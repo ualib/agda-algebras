@@ -1,6 +1,6 @@
-.. .. math:: \newcommand\hom{\operatorname{Hom}} \newcommand{\FGrp}{F_{\mathbf{Grp}}} \newcommand{\Sg}{\mathsf{Sg}}
+.. .. math:: \newcommand\hom{\operatorname{Hom}} 
 
-.. math:: \newcommand\epi{\operatorname{Epi}} \newcommand\aut{\operatorname{Aut}} \newcommand\mono{\operatorname{Mono}} \newcommand\Af{\ensuremath{\langle A, f \rangle}} 
+.. math:: \newcommand{\Sg}{\mathsf{Sg}} \newcommand\hom{\operatorname{Hom}} \newcommand\epi{\operatorname{Epi}} \newcommand\aut{\operatorname{Aut}} \newcommand\mono{\operatorname{Mono}} \newcommand\Af{\ensuremath{\langle A, f \rangle}} 
 
 .. role:: cat
 
