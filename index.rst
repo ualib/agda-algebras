@@ -7,8 +7,8 @@ The Lean Universal Algebra Library
 
     background
     lean_ualib
-    postmodern_algebra
     birkhoff_hsp
+    postmodern_algebra
     appendix
     glossary
     refs
