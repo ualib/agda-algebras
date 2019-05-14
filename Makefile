@@ -21,6 +21,7 @@ install-deps:
 	pip install 'wheel>=0.29' # needed for old ubuntu versions, https://github.com/pallets/markupsafe/issues/59
 	pip install sphinx
 	pip install sphinxcontrib-bibtex
+	pip install sphinxcontrib-proof
 .PHONY: help Makefile
 
 images:

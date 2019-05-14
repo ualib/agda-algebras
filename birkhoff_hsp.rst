@@ -32,13 +32,17 @@ A variety of theorems
 
 .. _fact-m1:
 
-#. For every class 𝒦, each of the classes :math:`𝖲(𝒦)`, :math:`𝖧(𝒦)`, :math:`𝖯(𝒦)`, and :math:`𝕍(𝒦)` satisfies exactly the same identities as does 𝒦.
+.. proof:theorem::
+
+   For every class 𝒦, each of the classes :math:`𝖲(𝒦)`, :math:`𝖧(𝒦)`, :math:`𝖯(𝒦)`, and :math:`𝕍(𝒦)` satisfies exactly the same identities as does 𝒦.
 
    *Proof*. Exercise.
 
    .. _fact-m2:
 
-#. :math:`𝒦 ⊧ p ≈ q` if and only if for every :math:`𝐀 ∈ 𝒦` and every :math:`h ∈ \mathrm{Hom}(𝐓(X_ω), 𝐀)`, we have :math:`h(p) = h(q)`.
+.. proof:theorem:: 
+
+   :math:`𝒦 ⊧ p ≈ q` if and only if for every :math:`𝐀 ∈ 𝒦` and every :math:`h ∈ \mathrm{Hom}(𝐓(X_ω), 𝐀)`, we have :math:`h(p) = h(q)`.
 
    .. container:: toggle
  
@@ -62,13 +66,15 @@ A variety of theorems
 
    .. _fact-m3:
 
-#. Let 𝒦 be a class of algebras and :math:`p ≈ q` an equation. The following are equivalent.
+.. proof:theorem:: 
 
-   #. :math:`𝒦 ⊧ p ≈ q`.
+   Let 𝒦 be a class of algebras and :math:`p ≈ q` an equation. The following are equivalent.
 
-   #. :math:`(p, q)` belongs to the congruence :math:`λ_{𝒦}` on :math:`𝐓(X_ω)`.
+     #. :math:`𝒦 ⊧ p ≈ q`.
 
-   #. :math:`𝐅_{𝒦}(X_ω) ⊧ p ≈ q`.
+     #. :math:`(p, q)` belongs to the congruence :math:`λ_{𝒦}` on :math:`𝐓(X_ω)`.
+
+     #. :math:`𝐅_{𝒦}(X_ω) ⊧ p ≈ q`.
 
    .. container:: toggle
  
@@ -94,11 +100,13 @@ A variety of theorems
       
       Then :math:`𝐓/\ker h ∈ 𝖲 (𝐀) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (b) implies :math:`h(p) = h(q)` hence (a) holds, completing the proof.
 
-   **Remark.** The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝐅(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
+The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝐅(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
 
-   .. _fact-m4:
+.. _fact-m4:
 
-#. Let :math:`𝒦` be a class of algebras, :math:`p` and :math:`q` :math:`n`-ary terms, :math:`Y` a set and :math:`y_1, \dots, y_n` distinct elements of :math:`Y`. Then :math:`𝒦 ⊧ p ≈ q` if and only if
+.. proof:theorem:: 
+
+   Let :math:`𝒦` be a class of algebras, :math:`p` and :math:`q` :math:`n`-ary terms, :math:`Y` a set and :math:`y_1, \dots, y_n` distinct elements of :math:`Y`. Then :math:`𝒦 ⊧ p ≈ q` if and only if
    :math:`p^{𝐅_{𝒦}(Y)}(y_1, \dots, y_n) = q^{𝐅_{𝒦}(Y)}(y_1, \dots, y_n)`. In particular, :math:`𝒦 ⊧ p ≈ q` if and only if :math:`𝐅_{𝒦}(X_n) ⊧ p ≈ q`.
 
    .. container:: toggle
@@ -126,24 +134,33 @@ A variety of theorems
 The HSP theorem
 ---------------
 
-**Theorem**. (see also :cite:`Bergman:2012`, Thm 4.41) Every variety is an equational class.
+The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:2012`, Thm 4.41.)
 
-**Proof.** Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
+.. proof:theorem:: 
 
-  To this end, take :math:`Σ = \mathrm{Id}(𝒲)`. Let :math:`𝒲^† := \mathrm{Mod}(Σ)`.  
+   Every variety is an equational class.
+
+   .. container:: toggle
+ 
+      .. container:: header
+ 
+         *Proof*
+      
+      Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
+
+      To this end, take :math:`Σ = \mathrm{Id}(𝒲)`. Let :math:`𝒲^† := \mathrm{Mod}(Σ)`.  
   
-  Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
+      Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
-  Let :math:`𝐀 ∈ 𝒲^†` and :math:`Y` a set of cardinality :math:`\max(|A|, ω)`. *Choose* a surjection :math:`h_0 : Y → A`. [1]_
+      Let :math:`𝐀 ∈ 𝒲^†` and :math:`Y` a set of cardinality :math:`\max(|A|, ω)`. *Choose* a surjection :math:`h_0 : Y → A`. [1]_
   
-  By :ref:`Theorem 4.21 <thm-4-21>`, :math:`h_0` extends to a (surjective) homomorphism :math:`h : 𝐓(Y) → 𝐀`.
+      By :ref:`Theorem 4.21 <thm-4-21>`, :math:`h_0` extends to a (surjective) homomorphism :math:`h : 𝐓(Y) → 𝐀`.
 
-  Furthermore, since :math:`𝐅_{𝒲}(Y) = 𝐓(Y)/Θ_{𝒲}`, there is a surjective homomorphism :math:`g : 𝐓(Y) → 𝐅_{𝒲}`. [2]_
+      Furthermore, since :math:`𝐅_{𝒲}(Y) = 𝐓(Y)/Θ_{𝒲}`, there is a surjective homomorphism :math:`g : 𝐓(Y) → 𝐅_{𝒲}`. [2]_
 
-  We claim that :math:`\ker g ⊆ \ker h`. If the claim is true then by Lemma [ex:1.26.8] there is a map :math:`f : 𝐅_{𝒲}(Y) → 𝐀` such that :math:`f ∘ g = h`.
+      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true then by Lemma [ex:1.26.8] there is a map :math:`f : 𝐅_{𝒲}(Y) → 𝐀` such that :math:`f ∘ g = h`.
    
-  Since :math:`h` is surjective, so is :math:`f`. Hence :math:`𝐀 ∈ 𝖧 (𝐅_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
-
+      Since :math:`h` is surjective, so is :math:`f`. Hence :math:`𝐀 ∈ 𝖧 (𝐅_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
 
 Let :math:`u,v ∈ T(Y)` and assume that :math:`g(u) = g(v)`. Since :math:`𝐓(Y)` is generated by :math:`Y`, by :ref:`Theorem 4.21 <thm-4-21>`, there is an integer :math:`n`, terms :math:`p, q ∈ T(X_n)`, and :math:`y_1, \dots, y_n ∈ Y` such that :math:`u = p^{𝐓(Y)}(y_1, \dots, y_n)` and :math:`v = q^{𝐓(Y)}(y_1,\dots, y_n)`, by Theorem [thm:4.32].
 

@@ -1,6 +1,6 @@
 .. .. math:: \newcommand\hom{\operatorname{Hom}} 
 
-.. math:: \newcommand{\Sg}{\mathsf{Sg}} \newcommand\hom{\operatorname{Hom}} \newcommand\epi{\operatorname{Epi}} \newcommand\aut{\operatorname{Aut}} \newcommand\mono{\operatorname{Mono}} \newcommand\Af{\ensuremath{\langle A, f \rangle}} 
+.. math:: \newcommand{\Sg}{\mathsf{Sg}} \newcommand{\hom}{\operatorname{Hom}} \newcommand{\epi}{\operatorname{Epi}} \newcommand{\aut}{\operatorname{Aut}} \newcommand{\mono}{\operatorname{Mono}} \newcommand{\Af}{\langle A, f \rangle}
 
 .. role:: cat
 
@@ -74,7 +74,7 @@ An **algebraic structure** is denoted by :math:`𝐀 = ⟨ A, F^𝐀⟩` and con
   #. :math:`F^𝐀 = \{ f^𝐀 ∣ f ∈ F, \ f^𝐀 : (ρf → A) → A \}` := a set of operations on :math:`A`,
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝐀`.
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`finster:2018`, :cite:`gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later, once we have a working implementation of the classical (single-sorted, set-based) core of universal algebra. (See :numref:`Section %s <category-theoretic-approach>`.)
+Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`finster:2018`, :cite:`gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later, once we have a working implementation of the classical (single-sorted, set-based) core of universal algebra. (See :numref:`Section %s <postmodern-algebra>`.)
 
 Notation for homs, epis, monos, and autos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,12 +88,12 @@ If :math:`𝐀 = ⟨A, f^𝐀⟩` and :math:`𝐁 = ⟨B, f^𝐁⟩` are algebra
 
 -----------------------------------------------------------------
 
-.. _basic-facts:
+.. _observations-classically:
 
-Basic facts, classically
-------------------------
+Observations, classically
+-------------------------
 
-Throught this section,
+Throughout this section,
 
 + :math:`𝐀 = ⟨A, F^𝐀⟩, \ 𝐁 = ⟨B, F^𝐁⟩, \ 𝐂 = ⟨C, F^𝐂⟩\ ` are algebras of the same signature :math:`σ = (F, ρ)`, and
 
@@ -105,13 +105,13 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
 
-Here is a numbered list of basic facts that we need later. We will reference the first fact in the list as :ref:`Fact 1 <fact-one>`, etc.
+Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc.
 
-**Facts**.
+.. _obs-one:
 
-.. _fact-one:
+.. proof:observation::
 
-#. :math:`𝖤(g,h)` is a subuniverse of 𝐀.
+   :math:`𝖤(g,h)` is a subuniverse of 𝐀.
 
    .. container:: toggle
  
@@ -127,11 +127,11 @@ Here is a numbered list of basic facts that we need later. We will reference the
 
       .. math:: (g ∘ f^𝐀)(ι_i a) = (f^𝐁 ∘ F g)(ι_i a) = (f^𝐁 ∘ F h)(ι_i a) = (h ∘ f^𝐀)(ι_i a).
 
-   |
-            
-   .. _fact-two:
+.. _obs-two:
 
-#. If the set :math:`X ⊆ A` generates 𝐀 and :math:`g|_X = h|_X`, then :math:`g = h`.
+.. proof:observation::
+
+   If the set :math:`X ⊆ A` generates 𝐀 and :math:`g|_X = h|_X`, then :math:`g = h`.
 
    .. container:: toggle
     
@@ -148,12 +148,12 @@ Here is a numbered list of basic facts that we need later. We will reference the
       Therefore, since :math:`F g = F h` on :math:`X`, we have
     
       .. math:: g(a) = g(tᴬ x) = (tᴮ ∘ F g)(x) = (tᴮ ∘ F h)(x) = h(tᴬ x) = h(a).
-    
-   |
 
-   .. _fact-three:
+.. _obs-three:
 
-#. If :math:`A, B` are finite and :math:`X` generates 𝐀, then :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
+.. proof:observation::
+
+   If :math:`A, B` are finite and :math:`X` generates 𝐀, then :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
 
    .. container:: toggle
     
@@ -161,15 +161,15 @@ Here is a numbered list of basic facts that we need later. We will reference the
     
          *Proof*.
 
-      By :ref:`Fact 2 <fact-two>`, a homomorphism is uniquely determined by its restriction to a generating set.
+      By :ref:`Obs 2 <obs-two>`, a homomorphism is uniquely determined by its restriction to a generating set.
 
       If :math:`X` generates 𝐀, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
     
-   |
+.. _obs-four:
 
-   .. _fact-four:
+.. proof:observation::
 
-#. If :math:`g : \epi (𝐀, 𝐁)` and :math:`h : \hom (𝐀, 𝐂)` satisfy :math:`\ker g ⊆ \ker h`, then
+   If :math:`g : \epi (𝐀, 𝐁)` and :math:`h : \hom (𝐀, 𝐂)` satisfy :math:`\ker g ⊆ \ker h`, then
 
    .. math:: ∃ k ∈ \hom(𝐁, 𝐂)\ . \ h = k ∘ g.
     
@@ -208,10 +208,12 @@ Here is a numbered list of basic facts that we need later. We will reference the
       Therefore,
    
       .. math:: (f^C ∘ F k) (b) = (h ∘ f^A) (a) = (k ∘ g ∘ f^A)(a) = (k ∘ f^B ∘ F g)(a) = (k ∘ f^B)(b).
- 
-   |
 
-#. Let :math:`S = (F, ρ)` be a signature each :math:`f ∈ F` an :math:`(ρf)`-ary operation symbol.
+.. _obs-five:
+
+.. proof:observation::
+
+   Let :math:`S = (F, ρ)` be a signature each :math:`f ∈ F` an :math:`(ρf)`-ary operation symbol.
  
     Define :math:`F_0 := \operatorname{Proj}(A)` and for all :math:`n > 0` in :math:`ω` let
  
@@ -219,7 +221,11 @@ Here is a numbered list of basic facts that we need later. We will reference the
  
     Then :math:`\mathrm{Clo}^{𝐀}(F) = ⋃_n F_n`.
  
-#. Let :math:`f` be a similarity type.
+.. _obs-six:
+
+.. proof:observation::
+
+   Let :math:`f` be a similarity type.
  
     (a) :math:`𝐓_ρ (X)` is generated by :math:`X`.
  
@@ -245,9 +251,11 @@ Here is a numbered list of basic facts that we need later. We will reference the
      
       By its very definition, :math:`g` is a homomorphism. Finally, the uniqueness of :math:`g` follows from Exercise 1.16.6 in :cite:`Bergman:2012`.
  
-   |
+.. _obs-seven:
 
-#. Let :math:`𝐀 = ⟨A, f^{𝐀}⟩` and :math:`𝐁 = ⟨B, f^{𝐁}⟩` be algebras of type :math:`ρ`.
+.. proof:observation::
+
+   Let :math:`𝐀 = ⟨A, f^{𝐀}⟩` and :math:`𝐁 = ⟨B, f^{𝐁}⟩` be algebras of type :math:`ρ`.
  
     (a) For every :math:`n`-ary term :math:`t` and homomorphism :math:`g : 𝐀 → 𝐁`, :math:`g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n))`.
 
@@ -270,8 +278,6 @@ Here is a numbered list of basic facts that we need later. We will reference the
       For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝐀}`.
     
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows.
-
-   |
 
 ------------------------------
 
