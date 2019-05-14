@@ -1,0 +1,287 @@
+.. .. include:: substitutions.rst
+
+.. .. role:: code
+
+Glossary
+========
+
+.. glossary::
+
+    relation
+      Given sets :math:`A` and :math:`B`, a **relation** from :math:`A` to :math:`B` is a subset of :math:`A × B`.
+
+    relational structure
+      A relational structure :math:`𝐀 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
+      
+    relational product
+      Given relations :math:`R : A → B` and :math:`S : B → C` we denote and define the **relational product** (or **composition**) of :math:`S` and :math:`R` to be :math:`S ∘ R = \{(a,c) : (∃ b ∈ B) a \mathrel{R} b ∧ b \mathrel{S} c \}`.
+
+    hom set
+      Some authors require that :math:`\mathcal C(A,B)` always be a set and call :math:`\mathcal C(A,B)` the **hom set** from :math:`A` to :math:`B`.
+
+    point
+      Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
+
+    global element
+      see :term:`point`
+
+    directed graph
+      A **directed graph** is a :term:`relational structure` consisting of a vertex set :math:`V` (whose elements are called vertices) and an edge set :math:`E\subseteq V^2` (whose elements are called edges).
+
+    source vertex
+      Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2) ∈ E`, we refer to :math:`v_1` as the **source vertex** of :math:`e`.
+
+    target vertex
+      Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2)\in E`, we refer to :math:`v_2` as the **target vertex** of :math:`e`.
+
+    graph morphism
+      Let :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
+
+    domain
+      If :math:`f : A → B` is a function or relation from :math:`A` to :math:`B`, then :math:`A` is called the **domain** of :math:`f`, denoted by :math:`\mathrm{dom} f`.
+
+    codomain
+      If :math:`f : A → B` is a function or relation from :math:`A` to :math:`B`, then :math:`B` is called the **codomain** of :math:`f`, denoted by :math:`\mathrm{cod} f`.
+
+    consecutive functions
+      If :math:`f : A → B` and :math:`g : B → C`, then :math:`\mathrm{cod} f = \mathrm{dom} g` and we say that :math:`f` and :math:`g` are **consecutive functions**.
+
+    monoid
+      A **monoid** :math:`𝐌 = (M, e, ⋆)` consists of a set :math:`M` with a a **unit** element :math:`e ∈ M` and a binary operation :math:`⋆ : M^2 → M` such that for all :math:`x,y,z ∈ M`, :math:`x ⋆ e = x = e ⋆ x` and :math:`(x ⋆ y) ⋆ z = x ⋆ (y ⋆ z)`.
+
+    monoid homomorphism
+      Given monoids :math:`𝐌_1 = (M_1, e_1, ⋆)` and :math:`𝐌_2 = (M_2, e_2, ∗)` we say that a function :math:`f : M_1 → M_2` is a **monoid homomorphism** from :math:`𝐌_1` to :math:`𝐌_2` provided :math:`f` preserves the nullary (identity) and binary operations; that is, :math:`f(e_1) = e_2` and :math:`f (x ⋆ y) = f(x) ∗ f(y)` for all :math:`x, y ∈ M_1`.
+
+    group
+      A **group** :math:`𝐆 = (G, e, \ ^{-1}, ⋆)` consists of a set :math:`G` together with a nullary (constant) operation :math:`e`, a unary (inverse) operation :math:`\ ^{-1}: G → G`, and a binary operation :math:`⋆ : G^2 → G`, such that :math:`(G, e, ⋆)` is a monoid and :math:`x ⋆ x^{-1} = e` for all :math:`x ∈ G`.
+
+    concrete category
+      A **concrete category** is one whose objects are sets and whose morphisms are functions defined on these sets (possibly satisfying some other special properties).
+
+    abstract category
+      An **abstract category** is one whose objects are not sets or whose morphisms are not functions defined on sets. Our next example is somewhere in between. The objects are sets, but the morphisms are not necessarily *total* functions; that is, they may be defined on only a part of the source object.
+
+    total function
+      Given sets :math:`A` and :math:`B`, a **total function** :math:`f` from :math:`A` to :math:`B` is what we typically mean by a “function” from :math:`A` to :math:`B`.
+
+    partial function
+      A **partial function** from :math:`A` to :math:`B` is a total function on some (potentially proper) subset :math:`\operatorname{dom}_f` of :math:`A`.
+
+    initial object
+      An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
+     
+    universal property
+      The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.
+
+    free algebra
+      Let :math:`\mathcal V` be a variety of algebras of a certain signature. [1]_  Let :math:`X` be a set.  The **free algebra generated by** :math:`X` is denoted by :math:`\mathbb F(X)` and is defined as follows: for every algebra :math:`\mathbf A = ⟨A, \dots⟩ ∈ \mathcal V` and every function :math:`f : X → A`, there exists a unique homomorphism :math:`h:\mathbb F(X) → \mathbf A` such that :math:`\forall x ∈ X, h(x) = f(x)`.  We say that :math:`\mathbb F (X)` is *universal for* :math:`\mathcal V`.
+
+    terminal object
+      An object :math:`\mathbf{1}` is called a **terminal** (or **bound**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`⟨\ ⟩_A: A → \mathbf{1}`.
+
+    opposite category
+      Given a category :math:`\mathcal C` the **opposite** (or **dual**) **category** :math:`\mathcal C^{\mathrm{op}}` has the same objects as :math:`\mathcal C` and whenever :math:`f: A → B` is a morphism in :math:`\mathcal C` we define :math:`f : B → A` to be a morphism in :math:`\mathcal C^{\mathrm{op}}`.
+
+    self-dual
+      A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
+
+    poset
+      A **poset** :math:`(A, ≤)` consists of a set :math:`A` and a binary relation :math:`≤ \ ⊆ A^2` such that for all :math:`x, y, z ∈ A` we have :math:`x ≤ x`;:math:`x ≤ y` and :math:`y ≤ x` imply :math:`x = y`; and :math:`x ≤ y` and :math:`y ≤ z` imply :math:`x ≤ z`.
+
+    lattice
+      a :term:`poset` whose universe is closed under all *finite* meets and joins is called a lattice.
+     
+    complete lattice
+      a :term:`poset` whose universe is closed under *arbitrary* meets and joins.
+
+    compact element
+      an element :math:`x` of a lattice :math:`L` is called **compact** provide for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
+
+    algebraic lattice
+      a :term:`lattice` generated by its :term:`compact elements <compact element>`. 
+
+    Boolean algebra
+      ..todo:: fill in definition    
+
+    Heyting algebra
+      ..todo:: fill in definition    
+   
+    monotone function
+      Given posets :math:`⟨A, ≤ᴬ⟩` and :math:`(B, ≤ᴮ)` we say that a function :math:`f: A → B` is **monotone** from :math:`⟨A, ≤ᴬ⟩` to :math:`⟨B, ≤ᴮ ⟩` when for any :math:`x, y ∈ A` we have that :math:`x ≤ᴬ y` implies that :math:`f(x) ≤ᴮ f(y)`.
+
+    lattice homomorphism
+      a function :math:`f: X → Y` preserving finite meets and joins.
+
+    complete lattice homomorphism
+      a function :math:`f: X → Y` preserving complete meets and joins.
+
+    Boolean algebra homomorphism
+      a :term:`lattice homomorphism` that also preserves complementation (but every lattice homomorphism between Boolean lattices automatically preserves complementation, so we may characterize the morphisms of this category more simply as the lattice homomorphisms).
+
+    Heyting algebra homomorphism
+      a :term:`lattice homomorphism` that also preserves Heyting implications; that is, if :math:`x, x' ∈ X`, then :math:`f(x → x') = f(x) → f(x')`.
+
+    isomorphism
+      A morphism :math:`f: A → B` is called an **isomorphism** if there exists a morphism :math:`g: A → B` such that :math:`g ∘ f= \mathrm{id}_A` and :math:`f ∘ g = \mathrm{id}_B`. We write :math:`f^{-1}` to denote :math:`g` when it exists.
+
+    monomorphism
+      A morphism :math:`f: A → B` is called a **monomorphism** if for every object :math:`X` and every pair :math:`h, h' : X → A` of morphisms, :math:`f ∘ h = f ∘ h'` implies :math:`h = h'`. When :math:`f` is a monomorphism we often say :math:`f` is "mono" and write :math:`f: A ↣ B`.
+
+    generalized element
+      A morphism :math:`h: X → A` is sometimes called a **generalized element** of :math:`A`. A morphism :math:`f` is mono when it is injective on the generalized elements of its domain.
+      
+    epimorphism
+      A morphism :math:`f: A → B` is called an **epimorphism** if for every object :math:`Y` and pair :math:`y_1, y_2: B → Y` of morphisms, :math:`y_1 ∘ f = y_2 ∘ f` implies :math:`y_1 = y_2`. When :math:`f: A → B` is an **epimorphism** we often say ":math:`f` is epi" and write :math:`f: ↠ B`.
+
+    product
+      Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
+
+    coproduct
+      Given two objects :math:`A` and :math:`B` a **coproduct** (or **sum**) of :math:`A` and :math:`B` is denoted by :math:`A+B` and defined to be an object with morphisms :math:`ι_1 : A → A + B` and :math:`ι_2 : B → A + B` such that for every object :math:`X` and all morphisms :math:`u : A → Y` and :math:`v : B → Y` there exists a unique morphism :math:`[u,v] : A+B → Y` such that :math:`[u,v] ∘ ι_1 = u` and :math:`[u,v] ∘ ι_2 = v`.
+
+    commutative diagram
+      A **commutative diagram** is a diagram with the following property: for all objects :math:`C` and :math:`D`, all paths from :math:`C` to :math:`D` yield the same morphism.
+
+    functor
+      A **functor** :math:`F : \mathcal C → \mathcal D` consists of a function :math:`F_0` that maps objects of :math:`\mathcal C` to objects of :math:`\mathcal D` and a function :math:`F_1` that maps morphisms of :math:`\mathcal C` to morphisms of :math:`\mathcal D` such that :math:`F` preserves (co)domains of morphisms, identities, and compositions.
+
+    free monoid
+      An example is the **free monoid**, or **Kleene closure** of a set.
+
+    Kleene closure
+      (see :term:`free monoid`)
+
+    underlying set functor
+      The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.
+
+    universal mapping property
+      Let :math:`η_A : A → |𝐀^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The functors :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every monoid :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique morphism :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
+
+    endomorphism
+      A morphism :math:`f : A → A` (i.e., :math:`\mathrm{src} f = \mathrm{tar} f`) is called an **endomorphism**.
+
+    parallel morphisms
+      Morphisms :math:`f,g : A → B` are called **parallel morphisms** just in case :math:`\mathrm{src} f = \mathrm{src} g` and :math:`\mathrm{tar} f = \mathrm{tar} g`.
+ 
+    endofunctor
+      A functor that maps a category to itself is called an **endofunctor**.
+
+    existential image functor
+      is the functor :math:`∃ f : P(A) → P(B)` defined by :math:`∃ f(X) = \{f(x) : x ∈  X\},` for :math:`X ∈ P(A)`.
+
+    universal image functor
+      is the functor :math:`∀ f : P(A) → P(B)` defined by :math:`∀ f (X) = \{y ∈ B : f^{-1}(\{y\}) \subseteq  X\}`, for :math:`X ∈ P(A)`.
+
+    covariant powerset functor
+      The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
+
+    contravariant powerset functor
+      The **contravariant powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`g : B → A` the morphism :math:`g^← : PA → PB` is given by :math:`g^← (S) = \{b ∈ B : g(b) ∈ S\}` for each :math:`S ⊆ A`.
+
+
+    category of categories
+      has categories as objects and functors as morphisms.
+      
+    natural transformation
+      Given functors :math:`F, G : \mathcal C → \mathcal D`, a **natural transformation** :math:`α : F ⇒ G` is a family :math:`\{α_A : A ∈ \mathcal C_{\mathrm{obj}}\}` of morphisms in :math:`\mathcal D` indexed by the objects of :math:`\mathcal C` such that, for each :math:`A ∈ \mathcal C_{\mathrm{obj}}`, the map :math:`\alpha_A` is a morphism from :math:`FA` to :math:`GA` satisfying the *naturality condition*, :math:`Gf ∘ α_A = α_B ∘ Ff`, for each :math:`f : A → B` in :math:`\mathcal C_{\mathrm{mor}}`. We shall write :math:`α : F ⇒ G : \mathcal C → \mathcal D` to indicate that α is a natural transformation from :math:`F` to :math:`G`, where :math:`F, G : \mathcal C → \mathcal D`.
+
+    component
+      If :math:`α : F ⇒ G` is a natural transformation, then the **component** of α at :math:`A` is the morphism :math:`α_A : FA → GA`.
+
+    evaluation natural transformation
+      The **evaluation natural transformation** is denoted by :math:`eval^A : F_A →  \mathrm{id}_{\mathbf{Set}}` and defined by...
+
+    .. todo:: complete this sentence
+
+    polymorphic function
+      is a function that operates in the "same way" independently of the object parameter.
+
+    natural isomorphism
+      An isomorphism in a functor category is referred to as a **natural isomorphism**.
+      
+    naturally isomorphic
+      If there is a natural isomorphism between the functors :math:`F` and :math:`G`, then we call :math:`F` and :math:`G` **naturally isomorphic**.
+
+    equivalent categories
+      Two categories :math:`\mathcal C` and :math:`\mathcal D` are called **equivalent categories** if there are functors :math:`F : \mathcal C →  \mathcal D` and :math:`G : \mathcal D → \mathcal C` together with natural isomorphisms :math:`ε : FG ≅ \mathrm{id}_{\mathcal D}`, and :math:`η : \mathrm{id}_{\mathcal C} ≅ GF`. We say that :math:`F` is an equivalence with an inverse equivalence :math:`G` and denote the equivalence by :math:`F : \mathcal C ≃ \mathcal D : G`.
+
+    small category
+      A category is called **small** if both its objects and morphisms form sets.
+
+    locally small category
+      A category :math:`\mathcal C` is **locally small** if for every pair :math:`A`, :math:`B` of objects in :math:`\mathcal C` the collection of morphisms from :math:`A` to :math:`B` is a set.
+
+    finite ordinals
+      The category :math:`\mathrm{Ord}_{\mathrm{fin}}` of **finite ordinals** (also called the **simplex category** :math:`\Delta`) has :math:`\underline n = \{0, 1, \dots, n-1\}` for objects (for each :math:`n ∈ ℕ`) and :math:`f : \underline n → \underline m` :term:`monotone functions <monotone function>` for morphisms.
+
+    simplex category
+      (see :term:`finite ordinals`)
+
+    category of small categories
+      (see :term:`Cat`)
+
+    functor category
+      The **functor category** from :math:`\mathcal C` to :math:`\mathcal D` has functors :math:`F : \mathcal C → \mathcal D` as objects and natural transformations :math:`α : F ⇒ G` as morphisms.
+
+    evaluation functor
+      The **evaluation functor** is the functor :math:`Ev : \mathcal C × \mathbf{Set}^{\mathcal C} → \mathbf{Set}`, which takes each pair :math:`(A, F) ∈ \mathcal C_{\mathrm{obj}} × \mathbf{Set}^{{\mathcal C}_{\mathrm{obj}}}` of objects to the set :math:`Ev(A, F) = FA`, and takes each pair :math:`(g, μ) ∈ \mathcal C_{\mathrm{obj}} × \mathbf{Set}^{\mathcal C_{\mathrm{mor}}}` of morphisms to a function on sets, namely, :math:`Ev(g, μ) = μ_{A'} ∘ F g = F' g ∘ μ_A`, where :math:`g ∈ \mathcal C(A, A')` and :math:`μ : F ⇒ F'`.
+
+    Equivalent categories
+      We call :math:`\mathcal C` and :math:`\mathcal D` **equivalent categories** if there are functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal D → \mathcal C`, together with natural isomorphisms :math:`ε : FG ≅ \mathrm{id}_{\mathcal D}`, and :math:`η : \mathrm{id}_{\mathcal C} ≅ GF`.
+
+    1
+      The only object is :math:`0`; the only morphism is the identity :math:`\operatorname{id}_0: 0 ↦ 0`.
+
+    2
+      There are two objects, :math:`0` and :math:`1`; there is one nonidentity morphism :math:`f: 0 ↦ 1`.
+
+    3
+      There are three objects, :math:`0`, :math:`1`, and :math:`2`; there are three nonidentity morphisms: :math:`f: 0 ↦ 1`, :math:`g: 1 ↦ 2`, and :math:`h: 0 ↦ 2`.
+
+    Cat 
+      is the (large) category of small categories; it has small categories as objects and functors :math:`F : \mathcal C → \mathcal D` as morphisms.
+
+    Set
+      the category whose objects are the sets and whose morphisms are the functions on sets.
+
+    Grph
+      the category whose objects are the (directed) graphs; the morphisms are the :math:`graph morphisms <graph morphism>`.
+
+    Mon
+      is the category whose objects are the :term:`monoids <monoid>` and whose morphisms are the :term:`monoid homomorphisms <monoid homomorphism>`.
+
+    Par
+      the category whose objects are sets and whose morphisms are the :term:`partial functions <partial function>`.
+
+    Rel
+      the category whose objects are sets and whose morphisms are the :term:`relations <relation>` on sets.
+
+    Fin
+      a category whose objects are the finite sets; the morphisms are the functions on finite sets.
+
+    Pos
+      a category whose objects are the :term:`posets <poset>`; the morphisms are the :term:`monotone functions <monotone function>`.
+
+    Lat
+      a category whose objects are the :term:`lattices <lattice>`; the morphisms are the :term:`lattice homomorphisms <lattice homomorphism>`.
+
+    CLat
+      a category whose objects are the :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
+
+    BLat
+      a category whose objects are the :term:`Boolean lattices <Boolean algebra>`; the morphisms are the :term:`Boolean lattice homomorphisms <Boolean algebra homomorphism>`.
+
+    HLat
+      a category whose objects are the :term:`Heyting lattices <Heyting algebra>`; the morphisms are the :term:`Heyting lattice homomorphisms <Heyting algebra homomorphism>`
+
+    ACLat
+      a category whose objects are :term:`algebraic <algebraic lattice>`, :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
+
+    Arrow
+      Given a category :math:`\mathcal C`, the **arrow category** :math:`\mathcal C^→` has as objects the triples :math:`(A, B, f)` satisfying :math:`A, B ∈  \mathcal C_{\mathrm{obj}}` and :math:`f ∈ \mathcal C(A,B)`, and as morphisms the pairs :math:`(h_1, h_2) : (A, B, f) → (C, D, g)` such that :math:`h_1 ∈ \mathcal C(A,C)`, :math:`h_2 ∈ \mathcal C(B, D)` and :math:`g \circ h_1 = h_2 \circ f`.
+
+    Slice
+      Given a category :math:`\mathcal C` and an object :math:`C ∈ \mathcal C_{\mathrm{obj}} `, the **slice category** :math:`\mathcal C/C` has objects the pairs :math:`(A, f)` such that :math:`f ∈ \mathcal C(A, C)`, and morphisms :math:`h : (A, f) → (B, g)` such that :math:`h ∈ \mathcal C(A, B)` and :math:`g ∘ h = f`.
+
+    Comma
+      Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.

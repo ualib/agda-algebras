@@ -1,0 +1,17 @@
+image: alpine
+
+pages:
+  script:
+  - apk --no-cache add py2-pip python-dev
+  - pip install Pygments
+  - pip install sphinx
+  - pip install sphinxcontrib-bibtex
+  - pip install sphinxcontrib-tikz
+  - apk --no-cache add make
+  - make html
+  - mv _build/html/ public/
+  artifacts:
+    paths:
+    - public
+  only:
+  - master

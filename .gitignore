@@ -1,0 +1,5 @@
+_static/
+_build/
+latex_images/*.png
+*.pyc
+.venv
