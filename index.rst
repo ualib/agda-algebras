@@ -6,9 +6,9 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     background
-    lean-ualib
-    category-theoretic-approach
-    birkhoff-hsp
+    lean_ualib
+    postmodern_algebra
+    birkhoff_hsp
     appendix
     glossary
     refs

@@ -12,8 +12,8 @@
 Background
 ==========
 
-Modern classical algebra
-------------------------
+Modern algebra
+--------------
 
 Notation
 ~~~~~~~~
