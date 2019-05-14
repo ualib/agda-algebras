@@ -592,8 +592,8 @@ The next three lemmas show that :math:`\mathrm{Sg} X` is the smallest subunivers
 
 .. _inductively-defined-type:
 
-Inductively defined type
-------------------------
+Inductively defined types
+-------------------------
 
 A primary motivation for this project was our observation that, on the one hand, many important constructs in universal algebra can be defined inductively, and on the other hand, type theory in general, and Lean in particular, offers excellent support for defining inductive types and powerful tactics for proving their properties.
 
@@ -656,8 +656,8 @@ The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notati
 
 .. _terms-and-free-algebra:
 
-Terms and free algebra
-----------------------
+Terms and free algebras
+-----------------------
 
 Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
 
