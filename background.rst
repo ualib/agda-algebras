@@ -117,8 +117,8 @@ Here is a numbered list of basic facts that we need later. We will reference the
  
       .. container:: header
  
-         *Proof*.
-      
+         *Proof.*
+
       Fix arbitrary :math:`f ∈ F` and :math:`a : ρf → 𝖤(g,h)`.
 
       We show that :math:`g (f^𝐀 ∘ a) = h (f^𝐀 ∘ a)`, as this shows that :math:`𝖤(g, h)` is closed under the operation :math:`f^𝐀` of :math:`𝐀`.
@@ -126,8 +126,10 @@ Here is a numbered list of basic facts that we need later. We will reference the
       But this is trivial since, by definition of homomorphism, we have
 
       .. math:: (g ∘ f^𝐀)(ι_i a) = (f^𝐁 ∘ F g)(ι_i a) = (f^𝐁 ∘ F h)(ι_i a) = (h ∘ f^𝐀)(ι_i a).
-    
-      .. _fact-two:
+
+   |
+            
+   .. _fact-two:
 
 #. If the set :math:`X ⊆ A` generates 𝐀 and :math:`g|_X = h|_X`, then :math:`g = h`.
 
@@ -147,7 +149,9 @@ Here is a numbered list of basic facts that we need later. We will reference the
     
       .. math:: g(a) = g(tᴬ x) = (tᴮ ∘ F g)(x) = (tᴮ ∘ F h)(x) = h(tᴬ x) = h(a).
     
-      .. _fact-three:
+   |
+
+   .. _fact-three:
 
 #. If :math:`A, B` are finite and :math:`X` generates 𝐀, then :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
 
@@ -161,7 +165,9 @@ Here is a numbered list of basic facts that we need later. We will reference the
 
       If :math:`X` generates 𝐀, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
     
-      .. _fact-four:
+   |
+
+   .. _fact-four:
 
 #. If :math:`g : \epi (𝐀, 𝐁)` and :math:`h : \hom (𝐀, 𝐂)` satisfy :math:`\ker g ⊆ \ker h`, then
 
@@ -203,6 +209,8 @@ Here is a numbered list of basic facts that we need later. We will reference the
    
       .. math:: (f^C ∘ F k) (b) = (h ∘ f^A) (a) = (k ∘ g ∘ f^A)(a) = (k ∘ f^B ∘ F g)(a) = (k ∘ f^B)(b).
  
+   |
+
 #. Let :math:`S = (F, ρ)` be a signature each :math:`f ∈ F` an :math:`(ρf)`-ary operation symbol.
  
     Define :math:`F_0 := \operatorname{Proj}(A)` and for all :math:`n > 0` in :math:`ω` let
@@ -237,6 +245,8 @@ Here is a numbered list of basic facts that we need later. We will reference the
      
       By its very definition, :math:`g` is a homomorphism. Finally, the uniqueness of :math:`g` follows from Exercise 1.16.6 in :cite:`Bergman:2012`.
  
+   |
+
 #. Let :math:`𝐀 = ⟨A, f^{𝐀}⟩` and :math:`𝐁 = ⟨B, f^{𝐁}⟩` be algebras of type :math:`ρ`.
  
     (a) For every :math:`n`-ary term :math:`t` and homomorphism :math:`g : 𝐀 → 𝐁`, :math:`g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n))`.
@@ -260,6 +270,8 @@ Here is a numbered list of basic facts that we need later. We will reference the
       For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝐀}`.
     
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows.
+
+   |
 
 ------------------------------
 

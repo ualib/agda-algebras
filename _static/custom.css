@@ -4,14 +4,14 @@
 }
 
 .toggle .header:after {
-    content: " ↓";
+    content: " ↓ reveal ↓";
 }
 
 /* .toggle .header.open:after {
     content: " ▲";
 } */
 .toggle .header.open:after {
-    content: " ↑";
+    content: " ↑ hide ↑";
 }
 
 .premium {
