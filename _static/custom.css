@@ -1,0 +1,96 @@
+.toggle .header {
+    display: block;
+    clear: both;
+}
+
+.toggle .header:after {
+    content: " ↓";
+}
+
+/* .toggle .header.open:after {
+    content: " ▲";
+} */
+.toggle .header.open:after {
+    content: " ↑";
+}
+
+.premium {
+    color:gray;
+    font-weight:700;
+}
+
+.red {
+    color:#aa0060; 
+    font-weight:500; 
+    font-size:16px
+}
+
+.green {
+    color:green; 
+    font-weight:500;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+.cyan {
+    color:darkcyan; 
+    font-weight:500
+}
+
+.code1 {
+    font-family: 'FreeMono', monospace;
+    font-weight:500;
+}
+
+.freemono {
+    font-family: 'FreeMono', monospace;
+    font-weight:600;
+}
+.code2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    font-weight: 520;
+}
+
+.code {
+  font-family: 'Roboto Mono';
+}
+
+.cmd {
+    font-family: 'Courier';
+    font-weight:500;
+    font-size: 14px
+}
+.codesm {
+    font-family: 'Courier';
+    font-weight:500;
+    font-size: 12px
+}
+
+.catalt2 {
+    font-family: 'Spicy Rice';
+}
+
+.cat {
+    font-family: 'Rye';
+}
+
+.catalt4 {
+    font-family: 'Jacques Francois Shadow';
+    font-size: 16px
+}
+
+.catalt5 {
+    font-family: 'Fascinate Inline';
+    font-size: 16px
+}
+
+.catalt3 {
+    font-family: 'Diplomata';
+    font-size: 16px
+}
+
+.catalt1 {
+    font-family: 'Oleo Script Swash Caps';
+    font-size: 24px
+}
