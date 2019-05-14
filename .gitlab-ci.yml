@@ -3,10 +3,10 @@ image: alpine
 pages:
   script:
   - apk --no-cache add py2-pip python-dev
-  - pip install Pygments
+	- pip install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
+	- pip install 'wheel>=0.29' # needed for old ubuntu versions, https://github.com/pallets/markupsafe/issues/59
   - pip install sphinx
-  - pip install sphinxcontrib-bibtex
-  - pip install sphinxcontrib-tikz
+	- pip install sphinxcontrib-bibtex
   - apk --no-cache add make
   - make html
   - mv _build/html/ public/
