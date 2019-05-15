@@ -18,16 +18,78 @@ Our formal representations of these concepts will be clear, concise, and computa
 
 Our goal here is to demonstrate the power of Lean's type system for expressing mathematical concepts precisely and constructively, and to show that if we make careful design choices at the start of our development, then our formal theorems *and their proofs* can approximate the efficiency and readability of analogous informal presentations found in the mathematics literature.
 
+Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
+
+The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, terms.lean``. [3]_
+
 -----------------------------------------------------
 
 .. index:: signature, operation, operation symbol, similarity type, arity, arity type, variety, equational class, algebraic structure 
+
+Arity and Operations 
+--------------------------
+
+We start with the **type of operation symbols**, which depends on our semantic notion of **arity**, also captured by a type.
+
+Argument lists that are passed to operations are represented by tuples which are simply functions, say, of type β → α, where β is the **arity type** of the operation to which the tuple will be passed as an argument list.
+
+Heuristically, it's fine to think of | β | as the "number" of arguments the operation takes, but the implementation is much more general than that. In particular, there is no reason to restrict, *a priori*, the arity type to be a finite set.
+
+An **operation** takes a tuple (or, list of "arguments") of type β → α and returns an element of type α.  Here, α is the type on which the operation is defined.
+
+In Lean, if α and β are types, we define the **type of β-ary operations on α**, denoted by ``op``, to be the function type (β → α) → α.
+
+.. code-block:: lean
+
+    import data.set
+    definition op (β α) := (β → α) → α
+
+An example of an operation of type ``op(βα)`` is the **projection function** π , defined on the type α, as follows:
+
+.. code-block:: lean
+
+    import data.set
+    definition op (β α) := (β → α) → α
+    -- BEGIN
+    definition π {β α} (i) : op β α := λ t, t i
+    -- END
+
+The operation ``π i`` maps a given tuple ``t : β → α`` to ``t i``, its "value" at input ``i``.
+
+For instance, if we have types ``α, β``, and variables ``i:β`` and ``t:β → α``, then the command ``#check π i t`` shows that the type of ``π i t`` is ``α``, as expected, since ``π i t = t i``.
+
+.. code-block:: lean
+
+    import data.set
+    definition op (β α) := (β → α) → α
+    definition π {β α} (i) : op β α := λ t, t i
+    -- BEGIN
+    variables (α : Type*) (β : Type*) (i : β) (t : β → α) 
+    #check π i f       -- answer: π i f : α 
+    -- END
+
+Here are a couple of examples that are a bit more concrete.
+
+.. code-block:: lean
+
+    -- Example: the tuple p1 = (1, 2, 3, ...).
+    definition p1 : ℕ → ℕ := λ n, n+1
+
+    -- What's the 3rd projection of p1?
+    #eval π 3 p1                         -- answer: 4
+
+    -- Example: the constant tuple sevens = (7, 7, 7, ...)
+    definition sevens : ℕ → ℕ := λ n, 7
+
+    -- What's the 3rd projection of sevens?
+    #eval π 3 sevens                      -- answer: 7
+
+------------------------------------------------------
 
 .. _signature:
 
 Signature
 ---------
-
-Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
 A **signature** :math:`σ = (F, ρ)` consists of
 
@@ -40,58 +102,11 @@ For each operation symbol :math:`f : F`, the value :math:`ρ f` is called the **
 
 In classical universal algebra we typically assume :math:`N = ω := ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
 
-.. index:: type of operation symbols, type of signatures, carrier type,
+.. index:: type of signatures
 
-.. index:: operation symbol, arity function, type of interpretations of operations
-
-.. _signatures-in-lean:
-
-Signatures in Lean [3]_
-~~~~~~~~~~~~~~~~~~~~~~~
+.. index:: operation symbol, arity function, 
 
 We now given a first pass at implementing signatures and operations in Lean, highlighting the similarity between the formal and the (classical) informal presentation of these concepts.
-
-We start with the **type of operation symbols** and the **type of signatures**.
-
-.. code-block:: lean
-
-    import data.set
-    definition op (β α) := (β → α) → α
-
-An example of an operation of type ``op (β α)`` is the projection function π, of arity β on the **carrier type** α, which we define in Lean as follows:
-
-.. code-block:: lean
-
-    import data.set
-    definition op (β α) := (β → α) → α
-    -- BEGIN
-    definition π {β α} (i) : op β α := λ a, a i
-    -- END
-
-The operation ``π i`` maps a given tuple ``a : β → α`` to its value at input ``i``.
-
-For instance, suppose we have types ``α`` and ``β``, and variables ``i : β`` and ``f : β → α``.
-
-.. code-block:: lean
-
-    import data.set
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ f, f i
-    -- BEGIN
-    variables (α : Type*) (β : Type*) (i : β) (f : β → α) 
-    -- END
-
-Then the command ``#check πif`` shows that the type of ``π i f`` is ``α``, as expected, since ``π i f = f i``.
-
-.. code-block:: lean
-
-    import data.set
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ f, f i
-    variables (α : Type*) (β : Type*) (i : β) (f : β → α) 
-    -- BEGIN
-    #check π i f     -- >> π i f : α 
-    -- END
 
 We define a signature as a structure with two fields, the type ``F`` of **operation symbols** and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
 
@@ -123,11 +138,9 @@ First, let us fix a signature ``σ`` and define some convenient notation.
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
     -- BEGIN
     section
-
       parameter (σ : signature)
       local notation `F` := σ.F
       local notation `ρ` := σ.ρ 
-
     end
     -- END
 
@@ -288,11 +301,7 @@ The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, r
 
 Using coercions allows us to employ a syntax that is similar (though not identical) to the standard syntax of informal mathematics.
 
-For instance, the standard notation for the interpretation of the operation symbol :math:`f` in the algebra :math:`𝐀 = ⟨A, F^𝐀⟩` is :math:`f^𝐀`.
-
-In our implementation, the interpretation of ``f`` in the algebra ``A`` is denoted by ``A f``.
-
-Although ``A f`` is not identical to the informal language's :math:`f^𝐀`, we feel it is equally elegant and adapting to it should not be a tremendous burden on the user.
+For instance, the standard notation for the interpretation of the operation symbol :math:`f` in the algebra :math:`𝐀 = ⟨A, F^𝐀⟩` is :math:`f^𝐀`. In our Lean implementation, we use ``A f`` to denote :math:`f^𝐀`. Although this syntax doesn't match the informal syntax exactly, it seems equally elegant and adapting to it should not overburden the user.
 
 Another example that demonstrates the utility of coercions is our definition of ``is_subalgebra``, a function that takes as input two algebraic structures and decides whether the second structure is a subalgebra of the first.  Here is the definition.
 
@@ -315,7 +324,8 @@ Another example that demonstrates the utility of coercions is our definition of 
     section
 
     -- BEGIN
-    definition is_subalgebra {σ : signature} {α : Type*} {β : Type*}
+    definition is_subalgebra 
+    {σ : signature} {α : Type*} {β : Type*}
     (A : algebra_on σ α) {β : set α} (B : algebra_on σ β) := 
     ∀ f b, ↑(B f b) = A f ↑b
     -- END
@@ -410,7 +420,7 @@ The following is a recursive definition of the subuniverse generated by a set. (
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       Let :math:`Y = ⋃_{n < ω} X_n`. Clearly :math:`X_n ⊆ Y ⊆ A`, for every :math:`n < ω`. In particular :math:`X = X_0 ⊆ Y`.
 
@@ -712,7 +722,7 @@ To prove this, we need the following basic lemma, which states that a homomorphi
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       Suppose the subset :math:`X ⊆ A` generates 𝐀 and suppose :math:`f|_X = g|_X`. Fix an arbitrary element :math:`a ∈ A`.
 
@@ -736,7 +746,7 @@ Here is another useful theorem. (See also :cite:`Bergman:2012`, Thm. 4.21.)
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       The definition of :math:`𝐓_ρ (X)` exactly parallels the construction in :ref:`Theorem 1.14 <thm-1-14>`. That accounts for (1).
 
@@ -765,9 +775,9 @@ As a second demonstration of inductive types in Lean, we define a type represent
 
     import basic
     section
-      parameters {S : signature} (X :Type*) 
-      local notation `F` := S.F
-      local notation `ρ` := S.ρ 
+      parameters {σ : signature} (X :Type*) 
+      local notation `F` := σ.F
+      local notation `ρ` := σ.ρ 
     
       inductive term
       | var : X → term
@@ -776,11 +786,11 @@ As a second demonstration of inductive types in Lean, we define a type represent
       def Term : algebra S := ⟨term, term.app⟩
     end
 
-The set of terms along with the operations :math:`F^{𝐓} := \{app f | f : F\}` forms an algebra :math:`𝐓(X) = ⟨T(X), F^{𝐓}⟩` in the signature :math:`S = (F, ρ)`.
+The set of terms along with the operations :math:`F^{𝐓} := \{\mathsf{app} f | f : F\}` forms an algebra :math:`𝐓(X) = ⟨T(X), F^{𝐓}⟩` in the signature :math:`σ = (F, ρ)`.
 
 Suppose :math:`𝐀 = ⟨A, F^{𝐀}⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝐓(X)` to 𝐀.
 
-Since 𝐀 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝐓(X)` is *universal* for σ-algebras.
+Since 𝐀 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝐓(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝐓(X)` is *absolutely free* for σ-algebras," in this and only this case.
 
 Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
 
@@ -794,7 +804,7 @@ Before implementing the formal proof of this fact in Lean, let us first define s
       definition 𝕋 := @Term σ     -- term algebra over X
       definition 𝕏 := @var σ X    -- generators of the term algebra
 
-If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of  𝗁 to all of :math:`𝕋(X)` is defined inductively as follows:
+If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of :math:`h` to all of :math:`𝕋(X)` is defined inductively as follows:
 
 .. code-block:: lean
 
@@ -802,7 +812,7 @@ If :math:`h : X → A` is a function defined on the generators of the term algeb
     | (var x) := h x
     | (app f a) := (A f) (λ x, lift_of (a x))
 
-To prove that the term algebra is absolutely free, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
+To prove that the term algebra is universal for σ-algebras, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
 
 .. code-block:: lean
 
@@ -859,19 +869,25 @@ We now state a theorem that shows how the clone of term operations of a signatur
    .. math:: F_0 &= X;\\
          F_{n+1} &= F_n ∪ \{ f g ∣ f ∈ F, g : ρf → (F_n ∩ (ρ g → X)) \}, \quad n < ω.
 
-   Then :math:`Clo^X(F) = ⋃_n F_n`.
+   Then :math:`\mathrm{Clo}^X(F) = ⋃_n F_n`.
 
-This indicates that *the clone of terms can be implemented in Lean as an inductive type*. The following theorem makes this precise. (See also :cite:`Bergman:2012`, Thm. 4.32.)
+Thus *the clone of terms operations can be implemented (e.g., in Lean) as an inductive type*. The following theorem makes this precise. (See also :cite:`Bergman:2012`, Thm. 4.32.)
 
 .. _thm-4-32:
 
 .. proof:theorem::
 
-   Let 𝐀 and 𝐁 be algebras of type ρ.
+   Let 𝐀 and 𝐁 be algebras of type :math:`ρ`.
 
-   #. For every :math:`n`-ary term 𝗍 and homomorphism :math:`g : 𝐀 → 𝐁`, we have :math:`g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n))`.
-   #. For every term :math:`t ∈ T_ρ (X_ω)` and every :math:`θ ∈ \mathrm{Con} 𝐀`, we have :math:`𝐚 ≡₀ 𝐛 ⟹ t^{𝐀}(𝐚) ≡₀ t^{𝐀}(𝐛)`.
-   #. For every subset 𝖸 of 𝖠, we have
+   #. For every :math:`n`-ary term :math:`t ∈ T_ρ (X_ω)` and homomorphism :math:`g : 𝐀 → 𝐁`,
+      
+      .. math:: g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n)).
+
+   #. For all :math:`t ∈ T_ρ (X_ω)`, :math:`θ ∈ \mathrm{Con} 𝐀`, :math:`𝐚 : ρ t → A` and :math:`𝐛 : ρ t → A`,
+   
+      .. math:: 𝐚 \mathrel{θ} 𝐛 ⟹ t^{𝐀}(𝐚) \mathrel{θ} t^{𝐀}(𝐛).
+
+   #. For every subset :math:`Y ⊆ A`,
 
       .. math:: \mathrm{Sg}^{𝐀}(Y) = \{ t^{𝐀}(a_1, \dots, a_n) : t ∈ T(X_n), a_i ∈ Y, i ≤ n < ω\}.
 
@@ -879,7 +895,7 @@ This indicates that *the clone of terms can be implemented in Lean as an inducti
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       The first statement is an easy induction on :math:`|t|`.
 
@@ -899,8 +915,8 @@ This indicates that *the clone of terms can be implemented in Lean as an inducti
 .. [2]
    Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
 
-.. [3]
-   https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/basic.lean
+.. [3] 
+   The ``lean-ualib`` source code is available from `github.com/UniversalAlgebra/lean-ualib`_.
 
 .. [4]   
    The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
@@ -909,7 +925,7 @@ This indicates that *the clone of terms can be implemented in Lean as an inducti
    The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
 
 .. [6]
-   plus whatever equational laws it may models; our handling of *theories* and *models* in Lean is beyond our current scope; for more information, see https://github.com/UniversalAlgebra/lean-ualib/ .
+   plus whatever equational laws it may models; our handling of *theories* and *models* in Lean is beyond our current scope; for more information, see `github.com/UniversalAlgebra/lean-ualib`_.
 
 .. [7]
    See https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/subuniverse.lean
@@ -927,6 +943,8 @@ This indicates that *the clone of terms can be implemented in Lean as an inducti
    https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/free.lean
 
 .. _Lean: https://leanprover.github.io/
+
+.. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
 
 .. The clone of *polynomials} of $\alg A$, denoted by $\Pol \alg A$, is the clone generated by the basic operations of $\alg A$ and the constant unary maps on $A$.
 

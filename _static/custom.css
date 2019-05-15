@@ -38,16 +38,19 @@
     clear: both;
 }
 
-.toggle .header:after {
+/* .toggle .header:after {
     content: " ↓ reveal ↓";
+} */
+.toggle .header:after {
+    content: " ▼";
 }
 
-/* .toggle .header.open:after {
-    content: " ▲";
-} */
 .toggle .header.open:after {
-    content: " ↑ hide ↑";
+    content: " ▲";
 }
+/* .toggle .header.open:after {
+    content: " ↑ hide ↑";
+} */
 
 .premium {
     color:gray;

@@ -48,7 +48,7 @@ A variety of theorems
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       First assume that :math:`𝒦 ⊧ p ≈ q`. Fix :math:`𝐀∈ 𝒦` and :math:`h ∈ \mathrm{Hom}(𝐓(X_ω), 𝐀)`.
       
@@ -80,7 +80,7 @@ A variety of theorems
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       We shall show (a) ⟹ (c) ⟹ (b) ⟹ (a). 
       
@@ -113,7 +113,7 @@ The last result tells us that we can determine whether an identity is true in a 
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       Since :math:`𝐅_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Theorem 4.38 of :cite:`Bergman:2012`. (See :ref:`Fact 3 <fact-m3>` above.)
       
@@ -144,7 +144,7 @@ The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:201
  
       .. container:: header
  
-         *Proof*
+         *Proof*.
       
       Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
 

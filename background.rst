@@ -105,7 +105,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
 
-Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc.
+Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc. [3]_
 
 .. _obs-one:
 
@@ -288,6 +288,9 @@ Here is a list of basic observations that we will need later. We will reference 
 
 .. [2]
    By "functional" we mean a function whose domain is a collection of functions.
+
+.. [3]
+   To see the proofs, click the black triangles.
 
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
 

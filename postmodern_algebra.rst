@@ -66,20 +66,20 @@ General composition
 fork and eval
 ~~~~~~~~~~~~~
 
-.. raw:: latex
+.. .. raw:: latex
 
-   \begin{prooftree}
-   \AXM{\exists x A(x)}
-   \AXM{}
-   \RLM{1}
-   \UIM{A(y)}
-   \noLine
-   \UIM{\vdots}
-   \noLine
-   \UIM{B}
-   \RLM{1}
-   \BIM{B}
-   \end{prooftree}
+..    \begin{prooftree}
+..    \AXM{\exists x A(x)}
+..    \AXM{}
+..    \RLM{1}
+..    \UIM{A(y)}
+..    \noLine
+..    \UIM{\vdots}
+..    \noLine
+..    \UIM{B}
+..    \RLM{1}
+..    \BIM{B}
+..    \end{prooftree}
 
 .. .. include:: latex_images/first_order_logic.8.tex
 
@@ -109,9 +109,9 @@ Example: :cat:`Set`
 
 In universal algebra we deal mainly with *finitary operations on sets*.
 
-By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f : A^n → A`, that takes :math:`n` inhabitants of the type :math:`A` and returns an element of type :math:`A`. [1]_
+By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f : A^n → A`, that takes :math:`n` elements of type :math:`A` and returns an element of type :math:`A`. [1]_
 
-By the equivalence of the :math:`\mathrm{ntuple}` type and the function type :math:`\underline n →  A`, we may represent the type of :math:`n`-ary operations on :math:`A` by :math:`(\underline n → A) → A`.
+By identifying the :math:`\mathrm{ntuple}` type with the function type :math:`\underline n →  A`, we may represent the type of :math:`n`-ary operations on :math:`A` by :math:`(\underline n → A) → A`.
 
 Evaluating such an :math:`f : (\underline n → A) → A` at a tuple :math:`a : \underline n → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
 
