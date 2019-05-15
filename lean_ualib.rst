@@ -18,54 +18,60 @@ Our formal representations of these concepts will be clear, concise, and computa
 
 Our goal here is to demonstrate the power of Lean's type system for expressing mathematical concepts precisely and constructively, and to show that if we make careful design choices at the start of our development, then our formal theorems *and their proofs* can approximate the efficiency and readability of analogous informal presentations found in the mathematics literature.
 
+.. index:: type of; natural numbers
+
 Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
-The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, terms.lean``. [3]_
+The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, ``terms.lean``. [3]_
 
 -----------------------------------------------------
 
 .. index:: signature, operation, operation symbol, similarity type, arity, arity type, variety, equational class, algebraic structure 
 
 Arity and Operations 
---------------------------
+--------------------
+
+.. index:: type of; operation symbols
+.. index:: type of; operations
+.. index:: type of; arities
 
 We start with the **type of operation symbols**, which depends on our semantic notion of **arity**, also captured by a type.
 
 Argument lists that are passed to operations are represented by tuples which are simply functions, say, of type β → α, where β is the **arity type** of the operation to which the tuple will be passed as an argument list.
 
-Heuristically, it's fine to think of | β | as the "number" of arguments the operation takes, but the implementation is much more general than that. In particular, there is no reason to restrict, *a priori*, the arity type to be a finite set.
+Heuristically, it's fine to think of | β | as the "number" of arguments the operation takes, but the implementation is much more general than that. In particular, there is no reason to restrict the arity type to be a finite set, *a priori*.
 
 An **operation** takes a tuple (or, list of "arguments") of type β → α and returns an element of type α.  Here, α is the type on which the operation is defined.
 
-In Lean, if α and β are types, we define the **type of β-ary operations on α**, denoted by ``op``, to be the function type (β → α) → α.
+In Lean, if α and β are types, we define the **type of β-ary operations on α** to be the function type (β → α) → α, and we denote this type by ``op(β α)``.
 
 .. code-block:: lean
 
     import data.set
     definition op (β α) := (β → α) → α
 
-An example of an operation of type ``op(βα)`` is the **projection function** π , defined on the type α, as follows:
+An example of an operation of type ``op (β α)`` is the **projection function** π , defined on the type α, as follows:
 
 .. code-block:: lean
 
     import data.set
     definition op (β α) := (β → α) → α
     -- BEGIN
-    definition π {β α} (i) : op β α := λ t, t i
+    definition π {β α} (i) : op β α := λ a, a i
     -- END
 
-The operation ``π i`` maps a given tuple ``t : β → α`` to ``t i``, its "value" at input ``i``.
+The operation ``π i`` maps a given tuple ``a: β → α`` to its "value" ``a i`` at input ``i``.
 
-For instance, if we have types ``α, β``, and variables ``i:β`` and ``t:β → α``, then the command ``#check π i t`` shows that the type of ``π i t`` is ``α``, as expected, since ``π i t = t i``.
+For instance, if we have types ``α`` and ``β``, and variables ``i: β`` and ``a: β → α``, then the command ``#check π i a`` shows that the type of ``π i a`` is ``α``, as expected, since ``π i a = a i``.
 
 .. code-block:: lean
 
     import data.set
     definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ t, t i
+    definition π {β α} (i) : op β α := λ a, a i
     -- BEGIN
-    variables (α : Type*) (β : Type*) (i : β) (t : β → α) 
-    #check π i f       -- answer: π i f : α 
+    variables (α : Type*) (β : Type*) (i : β) (a : β → α) 
+    #check π i a       -- answer: π i a : α 
     -- END
 
 Here are a couple of examples that are a bit more concrete.
@@ -86,6 +92,10 @@ Here are a couple of examples that are a bit more concrete.
 
 ------------------------------------------------------
 
+.. index:: type of; signatures
+.. index:: type of; similarity types
+.. index:: type of; arities
+
 .. _signature:
 
 Signature
@@ -100,13 +110,13 @@ A **signature** :math:`σ = (F, ρ)` consists of
   
 For each operation symbol :math:`f : F`, the value :math:`ρ f` is called the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
 
-In classical universal algebra we typically assume :math:`N = ω := ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
+In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
 
 .. index:: type of signatures
 
 .. index:: operation symbol, arity function, 
 
-We now given a first pass at implementing signatures and operations in Lean, highlighting the similarity between the formal and the (classical) informal presentation of these concepts.
+We now take our first crack at implementing signatures and operations in Lean, highlighting the similarity between the formal and the classical, informal presentations of these concepts.
 
 We define a signature as a structure with two fields, the type ``F`` of **operation symbols** and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
 
@@ -123,11 +133,7 @@ We define a signature as a structure with two fields, the type ``F`` of **operat
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
     -- END
 
-Next we open up a ``section`` so we can define some parameters (such as the signature ``σ``) that won't change often throughout the development. [4]_
-
-Then we define the **type of interpretations of operations** on the carrier type ``α``. 
-
-First, let us fix a signature ``σ`` and define some convenient notation.
+In the next section, we define the **type of interpretations of operations** on the carrier type ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [4]_
 
 .. code-block:: lean
 
@@ -144,11 +150,7 @@ First, let us fix a signature ``σ`` and define some convenient notation.
     end
     -- END
 
-The ``local notation`` directive lets us write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``.
-
-Similarly, the second notation directive lets us denote the arity of ``f`` by ``ρ f`` (instead of ``σ.ρ f``).
-
-With this notation, the Lean syntax matches our standard informal algebra syntax almost exactly! [5]_ 
+With these ``local notation`` directives, we can now write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [5]_ 
 
 -------------------------------------
 
@@ -167,27 +169,21 @@ An **algebraic structure** is denoted by :math:`𝐀 = ⟨A, F^{𝐀}⟩` and co
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`finster:2018`, :cite:`gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will become part of the ``lean-ualib`` library, but only after we have an easily accessible implementation of the classical core of (single-sorted, set-based) universal algebra.
 
-Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
+Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [2]_
 
-If the arity type :math:`N` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`.
+Fix :math:`m : ℕ`. An :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
 
-A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements from :math:`A`. [2]_
+If :math:`h : A → B` and :math:`a : m → A`, then :math:`h ∘ a : m → B` is the tuple whose :math:`i`-th value is :math:`(h ∘ a) i = h\, a\, i = h a_i`, which has type :math:`B`.
 
-Fix :math:`m : ℕ`.
+If :math:`g : A^m → A` and :math:`a : m → A`, then the value :math:`g\, a` has type :math:`A`.
 
-An :math:`m`-tuple, :math:`𝐚 = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`𝐚 : m → 𝖠`, defined for each :math:`i < m` by :math:`𝐚 i = 𝖺_i`.
-
-Therefore, if :math:`h : A → B`, then :math:`h ∘ a : m → B` is the tuple whose value at :math:`i` is :math:`(h ∘ a) i = h a i = h a_i`, which has type :math:`B`.
-
-On the other hand, if :math:`g` has type :math:`A^m → A`, then for each :math:`a : A` the value :math:`g a` has type :math:`A`.
-
-Suppose 
+Thus, if
 
   + :math:`f : (ρf → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
   + :math:`a : ρf → A` is a :math:`ρ f`-tuple on :math:`A`, and 
-  + :math:`h : A → B`. 
+  + :math:`h : A → B`,
 
-Then :math:`h ∘ a : ρf → B`, so :math:`f (h ∘ a) : B`.
+then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
 .. _universal-algebras-in-lean:
 
@@ -196,15 +192,23 @@ Universal algebras in Lean
 
 To represent the interpretation of an algebra on a carrier type α, we define a type that we call ``algebra_on``.
 
-.. index:: pair: dependent pair type; Sigma type
+.. index:: type of; dependent pairs (Sigma type)
 
-.. index:: pair: dependent function type; Pi type
+.. index:: type of; dependent functions (Pi type)
 
-Recall, a **Pi type** ``Π(x:A),B x`` generalizes the function type ``A → B`` and represents a **dependent function type** by allowing the codomain ``B x`` to depend on the value ``x`` of the input argument.
+The **Pi type** ``Π(x:A),B x`` is a **dependent function type** that generalizes the function type ``A → B``.  It's called a *dependent type* because the codomain ``B x`` can depend on the value ``x: A``.
 
-Similarly, a **Sigma type** ``Σ(x:A),B x`` generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first. Thus, a Sigma type is called a **dependent pair type**.
+Similarly, the **Sigma type** ``Σ(x:A),B x`` generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first. Thus, a Sigma type is called a **dependent pair type**.
 
-Our definition of ``algebra_on`` uses the dependent function type, which makes sense because, if we are given a signature σ and a carrier type α, then an σ-algebra over α is determined by its operations on α, and an inhabitant of the type ``algebra_on`` assigns an interpretation to each ``op`` symbol ``f : F``, which yields a function of type ``ρ f → α → α``. [6]_
+.. index:: type of; interpretations of operations
+
+Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature.
+
+Our definition of ``algebra_on`` uses the dependent function type. Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
+
+Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
+
+.. math:: \prod_{f : F} (ρ f → α) → α = \prod_{f : F} \mathrm{op} \,(ρ f)\, α.
 
 .. code-block:: lean
 
@@ -231,7 +235,9 @@ Our definition of ``algebra_on`` uses the dependent function type, which makes s
     end
     -- END
 
-Finally, let us consider how to define a **universal algebra** in Lean.
+.. index:: type of; universal algebras
+
+Finally, let us define the **type of universal algebras** in Lean.
 
 A universal algebra :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting of a carrier (or universe) :math:`A` along with an set :math:`F^𝐀` of interpretations of the operation symbols in :math:`F`.
 
@@ -696,15 +702,13 @@ Define the set of **terms in the signature** σ **over** :math:`X` by :math:`T_�
 
 The definition of :math:`T_ρ (X)` is recursive, indicating that *the set of terms in a signature can be implemented in Lean using an inductive type*.
 
-We will confirm this in the next subsection, but before doing so, we impose an algebraic structure on :math:`T_ρ(X)`, and then state and prove some basic but important facts about this algebra.
-
-These will also be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts, and to show off inductively defined types in Lean.
+We will confirm this in the next subsection, but before doing so, we impose an algebraic structure on :math:`T_ρ(X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
 
 If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [9]_ The height is a useful index for recursion and induction.
 
 Notice that the set :math:`T_ρ (X)` is nonempty iff either :math:`X` or :math:`F_0` is nonempty. As long as :math:`T_ρ (X)` is nonempty, we can impose upon this set an algebraic structure, as follows:
 
-For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝐓_ρ (X)}` be the operation on :math:`𝐓_ρ (X)` that maps each tuple :math:`t : ρf → T_ρ (X)` to the term :math:`ft`.
+For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝐓_ρ (X)}` be the operation on :math:`𝐓_ρ (X)` that maps each tuple :math:`𝐚 : ρf → T_ρ (X)` to the formal term :math:`f 𝐚`.
 
 We define :math:`𝐓_ρ (X)` to be the algebra with universe :math:`T_ρ (X)` and with basic operations :math:`\{f^{𝐓_ρ (X)} | f ∈ F\}`. [10]_
 
@@ -924,8 +928,8 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
 .. [5]
    The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
 
-.. [6]
-   plus whatever equational laws it may models; our handling of *theories* and *models* in Lean is beyond our current scope; for more information, see `github.com/UniversalAlgebra/lean-ualib`_.
+.. .. [6]
+..    plus whatever equational laws it may models; our handling of *theories* and *models* in Lean is beyond our current scope; for more information, see `github.com/UniversalAlgebra/lean-ualib`_.
 
 .. [7]
    See https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/subuniverse.lean
