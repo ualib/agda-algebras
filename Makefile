@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = logic_and_proof
+SPHINXPROJ    = ualib
 SOURCEDIR     = .
 BUILDDIR      = _build
 

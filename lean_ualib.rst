@@ -22,7 +22,7 @@ Our goal here is to demonstrate the power of Lean's type system for expressing m
 
 Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
-The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, ``terms.lean``. [3]_
+The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, ``terms.lean``. [1]_
 
 -----------------------------------------------------
 
@@ -110,7 +110,7 @@ A **signature** :math:`σ = (F, ρ)` consists of
   
 For each operation symbol :math:`f : F`, the value :math:`ρ f` is called the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
 
-In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
+In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [2]_
 
 .. index:: type of signatures
 
@@ -133,7 +133,7 @@ We define a signature as a structure with two fields, the type ``F`` of **operat
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
     -- END
 
-In the next section, we define the **type of interpretations of operations** on the carrier type ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [4]_
+In the next section, we define the **type of interpretations of operations** on the carrier type ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [3]_
 
 .. code-block:: lean
 
@@ -150,7 +150,7 @@ In the next section, we define the **type of interpretations of operations** on 
     end
     -- END
 
-With these ``local notation`` directives, we can now write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [5]_ 
+With these ``local notation`` directives, we can now write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [4]_ 
 
 -------------------------------------
 
@@ -167,9 +167,9 @@ An **algebraic structure** is denoted by :math:`𝐀 = ⟨A, F^{𝐀}⟩` and co
   #. :math:`F^{𝐀} = \{f^{𝐀} ∣ f ∈ F, f^{𝐀} : (ρf → A) → A\} :=` a set of operations defined on :math:`A`, and
   #. a collection of identities satisfied by the elements and operations of 𝐀.
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`finster:2018`, :cite:`gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will become part of the ``lean-ualib`` library, but only after we have an easily accessible implementation of the classical core of (single-sorted, set-based) universal algebra.
+Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will become part of the ``lean-ualib`` library, but only after we have an easily accessible implementation of the classical core of (single-sorted, set-based) universal algebra.
 
-Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [2]_
+Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [5]_
 
 Fix :math:`m : ℕ`. An :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
 
@@ -190,21 +190,9 @@ then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 Universal algebras in Lean
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To represent the interpretation of an algebra on a carrier type α, we define a type that we call ``algebra_on``.
-
-.. index:: type of; dependent pairs (Sigma type)
-
-.. index:: type of; dependent functions (Pi type)
-
-The **Pi type** ``Π(x:A),B x`` is a **dependent function type** that generalizes the function type ``A → B``.  It's called a *dependent type* because the codomain ``B x`` can depend on the value ``x: A``.
-
-Similarly, the **Sigma type** ``Σ(x:A),B x`` generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first. Thus, a Sigma type is called a **dependent pair type**.
-
 .. index:: type of; interpretations of operations
 
-Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature.
-
-Our definition of ``algebra_on`` uses the dependent function type. Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
+Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses the :ref:`dependent function type <pi-type>` (:ref:`Pi type <pi-type>`). Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
 
 Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
@@ -234,6 +222,8 @@ Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
       -- a function of type (β → α) → α.
     end
     -- END
+
+Lean's definition of ``Π`` is shown in :numref:`Appendix Section %s <appendix>`. 
 
 .. index:: type of; universal algebras
 
@@ -913,23 +903,20 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
 
 .. rubric:: Footnotes
 
-.. [1]
-   As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
-
-.. [2]
-   Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
-
-.. [3] 
+.. [1]   
    The ``lean-ualib`` source code is available from `github.com/UniversalAlgebra/lean-ualib`_.
 
-.. [4]   
+.. [2]
+   As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
+
+.. [3]
    The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
 
-.. [5]
+.. [4]
    The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
 
-.. .. [6]
-..    plus whatever equational laws it may models; our handling of *theories* and *models* in Lean is beyond our current scope; for more information, see `github.com/UniversalAlgebra/lean-ualib`_.
+.. [5]
+   Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
 
 .. [7]
    See https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/subuniverse.lean

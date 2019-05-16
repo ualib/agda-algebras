@@ -30,7 +30,10 @@ sys.path.insert(0, os.path.abspath('.'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.mathjax', 'sphinx.ext.githubpages', 'lean_sphinx', 'sphinxcontrib.bibtex', 'sphinxcontrib.proof']
+extensions = [
+    'sphinx.ext.mathjax', 'sphinx.ext.githubpages', 'sphinx.ext.todo',
+    'lean_sphinx', 'sphinxcontrib.bibtex', 'sphinxcontrib.proof'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -76,12 +79,10 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-source_parsers = {
-}
+source_parsers = {}
 
 # use numbering for section references with :numref:, e.g. 'Section 3.2'.
 numfig = True
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -99,8 +100,10 @@ html_theme_options = {
     'font_family': 'Times New Roman, Times, serif',
     'head_font_family': 'Times New Roman, Times, serif',
     'code_bg': 'white',
-    'extra_nav_links': {'PDF version':'ualib.pdf',
-                       'Logical Foundations Home':'https://logicalfoundations.gitlab.io/'},
+    'extra_nav_links': {
+        'PDF version': 'ualib.pdf',
+        'Logical Foundations Home': 'https://logicalfoundations.gitlab.io/'
+    },
     # 'sidebar_width' : '200px',
     # 'page_width' : '960px',
     # 'fixed_sidebar' : True
@@ -131,12 +134,10 @@ html_sidebars = {
     ]
 }
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ualib'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -155,7 +156,8 @@ latex_elements = {
 
     # Additional stuff for the LaTeX preamble.
     # load packages and make box around code lighter
-    'preamble': r'''
+    'preamble':
+    r'''
 \usepackage{unixode}
 \usepackage{bussproofs}
 \usepackage{mylogic}
@@ -177,15 +179,12 @@ latex_documents = [
      u'William DeMeo', 'manual'),
 ]
 
-
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'ualib', u'Lean Universal Algebra Library',
-     [author], 1)
-]
+man_pages = [(master_doc, 'ualib', u'Lean Universal Algebra Library', [author],
+              1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -193,11 +192,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ualib', u'Lean Universal Algebra Library',
-     author, 'ualib', 'One line description of project.',
-     'Miscellaneous'),
+    (master_doc, 'ualib', u'Lean Universal Algebra Library', author, 'ualib',
+     'One line description of project.', 'Miscellaneous'),
 ]
 
 # -- Options for Epub output -------------------------------------------------
-
-

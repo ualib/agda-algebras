@@ -74,7 +74,7 @@ An **algebraic structure** is denoted by :math:`𝐀 = ⟨ A, F^𝐀⟩` and con
   #. :math:`F^𝐀 = \{ f^𝐀 ∣ f ∈ F, \ f^𝐀 : (ρf → A) → A \}` := a set of operations on :math:`A`,
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝐀`.
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`finster:2018`, :cite:`gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later, once we have a working implementation of the classical (single-sorted, set-based) core of universal algebra. (See :numref:`Section %s <postmodern-algebra>`.)
+Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later, once we have a working implementation of the classical (single-sorted, set-based) core of universal algebra. (See :numref:`Section %s <postmodern-algebra>`.)
 
 Notation for homs, epis, monos, and autos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
