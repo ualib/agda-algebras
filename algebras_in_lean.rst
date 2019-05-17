@@ -28,8 +28,10 @@ Most of the Lean code described in this section can be found in the files ``basi
 .. index:: type of; arities
 .. index:: type of; natural numbers
 
-Arity and Operations 
---------------------
+.. _operations-and-arities:
+
+Operations and arities
+----------------------
 
 Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
@@ -100,8 +102,8 @@ Here are a couple of examples that are a bit more concrete.
 
 .. index:: ! arity
 
-Signature in Lean
------------------
+Signatures
+----------
 
 A **signature** :math:`σ = (F, ρ)` consists of
 
@@ -163,8 +165,8 @@ With these ``local notation`` directives, we can now write ``f : F`` (instead of
 
 .. _universal-algebras-in-lean:
 
-Universal algebras in Lean
---------------------------
+Algebras
+--------
 
 Classical universal algebra is the study of **varieties** (or **equational classes**) of algebraic structures. 
 
@@ -262,7 +264,7 @@ A :index:`universal algebra` :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting 
     end
     -- END
 
-(See also :numref:`Appendix Section %s <sigma-type>`, for a more technical description of coersions in Lean.)
+(See also :numref:`Appendix Section %s <sigma-type>`, for a more technical description of the Sigma type in Lean.)
 
 Finally, we show how to get ahold of the carrier and operations of an algebra by instantiating them as follows:
 
@@ -299,7 +301,7 @@ The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, r
 
 For instance, the standard notation for the interpretation of the operation symbol :math:`f` in the algebra :math:`𝐀 = ⟨A, F^𝐀⟩` is :math:`f^𝐀`. In our Lean implementation, we use ``A f`` to denote :math:`f^𝐀`. Although this syntax doesn't match the informal syntax exactly, it seems equally elegant and adapting to it should not overburden the user.
 
-Another example that demonstrates the utility of coercions is our definition of ``is_subalgebra``, a function that takes as input two algebraic structures and decides whether the second structure is a subalgebra of the first.  Here is the definition.  (See also :numref:`Appendix Section %s <coercions>`, for a more technical description of coersions in Lean.)
+Another example that demonstrates the utility of coercions is our definition of ``is_subalgebra``, a function that takes as input two algebraic structures and decides whether the second structure is a subalgebra of the first.  Here is the definition.  
 
 .. code-block:: lean
 
@@ -327,6 +329,8 @@ Another example that demonstrates the utility of coercions is our definition of 
     -- END
 
     end 
+
+(See also :numref:`Appendix Section %s <coercions>`, for a more technical description of coersions in Lean.)
 
 .. index:: homomorphism
 
@@ -372,8 +376,8 @@ Comparing this with a common informal language definition of a homomorphism, whi
 
 .. _subalgebras-in-lean:
 
-Subalgebras in Lean
---------------------
+Subalgebras
+-----------
 
 Two important concepts in universal algebra are **subuniverse** and **subalgebra**.
 
@@ -490,7 +494,7 @@ We now show how the subalgebra concept and the foregoing argument can be impleme
     end subs
     end subuniverse
 
-Lean syntax for the intersection operation on collections of *sets* is ``⋂₀``. [6]_
+(See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coersions ``⋂₀`` in Lean.)
 
 Next we need *introduction* and *elimination* rules for arbitrary intersections, plus the useful fact that the intersection of subuniverses is a subuniverse. 
 
@@ -619,9 +623,6 @@ The next three lemmas show that :math:`\mathrm{Sg} X` is the smallest subunivers
 
 .. [5]
    See https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/subuniverse.lean
-
-.. [6]
-   Technically, ``⋂₀ S`` denotes ``sInter (S : set (set α)) : set α := {λ s, a | ∀ t ∈ s, a ∈ t}`` Given a collection ``S : set (set α)`` of sets of type ``α``, ``⋂₀ S`` is the intersection of the sets in ``S``, as claimed.
 
 .. _Lean: https://leanprover.github.io/
 

@@ -69,11 +69,10 @@ The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notati
 
 .. index:: variables, word, term, free algebra
 
-.. _terms-and-free-algebra:
+.. _terms-and-free-algebras:
 
-Terms and free algebras in Lean
--------------------------------
-
+Terms and free algebras
+-----------------------
 
 Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
 

@@ -5,6 +5,7 @@ The Lean Universal Algebra Library
     :numbered:
     :maxdepth: 2
 
+    preface
     background
     algebras_in_lean
     terms_and_free_algebras

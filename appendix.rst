@@ -4,20 +4,7 @@
 Appendix
 ========
 
-Motivation
-----------
-
-We chose the Lean_ proof assistant because it is designed and developed by logicians and computer scientists working together to create a language and syntax that presents things *as they should be*, so that the working in the language feels almost as natural as working in the informal language of mathematics and is easily adopted by mathematicians who lack special training in computer science.
-
-Lean_ is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. Lean_ draws on decades of experience in interactive and automatic theorem provers (e.g., Coq, Isabelle/HOL, and Z3). Its logic is very expressive, and emphasis is placed on *powerful proof automation*. The system is easy to extend via *metaprograms* developed in the same logical language as is used to express specifications and proofs in Lean. In this way, Lean aims to *bridge the gap between interactive and automated theorem proving*.
-
-There are many other reasons Lean is an ideal platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood* without special training. In fact, working in Lean usually leads to formal proofs that are cleaner, more concise, and shorter than the corresponding proofs in the language of informal mathematics.
-
-To support the formalization of theorems, we will develop libraries that contain formal statements and proofs of all of the core definitions and results universal algebra, and we will explore how to automate proof search specifically in these foundational areas. We will also formalize theorems emerging from our own mathematics research.  For such projects, a proof assistant equipped with special libraries of definitions and results from algebra and lattice theory, as well as specialized tactics to automate the standard *proof idioms* of our field, would be extremely useful. Our goals is to demonstrate (to ourselves and to our colleagues around
-the globe) the utility of such libraries and tactics for proving "real world" theorems.
-
-Lean is a very young language, and its domain-specific libraries for special disciplines are small but growing. We feel it is vital for us to get involved at this early stage and play a leading role in its development. If we leave all of this to our colleagues in computer science, they will base the development on their perception of our needs, history will likely repeat itself, and it is unlikely that the libraries and tools that come out of the effort will meet the needs and
-expectations of most working mathematicians.
+.. _basic-type-theory:
 
 Basic type theory
 -----------------
@@ -26,6 +13,8 @@ This section presents the rudiments of *type theory*, covering just enough to ke
 
 .. todo:: say something more about this
 
+.. _
+
 Curry-Howard
 ------------
 
@@ -33,11 +22,12 @@ The rule for *function application* corresponds, under the “Curry-Howard” or
 
 This simply codifies our intuitive notion of function application, viz. applying the function :math:`f` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an inhabitant :math:`f \, a` of the codomain :math:`B`. If we interpret :math:`A` and :math:`B` as propositions, :math:`f` as a proof of the implication :math:`A \to B`, and :math:`a` as a proof of :math:`A`, then the rule :math:`\mathsf{app}` becomes the implication elimination rule (*modus ponens*).
 
+.. _
 
 Dependent types
 ---------------
 
-Lean is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
+Lean_ is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
 
 Before getting to the example, however, we should first briefly explain what makes dependent type theory *dependent*, and why dependent types are useful. The short explanation is that types can depend on *parameters*. For example, the type ``list α`` depends on the argument ``α``, and this dependence is what distinguishes ``list ℕ`` from list ``bool``. For another example, consider the type ``vec α n``, the type of vectors of length ``n`` whose entries inhabit the type ``α``. The ``vec α n`` type depends on two parameters: the type ``α : Type`` of the elements in the vector and the length ``n : ℕ``.
 
@@ -73,6 +63,8 @@ Alternatively, some authors prefer to use the injection function to indicate the
 
 .. index:: dependent type theory, inductive type, universes
 
+.. _
+
 Inductive types
 -----------------
 
@@ -80,30 +72,41 @@ Inductive types
 
 **Inductive types** and **inductive families of types**, generating only the recursor for an inductive type;
 
+.. _
 
 Lean's type hierarchy
 ---------------------
 
-Like its more mature cousins Coq and Agda, Lean takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
+Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
 
 .. index:: keyword: Type
 .. index:: keyword: Type 0
 .. index:: keyword: Type 1
-.. index:: keyword: Type 2
+.. index:: keyword: Type n
 
-Lean has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.  For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature: ``list : Type u₁ → Type u₁``. Here ``u₁`` is a variable ranging over type levels.
+Lean_ has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.
+
+For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature: 
+
+.. code-block:: lean
+
+   #check @list    -- answer: Type u → Type u
+   
+Here ``u`` is a variable ranging over type levels.
 
 Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is then a larger universe of types that contains ``Type 0`` as an *element*, and ``Type 2`` is an even larger universe of types, that contains ``Type 1`` as an element. The list is indefinite, so that there is a ``Type n`` for every natural number ``n``. ``Type`` is an abbreviation for ``Type 0``.
 
 .. index:: ! predicative, ! ramified, ! impredicative
 .. index:: keyword: Prop
 
-The upshot of this **ramified** arrangement is that the types described in the last paragraph are **predicative**, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean supplies us with exactly one. It is the type ``Prop`` of propositions, and it is **impredicative** (self-referential).
+The upshot of this **ramified** arrangement is that the types described in the last paragraph are **predicative**, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is **impredicative** (self-referential).
+
+.. _
 
 The elaboration engine
 -----------------------
 
-On top of the Lean kernel there is a powerful *elaboration engine* that can
+On top of the Lean_ kernel there is a powerful *elaboration engine* that can
 
 #. infer implicit universe variables;
 
@@ -119,13 +122,17 @@ On top of the Lean kernel there is a powerful *elaboration engine* that can
 
 #. constructs terms using tactics
 
-Lean does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
+Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
 
+
+.. _pattern-matching
 
 Pattern matching
 ----------------
 
 .. todo:: say something about this
+
+.. _various-types-and-sorts:
 
 Various types and sorts
 -----------------------
@@ -168,31 +175,54 @@ The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, g
     mk :: (fst : α) (snd : β fst)
 
 
+.. _other-features:
+
 Other features
 --------------
 
 .. _intersection:
 
-Intersection
-~~~~~~~~~~~~
+Union and Intersection
+~~~~~~~~~~~~~~~~~~~~~~
 
-(used in :numref:`Section %s <subalgebras-in-lean>`)
+References for this subsection:
+
++ lean_src_ : set.lean_
+
++ mathlib_: basic.lean_, lattice.lean_
+
+Let :math:`S` be a set of sets of type :math:`α`. 
+
+In Lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
+
+.. code-block:: lean
+
+   import data.set
+   variable S : set (set α)
+   #check ⋂₀ S          -- answer: set α
+   
+Here is the formal definition from the file lattice.lean_.
 
 .. code-block:: lean
 
     /-- Intersection of a set of sets. -/
-    @[reducible] def sInter (S : set (set α)) : set α := Inf S
+    @[reducible]
+    def sInter (S : set (set α)) : set α := Inf S
 
     prefix `⋂₀`:110 := sInter
 
+The **union of sets** is implemented similarly.
+
+.. code-block:: lean
+
+   @[reducible]
+   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
+   prefix `⋃₀`:110 := sUnion
 
 .. _coercions:
 
 Coercions
 ~~~~~~~~~
-
-(used in :numref:`Section %s <universal-algebras-in-lean>`)
-
 
 .. code-block:: lean
 
@@ -202,10 +232,12 @@ Coercions
     class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
     (F : a → Sort v) (coe : Π x, F x)
 
+.. _metaprogramming:
+
 Metaprogramming
 ~~~~~~~~~~~~~~~
 
-Lean is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a program whose purpose is to modify the behavior of other programs.  **Proof tactics** form an important class of metaprograms. These are automated procedures for constructing and manipulating proof terms. An awesome feature of Lean is that  *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
+Lean_ is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a program whose purpose is to modify the behavior of other programs.  **Proof tactics** form an important class of metaprograms. These are automated procedures for constructing and manipulating proof terms. An awesome feature of Lean_ is that  *metaprograms can be written in the Lean_ language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
 
 ---------------------
 
@@ -214,8 +246,23 @@ Lean is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a 
 .. [1] 
    Of course, it's more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1) : b_i ∈ B_i, i = 0, 1\}`, but as usual we identify tuples with functions, which yields the :ref:`Pi type <pi-type>`.
 
-
-
 .. _Lean: https://leanprover.github.io/
 
 .. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _lean_src: https://github.com/leanprover/lean
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+/-- Intersection of a set of sets. -/
+@[reducible] def sInter (S : set (set α)) : set α := Inf S
+
+prefix `⋂₀`:110 := sInter
