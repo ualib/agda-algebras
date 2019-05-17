@@ -63,7 +63,7 @@ The following special cases come up often.
 
 It is important to be familiar with the classical notions of signature and arity, since these are used by almost all algebraists. (In :numref:`Section %s <f-algebra>`, we give alternative, category theoretic definitions of these things that are sometimes easier to compute with.)
 
-.. index:: pair: algebra; algebraic structure
+.. index:: triple: algebra; structure; universal algebra
 
 Algebraic structures
 ~~~~~~~~~~~~~~~~~~~~

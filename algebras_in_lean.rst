@@ -18,28 +18,28 @@ Our formal representations of these concepts will be clear, concise, and computa
 
 Our goal here is to demonstrate the power of Lean's type system for expressing mathematical concepts precisely and constructively, and to show that if we make careful design choices at the start of our development, then our formal theorems *and their proofs* can approximate the efficiency and readability of analogous informal presentations found in the mathematics literature.
 
-.. index:: type of; natural numbers
-
-Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
-
-The Lean code described in this section is found in the following files of the lean-ualib: ``basic.lean``, ``subuniverse.lean``, ``free.lean``, ``terms.lean``. [1]_
+Most of the Lean code described in this section can be found in the files ``basic.lean`` and ``subuniverse.lean`` which reside in the ``src`` directory of the lean-ualib_ repository.
 
 -----------------------------------------------------
 
-.. index:: signature, operation, operation symbol, similarity type, arity, arity type, variety, equational class, algebraic structure 
+.. index:: arity, operation
+.. index:: airty type, operation symbol type
+.. index:: type of; operation symbols
+.. index:: type of; arities
+.. index:: type of; natural numbers
 
 Arity and Operations 
 --------------------
 
-.. index:: type of; operation symbols
-.. index:: type of; operations
-.. index:: type of; arities
+Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
 We start with the **type of operation symbols**, which depends on our semantic notion of **arity**, also captured by a type.
 
 Argument lists that are passed to operations are represented by tuples which are simply functions, say, of type β → α, where β is the **arity type** of the operation to which the tuple will be passed as an argument list.
 
 Heuristically, it's fine to think of | β | as the "number" of arguments the operation takes, but the implementation is much more general than that. In particular, there is no reason to restrict the arity type to be a finite set, *a priori*.
+
+.. index:: ! type of; operations
 
 An **operation** takes a tuple (or, list of "arguments") of type β → α and returns an element of type α.  Here, α is the type on which the operation is defined.
 
@@ -49,6 +49,8 @@ In Lean, if α and β are types, we define the **type of β-ary operations on α
 
     import data.set
     definition op (β α) := (β → α) → α
+
+.. index:: ! projection function
 
 An example of an operation of type ``op (β α)`` is the **projection function** π , defined on the type α, as follows:
 
@@ -92,33 +94,31 @@ Here are a couple of examples that are a bit more concrete.
 
 ------------------------------------------------------
 
-.. index:: type of; signatures
-.. index:: type of; similarity types
-.. index:: type of; arities
+.. _signatures-in-lean:
 
-.. _signature:
+.. index:: ! signature, ! operation symbol, ! similarity type
 
-Signature
----------
+.. index:: ! arity
+
+Signature in Lean
+-----------------
 
 A **signature** :math:`σ = (F, ρ)` consists of
 
   #. :math:`F :=` a set of **operation symbols**;
   #. :math:`ρ: F → N :=` a **similarity type**.
   
-..  giving the **arity**, ``ρf``, of each operation symbol ``f:F``.
-  
 For each operation symbol :math:`f : F`, the value :math:`ρ f` is called the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
 
-In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [2]_
+In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
 
-.. index:: type of signatures
+.. index:: ! type of; signatures
+.. index:: ! type of; operations
+.. index:: ! arity function
 
-.. index:: operation symbol, arity function, 
+We now take our first crack at implementing a type of signatures and a type of operations in Lean_. In the process we compare and contrast the formal and the informal presentations of these concepts.
 
-We now take our first crack at implementing signatures and operations in Lean, highlighting the similarity between the formal and the classical, informal presentations of these concepts.
-
-We define a signature as a structure with two fields, the type ``F`` of **operation symbols** and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
+We define the **type of signatures** as a structure with two fields, the type ``F`` of operation symbols and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
 
 .. code-block:: lean
 
@@ -133,7 +133,11 @@ We define a signature as a structure with two fields, the type ``F`` of **operat
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
     -- END
 
-In the next section, we define the **type of interpretations of operations** on the carrier type ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [3]_
+.. index:: ! type of; interpretations of operations
+.. index:: keyword: section
+.. index:: keyword: local notation
+
+In the next section, we define the **type of interpretations of operations** on the :index:`carrier type` ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [2]_
 
 .. code-block:: lean
 
@@ -150,26 +154,29 @@ In the next section, we define the **type of interpretations of operations** on 
     end
     -- END
 
-With these ``local notation`` directives, we can now write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [4]_ 
+With these ``local notation`` directives, we can now write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [3]_ 
 
 -------------------------------------
 
-.. _universal-algebra:
+.. index:: pair: variety; equational class
+.. index:: triple: algebra; structure; universal algebra
 
-Universal algebra
-------------------
+.. _universal-algebras-in-lean:
+
+Universal algebras in Lean
+--------------------------
 
 Classical universal algebra is the study of **varieties** (or **equational classes**) of algebraic structures. 
 
-An **algebraic structure** is denoted by :math:`𝐀 = ⟨A, F^{𝐀}⟩` and consists of 
+A **universal algebra** (also known as an **algebraic structure**) is denoted by :math:`𝐀 = ⟨A, F^{𝐀}⟩` and consists of 
 
-  #. :math:`A :=` a set, called the *universe* (or *carrier*) of the algebra,
-  #. :math:`F^{𝐀} = \{f^{𝐀} ∣ f ∈ F, f^{𝐀} : (ρf → A) → A\} :=` a set of operations defined on :math:`A`, and
-  #. a collection of identities satisfied by the elements and operations of 𝐀.
+  #. :math:`A :=` a set, called the **universe** (or **carrier**) of the algebra,
+  #. :math:`F^{𝐀} = \{f^{𝐀} ∣ f ∈ F, f^{𝐀} : (ρf → A) → A\} :=` a set of **operations** defined on :math:`A`, and
+  #. a collection of **identities** satisfied by the elements and operations of 𝐀.
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will become part of the ``lean-ualib`` library, but only after we have an easily accessible implementation of the classical core of (single-sorted, set-based) universal algebra.
 
-Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [5]_
+Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [4]_
 
 Fix :math:`m : ℕ`. An :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
 
@@ -185,16 +192,13 @@ Thus, if
 
 then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
-.. _universal-algebras-in-lean:
-
-Universal algebras in Lean
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 .. index:: type of; interpretations of operations
 
-Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses the :ref:`dependent function type <pi-type>` (:ref:`Pi type <pi-type>`). Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
+Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses the :ref:`dependent function type <pi-type>` (or "Pi type").
 
-Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
+.. index:: ! carrier type
+
+Given a signature :math:`σ = (F, ρ)` and a **carrier type** :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).  Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
 .. math:: \prod_{f : F} (ρ f → α) → α = \prod_{f : F} \mathrm{op} \,(ρ f)\, α.
 
@@ -223,17 +227,13 @@ Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
     end
     -- END
 
-Lean's definition of ``Π`` is shown in :numref:`Appendix Section %s <appendix>`. 
+(See also :numref:`Appendix Section %s <pi-type>`, for a more technical description of Leans ``pi`` type.)
 
 .. index:: type of; universal algebras
 
 Finally, let us define the **type of universal algebras** in Lean.
 
-A universal algebra :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting of a carrier (or universe) :math:`A` along with an set :math:`F^𝐀` of interpretations of the operation symbols in :math:`F`.
-
-Thus, the type of the second component of the pair :math:`⟨A,F^𝐀⟩` depends on the first, so it is natural to encode the type of algebras as a dependent pair (or Sigma) type.
-
-.. , that is, a type of the form ``Σ(x:A), B x``.
+A :index:`universal algebra` :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting of a :index:`carrier` (or :index:`universe`) :math:`A` along with an set :math:`F^𝐀` of :index:`operations` (i.e., interpretations of the operation symbols in :math:`F`). Thus, the type of the second component of the pair :math:`⟨A,F^𝐀⟩` depends on the first, so it is natural to encode the type of algebras as a :index:`dependent pair`, or :index:`Sigma type`.
 
 .. code-block:: lean
 
@@ -262,7 +262,7 @@ Thus, the type of the second component of the pair :math:`⟨A,F^𝐀⟩` depend
     end
     -- END
 
-(For a disection of Lean's ``sigma`` type, see :numref:`Appendix Section %s <sigma-type>`.)
+(See also :numref:`Appendix Section %s <sigma-type>`, for a more technical description of coersions in Lean.)
 
 Finally, we show how to get ahold of the carrier and operations of an algebra by instantiating them as follows:
 
@@ -291,15 +291,15 @@ Finally, we show how to get ahold of the carrier and operations of an algebra by
     end
     -- END
 
-The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, respectively, because here we are using a very nice feature of Lean called **coercions**.
+.. index:: keyword: has_coe_to_sort
+.. index:: keyword: has_coe_to_fun
+.. index:: coersion
 
-(For a disection of coercions in Lean, see :numref:`Appendix Section %s <coercions>`.)
-
-Using coercions allows us to employ a syntax that is similar (though not identical) to the standard syntax of informal mathematics.
+The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, respectively, because here we are using a very nice feature of Lean called **coercions**. Using coercions allows us to employ a syntax that is similar (though not identical) to the standard syntax of informal mathematics. 
 
 For instance, the standard notation for the interpretation of the operation symbol :math:`f` in the algebra :math:`𝐀 = ⟨A, F^𝐀⟩` is :math:`f^𝐀`. In our Lean implementation, we use ``A f`` to denote :math:`f^𝐀`. Although this syntax doesn't match the informal syntax exactly, it seems equally elegant and adapting to it should not overburden the user.
 
-Another example that demonstrates the utility of coercions is our definition of ``is_subalgebra``, a function that takes as input two algebraic structures and decides whether the second structure is a subalgebra of the first.  Here is the definition.
+Another example that demonstrates the utility of coercions is our definition of ``is_subalgebra``, a function that takes as input two algebraic structures and decides whether the second structure is a subalgebra of the first.  Here is the definition.  (See also :numref:`Appendix Section %s <coercions>`, for a more technical description of coersions in Lean.)
 
 .. code-block:: lean
 
@@ -368,12 +368,12 @@ Comparing this with a common informal language definition of a homomorphism, whi
 
 .. \ref{sec:leans-hierarchy-of-sorts-and-types})
 
-.. index:: subalgebra, subuniverse
+.. index:: ! subalgebra, ! subuniverse
 
-.. _subalgebra:
+.. _subalgebras-in-lean:
 
-Subalgebra
-----------
+Subalgebras in Lean
+--------------------
 
 Two important concepts in universal algebra are **subuniverse** and **subalgebra**.
 
@@ -444,11 +444,6 @@ The following is a recursive definition of the subuniverse generated by a set. (
     
       Therefore, :math:`X_{n+1} ⊆ \mathrm{Sg}^𝐀(X)`, as desired.
 
-.. _subalgebras-in-lean:
-
-Subalgebras in Lean 
-~~~~~~~~~~~~~~~~~~~
-
 The argument in the proof of :numref:`Theorem %s <thm-1-14>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
   #. Some set :math:`Y` is shown to be a subuniverse of 𝐀 that contains :math:`X`.
@@ -457,7 +452,7 @@ The argument in the proof of :numref:`Theorem %s <thm-1-14>` is of a type that o
 
   #. One concludes that :math:`Y = \mathrm{Sg}^𝐀 (X)`.
 
-We now show how the subalgebra concept and the foregoing argument can be implemented formally in Lean_. [7]_
+We now show how the subalgebra concept and the foregoing argument can be implemented formally in Lean_. [5]_
 
 .. code-block:: lean
 
@@ -495,7 +490,7 @@ We now show how the subalgebra concept and the foregoing argument can be impleme
     end subs
     end subuniverse
 
-Lean syntax for the intersection operation on collections of *sets* is ``⋂₀``. [8]_
+Lean syntax for the intersection operation on collections of *sets* is ``⋂₀``. [6]_
 
 Next we need *introduction* and *elimination* rules for arbitrary intersections, plus the useful fact that the intersection of subuniverses is a subuniverse. 
 
@@ -606,336 +601,33 @@ The next three lemmas show that :math:`\mathrm{Sg} X` is the smallest subunivers
     end subs
     end subuniverse
 
----------------------------------------------------
-
-.. _inductively-defined-type:
-
-Inductively defined types
--------------------------
-
-A primary motivation for this project was our observation that, on the one hand, many important constructs in universal algebra can be defined inductively, and on the other hand, type theory in general, and Lean in particular, offers excellent support for defining inductive types and powerful tactics for proving their properties.
-
-These two facts suggest that there should be much to gain from implementing universal algebra in an expressive type system that offers powerful tools for proving theorems about inductively defined types.
-
-.. index:: subuniverse generated by a set
-
-As such, we are pleased to present the following inductive type that implements the **subuniverse generated by a set**; cf. the definition :eq:`subalgebra-inductive` given in the informal language.
-
-.. code-block:: lean
-
-    inductive Y (X : set α) : set α
-    | var (x : α) : x ∈ X → Y x
-    | app (f : F) (a : ρ f → α) : (∀ i, Y (a i)) → Y (A f a)
-  
-Next we prove that the type ``Y X`` defines a subuniverse, and that it is, in fact, equal to :math:`\mathrm{Sg}^𝐀(X)`.
-
-.. code-block:: lean
-
-    -- Y X is a subuniverse
-    lemma Y_is_Sub (X : set α) : Sub (Y X) := 
-    assume f a (h: ∀ i, Y X (a i)), show Y X (A f a), from 
-    Y.app f a h 
-   
-    -- Y X is the subuniverse generated by X
-    theorem sg_inductive (X : set α) : Sg X = Y X :=
-    have h₀ : X ⊆ Y X, from 
-      assume x (h : x ∈ X), 
-      show x ∈ Y X, from Y.var x h,
-    have h₁ : Sub (Y X), from 
-      assume f a (h : ∀ x, Y X (a x)), 
-      show Y X (A f a), from Y.app f a h,
-    have inc_l : Sg X ⊆ Y X, from 
-       assume u (h : u ∈ Sg X), 
-       show u ∈ Y X, from (sInter_mem u) h h₁ h₀,
-    have inc_r : Y X ⊆ Sg X, from
-       assume a (h: a ∈ Y X), show a ∈ Sg X, from
-         have h' : a ∈ Y X → a ∈ Sg X, from 
-           Y.rec
-           --base: a = x ∈ X
-           ( assume x (h1 : x ∈ X), 
-             show x ∈ Sg X, from subset_X_of_SgX X h1 )
-           --inductive: a = A f b for some b with ∀ i, b i ∈ Sg X
-           ( assume f b (h2 : ∀ i, b i ∈ Y X) (h3 : ∀ i, b i ∈ Sg X),
-             show A f b ∈ Sg X, from SgX_is_Sub X f b h3 ),
-         h' h,
-    subset.antisymm inc_l inc_r
-
-Observe that the last proof proceeds exactly as would a typical informal proof that two sets are equal---prove two subset inclusions and then apply the ``subset.antisymm`` rule, :math:`A ⊆ B → B ⊆ A → A = B`.
-
-.. index:: recursor
-
-We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y.rec``, which Lean creates for us automatically whenever an inductive type is defined.
-
-The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
-
-----------------------------------------------
-
-.. index:: variables, word, term, free algebra
-
-.. _terms-and-free-algebra:
-
-Terms and free algebras
------------------------
-
-Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
-
-For every :math:`n < ω`, let  :math:`F_n = ρ^{-1} \{n\}` be the set of :math:`𝗇`-ary operation symbols.
-
-By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members of :math:`X ∪ T`.
-
-We denote the concatenation of sequences by simple juxtaposition. We define, by recursion on :math:`n`, the sets :math:`T_n` of words on :math:`X ∪ F` by
-
-.. math::      T_0 &= X ∪ F_0;\\
-           T_{n+1} &= T_n ∪ \{ f s ∣ f ∈  F, \ s : ρf → T_n \}. 
-
-Define the set of **terms in the signature** σ **over** :math:`X` by :math:`T_ρ(X) = ⋃_{n < ω}T_n`.
-
-The definition of :math:`T_ρ (X)` is recursive, indicating that *the set of terms in a signature can be implemented in Lean using an inductive type*.
-
-We will confirm this in the next subsection, but before doing so, we impose an algebraic structure on :math:`T_ρ(X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
-
-If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [9]_ The height is a useful index for recursion and induction.
-
-Notice that the set :math:`T_ρ (X)` is nonempty iff either :math:`X` or :math:`F_0` is nonempty. As long as :math:`T_ρ (X)` is nonempty, we can impose upon this set an algebraic structure, as follows:
-
-For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝐓_ρ (X)}` be the operation on :math:`𝐓_ρ (X)` that maps each tuple :math:`𝐚 : ρf → T_ρ (X)` to the formal term :math:`f 𝐚`.
-
-We define :math:`𝐓_ρ (X)` to be the algebra with universe :math:`T_ρ (X)` and with basic operations :math:`\{f^{𝐓_ρ (X)} | f ∈ F\}`. [10]_
-
-Indeed, Part (2) of :ref:`Theorem 4.21 <thm-4-21>` below asserts that :math:`𝐓_ρ (X)` is *universal for* \sigma-algebras.
-
-To prove this, we need the following basic lemma, which states that a homomorphism is uniquely determined by its restriction to a generating set. (See also :cite:`Bergman:2012`, Ex. 1.16.6.)
-
-.. _ex_1-16-6-brief:
-
-.. proof:lemma::
-
-   Let :math:`f` and :math:`g` be homomorphisms from 𝐀 to 𝐁. If :math:`X ⊆ A` and :math:`X` generates 𝐀 and :math:`f|_X = g|_X`, then :math:`f = g`.
-
-   .. container:: toggle
- 
-      .. container:: header
- 
-         *Proof*.
-      
-      Suppose the subset :math:`X ⊆ A` generates 𝐀 and suppose :math:`f|_X = g|_X`. Fix an arbitrary element :math:`a ∈ A`.
-
-      We show :math:`f(a) = g(a)`. Since :math:`X` generates 𝐀, there exists a (say, :math:`n`-ary) term :math:`t` and a tuple :math:`(x_1, \dots, x_n) ∈ X^n` such that :math:`a = t^{𝐀}(x_1, \dots, x_n)`. Therefore,
-
-      .. math:: f(a) = f(t^{𝐀}(x_1, \dots, x_n)) &= t^{𝐁}(f(x_1), \dots, f(x_n)) \\
-                                    &= t^{𝐁}(g(x_1), \dots, g(x_n)) = g(t^{𝐀}(x_1, \dots, x_n)) = g(a).
-
-Here is another useful theorem. (See also :cite:`Bergman:2012`, Thm. 4.21.) 
-
-.. _thm-4-21:
-
-.. proof:theorem::
-
-   Let :math:`σ = (F, ρ)` be a signature.
-
-   #. :math:`𝐓_ρ (X)` is generated by X.
-   #. For every σ-algebra 𝐀 and every function :math:`h : X → A` there is a unique homomorphism :math:`g : 𝐓_ρ (X) → 𝐀` such that :math:`g|_X = h`.
-
-   .. container:: toggle
- 
-      .. container:: header
- 
-         *Proof*.
-      
-      The definition of :math:`𝐓_ρ (X)` exactly parallels the construction in :ref:`Theorem 1.14 <thm-1-14>`. That accounts for (1).
-
-      For (2), define :math:`g(t)` by induction on :math:`ρt`. Suppose :math:`ρt = 0`. Then :math:`t ∈ X ∪ F`.
-      
-      If :math:`t ∈ X` then define :math:`g(t) = h(t)`. For :math:`t ∉ X`, :math:`g(t) = t^{𝐀}`.
-      
-      Note that since 𝐀 is an \sigma-algebra and 𝗍 is a nullary operation symbol, :math:`t^{𝐀}` is defined.
-    
-      For the inductive step, let :math:`|t| = n + 1`. Then :math:`t = f(s_1, \dots, s_k)` for some :math:`f ∈ F_k` and :math:`s_1, \dots, s_k` each of height at most :math:`n`.
-      
-      We define :math:`g(t) = f^{𝐀}(g(s_1), \dots, g(s_k))`.
-      
-      By its very definition, 𝗀 is a homomorphism.
-      
-      Finally, the uniqueness of 𝗀 follows from :ref:`Lemma 1.16 <ex_1-16-6-brief>`. 
-
-.. _terms-and-free-algebras-in-lean:
-
-Terms and free algebras in Lean [11]_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝐓(X)` of all terms of a given signature.
-
-.. code-block:: lean
-
-    import basic
-    section
-      parameters {σ : signature} (X :Type*) 
-      local notation `F` := σ.F
-      local notation `ρ` := σ.ρ 
-    
-      inductive term
-      | var : X → term
-      | app (f : F) : (ρ f → term) → term
-  
-      def Term : algebra S := ⟨term, term.app⟩
-    end
-
-The set of terms along with the operations :math:`F^{𝐓} := \{\mathsf{app} f | f : F\}` forms an algebra :math:`𝐓(X) = ⟨T(X), F^{𝐓}⟩` in the signature :math:`σ = (F, ρ)`.
-
-Suppose :math:`𝐀 = ⟨A, F^{𝐀}⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝐓(X)` to 𝐀.
-
-Since 𝐀 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝐓(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝐓(X)` is *absolutely free* for σ-algebras," in this and only this case.
-
-Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
-
-.. code-block:: lean
-
-    section
-      open term
-      parameters {σ : signature} (X :Type*) {A : algebra σ}
-      definition F := σ.F         -- operation symbols
-      definition ρ := σ.ρ         -- arity function
-      definition 𝕋 := @Term σ     -- term algebra over X
-      definition 𝕏 := @var σ X    -- generators of the term algebra
-
-If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of :math:`h` to all of :math:`𝕋(X)` is defined inductively as follows:
-
-.. code-block:: lean
-
-    definition lift_of (h : X → A) : 𝕋(X) → 
-    | (var x) := h x
-    | (app f a) := (A f) (λ x, lift_of (a x))
-
-To prove that the term algebra is universal for σ-algebras, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
-
-.. code-block:: lean
-
-      -- The lift is a homomorphism.
-      lemma lift_is_hom (h : X → A) : homomorphic (lift_of h) :=
-      λ f a, show lift_of h (app f a) = A f (lift_of h ∘ a), from rfl
-    
-      -- The lift is unique.
-      lemma lift_is_unique : ∀ {h h' : 𝕋(X) → A},
-      homomorphic h → homomorphic h' → h ∘ 𝕏 = h' ∘ 𝕏 → h = h' :=
-      assume (h h' : 𝕋(X) → A) (h₁ : homomorphic h)
-        (h₂ : homomorphic h')(h₃ : h ∘ 𝕏 = h' ∘ 𝕏),
-        show h = h', from 
-          have h₀ : ∀ t : 𝕋(X), h t = h' t, from 
-            assume t : 𝕋(X), 
-            begin
-              induction t with t f a ih₁ ,
-              show h (𝕏 t) = h' (𝕏 t),
-              { apply congr_fun h₃ t },
-    
-              show h (app f a) = h' (app f a),
-              { have ih₂  : h ∘ a = h' ∘ a, from funext ih₁,
-                calc h (app f a) = A f (h ∘ a) : h₁ f a
-                             ... = A f (h' ∘ a) : congr_arg (A f) ih₂ 
-                             ... = h' (app f a) : (h₂ f a).symm }
-            end,
-          funext h₀ 
-    end
-
-Let :math:`𝐀 = ⟨A, F^{𝐀}⟩` be a \sigma-algebra.
-
-.. with congruence lattice $\Con\<A, \dots \>$.
-
-.. index:: clone
-
-Recall that a **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. 
-
-Let :math:`A` denote the set of all clones on :math:`A`.
-
-The **clone of term operations** of an σ-algebra 𝐀, denoted by :math:`\mathrm{Clo} 𝐀`, is the smallest clone on :math:`A` containing the basic operations of 𝐀, that is,
-
-.. math:: \mathrm{Clo} 𝐀 = ⋂ \{ U ∈ 𝖢 A ∣ F^{𝐀} ⊆ U\}.
-
-The set of :math:`n`-ary members of :math:`\mathrm{Clo} 𝐀` is sometimes denoted by :math:`\mathrm{Clo}_n 𝐀` (despite the fact that the latter is obviously not a clone).
-
-We now state a theorem that shows how the clone of term operations of a signature can be defined inductively.
-
-.. _thm-4-3:
-
-.. proof:theorem::
-
-   Let :math:`X` be a set and :math:`σ = (F, ρ)` a signature. Define
-
-   .. math:: F_0 &= X;\\
-         F_{n+1} &= F_n ∪ \{ f g ∣ f ∈ F, g : ρf → (F_n ∩ (ρ g → X)) \}, \quad n < ω.
-
-   Then :math:`\mathrm{Clo}^X(F) = ⋃_n F_n`.
-
-Thus *the clone of terms operations can be implemented (e.g., in Lean) as an inductive type*. The following theorem makes this precise. (See also :cite:`Bergman:2012`, Thm. 4.32.)
-
-.. _thm-4-32:
-
-.. proof:theorem::
-
-   Let 𝐀 and 𝐁 be algebras of type :math:`ρ`.
-
-   #. For every :math:`n`-ary term :math:`t ∈ T_ρ (X_ω)` and homomorphism :math:`g : 𝐀 → 𝐁`,
-      
-      .. math:: g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n)).
-
-   #. For all :math:`t ∈ T_ρ (X_ω)`, :math:`θ ∈ \mathrm{Con} 𝐀`, :math:`𝐚 : ρ t → A` and :math:`𝐛 : ρ t → A`,
-   
-      .. math:: 𝐚 \mathrel{θ} 𝐛 ⟹ t^{𝐀}(𝐚) \mathrel{θ} t^{𝐀}(𝐛).
-
-   #. For every subset :math:`Y ⊆ A`,
-
-      .. math:: \mathrm{Sg}^{𝐀}(Y) = \{ t^{𝐀}(a_1, \dots, a_n) : t ∈ T(X_n), a_i ∈ Y, i ≤ n < ω\}.
-
-   .. container:: toggle
- 
-      .. container:: header
- 
-         *Proof*.
-      
-      The first statement is an easy induction on :math:`|t|`.
-
-      The second statement follows from the first by taking :math:`𝐁 = 𝐀/θ` and 𝗀 the canonical homomorphism.
-  
-      For the third statement, again by induction on the height of 𝗍, every subalgebra must be closed under the action of :math:`t^{𝐀}`. 
-  
-      Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows.
-
 --------------------------------------------------------------
 
 .. rubric:: Footnotes
 
-.. [1]   
-   The ``lean-ualib`` source code is available from `github.com/UniversalAlgebra/lean-ualib`_.
-
-.. [2]
+.. [1]
    As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
 
-.. [3]
+.. [2]
    The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
 
-.. [4]
+.. [3]
    The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
 
-.. [5]
+.. [4]
    Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
 
-.. [7]
+.. [5]
    See https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/subuniverse.lean
 
-.. [8]
+.. [6]
    Technically, ``⋂₀ S`` denotes ``sInter (S : set (set α)) : set α := {λ s, a | ∀ t ∈ s, a ∈ t}`` Given a collection ``S : set (set α)`` of sets of type ``α``, ``⋂₀ S`` is the intersection of the sets in ``S``, as claimed.
-
-.. [9]
-   The **height** of a type is simply type's *level* (see Section ???) and the syntax :math:`Type*` indicates that we do not wish to commit in advance to a specific height.
-
-.. [10]
-   The construction of :math:`𝐓_ρ (X)` may seem to be making something out of nothing, but it plays a crucial role in the theory.
-
-.. [11]
-   https://github.com/UniversalAlgebra/lean-ualib/blob/master/src/free.lean
 
 .. _Lean: https://leanprover.github.io/
 
 .. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
 
 .. The clone of *polynomials} of $\alg A$, denoted by $\Pol \alg A$, is the clone generated by the basic operations of $\alg A$ and the constant unary maps on $A$.
 

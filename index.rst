@@ -6,7 +6,8 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     background
-    lean_ualib
+    algebras_in_lean
+    terms_and_free_algebras
     birkhoff_hsp
     postmodern_algebra
     appendix
