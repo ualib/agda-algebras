@@ -6,11 +6,11 @@
 
 .. role:: code
 
-.. _modern-algebra:
+.. _algebraic-preliminaries:
 
-=============
-Modern Algebra
-=============
+=============================
+Algebraic Preliminaries
+=============================
 
 .. index:: operation, arity
 
@@ -117,9 +117,6 @@ Homomorphisms
 
 .. [2]
    By "functional" we mean a function whose domain is a collection of functions.
-
-.. [3]
-   To see the proofs, click the black triangles.
 
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
 

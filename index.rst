@@ -6,7 +6,7 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
-    modern_algebra
+    algebraic_preliminaries
     inductively_defined_things
     algebras_in_lean
     inductively_defined_types

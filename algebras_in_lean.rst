@@ -4,11 +4,11 @@
 
 .. role:: code
 
-.. _universal-algebra-in-lean:
+.. _algebras-in-lean:
 
-=========================
-Universal Algebra in Lean
-=========================
+================
+Algebras in Lean
+================
 
 This section demonstrates the utility of dependent and inductive types by expressing some fundamental concepts of universal algebra in Lean.
 
