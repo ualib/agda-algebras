@@ -23,13 +23,20 @@ We chose the Lean_ proof assistant because it is designed and developed by logic
 
 Lean_ is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. Lean_ draws on decades of experience in interactive and automatic theorem provers (e.g., Coq, Isabelle/HOL, and Z3). Its logic is very expressive, and emphasis is placed on *powerful proof automation*. The system is easy to extend via :ref:`metaprograms <metaprogramming>` developed in the same language used to express specifications and proofs in Lean. In this way, Lean_ narrows the gap between interactive and automated theorem proving.
 
-There are many other reasons Lean_ is an ideal platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood* without special training. In fact, working in Lean_ usually leads to formal proofs that are cleaner, more concise, and shorter than the corresponding proofs in the language of informal mathematics.
+There are many other reasons Lean_ is an excellent platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood* without special training. In fact, working in Lean_ usually leads to formal proofs that are cleaner, more concise, and shorter than the corresponding proofs in the language of informal mathematics.
 
-Lean_ is a very young language, and its domain-specific libraries for special disciplines are small but growing. We feel it is vital for us to get involved at this early stage and play a leading role in its development. If we leave all of this to our colleagues in computer science, they will base the development on their perception of our needs, history will likely repeat itself, and it is unlikely that the libraries and tools that come out of the effort will meet the needs and
-expectations of most working mathematicians.
+Lean_ is a very young language, and its domain-specific libraries are small but growing. We feel it is vital to get involved at this early stage and play a role in its development. If we leave it to our colleagues in computer science, they will likely have our *perceived* needs and use cases in mind, and the libraries and tools that come out of their effort may not meet the needs and expectations of most working mathematicians.
+
+We conclude this section with a note that is important for anyone interested in `Homotopy Type Theory`_ (HoTT).  Unfortunately, the current version of Lean_ does not support HoTT. There is, however, a frozen version (`Lean 2`_) that does supports HoTT and there is a `2015 post by Floris van Doorn`_ that gives a nice overview of the use of `Lean 2`_ for homotopy type theory.
 
 .. _Lean: https://leanprover.github.io/
 
 .. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
 
 .. _Lean Universal Algebra Library: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _Lean 2: https://github.com/leanprover/lean2
+
+.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+
+.. _Homotopy Type Theory: https://homotopytypetheory.org/

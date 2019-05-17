@@ -6,9 +6,10 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
-    background
+    modern_algebra
+    inductively_defined_things
     algebras_in_lean
-    terms_and_free_algebras
+    inductively_defined_types
     birkhoff_hsp
     postmodern_algebra
     appendix

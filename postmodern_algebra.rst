@@ -293,7 +293,7 @@ which are precisely the conditions we would normally verify when checking that :
 Observations, categorically
 ---------------------------
 
-Let us revisit the list of observations we made (in classical notation) above in :numref:`Section %s <observations-classically>`.
+Let us revisit the list of observations we made (in classical notation) above in :numref:`Section %s <basic-facts>`.
 
 Throught this section,
 

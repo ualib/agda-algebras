@@ -13,7 +13,7 @@ This section presents the rudiments of *type theory*, covering just enough to ke
 
 .. todo:: say something more about this
 
-.. _
+.. _curry-howard:
 
 Curry-Howard
 ------------
@@ -22,7 +22,7 @@ The rule for *function application* corresponds, under the “Curry-Howard” or
 
 This simply codifies our intuitive notion of function application, viz. applying the function :math:`f` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an inhabitant :math:`f \, a` of the codomain :math:`B`. If we interpret :math:`A` and :math:`B` as propositions, :math:`f` as a proof of the implication :math:`A \to B`, and :math:`a` as a proof of :math:`A`, then the rule :math:`\mathsf{app}` becomes the implication elimination rule (*modus ponens*).
 
-.. _
+.. _dependent-types:
 
 Dependent types
 ---------------
@@ -63,7 +63,7 @@ Alternatively, some authors prefer to use the injection function to indicate the
 
 .. index:: dependent type theory, inductive type, universes
 
-.. _
+.. _inductive-types:
 
 Inductive types
 -----------------
@@ -72,7 +72,7 @@ Inductive types
 
 **Inductive types** and **inductive families of types**, generating only the recursor for an inductive type;
 
-.. _
+.. _leans-type-hierarchy:
 
 Lean's type hierarchy
 ---------------------
@@ -101,7 +101,7 @@ Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is 
 
 The upshot of this **ramified** arrangement is that the types described in the last paragraph are **predicative**, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is **impredicative** (self-referential).
 
-.. _
+.. _the-elaboration-engine:
 
 The elaboration engine
 -----------------------
@@ -124,8 +124,9 @@ On top of the Lean_ kernel there is a powerful *elaboration engine* that can
 
 Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
 
+For a nice overview of the elaboration engine, see 
 
-.. _pattern-matching
+.. _pattern-matching:
 
 Pattern matching
 ----------------
