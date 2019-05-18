@@ -12,8 +12,9 @@ The Lean Universal Algebra Library
     inductively_defined_types
     birkhoff_hsp
     postmodern_algebra
-    appendixa
-    appendixb
+    appendix_a
+    appendix_b
+    appendix_c
     glossary
     refs
     genindex
