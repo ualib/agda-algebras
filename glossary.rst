@@ -7,6 +7,69 @@ Glossary
 
 .. glossary::
 
+    ATP
+      automated theorem prover
+
+    ITP
+      interactive theorem prover (aka proof assistant); some popular examples are: :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`.
+
+    ATP (v)
+      automated theorem proving
+
+    ITP (v)
+      interactive theorem proving
+
+    CiC
+      Calculus of Inductive Constructions
+
+    TT
+      refers to **intuitionistic type theory**, which is based on the :term:`Curry-Howard correspondence`; TT extends Curry-Howard to predicate logic by introducing :term:`dependent types`. A dependent type is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
+
+    ITT
+      :term:`intensional` :term:`intuitionistic type theory <TT>`.
+
+    ETT
+      :term:`extensional` :term:`intuitionistic type theory <TT>`.
+
+    ER 
+      equality reflection
+
+    UIP
+      uniqueness of identity proofs
+
+    Agda
+      An :term:`intensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types` and based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+    Coq
+      An :term:`intensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types` and based on :term:`CiC`; url: http://coq.inria.fr
+      
+    NuPRL
+      An :term:`extensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types` and based on Martin Lof type theory; url: http://www.nuprl.org/
+
+    Lean
+      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types` and based on :term:`CiC`; url: https://leanprover.github.io/
+    
+    dependent types
+      .. todo:: fill in definition
+
+    impredicative
+      A self-referencing definition is called *impredicative*. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
+
+    predicative
+      The opposite of :term:`impredicative`, *predicative* refers to building stratified (or ramified) theories where quantification over lower levels results in variables of some new type, distinguished from the lower types that the variable ranges over.
+
+    extensional
+      An *extensional* definition of a term lists everything that qualifies as something to which that term refers. (See also :term:`function extensionality`.)
+
+    intensional
+      An *intensional* definition of a term specifies necessary and sufficient conditions that the term satisfies. In the case of nouns, this is equivalent to specifying all the properties that an object must have in order to be something to which the term refers.
+
+    function extensionality
+      is the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`.
+
+    Curry-Howard correspondence
+      the correspondence between propositions and types, and proofs and programs; a proposition is identified with the type of its proofs, and a proof is a program of that type.
+
     relation
       Given sets :math:`A` and :math:`B`, a **relation** from :math:`A` to :math:`B` is a subset of :math:`A × B`.
 

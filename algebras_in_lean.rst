@@ -28,8 +28,8 @@ Most of the Lean code described in this section can be found in the files ``basi
 
 .. _operations-in-lean:
 
-Operations in Lean
-------------------
+Operations
+----------
 
 Recall, the symbols ℕ, ω, and ``nat`` are synonymous and all denote the **type of natural numbers**.
 
@@ -97,8 +97,8 @@ Here are a couple of examples that are a bit more concrete.
 
 .. _signatures-in-lean:
 
-Signatures in Lean
--------------------
+Signatures
+----------
 
 A **signature** :math:`σ = (F, ρ)` consists of
 
@@ -158,8 +158,8 @@ With these ``local notation`` directives, we can now write ``f : F`` (instead of
 
 .. _universal-algebras-in-lean:
 
-Algebras in Lean
-----------------
+Algebras
+--------
 
 Classical universal algebra is the study of **varieties** (or **equational classes**) of algebraic structures. 
 
@@ -327,8 +327,10 @@ Another example that demonstrates the utility of coercions is our definition of 
 
 .. index:: homomorphism
 
-Homomorphisms in Lean
----------------------
+.. _homomorphisms-in-lean:
+
+Homomorphisms
+-------------
 
 To see this notation in action, let us look at how the ``lean-ualib`` represents the assertion that a function is a σ-**homomorphism**.
 

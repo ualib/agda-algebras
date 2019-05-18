@@ -12,7 +12,10 @@
 Algebraic Preliminaries
 =============================
 
-.. index:: operation, arity
+.. index:: operation, arity, image
+.. index::
+   symbol: ℕ
+   symbol: ̱m  
 
 .. _operations:
 
@@ -23,20 +26,19 @@ The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the s
 
 If :math:`m` is a natural number, we write :math:`m : ℕ` and say ":math:`m` has type ℕ." [1]_
 
+For :math:`m : ℕ`, denote and define :math:`\underline m := \{0, 1, \dots, m-1\}`.
 
-For :math:`m : ℕ`, we denote and define :math:`\underline m := \{0, 1, \dots, m-1\}`.
+Let :math:`a[\underline m] = (a_0, a_1, \dots, a_{m-1})` denote the :ref:`mtuple <tuple-functors>` of elements :math:`a_i : A`, for each :math:`i : \underline m`.
 
-Let :math:`a = (a_0, a_1, \dots, a_{m-1})` be an :ref:`mtuple <tuple-functors>` of elements from :math:`A`.
+The :ref:`mtuple <tuple-functors>` :math:`a[\underline m]` may be identified with the function :math:`a : \underline m → A`, where :math:`a(i) = a_i`, for each :math:`i : \underline m`. (See :numref:`Section %s <general-composition>` for a discussion of this identification.)
 
-As explained in :numref:`Section %s <general-composition>`, the tuple :math:`a` may be identified with a function of type :math:`\underline m → A`, where :math:`a(i) = a_i`, for each :math:`i < m`.
-
-If :math:`h  : A → A`, then :math:`h ∘ a : \underline m → A` is the function whose i-th coordinate is
+If :math:`h  : A → A`, then :math:`h ∘ a : \underline m → A` is the function whose :math:`i`-th coordinate is
 
 .. math:: (h ∘ a)(i) = h(a(i)) = h(a_i), 
 
-and we may formally identify the function :math:`h ∘ a : \underline m → A` with its "image tuple." We denote and define the *image of* :math:`\underline m` *under* :math:`h ∘ a` by
+and we may formally identify the function :math:`h ∘ a : \underline m → A` with its image---that is, the **image of** :math:`\underline m` **under** :math:`h ∘ a`---which is the :ref:`mtuple <tuple-functors>`,
 
-.. math:: (h ∘ a)[\underline m] := (h(a_0), h(a_1), \dots, h(a_{m-1})).
+.. math:: (h ∘ a)[\underline m] = (h(a_0), h(a_1), \dots, h(a_{m-1})).
 
 .. index:: signature
 

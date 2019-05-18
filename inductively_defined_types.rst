@@ -14,8 +14,8 @@ These two facts suggest that there should be much to gain from implementing univ
 
 .. _subalgebras-in-lean:
 
-Subalgebras in Lean [1]_
--------------------------
+Subalgebras [1]_
+-----------------
 
 This section describes how :ref:`subalgebras <subalgebras>` and :ref:`subuniverse generation <thm-1-14>` can be implemented formally in Lean_.
 
@@ -227,6 +227,8 @@ The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notati
 Clones
 ------
 
+A **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. 
+
 .. todo:: complete this section
 
 .. index:: variables, word, term, free algebra
@@ -315,9 +317,7 @@ Let :math:`𝐀 = ⟨A, F^{𝐀}⟩` be a \sigma-algebra.
 
 .. index:: clone
 
-Recall that a **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. 
-
-Let :math:`A` denote the set of all clones on :math:`A`.
+Recall that a **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. Let :math:`A` denote the set of all clones on :math:`A`.
 
 The **clone of term operations** of an σ-algebra 𝐀, denoted by :math:`\mathrm{Clo} 𝐀`, is the smallest clone on :math:`A` containing the basic operations of 𝐀, that is,
 
