@@ -290,7 +290,17 @@ Finally, we show how to get ahold of the carrier and operations of an algebra by
 .. index:: keyword: has_coe_to_fun
 .. index:: coersion
 
-The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, respectively, because here we are using a very nice feature of Lean called **coercions**. Using coercions allows us to employ a syntax that is similar (though not identical) to the standard syntax of informal mathematics. 
+The last two lines are tagged with ``has_coe_to_sort`` and ``has_coe_to_fun``, respectively, because here we are using a very nice feature of Lean called **coercions**. Using coercions allows us to identify certain objects which, though not identical, are normally conflated in informal mathematics.  (See :numref:`Section %s <coercion>` for a simple example.)
+
+The definitions of ``has_coe_to_sort`` and ``has_coe_to_fun`` in the Lean_ library are as follows:
+
+.. code-block:: lean
+
+    class has_coe_to_sort (a : Sort u) : Type (max u (v+1)) :=
+    (S : Sort v) (coe : a → S)
+
+    class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
+    (F : a → Sort v) (coe : Π x, F x)
 
 For instance, the standard notation for the interpretation of the operation symbol :math:`f` in the algebra :math:`𝐀 = ⟨A, F^𝐀⟩` is :math:`f^𝐀`. In our Lean implementation, we use ``A f`` to denote :math:`f^𝐀`. Although this syntax doesn't match the informal syntax exactly, it seems equally elegant and adapting to it should not overburden the user.
 
@@ -323,7 +333,7 @@ Another example that demonstrates the utility of coercions is our definition of 
 
     end 
 
-(See also :numref:`Appendix Section %s <coercions>`, for a more technical description of coersions in Lean.)
+(See also :numref:`Appendix Section %s <coercion>`, for a more technical description of coersions in Lean.)
 
 .. index:: homomorphism
 

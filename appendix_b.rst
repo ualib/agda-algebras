@@ -4,10 +4,21 @@
 Appendix B: Lean Basics
 =======================
 
+In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
+
+Some of the things described here will come from the Lean_ standard library.  Others will be from the mathlib_ Lean community project, and possible other projects.
+
+Some good references for this material are
+
+  + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
+  + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
+  + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
+  + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
+
 .. _leans-type-hierarchy:
 
-Lean's type hierarchy
----------------------
+Lean's type hierarchy [1]_
+---------------------------
 
 Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
 
@@ -15,12 +26,12 @@ Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundatio
 
 Lean_ has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.
 
-For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature: 
+For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature:
 
 .. code-block:: lean
 
    #check @list    -- answer: Type u → Type u
-   
+
 Here ``u`` is a variable ranging over type levels.
 
 Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is then a larger universe of types that contains ``Type 0`` as an *element*, and ``Type 2`` is an even larger universe of types, that contains ``Type 1`` as an element. The list is indefinite, so that there is a ``Type n`` for every natural number ``n``. ``Type`` is an abbreviation for ``Type 0``.
@@ -74,32 +85,25 @@ The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, g
     structure psigma {α : Sort u} (β : α → Sort v) :=
     mk :: (fst : α) (snd : β fst)
 
-.. _other-features:
 
-Other features
---------------
 
 .. _intersection:
 
 Union and Intersection
 ~~~~~~~~~~~~~~~~~~~~~~
 
-References for this subsection:
+The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
 
-+ lean_src_ : set.lean_
+Let :math:`S` be a set of sets of type :math:`α`.
 
-+ mathlib_: basic.lean_, lattice.lean_
-
-Let :math:`S` be a set of sets of type :math:`α`. 
-
-In Lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
+In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
 
 .. code-block:: lean
 
    import data.set
    variable S : set (set α)
    #check ⋂₀ S          -- answer: set α
-   
+
 Here is the formal definition from the file lattice.lean_.
 
 .. code-block:: lean
@@ -110,7 +114,7 @@ Here is the formal definition from the file lattice.lean_.
 
     prefix `⋂₀`:110 := sInter
 
-The **union of sets** is implemented similarly.
+The **union of sets** is implemented in lattice.lean_ similarly.
 
 .. code-block:: lean
 
@@ -118,25 +122,41 @@ The **union of sets** is implemented similarly.
    def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
    prefix `⋃₀`:110 := sUnion
 
-.. _coercions:
+----------------------------------------------------------
 
-Coercions
----------
+.. _coercion:
+
+Coercion
+--------
+
+**References**. `Coercions`_ and `Coercions using Type Classes`_ sections of `TPL`_
+
+A very nice feature of Lean, called coercion, enables us to identify two objects that we think of as "the same" but that are of different types. This kind of thing happens implicitly in virtually all informal mathematical arguments.
+
+Here's a simple example. Suppose we have an integer :math:`z : ℤ` and a natural number :math:`n : ℕ`.  Most people would not hesitate to form the sum :math:`z + n`.  Of course, this doesn't make sense since (in type theory as well as set theory), natural numbers are not integers!  That is, :math:`ℕ ⊈ ℤ`, despite what your highschool math teacher told you.
+
+However, it is true that the set of natural numbers can be embedded in ℤ in a natural way, and Lean_ allows us to express this embedding using coercions.
+
+Here's how the example just discussed is handled in Lean_.
 
 .. code-block:: lean
 
-    class has_coe_to_sort (a : Sort u) : Type (max u (v+1)) :=
-    (S : Sort v) (coe : a → S)
+   variable n : ℕ
+   variable z : ℤ
+   #check z + n      -- z + ↑n : ℤ
 
-    class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
-    (F : a → Sort v) (coe : Π x, F x)
+Indeed, the addition is handled automatically in this case.  But notice the coercion symbol ``↑`` that appears in the output of ``#check``. The up arrow is notation for the Lean_ function ``coe``; it can be typed with ``\u``, but ``coe`` could be used instead.
 
-.. _kernel:
+In fact, an explicit ``↑`` must appear in certain cases, in particular when Lean_ is not aware in advance that a coercion is needed.
 
-Kernel
-------
+If we change the order of the arguments of ``#check`` in the example above, we get an error unless we tell Lean_ about the required coercion.
 
-.. todo:: complete this section
+.. code-block:: lean
+
+   -- #check n + z        -- error!
+   #check ↑n + z          -- ↑n + z : ℤ
+
+Lean_ allows various kinds of coercions using type classes; for details, see the `Coercions using Type Classes`_ section of `TPL`_.
 
 .. _the-elaboration-engine:
 
@@ -151,13 +171,13 @@ On top of the Lean_ kernel there is a powerful *elaboration engine* that can
 
 #. support overloaded notation or declarations;
 
-#. inserts coercions;
+#. insert coercions;
 
-#. infers implicit arguments using type classes;
+#. infer implicit arguments using type classes;
 
 #. convert readable proofs to proof terms
 
-#. constructs terms using tactics
+#. construct terms using tactics
 
 Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
 
@@ -171,10 +191,18 @@ Metaprogramming
 Lean_ is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a program whose purpose is to modify the behavior of other programs.  **Proof tactics** form an important class of metaprograms. These are automated procedures for constructing and manipulating proof terms. An awesome feature of Lean_ is that  *metaprograms can be written in the Lean_ language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
 
 
+--------------------------
+
+.. rubric:: Footnotes
+
+.. [1]
+   See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
+
+
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 
 .. _Coq: http://coq.inria.fr
-      
+
 .. _NuPRL: http://www.nuprl.org/
 
 .. _Lean: https://leanprover.github.io/
@@ -195,3 +223,10 @@ Lean_ is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
+.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+
+.. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
+
+.. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
+
+.. _Lean Tutorial: https://leanprover.github.io/tutorial/
