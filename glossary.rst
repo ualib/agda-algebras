@@ -142,6 +142,9 @@ Nomenclature
     equivalent categories
       Two categories :math:`\mathcal C` and :math:`\mathcal D` are called **equivalent categories** if there are functors :math:`F : \mathcal C →  \mathcal D` and :math:`G : \mathcal D → \mathcal C` together with natural isomorphisms :math:`ε : FG ≅ \mathrm{id}_{\mathcal D}`, and :math:`η : \mathrm{id}_{\mathcal C} ≅ GF`. We say that :math:`F` is an equivalence with an inverse equivalence :math:`G` and denote the equivalence by :math:`F : \mathcal C ≃ \mathcal D : G`.
 
+    essentially surjective on objects
+      A functor :math:`F : C → D` is called **essentially surjective on objects** if for every object :math:`D ∈ \mathcal D`, there is some :math:`A ∈ \mathcal C` such that :math:`F A` is isomorphic to :math:`D`.
+
     existential image functor
       the functor :math:`∃ f : P(A) → P(B)` defined by :math:`∃ f(X) = \{f(x) : x ∈  X\},` for :math:`X ∈ P(A)`.
 
@@ -156,6 +159,11 @@ Nomenclature
     extensional
       An *extensional* definition of a term lists everything that qualifies as something to which that term refers. (See also :term:`function extensionality`.)
 
+    faithful functor
+      A functor :math:`F : \mathcal C → \mathcal D` is called **faithful** if for all objects :math:`A`, :math:`B` in :math:`\mathcal C_{\mathrm{obj}}`, the map :math:`\mathcal C(A, B) → \mathcal D(F A, F B)` is injective.
+      
+      (Note: A faithful functor need not be injective on morphisms.)
+
     finite ordinals
       The category :math:`\mathrm{Ord}_{\mathrm{fin}}` of **finite ordinals** (also called the **simplex category** :math:`\Delta`) has :math:`\underline n = \{0, 1, \dots, n-1\}` for objects (for each :math:`n ∈ ℕ`) and :math:`f : \underline n → \underline m` :term:`monotone functions <monotone function>` for morphisms.
 
@@ -164,6 +172,20 @@ Nomenclature
 
     free monoid
       .. todo:: fill in definition
+
+    full embedding
+      a :term:`fully faithful functor` that is injective on objects.
+
+    full functor
+      A functor :math:`F : \mathcal C → \mathcal D` is called **full** if for all objects :math:`A`, :math:`B` in :math:`\mathcal C`, the map :math:`\mathcal C(A, B) → \mathcal D(F A, F B)` is surjective.
+      
+      (N.B. A full functor need not be surjective on morphisms.)
+
+    full subcategory
+      If there exists a :term:`full embedding` :math:`F : \mathcal C → \mathcal D`, then :math:`\mathcal C` is called a **full subcategory** of :math:`\mathcal D`.
+
+    fully faithful functor
+      a functor that is both :term:`full <full functor>` and :term:`faithfull <faithful functor>`.
 
     function extensionality
       the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`.
