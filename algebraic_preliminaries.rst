@@ -1,10 +1,10 @@
 .. .. math:: \newcommand\hom{\operatorname{Hom}} 
 
-.. math:: \newcommand{\Sg}{\mathsf{Sg}} \newcommand{\hom}{\operatorname{Hom}} \newcommand{\epi}{\operatorname{Epi}} \newcommand{\aut}{\operatorname{Aut}} \newcommand{\mono}{\operatorname{Mono}} \newcommand{\Af}{\langle A, f \rangle}
-
 .. role:: cat
 
 .. role:: code
+
+.. include:: _static/html_latex_macros.rst
 
 .. _algebraic-preliminaries:
 
@@ -115,12 +115,11 @@ Homomorphisms
 .. rubric:: Footnotes
 
 .. [1]
-   For a brief, gentle introduction to Type Theory see https://leanprover.github.io/logic_and_proof/axiomatic_foundations.html?highlight=type#type-theory. Alternatively, viewing :math:`m  : \mathbb N` as roughly equivalent to :math:`n\in \mathbb N` is not totally unreasonable at this point.
+   For a brief and gentle introduction to type theory see the `section on axiomatic foundations <https://leanprover.github.io/logic_and_proof/axiomatic_foundations.html?highlight=type#type-theory>`_ in `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_.  Alternatively, viewing :math:`m  : \mathbb N` as roughly equivalent to :math:`n\in \mathbb N` is not totally unreasonable at this point.
 
 .. [2]
    By "functional" we mean a function whose domain is a collection of functions.
 
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
-
 
 .. _Lean: https://leanprover.github.io/

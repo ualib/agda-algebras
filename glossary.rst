@@ -1,6 +1,6 @@
-.. .. include:: substitutions.rst
+.. include:: _static/html_latex_macros.rst
 
-.. .. role:: code
+.. role:: code
 
 Glossary
 ========
@@ -28,7 +28,7 @@ Acronyms
       Calculus of Inductive Constructions
 
     TT
-      TT stands for *intuitionistic* **type theory**, which takes as its starting point the :term:`Curry-Howard correspondence`. TT extends Curry-Howard to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
+      TT stands for *intuitionistic* **type theory**, which extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
 
     ITT
       :term:`intensional` :term:`intuitionistic type theory <TT>`.
@@ -42,19 +42,8 @@ Acronyms
     UIP
       uniqueness of identity proofs
 
-    Agda
-      An :term:`intensional`, :term:`predicative` :term:`ITP` supporting dependent types and based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php
 
-    Coq
-      An :term:`intensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: http://coq.inria.fr
-      
-    NuPRL
-      An :term:`extensional`, :term:`predicative` :term:`ITP` supporting dependent types and based on Martin Lof type theory; url: http://www.nuprl.org/
-
-    Lean
-      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
-
-----------------------------------------------
+----------------------------------------------------
 
 .. _nomenclature:
 
@@ -400,3 +389,25 @@ Categories
 
     Comma
       Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.
+
+----------------------------
+
+.. _tt-based-proof-assistants:
+
+Some proof assistants based on TT
+----------------------------------
+
+.. glossary::
+
+    Agda
+      An :term:`intensional`, :term:`predicative` :term:`ITP` supporting dependent types and based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+    Coq
+      An :term:`intensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: http://coq.inria.fr
+      
+    NuPRL
+      An :term:`extensional`, :term:`predicative` :term:`ITP` supporting dependent types and based on Martin Lof type theory; url: http://www.nuprl.org/
+
+    Lean
+      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
+

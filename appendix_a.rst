@@ -1,3 +1,5 @@
+.. include:: _static/html_latex_macros.rst
+
 .. _appendix-a:
 
 =====================

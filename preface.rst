@@ -29,6 +29,25 @@ Lean_ is a very young language, and its domain-specific libraries are small but 
 
 We conclude this section with a note that is important for anyone interested in `Homotopy Type Theory`_ (HoTT).  Unfortunately, the current version of Lean_ does not support HoTT. There is, however, a frozen version (`Lean 2`_) that does supports HoTT and there is a `2015 post by Floris van Doorn`_ that gives a nice overview of the use of `Lean 2`_ for homotopy type theory.
 
+Prerequisites
+-------------
+
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`MR883644`) and, to a lesser extent, category theory (as presented by `categorytheory.gitlab.io`_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Section %s <postmodern-algebra>`.
+
+Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful, but one could probably get by with what is included in the appendices and the glossary, consulting one or more of the following to fill in gaps as needed:
+
+  + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
+  + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
+  + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
+  + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
+  + `Type Theory and Formal Proof <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
+
+
+Feedback
+--------
+
+This is a work in progress and any feedback you can give would be much appreciated.  Please direct all comments, questions, or suggestions to `William DeMeo <mailto:williamdemeo@gmail.com>`_.
+
 .. _Lean: https://leanprover.github.io/
 
 .. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
@@ -40,3 +59,7 @@ We conclude this section with a note that is important for anyone interested in 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
 .. _Homotopy Type Theory: https://homotopytypetheory.org/
+
+.. _categorytheory.gitlab.io: https://categorytheory.gitlab.io/index.html
+
+.. _Category Theory in Context: http://www.math.jhu.edu/~eriehl/context.pdf
