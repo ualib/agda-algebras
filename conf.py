@@ -49,8 +49,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'The Lean Universal Algebra Library'
-copyright = u'2019, William DeMeo'
-author = u'William DeMeo'
+copyright = u'2019, William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
+author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -176,7 +176,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ualib.tex', u'Lean Universal Algebra Library',
-     u'William DeMeo', 'manual'),
+     u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula', 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------------
