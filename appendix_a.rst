@@ -1,15 +1,15 @@
 .. _appendix-a:
 
-==============================
-Appendix A. Type Theory Basics
-==============================
+=====================
+Appendix A. TT Basics
+=====================
 
 .. _basic-type-theory:
 
 Basic type theory
 -----------------
 
-This section presents the rudiments of *type theory*, covering just enough to keep the rest of this work mostly self contained, even for readers with little or no prior background in type theory.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, and more advanced treatments are :cite:`MR3445957` and :cite:`HoTT`.
+This section presents some of the rudiments of *type theory*.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, and more advanced treatments are :cite:`MR3445957` and :cite:`HoTT`.
 
 .. todo:: say something more about this
 
@@ -39,7 +39,7 @@ A first guess might be ``Type → α → list α → list α``, but, on reflecti
 
 In other words, assuming ``α : Type`` is the first argument to the function, the type of the next two elements are ``α`` and ``list α``. These types vary depending on the first argument, ``α``. This is an instance of a **Pi type**, or **dependent function type**. Given ``α : Type`` and ``β : α → Type``, think of ``β`` as a family of types over ``α``, that is, a type ``β a`` for each ``a : α``.
 
-In this case, the type ``Π x : α, β x`` denotes the type of functions ``f`` with the property that, for each ``a : α``, ``f a`` is an element of ``β a``. In other words, the type of the value returned by ``f`` *depends* on its input. 
+In this case, the type ``Π x : α, β x`` denotes the type of functions ``f`` with the property that, for each ``a : α``, ``f a`` is an element of ``β a``. In other words, the type of the value returned by ``f`` *depends* on its input.
 
 Notice that ``Π x : α, β`` makes sense for any expression ``β : Type``. When the value of ``β`` depends on ``x`` (as does, for example, the expression ``β x`` in the previous paragraph), ``Π x : α, β`` denotes a dependent function type. If ``β`` doesn't depend on ``x``, then ``Π x : α, β`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is just notation for ``Π x : α, β`` in the special case in which ``β`` does not depend on ``x``.
 
@@ -77,7 +77,7 @@ Inductive types
 Compariosn of ITPs
 ------------------
 
-The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type <dependent types>` theory.
+The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.
 
 + NuPRL_ (Cornell). :term:`extensional`, :term:`predicative`
 + Coq_ (INRIA).  :term:`intensional`, :term:`impredicative`

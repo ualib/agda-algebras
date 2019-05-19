@@ -39,7 +39,7 @@ Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is 
 .. index:: ! predicative, ! ramified, ! impredicative
 .. index:: keyword: Prop
 
-The upshot of this **ramified** arrangement is that the types described in the last paragraph are **predicative**, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is **impredicative** (self-referential).
+The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
 
 .. _pattern-matching:
 
@@ -188,7 +188,9 @@ Lean_ does most of these things simultaneously. For example, the term constructe
 Metaprogramming
 ---------------
 
-Lean_ is easy to extend via **metaprogramming**. Briefly, a **metaprogram** is a program whose purpose is to modify the behavior of other programs.  **Proof tactics** form an important class of metaprograms. These are automated procedures for constructing and manipulating proof terms. An awesome feature of Lean_ is that  *metaprograms can be written in the Lean_ language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
+Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` is a program whose purpose is to modify the behavior of other programs. :term:`Proof tactics <proof tactic>` form an important class of metaprograms.
+
+An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
 
 
 --------------------------
