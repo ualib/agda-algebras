@@ -1,4 +1,4 @@
-.. include:: _static/html_latex_macros.rst
+.. include:: _static/math_macros.rst
 
 .. _inductively-defined-things:
 

@@ -1,4 +1,4 @@
-.. include:: _static/html_latex_macros.rst
+.. include:: _static/math_macros.rst
 
 .. _appendix-b:
 
@@ -23,6 +23,35 @@ Lean's type hierarchy [1]_
 ---------------------------
 
 Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
+
+Sort and Type
+~~~~~~~~~~~~~
+
+The following excerpt from the `Lean Reference Manual`_ explains the correspondence between ``Sort`` and ``Type``.
+
+  Every type in Lean is, by definition, an expression of type ``Sort u`` for some universe level ``u``. A universe level is one of the following:
+
+  + a natural number, ``n``
+  + a universe variable, ``u`` (declared with the command universe or universes)
+  + an expression ``u + n``, where ``u`` is a universe level and ``n`` is a natural number
+  + an expression ``max u v``, where ``u`` and ``v`` are universes
+  + an expression ``imax u v``, where ``u`` and ``v`` are universe levels
+
+  The last one denotes the universe level 0 if ``v`` is 0, and ``max u v`` otherwise.
+
+  .. code-block:: lean
+
+     universes u v                    -- Lean Output
+                                      -- -----------
+     #check Sort u                    -- Sort u : Type u
+     #check Sort 5                    -- Type 4 : Type 5
+     #check Sort (u + 1)              -- Type u : Type (u+1)
+     #check Sort (u + 3)              -- Type (u+2) : Type (u+3)
+     #check Sort (max u v)            -- Sort (max u v) : Type (max u v)
+     #check Sort (max (u + 3) v)      -- Sort (max (u+3) v) : Type (max (u+3) v)
+     #check Sort (imax (u + 3) v)     -- Sort (imax (u+3) v) : Type (imax (u+3) v)
+     #check Prop                      -- Prop : Type
+     #check Type                      -- Type : Type 1
 
 .. index:: keyword: Type, Type 0, Type 1, ...
 
@@ -234,3 +263,5 @@ An nice feature of Lean_ is that *metaprograms can be written in the Lean langua
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 
 .. _Lean Tutorial: https://leanprover.github.io/tutorial/
+
+.. _Lean Reference Manual: https://leanprover.github.io/reference/

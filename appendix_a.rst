@@ -2,9 +2,166 @@
 
 .. _appendix-a:
 
-=====================
-Appendix A. TT Basics
-=====================
+==========================
+Appendix A. Prerequisites
+==========================
+
+.. index:: ! binary relation, ! preorder, ! partial order, ! equivalence relation
+
+.. _relations:
+
+Relations
+---------
+
+A **binary relation** is a set of ordered pairs. Thus, if :math:`X` is a set, a binary relation on :math:`X` is simply a subset of the Cartesian product :math:`X \times X`.
+
+For a binary relation :math:`R`, we sometimes write :math:`x \mathrel{R} y` in place of :math:`(x, y) ∈ R`. For example, in the case of the order relation :math:`≤` on the set of natural numbers, :math:`≤` is the set
+
+.. math:: \{(x, y) ∈ ℕ × ℕ : x \text{ is less than or equal to } y}\},
+
+and we usually write :math:`x ≤ y` instead of :math:`(x, y) ∈ ≤`.
+
+For a relation :math:`R`, we define the **domain** of :math:`R` (:math:`\dom R`) and the **range** of :math:`R` (:math:`\ran R`) by
+
+.. math::
+
+    x ∈  \dom R \quad & ⟺ \quad ∃ y, \, (x,y) ∈ R,\\
+    x ∈ \ran R  \quad & ⟺ \quad ∃ t, \, (t,x) ∈ R.
+
+Binary relations arise so often that we simply call them "relations," and only say "binary relation" when we want to highlight their **arity** (which is 2) and distinguish them from relations of other arities.
+
+Some binary relations have properties that make them especially useful in a vast array of applications. For instance, a binary relation :math:`R` may or may not be
+
++ **reflexive**: :math:`∀ x, \, x \mathrel{R} x`,
+
++ **symmetric**: :math:`∀ x\, ∀ y, \, (x \mathrel{R} y \; ⟶ \; y \mathrel{R} x)`;
+
++ **antisymmetric**: :math:`∀  x,\, ∀ y,\, (x \mathrel{R} y ∧ y\mathrel{R} x \; ⟶ \; x=y)`;
+
++ **transitive**: :math:`∀ x,\, ∀ y,\, ∀ z, \, x \mathrel{R} y ∧ y \mathrel{R} z\; ⟶ \; x \mathrel{R} z)`.
+
+A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
+
+If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) as a **preordered set**.
+
+.. proof:example::
+
+   The `reachability relation <http://en.wikipedia.org/wiki/Reachability>`_ of a `directed graph <http://en.wikipedia.org/wiki/Directed_graph>`_ (possibly containing cycles) gives rise to a preorder :math:`R`, where :math:`x \mathrel{R} y` if and only if the directed graph has a path from :math:`x` to :math:`y`.
+
+   Conversely, every preorder :math:`R` on a set :math:`X` is the reachability relation of a directed graph (simply take elements of :math:`X` to be the vertices and draw an edge from :math:`x` to :math:`y` whenever :math:`x \mathrel{R} y`).
+
+The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *partial orders* and *equivalence relations*.
+
+An **equivalence relation** is a symmetric preorder.
+
+A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
+
+We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
+
+Here are a few concrete examples of binary relations that arise often.
+
+#. If :math:`X = ℤ` and :math:`R` is the usual :math:`≤` relation, then :math:`R` is a partial order on :math:`X`. (In fact, :math:`≤` is a :term:`total order` on :math:`ℤ` in this case.)
+
+#. Let :math:`X` be any set and let :math:`\mathcal{P}(X)` be the collection of all subsets of :math:`X`. The subset relation :math:`y ⊆ z` (":math:`y` is a subset of :math:`z`") is a partial order on :math:`\mathcal{P}(X)`.
+
+#. Let :math:`X = ℝ^2` and :math:`R =` ":math:`≤` on each component"; i.e., :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a_1 ≤ b_1, \, a_2 ≤ b_2 \}`. Then :math:`R` is a partial order on :math:`X`.
+
+#. If :math:`A = \R^2` then
+   :math:`R = \{(a, b) \in \R^2\times \R^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1^2+ a_2^2 = b_1^2+ b_2^2 \}`
+   is an equivalence relation on :math:`A`. The equivalence classes are
+   circles centered at :math:`(0,0)`.
+
+A **partition** of a set :math:`A` is a collection
+:math:`\Pi = \{A_i : i\in I\}` of non-empty subsets of :math:`A` such
+that
+
+.. math::
+
+   \bigcup_{i\in I} A_i = A \quad \text{ and } \quad  A_i \cap A_j = 
+   \emptyset \text{ for all pairs $i\neq j$ in $I$.}
+
+ The :math:`A_i` are called the “blocks” of the partition.
+
+Every partition :math:`\Pi` determines an equivalence relation—namely,
+the relation :math:`R` defined by :math:`a\rel{R} b` if and only if
+:math:`a` and :math:`b` are in the same block of :math:`\Pi`.
+Conversely, if :math:`R` is an equivalence relation on :math:`A`, we
+denote the equivalence class of :math:`R` containing :math:`a` by
+:math:`a/R := \{b\in A : a \rel{R} b\}` and the set
+:math:`A/\theta := \{a/\theta : a\in A\}` of all :math:`\theta` classes
+is a partition of :math:`A`.
+
+Examples: preorders, partial orders
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An **equivalence relation** on a set :math:`X` is a preorder that is
+**symmetric**. That is, an equivalence relation is a binary relation
+that is reflexive, symmetric, and transitive.
+
+With any preorder :math:`X` we can associate a poset in a natural way.
+Since a preorder is not antisymmetric in general, we may have distinct
+elements :math:`x, y \in X` with :math:`x\leq y` and :math:`y\leq x`.
+However, in this case we define the binary relation :math:`\cong` on
+:math:`X` by: :math:`x\cong y` iff :math:`x\leq y` and :math:`y\leq x`.
+(Some authors call the elements :math:`x` and :math:`y` **isomorphic**
+in this case, but we prefer the term :math:`{\cong}`-equivalent.) The
+relation :math:`\cong` so defined is an equivalence relation on
+:math:`X` and if we simply equate all :math:`{\cong}`-equivalent pairs
+:math:`x\cong y`, then we obtain a poset, denoted by :math:`X/{\cong}`.
+The elements of :math:`X/{\cong}` are **:math:`\cong`-equivalence
+classes**. These classes partition the set :math:`X` into disjoint
+subsets, each subset consisting of elements that are pairwise
+:math:`\cong`-equivalent. For :math:`x\in X`, the equivalence class
+containing the element :math:`x`—which is sometimes denoted by
+:math:`[x]` or :math:`[x]_{\cong}`—is given by the set
+:math:`[x]=\{y\in X : x\cong y\}`. The relation :math:`\leq` defined by
+:math:`[x] \leq [y]` iff :math:`x\leq y` is a partial order on the set
+:math:`X/{\cong}:=\{[x] : x\in X\}` of equivalence classes. The poset
+:math:`X/{\cong}` is sometimes called the **poset reflection** of the
+preorder :math:`X`.
+
+Let :math:`\< X, \leq\>` be a preorder, let :math:`A, B, C\subseteq X`
+be subsets, and let :math:`x \in X`. If :math:`a\leq x` for all
+:math:`a \in A`, then we write :math:`A\leq x` and we say that :math:`x`
+is an **upper bound** for :math:`A` in :math:`X`. (Lower bounds are
+defined dually.) A **join** of :math:`A` (when it exists) is a least
+element in the set of all upper bounds of :math:`A` in :math:`X`. A join
+is sometimes called a **least upper bound** or **supremum**. A **meet**
+of :math:`A` (when it exists) is a greatest element in the set of all
+lower bounds of :math:`A` in :math:`X`. A meet of :math:`A` is sometimes
+called a **greatest lower bound** or **infimum**. It is easy to see that
+joins and meets of preordered sets are determined uniquely up to
+(:math:`\cong`)-equivalence. Indeed, if :math:`a` and :math:`a'` are two
+least upper bounds of :math:`A`, then we clearly have :math:`a\leq a'`
+and :math:`a'\leq a`; therefore, :math:`a\cong a'`. If a subset
+:math:`A` has at least one join, then we will let :math:`{\Join}A`
+denote a choice of one of the joins of :math:`A`. Similarly, if
+:math:`A` has at least one meet, then we let :math:`{\Meet}A` denote a
+choice of one of the meets of :math:`A`. To specify the preorder
+:math:`X` with respect to which the join or meet is taken, we write
+:math:`{\Join_X}A` and :math:`{\Meet_X}A`, respectively. Note that for
+every :math:`x\in X` we have :math:`{\Join_X}A \leq x` iff
+:math:`A \leq x`. Similarly, for meets, we have :math:`x\leq {\Meet_X}A`
+iff :math:`x\leq A`.
+
+Considering the empty subset :math:`\varnothing \subseteq X`, and in
+light of the fact that for every :math:`x\in X` the implication
+:math:`a\in \varnothing \longrightarrow a\leq x` holds *ex falso
+quodlibet*, we see that the join of :math:`\varnothing`, if it exists,
+must satisfy :math:`{\Join}\varnothing \leq x` for all :math:`x\in X`.
+Therefore, :math:`\bot := {\Join}\varnothing` is the “bottom” of any
+preorder in which :math:`{\Join}\varnothing` exists. Similarly,
+:math:`a\in \varnothing \longrightarrow x\leq a` also holds vacuously,
+so for all :math:`x\in X` we have :math:`{\Meet}\varnothing \leq x`, and
+we let :math:`\top := {\Meet}\varnothing` be the “top” of any preorder
+in which :math:`{\Meet}\varnothing` exists.
+
+We call :math:`C\subseteq X` a **chain** if for all :math:`x, y \in C`
+we have :math:`x\leq y` or :math:`y\leq x`. If, in addition, the
+elements of :math:`C` can be indexed by the natural numbers, then we
+call :math:`C` an :math:`\omega`\ **-chain**. A subset :math:`A` of a
+preorder :math:`X` is called an **antichain** if for all
+:math:`x, y \in A` we have :math:`x \leq y` implies :math:`y\leq x`.
 
 .. _basic-type-theory:
 

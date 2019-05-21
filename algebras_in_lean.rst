@@ -1,7 +1,6 @@
-.. include:: _static/html_latex_macros.rst
+.. include:: _static/math_macros.rst
 
 .. role:: cat
-
 .. role:: code
 
 .. _algebras-in-lean:
@@ -228,7 +227,9 @@ Given a signature :math:`σ = (F, ρ)` and a **carrier type** :math:`α`, an inh
 
 Finally, let us define the **type of universal algebras** in Lean.
 
-A :index:`universal algebra` :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting of a :index:`carrier` (or :index:`universe`) :math:`A` along with an set :math:`F^𝐀` of :index:`operations` (i.e., interpretations of the operation symbols in :math:`F`). Thus, the type of the second component of the pair :math:`⟨A,F^𝐀⟩` depends on the first, so it is natural to encode the type of algebras as a :index:`dependent pair`, or :index:`Sigma type`.
+A :index:`universal algebra` :math:`𝐀 = ⟨A,F^𝐀⟩` is a pair consisting of a :index:`carrier` (or :index:`universe`) :math:`A` along with an set :math:`F^𝐀` of :index:`operations` (i.e., interpretations of the operation symbols in :math:`F`).
+
+Also, we should have the concept of an algebraic structures of any given signature. Thus, the type of :math:`⟨A,F^𝐀⟩` depends on the choice of signature :math:`σ = (F, ρ)`, so it is natural to encode the type of algebras as a :index:`dependent pair`, or :index:`Sigma type`.
 
 .. code-block:: lean
 

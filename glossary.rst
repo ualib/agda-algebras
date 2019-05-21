@@ -1,4 +1,4 @@
-.. include:: _static/html_latex_macros.rst
+.. include:: _static/math_macros.rst
 
 .. role:: code
 
@@ -127,6 +127,9 @@ Nomenclature
 
     epimorphism
       A morphism :math:`f: A → B` is called an **epimorphism** if for every object :math:`Y` and pair :math:`y_1, y_2: B → Y` of morphisms, :math:`y_1 ∘ f = y_2 ∘ f` implies :math:`y_1 = y_2`. When :math:`f: A → B` is an **epimorphism** we often say ":math:`f` is epi" and write :math:`f: ↠ B`.
+
+    equivalence relation
+      An **equivalence relation** is a symmetric :term:`preorder`. We denote the set of all equivalence relations on the set :math:`X` by :math:`\mathrm{Eq}(X)`.
 
     equivalent categories
       Two categories :math:`\mathcal C` and :math:`\mathcal D` are called **equivalent categories** if there are functors :math:`F : \mathcal C →  \mathcal D` and :math:`G : \mathcal D → \mathcal C` together with natural isomorphisms :math:`ε : FG ≅ \mathrm{id}_{\mathcal D}`, and :math:`η : \mathrm{id}_{\mathcal C} ≅ GF`. We say that :math:`F` is an equivalence with an inverse equivalence :math:`G` and denote the equivalence by :math:`F : \mathcal C ≃ \mathcal D : G`.
@@ -263,6 +266,12 @@ Nomenclature
     partial function
       A **partial function** from :math:`A` to :math:`B` is a total function on some (potentially proper) subset :math:`\operatorname{dom}_f` of :math:`A`.
 
+    partial ordering
+      A **partial ordering** (or "partial order") is an anti-symmetric :term:`preorder`.
+      
+    partially ordered set
+      A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
+
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
 
@@ -270,10 +279,13 @@ Nomenclature
       a function that operates in the "same way" independently of the object parameter.
 
     poset
-      A **poset** :math:`(A, ≤)` consists of a set :math:`A` and a binary relation :math:`≤ \ ⊆ A^2` such that for all :math:`x, y, z ∈ A` we have :math:`x ≤ x`;:math:`x ≤ y` and :math:`y ≤ x` imply :math:`x = y`; and :math:`x ≤ y` and :math:`y ≤ z` imply :math:`x ≤ z`.
+      A **poset** :math:`⟨X, ⊑⟩` consists of a set :math:`X` and an antisymmetric preorder :math:`⊑` on :math:`X`.  That is, for all :math:`x, y, z ∈ X` we have :math:`x ⊑ x`;:math:`x ⊑ y` and :math:`y ⊑ x` imply :math:`x = y`; and :math:`x ⊑ y` and :math:`y ⊑ z` imply :math:`x ⊑ z`.
 
     predicative
       The opposite of :term:`impredicative`, *predicative* refers to building stratified (or ramified) theories where quantification over lower levels results in variables of some new type, distinguished from the lower types that the variable ranges over.
+
+    preorder
+      A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
 
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
