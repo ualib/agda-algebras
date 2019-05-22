@@ -48,7 +48,7 @@ Acronyms
       range
 
     TT
-      TT stands for *intuitionistic* **type theory**, which extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
+      intuitionistic :term:`type theory`
 
     UIP
       uniqueness of identity proofs
@@ -380,6 +380,9 @@ Nomenclature
 
     total order
       A **total order** relation :math:`R` on a set :math:`X` is a partial order on :math:`X` satisfying :math:`∀ x, y ∈ X \ (x ≤ y \ ⋁ \ y ≤ x)`.
+
+    type theory
+      Intuitionistic **type theory**, which extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
 
     underlying set functor
       The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.

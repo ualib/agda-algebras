@@ -73,18 +73,23 @@ Inductive types
 Compariosn of ITPs
 ------------------
 
-The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.
+The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
 
-Some proof assistants based on TT
-----------------------------------
+Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It is based on Martin Lof :term:`type theory`.
 
-Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It supports :term:`dependent types <dependent type>` and is based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
+.. ; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
 
-Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It supports :term:`dependent types <dependent type>` and is based on :term:`CiC`; url: http://coq.inria.fr .
+Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
+
+.. ; url: http://coq.inria.fr .
       
-NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It supports :term:`dependent types <dependent type>` and based on Martin Lof type theory; url: http://www.nuprl.org/
+NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
 
-Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It supports dependent types and is based on :term:`CiC`; url: https://leanprover.github.io/
+.. ; url: http://www.nuprl.org/
+
+Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It is based on :term:`CiC`.
+
+.. ; url: https://leanprover.github.io/
 
 .. + NuPRL_ . :term:`extensional`, :term:`predicative`
 .. + Coq_ .  :term:`intensional`, :term:`impredicative`
