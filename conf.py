@@ -42,6 +42,7 @@ proof_theorem_types = {
     "corollary": "Corollary",
     "definition": "Definition",
     "example": "Example",
+    "examples": "Examples",
     "lemma": "Lemma",
     "observation": "Observation",
     "proof": "Proof",

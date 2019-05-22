@@ -7,11 +7,12 @@ Appendix A. Mathematical Prerequisites
 =======================================
 
 .. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
+.. index:: ! domain, ! range
 
-.. _relations:
+.. _binary-relations:
 
-Relations
----------
+Binary Relations
+----------------
 
 A **binary relation** is a set of ordered pairs. Thus, if :math:`X` is a set, a binary relation on :math:`X` is simply a subset of the Cartesian product :math:`X \times X`.
 
@@ -40,7 +41,7 @@ A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:
 
 If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) as a **preordered set**.
 
-.. proof:example::
+.. proof:examples::
 
    The `reachability relation <http://en.wikipedia.org/wiki/Reachability>`_ of a `directed graph <http://en.wikipedia.org/wiki/Directed_graph>`_ (possibly containing cycles) gives rise to a preorder :math:`R`, where :math:`x \mathrel{R} y` if and only if the directed graph has a path from :math:`x` to :math:`y`.
 
@@ -48,16 +49,17 @@ If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :ma
 
 The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *partial orders* and *equivalence relations*.
 
-Equivalence relations and partial orders
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. index:: ! equivalence relation, ! partial ordering
+.. index:: pair: partially ordered set; poset
 
-An **equivalence relation** is a symmetric preorder.
+Equivalence relations and partial orders
+-----------------------------------------
+
+An **equivalence relation** is a symmetric preorder. We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
 
 A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
 
-We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
-
-.. proof:example::
+.. proof:examples::
 
    #. If :math:`X = ℤ` and :math:`R` is the usual :math:`≤` relation, then :math:`R` is a partial order on :math:`X`. (In fact, :math:`≤` is a :term:`total order` on :math:`ℤ` in this case.)
 
@@ -84,35 +86,56 @@ With any preorder :math:`X` we can associate a poset in a natural way as we now 
 
 Since a preorder is not antisymmetric in general, we may have distinct elements :math:`x, y ∈ X` with :math:`x ≤ y` and :math:`y ≤ x`.
 
-In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`. [1]_
+In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
 
-The relation ≅ so defined is an equivalence relation on :math:`X` and if we simply equate all ≅-related pairs, then we obtain a poset, denoted by :math:`X/≅`.
+The relation ≅ so defined is an equivalence relation on :math:`X` and if we simply equate all ≅-related pairs, then we obtain a poset, denoted by :math:`X/{≅}`.
 
-The elements of :math:`X/≅` are ≅-equivalence classes. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise ≅-equivalent.
+.. index:: equivalence class
 
-For :math:`x ∈ X`, the equivalence class containing the element :math:`x`---which is sometimes denoted by :math:`[x]` or :math:`[x]_≅`---is given by the set :math:`[x]=\{y ∈ X : x ≅ y\}`.
+The elements of :math:`X/{≅}` are called *equivalence classes*. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise equivalent.  Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence class** containing the element :math:`x` by 
 
-The relation ≤ defined by :math:`[x] ≤ [y]` iff :math:`x ≤ y` is a partial order on the set :math:`X/≅ := \{[x] : x ∈ X\}` of equivalence classes. The poset :math:`X/≅` is sometimes called the **poset reflection** of the preorder :math:`X`.
+.. math:: x/{≅} \; = \{y ∈ X : x ≅ y\}.
 
-Let :math:`⟨ X, ≤ ⟩` be a preordered set, let :math:`A, B, C ⊆ X` be subsets, and let :math:`x ∈ X`. If :math:`a ≤ x` for all :math:`a ∈ A`, then we write :math:`A ≤ x` and we say that :math:`x` is an **upper bound** for :math:`A` in :math:`X`. (Lower bounds are defined dually.)
+(Some authors prefer the notation :math:`[x]` or :math:`[x]_≅` for the equivalence class containing :math:`x`.)
 
-A **join** of :math:`A` (when it exists) is a least element in the set of all upper bounds of :math:`A` in :math:`X`. A join is sometimes called a **least upper bound** or **supremum**.
+We denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all (≅-)equivalence classes by :math:`X/{≅}`.
+
+Let ⊑ denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x \ ∀ y \ (x/{≅} \ ⊑ y/{≅} \ ⟺ \ x ≤ y)`.
+
+It is easy to see that ⊑ is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
+
+.. index:: ! join, ! upper bound, ! least upper bound, ! supremum
+.. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
+
+Joins and meets
+~~~~~~~~~~~~~~~
+
+A **join** of :math:`A` (when it exists) is a least element in the set of all upper bounds of :math:`A` in :math:`X`. A join of :math:`A` is sometimes called the **least upper bound** or **supremum** of :math:`A`.
 
 Dually, a **meet** of :math:`A` (when it exists) is a greatest element in the set of all lower bounds of :math:`A` in :math:`X`. A meet of :math:`A` is sometimes
 called a **greatest lower bound** or **infimum**.
 
-It is easy to see that joins and meets of preordered sets are determined uniquely up to ≅-equivalence. Indeed, if :math:`a` and :math:`a'` are two least upper bounds of :math:`A`, then we clearly have :math:`a ≤ a'` and :math:`a' ≤ a`; therefore, :math:`a ≅ a'`.
+Let :math:`⟨ X, ≤ ⟩` be a preordered set, let :math:`A, B, C ⊆ X`, and let :math:`x ∈ X`. If :math:`a ≤ x` for all :math:`a ∈ A`, then we write :math:`A ≤ x` and we say that :math:`x` is an **upper bound** for :math:`A` in :math:`X` (**lower bound** is defined dually).
+
+A **join** of :math:`A` (when it exists) is a least element in the set of all upper bounds of :math:`A` in :math:`X`. A join of :math:`A` is sometimes called a **least upper bound** or **supremum** of :math:`A`.
+
+Dually, a **meet** of :math:`A` (when it exists) is a greatest element in the set of all lower bounds of :math:`A` in :math:`X`. A meet of :math:`A` is sometimes
+called a **greatest lower bound** or **infimum** of :math:`A`.
+
+It is easy to see that joins and meets of preordered sets are determined uniquely up to equivalence. Indeed, if :math:`a` and :math:`a'` are two least upper bounds of :math:`A`, then we clearly have :math:`a ≤ a'` and :math:`a' ≤ a`; therefore, :math:`a ≅ a'`.
 
 If a subset :math:`A` has at least one join, then we will let :math:`⋁ A` denote a choice of one of the joins of :math:`A`. Similarly, if :math:`A` has at least one meet, then we let :math:`⋀ A` denote a choice of one of the meets of :math:`A`.
 
-To specify the preorder :math:`X` with respect to which the join or meet is taken, we write :math:`⋁_X A` and :math:`⋀_X A`, respectively.
+To specify the preorder :math:`X` with respect to which the join or meet is taken, we write :math:`⋁^X A` and :math:`⋀^X A`, respectively.
 
-Note that for every :math:`x ∈ X` we have :math:`⋁_X A ≤ x` iff :math:`A ≤ x`. Dually, :math:`x ≤ ⋀_X A` iff :math:`x ≤ A`.
+Note that for every :math:`x ∈ X` we have :math:`⋁^X A ≤ x` iff :math:`A ≤ x`. Dually, :math:`x ≤ ⋀^X A` iff :math:`x ≤ A`.
 
-Considering the empty subset :math:`∅ ⊆ X`, and in light of the fact that for every :math:`x ∈ X` the implication :math:`a ∈ ∅ ⟶ a ≤ x` holds, *ex falso quodlibet*, we see that the join of :math:`∅`, if it exists, must satisfy :math:`⋁ ∅ ≤ x` for all :math:`x ∈ X`. Therefore, :math:`⊥ := ⋁ ∅` is the “bottom” of any preorder in which it exists.
+Considering the empty subset :math:`∅ ⊆ X`, and in light of the fact that for every :math:`x ∈ X` the implication :math:`a ∈ ∅ ⟶ a ≤ x` holds, *ex falso quodlibet*, we see that the join of :math:`∅`, if it exists, must satisfy :math:`⋁ ∅ ≤ x` for all :math:`x ∈ X`. Therefore, :math:`⋁ ∅` is the “bottom” of any preorder in which it exists; we use the symbol ⊥ to denote :math:`⋁ ∅` when it exists.
 
-Dually, :math:`a ∈ ∅ ⟶ x ≤ a` also holds, *ex falso quodlibet*, so for all :math:`x ∈ X` we have :math:`⋀ ∅ ≤ x`, so we let :math:`⊤ := ⋀ ∅` be the “top” of any preorder
-in which it exists.
+Dually, :math:`a ∈ ∅ ⟶ x ≤ a` also holds, *ex falso quodlibet*, so for all :math:`x ∈ X` we have :math:`⋀ ∅ ≤ x`, so :math:`⋀ ∅` is the “top” of any preorder
+in which it exists; we use the symbol ⊤ to denote :math:`⋀ ∅` when it exists.
+
+.. index:: ! chain, ! antichain, ! ω-chain
 
 Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds. If, in addition, the elements of :math:`C` can be indexed by the natural numbers, then we call :math:`C` an ω-**chain**.
 
@@ -120,7 +143,7 @@ A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if
 
 ---------------------------------
 
-.. index:: ! function
+.. index:: ! function, ! inverse, ! function composition, ! restriction, ! image
 
 Functions
 ---------
@@ -193,6 +216,9 @@ With this axiom we can prove the sufficiency direction of item 2 of the theorem 
 
 ---------------------------------
 
+.. index:: ordered tuples, tuples
+.. index:: ! unary relation, ! binary relation, ! ternary relation
+
 Relations of higher arity
 -------------------------
 
@@ -225,14 +251,18 @@ We give some examples of relations below. In these examples, :math:`ℝ` denotes
 
 (b) :math:`A = ℝ^2` (the plane) and :math:`R = \{(a,b,c) ∈ ℝ^2 × ℝ^2 × ℝ^2 : a, b, c \text{ lie on a line } \}`; i.e. triples of points that are *colinear*.
 
-Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`, etc.
+
+Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`; finally, an :math:`n`-**ary relation** on :math:`A` is a subset of :math:`A^n`.
 
 ---------------------------------
+
+.. index:: ! projection, ! idempotent operation
+
+.. _projections:
 
 Projections
 -----------
 
-.. index:: ! idempotent operation
 
 An operation :math:`f : A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
 
@@ -246,7 +276,7 @@ Given sets :math:`A_0, A_1, \dots, A_{n-1}`, denote their Cartesian product by
 
 .. math:: ∏_{i < n} A_i := A_0 × A_1 × \cdots × A_{n-1}.
 
-An element :math:`a ∈ ∏_{i<n} A_i` is an ordered :math:`n`-tuple, which may be specified by simply listing its values, :math:`a = (a(0), a(1), \dots, a(n-1))`. [1]_ 
+An element :math:`a ∈ ∏_{i<n} A_i` is an ordered :math:`n`-tuple, which may be specified by simply listing its values, :math:`a = (a(0), a(1), \dots, a(n-1))`.
 
 Thus, tuples are functions defined on a finite (“index”) set, and we often view them this way. This fact may be emphasized by writing
 
@@ -269,6 +299,8 @@ We often apply such projection functions to subsets :math:`R ⊆ ∏_{i<n} A_i`,
                     &= \{ (r_{σ(0)}, r_{σ(1)}, \dots, r_{σ(k-1)}) | r ∈ R \}.
 
 The following shorthand is frequently convenient:
+
+.. index:: kernel
 
 .. math:: R_σ := \Proj_σ R.
 
@@ -319,25 +351,27 @@ Here are some obvious consequences of the foregoing notation and definitions tha
    ⋁_{j<n}\mathbf{0}_j = A^2, \qquad \mathbf{0}_σ = ⋀_{j ∈ σ} \mathbf{0}_j, \qquad \mathbf{0}_{n} = ⋀_{j<n}\mathbf{0}_j = 0_{A}, \qquad
    θ_σ = ⋀_{j<k} θ_{σ(j)},
 
-where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is, :math:`0_{A}:= \{(a, a') ∈ \uA^2 ∣ a = a'\}`.
+where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is, :math:`0_{A}:= \{(a, a') ∈ A^2 ∣ a = a'\}`.
 
-As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
+.. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
 
 -----------------------------------
+
+.. index:: generalized projections, dependent types 
 
 Generalized projections and dependent types
 -------------------------------------------
 
-This is new material on a more general way of presenting projections and partial application of functions.
+Here we present a more general way of describing projections.
 
-Let :math:`\{𝐀_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) [3]_ and let :math:`\underline{𝐀} = ∏_{i ∈ I} 𝐀_i`. (Actually, for now it suffices to think of the :math:`𝐀_i` and :math:`\underline{𝐀}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝐀}` as functions:
+Let :math:`\{𝐀_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) and let :math:`\underline{𝐀} = ∏_{i ∈ I} 𝐀_i`. (Actually, for now it suffices to think of the :math:`𝐀_i` and :math:`\underline{𝐀}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝐀}` as functions:
 
 .. math:: a ∈ ∏_{i∈I} 𝐀_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a(i) ∈ A_i, & ∀ i ∈ I. \end{cases}
    :label: 7
    
 This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual → notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} 𝐀_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
 
-Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, “:math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`,” but this specification has a nicer, more compact description using a dependent function type.
+Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, “:math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`,” but this specification has a nicer, more compact description using a :term:`dependent function type`.
 
 .. math:: a ∘ g ∈ ∏_{j∈J} A_{g(j)}.
 
@@ -367,16 +401,16 @@ This says that :math:`\Proj` takes a function :math:`g : J → I` and a function
 
 Here again we see that the arrow notation is not expressive enough because :math:`∏_{j∈J} A_{g(j)}` depends on :math:`g`, but there is no :math:`g` symbol available from earlier in :eq:`9`.
 
-The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` is a “constant” of type :math:`A`. Thus, the full :term:`dependent type` specification of the projection operation is
+The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operation is
 
 .. math:: \Proj: ∏_{g:J→I} \left( ∏_{i:I} A_{i} →  ∏_{j:J} A_{g(j)} \right).
 
 Kernels of generalized projections
 ----------------------------------
 
-Let :math:`𝐀 = ∏_{i:I} 𝐀_i` be a product of algebras of the same type, and suppose :math:`g : J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
+Let :math:`𝐀 = ∏_{i:I} 𝐀_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g : J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
 
-Define the **kernel of the projection of** :math:`𝐀` **onto** :math:`∏_{j:J} A_{g(j)}` as follows: [4]_
+Define the **kernel of the projection of** :math:`𝐀` **onto** :math:`∏_{j:J} A_{g(j)}` as follows:
 
 .. math:: Δ_g = \{(a,a') : 𝐀^2 | a ∘ g = a' ∘ g \} = \ker (\Proj g)
 
@@ -404,13 +438,14 @@ If :math:`f : (ρ f → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
 
 -----------------------------------------------------
 
+.. index:: partial function application
+
 Partial function application
 ----------------------------
 
-Let :math:`I` be a nonempty set and let :math:`\{𝐀_i | i : I\}` be a collection of sets (or algebras of the same signature). [5]_ (In applications, :math:`I` is often
-:math:`\{0,1,\dots, n-1\}` for some :math:`n: ℕ`, and it helps intuition to keep this special case in mind.)
+Let :math:`I` be a nonempty set and :math:`\{𝐀_i | i : I\}` a family of sets.
 
-Elements of the product :math:`∏_{i: I} 𝐀_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
+Elements of the product :math:`∏_{i∈ I} 𝐀_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
 
 Let :math:`J ⊆ I` and let :math:`g : J → I` be one-to-one. Then, as above, :math:`a ∘ g: ∏_{j: J} A_{g(j)}` gives the projection of :math:`a` onto certain coordinates of the full product, namely, the coordinates :math:`\im g = \{g(j) ∣ j:J\}`.
 
@@ -448,10 +483,12 @@ We may wish to apply :math:`f` to just a portion of :math:`a` but it may not be 
 
 --------------------------------------------
 
+.. index:: ! directed set, ! inductive set
+
+.. _directed-sets-and-inductive-sets:
+
 Directed sets and inductive sets
 --------------------------------
-
-.. index:: ! directed set, ! inductive set
 
 A subset :math:`D` of a preorder is called a **directed set** if every finite subset of :math:`D` has an upper bound in :math:`D`.
 
@@ -472,6 +509,12 @@ A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :ma
 .. todo:: insert figure
 
 --------------------------------------------
+
+.. index:: ! complete, ! cocomplete
+.. index:: ! directed-cocomplete preorder, ! directed-cocomplete partial order (dcpo)
+.. index:: ! ω-chain cocomplete, ! ω-chain cocomplete partial order (ω-cpo)
+
+.. _completeness-and-cocompleteness:
 
 Completeness and cocompleteness
 -------------------------------
@@ -502,7 +545,7 @@ A homomorphism of dcpos :math:`X` and :math:`Y` is a function :math:`f: X → Y`
 
 A homomorphism of ω-cpos is defined analogously. A homomorphism of :term:`dcpos <dcpo>` (ω-cpos) will also be referred to as a **continuous** (ω-**continuous**) function.
 
-If :math:`X` and :math:`Y` have least elements, both denoted by ⊥, then a function :math:`f: X → Y` is said to be **strict** if :math:`f(⊥) = ⊥`.
+.. If :math:`X` and :math:`Y` have least elements, both denoted by ⊥, then a function :math:`f: X → Y` is said to be **strict** if :math:`f(⊥) = ⊥`.
 
 If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
    
@@ -513,6 +556,8 @@ Note also that if :math:`A ⊆ X` are :term:`dcpos <dcpo>` and if :math:`ι : A 
 If :math:`X` is a poset, :math:`D` a :term:`directed <directed set>` subset of :math:`X`, and if the join of :math:`D` in :math:`X` exists, then we denote the join of :math:`D` by :math:`⨆_X D` rather than :math:`⋁_X D`. Part of the force of the judgement :math:`⨆_X D` is that the set :math:`D` is directed.
 
 -------------------------------------
+
+.. index:: ! closure operator, ! closure system
 
 Closure systems
 ---------------
@@ -529,38 +574,15 @@ A **closure operator** on 𝔛 is a set function :math:`𝖢 : 𝒫 (𝔛) → �
 
 If 𝒜 is a collection of algebras of the same type, let :math:`𝖲 𝒜` and :math:`𝖱 𝒜` denote, respectively, the collection of all subalgebras and retracts of algebras in 𝒜.
 
-𝖲 is a closure operator on sets of algebras of the same type.
+Observe that 𝖲 is a closure operator on sets of algebras of the same type.
 
-It's easy to see, if the retraction is as defined above, that then retraction operator 𝖱 is not a closure operator on sets of algebras of the same type.
+It's easy to see that if the retraction is as defined above, then retraction operator 𝖱 is not a closure operator on sets of algebras of the same type.
 
 However, if we take our definition of **retraction** of :math:`𝐀 = ⟨ A, F ⟩` via :math:`p ∈ \mathrm{Pol}_1(𝐀)` to be
 
 .. math:: p(𝐀) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
 
 then 𝖱 is a closure operator.
-
--------------------------------
-
-.. rubric:: Footnotes
-
-.. [1]
-   Some authors call the elements :math:`x` and :math:`y` **isomorphic** in this case, but we prefer the term :math:`≅`-equivalent. 
-
-.. .. [2]
-..    Tuples are more commonly written with subscripts as in :math:`(a_0, a_1, \dots, a_{n-1})`, and we will adopt this convention when it is convenient, especially if the functional view is not relevant.
-
-.. [3]
-   Usually :math:`I` will simply be :math:`[n] := \{0,1,\dots, n-1\}`.
-
-.. [4]
-   Note that our :math:`Δ_σ` is the same as Kearnes' :math:`η_σ`, in the paper, "Idempotent Simple Algebras."
-
-.. [5]
-   Sets would do for now, but we continue to mention algebras to help smooth the transition to material in later sections.
-
-
-
-
 
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
