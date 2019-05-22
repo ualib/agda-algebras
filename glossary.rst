@@ -13,10 +13,8 @@ Acronyms
 .. glossary::
 
     ATP
-      automated theorem prover
-
-    ATP (v)
-      automated theorem proving
+      | *n.* automated theorem prover
+      | *v.* automated theorem proving
 
     CiC
       Calculus of Inductive Constructions
@@ -37,10 +35,8 @@ Acronyms
       equality reflection
 
     ITP
-      interactive theorem prover (aka proof assistant); some popular examples are: :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`.
-
-    ITP (v)
-      interactive theorem proving
+      | *n.* interactive theorem prover (or proof assistant), e.g., :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`
+      | *v.* interactive theorem proving
 
     ITT
       :term:`intensional` :term:`intuitionistic type theory <TT>`.
@@ -104,7 +100,7 @@ Nomenclature
       A **commutative diagram** is a diagram with the following property: for all objects :math:`C` and :math:`D`, all paths from :math:`C` to :math:`D` yield the same morphism.
 
     compact element
-      an element :math:`x` of a lattice :math:`L` is called **compact** provide for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
+      an element :math:`x` of a lattice :math:`L` is called **compact** provided for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
 
     complete
       A poset in which all meets exist is called **complete**.
@@ -239,7 +235,7 @@ Nomenclature
       A **group** :math:`𝐆 = (G, e, \ ^{-1}, ⋆)` consists of a set :math:`G` together with a nullary (constant) operation :math:`e`, a unary (inverse) operation :math:`\ ^{-1}: G → G`, and a binary operation :math:`⋆ : G^2 → G`, such that :math:`(G, e, ⋆)` is a monoid and :math:`x ⋆ x^{-1} = e` for all :math:`x ∈ G`.
 
     Heyting algebra
-      ..todo:: fill in definition    
+      A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
    
     Heyting algebra homomorphism
       a :term:`lattice homomorphism` that also preserves Heyting implications; that is, if :math:`x, x' ∈ X`, then :math:`f(x → x') = f(x) → f(x')`.
@@ -339,6 +335,9 @@ Nomenclature
 
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
+
+    proof asssitant
+      see :term:`ITP`
 
     proof tactic
       an automated procedure for constructing and manipulating proof terms.

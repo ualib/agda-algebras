@@ -75,10 +75,21 @@ Compariosn of ITPs
 
 The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.
 
-+ NuPRL_ (Cornell). :term:`extensional`, :term:`predicative`
-+ Coq_ (INRIA).  :term:`intensional`, :term:`impredicative`
-+ Agda_ (Göteborg). :term:`intensional`, :term:`predicative`
-+ Lean_ (Microsoft Research, CMU) :term:`extensional`, :term:`impredicative`
+Some proof assistants based on TT
+----------------------------------
+
+Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It supports :term:`dependent types <dependent type>` and is based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
+
+Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It supports :term:`dependent types <dependent type>` and is based on :term:`CiC`; url: http://coq.inria.fr .
+      
+NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It supports :term:`dependent types <dependent type>` and based on Martin Lof type theory; url: http://www.nuprl.org/
+
+Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It supports dependent types and is based on :term:`CiC`; url: https://leanprover.github.io/
+
+.. + NuPRL_ . :term:`extensional`, :term:`predicative`
+.. + Coq_ .  :term:`intensional`, :term:`impredicative`
+.. + Agda_ . :term:`intensional`, :term:`predicative`
+.. + Lean_  :term:`extensional`, :term:`impredicative`
 
 ---------------------------------
 
