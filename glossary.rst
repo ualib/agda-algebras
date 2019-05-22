@@ -340,6 +340,9 @@ Nomenclature
     source vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2) ∈ E`, we refer to :math:`v_1` as the **source vertex** of :math:`e`.
 
+    subdcpo
+      If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
+
     target vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2)\in E`, we refer to :math:`v_2` as the **target vertex** of :math:`e`.
 
