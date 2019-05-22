@@ -2,9 +2,9 @@
 
 .. _appendix-a:
 
-==========================
-Appendix A. Prerequisites
-==========================
+=======================================
+Appendix A. Mathematical Prerequisites
+=======================================
 
 .. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
 
@@ -48,40 +48,43 @@ If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :ma
 
 The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *partial orders* and *equivalence relations*.
 
+Equivalence relations and partial orders
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 An **equivalence relation** is a symmetric preorder.
 
 A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
 
 We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
 
-Here are a few concrete examples of binary relations that arise often.
+.. proof:example::
 
-#. If :math:`X = ℤ` and :math:`R` is the usual :math:`≤` relation, then :math:`R` is a partial order on :math:`X`. (In fact, :math:`≤` is a :term:`total order` on :math:`ℤ` in this case.)
+   #. If :math:`X = ℤ` and :math:`R` is the usual :math:`≤` relation, then :math:`R` is a partial order on :math:`X`. (In fact, :math:`≤` is a :term:`total order` on :math:`ℤ` in this case.)
 
-#. Let :math:`X` be any set and let :math:`\mathcal{P}(X)` be the collection of all subsets of :math:`X`. The subset relation :math:`y ⊆ z` (":math:`y` is a subset of :math:`z`") is a partial order on :math:`\mathcal{P}(X)`.
+   #. Let :math:`X` be any set and let :math:`\mathcal{P}(X)` be the collection of all subsets of :math:`X`. The subset relation :math:`y ⊆ z` (":math:`y` is a subset of :math:`z`") is a partial order on :math:`\mathcal{P}(X)`.
 
-#. Let :math:`X = ℝ^2` and :math:`R =` ":math:`≤` on each component"; i.e., :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a_1 ≤ b_1, \, a_2 ≤ b_2 \}`. Then :math:`R` is a partial order on :math:`X`.
+   #. Let :math:`X = ℝ^2` and :math:`R =` ":math:`≤` on each component"; i.e., :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a_1 ≤ b_1, \, a_2 ≤ b_2 \}`. Then :math:`R` is a partial order on :math:`X`.
 
-#. If :math:`A = ℝ^2` then :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1^2+ a_2^2 = b_1^2+ b_2^2 \}` is an equivalence relation on :math:`A`. The equivalence classes are circles centered at :math:`(0,0)`.
+   #. If :math:`A = ℝ^2` then :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1^2+ a_2^2 = b_1^2+ b_2^2 \}` is an equivalence relation on :math:`A`. The equivalence classes are circles centered at :math:`(0,0)`.
 
-A **partition** of a set :math:`A` is a collection :math:`Π = \{A_i : i ∈ I\}` of non-empty subsets of :math:`A` such that
+A **partition** of the set :math:`A` is a collection :math:`P = \{A_i : i ∈ I\}` of non-empty subsets of :math:`A` such that
 
 .. math:: ⋃_{i ∈ I} A_i = A \quad \text{ and } \quad  A_i ∩ A_j = ∅  \quad ∀ i ≠ j.
 
 The :math:`A_i` are called the “blocks” of the partition.
 
-Every partition :math:`Π` determines an equivalence relation—namely, the relation :math:`R` defined by :math:`a\mathrel{R} b` if and only if :math:`a` and :math:`b` are in the same block of :math:`Π`.
+Every partition :math:`P` determines an equivalence relation---namely, the relation :math:`R` defined by :math:`a\mathrel{R} b` if and only if :math:`a` and :math:`b` are in the same block of :math:`P`.
 
 Conversely, if :math:`R` is an equivalence relation on :math:`A`, we denote the equivalence class of :math:`R` containing :math:`a` by :math:`a/R := \{b ∈ A : a \mathrel{R} b\}` and the set :math:`A/θ := \{a/θ : a ∈ A\}` of all :math:`θ` classes is a partition of :math:`A`.
 
-Examples: preorders, partial orders
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The poset induced by a preorder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An **equivalence relation** on a set :math:`X` is a preorder that is **symmetric**. That is, an equivalence relation is a binary relation that is reflexive, symmetric, and transitive.
+With any preorder :math:`X` we can associate a poset in a natural way as we now explain.
 
-With any preorder :math:`X` we can associate a poset in a natural way. Since a preorder is not antisymmetric in general, we may have distinct elements :math:`x, y ∈ X` with :math:`x ≤ y` and :math:`y ≤ x`.
+Since a preorder is not antisymmetric in general, we may have distinct elements :math:`x, y ∈ X` with :math:`x ≤ y` and :math:`y ≤ x`.
 
-However, in this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`. [1]_
+In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`. [1]_
 
 The relation ≅ so defined is an equivalence relation on :math:`X` and if we simply equate all ≅-related pairs, then we obtain a poset, denoted by :math:`X/≅`.
 
@@ -114,6 +117,8 @@ in which it exists.
 Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds. If, in addition, the elements of :math:`C` can be indexed by the natural numbers, then we call :math:`C` an ω-**chain**.
 
 A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
+
+---------------------------------
 
 .. index:: ! function
 
@@ -172,20 +177,24 @@ The restriction of :math:`F` to :math:`∅` is :math:`∅`, but :math:`F ↾ \{�
 
 Consequently, :math:`F[\{\emptyset \}] = \{a\}`, in contrast to the fact that :math:`F(\{∅\}) = b`.
 
-Assume that :math:`F: A → B`, and that :math:`A` is nonempty.
+.. proof:theorem::
 
-#. There exists a function :math:`G: B → A` (a “left inverse”) such that :math:`G ∘ F` is the identity function :math:`\id_{A}` on :math:`A` iff :math:`F` is one-to-one.
+   Assume that :math:`F: A → B`, and that :math:`A` is nonempty.
 
-#. There exists a function :math:`H: B → A` (a “right inverse”) such that :math:`F ∘ H` is the identity function :math:`\id_{B}` on :math:`B` iff :math:`F` maps :math:`A` *onto* :math:`B`.
+   #. There exists a function :math:`G: B → A` (a “left inverse”) such that :math:`G ∘ F` is the identity function :math:`\id_{A}` on :math:`A` iff :math:`F` is one-to-one.
 
-.. proof:theorem:: Axiom of Choice 1
+   #. There exists a function :math:`H: B → A` (a “right inverse”) such that :math:`F ∘ H` is the identity function :math:`\id_{B}` on :math:`B` iff :math:`F` maps :math:`A` *onto* :math:`B`.
+
+.. proof:axiom:: Axiom of Choice 1
 
    For any relation :math:`R` there is a function :math:`H ⊆ R` with :math:`\dom H = \dom R`.
 
-With this axiom we can prove the sufficiency direction of part 2 of the theorem above: take :math:`H` to be a function with :math:`H ⊆ F^{-1}` and :math:`\dom H = \dom F^{-1} = B`. Then :math:`H` does what we want: Given any :math:`y ∈ B`, we have :math:`(y,H(y)) ∈ F^{-1}` hence :math:`(H(y), y) ∈ F`, and so :math:`F(H(y)) = y`.
+With this axiom we can prove the sufficiency direction of item 2 of the theorem above: take :math:`H` to be a function with :math:`H ⊆ F^{-1}` and :math:`\dom H = \dom F^{-1} = B`. Then :math:`H` does what we want: Given any :math:`y ∈ B`, we have :math:`(y,H(y)) ∈ F^{-1}` hence :math:`(H(y), y) ∈ F`, and so :math:`F(H(y)) = y`.
+
+---------------------------------
 
 Relations of higher arity
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 We can extend the definition of ordered pairs and define an *ordered triple* recursively.
 
@@ -218,5 +227,494 @@ We give some examples of relations below. In these examples, :math:`ℝ` denotes
 
 Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`, etc.
 
+---------------------------------
+
+Projections
+-----------
+
+.. index:: ! idempotent operation
+
+An operation :math:`f : A^n \rightarrow A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a \in A`.
+
+Examples of idempotent operations are the projection functions and these play an important role, so we introduce a sufficiently general and flexible notation for them.
+
+Denote and define the set ℕ of natural numbers in inductively, as usual,
+
+.. math:: 0 = \emptyset, \quad 1 = \{0\}, \quad  2 := \{0, 1\}, \dots, n = \{0, 1, \dots, n-1\}.
+
+Given sets :math:`A_0, A_1, \dots, A_{n-1}`, denote their Cartesian product by
+
+.. math:: \prod_{i < n} A_i := A_0 × A_1 × \cdots × A_{n-1}.
+
+An element :math:`a ∈ \prod_{i<n} A_i` is an ordered :math:`n`-tuple, which may be specified by simply listing its values, :math:`a = (a(0), a(1), \dots, a(n-1))`. [1]_ 
+
+Thus, tuples are functions defined on a finite (“index”) set, and we often view them this way. This fact may be emphasized by writing
+
+.. math:: a : n → ⋃_{i < n} A_i; \;\; i ↦ a(i) ∈ A_i.
+
+If :math:`σ : k → n` is a :math:`k`-tuple of numbers in the set :math:`n = \{0, 1, \dots, n-1\}`, then we can compose an :math:`n`-tuple :math:`a ∈ \prod_{i<n} A_i` with :math:`σ` yielding :math:`a ∘ σ ∈ \prod_{i < k}A_{σ(i)}`.
+
+The result is a :math:`k`-tuple whose :math:`i`-th component is :math:`(a ∘ σ)(i) = a(σ(i))`.
+
+If :math:`σ` happens to be one-to-one, then we call the following a **projection function**:
+
+.. math:: \mathrm{Proj}_σ : \prod_{i< n} A_i → \prod_{i<k}A_{σ(i)};  \;\; a ↦ a ∘ σ.
+   :label: projection
+
+That is, for :math:`a ∈ \prod_{i<n}A_i` we define :math:`\mathrm{Proj}_σ a = a ∘ σ`.
+
+We often apply such projection functions to subsets :math:`R ⊆ \prod_{i<n} A_i`, in which case
+
+.. math:: \mathrm{Proj}_σ R &= \{ r ∘ σ  | r ∈ R \}\\
+                            &= \{(r_{σ(0)}, r_{σ(1)}, \dots, r_{σ(k-1)}) | r ∈ R\}.
+
+The following shorthand is frequently convenient:
+
+.. math:: R_σ := \mathrm{Proj}_σ R.
+
+.. proof:example::
+
+   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a \mapsto a\circ Igma` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`.
+
+Let :math:`A = \prod_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\mathrm{Proj}_σ` as in :eq:`projection` above. Then the **kernel**
+of :math:`\mathrm{Proj}_σ`, which we denote by :math:`\mathbf{0}_σ`, is defined as follows:
+
+.. math:: \mathbf{0}_σ &= \ker (\mathrm{Proj}_σ) = \{(a,a') ∈ A^2 | \mathrm{Proj}_σ a = \mathrm{Proj}_σ a'\}\\
+                &= \{(a,a') ∈ A^2 | a ∘ σ = a' ∘ Igma \} = \{(a,a') ∈ A^2 | ∀ j ∈ \im σ, \ a(j) = a'(j) \}.
+   :label: kernel
+
+It is obvious that :math:`\mathrm{0}_σ` is an equivalence relation on the set :math:`A`.
+
+More generally, if :math:`θ` is an equivalence relation on the set :math:`\prod_{j<k} A_{σ(j)}`---that is, :math:`θ ⊆ (\prod_{j<k} A_{σ(j)})^2` and :math:`θ` is reflexive, symmetric, and transitive---then we define the equivalence relation :math:`θ_σ` on the set :math:`A = \prod_{i<n} A_i` as follows:
+
+.. math:: θ_σ = \{(a, a') ∈ A^2 ∣ (a ∘ σ) \mathrel{\theta} (a' ∘ σ)\}.
+   :label: 17
+
+In other words, :math:`θ_σ` consists of all pairs in :math:`A^2` that land in :math:`θ` when projected onto the coordinates in :math:`\im σ`.
+
+#. Recall that :math:`\Proj_σ : A → \prod_{j<k} A_{σ(j)}` is the function that maps :math:`a` to :math:`a ∘ σ`.
+
+   Now, suppose we have a tuple :math:`(a_0, a_1, \dots, a_{p-1})\in A^p`, and suppose we intend to apply :math:`\Proj_σ` to each component, :math:`a_j`.
+
+   To do so, we need to lift :math:`\Proj_σ` from type :math:`A → ∏_{j<k} A_{σ(j)}` to type :math:`A^p → (∏_{j<k} A_{σ(j)})^p`, which is accomplished using a functor that often goes by the name :math:`map`.
+
+   For instance, if :math:`(a, a') ∈ A^2`, then :math:`map(\Proj_σ)(a, a') = (\Proj_σ(a), \Proj_σ(a'))`.
+
+   Therefore,
+
+   .. math:: θ_σ =\{(a, a') ∈ A^2 ∣ map(\Proj_σ)(a, a') ∈ θ \},
+
+   whence, :math:`θ_Igma = map(\Proj_σ)^{-1}θ`.
+
+#. If :math:`f: X → A` and :math:`g: X → B` are functions defined  on the same domain :math:`X`, then :math:`(f,g): X → A × B` is the unique function that composes with the first projection to give :math:`f` and composes with the second projection to give :math:`g`. For example, in the last remark there appears the expression :math:`(\Proj_σ(a), \Proj_σ(a')) = (a ∘ σ, a' ∘ σ)`, which has type :math:`( ∏_{j<k} A_{σ(j)} )^2`.
+
+    In retrospect, a more appropriate name for :math:`\mathbf{0}_σ` might be :math:`Δ_σ`, or even :math:`=_σ`.
+
+#. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj_j` instead of :math:`\Proj_{(j)}`.  Similarly, we write and :math:`\mathbf{0}_j` and :math:`θ_j` instead of :math:`\mathbf{0}_{(j)}` and :math:`θ_{(j)}`. Thus, :math:`\Proj_j a = a(j)`, and :math:`\mathbf{0}_j = \{(a, a') ∈ A^2 ∣ a(j) = a'(j)\}`, and, if :math:`θ ∈ \Con 𝐀_j`, then :math:`θ_j = \{(a, a') ∈ A^2 ∣ a(j) \mathrel{\theta} a'(j)\}`.
+
+Here are some obvious consequences of the foregoing notation and definitions that are worth noting.
+
+.. math::
+
+   ⋁_{j<n}\mathbf{0}_j = A^2, \qquad \mathbf{0}_σ = ⋀_{j ∈ σ} \mathbf{0}_j, \qquad \mathbf{0}_{n} = ⋀_{j<n}\mathbf{0}_j = 0_{A}, \qquad
+   θ_σ = ⋀_{j<k} θ_{σ(j)},
+
+where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is, :math:`0_{A}:= \{(a, a') ∈ \uA^2 ∣ a = a'\}`.
+
+As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
+
+-----------------------------------
+
+Generalized projections and dependent types
+-------------------------------------------
+
+This is new material on a more general way of presenting projections and partial application of functions.
+
+Let :math:`\{𝐀_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) [3]_ and let :math:`\underline{𝐀} = \prod_{i\in I} 𝐀_i`. (Actually, for now it suffices to think of the :math:`𝐀_i` and :math:`\underline{𝐀}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝐀}` as functions:
+
+.. math:: a \in \prod_{i\in I} 𝐀_i \quad \longleftrightarrow \quad \begin{cases} a: I \rightarrow \bigcup_{i\in I} A_i, &\text{ and }\\ a(i) \in A_i, & (i\in I). \end{cases}
+   :label: 7
+   
+This correspondence simply records the fact that the product type (on
+the left of the :math:`\longleftrightarrow` symbol) represents a special
+kind of function type (depicted on the right of
+:math:`\longleftrightarrow` using the usual :math:`\rightarrow` notation
+for function types). In other words, ([eq:7]) says that an element of
+the product type :math:`\prod_{i\in I} 𝐀_i` is a function from
+:math:`I` into :math:`\bigcup_{i\in I} A_i` whose codomain
+:math:`A_i` *depends* on the input argument :math:`i`. Such a function
+(or product) type is what computer scientists call a *dependent type*.
+
+Now, given a subset :math:`J \subseteq I`, a function
+:math:`Igma: J \rightarrow I`, and an element
+:math:`a \in \prod_{i\in I}A_i`, consider the composition
+:math:`a \circ Igma`. This is a function from :math:`J` to
+:math:`\bigcup_{j\in J} A_{Igma(j)}`, where
+:math:`(a\circ Igma)(j) \in A_{Igma(j)}`. Again, we could express
+this function type using the arrow notation,
+“:math:`a \circ Igma: J \rightarrow \bigcup_{j\in J} A_{Igma(j)}`
+where :math:`(a\circ Igma)(j) \in A_{Igma(j)}`,” but this
+specification has a more compact description using a product type:
+
+.. math:: a \circ Igma \in \prod_{j\in J} A_{Igma(j)}.
+
+Assume :math:`Igma` is one-to-one and define the “projection”
+function,
+
+.. math:: \Proj(Igma) : \prod_{i\in I} A_{i} \rightarrow \prod_{j\in J} A_{Igma(j)}
+
+by :math:`\Proj(Igma): a \mapsto (a \circ Igma)`. That is,
+:math:`\Proj(Igma)(a) = a \circ Igma`.
+
+We could try to specify the type of :math:`\Proj` using the arrow
+notation as follows:
+
+.. math::
+
+   \label{eq:8}
+   \Proj: (J \rightarrow I)\rightarrow 
+   \bigl(I \rightarrow \bigcup_{i\in I} A_{i}\bigr) \rightarrow 
+   \bigl(J \rightarrow \bigcup_{i\in I} A_{i}\bigr),
+
+but the deficiencies of the arrow notation are now even more glaring.
+The function type specification given in ([eq:8]) is not only imprecise,
+but also misleading. The result of applying :math:`\Proj` first to some
+:math:`Igma: J \rightarrow I` and then
+:math:`a:I \rightarrow \bigcup_{i\in I} A_{i}` is
+:math:`\Proj (Igma) (a)= a \circ Igma`, and to say that this is
+a function of type :math:`J \rightarrow \bigcup_{i\in I} A_{i}` is
+ambiguous at best. Rather, the precise (correct!) type specification is,
+“:math:`\Proj (Igma) (a): J \rightarrow \bigcup_{j\in J} A_{Igma(j)}`
+where :math:`\Proj (Igma) (a) (j) \in A_{Igma(j)}`.” Here again we
+can express this more concisely with a product type,
+:math:`\Proj (Igma)(a) \in \prod_{j\in J} A_{Igma(j)}`. Thus, to
+denote the type of :math:`\Proj`, we must add to ([eq:8]) the
+constraints on codomains that depend on argument values. For specifying
+the type of a “function of higher order” (a.k.a. a “functional”), the
+arrow notation can be cumbersome.
+
+The following is closer to what we want, but still imperfect:
+
+.. math::
+
+   \label{eq:9}
+   \Proj: (J \rightarrow I)\rightarrow \prod_{i\in I} A_{i} \rightarrow 
+   \prod_{j\in J} A_{Igma(j)}.
+
+This says that :math:`\Proj` takes a function
+:math:`Igma : J \rightarrow I` and a function
+:math:`a \in \prod_{i\in I} A_{i}` and returns the function
+:math:`a \circ Igma \in \prod_{j\in J} A_{Igma(j)}`. Here again we
+see that the arrow notation is not expressive enough because
+:math:`\prod_{j\in J} A_{Igma(j)}` depends on :math:`Igma`, but no
+:math:`Igma` is available from earlier in the expression ([eq:9]).
+
+The solution is again to denote the function type as a product. Product
+types are more expresive and enable us to concisely specify dependent
+types. Before demonstrating this, we make one more notational
+adjustment. Instead of denoting set membership by :math:`a \in A`, we
+will use the (type theoretic) notation :math:`a: A`, which expresses the
+fact that :math:`a` is a “constant” of type :math:`A`. Thus, the full
+(dependent) type specification of the projection operation is
+
+.. math::
+
+   \Proj: \prod_{Igma :J \rightarrow I}\left( \prod_{i: I} A_{i} \rightarrow 
+   \prod_{j: J} A_{Igma(j)}\right).
+
+Kernels of generalized projections
+----------------------------------
+
+Let :math:`𝐀 = \prod_{i\in I} 𝐀_i` be a product of
+algebras of the same type, and suppose
+:math:`Igma : J \rightarrow I` is a one-to-one function, where
+:math:`\emptyset ≠ J ⊆ I ⊆ ℕ`. Define the *kernel
+of the projection of* :math:`𝐀` *onto*
+:math:`\prod_{j: J} A_{Igma(j)}` as follows: [4]_
+
+.. math::
+
+   \Delta_Igma = \{(a,a') \in 𝐀^2 : a \circ Igma = a' \circ Igma \} 
+   = \ker (\Proj Igma)
+
+This is a congruence of :math:`𝐀`. More generally, if
+:math:`\theta` is a congruence of :math:`\prod_{j: J} A_{Igma(j)}`,
+define :math:`\theta_Igma \in \Con 𝐀` as follows:
+
+.. math::
+
+   \theta_Igma := (\Proj Igma)^{-1}(\theta)  = 
+   \{(a, a') \in 𝐀^2 : (a\circ Igma) \mathrel{\theta} (a' \circ Igma)\}.
+
+This indicates the origin of the notation :math:`\Delta_Igma`, where
+:math:`\Delta` denotes the trivial (identity) relation on
+:math:`\prod_{j: J} A_{Igma(j)}`. If :math:`J = \{0\}` and
+:math:`Igma : I` is just a constant, say, :math:`Igma(0) = k`,
+then we write :math:`\theta_k` instead of :math:`\theta_{\{k\}}`, so
+
+.. math:: \theta_k = \{(a, a') \in 𝐀^2 : a(k) \mathrel{\theta} a'(k)\}.
+
+(Here, :math:`\theta` must be in :math:`\Con 𝐀_k`.)
+
+The symbols :math:`ℕ`, :math:`\omega`, and nat are used
+interchangeably; they all denote the set of natural numbers. A
+**signature** :math:`S = (F, \rho)` consists of a set :math:`F` of
+operation symbols and a function :math:`\rho \colon F \to ℕ`. We call
+:math:`\rho f` the **arity** of the symbol :math:`f`. If :math:`A` is a
+set and :math:`f` is a :math:`\rho f`-ary operation on :math:`A`, then
+we sometimes write :math:`f \colon A^{\rho f} \to A`. Since the natural
+number :math:`\rho f` denotes the set
+:math:`\{0, 1, \dots, \rho f -1\}`, a function
+:math:`g \colon \rho f \to A` is simply a :math:`\rho f`-tuple of
+elements from :math:`A`; that is for each :math:`i\in \rho f`,
+:math:`g i \in A`.
+
+By identifying the :math:`\rho f`-th power, :math:`A^{\rho f}`, of the
+set :math:`A` with the type :math:`\rho f \to A` of functions from
+:math:`\{0, 1, \dots, \rho f -1\}` to :math:`A`, we thus identify the
+function type :math:`A^{\rho f} \to A` with the type
+:math:`(\rho f \to A) \to A`. To say that :math:`f` inhabits the
+function type :math:`A^{\rho f} \to A` and to write
+:math:`f \colon A^{\rho f} \to A` is then equivalent to saying that
+:math:`f` inhabits :math:`(\rho f \to A) \to A` and writing
+:math:`f \colon (\rho f \to A) \to A`.
+
+Fix :math:`m\in ℕ`. If :math:`a = (a_0, a_1, \dots, a_{m-1})` is an
+:math:`m`-tuple of elements from :math:`A`, then (keeping in mind that
+:math:`m` is the set :math:`\{0, 1, \dots, m-1\}`) it is useful to
+understand that this tuple is a function :math:`a : m \to A`, where
+:math:`a(i) = a_i`, for each :math:`i<m`. If :math:`h \colon A \to A`,
+then :math:`h\circ a : m \to A` is the tuple
+:math:`(h(a_0), h(a_1), \dots, h(a_{m-1}))\in A^m`, whose :math:`i`-th
+coordinate is :math:`(h\circ a)(i) = h(a(i)) = h(a_i) \in A`. On the
+other hand, if :math:`g \colon A^m \to A`—equivalently,
+:math:`g \colon (m \to A) \to A`—then :math:`g a` is the element
+:math:`g(a_0, a_1, \dots, a_{m-1}) \in A`. If
+:math:`f \colon (\rho f \to B) \to B` is a :math:`\rho f`-ary operation
+on :math:`B`, if :math:`a \colon \rho f \to A` is a :math:`\rho f`-tuple
+on :math:`A`, and if :math:`h \colon A \to B`, then
+:math:`h \circ a \colon \rho f \to B`, so
+:math:`f (h \circ a) \colon B`.
+
+-----------------------------------------------------
+
+
+Partial function application
+----------------------------
+
+Let :math:`I` be a nonempty set and let
+:math:`\{𝐀_i \mid i : I\}` be a collection of sets (or algebras
+of the same signature). [5]_ In applications, :math:`I` is often
+:math:`\{0,1,\dots, n-1\}` for some :math:`n: ℕ`, and it helps to keep
+this special case in mind. Elements of the product
+:math:`\underline{𝐀} = \prod_{i: I} 𝐀_i` are functions
+:math:`a: I \to \bigcup_{i: I} A_{i}` such that for each :math:`i`
+we have :math:`a(i): A_i`.
+
+Let :math:`J\subseteq I` and let :math:`Igma : J \to I` be
+one-to-one. Then, as above,
+:math:`a \circ Igma: \prod_{j: J} A_{Igma(j)}` gives the
+projection of :math:`a` onto certain coordinates of the full product,
+namely, the coordinates :math:`\im Igma = \{Igma(j) \mid j:J\}`.
+
+Suppose :math:`f` is a self map of the set
+:math:`\underline{A}:=\prod_{i: I} A_i`. That is,
+:math:`f: \underline{A}\to \underline{A}`. If
+:math:`I = \{0, 1, \dots, n-1\}`, then
+:math:`\underline{A}=\prod_{i=0}^{n-1} A_i` and the (curried) type of
+:math:`f` is
+
+.. math:: f: A_0 \to (A_1 \to (A_2 \to \cdots \to (A_{n-3} \to (A_{n-2} \to A_{n-1}))\cdots ).
+
+For a given :math:`a_0: A_0`, the function :math:`f` partially applied
+at the first coordinate has type
+
+.. math:: f(a_0): A_1 \to (A_2 \to \cdots \to (A_{n-3} \to (A_{n-2} \to A_{n-1}))\cdots ).
+
+To ease notation we will sometimes write function application by
+juxtaposition so that :math:`f a_0 := f(a_0)`, for example. For elements
+:math:`a_0` and :math:`a_1` inhabiting types :math:`A_0` and :math:`A_1`
+(resp.), the partial application of :math:`f` to these elements yields
+the following function : type pair
+
+.. math:: f a_0 a_1 : A_2 \to (A_3 \to \cdots \to (A_{n-3} \to (A_{n-2} \to A_{n-1}))\cdots ).
+
+ In general, for :math:`a_i: A_i`, :math:`0\leq i<\ell`,
+
+.. math:: f a_0 a_1\dots a_{\ell-1}: A_\ell \to (A_{\ell+1} \to \cdots \to (A_{n-3} \to (A_{n-2} \to A_{n-1}))\cdots ).
+
+It would be useful to have a means of partial function application in
+case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`,
+or in case we wish to partially apply a function to an arbitrary subset
+of its operands (coordinates of its domain). If we have, as above,
+
+-  :math:`\underline{𝐀} = \prod_{i: I} A_i`,
+
+-  :math:`Igma : J \to I` (one-to-one),
+
+-  :math:`a \circ Igma: \prod_{j: J} A_{Igma(j)}`, for each
+   :math:`a: \prod_{i: I} A_i`,
+
+Let :math:`f` have type
+:math:`\prod_{i: I} A_i \to \prod_{i: I} A_i`, which means that if
+we apply :math:`f` to an element :math:`a:\prod_{i: I} A_i` the
+result has the same type, that is,
+:math:`f a: a:\prod_{i: I} A_i`. We may wish to apply :math:`f` to
+just a portion of :math:`a` but it may not be the case that
+:math:`I` is a subset of :math:`ℕ`, or an ordered enumeration of some
+other set, so there is no natural notion of “the first :math:`\ell`
+operands.” Even if there was such a notion, we may wish to partially
+apply :math:`f` to something other than the first :math:`\ell` operands.
+Therefore, we define a more general notion of partial application as
+follows: :math:`f` partially applied to the coordinates
+:math:`\im Igma = \{Igma(j) \mid j:J\}` of the element :math:`a`
+gives the function : type pair
+
+.. math::
+
+   f \circ (a \circ Igma): 
+   \prod_{\substack{i: I\\ i∉ \im Igma}} A_i \to \prod_{i: I} A_i.
+
+--------------------------------------------
+
+Directed sets and inductive sets
+--------------------------------
+
+.. index:: ! directed set, ! inductive set
+
+A subset :math:`D` of a preorder is called a **directed set** if every finite subset of :math:`D` has an upper bound in :math:`D`.
+
+That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
+
+A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
+
+.. proof:example:: See Remark 1.2.10 of :cite:`MR1275826`
+
+   Let :math:`X = \{0, 1, 2, \dots, n, n+1, \dots, ∞, ⊤\}` be the chain with order relation satisfying :math:`0≤ 1≤ 2≤ \cdots ≤ n ≤ n+1 ≤ \cdots ≤ ∞ ≤ ⊤`.
+
+   Let :math:`A = X - \{∞\}` and :math:`D = X -\{∞, ⊤\}`. (See Figure [fig:noninductive].)
+
+   Then :math:`⋁_A D` exists and is equal to :math:`⊤`, since the join is taken in :math:`A`.
+
+   However, :math:`⋁_X D = ∞ ∉ A`, so :math:`A` is not an inductive subset of :math:`X`.
+
+.. todo:: insert figure
+
+--------------------------------------------
+
+Completeness and cocompleteness
+-------------------------------
+
+The existence of meets and joins for certain kinds of subsets of a preorder is known as completeness and cocompleteness respectively.
+
+Suppose :math:`X` is a preorder and let :math:`P` be a **property of subsets** of :math:`X`.
+
+Given a subset :math:`A ⊆ X`, denote by :math:`A ⊨ P` the judgement “:math:`A` has property :math:`P`”.
+
+If the meet :math:`⋀ A` exists for every subset :math:`A ⊆ X` for which :math:` A ⊨ P` holds, then we say that :math:`X` is :math:`P`-**complete**.
+
+Dually, :math:`X` is called :math:`P`-**cocomplete** if the join :math:`⋁ A` exists for every subset :math:`A` with property :math:`P`.
+
+Suppose :math:`X` is a preorder for which joins of all directed subsets exist. Then :math:`X` is called a **directed-cocomplete preorder**. If, in addition, :math:`X` happens to be a poset, then :math:`X` is a **directed-cocomplete partial order** or **dcpo**.
+
+If :math:`X` has joins of all :math:`ω`-chains, then :math:`X` is said to be :math:`\omega`-**chain cocomplete**.
+
+We will refer to an :math:`\omega`-**chain cocomplete partial order** as a :math:`\omega`-cpo.
+
+Finally, if all meets in :math:`X` exist, then we say :math:`X` is **complete**, and if all joins exist, then :math:`X` is called **cocomplete**.
+
+It is easy to see that a preorder is complete if and only if it is cocomplete. Indeed, this follows from the next pair of equations, which are direct consequences of the defintions of ⋀ and ⋁:
+
+.. math:: ⋀ A = ⋁ \{x ∈ X : x ≤ A\} \qquad ⋁ A = ⋀ \{x ∈ X : A ≤ x\}.
+
+A homomorphism of dcpos :math:`X` and :math:`Y` is a function :math:`f: X → Y` that preserves the structure of :math:`X`, which is to say :math:`f` is monotone and if :math:`D ⊆ X` is directed, then :math:`f (⋁ D) =⋁ f(D)`. (The join on the right hand side exists since :math:`f` is monotone.)
+
+A homomorphism of ω-cpos is defined analogously. A homomorphism of :term:`dcpos <dcpo>` (:math:`\omega`-cpos) will also be referred to as a **continuous** (ω-**continuous**) function.
+
+If :math:`X` and :math:`Y` have least elements, both denoted by :math:`⊥`, then a function :math:`f: X → Y` is said to be **strict** if :math:`f(⊥) = ⊥`.
+
+If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
+
+Thus if :math:`A` is a :term:`subdcpo` of :math:`X` and :math:`A` is given the restriction order from :math:`X`, then the inclusion :math:`ι : A → X` is a continuous function.
+
+Note also that if :math:`A ⊆ X` are :term:`dcpos <dcpo>` and if :math:`ι : A → X` is continuous, then :math:`A` is a :term:`subdcpo` of :math:`X`.
+
+If :math:`X` is a poset, :math:`D` a :term:`directed` subset of :math:`X`, and if the join of :math:`D` in :math:`X` exists, then we denote the join of :math:`D` by :math:`⨆_X D` rather than :math:`\Join_X D`. Part of the force of the judgement :math:`\bigsqcup_X D` is that the set
+:math:`D` is directed.
+
+-------------------------------------
+
+Closure systems
+---------------
+
+Let 𝔛 be a set and let :math:`𝒫(𝔛)` denote the collection of all subsets of 𝔛.
+
+A **closure operator** on 𝔛 is a set function :math:`𝖢 : 𝒫 (𝔛) → 𝒫 {𝔛}` satisfying the following conditions, for all :math:`X, Y ∈ 𝒫 (𝔛)`, 
+
+#. :math:`X ⊆ 𝖢 (X)`,
+
+#. :math:`𝖢 𝖢 = 𝖢`,
+
+#. :math:`Y ⊆ X ⟹ 𝖢 (Y) ⊆ 𝖢 (X)`.
+
+If 𝒜 is a collection of algebras of the same type, let :math:`𝖲 𝒜` and :math:`𝖱 𝒜` denote, respectively, the collection of all subalgebras and retracts of algebras in 𝒜.
+
+𝖲 is a closure operator on sets of algebras of the same type.
+
+It's easy to see, if the retraction is as defined above, that then retraction operator :math:`𝖱` is not a closure operator on sets of algebras of the same type.
+
+However, if we take our definition of **retraction** of :math:`𝐀 = ⟨ A, F ⟩` via :math:`p ∈ \mathrm{Pol}_1(𝐀)` to be
+
+.. math:: p(𝐀) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
+
+then :math:`𝖱` is a closure operator.
+
+-------------------------------
+
+.. rubric:: Footnotes
+
+.. [1]
+   Some authors call the elements :math:`x` and :math:`y` **isomorphic** in this case, but we prefer the term :math:`≅`-equivalent. 
+
+.. [2]
+   Tuples are more commonly written with subscripts as in :math:`(a_0, a_1, \dots, a_{n-1})`, and we will adopt this convention when it is convenient, especially if the functional view is not relevant.
+
+.. [3]
+   Usually :math:`I` will simply be :math:`[n] := \{0,1,\dots, n-1\}`.
+
+.. [4]
+   Note that our :math:`Δ_σ` is the same as Kearnes' :math:`η_σ`, in the paper, "Idempotent Simple Algebras."
+
+.. [5]
+   Sets would do for now, but we continue to mention algebras to help smooth the transition to material in later sections.
+
+
+
+
+
+
+.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+.. _Coq: http://coq.inria.fr
+      
+.. _NuPRL: http://www.nuprl.org/
+
+.. _Lean: https://leanprover.github.io/
+
+.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _lean_src: https://github.com/leanprover/lean
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
 

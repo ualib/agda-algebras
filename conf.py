@@ -35,6 +35,20 @@ extensions = [
     'lean_sphinx', 'sphinxcontrib.bibtex', 'sphinxcontrib.proof'
 ]
 
+proof_theorem_types = {
+    "algorithm": "Algorithm",
+    "axiom": "Axiom",
+    "conjecture": "Conjecture",
+    "corollary": "Corollary",
+    "definition": "Definition",
+    "example": "Example",
+    "lemma": "Lemma",
+    "observation": "Observation",
+    "proof": "Proof",
+    "property": "Property",
+    "theorem": "Theorem",
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

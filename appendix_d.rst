@@ -1,7 +1,7 @@
-.. _appendix_c:
+.. _appendix_d:
 
 ===================
-Appendix C. License
+Appendix D. License
 ===================
 
 **Apache License**

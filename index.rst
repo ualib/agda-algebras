@@ -15,6 +15,7 @@ The Lean Universal Algebra Library
     appendix_a
     appendix_b
     appendix_c
+    appendix_d
     glossary
     refs
     genindex

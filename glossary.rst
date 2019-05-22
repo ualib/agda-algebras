@@ -42,6 +42,8 @@ Acronyms
     UIP
       uniqueness of identity proofs
 
+    dcpo
+      :term:`directed-cocomplete partial order`
 
 ----------------------------------------------------
 
@@ -73,6 +75,9 @@ Nomenclature
     category of small categories
       (see :term:`Cat`)
 
+    cocomplete
+      A poset in which all joins exist is called **cocomplete**.
+
     codomain
       If :math:`f : A → B` is a function or relation from :math:`A` to :math:`B`, then :math:`B` is called the **codomain** of :math:`f`, denoted by 
       :math:`\mathrm{cod} f`.
@@ -82,6 +87,9 @@ Nomenclature
 
     compact element
       an element :math:`x` of a lattice :math:`L` is called **compact** provide for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
+
+    complete
+      A poset in which all meets exist is called **complete**.
 
     complete lattice
       a :term:`poset` whose universe is closed under *arbitrary* meets and joins.
@@ -112,6 +120,18 @@ Nomenclature
 
     dependent type
       A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`Section %s <dependent-types>`.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_ manual.
+
+    directed set
+      A subset :math:`D` of a preorder is called **directed** if every finite subset of :math:`D` has an upper bound in :math:`D`. That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
+
+    inductive set
+      A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
+
+    directed-cocomplete preorder
+      a preorder for which the joins of all :term:`directed <directed set>` subsets exist. 
+      
+    directed-cocomplete partial order
+      an antisymmetric directed-cocomplete preorder---that is, a directed-cocomplete preorder that is also a poset.
 
     directed graph
       A **directed graph** is a :term:`relational structure` consisting of a vertex set :math:`V` (whose elements are called vertices) and an edge set :math:`E\subseteq V^2` (whose elements are called edges).
@@ -211,6 +231,9 @@ Nomenclature
 
     impredicative
       A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
+
+    inductive set
+      A subset :math:`I` of a preorder :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
     initial object
       An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
@@ -325,6 +348,9 @@ Nomenclature
 
     total function
       Given sets :math:`A` and :math:`B`, a **total function** :math:`f` from :math:`A` to :math:`B` is what we typically mean by a “function” from :math:`A` to :math:`B`.
+
+    total order
+      A **total order** relation :math:`R` on a set :math:`X` is a partial order on :math:`X` satisfying :math:`∀ x, y ∈ X \ (x ≤ y \ ⋁ \ y ≤ x)`.
 
     underlying set functor
       The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.

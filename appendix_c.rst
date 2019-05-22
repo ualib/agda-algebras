@@ -1,9 +1,9 @@
 .. include:: _static/math_macros.rst
 
-.. _appendix-b:
+.. _appendix-c:
 
 =======================
-Appendix B: Lean Basics
+Appendix C: Lean Basics
 =======================
 
 In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
