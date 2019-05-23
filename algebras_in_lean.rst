@@ -42,16 +42,18 @@ Heuristically, it's fine to think of | β | as the "number" of arguments the ope
 
 An **operation** takes a tuple (or, list of "arguments") of type β → α and returns an element of type α.  Here, α is the type on which the operation is defined.
 
-In Lean, if α and β are types, we define the **type of β-ary operations on α** to be the function type (β → α) → α, and we denote this type by ``op(β α)``.
+In the lean-ualib_, given types α and β, we define the type of **β-ary operations on α** to be (β → α) → α, and we denote this type by ``op (β α)``.
 
 .. code-block:: lean
 
     import data.set
     definition op (β α) := (β → α) → α
 
+definition op (β : Type*) (α : Type*) := (β → α) → α
+
 .. index:: ! projection function
 
-An example of an operation of type ``op (β α)`` is the **projection function** π , defined on the type α, as follows:
+A simple but important example of an operation of type ``op (β α)`` is the **β-ary projection on α**, which is defined as follows:
 
 .. code-block:: lean
 
@@ -61,9 +63,19 @@ An example of an operation of type ``op (β α)`` is the **projection function**
     definition π {β α} (i) : op β α := λ a, a i
     -- END
 
+For clarity, it is sometimes helpful to make the types explicit, so we repeat the definition of the β-ary projection on α, this time showing the types.
+
+.. code-block:: lean
+
+    import data.set
+    definition op (β α) := (β → α) → α
+    -- BEGIN
+    definition π {β α} (i : β) : op β α := λ (a : β → α), a i
+    -- END
+
 The operation ``π i`` maps a given tuple ``a: β → α`` to its "value" ``a i`` at input ``i``.
 
-For instance, if we have types ``α`` and ``β``, and variables ``i: β`` and ``a: β → α``, then the command ``#check π i a`` shows that the type of ``π i a`` is ``α``, as expected, since ``π i a = a i``.
+For instance, if we have types ``α`` and ``β``, and inhabitants ``i: β`` and ``a: β → α``, then the command ``#check π i a`` shows that the type of ``π i a`` is ``α``, as expected, since ``π i a = a i``.
 
 .. code-block:: lean
 
@@ -102,11 +114,11 @@ Signatures
 A **signature** :math:`σ = (F, ρ)` consists of
 
   + a set :math:`F` of **operation symbols**, and
-  + a **similarity type** :math:`ρ: F → N`.
+  + a **similarity type** :math:`ρ: F → β`.
   
-For each operation symbol :math:`f : F`, the value :math:`ρ f` is the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
+For each operation symbol :math:`f : F`, the value :math:`ρ f` is the **arity** of :math:`f`.  This value has type :math:`β`, which is the **arity type**.
 
-In classical universal algebra we typically assume that :math:`N = ℕ`, but for much of the basic theory this choice is inconsequential. [1]_
+In classical universal algebra we typically assume that :math:`β = ℕ`, but for much of the basic theory this choice is inconsequential. [1]_
 
 .. index:: ! type of; signatures
 .. index:: ! type of; operations
@@ -193,9 +205,9 @@ then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
 .. index:: type of; interpretations of operations
 
-Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses the :ref:`dependent function type <pi-type>` (or "Pi type").
+Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses a :ref:`dependent function type <pi-type>` (or "Pi type").
 
-Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
+Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which *depends* on :math:`f`).
 
 Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
