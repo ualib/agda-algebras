@@ -101,20 +101,20 @@ Signatures
 
 A **signature** :math:`σ = (F, ρ)` consists of
 
-  #. :math:`F :=` a set of **operation symbols**;
-  #. :math:`ρ: F → N :=` a **similarity type**.
+  + a set :math:`F` of **operation symbols**, and
+  + a **similarity type** :math:`ρ: F → N`.
   
-For each operation symbol :math:`f : F`, the value :math:`ρ f` is called the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
+For each operation symbol :math:`f : F`, the value :math:`ρ f` is the **arity** of :math:`f`.  This value has type :math:`N`, which is the **arity type**.
 
-In classical universal algebra we typically assume that :math:`N = ℕ`, but for most of the basic theory this choice is inconsequential. [1]_
+In classical universal algebra we typically assume that :math:`N = ℕ`, but for much of the basic theory this choice is inconsequential. [1]_
 
 .. index:: ! type of; signatures
 .. index:: ! type of; operations
 .. index:: ! arity function
 
-We now take our first crack at implementing a type of signatures and a type of operations in Lean_. In the process we compare and contrast the formal and the informal presentations of these concepts.
+We now implement a type of signatures and a type of operations in Lean_.  In the process we compare and contrast the formal and the informal presentations of these concepts.
 
-We define the **type of signatures** as a structure with two fields, the type ``F`` of operation symbols and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
+Define the **type of signatures** as a structure with two fields, the type ``F`` of operation symbols, and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
 
 .. code-block:: lean
 
@@ -133,7 +133,7 @@ We define the **type of signatures** as a structure with two fields, the type ``
 .. index:: keyword: section
 .. index:: keyword: local notation
 
-In the next section, we define the **type of interpretations of operations** on the :index:`carrier type` ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that won't change throughout the development. [2]_
+In the next section, we define the **type of interpretations of operations** on the :index:`carrier type` ``α``.  Before proceeding, however, let us first start a new ``section`` which allows us to define some parameters (such as a fixed signature ``σ``) that will be available throughout the section. [2]_
 
 .. code-block:: lean
 
@@ -154,6 +154,7 @@ With these ``local notation`` directives, we can now write ``f : F`` (instead of
 
 .. index:: pair: variety; equational class
 .. index:: triple: algebra; structure; universal algebra
+.. index:: carrier type
 
 .. _universal-algebras-in-lean:
 
@@ -164,21 +165,25 @@ Classical universal algebra is the study of **varieties** (or **equational class
 
 A **universal algebra** (also known as an **algebraic structure**) is denoted by :math:`𝐀 = ⟨A, F^{𝐀}⟩` and consists of 
 
-  #. :math:`A :=` a set, called the **universe** (or **carrier**) of the algebra,
-  #. :math:`F^{𝐀} = \{f^{𝐀} ∣ f ∈ F, f^{𝐀} : (ρf → A) → A\} :=` a set of **operations** defined on :math:`A`, and
-  #. a collection of **identities** satisfied by the elements and operations of 𝐀.
+  + a set :math:`A`, called the **universe** (or **carrier**) of the algebra,
+  + a set :math:`F^{𝐀} = \{f^{𝐀} ∣ f ∈ F, f^{𝐀} : (ρf → A) → A\}` of **operations** defined on :math:`A`, and
+  + a collection of **identities** satisfied by the elements and operations of 𝐀.
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will become part of the ``lean-ualib`` library, but only after we have an easily accessible implementation of the classical core of (single-sorted, set-based) universal algebra.
+Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as multisorted algebras, higher-type universal algebra, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that will eventually be incorporated into ``lean-ualib``, but for now we content ourselves with developing and documenting an *accessible* implementation of the classical core of (single-sorted, set-based) universal algebra.
 
-Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`. If the arity type :math:`\beta` happens to be the set ℕ of natural numbers, then :math:`ρ f` denotes the set :math:`\{0, 1, \dots, ρf-1\}`. A function :math:`g` of type :math:`ρf → A` is then simply a :math:`ρ f`-tuple of elements of :math:`A`. [4]_
+When working informally, we typically denote arguments to functions as tuples.  However, when computing with functions (and even when not!) it's useful to identify tuples as functions, so let's briefly review how this correspondence works with an example.
 
-Fix :math:`m : ℕ`. An :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
+Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
+
+Let :math:`β` be the arity type. If :math:`β` happens to be ℕ, then :math:`ρ f = \{0, 1, \dots, ρf-1\}` and a function :math:`g : ρf → A` is simply a :math:`ρ f`-tuple of elements of :math:`A`. [4]_
+
+Conversely, for :math:`m : ℕ`, an :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
 
 If :math:`h : A → B` and :math:`a : m → A`, then :math:`h ∘ a : m → B` is the tuple whose :math:`i`-th value is :math:`(h ∘ a) i = h\, a\, i = h a_i`, which has type :math:`B`.
 
 If :math:`g : A^m → A` and :math:`a : m → A`, then the value :math:`g\, a` has type :math:`A`.
 
-Thus, if
+Putting it all together, if
 
   + :math:`f : (ρf → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
   + :math:`a : ρf → A` is a :math:`ρ f`-tuple on :math:`A`, and 
@@ -190,9 +195,9 @@ then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
 Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses the :ref:`dependent function type <pi-type>` (or "Pi type").
 
-.. index:: ! carrier type
+Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).
 
-Given a signature :math:`σ = (F, ρ)` and a **carrier type** :math:`α`, an inhabitant of ``algebra_on α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which depends on :math:`f`).  Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
+Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
 .. math:: \prod_{f : F} (ρ f → α) → α = \prod_{f : F} \mathrm{op} \,(ρ f)\, α.
 
@@ -343,7 +348,9 @@ Another example that demonstrates the utility of coercions is our definition of 
 Homomorphisms
 -------------
 
-To see this notation in action, let us look at how the ``lean-ualib`` represents the assertion that a function is a σ-**homomorphism**.
+Using the types defined in the last section, it's not hard to represent the assertion that a function :math:`h : A → B` is a :ref:`homomorphism <homomorphisms>`.
+
+We could clean this up a bit by fixing the signature σ and algebras 𝐀 and 𝐁 in advance, the definition looks a bit cleaner.
 
 .. code-block:: lean
 
@@ -361,21 +368,42 @@ To see this notation in action, let us look at how the ``lean-ualib`` represents
      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
    end
-   section
-
-   definition is_subalgebra {σ : signature} {α : Type*} {β : Type*}
-   (A : algebra_on σ α) {β : set α} (B : algebra_on σ β) :=
-   ∀ f b, ↑(B f b) = A f ↑b
 
    -- BEGIN
-   definition homomorphic {σ : signature}
-   {A : algebra σ} {B : algebra σ} (h : A → B) := 
-   ∀ (f : σ.F) (a : σ.ρ f → A.fst), h (A f a) = B f (h ∘ a)
+   variables {σ : signature} {A : algebra σ} {B : algebra σ}
+
+   definition homomorphic (h : A → B) := ∀ f a, h (A f a) = B f (h ∘ a)
    -- END
 
+Comparing this with a common informal language definition of a homomorphism, which is typically something similar to :math:`∀ f \ ∀ a \ h (f^𝐀 (a)) = f^𝐁 (h ∘ a)`, we expect working algebraists to find the ``lean-ualib`` syntax quite readable.
+
+Alternatively, we could define ``homomorphic`` so that the signature and algebras are not specified in advance, but instead passed in as arguments. This is demonstrated below, along with a third alternative that makes the types explicit which can sometimes be instructive.
+
+.. code-block:: lean
+
+   import data.set
+   definition op (β α) := (β → α) → α
+   definition π {β α} (i) : op β α := λ f, f i
+   variables (α : Type*) (β : Type*) (i : β) (f : β → α) 
+   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   section
+     parameter (σ : signature)
+     local notation `F` := σ.F
+     local notation `ρ` := σ.ρ 
+     definition algebra_on (α : Type*) := Π (f : F), op (ρ f) α   
+     definition algebra := sigma algebra_on
+     instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+     instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
    end
 
-Comparing this with a common informal language definition of a homomorphism, which is typically something similar to :math:`∀ f \ ∀ a \ h (f^𝐀 (a)) = f^𝐁 (h ∘ a)`, we expect working algebraists to find the ``lean-ualib`` syntax very readable and usable.
+   -- BEGIN
+   def homomorphic_with_args 
+   {σ : signature} {A : algebra σ} {B : algebra σ} 
+   (h : A → B) := ∀ f a, h (A f a) = B f (h ∘ a)
+
+   def homomorphic_explicit (h : A → B) := 
+   ∀ (f : σ.F) (a : σ.ρ f → A.fst), h (A f a) = B f (h ∘ a)
+   -- END
 
 --------------------------------------------------------------
 
