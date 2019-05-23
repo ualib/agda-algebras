@@ -6,6 +6,26 @@
 Appendix A. Mathematical Prerequisites
 =======================================
 
+Products of Sets
+-----------------
+
+The **Cartesian product** of two sets :math:`A_0` and :math:`A_1`, denoted :math:`A_0 × A_1`, is the set of all ordered pairs :math:`(a_0, a_1)` such that :math:`a_0 ∈ A_0` and :math:`a_1 ∈ A_1`. That is, :math:`A_0 × A_1 := \{(a_0, a_1) ∣ a_0 ∈ A_0, a_1 ∈ A_1\}`.
+
+More generally, :math:`A_0 × \cdots × A_{n-1}` is the set of sequences of length :math:`n` with :math:`i`-th element in :math:`A_i`. That is,
+
+.. math:: A_0 × \cdots × A_{n-1} := \{(a_0, \dots,  a_{n-1}) ∣ a_0 ∈ A_0, \dots, a_{n-1} ∈ A_{n-1}\}.
+
+Another way to view :math:`A_0 × \cdots × A_{n-1}` is as the set of all functions with domain :math:`\{0, 1, \dots, n-1\}` and range :math:`⋃_{i<n} A_i`. More generally still, the **Cartesian product** of an indexed family of sets, :math:`\{A_i : i ∈ I\}`, is the set of all functions with domain :math:`I` and range :math:`⋃_{i ∈ I} A_i` such that :math:`f(i) ∈ A_i`. That is,
+
+.. math:: ∏_{i∈I} A_i := \{f: I → ⋃_{i∈I} A_i | f(i) ∈ A_i\}.
+
+When :math:`A_0 = A_1 = \cdots = A`, we write :math:`A^2 := A × A` and :math:`A^n := A × \cdots × A` (:math:`n` factors), and refer to these as **Cartesian powers** of
+:math:`A`.
+
+.. proof:question::
+
+   How do you know :math:`∏_{i∈I} A_i ≠ ∅`, even supposing :math:`I ≠ ∅` and :math:`A_i ≠ ∅` for all :math:`i ∈ I`? [1]_
+
 .. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
 .. index:: ! domain, ! range
 
@@ -208,6 +228,8 @@ Consequently, :math:`F[\{∅\}] = \{a\}`, in contrast to the fact that :math:`F(
 
    #. There exists a function :math:`H: B → A` (a “right inverse”) such that :math:`F ∘ H` is the identity function :math:`\id_{B}` on :math:`B` iff :math:`F` maps :math:`A` *onto* :math:`B`.
 
+.. _axiom-of-choice-1:
+
 .. proof:axiom:: Axiom of Choice 1
 
    For any relation :math:`R` there is a function :math:`H ⊆ R` with :math:`\dom H = \dom R`.
@@ -216,17 +238,17 @@ With this axiom we can prove the sufficiency direction of item 2 of the theorem 
 
 ---------------------------------
 
-.. index:: ordered tuples, tuples
+.. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
 Relations of higher arity
 -------------------------
 
-We can extend the definition of ordered pairs and define an *ordered triple* recursively.
+We can extend the definition of ordered pairs and define an **ordered triple** recursively.
 
 .. math:: (x, y, z) = ((x, y), z).
 
-Similarly, *ordered quadruples*.
+Similarly, **ordered quadruples**.
 
 .. math::
 
@@ -583,6 +605,13 @@ However, if we take our definition of **retraction** of :math:`𝐀 = ⟨ A, F �
 .. math:: p(𝐀) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
 
 then 𝖱 is a closure operator.
+
+--------------------------------
+
+.. rubric:: Footnotes
+
+.. [1]
+   **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
 
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
