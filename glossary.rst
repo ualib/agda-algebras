@@ -126,11 +126,14 @@ Nomenclature
     coproduct
       Given two objects :math:`A` and :math:`B` a **coproduct** (or **sum**) of :math:`A` and :math:`B` is denoted by :math:`A+B` and defined to be an object with morphisms :math:`ι_1 : A → A + B` and :math:`ι_2 : B → A + B` such that for every object :math:`X` and all morphisms :math:`u : A → Y` and :math:`v : B → Y` there exists a unique morphism :math:`[u,v] : A+B → Y` such that :math:`[u,v] ∘ ι_1 = u` and :math:`[u,v] ∘ ι_2 = v`.
 
+    covariant powerset functor
+      The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
+
     Curry-Howard correspondence
       the correspondence between propositions and types, and proofs and programs; a proposition is identified with the type of its proofs, and a proof is a program of that type.
 
-    covariant powerset functor
-      The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
+    currying
+      see https://en.wikipedia.org/wiki/Currying
 
     dependent function type
       .. todo:: fill in definition
@@ -260,6 +263,9 @@ Nomenclature
 
     Kleene closure
       (see :term:`free monoid`)
+
+    lambda calculus
+      see https://en.wikipedia.org/wiki/Lambda_calculus
 
     lattice
       a :term:`poset` whose universe is closed under all *finite* meets and joins is called a lattice.

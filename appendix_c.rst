@@ -189,6 +189,18 @@ If we change the order of the arguments of ``#check`` in the example above, we g
 
 Lean_ allows various kinds of coercions using type classes; for details, see the `Coercions using Type Classes`_ section of `TPL`_.
 
+In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``. The definitions of these in the Lean_ library are as follows:
+
+.. code-block:: lean
+
+   class has_coe_to_sort (a : Sort u) : Type (max u (v+1)) :=
+   (S : Sort v) (coe : a → S)
+
+   class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
+   (F : a → Sort v) (coe : Π x, F x)
+
+------------------------------------------------
+
 .. _the-elaboration-engine:
 
 Elaboration engine
