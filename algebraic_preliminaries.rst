@@ -91,10 +91,26 @@ An **algebraic structure** is denoted by :math:`𝐀 = ⟨ A, F^𝐀⟩` and con
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Section %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
+---------------------------
+
 .. _homomorphisms:
 
 Homomorphisms
--------------
+--------------
+
+Let :math:`𝐀 = ⟨ A, F^𝐀 ⟩` and :math:`𝐁 = ⟨ B, F^𝐁 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
+
+.. math:: φ (f^𝐀 (a_1, \dots, a_{n})) = f^𝐁 (φ (a_1), \dots, φ (a_{n})).
+
+Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math:`φ` respects the interpretation of every :math:`f ∈ F`, then we call :math:`φ` a **homomorphism** from 𝐀 to 𝐁, and we write :math:`φ \in \operatorname{Hom}(𝐀, 𝐁)`, or simply, :math:`φ : 𝐀 → 𝐁`.
+
+.. .. proof:observation::
+..  For groups, to check that a map :math:`φ : G → H` is a homomorphism, it is enough to check that :math:`φ` respects the interpretation of the binary operation. It follows from this that such a function respects the unary and nulary operations as well.
+
+---------------------------------
+
+Epis, Monos, and Autos
+-----------------------
 
 .. todo:: complete this section
 
