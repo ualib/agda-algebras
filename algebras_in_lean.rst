@@ -138,7 +138,7 @@ In classical universal algebra we typically assume that :math:`β = ℕ`, but fo
 .. index:: ! type of; operations
 .. index:: ! arity function
 
-We now implement a type of signatures and a type of operations in Lean_.  In the process we compare and contrast the formal and the informal presentations of these concepts.
+We now implement a type of signatures and a type of operations in Lean_.
 
 Define the **type of signatures** as a structure with two fields, the type ``F`` of operation symbols, and an **arity function** ``ρ : F → Type*``, which takes each operation symbol ``f`` to its arity ``ρ f``.
 
