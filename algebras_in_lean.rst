@@ -322,12 +322,12 @@ Here is how the type ``sigma`` is defined in the Lean_ standard library.
 
 Sigma is the appropriate type for the ``algebra`` type since an algebra consists of a universe (of type α), along with operations on that universe, and the type of each operation is dependent on the universe type α.
 
-Syntactic sugar and coersions
+Syntactic sugar and coercions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Lean_ has a nifty :index:`coersion` feature which we use for the following purpose: if ``A`` is an algebra, Lean_ will try to determine the correct type of the symbol A---either the algebra itself or the universe of the algebra---depending on the context (just as we would when working informally!).
+Lean_ has a nifty :index:`coercion` feature which we use for the following purpose: if ``A`` is an algebra, Lean_ will try to determine the correct type of the symbol A---either the algebra itself or the universe of the algebra---depending on the context (just as we would when working informally!).
 
-The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` coersion directives direct Lean_ to yield either the universe of the algebra or the whole algebra, as appropriate for the given context.
+The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` coercion directives direct Lean_ to yield either the universe of the algebra or the whole algebra, as appropriate for the given context.
 
 .. code-block:: lean
 
@@ -344,7 +344,7 @@ The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` co
 
 .. index:: keyword: has_coe_to_sort
 .. index:: keyword: has_coe_to_fun
-.. index:: coersion
+.. index:: coercion
 
 Using coercions allows us to identify certain objects which, though not identical, are typically conflated in informal mathematics.
 

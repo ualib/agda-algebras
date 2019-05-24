@@ -60,7 +60,7 @@ This section describes how :ref:`subalgebras <subalgebras>` and :ref:`subunivers
     end subs
     end subuniverse
 
-(See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coersions ``⋂₀`` in Lean.)
+(See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
 
 Next we need *introduction* and *elimination* rules for arbitrary intersections, plus the useful fact that the intersection of subuniverses is a subuniverse. 
 
