@@ -1,3 +1,4 @@
+.. include:: _static/math_macros.rst
 
 .. role:: cat
 
