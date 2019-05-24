@@ -293,6 +293,9 @@ which are precisely the conditions we would normally verify when checking that :
 Observations, categorically
 ---------------------------
 
+.. todo:: rewrite this section (it's still based on the classical treatment)
+
+
 Let us revisit the list of observations we made (in classical notation) above in :numref:`Section %s <basic-facts>`.
 
 Throught this section,
