@@ -322,6 +322,10 @@ Here is how the type ``sigma`` is defined in the Lean_ standard library.
 
 Sigma is the appropriate type for the ``algebra`` type since an algebra consists of a universe (of type α), along with operations on that universe, and the type of each operation is dependent on the universe type α.
 
+.. index:: keyword: has_coe_to_sort
+.. index:: keyword: has_coe_to_fun
+.. index:: coercion
+
 Syntactic sugar and coercions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -338,19 +342,17 @@ The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` co
    definition algebra (σ : signature) := sigma (algebra_on σ)
 
    -- BEGIN
-   instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
-   instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+   -- coercion to universe of σ
+   -- (essentially the forgetful functor)
+   instance alg_carrier (σ : signature) : 
+   has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
+
+   -- coercion to operations of σ 
+   instance alg_operations (σ : signature) : 
+   has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
    -- END
 
-.. index:: keyword: has_coe_to_sort
-.. index:: keyword: has_coe_to_fun
-.. index:: coercion
-
-Using coercions allows us to identify certain objects which, though not identical, are typically conflated in informal mathematics.
-
-Notice that we use ``A f`` to denote what, in the informal syntax, is usually denoted by :math:`f^𝐀`. So, although our Lean_ syntax doesn't match the informal syntax exactly, it is arguably just as elegant, and adapting to it should not overburden the user.
-
-See :numref:`Section %s <coercion>` for a simple example and the precise definitions of ``has_coe_to_sort`` and ``has_coe_to_fun`` in the Lean_ library.
+Using coercions allows us to identify certain objects which, though not identical, are typically conflated in informal mathematics. In the next section we use coercions to our advantage in a concrete example, but see also :numref:`Section %s <coercion>` for a simpler example and for the definitions of ``has_coe_to_sort`` and ``has_coe_to_fun`` in the Lean_ library.
 
 -----------------------------------------------
 
@@ -368,46 +370,85 @@ We start by importing the definitions described above so that we have signatures
 .. code-block:: lean
 
    import basic     -- the basic.lean file from lean-ualib
-   import data.set  -- the set.lean file from mathlib
 
 Next, we open a ``namespace`` to collect definitions and results related to subuniverses and subalgebras.  This is done using the ``namespace`` directive. We also start a ``section`` so we can fix a signature and a carrier type and define some syntactic sugar for the signature.
 
 .. code-block:: lean
 
+   definition op (β α) := (β → α) → α
+   definition π {β α} (i) : op β α := λ a, a i
+   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+   definition algebra (σ : signature) := sigma (algebra_on σ)
+   instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
+   instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+   import data.set  -- the set.lean file from mathlib
+
    -- BEGIN
    namespace subuniverse
      section
+       parameter {σ : signature}
+       parameter {α : Type*}  -- carrier type
+       definition F := σ.F
+       definition ρ := σ.ρ 
+     end
+   namespace subuniverse
+   end subuniverse
+   -- END
 
+Although we won't make it explicit, the remainder of this section assumes all Lean_ code is in the ``subuniverse`` namespace; that is,  inside a block of the form
+
+.. code-block:: lean
+
+   namespace subuniverse
+   -- ...
+   end subuniverse
+
+We now codify the property that a given subset ``B₀`` of an algebra ``A`` is a subuniverse of ``A``.
+
+.. code-block:: lean
+
+   definition op (β α) := (β → α) → α
+   definition π {β α} (i) : op β α := λ a, a i
+   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+   definition algebra (σ : signature) := sigma (algebra_on σ)
+   instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
+   instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+   import data.set  -- the set.lean file from mathlib
+
+   namespace subuniverse
+     section
        parameters {σ : signature}
        parameter {α : Type*}  -- carrier type
        definition F := σ.F
        definition ρ := σ.ρ 
-   -- END
+
+       -- BEGIN
+       -- subuniverse property
+       definition Sub
+       (A : algebra_on σ α) (B₀ : set α) : Prop :=
+       ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
+
+            -- (A f a ∈ B₀  is syntactic sugar for  B₀ (A f a).)
+       -- END
      end
    end subuniverse
 
-Next we say what it means for a subset of a universe to be a subuniverse.
+Notice that we use ``A f`` to denote what, in the informal syntax, is usually denoted by :math:`f^𝐀`. So, although our Lean_ syntax doesn't match the informal syntax exactly, it is arguably just as elegant, and adapting to it should not overburden the user.
+
+We also want a means of testing whether an algebra defined on a subset :math:`B₀ ⊆ A` is a subalgebra of 𝐀. (Of course, this is equivalent to testing whether :math:`B₀` is a subuniverse of 𝐀.)
 
 .. code-block:: lean
 
-   namespace subuniverse
-     section
-       parameters {σ : signature}
-       parameter {α : Type*}  -- carrier type
-       definition F := σ.F
-       definition ρ := σ.ρ 
-   -- BEGIN
-       -- subuniverse
-       definition Sub (A : algebra_on σ α) (B₀ : set α) : Prop :=
-       ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
-
-          -- (A f a ∈ B₀  is syntactic sugar for  B₀ (A f a).)
-   -- END
-
-We also want a way to testing whether an algebra defined on a subset ``B₀`` of the universe of ``A`` is a subalgebra of ``A``.
-
-.. code-block:: lean
-
+   definition op (β α) := (β → α) → α
+   definition π {β α} (i) : op β α := λ a, a i
+   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+   definition algebra (σ : signature) := sigma (algebra_on σ)
+   instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
+   instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+   import data.set  -- the set.lean file from mathlib
    namespace subuniverse
      section
        parameters {σ : signature}
@@ -416,29 +457,45 @@ We also want a way to testing whether an algebra defined on a subset ``B₀`` of
        definition ρ := σ.ρ 
        definition Sub (A : algebra_on σ α) (B₀ : set α) : Prop :=
        ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
+
        -- BEGIN
        -- subalgebra
-       definition is_subalgebra
-       (A : algebra_on σ α) (B₀ : set α) (B : algebra_on σ B₀) :=
+       definition is_subalgebra (A : algebra_on σ α) 
+       (B₀ : set α) (B : algebra_on σ B₀) :=
        ∀ f b, ↑(B f b) = A f ↑b
        -- END
      end
    end subuniverse
 
-Next, we demonstrate how subalgebra generation can be represented in Lean_.
+Next, we codify the definition of the subuniverse generated by a set that we saw in :eq:`SgDef` of :numref:`Section %s <subalgebras>`.
 
 .. code-block:: lean
+
+   definition op (β α) := (β → α) → α
+   definition π {β α} (i) : op β α := λ a, a i
+   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+   definition algebra (σ : signature) := sigma (algebra_on σ)
+   instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
+   instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+   import data.set  -- the set.lean file from mathlib
 
    namespace subuniverse
      section
        parameters {σ : signature}
-       parameter {α : Type*}
+       parameter {α : Type*}  -- carrier type
        definition F := σ.F
        definition ρ := σ.ρ 
-       definition Sub (A : algebra_on σ α) (B₀ : set α) : Prop :=
+
+       definition Sub
+       (A : algebra_on σ α) (B₀ : set α) : Prop :=
        ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
-       definition is_subalgebra (A : algebra_on σ α) 
-       (B₀ : set α) (B : algebra_on σ B₀) := ∀ f b, ↑(B f b) = A f ↑b
+
+       -- subalgebra
+       definition is_subalgebra
+       (A : algebra_on σ α) (B₀ : set α) (B : algebra_on σ B₀) :=
+       ∀ f b, ↑(B f b) = A f ↑b
+
        -- BEGIN
        -- subuniverse generated by X
        definition Sg (A : algebra_on σ α) (X : set α) : set α := 
@@ -447,7 +504,7 @@ Next, we demonstrate how subalgebra generation can be represented in Lean_.
      end
    end subuniverse
    
-We wish to formally prove that intersecting two subuniverses results in a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` that is defined in the mathlib_. [6]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
+We now formally prove that the intersection of two subuniverses is a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` defined in the mathlib_. [6]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
 
 .. code-block:: lean
 
@@ -572,7 +629,7 @@ Next we formalize the proof of the obvious fact that a subuniverse containing ``
      end
    end subuniverse
 
-Now we get to the more interesting part.  We present a definition of subuniverse generation using an *inductive type*.  Naturally, this is based on the inductive definition appearing in the :ref:`subuniverse generation theorem <thm-1-14>` of :numref:`Section %s <subalgebras>`. While we're at it, we go ahead and formalize the proof of the :ref:`subuniverse generation theorem <thm-1-14>`.
+Now we get to the more interesting part.  We present a definition of subuniverse generation using an *inductive type*.  This is a codification of the inductive definition appearing in the :ref:`subuniverse generation theorem <thm-1-14>` of :numref:`Section %s <subalgebras>`. While we're at it, we'll go ahead and formalize the proof of the :ref:`subuniverse generation theorem <thm-1-14>`.
 
 .. code-block:: lean
 
