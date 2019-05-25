@@ -175,8 +175,8 @@ The next three lemmas show that :math:`\mathrm{Sg} X` is the smallest subunivers
 
 .. _subuniverse-generation:
 
-Subuniverse generation [1]_
-----------------------------
+Subuniverse generation 
+-----------------------
 
 (The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of the lean-ualib_ repository.)
 
