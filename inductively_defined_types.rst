@@ -231,10 +231,10 @@ We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y
 
 The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
 
-.. _clones:
+.. _clones-in-lean:
 
-Clones
-------
+Clones in Lean
+---------------
 
 A **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. 
 
@@ -242,10 +242,10 @@ A **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that
 
 .. index:: variables, word, term, free algebra
 
-.. _terms-and-free-algebras:
+.. _terms-and-free-algebras-in-lean:
 
-Terms and free algebras
------------------------
+Terms and free algebras in Lean
+--------------------------------
 
 (The code described in this section is found in the file ``free.lean`` in the ``src`` directory of the lean-ualib_ repository.)
 
