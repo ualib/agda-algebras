@@ -57,12 +57,12 @@ A simple but important example of an operation of type ``op (β α)`` is the **�
 
 .. code-block:: lean
 
-   -- operation type
    definition op (β α) := (β → α) → α
 
    -- BEGIN
    -- Example Operation (Projection)
-   -- Get i-th element of a given tuple ``a``.
+   -- The (i : β)-th projection is an operation on α that 
+   -- returns the i-th element of a given tuple `a`.
    definition π {β α} (i) : op β α := λ a, a i
    -- END
 
@@ -70,7 +70,6 @@ For clarity, it is sometimes helpful to make the types explicit, so we repeat th
 
 .. code-block:: lean
 
-   -- operation type
    definition op (β α) := (β → α) → α
 
    -- BEGIN
@@ -148,10 +147,12 @@ Define the **type of signatures** as a structure with two fields, the type ``F``
    definition π {β α} (i) : op β α := λ a, a i
 
    -- BEGIN
-   -- signature type
-   -- F : a set of operation symbols
-   -- ρ : returns the arity of a given operation symbol
-   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+   -- signature is the type of operation symbols along with
+   -- a function assigning an arity (type) to each symbol.
+   structure signature :=
+   mk :: (F : Type*)     -- F = a set of operation symbols
+         (ρ : F → Type*) -- ρ = a function that returns the arity 
+                         --     type of a given operation symbol
    -- END
 
 .. index:: ! type of; interpretations of operations
@@ -173,7 +174,7 @@ In the next section, we define the **type of interpretations of operations** on 
    end
     -- END
 
-This enables us to define some ``local notation``, so that we can write ``f : F`` (instead of ``f : σ.F``) to indicate that the operation symbol ``f`` has type ``F``; similarly, for the arity of ``f``, we can write ``ρ f`` (instead of ``σ.ρ f``). This syntactic sugar results in Lean syntax that matches that of informal algebra almost exactly. [3]_ 
+This allows us to define some ``local notation``, so we can write ``f : F`` in place of ``f : σ.F`` and ``ρ f`` instead of ``σ.ρ f``. This bit of syntactic sugar results in Lean_ syntax for operation symbols that matches informal algebraic syntax almost exactly. [3]_ 
 
 .. index:: pair: variety; equational class
 .. index:: triple: algebra; structure; universal algebra
@@ -240,28 +241,27 @@ Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
 .. code-block:: lean
 
-   definition op (β α) := (β → α) → α
-   definition π {β α} (i) : op β α := λ a, a i
-   structure signature := mk :: (F : Type*) (ρ : F → Type*)
+    definition op (β α) := (β → α) → α
+    definition π {β α} (i) : op β α := λ a, a i
+    structure signature := mk :: (F : Type*) (ρ : F → Type*)
 
-   -- BEGIN
-   -- algebra_on type
-   -- Define interpretations of operations on carrier type α
-   definition algebra_on (σ : signature) (α : Type*) := 
-   Π (f : σ.F), op (σ.ρ f) α   
+    -- BEGIN
+    -- algebra_on is the type of algebras on a carrier type
+    -- α such that each symbol f is given an interpretation 
+    -- as an operation on α with arity ρ f.
+    definition algebra_on (σ : signature) (α : Type*) := 
+    Π (f : σ.F), op (σ.ρ f) α   
 
-      -- This is called `algebra_on` since an algebra is fully
-      -- specified by its (Cayley) operation tables. An inhabitant 
-      -- of `algebra_on` assigns to each op symbol f : F, of 
-      -- arity `β = S.ρ f`, an interpretation of f, that is, 
-      -- a function of type (β → α) → α.
+      -- An inhabitant of algebra_on assigns to each op symbol 
+      -- f : F of arity β = σ.ρ f, an interpretation of f, 
+      -- that is, a function of type (β → α) → α.
    -- END
 
 .. index:: Pi type
 
 Since the :ref:`dependent function type <pi-type>` or "Pi type" (denoted ``pi`` or ``Π`` in Lean_) is among one of the most important types in dependent type theory, let us pause pause for a moment to discuss it.
 
-The **Pi type** :math:`Π_(x:A), B x` is called a *dependent function type* because it generalizes the function type :math:`A → B` by allowing the type :math:`B x` of the codomain to depend on the *value* :math:`x : A` of the domain. (See :numref:`Section %s <dependent-types>` for more about dependent types.)
+A **Pi type**, such as :math:`Π_{(x:A)} B x`, is also known as a *dependent function type* because it generalizes the function type :math:`A → B` by allowing :math:`B x` (the type of the codomain) to depend on a *value* :math:`x : A` of the domain. (See :numref:`Section %s <dependent-types>` for more about dependent types.)
  
 Here is how the type ``pi`` is defined in the Lean_ standard library.
 
@@ -295,14 +295,12 @@ Also, our definition should caption the concept of an algebraic structure of any
    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
 
    -- BEGIN
-   -- algebra type
-   -- pairs a carrier with an interpretation of op symbols
+   -- algebra is the type of algebras consisting of a pair: 
+   -- a carrier type α, along with an algebra_on α 
    definition algebra (σ : signature) := sigma (algebra_on σ)
-
-   -- sigma is the "dependent pair" type: ⟨α, β α⟩ 
-   -- which is appropriate here since an algebra consists of 
-   -- a universe (of type α), and operations on that universe,
-   -- the type of the operations depends on the universe type.
+  
+     -- The Lean syntax sigma (algebra_on σ) denotes the 
+     -- dependent pair type, ∑ (α : Type*) (algebra_on σ α).
    -- END
 
 An algebra pairs a carrier with an interpretation of the op symbols.
@@ -370,8 +368,9 @@ We start by importing the definitions described above so that we have signatures
 .. code-block:: lean
 
    import basic     -- the basic.lean file from lean-ualib
+   import data.set  -- the set.lean file from mathlib
 
-Next, we open a ``namespace`` to collect definitions and results related to subuniverses and subalgebras.  This is done using the ``namespace`` directive. We also start a ``section`` so we can fix a signature and a carrier type and define some syntactic sugar for the signature.
+Next, we open a ``namespace`` to collect definitions and results related to subuniverses and subalgebras.  This is done using the ``namespace`` directive. We also start a ``section`` so we can fix a signature along with some syntactic sugar. 
 
 .. code-block:: lean
 
@@ -382,29 +381,28 @@ Next, we open a ``namespace`` to collect definitions and results related to subu
    definition algebra (σ : signature) := sigma (algebra_on σ)
    instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
    instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
-   import data.set  -- the set.lean file from mathlib
 
    -- BEGIN
    namespace subuniverse
      section
        parameter {σ : signature}
-       parameter {α : Type*}  -- carrier type
        definition F := σ.F
        definition ρ := σ.ρ 
      end
-   namespace subuniverse
    end subuniverse
    -- END
 
-Although we won't make it explicit, the remainder of this section assumes all Lean_ code is in the ``subuniverse`` namespace; that is,  inside a block of the form
+Although we won't make it explicit, the remainder of this section assumes all Lean_ code (apart from that being imported from another file) is part of the ``subuniverse`` namespace; that is, it occurs inside a block of the form
 
 .. code-block:: lean
 
    namespace subuniverse
-   -- ...
+
+     -- all subuniverse code will go here --
+
    end subuniverse
 
-We now codify the property that a given subset ``B₀`` of an algebra ``A`` is a subuniverse of ``A``.
+We now implement the definition of **subuniverse**. Specifically, we say what it means for a given set ``B₀`` (comprised of elements of the carrier type of an algebra ``A``) to be closed under the operations of ``A``.
 
 .. code-block:: lean
 
@@ -418,21 +416,21 @@ We now codify the property that a given subset ``B₀`` of an algebra ``A`` is a
    import data.set  -- the set.lean file from mathlib
 
    namespace subuniverse
+     -- BEGIN
      section
-       parameters {σ : signature}
-       parameter {α : Type*}  -- carrier type
+
+       parameter {σ : signature}
        definition F := σ.F
        definition ρ := σ.ρ 
 
-       -- BEGIN
-       -- subuniverse property
-       definition Sub
-       (A : algebra_on σ α) (B₀ : set α) : Prop :=
-       ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
+       -- subuniverse
+       definition Sub (A : algebra σ) (B₀ : set A.fst ) : Prop :=
+       ∀ (f : F) (a : ρ f → A.fst), (∀ x, a x ∈ B₀) → (A f a) ∈ B₀
 
-            -- (A f a ∈ B₀  is syntactic sugar for  B₀ (A f a).)
-       -- END
+       -- N.B. (A f a) ∈ B₀  is syntactic sugar for  B₀ (A f a).
+
      end
+     -- END
    end subuniverse
 
 Notice that we use ``A f`` to denote what, in the informal syntax, is usually denoted by :math:`f^𝐀`. So, although our Lean_ syntax doesn't match the informal syntax exactly, it is arguably just as elegant, and adapting to it should not overburden the user.
