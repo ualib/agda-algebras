@@ -36,4 +36,4 @@ make leantest
 
 ## How to contribute
 
-Pull requests with corrections are welcome. Please follow our `commit conventions <https://github.com/leanprover/lean/blob/master/doc/commit_convention.md>`. If you have questions about whether a change will be considered helpful, please contact Jeremy Avigad, ``avigad@cmu.edu``.
+Pull requests with corrections are welcome. Please follow the [standard Lean commit conventions](https://github.com/leanprover/lean/blob/master/doc/commit_convention.md). If you have questions about whether a change will be considered helpful, please contact [William DeMeo](mailto:williamdemeo@gmail.com).
