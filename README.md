@@ -4,7 +4,7 @@
 
 This repository contains all documentation for `lean-ualib`, the Lean Universal Algebra Library.
 
-The resulting documentation is served at ualib.org (which points to https://ualib.gitlab.io/).
+The resulting documentation is served at [ualib.org](https://ualib.gitlab.io/) (which redirects to https://ualib.gitlab.io/).
 
 The documentation is built using Sphinx and restructured text.  It may also require `convert` (https://imagemagick.org) for image conversion.
 
