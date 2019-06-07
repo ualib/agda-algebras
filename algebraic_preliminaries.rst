@@ -37,6 +37,8 @@ and we may formally identify the function :math:`h ∘ a : \underline m → A` w
 
 .. math:: (h ∘ a)[\underline m] = (h(a_0), h(a_1), \dots, h(a_{m-1})).
 
+---------------------------
+
 .. index:: signature
 
 .. _signatures:
@@ -75,6 +77,8 @@ Thus, by identifying the :math:`ρf`-th power :math:`A^{ρf}` with the type :mat
    Then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
 It is important to be familiar with the classical notions of signature and arity, since these are used by almost all algebraists. However, in :numref:`Section %s <f-algebra>` we give alternative, category theoretic definitions of these things that are sometimes easier to compute with.
+
+---------------------------
 
 .. index:: triple: algebra; structure; universal algebra
 
