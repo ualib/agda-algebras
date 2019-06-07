@@ -181,7 +181,7 @@ F-algebras
 
 Let :math:`F` be an endofunctor on the category :cat:`Set`.
 
-We define an **F-algebra** to be a structure :math:`𝐀 = ⟨A, f⟩`, where :math:`f : F A → A`.
+We define an **F-algebra** to be a structure :math:`𝔸 = ⟨A, f⟩`, where :math:`f : F A → A`.
 
 Example: :cat:`Grp`
 ~~~~~~~~~~~~~~~~~~~
@@ -196,7 +196,7 @@ A **group** is an :math:`\FGrp`-algebra where :math:`\FGrp A = 1 + A + A × A`.
    + :math:`\ ^{-1}` is a unary operation symbol (the "inverse");
    + :math:`∘` is a binary operation symbol ("multiplication"). 
 
-  Thus, a group is an algebraic structure, :math:`𝐀 = ⟨A, e, \ ^{-1}, ∘⟩`, where
+  Thus, a group is an algebraic structure, :math:`𝔸 = ⟨A, e, \ ^{-1}, ∘⟩`, where
 
    + :math:`e : A`;
    + :math:`^{-1} : A → A`;
@@ -204,7 +204,7 @@ A **group** is an :math:`\FGrp`-algebra where :math:`\FGrp A = 1 + A + A × A`.
 
   If we were to adopt Church's more precise :math:`λ` syntax, we could denote a group like this
 
-  .. math:: 𝐀 = ⟨A, e, λ x . x^{-1}, λ x . λ y . x ∘ y⟩,
+  .. math:: 𝔸 = ⟨A, e, λ x . x^{-1}, λ x . λ y . x ∘ y⟩,
 
   and then the arity of each operation symbol could be read off immediately!
 
@@ -254,9 +254,9 @@ A **group** is an :math:`\FGrp`-algebra where :math:`\FGrp A = 1 + A + A × A`.
 F-algebra homomorphisms
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Let :math:`𝐀 = ⟨A, f⟩` and :math:`𝐁 = ⟨B, g⟩` be two groups (i.e., :math:`\FGrp`-algebras).
+Let :math:`𝔸 = ⟨A, f⟩` and :math:`𝔹 = ⟨B, g⟩` be two groups (i.e., :math:`\FGrp`-algebras).
 
-A **homomorphism** from :math:`𝐀` to :math:`𝐁`, denoted by :math:`h : 𝐀 → 𝐁`, is a function :math:`h : A → B` that satisfies the following identity:
+A **homomorphism** from :math:`𝔸` to :math:`𝔹`, denoted by :math:`h : 𝔸 → 𝔹`, is a function :math:`h : A → B` that satisfies the following identity:
 
   .. math:: h ∘ f = g ∘ \FGrp h
 
@@ -301,17 +301,17 @@ Let us revisit the list of observations we made (in classical notation) above in
 Throught this section,
 
 + :math:`F` is an endofunctor on **Set**;
-+ :math:`𝐀 = ⟨A, f^{𝐀}⟩, \ 𝐁 = ⟨B, f^{𝐁}⟩, \ 𝐂 = ⟨C, f^{𝐂}⟩\ ` are :ref:`F-algebras <f-algebra>`.
++ :math:`𝔸 = ⟨A, f^{𝔸}⟩, \ 𝔹 = ⟨B, f^{𝔹}⟩, \ 𝐂 = ⟨C, f^{𝐂}⟩\ ` are :ref:`F-algebras <f-algebra>`.
 
 Suppose :math:`F` yields :math:`m` operation symbols and :math:`k_i` is the arity of the :math:`i`-th symbol:
 
 .. math:: F A : ∐_{i=0}^{m-1}(\underline{k_i} → A) \quad \text{ and } \quad F B : ∐_{i=0}^{m-1}(\underline{k_i} → B).
 
-Let :math:`g, h : \hom(𝐀, 𝐁)` be :ref:`F-algebra homomorphisms <f-algebra-homomorphism>` from 𝐀 to 𝐁:
+Let :math:`g, h : \hom(𝔸, 𝔹)` be :ref:`F-algebra homomorphisms <f-algebra-homomorphism>` from 𝔸 to 𝔹:
 
   :math:`g, h : A → B` are set maps satisfying
 
-  .. math:: g ∘ f^{𝐀} = f^{𝐁} ∘ F g \quad \text{ and } \quad h ∘ f^{𝐀} = f^{𝐁} ∘ F h.
+  .. math:: g ∘ f^{𝔸} = f^{𝔹} ∘ F g \quad \text{ and } \quad h ∘ f^{𝔸} = f^{𝔹} ∘ F h.
 
 .. index:: ! equalizer
 
@@ -324,7 +324,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. proof:observation::
 
-   :math:`E(g,h)` is a subuniverse of 𝐀.
+   :math:`E(g,h)` is a subuniverse of 𝔸.
 
    .. container:: toggle
  
@@ -344,7 +344,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. proof:observation::
 
-   If the set :math:`X ⊆ A` generates 𝐀 and :math:`g|_X = h|_X`, then :math:`g = h`.
+   If the set :math:`X ⊆ A` generates 𝔸 and :math:`g|_X = h|_X`, then :math:`g = h`.
 
    .. container:: toggle
     
@@ -356,7 +356,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
  
       Fix an arbitrary :math:`a : A`. We show :math:`g(a) = h(a)`.
  
-      Since :math:`X` generates 𝐀, there exists a term :math:`t` and a tuple :math:`x : ρt → X` of generators such that :math:`a = tᴬ x`.
+      Since :math:`X` generates 𝔸, there exists a term :math:`t` and a tuple :math:`x : ρt → X` of generators such that :math:`a = tᴬ x`.
  
       Therefore, since :math:`F g = F h` on :math:`X`, we have
     
@@ -366,7 +366,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. proof:observation::
 
-   If :math:`A, B` are finite and :math:`X` generates 𝐀, then :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
+   If :math:`A, B` are finite and :math:`X` generates 𝔸, then :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`.
 
    .. container:: toggle
     
@@ -376,15 +376,15 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
       By :ref:`obs 2 <obs2cat>`, a homomorphism is uniquely determined by its restriction to a generating set.
 
-      If :math:`X` generates 𝐀, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝐀, 𝐁)| ≤ |B|^{|X|}`.
+      If :math:`X` generates 𝔸, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`.
     
 .. _obs4cat:
 
 .. proof:observation::
 
-   If :math:`g : \epi (𝐀, 𝐁)` and :math:`h : \hom (𝐀, 𝐂)` satisfy :math:`\ker g ⊆ \ker h`, then
+   If :math:`g : \epi (𝔸, 𝔹)` and :math:`h : \hom (𝔸, 𝐂)` satisfy :math:`\ker g ⊆ \ker h`, then
 
-   .. math:: ∃ k ∈ \hom(𝐁, 𝐂)\ . \ h = k ∘ g.
+   .. math:: ∃ k ∈ \hom(𝔹, 𝐂)\ . \ h = k ∘ g.
     
    .. container:: toggle
     
@@ -392,7 +392,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
     
          *Proof*
 
-      We define :math:`k ∈ \hom(𝐁, 𝐂)` constructively, as follows:
+      We define :math:`k ∈ \hom(𝔹, 𝐂)` constructively, as follows:
 
       Fix :math:`b : B`.
 
@@ -432,7 +432,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
  
    .. math:: F_{n+1} := F_n ∪ \{ f g ∣ f ∈ F, g : ρf → (F_n ∩ (ρg → A)) \}.
  
-   Then :math:`\mathrm{Clo}^{𝐀}(F) = ⋃_n F_n`.
+   Then :math:`\mathrm{Clo}^{𝔸}(F) = ⋃_n F_n`.
  
 .. _obs6cat:
 
@@ -440,9 +440,9 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
    Let :math:`f` be a similarity type.
  
-    (a) :math:`𝐓_ρ (X)` is generated by :math:`X`.
+    (a) :math:`𝕋_ρ (X)` is generated by :math:`X`.
  
-    (b) For every algebra :math:`𝐀 = ⟨A, F⟩` of type :math:`ρ` and every function :math:`h : X → A` there is a unique homomorphism :math:`g : 𝐓_ρ (X) → ⟨A, fᴬ⟩` such that :math:`g|_X = h`.
+    (b) For every algebra :math:`𝔸 = ⟨A, F⟩` of type :math:`ρ` and every function :math:`h : X → A` there is a unique homomorphism :math:`g : 𝕋_ρ (X) → ⟨A, fᴬ⟩` such that :math:`g|_X = h`.
  
    .. container:: toggle
     
@@ -450,17 +450,17 @@ The **equalizer** of :math:`g` and :math:`h` is the set
      
          *Proof*
      
-      The definition of :math:`𝐓_ρ (X)` exactly parallels the construction in Theorem 1.14 :cite:`Bergman:2012`. That accounts for the first item.
+      The definition of :math:`𝕋_ρ (X)` exactly parallels the construction in Theorem 1.14 :cite:`Bergman:2012`. That accounts for the first item.
      
       For b, define :math:`g(t)` by induction on :math:`|t|`.
      
       Suppose :math:`|t| = 0`.  Then :math:`t ∈ X ∪ \mathcal F_0`.
      
-      If :math:`t ∈ X` then define :math:`g(t) = h(t)`. For :math:`t ∈ \mathcal F_0`, :math:`g(t) = t^{𝐀}`.
+      If :math:`t ∈ X` then define :math:`g(t) = h(t)`. For :math:`t ∈ \mathcal F_0`, :math:`g(t) = t^{𝔸}`.
      
-      Note that since :math:`𝐀 = ⟨A, fᴬ⟩` is an algebra of type :math:`f` and :math:`t` is a nullary operation symbol, :math:`t^{𝐀}` is defined.
+      Note that since :math:`𝔸 = ⟨A, fᴬ⟩` is an algebra of type :math:`f` and :math:`t` is a nullary operation symbol, :math:`t^{𝔸}` is defined.
      
-      For the inductive step, let :math:`|t| = n + 1`. Then :math:`t = f(s_1, \dots, s_k)` for some :math:`f ∈ \mathcal F_k` and :math:`s_1, \dots, s_k` each of height at most :math:`n`. We define :math:`g(t) = f^{𝐀}(g(s_1), \dots, g(s_k))`.
+      For the inductive step, let :math:`|t| = n + 1`. Then :math:`t = f(s_1, \dots, s_k)` for some :math:`f ∈ \mathcal F_k` and :math:`s_1, \dots, s_k` each of height at most :math:`n`. We define :math:`g(t) = f^{𝔸}(g(s_1), \dots, g(s_k))`.
      
       By its very definition, :math:`g` is a homomorphism. Finally, the uniqueness of :math:`g` follows from Exercise 1.16.6 in :cite:`Bergman:2012`.
  
@@ -468,15 +468,15 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. proof:observation::
 
-   Let :math:`𝐀 = ⟨A, f^{𝐀}⟩` and :math:`𝐁 = ⟨B, f^{𝐁}⟩` be algebras of type :math:`ρ`.
+   Let :math:`𝔸 = ⟨A, f^{𝔸}⟩` and :math:`𝔹 = ⟨B, f^{𝔹}⟩` be algebras of type :math:`ρ`.
  
-    (a) For every :math:`n`-ary term :math:`t` and homomorphism :math:`g : 𝐀 → 𝐁`, :math:`g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n))`.
+    (a) For every :math:`n`-ary term :math:`t` and homomorphism :math:`g : 𝔸 → 𝔹`, :math:`g(t^{𝔸}(a_1,\dots, a_n)) = t^{𝔹}(g(a_1),\dots, g(a_n))`.
 
-    (b) For every term :math:`t ∈ T_ρ(X_ω)` and every :math:`θ ∈ \mathrm{Con}⟨A, fᴬ⟩`, :math:`𝐀 ≡_θ 𝐁` implies :math:`t^{𝐀}(𝐀) ≡_θ t^{𝐀}(𝐁)`.
+    (b) For every term :math:`t ∈ T_ρ(X_ω)` and every :math:`θ ∈ \mathrm{Con}⟨A, fᴬ⟩`, :math:`𝔸 ≡_θ 𝔹` implies :math:`t^{𝔸}(𝔸) ≡_θ t^{𝔸}(𝔹)`.
 
     (c) For every subset :math:`Y` of :math:`A`,
 
-        .. math:: \Sg^{𝐀}(Y) = \{ t^{𝐀}(a_1, \dots, a_n) : t ∈ Tᵨ (X_n), a_i ∈ Y, i ≤ n < ω\}.
+        .. math:: \Sg^{𝔸}(Y) = \{ t^{𝔸}(a_1, \dots, a_n) : t ∈ Tᵨ (X_n), a_i ∈ Y, i ≤ n < ω\}.
 
    .. container:: toggle
     
@@ -486,9 +486,9 @@ The **equalizer** of :math:`g` and :math:`h` is the set
     
       The first statement is an easy induction on :math:`|t|`.
     
-      The second statement follows from the first by taking :math:`⟨B, f^{𝐁}⟩ = ⟨A, f^{𝐀}⟩/θ` and :math:`g` the canonical homomorphism.
+      The second statement follows from the first by taking :math:`⟨B, f^{𝔹}⟩ = ⟨A, f^{𝔸}⟩/θ` and :math:`g` the canonical homomorphism.
     
-      For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝐀}`.
+      For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝔸}`.
     
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows.
 

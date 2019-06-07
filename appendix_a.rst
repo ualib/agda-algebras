@@ -364,7 +364,7 @@ In other words, :math:`θ_σ` consists of all pairs in :math:`A^2` that land in 
 
     In retrospect, a more appropriate name for :math:`\mathbf{0}_σ` might be :math:`Δ_σ`, or even :math:`=_σ`.
 
-#. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj_j` instead of :math:`\Proj_{(j)}`.  Similarly, we write and :math:`\mathbf{0}_j` and :math:`θ_j` instead of :math:`\mathbf{0}_{(j)}` and :math:`θ_{(j)}`. Thus, :math:`\Proj_j a = a(j)`, and :math:`\mathbf{0}_j = \{(a, a') ∈ A^2 ∣ a(j) = a'(j)\}`, and, if :math:`θ ∈ \Con 𝐀_j`, then :math:`θ_j = \{(a, a') ∈ A^2 ∣ a(j) \mathrel{\theta} a'(j)\}`.
+#. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj_j` instead of :math:`\Proj_{(j)}`.  Similarly, we write and :math:`\mathbf{0}_j` and :math:`θ_j` instead of :math:`\mathbf{0}_{(j)}` and :math:`θ_{(j)}`. Thus, :math:`\Proj_j a = a(j)`, and :math:`\mathbf{0}_j = \{(a, a') ∈ A^2 ∣ a(j) = a'(j)\}`, and, if :math:`θ ∈ \Con 𝔸_j`, then :math:`θ_j = \{(a, a') ∈ A^2 ∣ a(j) \mathrel{\theta} a'(j)\}`.
 
 Here are some obvious consequences of the foregoing notation and definitions that are worth noting.
 
@@ -386,12 +386,12 @@ Generalized projections and dependent types
 
 Here we present a more general way of describing projections.
 
-Let :math:`\{𝐀_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) and let :math:`\underline{𝐀} = ∏_{i ∈ I} 𝐀_i`. (Actually, for now it suffices to think of the :math:`𝐀_i` and :math:`\underline{𝐀}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝐀}` as functions:
+Let :math:`\{𝔸_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) and let :math:`\underline{𝔸} = ∏_{i ∈ I} 𝔸_i`. (Actually, for now it suffices to think of the :math:`𝔸_i` and :math:`\underline{𝔸}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝔸}` as functions:
 
-.. math:: a ∈ ∏_{i∈I} 𝐀_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a(i) ∈ A_i, & ∀ i ∈ I. \end{cases}
+.. math:: a ∈ ∏_{i∈I} 𝔸_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a(i) ∈ A_i, & ∀ i ∈ I. \end{cases}
    :label: 7
    
-This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual → notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} 𝐀_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
+This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual → notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} 𝔸_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
 
 Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, “:math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`,” but this specification has a nicer, more compact description using a :term:`dependent function type`.
 
@@ -430,23 +430,23 @@ The solution is again to denote the function type as a product. Product types ar
 Kernels of generalized projections
 ----------------------------------
 
-Let :math:`𝐀 = ∏_{i:I} 𝐀_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g : J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
+Let :math:`𝔸 = ∏_{i:I} 𝔸_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g : J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
 
-Define the **kernel of the projection of** :math:`𝐀` **onto** :math:`∏_{j:J} A_{g(j)}` as follows:
+Define the **kernel of the projection of** :math:`𝔸` **onto** :math:`∏_{j:J} A_{g(j)}` as follows:
 
-.. math:: Δ_g = \{(a,a') : 𝐀^2 | a ∘ g = a' ∘ g \} = \ker (\Proj g)
+.. math:: Δ_g = \{(a,a') : 𝔸^2 | a ∘ g = a' ∘ g \} = \ker (\Proj g)
 
-This is a congruence of :math:`𝐀`. More generally, if :math:`θ` is a congruence of :math:`∏_{j:J} A_{g(j)}`, define :math:`θ_g : \Con 𝐀` as follows:
+This is a congruence of :math:`𝔸`. More generally, if :math:`θ` is a congruence of :math:`∏_{j:J} A_{g(j)}`, define :math:`θ_g : \Con 𝔸` as follows:
 
-.. math:: θ_g = (\Proj g)^{-1}(θ) =  \{ (a, a') : 𝐀^2 | (a ∘ g) \mathrel{\theta} (a' ∘ g) \}.
+.. math:: θ_g = (\Proj g)^{-1}(θ) =  \{ (a, a') : 𝔸^2 | (a ∘ g) \mathrel{\theta} (a' ∘ g) \}.
 
 This indicates the origin of the notation :math:`Δ_g`, where :math:`Δ` denotes the trivial (identity) relation on :math:`∏_{j:J} A_{g(j)}`. If :math:`J = \{0\}` and
 :math:`g : I` is just a constant, say, :math:`g(0) = k`,
 then we write :math:`\theta_k` instead of :math:`\theta_{\{k\}}`, so
 
-.. math:: \theta_k = \{(a, a') \in 𝐀^2 : a(k) \mathrel{\theta} a'(k)\}.
+.. math:: \theta_k = \{(a, a') \in 𝔸^2 : a(k) \mathrel{\theta} a'(k)\}.
 
-(Here, :math:`\theta` must be in :math:`\Con 𝐀_k`.)
+(Here, :math:`\theta` must be in :math:`\Con 𝔸_k`.)
 
 The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the set of natural numbers.
 
@@ -465,9 +465,9 @@ If :math:`f : (ρ f → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
 Partial function application
 ----------------------------
 
-Let :math:`I` be a nonempty set and :math:`\{𝐀_i | i : I\}` a family of sets.
+Let :math:`I` be a nonempty set and :math:`\{𝔸_i | i : I\}` a family of sets.
 
-Elements of the product :math:`∏_{i∈ I} 𝐀_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
+Elements of the product :math:`∏_{i∈ I} 𝔸_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
 
 Let :math:`J ⊆ I` and let :math:`g : J → I` be one-to-one. Then, as above, :math:`a ∘ g: ∏_{j: J} A_{g(j)}` gives the projection of :math:`a` onto certain coordinates of the full product, namely, the coordinates :math:`\im g = \{g(j) ∣ j:J\}`.
 
@@ -489,7 +489,7 @@ In general, for :math:`a_i : A_i`, :math:`0 ≤ i < ℓ`,
 
 It would be useful to have a means of partial function application in case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`, or in case we wish to partially apply a function to an arbitrary subset of its operands (coordinates of its domain). If we have, as above,
 
-+ :math:`\underline{𝐀} = ∏_{i:I} A_i`,
++ :math:`\underline{𝔸} = ∏_{i:I} A_i`,
 
 + :math:`g : J → I` (one-to-one),
 
@@ -600,9 +600,9 @@ Observe that 𝖲 is a closure operator on sets of algebras of the same type.
 
 It's easy to see that if the retraction is as defined above, then retraction operator 𝖱 is not a closure operator on sets of algebras of the same type.
 
-However, if we take our definition of **retraction** of :math:`𝐀 = ⟨ A, F ⟩` via :math:`p ∈ \mathrm{Pol}_1(𝐀)` to be
+However, if we take our definition of **retraction** of :math:`𝔸 = ⟨ A, F ⟩` via :math:`p ∈ \mathrm{Pol}_1(𝔸)` to be
 
-.. math:: p(𝐀) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
+.. math:: p(𝔸) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
 
 then 𝖱 is a closure operator.
 

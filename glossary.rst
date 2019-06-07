@@ -355,7 +355,7 @@ Nomenclature
       Given relations :math:`R : A → B` and :math:`S : B → C` we denote and define the **relational product** (or **composition**) of :math:`S` and :math:`R` to be :math:`S ∘ R = \{(a,c) : (∃ b ∈ B) a \mathrel{R} b ∧ b \mathrel{S} c \}`.
 
     relational structure
-      A relational structure :math:`𝐀 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
+      A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
 
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
@@ -397,7 +397,7 @@ Nomenclature
       the functor :math:`∀ f : P(A) → P(B)` defined by :math:`∀ f (X) = \{y ∈ B : f^{-1}(\{y\}) \subseteq  X\}`, for :math:`X ∈ P(A)`.
 
     universal mapping property
-      Let :math:`η_A : A → |𝐀^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The functors :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every monoid :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique morphism :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
+      Let :math:`η_A : A → |𝔸^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The functors :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every monoid :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique morphism :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
 
     universal property
       The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.

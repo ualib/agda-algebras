@@ -190,7 +190,7 @@ We present the following inductive type that implements the **subuniverse genera
     | var (x : α) : x ∈ X → Y x
     | app (f : F) (a : ρ f → α) : (∀ i, Y (a i)) → Y (A f a)
   
-Next we prove that the type ``Y X`` defines a subuniverse, and that it is, in fact, equal to :math:`\mathrm{Sg}^𝐀(X)`.
+Next we prove that the type ``Y X`` defines a subuniverse, and that it is, in fact, equal to :math:`\mathrm{Sg}^𝔸(X)`.
 
 .. code-block:: lean
 
@@ -231,15 +231,6 @@ We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y
 
 The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
 
-.. _clones-in-lean:
-
-Clones in Lean
----------------
-
-A **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. 
-
-.. todo:: complete this section
-
 .. index:: variables, word, term, free algebra
 
 .. _terms-and-free-algebras-in-lean:
@@ -249,7 +240,7 @@ Terms and free algebras in Lean
 
 (The code described in this section is found in the file ``free.lean`` in the ``src`` directory of the lean-ualib_ repository.)
 
-As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝐓(X)` of all terms of a given signature.
+As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝕋(X)` of all terms of a given signature.
 
 .. code-block:: lean
 
@@ -266,11 +257,11 @@ As a second demonstration of inductive types in Lean, we define a type represent
       def Term : algebra S := ⟨term, term.app⟩
     end
 
-The set of terms along with the operations :math:`F^{𝐓} := \{\mathsf{app} f | f : F\}` forms an algebra :math:`𝐓(X) = ⟨T(X), F^{𝐓}⟩` in the signature :math:`σ = (F, ρ)`.
+The set of terms along with the operations :math:`F^{𝕋} := \{\mathsf{app} f | f : F\}` forms an algebra :math:`𝕋(X) = ⟨T(X), F^{𝕋}⟩` in the signature :math:`σ = (F, ρ)`.
 
-Suppose :math:`𝐀 = ⟨A, F^{𝐀}⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝐓(X)` to 𝐀.
+Suppose :math:`𝔸 = ⟨A, F^{𝔸}⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
 
-Since 𝐀 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝐓(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝐓(X)` is *absolutely free* for σ-algebras," in this and only this case.
+Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝕋(X)` is *absolutely free* for σ-algebras," in this and only this case.
 
 Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
 
@@ -322,19 +313,25 @@ To prove that the term algebra is universal for σ-algebras, we show that the li
           funext h₀ 
     end
 
-Let :math:`𝐀 = ⟨A, F^{𝐀}⟩` be a \sigma-algebra.
 
 .. with congruence lattice $\Con\<A, \dots \>$.
 
 .. index:: clone
 
+.. _clones-in-lean:
+
+Clones in Lean
+---------------
+
+.. Let :math:`𝔸 = ⟨A, F^{𝔸}⟩` be a \sigma-algebra.
+
 Recall that a **clone** on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition. Let :math:`A` denote the set of all clones on :math:`A`.
 
-The **clone of term operations** of an σ-algebra 𝐀, denoted by :math:`\mathrm{Clo} 𝐀`, is the smallest clone on :math:`A` containing the basic operations of 𝐀, that is,
+The **clone of term operations** of an σ-algebra 𝔸, denoted by :math:`\mathrm{Clo} 𝔸`, is the smallest clone on :math:`A` containing the basic operations of 𝔸, that is,
 
-.. math:: \mathrm{Clo} 𝐀 = ⋂ \{ U ∈ 𝖢 A ∣ F^{𝐀} ⊆ U\}.
+.. math:: \mathrm{Clo} 𝔸 = ⋂ \{ U ∈ 𝖢 A ∣ F^{𝔸} ⊆ U\}.
 
-The set of :math:`n`-ary members of :math:`\mathrm{Clo} 𝐀` is sometimes denoted by :math:`\mathrm{Clo}_n 𝐀` (despite the fact that the latter is obviously not a clone).
+The set of :math:`n`-ary members of :math:`\mathrm{Clo} 𝔸` is sometimes denoted by :math:`\mathrm{Clo}_n 𝔸` (despite the fact that the latter is obviously not a clone).
 
 We now state a theorem that shows how the clone of term operations of a signature can be defined inductively.
 
@@ -355,19 +352,19 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
 
 .. proof:theorem::
 
-   Let 𝐀 and 𝐁 be algebras of type :math:`ρ`.
+   Let 𝔸 and 𝔹 be algebras of type :math:`ρ`.
 
-   #. For every :math:`n`-ary term :math:`t ∈ T_ρ (X_ω)` and homomorphism :math:`g : 𝐀 → 𝐁`,
+   #. For every :math:`n`-ary term :math:`t ∈ T_ρ (X_ω)` and homomorphism :math:`g : 𝔸 → 𝔹`,
       
-      .. math:: g(t^{𝐀}(a_1,\dots, a_n)) = t^{𝐁}(g(a_1),\dots, g(a_n)).
+      .. math:: g(t^{𝔸}(a_1,\dots, a_n)) = t^{𝔹}(g(a_1),\dots, g(a_n)).
 
-   #. For all :math:`t ∈ T_ρ (X_ω)`, :math:`θ ∈ \mathrm{Con} 𝐀`, :math:`𝐚 : ρ t → A` and :math:`𝐛 : ρ t → A`,
+   #. For all :math:`t ∈ T_ρ (X_ω)`, :math:`θ ∈ \mathrm{Con} 𝔸`, :math:`𝐚 : ρ t → A` and :math:`𝐛 : ρ t → A`,
    
-      .. math:: 𝐚 \mathrel{θ} 𝐛 ⟹ t^{𝐀}(𝐚) \mathrel{θ} t^{𝐀}(𝐛).
+      .. math:: 𝐚 \mathrel{θ} 𝐛 ⟹ t^{𝔸}(𝐚) \mathrel{θ} t^{𝔸}(𝐛).
 
    #. For every subset :math:`Y ⊆ A`,
 
-      .. math:: \mathrm{Sg}^{𝐀}(Y) = \{ t^{𝐀}(a_1, \dots, a_n) : t ∈ T(X_n), a_i ∈ Y, i ≤ n < ω\}.
+      .. math:: \mathrm{Sg}^{𝔸}(Y) = \{ t^{𝔸}(a_1, \dots, a_n) : t ∈ T(X_n), a_i ∈ Y, i ≤ n < ω\}.
 
    .. container:: toggle
  
@@ -377,9 +374,9 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
       
       The first statement is an easy induction on :math:`|t|`.
 
-      The second statement follows from the first by taking :math:`𝐁 = 𝐀/θ` and 𝗀 the canonical homomorphism.
+      The second statement follows from the first by taking :math:`𝔹 = 𝔸/θ` and 𝗀 the canonical homomorphism.
   
-      For the third statement, again by induction on the height of 𝗍, every subalgebra must be closed under the action of :math:`t^{𝐀}`. 
+      For the third statement, again by induction on the height of 𝗍, every subalgebra must be closed under the action of :math:`t^{𝔸}`. 
   
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows.
 

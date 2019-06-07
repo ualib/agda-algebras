@@ -83,11 +83,11 @@ It is important to be familiar with the classical notions of signature and arity
 Algebras
 --------
 
-An **algebraic structure** is denoted by :math:`𝐀 = ⟨ A, F^𝐀⟩` and consists of 
+An **algebraic structure** is denoted by :math:`𝔸 = ⟨ A, F^𝔸⟩` and consists of 
 
   #. :math:`A` := a set, called the *carrier* (or *universe*) of the algebra,
-  #. :math:`F^𝐀 = \{ f^𝐀 ∣ f ∈ F, \ f^𝐀 : (ρf → A) → A \}` := a set of operations on :math:`A`,
-  #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝐀`.
+  #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρf → A) → A \}` := a set of operations on :math:`A`,
+  #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Section %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
@@ -98,11 +98,11 @@ Some of the renewed interest in universal algebra has focused on representations
 Homomorphisms
 --------------
 
-Let :math:`𝐀 = ⟨ A, F^𝐀 ⟩` and :math:`𝐁 = ⟨ B, F^𝐁 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
+Let :math:`𝔸 = ⟨ A, F^𝔸 ⟩` and :math:`𝔹 = ⟨ B, F^𝔹 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
 
-.. math:: φ (f^𝐀 (a_1, \dots, a_{n})) = f^𝐁 (φ (a_1), \dots, φ (a_{n})).
+.. math:: φ (f^𝔸 (a_1, \dots, a_{n})) = f^𝔹 (φ (a_1), \dots, φ (a_{n})).
 
-Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math:`φ` respects the interpretation of every :math:`f ∈ F`, then we call :math:`φ` a **homomorphism** from 𝐀 to 𝐁, and we write :math:`φ \in \operatorname{Hom}(𝐀, 𝐁)`, or simply, :math:`φ : 𝐀 → 𝐁`.
+Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math:`φ` respects the interpretation of every :math:`f ∈ F`, then we call :math:`φ` a **homomorphism** from 𝔸 to 𝔹, and we write :math:`φ \in \operatorname{Hom}(𝔸, 𝔹)`, or simply, :math:`φ : 𝔸 → 𝔹`.
 
 .. .. proof:observation::
 ..  For groups, to check that a map :math:`φ : G → H` is a homomorphism, it is enough to check that :math:`φ` respects the interpretation of the binary operation. It follows from this that such a function respects the unary and nulary operations as well.
@@ -116,12 +116,12 @@ Epis, Monos, and Autos
 
 .. proof:definition:: Notation for homs, epis, monos, and autos
 
-   If :math:`𝐀 = ⟨A, f^𝐀⟩` and :math:`𝐁 = ⟨B, f^𝐁⟩` are algebras, we denote and define
+   If :math:`𝔸 = ⟨A, f^𝔸⟩` and :math:`𝔹 = ⟨B, f^𝔹⟩` are algebras, we denote and define
 
-   + :math:`\hom(𝐀, 𝐁) =` homomorphisms from 𝐀 to 𝐁.
-   + :math:`\epi(𝐀, 𝐁) =` epimorphisms from 𝐀 onto 𝐁.
-   + :math:`\mono(𝐀, 𝐁) =` monomorphisms from 𝐀 into 𝐁.
-   + :math:`\aut(𝐀, 𝐁) =` automorphisms from 𝐀 into and onto 𝐁.
+   + :math:`\hom(𝔸, 𝔹) =` homomorphisms from 𝔸 to 𝔹.
+   + :math:`\epi(𝔸, 𝔹) =` epimorphisms from 𝔸 onto 𝔹.
+   + :math:`\mono(𝔸, 𝔹) =` monomorphisms from 𝔸 into 𝔹.
+   + :math:`\aut(𝔸, 𝔹) =` automorphisms from 𝔸 into and onto 𝔹.
 
 ------------------------------
 
