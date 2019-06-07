@@ -18,14 +18,14 @@ If 𝒦 is a class of algebras of signature σ, we write :math:`𝒦 ⊧ p \appr
 
 Finally, if Σ is a set of equations, we write :math:`𝒦 ⊧ Σ` if every member of 𝒦 satisfies every member of Σ.
 
-Let 𝒦 be a class of algebras and Σ a set of equations in the signature σ. We define :math:`\mathrm{Id}(𝒦) = \{p ≈ q : 𝒦 ⊧ p ≈ q\}`
-and :math:`\mathrm{Mod}(Σ) = \{ 𝔸 : 𝔸 ⊧ Σ \}`.
+Let 𝒦 be a class of algebras and Σ a set of equations in the signature σ. We define :math:`\operatorname{Id}(𝒦) = \{p ≈ q : 𝒦 ⊧ p ≈ q\}`
+and :math:`\operatorname{Mod}(Σ) = \{ 𝔸 : 𝔸 ⊧ Σ \}`.
 
-Classes of the form :math:`\mathrm{Mod}(Σ)` are called **equational classes**, and :math:`Σ` is called an **equational base** or an **axiomatization** of the class.
+Classes of the form :math:`\operatorname{Mod}(Σ)` are called **equational classes**, and :math:`Σ` is called an **equational base** or an **axiomatization** of the class.
 
-:math:`\mathrm{Mod}(Σ)` is called the class of **models** of Σ.
+:math:`\operatorname{Mod}(Σ)` is called the class of **models** of Σ.
 
-Dually, a set of identities of the form :math:`\mathrm{Id}(𝒦)` is called an **equational theory**.
+Dually, a set of identities of the form :math:`\operatorname{Id}(𝒦)` is called an **equational theory**.
 
 .. _a-variety-of-facts:
 
@@ -44,7 +44,7 @@ A variety of theorems
 
 .. proof:theorem:: 
 
-   :math:`𝒦 ⊧ p ≈ q` if and only if for every :math:`𝔸 ∈ 𝒦` and every :math:`h ∈ \mathrm{Hom}(𝕋(X_ω), 𝔸)`, we have :math:`h(p) = h(q)`.
+   :math:`𝒦 ⊧ p ≈ q` if and only if for every :math:`𝔸 ∈ 𝒦` and every :math:`h ∈ \operatorname{Hom}(𝕋(X_ω), 𝔸)`, we have :math:`h(p) = h(q)`.
 
    .. container:: toggle
  
@@ -52,13 +52,13 @@ A variety of theorems
  
          *Proof*.
       
-      First assume that :math:`𝒦 ⊧ p ≈ q`. Fix :math:`𝔸∈ 𝒦` and :math:`h ∈ \mathrm{Hom}(𝕋(X_ω), 𝔸)`.
+      First assume that :math:`𝒦 ⊧ p ≈ q`. Fix :math:`𝔸∈ 𝒦` and :math:`h ∈ \operatorname{Hom}(𝕋(X_ω), 𝔸)`.
       
       Then :math:`𝔸 ⊧ p ≈ q ⟹ p^{𝔸} = q^{𝔸} ⟹ p^{𝔸}(h(x_1), \dots, h(x_n)) = q^{𝔸}(h(x_1), \dots, h(x_n))`.
       
       Since :math:`h` is a homomorphism, we obtain :math:`h(p^{𝔸}(x_1, \dots, x_n)) = h(q^{𝔸}(x_1, \dots, x_n))`, i.e., :math:`h(p) = h(q)`.
 
-      To prove the converse we must fix a :math:`𝔸 \in 𝒦` and :math:`a_1, \dots, a_n ∈ A` and show that :math:`p^{𝔸}(x_1, \dots, x_n) = q^{𝔸}(x_1, \dots, x_n)`.
+      To prove the converse we must fix a :math:`𝔸 ∈ 𝒦` and :math:`a_1, \dots, a_n ∈ A` and show that :math:`p^{𝔸}(x_1, \dots, x_n) = q^{𝔸}(x_1, \dots, x_n)`.
    
       Let :math:`h_0 : X_ω → A` be a function with :math:`h_0(x_i) = a_i` for :math:`i ≤ n`.
       
@@ -76,7 +76,7 @@ A variety of theorems
 
      #. :math:`(p, q)` belongs to the congruence :math:`λ_{𝒦}` on :math:`𝕋(X_ω)`.
 
-     #. :math:`𝐅_{𝒦}(X_ω) ⊧ p ≈ q`.
+     #. :math:`𝔽_{𝒦}(X_ω) ⊧ p ≈ q`.
 
    .. container:: toggle
  
@@ -98,7 +98,7 @@ A variety of theorems
 
       Finally assume (b). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
       
-      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \mathrm{Hom}(𝕋, 𝔸)`.
+      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \operatorname{Hom}(𝕋, 𝔸)`.
       
       Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (b) implies :math:`h(p) = h(q)` hence (a) holds, completing the proof.
 
@@ -150,7 +150,7 @@ The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:201
       
       Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
 
-      To this end, take :math:`Σ = \mathrm{Id}(𝒲)`. Let :math:`𝒲^† := \mathrm{Mod}(Σ)`.  
+      To this end, take :math:`Σ = \operatorname{Id}(𝒲)`. Let :math:`𝒲^† := \operatorname{Mod}(Σ)`.  
   
       Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
@@ -172,7 +172,7 @@ Applying the homomorphism :math:`g`,
 
 Then by :ref:`Fact 4 <fact-m4>` above (Corollary 4.39 of :cite:`Bergman:2012`), we have :math:`𝒲 ⊧ p ≈ q`, hence :math:`(p ≈ q) \in Σ`.
 
-Since :math:`𝔸 ∈ 𝒲^† = \mathrm{Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
+Since :math:`𝔸 ∈ 𝒲^† = \operatorname{Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
 
 .. math:: h(u) = p^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = q^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = h(v),
 
