@@ -86,9 +86,7 @@ A variety of theorems
       
       We shall show (a) ⟹ (c) ⟹ (b) ⟹ (a). 
       
-      Throughout the proof we write 𝐅 for :math:`𝔽_{𝒦}(X_ω)`, 𝕋 for :math:`𝕋(X_ω)` and :math:`λ` for :math:`λ_{𝒦}`.
-
-      Recall that :math:`𝔽 = 𝕋/λ ∈ 𝖲 𝖯 (𝒦)`.
+      Recall that :math:`𝔽_{𝒦}(X_ω) = 𝕋/λ ∈ 𝖲 𝖯 (𝒦)`.
       
       From (a) and Lemma 4.36 of :cite:`Bergman:2012` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (c) holds.
 
