@@ -10,7 +10,7 @@ Let :math:`σ = (F, ρ)` be a signature.
 
 An **identity in the signature** σ is an ordered pair of terms, written :math:`p ≈ q`, from :math:`T_σ (X_ω)`.
 
-Let :math:`𝔸 = ⟨A, F^{𝔸}⟩` be an algebra of signature :math:`S`.
+Let :math:`𝔸 = ⟨A, F^𝔸⟩` be an algebra of signature σ.
 
 We say that 𝔸 satisfies :math:`p ≈ q`, and write :math:`𝔸 ⊧ p ≈ q`, if :math:`p^{𝔸} = q^{𝔸}`.
 
