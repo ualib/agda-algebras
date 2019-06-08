@@ -241,8 +241,8 @@ Thus, given a signature :math:`σ = (F, ρ)`, the ``algebra_on α`` type is
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
 
     -- BEGIN
@@ -289,10 +289,10 @@ Also, our definition should caption the concept of an algebraic structure of any
 
 .. code-block:: lean
 
-   definition op (β α) := (β → α) → α
-   definition π {β α} (i) : op β α := λ a, a i
+   def op (β α) := (β → α) → α
+   def π {β α} (i) : op β α := λ a, a i
    structure signature := mk :: (F : Type*) (ρ : F → Type*)
-   definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+   def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
 
    -- BEGIN
    -- algebra is the type of algebras consisting of a pair: 
@@ -333,11 +333,11 @@ The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` co
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
  
     -- BEGIN
     -- coercion to universe of σ
@@ -365,20 +365,20 @@ We will cover subalgebra generation in Lean_, using inductive types, in :numref:
 
 We start by importing the definitions described above so that we have signatures and algebras available. We will also need to import the set.lean_ file from the mathlib_ library.  We satisfy these requirements as follows:
  
-.. code-block:: lean
-
+   ```
    import basic     -- the basic.lean file from lean-ualib
    import data.set  -- the set.lean file from mathlib
+   ```
 
 Next, we open a ``namespace`` to collect definitions and results related to subuniverses and subalgebras.  This is done using the ``namespace`` directive. We also start a ``section`` so we can fix a signature along with some syntactic sugar. 
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
     instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
     instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
  
@@ -410,29 +410,26 @@ We now implement the definition of **subuniverse**. Specifically, we say what it
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
     instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
     instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
     import data.set  -- the set.lean file from mathlib
  
     namespace subuniverse
       section sub
-         parameter {σ : signature}
-         parameter {α : Type*}
-         parameter {I : Type*}
-         definition F := σ.F
-         definition ρ := σ.ρ 
+        parameter {σ : signature} {α : Type*} {I : Type*}
+        definition F := σ.F
+        definition ρ := σ.ρ 
         -- BEGIN
- 
-         -- subuniverse ----------------------------
-         def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-         ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        -- subuniverse -----------------------------------
+        definition Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
+        ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
          
-         -- 𝔸 f a ∈ B₀  is syntactic sugar for  B₀ (𝔸 f a).
+        -- 𝔸 f a ∈ B₀  is syntactic sugar for  B₀ (𝔸 f a).
         -- END
       end sub
     end subuniverse
@@ -443,29 +440,26 @@ We also want a means of testing whether an algebra defined on a subset :math:`B�
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
     instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
     instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
     import data.set  -- the set.lean file from mathlib
  
     namespace subuniverse
       section sub
-         parameter {σ : signature}
-         parameter {α : Type*}
-         parameter {I : Type*}
-         definition F := σ.F
-         definition ρ := σ.ρ 
-         def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-         ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        parameter {σ : signature} {α : Type*} {I : Type*}
+        def F := σ.F
+        def ρ := σ.ρ 
+        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
         -- BEGIN
-         -- is subalgebra? -----------------------
-         def is_subalgebra (𝔸: algebra σ) 
-         (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
-         ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
+        -- is subalgebra? -----------------------
+        definition is_subalgebra (𝔸: algebra σ) 
+        (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
+        ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
         -- END
       end sub
     end subuniverse
@@ -474,30 +468,25 @@ Next, we codify the definition of the subuniverse generated by a set that we saw
 
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
     instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
     instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
     import data.set  -- the set.lean file from mathlib
  
     namespace subuniverse
       section sub
-        parameter {σ : signature}
-        parameter {α : Type*}
-        parameter {I : Type*}
-        definition F := σ.F
-        definition ρ := σ.ρ 
-        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-        ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-        def is_subalgebra (𝔸: algebra σ) 
-        (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
-        ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
+        parameters {σ : signature} {α : Type*} {I : Type*}
+        def F := σ.F
+        def ρ := σ.ρ 
+        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
         -- BEGIN
-        -- subuniverse generated by X ---------------------------
-        definition Sg (A : algebra_on σ α) (X : set α) : set α := 
+        -- subuniverse generated by X ----------------------
+        definition Sg(A: algebra_on σ α) (X: set α): set α:= 
         ⋂₀ {U | Sub A U ∧ X ⊆ U}
         -- END
      end
@@ -505,38 +494,34 @@ Next, we codify the definition of the subuniverse generated by a set that we saw
    
 We now formally prove that the intersection of two subuniverses is a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` defined in the mathlib_. [6]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
 
+(See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
+
 .. code-block:: lean
 
-    definition op (β α) := (β → α) → α
-    definition π {β α} (i) : op β α := λ a, a i
+    def op (β α) := (β → α) → α
+    def π {β α} (i) : op β α := λ a, a i
     structure signature := mk :: (F : Type*) (ρ : F → Type*)
-    definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-    definition algebra (σ : signature) := sigma (algebra_on σ)
+    def algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
+    def algebra (σ : signature) := sigma (algebra_on σ)
     instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
     instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
     import data.set  -- the set.lean file from mathlib
  
     namespace subuniverse
       section sub
-        parameter {σ : signature}
-        parameter {α : Type*}
-        parameter {I : Type*}
-        definition F := σ.F
-        definition ρ := σ.ρ 
-        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-        ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-        def is_subalgebra (𝔸: algebra σ) 
-        (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
-        ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-        definition Sg (A : algebra_on σ α) (X : set α) : set α := 
-        ⋂₀ {U | Sub A U ∧ X ⊆ U}
+        parameters {σ : signature} {α : Type*} {I : Type*}
+        def F := σ.F
+        def ρ := σ.ρ 
+        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
+        def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
         -- BEGIN
         -- intersection introduction ---------------------
         theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: 
         ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
         assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
 
-        -- intersection elimination -------------------------------------
+        -- intersection elimination -----------------------------
         theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: 
         (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= 
         assume h: x ∈ ⋂ i, C i, by simp at h; apply h
@@ -544,7 +529,7 @@ We now formally prove that the intersection of two subuniverses is a subuniverse
      end
    end subuniverse
 
-Now we are ready to prove that the intersection of subuniverses is a subuniverse.
+Now we are ready to prove that the easy but important fact that intersections of subuniverses are subuniverses.
 
 .. code-block:: lean
 
@@ -559,26 +544,17 @@ Now we are ready to prove that the intersection of subuniverses is a subuniverse
  
     namespace subuniverse
       section sub
-        parameter {σ : signature}
-        parameter {α : Type*}
-        parameter {I : Type*}
-        definition F := σ.F
-        definition ρ := σ.ρ 
-        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-        ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-        def is_subalgebra (𝔸: algebra σ) 
-        (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
-        ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-        definition Sg (A : algebra_on σ α) (X : set α) : set α := 
-        ⋂₀ {U | Sub A U ∧ X ⊆ U}
-        theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: 
-        ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
+        parameter {σ : signature} {α : Type*} {I : Type*}
+        def F := σ.F
+        def ρ := σ.ρ 
+        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
+        def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
+        theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
         assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
-        theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: 
-        (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= 
-        assume h: x ∈ ⋂ i, C i, by simp at h; apply h
+        theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h: x ∈ ⋂ i, C i, by simp at h; apply h
         -- BEGIN
-        -- Intersection of subuniverses is a subuniverse ---------------
+        -- Intersection of subuniverses is a subuniverse ---------
         lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): 
         (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
         assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
@@ -590,7 +566,21 @@ Now we are ready to prove that the intersection of subuniverses is a subuniverse
       end
     end subuniverse
 
-Next we formalize the proof of the obvious fact that a subuniverse containing ``X`` also contains the subuniverse generated by ``X``, and immediately thereafter we check that :math:`\operatorname{Sg}^𝔸 (X)` is, indeed, a subuniverse.
+Here, ``⋂₀`` is notation for ``sInter (S : set (set α)) : set α := Inf S``, and ``Inf S`` is defined as follows:
+
+``Inf := λs, {a | ∀ t ∈ s, a ∈ t }``
+
+So, if ``S : set (set α)`` (i.e., a collection of sets of type ``α``), then ``Inf S`` is the intersection of the sets in ``S``.
+
+(See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
+
+Next we formalize three obvious facts and their proofs:
+
+  #. ``X`` is a subset of :math:`\operatorname{Sg}^𝔸 (X)`, 
+  #. every subuniverse containing ``X`` also contains :math:`\operatorname{Sg}^𝔸 (X)`, and 
+  #. :math:`\operatorname{Sg}^𝔸 (X)` is a subuniverse.
+
+(We will give three alternative, but similar, proofs of the second.)
 
 .. code-block:: lean
 
@@ -605,39 +595,22 @@ Next we formalize the proof of the obvious fact that a subuniverse containing ``
  
     namespace subuniverse
       section sub
-        parameter {σ : signature}
-        parameter {α : Type*}
-        parameter {I : Type*}
-        definition F := σ.F
-        definition ρ := σ.ρ 
-
-        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:=
-        ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-
-        def is_subalgebra (𝔸: algebra σ) 
-        (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= 
-        ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-
-        definition Sg (A : algebra_on σ α) (X : set α) : set α := 
-        ⋂₀ {U | Sub A U ∧ X ⊆ U}
-
-        theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: 
-        ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
+        parameter {σ : signature} {α : Type*} {I : Type*}
+        def F := σ.F
+        def ρ := σ.ρ 
+        def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
+        def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
+        def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
+        theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
         assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
-
-        theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: 
-        (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= 
-        assume h: x ∈ ⋂ i, C i, by simp at h; apply h
-
-        lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): 
-        (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
+        theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h: x ∈ ⋂ i, C i, by simp at h; apply h
+        lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
         assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
         assume (f: F) (a: ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
-        show 𝔸 f a ∈ ⋂i, C i, from 
-          Inter.intro (𝔸 f a)
-          (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+        show 𝔸 f a ∈ ⋂i, C i, from Inter.intro (𝔸 f a) (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
         -- BEGIN
-        -- X is a subset of Sgᴬ(X) ----------------------------------------
+        -- Fact 1. X is a subset of Sgᴬ(X) -------------------
         lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= 
         assume x (h: x ∈ X), 
           show x ∈ ⋂₀ {U | Sub U ∧ X ⊆ U}, from 
@@ -645,105 +618,41 @@ Next we formalize the proof of the obvious fact that a subuniverse containing ``
             show x ∈ W, from 
               have h₂: Sub W ∧ X ⊆ W, from h₁, 
             h₂.right h
+    
+        -- Fact 2. A subuniverse that contains X also contains Sgᴬ X --
+        lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}:
+        ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+        assume R (h₁: Sub R) (h₂: X ⊆ R),
+        show Sg X ⊆ R, from 
+          assume x (h: x ∈ Sg X), show x ∈ R, from 
+            h R (and.intro h₁ h₂)
+
+        -- An alternative proof of Fact 2. ---------
+        lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}:
+        ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+        assume R (hc : Sub R ∧ X ⊆ R),
+        have h₁: Sub R, from hc.left,
+        have h₂: X ⊆ R, from hc.right,
+        show Sg X ⊆ R, from 
+          assume x (h: x ∈ Sg X), show x ∈ R, from 
+            h R (and.intro h₁ h₂)
+    
+        -- Yet another derivation of Fact 2. ---------
+        lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}:
+        ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= 
+        assume x (h₁: x ∈ Sg X) (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), 
+        show x ∈ R, from h₁ R (and.intro h₂ h₃)
+    
+        -- Sgᴬ X is a subuniverse of A --------------------------
+        lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= 
+        assume (f: F) (a: ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), 
+        show 𝔸 f a ∈ Sg X, from 
+          assume W (h: Sub W ∧ X ⊆ W), show 𝔸 f a ∈ W, from 
+            have h₁: Sg X ⊆ W, from 
+              sInter_mem' W h,
+            have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i),
+            (h.left f a h')
         -- END
-      end
-    end subuniverse
-
-Now we get to the more interesting part.  We present a definition of subuniverse generation using an *inductive type*.  This is a codification of the inductive definition appearing in the :ref:`subuniverse generation theorem <thm-1-14>` of :numref:`Section %s <subalgebras>`. While we're at it, we'll go ahead and formalize the proof of the :ref:`subuniverse generation theorem <thm-1-14>`.
-
-.. todo:: replace code below with new version
-
-.. code-block:: lean
-
-   namespace subuniverse
-     section
-       parameters {σ : signature}
-       parameter {α : Type*}  -- carrier type
-       definition F := σ.F
-       definition ρ := σ.ρ 
-       definition Sub (A : algebra_on σ α) (B₀ : set α) : Prop :=
-       ∀ f (a : ρ f → α), (∀ x, a x ∈ B₀) → A f a ∈ B₀ 
-       definition is_subalgebra (A : algebra_on σ α) 
-       (B₀ : set α) (B : algebra_on σ B₀) := ∀ f b, ↑(B f b) = A f ↑b
-       definition Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
-
-       theorem Inter.intro {s : I → set α} : 
-       ∀ x, (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
-       assume x h t ⟨a, (eq : t = s a)⟩, eq.symm ▸ h a
-
-       theorem Inter.elim {x : α} (C : I → set α) : 
-       (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i) := 
-       assume h : x ∈ ⋂ i, C i, by simp at h; apply h
-       -- Intersection of subuniverses is a subuniverse
-       lemma sub_of_sub_inter_sub (C : I → set α) : 
-       (∀ i, Sub (C i)) → Sub ⋂i, C i :=
-       assume h : ∀ i, Sub (C i), show  Sub (⋂i, C i), from 
-       assume (f : F) (a : ρ f → α) (h₁ : ∀ x, a x ∈ ⋂i, C i), 
-       show A f a ∈ ⋂i, C i, from 
-       Inter.intro (A f a) 
-       (λ j, (h j) f a (λ x, Inter.elim C (h₁ x) j))
-       -- X is a subset of Sg(X)
-       lemma subset_X_of_SgX (X : set α) : X ⊆ Sg X := 
-       assume x (h : x ∈ X), 
-         show x ∈ ⋂₀ {U | Sub U ∧ X ⊆ U}, from 
-           assume W (h₁ : W ∈ {U | Sub U ∧ X ⊆ U}),  
-           show x ∈ W, from 
-             have h₂ : Sub W ∧ X ⊆ W, from h₁, 
-           h₂.right h
-   
-       -- A subuniverse that contains X also contains Sg X
-       lemma sInter_mem {X : set α} (x : α) : 
-       x ∈ Sg X  →  ∀ {R : set α }, Sub R → X ⊆ R → x ∈ R := 
-       assume (h₁ : x ∈ Sg X) (R : set α)  (h₂ : Sub R) (h₃ : X ⊆ R), 
-       show x ∈ R, from h₁ R (and.intro h₂ h₃)
-   
-       -- Sg X is a Sub
-       lemma SgX_is_Sub (X : set α) : Sub (Sg X) := 
-       assume (f : F) (a : ρ f → α) (h₀ : ∀ i, a i ∈ Sg X), 
-       show A f a ∈ Sg X, from 
-         assume W (h : Sub W ∧ X ⊆ W), show A f a ∈ W, from 
-           have h₁ : Sg X ⊆ W, from 
-             assume r (h₂ : r ∈ Sg X), show r ∈ W, from 
-               sInter_mem r h₂ h.left h.right,
-           have h' : ∀ i, a i ∈ W, from assume i, h₁ (h₀ i),
-           (h.left f a h')
-       -- BEGIN
-       inductive Y (X : set α) : set α
-       | var (x : α) : x ∈ X → Y x
-       | app (f : F) (a : ρ f → α) : (∀ i, Y (a i)) → Y (A f a)
-   
-       -- Y X is a subuniverse
-       lemma Y_is_Sub (X : set α) : Sub (Y X) := 
-       assume f a (h: ∀ i, Y X (a i)), show Y X (A f a), from 
-       Y.app f a h 
-   
-       -- Y X is the subuniverse generated by X
-       theorem sg_inductive (X : set α) : Sg X = Y X :=
-         have h₀ : X ⊆ Y X, from 
-           assume x (h : x ∈ X), 
-           show x  ∈ Y X, from Y.var x h,
-         have h₁ : Sub (Y X), from 
-           assume f a (h : ∀ x, Y X (a x)), 
-           show Y X (A f a), from Y.app f a h,
-         have inc_l : Sg X ⊆ Y X, from 
-           assume u (h : u ∈ Sg X), 
-           show u ∈ Y X, from (sInter_mem u) h h₁ h₀,
-         have inc_r : Y X ⊆ Sg X, from
-           assume a (h: a ∈ Y X), show a ∈ Sg X, from
-             have h' : a ∈ Y X → a ∈ Sg X, from 
-               Y.rec
-               --base: a = x ∈ X
-               ( assume x (h1 : x ∈ X), 
-                 show x ∈ Sg X, from subset_X_of_SgX X h1 )
-               --inductive: a = A f b for some b with ∀ i, b i ∈ Sg X
-               ( assume f b (h2 : ∀ i, b i ∈ Y X) (h3 : ∀ i, b i ∈ Sg X),
-                 show A f b ∈ Sg X, from SgX_is_Sub X f b h3 ),
-             h' h,
-         subset.antisymm inc_l inc_r
-       -- END
-     end
-   end subuniverse
-
 
 
 ----------------------------------------------------------------
