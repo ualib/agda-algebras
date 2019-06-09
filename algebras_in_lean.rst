@@ -9,6 +9,8 @@
 Algebras in Lean
 ================
 
+Most of the Lean_ code described in this section can be found in the files ``basic.lean`` residing in the ``src`` directory (on the ``dev_wjd`` branch) of the lean-ualib_ repository. [1]_
+
 This section demonstrates the utility of dependent and inductive types by expressing some fundamental concepts of universal algebra in Lean.
 
 In particular, we will formally represent each of the following:  *operation*, *algebra*, *subuniverse*, and *term algebra*.
@@ -16,8 +18,6 @@ In particular, we will formally represent each of the following:  *operation*, *
 Our formal representations of these concepts will be clear, concise, and computable. Moreover, we strive to develop a notation and syntax that will feel natural to working algebraists.
 
 Our goal here is to demonstrate the power of Lean's type system for expressing mathematical concepts precisely and constructively, and to show that if we make careful design choices at the start of our development, then our formal theorems *and their proofs* can approximate the efficiency and readability of analogous informal presentations found in the mathematics literature.
-
-Most of the Lean code described in this section can be found in the files ``basic.lean`` and ``subuniverse.lean`` which reside in the ``src`` directory of the lean-ualib_ repository.
 
 .. index:: arity, operation
 .. index:: airty type, operation symbol type
@@ -131,7 +131,7 @@ A **signature** :math:`σ = (F, ρ)` consists of
   
 For each operation symbol :math:`f : F`, the value :math:`ρ f` is the **arity** of :math:`f`.  This value has type :math:`β`, which is the **arity type**.
 
-In classical universal algebra we typically assume that :math:`β = ℕ`, but for much of the basic theory this choice is inconsequential. [1]_
+In classical universal algebra we typically assume that :math:`β = ℕ`, but for much of the basic theory this choice is inconsequential. [2]_
 
 .. index:: ! type of; signatures
 .. index:: ! type of; operations
@@ -159,7 +159,7 @@ Define the **type of signatures** as a structure with two fields, the type ``F``
 .. index:: keyword: section
 .. index:: keyword: local notation
 
-In the next section, we define the **type of interpretations of operations** on the :index:`carrier type` ``α``.  Before proceeding, however, we note that by starting a new ``section`` we could define some parameters (such as a fixed signature ``σ``) that will be available throughout the section. [2]_
+In the next section, we define the **type of interpretations of operations** on the :index:`carrier type` ``α``.  Before proceeding, however, we note that by starting a new ``section`` we could define some parameters (such as a fixed signature ``σ``) that will be available throughout the section. [3]_
 
 .. code-block:: lean
 
@@ -174,7 +174,7 @@ In the next section, we define the **type of interpretations of operations** on 
    end
     -- END
 
-This allows us to define some ``local notation``, so we can write ``f : F`` in place of ``f : σ.F`` and ``ρ f`` instead of ``σ.ρ f``. This bit of syntactic sugar results in Lean_ syntax for operation symbols that matches informal algebraic syntax almost exactly. [3]_ 
+This allows us to define some ``local notation``, so we can write ``f : F`` in place of ``f : σ.F`` and ``ρ f`` instead of ``σ.ρ f``. This bit of syntactic sugar results in Lean_ syntax for operation symbols that matches informal algebraic syntax almost exactly. [4]_ 
 
 .. index:: pair: variety; equational class
 .. index:: triple: algebra; structure; universal algebra
@@ -208,9 +208,9 @@ Functional programming languages like Lean_ are based on the :term:`lambda calcu
 
 Representing an :math:`n`-ary function by a unary function can be done in a number of essentially equivalent ways.  One is by :term:`currying`.  Another is by viewing the :math:`n`-tuple (e.g., passed to an :math:`n`-ary function) as a function.  We take the latter approach here (though we will have plenty of opportunities to curry later).
 
-So, let us review how the correspondence between tuples and functions works by way of an example. [4]_ Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
+So, let us review how the correspondence between tuples and functions works by way of an example. [5]_ Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
 
-Let :math:`β` be the arity type. If :math:`β` happens to be ℕ, then :math:`ρ f = \{0, 1, \dots, ρf-1\}` and a function :math:`g : ρf → A` is simply a :math:`ρ f`-tuple of elements of :math:`A`. [5]_
+Let :math:`β` be the arity type. If :math:`β` happens to be ℕ, then :math:`ρ f = \{0, 1, \dots, ρf-1\}` and a function :math:`g : ρf → A` is simply a :math:`ρ f`-tuple of elements of :math:`A`. [6]_
 
 Conversely, for :math:`m : ℕ`, an :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
 
@@ -359,9 +359,9 @@ Using coercions allows us to identify certain objects which, though not identica
 Subalgebras in Lean
 ---------------------
 
-We will cover subalgebra generation in Lean_, using inductive types, in :numref:`Section %s <subalgebras-in-lean2>`.  In this section we mere show how to use Lean_ to formally define a subalgebra and test whether a subset is a subuniverse.
+The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository. 
 
-(The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of the lean-ualib_ repository.)
+We will cover subalgebra generation in Lean_, using inductive types, in :numref:`Section %s <subalgebras-in-lean2>`.  In this section we mere show how to use Lean_ to formally define a subalgebra and test whether a subset is a subuniverse.
 
 We start by importing the definitions described above so that we have signatures and algebras available. We will also need to import the set.lean_ file from the mathlib_ library.  We satisfy these requirements as follows:
  
@@ -492,7 +492,7 @@ Next, we codify the definition of the subuniverse generated by a set that we saw
      end
    end subuniverse
    
-We now formally prove that the intersection of two subuniverses is a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` defined in the mathlib_. [6]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
+We now formally prove that the intersection of two subuniverses is a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` defined in the mathlib_. [7]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
 
 (See also :numref:`Appendix Section %s <intersection>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
 
@@ -726,21 +726,24 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 .. rubric:: Footnotes
 
 .. [1]
-   As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
+   As of this writing (9 June 2019), this documentation describes code residing on the ``dev_wjd`` branch of the ``lean-ualib`` repository. Of course, one of our long-term goals is to have the latest code residing on the ``master`` branch of the repository and the docs should describe the code on that branch.
 
 .. [2]
-   The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
+   As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
 
 .. [3]
-   The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
+   The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
 
 .. [4]
-   For a more general and detailed treatment of this topic, see :numref:`Section %s <tuple-functors>`.
+   The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
 
 .. [5]
-   Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
+   For a more general and detailed treatment of this topic, see :numref:`Section %s <tuple-functors>`.
 
 .. [6]
+   Technically, this assumes we identify :math:`g` with its graph, which is fairly common practice. We will try to identify any situations in which the conflation of a function with its graph might cause problems.
+
+.. [7]
    In Gentzen style natural deduction, which is the logical system on which Lean_ is based, "introduction" and "elimination" rules are two fundamental types of rules of deduction.  The *introduction rule for conjunction*, for example, specifies how one *forms* a conjunction in the course of a natural deduction proof, while the *elimination rule for conjunction* specifies how one *uses* a conjunction in a natural deduction proof.
    
    address these needs 

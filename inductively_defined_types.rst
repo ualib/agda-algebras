@@ -24,7 +24,7 @@ These two facts suggest that there should be much to gain from implementing univ
 Subuniverse generation in Lean
 -------------------------------
 
-(The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of the lean-ualib_ repository.)
+The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository.
 
 In :numref:`Section %s <subalgebras-in-lean1>`, we saw how :ref:`subalgebras <subalgebras>` can be implemented in Lean_ and proved some easy facts about them.  This section views subalgebras as an inductively defined type over a set of generators and implements the :ref:`subuniverse generation theorem <thm-1-14>`. 
 
@@ -102,7 +102,7 @@ First, we define an inductive type that represents the **subuniverse generated b
       end sub
     end subuniverse
 
-Next we prove that the type ``Y X`` is a subuniverse. Moreover, ``Y X`` is equal to :math:`\mathrm{Sg}^𝐀(X)`, which is another fact that we formalize and prove below.
+Next we prove that the type ``Y X`` is a subuniverse. Moreover, ``Y X`` is equal to :math:`\mathrm{Sg}^𝔸(X)`, which is another fact that we formalize and prove below.
 
 .. code-block:: lean
 
@@ -327,15 +327,13 @@ Finally, we prove that ``Y`` is the smallest subalgebra containing ``X``.
       end sub
     end subuniverse
 
-
-
 Observe that the last proof proceeds exactly as would a typical informal proof that two sets are equal---prove two subset inclusions and then apply the ``subset.antisymm`` rule, :math:`A ⊆ B → B ⊆ A → A = B`.
 
 .. index:: recursor
 
-We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y.rec``, which Lean creates for us automatically whenever an inductive type is defined.
+We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y.rec``, which Lean_ creates for us automatically whenever an inductive type is defined.
 
-The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
+The Lean_ keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
 
 .. with congruence lattice $\Con\<A, \dots \>$.
 
@@ -359,85 +357,36 @@ Clones in Lean
 Terms and free algebras in Lean
 --------------------------------
 
-(The code described in this section is found in the file ``free.lean`` in the ``src`` directory of the lean-ualib_ repository.)
+The code described in this section is in the source file ``free.lean``, which resides in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository. [1]_
 
-As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝐓(X)` of all terms of a given signature.
+As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝕋(X)` of all terms of a given signature.
 
-.. code-block:: lean
+.. include:: _static/free.lean.1.rst
 
-    import basic
-    section
-      parameters {σ : signature} (X :Type*) 
-      local notation `F` := σ.F
-      local notation `ρ` := σ.ρ 
-    
-      inductive term
-      | var : X → term
-      | app (f : F) : (ρ f → term) → term
-  
-      def Term : algebra S := ⟨term, term.app⟩
-    end
+The set of terms along with the operations :math:`F^{𝕋} := \{\mathsf{app} f ∣ f : F\}` forms an algebra :math:`𝕋(X) = ⟨T(X), F^{𝕋}⟩` in the signature :math:`σ = (F, ρ)`.
+Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
 
-The set of terms along with the operations :math:`F^{𝐓} := \{\mathsf{app} f | f : F\}` forms an algebra :math:`𝐓(X) = ⟨T(X), F^{𝐓}⟩` in the signature :math:`σ = (F, ρ)`.
-
-Suppose :math:`𝐀 = ⟨A, F^{𝐀}⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝐓(X)` to 𝐀.
-
-Since 𝐀 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝐓(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝐓(X)` is *absolutely free* for σ-algebras," in this and only this case.
+Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝕋(X)` is *absolutely free* for σ-algebras," in this and only this case.
 
 Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
 
-.. code-block:: lean
-
-    section
-      open term
-      parameters {σ : signature} (X :Type*) {A : algebra σ}
-      definition F := σ.F         -- operation symbols
-      definition ρ := σ.ρ         -- arity function
-      definition 𝕋 := @Term σ     -- term algebra over X
-      definition 𝕏 := @var σ X    -- generators of the term algebra
+.. include:: _static/free.lean.2.rst
 
 If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of :math:`h` to all of :math:`𝕋(X)` is defined inductively as follows:
 
-.. code-block:: lean
-
-    definition lift_of (h : X → A) : 𝕋(X) → 
-    | (var x) := h x
-    | (app f a) := (A f) (λ x, lift_of (a x))
+.. include:: _static/free.lean.3.rst
 
 To prove that the term algebra is universal for σ-algebras, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
 
-.. code-block:: lean
+.. include:: _static/free.lean.4.rst
 
-      -- The lift is a homomorphism.
-      lemma lift_is_hom (h : X → A) : homomorphic (lift_of h) :=
-      λ f a, show lift_of h (app f a) = A f (lift_of h ∘ a), from rfl
-    
-      -- The lift is unique.
-      lemma lift_is_unique : ∀ {h h' : 𝕋(X) → A},
-      homomorphic h → homomorphic h' → h ∘ 𝕏 = h' ∘ 𝕏 → h = h' :=
-      assume (h h' : 𝕋(X) → A) (h₁ : homomorphic h)
-        (h₂ : homomorphic h')(h₃ : h ∘ 𝕏 = h' ∘ 𝕏),
-        show h = h', from 
-          have h₀ : ∀ t : 𝕋(X), h t = h' t, from 
-            assume t : 𝕋(X), 
-            begin
-              induction t with t f a ih₁ ,
-              show h (𝕏 t) = h' (𝕏 t),
-              { apply congr_fun h₃ t },
-    
-              show h (app f a) = h' (app f a),
-              { have ih₂  : h ∘ a = h' ∘ a, from funext ih₁,
-                calc h (app f a) = A f (h ∘ a) : h₁ f a
-                             ... = A f (h' ∘ a) : congr_arg (A f) ih₂ 
-                             ... = h' (app f a) : (h₂ f a).symm }
-            end,
-          funext h₀ 
-    end
+---------------------------
 
+.. rubric:: Footnotes
 
-.. todo:: complete this section
-
-
+.. [1]
+   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd branch of the ``lean-ualib`` repository. Of course, one of our long-term goals is to have the latest code residing on the master branch of the repository and the docs should describe the code on that branch.
+   
 .. _Lean: https://leanprover.github.io/
 
 .. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
