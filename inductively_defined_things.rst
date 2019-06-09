@@ -211,12 +211,13 @@ If :math:`𝔸 = ⟨ A, F^𝔸 ⟩` denotes the algebra with universe :math:`A` 
 
 .. proof:example::
 
-   We will discuss varieties in more detail later, but for now a variety is a collection of algebras of the same signature that is defined by a certain set of identities.  Walter Taylor proved in :cite:`MR0434928` that a variety :math:`𝕍` satisfies some nontrivial idempotent Malcev condition if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`i < n` there is an identity of the form 
+   We will discuss varieties in more detail later, but for now a variety is a collection of algebras of the same signature that is defined by a certain set of identities. [3]_ 
+   
+   In 1977, Walter Taylor showed that a variety :math:`𝕍` satisfies some nontrivial idempotent Malcev condition if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`i < n` there is an identity of the form 
 
    .. math:: t(∗, \cdots, ∗, x, ∗, \cdots, ∗) ≈ t(∗, \cdots, ∗, y, ∗, \cdots, ∗)
 
-   true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on either side of the identity.  Such a term :math:`t` is now commonly called a **Taylor term**. 
-
+   true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name **Taylor term** (:cite:`MR0434928`).
 
 Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
 
@@ -235,13 +236,13 @@ The definition of :math:`T_ρ (X)` is recursive, indicating that *the set of ter
 
 We will confirm this in the next subsection, but before doing so, we impose an algebraic structure on :math:`T_ρ(X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
 
-If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [3]_ The height is a useful index for recursion and induction.
+If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [4]_ The height is a useful index for recursion and induction.
 
 Notice that the set :math:`T_ρ (X)` is nonempty iff either :math:`X` or :math:`F_0` is nonempty. As long as :math:`T_ρ (X)` is nonempty, we can impose upon this set an algebraic structure, as follows:
 
 For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝕋_ρ (X)}` be the operation on :math:`𝕋_ρ (X)` that maps each tuple :math:`𝐚 : ρf → T_ρ (X)` to the formal term :math:`f 𝐚`.
 
-We define :math:`𝕋_ρ (X)` to be the algebra with universe :math:`T_ρ (X)` and with basic operations :math:`\{f^{𝕋_ρ (X)} | f ∈ F\}`. [4]_
+We define :math:`𝕋_ρ (X)` to be the algebra with universe :math:`T_ρ (X)` and with basic operations :math:`\{f^{𝕋_ρ (X)} | f ∈ F\}`. [5]_
 
 .. todo:: complete this section (include material on free algebras)
 
@@ -264,7 +265,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
 
-Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc. [5]_
+Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc. [6]_
 
 .. _obs-one:
 
@@ -451,12 +452,15 @@ Here is a list of basic observations that we will need later. We will reference 
    By "the constants on :math:`A`" we mean the **constant operations**; i.e., functions :math:`f: A → A` such that :math:`∀ a ∈ A, f(a) = c`, for some :math:`c ∈ A`.
 
 .. [3]
-   The **height** of a type is simply type's *level* (see Section ???) and the syntax ``Type*`` indicates that we do not wish to commit in advance to a specific height.
+   We will also have much to say about Malcev conditions, but for now we ask the reader to trust us when we say that such conditions play an important role in many deep results in universal algebra.
 
 .. [4]
-   The construction of :math:`𝕋_ρ (X)` may seem to be making something out of nothing, but it plays a crucial role in the theory.
+   The **height** of a type is simply type's *level* (see Section ???) and the syntax ``Type*`` indicates that we do not wish to commit in advance to a specific height.
 
 .. [5]
+   The construction of :math:`𝕋_ρ (X)` may seem to be making something out of nothing, but it plays a crucial role in the theory.
+
+.. [6]
    To see the proofs, click the black triangles.
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
