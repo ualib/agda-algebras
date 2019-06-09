@@ -385,11 +385,15 @@ To prove that the term algebra is universal for σ-algebras, we show that the li
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd branch of the ``lean-ualib`` repository. Of course, one of our long-term goals is to have the latest code residing on the master branch of the repository and the docs should describe the code on that branch.
+   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd_ branch of the ``lean-ualib`` repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
    
 .. _Lean: https://leanprover.github.io/
 
 .. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
 
 .. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _dev_wjd: https://gitlab.com/ualib/lean-ualib/tree/dev_wjd
+
+.. _master: https://gitlab.com/ualib/lean-ualib/tree/master
 

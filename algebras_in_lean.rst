@@ -726,8 +726,8 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing on the ``dev_wjd`` branch of the ``lean-ualib`` repository. Of course, one of our long-term goals is to have the latest code residing on the ``master`` branch of the repository and the docs should describe the code on that branch.
-
+   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd_ branch of the ``lean-ualib`` repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
+   
 .. [2]
    As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
 
@@ -764,5 +764,11 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 .. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
 
 .. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _dev_wjd: https://gitlab.com/ualib/lean-ualib/tree/dev_wjd
+
+.. _master: https://gitlab.com/ualib/lean-ualib/tree/master
 
 
