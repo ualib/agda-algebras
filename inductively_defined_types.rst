@@ -1,6 +1,6 @@
 .. include:: _static/math_macros.rst
 
-.. _inductively-defined-type:
+.. _inductively-defined-types:
 
 =========================
 Inductively Defined Types
