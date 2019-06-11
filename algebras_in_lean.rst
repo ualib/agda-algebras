@@ -9,7 +9,7 @@
 Algebras in Lean
 ================
 
-Most of the Lean_ code described in this section can be found in the files ``basic.lean`` residing in the ``src`` directory (on the ``dev_wjd`` branch) of the lean-ualib_ repository. [1]_
+Most of the Lean_ code described in this section can be found in the files ``basic.lean`` residing in the ``src`` directory of the lean-ualib_ repository. [1]_
 
 This section demonstrates the utility of dependent and inductive types by expressing some fundamental concepts of universal algebra in Lean.
 

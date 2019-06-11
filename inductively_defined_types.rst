@@ -8,7 +8,7 @@ Inductively Defined Types
 
 A primary motivation for this project was our observation that, on the one hand, many important constructs in universal algebra can be defined inductively, and on the other hand, type theory in general, and Lean in particular, offers excellent support for defining inductive types and powerful tactics for proving their properties.
 
-These two facts suggest that there should be much to gain from implementing universal algebra in an expressive type system that offers powerful tools for proving theorems about inductively defined types.  Examples demonstrating how this vision manifests in Lean code are provided in :numref:`Sections %s <subuniverse-generation>`, :numref:`%s <clones>` and :numref:`%s <terms-and-free-algebras>`.
+These two facts suggest that there should be much to gain from implementing universal algebra in an expressive type system that offers powerful tools for proving theorems about inductively defined types.  Examples demonstrating how this vision manifests in Lean_ code are provided in :numref:`Sections %s <subuniverse-generation>`, :numref:`%s <clones-in-lean>` and :numref:`%s <terms-in-lean>`.
 
 .. \ref{sec:leans-hierarchy-of-sorts-and-types})
 
@@ -352,12 +352,12 @@ Clones in Lean
 
 .. index:: variables, word, term, free algebra
 
-.. _terms-and-free-algebras-in-lean:
+.. _terms-in-lean:
 
-Terms and free algebras in Lean
---------------------------------
+Terms in Lean
+-------------
 
-The code described in this section is in the source file ``free.lean``, which resides in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository. [1]_
+The code described in this section is in the source files ``free.lean`` and ``term.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
 
 As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝕋(X)` of all terms of a given signature.
 

@@ -123,10 +123,10 @@ If :math:`R` is compatible with the product algebra and if the projection of :ma
 
 .. index:: ! Taylor term, ! term
 
-.. _terms-and-free-algebras:
+.. _terms:
 
-Terms and free algebras
------------------------
+Terms
+-----
 
 Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
 
