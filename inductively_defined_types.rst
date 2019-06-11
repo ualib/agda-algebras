@@ -359,14 +359,15 @@ Terms in Lean
 
 The code described in this section is in the source files ``free.lean`` and ``term.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
 
-As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`𝕋(X)` of all terms of a given signature.
+As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`T(X)` of all terms of a given signature over a collection :math:`X` of variables.
 
 .. include:: _static/free.lean.1.rst
 
-The set of terms along with the operations :math:`F^{𝕋} := \{\mathsf{app} f ∣ f : F\}` forms an algebra :math:`𝕋(X) = ⟨T(X), F^{𝕋}⟩` in the signature :math:`σ = (F, ρ)`.
-Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the same signature and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
+The collection of terms over :math:`X`, along with the operations :math:`F^{𝕋(X)} := \{\mathsf{app} f ∣ f : F\}` forms an algebra in the signature :math:`σ = (F, ρ)`, which we denote and define by :math:`𝕋(X) = ⟨T(X), F^{𝕋(X)}⟩` .
 
-Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝕋(X)` is *absolutely free* for σ-algebras," in this and only this case.
+Now, suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the signature σ and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
+
+Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is *universal* for σ-algebras. Some authors say, ":math:`𝕋(X)` is **absolutely free** for σ-algebras," in this and only this case.
 
 Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
 
