@@ -354,14 +354,14 @@ Using coercions allows us to identify certain objects which, though not identica
 
 -----------------------------------------------
 
-.. _subalgebras-in-lean1:
+.. _subuniverses-in-lean:
 
-Subalgebras in Lean
+Subuniverses in Lean
 ---------------------
 
 The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository. 
 
-We will cover subalgebra generation in Lean_, using inductive types, in :numref:`Section %s <subalgebras-in-lean2>`.  In this section we mere show how to use Lean_ to formally define a subalgebra and test whether a subset is a subuniverse.
+We will cover subalgebra generation in Lean_, using inductive types, in :numref:`Section %s <subalgebras-in-lean>`.  In this section we mere show how to use Lean_ to formally define a subalgebra and test whether a subset is a subuniverse.
 
 We start by importing the definitions described above so that we have signatures and algebras available. We will also need to import the set.lean_ file from the mathlib_ library.  We satisfy these requirements as follows:
  
