@@ -17,6 +17,8 @@ Some good references for this material are
   + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
   + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
 
+------------------------------------------------
+
 .. _leans-type-hierarchy:
 
 Lean's type hierarchy [1]_
@@ -72,86 +74,14 @@ Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is 
 
 The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
 
+------------------------------------------------
+
 .. _pattern-matching:
 
 Pattern matching
 ----------------
 
 .. todo:: complete this section
-
----------------------------------------
-
-Next we collect for easy reference a list of some basic but important components from the Lean_ standard library.
-
-.. index:: type of; dependent functions (Pi type)
-
-.. _pi-type:
-
-Pi Type
--------
-
-The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
-
-.. code-block:: lean
-
-    variables {α : Type*} {π : α → Type*}
-
-    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
-    { f | ∀ a ∈ i, f a ∈ s a }
-
-.. index:: type of; dependent pairs (Sigma type)
-
-.. _sigma-type:
-
-Sigma Type
-----------
-
-The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
-
-.. code-block:: lean
-
-    structure sigma {α : Type u} (β : α → Type v) :=
-    mk :: (fst : α) (snd : β fst)
-
-    structure psigma {α : Sort u} (β : α → Sort v) :=
-    mk :: (fst : α) (snd : β fst)
-
-
-
-.. _intersection:
-
-Union and Intersection
-~~~~~~~~~~~~~~~~~~~~~~
-
-The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
-
-Let :math:`S` be a set of sets of type :math:`α`.
-
-In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
-
-.. code-block:: lean
-
-   import data.set
-   variable S : set (set α)
-   #check ⋂₀ S          -- answer: set α
-
-Here is the formal definition from the file lattice.lean_.
-
-.. code-block:: lean
-
-    /-- Intersection of a set of sets. -/
-    @[reducible]
-    def sInter (S : set (set α)) : set α := Inf S
-
-    prefix `⋂₀`:110 := sInter
-
-The **union of sets** is implemented in lattice.lean_ similarly.
-
-.. code-block:: lean
-
-   @[reducible]
-   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
-   prefix `⋃₀`:110 := sUnion
 
 ----------------------------------------------------------
 
@@ -226,6 +156,8 @@ Lean_ does most of these things simultaneously. For example, the term constructe
 
 (For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
 
+----------------------------------------------------------
+
 .. _metaprogramming:
 
 Metaprogramming
@@ -249,7 +181,7 @@ Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Ch
 Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
 
 .. ; url: http://coq.inria.fr .
-      
+
 NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
 
 .. ; url: http://www.nuprl.org/
@@ -262,6 +194,83 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 .. + Coq_ .  :term:`intensional`, :term:`impredicative`
 .. + Agda_ . :term:`intensional`, :term:`predicative`
 .. + Lean_  :term:`extensional`, :term:`impredicative`
+
+---------------------------------------
+
+The Lean Standard Library
+--------------------------
+
+This section collects for easy reference a list of some basic but important components from the Lean_ standard library.
+
+.. index:: type of; dependent functions (Pi type)
+
+.. _pi-type:
+
+Pi Type
+~~~~~~~
+
+The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
+
+.. code-block:: lean
+
+    variables {α : Type*} {π : α → Type*}
+
+    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
+    { f | ∀ a ∈ i, f a ∈ s a }
+
+.. index:: type of; dependent pairs (Sigma type)
+
+.. _sigma-type:
+
+Sigma Type
+~~~~~~~~~~
+
+The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
+
+.. code-block:: lean
+
+    structure sigma {α : Type u} (β : α → Type v) :=
+    mk :: (fst : α) (snd : β fst)
+
+    structure psigma {α : Sort u} (β : α → Sort v) :=
+    mk :: (fst : α) (snd : β fst)
+
+
+
+.. _intersection:
+
+Union and Intersection
+~~~~~~~~~~~~~~~~~~~~~~
+
+The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
+
+Let :math:`S` be a set of sets of type :math:`α`.
+
+In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
+
+.. code-block:: lean
+
+   import data.set
+   variable S : set (set α)
+   #check ⋂₀ S          -- answer: set α
+
+Here is the formal definition from the file lattice.lean_.
+
+.. code-block:: lean
+
+    /-- Intersection of a set of sets. -/
+    @[reducible]
+    def sInter (S : set (set α)) : set α := Inf S
+
+    prefix `⋂₀`:110 := sInter
+
+The **union of sets** is implemented in lattice.lean_ similarly.
+
+.. code-block:: lean
+
+   @[reducible]
+   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
+   prefix `⋃₀`:110 := sUnion
 
 ---------------------
 
