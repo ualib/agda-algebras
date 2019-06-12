@@ -377,7 +377,6 @@ where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is
 
 .. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
 
-
 --------------------------------
 
 .. rubric:: Footnotes

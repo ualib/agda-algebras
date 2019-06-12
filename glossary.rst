@@ -89,6 +89,9 @@ Nomenclature
     chain
       Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
 
+    closed
+      A subset :math:`B ⊆ A` is called **closed** under the operations in :math:`F` if, for all :math:`f ∈ F` and all :math:`a : ρ f → B`, it is the case that :math:`f a ∈ B`.
+
     cocomplete
       A poset in which all joins exist is called **cocomplete**.
 
@@ -372,8 +375,14 @@ Nomenclature
     source vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2) ∈ E`, we refer to :math:`v_1` as the **source vertex** of :math:`e`.
 
+    subalgebra
+      Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If :math:`B ≠ ∅` is a :term:`subuniverse` of 𝔸, and if we let :math:`F^𝔹 = \{ f ↾ B : f ∈ F^𝔸 \}`, then :math:`𝔹 = ⟨ B, F^𝔹 ⟩` is an algebra, called a **subalgebra** of 𝔸.
+
     subdcpo
       If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
+
+    subuniverse
+      Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If a subset :math:`B ⊆ A` is closed under :math:`F^𝔸`, then we call :math:`B` a **subuniverse** of :math:`𝔸`.
 
     target vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2)\in E`, we refer to :math:`v_2` as the **target vertex** of :math:`e`.

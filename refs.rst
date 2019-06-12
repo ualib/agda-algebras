@@ -15,126 +15,116 @@ References
 
   .. code-block:: latex
 
-    @BOOK{HoTT,
-      AUTHOR = {The {Univalent Foundations Program}},
-      TITLE = {Homotopy Type Theory: Univalent Foundations of Mathematics},
-      YEAR = {2013},
-      PUBLISHER = {\url{https://homotopytypetheory.org/book}},
-      ADDRESS = {Institute for Advanced Study}
+      @BOOK {MR2757312,
+        AUTHOR = {J. Adamek and J. Rosicky and E. M. Vitale},
+        TITLE = {Algebraic theories},
+        YEAR = {2011},
+        SERIES = {Cambridge Tracts in Mathematics},
+        VOLUME = {184},
+        NOTE = {A categorical introduction to general algebra, With a foreword by F. W. Lawvere},
+        PUBLISHER = {Cambridge University Press, Cambridge},
+        PAGES = {xviii+249},
+        ISBN = {978-0-521-11922-1},
+        MRCLASS = {18-02 (18C05 18C10 18C15)},
+        MRNUMBER = {2757312},
+        MRREVIEWER = {Walter Tholen}
+      }
+  
+      @INPROCEEDINGS {MR3003214,
+        AUTHOR = {Behrisch, Mike and Kerkhoff, Sebastian and Power, John},
+        TITLE = {Category theoretic understandings of universal algebra and its dual: monads and {L}awvere theories, comonads and what?},
+        YEAR = {2012},
+        BOOKTITLE = {Proceedings of the 28th {C}onference on the {M}athematical {F}oundations of {P}rogramming {S}emantics ({MFPS} {XXVIII})},
+        SERIES = {Electron. Notes Theor. Comput. Sci.},
+        VOLUME = {286},
+        PAGES = {5--16},
+        PUBLISHER = {Elsevier Sci. B. V., Amsterdam},
+        MRCLASS = {Expansion},
+        MRNUMBER = {3003214},
+        DOI = {10.1016/j.entcs.2012.08.002}
+      }
+  
+      @BOOK {Bergman:2012,
+        AUTHOR = {Bergman, Clifford},
+        TITLE = {Universal algebra},
+        YEAR = {2012},
+        SERIES = {Pure and Applied Mathematics (Boca Raton)},
+        VOLUME = {301},
+        NOTE = {Fundamentals and selected topics},
+        PUBLISHER = {CRC Press, Boca Raton, FL},
+        PAGES = {xii+308},
+        ISBN = {978-1-4398-5129-6},
+        MRCLASS = {08-02 (06-02 08A40 08B05 08B10 08B26)},
+        MRNUMBER = {2839398 (2012k:08001)},
+        MRREVIEWER = {Konrad P. Pi{\'o}ro}
+      }
+  
+      @MISC{Finster:2018,
+        AUTHOR = {Eric Finster},
+        TITLE = {Higher Algebra in Type Theory},
+        YEAR = {2018},
+        HOWPUBLISHED = {{G}it{H}ub.com},
+        URL = {https://github.com/ericfinster/higher-alg}
+      }
+  
+      @MISC {Gepner:2018,
+        AUTHOR = {David Gepner and Rune Haugseng and Joachim Kock},
+        TITLE = {$\infty$-Operads as Analytic Monads},
+        YEAR = {2017},
+        HOWPUBLISHED = {arXiv},
+        URL = {https://arxiv.org/abs/1712.06469}
+      }
+  
+      @ARTICLE {MR1173632,
+        AUTHOR = {Meinke, Karl},
+        TITLE = {Universal algebra in higher types},
+        YEAR = {1992},
+        JOURNAL = {Theoret. Comput. Sci.},
+        FJOURNAL = {Theoretical Computer Science},
+        VOLUME = {100},
+        NUMBER = {2},
+        PAGES = {385--417},
+        ISSN = {0304-3975},
+        MRCLASS = {03C85 (03C05 08A70 68Q55)},
+        MRNUMBER = {1173632},
+        MRREVIEWER = {S. Comer},
+        DOI = {10.1016/0304-3975(92)90310-C}
+      }
+  
+      @BOOK {Munkres:2000,
+        AUTHOR = {Munkres, James R.},
+        TITLE = {Topology},
+        YEAR = {2000},
+        EDITION = {Second},
+        PUBLISHER = {Prentice Hall, Inc., Upper Saddle River, NJ},
+        PAGES = {xvi+537},
+        ISBN = {0-13-181629-2},
+        MRCLASS = {54-01},
+        MRNUMBER = {3728284},
+        URL = {https://amzn.to/2V5NMHn}
+      }
+  
+      @BOOK {Nederpelt:2014,
+        AUTHOR = {Nederpelt, Rob and Geuvers, Herman},
+        TITLE = {Type theory and formal proof},
+        YEAR = {2014},
+        NOTE = {An introduction, With a foreword by Henk Barendregt},
+        PUBLISHER = {Cambridge University Press, Cambridge},
+        PAGES = {xxv+436},
+        ISBN = {978-1-107-03650-5},
+        MRCLASS = {03-01 (03B35 03B40 68-01 68N18 68T15)},
+        MRNUMBER = {3445957},
+        MRREVIEWER = {Luca Paolini},
+        DOI = {10.1017/CBO9781139567725},
+        URL = {https://doi-org.colorado.idm.oclc.org/10.1017/CBO9781139567725}
+      }
 
-    }
-
-    @BOOK {MR2757312,
-      AUTHOR = {J. Adamek and J. Rosicky and E. M. Vitale},
-      TITLE = {Algebraic theories},
-      YEAR = {2011},
-      SERIES = {Cambridge Tracts in Mathematics},
-      VOLUME = {184},
-      NOTE = {A categorical introduction to general algebra, With a foreword by F. W. Lawvere},
-      PUBLISHER = {Cambridge University Press, Cambridge},
-      PAGES = {xviii+249},
-      ISBN = {978-0-521-11922-1},
-      MRCLASS = {18-02 (18C05 18C10 18C15)},
-      MRNUMBER = {2757312},
-      MRREVIEWER = {Walter Tholen}
-
-    }
-
-    @INPROCEEDINGS {MR3003214,
-      AUTHOR = {Behrisch, Mike and Kerkhoff, Sebastian and Power, John},
-      TITLE = {Category theoretic understandings of universal algebra and its dual: monads and {L}awvere theories, comonads and what?},
-      YEAR = {2012},
-      BOOKTITLE = {Proceedings of the 28th {C}onference on the {M}athematical {F}oundations of {P}rogramming {S}emantics ({MFPS} {XXVIII})},
-      SERIES = {Electron. Notes Theor. Comput. Sci.},
-      VOLUME = {286},
-      PAGES = {5--16},
-      PUBLISHER = {Elsevier Sci. B. V., Amsterdam},
-      MRCLASS = {Expansion},
-      MRNUMBER = {3003214},
-      DOI = {10.1016/j.entcs.2012.08.002}
-
-    }
-
-    @BOOK {Bergman:2012,
-      AUTHOR = {Bergman, Clifford},
-      TITLE = {Universal algebra},
-      YEAR = {2012},
-      SERIES = {Pure and Applied Mathematics (Boca Raton)},
-      VOLUME = {301},
-      NOTE = {Fundamentals and selected topics},
-      PUBLISHER = {CRC Press, Boca Raton, FL},
-      PAGES = {xii+308},
-      ISBN = {978-1-4398-5129-6},
-      MRCLASS = {08-02 (06-02 08A40 08B05 08B10 08B26)},
-      MRNUMBER = {2839398 (2012k:08001)},
-      MRREVIEWER = {Konrad P. Pi{\'o}ro}
-
-    }
-
-    @MISC{Finster:2018,
-      AUTHOR = {Eric Finster},
-      TITLE = {Higher Algebra in Type Theory},
-      YEAR = {2018},
-      HOWPUBLISHED = {{G}it{H}ub.com},
-      URL = {https://github.com/ericfinster/higher-alg}
-
-    }
-
-    @MISC {Gepner:2018,
-      AUTHOR = {David Gepner and Rune Haugseng and Joachim Kock},
-      TITLE = {$\infty$-Operads as Analytic Monads},
-      YEAR = {2017},
-      HOWPUBLISHED = {arXiv},
-      URL = {https://arxiv.org/abs/1712.06469}
-
-    }
-
-    @ARTICLE {MR1173632,
-      AUTHOR = {Meinke, Karl},
-      TITLE = {Universal algebra in higher types},
-      YEAR = {1992},
-      JOURNAL = {Theoret. Comput. Sci.},
-      FJOURNAL = {Theoretical Computer Science},
-      VOLUME = {100},
-      NUMBER = {2},
-      PAGES = {385--417},
-      ISSN = {0304-3975},
-      MRCLASS = {03C85 (03C05 08A70 68Q55)},
-      MRNUMBER = {1173632},
-      MRREVIEWER = {S. Comer},
-      DOI = {10.1016/0304-3975(92)90310-C}
-
-    }
-
-    @BOOK {Munkres:2000,
-      AUTHOR = {Munkres, James R.},
-      TITLE = {Topology},
-      YEAR = {2000},
-      EDITION = {Second},
-      PUBLISHER = {Prentice Hall, Inc., Upper Saddle River, NJ},
-      PAGES = {xvi+537},
-      ISBN = {0-13-181629-2},
-      MRCLASS = {54-01},
-      MRNUMBER = {3728284},
-      URL = {https://amzn.to/2V5NMHn}
-      
-    }
-
-    @BOOK {MR3445957,
-      AUTHOR = {Nederpelt, Rob and Geuvers, Herman},
-      TITLE = {Type theory and formal proof},
-      YEAR = {2014},
-      NOTE = {An introduction, With a foreword by Henk Barendregt},
-      PUBLISHER = {Cambridge University Press, Cambridge},
-      PAGES = {xxv+436},
-      ISBN = {978-1-107-03650-5},
-      MRCLASS = {03-01 (03B35 03B40 68-01 68N18 68T15)},
-      MRNUMBER = {3445957},
-      MRREVIEWER = {Luca Paolini},
-      DOI = {10.1017/CBO9781139567725},
-      URL = {https://doi-org.colorado.idm.oclc.org/10.1017/CBO9781139567725}
-
-    }
-
-
-.. .. include:: ualib.rst
+      @BOOK{HoTT:2013,
+        AUTHOR = {The Univalent Foundations Program},
+        TITLE = {Homotopy Type Theory: Univalent Foundations of Mathematics},
+        YEAR = {2013},
+        PUBLISHER = {https://homotopytypetheory.org/book},
+        ADDRESS = {Institute for Advanced Study},
+        URL = {https://homotopytypetheory.org/book}
+      }
+  

@@ -8,9 +8,9 @@ The Lean Universal Algebra Library
     preface
     preliminaries
     types_preliminaries
-    algebraic_preliminaries
-    inductively_defined_things
+    algebras
     algebras_in_lean
+    inductively_defined_things
     inductively_defined_types
     birkhoff_hsp
     postmodern_algebra

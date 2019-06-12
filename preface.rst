@@ -7,7 +7,7 @@ This work describes the `Lean Universal Algebra Library`_ in enough detail so th
 Motivation
 ----------
 
-To support the formalization of theorems, we are developing software libraries that contain formal statements and proofs of the core definitions and results universal algebra. Our objectives include 
+To support the formalization of theorems, we are developing software libraries that contain formal statements and proofs of the core definitions and results universal algebra. Our objectives include
 
 + incorporating automated proof search for universal algebra;
 + formalizing theorems emerging from our own mathematics research;
