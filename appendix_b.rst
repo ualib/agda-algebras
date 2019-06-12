@@ -1,107 +1,247 @@
+.. include:: _static/math_macros.rst
 
-.. _appendix-b:
+.. _appendix-B:
 
-========================
-Appendix B: Type Theory
-========================
+=======================
+Appendix B: Lean Basics
+=======================
 
-This section presents some of the rudiments of *type theory*.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, and more advanced treatments are :cite:`MR3445957` and :cite:`HoTT`.
+In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
 
-.. .. todo:: say something more about this
+Some of the things described here will come from the Lean_ standard library.  Others will be from the mathlib_ Lean community project, and possible other projects.
 
-.. _curry-howard:
+Some good references for this material are
 
-Curry-Howard
-------------
+  + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
+  + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
+  + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
+  + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
 
-The rule for *function application* corresponds, under the “Curry-Howard” or “propositions-as-types” correspondence, to the *implication elimination* rule of natural deduction (sometimes called *modus ponens*). It is the following:
+.. _leans-type-hierarchy:
 
-This simply codifies our intuitive notion of function application, viz. applying the function :math:`f` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an inhabitant :math:`f \, a` of the codomain :math:`B`. If we interpret :math:`A` and :math:`B` as propositions, :math:`f` as a proof of the implication :math:`A \to B`, and :math:`a` as a proof of :math:`A`, then the rule :math:`\mathsf{app}` becomes the implication elimination rule (*modus ponens*).
+Lean's type hierarchy [1]_
+---------------------------
 
-.. _dependent-types:
+Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
 
-Dependent types
----------------
+Sort and Type
+~~~~~~~~~~~~~
 
-Lean_ is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
+The following excerpt from the `Lean Reference Manual`_ explains the correspondence between ``Sort`` and ``Type``.
 
-Before getting to the example, however, we should first briefly explain what makes dependent type theory *dependent*, and why dependent types are useful. The short explanation is that types can depend on *parameters*. For example, the type ``list α`` depends on the argument ``α``, and this dependence is what distinguishes ``list ℕ`` from list ``bool``. For another example, consider the type ``vec α n``, the type of vectors of length ``n`` whose entries inhabit the type ``α``. The ``vec α n`` type depends on two parameters: the type ``α : Type`` of the elements in the vector and the length ``n : ℕ``.
+  Every type in Lean is, by definition, an expression of type ``Sort u`` for some universe level ``u``. A universe level is one of the following:
 
-Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should cons have? Such a function is polymorphic: we expect the ``cons`` function for ``ℕ``, ``bool``, or an arbitrary type ``α`` to behave the same way. So it makes sense to take the type to be the first argument to ``cons``, so that for any type, ``α``, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a : α`` and a list ``l : list α``, and returns a new list, so that ``con α a l : list α``.
+  + a natural number, ``n``
+  + a universe variable, ``u`` (declared with the command universe or universes)
+  + an expression ``u + n``, where ``u`` is a universe level and ``n`` is a natural number
+  + an expression ``max u v``, where ``u`` and ``v`` are universes
+  + an expression ``imax u v``, where ``u`` and ``v`` are universe levels
 
-It is clear that ``cons α`` should have type ``α → list α → list α``. But what type should ``cons`` have?
+  The last one denotes the universe level 0 if ``v`` is 0, and ``max u v`` otherwise.
 
-A first guess might be ``Type → α → list α → list α``, but, on reflection, this does not make sense: the ``α`` in this expression does not refer to anything, whereas it should refer to the argument of type ``Type``.
+  .. code-block:: lean
 
-In other words, assuming ``α : Type`` is the first argument to the function, the type of the next two elements are ``α`` and ``list α``. These types vary depending on the first argument, ``α``. This is an instance of a **Pi type**, or **dependent function type**. Given ``α : Type`` and ``β : α → Type``, think of ``β`` as a family of types over ``α``, that is, a type ``β a`` for each ``a : α``.
+     universes u v                    -- Lean Output
+                                      -- -----------
+     #check Sort u                    -- Sort u : Type u
+     #check Sort 5                    -- Type 4 : Type 5
+     #check Sort (u + 1)              -- Type u : Type (u+1)
+     #check Sort (u + 3)              -- Type (u+2) : Type (u+3)
+     #check Sort (max u v)            -- Sort (max u v) : Type (max u v)
+     #check Sort (max (u + 3) v)      -- Sort (max (u+3) v) : Type (max (u+3) v)
+     #check Sort (imax (u + 3) v)     -- Sort (imax (u+3) v) : Type (imax (u+3) v)
+     #check Prop                      -- Prop : Type
+     #check Type                      -- Type : Type 1
 
-In this case, the type ``Π x : α, β x`` denotes the type of functions ``f`` with the property that, for each ``a : α``, ``f a`` is an element of ``β a``. In other words, the type of the value returned by ``f`` *depends* on its input.
+.. index:: keyword: Type, Type 0, Type 1, ...
 
-Notice that ``Π x : α, β`` makes sense for any expression ``β : Type``. When the value of ``β`` depends on ``x`` (as does, for example, the expression ``β x`` in the previous paragraph), ``Π x : α, β`` denotes a dependent function type. If ``β`` doesn't depend on ``x``, then ``Π x : α, β`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is just notation for ``Π x : α, β`` in the special case in which ``β`` does not depend on ``x``.
+Lean_ has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.
+
+For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature:
+
+.. code-block:: lean
+
+   #check @list    -- answer: Type u → Type u
+
+Here ``u`` is a variable ranging over type levels.
+
+Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is then a larger universe of types that contains ``Type 0`` as an *element*, and ``Type 2`` is an even larger universe of types, that contains ``Type 1`` as an element. The list is indefinite, so that there is a ``Type n`` for every natural number ``n``. ``Type`` is an abbreviation for ``Type 0``.
+
+.. index:: ! predicative, ! ramified, ! impredicative
+.. index:: keyword: Prop
+
+The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
+
+.. _pattern-matching:
+
+Pattern matching
+----------------
+
+.. todo:: complete this section
+
+---------------------------------------
+
+Next we collect for easy reference a list of some basic but important components from the Lean_ standard library.
 
 .. index:: type of; dependent functions (Pi type)
 
-The :ref:`Pi type <pi-type>` :math:`\Pi_{(x:A)}, B x`, also known as the :ref:`dependent function type <pi-type>`, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x : A` of the function's "input."
+.. _pi-type:
 
-The simplest example of a Pi type is the Cartesian product :math:`B_0 × B_1` which, when viewed as the collection of functions that map :math:`i ∈ \{0, 1\}` to some element of :math:`B_i`, is the type :math:`\Pi_{i : \{0, 1\}} B_i`. [1]_
+Pi Type
+-------
+
+The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
+
+.. code-block:: lean
+
+    variables {α : Type*} {π : α → Type*}
+
+    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
+    { f | ∀ a ∈ i, f a ∈ s a }
 
 .. index:: type of; dependent pairs (Sigma type)
 
-Similarly, the :ref:`Sigma type <sigma-type>` :math:`\sum_{(x:A)}, B x`, also known as the :ref:`dependent pair type <sigma-type>`, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
+.. _sigma-type:
 
-The simplest example of a Sigma type is the disjoint union :math:`B_0 \coprod B_1` which may be viewed as a collection of ordered pairs :math:`(i, b_i)`, where the first coordinate indicates to which set the second element belongs.  For example, if the two sets are :math:`B_0 = \{a, b\}` and :math:`B_1 = \{a, b, c\}` we form the disjoint union of :math:`B_0` and :math:`B_1` as follows:
+Sigma Type
+----------
 
-.. math:: B_0 + B_1 = \{(0,a), (0,b), (1,a), (1,b), (1,c)\}.
+The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
 
-Alternatively, some authors prefer to use the injection function to indicate the set from which an element originated.  For example, if we denote the injection into the :math:`i`-th coordinate by :math:`ι_i`, then a perfectly adequate presention of math::`B_0 + B_1` would be
+.. code-block:: lean
 
-.. math:: B_0 + B_1 = \{ι_0 a, ι_0 a, ι_1 a, ι_1 b, ι_1 c\}.
+    structure sigma {α : Type u} (β : α → Type v) :=
+    mk :: (fst : α) (snd : β fst)
 
-.. index:: dependent type theory, inductive type, universes
+    structure psigma {α : Sort u} (β : α → Sort v) :=
+    mk :: (fst : α) (snd : β fst)
 
-.. _inductive-types:
 
-Inductive types
------------------
 
-.. todo:: say something about this
+.. _intersection:
 
-**Inductive types** and **inductive families of types**, generating only the recursor for an inductive type;
+Union and Intersection
+~~~~~~~~~~~~~~~~~~~~~~
 
----------------------
+The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
 
-Compariosn of ITPs
+Let :math:`S` be a set of sets of type :math:`α`.
+
+In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
+
+.. code-block:: lean
+
+   import data.set
+   variable S : set (set α)
+   #check ⋂₀ S          -- answer: set α
+
+Here is the formal definition from the file lattice.lean_.
+
+.. code-block:: lean
+
+    /-- Intersection of a set of sets. -/
+    @[reducible]
+    def sInter (S : set (set α)) : set α := Inf S
+
+    prefix `⋂₀`:110 := sInter
+
+The **union of sets** is implemented in lattice.lean_ similarly.
+
+.. code-block:: lean
+
+   @[reducible]
+   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
+   prefix `⋃₀`:110 := sUnion
+
+----------------------------------------------------------
+
+.. _coercion:
+
+Coercion
+--------
+
+**References**. `Coercions`_ and `Coercions using Type Classes`_ sections of `TPL`_
+
+A very nice feature of Lean, called coercion, enables us to identify two objects that we think of as "the same" but that are of different types. This kind of thing happens implicitly in virtually all informal mathematical arguments.
+
+Here's a simple example. Suppose we have an integer :math:`z : ℤ` and a natural number :math:`n : ℕ`.  Most people would not hesitate to form the sum :math:`z + n`.  Of course, this doesn't make sense since (in type theory as well as set theory), natural numbers are not integers!  That is, :math:`ℕ ⊈ ℤ`, despite what your highschool math teacher told you.
+
+However, it is true that the set of natural numbers can be embedded in ℤ in a natural way, and Lean_ allows us to express this embedding using coercions.
+
+Here's how the example just discussed is handled in Lean_.
+
+.. code-block:: lean
+
+   variable n : ℕ
+   variable z : ℤ
+   #check z + n      -- z + ↑n : ℤ
+
+Indeed, the addition is handled automatically in this case.  But notice the coercion symbol ``↑`` that appears in the output of ``#check``. The up arrow is notation for the Lean_ function ``coe``; it can be typed with ``\u``, but ``coe`` could be used instead.
+
+In fact, an explicit ``↑`` must appear in certain cases, in particular when Lean_ is not aware in advance that a coercion is needed.
+
+If we change the order of the arguments of ``#check`` in the example above, we get an error unless we tell Lean_ about the required coercion.
+
+.. code-block:: lean
+
+   -- #check n + z        -- error!
+   #check ↑n + z          -- ↑n + z : ℤ
+
+Lean_ allows various kinds of coercions using type classes; for details, see the `Coercions using Type Classes`_ section of `TPL`_.
+
+In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``. The definitions of these in the Lean_ library are as follows:
+
+.. code-block:: lean
+
+   class has_coe_to_sort (a : Sort u) : Type (max u (v+1)) :=
+   (S : Sort v) (coe : a → S)
+
+   class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
+   (F : a → Sort v) (coe : Π x, F x)
+
+------------------------------------------------
+
+.. _the-elaboration-engine:
+
+Elaboration engine
 ------------------
 
-The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
+On top of the Lean_ kernel there is a powerful *elaboration engine* that can
 
-Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It is based on Martin Lof :term:`type theory`.
+#. infer implicit universe variables;
 
-.. ; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
+#. infer implicit arguments, using higher order unification;
 
-Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
+#. support overloaded notation or declarations;
 
-.. ; url: http://coq.inria.fr .
-      
-NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
+#. insert coercions;
 
-.. ; url: http://www.nuprl.org/
+#. infer implicit arguments using type classes;
 
-Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It is based on :term:`CiC`.
+#. convert readable proofs to proof terms
 
-.. ; url: https://leanprover.github.io/
+#. construct terms using tactics
 
-.. + NuPRL_ . :term:`extensional`, :term:`predicative`
-.. + Coq_ .  :term:`intensional`, :term:`impredicative`
-.. + Agda_ . :term:`intensional`, :term:`predicative`
-.. + Lean_  :term:`extensional`, :term:`impredicative`
+Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
 
----------------------------------
+(For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
+
+.. _metaprogramming:
+
+Metaprogramming
+---------------
+
+Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` is a program whose purpose is to modify the behavior of other programs. :term:`Proof tactics <proof tactic>` form an important class of metaprograms.
+
+An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
+
+
+--------------------------
 
 .. rubric:: Footnotes
 
 .. [1]
-   Of course, it's more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1) : b_i ∈ B_i, i = 0, 1\}`, but as usual we identify tuples with functions, which yields the :ref:`Pi type <pi-type>`.
+   See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
 
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
@@ -128,3 +268,12 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
+.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+
+.. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
+
+.. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
+
+.. _Lean Tutorial: https://leanprover.github.io/tutorial/
+
+.. _Lean Reference Manual: https://leanprover.github.io/reference/

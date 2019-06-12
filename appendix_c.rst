@@ -1,279 +1,86 @@
-.. include:: _static/math_macros.rst
+.. _appendix_d:
 
-.. _appendix-c:
+===================
+Appendix D. License
+===================
 
-=======================
-Appendix C: Lean Basics
-=======================
+**Apache License**
 
-In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
+Version 2.0, January 2004
 
-Some of the things described here will come from the Lean_ standard library.  Others will be from the mathlib_ Lean community project, and possible other projects.
+http://www.apache.org/licenses/
 
-Some good references for this material are
+**TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION**
 
-  + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
-  + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
-  + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
-  + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
+#. **Definitions.**
 
-.. _leans-type-hierarchy:
+    "License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document.
 
-Lean's type hierarchy [1]_
----------------------------
+    "Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
 
-Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
+    "Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
 
-Sort and Type
-~~~~~~~~~~~~~
+    "You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
 
-The following excerpt from the `Lean Reference Manual`_ explains the correspondence between ``Sort`` and ``Type``.
+    "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
 
-  Every type in Lean is, by definition, an expression of type ``Sort u`` for some universe level ``u``. A universe level is one of the following:
+    "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
 
-  + a natural number, ``n``
-  + a universe variable, ``u`` (declared with the command universe or universes)
-  + an expression ``u + n``, where ``u`` is a universe level and ``n`` is a natural number
-  + an expression ``max u v``, where ``u`` and ``v`` are universes
-  + an expression ``imax u v``, where ``u`` and ``v`` are universe levels
+    "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below).
 
-  The last one denotes the universe level 0 if ``v`` is 0, and ``max u v`` otherwise.
+    "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof.
 
-  .. code-block:: lean
+    "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution."
 
-     universes u v                    -- Lean Output
-                                      -- -----------
-     #check Sort u                    -- Sort u : Type u
-     #check Sort 5                    -- Type 4 : Type 5
-     #check Sort (u + 1)              -- Type u : Type (u+1)
-     #check Sort (u + 3)              -- Type (u+2) : Type (u+3)
-     #check Sort (max u v)            -- Sort (max u v) : Type (max u v)
-     #check Sort (max (u + 3) v)      -- Sort (max (u+3) v) : Type (max (u+3) v)
-     #check Sort (imax (u + 3) v)     -- Sort (imax (u+3) v) : Type (imax (u+3) v)
-     #check Prop                      -- Prop : Type
-     #check Type                      -- Type : Type 1
+    "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work.
 
-.. index:: keyword: Type, Type 0, Type 1, ...
+#. **Grant of Copyright License**.
 
-Lean_ has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.
+    Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
 
-For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature:
+#. **Grant of Patent License**.
 
-.. code-block:: lean
+    Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed.
 
-   #check @list    -- answer: Type u → Type u
+#. **Redistribution.** 
 
-Here ``u`` is a variable ranging over type levels.
+    You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions:
 
-Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is then a larger universe of types that contains ``Type 0`` as an *element*, and ``Type 2`` is an even larger universe of types, that contains ``Type 1`` as an element. The list is indefinite, so that there is a ``Type n`` for every natural number ``n``. ``Type`` is an abbreviation for ``Type 0``.
+    (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and
 
-.. index:: ! predicative, ! ramified, ! impredicative
-.. index:: keyword: Prop
+    (b) You must cause any modified files to carry prominent notices stating that You changed the files; and
 
-The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
+    (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and
 
-.. _pattern-matching:
+    (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or,  within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License.
 
-Pattern matching
-----------------
+        You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
 
-.. todo:: complete this section
+#. **Submission of Contributions**.
 
----------------------------------------
+    Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions.
 
-Next we collect for easy reference a list of some basic but important components from the Lean_ standard library.
+#. **Trademarks**. 
 
-.. index:: type of; dependent functions (Pi type)
+    This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file.
 
-.. _pi-type:
+#. **Disclaimer of Warranty**.
 
-Pi Type
--------
+    Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
 
-The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
+#. **Limitation of Liability**. 
 
-.. code-block:: lean
+    In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
 
-    variables {α : Type*} {π : α → Type*}
+#. **Accepting Warranty or Additional Liability**.
 
-    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
-    { f | ∀ a ∈ i, f a ∈ s a }
+    While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability.
 
-.. index:: type of; dependent pairs (Sigma type)
+END OF TERMS AND CONDITIONS
 
-.. _sigma-type:
+--------------------------------------
 
-Sigma Type
-----------
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
-
-.. code-block:: lean
-
-    structure sigma {α : Type u} (β : α → Type v) :=
-    mk :: (fst : α) (snd : β fst)
-
-    structure psigma {α : Sort u} (β : α → Sort v) :=
-    mk :: (fst : α) (snd : β fst)
-
-
-
-.. _intersection:
-
-Union and Intersection
-~~~~~~~~~~~~~~~~~~~~~~
-
-The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
-
-Let :math:`S` be a set of sets of type :math:`α`.
-
-In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
-
-.. code-block:: lean
-
-   import data.set
-   variable S : set (set α)
-   #check ⋂₀ S          -- answer: set α
-
-Here is the formal definition from the file lattice.lean_.
-
-.. code-block:: lean
-
-    /-- Intersection of a set of sets. -/
-    @[reducible]
-    def sInter (S : set (set α)) : set α := Inf S
-
-    prefix `⋂₀`:110 := sInter
-
-The **union of sets** is implemented in lattice.lean_ similarly.
-
-.. code-block:: lean
-
-   @[reducible]
-   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
-   prefix `⋃₀`:110 := sUnion
-
-----------------------------------------------------------
-
-.. _coercion:
-
-Coercion
---------
-
-**References**. `Coercions`_ and `Coercions using Type Classes`_ sections of `TPL`_
-
-A very nice feature of Lean, called coercion, enables us to identify two objects that we think of as "the same" but that are of different types. This kind of thing happens implicitly in virtually all informal mathematical arguments.
-
-Here's a simple example. Suppose we have an integer :math:`z : ℤ` and a natural number :math:`n : ℕ`.  Most people would not hesitate to form the sum :math:`z + n`.  Of course, this doesn't make sense since (in type theory as well as set theory), natural numbers are not integers!  That is, :math:`ℕ ⊈ ℤ`, despite what your highschool math teacher told you.
-
-However, it is true that the set of natural numbers can be embedded in ℤ in a natural way, and Lean_ allows us to express this embedding using coercions.
-
-Here's how the example just discussed is handled in Lean_.
-
-.. code-block:: lean
-
-   variable n : ℕ
-   variable z : ℤ
-   #check z + n      -- z + ↑n : ℤ
-
-Indeed, the addition is handled automatically in this case.  But notice the coercion symbol ``↑`` that appears in the output of ``#check``. The up arrow is notation for the Lean_ function ``coe``; it can be typed with ``\u``, but ``coe`` could be used instead.
-
-In fact, an explicit ``↑`` must appear in certain cases, in particular when Lean_ is not aware in advance that a coercion is needed.
-
-If we change the order of the arguments of ``#check`` in the example above, we get an error unless we tell Lean_ about the required coercion.
-
-.. code-block:: lean
-
-   -- #check n + z        -- error!
-   #check ↑n + z          -- ↑n + z : ℤ
-
-Lean_ allows various kinds of coercions using type classes; for details, see the `Coercions using Type Classes`_ section of `TPL`_.
-
-In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``. The definitions of these in the Lean_ library are as follows:
-
-.. code-block:: lean
-
-   class has_coe_to_sort (a : Sort u) : Type (max u (v+1)) :=
-   (S : Sort v) (coe : a → S)
-
-   class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
-   (F : a → Sort v) (coe : Π x, F x)
-
-------------------------------------------------
-
-.. _the-elaboration-engine:
-
-Elaboration engine
-------------------
-
-On top of the Lean_ kernel there is a powerful *elaboration engine* that can
-
-#. infer implicit universe variables;
-
-#. infer implicit arguments, using higher order unification;
-
-#. support overloaded notation or declarations;
-
-#. insert coercions;
-
-#. infer implicit arguments using type classes;
-
-#. convert readable proofs to proof terms
-
-#. construct terms using tactics
-
-Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
-
-(For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
-
-.. _metaprogramming:
-
-Metaprogramming
----------------
-
-Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` is a program whose purpose is to modify the behavior of other programs. :term:`Proof tactics <proof tactic>` form an important class of metaprograms.
-
-An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
-
-
---------------------------
-
-.. rubric:: Footnotes
-
-.. [1]
-   See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
-
-
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _lean_src: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
-.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
-
-.. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
-
-.. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
-
-.. _Lean Tutorial: https://leanprover.github.io/tutorial/
-
-.. _Lean Reference Manual: https://leanprover.github.io/reference/
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
