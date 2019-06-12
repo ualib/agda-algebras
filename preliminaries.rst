@@ -1,10 +1,10 @@
 .. include:: _static/math_macros.rst
 
-.. _appendix-a:
+.. _preliminaries:
 
-=======================================
-Appendix A. Mathematical Prerequisites
-=======================================
+=============
+Preliminaries
+=============
 
 Products of Sets
 -----------------

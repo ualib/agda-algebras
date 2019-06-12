@@ -6,6 +6,7 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
+    preliminaries
     algebraic_preliminaries
     inductively_defined_things
     algebras_in_lean
@@ -15,7 +16,6 @@ The Lean Universal Algebra Library
     appendix_a
     appendix_b
     appendix_c
-    appendix_d
     glossary
     refs
     genindex
