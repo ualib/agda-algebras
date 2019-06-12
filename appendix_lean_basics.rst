@@ -1,10 +1,10 @@
 .. include:: _static/math_macros.rst
 
-.. _appendix-B:
+.. _appendix-lean-basics:
 
-=======================
-Appendix B: Lean Basics
-=======================
+=====================
+Appendix. Lean Basics
+=====================
 
 In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
 
@@ -235,8 +235,35 @@ Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` 
 
 An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
 
-
 --------------------------
+
+Comparison of ITPs
+------------------
+
+The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
+
+Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It is based on Martin Lof :term:`type theory`.
+
+.. ; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
+
+Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
+
+.. ; url: http://coq.inria.fr .
+      
+NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
+
+.. ; url: http://www.nuprl.org/
+
+Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It is based on :term:`CiC`.
+
+.. ; url: https://leanprover.github.io/
+
+.. + NuPRL_ . :term:`extensional`, :term:`predicative`
+.. + Coq_ .  :term:`intensional`, :term:`impredicative`
+.. + Agda_ . :term:`intensional`, :term:`predicative`
+.. + Lean_  :term:`extensional`, :term:`impredicative`
+
+---------------------
 
 .. rubric:: Footnotes
 
