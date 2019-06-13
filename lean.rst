@@ -31,6 +31,8 @@
 .. Functions in Lean
 ..   Projections
 
+.. todo:: add chapter introduction
+
 Sets in Lean
 ------------
 
