@@ -23,7 +23,7 @@ These two facts suggest that there should be much to gain from implementing univ
 Subalgebras in Lean
 -------------------
 
-The Lean code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository.
+The Lean code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of the lean-ualib_ repository. [1]_
 
 In :numref:`Section %s <subuniverses-in-lean>`, we saw how :ref:`subalgebras <subalgebras>` can be implemented in Lean and proved some easy facts about them.  This section views subalgebras as an inductively defined type over a set of generators and implements the :ref:`subuniverse generation theorem <thm-1-14>`. 
 

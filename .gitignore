@@ -1,5 +1,12 @@
-_static/
+_static/csp
+_static/calco
+_static/demeo*
+_static/tex
 _build/
-latex_images/*.png
+latex_images
+png_images
+exclude
 *.pyc
 .venv
+.vscode
+*~

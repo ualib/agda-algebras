@@ -6,7 +6,11 @@
 Inductively Defined Things
 ==========================
 
-Our Lean_ implementation of the notion of :term:`subuniverse` will illustrate one of the underlying themes that motivate our work. Indeed, this chapter will display some of the power of **inductively defined types**, which are essential for working with infinite objects in a constructive and computable way, and for proving (by induction) properties of these objects.
+Our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of the underlying themes motivating our work.
+
+To exhibit the efficiency and ease with which we can formalize basic but important mathematical concepts in Lean_, we present a fundamental theorem about subalgebra generation, first in the informal language, and then formally :ref:`below <subalgebras-in-lean>`.
+
+We display some of the power of **inductively defined types**, which are essential for working with infinite objects in a constructive and computable way, and for proving (by induction) properties of these objects.
 
 .. index:: ! subuniverse, ! subalgebra
 
@@ -68,19 +72,6 @@ The argument in the proof of :numref:`Theorem %s <thm-1-14>` is of a type that o
   #. Every subuniverse containing :math:`X` is shown to contain :math:`Y` as well.
 
   #. One concludes that :math:`Y = \mathrm{Sg}^𝔸 (X)`.
-
------------------------------------------------
-
-Subdirect products
-------------------
-
-If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : k → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
-
-Let :math:`F` be a set of operation symbols and for each :math:`i<n` let :math:`𝔸_i = ⟨ A_i, F ⟩` be an algebra of type :math:`F`. If :math:`𝔸 = ∏_{i<n}𝔸_i` is the product of these algebras, then a relation :math:`R` over :math:`𝔸` with scope :math:`σ` is called **compatible with** 𝔸 if it is closed under the basic operations in
-:math:`F`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨ R, F ⟩` is a subalgebra of :math:`\prod_{j<k} 𝔸_{σ(j)}`.
-
-If :math:`R` is compatible with the product algebra and if the projection of :math:`R` onto each factor is surjective, then :math:`ℝ` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{\mathrm{sd}} \prod_{j< k} 𝔸_{σ(j)}` [1]_ 
-
 
 -----------------------------------------------
 
@@ -206,11 +197,11 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
 
    We will discuss varieties in more detail later, but for now a variety is a collection of algebras of the same signature that is defined by a certain set of identities. [3]_ 
    
-   In 1977, Walter Taylor showed that a variety :math:`𝕍` satisfies some nontrivial idempotent Malcev condition if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`i < n` there is an identity of the form 
+   In 1977, Walter Taylor showed in :cite:`Taylor:1977` that a variety :math:`𝕍` satisfies some nontrivial idempotent Malcev condition if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`i < n` there is an identity of the form 
 
    .. math:: t(∗, \cdots, ∗, x, ∗, \cdots, ∗) ≈ t(∗, \cdots, ∗, y, ∗, \cdots, ∗)
 
-   true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name **Taylor term** (:cite:`MR0434928`).
+   true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name **Taylor term**.
 
 -----------------------------------------------
 
@@ -411,9 +402,6 @@ Here is a list of basic observations that we will need later. We will reference 
 
 .. rubric:: Footnotes
 
-.. [1]
-   Note that even in the special case when :math:`\Proj_j ℝ = 𝔸_{σ(j)}` for each :math:`j<k` so that :math:`ℝ ≤_{\mathrm{sd}} ∏_{j<k} 𝔸_{σ(j)}`, we refrain from using :math:`\Proj_σ 𝔸` to denote :math:`∏_{j<k} 𝔸_{σ(j)}`  for the simple reason that σ might not be one-to-one.  For example, we could have :math:`𝔸 = 𝔸_0 × 𝔸_1` and :math:`σ = (1,0,1)`, in which case :math:`∏_{j<k} 𝔸_{σ(j)} = 𝔸_1 × 𝔸_0 × 𝔸_1` and this is not the "projection" of 𝔸 onto a subset of its factors.
-   
 .. [2]
    By "the constants on :math:`A`" we mean the **constant operations**; i.e., functions :math:`f: A → A` such that :math:`∀ a ∈ A, f(a) = c`, for some :math:`c ∈ A`.
 

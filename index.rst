@@ -8,7 +8,7 @@ The Lean Universal Algebra Library
     preface
     sets
     types
-    sets_and_types_in_lean
+    lean
     algebras
     algebras_in_lean
     inductively_defined_things

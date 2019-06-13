@@ -7,6 +7,8 @@
 Algebras
 =========
 
+.. todo:: add chapter intro
+
 .. index:: operation, arity, image
 .. index::
    symbol: ℕ
@@ -78,22 +80,24 @@ It is important to be familiar with the classical notions of signature and arity
 
 ---------------------------
 
-.. index:: triple: algebra; structure; universal algebra
+.. index:: triple: algebra; algebraic structure; universal algebra
 
-.. _algebras:
+.. _algebraic-structures:
 
-Algebras
---------
+Algebraic structures
+----------------------
 
-An **algebraic structure** is denoted by :math:`𝔸 = ⟨ A, F^𝔸⟩` and consists of 
+An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
 
   #. :math:`A` := a set, called the *carrier* (or *universe*) of the algebra,
-  #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρf → A) → A \}` := a set of operations on :math:`A`,
+  #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρ f → A) → A \}` := a set of operations on :math:`A`, and
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Section %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
 ---------------------------
+
+.. index:: ! subalgebra
 
 .. _subalgebras:
 
@@ -131,16 +135,30 @@ If 𝔸 is an algebra and :math:`X ⊆ A` a subset of the universe of 𝔸, then
 .. math:: \mathrm{Sg}^{𝔸}(X)  =  ⋂ \{ U ∈ 𝖲 𝔸 ∣ X ⊆ U \}.
   :label: SgDef
 
-.. To give an exhibition of the efficiency and ease with which we can formalize basic but important mathematical concepts in Lean_, we now present a fundamental theorem about subalgebra generation, first in the informal language, and then formally :ref:`below <subalgebras-in-lean>`.
+---------------------------
 
-.. Notice that the added complexity of the Lean implementation of this theorem is not significant, and the proof seems quite readable (especially when compared to the syntax used by other interactive theorem provers).  
+.. index:: ! Subdirect product
 
--------------------------------------
+.. _subdirect-product:
 
-.. _homomorphisms:
+Subdirect product
+-----------------
 
-Homomorphisms
---------------
+If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : k → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
+
+Let :math:`F` be a set of operation symbols and for each :math:`i<n` let :math:`𝔸_i = ⟨ A_i, F ⟩` be an algebra of type :math:`F`. If :math:`𝔸 = ∏_{i<n}𝔸_i` is the product of these algebras, then a relation :math:`R` over :math:`𝔸` with scope :math:`σ` is called **compatible with** 𝔸 if it is closed under the basic operations in
+:math:`F`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨ R, F ⟩` is a subalgebra of :math:`\prod_{j<k} 𝔸_{σ(j)}`.
+
+If :math:`R` is compatible with the product algebra and if the projection of :math:`R` onto each factor is surjective, then :math:`ℝ` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{\mathrm{sd}} \prod_{j< k} 𝔸_{σ(j)}` [1]_ 
+
+-----------------------------------------------
+
+.. index:: ! homomorphism
+
+.. _homomorphism:
+
+Homomorphism
+------------
 
 Let :math:`𝔸 = ⟨ A, F^𝔸 ⟩` and :math:`𝔹 = ⟨ B, F^𝔹 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
 
@@ -152,6 +170,8 @@ Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math
 ..  For groups, to check that a map :math:`φ : G → H` is a homomorphism, it is enough to check that :math:`φ` respects the interpretation of the binary operation. It follows from this that such a function respects the unary and nulary operations as well.
 
 ---------------------------------
+
+.. index:: ! epimorphism, ! monomorphism, ! automorphism
 
 Epis, Monos, and Autos
 -----------------------

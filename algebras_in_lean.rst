@@ -189,10 +189,10 @@ Algebras in Lean
 
 Classical universal algebra is the study of **varieties** (or **equational classes**) of algebraic structures.
 
-A **universal algebra** (also known as an **algebraic structure**) is denoted by :math:`𝔸 = ⟨A, F^{𝔸}⟩` and consists of 
+Recall from :numref:`Section %s <algebraic-structures>`, an **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
 
   + a set :math:`A`, called the **universe** (or **carrier**) of the algebra,
-  + a set :math:`F^{𝔸} = \{f^{𝔸} ∣ f ∈ F, f^{𝔸} : (ρf → A) → A\}` of **operations** defined on :math:`A`, and
+  + a set :math:`F^{𝔸} = \{f^{𝔸} ∣ f ∈ F, f^{𝔸} : (ρ f → A) → A\}` of **operations** defined on :math:`A`, and
   + a collection of **identities** satisfied by the elements and operations of 𝔸.
 
 Usually, the algebraic structures we study are **single-sorted**, meaning each structure has only one universe and that universe is of only a single type. Furthermore, in classical algebra, the universes are typically sets.
@@ -406,7 +406,7 @@ Next, we open a ``namespace`` to collect definitions and results related to subu
 
    namespace subuniverse
 
-     -- all subuniverse code will go here --
+     -- all subuniverse code goes here --
 
    end subuniverse
 
@@ -668,7 +668,7 @@ Next we formalize three obvious facts and their proofs:
 Homomorphisms in Lean
 ---------------------
 
-Using the types defined in the last section, it's not hard to represent the assertion that a function :math:`h : A → B` is a :ref:`homomorphism <homomorphisms>`.
+Using the types defined in the last section, it's not hard to represent the assertion that a function :math:`h : A → B` is a :ref:`homomorphism <homomorphism>`.
 
 We could clean this up a bit by fixing the signature σ and algebras 𝔸 and 𝔹 in advance, the definition looks a bit cleaner.
 

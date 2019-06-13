@@ -1,10 +1,8 @@
 .. include:: _static/math_macros.rst
 
-.. _sets-and-types-in Lean:
-
-=======================
-Sets and Types in Lean
-=======================
+======
+ Lean
+======
 
 .. Sections of set_theory.rst
 .. ---------------------------
@@ -32,8 +30,6 @@ Sets and Types in Lean
 ..   Relations of higher arity
 .. Functions in Lean
 ..   Projections
-
-
 
 Sets in Lean
 ------------
@@ -105,14 +101,6 @@ The poset induced by a preorder
 
 .. todo:: complete this section
 
-.. index:: ! join, ! upper bound, ! least upper bound, ! supremum
-.. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
-
-Joins and meets
-~~~~~~~~~~~~~~~
-
-.. todo:: complete this section
-
 .. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
@@ -139,13 +127,25 @@ Projections
 
 .. todo:: complete this section
 
-Generalized projections
+.. index:: ! generalized projection
+
+Generalized projection
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. todo:: complete this section
 
-Kernels
-~~~~~~~
+.. index:: ! kernel
+
+Kernel
+~~~~~~
+
+.. todo:: complete this section
+
+.. index:: ! join, ! upper bound, ! least upper bound, ! supremum
+.. index:: ! meet, ! lower bound, ! greatest lower bound, ! infimum
+
+Joins and meets
+~~~~~~~~~~~~~~~
 
 .. todo:: complete this section
 
@@ -203,6 +203,8 @@ Inductive types in Lean
 ------------------------
 
 .. todo:: complete this section
+
+----------------------------------
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 

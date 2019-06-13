@@ -6,6 +6,8 @@
 Sets
 ====
 
+.. todo:: add chapter intro
+
 .. Sections of set_theory.rst
 .. ---------------------------
 .. Products of Sets
@@ -20,8 +22,12 @@ Sets
 .. Completeness and cocompleteness
 .. Closure systems
 
-Products of Sets
------------------
+.. index:: product
+
+.. _products:
+
+Products
+--------
 
 The **Cartesian product** of two sets :math:`A_0` and :math:`A_1`, denoted :math:`A_0 × A_1`, is the set of all ordered pairs :math:`(a_0, a_1)` such that :math:`a_0 ∈ A_0` and :math:`a_1 ∈ A_1`. That is, :math:`A_0 × A_1 := \{(a_0, a_1) ∣ a_0 ∈ A_0, a_1 ∈ A_1\}`.
 
@@ -339,7 +345,7 @@ The following shorthand is frequently convenient:
 
 .. proof:example::
 
-   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`.
+   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [2]_
 
 Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the **kernel**
 of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is defined as follows:
@@ -498,6 +504,9 @@ then 𝖱 is a closure operator.
 .. [1]
    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
 
+.. [2]
+   Note that even in the special case when :math:`\Proj_j ℝ = 𝔸_{σ(j)}` for each :math:`j<k` so that :math:`ℝ ≤_{\mathrm{sd}} ∏_{j<k} 𝔸_{σ(j)}`, we refrain from using :math:`\Proj_σ 𝔸` to denote :math:`∏_{j<k} 𝔸_{σ(j)}`  for the simple reason that σ might not be one-to-one.  For example, we could have :math:`𝔸 = 𝔸_0 × 𝔸_1` and :math:`σ = (1,0,1)`, in which case :math:`∏_{j<k} 𝔸_{σ(j)} = 𝔸_1 × 𝔸_0 × 𝔸_1` and this is not the "projection" of 𝔸 onto a subset of its factors.
+   
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 

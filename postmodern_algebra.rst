@@ -6,13 +6,13 @@
 
 .. _postmodern-algebra:
 
-==================
-Postmodern Algebra
-==================
+=======================
+Postmodern Algebra [1]_
+=======================
 
 Up to now the goal of the :code:`ualib` development has been to remain faithful to the classical presentation of general (universal) algebra.  The motivation for this is so that the library seems natural to working algebraists.  However, there are real advantages to adopting a more modern and category theoretic approach.
 
-In the remaining sections, we redesign the :code:`ualib` implementation to take advantage of the more elegant and more general language of category theory.  The downside is that the resulting definitions and theorem statements may turn out to be hardly recognizable to most algebraists.
+In the remaining sections, we redesign the :code:`ualib` implementation to take advantage of the more elegant and more general language of category theory.  The downside is that the resulting definitions and theorem statements may turn out to be hardly recognizable to classical algebraists. 
 
 This section assumes the reader is familiar with basic notions of category theory, as it is presented at categorytheory.gitlab.io_, for example.
 
@@ -109,7 +109,7 @@ Example: :cat:`Set`
 
 In universal algebra we deal mainly with *finitary operations on sets*.
 
-By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f : A^n → A`, that takes :math:`n` elements of type :math:`A` and returns an element of type :math:`A`. [1]_
+By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f : A^n → A`, that takes :math:`n` elements of type :math:`A` and returns an element of type :math:`A`. [2]_
 
 By identifying the :math:`\mathrm{ntuple}` type with the function type :math:`\underline n →  A`, we may represent the type of :math:`n`-ary operations on :math:`A` by :math:`(\underline n → A) → A`.
 
@@ -497,6 +497,9 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 .. rubric:: Footnotes
 
 .. [1]
+   The tile of this chapter, "Postmodern Algebra," is borrowed from Johnathan Smith and Anna Romanowska, whose algebra textbook has the same title.
+
+.. [2]
    Using the tuple constructor described in :numref:`Section %s <tuple-functors>`, we could also represent such an operation as :math:`f : \mathrm{ntuple} A → A`, but we prefer to reserve ntuple for instances in which it acts as a functor.
 
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
