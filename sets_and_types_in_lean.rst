@@ -42,8 +42,9 @@ The code described in this subsection comes from set.lean_, basic.lean_, and lat
 
 Let :math:`S` be a set of sets of type :math:`α`.
 
+.. _intersection-and-union:
 
-Union and intersection
+Intersection and union
 ~~~~~~~~~~~~~~~~~~~~~~
 
 In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
@@ -74,6 +75,8 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 
 -------------------------------------------
 
+.. _products-in-lean:
+
 Products in Lean
 -----------------
 
@@ -87,6 +90,8 @@ Products in Lean
 .. index:: equivalence relation, partial ordering
 .. index:: pair: partially ordered set; poset
 
+.. _relations-in-lean:
+
 Relations in Lean
 ------------------
 
@@ -98,17 +103,23 @@ A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **
 The poset induced by a preorder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. todo:: complete this section
+
 .. index:: ! join, ! upper bound, ! least upper bound, ! supremum
 .. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
 
 Joins and meets
 ~~~~~~~~~~~~~~~
 
+.. todo:: complete this section
+
 .. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
 Relations of higher arity
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. todo:: complete this section
 
 ---------------------------------
 
@@ -117,15 +128,14 @@ Relations of higher arity
 Functions in Lean
 ------------------
 
+.. todo:: complete this section
+
 .. index:: ! projection, ! idempotent operation
 
-.. _projections:
+.. _projections-in-lean:
 
 Projections
 ~~~~~~~~~~~
-
-.. todo:: complete this section
-
 
 .. todo:: complete this section
 
@@ -193,14 +203,6 @@ Inductive types in Lean
 ------------------------
 
 .. todo:: complete this section
-
----------------------------------
-
-.. rubric:: Footnotes
-
-.. [1]
-   **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
-
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 

@@ -202,7 +202,7 @@ The Lean Standard Library
 
 This section collects for easy reference a description of some of the most important basic components of the Lean_ standard library.
 
-While Lean doesn't have a formal API, per se, you can browse the source code of the core Lean library to see what built-in mathematical objects and operations are available.  For example, some of the most important mathematical objects are implemented in the files listed below. These (and many more) can be found in (or under) the :ref:`lean/library/init <https://github.com/leanprover/lean/tree/master/library/init>` directory of the official Lean GitHub repository](
+While Lean doesn't have a formal API, per se, you can browse the source code of the core Lean library to see what built-in mathematical objects and operations are available.  For example, some of the most important mathematical objects are implemented in the files listed below. These (and many more) can be found in (or under) the `lean/library/init <https://github.com/leanprover/lean/tree/master/library/init>`_ directory of the official Lean GitHub repository](
 
 + [classical.lean](https://github.com/leanprover/lean/blob/master/library/init/classical.lean)
 + [core.lean](https://github.com/leanprover/lean/blob/master/library/init/core.lean)
