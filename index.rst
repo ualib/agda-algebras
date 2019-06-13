@@ -17,10 +17,10 @@ The Lean Universal Algebra Library
     postmodern_algebra
     postmodern_algebra_in_lean
     appendix_lean_basics
-    license
     glossary
     refs
     genindex
+    license
 
 .. Indices and tables
    ==================
