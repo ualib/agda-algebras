@@ -200,77 +200,30 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 The Lean Standard Library
 --------------------------
 
-This section collects for easy reference a list of some basic but important components from the Lean_ standard library.
+This section collects for easy reference a description of some of the most important basic components of the Lean_ standard library.
 
-.. index:: type of; dependent functions (Pi type)
+While Lean doesn't have a formal API, per se, you can browse the source code of the core Lean library to see what built-in mathematical objects and operations are available.  For example, some of the most important mathematical objects are implemented in the files listed below. These (and many more) can be found in (or under) the :ref:`lean/library/init <https://github.com/leanprover/lean/tree/master/library/init>` directory of the official Lean GitHub repository](
 
-.. _pi-type:
++ [classical.lean](https://github.com/leanprover/lean/blob/master/library/init/classical.lean)
++ [core.lean](https://github.com/leanprover/lean/blob/master/library/init/core.lean)
++ [function.lean](https://github.com/leanprover/lean/blob/master/library/init/function.lean)
++ [logic.lean](https://github.com/leanprover/lean/blob/master/library/init/logic.lean)
++ [wf.lean](https://github.com/leanprover/lean/blob/master/library/init/wf.lean)
 
-Pi Type
-~~~~~~~
++ In [lean/library/init/data](https://github.com/leanprover/lean/tree/master/library/init/data):
+  - [nat (dir)](https://github.com/leanprover/lean/blob/master/library/init/data/nat)
+  - [prod.lean](https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean)
+  - [quot.lean](https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean)
+  - [set.lean](https://github.com/leanprover/lean/blob/master/library/init/data/set.lean)
+  - [sigma (dir)](https://github.com/leanprover/lean/blob/master/library/init/data/sigma/)
+  
++ In [lean/library/init/algebra](https://github.com/leanprover/lean/blob/master/library/init/algebra):
+  - [classes.lean](https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean)
+  - [functions.lean](https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean)
+  - [order.lean](https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean)
 
-The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
-
-.. code-block:: lean
-
-    variables {α : Type*} {π : α → Type*}
-
-    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
-    { f | ∀ a ∈ i, f a ∈ s a }
-
-.. index:: type of; dependent pairs (Sigma type)
-
-.. _sigma-type:
-
-Sigma Type
-~~~~~~~~~~
-
-The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
-
-.. code-block:: lean
-
-    structure sigma {α : Type u} (β : α → Type v) :=
-    mk :: (fst : α) (snd : β fst)
-
-    structure psigma {α : Sort u} (β : α → Sort v) :=
-    mk :: (fst : α) (snd : β fst)
-
-
-
-.. _intersection:
-
-Union and Intersection
-~~~~~~~~~~~~~~~~~~~~~~
-
-The code described in this subsection comes from set.lean_, basic.lean_, and lattice.lean_.
-
-Let :math:`S` be a set of sets of type :math:`α`.
-
-In lattice.lean_, the **intersection** of the sets in :math:`S` is denoted by ``⋂₀ S``.
-
-.. code-block:: lean
-
-   import data.set
-   variable S : set (set α)
-   #check ⋂₀ S          -- answer: set α
-
-Here is the formal definition from the file lattice.lean_.
-
-.. code-block:: lean
-
-    /-- Intersection of a set of sets. -/
-    @[reducible]
-    def sInter (S : set (set α)) : set α := Inf S
-
-    prefix `⋂₀`:110 := sInter
-
-The **union of sets** is implemented in lattice.lean_ similarly.
-
-.. code-block:: lean
-
-   @[reducible]
-   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
-   prefix `⋃₀`:110 := sUnion
+[Lean]: http://leanprover.github.io/ 
+[VS Code]: https://code.visualstudio.com/
 
 ---------------------
 
@@ -287,6 +240,8 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 .. _NuPRL: http://www.nuprl.org/
 
 .. _Lean: https://leanprover.github.io/
+
+.. _Lean github repository:  https://github.com/leanprover/lean).
 
 .. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
 
@@ -313,3 +268,4 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 .. _Lean Tutorial: https://leanprover.github.io/tutorial/
 
 .. _Lean Reference Manual: https://leanprover.github.io/reference/
+

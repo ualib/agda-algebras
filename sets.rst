@@ -1,10 +1,24 @@
 .. include:: _static/math_macros.rst
 
-.. _preliminaries:
+.. _sets:
 
-========================
-Set Theory Preliminaries
-========================
+====
+Sets
+====
+
+.. Sections of set_theory.rst
+.. ---------------------------
+.. Products of Sets
+.. Relations
+..   Equivalence relations, partial orders
+..   The poset induced by a preorder
+..   Joins and meets
+..   Relations of higher arity
+.. Functions
+..   Projections
+.. Directed sets and inductive sets
+.. Completeness and cocompleteness
+.. Closure systems
 
 Products of Sets
 -----------------
@@ -26,12 +40,14 @@ When :math:`A_0 = A_1 = \cdots = A`, we write :math:`A^2 := A × A` and :math:`A
 
    How do you know :math:`∏_{i∈I} A_i ≠ ∅`, even supposing :math:`I ≠ ∅` and :math:`A_i ≠ ∅` for all :math:`i ∈ I`? [1]_
 
+--------------------------------------------
+
 .. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
 .. index:: ! domain, ! range
 
-.. _binary-relations:
+.. _relations:
 
-Binary Relations
+Relations
 ----------------
 
 A **binary relation** is a set of ordered pairs. Thus, if :math:`X` is a set, a binary relation on :math:`X` is simply a subset of the Cartesian product :math:`X \times X`.
@@ -67,13 +83,13 @@ If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :ma
 
    Conversely, every preorder :math:`R` on a set :math:`X` is the reachability relation of a directed graph (simply take elements of :math:`X` to be the vertices and draw an edge from :math:`x` to :math:`y` whenever :math:`x \mathrel{R} y`).
 
-The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *partial orders* and *equivalence relations*.
+The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *equivalence relations* and *partial orders*.
 
 .. index:: ! equivalence relation, ! partial ordering
 .. index:: pair: partially ordered set; poset
 
-Equivalence relations and partial orders
------------------------------------------
+Equivalence relations, partial orders
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An **equivalence relation** is a symmetric preorder. We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
 
@@ -161,6 +177,44 @@ Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :mat
 
 A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
 
+.. index:: ! ordered tuples, !tuples
+.. index:: ! unary relation, ! binary relation, ! ternary relation
+
+Relations of higher arity
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can extend the definition of ordered pairs and define an **ordered triple** recursively.
+
+.. math:: (x, y, z) = ((x, y), z).
+
+Similarly, **ordered quadruples**.
+
+.. math::
+
+   (x_1, x_2, x_3, x_4) = ((x_1, x_2, x_3), x_4) = (((x_1,x_2),x_3),x_4).
+
+Inductively, for each :math:`n ∈ ℕ`, if we assume the notion of ordered :math:`k`-tuple, :math:`(x_1, \dots, x_k)`, has been defined for :math:`k < n`, we can form **ordered** :math:`n`-**tuples** as follows:
+
+.. math:: (x_1, \dots, x_{n-1}, x_n) = ((x_1, \dots, x_{n-1}), x_n).
+
+It is convenient for reasons of uniformity to define also the 1-**tuple** :math:`(x) = x`.
+
+We define an :math:`n`-ary relation on :math:`A` to be a set of ordered :math:`n`-tuples with all components in :math:`A`. Thus a binary (2-ary) relation on :math:`A` is just a subset of :math:`A \times A`. A ternary (3-ary) relation on :math:`A` is a subset of :math:`(A \times A) \times A`, and so on.
+
+There is, however, a terminological quirk here. If :math:`n > 1`, then any :math:`n`-ary relation on :math:`A` is actually a binary relation, but a unary (1-ary)
+relation on :math:`A` is just a subset of :math:`A`.
+
+A :math:`k`-**ary relation** :math:`R` on a set :math:`A` is a subset of the Cartesian product :math:`A^k`.
+
+We give some examples of relations below. In these examples, :math:`ℝ` denotes the set of real numbers, and letters :math:`a ∈ ℝ^2`, :math:`b ∈ ℝ^3` etc. denote tuples :math:`(a_0, a_1)`, :math:`(b_0, b_1, b_2)`, etc.
+
+#. :math:`A = ℝ` and :math:`R = \{a\in ℝ^2: a_0 = a_1\} = \{(x,x) : x ∈ ℝ \}`.
+
+(b) :math:`A = ℝ^2` (the plane) and :math:`R = \{(a,b,c) ∈ ℝ^2 × ℝ^2 × ℝ^2 : a, b, c \text{ lie on a line } \}`; i.e. triples of points that are *colinear*.
+
+
+Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`; finally, an :math:`n`-**ary relation** on :math:`A` is a subset of :math:`A^n`.
+
 ---------------------------------
 
 .. index:: ! function, ! inverse, ! function composition, ! restriction, ! image
@@ -236,55 +290,12 @@ Consequently, :math:`F[\{∅\}] = \{a\}`, in contrast to the fact that :math:`F(
 
 With this axiom we can prove the sufficiency direction of item 2 of the theorem above: take :math:`H` to be a function with :math:`H ⊆ F^{-1}` and :math:`\dom H = \dom F^{-1} = B`. Then :math:`H` does what we want: Given any :math:`y ∈ B`, we have :math:`(y,H(y)) ∈ F^{-1}` hence :math:`(H(y), y) ∈ F`, and so :math:`F(H(y)) = y`.
 
----------------------------------
-
-.. index:: ! ordered tuples, !tuples
-.. index:: ! unary relation, ! binary relation, ! ternary relation
-
-Relations of higher arity
--------------------------
-
-We can extend the definition of ordered pairs and define an **ordered triple** recursively.
-
-.. math:: (x, y, z) = ((x, y), z).
-
-Similarly, **ordered quadruples**.
-
-.. math::
-
-   (x_1, x_2, x_3, x_4) = ((x_1, x_2, x_3), x_4) = (((x_1,x_2),x_3),x_4).
-
-Inductively, for each :math:`n ∈ ℕ`, if we assume the notion of ordered :math:`k`-tuple, :math:`(x_1, \dots, x_k)`, has been defined for :math:`k < n`, we can form **ordered** :math:`n`-**tuples** as follows:
-
-.. math:: (x_1, \dots, x_{n-1}, x_n) = ((x_1, \dots, x_{n-1}), x_n).
-
-It is convenient for reasons of uniformity to define also the 1-**tuple** :math:`(x) = x`.
-
-We define an :math:`n`-ary relation on :math:`A` to be a set of ordered :math:`n`-tuples with all components in :math:`A`. Thus a binary (2-ary) relation on :math:`A` is just a subset of :math:`A \times A`. A ternary (3-ary) relation on :math:`A` is a subset of :math:`(A \times A) \times A`, and so on.
-
-There is, however, a terminological quirk here. If :math:`n > 1`, then any :math:`n`-ary relation on :math:`A` is actually a binary relation, but a unary (1-ary)
-relation on :math:`A` is just a subset of :math:`A`.
-
-A :math:`k`-**ary relation** :math:`R` on a set :math:`A` is a subset of the Cartesian product :math:`A^k`.
-
-We give some examples of relations below. In these examples, :math:`ℝ` denotes the set of real numbers, and letters :math:`a ∈ ℝ^2`, :math:`b ∈ ℝ^3` etc. denote tuples :math:`(a_0, a_1)`, :math:`(b_0, b_1, b_2)`, etc.
-
-#. :math:`A = ℝ` and :math:`R = \{a\in ℝ^2: a_0 = a_1\} = \{(x,x) : x ∈ ℝ \}`.
-
-(b) :math:`A = ℝ^2` (the plane) and :math:`R = \{(a,b,c) ∈ ℝ^2 × ℝ^2 × ℝ^2 : a, b, c \text{ lie on a line } \}`; i.e. triples of points that are *colinear*.
-
-
-Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`; finally, an :math:`n`-**ary relation** on :math:`A` is a subset of :math:`A^n`.
-
----------------------------------
-
 .. index:: ! projection, ! idempotent operation
 
 .. _projections:
 
 Projections
------------
-
+~~~~~~~~~~~
 
 An operation :math:`f : A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
 
@@ -378,6 +389,109 @@ where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is
 .. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
 
 --------------------------------
+
+.. index:: ! directed set, ! inductive set
+
+.. _directed-sets-and-inductive-sets:
+
+Directed sets and inductive sets
+--------------------------------
+
+A subset :math:`D` of a preorder is called a **directed set** if every finite subset of :math:`D` has an upper bound in :math:`D`.
+
+That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
+
+A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
+
+.. proof:example:: See Remark 1.2.10 of :cite:`MR1275826`
+
+   Let :math:`X = \{0, 1, 2, \dots, n, n+1, \dots, ∞, ⊤\}` be the chain with order relation satisfying :math:`0≤ 1≤ 2≤ \cdots ≤ n ≤ n+1 ≤ \cdots ≤ ∞ ≤ ⊤`.
+
+   Let :math:`A = X - \{∞\}` and :math:`D = X -\{∞, ⊤\}`. (See Figure [fig:noninductive].)
+
+   Then :math:`⋁_A D` exists and is equal to :math:`⊤`, since the join is taken in :math:`A`.
+
+   However, :math:`⋁_X D = ∞ ∉ A`, so :math:`A` is not an inductive subset of :math:`X`.
+
+.. todo:: insert figure
+
+--------------------------------------------
+
+.. index:: ! complete, ! cocomplete
+.. index:: ! directed-cocomplete preorder, ! directed-cocomplete partial order (dcpo)
+.. index:: ! ω-chain cocomplete, ! ω-chain cocomplete partial order (ω-cpo)
+
+.. _completeness-and-cocompleteness:
+
+Completeness and cocompleteness
+-------------------------------
+
+The existence of meets and joins for certain kinds of subsets of a preorder is known as completeness and cocompleteness respectively.
+
+Suppose :math:`X` is a preorder and let P be a **property of subsets** of :math:`X`.
+
+Given a subset :math:`A ⊆ X`, denote by :math:`A ⊨ \mathrm P` the judgement ":math:`A` has property P."
+
+If the meet :math:`⋀ A` exists for every subset :math:`A ⊆ X` for which :math:` A ⊨ \mathrm P` holds, then we say that :math:`X` is P-**complete**.
+
+Dually, :math:`X` is called P-**cocomplete** if the join :math:`⋁ A` exists for every subset :math:`A` with property P.
+
+Suppose :math:`X` is a preorder for which joins of all directed subsets exist. Then :math:`X` is called a **directed-cocomplete preorder**. If, in addition, :math:`X` happens to be a poset, then :math:`X` is a **directed-cocomplete partial order** or **dcpo**.
+
+If :math:`X` has joins of all ω-chains, then :math:`X` is said to be ω-**chain cocomplete**.
+
+We will refer to an ω-**chain cocomplete partial order** as a ω-cpo.
+
+Finally, if all meets in :math:`X` exist, then we say :math:`X` is **complete**, and if all joins exist, then :math:`X` is called **cocomplete**.
+
+It is easy to see that a preorder is complete if and only if it is cocomplete. Indeed, this follows from the next pair of equations, which are direct consequences of the defintions of ⋀ and ⋁:
+
+.. math:: ⋀ A = ⋁ \{x ∈ X : x ≤ A\} \qquad ⋁ A = ⋀ \{x ∈ X : A ≤ x\}.
+
+A homomorphism of dcpos :math:`X` and :math:`Y` is a function :math:`f: X → Y` that preserves the structure of :math:`X`, which is to say :math:`f` is monotone and if :math:`D ⊆ X` is directed, then :math:`f (⋁ D) =⋁ f(D)`. (The join on the right hand side exists since :math:`f` is monotone.)
+
+A homomorphism of ω-cpos is defined analogously. A homomorphism of :term:`dcpos <dcpo>` (ω-cpos) will also be referred to as a **continuous** (ω-**continuous**) function.
+
+.. If :math:`X` and :math:`Y` have least elements, both denoted by ⊥, then a function :math:`f: X → Y` is said to be **strict** if :math:`f(⊥) = ⊥`.
+
+If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
+   
+Thus if :math:`A` is a :term:`subdcpo` of :math:`X` and :math:`A` is given the restriction order from :math:`X`, then the inclusion :math:`ι : A → X` is a continuous function.
+
+Note also that if :math:`A ⊆ X` are :term:`dcpos <dcpo>` and if :math:`ι : A → X` is continuous, then :math:`A` is a :term:`subdcpo` of :math:`X`.
+
+If :math:`X` is a poset, :math:`D` a :term:`directed <directed set>` subset of :math:`X`, and if the join of :math:`D` in :math:`X` exists, then we denote the join of :math:`D` by :math:`⨆_X D` rather than :math:`⋁_X D`. Part of the force of the judgement :math:`⨆_X D` is that the set :math:`D` is directed.
+
+-------------------------------------
+
+.. index:: ! closure operator, ! closure system
+
+Closure systems
+---------------
+
+Let 𝔛 be a set and let :math:`𝒫(𝔛)` denote the collection of all subsets of 𝔛.
+
+A **closure operator** on 𝔛 is a set function :math:`𝖢 : 𝒫 (𝔛) → 𝒫 {𝔛}` satisfying the following conditions, for all :math:`X, Y ∈ 𝒫 (𝔛)`, 
+
+#. :math:`X ⊆ 𝖢 (X)`,
+
+#. :math:`𝖢 𝖢 = 𝖢`,
+
+#. :math:`Y ⊆ X ⟹ 𝖢 (Y) ⊆ 𝖢 (X)`.
+
+If 𝒜 is a collection of algebras of the same type, let :math:`𝖲 𝒜` and :math:`𝖱 𝒜` denote, respectively, the collection of all subalgebras and retracts of algebras in 𝒜.
+
+Observe that 𝖲 is a closure operator on sets of algebras of the same type.
+
+It's easy to see that if the retraction is as defined above, then retraction operator 𝖱 is not a closure operator on sets of algebras of the same type.
+
+However, if we take our definition of **retraction** of :math:`𝔸 = ⟨ A, F ⟩` via :math:`p ∈ \mathrm{Pol}_1(𝔸)` to be
+
+.. math:: p(𝔸) = ⟨ p(A), \{p f|_{p(A)} : f \in F\}⟩,
+
+then 𝖱 is a closure operator.
+
+-----------------------------------------
 
 .. rubric:: Footnotes
 

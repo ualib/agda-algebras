@@ -199,8 +199,8 @@ Usually, the algebraic structures we study are **single-sorted**, meaning each s
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as **multisorted** algebras and higher-type algebras, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that will eventually be incorporated into ``lean-ualib``, but for now we content ourselves with developing and documenting an *accessible* implementation of the classical core of (single-sorted, set-based) universal algebra.
 
-One arity to rule them all
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+All functions are unary
+~~~~~~~~~~~~~~~~~~~~~~~
 
 When working informally, we typically denote an :math:`n`-ary operation by, say, :math:`f(x_0, x_1, \dots, x_{n-1})`, the arguments appearing as an :math:`n`-tuple, :math:`(x_0, x_1, \dots, x_{n-1})`.  However, when computing with functions (and even when not!) this is impractical for a number of reasons.
 
@@ -208,23 +208,27 @@ Functional programming languages like Lean_ are based on the :term:`lambda calcu
 
 Representing an :math:`n`-ary function by a unary function can be done in a number of essentially equivalent ways.  One is by :term:`currying`.  Another is by viewing the :math:`n`-tuple (e.g., passed to an :math:`n`-ary function) as a function.  We take the latter approach here (though we will have plenty of opportunities to curry later).
 
-So, let us review how the correspondence between tuples and functions works by way of an example. [5]_ Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
+We explain how the correspondence between tuples and functions works using a simple example. [5]_ 
 
-Let :math:`β` be the arity type. If :math:`β` happens to be ℕ, then :math:`ρ f = \{0, 1, \dots, ρf-1\}` and a function :math:`g : ρf → A` is simply a :math:`ρ f`-tuple of elements of :math:`A`. [6]_
+.. proof:example::
 
-Conversely, for :math:`m : ℕ`, an :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
+    Suppose :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary operation on :math:`A`. In this case, we often write :math:`f : A^{ρf} → A`.
 
-If :math:`h : A → B` and :math:`a : m → A`, then :math:`h ∘ a : m → B` is the tuple whose :math:`i`-th value is :math:`(h ∘ a) i = h\, a\, i = h a_i`, which has type :math:`B`.
-
-If :math:`g : A^m → A` and :math:`a : m → A`, then the value :math:`g\, a` has type :math:`A`.
-
-Putting it all together, if
-
-  + :math:`f : (ρf → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
-  + :math:`a : ρf → A` is a :math:`ρ f`-tuple on :math:`A`, and 
-  + :math:`h : A → B`,
-
-then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
+    Let :math:`β` be the arity type. If :math:`β` happens to be ℕ, then :math:`ρ f = \{0, 1, \dots, ρf-1\}` and a function :math:`g : ρf → A` is simply a :math:`ρ f`-tuple of elements of :math:`A`. [6]_
+    
+    Conversely, for :math:`m : ℕ`, an :math:`m`-tuple :math:`a = (a_0, a_1, \dots , a_{m-1}) : A^m` is (the graph of) the function :math:`a : m → A`, defined for each :math:`i < m` by :math:`a\,i = a_i`. 
+    
+    If :math:`h : A → B` and :math:`a : m → A`, then :math:`h ∘ a : m → B` is the tuple whose :math:`i`-th value is :math:`(h ∘ a) i = h\, a\, i = h a_i`, which has type :math:`B`.
+    
+    If :math:`g : A^m → A` and :math:`a : m → A`, then the value :math:`g\, a` has type :math:`A`.
+    
+    Putting it all together, if
+    
+      + :math:`f : (ρf → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
+      + :math:`a : ρf → A` is a :math:`ρ f`-tuple on :math:`A`, and 
+      + :math:`h : A → B`,
+    
+    then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
 .. index:: type of; interpretations of operations
 

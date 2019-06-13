@@ -6,8 +6,9 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
-    preliminaries
-    types_preliminaries
+    sets
+    types
+    sets_and_types_in_lean
     algebras
     algebras_in_lean
     inductively_defined_things
