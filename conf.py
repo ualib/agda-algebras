@@ -48,6 +48,7 @@ proof_theorem_types = {
     "proof": "Proof",
     "property": "Property",
     "question": "Question",
+    "prop": "Proposition",
     "theorem": "Theorem",
 }
 

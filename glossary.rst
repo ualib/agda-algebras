@@ -487,3 +487,49 @@ Categories
     Comma
       Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.
 
+-------------------------------
+
+.. _symbols:
+
+Symbols
+--------
+
+The list below shows what to type in order to produce each of the special unicode symbols we use.
+
+  +--------+------------------------+
+  | produce| by typing              |
+  +========+========================+
+  | ∩      | ``\cap``               |
+  +--------+------------------------+
+  | ∪      | ``\cup``               |
+  +--------+------------------------+
+  | ⋂      | ``\bigcap``            |
+  +--------+------------------------+
+  | ⋃      | ``\bigcup``            |
+  +--------+------------------------+
+  | ∧      | ``\wedge`` or ``\and`` |
+  +--------+------------------------+
+  | ∨      | ``\vee`` or ``\or``    |
+  +--------+------------------------+
+  | ⋀      | ``\bigwedge``          |
+  +--------+------------------------+
+  | ⋁      | ``\bigvee``            |
+  +--------+------------------------+
+  | ∘      | ``\circ``              |
+  +--------+------------------------+
+  | ι      | ``\iota``              |
+  +--------+------------------------+
+  | ∈      | ``\in``                |
+  +--------+------------------------+
+  | ⋆      | ``\star``              |
+  +--------+------------------------+
+  | ∗      | ``\ast``               |
+  +--------+------------------------+
+  | 𝔸      | ``\BbbA``              |
+  +--------+------------------------+
+  | 𝔹      | ``\BbbB``              |
+  +--------+------------------------+
+  | ℂ      | ``\BbbC``, etc.        |
+  +--------+------------------------+
+
+
