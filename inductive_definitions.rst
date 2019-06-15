@@ -2,9 +2,9 @@
 
 .. _inductively-defined-things:
 
-==========================
-Inductively Defined Things
-==========================
+=====================
+Inductive Definitions
+=====================
 
 Our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of the underlying themes motivating our work.
 
@@ -97,7 +97,7 @@ Define the collection of **terms in the signature** σ **over** :math:`X` by :ma
 
 The definition of :math:`T_σ (X)` is recursive, indicating that *the set of terms in a signature can be implemented (e.g., in Lean) using an inductive type*.
 
-We will confirm this in :numref:`Chapter %s <inductively-defined-types>`, but before doing so we impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
+We will confirm this in :numref:`inductively-defined-types`, but before doing so we impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
 
 If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [4]_ The height is a useful index for recursion and induction.
 

@@ -1,60 +1,18 @@
 .. include:: _static/math_macros.rst
 
-.. _sets:
-
-====
-Sets
-====
-
-.. todo:: add chapter intro
-
-.. Sections of set_theory.rst
-.. ---------------------------
-.. Products of Sets
-.. Relations
-..   Equivalence relations, partial orders
-..   The poset induced by a preorder
-..   Joins and meets
-..   Relations of higher arity
-.. Functions
-..   Projections
-.. Directed sets and inductive sets
-.. Completeness and cocompleteness
-.. Closure systems
-
-.. index:: product
-
-.. _products:
-
-Products
---------
-
-The **Cartesian product** of two sets :math:`A_0` and :math:`A_1`, denoted :math:`A_0 × A_1`, is the set of all ordered pairs :math:`(a_0, a_1)` such that :math:`a_0 ∈ A_0` and :math:`a_1 ∈ A_1`. That is, :math:`A_0 × A_1 := \{(a_0, a_1) ∣ a_0 ∈ A_0, a_1 ∈ A_1\}`.
-
-More generally, :math:`A_0 × \cdots × A_{n-1}` is the set of sequences of length :math:`n` with :math:`i`-th element in :math:`A_i`. That is,
-
-.. math:: A_0 × \cdots × A_{n-1} := \{(a_0, \dots,  a_{n-1}) ∣ a_0 ∈ A_0, \dots, a_{n-1} ∈ A_{n-1}\}.
-
-Another way to view :math:`A_0 × \cdots × A_{n-1}` is as the set of all functions with domain :math:`\{0, 1, \dots, n-1\}` and range :math:`⋃_{i<n} A_i`. More generally still, the **Cartesian product** of an indexed family of sets, :math:`\{A_i : i ∈ I\}`, is the set of all functions with domain :math:`I` and range :math:`⋃_{i ∈ I} A_i` such that :math:`f(i) ∈ A_i`. That is,
-
-.. math:: ∏_{i∈I} A_i := \{f: I → ⋃_{i∈I} A_i | f(i) ∈ A_i\}.
-
-When :math:`A_0 = A_1 = \cdots = A`, we write :math:`A^2 := A × A` and :math:`A^n := A × \cdots × A` (:math:`n` factors), and refer to these as **Cartesian powers** of
-:math:`A`.
-
-.. proof:question::
-
-   How do you know :math:`∏_{i∈I} A_i ≠ ∅`, even supposing :math:`I ≠ ∅` and :math:`A_i ≠ ∅` for all :math:`i ∈ I`? [1]_
-
---------------------------------------------
-
 .. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
 .. index:: ! domain, ! range
 
-.. _relations:
+.. _preliminaries:
 
-Relations
----------
+=============
+Preliminaries
+=============
+
+.. todo:: add introductory paragraph
+
+Binary Relations
+-----------------
 
 A **binary relation** is a set of ordered pairs. Thus, if :math:`X` is a set, a binary relation on :math:`X` is simply a subset of the Cartesian product :math:`X \times X`.
 
@@ -79,6 +37,15 @@ Some binary relations have properties that make them especially useful in a vast
 
 + **transitive**: :math:`∀ x,\, ∀ y,\, ∀ z, \, x \mathrel{R} y ∧ y \mathrel{R} z\; ⟶ \; x \mathrel{R} z)`.
 
+-----------------------------------------
+
+.. index:: preorder
+
+.. _preorders:
+
+Preorders
+---------
+
 A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
 
 If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) as a **preordered set**.
@@ -91,11 +58,14 @@ If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :ma
 
 The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *equivalence relations* and *partial orders*.
 
+------------------------------------------------------------------------
+
 .. index:: ! equivalence relation
+
 .. _equivalence-relations:
 
 Equivalence relations
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 An **equivalence relation** is a symmetric preorder. We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
 
@@ -111,14 +81,15 @@ Every partition :math:`P` determines an equivalence relation---namely, the relat
 
 Conversely, if :math:`R` is an equivalence relation on :math:`A`, we denote the equivalence class of :math:`R` containing :math:`a` by :math:`a/R := \{b ∈ A : a \mathrel{R} b\}` and the set :math:`A/θ := \{a/θ : a ∈ A\}` of all :math:`θ` classes is a partition of :math:`A`.
 
+--------------------------------------------------------------
 
 .. index:: ! partial ordering
 .. index:: pair: partially ordered set; poset
 
 .. _order-relations:
 
-Order Relations
-~~~~~~~~~~~~~~~
+Partial Order Relations
+-----------------------
 
 A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
 
@@ -139,26 +110,34 @@ Since a preorder is not antisymmetric in general, we may have distinct elements 
 
 In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
 
-The relation ≅ so defined is an equivalence relation on :math:`X` and if we simply equate all ≅-related pairs, then we obtain a poset, denoted by :math:`X/{≅}`.
-
 .. index:: equivalence class
 
-The elements of :math:`X/{≅}` are called *equivalence classes*. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise equivalent.  Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence class** containing the element :math:`x` by 
+The relation ≅ so defined is an equivalence relation on the set :math:`X`, and as such it partitions :math:`X` into disjoint **equivalence classes**, :math:`X_0, X_1, \dots` where :math:`X = ⋃ X_i` and for each :math:`i` we have :math:`x, y ∈ X_i` iff :math:`x ≡ y`.
+
+Now imagine that we cannot differentiate elements of a single equivalence class. Then we can think of each equivalence class as a single object and every member of a particular class can be taken as a "representative" of that class.
+
+The result is a poset, denoted by :math:`X/{≅}`, whose elements are the equivalence classes of ≡. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise equivalent.  Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence class** containing the element :math:`x` by 
 
 .. math:: x/{≅} \; = \{y ∈ X : x ≅ y\}.
 
 (Some authors prefer the notation :math:`[x]` or :math:`[x]_≅` for the equivalence class containing :math:`x`.)
 
-We denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all (≅-)equivalence classes by :math:`X/{≅}`.
+We denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all ≅-equivalence classes by :math:`X/{≅}`.
 
 Let ⊑ denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x \ ∀ y \ (x/{≅} \ ⊑ y/{≅} \ ⟺ \ x ≤ y)`.
 
 It is easy to see that ⊑ is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
 
-Total and strict partial orderings
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
-A partial order ≤ on a domain :math:`A` is a **total order** (also called a **linear order**) if it also has the following property: for every :math:`a` and :math:`b` in :math:`A`, either :math:`a ≤ b` or :math:`b ≤ a`.
+.. index:: ! total ordering, ! partial order
+
+.. _total-and-strict-orderings:
+
+Total and strict orderings
+-----------------------------------
+
+A partial order ≤ on a domain :math:`A` is a **total order** (also called a **linear order**) if all elements are pairwise comparable; that is, for all :math:`a, b ∈ A`, we have either :math:`a ≤ b` or :math:`b ≤ a`.
 
 .. proof:examples::
 
@@ -182,8 +161,6 @@ Here, :math:`b ≮ a` means, of course, that it is not the case that :math:`a < 
 
 *Proof*. Suppose :math:`a < b` and :math:`b < a`. Then, by transitivity, :math:`a < a`, contradicting irreflexivity.
 
-----
-
 On the integers, there are precise relationships between :math:`<` and :math:`≤`: :math:`x ≤ y` if and only if :math:`x < y` or :math:`x = y`, and :math:`x < y` if and only if :math:`x ≤ y` and :math:`x ≠ y`. This illustrates a more general phenomenon.
 
 .. proof:theorem::
@@ -194,7 +171,7 @@ On the integers, there are precise relationships between :math:`<` and :math:`�
 
     Suppose :math:`<` is a strict partial order on a domain :math:`A`. Define :math:`a ≤ b` to mean :math:`a < b` or :math:`a = b`. Then ≤ is a partial order. Moreover, if :math:`<` is total, so is ≤.
 
-We will prove the second here, and leave the first as an exercise.
+.. We will prove the second here, and leave the first as an exercise.
 
 .. .. Proof of the first theorem:
 
@@ -204,91 +181,36 @@ We will prove the second here, and leave the first as an exercise.
 
 .. To establish the last claim in the theorem, suppose :math:`\leq` is total, and let :math:`a` and :math:`b` be any elements of :math:`A`. We need to show that :math:`a < b`, :math:`a = b`, or :math:`a > b`. If :math:`a = b`, we are done, so we can assume :math:`a \neq b`. Since :math:`\leq` is total, we have :math:`a \leq b` or :math:`a \leq b`. Since :math:`a \neq b`, in the first case we have :math:`a < b`, and in the second case, we have :math:`a > b`.
 
-More on Orderings
------------------
+--------------------------------------
 
-Let :math:`\leq` be a partial order on a domain, :math:`A`, and let :math:`<` be the associated strict order, as defined in the last section. It is possible to show that if we go in the other direction, and define :math:`\leq'` to be the partial order associated to :math:`<`, then :math:`\leq` and :math:`\leq'` are the same, which is to say, for every :math:`a` and :math:`b` in :math:`A`, :math:`a \leq b` if and only if :math:`a \leq' b`. So we can think of every partial order as really being a pair, consisting of a weak partial order and an associated strict one. In other words, we can assume that :math:`x < y` holds if and only if :math:`x \leq y` and :math:`x \neq y`, and we can assume :math:`x \leq y` holds if and only if :math:`x < y` or :math:`x = y`.
+.. _equality:
 
-We will henceforth adopt this convention. Given a partial order :math:`\leq` and the associated strict order :math:`<`, we leave it to you to show that if :math:`x \leq y` and :math:`y < z`, then :math:`x < z`, and, similarly, if :math:`x < y` and :math:`y \leq z`, then :math:`x < z`.
+Equality
+---------
 
-Consider the natural numbers with the less-than-or-equal relation. It has a least element, :math:`0`. We can express the fact that :math:`0` is the least element in at least two ways:
+Let :math:`A` be a set and let ≡ be equivalence relation on :math:`A`.  Recall, this means that, in addition to being a binary relation, ≡ has three special properties.
 
--  :math:`0` is less than or equal to every natural number.
--  There is no natural number that is less than :math:`0`.
+-  ≡ is **reflexive**; :math:`∀ a ∈ A`, :math:`a ≡ a`;
+-  ≡ is **symmetric**; i.e., :math:`∀ a, b ∈ A` if :math:`a ≡ b`, then :math:`b ≡ a`;
+-  ≡ is **transitive**; i.e., :math:`∀ a, b, c ∈ A` if :math:`a ≡ b` and :math:`b ≡ c`, then :math:`a ≡ c`.
 
-In symbolic logic, we could formalize these statements as follows:
+These three properties alone are not strong enough to characterize *equality*.
 
--  :math:`\forall x \; (0 \leq x)`
--  :math:`\forall x \; (x \nless 0)`
+.. proof:examples::
 
-Using the existential quantifier, we could render the second statement more faithfully as follows:
+   The reader should check that the following informal examples are all instances of equivalence relations:
 
--  :math:`\neg \exists x \; (x < 0)`
+   #. The relation on calendar days, given by ":math:`x` and :math:`y` fall on the same day of the week" is an equivalence relation.
+   #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same age" is an equivalence relation.
+   #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same birthday" is an equivalence relation.
+   #. The relation on cities in the United States, given by ":math:`x` and :math:`y` are in the same state" is an equivalence relation.
 
-Notice that this more faithful statement is equivalent to the original, using deMorgan's laws for quantifiers.
+.. proof:examples::
 
-Are the two statements above equivalent? Say an element :math:`y` is *minimum* for a partial order if it is less than or equal to any other element, that is, if it takes the place of 0 in the first statement. Say that an element :math:`y` is *minimal* for a partial order if no element is less than it, that is, if it takes the place of 0 in the second statement. Two facts are immediate.
+    Here are two common mathematical examples:
 
-.. proof:theorem::
-
-   Any minimum element is minimal.
-
-*Proof*. Suppose :math:`x` is minimum for :math:`\leq`. We need to show that :math:`x` is minimal, that is, for every :math:`y`, it is not the case that :math:`y < x`. Suppose :math:`y < x`. Since :math:`x` is minimum, we have :math:`x \leq y`. From :math:`y < x` and :math:`x \leq y`, we have :math:`y < y`, contradicting the irreflexivity of :math:`<`.
-
-.. proof:theorem::
-
-   If a partial order :math:`\leq` has a minimum element, it is unique.
-
-*Proof*. Suppose :math:`x_1` and :math:`x_2` are both minimum. Then :math:`x_1 \leq x_2` and :math:`x_2 \leq x_1`. By antisymmetry, :math:`x_1 = x_2`.
-
-
-Notice that we have interpreted the second theorem as the statement that if :math:`x_1` and :math:`x_2` are both minimum, then :math:`x_1 = x_2`. Indeed, this is exactly what we mean when we say that something is "unique." When a partial order has a minimum element :math:`x`, uniqueness is what justifies calling :math:`x` *the* minimum element. Such an :math:`x` is also called the *least* element or the *smallest* element, and the terms are generally interchangeable.
-
-The converse to the second theorem -- that is, the statement that every minimal element is minimum -- is false. As an example, consider the nonempty subsets of the set :math:`\{ 1, 2 \}` with the subset relation. In other words, consider the collection of sets :math:`\{ 1 \}`, :math:`\{ 2 \}`, and :math:`\{1, 2\}`, where :math:`\{ 1 \} \subseteq \{1, 2\}`, :math:`\{ 2 \} \subseteq \{1, 2\}`, and, of course, every element is a subset of itself. Then you can check that :math:`\{1\}` and :math:`\{2\}` are each minimal, but neither is minimum. (One can also exhibit such a partial order by drawing a diagram, with dots labeled :math:`a`, :math:`b`, :math:`c`, etc., and upwards edges between elements to indicate that one is less than or equal to the other.)
-
-Notice that the statement "a minimal element of a partial order is not necessarily minimum" makes an "existential" assertion: it says that there is a partial order :math:`\leq`, and an element :math:`x` of the domain, such that :math:`x` is minimal but not minimum. For a fixed partial order :math:`\leq`, we can express the assertion that such an :math:`x` exists as follows:
-
-.. math::
-
-   \exists x \; (\forall y \; (y \nless x) \wedge \forall y \; (x \leq y)).
-
-The assertion that there exists a domain :math:`A`, and a partial order :math:`\leq` on that domain :math:`A`, is more dramatic: it is a "higher order" existential assertion. But symbolic logic provides us with the means to make assertions like these as well, as we will see later on.
-
-We can consider other properties of orders. An order is said to be *dense* if between any two distinct elements, there is another element. More precisely, an order is dense if, whenever :math:`x < y`, there is an element :math:`z` satisfying :math:`x < z` and :math:`z < y`. For example, the rational numbers are dense with the usual :math:`\leq` ordering, but not the integers. Saying that an order is dense is another example of an implicit use of existential quantification.
-
---------------------------------
-
-.. _equivalence_relations_and_equality:
-
-Equivalence Relations and Equality
-----------------------------------
-
-In ordinary mathematical language, an *equivalence relation* is defined as follows.
-
-A binary relation :math:`\equiv` on some domain :math:`A` is said to be an **equivalence relation** if it is reflexive, symmetric, and transitive. In other words, :math:`\equiv` is an equivalent relation if it satisfies these three properties:
-
--  *reflexivity*: :math:`a \equiv a`, for every :math:`a` in :math:`A`
--  *symmetry*: if :math:`a \equiv b`, then :math:`b \equiv a`, for every :math:`a` and :math:`b` in :math:`A`
--  *transitivity*: if :math:`a \equiv b` and :math:`b \equiv c`, then :math:`a \equiv c`, for every :math:`a`, :math:`b`, and :math:`c` in :math:`A`
-
-We leave it to you to think about how you could write these statements in first-order logic. (Note the similarity to the rules for a partial order.) We will also leave you with an exercise: by a careful choice of how to instantiate the quantifiers, you can actually prove the three properties above from the following two:
-
--  :math:`\forall a \; (a \equiv a)`
--  :math:`\forall {a, b, c} \; (a \equiv b \wedge c \equiv b \to a \equiv c)`
-
-Try to verify this using natural deduction or Lean.
-
-These three properties alone are not strong enough to characterize equality. You should check that the following informal examples are all instances of equivalence relations:
-
--  the relation on days on the calendar, given by ":math:`x` and :math:`y` fall on the same day of the week"
--  the relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same age"
--  the relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same birthday"
--  the relation on cities in the United States, given by ":math:`x` and :math:`y` are in the same state"
-
-Here are two common mathematical examples:
-
--  the relation on lines in a plane, given by ":math:`x` and :math:`y` are parallel"
--  for any fixed natural number :math:`m \geq 0`, the relation on natural numbers, given by ":math:`x` is congruent to :math:`y` modulo :math:`m`" (see :numref:`Chapter %s <elementary_number_theory>`) 
+    #. The **kernel** of a function is an equivalence relation on :math:`X`; i.e., if :math:`f : X → Y` and :math:`x_1, x_2 ∈ X`, then we say :math:`x_1` and :math:`x_2` are **equivalent modulo the kernel of** :math:`f` and we write :math:`x_1 ∼ x_2` (or :math:`(x_1, x_2) ∈ \ker f`) if and only if :math:`f(x_1) = f(x_2)`.
+    #. The relation on lines in a plane, given by ":math:`x` and :math:`y` are parallel" is an equivalence relation.
 
 Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
 
@@ -298,12 +220,13 @@ Let :math:`A` be a set and let :math:`\equiv` be an equivalence relation on :mat
 
 The motivation is as follows. Equivalence tries to capture a weak notion of equality: if two elements of :math:`A` are equivalent, they are not necessarily the same, but they are similar in some way. Equivalence classes collect similar objects together, essentially glomming them into new objects.  Thus :math:`A / \mathord{\equiv}` is a version of the set :math:`A` where similar elements have been compressed into a single element. For example, given the equivalence relation :math:`\equiv` of congruence modulo 5 on the integers, :math:`\mathbb{Z} / \mathord{\equiv}` is the set :math:`\{ [0], [1], [2], [3], [4] \}`, where, for example, :math:`[0]` is the set of all multiples of 5.
 
+-------------------------------------------------------------
 
 .. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
 Relations of higher arity
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 We can extend the definition of ordered pairs and define an **ordered triple** recursively.
 
@@ -412,12 +335,13 @@ Consequently, :math:`F[\{∅\}] = \{a\}`, in contrast to the fact that :math:`F(
 
 With this axiom we can prove the sufficiency direction of item 2 of the theorem above: take :math:`H` to be a function with :math:`H ⊆ F^{-1}` and :math:`\dom H = \dom F^{-1} = B`. Then :math:`H` does what we want: Given any :math:`y ∈ B`, we have :math:`(y,H(y)) ∈ F^{-1}` hence :math:`(H(y), y) ∈ F`, and so :math:`F(H(y)) = y`.
 
+------------------------------
 
 .. index:: ! join, ! upper bound, ! least upper bound, ! supremum
 .. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
 
 Joins and meets
-~~~~~~~~~~~~~~~
+-----------------
 
 A **join** of :math:`A` (when it exists) is a least element in the set of all upper bounds of :math:`A` in :math:`X`. A join of :math:`A` is sometimes called the **least upper bound** or **supremum** of :math:`A`.
 
@@ -450,12 +374,15 @@ Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :mat
 
 A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
 
+----------------------------
+
+
 .. index:: ! projection, ! idempotent operation
 
 .. _projections:
 
 Projections
-~~~~~~~~~~~
+-----------
 
 An operation :math:`f : A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
 
@@ -499,7 +426,7 @@ The following shorthand is frequently convenient:
 
 .. proof:example::
 
-   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [2]_
+   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [1]_
 
 Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the **kernel**
 of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is defined as follows:
@@ -656,9 +583,6 @@ then 𝖱 is a closure operator.
 .. rubric:: Footnotes
 
 .. [1]
-   **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
-
-.. [2]
    Note that even in the special case when :math:`\Proj_j ℝ = 𝔸_{σ(j)}` for each :math:`j<k` so that :math:`ℝ ≤_{\mathrm{sd}} ∏_{j<k} 𝔸_{σ(j)}`, we refrain from using :math:`\Proj_σ 𝔸` to denote :math:`∏_{j<k} 𝔸_{σ(j)}`  for the simple reason that σ might not be one-to-one.  For example, we could have :math:`𝔸 = 𝔸_0 × 𝔸_1` and :math:`σ = (1,0,1)`, in which case :math:`∏_{j<k} 𝔸_{σ(j)} = 𝔸_1 × 𝔸_0 × 𝔸_1` and this is not the "projection" of 𝔸 onto a subset of its factors.
    
 
@@ -686,4 +610,18 @@ then 𝖱 is a closure operator.
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
+.. Preliminaries
+..   Preorders
+..   Equivalence relations
+..   Partial Order Relations
+..     The poset induced by a preorder
+..   Total and strict orderings
+..   Equality
+..   Relations of higher arity
+..   Functions
+..   Joins and meets
+..   Projections
+..   Directed sets and inductive sets
+..   Completeness and cocompleteness
+..   Closure systems
 

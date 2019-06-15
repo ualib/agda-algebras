@@ -6,7 +6,7 @@
 Types
 =====
 
-This section presents some of the rudiments of *type theory*.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, and more advanced treatments are :cite:`Nederpelt:2014` and :cite:`UFP:2013`.
+This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, and more advanced treatments are :cite:`Nederpelt:2014` and :cite:`UFP:2013`.
 
 .. _curry-howard:
 
@@ -26,9 +26,15 @@ Dependent types
 
 Lean_ is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
 
-Before getting to the example, however, we should first briefly explain what makes dependent type theory *dependent*, and why dependent types are useful. The short explanation is that types can depend on *parameters*. For example, the type ``list α`` depends on the argument ``α``, and this dependence is what distinguishes ``list ℕ`` from list ``bool``. For another example, consider the type ``vec α n``, the type of vectors of length ``n`` whose entries inhabit the type ``α``. The ``vec α n`` type depends on two parameters: the type ``α : Type`` of the elements in the vector and the length ``n : ℕ``.
+Before getting to the example, however, we should first briefly explain what makes dependent types *dependent*, and why they are so useful.
 
-Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should cons have? Such a function is polymorphic: we expect the ``cons`` function for ``ℕ``, ``bool``, or an arbitrary type ``α`` to behave the same way. So it makes sense to take the type to be the first argument to ``cons``, so that for any type, ``α``, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a : α`` and a list ``l : list α``, and returns a new list, so that ``con α a l : list α``.
+Types can depend on *parameter values*.  For example, the type ``list α`` (lists with elements from α) depends on the argument α and the type ``vec α n`` (vectors of length ``n`` with entries from α) depends on ``α : Type`` (the type of the elements in the vectors) and ``n : ℕ`` (the length of the vectors).
+
+The first, ``list α``, is an example of a **polymorphic type** which is usually not considered a kind of dependent type.  One could argue that the type ``list α`` *depends* on the argument α; for example, this dependence distinguishes ``list ℕ`` from ``list bool``.  However, since the dependence is on the argument ``α``, which denotes denotes a type, rather than a particular *value* (or *inhabitant*) of a type, this dependence is called **polymorphism**.
+
+Contrast this with the example in the previous paragraph, where the type ``vec α n`` depends on the *value* of the variable ``n`` (which is an *inhabitant* of the type ℕ). This is the sort of dependence for which we reserve the moniker "dependent type". [1]_  
+
+Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should cons have? Such a function is polymorphic: we expect the ``cons`` function for ℕ, ``bool``, or an arbitrary type α to behave the same way. So it makes sense to take the type to be the first argument to ``cons``, so that for any type, α, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a : α`` and a list ``l : list α``, and returns a new list, so that ``con α a l : list α``.
 
 It is clear that ``cons α`` should have type ``α → list α → list α``. But what type should ``cons`` have?
 

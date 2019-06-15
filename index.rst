@@ -6,12 +6,12 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
-    sets
+    preliminaries
     types
     lean
     algebras
     algebras_in_lean
-    inductively_defined_things
+    inductive_definitions
     inductively_defined_types
     birkhoff_hsp
     postmodern_algebra
