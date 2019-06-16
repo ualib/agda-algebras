@@ -29,13 +29,13 @@ Binary relations arise so often that we simply call them "relations," and only s
 
 Some binary relations have properties that make them especially useful in a vast array of applications. For instance, a binary relation :math:`R` may or may not be
 
-+ **reflexive**: :math:`∀ x, \, x \mathrel{R} x`,
++ **reflexive**: :math:`∀ x ∈ X, \, x \mathrel{R} x`,
 
-+ **symmetric**: :math:`∀ x\, ∀ y, \, (x \mathrel{R} y \; ⟶ \; y \mathrel{R} x)`;
++ **symmetric**: :math:`∀ x, y ∈ X, \, (x \mathrel{R} y \; ⟶ \; y \mathrel{R} x)`;
 
-+ **antisymmetric**: :math:`∀  x,\, ∀ y,\, (x \mathrel{R} y ∧ y\mathrel{R} x \; ⟶ \; x=y)`;
++ **antisymmetric**: :math:`∀  x, y ∈ X, \, (x \mathrel{R} y ∧ y\mathrel{R} x \; ⟶ \; x=y)`;
 
-+ **transitive**: :math:`∀ x,\, ∀ y,\, ∀ z, \, x \mathrel{R} y ∧ y \mathrel{R} z\; ⟶ \; x \mathrel{R} z)`.
++ **transitive**: :math:`∀ x, y, z ∈ X, \, (x \mathrel{R} y ∧ y \mathrel{R} z\; ⟶ \; x \mathrel{R} z)`.
 
 -----------------------------------------
 
@@ -67,19 +67,68 @@ The significance of preorders stems mainly from the fact that the two most impor
 Equivalence relations
 ---------------------
 
-An **equivalence relation** is a symmetric preorder. We denote the set of all equivalence relations on a set :math:`X` by :math:`\mathrm{Eq}(X)`.
+An **equivalence relation** is a symmetric preorder.  That is, an equivalence relation is a binary relation ≈ on a set :math:`A` such that
 
-   #. If :math:`A = ℝ^2` then :math:`R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1^2+ a_2^2 = b_1^2+ b_2^2 \}` is an equivalence relation on :math:`A`. The equivalence classes are circles centered at :math:`(0,0)`.
+* ≈ is **reflexive**: :math:`∀ a ∈ A, \ a ≈ a`;
+* ≈ is **symmetric**: :math:`∀ a, b ∈ A \ (a ≈ b\ →\ b ≈ a)`;
+* ≈ is **transitive**: :math:`∀ a, b, c ∈ A \ (a ≈ b ∧ b ≈ c \ → \ a ≈ c)`.
 
-A **partition** of the set :math:`A` is a collection :math:`P = \{A_i : i ∈ I\}` of non-empty subsets of :math:`A` such that
+.. .. math:: ∀ a ∈ A       \ a ≡ a; & \quad \text{(reflexivity)}\\
+..           ∀ a, b ∈ A    \ (a ≡ b\ →\ b ≡ a) & \quad \text{(symmetry)}\\
+..           ∀ a, b, c ∈ A \ (a ≡ b ∧ b ≡ c \ → \ a ≡ c) & \quad (transitivity).
+
+If ≈ is an equivalence relation on :math:`A`, then the **equivalence class** of ≈ that contains :math:`a` is :math:`\{b ∈ A : a ≈ b\}`, which we denote by :math:`a/{≈}`.  We call this "the ≈-class containing :math:`a`", and :math:`a` is called a **representative** of the class :math:`a/{≈}`.
+
+  *Every equivalence relation on a set determines a partition of that set as the disjoint union of the collection equivalence classes*. 
+
+By a **partition** of :math:`A`, we mean a collection :math:`\{A_i : i ∈ I\}` of non-empty subsets of :math:`A` such that
 
 .. math:: ⋃_{i ∈ I} A_i = A \quad \text{ and } \quad  A_i ∩ A_j = ∅  \quad ∀ i ≠ j.
 
-The :math:`A_i` are called the “blocks” of the partition.
+Each :math:`A_i` is called a **block** of the partition.
 
-Every partition :math:`P` determines an equivalence relation---namely, the relation :math:`R` defined by :math:`a\mathrel{R} b` if and only if :math:`a` and :math:`b` are in the same block of :math:`P`.
+The collection :math:`\{a/{≈} : a ∈ A\}` of all ≈-classes of :math:`A` is denoted by :math:`A/{≈}`.
 
-Conversely, if :math:`R` is an equivalence relation on :math:`A`, we denote the equivalence class of :math:`R` containing :math:`a` by :math:`a/R := \{b ∈ A : a \mathrel{R} b\}` and the set :math:`A/θ := \{a/θ : a ∈ A\}` of all :math:`θ` classes is a partition of :math:`A`.
+Evidently, the blocks of a partition may be viewed as the equivalence classes of an equivalence relation---namely, the relation :math:`R` defined by :math:`a\mathrel{R} b` if and only if :math:`a` and :math:`b` are in the same block of the partition.
+
+  *Every partition of a set determines an equivalence relation on that set*.
+
+.. proof:examples::
+
+   Here are two examples.
+
+   If :math:`A = ℝ^2`, then
+   
+   .. math:: R = \{(a, b) ∈ ℝ^2 × ℝ^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1^2+ a_2^2 = b_1^2+ b_2^2 \}
+   
+   is an equivalence relation on :math:`A`. Each equivalence class (or block) of :math:`R` is a circle centered at :math:`(0,0)` and :math:`ℝ^2` is the disjoint union of all these circles. 
+   
+   As another example, let
+   
+   .. math:: R' = \{(a, b) ∈ ℝ^2 × ℝ^2 : a = (a_1, a_2), \; b = (b_1, b_2), \; a_1- a_2 = b_1- b_2\}.
+   
+   Then :math:`R'` forms an equivalence relation on :math:`ℝ^2` where each equivalence class (or block) is a 45 degree line.
+   
+Notice that the examples :math:`R` and :math:`R'` are distinct instances of equivalence relations on the same set :math:`A = ℝ^2`.  We denote the set of all equivalence relations on a :math:`A` by :math:`\operatorname{Eq}(A)`.
+
+There are always at least two equivalence relations in on a given set :math:`A`---namely, :math:`0_A := \{(x, y) : x = y ∈ A\}` (the smallest), and :math:`1_A := \{(x, y) : x ∈ A, y ∈ A\} = A × A` (the largest).
+   
+.. proof:examples::
+
+   It is instructive, especially at the start of one's studies, to consider many examples.  Here are a few more examples that the reader is invited to confirm are indeed instances of equivalence relations.
+
+   #. The relation on calendar days, given by ":math:`x` and :math:`y` fall on the same day of the week" is an equivalence relation.
+   #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same birthday" is an equivalence relation.
+   #. The relation on cities in the United States, given by ":math:`x` and :math:`y` are in the same state" is an equivalence relation.
+
+.. proof:examples::
+
+   Two common mathematical examples are these.
+
+   #. The **kernel** of a function is an equivalence relation on :math:`X`; i.e., if :math:`f : X → Y` and :math:`x_1, x_2 ∈ X`, then we say :math:`x_1` and :math:`x_2` are **equivalent modulo the kernel of** :math:`f` and we write :math:`x_1 ∼ x_2` (or :math:`(x_1, x_2) ∈ \ker f`) if and only if :math:`f(x_1) = f(x_2)`.
+   #. The relation on lines in a plane, given by ":math:`x` and :math:`y` are parallel" is an equivalence relation.
+
+   Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
 
 --------------------------------------------------------------
 
@@ -196,23 +245,6 @@ Let :math:`A` be a set and let ≡ be equivalence relation on :math:`A`.  Recall
 
 These three properties alone are not strong enough to characterize *equality*.
 
-.. proof:examples::
-
-   The reader should check that the following informal examples are all instances of equivalence relations:
-
-   #. The relation on calendar days, given by ":math:`x` and :math:`y` fall on the same day of the week" is an equivalence relation.
-   #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same age" is an equivalence relation.
-   #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same birthday" is an equivalence relation.
-   #. The relation on cities in the United States, given by ":math:`x` and :math:`y` are in the same state" is an equivalence relation.
-
-.. proof:examples::
-
-    Here are two common mathematical examples:
-
-    #. The **kernel** of a function is an equivalence relation on :math:`X`; i.e., if :math:`f : X → Y` and :math:`x_1, x_2 ∈ X`, then we say :math:`x_1` and :math:`x_2` are **equivalent modulo the kernel of** :math:`f` and we write :math:`x_1 ∼ x_2` (or :math:`(x_1, x_2) ∈ \ker f`) if and only if :math:`f(x_1) = f(x_2)`.
-    #. The relation on lines in a plane, given by ":math:`x` and :math:`y` are parallel" is an equivalence relation.
-
-Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
 
 Consider the equivalence relation on citizens of the United States, given by ":math:`x` and :math:`y` have the same age." There are some properties that respect that equivalence. For example, suppose I tell you that John and Susan have the same age, and I also tell you that John is old enough to vote. Then you can rightly infer that Susan is old enough to vote. On the other hand, if I tell you nothing more than the facts that John and Susan have the same age and John lives in South Dakota, you cannot infer that Susan lives in South Dakota. This little example illustrates what is special about the *equality* relation: if two things are equal, then they have exactly the same properties.
 
