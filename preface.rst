@@ -32,7 +32,7 @@ We conclude this section with a note that is important for anyone interested in 
 Prerequisites
 -------------
 
-While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`MR883644`) and, to a lesser extent, category theory (as presented by `categorytheory.gitlab.io`_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Section %s <postmodern-algebra>`.
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`) and, to a lesser extent, category theory (as presented by `categorytheory.gitlab.io`_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Section %s <postmodern-algebra>`.
 
 Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful, but one could probably get by with what is included in the appendices and the glossary, consulting one or more of the following to fill in gaps as needed:
 

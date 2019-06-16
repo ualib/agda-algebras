@@ -524,7 +524,9 @@ That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d 
 
 A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
-.. proof:example:: See Remark 1.2.10 of :cite:`MR1275826`
+.. proof:example:: 
+
+   These examples are borrowed from :cite:`Crole:1993` (Remark 1.2.10).
 
    Let :math:`X = \{0, 1, 2, \dots, n, n+1, \dots, ∞, ⊤\}` be the chain with order relation satisfying :math:`0≤ 1≤ 2≤ \cdots ≤ n ≤ n+1 ≤ \cdots ≤ ∞ ≤ ⊤`.
 

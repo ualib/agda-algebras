@@ -6,7 +6,9 @@
 Types
 =====
 
-This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_, a more comprehensive treatment is :cite:`Mitchell:1996`, and more advanced treatments are :cite:`Nederpelt:2014` and :cite:`UFP:2013`.
+This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_.
+
+A more comprehensive treatment is :cite:`Mitchell:1996`, and more advanced treatments are :cite:`Nederpelt:2014` and :cite:`UFP:2013`.
 
 .. _curry-howard:
 

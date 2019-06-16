@@ -195,9 +195,7 @@ Recall from :numref:`Section %s <algebraic-structures>`, an **algebraic structur
   + a set :math:`F^{𝔸} = \{f^{𝔸} ∣ f ∈ F, f^{𝔸} : (ρ f → A) → A\}` of **operations** defined on :math:`A`, and
   + a collection of **identities** satisfied by the elements and operations of 𝔸.
 
-Usually, the algebraic structures we study are **single-sorted**, meaning each structure has only one universe and that universe is of only a single type. Furthermore, in classical algebra, the universes are typically sets.
-
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :math:`\mathbf{Set}`, such as **multisorted** algebras and higher-type algebras, etc. (:cite:`MR2757312`, :cite:`MR3003214`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`MR1173632`). These are natural generalizations that will eventually be incorporated into ``lean-ualib``, but for now we content ourselves with developing and documenting an *accessible* implementation of the classical core of (single-sorted, set-based) universal algebra.
+Usually, the algebraic structures we study are **single-sorted**, meaning each structure has only one universe and that universe is of only a single type. Furthermore, in classical algebra, the universes are typically sets. We take the classical theory as our starting point, and although generalizations will eventually be incorporated into ``lean-ualib``, for now we content ourselves with developing and documenting an *accessible* implementation of the classical core of (single-sorted, set-based) universal algebra.
 
 All functions are unary
 ~~~~~~~~~~~~~~~~~~~~~~~

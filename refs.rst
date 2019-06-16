@@ -59,7 +59,7 @@ References
         MRREVIEWER = {Konrad P. Pi{\'o}ro}
       }
 
-      @BOOK {MR1275826,
+      @BOOK {Crole:1993,
         AUTHOR = {Crole, Roy L.},
         TITLE = {Categories for types},
         SERIES = {Cambridge Mathematical Textbooks},
