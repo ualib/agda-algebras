@@ -74,6 +74,9 @@ Nomenclature
     antichain
       A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
 
+    antisymmetric
+      A binary relation :math:`R` on a set :math:`X` is called **antisymmetric** provided :math:`∀  x, y ∈ X \ (x \mathrel{R} y ∧ y\mathrel{R} x \ → \ x=y)`.
+
     arity
       Given a :term:`signature` :math:`σ = (F, ρ)`, each operation symbol :math:`f ∈ F` is assigned a value :math:`ρ f`, called the **arity** of :math:`f`. (Intuitively, the arity can be thought of as the "number of arguments" that :math:`f` takes as "input".)
 
@@ -151,13 +154,13 @@ Nomenclature
       A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`Section %s <dependent-types>`.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_ manual.
 
     directed set
-      A subset :math:`D` of a preorder is called **directed** if every finite subset of :math:`D` has an upper bound in :math:`D`. That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
+      A subset :math:`D` of a :term:`preorder` is called **directed** if every finite subset of :math:`D` has an upper bound in :math:`D`. That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
 
     directed-cocomplete preorder
-      a preorder for which the joins of all :term:`directed <directed set>` subsets exist. 
+      a :term:`preorder` for which the joins of all :term:`directed <directed set>` subsets exist. 
       
     directed-cocomplete poset
-      an antisymmetric directed-cocomplete preorder.
+      an :term:`antisymmetric` :term:`directed-cocomplete preorder`.
 
     directed graph
       A **directed graph** is a :term:`relational structure` consisting of a vertex set :math:`V` (whose elements are called vertices) and an edge set :math:`E\subseteq V^2` (whose elements are called edges).
@@ -175,7 +178,7 @@ Nomenclature
       A morphism :math:`f: A → B` is called an **epimorphism** if for every object :math:`Y` and pair :math:`y_1, y_2: B → Y` of morphisms, :math:`y_1 ∘ f = y_2 ∘ f` implies :math:`y_1 = y_2`. When :math:`f: A → B` is an **epimorphism** we often say ":math:`f` is epi" and write :math:`f: ↠ B`.
 
     equivalence relation
-      An **equivalence relation** is a symmetric :term:`preorder`. We denote the set of all equivalence relations on the set :math:`X` by :math:`\mathrm{Eq}(X)`.
+      An **equivalence relation** is a :term:`symmetric` :term:`preorder`. The collection of all equivalence relations on :math:`X` is denoted by :math:`\mathrm{Eq}(X)`.
 
     equivalent categories
       Two categories :math:`\mathcal C` and :math:`\mathcal D` are called **equivalent categories** if there are functors :math:`F : \mathcal C →  \mathcal D` and :math:`G : \mathcal D → \mathcal C` together with natural isomorphisms :math:`ε : FG ≅ \mathrm{id}_{\mathcal D}`, and :math:`η : \mathrm{id}_{\mathcal C} ≅ GF`. We say that :math:`F` is an equivalence with an inverse equivalence :math:`G` and denote the equivalence by :math:`F : \mathcal C ≃ \mathcal D : G`.
@@ -259,7 +262,7 @@ Nomenclature
       A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
 
     inductive set
-      A subset :math:`I` of a preorder :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
+      A subset :math:`I` of a :term:`preorder` :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
     initial object
       An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
@@ -319,10 +322,10 @@ Nomenclature
       Let :math:`⟨ X, ≤ ⟩` be a preordered set. An ω-**chain** is an enumerable :term:`chain`.  That is, a chain the elements of which can be indexed by the natural numbers.
 
     ω-chain cocomplete
-      A preorder in which joins of all ω-chains exist is called ω-**chain cocomplete**.
+      A :term:`preorder` in which joins of all ω-chains exist is called ω-**chain cocomplete**.
 
     ω-chain cocomplete poset
-      an antisymmetric ω-chain cocomplete preorder.
+      an :term:`antisymmetric` :term:`ω-chain cocomplete` :term:`preorder`.
 
     opposite category
       Given a category :math:`\mathcal C` the **opposite** (or **dual**) **category** :math:`\mathcal C^{\mathrm{op}}` has the same objects as :math:`\mathcal C` and whenever :math:`f: A → B` is a morphism in :math:`\mathcal C` we define :math:`f : B → A` to be a morphism in :math:`\mathcal C^{\mathrm{op}}`.
@@ -334,7 +337,7 @@ Nomenclature
       A **partial function** from :math:`A` to :math:`B` is a total function on some (potentially proper) subset :math:`\operatorname{dom}_f` of :math:`A`.
 
     partial ordering
-      A **partial ordering** (or "partial order") is an anti-symmetric :term:`preorder`.
+      A **partial ordering** (or "partial order") is an :term:`antisymmetric` :term:`preorder`.
       
     partially ordered set
       A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
@@ -346,13 +349,13 @@ Nomenclature
       a function that operates in the "same way" independently of the object parameter.
 
     poset
-      A **poset** :math:`⟨X, ⊑⟩` consists of a set :math:`X` and an antisymmetric preorder :math:`⊑` on :math:`X`.  That is, for all :math:`x, y, z ∈ X` we have :math:`x ⊑ x`;:math:`x ⊑ y` and :math:`y ⊑ x` imply :math:`x = y`; and :math:`x ⊑ y` and :math:`y ⊑ z` imply :math:`x ⊑ z`.
+      A **poset** :math:`⟨X, ⊑⟩` consists of a set :math:`X` and an :term:`antisymmetric` :term:`preorder` :math:`⊑` on :math:`X`.
 
     predicative
       The opposite of :term:`impredicative`, *predicative* refers to building stratified (or ramified) theories where quantification over lower levels results in variables of some new type, distinguished from the lower types that the variable ranges over.
 
     preorder
-      A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
+      A **preorder** on a set :math:`X` is a :term:`reflexive` and :term:`transitive` subset of :math:`X × X`.
 
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
@@ -362,6 +365,9 @@ Nomenclature
 
     proof tactic
       an automated procedure for constructing and manipulating proof terms.
+
+    reflexive
+      A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
 
     relation
       Given sets :math:`A` and :math:`B`, a **relation** from :math:`A` to :math:`B` is a subset of :math:`A × B`.
@@ -396,6 +402,9 @@ Nomenclature
     subuniverse
       Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If a subset :math:`B ⊆ A` is closed under :math:`F^𝔸`, then we call :math:`B` a **subuniverse** of :math:`𝔸`.
 
+    symmetric
+      A binary relation :math:`R` on a set :math:`X` is called **symmetric** provided :math:`∀ x, y ∈ X \ (x \mathrel{R} y \ → \ y \mathrel{R} x)`;
+
     target vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2)\in E`, we refer to :math:`v_2` as the **target vertex** of :math:`e`.
 
@@ -407,6 +416,9 @@ Nomenclature
 
     total order
       A **total order** relation :math:`R` on a set :math:`X` is a partial order on :math:`X` satisfying :math:`∀ x, y ∈ X \ (x ≤ y \ ⋁ \ y ≤ x)`.
+
+    transitive
+      A binary relation :math:`R` on a set :math:`X` is called **transitive** provided :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
     type theory
       Intuitionistic **type theory**, which extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.

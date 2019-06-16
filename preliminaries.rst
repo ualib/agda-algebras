@@ -1,8 +1,5 @@
 .. include:: _static/math_macros.rst
 
-.. index:: ! relation, ! binary relation, ! preorder, ! partial order, ! equivalence relation
-.. index:: ! domain, ! range
-
 .. _preliminaries:
 
 =============
@@ -10,6 +7,9 @@ Preliminaries
 =============
 
 .. todo:: add introductory paragraph
+
+.. index:: ! relation, ! binary relation, 
+.. index:: ! domain, ! range
 
 Binary Relations
 -----------------
@@ -29,17 +29,17 @@ Binary relations arise so often that we simply call them "relations," and only s
 
 Some binary relations have properties that make them especially useful in a vast array of applications. For instance, a binary relation :math:`R` may or may not be
 
-+ **reflexive**: :math:`∀ x ∈ X, \, x \mathrel{R} x`,
++ **reflexive**: :math:`∀ x ∈ X, \ x \mathrel{R} x`,
 
-+ **symmetric**: :math:`∀ x, y ∈ X, \, (x \mathrel{R} y \; ⟶ \; y \mathrel{R} x)`;
++ **symmetric**: :math:`∀ x, y ∈ X \ (x \mathrel{R} y \ → \ y \mathrel{R} x)`;
 
-+ **antisymmetric**: :math:`∀  x, y ∈ X, \, (x \mathrel{R} y ∧ y\mathrel{R} x \; ⟶ \; x=y)`;
++ **antisymmetric**: :math:`∀  x, y ∈ X \ (x \mathrel{R} y ∧ y\mathrel{R} x \ → \ x=y)`;
 
-+ **transitive**: :math:`∀ x, y, z ∈ X, \, (x \mathrel{R} y ∧ y \mathrel{R} z\; ⟶ \; x \mathrel{R} z)`.
++ **transitive**: :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
 -----------------------------------------
 
-.. index:: preorder
+.. index:: ! preorder
 
 .. _preorders:
 
@@ -60,7 +60,7 @@ The significance of preorders stems mainly from the fact that the two most impor
 
 ------------------------------------------------------------------------
 
-.. index:: ! equivalence relation
+.. index:: ! equivalence relation, ! equivalence class, ! partition, ! block
 
 .. _equivalence-relations:
 
@@ -121,6 +121,8 @@ There are always at least two equivalence relations in on a given set :math:`A`-
    #. The relation on people currently alive on the planet, given by ":math:`x` and :math:`y` have the same birthday" is an equivalence relation.
    #. The relation on cities in the United States, given by ":math:`x` and :math:`y` are in the same state" is an equivalence relation.
 
+.. index:: ! kernel
+
 .. proof:examples::
 
    Two common mathematical examples are these.
@@ -157,11 +159,11 @@ With any preorder :math:`X` we can associate a poset in a natural way as we now 
 
 Since a preorder is not antisymmetric in general, we may have distinct elements :math:`x, y ∈ X` with :math:`x ≤ y` and :math:`y ≤ x`.
 
-In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
+In this case we define the binary relation ≡ on :math:`X` by: :math:`x ≡ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
 
 .. index:: equivalence class
 
-The relation ≅ so defined is an equivalence relation on the set :math:`X`, and as such it partitions :math:`X` into disjoint **equivalence classes**, :math:`X_0, X_1, \dots` where :math:`X = ⋃ X_i` and for each :math:`i` we have :math:`x, y ∈ X_i` iff :math:`x ≡ y`.
+The relation ≡ so defined is an equivalence relation on the set :math:`X`, and as such it partitions :math:`X` into disjoint equivalence classes, :math:`X_0, X_1, \dots` where :math:`X = ⋃ X_i` and for each :math:`i` we have :math:`x, y ∈ X_i` iff :math:`x ≡ y`.
 
 Now imagine that we cannot differentiate elements of a single equivalence class. Then we can think of each equivalence class as a single object and every member of a particular class can be taken as a "representative" of that class.
 

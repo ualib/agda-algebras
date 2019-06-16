@@ -75,7 +75,7 @@ References
         URL = {https://arxiv.org/abs/1712.06469}
       }
 
-      @ARTICLE {MR1173632,
+      @ARTICLE {Meinke:1992,
         AUTHOR = {Meinke, Karl},
         TITLE = {Universal algebra in higher types},
         YEAR = {1992},
@@ -89,6 +89,15 @@ References
         MRNUMBER = {1173632},
         MRREVIEWER = {S. Comer},
         DOI = {10.1016/0304-3975(92)90310-C}
+      }
+
+      @BOOK {Mitchell:1996,
+       AUTHOR = {Mitchell, John C.},
+       TITLE = {Foundations for Programming Languages},
+       YEAR = {1996},
+       ISBN = {0-262-13321-0},
+       PUBLISHER = {MIT Press},
+       ADDRESS = {Cambridge, MA, USA},
       }
 
       @BOOK {Munkres:2000,
