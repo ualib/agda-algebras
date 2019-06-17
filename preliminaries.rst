@@ -247,12 +247,102 @@ Let :math:`A` be a set and let ≡ be equivalence relation on :math:`A`.  Recall
 
 These three properties alone are not strong enough to characterize *equality*.
 
+.. Consider the equivalence relation on citizens of the United States, given by ":math:`x` and :math:`y` have the same age." There are some properties that respect that equivalence. For example, suppose I tell you that John and Susan have the same age, and I also tell you that John is old enough to vote. Then you can rightly infer that Susan is old enough to vote. On the other hand, if I tell you nothing more than the facts that John and Susan have the same age and John lives in South Dakota, you cannot infer that Susan lives in South Dakota. This little example illustrates what is special about the *equality* relation: if two things are equal, then they have exactly the same properties.
 
-Consider the equivalence relation on citizens of the United States, given by ":math:`x` and :math:`y` have the same age." There are some properties that respect that equivalence. For example, suppose I tell you that John and Susan have the same age, and I also tell you that John is old enough to vote. Then you can rightly infer that Susan is old enough to vote. On the other hand, if I tell you nothing more than the facts that John and Susan have the same age and John lives in South Dakota, you cannot infer that Susan lives in South Dakota. This little example illustrates what is special about the *equality* relation: if two things are equal, then they have exactly the same properties.
+In mathematics, there are many notions of equality. These are usually implicit and almost never mentioned.  Instead, one assumes that the intended notion of equality is obvious from context.
 
-Let :math:`A` be a set and let :math:`\equiv` be an equivalence relation on :math:`A`. There is an important mathematical construction known as forming the *quotient* of :math:`A` under the equivalence relation. For every element :math:`a` in :math:`A`, let :math:`[a]` be the set of elements :math:`\{ c \mid c \equiv a \}`, that is, the set of elements of :math:`A` that are equivalent to :math:`a`. We call :math:`[a]` the equivalence class of :math:`A`. The set :math:`A / \mathord{\equiv}`, the *quotient of* :math:`A` *by* :math:`\equiv`, is defined to be the set :math:`\{ [a] : a \in A \}`, that is, the set of all the equivalence classes of elements in :math:`A`. The exercises below as you to show that if :math:`[a]` and :math:`[b]` are elements of such a quotient, then :math:`[a] = [b]` if and only if :math:`a \equiv b`.
+In computer science, however, such informality is unacceptable since computers cannot infer the appropriate equality in every situation.  For this reason, explicit mention of particular notions of equality is more common in computer science than in mathematics. [1]_
 
-The motivation is as follows. Equivalence tries to capture a weak notion of equality: if two elements of :math:`A` are equivalent, they are not necessarily the same, but they are similar in some way. Equivalence classes collect similar objects together, essentially glomming them into new objects.  Thus :math:`A / \mathord{\equiv}` is a version of the set :math:`A` where similar elements have been compressed into a single element. For example, given the equivalence relation :math:`\equiv` of congruence modulo 5 on the integers, :math:`\mathbb{Z} / \mathord{\equiv}` is the set :math:`\{ [0], [1], [2], [3], [4] \}`, where, for example, :math:`[0]` is the set of all multiples of 5.
+To see what we're going on about, consider two basic, distinct notions of equality---**syntactic equality**, where two expressions are "equal" if and only if exactly the same symbols appear in exactly the same order in each expression, and **semantic equality**, which takes two expressions to be equal if they have the same "meaning", or if they refer to or denote the same object.  
+
+For example, :math:`2 + 5` is semantically, but not syntactically, equal to :math:`7`.
+
+Axiomatically, we assume that every relation used to represent some notion of an equality must be an *equivalence relation*.  That is, it must be a reflexive, symmetric, transitive binary relation.  Of course, there are a number of distinct equivalence relations on a nonempty set, so these properties do not fully characterize equality.
+
+If two expressions denote the same thing, then we should be able to substitute one for any other in any expression. It is convenient to adopt the following convention: if :math:`r` is any term, we may write :math:`r(x)` to indicate that the variable :math:`x` may occur in :math:`r`. Then, if :math:`s` is another term, we can thereafter write :math:`r(s)` to denote the result of replacing :math:`s` for :math:`x` in :math:`r`. The substitution rule for terms thus reads as follows: if :math:`s = t`, then :math:`r(s) = r(t)`.
+
+We already adopted a similar convention for formulas: if we introduce a formula as :math:`A(x)`, then :math:`A(t)` denotes the result of substituting :math:`t` for :math:`x` in :math:`A`. With this in mind, we can write the rules for equality as follows:
+
+.. raw:: html
+
+   <img src="_static/first_order_logic.10.png">
+
+.. raw:: latex
+
+   \begin{center}
+   \AXM{}
+   \UIM{t = t}
+   \DP
+   \quad
+   \AXM{s = t}
+   \UIM{t = s}
+   \DP
+   \quad
+   \AXM{r = s}
+   \AXM{s = t}
+   \BIM{r = t}
+   \DP
+   \\
+   \ \\
+   \AXM{s = t}
+   \UIM{r(s) = r(t)}
+   \DP
+   \quad
+   \AXM{s = t}
+   \AXM{P(s)}
+   \BIM{P(t)}
+   \DP
+   \end{center}
+
+Here, the first substitution rule governs terms and the second substitution rule governs formulas. In the next chapter, you will learn how to use them.
+
+Using equality, we can define even more quantifiers.
+
+-  We can express "there are at least two elements :math:`x` such that :math:`A(x)` holds" as :math:`∃ x \ ∃ y \ (x ≠ y ∧ A(x) ∧ A(y))`.
+
+-  We can express "there are at most two elements :math:`x` such that :math:`A(x)` holds" as :math:`∀ x \ ∀ y \ ∀ z \ (A(x) ∧ A(y) ∧ A(z) → x = y ∨ y = z ∨ x = z)`. This states that if we have three elements :math:`a` for which :math:`A(a)` holds, then two of them must be equal.
+
+-  We can express "there are exactly two elements :math:`x` such that :math:`A(x)` holds" as the conjunction of the above two statements.
+
+As an exercise, write out in first order logic the statements that there are at least, at most, and exactly three elements :math:`x` such that :math:`A(x)` holds.
+
+In logic, the expression :math:`∃! x \ A(x)` is used to express the fact that there is a *unique* :math:`x` satisfying :math:`A(x)`, which is to say, there is exactly one such :math:`x`. As above, this can be expressed as follows:
+
+.. math::
+
+   ∃ x \ A(x) ∧ ∀ y \ ∀ y' \ (A(y) ∧ A(y') → y = y').
+
+The first conjunct says that there is at least one object satisfying :math:`A`, and the second conjunct says that there is at most one. The same thing can be expressed more concisely as follows:
+
+.. math::
+
+   ∃ x \ (A(x) ∧ ∀ y \ (A(y) → y = x)).
+
+You should think about why this second expression works. In the next chapter we will see that, using the rules of natural deduction, we can prove that these two expressions are equivalent.
+
+
+
+--------------------------------------
+
+.. index:: equivalence class, ! quotient, 
+.. _quotient:
+
+Quotient
+---------
+
+Given an equivalence relation on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the equivalence relation.
+
+As above, for each :math:`a ∈ A`, let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of those elements of :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+
+The set :math:`A/{≡}`, of all such equivalence classes is called the **quotient of** :math:`A` **modulo** ≡.  It is defined to be the set :math:`\{ a/{≡} ∣ a ∈ A \}`.
+
+Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but they differ only in ways that do not interest us.  
+
+Here is a "real-world" example of a situation in which we would "mod out" certain irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person from two photographs---the orientation of the face at the moment it is captured in the photos is unimportant.  Indeed, it would be silly to conclude that the individuals in the two photos must be different simply because the face is shown at different angles.
+
+Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of a single individual).  Thus :math:`A/{≡}` is a version of the set :math:`A` where similar elements have been compressed into a single element.
+
+A simple example from mathematics is the equivalence relation on ℤ of **congruence modulo 5**, which partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
 -------------------------------------------------------------
 
@@ -307,25 +397,25 @@ The following operations are most commonly applied to functions, are sometimes a
 
 #. The **inverse** of :math:`F` is denoted and defined by
 
-    .. math:: F^{-1} = \{(u, v) ∣ v \mathrel{F} u\} = \{(u, v) ∣ (v,u) ∈ F \}.
+    .. math:: F^{-1} = \{(u, v) ∣ v \ F \ u \} = \{(u, v) ∣ (v,u) ∈ F \}.
 
 #. The **composition** of :math:`F` and :math:`G` is denoted and defined by
 
     .. math::
 
-       F ∘ G = \{(u, v) ∣ ∃ t \ (u \mathrel{G} t \ ⋀ \ t \mathrel{F} v)\} = \{(u, v) ∣ ∃ t \ ((u,t) ∈ G\ ⋀ \ (t,v) ∈ F)\}.
+       F ∘ G = \{(u, v) ∣ ∃ t \ (u \ G \ t \ ∧ \ t \ F \ v)\} = \{(u, v) ∣ ∃ t \ ((u,t) ∈ G \ ∧ \ (t,v) ∈ F)\}.
 
 #. The **restriction** of :math:`F` to :math:`A` is denoted and defined by
 
     .. math::
 
-       F ↾ A = \{(u, v) ∣ u \mathrel{F} v \ ⋀ \ u ∈ A\} = \{(u, v) ∣ (u,v)∈ F\ ⋀ \ u \in A\}.
+       F ↾ A = \{(u, v) ∣ u \ F \ v \ ∧ \ u ∈ A\} = \{(u, v) ∣ (u,v) ∈ F \ ∧ \ u ∈ A\}.
 
-     We often denote this restriction by :math:`F|_A`.
+    We often denote this restriction by :math:`F|_A`.
 
 #. The **image** of :math:`A` under :math:`F` is denoted and defined by
 
-    .. math:: F[A] = \ran (F ↾ A) = \{v \mid (\exists u \in A)\; (u,v) \in F\}.
+    .. math:: F[A] = \ran (F ↾ A) = \{v ∣ (∃ u ∈ A)\  (u,v) ∈ F\}.
 
     The image :math:`F[A]` can be characterized more simply when :math:`F` is a function and :math:`A ⊆ \dom F`; in this case :math:`F[A] = \{F(u) ∣ u ∈ A\}`.
 
@@ -335,11 +425,11 @@ The following operations are most commonly applied to functions, are sometimes a
 
     (A more detailed justification of the definition of :math:`F^{-1}` would go as follows: By a subset axiom there is a set :math:`B` such that for every :math:`x`,
 
-    .. math:: x ∈ B \quad ⟺ \quad  x ∈ \ran F × \dom F \ ⋀ \ ∃ u \ ∃ v \ (x = (u, v) \ ⋀ \ (v, u) ∈ F).
+    .. math:: x ∈ B \quad ⟺ \quad  x ∈ \ran F × \dom F \ ∧ \ ∃ u \ ∃ v \ (x = (u, v) \ ∧ \ (v, u) ∈ F).
 
     It then follows that
 
-    .. math:: x ∈ B \quad ⟺ \quad ∃ u \ ∃ v \ (x = (u, v) \ ⋀ \ (v, u) ∈ F).
+    .. math:: x ∈ B \quad ⟺ \quad ∃ u \ ∃ v \ (x = (u, v) \ ∧ \ (v, u) ∈ F).
 
     We denote this unique set :math:`B` by :math:`F^{-1}`.)
 
@@ -357,9 +447,9 @@ Consequently, :math:`F[\{∅\}] = \{a\}`, in contrast to the fact that :math:`F(
 
    Assume that :math:`F: A → B`, and that :math:`A` is nonempty.
 
-   #. There exists a function :math:`G: B → A` (a “left inverse”) such that :math:`G ∘ F` is the identity function :math:`\id_{A}` on :math:`A` iff :math:`F` is one-to-one.
+   #. There exists a function :math:`G: B → A` (a “left inverse”) such that :math:`G ∘ F` is the identity function :math:`\id_A` on :math:`A` iff :math:`F` is one-to-one.
 
-   #. There exists a function :math:`H: B → A` (a “right inverse”) such that :math:`F ∘ H` is the identity function :math:`\id_{B}` on :math:`B` iff :math:`F` maps :math:`A` *onto* :math:`B`.
+   #. There exists a function :math:`H: B → A` (a “right inverse”) such that :math:`F ∘ H` is the identity function :math:`\id_B` on :math:`B` iff :math:`F` maps :math:`A` *onto* :math:`B`.
 
 .. _axiom-of-choice-1:
 
@@ -460,7 +550,7 @@ The following shorthand is frequently convenient:
 
 .. proof:example::
 
-   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [1]_
+   To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [2]_
 
 Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the **kernel**
 of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is defined as follows:
@@ -619,6 +709,9 @@ then 𝖱 is a closure operator.
 .. rubric:: Footnotes
 
 .. [1]
+   The relationship that a computer scientist has with equality, borne of necessity, is deeper than that of a mathematician, just as the relationship of an Eskimo to snow is deeper than that humans living in mild climates. (See `There really are 50 Eskimo words for snow <https://www.washingtonpost.com/national/health-science/there-really-are-50-eskimo-words-for-snow/2013/01/14/e0e3f4e0-59a0-11e2-beee-6e38f5215402_story.html>`_.)
+
+.. [2]
    Note that even in the special case when :math:`\Proj_j ℝ = 𝔸_{σ(j)}` for each :math:`j<k` so that :math:`ℝ ≤_{\mathrm{sd}} ∏_{j<k} 𝔸_{σ(j)}`, we refrain from using :math:`\Proj_σ 𝔸` to denote :math:`∏_{j<k} 𝔸_{σ(j)}`  for the simple reason that σ might not be one-to-one.  For example, we could have :math:`𝔸 = 𝔸_0 × 𝔸_1` and :math:`σ = (1,0,1)`, in which case :math:`∏_{j<k} 𝔸_{σ(j)} = 𝔸_1 × 𝔸_0 × 𝔸_1` and this is not the "projection" of 𝔸 onto a subset of its factors.
    
 
