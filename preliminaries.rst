@@ -37,14 +37,13 @@ Some binary relations have properties that make them especially useful in a vast
 
 + **transitive**: :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
------------------------------------------
 
 .. index:: ! preorder
 
-.. _preorders:
+.. _preorder:
 
-Preorders
----------
+Preorder
+~~~~~~~~~
 
 A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
 
@@ -58,14 +57,13 @@ If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :ma
 
 The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *equivalence relations* and *partial orders*.
 
-------------------------------------------------------------------------
 
 .. index:: ! equivalence relation, ! equivalence class, ! partition, ! block
 
-.. _equivalence-relations:
+.. _equivalence-relation:
 
-Equivalence relations
----------------------
+Equivalence relation
+~~~~~~~~~~~~~~~~~~~~
 
 An **equivalence relation** is a symmetric preorder.  That is, an equivalence relation is a binary relation ≈ on a set :math:`A` such that
 
@@ -132,15 +130,13 @@ There are always at least two equivalence relations in on a given set :math:`A`-
 
    Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
 
---------------------------------------------------------------
-
 .. index:: ! partial ordering
 .. index:: pair: partially ordered set; poset
 
-.. _order-relations:
+.. _partial-order-relation:
 
-Partial Order Relations
------------------------
+Partial order relation
+~~~~~~~~~~~~~~~~~~~~~~
 
 A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
 
@@ -179,14 +175,13 @@ Let ⊑ denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x 
 
 It is easy to see that ⊑ is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
 
---------------------------------------
 
 .. index:: ! total ordering, ! partial order
 
-.. _total-and-strict-orderings:
+.. _total-and-strict-ordering:
 
-Total and strict orderings
------------------------------------
+Total and strict ordering
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A partial order ≤ on a domain :math:`A` is a **total order** (also called a **linear order**) if all elements are pairwise comparable; that is, for all :math:`a, b ∈ A`, we have either :math:`a ≤ b` or :math:`b ≤ a`.
 
@@ -232,12 +227,10 @@ On the integers, there are precise relationships between :math:`<` and :math:`�
 
 .. To establish the last claim in the theorem, suppose :math:`\leq` is total, and let :math:`a` and :math:`b` be any elements of :math:`A`. We need to show that :math:`a < b`, :math:`a = b`, or :math:`a > b`. If :math:`a = b`, we are done, so we can assume :math:`a \neq b`. Since :math:`\leq` is total, we have :math:`a \leq b` or :math:`a \leq b`. Since :math:`a \neq b`, in the first case we have :math:`a < b`, and in the second case, we have :math:`a > b`.
 
---------------------------------------
-
 .. _equality:
 
 Equality
----------
+~~~~~~~~
 
 Let :math:`A` be a set and let ≡ be equivalence relation on :math:`A`.  Recall, this means that, in addition to being a binary relation, ≡ has three special properties.
 
@@ -320,14 +313,13 @@ The first conjunct says that there is at least one object satisfying :math:`A`, 
 
 You should think about why this second expression works. In the next chapter we will see that, using the rules of natural deduction, we can prove that these two expressions are equivalent.
 
-
-
 --------------------------------------
 
 .. index:: equivalence class, ! quotient, 
-.. _quotient:
 
-Quotient
+.. _quotients:
+
+Quotients
 ---------
 
 Given an equivalence relation on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the equivalence relation.

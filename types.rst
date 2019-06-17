@@ -34,7 +34,7 @@ Types can depend on *parameter values*.  For example, the type ``list α`` (list
 
 The first, ``list α``, is an example of a **polymorphic type** which is usually not considered a kind of dependent type.  One could argue that the type ``list α`` *depends* on the argument α; for example, this dependence distinguishes ``list ℕ`` from ``list bool``.  However, since the dependence is on the argument ``α``, which denotes denotes a type, rather than a particular *value* (or *inhabitant*) of a type, this dependence is called **polymorphism**.
 
-Contrast this with the example in the previous paragraph, where the type ``vec α n`` depends on the *value* of the variable ``n`` (which is an *inhabitant* of the type ℕ). This is the sort of dependence for which we reserve the moniker "dependent type". [1]_  
+Contrast this with the example in the previous paragraph, where the type ``vec α n`` depends on the *value* of the variable ``n`` (which is an *inhabitant* of the type ℕ). This is the sort of dependence for which we reserve the moniker "dependent type".
 
 Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should cons have? Such a function is polymorphic: we expect the ``cons`` function for ℕ, ``bool``, or an arbitrary type α to behave the same way. So it makes sense to take the type to be the first argument to ``cons``, so that for any type, α, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a : α`` and a list ``l : list α``, and returns a new list, so that ``con α a l : list α``.
 
@@ -66,23 +66,27 @@ Alternatively, some authors prefer to use an injection function to indicate the 
 
 .. math:: B_0 + B_1 = \{ι_0 a,\, ι_0 b,\, ι_1 a,\, ι_1 b,\, ι_1 c\}.
 
-(The symbol ι is produced by typing ``\iota``.)
+(The symbol ι is produced by typing ``\iota``; see :numref:`symbols`.)
 
 -----------------------------------------------
 
-Generalized projections and dependent types
--------------------------------------------
+.. _generalized-projections:
+
+.. index:: projection
+
+Generalized projections
+-----------------------
 
 Here we present a more general way of describing projections.
 
-Let :math:`\{𝔸_i : i ∈ I\}` be a collection of algebras of the same signature (for some :math:`I ⊆ ℕ`) and let :math:`\underline{𝔸} = ∏_{i ∈ I} 𝔸_i`. (Actually, for now it suffices to think of the :math:`𝔸_i` and :math:`\underline{𝔸}` as sets since the algebraic structure won't play a role in this section.) View the elements of :math:`\underline{𝔸}` as functions:
+Let :math:`\{A_i : i ∈ I\}` be a collection of sets (for some :math:`I ⊆ ℕ`) and let :math:`\underline{A} = ∏_{i ∈ I} A_i`. View the elements of :math:`\underline{A}` as functions:
 
-.. math:: a ∈ ∏_{i∈I} 𝔸_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a(i) ∈ A_i, & ∀ i ∈ I. \end{cases}
+.. math:: a ∈ ∏_{i∈I} A_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a(i) ∈ A_i, & ∀ i ∈ I. \end{cases}
    :label: 7
    
-This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual → notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} 𝔸_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
+This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual arrow notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} A_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
 
-Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, “:math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`,” but this specification has a nicer, more compact description using a :term:`dependent function type`.
+Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, ":math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`," but this specification has a nicer, more compact description using a :term:`dependent function type`.
 
 .. math:: a ∘ g ∈ ∏_{j∈J} A_{g(j)}.
 
@@ -101,7 +105,7 @@ but the deficiencies of the arrow notation are now even more glaring. The functi
 
 Rather, the complete, correct type specification is actually “:math:`\Proj (g) (a) : J → ⋃_{j∈J} A_{g(j)}` where :math:`\Proj (g) (a) (j) ∈ A_{g(j)}`.”
 
-Again, we can express this more concisely with a dependent function type, :math:`\Proj (g)(a) ∈ ∏_{j∈J} A_{g(j)}`. Thus, to denote the type of :math:`\Proj`, we must add to :eq:`8` the constraints on codomains that depend on argument values. For specifying the type of a “function of higher order” (a.k.a. a “functional”), the arrow notation can be cumbersome.
+Again, we can express this more concisely with a dependent function type, :math:`\Proj (g)(a) ∈ ∏_{j∈J} A_{g(j)}`. Thus, to denote the type of :math:`\Proj`, we must add to :eq:`8` the constraints on codomains that depend on argument values. For specifying the type of a "function of higher order" (or "functional"), the arrow notation can be cumbersome.
 
 The following is closer to what we want, but still imperfect:
 
@@ -114,12 +118,18 @@ Here again we see that the arrow notation is not expressive enough because :math
 
 The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operation is
 
-------------------------------
-
 .. math:: \Proj: ∏_{g:J→I} \left( ∏_{i:I} A_{i} →  ∏_{j:J} A_{g(j)} \right).
 
-Kernels of generalized projections
-----------------------------------
+This is a special case of the more general (and more elegant) types that we define in later chapters, after reviewing some concepts of category theory in :numref:`postmodern-algebra` that are essential for this purpose.
+
+---------------------------------------
+
+.. _kernels-of-projections:
+
+.. index:: projection kernel
+
+Kernels of projections
+----------------------
 
 Let :math:`𝔸 = ∏_{i:I} 𝔸_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g : J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
 
@@ -151,14 +161,16 @@ If :math:`f : (ρ f → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, 
 
 -----------------------------------------------------
 
-.. index:: partial function application
+.. index:: partial application
 
-Partial function application
-----------------------------
+.. _partial-application:
 
-Let :math:`I` be a nonempty set and :math:`\{𝔸_i | i : I\}` a family of sets.
+Partial application
+-------------------
 
-Elements of the product :math:`∏_{i∈ I} 𝔸_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
+Let :math:`I` be a nonempty set and :math:`\{A_i | i : I\}` a family of sets.
+
+Elements of the product :math:`∏_{i∈ I} A_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a(i): A_i`.
 
 Let :math:`J ⊆ I` and let :math:`g : J → I` be one-to-one. Then, as above, :math:`a ∘ g: ∏_{j: J} A_{g(j)}` gives the projection of :math:`a` onto certain coordinates of the full product, namely, the coordinates :math:`\im g = \{g(j) ∣ j:J\}`.
 
@@ -191,6 +203,9 @@ Let :math:`f` have type :math:`∏_{i:I} A_i → ∏_{i:I} A_i`, which means tha
 We may wish to apply :math:`f` to just a portion of :math:`a` but it may not be the case that :math:`I` is a subset of :math:`ℕ`, or an ordered enumeration of some other set, so there is no natural notion of “the first :math:`ℓ` operands.” Even if there was such a notion, we may wish to partially apply :math:`f` to something other than the first :math:`ℓ` operands. Therefore, we define a more general notion of partial application as follows: :math:`f` partially applied to the coordinates :math:`\im g = \{g(j) ∣ j:J\}` of the element :math:`a` gives the function : type judgment
 
 .. math:: f ∘ (a ∘ g): ∏_{\substack{i: I\\ i ∉ \im g}} A_i → ∏_{i:I} A_i.
+
+Asynchronous currying
+~~~~~~~~~~~~~~~~~~~~~
 
 .. todo:: continue to describe asynchronous curry type
 
