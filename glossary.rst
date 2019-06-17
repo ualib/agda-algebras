@@ -148,7 +148,10 @@ Nomenclature
       see https://en.wikipedia.org/wiki/Currying
 
     dependent function type
-      .. todo:: fill in definition
+      see :term:`pi type`
+
+    dependent pair type
+      see :term:`sigma type`
 
     dependent type
       A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`Section %s <dependent-types>`.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_ manual.
@@ -336,11 +339,20 @@ Nomenclature
     partial function
       A **partial function** from :math:`A` to :math:`B` is a total function on some (potentially proper) subset :math:`\operatorname{dom}_f` of :math:`A`.
 
+    partial order
+      see :term:`partial order`
+
     partial ordering
       A **partial ordering** (or "partial order") is an :term:`antisymmetric` :term:`preorder`.
       
     partially ordered set
       A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
+
+    pi type
+      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`.
+
+    sigma type
+      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
 
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
@@ -521,9 +533,9 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+---------------------------------------------+
   | ∪, ⋃    | ``\cup``, ``\bigcup``                       |
   +---------+---------------------------------------------+
-  | ∧, ⋀   | ``\wedge`` or ``\and``, ``\bigwedge``        |
+  | ∧, ⋀    | ``\wedge`` or ``\and``, ``\bigwedge``       |
   +---------+---------------------------------------------+
-  | ∨, ⋁   | ``\vee``, ``\bigvee``                        |
+  | ∨, ⋁    | ``\vee`` or ``\or``, ``\bigvee``            |
   +---------+---------------------------------------------+
   | ∘       | ``\circ``                                   |
   +---------+---------------------------------------------+

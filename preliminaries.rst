@@ -341,8 +341,8 @@ A simple example from mathematics is the equivalence relation on ℤ of **congru
 .. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
-Relations of higher arity
--------------------------
+Relations
+---------
 
 We can extend the definition of ordered pairs and define an **ordered triple** recursively.
 

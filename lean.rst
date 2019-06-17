@@ -29,6 +29,8 @@ Many of the implementations shown here also appear in the following files in the
 
 -----------------------------------------------
 
+.. _sets-in-lean:
+
 Sets in Lean
 ------------
 
@@ -61,7 +63,7 @@ Here is the formal definition from the file lattice.lean_.
 
     /-- Intersection of a set of sets. -/
     @[reducible]
-    def sInter (S : set (set α)) : set α := Inf S
+    def sInter (S: set (set α)): set α := Inf S
 
     prefix `⋂₀`:110 := sInter
 
@@ -70,23 +72,23 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 .. code-block:: lean
 
    @[reducible]
-   def sUnion (s : set (set α)) : set α := {t | ∃ a ∈ s, t ∈ a}
+   def sUnion (s: set (set α)): set α := {t | ∃ a ∈ s, t ∈ a}
    prefix `⋃₀`:110 := sUnion
 
 -------------------------------------------
 
-.. index:: relation, binary relation, preorder, partial order, equivalence relation
+.. index:: relation, binary relation, preorder
 .. index:: domain, range
-
-.. index:: equivalence relation, partial ordering
-.. index:: pair: partially ordered set; poset
-
-.. _relations-in-lean:
 
 Relations in Lean
 ------------------
 
-In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a : A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b : A``, ``R a b`` is a proposition.
+.. _binary-relations-in-lean:
+
+Binary relations
+~~~~~~~~~~~~~~~~
+
+In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a: A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b: A``, ``R a b`` is a proposition.
 
 With first-order logic, we can say what it means for a relation to be reflexive, symmetric, transitive, and antisymmetric, as follows:
 
@@ -94,18 +96,18 @@ With first-order logic, we can say what it means for a relation to be reflexive,
 
     namespace hidden
 
-    variable {A : Type}
+    variable {A: Type}
 
-    def reflexive (R : A → A → Prop) : Prop :=
+    def reflexive (R: A → A → Prop): Prop :=
     ∀ x, R x x
 
-    def symmetric (R : A → A → Prop) : Prop :=
+    def symmetric (R: A → A → Prop): Prop :=
     ∀ x y, R x y → R y x
 
-    def transitive (R : A → A → Prop) : Prop :=
+    def transitive (R: A → A → Prop): Prop :=
     ∀ x y z, R x y → R y z → R x z
 
-    def antisymmetric (R : A → A → Prop) : Prop :=
+    def antisymmetric (R: A → A → Prop): Prop :=
     ∀ x y, R x y → R y x → x = y
 
     end hidden
@@ -114,51 +116,51 @@ We can then use the notions freely. Notice that Lean will unfold the definitions
 
 .. code-block:: lean
 
-    namespace hidden
-    variable {A : Type}
-    def reflexive (R : A → A → Prop) : Prop := ∀ x, R x x
-    def symmetric (R : A → A → Prop) : Prop := ∀ x y, R x y → R y x
-    def transitive (R : A → A → Prop) : Prop := ∀ x y z, R x y → R y z → R x z
-    def antisymmetric (R : A → A → Prop) : Prop := ∀ x y, R x y → R y x → x = y
+   namespace hidden
 
-    -- BEGIN
-    variable R : A → A → Prop
+     variable {A: Type}
+     def reflexive (R: A → A → Prop): Prop := ∀ x, R x x
+     def symmetric (R: A → A → Prop): Prop := ∀ x y, R x y → R y x
+     def transitive (R: A → A → Prop): Prop := ∀ x y z, R x y → R y z → R x z
+     def antisymmetric (R: A → A → Prop): Prop := ∀ x y, R x y → R y x → x = y
+ 
+     -- BEGIN
+     variable R: A → A → Prop
+ 
+     example (h: reflexive R) (x: A): R x x := h x
+ 
+     example (h: symmetric R) (x y: A) (h1: R x y): R y x :=
+     h x y h1
+ 
+     example (h: transitive R) (x y z: A)
+     (h1: R x y) (h2: R y z): R x z :=
+     h x y z h1 h2
+ 
+     example (h: antisymmetric R) (x y: A)
+     (h1: R x y) (h2: R y x): x = y:=
+     h x y h1 h2
+     -- END
 
-    example (h : reflexive R) (x : A) : R x x := h x
-
-    example (h : symmetric R) (x y : A) (h1 : R x y) : R y x :=
-    h x y h1
-
-    example (h : transitive R) (x y z : A) 
-    (h1 : R x y) (h2 : R y z) : R x z :=
-    h x y z h1 h2
-
-    example (h : antisymmetric R) (x y : A) 
-    (h1 : R x y) (h2 : R y x) : x = y :=
-    h x y h1 h2
-    -- END
-
-    end hidden
+   end hidden
 
 .. index:: implicit argument
 
-In the command ``variable {A : Type}``, we put curly braces around ``A`` to indicate that it is an **implicit argument**, which is to say that you don't have to write it explicitly; Lean can infer it from the argument ``R``. That is why we can write ``reflexive R`` rather than ``reflexive A R``: since ``R`` is a binary relation on ``A``, Lean_ can infer that ``reflexive R`` refers to reflexivity of a binary relation ``R`` on ``A``.
+In the command ``variable {A: Type}``, we put curly braces around ``A`` to indicate that it is an **implicit argument**, which is to say that you don't have to write it explicitly; Lean can infer it from the argument ``R``. That is why we can write ``reflexive R`` rather than ``reflexive A R``: since ``R`` is a binary relation on ``A``, Lean_ can infer that ``reflexive R`` refers to reflexivity of a binary relation ``R`` on ``A``.
 
-Given ``h : transitive R``, ``h1 : R x y``, and ``h2 : R y z``, it is annoying to have to write ``h x y z h1 h2`` to prove ``R x z``. After all, Lean should be able to use the fact that ``h1`` is ``R x y`` and ``h2`` is ``R y z`` to infer that we are talking about transitivity at ``x``, ``y``, and ``z``. Indeed it can and as a result we can replace that information by underscores.
+Given ``h: transitive R``, ``h1: R x y``, and ``h2: R y z``, it is annoying to have to write ``h x y z h1 h2`` to prove ``R x z``. After all, Lean should be able to use the fact that ``h1`` is ``R x y`` and ``h2`` is ``R y z`` to infer that we are talking about transitivity at ``x``, ``y``, and ``z``. Indeed it can, and as a result we can safely replace that information by underscores.
 
 .. code-block:: lean
 
     namespace hidden
-    variable {A : Type}
-    def transitive (R : A → A → Prop) : Prop := ∀ x y z, R x y → R y z → R x z
 
-    -- BEGIN
-    variable R : A → A → Prop
+      variable {A: Type}
+      def transitive (R: A → A → Prop): Prop := ∀ x y z, R x y → R y z → R x z
 
-    example (h : transitive R) (x y z : A)
-    (h1 : R x y) (h2 : R y z) : R x z :=
-    h _ _ _ h1 h2
-    -- END
+      variable R: A → A → Prop
+
+      example (h: transitive R) (x y z: A)
+      (h1: R x y) (h2: R y z): R x z :=
+      h _ _ _ h1 h2
 
     end hidden
 
@@ -168,57 +170,56 @@ But typing underscores is annoying, too. The best solution is to declare the arg
 
     namespace hidden
 
-    -- BEGIN
-    variable {A : Type}
+      variable {A: Type}
 
-    def transitive (R : A → A → Prop) : Prop :=
-    ∀ {x y z}, R x y → R y z → R x z
+      def transitive (R: A → A → Prop): Prop :=
+      ∀ {x y z}, R x y → R y z → R x z
 
-    variable R : A → A → Prop
+      variable R: A → A → Prop
 
-    example (h : transitive R) (x y z : A)
-    (h1 : R x y) (h2 : R y z) : R x z :=
-    h h1 h2
-
-    -- END
+      example (h: transitive R) (x y z: A)
+      (h1: R x y) (h2: R y z): R x z :=
+      h h1 h2
 
     end hidden
 
 In fact, the notions ``reflexive``, ``symmetric``, ``transitive``, and ``antisymmetric`` are defined in Lean's core library in exactly this way, so we are free to use them without defining them. (That is why we put our temporary definitions of in a namespace ``hidden``; that means that the full name of our version of ``reflexive`` is ``hidden.reflexive``, which, therefore, doesn't conflict with the one defined in the library.)
 
-Preorders and equivalences in Lean
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _preorders-and-equivalences-in-lean:
 
-In :numref:`equivalence-relation` we saw that an *equivalence relation* is a symmetric preorder; that is, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder and use this definition to define equivalence relation.
+Preorders and equivalences
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Recall, a **preorder** is a reflexive and transitive binary relation.
+In :numref:`equivalence-relation` we learned that an *equivalence relation* is a symmetric preorder, or, equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
+
+Recall, a *preorder* is a reflexive and transitive binary relation.
 
 .. code-block:: lean
 
     namespace hidden
 
-    variable {A : Type}
+      variable {A : Type}
 
-    def preorder (R : A → A → Prop) : Prop :=
-    reflexive R ∧ transitive R
+      def preorder (R : A → A → Prop) : Prop :=
+      reflexive R ∧ transitive R
 
     end hidden
 
-Lean's library provides a different formulation of preorders, so, in order to use the same name, we have to put it in the ``hidden`` namespace. Lean's library defines other properties of relations, such as these:
+Lean's library provides a different formulation of preorders, so, in order to use the same name, we have to put it in the ``hidden`` namespace. The Lean library also defines other properties of relations, such as these:
 
 .. code-block:: lean
 
     namespace hidden
 
-    variables {A : Type} (R : A → A → Prop)
+      variables {A : Type} (R : A → A → Prop)
 
-    def equivalence := reflexive R ∧ symmetric R ∧ transitive R
+      def equivalence := reflexive R ∧ symmetric R ∧ transitive R
 
-    def total := ∀ x y, R x y ∨ R y x
+      def total := ∀ x y, R x y ∨ R y x
 
-    def irreflexive := ∀ x, ¬ R x x
+      def irreflexive := ∀ x, ¬ R x x
 
-    def antisymmetric := ∀ ⦃x y⦄, R x y → R y x → x = y
+      def antisymmetric := ∀ ⦃x y⦄, R x y → R y x → x = y
 
     end hidden
 
@@ -231,20 +232,59 @@ You can ask Lean to print their definitions:
     #print irreflexive
     #print anti_symmetric
 
-Building on our previous definition of a preorder, we can describe a partial order as an antisymmetric preorder, and show that an equivalence relation as a symmetric preorder.
+Another way to define *equivalence relation* is as a binary relation satisfying
+
+  #. :math:`\forall a \ (a ≡ a)`, and
+  #. :math:`\forall a, b, c \ (a ≡ b ∧ c ≡ b \ → \ a ≡ c)`.
+
+Let's prove this now.
+
+Remember that the ``parameters`` and ``local infix`` commands fix a relation ``R`` and introduce the symbol ``≈`` to denote it. Thus, in the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
+
+(The symbol ``≈`` is typed ``\~~`` or ``\approx``; see :numref:`symbols`.)
+
+.. code-block:: lean
+
+   namespace hidden
+
+     def preorder {A : Type} (R : A → A → Prop) : Prop :=
+     reflexive R ∧ transitive R
+
+     section
+       parameters {A : Type} (R : A → A → Prop)
+       local infix ≈ := R
+
+       variable (h1 : reflexive (≈))
+       variable (h2 : ∀ {a b c}, a ≈ b ∧ c ≈ b → a ≈ c)
+
+       -- We will show that a relation satisfying h1 and
+       -- h2 must also be symmetric and transitive, hence,
+       -- an equivalence relation.
+
+       example : symmetric (≈) :=
+       assume a b (h : a ≈ b),
+       have b ≈ b ∧ a ≈ b, from and.intro (h1 b) h,
+       show b ≈ a, from h2 this
+
+       example : transitive (≈) :=
+       assume a b c (h3 : a ≈ b) (h4 : b ≈ c),
+       have c ≈ b, from h2 (and.intro (h1 c) h4),
+       have a ≈ b ∧ c ≈ b, from and.intro h3 this,
+       show a ≈ c, from h2 this
+    end
+
+    end hidden
+
+Finally, we prove that an equivalence relation (defined as a reflexive, symmetric, transitive, binary relation) is a symmetric preorder, as claimed above.
 
 .. code-block:: lean
 
     namespace hidden
-    variable {A : Type}
 
-    def preorder (R : A → A → Prop) : Prop :=
+    def preorder {A : Type} (R : A → A → Prop) : Prop :=
     reflexive R ∧ transitive R
 
-    def partial_order (R : A → A → Prop) : Prop :=
-    preorder R ∧ anti_symmetric R
-
-    example (R : A → A → Prop):
+    example {A : Type} (R : A → A → Prop):
       equivalence R ↔ preorder R ∧ symmetric R :=
     iff.intro
       (assume h1 : equivalence R,
@@ -261,69 +301,47 @@ Building on our previous definition of a preorder, we can describe a partial ord
 
     end hidden
 
-We previously claimed that another way to define *equivalence relation* is as a binary relation satisfying
+.. _quotients-in-lean:
 
-  #. :math:`\forall a \ (a ≡ a)`, and
-  #. :math:`\forall a, b, c \ (a ≡ b ∧ c ≡ b \ → \ a ≡ c)`.
+Quotients
+~~~~~~~~~~
 
-Let's prove this now. Remember that the ``parameters`` and ``local infix`` commands fix a relation ``R`` and introduce the symbol ``≈`` to denote it. 
+.. todo:: add section on quotients in Lean
 
-(``≈`` is typed ``\~~`` or ``\approx``.) In the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
+.. _partial-orders-in-lean:
+
+Partial orders
+~~~~~~~~~~~~~~
+
+Building on our Lean definition of :term:`preorder`, we can define a :term:`partial order` in Lean as an antisymmetric preorder.
 
 .. code-block:: lean
 
     namespace hidden
 
-    def preorder {A : Type} (R : A → A → Prop) : Prop :=
-    reflexive R ∧ transitive R
+      variable {A : Type}
 
-    -- BEGIN
-    section
-    parameters {A : Type} (R : A → A → Prop)
-    local infix ≈ := R
+      def preorder (R : A → A → Prop) : Prop :=
+      reflexive R ∧ transitive R
 
-    variable (h1 : reflexive (≈))
-    variable (h2 : ∀ {a b c}, a ≈ b ∧ c ≈ b → a ≈ c)
-
-    example : symmetric (≈) :=
-    assume a b (h : a ≈ b),
-    have b ≈ b ∧ a ≈ b, from and.intro (h1 b) h,
-    show b ≈ a, from h2 this
-
-    example : transitive (≈) :=
-    assume a b c (h3 : a ≈ b) (h4 : b ≈ c),
-    have c ≈ b, from h2 (and.intro (h1 c) h4),
-    have a ≈ b ∧ c ≈ b, from and.intro h3 this,
-    show a ≈ c, from h2 this
-
-    end
-    -- END
+      def partial_order (R : A → A → Prop) : Prop :=
+      preorder R ∧ anti_symmetric R
 
     end hidden
 
-Partial orders in Lean
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. todo:: insert Lean definition
+.. _the-poset-induced-by-a-preorder-in-lean:
 
 The poset induced by a preorder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: complete this section
+.. todo:: complete this section after completing :numref:`quotients-in-lean`.
 
 ..     The poset induced by a preorder
 
-Total and strict orders in Lean
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _total-and-strict-orders-in-lean:
 
-..   Equality
-..   Relations of higher arity
-..   Functions
-..   Joins and meets
-..   Projections
-..   Directed sets and inductive sets
-..   Completeness and cocompleteness
-..   Closure systems
+Total and strict orders
+~~~~~~~~~~~~~~~~~~~~~~~
 
 In :numref:`total-and-strict-ordering` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
 
@@ -333,33 +351,28 @@ In :numref:`total-and-strict-ordering` we showed that a strict partial order---t
     variable R : A → A → Prop
 
     example (h1 : irreflexive R) (h2 : transitive R) :
-      ∀ x y, R x y → ¬ R y x :=
-    assume x y,
-    assume h3 : R x y,
-    assume h4 : R y x,
+    ∀ x y, R x y → ¬ R y x :=
+    assume x y (h3 : R x y) (h4 : R y x),
     have h5 : R x x, from h2 h3 h4,
-    have h6 : ¬ R x x, from h1 x, 
+    have h6 : ¬ R x x, from h1 x,
     show false, from h6 h5
 
 In mathematics, it is common to use infix notation and a symbol like ``≤`` to denote a partial order. Lean supports this practice:
- 
+
 .. code-block:: lean
 
     section
-    parameter A : Type
-    parameter R : A → A → Prop
-
-    local infix ≤ := R
-
-    example (h1 : irreflexive R) (h2 : transitive R) : 
+      parameter A : Type
+      parameter R : A → A → Prop
+  
+      local infix ≤ := R
+  
+      example (h1 : irreflexive R) (h2 : transitive R) :
       ∀ x y, x ≤ y → ¬ y ≤ x :=
-    assume x y,
-    assume h3 : x ≤ y,
-    assume h4 : y ≤ x,
-    have h5 : x ≤ x, from h2 h3 h4,
-    have h6 : ¬ x ≤ x, from h1 x, 
-    show false, from h6 h5
-
+      assume x y (h3 : x ≤ y) (h4 : y ≤ x),
+      have h5 : x ≤ x, from h2 h3 h4,
+      have h6 : ¬ x ≤ x, from h1 x,
+      show false, from h6 h5
     end
 
 The ``parameter`` and ``parameters`` commands are similar to the ``variable`` and ``variables`` commands, except that parameters are fixed within a section. In other words, if you prove a theorem about ``R`` in the section above, you cannot apply that theorem to another relation, ``S``, without closing the section. Since the parameter ``R`` is fixed, Lean allows us to define notation for ``R`` to be used locally in the section.
@@ -369,35 +382,35 @@ In the example below, having fixed a partial order, ``R``, we define the corresp
 .. code-block:: lean
 
     section
-    parameters {A : Type} (R : A → A → Prop)
-    parameter (reflR : reflexive R)
-    parameter (transR : transitive R)
-    parameter (antisymmR : ∀ {a b : A}, R a b → R b a → a = b)
-
-    local infix ≤ := R
-
-    definition R' (a b : A) : Prop := a ≤ b ∧ a ≠ b
-
-    local infix < := R'
-
-    theorem irreflR (a : A) : ¬ a < a :=
-    assume : a < a,
-    have a ≠ a, from and.right this,
-    have a = a, from rfl,
-    show false, from ‹a ≠ a› ‹a = a›
-
-    theorem transR {a b c : A} (h₁ : a < b) (h₂ : b < c) : a < c :=
-    have a ≤ b, from and.left h₁,
-    have a ≠ b, from and.right h₁,
-    have b ≤ c, from and.left h₂,
-    have b ≠ c, from and.right h₂,
-    have a ≤ c, from transR ‹a ≤ b› ‹b ≤ c›,
-    have a ≠ c, from
-        assume : a = c,
-        have c ≤ b, from eq.subst ‹a = c› ‹a ≤ b›,
-        have b = c, from antisymmR ‹b ≤ c› ‹c ≤ b›,
-        show false, from ‹b ≠ c› ‹b = c›,
-    show a < c, from and.intro ‹a ≤ c› ‹a ≠ c›
+      parameters {A : Type} (R : A → A → Prop)
+      parameter (reflR : reflexive R)
+      parameter (transR : transitive R)
+      parameter (antisymmR : ∀ {a b : A}, R a b → R b a → a = b)
+  
+      local infix ≤ := R
+  
+      definition R' (a b : A) : Prop := a ≤ b ∧ a ≠ b
+  
+      local infix < := R'
+  
+      theorem irreflR (a : A) : ¬ a < a :=
+      assume : a < a,
+      have a ≠ a, from and.right this,
+      have a = a, from rfl,
+      show false, from ‹a ≠ a› ‹a = a›
+  
+      theorem transR {a b c : A} (h₁ : a < b) (h₂ : b < c) : a < c :=
+      have a ≤ b, from and.left h₁,
+      have a ≠ b, from and.right h₁,
+      have b ≤ c, from and.left h₂,
+      have b ≠ c, from and.right h₂,
+      have a ≤ c, from transR ‹a ≤ b› ‹b ≤ c›,
+      have a ≠ c, from
+          assume : a = c,
+          have c ≤ b, from eq.subst ‹a = c› ‹a ≤ b›,
+          have b = c, from antisymmR ‹b ≤ c› ‹c ≤ b›,
+          show false, from ‹b ≠ c› ‹b = c›,
+      show a < c, from and.intro ‹a ≤ c› ‹a ≠ c›
     end
 
 Notice that we have used suggestive names ``reflR``, ``transR``, ``antisymmR`` instead of ``h1``, ``h2``, ``h3`` to help remember which hypothesis is which. The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes, ``\f<`` anf ``\f>``. Remember also that ``eq.subst ‹a = c› ‹a ≤ b›`` is a proof of the fact that amounts for substituting ``c`` for ``a`` in ``a ≤ b``. You can also use the equivalent notation ``‹a = c› ▸ ‹a ≤ b›``, where the triangle is written ``\t``.
@@ -407,34 +420,35 @@ Here is one more example. Suppose ``R`` is a binary relation on a type ``A``, an
 .. code-block:: lean
 
     section
-    parameter A : Type
-    parameter R : A → A → Prop
-
-    variable h1 : transitive R
-    variable h2 : reflexive R
-
-    def S (x y : A) := R x y ∧ R y x
-
-    example : reflexive S :=
-    assume x,
-    have R x x, from h2 x,
-    show S x x, from and.intro this this
-
-    example : symmetric S :=
-    assume x y,
-    assume h : S x y,
-    have h1 : R x y, from h.left,
-    have h2 : R y x, from h.right,
-    show S y x, from ⟨h.right, h.left⟩
-
+      parameter A : Type
+      parameter R : A → A → Prop
+  
+      variable h1 : transitive R
+      variable h2 : reflexive R
+  
+      def S (x y : A) := R x y ∧ R y x
+  
+      example : reflexive S :=
+      assume x,
+      have R x x, from h2 x,
+      show S x x, from and.intro this this
+  
+      example : symmetric S :=
+      assume x y,
+      assume h : S x y,
+      have h1 : R x y, from h.left,
+      have h2 : R y x, from h.right,
+      show S y x, from ⟨h.right, h.left⟩
     end
 
 As an exercise, the reader should prove in Lean that ``S`` is transitive as well.
 
 In the first example, we use the anonymous ``assume`` and ``have``, and then refer back to the ``have`` with the keyword ``this``. In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.left`` and ``h.right``, respectively. We also abbreviate ``and.intro h.right h.left`` with an anonymous constructor, writing ``⟨h.right, h.left⟩``. Lean figures out that we are trying to prove a conjunction, and figures out that ``and.intro`` is the relevant introduction principle. You can type the corner brackets with ``\<`` and ``\>``, respectively.
 
+.. _equality-in-lean:
 
-
+Equality
+~~~~~~~~
 
 .. .. index:: ! ordered tuples, !tuples
 .. .. index:: ! unary relation, ! binary relation, ! ternary relation
@@ -484,12 +498,6 @@ In the first example, we use the anonymous ``assume`` and ``have``, and then ref
 ..     #check (nat.lt_succ_self : ∀ n : ℕ, n < n + 1)
 ..     #check (nat.le_succ : ∀ n : ℕ, n ≤ n + 1)
 
-Relations of higher arity
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. todo:: complete this section
-
----------------------------------
 
 .. index:: function, inverse, function composition, restriction, image
 
@@ -521,13 +529,11 @@ Kernel
 
 .. todo:: complete this section
 
--------------------------------------
-
 .. index:: join, upper bound, least upper bound, supremum
 .. index:: meet, lower bound, greatest lower bound, infimum
 
 Joins and meets
----------------
+~~~~~~~~~~~~~~~~
 
 .. todo:: complete this section
 
