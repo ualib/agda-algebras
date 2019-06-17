@@ -154,7 +154,8 @@ Given ``h: transitive R``, ``h1: R x y``, and ``h2: R y z``, it is annoying to h
     namespace hidden
 
       variable {A: Type}
-      def transitive (R: A → A → Prop): Prop := ∀ x y z, R x y → R y z → R x z
+      def transitive (R: A → A → Prop): Prop :=
+      ∀ x y z, R x y → R y z → R x z
 
       variable R: A → A → Prop
 
