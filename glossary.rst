@@ -17,7 +17,7 @@ Acronyms
       | *v.* automated theorem proving
 
     CiC
-      Calculus of Inductive Constructions
+      :term:`Calculus of Inductive Constructions`
 
     cod
       codomain
@@ -30,6 +30,9 @@ Acronyms
     
     ETT
       :term:`extensional` :term:`intuitionistic type theory <TT>`.
+
+    em
+      :term:`law of the excluded middle`
 
     ER
       equality reflection
@@ -86,11 +89,23 @@ Nomenclature
     Boolean algebra homomorphism
       a :term:`lattice homomorphism` that also preserves complementation (but every lattice homomorphism between Boolean lattices automatically preserves complementation, so we may characterize the morphisms of this category more simply as the lattice homomorphisms).
 
+    bytecode
+      ..todo:: fill in definition    
+
+    Calculus of Inductive Constructions
+      see https://en.wikipedia.org/wiki/Calculus_of_constructions
+
+    canonical normal form
+      .. todo:: insert definition
+
     category of categories
       has categories as objects and functors as morphisms.
 
     category of small categories
-      (see :term:`Cat`)
+      see :term:`Cat`
+
+    Choice
+      .. todo:: insert definition
 
     chain
       Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
@@ -100,6 +115,9 @@ Nomenclature
 
     cocomplete
       A poset in which all joins exist is called **cocomplete**.
+
+    code extraction
+      .. todo:: insert def
 
     codomain
       If :math:`f : A → B` is a function or relation from :math:`A` to :math:`B`, then :math:`B` is called the **codomain** of :math:`f`, denoted by 
@@ -267,6 +285,9 @@ Nomenclature
     inductive set
       A subset :math:`I` of a :term:`preorder` :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
+    inductive type
+      .. todo:: insert definition
+
     initial object
       An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
      
@@ -287,6 +308,9 @@ Nomenclature
      
     lattice homomorphism
       a function :math:`f: X → Y` preserving finite meets and joins.
+
+    law of the excluded middle
+      This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds.
 
     Lean
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
@@ -351,9 +375,6 @@ Nomenclature
     pi type
       The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`.
 
-    sigma type
-      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
-
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
 
@@ -375,8 +396,17 @@ Nomenclature
     proof asssitant
       see :term:`ITP`
 
+    proof-irrelevant
+      .. todo:: insert definition
+
     proof tactic
       an automated procedure for constructing and manipulating proof terms.
+
+    proposition extensionality
+      .. todo:: insert definition
+
+    quotient
+      .. todo:: insert definition
 
     reflexive
       A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
@@ -392,6 +422,9 @@ Nomenclature
 
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
+
+    sigma type
+      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
 
     signature
       a pair :math:`σ = (F, ρ)` consisting of a collection :math:`F` of operation symbols and an :term:`arity` function :math:`ρ : F → β` that maps each operation symbol to its :term:`arity`; here, :math:`β` denotes the arity type.
@@ -446,6 +479,12 @@ Nomenclature
 
     universal property
       The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.
+
+    universe
+      .. todo:: insert definition
+
+    universes
+      see :term:`universe`
 
 --------------------------------
 
@@ -521,11 +560,9 @@ Symbols
 The list below shows what to type in order to produce each of the special unicode symbols we use.
 
   +---------+--------------------------------------------------+
-  | produce | by typing                                        |
-  +=========+==================================================+
   | 𝔸, 𝔹, ℂ | ``\BbbA``, ``\BbbB``, ``\BbbC``, etc.            |
   +---------+--------------------------------------------------+
-  | ℕ, ℤ    | ``\N`` (or ``\nat``), ``\In`` (or ``\Z``)        |
+  | ℕ, ℤ    | ``\N``, ``\In`` (or ``\nat``, ``\Z``)            |
   +---------+--------------------------------------------------+
   | α, β, γ | ``\a`` (or ``\alpha``), ``\b``, ``\g``, etc.     |
   +---------+--------------------------------------------------+
@@ -539,9 +576,9 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+--------------------------------------------------+
   | œ, Œ    | ``\oe``, ``\OE``                                 |
   +---------+--------------------------------------------------+
-  | ě       | ``\ve``,                                         |
+  | ě, ö    | ``\ve``, ``\"o``                                 |
   +---------+--------------------------------------------------+
-  | h₁, hᵢ  | ``h\1``, ``h\i`` (or ``h\_i``)                   | 
+  | h₁, h₂  | ``h\1``, ``h\2``, etc.   (or ``h\_1``)           | 
   +---------+--------------------------------------------------+
   | ∩       | ``\i``  (or ``\cap`` or ``\intersection``)       |
   +---------+--------------------------------------------------+
@@ -565,7 +602,9 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+--------------------------------------------------+
   | ×       | ``\x`` (or ``\times``)                           |
   +---------+--------------------------------------------------+
-  | ∈       | ``\in``                                          |
+  | ∈, ∋    | ``\in``, ``\ni``                                 |
+  +---------+--------------------------------------------------+
+  | ∉, ∌    | ``\inn``, ``\nin`` (or ``\notin``, ``\nni``)     |
   +---------+--------------------------------------------------+
   | ∃       | ``\ex`` (or ``\exists``)                         |
   +---------+--------------------------------------------------+
@@ -603,5 +642,7 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+--------------------------------------------------+
   | ↣       | ``\pr`` or ``\r->``                              |
   +---------+--------------------------------------------------+
-  | ↦       | ``\mapsto`` (or ``\r-|``)                        |
+  | ∅       | ``\emp`` (or ``\empty`` or ``\emptyset``)        |
   +---------+--------------------------------------------------+
+
+

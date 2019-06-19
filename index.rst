@@ -9,6 +9,7 @@ The Lean Universal Algebra Library
     preliminaries
     types
     lean
+    computation
     algebras
     algebras_in_lean
     inductive_definitions
