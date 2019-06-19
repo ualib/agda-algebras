@@ -10,6 +10,26 @@
 Postmodern Algebra in Lean
 ===========================
 
+Categories in Lean
+------------------
+
+.. highlight:: lean
+
+**Example**.
+
+::
+
+  import category_theory.category category_theory.functor
+  universes u v
+  open category_theory
+
+  variable (C : Type u)
+  variable [category.{u v} C]
+  variables A B : C
+
+  #check A ⟶ B   -- Type v (type ⟶ with ``⟶``)
+
+
 .. _tuple-functors-in-lean:
 
 Tuple functors in Lean
