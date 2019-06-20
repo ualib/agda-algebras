@@ -141,6 +141,11 @@ Nomenclature
     component
       If :math:`α : F ⇒ G` is a natural transformation, then the **component** of α at :math:`A` is the morphism :math:`α_A : FA → GA`.
 
+    computationally pure
+      An expression is called **computationally pure** if
+
+      .. todo:: complete definition
+
     concrete category
       A **concrete category** is one whose objects are sets and whose morphisms are functions defined on these sets (possibly satisfying some other special properties).
 
@@ -164,6 +169,9 @@ Nomenclature
 
     currying
       see https://en.wikipedia.org/wiki/Currying
+
+    data-relevant
+      .. todo:: insert definition
 
     dependent function type
       see :term:`pi type`
@@ -399,11 +407,14 @@ Nomenclature
     proof-irrelevant
       .. todo:: insert definition
 
-    proof tactic
+    proof tactic    
       an automated procedure for constructing and manipulating proof terms.
 
     proposition extensionality
       .. todo:: insert definition
+
+    pure
+      see :term:`computationally pure`
 
     quotient
       .. todo:: insert definition
