@@ -3,8 +3,8 @@
 Computation
 ===========
 
-References, attributions
--------------------------
+References and attributions
+----------------------------
 
 In this chapter, we take as a starting point the chapter `Axioms and Computation`_ from the book `Theorem Proving in Lean`_.  Some of the background material from that chapter is repeated here to keep our presentation self-contained.
 
@@ -21,7 +21,7 @@ Lean extends :term:`CiC` with additional axioms and rules in order to make proof
 
 Adding axioms to a foundational system can have negative consequences, beyond concerns about correctness and consistency. In particular, whether or not our theorems and proofs have computational content depends on whether we abstain from the use of certain classical axioms, as we now discuss.
 
-Lean is designed to support **computational** (or **constructive**) **reasoning** as well as **classical reasoning**.
+Lean is designed to support **classical reasoning** as well as **computational**, or **constructive reasoning**.
 
 By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, any closed :term:`computationally pure` expression of type ℕ will reduce to a number.
 
