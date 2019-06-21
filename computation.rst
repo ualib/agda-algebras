@@ -149,7 +149,7 @@ Given a definition or theorem in Lean, ``#print axioms`` will display the axioms
 
 -----------------------------------
 
-Function Extensionality
+Function extensionality
 -----------------------
 
 The **function extensionality** principle is an equivalence relation on functions that equates two functions of type ``Π(x:α), β x`` that agree on all inputs.
@@ -160,17 +160,23 @@ The **function extensionality** principle is an equivalence relation on function
 
     #check (@funext : ∀ {α : Type u₁} {β : α → Type u₂} {f₁ f₂ : Π (x : α), β x}, (∀ (x : α), f₁ x = f₂ x) → f₁ = f₂)
 
-In classical logic and set theory we usually take this :term:`extensional` view of equality of functions for granted, and this notion of equality is sometimes called "Leibniz equality".
+This :term:`extensional` view of equality of functions is sometimes called "Leibniz equality" and it is usually taken for granted in the context of set theory and classical logic.  From a constructive perspective, however, it is more natural to think of a function as an algorithm, or computer programs, that is presented in some explicit (constructive) way.
 
-From a constructive perspective, however, it is sometimes more natural to think of functions as algorithms, or computer programs, that are presented in some explicit way.
+It is certainly the case that two computer programs can compute the same answer for every input despite the fact that their syntax and performance characteristics may be quite different.  Are these computer programs really "equal?"
 
-It is certainly the case that two computer programs can compute the same answer for every input despite the fact that they are syntactically quite different. In much the same way, you might want to maintain a view of functions that does not force you to identify two functions that have the same input/output behavior. This is known as an :term:`intensional` view of functions.
+A view of functions that does not force us to identify two functions with the same input/output behavior is known as an :term:`intensional` view of functions.
 
-In fact, function extensionality follows from the existence of quotients, which we describe in the next section.
 
-In the Lean standard library, therefore, ``funext`` is `proved from the quotient construction <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`__.
+-------------------------------------
 
-Suppose that for ``α: Type`` we define the ``set α := α → Prop`` to denote the type of subsets of ``α``, essentially identifying subsets with predicates. By combining ``funext`` and ``propext``, we obtain an extensional theory of such sets:
+Extensionality in Lean
+----------------------
+
+Function extensionality follows from the existence of *quotients*, as describe in the next section. In the `standard library <lean_src>`_, therefore, ``funext`` is `proved from the quotient construction <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`__.
+
+Let ``α: Type`` and define ``set α := α → Prop`` to denote the type of subsets of ``α`` (identifying subsets with predicates).
+
+By combining ``funext`` and ``propext``, we obtain an extensional theory of subsets.
 
 .. code-block:: lean
 
@@ -186,7 +192,7 @@ Suppose that for ``α: Type`` we define the ``set α := α → Prop`` to denote 
     variable {α : Type u}
 
     definition mem (x : α) (a : set α) := a x
-    notation e ∈ a := mem e a 
+    notation e ∈ a := mem e a
 
     theorem setext {a b : set α} (h : ∀ x, x ∈ a ↔ x ∈ b) : a = b :=
     funext (assume x, propext (h x))
@@ -195,49 +201,47 @@ Suppose that for ``α: Type`` we define the ``set α := α → Prop`` to denote 
     -- END
     end hidden
 
-We can then proceed to define the empty set and set intersection, for example, and prove set identities:
+We can then proceed to define the empty set, set intersection, etc. and then prove some set identities.
 
-.. code-block:: lean
+::
 
-    namespace hidden
+  namespace computation
 
     universe u
-
     definition set (α : Type u) := α → Prop
 
     namespace set
 
-    variable {α : Type u}
+      variable {α : Type u}
 
-    def mem (x : α) (a : set α) := a x
+      def mem (x : α) (a : set α) := a x
 
-    instance has_mem_set (α : Type u) : has_mem α (set α) := ⟨mem⟩
+      instance has_mem_set (α : Type u) : has_mem α (set α) := ⟨mem⟩
 
-    theorem setext {a b : set α} (h : ∀ x, x ∈ a ↔ x ∈ b) : a = b :=
-    funext (assume x, propext (h x))
+      theorem setext {a b : set α} (h : ∀ x, x ∈ a ↔ x ∈ b) : a = b :=
+      funext (assume x, propext (h x))
 
-    -- BEGIN
-    definition empty : set α := λ x, false
-    local notation `∅` := empty
+      definition empty : set α := λ x, false
+      local notation `∅` := empty
 
-    definition inter (a b : set α) : set α := λ x, x ∈ a ∧ x ∈ b
-    notation a ∩ b := inter a b
+      definition inter (a b : set α) : set α := λ x, x ∈ a ∧ x ∈ b
 
-    theorem inter_self (a : set α) : a ∩ a = a :=
-    setext (assume x, and_self _)
+      notation a ∩ b := inter a b
 
-    theorem inter_empty (a : set α) : a ∩ ∅ = ∅ :=
-    setext (assume x, and_false _)
+      theorem inter_self (a : set α) : a ∩ a = a :=
+      setext (assume x, and_self _)
 
-    theorem empty_inter (a : set α) : ∅ ∩ a = ∅ :=
-    setext (assume x, false_and _)
+      theorem inter_empty (a : set α) : a ∩ ∅ = ∅ :=
+      setext (assume x, and_false _)
 
-    theorem inter.comm (a b : set α) : a ∩ b = b ∩ a :=
-    setext (assume x, and_comm _ _)
-    -- END
+      theorem empty_inter (a : set α) : ∅ ∩ a = ∅ :=
+      setext (assume x, false_and _)
+
+      theorem inter.comm (a b : set α) : a ∩ b = b ∩ a :=
+      setext (assume x, and_comm _ _)
 
     end set
-    end hidden
+    end computation
 
 The following is an example of how function extensionality blocks computation inside the Lean kernel.
 
