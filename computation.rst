@@ -103,7 +103,7 @@ It is only the :term:`Choice` principle, discussed in more detail `here <https:/
 Proposition extensionality
 --------------------------
 
-This is the axiom asserting that if two propositions mutually imply each other, then we do not distinguish them.  Thus, proposition extensionality is a principle we use when we wish to reason about *equivalence classes of propositions* as a whole, rather than individual propositions.
+The **proposition extensionality** axiom is a relation that identifies propositions that mutually imply each other.  Thus, proposition extensionality is a principle we use when we wish to reason about classes of such "logically equivalent" propositions, rather than considering each individual proposition separately.
 
 .. highlight:: lean
 
@@ -116,7 +116,7 @@ This is the axiom asserting that if two propositions mutually imply each other, 
     -- END
   end propext
 
-That is, when two propositions imply one another, we consider them the same.  This is consistent with set-theoretic interpretations in which any element ``a: Prop`` is either empty or a singleton.  The axiom also has the effect that equivalent propositions can be substituted for one another in any context:
+This principle is consistent with set-theoretic interpretations in which an element ``a: Prop`` is either empty or a singleton.  The axiom also has the consequence that equivalent propositions can be substituted for one another in every context.
 
 ::
 
@@ -124,41 +124,35 @@ That is, when two propositions imply one another, we consider them the same.  Th
     variables a b c d e: Prop
     variable p: Prop → Prop
 
-    theorem thm₁ (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
+    example (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
     propext h ▸ iff.refl _
 
-    theorem thm₂ (h: a ↔ b) (h₁: p a): p b :=
+    example (h: a ↔ b) (h₁: p a): p b :=
     propext h ▸ h₁
   end
 
-The first example could be proved more laboriously without ``propext`` using the fact that the propositional connectives respect propositional equivalence.
+The first example could be proved without ``propext`` using the fact that the propositional connectives respect propositional equivalence.
 
 The second example represents a more essential use of ``propext``. In fact, it is equivalent to ``propext`` itself. (Exercise!)
 
-Given any definition or theorem in Lean, you can use the ``#print axioms`` command to display the axioms it depends on.
+Given a definition or theorem in Lean, ``#print axioms`` will display the axioms on which it depends.
 
 .. code-block:: lean
 
     variables a b c d e : Prop
     variable p : Prop → Prop
 
-    theorem thm₁ (h : a ↔ b) : (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
+    theorem thm (h : a ↔ b) : (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
     propext h ▸ iff.refl _
 
-    theorem thm₂ (h : a ↔ b) (h₁ : p a) : p b :=
-    propext h ▸ h₁
-
-    -- BEGIN
-    #print axioms thm₁  -- propext
-    #print axioms thm₂  -- propext
-    -- END
+    #print axioms thm  -- propext
 
 -----------------------------------
 
 Function Extensionality
 -----------------------
 
-Similar to proposition extensionality, **function extensionality** asserts that any two functions of type ``Π(x:α), β x`` that agree on all their inputs are equal.
+The **function extensionality** principle is an equivalence relation on functions that equates two functions of type ``Π(x:α), β x`` that agree on all inputs.
 
 .. code-block:: lean
 
@@ -166,7 +160,7 @@ Similar to proposition extensionality, **function extensionality** asserts that 
 
     #check (@funext : ∀ {α : Type u₁} {β : α → Type u₂} {f₁ f₂ : Π (x : α), β x}, (∀ (x : α), f₁ x = f₂ x) → f₁ = f₂)
 
-From a classical, set-theoretic perspective, this is exactly what it means for two functions to be equal. This is known as an :term:`extensional` view of functions.
+In classical logic and set theory we usually take this :term:`extensional` view of equality of functions for granted, and this notion of equality is sometimes called "Leibniz equality".
 
 From a constructive perspective, however, it is sometimes more natural to think of functions as algorithms, or computer programs, that are presented in some explicit way.
 
