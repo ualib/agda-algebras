@@ -313,29 +313,6 @@ The first conjunct says that there is at least one object satisfying :math:`A`, 
 
 You should think about why this second expression works. In the next chapter we will see that, using the rules of natural deduction, we can prove that these two expressions are equivalent.
 
---------------------------------------
-
-.. index:: equivalence class, ! quotient, 
-
-.. _quotients:
-
-Quotients
----------
-
-Given an equivalence relation on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the equivalence relation.
-
-As above, for each :math:`a ∈ A`, let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of those elements of :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
-
-The set :math:`A/{≡}`, of all such equivalence classes is called the **quotient of** :math:`A` **modulo** ≡.  It is defined to be the set :math:`\{ a/{≡} ∣ a ∈ A \}`.
-
-Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but they differ only in ways that do not interest us.  
-
-Here is a "real-world" example of a situation in which we would "mod out" certain irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person from two photographs---the orientation of the face at the moment it is captured in the photos is unimportant.  Indeed, it would be silly to conclude that the individuals in the two photos must be different simply because the face is shown at different angles.
-
-Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of a single individual).  Thus :math:`A/{≡}` is a version of the set :math:`A` where similar elements have been compressed into a single element.
-
-A simple example from mathematics is the equivalence relation on ℤ of **congruence modulo 5**, which partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
-
 -------------------------------------------------------------
 
 .. index:: ! ordered tuples, !tuples

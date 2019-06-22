@@ -13,6 +13,9 @@ In this chapter, we take as a starting point the chapter `Axioms and Computation
 -------------------------------------------------
 
 .. index:: proposition extensionality, quotient, function extensionality, law of the excluded middle, Choice
+.. index:: extensional equality of; propositions
+.. index:: extensional equality of; functions
+.. index:: extensional equality of; sets
 
 Classical and constructive reasoning
 ------------------------------------
@@ -27,7 +30,7 @@ Lean is designed to support **classical reasoning** as well as **computational**
 
 By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, any closed :term:`computationally pure` expression of type ℕ will reduce to a number.
 
-`Lean's `standard library <lean_src>` <lean_src>`_ defines an additional axiom, :term:`proposition extensionality`, and a :term:`quotient` construction. These in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
+`Lean's standard library <lean_src>`_ defines an additional axiom, :term:`proposition extensionality`, and a :term:`quotient` construction. These in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
 
   *using such axiomatic extensions can block evaluation in Lean's kernel*
 
@@ -59,7 +62,7 @@ The `standard library <lean_src>`_ supports the classical :term:`law of the excl
 
 Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to :term:`bytecode`.
 
-The `standard library <lean_src>`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
+`Lean's standard library <lean_src>`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
 
 Use of :term:`Choice` is essential to some classical constructions and it can be imported in Lean when needed. However,
 
@@ -119,6 +122,9 @@ It is only the :term:`Choice` principle, discussed in more detail `here <https:/
 --------------------------------------------
 
 .. index:: ! proposition extensionality
+.. index:: extensional equality of; propositions
+
+.. _proposition-extensionality:
 
 Proposition extensionality
 --------------------------
@@ -167,6 +173,11 @@ Given a definition or theorem in Lean, ``#print axioms`` will display the axioms
 
 -----------------------------------
 
+.. index:: ! function extensionality
+.. index:: ! extensional equality of; functions
+
+.. _function-extensionality:
+
 Function extensionality
 -----------------------
 
@@ -186,14 +197,22 @@ A view of functions that does not force us to identify two functions with the sa
 
 -------------------------------------
 
+.. index:: ! characteristic function, ! extensional equality (of sets)
+
 Extensionality in Lean
 ----------------------
 
-Function extensionality follows from the existence of *quotients*, as describe in the next section. In the `standard library <lean_src>`_, therefore, ``funext`` is `proved from the quotient construction <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`__.
+Function extensionality follows from the existence of *quotients* (describe in the next section) and in the `standard library <lean_src>`_ ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.
 
-Let ``α:Type`` and define ``set α := α → Prop`` to denote the type of subsets of ``α`` (identifying subsets with predicates).
+Let ``α:Type`` and, as before, let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates).  In other terms, ``A: set α`` represents the **characteristic function** of the set ``A``, defined as follows: :math:`∀ x : α`,
 
-By combining ``funext`` and ``propext``, we obtain an extensional theory of subsets.
+.. math:: A x = \begin{cases} \mathsf{true},& \text{ if $x$ belongs to $A$,}\\
+                              \mathsf{false},& \text{ otherwise.}
+                              \end{cases}
+
+Thus, if we combine ``funext`` and ``propext``, we obtain an *extensional theory of subsets*, or **set extensionality**.  This means that two sets are equal precisely when then contain the same elements; equivalently, precisely when their characteristic functions are (extensionally) equal.
+
+Precisely, ``A B: set α`` are (extensionally) equal iff their characteristic functions are (extensionally) equal iff for each ``x: α``, the propositions ``A x`` and ``B x`` are (extensionally) equal.
 
 .. code-block:: lean
 
@@ -295,10 +314,30 @@ Current research programs, including work on *observational type theory* and *cu
 
 In a sense, however, a cast does not change the meaning of an expression. Rather, it is a mechanism to reason about the expression's type. Given an appropriate semantics, it then makes sense to reduce terms in ways that preserve their meaning, ignoring the intermediate bookkeeping needed to make the reductions type correct. In that case, adding new axioms in ``Prop`` does not matter; by proof irrelevance, an expression in ``Prop`` carries no information, and can be safely ignored by the reduction procedures.
 
+--------------------------------------------
+
+.. index:: equivalence class, ! quotient, 
+
+.. _quotients:
+
 Quotients
 ---------
 
-Let ``α`` be any type, and let ``r`` be an equivalence relation on ``α``. It is mathematically common to form the "quotient" ``α/r``, that is, the type of elements of ``α`` "modulo" ``r``. Set theoretically, one can view ``α/r`` as the set of equivalence classes of ``α`` modulo ``r``. If ``f: α → β`` is any function that respects the equivalence relation in the sense that for every ``x y: α``, ``r x y`` implies ``f x = f y``, then ``f`` "lifts" to a function ``f': α/r → β`` defined on each equivalence class ``⟦x⟧`` by ``f' ⟦x⟧ = f x``. Lean's `standard library <lean_src>` extends the Calculus of Constructions with additional constants that perform exactly these constructions, and installs this last equation as a definitional reduction rule.
+Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the equivalence relation.
+
+As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+
+The :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is :math:`A/{≡}` and called the **quotient of** :math:`A` **modulo** ≡.
+
+Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but they differ only in ways that do not interest us.
+
+Here is a "real-world" example of a situation in which we might want to "mod out" (i.e., remove by taking the quotient modulo some equivalence relation) irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in two different photographs---the orientation of the face is unimportant.  Indeed, it would be silly to conclude that the faces in the two photos must belong to different people simply because it is shown from different angles.
+
+Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of a single individual).  Thus :math:`A/{≡}` is a version of the set :math:`A` where similar elements have been compressed into a single element.
+
+Another example is the equivalence relation **congruence modulo 5** on the set ℤ of integers. This relation partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
+
+Let ``α`` be any type, and let ``r`` be an equivalence relation on ``α``. It is mathematically common to form the "quotient" ``α/r``, that is, the type of elements of ``α`` "modulo" ``r``. Set theoretically, one can view ``α/r`` as the set of equivalence classes of ``α`` modulo ``r``. If ``f: α → β`` is any function that respects the equivalence relation in the sense that for every ``x y: α``, ``r x y`` implies ``f x = f y``, then ``f`` "lifts" to a function ``f': α/r → β`` defined on each equivalence class ``⟦x⟧`` by ``f' ⟦x⟧ = f x``. Lean's `standard library <lean_src>`_ extends the Calculus of Constructions with additional constants that perform exactly these constructions, and installs this last equation as a definitional reduction rule.
 
 In its most basic form, the quotient construction does not even require ``r`` to be an equivalence relation. The following constants are built into Lean:
 
@@ -382,7 +421,7 @@ This is the axiom that asserts that any two elements of ``α`` that are related 
 
 Of course, the quotient construction is most commonly used in situations when ``r`` is an equivalence relation. Given ``r`` as above, if we define `r'` according to the rule `r' a b` iff `quot.mk r a = quot.mk r b`, then it's clear that `r'` is an equivalence relation. Indeed, `r'` is the *kernel* of the function ``a ↦ quot.mk r a``.  The axiom ``quot.sound`` says that ``r a b`` implies ``r' a b``. Using ``quot.lift`` and ``quot.ind``, we can show that ``r'`` is the smallest equivalence relation containing ``r``, in the sense that if ``r''`` is any equivalence relation containing ``r``, then ``r' a b`` implies ``r'' a b``. In particular, if ``r`` was an equivalence relation to start with, then for all ``a`` and ``b`` we have ``r a b`` iff ``r' a b``.
 
-To support this common use case, the `standard library <lean_src>` defines the notion of a *setoid*, which is simply a type with an associated equivalence relation:
+To support this common use case, the `standard library <lean_src>`_ defines the notion of a *setoid*, which is simply a type with an associated equivalence relation:
 
 .. code-block:: lean
 
@@ -440,7 +479,7 @@ The constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotie
 
 Together with ``quotient.sound``, this implies that the elements of the quotient correspond exactly to the equivalence classes of elements in ``α``.
 
-Recall that in the `standard library <lean_src>`, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of *unordered* pairs of elements of a type ``α`` as a quotient of the type ``α × α``. First, we define the relevant equivalence relation:
+Recall that in the `standard library <lean_src>`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of *unordered* pairs of elements of a type ``α`` as a quotient of the type ``α × α``. First, we define the relevant equivalence relation:
 
 .. code-block:: lean
 
@@ -601,7 +640,7 @@ We can easily prove that ``{a₁, a₂} = {a₂, a₁}`` using ``quot.sound``, s
     -- END
     end uprod
 
-To complete the example, given ``a:α`` and ``u: uprod α``, we define the proposition ``a ∈ u`` which should hold if ``a`` is one of the elements of the unordered pair ``u``. First, we define a similar proposition ``mem_fn a u`` on (ordered) pairs; then we show that ``mem_fn`` respects the equivalence relation ``eqv`` with the lemma ``mem_respects``. This is an idiom that is used extensively in the Lean `standard library <lean_src>`.
+To complete the example, given ``a:α`` and ``u: uprod α``, we define the proposition ``a ∈ u`` which should hold if ``a`` is one of the elements of the unordered pair ``u``. First, we define a similar proposition ``mem_fn a u`` on (ordered) pairs; then we show that ``mem_fn`` respects the equivalence relation ``eqv`` with the lemma ``mem_respects``. This is an idiom that is used extensively in the Lean `standard library <lean_src>`_.
 
 .. code-block:: lean
 
