@@ -98,6 +98,58 @@ If you expect to contribute improvements to the source code, instead of cloning 
 
 If you have permission to push changes directly to the official ualib.gitlab.io repository, you don't have to bother with creating forks and pull requests. Instead, you can simply clone the repository to your local drive, make changes, and then commit and push them.
 
+---------------------------------------------
+
+## Typical Workflow
+
+Once you have a clone of the [ualib.gitlab.io repo](https://gitlab.com/ualib/ualib.gitlab.io) on your hard drive, carry out the following series of steps (repeatedly, as necessary) to improve the repo's content.
+
+1. **Important**. Before editing any of the files, first check that the files in your local repository are up-to-date and reflect the latest changes that you or other team members have made (otherwise, merging mayhem is likely).
+
+   If you are working on a clone of the official repository, you can simply do `git pull`.
+
+   If you are working on a clone of your own fork of the repository, please follow the instructions in the section on [Keeping your fork up-to-date](#keeping-your-fork-up-to-date).
+
+2. **Build the html version** of the book and view the result in a browser.
+
+   ``` sh
+   make html
+   google-chrome _build/html/index.html
+   ```
+
+3. **Edit the rst files** and then rebuild (repeat step 2). See the section on [Editing rst files](#editing-rst-files).
+
+4. If you like your changes, stage and commit them to your local repository, then push to your remote fork; e.g.,
+
+   ``` sh
+   git commit -m "fixed a bug in the bar method of the Foo class"
+   git push
+   ```
+
+5. Create a pull request by navigating to your fork's Gitlab page and clicking the **Pull Request** link (which appears next to a message like, "This branch is 1 commit ahead of ualib:master").
+
+   Try to include an informative comment stating the reason for your proposed changes.
+
+-------------------------------
+
+## Editing rst files
+
+The docs are built from [reStructuredText](http://docutils.sourceforge.net/rst.html) (.rst) files using [Sphinx](http://www.sphinx-doc.org).
+
+Here are some resources to help you get started editing [reStructuredText](http://docutils.sourceforge.net/rst.html) files.
+
++ [Official Sphinx Documentation](http://www.sphinx-doc.org/en/master/)
++ [quickref.html](http://docutils.sourceforge.net/docs/user/rst/quickref.html)
++ [rest_syntax.html](https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html)
+
+------------------------------------------
+
+## Test the Lean code snippets
+
+``` sh
+make leantest
+```
+
 -------------------------------
 
 ## Keeping your fork up-to-date
@@ -152,58 +204,6 @@ Below is a list of the commands that accomplish this, but see [this page](https:
    ```
 
 Now when you now visit the Gitlab page of your personal fork of the repo, you should see a message like, "This branch is even with ualib:master."
-
----------------------------------------------
-
-## Typical Workflow
-
-Once you have a clone of the [ualib.gitlab.io repo](https://gitlab.com/ualib/ualib.gitlab.io) on your hard drive, carry out the following series of steps (repeatedly, as necessary) to improve the repo's content.
-
-1. **Important**. Before editing any of the files, first check that the files in your local repository are up-to-date and reflect the latest changes that you or other team members may have made (otherwise, merging mayhem will likely follow).
-
-   If you are working on a clone of the official repository, you can simply do `git pull`.
-
-   If you are working on a clone of your own fork of the repository, please follow the instructions in the section on [Keeping your fork up-to-date](#keeping-your-fork-up-to-date).
-
-2. **Build the html version** of the book and view the result in a browser.
-
-   ``` sh
-   make html
-   google-chrome _build/html/index.html
-   ```
-
-3. **Edit the rst files** and then rebuild (repeat step 2). See the section on [Editing rst files](#editing-rst-files).
-
-4. If you like your changes, stage and commit them to your local repository, then push to your remote fork; e.g.,
-
-   ``` sh
-   git commit -m "fixed a bug in the bar method of the Foo class"
-   git push
-   ```
-
-5. Create a pull request by navigating to your fork's Gitlab page and clicking the **Pull Request** link (which appears next to a message like, "This branch is 1 commit ahead of ualib:master").
-
-   Try to include an informative comment stating the reason for your proposed changes.
-
--------------------------------
-
-## Editing rst files
-
-The docs are built from [reStructuredText](http://docutils.sourceforge.net/rst.html) (.rst) files using [Sphinx](http://www.sphinx-doc.org).
-
-Here are some resources to help you get started editing [reStructuredText](http://docutils.sourceforge.net/rst.html) files.
-
-+ [Official Sphinx Documentation](http://www.sphinx-doc.org/en/master/)
-+ [quickref.html](http://docutils.sourceforge.net/docs/user/rst/quickref.html)
-+ [rest_syntax.html](https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html)
-
-------------------------------------------
-
-## Test the Lean code snippets
-
-``` sh
-make leantest
-```
 
 -----------------------
 
