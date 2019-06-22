@@ -1,10 +1,10 @@
 # ualib.gitlab.io
 
-As of 22 June 2019, **this is a work in progress**.
+As of 22 June 2019, **this is still a work in progress**.
 
 ## Introduction
 
-This repository contains the documentation for the [Lean Universal Algebra Library](https://gitlab.com/ualib/lean-ualib?nav_source=navbar), aka [lean-ualib](https://gitlab.com/ualib/lean-ualib?nav_source=navbar).
+This repository contains the [documentation](https://ualib.gitlab.io/) for the [Lean Universal Algebra Library](https://gitlab.com/ualib/lean-ualib?nav_source=navbar), aka [lean-ualib](https://gitlab.com/ualib/lean-ualib?nav_source=navbar).
 
 The docs are served at [ualib.org](https://ualib.gitlab.io/), and are built from [reStructuredText](http://docutils.sourceforge.net/rst.html) (rst) files using [Sphinx](http://www.sphinx-doc.org).
 
@@ -209,7 +209,7 @@ Now when you now visit the Gitlab page of your personal fork of the repo, you sh
 
 ## Troubleshooting
 
-Please email [William](mailto:williamdemeo@gmail.com) if you get stuck with any of the above steps.
+Please [email William](mailto:williamdemeo@gmail.com) if you get stuck with any of the above steps.
 
-Please post comments, questions, or suggestions using [the issues link](https://gitlab.com/ualib/ualib.gitlab.io/issues/new).
+Please [post](https://gitlab.com/ualib/ualib.gitlab.io/issues/new) comments, questions, or suggestions using [the issues link](https://gitlab.com/ualib/ualib.gitlab.io/issues/new).
 
