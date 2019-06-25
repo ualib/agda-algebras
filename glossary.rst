@@ -320,6 +320,9 @@ Nomenclature
     law of the excluded middle
       This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds.
 
+    logically equivalent
+      Propositions :math:`P` and :math:`Q` are **logically equivalent** provided :math:`P` implies :math:`Q` and :math:`Q` implies :math:`P`.
+
     Lean
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
 
