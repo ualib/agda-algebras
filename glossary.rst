@@ -434,6 +434,9 @@ Nomenclature
     relational structure
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
 
+    respects
+      Given a function :math:`f: α → β`, we say that :math:`f` **respects** the relation ρ provided :math:`∀ x y: α`, if :math:`x \mathrel ρ y` then :math:`f x = f y`. We write :math:`f ⊧ ρ` in this case. (The symbol ⊧ is produced by typing ``\models``.)
+
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
 
@@ -658,5 +661,7 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+--------------------------------------------------+
   | ∅       | ``\emp`` (or ``\empty`` or ``\emptyset``)        |
   +---------+--------------------------------------------------+
-
+  | ⊢, ⊨, ⊧ | ``\vdash``, ``\vDash``, ``\models``              |
+  +---------+--------------------------------------------------+
+  
 

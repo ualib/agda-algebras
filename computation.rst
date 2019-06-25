@@ -317,7 +317,7 @@ In such cases, it's tempting to reduce the expression to ``0``, but in nontrivia
 
   *eliminating cast changes the type of the term*,
 
-which might leave us with an expression that is not of the expected type. However, the virtual machine has no trouble evaluating the expression to ``0``.
+which might give an expression that is not of the expected type, but the virtual machine has no trouble evaluating it to ``0``.
 
 The next example shows how ``propext`` can also block the kernel.
 
@@ -335,98 +335,118 @@ The next example shows how ``propext`` can also block the kernel.
      -- evaluates to 0
      #eval val
 
-Current research programs aim to extend type theory in ways that permit reductions for casts involving function extensionality, quotients, and more. However, the solutions are not so obvious, and the rules of Lean's underlying calculus do not allow such reductions.
+Current research aims to extend type theory to permit reductions for casts involving function extensionality, quotients, and more. However, the solutions are not so obvious, and Lean's underlying calculus does not allow such reductions.
 
-In a sense, a cast does not change the meaning of an expression. Rather, it is a mechanism to reason about the expression's type.
+  *In a sense, a cast does not change the meaning of an expression. Rather, it is a mechanism to reason about the expression's type*.
 
-Given an appropriate semantics, then, it makes sense to reduce terms in ways that preserve their meaning, ignoring the intermediate bookkeeping needed to make the reductions type check. In that case, adding new axioms in ``Prop`` does not matter; by proof irrelevance, an expression in ``Prop`` carries no information, and can be safely ignored by the reduction procedures.
+Given an appropriate semantics, it makes sense to reduce terms in ways that preserve their meaning, ignoring the intermediate bookkeeping needed to make the reductions type check. Thus, adding new axioms in ``Prop`` does not matter; by proof irrelevance, an expression in ``Prop`` carries no information, and can be safely ignored by the reduction procedures.
 
 --------------------------------------------
 
-.. index:: equivalence class, ! quotient, 
+.. index:: equivalence class, ! quotient
 
 .. _quotients:
 
 Quotients
 ---------
 
-.. Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the equivalence relation.
+Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-.. As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
 
-.. The :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is :math:`A/{≡}` and called the **quotient of** :math:`A` **modulo** ≡.
+The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient of** :math:`A` **modulo** ≡.
 
-.. Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but they differ only in ways that do not interest us.
+Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but the ways in which they do differ do not interest us.
 
-.. Here is a "real-world" example of a situation in which we might want to "mod out" (i.e., remove by taking the quotient modulo some equivalence relation) irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in two different photographs---the orientation of the face is unimportant.  Indeed, it would be silly to conclude that the faces in the two photos must belong to different people simply because it is shown from different angles.
+Here is a "real-world" example of a situation in which we might want to "mod out" (i.e., ignore by forming a quotient) irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of the face is unimportant.  Indeed, it would be silly to conclude that the faces in multiple photos must belong to different people simply because they show the face at different angles.
 
-.. Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of a single individual).  Thus :math:`A/{≡}` is a version of the set :math:`A` where similar elements have been compressed into a single element.
+Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of person :math:`a`).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
 
-.. Another example is the equivalence relation **congruence modulo 5** on the set ℤ of integers. This relation partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
+Another example is the equivalence relation of **congruence modulo 5** on the set of integers, ℤ.  This relation partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
-.. Let ``α`` be any type, and let ``r`` be an equivalence relation on ``α``. It is mathematically common to form the "quotient" ``α/r``, that is, the type of elements of ``α`` "modulo" ``r``. Set theoretically, one can view ``α/r`` as the set of equivalence classes of ``α`` modulo ``r``. If ``f: α → β`` is any function that respects the equivalence relation in the sense that for every ``x y: α``, ``r x y`` implies ``f x = f y``, then ``f`` "lifts" to a function ``f': α/r → β`` defined on each equivalence class ``⟦x⟧`` by ``f' ⟦x⟧ = f x``. Lean's `standard library <lean_src>`_ extends the Calculus of Constructions with additional constants that perform exactly these constructions, and installs this last equation as a definitional reduction rule.
+Let ``α`` be a type, and let ``ρ`` be an equivalence relation on ``α``.  The **quotient** ``α/ρ`` of elements ``α`` modulo ``ρ`` is the collection of equivalence classes of ``α`` modulo ``ρ``.
 
-.. In its most basic form, the quotient construction does not even require ``r`` to be an equivalence relation. The following constants are built into Lean:
+.. index:: lift; of a function, reduction rule
 
-.. .. code-block:: lean
+Suppose ``f: α → β`` is a function that :term:`respects` the equivalence relation ``ρ``; that is, ``∀ x y: α`` if ``ρ x y`` then ``f x = f y``.
 
-..     namespace hidden
-..     -- BEGIN
-..     universes u v
+**Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``. (The symbol ⊧ is produced by typing ``\models``.)
 
-..     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+If ``f ⊧ ρ`` Then  ``f`` **lifts** to a function ``̃̃f̃ : α/ρ → β`` defined for each class ``⟦x⟧`` by ``̃f̃ ⟦x⟧ = f x``. We call ``̃f̃`` the **lift** of ``f`` from ``α`` to ``α/ρ``.
 
-..     constant quot.mk :
-..       Π {α: Sort u} (r: α → α → Prop), α → quot r
+Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lifting constructions, and makes the equation ``̃f̃ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
 
-..     axiom quot.ind :
-..       ∀ {α: Sort u} {r: α → α → Prop} {β: quot r → Prop},
-..         (∀ a, β (quot.mk r a)) → ∀ (q: quot r), β q
+The following constants are built into Lean.
 
-..     constant quot.lift :
-..       Π {α: Sort u} {r: α → α → Prop} {β: Sort u} (f: α → β),
-..         (∀ a b, r a b → f a = f b) → quot r → β
+::
 
-..     -- END
-..     end hidden
+  namespace computation
 
-.. The first one forms a type ``quot r`` given a type ``α`` by any binary relation ``r`` on ``α``. The second maps ``α`` to ``quot α``, so that if ``r: α → α → Prop`` and ``a:α``, then ``quot.mk r a`` is an element of ``quot r``. The third principle, ``quot.ind``, says that every element of ``quot.mk r a`` is of this form.  As for ``quot.lift``, given a function ``f: α → β``, if ``h`` is a proof that ``f`` respects the relation ``r``, then ``quot.lift f h`` is the corresponding function on ``quot r``. The idea is that for each element ``a`` in ``α``, the function ``quot.lift f h`` maps ``quot.mk r a`` (the ``r``-class containing ``a``) to ``f a``, wherein ``h`` shows that this function is well defined. In fact, the computation principle is declared as a reduction rule, as the proof below makes clear.
+    -- BEGIN
+    universes u v
 
-.. .. code-block:: lean
+    -- Form the type quot ρ.
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
 
-..     variables α β: Type
-..     variable  r: α → α → Prop
-..     variable  a: α
+    -- Map α to quot α, so that if ρ: α → α → Prop and a:α,
+    -- then quot.mk ρ a has type quot ρ.
+    constant quot.mk :
+      Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
 
-..     -- the quotient type
-..     #check (quot r: Type)
+    -- Every element of quot α has the form quot.mk ρ a.
+    axiom quot.ind :
+      ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
+        (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
 
-..     -- the class of a
-..     #check (quot.mk r a: quot r)
+    constant quot.lift :
+      Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
+        (∀ a b, ρ a b → f a = f b) → quot ρ → β
 
-..     variable  f: α → β
-..     variable   h: ∀ a₁ a₂, r a₁ a₂ → f a₁ = f a₂ 
+    -- END
+  end computation
 
-..     -- the corresponding function on quot r
-..     #check (quot.lift f h: quot r → β)
+The first of these takes a type ``α`` and a binary relation ``ρ`` on ``α`` and forms the type ``quot ρ``.
 
-..     -- the computation principle
-..     theorem thm: quot.lift f h (quot.mk r a) = f a := rfl
+The second maps ``α`` to ``quot α``, so that if ``ρ: α → α → Prop`` and ``a:α``, then ``quot.mk ρ a`` is an element of ``quot ρ``.
 
-.. The four constants, ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` in and of themselves are not very strong. You can check that the ``quot.ind`` is satisfied if we take ``quot r`` to be simply ``α``, and take ``quot.lift`` to be the identity function (ignoring ``h``). For that reason, these four constants are not viewed as additional axioms:
+The third, ``quot.ind``, says every element of ``quot.mk ρ a`` is of this form.
 
-.. .. code-block:: lean
+Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f ⊧ ρ``, then ``quot.lift f h`` is the corresponding function on ``quot ρ``.
 
-..     variables α β: Type
-..     variable  r: α → α → Prop
-..     variable  a: α
-..     variable  f: α → β
-..     variable   h: ∀ a₁ a₂, r a₁ a₂ → f a₁ = f a₂ 
-..     theorem thm: quot.lift f h (quot.mk r a) = f a := rfl
+The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk ρ a`` (the ``ρ``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
 
-..     -- BEGIN
-..     #print axioms thm   -- no axioms
-..     -- END
+In fact, this computation principle is declared as a reduction rule, as the proof below makes clear.
+
+::
+
+  variables (α β: Type) (ρ: α → α → Prop) (a: α)
+
+  -- the quotient type
+  #check (quot ρ: Type)
+
+  -- the class of a
+  #check (quot.mk ρ a: quot ρ)
+
+  variable f: α → β
+  variable h: ∀ a₁ a₂, ρ a₁ a₂ → f a₁ = f a₂
+
+  -- the corresponding function on quot r
+  #check (quot.lift f h: quot ρ → β)
+
+  -- the computation principle
+  theorem thm: quot.lift f h (quot.mk ρ a) = f a := rfl
+
+The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot ρ`` is just ``α``, and ``quot.lift`` is the identity function.)  For that reason, these four constants are not considered "axioms," as is verified in the following code segment which asks Lean to ``#print`` the axioms used by ``thm``.
+
+::
+
+  variables (α β: Type) (ρ: α → α → Prop)
+  variables (a: α) (f: α → β)
+
+  theorem thm (h: ∀ a₁ a₂, ρ a₁ a₂ → f a₁ = f a₂):
+  quot.lift f h (quot.mk ρ a) = f a := rfl
+
+  #print axioms thm   -- no axioms
 
 .. They are, like inductively defined types and the associated constructors and recursors, viewed as part of the logical framework.
 
@@ -773,6 +793,9 @@ Quotients
 
 .. [1]
    :math:`∨\mathrm E`; see `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
+
+.. [2]
+   In fact, in its most basic form the quotient construction does not require that ``ρ`` be an equivalence relation.
 
 .. .. [2]
 ..    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
