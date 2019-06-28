@@ -1,14 +1,14 @@
-.. _axioms_and_computation:
+.. _extensionality-and-quotients:
 
 .. highlight:: lean
 
-Computation
-===========
+Extensionality and Quotients
+============================
 
-References and attributions
-----------------------------
+Attribution
+-----------
 
-In this chapter, we take as a starting point the chapter `Axioms and Computation`_ in the `Theorem Proving in Lean`_ tutorial.  Some of the background material from that chapter is repeated in this section for clarity and self-containment.
+This chapter takes as its starting point the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some material from that tutorial is repeated here for clarity and self-containment.
 
 -------------------------------------------------
 
@@ -380,9 +380,9 @@ Suppose ``f: α → β`` is a function that :term:`respects` the equivalence rel
 
 **Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``. (The symbol ⊧ is produced by typing ``\models``.)
 
-If ``f ⊧ ρ``, then  ``f`` **lifts** to a function ``̃̃f̃ : α/ρ → β`` defined for each class ``⟦x⟧`` by ``̃f̃ ⟦x⟧ = f x``. We call ``̃f̃`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol f̃ is produced by typing ``f\tilde``.)
+If ``f ⊧ ρ``, then  ``f`` **lifts** to a function ``fₗ : α → β`` defined for each class ``⟦x⟧`` by ``fₗ ⟦x⟧ = f x``. We call ``fₗ`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol ``fₗ`` is produced by typing ``f\_l``.)
 
-Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lifting constructions, and makes the equation ``̃f̃ ⟦x⟧ = f x`` available as a definitional reduction rule. [3]_
+Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lift constructions, and makes the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule.
 
 The following constants are built into Lean.
 
@@ -393,37 +393,43 @@ The following constants are built into Lean.
     -- BEGIN
     universes u v
 
-    -- Form the type quot ρ.
+    -- The quotient type former
     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
 
-    -- Map α to quot α, so that if ρ: α → α → Prop and a:α,
-    -- then quot.mk ρ a has type quot ρ.
-    constant quot.mk :
-      Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
+    -- So quot takes a type α and a binary relation ρ on α
+    -- and forms the collection α/ρ of all ρ-classes of α.
 
-    -- Every element of quot α has the form quot.mk ρ a.
-    axiom quot.ind :
-      ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
-        (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
+    -- Map each a:α to a particular ρ-class.
+    constant quot.mk: Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
 
-    constant quot.lift :
-      Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
-        (∀ a b, ρ a b → f a = f b) → quot ρ → β
+    -- So, if ρ: α → α → Prop and a:α, then quot.mk ρ a is the
+    -- ρ-class a/ρ containing a and this class has type quot ρ.
+
+    -- Assume each element of quot ρ is a ρ-class of the form quot.mk ρ a.
+    axiom quot.ind:
+    ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
+    (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
+
+    constant quot.lift:
+    Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, ρ a b → f a = f b) → quot ρ → β
 
     -- END
   end computation
 
-The first of these takes a type ``α`` and a binary relation ``ρ`` on ``α`` and forms the type ``quot ρ``.
+The first of these takes each type ``α`` and, given a binary relation ``ρ`` on ``α``, forms the type ``quot ρ`` (or ``@quot α ρ``, if we wish to make the first parameter explicit).
 
-The second maps ``α`` to ``quot α``, so that if ``ρ: α → α → Prop`` and ``a:α``, then ``quot.mk ρ a`` is an element of ``quot ρ``.
+That is, for each ``α: Sort u``, the function type ``quot`` (or ``@quot α``) takes each binary relation ``ρ: α → α → Prop`` to the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
 
-The third, ``quot.ind``, says every element of ``quot.mk ρ a`` is of this form.
+The second, ``constant quot.mk``, takes ``α`` and ``ρ: α → α → Prop`` and forms the function that maps each ``a:α`` to its ρ-class ``quot.mk ρ a``, which has type ``quot ρ``.
 
-Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f ⊧ ρ``, then ``quot.lift f h`` is the corresponding function on ``quot ρ``.
+The third, ``quot.ind``, is the axoim which assumes every element of ``quot ρ`` is of the form ``quot.mk ρ a``.
+
+Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``ρ`` (i.e., ``f ⊧ ρ``), then ``quot.lift f h`` is the corresponding function on ``quot ρ``, that is, the lift of ``f`` to ``quot ρ``.
 
 The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk ρ a`` (the ``ρ``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
 
-In fact, this computation principle is declared as a reduction rule, as the proof below makes clear.
+In fact, this computation principle is declared as a reduction rule, as the proof of the theorem at the end of this code block makes clear.
 
 ::
 
@@ -443,6 +449,40 @@ In fact, this computation principle is declared as a reduction rule, as the proo
 
   -- the computation principle
   theorem thm: quot.lift f h (quot.mk ρ a) = f a := rfl
+
+Here's an example that includes a bit of syntactic sugar.
+
+::
+
+   namespace computation
+    universes u v
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+    constant quot.mk: Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
+
+    axiom quot.ind:
+    ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
+    (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
+
+    constant quot.lift:
+    Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, ρ a b → f a = f b) → quot ρ → β
+
+    -- BEGIN
+    variables (α β : Type) (f : α → β) (ρ : α → α → Prop)
+
+    -- notation for "f respects ρ"
+    notation f `⊧` ρ := ∀ a b, ρ a b → f a = f b
+
+    variable h: f ⊧ ρ
+
+    local notation `fₗ` := quot.lift f h
+
+    #check f ⊧ ρ                 -- Prop
+    #check quot.lift f h         -- quot (λ (a b : α), ρ a b) → β
+    #check fₗ                    -- quot (λ (a b : α), ρ a b) → β
+    -- END
+
+  end computation
 
 The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot ρ`` is just ``α``, and ``quot.lift`` is the identity function.)  For that reason, these four constants are not considered "axioms," as is verified in the following code segment which asks Lean to ``#print`` the axioms used by ``thm``.
 
@@ -803,10 +843,7 @@ The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not ver
    :math:`∨\mathrm E`; see `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 .. [2]
-   Like some of the other material in this section, this example is borrowed from the chapter `Axioms and Computation`_ in the `Theorem Proving in Lean`_ tutorial.
-
-.. [3]
-   In fact, in its most basic form the quotient construction does not require that ``ρ`` be an equivalence relation.
+   Like some of the other material in this chapter, this example is borrowed from the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
 
 .. .. [2]
 ..    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
