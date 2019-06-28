@@ -8,7 +8,7 @@ Computation
 References and attributions
 ----------------------------
 
-In this chapter, we take as a starting point the chapter `Axioms and Computation`_ from the book `Theorem Proving in Lean`_.  Some of the background material from that chapter is repeated here to keep our presentation self-contained.
+In this chapter, we take as a starting point the chapter `Axioms and Computation`_ in the `Theorem Proving in Lean`_ tutorial.  Some of the background material from that chapter is repeated in this section for clarity and self-containment.
 
 -------------------------------------------------
 
@@ -292,7 +292,7 @@ We can then define the empty set, ∅, as well as set intersection, union, etc. 
 
   end computation
 
-The following is an example of how function extensionality can block computation in the Lean kernel.
+The following is an example of how function extensionality can block computation in the Lean kernel. [2]_
 
 ::
 
@@ -352,17 +352,25 @@ Quotients
 
 Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.  Below we will sometimes use the notation :math:`a/{≡}` to denote the class :math:`a/{≡}`.
 
 The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient of** :math:`A` **modulo** ≡.
 
-Equivalence captures a weak notion of equality: if two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but the ways in which they do differ do not interest us.
+Equivalence captures a weak notion of equality. If two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, rather, the way in which they do differ is not relevant to us.
 
-Here is a "real-world" example of a situation in which we might want to "mod out" (i.e., ignore by forming a quotient) irrelevant information.  In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of the face is unimportant.  Indeed, it would be silly to conclude that the faces in multiple photos must belong to different people simply because they show the face at different angles.
+.. proof:example::
+
+   Consider this "real-world" example in which it is useful to "mod out"---i.e., ignore by forming a quotient---irrelevant information.
+
+   In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of a person's face is unimportant.  Indeed, it would be silly to conclude that the faces in multiple photos must belong to different people simply because they show the face at different angles.
+
+   In this application it makes sense to collect in a single class those faces that differ only with respect to their orientation.  We might call two faces from the same class "equivalent modulo orientation."
 
 Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of person :math:`a`).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
 
-Another example is the equivalence relation of **congruence modulo 5** on the set of integers, ℤ.  This relation partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
+.. proof:example::
+
+   The equivalence relation of **congruence modulo 5** on the set of integers partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
 Let ``α`` be a type, and let ``ρ`` be an equivalence relation on ``α``.  The **quotient** ``α/ρ`` of elements ``α`` modulo ``ρ`` is the collection of equivalence classes of ``α`` modulo ``ρ``.
 
@@ -372,9 +380,9 @@ Suppose ``f: α → β`` is a function that :term:`respects` the equivalence rel
 
 **Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``. (The symbol ⊧ is produced by typing ``\models``.)
 
-If ``f ⊧ ρ`` Then  ``f`` **lifts** to a function ``̃̃f̃ : α/ρ → β`` defined for each class ``⟦x⟧`` by ``̃f̃ ⟦x⟧ = f x``. We call ``̃f̃`` the **lift** of ``f`` from ``α`` to ``α/ρ``.
+If ``f ⊧ ρ``, then  ``f`` **lifts** to a function ``̃̃f̃ : α/ρ → β`` defined for each class ``⟦x⟧`` by ``̃f̃ ⟦x⟧ = f x``. We call ``̃f̃`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol f̃ is produced by typing ``f\tilde``.)
 
-Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lifting constructions, and makes the equation ``̃f̃ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
+Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lifting constructions, and makes the equation ``̃f̃ ⟦x⟧ = f x`` available as a definitional reduction rule. [3]_
 
 The following constants are built into Lean.
 
@@ -795,6 +803,9 @@ The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not ver
    :math:`∨\mathrm E`; see `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 .. [2]
+   Like some of the other material in this section, this example is borrowed from the chapter `Axioms and Computation`_ in the `Theorem Proving in Lean`_ tutorial.
+
+.. [3]
    In fact, in its most basic form the quotient construction does not require that ``ρ`` be an equivalence relation.
 
 .. .. [2]
