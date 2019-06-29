@@ -157,7 +157,7 @@ For that reason, these four constants are not considered "axioms," as is verifie
 
 Like inductively defined types and their associated constructors and recursors, the four constants above are viewed as part of the logical framework.
 
-What makes the ``quot`` construction into a bona fide quotient is the following additional axiom:
+What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``ρ``, then they are identified in the quotient ``α/ρ``.
 
 ::
 
@@ -170,7 +170,6 @@ What makes the ``quot`` construction into a bona fide quotient is the following 
     -- END
   end quotient
 
-The ``quot.sound`` axiom asserts that if two elements of ``α`` are related by ``ρ``, then they are identified in the quotient ``α/ρ``.
 
 ----------------------------------------
 
@@ -181,11 +180,13 @@ The ``quot.sound`` axiom asserts that if two elements of ``α`` are related by `
 Setoids
 -------
 
-In a quotient construction α/ρ, the relation ρ is typically an *equivalence relation*.  If not, we can extend it to one.
+In a quotient construction α/ρ, the relation ρ is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``ρ``, we define ``ρ'`` according to the rule
 
-Indeed, given a binary relation ``ρ``, we define ``ρ'`` according to the rule ``ρ' a b`` iff ``quot.mk ρ a = quot.mk ρ b``. Then ``ρ'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk ρ a``.
+  ``ρ' a b`` :math:`\quad` iff :math:`\quad` ``quot.mk ρ a = quot.mk ρ b``.
+  
+Then ``ρ'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk ρ a``.
 
-The axiom ``quot.sound``, given at the end of the last section, asserts that ``ρ a b`` implies ``ρ' a b``.
+The axiom ``quot.sound`` given at the end of the last section asserts that ``ρ a b`` implies ``ρ' a b``.
 
 Using ``quot.lift`` and ``quot.ind``, we can show that ``ρ'`` is the smallest equivalence relation containing ``ρ``. In particular, if ``ρ`` is already an equivalence relation, then we have ``ρ = ρ'``.
 
