@@ -63,20 +63,22 @@ Here are four such constants from the :term:`LSL`.
     -- The quotient type former
     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
 
-    -- So quot takes a type α and a binary relation ρ on α
-    -- and forms the collection α/ρ of all ρ-classes of α.
+    -- So quot takes a type α and a relation ρ ⊆ α × α
+    -- and forms the collection α/ρ of ρ-classes.
 
-    -- Map each a:α to a particular ρ-class.
+    -- Given α and ρ ⊆ α × α, map each a:α to its ρ-class.
     constant quot.mk: Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
 
     -- So, if ρ: α → α → Prop and a:α, then quot.mk ρ a is the
-    -- ρ-class a/ρ containing a and this class has type quot ρ.
+    -- ρ-class a/ρ containing a, which has type quot ρ.
 
     -- Assume each element of quot ρ is a ρ-class, eg, quot.mk ρ a.
     axiom quot.ind:
     ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
     (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
 
+    -- Take a function f: α → β and a proof h : f ⊧ ρ, and
+    -- return the lift of f to quot ρ.
     constant quot.lift:
     Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
     (∀ a b, ρ a b → f a = f b) → quot ρ → β
