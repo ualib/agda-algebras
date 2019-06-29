@@ -21,7 +21,7 @@
 
 We now describe how many of the concepts of sets and types discussed in the last two chapters are implemented in the Lean language.
 
-Many of the implementations shown here also appear in the following files in the `Lean standard library <lean_src>`_ and the `Lean Mathlib <mathlib>`_:
+Many of the implementations shown here also appear in the following files in the `Lean Standard Library`_ (:term:`LSL`) and the `Lean Mathlib <mathlib>`_:
 
 + set.lean_
 + basic.lean_
@@ -656,7 +656,7 @@ Inductive types in Lean
 
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 
-.. _lean_src: https://github.com/leanprover/lean
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 

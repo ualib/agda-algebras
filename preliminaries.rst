@@ -696,9 +696,9 @@ then 𝖱 is a closure operator.
 
 .. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
 
-.. _mathlib: https://github.com/leanprover-community/mathlib/
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
-.. _lean_src: https://github.com/leanprover/lean
+.. _mathlib: https://github.com/leanprover-community/mathlib/
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 

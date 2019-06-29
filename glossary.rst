@@ -44,6 +44,9 @@ Acronyms
     ITT
       :term:`intensional` :term:`intuitionistic type theory <TT>`.
 
+    LSL
+      `Lean Standard Library`_
+      
     ω-cpo
       :term:`ω-chain cocomplete poset`
 
@@ -51,10 +54,10 @@ Acronyms
       range
 
     TT
-      intuitionistic :term:`type theory`
+      (intuitionistic) :term:`type theory`
 
     UIP
-      uniqueness of identity proofs
+      `Uniqueness of Identity Proofs <https://ncatlab.org/nlab/show/axiom+UIP>`_
 
 ----------------------------------------------------
 
@@ -180,7 +183,7 @@ Nomenclature
       see :term:`sigma type`
 
     dependent type
-      A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`Section %s <dependent-types>`.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_ manual.
+      A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`Section %s <dependent-types>`.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ manual.
 
     directed set
       A subset :math:`D` of a :term:`preorder` is called **directed** if every finite subset of :math:`D` has an upper bound in :math:`D`. That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
@@ -401,6 +404,9 @@ Nomenclature
     preorder
       A **preorder** on a set :math:`X` is a :term:`reflexive` and :term:`transitive` subset of :math:`X × X`.
 
+    preserves
+      see :term:`respects`
+
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
 
@@ -435,7 +441,9 @@ Nomenclature
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
 
     respects
-      Given a function :math:`f: α → β`, we say that :math:`f` **respects** the relation ρ provided :math:`∀ x y: α`, if :math:`x \mathrel ρ y` then :math:`f x = f y`. We write :math:`f ⊧ ρ` in this case. (The symbol ⊧ is produced by typing ``\models``.)
+      Given a function :math:`f: α → β`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`ρ ⊆ α × α`, and we write :math:`f ⊧ ρ`, just in case :math:`∀ x, y :α \ (x \mathrel ρ y \ → \ f x = f y)`.
+        
+      (The symbol ⊧ is produced by typing ``\models``.)
 
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
@@ -483,7 +491,7 @@ Nomenclature
       A binary relation :math:`R` on a set :math:`X` is called **transitive** provided :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
     type theory
-      Intuitionistic **type theory**, which extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. TT internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in TT play a similar role to sets in set theory but *functions definable in TT are always computable*.
+      Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. :term:`TT` internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in :term:`TT` play a similar role to that of sets in set theory but *functions definable in TT are always computable*. (See also `ncatlab.org/type+theory <https://ncatlab.org/nlab/show/type+theory>`_.)
 
     underlying set functor
       The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.
@@ -675,3 +683,37 @@ The list below shows what to type in order to produce each of the special unicod
   +---------+--------------------------------------------------+
   | f̃, f̂  |  ``f\tilde``, ``f\hat``                          |
   +---------+--------------------------------------------------+
+
+-------------------------------------
+
+.. .. rubric:: Footnotes
+
+.. .. [1]
+
+.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+.. _Coq: http://coq.inria.fr
+
+.. _NuPRL: http://www.nuprl.org/
+
+.. _Lean: https://leanprover.github.io/
+
+.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _Lean Standard Library: https://github.com/leanprover/lean
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+
+.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
+
+.. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#

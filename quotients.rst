@@ -19,29 +19,39 @@ Equivalence captures a weak notion of equality. If two elements of :math:`A` are
 
    Consider this "real-world" example in which it is useful to "mod out"---i.e., ignore by forming a quotient---irrelevant information.
 
-   In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of a person's face is unimportant.  Indeed, it would be silly to conclude that the faces in multiple photos must belong to different people simply because they show the face at different angles.
+   In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of a person's face is unimportant.  Indeed, it would be silly to infer that faces in multiple photos belong to different people on the basis that the faces are orientated differently with respect to the camera's field of view.
 
-   In this application it makes sense to collect in a single class those faces that differ only with respect to their orientation.  We might call two faces from the same class "equivalent modulo orientation."
+   In this application it seems reasonable to collect in a single group (equivalence class) those faces that differ only with respect to their spacial orientations.  We might call two faces from the same class "equivalent modulo orientation."
 
-Equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all photographs of person :math:`a`).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
+As we have seen, equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all images of the face of a particular individual).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
 
 .. proof:example::
 
    The equivalence relation of **congruence modulo 5** on the set of integers partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
-Let ``α`` be a type, and let ``ρ`` be an equivalence relation on ``α``.  The **quotient** ``α/ρ`` of elements ``α`` modulo ``ρ`` is the collection of equivalence classes of ``α`` modulo ``ρ``.
+
+Respecting relations
+--------------------
+
+Let ``α`` be a type and ``ρ`` an equivalence relation on ``α``.
+
+The **quotient** ``α/ρ`` (read, "alpha modulo rho") is the collection of equivalence classes of ``ρ``.
+
+That is, for each ``a:α``, there is a class ``a/ρ`` consisting of all ``b:α`` such that ``ρ a b`` holds  (i.e., such that the pair ``(a,b)`` belongs to ``ρ``), and the class ``a/ρ`` inhabits the type ``α/ρ``.
 
 .. index:: lift; of a function, reduction rule
 
-Suppose ``f: α → β`` is a function that :term:`respects` the equivalence relation ``ρ``; that is, ``∀ x y: α`` if ``ρ x y`` then ``f x = f y``.
+We say that a function ``f: α → β`` :term:`respects` (or **preserves**) the relation ``ρ`` provided the following implication holds for all ``x y: α``:
 
-**Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``. (The symbol ⊧ is produced by typing ``\models``.)
+  if ``ρ x y`` then ``f x = f y``.
+
+(**Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``; the symbol ⊧ is produced by typing ``\models``.)
 
 If ``f ⊧ ρ``, then  ``f`` **lifts** to a function ``fₗ : α → β`` defined for each class ``⟦x⟧`` by ``fₗ ⟦x⟧ = f x``. We call ``fₗ`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol ``fₗ`` is produced by typing ``f\_l``.)
 
-Lean's `standard library <lean_src>`_ extends the :term:`Calculus of Inductive Constructions` with additional constants that perform such lift constructions, and makes the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule.
+The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that perform such lift constructions, and makes the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
 
-The following constants are built into Lean.
+Here are four such constants from the :term:`LSL`.
 
 ::
 
@@ -76,11 +86,11 @@ The following constants are built into Lean.
 
 The first of these takes each type ``α`` and, given a binary relation ``ρ`` on ``α``, forms the type ``quot ρ`` (or ``@quot α ρ``, if we wish to make the first parameter explicit).
 
-That is, for each ``α: Sort u``, the function type ``quot`` (or ``@quot α``) takes each binary relation ``ρ: α → α → Prop`` to the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
+That is, if ``α: Sort u``, then the function type ``quot`` (or ``@quot α``) takes a binary relation ``ρ: α → α → Prop`` to the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
 
-The second, ``constant quot.mk``, takes ``α`` and ``ρ: α → α → Prop`` and forms the function that maps each ``a:α`` to its ρ-class ``quot.mk ρ a``, which has type ``quot ρ``.
+The second constant, ``quot.mk``, takes ``α`` and ``ρ: α → α → Prop`` and forms the function that maps each ``a:α`` to its ρ-class ``quot.mk ρ a``, of type ``quot ρ``.
 
-The third, ``quot.ind``, is the axoim which assumes every element of ``quot ρ`` is of the form ``quot.mk ρ a``.
+The third, ``quot.ind``, is the axiom asserting that every element of ``quot ρ`` is of the form ``quot.mk ρ a``.
 
 Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``ρ`` (i.e., ``f ⊧ ρ``), then ``quot.lift f h`` is the corresponding function on ``quot ρ``, that is, the lift of ``f`` to ``quot ρ``.
 
@@ -190,7 +200,7 @@ The axiom ``quot.sound`` given at the end of the last section asserts that ``ρ 
 
 Using ``quot.lift`` and ``quot.ind``, we can show that ``ρ'`` is the smallest equivalence relation containing ``ρ``. In particular, if ``ρ`` is already an equivalence relation, then we have ``ρ = ρ'``.
 
-To support this common use case, the `standard library <lean_src>`_ defines a **setoid**, which is simply a pair consisting of a type along with an associated equivalence relation.
+To support this common use case, the :term:`LSL` defines a **setoid**, which is simply a pair consisting of a type along with an associated equivalence relation.
 
 ::
 
@@ -522,6 +532,10 @@ As a result, ``f₁`` is equal to ``f₂``.
 .. [1]
    Some material in this chapter is borrowed from the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
 
+
+.. [2]
+   At issue here is the question of whether we can define ``fₗ ⟦x⟧`` without invoking some :term:`Choice` axiom.  Indeed, ``⟦x⟧`` is a class of inhabitants of type ``α`` and, if ``fₗ ⟦x⟧`` is taken to be the value returned when ``f`` is evaluated at some member of this class, then we must have a way to choose one such member.
+
 .. .. [2]
 ..    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
 
@@ -540,6 +554,8 @@ As a result, ``f₁`` is equal to ``f₂``.
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 
 .. _lean_src: https://github.com/leanprover/lean
+
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 

@@ -249,7 +249,7 @@ While Lean doesn't have a formal API, per se, you can browse the source code of 
 
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 
-.. _lean_src: https://github.com/leanprover/lean
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 

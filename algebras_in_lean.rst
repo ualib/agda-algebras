@@ -759,7 +759,7 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 
-.. _lean_src: https://github.com/leanprover/lean
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 

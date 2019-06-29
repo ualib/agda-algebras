@@ -32,7 +32,7 @@ Lean is designed to support **classical reasoning** as well as **computational**
 
 By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, any closed :term:`computationally pure` expression of type ℕ will reduce to a number.
 
-`Lean's standard library <lean_src>`_ defines an additional axiom, :term:`proposition extensionality`, and a :term:`quotient` construction. These in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
+The `Lean Standard Library`_ (:term:`LSL`) defines an additional axiom, :term:`proposition extensionality`, and a :term:`quotient` construction. These in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
 
   *using such axiomatic extensions can block evaluation in Lean's kernel*
 
@@ -44,7 +44,7 @@ On the other hand,
 
 and since these axioms only add new propositions, they admit a computational interpretation.
 
-The `standard library <lean_src>`_ supports the classical :term:`law of the excluded middle` (em) as an optional axiom.  We can invoke it if we explicitly open the classical fragment of the library with the line ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``---either ``P`` or ``¬ P``.
+The :term:`LSL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom.  We can invoke it if we explicitly open the classical fragment of the library with the line ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``---either ``P`` or ``¬ P``.
 
 .. proof:example::
 
@@ -64,7 +64,7 @@ The `standard library <lean_src>`_ supports the classical :term:`law of the excl
 
 Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to :term:`bytecode`.
 
-`Lean's standard library <lean_src>`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
+The `Lean Standard Library`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
 
 Use of :term:`Choice` is essential to some classical constructions and it can be imported in Lean when needed. However,
 
@@ -76,7 +76,7 @@ Therefore, in Lean we must mark such definitions ``noncomputable``.
 .. ~~~~~~~~~~~~~~~~~~~~
 .. A famous theorem of Diaconescu uses :term:`proposition extensionality`, :term:`function extensionality` and :term:`Choice` to derive the :term:`law of the excluded middle`. However, as noted above, use of :term:`em` is still compatible with :term:`bytecode` compilation and :term:`code extraction`, as are other classical principles, *as long as they are not used to manufacture data*.
 
-To summarize, on top of the framework of :term:`universes`, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the `standard library <lean_src>`_ adds three (optional) components:
+To summarize, on top of the framework of :term:`universes`, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the :term:`LSL` adds three (optional) components:
 
 + the axiom of :term:`proposition extensionality`
 + a :term:`quotient` construction, which implies :term:`function extensionality`
@@ -213,7 +213,7 @@ Evidently, there are a number of distinct notions of equality, and each may have
 Extensionality in Lean
 ----------------------
 
-Function extensionality follows from the existence of *quotients* (discussed in the next section) and in the `standard library <lean_src>`_ ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.
+Function extensionality follows from the existence of *quotients* (discussed in the next section) and in the :term:`LSL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.
 
 Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).  In other terms, ``A: set α`` represents the **characteristic function** of the set ``A`` defined for all ``x:α`` by
 
@@ -363,7 +363,7 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 
-.. _lean_src: https://github.com/leanprover/lean
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 
