@@ -31,8 +31,8 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
 .. index:: pair: respect; preserve
 
-Lifting functions
------------------
+Lifts of functions
+------------------
 
 Let ``α`` be a type and ``ρ`` a binary relation on ``α``.  Define the **quotient** ``α/ρ`` (read, "alpha modulo rho") to be the collection of ``ρ``-classes of ``α``.
 
@@ -43,7 +43,7 @@ That is, for each ``a:α``, there is a class ``a/ρ`` consisting of all ``b:α``
 Let ``f: α → β`` be a function. We say that ``f`` **lifts** from ``α`` to ``α/ρ`` provided the implication
 
   ``ρ x y  →  f x = f y``
-  
+
 holds for all ``x`` and ``y`` of type ``α``.
 
 (**Notation**. We write ``f ⊧ ρ`` if ``f`` :term:`lifts` from ``α`` to ``α/ρ``; ⊧ is produced by typing ``\models``.)
@@ -194,11 +194,17 @@ Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :
 
 Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
 
-More generally, if :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf` and if :math:`τ: ρf → (α × α)` is a :math:`ρf`-tuple of pairs, each of which belongs to the relation :math:`R ⊆ α × α`, then we say that :math:`f` **respects** :math:`R` provided :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` also belongs to :math:`R`.
+Let us now generalize this notion to operations of higher arities. Suppose :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf`. A function τ of type :math:`ρf → (α × α)` is evidently a :math:`ρf`-tuple of pairs, since for each :math:`i : ρf` we have :math:`τ i : α × α`, a pair of elements of type :math:`α`.
 
-In other words, if we evaluate :math:`f` at all the first coordinates of :math:`τ`, obtaining :math:`f (π_1 ∘ τ)`, and then at all second coordinates of :math:`τ`, obtaining :math:`f (π_2 ∘ τ)`, then the result is a pair that also belongs to ``R``.
+Also, if :math:`π_i` denotes the projection onto the :math:`i`-th coordinate, then :math:`π_1 ∘ τ` and :math:`π_2 ∘ τ` are :math:`ρf`-tuples of elements of type α. For example, the :math:`i`-th pair is :math:`τ\ i` and the first coordinate of this pair is :math:`(π_1 ∘ τ)(i) = π_1 (τ \ i)`.
 
-Of course, if :math:`τ: ρf → (α × α)`, then :math:`(π_1 ∘ τ) : ρf → α`, so :math:`f (π_1  ∘ τ)` makes sense and has type :math:`α`.
+Thus, :math:`f (π_i ∘ τ)` denotes :math:`f` evaluated at the :math:`ρf`-tuple of the :math:`i`-th coordinates of τ.
+
+If :math:`R ⊆ α × α` is a binary relation on α, then we say that :math:`τ: ρf → (α × α)` **belongs to** :math:`R` provided the pair :math:`τ i` belongs to :math:`R` for every :math:`i : ρf`.
+
+We say that :math:`f` **respects** :math:`R` provided the following implication holds for all :math:`τ : ρf → (α × α)`:
+
+  if τ belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
 
 ----------------------------------------
 
