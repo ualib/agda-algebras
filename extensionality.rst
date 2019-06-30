@@ -14,7 +14,7 @@ This chapter takes as its starting point the `Axioms and Computation`_ section o
 
 -------------------------------------------------
 
-.. index:: proposition extensionality, quotient, function extensionality, law of the excluded middle, Choice
+.. index:: proposition extensionality, function extensionality, law of the excluded middle, Choice
 .. index:: extensional equality of; propositions
 .. index:: extensional equality of; functions
 .. index:: extensional equality of; sets
@@ -209,6 +209,7 @@ Evidently, there are a number of distinct notions of equality, and each may have
 -------------------------------------
 
 .. index:: ! characteristic function, ! extensional equality (of sets)
+.. index:: quotient
 
 Extensionality in Lean
 ----------------------

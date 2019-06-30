@@ -29,32 +29,42 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
    The equivalence relation of **congruence modulo 5** on the set of integers partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
-.. index:: pair: respect; preserve
+--------------------------------------------
+
+.. index:: lift
 
 Lifts of functions
 ------------------
 
-Let ``α`` be a type and ``ρ`` a binary relation on ``α``.  Define the **quotient** ``α/ρ`` (read, "alpha modulo rho") to be the collection of ``ρ``-classes of ``α``.
+Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.  Define the **quotient** :math:`α/R` (read, "alpha modulo rho") to be the collection of :math:`R`-classes of :math:`α`.
 
-That is, for each ``a:α``, there is a class ``a/ρ`` consisting of all ``b:α`` such that ``ρ a b`` (i.e., ``(a,b) ∈ ρ``). Moreover, each class ``a/ρ`` has type ``α/ρ``.
+That is, for each :math:`x:α`, there is a class :math:`y/R` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`. Moreover, each class :math:`x/R` has type :math:`α/R`.
 
 .. index:: lift; of a function, reduction rule
 
-Let ``f: α → β`` be a function. We say that ``f`` **lifts** from ``α`` to ``α/ρ`` provided the implication
+Let :math:`f: α → β` be a function. We say that :math:`f` **lifts** from :math:`α` to :math:`α/R` provided the implication
 
-  ``ρ x y  →  f x = f y``
+.. math:: (x, y) ∈ R \ → \ f x = f y
+   :label: lift
 
-holds for all ``x`` and ``y`` of type ``α``.
+holds for all :math:`x` and :math:`y` of type :math:`α`.
 
-(**Notation**. We write ``f ⊧ ρ`` if ``f`` :term:`lifts` from ``α`` to ``α/ρ``; ⊧ is produced by typing ``\models``.)
+Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kernel** of :math:`f`; that is,
 
-If ``f ⊧ ρ``, then there is a function ``fₗ : α/ρ → β`` defined by ``fₗ ⟦x⟧ = f x``, for each ``⟦x⟧: α/ρ`` .
+.. math:: R ⊆ \ker f := \{(x, y) ∈ α × α ∣ f x = f y\}.
 
-We call this ``fₗ`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol ``fₗ`` is produced by typing ``f\_l``.)
+Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
 
-The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
+If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ ⟦x⟧ = f x`, for each :math:`⟦x⟧: α/R`.
+
+We call this :math:`fₗ` the **lift** of :math:`f` from :math:`α` to :math:`α/R`.  (The symbol :math:`fₗ` is produced by typing ``f\_l``.)
+
+The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ ⟦x⟧ = f x` available as a definitional reduction rule. [2]_
 
 Here are four such constants from the :term:`LSL`.
+
+.. index:: keyword: quot, quot.mk, quot.ind
+.. index:: keyword: quot.lift
 
 ::
 
@@ -66,61 +76,61 @@ Here are four such constants from the :term:`LSL`.
     -- The quotient type former.
     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
 
-    -- So quot takes a type α and a relation ρ ⊆ α × α
-    -- and forms the collection α/ρ of ρ-classes.
+    -- So quot takes a type α and a relation R ⊆ α × α
+    -- and forms the collection α/R of R-classes.
 
-    -- Given α and ρ ⊆ α × α, map each a:α to its ρ-class.
-    constant quot.mk: Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
+    -- Given α and R ⊆ α × α, map each a:α to its R-class.
+    constant quot.mk: Π {α: Sort u} (R: α → α → Prop), α → quot R
 
-    -- So, if ρ: α → α → Prop and a:α, then quot.mk ρ a is the
-    -- ρ-class a/ρ containing a, which has type quot ρ.
+    -- So, if R: α → α → Prop and a:α, then quot.mk R a is the
+    -- R-class a/R containing a, which has type quot R.
 
-    -- Each element of quot ρ is a ρ-class of the form quot.mk ρ a.
+    -- Each element of quot R is a R-class of the form quot.mk R a.
     axiom quot.ind:
-    ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
-    (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
 
-    -- Take a function f: α → β and a proof h : f ⊧ ρ, and
-    -- return the lift of f to quot ρ.
+    -- Take a function f: α → β and a proof h : f ⊧ R, and
+    -- return the lift of f to quot R.
     constant quot.lift:
-    Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
-    (∀ a b, ρ a b → f a = f b) → quot ρ → β
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
 
     -- END
   end quotient
 
-The first of these takes a type ``α`` and a binary relation ``ρ`` on ``α`` and forms the type ``quot ρ`` (or ``@quot α ρ``, if we wish to make the first parameter explicit).
+The first of these takes a type ``α`` and a binary relation ``R`` on ``α`` and forms the type ``quot R`` (or ``@quot α R``, if we wish to make the first parameter explicit).
 
-That is, for each ``α: Sort u``, we form the function type ``@quot α`` which takes a binary relation ``ρ: α → α → Prop`` and returns the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
+That is, for each ``α: Sort u``, we form the function type ``@quot α`` which takes a binary relation ``R: α → α → Prop`` and returns the quotient type ``quot R``, each element of which is an equivalence class, say, ``a/R``, where ``a:α``.
 
-The second constant, ``quot.mk``, takes ``α`` and ``ρ: α → α → Prop`` and forms the function that maps each ``a:α`` to its ρ-class ``quot.mk ρ a``, of type ``quot ρ``.
+The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and forms the function that maps each ``a:α`` to its R-class ``quot.mk R a``, of type ``quot R``.
 
-The third, ``quot.ind``, is the axiom asserting that every element of ``quot ρ`` is of the form ``quot.mk ρ a``.
+The third, ``quot.ind``, is the axiom asserting that every element of ``quot R`` is of the form ``quot.mk R a``.
 
-Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``ρ`` (i.e., ``f ⊧ ρ``), then ``quot.lift f h`` is the corresponding function on ``quot ρ``, that is, the lift of ``f`` to ``quot ρ``.
+Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (i.e., ``f ⊧ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
-The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk ρ a`` (the ``ρ``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
+The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk R a`` (the ``R``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
 
 In fact, this computation principle is declared as a reduction rule, as the proof of the theorem at the end of this code block makes clear.
 
 ::
 
-  variables (α β: Type) (ρ: α → α → Prop) (a: α)
+  variables (α β: Type) (R: α → α → Prop) (a: α)
 
   -- the quotient type
-  #check (quot ρ: Type)
+  #check (quot R: Type)
 
   -- the class of a
-  #check (quot.mk ρ a: quot ρ)
+  #check (quot.mk R a: quot R)
 
   variable f: α → β
-  variable h: ∀ a₁ a₂, ρ a₁ a₂ → f a₁ = f a₂
+  variable h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂
 
-  -- the corresponding function on quot r
-  #check (quot.lift f h: quot ρ → β)
+  -- the corresponding function on quot R
+  #check (quot.lift f h: quot R → β)
 
   -- the computation principle
-  theorem thm: quot.lift f h (quot.mk ρ a) = f a := rfl
+  theorem thm: quot.lift f h (quot.mk R a) = f a := rfl
 
 Here's an example that includes a bit of syntactic sugar.
 
@@ -129,50 +139,52 @@ Here's an example that includes a bit of syntactic sugar.
    namespace quotient
     universes u v
     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
-    constant quot.mk: Π {α: Sort u} (ρ: α → α → Prop), α → quot ρ
+    constant quot.mk: Π {α: Sort u} (R: α → α → Prop), α → quot R
 
     axiom quot.ind:
-    ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
-    (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
 
     constant quot.lift:
-    Π {α: Sort u} {ρ: α → α → Prop} {β: Sort u} (f: α → β),
-    (∀ a b, ρ a b → f a = f b) → quot ρ → β
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
 
     -- BEGIN
-    variables (α β : Type) (f : α → β) (ρ : α → α → Prop)
+    variables (α β : Type) (f : α → β) (R : α → α → Prop)
 
     -- notation for "f respects ρ"
-    notation f `⊧` ρ := ∀ a b, ρ a b → f a = f b
+    notation f `⊧` R := ∀ a b, R a b → f a = f b
 
-    variable h: f ⊧ ρ
+    variable h: f ⊧ R
 
     local notation `fₗ` := quot.lift f h
 
-    #check f ⊧ ρ                 -- Prop
-    #check quot.lift f h         -- quot (λ (a b : α), ρ a b) → β
-    #check fₗ                    -- quot (λ (a b : α), ρ a b) → β
+    #check f ⊧ R                 -- Prop
+    #check quot.lift f h         -- quot (λ (a b : α), R a b) → β
+    #check fₗ                    -- quot (λ (a b : α), R a b) → β
     -- END
 
   end quotient
 
-The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot ρ`` is just ``α``, and ``quot.lift`` is the identity function.)
+The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)
 
 For that reason, these four constants are not considered "axioms," as is verified in the following code segment which asks Lean to ``#print`` the axioms used by ``thm``. (Lean responds, "``no axioms``.")
 
 ::
 
-  variables (α β: Type) (ρ: α → α → Prop)
+  variables (α β: Type) (R: α → α → Prop)
   variables (a: α) (f: α → β)
 
-  theorem thm (h: ∀ a₁ a₂, ρ a₁ a₂ → f a₁ = f a₂):
-  quot.lift f h (quot.mk ρ a) = f a := rfl
+  theorem thm (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂):
+  quot.lift f h (quot.mk R a) = f a := rfl
 
   #print axioms thm   -- no axioms
 
 Like inductively defined types and their associated constructors and recursors, the four constants above are viewed as part of the logical framework.
 
-What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``ρ``, then they are identified in the quotient ``α/ρ``.
+What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
+
+.. index:: keyword: quot.sound
 
 ::
 
@@ -180,31 +192,37 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
     universe u
 
     -- BEGIN
-    axiom quot.sound: ∀ {α: Type u} {ρ: α → α → Prop} {a b: α},
-    ρ a b → quot.mk ρ a = quot.mk ρ b
+    axiom quot.sound: ∀ {α: Type u} {R: α → α → Prop} {a b: α},
+    R a b → quot.mk R a = quot.mk R b
     -- END
   end quotient
 
 ------------------------
 
+.. index:: pair: respect; preserve
+
 Respecting relations
 --------------------
 
-Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.
+Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we can represent the function type not by :math:`α^n → α`, but by :math:`(n → α) → α` instead.
 
 Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
 
-Let us now generalize this notion to operations of higher arities. Suppose :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf`. A function τ of type :math:`ρf → (α × α)` is evidently a :math:`ρf`-tuple of pairs, since for each :math:`i : ρf` we have :math:`τ i : α × α`, a pair of elements of type :math:`α`.
+Let us now generalize this notion to operations of higher arities. Suppose :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf`. A function :math:`τ` of type :math:`ρf → (α × α)` is a :math:`ρf`-tuple of pairs, since for each :math:`i: ρf` we have :math:`τ i: α × α`, a pair of elements of type :math:`α`.
 
-Also, if :math:`π_i` denotes the projection onto the :math:`i`-th coordinate, then :math:`π_1 ∘ τ` and :math:`π_2 ∘ τ` are :math:`ρf`-tuples of elements of type α. For example, the :math:`i`-th pair is :math:`τ\ i` and the first coordinate of this pair is :math:`(π_1 ∘ τ)(i) = π_1 (τ \ i)`.
+If :math:`π_i^{ρf}` denotes the :math:`ρf`-ary function that projects onto the :math:`i`-th coordinate, then :math:`π_1^{ρf} ∘ τ` is the :math:`ρf`-tuple of all first coordinates of the pairs in the range of :math:`τ`; similarly, :math:`π_2^{ρf} ∘ τ` is the :math:`ρf`-tuple of all second coordinates.
 
-Thus, :math:`f (π_i ∘ τ)` denotes :math:`f` evaluated at the :math:`ρf`-tuple of the :math:`i`-th coordinates of τ.
+For example, if the :math:`i`-th pair in the range of :math:`τ` is :math:`τ\ i = (a_1, a_2)`, then the first coordinate of the :math:`i`-th pair is given by :math:`(π_1^{ρf} ∘ τ)(i) = π_1^2 (τ \ i) = a_1`.
 
-If :math:`R ⊆ α × α` is a binary relation on α, then we say that :math:`τ: ρf → (α × α)` **belongs to** :math:`R` provided the pair :math:`τ i` belongs to :math:`R` for every :math:`i : ρf`.
+From now on, when the arity (say, :math:`k`) is clear from the context, we will write :math:`π_i` instead of :math:`π_i^k`.
 
-We say that :math:`f` **respects** :math:`R` provided the following implication holds for all :math:`τ : ρf → (α × α)`:
+Thus, :math:`f (π_1 ∘ τ)` denotes :math:`f` evaluated at the :math:`ρf`-tuple of all first coordinates of :math:`τ`. Similarly, :math:`f (π_2 ∘ τ)` is :math:`f` evaluated at all second coordinates of :math:`τ`.
 
-  if τ belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
+If :math:`R ⊆ α × α` is a binary relation on :math:`α`, then we say that :math:`τ: ρf → (α × α)` **belongs to** :math:`R` provided the pair :math:`τ\ i` belongs to :math:`R` for every :math:`i : ρf`.
+
+We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just in case the following implication holds for all :math:`τ: ρf → (α × α)`:
+
+  if :math:`τ` belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
 
 ----------------------------------------
 

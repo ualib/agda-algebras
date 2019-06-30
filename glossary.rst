@@ -209,6 +209,9 @@ Nomenclature
     epimorphism
       A morphism :math:`f: A → B` is called an **epimorphism** if for every object :math:`Y` and pair :math:`y_1, y_2: B → Y` of morphisms, :math:`y_1 ∘ f = y_2 ∘ f` implies :math:`y_1 = y_2`. When :math:`f: A → B` is an **epimorphism** we often say ":math:`f` is epi" and write :math:`f: ↠ B`.
 
+    equivalence class
+      If :math:`R` is an :term:`equivalence relation` on :math:`A`, then for each :math:`a ∈ A`, there is an **equivalence class** containing :math:`a`, which is denoted and defined by :math:`a/R = \{b ∈ A ∣ a \mathrel R b\}`.
+
     equivalence relation
       An **equivalence relation** is a :term:`symmetric` :term:`preorder`. The collection of all equivalence relations on :math:`X` is denoted by :math:`\mathrm{Eq}(X)`.
 
@@ -426,7 +429,7 @@ Nomenclature
       see :term:`computationally pure`
 
     quotient
-      .. todo:: insert definition
+      If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
 
     reflexive
       A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
