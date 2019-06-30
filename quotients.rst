@@ -31,14 +31,14 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
 --------------------------------------------
 
-.. index:: lift
+.. index:: lift, ! quotient
 
 Lifts of functions
 ------------------
 
-Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.  Define the **quotient** :math:`α/R` (read, "alpha modulo rho") to be the collection of :math:`R`-classes of :math:`α`.
+Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.
 
-That is, for each :math:`x:α`, there is a class :math:`y/R` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`. Moreover, each class :math:`x/R` has type :math:`α/R`.
+Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`. Each such class has type :math:`α/R`.
 
 .. index:: lift; of a function, reduction rule
 
@@ -55,9 +55,7 @@ Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kern
 
 Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
 
-If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ ⟦x⟧ = f x`, for each :math:`⟦x⟧: α/R`.
-
-We call this :math:`fₗ` the **lift** of :math:`f` from :math:`α` to :math:`α/R`.  (The symbol :math:`fₗ` is produced by typing ``f\_l``.)
+If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ ⟦x⟧ = f x`, for each :math:`⟦x⟧: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
 
 The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ ⟦x⟧ = f x` available as a definitional reduction rule. [2]_
 
@@ -103,7 +101,7 @@ The first of these takes a type ``α`` and a binary relation ``R`` on ``α`` and
 
 That is, for each ``α: Sort u``, we form the function type ``@quot α`` which takes a binary relation ``R: α → α → Prop`` and returns the quotient type ``quot R``, each element of which is an equivalence class, say, ``a/R``, where ``a:α``.
 
-The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and forms the function that maps each ``a:α`` to its R-class ``quot.mk R a``, of type ``quot R``.
+The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and forms the function that maps each ``a:α`` to its ``R``-class ``quot.mk R a``, which is of type ``quot R``.
 
 The third, ``quot.ind``, is the axiom asserting that every element of ``quot R`` is of the form ``quot.mk R a``.
 
@@ -204,17 +202,19 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
 Respecting relations
 --------------------
 
-Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we can represent the function type not by :math:`α^n → α`, but by :math:`(n → α) → α` instead.
+Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we can represent the function type not by :math:`α^n → α`, but by :math:`(n → α) → α`.
 
 Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
 
-Let us now generalize this notion to operations of higher arities. Suppose :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf`. A function :math:`τ` of type :math:`ρf → (α × α)` is a :math:`ρf`-tuple of pairs, since for each :math:`i: ρf` we have :math:`τ i: α × α`, a pair of elements of type :math:`α`.
+Let us now generalize this notion to operations of higher arity.
 
-If :math:`π_i^{ρf}` denotes the :math:`ρf`-ary function that projects onto the :math:`i`-th coordinate, then :math:`π_1^{ρf} ∘ τ` is the :math:`ρf`-tuple of all first coordinates of the pairs in the range of :math:`τ`; similarly, :math:`π_2^{ρf} ∘ τ` is the :math:`ρf`-tuple of all second coordinates.
+Suppose :math:`f: (ρf → α) → α` is an operation (of arity :math:`ρf`) and let :math:`τ` be a function of type :math:`ρf → (α × α)`, so that :math:`τ` is a :math:`ρf`-tuple of pairs; to each :math:`i : ρ f` corresponds a pair :math:`τ \ i : α × α`.
 
-For example, if the :math:`i`-th pair in the range of :math:`τ` is :math:`τ\ i = (a_1, a_2)`, then the first coordinate of the :math:`i`-th pair is given by :math:`(π_1^{ρf} ∘ τ)(i) = π_1^2 (τ \ i) = a_1`.
+If :math:`π_i^k` denotes the :math:`k`-ary function that projects onto the :math:`i`-th coordinate, then :math:`π_1^{ρf} ∘ τ` is the :math:`ρf`-tuple of all first coordinates of the pairs in the range of :math:`τ`; similarly, :math:`π_2^{ρf} ∘ τ` is the :math:`ρf`-tuple of all second coordinates.
 
-From now on, when the arity (say, :math:`k`) is clear from the context, we will write :math:`π_i` instead of :math:`π_i^k`.
+For example, if the :math:`i`-th pair in the range of :math:`τ` is :math:`τ\ i = (a_1, a_2)`, then the first coordinate of the :math:`i`-th pair is :math:`(π_1^{ρf} ∘ τ)(i) = π_1^2 (τ \ i) = a_1`.
+
+(From now on, when the arity :math:`k` is clear from the context, we will write :math:`π_i` instead of :math:`π_i^k`.)
 
 Thus, :math:`f (π_1 ∘ τ)` denotes :math:`f` evaluated at the :math:`ρf`-tuple of all first coordinates of :math:`τ`. Similarly, :math:`f (π_2 ∘ τ)` is :math:`f` evaluated at all second coordinates of :math:`τ`.
 
@@ -223,6 +223,12 @@ If :math:`R ⊆ α × α` is a binary relation on :math:`α`, then we say that :
 We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just in case the following implication holds for all :math:`τ: ρf → (α × α)`:
 
   if :math:`τ` belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
+
+.. proof:example::
+
+   Readers who do not find the foregoing explanation perfectly clear are invited to consider this simple, concrete example.
+
+   Let :math:`f : (\{0,1,2\} → α) → α` be a ternary operation on :math:`α`, let :math:`R ⊆ α × α`, and suppose that for every triple :math:`(a_1, b_1), (a_2, b_2), (a_3, b_3)` of pairs from :math:`R`, the pair :math:`(f(a_1, a_2, a_3), f(b_1, b_2, b_3))` also belongs to :math:`R`. Then :math:`f ⊧ R`.
 
 ----------------------------------------
 
