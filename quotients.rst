@@ -29,27 +29,30 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
    The equivalence relation of **congruence modulo 5** on the set of integers partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
+.. index:: pair: respect; preserve
 
-Respecting relations
---------------------
+Lifting functions
+-----------------
 
-Let ``α`` be a type and ``ρ`` an equivalence relation on ``α``.
+Let ``α`` be a type and ``ρ`` a binary relation on ``α``.  Define the **quotient** ``α/ρ`` (read, "alpha modulo rho") to be the collection of ``ρ``-classes of ``α``.
 
-The **quotient** ``α/ρ`` (read, "alpha modulo rho") is the collection of equivalence classes of ``ρ``.
-
-That is, for each ``a:α``, there is a class ``a/ρ`` consisting of all ``b:α`` such that ``ρ a b`` holds  (i.e., such that the pair ``(a,b)`` belongs to ``ρ``), and the class ``a/ρ`` inhabits the type ``α/ρ``.
+That is, for each ``a:α``, there is a class ``a/ρ`` consisting of all ``b:α`` such that ``ρ a b`` (i.e., ``(a,b) ∈ ρ``). Moreover, each class ``a/ρ`` has type ``α/ρ``.
 
 .. index:: lift; of a function, reduction rule
 
-We say that a function ``f: α → β`` :term:`respects` (or **preserves**) the relation ``ρ`` provided the following implication holds for all ``x y: α``:
+Let ``f: α → β`` be a function. We say that ``f`` **lifts** from ``α`` to ``α/ρ`` provided the implication
 
-  if ``ρ x y`` then ``f x = f y``.
+  ``ρ x y  →  f x = f y``
+  
+holds for all ``x`` and ``y`` of type ``α``.
 
-(**Notation**. If ``f`` :term:`respects` ``ρ`` we write ``f ⊧ ρ``; the symbol ⊧ is produced by typing ``\models``.)
+(**Notation**. If ``f`` :term:`lifts` from ``α`` to ``α/ρ`` we write ``f ⊧ ρ``; the symbol ⊧ is produced by typing ``\models``.)
 
-If ``f ⊧ ρ``, then  ``f`` **lifts** to a function ``fₗ : α → β`` defined for each class ``⟦x⟧`` by ``fₗ ⟦x⟧ = f x``. We call ``fₗ`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol ``fₗ`` is produced by typing ``f\_l``.)
+If ``f ⊧ ρ``, then there is a function ``fₗ : α/ρ → β`` defined by ``fₗ ⟦x⟧ = f x``, for each ``⟦x⟧: α/ρ`` .
 
-The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that perform such lift constructions, and makes the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
+We call this ``fₗ`` the **lift** of ``f`` from ``α`` to ``α/ρ``.  (The symbol ``fₗ`` is produced by typing ``f\_l``.)
+
+The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation ``fₗ ⟦x⟧ = f x`` available as a definitional reduction rule. [2]_
 
 Here are four such constants from the :term:`LSL`.
 
@@ -60,7 +63,7 @@ Here are four such constants from the :term:`LSL`.
     -- BEGIN
     universes u v
 
-    -- The quotient type former
+    -- The quotient type former.
     constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
 
     -- So quot takes a type α and a relation ρ ⊆ α × α
@@ -72,7 +75,7 @@ Here are four such constants from the :term:`LSL`.
     -- So, if ρ: α → α → Prop and a:α, then quot.mk ρ a is the
     -- ρ-class a/ρ containing a, which has type quot ρ.
 
-    -- Assume each element of quot ρ is a ρ-class, eg, quot.mk ρ a.
+    -- Assume each element of quot ρ is a ρ-class, like quot.mk ρ a.
     axiom quot.ind:
     ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
     (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
@@ -86,9 +89,9 @@ Here are four such constants from the :term:`LSL`.
     -- END
   end quotient
 
-The first of these takes each type ``α`` and, given a binary relation ``ρ`` on ``α``, forms the type ``quot ρ`` (or ``@quot α ρ``, if we wish to make the first parameter explicit).
+The first of these takes a type ``α`` and a binary relation ``ρ`` on ``α`` and forms the type ``quot ρ`` (or ``@quot α ρ``, if we wish to make the first parameter explicit).
 
-That is, if ``α: Sort u``, then the function type ``quot`` (or ``@quot α``) takes a binary relation ``ρ: α → α → Prop`` to the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
+That is, for each ``α: Sort u``, we form the function type ``@quot α`` which takes a binary relation ``ρ: α → α → Prop`` and returns the quotient type ``quot ρ``, each element of which is an equivalence class, say, ``a/ρ``, where ``a:α``.
 
 The second constant, ``quot.mk``, takes ``α`` and ``ρ: α → α → Prop`` and forms the function that maps each ``a:α`` to its ρ-class ``quot.mk ρ a``, of type ``quot ρ``.
 
@@ -182,6 +185,20 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
     -- END
   end quotient
 
+------------------------
+
+Operations of higher arity
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let ``f: (ρf → α) → α`` be an operation of arity ``ρf`` and let ``τ: ρf → (α × α)`` be a ``ρf``-tuple of pairs that belong to the relation ``r ⊆ α × α``.
+
+To say that ``f`` respects ``r ⊆ α × α`` means the following
+
+  For every ``ρf``-tuple of pairs from ``r``, the pair ``(f (fst ∘ τ), f (snd ∘ τ))`` also belongs to ``r``.
+
+In other words, if we evaluate ``f`` at all the first coordinates of ``τ``, obtaining ``f (fst ∘ τ)``, and then at all second coordinates of ``τ``, obtaining ``f (snd ∘ τ)``, then the result is a pair that also belongs to ``r``.
+
+Of course, if ``τ: ρf → (α × α)``, then ``(fst ∘ τ) : ρf → α`` and so ``f (fst ∘ τ)`` makes sense and has type ``α``.
 
 ----------------------------------------
 

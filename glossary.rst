@@ -440,8 +440,11 @@ Nomenclature
     relational structure
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
 
+    lifts
+      For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
+
     respects
-      Given a function :math:`f: α → β`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`ρ ⊆ α × α`, and we write :math:`f ⊧ ρ`, just in case :math:`∀ x, y :α \ (x \mathrel ρ y \ → \ f x = f y)`.
+      Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`ρ ⊆ α × α`, and we write :math:`f ⊧ ρ`, just in case :math:`∀ x, y :α \ (x \mathrel ρ y \ → \ f x \mathrel ρ f y)`.
         
       (The symbol ⊧ is produced by typing ``\models``.)
 
