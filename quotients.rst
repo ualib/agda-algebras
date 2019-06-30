@@ -46,7 +46,7 @@ Let ``f: α → β`` be a function. We say that ``f`` **lifts** from ``α`` to `
   
 holds for all ``x`` and ``y`` of type ``α``.
 
-(**Notation**. If ``f`` :term:`lifts` from ``α`` to ``α/ρ`` we write ``f ⊧ ρ``; the symbol ⊧ is produced by typing ``\models``.)
+(**Notation**. We write ``f ⊧ ρ`` if ``f`` :term:`lifts` from ``α`` to ``α/ρ``; ⊧ is produced by typing ``\models``.)
 
 If ``f ⊧ ρ``, then there is a function ``fₗ : α/ρ → β`` defined by ``fₗ ⟦x⟧ = f x``, for each ``⟦x⟧: α/ρ`` .
 
@@ -75,7 +75,7 @@ Here are four such constants from the :term:`LSL`.
     -- So, if ρ: α → α → Prop and a:α, then quot.mk ρ a is the
     -- ρ-class a/ρ containing a, which has type quot ρ.
 
-    -- Assume each element of quot ρ is a ρ-class, like quot.mk ρ a.
+    -- Each element of quot ρ is a ρ-class of the form quot.mk ρ a.
     axiom quot.ind:
     ∀ {α: Sort u} {ρ: α → α → Prop} {β: quot ρ → Prop},
     (∀ a, β (quot.mk ρ a)) → ∀ (q: quot ρ), β q
@@ -187,18 +187,18 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
 
 ------------------------
 
-Operations of higher arity
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Respecting relations
+--------------------
 
-Let ``f: (ρf → α) → α`` be an operation of arity ``ρf`` and let ``τ: ρf → (α × α)`` be a ``ρf``-tuple of pairs that belong to the relation ``r ⊆ α × α``.
+Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.
 
-To say that ``f`` respects ``r ⊆ α × α`` means the following
+Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
 
-  For every ``ρf``-tuple of pairs from ``r``, the pair ``(f (fst ∘ τ), f (snd ∘ τ))`` also belongs to ``r``.
+More generally, if :math:`f: (ρf → α) → α` is an operation of arity :math:`ρf` and if :math:`τ: ρf → (α × α)` is a :math:`ρf`-tuple of pairs, each of which belongs to the relation :math:`R ⊆ α × α`, then we say that :math:`f` **respects** :math:`R` provided :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` also belongs to :math:`R`.
 
-In other words, if we evaluate ``f`` at all the first coordinates of ``τ``, obtaining ``f (fst ∘ τ)``, and then at all second coordinates of ``τ``, obtaining ``f (snd ∘ τ)``, then the result is a pair that also belongs to ``r``.
+In other words, if we evaluate :math:`f` at all the first coordinates of :math:`τ`, obtaining :math:`f (π_1 ∘ τ)`, and then at all second coordinates of :math:`τ`, obtaining :math:`f (π_2 ∘ τ)`, then the result is a pair that also belongs to ``R``.
 
-Of course, if ``τ: ρf → (α × α)``, then ``(fst ∘ τ) : ρf → α`` and so ``f (fst ∘ τ)`` makes sense and has type ``α``.
+Of course, if :math:`τ: ρf → (α × α)`, then :math:`(π_1 ∘ τ) : ρf → α`, so :math:`f (π_1  ∘ τ)` makes sense and has type :math:`α`.
 
 ----------------------------------------
 
