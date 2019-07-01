@@ -31,7 +31,9 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
 --------------------------------------------
 
-.. index:: lift, ! quotient
+.. index:: quotient
+
+.. index:: ! lift; (of a function)
 
 Lifts of functions
 ------------------
@@ -130,40 +132,6 @@ In fact, this computation principle is declared as a reduction rule, as the proo
   -- the computation principle
   theorem thm: quot.lift f h (quot.mk R a) = f a := rfl
 
-Here's an example that includes a bit of syntactic sugar.
-
-::
-
-   namespace quotient
-    universes u v
-    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
-    constant quot.mk: Π {α: Sort u} (R: α → α → Prop), α → quot R
-
-    axiom quot.ind:
-    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
-    (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
-
-    constant quot.lift:
-    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
-    (∀ a b, R a b → f a = f b) → quot R → β
-
-    -- BEGIN
-    variables (α β : Type) (f : α → β) (R : α → α → Prop)
-
-    -- notation for "f respects ρ"
-    notation f `⊧` R := ∀ a b, R a b → f a = f b
-
-    variable h: f ⊧ R
-
-    local notation `fₗ` := quot.lift f h
-
-    #check f ⊧ R                 -- Prop
-    #check quot.lift f h         -- quot (λ (a b : α), R a b) → β
-    #check fₗ                    -- quot (λ (a b : α), R a b) → β
-    -- END
-
-  end quotient
-
 The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)
 
 For that reason, these four constants are not considered "axioms," as is verified in the following code segment which asks Lean to ``#print`` the axioms used by ``thm``. (Lean responds, "``no axioms``.")
@@ -229,6 +197,67 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
    Readers who do not find the foregoing explanation perfectly clear are invited to consider this simple, concrete example.
 
    Let :math:`f : (\{0,1,2\} → α) → α` be a ternary operation on :math:`α`, let :math:`R ⊆ α × α`, and suppose that for every triple :math:`(a_1, b_1), (a_2, b_2), (a_3, b_3)` of pairs from :math:`R`, the pair :math:`(f(a_1, a_2, a_3), f(b_1, b_2, b_3))` also belongs to :math:`R`. Then :math:`f ⊧ R`.
+
+.. index:: ! quotient tuple
+.. index:: ! lift; (of a tuple)
+.. index:: ! lift; (of an operation)
+
+Lifts of tuples and operations
+------------------------------
+
+Let :math:`α` be a type, :math:`R ⊆ α × α` a binary relation on :math:`α`, and :math:`f : (ρ f → α) → α` a :math:`ρ f`-ary operation on :math:`α`.
+
+If :math:`q : ρ f → α` is a :math:`ρf`-tuple of elements of type :math:`α`, then the **lift** of :math:`q` to :math:`α/R` is the :math:`ρf`-tuple :math:`q_l : ρ f → α/R` that takes each :math:`i : ρ f` to the :math:`R`-class containing :math:`q\ i`; that is,
+
+.. math:: q_l\ i = (q\ i)/R.
+
+Thus, :math:`q_l\ i` is of type :math:`α/R`.
+
+If :math:`f : (ρ f → α) → α` respects :math:`R ⊆ α × α`, then the **lift** of :math:`f` to :math:`α/R` is the function :math:`f_l: (ρ f → α/R) → α/R` defined for each quotient tuple :math:`q_l : ρ f → α/R` as follows:
+
+.. math:: f_l\ q_l \ i  := (f\ q) / R.
+
+Observe that this definition, of *lift of an operation*, differs from that of *lift of a function*. Thus, in the next example, we redefine ``quot.lift`` to reflect this. 
+
+::
+
+  namespace quotient
+
+    universes u v
+    constant quot: Π {α: Type*}, (α → α → Prop) → Type*
+    constant quot.mk: Π {α: Type*} (R: α → α → Prop), α → quot R
+
+    axiom quot.ind:
+    ∀ {α: Type*} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
+
+    section operation_lift_example
+
+      parameters {α: Type*} {β: Type*} (R: α → α → Prop)
+
+      -- operation type (see "Algebras in Lean" section)
+      definition op (β α) := (β → α) → α
+
+      -- notation for "f respects ρ"
+      local notation f `⊧` R :=
+      ∀ (a b: β → α), ( (∀ i, R (a i) (b i)) → R (f a) (f b) )
+
+      definition quot.lift (f: op β α) :=
+      (f ⊧ R) → ((β → quot R) → quot R)
+
+      variables (f: op β α) (h: f ⊧ R) (qh : quot.lift f)
+
+      local notation `fₗ` := qh h
+
+      #check f ⊧ R           -- Prop
+      #check qh h            -- (β → quot R) → β
+      #check fₗ              -- (β → quot R) → β
+
+    end operation_lift_example
+
+  end quotient
+
+In the foregoing example we included some syntactic sugar for the "respects" relation, so that we can simply write ``f ⊧ R`` in place of ``∀ (a b: β → α), ((∀ i, R (a i) (b i)) → R (f a) (f b))``.  We also made use of the ``operation`` type which will be introduced below in :numref:`algebras-in-lean`.
 
 ----------------------------------------
 
