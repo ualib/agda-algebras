@@ -90,7 +90,7 @@ Here are four such constants from the :term:`LSL`.
     ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
     (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
 
-    -- Take a function f: α → β and a proof h : f ⊧ R, and
+    -- Given a function f: α → β and a proof of R ⊆ ker f,
     -- return the lift of f to quot R.
     constant quot.lift:
     Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
@@ -176,7 +176,7 @@ Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects**
 
 Let us now generalize this notion to operations of higher arity.
 
-Suppose :math:`f: (ρf → α) → α` is an operation (of arity :math:`ρf`) and let :math:`τ` be a function of type :math:`ρf → (α × α)`, so that :math:`τ` is a :math:`ρf`-tuple of pairs; to each :math:`i : ρ f` corresponds a pair :math:`τ \ i : α × α`.
+Suppose :math:`f: (ρf → α) → α` is an operation (of arity :math:`ρf`) and let :math:`τ: ρf → (α × α)` be a :math:`ρf`-tuple of pairs of elements of type :math:`α`; that is, to each :math:`i : ρ f` corresponds a pair :math:`τ \ i : α × α`.
 
 If :math:`π_i^k` denotes the :math:`k`-ary function that projects onto the :math:`i`-th coordinate, then :math:`π_1^{ρf} ∘ τ` is the :math:`ρf`-tuple of all first coordinates of the pairs in the range of :math:`τ`; similarly, :math:`π_2^{ρf} ∘ τ` is the :math:`ρf`-tuple of all second coordinates.
 
@@ -213,48 +213,87 @@ If :math:`q : ρ f → α` is a :math:`ρf`-tuple of elements of type :math:`α`
 
 Thus, :math:`q_l\ i` is of type :math:`α/R`.
 
-If :math:`f : (ρ f → α) → α` respects :math:`R ⊆ α × α`, then the **lift** of :math:`f` to :math:`α/R` is the function :math:`f_l: (ρ f → α/R) → α/R` defined for each quotient tuple :math:`q_l : ρ f → α/R` as follows:
+If :math:`f : (ρ f → α) → α` respects :math:`R ⊆ α × α`, then the **lift** of :math:`f` to :math:`α/R` is the function :math:`f_l: (ρ f → α/R) → α/R` defined at each lift :math:`q_l : ρ f → α/R` (of each :math:`q: ρ f → α`) as follows:
 
 .. math:: f_l\ q_l \ i  := (f\ q) / R.
 
-Observe that this definition, of *lift of an operation*, differs from that of *lift of a function*. Thus, in the next example, we redefine ``quot.lift`` to reflect this. 
+Observe that this definition---of the *lift of an operation*---differs from that of the *lift of a function*, and we must redefine ``quot.lift`` to reflect this difference. We do so as follows.
 
 ::
 
   namespace quotient
 
     universes u v
-    constant quot: Π {α: Type*}, (α → α → Prop) → Type*
-    constant quot.mk: Π {α: Type*} (R: α → α → Prop), α → quot R
 
+    -- The quotient type former.
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+
+    -- So quot takes a type α and a relation R ⊆ α × α
+    -- and forms the collection α/R of R-classes.
+
+    -- Given α and R ⊆ α × α, map each a:α to its R-class.
+    constant quot.mk: Π {α: Sort u} (R: α → α → Prop), α → quot R
+
+    -- So, if R: α → α → Prop and a:α, then quot.mk R a is the
+    -- R-class a/R containing a, which has type quot R.
+
+    -- Each element of quot R is a R-class of the form quot.mk R a.
     axiom quot.ind:
-    ∀ {α: Type*} {R: α → α → Prop} {β: quot R → Prop},
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
     (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
 
-    section operation_lift_example
+    -- BEGIN
+    -- Given a function f: α → β and a proof of R ⊆ ker f,
+    -- return the lift of f to quot R.
+    constant quot.lift:
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
 
-      parameters {α: Type*} {β: Type*} (R: α → α → Prop)
+    constant quot.colift :
+    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β),
+    (α → quot R)
 
-      -- operation type (see "Algebras in Lean" section)
-      definition op (β α) := (β → α) → α
+    constant quot.tlift :
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α),
+    (β → quot R)
 
-      -- notation for "f respects ρ"
-      local notation f `⊧` R :=
-      ∀ (a b: β → α), ( (∀ i, R (a i) (b i)) → R (f a) (f b) )
+    -- operation type (see "Algebras in Lean" section)
+    definition op (β : Sort v) (α : Sort u) := (β → α) → α
 
-      definition quot.lift (f: op β α) :=
-      (f ⊧ R) → ((β → quot R) → quot R)
+    variables {α β : Sort u}
 
-      variables (f: op β α) (h: f ⊧ R) (qh : quot.lift f)
+    -- notation for "f respects R"
+    local notation f `⊧` R :=
+    ∀ (a b : β → α), (∀ i, R (a i) (b i)) → R (f a) (f b)
 
-      local notation `fₗ` := qh h
+    constant quot.oplift :
+    Π {R: α → α → Prop} (f: op β α),
+    (f ⊧ R) → ((β → quot R) → quot R)
 
-      #check f ⊧ R           -- Prop
-      #check qh h            -- (β → quot R) → β
-      #check fₗ              -- (β → quot R) → β
+    variable (f: α → β)  -- function
+    variable (t: β → α)  -- tuple
+    variable (g: op β α) -- operation
 
-    end operation_lift_example
+    variable {R: α → α → Prop} -- a binary relation on α
+    variable (h: g ⊧ R)        -- that is respected by g
 
+    #check quot.tlift t     -- β → quot ?M_1
+
+    #check quot.oplift g h  -- (β → quot R) → quot R
+
+    -- computation principle for function lift
+    theorem lift_comp_principle
+    (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) :
+    ∀ a, quot.lift f h (quot.mk R a) = f a := sorry
+
+    -- computation principle for tuple lift
+    theorem tlift_comp_principle : ∀ b : β, 
+    (quot.tlift t) b = quot.mk R (t b) := sorry
+
+    -- computation principle for operation lift
+    theorem olift_comp_principle (h : g ⊧ R) : ∀ (a : β → α), 
+    (quot.oplift g h) (quot.tlift a) = quot.mk R (g a) := sorry
+    -- END
   end quotient
 
 In the foregoing example we included some syntactic sugar for the "respects" relation, so that we can simply write ``f ⊧ R`` in place of ``∀ (a b: β → α), ((∀ i, R (a i) (b i)) → R (f a) (f b))``.  We also made use of the ``operation`` type which will be introduced below in :numref:`algebras-in-lean`.
@@ -646,3 +685,41 @@ As a result, ``f₁`` is equal to ``f₂``.
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
+
+
+
+.. namespace quotient
+
+..   universes u v
+..   constant quot: Π {α: Type*}, (α → α → Prop) → Type*
+..   constant quot.mk: Π {α: Type*} (R: α → α → Prop), α → quot R
+
+..   axiom quot.ind:
+..   ∀ {α: Type*} {R: α → α → Prop} {β: quot R → Prop},
+..   (∀ a, β (quot.mk R a)) → ∀ (q: quot R), β q
+
+..   section operation_lift_example
+
+..     parameters {α: Type*} {β: Type*} (R: α → α → Prop)
+
+..     -- operation type (see "Algebras in Lean" section)
+..     definition op (β α) := (β → α) → α
+
+..     -- notation for "f respects ρ"
+..     local notation f `⊧` R :=
+..     ∀ (a b: β → α), ( (∀ i, R (a i) (b i)) → R (f a) (f b) )
+
+..     definition quot.lift (f: op β α) :=
+..     (f ⊧ R) → ((β → quot R) → quot R)
+
+..     variables (f: op β α) (h: f ⊧ R) (qh : quot.lift f)
+
+..     local notation `fₗ` := qh h
+
+..     #check f ⊧ R           -- Prop
+..     #check qh h            -- (β → quot R) → β
+..     #check fₗ              -- (β → quot R) → β
+
+..   end operation_lift_example
+
+.. end quotient
