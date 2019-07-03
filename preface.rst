@@ -4,6 +4,8 @@ Preface
 
 This work describes the `Lean Universal Algebra Library`_ in enough detail so that people other than the library developers may be able to understand it well enough to make use of it.
 
+-----------------------------------
+
 Motivation
 ----------
 
@@ -15,6 +17,8 @@ To support the formalization of theorems, we are developing software libraries t
 + documenting the resulting software library so that others may find it useful.
 
 For our own mathematics research projects, a proof assistant equipped with special libraries of definitions and results from algebra and lattice theory, as well as specialized tactics to automate the standard proof idioms of our field, will be very useful. Our goal is to demonstrate (to ourselves and our colleagues) the utility of such libraries and tactics for proving "real world" theorems.
+
+-----------------------------------
 
 Why Lean?
 ---------
@@ -29,6 +33,8 @@ Lean_ is a very young language, and its domain-specific libraries are small but 
 
 We conclude this section with a note that is important for anyone interested in `Homotopy Type Theory`_ (HoTT).  Unfortunately, the current version of Lean_ does not support HoTT. There is, however, a frozen version (`Lean 2`_) that does supports HoTT and there is a `2015 post by Floris van Doorn`_ that gives a nice overview of the use of `Lean 2`_ for homotopy type theory.
 
+-----------------------------------
+
 Prerequisites
 -------------
 
@@ -42,6 +48,14 @@ Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful,
   + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
   + `Type Theory and Formal Proof <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
 
+-----------------------------------
+
+Acknowledgments
+---------------
+
+This tutorial is an open access project maintained on Gitlab. Besides the authors named below, a number of other people have also contributed to the ualib project.  We are especially grateful to Jeremy Avigad, Andrej Bauer, Clifford Bergman, Peter Jipsen, Miklos Maroti, and Ralph Freese for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
+
+----------------------
 
 Feedback
 --------

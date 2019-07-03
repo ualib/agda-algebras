@@ -7,10 +7,7 @@
 Extensionality
 ==============
 
-Attribution
------------
-
-This chapter takes as its starting point the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some material from that tutorial is repeated here for clarity and self-containment.
+This chapter takes as its starting point the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some material from that tutorial is repeated here for clarity and to keep this section self-contained.
 
 -------------------------------------------------
 
@@ -22,17 +19,17 @@ This chapter takes as its starting point the `Axioms and Computation`_ section o
 Classical and constructive reasoning
 ------------------------------------
 
-The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a hierarchy of :term:`universes` that starts with an :term:`impredicative` ``Prop`` type at the bottom.
+The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a hierarchy of :term:`universes` that starts with the :term:`impredicative` ``Prop`` type at the bottom.
 
-Lean extends :term:`CiC` with additional axioms and rules in order to make proof construction easier and more versatile by making the language more expressive.
+Lean extends the :term:`CiC` with additional axioms and rules in order to make the language more expressive and versatile so that the statements of theorems and the constructions of proofs are simpler and more elegant.
 
-Adding axioms to a foundational system can have negative consequences, beyond concerns about correctness and consistency. In particular, whether or not our theorems and proofs have computational content depends on whether we abstain from the use of certain classical axioms, as we now discuss.
+Adding axioms to a foundational system can have negative consequences, beyond concerns about correctness and consistency. In particular, whether the theorems and proofs expressed in the extended system have computational content depends on whether we abstain from the use of certain classical axioms.
 
-Lean is designed to support **classical reasoning** as well as **computational**, or **constructive reasoning**.
+Lean is designed to support **classical reasoning** as well as **computational** (or **constructive**) **reasoning**.
 
-By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, any closed :term:`computationally pure` expression of type ℕ will reduce to a number.
+By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, every closed computationally pure expression of type ℕ will reduce to a number.
 
-The `Lean Standard Library`_ (:term:`LSL`) defines an additional axiom, :term:`proposition extensionality`, and a :term:`quotient` construction. These in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
+Two axioms that the `Lean Standard Library`_ (:term:`LSL`) adds to :term:`CiC` are :term:`proposition extensionality` and a :term:`quotient` construction, which in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
 
   *using such axiomatic extensions can block evaluation in Lean's kernel*
 
@@ -44,23 +41,38 @@ On the other hand,
 
 and since these axioms only add new propositions, they admit a computational interpretation.
 
-The :term:`LSL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom.  We can invoke it if we explicitly open the classical fragment of the library with the line ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``---either ``P`` or ``¬ P``.
+The :term:`LSL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom that the user can assume when necessary.  We can invoke ``em`` if we explicitly open the classical fragment of the library with the directive ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``, that is, either ``P`` or ``¬ P``.
 
 .. proof:example::
 
-   In classical logic, for all propositions ``P`` and ``Q`` the implication ``P → Q`` is equivalent to the disjunction ``¬ P ∨ Q``.  The left-to-right direction of this equivalence is proved in Lean using ``em``, as follows:
+   In classical logic, for all propositions ``P`` and ``Q`` the implication ``P → Q`` is equivalent to the disjunction ``¬ P ∨ Q``.  The left-to-right direction of this equivalence is proved in Lean using ``em``, as we now show.
+
+.. index:: elimination rule; (for disjunction)
 
 ::
 
   open classical
 
-  example (P Q: Prop) (f: P → Q): ¬ P ∨ Q :=
+  example (P Q: Prop): (P → Q) → ¬ P ∨ Q :=
+  assume f: P → Q,
   or.elim (em P)
     (assume h: P, or.inr (f h))
     (assume h: ¬ P, or.inl h)
 
-(Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of any Lean novices who are puzzled by it:
-``or.elim`` means "apply the disjunction elimination rule" [1]_ to the disjunction ``em P``; the latter is ``P ∨ ¬ P`` and the final two lines handles each disjunct in turn.)
+(Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of Lean novices who might be puzzled by it: ``or.elim`` means "apply the **disjunction elimination** rule", :math:`∨\mathrm E`.  [1]_  In this case, we apply :math:`∨\mathrm E` to the disjunction ``em P``, that is, ``P ∨ ¬ P``, and the final two lines handle each disjunct in turn.)
+
+.. proof:example::
+
+   On the other hand, the converse of the example above---that is, ``¬ P ∨ Q → (P → Q)``---can be proved without the help of classical axioms, so the code below need not be preceded by ``open classical``.
+
+::
+
+  example (P Q: Prop): ¬ P ∨ Q → (P → Q) :=
+  assume (h: ¬ P ∨ Q) (p: P), show Q, from
+  or.elim h
+    (assume np: ¬ P, false.elim (np p))
+    (assume q : Q, q)
+
 
 Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to :term:`bytecode`.
 
@@ -141,7 +153,7 @@ This axiom is useful when reasoning about classes of :term:`logically equivalent
 
   namespace extensionality
     -- BEGIN
-    -- "proposition extensionality"
+    -- proposition extensionality
     axiom propext {a b: Prop}: (a ↔ b) → a = b
     -- END
   end extensionality
@@ -214,9 +226,11 @@ Evidently, there are a number of distinct notions of equality, and each may have
 Extensionality in Lean
 ----------------------
 
-Function extensionality follows from the existence of *quotients* (discussed in the next section) and in the :term:`LSL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.
+Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotients`) and in the :term:`LSL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
 
-Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).  In other terms, ``A: set α`` represents the **characteristic function** of the set ``A`` defined for all ``x:α`` by
+Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).
+
+In other terms, ``A: set α`` represents the **characteristic function** of the set ``A`` defined for all ``x:α`` by
 
 .. math:: \mathsf{A\ x} = \begin{cases} \mathsf{true},& \text{ if $\mathsf x$ belongs to $\mathsf A$,}\\
                               \mathsf{false},& \text{ otherwise.}
@@ -224,7 +238,7 @@ Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets con
 
 Thus, if we combine ``funext`` and ``propext``, we obtain an *extensional theory of subsets*, or **set extensionality**.  This means that two sets are equal when then contain the same elements, that is, when their characteristic functions are (extensionally) equal.
 
-More precisely, ``A B: set α`` are (extensionally) equal iff their characteristic functions are (extensionally) equal iff for each ``x:α``, the propositions ``A x`` and ``B x`` are (extensionally) equal.
+More precisely, ``A B: set α`` are equal iff their characteristic functions are equal iff for each ``x:α``, the propositions ``A x`` and ``B x`` are equal.  (Here, each occurrence of "equal" is understood to mean "extensionally equal".)
 
 ::
 
@@ -339,10 +353,331 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 
 -------------------------------------
 
+.. _proof-of-funext:
+
+Proof of funext
+---------------
+
+As an example of extensionality in Lean, and as a lead-in to the subject of the next chapter (quotients), it is instructive to dissect the definition of function extensionality in the `Lean Standard Library`_, as well as the proof of the ``funext`` theorem, which states that function extensionality *is* equality of functions in Lean; in other words, two functions are equal iff they are "Leibniz equal" (i.e., give the same output for every input).
+
+We start with the full listing of the `funext.lean`_ program that we will dissect below; this file resides in the ``library/init`` directory of every standard installation of Lean.
+
+::
+
+  /-
+  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
+  Released under Apache 2.0 license as described in the file
+  LICENSE.
+
+  Author: Jeremy Avigad
+
+  Extensional equality for functions, and a proof of
+  function extensionality from quotients.
+  -/
+  prelude
+  import init.data.quot init.logic
+
+  universes u v
+
+  namespace function
+    variables {α : Sort u} {β : α → Sort v}
+
+    protected def equiv (f₁ f₂: Π x:α, β x): Prop :=
+    ∀ x, f₁ x = f₂ x
+
+    local infix `~` := function.equiv
+
+    protected theorem equiv.refl (f: Π x:α, β x):
+    f ~ f := assume x, rfl
+
+    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
+
+    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ :=
+    λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
+
+    protected theorem equiv.is_equivalence
+    (α: Sort u) (β: α → Sort v):
+    equivalence (@function.equiv α β) :=
+    mk_equivalence (@function.equiv α β)
+    (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
+  end function
+
+  section
+
+    open quotient
+    variables {α: Sort u} {β: α → Sort v}
+
+    @[instance]
+    private def fun_setoid (α: Sort u) (β: α → Sort v):
+    setoid (Π x:α, β x) :=
+    setoid.mk (@function.equiv α β)
+              (function.equiv.is_equivalence α β)
+
+    private def extfun (α : Sort u) (β : α → Sort v):
+    Sort (imax u v) := quotient (fun_setoid α β)
+
+    private def fun_to_extfun (f: Π x:α, β x):
+    extfun α β := ⟦f⟧
+    private def extfun_app (f : extfun α β) : Π x : α, β x :=
+    assume x,
+    quot.lift_on f
+      (λ f : Π x : α, β x, f x)
+      (λ f₁ f₂ h, h x)
+
+    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
+    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
+      congr_arg extfun_app (sound h)
+
+  end
+
+  attribute [intro!] funext
+
+  local infix `~` := function.equiv
+
+  instance pi.subsingleton {α : Sort u} {β : α → Sort v}
+  [∀ a, subsingleton (β a)]: subsingleton (Π a, β a) :=
+  ⟨λ f₁ f₂, funext (λ a, subsingleton.elim (f₁ a) (f₂ a))⟩
+
+The first section of the program, inside the ``function`` namespace, is simply a formalization of the easy proof that extensional equality of functions is an equivalence relation.
+
+The more interesting part appears inside the ``section``.
+
+First, the ``quotient`` namespace is openned.  The contents of that namespace are as follows:
+
+
+::
+
+  namespace quotient
+
+    protected def mk {α : Sort u} [s : setoid α] (a : α):
+    quotient s := quot.mk setoid.r a
+
+    notation `⟦`:max a `⟧`:0 := quotient.mk a
+
+    def sound {α : Sort u} [s : setoid α] {a b : α}:
+    a ≈ b → ⟦a⟧ = ⟦b⟧ := quot.sound
+
+    attribute [reducible, elab_as_eliminator]
+    protected def lift {α : Sort u} {β : Sort v} [s : setoid α] (f : α → β):
+    (∀ a b, a ≈ b → f a = f b) → quotient s → β := quot.lift f
+
+    attribute [elab_as_eliminator]
+    protected lemma ind {α : Sort u} [s : setoid α] {β : quotient s → Prop}:
+    (∀ a, β ⟦a⟧) → ∀ q, β q := quot.ind
+
+    attribute [reducible, elab_as_eliminator]
+    protected def lift_on {α : Sort u} {β : Sort v} [s : setoid α]
+    (q : quotient s) (f : α → β) (c : ∀ a b, a ≈ b → f a = f b) : β :=
+    quot.lift_on q f c
+
+    attribute [elab_as_eliminator]
+    protected lemma induction_on {α : Sort u} [s : setoid α]
+    {β : quotient s → Prop} (q : quotient s) (h : ∀ a, β ⟦a⟧):
+    β q := quot.induction_on q h
+
+    lemma exists_rep {α : Sort u} [s : setoid α] (q : quotient s):
+    ∃ a : α, ⟦a⟧ = q := quot.exists_rep q
+
+    section
+
+      variable {α : Sort u}
+      variable [s : setoid α]
+      variable {β : quotient s → Sort v}
+
+      protected def rec
+        (f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : a ≈ b),
+        (eq.rec (f a) (quotient.sound p): β ⟦b⟧) = f b)
+        (q : quotient s) : β q := quot.rec f h q
+
+      attribute [reducible, elab_as_eliminator]
+      protected def rec_on
+      (q : quotient s) (f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : a ≈ b),
+      (eq.rec (f a) (quotient.sound p):
+      β ⟦b⟧) = f b) : β q := quot.rec_on q f h
+
+      attribute [reducible, elab_as_eliminator]
+      protected def rec_on_subsingleton
+      [h : ∀ a, subsingleton (β ⟦a⟧)]
+      (q : quotient s) (f : Π a, β ⟦a⟧):
+      β q := @quot.rec_on_subsingleton _ _ _ h q f
+
+      attribute [reducible, elab_as_eliminator]
+      protected def hrec_on (q : quotient s) (f : Π a, β ⟦a⟧) 
+      (c : ∀ (a b : α) (p : a ≈ b), f a == f b):
+      β q := quot.hrec_on q f c
+
+    end
+
+    section
+
+      universes u_a u_b u_c
+      variables {α : Sort u_a} {β : Sort u_b} {φ : Sort u_c}
+      variables [s₁ : setoid α] [s₂ : setoid β]
+      include s₁ s₂
+
+      attribute [reducible, elab_as_eliminator]
+      protected def lift₂
+      ( f : α → β → φ)(c : ∀ a₁ a₂ b₁ b₂,
+        a₁ ≈ b₁ → a₂ ≈ b₂ → f a₁ a₂ = f b₁ b₂ )
+      (q₁ : quotient s₁) (q₂ : quotient s₂): φ :=
+      quotient.lift
+        ( λ (a₁ : α), quotient.lift (f a₁) (λ (a b : β),
+          c a₁ a a₁ b (setoid.refl a₁)) q₂
+        )
+        ( λ (a b : α) (h : a ≈ b),
+          @quotient.ind β s₂
+             (λ (a_1 : quotient s₂),
+                (quotient.lift (f a) (λ (a_1 b : β), c a a_1 a b (setoid.refl a)) a_1)
+                =
+                (quotient.lift (f b) (λ (a b_1 : β), c b a b b_1 (setoid.refl b)) a_1))
+             (λ (a' : β), c a a' b a' h (setoid.refl a'))
+             q₂)
+        q₁
+
+      attribute [reducible, elab_as_eliminator]
+      protected def lift_on₂
+        (q₁ : quotient s₁) (q₂ : quotient s₂) (f : α → β → φ) (c : ∀ a₁ a₂ b₁ b₂, a₁ ≈ b₁ → a₂ ≈ b₂ → f a₁ a₂ = f b₁ b₂) : φ :=
+      quotient.lift₂ f c q₁ q₂
+
+      attribute [elab_as_eliminator]
+      protected lemma ind₂ {φ : quotient s₁ → quotient s₂ → Prop} (h : ∀ a b, φ ⟦a⟧ ⟦b⟧) (q₁ : quotient s₁) (q₂ : quotient s₂) : φ q₁ q₂ :=
+      quotient.ind (λ a₁, quotient.ind (λ a₂, h a₁ a₂) q₂) q₁
+
+      attribute [elab_as_eliminator]
+      protected lemma induction_on₂
+         {φ : quotient s₁ → quotient s₂ → Prop} (q₁ : quotient s₁) (q₂ : quotient s₂) (h : ∀ a b, φ ⟦a⟧ ⟦b⟧) : φ q₁ q₂ :=
+      quotient.ind (λ a₁, quotient.ind (λ a₂, h a₁ a₂) q₂) q₁
+
+      attribute [elab_as_eliminator]
+      protected lemma induction_on₃
+         [s₃ : setoid φ]
+         {δ : quotient s₁ → quotient s₂ → quotient s₃ → Prop} (q₁ : quotient s₁) (q₂ : quotient s₂) (q₃ : quotient s₃) (h : ∀ a b c, δ ⟦a⟧ ⟦b⟧ ⟦c⟧)
+         : δ q₁ q₂ q₃ :=
+      quotient.ind (λ a₁, quotient.ind (λ a₂, quotient.ind (λ a₃, h a₁ a₂ a₃) q₃) q₂) q₁
+
+    end -- section
+
+    section exact
+      variable   {α : Sort u}
+      variable   [s : setoid α]
+      include s
+
+      private def rel (q₁ q₂ : quotient s) : Prop :=
+      quotient.lift_on₂ q₁ q₂
+        (λ a₁ a₂, a₁ ≈ a₂)
+        (λ a₁ a₂ b₁ b₂ a₁b₁ a₂b₂,
+          propext (iff.intro
+            (λ a₁a₂, setoid.trans (setoid.symm a₁b₁) (setoid.trans a₁a₂ a₂b₂))
+            (λ b₁b₂, setoid.trans a₁b₁ (setoid.trans b₁b₂ (setoid.symm a₂b₂)))))
+
+      local infix `~` := rel
+
+      private lemma rel.refl : ∀ q : quotient s, q ~ q :=
+      λ q, quot.induction_on q (λ a, setoid.refl a)
+
+      private lemma eq_imp_rel {q₁ q₂ : quotient s} : q₁ = q₂ → q₁ ~ q₂ :=
+      assume h, eq.rec_on h (rel.refl q₁)
+
+      lemma exact {a b : α} : ⟦a⟧ = ⟦b⟧ → a ≈ b :=
+      assume h, eq_imp_rel h
+    end exact
+
+    section
+      universes u_a u_b u_c
+      variables {α : Sort u_a} {β : Sort u_b}
+      variables [s₁ : setoid α] [s₂ : setoid β]
+      include s₁ s₂
+
+      attribute [reducible, elab_as_eliminator]
+      protected def rec_on_subsingleton₂
+         {φ : quotient s₁ → quotient s₂ → Sort u_c} [h : ∀ a b, subsingleton (φ ⟦a⟧ ⟦b⟧)]
+         (q₁ : quotient s₁) (q₂ : quotient s₂) (f : Π a b, φ ⟦a⟧ ⟦b⟧) : φ q₁ q₂:=
+      @quotient.rec_on_subsingleton _ s₁ (λ q, φ q q₂) (λ a, quotient.ind (λ b, h a b) q₂) q₁
+        (λ a, quotient.rec_on_subsingleton q₂ (λ b, f a b))
+
+    end
+  end quotient
+
+::
+
+  /-
+  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
+  Released under Apache 2.0 license as described in the file
+  LICENSE.
+
+  Author: Jeremy Avigad
+
+  Extensional equality for functions, and a proof of
+  function extensionality from quotients.
+  -/
+  prelude
+  import init.data.quot init.logic
+
+  universes u v
+
+  namespace function
+    variables {α : Sort u} {β : α → Sort v}
+
+    protected def equiv (f₁ f₂: Π x:α, β x): Prop :=
+    ∀ x, f₁ x = f₂ x
+
+    local infix `~` := function.equiv
+
+    protected theorem equiv.refl (f: Π x:α, β x):
+    f ~ f := assume x, rfl
+
+    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
+
+    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ :=
+    λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
+
+    protected theorem equiv.is_equivalence
+    (α: Sort u) (β: α → Sort v):
+    equivalence (@function.equiv α β) :=
+    mk_equivalence (@function.equiv α β)
+    (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
+  end function
+
+  section
+
+    -- BEGIN
+    open quotient
+    variables {α: Sort u} {β: α → Sort v}
+
+    @[instance]
+    private def fun_setoid (α: Sort u) (β: α → Sort v):
+    setoid (Π x:α, β x) :=
+    setoid.mk (@function.equiv α β)
+              (function.equiv.is_equivalence α β)
+
+    private def extfun (α : Sort u) (β : α → Sort v):
+    Sort (imax u v) := quotient (fun_setoid α β)
+
+    private def fun_to_extfun (f: Π x:α, β x):
+    extfun α β := ⟦f⟧
+    private def extfun_app (f : extfun α β) : Π x : α, β x :=
+    assume x,
+    quot.lift_on f
+      (λ f : Π x : α, β x, f x)
+      (λ f₁ f₂ h, h x)
+
+    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
+    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
+      congr_arg extfun_app (sound h)
+    -- END
+
+  end
+
+-----------------------------------
+
 .. rubric:: Footnotes
 
 .. [1]
-   :math:`∨\mathrm E`; see `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
+   see, e.g., `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 .. [2]
    Like some of the other material in this chapter, this example is borrowed from the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.

@@ -2,6 +2,10 @@
 
 .. role:: code
 
+.. highlight:: lean
+
+.. _glossary:
+
 Glossary
 ========
 
@@ -53,6 +57,9 @@ Acronyms
     ran
       range
 
+    TPIL
+      the `Theorem Proving in Lean`_ tutorial
+
     TT
       (intuitionistic) :term:`type theory`
 
@@ -99,7 +106,7 @@ Nomenclature
       see https://en.wikipedia.org/wiki/Calculus_of_constructions
 
     canonical normal form
-      .. todo:: insert definition
+      See the `ncatlab page on normal forms <https://ncatlab.org/nlab/show/normal+form>`_.
 
     category of categories
       has categories as objects and functors as morphisms.
@@ -143,11 +150,6 @@ Nomenclature
 
     component
       If :math:`α : F ⇒ G` is a natural transformation, then the **component** of α at :math:`A` is the morphism :math:`α_A : FA → GA`.
-
-    computationally pure
-      An expression is called **computationally pure** if
-
-      .. todo:: complete definition
 
     concrete category
       A **concrete category** is one whose objects are sets and whose morphisms are functions defined on these sets (possibly satisfying some other special properties).
@@ -324,7 +326,7 @@ Nomenclature
       a function :math:`f: X → Y` preserving finite meets and joins.
 
     law of the excluded middle
-      This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds.
+      This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds. (See also the `LEM Section <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html?highlight=reduction%20rule#the-law-of-the-excluded-middle>`_ of the :term:`TPIL`.)
 
     logically equivalent
       Propositions :math:`P` and :math:`Q` are **logically equivalent** provided :math:`P` implies :math:`Q` and :math:`Q` implies :math:`P`.
@@ -423,10 +425,8 @@ Nomenclature
       an automated procedure for constructing and manipulating proof terms.
 
     proposition extensionality
-      .. todo:: insert definition
+      This axiom asserts that when two propositions imply one another, they are actually equal. This is consistent with set-theoretic interpretations in which any element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in any context. (See also the `Proposition Extensionality <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#propositional-extensionality>`_ section of the :term:`TPIL`.)
 
-    pure
-      see :term:`computationally pure`
 
     quotient
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
@@ -723,3 +723,12 @@ The list below shows what to type in order to produce each of the special unicod
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
+
+
+.. computationally pure
+..   An expression is called **computationally pure** if
+..   .. todo:: complete definition
+
+.. pure
+..   see :term:`computationally pure`
+

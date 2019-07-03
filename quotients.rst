@@ -1,8 +1,8 @@
-.. _quotients:
-
 .. highlight:: lean
 
 .. index:: equivalence class, ! quotient
+
+.. _quotients:
 
 Quotients [1]_
 ===============
@@ -258,13 +258,13 @@ Observe that this definition---of the *lift of an operation*---differs from that
 
   end quotient
 
-Notice how we included some syntactic sugar for the "respects" relation, so that we can simply write ``f ⊧ R`` in place of
+Notice the syntactic sugar we added for the "respects" relation, so that now we can simply write ``f ⊧ R`` in place of
 
   ``∀ (a b: β → α), ((∀ i, R (a i) (b i)) → R (f a) (f b))``.
-  
-We also made use of the ``operation`` type which will be introduced more formally later (see :numref:`algebras-in-lean`).
 
-Now let's check some of these types, and also prove that the standard library's notion of a function respecting a relation is equivalent to that relation being a subset of the function's kernel.
+We also made use of the ``operation`` type which will be introduced more formally in :numref:`algebras-in-lean`.
+
+Now let's check the types of some of these newly defined constants, and also prove that the standard library's notion of a function respecting a relation is equivalent to the assertion that the relation is a subset of the function's kernel.
 
 ::
 
