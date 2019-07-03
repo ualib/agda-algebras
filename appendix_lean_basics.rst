@@ -6,9 +6,9 @@
 Appendix. Lean Basics
 =====================
 
-In this appendix we describe various features and aspects of Lean_ that we have made use of in the lean-ualib_.
+In this appendix we describe the various features and aspects of Lean_ on which the lean-ualib_ depends.
 
-Some of the things described here will come from the Lean_ standard library.  Others will be from the mathlib_ Lean community project, and possible other projects.
+Some of the topics discussed here will come from the Lean_ standard library.  Others will be from the mathlib_ Lean community project, and possible other projects.
 
 Some good references for this material are
 
@@ -24,7 +24,7 @@ Some good references for this material are
 Lean's type hierarchy [1]_
 ---------------------------
 
-Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and *universes*. However, unlike Coq or Agda, Lean's universes are *not cumulative*.  This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use *universe polymorphism* and the *lift map* explicitly.
+Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and a countable hierarchy of *universes*. However, unlike Coq or Agda, Lean's universes are *non-cumulative*. This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use :term:`universe polymorphism` and lifting constructions.
 
 Sort and Type
 ~~~~~~~~~~~~~

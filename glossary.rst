@@ -511,11 +511,18 @@ Nomenclature
     universal property
       The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.
 
-    universe
-      .. todo:: insert definition
+    universe polymorphism
+      For example, ``list α`` should make sense for any type ``α``, no matter which type universe ``α`` lives in. This explains the type annotation of the function list:
 
-    universes
-      see :term:`universe`
+      :: 
+
+        universes u v
+        variables (α : Type u) (β : Type v)
+        #check list      -- Type u_1 → Type u_1
+        #check list α    -- Type u
+        #check list β    -- Type v
+
+      The variable ``u_1`` ranges over type levels.  As the output of the ``#check`` shows, ``list α`` has ``Type u`` because ``α`` has ``Type u``. Similarly for ``list β``. 
 
 --------------------------------
 
@@ -732,3 +739,7 @@ The list below shows what to type in order to produce each of the special unicod
 .. pure
 ..   see :term:`computationally pure`
 
+.. universe
+..   .. todo:: insert definition
+.. universes
+..   see :term:`universe`

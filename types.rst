@@ -209,16 +209,16 @@ Asynchronous currying
 
 ------------------------------
 
-.. index:: dependent type theory, inductive type, universes
+.. index:: inductive type, universes
 
 .. _inductive-types:
 
 Inductive types
 -----------------
 
-.. todo:: say something about this
+.. todo:: complete this section
 
-**Inductive types** and **inductive families of types**, generating only the recursor for an inductive type;
+(See also: the `Inductive Types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html#>`_ section of :term:`TPIL`.)
 
 --------------------------------------------
 

@@ -19,7 +19,7 @@ This chapter takes as its starting point the `Axioms and Computation`_ section o
 Classical and constructive reasoning
 ------------------------------------
 
-The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a hierarchy of :term:`universes` that starts with the :term:`impredicative` ``Prop`` type at the bottom.
+The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a countable hierarchy of universes that starts with the :term:`impredicative` ``Prop`` type at the bottom. (See :numref:`leans-type-hierarchy` for more details about Lean's type hierarchy.)
 
 Lean extends the :term:`CiC` with additional axioms and rules in order to make the language more expressive and versatile so that the statements of theorems and the constructions of proofs are simpler and more elegant.
 
@@ -88,7 +88,7 @@ Therefore, in Lean we must mark such definitions ``noncomputable``.
 .. ~~~~~~~~~~~~~~~~~~~~
 .. A famous theorem of Diaconescu uses :term:`proposition extensionality`, :term:`function extensionality` and :term:`Choice` to derive the :term:`law of the excluded middle`. However, as noted above, use of :term:`em` is still compatible with :term:`bytecode` compilation and :term:`code extraction`, as are other classical principles, *as long as they are not used to manufacture data*.
 
-To summarize, on top of the framework of :term:`universes`, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the :term:`LSL` adds three (optional) components:
+To summarize, on top of the framework of universes, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the :term:`LSL` adds three (optional) components:
 
 + the axiom of :term:`proposition extensionality`
 + a :term:`quotient` construction, which implies :term:`function extensionality`
