@@ -266,7 +266,14 @@ Nomenclature
       a functor that is both :term:`full <full functor>` and :term:`faithfull <faithful functor>`.
 
     function extensionality
-      the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`.
+      the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`; such functions are sometimes called :term:`Leibniz equal`.
+      
+      In Lean, one defines function extensionality for functions of (dependent) type :math:`Π(x:α), β x` as follows:
+      
+      ::
+      
+        def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
+
 
     functor
       A **functor** :math:`F : \mathcal C → \mathcal D` consists of a function :math:`F_0` that maps objects of :math:`\mathcal C` to objects of :math:`\mathcal D` and a function :math:`F_1` that maps morphisms of :math:`\mathcal C` to morphisms of :math:`\mathcal D` such that :math:`F` preserves (co)domains of morphisms, identities, and compositions.
@@ -333,6 +340,9 @@ Nomenclature
 
     Lean
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
+
+    Leibniz equal
+      (see :term:`function extensionality`)
 
     locally small category
       A category :math:`\mathcal C` is **locally small** if for every pair :math:`A`, :math:`B` of objects in :math:`\mathcal C` the collection of morphisms from :math:`A` to :math:`B` is a set.
@@ -512,12 +522,16 @@ Nomenclature
       The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.
 
     universe polymorphism
-      For example, ``list α`` should make sense for any type ``α``, no matter which type universe ``α`` lives in. This explains the type annotation of the function list:
+      We use an example to demonstrate this concept. Given a type ``α``, no matter to which type universe ``α`` belongs, we can form the type ``list α`` of lists of elements of type ``α``, and this type will have the same type universe as ``α``. In other terms, 
+      
+        ``α: Type u`` if and only if ``list α: Type u``.
+        
+      The Lean code for this example follows.
 
       :: 
 
         universes u v
-        variables (α : Type u) (β : Type v)
+        variables (α: Type u) (β: Type v)
         #check list      -- Type u_1 → Type u_1
         #check list α    -- Type u
         #check list β    -- Type v
