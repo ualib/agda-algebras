@@ -338,7 +338,9 @@ The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notati
 
 ---------------------------------------------
 
-.. index:: variables, word, term, free algebra, absolutely free, universal (for σ-algebras) 
+.. index:: variables, word, term, free algebra
+.. index:: universal for; σ-algebras
+.. index:: absolutely free for; σ-algebras
 
 .. _terms-in-lean:
 
@@ -355,7 +357,7 @@ The collection of terms over :math:`X`, along with the operations :math:`F^{𝕋
 
 Now, suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the signature σ and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
 
-Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is **universal** for σ-algebras. Some authors say, ":math:`𝕋(X)` is **absolutely free** for σ-algebras," in this and only this case.
+Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is **universal for** σ-algebras. Some authors say, ":math:`𝕋(X)` is **absolutely free for** σ-algebras," in this and only this case.
 
 Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
 

@@ -274,7 +274,6 @@ Nomenclature
       
         def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
 
-
     functor
       A **functor** :math:`F : \mathcal C → \mathcal D` consists of a function :math:`F_0` that maps objects of :math:`\mathcal C` to objects of :math:`\mathcal D` and a function :math:`F_1` that maps morphisms of :math:`\mathcal C` to morphisms of :math:`\mathcal D` such that :math:`F` preserves (co)domains of morphisms, identities, and compositions.
 
@@ -437,7 +436,6 @@ Nomenclature
     proposition extensionality
       This axiom asserts that when two propositions imply one another, they are actually equal. This is consistent with set-theoretic interpretations in which any element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in any context. (See also the `Proposition Extensionality <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#propositional-extensionality>`_ section of the :term:`TPIL`.)
 
-
     quotient
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
 
@@ -561,7 +559,7 @@ Categories
       the category whose objects are the sets and whose morphisms are the functions on sets.
 
     Grph
-      the category whose objects are the (directed) graphs; the morphisms are the :math:`graph morphisms <graph morphism>`.
+      the category whose objects are the (directed) graphs; the morphisms are the :term:`graph morphisms <graph morphism>`.
 
     Mon
       the category whose objects are the :term:`monoids <monoid>` and whose morphisms are the :term:`monoid homomorphisms <monoid homomorphism>`.
@@ -602,116 +600,283 @@ Categories
     Comma
       Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.
 
--------------------------------
-
-.. _symbols:
+--------------------------------
 
 Symbols
---------
+-------
 
-The list below shows what to type in order to produce each of the special unicode symbols we use.
+.. glossary::
 
-  +---------+--------------------------------------------------+
-  | 𝔸, 𝔹, ℂ | ``\BbbA``, ``\BbbB`` (or ``\bb``), ``\BbbC``     |
-  +---------+--------------------------------------------------+
-  | ℕ, ℤ    | ``\N`` (or ``\nat``), ``\Z`` (or ``\Int``)       |
-  +---------+--------------------------------------------------+
-  | α, β, γ | ``\a`` (or ``\alpha``), ``\b``, ``\g``, etc.     |
-  +---------+--------------------------------------------------+
-  | λ       | ``\lamda`` (or ``\Gl`` or ``\la`` or ``\fun``)   |
-  +---------+--------------------------------------------------+
-  | Λ       | ``\L`` (or ``\GL`` or ``\Lambda``)               |
-  +---------+--------------------------------------------------+
-  | ι       | ``\iota``                                        |
-  +---------+--------------------------------------------------+
-  | æ, Æ    | ``\ae``, ``\AE``                                 |
-  +---------+--------------------------------------------------+
-  | œ, Œ    | ``\oe``, ``\OE``                                 |
-  +---------+--------------------------------------------------+
-  | å       | ``\aa``                                          |
-  +---------+--------------------------------------------------+
-  | ě, ö, ç | ``\ve``, ``\"o``, ``\cc``                        |
-  +---------+--------------------------------------------------+
-  | h₁, h₂  | ``h\1``, ``h\2``, etc.   (or ``h\_1``)           | 
-  +---------+--------------------------------------------------+
-  | fₗ      | ``f\_l``                                         |
-  +---------+--------------------------------------------------+
-  | ∩       | ``\i``  (or ``\cap`` or ``\intersection``)       |
-  +---------+--------------------------------------------------+
-  | ⋂       | ``\I`` (or ``\bigcap`` or ``\Intersection``)     |
-  +---------+--------------------------------------------------+
-  | ∪       | ``\un`` (or ``cup`` or ``\union``)               |
-  +---------+--------------------------------------------------+
-  | ⋃       | ``\Un`` (or ``\bigcup`` or ``\Union``)           |
-  +---------+--------------------------------------------------+
-  | ∧       | ``\an`` (or ``\and`` or ``\wedge``)              |
-  +---------+--------------------------------------------------+
-  | ⋀       | ``\And`` (or ``\bigwedge``)                      |
-  +---------+--------------------------------------------------+
-  | ∨       | ``\vee`` (or ``\or``)                            |
-  +---------+--------------------------------------------------+
-  | ⋁       | ``\Or`` (or ``\bigvee``)                         |
-  +---------+--------------------------------------------------+
-  | ¬       | ``\n`` (or ``\neg``)                             |
-  +---------+--------------------------------------------------+
-  | ∘, ⊚    | ``\o`` (or ``\circ``), ``\oo``                   |
-  +---------+--------------------------------------------------+
-  | ×       | ``\x`` (or ``\times``)                           |
-  +---------+--------------------------------------------------+
-  | ∃       | ``\ex`` (or ``\exists``)                         |
-  +---------+--------------------------------------------------+
-  | ∀       | ``\al`` (or ``\all`` or ``\forall``)             |
-  +---------+--------------------------------------------------+
-  | ∈, ∋    | ``\in``, ``\ni``                                 |
-  +---------+--------------------------------------------------+
-  | ∉, ∌    | ``\inn``, ``\nin`` (or ``\notin``, ``\nni``)     |
-  +---------+--------------------------------------------------+
-  | ≤, ≥    | ``\leq``, ``\geq``                               |
-  +---------+--------------------------------------------------+
-  | ⊆, ⊇    | ``\ss`` (or ``\subseteq``), ``\supseteq``        |
-  +---------+--------------------------------------------------+
-  | ⊂, ⊃    | ``\subset``, ``\supset``                         |
-  +---------+--------------------------------------------------+
-  | ≪, ≫    | ``\ll``, ``\gg``                                 |
-  +---------+--------------------------------------------------+
-  | ⋆, ∗    | ``\star``, ``\ast``                              |
-  +---------+--------------------------------------------------+
-  | ≈, ∼    | ``\~~`` (or ``\approx``), ``\sim``               |
-  +---------+--------------------------------------------------+
-  | ≡, ≅    | ``\equiv``, ``\cong``                            |
-  +---------+--------------------------------------------------+
-  | ⟨, ⟩    | ``\<``, ``\>`` (or ``\langle``, ``\rangle``)     |
-  +---------+--------------------------------------------------+
-  | ‹, ›    | ``\f<``, ``\f>`` (or ``\f``, ``\fr``)            |
-  +---------+--------------------------------------------------+
-  | ◀ ▸     | ``\T``, ``\t``                                   |
-  +---------+--------------------------------------------------+
-  | ←, →    | ``\l``, ``\to`` (or ``->`` or ``\r``)            |
-  +---------+--------------------------------------------------+
-  | ⟶       | ``\hom`` (or ``-->``)                            |
-  +---------+--------------------------------------------------+
-  | ↑, ↓    | ``\u``, ``\d``                                   |
-  +---------+--------------------------------------------------+
-  | ⟹       | ``==>`` (or ``\nattrans``)                       |
-  +---------+--------------------------------------------------+
-  | ⟺       | ``\iff``                                         |
-  +---------+--------------------------------------------------+
-  | ↦       | ``\mapsto`` (or ``\r-|``)                        |
-  +---------+--------------------------------------------------+
-  | ↠       | ``\rr`` or ``\twoheadrightarrow``                |
-  +---------+--------------------------------------------------+
-  | ↣       | ``\pr`` or ``\r->``                              |
-  +---------+--------------------------------------------------+
-  | ∅       | ``\emp`` (or ``\empty`` or ``\emptyset``)        |
-  +---------+--------------------------------------------------+
-  | ⊢, ⊨, ⊧ | ``\vdash``, ``\vDash``, ``\models``              |
-  +---------+--------------------------------------------------+
-  | ⋈       | ``\j`` (or ``\bowtie``)                          |
-  +---------+--------------------------------------------------+
-  | f̃, f̂  |  ``f\tilde``, ``f\hat``                          |
-  +---------+--------------------------------------------------+
+    𝔸
+      ``\A`` (or ``\BbbA``)
 
--------------------------------------
+    𝔹 
+      ``\BbbB``
+
+    ℂ
+      ``\C`` (or ``\BbbC``)
+
+    ℕ
+      ``\N`` (or ``\nat`` or ``\BbbN``)
+      
+    𝕋 
+      ``\BbbT``
+      
+    ℤ
+      ``\Z`` (or ``\Int`` or ``\BbbZ``)
+
+    h₁
+      ``h\1`` (or ``h\_1``)
+      
+    h₂
+      ``h\2``, etc.
+
+    fₗ
+      ``f\_l``
+  
+    f̃
+      ``f\tilde``
+
+    f̂
+      ``f\hat``                          
+
+    å
+      ``\aa``
+  
+    ě
+      ``\ve``
+    
+    ö
+      ``\"o``
+      
+    ç
+      ``\cc``
+
+    α
+      ``\a`` (or ``\alpha``)
+      
+    β
+      ``\b``
+      
+    γ
+      ``\g``
+
+    Γ 
+      ``\G``
+
+    δ
+      ``\de`` (or ``\delta``)
+
+    Δ 
+      ``\D`` (or ``\Delta``)
+
+    ε
+      ``\e`` (or ``\epsilon``)
+
+    ι
+      ``\iota``
+
+    λ
+      ``\lamda`` (or ``\Gl`` or ``\la`` or ``\fun``)
+      
+    Λ
+      ``\L`` (or ``\GL`` or ``\Lambda``)
+
+    ρ
+      ``\rho``
+
+    σ
+      ``\s`` (or ``\sigma``)
+      
+    Σ
+      ``\S`` (or ``\Sigma``)
+      
+    ∑
+      ``\sum``
+
+    ∏
+      ``\prod``
+
+    Π
+      ``\p`` (or ``\Pi``)
+
+    π
+      ``\pi``
+       
+    ϕ
+      ``\phi``
+
+    Φ
+      ``\Phi``
+
+    æ
+      ``\ae``
+
+    Æ
+      ``\AE``
+
+    œ
+      ``\oe``
+    
+    Œ
+      ``\OE``
+
+    ∩
+      ``\i``  (or ``\cap`` or ``\intersection``)
+  
+    ⋂
+      ``\I`` (or ``\bigcap`` or ``\Intersection``)
+  
+    ∪
+      ``\un`` (or ``cup`` or ``\union``)
+  
+    ⋃
+      ``\Un`` (or ``\bigcup`` or ``\Union``)
+
+    ∧
+      ``\an`` (or ``\and`` or ``\wedge``)
+
+    ⋀
+      ``\And`` (or ``\bigwedge``)
+
+    ∨
+      ``\vee`` (or ``\or``)
+
+    ⋁
+      ``\Or`` (or ``\bigvee``)
+
+    ¬
+      ``\n`` (or ``\neg``)
+
+    ∘
+      ``\o`` (or ``\circ``)
+
+    ⊚
+      ``\oo``
+
+    ×
+      ``\x`` (or ``\times``)
+
+    ∃
+      ``\ex`` (or ``\exists``)
+
+    ∀
+      ``\al`` (or ``\all`` or ``\forall``)
+
+    ∈
+      ``\in``
+
+    ∋
+      ``\ni``
+
+    ∉
+      ``\inn``, ``\nin`` (or ``\notin``, ``\nni``)
+
+    ≤
+      ``\leq``
+
+    ≥
+      ``\geq``                               
+
+    ⊆
+      ``\ss`` (or ``\subseteq``)
+
+    ⊇
+      ``\supseteq``        
+
+    ⊂
+      ``\subset``
+
+    ⊃
+      ``\supset``                         
+
+    ≪
+      ``\ll``
+
+    ≫
+      ``\gg``                                 
+
+    ⋆
+      ``\star``
+
+    ∗
+      ``\ast``                              
+
+    ≈
+      ``\~~`` (or ``\approx``)
+
+    ∼
+      ``\sim``               
+
+    ≡
+      ``\equiv``
+
+    ≅
+      ``\cong``                            
+
+    ⟨
+      ``\<`` (or ``\langle``)
+
+
+    ⟩
+      ``\>`` (or ``\rangle``)     
+
+    ‹
+      ``\f<`` (or ``\f``)
+
+    ›
+      ``\f>`` (or ``\fr``)            
+
+    ◀
+      ``\T``
+
+    ▸
+      ``\t``                                   
+
+    ←
+      ``\l`` (or ``->``)
+
+    →
+      ``\to`` (or ``\r``)            
+
+    ⟶
+      ``\hom`` (or ``-->``)                            
+
+    ↑
+      ``\u``
+
+    ↓
+      ``\d``                                   
+
+    ⟹
+      ``==>`` (or ``\nattrans``)                       
+
+    ⟺
+      ``\iff``                                         
+
+    ↦
+      ``\mapsto`` (or ``\r-``)                        |
+
+    ↠
+      ``\rr`` or ``\twoheadrightarrow``                
+
+    ↣
+      ``\pr`` or ``\r->``                              
+
+    ∅
+      ``\emp`` (or ``\empty`` or ``\emptyset``)        
+
+    ⊢
+      ``\vdash``
+
+    ⊨
+      ``\vDash``
+
+    ⊧
+      ``\models``              
+
+    ⋈
+      ``\j`` (or ``\bowtie``)
 
 .. .. rubric:: Footnotes
 

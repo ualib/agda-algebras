@@ -17,13 +17,13 @@ Equivalence captures a weak notion of equality. If two elements of :math:`A` are
 
 .. proof:example::
 
-   Consider this "real-world" example in which it is useful to "mod out"---i.e., ignore by forming a quotient---irrelevant information.
+   Consider the following "real-world" situation in which it is useful to "mod out"---i.e., ignore by forming a quotient---irrelevant information.
 
-   In a study of image data for the purpose of facial recognition---specifically, the task of identifying a particular person in different photographs---the orientation of a person's face is unimportant.  Indeed, it would be silly to infer that faces in multiple photos belong to different people on the basis that the faces are orientated differently with respect to the camera's field of view.
+   In a study of image data for the purpose of face recognition---specifically, the task of identifying a particular person in different photographs---the orientation of a person's face is unimportant, and it would be silly to infer that faces in multiple photos belong to different people solely because they are orientated differently with respect to the camera's field of view.
 
-   In this application it seems reasonable to collect in a single group (equivalence class) those faces that differ only with respect to their spacial orientations.  We might call two faces from the same class "equivalent modulo orientation."
+   In this application it is reasonable to collect into a single group (equivalence class) those face images that differ only with respect to the spacial orientation of the face.  We might call two faces from the same class "equivalent modulo orientation."
 
-As we have seen, equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all images of the face of a particular individual).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
+Thus, equivalence classes collect similar objects together, unifying them into a single entity (e.g., the collection of all images of the face of a single individual).  Thus :math:`A/{≡}` is a version of :math:`A` where similar elements are compressed into a single element, so irrelevant distinctions can be ignored.
 
 .. proof:example::
 
@@ -33,14 +33,18 @@ As we have seen, equivalence classes collect similar objects together, unifying 
 
 .. index:: quotient
 
-.. index:: ! lift; (of a function)
+.. index:: ! type of; (quotients)
+
+.. index:: ! lift of; (functions)
 
 Lifts of functions
 ------------------
 
 Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.
 
-Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`. Each such class has type :math:`α/R`.
+Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`.
+
+The type of the class :math:`x/R` is a **quotient type**, denoted in this case by :math:`α/R`, and the main goal of this chapter is to see how such quotient types can be defined in Lean.
 
 .. index:: lift; of a function, reduction rule
 
@@ -201,8 +205,8 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
 ------------------------------------------------
 
 .. index:: ! quotient tuple
-.. index:: ! lift; (of a tuple)
-.. index:: ! lift; (of an operation)
+.. index:: ! lift of; tuples
+.. index:: ! lift of; operations
 
 Lifts of tuples and operations
 ------------------------------
