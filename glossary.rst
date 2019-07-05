@@ -94,13 +94,13 @@ Nomenclature
       Given a :term:`signature` :math:`σ = (F, ρ)`, each operation symbol :math:`f ∈ F` is assigned a value :math:`ρ f`, called the **arity** of :math:`f`. (Intuitively, the arity can be thought of as the "number of arguments" that :math:`f` takes as "input".)
 
     Boolean algebra
-      ..todo:: fill in definition    
+      .. todo:: fill in definition    
 
     Boolean algebra homomorphism
       a :term:`lattice homomorphism` that also preserves complementation (but every lattice homomorphism between Boolean lattices automatically preserves complementation, so we may characterize the morphisms of this category more simply as the lattice homomorphisms).
 
     bytecode
-      ..todo:: fill in definition    
+      .. todo:: fill in definition    
 
     Calculus of Inductive Constructions
       see https://en.wikipedia.org/wiki/Calculus_of_constructions
@@ -230,9 +230,7 @@ Nomenclature
       The **evaluation functor** is the functor :math:`Ev : \mathcal C × \mathbf{Set}^{\mathcal C} → \mathbf{Set}`, which takes each pair :math:`(A, F) ∈ \mathcal C_{\mathrm{obj}} × \mathbf{Set}^{{\mathcal C}_{\mathrm{obj}}}` of objects to the set :math:`Ev(A, F) = FA`, and takes each pair :math:`(g, μ) ∈ \mathcal C_{\mathrm{obj}} × \mathbf{Set}^{\mathcal C_{\mathrm{mor}}}` of morphisms to a function on sets, namely, :math:`Ev(g, μ) = μ_{A'} ∘ F g = F' g ∘ μ_A`, where :math:`g ∈ \mathcal C(A, A')` and :math:`μ : F ⇒ F'`.
 
     evaluation natural transformation
-      The **evaluation natural transformation** is denoted by :math:`eval^A : F_A →  \mathrm{id}_{\mathbf{Set}}` and defined by...
-
-    .. todo:: complete this sentence
+      The **evaluation natural transformation** is denoted by :math:`eval^A : F_A →  \mathrm{id}_{\mathbf{Set}}` and defined by... (**Todo** complete definition)
 
     extensional
       An *extensional* definition of a term lists everything that qualifies as something to which that term refers. (See also :term:`function extensionality`.)

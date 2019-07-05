@@ -11,7 +11,7 @@ Given an :term:`equivalence relation` on :math:`A`, there is an important mathem
 
 As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.  Below we will sometimes use the notation :math:`a/{≡}` to denote the class :math:`a/{≡}`.
 
-The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient of** :math:`A` **modulo** ≡.
+The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient** :math:`A` modulo ≡.
 
 Equivalence captures a weak notion of equality. If two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, rather, the way in which they do differ is not relevant to us.
 
@@ -419,57 +419,88 @@ Setoids
 In a quotient construction α/ρ, the relation ρ is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``ρ``, we define ``ρ'`` according to the rule
 
   ``ρ' a b`` :math:`\quad` iff :math:`\quad` ``quot.mk ρ a = quot.mk ρ b``.
-  
+
 Then ``ρ'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk ρ a``.
 
 The axiom ``quot.sound`` given at the end of the last section asserts that ``ρ a b`` implies ``ρ' a b``.
 
 Using ``quot.lift`` and ``quot.ind``, we can show that ``ρ'`` is the smallest equivalence relation containing ``ρ``. In particular, if ``ρ`` is already an equivalence relation, then we have ``ρ = ρ'``.
 
-To support this common use case, the :term:`LSL` defines a **setoid**, which is simply a pair consisting of a type along with an associated equivalence relation.
+::
+
+  namespace ualib_setoid
+
+    universe u
+
+    class setoid {α: Type u} :=
+    (r: α → α → Prop) (iseqv: equivalence r)
+
+      namespace setoid
+        infix `≈` := setoid.r
+
+        variable (α: Type u)
+        variable [s: @setoid α]
+        include s
+
+        theorem refl (a: α): a ≈ a :=
+        (@setoid.iseqv α s).left a
+
+        theorem symm {a b: α}: a ≈ b → b ≈ a :=
+        λ h, (@setoid.iseqv α s).right.left h
+
+        theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
+        λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+      end setoid
+
+  end ualib_setoid
+
+
+Given a type ``α``, a relation ``R`` on ``α``, and a proof ``p`` that ``r`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
 
 ::
 
-  universe u
-  namespace quotient
+  namespace ualib_setoid
 
-    -- BEGIN
-    class setoid (α: Type u) :=
-    (ρ: α → α → Prop) (iseqv: equivalence ρ)
+    universe u
+
+    class setoid {α : Type u} :=
+    (r : α → α → Prop) (iseqv : equivalence r)
 
     namespace setoid
-      infix `≈` := setoid.ρ
+      infix `≈` := setoid.r
 
-      variable {α: Type u}
-      variable [s: setoid α]
+      variable (α : Type u)
+      variable [s : @setoid α]
       include s
 
-      theorem refl (a: α) : a ≈ a :=
+      theorem refl (a : α) : a ≈ a :=
       (@setoid.iseqv α s).left a
 
-      theorem symm {a b: α}: a ≈ b → b ≈ a :=
+      theorem symm {a b : α} : a ≈ b → b ≈ a :=
       λ h, (@setoid.iseqv α s).right.left h
 
-      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
+      theorem trans {a b c : α} : a ≈ b → b ≈ c → a ≈ c :=
       λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
     end setoid
-    -- END
-
-  end quotient
-
-Given a type ``α``, a relation ``ρ`` on ``α``, and a proof ``p`` that ``ρ`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
-
-::
-
-  universe u
-  namespace quotients
-
     -- BEGIN
-    def quotient {α: Type u} (s: setoid α) :=
-    @quot α setoid.r
+    variables (α : Type u) (R : α → α → Prop) (p: equivalence R)
+
+    #check setoid.mk R p -- {r := R, iseqv := p} : setoid
+
+    #check (setoid.mk R p : setoid)
     -- END
 
-  end quotients
+  end ualib_setoid
+
+.. universe u
+.. namespace hidden
+
+.. -- BEGIN
+.. def quotient {α : Type u} (s : setoid α) :=
+.. @quot α setoid.r
+.. -- END
+
+.. end hidden
 
 The constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotient.sound`` are nothing more than the specializations of the corresponding elements of ``quot``. The fact that type class inference can find the setoid associated to a type ``α`` brings a number of benefits.
 
