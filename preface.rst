@@ -1,3 +1,5 @@
+.. role:: lightgray
+
 =======
 Preface
 =======
@@ -60,13 +62,10 @@ This tutorial is an open access project maintained on Gitlab. Besides the author
 Feedback
 --------
 
-This is a work in progress and any feedback you can give would be much appreciated.  Please direct all comments, questions, or suggestions to `William DeMeo <mailto:williamdemeo@gmail.com>`_.
+This is a work in progress and any feedback you can provide us with would be much appreciated.  Please direct comments, questions, or suggestions to William DeMeo `at gmail dot com <mailto:williamdemeo@gmail.com>`_.  (Alternatively, feedback can be provided by `posting to the ualib gitlab <https://gitlab.com/ualib/lean-ualib/issues/new>`_ repository.)
 
 ---------------------------
 
-For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere in the documentation unless we cite them here first.
-
-:cite:`Mitchell:1996` :cite:`Nederpelt:2014` :cite:`UFP:2013`
 
 .. _Lean: https://leanprover.github.io/
 

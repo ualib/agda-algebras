@@ -118,7 +118,7 @@ html_theme_options = {
     'head_font_family': 'Times New Roman, Times, serif',
     'code_bg': 'white',
     'extra_nav_links': {
-        'PDF version': 'ualib.pdf',
+        #        'PDF version': 'ualib.pdf',
         'Logical Foundations Home': 'https://logicalfoundations.gitlab.io/'
     },
     # 'sidebar_width' : '200px',

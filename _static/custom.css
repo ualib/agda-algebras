@@ -69,6 +69,11 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
+.lightgray {
+    color:rgb(188, 190, 188); 
+    font-weight:500;
+    font-family: 'Courier New', Courier, monospace;
+}
 
 .cyan {
     color:darkcyan; 
