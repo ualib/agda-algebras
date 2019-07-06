@@ -6,6 +6,24 @@
 Inductive Definitions
 =====================
 
+.. :cite:`Adamek:2011`
+.. :cite:`Behrisch:2012`
+.. :cite:`Bergman:2012`
+.. :cite:`Meinke:1992`
+.. :cite:`McKenzie:1987`
+.. :cite:`Gepner:2018`
+.. :cite:`Crole:1993`
+.. :cite:`Taylor:1977`
+.. :cite:`Finster:2018`
+.. :cite:`Coq:2004`
+.. :cite:`Constable:1979`
+.. :cite:`Mitchell:1996`
+.. :cite:`Munkres:2000`
+.. :cite:`Nederpelt:2014`
+.. :cite:`Norell:2009`
+.. :cite:`Smith:2011`
+.. :cite:`UFP:2013`
+
 Our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of the underlying themes motivating our work.
 
 To exhibit the efficiency and ease with which we can formalize basic but important mathematical concepts in Lean_, we present a fundamental theorem about subalgebra generation, first in the informal language, and then formally :ref:`below <subalgebras-in-lean>`.

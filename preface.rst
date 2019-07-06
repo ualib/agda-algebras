@@ -62,6 +62,12 @@ Feedback
 
 This is a work in progress and any feedback you can give would be much appreciated.  Please direct all comments, questions, or suggestions to `William DeMeo <mailto:williamdemeo@gmail.com>`_.
 
+---------------------------
+
+For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere in the documentation unless we cite them here first.
+
+:cite:`Mitchell:1996` :cite:`Nederpelt:2014` :cite:`UFP:2013`
+
 .. _Lean: https://leanprover.github.io/
 
 .. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/

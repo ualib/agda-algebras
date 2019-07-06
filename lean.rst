@@ -1,5 +1,7 @@
 .. include:: _static/math_macros.rst
 
+.. highlight:: lean
+
 ======
  Lean
 ======
@@ -51,7 +53,7 @@ Let ``S`` be a family of sets of type :math:`α`.
 
 In lattice.lean_, the **intersection** of the sets in ``S`` is denoted by ``⋂₀ S``. [1]_
 
-.. code-block:: lean
+::
 
    import data.set
    variables (α : Type) (S : set (set α))
@@ -92,8 +94,6 @@ Binary relations
 In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a: A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b: A``, ``R a b`` is a proposition.
 
 With first-order logic, we can say what it means for a relation to be reflexive, symmetric, transitive, and antisymmetric, as follows:
-
-.. highlight:: lean
 
 ::
 
@@ -251,7 +251,7 @@ Let's prove this now. First recall that the commands
 
 fix a relation ``R`` and introduce the symbol ``≈`` to denote it. Thus, in the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
 
-(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see :numref:`symbols`.)
+(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see :numref:`symbol-commands`.)
 
 ::
 
@@ -355,7 +355,7 @@ In :numref:`total-and-strict-ordering` we showed that a strict partial order---t
 
 ::
 
-  example {A: Type} (R: A → A → Prop) 
+  example {A: Type} (R: A → A → Prop)
   (h₁: irreflexive R) (h₂: transitive R):
   ∀ x y, R x y → ¬ R y x :=
   assume x y (h₃: R x y) (h₄: R y x),
@@ -420,7 +420,7 @@ In the example below, having fixed a partial order, ``R``, we define the corresp
 
 Notice that we have used suggestive names ``reflR``, ``transR``, ``antisymmR`` to help remember which hypothesis is which.
 
-The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see :numref:`symbols`).
+The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see :numref:`symbol-commands`).
 
 Remember also that ``eq.subst ‹a = c› ‹a ≤ b›`` is a proof of the fact that amounts for substituting ``c`` for ``a`` in ``a ≤ b``. You can also use the equivalent notation ``‹a = c› ▸ ‹a ≤ b›``, where the triangle is written ``\t``.
 
@@ -455,12 +455,12 @@ In the first example, we use the anonymous ``assume`` and ``have``, and then ref
 
 In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.left`` and ``h.right``, respectively. We also abbreviate ``and.intro h.right h.left`` with an anonymous constructor, writing ``⟨h.right, h.left⟩``. Lean figures out that we are trying to prove a conjunction, and figures out that ``and.intro`` is the relevant introduction principle.
 
-(You can produce angled brackets by typing ``\<`` and ``\>``; see :numref:`symbols`.)
+(You can produce angled brackets by typing ``\<`` and ``\>``; see :numref:`symbol-commands`.)
 
-.. _equality-in-lean:
+.. .. _equality-in-lean:
 
-Equality
-~~~~~~~~
+.. Equality
+.. ~~~~~~~~
 
 .. .. index:: ! ordered tuples, !tuples
 .. .. index:: ! unary relation, ! binary relation, ! ternary relation
@@ -510,6 +510,7 @@ Equality
 ..     #check (nat.lt_succ_self : ∀ n : ℕ, n < n + 1)
 ..     #check (nat.le_succ : ∀ n : ℕ, n ≤ n + 1)
 
+-------------------------
 
 .. index:: function, inverse, function composition, restriction, image
 
@@ -549,8 +550,6 @@ Joins and meets
 
 .. todo:: complete this section
 
-------------------------------
-
 .. .. index:: product
 
 .. .. _products-in-lean:
@@ -577,9 +576,9 @@ Joins and meets
 
 .. .. todo:: complete this section, adding Lean code
 
-.. -------------------------------------------------
+-------------------------------------------------
 
-.. index:: dependent types
+.. index:: dependent type
 
 .. _dependent-types-in-lean:
 
@@ -588,38 +587,50 @@ Dependent types in Lean
 
 .. todo:: complete this section
 
-.. index:: type of; dependent functions (Pi type)
+.. index:: type of; ! dependent functions (Pi type)
 
 .. _pi-type:
 
 Pi Type
 ~~~~~~~
 
-The **Pi type** ``Π(x:A),B x``, also known as the **dependent function type**, generalizes the function type ``A → B`` and is called a *dependent type* because the codomain ``B x`` may depend on the value ``x: A``.
+The **Pi type**
 
-.. code-block:: lean
+  ``Π(x:A),B x``
 
-    variables {α : Type*} {π : α → Type*}
+is called a **dependent function type**. It generalizes the (nondependent) function type ``A → B``.
 
-    def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
-    { f | ∀ a ∈ i, f a ∈ s a }
+To see why ``Π(x:A),B x`` is a *dependent type*, consider the following example: a function ``f: Π(x:A),B x`` implies for each ``a:A`` the typing judgment ``f a: B a``, where the type ``B a`` *depends* on the value ``a``.
 
-.. index:: type of; dependent pairs (Sigma type)
+::
+
+  variables {α : Type*} {π : α → Type*}
+
+  def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
+  { f | ∀ a ∈ i, f a ∈ s a }
+
+.. index:: type of; ! dependent pairs (Sigma type)
 
 .. _sigma-type:
 
 Sigma Type
 ~~~~~~~~~~~
 
-The **Sigma type** ``Σ(x:A),B x``, also known as the **dependent pair type**, generalizes the Cartesian product ``A × B`` by allowing the type ``B x`` of the second argument of the ordered pair to depend on the value ``x`` of the first.
+The **Sigma type**
 
-.. code-block:: lean
+  ``Σ(x:A),B x``
 
-    structure sigma {α : Type u} (β : α → Type v) :=
-    mk :: (fst : α) (snd : β fst)
+is called a **dependent pair type**.  It generalizes the Cartesian product ``A × B``.
 
-    structure psigma {α : Sort u} (β : α → Sort v) :=
-    mk :: (fst : α) (snd : β fst)
+To see why ``Σ(x:A),B x`` is a *dependent type*, consider the following example: a pair ``(a,b): Σ(x:A),B x`` implies the typing judgments ``a:A`` and ``b: B a``, where the type ``B a`` *depends* on the value ``a``.
+
+::
+
+  structure sigma {α : Type u} (β : α → Type v) :=
+  mk :: (fst : α) (snd : β fst)
+
+  structure psigma {α : Sort u} (β : α → Sort v) :=
+  mk :: (fst : α) (snd : β fst)
 
 ------------------------------
 

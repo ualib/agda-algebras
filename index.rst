@@ -20,9 +20,9 @@ The Lean Universal Algebra Library
     postmodern_algebra_in_lean
     appendix_lean_basics
     glossary
-    refs
     genindex
     license
+    refs
 
 .. Indices and tables
    ==================

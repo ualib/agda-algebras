@@ -6,9 +6,29 @@
 Types
 =====
 
-This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_.
+This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_. 
 
 A more comprehensive treatment is :cite:`Mitchell:1996`, and more advanced treatments are :cite:`Nederpelt:2014` and :cite:`UFP:2013`.
+
+
+
+.. :cite:`Adamek:2011`
+.. :cite:`Behrisch:2012`
+.. :cite:`Bergman:2012`
+.. :cite:`Meinke:1992`
+.. :cite:`McKenzie:1987`
+.. :cite:`Gepner:2018`
+.. :cite:`Crole:1993`
+.. :cite:`Taylor:1977`
+.. :cite:`Finster:2018`
+.. :cite:`Coq:2004`
+.. :cite:`Constable:1979`
+.. :cite:`Mitchell:1996`
+.. :cite:`Munkres:2000`
+.. :cite:`Nederpelt:2014`
+.. :cite:`Norell:2009`
+.. :cite:`Smith:2011`
+.. :cite:`UFP:2013`
 
 .. _curry-howard:
 
@@ -64,7 +84,7 @@ Alternatively, some authors prefer to use an injection function to indicate the 
 
 .. math:: B_0 + B_1 = \{ι_0 a,\, ι_0 b,\, ι_1 a,\, ι_1 b,\, ι_1 c\}.
 
-(The symbol ι is produced by typing ``\iota``; see :numref:`symbols`.)
+(The symbol ι is produced by typing ``\iota``; see :numref:`symbol-commands`.)
 
 -----------------------------------------------
 

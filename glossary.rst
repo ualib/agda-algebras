@@ -600,6 +600,8 @@ Categories
 
 --------------------------------
 
+.. _symbol-commands:
+
 Symbols
 -------
 
