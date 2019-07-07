@@ -114,9 +114,9 @@ The third, ``quot.ind``, is the axiom asserting that every element of ``quot R``
 
 Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (i.e., ``f ⊧ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
-The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk R a`` (the ``R``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
+The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk R a`` (the ``R``-class containing ``a``) to ``f a``, where ``h`` is a proof that this function is well defined.
 
-In fact, this computation principle is declared as a reduction rule, as the proof of the ``lift_comp_principle`` below makes clear.
+In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the ``lift_comp_principle`` below can be proved with just ``rfl``).
 
 ::
 
@@ -156,12 +156,19 @@ For that reason, the `Lean Standard Library`_ does not take these four constants
 
 Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` are viewed as part of the logical framework.
 
+By contrast, other lifting constructions that are defined in the next section (and are important in universal algebra) are not native to Lean. Therefore, their computation principles cannot be proved as theorems and will have to be added as axioms.
+
 ------------------------
 
 .. index:: pair: respect; preserve
 
+Lifts of operations
+-------------------
+
+The last section explain the quotient construction that is built into Lean and that is useful for lifting a function :math:`f: α → β` to a function :math:`f': α/R → β` for some relation :math:`R ⊆ α × α` respected by :math:`f`.  In this section, we generalize this lifting construction to a lift that is more common in universal algebra.  Namely, we wish to take an operation of type :math:`(β → α) → α` and lift it to an operation of type :math:`(β → α/R) → α/R`.
+
 Respecting relations
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we can represent the function type not by :math:`α^n → α`, but by :math:`(n → α) → α`.
 
@@ -191,14 +198,12 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
 
    Let :math:`f : (\{0,1,2\} → α) → α` be a ternary operation on :math:`α`, let :math:`R ⊆ α × α`, and suppose that for every triple :math:`(a_1, b_1), (a_2, b_2), (a_3, b_3)` of pairs from :math:`R`, the pair :math:`(f(a_1, a_2, a_3), f(b_1, b_2, b_3))` also belongs to :math:`R`. Then :math:`f ⊧ R`.
 
-------------------------------------------------
-
 .. index:: ! quotient tuple
 .. index:: ! lift; of tuples
 .. index:: ! lift; of operations
 
 Lifts of tuples and operations
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation on :math:`α`, and let :math:`f : (ρ f → α) → α` be a :math:`ρ f`-ary operation on :math:`α`.
 
@@ -213,6 +218,11 @@ We define a **lift of operations** :math:`[\ ]: ((β → α) → α)  → (β �
 Notice, however, that this lifted operation will not be well defined unless :math:`f` :term:`respects` :math:`R`.  If we have a proof, say, ``p: f ⊧ R``, that :math:`f: (β → α) → α` does respect :math:`R ⊆ α × α`, then the function :math:`[f]` is well defined for each :math:`τ: β → α`, and we use an infix symbol to denote this as follows: :math:`∀ τ: β → α`,
 
 .. math:: (f \mathrel ℒ h) [τ]  := (f\ τ) / R.
+
+----------------------
+
+Lifts of Operations in Lean
+----------------------------
 
 Observe that these definitions---of *lift of a tuple* and *lift of an operation*---differ from that of the *lift of a function*.  To account for these differences, we now define three new lifting constants, ``quot.colift``, ``quot.tlift`` ``quot.oplift``.  In the next section of code, we start by reiterating the definitions from the standard library of ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` before defining the new lift constants.  This puts all of the constants on the same "level" in the sense that now they are all "user-defined" and thus none is a built-in part of Lean's logical framework.
 
