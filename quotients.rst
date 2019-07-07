@@ -69,10 +69,11 @@ Here are four such constants from the :term:`LSL`.
 
 .. index:: keyword: quot, quot.mk, quot.ind
 .. index:: keyword: quot.lift
+.. index:: keyword: ualib_quotient
 
 ::
 
-  namespace quotient
+  namespace ualib_quotient
 
     -- BEGIN
     universes u v
@@ -101,7 +102,7 @@ Here are four such constants from the :term:`LSL`.
     (∀ a b, R a b → f a = f b) → quot R → β
 
     -- END
-  end quotient
+  end ualib_quotient
 
 The first of these takes a type ``α`` and a binary relation ``R`` on ``α`` and forms the type ``quot R`` (or ``@quot α R``, if we wish to make the first parameter explicit).
 
@@ -115,7 +116,7 @@ Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proo
 
 The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk R a`` (the ``R``-class containing ``a``) to ``f a``, where ``h`` shows that this function is well defined.
 
-In fact, this computation principle is declared as a reduction rule, as the proof of the theorem at the end of this code block makes clear.
+In fact, this computation principle is declared as a reduction rule, as the proof of the ``lift_comp_principle`` below makes clear.
 
 ::
 
@@ -131,41 +132,29 @@ In fact, this computation principle is declared as a reduction rule, as the proo
   variable h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂
 
   -- the corresponding function on quot R
-  #check (quot.lift f h: quot R → β)
+  #check quot.lift f h      -- quot R → β
 
   -- the computation principle
-  theorem thm: quot.lift f h (quot.mk R a) = f a := rfl
+  theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
+  rfl
 
 The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)
 
-For that reason, these four constants are not considered "axioms," as is verified in the following code segment which asks Lean to ``#print`` the axioms used by ``thm``. (Lean responds, "``no axioms``.")
+For that reason, the `Lean Standard Library`_ does not take these four constants to be "axioms." This can be verified by asking Lean to ``#print`` the axioms used by ``lift_comp_principle``; observe that Lean responds, "``no axioms``."
 
 ::
 
   variables (α β: Type) (R: α → α → Prop)
-  variables (a: α) (f: α → β)
+  variables (a: α) (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂)
 
-  theorem thm (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂):
-  quot.lift f h (quot.mk R a) = f a := rfl
+  theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
+  rfl
 
-  #print axioms thm   -- no axioms
+  -- BEGIN
+  #print axioms lift_comp_principle  -- no axioms
+  -- END
 
-Like inductively defined types and their associated constructors and recursors, the four constants above are viewed as part of the logical framework.
-
-What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
-
-.. index:: keyword: quot.sound
-
-::
-
-  namespace quotient
-    universe u
-
-    -- BEGIN
-    axiom quot.sound: ∀ {α: Type u} {R: α → α → Prop} {a b: α},
-    R a b → quot.mk R a = quot.mk R b
-    -- END
-  end quotient
+Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` are viewed as part of the logical framework.
 
 ------------------------
 
@@ -227,41 +216,70 @@ Observe that this definition---of the *lift of an operation*---differs from that
 
 ::
 
-  namespace quotient
+  namespace ualib_quotient
 
     universes u v
 
-    -- NEW LIFT CONSTANTS --
+    -- (Already defined in std lib)
+    -- The quotient type former.
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+
+    -- So quot takes a type α and a relation R ⊆ α × α
+    -- and forms the collection α/R of R-classes.
+
+    -- (Already defined in std lib)
+    -- Given α and R ⊆ α × α, map each a:α to its R-class.
+    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
+
+    -- So, if R: α → α → Prop and a:α, then quot.mk R a is the
+    -- R-class a/R containing a, which has type quot R.
+
+    -- Let us define some syntactic sugar that reflects this fact.
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+
+    -- Each element of quot R is a R-class of the form quot.mk R a.
+    axiom quot.ind:                  -- (already defined in std lib)
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (a/R)) → ∀ (q: quot R), β q
+
+    -- Take a function f: α → β and a proof h : f ⊧ R, and
+    -- return the lift of f to quot R.
+    constant quot.lift:              -- (already defined in std lib)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
+
+    -- new lift constants
 
     -- quot.colift
-    -- lift to a func with quotient codomain
+    -- lift to a function with quotient codomain (instead of domain)
     constant quot.colift:
-    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β),
-    (α → quot R)
+    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
 
     -- quot.tlift
-    -- lift of a tuple of α's to a tuple of quotients α/R's
+    -- lift tuple of α's to a tuple of quotients α/R's
+    -- (same as colift, except for order of arguments)
     constant quot.tlift:
-    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α),
-    (β → quot R)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
 
-    -- (tlift is same as colift except for order of arguments)
-
-    -- operation type (see "Algebras in Lean" section)
-    def op (β: Sort v) (α: Sort u) := (β → α) → α
+    -- operation type
+    def op (β : Sort v) (α : Sort u) := (β → α) → α
 
     variables {α β : Type}
 
-    -- Here is shorthand for asserting that an *operation*
-    -- g: (β → α) → α respects a relation R: α → α → Prop.
-    local notation f `⊧` R :=
-    ∀ (a b: β → α), (∀ i, R (a i) (b i)) → R (f a) (f b)
+    def liftrel: (α → α → Prop) → (β → α) → (β → α) → Prop :=
+    λ R a b, ∀ i, R (a i) (b i)
 
-    constant quot.oplift:
-    Π {R: α → α → Prop} (f: op β α),
-    (f ⊧ R) → ((β → quot R) → quot R)
+    def respects: ((β → α) → α) → (α → α → Prop) → Prop :=
+    λ f R, ∀ (a b: β → α), liftrel R a b → R (f a) (f b)
 
-  end quotient
+    -- notation for "f respects ρ"
+    -- f `⊧` R  means ∀ (a b : β → α), (∀ i, R (a i) (b i)) → R (f a) (f b)
+    infix `⊧`:50 := respects
+
+    constant quot.oplift :
+    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
+
+  end ualib_quotient
 
 Notice the syntactic sugar we added for the "respects" relation, so that now we can simply write ``f ⊧ R`` in place of
 
@@ -273,95 +291,112 @@ Now let's check the types of some of these newly defined constants, and also pro
 
 ::
 
-  namespace quotient
+  namespace ualib_quotient
+
     universes u v
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+
+    axiom quot.ind:                  -- (already defined in std lib)
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (a/R)) → ∀ (q: quot R), β q
+
+    constant quot.lift:              -- (already defined in std lib)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
+
     constant quot.colift:
     Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
 
     constant quot.tlift:
     Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
 
-    def op (β : Sort v) (α : Sort u) := (β → α) → α
+    def op (β: Sort v) (α: Sort u) := (β → α) → α
 
-    variables {α β : Type}
+    variables {α β: Type}
 
-    local notation g `⊧` R :=
-    ∀ (a b : β → α), (∀ i, R (a i) (b i)) → R (g a) (g b)
+    def liftrel: (α → α → Prop) → (β → α) → (β → α) → Prop :=
+    λ R a b, ∀ i, R (a i) (b i)
 
+    def respects: ((β → α) → α) → (α → α → Prop) → Prop :=
+    λ f R, ∀ (a b: β → α), liftrel R a b → R (f a) (f b)
+
+    infix `⊧`:50 := respects
     constant quot.oplift :
-    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → ((β → quot R) → quot R)
+    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
 
     -- BEGIN
     variable (f: α → β)  -- function
     variable (t: β → α)  -- tuple
     variable (g: op β α) -- operation
 
-    variable {R: α → α → Prop}              -- a relation on α
-    variable (h₀: ∀ a b, R a b → f a = f b) -- contained in ker f
-    variable (h₁: g ⊧ R)                    -- and respected by g
+    variable {R: α → α → Prop}              -- a binary relation on α
+    variable (h₀: ∀ a b, R a b → f a = f b) -- that is respected by g
+    variable (h₁: g ⊧ R)                    -- that is respected by g
 
-    #check quot.lift f h₀          -- quot (λ (a b: α), R a b) → β
-    #check quot.tlift t            -- β → quot ?M_1
-    #check quot.oplift g h₁        -- (β → quot R) → quot R
+    #check quot.lift f h₀     -- quot (λ (a b : α), R a b)  → β
+    #check quot.tlift t       -- β → quot ?M_1
+    #check quot.oplift g h₁   -- (β → quot R) → quot R
 
-    -- Here's an alternative representation of the condition that a
-    -- *function* f : α → β "respects" a relation R : α → α → Prop.
+    def ker (f: α → β): set (α × α) := { a | f a.fst = f a.snd}
+    def Ker (f: α → β): α → α → Prop := λ a b, f a = f b
+    def uncurry {α: Type} (R: α → α → Prop) : set (α × α) := λ a, R a.fst a.snd
 
-    -- the (uncurried) kernel of a function
-    def ker (f : α → β) : set (α × α) := { a | f a.fst = f a.snd}
-
-    -- the (curried) kernel of a function
-    def Ker (f : α → β) : α → α → Prop := λ a b, f a = f b
-
-    def uncurry {α : Type} (R : α → α → Prop) : set (α × α) :=
-    λ a, R a.fst a.snd
-
-    -- Theorem. The standard library's notion of a function
-    -- respecting a relation is equivalent to the relation
-    -- being contained in the function's kernel.
-    theorem kernel_resp {α : Type} {R: α → α → Prop}
-    {β : Type} (f: α → β):
-    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f):=
-    iff.intro
-      ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂,
-        show uncurry R ⊆ ker f, from
+    theorem kernel_resp {α: Type} {R: α → α → Prop} {β: Type} (f: α → β):
+    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f) := iff.intro
+    ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, show uncurry R ⊆ ker f, from
         λ p, h p.fst p.snd
-      )
-      ( assume h: uncurry R ⊆ ker f,
-        show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
-          assume a₁ a₂ (h1 : R a₁ a₂),
-          have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
-          h h2
-      )
+    )
+    ( assume h: uncurry R ⊆ ker f, show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
+        assume a₁ a₂ (h1 : R a₁ a₂),
+        have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
+        h h2
+    )
     -- END
 
-  end quotient
+  end ualib_quotient
 
-Finally, let us prove or assert the computation principles for these various lifts to quotients.  We can *prove* the first one, since it is taken as part of the logical framework of the standard library.  The others must be *assumed* (as axioms) and cannot be proved.
+Finally, let us assert the computation principles for these various lifts to quotients.
 
 ::
 
-  namespace quotient
+  namespace ualib_quotient
     universes u v
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+
+    axiom quot.ind:                  -- (already defined in std lib)
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (a/R)) → ∀ (q: quot R), β q
+
+    constant quot.lift:              -- (already defined in std lib)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
+
     constant quot.colift:
     Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
 
     constant quot.tlift:
     Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
 
-    def op (β : Sort v) (α : Sort u) := (β → α) → α
+    def op (β: Sort v) (α: Sort u) := (β → α) → α
+    variables {α β: Type}
 
-    variables {α β : Type}
+    def liftrel: (α → α → Prop) → (β → α) → (β → α) → Prop :=
+    λ R a b, ∀ i, R (a i) (b i)
 
-    local notation g `⊧` R :=
-    ∀ (a b : β → α), (∀ i, R (a i) (b i)) → R (g a) (g b)
+    def respects: ((β → α) → α) → (α → α → Prop) → Prop :=
+    λ f R, ∀ (a b: β → α), liftrel R a b → R (f a) (f b)
 
+    infix `⊧`:50 := respects
     constant quot.oplift :
-    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → ((β → quot R) → quot R)
+    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
 
-    def ker (f : α → β) : set (α × α) := { a | f a.fst = f a.snd}
-    def Ker (f : α → β) : α → α → Prop := λ a b, f a = f b
-    def uncurry {α : Type} (R : α → α → Prop) : set (α × α) := λ a, R a.fst a.snd
+    def ker (f: α → β): set (α × α) := { a | f a.fst = f a.snd}
+    def Ker (f: α → β): α → α → Prop := λ a b, f a = f b
+    def uncurry {α: Type} (R: α → α → Prop) : set (α × α) := λ a, R a.fst a.snd
 
     theorem kernel_resp {α : Type} {R: α → α → Prop} {β : Type} (f: α → β):
     (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f) := iff.intro
@@ -373,39 +408,107 @@ Finally, let us prove or assert the computation principles for these various lif
         have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
         h h2
     )
-
     -- BEGIN
     -- computation principle for function lift
-    theorem flift_comp_principle {α: Type}
-    {R: α → α → Prop} {β: Type} (f: α → β)
-    (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) (a: α):
-    quot.lift f h (quot.mk R a) = f a := rfl
+    axiom flift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
+    (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) (a: α):
+    quot.lift f h (a/R) = f a -- := rfl
 
-    -- We can prove the same principle assuming instead
-    -- that (uncurry) R belongs to the kernel of f and
-    -- applying the kernel_resp theorem proved above.
-    theorem flift_comp_principle' {α: Type} {R: α → α → Prop}
-    {β: Type} (f: α → β) (h: uncurry R ⊆ ker f) (a: α):
-    quot.lift f (iff.elim_right (kernel_resp f) h) (quot.mk R a) =
-    f a := rfl
+    -- We can prove the same principle assuming instead that (uncurry) R
+    -- belongs to the kernel of f and applying the kernel_resp theorem.
+    axiom flift_comp_principle' {α: Type} {R: α → α → Prop} {β: Type}
+    (f: α → β) (h: uncurry R ⊆ ker f) (a: α):
+    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a -- := rfl
 
     -- computation principle for colift
-    axiom colift_comp_principle {α: Type} {β: Type}
-    {R: β → β → Prop} (f: α → β) (a: α):
-    (quot.colift f) a = quot.mk R (f a)
+    axiom colift_comp_principle {α: Type} {β: Type} {R: β → β → Prop}
+    (f: α → β) (a: α) : (quot.colift f) a = (f a)/R
 
     -- computation principle for tuple lift
-    axiom tlift_comp_principle {α: Type} {R: α → α → Prop}
-    {β: Type} (t: β → α) (b: β):
-    (quot.tlift t) b = quot.mk R (t b)
+    axiom tlift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
+    (t: β → α) (b: β) : (quot.tlift t) b = (t b)/R
 
     -- computation principle for operation lift
     axiom olift_comp_principle {R: α → α → Prop}
     (g: (β → α) → α) (h: g ⊧ R) (a: β → α):
-    (quot.oplift g h) (quot.tlift a) = quot.mk R (g a)
+    (quot.oplift g h) (quot.tlift a) = (g a)/R
     -- END
 
-  end quotient
+  end ualib_quotient
+
+**N.B.** we could have *proved* the first of these, ``flift_comp_principle``, if we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), since this principle is taken as part of the logical framework of the :term:`LSL`.
+
+What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
+
+.. index:: keyword: quot.sound
+
+::
+
+  namespace ualib_quotient
+    universes u v
+    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
+    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+    axiom quot.ind:                  -- (already defined in std lib)
+    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
+    (∀ a, β (a/R)) → ∀ (q: quot R), β q
+
+    constant quot.lift:              -- (already defined in std lib)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
+    (∀ a b, R a b → f a = f b) → quot R → β
+
+    constant quot.colift: Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
+    constant quot.tlift: Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
+    def op (β: Sort v) (α: Sort u) := (β → α) → α
+    variables {α β : Type}
+
+    def liftrel: (α → α → Prop) → (β → α) → (β → α) → Prop := λ R a b, ∀ i, R (a i) (b i)
+    def respects: ((β → α) → α) → (α → α → Prop) → Prop := λ f R, ∀ (a b: β → α), liftrel R a b → R (f a) (f b)
+
+    infix `⊧`:50 := respects
+    constant quot.oplift: Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
+
+    def ker (f: α → β): set (α × α) := { a | f a.fst = f a.snd}
+    def Ker (f: α → β): α → α → Prop := λ a b, f a = f b
+    def uncurry {α: Type} (R: α → α → Prop): set (α × α) := λ a, R a.fst a.snd
+
+    theorem kernel_resp {α: Type} {R: α → α → Prop} {β: Type} (f: α → β):
+    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f) := iff.intro
+    ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, show uncurry R ⊆ ker f, from
+        λ p, h p.fst p.snd
+    )
+    ( assume h: uncurry R ⊆ ker f, show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
+        assume a₁ a₂ (h1: R a₁ a₂),
+        have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
+        h h2
+    )
+
+    axiom flift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
+    (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) (a : α):
+    quot.lift f h (a/R) = f a -- := rfl
+
+    axiom flift_comp_principle' {α: Type} {R: α → α → Prop} {β: Type}
+    (f: α → β) (h: uncurry R ⊆ ker f) (a: α):
+    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a -- := rfl
+
+    axiom colift_comp_principle {α: Type} {β : Type} {R: β → β → Prop}
+    (f: α → β) (a: α) : (quot.colift f) a = (f a)/R
+
+    axiom tlift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
+    (t: β → α) (b: β) : (quot.tlift t) b = (t b)/R
+
+    axiom olift_comp_principle {R: α → α → Prop}
+    (g: (β → α) → α) (h: g ⊧ R) (a: β → α):
+    (quot.oplift g h) (quot.tlift a) = (g a)/R
+
+    -- BEGIN
+    axiom quot.sound: ∀ {α: Type u} {R: α → α → Prop} {a b: α},
+    R a b → a/R = b/R
+    -- END
+
+  end ualib_quotient
+
+If a theorem or definition makes use of ``quot.sound``, it will show up in the ``#print axioms`` command.
 
 ----------------------------------------
 
@@ -416,371 +519,416 @@ Finally, let us prove or assert the computation principles for these various lif
 Setoids
 -------
 
-In a quotient construction α/ρ, the relation ρ is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``ρ``, we define ``ρ'`` according to the rule
+In a quotient construction α/R, the relation R is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``R``, we define ``R'`` according to the rule
 
-  ``ρ' a b`` :math:`\quad` iff :math:`\quad` ``quot.mk ρ a = quot.mk ρ b``.
+  ``R' a b`` :math:`\quad` iff :math:`\quad` ``quot.mk R a = quot.mk R b``.
 
-Then ``ρ'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk ρ a``.
+Then ``R'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk R a``.
 
-The axiom ``quot.sound`` given at the end of the last section asserts that ``ρ a b`` implies ``ρ' a b``.
+The axiom ``quot.sound`` given at the end of the last section asserts that ``R a b`` implies ``R' a b``.
 
-Using ``quot.lift`` and ``quot.ind``, we can show that ``ρ'`` is the smallest equivalence relation containing ``ρ``. In particular, if ``ρ`` is already an equivalence relation, then we have ``ρ = ρ'``.
+Using ``quot.lift`` and ``quot.ind``, we can show that ``R'`` is the smallest equivalence relation containing ``R``. In particular, if ``R`` is already an equivalence relation, then we have ``R = R'``.
 
 ::
+
+  import ualib_quotient
 
   namespace ualib_setoid
 
     universe u
 
-    class setoid {α: Type u} :=
-    (r: α → α → Prop) (iseqv: equivalence r)
+    class setoid (α: Type u) :=
+    (R: α → α → Prop) (iseqv: equivalence R)
 
-      namespace setoid
-        infix `≈` := setoid.r
+    namespace setoid
 
-        variable (α: Type u)
-        variable [s: @setoid α]
-        include s
+      open setoid
+      infix `≈` := setoid.R
 
-        theorem refl (a: α): a ≈ a :=
-        (@setoid.iseqv α s).left a
+      variable (α: Type u)
+      variable [s: setoid α]
+      include s
 
-        theorem symm {a b: α}: a ≈ b → b ≈ a :=
-        λ h, (@setoid.iseqv α s).right.left h
+      theorem refl (a: α): a ≈ a :=
+      (@setoid.iseqv α s).left a
 
-        theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
-        λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
-      end setoid
+      theorem symm {a b: α}: a ≈ b → b ≈ a :=
+      λ h, (@setoid.iseqv α s).right.left h
+
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
+      λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+
+    end setoid
 
   end ualib_setoid
-
 
 Given a type ``α``, a relation ``R`` on ``α``, and a proof ``p`` that ``r`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
 
 ::
 
+  import ualib_quotient
   namespace ualib_setoid
-
     universe u
-
-    class setoid {α : Type u} :=
-    (r : α → α → Prop) (iseqv : equivalence r)
-
+    class setoid (α: Type u) :=
+    (R: α → α → Prop) (iseqv: equivalence R)
     namespace setoid
-      infix `≈` := setoid.r
-
-      variable (α : Type u)
-      variable [s : @setoid α]
+      open setoid
+      infix `≈` := setoid.R
+      variable (α: Type u)
+      variable [s: setoid α]
       include s
-
-      theorem refl (a : α) : a ≈ a :=
+      theorem refl (a: α): a ≈ a :=
       (@setoid.iseqv α s).left a
-
-      theorem symm {a b : α} : a ≈ b → b ≈ a :=
+      theorem symm {a b: α}: a ≈ b → b ≈ a :=
       λ h, (@setoid.iseqv α s).right.left h
-
-      theorem trans {a b c : α} : a ≈ b → b ≈ c → a ≈ c :=
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
       λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
     end setoid
+
     -- BEGIN
-    variables (α : Type u) (R : α → α → Prop) (p: equivalence R)
+    variables (α : Type u) (r : α → α → Prop) (p: equivalence r)
 
-    #check setoid.mk R p -- {r := R, iseqv := p} : setoid
+    #check setoid.mk r p -- {R := r, iseqv := p} : setoid
+    -- END
+  end ualib_setoid
 
-    #check (setoid.mk R p : setoid)
+Now let us define some syntactic sugar to make it a little easier to work with quotients.
+
+::
+
+  import ualib_quotient
+  namespace ualib_setoid
+    universe u
+    class setoid (α: Type u) :=
+    (R: α → α → Prop) (iseqv: equivalence R)
+    namespace setoid
+      open setoid
+      infix `≈` := setoid.R
+      variable (α: Type u)
+      variable [s: setoid α]
+      include s
+      theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
+      theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+    end setoid
+  end ualib_setoid
+
+  -- BEGIN
+  namespace ualib_setoid
+    universe u
+
+    def quotient (α : Type u) (s : setoid α) := @quot α setoid.R
+    variable (α : Type u)
+
+  end ualib_setoid
+  -- END
+
+The constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotient.sound`` are simply specializations of the corresponding elements of ``quot``.
+
+The fact that type class inference can find the setoid associated to a type ``α`` has the following benefits:
+
+First, we can use the notation ``a ≈ b`` for ``setoid.R a b``, where the instance of ``setoid`` is implicit in the notation ``setoid.R``.  (The ≈ symbol is produced by typing ``\app`` or ``\approx``.)
+
+We can use the generic theorems ``setoid.refl``, ``setoid.symm``, ``setoid.trans`` to reason about the relation. Specifically with quotients we can use the generic notation ``⟦a⟧`` for ``quot.mk setoid.R`` where the instance of ``setoid`` is implicit in the notation ``setoid.R``, as well as the theorem ``quotient.exact``:
+
+::
+
+  import ualib_quotient
+  namespace ualib_setoid
+    universe u
+    class setoid (α: Type u) :=
+    (R: α → α → Prop) (iseqv: equivalence R)
+    namespace setoid
+      open setoid
+      infix `≈` := setoid.R
+      variable (α: Type u)
+      variable [s: setoid α]
+      include s
+      theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
+      theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+    end setoid
+  end ualib_setoid
+
+  namespace ualib_setoid
+    universe u
+
+    def quotient (α : Type u) (s : setoid α) := @quot α setoid.R
+    variable (α : Type u)
+
+    -- BEGIN
+    axiom quotient.exact: ∀ {α : Type u} [setoid α] {a b: α},
+    (a/setoid.R = b/setoid.R → a ≈ b)
     -- END
 
   end ualib_setoid
 
-.. universe u
-.. namespace hidden
-
-.. -- BEGIN
-.. def quotient {α : Type u} (s : setoid α) :=
-.. @quot α setoid.r
-.. -- END
-
-.. end hidden
-
-The constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotient.sound`` are nothing more than the specializations of the corresponding elements of ``quot``. The fact that type class inference can find the setoid associated to a type ``α`` brings a number of benefits.
-
-First, we can use the notation ``a ≈ b`` (entered with ``\eq`` in Emacs) for ``setoid.r a b``, where the instance of ``setoid`` is implicit in the notation ``setoid.r``. We can use the generic theorems ``setoid.refl``, ``setoid.symm``, ``setoid.trans`` to reason about the relation. Specifically with quotients we can use the generic notation ``⟦a⟧`` for ``quot.mk setoid.r`` where the instance of ``setoid`` is implicit in the notation ``setoid.r``, as well as the theorem ``quotient.exact``:
-
-::
-
-  universe u
-
-  -- BEGIN
-  #check (@quotient.exact: 
-         ∀ {α: Type u} [setoid α] {a b: α}, 
-         ⟦a⟧ = ⟦b⟧ → a ≈ b)
-  -- END
-
 Together with ``quotient.sound``, this implies that the elements of the quotient correspond exactly to the equivalence classes of elements in ``α``.
 
-Recall that in the `standard library <lean_src>`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of **unordered pairs** of elements of a type ``α`` as a quotient of the type ``α × α``.
 
-First, we define the relevant equivalence relation:
+Recall that in the `Lean Standard Library`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of **unordered pairs** of elements of a type ``α`` as a quotient of the type ``α × α``.
 
-::
+.. First, we define the relevant equivalence relation:
 
-  universe u
+.. ::
 
-  private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
-  (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
+..   universe u
 
-  infix `~` := eqv
+..   private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
+..   (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
 
-The next step is to prove that ``eqv`` is in fact an equivalence relation, which is to say, it is reflexive, symmetric and transitive. We can prove these three facts in a convenient and readable way by using dependent pattern matching to perform case-analysis and break the hypotheses into pieces that are then reassembled to produce the conclusion.
+..   infix `~` := eqv
 
-::
+.. The next step is to prove that ``eqv`` is in fact an equivalence relation, which is to say, it is reflexive, symmetric and transitive. We can prove these three facts in a convenient and readable way by using dependent pattern matching to perform case-analysis and break the hypotheses into pieces that are then reassembled to produce the conclusion.
 
-  universe u
+.. ::
 
-  private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
-  (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
+..   universe u
 
-  local infix `~` := eqv
+..   private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
+..   (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
 
-  -- BEGIN
-  open or
+..   local infix `~` := eqv
 
-  private theorem eqv.refl {α : Type u}:
-  ∀ p: α × α, p ~ p := assume p, inl ⟨rfl, rfl⟩
+..   -- BEGIN
+..   open or
 
-  private theorem eqv.symm {α: Type u}:
-  ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
-  | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩):=
-    inl ⟨symm a₁b₁, symm a₂b₂⟩
-  | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩):=
-    inr ⟨symm a₂b₁, symm a₁b₂⟩
+..   private theorem eqv.refl {α : Type u}:
+..   ∀ p: α × α, p ~ p := assume p, inl ⟨rfl, rfl⟩
 
-  private theorem eqv.trans {α: Type u}:
-  ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩):=
-    inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩):=
-    inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩):=
-    inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩):=
-    inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
+..   private theorem eqv.symm {α: Type u}:
+..   ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
+..   | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩):=
+..     inl ⟨symm a₁b₁, symm a₂b₂⟩
+..   | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩):=
+..     inr ⟨symm a₂b₁, symm a₁b₂⟩
 
-  private theorem is_equivalence (α: Type u):
-  equivalence (@eqv α):= mk_equivalence (@eqv α)
-  (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
-  -- END
+..   private theorem eqv.trans {α: Type u}:
+..   ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩):=
+..     inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩):=
+..     inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩):=
+..     inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩):=
+..     inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
 
-We open the namespaces ``or`` and ``eq`` to be able to use ``or.inl``, ``or.inr``, and ``eq.trans`` more conveniently.
+..   private theorem is_equivalence (α: Type u):
+..   equivalence (@eqv α):= mk_equivalence (@eqv α)
+..   (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
+..   -- END
 
-Now that we have proved that ``eqv`` is an equivalence relation, we can construct a ``setoid (α × α)``, and use it to define the type ``uprod α`` of unordered pairs.
+.. We open the namespaces ``or`` and ``eq`` to be able to use ``or.inl``, ``or.inr``, and ``eq.trans`` more conveniently.
 
-::
+.. Now that we have proved that ``eqv`` is an equivalence relation, we can construct a ``setoid (α × α)``, and use it to define the type ``uprod α`` of unordered pairs.
 
-  universe u
+.. ::
 
-  private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
-  (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
+..   universe u
 
-  local infix `~` := eqv
+..   private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
+..   (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
 
-  open or
+..   local infix `~` := eqv
 
-  private theorem eqv.refl {α: Type u} : ∀ p: α × α, p ~ p :=
-  assume p, inl ⟨rfl, rfl⟩
+..   open or
 
-  private theorem eqv.symm {α: Type u} : ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
-  | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
-  | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
+..   private theorem eqv.refl {α: Type u} : ∀ p: α × α, p ~ p :=
+..   assume p, inl ⟨rfl, rfl⟩
 
-  private theorem eqv.trans {α: Type u} : ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
+..   private theorem eqv.symm {α: Type u} : ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
+..   | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
+..   | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
 
-  private theorem is_equivalence (α : Type u) : equivalence (@eqv α) :=
-  mk_equivalence (@eqv α) (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
+..   private theorem eqv.trans {α: Type u} : ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
 
-  -- BEGIN
-  instance uprod.setoid (α: Type u): setoid (α × α) :=
-  setoid.mk (@eqv α) (is_equivalence α)
+..   private theorem is_equivalence (α : Type u) : equivalence (@eqv α) :=
+..   mk_equivalence (@eqv α) (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
 
-  definition uprod (α: Type u): Type u :=
-  quotient (uprod.setoid α)
+..   -- BEGIN
+..   instance uprod.setoid (α: Type u): setoid (α × α) :=
+..   setoid.mk (@eqv α) (is_equivalence α)
 
-  namespace uprod
-    definition mk {α: Type u} (a₁ a₂: α): uprod α:=
-    ⟦(a₁, a₂)⟧
+..   definition uprod (α: Type u): Type u :=
+..   quotient (uprod.setoid α)
 
-    local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
-  end uprod
-  -- END
+..   namespace uprod
+..     definition mk {α: Type u} (a₁ a₂: α): uprod α:=
+..     ⟦(a₁, a₂)⟧
 
-Notice that we locally define the notation ``{a₁, a₂}`` for ordered pairs as ``⟦(a₁, a₂)⟧``. This is useful for illustrative purposes, but it is not a good idea in general, since the notation will shadow other uses of curly brackets, such as for records and sets.
+..     local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
+..   end uprod
+..   -- END
 
-We can easily prove that ``{a₁, a₂} = {a₂, a₁}`` using ``quot.sound``, since we have ``(a₁, a₂) ~ (a₂, a₁)``.
+.. Notice that we locally define the notation ``{a₁, a₂}`` for ordered pairs as ``⟦(a₁, a₂)⟧``. This is useful for illustrative purposes, but it is not a good idea in general, since the notation will shadow other uses of curly brackets, such as for records and sets.
 
-::
+.. We can easily prove that ``{a₁, a₂} = {a₂, a₁}`` using ``quot.sound``, since we have ``(a₁, a₂) ~ (a₂, a₁)``.
 
-  universe u
+.. ::
 
-  private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
-  (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
+..   universe u
 
-  local infix `~` := eqv
+..   private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
+..   (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
 
-  open or
+..   local infix `~` := eqv
 
-  private theorem eqv.refl {α: Type u}: ∀ p: α × α, p ~ p :=
-  assume p, inl ⟨rfl, rfl⟩
+..   open or
 
-  private theorem eqv.symm {α: Type u}: ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
-  | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
-  | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
+..   private theorem eqv.refl {α: Type u}: ∀ p: α × α, p ~ p :=
+..   assume p, inl ⟨rfl, rfl⟩
 
-  private theorem eqv.trans {α: Type u}:
-  ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) 
-    (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂)
-    (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
+..   private theorem eqv.symm {α: Type u}: ∀ p₁ p₂: α × α, p₁ ~ p₂ → p₂ ~ p₁
+..   | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
+..   | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
 
-  private theorem is_equivalence (α: Type u):
-  equivalence (@eqv α) := mk_equivalence (@eqv α)
-  (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
+..   private theorem eqv.trans {α: Type u}:
+..   ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) 
+..     (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂)
+..     (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
 
-  instance uprod.setoid (α: Type u): setoid (α × α) :=
-  setoid.mk (@eqv α) (is_equivalence α)
+..   private theorem is_equivalence (α: Type u):
+..   equivalence (@eqv α) := mk_equivalence (@eqv α)
+..   (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
 
-  definition uprod (α: Type u): Type u :=
-  quotient (uprod.setoid α)
+..   instance uprod.setoid (α: Type u): setoid (α × α) :=
+..   setoid.mk (@eqv α) (is_equivalence α)
 
-  namespace uprod
-    definition mk {α: Type u} (a₁ a₂: α): uprod α :=
-    ⟦(a₁, a₂)⟧
+..   definition uprod (α: Type u): Type u :=
+..   quotient (uprod.setoid α)
 
-    local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
+..   namespace uprod
+..     definition mk {α: Type u} (a₁ a₂: α): uprod α :=
+..     ⟦(a₁, a₂)⟧
 
-    -- BEGIN
-    theorem mk_eq_mk {α: Type} (a₁ a₂: α):
-    {a₁, a₂} = {a₂, a₁} := quot.sound (inr ⟨rfl, rfl⟩)
-    -- END
-  end uprod
+..     local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
 
-To complete the example, given ``a:α`` and ``u: uprod α``, we define the proposition ``a ∈ u`` which should hold if ``a`` is one of the elements of the unordered pair ``u``. First, we define a similar proposition ``mem_fn a u`` on (ordered) pairs; then we show that ``mem_fn`` respects the equivalence relation ``eqv`` with the lemma ``mem_respects``. This is an idiom that is used extensively in the Lean `standard library <lean_src>`_.
+..     -- BEGIN
+..     theorem mk_eq_mk {α: Type} (a₁ a₂: α):
+..     {a₁, a₂} = {a₂, a₁} := quot.sound (inr ⟨rfl, rfl⟩)
+..     -- END
+..   end uprod
 
-::
+.. To complete the example, given ``a:α`` and ``u: uprod α``, we define the proposition ``a ∈ u`` which should hold if ``a`` is one of the elements of the unordered pair ``u``. First, we define a similar proposition ``mem_fn a u`` on (ordered) pairs; then we show that ``mem_fn`` respects the equivalence relation ``eqv`` with the lemma ``mem_respects``. This is an idiom that is used extensively in the Lean `standard library <lean_src>`_.
 
-  universe u
+.. ::
 
-  private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
-  (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
+..   universe u
 
-  local infix `~` := eqv
+..   private definition eqv {α: Type u} (p₁ p₂: α × α): Prop :=
+..   (p₁.1 = p₂.1 ∧ p₁.2 = p₂.2) ∨ (p₁.1 = p₂.2 ∧ p₁.2 = p₂.1)
 
-  open or
+..   local infix `~` := eqv
 
-  private theorem eqv.refl {α: Type u}: ∀ p: α × α, p ~ p :=
-  assume p, inl ⟨rfl, rfl⟩
+..   open or
 
-  private theorem eqv.symm {α: Type u} : ∀ p₁ p₂ : α × α, p₁ ~ p₂ → p₂ ~ p₁
-  | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
-  | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
+..   private theorem eqv.refl {α: Type u}: ∀ p: α × α, p ~ p :=
+..   assume p, inl ⟨rfl, rfl⟩
 
-  private theorem eqv.trans {α: Type u} : ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
-    inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
-  | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
-    inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
+..   private theorem eqv.symm {α: Type u} : ∀ p₁ p₂ : α × α, p₁ ~ p₂ → p₂ ~ p₁
+..   | (a₁, a₂) (b₁, b₂) (inl ⟨a₁b₁, a₂b₂⟩) := inl ⟨symm a₁b₁, symm a₂b₂⟩
+..   | (a₁, a₂) (b₁, b₂) (inr ⟨a₁b₂, a₂b₁⟩) := inr ⟨symm a₂b₁, symm a₁b₂⟩
 
-  private theorem is_equivalence (α: Type u): equivalence (@eqv α) :=
-  mk_equivalence (@eqv α) (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
+..   private theorem eqv.trans {α: Type u} : ∀ p₁ p₂ p₃: α × α, p₁ ~ p₂ → p₂ ~ p₃ → p₁ ~ p₃
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inl ⟨trans a₁b₁ b₁c₁, trans a₂b₂ b₂c₂⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inl ⟨a₁b₁, a₂b₂⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inr ⟨trans a₁b₁ b₁c₂, trans a₂b₂ b₂c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inl ⟨b₁c₁, b₂c₂⟩) :=
+..     inr ⟨trans a₁b₂ b₂c₂, trans a₂b₁ b₁c₁⟩
+..   | (a₁, a₂) (b₁, b₂) (c₁, c₂) (inr ⟨a₁b₂, a₂b₁⟩) (inr ⟨b₁c₂, b₂c₁⟩) :=
+..     inl ⟨trans a₁b₂ b₂c₁, trans a₂b₁ b₁c₂⟩
 
-  instance uprod.setoid (α: Type u): setoid (α × α) :=
-  setoid.mk (@eqv α) (is_equivalence α)
+..   private theorem is_equivalence (α: Type u): equivalence (@eqv α) :=
+..   mk_equivalence (@eqv α) (@eqv.refl α) (@eqv.symm α) (@eqv.trans α)
 
-  definition uprod (α: Type u): Type u :=
-  quotient (uprod.setoid α)
+..   instance uprod.setoid (α: Type u): setoid (α × α) :=
+..   setoid.mk (@eqv α) (is_equivalence α)
 
-  namespace uprod
-    definition mk {α: Type u} (a₁ a₂: α): uprod α :=
-    ⟦(a₁, a₂)⟧
+..   definition uprod (α: Type u): Type u :=
+..   quotient (uprod.setoid α)
 
-    local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
+..   namespace uprod
+..     definition mk {α: Type u} (a₁ a₂: α): uprod α :=
+..     ⟦(a₁, a₂)⟧
 
-    theorem mk_eq_mk {α: Type} (a₁ a₂: α): {a₁, a₂} = {a₂, a₁} :=
-    quot.sound (inr ⟨rfl, rfl⟩)
+..     local notation `{` a₁ `,` a₂ `}` := mk a₁ a₂
 
-    -- BEGIN
-    private definition mem_fn {α: Type} (a: α):
-      α × α → Prop
-    | (a₁, a₂) := a = a₁ ∨ a = a₂
+..     theorem mk_eq_mk {α: Type} (a₁ a₂: α): {a₁, a₂} = {a₂, a₁} :=
+..     quot.sound (inr ⟨rfl, rfl⟩)
 
-    -- auxiliary lemma for proving mem_respects
-    private lemma mem_swap {α: Type} {a: α}:
-      ∀ {p : α × α}, mem_fn a p = mem_fn a (⟨p.2, p.1⟩)
-    | (a₁, a₂) := propext (iff.intro
-        (λ l: a = a₁ ∨ a = a₂,
-          or.elim l (λ h₁, inr h₁) (λ h₂, inl h₂))
-        (λ r: a = a₂ ∨ a = a₁,
-          or.elim r (λ h₁, inr h₁) (λ h₂, inl h₂)))
+..     -- BEGIN
+..     private definition mem_fn {α: Type} (a: α):
+..       α × α → Prop
+..     | (a₁, a₂) := a = a₁ ∨ a = a₂
 
-    private lemma mem_respects {α: Type}:
-      ∀ {p₁ p₂: α × α} (a: α),
-        p₁ ~ p₂ → mem_fn a p₁ = mem_fn a p₂
-    | (a₁, a₂) (b₁, b₂) a (inl ⟨a₁b₁, a₂b₂⟩) :=
-      by { dsimp at a₁b₁, dsimp at a₂b₂, rw [a₁b₁, a₂b₂] }
-    | (a₁, a₂) (b₁, b₂) a (inr ⟨a₁b₂, a₂b₁⟩) :=
-      by { dsimp at a₁b₂, dsimp at a₂b₁, rw [a₁b₂, a₂b₁],
-            apply mem_swap }
+..     -- auxiliary lemma for proving mem_respects
+..     private lemma mem_swap {α: Type} {a: α}:
+..       ∀ {p : α × α}, mem_fn a p = mem_fn a (⟨p.2, p.1⟩)
+..     | (a₁, a₂) := propext (iff.intro
+..         (λ l: a = a₁ ∨ a = a₂,
+..           or.elim l (λ h₁, inr h₁) (λ h₂, inl h₂))
+..         (λ r: a = a₂ ∨ a = a₁,
+..           or.elim r (λ h₁, inr h₁) (λ h₂, inl h₂)))
 
-    def mem {α: Type} (a: α) (u: uprod α): Prop :=
-    quot.lift_on u (λ p, mem_fn a p) (λ p₁ p₂ e, mem_respects a e)
+..     private lemma mem_respects {α: Type}:
+..       ∀ {p₁ p₂: α × α} (a: α),
+..         p₁ ~ p₂ → mem_fn a p₁ = mem_fn a p₂
+..     | (a₁, a₂) (b₁, b₂) a (inl ⟨a₁b₁, a₂b₂⟩) :=
+..       by { dsimp at a₁b₁, dsimp at a₂b₂, rw [a₁b₁, a₂b₂] }
+..     | (a₁, a₂) (b₁, b₂) a (inr ⟨a₁b₂, a₂b₁⟩) :=
+..       by { dsimp at a₁b₂, dsimp at a₂b₁, rw [a₁b₂, a₂b₁],
+..             apply mem_swap }
 
-    local infix `∈` := mem
+..     def mem {α: Type} (a: α) (u: uprod α): Prop :=
+..     quot.lift_on u (λ p, mem_fn a p) (λ p₁ p₂ e, mem_respects a e)
 
-    theorem mem_mk_left {α: Type} (a b: α): a ∈ {a, b} :=
-    inl rfl
+..     local infix `∈` := mem
 
-    theorem mem_mk_right {α: Type} (a b: α): b ∈ {a, b} :=
-    inr rfl
+..     theorem mem_mk_left {α: Type} (a b: α): a ∈ {a, b} :=
+..     inl rfl
 
-    theorem mem_or_mem_of_mem_mk {α: Type} {a b c: α}:
-      c ∈ {a, b} → c = a ∨ c = b :=
-    λ h, h
-    -- END
-  end uprod
+..     theorem mem_mk_right {α: Type} (a b: α): b ∈ {a, b} :=
+..     inr rfl
 
-For convenience, the `standard library <lean_src>`_ also defines ``quotient.lift₂`` for lifting binary functions, and ``quotient.ind₂`` for induction on two variables.
+..     theorem mem_or_mem_of_mem_mk {α: Type} {a b c: α}:
+..       c ∈ {a, b} → c = a ∨ c = b :=
+..     λ h, h
+..     -- END
+..   end uprod
 
-We close this section with some hints as to why the quotient construction implies function extenionality. It is not hard to show that extensional equality on the ``Π(x:α), β x`` is an equivalence relation, and so we can consider the type ``extfun α β`` of functions "up to equivalence." Of course, application respects that equivalence in the sense that if ``f₁`` is equivalent to ``f₂``, then ``f₁ a`` is equal to ``f₂ a``. Thus application gives rise to a function ``extfun_app: extfun α β → Π(x:α), β x``. But for every ``f``, ``extfun_app ⟦f⟧`` is definitionally equal to ``λ x, f x``, which is in turn definitionally equal to ``f``. So, when ``f₁`` and ``f₂`` are extensionally equal, we have the following chain of equalities:
+.. For convenience, the `standard library <lean_src>`_ also defines ``quotient.lift₂`` for lifting binary functions, and ``quotient.ind₂`` for induction on two variables.
 
-::
+.. We close this section with some hints as to why the quotient construction implies function extenionality. It is not hard to show that extensional equality on the ``Π(x:α), β x`` is an equivalence relation, and so we can consider the type ``extfun α β`` of functions "up to equivalence." Of course, application respects that equivalence in the sense that if ``f₁`` is equivalent to ``f₂``, then ``f₁ a`` is equal to ``f₂ a``. Thus application gives rise to a function ``extfun_app: extfun α β → Π(x:α), β x``. But for every ``f``, ``extfun_app ⟦f⟧`` is definitionally equal to ``λ x, f x``, which is in turn definitionally equal to ``f``. So, when ``f₁`` and ``f₂`` are extensionally equal, we have the following chain of equalities:
 
-  f₁ = extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧ = f₂
+.. ::
 
-As a result, ``f₁`` is equal to ``f₂``.
+..   f₁ = extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧ = f₂
+
+.. As a result, ``f₁`` is equal to ``f₂``.
 
 
 -------------------------------------
