@@ -194,25 +194,28 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
 ------------------------------------------------
 
 .. index:: ! quotient tuple
-.. index:: ! lift of; tuples
-.. index:: ! lift of; operations
+.. index:: ! lift; of tuples
+.. index:: ! lift; of operations
 
 Lifts of tuples and operations
 ------------------------------
 
-Let :math:`α` be a type, :math:`R ⊆ α × α` a binary relation on :math:`α`, and :math:`f : (ρ f → α) → α` a :math:`ρ f`-ary operation on :math:`α`.
+Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation on :math:`α`, and let :math:`f : (ρ f → α) → α` be a :math:`ρ f`-ary operation on :math:`α`.
 
-If :math:`q : ρ f → α` is a :math:`ρf`-tuple of elements of type :math:`α`, then the **lift** of :math:`q` to :math:`α/R` is the :math:`ρf`-tuple :math:`q_l : ρ f → α/R` that takes each :math:`i : ρ f` to the :math:`R`-class containing :math:`q\ i`; that is,
+Recall, we view the function type :math:`β → α` as the type of :math:`β`-tuples of elements from :math:`α`.
 
-.. math:: q_l\ i = (q\ i)/R.
+We define a **lift of tuples** :math:`ℒ_R: (β → α) → β → α/R` as follows: for each tuple :math:`τ: β → α`, we take :math:`ℒ_R τ : β → α/R` to be the :math:`β`-tuple that takes each :math:`i: β` to the :math:`R`-class containing :math:`τ\ i`; that is,
 
-Thus, :math:`q_l\ i` is of type :math:`α/R`.
+.. math:: (ℒ_R τ)\ i = (τ\ i)/R.
 
-If :math:`f : (ρ f → α) → α` respects :math:`R ⊆ α × α`, then the **lift** of :math:`f` to :math:`α/R` is the function :math:`f_l: (ρ f → α/R) → α/R` defined at each lift :math:`q_l : ρ f → α/R` (of each :math:`q: ρ f → α`) as follows:
+We define a **lift of operations** :math:`𝖫_R: ((β → α) → α)  → (β → α/R) → α/R` as follows: for each :math:`β`-ary operation :math:`f: (β → α) → α`, we take :math:`𝖫_R f : (β → α/R) → α/R` to be the :math:`β`-ary operation that takes each lifted tuple :math:`ℒ_R τ: β → α/R` to the :math:`R`-class containing :math:`f τ`.
 
-.. math:: f_l\ q_l \ i  := (f\ q) / R.
+Notice, however, that this lifted operation will not be well defined unless :math:`f` :term:`respects` :math:`R`.  If :math:`f: (β → α) → α` does respect :math:`R ⊆ α × α`, then the function 
+:math:`𝖫_R f` is well defined for each :math:`τ: β → α` by
 
-Observe that this definition---of the *lift of an operation*---differs from that of the *lift of a function*, and we must redefine ``quot.lift`` to reflect this difference. We do so as follows.
+.. math:: (𝖫_R f) (ℒ_R τ) \ i  := (f\ τ) / R.
+
+Observe that these definitions---of *lift of a tuple* and *lift of an operation*---differ from that of the *lift of a function*.  To account for these differences, we now define three new lifting constants, ``quot.colift``, ``quot.tlift`` ``quot.oplift``.  In the next section of code, we start by reiterating the definitions from the standard library of ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` before defining the new lift constants.  This puts all of the constants on the same "level" in the sense that now they are all "user-defined" and thus none is a built-in part of Lean's logical framework.
 
 ::
 
@@ -229,7 +232,8 @@ Observe that this definition---of the *lift of an operation*---differs from that
 
     -- (Already defined in std lib)
     -- Given α and R ⊆ α × α, map each a:α to its R-class.
-    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
+    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop),
+    quot R
 
     -- So, if R: α → α → Prop and a:α, then quot.mk R a is the
     -- R-class a/R containing a, which has type quot R.
@@ -237,29 +241,36 @@ Observe that this definition---of the *lift of an operation*---differs from that
     -- Let us define some syntactic sugar that reflects this fact.
     infix `/` := quot.mk  -- notation: a/R := quot.mk a R
 
+    -- (Already defined in std lib)
     -- Each element of quot R is a R-class of the form quot.mk R a.
-    axiom quot.ind:                  -- (already defined in std lib)
+    axiom quot.ind:
     ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
     (∀ a, β (a/R)) → ∀ (q: quot R), β q
 
+    -- (Already defined in std lib)
     -- Take a function f: α → β and a proof h : f ⊧ R, and
     -- return the lift of f to quot R.
-    constant quot.lift:              -- (already defined in std lib)
+    constant quot.lift:
     Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
     (∀ a b, R a b → f a = f b) → quot R → β
 
-    -- new lift constants
+    -- New lift constants (not defined in std lib)
 
     -- quot.colift
-    -- lift to a function with quotient codomain (instead of domain)
+    -- lift to a function with quotient codomain
+    -- (instead of quotient domain)
     constant quot.colift:
-    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
+    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β),
+    (α → quot R)
 
     -- quot.tlift
     -- lift tuple of α's to a tuple of quotients α/R's
-    -- (same as colift, except for order of arguments)
     constant quot.tlift:
-    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
+    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α),
+    (β → quot R)
+
+    -- So tlift is essentially the same as colift, except for
+    -- the order of arguments.
 
     -- operation type
     def op (β : Sort v) (α : Sort u) := (β → α) → α
@@ -273,11 +284,13 @@ Observe that this definition---of the *lift of an operation*---differs from that
     λ f R, ∀ (a b: β → α), liftrel R a b → R (f a) (f b)
 
     -- notation for "f respects ρ"
-    -- f `⊧` R  means ∀ (a b : β → α), (∀ i, R (a i) (b i)) → R (f a) (f b)
+    -- f `⊧` R  means
+    -- ∀ (a b: β → α), (∀ i, R (a i) (b i)) → R (f a) (f b)
     infix `⊧`:50 := respects
 
     constant quot.oplift :
-    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
+    Π {R: α → α → Prop} (f: op β α),
+    (f ⊧ R) → (β → quot R) → quot R
 
   end ualib_quotient
 
@@ -331,9 +344,9 @@ Now let's check the types of some of these newly defined constants, and also pro
     variable (t: β → α)  -- tuple
     variable (g: op β α) -- operation
 
-    variable {R: α → α → Prop}              -- a binary relation on α
-    variable (h₀: ∀ a b, R a b → f a = f b) -- that is respected by g
-    variable (h₁: g ⊧ R)                    -- that is respected by g
+    variable {R: α → α → Prop}             -- a binary relation on α
+    variable (h₀: ∀ a b, R a b → f a = f b)-- that is respected by g
+    variable (h₁: g ⊧ R)                   -- that is respected by g
 
     #check quot.lift f h₀     -- quot (λ (a b : α), R a b)  → β
     #check quot.tlift t       -- β → quot ?M_1
@@ -341,14 +354,19 @@ Now let's check the types of some of these newly defined constants, and also pro
 
     def ker (f: α → β): set (α × α) := { a | f a.fst = f a.snd}
     def Ker (f: α → β): α → α → Prop := λ a b, f a = f b
-    def uncurry {α: Type} (R: α → α → Prop) : set (α × α) := λ a, R a.fst a.snd
+    def uncurry {α: Type} (R: α → α → Prop): set (α × α) :=
+    λ a, R a.fst a.snd
 
-    theorem kernel_resp {α: Type} {R: α → α → Prop} {β: Type} (f: α → β):
-    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f) := iff.intro
-    ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, show uncurry R ⊆ ker f, from
+    theorem kernel_resp {α: Type} {R: α → α → Prop} {β: Type}
+    (f: α → β):
+    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (uncurry R ⊆ ker f) :=
+    iff.intro
+    ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂,
+      show uncurry R ⊆ ker f, from
         λ p, h p.fst p.snd
     )
-    ( assume h: uncurry R ⊆ ker f, show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
+    ( assume h: uncurry R ⊆ ker f,
+      show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
         assume a₁ a₂ (h1 : R a₁ a₂),
         have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
         h h2
@@ -357,7 +375,7 @@ Now let's check the types of some of these newly defined constants, and also pro
 
   end ualib_quotient
 
-Finally, let us assert the computation principles for these various lifts to quotients.
+Finally, let us assert the computation principles for these various lifts to quotients. [3]_
 
 ::
 
@@ -408,35 +426,36 @@ Finally, let us assert the computation principles for these various lifts to quo
         have h2 : (a₁ , a₂) ∈ uncurry R, from h1,
         h h2
     )
+
     -- BEGIN
     -- computation principle for function lift
-    axiom flift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
-    (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) (a: α):
-    quot.lift f h (a/R) = f a -- := rfl
+    axiom flift_comp_principle {α : Type} {R: α → α → Prop}
+    {β : Type} (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂):
+    ∀ (a : α), quot.lift f h (a/R) = f a
 
-    -- We can prove the same principle assuming instead that (uncurry) R
-    -- belongs to the kernel of f and applying the kernel_resp theorem.
-    axiom flift_comp_principle' {α: Type} {R: α → α → Prop} {β: Type}
-    (f: α → β) (h: uncurry R ⊆ ker f) (a: α):
-    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a -- := rfl
+    -- We can prove this assuming instead that (uncurry) R
+    -- belongs to kernel of f and applying kernel_resp theorem.
+    axiom flift_comp_principle' {α : Type} {R: α → α → Prop}
+    {β : Type} (f: α → β) (h: uncurry R ⊆ ker f): ∀ (a : α),
+    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a
 
     -- computation principle for colift
-    axiom colift_comp_principle {α: Type} {β: Type} {R: β → β → Prop}
-    (f: α → β) (a: α) : (quot.colift f) a = (f a)/R
+    axiom colift_comp_principle {α : Type} {β : Type}
+    {R: β → β → Prop} (f: α → β): ∀ (a : α),
+    (quot.colift f) a = (f a)/R
 
     -- computation principle for tuple lift
-    axiom tlift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
-    (t: β → α) (b: β) : (quot.tlift t) b = (t b)/R
+    axiom tlift_comp_principle {α : Type} {R: α → α → Prop}
+    {β : Type} (t: β → α): ∀ (b : β),
+    (quot.tlift t) b = (t b)/R
 
     -- computation principle for operation lift
-    axiom olift_comp_principle {R: α → α → Prop}
-    (g: (β → α) → α) (h: g ⊧ R) (a: β → α):
+    axiom olift_comp_principle {R : α → α → Prop}
+    (g: (β → α) → α) (h : g ⊧ R): ∀ (a : β → α),
     (quot.oplift g h) (quot.tlift a) = (g a)/R
     -- END
 
   end ualib_quotient
-
-**N.B.** we could have *proved* the first of these, ``flift_comp_principle``, if we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), since this principle is taken as part of the logical framework of the :term:`LSL`.
 
 What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
 
@@ -483,27 +502,29 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
         h h2
     )
 
-    axiom flift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
-    (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) (a : α):
-    quot.lift f h (a/R) = f a -- := rfl
+    axiom flift_comp_principle {α : Type} {R: α → α → Prop}
+    {β : Type} (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂):
+    ∀ (a : α), quot.lift f h (a/R) = f a
 
-    axiom flift_comp_principle' {α: Type} {R: α → α → Prop} {β: Type}
-    (f: α → β) (h: uncurry R ⊆ ker f) (a: α):
-    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a -- := rfl
+    axiom flift_comp_principle' {α : Type} {R: α → α → Prop}
+    {β : Type} (f: α → β) (h: uncurry R ⊆ ker f): ∀ (a : α),
+    quot.lift f (iff.elim_right (kernel_resp f) h) (a/R) = f a
 
-    axiom colift_comp_principle {α: Type} {β : Type} {R: β → β → Prop}
-    (f: α → β) (a: α) : (quot.colift f) a = (f a)/R
+    axiom colift_comp_principle {α : Type} {β : Type}
+    {R: β → β → Prop} (f: α → β): ∀ (a : α),
+    (quot.colift f) a = (f a)/R
 
-    axiom tlift_comp_principle {α: Type} {R: α → α → Prop} {β: Type}
-    (t: β → α) (b: β) : (quot.tlift t) b = (t b)/R
+    axiom tlift_comp_principle {α : Type} {R: α → α → Prop}
+    {β : Type} (t: β → α): ∀ (b : β),
+    (quot.tlift t) b = (t b)/R
 
-    axiom olift_comp_principle {R: α → α → Prop}
-    (g: (β → α) → α) (h: g ⊧ R) (a: β → α):
+    axiom olift_comp_principle {R : α → α → Prop}
+    (g: (β → α) → α) (h : g ⊧ R): ∀ (a : β → α),
     (quot.oplift g h) (quot.tlift a) = (g a)/R
 
     -- BEGIN
-    axiom quot.sound: ∀ {α: Type u} {R: α → α → Prop} {a b: α},
-    R a b → a/R = b/R
+    axiom quot.sound {α: Type u} {R: α → α → Prop}:
+    ∀ (a b: α), R a b → a/R = b/R
     -- END
 
   end ualib_quotient
@@ -519,11 +540,11 @@ If a theorem or definition makes use of ``quot.sound``, it will show up in the `
 Setoids
 -------
 
-In a quotient construction α/R, the relation R is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``R``, we define ``R'`` according to the rule
+In a quotient construction ``α/R``, the relation ``R`` is typically an *equivalence relation*.  If not, we can extend it to one.  Indeed, given a binary relation ``R``, we define ``R'`` according to the rule
 
-  ``R' a b`` :math:`\quad` iff :math:`\quad` ``quot.mk R a = quot.mk R b``.
+  ``R' a b`` :math:`\quad` iff :math:`\quad` ``a/R = b/R``.
 
-Then ``R'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ quot.mk R a``.
+Then ``R'`` is an equivalence relation---namely, the **kernel** of the function ``a ↦ a/R``.
 
 The axiom ``quot.sound`` given at the end of the last section asserts that ``R a b`` implies ``R' a b``.
 
@@ -1126,6 +1147,11 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 
 .. [2]
    At issue here is the question of whether we can define ``fₗ ⟦x⟧`` without invoking some :term:`Choice` axiom.  Indeed, ``⟦x⟧`` is a class of inhabitants of type ``α`` and, if ``fₗ ⟦x⟧`` is taken to be the value returned when ``f`` is evaluated at some member of this class, then we must have a way to choose one such member.
+
+.. [3]
+   The definitions inside the ``ualib_quotient`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSL`.
+
+
 
 .. .. [2]
 ..    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.

@@ -453,10 +453,18 @@ Nomenclature
       For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
 
     respects
-      Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`ρ ⊆ α × α`, and we write :math:`f ⊧ ρ`, just in case :math:`∀ x, y :α \ (x \mathrel ρ y \ → \ f x \mathrel ρ f y)`.
+      Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
         
       (The symbol ⊧ is produced by typing ``\models``.)
 
+      If :math:`f: (β → α) → α` is a :math:`β`-ary operation on :math:`α`, we can extend the definition of ":math:`f` respects :math:`R`" in the obvious way.
+      
+      First, for every pair :math:`u : β → α` and :math:`v : β → α` (:math:`β`-tuples of :math:`α`), we say that :math:`(u, v)` "belongs to" :math:`R ⊆ α × α` provided
+      
+      .. math:: ∀ i: β \ ui \mathrel R vi
+      
+      Then we say :math:`f:  (β → α) → α` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ u, v, \ [(∀ i: β, \ u i \mathrel R v i) \ → \ f u \mathrel R f v]`.
+        
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
 
