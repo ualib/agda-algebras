@@ -613,6 +613,8 @@ Categories
 Symbols
 -------
 
+The list below shows what to type (e.g., in the vscode IDE with lean extension) to produce some of the special characters used in the `lean-ualib`_.
+
 .. glossary::
 
     𝔸

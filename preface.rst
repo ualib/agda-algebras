@@ -40,9 +40,9 @@ We conclude this section with a note that is important for anyone interested in 
 Prerequisites
 -------------
 
-While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`) and, to a lesser extent, category theory (as presented by `categorytheory.gitlab.io`_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Section %s <postmodern-algebra>`.
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`) and, to a lesser extent, category theory (as presented by `categorytheory.gitlab.io`_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Chapter %s <postmodern-algebra>`.
 
-Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful, but one could probably get by with what is included in the appendices and the glossary, consulting one or more of the following to fill in gaps as needed:
+Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the following references to fill in gaps as needed:
 
   + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
   + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
@@ -50,12 +50,14 @@ Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful,
   + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
   + `Type Theory and Formal Proof <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
 
+Finally, it is assumed that, while reading this manual, the reader is actively experimenting with Lean using `vscode`_ with its `lean extension`_ installed.  While Emacs is another excellent means of interfacing with Lean, some of our instructions may not work in that environment.  (For example, we will explain how one produces certain special unicode characters, and the procedure may be different for other IDE's.)
+
 -----------------------------------
 
 Acknowledgments
 ---------------
 
-This tutorial is an open access project maintained on Gitlab. Besides the authors named below, a number of other people have also contributed to the ualib project.  We are especially grateful to Jeremy Avigad, Andrej Bauer, Clifford Bergman, Peter Jipsen, Miklos Maroti, and Ralph Freese for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
+This manual and the software library that it documents are open access projects maintained on Gitlab. Besides the main authors, a number of other people have also contributed to the ualib project.  We are especially grateful to Jeremy Avigad, Andrej Bauer, Clifford Bergman, Peter Jipsen, Miklos Maroti, and Ralph Freese for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
 
 ----------------------
 
@@ -66,6 +68,9 @@ This is a work in progress and any feedback you can provide us with would be muc
 
 ---------------------------
 
+.. _vscode: https://code.visualstudio.com/
+
+.. _lean extension: https://github.com/leanprover/vscode-lean
 
 .. _Lean: https://leanprover.github.io/
 
