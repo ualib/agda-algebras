@@ -158,6 +158,37 @@ For that reason, the `Lean Standard Library`_ does not take these four constants
   #print axioms lift_comp_principle  -- no axioms
   -- END
 
+What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
+
+.. index:: keyword: quot.sound
+
+::
+
+  variables (α β: Type) (R: α → α → Prop) (a: α)
+
+  -- the quotient type
+  #check (quot R: Type)
+
+  -- the class of a
+  #check (quot.mk R a: quot R)
+
+  variable f: α → β
+  variable h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂
+
+  -- the corresponding function on quot R
+  #check quot.lift f h      -- quot R → β
+
+  -- the computation principle
+  theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
+  rfl
+
+  -- BEGIN
+  axiom quot.sound {α: Type u} {R: α → α → Prop}:
+  ∀ (a b: α), R a b → a/R = b/R
+  -- END
+
+If a theorem or definition makes use of ``quot.sound``, it will show up in the ``#print axioms`` command.
+
 Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` are viewed as part of the logical framework.
 
 By contrast, other lifting constructions that are defined in the next section (and are important in universal algebra) are not native to Lean. Therefore, their computation principles cannot be proved as theorems and will have to be added as axioms.
@@ -221,11 +252,15 @@ We define a **lift of tuples** :math:`[\ ]: (β → α) → β → α/R` as foll
 
 We define a **lift of operations** as follows: for each :math:`β`-ary operation :math:`g: (β → α) → α`, we would like the lift of :math:`g` to have type :math:`(β → α/R) → α/R` and take each lifted tuple :math:`[τ]: β → α/R` to the :math:`R`-class containing :math:`g τ`.
 
-However, such a lift is not well-defined unless :math:`g` :term:`respects` :math:`R`.  Therefore, we must provide a proof, say, :math:`p: g ⊧ R`, that :math:`g` respects :math:`R`, in order to guarantee that the lift from :math:`(β → α) → α` to :math:`(β → α/R) → α/R` is well-defined.
+However, such a lift is not well-defined unless :math:`g` :term:`respects` :math:`R`.  Therefore, we must provide a proof that :math:`g` respects :math:`R` in order to guarantee the well-definedness of the lift from :math:`(β → α) → α` to :math:`(β → α/R) → α/R`.
 
-We introduce an (infix) symbol :math:`ℒ` to denote such a lift of operations.  It has type :math:`ℒ : Π (R: α → α → \mathsf{Prop}) (g: (β → α) → α), (g ⊧ R) → (β → α/R) → α/R` and as such it takes a relation :math:`R: α → α → \mathsf{Prop}`, an operation :math:`g: (β → α) → α`, and a proof :math:`p: g ⊧ R` and constructs the operaiton :math:`g \mathrel ℒ p: (β → α/R) → α/R`, defined as follows: for each tuple :math:`τ: β → α`,
+Below, when we implement lifts of tuples and operations in Lean, we will introduce the symbol ``ℒ`` to denote the lift of operations, with the following typing judgment:
 
-.. math:: (g \mathrel ℒ p) [τ]  := (g\ τ) / R.
+  ``ℒ : Π {R: α → α → Prop} (g: (β → α) → α), (g ⊧ R) → (β → α/R) → α/R``.
+
+As such, ``ℒ`` takes a relation ``R: α → α → Prop``, an operation ``g: (β → α) → α``, and a proof ``p: g ⊧ R``, and constructs the operaiton ``g ℒ p: (β → α/R) → α/R``, defined as follows: for each tuple ``τ: β → α``,
+
+  ``(g ℒ p) [τ]  := (g τ) / R``.
 
 ----------------------
 
@@ -323,12 +358,12 @@ The next section of code begins by redefining the constants ``quot``, ``quot.mk`
     infix `ℒ`:50 := quot.oplift          -- ``\mscrL``
 
     -- uncurrying a relation (from α → α → Prop to set (α × α))
-    def uncurry {α : Type} (R : α → α → Prop) : set (α × α) :=
+    def uncurry {α: Type} (R: α → α → Prop): set (α × α) :=
     λ a, R a.fst a.snd
 
     notation R`̃ ` := uncurry R            -- ``R\tilde``
 
-    def ker (f : α → β) : set (α × α) := { a | f a.fst = f a.snd}
+    def ker (f: α → β): set (α × α) := { a | f a.fst = f a.snd}
 
   end ualib_quotient
 
@@ -437,7 +472,7 @@ Now let's check the types of some of these newly defined constants, test the new
     #check g ℒ h₁           -- (β → quot R) → quot R
 
     -- Theorem. The function f: α → β respects R: α → α → Prop
-    --          iff  uncurry R ⊆ ker f  iff  R̃ ⊆ ker f.
+    --          iff  R̃ ⊆ ker f.
     theorem kernel_resp
     {α : Type} {R: α → α → Prop} {β : Type} (f: α → β):
     (f ⫢ R) ↔ (R̃ ⊆ ker f) :=
@@ -454,7 +489,7 @@ Now let's check the types of some of these newly defined constants, test the new
     -- END
   end ualib_quotient
 
-Finally, let us assert the computation principles for these various lifts to quotients. [3]_
+Finally, let us assert the computation principles for these new lift operators. [3]_
 
 ::
 
@@ -550,101 +585,6 @@ Finally, let us assert the computation principles for these various lifts to quo
 
   end ualib_quotient
 
-What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
-
-.. index:: keyword: quot.sound
-
-::
-
-  namespace ualib_quotient
-    universes u v
-
-    constant quot: Π {α: Sort u}, (α → α → Prop) → Sort u
-
-    constant quot.mk: Π {α: Sort u} (a : α) (R: α → α → Prop), quot R
-    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
-
-    axiom quot.ind:
-    ∀ {α: Sort u} {R: α → α → Prop} {β: quot R → Prop},
-    (∀ a, β (a/R)) → ∀ (q: quot R), β q
-
-    constant quot.lift:
-    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
-    (∀ a b, R a b → f a = f b) → quot R → β
-
-    infix `ℓ`:50 := quot.lift
-
-    constant quot.colift:
-    Π {α: Sort u} {β: Sort u} {R: β → β → Prop} (f: α → β), (α → quot R)
-
-    constant quot.tlift:
-    Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (t: β → α), (β → quot R)
-
-    notation `[` t `]` := quot.tlift t -- lift of a tuple
-
-    def op (β : Sort v) (α : Sort u) := (β → α) → α
-
-    variables {α β : Type}
-
-    def liftrel: (α → α → Prop) → (β → α) → (β → α) → Prop :=
-    λ R a b, ∀ i, R (a i) (b i)
-
-    notation `⟨` R `⟩` := liftrel R       -- ``\<R\>``
-
-    def respects: ((β → α) → α) → (α → α → Prop) → Prop :=
-    λ f R, ∀ (a b: β → α), ⟨R⟩ a b → R (f a) (f b)
-
-    infix `⊧`:50 := respects              -- ``\models``
-
-    constant quot.oplift :
-    Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
-
-    infix `ℒ`:50 := quot.oplift
-
-    def uncurry {α : Type} (R : α → α → Prop) : set (α × α) := λ a, R a.fst a.snd
-
-    notation R`̃ ` := uncurry R            -- type: ``R\tilde``
-
-    def ker (f : α → β) : set (α × α) := { a | f a.fst = f a.snd}
-
-    theorem kernel_resp {α : Type} {R: α → α → Prop} {β : Type} (f: α → β):
-    (∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂) ↔ (R̃ ⊆ ker f) := iff.intro
-    ( assume h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, show R̃ ⊆ ker f, from
-        λ p, h p.fst p.snd
-    )
-    ( assume h: R̃ ⊆ ker f, show ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂, from
-        assume a₁ a₂ (h1 : R a₁ a₂),
-        have h2 : (a₁ , a₂) ∈ (R̃), from h1,
-        h h2
-    )
-    axiom flift_comp_principle {α : Type} {R: α → α → Prop}
-    {β : Type} (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂):
-    ∀ (a : α), (f ℓ h) (a/R) = f a
-
-    axiom flift_comp_principle' {α : Type} {R: α → α → Prop}
-    {β : Type} (f: α → β) (h: R̃ ⊆ ker f): ∀ (a : α),
-    (f ℓ (iff.elim_right (kernel_resp f) h)) (a/R) = f a
-
-    axiom colift_comp_principle {α : Type} {β : Type}
-    {R: β → β → Prop} (f: α → β): ∀ (a : α),
-    (quot.colift f) a = (f a)/R
-
-    axiom tlift_comp_principle {α : Type} {R: α → α → Prop}
-    {β : Type} (τ: β → α): ∀ (b : β), [τ] b = (τ b)/R
-
-    axiom olift_comp_principle {R : α → α → Prop}
-    (g: (β → α) → α) (h : g ⊧ R): ∀ (τ : β → α),
-    (g ℒ h) [τ] = (g τ)/R
-
-      -- BEGIN
-      axiom quot.sound {α: Type u} {R: α → α → Prop}:
-      ∀ (a b: α), R a b → a/R = b/R
-      -- END
-
-  end ualib_quotient
-
-If a theorem or definition makes use of ``quot.sound``, it will show up in the ``#print axioms`` command.
-
 ----------------------------------------
 
 .. _setoids:
@@ -697,7 +637,7 @@ Using ``quot.lift`` and ``quot.ind``, we can show that ``R'`` is the smallest eq
 
   end ualib_setoid
 
-Given a type ``α``, a relation ``R`` on ``α``, and a proof ``p`` that ``r`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
+Given a type ``α``, a relation ``r`` on ``α``, and a proof ``p`` that ``r`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
 
 ::
 
@@ -800,8 +740,87 @@ We can use the generic theorems ``setoid.refl``, ``setoid.symm``, ``setoid.trans
 
 Together with ``quotient.sound``, this implies that the elements of the quotient correspond exactly to the equivalence classes of elements in ``α``.
 
+Here is the full listing of the `ualib_setoid.lean <https://gitlab.com/ualib/lean-ualib/blob/dev_wjd/src/ualib_setoid.lean>`_ file.  We dissect this program below.
 
-Recall that in the `Lean Standard Library`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of **unordered pairs** of elements of a type ``α`` as a quotient of the type ``α × α``.
+::
+
+  import ualib_quotient
+
+  namespace ualib_setoid
+
+    universe u
+
+    class setoid (α: Type u) :=
+    (R: α → α → Prop) (iseqv: equivalence R)
+
+    namespace setoid
+
+      infix `≈` := setoid.R
+
+      variable (α: Type u)
+      variable [s: setoid α]
+      include s
+
+      theorem refl (a: α): a ≈ a :=
+      (@setoid.iseqv α s).left a
+
+      theorem symm {a b: α}: a ≈ b → b ≈ a :=
+      λ h, (@setoid.iseqv α s).right.left h
+
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
+      λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+
+    end setoid
+
+    variables (α: Type u) (r : α → α → Prop) (p: equivalence r)
+
+    #check setoid.mk r p -- {R := r, iseqv := p} : setoid
+
+    def quotient (α: Type u) (s: setoid α) := @quot α setoid.R
+    axiom quotient.exact: ∀ {α: Type u} [setoid α] {a b: α},
+    (a/setoid.R = b/setoid.R → a ≈ b)
+
+    variables {Q: α → α → Prop} (a: α) (q: equivalence Q)
+    -- test notation for quotient --
+    #check @ualib_quotient.quot.mk α a Q  -- ualib_quotient.quot Q
+    #check a/Q  -- ualib_quotient.quot Q
+
+    #check @ualib_quotient.quot.ind α Q
+    -- ∀ {β: ualib_quotient.quot Q → Prop},
+    -- (∀ (a: α), β (a/Q)) → ∀ (q: ualib_quotient.quot Q), β q
+
+    variable β : ualib_quotient.quot Q → Prop
+    variable h: ∀ (a: α), β (a/Q)
+
+    #check @ualib_quotient.quot.ind α Q β h
+    -- ∀ (q: ualib_quotient.quot Q), β q
+
+    #check @ualib_quotient.quot.lift α Q
+    -- Π {β: Type u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β
+
+    #check @ualib_quotient.quot.sound α Q
+    -- ∀ (a b: α), Q a b → a/Q = b/Q
+
+    #check @ualib_setoid.quotient.exact α
+    -- a/setoid.R = b/setoid.R → a ≈ b
+
+    def Qeq: α → α → Prop := λ (a b: α),
+    ualib_quotient.quot.mk a Q = ualib_quotient.quot.mk b Q
+
+    theorem reflQ {a: α}: @Qeq α Q a a :=
+    have h: ualib_quotient.quot.mk a Q = ualib_quotient.quot.mk a Q,
+    from sorry,
+    sorry
+
+    theorem symmQ {a b: α}: @Qeq α Q a b → @Qeq α Q b a := eq.symm
+
+    theorem transQ {a b c: α}:
+    @Qeq α Q a b → @Qeq α Q b c → @Qeq α Q a c :=
+    λ h₁ h₂, eq.trans h₁ h₂
+
+  end ualib_setoid
+
+.. Recall that in the `Lean Standard Library`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of **unordered pairs** of elements of a type ``α`` as a quotient of the type ``α × α``.
 
 .. First, we define the relevant equivalence relation:
 
