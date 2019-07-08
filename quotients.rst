@@ -9,7 +9,9 @@ Quotients [1]_
 
 Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.  Below we will sometimes use the notation :math:`a/{≡}` to denote the class :math:`a/{≡}`.
+As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+
+.. Below we will sometimes use the notation :math:`a/{≡}` to denote the class :math:`⟦a⟧`
 
 The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient** :math:`A` modulo ≡.
 
@@ -63,9 +65,9 @@ Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kern
 
 Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
 
-If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ ⟦x⟧ = f x`, for each :math:`⟦x⟧: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
+If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
 
-The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ ⟦x⟧ = f x` available as a definitional reduction rule. [2]_
+The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
 
 Here are four such constants from the :term:`LSL`.
 
@@ -116,9 +118,9 @@ The third, ``quot.ind``, is the axiom asserting that every element of ``quot R``
 
 Finally, ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (i.e., ``f ⊧ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
-The idea is that for each ``a:α``, the function ``quot.lift f h`` maps each ``quot.mk R a`` (the ``R``-class containing ``a``) to ``f a``, where ``h`` is a proof that this function is well defined.
+The idea is for each ``a:α``, the function ``quot.lift f h`` maps the ``R``-class ``quot.mk R a`` to ``f a``, where ``h`` is a proof that this function is well defined.
 
-In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the ``lift_comp_principle`` below can be proved with just ``rfl``).
+In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the computation principle below can be proved with just ``rfl``).
 
 ::
 
@@ -221,7 +223,7 @@ We define a **lift of operations** as follows: for each :math:`β`-ary operation
 
 However, such a lift is not well-defined unless :math:`g` :term:`respects` :math:`R`.  Therefore, we must provide a proof, say, :math:`p: g ⊧ R`, that :math:`g` respects :math:`R`, in order to guarantee that the lift from :math:`(β → α) → α` to :math:`(β → α/R) → α/R` is well-defined.
 
-We introduce an (infix) symbol :math:`ℒ` to denote and define such a lift of operations.  It has type :math:`ℒ : Π (R: α → α → \mathsf{Prop}) (g: (β → α) → α), (g ⊧ R) → (β → α/R) → α/R` and as such it takes a relation :math:`R: α → α → \mathsf{Prop}` an operation :math:`g: (β → α) → α` and a proof :math:`p: g ⊧ R` and constructs the operaiton :math:`g \mathrel ℒ p: (β → α/R) → α/R`, defined as follows: for each tuple :math:`τ: β → α`,
+We introduce an (infix) symbol :math:`ℒ` to denote such a lift of operations.  It has type :math:`ℒ : Π (R: α → α → \mathsf{Prop}) (g: (β → α) → α), (g ⊧ R) → (β → α/R) → α/R` and as such it takes a relation :math:`R: α → α → \mathsf{Prop}`, an operation :math:`g: (β → α) → α`, and a proof :math:`p: g ⊧ R` and constructs the operaiton :math:`g \mathrel ℒ p: (β → α/R) → α/R`, defined as follows: for each tuple :math:`τ: β → α`,
 
 .. math:: (g \mathrel ℒ p) [τ]  := (g\ τ) / R.
 
@@ -273,7 +275,7 @@ The next section of code begins by redefining the constants ``quot``, ``quot.mk`
     infix `⫢`:50 := funresp          -- type: ``f \vDdash R``
  
     -- (Already defined in std lib)
-    -- Take a function f: α → β and a proof h : f ⫦  R, and
+    -- Take a function f: α → β and a proof h : f ⫢ R, and
     -- return the lift of f to quot R.
     constant quot.lift:
     Π {α: Sort u} {R: α → α → Prop} {β: Sort u} (f: α → β),
@@ -1256,9 +1258,8 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 .. [1]
    Some material in this chapter is borrowed from the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
 
-
 .. [2]
-   At issue here is the question of whether we can define ``fₗ ⟦x⟧`` without invoking some :term:`Choice` axiom.  Indeed, ``⟦x⟧`` is a class of inhabitants of type ``α`` and, if ``fₗ ⟦x⟧`` is taken to be the value returned when ``f`` is evaluated at some member of this class, then we must have a way to choose one such member.
+   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some form of the axiom of :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSL` for this :math:`R`-class is :math:`⟦x⟧`.
 
 .. [3]
    The definitions inside the ``ualib_quotient`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSL`.
