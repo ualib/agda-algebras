@@ -633,6 +633,9 @@ Symbols
     ℤ
       ``\Z`` (or ``\Int`` or ``\BbbZ``)
 
+    ℒ
+      ``\mscrL``
+
     h₁
       ``h\1`` (or ``h\_1``)
       
@@ -644,6 +647,9 @@ Symbols
   
     f̃
       ``f\tilde``
+
+    R̃
+      ``R\tilde``
 
     f̂
       ``f\hat``                          
@@ -879,6 +885,9 @@ Symbols
 
     ⊨
       ``\vDash``
+
+    ⫢
+      ``\vDdash``
 
     ⊧
       ``\models``              
