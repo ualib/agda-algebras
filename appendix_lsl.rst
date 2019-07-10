@@ -226,6 +226,8 @@ The first argument is the function :math:`f`, which is of (dependent) function t
 
   ``indep f a = ⟨⟦a⟧, f a⟩ : psigma β``.
 
+.. todo:: dissect more of quot namespace
+
 .. _the-quotient-namespace:
 
 The quotient namespace
@@ -422,6 +424,8 @@ In the second part of `quot.lean`_ is the ``quotient`` namespace.
 
   end quotient
 
+.. todo:: dissect quotient namespace
+
 .. _quotient-theorems:
 
 Quotient theorems
@@ -476,6 +480,8 @@ The third and final part of the `quot.lean`_ file proves some theorems about the
       | (is_false h₂) := is_false (λ h, absurd (quotient.exact h) h₂)
       end
     )
+
+.. todo:: dissect quot theorems
 
 -------------------------------------
 
@@ -667,8 +673,7 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 
   end
 
-.. todo:: complete this section
-
+.. todo:: finish dissecting funext proof
 
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
