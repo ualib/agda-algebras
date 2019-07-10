@@ -48,7 +48,7 @@ Acronyms
     ITT
       :term:`intensional` :term:`intuitionistic type theory <TT>`.
 
-    LSL
+    LSTL
       `Lean Standard Library`_
       
     ω-cpo

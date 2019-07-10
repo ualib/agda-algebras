@@ -23,7 +23,7 @@
 
 We now describe how many of the concepts of sets and types discussed in the last two chapters are implemented in the Lean language.
 
-Many of the implementations shown here also appear in the following files in the `Lean Standard Library`_ (:term:`LSL`) and the `Lean Mathlib <mathlib>`_:
+Many of the implementations shown here also appear in the following files in the `Lean Standard Library`_ (:term:`LSTL`) and the `Lean Mathlib <mathlib>`_:
 
 + set.lean_
 + basic.lean_

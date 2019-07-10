@@ -29,7 +29,7 @@ Lean is designed to support **classical reasoning** as well as **computational**
 
 By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, every closed computationally pure expression of type ℕ will reduce to a number.
 
-Two axioms that the `Lean Standard Library`_ (:term:`LSL`) adds to :term:`CiC` are :term:`proposition extensionality` and a :term:`quotient` construction, which in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
+Two axioms that the `Lean Standard Library`_ (:term:`LSTL`) adds to :term:`CiC` are :term:`proposition extensionality` and a :term:`quotient` construction, which in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
 
   *using such axiomatic extensions can block evaluation in Lean's kernel*
 
@@ -41,7 +41,7 @@ On the other hand,
 
 and since these axioms only add new propositions, they admit a computational interpretation.
 
-The :term:`LSL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom that the user can assume when necessary.  We can invoke ``em`` if we explicitly open the classical fragment of the library with the directive ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``, that is, either ``P`` or ``¬ P``.
+The :term:`LSTL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom that the user can assume when necessary.  We can invoke ``em`` if we explicitly open the classical fragment of the library with the directive ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``, that is, either ``P`` or ``¬ P``.
 
 .. proof:example::
 
@@ -88,7 +88,7 @@ Therefore, in Lean we must mark such definitions ``noncomputable``.
 .. ~~~~~~~~~~~~~~~~~~~~
 .. A famous theorem of Diaconescu uses :term:`proposition extensionality`, :term:`function extensionality` and :term:`Choice` to derive the :term:`law of the excluded middle`. However, as noted above, use of :term:`em` is still compatible with :term:`bytecode` compilation and :term:`code extraction`, as are other classical principles, *as long as they are not used to manufacture data*.
 
-To summarize, on top of the framework of universes, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the :term:`LSL` adds three (optional) components:
+To summarize, on top of the framework of universes, :term:`dependent function types <dependent function type>`, and :term:`inductive types <inductive type>`, the :term:`LSTL` adds three (optional) components:
 
 + the axiom of :term:`proposition extensionality`
 + a :term:`quotient` construction, which implies :term:`function extensionality`
@@ -226,7 +226,7 @@ To do this requires that we understand *quotients* and *setoids*---two concepts 
 Extensionality in Lean
 ----------------------
 
-Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotients`) and in the :term:`LSL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
+Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotients`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
 
 Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).
 

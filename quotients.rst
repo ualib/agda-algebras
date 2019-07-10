@@ -67,9 +67,9 @@ Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`
 
 If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
 
-The `Lean Standard Library`_ (:term:`LSL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
+The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
 
-Here are four such constants from the :term:`LSL`.
+Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.)
 
 .. index:: keyword: quot, quot.mk, quot.ind
 .. index:: keyword: quot.lift
@@ -267,7 +267,7 @@ As such, ``ℒ`` takes a relation ``R: α → α → Prop``, an operation ``g: (
 Lifts of Operations in Lean
 ----------------------------
 
-The definitions of lifts of tuples and operations in :numref:`lifts-of-tuples-and-operations` are fundamentally different from that of the *lift of a function* given in :numref:`lifts-of-functions` and defined in the :term:`LSL`. To account for this, we must introduce new lifting constants.
+The definitions of lifts of tuples and operations in :numref:`lifts-of-tuples-and-operations` are fundamentally different from that of the *lift of a function* given in :numref:`lifts-of-functions` and defined in the :term:`LSTL`. To account for this, we must introduce new lifting constants.
 
 The next section of code begins by redefining the constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` and then defines three new lift constants, ``quot.colift``, ``quot.tlift``, and ``quot.oplift``.  By redefining the standard ``quot`` constants, the ``ualib_quotient`` namespace puts all of the quotient constants on the same "level" in the sense that all are now "user-defined" and thus none is a built-in part of Lean's logical framework.  As such, their associated computation principles will be added as axioms rather than proved as theorems.
 
@@ -381,7 +381,7 @@ Notice the syntactic sugar we added for the "respects" relation, so that now we 
 
 We also made use of the ``operation`` type which will be formally introduced in :numref:`algebras-in-lean`.
 
-Now let's check the types of some of these newly defined constants, test the new notation, and prove that the notion of a function ``f`` respecting a relation ``R``, as defined in the :term:`LSL`, is equivalent to the assertion that ``R`` is a subset of the kernel of ``f``.
+Now let's check the types of some of these newly defined constants, test the new notation, and prove that the notion of a function ``f`` respecting a relation ``R``, as defined in the :term:`LSTL`, is equivalent to the assertion that ``R`` is a subset of the kernel of ``f``.
 
 ::
 
@@ -604,23 +604,24 @@ The axiom ``quot.sound`` given at the end of the last section asserts that ``R a
 
 Using ``quot.lift`` and ``quot.ind``, we can show that ``R'`` is the smallest equivalence relation containing ``R``. In particular, if ``R`` is already an equivalence relation, then we have ``R = R'``.
 
+Here is the beginning of the ``ualib_setoid`` namespace from the source file `ualib_setoid.lean <https://gitlab.com/ualib/lean-ualib/blob/dev_wjd/src/ualib_setoid.lean>`_.
+
 ::
 
   import ualib_quotient
 
   namespace ualib_setoid
 
-    universe u
+    universes u v
 
-    class setoid (α: Type u) :=
+    class setoid (α: Sort u) :=
     (R: α → α → Prop) (iseqv: equivalence R)
 
     namespace setoid
 
-      open setoid
-      infix `≈` := setoid.R
+      infix ` ≈ ` := setoid.R
 
-      variable (α: Type u)
+      variable (α: Sort u)
       variable [s: setoid α]
       include s
 
@@ -643,180 +644,165 @@ Given a type ``α``, a relation ``r`` on ``α``, and a proof ``p`` that ``r`` is
 
   import ualib_quotient
   namespace ualib_setoid
-    universe u
-    class setoid (α: Type u) :=
-    (R: α → α → Prop) (iseqv: equivalence R)
+    universes u v
+    class setoid (α: Sort u) :=(R: α → α → Prop) (iseqv: equivalence R)
     namespace setoid
-      open setoid
-      infix `≈` := setoid.R
-      variable (α: Type u)
-      variable [s: setoid α]
-      include s
-      theorem refl (a: α): a ≈ a :=
-      (@setoid.iseqv α s).left a
-      theorem symm {a b: α}: a ≈ b → b ≈ a :=
-      λ h, (@setoid.iseqv α s).right.left h
-      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
-      λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
-    end setoid
-
-    -- BEGIN
-    variables (α : Type u) (r : α → α → Prop) (p: equivalence r)
-
-    #check setoid.mk r p -- {R := r, iseqv := p} : setoid
-    -- END
-  end ualib_setoid
-
-Now let us define some syntactic sugar to make it a little easier to work with quotients.
-
-::
-
-  import ualib_quotient
-  namespace ualib_setoid
-    universe u
-    class setoid (α: Type u) :=
-    (R: α → α → Prop) (iseqv: equivalence R)
-    namespace setoid
-      open setoid
-      infix `≈` := setoid.R
-      variable (α: Type u)
+      infix ` ≈ ` := setoid.R
+      variable (α: Sort u)
       variable [s: setoid α]
       include s
       theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
       theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
       theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
     end setoid
+
+    -- BEGIN
+    variables (α: Sort u) (r : α → α → Prop) (p: equivalence r)
+    variables (a: α) (Q: α → α → Prop)
+
+    #check setoid.mk r p         -- {R := r, iseqv := p} : setoid α
+
+    #check ualib_quotient.quot Q -- Sort u
+    #check a/Q                   -- a/Q: ualib_quotient.quot Q
+
+    #check @ualib_quotient.quot.mk α a Q
+                                 -- a/Q: ualib_quotient.quot Q
+    -- END
+
   end ualib_setoid
 
-  -- BEGIN
+Now let us define a ``quotient`` type which will make it a little easier to work with quotients.
+
+::
+
+  import ualib_quotient
   namespace ualib_setoid
-    universe u
+    universes u v
+    class setoid (α: Sort u) :=(R: α → α → Prop) (iseqv: equivalence R)
+    namespace setoid
+      infix ` ≈ ` := setoid.R
+      variable (α: Sort u)
+      variable [s: setoid α]
+      include s
+      theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
+      theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
+    end setoid
 
-    def quotient (α : Type u) (s : setoid α) := @quot α setoid.R
-    variable (α : Type u)
+    -- BEGIN
+    def quotient (α: Sort u) (s: setoid α) := @quot α setoid.R
+
+    constant ualib_setoid.quotient.exact:
+    ∀ {α: Sort u} [setoid α] {a b: α},
+    a/setoid.R = b/setoid.R → a ≈ b
+
+    #check @quotient.exact α
+    -- ∀ [s: setoid α] {a b: α}, ⟦a⟧ = ⟦b⟧ → a ≈ b
+
+    #check @ualib_setoid.quotient.exact α (setoid.mk r p)
+    -- ∀ {a b: α}, a/setoid.R = b/setoid.R → a ≈ b
+    -- END
 
   end ualib_setoid
-  -- END
 
-The constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotient.sound`` are simply specializations of the corresponding elements of ``quot``.
+The resulting constants ``quotient.mk``, ``quotient.ind``, ``quotient.lift``, and ``quotient.sound`` are available and are simply specializations of the corresponding elements of ``quot``.
 
 The fact that type class inference can find the setoid associated to a type ``α`` has the following benefits:
 
 First, we can use the notation ``a ≈ b`` for ``setoid.R a b``, where the instance of ``setoid`` is implicit in the notation ``setoid.R``.  (The ≈ symbol is produced by typing ``\app`` or ``\approx``.)
 
-We can use the generic theorems ``setoid.refl``, ``setoid.symm``, ``setoid.trans`` to reason about the relation. Specifically with quotients we can use the generic notation ``⟦a⟧`` for ``quot.mk setoid.R`` where the instance of ``setoid`` is implicit in the notation ``setoid.R``, as well as the theorem ``quotient.exact``:
+We can use the generic theorems ``setoid.refl``, ``setoid.symm``, ``setoid.trans`` to reason about the relation. Specifically with quotients we can use the generic notation ``a/setoid.R`` for ``quot.mk setoid.R a`` where the instance of ``setoid`` is implicit in the notation ``setoid.R``, as well as the theorem ``quotient.exact``.
 
 ::
 
   import ualib_quotient
   namespace ualib_setoid
-    universe u
-    class setoid (α: Type u) :=
-    (R: α → α → Prop) (iseqv: equivalence R)
+    universes u v
+    class setoid (α: Sort u) :=(R: α → α → Prop) (iseqv: equivalence R)
     namespace setoid
-      open setoid
-      infix `≈` := setoid.R
-      variable (α: Type u)
+      infix ` ≈ ` := setoid.R
+      variable (α: Sort u)
       variable [s: setoid α]
       include s
       theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
       theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
       theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
     end setoid
-  end ualib_setoid
 
-  namespace ualib_setoid
-    universe u
+    def quotient (α: Sort u) (s: setoid α) := @quot α setoid.R
 
-    def quotient (α : Type u) (s : setoid α) := @quot α setoid.R
-    variable (α : Type u)
+    constant ualib_setoid.quotient.exact: ∀ {α: Sort u} [setoid α] {a b: α},
+    a/setoid.R = b/setoid.R → a ≈ b
+
+    variables (α: Type u) (r : α → α → Prop) (p: equivalence r)
+    variables (a: α) (Q: α → α → Prop)
 
     -- BEGIN
-    axiom quotient.exact: ∀ {α : Type u} [setoid α] {a b: α},
-    (a/setoid.R = b/setoid.R → a ≈ b)
+    variables (β : Type v) [setoid β] (b: β)
+    variable B : ualib_quotient.quot Q → Prop
+    variable h: ∀ (a: α), B (a/Q)
+
+    #check b/setoid.R             -- ualib_quotient.quot setoid.R
+
+    #check @ualib_quotient.quot.ind α Q
+    -- ualib_quotient.quot.ind:
+    -- ∀ {β: ualib_quotient.quot Q → Prop},
+    --   (∀ (a: α), β (a/Q)) → ∀ (q: ualib_quotient.quot Q), β q
+
+    #check @ualib_quotient.quot.ind α Q B h
+    -- ualib_quotient.quot.ind h:
+    -- ∀ (q: ualib_quotient.quot Q), B q
+
+    #check @ualib_quotient.quot.lift α Q
+    -- ualib_quotient.quot.lift:
+    -- Π {β: Sort u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β
+
+    #check @ualib_quotient.quot.sound α Q
+    -- ualib_quotient.quot.sound:
+    -- ∀ {a b: α}, Q a b → a/Q = b/Q
+
+    #check @ualib_setoid.quotient.exact α (setoid.mk r p)
+    -- ∀ {a b: α}, a/setoid.R = b/setoid.R → a ≈ b
     -- END
 
   end ualib_setoid
 
 Together with ``quotient.sound``, this implies that the elements of the quotient correspond exactly to the equivalence classes of elements in ``α``.
 
-Here is the full listing of the `ualib_setoid.lean <https://gitlab.com/ualib/lean-ualib/blob/dev_wjd/src/ualib_setoid.lean>`_ file.  We dissect this program below.
-
 ::
 
   import ualib_quotient
-
   namespace ualib_setoid
-
-    universe u
-
-    class setoid (α: Type u) :=
-    (R: α → α → Prop) (iseqv: equivalence R)
-
+    universes u v
+    class setoid (α: Sort u) :=(R: α → α → Prop) (iseqv: equivalence R)
     namespace setoid
-
-      infix `≈` := setoid.R
-
-      variable (α: Type u)
+      infix ` ≈ ` := setoid.R
+      variable (α: Sort u)
       variable [s: setoid α]
       include s
-
-      theorem refl (a: α): a ≈ a :=
-      (@setoid.iseqv α s).left a
-
-      theorem symm {a b: α}: a ≈ b → b ≈ a :=
-      λ h, (@setoid.iseqv α s).right.left h
-
-      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c :=
-      λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
-
+      theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
+      theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
+      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
     end setoid
-
+    def quotient (α: Sort u) (s: setoid α) := @quot α setoid.R
+    constant ualib_setoid.quotient.exact: ∀ {α: Sort u} [setoid α] {a b: α}, a/setoid.R = b/setoid.R → a ≈ b
     variables (α: Type u) (r : α → α → Prop) (p: equivalence r)
+    variables (a: α) (Q: α → α → Prop)
+    variables (β : Type v) [setoid β] (b: β)
+    variable B : ualib_quotient.quot Q → Prop
+    variable h: ∀ (a: α), B (a/Q)
 
-    #check setoid.mk r p -- {R := r, iseqv := p} : setoid
+    -- BEGIN
+    def Qeq : α → α → Prop := λ (a b : α), a/Q = b/Q
 
-    def quotient (α: Type u) (s: setoid α) := @quot α setoid.R
-    axiom quotient.exact: ∀ {α: Type u} [setoid α] {a b: α},
-    (a/setoid.R = b/setoid.R → a ≈ b)
-
-    variables {Q: α → α → Prop} (a: α) (q: equivalence Q)
-    -- test notation for quotient --
-    #check @ualib_quotient.quot.mk α a Q  -- ualib_quotient.quot Q
-    #check a/Q  -- ualib_quotient.quot Q
-
-    #check @ualib_quotient.quot.ind α Q
-    -- ∀ {β: ualib_quotient.quot Q → Prop},
-    -- (∀ (a: α), β (a/Q)) → ∀ (q: ualib_quotient.quot Q), β q
-
-    variable β : ualib_quotient.quot Q → Prop
-    variable h: ∀ (a: α), β (a/Q)
-
-    #check @ualib_quotient.quot.ind α Q β h
-    -- ∀ (q: ualib_quotient.quot Q), β q
-
-    #check @ualib_quotient.quot.lift α Q
-    -- Π {β: Type u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β
-
-    #check @ualib_quotient.quot.sound α Q
-    -- ∀ (a b: α), Q a b → a/Q = b/Q
-
-    #check @ualib_setoid.quotient.exact α
-    -- a/setoid.R = b/setoid.R → a ≈ b
-
-    def Qeq: α → α → Prop := λ (a b: α),
-    ualib_quotient.quot.mk a Q = ualib_quotient.quot.mk b Q
-
-    theorem reflQ {a: α}: @Qeq α Q a a :=
-    have h: ualib_quotient.quot.mk a Q = ualib_quotient.quot.mk a Q,
-    from sorry,
-    sorry
+    theorem reflQ {a: α} : @Qeq α Q a a :=
+    have a/Q = a/Q, from rfl, this
 
     theorem symmQ {a b: α}: @Qeq α Q a b → @Qeq α Q b a := eq.symm
 
     theorem transQ {a b c: α}:
-    @Qeq α Q a b → @Qeq α Q b c → @Qeq α Q a c :=
-    λ h₁ h₂, eq.trans h₁ h₂
+    @Qeq α Q a b → @Qeq α Q b c → @Qeq α Q a c := eq.trans
+    -- END
 
   end ualib_setoid
 
@@ -1084,192 +1070,6 @@ Here is the full listing of the `ualib_setoid.lean <https://gitlab.com/ualib/lea
 
 .. As a result, ``f₁`` is equal to ``f₂``.
 
-
--------------------------------------
-
-.. index:: !Leibniz equal, function extionsionality
-.. index:: keyword: funext
-
-.. _proof-of-funext:
-
-Proof of funext
----------------
-
-To gain some more familiarity with extensionality in Lean, we will dissect the definition of function extensionality in the `Lean Standard Library`_, as well as the proof of the ``funext`` theorem, which states that the function extensionality principle *is* equality of functions in Lean; in other words, two functions are equal iff they are :term:`Leibniz equal` (i.e., they give the same output for each input).
-
-We start with the full listing of the `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_, which resides in the ``library/init`` directory of the `Lean Standard Library`_.
-
-::
-
-  /-
-  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
-  Released under Apache 2.0 license as described in the file
-  LICENSE.
-
-  Author: Jeremy Avigad
-
-  Extensional equality for functions, and a proof of
-  function extensionality from quotients.
-  -/
-  prelude
-  import init.data.quot init.logic
-
-  universes u v
-
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop :=
-    ∀ x, f₁ x = f₂ x
-
-    local infix `~` := function.equiv
-
-    protected theorem equiv.refl (f: Π x:α, β x):
-    f ~ f := assume x, rfl
-
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}:
-    f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}:
-    f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ :=
-    λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-
-    protected theorem equiv.is_equivalence
-    (α: Sort u) (β: α → Sort v):
-    equivalence (@function.equiv α β) :=
-    mk_equivalence (@function.equiv α β)
-    (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-
-  section
-
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v):
-    setoid (Π x:α, β x) :=
-    setoid.mk (@function.equiv α β)
-              (function.equiv.is_equivalence α β)
-
-    private def extfun (α : Sort u) (β : α → Sort v):
-    Sort (imax u v) := quotient (fun_setoid α β)
-
-    private def fun_to_extfun (f: Π x:α, β x):
-    extfun α β := ⟦f⟧
-    private def extfun_app (f : extfun α β) : Π x : α, β x :=
-    assume x,
-    quot.lift_on f
-      (λ f : Π x : α, β x, f x)
-      (λ f₁ f₂ h, h x)
-
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-
-  end
-
-  attribute [intro!] funext
-
-  local infix `~` := function.equiv
-
-  instance pi.subsingleton {α : Sort u} {β : α → Sort v}
-  [∀ a, subsingleton (β a)]: subsingleton (Π a, β a) :=
-  ⟨λ f₁ f₂, funext (λ a, subsingleton.elim (f₁ a) (f₂ a))⟩
-
-The first section of the program, inside the ``function`` namespace, is simply a formalization of the easy proof that extensional equality of functions is an equivalence relation.
-
-The more interesting part appears in between the ``section`` and ``end`` delimiters.
-
-First, the ``open quotient`` directive makes the contents of the ``quotient`` namespace available.  (We reproduce that namespace in Appendix :numref:`the-standard-librarys-quotient-namespace` for easy reference.)
-
-Next, some implicit variables are defined, namely, for universes ``u`` and ``v``, we have ``α: Sort u`` and ``β: α → Sort v``.
-
-This is followed by four definitions,
-
-::
-
-  prelude
-  import init.data.quot init.logic
-  universes u v
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
-    local infix `~` := function.equiv
-    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-  section
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-
-    -- BEGIN
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v):
-    setoid (Π x:α, β x) :=
-    setoid.mk (@function.equiv α β)
-              (function.equiv.is_equivalence α β)
-
-    private def extfun (α: Sort u) (β: α → Sort v):
-    Sort (imax u v) := quotient (fun_setoid α β)
-
-    private def fun_to_extfun (f: Π x:α, β x):
-    extfun α β := ⟦f⟧
-    private def extfun_app (f: extfun α β): Π x:α, β x :=
-    assume x, 
-    quot.lift_on f (λ f: Π x:α, β x, f x) (λ f₁ f₂ h, h x)
-    -- END
-
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-
-  end
-
-The first of these creates a setoid consisting of functions of type ``Π x:α, β x`` along with the relation ``function.equiv`` (which was just proved, in the ``function`` namespace, to be an equivalence relation).
-
-The second takes this ``fun_setoid`` and uses it to define the quotient consisting of the ``function.equiv``-classes of functions of type ``Π x:α, β x``, where functions within a single class are :term:`Leibniz equal`.
-
-The third, ``fun_to_extfun``, simply maps each function ``f: Π x:α, β x`` to its equivalence class ``⟦f⟧: extfun α β``.
-
-As for ``extfun_app``, this function lifts each class ``⟦f⟧: extfun α β`` of functions back up to an actual function of type ``Π x:α, β x``.
-
-Finally, the ``funext`` theorem asserts that function extensionality *is* function equality.
-
-::
-
-  prelude
-  import init.data.quot init.logic
-  universes u v
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
-    local infix `~` := function.equiv
-    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-  section
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v): setoid (Π x:α, β x) := setoid.mk (@function.equiv α β) (function.equiv.is_equivalence α β)
-    private def extfun (α : Sort u) (β : α → Sort v): Sort (imax u v) := quotient (fun_setoid α β)
-    private def fun_to_extfun (f: Π x:α, β x): extfun α β := ⟦f⟧
-    private def extfun_app (f : extfun α β) : Π x : α, β x := assume x,
-    quot.lift_on f (λ f : Π x : α, β x, f x) (λ f₁ f₂ h, h x)
-
-    -- BEGIN
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-    -- END
-
-  end
-
 -------------------------------------
 
 .. rubric:: Footnotes
@@ -1278,10 +1078,10 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
    Some material in this chapter is borrowed from the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
 
 .. [2]
-   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some form of the axiom of :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSL` for this :math:`R`-class is :math:`⟦x⟧`.
+   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some form of the axiom of :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
 
 .. [3]
-   The definitions inside the ``ualib_quotient`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSL`.
+   The definitions inside the ``ualib_quotient`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
 
 
 

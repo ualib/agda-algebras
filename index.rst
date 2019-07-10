@@ -19,6 +19,7 @@ The Lean Universal Algebra Library
     postmodern_algebra
     postmodern_algebra_in_lean
     appendix_lean_basics
+    appendix_lsl
     glossary
     genindex
     license
