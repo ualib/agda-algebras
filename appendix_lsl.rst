@@ -48,14 +48,56 @@ Quotients
 
 To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the ``library/init`` directory of the :term:`LSTL`.
 
-We will divide the `quot.lean`_ file into three sections and consider each separately.
+We divide the `quot.lean`_ file into three parts and dissect each part separately below. 
 
 .. _the-quot-namespace:
 
 The quot namespace
 ~~~~~~~~~~~~~~~~~~
 
-In the first section some components of the :term:`LSTL` are imported and this is followed by the ``quot`` namespace.
+First, it is important to note that, in the `core.lean`_ file, some constants are initialized on which much of the code in `quot.lean`_ depends.  Specifically, the line in `core.lean`_ at which the "quotient module" is initialized is preceded by the following informative comment:
+
+::
+
+  /-
+  Initialize the quotient module, which effectively adds
+  the following definitions:
+
+  constant quot {α: Sort u} (r: α → α → Prop) : Sort u
+
+  constant quot.mk {α: Sort u} (r: α → α → Prop) (a: α) : quot r
+
+  constant quot.lift
+  {α: Sort u} {r: α → α → Prop} {β: Sort v} (f: α → β) :
+  (∀ a b: α, r a b → eq (f a) (f b)) → quot r → β
+
+  constant quot.ind
+  {α: Sort u} {r: α → α → Prop} {β: quot r → Prop} :
+  (∀ a: α, β (quot.mk r a)) → ∀ q: quot r, β q
+  -/
+  init_quotient
+
+Thus, inside the ``quot`` namespace of the `quot.lean`_ file, we can check that these constants are indeed defined and available, as follows:
+
+::
+
+  namespace quot
+
+    #check @quot -- Π {α: Sort u_1}, (α → α → Prop) → Sort u_1
+
+    #check @mk   -- Π {α: Sort u_1} (r: α → α → Prop), α → quot r
+
+    #check @lift
+    -- Π {α: Sort u_1} {r: α → α → Prop} {β: Sort u_2} (f: α → β),
+    --   (∀ (a b: α), r a b → f a = f b) → quot r → β
+
+    #check @ind
+    -- (∀ {α: Sort u_1} {r: α → α → Prop} {β: quot r → Prop},
+    --   (∀ (a: α), β (mk r a)) → ∀ (q: quot r), β q
+
+  end quot
+
+In the first part of `quot.lean`_ some components of the :term:`LSTL` are imported. This is followed by the ``quot`` namespace.
 
 ::
 
@@ -131,9 +173,10 @@ In the first section some components of the :term:`LSTL` are imported and this i
       λ a b e, psigma.eq (sound e) (h a b e)
 
       protected lemma lift_indep_pr1
-      (f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : r a b),
-      (eq.rec (f a) (sound p) : β ⟦b⟧) = f b) (q : quot r):
-      (lift (quot.indep f) (quot.indep_coherent f h) q).1 = q :=
+      ( f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : r a b),
+        (eq.rec (f a) (sound p) : β ⟦b⟧) = f b ) 
+      (q : quot r):
+      ( lift (quot.indep f) (quot.indep_coherent f h) q ).1 = q :=
       quot.ind (λ (a : α), eq.refl (quot.indep f a).1) q
 
       attribute [reducible, elab_as_eliminator]
@@ -170,13 +213,25 @@ In the first section some components of the :term:`LSTL` are imported and this i
 
   end quot
 
+Let's consider the definition of ``indep``.  Assume the following typing judgments:
+``α: Sort u``, ``r: α → α → Prop``, and ``β: quot r → Sort v``.
+
+Given an equivalence class, say, ``⟦a⟧: quot r`` the value ``β ⟦a⟧`` is a type---specifically, an inhabitant of ``Sort v``.
+
+Now consider the definition of ``indep``,
+
+  ``protected def indep (f: Π a, β ⟦a⟧) (a: α): psigma β := ⟨⟦a⟧, f a⟩``
+
+The first argument is the function :math:`f`, which is of (dependent) function type :math:`∏_{(a:α)} β ⟦a⟧`. This and a second argument :math:`a: α` are mapped by ``indep`` to the (dependent) pair,
+
+  ``indep f a = ⟨⟦a⟧, f a⟩ : psigma β``.
 
 .. _the-quotient-namespace:
 
 The quotient namespace
 ~~~~~~~~~~~~~~~~~~~~~~
 
-In the second part of the `quot.lean`_ file of the :term:`LSTL` is the ``quotient`` namespace.
+In the second part of `quot.lean`_ is the ``quotient`` namespace.
 
 ::
 
