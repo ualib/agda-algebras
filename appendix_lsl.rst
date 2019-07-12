@@ -31,6 +31,7 @@ For example, some of the most important of these objects are implemented in the 
   + `prod.lean`_
   + `quot.lean`_
   + `set.lean`_
+  + `setoid.lean`_
   + `sigma (dir)`_
 
 + In `lean/library/init/algebra`_
@@ -46,16 +47,32 @@ For example, some of the most important of these objects are implemented in the 
 Quotients
 ---------
 
-To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the ``library/init`` directory of the :term:`LSTL`.
+To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the `lean/library/init/data`_ directory of the :term:`LSTL`.
 
-We divide the `quot.lean`_ file into three parts and dissect each part separately below. 
+We will divide the `quot.lean`_ file into three parts and dissect each part separately below, but first we note that at the top of the file `quot.lean`_ are some ``import`` statements which import some components of the :term:`LSTL`---namely,
 
-.. _the-quot-namespace:
++ `sigma/basic.lean`_
++ `logic.lean`_
++ `propext.lean`_
++ `setoid.lean`_
 
-The quot namespace
-~~~~~~~~~~~~~~~~~~
+Here is the code containing these imports and a few other preliminaries.
 
-First, it is important to note that, in the `core.lean`_ file, some constants are initialized on which much of the code in `quot.lean`_ depends.  Specifically, the line in `core.lean`_ at which the "quotient module" is initialized is preceded by the following informative comment:
+::
+
+  prelude
+
+  /- We import propext here, otherwise we would need a quot.lift for propositions. -/
+  import init.data.sigma.basic init.logic init.propext init.data.setoid
+
+  universes u v
+
+  -- iff can now be used to do substitutions in a calculation
+  attribute [subst]
+  lemma iff_subst {a b : Prop} {p : Prop → Prop}
+  (h₁ : a ↔ b) (h₂ : p a) : p b := eq.subst (propext h₁) h₂
+
+After this comes the ``quot`` namespace. Before analyzing the code in that namespace, however, we pause to note that in `core.lean`_ the directive ``init_quotient`` initializes the "quotient module" and is preceded by the following informative comment:
 
 ::
 
@@ -75,9 +92,8 @@ First, it is important to note that, in the `core.lean`_ file, some constants ar
   {α: Sort u} {r: α → α → Prop} {β: quot r → Prop} :
   (∀ a: α, β (quot.mk r a)) → ∀ q: quot r, β q
   -/
-  init_quotient
 
-Thus, inside the ``quot`` namespace of the `quot.lean`_ file, we can check that these constants are indeed defined and available, as follows:
+Thus, inside the ``quot`` namespace of `quot.lean`_, these four constants---``quot``, ``mk``, ``lift``, and ``ind``---will be available, as can be easily verified with the ``#check`` directive.
 
 ::
 
@@ -97,29 +113,24 @@ Thus, inside the ``quot`` namespace of the `quot.lean`_ file, we can check that 
 
   end quot
 
-In the first part of `quot.lean`_ some components of the :term:`LSTL` are imported. This is followed by the ``quot`` namespace.
+The constant ``lift`` takes a relation ``r: α → α → Prop``, a function ``f: α → β``, a proof that ``f`` respects ``r`` and returns a function (the lift of ``f``) of type ``quot r → β``.
+
+The constant ``ind`` takes as arguments:
+
++ a relation ``r: α → α → Prop``,
++ a set ``β`` of ``r``-classes (of type ``quot r``), and
++ a proof that every ``r``-class constructed as ``mk r a`` is in ``β``
+
+and returns a proof of the assertion that *every* class of ``r`` (i.e., every ``q: quot r``) is in ``β``.
+
+.. _the-quot-namespace:
+
+The quot namespace
+~~~~~~~~~~~~~~~~~~
+
+Without further ado, here is the ``quot`` namespace.
 
 ::
-
-  /-
-  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
-  Released under Apache 2.0 license as described in the file LICENSE.
-  Author: Leonardo de Moura
-
-  Quotient types.
-  -/
-  prelude
-  /- We import propext here, otherwise we would need a quot.lift
-     for propositions. -/
-  import init.data.sigma.basic init.logic
-  import init.propext init.data.setoid
-
-  universes u v
-
-  -- iff can now be used to do substitutions in a calculation
-  attribute [subst]
-  lemma iff_subst {a b : Prop} {p : Prop → Prop}
-  (h₁ : a ↔ b) (h₂ : p a) : p b := eq.subst (propext h₁) h₂
 
   namespace quot
 
@@ -174,7 +185,7 @@ In the first part of `quot.lean`_ some components of the :term:`LSTL` are import
 
       protected lemma lift_indep_pr1
       ( f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : r a b),
-        (eq.rec (f a) (sound p) : β ⟦b⟧) = f b ) 
+        (eq.rec (f a) (sound p) : β ⟦b⟧) = f b )
       (q : quot r):
       ( lift (quot.indep f) (quot.indep_coherent f h) q ).1 = q :=
       quot.ind (λ (a : α), eq.refl (quot.indep f a).1) q
@@ -212,6 +223,36 @@ In the first part of `quot.lean`_ some components of the :term:`LSTL` are import
     end
 
   end quot
+
+The constant ``sound`` ensures that if ``(a, b)`` belongs to the relation ``r``, then the ``r``-classes of ``a`` and ``b`` are the same; that is, ``quot.mk r a = quot.mk r b``.
+
+The code ``attribute [elab_as_eliminator] lift ind`` indicates that... (**Todo**: fill this in).
+
+The ``lift_beta`` lemma states that if we are given a relation ``r`` on ``α`` and a function ``f: α → β`` and a proof that ``f`` respects ``r`` (in the sense that ``∀ a b, r a b → f a = f b``), then the lift of ``f`` to ``quot.r`` is well defined by ``lift f c (quot.mk r a) = f a`` for each ``a:α``.
+
+The ``ind_beta`` lemma says that if we are given a relation ``r`` on ``α``, a "set" ``β: quot r → Prop`` of ``r``-classes, and a proof that ``β`` contains all equivalence classes ``a/r`` of  ``quot r``...
+
+    {α : Sort u} {r : α → α → Prop} {β : quot r → Prop}
+    (p : ∀ a, β (quot.mk r a)) (a : α) :
+    (ind p (quot.mk r a) : β (quot.mk r a)) = p a := rfl
+
+    attribute [reducible, elab_as_eliminator]
+    protected def lift_on
+    {α : Sort u} {β : Sort v} {r : α → α → Prop}
+    (q : quot r) (f : α → β) (c : ∀ a b, r a b → f a = f b): β :=
+    lift f c q
+
+    attribute [elab_as_eliminator]
+    protected lemma induction_on
+    {α : Sort u} {r : α → α → Prop} {β : quot r → Prop}
+    (q : quot r) (h : ∀ a, β (quot.mk r a)) : β q :=
+    ind h q
+
+    lemma exists_rep
+    {α : Sort u} {r : α → α → Prop} (q : quot r) :
+    ∃ a : α, (quot.mk r a) = q :=
+    quot.induction_on q (λ a, ⟨a, rfl⟩)
+
 
 Let's consider the definition of ``indep``.  Assume the following typing judgments:
 ``α: Sort u``, ``r: α → α → Prop``, and ``β: quot r → Sort v``.
@@ -724,10 +765,14 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 .. _`lean/library/init/data`: https://github.com/leanprover/lean/tree/master/library/init/data
 .. _nat (dir): https://github.com/leanprover/lean/blob/master/library/init/data/nat
 .. _prod.lean: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+.. _propext.lean: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
 .. _quot.lean: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
 .. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-.. _sigma (dir): https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
 .. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
 .. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
 .. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+.. _sigma (dir): https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+.. _`sigma/basic.lean`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+.. _setoid.lean: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
