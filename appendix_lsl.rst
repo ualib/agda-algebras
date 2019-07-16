@@ -113,22 +113,28 @@ Thus, inside the ``quot`` namespace of `quot.lean`_, these four constants---``qu
 
   end quot
 
-The constant ``lift`` takes a relation ``r: α → α → Prop``, a function ``f: α → β``, a proof that ``f`` respects ``r`` and returns a function (the lift of ``f``) of type ``quot r → β``.
+The constant ``lift`` takes as arguments,
 
-The constant ``ind`` takes as arguments:
++ a relation ``r: α → α → Prop``,
++ a function ``f: α → β``, and
++ a proof that ``f`` respects ``r``,
+
+and returns a function of type ``quot r → β``, called the "lift" of ``f``.
+
+The constant ``ind`` takes as arguments,
 
 + a relation ``r: α → α → Prop``,
 + a set ``β`` of ``r``-classes (of type ``quot r``), and
-+ a proof that every ``r``-class constructed as ``mk r a`` is in ``β``
++ a proof that every ``r``-class of the form ``mk r a`` belongs to ``β``,
 
-and returns a proof of the assertion that *every* class of ``r`` (i.e., every ``q: quot r``) is in ``β``.
+and returns a proof of the assertion that *every* ``r``-class belongs to ``β``.
 
 .. _the-quot-namespace:
 
 The quot namespace
 ~~~~~~~~~~~~~~~~~~
 
-Without further ado, here is the ``quot`` namespace.
+Without further ado, here is the ``quot`` namespace, which we dissect below.
 
 ::
 
@@ -224,48 +230,147 @@ Without further ado, here is the ``quot`` namespace.
 
   end quot
 
-The constant ``sound`` ensures that if ``(a, b)`` belongs to the relation ``r``, then the ``r``-classes of ``a`` and ``b`` are the same; that is, ``quot.mk r a = quot.mk r b``.
+We examine each definition in turn.
 
-The code ``attribute [elab_as_eliminator] lift ind`` indicates that... (**Todo**: fill this in).
+.. index:: keyword: elab_as_eliminator
+.. index:: keyword: reducible
 
-The ``lift_beta`` lemma states that if we are given a relation ``r`` on ``α`` and a function ``f: α → β`` and a proof that ``f`` respects ``r`` (in the sense that ``∀ a b, r a b → f a = f b``), then the lift of ``f`` to ``quot.r`` is well defined by ``lift f c (quot.mk r a) = f a`` for each ``a:α``.
++ ``constant sound``
 
-The ``ind_beta`` lemma says that if we are given a relation ``r`` on ``α``, a "set" ``β: quot r → Prop`` of ``r``-classes, and a proof that ``β`` contains all equivalence classes ``a/r`` of  ``quot r``...
+  | If ``(a, b)`` belongs to the relation ``r``, then the ``r``-classes of ``a`` and ``b`` are the same; that is, ``quot.mk r a = quot.mk r b``.
 
-    {α : Sort u} {r : α → α → Prop} {β : quot r → Prop}
-    (p : ∀ a, β (quot.mk r a)) (a : α) :
-    (ind p (quot.mk r a) : β (quot.mk r a)) = p a := rfl
++ ``attribute [elab_as_eliminator] lift ind``
 
-    attribute [reducible, elab_as_eliminator]
-    protected def lift_on
-    {α : Sort u} {β : Sort v} {r : α → α → Prop}
-    (q : quot r) (f : α → β) (c : ∀ a b, r a b → f a = f b): β :=
-    lift f c q
+  | This tells the elaborator that, in the function application of ``lift`` and ``ind``, the arguments should be elaborated as if ``lift`` and ``ind`` were eliminators.
 
-    attribute [elab_as_eliminator]
-    protected lemma induction_on
-    {α : Sort u} {r : α → α → Prop} {β : quot r → Prop}
-    (q : quot r) (h : ∀ a, β (quot.mk r a)) : β q :=
-    ind h q
++ ``protected lemma lift_beta``
 
-    lemma exists_rep
-    {α : Sort u} {r : α → α → Prop} (q : quot r) :
-    ∃ a : α, (quot.mk r a) = q :=
-    quot.induction_on q (λ a, ⟨a, rfl⟩)
+  | If ``r`` is a relation on ``α``, if ``f: α → β`` is a function, and if we have a proof ``c`` that ``f`` respects ``r``, then the lift of ``f`` to ``quot.r`` is well defined by ``lift f c (quot.mk r a) = f a`` for each ``a:α``.
 
++ ``protected lemma ind_beta``
 
-Let's consider the definition of ``indep``.  Assume the following typing judgments:
-``α: Sort u``, ``r: α → α → Prop``, and ``β: quot r → Sort v``.
+  | Given a relation ``r`` on ``α``, a "set" ``β: quot r → Prop`` of ``r``-classes, and a proof that ``β`` contains every ``r``-class of the form ``quot.mk r a``, it holds that ``β`` contains *every* ``r``-class.
 
-Given an equivalence class, say, ``⟦a⟧: quot r`` the value ``β ⟦a⟧`` is a type---specifically, an inhabitant of ``Sort v``.
++ | ``attribute [reducible, elab_as_eliminator] protected``
+  | ``def lift_on``
 
-Now consider the definition of ``indep``,
+  | takes a relation ``r`` on ``α``, a function ``f : α → β``, a proof that ``f`` respects ``r`` and an ``r``-class, ``q``, and returns the lift of ``f`` evaluated at ``q`` (which should be equal to ``f`` evaluated at any representative of the ``r``-class ``q``).
 
-  ``protected def indep (f: Π a, β ⟦a⟧) (a: α): psigma β := ⟨⟦a⟧, f a⟩``
++ | ``attribute [elab_as_eliminator] protected``
+  | ``lemma induction_on``
 
-The first argument is the function :math:`f`, which is of (dependent) function type :math:`∏_{(a:α)} β ⟦a⟧`. This and a second argument :math:`a: α` are mapped by ``indep`` to the (dependent) pair,
+  If
 
-  ``indep f a = ⟨⟦a⟧, f a⟩ : psigma β``.
+    + ``r`` is a relation on ``α``,
+    + ``β: quot r → Prop`` is a "set" of ``r``-classes,
+    + all ``r``-classes  of the form ``quot.mk r a`` belong to ``β``,
+    + ``q`` is an arbitrary ``r``-class,
+
+  | then ``q`` belongs to ``β``.
+
++ | ``lemma exists_rep``
+
+  | Given a relation ``r`` on ``α`` and an ``r``-class ``q``, there exists a representative ``a`` of the class ``q``; that is ``∃ a, (quot.mk r a) = q``.
+
+Next is a ``section`` directive (which is actually unnecessary, since only variables---not parameters---are declared)inside of which we assume the following typing judgments:
+
+  | ``α: Sort u``,
+  | ``r: α → α → Prop``, and
+  | ``β: quot r → Sort v``.
+
+Then notation is defined so that ``⟦a⟧`` denotes ``quot.mk r a`` whenever ``a:α``.
+
++ | ``attribute [reducible] protected``
+  | ``def indep``
+
+  This function takes a (dependent) function ``f`` of type ``Π a, β ⟦a⟧`` and a representative ``a:α`` and returns the (dependent) pair ``⟨⟦a⟧, f a⟩`` of type ``psigma β``; that is,
+
+     ``indep f a = ⟨⟦a⟧, f a⟩ : psigma β``
+
+  | Note that the value ``f a`` is of type ``β ⟦a⟧``, and the latter has type ``Sort v``.
+
+Before dissecting the next lemma, consider the type of ``eq.rec``.
+
+::
+
+  #check @eq.rec
+  -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1},
+  --   C a → Π{b: α}, a = b → C b
+
+That is, ``eq.rec`` is the (dependent) function that takes an inabitant of ``C b: Sort u_1`` and returns a function of type ``Π{a: α}, b = a → C a``; the latter takes ``a`` and a proof of ``b = a`` and produces a proof of ``C b``.
+
+If ``quot.mk r: α → quot r`` and ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, which looks much like the type of ``C`` above. In the lemma``indep_coherent`` we will see a term of type ``β (quot.mk r)`` playing the role of ``C``.
+
+The function ``eq.rec`` will appear in the following hypothesis:
+
+  | ``h: ∀ (a b : α) (p: r a b),``
+  | ``( eq.rec (f a) (sound p): β ⟦b⟧ ) = f b``
+
+Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type ``Π{⟦b⟧: quot r}, ⟦b⟧ = ⟦a⟧ → β ⟦b⟧``, to which we will pass a proof ``p' : ⟦b⟧ = ⟦a⟧``, so that ``eq.rec (f a) p'`` produces the value ``f b``.
+
+The type of ``sound`` is
+
+  | ``Π {α: Sort u} {r: α → α → Prop} {a b: α},``
+  | ``r a b → quot.mk r a = quot.mk r b``
+
+so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (sound p)`` is ``f b: β ⟦b⟧``, as desired.
+
+.. protected lemma indep_coherent (f : Π a, β ⟦a⟧)
+..                      (h : ∀ (a b : α) (p : r a b), (eq.rec (f a) (sound p) : β ⟦b⟧) = f b)
+..                      : ∀ a b, r a b → quot.indep f a = quot.indep f b  :=
+.. λ a b e, psigma.eq (sound e) (h a b e)
+
++ ``protected lemma indep_coherent``.
+
+  If ``r`` is a relation on ``α``, if ``f: Π a, β ⟦a⟧``, and if
+
+    ``(eq.rec (f a) (sound p): β ⟦b⟧) = f b`` (as explained above),
+
+  | holds ``∀ (a, b)`` in ``r``, then ``quot.indep f a = quot.indep f b``; i.e., ``⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``.
+
++ ``protected lemma lift_indep_pr1``
+
+  If ``f: Π a, β ⟦a⟧``, if ``h`` is as above (see ``indep_coherent``), and if ``q`` is an ``r``-class, then
+
+    ``( lift (quot.indep f) (quot.indep_coherent f h) q ).1 = q``.
+
++ | ``attribute [reducible, elab_as_eliminator] protected``
+  | ``def rec``
+
+  This function takes ``f: Π a, β ⟦a⟧``, the assumption ``h`` above (see ``indep_coherent``), and an ``r``-class ``q``, and returns
+
+    | ``eq.rec_on (quot.lift_indep_pr1 f h q)``
+    | ``( (lift (quot.indep f) (quot.indep_coherent f h) q).2 )``
+
++ | ``attribute [reducible, elab_as_eliminator] protected``
+  | ``def rec_on``
+
+  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧``, the assumption ``h`` above (see ``indep_coherent``), and returns ``quot.rec f h q``.
+
++ | ``attribute [reducible, elab_as_eliminator] protected``
+  | ``def rec_on_subsingleton``
+
+  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧`` and returns ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
+
++ | ``attribute [reducible, elab_as_eliminator] protected``
+  | ``def hrec_on``
+
+  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧`` and a proof ``c`` of ``∀ (a b: α) (p: r a b), f a == f b`` and returns the following inhabitant of ``β q``:
+
+    | ``quot.rec_on q f``
+    | ``( λ a b p, eq_of_heq``
+
+      | ``( calc``
+
+        | ``( eq.rec (f a) (sound p) : β ⟦b⟧ )``
+
+            | ``== f a : eq_rec_heq (sound p) (f a)``
+
+          | ``... == f b : c a b p``
+
+      | ``)``
+
+    | ``)``
 
 .. todo:: dissect more of quot namespace
 
