@@ -297,48 +297,74 @@ Before dissecting the next lemma, consider the type of ``eq.rec``.
   -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1},
   --   C a → Π{b: α}, a = b → C b
 
-Thus ``eq.rec`` is the function that takes an inabitant of ``C a: Sort u_1`` and returns a function of type ``Π{b: α}, b = a → C b``; the latter takes ``b`` and a proof of ``b = a`` and produces a proof of ``C b``.
+Thus ``eq.rec`` is the function that takes an inabitant of ``C a: Sort u_1`` and produces a function of type ``Π{b: α}, b = a → C b``; the latter takes ``b`` and a proof of ``a = b`` and constructs a proof of ``C b``.
 
-If ``quot.mk r: α → quot r`` and ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, which looks much like the type of ``C`` above. In the next lemma, ``indep_coherent``, we see a term of type ``β (quot.mk r)`` playing the role of ``C``.
+If ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``.
+
+Thus, ``β (quot.mk r)`` has the same shape as the function ``C: α → Sort u_1``, and it will come as no surprise when an inhabitant of ``β (quot.mk r a)`` (``= β ⟦a⟧``) shows up in when an element of type ``C a`` is required.
 
 The function ``eq.rec`` will appear in the following hypothesis:
 
   | ``h: ∀ (a b : α) (p: r a b),``
   | ``( eq.rec (f a) (sound p): β ⟦b⟧ ) = f b``
 
-Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type ``Π{⟦b⟧: quot r}, ⟦b⟧ = ⟦a⟧ → β ⟦b⟧``, to which we will pass a proof ``p'`` of ``⟦b⟧ = ⟦a⟧``, so that ``eq.rec (f a) p'`` produces the value ``f b``.
+Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type
 
-The type of ``sound`` is
+  ``Π{⟦b⟧: quot r}, ⟦a⟧ = ⟦b⟧ → β ⟦b⟧``,
+
+to which is passed ``(sound p)``.
+
+Now, ``sound`` has type
 
   | ``Π {α: Sort u} {r: α → α → Prop} {a b: α},``
   | ``r a b → quot.mk r a = quot.mk r b``
 
-so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (sound p)`` evaluates to ``f b`` as desired. 
+so, ``p: r a b`` implies ``sound p: ⟦a⟧ = ⟦b⟧``; that is, ``sound p`` is a proof of ``⟦a⟧ = ⟦b⟧``.
 
-Here is the lemma in which this application of ``eq.rec`` appears.
+Thus, ``eq.rec (f a) (sound p)`` evaluates to ``f b`` as desired.
+
+Here is a pair of lemmas in which this application of ``eq.rec`` appears.
 
 .. protected lemma indep_coherent (f : Π a, β ⟦a⟧)
 ..                      (h : ∀ (a b : α) (p : r a b), (eq.rec (f a) (sound p) : β ⟦b⟧) = f b)
 ..                      : ∀ a b, r a b → quot.indep f a = quot.indep f b  :=
 .. λ a b e, psigma.eq (sound e) (h a b e)
+.. ``quot.indep f a = quot.indep f b``, that is,
 
 + ``protected lemma indep_coherent``.
 
-  This lemma returns a proof of ``quot.indep f a = quot.indep f b``, that is,
-  
-    ``⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``
-    
-  | when given a relation ``r`` on ``α``, a function ``f: Π a, β ⟦a⟧``, and a proof that
+  This lemma takes a relation ``r`` on ``α``, a function ``f: Π a, β ⟦a⟧``, and a proof that
 
     ``(eq.rec (f a) (sound p): β ⟦b⟧) = f b``
 
-  | holds for all ``(a, b)`` in ``r`` (as explained above).
+  holds for all ``(a, b)`` in ``r``, and constructs a proof of
+
+  | ``∀ (a, b) (p: r a b), ⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``.
+
+.. protected lemma lift_indep_pr1
+..   (f : Π a, β ⟦a⟧) (h : ∀ (a b : α) (p : r a b), (eq.rec (f a) (sound p) : β ⟦b⟧) = f b)
+..   (q : quot r) : (lift (quot.indep f) (quot.indep_coherent f h) q).1 = q  :=
+.. quot.ind (λ (a : α), eq.refl (quot.indep f a).1) q
 
 + ``protected lemma lift_indep_pr1``
 
-  This lemma takes ``f: Π a, β ⟦a⟧``, the assumption ``h`` above (see ``indep_coherent``), and an ``r``-class ``q``, and returns a proof of
+  This lemma takes the same hypotheses as those in ``indep_coherent``, plus an ``r``-class ``q``, and constructs a proof that if ``f`` respects ``r``, then the composition consisting of the map ``⟦a⟧ ↦ ⟨⟦a⟧, f a⟩`` followed by the first projection is the identity function on ``quot r`` (as one would hope).
+
+  Indeed, from the stated assumptions, ``lift_indep_pr1`` constructs a proof of
 
     ``( lift (quot.indep f) (quot.indep_coherent f h) q ).1 = q``.
+
+  Here, ``quot.indep_coherent f h`` is a proof that the function
+
+    ``quot.indep f: α → psigma β``
+
+  respects the relation ``r``; this and the function ``quot.indep f`` are passed to ``lift``, which returns a function, say, ``φ``, of type ``quot r → psigma β``.
+
+  From these data, ``lift_indep_pr1`` constructs a proof that the first component of ``φ q`` is, in fact, ``q``.
+
+  This may seem to be making something out of nothing, but an important thing to take away from the proof of ``lift_indep_pr1`` is that one can refer to elements of the quotient ``quot r`` without ever referencing a particular element (say, ``a:α``) of the base type.
+
+  | Here is a pair of definitions in which the same application of ``eq.rec`` (as described above) appears yet again.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec``
