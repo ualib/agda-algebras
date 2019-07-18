@@ -297,23 +297,25 @@ Before dissecting the next lemma, consider the type of ``eq.rec``.
   -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1},
   --   C a → Π{b: α}, a = b → C b
 
-That is, ``eq.rec`` is the (dependent) function that takes an inabitant of ``C b: Sort u_1`` and returns a function of type ``Π{a: α}, b = a → C a``; the latter takes ``a`` and a proof of ``b = a`` and produces a proof of ``C b``.
+Thus ``eq.rec`` is the function that takes an inabitant of ``C a: Sort u_1`` and returns a function of type ``Π{b: α}, b = a → C b``; the latter takes ``b`` and a proof of ``b = a`` and produces a proof of ``C b``.
 
-If ``quot.mk r: α → quot r`` and ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, which looks much like the type of ``C`` above. In the lemma``indep_coherent`` we will see a term of type ``β (quot.mk r)`` playing the role of ``C``.
+If ``quot.mk r: α → quot r`` and ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, which looks much like the type of ``C`` above. In the next lemma, ``indep_coherent``, we see a term of type ``β (quot.mk r)`` playing the role of ``C``.
 
 The function ``eq.rec`` will appear in the following hypothesis:
 
   | ``h: ∀ (a b : α) (p: r a b),``
   | ``( eq.rec (f a) (sound p): β ⟦b⟧ ) = f b``
 
-Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type ``Π{⟦b⟧: quot r}, ⟦b⟧ = ⟦a⟧ → β ⟦b⟧``, to which we will pass a proof ``p' : ⟦b⟧ = ⟦a⟧``, so that ``eq.rec (f a) p'`` produces the value ``f b``.
+Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type ``Π{⟦b⟧: quot r}, ⟦b⟧ = ⟦a⟧ → β ⟦b⟧``, to which we will pass a proof ``p'`` of ``⟦b⟧ = ⟦a⟧``, so that ``eq.rec (f a) p'`` produces the value ``f b``.
 
 The type of ``sound`` is
 
   | ``Π {α: Sort u} {r: α → α → Prop} {a b: α},``
   | ``r a b → quot.mk r a = quot.mk r b``
 
-so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (sound p)`` is ``f b: β ⟦b⟧``, as desired.
+so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (sound p)`` evaluates to ``f b`` as desired. 
+
+Here is the lemma in which this application of ``eq.rec`` appears.
 
 .. protected lemma indep_coherent (f : Π a, β ⟦a⟧)
 ..                      (h : ∀ (a b : α) (p : r a b), (eq.rec (f a) (sound p) : β ⟦b⟧) = f b)
@@ -322,15 +324,19 @@ so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (s
 
 + ``protected lemma indep_coherent``.
 
-  If ``r`` is a relation on ``α``, if ``f: Π a, β ⟦a⟧``, and if
+  This lemma returns a proof of ``quot.indep f a = quot.indep f b``, that is,
+  
+    ``⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``
+    
+  | when given a relation ``r`` on ``α``, a function ``f: Π a, β ⟦a⟧``, and a proof that
 
-    ``(eq.rec (f a) (sound p): β ⟦b⟧) = f b`` (as explained above),
+    ``(eq.rec (f a) (sound p): β ⟦b⟧) = f b``
 
-  | holds ``∀ (a, b)`` in ``r``, then ``quot.indep f a = quot.indep f b``; i.e., ``⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``.
+  | holds for all ``(a, b)`` in ``r`` (as explained above).
 
 + ``protected lemma lift_indep_pr1``
 
-  If ``f: Π a, β ⟦a⟧``, if ``h`` is as above (see ``indep_coherent``), and if ``q`` is an ``r``-class, then
+  This lemma takes ``f: Π a, β ⟦a⟧``, the assumption ``h`` above (see ``indep_coherent``), and an ``r``-class ``q``, and returns a proof of
 
     ``( lift (quot.indep f) (quot.indep_coherent f h) q ).1 = q``.
 
@@ -345,17 +351,17 @@ so, ``p: r a b`` implies ``sound p: ⟦b⟧ = ⟦a⟧``; thus, ``eq.rec (f a) (s
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on``
 
-  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧``, the assumption ``h`` above (see ``indep_coherent``), and returns ``quot.rec f h q``.
+  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧``, and the assumption ``h`` above (see ``indep_coherent``), and returns ``quot.rec f h q``.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on_subsingleton``
 
-  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧`` and returns ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
+  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def hrec_on``
 
-  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧`` and a proof ``c`` of ``∀ (a b: α) (p: r a b), f a == f b`` and returns the following inhabitant of ``β q``:
+  This function takes an ``r``-class ``q``, a function ``f: Π a, β ⟦a⟧``, and a proof ``c`` of ``∀ (a b: α) (p: r a b), f a == f b``, and returns the following inhabitant of ``β q``:
 
     | ``quot.rec_on q f``
     | ``( λ a b p, eq_of_heq``
