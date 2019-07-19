@@ -283,45 +283,54 @@ Then notation is defined so that ``⟦a⟧`` denotes ``quot.mk r a`` whenever ``
 + | ``attribute [reducible] protected``
   | ``def indep``
 
-  This function takes a (dependent) function ``f`` of type ``Π a, β ⟦a⟧`` and a representative ``a:α`` and returns the (dependent) pair ``⟨⟦a⟧, f a⟩`` of type ``psigma β``; that is,
+  Before dissecting the definition of ``indep``, recall that if ``α:Sort u`` and ``β:α → Sort v``, then ``psigma β`` is the dependent pair type, ``∑(a:α),β a``, each inhabitant of which has the form ``⟨a, b⟩`` for some ``a:α`` and ``b:β a``.
 
-     ``indep f a = ⟨⟦a⟧, f a⟩ : psigma β``
+  In particular, if ``r: α → α → Prop`` is a relation on ``α``, and ``β: quot r → Sort v``, then ``psigma β`` is the dependent pair type ``∑ (q:quot r), β q``, each inhabitant of which has the form ``⟨q, b⟩`` for some ``q: quot r`` and ``b: β q``, and of course ``⟨q, b⟩ = ⟨⟦a⟧, b⟩`` for some ``a:α`` and ``b: β ⟦a⟧``
 
-  | Note that the value ``f a`` is of type ``β ⟦a⟧``, and the latter has type ``Sort v``.
+  Thus, if ``β: quot r → Sort v`` and ``f: Π (a:α), β ⟦a⟧``, then ``indep f`` yields a function of type ``psigma β = ∑ (q: quot r), β q`` that maps each ``r``-class ``q`` to the pair ``⟨q, b⟩ = ⟨⟦a⟧, f a⟩``. (Here we explicitly mention a particular representative ``a:α`` of the class ``q`` for clarity.)
 
-Before dissecting the next lemma, consider the type of ``eq.rec``.
+To dissect the next lemma, we must first make sense of the ``eq.rec`` function.
+
+The inductive type ``eq`` is defined in the file `core.lean`_ as follows:
 
 ::
 
+  namespace hidden
+  -- BEGIN
+  inductive eq {α: Sort u} (a: α): α → Prop
+  | refl: eq a
+
   #check @eq.rec
   -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1},
-  --   C a → Π{b: α}, a = b → C b
+  --   C a → Π {b:α}, a = b → C b
+  -- END
+  end hidden
 
-Thus ``eq.rec`` is the function that takes an inabitant of ``C a: Sort u_1`` and produces a function of type ``Π{b: α}, b = a → C b``; the latter takes ``b`` and a proof of ``a = b`` and constructs a proof of ``C b``.
+Thus ``eq.rec`` is the function that takes an inhabitant of ``C a: Sort u_1`` and produces a function of type ``Π {b:α}, a = b → C b``, which in turn maps ``b:α``, along with a proof of ``a = b``, to an inhabitant (or proof) of ``C b``.
 
-If ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``.
-
-Thus, ``β (quot.mk r)`` has the same shape as the function ``C: α → Sort u_1``, and it will come as no surprise when an inhabitant of ``β (quot.mk r a)`` (``= β ⟦a⟧``) shows up in when an element of type ``C a`` is required.
+Now, if ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, so ``β (quot.mk r)`` has the same shape as the function ``C: α → Sort u_1``. Thus, it will come as no surprise when an inhabitant of ``β (quot.mk r a)`` (``= β ⟦a⟧``) shows up later in place of an element of type ``C a``.
 
 The function ``eq.rec`` will appear in the following hypothesis:
 
-  | ``h: ∀ (a b : α) (p: r a b),``
+  | ``h: ∀ (a b: α) (p: r a b),``
   | ``( eq.rec (f a) (sound p): β ⟦b⟧ ) = f b``
 
-Here, ``f a : β ⟦a⟧``, so  ``eq.rec (f a)`` produces a function of type
+Here, ``f a`` has type ``β ⟦a⟧``, so ``eq.rec (f a)`` produces a function of type
 
-  ``Π{⟦b⟧: quot r}, ⟦a⟧ = ⟦b⟧ → β ⟦b⟧``,
+  ``Π {⟦b⟧: quot r}, ⟦a⟧ = ⟦b⟧ → β ⟦b⟧``,
 
-to which is passed ``(sound p)``.
+to which is passed a proof of ``⟦a⟧ = ⟦b⟧``---namely, ``sound p``.
 
-Now, ``sound`` has type
+(To see that ``sound p`` is a proof of ``⟦a⟧ = ⟦b⟧``, recall that ``sound`` has type
 
   | ``Π {α: Sort u} {r: α → α → Prop} {a b: α},``
   | ``r a b → quot.mk r a = quot.mk r b``
 
-so, ``p: r a b`` implies ``sound p: ⟦a⟧ = ⟦b⟧``; that is, ``sound p`` is a proof of ``⟦a⟧ = ⟦b⟧``.
+so, ``p: r a b`` implies ``sound p`` has type ``⟦a⟧ = ⟦b⟧``.)
 
-Thus, ``eq.rec (f a) (sound p)`` evaluates to ``f b`` as desired.
+Thus, ``eq.rec (f a) (sound p)`` evaluates to something of type ``β ⟦b⟧``, as desired.
+
+The assumption ``h`` given above asserts that the "something" is, in fact, ``f b``.
 
 Here is a pair of lemmas in which this application of ``eq.rec`` appears.
 
@@ -333,9 +342,13 @@ Here is a pair of lemmas in which this application of ``eq.rec`` appears.
 
 + ``protected lemma indep_coherent``.
 
-  This lemma takes a relation ``r`` on ``α``, a function ``f: Π a, β ⟦a⟧``, and a proof that
+  Suppose a function ``f: Π (a:α), β ⟦a⟧`` respects a relation ``r: α → α → Prop`` in the following sense:
 
-    ``(eq.rec (f a) (sound p): β ⟦b⟧) = f b``
+    ``∀ (a b: α), r a b → f a = f b``
+
+  Then the function ``quot.indep f`` takes a relation ``r`` on ``α``, a function ``f: Π a, β ⟦a⟧``, and a proof that
+
+    ``( eq.rec (f a) (sound p): β ⟦b⟧ ) = f b``
 
   holds for all ``(a, b)`` in ``r``, and constructs a proof of
 
@@ -348,7 +361,7 @@ Here is a pair of lemmas in which this application of ``eq.rec`` appears.
 
 + ``protected lemma lift_indep_pr1``
 
-  This lemma takes the same hypotheses as those in ``indep_coherent``, plus an ``r``-class ``q``, and constructs a proof that if ``f`` respects ``r``, then the composition consisting of the map ``⟦a⟧ ↦ ⟨⟦a⟧, f a⟩`` followed by the first projection is the identity function on ``quot r`` (as one would hope).
+  This lemma takes the same hypotheses as those in ``indep_coherent``, plus an ``r``-class ``q``, and constructs a proof of the following: if the function ``quot.indep f: α → psigma β``---taking each ``a:α`` to ``⟨⟦a⟧, f a⟩``---respects ``r`` in the sense that ``r a b`` implies ``⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``, then the composition consisting of the map ``⟦a⟧ ↦ ⟨⟦a⟧, f a⟩`` followed by the first projection is the identity function on ``quot r`` (as one would hope).
 
   Indeed, from the stated assumptions, ``lift_indep_pr1`` constructs a proof of
 
