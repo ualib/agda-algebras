@@ -6,9 +6,36 @@
 Inductively Defined Types
 =========================
 
-A primary motivation for this project was our observation that, on the one hand, many important constructs in universal algebra can be defined inductively, and on the other hand, type theory in general, and Lean in particular, offers excellent support for defining inductive types and powerful tactics for proving their properties.
+(`The chapter on inductive types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html>`_ in the `Theorem Proving in Lean`_ tutorial gives a nice presentation of this topic. We start our presentation by quoting four key points from the start of `that chapter <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html>`_.)
 
-These two facts suggest that there should be much to gain from implementing universal algebra in an expressive type system that offers powerful tools for proving theorems about inductively defined types.  Examples demonstrating how this vision manifests in Lean code are provided in :numref:`Sections %s <subalgebras-in-lean>`, :numref:`%s <clones-in-lean>` and :numref:`%s <terms-in-lean>`.
+#. "Lean's formal foundation includes basic types, ``Prop, Type 0, Type 1, ...``, and allows for the formation of :term:`dependent function types <dependent function type>`, ``Π x : α, β``."
+
+#. "In Lean's library, every concrete type other than the universes and every type constructor other than ``Pi`` is an instance of a general family of type constructions known as *inductive types*."
+
+#. "It is remarkable that it is possible to construct a substantial edifice of mathematics based on nothing more than the type universes, Pi types, and inductive types; everything else follows from those."
+
+#. "Intuitively, an inductive type is built up from a specified list of constructors. In Lean, the syntax for specifying such a type is as follows:
+
+   .. code-block:: text
+
+       inductive foo : Sort u
+       | constructor₁ : ... → foo
+       | constructor₂ : ... → foo
+       ...
+       | constructorₙ : ... → foo
+
+   The intuition is that each constructor specifies a way of building new objects of type ``foo``, possibly from previously constructed values. The type ``foo`` consists of nothing more than the objects that are constructed in this way."
+
+------------------------------
+
+.. _the-recursor:
+
+The Recursor
+------------
+
+Each inductively defined type, say ``foo``, is accompanied by an elimination principle known as a **recursor** (denoted by ``foo.rec`` in Lean). This elimination principle is what makes the type "inductive"; it allows us to define a function on ``foo`` by assigning values for each of ``foo``'s constructors.
+
+.. todo:: complete this section; include an example.
 
 .. \ref{sec:leans-hierarchy-of-sorts-and-types})
 
@@ -419,3 +446,4 @@ Finally, we check that the foregoing definition is indeed a clone and that it is
 
 .. _master: https://gitlab.com/ualib/lean-ualib/tree/master
 
+.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html

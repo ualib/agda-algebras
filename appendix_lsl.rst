@@ -230,6 +230,7 @@ Without further ado, here is the ``quot`` namespace, which we dissect below.
 
   end quot
 
+
 We examine each definition in turn.
 
 .. index:: keyword: elab_as_eliminator
@@ -280,6 +281,9 @@ Next is a ``section`` directive (which is actually unnecessary, since only varia
 
 Then notation is defined so that ``⟦a⟧`` denotes ``quot.mk r a`` whenever ``a:α``.
 
+Temporary subsection (delete later)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 + | ``attribute [reducible] protected``
   | ``def indep``
 
@@ -288,15 +292,15 @@ Then notation is defined so that ``⟦a⟧`` denotes ``quot.mk r a`` whenever ``
     | ``attribute [reducible] protected``
     | ``def indep (f: Π a, β ⟦a⟧) (a: α): psigma β := ⟨⟦a⟧, f a⟩``
 
-  Before dissecting this definition, recall that if ``α:Sort u`` and ``β:α → Sort v``, then ``psigma β`` is the dependent pair type, ``∑(a:α),β a``, each inhabitant of which has the form ``⟨a, b⟩`` for some ``a:α`` and ``b:β a``.
+  Before dissecting this definition, recall that if ``α:Sort u`` and ``β:α → Sort v``, then ``psigma β`` is the dependent pair type, ``∑(a:α),β a``, each inhabitant of which has the form ``⟨a, b⟩`` for some ``a:α`` and ``b: β a``.
 
   In particular, if ``r: α → α → Prop`` is a relation on ``α``, and ``β: quot r → Sort v``, then ``psigma β`` is the dependent pair type ``∑ (q:quot r), β q``, each inhabitant of which has the form ``⟨q, b⟩ = ⟨⟦a⟧, b⟩`` for some ``a:α`` and ``b: β ⟦a⟧``.
 
-  Thus, if ``β: quot r → Sort v`` and ``f: Π (a:α), β ⟦a⟧``, then ``indep f`` is a function that takes each ``a:α`` to the pair ``⟨⟦a⟧, f a⟩`` in ``psigma β``; that is, we have the following typing judgment:
+  Thus, if ``β: quot r → Sort v`` and ``f: Π (a:α), β ⟦a⟧``, then ``indep f`` is a function that maps ``a:α`` to the pair ``⟨⟦a⟧, f a⟩`` in ``psigma β``; that is, we have the following typing judgment:
 
     ``quot.indep f: α → psigma β``.
 
-  Let us pause to check the type of ``quot.sound`` and ``quot.indep f`` in Lean.
+  Let us pause to check this, as well as the types of ``quot.mk`` and ``quot.sound``, in Lean.
 
   ::
 
@@ -308,13 +312,14 @@ Then notation is defined so that ``⟦a⟧`` denotes ``quot.mk r a`` whenever ``
 
     #check quot.indep f      -- α → psigma β
 
+    #check @quot.mk
+    -- Π {α: Sort u_1} (r: α → α → Prop), α → quot r
+
     #check @quot.sound
     -- ∀ {α: Sort u_1} {r: α → α → Prop} {a b: α},
     -- r a b → mk r a = mk r b
 
-To dissect the next lemma, we must first make sense of the ``eq.rec`` function.
-
-The inductive type ``eq`` is defined in the file `core.lean`_ as follows:
+Before dissecting the next lemma, consider the ``eq.rec`` function. The inductive type ``eq`` is defined in the file `core.lean`_ as follows:
 
 ::
 
@@ -325,7 +330,9 @@ The inductive type ``eq`` is defined in the file `core.lean`_ as follows:
   -- END
   end hidden
 
-Checking the types of ``eq.rec`` and ``eq.rec_on`` (which Lean generates automatically, since ``eq`` is an inductive type), we have
+Each inductively defined type ``T`` (see :numref:`inductively-defined-types`) comes with an elimination principle that manifests in Lean as the two :term:`recursors <recursor>` called ``T.rec`` and ``T.rec_on``. Lean automatically generates such :term:`recursors <recursor>` whenever an inductive type is defined.
+
+Let's check the types of the recursors associated with the inductively defined type ``eq``.
 
 ::
 
@@ -344,9 +351,9 @@ Checking the types of ``eq.rec`` and ``eq.rec_on`` (which Lean generates automat
   -- END
   end hidden
 
-Thus ``eq.rec`` is the function that takes an inhabitant of ``C a: Sort u_1`` and produces a function of type ``Π {b:α}, a = b → C b``, which in turn maps ``b:α``, along with a proof of ``a = b``, to an inhabitant (or proof) of ``C b``.
+Thus ``eq.rec`` is the :term:`recursor` that takes an inhabitant of ``C a: Sort u_1`` and produces a function of type ``Π {b:α}, a = b → C b``. The latter evidently takes each ``b:α`` and proof of ``a = b`` and constructs an inhabitant (or proof) of ``C b``.
 
-Now, if ``β: quot r → Sort v``, then ``β (quot.mk r): α → Sort v``, so ``β (quot.mk r)`` has the same shape as the function ``C: α → Sort u_1``. Thus, it will come as no surprise when an inhabitant of ``β (quot.mk r a)`` (``= β ⟦a⟧``) shows up later in place of an element of type ``C a``.
+Now, if ``β: quot r → Sort v``, then ``β (mk r): α → Sort v``, so ``β (mk r)`` has the same shape as the function ``C: α → Sort u_1``. Thus, it will come as no surprise when an inhabitant of ``β (mk r a)`` (``= β ⟦a⟧``) shows up later in place of an element of type ``C a``.
 
 The function ``eq.rec`` will be used below in hypotheses like the following:
 

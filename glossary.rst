@@ -268,9 +268,9 @@ Nomenclature
       
       In Lean, one defines function extensionality for functions of (dependent) type :math:`Π(x:α), β x` as follows:
       
-      ::
+      .. code-block:: lean
       
-        def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
+         def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
 
     functor
       A **functor** :math:`F : \mathcal C → \mathcal D` consists of a function :math:`F_0` that maps objects of :math:`\mathcal C` to objects of :math:`\mathcal D` and a function :math:`F_1` that maps morphisms of :math:`\mathcal C` to morphisms of :math:`\mathcal D` such that :math:`F` preserves (co)domains of morphisms, identities, and compositions.
@@ -306,8 +306,10 @@ Nomenclature
       A subset :math:`I` of a :term:`preorder` :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
     inductive type
-      .. todo:: insert definition
-
+      A type is called **inductive** or **inductively defined** if...
+      
+      (See also: :numref:`inductively-defined-types` and the :term:`definition of the recursor <recursor>`.)
+      
     initial object
       An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
      
@@ -332,8 +334,8 @@ Nomenclature
     law of the excluded middle
       This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds. (See also the `LEM Section <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html?highlight=reduction%20rule#the-law-of-the-excluded-middle>`_ of the :term:`TPIL`.)
 
-    logically equivalent
-      Propositions :math:`P` and :math:`Q` are **logically equivalent** provided :math:`P` implies :math:`Q` and :math:`Q` implies :math:`P`.
+    lifts
+      For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
 
     Lean
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting dependent types and based on :term:`CiC`; url: https://leanprover.github.io/
@@ -343,6 +345,9 @@ Nomenclature
 
     locally small category
       A category :math:`\mathcal C` is **locally small** if for every pair :math:`A`, :math:`B` of objects in :math:`\mathcal C` the collection of morphisms from :math:`A` to :math:`B` is a set.
+
+    logically equivalent
+      Propositions :math:`P` and :math:`Q` are **logically equivalent** provided :math:`P` implies :math:`Q` and :math:`Q` implies :math:`P`.
 
     metaprogram
       a program whose purpose is to modify the behavior of other programs; :term:`proof tactics <proof tactic>` form an important class of metaprograms.
@@ -399,7 +404,7 @@ Nomenclature
       A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
 
     pi type
-      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`.
+      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`. (See also the `section on dependent types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ tutorial.)
 
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
@@ -437,6 +442,9 @@ Nomenclature
     quotient
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
 
+    recursor
+      Each inductively defined type ``T`` is accompanied by an elimination principle known as a **recursor** (denoted by ``T.rec`` in Lean). It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors. (See also :numref:`inductively-defined-types`.)
+
     reflexive
       A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
 
@@ -448,9 +456,6 @@ Nomenclature
 
     relational structure
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
-
-    lifts
-      For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
 
     respects
       Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
