@@ -115,7 +115,7 @@ Nomenclature
       see :term:`Cat`
 
     Choice
-      .. todo:: insert definition
+      is short for the `Axiom of Choice <https://en.wikipedia.org/wiki/Axiom_of_choice>`_.
 
     chain
       Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
