@@ -351,7 +351,7 @@ Let's check the types of the recursors associated with the inductively defined t
 Thus ``eq.rec`` takes an inhabitant of ``C a: Sort u_1`` and produces a function of type
 
   ``Π {b:α}, a = b → C b``.
-  
+
 The latter evidently takes ``b:α`` and proof of ``a = b`` and constructs an inhabitant (proof) of ``C b``.
 
 Recall that ``mk r: α → quot r``, so if ``β: quot r → Sort v``, then ``β (mk r): α → Sort v``. Therefore, ``β (mk r)`` has the same shape as the function ``C: α → Sort u_1``, so it will come as no surprise when an element of type ``β (mk r a)`` (``= β ⟦a⟧``) shows up later where an inhabitant of ``C a`` is called for.
@@ -905,7 +905,7 @@ This is followed by four definitions,
     private def fun_to_extfun (f: Π x:α, β x):
     extfun α β := ⟦f⟧
     private def extfun_app (f: extfun α β): Π x:α, β x :=
-    assume x, 
+    assume x,
     quot.lift_on f (λ f: Π x:α, β x, f x) (λ f₁ f₂ h, h x)
     -- END
 

@@ -68,6 +68,8 @@ This is a work in progress and any feedback you can provide us with would be muc
 
 ---------------------------
 
+For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,Nederpelt:2014,HoTT:2013`.
+
 .. _vscode: https://code.visualstudio.com/
 
 .. _lean extension: https://github.com/leanprover/vscode-lean
