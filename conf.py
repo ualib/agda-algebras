@@ -119,6 +119,7 @@ html_theme_options = {
     'code_bg': 'white',
     'extra_nav_links': {
         #        'PDF version': 'ualib.pdf',
+        'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
         'Logical Foundations Home': 'https://logicalfoundations.gitlab.io/'
     },
     # 'sidebar_width' : '200px',
