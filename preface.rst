@@ -52,6 +52,36 @@ Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful,
 
 Finally, it is assumed that, while reading this manual, the reader is actively experimenting with Lean using `vscode`_ with its `lean extension`_ installed.  While Emacs is another excellent means of interfacing with Lean, some of our instructions may not work in that environment.  (For example, we will explain how one produces certain special unicode characters, and the procedure may be different for other IDE's.)
 
+-------------------------
+
+Installing lean-ualib
+---------------------
+
+The main repository for lean-ualib is https://gitlab.com/ualib/lean-ualib.
+
+There are installation instructions in the main README.md file in that repository, but here is a summary.
+
+(We assume you have the ``lean`` and ``leanpkg`` programs installed on your machine. If not, follow the directions on `the main Lean website <Lean>`_ to install them.)
+
+#. clone the repository with, e.g.,
+
+   ```sh
+   git clone git@gitlab.com:ualib/lean-ualib.git
+   ```
+
+   OR
+
+   ```sh
+   git clone https://gitlab.com/ualib/lean-ualib.git
+   ```
+
+#. Change into the lean-ualib directory and run `leanpkg build`:
+
+   ```sh
+   cd lean-ualib;
+   leanpkg build
+   ```
+
 -----------------------------------
 
 Acknowledgments
