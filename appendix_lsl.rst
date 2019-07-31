@@ -339,12 +339,12 @@ Let's check the types of the recursors associated with the inductively defined t
 
   -- BEGIN
   #check @eq.rec
-  -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1},
+  -- Π {α: Sort u} {a:α} {C: α → Sort v},
   --   C a → Π {b:α}, a = b → C b
 
   #check @eq.rec_on
-  -- Π {α: Sort u_2} {a:α} {C: α → Sort u_1} {a_1:α},
-  --   a = a_1 → C a = C a_1
+  -- Π {α: Sort u} {a:α} {C: α → Sort v} {b:α},
+  --   a = b → C a → C b
   -- END
   end hidden
 
@@ -437,13 +437,13 @@ Temporary subsection (delete later)
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec``
 
-  This function takes the following (ordered) list of arguments:
+  For universe ``v`` and ``β: quot r → Sort v``, the function ``quot.rec`` takes the arguments
 
     1. ``f: Π a, β ⟦a⟧``,
-    2. ``h`` ( = assumption ``(‡)`` above),
+    2. ``h = (‡)`` (defined above),
     3. ``q: quot r``,
 
-  and returns the following element of type ``β q``:
+  and returns the following inhabitant of ``β q``:
 
     | ``eq.rec_on (quot.lift_indep_pr1 f h q)``
     | ``( (lift (quot.indep f) (quot.indep_coherent f h) q).2 )``
@@ -464,15 +464,29 @@ Temporary subsection (delete later)
 
     ``lift (quot.indep f) (quot.indep_coherent f h)``
 
-  is the function which takes ``q: quot r`` to the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩``, for all ``a:α`` satisfying ``⟦a⟧ = q``.  Evidently, taking the second projection of this pair gives just ``y`` (or ``f a``).
+  is the function ``φ: quot r → psigma β`` which takes ``q: quot r`` to the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩``, for all ``a:α`` satisfying ``⟦a⟧ = q``.
 
-  Next, recall that ``lift_indep_pr1 f h q`` is a proof that the first projection of ``φ q`` is ``q``.
+  Evidently, taking the second projection of the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩`` gives ``y`` (or ``f a``).
+
+  Next, recall that ``quot.lift_indep_pr1 f h q`` is a proof that the first projection of ``φ`` is the identity function on ``quot r``.
+
+  Let ``B := id`` be the identity function on ``quot r``.
+
+  Let ``A := (λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)``.
+
+  Then ``A`` and ``B`` have type ``quot r → quot r`` and ``quot.lift_indep_pr1 f h q`` is a proof that ``A = B``.
 
   As the directive ``#check @eq.rec_on`` shows, the type of ``eq.rec_on`` is
 
-    ``Π {α: Sort u} {a:α} {C: α → Sort v} {b:α}, a = b → C a = C b``.
+    ``Π {α: Sort u} {a:α} {C: α → Sort v} {b:α}, a = b → C a → C b``.
 
-  We just saw that ``quot.lift_indep_pr1 f h q`` gives a proof that the composition ``(λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)`` is the identity function on ``quot r``.
+  In the present case, we have ``α := quot r → quot r``, and ``C: (quot r → quot r) → Sort v``.
+
+  All told, the function ``quot.rec`` yields a proof of ``C B`` from the following data:
+
+    + two functions ``A B: quot r → quot r``,
+    + a proof of ``A = B``, and
+    + a proof of ``C A``
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on``
@@ -481,14 +495,18 @@ Temporary subsection (delete later)
 
     1. ``q: quot r``,
     2. ``f: Π a, β ⟦a⟧``,
-    3. ``h`` (defined in ``(‡)`` above),
+    3. ``h = (‡)`` (defined above),
 
   and returns ``quot.rec f h q``.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on_subsingleton``
 
-  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
+  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns
+
+    ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
+
+  A ``subsingleton`` type is a type inhabited by exactly one element.  See :numref:`subsingleton-type-class` for the definition.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def hrec_on``
@@ -959,6 +977,61 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 
 .. todo:: finish dissecting funext proof
 
+-----------------------------------
+
+.. _subsingleton-type-class:
+
+Subsingleton type class
+-----------------------
+
+The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_subsingleton`` and related theorems. Any type inhabited by a single element is a subsingleton type. Here is the definition.
+
+::
+
+  class inductive subsingleton (α: Sort u): Prop
+  | intro (h: ∀ a b: α, a = b): subsingleton
+
+  protected def subsingleton.elim {α: Sort u}
+  [h: subsingleton α]: ∀ (a b: α), a = b :=
+  subsingleton.rec (λ p, p) h
+
+  protected def subsingleton.helim {α β: Sort u}
+  [h: subsingleton α] (h: α = β): ∀ (a: α) (b: β), a == b :=
+  eq.rec_on h (λ a b: α, heq_of_eq (subsingleton.elim a b))
+
+  instance subsingleton_prop (p: Prop): subsingleton p :=
+  ⟨λ a b, proof_irrel a b⟩
+
+  instance (p: Prop): subsingleton (decidable p) :=
+  subsingleton.intro
+  ( λ d₁,
+    match d₁ with
+    | (is_true t₁)  :=
+      ( λ d₂,
+        match d₂ with
+        | (is_true t₂)  := eq.rec_on (proof_irrel t₁ t₂) rfl
+        | (is_false f₂) := absurd t₁ f₂
+        end
+      )
+    | (is_false f₁) :=
+      ( λ d₂,
+        match d₂ with
+        | (is_true t₂)  := absurd t₂ f₁
+        | (is_false f₂) := eq.rec_on (proof_irrel f₁ f₂) rfl
+        end
+      )
+  end)
+
+  protected lemma rec_subsingleton {p: Prop} [h: decidable p]
+  {h₁: p → Sort u} {h₂: ¬p → Sort u}
+  [h₃: Π (h: p), subsingleton (h₁ h)]
+  [h₄: Π (h: ¬p), subsingleton (h₂ h)]:
+  subsingleton (decidable.rec_on h h₂ h₁) :=
+  match h with
+  | (is_true h)  := h₃ h
+  | (is_false h) := h₄ h
+  end
+
 
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 
@@ -1015,7 +1088,6 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 .. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
 .. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
-
 .. _sigma (dir): https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
 .. _`sigma/basic.lean`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
 .. _setoid.lean: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
