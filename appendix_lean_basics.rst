@@ -85,6 +85,52 @@ Pattern matching
 
 .. todo:: complete this section
 
+------------------------------------------------
+
+.. _the-elaboration-engine:
+
+Elaboration engine
+------------------
+
+On top of the Lean_ kernel there is a powerful *elaboration engine* that can
+
+#. infer implicit universe variables;
+
+#. infer implicit arguments, using higher order unification;
+
+#. support overloaded notation or declarations;
+
+#. insert coercions;
+
+#. infer implicit arguments using type classes;
+
+#. convert readable proofs to proof terms
+
+#. construct terms using tactics
+
+Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
+
+(For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
+
+----------------------------------------------------------
+
+.. _type-classes:
+
+Type Classes
+-------------
+
+The `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in `TPL`_ provides a nice explanation of **type classes**.  Here we excerpt a few highlights from that chapter.
+
+"Any family of types can be marked as a type class. We can then declare particular elements of a type class to be instances. These provide hints to the elaborator: any time the elaborator is looking for an element of a type class, it can consult a table of declared instances to find a suitable element.
+
+"More precisely, there are three steps involved:
+
++ First, we declare a family of inductive types to be a type class.
++ Second, we declare instances of the type class.
++ Finally, we mark some implicit arguments with square brackets instead of curly brackets, to inform the elaborator that these arguments should be inferred by the type class mechanism."
+
+See the `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in `TPL`_ for more details.
+
 ----------------------------------------------------------
 
 .. _coercion:
@@ -131,32 +177,6 @@ In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``. The
    class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
    (F : a → Sort v) (coe : Π x, F x)
 
-------------------------------------------------
-
-.. _the-elaboration-engine:
-
-Elaboration engine
-------------------
-
-On top of the Lean_ kernel there is a powerful *elaboration engine* that can
-
-#. infer implicit universe variables;
-
-#. infer implicit arguments, using higher order unification;
-
-#. support overloaded notation or declarations;
-
-#. insert coercions;
-
-#. infer implicit arguments using type classes;
-
-#. convert readable proofs to proof terms
-
-#. construct terms using tactics
-
-Lean_ does most of these things simultaneously. For example, the term constructed by type classes can be used to find out implicit arguments for functions.
-
-(For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
 
 ----------------------------------------------------------
 
@@ -205,41 +225,42 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
    See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
 
 
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _vscode: https://code.visualstudio.com/
-
-.. _Lean github repository:  https://github.com/leanprover/lean/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
-.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
 
 .. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
 
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 
-.. _Lean Tutorial: https://leanprover.github.io/tutorial/
+.. _Coq: http://coq.inria.fr
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. _Lean: https://leanprover.github.io/
+
+.. _Lean github repository:  https://github.com/leanprover/lean/
 
 .. _Lean Reference Manual: https://leanprover.github.io/reference/
+
+.. _Lean Standard Library: https://github.com/leanprover/lean
+
+.. _Lean Tutorial: https://leanprover.github.io/tutorial/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _NuPRL: http://www.nuprl.org/
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+
+.. _vscode: https://code.visualstudio.com/
+
 

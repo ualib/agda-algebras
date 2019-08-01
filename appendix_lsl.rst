@@ -493,8 +493,8 @@ To see this in action, let's look at the next pair of lemmas from the `quot.lean
 
   and returns ``quot.rec f h q``.
 
-Temporary subsection (delete later)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Temporary "bookmark" subsection (to be deleted)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on_subsingleton``
@@ -507,7 +507,7 @@ Temporary subsection (delete later)
     [h: ∀ (a:α), subsingleton (β (mk r a))] (q: quot r),
     (Π (a: α), β (mk r a)) → β q
 
-  Thus, assuming ``h: ∀ a, subsingleton (β ⟦a⟧)``, the function ``rec_on_subsingleton`` takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns an inhabitant of ``β q: Sort v``, namely,
+  Thus, assuming ``h: ∀ a, subsingleton (β ⟦a⟧)``, the function ``rec_on_subsingleton`` takes an ``r``-class ``q`` and a function ``f: Π a, β ⟦a⟧``, and returns an inhabitant of ``β q: Sort v``, namely,
 
     ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
 
@@ -1041,46 +1041,46 @@ The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_s
   end
 
 
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _vscode: https://code.visualstudio.com/
-
-.. _Lean github repository:  https://github.com/leanprover/lean/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 
-.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
 
 .. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
 
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 
-.. _Lean Tutorial: https://leanprover.github.io/tutorial/
+.. _Coq: http://coq.inria.fr
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. _Lean: https://leanprover.github.io/
+
+.. _Lean github repository:  https://github.com/leanprover/lean/
 
 .. _Lean Reference Manual: https://leanprover.github.io/reference/
 
-.. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
+.. _Lean Standard Library: https://github.com/leanprover/lean
 
+.. _Lean Tutorial: https://leanprover.github.io/tutorial/
+
+.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+
+.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _NuPRL: http://www.nuprl.org/
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+
+.. _vscode: https://code.visualstudio.com/
+
+
+.. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
 .. _classical.lean: https://github.com/leanprover/lean/blob/master/library/init/classical.lean
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
