@@ -431,58 +431,52 @@ To see this in action, let's look at the next pair of lemmas from the `quot.lean
 ..    (q : quot r) : β q :=
 .. eq.rec_on (quot.lift_indep_pr1 f h q) ((lift (quot.indep f) (quot.indep_coherent f h) q).2)
 
-Temporary subsection (delete later)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec``
 
-  For universe ``v`` and ``β: quot r → Sort v``, the function ``quot.rec`` takes the arguments
+  This is the recursor for ``quot``. Its type is shown in the output of ``#check @quot.rec``:
 
-    1. ``f: Π a, β ⟦a⟧``,
-    2. ``h = (‡)`` (defined above),
-    3. ``q: quot r``,
+  ::
 
-  and returns the following inhabitant of ``β q``:
+    Π{α: Sort u} {r: α → α → Prop} {β: quot r → Sort v}
+    (f: Π (a: α), β (mk r a)),
+    ( ∀ (a b: α) (p: r a b),
+      eq.rec (f a) _ = f b ) → Π (q: quot r), β q
 
-    | ``eq.rec_on (quot.lift_indep_pr1 f h q)``
-    | ``( (lift (quot.indep f) (quot.indep_coherent f h) q).2 )``
+  For universe ``v`` and ``β: quot r → Sort v``, ``quot.rec`` takes the function ``f: Π a, β ⟦a⟧`` and hypothesis ``h = (‡)`` (defined above) and returns a function of type ``Π (q: quot r), β q``, namely, the function that maps each ``q`` to the following inhabitant of ``β q``:
 
-  To dissect this return value, first recall that the function
+    | ``eq.rec_on (quot.lift_indep_pr1 f h q)                       (ℓ₁)``
+    | ``( (lift (quot.indep f) (quot.indep_coherent f h) q).2 )     (ℓ₂)``
 
-    ``quot.indep f: α → psigma β``
-
-  is defined for each ``a:α`` by ``quot.indep f a = ⟨⟦a⟧, f a⟩``, and that
+  To dissect this return value, recall that ``quot.indep f`` maps each ``a`` to ``⟨⟦a⟧, f a⟩``, and
 
     ``quot.indep_coherent f h``
 
-  is a proof that this function respects the relation ``r`` in the following sense:
+  is a proof that ``quot.indep f`` respects the relation ``r`` in the following sense:
 
     ``∀ (a b: α), r a b → ⟨⟦a⟧, f a⟩ = ⟨⟦b⟧, f b⟩``.
 
-  This fact is exactly what is required by ``lift`` in order to lift the function ``a ↦ ⟨⟦a⟧, f a⟩`` from the domain ``α`` to the domain ``quot r``.  Thus,
+  This is exactly what is required in order to lift ``quot.indep f`` from domain ``α`` to domain ``quot r``.  Therefore,
 
     ``lift (quot.indep f) (quot.indep_coherent f h)``
 
-  is the function ``φ: quot r → psigma β`` which takes ``q: quot r`` to the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩``, for all ``a:α`` satisfying ``⟦a⟧ = q``.
+  is the function ``φ: quot r → psigma β`` which takes each ``r``-class ``q`` to the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩``, where ``a`` is any inhabitant of ``α`` satisfying ``⟦a⟧ = q``.
 
-  Evidently, taking the second projection of the pair ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩`` gives ``y`` (or ``f a``).
+  Thus, line ``(ℓ₂)`` gives the second projection of ``⟨q, y⟩ = ⟨⟦a⟧, f a⟩``, which is evidently ``y`` (or ``f a``).
 
-  Next, recall that ``quot.lift_indep_pr1 f h q`` is a proof that the first projection of ``φ`` is the identity function on ``quot r``.
+  As for line ``(ℓ₁)``, recall ``quot.lift_indep_pr1 f h q`` is a proof that the first projection of ``φ`` is the identity function on ``quot r``.
 
-  Let ``B := id`` be the identity function on ``quot r``.
-
-  Let ``A := (λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)``.
+  Let ``A := (λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)`` and let ``B := id`` be the identity function on ``quot r``.
 
   Then ``A`` and ``B`` have type ``quot r → quot r`` and ``quot.lift_indep_pr1 f h q`` is a proof that ``A = B``.
 
   As the directive ``#check @eq.rec_on`` shows, the type of ``eq.rec_on`` is
 
-    ``Π {α: Sort u} {a:α} {C: α → Sort v} {b:α}, a = b → C a → C b``.
+    ``Π {γ: Sort u} {A:γ} {C: γ → Sort v} {B:γ}, A = B → C A → C B``.
 
-  In the present case, we have ``α := quot r → quot r``, and ``C: (quot r → quot r) → Sort v``.
+  In the present case, we have ``γ := quot r → quot r``, and ``C: (quot r → quot r) → Sort v``.
 
-  All told, the function ``quot.rec`` yields a proof of ``C B`` from the following data:
+  All told, the function ``quot.rec`` yields a proof of ``C B`` when given the following data:
 
     + two functions ``A B: quot r → quot r``,
     + a proof of ``A = B``, and
@@ -499,14 +493,28 @@ Temporary subsection (delete later)
 
   and returns ``quot.rec f h q``.
 
+Temporary subsection (delete later)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on_subsingleton``
 
-  Assuming ``[h: ∀ a, subsingleton (β ⟦a⟧)]``, this function takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns
+  If we ``#check`` it, we see the type of this definition is
+
+  ::
+
+    Π {α: Sort u} {r: α → α → Prop} {β: quot r → Sort v}
+    [h: ∀ (a:α), subsingleton (β (mk r a))] (q: quot r),
+    (Π (a: α), β (mk r a)) → β q
+
+  Thus, assuming ``h: ∀ a, subsingleton (β ⟦a⟧)``, the function ``rec_on_subsingleton`` takes an ``r``-class ``q``, and a function ``f: Π a, β ⟦a⟧``, and returns an inhabitant of ``β q: Sort v``, namely,
 
     ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
 
   A ``subsingleton`` type is a type inhabited by exactly one element.  See :numref:`subsingleton-type-class` for the definition.
+
+  The ``subsingleton.elim`` function takes evidence that ``α`` is a subsingleton type and provides a proof of ``∀ (a b: α), a = b``.
+
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def hrec_on``
