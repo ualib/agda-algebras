@@ -54,12 +54,12 @@ extensions = [
     'sphinxcontrib.bibtex',
     'sphinxcontrib.tikz',
     'lean_sphinx',
-    'numbered_block',
+    #'numbered_block',
     'sphinxcontrib.proof']
 
-numbered_blocks = [{'name': 'exercise',
-                    'numbering-level': 2
-}]
+# numbered_blocks = [{'name': 'exercise',
+#                     'numbering-level': 2
+# }]
 
 proof_theorem_types = {
     "axiom": "Axiom",
@@ -107,7 +107,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.venv', 'exclude']
 pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+todo_include_todos = False
 
 source_parsers = {}
 
@@ -166,17 +166,12 @@ html_show_sourcelink = False
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation_without_header.html',
-        #'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-        #'donate.html',
-    ]
-}
+# The default sidebars (for documents that don't match any pattern) are
+# defined by theme itself.  Builtin themes are using these templates by
+# default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
+# 'searchbox.html']``.
+#
+# html_sidebars = {}
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -228,6 +223,10 @@ latex_documents = [
     (master_doc, 'ualib.tex', u'Lean Universal Algebra Library',
      u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula', 'manual'),
 ]
+
+#tikz_proc_suite = 'GhostScript'
+#tikz_proc_suite = 'pdf2svg'
+#tikz_tikzlibraries = 'tikz-cd'
 
 # -- Options for manual page output ------------------------------------------
 
