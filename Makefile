@@ -22,6 +22,7 @@ install-deps:
 	pip install sphinx
 	pip install sphinxcontrib-bibtex
 	pip install sphinxcontrib-proof
+	pip install sphinxcontrib-tikz
 .PHONY: help Makefile
 
 images:
