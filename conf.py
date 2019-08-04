@@ -122,6 +122,7 @@ html_theme_options = {
         'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
         'Logical Foundations Home': 'https://logicalfoundations.gitlab.io/'
     },
+    'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
     # 'sidebar_width' : '200px',
     # 'page_width' : '960px',
     # 'fixed_sidebar' : True

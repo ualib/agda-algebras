@@ -466,21 +466,24 @@ To see this in action, let's look at the next pair of lemmas from the `quot.lean
 
   As for line ``(ℓ₁)``, recall ``quot.lift_indep_pr1 f h q`` is a proof that the first projection of ``φ`` is the identity function on ``quot r``.
 
-  Let ``A := (λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)`` and let ``B := id`` be the identity function on ``quot r``.
-
-  Then ``A`` and ``B`` have type ``quot r → quot r`` and ``quot.lift_indep_pr1 f h q`` is a proof that ``A = B``.
+.. Let ``A := (λ ⟨x, y⟩, x) ∘ (λ q, ⟨q, y⟩)`` and let ``B := id`` be the identity function on ``quot r``.
+.. Then ``A`` and ``B`` have type ``quot r → quot r`` and ``quot.lift_indep_pr1 f h q`` is a proof that ``A = B``.
 
   As the directive ``#check @eq.rec_on`` shows, the type of ``eq.rec_on`` is
 
-    ``Π {γ: Sort u} {A:γ} {C: γ → Sort v} {B:γ}, A = B → C A → C B``.
+    ``Π {α: Sort u} {a:α} {C: α → Sort v} {b:α}, a = b → C a → C b``.
 
-  In the present case, we have ``γ := quot r → quot r``, and ``C: (quot r → quot r) → Sort v``.
+..  In the present case, we have ``γ := quot r → quot r``, and ``C: (quot r → quot r) → Sort v``.
+.. All told, the function ``quot.rec`` yields a proof of ``C B`` when given the following data:
+..   + two functions ``A B: quot r → quot r``,
+..   + a proof of ``A = B``, and
+..   + a proof of ``C A``
 
-  All told, the function ``quot.rec`` yields a proof of ``C B`` when given the following data:
+  All told, the function ``quot.rec`` yields a proof of ``C b`` when given the following data:
 
-    + two functions ``A B: quot r → quot r``,
-    + a proof of ``A = B``, and
-    + a proof of ``C A``
+    + ``a b: α``,
+    + a proof of ``a = b``, and
+    + a proof of ``C a``.
 
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on``
@@ -507,11 +510,13 @@ Temporary "bookmark" subsection (to be deleted)
     [h: ∀ (a:α), subsingleton (β (mk r a))] (q: quot r),
     (Π (a: α), β (mk r a)) → β q
 
-  Thus, assuming ``h: ∀ a, subsingleton (β ⟦a⟧)``, the function ``rec_on_subsingleton`` takes an ``r``-class ``q`` and a function ``f: Π a, β ⟦a⟧``, and returns an inhabitant of ``β q: Sort v``, namely,
+  First note the square brackets around the hypothesis ``h: ∀ a, subsingleton (β ⟦a⟧)``.  Recall brackets indicate implicit arguments and, when the brackets are square, this tells the elaborator that the given argument should be inferred using the type class mechanism.  (See the `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in the `TPL`_ tutorial for more details about this.)
+
+  Thus (assuming ``[h: ∀ (a:α), subsingleton (β (mk r a))]`` is inferrable from the current context) the function ``rec_on_subsingleton`` takes an ``r``-class ``q`` and a function ``f: Π a, β ⟦a⟧``, and returns the following inhabitant of ``β q``:
 
     ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
 
-  A ``subsingleton`` type is a type inhabited by exactly one element.  See :numref:`subsingleton-type-class` for the definition.
+  A ``subsingleton`` type is inhabited by exactly one element.  See :numref:`subsingleton-type-class` for the definition.
 
   The ``subsingleton.elim`` function takes evidence that ``α`` is a subsingleton type and provides a proof of ``∀ (a b: α), a = b``.
 

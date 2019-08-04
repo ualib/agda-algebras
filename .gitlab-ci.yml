@@ -8,6 +8,7 @@ pages:
   - pip install sphinx
   - pip install sphinxcontrib-bibtex
   - pip install sphinxcontrib-proof
+  - pip install sphinxcontrib-tikz
   - apk --no-cache add make
   - make html
   - mv _build/html/ public/
