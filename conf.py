@@ -126,12 +126,12 @@ html_theme = 'alabaster'
 #     "rightsidebar": "true",
 #     "relbarbgcolor": "black"
 # }
-#html_theme = 'nature'
-#html_theme = 'agogo'
+# html_theme = 'nature'
+# html_theme = 'agogo'
 # html_theme = 'scrolls'
 # html_theme = 'haiku'
 # html_theme = 'bizstyle'
-#html_theme = 'pyramid'
+# html_theme = 'pyramid'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -145,7 +145,8 @@ html_theme_options = {
     'extra_nav_links': {
         'PDF version': 'ualib.pdf',
         'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
-        'Logical Foundations Home': 'https://logicalfoundations.gitlab.io/'
+        'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/',
+        'mathematicalanalysis.org': 'https://mathematicalanalysis.gitlab.org/'
     },
     'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
     # 'sidebar_width' : '200px',

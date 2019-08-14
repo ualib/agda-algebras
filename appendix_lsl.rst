@@ -134,7 +134,7 @@ and returns a proof of the assertion that *every* ``r``-class belongs to ``β``.
 The quot namespace
 ~~~~~~~~~~~~~~~~~~
 
-Without further ado, here is the ``quot`` namespace, which we dissect below.
+Without further ado, here is the ``quot`` namespace as defined in the :term:`LSTL`.  We will dissect this code below.
 
 ::
 
@@ -231,7 +231,7 @@ Without further ado, here is the ``quot`` namespace, which we dissect below.
   end quot
 
 
-We examine each definition in turn.
+Let's examine each definition in turn.
 
 .. index:: keyword: elab_as_eliminator
 .. index:: keyword: reducible
@@ -510,7 +510,7 @@ Temporary "bookmark" subsection (to be deleted)
     [h: ∀ (a:α), subsingleton (β (mk r a))] (q: quot r),
     (Π (a: α), β (mk r a)) → β q
 
-  First note the square brackets around the hypothesis ``h: ∀ a, subsingleton (β ⟦a⟧)``.  Recall brackets indicate implicit arguments and, when the brackets are square, this tells the elaborator that the given argument should be inferred using the type class mechanism.  (See the `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in the `TPL`_ tutorial for more details about this.)
+  First note the square brackets around the hypothesis ``h: ∀ a, subsingleton (β ⟦a⟧)``.  Brackets indicate implicit arguments and, when the brackets are square, this tells the elaborator that the given argument should be inferred using the type class mechanism.  (See the `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in the `TPL`_ tutorial for more details about this.)
 
   Thus (assuming ``[h: ∀ (a:α), subsingleton (β (mk r a))]`` is inferrable from the current context) the function ``rec_on_subsingleton`` takes an ``r``-class ``q`` and a function ``f: Π a, β ⟦a⟧``, and returns the following inhabitant of ``β q``:
 
