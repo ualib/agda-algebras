@@ -9,13 +9,13 @@ Quotients [1]_
 
 Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we let :math:`a/{≡}` denote the set :math:`\{ b ∈ A ∣ b ≡ a \}` of elements in :math:`A` that are equivalent to :math:`a` modulo ≡. We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`.
+As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we denote by :math:`a/{≡}` the set of elements in :math:`A` that are **equivalent to** :math:`a` **modulo** ≡, that is,
 
-.. Below we will sometimes use the notation :math:`a/{≡}` to denote the class :math:`⟦a⟧`
+.. math:: a/{≡} = \{ b ∈ A ∣ b ≡ a \}.
 
-The collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}` and called the **quotient** :math:`A` modulo ≡.
+We call :math:`a/{≡}` the ≡-class of :math:`A` containing :math:`a`, and the collection :math:`\{ a/{≡} ∣ a ∈ A \}` of all such equivalence classes is denoted by :math:`A/{≡}`, called the **quotient of** :math:`A` **modulo** ≡.
 
-Equivalence captures a weak notion of equality. If two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, rather, the way in which they do differ is not relevant to us.
+Equivalence captures a rather weak notion of equality. If two elements of :math:`A` are equivalent modulo ≡, they are not necessarily the same, but the way in which they differ may be uninteresting or irrelevant for all intents and purposes.
 
 .. proof:example::
 
@@ -46,7 +46,9 @@ Lifts of functions
 
 Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.
 
-Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`(x,y) ∈ R`.
+Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`x \mathrel R y`, that is, 
+
+.. math:: x/R = \{y : α ∣  x \mathrel R y\}.
 
 The type of the class :math:`x/R` is a **quotient type**, denoted in this case by :math:`α/R`, and the main goal of this chapter is to see how such quotient types can be defined in Lean.
 
@@ -69,7 +71,7 @@ If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a func
 
 The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
 
-Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.)
+Four such constants that are defined in the :term:`LSTL` are also defined in the `lean-ualib`_, as follows:
 
 .. index:: keyword: quot, quot.mk, quot.ind
 .. index:: keyword: quot.lift
@@ -88,16 +90,14 @@ Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.
 
   namespace ualib
 
-    -- Notation: "(dup)" means "also defined in std lib"
-
-    -- The quotient type former (dup)
+    -- The quotient type former
     constant quot:
     Π {α: Type u}, (α → α → Prop) → Type u
 
     -- So quot takes a type α and a relation R ⊆ α × α
     -- and forms the collection α/R of R-classes.
 
-    -- Given α and R ⊆ α × α, map each a:α to its R-class (dup)
+    -- Given α and R ⊆ α × α, map each a:α to its R-class
     constant quot.mk:
     Π {α: Type u} (a : α) (R: α → α → Prop),
     quot R
@@ -108,12 +108,14 @@ Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.
     -- Let us define some syntactic sugar that reflects this fact.
     infix `/` := quot.mk  -- notation: a/R := quot.mk a R
 
-    -- Each element of quot R is a R-class of the form quot.mk R a. (dup)
+    -- The quot.ind axioms asserts that each element of
+    -- ``quot R`` is an R-class of the form ``quot.mk R a``.
     axiom quot.ind:
     ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop},
     (∀ a, β (a/R)) → ∀ (q: quot R), β q
 
-
+    -- Defines what it means for a function to respect a relation
+    -- in a certain sense.
     def funresp {α: Type u} {β: Type v}
     (f: α → β) (R: α → α → Prop): Prop :=
     ∀ a b, R a b → f a = f b
@@ -121,7 +123,7 @@ Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.
     infix `⫢`:50 := funresp       -- ``\vDdash``
 
     -- Take a function f: α → β and a proof h : f ⫢ R, and
-    -- return the lift of f to quot R. (dup)
+    -- return the lift of f to quot R.
     constant quot.lift:
     Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β),
     (f ⫢ R) → quot R → β
@@ -161,15 +163,13 @@ Here are four such constants from the :term:`LSTL`. (See also :numref:`the-stl`.
 ..     -- END
 ..   end ualib_quotient
 
-The first of these takes a type ``α`` and a binary relation ``R`` on ``α`` and forms the type ``quot R`` (or ``@quot α R``, if we wish to make the first parameter explicit).
+The first constant, ``quot``, takes a type ``α`` and a binary relation ``R`` on ``α`` and forms the type ``quot R`` (or ``@quot α R``, if we wish to make the first parameter explicit). Thus, for each ``α: Sort u``, the function type ``@quot α`` takes a binary relation ``R: α → α → Prop`` and returns the quotient type ``quot R``, each element of which is an equivalence class, say, ``a/R``, where ``a:α``.
 
-That is, for each ``α: Sort u``, we form the function type ``@quot α`` which takes a binary relation ``R: α → α → Prop`` and returns the quotient type ``quot R``, each element of which is an equivalence class, say, ``a/R``, where ``a:α``.
+The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and forms the function that maps each ``a:α`` to its ``R``-class, ``quot.mk R a``, of type ``quot R``.
 
-The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and forms the function that maps each ``a:α`` to its ``R``-class ``quot.mk R a``, which is of type ``quot R``.
+Third is the axiom ``quot.ind``, which asserts that every element of ``quot R`` is of the form ``quot.mk R a``.
 
-The third, ``quot.ind``, is the axiom asserting that every element of ``quot R`` is of the form ``quot.mk R a``.
-
-Before considering ``quot.lift``, notice that we defined some syntactic sugar for the "respects" relation, so that now we can simply write ``f ⫢ R`` in place of ``∀ a b, R a b → f a = f b``.
+Before considering the final constant, ``quot.lift``, observe the syntactic sugar we defined for the "respects" relation, which allows us to simply write ``f ⫢ R`` whenever we wish to assert that ``∀ a b, R a b → f a = f b``. (Type ``\vDdash`` to produce the symbol ⫢.)
 
 The constant ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (in the sense of the last sentence; i.e., ``f ⫢ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
@@ -178,9 +178,7 @@ The idea is for each ``a:α``, the function ``quot.lift f h`` maps the ``R``-cla
 .. In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the computation principle below can be proved with just ``rfl``).
 
 
-The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)
-
-For that reason, the `Lean Standard Library`_ does not take these four constants to be "axioms." This can be verified by asking Lean to ``#print`` the axioms used by ``lift_comp_principle``; observe that Lean responds, "``no axioms``."
+The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)  For that reason, the :term:`LSTL` does not even take these four constants to be "axioms." (This can be verified by asking Lean to ``#print`` the axioms used by ``lift_comp_principle`` and observing that Lean responds with "``no axioms``.")
 
 ::
 
@@ -225,9 +223,9 @@ What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which 
 
 If a theorem or definition makes use of ``quot.sound``, it will show up in the ``#print axioms`` command.
 
-Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` are viewed as part of the logical framework.
+Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` defined in the :term:`LSTL` are viewed as part of the logical framework.
 
-By contrast, other lifting constructions that are defined in the next section (and are important in universal algebra) are not native to Lean. Therefore, their computation principles cannot be proved as theorems and will have to be added as axioms.
+In contrast, the other lifting constructions that we defined in the next section, which are important for universal algebra, are not native to Lean and, therefore, their computation principles cannot be proved as theorems, so we will define them as axioms.
 
 ------------------------
 
@@ -236,18 +234,16 @@ By contrast, other lifting constructions that are defined in the next section (a
 Lifts of operations
 -------------------
 
-The last section explain the quotient construction that is built into Lean and that is useful for lifting a function :math:`f: α → β` to a function :math:`f': α/R → β` for some relation :math:`R ⊆ α × α` respected by :math:`f`.  In this section, we generalize this lifting construction to a lift that is more common in universal algebra.  Namely, we wish to take an operation of type :math:`(β → α) → α` and lift it to an operation of type :math:`(β → α/R) → α/R`.
+The last section explain the quotient construction that is built into Lean and that is useful for lifting a function :math:`f: α → β` to a function :math:`f': α/R → β` for some relation :math:`R ⊆ α × α` "respected" by :math:`f` (in the sense denoted above by ``f ⫢ R``).  In this section, we generalize this lifting construction to a lift that is more common in universal algebra.  Namely, we wish to take an operation of type :math:`(β → α) → α` and lift it to an operation of type :math:`(β → α/R) → α/R`.
 
 Respecting relations
 ~~~~~~~~~~~~~~~~~~~~
 
-Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we can represent the function type not by :math:`α^n → α`, but by :math:`(n → α) → α`.
+Recall, an :math:`n`-**ary operation** on :math:`α` is a function with domain :math:`α^n` and codomain :math:`α`.  Recall also that we represent such an operation as a function of type :math:`(n → α) → α` (instead of :math:`α^n → α`).
 
 Given a unary operation :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
 
-Let us now generalize this notion to operations of higher arity.
-
-Suppose :math:`f: (ρf → α) → α` is an operation (of arity :math:`ρf`) and let :math:`τ: ρf → (α × α)` be a :math:`ρf`-tuple of pairs of elements of type :math:`α`; that is, to each :math:`i : ρ f` corresponds a pair :math:`τ \ i : α × α`.
+Generalizing to operations of higher arity, suppose :math:`f: (ρf → α) → α` is an operation on :math:`α` (of arity :math:`ρf`), and let :math:`τ: ρf → (α × α)` be a :math:`ρf`-tuple of pairs of elements of type :math:`α`; that is, to each :math:`i : ρ f` corresponds a pair :math:`τ \ i : α × α`.
 
 If :math:`π_i^k` denotes the :math:`k`-ary function that projects onto the :math:`i`-th coordinate, then :math:`π_1^{ρf} ∘ τ` is the :math:`ρf`-tuple of all first coordinates of the pairs in the range of :math:`τ`; similarly, :math:`π_2^{ρf} ∘ τ` is the :math:`ρf`-tuple of all second coordinates.
 
@@ -262,6 +258,8 @@ If :math:`R ⊆ α × α` is a binary relation on :math:`α`, then we say that :
 We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just in case the following implication holds for all :math:`τ: ρf → (α × α)`:
 
   if :math:`τ` belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
+
+Type ``\models`` to produce the symbol ``⊧``. (Note that ``\vDash`` produces ⊨, which is not ⊧.)
 
 .. proof:example::
 
@@ -278,23 +276,21 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
 Lifts of tuples and operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation on :math:`α`, and let :math:`g : (β → α) → α` be a :math:`β`-ary operation on :math:`α`.
+Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation and :math:`g : (β → α) → α` a :math:`β`-ary operation. Recall that the function type :math:`β → α` may be viewed as the type of :math:`β`-tuples of elements from :math:`α`.
 
-Recall, we view the function type :math:`β → α` as the type of :math:`β`-tuples of elements from :math:`α`.
-
-We define a **lift of tuples** :math:`[\ ]: (β → α) → β → α/R` as follows: for each tuple :math:`τ: β → α`, we take :math:`[τ] : β → α/R` to be the :math:`β`-tuple that takes each :math:`i: β` to the :math:`R`-class containing :math:`τ\ i`; that is,
+Define a **lift of tuples** :math:`[\ ]: (β → α) → β → α/R` as follows: for each tuple :math:`τ: β → α`, let :math:`[τ] : β → α/R` be the :math:`β`-tuple that takes each :math:`i: β` to the :math:`R`-class containing :math:`τ\ i`; that is,
 
 .. math:: [τ]\ i = (τ\ i)/R.
 
-We define a **lift of operations** as follows: for each :math:`β`-ary operation :math:`g: (β → α) → α`, we would like the lift of :math:`g` to have type :math:`(β → α/R) → α/R` and take each lifted tuple :math:`[τ]: β → α/R` to the :math:`R`-class containing :math:`g τ`.
+We would like to define a **lift of operations** as follows: for each :math:`β`-ary operation :math:`g: (β → α) → α`, let the lift of :math:`g` be the function of type :math:`(β → α/R) → α/R` that takes each (lifted) tuple :math:`[τ]: β → α/R` to the :math:`R`-class containing :math:`g τ`.
 
-However, such a lift is not well-defined unless :math:`g` :term:`respects` :math:`R`.  Therefore, we must provide a proof that :math:`g` respects :math:`R` in order to guarantee the well-definedness of the lift from :math:`(β → α) → α` to :math:`(β → α/R) → α/R`.
+Note, however, that this function is well-defined if and only if :math:`g` :term:`respects` :math:`R`, so we must supply a proof that :math:`g ⊧ R` whenever we wish to consider the lift of :math:`g` from :math:`(β → α) → α` to :math:`(β → α/R) → α/R`.
 
 Below, when we implement lifts of tuples and operations in Lean, we will introduce the symbol ``ℒ`` to denote the lift of operations, with the following typing judgment:
 
   ``ℒ : Π {R: α → α → Prop} (g: (β → α) → α), (g ⊧ R) → (β → α/R) → α/R``.
 
-As such, ``ℒ`` takes a relation ``R: α → α → Prop``, an operation ``g: (β → α) → α``, and a proof ``p: g ⊧ R``, and constructs the operaiton ``g ℒ p: (β → α/R) → α/R``, defined as follows: for each tuple ``τ: β → α``,
+As such, ``ℒ`` takes a relation ``R: α → α → Prop``, an operation ``g: (β → α) → α``, and a proof ``p: g ⊧ R``, and constructs the operation ``g ℒ p: (β → α/R) → α/R``, defined as follows: for each ``τ: β → α``,
 
   ``(g ℒ p) [τ]  := (g τ) / R``.
 
@@ -305,7 +301,9 @@ Lifts of Operations in Lean
 
 The definitions of lifts of tuples and operations in :numref:`lifts-of-tuples-and-operations` are fundamentally different from that of the *lift of a function* given in :numref:`lifts-of-functions` and defined in the :term:`LSTL`. To account for this, we must introduce new lifting constants.
 
-The next section of code begins by redefining the constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` and then defines three new lift constants, ``quot.colift``, ``quot.tlift``, and ``quot.oplift``.  By redefining the standard ``quot`` constants, the ``ualib_quotient`` namespace puts all of the quotient constants on the same "level" in the sense that all are now "user-defined" and thus none is a built-in part of Lean's logical framework.  As such, their associated computation principles will be added as axioms rather than proved as theorems.
+The next section of code begins by redefining the constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` and then defines three new lift constants, ``quot.colift``, ``quot.tlift``, and ``quot.oplift``.
+
+By redefining the standard ``quot`` constants, the ``ualib`` namespace puts all quotient constants on the same "level" in the sense that all are now "user-defined" and thus none is a built-in part of Lean's logical framework.  As such, their associated computation principles will be added as axioms rather than proved as theorems.
 
 ::
 
@@ -365,11 +363,9 @@ The next section of code begins by redefining the constants ``quot``, ``quot.mk`
   (α → α → Prop) → (β → α) → (β → α) → Prop :=
   λ R a b, ∀ i, R (a i) (b i)
 
-  notation `⟨` R `⟩` := liftrel R       -- ``\<R\>``
-
   def respects {α: Type u} {β: Type v}:
   ((β → α) → α) → (α → α → Prop) → Prop :=
-  λ f R, ∀ (a b: β → α), ⟨R⟩ a b → R (f a) (f b)
+  λ f R, ∀ (a b: β → α), (liftrel R) a b → R (f a) (f b)
 
   infix `⊧`:50 := respects              -- ``\models``
 
@@ -391,7 +387,9 @@ The next section of code begins by redefining the constants ``quot``, ``quot.mk`
   -- END
   end ualib
 
-Notice the alternative syntax we added for this notion of "respects". To summarize the notations defined so far, we have the following convenient shorthands:
+Notice the alternative syntax we added for this notion of "respects".
+
+Now is a good time to pause and summarize the shorthand notation defined thus far.
 
 .. (Recall we defined ``⫢`` earlier as notation for the notion of "respects" that agrees with the one used in the :term:`LSTL`).
 
@@ -405,9 +403,9 @@ Notice the alternative syntax we added for this notion of "respects". To summari
 
 + ``R̃`` means ``uncurry R``.
 
-We also made use of the ``operation`` type which will be formally introduced in :numref:`algebras-in-lean`.
+.. We also made use of the ``operation`` type which will be formally introduced in :numref:`algebras-in-lean`.
 
-Now let's check the types of some of these newly defined constants, test the new notation, and prove that the notion of a function ``f`` respecting a relation ``R``, as defined in the :term:`LSTL`, is equivalent to the assertion that ``R`` is a subset of the kernel of ``f``.
+Now let's check some types associated with these newly defined constants, test the new notation, and prove that the notion of a function ``f`` respecting a relation ``R``, as defined in the :term:`LSTL`, is equivalent to the assertion that ``R`` is a subset of the kernel of ``f``.
 
 .. ::
 
@@ -558,7 +556,7 @@ Now let's check the types of some of these newly defined constants, test the new
 
   end ualib
 
-Finally, let us assert the computation principles for these new lift operators. [3]_
+Finally, let us assert some computation principles for these new lift operators. [3]_
 
 ::
 
