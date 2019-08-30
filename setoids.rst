@@ -55,6 +55,7 @@ Here is the beginning of the ``setoid`` namespace in `lean-ualib`_ from the sour
     end setoid
 
     def quotient (α: Type u) (s: setoid α) := @quot α setoid.R
+
     axiom quotient.exact: ∀ {α: Type u} [setoid α] {a b: α},
     (a/setoid.R = b/setoid.R → a ≈ b)
 
@@ -90,10 +91,6 @@ Given a type ``α``, a relation ``r`` on ``α``, and a proof ``p`` that ``r`` is
 
     end setoid
 
-    def quotient (α: Type u) (s: setoid α) := @quot α setoid.R
-
-    axiom quotient.exact: ∀ {α: Type u} [setoid α] {a b: α}, (a/setoid.R = b/setoid.R → a ≈ b)
-
   -- BEGIN
 
   section examples
@@ -104,81 +101,28 @@ Given a type ``α``, a relation ``r`` on ``α``, and a proof ``p`` that ``r`` is
     variables {Q: α → α → Prop} (a: α) (q: equivalence Q)
     -- test notation for quotient --
     #check quot Q          -- quot Q: Type u
-    #check @quot.mk α a Q  -- a/Q: quot Q 
-    #check quot.mk a Q     -- a/Q: quot Q 
+    #check @quot.mk α a Q  -- a/Q: quot Q
+    #check quot.mk a Q     -- a/Q: quot Q
     #check a/Q             -- a/Q: quot Q
 
     #check @quot.ind α Q
     -- ∀ {β: quot Q → Prop},
-    -- (∀ (a: α), β (a/Q)) → ∀ (q: quot Q), β q 
+    -- (∀ (a: α), β (a/Q)) → ∀ (q: quot Q), β q
 
     variables (β : quot Q → Prop) (h: ∀ (a: α), β (a/Q))
 
-    #check @quot.ind α Q β h -- ∀ (q: quot Q), β q 
+    #check @quot.ind α Q β h -- ∀ (q: quot Q), β q
 
     #check quot.lift Q  -- Q ⫢ ?M_1 → quot ?M_1 → α → Prop
 
     #check @quot.lift α Q
-    -- Π {β: Type u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β  
+    -- Π {β: Type u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β
 
     #check @quot.sound α Q   -- ∀ (a b: α), Q a b → a/Q = b/Q
-    #check @quotient.exact α
-    ---- ∀ [_inst_1: setoid α] {a b: α},  a/setoid.R = b/setoid.R → a ≈ b
 
   end examples
   -- END
 
-  section setoid
-
-    parameters {α : Type u} (Q: α → α → Prop)
-
-    def Qeq: α → α → Prop := 
-    λ (a b : α), quot.mk a Q = quot.mk b Q
-
-    theorem reflQ (a: α) : Qeq a a :=
-    show quot.mk a Q = quot.mk a Q, from rfl
-  
-    theorem symmQ {a b: α}: Qeq a b → Qeq b a := eq.symm
-  
-    theorem transQ {a b c: α}: Qeq a b → Qeq b c → Qeq a c :=
-    λ h₁ h₂, eq.trans h₁ h₂
-  
-  end setoid
-
-end ualib
-
-Given a type ``α``, a relation ``r`` on ``α``, and a proof ``p`` that ``r`` is an equivalence relation, we can define ``setoid.mk p`` as an instance of the setoid class.
-
-::
-
-  import quotient
-  namespace setoid
-    universes u v
-    class setoid (α: Sort u) :=(R: α → α → Prop) (iseqv: equivalence R)
-    namespace setoid
-      infix ` ≈ ` := setoid.R
-      variable (α: Sort u)
-      variable [s: setoid α]
-      include s
-      theorem refl (a: α): a ≈ a := (@setoid.iseqv α s).left a
-      theorem symm {a b: α}: a ≈ b → b ≈ a := λ h, (@setoid.iseqv α s).right.left h
-      theorem trans {a b c: α}: a ≈ b → b ≈ c → a ≈ c := λ h₁ h₂, (@setoid.iseqv α s).right.right h₁ h₂
-    end setoid
-
-    -- BEGIN
-    variables (α: Sort u) (r : α → α → Prop) (p: equivalence r)
-    variables (a: α) (Q: α → α → Prop)
-
-    #check setoid.mk r p         -- {R := r, iseqv := p} : setoid α
-
-    #check quotient.quot Q -- Sort u
-    #check a/Q                   -- a/Q: quotient.quot Q
-
-    #check @quotient.quot.mk α a Q
-                                 -- a/Q: quotient.quot Q
-    -- END
-
-  end setoid
 
 Now let us define a ``quotient`` type which will make it a little easier to work with quotients.
 

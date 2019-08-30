@@ -7,7 +7,7 @@
 Quotients
 =========
 
-(Parts of this chapter are borrowed from the `Axioms and Computation`_ section of the excellent `Theorem Proving in Lean`_ tutorial.)
+(Some parts of this chapter borrow from the `Axioms and Computation`_ section of the excellent `Theorem Proving in Lean`_ tutorial.)
 
 Here we document the code in the quotients.lean file and discuss some of the theory underpinning that code.
 
