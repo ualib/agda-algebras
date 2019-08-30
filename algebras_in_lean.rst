@@ -361,7 +361,7 @@ Using coercions allows us to identify certain objects which, though not identica
 Subuniverses in Lean
 ---------------------
 
-The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``dev_wjd`` branch of) the lean-ualib_ repository. 
+The code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of (the ``william`` branch of) the lean-ualib_ repository. 
 
 We will cover subalgebra generation in Lean_, using inductive types, in :numref:`Section %s <subalgebras-in-lean>`.  In this section we mere show how to use Lean_ to formally define a subalgebra and test whether a subset is a subuniverse.
 
@@ -728,7 +728,7 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd_ branch of the ``lean-ualib`` repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
+   As of this writing (9 June 2019), this documentation describes code residing in (the william_ branch of) the `lean-ualib`_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
    
 .. [2]
    As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
@@ -748,29 +748,4 @@ Alternatively, we could define ``homomorphic`` so that the signature and algebra
 .. [7]
    In Gentzen style natural deduction, which is the logical system on which Lean_ is based, "introduction" and "elimination" rules are two fundamental types of rules of deduction.  The *introduction rule for conjunction*, for example, specifies how one *forms* a conjunction in the course of a natural deduction proof, while the *elimination rule for conjunction* specifies how one *uses* a conjunction in a natural deduction proof.
    
-   address these needs 
-.. _Lean: https://leanprover.github.io/
-
-.. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _dev_wjd: https://gitlab.com/ualib/lean-ualib/tree/dev_wjd
-
-.. _master: https://gitlab.com/ualib/lean-ualib/tree/master
-
-
+.. include:: hyperlink_references.rst

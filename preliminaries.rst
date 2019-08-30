@@ -125,7 +125,7 @@ There are always at least two equivalence relations in on a given set :math:`A`-
 
    Two common mathematical examples are these.
 
-   #. The **kernel** of a function is an equivalence relation on :math:`X`; i.e., if :math:`f : X → Y` and :math:`x_1, x_2 ∈ X`, then we say :math:`x_1` and :math:`x_2` are **equivalent modulo the kernel of** :math:`f` and we write :math:`x_1 ∼ x_2` (or :math:`(x_1, x_2) ∈ \ker f`) if and only if :math:`f(x_1) = f(x_2)`.
+   #. The :term:`kernel` of a function is an equivalence relation on :math:`X`; if :math:`f : X → Y` is a function and if :math:`x_1, x_2 ∈ X`, then we say :math:`x_1` and :math:`x_2` are **equivalent modulo the kernel of** :math:`f` and we write :math:`(x_1, x_2) ∈ \ker f` (or :math:`x₁ \mathrel{\mathrm{ker} f} x₂`) if and only if :math:`f(x_1) = f(x_2)`.
    #. The relation on lines in a plane, given by ":math:`x` and :math:`y` are parallel" is an equivalence relation.
 
    Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
@@ -521,8 +521,7 @@ The following shorthand is frequently convenient:
 
    To make clear why the term “projection” is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [2]_
 
-Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the **kernel**
-of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is defined as follows:
+Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the :term:`kernel` of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is denoted and defined by
 
 .. math:: \mathbf{0}_σ &= \ker \Proj_σ = \{(a,a') ∈ A^2 | \Proj_σ a = \Proj_σ a'\}\\
                        &= \{ (a,a') ∈ A^2 | a ∘ σ = a' ∘ g \} = \{ (a,a') ∈ A^2 | ∀ j ∈ \im σ, \ a(j) = a'(j) \}.
@@ -683,30 +682,7 @@ then 𝖱 is a closure operator.
 .. [2]
    Note that even in the special case when :math:`\Proj_j ℝ = 𝔸_{σ(j)}` for each :math:`j<k` so that :math:`ℝ ≤_{\mathrm{sd}} ∏_{j<k} 𝔸_{σ(j)}`, we refrain from using :math:`\Proj_σ 𝔸` to denote :math:`∏_{j<k} 𝔸_{σ(j)}`  for the simple reason that σ might not be one-to-one.  For example, we could have :math:`𝔸 = 𝔸_0 × 𝔸_1` and :math:`σ = (1,0,1)`, in which case :math:`∏_{j<k} 𝔸_{σ(j)} = 𝔸_1 × 𝔸_0 × 𝔸_1` and this is not the "projection" of 𝔸 onto a subset of its factors.
    
-
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-      
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+.. include:: hyperlink_references.rst
 
 .. Preliminaries
 ..   Preorders

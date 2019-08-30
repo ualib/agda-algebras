@@ -319,6 +319,9 @@ Nomenclature
     isomorphism
       A morphism :math:`f: A → B` is called an **isomorphism** if there exists a morphism :math:`g: A → B` such that :math:`g ∘ f= \mathrm{id}_A` and :math:`f ∘ g = \mathrm{id}_B`. We write :math:`f^{-1}` to denote :math:`g` when it exists.
 
+    kernel
+      By the kernel of a function :math:`f: A → B` we mean the binary relation on :math:`A` denoted and defined by :math:`\mathrm{ker} f := \{(a₁, a₂) : f a₁  = f a₂\}`.   
+
     Kleene closure
       (see :term:`free monoid`)
 
@@ -906,34 +909,7 @@ The list below shows what to type (e.g., in the vscode IDE with lean extension) 
 
 .. .. [1]
 
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
-.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
-
-.. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
-
+.. include:: hyperlink_references.rst
 
 .. computationally pure
 ..   An expression is called **computationally pure** if

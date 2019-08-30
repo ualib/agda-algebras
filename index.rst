@@ -11,6 +11,7 @@ The Lean Universal Algebra Library
     lean
     extensionality
     quotients
+    setoids
     algebras
     algebras_in_lean
     inductive_definitions

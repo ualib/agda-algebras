@@ -434,16 +434,57 @@ Finally, we check that the foregoing definition is indeed a clone and that it is
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing on the dev_wjd_ branch of the ``lean-ualib`` repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
+   As of this writing (9 June 2019), this documentation describes code residing on the william_ branch of the lean-ualib_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
    
+
+.. __ Hyperlink References ____________________________________________________
+
+.. __ refs to leanprover.github.io ____________________________________________
+
 .. _Lean: https://leanprover.github.io/
 
-.. _`github.com/UniversalAlgebra/lean-ualib`: https://github.com/UniversalAlgebra/lean-ualib/
+.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
 
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
+.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 
-.. _dev_wjd: https://gitlab.com/ualib/lean-ualib/tree/dev_wjd
+.. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
+
+.. __ refs from github.com/leanprover/lean _____________________________________
+
+.. _lean_src: https://github.com/leanprover/lean
+
+.. _Lean Standard Library: https://github.com/leanprover/lean
+
+.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
+
+.. __ refs to github.com/leanprover-community ___________________________________
+
+.. _mathlib: https://github.com/leanprover-community/mathlib/
+
+.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+
+.. __ refs to github.com/ualib/lean-ualib _______________________________________
+
+.. _lean-ualib: https://gitlab.com/ualib/lean-ualib/
+
+.. _quotient.lean: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+.. _setoid.lean: https://gitlab.com/ualib/lean-ualib/blob/william/src/setoid.lean
+
+.. _william: https://gitlab.com/ualib/lean-ualib/tree/william
 
 .. _master: https://gitlab.com/ualib/lean-ualib/tree/master
 
-.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
+.. __ other miscellaneous refs ___________________________________________________
+
+.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
+.. _Coq: http://coq.inria.fr
+
+.. _NuPRL: http://www.nuprl.org/
+
+.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+
+
