@@ -7,7 +7,8 @@
 Quotients
 =========
 
-(Some parts of this chapter borrow from the `Axioms and Computation`_ section of the excellent `Theorem Proving in Lean`_ tutorial.)
+Background
+-----------
 
 Here we document the code in the quotients.lean file and discuss some of the theory underpinning that code.
 
@@ -35,51 +36,26 @@ Thus, equivalence classes collect similar objects together, unifying them into a
 
    The equivalence relation of **congruence modulo 5** on the set of integers partitions ℤ into five equivalence classes---namely, :math:`5ℤ`, :math:`1 + 5ℤ`, :math:`2+5ℤ`, :math:`3+5ℤ` and :math:`4+5ℤ`.  Here, :math:`5ℤ` is the set :math:`\{\dots, -10, -5, 0, 5, 10, 15, \dots\}` of multiples of 5, and :math:`2+5ℤ` is the set :math:`\{\dots, -8, -3, 2, 7, 12, \dots\}` of integers that differ from a multiple of 5 by 2.
 
---------------------------------------------
+----------------------
 
-.. index:: quotient
+Quotient in Lean
+-----------------
 
-.. index:: ! type of; (quotients)
-
-.. index:: ! lift of; (functions)
-
-.. _lifts-of-functions:
-
-Lifts of functions
-------------------
+.. index:: keyword: quot, quot.mk, quot.ind
 
 Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.
 
-Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`x \mathrel R y`, that is, 
+Define the **quotient** :math:`α/R` (read, "alpha modulo :math:`R`") to be the collection of :math:`R`-classes in :math:`α`. That is, for each :math:`x:α`, there is a class :math:`x/R ⊆ α` consisting of all :math:`y:α` such that :math:`x \mathrel R y`, that is,
 
 .. math:: x/R = \{y : α ∣  x \mathrel R y\}.
 
-The type of the class :math:`x/R` is a **quotient type**, denoted in this case by :math:`α/R`, and the main goal of this chapter is to see how such quotient types can be defined in Lean.
-
-.. index:: lift; of a function, reduction rule
-
-Let :math:`f: α → β` be a function. We say that :math:`f` **lifts** from :math:`α` to :math:`α/R` provided the implication
-
-.. math:: (x, y) ∈ R \ → \ f x = f y
-   :label: lift
-
-holds for all :math:`x` and :math:`y` of type :math:`α`.
-
-Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kernel** of :math:`f`; that is,
-
-.. math:: R ⊆ \ker f := \{(x, y) ∈ α × α ∣ f x = f y\}.
-
-Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
-
-If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
+The type of the class :math:`x/R` is a **quotient type**, denoted in this case by :math:`α/R`.
 
 The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [1]_
 
 Four such constants that are defined in the :term:`LSTL` are also defined in the `lean-ualib`_, as follows:
 
-.. index:: keyword: quot, quot.mk, quot.ind
-.. index:: keyword: quot.lift
-.. index:: keyword: quotient
+.. index:: lift; of a function, reduction rule
 
 ::
 
@@ -126,13 +102,9 @@ Four such constants that are defined in the :term:`LSTL` are also defined in the
 
     infix `⫢`:50 := funresp       -- ``\vDdash``
 
-    -- Take a function f: α → β and a proof h : f ⫢ R, and
-    -- return the lift of f to quot R.
-    constant quot.lift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β),
-    (f ⫢ R) → quot R → β
-
-    infix `ℓ`:50 := quot.lift
+    axiom quot.sound
+    {α: Type u} {R: α → α → Prop}:
+    ∀ (a b: α), R a b → a/R = b/R
 
   end ualib
 
@@ -142,7 +114,170 @@ The second constant, ``quot.mk``, takes ``α`` and ``R: α → α → Prop`` and
 
 Third is the axiom ``quot.ind``, which asserts that every element of ``quot R`` is of the form ``quot.mk R a``.
 
-Before considering the final constant, ``quot.lift``, observe the syntactic sugar we defined for the "respects" relation, which allows us to simply write ``f ⫢ R`` whenever we wish to assert that ``∀ a b, R a b → f a = f b``. (Type ``\vDdash`` to produce the symbol ⫢.)
+What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
+
+Finally, note the syntactic sugar we defined for the "respects" relation, which allows us to simply write ``f ⫢ R`` whenever we wish to assert that ``∀ a b, R a b → f a = f b``. (Type ``\vDdash`` to produce the symbol ⫢.)
+
+Let us now look at a few basic examples.
+
+::
+
+  import basic
+  import data.fintype
+
+  universe u   -- carrier (universe) types,          (α)
+  universe v   -- type of operation symbols,         (β)
+  universe w   -- arity types.                       (γ)
+
+  namespace ualib
+
+    constant quot: Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot.mk: Π {α: Type u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+    axiom quot.ind: ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop}, (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    def funresp {α: Type u} {β: Type v} (f: α → β) (R: α → α → Prop): Prop := ∀ a b, R a b → f a = f b
+    infix `⫢`:50 := funresp
+    axiom quot.sound {α: Type u} {R: α → α → Prop}: ∀ (a b: α), R a b → a/R = b/R
+
+  -- BEGIN
+  section examples
+    #print quot.mk
+    -- Π {α: Type u}, α → Π (R: α → α → Prop), quot R
+
+    parameters {α: Type u} {r : α → α → Prop}
+    variables {Q: α → α → Prop} (a: α) (q: equivalence Q)
+
+    #check quot Q          -- quot Q: Type u
+    #check @quot.mk α a Q  -- a/Q: quot Q
+    #check quot.mk a Q     -- a/Q: quot Q
+    #check a/Q             -- a/Q: quot Q
+
+    #check @quot.ind α Q
+    -- ∀ {β: quot Q → Prop},
+    -- (∀ (a: α), β (a/Q)) → ∀ (q: quot Q), β q
+
+    variables (β : quot Q → Prop) (h: ∀ (a: α), β (a/Q))
+
+    #check @quot.ind α Q β h -- ∀ (q: quot Q), β q
+  end examples
+  -- END
+  end ualib
+
+The constants ``quot``, ``quot.mk``, and ``quot.ind``, are not very strong. Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``. For that reason, the :term:`LSTL` does not even take these constants to be “axioms.”  (We'll come back to this point in a moment.)
+
+What makes ``quot`` into a bona fide quotient is the axiom ``quot.sound`` appearing at the end of the code listing above.  This axiom asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
+
+If ``foo`` is a theorem or definition that makes use of the ``quot.sound`` axiom, then that axiom will show up in the output of ``#print axioms foo``.
+
+Like inductively defined types and their associated constructors and recursors, the :term:`LSTL` versions of the constants quot, quot.mk, and quot.ind are viewed as part of the logical framework.
+
+In contrast, the analogous constants defined in the `lean-ualib`_ are not native to Lean and, therefore, their computation principles cannot be proved as theorems, so we define them as axioms.
+
+--------------------------------------------
+
+.. index:: quotient
+
+.. index:: ! type of; (quotients)
+
+.. index:: ! lift of; (functions)
+
+.. _lifts-of-functions:
+
+Lifts of functions
+------------------
+
+Let :math:`α` be a type and :math:`R` a binary relation on :math:`α`.
+
+
+Let :math:`f: α → β` be a function. We say that :math:`f` **lifts** from :math:`α` to :math:`α/R` provided the implication
+
+.. math:: (x, y) ∈ R \ → \ f x = f y
+   :label: lift
+
+holds for all :math:`x` and :math:`y` of type :math:`α`.
+
+Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kernel** of :math:`f`; that is,
+
+.. math:: R ⊆ \ker f := \{(x, y) ∈ α × α ∣ f x = f y\}.
+
+Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
+
+If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
+
+The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [1]_
+
+.. index:: keyword: quot.lift
+
+::
+
+  import basic
+  import data.fintype
+
+  universe u   -- carrier (universe) types,          (α)
+  universe v   -- type of operation symbols,         (β)
+  universe w   -- arity types.                       (γ)
+
+  namespace ualib
+    constant quot: Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot.mk: Π {α: Type u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+    axiom quot.ind: ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop}, (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    def funresp {α: Type u} {β: Type v} (f: α → β) (R: α → α → Prop): Prop := ∀ a b, R a b → f a = f b
+    infix `⫢`:50 := funresp       -- ``\vDdash``
+    axiom quot.sound {α: Type u} {R: α → α → Prop}: ∀ (a b: α), R a b → a/R = b/R
+
+    -- BEGIN
+    -- Take a function f: α → β and a proof h : f ⫢ R, and
+    -- return the lift of f to quot R. (dup)
+    constant quot.lift:
+    Π {α: Type u} {R: α → α → Prop} {β: Type v}
+    (f: α → β), (f ⫢ R) → quot R → β
+
+    infix `ℓ`:50 := quot.lift
+
+    -- quot.colift
+    -- lift to a function with quotient codomain (instead of domain)
+    constant quot.colift:
+    Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
+    α → quot R
+    -- END
+
+    -- quot.tlift
+    -- lift tuple of α's to a tuple of quotients α/R's
+    -- (same as colift, except for order of arguments)
+    constant quot.tlift:
+    Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α),
+    β → quot R
+
+    notation `[` t `]` := quot.tlift t -- lift of a tuple
+
+    -- LIFT OF RELATIONS AND OPERATIONS
+    def liftrel {α: Type u} {β: Type v}:
+    (α → α → Prop) → (β → α) → (β → α) → Prop :=
+    λ R a b, ∀ i, R (a i) (b i)
+
+    def respects {α: Type u} {β: Type v}:
+    ((β → α) → α) → (α → α → Prop) → Prop :=
+    λ f R, ∀ (a b: β → α), (liftrel R) a b → R (f a) (f b)
+
+    infix `⊧`:50 := respects              -- ``\models``
+
+    constant quot.oplift {α: Type u} {β: Type v}:
+    Π {R: α → α → Prop} (f: op β α),
+    (f ⊧ R) → (β → quot R) → quot R
+
+    infix `ℒ`:50 := quot.oplift
+
+    -- uncurrying a relation (from α → α → Prop to set (α × α))
+    def uncurry {α: Type u} (R: α → α → Prop):
+    set (α × α) := λ a, R a.fst a.snd
+
+    notation R`̃ ` := uncurry R            -- type: ``R\tilde``
+
+    def ker {α: Type u} {β: Type v} (f : α → β):
+    set (α × α) := {a | f a.fst = f a.snd}
+
+  end ualib
 
 The constant ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (in the sense of the last sentence; i.e., ``f ⫢ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
@@ -150,59 +285,72 @@ The idea is for each ``a:α``, the function ``quot.lift f h`` maps the ``R``-cla
 
 .. In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the computation principle below can be proved with just ``rfl``).
 
-
-The constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` are not very strong.  (Indeed, ``quot.ind`` is satisfied if ``quot R`` is just ``α``, and ``quot.lift`` is the identity function.)  For that reason, the :term:`LSTL` does not even take these four constants to be "axioms." (This can be verified by asking Lean to ``#print`` the axioms used by ``lift_comp_principle`` and observing that Lean responds with "``no axioms``.")
-
-::
-
-  variables (α β: Type) (R: α → α → Prop)
-  variables (a: α) (f: α → β) (h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂)
-
-  theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
-  rfl
-
-  -- BEGIN
-  #print axioms lift_comp_principle  -- no axioms
-  -- END
-
-What makes ``quot`` into a bona fide quotient is the ``quot.sound`` axiom which asserts that if two elements of ``α`` are related by ``R``, then they are identified in the quotient ``α/R``.
-
-.. index:: keyword: quot.sound
+Let us see some examples.
 
 ::
 
-  variables (α β: Type) (R: α → α → Prop) (a: α)
+  import basic
+  import data.fintype
 
-  -- the quotient type
-  #check (quot R: Type)
+  universe u   -- carrier (universe) types,          (α)
+  universe v   -- type of operation symbols,         (β)
+  universe w   -- arity types.                       (γ)
 
-  -- the class of a
-  #check (quot.mk R a: quot R)
+  namespace ualib
+    constant quot: Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot.mk: Π {α: Type u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+    axiom quot.ind: ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop}, (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    def funresp {α: Type u} {β: Type v} (f: α → β) (R: α → α → Prop): Prop := ∀ a b, R a b → f a = f b
+    infix `⫢`:50 := funresp       -- ``\vDdash``
+    axiom quot.sound {α: Type u} {R: α → α → Prop}: ∀ (a b: α), R a b → a/R = b/R
 
-  variable f: α → β
-  variable h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂
+    -- Take a function f: α → β and a proof h : f ⫢ R, and
+    -- return the lift of f to quot R. (dup)
+    constant quot.lift:
+    Π {α: Type u} {R: α → α → Prop} {β: Type v}
+    (f: α → β), (f ⫢ R) → quot R → β
 
-  -- the corresponding function on quot R
-  #check quot.lift f h      -- quot R → β
+    infix `ℓ`:50 := quot.lift
 
-  -- the computation principle
-  theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
-  rfl
+    -- quot.colift
+    -- lift to a function with quotient codomain (instead of domain)
+    constant quot.colift:
+    Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
+    α → quot R
 
   -- BEGIN
-  axiom quot.sound {α: Type u} {R: α → α → Prop}:
-  ∀ (a b: α), R a b → a/R = b/R
+  section examples
+
+    parameters {α: Type u} {β : Type v} {r : α → α → Prop}
+
+    -- Name some binary relations on α.
+    variables (R: α → α → Prop) (Q: α → α → Prop)
+    variable a: α
+
+    #check @quot.lift α Q
+    -- Π {β: Type u} (f: α → β), f ⫢ Q → ualib_quotient.quot Q → β
+
+    #check @quot.sound α Q   -- ∀ (a b: α), Q a b → a/Q = b/Q
+    #check quot.lift Q       -- Q ⫢ ?M_1 → quot ?M_1 → α → Prop
+
+    -- Name a function and assume it respects R.
+    variables (f: α → β) (h₀: f ⫢ R)
+
+    #check (quot.lift f h₀: quot (λ (a b: α), R a b) → β)
+    #check (f ℓ h₀: quot R → β)
+
+  end examples
   -- END
 
-If a theorem or definition makes use of ``quot.sound``, it will show up in the ``#print axioms`` command.
+  end ualib
 
-Like inductively defined types and their associated constructors and recursors, the constants ``quot``, ``quot.mk``, ``quot.ind``, ``quot.lift`` defined in the :term:`LSTL` are viewed as part of the logical framework.
-
-In contrast, the other lifting constructions that we defined in the next section, which are important for universal algebra, are not native to Lean and, therefore, their computation principles cannot be proved as theorems, so we will define them as axioms.
 
 ------------------------
 
 .. index:: pair: respect; preserve
+
+.. _lifts-of-operations:
 
 Lifts of operations
 -------------------
@@ -244,11 +392,6 @@ Type ``\models`` to produce the symbol ``⊧``. (Note that ``\vDash`` produces �
 .. index:: ! lift; of tuples
 .. index:: ! lift; of operations
 
-.. _lifts-of-tuples-and-operations:
-
-Lifts of tuples and operations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation and :math:`g : (β → α) → α` a :math:`β`-ary operation. Recall that the function type :math:`β → α` may be viewed as the type of :math:`β`-tuples of elements from :math:`α`.
 
 Define a **lift of tuples** :math:`[\ ]: (β → α) → β → α/R` as follows: for each tuple :math:`τ: β → α`, let :math:`[τ] : β → α/R` be the :math:`β`-tuple that takes each :math:`i: β` to the :math:`R`-class containing :math:`τ\ i`; that is,
@@ -267,12 +410,8 @@ As such, ``ℒ`` takes a relation ``R: α → α → Prop``, an operation ``g: (
 
   ``(g ℒ p) [τ]  := (g τ) / R``.
 
-----------------------
 
-Lifts of Operations in Lean
-----------------------------
-
-The definitions of lifts of tuples and operations in :numref:`lifts-of-tuples-and-operations` are fundamentally different from that of the *lift of a function* given in :numref:`lifts-of-functions` and defined in the :term:`LSTL`. To account for this, we must introduce new lifting constants.
+The definitions of lifts of tuples and operations in :numref:`lifts-of-operations` are fundamentally different from that of the *lift of a function* given in :numref:`lifts-of-functions` and defined in the :term:`LSTL`. To account for this, we must introduce new lifting constants.
 
 The next section of code begins by redefining the constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` and then defines three new lift constants, ``quot.colift``, ``quot.tlift``, and ``quot.oplift``.
 
@@ -280,7 +419,7 @@ By redefining the standard ``quot`` constants, the ``ualib`` namespace puts all 
 
 ::
 
-  import basic 
+  import basic
   import data.fintype
 
   universe u   -- carrier (universe) types,          (α)
@@ -288,81 +427,98 @@ By redefining the standard ``quot`` constants, the ``ualib`` namespace puts all 
   universe w   -- arity types.                       (γ)
 
   namespace ualib
-    constant quot:
-    Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot: Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot.mk: Π {α: Type u} (a : α) (R: α → α → Prop), quot R
+    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
+    axiom quot.ind: ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop}, (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    def funresp {α: Type u} {β: Type v} (f: α → β) (R: α → α → Prop): Prop := ∀ a b, R a b → f a = f b
+    infix `⫢`:50 := funresp       -- ``\vDdash``
+    axiom quot.sound {α: Type u} {R: α → α → Prop}: ∀ (a b: α), R a b → a/R = b/R
+    constant quot.lift: Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β), (f ⫢ R) → quot R → β
+    infix `ℓ`:50 := quot.lift
+    constant quot.colift: Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β), α → quot R
 
-    constant quot.mk:
-    Π {α: Type u} (a : α) (R: α → α → Prop),
-    quot R
+    -- BEGIN
+    -- The lift of a tuple.
+    -- quot.tlift: lifts a tuple of α's to a tuple of classes α/R's
+    -- (same as colift, except for order of arguments)
+    constant quot.tlift:
+    Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α),
+    β → quot R
 
-    infix `/` := quot.mk
+    notation `[` t `]` := quot.tlift t -- lift of a tuple
 
-    axiom quot.ind:
-    ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop},
-    (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    -- The lift of a relation.
+    def liftrel {α: Type u} {β: Type v}:
+    (α → α → Prop) → (β → α) → (β → α) → Prop :=
+    λ R a b, ∀ i, R (a i) (b i)
 
-    def funresp {α: Type u} {β: Type v}
-    (f: α → β) (R: α → α → Prop): Prop :=
-    ∀ a b, R a b → f a = f b
+    def respects {α: Type u} {β: Type v}:
+    ((β → α) → α) → (α → α → Prop) → Prop :=
+    λ f R, ∀ (a b: β → α), (liftrel R) a b → R (f a) (f b)
 
-    infix `⫢`:50 := funresp
+    infix `⊧`:50 := respects              -- ``\models``
 
-    constant quot.lift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β),
-    (f ⫢ R) → quot R → β
+    -- The lift of an operation.
+    constant quot.oplift {α: Type u} {β: Type v}:
+    Π {R: α → α → Prop} (f: op β α),
+    (f ⊧ R) → (β → quot R) → quot R
 
-    infix `ℓ`:50 := quot.lift 
+    infix `ℒ`:50 := quot.oplift
 
-  -- BEGIN
+    -- uncurrying a relation (from α → α → Prop to set (α × α))
+    def uncurry {α: Type u} (R: α → α → Prop):
+    set (α × α) := λ a, R a.fst a.snd
 
-  -- quot.colift
-  -- lift to a function with quotient codomain (instead of domain)
-  constant quot.colift:
-  Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
-  α → quot R
+    notation R`̃ ` := uncurry R            -- type: ``R\tilde``
 
-  -- LIFT OF A TUPLE ------------------------------------------
-  -- quot.tlift
-  -- lift tuple of α's to a tuple of quotients α/R's
-  -- (same as colift, except for order of arguments)
-  constant quot.tlift:
-  Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α),
-  β → quot R
+    def ker {α: Type u} {β: Type v} (f : α → β):
+    set (α × α) := {a | f a.fst = f a.snd}
+    -- END
+    section examples
+      parameters {α: Type u} {β : Type v}
 
-  notation `[` t `]` := quot.tlift t -- lift of a tuple
+      -- Name some binary relations on α.
+      variables (R: α → α → Prop)
 
-  -- LIFT OF RELATIONS AND OPERATIONS --------------------------
-  def liftrel {α: Type u} {β: Type v}:
-  (α → α → Prop) → (β → α) → (β → α) → Prop :=
-  λ R a b, ∀ i, R (a i) (b i)
+      -- Lift of a tuple.
+      variable t: β → α        -- A tuple.
+      #check quot.tlift t  -- β → quot ?M_1
+      #check [t]           -- β → quot ?M_1
 
-  def respects {α: Type u} {β: Type v}:
-  ((β → α) → α) → (α → α → Prop) → Prop :=
-  λ f R, ∀ (a b: β → α), (liftrel R) a b → R (f a) (f b)
+      -- Lift of an operation.
+      -- Name an operation and assume it respects R.
+      variables (g: op β α) (h₁: g ⊧ R)
+      #check (quot.oplift g h₁ : (β → quot R) → quot R)
+      #check g ℒ h₁           -- (β → quot R) → quot R
 
-  infix `⊧`:50 := respects              -- ``\models``
+      -- Uncurry notation.
+      #check (uncurry R : set (α × α))
+      #check (R̃ : set (α × α) )
 
-  constant quot.oplift {α: Type u} {β: Type v}:
-  Π {R: α → α → Prop} (f: op β α),
-  (f ⊧ R) → (β → quot R) → quot R
+      -- Theorem. The function f: α → β respects R: α → α → Prop
+      --          iff uncurry R ⊆ ker f
+      --          iff R̃ ⊆ ker f
 
-  infix `ℒ`:50 := quot.oplift
+      theorem kernel_resp
+      {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β):
+      (f ⫢ R)  ↔  (R̃ ⊆ ker f) :=
+      iff.intro
+      ( assume h: f ⫢ R, show R̃ ⊆ ker f, from
+          λ p, h p.fst p.snd
+      )
+      ( assume h: R̃ ⊆ ker f, show f ⫢ R, from
+          assume a₁ a₂ (h₁: R a₁ a₂),
+          have h₂: (a₁ , a₂) ∈ (R̃), from h₁,
+          h h₂
+      )
+    end examples
 
-  -- uncurrying a relation (from α → α → Prop to set (α × α))
-  def uncurry {α: Type u} (R: α → α → Prop):
-  set (α × α) := λ a, R a.fst a.snd
-
-  notation R`̃ ` := uncurry R            -- type: ``R\tilde``
-
-  def ker {α: Type u} {β: Type v} (f : α → β):
-  set (α × α) := {a | f a.fst = f a.snd}
-
-  -- END
   end ualib
 
-Notice the alternative syntax we added for this notion of "respects".
+Note the weaker sense in which a function may respect a relation; also note that we use the symbol ⊧ (typed with ``\models``) to denote this alternative notion of the "respects" relation.
 
-Now is a good time to pause and summarize the shorthand notation defined thus far.
+Now is a good time to pause to summarize the shorthand notation defined thus far.
 
 .. (Recall we defined ``⫢`` earlier as notation for the notion of "respects" that agrees with the one used in the :term:`LSTL`).
 
@@ -376,33 +532,16 @@ Now is a good time to pause and summarize the shorthand notation defined thus fa
 
 + ``R̃`` means ``uncurry R``.
 
-.. We also made use of the ``operation`` type which will be formally introduced in :numref:`algebras-in-lean`.
+----------------------
 
-Now let's check some types associated with these newly defined constants, test the new notation, and prove that the notion of a function ``f`` respecting a relation ``R``, as defined in the :term:`LSTL`, is equivalent to the assertion that ``R`` is a subset of the kernel of ``f``.
+Computation principles
+----------------------
 
-.. ::
-
-..   variables (α β: Type) (R: α → α → Prop) (a: α)
-
-..   -- the quotient type
-..   #check (quot R: Type)
-
-..   -- the class of a
-..   #check (quot.mk R a: quot R)
-
-..   variable f: α → β
-..   variable h: ∀ a₁ a₂, R a₁ a₂ → f a₁ = f a₂
-
-..   -- the corresponding function on quot R
-..   #check quot.lift f h      -- quot R → β
-
-..   -- the computation principle
-..   theorem lift_comp_principle: quot.lift f h (quot.mk R a) = f a :=
-..   rfl
+Finally, let us assert some computation principles for these lift operators defined above. [2]_
 
 ::
 
-  import basic 
+  import basic
   import data.fintype
 
   universe u   -- carrier (universe) types,          (α)
@@ -410,106 +549,30 @@ Now let's check some types associated with these newly defined constants, test t
   universe w   -- arity types.                       (γ)
 
   namespace ualib
-    constant quot:
-    Π {α: Type u}, (α → α → Prop) → Type u
-
-    constant quot.mk:
-    Π {α: Type u} (a : α) (R: α → α → Prop),
-    quot R
-
+    constant quot: Π {α: Type u}, (α → α → Prop) → Type u
+    constant quot.mk: Π {α: Type u} (a : α) (R: α → α → Prop), quot R
     infix `/` := quot.mk  -- notation: a/R := quot.mk a R
-
-    axiom quot.ind:
-    ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop},
-    (∀ a, β (a/R)) → ∀ (q: quot R), β q
-
-    def funresp {α: Type u} {β: Type v}
-    (f: α → β) (R: α → α → Prop): Prop :=
-    ∀ a b, R a b → f a = f b
-
-    infix `⫢`:50 := funresp
-
-    constant quot.lift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β),
-    (f ⫢ R) → quot R → β
-
+    axiom quot.ind: ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop}, (∀ a, β (a/R)) → ∀ (q: quot R), β q
+    def funresp {α: Type u} {β: Type v} (f: α → β) (R: α → α → Prop): Prop := ∀ a b, R a b → f a = f b
+    infix `⫢`:50 := funresp       -- ``\vDdash``
+    axiom quot.sound {α: Type u} {R: α → α → Prop}: ∀ (a b: α), R a b → a/R = b/R
+    constant quot.lift: Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β), (f ⫢ R) → quot R → β
     infix `ℓ`:50 := quot.lift
-
-    constant quot.colift:
-    Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
-    α → quot R
-
-    constant quot.tlift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α),
-    β → quot R
-
+    constant quot.colift: Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β), α → quot R
+    constant quot.tlift: Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α), β → quot R
     notation `[` t `]` := quot.tlift t -- lift of a tuple
-
-    def liftrel {α: Type u} {β: Type v}:
-    (α → α → Prop) → (β → α) → (β → α) → Prop :=
-    λ R a b, ∀ i, R (a i) (b i)
-
-    notation `⟨` R `⟩` := liftrel R       -- ``\<R\>``
-
-    def respects {α: Type u} {β: Type v}:
-    ((β → α) → α) → (α → α → Prop) → Prop :=
-    λ f R, ∀ (a b: β → α), ⟨R⟩ a b → R (f a) (f b)
-
-    infix `⊧`:50 := respects              -- ``\models``
-
-    constant quot.oplift {α: Type u} {β: Type v}:
-    Π {R: α → α → Prop} (f: op β α),
-    (f ⊧ R) → (β → quot R) → quot R
-
+    def liftrel {α: Type u} {β: Type v}: (α → α → Prop) → (β → α) → (β → α) → Prop := λ R a b, ∀ i, R (a i) (b i)
+    def respects {α: Type u} {β: Type v}: ((β → α) → α) → (α → α → Prop) → Prop := λ f R, ∀ (a b: β → α), (liftrel R) a b → R (f a) (f b)
+    infix `⊧`:50 := respects
+    constant quot.oplift {α: Type u} {β: Type v}: Π {R: α → α → Prop} (f: op β α), (f ⊧ R) → (β → quot R) → quot R
     infix `ℒ`:50 := quot.oplift
-
-    def uncurry {α: Type u} (R: α → α → Prop):
-    set (α × α) := λ a, R a.fst a.snd
-
-    notation R`̃ ` := uncurry R            -- type: ``R\tilde``
-
-    def ker {α: Type u} {β: Type v} (f : α → β):
-    set (α × α) := {a | f a.fst = f a.snd}
-
-  -- BEGIN
-
-  section examples
-
-    parameter α : Type u
-    parameter β : Type v
-
-    variable R: α → α → Prop -- A binary relation on α,
-    variable f: α → β        -- A function...
-    variable h₀: f ⫢ R       -- ...that respects R.
-
-    variable (t: β → α)        -- A tuple.
-    variable (g: op β α)       -- An operation...
-    variable (h₁: g ⊧ R)       -- ...that respects R
-
-    -- test notation for lift of a relation --
-    #check liftrel R      -- (?M_1 → α) → (?M_1 → α) → Prop)
-    #check @liftrel α β R -- (β → α) → (β → α) → Prop)
-    #check (R: α → α → Prop)
-
-    -- test notation for lift of a function --
-    #check (quot.lift f h₀: quot (λ (a b: α), R a b) → β)
-    #check (f ℓ h₀: quot R → β)
-
-    -- test notation for lift of a tuple --
-    #check quot.tlift t  -- β → quot ?M_1
-    #check [t]           -- β → quot ?M_1
-
-    -- test notation for lift of an operation
-    #check (quot.oplift g h₁ : (β → quot R) → quot R)
-    #check g ℒ h₁           -- (β → quot R) → quot R
-
-    -- test notation for uncurrying a relation --
-    #check (uncurry R : set (α × α))
-    #check (R̃ : set (α × α) )
-
+    def uncurry {α: Type u} (R: α → α → Prop): set (α × α) := λ a, R a.fst a.snd
+    notation R`̃ ` := uncurry R
+    def ker {α: Type u} {β: Type v} (f : α → β): set (α × α) := {a | f a.fst = f a.snd}
     -- Theorem. The function f: α → β respects R: α → α → Prop
     --          iff uncurry R ⊆ ker f
     --          iff R̃ ⊆ ker f
+
     theorem kernel_resp
     {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β):
     (f ⫢ R)  ↔  (R̃ ⊆ ker f) :=
@@ -523,134 +586,38 @@ Now let's check some types associated with these newly defined constants, test t
         h h₂
     )
 
-  end examples
+    -- BEGIN
 
-  -- END
+    -- computation principle for function lift
+    axiom flift_comp_principle
+    {α: Type u} {R: α → α → Prop} {β : Type v}
+    (f: α → β) (h: f ⫢ R):
+    ∀ (a: α), (f ℓ h) (a/R) = f a
 
-  end ualib
+    -- The same flift principle, assuming instead that (uncurry) R
+    -- belongs to the kernel of f and applying the kernel_resp theorem.
+    axiom flift_comp_principle'
+    {α : Type u} {R: α → α → Prop} {β: Type v}
+    (f: α → β) (h: R̃ ⊆ ker f): ∀ (a: α),
+    (f ℓ (iff.elim_right (kernel_resp f) h)) (a/R) = f a
 
-Finally, let us assert some computation principles for these new lift operators. [2]_
+    -- computation principle for colift
+    axiom colift_comp_principle
+    {α: Type u} {β: Type v} {R: β → β → Prop}
+    (f: α → β): ∀ (a: α),
+    (quot.colift f) a = (f a)/R
 
-::
+    -- computation principle for tuple lift
+    axiom tlift_comp_principle
+    {α: Type u} {R: α → α → Prop} {β: Type v}
+    (τ: β → α): ∀ (b : β), [τ] b = (τ b)/R
 
-  import basic 
-  import data.fintype
-
-  universe u   -- carrier (universe) types,          (α)
-  universe v   -- type of operation symbols,         (β)
-  universe w   -- arity types.                       (γ)
-
-  namespace ualib
-    constant quot:
-    Π {α: Type u}, (α → α → Prop) → Type u
-
-    constant quot.mk:
-    Π {α: Type u} (a : α) (R: α → α → Prop),
-    quot R
-
-    infix `/` := quot.mk  -- notation: a/R := quot.mk a R
-
-    axiom quot.ind:
-    ∀ {α: Type u} {R: α → α → Prop} {β: quot R → Prop},
-    (∀ a, β (a/R)) → ∀ (q: quot R), β q
-
-    def funresp {α: Type u} {β: Type v}
-    (f: α → β) (R: α → α → Prop): Prop :=
-    ∀ a b, R a b → f a = f b
-
-    infix `⫢`:50 := funresp
-
-    constant quot.lift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β),
-    (f ⫢ R) → quot R → β
-
-    infix `ℓ`:50 := quot.lift
-
-    constant quot.colift:
-    Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
-    α → quot R
-
-    constant quot.tlift:
-    Π {α: Type u} {R: α → α → Prop} {β: Type v} (t: β → α),
-    β → quot R
-
-    notation `[` t `]` := quot.tlift t -- lift of a tuple
-
-    def liftrel {α: Type u} {β: Type v}:
-    (α → α → Prop) → (β → α) → (β → α) → Prop :=
-    λ R a b, ∀ i, R (a i) (b i)
-
-    notation `⟨` R `⟩` := liftrel R       -- ``\<R\>``
-
-    def respects {α: Type u} {β: Type v}:
-    ((β → α) → α) → (α → α → Prop) → Prop :=
-    λ f R, ∀ (a b: β → α), ⟨R⟩ a b → R (f a) (f b)
-
-    infix `⊧`:50 := respects              -- ``\models``
-
-    constant quot.oplift {α: Type u} {β: Type v}:
-    Π {R: α → α → Prop} (f: op β α),
-    (f ⊧ R) → (β → quot R) → quot R
-
-    infix `ℒ`:50 := quot.oplift
-
-    def uncurry {α: Type u} (R: α → α → Prop):
-    set (α × α) := λ a, R a.fst a.snd
-
-    notation R`̃ ` := uncurry R            -- type: ``R\tilde``
-
-    def ker {α: Type u} {β: Type v} (f : α → β):
-    set (α × α) := {a | f a.fst = f a.snd}
-
-  theorem kernel_resp
-  {α: Type u} {R: α → α → Prop} {β: Type v} (f: α → β): 
-  (f ⫢ R)  ↔  (R̃ ⊆ ker f) :=
-  iff.intro
-  ( assume h: f ⫢ R, show R̃ ⊆ ker f, from
-      λ p, h p.fst p.snd
-  )
-  ( assume h: R̃ ⊆ ker f, show f ⫢ R, from
-      assume a₁ a₂ (h₁: R a₁ a₂), 
-      have h₂: (a₁ , a₂) ∈ (R̃), from h₁,
-      h h₂
-  )
-
-  -- BEGIN
-
-  -- computation principle for function lift
-  axiom flift_comp_principle
-  {α: Type u} {R: α → α → Prop} {β : Type v}
-  (f: α → β) (h: f ⫢ R):
-  ∀ (a: α), (f ℓ h) (a/R) = f a
-
-  -- The same flift principle, assuming instead that (uncurry) R 
-  -- belongs to the kernel of f and applying the kernel_resp theorem.
-  axiom flift_comp_principle'
-  {α : Type u} {R: α → α → Prop} {β: Type v}
-  (f: α → β) (h: R̃ ⊆ ker f): ∀ (a: α),
-  (f ℓ (iff.elim_right (kernel_resp f) h)) (a/R) = f a
-
-  -- computation principle for colift
-  axiom colift_comp_principle
-  {α: Type u} {β: Type v} {R: β → β → Prop}
-  (f: α → β): ∀ (a: α), 
-  (quot.colift f) a = (f a)/R
-
-  -- computation principle for tuple lift
-  axiom tlift_comp_principle
-  {α: Type u} {R: α → α → Prop} {β: Type v}
-  (τ: β → α): ∀ (b : β), [τ] b = (τ b)/R
-
-  -- computation principle for operation lift
-  axiom olift_comp_principle
-  {α: Type u} {R: α → α → Prop} {β: Type v}
-  (g: (β → α) → α) (h : g ⊧ R): ∀ (τ : β → α),
-  (g ℒ h) [τ] = (g τ)/R
-
-  axiom quot.sound
-  {α: Type u} {R: α → α → Prop}:
-  ∀ (a b: α), R a b → a/R = b/R
-  -- END
+    -- computation principle for operation lift
+    axiom olift_comp_principle
+    {α: Type u} {R: α → α → Prop} {β: Type v}
+    (g: (β → α) → α) (h : g ⊧ R): ∀ (τ : β → α),
+    (g ℒ h) [τ] = (g τ)/R
+    -- END
 
   end ualib
 
@@ -662,7 +629,7 @@ Finally, let us assert some computation principles for these new lift operators.
    The issue here is whether we can define :math:`fₗ (x/R)` without invoking some form of the axiom of :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
 
 .. [2]
-   The definitions inside the ``quotient`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
+   Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
 
 
 -------------------------------------
