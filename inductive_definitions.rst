@@ -226,7 +226,7 @@ The **equalizer** of :math:`g` and :math:`h` is the set
 
 .. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
 
-Here is a list of basic observations that we will need later. We will reference the first observation in the list as :ref:`Obs 1 <obs-one>`, etc. [6]_
+Here is a list of basic observations that we will need later. We will reference the first observation in the list as :numref:`Obs %s <obs-one>`, etc. [6]_
 
 .. _obs-one:
 
@@ -421,27 +421,4 @@ Here is a list of basic observations that we will need later. We will reference 
 .. [6]
    To see the proofs, click the black triangles.
 
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
+.. include:: hyperlink_references.rst

@@ -35,4 +35,3 @@
 .. _NuPRL: http://www.nuprl.org/
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
