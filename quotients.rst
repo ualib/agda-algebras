@@ -380,7 +380,7 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
 
   if :math:`τ` belongs to :math:`R`, then :math:`(f (π_1 ∘ τ), f (π_2 ∘ τ))` belongs to :math:`R`.
 
-Type ``\models`` to produce the symbol ``⊧``. (Note that ``\vDash`` produces ⊨, which is not ⊧.)
+(Type ``\models`` to produce the symbol ``⊧``; note that ``\vDash`` produces ⊨, which is not the same as ⊧.)
 
 .. proof:example::
 
@@ -415,7 +415,7 @@ The definitions of lifts of tuples and operations in :numref:`lifts-of-operation
 
 The next section of code begins by redefining the constants ``quot``, ``quot.mk``, ``quot.ind``, and ``quot.lift`` and then defines three new lift constants, ``quot.colift``, ``quot.tlift``, and ``quot.oplift``.
 
-By redefining the standard ``quot`` constants, the ``ualib`` namespace puts all quotient constants on the same "level" in the sense that all are now "user-defined" and thus none is a built-in part of Lean's logical framework.  As such, their associated computation principles will be added as axioms rather than proved as theorems.
+By redefining the standard ``quot`` constants, the ``ualib`` namespace puts all quotient constants on the same "level" in the sense that each is now "user-defined" and none is a built-in part of Lean's logical framework.  As such, their associated computation principles will be added as axioms rather than proved as theorems.
 
 ::
 
@@ -537,7 +537,7 @@ Now is a good time to pause to summarize the shorthand notation defined thus far
 Computation principles
 ----------------------
 
-Finally, let us assert some computation principles for these lift operators defined above. [2]_
+Finally, let us assert some computation principles for the lifts defined above. [2]_
 
 ::
 
@@ -626,7 +626,7 @@ Finally, let us assert some computation principles for these lift operators defi
 .. rubric:: Footnotes
 
 .. [1]
-   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some form of the axiom of :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
+   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
 
 .. [2]
    Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.

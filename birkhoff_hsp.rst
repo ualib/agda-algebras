@@ -40,7 +40,8 @@ A variety of theorems
 
    *Proof*. Exercise.
 
-   .. _fact-m2:
+
+.. _fact-m2:
 
 .. proof:theorem:: 
 
@@ -66,7 +67,8 @@ A variety of theorems
       
       By assumption :math:`h(p) = h(q)`. Since :math:`h(p) = h(p^{𝔸}(x_1, \dots, x_n)) = p^{𝔸}(h(x_1), \dots, h(x_n)) = p^{𝔸}(a_1,\dots, a_n)` (and similarly for :math:`q`) the result follows.
 
-   .. _fact-m3:
+
+.. _fact-m3:
 
 .. proof:theorem:: 
 
@@ -84,23 +86,25 @@ A variety of theorems
  
          *Proof*.
       
-      We shall show (a) ⟹ (c) ⟹ (b) ⟹ (a). 
+      We shall show (1) ⟹ (3) ⟹ (2) ⟹ (1). 
       
       Recall that :math:`𝔽_{𝒦}(X_ω) = 𝕋/λ ∈ 𝖲 𝖯 (𝒦)`.
       
-      From (a) and Lemma 4.36 of :cite:`Bergman:2012` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (c) holds.
+      From (1) and Lemma 4.36 of :cite:`Bergman:2012` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (3) holds.
 
-      From (c), :math:`p^{𝔽}([x_1], \dots, [x_n]) = q^{𝔽}([x_1], \dots, [x_n])`, where :math:`[x_i] = x_i/λ`.
+      From (3), :math:`p^{𝔽}([x_1], \dots, [x_n]) = q^{𝔽}([x_1], \dots, [x_n])`, where :math:`[x_i] = x_i/λ`.
       
-      From the definition of 𝔽, :math:`p^{𝕋}(x_1, \dots, x_n) ≡_λ q^{𝕋}(x_1, \dots, x_n)`, from which (b) follows since :math:`p = p^{𝕋}(x_1, \dots, x_n)` and :math:`q = q^{𝕋}(x_1, \dots, x_n)`.
+      From the definition of 𝔽, :math:`p^{𝕋}(x_1, \dots, x_n) ≡_λ q^{𝕋}(x_1, \dots, x_n)`, from which (2) follows since :math:`p = p^{𝕋}(x_1, \dots, x_n)` 
+      and :math:`q = q^{𝕋}(x_1, \dots, x_n)`.
 
-      Finally assume (b). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
+      Finally assume (2). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
       
       Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \operatorname{Hom}(𝕋, 𝔸)`.
       
-      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (b) implies :math:`h(p) = h(q)` hence (a) holds, completing the proof.
+      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h(p) = h(q)` hence (1) holds, completing the proof.
 
 The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝔽(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
+
 
 .. _fact-m4:
 
@@ -115,7 +119,7 @@ The last result tells us that we can determine whether an identity is true in a 
  
          *Proof*.
       
-      Since :math:`𝔽_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Theorem 4.38 of :cite:`Bergman:2012`. (See :ref:`Fact 3 <fact-m3>` above.)
+      Since :math:`𝔽_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Theorem 4.38 of :cite:`Bergman:2012`. (See :numref:`Thm %s <fact-m3>` above.)
       
       So assume that :math:`p^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n) = q^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n)`.
       
@@ -127,7 +131,7 @@ The last result tells us that we can determine whether an identity is true in a 
                                        &= h(q^{𝔽_𝒦(Y)}(y_1, \dots, y_n)) = q^{𝔸}(h(y_1), \dots, h(y_n))\\
                                        &= q^{𝔸}(a_1, \dots, a_n).
 
-      It now follows from :ref:`Fact 1 <fact-m1>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**.
+      It now follows from :numref:`Thm %s <fact-m1>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**.
 
 .. _the-hsp-theorem:
 
@@ -168,7 +172,7 @@ Applying the homomorphism :math:`g`,
 
 .. math:: p^{𝔽_{𝒲}(Y)}(y_1, \dots, y_n) = g(u) = g(v) = q^{𝔽_{𝒲}(Y)}(y_1,\dots, y_n).
 
-Then by :ref:`Fact 4 <fact-m4>` above (Corollary 4.39 of :cite:`Bergman:2012`), we have :math:`𝒲 ⊧ p ≈ q`, hence :math:`(p ≈ q) \in Σ`.
+Then by :numref:`Thm %s <fact-m4>` above (Corollary 4.39 of :cite:`Bergman:2012`), we have :math:`𝒲 ⊧ p ≈ q`, hence :math:`(p ≈ q) \in Σ`.
 
 Since :math:`𝔸 ∈ 𝒲^† = \operatorname{Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
 
@@ -181,7 +185,7 @@ as desired.
 .. rubric:: Footnotes
 
 .. [1]
-   **AoC**. It seems we need the Axiom of Choice here.
+   **AoC**. It seems we need to use some :term:`Choice` axiom here.
 
 .. [2]
    **AoC**. *ditto*
