@@ -60,141 +60,104 @@ First, we define an inductive type that represents the **subuniverse generated b
 
 ::
 
-  import data.set  -- the set.lean file from mathlib
-  definition op (β α) := (β → α) → α
-  definition π {β α} (i) : op β α := λ a, a i
-  structure signature := mk :: (F : Type*) (ρ : F → Type*)
-  definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-  definition algebra (σ : signature) := sigma (algebra_on σ)
-  instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
-  instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+  import data.set
+  universes u v w
+  namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
 
-  namespace subuniverse
-    section sub
-      parameters {σ : signature} {α : Type*} {I : Type*}
-      def F := σ.F
-      def ρ := σ.ρ 
-      def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-      def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-      def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
-      theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
-      assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
-      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h: x ∈ ⋂ i, C i, by simp at h; apply h
-      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
-      assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
-      assume (f: F) (a: ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
-      show 𝔸 f a ∈ ⋂i, C i, from Inter.intro (𝔸 f a) (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
-      -- Fact 1. X is a subset of Sgᴬ(X) ----------------------------------------
-      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= 
-      assume x (h: x ∈ X), 
-        show x ∈ ⋂₀ {U | Sub U ∧ X ⊆ U}, from 
-          assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}),  
-          show x ∈ W, from 
-            have h₂: Sub W ∧ X ⊆ W, from h₁, 
-          h₂.right h
-      -- Fact 2. A subuniverse that contains X also contains Sgᴬ X --
-      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}:
-      ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
-      assume R (h₁: Sub R) (h₂: X ⊆ R),
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      -- An alternative proof of Fact 2. ---------
-      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}:
-      ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
-      assume R (hc : Sub R ∧ X ⊆ R),
-      have h₁: Sub R, from hc.left,
-      have h₂: X ⊆ R, from hc.right,
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      -- Yet another derivation of Fact 2. ---------
-      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}:
-      ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= 
-      assume x (h₁: x ∈ Sg X) (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), 
-      show x ∈ R, from h₁ R (and.intro h₂ h₃)
-      -- Sgᴬ X is a subuniverse of A --------------------------
-      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= 
-      assume (f: F) (a: ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), 
-      show 𝔸 f a ∈ Sg X, from 
-        assume W (h: Sub W ∧ X ⊆ W), show 𝔸 f a ∈ W, from 
-          have h₁: Sg X ⊆ W, from 
-            sInter_mem' W h,
-          have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i),
-          (h.left f a h')
-    -- BEGIN
-    inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
-    | var (x : 𝔸) : x ∈ X → Y x
-    | app (f : F) (a : ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸 f a)
-    -- END  
-    end sub
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ
+      definition ρ := σ.ρ
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+  
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i), Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      -- BEGIN
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x: 𝔸): x ∈ X → Y x
+      | app (f: σ.ℱ) (a: σ.ρ f → 𝔸): (∀ i, Y (a i)) → Y (𝔸.snd f a)
+      -- END
   end subuniverse
 
 Next we prove that the type ``Y X`` is a subuniverse. Moreover, ``Y X`` is equal to :math:`\mathrm{Sg}^𝔸(X)`, which is another fact that we formalize and prove below.
 
 ::
 
-  import data.set  -- the set.lean file from mathlib
-  definition op (β α) := (β → α) → α
-  definition π {β α} (i) : op β α := λ a, a i
-  structure signature := mk :: (F : Type*) (ρ : F → Type*)
-  definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-  definition algebra (σ : signature) := sigma (algebra_on σ)
-  instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
-  instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+  import data.set
+  universes u v w
+  namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
 
-  namespace subuniverse
-    section sub
-      parameters {σ : signature} {α : Type*} {I : Type*}
-      def F := σ.F
-      def ρ := σ.ρ 
-      def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-      def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-      def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
-      theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
-      assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
-      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h: x ∈ ⋂ i, C i, by simp at h; apply h
-      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
-      assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
-      assume (f: F) (a: ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
-      show 𝔸 f a ∈ ⋂i, C i, from Inter.intro (𝔸 f a) (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
-      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:=                                   -- Fact 1.
-      assume x (h: x ∈ X), 
-        show x ∈ ⋂₀ {U | Sub U ∧ X ⊆ U}, from 
-          assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}),  
-          show x ∈ W, from 
-            have h₂: Sub W ∧ X ⊆ W, from h₁, 
-          h₂.right h
-      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}:                                                     -- Fact 2.
-      ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
-      assume R (h₁: Sub R) (h₂: X ⊆ R),
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}:                               -- An alternative proof of Fact 2.
-      ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
-      assume R (hc : Sub R ∧ X ⊆ R),
-      have h₁: Sub R, from hc.left,
-      have h₂: X ⊆ R, from hc.right,
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}:                          -- Yet another derivation of Fact 2.
-      ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= 
-      assume x (h₁: x ∈ Sg X) (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), 
-      show x ∈ R, from h₁ R (and.intro h₂ h₃)
-      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):=               -- Sgᴬ X is a subuniverse of A
-      assume (f: F) (a: ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), 
-      show 𝔸 f a ∈ Sg X, from 
-        assume W (h: Sub W ∧ X ⊆ W), show 𝔸 f a ∈ W, from 
-          have h₁: Sg X ⊆ W, from 
-            sInter_mem' W h,
-          have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i),
-          (h.left f a h')
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ
+      definition ρ := σ.ρ
+
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+   
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i), Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
       inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
       | var (x : 𝔸) : x ∈ X → Y x
-      | app (f : F) (a : ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸 f a)
-
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+      
     -- BEGIN
     -- Y X is a subuniverse
     lemma Y_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Y X):= 
@@ -204,138 +167,102 @@ Next we prove that the type ``Y X`` is a subuniverse. Moreover, ``Y X`` is equal
     -- Y A X is the subuniverse generated by X
     theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
     have h₀: X ⊆ Y X, from assume x (h: x ∈ X), 
-      show x  ∈ Y X, from Y.var x h,
-    have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), 
+    show x  ∈ Y X, from Y.var x h,
+    have h₁: Sub (Y X), from
+      assume f a (h : ∀ x, Y X (a x)), 
       show Y X (𝔸 f a), from Y.app f a h,
-    have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
-    have inc_r: Y X ⊆ Sg X, from assume a (h: a ∈ Y X), 
+        have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+        have inc_r: Y X ⊆ Sg X, from assume a (h: a ∈ Y X), 
       show a ∈ Sg X, from
         have h₂: a ∈ Y X → a ∈ Sg X, from 
           Y.rec
-          ( --base: a = x ∈ X
-            assume x (hr₁: x ∈ X), 
-            show x ∈ Sg X, from subset_X_of_SgX X hr₁ 
-          )
-          ( --inductive: a = A f b for some b with ∀ i, b i ∈ Sg X
-            assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X),
-            show 𝔸 f b ∈ Sg X, from SgX_is_Sub X f b hr₃ 
-          ),
-        h₂ h,
-    set.subset.antisymm inc_l inc_r
+          -- base step: a = x ∈ X
+            (
+              assume x (hr₁: x ∈ X), 
+              show x ∈ Sg X, from subset_X_of_SgX X hr₁
+            )
+          -- induct step: a = A f b for some b with ∀ i, b i ∈ Sg X
+            (
+              assume f b (hr₂: ∀ i, b i ∈ Y X),
+              assume (hr₃: ∀ i, b i ∈ Sg X),
+              show 𝔸 f b ∈ Sg X, from SgX_is_Sub X f b hr₃
+            ),
+          h₂ h,
+          set.subset.antisymm inc_l inc_r
     -- END  
-    end sub
   end subuniverse
 
-Finally, we prove that ``Y`` is the smallest subalgebra containing ``X``.
+Finally, we prove that ``Y`` is the smallest subuniverse containing ``X``.
 
 ::
 
-  import data.set  -- the set.lean file from mathlib
-  definition op (β α) := (β → α) → α
-  definition π {β α} (i) : op β α := λ a, a i
-  structure signature := mk :: (F : Type*) (ρ : F → Type*)
-  definition algebra_on (σ : signature) (α : Type*) := Π (f : σ.F), op (σ.ρ f) α   
-  definition algebra (σ : signature) := sigma (algebra_on σ)
-  instance alg_carrier (σ : signature) : has_coe_to_sort (algebra σ) := ⟨_, sigma.fst⟩
-  instance alg_operations (σ : signature) : has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
+  import data.set
+  universes u v w
+  namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
 
-  namespace subuniverse
-    section sub
-      parameters {σ : signature} {α : Type*} {I : Type*}
-      def F := σ.F
-      def ρ := σ.ρ 
-      def Sub {𝔸: algebra σ} (B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸 f a) ∈ B₀
-      def is_subalgebra (𝔸: algebra σ) (B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸 f ↑b
-      def Sg (A : algebra_on σ α) (X : set α) : set α := ⋂₀ {U | Sub A U ∧ X ⊆ U}
-      theorem Inter.intro {𝔸: algebra σ} {s: I → set 𝔸}: ∀ (x: 𝔸), (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) :=
-      assume x h t ⟨j, (eq: t = s j)⟩, eq.symm ▸ h j
-      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: I → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h: x ∈ ⋂ i, C i, by simp at h; apply h
-      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: I → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= 
-      assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
-      assume (f: F) (a: ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
-      show 𝔸 f a ∈ ⋂i, C i, from Inter.intro (𝔸 f a) (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
-      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:=                                   -- Fact 1.
-      assume x (h: x ∈ X), 
-        show x ∈ ⋂₀ {U | Sub U ∧ X ⊆ U}, from 
-          assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}),  
-          show x ∈ W, from 
-            have h₂: Sub W ∧ X ⊆ W, from h₁, 
-          h₂.right h
-      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}:                                                     -- Fact 2.
-      ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
-      assume R (h₁: Sub R) (h₂: X ⊆ R),
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}:                               -- An alternative proof of Fact 2.
-      ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
-      assume R (hc : Sub R ∧ X ⊆ R),
-      have h₁: Sub R, from hc.left,
-      have h₂: X ⊆ R, from hc.right,
-      show Sg X ⊆ R, from 
-        assume x (h: x ∈ Sg X), show x ∈ R, from 
-          h R (and.intro h₁ h₂)
-      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}:                          -- Yet another derivation of Fact 2.
-      ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= 
-      assume x (h₁: x ∈ Sg X) (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), 
-      show x ∈ R, from h₁ R (and.intro h₂ h₃)
-      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):=               -- Sgᴬ X is a subuniverse of A
-      assume (f: F) (a: ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), 
-      show 𝔸 f a ∈ Sg X, from 
-        assume W (h: Sub W ∧ X ⊆ W), show 𝔸 f a ∈ W, from 
-          have h₁: Sg X ⊆ W, from 
-            sInter_mem' W h,
-          have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i),
-          (h.left f a h')
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ
+      definition ρ := σ.ρ
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+    
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i), Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
       inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
       | var (x : 𝔸) : x ∈ X → Y x
-      | app (f : F) (a : ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸 f a)
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
 
-      -- Y X is a subuniverse
-      lemma Y_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Y X):= 
-      assume f a (h: ∀ i, Y X (a i)), show Y X (𝔸 f a), from 
-      Y.app f a h 
-  
-      -- Y A X is the subuniverse generated by X
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
       theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
-      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), 
-        show x  ∈ Y X, from Y.var x h,
-      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), 
-        show Y X (𝔸 f a), from Y.app f a h,
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
       have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
-      have inc_r: Y X ⊆ Sg X, from assume a (h: a ∈ Y X), 
-        show a ∈ Sg X, from
-          have h₂: a ∈ Y X → a ∈ Sg X, from 
-            Y.rec
-            ( --base: a = x ∈ X
-              assume x (hr₁: x ∈ X), 
-              show x ∈ Sg X, from subset_X_of_SgX X hr₁ 
-            )
-            ( --inductive: a = A f b for some b with ∀ i, b i ∈ Sg X
-              assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X),
-              show 𝔸 f b ∈ Sg X, from SgX_is_Sub X f b hr₃ 
-            ),
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
           h₂ h,
-      set.subset.antisymm inc_l inc_r
+        set.subset.antisymm inc_l inc_r
 
     -- BEGIN
-    definition index_of_sub_above_X {𝔸: algebra σ} 
-    (X: set 𝔸) (C: I → set 𝔸): I → Prop:= 
-    λ i, Sub (C i) ∧ X ⊆ (C i) 
-
-    lemma sInter_mem_of_mem {𝔸: algebra σ} {X: set 𝔸} (x: 𝔸): 
-    x ∈ Sg X ↔ ∀ {R: set 𝔸}, Sub R → X ⊆ R → x ∈ R:= 
-    iff.intro
-      (assume (h: x ∈ Sg X) (R: set 𝔸) (h₁: Sub R) (h₂: X ⊆ R), 
-        show x ∈ R, from h R (and.intro h₁ h₂))
-      (assume (h: ∀ {R: set 𝔸}, Sub R → X ⊆ R → x ∈ R), 
-        show x ∈ Sg X, from h (SgX_is_Sub X) (subset_X_of_SgX X))
-
     -- Y is the smallest Sub containing X
     lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): 
     Sub U → X ⊆ U → Y X ⊆ U:=
     assume (h₁: Sub U) (h₂ : X ⊆ U),
-    assume (y: 𝔸)  (p: Y X y), show U y, from 
+    assume (y: 𝔸) (p: Y X y), show U y, from 
       have q: Y X y → Y X y → U y, from 
         Y.rec
 
@@ -350,7 +277,6 @@ Finally, we prove that ``Y`` is the smallest subalgebra containing ``X``.
           have h₆: ∀ i, a i ∈ U, from 
             assume i, h₄ i (h₃ i), show U (𝔸 f a), from h₁ f a h₆ ),
       q p p
-
     -- END  
     end sub
   end subuniverse
@@ -359,7 +285,7 @@ Observe that the last proof proceeds exactly as would a typical informal proof t
 
 .. index:: recursor
 
-We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y.rec``, which Lean creates for us automatically whenever an inductive type is defined.
+We proved ``Y X ⊆ Sg X`` in this case by induction using the **recursor**, ``Y.rec``, which Lean creates for us automatically whenever an inductive type is defined. (We will see many more examples of inductive proofs below.)
 
 The Lean keyword ``assume`` is syntactic sugar for ``λ``; this and other notational conveniences, such as Lean's ``have...from`` and ``show...from`` syntax, make it possible to render formal proofs in a very clear and readable way.
 
@@ -454,17 +380,87 @@ We begin by defining in Lean
 
 ::
 
-  import subuniverse 
   import data.set
-
-  universe u -- where carrier types live
-
+  universes u v w
   namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
+  
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
 
-    def ker {α β: Type u} (f: α → β): α → α → Prop :=
-    λ a b, f a = f b
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ 
+      definition ρ := σ.ρ 
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
 
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
+        assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
+        Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x : 𝔸) : x ∈ X → Y x
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
+      theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
+      have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
+          h₂ h,
+        set.subset.antisymm inc_l inc_r
+
+      lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): Sub U → X ⊆ U → Y X ⊆ U:= assume (h₁: Sub U) (h₂ : X ⊆ U), assume (y: 𝔸)  (p: Y X y), have q: Y X y → Y X y → U y, from 
+        Y.rec
+          ( assume y (h: X y) (h': Y X y), h₂ h )
+          ( assume f a (h₃: ∀ i, Y X (a i)) (h₄: ∀ i, Y X (a i) → U (a i)) (h₅: Y X (𝔸.snd f a)), have h₆: ∀ i, a i ∈ U, from
+            assume i, h₄ i (h₃ i), h₁ f a h₆ ), q p p
+    end subuniverse
+
+    section homomorphism
+      parameters {α: Type u} {γ: Type v}
+      def homomorphic {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸 → 𝔹) := ∀ f a, h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+      def homomorphic_verbose {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸.fst → 𝔹.fst) := ∀ (f: σ.ℱ) (a : σ.ρ f → 𝔸.fst), h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+    end homomorphism
+
+    def ker {α β: Type u} (f: α → β): α → α → Prop := λ a b, f a = f b
+
+    -- BEGIN
     section basic_facts
+      parameter {σ: signature}
 
       -- equalizer (of functions)
       def E {α β: Type u} (f g: α → β): set α := 
@@ -480,6 +476,7 @@ We begin by defining in Lean
       λ (a: 𝔸), g a = h a 
 
     end basic_facts
+    -- END
 
   end ualib
 
@@ -487,19 +484,90 @@ Recall the simple fact that composing two homomorphisms results in a homomorphis
 
 ::
 
-  import subuniverse 
   import data.set
-  
-  universe u -- where structure universe (i.e. carrier) types live  (α)
-  
+  universes u v w
   namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
+  
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ 
+      definition ρ := σ.ρ 
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
+        assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
+        Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x : 𝔸) : x ∈ X → Y x
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
+      theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
+      have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
+          h₂ h,
+        set.subset.antisymm inc_l inc_r
+
+      lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): Sub U → X ⊆ U → Y X ⊆ U:= assume (h₁: Sub U) (h₂ : X ⊆ U), assume (y: 𝔸)  (p: Y X y), have q: Y X y → Y X y → U y, from 
+        Y.rec
+          ( assume y (h: X y) (h': Y X y), h₂ h )
+          ( assume f a (h₃: ∀ i, Y X (a i)) (h₄: ∀ i, Y X (a i) → U (a i)) (h₅: Y X (𝔸.snd f a)), have h₆: ∀ i, a i ∈ U, from
+            assume i, h₄ i (h₃ i), h₁ f a h₆ ), q p p
+    end subuniverse
+
+    section homomorphism
+      parameters {α: Type u} {γ: Type v}
+      def homomorphic {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸 → 𝔹) := ∀ f a, h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+      def homomorphic_verbose {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸.fst → 𝔹.fst) := ∀ (f: σ.ℱ) (a : σ.ρ f → 𝔸.fst), h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+    end homomorphism
+
     def ker {α β: Type u} (f: α → β): α → α → Prop := λ a b, f a = f b
+
     section basic_facts
       parameter {σ: signature}
       def E {α β: Type u} (f g: α → β): set α := λ (x: α), f x = g x 
       def hom {𝔸 𝔹: algebra σ} (g: 𝔸 → 𝔹): Prop := ∀ f a, g (𝔸 f a) = 𝔹 f (g ∘ a)
-      def E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹)(h₁: hom g) (h₂: hom h): set 𝔸 := λ a, g a = h a 
-    
+      def E_homs {𝔸 𝔹: algebra σ} (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): set 𝔸 :=  λ (a: 𝔸), g a = h a 
+
     -- BEGIN
     -- 0. The composition of homs is a hom.
     lemma hom_comp_of_hom {𝔸 𝔹 ℂ: algebra σ}
@@ -518,26 +586,96 @@ Next we see that the equalizer ``𝖤 g h`` of two homomorphisms ``g`` and ``h``
 
 ::
 
-  import subuniverse 
   import data.set
-  
-  universe u -- where structure universe (i.e. carrier) types live  (α)
-  
+  universes u v w
   namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
+  
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ 
+      definition ρ := σ.ρ 
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
+        assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
+        Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x : 𝔸) : x ∈ X → Y x
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
+      theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
+      have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
+          h₂ h,
+        set.subset.antisymm inc_l inc_r
+
+      lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): Sub U → X ⊆ U → Y X ⊆ U:= assume (h₁: Sub U) (h₂ : X ⊆ U), assume (y: 𝔸)  (p: Y X y), have q: Y X y → Y X y → U y, from 
+        Y.rec
+          ( assume y (h: X y) (h': Y X y), h₂ h )
+          ( assume f a (h₃: ∀ i, Y X (a i)) (h₄: ∀ i, Y X (a i) → U (a i)) (h₅: Y X (𝔸.snd f a)), have h₆: ∀ i, a i ∈ U, from
+            assume i, h₄ i (h₃ i), h₁ f a h₆ ), q p p
+    end subuniverse
+
+    section homomorphism
+      parameters {α: Type u} {γ: Type v}
+      def homomorphic {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸 → 𝔹) := ∀ f a, h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+      def homomorphic_verbose {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸.fst → 𝔹.fst) := ∀ (f: σ.ℱ) (a : σ.ρ f → 𝔸.fst), h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+    end homomorphism
+
     def ker {α β: Type u} (f: α → β): α → α → Prop := λ a b, f a = f b
+
     section basic_facts
       parameter {σ: signature}
       def E {α β: Type u} (f g: α → β): set α := λ (x: α), f x = g x 
       def hom {𝔸 𝔹: algebra σ} (g: 𝔸 → 𝔹): Prop := ∀ f a, g (𝔸 f a) = 𝔹 f (g ∘ a)
-      def E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹)(h₁: hom g) (h₂: hom h): set 𝔸 := λ a, g a = h a 
-    
-      lemma hom_comp_of_hom {𝔸 𝔹 ℂ: algebra σ} (g: 𝔸 → 𝔹) (h₁: hom g) (h: 𝔹 → ℂ) (h₂: hom h): hom (h ∘ g) :=
-      assume f a, show (h ∘ g)(𝔸 f a) = ℂ f (h ∘ g ∘ a), from 
-        have h₃: (h ∘ g)(𝔸 f a) = h (g (𝔸 f a)), from  rfl,
-        calc
-          (h ∘ g)(𝔸 f a) = h ((𝔹 f) (g ∘ a)) : (h₁ f a) ▸ h₃ 
-                     ... = (ℂ f) (h ∘ g ∘ a)  : h₂ f (g ∘ a)
-  
+      def E_homs {𝔸 𝔹: algebra σ} (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): set 𝔸 :=  λ (a: 𝔸), g a = h a 
+
+      lemma hom_comp_of_hom {𝔸 𝔹 ℂ: algebra σ}(g: 𝔸 → 𝔹) (h: 𝔹 → ℂ) (hg: hom g) (hh: hom h): hom (h ∘ g) :=
+    assume f a, show (h ∘ g)(𝔸 f a) = ℂ f (h ∘ g ∘ a), from 
+      have h₃: (h ∘ g)(𝔸 f a) = h (g (𝔸 f a)), from  rfl,
+      calc
+        (h ∘ g)(𝔸 f a) = h ((𝔹 f) (g ∘ a)) : (h₁ f a) ▸ h₃ 
+                   ... = (ℂ f) (h ∘ g ∘ a)  : h₂ f (g ∘ a)
     -- BEGIN
     -- 1. The equalizer of homs is a subuniverse.
     lemma Sub_E_homs {𝔸 𝔹: algebra σ}
@@ -561,24 +699,97 @@ More precisely, if a subset ``X`` is contained in the equalizer of two homomorph
 
 ::
 
-  import subuniverse 
   import data.set
-  universe u
+  universes u v w
   namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
+  
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ 
+      definition ρ := σ.ρ 
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
+        assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
+        Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x : 𝔸) : x ∈ X → Y x
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
+      theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
+      have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
+          h₂ h,
+        set.subset.antisymm inc_l inc_r
+
+      lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): Sub U → X ⊆ U → Y X ⊆ U:= assume (h₁: Sub U) (h₂ : X ⊆ U), assume (y: 𝔸)  (p: Y X y), have q: Y X y → Y X y → U y, from 
+        Y.rec
+          ( assume y (h: X y) (h': Y X y), h₂ h )
+          ( assume f a (h₃: ∀ i, Y X (a i)) (h₄: ∀ i, Y X (a i) → U (a i)) (h₅: Y X (𝔸.snd f a)), have h₆: ∀ i, a i ∈ U, from
+            assume i, h₄ i (h₃ i), h₁ f a h₆ ), q p p
+    end subuniverse
+
+    section homomorphism
+      parameters {α: Type u} {γ: Type v}
+      def homomorphic {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸 → 𝔹) := ∀ f a, h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+      def homomorphic_verbose {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸.fst → 𝔹.fst) := ∀ (f: σ.ℱ) (a : σ.ρ f → 𝔸.fst), h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+    end homomorphism
+
     def ker {α β: Type u} (f: α → β): α → α → Prop := λ a b, f a = f b
+
     section basic_facts
       parameter {σ: signature}
       def E {α β: Type u} (f g: α → β): set α := λ (x: α), f x = g x 
       def hom {𝔸 𝔹: algebra σ} (g: 𝔸 → 𝔹): Prop := ∀ f a, g (𝔸 f a) = 𝔹 f (g ∘ a)
-      def E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹)(h₁: hom g) (h₂: hom h): set 𝔸 := λ a, g a = h a 
-    
+      def E_homs {𝔸 𝔹: algebra σ} (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): set 𝔸 :=  λ (a: 𝔸), g a = h a 
+
       lemma hom_comp_of_hom {𝔸 𝔹 ℂ: algebra σ} (g: 𝔸 → 𝔹) (h₁: hom g) (h: 𝔹 → ℂ) (h₂: hom h): hom (h ∘ g) :=
       assume f a, show (h ∘ g)(𝔸 f a) = ℂ f (h ∘ g ∘ a), from 
         have h₃: (h ∘ g)(𝔸 f a) = h (g (𝔸 f a)), from  rfl,
         calc
           (h ∘ g)(𝔸 f a) = h ((𝔹 f) (g ∘ a)) : (h₁ f a) ▸ h₃ 
                      ... = (ℂ f) (h ∘ g ∘ a)  : h₂ f (g ∘ a)
-  
+
       lemma Sub_E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): Sub (E_homs g h hg hh) := 
       assume f a (h₁: ∀ x, a x ∈ (E_homs g h hg hh)),
       show 𝔸 f a ∈ (E_homs g h hg hh),  from 
@@ -588,7 +799,7 @@ More precisely, if a subset ``X`` is contained in the equalizer of two homomorph
             g (𝔸 f a) = 𝔹 f (g ∘ a) : hg f a
                   ... = 𝔹 f (h ∘ a) : congr_arg (𝔹 f) h₂
                   ... = h (𝔸 f a)   : eq.symm (hh f a)
-    
+
     -- BEGIN
     -- 2. If X ⊆ 𝔸, g and h are homs, and X ⊆ E g h, then
     --    Sg X ⊆ X.
@@ -606,34 +817,105 @@ More precisely, if a subset ``X`` is contained in the equalizer of two homomorph
       sInter_mem (E g h) h₃ h₁
     -- END
     end basic_facts
-    end ualib
+  end ualib
   
 Alternatively, we could have proved the last fact using the inductive nature of the definition of subalgebra generated by a set.
 
-Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal to ``Sg X``; thus, properties of the subuniverse generated by the set ``X`` can be proved using the recursor on ``Y``.
+Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal to ``Sg X``; thus, properties of the subuniverse generated by the set ``X`` can be proved using the recursor of ``Y``.
 
 ::
 
-  import subuniverse 
   import data.set
-  
-  universe u -- where structure universe (i.e. carrier) types live  (α)
-  
+  universes u v w
   namespace ualib
+    definition op (γ: Type w) (α: Type u) := (γ → α) → α
+    structure signature := mk :: (ℱ: Type v) (ρ: ℱ  → Type u)
+  
+    section algebra
+      parameter σ: signature
+      def algebra_on (α: Type u) := Π f, op (σ.ρ f) α
+      def algebra := sigma algebra_on
+      instance alg_carrier : has_coe_to_sort algebra := ⟨_, sigma.fst⟩
+      instance alg_operations : has_coe_to_fun algebra := ⟨_, sigma.snd⟩
+    end algebra
+
+    section subuniverse
+      parameters {α: Type u} {γ: Type w} {σ: signature}
+      definition F := σ.ℱ 
+      definition ρ := σ.ρ 
+      def Sub {𝔸: algebra σ}(B₀: set 𝔸): Prop:= ∀ (f: F) (a: ρ f → 𝔸), (∀ x, a x ∈ B₀) → (𝔸.snd f a) ∈ B₀
+      def is_subalgebra {𝔸: algebra σ}(B₀: set 𝔸) (𝔹: algebra_on σ B₀): Prop:= ∀ f b, ↑(𝔹 f b) = 𝔸.snd f ↑b
+      def Sg {𝔸: algebra σ}(X: set 𝔸): set 𝔸:= ⋂₀ {U | Sub U ∧ X ⊆ U}
+
+      theorem Inter.intro {𝔸: algebra σ} {x: 𝔸} {s: γ → set 𝔸}: (∀ i, x ∈ s i) → (x ∈ ⋂ i, s i) := assume h, iff.elim_right set.mem_Inter h
+
+      theorem Inter.elim {𝔸: algebra σ} {x: 𝔸} {C: γ → set 𝔸}: (x ∈ ⋂ i, C i) →  (∀ i, x ∈ C i):= assume h, iff.elim_left set.mem_Inter h
+
+      lemma sub_of_sub_inter_sub {𝔸: algebra σ} (C: γ → set 𝔸): (∀ i, Sub (C i)) → Sub (⋂i, C i):= assume h: (∀ i, Sub (C i)), show Sub (⋂i, C i), from
+        assume (f: σ.ℱ) (a: σ.ρ f → 𝔸) (h₁: ∀ x, a x ∈ ⋂i, C i),
+        Inter.intro (λ j, (h j) f a (λ x, Inter.elim (h₁ x) j))
+
+      lemma subset_X_of_SgX {𝔸: algebra σ} (X : set 𝔸): X ⊆ Sg X:= assume x (h: x ∈ X), 
+      assume W (h₁: W ∈ {U | Sub U ∧ X ⊆ U}), have h₂: Sub W ∧ X ⊆ W, from h₁, h₂.right h
+
+      lemma sInter_mem {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R → X ⊆ R → (Sg X ⊆ R) := 
+      assume R (h₁: Sub R) (h₂: X ⊆ R), assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem' {𝔸: algebra σ} {X: set 𝔸}: ∀ R, Sub R ∧ X ⊆ R → (Sg X ⊆ R):= 
+      assume R (hc : Sub R ∧ X ⊆ R), have h₁: Sub R, from hc.left,
+      have h₂: X ⊆ R, from hc.right, assume x (h: x ∈ Sg X), h R (and.intro h₁ h₂)
+
+      lemma sInter_mem'' {𝔸: algebra σ} {X: set 𝔸}: ∀ x, x ∈ Sg X → ∀ R, Sub R → X ⊆ R → x ∈ R:= assume x (h₁: x ∈ Sg X), assume (R: set 𝔸) (h₂: Sub R) (h₃: X ⊆ R), h₁ R (and.intro h₂ h₃)
+
+      lemma SgX_is_Sub {𝔸: algebra σ} (X: set 𝔸): Sub (Sg X):= assume f (a: σ.ρ f → 𝔸) (h₀: ∀ i, a i ∈ Sg X), assume W (h: Sub W ∧ X ⊆ W), have h₁: Sg X ⊆ W, from sInter_mem' W h,
+      have h': ∀ i, a i ∈ W, from assume i, h₁ (h₀ i), (h.left f a h')
+
+      inductive Y {𝔸: algebra σ} (X: set 𝔸): set 𝔸
+      | var (x : 𝔸) : x ∈ X → Y x
+      | app (f : σ.ℱ) (a : σ.ρ f → 𝔸) : (∀ i, Y (a i)) → Y (𝔸.snd f a)
+
+      lemma Y_is_Sub {𝔸: algebra σ}(X: set 𝔸): Sub (Y X):= assume f a (h: ∀ i, Y X (a i)),Y.app f a h 
+
+      theorem sg_inductive {𝔸: algebra σ} (X: set 𝔸): Sg X = Y X :=
+      have h₀: X ⊆ Y X, from assume x (h: x ∈ X), Y.var x h,
+      have h₁: Sub (Y X), from assume f a (h : ∀ x, Y X (a x)), Y.app f a h,
+      have inc_l: Sg X ⊆ Y X, from sInter_mem (Y X) h₁ h₀, 
+      have inc_r: Y X ⊆ Sg X, from
+        assume a (h: a ∈ Y X), have h₂: a ∈ Y X → a ∈ Sg X, from
+        Y.rec
+          (assume x (hr₁: x ∈ X), show x ∈ Sg X, from subset_X_of_SgX X hr₁)
+          (assume f b (hr₂: ∀ i, b i ∈ Y X) (hr₃: ∀ i, b i ∈ Sg X), show 𝔸.snd f b ∈ Sg X, from SgX_is_Sub X f b hr₃ ),
+          h₂ h,
+        set.subset.antisymm inc_l inc_r
+
+      lemma Y_is_min_Sub {𝔸: algebra σ} (U X: set 𝔸): Sub U → X ⊆ U → Y X ⊆ U:= assume (h₁: Sub U) (h₂ : X ⊆ U), assume (y: 𝔸)  (p: Y X y), have q: Y X y → Y X y → U y, from 
+        Y.rec
+          ( assume y (h: X y) (h': Y X y), h₂ h )
+          ( assume f a (h₃: ∀ i, Y X (a i)) (h₄: ∀ i, Y X (a i) → U (a i)) (h₅: Y X (𝔸.snd f a)), have h₆: ∀ i, a i ∈ U, from
+            assume i, h₄ i (h₃ i), h₁ f a h₆ ), q p p
+    end subuniverse
+
+    section homomorphism
+      parameters {α: Type u} {γ: Type v}
+      def homomorphic {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸 → 𝔹) := ∀ f a, h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+      def homomorphic_verbose {σ: signature} {𝔸 𝔹: algebra σ} (h: 𝔸.fst → 𝔹.fst) := ∀ (f: σ.ℱ) (a : σ.ρ f → 𝔸.fst), h (𝔸.snd f a) = 𝔹.snd f (h ∘ a)
+    end homomorphism
+
     def ker {α β: Type u} (f: α → β): α → α → Prop := λ a b, f a = f b
+
     section basic_facts
       parameter {σ: signature}
       def E {α β: Type u} (f g: α → β): set α := λ (x: α), f x = g x 
       def hom {𝔸 𝔹: algebra σ} (g: 𝔸 → 𝔹): Prop := ∀ f a, g (𝔸 f a) = 𝔹 f (g ∘ a)
-      def E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹)(h₁: hom g) (h₂: hom h): set 𝔸 := λ a, g a = h a 
-    
+      def E_homs {𝔸 𝔹: algebra σ} (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): set 𝔸 :=  λ (a: 𝔸), g a = h a 
+
       lemma hom_comp_of_hom {𝔸 𝔹 ℂ: algebra σ} (g: 𝔸 → 𝔹) (h₁: hom g) (h: 𝔹 → ℂ) (h₂: hom h): hom (h ∘ g) :=
       assume f a, show (h ∘ g)(𝔸 f a) = ℂ f (h ∘ g ∘ a), from 
         have h₃: (h ∘ g)(𝔸 f a) = h (g (𝔸 f a)), from  rfl,
         calc
           (h ∘ g)(𝔸 f a) = h ((𝔹 f) (g ∘ a)) : (h₁ f a) ▸ h₃ 
                      ... = (ℂ f) (h ∘ g ∘ a)  : h₂ f (g ∘ a)
-  
+
       lemma Sub_E_homs {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h): Sub (E_homs g h hg hh) := 
       assume f a (h₁: ∀ x, a x ∈ (E_homs g h hg hh)),
       show 𝔸 f a ∈ (E_homs g h hg hh),  from 
@@ -643,9 +925,11 @@ Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal
             g (𝔸 f a) = 𝔹 f (g ∘ a) : hg f a
                   ... = 𝔹 f (h ∘ a) : congr_arg (𝔹 f) h₂
                   ... = h (𝔸 f a)   : eq.symm (hh f a)
-    
-      lemma mem_of_eq {α : Type u} (s t : set α): s = t →  ∀ x, x ∈ s → x ∈ t :=
-      begin intros h x h', rw ←h, assumption end
+
+      lemma hom_determined_on_gens {𝔸 𝔹: algebra σ}(g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h) (X: set 𝔸): X ⊆ E g h → Sg X ⊆ E g h :=
+      assume h₁: X ⊆ E g h, show Sg X ⊆ E g h, from
+        have h₃: Sub (E g h), from (Sub_E_homs g h hg hh),
+        sInter_mem (E g h) h₃ h₁
     
     -- BEGIN
     lemma hom_determined_on_gens_rec {𝔸 𝔹: algebra σ}
