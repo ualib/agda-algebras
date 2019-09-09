@@ -359,6 +359,8 @@ Finally, we check that the foregoing definition is indeed a clone and that it is
 
 ---------------------------
 
+.. _basic-facts-in-lean:
+
 Basic Facts in Lean
 --------------------
 
@@ -582,7 +584,9 @@ Recall the simple fact that composing two homomorphisms results in a homomorphis
     end basic_facts
   end ualib
 
-Next we see that the equalizer ``𝖤 g h`` of two homomorphisms ``g`` and ``h`` is a subuniverse of 𝔸 (cf. :numref:`Obs %s <obs-one>`).
+(As with the other numbered results appearing in this section, we include the statement and proof of the above fact inside the ``basic_facts`` section.)
+
+Next we formally prove that the equalizer ``𝖤 g h`` of two homomorphisms ``g`` and ``h`` is a subuniverse of 𝔸 (cf. :numref:`Obs %s <obs-one>`).
 
 ::
 
@@ -801,8 +805,8 @@ More precisely, if a subset ``X`` is contained in the equalizer of two homomorph
                   ... = h (𝔸 f a)   : eq.symm (hh f a)
 
     -- BEGIN
-    -- 2. If X ⊆ 𝔸, g and h are homs, and X ⊆ E g h, then
-    --    Sg X ⊆ X.
+    -- 2. If X ⊆ 𝔸, g and h are homs, and X ⊆ E g h,
+    --    then Sg X ⊆ X.
     lemma hom_determined_on_gens {𝔸 𝔹: algebra σ}
     (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h) (X: set 𝔸) : 
     X ⊆ E g h → Sg X ⊆ E g h := 
@@ -932,6 +936,8 @@ Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal
         sInter_mem (E g h) h₃ h₁
     
     -- BEGIN
+    -- 2. If X ⊆ 𝔸, g and h are homs, and X ⊆ E g h,
+    --    then Sg X ⊆ X.
     lemma hom_determined_on_gens_rec {𝔸 𝔹: algebra σ}
     (g h: 𝔸 → 𝔹) (hg: hom g) (hh: hom h) (X: set 𝔸): 
     X ⊆ E g h → Sg X ⊆ E g h := 
@@ -959,6 +965,25 @@ Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal
     -- END
     end basic_facts
   end ualib
+
+Before implementing :numref:`Obs %s <obs-four>` in Lean, we reiterate that we cannot do so constructively.  Here is a related passage from `Theorem Proving in Lean`_ that explains.
+
+  "The standard library also defines a choice principle that is entirely antithetical to a computational interpretation, since it magically produces 'data' from a proposition asserting its existence. Its use is essential to some classical constructions, and users can import it when needed. But expressions that use this construction to produce data do not have computational content, and in Lean we are required to mark such definitions as noncomputable to flag that fact... To summarize, then, on top of the underlying framework of universes, dependent function types, and inductive types, the standard library adds three additional components:
+
+  #. the axiom of propositional extensionality
+  #. a quotient construction, which implies function extensionality
+  #. a choice principle, which produces data from an existential proposition.
+
+  The first two of these block normalization within Lean, but are compatible with bytecode evaluation, whereas the third is not amenable to computational interpretation."
+   
+The upshot is that we cannot always use Lean's ``exists.elim`` to produce data.
+
+.. todo:: insert Lean proof here
+
+To see that :math:`k` is a homomorphism, assume there are :math:`m` operation symbols. Fix arbitrary :math:`0≤ i< m` and :math:`b: \underline{k_i} → B`.
+   
+Since :math:`g` is surjective, for each :math:`i: \underline{k_i}`, the subset :math:`g^{-1}\{b(i)\}⊆ A` is nonempty and is mapped by :math:`h` to a single point of :math:`C` (since :math:`\ker g ⊆ \ker h`.
+
 
 -------------------------
 

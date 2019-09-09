@@ -625,6 +625,12 @@ The list below shows what to type (e.g., in the vscode IDE with lean extension) 
 
 .. glossary::
 
+    { }
+      Surrounds implicit argument(s) and directs parser to use *agressive* type inference (see :numref:`implicit-arguments`).
+
+    ⦃ ⦄
+      Surrounds implicit argument(s) and directs parser to use *conservative* type inference (see :numref:`implicit-arguments`). (Type with ``\{{``.)
+
     𝔸
       ``\A`` (or ``\BbbA``)
 
@@ -905,6 +911,7 @@ The list below shows what to type (e.g., in the vscode IDE with lean extension) 
     ⋈
       ``\j`` (or ``\bowtie``)
 
+      
 .. .. rubric:: Footnotes
 
 .. .. [1]

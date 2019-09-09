@@ -76,6 +76,37 @@ Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is 
 
 The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
 
+------------------
+
+.. _implicit-arguments:
+
+Implicit arguments
+------------------
+
+Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful.  The section (**Todo**: insert reference) explains this topic in detail.  The present section merely collects a few of the finer points and technicalities related to this topic that come up in `lean-ualib`_.
+
+By default, Lean inserts, and eagerly tries to infer the type of, the implicit argument.  For example,
+
+::
+
+  -- Agressive type inference.
+
+  definition id₁ {α: Type} (x: α): α := x
+
+  #check id₁   -- ℕ → ℕ
+
+In this case, Lean seems a bit presumptuous since the type ``α`` is not known, so there's no evidence for the typing judgments ``x: ℕ`` nor ``id₁: ℕ → ℕ``.
+
+If we instead use double curly braces ``{{ … }}``, or their unicode equivalents ``⦃ … ⦄``, this tells the parser to be more conservative about inserting the argument and inferring its type. [2]_
+
+::
+
+  -- Conservative type inference.
+
+  definition id₂ ⦃α: Type⦄ (x: α): α := x
+
+  #check id₂     -- Π ⦃α: Type⦄, α → α
+
 ------------------------------------------------
 
 .. _pattern-matching:
@@ -223,6 +254,9 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 
 .. [1]
    See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
+
+.. [2]
+   On some systems, typing ``\{{`` and hitting the spacebar produces both left and right double curly braces---i.e., ``⦃ ⦄``.   On other systems, perhaps the ``\}}`` is needed for the closing ``⦄`` symbol.
 
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/

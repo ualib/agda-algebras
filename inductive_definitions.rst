@@ -290,9 +290,9 @@ Here is a list of basic observations that we will need later. We will reference 
 
 .. proof:observation::
 
-   If :math:`g : \epi (𝔸, 𝔹)` and :math:`h : \hom (𝔸, ℂ)` satisfy :math:`\ker g ⊆ \ker h`, then
+   If :math:`g: \epi (𝔸, 𝔹)` and :math:`h: \hom (𝔸, ℂ)` satisfy :math:`\ker g ⊆ \ker h`, then
 
-   .. math:: ∃ k ∈ \hom(𝔹, ℂ)\ . \ h = k ∘ g.
+   .. math:: ∃ k ∈ \hom(𝔹, ℂ), \ h = k ∘ g.
     
    .. container:: toggle
     
@@ -300,28 +300,22 @@ Here is a list of basic observations that we will need later. We will reference 
     
          *Proof*.
 
-      We define :math:`k ∈ \hom(𝔹, ℂ)` constructively, as follows:
+      We define :math:`k ∈ \hom(𝔹, ℂ)` as follows:
 
-      Fix :math:`b : B`.
+      Fix :math:`b: B`.
 
-      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, we see that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
+      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
 
-      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a : g^{-1}\{b\}`.
+      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a: g^{-1}\{b\}`.
    
-      We define :math:`k(b) = c_b`. Since :math:`b` was arbitrary, :math:`k` is defined on all of :math:`B` in this way.
+      For each such :math:`b`, and its associated :math:`c_b`, define :math:`k(b) = c_b`.
+   
+      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b: B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a: g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.  We might argue that one simply needs to choose a particular :math:`a: g^{-1}\{b\}` and then compute :math:`c_b = h(a)`.  Of course, this requires the Axiom of :term:`Choice`. We will have more to say about this in :numref:`Sec %s <basic-facts-in-lean>` when we implement :numref:`Obs %s <obs-four>` in Lean.
    
       Now it's easy to see that :math:`k g = h` by construction.
    
       Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
-   
-      To see that :math:`k` is a homomorphism, let there be :math:`m` operation symbols and let :math:`0≤ i< m` be arbitrary.
-   
-      Fix :math:`b : \underline{k_i} → B`.
-   
-      Since :math:`g` is surjective, for each :math:`i : \underline{k_i}`, the subset :math:`g^{-1}\{b(i)\}⊆ A` is nonempty and is mapped by :math:`h` to a single point of :math:`C` (since :math:`\ker g ⊆ \ker h`.
-   
-      Label this point :math:`c_i` and define :math:`c : \underline{k_i} → C` by :math:`c(i) = c_i`.
-   
+
       We want to show :math:`(f^C ∘ F k) (b) = (k ∘ f^B)(b).`
    
       The left hand side is :math:`f^C c`, which is equal to :math:`(h ∘ fᴬ)(a)` for some :math:`a : \underline{k_i} → A`, since :math:`h` is a homomorphism.
