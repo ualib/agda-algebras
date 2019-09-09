@@ -83,7 +83,7 @@ The upshot of this **ramified** arrangement is that the types described in the l
 Implicit arguments
 ------------------
 
-Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful.  The section (**Todo**: insert reference) explains this topic in detail.  The present section merely collects a few of the finer points and technicalities related to this topic that come up in `lean-ualib`_.
+Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful. The `TPL`_ sections on `Implicit Arguments`_ and `More on Implicit Arguments`_ explain this topic in detail.  In the present section we merely collect a few fine points and technicalities that come up in `lean-ualib`_.
 
 By default, Lean inserts, and eagerly tries to infer the type of, the implicit argument.  For example,
 
@@ -297,4 +297,6 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 
 .. _vscode: https://code.visualstudio.com/
 
+.. _Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 
+.. _More on Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
