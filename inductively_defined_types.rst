@@ -966,7 +966,7 @@ Indeed, recall the definition of ``Y`` above and the proof that ``Y X`` is equal
     end basic_facts
   end ualib
 
-Before implementing :numref:`Obs %s <obs-four>` in Lean, we reiterate that we cannot do so constructively.  Here is a related passage from `Theorem Proving in Lean`_ that explains.
+Before implementing :numref:`Obs %s <obs-four>` in Lean, we reiterate that we cannot do so constructively.  Here is a related passage from `Theorem Proving in Lean`_ that explains why.
 
   "The standard library also defines a choice principle that is entirely antithetical to a computational interpretation, since it magically produces 'data' from a proposition asserting its existence. Its use is essential to some classical constructions, and users can import it when needed. But expressions that use this construction to produce data do not have computational content, and in Lean we are required to mark such definitions as noncomputable to flag that fact... To summarize, then, on top of the underlying framework of universes, dependent function types, and inductive types, the standard library adds three additional components:
 

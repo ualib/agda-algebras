@@ -290,7 +290,7 @@ Here is a list of basic observations that we will need later. We will reference 
 
 .. proof:observation::
 
-   If :math:`g: \epi (𝔸, 𝔹)` and :math:`h: \hom (𝔸, ℂ)` satisfy :math:`\ker g ⊆ \ker h`, then
+   If :math:`g ∈ \epi (𝔸, 𝔹)`, :math:`h ∈ \hom (𝔸, ℂ)`, and :math:`\ker g ⊆ \ker h`, then
 
    .. math:: ∃ k ∈ \hom(𝔹, ℂ), \ h = k ∘ g.
     
@@ -302,27 +302,38 @@ Here is a list of basic observations that we will need later. We will reference 
 
       We define :math:`k ∈ \hom(𝔹, ℂ)` as follows:
 
-      Fix :math:`b: B`.
+      Fix :math:`b ∈ B`.
 
       Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
 
-      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a: g^{-1}\{b\}`.
+      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a ∈ g^{-1}\{b\}`.
    
       For each such :math:`b`, and its associated :math:`c_b`, define :math:`k(b) = c_b`.
    
-      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b: B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a: g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.  We might argue that one simply needs to choose a particular :math:`a: g^{-1}\{b\}` and then compute :math:`c_b = h(a)`.  Of course, this requires the Axiom of :term:`Choice`. We will have more to say about this in :numref:`Sec %s <basic-facts-in-lean>` when we implement :numref:`Obs %s <obs-four>` in Lean.
+      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b ∈ B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a ∈ g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.
+      
+      One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
+      
+      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Sec %s <basic-facts-in-lean>` when we implement :numref:`Obs %s <obs-four>` in Lean.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`.
    
-      Now it's easy to see that :math:`k g = h` by construction.
-   
-      Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
+      It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
 
-      We want to show :math:`(f^C ∘ F k) (b) = (k ∘ f^B)(b).`
-   
-      The left hand side is :math:`f^C c`, which is equal to :math:`(h ∘ fᴬ)(a)` for some :math:`a : \underline{k_i} → A`, since :math:`h` is a homomorphism.
+      Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b: ρ f → B`; we will show that
+      
+      .. math:: f^ℂ (k ∘ b) = k (f^𝔹(b)).
+         :label: hom
+
+      Let :math:`a: ρ f → A` be such that :math:`g ∘ a = b`.  Then the left hand side of :eq:`hom` is :math:`f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)`, which is equal to :math:`h (f^𝔸 (a))` since :math:`h` is a homomorphism.
    
       Therefore,
    
-      .. math:: (f^C ∘ F k) (b) = (h ∘ f^A) (a) = (k ∘ g ∘ f^A)(a) = (k ∘ f^B ∘ F g)(a) = (k ∘ f^B)(b).
+      .. math:: 
+      
+         f^ℂ (k ∘ b) &= f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)\\ 
+                 & = h (f^𝔸 (a)) = (k ∘ g)(f^𝔸 (a))\\
+                 & = k (f^𝔹 (g ∘ a)) = k (f^𝔹 (b)),
+
+      as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism.
 
 .. _obs-five:
 
