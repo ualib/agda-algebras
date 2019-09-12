@@ -28,7 +28,7 @@ This simply codifies our intuitive notion of function application, viz. applyin
 Dependent types
 ---------------
 
-Lean_ is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
+Lean_is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
 
 Before getting to the example, however, we should first briefly explain what makes dependent types *dependent*, and why they are so useful.
 
@@ -118,7 +118,7 @@ Here again we see that the arrow notation is not expressive enough because :math
 
 The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operation is
 
-.. math:: \Proj: ∏_{g:J→I} \left( ∏_{i:I} A_{i} →  ∏_{j:J} A_{g(j)} \right).
+.. math:: \Proj: ∏_{g:J→I} \left( ∏_{(i:I)} A_{i} →  ∏_{(j:J)} A_{g(j)} \right).
 
 This is a special case of the more general (and more elegant) types that we define in later chapters, after reviewing some concepts of category theory in :numref:`postmodern-algebra` that are essential for this purpose.
 
@@ -131,18 +131,18 @@ This is a special case of the more general (and more elegant) types that we defi
 Kernels of projections
 ----------------------
 
-Let :math:`𝔸 = ∏_{i:I} 𝔸_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g: J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
+Let :math:`𝔸 = ∏_{(i:I)} 𝔸_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g: J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
 
-Define the **kernel of the projection of** :math:`𝔸` **onto** :math:`∏_{j:J} A_{g(j)}` as follows:
+Define the **kernel of the projection of** :math:`𝔸` **onto** :math:`∏_{(j:J)} A_{g(j)}` as follows:
 
-.. math:: Δ_g = \{(a,a') : 𝔸^2 | a ∘ g = a' ∘ g \} = \ker (\Proj g)
+.. math:: Δ_g = \{(a,a'): 𝔸^2 | a ∘ g = a' ∘ g \} = \ker (\Proj g)
 
-This is a congruence of :math:`𝔸`. More generally, if :math:`θ` is a congruence of :math:`∏_{j:J} A_{g(j)}`, define :math:`θ_g: \Con 𝔸` as follows:
+This is a congruence of :math:`𝔸`. More generally, if :math:`θ` is a congruence of :math:`∏_{(j:J)} A_{g(j)}`, define :math:`θ_g: \Con 𝔸` as follows:
 
 .. math:: θ_g = (\Proj g)^{-1}(θ) =  \{ (a, a') : 𝔸^2 | (a ∘ g) \mathrel{\theta} (a' ∘ g) \}.
 
-This indicates the origin of the notation :math:`Δ_g`, where :math:`Δ` denotes the trivial (identity) relation on :math:`∏_{j:J} A_{g(j)}`. If :math:`J = \{0\}` and
-:math:`g: I` is just a constant, say, :math:`g(0) = k`,
+This indicates the origin of the notation :math:`Δ_g`, where :math:`Δ` denotes the trivial (identity) relation on :math:`∏_{(j:J)} A_{g(j)}`. If :math:`J = \{0\}` and
+:math:`g:I` is just a constant, say, :math:`g(0) = k`,
 then we write :math:`\theta_k` instead of :math:`\theta_{\{k\}}`, so
 
 .. math:: \theta_k = \{(a, a') \in 𝔸^2 : a(k) \mathrel{\theta} a'(k)\}.
@@ -253,7 +253,7 @@ Notice that :math:`𝐚_i` has type :math:`\mathrm{m_ituple}(A)` iff it can be r
 
 Thus, if :math:`m = (m_0, \dots, m_{n-1}): \mathrm{ntuple}(ℕ)`, then :math:`\mathbf{mtuple}(A)` is the :term:`dependent function type`,
 
-.. math:: \prod_{i: n} (m_i → A).
+.. math:: \prod_{(i:n)} (m_i → A).
 
 -------------------------------------
 
@@ -298,11 +298,11 @@ Define the (non-dependent) **fork** function,
 
 as follows: 
 
-  if :math:`f  : A \to B`, :math:`g  : A \to C`, and :math:`a  : A`, then
+  if :math:`f: A \to B`, :math:`g: A \to C`, and :math:`a:A`, then
   
 .. math:: \mathrm{fork} (f) (g) (a) = (f\,a, g\,a) : B \times C.
 
-(Alternatively, we could have taken the domain of :math:`\mathrm{fork}` to be :math:`(A \to B)\times (A \to C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
+(Alternatively, we could have taken the domain of :math:`\mathrm{fork}` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
 
 This definition of fork generalizes easily to :term:`dependent function types <dependent function type>`, as we now describe.
 
@@ -310,17 +310,17 @@ Let :math:`A` be a type and for each :math:`a: A` let :math:`B_a` and :math:`C_a
 
 Define the (dependent) **fork** function,
 
-.. math:: \mathbf{fork}: ∏_{a:A} B_a → ∏_{a:A} C_a → ∏_{a:A} (B_a × C_a),
+.. math:: \mathbf{fork}: ∏_{(a:A)} B_a → ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a),
 
 as follows:
 
-  if :math:`f: ∏_{a:A} B_a` and :math:`g: ∏_{a:A} C_a` and :math:`a: A`, then
+  if :math:`f: ∏_{(a:A)} B_a` and :math:`g: ∏_{(a:A)} C_a` and :math:`a:A`, then
   
 .. math:: \mathbf{fork} (f)(g)(a) = (f\,a, g\,a): B_a × C_a.
 
 Since our definition of fork is presented in curried form, we can partially apply it and obtain the typing judgments,
 
-.. math:: \mathbf{fork}(f): ∏_{a:A} C_a → ∏_{a:A} (B_a × C_a)\quad \text{ and } \quad \mathbf{fork}(f)(g): ∏_{a:A} (B_a × C_a).
+.. math:: \mathbf{fork}(f): ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a)\quad \text{ and } \quad \mathbf{fork}(f)(g): ∏_{(a:A)} (B_a × C_a).
 
 Next, define the **eval** (or **function application**) function, :math:`\mathbf{eval}: (A → B) × A`, as follows: 
 
@@ -328,7 +328,7 @@ Next, define the **eval** (or **function application**) function, :math:`\mathbf
   
 .. math:: \mathbf{eval} (f, a) = f\,a.
 
-Thus, if :math:`h: ∏_{a:A}(C_a → D)` and :math:`k: ∏_{a:A} C_a` and :math:`a:A`, then
+Thus, if :math:`h: ∏_{(a:A)}(C_a → D)` and :math:`k: ∏_{(a:A)} C_a` and :math:`a:A`, then
 
 .. math:: \mathbf{fork}(h)(k)(a) = (h\,a, k\,a): (C_a → D) × C_a, \text{ and }
 
@@ -338,7 +338,7 @@ Here is a typical use case (which we discuss in more detail below; see :numref:`
 
 In the foregoing, let :math:`n = \{0,1,\dots, n-1\}` play the role of :math:`A`, and for each :math:`i:n`, let :math:`C_i = k_i → A`. Finally, let :math:`D = A`.
 
-Then :math:`g: ∏_{i:n} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{i:n}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus, we have 
+Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus, we have 
 
 .. math:: \mathbf{fork} (g) (a) (i) = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A),
 
@@ -383,7 +383,7 @@ This notation is ugly and tedious, and it lends itself poorly to computation. We
 
 Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathrm{Op}(A)`.  Denote by :math:`g` the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.  This :math:`g` inhabits the following :term:`dependent function type`:
 
-.. math:: ∏_{i:n} ((k_i → A) → A).
+.. math:: ∏_{(i:n)} ((k_i → A) → A).
 
 Next, define the function :math:`a` as follows: for each :math:`0≤ i < n`,
 
@@ -395,11 +395,11 @@ and for each :math:`j: k_i`,
   
 Then the :math:`n`-tuple of arguments in the expression above is identified with the :math:`n`-tuple :math:`a = (a 0, \dots, a (n-1))` of functions.
 
-Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{i:n} (k_i → A)`.
+Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{(i:n)} (k_i → A)`.
 
 Now, recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is clear how to perform general composition using dependent types.
 
-  If :math:`g: ∏_{i:n} ((k_i → A) → A)` and :math:`a: ∏_{i:n}(k_i → A)`, then
+  If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then
 
 .. math:: \mathbf{fork} (g) (a) (i) = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A)
 
@@ -407,23 +407,23 @@ and
 
 .. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = (g\,i)(a\,i) : A.
 
-Observe that the codomain :math:`A` does not depend on :math:`i`, so the types :math:`∏_{i:n} A` and :math:`n → A` are equivalent. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
+Observe that the codomain :math:`A` does not depend on :math:`i`, so the types :math:`∏_{(i:n)} A` and :math:`n → A` are equivalent. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
 
 On the other hand, we have
 
-.. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{i:n}  (k_i → A) → (n → A).
+.. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{(i:n)}  (k_i → A) → (n → A).
 
 Thus,
 
   if :math:`f: (n → A) → A` (an :math:`n`-ary operation) and 
   
-  if :math:`g: ∏_{i: n} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
+  if :math:`g: ∏_{(i:n)} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
   
   *define* the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f [g] := f  (\mathbf{eval} \, \mathbf{fork}\, g): ∏_{i:n}(k_i → A) → A.
+.. math:: f [g] := f  (\mathbf{eval} \, \mathbf{fork}\, g): ∏_{(i:n)}(k_i → A) → A.
 
-Indeed, if :math:`a: ∏_{i:n}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, (g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f (\mathbf{eval} \, \mathbf{fork}\, (g) (a))` has type :math:`A`, as desired.
+Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, (g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f (\mathbf{eval} \, \mathbf{fork}\, (g) (a))` has type :math:`A`, as desired.
 
 ----------------------------
 
@@ -436,7 +436,7 @@ Inductive types
 
 .. todo:: complete this section
 
-(See also: the `Inductive Types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html#>`_ section of :term:`TPIL`.)
+(See also: the `Inductive Types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html#>`_section of :term:`TPIL`.)
 
 --------------------------------------------
 
