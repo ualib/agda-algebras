@@ -322,21 +322,37 @@ Since our definition of fork is presented in curried form, we can partially appl
 
 .. math:: \mathbf{fork}(f): ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a)\quad \text{ and } \quad \mathbf{fork}(f)(g): ∏_{(a:A)} (B_a × C_a).
 
-Next, define the **eval** (or **function application**) function, :math:`\mathbf{eval}: (A → B) × A`, as follows: 
+Next, we define a :term:`function application` operation, which we will refer to as "eval."
 
-  if :math:`f: A → B` and :math:`a: A`, then
+If :math:`A` and :math:`B` are types, then the **eval** (or **function application**) function on :math:`A` and :math:`B` is denoted by :math:`\mathbf{eval}: ((A → B) × A) → B` and defined as follows:
+
+  for each :math:`f: A → B` and :math:`a: A`, we have :math:`\mathbf{eval} (f, a) = f\, a: B`.
+
+Notice that :math:`\mathbf{eval}` is polymorphic (that is, it depends on the types :math:`A` and :math:`B`), and its type is
+
+.. math:: \mathbf{eval}: \prod_{(A: \mathrm{Type})} \prod_{(B: \mathrm{Type})} ((A → B) × A) → B,
+
+so it seems we should have to say, "*the eval function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval} \, A \, B`."  However, our implementation of :math:`\mathbf{eval}` will use implicit types, so :math:`A` and :math:`B` need not not be mentioned explicitly.
+
+For example,
+
+if :math:`f: ∏_{a:A}((C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`, then we have
+
+  :math:`f\,a : C_a → D` and :math:`g\,a: C_a` and 
+
+.. math:: \mathbf{eval} (f\,a, g\,a) = (f\,a)(g\, a): D.
+
+Finally, the :math:`@` symbol is used when we wish to make implicit types explicit, so we could have written,
+
+.. math:: (@ \mathbf{eval}\, C_a \, D)\,  (f\,a, g\,a) = (f\,a)(g\, a): D.
+
+Let us briefly mention a typical use case on which our definition of general composition in :numref:`general-composition-of-operations` will depend. In the foregoing, substitute
+
+  * :math:`n = \{0,1,\dots, n-1\}` for :math:`A`, 
   
-.. math:: \mathbf{eval} (f, a) = f\,a.
-
-Thus, if :math:`h: ∏_{(a:A)}(C_a → D)` and :math:`k: ∏_{(a:A)} C_a` and :math:`a:A`, then
-
-.. math:: \mathbf{fork}(h)(k)(a) = (h\,a, k\,a): (C_a → D) × C_a, \text{ and }
-
-.. math:: \mathbf{eval} \, \mathbf{fork}\,(h)(k)(a) = \mathbf{eval}(h\,a, k\,a) = (h\,a)(k\,a): D.
-
-Here is a typical use case (which we discuss in more detail below; see :numref:`general-composition-of-operations`).
-
-In the foregoing, let :math:`n = \{0,1,\dots, n-1\}` play the role of :math:`A`, and for each :math:`i:n`, let :math:`C_i = k_i → A`. Finally, let :math:`D = A`.
+  * :math:`A` for :math:`D`, and
+  
+  * :math:`k_i → A` for :math:`C_a`, for each :math:`i:n`.
 
 Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus, we have 
 
@@ -364,7 +380,7 @@ If we identify the natural number :math:`n ∈ ℕ` with the set :math:`\{0,1,\d
   \BinaryInfC{$f a : A$}
   \end{prooftree}
 
-Letting :math:`a_i` denote the value of :math:`a` at :math:`i`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f a = f(a_0, \dots, a_{n-1})`.
+Letting :math:`a_i` denote the value of :math:`a` at :math:`i`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f\,a = f(a_0, \dots, a_{n-1})`.
 
 Denote and define the collection of all finitary operations on :math:`A` by
 
