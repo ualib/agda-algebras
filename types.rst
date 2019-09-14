@@ -190,22 +190,24 @@ In general, for :math:`a_i: A_i`, :math:`0 ≤ i < ℓ`,
 
 .. math:: f a_0 a_1 \dots a_{ℓ-1}: A_ℓ → (A_{ℓ+1} → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
 
-It would be useful to have a means of partial function application in case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`, or in case we wish to partially apply a function to an arbitrary subset of its operands (coordinates of its domain). If we have, as above,
+Asynchronous currying
+~~~~~~~~~~~~~~~~~~~~~
+
+It would be useful to have a means of partial function application in case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`, or in case we wish to partially apply a function to an arbitrary subset of its operands (coordinates of its domain).
+
+Suppose, as above,
 
 + :math:`\underline{𝔸} = ∏_{i:I} A_i`,
 
 + :math:`g: J → I` (one-to-one),
 
-+ :math:`a ∘ g: ∏_{j:J} A_{g(j)}`, for each :math:`a : ∏_{i:I} A_i`,
++ :math:`a ∘ g: ∏_{j:J} A_{g(j)}`, for each :math:`a : ∏_{i:I} A_i`.
 
 Let :math:`f` have type :math:`∏_{i:I} A_i → ∏_{i:I} A_i`, which means that if we apply :math:`f` to an element :math:`a : ∏_{i:I} A_i` the result has the same type, that is, :math:`f a : ∏_{i:I} A_i`.
 
 We may wish to apply :math:`f` to just a portion of :math:`a` but it may not be the case that :math:`I` is a subset of :math:`ℕ`, or an ordered enumeration of some other set, so there is no natural notion of “the first :math:`ℓ` operands.” Even if there was such a notion, we may wish to partially apply :math:`f` to something other than the first :math:`ℓ` operands. Therefore, we define a more general notion of partial application as follows: :math:`f` partially applied to the coordinates :math:`\im g = \{g(j) ∣ j: J\}` of the element :math:`a` gives the function : type judgment
 
 .. math:: f ∘ (a ∘ g): ∏_{\substack{i: I\\ i ∉ \im g}} A_i → ∏_{i:I} A_i.
-
-Asynchronous currying
-~~~~~~~~~~~~~~~~~~~~~
 
 .. todo:: define/describe the asynchronous curry type
 
@@ -275,8 +277,9 @@ fork and eval
 
 We begin by defining the "fork" and "eval" operations mentioned in the opening paragraph of this section.
 
-.. .. raw:: latex
+Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and mappings :math:`f: A → B` and :math:`g: A → C`, there exists a unique mapping :math:`⟨f, g⟩: A → B × C` such that :math:`π_1 ⟨f, g⟩ = f` and :math:`π_2 ⟨f, g⟩ = g`.  It should be obvious that the map in question is defined for each :math:`a: A` by :math:`⟨f, g⟩(a) = (f\,a, g\,a)`.
 
+.. .. raw:: latex
 ..    \begin{prooftree}
 ..    \AXM{\exists x A(x)}
 ..    \AXM{}
@@ -292,13 +295,13 @@ We begin by defining the "fork" and "eval" operations mentioned in the opening p
 
 .. .. include:: latex_images/first_order_logic.8.tex
 
-Define the (non-dependent) **fork** function,
+Denote the (non-dependent) **fork** function by
 
 .. math:: \mathrm{fork} : (A \to B)\to (A \to C) \to A \to (B \times C),
 
-as follows: 
+and define it as follows: 
 
-  if :math:`f: A \to B`, :math:`g: A \to C`, and :math:`a:A`, then
+  if :math:`f: A \to B` and :math:`g: A \to C` and :math:`a:A`, then
   
 .. math:: \mathrm{fork} (f) (g) (a) = (f\,a, g\,a) : B \times C.
 
@@ -308,11 +311,11 @@ This definition of fork generalizes easily to :term:`dependent function types <d
 
 Let :math:`A` be a type and for each :math:`a: A` let :math:`B_a` and :math:`C_a` be types.
 
-Define the (dependent) **fork** function,
+Denote the (dependent) **fork** function by
 
 .. math:: \mathbf{fork}: ∏_{(a:A)} B_a → ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a),
 
-as follows:
+and define it as follows:
 
   if :math:`f: ∏_{(a:A)} B_a` and :math:`g: ∏_{(a:A)} C_a` and :math:`a:A`, then
   
@@ -324,25 +327,27 @@ Since our definition of fork is presented in curried form, we can partially appl
 
 Next, we define a :term:`function application` operation, which we will refer to as "eval."
 
-If :math:`A` and :math:`B` are types, then the **eval** (or **function application**) function on :math:`A` and :math:`B` is denoted by :math:`\mathbf{eval}: ((A → B) × A) → B` and defined as follows:
+If :math:`A` and :math:`B` are types, then *the* **eval**, *or* **function application**, *function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval}: ((A → B) × A) → B` and defined as follows:
 
-  for each :math:`f: A → B` and :math:`a: A`, we have :math:`\mathbf{eval} (f, a) = f\, a: B`.
+  for each :math:`f: A → B` and :math:`a: A`, let :math:`\mathbf{eval} (f, a) = f\, a: B`.
 
-Notice that :math:`\mathbf{eval}` is polymorphic (that is, it depends on the types :math:`A` and :math:`B`), and its type is
+Notice that :math:`\mathbf{eval}` is polymorphic as it depends on the types :math:`A` and :math:`B`, and its type is
 
 .. math:: \mathbf{eval}: \prod_{(A: \mathrm{Type})} \prod_{(B: \mathrm{Type})} ((A → B) × A) → B,
 
-so it seems we should have to say, "*the eval function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval} \, A \, B`."  However, our implementation of :math:`\mathbf{eval}` will use implicit types, so :math:`A` and :math:`B` need not not be mentioned explicitly.
+so it seems that when we introduced the :math:`\mathbf{eval}` function (in italics above) we should have said,
 
-For example,
+  "*...the eval function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval} \, A \, B: ((A → B) × A) → B`..."
+  
+However, our implementation of :math:`\mathbf{eval}` will use implicit types, so :math:`A` and :math:`B` need not be mentioned explicitly.
 
-if :math:`f: ∏_{a:A}((C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`, then we have
+As an example of function application, let :math:`f: ∏_{a:A}((C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`. Then,
 
   :math:`f\,a : C_a → D` and :math:`g\,a: C_a` and 
 
 .. math:: \mathbf{eval} (f\,a, g\,a) = (f\,a)(g\, a): D.
 
-Finally, the :math:`@` symbol is used when we wish to make implicit types explicit, so we could have written,
+We could also have specified the types explicitly. For this purpose, we adopt the symbol :math:`@` (also used by `Lean`_ for this purpose).
 
 .. math:: (@ \mathbf{eval}\, C_a \, D)\,  (f\,a, g\,a) = (f\,a)(g\, a): D.
 
@@ -354,7 +359,7 @@ Let us briefly mention a typical use case on which our definition of general com
   
   * :math:`k_i → A` for :math:`C_a`, for each :math:`i:n`.
 
-Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus, we have 
+Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus,
 
 .. math:: \mathbf{fork} (g) (a) (i) = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A),
 
@@ -415,17 +420,17 @@ Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{(i:n)} (
 
 Now, recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is clear how to perform general composition using dependent types.
 
-  If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then
+  If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)` and :math:`i:n`, then
 
 .. math:: \mathbf{fork} (g) (a) (i) = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A)
 
 and
 
-.. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = (g\,i)(a\,i) : A.
+.. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = (g\,i)\,(a\,i) : A.
 
 Observe that the codomain :math:`A` does not depend on :math:`i`, so the types :math:`∏_{(i:n)} A` and :math:`n → A` are equivalent. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
 
-On the other hand, we have
+On the other hand,
 
 .. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{(i:n)}  (k_i → A) → (n → A).
 

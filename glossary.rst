@@ -99,7 +99,7 @@ Nomenclature
     Boolean algebra homomorphism
       a :term:`lattice homomorphism` that also preserves complementation (but every lattice homomorphism between Boolean lattices automatically preserves complementation, so we may characterize the morphisms of this category more simply as the lattice homomorphisms).
 
-    bytecode
+    byte-code
       .. todo:: fill in definition    
 
     Calculus of Inductive Constructions
