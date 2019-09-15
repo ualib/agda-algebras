@@ -295,15 +295,17 @@ Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :ma
 
 .. .. include:: latex_images/first_order_logic.8.tex
 
-Denote the (non-dependent) **fork** function by
+Denote the (nondependent) **fork** function by
 
-.. math:: \mathrm{fork} : (A \to B)\to (A \to C) \to A \to (B \times C),
+.. math:: \mathrm{fork}: (A → B) → (A → C) → A → (B × C),
 
-and define it as follows: 
+and define it as follows: for each :math:`f: A → B` and :math:`g: A → C`, let
 
-  if :math:`f: A \to B` and :math:`g: A \to C` and :math:`a:A`, then
+.. math:: \mathrm{fork}\, f\, g: A → (B × C)
+
+be the function that takes each :math:`a:A` to the pair
   
-.. math:: \mathrm{fork} (f) (g) (a) = (f\,a, g\,a) : B \times C.
+.. math:: \mathrm{fork}\, f\, g\, a = (f\,a, g\,a): B \times C.
 
 (Alternatively, we could have taken the domain of :math:`\mathrm{fork}` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
 
@@ -315,21 +317,23 @@ Denote the (dependent) **fork** function by
 
 .. math:: \mathbf{fork}: ∏_{(a:A)} B_a → ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a),
 
-and define it as follows:
+and define it as follows: for each :math:`f: ∏_{(a:A)} B_a` and :math:`g: ∏_{(a:A)} C_a`, let 
 
-  if :math:`f: ∏_{(a:A)} B_a` and :math:`g: ∏_{(a:A)} C_a` and :math:`a:A`, then
-  
-.. math:: \mathbf{fork} (f)(g)(a) = (f\,a, g\,a): B_a × C_a.
+.. math:: \mathbf{fork}\, f\, g: ∏_{(a:A)} B_a × C_a
 
-Since our definition of fork is presented in curried form, we can partially apply it and obtain the typing judgments,
+be the function that maps each :math:`a:A` to the pair
 
-.. math:: \mathbf{fork}(f): ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a)\quad \text{ and } \quad \mathbf{fork}(f)(g): ∏_{(a:A)} (B_a × C_a).
+.. math:: \mathbf{fork}\, f\, g\, a = (f\,a, g\,a): B_a × C_a.
+
+Since our definition of fork is presented in curried form, we can partially apply it and obtain the typing judgment,
+
+.. math:: \mathbf{fork}(f): ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a).
 
 Next, we define a :term:`function application` operation, which we will refer to as "eval."
 
-If :math:`A` and :math:`B` are types, then *the* **eval**, *or* **function application**, *function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval}: ((A → B) × A) → B` and defined as follows:
+If :math:`A` and :math:`B` are types, then *the* **eval**, *or* **function application**, *function on* :math:`A` *and* :math:`B` *is denoted by* :math:`\mathbf{eval}: ((A → B) × A) → B` and defined as follows: for each :math:`f: A → B` and :math:`a: A`, let
 
-  for each :math:`f: A → B` and :math:`a: A`, let :math:`\mathbf{eval} (f, a) = f\, a: B`.
+.. math:: \mathbf{eval} (f, a) = f\, a: B.
 
 Notice that :math:`\mathbf{eval}` is polymorphic as it depends on the types :math:`A` and :math:`B`, and its type is
 
@@ -442,9 +446,9 @@ Thus,
   
   *define* the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f [g] := f \, (\mathbf{eval} \, \mathbf{fork}\, g): ∏_{(i:n)}(k_i → A) → A.
+.. math:: f [g] := f \, \mathbf{eval} \, \mathbf{fork}\, g: ∏_{(i:n)}(k_i → A) → A.
 
-Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, (g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f (\mathbf{eval} \, \mathbf{fork}\, (g) (a))` has type :math:`A`, as desired.
+Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`(\mathbf{eval} \, \mathbf{fork}\, g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, (\mathbf{eval} \, \mathbf{fork}\, g) (a)` has type :math:`A`, as desired.
 
 ----------------------------
 
