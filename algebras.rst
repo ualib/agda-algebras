@@ -76,7 +76,7 @@ Thus, by identifying the :math:`ρf`-th power :math:`A^{ρf}` with the type :mat
       
    Then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
 
-It is important to be familiar with the classical notions of signature and arity, since these are used by almost all algebraists. However, in :numref:`Section %s <f-algebra>` we give alternative, category theoretic definitions of these things that are sometimes easier to compute with.
+It is important to be familiar with the classical notions of signature and arity, since these are used by almost all algebraists. However, in :numref:`f-algebra` we give alternative, category theoretic definitions of these things that are sometimes easier to compute with.
 
 --------------------------
 
@@ -93,7 +93,7 @@ An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)
   #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρ f → A) → A \}` := a set of operations on :math:`A`, and
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Section %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
+Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
 ---------------------------
 

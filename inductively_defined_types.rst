@@ -8,25 +8,9 @@
 Inductively Defined Types
 =========================
 
-(`The chapter on inductive types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html>`_ in the `Theorem Proving in Lean`_ tutorial gives a nice presentation of this topic. We start our presentation by quoting four key points from the start of `that chapter <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html>`_.)
+We briefly introduced inductively defined types in :numref:`inductive-types`.  Many more details can be found in the chapter on `Inductive Types`_ in :term:`TPIL`. 
 
-#. "Lean's formal foundation includes basic types, ``Prop, Type 0, Type 1, ...``, and allows for the formation of :term:`dependent function types <dependent function type>`, ``Π x : α, β``."
-
-#. "In Lean's library, every concrete type other than the universes and every type constructor other than ``Pi`` is an instance of a general family of type constructions known as *inductive types*."
-
-#. "It is remarkable that it is possible to construct a substantial edifice of mathematics based on nothing more than the type universes, Pi types, and inductive types; everything else follows from those."
-
-#. "Intuitively, an inductive type is built up from a specified list of constructors. In Lean, the syntax for specifying such a type is as follows:
-
-   .. code-block:: text
-
-       inductive foo : Sort u
-       | constructor₁ : ... → foo
-       | constructor₂ : ... → foo
-       ...
-       | constructorₙ : ... → foo
-
-   The intuition is that each constructor specifies a way of building new objects of type ``foo``, possibly from previously constructed values. The type ``foo`` consists of nothing more than the objects that are constructed in this way."
+The availability and utility of inductively defined types were among our primary original motivations for formalizing universal algebra in a language (like Lean) that supports such types. In the present chapter, we show how these types come into play in our formalization project.  
 
 ------------------------------
 

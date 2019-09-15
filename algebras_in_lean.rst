@@ -688,9 +688,10 @@ We could clean this up a bit by fixing the signature σ and algebras 𝔸 and �
    end
 
    -- BEGIN
-   variables {σ : signature} {A : algebra σ} {B : algebra σ}
+   variables {σ: signature} {A: algebra σ} {B: algebra σ}
 
-   definition homomorphic (h : A → B) := ∀ f a, h (A f a) = B f (h ∘ a)
+   definition homomorphic (h: A → B) :=
+   ∀ f a, h (A f a) = B f (h ∘ a)
    -- END
 
 Comparing this with a common informal language definition of a homomorphism, which is typically something similar to :math:`∀ f \ ∀ a \ h (f^𝔸 (a)) = f^𝔹 (h ∘ a)`, we expect working algebraists to find the ``lean-ualib`` syntax quite readable.

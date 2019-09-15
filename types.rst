@@ -120,7 +120,7 @@ The solution is again to denote the function type as a product. Product types ar
 
 .. math:: \Proj: ∏_{g:J→I} \left( ∏_{(i:I)} A_{i} →  ∏_{(j:J)} A_{g(j)} \right).
 
-This is a special case of the more general (and more elegant) types that we define in later chapters, after reviewing some concepts of category theory in :numref:`postmodern-algebra` that are essential for this purpose.
+This is a special case of the more general (and more elegant) types that we define in later chapters, after reviewing some concepts of category theory in :numref:`Chapter %s <postmodern-algebra>` that are essential for this purpose.
 
 ---------------------------------------
 
@@ -400,6 +400,7 @@ We now develop a general formulation of :term:`composition of operations` on set
 Let :math:`f : (n → A) → A` be an :math:`n`-ary operation, and :math:`g_i : (k_i → A) → A` a :math:`k_i`-ary operation on :math:`A`, for each :math:`0≤ i < n`. Define the **composition of** :math:`f` **with** :math:`(g_0, \dots, g_{n-1})`, denoted by :math:`f [g_0, \dots, g_{n-1}]`, in the following standard way: for each
 
 .. math:: ((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})): A^{k_0} × \cdots × A^{k_{n-1}},
+   :label: args
 
 .. math:: f & [g_0, \dots, g_{n-1}]((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)}))\\
                 &= f(g_0(a_{00}, \dots, a_{0(k_0-1)}), \dots, g_{n-1}(a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})).
@@ -410,45 +411,41 @@ Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :m
 
 Let :math:`g: ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.
 
-Let :math:`a: ∏_{(i:n)} (k_i → A)` be the function defined for each :math:`0≤ i < n` by :math:`a\,i: k_i → A`, and for each :math:`j: k_i`, by
-
-.. math:: a\,i\,j = a_{ij}.
+Let :math:`a: ∏_{(i:n)} (k_i → A)` be the function defined for each :math:`0≤ i < n` by :math:`a\,i: k_i → A`, and for each :math:`j: k_i`, by :math:`a\,i\,j = a_{ij}: A`.
   
-Then the :math:`n`-tuple of arguments in the expression above is identified with the :math:`n`-tuple :math:`a = (a 0, \dots, a (n-1))` of functions.
+Then the :math:`n`-tuple of arguments in expression :eq:`args` above can be identified with the :math:`n`-tuple :math:`a = (a\,0, \dots, a\,(n-1))` of functions.
 
-.. Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{(i:n)} (k_i → A)`.
-
-Now, recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
+Recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
 
 If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then 
 
-.. math:: \mathbf{fork} (g) (a): ∏_{(i:n)}\bigl((k_i → A) → A) \times (k_i → A)\bigr)
+.. math:: \mathbf{fork}\, g\, a: ∏_{(i:n)}\bigl((k_i → A) → A) \times (k_i → A)\bigr)
 
 is the function that maps each :math:`i:n` to the pair
 
 .. math:: (g\,i, a\,i): (k_i → A) → A) × (k_i → A).
 
-Now, applying :math:`g\,i` to :math:`a\,i` with the :math:`\mathbf{eval}` function, we have
+Applying :math:`g\,i` to :math:`a\,i` with the :math:`\mathbf{eval}` function, we have
 
-.. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = \mathbf{eval} (g\,i, a\,i) = (g\,i)(a\,i): A.
+.. math:: \mathbf{eval} \, \mathbf{fork}\, g\, a\, i = \mathbf{eval} (g\,i, a\,i) = (g\,i)(a\,i): A.
 
-Observe that the codomain :math:`A` of the function :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
+Observe that the codomain :math:`A` of the function :math:`\mathbf{eval} \, \mathbf{fork}\, g\, a` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case, resulting in the typing judgment, :math:`\mathbf{eval} \, \mathbf{fork}\, g\, a: n → A`.
 
 .. On the other hand,
 
 .. .. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{(i:n)}  (k_i → A) → (n → A).
 
-Thus,
+Thus, if
 
-  if :math:`f: (n → A) → A` (an :math:`n`-ary operation) and 
+  :math:`f: (n → A) → A` (an :math:`n`-ary operation) and 
   
-  if :math:`g: ∏_{(i:n)} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
+  :math:`g: ∏_{(i:n)} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
   
   *define* the **composition of** :math:`f` **with** :math:`g` as follows:
 
 .. math:: f [g] := f \, \mathbf{eval} \, \mathbf{fork}\, g: ∏_{(i:n)}(k_i → A) → A.
 
-Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`(\mathbf{eval} \, \mathbf{fork}\, g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, (\mathbf{eval} \, \mathbf{fork}\, g) (a)` has type :math:`A`, as desired.
+Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`A`, as desired.
 
 ----------------------------
 
@@ -459,19 +456,37 @@ Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`(\mathbf{eval} \, \mat
 Inductive types
 -----------------
 
-.. todo:: complete this section
+The chapter on `Inductive Types`_ in :term:`TPIL` gives a nice presentation of this topic. We start our presentation by quoting four key points from the start of that chapter.
 
-(See also: the `Inductive Types <https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html#>`_section of :term:`TPIL`.)
+#. "Lean's formal foundation includes basic types, ``Prop, Type 0, Type 1, ...``, and allows for the formation of :term:`dependent function types <dependent function type>`, ``Π x : α, β``."
+
+#. "In Lean's library, every concrete type other than the universes and every type constructor other than ``Pi`` is an instance of a general family of type constructions known as *inductive types*."
+
+#. "It is remarkable that it is possible to construct a substantial edifice of mathematics based on nothing more than the type universes, Pi types, and inductive types; everything else follows from those."
+
+#. "Intuitively, an inductive type is built up from a specified list of constructors. In Lean, the syntax for specifying such a type is as follows:
+
+   .. code-block:: text
+
+       inductive foo : Sort u
+       | constructor₁ : ... → foo
+       | constructor₂ : ... → foo
+       ...
+       | constructorₙ : ... → foo
+
+   The intuition is that each constructor specifies a way of building new objects of type ``foo``, possibly from previously constructed values. The type ``foo`` consists of nothing more than the objects that are constructed in this way."
+
+In :numref:`Chapter %s <inductively-defined-types>` we will describe the key role played by inductive types in our formalization of universal algebra.
 
 --------------------------------------------
 
 .. rubric:: Footnotes
 
 .. [1]
-   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1) : b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions yields a :term:`pi type`.
+   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions yields a :term:`pi type`.
 
 .. [2]
-   Using the tuple constructor described in :numref:`Section %s <tuple-functors>`, we could also represent such an operation as :math:`f : \mathrm{ntuple} A → A`, but we prefer to reserve ntuple for instances in which it acts as a functor.
+   Using the tuple constructor described in :numref:`tuple-functors`, we could also represent such an operation as :math:`f: \mathrm{ntuple} A → A`, but we prefer to reserve ntuple for instances in which it acts as a functor.
 
 .. include:: hyperlink_references.rst
 

@@ -8,6 +8,8 @@
 
 .. _Coq: http://coq.inria.fr
 
+.. _Inductive Types: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
+
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 
 .. _Lean: https://leanprover.github.io/
