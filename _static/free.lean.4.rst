@@ -171,12 +171,12 @@
     show lift_of h (app f as) = 𝔸 f (lift_of h ∘ as), from rfl
   
     -- The lift of a function is unique among homomorphic lifts.
-    lemma lift_is_unique {𝔸: algebra σ}: ∀ {g h : 𝕋(X) → 𝔸},
+    lemma lift_is_unique {𝔸: algebra σ}: ∀ {g h: 𝕋(X) → 𝔸},
     homomorphic g → homomorphic h → g ∘ 𝕏 = h ∘ 𝕏 → g = h :=
     assume (g h: 𝕋(X) → 𝔸) 
-           (h₁ : homomorphic g)
-           (h₂ : homomorphic h)
-           (h₃ : g ∘ 𝕏 = h ∘ 𝕏),
+           (h₁: homomorphic g)
+           (h₂: homomorphic h)
+           (h₃: g ∘ 𝕏 = h ∘ 𝕏),
   
     show g = h, from 
 
@@ -189,10 +189,10 @@
           {apply congr_fun h₃ t},
 
           show g (app f a) = h (app f a),
-          { have ih₂  : g ∘ a = h ∘ a, from funext ih₁,
-            calc g (app f a) = 𝔸 f (g ∘ a) : h₁ f a
-                         ... = 𝔸 f (h ∘ a) : congr_arg (𝔸 f) ih₂ 
-                         ... = h (app f a) : (h₂ f a).symm }
+          { have ih₂: g ∘ a = h ∘ a, from funext ih₁,
+            calc g (app f a) = 𝔸 f (g ∘ a): h₁ f a
+                         ... = 𝔸 f (h ∘ a): congr_arg (𝔸 f) ih₂ 
+                         ... = h (app f a)  (h₂ f a).symm }
         end,
       funext h₀ 
     -- END

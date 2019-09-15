@@ -341,7 +341,7 @@ so it seems that when we introduced the :math:`\mathbf{eval}` function (in itali
   
 However, our implementation of :math:`\mathbf{eval}` will use implicit types, so :math:`A` and :math:`B` need not be mentioned explicitly.
 
-As an example of function application, let :math:`f: ∏_{a:A}((C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`. Then,
+As an example of function application, let :math:`f: ∏_{a:A}(C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`. Then,
 
   :math:`f\,a : C_a → D` and :math:`g\,a: C_a` and 
 
@@ -402,37 +402,37 @@ Let :math:`f : (n → A) → A` be an :math:`n`-ary operation, and :math:`g_i : 
 
 This notation is ugly and tedious, and it lends itself poorly to computation. We now show how it can be vastly improved.
 
-Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathrm{Op}(A)`.  Denote by :math:`g` the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.  This :math:`g` inhabits the following :term:`dependent function type`:
+Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathrm{Op}(A)`.
 
-.. math:: ∏_{(i:n)} ((k_i → A) → A).
+Let :math:`g: ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.
 
-Next, define the function :math:`a` as follows: for each :math:`0≤ i < n`,
-
-.. math:: a\,i: k_i → A,
-
-and for each :math:`j: k_i`,
+Let :math:`a: ∏_{(i:n)} (k_i → A)` be the function defined for each :math:`0≤ i < n` by :math:`a\,i: k_i → A`, and for each :math:`j: k_i`, by
 
 .. math:: a\,i\,j = a_{ij}.
   
 Then the :math:`n`-tuple of arguments in the expression above is identified with the :math:`n`-tuple :math:`a = (a 0, \dots, a (n-1))` of functions.
 
-Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{(i:n)} (k_i → A)`.
+.. Thus :math:`a` inhabits the :term:`dependent function type` :math:`∏_{(i:n)} (k_i → A)`.
 
-Now, recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is clear how to perform general composition using dependent types.
+Now, recalling the definitions of :math:`\mathbf{fork}` and :math:`\mathbf{eval}` (:numref:`fork-and-eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
 
-  If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)` and :math:`i:n`, then
+If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then 
 
-.. math:: \mathbf{fork} (g) (a) (i) = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A)
+.. math:: \mathbf{fork} (g) (a): ∏_{(i:n)}\bigl((k_i → A) → A) \times (k_i → A)\bigr)
 
-and
+is the function that maps each :math:`i:n` to the pair
 
-.. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = (g\,i)\,(a\,i) : A.
+.. math:: (g\,i, a\,i): (k_i → A) → A) × (k_i → A).
 
-Observe that the codomain :math:`A` does not depend on :math:`i`, so the types :math:`∏_{(i:n)} A` and :math:`n → A` are equivalent. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
+Now, applying :math:`g\,i` to :math:`a\,i` with the :math:`\mathbf{eval}` function, we have
 
-On the other hand,
+.. math:: \mathbf{eval} \, \mathbf{fork}\, (g) (a) (i) = \mathbf{eval} (g\,i, a\,i) = (g\,i)(a\,i): A.
 
-.. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{(i:n)}  (k_i → A) → (n → A).
+Observe that the codomain :math:`A` of the function :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case. Therefore, :math:`\mathbf{eval} \, \mathbf{fork}\, (g) (a)` has type :math:`n → A`.
+
+.. On the other hand,
+
+.. .. math:: \mathbf{eval}\,\mathbf{fork}\, g: ∏_{(i:n)}  (k_i → A) → (n → A).
 
 Thus,
 
@@ -442,7 +442,7 @@ Thus,
   
   *define* the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f [g] := f  (\mathbf{eval} \, \mathbf{fork}\, g): ∏_{(i:n)}(k_i → A) → A.
+.. math:: f [g] := f \, (\mathbf{eval} \, \mathbf{fork}\, g): ∏_{(i:n)}(k_i → A) → A.
 
 Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, (g)(a)` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f (\mathbf{eval} \, \mathbf{fork}\, (g) (a))` has type :math:`A`, as desired.
 

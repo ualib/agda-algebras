@@ -38,8 +38,8 @@
         and ker g ⊆ ker h, then there is a hom k: 𝔹 → C such
         that h = g ∘ k.
   
-              g
-          𝔸 -----> 𝔹
+               g
+           𝔸 ----> 𝔹
            |      /
            |     /
          h |    / k
