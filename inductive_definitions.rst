@@ -16,12 +16,146 @@ To exhibit the efficiency and ease with which we can formalize and work with bas
 
 The idea is to demonstrate the power and utility of implementing the theory in a formal language that supports dependent and inductively defined types, which are essential for expressing and working with infinite objects in a constructive and computable way, and for proving (by induction) properties of these objects.
 
+-----------------------------------------------
+
+.. _basic-facts:
+
+Basic Facts
+-----------
+
+Throughout this section,
+
++ :math:`𝔸 = ⟨A, F^𝔸⟩, \ 𝔹 = ⟨B, F^𝔹⟩, \ ℂ = ⟨C, F^ℂ⟩\ ` are algebras of the same signature :math:`σ = (F, ρ)`, and
+
++ :math:`g, h : \hom(𝔸, 𝔹)` are homomorphism from 𝔸 to 𝔹;
+
+.. index:: ! equalizer
+
+The **equalizer** of :math:`g` and :math:`h` is the set
+
+.. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
+
+Here is a small collection of basic observations that we will need later. When we refer back to these, we will call them :numref:`Obs %s <obs-one>`, etc.
+
+.. _obs-one:
+
+.. proof:observation::
+
+   :math:`𝖤(g,h)` is a subuniverse of 𝔸.
+
+   .. container:: toggle
+ 
+      .. container:: header
+ 
+         *Proof*.
+
+      Fix arbitrary :math:`f ∈ F` and :math:`a : ρf → 𝖤(g,h)`.
+
+      We show that :math:`g (f^𝔸 ∘ a) = h (f^𝔸 ∘ a)`, as this shows that :math:`𝖤(g, h)` is closed under the operation :math:`f^𝔸` of :math:`𝔸`.
+
+      But this is trivial since, by definition of homomorphism, we have
+
+      .. math:: (g ∘ f^𝔸)(ι_i a) = (f^𝔹 ∘ F g)(ι_i a) = (f^𝔹 ∘ F h)(ι_i a) = (h ∘ f^𝔸)(ι_i a).
+
+      ☐
+
+.. _obs-two:
+
+.. proof:observation::
+
+   If the set :math:`X ⊆ A` generates 𝔸 and :math:`g|_X = h|_X`, then :math:`g = h`.
+
+   .. container:: toggle
+    
+      .. container:: header
+  
+         *Proof*.
+
+      Suppose the subset :math:`X ⊆ A` generates :math:`⟨A, f^𝔸⟩` and suppose :math:`g|_X = h|_X`.
+ 
+      Fix an arbitrary :math:`a : A`. We show :math:`g(a) = h(a)`.
+ 
+      Since :math:`X` generates 𝔸, there exists a term :math:`t` and a tuple :math:`x : ρt → X` of generators such that :math:`a = t^𝔸 x`.
+ 
+      Therefore, since :math:`F g = F h` on :math:`X`, we have
+    
+      .. math:: g(a) = g(tᴬ x) = (tᴮ ∘ F g)(x) = (tᴮ ∘ F h)(x) = h(tᴬ x) = h(a).
+
+      ☐
+
+.. _obs-three:
+
+.. proof:observation::
+
+   If :math:`A, B` are finite and :math:`X` generates 𝔸, then :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`.
+
+   .. container:: toggle
+    
+      .. container:: header
+    
+         *Proof*.
+
+      By :ref:`Obs 2 <obs-two>`, a homomorphism is uniquely determined by its restriction to a generating set.
+
+      If :math:`X` generates 𝔸, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`. ☐
+    
+.. _obs-four:
+
+.. proof:observation::
+
+   If :math:`g ∈ \epi (𝔸, 𝔹)`, :math:`h ∈ \hom (𝔸, ℂ)`, and :math:`\ker g ⊆ \ker h`, then
+
+   .. math:: ∃ k ∈ \hom(𝔹, ℂ), \ h = k ∘ g.
+    
+   .. container:: toggle
+    
+      .. container:: header
+    
+         *Proof*.
+
+      We define :math:`k ∈ \hom(𝔹, ℂ)` as follows:
+
+      Fix :math:`b ∈ B`.
+
+      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
+
+      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a ∈ g^{-1}\{b\}`.
+   
+      For each such :math:`b`, and its associated :math:`c_b`, define :math:`k(b) = c_b`.
+   
+      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b ∈ B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a ∈ g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.
+      
+      One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
+      
+      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Sec %s <basic-facts-in-lean>` when we implement :numref:`Obs %s <obs-four>` in Lean.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`.
+   
+      It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
+
+      Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b: ρ f → B`; we will show that
+      
+      .. math:: f^ℂ (k ∘ b) = k (f^𝔹(b)).
+         :label: hom
+
+      Let :math:`a: ρ f → A` be such that :math:`g ∘ a = b`.  Then the left hand side of :eq:`hom` is :math:`f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)`, which is equal to :math:`h (f^𝔸 (a))` since :math:`h` is a homomorphism.
+   
+      Therefore,
+   
+      .. math:: 
+      
+         f^ℂ (k ∘ b) &= f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)\\ 
+                 & = h (f^𝔸 (a)) = (k ∘ g)(f^𝔸 (a))\\
+                 & = k (f^𝔹 (g ∘ a)) = k (f^𝔹 (b)),
+
+      as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
+
+-----------------------------------------
+
 .. index:: ! subuniverse, ! subalgebra
 
 Subalgebras
 -----------
 
-The following is an inductive definition of the subuniverse generated by a set (cf. Theorem 1.14 of :cite:`Bergman:2012`).
+We now inductively define the **subuniverse generated by a set** and prove that this new definition is equivalent to the one we gave in :numref:`subalgebras` (cf. :cite:`Bergman:2012` Thm. 1.14).
 
 .. _thm-1-14:
 
@@ -32,10 +166,10 @@ The following is an inductive definition of the subuniverse generated by a set (
    Define, by recursion on :math:`n`, the sets :math:`X_n` as follows:
 
    .. math:: X_0  &=  X \\
-          X_{n+1} &=  X_n ∪ \{ f a  ∣ f ∈ F, \ a ∈ X_n^{ρf}\}.
+          X_{n+1} &=  X_n ∪ \{ f a ∣ f ∈ F, \ a ∈ X_n^{ρf}\}.
       :label: subalgebra-inductive
 
-   Then  :math:`\mathrm{Sg}^{𝔸}(X) = ⋃ X_n`.
+   Then  :math:`\Sg^𝔸(X) = ⋃ X_n`.
 
    .. container:: toggle
  
@@ -43,7 +177,7 @@ The following is an inductive definition of the subuniverse generated by a set (
  
          *Proof*.
       
-      Let :math:`Y = ⋃_{n < ω} X_n`. Clearly :math:`X_n ⊆ Y ⊆ A`, for every :math:`n < ω`. In particular :math:`X = X_0 ⊆ Y`.
+      Let :math:`Y = ⋃_{n < ω} X_n`. Clearly :math:`X_n ⊆ Y ⊆ A`, for every :math:`n ∈ ℕ`. In particular :math:`X = X_0 ⊆ Y`.
 
       Let us show that :math:`Y` is a subuniverse of 𝔸.
    
@@ -55,19 +189,19 @@ The following is an inductive definition of the subuniverse generated by a set (
     
       Thus :math:`Y` is a subuniverse of 𝔸 containing :math:`X`.
     
-      By :eq:`SgDef`, :math:`\mathrm{Sg}^{𝔸}(X) ⊆ Y`.
+      By :eq:`SgDef`, :math:`\Sg^𝔸(X) ⊆ Y`.
     
-      For the opposite inclusion, it is enough to check, by induction on :math:`n`, that :math:`X_n ⊆ \mathrm{Sg}^{𝔸}(X)`.
+      For the opposite inclusion, it is enough to check, by induction on :math:`n`, that :math:`X_n ⊆ \Sg^𝔸(X)`.
     
-      By definition, :math:`X_0 = X ⊆ \mathrm{Sg}^{𝔸}(X)`.
+      By definition, :math:`X_0 = X ⊆ \Sg^𝔸(X)`.
       
-      Assume :math:`X_n ⊆ \mathrm{Sg}^𝔸(X)`.  We show :math:`X_{n+1} ⊆ \mathrm{Sg}^𝔸(X)`.
+      Assume :math:`X_n ⊆ \Sg^𝔸(X)`.  We show :math:`X_{n+1} ⊆ \Sg^𝔸(X)`.
       
       If :math:`b ∈ X_{n+1} - X_n`, then :math:`b = f a` for a basic :math:`k`-ary operation :math:`f` and some :math:`a ∈ X_n^k`.
       
-      But :math:`∀ i, \ a i ∈ \mathrm{Sg}^𝔸(X)` and since this latter object is a subuniverse, :math:`b ∈ \mathrm{Sg}^𝔸(X)` as well.
+      But :math:`∀ i, \ a i ∈ \Sg^𝔸(X)` and since this latter object is a subuniverse, :math:`b ∈ \Sg^𝔸(X)` as well.
     
-      Therefore, :math:`X_{n+1} ⊆ \mathrm{Sg}^𝔸(X)`, as desired. ☐ 
+      Therefore, :math:`X_{n+1} ⊆ \Sg^𝔸(X)`, as desired. ☐ 
 
 The argument in the proof of :numref:`Theorem %s <thm-1-14>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
@@ -75,7 +209,7 @@ The argument in the proof of :numref:`Theorem %s <thm-1-14>` is of a type that o
 
   #. Every subuniverse containing :math:`X` is shown to contain :math:`Y` as well.
 
-  #. One concludes that :math:`Y = \mathrm{Sg}^𝔸 (X)`.
+  #. One concludes that :math:`Y = \Sg^𝔸 (X)`.
 
 -----------------------------------------------
 
@@ -88,28 +222,94 @@ Terms
 
 Fix a signature :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables** and assume :math:`X ∩ F = ∅`.
 
-For every :math:`n < ω`, let :math:`F_n = ρ^{-1} \{n\}` be the set of :math:`𝗇`-ary operation symbols.
+Let :math:`F_0` denote the set of nullary operation symbols.
 
-By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members of :math:`X ∪ T`.
+By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members of :math:`X ∪ F`, and we will denote the concatenation of such sequences by simple juxtaposition.
 
-We denote the concatenation of sequences by simple juxtaposition. We define, by induction on :math:`n`, the sets :math:`T_n` of words on :math:`X ∪ F` by
+We *define* by induction on :math:`n` the set :math:`T_n` of words on :math:`X ∪ F` as follows:
 
 .. math::      T_0 &= X ∪ F_0;\\
-           T_{n+1} &= T_n ∪ \{ f s ∣ f ∈  F, \ s : ρf → T_n \}. 
+           T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: ρf → T_n \},
 
-Define the collection of **terms in the signature** σ **over** :math:`X` by :math:`T_σ(X) = ⋃_{n < ω}T_n`.
+and we *define* the collection of **terms of signature** σ **over** :math:`X` by :math:`T_σ(X) = ⋃_{n < ω}T_n`.
 
-The definition of :math:`T_σ (X)` is recursive, indicating that *the set of terms in a signature can be implemented (e.g., in Lean) using an inductive type*.
+The definition of :math:`T_σ (X)` is recursive, indicating that
 
-We will confirm this in :numref:`Chapter %s <inductively-defined-types>`, but before doing so we impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in the next section, giving us another chance to compare informal language proofs to their formal Lean counterparts and to show off inductively defined types in Lean.
+  *the terms of a given signature can be implemented (in Lean, for example) as an inductive type*.
 
-If :math:`w` is a term, let :math:`|w|` be the least :math:`n` such that :math:`w ∈ T_n`, called the *height* of :math:`w`. [4]_ The height is a useful index for recursion and induction.
+We will confirm this in :numref:`Chapter %s <inductively-defined-types>`, but before doing so we impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic but important facts about this algebra. These will be formalized in :numref:`Chapter %s <inductively-defined-types>`, giving us a chance to show off inductively defined types in Lean and to compare informal language proofs to their formal Lean counterparts.
+
+If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. The height is a useful index for recursion and induction.
 
 Notice that :math:`T_σ (X)` is nonempty iff either :math:`X` or :math:`F_0` is nonempty. As long as :math:`T_σ (X)` is nonempty, we can impose upon it an algebraic structure, as follows:
 
-For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝕋_σ (X)}` be the operation on :math:`T_σ (X)` that maps each tuple :math:`a : ρ f → T_σ (X)` to the formal term :math:`f a`.
+For every basic operation symbol :math:`f ∈ F` let :math:`f^{𝕋_σ (X)}` be the operation on :math:`T_σ (X)` that maps each tuple :math:`s: ρ f → T_σ (X)` to the formal term :math:`f\,s`.
 
-We define :math:`𝕋_σ (X)` to be the algebra with universe :math:`T_σ (X)` and with basic operations :math:`\{f^{𝕋_σ (X)} | f ∈ F\}`. [5]_
+We define :math:`𝕋_σ (X)` to be the algebra with universe :math:`T_σ (X)` and with basic operations :math:`\{f^{𝕋_σ (X)} | f ∈ F\}`. [4]_
+
+Here are some important facts about this algebra.
+
+.. _obs-six:
+
+.. proof:observation::
+
+   Let :math:`σ = (F, ρ)` be a signature.
+ 
+   (a) :math:`𝕋_σ(X)` is generated by :math:`X`.
+ 
+   (b) For every algebra :math:`𝔸 = ⟨A, F^𝔸⟩` of type :math:`σ` and every function :math:`g: X → A` there is a unique homomorphism :math:`h: 𝕋_σ(X) → 𝔸` such that :math:`h|_X = g`.
+ 
+   .. container:: toggle
+    
+      .. container:: header
+     
+         *Proof*.
+     
+      The definition of :math:`𝕋_σ(X)` exactly parallels the construction in :numref:`Theorem %s <thm-1-14>`. That accounts for the first item.
+     
+      For b, define :math:`h\,t` by induction on the :term:`height` of :math:`|t|`.
+     
+      Suppose :math:`|t| = 0`.  Then :math:`t ∈ X ∪ F_0`. If :math:`t ∈ X`, then define :math:`h\,t = g\,t`. If :math:`t ∈ F_0`, then let :math:`h\,t = t^𝔸`.
+     
+      For the inductive step, assume :math:`|t| = n + 1`. Then :math:`t = f\,s` for some :math:`f ∈ F` and :math:`s: ρ f → T_n`, where for each :math:`0 ≤ i< ρ f` the term :math:`s\, i` has height at most :math:`n`. We define :math:`h\,t = f^{𝔸}(h ∘ s) = f^{𝔸}(h\,s_1, \dots, h\,s_k)`.
+     
+      It is easy to see that, by its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`.
+      
+      Finally, the uniqueness of :math:`h` follows from :numref:`Obs %s <obs-two>`. ☐
+
+.. _obs-seven:
+
+.. proof:observation::
+
+   Let :math:`𝔸 = ⟨A, f^{𝔸}⟩` and :math:`𝔹 = ⟨B, f^{𝔹}⟩` be algebras of type :math:`ρ`.
+ 
+    (a) For every :math:`n`-ary term :math:`t`, homomorphism :math:`g: 𝔸 → 𝔹`, and :math:`n`-tuple :math:`a: n → A`,
+    
+        .. math:: g(t^{𝔸} a) = t^{𝔹}(g ∘ a).
+
+        where, recall, :math:`t^𝔸 a = t^𝔸 (a_0, a_1, \dots, a_{n-1})` and :math:`(g ∘ a)(i) = g(a_i)`.
+
+    (b) For every term :math:`t ∈ T_ρ(X_ω)` and every :math:`θ ∈ \mathrm{Con}⟨A, fᴬ⟩`,
+    
+        .. math:: 𝔸 ≡_θ 𝔹 \quad ⟹ \quad t^𝔸(𝔸) ≡_θ t^𝔸(𝔹).
+
+    (c) For every subset :math:`Y` of :math:`A`,
+
+        .. math:: \Sg^{𝔸}(Y) = \{ t^𝔸 \, a ∣ t ∈ T_σ(X_n), a: ρ t → Y, n ∈ ℕ\}.
+
+   .. container:: toggle
+    
+      .. container:: header
+    
+        *Proof*.
+    
+      The first statement is an easy induction on :math:`|t|`.
+    
+      The second statement follows from the first by taking :math:`⟨B, f^{𝔹}⟩ = ⟨A, f^{𝔸}⟩/θ` and :math:`g` the canonical homomorphism.
+    
+      For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝔸}`.
+    
+      Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows. ☐
 
 .. todo:: complete this section (include material on free algebras)
 
@@ -272,195 +472,6 @@ Thus *the clone of terms operations can be implemented (e.g., in Lean) as an ind
 
    true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name **Taylor term**.
 
------------------------------------------------
-
-.. _basic-facts:
-
-Basic Facts
------------
-
-Throughout this section,
-
-+ :math:`𝔸 = ⟨A, F^𝔸⟩, \ 𝔹 = ⟨B, F^𝔹⟩, \ ℂ = ⟨C, F^ℂ⟩\ ` are algebras of the same signature :math:`σ = (F, ρ)`, and
-
-+ :math:`g, h : \hom(𝔸, 𝔹)` are homomorphism from 𝔸 to 𝔹;
-
-.. index:: ! equalizer
-
-The **equalizer** of :math:`g` and :math:`h` is the set
-
-.. math:: 𝖤(g,h) = \{ a : A ∣ g(a) = h(a) \}.
-
-Here is a list of basic observations that we will need later. We will reference the first observation in the list as :numref:`Obs %s <obs-one>`, etc. [6]_
-
-.. _obs-one:
-
-.. proof:observation::
-
-   :math:`𝖤(g,h)` is a subuniverse of 𝔸.
-
-   .. container:: toggle
- 
-      .. container:: header
- 
-         *Proof*.
-
-      Fix arbitrary :math:`f ∈ F` and :math:`a : ρf → 𝖤(g,h)`.
-
-      We show that :math:`g (f^𝔸 ∘ a) = h (f^𝔸 ∘ a)`, as this shows that :math:`𝖤(g, h)` is closed under the operation :math:`f^𝔸` of :math:`𝔸`.
-
-      But this is trivial since, by definition of homomorphism, we have
-
-      .. math:: (g ∘ f^𝔸)(ι_i a) = (f^𝔹 ∘ F g)(ι_i a) = (f^𝔹 ∘ F h)(ι_i a) = (h ∘ f^𝔸)(ι_i a).
-
-      ☐
-
-.. _obs-two:
-
-.. proof:observation::
-
-   If the set :math:`X ⊆ A` generates 𝔸 and :math:`g|_X = h|_X`, then :math:`g = h`.
-
-   .. container:: toggle
-    
-      .. container:: header
-  
-         *Proof*.
-
-      Suppose the subset :math:`X ⊆ A` generates :math:`⟨A, f^𝔸⟩` and suppose :math:`g|_X = h|_X`.
- 
-      Fix an arbitrary :math:`a : A`. We show :math:`g(a) = h(a)`.
- 
-      Since :math:`X` generates 𝔸, there exists a term :math:`t` and a tuple :math:`x : ρt → X` of generators such that :math:`a = t^𝔸 x`.
- 
-      Therefore, since :math:`F g = F h` on :math:`X`, we have
-    
-      .. math:: g(a) = g(tᴬ x) = (tᴮ ∘ F g)(x) = (tᴮ ∘ F h)(x) = h(tᴬ x) = h(a).
-
-      ☐
-
-.. _obs-three:
-
-.. proof:observation::
-
-   If :math:`A, B` are finite and :math:`X` generates 𝔸, then :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`.
-
-   .. container:: toggle
-    
-      .. container:: header
-    
-         *Proof*.
-
-      By :ref:`Obs 2 <obs-two>`, a homomorphism is uniquely determined by its restriction to a generating set.
-
-      If :math:`X` generates 𝔸, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\hom(𝔸, 𝔹)| ≤ |B|^{|X|}`. ☐
-    
-.. _obs-four:
-
-.. proof:observation::
-
-   If :math:`g ∈ \epi (𝔸, 𝔹)`, :math:`h ∈ \hom (𝔸, ℂ)`, and :math:`\ker g ⊆ \ker h`, then
-
-   .. math:: ∃ k ∈ \hom(𝔹, ℂ), \ h = k ∘ g.
-    
-   .. container:: toggle
-    
-      .. container:: header
-    
-         *Proof*.
-
-      We define :math:`k ∈ \hom(𝔹, ℂ)` as follows:
-
-      Fix :math:`b ∈ B`.
-
-      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
-
-      Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a ∈ g^{-1}\{b\}`.
-   
-      For each such :math:`b`, and its associated :math:`c_b`, define :math:`k(b) = c_b`.
-   
-      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b ∈ B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a ∈ g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.
-      
-      One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
-      
-      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Sec %s <basic-facts-in-lean>` when we implement :numref:`Obs %s <obs-four>` in Lean.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`.
-   
-      It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
-
-      Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b: ρ f → B`; we will show that
-      
-      .. math:: f^ℂ (k ∘ b) = k (f^𝔹(b)).
-         :label: hom
-
-      Let :math:`a: ρ f → A` be such that :math:`g ∘ a = b`.  Then the left hand side of :eq:`hom` is :math:`f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)`, which is equal to :math:`h (f^𝔸 (a))` since :math:`h` is a homomorphism.
-   
-      Therefore,
-   
-      .. math:: 
-      
-         f^ℂ (k ∘ b) &= f^ℂ (k ∘ g ∘ a) = f^ℂ (h ∘ a)\\ 
-                 & = h (f^𝔸 (a)) = (k ∘ g)(f^𝔸 (a))\\
-                 & = k (f^𝔹 (g ∘ a)) = k (f^𝔹 (b)),
-
-      as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
-
-.. _obs-six:
-
-.. proof:observation::
-
-   Let :math:`f` be a similarity type.
- 
-   (a) :math:`𝕋_ρ (X)` is generated by :math:`X`.
- 
-   (b) For every algebra :math:`𝔸 = ⟨A, F⟩` of type :math:`ρ` and every function :math:`h : X → A` there is a unique homomorphism :math:`g : 𝕋_ρ (X) → ⟨A, fᴬ⟩` such that :math:`g|_X = h`.
- 
-   .. container:: toggle
-    
-      .. container:: header
-     
-         *Proof*.
-     
-      The definition of :math:`𝕋_ρ (X)` exactly parallels the construction in :numref:`Theorem %s <thm-1-14>`. That accounts for the first item.
-     
-      For b, define :math:`g(t)` by induction on :math:`|t|`.
-     
-      Suppose :math:`|t| = 0`.  Then :math:`t ∈ X ∪ \mathcal F_0`.
-     
-      If :math:`t ∈ X` then define :math:`g(t) = h(t)`. For :math:`t ∈ \mathcal F_0`, :math:`g(t) = t^{𝔸}`.
-     
-      Note that since :math:`𝔸 = ⟨A, fᴬ⟩` is an algebra of type :math:`f` and :math:`t` is a nullary operation symbol, :math:`t^{𝔸}` is defined.
-     
-      For the inductive step, let :math:`|t| = n + 1`. Then :math:`t = f(s_1, \dots, s_k)` for some :math:`f ∈ \mathcal F_k` and :math:`s_1, \dots, s_k` each of height at most :math:`n`. We define :math:`g(t) = f^{𝔸}(g(s_1), \dots, g(s_k))`.
-     
-      By its very definition, :math:`g` is a homomorphism. Finally, the uniqueness of :math:`g` follows from :numref:`Obs %s <obs-two>`. ☐
- 
-.. _obs-seven:
-
-.. proof:observation::
-
-   Let :math:`𝔸 = ⟨A, f^{𝔸}⟩` and :math:`𝔹 = ⟨B, f^{𝔹}⟩` be algebras of type :math:`ρ`.
- 
-    (a) For every :math:`n`-ary term :math:`t` and homomorphism :math:`g : 𝔸 → 𝔹`, :math:`g(t^{𝔸}(a_1,\dots, a_n)) = t^{𝔹}(g(a_1),\dots, g(a_n))`.
-
-    (b) For every term :math:`t ∈ T_ρ(X_ω)` and every :math:`θ ∈ \mathrm{Con}⟨A, fᴬ⟩`, :math:`𝔸 ≡_θ 𝔹` implies :math:`t^{𝔸}(𝔸) ≡_θ t^{𝔸}(𝔹)`.
-
-    (c) For every subset :math:`Y` of :math:`A`,
-
-        .. math:: \Sg^{𝔸}(Y) = \{ t^{𝔸}(a_1, \dots, a_n) : t ∈ Tᵨ (X_n), a_i ∈ Y, i ≤ n < ω\}.
-
-   .. container:: toggle
-    
-      .. container:: header
-    
-        *Proof*.
-    
-      The first statement is an easy induction on :math:`|t|`.
-    
-      The second statement follows from the first by taking :math:`⟨B, f^{𝔹}⟩ = ⟨A, f^{𝔸}⟩/θ` and :math:`g` the canonical homomorphism.
-    
-      For the third statement, again by induction on the height of :math:`t`, every subalgebra must be closed under the action of :math:`t^{𝔸}`.
-    
-      Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows. ☐
 
 ------------------------
 
@@ -473,12 +484,6 @@ Here is a list of basic observations that we will need later. We will reference 
    We will also have much to say about Malcev conditions, but for now we ask the reader to trust us when we say that such conditions play an important role in many deep results in universal algebra.
 
 .. [4]
-   The **height** of a type is simply type's *level* (see Section ???) and the syntax ``Type*`` indicates that we do not wish to commit in advance to a specific height.
-
-.. [5]
    The construction of :math:`𝕋_ρ (X)` may seem to be making something out of nothing, but it plays a crucial role in the theory.
-
-.. [6]
-   To see the proofs, click the black triangles.
 
 .. include:: hyperlink_references.rst

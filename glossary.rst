@@ -324,6 +324,11 @@ Nomenclature
     group
       A **group** :math:`𝐆 = (G, e, \ ^{-1}, ⋆)` consists of a set :math:`G` together with a nullary (constant) operation :math:`e`, a unary (inverse) operation :math:`\ ^{-1}: G → G`, and a binary operation :math:`⋆ : G^2 → G`, such that :math:`(G, e, ⋆)` is a monoid and :math:`x ⋆ x^{-1} = e` for all :math:`x ∈ G`.
 
+    height
+      If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. (See :numref:`terms` for the definition of :math:`T_n`.) The height is a useful index for recursion and induction.
+
+      If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` (see :numref:`leans-type-hierarchy`).
+
     Heyting algebra
       A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
    

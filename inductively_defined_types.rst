@@ -108,17 +108,19 @@ Clones in Lean
 
 In this section we see how the clone concept, described above in :numref:`clones`, can be implemented in Lean.  We then formalize the proof of :numref:`Obs %s <obs-five>` which asserts that we can define *clone* inductively and that the inductive definition is equivalent to our initial definition.
 
-(The Lean code described in this section is in the source file ``clone.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_ Also, although we don't make it explicit below, all of the code in the first part of this section is surrounded by the lines
+The Lean code described in this section is in the source file ``clone.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
+
+(All of the code in the first part of this section is surrounded by the lines
 
 .. code::
 
-    namespace clone
+    namespace ualib
       section clo 
         ... 
       end clo
-    end clone
+    end ualib
 
-That is, the code belongs where the ellipses appear in the above block.)
+although these lines won't always explicitly appear in the code listings below.)
 
 First, we define a structure that specifies the properties that a clone must have.  As defined in :numref:`clones`, in order to be a clone a collection must include all projections and be closed under general composition.
 
