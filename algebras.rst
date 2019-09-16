@@ -80,6 +80,8 @@ Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :ma
 
 It is important to be familiar with the classical notions of signature and arity, since these are used at the present time by virtually all algebraists.
 
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of signature is described in :numref:`Section %s <signatures-in-lean>` and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
+
 In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theoretic definitions of these concepts and show how this alternative presentation can often simplify implementation of the mathematics in :term:`type theory`.
 
 --------------------------
@@ -98,6 +100,8 @@ An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
+
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`the-universal-algebra-type`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
 
 ---------------------------
 
@@ -143,6 +147,8 @@ If 𝔸 is an algebra and :math:`X ⊆ A` a subset of the universe of 𝔸, then
 .. math:: \mathrm{Sg}^{𝔸}(X)  =  ⋂ \{ U ∈ 𝖲 𝔸 ∣ X ⊆ U \}.
   :label: SgDef
 
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of subalgebra is described in :numref:`Sections %s <subalgebras-in-lean>` and :numref:`%s <subuniverses-in-lean>`, and is included in the `subuniverse.lean`_ file of the `lean-ualib`_ library.
+
 ---------------------------
 
 .. index:: ! Subdirect product
@@ -159,6 +165,10 @@ Let :math:`F` be a set of operation symbols and for each :math:`i<n` let :math:`
 
 If :math:`R` is compatible with the product algebra and if the projection of :math:`R` onto each factor is surjective, then :math:`ℝ` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{\mathrm{sd}} \prod_{j< k} 𝔸_{σ(j)}` [1]_ 
 
+**Formalization**. (not yet implemented)
+
+.. todo:: implement subdirect product in Lean
+
 -----------------------------------------------
 
 .. index:: ! homomorphism
@@ -174,6 +184,8 @@ Let :math:`𝔸 = ⟨ A, F^𝔸 ⟩` and :math:`𝔹 = ⟨ B, F^𝔹 ⟩` be alg
 
 Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math:`φ` respects the interpretation of every :math:`f ∈ F`, then we call :math:`φ` a **homomorphism** from 𝔸 to 𝔹, and we write :math:`φ \in \operatorname{Hom}(𝔸, 𝔹)`, or simply, :math:`φ : 𝔸 → 𝔹`.
 
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of homomorphism is described in :numref:`Sections %s <subalgebras-in-lean>` and :numref:`%s <basic-facts-in-lean>`, and is included in the `subuniverse.lean`_ file of the `lean-ualib`_ library.
+
 .. .. proof:observation::
 ..  For groups, to check that a map :math:`φ : G → H` is a homomorphism, it is enough to check that :math:`φ` respects the interpretation of the binary operation. It follows from this that such a function respects the unary and nulary operations as well.
 
@@ -186,7 +198,7 @@ Epi, Mono, Auto
 
 .. todo:: complete this section
 
-.. proof:definition:: Notation for homs, epis, monos, and autos
+.. proof:notation:: homo-, epi-, mono-, automorphism
 
    We adopt the following notation. If :math:`𝔸 = ⟨A, f^𝔸⟩` and :math:`𝔹 = ⟨B, f^𝔹⟩` are algebras, then
 
@@ -195,12 +207,18 @@ Epi, Mono, Auto
    + :math:`\mono(𝔸, 𝔹) =` the set of monomorphisms from 𝔸 into 𝔹.
    + :math:`\aut(𝔸, 𝔹) =` the set of automorphisms from 𝔸 into and onto 𝔹.
 
+**Formalization**. Our formal implementation (in `Lean`_) of these concepts is described in :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
+
 -----------------------------------------------
 
 .. _basic-facts:
 
 Basic Facts
 -----------
+
+Here is a collection of basic facts that are useful in universal algebra.  Some of them involve homomorphisms, or terms, or clones.  
+
+**Formalization**. Our formal implementation (in `Lean`_) of these objects is described in :numref:`Sections %s <basic-facts-in-lean>`, :numref:`%s <terms-in-lean>`, and :numref:`%s <clones-in-lean>`.
 
 Throughout this section,
 
@@ -238,7 +256,7 @@ Here is a small collection of basic observations that we will need later. When w
 
       ☐
 
-We present a formal Lean proof of :numref:`Obs %s <obs-one>` in :numref:`equalizer-as-subuniverse` below.
+**Formalization**. Our formal implementation (in `Lean`_) of :numref:`Obs %s <obs-one>` is described in :numref:`equalizer-as-subuniverse`,  and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
 
 .. _obs-two:
 
@@ -268,7 +286,7 @@ We present a formal Lean proof of :numref:`Obs %s <obs-one>` in :numref:`equaliz
 
       ☐
 
-We present a formal Lean proof of :numref:`Obs %s <obs-two>` in :numref:`homomorphisms-that-agree-on-a-generating-set` below.
+**Formalization**. Our formal implementation (in `Lean`_) of :numref:`Obs %s <obs-two>` is described in :numref:`homomorphisms-that-agree-on-a-generating-set`,  and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
 
 .. _obs-three:
 
@@ -335,7 +353,7 @@ We present a formal Lean proof of :numref:`Obs %s <obs-two>` in :numref:`homomor
 
       as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
 
-We present a (nonconstructive) formal Lean proof of :numref:`Obs %s <obs-four>` in :numref:`factoring-homomorphisms` below.
+**Formalization**. Our formal implementation (in `Lean`_) of :numref:`Obs %s <obs-four>` is described in :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
 
 ------------------------------
 
@@ -347,6 +365,4 @@ We present a (nonconstructive) formal Lean proof of :numref:`Obs %s <obs-four>` 
 .. [2]
    By "functional" we mean a function whose domain is a collection of functions.
 
-.. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
-
-.. _Lean: https://leanprover.github.io/
+.. include:: hyperlink_references.rst

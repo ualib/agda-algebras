@@ -364,30 +364,5 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 .. .. [2]
 ..    **Answer**. Each :math:`f` "chooses" an element from each :math:`A_i`, but when the :math:`A_i` are distinct and :math:`I` is infinite, we may not be able to do this. The :ref:`Axiom of Choice <axiom-of-choice-1>` ("Choice") says you can. Gödel proved that Choice is consistent with the other axioms of set theory. Cohen proved that the negation of Choice is also consistent.
 
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+.. include:: hyperlink_references.rst
 
-.. _Coq: http://coq.inria.fr
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
-.. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
-
-.. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#

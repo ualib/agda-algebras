@@ -69,6 +69,7 @@ proof_theorem_types = {
     "example": "Example",
     "examples": "Examples",
     "lemma": "Lemma",
+    "notation": "Notation",
     "observation": "Observation",
     "proof": "Proof",
     "property": "Property",

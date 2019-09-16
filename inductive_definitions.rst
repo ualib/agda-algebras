@@ -183,6 +183,8 @@ Here are some important facts about this algebra.
     
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows. ☐
 
+**Formalization**. Our formal implementation (in `Lean`_) of the concepts and results of this section is described in :numref:`terms-in-lean`, and is included in the `term.lean`_ and `birkhoff.lean`_ files of the `lean-ualib`_ library.
+
 .. todo:: complete this section (include material on free algebras)
 
 -----------------------------------------------
@@ -288,7 +290,12 @@ The following theorem makes this more precise (cf. Theorem 4.32 of :cite:`Bergma
 
       the claim is proved. □
 
+**Formalization**. Our formal implementation (in `Lean`_) of the concepts and results of this section is described in :numref:`clones-in-lean`, and is included in the `clone.lean`_ and `birkhoff.lean`_ files of the `lean-ualib`_ library.
 
+------------------------
+
+Special terms
+-------------
 .. .. _thm-4-3:
 
 .. .. proof:theorem::
@@ -314,7 +321,6 @@ The following theorem makes this more precise (cf. Theorem 4.32 of :cite:`Bergma
    .. math:: t(∗, \cdots, ∗, x, ∗, \cdots, ∗) ≈ t(∗, \cdots, ∗, y, ∗, \cdots, ∗)
 
    true in 𝕍 where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name **Taylor term**.
-
 
 ------------------------
 

@@ -2,11 +2,17 @@
 
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+.. _basic.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/basic.lean
+
+.. _birkhoff.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/birkhoff.lean
 
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
 
+.. _clone.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/clone.lean
+
 .. _Coq: http://coq.inria.fr
+
+.. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 
 .. _Inductive Types: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 
@@ -34,8 +40,15 @@
 
 .. _setoid.lean: https://gitlab.com/ualib/lean-ualib/blob/william/src/setoid.lean
 
+.. _subuniverse.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/subuniverse.lean
+
+.. _term.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/term.lean
+
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 
 .. _william: https://gitlab.com/ualib/lean-ualib/tree/william
 
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+
+.. _`mathlib/src/data/set/basic.lean`: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+

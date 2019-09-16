@@ -28,6 +28,9 @@ Our goal here is to demonstrate the power of Lean's type system for expressing m
 
 ----------------------------------------
 
+.. index:: pair: ℕ; ω
+.. index:: pair: ω; 𝗇𝖺𝗍
+
 .. _operations-in-lean:
 
 Operations in Lean
@@ -277,6 +280,8 @@ Here is how the type ``pi`` is defined in the Lean_ standard library.
 .. (See also :numref:`Appendix Section %s <pi-type>`, for a more technical description of Leans ``pi`` type.)
 
 .. index:: ! type of; universal algebras
+
+.. _the-universal-algebra-type:
 
 The (universal) ``algebra`` type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -576,9 +581,9 @@ So, if ``S : set (set α)`` (i.e., a collection of sets of type ``α``), then ``
 
 Next we formalize three obvious facts and their proofs:
 
-  #. ``X`` is a subset of :math:`\operatorname{Sg}^𝔸 (X)`, 
-  #. every subuniverse containing ``X`` also contains :math:`\operatorname{Sg}^𝔸 (X)`, and 
-  #. :math:`\operatorname{Sg}^𝔸 (X)` is a subuniverse.
+  #. ``X`` is a subset of :math:`\Sg^𝔸 (X)`, 
+  #. every subuniverse containing ``X`` also contains :math:`\Sg^𝔸 (X)`, and 
+  #. :math:`\Sg^𝔸 (X)` is a subuniverse.
 
 (We will give three alternative, but similar, proofs of the second.)
 
@@ -833,7 +838,7 @@ Finally, we are ready to prove the homomorphism factorization lemma of :numref:`
    As of this writing (9 June 2019), this documentation describes code residing in (the william_ branch of) the `lean-ualib`_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
    
 .. [2]
-   As we will see when implementing general operations in Lean, it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
+   We will see very soon that when implementing general operations (e.g., in Lean) it is unnecessary to commit in advance to a specific arity type :math:`N`. An exception is the *quotient algebra type* since, unless we restrict ourselves to finitary operations, lifting a basic operation to a quotient requires some form of choice.
 
 .. [3]
    The  ``section`` command allows us to open a section throughout which our signature ``σ`` will be available; ``section`` ends when the keyword ``end`` appears.
