@@ -115,16 +115,16 @@ A variety of theorems
       
       From (1) and Lemma 4.36 of :cite:`Bergman:2012` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (3) holds.
 
-      From (3), :math:`p^{𝔽}([x_1], \dots, [x_n]) = q^{𝔽}([x_1], \dots, [x_n])`, where :math:`[x_i] = x_i/λ`.
+      From (3), :math:`p^{𝔽} \, [x] = q^{𝔽} \, [x]`, where :math:`[x]: ρ p → 𝔽_𝒦 (X_ω)` is defined by :math:`[x]\, i = x_i/λ`.
       
-      From the definition of 𝔽, :math:`p^{𝕋}(x_1, \dots, x_n) ≡_λ q^{𝕋}(x_1, \dots, x_n)`, from which (2) follows since :math:`p = p^{𝕋}(x_1, \dots, x_n)` 
-      and :math:`q = q^{𝕋}(x_1, \dots, x_n)`.
+      From the definition of 𝔽, :math:`p^{𝕋}\, x ≡_λ q^{𝕋} ×`, from which (2) follows since :math:`p = p^{𝕋}\, x` 
+      and :math:`q = q^{𝕋}\, x`.
 
       Finally assume (2). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
       
-      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \Hom}(𝕋, 𝔸)`.
+      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \Hom(𝕋, 𝔸)`.
       
-      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h(p) = h(q)` hence (1) holds, completing the proof. ☐
+      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h\, p = h\, q` hence (1) holds, completing the proof. ☐
 
 The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝔽(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
 
@@ -185,11 +185,7 @@ The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:201
 
       Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`. [2]_
 
-      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true then by 
-      
-      XXXXX Lemma [ex:1.26.8] XXXXX
-      
-      there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
+      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs-four>` there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
    
       Since :math:`h` is epic, so is :math:`f`. Hence :math:`𝔸 ∈ 𝖧 (𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof. ☐
 
@@ -201,7 +197,7 @@ Applying the homomorphism :math:`g`,
 
 Then by :numref:`Thm %s <fact-m4>` above (Corollary 4.39 of :cite:`Bergman:2012`), we have :math:`𝒲 ⊧ p ≈ q`, hence :math:`(p ≈ q) \in Σ`.
 
-Since :math:`𝔸 ∈ 𝒲^† = \Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
+Since :math:`𝔸 ∈ 𝒲^† = \Mod(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
 
 .. math:: h(u) = p^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = q^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = h(v),
 
