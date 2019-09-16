@@ -6,26 +6,34 @@
 Birkhoff's HSP Theorem
 ======================
 
-Let :math:`σ = (F, ρ)` be a signature.
+Let :math:`σ = (F, ρ)` be a signature. Recall, :math:`X_ω := \{x_0, x_1, \dots\}` is a countable collection of variables.
 
-An **identity in the signature** σ is an ordered pair of terms, written :math:`p ≈ q`, from :math:`T_σ (X_ω)`.
+An **identity** (or **equation**) **in the signature** :math:`σ` is an ordered pair of terms from :math:`T_σ (X_ω)` of the same arity.
+
+We write :math:`p ≈ q` to indicate such an identity in :math:`σ`; here :math:`p, q ∈ T_σ (X_ω)` and :math:`ρ p = ρ q`.
 
 Let :math:`𝔸 = ⟨A, F^𝔸⟩` be an algebra of signature σ.
 
-We say that 𝔸 satisfies :math:`p ≈ q`, and write :math:`𝔸 ⊧ p ≈ q`, if :math:`p^{𝔸} = q^{𝔸}`.
+We say that 𝔸 **satisfies** (or **models**, or **is a model for**) the identity :math:`p ≈ q`, and we write :math:`𝔸 ⊧ p ≈ q`, just in case :math:`p^𝔸 = q^𝔸` extensionally.
 
-If 𝒦 is a class of algebras of signature σ, we write :math:`𝒦 ⊧ p \approx q` if :math:`∀ 𝔸 ∈ 𝒦`, :math:`𝔸 ⊧ p ≈ q`.
+In other words, :math:`𝔸 ⊧ p ≈ q` iff :math:`p^𝔸 \, a = q^𝔸 \, a` holds for every tuple :math:`∀ a: ρ p → A`.
 
-Finally, if Σ is a set of equations, we write :math:`𝒦 ⊧ Σ` if every member of 𝒦 satisfies every member of Σ.
+If :math:`Σ` is a set of identities in :math:`σ`, we say that :math:`𝔸` **models** (or **is a model for**) :math:`Σ`, and we write :math:`𝔸 ⊧ Σ`, just in case :math:`𝔸` models every equation in :math:`Σ`.
 
-Let 𝒦 be a class of algebras and Σ a set of equations in the signature σ. We define :math:`\operatorname{Id}(𝒦) = \{p ≈ q : 𝒦 ⊧ p ≈ q\}`
-and :math:`\operatorname{Mod}(Σ) = \{ 𝔸 : 𝔸 ⊧ Σ \}`.
+Suppose :math:`𝒦` is a class of algebras and :math:`p ≈ q` is an identity in the signature :math:`σ`. Then we say that :math:`𝒦` **models** :math:`p ≈ q`, and we write :math:`𝒦 ⊧ p ≈ q`, just in case every algebra in :math:`𝒦` models :math:`p ≈ q`.
 
-Classes of the form :math:`\operatorname{Mod}(Σ)` are called **equational classes**, and :math:`Σ` is called an **equational base** or an **axiomatization** of the class.
+Finally, we write :math:`𝒦 ⊧ Σ` and we say :math:`𝒦` **models** :math:`Σ` iff every algebra in :math:`𝒦` models every identity in :math:`Σ`.  
 
-:math:`\operatorname{Mod}(Σ)` is called the class of **models** of Σ.
+The binary relation :math:`⊧` induces an obvious :term:`Galois connection`.
 
-Dually, a set of identities of the form :math:`\operatorname{Id}(𝒦)` is called an **equational theory**.
+Indeed, letting 𝒦 be a class of :math:`σ`-algebras and :math:`Σ` a set of :math:`σ`-equations, we define the :term:`Galois pair` :math:`(\Mod, \Th)` as follows:
+
+.. math:: \Mod(Σ) := \{𝔸: 𝔸 ⊧ Σ \} \quad \text{ and } \quad \Th(𝒦) := \{p ≈ q: 𝒦 ⊧ p ≈ q\}.
+
+The first of these, :math:`\Mod(Σ)`, is called the class of **models** of Σ.  Classes such as these, which contain those and only those algebras satisfying a given set of identities, are called **equational classes**, and :math:`Σ` is called an **equational base** or an **axiomatization** of the class.
+
+Dually, a set of identities of the form :math:`\Th(𝒦)` is called an **equational theory**.
+
 
 .. _a-variety-of-facts:
 
@@ -45,7 +53,7 @@ A variety of theorems
 
 .. proof:theorem:: 
 
-   :math:`𝒦 ⊧ p ≈ q` if and only if for every :math:`𝔸 ∈ 𝒦` and every :math:`h ∈ \operatorname{Hom}(𝕋(X_ω), 𝔸)`, we have :math:`h(p) = h(q)`.
+   :math:`𝒦 ⊧ p ≈ q` if and only if :math:`∀ 𝔸 ∈ 𝒦`, :math:`∀ h ∈ \Hom(𝕋(X_ω), 𝔸)`, :math:`h\, p^𝔸 = h\, q^𝔸`.
 
    .. container:: toggle
  
@@ -53,20 +61,35 @@ A variety of theorems
  
          *Proof*.
       
-      First assume that :math:`𝒦 ⊧ p ≈ q`. Fix :math:`𝔸∈ 𝒦` and :math:`h ∈ \operatorname{Hom}(𝕋(X_ω), 𝔸)`.
+      (⇒) Assume that :math:`𝒦 ⊧ p ≈ q`.
       
-      Then :math:`𝔸 ⊧ p ≈ q ⟹ p^{𝔸} = q^{𝔸} ⟹ p^{𝔸}(h(x_1), \dots, h(x_n)) = q^{𝔸}(h(x_1), \dots, h(x_n))`.
+          Fix :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \Hom(𝕋(X_ω), 𝔸)`.
       
-      Since :math:`h` is a homomorphism, we obtain :math:`h(p^{𝔸}(x_1, \dots, x_n)) = h(q^{𝔸}(x_1, \dots, x_n))`, i.e., :math:`h(p) = h(q)`.
+          We must show :math:`∀ a: ρ p → A` that :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`.
 
-      To prove the converse we must fix a :math:`𝔸 ∈ 𝒦` and :math:`a_1, \dots, a_n ∈ A` and show that :math:`p^{𝔸}(x_1, \dots, x_n) = q^{𝔸}(x_1, \dots, x_n)`.
-   
-      Let :math:`h_0 : X_ω → A` be a function with :math:`h_0(x_i) = a_i` for :math:`i ≤ n`.
-      
-      By Thm. 4.21 in :cite:`Bergman:2012`, :math:`h_0` extends to a homomorphism :math:`h` from :math:`𝕋(X_ω)` to :math:`(A, f^A)`.
-      
-      By assumption :math:`h(p) = h(q)`. Since :math:`h(p) = h(p^{𝔸}(x_1, \dots, x_n)) = p^{𝔸}(h(x_1), \dots, h(x_n)) = p^{𝔸}(a_1,\dots, a_n)` (and similarly for :math:`q`) the result follows.
+          Fix :math:`a: ρ p → A`.
 
+          By :math:`𝔸 ⊧ p ≈ q` we have :math:`p^{𝔸} = q^{𝔸}` which implies :math:`p^{𝔸}(h ∘ a) = q^{𝔸}(h ∘ a)`.
+      
+          Since :math:`h` is a homomorphism, we obtain :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`, as desired.
+
+      (⇐) Assume :math:`∀ 𝔸 ∈ 𝒦`, :math:`∀ h ∈ \Hom(𝕋(X_ω), 𝔸)`, :math:`h\, p^𝔸 = h\, q^𝔸`.
+      
+          We must show :math:`𝒦 ⊧ p ≈ q`.
+          
+          Fix :math:`𝔸 ∈ 𝒦` and :math:`a: ρ p → A`.
+          
+          We must prove :math:`p^𝔸 \, a = q^𝔸\, a`.
+          
+          Let :math:`h_0 : X_ω → A` be a function with :math:`h_0\, x\, i = a\, i` for all :math:`0≤ i < ρ p`, for some :math:`x: ρ p → X_ω`.
+          
+          By :numref:`Obs %s <obs-six>`, :math:`h_0` extends to a homomorphism :math:`h` from :math:`𝕋(X_ω)` to 𝔸.
+      
+          By assumption :math:`h\, p^𝔸 = h\, q^𝔸`, and since :math:`h` is a homomorphism,
+      
+          .. math:: p^{𝔸}\, a =  p^{𝔸}(h ∘ x) = h(p^{𝔸} \, x) = h(q^𝔸 \, x) = q^𝔸 (h ∘ x) = q^𝔸 \, a,
+      
+          so :math:`p^{𝔸}\, a = q^𝔸 \, a`, as desired. ☐
 
 .. _fact-m3:
 
@@ -99,9 +122,9 @@ A variety of theorems
 
       Finally assume (2). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
       
-      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \operatorname{Hom}(𝕋, 𝔸)`.
+      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \Hom}(𝕋, 𝔸)`.
       
-      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h(p) = h(q)` hence (1) holds, completing the proof.
+      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h(p) = h(q)` hence (1) holds, completing the proof. ☐
 
 The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝔽(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
 
@@ -131,7 +154,7 @@ The last result tells us that we can determine whether an identity is true in a 
                                        &= h(q^{𝔽_𝒦(Y)}(y_1, \dots, y_n)) = q^{𝔸}(h(y_1), \dots, h(y_n))\\
                                        &= q^{𝔸}(a_1, \dots, a_n).
 
-      It now follows from :numref:`Thm %s <fact-m1>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**.
+      It now follows from :numref:`Thm %s <fact-m1>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**. ☐
 
 .. _the-hsp-theorem:
 
@@ -152,19 +175,23 @@ The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:201
       
       Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
 
-      To this end, take :math:`Σ = \operatorname{Id}(𝒲)`. Let :math:`𝒲^† := \operatorname{Mod}(Σ)`.  
+      To this end, take :math:`Σ = \Th(𝒲)`. Let :math:`𝒲^† := \Mod(Σ)`.  
   
       Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
       Let :math:`𝔸 ∈ 𝒲^†` and :math:`Y` a set of cardinality :math:`\max(|A|, ω)`. *Choose* a surjection :math:`h_0 : Y → A`. [1]_
   
-      By :numref:`Obs %s <obs-six>` (which is essentially Theorem 4.21 of :cite:`Bergman:2012`), :math:`h_0` extends to a (surjective) homomorphism :math:`h : 𝕋(Y) → 𝔸`.
+      By :numref:`Obs %s <obs-six>` (which is essentially Thm. 4.21 of :cite:`Bergman:2012`), :math:`h_0` extends to an epimorphism :math:`h: 𝕋(Y) → 𝔸`.
 
-      Furthermore, since :math:`𝔽_{𝒲}(Y) = 𝕋(Y)/Θ_{𝒲}`, there is a surjective homomorphism :math:`g : 𝕋(Y) → 𝔽_{𝒲}`. [2]_
+      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`. [2]_
 
-      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true then by Lemma [ex:1.26.8] there is a map :math:`f : 𝔽_{𝒲}(Y) → 𝔸` such that :math:`f ∘ g = h`.
+      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true then by 
+      
+      XXXXX Lemma [ex:1.26.8] XXXXX
+      
+      there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
    
-      Since :math:`h` is surjective, so is :math:`f`. Hence :math:`𝔸 ∈ 𝖧 (𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
+      Since :math:`h` is epic, so is :math:`f`. Hence :math:`𝔸 ∈ 𝖧 (𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof. ☐
 
 Let :math:`u,v ∈ T(Y)` and assume that :math:`g(u) = g(v)`. Since :math:`𝕋(Y)` is generated by :math:`Y`, then by :numref:`Obs %s <obs-six>` there is an integer :math:`n`, terms :math:`p, q ∈ T(X_n)`, and :math:`y_1, \dots, y_n ∈ Y` such that :math:`u = p^{𝕋(Y)}(y_1, \dots, y_n)` and :math:`v = q^{𝕋(Y)}(y_1,\dots, y_n)`, by Theorem 4.32 of :cite:`Bergman:2012`.
 
@@ -174,7 +201,7 @@ Applying the homomorphism :math:`g`,
 
 Then by :numref:`Thm %s <fact-m4>` above (Corollary 4.39 of :cite:`Bergman:2012`), we have :math:`𝒲 ⊧ p ≈ q`, hence :math:`(p ≈ q) \in Σ`.
 
-Since :math:`𝔸 ∈ 𝒲^† = \operatorname{Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
+Since :math:`𝔸 ∈ 𝒲^† = \Mod}(Σ)`, we obtain :math:`𝔸 ⊧ p ≈ q`. Therefore,
 
 .. math:: h(u) = p^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = q^{𝔸}(h_0(y_1), \dots, h_0(y_n)) = h(v),
 

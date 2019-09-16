@@ -312,6 +312,12 @@ Nomenclature
     functor category
       The **functor category** from :math:`\mathcal C` to :math:`\mathcal D` has functors :math:`F : \mathcal C → \mathcal D` as objects and natural transformations :math:`α : F ⇒ G` as morphisms.
 
+    Galois connection
+      see https://en.wikipedia.org/wiki/Galois_connection
+      
+    Galois pair
+      see https://en.wikipedia.org/wiki/Galois_connection
+
     generalized element
       A morphism :math:`h: X → A` is sometimes called a **generalized element** of :math:`A`. A morphism :math:`f` is mono when it is injective on the generalized elements of its domain.
 

@@ -37,7 +37,7 @@ so that closed terms of type ℕ may no longer evaluate to numbers.
 
 On the other hand,
 
-  *Lean erases types and propositional information when compiling definitions to* :term:`bytecode` *for its virtual machine evaluator*,
+  *Lean erases types and propositional information when compiling definitions to* :term:`byte-code` *for its virtual machine evaluator*,
 
 and since these axioms only add new propositions, they admit a computational interpretation.
 
@@ -74,7 +74,7 @@ The :term:`LSTL` supports the classical :term:`law of the excluded middle` (em) 
     (assume q : Q, q)
 
 
-Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to :term:`bytecode`.
+Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to :term:`byte-code`.
 
 The `Lean Standard Library`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
 
@@ -94,7 +94,7 @@ To summarize, on top of the framework of universes, :term:`dependent function ty
 + a :term:`quotient` construction, which implies :term:`function extensionality`
 + a :term:`Choice` principle, which produces data from an existential proposition.
 
-The first two of these are compatible with :term:`bytecode` evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations.
+The first two of these are compatible with :term:`byte-code` evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations.
 
 ----------------------------------
 
@@ -129,7 +129,7 @@ However, computation is still possible under an evaluation scheme that
 
 This is precisely what Lean's virtual machine does.
 
-If we adopt a proof-irrelevant ``Prop``, then we might consider it legitimate to use, for example, the :term:`law of the excluded middle` (em), ``∀ p:Prop, p ∨ ¬p``.  This can block computation in :term:`CiC`, but will not block :term:`bytecode` evaluation.
+If we adopt a proof-irrelevant ``Prop``, then we might consider it legitimate to use, for example, the :term:`law of the excluded middle` (em), ``∀ p:Prop, p ∨ ¬p``.  This can block computation in :term:`CiC`, but will not block :term:`byte-code` evaluation.
 
 It is only the :term:`Choice` principle, discussed in more detail `here <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#choice>`_, that completely erases the distinction between the :term:`proof-irrelevant` and :term:`data-relevant` parts of the theory.
 
