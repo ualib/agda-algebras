@@ -42,13 +42,13 @@ Suppose we wish to write a function ``cons`` that inserts a new element at the h
 
 It is clear that ``cons α`` should have type ``α → list α → list α``. But what type should ``cons`` have?  Certainly not ``Type → α → list α → list α`` since the ``α``  appears as if from nowhere, while it should refer to an argument of type ``Type``, 
 
-In other words, we must first assume that a specific (arbitrary) ``α: Type`` is the first argument to the function, so that the type of the next two elements are can be specified as ``α`` and ``list α``. This is an instance of a :term:`pi type`, or :term:`dependent function type <pi type>`. Given ``α: Type`` and ``β: α → Type``, think of ``β`` as a family of types, one type ``β a`` for each ``a: α``.
+In other words, we must first assume that a specific (arbitrary) ``α: Type`` is the first argument to the function, so that the type of the next two elements are can be specified as ``α`` and ``list α``. This is an instance of a :term:`Pi type`, or :term:`dependent function type <Pi type>`. Given ``α: Type`` and ``β: α → Type``, think of ``β`` as a family of types, one type ``β a`` for each ``a: α``.
 
 In this case, the type ``Π(x:α),β x`` denotes the type of functions ``f`` with the property that, for each ``a: α``, ``f a`` is an element of ``β a``. In other words, the type of the value returned by ``f`` *depends* on its input.
 
 Notice that ``Π(x:α),β`` makes sense for any expression ``β: Type``. When the value of ``β`` depends on ``x`` (as does, for example, the expression ``β x`` in the previous paragraph), ``Π(x:α),β`` denotes a dependent function type. If ``β`` doesn't depend on ``x``, then ``Π(x:α),β`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is just notation for ``Π(x:α),β`` in the special case in which ``β`` does not depend on ``x``.
 
-.. index:: type of; dependent functions (pi type)
+.. index:: type of; dependent functions (Pi type)
 
 The :term:`pi type` :math:`\Pi_{(x:A)}, B x`, also known as the :ref:`dependent function type <pi-type>`, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
 

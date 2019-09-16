@@ -587,7 +587,7 @@ Dependent types in Lean
 
 .. todo:: complete this section
 
-.. index:: type of; ! dependent functions (Pi type)
+.. index:: ! type of; dependent functions (Pi type)
 
 .. _pi-type:
 
@@ -609,7 +609,7 @@ To see why ``Π(x:A),B x`` is a *dependent type*, consider the following example
   def pi (i : set α) (s : Πa, set (π a)) : set (Πa, π a) := 
   { f | ∀ a ∈ i, f a ∈ s a }
 
-.. index:: type of; ! dependent pairs (Sigma type)
+.. index:: ! type of; dependent pairs (Sigma type)
 
 .. _sigma-type:
 
