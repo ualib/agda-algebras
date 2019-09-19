@@ -183,7 +183,7 @@ Here are some important facts about this algebra.
     
       Thus the right-hand side is contained in the left. On the other hand, the right-hand side is clearly a subalgebra containing the elements of :math:`Y` (take :math:`t = x_1`) from which the reverse inclusion follows. ☐
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concepts and results of this section is described in :numref:`terms-in-lean`, and is included in the `term.lean`_ and `birkhoff.lean`_ files of the `lean-ualib`_ library.
+**Formalization**. Our formal implementation (in `Lean`_) of the concepts and results of this section is described in :numref:`terms-in-lean`, and is included in the `free.lean`_, `term.lean`_, and `birkhoff.lean`_ files of the `lean-ualib`_ library.
 
 .. todo:: complete this section (include material on free algebras)
 
