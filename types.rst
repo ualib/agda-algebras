@@ -443,9 +443,48 @@ Thus, if
   
   *define* the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f [g] := f \, \mathbf{eval} \, \mathbf{fork}\, g: ∏_{(i:n)}(k_i → A) → A.
+.. math:: f [g] := f \, \mathbf{eval} \, \mathbf{fork}\, g: ∏_{(i:n)}((k_i → A) → A).
 
 Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`A`, as desired.
+
+Greater generality
+~~~~~~~~~~~~~~~~~~
+
+Let :math:`α` and :math:`γ` be types.  We call :math:`f: (γ → α) → α` a :math:`γ`-ary operation on :math:`α`.
+
+Suppose that for each :math:`i: γ` we have a type :math:`γ_i` and an operation :math:`g_i` of type :math:`(γ_i → α) → α` on :math:`α`.
+
+Denote by :math:`G` the ":math:`γ`-tuple" of these operations; that is, for each :math:`i: γ` the ":math:`i`-th component" of :math:`G` is 
+
+.. math:: G\, i = g_i: (γ_i → α) → α
+
+Then :math:`G` has type :math:`∏_{(i:γ)} ((γ_i → α) → α)`.
+
+*Define* the **composition of** :math:`f` **with** :math:`G` by :math:`f \, \mathbf{eval} \, \mathbf{fork}\, G`.
+
+Let us formally adopt the following convention in this context:
+
+  *The symbol* :math:`∘` *means* :math:`\mathbf{eval} \, \mathbf{fork}`.
+
+As such, we *define* :math:`f ∘ G := f \, \mathbf{eval} \, \mathbf{fork}\, G`, yielding the typing judgment,
+
+.. math:: f ∘ G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
+
+Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have the following typing judgments:
+
+.. math:: a\, i : γ_i → α \quad \text{ and } \quad  G\, i : (γ_i → α) → α,
+
+so evaluation of :math:`∘ G \, a` at a particular :math:`i: γ` is simply function application. That is,
+
+.. math:: ∘ G \, a := \mathbf{eval} \, \mathbf{fork}\, G \, a \, i = (G\, i)(a\, i): α.
+
+Thus, :math:`∘ G \, a` has type :math:`γ → α`, which is precisely the domain type of :math:`f`.
+
+To summarize, we have the following typing judgments:
+
+.. math:: ∘ G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
+
+whence :math:`f ∘ G \, a: α` is well-typed.
 
 ----------------------------
 
