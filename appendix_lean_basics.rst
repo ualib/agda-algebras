@@ -255,8 +255,8 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 
 .. _dependent-types-in-lean:
 
-Dependent types in Lean
-------------------------
+Dependent types
+---------------
 
 .. todo:: complete this section
 
@@ -311,8 +311,8 @@ To see why ``Σ(x:A),B x`` is a *dependent type*, consider the following example
 
 .. _inductive-types-in-lean:
 
-Inductive types in Lean
-------------------------
+Inductive types
+---------------
 
 .. todo:: complete this section
 
@@ -532,13 +532,11 @@ To gain some familiarity with function extensionality in Lean, we will dissect t
 
 To do this requires that we understand *quotients* and *setoids*---two concepts that we cover in the next chapter---so we postpone our dissection of the ``funext`` program until :numref:`proof-of-funext`.
 
--------------------------------------
-
 .. index:: ! characteristic function, ! extensional equality (of sets)
 .. index:: quotient
 
 Extensionality in Lean
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotients`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
 
