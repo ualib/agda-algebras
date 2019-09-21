@@ -3,6 +3,7 @@
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 .. _basic.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/basic.lean
 .. _birkhoff.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/birkhoff.lean
+.. _Category Theory in Context: http://www.math.jhu.edu/~eriehl/context.pdf
 .. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
 .. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
 .. _classical.lean: https://github.com/leanprover/lean/blob/master/library/init/classical.lean
@@ -14,14 +15,18 @@
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+.. _Homotopy Type Theory: https://homotopytypetheory.org/
 .. _Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 .. _Inductive Types: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 .. _Lean: https://leanprover.github.io/
+.. _Lean 2: https://github.com/leanprover/lean2
+.. _lean extension: https://github.com/leanprover/vscode-lean
 .. _Lean github repository:  https://github.com/leanprover/lean/
 .. _Lean Reference Manual: https://leanprover.github.io/reference/
 .. _Lean Standard Library: https://github.com/leanprover/lean
 .. _Lean Tutorial: https://leanprover.github.io/tutorial/
+.. _Lean Universal Algebra Library: https://github.com/UniversalAlgebra/lean-ualib/
 .. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
 .. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
 .. _`lean/library/init/data`: https://github.com/leanprover/lean/tree/master/library/init/data

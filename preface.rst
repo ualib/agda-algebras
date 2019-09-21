@@ -27,7 +27,7 @@ Why Lean?
 
 We chose the Lean_ proof assistant because it is designed and developed by logicians and computer scientists working together to create a language and syntax that presents mathematical theorems and proofs *as they should be*, by which we mean that working in the language feels almost as natural as working in the informal language of mathematics and is easily adopted by mathematicians who lack special training in computer science.
 
-Lean_ is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. Lean_ draws on decades of experience in interactive and automatic theorem provers (e.g., Coq, Isabelle/HOL, and Z3). Its logic is very expressive, and emphasis is placed on *powerful proof automation*. The system is easy to extend via :ref:`metaprograms <metaprogramming>` developed in the same language used to express specifications and proofs in Lean. In this way, Lean_ narrows the gap between interactive and automated theorem proving.
+Lean_ is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. Lean_ draws on decades of experience in interactive and automatic theorem provers (e.g., `Coq`_, Isabelle/HOL, and Z3). Its logic is very expressive, and emphasis is placed on *powerful proof automation*. The system is easy to extend via :ref:`metaprograms <metaprogramming>` developed in the same language used to express specifications and proofs in Lean. In this way, Lean_ narrows the gap between interactive and automated theorem proving.
 
 There are many other reasons Lean_ is an excellent platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood* without special training. In fact, working in Lean_ usually leads to formal proofs that are cleaner, more concise, and shorter than the corresponding proofs in the language of informal mathematics.
 
@@ -44,11 +44,11 @@ While there are no strict prerequisites, we expect anyone with an interest in th
 
 Some prior exposure to :term:`type theory (TT) <TT>` and Lean_ would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the following references to fill in gaps as needed:
 
-  + `Lean Tutorial <https://leanprover.github.io/tutorial/>`_
-  + `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_
-  + `The Lean Reference Manual <https://leanprover.github.io/reference/>`_
-  + `Logic and Proof <https://leanprover.github.io/logic_and_proof/>`_
-  + `Type Theory and Formal Proof <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
+  + `Lean Tutorial`_
+  + `Theorem Proving in Lean`_
+  + `Lean Reference Manual`_
+  + `Logic and Proof`_
+  + `Type Theory and Formal Proof <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_ :cite:`Nederpelt:2014`
 
 Finally, it is assumed that, while reading this manual, the reader is actively experimenting with Lean using `vscode`_ with its `lean extension`_ installed.  While Emacs is another excellent means of interfacing with Lean, some of our instructions may not work in that environment.  (For example, we will explain how one produces certain special unicode characters, and the procedure may be different for other IDE's.)
 
@@ -100,22 +100,5 @@ This is a work in progress and any feedback you can provide us with would be muc
 
 For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,Nederpelt:2014,HoTT:2013`.
 
-.. _vscode: https://code.visualstudio.com/
+.. include:: hyperlink_references.rst
 
-.. _lean extension: https://github.com/leanprover/vscode-lean
-
-.. _Lean: https://leanprover.github.io/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _Lean Universal Algebra Library: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _Lean 2: https://github.com/leanprover/lean2
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
-.. _Homotopy Type Theory: https://homotopytypetheory.org/
-
-.. _categorytheory.gitlab.io: https://categorytheory.gitlab.io/index.html
-
-.. _Category Theory in Context: http://www.math.jhu.edu/~eriehl/context.pdf

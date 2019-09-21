@@ -7,7 +7,24 @@
 Algebras
 =========
 
-.. todo:: add chapter intro
+.. _motivation:
+
+Motivation
+----------
+
+Our vision for the `lean-ualib`_ (Lean Universal Algebra Library) originated with our observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, :term:`type theory` in general, and :term:`dependent <dependent type>` and :term:`inductive types <inductive type>` in particular, facilitates elegant representations of recursively defined objects. Such objects can therefore be implemented in a :term:`proof assistant` such as `Lean`_, a language that not only supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, but also provides powerful :term:`tactics <proof tactic>` for proving properties of objects that inhabit these types.
+
+These observations suggest that there is much to gain from implementing universal algebra in a proof assistant that offers powerful tools for working with :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`. Lean is one such proof assistant.
+
+The goal of the `Lean Universal Algebra Library`_, and this documentation explaining it, is to demonstrate that our vision manifests in a careful (and, whenever possible, :term:`constructive`) presentation of the elementary theory of universal algebra in the language of type theory, along with a formal implementation of this theory in the Lean proof assistant.  Specific examples of this manifestation appear below in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
+
+.. In particular, our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of these underlying themes motivating our work.
+
+Specifically, we present fundamental definitions and theorems about :term:`subalgebras <subalgebra>`, terms, and clones---first in this chapter using the informal language of universal algebra, and then in the next chapter using the formal language of Lean.
+
+The idea is to demonstrate the power and utility of implementing the theory in a formal language that supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving (by induction) properties of these objects.
+
+-----------------------------------------
 
 .. index:: operation, arity, image
 .. index:: ℕ
@@ -288,23 +305,6 @@ Epi, Mono, Auto
 **Formalization**. Our formal implementation (in `Lean`_) of these concepts is described in :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
 
 ------------------------------
-
-.. _inductive-definitions:
-
-Inductive definitions
------------------------
-
-One of the primary motivations for the `lean-ualib`_ project was our observation that, on the one hand, many important constructs in universal algebra can be defined inductively, and on the other hand, type theory in general, and Lean in particular, offers excellent support for defining inductive types and powerful tactics for proving their properties.
-
-These two facts suggest that there is much to be gained from implementing universal algebra in an expressive type system that offers powerful tools for proving theorems about inductively defined types. Examples demonstrating how this vision manifests in our Lean library are presented in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
-
-.. In particular, our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of these underlying themes motivating our work.
-
-To exhibit the efficiency and ease with which we can formalize and work with basic but important mathematical objects in Lean_, we will present some fundamental theorems about subalgebras, terms and clones---first in this chapter using the informal language of universal algebra, and then in the next chapter using the formal language of Lean.
-
-The idea is to demonstrate the power and utility of implementing the theory in a formal language that supports dependent and inductively defined types, which are essential for expressing and working with infinite objects in a constructive and computable way, and for proving (by induction) properties of these objects.
-
------------------------------------------
 
 .. index:: ! Taylor term, ! term
 

@@ -70,14 +70,20 @@ Alternatively, some authors prefer to use an injection function to indicate the 
 
 -----------------------------------------------
 
-.. _generalized-projections:
+.. index:: ! projection operator, ! idempotent operation
 
-.. index:: projection
+.. _projection-operator:
 
-Generalized projections
------------------------
+Projection operator
+--------------------
 
-Here we present a more general way of describing projections.
+An operation :math:`f: A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
+
+Examples of idempotent operations are the projection functions and these play an important role, so we introduce a sufficiently general and flexible notation for them.
+
+Denote and define the set ℕ of natural numbers inductively, as usual;
+
+.. math:: 0 = ∅, \quad 1 = \{0\}, \quad  2 := \{0, 1\}, \dots, n = \{0, 1, \dots, n-1\}.
 
 Let :math:`\{A_i: i ∈ I\}` be a collection of sets (for some :math:`I ⊆ ℕ`) and let :math:`\underline{A} = ∏_{i ∈ I} A_i`. View the elements of :math:`\underline{A}` as functions:
 
@@ -86,41 +92,87 @@ Let :math:`\{A_i: i ∈ I\}` be a collection of sets (for some :math:`I ⊆ ℕ`
    
 This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) represents a special kind of function type (depicted on the right of ⟷ using the usual arrow notation for function types). In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} A_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i` whose codomain :math:`A_i` *depends* on the input argument :math:`i`. Such a function (or product) type is known as a :term:`dependent type`.
 
-Now, given a subset :math:`J ⊆ I`, a function :math:`g : J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ g`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{g(j)}`, where :math:`(a ∘ g)(j) ∈ A_{g(j)}`. Again, we could express this function type using the arrow notation, ":math:`a ∘ g : J → ⋃_{j∈J} A_{g(j)}` where :math:`(a ∘ g)(j) ∈ A_{g(j)}`," but this specification has a nicer, more compact description using a :term:`dependent function type`.
+Now, given a subset :math:`J ⊆ I`, a function :math:`σ: J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ σ`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{σ\, j}`, where :math:`(a ∘ σ)\, j ∈ A_{σ\, j}`.
 
-.. math:: a ∘ g ∈ ∏_{j∈J} A_{g(j)}.
+We could express this function type using the arrow notation, as in, ":math:`a ∘ σ: J → ⋃_{j∈J} A_{σ\, j}` where :math:`(a ∘ σ)\, j ∈ A_{σ\, j}`," but this specification has a nicer, more compact description using a :term:`dependent function type`, namely, 
 
-Assume :math:`g` is one-to-one and define the “projection” function,
+.. math:: a ∘ σ ∈ ∏_{j∈J} A_{σ \, j}.
 
-.. math:: \Proj(g) : ∏_{i∈I} A_{i} → ∏_{j∈J} A_{g(j)}
+If :math:`σ` happens to be one-to-one, then we will define the **projection operator induced by** :math:`σ`. We denote this operator by
 
-by :math:`\Proj(g): a ↦ (a ∘ g)`. That is, :math:`\Proj(g)(a) = a ∘ g`.
+.. math:: \Proj\, σ : ∏_{i∈I} A_i → ∏_{j∈J} A_{σ \, i},
+   :label: projection
 
-We could try to specify the type of :math:`\Proj` using the arrow notation as follows:
-
-.. math::    \Proj : (J → I) → \bigl( I → \bigcup_{i∈I} A_{i} \bigr) → \bigl(J → ⋃_{i∈I} A_{i}\bigr),
-   :label: 8
-
-but the deficiencies of the arrow notation are now even more glaring. The function type specification given in :eq:`8` is imprecise and arguably misleading. The result of applying :math:`\Proj` first to some :math:`g: J → I` and then :math:`a : I → ⋃_{i∈I} A_{i}` is :math:`\Proj (g) (a) = a ∘ g`, and to say that this is a function of type :math:`J → ⋃_{i∈I} A_{i}` is ambiguous at best.
-
-Rather, the complete, correct type specification is actually “:math:`\Proj (g) (a) : J → ⋃_{j∈J} A_{g(j)}` where :math:`\Proj (g) (a) (j) ∈ A_{g(j)}`.”
-
-Again, we can express this more concisely with a dependent function type, :math:`\Proj (g)(a) ∈ ∏_{j∈J} A_{g(j)}`. Thus, to denote the type of :math:`\Proj`, we must add to :eq:`8` the constraints on codomains that depend on argument values. For specifying the type of a "function of higher order" (or "functional"), the arrow notation can be cumbersome.
+and define it for each :math:`a ∈ ∏_{i∈I} A_i` by :math:`\Proj\, σ \, a = a ∘ σ`.
 
 The following is closer to what we want, but still imperfect:
 
 .. math:: \Proj: (J → I) → ∏_{i∈I} A_{i} → ∏_{j∈J} A_{g(j)}.
    :label: 9
 
-This says that :math:`\Proj` takes a function :math:`g : J → I` and a function :math:`a ∈ ∏_{i∈I} A_i` and returns the function :math:`a ∘ g ∈ ∏_{j∈J} A_{g(j)}`.
+This says that :math:`\Proj` takes a function :math:`σ: J → I` and a function :math:`a ∈ ∏_{i∈I} A_i` and returns the function :math:`a ∘ σ ∈ ∏_{j∈J} A_{σ \, j}`.
 
-Here again we see that the arrow notation is not expressive enough because :math:`∏_{j∈J} A_{g(j)}` depends on :math:`g`, but there is no :math:`g` symbol available from earlier in :eq:`9`.
+Here again we see that the arrow notation is not expressive enough because :math:`∏_{j∈J} A_{σ \, j}` depends on :math:`σ`, but there is no :math:`σ` symbol available from earlier in :eq:`9`.
 
-The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operation is
+The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operator is
 
-.. math:: \Proj: ∏_{g:J→I} \left( ∏_{(i:I)} A_{i} →  ∏_{(j:J)} A_{g(j)} \right).
+.. math:: \Proj: ∏_{σ:J→I} \left( ∏_{(i:I)} A_{i} →  ∏_{(j:J)} A_{σ\, j} \right).
 
-This is a special case of the more general (and more elegant) types that we define in later chapters, after reviewing some concepts of category theory in :numref:`Chapter %s <postmodern-algebra>` that are essential for this purpose.
+This is a special case of the more general types that we define in later chapters, after reviewing some concepts of category theory in :numref:`Chapter %s <postmodern-algebra>` that are essential for this purpose.
+
+.. proof:example::
+
+   To see why the term "projection" is reserved for the case when :math:`σ` is one-to-one, suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`. Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by :math:`σ(0) = 1`, :math:`σ(1) = 0`, :math:`σ(2) = 1`, :math:`σ(3) = 1`, and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a_0, a_1, a_2)∈ A_0 × A_1 × A_2` to :math:`(a_1, a_0, a_1, a_1) ∈ A_1 × A_0 × A_1 × A_1`. [2]_
+
+Let :math:`A = ∏_{i<n} A_i`, let :math:`σ : k → n` be one-to-one, and define the projection :math:`\Proj_σ` as in :eq:`projection` above. Then the :term:`kernel` of :math:`\Proj_σ`, which we denote by :math:`\mathbf{0}_σ`, is denoted and defined by
+
+.. math:: \mathbf{0}_σ &= \ker \Proj_σ = \{(a,a') ∈ A^2 | \Proj_σ a = \Proj_σ a'\}\\
+                       &= \{ (a,a') ∈ A^2 | a ∘ σ = a' ∘ g \} = \{ (a,a') ∈ A^2 | ∀ j ∈ \im σ, \ a(j) = a'(j) \}.
+   :label: kernel
+
+It is obvious that :math:`\mathbf{0}_σ` is an equivalence relation on the set :math:`A`.
+
+More generally, if :math:`θ` is an equivalence relation on the set :math:`∏_{j<k} A_{σ(j)}`---that is, :math:`θ ⊆ (∏_{j<k} A_{σ(j)})^2` and :math:`θ` is reflexive, symmetric, and transitive---then we define the equivalence relation :math:`θ_σ` on the set :math:`A = ∏_{i<n} A_i` as follows:
+
+.. math:: θ_σ = \{(a, a') ∈ A^2 ∣ (a ∘ σ) \mathrel{\theta} (a' ∘ σ)\}.
+   :label: 17
+
+In other words, :math:`θ_σ` consists of all pairs in :math:`A^2` that land in :math:`θ` when projected onto the coordinates in :math:`\im σ`.
+
+#. Recall that :math:`\Proj_σ : A → ∏_{j<k} A_{σ(j)}` is the function that maps :math:`a` to :math:`a ∘ σ`.
+
+   Now, suppose we have a tuple :math:`(a_0, a_1, \dots, a_{p-1})\in A^p`, and suppose we intend to apply :math:`\Proj_σ` to each component, :math:`a_j`.
+
+   To do so, we need to lift :math:`\Proj_σ` from type :math:`A → ∏_{j<k} A_{σ(j)}` to type :math:`A^p → (∏_{j<k} A_{σ(j)})^p`, which is accomplished using a functor that often goes by the name :math:`map`.
+
+   For instance, if :math:`(a, a') ∈ A^2`, then :math:`map(\Proj_σ)(a, a') = (\Proj_σ(a), \Proj_σ(a'))`.
+
+   Therefore,
+
+   .. math:: θ_σ =\{(a, a') ∈ A^2 ∣ map(\Proj_σ)(a, a') ∈ θ \},
+
+   whence, :math:`θ_g = map(\Proj_σ)^{-1}θ`.
+
+#. If :math:`f: X → A` and :math:`g: X → B` are functions defined  on the same domain :math:`X`, then :math:`(f,g): X → A × B` is the unique function that composes with the first projection to give :math:`f` and composes with the second projection to give :math:`g`. For example, in the last remark there appears the expression :math:`(\Proj_σ(a), \Proj_σ(a')) = (a ∘ σ, a' ∘ σ)`, which has type :math:`( ∏_{j<k} A_{σ(j)} )^2`.
+
+    In retrospect, a more appropriate name for :math:`\mathbf{0}_σ` might be :math:`Δ_σ`, or even :math:`=_σ`.
+
+#. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj_j` instead of :math:`\Proj_{(j)}`.  Similarly, we write and :math:`\mathbf{0}_j` and :math:`θ_j` instead of :math:`\mathbf{0}_{(j)}` and :math:`θ_{(j)}`. Thus, :math:`\Proj_j a = a(j)`, and :math:`\mathbf{0}_j = \{(a, a') ∈ A^2 ∣ a(j) = a'(j)\}`, and, if :math:`θ ∈ \Con 𝔸_j`, then :math:`θ_j = \{(a, a') ∈ A^2 ∣ a(j) \mathrel{\theta} a'(j)\}`.
+
+Here are some obvious consequences of the foregoing notation and definitions that are worth noting.
+
+.. math::
+
+   ⋁_{j<n}\mathbf{0}_j = A^2, \qquad \mathbf{0}_σ = ⋀_{j ∈ σ} \mathbf{0}_j, \qquad \mathbf{0}_{n} = ⋀_{j<n}\mathbf{0}_j = 0_{A}, \qquad
+   θ_σ = ⋀_{j<k} θ_{σ(j)},
+
+where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is, :math:`0_{A}:= \{(a, a') ∈ A^2 ∣ a = a'\}`.
+
+.. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
+
+--------------------------------
+
+
 
 ---------------------------------------
 
@@ -446,6 +498,8 @@ Thus, if
 .. math:: f [g] := f \, \mathbf{eval} \, \mathbf{fork}\, g: ∏_{(i:n)}((k_i → A) → A).
 
 Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \mathbf{eval} \, \mathbf{fork}\, g \, a` has type :math:`A`, as desired.
+
+.. _greater-generality:
 
 Greater generality
 ~~~~~~~~~~~~~~~~~~
