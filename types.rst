@@ -450,39 +450,43 @@ Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathbf{eval} \, \math
 Greater generality
 ~~~~~~~~~~~~~~~~~~
 
-Let :math:`α` and :math:`γ` be types.  We call :math:`f: (γ → α) → α` a :math:`γ`-ary operation on :math:`α`.
+In the last section we looked at an operation :math:`f` on a set :math:`A`. We took the domain of :math:`f` to be :math:`n → A` (the type of :math:`n`-tuples over :math:`A`) for some :math:`n`.  In particular, we assumed that :math:`A` was a set, and that the arity of :math:`f` was some natural number, say, :math:`n`. Although this is the standard setup in universal algebra.  However, it is not necessary to be so specific about the arities, domains, and codomains of operations.
+
+In this section we start with two types :math:`α` and :math:`γ` and consider :math:`γ`-**ary operations on** :math:`α`---e.g., :math:`f: (γ → α) → α`---and show how to express composition of operations in this general context.
 
 Suppose that for each :math:`i: γ` we have a type :math:`γ_i` and an operation :math:`g_i` of type :math:`(γ_i → α) → α` on :math:`α`.
 
 Denote by :math:`G` the ":math:`γ`-tuple" of these operations; that is, for each :math:`i: γ` the ":math:`i`-th component" of :math:`G` is 
+:math:`G\, i = g_i`. Evidently, this results in the typing judgment,
 
-.. math:: G\, i = g_i: (γ_i → α) → α
+.. math:: G: ∏_{(i:γ)} ((γ_i → α) → α).
 
-Then :math:`G` has type :math:`∏_{(i:γ)} ((γ_i → α) → α)`.
+Even in this more general context, we can still use the fork and eval maps introduced above to express composition of operations.
+Indeed, we *define* the **composition of** :math:`f` **with** :math:`G` to be
 
-*Define* the **composition of** :math:`f` **with** :math:`G` by :math:`f \, \mathbf{eval} \, \mathbf{fork}\, G`.
+.. math:: f \, \mathbf{eval} \, \mathbf{fork}\, G.
 
-Let us formally adopt the following convention in this context:
+Let us adopt the following convenient notation:
 
-  *The symbol* :math:`∘` *means* :math:`\mathbf{eval} \, \mathbf{fork}`.
+  *Denote by* :math:`∘` *the general composition operation* :math:`\mathbf{eval} \, \mathbf{fork}`.
 
-As such, we *define* :math:`f ∘ G := f \, \mathbf{eval} \, \mathbf{fork}\, G`, yielding the typing judgment,
+Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f ∘ G := f \, \mathbf{eval} \, \mathbf{fork}\, G`.  Evidently, this yields the typing judgment,
 
 .. math:: f ∘ G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
 
-Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have the following typing judgments:
+Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have,
 
 .. math:: a\, i : γ_i → α \quad \text{ and } \quad  G\, i : (γ_i → α) → α,
 
-so evaluation of :math:`∘ G \, a` at a particular :math:`i: γ` is simply function application. That is,
+so evaluation of :math:`∘\, G \, a` at a particular :math:`i: γ` is simply function application. That is,
 
-.. math:: ∘ G \, a := \mathbf{eval} \, \mathbf{fork}\, G \, a \, i = (G\, i)(a\, i): α.
+.. math:: ∘\, G \, a \, i:= \mathbf{eval} \, \mathbf{fork}\, G \, a \, i = (G\, i)(a\, i): α.
 
-Thus, :math:`∘ G \, a` has type :math:`γ → α`, which is precisely the domain type of :math:`f`.
+Thus, :math:`∘\, G \, a` has type :math:`γ → α`, which is precisely the domain type of :math:`f`.
 
 To summarize, we have the following typing judgments:
 
-.. math:: ∘ G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
+.. math:: ∘\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
 
 whence :math:`f ∘ G \, a: α` is well-typed.
 
