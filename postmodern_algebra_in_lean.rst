@@ -27,7 +27,7 @@ Categories in Lean
   variable [category.{u v} C]
   variables A B : C
 
-  #check A ⟶ B   -- Type v (type ⟶ with ``⟶``)
+  #check A ⟶ B   -- Type v
 
 
 .. _tuple-functors-in-lean:

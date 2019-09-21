@@ -140,7 +140,7 @@ Observations, categorically
 .. todo:: rewrite this section (it's still based on the classical treatment)
 
 
-Let us revisit the list of observations we made (in classical notation) above in :numref:`Section %s <basic-facts>`.
+Let us revisit the list of observations we made (in classical notation) above in :numref:`Chapter %s <basic-facts>`.
 
 Throught this section,
 

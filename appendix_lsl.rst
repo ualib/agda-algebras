@@ -40,12 +40,741 @@ For example, some of the most important of these objects are implemented in the 
   + `functions.lean`_
   + `order.lean`_
 
+-------------------------------------
+
+.. _extensionality-in-the-lstl:
+
+Extensionality
+--------------
+
+.. index:: !Leibniz equal, function extionsionality
+.. index:: keyword: funext
+
+.. _proof-of-funext:
+
+Proof of funext
+~~~~~~~~~~~~~~~~
+
+Here we dissect the definition of function extensionality in the `Lean Standard Library`_, as well as the proof of the ``funext`` theorem, which states that the function extensionality principle *is* equality of functions in Lean; in other words, two functions are equal iff they are :term:`Leibniz equal` (i.e., they give the same output for each input).
+
+We start with the full listing of the `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_, which resides in the ``library/init`` directory of the `Lean Standard Library`_.
+
+::
+
+  /-
+  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
+  Released under Apache 2.0 license as described in the file
+  LICENSE.
+
+  Author: Jeremy Avigad
+
+  Extensional equality for functions, and a proof of
+  function extensionality from quotients.
+  -/
+  prelude
+  import init.data.quot init.logic
+
+  universes u v
+
+  namespace function
+    variables {α : Sort u} {β : α → Sort v}
+
+    protected def equiv (f₁ f₂: Π x:α, β x): Prop :=
+    ∀ x, f₁ x = f₂ x
+
+    local infix `~` := function.equiv
+
+    protected theorem equiv.refl (f: Π x:α, β x):
+    f ~ f := assume x, rfl
+
+    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
+
+    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}:
+    f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ :=
+    λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
+
+    protected theorem equiv.is_equivalence
+    (α: Sort u) (β: α → Sort v):
+    equivalence (@function.equiv α β) :=
+    mk_equivalence (@function.equiv α β)
+    (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
+  end function
+
+  section
+
+    open quotient
+    variables {α: Sort u} {β: α → Sort v}
+
+    @[instance]
+    private def fun_setoid (α: Sort u) (β: α → Sort v):
+    setoid (Π x:α, β x) :=
+    setoid.mk (@function.equiv α β)
+              (function.equiv.is_equivalence α β)
+
+    private def extfun (α : Sort u) (β : α → Sort v):
+    Sort (imax u v) := quotient (fun_setoid α β)
+
+    private def fun_to_extfun (f: Π x:α, β x):
+    extfun α β := ⟦f⟧
+    private def extfun_app (f : extfun α β) : Π x : α, β x :=
+    assume x,
+    quot.lift_on f
+      (λ f : Π x : α, β x, f x)
+      (λ f₁ f₂ h, h x)
+
+    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
+    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
+      congr_arg extfun_app (sound h)
+
+  end
+
+  attribute [intro!] funext
+
+  local infix `~` := function.equiv
+
+  instance pi.subsingleton {α : Sort u} {β : α → Sort v}
+  [∀ a, subsingleton (β a)]: subsingleton (Π a, β a) :=
+  ⟨λ f₁ f₂, funext (λ a, subsingleton.elim (f₁ a) (f₂ a))⟩
+
+The first section of the program, inside the ``function`` namespace, is simply a formalization of the easy proof that extensional equality of functions is an equivalence relation.
+
+The more interesting part appears in between the ``section`` and ``end`` delimiters.
+
+First, the ``open quotient`` directive makes the contents of the ``quotient`` namespace available.  (See :numref:`the-quotient-namespace`.)
+
+Next, some implicit variables are defined, namely, for universes ``u`` and ``v``, we have ``α: Sort u`` and ``β: α → Sort v``.
+
+This is followed by four definitions,
+
+::
+
+  prelude
+  import init.data.quot init.logic
+  universes u v
+  namespace function
+    variables {α : Sort u} {β : α → Sort v}
+    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
+    local infix `~` := function.equiv
+    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
+    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
+    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
+    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
+  end function
+  section
+    open quotient
+    variables {α: Sort u} {β: α → Sort v}
+
+    -- BEGIN
+    @[instance]
+    private def fun_setoid (α: Sort u) (β: α → Sort v):
+    setoid (Π x:α, β x) :=
+    setoid.mk (@function.equiv α β)
+              (function.equiv.is_equivalence α β)
+
+    private def extfun (α: Sort u) (β: α → Sort v):
+    Sort (imax u v) := quotient (fun_setoid α β)
+
+    private def fun_to_extfun (f: Π x:α, β x):
+    extfun α β := ⟦f⟧
+    private def extfun_app (f: extfun α β): Π x:α, β x :=
+    assume x,
+    quot.lift_on f (λ f: Π x:α, β x, f x) (λ f₁ f₂ h, h x)
+    -- END
+
+    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
+    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
+      congr_arg extfun_app (sound h)
+
+  end
+
+The first of these creates a setoid consisting of functions of type ``Π x:α, β x`` along with the relation ``function.equiv`` (which was just proved, in the ``function`` namespace, to be an equivalence relation).
+
+The second takes this ``fun_setoid`` and uses it to define the quotient consisting of the ``function.equiv``-classes of functions of type ``Π x:α, β x``, where functions within a single class are :term:`Leibniz equal`.
+
+The third, ``fun_to_extfun``, simply maps each function ``f: Π x:α, β x`` to its equivalence class ``⟦f⟧: extfun α β``.
+
+As for ``extfun_app``, this function lifts each class ``⟦f⟧: extfun α β`` of functions back up to an actual function of type ``Π x:α, β x``.
+
+Finally, the ``funext`` theorem asserts that function extensionality *is* function equality.
+
+::
+
+  prelude
+  import init.data.quot init.logic
+  universes u v
+  namespace function
+    variables {α : Sort u} {β : α → Sort v}
+    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
+    local infix `~` := function.equiv
+    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
+    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
+    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
+    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
+  end function
+  section
+    open quotient
+    variables {α: Sort u} {β: α → Sort v}
+    @[instance]
+    private def fun_setoid (α: Sort u) (β: α → Sort v): setoid (Π x:α, β x) := setoid.mk (@function.equiv α β) (function.equiv.is_equivalence α β)
+    private def extfun (α : Sort u) (β : α → Sort v): Sort (imax u v) := quotient (fun_setoid α β)
+    private def fun_to_extfun (f: Π x:α, β x): extfun α β := ⟦f⟧
+    private def extfun_app (f : extfun α β) : Π x : α, β x := assume x,
+    quot.lift_on f (λ f : Π x : α, β x, f x) (λ f₁ f₂ h, h x)
+
+    -- BEGIN
+    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
+    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
+      congr_arg extfun_app (sound h)
+    -- END
+
+  end
+
+.. todo:: finish dissecting funext proof
+
+-----------------------------------
+
+.. _subsingleton-type-class:
+
+Subsingleton type class
+-----------------------
+
+The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_subsingleton`` and related theorems. Any type inhabited by a single element is a subsingleton type. Here is the definition.
+
+::
+
+  class inductive subsingleton (α: Sort u): Prop
+  | intro (h: ∀ a b: α, a = b): subsingleton
+
+  protected def subsingleton.elim {α: Sort u}
+  [h: subsingleton α]: ∀ (a b: α), a = b :=
+  subsingleton.rec (λ p, p) h
+
+  protected def subsingleton.helim {α β: Sort u}
+  [h: subsingleton α] (h: α = β): ∀ (a: α) (b: β), a == b :=
+  eq.rec_on h (λ a b: α, heq_of_eq (subsingleton.elim a b))
+
+  instance subsingleton_prop (p: Prop): subsingleton p :=
+  ⟨λ a b, proof_irrel a b⟩
+
+  instance (p: Prop): subsingleton (decidable p) :=
+  subsingleton.intro
+  ( λ d₁,
+    match d₁ with
+    | (is_true t₁)  :=
+      ( λ d₂,
+        match d₂ with
+        | (is_true t₂)  := eq.rec_on (proof_irrel t₁ t₂) rfl
+        | (is_false f₂) := absurd t₁ f₂
+        end
+      )
+    | (is_false f₁) :=
+      ( λ d₂,
+        match d₂ with
+        | (is_true t₂)  := absurd t₂ f₁
+        | (is_false f₂) := eq.rec_on (proof_irrel f₁ f₂) rfl
+        end
+      )
+  end)
+
+  protected lemma rec_subsingleton {p: Prop} [h: decidable p]
+  {h₁: p → Sort u} {h₂: ¬p → Sort u}
+  [h₃: Π (h: p), subsingleton (h₁ h)]
+  [h₄: Π (h: ¬p), subsingleton (h₂ h)]:
+  subsingleton (decidable.rec_on h h₂ h₁) :=
+  match h with
+  | (is_true h)  := h₃ h
+  | (is_false h) := h₄ h
+  end
+
+-------------------
+
+.. _sets-in-lean:
+
+Sets in Lean
+------------
+
+We now describe how some basic mathematical concepts are represented in the Lean language.
+
+Many of the implementations shown here also appear in the following files in the `Lean Standard Library`_ (:term:`LSTL`) and the `Lean Mathlib <mathlib>`_:
+
++ set.lean_
++ basic.lean_
++ lattice.lean_
+
+
+If ``α`` is a type, then Lean provides the type ``set α``, which represents the type of **sets of elements of type** ``α``.
+
+This is naturally implemented as a function type.  Indeed, the type ``set α`` is simply an alias for the type ``α → Prop``.
+
+Thus, a set ``A`` of elements of type ``α`` would be denoted by ``A: set α``.
+
+We say "``x`` belongs to ``A``", and write ``x ∈ A``, if and only if the proposition ``A x`` holds (i.e., has a proof, say, ``h: A x``).
+
+.. _intersection-and-union:
+
+Intersection and union
+~~~~~~~~~~~~~~~~~~~~~~
+
+Let ``S`` be a family of sets of type :math:`α`.
+
+In lattice.lean_, the **intersection** of the sets in ``S`` is denoted by ``⋂₀ S``.
+
+::
+
+   import data.set
+   variables (α : Type) (S : set (set α))
+
+   #check ⋂₀ S          -- answer: set α
+
+Here is the formal definition of ``sInter`` from the file lattice.lean_.
+
+::
+
+   @[reducible]
+   def sInter (S: set (set α)): set α := Inf S
+
+   prefix `⋂₀`:110 := sInter
+
+The **union of sets** is implemented in lattice.lean_ similarly.
+
+::
+
+   @[reducible]
+   def sUnion (s: set (set α)): set α := {t | ∃ a ∈ s, t ∈ a}
+
+   prefix `⋃₀`:110 := sUnion
+
+------------------------------
+
+.. index:: relation, binary relation, preorder
+.. index:: domain, range
+
+Relations in Lean
+-------------------
+
+In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a: A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b: A``, ``R a b`` is a proposition.
+
+With first-order logic, we can say what it means for a relation to be reflexive, symmetric, transitive, and antisymmetric, as follows:
+
+::
+
+   namespace prelim
+     section
+       parameters {A: Type} (R: A → A → Prop)
+
+       def reflexive: Prop := ∀ x, R x x
+
+       def symmetric: Prop := ∀ x y, R x y → R y x
+
+       def transitive: Prop := ∀ x y z, R x y → R y z → R x z
+
+       def antisymmetric: Prop := ∀ x y, R x y → R y x → x = y
+     end
+   end prelim
+
+We can then use the notions freely. Notice that Lean will unfold the definitions when necessary, for example, treating ``reflexive R`` as ``∀ x, R x x``.
+Also, in ``parameters {A: Type}``, we use curly braces to indicate that ``A`` is an **implicit argument**, thus you don't have to write it explicitly.
+
+Lean can infer from the argument ``R``, which is a binary relation on ``A``, that ``reflexive R`` really means ``reflexive A R``.
+
+::
+
+  namespace prelim
+    section
+      parameters {A: Type} (R: A → A → Prop)
+      def reflexive: Prop := ∀ x, R x x
+      def symmetric: Prop := ∀ x y, R x y → R y x
+      def transitive: Prop := ∀ x y z, R x y → R y z → R x z
+      def antisymmetric: Prop := ∀ x y, R x y → R y x → x = y
+
+  -- BEGIN
+  example (h: reflexive R) (x: A): R x x := h x
+
+  example (h: symmetric R) (x y: A)
+  (h₁: R x y): R y x := h x y h₁
+
+  example (h: transitive R) (x y z: A)
+  (h₁: R x y) (h₂: R y z): R x z :=
+  h x y z h₁ h₂
+
+  example (h: antisymmetric R) (x y: A)
+  (h₁: R x y) (h₂: R y x): x = y:=
+  h x y h₁ h₂
+  -- END
+    end
+
+   end prelim
+
+.. index:: implicit argument
+
+In one of these examples we show ``R x z`` follows from the assumptions ``h: transitive R`` and ``h₁: R x y`` and ``h₂: R y z``. This is done using the proof term ``h x y z h₁ h₂``. But Lean_ could use the fact that ``h₁`` is ``R x y`` and ``h₂`` is ``R y z`` to infer that we are talking about transitivity at ``x``, ``y`` and ``z``, so we should not need to mention these variable names explicitly.  Indeed, we can replace them with underscores.
+
+::
+
+  namespace prelim
+
+    def transitive {A: Type} (R: A → A → Prop): Prop :=
+    ∀ x y z, R x y → R y z → R x z
+
+    example {A: Type} (R: A → A → Prop)
+    (h: transitive R) (x y z: A) (h₁: R x y) (h₂: R y z): R x z :=
+    h _ _ _ h₁ h₂
+
+  end prelim
+
+But typing underscores is annoying; we should make ``x y z`` implicit arguments so that the underscores are unnecessary.
+
+::
+
+  namespace prelim
+
+    def transitive {A: Type} (R: A → A → Prop): Prop :=
+    ∀ {x y z}, R x y → R y z → R x z
+
+    example {A: Type} (R: A → A → Prop) (h: transitive R) (x y z: A)
+    (h₁: R x y) (h₂: R y z): R x z := h h₁ h₂
+
+  end prelim
+
+In fact, the notions ``reflexive``, ``symmetric``, ``transitive``, and ``antisymmetric`` are defined in Lean's core library in exactly this way, so we are free to use them without defining them and we can (must) leave off the implicit parameters.
+
+It is possible to provide the implicit parameters explicitly, but then the ``@`` prefix must be used, as follows:
+
+::
+
+  example {A : Type} (R: A → A → Prop)
+  (h: transitive R) (x y z: A) (h₁: R x y) (h₂: R y z): R x z :=
+  @h x y z h₁ h₂
+
+
+.. index:: preorder, equivalence relation, total order relation, irreflexive relation, antisymmetric relation
+
+.. _preorders-and-equivalences-in-lean:
+
+Preorders and equivalences
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In :numref:`equivalence-relation` we learned that an *equivalence relation* is a symmetric preorder, or, equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
+
+Recall, a *preorder* is a reflexive and transitive binary relation.
+
+::
+
+  namespace prelim
+
+    def preorder {A: Type} (R: A → A → Prop): Prop :=
+    reflexive R ∧ transitive R
+
+  end prelim
+
+Lean's library provides a different formulation of preorders, so, in order to use the same name, we have to put it in the ``prelim`` namespace. The Lean library also defines other properties of relations, such as these:
+
+::
+
+  namespace prelim
+
+    def equivalence {A: Type} (R: A → A → Prop) :=
+    reflexive R ∧ symmetric R ∧ transitive R
+
+    def total {A: Type} (R: A → A → Prop) :=
+    ∀ x y, R x y ∨ R y x
+
+    def irreflexive {A: Type} (R: A → A → Prop) :=
+    ∀ x, ¬ R x x
+
+    def antisymmetric {A: Type} (R: A → A → Prop) :=
+    ∀ ⦃x y⦄, R x y → R y x → x = y
+
+  end prelim
+
+(In the standard library, the latter is actually named ``anti_symmetric``.)
+
+Lean will print the definitions of these (as defined in the standard library) if given the commands
+
+::
+
+  #print equivalence
+  #print total
+  #print irreflexive
+  #print anti_symmetric
+
+An equivalent way to define **equivalence relation** is as a binary relation on :math:`A` satisfying,
+
+  #. :math:`∀ a ∈ A \ (a ≡ a)`, and
+  #. :math:`∀ a, b, c ∈ A \ (a ≡ b ∧ c ≡ b \ → \ a ≡ c)`.
+
+Let's prove this now. First recall that the commands
+
+::
+
+  parameters {A: Type} (R: A → A → Prop)
+  local infix ≈ := R
+
+fix a relation ``R`` and introduce the symbol ``≈`` to denote it. Thus, in the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
+
+(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see :numref:`symbol-commands`.)
+
+::
+
+  namespace prelim
+
+    def preorder {A: Type} (R: A → A → Prop): Prop :=
+    reflexive R ∧ transitive R
+
+    section
+      parameters {A: Type} (R: A → A → Prop)
+      local infix ≈ := R
+
+      variable (h₁: reflexive (≈))
+      variable (h₂: ∀ {a b c}, a ≈ b ∧ c ≈ b → a ≈ c)
+
+      -- We will show that a relation satisfying h₁ and
+      -- h₂ must also be symmetric and transitive, hence,
+      -- an equivalence relation.
+
+      example: symmetric (≈) :=
+      assume a b (h: a ≈ b),
+      have b ≈ b ∧ a ≈ b, from and.intro (h₁ b) h,
+      show b ≈ a, from h₂ this
+
+      example: transitive (≈) :=
+      assume a b c (h₃: a ≈ b) (h₄: b ≈ c),
+      have c ≈ b, from h₂ (and.intro (h₁ c) h₄),
+      have a ≈ b ∧ c ≈ b, from and.intro h₃ this,
+      show a ≈ c, from h₂ this
+    end
+
+  end prelim
+
+Finally, we prove that an equivalence relation (defined as a reflexive, symmetric, transitive, binary relation) is a symmetric preorder, as claimed above.
+
+::
+
+  namespace prelim
+
+    def preorder {A: Type} (R: A → A → Prop): Prop :=
+    reflexive R ∧ transitive R
+
+    example {A: Type} (R: A → A → Prop):
+    equivalence R ↔ preorder R ∧ symmetric R :=
+    iff.intro
+      (assume h₁: equivalence R,
+        have h₂: reflexive R, from and.left h₁,
+        have h₃: symmetric R, from and.left (and.right h₁),
+        have h₄: transitive R, from and.right (and.right h₁),
+        show preorder R ∧ symmetric R,
+          from and.intro (and.intro h₂ h₄) h₃)
+      (assume h₁: preorder R ∧ symmetric R,
+        have h₂: preorder R, from and.left h₁,
+        show equivalence R,
+          from and.intro (and.left h₂)
+                 (and.intro (and.right h₁) (and.right h₂)))
+
+  end prelim
+
+.. _partial-orders-in-lean:
+
+Partial orders
+~~~~~~~~~~~~~~
+
+Building on our Lean definition of :term:`preorder`, we can define a :term:`partial order` in Lean as an antisymmetric preorder.
+
+::
+
+  namespace prelim
+
+    def preorder {A : Type} (R : A → A → Prop) : Prop :=
+    reflexive R ∧ transitive R
+
+    def partial_order {A : Type} (R : A → A → Prop) : Prop :=
+    preorder R ∧ anti_symmetric R
+
+  end prelim
+
+.. _the-poset-induced-by-a-preorder-in-lean:
+
+The poset induced by a preorder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. todo:: complete this section after completing :numref:`quotients-in-the-LSTL`.
+
+..     The poset induced by a preorder
+
+.. _total-and-strict-orders-in-lean:
+
+Total and strict orders
+~~~~~~~~~~~~~~~~~~~~~~~
+
+In :numref:`total-and-strict-ordering` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
+
+::
+
+  example {A: Type} (R: A → A → Prop)
+  (h₁: irreflexive R) (h₂: transitive R):
+  ∀ x y, R x y → ¬ R y x :=
+  assume x y (h₃: R x y) (h₄: R y x),
+  have h₅: R x x, from h₂ h₃ h₄,
+  have h₆: ¬ R x x, from h₁ x,
+  show false, from h₆ h₅
+
+In mathematics, it is common to use infix notation and a symbol like ``≤`` to denote a partial order. Lean supports this practice:
+
+::
+
+  section
+    parameters {A : Type} (R : A → A → Prop)
+
+    local infix ≤ := R
+
+    example (h₁: irreflexive ≤) (h₂: transitive ≤):
+    ∀ x y, x ≤ y → ¬ y ≤ x :=
+    assume x y (h₃: x ≤ y) (h₄: y ≤ x),
+    have h₅: x ≤ x, from h₂ h₃ h₄,
+    have h₆: ¬ x ≤ x, from h₁ x,
+    show false, from h₆ h₅
+  end
+
+The ``parameter`` and ``parameters`` commands are similar to the ``variable`` and ``variables`` commands, except that parameters are fixed within a section. In other words, if you prove a theorem about ``R`` in the section above, you cannot apply that theorem to another relation, ``S``, without closing the section. Since the parameter ``R`` is fixed, Lean allows us to define notation for ``R`` to be used locally in the section.
+
+In the example below, having fixed a partial order, ``R``, we define the corresponding strict partial order and prove that it is, indeed, a strict order.
+
+::
+
+  section
+    parameters {A : Type} (R : A → A → Prop)
+    parameter (reflR : reflexive R)
+    parameter (transR : transitive R)
+    parameter (antisymmR : ∀ {a b : A}, R a b → R b a → a = b)
+
+    local infix ≤ := R
+
+    definition R' (a b : A) : Prop := a ≤ b ∧ a ≠ b
+
+    local infix < := R'
+
+    theorem irreflR (a : A) : ¬ a < a :=
+    assume : a < a,
+    have a ≠ a, from and.right this,
+    have a = a, from rfl,
+    show false, from ‹a ≠ a› ‹a = a›
+
+    theorem transR {a b c : A} (h₁ : a < b) (h₂ : b < c) : a < c :=
+    have a ≤ b, from and.left h₁,
+    have a ≠ b, from and.right h₁,
+    have b ≤ c, from and.left h₂,
+    have b ≠ c, from and.right h₂,
+    have a ≤ c, from transR ‹a ≤ b› ‹b ≤ c›,
+    have a ≠ c, from
+        assume : a = c,
+        have c ≤ b, from eq.subst ‹a = c› ‹a ≤ b›,
+        have b = c, from antisymmR ‹b ≤ c› ‹c ≤ b›,
+        show false, from ‹b ≠ c› ‹b = c›,
+    show a < c, from and.intro ‹a ≤ c› ‹a ≠ c›
+  end
+
+Notice that we have used suggestive names ``reflR``, ``transR``, ``antisymmR`` to help remember which hypothesis is which.
+
+The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see :numref:`symbol-commands`).
+
+Remember also that ``eq.subst ‹a = c› ‹a ≤ b›`` is a proof of the fact that amounts for substituting ``c`` for ``a`` in ``a ≤ b``. You can also use the equivalent notation ``‹a = c› ▸ ‹a ≤ b›``, where the triangle is written ``\t``.
+
+Here is one more example. Suppose ``R`` is a binary relation on a type ``A``, and we define ``S x y`` to mean that both ``R x y`` and ``R y x`` holds. Below we show that the resulting relation is reflexive and symmetric.
+
+::
+
+  section
+    parameters {A: Type} (R: A → A → Prop)
+
+    variable h₁: transitive R
+    variable h₂: reflexive R
+
+    def S (x y: A) := R x y ∧ R y x
+
+    example: reflexive S :=
+    assume x,
+    have R x x, from h₂ x,
+    show S x x, from and.intro this this
+
+    example: symmetric S :=
+    assume x y,
+    assume h: S x y,
+    have h₁: R x y, from h.left,
+    have h₂: R y x, from h.right,
+    show S y x, from ⟨h.right, h.left⟩
+  end
+
+As an exercise, the reader should prove in Lean that ``S`` is transitive as well.
+
+In the first example, we use the anonymous ``assume`` and ``have``, and then refer back to the ``have`` with the keyword ``this``.
+
+In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.left`` and ``h.right``, respectively. We also abbreviate ``and.intro h.right h.left`` with an anonymous constructor, writing ``⟨h.right, h.left⟩``. Lean figures out that we are trying to prove a conjunction, and figures out that ``and.intro`` is the relevant introduction principle.
+
+(You can produce angled brackets by typing ``\<`` and ``\>`` or by typing ``\langle`` and ``\rangle``; see :numref:`symbol-commands`.)
+
+.. .. _equality-in-lean:
+
+.. Equality
+.. ~~~~~~~~
+
+.. .. index:: ! ordered tuples, !tuples
+.. .. index:: ! unary relation, ! binary relation, ! ternary relation
+
+.. Orderings on numbers
+.. ~~~~~~~~~~~~~~~~~~~~
+
+.. Conveniently, Lean has the normal orderings on the natural numbers, integers, and so on defined already.
+
+.. .. code-block:: lean
+
+..     open nat
+..     variables n m : ℕ
+
+..     #check 0 ≤ n
+..     #check n < n + 1
+
+..     example : 0 ≤ n := zero_le n
+..     example : n < n + 1 := lt_succ_self n
+
+..     example (h : n + 1 ≤ m) : n < m + 1 :=
+..     have h\_1 : n < n + 1, from lt_succ_self n,
+..     have h\_2 : n < m, from lt_of_lt_of_le h\_1 h,
+..     have h\_3 : m < m + 1, from lt_succ_self m,
+..     show n < m + 1, from lt.trans h\_2 h\_3
+
+.. There are many theorems in Lean that are useful for proving facts about inequality relations. We list some common ones here.
+
+.. .. code-block:: lean
+
+..     variables (A : Type) [partial_order A]
+..     variables a b c : A
+
+..     #check (le_trans : a ≤ b → b ≤ c → a ≤ c)
+..     #check (lt_trans : a < b → b < c → a < c)
+..     #check (lt_of_lt_of_le : a < b → b ≤ c → a < c)
+..     #check (lt_of_le_of_lt : a ≤ b → b < c → a < c)
+..     #check (le_of_lt : a < b → a ≤ b)
+
+.. Here the declaration at the top says that ``A`` has the structure of a partial order. There are also properties that are specific to some domains, like the natural numbers:
+
+.. .. code-block:: lean
+
+..     variable n : ℕ
+
+..     #check (nat.zero_le : ∀ n : ℕ, 0 ≤ n)
+..     #check (nat.lt_succ_self : ∀ n : ℕ, n < n + 1)
+..     #check (nat.le_succ : ∀ n : ℕ, n ≤ n + 1)
+
+.. .. index:: product
+
+.. .. _products-in-lean:
+
 ----------------------------------------------------------
 
 .. _quotients-in-the-LSTL:
 
-Quotients
----------
+Quotients in the LSTL
+----------------------
 
 To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the `lean/library/init/data`_ directory of the :term:`LSTL`.
 
@@ -798,309 +1527,5 @@ The third and final part of the `quot.lean`_ file proves some theorems about the
 
 .. todo:: dissect quot theorems
 
--------------------------------------
+.. include:: hyperlink_references.rst
 
-.. _extensionality-in-the-lstl:
-
-Extensionality
---------------
-
-.. index:: !Leibniz equal, function extionsionality
-.. index:: keyword: funext
-
-.. _proof-of-funext:
-
-Proof of funext
-~~~~~~~~~~~~~~~~
-
-Here we dissect the definition of function extensionality in the `Lean Standard Library`_, as well as the proof of the ``funext`` theorem, which states that the function extensionality principle *is* equality of functions in Lean; in other words, two functions are equal iff they are :term:`Leibniz equal` (i.e., they give the same output for each input).
-
-We start with the full listing of the `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_, which resides in the ``library/init`` directory of the `Lean Standard Library`_.
-
-::
-
-  /-
-  Copyright (c) 2015 Microsoft Corporation. All rights reserved.
-  Released under Apache 2.0 license as described in the file
-  LICENSE.
-
-  Author: Jeremy Avigad
-
-  Extensional equality for functions, and a proof of
-  function extensionality from quotients.
-  -/
-  prelude
-  import init.data.quot init.logic
-
-  universes u v
-
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop :=
-    ∀ x, f₁ x = f₂ x
-
-    local infix `~` := function.equiv
-
-    protected theorem equiv.refl (f: Π x:α, β x):
-    f ~ f := assume x, rfl
-
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}:
-    f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}:
-    f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ :=
-    λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-
-    protected theorem equiv.is_equivalence
-    (α: Sort u) (β: α → Sort v):
-    equivalence (@function.equiv α β) :=
-    mk_equivalence (@function.equiv α β)
-    (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-
-  section
-
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v):
-    setoid (Π x:α, β x) :=
-    setoid.mk (@function.equiv α β)
-              (function.equiv.is_equivalence α β)
-
-    private def extfun (α : Sort u) (β : α → Sort v):
-    Sort (imax u v) := quotient (fun_setoid α β)
-
-    private def fun_to_extfun (f: Π x:α, β x):
-    extfun α β := ⟦f⟧
-    private def extfun_app (f : extfun α β) : Π x : α, β x :=
-    assume x,
-    quot.lift_on f
-      (λ f : Π x : α, β x, f x)
-      (λ f₁ f₂ h, h x)
-
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-
-  end
-
-  attribute [intro!] funext
-
-  local infix `~` := function.equiv
-
-  instance pi.subsingleton {α : Sort u} {β : α → Sort v}
-  [∀ a, subsingleton (β a)]: subsingleton (Π a, β a) :=
-  ⟨λ f₁ f₂, funext (λ a, subsingleton.elim (f₁ a) (f₂ a))⟩
-
-The first section of the program, inside the ``function`` namespace, is simply a formalization of the easy proof that extensional equality of functions is an equivalence relation.
-
-The more interesting part appears in between the ``section`` and ``end`` delimiters.
-
-First, the ``open quotient`` directive makes the contents of the ``quotient`` namespace available.  (See :numref:`the-quotient-namespace`.)
-
-Next, some implicit variables are defined, namely, for universes ``u`` and ``v``, we have ``α: Sort u`` and ``β: α → Sort v``.
-
-This is followed by four definitions,
-
-::
-
-  prelude
-  import init.data.quot init.logic
-  universes u v
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
-    local infix `~` := function.equiv
-    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-  section
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-
-    -- BEGIN
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v):
-    setoid (Π x:α, β x) :=
-    setoid.mk (@function.equiv α β)
-              (function.equiv.is_equivalence α β)
-
-    private def extfun (α: Sort u) (β: α → Sort v):
-    Sort (imax u v) := quotient (fun_setoid α β)
-
-    private def fun_to_extfun (f: Π x:α, β x):
-    extfun α β := ⟦f⟧
-    private def extfun_app (f: extfun α β): Π x:α, β x :=
-    assume x,
-    quot.lift_on f (λ f: Π x:α, β x, f x) (λ f₁ f₂ h, h x)
-    -- END
-
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-
-  end
-
-The first of these creates a setoid consisting of functions of type ``Π x:α, β x`` along with the relation ``function.equiv`` (which was just proved, in the ``function`` namespace, to be an equivalence relation).
-
-The second takes this ``fun_setoid`` and uses it to define the quotient consisting of the ``function.equiv``-classes of functions of type ``Π x:α, β x``, where functions within a single class are :term:`Leibniz equal`.
-
-The third, ``fun_to_extfun``, simply maps each function ``f: Π x:α, β x`` to its equivalence class ``⟦f⟧: extfun α β``.
-
-As for ``extfun_app``, this function lifts each class ``⟦f⟧: extfun α β`` of functions back up to an actual function of type ``Π x:α, β x``.
-
-Finally, the ``funext`` theorem asserts that function extensionality *is* function equality.
-
-::
-
-  prelude
-  import init.data.quot init.logic
-  universes u v
-  namespace function
-    variables {α : Sort u} {β : α → Sort v}
-    protected def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
-    local infix `~` := function.equiv
-    protected theorem equiv.refl (f: Π x:α, β x): f ~ f := assume x, rfl
-    protected theorem equiv.symm {f₁ f₂: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₁ := λ h x, eq.symm (h x)
-    protected theorem equiv.trans {f₁ f₂ f₃: Π x:α, β x}: f₁ ~ f₂ → f₂ ~ f₃ → f₁ ~ f₃ := λ h₁ h₂ x, eq.trans (h₁ x) (h₂ x)
-    protected theorem equiv.is_equivalence (α: Sort u) (β: α → Sort v): equivalence (@function.equiv α β) := mk_equivalence (@function.equiv α β) (@equiv.refl α β) (@equiv.symm α β) (@equiv.trans α β)
-  end function
-  section
-    open quotient
-    variables {α: Sort u} {β: α → Sort v}
-    @[instance]
-    private def fun_setoid (α: Sort u) (β: α → Sort v): setoid (Π x:α, β x) := setoid.mk (@function.equiv α β) (function.equiv.is_equivalence α β)
-    private def extfun (α : Sort u) (β : α → Sort v): Sort (imax u v) := quotient (fun_setoid α β)
-    private def fun_to_extfun (f: Π x:α, β x): extfun α β := ⟦f⟧
-    private def extfun_app (f : extfun α β) : Π x : α, β x := assume x,
-    quot.lift_on f (λ f : Π x : α, β x, f x) (λ f₁ f₂ h, h x)
-
-    -- BEGIN
-    theorem funext {f₁ f₂: Π x:α, β x} (h: ∀ x, f₁ x = f₂ x):
-    f₁ = f₂ := show extfun_app ⟦f₁⟧ = extfun_app ⟦f₂⟧, from
-      congr_arg extfun_app (sound h)
-    -- END
-
-  end
-
-.. todo:: finish dissecting funext proof
-
------------------------------------
-
-.. _subsingleton-type-class:
-
-Subsingleton type class
------------------------
-
-The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_subsingleton`` and related theorems. Any type inhabited by a single element is a subsingleton type. Here is the definition.
-
-::
-
-  class inductive subsingleton (α: Sort u): Prop
-  | intro (h: ∀ a b: α, a = b): subsingleton
-
-  protected def subsingleton.elim {α: Sort u}
-  [h: subsingleton α]: ∀ (a b: α), a = b :=
-  subsingleton.rec (λ p, p) h
-
-  protected def subsingleton.helim {α β: Sort u}
-  [h: subsingleton α] (h: α = β): ∀ (a: α) (b: β), a == b :=
-  eq.rec_on h (λ a b: α, heq_of_eq (subsingleton.elim a b))
-
-  instance subsingleton_prop (p: Prop): subsingleton p :=
-  ⟨λ a b, proof_irrel a b⟩
-
-  instance (p: Prop): subsingleton (decidable p) :=
-  subsingleton.intro
-  ( λ d₁,
-    match d₁ with
-    | (is_true t₁)  :=
-      ( λ d₂,
-        match d₂ with
-        | (is_true t₂)  := eq.rec_on (proof_irrel t₁ t₂) rfl
-        | (is_false f₂) := absurd t₁ f₂
-        end
-      )
-    | (is_false f₁) :=
-      ( λ d₂,
-        match d₂ with
-        | (is_true t₂)  := absurd t₂ f₁
-        | (is_false f₂) := eq.rec_on (proof_irrel f₁ f₂) rfl
-        end
-      )
-  end)
-
-  protected lemma rec_subsingleton {p: Prop} [h: decidable p]
-  {h₁: p → Sort u} {h₂: ¬p → Sort u}
-  [h₃: Π (h: p), subsingleton (h₁ h)]
-  [h₄: Π (h: ¬p), subsingleton (h₂ h)]:
-  subsingleton (decidable.rec_on h h₂ h₁) :=
-  match h with
-  | (is_true h)  := h₃ h
-  | (is_false h) := h₄ h
-  end
-
-
-.. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
-
-.. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
-
-.. _basic.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-.. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
-
-.. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
-
-.. _Coq: http://coq.inria.fr
-
-.. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-
-.. _Lean: https://leanprover.github.io/
-
-.. _Lean github repository:  https://github.com/leanprover/lean/
-
-.. _Lean Reference Manual: https://leanprover.github.io/reference/
-
-.. _Lean Standard Library: https://github.com/leanprover/lean
-
-.. _Lean Tutorial: https://leanprover.github.io/tutorial/
-
-.. _lean-ualib: https://github.com/UniversalAlgebra/lean-ualib/
-
-.. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
-
-.. _mathlib: https://github.com/leanprover-community/mathlib/
-
-.. _NuPRL: http://www.nuprl.org/
-
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-
-.. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
-
-.. _vscode: https://code.visualstudio.com/
-
-
-.. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
-.. _classical.lean: https://github.com/leanprover/lean/blob/master/library/init/classical.lean
-.. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
-.. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
-.. _logic.lean: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
-.. _wf.lean: https://github.com/leanprover/lean/blob/master/library/init/wf.lean
-.. _`lean/library/init/data`: https://github.com/leanprover/lean/tree/master/library/init/data
-.. _nat (dir): https://github.com/leanprover/lean/blob/master/library/init/data/nat
-.. _prod.lean: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
-.. _propext.lean: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
-.. _quot.lean: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
-.. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
-.. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
-.. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
-.. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
-.. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
-.. _sigma (dir): https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
-.. _`sigma/basic.lean`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
-.. _setoid.lean: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
