@@ -3,11 +3,11 @@ image: alpine
 pages:
   script:
   - apk --no-cache add py2-pip python-dev
-  - pip install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
-  - pip install sphinx
-  - pip install sphinxcontrib-bibtex
-  - pip install sphinxcontrib-proof
-  - pip install sphinxcontrib-tikz
+  - pip3 install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
+  - pip3 install sphinx
+  - pip3 install sphinxcontrib-bibtex
+  - pip3 install sphinxcontrib-proof
+  - pip3 install sphinxcontrib-tikz
   - apk --no-cache add make
   - make html
   - mv _build/html/ public/
@@ -18,3 +18,8 @@ pages:
   - master
 
   #- pip install 'wheel>=0.29' # needed for old ubuntu versions, https://github.com/pallets/markupsafe/issues/59
+  # - python3 -m pip install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
+  # - python3 -m pip install sphinx
+  # - python3 -m pip install sphinxcontrib-bibtex
+  # - python3 -m pip install sphinxcontrib-proof
+  # - python3 -m pip install sphinxcontrib-tikz
