@@ -477,6 +477,9 @@ Nomenclature
     polymorphic function
       a function that operates in the "same way" independently of the object parameter.
 
+    polymorphic type
+      (to do: fill in definition)
+
     poset
       A **poset** :math:`⟨X, ⊑⟩` consists of a set :math:`X` and an :term:`antisymmetric` :term:`preorder` :math:`⊑` on :math:`X`.
 

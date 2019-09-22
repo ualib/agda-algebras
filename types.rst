@@ -8,18 +8,22 @@
 Types
 =====
 
-This section presents some of the rudiments of **type theory**.  For more details, a nice and easy introduction to the basics is `Logic and Proof`_. 
+This section presents some of the rudiments of :term:`type theory`.  For more details, a nice and gentle introduction to the basics of both (type theory and the `Lean`_ :term:`proof assistant`) is the textbook `Logic and Proof`_, by Avigad, et al.
 
-A more comprehensive treatment is :cite:`Mitchell:1996`; more advanced treatments are :cite:`Nederpelt:2014` and :cite:`HoTT:2013`.
+A more comprehensive (yet still gentle) treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced treatments are found in the book *Type Theory and Formal Proof* by Geuvers and Nederpelt :cite:`Nederpelt:2014`, as well as "The HoTT Book" :cite:`HoTT:2013` (authored by two dozen participants of the Univalent Foundations Program held in 2013 at the IAS in Princeton).
+
+-----------------------------
 
 .. _curry-howard:
 
 Curry-Howard correspondence
 ----------------------------
 
-The rule for *function application* corresponds, under the “Curry-Howard” or “propositions-as-types” correspondence, to the *implication elimination* rule of natural deduction (sometimes called *modus ponens*). It is the following:
+The rule for *function application* corresponds, under the “Curry-Howard” or “propositions-as-types” correspondence, to the *implication elimination* rule of natural deduction (sometimes called *modus ponens*).
 
-This simply codifies our intuitive notion of function application, viz. applying the function :math:`f` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an inhabitant :math:`f\,a` of the codomain :math:`B`. If we interpret :math:`A` and :math:`B` as propositions, :math:`f` as a proof of the implication :math:`A → B`, and :math:`a` as a proof of :math:`A`, then the rule :math:`\mathsf{app}` becomes the implication elimination rule (*modus ponens*).
+This simply codifies our intuitive notion of function application, viz., applying the function :math:`f: A → B` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an element :math:`f\,a` of the codomain :math:`B`.
+
+If we interpret the types :math:`A` and :math:`B` as propositions, the function :math:`f: A → B` as a proof of the proposition ":math:`A` implies :math:`B`," and if :math:`a` is a proof of :math:`A`, then the application rule is the so called *implication elimination* rule (or, *modus ponens*); that is, "if :math:`A → B` and :math:`A`, then :math:`B`."
 
 ---------------------------------------
 
@@ -30,31 +34,35 @@ This simply codifies our intuitive notion of function application, viz. applyin
 Dependent types
 ---------------
 
-Lean_is a functional programming language that supports **dependent types**. Here we give an example demonstrating that dependent types provide a more precise representation of the types of certain functions that are important in universal algebra and elsewhere. Besides being more precise and elegant, this representation is intrinsically computational.
+`Lean`_ is a functional programming language that supports :term:`dependent types <dependent type>`.
 
-Before getting to the example, however, we should first briefly explain what makes dependent types *dependent*, and why they are so useful.
+In the present section we will present an example that demonstrates how dependent types can be used to representation of many concepts that are important in universal algebra in a more precise and elegant way. Besides being more precise and elegant, the representation we present is intrinsically computational. [1]_ 
 
-Types can depend on *parameter values*.  For example, the type ``list α`` (lists with elements from α) depends on the argument α and the type ``vec α n`` (vectors of length ``n`` with entries from α) depends on ``α: Type`` (the type of the elements in the vectors) and ``n: ℕ`` (the length of the vectors).
+Before the example, however, let us first briefly mention what it is that makes a type *dependent*, and why :term:`dependent types <dependent type>` are so useful.
 
-The first, ``list α``, is an example of a **polymorphic type** which is usually not considered a kind of dependent type.  One could argue that the type ``list α`` *depends* on the argument α; for example, this dependence distinguishes ``list ℕ`` from ``list bool``.  However, since the dependence is on the argument ``α``, which denotes denotes a type, rather than a particular *value* (or *inhabitant*) of a type, this dependence is called **polymorphism**.
+Types can depend on *parameter values*.  For example, the type ``list α`` (lists with elements from ``α``) depends on the argument ``α`` and the type ``vec α n`` (vectors of length ``n`` with entries from ``α``) depends on ``α:Type`` (the type of the elements that populate the vectors) and ``n:ℕ`` (the length of the vectors).
 
-Contrast this with the example in the previous paragraph, where the type ``vec α n`` depends on the *value* of the variable ``n`` (which is an *inhabitant* of the type ℕ). This is the sort of dependence for which we reserve the moniker "dependent type".
+The first, ``list α``, is an example of a :term:`polymorphic type`, which is not usually considered a "dependent type."  One could argue that the type ``list α`` *depends* on the argument ``α``; for example, this dependence distinguishes ``list ℕ`` from ``list bool``.  However, since the dependence is on the argument ``α``, which denotes denotes a type, rather than a particular *value* (or *inhabitant*) of a type, this dependence is referred to as **polymorphism**.
 
-Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should cons have? Such a function is polymorphic: we expect the ``cons`` function for ℕ, ``bool``, or an arbitrary type α to behave the same way. So it makes sense to take the type to be the first argument to ``cons``, so that for any type, α, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a: α`` and a list ``l: list α``, and returns a new list, so that ``con α a l: list α``.
+Contrast this with the example in the previous paragraph, where the type ``vec α n`` depends on the *value* of the variable ``n`` (which is an *inhabitant* of the type ℕ). This is the sort of dependence for which we reserve the moniker "dependent type."
 
-It is clear that ``cons α`` should have type ``α → list α → list α``. But what type should ``cons`` have?  Certainly not ``Type → α → list α → list α`` since the ``α``  appears as if from nowhere, while it should refer to an argument of type ``Type``, 
+Suppose we wish to write a function ``cons`` that inserts a new element at the head of a list. What type should ``cons`` have? Such a function is polymorphic: we expect the ``cons`` function for ℕ, ``bool``, or an arbitrary type ``α`` to behave in roughly the same way, so it makes sense to take the type to be the first argument to ``cons``. Thus, for any type ``α``, ``cons α`` is the insertion function for lists of type ``α``. In other words, for every ``α``, ``cons α`` is the function that takes an element ``a:α`` and a list ``l:list α``, and returns a new list---the concatenation of the single element list ``(a)`` with the list ``l``---so that ``con α a l`` is again of type ``list α``.
 
-In other words, we must first assume that a specific (arbitrary) ``α: Type`` is the first argument to the function, so that the type of the next two elements are can be specified as ``α`` and ``list α``. This is an instance of a :term:`Pi type`, or :term:`dependent function type <Pi type>`. Given ``α: Type`` and ``β: α → Type``, think of ``β`` as a family of types, one type ``β a`` for each ``a: α``.
+Evidently, ``cons α`` has type ``α → list α → list α``. But what type should ``cons`` have?  Certainly not ``Type → α → list α → list α`` since the ``α``  appears as if from nowhere, while it should refer to an argument of type ``Type``, 
 
-In this case, the type ``Π(x:α),β x`` denotes the type of functions ``f`` with the property that, for each ``a: α``, ``f a`` is an element of ``β a``. In other words, the type of the value returned by ``f`` *depends* on its input.
+To put it another way, we first assume that a specific (arbitrary) ``α:Type`` is the first argument to the function, and consequently the type of the next two elements are ``α`` and ``list α``. This is an instance of a :term:`Pi type`, or :term:`dependent function type <Pi type>`. Given ``α:Type`` and ``β:α → Type``, think of ``β`` as a family of types, one type ``β a`` for each ``a:α``.
 
-Notice that ``Π(x:α),β`` makes sense for any expression ``β: Type``. When the value of ``β`` depends on ``x`` (as does, for example, the expression ``β x`` in the previous paragraph), ``Π(x:α),β`` denotes a dependent function type. If ``β`` doesn't depend on ``x``, then ``Π(x:α),β`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is just notation for ``Π(x:α),β`` in the special case in which ``β`` does not depend on ``x``.
+In this case, the type ``Π(a:α),β x`` denotes the type of functions ``f`` with the property that ``f a`` is an element of ``β a``, for each ``a:α``. In other words, the type of the value returned by ``f`` *depends* on its input.
+
+Notice that ``Π(a:α),β`` makes sense for any expression ``β:Type``. When the value of ``β`` depends on ``a`` (as does ``β a`` in the previous paragraph), ``Π(a:α),β`` denotes a dependent function type.
+
+If, on the other hand, ``β`` does not depend on ``a``, then ``Π(a:α),β`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is simply notation for ``Π(a:α),β`` for the special case in which ``β`` does not depend on ``a``.
 
 .. index:: type of; dependent functions (Pi type)
 
-The :term:`Pi type` :math:`\Pi_{(x:A)}, B x`, also known as the `dependent function type <pi-type>`_, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
+To summarize, the :term:`Pi type` :math:`\Pi_{(a:A)}, B a` generalizes the function type :math:`A → B` by allowing the codomain :math:`B a` to depend on the *value* :math:`a: A` (the function's "input").
 
-The simplest example of a pi type is the Cartesian product :math:`B_0 × B_1` which, when viewed as the collection of functions that map :math:`i ∈ \{0, 1\}` to some element of :math:`B_i`, is the type :math:`\Pi_{(i:\mathsf{bool})}, B_i`. [1]_
+The simplest example of a Pi type is the Cartesian product :math:`B_0 × B_1` which, when viewed as the collection of functions that map :math:`i ∈ \{0, 1\}` to some element of :math:`B_i`, is the type :math:`\Pi_{(i:\mathsf{bool})}, B_i`. [1]_
 
 .. index:: type of; dependent pairs
 
@@ -426,7 +434,7 @@ General composition of operations
 
 In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).
 
-By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`. [2]_
+By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`. [3]_
 
 If we identify the natural number :math:`n ∈ ℕ` with the set :math:`\{0,1,\dots, n-1\}`, and the :math:`\mathrm{ntuple}` type with function type :math:`n →  A`, then the type of :math:`n`-ary operations on :math:`A` is :math:`(n → A) → A`. Evaluating such an operation :math:`f:(n → A) → A` at the tuple :math:`a: n → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
 
@@ -578,10 +586,13 @@ In :numref:`Chapter %s <inductively-defined-types>` we will describe the key rol
 .. rubric:: Footnotes
 
 .. [1]
-   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions yields a :term:`pi type`.
+   What we mean by "intrinsically computational" ought to become clearer as one progresses through this documentation.
 
 .. [2]
-   Using the tuple constructor described in :numref:`tuple-functors`, we could also represent such an operation as :math:`f: \mathrm{ntuple} A → A`, but we prefer to reserve ntuple for instances in which it acts as a functor.
+   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions results in a :term:`Pi type`.
+
+.. [3]
+   Using the tuple constructor described in :numref:`tuple-functors`, we could also represent such an operation as :math:`f: \mathrm{ntuple} A → A`. However,  we wish to postpone taking this viewpoint until we have some experience with categories and functors.
 
 .. include:: hyperlink_references.rst
 
