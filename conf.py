@@ -27,8 +27,8 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = u'The Lean Universal Algebra Library'
-copyright = u'2019, William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
-author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
+copyright = u'2019, William DeMeo and Siva Somayyajula'
+author = u'William DeMeo and Siva Somayyajula'
 
 # The short X.Y version.
 version = u'0'
@@ -75,7 +75,7 @@ proof_theorem_types = {
     "property": "Property",
     "question": "Question",
     "prop": "Proposition",
-    "theorem": "Theorem",
+    "theorem": "Theorem"
 }
 
 # Add any paths that contain templates here, relative to this directory.

@@ -29,10 +29,10 @@ The idea is to demonstrate the power and utility of implementing the theory in a
 .. index:: operation, arity, image
 .. index:: ℕ
 
-.. _operation:
+.. _operations:
 
-Operation
----------
+Operations
+-----------
 
 The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the set of natural numbers.
 
@@ -58,9 +58,9 @@ Again, we may formally identify the function :math:`h ∘ a: m → A` with its i
 
 .. index:: signature, arity
 
-.. _signature:
+.. _signatures:
 
-Signature
+Signatures
 ----------
 
 Classically, a **signature** is a pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an "arity" function :math:`ρ: F → ℕ`.
@@ -105,9 +105,9 @@ In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theor
 
 .. index:: triple: algebra; algebraic structure; universal algebra
 
-.. _algebraic-structure:
+.. _algebraic-structures:
 
-Algebraic structure
+Algebraic structures
 ----------------------
 
 An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
@@ -118,7 +118,7 @@ An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)
 
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`the-universal-algebra-type`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`the-algebra-type`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
 
 ---------------------------
 
@@ -126,10 +126,10 @@ Some of the renewed interest in universal algebra has focused on representations
 .. index:: 𝖲(𝔸)
 .. index:: 𝖲𝗀
 
-.. _subuniverse:
+.. _subuniverses:
 
-Subuniverse
------------
+Subuniverses
+-------------
 
 This section introduces two important concepts in universal algebra, **subuniverse** and **subalgebra**.
 
@@ -246,12 +246,12 @@ Our formal implementation (in `Lean`_) of the concept of subalgebra is described
 
 ---------------------------
 
-.. index:: ! Subdirect product
+.. index:: ! subdirect product
 
-.. _subdirect-product:
+.. _subdirect-products:
 
-Subdirect product
------------------
+Subdirect products
+-------------------
 
 If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : k → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
 
@@ -268,10 +268,10 @@ If :math:`R` is compatible with the product algebra and if the projection of :ma
 
 .. index:: ! homomorphism
 
-.. _homomorphism:
+.. _homomorphisms:
 
-Homomorphism
-------------
+Homomorphisms
+-------------
 
 Let :math:`𝔸 = ⟨ A, F^𝔸 ⟩` and :math:`𝔹 = ⟨ B, F^𝔹 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
 

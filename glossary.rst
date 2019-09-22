@@ -121,7 +121,7 @@ Nomenclature
       Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
 
     clone
-      An **operational clone** (or just **clone**) on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the :term:`projection operations <projection operation>` and is closed under :term:`general composition`.
+      An **operational clone** (or just **clone**) on a nonempty set :math:`A` is a set of operations on :math:`A` that contains all :term:`projection operations <projection operation>` and is closed under :term:`general composition`.
 
     closed
       A subset :math:`B ⊆ A` is called **closed** under the operations in :math:`F` if, for all :math:`f ∈ F` and all :math:`a : ρ f → B`, it is the case that :math:`f a ∈ B`.
@@ -348,7 +348,7 @@ Nomenclature
       If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. (See :numref:`terms` for the definition of :math:`T_n`.) The height is a useful index for recursion and induction.
 
       If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` (see :numref:`leans-type-hierarchy`).
-
+       
     Heyting algebra
       A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
    
@@ -489,6 +489,9 @@ Nomenclature
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
 
+    projection operation
+      The :math:`i`**-th** :math:`k`**-ary projection operation on** :math:`A` is denoted by :math:`π^k_i : (k → A) → A` and defined for each :math:`k`-tuple :math:`a: k → A` by :math:`π^k_i \, a  = a\, i`.  
+
     projection operator
       If :math:`σ : k → n` is a :math:`k`-tuple of numbers in the set :math:`n = \{0, 1, \dots, n-1\}`, then we can compose an :math:`n`-tuple :math:`a ∈ ∏_{i<n} A_i` with :math:`σ` yielding :math:`a ∘ σ ∈ ∏_{i < k} A_{σ(i)}`.
 
@@ -602,6 +605,11 @@ Nomenclature
 
     universal property
       The unique morphism property of :term:`initial object` is what we refer to as a **universal property,** and we say that the free object in a category :math:`\mathcal C` is *universal for* all other objects in :math:`\mathcal C`.
+
+    universe
+      In :term:`type theory`, everything has a type---even a type has a type.  If ``α`` is a type, then ``α``'s type is ``Type u`` for some **universe** ``u``.  More accurately, the ``u`` here is actually a variable and whatever (natural number) value it takes on will be the universe *level* of the type ``α``.
+
+      In universal algebra, the universe of an algebra is the set over which the algebra is defined.  For example, the universe of the algebra :math:`𝔸 = ⟨A, F^𝔸⟩` is :math:`A`.  (**N.B.** we sometimes use the word **carrier** to mean universe in this sense, which can be helpful when we wish to avoid confusion with the universe levels of Lean's type hierarchy.)
 
     universe polymorphism
       We use an example to demonstrate this concept. Given a type ``α``, no matter to which type universe ``α`` belongs, we can form the type ``list α`` of lists of elements of type ``α``, and this type will have the same type universe as ``α``. In other terms, 

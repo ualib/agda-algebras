@@ -23,8 +23,10 @@ Some good references for this material are
 
 .. _leans-type-hierarchy:
 
-Lean's type hierarchy [1]_
----------------------------
+Lean's type hierarchy
+----------------------
+
+(See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.)
 
 Like its more mature cousins Coq and Agda, Lean_ takes for its logical foundations *dependent type theory* with *inductive types* and a countable hierarchy of *universes*. However, unlike Coq or Agda, Lean's universes are *non-cumulative*. This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use :term:`universe polymorphism` and lifting constructions.
 
@@ -666,9 +668,6 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 -----------------------------------
 
 .. rubric:: Footnotes
-
-.. [1]
-   See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.
 
 .. [2]
    On some systems, typing ``\{{`` and hitting the spacebar produces both left and right double curly braces---i.e., ``⦃ ⦄``.   On other systems, perhaps the ``\}}`` is needed for the closing ``⦄`` symbol. If neither works, the ascii symbols ``{{`` and ``}}`` may be used instead.

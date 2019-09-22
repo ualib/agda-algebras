@@ -21,6 +21,8 @@ The rule for *function application* corresponds, under the “Curry-Howard” or
 
 This simply codifies our intuitive notion of function application, viz. applying the function :math:`f` to an inhabitant :math:`a` of the domain :math:`A`, we obtain an inhabitant :math:`f\,a` of the codomain :math:`B`. If we interpret :math:`A` and :math:`B` as propositions, :math:`f` as a proof of the implication :math:`A → B`, and :math:`a` as a proof of :math:`A`, then the rule :math:`\mathsf{app}` becomes the implication elimination rule (*modus ponens*).
 
+---------------------------------------
+
 .. index:: dependent types 
 
 .. _dependent-types:
@@ -50,13 +52,13 @@ Notice that ``Π(x:α),β`` makes sense for any expression ``β: Type``. When th
 
 .. index:: type of; dependent functions (Pi type)
 
-The :term:`pi type` :math:`\Pi_{(x:A)}, B x`, also known as the :ref:`dependent function type <pi-type>`, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
+The :term:`pi type` :math:`\Pi_{(x:A)}, B x`, also known as the `dependent function type <pi-type>`_, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
 
 The simplest example of a pi type is the Cartesian product :math:`B_0 × B_1` which, when viewed as the collection of functions that map :math:`i ∈ \{0, 1\}` to some element of :math:`B_i`, is the type :math:`\Pi_{(i:\mathsf{bool})}, B_i`. [1]_
 
 .. index:: type of; dependent pairs (Sigma type)
 
-Similarly, the :term:`sigma type` :math:`\sum_{(x:A)}, B x`, also known as the :ref:`dependent pair type <sigma-type>`, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
+Similarly, the :term:`Sigma type` :math:`\sum_{(x:A)}, B x`, also known as the `dependent pair type <sigma-type>`_, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
 
 The simplest example of a Sigma type is the disjoint union :math:`B_0 \coprod B_1` which may be viewed as a collection of ordered pairs :math:`(i, b_i)`, where the first coordinate indicates to which set the second element belongs.  For example, if the two sets are :math:`B_0 = \{a, b\}` and :math:`B_1 = \{a, b, c\}` we form the disjoint union of :math:`B_0` and :math:`B_1` as follows:
 
@@ -72,9 +74,9 @@ Alternatively, some authors prefer to use an injection function to indicate the 
 
 .. index:: ! projection operator, ! idempotent operation
 
-.. _projection-operator:
+.. _projection-operators:
 
-Projection operator
+Projection operators
 --------------------
 
 An operation :math:`f: A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
@@ -171,10 +173,6 @@ where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is
 .. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
 
 --------------------------------
-
-
-
----------------------------------------
 
 .. _kernels-of-projections:
 

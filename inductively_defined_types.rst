@@ -34,7 +34,7 @@ Each inductively defined type, say ``foo``, is accompanied by an elimination pri
 .. _subuniverses-in-lean:
 
 Subuniverses in Lean
----------------------
+-----------------------
 
 The Lean code described in this section is found in the file ``subuniverse.lean`` in the ``src`` directory of the lean-ualib_ repository. [1]_
 
@@ -79,6 +79,8 @@ As a second demonstration of inductive types in Lean, we define a type represent
 
 .. include:: _static/free.lean.1.rst
 
+We have defined some ``local notation``, so we can write, e.g., ``f: ℱ`` instead of ``f: σ.ℱ`` and ``ρ f`` instead of ``σ.ρ f``. This bit of syntactic sugar results in Lean syntax for operation symbols that matches the informal algebraic analogue almost exactly. [2]_ 
+
 The collection of terms over :math:`X`, along with the operations :math:`F^{𝕋(X)} := \{\mathsf{app} f ∣ f : F\}` forms an algebra in the signature :math:`σ = (F, ρ)`, which we denote and define by :math:`𝕋(X) = ⟨T(X), F^{𝕋(X)}⟩` .
 
 Now, suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the signature σ and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
@@ -108,7 +110,7 @@ Clones in Lean
 
 In this section we see how the clone concept, described above in :numref:`clones`, can be implemented in Lean.  We then formalize the proof of :numref:`Obs %s <obs-five>` which asserts that we can define *clone* inductively and that the inductive definition is equivalent to our initial definition.
 
-The Lean code described in this section is in the source file `clone.lean`_, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
+The Lean code described in this section is in the source file `clone.lean`_, which reside in the ``src`` directory of the lean-ualib_ repository.
 
 In order to ensure that the code in this section works without importing other parts of the `lean-ualib`_, we begin with a block of code comprised of excerpts from other parts of the `lean-ualib`_.
 
@@ -143,6 +145,9 @@ Finally, we check that the foregoing definition is indeed a clone and that it is
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing on the william_ branch of the lean-ualib_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
-   
+   As of this writing (summer 2019), this documentation describes code residing on the william_ branch of the lean-ualib_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
+
+.. [2]
+   The only exception is that in type theory we make *typing judgments*, denoted by ``:``, rather than set membership judgments, denoted by ``∈``.
+
 .. include:: hyperlink_references.rst
