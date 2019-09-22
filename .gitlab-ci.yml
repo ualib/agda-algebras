@@ -2,7 +2,7 @@ image: alpine
 
 pages:
   script:
-  - apk --no-cache add py3-pip python3-dev
+  - apk --no-cache add py2-pip python-dev
   - pip3 install sphinx
   - pip3 install sphinxcontrib-bibtex
   - pip3 install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
