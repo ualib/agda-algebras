@@ -2,7 +2,7 @@ image: alpine
 
 pages:
   script:
-  - apk --no-cache add py2-pip python-dev
+  - apk --no-cache add py3-pip python-dev
   - pip3 install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
   - pip3 install sphinx
   - pip3 install sphinxcontrib-bibtex
@@ -17,7 +17,9 @@ pages:
   only:
   - master
 
-  #- pip install 'wheel>=0.29' # needed for old ubuntu versions, https://github.com/pallets/markupsafe/issues/59
+#    - apk --no-cache add py2-pip python-dev python3
+    
+    #- pip install 'wheel>=0.29' # needed for old ubuntu versions, https://github.com/pallets/markupsafe/issues/59
   # - python3 -m pip install https://bitbucket.org/gebner/pygments-main/get/default.tar.gz#egg=Pygments
   # - python3 -m pip install sphinx
   # - python3 -m pip install sphinxcontrib-bibtex
