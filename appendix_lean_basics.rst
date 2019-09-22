@@ -266,7 +266,7 @@ Dependent types
 
 .. _pi-type:
 
-Pi Type
+Pi type
 ~~~~~~~
 
 The **Pi type**
@@ -286,9 +286,9 @@ To see why ``Π(x:A),B x`` is a *dependent type*, consider the following example
 
 .. index:: ! type of; dependent pairs (Sigma type)
 
-.. _sigma-type:
+.. _sig-type:
 
-Sigma Type
+Sigma type
 ~~~~~~~~~~~
 
 The **Sigma type**

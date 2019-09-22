@@ -238,9 +238,9 @@ Also, our definition should caption the concept of an algebraic structure of any
 
 An algebra pairs a carrier with an interpretation of the op symbols.
 
-.. index:: type of; dependent pairs (Sigma type)
+.. index:: type of; dependent pairs
 
-The type ``sigma`` is the Sigma type, which is also known as a `dependent pair <sigma-type>`_ (i.e., dependent product). It is one of the most important types in dependent type theory, so let's pause for a moment to discuss it.
+The type ``sigma`` is the so called :term:`Sigma type`, which is also known as a :term:`dependent pair type`, or a :term:`dependent product type`. It is one of the most important types in (dependent) :term:`type theory`, so let's pause for a moment to discuss it.
 
 A **Sigma type** :math:`Σ_(x:A), B x` is also known as a **dependent pair type** because it generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second component to depend on the *value* :math:`x` of the first.
 

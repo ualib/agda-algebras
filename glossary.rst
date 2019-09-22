@@ -208,6 +208,9 @@ Nomenclature
     dependent pair type
       see :term:`Sigma type`
 
+    dependent product type
+      see :term:`Sigma type`
+
     dependent type
       A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`dependent-types`_.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ manual.
 

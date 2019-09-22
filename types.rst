@@ -52,11 +52,11 @@ Notice that ``Π(x:α),β`` makes sense for any expression ``β: Type``. When th
 
 .. index:: type of; dependent functions (Pi type)
 
-The :term:`pi type` :math:`\Pi_{(x:A)}, B x`, also known as the `dependent function type <pi-type>`_, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
+The :term:`Pi type` :math:`\Pi_{(x:A)}, B x`, also known as the `dependent function type <pi-type>`_, generalizes the function type :math:`A → B` by allowing the codomain :math:`B x` to depend on the value :math:`x: A` of the function's "input."
 
 The simplest example of a pi type is the Cartesian product :math:`B_0 × B_1` which, when viewed as the collection of functions that map :math:`i ∈ \{0, 1\}` to some element of :math:`B_i`, is the type :math:`\Pi_{(i:\mathsf{bool})}, B_i`. [1]_
 
-.. index:: type of; dependent pairs (Sigma type)
+.. index:: type of; dependent pairs
 
 Similarly, the :term:`Sigma type` :math:`\sum_{(x:A)}, B x`, also known as the `dependent pair type <sigma-type>`_, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
 
