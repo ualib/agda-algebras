@@ -361,6 +361,9 @@ Nomenclature
     hom set
       Some authors require that :math:`\mathcal C(A,B)` always be a set and call :math:`\mathcal C(A,B)` the **hom set** from :math:`A` to :math:`B`.
 
+    implicit arguments
+      see sections `Implicit arguments`_ and `More on implicit arguments`_ of `TPL`_.
+
     impredicative
       A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
 
