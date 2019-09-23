@@ -330,14 +330,38 @@ Of course, to each, his own, particularly when it comes to notational sensibilit
 
 .. index:: ! fork, ! eval
 
-.. _fork-and-eval:
+.. _fork:
 
-fork and eval
-~~~~~~~~~~~~~
+fork
+~~~~
 
 We begin by defining the "fork" and "eval" operators mentioned in the opening paragraph of this section.
 
-Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and functions :math:`f: A → B` and :math:`g: A → C`, there exists a unique function :math:`⟨f, g⟩: A → B × C` such that :math:`π_1 ⟨f, g⟩ = f` and :math:`π_2 ⟨f, g⟩ = g`.  Evidently, this function is defined for each :math:`a: A` by :math:`⟨f, g⟩(a) = (f\,a, g\,a): B × C`.
+Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and functions :math:`f: A → B` and :math:`g: A → C`, there exists a unique function :math:`(f, g): A → B × C` such that :math:`π_1 (f, g) = f` and :math:`π_2 (f, g) = g`.
+
+Evidently, this (the so called universal) mapping is defined for each :math:`a: A` by :math:`(f, g)\, a = (f\,a, g\,a)`.
+
+Denote and define the (nondependent) **fork operator** (on :math:`A`, :math:`B`, and :math:`C`) by
+
+.. math:: \fork: (A → B) → (A → C) → A → (B × C),
+
+and, for each :math:`f: A → B` and :math:`g: A → C`, 
+
+.. math:: \fork \, f\, g: A → (B × C)
+
+is the function that takes each :math:`a:A` to the pair,
+  
+.. math:: \fork \, f\, g\, a = (f\,a, g\,a): B × C.
+
+(Alternatively, we could have taken the domain of :math:`\fork` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
+
+The definition of the universal mapping for the product naturally generalizes to arbitrary collections of functions with common domain.  Therefore, it's no surprise that the definition of :math:`\fork` is just a special case of a more general definition that operates on :term:`dependent function types <dependent function type>`, as we now describe.
+
+If :math:`n<ω` and if :math:`f_i: A → B_i` for each :math:`0≤ i < n`, then there exists a unique function of type :math:`A → (B_0 × \cdots × B_{n-1})` whose :math:`k`-th projection is :math:`f_k`.  Precisely, this function is denoted by :math:`(f_0, \dots, f_{n-1})` and defined for each :math:`a:A` by
+
+.. math:: (f_0, \dots, f_{n-1})\, a = (f_0\, a, \dots, f_{n-1}\, a).
+
+More generally still, if :math:`I` is a type and :math:`f: ∏_{(i:I)} (A → B_i)` denotes an :math:`I`-tuple of functions, then define :math:`\fork f : A → ∏_{(i:I)}B_i` to be the function that takes :math:`a:A` to the :math:`I`-tuple :math:`\fork f \, a`, where :math:`\fork f \, a \, i = f_i\, a`.
 
 .. .. raw:: latex
 ..    \begin{prooftree}
@@ -355,39 +379,32 @@ Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :ma
 
 .. .. include:: latex_images/first_order_logic.8.tex
 
-Denote and define the (nondependent) **fork operator** (on :math:`A`, :math:`B`, and :math:`C`) by
-
-.. math:: \fork: (A → B) → (A → C) → A → (B × C),
-
-and, for each :math:`f: A → B` and :math:`g: A → C`, 
-
-.. math:: \fork \, f\, g: A → (B × C)
-
-is the function that takes each :math:`a:A` to the pair,
-  
-.. math:: \fork \, f\, g\, a = (f\,a, g\,a): B × C.
-
-(Alternatively, we could have taken the domain of :math:`\fork` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
-
-The above definition of :math:`\fork` is really just a special case of a more general definition that operates on :term:`dependent function types <dependent function type>`, as we now describe.
-
-Let :math:`A` be a type and for each :math:`a: A` let :math:`B_a` and :math:`C_a` be types.
+To generalize in another direction, suppose that :math:`A` is a type and that for each :math:`a:A` we have types :math:`Ba` and :math:`Ca`.
 
 Denote and define the (dependent) **fork operator** by
 
-.. math:: \fork: ∏_{(a:A)} B_a → ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a),
+.. math:: \fork: ∏_{(x:A)} Bx → ∏_{(y:A)} Cy → ∏_{(a:A)} (Ba × Ca),
 
-and, for each :math:`f: ∏_{(a:A)} B_a` and :math:`g: ∏_{(a:A)} C_a`,
+and, for each :math:`f: ∏_{(x:A)} Bx` and :math:`g: ∏_{(y:A)} Cy`,
 
-.. math:: \fork \, f\, g: ∏_{(a:A)} B_a × C_a
+.. math:: \fork \, f\, g: ∏_{(a:A)} Ba × Ca
 
 is the function that maps each :math:`a:A` to the pair
 
-.. math:: \fork \, f\, g\, a = (f\,a, g\,a): B_a × C_a.
+.. math:: \fork \, f\, g\, a = (f\,a, g\,a): Ba × Ca.
 
 Since our definition of :math:`\fork` is presented in curried form, we can partially apply it to obtain the typing judgment,
 
-.. math:: \fork \, f: ∏_{(a:A)} C_a → ∏_{(a:A)} (B_a × C_a).
+.. math:: \fork \, f: ∏_{(a:A)} Ca → ∏_{(a:A)} (Ba × Ca).
+
+Finally, we describe the most general version of fork that we need.  Suppose :math:`I` and :math:`A` are types and suppose that for each :math:`i:I` we have a (dependent) function :math:`f_i: ∏_{(a:A)}B_i \, a`.  That is, the codomain type :math:`B_i \, a` depends on both :math:`i` and :math:`a`. Let :math:`f: ∏_{(i:I)} ∏_{(a:A)}B_i \, a` be the tuple of these functions so that, for each :math:`i:I`, we have :math:`f\, i = f_i`.
+
+(todo: complete this subsection)
+
+.. _eval:
+
+eval
+~~~~
 
 Next, we define a :term:`function application` operation on types :math:`A` and :math:`B`.
 
@@ -395,7 +412,7 @@ Denote and define the **eval operator** by
 
 .. math:: \eval: ((A → B) × A) → B
 
-and for each :math:`f: A → B` and :math:`a: A`, :math:`\eval \, f` is the function that maps each :math:`a: A` to :math:`f\, a:B`. 
+and for each :math:`f: A → B`, :math:`\eval \, f` is the function that maps each :math:`a: A` to :math:`f\, a:B`. 
 
 Notice that :math:`\eval` is polymorphic as it depends on the types :math:`A` and :math:`B`. Indeed,
 
@@ -407,15 +424,15 @@ so it would seem that when we introduced the :math:`\eval` operation above, we s
   
 However, our implementation of :math:`\eval` will use implicit types, so :math:`A` and :math:`B` need not be mentioned explicitly.
 
-As an example of function application, let :math:`f: ∏_{a:A}(C_a → D)` and :math:`g: ∏_{(a:A)} C_a` and :math:`a: A`. Then,
+As an example of function application, let :math:`f: ∏_{a:A}(Ca → D)` and :math:`g: ∏_{(a:A)} Ca` and :math:`a: A`. Then,
 
-  :math:`f\,a : C_a → D` and :math:`g\,a: C_a` and 
+  :math:`f\,a : Ca → D` and :math:`g\,a: Ca` and 
 
 .. math:: \eval \, (f\,a) \, (g\,a) = (f\,a)(g\,a): D.
 
 We could also have specified the types explicitly. For this purpose, we adopt the :math:`@` symbol, which is used by `Lean`_ for this purpose.
 
-.. math:: (@ \eval\, C_a \, D)\,  (f\,a)\, (g\,a) = (f\,a)(g\, a): D.
+.. math:: (@ \eval\, Ca \, D)\,  (f\,a)\, (g\,a) = (f\,a)(g\, a): D.
 
 Let us briefly mention a typical use case on which our definition of general composition in :numref:`general-composition-of-operations` will depend. In the foregoing, substitute
 
@@ -423,7 +440,7 @@ Let us briefly mention a typical use case on which our definition of general com
   
   * :math:`A` for :math:`D`, and
   
-  * :math:`k_i → A` for :math:`C_a`, for each :math:`i:n`.
+  * :math:`k_i → A` for :math:`Ca`, for each :math:`i:n`.
 
 Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus,
 
@@ -477,7 +494,7 @@ Let :math:`a: ∏_{(i:n)} (k_i → A)` be the function defined for each :math:`0
   
 Then the :math:`n`-tuple of arguments in expression :eq:`args` above can be identified with the :math:`n`-tuple :math:`a = (a\,0, \dots, a\,(n-1))` of functions.
 
-Recalling the definitions of :math:`\fork ` and :math:`\eval` (:numref:`fork-and-eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
+Recalling the definitions of :math:`\fork ` (:numref:`fork`) and :math:`\eval` (:numref:`eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
 
 If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then 
 
