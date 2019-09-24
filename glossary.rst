@@ -103,7 +103,7 @@ Nomenclature
       .. todo:: fill in definition    
 
     Calculus of Inductive Constructions
-      see https://en.wikipedia.org/wiki/Calculus_of_constructions
+      See https://en.wikipedia.org/wiki/Calculus_of_constructions.
 
     canonical normal form
       See the `ncatlab page on normal forms <https://ncatlab.org/nlab/show/normal+form>`_.
@@ -112,7 +112,7 @@ Nomenclature
       has categories as objects and functors as morphisms.
 
     category of small categories
-      see :term:`Cat`
+      See :term:`Cat`.
 
     Choice
       is short for the `Axiom of Choice <https://en.wikipedia.org/wiki/Axiom_of_choice>`_.
@@ -167,10 +167,10 @@ Nomenclature
       
       Thus, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`(\mathbf{eval} \, \mathbf{fork} \, g) (a)` has type :math:`n → A`, which is the domain type of :math:`f`.  Therefore, :math:`f \, (\mathbf{eval} \, \mathbf{fork}\, g)\, (a)` has type :math:`A`.
 
-      (For a slightly more general description of composition, see :numref:`greater-generality`.)
+      For a slightly more general description of composition, see :numref:`greater-generality`.
 
     computable
-      see https://pdfs.semanticscholar.org/1364/d8e8763891b84a9383b722d82294ae0a736b.pdf
+      See https://pdfs.semanticscholar.org/1364/d8e8763891b84a9383b722d82294ae0a736b.pdf.
 
     concrete category
       A **concrete category** is one whose objects are sets and whose morphisms are functions defined on these sets (possibly satisfying some other special properties).
@@ -179,7 +179,7 @@ Nomenclature
       If :math:`f : A → B` and :math:`g : B → C`, then :math:`\cod f = \dom g` and we say that :math:`f` and :math:`g` are **consecutive functions**.
 
     constructive
-      see https://plato.stanford.edu/entries/mathematics-constructive/ and https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_mathematics) and https://en.wikipedia.org/wiki/Constructive_proof
+      See https://plato.stanford.edu/entries/mathematics-constructive/ and https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_mathematics) and https://en.wikipedia.org/wiki/Constructive_proof.
 
     contravariant powerset functor
       The **contravariant powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`g : B → A` the morphism :math:`g^← : PA → PB` is given by :math:`g^← (S) = \{b ∈ B : g(b) ∈ S\}` for each :math:`S ⊆ A`.
@@ -194,22 +194,22 @@ Nomenclature
       The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
 
     Curry-Howard correspondence
-      the correspondence between propositions and types, and proofs and programs; a proposition is identified with the type of its proofs, and a proof is a program of that type.
+      the correspondence between propositions and types, and proofs and programs; a proposition is identified with the type of its proofs, and a proof is a program of that type. See also https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence.
 
     currying
-      see https://en.wikipedia.org/wiki/Currying
+      See https://en.wikipedia.org/wiki/Currying.
 
     data-relevant
       .. todo:: insert definition
 
     dependent function type
-      see :term:`Pi type`
+      See :term:`Pi type`.
 
     dependent pair type
-      see :term:`Sigma type`
+      See :term:`Sigma type`.
 
     dependent product type
-      see :term:`Sigma type`
+      See :term:`Sigma type`.
 
     dependent type
       A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`dependent-types`_.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ manual.
@@ -263,7 +263,7 @@ Nomenclature
       The **evaluation natural transformation** is denoted by :math:`eval^A : F_A →  \mathrm{id}_{\mathbf{Set}}` and defined by... (**Todo** complete definition)
 
     extensional
-      An *extensional* definition of a term lists everything that qualifies as something to which that term refers. (See also :term:`function extensionality`.)
+      An *extensional* definition of a term lists everything that qualifies as something to which that term refers. See also :term:`function extensionality`.
 
     faithful functor
       A functor :math:`F : \mathcal C → \mathcal D` is called **faithful** if for all objects :math:`A`, :math:`B` in :math:`\mathcal C_{\mathrm{obj}}`, the map :math:`\mathcal C(A, B) → \mathcal D(F A, F B)` is injective.
@@ -286,7 +286,7 @@ Nomenclature
 
       .. math:: \mathbf{fork}\, (h)(k)(a) = (h\,a, k\,a): (C_a → D) × C_a.
 
-      Thus, :math:`\mathbf{eval} \, \mathbf{fork}\, (h)(k)(a) = (h\, a)(k\, a)` is of type :math:`D`. (See also :numref:`general-composition`.)
+      Thus, :math:`\mathbf{eval} \, \mathbf{fork}\, (h)(k)(a) = (h\, a)(k\, a)` is of type :math:`D`. See also :numref:`general-composition`.
 
     free algebra
       Let :math:`\mathcal V` be a variety of algebras of a certain :term:`signature`. Let :math:`X` be a set.  The **free algebra generated by** :math:`X` is denoted by :math:`\mathbb F(X)` and is defined as follows: for every algebra :math:`\mathbf A = ⟨A, \dots⟩ ∈ \mathcal V` and every function :math:`f : X → A`, there exists a unique homomorphism :math:`h:\mathbb F(X) → \mathbf A` such that :math:`\forall x ∈ X, h(x) = f(x)`.  We say that :math:`\mathbb F (X)` is *universal for* :math:`\mathcal V`.
@@ -318,7 +318,10 @@ Nomenclature
          def equiv (f₁ f₂: Π x:α, β x): Prop := ∀ x, f₁ x = f₂ x
 
     function application
-      see :term:`eval`
+      See :term:`eval`.
+
+    functional programming
+      See https://en.wikipedia.org/wiki/Functional_programming.
 
     functor
       A **functor** :math:`F : \mathcal C → \mathcal D` consists of a function :math:`F_0` that maps objects of :math:`\mathcal C` to objects of :math:`\mathcal D` and a function :math:`F_1` that maps morphisms of :math:`\mathcal C` to morphisms of :math:`\mathcal D` such that :math:`F` preserves (co)domains of morphisms, identities, and compositions.
@@ -327,19 +330,19 @@ Nomenclature
       The **functor category** from :math:`\mathcal C` to :math:`\mathcal D` has functors :math:`F : \mathcal C → \mathcal D` as objects and natural transformations :math:`α : F ⇒ G` as morphisms.
 
     Galois connection
-      see https://en.wikipedia.org/wiki/Galois_connection
+      See https://en.wikipedia.org/wiki/Galois_connection.
 
     Galois pair
-      see https://en.wikipedia.org/wiki/Galois_connection
+      See https://en.wikipedia.org/wiki/Galois_connection.
 
     generalized element
       A morphism :math:`h: X → A` is sometimes called a **generalized element** of :math:`A`. A morphism :math:`f` is mono when it is injective on the generalized elements of its domain.
 
     general composition
-      see :term:`composition of operations`
+      See :term:`composition of operations`.
 
     global element
-      see :term:`point`
+      See :term:`point`.
 
     graph morphism
       Let :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
@@ -348,9 +351,9 @@ Nomenclature
       A **group** :math:`𝐆 = (G, e, \ ^{-1}, ⋆)` consists of a set :math:`G` together with a nullary (constant) operation :math:`e`, a unary (inverse) operation :math:`\ ^{-1}: G → G`, and a binary operation :math:`⋆ : G^2 → G`, such that :math:`(G, e, ⋆)` is a monoid and :math:`x ⋆ x^{-1} = e` for all :math:`x ∈ G`.
 
     height
-      If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. (See :numref:`terms` for the definition of :math:`T_n`.) The height is a useful index for recursion and induction.
+      If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. See :numref:`terms` for the definition of :math:`T_n`.
 
-      If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` (see :numref:`leans-type-hierarchy`).
+      If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` See :numref:`leans-type-hierarchy`.
        
     Heyting algebra
       A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
@@ -361,8 +364,11 @@ Nomenclature
     hom set
       Some authors require that :math:`\mathcal C(A,B)` always be a set and call :math:`\mathcal C(A,B)` the **hom set** from :math:`A` to :math:`B`.
 
+    implication elimination
+      See the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `Logic and Proof`_ book.
+
     implicit arguments
-      see sections `Implicit arguments`_ and `More on implicit arguments`_ of `TPL`_.
+      See sections `Implicit arguments`_ and `More on implicit arguments`_ of `TPL`_.
 
     impredicative
       A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
@@ -373,7 +379,7 @@ Nomenclature
     inductive type
       A type is called **inductive** or **inductively defined** if...
       
-      (See also: :numref:`inductively-defined-types` and the :term:`definition of the recursor <recursor>`.)
+      See also: :numref:`inductively-defined-types` and the :term:`definition of the recursor <recursor>`.
       
     initial object
       An object :math:`\mathbf{0}` in a category is called an **initial**  (or a **free**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`!_A:\mathbf{0}\to A`.
@@ -388,10 +394,10 @@ Nomenclature
       By the kernel of a function :math:`f: A → B` we mean the binary relation on :math:`A` denoted and defined by :math:`\mathrm{ker} f := \{(a₁, a₂) : f a₁  = f a₂\}`.   
 
     Kleene closure
-      (see :term:`free monoid`)
+      See :term:`free monoid`.
 
     lambda calculus
-      see https://en.wikipedia.org/wiki/Lambda_calculus
+      See https://en.wikipedia.org/wiki/Lambda_calculus.
 
     lattice
       a :term:`poset` whose universe is closed under all *finite* meets and joins is called a lattice.
@@ -400,16 +406,16 @@ Nomenclature
       a function :math:`f: X → Y` preserving finite meets and joins.
 
     law of the excluded middle
-      This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds. (See also the `LEM Section <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html?highlight=reduction%20rule#the-law-of-the-excluded-middle>`_ of the :term:`TPIL`.)
+      This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds. See also the `LEM Section <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html?highlight=reduction%20rule#the-law-of-the-excluded-middle>`_ of the :term:`TPIL`.
 
     lifts
       For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
 
     Lean
-      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: https://leanprover.github.io/
+      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: https://leanprover.github.io/.
 
     Leibniz equal
-      (see :term:`function extensionality`)
+      See :term:`function extensionality`.
 
     locally small category
       A category :math:`\mathcal C` is **locally small** if for every pair :math:`A`, :math:`B` of objects in :math:`\mathcal C` the collection of morphisms from :math:`A` to :math:`B` is a set.
@@ -419,6 +425,9 @@ Nomenclature
 
     metaprogram
       a program whose purpose is to modify the behavior of other programs; :term:`proof tactics <proof tactic>` form an important class of metaprograms.
+
+    modus ponens
+      See :term:`implication elimination`.
 
     monoid
       A **monoid** :math:`𝐌 = (M, e, ⋆)` consists of a set :math:`M` with a a **unit** element :math:`e ∈ M` and a binary operation :math:`⋆ : M^2 → M` such that for all :math:`x,y,z ∈ M`, :math:`x ⋆ e = x = e ⋆ x` and :math:`(x ⋆ y) ⋆ z = x ⋆ (y ⋆ z)`.
@@ -463,7 +472,7 @@ Nomenclature
       A **partial function** from :math:`A` to :math:`B` is a total function on some (potentially proper) subset :math:`\dom_f` of :math:`A`.
 
     partial order
-      see :term:`partial order`
+      See :term:`partial order`.
 
     partial ordering
       A **partial ordering** (or "partial order") is an :term:`antisymmetric` :term:`preorder`.
@@ -472,7 +481,7 @@ Nomenclature
       A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
 
     Pi type
-      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`. (See also the `section on dependent types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ tutorial.)
+      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`. See also the `section on dependent types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ tutorial.
 
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
@@ -493,7 +502,7 @@ Nomenclature
       A **preorder** on a set :math:`X` is a :term:`reflexive` and :term:`transitive` subset of :math:`X × X`.
 
     preserves
-      see :term:`respects`
+      See :term:`respects`.
 
     product
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
@@ -513,22 +522,28 @@ Nomenclature
       That is, for :math:`a ∈ ∏_{i<n} A_i` we define :math:`\Proj_σ a = a ∘ σ`.
 
     proof assistant
-      see :term:`ITP`
+      See :term:`ITP`.
 
     proof-irrelevant
       .. todo:: insert definition
 
+    proofs-as-programs
+      In :term:`type theory`, constructing a proof of a proposition ``P`` is equivalent to constructing an inhabitant of the type to which ``P`` corresponds (under the :term:`propositions-as-types` correspondence). The construction of such a proof ``p: P`` is viewed as a program that computes ``p`` as output.  See also https://ncatlab.org/nlab/show/proofs+as+programs and :term:`Curry-Howard correspondence` and :term:`propositions-as-types`.
+
     proof tactic    
       an automated procedure for constructing and manipulating proof terms.
 
+    propositions-as-types
+      In :term:`type theory`, the propositions-as-types correspondence says that propositions and types are essentially the same. A proposition, when viewed as a type, is identified with the collection (or type) of all its proofs, and a type is identified with the proposition that there exists something of that type.  See also https://ncatlab.org/nlab/show/propositions+as+types and :term:`Curry-Howard correspondence` and :term:`proofs-as-programs`.
+
     proposition extensionality
-      This axiom asserts that when two propositions imply one another, they are actually equal. This is consistent with set-theoretic interpretations in which any element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in any context. (See also the `Proposition Extensionality <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#propositional-extensionality>`_ section of the :term:`TPIL`.)
+      This axiom asserts that when two propositions imply one another, they are actually equal. This is consistent with set-theoretic interpretations in which any element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in any context. See also the `Proposition Extensionality <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#propositional-extensionality>`_ section of the :term:`TPIL`.
 
     quotient
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
 
     recursor
-      Each :term:`inductively defined type <inductive type>` ``T`` is accompanied by an elimination principle known as a **recursor** (denoted by ``T.rec`` in Lean). It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors. (See also :numref:`inductively-defined-types`.)
+      Each :term:`inductively defined type <inductive type>` ``T`` is accompanied by an elimination principle known as a **recursor** (denoted by ``T.rec`` in Lean). It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors. See also :numref:`inductively-defined-types`.
 
     reflexive
       A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
@@ -565,7 +580,7 @@ Nomenclature
       a pair :math:`σ = (F, ρ)` consisting of a collection :math:`F` of operation symbols and an :term:`arity` function :math:`ρ : F → β` that maps each operation symbol to its :term:`arity`; here, :math:`β` denotes the arity type.
 
     simplex category
-      (see :term:`finite ordinals`)
+      See :term:`finite ordinals`.
 
     small category
       A category is called **small** if both its objects and morphisms form sets.
@@ -601,7 +616,7 @@ Nomenclature
       A binary relation :math:`R` on a set :math:`X` is called **transitive** provided :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
     type theory
-      Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. :term:`TT` internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in :term:`TT` play a similar role to that of sets in set theory but *functions definable in TT are always computable*. (See also `ncatlab.org/type+theory <https://ncatlab.org/nlab/show/type+theory>`_.)
+      Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. :term:`TT` internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in :term:`TT` play a similar role to that of sets in set theory but *functions definable in TT are always computable*. See also `ncatlab.org/type+theory <https://ncatlab.org/nlab/show/type+theory>`_.
 
     underlying set functor
       The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.
@@ -713,10 +728,10 @@ The list below shows what to type (e.g., in the vscode IDE with lean extension) 
 .. glossary::
 
     { }
-      Surrounds implicit argument(s) and directs parser to use *agressive* type inference (see :numref:`implicit-arguments`).
+      Surrounds implicit argument(s) and directs parser to use *agressive* type inference; see :numref:`implicit-arguments`.
 
     ⦃ ⦄
-      Surrounds implicit argument(s) and directs parser to use *conservative* type inference (see :numref:`implicit-arguments`). (Type with ``\{{``.)
+      (Type with ``\{{``.) Surrounds implicit argument(s) and directs parser to use *conservative* type inference; see :numref:`implicit-arguments`.
 
     𝔸
       ``\A`` (or ``\BbbA``)
