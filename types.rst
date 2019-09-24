@@ -61,21 +61,29 @@ Contrast this with the type ``vec α n``, which depends on the parameter ``α`` 
 
 This example may mislead one to think that a dependent type must depend on concrete values like a natural number, rather than on types.  However, in certain situations, a type itself is consider a value, since every type has a type.
 
-If ``α:Type``, then ``α`` is both a type in its own right and an inhabitant of ``Type``. For example, consider the ``cons`` function that inserts a new element at the head of a list. What type should ``cons`` have?  It is polymorphic---the ``cons`` function for ℕ, ``bool``, or an arbitrary type ``α`` should behave in roughly the same way. Thus, for each type ``α``, ``cons α`` is the insertion function for lists of type ``list α``; it takes an element ``a:α`` and a list ``l:list α``, and returns a new list---the concatenation of the singleton list ``(a)`` with the list ``l``.
+If ``α:Type``, then ``α`` is both a type in its own right and an inhabitant of ``Type``. For example, consider the ``cons`` function that inserts a new element at the head of a list. What type should ``cons`` have?
 
-Evidently, ``cons α`` has type ``α → list α → list α``, another example of polymorphism.
+Before trying to answer, consider the following facts:
 
-But what about ``cons`` itself?  We might try ``cons: Type → α → list α → list α``, but this somehow choses a specific inhabitant of ``Type``---namely, ``α``---in advance, which we don't want. Instead, ``cons`` should be polymorphic---the caller of ``cons`` is free to choose some (arbitrary) type ``α:Type`` as the first argument, and then (only then) do we know the types, ``α`` and ``list α``, of the second and third arguments to ``cons``.
+* For each type ``α``, ``cons α`` is the insertion function for lists of type ``list α``; it takes an element ``a:α`` and a list ``l:list α``, and returns a new list---the concatenation of ``a`` with the list ``l`` (sometimes denoted ``a::l``).
 
-What we have in this situation is a :term:`Pi type`, or :term:`dependent function type <Pi type>`. That is, given ``α:Type`` and ``β:α → Type``, the latter provides a family of types, one type ``β a`` for each ``a:α``.
+* ``cons`` is polymorphic and should behave in roughly the same way for lists with entries of type ℕ, or ``bool``, or an arbitrary type ``α``. 
+
+* ``cons α`` has type ``α → list α → list α``.
+
+But what about ``cons`` itself?  We might try ``cons: Type → α → list α → list α``, but this somehow choses a specific inhabitant of ``Type``---namely, ``α``---in advance, which we don't want.
+
+Instead, since ``cons`` should be polymorphic, the caller of ``cons`` is free to choose some (any) type ``α:Type`` as the first argument; then (and only then) do we know the types, ``α`` and ``list α``, of the second and third arguments to ``cons``.
+
+What we need in this situation is known as a :term:`Pi type`, or :term:`dependent function type <Pi type>`. Given ``α:Type`` and ``β:α → Type``, the latter provides a family of types, one type ``β a`` for each ``a:α``.
+
+The type ``Π (a:α) β a`` is inhabited by functions ``f`` such that ``f a`` is an element of ``β a`` for each ``a:α``. In other words, the types of the values returned by ``f`` *depends* on the inputs.
 
 In the present example, we have
 
-  ``cons: ∏ (a:Type) (α → list α → list α).``
-
-The type of functions ``f`` with the property that, for each ``a:Type``, ``f a`` is an element of ``β a``, for each ``a:α``. In other words, the type of the value returned by ``f`` *depends* on its input.
-
-If it so happens that ``β`` does not depend on ``a``, then ``Π(a:α),βa`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is simply notation for ``Π(a:α),β`` for the special case in which ``β`` does not depend on ``a``.
+  ``cons: Π (a:Type) (α → list α → list α).``
+  
+If it so happens that ``β`` does not depend on ``a``, then ``Π(a:α),β a`` is no different from the type ``α → β``. Indeed, in dependent type theory (and in Lean_), the Pi construction is fundamental, and ``α → β`` is simply notation for ``Π(a:α),β a`` for the special case in which ``β`` does not depend on ``a``.
 
 .. index:: type of; dependent functions (Pi type)
 
