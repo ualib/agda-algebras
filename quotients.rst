@@ -38,6 +38,8 @@ Thus, equivalence classes collect similar objects together, unifying them into a
 
 ----------------------
 
+.. index:: type of; quotients
+
 Quotient in Lean
 -----------------
 
@@ -55,7 +57,8 @@ The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additio
 
 Four such constants that are defined in the :term:`LSTL` are also defined in the `lean-ualib`_, as follows:
 
-.. index:: lift; of a function, reduction rule
+.. index:: lift of; a function
+.. index:: reduction rule
 
 ::
 
@@ -177,9 +180,9 @@ In contrast, the analogous constants defined in the `lean-ualib`_ are not native
 
 .. index:: quotient
 
-.. index:: ! type of; (quotients)
+.. index:: ! type of; quotients
 
-.. index:: ! lift of; (functions)
+.. index:: ! lift of; a function
 
 .. _lift-of-a-function:
 
@@ -200,9 +203,9 @@ Evidently, implication :eq:`lift` holds iff :math:`R` is contained in the **kern
 
 .. math:: R ⊆ \ker f := \{(x, y) ∈ α × α ∣ f x = f y\}.
 
-Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
+Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`0_α := \{(x, y) ∈ α × α ∣ x = y\}` be the identity relation on :math:`α`. Then :math:`f` :term:`lifts <lifts (v)>` from :math:`α` to :math:`α/R` if and only if :math:`f[R] ⊆ 0_α` if and only if :math:`R ⊆ \ker f`.
 
-If :math:`f` :term:`lifts` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the **lift** of :math:`f` from :math:`α` to :math:`α/R`.
+If :math:`f` :term:`lifts <lifts (v)>` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the :term:`lift <lift (n)>` of :math:`f` from :math:`α` to :math:`α/R`.
 
 The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [1]_
 
@@ -349,6 +352,9 @@ Let us see some examples.
 ------------------------
 
 .. index:: pair: respect; preserve
+.. index:: ! quotient tuple
+.. index:: ! lift of; a tuple
+.. index:: ! lift of; an operation
 
 .. _lift-of-an-operation:
 
@@ -387,10 +393,6 @@ We say that :math:`f` **respects** :math:`R`, and we write :math:`f ⊧ R`, just
    Readers who do not find the foregoing explanation perfectly clear are invited to consider this simple, concrete example.
 
    Let :math:`f : (\{0,1,2\} → α) → α` be a ternary operation on :math:`α`, let :math:`R ⊆ α × α`, and suppose that for every triple :math:`(a_1, b_1), (a_2, b_2), (a_3, b_3)` of pairs from :math:`R`, the pair :math:`(f(a_1, a_2, a_3), f(b_1, b_2, b_3))` also belongs to :math:`R`. Then :math:`f ⊧ R`.
-
-.. index:: ! quotient tuple
-.. index:: ! lift; of tuples
-.. index:: ! lift; of operations
 
 Let :math:`α` and :math:`β` be types, let :math:`R ⊆ α × α` be a binary relation and :math:`g : (β → α) → α` a :math:`β`-ary operation. Recall that the function type :math:`β → α` may be viewed as the type of :math:`β`-tuples of elements from :math:`α`.
 

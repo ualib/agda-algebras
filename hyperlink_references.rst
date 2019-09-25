@@ -12,6 +12,7 @@
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 .. _Coq: http://coq.inria.fr
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+.. _Dependent Types: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean

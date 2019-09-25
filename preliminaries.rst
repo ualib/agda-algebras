@@ -468,6 +468,7 @@ Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :mat
 A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
 
 ----------------------------
+
 .. index:: ! directed set, ! inductive set
 
 .. _directed-sets-and-inductive-sets:

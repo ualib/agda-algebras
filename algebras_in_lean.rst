@@ -208,6 +208,7 @@ Here is how the type ``pi`` is defined in the Lean_ standard library.
 .. (See also :numref:`Appendix Section %s <pi-type>`, for a more technical description of Leans ``pi`` type.)
 
 .. index:: ! type of; universal algebras
+.. index:: type of; dependent pairs
 
 .. _the-algebra-type:
 
@@ -218,7 +219,7 @@ Finally, let us define the **type of universal algebras** in Lean.
 
 A :index:`universal algebra` :math:`𝔸 = ⟨A,F^𝔸⟩` is a pair consisting of a :index:`carrier` (or :index:`universe`) :math:`A` along with an set :math:`F^𝔸` of :index:`operations` (i.e., interpretations of the operation symbols in :math:`F`).
 
-Also, our definition should caption the concept of an algebraic structure of any choice of signature. Thus, the type of :math:`⟨A,F^𝔸⟩` *depends* on the choice of signature :math:`σ = (F, ρ)`, so it is natural to encode the type of algebras as a :index:`dependent pair`, or :term:`Sigma type`.
+Also, our definition should caption the concept of an algebraic structure of any choice of signature. Thus, the type of :math:`⟨A,F^𝔸⟩` *depends* on the choice of signature :math:`σ = (F, ρ)`, so it is natural to encode the type of algebras as a :term:`dependent pair <Sigma type>`.
 
 .. code-block:: lean
 
@@ -240,7 +241,7 @@ An algebra pairs a carrier with an interpretation of the op symbols.
 
 .. index:: type of; dependent pairs
 
-The type ``sigma`` is the so called :term:`Sigma type`, which is also known as a :term:`dependent pair type`, or a :term:`dependent product type`. It is one of the most important types in (dependent) :term:`type theory`, so let's pause for a moment to discuss it.
+The type ``sigma`` is the so called :term:`Sigma type`, which is also known as a :term:`dependent pair type`, or :term:`dependent product type`. It is one of the most important types in (dependent) :term:`type theory`, so let's pause for a moment to discuss it.
 
 A **Sigma type** :math:`Σ_(x:A), B x` is also known as a **dependent pair type** because it generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second component to depend on the *value* :math:`x` of the first.
 

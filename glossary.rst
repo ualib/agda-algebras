@@ -212,7 +212,7 @@ Nomenclature
       See :term:`Sigma type`.
 
     dependent type
-      A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`dependent-types`_.  For details, see `the section on Dependent Types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ manual.
+      A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.  More examples are in :numref:`dependent-types`_.  See also the `Dependent Types`_ section in the `TPL`_ tutorial.
 
     directed set
       A subset :math:`D` of a :term:`preorder` is called **directed** if every finite subset of :math:`D` has an upper bound in :math:`D`. That is, if :math:`F ⊆ D` and :math:`F` is finite, then there exists :math:`d ∈ D` such that :math:`f ≤ d` for all :math:`f ∈ F`.
@@ -408,8 +408,11 @@ Nomenclature
     law of the excluded middle
       This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds. See also the `LEM Section <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html?highlight=reduction%20rule#the-law-of-the-excluded-middle>`_ of the :term:`TPIL`.
 
-    lifts
-      For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.
+    lift (n)
+      See :term:`lifts (v)`
+
+    lifts (v)
+      For :math:`ρ ⊆ α × α`, and :math:`f: α → β`, we say that :math:`f` **lifts** to a function on the quotient :math:`α/ρ` provided the following implication holds for all :math:`x y: α`: if :math:`ρ x y` then :math:`f x = f y`.  The function to which :math:`f` lifts is called the **lift** of :math:`f`.
 
     Lean
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: https://leanprover.github.io/.
@@ -481,7 +484,7 @@ Nomenclature
       A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a :term:`partial ordering` :math:`R` defined on :math:`X`.
 
     Pi type
-      The **Pi type** :math:`Π(x:A),B x`, also known as the **dependent function type**, generalizes the function type :math:`A → B` and is called a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x: A`. See also the `section on dependent types <https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types>`_ in the `Theorem Proving in Lean`_ tutorial.
+      The **Pi type** :math:`Π(x:A),B x`, also known as a **dependent function type**, is a dependent type that generalizes the type :math:`A → B`; it is a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x`. See also the `Dependent Types`_ section of the `TPL`_ tutorial.
 
     point
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
@@ -574,7 +577,7 @@ Nomenclature
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
 
     Sigma type
-      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
+      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.  See also the `Dependent Types`_ section of the `TPL`_ tutorial.
 
     signature
       a pair :math:`σ = (F, ρ)` consisting of a collection :math:`F` of operation symbols and an :term:`arity` function :math:`ρ : F → β` that maps each operation symbol to its :term:`arity`; here, :math:`β` denotes the arity type.
