@@ -105,6 +105,9 @@ Nomenclature
     Calculus of Inductive Constructions
       See https://en.wikipedia.org/wiki/Calculus_of_constructions.
 
+    Cartesian product
+      See :term:`product`.
+
     canonical normal form
       See the `ncatlab page on normal forms <https://ncatlab.org/nlab/show/normal+form>`_.
 
@@ -508,21 +511,21 @@ Nomenclature
       See :term:`respects`.
 
     product
-      Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is denoted :math:`A × B` and is defined to be an object with morphisms :math:`p_1 : A \times B → A` and :math:`p_2 : A \times B → B` such that for every object :math:`X` and all morphisms :math:`x_1 : X → A` and :math:`x_2 : X → B` there exists a unique morphism :math:`h : X → A \times B` such that :math:`p_1 \circ h = x_1` and :math:`p_2 \circ h = x_2`.  We usually use :math:`π_1 : A \times B → A` and :math:`π_2 : A \times B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h : X → A \times B`.
+      Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is defined to be an object, :math:`A × B`, along with morphisms :math:`p_1: A × B → A` and :math:`p_2: A × B → B` such that for every object :math:`X` and all morphisms :math:`x_1: X → A` and :math:`x_2: X → B` there exists a unique morphism :math:`h: X → A × B` such that :math:`p_1 ∘ h = x_1` and :math:`p_2 ∘ h = x_2`.  We usually use :math:`π_1: A × B → A` and :math:`π_2: A × B → B` to denote the projections and :math:`⟨x_1, x_2⟩` for the unique map :math:`h: X → A × B`.
 
     projection operation
-      The :math:`i`**-th** :math:`k`**-ary projection operation on** :math:`A` is denoted by :math:`π^k_i : (k → A) → A` and defined for each :math:`k`-tuple :math:`a: k → A` by :math:`π^k_i \, a  = a\, i`.  
+      The :math:`i`**-th** :math:`k`**-ary projection operation on** :math:`A` is denoted by :math:`π^k_i: (k → A) → A` and defined for each :math:`k`-tuple :math:`a: k → A` by :math:`π^k_i \, a  = a\, i`.  
 
     projection operator
-      If :math:`σ : k → n` is a :math:`k`-tuple of numbers in the set :math:`n = \{0, 1, \dots, n-1\}`, then we can compose an :math:`n`-tuple :math:`a ∈ ∏_{i<n} A_i` with :math:`σ` yielding :math:`a ∘ σ ∈ ∏_{i < k} A_{σ(i)}`.
+      If :math:`σ: k → n` is a :math:`k`-tuple of numbers in the set :math:`n = \{0, 1, \dots, n-1\}`, then we can compose an :math:`n`-tuple :math:`a ∈ ∏_{0≤i<n} A_i` with :math:`σ` yielding :math:`a ∘ σ ∈ ∏_{0≤i<k} A_{σ\, i}`.
 
       The result is a :math:`k`-tuple whose :math:`i`-th component is :math:`(a ∘ σ)(i) = a(σ(i))`.
 
       If :math:`σ` happens to be one-to-one, then we call the following a **projection operator**:
 
-      .. math:: \Proj_σ : ∏_{i< n} A_i → ∏_{i<k} A_{σ(i)};  \ \ a ↦ a ∘ σ.
+      .. math:: \Proj\, σ: ∏_{0≤i< n} A_i → ∏_{0≤i<k} A_{σ\, i};  \ \ a ↦ a ∘ σ.
 
-      That is, for :math:`a ∈ ∏_{i<n} A_i` we define :math:`\Proj_σ a = a ∘ σ`.
+      That is, for :math:`a ∈ ∏_{0≤i<n} A_i` we define :math:`\Proj\,σ\, a = a ∘ σ`.
 
     proof assistant
       See :term:`ITP`.

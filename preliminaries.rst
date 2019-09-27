@@ -8,8 +8,7 @@ Preliminaries
 
 .. todo:: add introductory paragraph
 
-.. index:: ! relation, ! binary relation, 
-.. index:: ! domain, ! range
+.. index:: ! relation, ! binary relation, ! domain, ! range
 
 Binary Relations
 -----------------
@@ -27,27 +26,27 @@ For a relation :math:`R`, we define the **domain** of :math:`R` (:math:`\dom R`)
 
 Binary relations arise so often that we simply call them "relations," and only say "binary relation" when we want to highlight their **arity** (which is 2) and distinguish them from relations of other arities.
 
-Some binary relations have properties that make them especially useful in a vast array of applications. For instance, a binary relation :math:`R` may or may not be
+Some binary relations have properties that make them especially useful in a vast array of applications. For instance, we call a binary relation :math:`R`
 
-+ **reflexive**: :math:`∀ x ∈ X, \ x \mathrel{R} x`,
++ **reflexive** if :math:`∀ x ∈ X, \ x \mathrel{R} x`;
 
-+ **symmetric**: :math:`∀ x, y ∈ X \ (x \mathrel{R} y \ → \ y \mathrel{R} x)`;
++ **symmetric** if :math:`∀ x, y ∈ X \ (x \mathrel{R} y \ → \ y \mathrel{R} x)`;
 
-+ **antisymmetric**: :math:`∀  x, y ∈ X \ (x \mathrel{R} y ∧ y\mathrel{R} x \ → \ x=y)`;
++ **antisymmetric** if :math:`∀  x, y ∈ X \ (x \mathrel{R} y ∧ y\mathrel{R} x \ → \ x=y)`;
 
-+ **transitive**: :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
++ **transitive** if :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
 
 
-.. index:: ! preorder
+More generally, if :math:`X, Y` are sets, then a (binary) **relation from** :math:`X` to :math:`Y` is a subset of :math:`X × Y`.
+
+.. index:: ! preorder, ! preordered set
 
 .. _preorder:
 
 Preorder
 ~~~~~~~~~
 
-A **preorder** on a set :math:`X` is a reflexive and transitive subset of :math:`X × X`.
-
-If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) as a **preordered set**.
+A **preorder** on a set :math:`X` is a reflexive and transitive (binary) relation on :math:`X`. If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) a **preordered set**.
 
 .. proof:examples::
 
@@ -138,7 +137,9 @@ There are always at least two equivalence relations in on a given set :math:`A`-
 Partial order relation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-A **partial ordering** (or "partial order") is an anti-symmetric preorder.  A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
+A **partial ordering** (or "partial order") is an anti-symmetric preorder.
+
+A **partially ordered set** (or "poset") :math:`⟨X, R⟩` is a set :math:`X` along with a partial order :math:`R` defined on :math:`X`.
 
 .. proof:examples::
 
@@ -155,25 +156,27 @@ With any preorder :math:`X` we can associate a poset in a natural way as we now 
 
 Since a preorder is not antisymmetric in general, we may have distinct elements :math:`x, y ∈ X` with :math:`x ≤ y` and :math:`y ≤ x`.
 
-In this case we define the binary relation ≡ on :math:`X` by: :math:`x ≡ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
+In this case we define the binary relation :math:`≅` on :math:`X` by: :math:`x ≅ y` iff :math:`x ≤ y` and :math:`y ≤ x`.
 
-.. index:: equivalence class
+.. index:: ! equivalence class, ! representative
 
-The relation ≡ so defined is an equivalence relation on the set :math:`X`, and as such it partitions :math:`X` into disjoint equivalence classes, :math:`X_0, X_1, \dots` where :math:`X = ⋃ X_i` and for each :math:`i` we have :math:`x, y ∈ X_i` iff :math:`x ≡ y`.
+The relation :math:`≅` so defined is an equivalence relation on the set :math:`X`, and as such it partitions :math:`X` into disjoint equivalence classes, :math:`X_0, X_1, \dots`, where :math:`x ≅ y` iff :math:`x, y ∈ X_i` for some :math:`i`.
 
-Now imagine that we cannot differentiate elements of a single equivalence class. Then we can think of each equivalence class as a single object and every member of a particular class can be taken as a "representative" of that class.
+Now imagine that we do not wish to distinguish between elements of a single equivalence class. Then we can think of each equivalence class as a single object and each member of a particular class can be taken as a representative of that class.
 
-The result is a poset, denoted by :math:`X/{≅}`, whose elements are the equivalence classes of ≡. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise equivalent.  Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence class** containing the element :math:`x` by 
+The result is a poset, denoted by :math:`X/{≅}`, whose elements are the equivalence classes of :math:`≅`.
+
+.. These classes partition the set :math:`X` into disjoint subsets, each subset consisting of elements that are pairwise equivalent.
+
+Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence class** containing the element :math:`x` by 
 
 .. math:: x/{≅} \; = \{y ∈ X : x ≅ y\}.
 
 (Some authors prefer the notation :math:`[x]` or :math:`[x]_≅` for the equivalence class containing :math:`x`.)
 
-We denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all ≅-equivalence classes by :math:`X/{≅}`.
+As above, we denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all :math:`≅`-equivalence classes by :math:`X/{≅}`.
 
-Let ⊑ denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x \ ∀ y \ (x/{≅} \ ⊑ y/{≅} \ ⟺ \ x ≤ y)`.
-
-It is easy to see that ⊑ is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
+Let :math:`⊑` denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x \ ∀ y \ (x/{≅} \ ⊑ y/{≅} \ ⟺ \ x ≤ y)`.  Then, evidently, :math:`⊑` is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
 
 
 .. index:: ! total ordering, ! partial order
@@ -246,80 +249,27 @@ In mathematics, there are many notions of equality. These are usually implicit a
 
 In computer science, however, such informality is unacceptable since computers cannot infer the appropriate equality in every situation.  For this reason, explicit mention of particular notions of equality is more common in computer science than in mathematics. [1]_
 
-To see what we're going on about, consider two basic, distinct notions of equality---**syntactic equality**, where two expressions are "equal" if and only if exactly the same symbols appear in exactly the same order in each expression, and **semantic equality**, which takes two expressions to be equal if they have the same "meaning", or if they refer to or denote the same object.  
+Here's a concrete example that illustrates what we're carrying on about.
 
-For example, :math:`2 + 5` is semantically, but not syntactically, equal to :math:`7`.
+  :math:`2 + 5` is equal to :math:`7` semantically; they are not syntactically (e.g., the first expression involves more symbols than the second).
 
-Axiomatically, we assume that every relation used to represent some notion of an equality must be an *equivalence relation*.  That is, it must be a reflexive, symmetric, transitive binary relation.  Of course, there are a number of distinct equivalence relations on a nonempty set, so these properties do not fully characterize equality.
+Two basic, distinct notions of equality are
 
-If two expressions denote the same thing, then we should be able to substitute one for any other in any expression. It is convenient to adopt the following convention: if :math:`r` is any term, we may write :math:`r(x)` to indicate that the variable :math:`x` may occur in :math:`r`. Then, if :math:`s` is another term, we can thereafter write :math:`r(s)` to denote the result of replacing :math:`s` for :math:`x` in :math:`r`. The substitution rule for terms thus reads as follows: if :math:`s = t`, then :math:`r(s) = r(t)`.
+  * **syntactic equality**, where two expressions are "equal" if and only if exactly the same symbols appear in exactly the same order in each expression;
+  
+  * **semantic equality**, which takes two expressions to be "equal" if they have the same *meaning*; that is, they refer to (or *denote*) the same object.  
 
-We already adopted a similar convention for formulas: if we introduce a formula as :math:`A(x)`, then :math:`A(t)` denotes the result of substituting :math:`t` for :math:`x` in :math:`A`. With this in mind, we can write the rules for equality as follows:
+Axiomatically, every relation used to represent some notion of an equality ought to at least be an *equivalence relation* (i.e., a reflexive, symmetric, transitive binary relation).  Of course, there are a number of distinct equivalence relations on a nonempty set, so these properties do not fully characterize equality.
 
-.. raw:: html
-
-   <img src="_static/first_order_logic.10.png">
-
-.. raw:: latex
-
-   \begin{center}
-   \AXM{}
-   \UIM{t = t}
-   \DP
-   \quad
-   \AXM{s = t}
-   \UIM{t = s}
-   \DP
-   \quad
-   \AXM{r = s}
-   \AXM{s = t}
-   \BIM{r = t}
-   \DP
-   \\
-   \ \\
-   \AXM{s = t}
-   \UIM{r(s) = r(t)}
-   \DP
-   \quad
-   \AXM{s = t}
-   \AXM{P(s)}
-   \BIM{P(t)}
-   \DP
-   \end{center}
-
-Here, the first substitution rule governs terms and the second substitution rule governs formulas. In the next chapter, you will learn how to use them.
-
-Using equality, we can define even more quantifiers.
-
--  We can express "there are at least two elements :math:`x` such that :math:`A(x)` holds" as :math:`∃ x \ ∃ y \ (x ≠ y ∧ A(x) ∧ A(y))`.
-
--  We can express "there are at most two elements :math:`x` such that :math:`A(x)` holds" as :math:`∀ x \ ∀ y \ ∀ z \ (A(x) ∧ A(y) ∧ A(z) → x = y ∨ y = z ∨ x = z)`. This states that if we have three elements :math:`a` for which :math:`A(a)` holds, then two of them must be equal.
-
--  We can express "there are exactly two elements :math:`x` such that :math:`A(x)` holds" as the conjunction of the above two statements.
-
-As an exercise, write out in first order logic the statements that there are at least, at most, and exactly three elements :math:`x` such that :math:`A(x)` holds.
-
-In logic, the expression :math:`∃! x \ A(x)` is used to express the fact that there is a *unique* :math:`x` satisfying :math:`A(x)`, which is to say, there is exactly one such :math:`x`. As above, this can be expressed as follows:
-
-.. math::
-
-   ∃ x \ A(x) ∧ ∀ y \ ∀ y' \ (A(y) ∧ A(y') → y = y').
-
-The first conjunct says that there is at least one object satisfying :math:`A`, and the second conjunct says that there is at most one. The same thing can be expressed more concisely as follows:
-
-.. math::
-
-   ∃ x \ (A(x) ∧ ∀ y \ (A(y) → y = x)).
-
-You should think about why this second expression works. In the next chapter we will see that, using the rules of natural deduction, we can prove that these two expressions are equivalent.
+For a useful general definition of the equality relation on terms and formulas that suits our purposes, see the `Equality Section`_ of `Logic and Proof`_.
 
 -------------------------------------------------------------
 
 .. index:: ! ordered tuples, !tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
-Relations
----------
+Relations more generally
+------------------------
 
 We can extend the definition of ordered pairs and define an **ordered triple** recursively.
 
@@ -352,6 +302,10 @@ We give some examples of relations below. In these examples, :math:`ℝ` denotes
 
 
 Note that a 1-ary or **unary relation** on a set :math:`A` is simply a subset of :math:`A`, a **binary relation** is a subset of :math:`A^2`, a **ternary relation** is a subset of :math:`A^3`; finally, an :math:`n`-**ary relation** on :math:`A` is a subset of :math:`A^n`.
+
+Finally, although it arises less frequently in the theory, an even more general definition of relation is worth mentioning.
+
+Let :math:`I` be a set and for each :math:`i ∈ I` let :math:`A_i` be a set.  A **relation on** :math:`\{A_i | i ∈ I\}` is a subset of the :term:`Cartesian product` :math:`∏_{i ∈ I}A_i`. 
 
 ---------------------------------
 
@@ -430,6 +384,150 @@ With this axiom we can prove the sufficiency direction of item 2 of the theorem 
 
 ------------------------------
 
+.. index:: ! projection operator, ! idempotent operation
+
+.. _projection-operators:
+
+Projection operators
+--------------------
+
+An operation :math:`f: A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
+
+Examples of idempotent operations are the *projections* and these play an important role in the theory, so we introduce a sufficiently general and flexible notation for them.
+
+Denote and define the set ℕ of natural numbers inductively as follows:
+
+.. math:: 0 = ∅, \quad 1 = \{0\}, \quad  2 := \{0, 1\}, \dots, n = \{0, 1, \dots, n-1\}.
+
+Let :math:`\{A_i: i ∈ I\}` be a collection of sets (for some :math:`I ⊆ ℕ`) and let :math:`A = ∏_{i ∈ I} A_i`. View the elements of :math:`A` as functions:
+
+.. math:: a ∈ ∏_{i∈I} A_i \quad ⟷ \quad \begin{cases} a : I → ⋃_{i∈I} A_i, & \\ a\,i ∈ A_i, & ∀ i ∈ I. \end{cases}
+   :label: 7
+   
+This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) is a special kind of function type (depicted on the right of ⟷ using the usual arrow notation for function types).
+
+In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} A_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i`.  As explained in :numref:`pi-types`, such a function (or product) type is known as a :term:`dependent type`.
+
+Given a subset :math:`J ⊆ I`, a function :math:`σ: J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ σ`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{σ\, j}`, where :math:`(a ∘ σ)\, j ∈ A_{σ\, j}`.
+
+We could express this function type using the arrow notation, as in, ":math:`a ∘ σ: J → ⋃_{j∈J} A_{σ\, j}` where :math:`(a ∘ σ)\, j ∈ A_{σ\, j}`," but this specification has a nicer, more compact description using a :term:`dependent function type`, namely, 
+
+.. math:: a ∘ σ ∈ ∏_{j∈J} A_{σ \, j}.
+
+If :math:`σ` happens to be one-to-one, then we will define the **projection operator induced by** :math:`σ`. We denote this operator by
+
+.. math:: \Proj\, σ : ∏_{i∈I} A_i → ∏_{j∈J} A_{σ \, i},
+   :label: projection
+
+and define it for each :math:`a ∈ ∏_{i∈I} A_i` by :math:`\Proj\, σ \, a = a ∘ σ`.
+
+The following is closer to what we want, but still imperfect:
+
+.. math:: \Proj: (J → I) → ∏_{i∈I} A_{i} → ∏_{j∈J} A_{g(j)}.
+   :label: 9
+
+This says that :math:`\Proj` takes a function :math:`σ: J → I` and a function :math:`a ∈ ∏_{i∈I} A_i` and returns the function :math:`a ∘ σ ∈ ∏_{j∈J} A_{σ \, j}`.
+
+Here again we see that the arrow notation is not expressive enough because :math:`∏_{j∈J} A_{σ \, j}` depends on :math:`σ`, but there is no :math:`σ` symbol available from earlier in :eq:`9`.
+
+The solution is again to denote the function type as a product. Product types are very expresive and enable us to concisely specify such dependent function types. Before demonstrating this, we make one more notational adjustment. Instead of denoting set membership by :math:`a ∈ A`, we adopt the type-theoretic notation :math:`a:A`, which expresses the fact that :math:`a` *has type* :math:`A`. Thus, the full :term:`dependent type` specification of the projection operator is
+
+.. math:: \Proj: ∏_{σ:J→I} \left( ∏_{(i:I)} A_{i} →  ∏_{(j:J)} A_{σ\, j} \right).
+
+This is a special case of the more general types that we define in later chapters, after reviewing some concepts of category theory in :numref:`Chapter %s <postmodern-algebra>` that are essential for this purpose.
+
+.. proof:example:: Projection terminology
+
+   Let us explain why the term "projection" is reserved for the case when :math:`σ` is one-to-one.
+   
+   Suppose :math:`k=4`, :math:`n=3`, and consider the 4-tuple :math:`σ = (1, 0, 1, 1)`.
+   
+   Then :math:`σ` is the function :math:`σ : \{0,1,2,3\} → \{0,1,2\}` given by
+   
+   .. math:: σ\, 0 = 1, \; σ\, 1 = 0`, \; σ\, 2 = 1, \; σ\, 3 = 1,
+   
+   and so :math:`a ↦ a ∘ σ` is the function that takes :math:`(a\, 0, a\, 1, a\, 2) ∈ A_0 × A_1 × A_2` to :math:`(a\, 1, a\, 0, a\, 1, a\, 1) ∈ A_1 × A_0 × A_1 × A_1`.
+
+Let :math:`A = ∏_{0≤ i<n} A_i`, let :math:`σ: k → n` be one-to-one, and define the projection :math:`\Proj\, σ` as in :eq:`projection` above. Then the :term:`kernel` of :math:`\Proj\, σ`, which we denote by :math:`\mathbf{0} σ`, is denoted and defined by
+
+.. math:: \mathbf{0} σ &= \ker \Proj\, σ = \{(a,a') ∈ A^2 | \Proj\, σ a = \Proj\, σ a'\}\\
+                       &= \{ (a,a') ∈ A^2 | a ∘ σ = a' ∘ g \} = \{ (a,a') ∈ A^2 | ∀ j ∈ \im σ, \ a\, j = a'\, j \}.
+   :label: kernel
+
+It is obvious that :math:`\mathbf{0} σ` is an equivalence relation on the set :math:`A`.
+
+More generally, if :math:`θ` is an equivalence relation on the set :math:`∏_{0≤ j<k} A_{σ\,j}`---that is, :math:`θ ⊆ (∏_{0≤ j<k} A_{σ\, j})^2` and :math:`θ` is reflexive, symmetric, and transitive---then we define the equivalence relation :math:`θ σ` on the set :math:`A = ∏_{0≤ i<n} A_i` as follows:
+
+.. math:: θ σ = \{(a, a') ∈ A^2 ∣ (a ∘ σ) \mathrel{\theta} (a' ∘ σ)\}.
+   :label: 17
+
+In other words, :math:`θ σ` consists of all pairs in :math:`A^2` that land in :math:`θ` when projected onto the coordinates in :math:`\im σ`.
+
+#. Recall that :math:`\Proj\, σ : A → ∏_{j<k} A_{σ\, j}` is the function that maps :math:`a` to :math:`a ∘ σ`.
+
+   Now, suppose we have a tuple :math:`(a\, 0, a\, 1, \dots, a\, (p-1))∈ A^p`, and suppose we intend to apply :math:`\Proj\, σ` to each component, :math:`a \, j`.
+
+   To do so, we need to lift :math:`\Proj\, σ` from type :math:`A → ∏_{j<k} A_{σ\, j}` to type :math:`A^p → (∏_{j<k} A_{σ\, j})^p`, which is accomplished using a functor that often goes by the name :math:`map`.
+
+   For instance, if :math:`(a, a') ∈ A^2`, then :math:`map \,(\Proj\, σ)\, (a, a') = (\Proj\, σ \, a, \Proj\, σ \, a')`.
+
+   Therefore,
+
+   .. math:: θ σ =\{(a, a') ∈ A^2 ∣ map \, (\Proj\, σ)\, (a, a') ∈ θ \},
+
+   whence, :math:`θ_g = map \, (\Proj\, σ)^{-1} \, θ`.
+
+#. If :math:`f: X → A` and :math:`g: X → B` are functions defined  on the same domain :math:`X`, then :math:`(f,g): X → A × B` is the unique function that composes with the first projection to give :math:`f` and composes with the second projection to give :math:`g`. For example, in the last remark there appears the expression :math:`(\Proj\, σ\, a, \Proj\, σ \, a') = (a ∘ σ, a' ∘ σ)`, which has type :math:`( ∏_{j<k} A_{σ\, j} )^2`. [2]_
+
+#. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj\, j` instead of :math:`\Proj\, {(j)}`.  Similarly, we write and :math:`\mathbf{0}\, j` and :math:`θ\, j` instead of :math:`\mathbf{0}\, {(j)}` and :math:`θ\, {(j)}`. Thus, :math:`\Proj\, j \, a = a\, j`, and :math:`\mathbf{0} \, j = \{(a, a') ∈ A^2 ∣ a \, j = a' \, j\}`, and, if :math:`θ ∈ \Con 𝔸_j`, then :math:`θ \, j = \{(a, a') ∈ A^2 ∣ a \, j \mathrel{\theta} a'\, j\}`.
+
+Here are some obvious consequences of the foregoing notation and definitions that are worth noting.
+
+.. math::
+
+   ⋁_{0≤j<n}\mathbf{0}j = A^2, \quad \mathbf{0} σ = ⋀_{j ∈ σ} \mathbf{0} j, \quad \mathbf{0}n = ⋀_{0≤j<n}\mathbf{0} j = 0_A, \quad
+   θσ = ⋀_{0≤j<k} θ \, σ\, j,
+
+where :math:`0_{A}` denotes the least equivalence relation on :math:`A`, that is, :math:`0_{A}:= \{(a, a') ∈ A^2 ∣ a = a'\}`.
+
+.. As we alluded to above, :math:`η_σ` is shorthand for :math:`(0_A)_σ`.
+
+--------------------------------
+
+.. _kernels-of-projections:
+
+.. index:: projection kernel
+
+Kernels of projections
+----------------------
+
+Let :math:`𝔸 = ∏_{(i:I)} 𝔸_i` be a product of algebras with the same :term:`signature`, and suppose :math:`g: J → I` is a one-to-one function, where :math:`∅ ≠ J ⊆ I ⊆ ℕ`.
+
+Define the **kernel of the projection of** :math:`𝔸` **onto** :math:`∏_{(j:J)} A_{g(j)}` as follows:
+
+.. math:: Δg = \{(a,a'): 𝔸^2 | a ∘ g = a' ∘ g \} = \ker (\Proj\, g)
+
+This is a congruence of :math:`𝔸`. More generally, if :math:`θ` is a congruence of :math:`∏_{(j:J)} A_{g(j)}`, define :math:`θg: \Con 𝔸` as follows:
+
+.. math:: θg = (\Proj\, g)^{-1}(θ) =  \{ (a, a') : 𝔸^2 | (a ∘ g) \mathrel{\theta} (a' ∘ g) \}.
+
+This indicates the origin of the notation :math:`Δg`, where :math:`Δ` denotes the trivial (identity) relation on :math:`∏_{(j:J)} A_{g(j)}`. If :math:`J = \{0\}` and :math:`g:I` is just a constant, say, :math:`g(0) = k`, then we write :math:`θ k` instead of :math:`θ \{k\}`, so
+
+.. math:: θ k = \{(a, a') \in 𝔸^2 : a\,k \mathrel{\theta} a'\,k\}.
+
+(Here, :math:`\theta` must be in :math:`\Con 𝔸_k`.)
+
+The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the set of natural numbers.
+
+Fix :math:`m ∈ ℕ`. If :math:`a = (a_0, a_1, \dots, a_{m-1})` is an :math:`m`-tuple of elements from :math:`A`, then (keeping in mind that :math:`m` is the set :math:`\{0, 1, \dots, m-1\}`) it is useful to understand that this tuple is a function :math:`a: m → A`, where :math:`a\,i = a_i`, for each :math:`i<m`. If :math:`h: A → A`, then :math:`h ∘ a: m → A` is the tuple :math:`(h\, a_0, h\, a_1, \dots, h\, a_{m-1}) ∈ A^m`, whose :math:`i`-th coordinate is :math:`(h ∘ a)\, i = h(a\, i) = h(a_i) ∈ A`.
+
+On the other hand, if :math:`g: A^m → A`---equivalently, :math:`g: (m → A) → A`---then :math:`g a` is the element :math:`g(a_0, a_1, \dots, a_{m-1}) ∈ A`.
+
+If :math:`f: (ρ f → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, if :math:`a: ρ f → A` is a :math:`ρ f`-tuple on :math:`A`, and if :math:`h: A → B`, then
+:math:`h ∘ a: ρ f → B`, so :math:`f (h ∘ a): B`.
+
+----------------------
+
 .. index:: ! join, ! upper bound, ! least upper bound, ! supremum
 .. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
 
@@ -498,6 +596,7 @@ A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :ma
 
 --------------------------------------------
 
+.. index:: ! models (v)
 .. index:: ! complete, ! cocomplete
 .. index:: ! directed-cocomplete preorder, ! directed-cocomplete partial order (dcpo)
 .. index:: ! ω-chain cocomplete, ! ω-chain cocomplete partial order (ω-cpo)
@@ -509,13 +608,13 @@ Completeness and cocompleteness
 
 The existence of meets and joins for certain kinds of subsets of a preorder is known as completeness and cocompleteness respectively.
 
-Suppose :math:`X` is a preorder and let P be a **property of subsets** of :math:`X`.
+Suppose :math:`X` is a preorder and let :math:`P` be a **property of subsets** of :math:`X`.
 
-Given a subset :math:`A ⊆ X`, denote by :math:`A ⊨ \mathrm P` the judgement ":math:`A` has property P."
+Given a subset :math:`A ⊆ X`, denote by :math:`A ⊨ P` the judgement ":math:`A` has property :math:`P`."  (Type ``\vDash`` to produce ⊨.)  We sometimes say :math:`A` **models** :math:`P` in this case.
 
-If the meet :math:`⋀ A` exists for every subset :math:`A ⊆ X` for which :math:` A ⊨ \mathrm P` holds, then we say that :math:`X` is P-**complete**.
+If the meet :math:`⋀ A` exists for every subset :math:`A ⊆ X` for which :math:` A ⊨ P` holds, then we say that :math:`X` is :math:`P`-**complete**.
 
-Dually, :math:`X` is called P-**cocomplete** if the join :math:`⋁ A` exists for every subset :math:`A` with property P.
+Dually, :math:`X` is called :math:`P`-**cocomplete** if the join :math:`⋁ A` exists for every subset :math:`A` with property :math:`P`.
 
 Suppose :math:`X` is a preorder for which joins of all directed subsets exist. Then :math:`X` is called a **directed-cocomplete preorder**. If, in addition, :math:`X` happens to be a poset, then :math:`X` is a **directed-cocomplete partial order** or **dcpo**.
 
@@ -578,6 +677,9 @@ then 𝖱 is a closure operator.
 
 .. [1]
    The relationship that a computer scientist has with equality is deeper than that of a mathematician, just as the relationship of an Eskimo to snow is deeper than that of a person living in a mild climate. (See `There really are 50 Eskimo words for snow <https://www.washingtonpost.com/national/health-science/there-really-are-50-eskimo-words-for-snow/2013/01/14/e0e3f4e0-59a0-11e2-beee-6e38f5215402_story.html>`_.)
+
+.. [2]
+   In retrospect, a more appropriate name for :math:`\mathbf{0} σ` might be :math:`Δ_σ`, or even :math:`=_σ`, but this may lead to conflicts with more standard notational conventions.
 
 .. include:: hyperlink_references.rst
 

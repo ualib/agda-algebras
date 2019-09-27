@@ -27,12 +27,12 @@ For example, some of the most important of these objects are implemented in the 
 
 + In `lean/library/init/data`_
 
-  + `nat (dir)`_
+  + `nat/`_
   + `prod.lean`_
   + `quot.lean`_
   + `set.lean`_
   + `setoid.lean`_
-  + `sigma (dir)`_
+  + `sigma/`_
 
 + In `lean/library/init/algebra`_
 

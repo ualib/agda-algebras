@@ -13,6 +13,7 @@
 .. _Coq: http://coq.inria.fr
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
 .. _Dependent Types: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types
+.. _Equality Section: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
@@ -39,7 +40,7 @@
 .. _mathlib: https://github.com/leanprover-community/mathlib/
 .. _`mathlib/src/data/set/basic.lean`: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
 .. _More on Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
-.. _nat (dir): https://github.com/leanprover/lean/blob/master/library/init/data/nat
+.. _`nat/`: https://github.com/leanprover/lean/blob/master/library/init/data/nat
 .. _NuPRL: http://www.nuprl.org/
 .. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
 .. _prod.lean: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
@@ -48,7 +49,7 @@
 .. _quotient.lean: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
 .. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
 .. _setoid.lean: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
-.. _sigma (dir): https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+.. _`sigma/`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
 .. _`sigma/basic.lean`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
 .. _subuniverse.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/subuniverse.lean
 .. _term.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/term.lean
