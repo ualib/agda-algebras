@@ -25,7 +25,7 @@ We begin with a slogan.
 
 ----------------------------------
 
-.. index:: pair: ! implication elimination; ! modus ponens
+.. index:: pair: implication elimination; modus ponens
 
 .. _curry-howard:
 

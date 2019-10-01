@@ -12,8 +12,6 @@ The Lean Universal Algebra Library
     algebras
     algebras_in_lean
     inductively_defined_types
-    basic_facts
-    basic_facts_in_lean
     birkhoff_hsp
     postmodern_algebra
     postmodern_algebra_in_lean
