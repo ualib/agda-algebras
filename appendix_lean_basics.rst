@@ -540,7 +540,7 @@ To do this requires that we understand *quotients* and *setoids*---two concepts 
 Extensionality in Lean
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotients`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
+Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotient-types`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
 
 Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).
 

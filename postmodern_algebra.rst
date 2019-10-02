@@ -1,7 +1,6 @@
-.. include:: _static/math_macros.rst
+.. .. include:: _static/math_macros.rst
 
 .. role:: cat
-
 .. role:: code
 
 .. _postmodern-algebra:
@@ -126,10 +125,7 @@ which are precisely the conditions we would normally verify when checking that :
 
 --------------------
 
-.. .. math:: \newcommand\hom{\operatorname{Hom}} \newcommand\hom{\operatorname{Hom}} \newcommand\epi{\operatorname{Epi}} \newcommand\aut{\operatorname{Aut}} \newcommand\mono{\operatorname{Mono}} \newcommand\Af{\ensuremath{\langle A, f \rangle}} \newcommand{\FGrp}{F_{\mathbf{Grp}}} \newcommand{\Sg}{\mathsf{Sg}}
-
 .. role:: cat
-
 .. role:: code
 
 .. _observations-categorically:
@@ -139,13 +135,12 @@ Observations, categorically
 
 .. todo:: rewrite this section (it's still based on the classical treatment)
 
-
 Let us revisit the list of observations we made (in classical notation) above in :numref:`Chapter %s <basic-facts>`.
 
 Throught this section,
 
 + :math:`F` is an endofunctor on **Set**;
-+ :math:`𝔸 = ⟨A, f^{𝔸}⟩, \ 𝔹 = ⟨B, f^{𝔹}⟩, \ 𝐂 = ⟨C, f^{𝐂}⟩\ ` are :ref:`F-algebras <f-algebra>`.
++ :math:`𝔸 = ⟨A, f^{𝔸}⟩, \ 𝔹 = ⟨B, f^{𝔹}⟩, \ ℂ = ⟨C, f^ℂ⟩\ ` are :ref:`F-algebras <f-algebra>`.
 
 Suppose :math:`F` yields :math:`m` operation symbols and :math:`k_i` is the arity of the :math:`i`-th symbol:
 

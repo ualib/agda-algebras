@@ -172,11 +172,11 @@ Precisely, for each :math:`x ∈ X`, we denote and define the **equivalence clas
 
 .. math:: x/{≅} \; = \{y ∈ X : x ≅ y\}.
 
-(Some authors prefer the notation :math:`[x]` or :math:`[x]_≅` for the equivalence class containing :math:`x`.)
+(Some authors prefer the notation :math:`[x]` or :math:`[x]_{\cong}` for the equivalence class containing :math:`x`.)
 
-As above, we denote the set :math:`\{x/{≅} \; : x ∈ X\}` of all :math:`≅`-equivalence classes by :math:`X/{≅}`.
+As above, we denote the set :math:`\{x/{\cong} \; : x ∈ X\}` of all :math:`\cong`-equivalence classes by :math:`X/{\cong}`.
 
-Let :math:`⊑` denote the relation on :math:`X/{≅}` defined as follows: :math:`∀ x \ ∀ y \ (x/{≅} \ ⊑ y/{≅} \ ⟺ \ x ≤ y)`.  Then, evidently, :math:`⊑` is a partial ordering on :math:`X/{≅}`. The poset :math:`⟨ X/{≅}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
+Let :math:`⊑` denote the relation on :math:`X/{\cong}` defined as follows: :math:`∀ x \ ∀ y \ (x/{\cong} \ ⊑ y/{\cong} \ ⟺ \ x ≤ y)`.  Then, evidently, :math:`⊑` is a partial ordering on :math:`X/{\cong}`. The poset :math:`⟨ X/{\cong}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
 
 
 .. index:: ! total ordering, ! partial order

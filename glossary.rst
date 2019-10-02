@@ -377,6 +377,11 @@ Nomenclature
     hom set
       Some authors require that :math:`\mathcal C(A,B)` always be a set and call :math:`\mathcal C(A,B)` the **hom set** from :math:`A` to :math:`B`.
 
+    idempotent
+      An operation :math:`f: A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`. That is, :math:`f` maps constant tuples to their constant image value.
+      
+      In other terms :math:`f: (ρ f → A) → A` is idempotent iff for each constant tuple :math:`a: ρ f → A`, say, :math:`∀ i<ρ f, \; a\, i = c`, we have :math:`f\, a = f(c, c, \dots, c) = c`.
+
     implication elimination
       See the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `Logic and Proof`_ book.
 

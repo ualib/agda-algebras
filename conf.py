@@ -24,11 +24,12 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 
+
 # -- Project information -----------------------------------------------------
 
 project = u'The Lean Universal Algebra Library'
 copyright = u'2019, William DeMeo and Siva Somayyajula'
-author = u'William DeMeo and Siva Somayyajula'
+author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
 
 # The short X.Y version.
 version = u'0'
@@ -146,8 +147,7 @@ html_theme_options = {
     'extra_nav_links': {
         'PDF version': 'ualib.pdf',
         'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
-        'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/',
-        'mathematicalanalysis.org': 'https://mathematicalanalysis.gitlab.org/'
+        'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/'
     },
     'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
     # 'sidebar_width' : '200px',
@@ -165,8 +165,7 @@ html_favicon = '_static/lambda.jpg'
 html_show_sourcelink = False
 #html_output_encoding = 'ascii'
 
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
+# Custom sidebar templates, must be a dictionary that maps document names to template names.
 #
 # The default sidebars (for documents that don't match any pattern) are
 # defined by theme itself.  Builtin themes are using these templates by
@@ -185,6 +184,7 @@ htmlhelp_basename = 'ualib'
 latex_engine = 'xelatex'
 
 latex_additional_files = ['unixode.sty', 'bussproofs.sty', 'mylogic.sty']
+# ,'math_macros.sty']
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -204,6 +204,7 @@ latex_elements = {
 \usepackage{mylogic}
 \usepackage{tikz,tikz-cd}
 \usetikzlibrary{backgrounds}
+\newtheorem{theorem}{Theorem}
 '''
     # \definecolor{VerbatimBorderColor}{rgb}{0.7, 0.7, 0.7}
     # \usepackage{tikz, tikz-cd}
