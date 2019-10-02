@@ -2,27 +2,24 @@
 
 .. highlight:: lean
 
-.. _terms-clones-varieties-in-lean:
+.. _inductively-defined-types:
 
 ==================================
-Terms, Clones, Varieties in Lean
+Inductively Defined Types
 ==================================
 
 .. todo:: add chapter intro
-
-.. _inductively-defined-types:
-
-Inductively Defined Types
----------------------------
 
 We briefly introduced inductively defined types in :numref:`inductive-types`.  Many more details can be found in the chapter on `Inductive Types`_ in :term:`TPIL`. 
 
 The availability and utility of inductively defined types were among our primary original motivations for formalizing universal algebra in a language (like Lean) that supports such types. In the present chapter, we show how these types come into play in our formalization project.  
 
+---------------------------------------------------
+
 .. _the-recursor:
 
 The Recursor
-~~~~~~~~~~~~
+-------------
 
 Each inductively defined type, say ``foo``, is accompanied by an elimination principle known as a **recursor** (denoted by ``foo.rec`` in Lean). This elimination principle is what makes the type "inductive"; it allows us to define a function on ``foo`` by assigning values for each of ``foo``'s constructors.
 

@@ -78,6 +78,8 @@ Let us now prove a couple of easy but important consequences of these definition
 
 .. index:: interpretation (of a term), ! arity (of a term)
 
+.. _interpretation-of-a-term:
+
 Interpretation of a term
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -308,7 +310,9 @@ The following theorem makes this more precise (cf. Theorem 4.32 of :cite:`Bergma
 
 ------------------------------
 
-Equational theories
+.. _varieties:
+
+Varieties
 -----------------------
 
 Let :math:`σ = (F, ρ)` be a signature. Recall, :math:`X_ω := \{x_0, x_1, \dots\}` is a countable collection of variables.
