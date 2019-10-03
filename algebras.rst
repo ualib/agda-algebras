@@ -260,42 +260,37 @@ If :math:`R` is compatible with the product algebra and if the projection of :ma
 -----------------------------------------------
 
 .. index:: ! homomorphism
+.. index:: ! epimorphism, ! monomorphism, ! automorphism
 
 .. _homomorphisms:
 
 Homomorphisms
 -------------
 
-Let :math:`𝔸 = ⟨ A, F^𝔸 ⟩` and :math:`𝔹 = ⟨ B, F^𝔹 ⟩` be algebras of the same signature, and let :math:`φ : A → B` be a function. Take an :math:`n`-ary operation symbol :math:`f ∈ F`, and suppose that for all :math:`a_1, \dots a_{n} ∈ A` the following equation holds:
+Let :math:`𝔹 = ⟨ B, F^𝔹 ⟩` and :math:`ℂ = ⟨ C, F^ℂ ⟩` be algebras of the same signature, and let :math:`h: B → C` be a function (e.g., on sets).
 
-.. math:: φ (f^𝔸 (a_1, \dots, a_{n})) = f^𝔹 (φ (a_1), \dots, φ (a_{n})).
+Take an operation symbol :math:`f ∈ F`, and suppose that for all :math:`ρ f`-tuples :math:`b: ρ f → B` of :math:`B` the following equation holds:
 
-Then :math:`φ` is said to **respect the interpretation of** :math:`f`. If :math:`φ` respects the interpretation of every :math:`f ∈ F`, then we call :math:`φ` a **homomorphism** from 𝔸 to 𝔹, and we write :math:`φ \in \operatorname{Hom}(𝔸, 𝔹)`, or simply, :math:`φ : 𝔸 → 𝔹`.
+.. math:: h (f^𝔹 \, b) = f^ℂ (h ∘ b).
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concept of homomorphism is described in :numref:`Sections %s <subalgebras-in-lean>` and :numref:`%s <basic-facts-in-lean>`, and is included in the `subuniverse.lean`_ file of the `lean-ualib`_ library.
+Then :math:`h` is said to **respect the interpretation of** :math:`f`.
 
-.. .. proof:observation::
-..  For groups, to check that a map :math:`φ : G → H` is a homomorphism, it is enough to check that :math:`φ` respects the interpretation of the binary operation. It follows from this that such a function respects the unary and nulary operations as well.
+If :math:`h` respects the interpretation of every :math:`f ∈ F`, then we call :math:`h` a **homomorphism** from 𝔹 to ℂ, and we write :math:`h ∈ \hom(𝔹, ℂ)`, or simply, :math:`h: 𝔹 → ℂ`.
 
----------------------------------
+A homomorphism :math:`h: 𝔹 → ℂ` is called an **epimorphism** if for every algebra :math:`𝔻` and pair :math:`g_1, g_2: ℂ → 𝔻` of homomorphisms, the equation :math:`g_1 ∘ h = g_2 ∘ h` implies :math:`g_1 = g_2`. We often write :math:`h: 𝔹 ↠ ℂ`, and we say ":math:`h` is **epi**" and ":math:`h` maps 𝔹 **onto** ℂ," in this case.
 
-.. index:: ! epimorphism, ! monomorphism, ! automorphism
-
-Epi, Mono, Auto
------------------------
-
-.. todo:: complete this section
+A homomorphism :math:`h: 𝔹 → ℂ` is called a **monomorphism** if for every algebra :math:`𝔸` and every pair :math:`g_1, g_2: 𝔸 → 𝔹` of homomorphisms, the equation :math:`h ∘ g_1 = h ∘ g_2` implies :math:`g_1 = g_2`.  We sometimes write :math:`h: 𝔸 ↣ 𝔹`, and we say ":math:`h` is **mono**" and ":math:`h` maps 𝔹 **into** ℂ," in this case.
 
 .. proof:notation:: homo-, epi-, mono-, automorphism
 
-   We adopt the following notation. If :math:`𝔸` and :math:`𝔹` are algebras in the same signature, then
+   We adopt the following notation. If :math:`𝔹` and :math:`ℂ` are algebras in the same signature, then
 
-   + :math:`\hom(𝔸, 𝔹) =` the set of homomorphisms from 𝔸 to 𝔹.
-   + :math:`\epi(𝔸, 𝔹) =` the set of epimorphisms from 𝔸 onto 𝔹.
-   + :math:`\mono(𝔸, 𝔹) =` the set of monomorphisms from 𝔸 into 𝔹.
-   + :math:`\aut(𝔸, 𝔹) =` the set of automorphisms from 𝔸 into and onto 𝔹.
+   + :math:`\hom(𝔹, ℂ) =` the set of homomorphisms from 𝔹 to ℂ.
+   + :math:`\epi(𝔹, ℂ) =` the set of epimorphisms from 𝔹 onto ℂ.
+   + :math:`\mono(𝔹, ℂ) =` the set of monomorphisms from 𝔹 into ℂ.
+   + :math:`\aut(𝔹, ℂ) =` the set of automorphisms from 𝔹 into and onto ℂ.
 
-**Formalization**. Our formal implementation (in `Lean`_) of these concepts is described in :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
+**Formalization**. Our formal implementation (in `Lean`_) of these concepts is described in  :numref:`subalgebras-in-lean`, :numref:`basic-facts-in-lean`, :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ and `subuniverse.lean`_ files of the `lean-ualib`_ library.
 
 ----------------------
 
