@@ -15,6 +15,7 @@
 # -- Path setup --------------------------------------------------------------
 def setup(app):
     app.add_stylesheet('_static/custom.css')
+    app.add_stylesheet('_static/mathconf.js')
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the

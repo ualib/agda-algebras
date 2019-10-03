@@ -3,14 +3,11 @@
 .. role:: cat
 .. role:: code
 
-=========
-Algebras
-=========
+.. _algebraic-structures:
 
-.. _motivation:
-
-Motivation
-----------
+======================
+Algebraic Structures
+======================
 
 Our vision for the `lean-ualib`_ (Lean Universal Algebra Library) originated with our observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, :term:`type theory` in general, and :term:`dependent <dependent type>` and :term:`inductive types <inductive type>` in particular, facilitates elegant representations of recursively defined objects. Such objects can therefore be implemented in a :term:`proof assistant` such as `Lean`_, a language that not only supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, but also provides powerful :term:`tactics <proof tactic>` for proving properties of objects that inhabit these types.
 
@@ -106,20 +103,22 @@ In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theor
 .. index:: pair: algebra; algebraic structure
 .. index:: ! σ-algebra 
 
-.. _algebraic-structures:
+.. _Algebras:
 
-Algebraic structures
-----------------------
+Algebras
+-----------
 
-An **algebraic structure** in the signature :math:`σ = (F, ρ)` (or, :math:`σ`-**algebra**) is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
+A (universal) **algebra** (or, **algebraic structure**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
 
   #. :math:`A` := a set, called the *carrier* (or *universe*) of the algebra,
   #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρ f → A) → A \}` := a set of operations on :math:`A`, and
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
+We sometimes call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (although this is not entirely standard). [3]_
+
 Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. 
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`the-algebra-type`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
+**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`algebras-in-lean`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
 
 ---------------------------
 
@@ -457,5 +456,8 @@ Here is a small collection of basic observations that we will need later. When w
 
 .. [2]
    By "functional" we mean a function whose domain is a collection of functions.
+
+.. [3]
+   The term :math:`σ`-**algebra** has a special meaning, different from ours, in other areas of mathematics such as real analysis, probability, and measure theory.
 
 .. include:: hyperlink_references.rst

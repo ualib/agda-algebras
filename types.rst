@@ -1449,7 +1449,7 @@ Together with ``quotient.sound``, this implies that the elements of the quotient
 .. [6]
    Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
 
-.. [7]
+.. .. [7]
    Lean code appearing in this section is drawn mainly from the `quotient.lean`_ file of the `lean-ualib`_ repository.
 
 .. include:: hyperlink_references.rst
