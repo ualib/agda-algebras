@@ -1,4 +1,4 @@
-.. .. include:: _static/math_macros.rst
+.. include:: _static/math_macros.rst
 
 .. role:: cat
 .. role:: code

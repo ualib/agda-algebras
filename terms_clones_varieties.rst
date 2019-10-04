@@ -1,3 +1,4 @@
+.. include:: _static/math_macros.rst
 
 .. _terms-clones-varieties:
 
@@ -310,38 +311,49 @@ The following theorem makes this more precise (cf. Theorem 4.32 of :cite:`Bergma
 
 ------------------------------
 
+.. index:: ! identity, ! equation, ! σ-identity, ! σ-equation, ! model
+.. index:: pair: equational base; axiomatization
+.. index:: pair: equational theory; theory
+.. index:: pair: equational class; variety
+
 .. _varieties:
 
-Varieties
------------------------
+Models, Theories, Varieties
+-----------------------------
 
-Let :math:`σ = (F, ρ)` be a signature. Recall, :math:`X_ω := \{x_0, x_1, \dots\}` is a countable collection of variables.
+Let :math:`σ = (F, ρ)` be a signature and :math:`X := \{x_0, x_1, \dots\}` a countable collection of variable symbols.
 
-An **identity** (or **equation**) **in the signature** :math:`σ` is an ordered pair of terms from :math:`T_σ (X_ω)` of the same arity.
+An **identity** (or **equation**) **in the signature** :math:`σ` (or :math:`σ`-**identity**) is an ordered pair :math:`(t,s)` of terms from :math:`T_σ (X)` of the same arity (:math:`ρ t = ρ s`).
 
-We write :math:`p ≈ q` to indicate such an identity in :math:`σ`; here :math:`p, q ∈ T_σ (X_ω)` and :math:`ρ p = ρ q`.
+We write :math:`p ≈ q` to indicate such a :math:`σ`-identity; here :math:`p, q ∈ T_σ (X)` and :math:`ρ p = ρ q`. [3]_
 
-Let :math:`𝔸 = ⟨A, F^𝔸⟩` be an algebra of signature σ.
+Let :math:`𝒜_σ`, resp. :math:`ℰ_σ`, denote the class of all :math:`σ`-algebras, resp. :math:`σ`-identities.
 
-We say that 𝔸 **satisfies** (or **models**, or **is a model for**) the identity :math:`p ≈ q`, and we write :math:`𝔸 ⊧ p ≈ q`, just in case :math:`p^𝔸 = q^𝔸` extensionally.
+For :math:`𝔸 ∈ 𝒦 ⊆ 𝒜_σ` and :math:`p ≈ q ∈ Σ ⊆ ℰ_σ`, we say
 
-In other words, :math:`𝔸 ⊧ p ≈ q` iff :math:`p^𝔸 \, a = q^𝔸 \, a` holds for every tuple :math:`∀ a: ρ p → A`.
+* :math:`𝔸` **models** :math:`p ≈ q`, denoted :math:`𝔸 ⊧ p ≈ q`, just in case :math:`p^𝔸 = q^𝔸` *extensionally* (i.e., :math:`ρ t = ρ s` and :math:`∀ a: ρ p → A, \; p^𝔸 \, a = q^𝔸 \, a`.); [4]_  
 
-If :math:`Σ` is a set of identities in :math:`σ`, we say that :math:`𝔸` **models** (or **is a model for**) :math:`Σ`, and we write :math:`𝔸 ⊧ Σ`, just in case :math:`𝔸` models every equation in :math:`Σ`.
+* :math:`𝔸` **models** :math:`Σ`, denoted :math:`𝔸 ⊧ Σ`, just in case :math:`𝔸 ⊧ p ≈ q` for every :math:`p ≈ q` in :math:`Σ`;
 
-Suppose :math:`𝒦` is a class of algebras and :math:`p ≈ q` is an identity in the signature :math:`σ`. Then we say that :math:`𝒦` **models** :math:`p ≈ q`, and we write :math:`𝒦 ⊧ p ≈ q`, just in case every algebra in :math:`𝒦` models :math:`p ≈ q`.
+* :math:`𝒦` **models** :math:`p ≈ q`, denoted :math:`𝒦 ⊧ p ≈ q`, just in case :math:`𝔸 ⊧ p ≈ q` for every :math:`𝔸` in :math:`𝒦`;
 
-Finally, we write :math:`𝒦 ⊧ Σ` and we say :math:`𝒦` **models** :math:`Σ` iff every algebra in :math:`𝒦` models every identity in :math:`Σ`.  
+* :math:`𝒦` **models** :math:`Σ`, denoted :math:`𝒦 ⊧ Σ`, just in case :math:`𝔸 ⊧ Σ` for every :math:`𝔸 ∈ 𝒦`.
 
-The binary relation :math:`⊧` induces an obvious :term:`Galois connection`.
+The binary relation :math:`⊧` induces an obvious :term:`Galois connection`. Indeed, the :term:`Galois pair` :math:`(\Mod, \Th)` is defined as follows: for all :math:`Σ ⊆ ℰ_σ` and :math:`𝒦 ⊆ 𝒜_σ`, 
 
-Indeed, letting 𝒦 be a class of :math:`σ`-algebras and :math:`Σ` a set of :math:`σ`-equations, we define the :term:`Galois pair` :math:`(\Mod, \Th)` as follows:
+.. math:: \Mod(Σ) := \{𝔸: 𝔸 ⊧ Σ \} \quad \text{ and } \quad \Th(𝒦) := \{Σ: 𝒦 ⊧ Σ\}.
 
-.. math:: \Mod(Σ) := \{𝔸: 𝔸 ⊧ Σ \} \quad \text{ and } \quad \Th(𝒦) := \{p ≈ q: 𝒦 ⊧ p ≈ q\}.
+The first of these, the class of **models** of :math:`Σ`, contains those and only those algebras modelling :math:`Σ`. It is called an **equational class** (or **variety**), and :math:`Σ` is called an **equational base** for, or an **axiomatization** of, the class.
 
-The first of these, :math:`\Mod(Σ)`, is called the class of **models** of Σ.  Classes such as these, which contain those and only those algebras satisfying a given set of identities, are called **equational classes**, and :math:`Σ` is called an **equational base** or an **axiomatization** of the class.
+Dually, :math:`\Th(𝒦)` is the class of identities modelled by all algebras in :math:`𝒦`.  Such a class of identities is called an **equational theory**.
 
-Dually, a set of identities of the form :math:`\Th(𝒦)` is called an **equational theory**.
+Alternatively and equivalently we could define "equational class" and "equational theory" in terms of the two :term:`closure operators <closure operator>` induced by the Galois pair :math:`(\Mod, \Th)`.  Indeed, :math:`\Mod \Th: 𝒫 (𝒜) → 𝒫(𝒜)` is a closure operator on :math:`𝒜` and :math:`\Th \Mod: 𝒫 (ℰ) → 𝒫(ℰ)` is a closure operator on :math:`ℰ`, and 
+
+* an **equational class** (or **variety**) is a :math:`\Mod \Th`-:term:`closed` set of :math:`σ`-algebras;
+
+* an **equational theory** (or **theory**) is a :math:`\Th \Mod`-:term:`closed` set of :math:`σ`-identities.
+
+(Here, as usual, :math:`𝒫` denotes the :term:`power set operator`.)
 
 
 .. _a-variety-of-facts:
@@ -490,11 +502,11 @@ The following is Birkhoff's celebrated HSP theorem. (See also :cite:`Bergman:201
   
       Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
-      Let :math:`𝔸 ∈ 𝒲^†` and :math:`Y` a set of cardinality :math:`\max(|A|, ω)`. *Choose* a surjection :math:`h_0 : Y → A`. [3]_
+      Let :math:`𝔸 ∈ 𝒲^†` and :math:`Y` a set of cardinality :math:`\max(|A|, ω)`. *Choose* a surjection :math:`h_0 : Y → A`. [5]_
   
       By :numref:`Obs %s <obs-six>` (which is essentially Thm. 4.21 of :cite:`Bergman:2012`), :math:`h_0` extends to an epimorphism :math:`h: 𝕋(Y) → 𝔸`.
 
-      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`. [4]_
+      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`. [6]_
 
       We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs-four>` there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
    
@@ -525,9 +537,15 @@ as desired.
    The construction of :math:`𝕋_ρ (X)` may seem to be making something out of nothing, but it plays an significant role in the theory.
 
 .. [3]
-   **AoC**. It seems we need to use some :term:`Choice` axiom here.
+   Produce ``≈`` with ``\approx``.
 
 .. [4]
+   Produce ⊧ with ``\models``.
+
+.. [5]
+   **AoC**. It seems we need to use some :term:`Choice` axiom here.
+
+.. [6]
    **AoC**. *ditto*
 
 .. include:: hyperlink_references.rst

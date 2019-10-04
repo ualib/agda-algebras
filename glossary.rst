@@ -137,7 +137,16 @@ Nomenclature
       An **operational clone** (or just **clone**) on a nonempty set :math:`A` is a set of operations on :math:`A` that contains all :term:`projection operations <projection operation>` and is closed under :term:`general composition`.
 
     closed
-      A subset :math:`B ⊆ A` is called **closed** under the operations in :math:`F` if, for all :math:`f ∈ F` and all :math:`a : ρ f → B`, it is the case that :math:`f a ∈ B`.
+      If :math:`𝖢` is a :term:`closure operator` on :math:`X`, then a subset :math:`A ⊆ X` is called **closed** with respect to :math:`𝖢` (or :math:`𝖢`-**closed**) provided :math:`𝖢(A) ⊆ A` (equivalently, :math:`𝖢(A) = A`).
+
+      Here's an important example. Let :math:`σ = (F, ρ)` be a :term:`signature` and :math:`X` a set. Define for each :math:`A ⊆ X` the set :math:`𝖢(A) = \{f\, b ∣ f ∈ F, \, b: ρ f → A\}`.  Then :math:`𝖢` is a closure operator on :math:`X` and a subset :math:`A ⊆ X` is said to be "closed under the operations in :math:`F`" provided :math:`A` is :math:`𝖢`-closed.
+
+    closure operator
+      Let :math:`X` be a set and let :math:`𝒫(X)` denote the collection of all subsets of :math:`X`. A **closure operator** on :math:`X` is a set function :math:`𝖢: 𝒫 (X) → 𝒫 (X)` satisfying the following conditions, for all :math:`A, B ∈ 𝒫 (X)`, 
+
+      #. :math:`A ⊆ 𝖢(A)`,
+      #. :math:`𝖢 ∘ 𝖢 = 𝖢`,
+      #. :math:`A ⊆ B ⟹ 𝖢(A) ⊆ 𝖢(B)`.
 
     cocomplete
       A poset in which all joins exist is called **cocomplete**.
@@ -516,6 +525,9 @@ Nomenclature
     poset
       A **poset** :math:`⟨X, ⊑⟩` consists of a set :math:`X` and an :term:`antisymmetric` :term:`preorder` :math:`⊑` on :math:`X`.
 
+    power set operator
+      The **powerset operator** :math:`𝒫` maps a class :math:`X` to the class :math:`𝒫 (X)` of all subsets of :math:`X`.
+ 
     predicative
       The opposite of :term:`impredicative`, *predicative* refers to building stratified (or ramified) theories where quantification over lower levels results in variables of some new type, distinguished from the lower types that the variable ranges over.
 
