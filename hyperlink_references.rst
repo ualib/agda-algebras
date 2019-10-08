@@ -1,5 +1,7 @@
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+.. _Algebraic Effects and Handlers: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
+.. _Andrej Bauer: http://www.andrej.com/index.html
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 .. _basic.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/basic.lean
 .. _birkhoff.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/birkhoff.lean
@@ -42,11 +44,13 @@
 .. _More on Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
 .. _`nat/`: https://github.com/leanprover/lean/blob/master/library/init/data/nat
 .. _NuPRL: http://www.nuprl.org/
+.. _OPLSS 2018: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 .. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
 .. _prod.lean: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
 .. _propext.lean: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
 .. _quot.lean: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
 .. _quotient.lean: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+.. _reading material: https://arxiv.org/abs/1807.05923
 .. _set.lean: https://github.com/leanprover/lean/blob/master/library/init/data/set.lean
 .. _setoid.lean: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
 .. _`sigma/`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
@@ -54,8 +58,10 @@
 .. _subuniverse.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/subuniverse.lean
 .. _term.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/term.lean
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
+.. _this gist: https://gist.github.com/andrejbauer/3cc438ab38646516e5e9278fdb22022c
 .. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
 .. _vscode: https://code.visualstudio.com/
 .. _wf.lean: https://github.com/leanprover/lean/blob/master/library/init/wf.lean
 .. _william: https://gitlab.com/ualib/lean-ualib/tree/william
+
 

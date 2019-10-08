@@ -70,6 +70,7 @@ proof_theorem_types = {
     "definition": "Definition",
     "example": "Example",
     "examples": "Examples",
+    "exercise": "Exercise",
     "lemma": "Lemma",
     "notation": "Notation",
     "observation": "Observation",

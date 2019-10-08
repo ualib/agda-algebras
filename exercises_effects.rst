@@ -34,69 +34,68 @@ Exercises
 
       Define an equivalence relation :math:`Θ` on :math:`\Term(X)` inductively as follows:
 
-      :math:`(t, s) ∈ Θ` iff one of the following holds:
+        Let :math:`R` be the relation defined by :math:`(t, s) ∈ R` iff one of the following holds:
         
-      #. :math:`t = s`,
-      #. :math:`t = (x ⋅ y) ⋅ z` and :math:`s = x ⋅ (y ⋅ z)`,
-      #. :math:`t = ε ⋅ x` and :math:`s = x`,
-      #. :math:`t = x ⋅ ε` and :math:`s = x`,
-      #. :math:`t = opᵢ (s₁,\dots ,sₙ)` and :math:`s = opᵢ (s₁',\dots ,sₙ')`) where :math:`∀ i, sᵢ, sᵢ' ∈ \Term(X)` and :math:`(sᵢ, sᵢ') ∈ Θ`.
+        #. :math:`t = s`,
+        #. :math:`t = (x ⋅ y) ⋅ z` and :math:`s = x ⋅ (y ⋅ z)`,
+        #. :math:`t = ε ⋅ x` and :math:`s = x`,
+        #. :math:`t = x ⋅ ε` and :math:`s = x`,
+        #. :math:`t = opᵢ (s₁,\dots ,sₙ)` and :math:`s = opᵢ (s₁',\dots ,sₙ')` where :math:`∀ i, sᵢ, sᵢ' ∈ \Term(X)` and :math:`(sᵢ, sᵢ') ∈ R`.
 
-      Let :math:`Θ` be the smallest equivalence relation on :math:`\Term(X)` containing all pairs :math:`(t,s)` that satisfy one of these five conditions.
+      Let :math:`Θ` be the smallest equivalence relation on :math:`\Term(X)` containing :math:`R`.
 
       Define :math:`F(X) = \Term(X)/Θ`.  We will prove that :math:`F(X)` is free for :math:`T` over :math:`X`.
 
-      Let :math:`𝔸 = ⟨ A, \{ε^𝔸, ⋅^𝔸\}⟩` be a structure in the signature :math:`σ = (\{ε, ⋅\}, ρ)`, where :math:`ρ\, ε = 0` (unary) and :math:`ρ \, ⋅ = 2` (binary).
+      Let :math:`𝔸 = ⟨ A, \{ε^𝔸, ⋅^𝔸\}⟩` be an algebra in the signature :math:`σ = (\{ε, ⋅\}, ρ)`, where :math:`ρ\, ε = 0` (unary) and :math:`ρ \, ⋅ = 2` (binary).
       
       Assume the identities in :eq:`1` are satisfied for all :math:`x, y, z ∈ A` (with :math:`ε^𝔸` in place of :math:`ε` and :math:`⋅^𝔸` in place of :math:`⋅`).
 
-      We must show that for every mapping :math:`φ: X → A` there exists a unique hom :math:`ψ: F(X) → A` such that :math:`ψ\, x = φ \, x` for all :math:`x ∈ X`.
+      We must show that for every mapping :math:`φ: X → A` there exists a unique hom :math:`ψ: F(X) → 𝔸` such that :math:`ψ\, x = φ \, x` for all :math:`x ∈ X`.
 
-      It's a basic fact that every mapping from :math:`X` to :math:`A` extends uniquely to a homomorphism from :math:`\Term(X)` to :math:`𝔸`.
+      Fix a mapping :math:`φ: X → A`.
       
-      Fix a mapping :math:`φ: X → A` and let :math:`h` be the unique hom extending :math:`φ` to :math:`\Term(X)`.
+      It's a basic fact that every mapping from :math:`X` to :math:`A` extends uniquely to a homomorphism from :math:`\Term(X)` to :math:`𝔸`. Let :math:`h: \Term(X) → 𝔸` be the unique homomorphic extension of :math:`φ`.
 
       Consider the kernel of :math:`h`; that is, the equivalence relation,
 
       .. math:: \ker h = \{(t, s) ∣ h\, t  = h \, s\}.
 
-      We prove :math:`\ker h = Θ`.
+      **Claim**. :math:`Θ ⊆ \ker h`.
 
-      The inclusion :math:`\ker h ⊇ Θ` can be seen as follows:
+        *Proof*. If :math:`(t, s) ∈ Θ` then by the definition of :math:`Θ` one of the following holds:
       
-      If :math:`(t, s) ∈ Θ` then, by the definition of :math:`Θ`, one of the following holds:
-      
-      #. :math:`t = s` (which implies :math:`φ'\, t = φ'\, s`, obviously); or
-      #. :math:`t = (x ⋅ y) ⋅ z` and :math:`s = x ⋅ (y ⋅ z)`, which implies
-      
-         .. math:: h\, t = ((h \, x) ⋅^𝔸 (h\, y)) ⋅^𝔸  (h\, z)  = (h \, x) ⋅^𝔸 ((h\, y))⋅^𝔸 (h\, z))
+        #. :math:`t = s`;
+        #. :math:`t = (x ⋅ y) ⋅ z` and :math:`s = x ⋅ (y ⋅ z)`;
+        #. :math:`t = ε ⋅ x` and :math:`s = x`;
          
-         since :math:`𝔸` models :eq:`1`; or,
-      #. :math:`t = ε ⋅ x` and :math:`s = x`, which implies 
+        #. :math:`t = x ⋅ ε` and :math:`s = x`;
+      
+        #. :math:`t = opᵢ (s₁,\dots ,sₙ)` and :math:`s = opᵢ (s₁',\dots ,sₙ')` where :math:`∀ i, (sᵢ, sᵢ') ∈ Θ`.
+      
+        In the first case we have :math:`h\, t = h\, s`, obviously. In the second case, 
 
-         .. math:: h\, t = (h \, ε) ⋅^𝔸 (h\, x) = ε^𝔸 ⋅^𝔸 (h\, x) = h\, x = h\, s
-
-         since :math:`𝔸` models :eq:`1`; or,
+        .. math:: h\, t = ((h \, x) ⋅^𝔸 (h\, y)) ⋅^𝔸  (h\, z)  = (h \, x) ⋅^𝔸 ((h\, y))⋅^𝔸 (h\, z)) = h\, s
          
-      #. :math:`t = x ⋅ ε` and :math:`s = x`, which implies :math:`h\, t = h\, s` for the same reason as the last item; or
-      
-      #. :math:`t = opᵢ (s₁,\dots ,sₙ)` and :math:`s = opᵢ (s₁',\dots ,sₙ')` where :math:`∀ i, (sᵢ, sᵢ') ∈ Θ`, and this case is handled by induction.
-      
-      For the last case, we assume that :math:`(u, v) ∈ Θ` implies :math:`h\, u = h\, v` for all terms :math:`u` and :math:`v` of maximum height :math:`n`.  Let :math:`t` and :math:`s` be terms of height :math:`n+1`.  Then :math:`t = f (s₁,\dots ,sₙ)` and :math:`s = f (s₁',\dots ,sₙ')` for some operation symbol :math:`f`, and so we have
-      
-      .. math:: h\, t = f(h\, s_1, \dots, h\, s_n)\; \text{ and }\; h \, s = f(h\, s_1', \dots, h\, s_n').
-         :label: 2
+        since :math:`𝔸` models :eq:`1`. For the same reason, the third case implies
 
-      But recall our assumption that :math:`∀ i, (s_i, s_i') ∈ Θ` implies :math:`h\, s_i = h\, s_i'`.  It clearly follows from this and :eq:`2` that :math:`h\, t = h\, s`.  
+        .. math:: h\, t = (h \, ε) ⋅^𝔸 (h\, x) = ε^𝔸 ⋅^𝔸 (h\, x) = h\, x = h\, s.
 
-      Let us now prove the reverse inclusion :math:`\ker h ⊆ Θ`.
+        The fourth case is similar. The fifth and final case is dispensed with by induction, as follows:
+        
+        Assume that :math:`(u, v) ∈ Θ` implies :math:`h\, u = h\, v` for all terms :math:`u` and :math:`v` of height at most :math:`n`.  Let :math:`t` and :math:`s` be terms of height :math:`n+1`.  Then :math:`t = f (s₁,\dots ,sₙ)` and :math:`s = f (s₁',\dots ,sₙ')` for some operation symbol :math:`f`, and so we have
       
-      Assume :math:`h\, t = h\, s`.  We must prove :math:`(t, s) ∈ Θ`. 
+        .. math:: h\, t = f(h\, s_1, \dots, h\, s_n)\; \text{ and }\; h \, s = f(h\, s_1', \dots, h\, s_n').
+           :label: 2
 
-      **Todo** complete proof of :math:`\ker h ⊆ Θ`.
+        But recall our assumption that :math:`∀ i, (s_i, s_i') ∈ Θ` implies :math:`h\, s_i = h\, s_i'`.  It follows from this and :eq:`2` that :math:`h\, t = h\, s`.  This completes the proof of the claim.
 
-      Finally, observe that by the first isomorphism theorem there is a unique homomorphism :math:`ψ: \Term(X)/\ker h → A`, and that this map satisfies :math:`ψ x = φ x` holds for all :math:`x ∈ X`.) 
+      Let :math:`π: \Term(X) → \Term(X)/Θ` be the natural projection homomorphism that takes each :math:`t∈ \Term(X)` to its :math:`\Theta`-class, :math:`t/Θ ∈ \Term(X)/Θ`.
+
+      Similarly, let :math:`k: \Term(X) → \Term(X)/\ker h` be the natural projection homomorphism :math:`t ↦ t/\ker h`.
       
+      Since :math:`Θ ⊆ \ker h`, there is a unique mapping :math:`p: \Term(X)/Θ →  \Term(X)/\ker h` such that :math:`p ∘ π = k`, and by the first isomorphism theorem, there is a unique :math:`ψ': \Term(X)/\ker h → 𝔸` such that :math:`ψ' ∘ k = h`.
+
+      It follows that the mapping :math:`ψ := ψ' ∘ p` is a homomorphism from :math:`F(X) = \Term(X)/Θ` and, by the uniqueness of :math:`h`, :math:`p`, and :math:`ψ'`, it's clear that :math:`ψ` is also the unique homomorphism satisfying :math:`ψ\, x = h \, x = φ\, x`. ☐   
 
 .. proof:exercise:: The theory of the apocalypse
 
