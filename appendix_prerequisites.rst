@@ -8,8 +8,8 @@
 Appendix. Prerequisites
 =======================
 
-Operations and Algebraic Structures
------------------------------------
+Operations
+----------
 
 An **algebraic structure** is a pair :math:`⟨ A, F⟩` where :math:`A` is a *nonempty* set and :math:`F` is a set of *finitary operations* on :math:`A`.
 
