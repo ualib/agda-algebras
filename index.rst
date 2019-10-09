@@ -15,6 +15,7 @@ The Lean Universal Algebra Library
     postmodern_algebra
     postmodern_algebra_in_lean
     exercises_effects
+    appendix_prerequisites
     appendix_lean_basics
     appendix_lsl
     glossary

@@ -99,7 +99,7 @@ By default, Lean inserts, and eagerly tries to infer the type of, the implicit a
 
 In this case, Lean seems a bit presumptuous since the type ``α`` is not known, so there's no evidence for the typing judgments ``x: ℕ`` nor ``id₁: ℕ → ℕ``.
 
-If we instead use double curly braces ``{{ … }}``, or their unicode equivalents ``⦃ … ⦄``, this tells the parser to be more conservative about inserting the argument and inferring its type. [2]_
+If we instead use double curly braces ``{{ … }}``, or their unicode equivalents ``⦃ … ⦄``, this tells the parser to be more conservative about inserting the argument and inferring its type. [1]_
 
 ::
 
@@ -377,7 +377,7 @@ The :term:`LSTL` supports the classical :term:`law of the excluded middle` (em) 
     (assume h: P, or.inr (f h))
     (assume h: ¬ P, or.inl h)
 
-(Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of Lean novices who might be puzzled by it: ``or.elim`` means "apply the **disjunction elimination** rule", :math:`∨\mathrm E`.  [4]_  In this case, we apply :math:`∨\mathrm E` to the disjunction ``em P``, that is, ``P ∨ ¬ P``, and the final two lines handle each disjunct in turn.)
+(Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of Lean novices who might be puzzled by it: ``or.elim`` means "apply the **disjunction elimination** rule", :math:`∨\mathrm E`.  In this case, we apply :math:`∨\mathrm E` to the disjunction ``em P``, that is, ``P ∨ ¬ P``, and the final two lines handle each disjunct in turn.)
 
 .. proof:example::
 
@@ -616,7 +616,7 @@ We can then define the empty set, ∅, as well as set intersection, union, etc. 
 
   end extensionality
 
-The following is an example of how function extensionality can block computation in the Lean kernel. [3]_
+The following is an example of how function extensionality can block computation in the Lean kernel. [2]_
 
 ::
 
@@ -669,13 +669,12 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 
 .. rubric:: Footnotes
 
-.. [2]
+.. [1]
    On some systems, typing ``\{{`` and hitting the spacebar produces both left and right double curly braces---i.e., ``⦃ ⦄``.   On other systems, perhaps the ``\}}`` is needed for the closing ``⦄`` symbol. If neither works, the ascii symbols ``{{`` and ``}}`` may be used instead.
 
-.. [3]
-   The symbol ``⋂`` is produced by typing ``\bigcap``, and the ``0`` subscript is obtained by typing ``\0``.
+.. .. [2] The symbol ``⋂`` is produced by typing ``\bigcap``, and the ``0`` subscript is obtained by typing ``\0``.
 
-.. [4]
+.. [2]
    see, e.g., `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 
