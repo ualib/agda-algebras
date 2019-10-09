@@ -27,7 +27,7 @@ The **inverse image of** :math:`C` **under** :math:`f` is the set
 
 Sometimes we refer to the **image of** :math:`f` without mentioning a subset, in which case we mean the image of :math:`\dom f` under :math:`f`, which we denote by :math:`\im f`.
 
-Let :math:`A` be a nonempty set and :math:`n∈ ℕ` a natural number.  An :math:`n`-**ary operation** on :math:`A` is a function :math:`f: A^n → A` which, if :math:`n>0`, maps each :math:`n`-tuple :math:`(a_0, a_1, \dots, a_{n-1})` in :math:`A^n` to a particular element :math:`f(a_0, a_1, \dots, a_{n-1})` in :math:`A`. If :math:`n=0`, then :math:`f: () → A` is a function that takes no arguments and returns an element of :math:`A`, whence :math:`f` simply denotes an element of :math:`A`.
+Let :math:`A` be a nonempty set and :math:`n∈ ℕ` a natural number.  An :math:`n`-**ary operation** on :math:`A` is a function :math:`f: A^n → A` which, if :math:`n>0`, maps each :math:`n`-tuple :math:`(a_0, a_1, \dots, a_{n-1})` in :math:`A^n` to a particular element :math:`f(a_0, a_1, \dots, a_{n-1})` in :math:`A`. If :math:`n=0`, then :math:`f: () → A` is a function that takes no arguments and returns an element of :math:`A`, so :math:`f` in this case is merely notation for a particular element of :math:`A`.
 
 An operation gives rise to a special kind of :math:`(n+1)`-ary relation, namely
 
