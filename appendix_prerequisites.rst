@@ -118,9 +118,9 @@ Here is a list of a few of the most frequently encountered and historically impo
 
 * **Magma**. An algebra :math:`⟨A, ⋅⟩` with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
 
-* **Semigroup**. A magma :math:`⟨A, ⋅⟩` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma whose binary operation satisfies :math:`∀ a, b, c ∈ A, \; (a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
+* **Semigroup**. A magma :math:`⟨A, ⋅⟩` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma whose binary operation satisfies :math:`∀ a, b, c ∈ A`, :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
 
-* **Monoid**. If :math:`⟨A, ⋅⟩` is a semigroup and if :math:`e ∈ A` is a *multiplicative identity* (i.e., :math:`∀ a ∈ A, \; e ⋅ a = a ⋅ e = a`), then :math:`⟨A, \{e, ⋅\}⟩` is called a **monoid**.
+* **Monoid**. If :math:`⟨A, ⋅⟩` is a semigroup and if :math:`e ∈ A` is a *multiplicative identity* (i.e., :math:`∀ a ∈ A`, :math:`e ⋅ a = a ⋅ e = a`), then :math:`⟨A, \{e, ⋅\}⟩` is called a **monoid**.
 
 * **Group**. A **group** is a monoid along with a unary operation :math:`^{-1}` called *multiplicative inverse*. That is, the reduct :math:`⟨ A, \{e, ⋅\}⟩` is a monoid and :math:`^{-1}`
   satisfies :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`, for all :math:`a ∈ A`.
@@ -137,7 +137,7 @@ Here is a list of a few of the most frequently encountered and historically impo
 
      .. math:: a ⋅ (b+c) = a ⋅ b + a ⋅ c \;\text{ and }\; (a+b)⋅ c = a ⋅ c + b ⋅ c`.
 
-  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨A, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨A, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ A`; that is :math:`∀ a ∈ A,\, a ⋅ 1 = 1 ⋅ a = a`.
+  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨A, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨A, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ A`; that is :math:`∀ a ∈ A`, :math:`a ⋅ 1 = 1 ⋅ a = a`.
 
   If :math:`⟨A, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ A` is called a **unit** if it has a multiplicative inverse. That is, :math:`r ∈ A` is a unit provided there exists :math:`s ∈ A` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
 
@@ -145,7 +145,7 @@ Here is a list of a few of the most frequently encountered and historically impo
 
 * **Field**. A commutative division ring is called a **field**.
 
-* **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following four conditions for all :math:`r, s ∈ R` and :math:`x, y ∈ M`:
+* **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
 
   #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
 
@@ -166,7 +166,7 @@ Here is a list of a few of the most frequently encountered and historically impo
 * **Bilinear algebra**. If :math:`𝔽 = ⟨F, \{0, 1, -, ⋅\}⟩` is a field, then the algebra :math:`𝔸 = ⟨A, \{0, -, +, ⋅\} ∪ \{f_r ∣ r ∈ F\}⟩` is called a **bilinear algebra** over :math:`𝔽` provided
 
   #. :math:`⟨A, \{0, -, +\} ∪ \{f_r ∣ r ∈ F\}⟩` is a vector space over :math:`𝔽` and 
-  #. :math:`∀ a, b, c ∈ A, \, ∀ r ∈ F`,
+  #. :math:`∀ a, b, c ∈ A`, :math:`∀ r ∈ F`,
 
      .. math:: \begin{gather}
                (a + b) ⋅ c = (a ⋅ c) + (b ⋅ c),\\
