@@ -195,8 +195,8 @@ Let :math:`âŠ‘` denote the relation on :math:`X/{\cong}` defined as follows: :ma
 
 .. index:: ! total ordering, ! partial order, ! trichotomy property
 .. index:: strict partial order
-.. index:: pair: ! total ordering; ! linear ordering
-.. index:: pair: ! strict total ordering; ! strict linear ordering
+.. index:: ! pair: total ordering; linear ordering
+.. index:: ! pair: strict total ordering; strict linear ordering
 
 .. _total-and-strict-orderings:
 
@@ -249,7 +249,7 @@ On the integers, there are precise relationships between :math:`<` and :math:`â‰
 
 ------------------
 
-.. index:: pair: ! syntactic equality; ! semantic equality
+.. index:: ! pair: syntactic equality; semantic equality
 
 .. _equality:
 
@@ -286,7 +286,7 @@ For a useful general definition of the equality relation on terms and formulas t
 
 -------------------------------------------------------------
 
-.. index:: pair: ! ordered tuples; !tuples
+.. index:: ! pair: ordered tuples; tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
 Relations more generally

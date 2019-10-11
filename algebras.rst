@@ -141,7 +141,7 @@ In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theor
 
 --------------------------
 
-.. index:: pair: ! algebra; ! algebraic structure
+.. index:: ! pair: algebra; algebraic structure
 .. index:: ! σ-algebra, ! arity, ! trivial algebra, ! reduct
 
 .. _algebraic-structures:

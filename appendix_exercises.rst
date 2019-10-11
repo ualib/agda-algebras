@@ -1,9 +1,9 @@
 
 .. include:: _static/math_macros.rst
 
-=========
-Exercises
-=========
+====================
+Appendix. Exercises
+====================
 
 **ATTRIBUTION**. The exercises in this section were supplied by `Andrej Bauer`_ to students of his course on `Algebraic Effects and Handlers`_ at `OPLSS 2018`_. We are merely "borrowing" these exercises for the time being as they may be helpful when we implement theories in Lean.  However, this section will ultimately be replaced and/or removed, unless Andrej agrees to be listed as a coauthor of the documentation when it is publicly released.
 
