@@ -6,9 +6,9 @@
 
 .. _algebraic-structures-in-lean:
 
-================================
-Algebraic Structures in Lean
-================================
+==================
+Algebras in Lean
+==================
 
 Most of the Lean_ code described in this section can be found in the files ``basic.lean`` residing in the ``src`` directory of the lean-ualib_ repository. [1]_
 

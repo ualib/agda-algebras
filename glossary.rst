@@ -666,6 +666,12 @@ Nomenclature
       
       Then we say :math:`f:  (β → α) → α` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ u, v, \ [(∀ i: β, \ u i \mathrel R v i) \ → \ f u \mathrel R f v]`.
         
+    retraction
+      todo: insert definition
+
+    retract
+      todo: insert definition
+      
     right module
       A **right module** :math:`M` over a :term:`ring` :math:`R` is...
 

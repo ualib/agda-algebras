@@ -561,7 +561,7 @@ In this section we define *quotients*, first as sets and then as types.  We defi
 
 Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-As in :numref:`equivalence-relation`, for each :math:`a ∈ A`, we denote by :math:`a/{≡}` the set of elements in :math:`A` that are **equivalent to** :math:`a` **modulo** ≡, that is,
+As in :numref:`equivalence-relations`, for each :math:`a ∈ A`, we denote by :math:`a/{≡}` the set of elements in :math:`A` that are **equivalent to** :math:`a` **modulo** ≡, that is,
 
 .. math:: a/{≡} = \{ b ∈ A ∣ b ≡ a \}.
 

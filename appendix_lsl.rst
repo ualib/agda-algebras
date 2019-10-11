@@ -455,7 +455,7 @@ It is possible to provide the implicit parameters explicitly, but then the ``@``
 Preorders and equivalences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In :numref:`equivalence-relation` we learned that an *equivalence relation* is a symmetric preorder, or, equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
+In :numref:`equivalence-relations` we learned that an *equivalence relation* is a symmetric preorder, or, equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
 
 Recall, a *preorder* is a reflexive and transitive binary relation.
 
@@ -606,7 +606,7 @@ The poset induced by a preorder
 Total and strict orders
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-In :numref:`total-and-strict-ordering` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
+In :numref:`total-and-strict-orderings` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
 
 ::
 

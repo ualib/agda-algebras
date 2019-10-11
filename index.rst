@@ -6,7 +6,6 @@ The Lean Universal Algebra Library
     :maxdepth: 2
 
     preface
-    preliminaries
     types
     algebras
     algebras_in_lean
