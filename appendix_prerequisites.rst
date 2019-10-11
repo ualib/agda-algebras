@@ -83,7 +83,6 @@ An algebra is **finite** if :math:`|A|` is finite, and is called **trivial** if 
 
 Given two algebras :math:`𝔸` and :math:`𝔹`, we say that :math:`𝔹` is a **reduct** of :math:`𝔸` if both algebras have the same universe and :math:`𝔹` can be obtained from :math:`𝔸` by removing  operations.
 
-
 .. index:: ! operation symbol, ! arity, ! interpretation, ! signature, ! similarity type
 
 A better approach
@@ -104,6 +103,8 @@ The constants :math:`0^ℤ` and :math:`1^ℤ` are nullary operations. Of course 
 Examples of some general algebraic structures that have historically played a central role in mathematics over the last century (e.g., groups, rings, and modules) are mentioned in the next section.
 
 ---------------------------------------
+
+.. index:: ! magma, ! groupoid, ! binar, ! vector space, ! bilinear algebra, ! associative algebra, ! semigroup, ! monoid, ! group, multiplicative inverse, ! abelian group, additive identity, additive inverse,! ring, ! unital ring, ! multiplicative identity, ! unit, ! division ring, ! field, ! module 
 
 Examples of Algebraic Structures
 ---------------------------------
@@ -127,19 +128,17 @@ Here is a list of a few of the most frequently encountered and historically impo
   
 * **Abelian group**. A group is called **abelian** just in case its binary operation is commutative, in which case we usually denote the operation by :math:`+` instead of :math:`⋅`. Also in this case we let :math:`0` (instead of :math:`e`) denote the *additive identity*, and we let :math:`-\,` (instead of :math:`^{-1}`) denote the *additive inverse*. Thus, an **abelian group** is a group :math:`𝔸 = ⟨ A, 0, -,+⟩` such that :math:`a+b = b+a` for all :math:`a, b ∈ A`.
 
-* **Ring**. An algebra :math:`𝔸 = ⟨ A, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
+* **Ring**. An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
 
-  #. the reduct :math:`⟨A, \{0, -,+\}⟩` is an abelian group,
+  #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
 
-  #. the reduct :math:`⟨ A, ⋅ ⟩` is a semigroup, and
+  #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
 
-  #. :math:`⋅` distributes over :math:`+`, that is, :math:`∀ a, b, c ∈ A`,
+  #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
 
-     .. math:: a ⋅ (b+c) = a ⋅ b + a ⋅ c \;\text{ and }\; (a+b)⋅ c = a ⋅ c + b ⋅ c`.
+  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
 
-  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨A, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨A, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ A`; that is :math:`∀ a ∈ A`, :math:`a ⋅ 1 = 1 ⋅ a = a`.
-
-  If :math:`⟨A, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ A` is called a **unit** if it has a multiplicative inverse. That is, :math:`r ∈ A` is a unit provided there exists :math:`s ∈ A` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
+  If :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ R` is called a **unit** if it has a multiplicative inverse, that is, there exists :math:`s ∈ R` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
 
 * **Division ring**.  A ring in which every non-zero element is a unit is called a **division ring**.
 
@@ -155,11 +154,9 @@ Here is a list of a few of the most frequently encountered and historically impo
 
   #. :math:`f_1(x) = x`.
 
-  Note that the first condition says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`.
-  
-  Conditions 2--4 say: (1) the collection of endomorphisms :math:`\{f_r ∣ r∈ R\}` is itself a ring with unit, where the function composition described in the third condition is the binary multiplication operation, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`\{f_r ∣ r∈ R\}`.
+  Note that Condition 1 says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`, while the other conditions amount to the following: (1) the set :math:`E := \{f_r ∣ r∈ R\}` of endomorphisms is a ring with unit where multiplication is function composition, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`E`.
 
-  Part of the importance of modules lies in the fact that every ring is, up to isomorphism, a ring of endomorphisms of some abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
+  One reason modules are important is that every ring is, up to isomorphism, a ring of endomorphisms of some abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
 
 * **Vector space**. In :math:`R` happens to be a field, then an :math:`R`-module is typically called a **vector space** over :math:`R`.
 
@@ -174,11 +171,7 @@ Here is a list of a few of the most frequently encountered and historically impo
                a ⋅ f_r(b) = f_r(a ⋅ b) = f_r(a) ⋅ b.
                \end{gather}
 
-  If in addition :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)` for all :math:`a, b, c ∈ A`, then :math:`𝔸` is called an **associative algebra** over :math:`𝔽`.
-  
-  Thus an associative algebra over a field has both a vector space reduct and a ring reduct.
-  
-  An example of an associative algebra is the space of linear transformations (endomorphisms) of any vector space into itself.
+  If in addition :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)` for all :math:`a, b, c ∈ A`, then :math:`𝔸` is called an **associative algebra** over :math:`𝔽`. Thus an associative algebra over a field has both a vector space reduct and a ring reduct. An example of an associative algebra is the space of *linear transformations* (endomorphisms) of any vector space into itself.
 
 ------------------
 

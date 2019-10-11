@@ -76,7 +76,7 @@ Nomenclature
 .. glossary::
 
     abelian group
-       An **abelian group** is a group with a *commutative* binary operation, which we usually denote by :math:`+` instead of :math:`\cdot`.  That is, a group :math:`𝔸 = ⟨ A, 0, \, -\, , + ⟩` is called **abelian** provided the :term:`binary operation` :math:`+` is commutative: :math:`∀ a, b ∈ G, \, a + b = b + a`. 
+      A :term:`group` is called **abelian** just in case its binary operation is commutative; in that case we usually let :math:`0` (instead of :math:`e`) denote the *additive identity*, we let :math:`-` (instead of :math:`^{-1}`) denote the *additive inverse*, and we let :math:`+` (instead of :math:`⋅`) denote *binary addition*. Thus, an **abelian group** is a group :math:`⟨A, 0, -, +⟩` such that :math:`a+b = b+a` for all :math:`a, b ∈ A`.
 
     abstract category
       An **abstract category** is one whose objects are not sets or whose morphisms are not functions defined on sets. Our next example is somewhere in between. The objects are sets, but the morphisms are not necessarily *total* functions; that is, they may be defined on only a part of the source object.
@@ -107,7 +107,7 @@ Nomenclature
       Given a :term:`signature` :math:`σ = (F, ρ)`, each operation symbol :math:`f ∈ F` is assigned a value :math:`ρ f`, called the **arity** of :math:`f`. (Intuitively, the arity can be thought of as the "number of arguments" that :math:`f` takes as "input".)
 
     bilinear algebra
-      Let :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra over** :math:`𝔽` provided :math:`⟨ A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a vector space over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
+      Let :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra over** :math:`𝔽` provided :math:`⟨A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a vector space over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
 
       .. math::   (a + b) ⋅ c &= (a ⋅ c) + (b ⋅ c)\\
                   c ⋅ (a + b) &= (c⋅ a) + (c⋅ b)\\
@@ -178,6 +178,9 @@ Nomenclature
 
     commutative diagram
       A **commutative diagram** is a diagram with the following property: for all objects :math:`C` and :math:`D`, all paths from :math:`C` to :math:`D` yield the same morphism.
+
+    commutative group
+      See :term:`abelian group`.
 
     compact element
       an element :math:`x` of a lattice :math:`L` is called **compact** provided for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
@@ -267,7 +270,7 @@ Nomenclature
       A **directed graph** is a :term:`relational structure` consisting of a vertex set :math:`V` (whose elements are called vertices) and an edge set :math:`E ⊆ V^2` (whose elements are called edges).
 
     division ring
-      A **division ring** is a ring in which every non-zero element is a :term:`unit`.
+      A ring in which every non-zero element is a unit is called a **division ring**.
 
     domain
       If :math:`f : A → B` is a function or relation from :math:`A` to :math:`B`, then :math:`A` is called the **domain** of :math:`f`, denoted by :math:`\dom f`.
@@ -394,9 +397,7 @@ Nomenclature
       Let :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
 
     group
-      A **group** is a monoid along with a unary operation :math:`\, ^{-1}`, called a :term:`multiplicative inverse`.
-
-      A **group** :math:`𝐆 = (G, e, \ ^{-1}, ⋆)` consists of a set :math:`G` together with a :term:`nullary <nullary operation>` (constant) operation :math:`e`, a :term:`unary <unary operation>` (inverse) operation :math:`\ ^{-1}: G → G`, and a :term:`binary operation` :math:`⋆ : G^2 → G`, such that :math:`(G, e, ⋆)` is a monoid and :math:`x ⋆ x^{-1} = e` for all :math:`x ∈ G`.
+      A **group** is a :term:`monoid` expanded with a unary operation :math:`^{-1}`, called *multiplicative inverse*, which satisfies :math:`∀ a ∈ A`, :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`.
 
     groupoid
       See :term:`magma`.
@@ -474,7 +475,7 @@ Nomenclature
       An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: https://leanprover.github.io/.
 
     left module
-      A **left module** :math:`M` over a :term:`ring` :math:`R` is...
+      See :term:`module`.
 
     Leibniz equal
       See :term:`function extensionality`.
@@ -486,28 +487,15 @@ Nomenclature
       Propositions :math:`P` and :math:`Q` are **logically equivalent** provided :math:`P` implies :math:`Q` and :math:`Q` implies :math:`P`.
 
     magma
-      An algebra with a single binary operation is called a **magma** (or **groupoid** or **binar**). This operation is usually denoted by :math:`+` or :math:`\cdot`, and we write :math:`a+b` or :math:`a\cdot b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, and call it the sum or product of :math:`a` and :math:`b`, respectively.
+      An algebra with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
 
     module
-      Let :math:`ℝ = ⟨ R, 0, 1, -\, , +, ⋅ ⟩` be a ring with unit :math:`1`. An :math:`R`-**module** (sometimes called a *left unitary* :math:`R`-*module*) is an algebra that we denote by :math:`𝕄 = ⟨ M, 0, 2, -\, , +, f_r⟩_{r ∈ R}`, where 
-      
-      #. :math:`\langle M, +, -, 0\rangle` is an Abelian group reduct, and unary operations :math:`(f_r)_{r ∈ R}` which satisfy the following four conditions: for all :math:`r, s∈ R` and :math:`x, y ∈ M`:
+      Let :math:`R` be a :term:`ring` with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an :term:`abelian group` :term:`reduct` :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
 
       #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
-
       #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
-
       #. :math:`f_r(f_s(x)) = f_{rs}(x)`
-
       #. :math:`f_1(x) = x`.
-
-      (If the ring :math:`R` happens to be a field, an :math:`R`-module is typically called a **vector space** over :math:`R`.)
-
-      Note that the first condition says that each :math:`f_r` is an endomorphism of the Abelian group :math:`⟨ M, 0, -, +⟩`.
-      
-      Conditions 1--4 above say: (1) the collection of endomorphisms :math:`(f_r)_{r∈ R}` is itself a ring with unit, where the function composition described in (3) is the binary multiplication operation, and (2) the map :math:`r ↦ f_r` is a ring epimorphism from :math:`ℝ` onto :math:`(f_r)_{r ∈ R}`.
-
-      Part of the importance of modules lies in the fact that every ring is, up to isomorphism, a ring of endomorphisms of some Abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
 
     metaprogram
       a program whose purpose is to modify the behavior of other programs; :term:`proof tactics <proof tactic>` form an important class of metaprograms.
@@ -516,8 +504,7 @@ Nomenclature
       See :term:`implication elimination`.
 
     monoid
-      A **monoid** :math:`𝐌 = (M, e, ∘)` consists of a set :math:`M` with a a **unit** (or, **multiplicative identity**) element :math:`e ∈ M` and a :term:`binary operation` :math:`⋆ : M^2 → M` such that for all :math:`x,y,z ∈ M`, :math:`x ∘ e = x = e ∘ x` and :math:`(x ∘ y) ∘ z = x ∘ (y ∘ z)`. In other words, a monoid has a reduct :math:`⟨ M, ⋅⟩` that is a semigroup, as well as an element :math:`e ∈ M` (constant, nullary operation) satisfying :math:`e ∘ m = m ∘ e = m`, for all :math:`m ∈ M`.
-
+      If :math:`⟨M, ⋅⟩` is a semigroup and if there exists :math:`e ∈ M` that is a *multiplicative identity* (i.e., :math:`∀ m ∈ M`, :math:`e ⋅ m = m = m ⋅ e`), then :math:`⟨M, \{e, ⋅\}⟩` is called a **monoid**.
 
     monoid homomorphism
       Given monoids :math:`𝐌_1 = (M_1, e_1, ⋆)` and :math:`𝐌_2 = (M_2, e_2, ∗)` we say that a function :math:`f : M_1 → M_2` is a **monoid homomorphism** from :math:`𝐌_1` to :math:`𝐌_2` provided :math:`f` preserves the :term:`nullary <nullary operation>` (identity) and :term:`binary operations <binary operation>`; that is, :math:`f(e_1) = e_2` and :math:`f (x ⋆ y) = f(x) ∗ f(y)` for all :math:`x, y ∈ M_1`.
@@ -651,6 +638,9 @@ Nomenclature
     recursor
       Each :term:`inductively defined type <inductive type>` ``T`` is accompanied by an elimination principle known as a **recursor** (denoted by ``T.rec`` in Lean). It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors. See also :numref:`inductively-defined-types`.
 
+    reduct
+      Given two algebras :math:`𝔸` and :math:`𝔹`, we say that :math:`𝔹` is a **reduct** of :math:`𝔸` if both algebras have the same universe and :math:`𝔹` can be obtained from :math:`𝔸` by removing  operations.
+
     reflexive
       A binary relation :math:`R` on a set :math:`X` is called **reflexive** provided :math:`∀ x ∈ X, \ x \mathrel{R} x`.
 
@@ -680,22 +670,20 @@ Nomenclature
       A **right module** :math:`M` over a :term:`ring` :math:`R` is...
 
     ring
-      A **ring** :math:`R` is an algebra :math:`𝔸 = ⟨ A, 0, -, +, ⋅⟩` such that
-      
-      #. the reduct :math:`⟨A, 0, -, +⟩` is an Abelian group,
+      An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
 
-      #. the reduct :math:`⟨A, ⋅⟩` is a semigroup, and
-
-      #. for all :math:`a, b, c ∈ A`, :math:`a ⋅ (b + c) = a ⋅ b + a ⋅ c` and :math:`(a + b) ⋅ c = a ⋅ c + b ⋅ c`.
+      #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
+      #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
+      #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
 
     ring with unity
-       A **ring with unity** is an algebra :math:`𝔸 = ⟨ A, 0, 1, -\, , +, ⋅⟩`, where the reduct :math:`⟨ A, 0, -, +, ⋅⟩` is a ring, and where :math:`1` is a multiplicative identity; i.e. :math:`a ⋅ 1 = 1 ⋅ a = a` for all :math:`a ∈ A`.
+      A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring :term:`reduct` :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
 
     self-dual
       A category :math:`\mathcal C` is called **self-dual** if :math:`\mathcal C^{\mathrm{op}} = \mathcal C`.
 
     semigroup
-      A :term:`groupoid` for which the binary operation is associative is called a **semigroup**. That is, a semigroup is a groupoid with binary operation satisfying :math:`(a\cdot b)\cdot c = a\cdot (b\cdot c)`, for all :math:`a, b, c \in A`.
+      A :term:`magma` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma :math:`⟨A, ⋅⟩` whose binary operation satisfies :math:`∀ a, b, c ∈ A`, :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
 
     σ-algebra
       See :term:`algebraic structure`.
@@ -755,7 +743,7 @@ Nomenclature
       The **underlying set functor** of :math:`𝐌` is denoted by :math:`U(𝐌)`, or by :math:`|𝐌|`; it returns the *universe* of the structure :math:`𝐌`, and for each morphism :math:`f`, :math:`Uf` (or :math:`|f|`) is :math:`f` viewed simply as a function on sets.
 
     unit
-      If :math:`𝔸 = ⟨ A, 0, 1, -, +, ⋅⟩` is a ring with unity, an element :math:`r ∈ A` is called a :term:`unit` of :math:`𝔸` if it has a multiplicative inverse; that is, there exists :math:`r' ∈ A` such that :math:`r ⋅ r' = 1 = r' ⋅ r`.
+      If :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ R` is called a **unit** if it has a multiplicative inverse, that is, there exists :math:`s ∈ R` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
 
     unital ring
       See :term:`ring with unity`.
@@ -790,6 +778,9 @@ Nomenclature
         #check list β    -- Type v
 
       The variable ``u_1`` ranges over type levels.  As the output of the ``#check`` shows, ``list α`` has ``Type u`` because ``α`` has ``Type u``. Similarly for ``list β``. 
+
+    vector space
+      If :math:`R` is a :term:`field`, then an :math:`R`-:term:`module` is typically called a **vector space** over :math:`R`.
 
 --------------------------------
 
