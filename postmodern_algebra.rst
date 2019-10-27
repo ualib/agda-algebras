@@ -1,3 +1,9 @@
+.. File: postmodern_algebra.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
+
 .. include:: _static/math_macros.rst
 
 .. role:: cat
@@ -90,7 +96,7 @@ A **group** is an :math:`\FGrp`-algebra where :math:`\FGrp A = 1 + A + A × A`.
   
 .. index:: homomorphism
 .. index:: ! group homomorphism
-.. index:: ! f-algebra homomorphism
+.. index:: ! F-algebra homomorphism
 
 .. _f-algebra-homomorphism:
 

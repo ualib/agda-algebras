@@ -1,4 +1,7 @@
-.. role:: lightgray
+.. File: preface.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 =======
 Preface

@@ -1,3 +1,8 @@
+.. File: types.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. role:: cat
@@ -109,6 +114,7 @@ To summarize, for each type ``α:Type`` and for every family of types ``β: α �
    Then we represent the Cartesian product :math:`B_0 × B_1` by the type ``Π(i:bool), B i``. [3]_
 
 .. index:: ! Sigma type
+
 .. index:: type of; dependent pairs
 
 .. _sigma-types:
@@ -561,7 +567,7 @@ In this section we define *quotients*, first as sets and then as types.  We defi
 
 Given an :term:`equivalence relation` on :math:`A`, there is an important mathematical construction known as forming the *quotient* of :math:`A` modulo the given equivalence relation.
 
-As in :numref:`equivalence-relations`, for each :math:`a ∈ A`, we denote by :math:`a/{≡}` the set of elements in :math:`A` that are **equivalent to** :math:`a` **modulo** ≡, that is,
+As explained in the :ref:`appendix section on equivalence relations <equivalence-relations>`, for each :math:`a ∈ A`, we denote by :math:`a/{≡}` the set of elements in :math:`A` that are **equivalent to** :math:`a` **modulo** ≡, that is,
 
 .. math:: a/{≡} = \{ b ∈ A ∣ b ≡ a \}.
 

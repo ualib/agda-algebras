@@ -1,3 +1,8 @@
+.. File: postmodern_algebra_in_lean.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. role:: cat
@@ -68,10 +73,9 @@ fork and eval
 
 ----------------------------------------------------
 
-.. index:: ! F-algebra, group, Set, Grp
+.. index:: F-algebra
 .. index:: homomorphism
-.. index:: ! group homomorphism
-.. index:: ! f-algebra homomorphism
+.. index:: F-algebra homomorphism
 
 
 .. _f-algebras-in-lean:

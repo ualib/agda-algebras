@@ -1,12 +1,18 @@
+.. File: appendix_lean_basics.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 11 Oct 2019
+.. Updated: 27 Oct 2019
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
 
 .. _lean-basics:
 
-========================
-Appendix. Lean Basics
-========================
+
+Lean Basics
+------------
 
 In this appendix we describe the various features and aspects of Lean_ on which the lean-ualib_ depends.
 
@@ -19,12 +25,10 @@ Some good references for this material are
   + `Lean Reference Manual`_
   + `Logic and Proof`_
 
-------------------------------------------------
-
 .. _leans-type-hierarchy:
 
 Lean's type hierarchy
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 (See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.)
 
@@ -78,12 +82,10 @@ Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is 
 
 The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean_ supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
 
-------------------
-
 .. _implicit-arguments:
 
 Implicit arguments
-------------------
+~~~~~~~~~~~~~~~~~~~
 
 Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful. The `TPL`_ sections on `Implicit Arguments`_ and `More on Implicit Arguments`_ explain this topic in detail.  In the present section we merely collect a few fine points and technicalities that come up in `lean-ualib`_.
 
@@ -109,21 +111,19 @@ If we instead use double curly braces ``{{ … }}``, or their unicode equivalent
 
   #check id₂     -- Π ⦃α: Type⦄, α → α
 
-------------------------------------------------
 
 .. _pattern-matching:
 
 Pattern matching
-----------------
+~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: complete this section
+.. todo:: write this section
 
-------------------------------------------------
 
 .. _the-elaboration-engine:
 
 Elaboration engine
-------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 On top of the Lean_ kernel there is a powerful *elaboration engine* that can
 
@@ -145,31 +145,26 @@ Lean_ does most of these things simultaneously. For example, the term constructe
 
 (For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
 
-----------------------------------------------------------
+.. index:: ! type class, ! instance
 
 .. _type-classes:
 
 Type Classes
--------------
+~~~~~~~~~~~~
 
-The `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in `TPL`_ provides a nice explanation of **type classes**.  Here we excerpt a few highlights from that chapter.
+The `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in `TPL`_ provides a nice explanation of **type classes**.
 
-"Any family of types can be marked as a type class. We can then declare particular elements of a type class to be instances. These provide hints to the elaborator: any time the elaborator is looking for an element of a type class, it can consult a table of declared instances to find a suitable element.
+A **type class** is a family of types; each type in the family is called an **instance** of the type class.
 
-"More precisely, there are three steps involved:
+To have Lean infer an implicit argument using the type class mechanism, the argument in question should appear inside square brackets (instead of curly braces) in the declaration.
 
-+ First, we declare a family of inductive types to be a type class.
-+ Second, we declare instances of the type class.
-+ Finally, we mark some implicit arguments with square brackets instead of curly brackets, to inform the elaborator that these arguments should be inferred by the type class mechanism."
+Type classes are used to provide hints to the elaborator when searching for an element of a certain type class.  The elaborator consults a table of declared instances of that type class to find a suitable element.
 
-See the `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in `TPL`_ for more details.
-
-----------------------------------------------------------
 
 .. _coercion:
 
 Coercion
---------
+~~~~~~~~
 
 **References**. `Coercions`_ and `Coercions using Type Classes`_ sections of `TPL`_
 
@@ -210,22 +205,20 @@ In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``. The
    class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
    (F : a → Sort v) (coe : Π x, F x)
 
-
-----------------------------------------------------------
-
 .. _metaprogramming:
 
 Metaprogramming
----------------
+~~~~~~~~~~~~~~~~~
 
 Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` is a program whose purpose is to modify the behavior of other programs. :term:`Proof tactics <proof tactic>` form an important class of metaprograms.
 
 An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
 
---------------------------
+.. todo:: complete this section
+
 
 Comparison of ITPs
-------------------
+~~~~~~~~~~~~~~~~~~~~
 
 The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
 
@@ -251,16 +244,14 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 .. + Lean_  :term:`extensional`, :term:`impredicative`
 
 
--------------------------------------------------
-
 .. index:: dependent type
 
 .. _dependent-types-in-lean:
 
 Dependent types
----------------
+~~~~~~~~~~~~~~~~~
 
-.. todo:: complete this section
+.. todo:: write brief intro to dependent types
 
 .. index:: ! type of; dependent functions
 
@@ -307,25 +298,22 @@ To see why ``Σ(x:A),B x`` is a *dependent type*, consider the following example
   structure psigma {α : Sort u} (β : α → Sort v) :=
   mk :: (fst : α) (snd : β fst)
 
-------------------------------
 
-.. index:: dependent type theory, inductive type, universes
+.. index:: inductive type
 
 .. _inductive-types-in-lean:
 
 Inductive types
----------------
+~~~~~~~~~~~~~~~
 
-.. todo:: complete this section
-
-----------------------------------
+.. todo:: write brief intro to inductive types
 
 .. index:: ! extensionality
 
 .. _extensionality:
 
 Extensionality
----------------
+~~~~~~~~~~~~~~~~~~
 
 This section takes as its starting point the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some material from that tutorial is repeated here for clarity and to keep this section self-contained.
 
@@ -337,7 +325,7 @@ This section takes as its starting point the `Axioms and Computation`_ section o
 Classical and constructive reasoning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a countable hierarchy of universes that starts with the :term:`impredicative` ``Prop`` type at the bottom. (See :numref:`leans-type-hierarchy` for more details about Lean's type hierarchy.)
+The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a countable hierarchy of universes that starts with the :term:`impredicative` ``Prop`` type at the bottom. (See the :ref:`appendix section on Lean's type hierarchy <leans-type-hierarchy>` for more details about Lean's type hierarchy.)
 
 Lean extends the :term:`CiC` with additional axioms and rules in order to make the language more expressive and versatile so that the statements of theorems and the constructions of proofs are simpler and more elegant.
 
@@ -532,7 +520,7 @@ Evidently, there are a number of distinct notions of equality, and each may have
 
 To gain some familiarity with function extensionality in Lean, we will dissect the `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ program of the `Lean Standard Library`_, including the proof of the ``funext`` theorem, which states that function extensionality *is* equality of functions in Lean; in other words, two functions are equal iff they are :term:`Leibniz equal` (i.e., they give the same output for each input).
 
-To do this requires that we understand *quotients* and *setoids*---two concepts that we cover in the next chapter---so we postpone our dissection of the ``funext`` program until :numref:`proof-of-funext`.
+To do this requires that we understand *quotients* and *setoids*---two concepts that we cover in the next chapter---so we postpone our dissection of the ``funext`` program until the :ref:`appendix section on extensionality <proof-of-funext>`.
 
 .. index:: ! characteristic function, ! extensional equality (of sets)
 .. index:: quotient
@@ -540,9 +528,9 @@ To do this requires that we understand *quotients* and *setoids*---two concepts 
 Extensionality in Lean
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotient-types`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in :numref:`proof-of-funext` below.)
+Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotient-types`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in the :ref:`appendix section on extensionality <proof-of-funext>`.)
 
-Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see :numref:`Section %s <sets-in-lean>`).
+Let ``α:Type`` and let ``set α := α → Prop`` represent the type of sets containing elements of type ``α`` (identifying subsets with predicates; see the :ref:`appendix section on sets in lean <sets-in-lean>`).
 
 In other terms, ``A: set α`` represents the **characteristic function** of the set ``A`` defined for all ``x:α`` by
 

@@ -1,17 +1,22 @@
+.. File: appendix_lsl.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 11 Oct 2019
+.. Updated: 27 Oct 2019
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
 
-.. _the-stl:
+.. _the-lean-stl:
 
-=======================
-Appendix. The Lean STL
-=======================
+The Lean STL
+-------------
 
 We first collect for easy reference some links to some of the basic components of the `Lean Standard Library`_ (:term:`LSTL`).  Thereafter, we dissect some of these components that are crucial for using Lean to do universal algebra.
 
 Some basic components
----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While Lean doesn't have a formal API, per se, you can browse the source code of the core Lean library to see what built-in types, definitions, and theorems are available in the :term:`LSTL`.
 
@@ -40,20 +45,16 @@ For example, some of the most important of these objects are implemented in the 
   + `functions.lean`_
   + `order.lean`_
 
--------------------------------------
 
 .. _extensionality-in-the-lstl:
 
 Extensionality
---------------
+~~~~~~~~~~~~~~~~~
 
-.. index:: !Leibniz equal, function extionsionality
+.. index:: !Leibniz equal, function extensionality
 .. index:: keyword: funext
 
 .. _proof-of-funext:
-
-Proof of funext
-~~~~~~~~~~~~~~~~
 
 Here we dissect the definition of function extensionality in the `Lean Standard Library`_, as well as the proof of the ``funext`` theorem, which states that the function extensionality principle *is* equality of functions in Lean; in other words, two functions are equal iff they are :term:`Leibniz equal` (i.e., they give the same output for each input).
 
@@ -141,7 +142,7 @@ The first section of the program, inside the ``function`` namespace, is simply a
 
 The more interesting part appears in between the ``section`` and ``end`` delimiters.
 
-First, the ``open quotient`` directive makes the contents of the ``quotient`` namespace available.  (See :numref:`the-quotient-namespace`.)
+First, the ``open quotient`` directive makes the contents of the ``quotient`` namespace available.  (See the :ref:`appendix section on the quotient namespace <the-quotient-namespace>`.)
 
 Next, some implicit variables are defined, namely, for universes ``u`` and ``v``, we have ``α: Sort u`` and ``β: α → Sort v``.
 
@@ -232,12 +233,10 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 
 .. todo:: finish dissecting funext proof
 
------------------------------------
-
 .. _subsingleton-type-class:
 
 Subsingleton type class
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_subsingleton`` and related theorems. Any type inhabited by a single element is a subsingleton type. Here is the definition.
 
@@ -287,12 +286,11 @@ The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_s
   | (is_false h) := h₄ h
   end
 
--------------------
 
 .. _sets-in-lean:
 
 Sets in Lean
-------------
+~~~~~~~~~~~~~~~
 
 We now describe how some basic mathematical concepts are represented in the Lean language.
 
@@ -345,13 +343,12 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 
    prefix `⋃₀`:110 := sUnion
 
-------------------------------
 
 .. index:: relation, binary relation, preorder
 .. index:: domain, range
 
 Relations in Lean
--------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a: A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b: A``, ``R a b`` is a proposition.
 
@@ -455,7 +452,7 @@ It is possible to provide the implicit parameters explicitly, but then the ``@``
 Preorders and equivalences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In :numref:`equivalence-relations` we learned that an *equivalence relation* is a symmetric preorder, or, equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
+In the :ref:`appendix section on equivalence relations <equivalence-relations>` we learned that an equivalence relation is a symmetric preorder---equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
 
 Recall, a *preorder* is a reflexive and transitive binary relation.
 
@@ -513,7 +510,7 @@ Let's prove this now. First recall that the commands
 
 fix a relation ``R`` and introduce the symbol ``≈`` to denote it. Thus, in the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
 
-(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see :numref:`symbol-commands`.)
+(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see the :ref:`symbol appendix <symbols>`.)
 
 ::
 
@@ -597,7 +594,7 @@ Building on our Lean definition of :term:`preorder`, we can define a :term:`part
 The poset induced by a preorder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: complete this section after completing :numref:`quotients-in-the-LSTL`.
+.. todo:: complete this section after completing the :ref:`appendix section on quotients in the lstl <quotients-in-the-lstl>`.
 
 ..     The poset induced by a preorder
 
@@ -606,7 +603,7 @@ The poset induced by a preorder
 Total and strict orders
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-In :numref:`total-and-strict-orderings` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
+In the :ref:`appendix section on orderings <total-and-strict-orderings>` we showed that a strict partial order---that is, a transitive and irreflexive binary relation. Here is a proof of that fact in Lean.
 
 ::
 
@@ -675,7 +672,7 @@ In the example below, having fixed a partial order, ``R``, we define the corresp
 
 Notice that we have used suggestive names ``reflR``, ``transR``, ``antisymmR`` to help remember which hypothesis is which.
 
-The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see :numref:`symbol-commands`).
+The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see the :ref:`symbol appendix <symbols>`).
 
 Remember also that ``eq.subst ‹a = c› ‹a ≤ b›`` is a proof of the fact that amounts for substituting ``c`` for ``a`` in ``a ≤ b``. You can also use the equivalent notation ``‹a = c› ▸ ‹a ≤ b›``, where the triangle is written ``\t``.
 
@@ -710,7 +707,7 @@ In the first example, we use the anonymous ``assume`` and ``have``, and then ref
 
 In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.left`` and ``h.right``, respectively. We also abbreviate ``and.intro h.right h.left`` with an anonymous constructor, writing ``⟨h.right, h.left⟩``. Lean figures out that we are trying to prove a conjunction, and figures out that ``and.intro`` is the relevant introduction principle.
 
-(You can produce angled brackets by typing ``\<`` and ``\>`` or by typing ``\langle`` and ``\rangle``; see :numref:`symbol-commands`.)
+(You can produce angled brackets by typing ``\<`` and ``\>`` or by typing ``\langle`` and ``\rangle``; see the :ref:`symbol appendix <symbols>`.)
 
 .. .. _equality-in-lean:
 
@@ -769,12 +766,11 @@ In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.l
 
 .. .. _products-in-lean:
 
-----------------------------------------------------------
 
 .. _quotients-in-the-LSTL:
 
 Quotients in the LSTL
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the `lean/library/init/data`_ directory of the :term:`LSTL`.
 
@@ -1225,9 +1221,6 @@ To see this in action, let's look at the next pair of lemmas from the `quot.lean
 
   and returns ``quot.rec f h q``.
 
-Temporary "bookmark" subsection (to be deleted)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 + | ``attribute [reducible, elab_as_eliminator] protected``
   | ``def rec_on_subsingleton``
 
@@ -1245,7 +1238,7 @@ Temporary "bookmark" subsection (to be deleted)
 
     ``quot.rec f (λ a b h, subsingleton.elim _ (f b)) q``.
 
-  A ``subsingleton`` type is inhabited by exactly one element.  See :numref:`subsingleton-type-class` for the definition.
+  A ``subsingleton`` type is inhabited by exactly one element.  See the :ref:`appendix section on the subsingleton type class <subsingleton-type-class>` for the definition.
 
   The ``subsingleton.elim`` function takes evidence that ``α`` is a subsingleton type and provides a proof of ``∀ (a b: α), a = b``.
 
@@ -1526,6 +1519,8 @@ The third and final part of the `quot.lean`_ file proves some theorems about the
     )
 
 .. todo:: dissect quot theorems
+
+---------------------
 
 .. include:: hyperlink_references.rst
 

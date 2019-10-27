@@ -126,15 +126,15 @@
     -- BEGIN
     section terms
 
-      parameters {σ : signature} (X :Type*)
+      parameters {σ: signature} (X: Type*)
       local notation `F` := σ.F
       local notation `ρ` := σ.ρ 
     
       inductive term
-      | var         : X → term
-      | app (f : F) : (ρ f → term) → term
+      | var       : X → term
+      | app (f: F): (ρ f → term) → term
     
-      def Term : algebra σ := ⟨term, term.app⟩
+      def Term: algebra σ := ⟨term, term.app⟩
     
     end terms
     -- END

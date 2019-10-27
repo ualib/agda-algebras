@@ -1,10 +1,15 @@
+.. File: algebras_in_lean.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
 .. role:: cat
 .. role:: code
 
-.. _algebraic-structures-in-lean:
+.. _algebras-in-lean:
 
 ==================
 Algebras in Lean
@@ -53,7 +58,7 @@ Before getting to the implementation of the ``op`` type (which resides in the `b
 
 .. include:: _static/basic.lean.1.rst
 
-The code above is self-explanatory.  We merely declare a few universe "levels" in Lean's *type hierarchy* (:numref:`leans-type-hierarchy`), along with comments indicating the kind of types that we expect will reside in these universes.
+The code above is self-explanatory.  We merely declare a few universe "levels" in Lean's *type hierarchy* (See :ref:`appendix section on Lean's type hierarchy <leans-type-hierarchy>`), along with comments indicating the kind of types that we expect will reside in these universes.
 
 (**N.B.** Most of the code listings below will take universe declarations for granted and will not mention them explicitly.) 
 
@@ -112,10 +117,10 @@ Later we will define the *type of interpretations of operations* on the :index:`
 
 -------------------------------------------------------
 
-.. _algebras-in-lean:
+.. _algebraic-structures-in-lean:
 
-Algebras in Lean
-----------------
+Algebraic structures in Lean
+------------------------------
 
 Classical universal algebra is the study of **varieties** (or **equational classes**) of algebraic structures.
 
@@ -259,6 +264,66 @@ Here are a few more examples. We won't explicitly comment on these as we trust t
 
 .. include:: _static/basic.lean.7.rst
 
+
+Examples of algebras in Lean
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We now return to the list of examples of classical algebraic structures that were first presented in :numref:`examples-of-algebras` above and demonstrate how one could represent these structures (and others) in `Lean`_.  Note that the code below represents just one of the many possible ways to represent algebras and will will consider alternatives implementations later.
+
+.. include:: _static/examples.lean.1.rst
+
+.. * **Magma**. An algebra :math:`⟨A, ⋅⟩` with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
+
+.. * **Semigroup**. A magma :math:`⟨A, ⋅⟩` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma whose binary operation satisfies :math:`∀ a, b, c ∈ A`, :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
+
+.. * **Monoid**. If :math:`⟨A, ⋅⟩` is a semigroup and if :math:`e ∈ A` is a *multiplicative identity* (i.e., :math:`∀ a ∈ A`, :math:`e ⋅ a = a ⋅ e = a`), then :math:`⟨A, \{e, ⋅\}⟩` is called a **monoid**.
+
+.. * **Group**. A **group** is a monoid along with a unary operation :math:`^{-1}` called *multiplicative inverse*. That is, the reduct :math:`⟨ A, \{e, ⋅\}⟩` is a monoid and :math:`^{-1}`
+..   satisfies :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`, for all :math:`a ∈ A`.
+  
+.. * **Abelian group**. A group is called **abelian** just in case its binary operation is commutative, in which case we usually denote the operation by :math:`+` instead of :math:`⋅`. Also in this case we let :math:`0` (instead of :math:`e`) denote the *additive identity*, and we let :math:`-\,` (instead of :math:`^{-1}`) denote the *additive inverse*. Thus, an **abelian group** is a group :math:`𝔸 = ⟨ A, 0, -,+⟩` such that :math:`a+b = b+a` for all :math:`a, b ∈ A`.
+
+.. * **Ring**. An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
+
+..   #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
+..   #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
+..   #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
+
+..   A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
+
+..   If :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ R` is called a **unit** if it has a multiplicative inverse, that is, there exists :math:`s ∈ R` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
+
+.. * **Division ring**.  A ring in which every non-zero element is a unit is called a **division ring**.
+
+.. * **Field**. A commutative division ring is called a **field**.
+
+.. * **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
+
+..   #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
+..   #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
+..   #. :math:`f_r(f_s(x)) = f_{rs}(x)`
+..   #. :math:`f_1(x) = x`.
+
+..   Note that Condition 1 says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`, while the other conditions amount to the following: (1) the set :math:`E := \{f_r ∣ r∈ R\}` of endomorphisms is a ring with unit where multiplication is function composition, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`E`.
+
+..   One reason modules are important is that every ring is, up to isomorphism, a ring of endomorphisms of some abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
+
+.. * **Vector space**. In :math:`R` happens to be a field, then an :math:`R`-module is typically called a **vector space** over :math:`R`.
+
+.. * **Bilinear algebra**. If :math:`𝔽 = ⟨F, \{0, 1, -, ⋅\}⟩` is a field, then the algebra :math:`𝔸 = ⟨A, \{0, -, +, ⋅\} ∪ \{f_r ∣ r ∈ F\}⟩` is called a **bilinear algebra** over :math:`𝔽` provided
+
+..   #. :math:`⟨A, \{0, -, +\} ∪ \{f_r ∣ r ∈ F\}⟩` is a vector space over :math:`𝔽` and 
+..   #. :math:`∀ a, b, c ∈ A`, :math:`∀ r ∈ F`,
+
+..      .. math:: \begin{gather}
+..                (a + b) ⋅ c = (a ⋅ c) + (b ⋅ c),\\
+..                c ⋅ (a + b) = (c ⋅ a) + (c ⋅ b),\\
+..                a ⋅ f_r(b) = f_r(a ⋅ b) = f_r(a) ⋅ b.
+..                \end{gather}
+
+..   If in addition :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)` for all :math:`a, b, c ∈ A`, then :math:`𝔸` is called an **associative algebra** over :math:`𝔽`. Thus an associative algebra over a field has both a vector space reduct and a ring reduct. An example of an associative algebra is the space of *linear transformations* (endomorphisms) of any vector space into itself.
+
+
 ----------------------------------
 
 .. _subalgebras-in-lean:
@@ -401,7 +466,7 @@ Next, we codify the definition of the subuniverse generated by a set that we saw
    
 We now formally prove that the intersection of two subuniverses is a subuniverse.  For this we will need "introduction" and "elimination" rules for the intersection operation ``Inter`` defined in the mathlib_. [7]_  (Naturally, mathlib_ allows us to use the notation ``⋂`` in place of ``Inter``.)
 
-(See also :numref:`Section %s <intersection-and-union>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
+(See also the :ref:`appendix section on intersection and union <intersection-and-union>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
 
 .. code-block:: lean
 
@@ -479,7 +544,7 @@ Here, ``⋂₀`` is notation for ``sInter (S : set (set α)) : set α := Inf S``
 
 So, if ``S : set (set α)`` (i.e., a collection of sets of type ``α``), then ``Inf S`` is the intersection of the sets in ``S``.
 
-(See also :numref:`Appendix Section %s <intersection-and-union>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
+(See also the :ref:`appendix section on intersection and union <intersection-and-union>`, for a more technical description of the intersection operation coercions ``⋂₀`` in Lean.)
 
 Next we formalize three obvious facts and their proofs:
 

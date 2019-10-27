@@ -1,18 +1,24 @@
+.. File: appendix_glossary.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 11 Oct 2019
+.. Updated: 27 Oct 2019
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. role:: code
 
 .. highlight:: lean
 
-.. _glossary:
+.. _appendix-glossary:
 
 Glossary
-========
+--------
 
 .. _acronyms:
 
 Acronyms
---------
+~~~~~~~~~
 
 .. glossary::
 
@@ -66,12 +72,11 @@ Acronyms
     UIP
       `Uniqueness of Identity Proofs <https://ncatlab.org/nlab/show/axiom+UIP>`_
 
-----------------------------------------------------
 
-.. _nomenclature:
+.. _definitions:
 
-Nomenclature
-------------
+Definitions
+~~~~~~~~~~~~
 
 .. glossary::
 
@@ -91,10 +96,10 @@ Nomenclature
       See :term:`algebraic structure`.
 
     algebraic structure
-      An **algebraic structure** in the signature :math:`σ = (F, ρ)` (or, :math:`σ`-**algebra**) is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
+      An **algebraic structure** in the :term:`signature` :math:`σ = (F, ρ)` (or, :math:`σ`-**algebra**) is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
 
       #. :math:`A` := a set, called the *carrier* (or *universe*) of the algebra,
-      #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρ f → A) → A \}` := a set of operations on :math:`A`, and
+      #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸: (ρ f → A) → A \}` := a set of operations on :math:`A`, and
       #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝔸`.
 
     antichain
@@ -405,7 +410,7 @@ Nomenclature
     height
       If :math:`w` is a term, then the **height** of :math:`w` is denoted by :math:`|w|` and defined to be the least :math:`n` such that :math:`w ∈ T_n`. See :numref:`terms` for the definition of :math:`T_n`.
 
-      If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` See :numref:`leans-type-hierarchy`.
+      If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α` See the :ref:`appendix section on Lean's type hierarchy <leans-type-hierarchy>`.
        
     Heyting algebra
       A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
@@ -635,6 +640,9 @@ Nomenclature
     quotient
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
 
+    record
+      See :term:`structure`.
+
     recursor
       Each :term:`inductively defined type <inductive type>` ``T`` is accompanied by an elimination principle known as a **recursor** (denoted by ``T.rec`` in Lean). It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors. See also :numref:`inductively-defined-types`.
 
@@ -671,7 +679,7 @@ Nomenclature
 
     retract
       todo: insert definition
-      
+
     right module
       A **right module** :math:`M` over a :term:`ring` :math:`R` is...
 
@@ -709,6 +717,9 @@ Nomenclature
     source vertex
       Given a directed graph :math:`\mathbf G = (V,E)` and an edge :math:`e=(v_1,v_2) ∈ E`, we refer to :math:`v_1` as the **source vertex** of :math:`e`.
 
+    structure
+      In Lean, a non-recursive inductive type that contains only one constructor is called a **structure**. In mathematics, a structure may refer to an :term:`algebraic structure` or a :term:`relational structure`.
+
     subalgebra
       Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If :math:`B ≠ ∅` is a :term:`subuniverse` of 𝔸, and if we let :math:`F^𝔹 = \{ f ↾ B : f ∈ F^𝔸 \}`, then :math:`𝔹 = ⟨ B, F^𝔹 ⟩` is an algebra, called a **subalgebra** of 𝔸.
 
@@ -738,6 +749,9 @@ Nomenclature
 
     transitive
       A binary relation :math:`R` on a set :math:`X` is called **transitive** provided :math:`∀ x, y, z ∈ X \ (x \mathrel{R} y ∧ y \mathrel{R} z\ → \ x \mathrel{R} z)`.
+
+    type class
+      A **type class** is a family of types; each type in the family is called an :index:`instance` of the type class.  **N.B.** Lean will infer an implicit argument using the type class mechanism if we put the argument in square brackets (instead of curly braces) in the declaration.
 
     type theory
       Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. :term:`TT` internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in :term:`TT` play a similar role to that of sets in set theory but *functions definable in TT are always computable*. See also `ncatlab.org/type+theory <https://ncatlab.org/nlab/show/type+theory>`_.
@@ -788,368 +802,8 @@ Nomenclature
     vector space
       If :math:`R` is a :term:`field`, then an :math:`R`-:term:`module` is typically called a **vector space** over :math:`R`.
 
---------------------------------
+--------------------------
 
-Categories
-----------
-
-.. glossary::
-
-    1
-      The only object is :math:`0`; the only morphism is the identity :math:`\id_0: 0 ↦ 0`.
-
-    2
-      There are two objects, :math:`0` and :math:`1`; there is one nonidentity morphism :math:`f: 0 ↦ 1`.
-
-    3
-      There are three objects, :math:`0`, :math:`1`, and :math:`2`; there are three nonidentity morphisms: :math:`f: 0 ↦ 1`, :math:`g: 1 ↦ 2`, and :math:`h: 0 ↦ 2`.
-
-    Cat 
-      the (large) category of small categories; it has small categories as objects and functors :math:`F : \mathcal C → \mathcal D` as morphisms.
-
-    Set
-      the category whose objects are the sets and whose morphisms are the functions on sets.
-
-    Grph
-      the category whose objects are the (directed) graphs; the morphisms are the :term:`graph morphisms <graph morphism>`.
-
-    Mon
-      the category whose objects are the :term:`monoids <monoid>` and whose morphisms are the :term:`monoid homomorphisms <monoid homomorphism>`.
-
-    Par
-      the category whose objects are sets and whose morphisms are the :term:`partial functions <partial function>`.
-
-    Rel
-      the category whose objects are sets and whose morphisms are the :term:`relations <relation>` on sets.
-
-    Fin
-      a category whose objects are the finite sets; the morphisms are the functions on finite sets.
-
-    Pos
-      a category whose objects are the :term:`posets <poset>`; the morphisms are the :term:`monotone functions <monotone function>`.
-
-    Lat
-      a category whose objects are the :term:`lattices <lattice>`; the morphisms are the :term:`lattice homomorphisms <lattice homomorphism>`.
-
-    CLat
-      a category whose objects are the :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
-
-    BLat
-      a category whose objects are the :term:`Boolean lattices <Boolean algebra>`; the morphisms are the :term:`Boolean lattice homomorphisms <Boolean algebra homomorphism>`.
-
-    HLat
-      a category whose objects are the :term:`Heyting lattices <Heyting algebra>`; the morphisms are the :term:`Heyting lattice homomorphisms <Heyting algebra homomorphism>`
-
-    ACLat
-      a category whose objects are :term:`algebraic <algebraic lattice>`, :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
-
-    Arrow
-      Given a category :math:`\mathcal C`, the **arrow category** :math:`\mathcal C^→` has as objects the triples :math:`(A, B, f)` satisfying :math:`A, B ∈  \mathcal C_{\mathrm{obj}}` and :math:`f ∈ \mathcal C(A,B)`, and as morphisms the pairs :math:`(h_1, h_2) : (A, B, f) → (C, D, g)` such that :math:`h_1 ∈ \mathcal C(A,C)`, :math:`h_2 ∈ \mathcal C(B, D)` and :math:`g \circ h_1 = h_2 \circ f`.
-
-    Slice
-      Given a category :math:`\mathcal C` and an object :math:`C ∈ \mathcal C_{\mathrm{obj}} `, the **slice category** :math:`\mathcal C/C` has objects the pairs :math:`(A, f)` such that :math:`f ∈ \mathcal C(A, C)`, and morphisms :math:`h : (A, f) → (B, g)` such that :math:`h ∈ \mathcal C(A, B)` and :math:`g ∘ h = f`.
-
-    Comma
-      Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.
-
---------------------------------
-
-.. _symbol-commands:
-
-Symbols
--------
-
-The list below shows what to type (e.g., in the vscode IDE with lean extension) to produce some of the special characters used in the `lean-ualib`_.
-
-.. glossary::
-
-    { }
-      Surrounds implicit argument(s) and directs parser to use *agressive* type inference; see :numref:`implicit-arguments`.
-
-    ⦃ ⦄
-      (Type with ``\{{``.) Surrounds implicit argument(s) and directs parser to use *conservative* type inference; see :numref:`implicit-arguments`.
-
-    𝔸
-      ``\A`` (or ``\BbbA``)
-
-    𝔹 
-      ``\BbbB``
-
-    ℂ
-      ``\C`` (or ``\BbbC``)
-
-    ℕ
-      ``\N`` (or ``\nat`` or ``\BbbN``)
-      
-    𝕋 
-      ``\BbbT``
-      
-    ℤ
-      ``\Z`` (or ``\Int`` or ``\BbbZ``)
-
-    ℒ
-      ``\mscrL``
-
-    h₁
-      ``h\1`` (or ``h\_1``)
-      
-    h₂
-      ``h\2``, etc.
-
-    fₗ
-      ``f\_l``
-  
-    f̃
-      ``f\tilde``
-
-    R̃
-      ``R\tilde``
-
-    f̂
-      ``f\hat``                          
-
-    å
-      ``\aa``
-  
-    ě
-      ``\ve``
-    
-    ö
-      ``\"o``
-      
-    ç
-      ``\cc``
-
-    α
-      ``\a`` (or ``\alpha``)
-      
-    β
-      ``\b``
-      
-    γ
-      ``\g``
-
-    Γ 
-      ``\G``
-
-    δ
-      ``\de`` (or ``\delta``)
-
-    Δ 
-      ``\D`` (or ``\Delta``)
-
-    ε
-      ``\e`` (or ``\epsilon``)
-
-    ι
-      ``\iota``
-
-    λ
-      ``\lamda`` (or ``\Gl`` or ``\la`` or ``\fun``)
-      
-    Λ
-      ``\L`` (or ``\GL`` or ``\Lambda``)
-
-    ρ
-      ``\rho``
-
-    σ
-      ``\s`` (or ``\sigma``)
-      
-    Σ
-      ``\S`` (or ``\Sigma``)
-      
-    ∑
-      ``\sum``
-
-    ∏
-      ``\prod``
-
-    Π
-      ``\p`` (or ``\Pi``)
-
-    π
-      ``\pi``
-       
-    ϕ
-      ``\phi``
-
-    Φ
-      ``\Phi``
-
-    æ
-      ``\ae``
-
-    Æ
-      ``\AE``
-
-    œ
-      ``\oe``
-    
-    Œ
-      ``\OE``
-
-    ∩
-      ``\i``  (or ``\cap`` or ``\intersection``)
-  
-    ⋂
-      ``\I`` (or ``\bigcap`` or ``\Intersection``)
-  
-    ∪
-      ``\un`` (or ``cup`` or ``\union``)
-  
-    ⋃
-      ``\Un`` (or ``\bigcup`` or ``\Union``)
-
-    ∧
-      ``\an`` (or ``\and`` or ``\wedge``)
-
-    ⋀
-      ``\And`` (or ``\bigwedge``)
-
-    ∨
-      ``\vee`` (or ``\or``)
-
-    ⋁
-      ``\Or`` (or ``\bigvee``)
-
-    ¬
-      ``\n`` (or ``\neg``)
-
-    ∘
-      ``\o`` (or ``\circ``)
-
-    ⊚
-      ``\oo``
-
-    ×
-      ``\x`` (or ``\times``)
-
-    ∃
-      ``\ex`` (or ``\exists``)
-
-    ∀
-      ``\al`` (or ``\all`` or ``\forall``)
-
-    ∈
-      ``\in``
-
-    ∋
-      ``\ni``
-
-    ∉
-      ``\inn``, ``\nin`` (or ``\notin``, ``\nni``)
-
-    ≤
-      ``\leq``
-
-    ≥
-      ``\geq``                               
-
-    ⊆
-      ``\ss`` (or ``\subseteq``)
-
-    ⊇
-      ``\supseteq``        
-
-    ⊂
-      ``\subset``
-
-    ⊃
-      ``\supset``                         
-
-    ≪
-      ``\ll``
-
-    ≫
-      ``\gg``                                 
-
-    ⋆
-      ``\star``
-
-    ∗
-      ``\ast``                              
-
-    ≈
-      ``\~~`` (or ``\approx``)
-
-    ∼
-      ``\sim``               
-
-    ≡
-      ``\equiv``
-
-    ≅
-      ``\cong``                            
-
-    ⟨
-      ``\<`` (or ``\langle``)
-
-
-    ⟩
-      ``\>`` (or ``\rangle``)     
-
-    ‹
-      ``\f<`` (or ``\f``)
-
-    ›
-      ``\f>`` (or ``\fr``)            
-
-    ◀
-      ``\T``
-
-    ▸
-      ``\t``                                   
-
-    ←
-      ``\l`` (or ``->``)
-
-    →
-      ``\to`` (or ``\r``)            
-
-    ⟶
-      ``\hom`` (or ``-->``)                            
-
-    ↑
-      ``\u``
-
-    ↓
-      ``\d``                                   
-
-    ⟹
-      ``==>`` (or ``\nattrans``)                       
-
-    ⟺
-      ``\iff``                                         
-
-    ↦
-      ``\mapsto`` (or ``\r-``)                        |
-
-    ↠
-      ``\rr`` or ``\twoheadrightarrow``                
-
-    ↣
-      ``\pr`` or ``\r->``                              
-
-    ∅
-      ``\emp`` (or ``\empty`` or ``\emptyset``)        
-
-    ⊢
-      ``\vdash``
-
-    ⊨
-      ``\vDash``
-
-    ⫢
-      ``\vDdash``
-
-    ⊧
-      ``\models``              
-
-    ⋈
-      ``\j`` (or ``\bowtie``)
-
-      
 .. .. rubric:: Footnotes
 
 .. .. [1]

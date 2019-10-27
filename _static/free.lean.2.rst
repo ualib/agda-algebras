@@ -140,60 +140,10 @@
     section
     -- BEGIN
       open term
-      parameters {σ : signature} (X :Type*) {f : σ.F} 
+      parameters {σ: signature} (X: Type*) {f: σ.F} 
       definition F := σ.F
       definition ρ := σ.ρ
       definition 𝕋 := @Term σ
       definition 𝕏 := @var σ X
     -- END
-      
-      -- To prove that the free algebra is absolutely free, we show that
-      -- the lift of an arbitrary function h : X → A is a homomorphism
-      -- and that it is the unique homomorphism extending h.
-    
-      -- Definition of the lift of a function.
-      -- Given an arbitrary map h : X → A, define a function on terms as follows:
-      -- ``term`` has two constructors:
-      --            var : X → term
-      --            app (f : F) : (ρ f → term) → term
-      -- We must say what ``lift_of h`` does in each case.
-      -- if the given term is ``var x`` then ``h (var x) = h x``
-      -- if the given term is ``app f ts``, then ``h (app f ts) = (A f) lift_of h``
-      -- ts ↦ 
-      definition lift_of {𝔸: algebra σ} (h: X → 𝔸): 𝕋(X) → 𝔸
-      | (var x):= h x
-      | (app f ts):= 𝔸 f (λ (i : ρ f), lift_of (ts i))
-    
-      open homomorphism
-    
-      -- The lift of a function is a homomorphism.
-      lemma lift_is_hom {𝔸: algebra σ} (h : X → 𝔸): 
-      homomorphic (lift_of h) :=
-      λ f as, show lift_of h (app f as) = 𝔸 f (lift_of h ∘ as), from rfl
-    
-      -- The lift of a function is unique among homomorphic lifts.
-      lemma lift_is_unique {𝔸: algebra σ}: ∀ {g h : 𝕋(X) → 𝔸},
-      homomorphic g → homomorphic h → g ∘ 𝕏 = h ∘ 𝕏 → g = h :=
-      assume (g h: 𝕋(X) → 𝔸) 
-             (h₁ : homomorphic g)
-             (h₂ : homomorphic h)
-             (h₃ : g ∘ 𝕏 = h ∘ 𝕏),
-    
-        show g = h, from 
-    
-          have h₀: ∀ t: 𝕋(X), g t = h t, from 
-    
-            assume t: 𝕋(X), 
-            begin
-              induction t with t f a ih₁ ,
-              show g (𝕏 t) = h (𝕏 t),
-              {apply congr_fun h₃ t},
-    
-              show g (app f a) = h (app f a),
-              { have ih₂  : g ∘ a = h ∘ a, from funext ih₁,
-                calc g (app f a) = 𝔸 f (g ∘ a) : h₁ f a
-                             ... = 𝔸 f (h ∘ a) : congr_arg (𝔸 f) ih₂ 
-                             ... = h (app f a) : (h₂ f a).symm }
-            end,
-          funext h₀ 
     end

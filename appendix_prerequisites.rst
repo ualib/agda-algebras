@@ -1,16 +1,19 @@
+.. File: appendix_prerequisites.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
 
 .. _prerequisites:
 
-=======================
-Appendix. Prerequisites
-=======================
+Prerequisites
+---------------
+
 
 .. todo:: add introductory paragraph
-
----------------------
 
 
 .. index:: ! relation, ! binary relation, ! domain, ! range, ! arity
@@ -19,7 +22,7 @@ Appendix. Prerequisites
 .. _binary-relations:
 
 Binary relations
------------------
+~~~~~~~~~~~~~~~~~~~
 
 A **binary relation** is a set of ordered pairs. Thus, if :math:`X` is a set, a binary relation on :math:`X` is simply a subset of the Cartesian product :math:`X \times X`.
 
@@ -47,14 +50,12 @@ Some binary relations have properties that make them especially useful in a vast
 
 More generally, if :math:`X, Y` are sets, then a (binary) **relation from** :math:`X` to :math:`Y` is a subset of :math:`X × Y`.
 
----------------------
-
 .. index:: ! preorder, ! preordered set
 
 .. _preorders:
 
 Preorders
--------------
+~~~~~~~~~~~~
 
 A **preorder** on a set :math:`X` is a reflexive and transitive (binary) relation on :math:`X`. If :math:`R` is a preorder on :math:`X`, then we call :math:`⟨X, R⟩` (or :math:`X` itself) a **preordered set**.
 
@@ -66,14 +67,12 @@ A **preorder** on a set :math:`X` is a reflexive and transitive (binary) relatio
 
 The significance of preorders stems mainly from the fact that the two most important classes of binary relations happen to be preorders. These are *equivalence relations* and *partial orders*.
 
-----------------
-
 .. index:: ! equivalence relation, ! equivalence class, ! partition, ! block, ! representative, ! kernel
 
 .. _equivalence-relations:
 
 Equivalence relations
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 An **equivalence relation** is a symmetric preorder.  That is, an equivalence relation is a binary relation ≈ on a set :math:`A` such that
 
@@ -140,15 +139,13 @@ There are always at least two equivalence relations in on a given set :math:`A`-
 
    Here, we say that :math:`x` is congruent to :math:`y` modulo :math:`m` if they leave the same remainder when divided by :math:`m`. Soon, you will be able to prove rigorously that this is equivalent to saying that :math:`x - y` is divisible by :math:`m`.
 
--------------------------
-
 .. index:: ! partial ordering
 .. index:: pair: partially ordered set; poset
 
 .. _partial-order-relations:
 
 Partial order relations
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A **partial ordering** (or "partial order") is an anti-symmetric preorder.
 
@@ -191,8 +188,6 @@ As above, we denote the set :math:`\{x/{\cong} \; : x ∈ X\}` of all :math:`\co
 
 Let :math:`⊑` denote the relation on :math:`X/{\cong}` defined as follows: :math:`∀ x \ ∀ y \ (x/{\cong} \ ⊑ y/{\cong} \ ⟺ \ x ≤ y)`.  Then, evidently, :math:`⊑` is a partial ordering on :math:`X/{\cong}`. The poset :math:`⟨ X/{\cong}, ≤ ⟩` is sometimes called the **poset reflection** of the preordered set :math:`⟨ X, ≤ ⟩`.
 
----------------------------
-
 .. index:: ! total ordering, ! partial order, ! trichotomy property
 .. index:: strict partial order
 .. index:: ! pair: total ordering; linear ordering
@@ -201,7 +196,7 @@ Let :math:`⊑` denote the relation on :math:`X/{\cong}` defined as follows: :ma
 .. _total-and-strict-orderings:
 
 Total and strict orderings
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A partial order ≤ on a domain :math:`A` is a **total order** (also called a **linear order**) if all elements are pairwise comparable; that is, for all :math:`a, b ∈ A`, we have either :math:`a ≤ b` or :math:`b ≤ a`.
 
@@ -247,14 +242,12 @@ On the integers, there are precise relationships between :math:`<` and :math:`�
 
 .. To establish the last claim in the theorem, suppose :math:`\leq` is total, and let :math:`a` and :math:`b` be any elements of :math:`A`. We need to show that :math:`a < b`, :math:`a = b`, or :math:`a > b`. If :math:`a = b`, we are done, so we can assume :math:`a \neq b`. Since :math:`\leq` is total, we have :math:`a \leq b` or :math:`a \leq b`. Since :math:`a \neq b`, in the first case we have :math:`a < b`, and in the second case, we have :math:`a > b`.
 
-------------------
-
 .. index:: ! pair: syntactic equality; semantic equality
 
 .. _equality:
 
 Equality
---------
+~~~~~~~~~~~~~
 
 Let :math:`A` be a set and let ≡ be equivalence relation on :math:`A`.  Recall, this means that, in addition to being a binary relation, ≡ has three special properties.
 
@@ -284,13 +277,11 @@ Axiomatically, every relation used to represent some notion of an equality ought
 
 For a useful general definition of the equality relation on terms and formulas that suits our purposes, see the `Equality Section`_ of `Logic and Proof`_.
 
--------------------------------------------------------------
-
 .. index:: ! pair: ordered tuples; tuples
 .. index:: ! unary relation, ! binary relation, ! ternary relation
 
 Relations more generally
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 We can extend the definition of ordered pairs and define an **ordered triple** recursively.
 
@@ -328,12 +319,10 @@ Finally, although it arises less frequently in the theory, an even more general 
 
 Let :math:`I` be a set and for each :math:`i ∈ I` let :math:`A_i` be a set.  A **relation on** :math:`\{A_i | i ∈ I\}` is a subset of the :term:`Cartesian product` :math:`∏_{i ∈ I}A_i`. 
 
----------------------------------
-
 .. index:: ! function, ! inverse, ! function composition, ! restriction, ! image
 
 Functions
----------
+~~~~~~~~~~~
 
 Let :math:`X` and :math:`Y` be sets.  A **function** (or **mapping**) **from** :math:`X` **to** :math:`Y` a is a relation :math:`F ⊆ X × Y` from :math:`X` to :math:`Y` such that for each :math:`a ∈ A` there is precisely one :math:`b ∈ B` such that :math:`a \mathrel{F} b`.
 
@@ -418,15 +407,13 @@ Sometimes we refer to the **image of** :math:`F` without mentioning a subset, in
 
 With this axiom we can prove the sufficiency direction of item 2 of the theorem above: take :math:`H` to be a function with :math:`H ⊆ F^{-1}` and :math:`\dom H = \dom F^{-1} = B`. Then :math:`H` does what we want: Given any :math:`y ∈ B`, we have :math:`(y,H(y)) ∈ F^{-1}` hence :math:`(H(y), y) ∈ F`, and so :math:`F(H(y)) = y`.
 
-----------------------
-
 .. index:: ! join, ! upper bound, ! least upper bound, ! supremum
 .. index:: ! meet, ! lower bound, ! greatest lower bound, !infimum
 
 .. _join-and-meet-operations:
 
 Join and meet operations
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A **join** of :math:`A` (when it exists) is a least element in the set of all upper bounds of :math:`A` in :math:`X`. A join of :math:`A` is sometimes called the **least upper bound** or **supremum** of :math:`A`.
 
@@ -459,14 +446,12 @@ Let :math:`⟨ X, ≤ ⟩` be a preordered set and :math:`C ⊆ X`. We call :mat
 
 A subset :math:`A` of the preordered set :math:`X` is called an **antichain** if for all :math:`x, y ∈ A` we have :math:`x ≤ y` implies :math:`y ≤ x`.
 
-----------------------------
-
 .. index:: ! directed set, ! inductive set
 
 .. _directed-and-inductive-sets:
 
 Directed and inductive sets
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A subset :math:`D` of a preorder is called a **directed set** if every finite subset of :math:`D` has an upper bound in :math:`D`.
 
@@ -488,8 +473,6 @@ A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :ma
 
 .. todo:: insert figure
 
---------------------------------------------
-
 .. index:: ! models (v)
 .. index:: ! complete, ! cocomplete
 .. index:: ! directed-cocomplete preorder, ! directed-cocomplete partial order (dcpo)
@@ -498,7 +481,7 @@ A subset :math:`I` of a preorder :math:`X` is called an **inductive set** if :ma
 .. _completeness-and-cocompleteness:
 
 Completeness and cocompleteness
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The existence of meets and joins for certain kinds of subsets of a preorder is known as completeness and cocompleteness respectively.
 
@@ -536,12 +519,11 @@ Note also that if :math:`A ⊆ X` are :term:`dcpos <dcpo>` and if :math:`ι : A 
 
 If :math:`X` is a poset, :math:`D` a :term:`directed <directed set>` subset of :math:`X`, and if the join of :math:`D` in :math:`X` exists, then we denote the join of :math:`D` by :math:`⨆_X D` rather than :math:`⋁_X D`. Part of the force of the judgement :math:`⨆_X D` is that the set :math:`D` is directed.
 
--------------------------------------
 
 .. index:: ! closure operator, ! closure system, ! retraction
 
 Closure systems and operators
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let 𝔛 be a set and let :math:`𝒫(𝔛)` denote the collection of all subsets of 𝔛.
 
@@ -565,14 +547,12 @@ However, if we take our definition of **retraction** of :math:`𝔸 = ⟨ A, F �
 
 then :math:`𝖱` is a closure operator.
 
--------------------
-
 .. index:: ! tensor product
 
 .. _tensor-product:
 
 Tensor product
----------------
+~~~~~~~~~~~~~~~~~~
 
 If :math:`𝔹 = ⟨B, ⟩` and :math:`ℂ = ⟨C, ⟩` are :term:`modules <module>` over a :term:`ring` :math:`R`, and :math:`𝔸 = ⟨ A, 0, -\, , +⟩` is an :term:`abelian group`, then a **middle linear** map from :math:`B × C` to :math:`A` is a function :math:`f: B × C → A` such that for all :math:`b, b_1, b_2 ∈ B`, :math:`c, c_1, c_2 ∈ C`, and :math:`r ∈ R`,
 

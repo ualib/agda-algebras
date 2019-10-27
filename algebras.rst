@@ -1,3 +1,8 @@
+.. File: algebras.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 2019.10.11
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+
 .. include:: _static/math_macros.rst
 
 .. role:: cat
@@ -101,6 +106,8 @@ An operation is called **nullary** (or constant) if its arity is zero. **Unary**
 Signatures
 ----------
 
+(Our formal `Lean`_ implementation of the concept of signature is described in :numref:`signatures-in-lean`.)
+
 Classically, a **signature** is a pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an "arity" function :math:`ρ: F → ℕ`.
 
 For each operation symbol :math:`f ∈ F`, the value :math:`ρ f` is the **arity** of :math:`f`. (Intuitively, the arity can be thought of as the "number of arguments" that :math:`f` takes as "input".)
@@ -135,8 +142,6 @@ Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :ma
 
 It is important to be familiar with the classical notions of signature and arity, since these are used at the present time by virtually all algebraists.
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concept of signature is described in :numref:`Section %s <signatures-in-lean>` and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
-
 In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theoretic definitions of these concepts and show how this alternative presentation can often simplify implementation of the mathematics in :term:`type theory`.
 
 --------------------------
@@ -149,19 +154,15 @@ In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theor
 Algebraic Structures
 ---------------------
 
-Some of the renewed interest in universal algebra has focused on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.) But our first goal is to develop a working library for classical (single-sorted, set-based) universal algebra. We now define such structures.
+(Our formal `Lean`_ implementation of the concept of algebraic structure is described in :numref:`Chapter %s <algebras-in-lean>`.)
 
-A (universal) **algebraic structure** (or, **algebra**) is a pair :math:`⟨A, F⟩` where :math:`A` is a *nonempty* set and :math:`F = \{f_i: i ∈ I\}` is a collection of finitary operations on :math:`A`.
+Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra.  In this section we define the main objects of study. 
 
-That is, :math:`f_i: A^n → A` for some :math:`n ∈ ℕ`.
+An **algebraic structure** (or **algebra**) is a pair :math:`⟨A, F⟩` where :math:`A` is a *nonempty* set and :math:`F = \{f_i: i ∈ I\}` is a collection of finitary operations on :math:`A`. That is, for each :math:`i∈ I` there exists an :math:`n ∈ ℕ` such that :math:`f_i: A^n → A`. The number :math:`n` is called the **arity** of the operation :math:`f_i`.
 
-.. A common shorthand for :eq:`algebra` is :math:`⟨A, f_i⟩_{i ∈ I}`.
+.. proof:example::
 
-The number :math:`n` is called the **arity** of the operation :math:`f_i`.
-
-If :math:`A=ℝ` and :math:`f: ℝ × ℝ → ℝ` is the map that takes each pair :math:`(a, b) ∈ ℝ × ℝ` to the number :math:`f(a,b) = a+b ∈ ℝ`, then :math:`⟨A, \{f\}⟩` is an example of an algebra with a single binary operation. In such cases, we often simplify the notation and write :math:`⟨A, f⟩` in stead of :math:`⟨A, \{f\}⟩`.
-
-.. An algebra is called **unary** if all of its operations are unary. 
+   If :math:`A=ℝ` and :math:`f: ℝ × ℝ → ℝ` is the map that takes each pair :math:`(a, b) ∈ ℝ × ℝ` to the number :math:`f(a,b) = a+b ∈ ℝ`, then :math:`⟨A, \{f\}⟩` is an example of an algebra with a single binary operation. In such cases, we often simplify the notation and write :math:`⟨A, f⟩` in stead of :math:`⟨A, \{f\}⟩`.
 
 An algebra is **finite** if :math:`|A|` is finite, and is called **trivial** if :math:`|A| = 1`.
 
@@ -172,11 +173,13 @@ Given two algebras :math:`𝔸` and :math:`𝔹`, we say that :math:`𝔹` is a 
 A better approach
 ~~~~~~~~~~~~~~~~~
 
-An **operation symbol** :math:`f` is an object that has an associated **arity**; we denote the arity of :math:`f` by :math:`ρ \,f`.
+We start with a set :math:`F` and call the members of :math:`F` "operation symbols."  An **operation symbol** is simply an object that has an associated **arity**.
 
-A pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an arity function :math:`ρ: F → N` is called a **signature** (or, **similarity type**).
+We denote the arity of :math:`f` by :math:`ρ \,f`, where :math:`ρ: F → N` is an "arity function" that maps :math:`F` into some "arity type" :math:`N`.  Often we take the arity type to be :math:`ℕ`, so that the arity of each symbol is a natural number, :math:`N = ℕ`, and :math:`ρ \, f ∈ ℕ` for all :math:`f∈ F`. 
 
-A (universal) **algebra** (or, **algebraic structure**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
+A pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an **arity function** :math:`ρ: F → N` is called a **signature** (or **similarity type**).
+
+An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝔸 = ⟨A, F^𝔸⟩` and consists of 
 
   #. :math:`A` := a set, called the **carrier** (or **universe**) of the algebra,
   #. :math:`F^𝔸 = \{ f^𝔸 ∣ f ∈ F, \ f^𝔸 : (ρ f → A) → A \}` is a collection of operations on :math:`A`,
@@ -196,8 +199,7 @@ We call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (althoug
 
 More examples of algebraic structures that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) are described in the next section.
 
-**Formalization**. Our formal implementation (in `Lean`_) of the concept of algebraic structure is described in :numref:`algebras-in-lean`, and is included in the `basic.lean`_ file of the `lean-ualib`_ library.
-
+Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.)
 
 .. index:: ! magma, ! groupoid, ! binar, ! vector space, ! bilinear algebra, ! associative algebra, ! semigroup, ! monoid, ! group, multiplicative inverse, ! abelian group, additive identity, additive inverse,! ring, ! unital ring, ! multiplicative identity, ! unit, ! division ring, ! field, ! module 
 
@@ -228,9 +230,7 @@ Here is a list of a few of the most frequently encountered and historically impo
 * **Ring**. An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
 
   #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
-
   #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
-
   #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
 
   A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
@@ -244,11 +244,8 @@ Here is a list of a few of the most frequently encountered and historically impo
 * **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
 
   #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
-
   #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
-
   #. :math:`f_r(f_s(x)) = f_{rs}(x)`
-
   #. :math:`f_1(x) = x`.
 
   Note that Condition 1 says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`, while the other conditions amount to the following: (1) the set :math:`E := \{f_r ∣ r∈ R\}` of endomorphisms is a ring with unit where multiplication is function composition, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`E`.
@@ -447,10 +444,10 @@ A homomorphism :math:`h: 𝔹 → ℂ` is called a **monomorphism** if for every
 
 .. index:: ! projection operator, ! idempotent operation
 
-.. _idempotent-operations-projections:
+.. _idempotence-and-projections:
 
-Idempotent operations, projections
-----------------------------------
+Idempotence and projections
+----------------------------
 
 An operation :math:`f: A^n → A` is called **idempotent** provided :math:`f(a, a, \dots, a) = a` for all :math:`a ∈ A`.
 
