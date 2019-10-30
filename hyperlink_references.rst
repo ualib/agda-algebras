@@ -1,4 +1,5 @@
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
+.. _absolute value: https://en.wikipedia.org/wiki/Absolute_value
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 .. _Algebraic Effects and Handlers: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 .. _Andrej Bauer: http://www.andrej.com/index.html
@@ -60,6 +61,7 @@
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 .. _this gist: https://gist.github.com/andrejbauer/3cc438ab38646516e5e9278fdb22022c
 .. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
+.. _type theory: https://en.wikipedia.org/wiki/Type_theory
 .. _vscode: https://code.visualstudio.com/
 .. _wf.lean: https://github.com/leanprover/lean/blob/master/library/init/wf.lean
 .. _william: https://gitlab.com/ualib/lean-ualib/tree/william

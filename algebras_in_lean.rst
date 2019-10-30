@@ -774,7 +774,7 @@ Before implementing in Lean the result on factoring homomorphisms (:numref:`Obs 
   #. a quotient construction, which implies function extensionality
   #. a choice principle, which produces data from an existential proposition.
 
-  The first two of these block normalization within Lean, but are compatible with :term:`byte-code` evaluation, whereas the third is not amenable to computational interpretation."
+  The first two of these block normalization within Lean, but are compatible with byte-code evaluation, whereas the third is not amenable to computational interpretation."
    
 The upshot is that we cannot always use Lean's ``exists.elim`` to produce data.
 

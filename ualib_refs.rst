@@ -21,7 +21,19 @@
        MRNUMBER = {2757312},
        MRREVIEWER = {Walter Tholen}
      }
-     @INPROCEEDINGS {Behrisch:2012,
+     @book{Aliprantis:1998,
+       AUTHOR = {Aliprantis, Charalambos D. and Burkinshaw, Owen},
+       TITLE = {Principles of real analysis},
+       EDITION = {Third},
+       PUBLISHER = {Academic Press, Inc., San Diego, CA},
+       YEAR = {1998},
+       PAGES = {xii+415},
+       ISBN = {0-12-050257-7},
+       MRCLASS = {28-01 (00A07 26-01)},
+       MRNUMBER = {1669668},
+       URL = {https://amzn.to/2HNeqSD}
+    }
+    @INPROCEEDINGS {Behrisch:2012,
        AUTHOR = {Behrisch, Mike and Kerkhoff, Sebastian and Power, John},
        TITLE = {Category theoretic understandings of universal algebra and its dual: monads and {L}awvere theories, comonads and what?},
        YEAR = {2012},
@@ -161,6 +173,18 @@
        ACMID = {1813352},
        PUBLISHER = {Springer-Verlag},
        ADDRESS = {Berlin, Heidelberg}
+     }
+     @BOOK{Rudin:1987,
+       AUTHOR = {Rudin, Walter},
+       TITLE = {Real and complex analysis},
+       EDITION = {Third},
+       PUBLISHER = {McGraw-Hill Book Co., New York},
+       YEAR = {1987},
+       PAGES = {xiv+416},
+       ISBN = {0-07-054234-1},
+       MRCLASS = {00A05 (26-01 30-01 46-01)},
+       MRNUMBER = {924157},
+       URL = {https://amzn.to/2JTkoTB}
      }
      @BOOK {Smith:2011,
        TITLE = {Post-Modern Algebra},
