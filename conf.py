@@ -23,7 +23,9 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'The Lean Universal Algebra Library'
+project = u'𝖫∃∀𝖭 ∀𝗅𝗀𝖾𝖻𝗋𝖺'
+#𝖫∃∀𝖭 𝔘𝔫𝔦𝔳𝔢𝔯𝔰𝔞𝔩 𝔞𝔩𝔤𝔢𝔟𝔯𝔞 λ𝔦𝔟𝔯𝔞𝔯𝔶'
+#The Lean Universal Algebra Library'
 copyright = u'2019, William DeMeo and Siva Somayyajula'
 author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
 
@@ -243,3 +245,13 @@ texinfo_documents = [
 ]
 
 # -- Options for Epub output -------------------------------------------------
+
+# A string of reStructuredText that will be included at the end of every source file that is read.
+rst_epilog = """
+
+.. include:: hyperlink_references.rst
+
+.. raw:: html
+
+    Please email comments, suggestions, and corrections to <a href="mailto:williamdemeo@gmail.com">williamdemeo@gmail.com</a>
+"""
