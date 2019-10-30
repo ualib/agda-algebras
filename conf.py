@@ -143,7 +143,7 @@ html_theme_options = {
     'head_font_family': 'Times New Roman, Times, serif',
     'code_bg': 'white',
     'extra_nav_links': {
-        'PDF version': 'ualib.pdf',
+        'PDF version (coming soon)': 'ualib.pdf',
         'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
         'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/'
     },
