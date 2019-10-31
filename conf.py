@@ -23,9 +23,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'𝖫∃∀𝖭 ∀𝗅𝗀𝖾𝖻𝗋𝖺'
-#𝖫∃∀𝖭 𝔘𝔫𝔦𝔳𝔢𝔯𝔰𝔞𝔩 𝔞𝔩𝔤𝔢𝔟𝔯𝔞 λ𝔦𝔟𝔯𝔞𝔯𝔶'
-#The Lean Universal Algebra Library'
+project = u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀'
 copyright = u'2019, William DeMeo and Siva Somayyajula'
 author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
 
