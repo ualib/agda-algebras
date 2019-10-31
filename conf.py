@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀'
+project = u'𝖫∃∀𝖭 ⋀𝖫𝖦∃𝖡𝖱⋀'
 copyright = u'2019, William DeMeo and Siva Somayyajula'
 author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
 
@@ -217,7 +217,7 @@ proof_latex_notheorem = ["definition", "theorem", "proof"]
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ualib.tex', u'Lean Universal Algebra Library',
+    (master_doc, 'ualib.tex', u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀',
      u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula', 'manual'),
 ]
 
@@ -229,7 +229,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'ualib', u'Lean Universal Algebra Library', [author],
+man_pages = [(master_doc, 'ualib', u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀', [author],
               1)]
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -238,7 +238,7 @@ man_pages = [(master_doc, 'ualib', u'Lean Universal Algebra Library', [author],
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ualib', u'Lean Universal Algebra Library', author, 'ualib',
+    (master_doc, 'ualib', u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀', author, 'ualib',
      'One line description of project.', 'Miscellaneous'),
 ]
 
