@@ -13,7 +13,7 @@
 Types
 =====
 
-This section presents little more of the rudiments of :term:`type theory` than we will need for formalizing universal algebra in the `Lean`_ :term:`proof assistant`.  For more details, a very nice and gentle introduction to type theory and Lean is the textbook `Logic and Proof`_, by Avigad, et al.
+This section presents little more of the rudiments of :term:`type theory` than we will need for formalizing universal algebra in the Lean_ :term:`proof assistant`.  For more details, a very nice and gentle introduction to type theory and Lean is the textbook `Logic and Proof`_, by Avigad, et al.
 
 A more comprehensive yet still gentle treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced books on this topic are *Type Theory and Formal Proof* by Geuvers and Nederpelt :cite:`Nederpelt:2014` and *Homotopy Type Theory: Univalent Foundations of Mathematics* (aka "The HoTT Book") :cite:`HoTT:2013` by roughly two dozen participants of the Univalent Foundations Program held in 2013 at the IAS in Princeton.
 
@@ -48,7 +48,7 @@ If we interpret the types :math:`A` and :math:`B` as propositions and the functi
 Dependent types
 ---------------
 
-`Lean`_ is a :term:`functional programming` language that supports :term:`dependent types <dependent type>`.
+Lean_ is a :term:`functional programming` language that supports :term:`dependent types <dependent type>`.
 
 In the present section we show how dependent types can be used to represent many concepts that are important in universal algebra in a way that we feel is precise, elegant, and intrinsically computational. [1]_ 
 
@@ -96,7 +96,7 @@ If ``α`` is a type, we write ``α:Type``.  Then a function ``β`` of type ``α 
   
 which is itself a type, and is called a **dependent function type**.  This name arises because, for each inhabitant ``f: Π(a:α), β a``, we see that the type of the image ``f a`` of each ``a:α`` may depend on ``a``.  Precisely, ``f a: β a`` for each ``a:α``.
 
-Suppose for all ``a:α`` the type ``β a`` does *not* depend on ``a``. Then ``Π(a:α), β a`` is equivalent to the (nondependent) function type ``α → β``.  Whence we see that ``α → β`` is a special case of the type ``Π(a:α), β a``. Indeed, in dependent type theory (and in Lean_) Pi types may be viewed as fundamental and function types as a special case.
+Suppose for all ``a:α`` the type ``β a`` does *not* depend on ``a``. Then ``Π(a:α), β a`` is equivalent to the (nondependent) function type ``α → β``.  Whence we see that ``α → β`` is a special case of the type ``Π(a:α), β a``. Indeed, in dependent type theory (and in Lean) Pi types may be viewed as fundamental and function types as a special case.
 
 To summarize, for each type ``α:Type`` and for every family of types ``β: α → Type``, we have the :term:`Pi type`, ``Π(a:α), β a`` which generalizes the function type ``α → β`` by allowing each section ``β a`` of the codomain to depend on a value ``a:α`` of the domain.
 
@@ -381,7 +381,7 @@ However, our implementation of :math:`\eval` will use :term:`implicit arguments 
 
    .. math:: (@ \eval\ Ca \ D) (f\,a, g\,a) = (f\,a)(g\, a).
 
-   As shown here, the :math:`@` symbol indicates that we will explicitly specify all arguments. (`Lean`_ also uses the :math:`@` symbol for this purpose.)
+   As shown here, the :math:`@` symbol indicates that we will explicitly specify all arguments. (Lean_ also uses the :math:`@` symbol for this purpose.)
 
 .. proof:example::
 

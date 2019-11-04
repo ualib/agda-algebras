@@ -16,6 +16,7 @@
     algebras_in_lean
     terms_and_clones
     terms_and_clones_in_lean
+    type_classes
     equational_logic
     equational_logic_in_lean
     postmodern_algebra

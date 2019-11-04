@@ -6,6 +6,7 @@
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
+
 .. role:: cat
 .. role:: code
 
@@ -253,7 +254,7 @@ The next bit of code shows how the ``has_coe_to_sort`` and ``has_coe_to_fun`` co
   has_coe_to_fun (algebra σ) := ⟨_, sigma.snd⟩
   -- END
 
-Coercions allows the code to adhere to one of the hallmarks of informal mathematics---notation that conflates distict objects such as an algebra :math:`𝔸 = ⟨A, F^𝔸⟩` and the set :math:`A` on which that algebra is defined. In the next section we use coercions to our advantage in a concrete example, but see also `Coercions`_ for a simpler example and for the definitions of ``has_coe_to_sort`` and ``has_coe_to_fun`` in the Lean_ library.
+Coercions allows the code to adhere to one of the hallmarks of informal mathematics---notation that conflates distict objects such as an algebra :math:`𝔸 = ⟨A, F^𝔸⟩` and the set :math:`A` on which that algebra is defined. In the next section we use coercions to our advantage in a concrete example, but see also :numref:`coercions` for a simpler example and for the definitions of ``has_coe_to_sort`` and ``has_coe_to_fun`` in the Lean_ library.
 
 .. _more-examples:
 
@@ -265,12 +266,12 @@ Here are a few more examples. We won't explicitly comment on these as we trust t
 .. include:: _static/basic.lean.7.rst
 
 
-Examples of algebras in Lean
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. Examples of algebras in Lean
+.. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We now return to the list of examples of classical algebraic structures that were first presented in :numref:`examples-of-algebras` above and demonstrate how one could represent these structures (and others) in `Lean`_.  Note that the code below represents just one of the many possible ways to represent algebras and will will consider alternatives implementations later.
+.. We now return to the list of examples of classical algebraic structures that were first presented in :numref:`examples-of-algebras` above and demonstrate how one could represent these structures (and others) in `Lean`_.  Note that the code below represents just one of the many possible ways to represent algebras and will will consider alternatives implementations later.
 
-.. include:: _static/examples.lean.1.rst
+.. .. include:: _static/examples.lean.1.rst
 
 .. * **Magma**. An algebra :math:`⟨A, ⋅⟩` with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
 

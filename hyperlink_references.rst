@@ -11,7 +11,6 @@
 .. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
 .. _classical.lean: https://github.com/leanprover/lean/blob/master/library/init/classical.lean
 .. _clone.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/clone.lean
-.. _Coercions: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 .. _Coq: http://coq.inria.fr
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
