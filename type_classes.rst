@@ -571,8 +571,6 @@ We now consider each of the three flavors of coercion in turn.
 Algebraic structure hierarcy
 -----------------------------
 
-.. include:: structure_hierarchy_dual_no_rng.tex
-
 In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``.  Here are the definitions of these coercions in the :term:`LSTL`.
 
 ::
@@ -584,120 +582,134 @@ In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``.  He
   (F : a → Sort v) (coe : Π x, F x)
 
 Group-like structures
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: grouplike_hierarchy.tex
 
-Magma
-Semigroup
-Monoid
-Group
-Rack
-Quandle
-Quasigroup
-Loop
-Abelian group
-Lie group
+.. todo:: write this section
+
+.. Magma
+.. Semigroup
+.. Monoid
+.. Group
+.. Rack
+.. Quandle
+.. Quasigroup
+.. Loop
+.. Abelian group
+.. Lie group
 
 Ring-like structures
----------------------
-Ring
-Semiring
-Nearing
-Commutative ring
-Integral domain
-UFD
-PID
-Euclidean domain
-Division ring
-Field
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: structure_hierarchy_dual_no_rng.tex
+
+.. todo:: write this section
+
+.. Ring
+.. Semiring
+.. Nearing
+.. Commutative ring
+.. Integral domain
+.. UFD
+.. PID
+.. Euclidean domain
+.. Division ring
+.. Field
 
 Module-like structures
 ------------------------
-Module 
-Group with operators
-Vector space
-Linear algebra
+
+
+.. todo:: write this section
+
+.. Module
+.. Group with operators
+.. Vector space
+.. Linear algebra
 
 Algebra-like structures
 -------------------------
-Algebra
-Associative algebra
-Nonassociative algebra 
-Composition algebra
-Lie algebra
-Graded algebra
-Bialgebra
 
-Lattice hierarchy
-------------------
+.. todo:: write this section
 
-Proofs of the relationships in the map
-Algebraic structures
-Group-like[show]
-Ring-like[show]
-Lattice-like[show]
-Module-like[show]
-Algebra-like[show]
-vte
+.. Algebra
+.. Associative algebra
+.. Nonassociative algebra
+.. Composition algebra
+.. Lie algebra
+.. Graded algebra
+.. Bialgebra
 
-#. A boolean algebra is a complemented distributive lattice. (def)
+Lattice-like structures
+-------------------------
 
-#. A boolean algebra is a heyting algebra.
+.. todo:: write this section
 
-#. A boolean algebra is orthocomplemented.
+.. Lattice
+.. Semilattice
+.. Complemented lattice
+.. Total order
+.. Heyting algebra
+.. Boolean algebra
 
-#. A distributive orthocomplemented lattice is orthomodular.
+.. #. A boolean algebra is a complemented distributive lattice. (def)
 
-#. A boolean algebra is orthomodular. (1,3,4)
+.. #. A boolean algebra is a heyting algebra.
 
-#. An orthomodular lattice is orthocomplemented. (def)
+.. #. A boolean algebra is orthocomplemented.
 
-#. An orthocomplemented lattice is complemented. (def)
+.. #. A distributive orthocomplemented lattice is orthomodular.
 
-#. A complemented lattice is bounded. (def)
+.. #. A boolean algebra is orthomodular. (1,3,4)
 
-#. An algebraic lattice is complete. (def)
+.. #. An orthomodular lattice is orthocomplemented. (def)
 
-#. A complete lattice is bounded.
+.. #. An orthocomplemented lattice is complemented. (def)
 
-#. A heyting algebra is bounded. (def)
+.. #. A complemented lattice is bounded. (def)
 
-#. A bounded lattice is a lattice. (def)
+.. #. An algebraic lattice is complete. (def)
 
-#. A heyting algebra is residuated.
+.. #. A complete lattice is bounded.
 
-14. A residuated lattice is a lattice. (def)
+.. #. A heyting algebra is bounded. (def)
 
-15. A distributive lattice is modular.[4]
+.. #. A bounded lattice is a lattice. (def)
 
-16. A modular complemented lattice is relatively complemented.[5]
+.. #. A heyting algebra is residuated.
 
-17. A boolean algebra is relatively complemented. (1,15,16)
+.. 14. A residuated lattice is a lattice. (def)
 
-18. A relatively complemented lattice is a lattice. (def)
+.. 15. A distributive lattice is modular.[4]
 
-19. A heyting algebra is distributive.[6]
+.. 16. A modular complemented lattice is relatively complemented.[5]
 
-20. A totally ordered set is a distributive lattice.
+.. 17. A boolean algebra is relatively complemented. (1,15,16)
 
-21. A metric lattice is modular.[7]
+.. 18. A relatively complemented lattice is a lattice. (def)
 
-22. A modular lattice is semi-modular.[8]
+.. 19. A heyting algebra is distributive.[6]
 
-23. A projective lattice is modular.[9]
+.. 20. A totally ordered set is a distributive lattice.
 
-24. A projective lattice is geometric. (def)
+.. 21. A metric lattice is modular.[7]
 
-25. A geometric lattice is semi-modular.[10]
+.. 22. A modular lattice is semi-modular.[8]
 
-26. A semi-modular lattice is atomic.[11][disputed – discuss]
+.. 23. A projective lattice is modular.[9]
 
-27. An atomic lattice is a lattice. (def)
+.. 24. A projective lattice is geometric. (def)
 
-28. A lattice is a semi-lattice. (def)
+.. 25. A geometric lattice is semi-modular.[10]
 
-29. A semi-lattice is a partially ordered set. (def)
+.. 26. A semi-modular lattice is atomic.[11][disputed – discuss]
+
+.. 27. An atomic lattice is a lattice. (def)
+
+.. 28. A lattice is a semi-lattice. (def)
+
+.. 29. A semi-lattice is a partially ordered set. (def)
 
 -------------
 
