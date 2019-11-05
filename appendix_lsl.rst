@@ -13,7 +13,7 @@
 The Lean STL
 -------------
 
-We first collect for easy reference some links to some of the basic components of the `Lean Standard Library`_ (:term:`LSTL`).  Thereafter, we dissect some of these components that are crucial for using Lean to do universal algebra.
+We first collect for easy reference some links to some of the basic components of the `Lean Standard Library`_ (:term:`LSTL`).  Thereafter, we dissect some of these components with special attention to those that are needed for implementing universal algebra in Lean.
 
 Some basic components
 ~~~~~~~~~~~~~~~~~~~~~~~~~

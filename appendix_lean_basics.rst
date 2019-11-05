@@ -24,6 +24,7 @@ Some good references for the material in this chapter are the following:
   + `Theorem Proving in Lean`_
   + `Lean Reference Manual`_
   + `Logic and Proof`_
+  + `Mathlib documentation`_
 
 .. _leans-type-hierarchy:
 
@@ -331,28 +332,36 @@ To summarize, on top of the framework of universes, :term:`dependent function ty
 
 The first two of these are compatible with byte-code evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations.
 
-Philosophical context
-~~~~~~~~~~~~~~~~~~~~~~~~
+Philosophical and foundational issues
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(This section is essentially a summary of the nice discussion of the same topic that one finds in the `Historical and Philosophical Context <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#historical-and-philosophical-context>`_ section of `TPL`_.)
 
 It is widely accepted that computational considerations are important to mathematics, but there are different views about the best means of addressing these computational concerns.
 
 + *Constructively*, mathematics are not separate from their computational roots and every meaningful mathematical theorem should have a direct computational interpretation.
 
-+ *Classically*, it is more fruitful to maintain a separation of mathematical and computational concerns. One (constructive) language may useful for *writing* computer programs, while nonconstructive theories and methods may be more useful when *reasoning* about such programs.
++ *Classically*, it may be more fruitful to maintain a separation of mathematical and computational concerns. One language (the constructive one) may be useful for writing computer programs, while the other (the nonconstructive language) may be useful for reasoning about such programs.
 
-Lean is designed to support both of these approaches. Core parts of the library are developed constructively, but the system also provides support for carrying out classical mathematical reasoning.
+Lean is designed to support both approaches. Core parts of the library are developed constructively, but the system also supports classical mathematical reasoning.
+
+Lean has a noncumulative hierarchy of universes ``Prop``, ``Type``, ``Type 1``, ``Type 2``, ...
+
+The bottom universe ``Prop`` is special because, unlike the others, it is :term:`impredicative`.  Roughly, and in general, this means "self-referencing". More precisely, and in this context, impredicative means that if we quantify a ``Prop`` over a larger type, the result is again a ``Prop``.
+
+The type ``Prop`` is also :term:`proof-irrelevant`. This means that for a fixed ``A: Prop``, all proofs of the proposition :math:`A` are :term:`definitionally equal`.
 
   *Computationally, the purest part of dependent type theory avoids the use of the* ``Prop`` *type entirely*.
 
 Introducing a proof-irrelevant ``Prop`` type and marking theorems irreducible represents a first step towards separation of concerns.
 
-  *Inhabitants (i.e., proofs) of a proposition* ``p:Prop`` *should play no role in computation*,
+  *Inhabitants (i.e., proofs) of a proposition* ``p: Prop`` *should play no role in computation*,
 
-and so the particular construction of a term (i.e., proof) ``t:p`` is "irrelevant" in that sense.
+and so the particular construction of a term (i.e., proof) ``t: p`` is "irrelevant" in that sense.
 
 One can still define computational objects that incorporate elements of type ``Prop``, which can help us reason about the effects of the computation, but can be ignored when we extract "code" from the term.
 
-Elements of type ``Prop`` are not entirely innocuous, however. They include equations ``s = t:α`` for any type ``α``, and such equations can be used as casts, to type check terms. Below, we will see examples of how such casts can block computation in the system.
+Elements of type ``Prop`` are not entirely innocuous, however. They include equations ``s = t: α`` for any type ``α``, and such equations can be used as casts, to type-check terms. (Below we see how this may block computation.)
 
 However, computation is still possible under an evaluation scheme that
 
@@ -362,7 +371,7 @@ However, computation is still possible under an evaluation scheme that
 
 This is precisely what Lean's virtual machine does.
 
-If we adopt a proof-irrelevant ``Prop``, then we might consider it legitimate to use, for example, the :term:`law of the excluded middle` (em), ``∀ p:Prop, p ∨ ¬p``.  This can block computation in :term:`CiC`, but will not block byte-code evaluation.
+If we adopt a proof-irrelevant ``Prop``, then we might consider it legitimate to use, for example, the :term:`law of the excluded middle` (em), ``∀ p:Prop, p ∨ ¬p``.  This can block computation in :term:`CiC`, but *will not block byte-code evaluation*.
 
 It is only the :term:`Choice` principle, discussed in more detail `here <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#choice>`_, that completely erases the distinction between the "proof-irrelevant" and "data-relevant" parts of the theory.
 

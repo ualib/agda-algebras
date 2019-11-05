@@ -190,6 +190,16 @@ The last result tells us that we can determine whether an identity is true in a 
 
       It now follows from :numref:`Thm %s <fact-m1>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**. ☐
 
+We end this subsection with yet another standard but important result.
+
+.. proof:theorem::
+
+    Every  finitely  generated  variety  is  locally finite.
+
+    (See Theorem 3.49 of :cite:`Bergman:2012` for proof.)
+
+    The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :cite:`Bergman:2012`).
+
 ----------------------------------
 
 .. _birkhoffs-hsp-theorem:

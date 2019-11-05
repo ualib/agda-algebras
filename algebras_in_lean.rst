@@ -1,6 +1,7 @@
 .. File: algebras_in_lean.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 11 Oct 2019
+.. Updated: 4 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst
@@ -16,7 +17,7 @@
 Algebras in Lean
 ==================
 
-Most of the Lean_ code described in this section can be found in the files ``basic.lean`` residing in the ``src`` directory of the lean-ualib_ repository. [1]_
+Most of the Lean_ code described in this section is found in the ``basic.lean`` file that resides in the ``src`` directory of the lean-ualib_ repository. [1]_
 
 This section demonstrates the utility of dependent and inductive types by expressing some fundamental concepts of universal algebra in Lean.
 
