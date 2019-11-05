@@ -15,13 +15,11 @@ Types
 
 This section presents little more of the rudiments of :term:`type theory` than we will need for formalizing universal algebra in the Lean_ :term:`proof assistant`.  For more details, a very nice and gentle introduction to type theory and Lean is the textbook `Logic and Proof`_, by Avigad, et al.
 
-A more comprehensive yet still gentle treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced books on this topic are *Type Theory and Formal Proof* by Geuvers and Nederpelt :cite:`Nederpelt:2014` and *Homotopy Type Theory: Univalent Foundations of Mathematics* (aka "The HoTT Book") :cite:`HoTT:2013` by roughly two dozen participants of the Univalent Foundations Program held in 2013 at the IAS in Princeton.
+A more comprehensive yet still gentle treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced books on this topic are *Type Theory and Formal Proof* by Nederpelt and Geuvers :cite:`Nederpelt:2014` and *Homotopy Type Theory: Univalent Foundations of Mathematics* (aka "The HoTT Book") :cite:`HoTT:2013`, which was authored by roughly two dozen participants of the Univalent Foundations Program held in 2013 at the `IAS <https://www.ias.edu/>`.
 
 We begin with a slogan that may be helpful to those who know about sets but have no prior exposure to type theory.
 
-  *In set theory virtually everything* **is** *a set, in type theory, everything* **has** *a type*.
-
-.. todo:: maybe add some basic background on types here
+  *In set theory virtually everything* **is** *a set, in type theory, vitually everything* **has** *a type*.
 
 ----------------------------------
 
@@ -34,7 +32,7 @@ Curry-Howard correspondence
 
 The rule for :term:`function application <eval>` corresponds, under the :term:`Curry-Howard <Curry-Howard correspondence>` (or :term:`propositions-as-types`/:term:`proofs-as-programs`) :term:`correspondence <Curry-Howard correspondence>`, to the :term:`implication elimination` rule of natural deduction (sometimes called :term:`modus ponens`). This simply codifies our intuitive notion of function application, viz., applying the function :math:`f: A → B` to an element :math:`a` of :math:`A` yields a member :math:`f\,a` of the codomain :math:`B`.
 
-If we interpret the types :math:`A` and :math:`B` as propositions and the function :math:`f: A → B` as a proof of the proposition ":math:`A` implies :math:`B`," and if we view :math:`a` as a proof of :math:`A`, then the application rule is the so called :term:`implication elimination` rule (or, :term:`modus ponens`); that is, "if :math:`A → B` and :math:`A`, then :math:`B`."
+If we interpret the types :math:`A` and :math:`B` as propositions and the function :math:`f: A → B` as a proof of the proposition ":math:`A` implies :math:`B`," and if we view :math:`a` as a proof of :math:`A`, then the application rule is the so called :term:`implication elimination` rule (or, :term:`modus ponens`); that is, "if :math:`A` and :math:`A → B`, then :math:`B`."
 
 ---------------------------------------
 
@@ -48,21 +46,21 @@ If we interpret the types :math:`A` and :math:`B` as propositions and the functi
 Dependent types
 ---------------
 
-Lean_ is a :term:`functional programming` language that supports :term:`dependent types <dependent type>`.
+.. Lean_ is a :term:`functional programming` language and interactive theorem prover that supports :term:`dependent types <dependent type>`.
 
-In the present section we show how dependent types can be used to represent many concepts that are important in universal algebra in a way that we feel is precise, elegant, and intrinsically computational. [1]_ 
+In this section we show how :term:`dependent types <dependent type>` can be used to represent many concepts that are important in universal algebra, in a way that is precise, elegant, and intrinsically computational. [1]_ 
 
-Before trying to understand why dependent types are so useful, it helps to know what dependent types *are*. Let us begin by explaining what makes a type dependent.
+Before trying to understand why dependent types are useful, it helps to know what dependent types are. So we begin by explaining what makes a type dependent.
 
 Types can depend on *parameters*.  For example, if ``α`` is a type, then ``list α`` is the type of lists whose entries have type ``α``.  The type ``list α``  depends on the parameter ``α``. The type of vectors of length ``n`` with entries from ``α`` is sometimes denoted by ``vec α n``. This type depends on the parameter ``α`` (the type of the elements that populate the vectors) and the *value* ``n`` of type ``ℕ`` (denoting the length of the vectors).
 
-The type ``list α`` is an example of a :term:`polymorphic type`, which is not what we mean by a "dependent type."  Of course ``list α`` does depends on the argument ``α``, and this dependence distinguishes ``list ℕ`` from ``list bool``.  But in this instance, the argument ``α`` is not seen as a particular *value* (or *inhabitant*) of a type, but rather as a type parameter, and we call this type of dependence **polymorphism**. [2]_
+The type ``list α`` is an example of a :term:`polymorphic type`, which is not what we mean by a "dependent type."  Of course ``list α`` does depends on the argument ``α``, and this dependence distinguishes, say, ``list ℕ`` from ``list bool``.  But the argument ``α`` is not a particular *value* (or *inhabitant*) of a type, but rather a type parameter, and we call this kind of dependence **polymorphism**.
 
-Contrast this with the type ``vec α n``, which depends on the parameter ``α`` as well as the *value* of the variable ``n``. This is the sort of dependence for which we reserve the label "dependent type."
+Contrast this with the type ``vec α n``, which depends on the parameter ``α`` as well as the *value* of the variable ``n``. The dependence of the type ``vec α n`` on the value ``n`` is the sort of dependence for which we reserve the label "dependent type."
 
-This example is somewhat misleading. It is not true that the only dependent types are those that depend on a concrete value of a type, e.g., ``n`` in the last example. In fact, types themselves may also be viewed as inhabitants of other types.  Indeed, in type theory, *everything* (even every type) has a type.
+This example is somewhat misleading. It is not true that the only dependent types are those that depend on a concrete value of a type, e.g., ``n`` in the last example. In fact, types themselves inhabit other types.  Indeed, in type theory, *everything* (even types) inhabits a type.
 
-For example, if ``α:Type``, then ``α`` is both a type in its own right and an inhabitant of ``Type`` (which is Lean syntax for the "ground type.")
+For example, if ``α: Type``, then ``α`` is both a type in its own right and an inhabitant of the ``Type`` type (which is Lean syntax for the "ground type", or ``Sort 1``). [2]_
 
 Consider the ``cons`` function that inserts a new element at the head of a list. What type should ``cons`` have?  Before answering, let us consider a few facts.
 
@@ -276,7 +274,7 @@ fork
 
 Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and functions :math:`f: A → B` and :math:`g: A → C`, there exists a unique function :math:`(f, g): A → B × C` such that :math:`π_1 (f, g) = f` and :math:`π_2 (f, g) = g`.
 
-Evidently, this, the so called universal, mapping is defined for each :math:`a: A` by :math:`(f, g)\, a = (f\,a, g\,a)`.
+Evidently, this (the so called :term:`universal mapping <universal mapping property>`) is defined for each :math:`a: A` by :math:`(f, g)\, a = (f\,a, g\,a)`.
 
 Denote and define the (nondependent) **fork operator** (on :math:`A`, :math:`B`, and :math:`C`) by
 
@@ -406,7 +404,7 @@ General composition of operations
 
 In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).
 
-By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`. [4]_
+By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`.
 
 If we identify the natural number :math:`n: ℕ` with the set :math:`\{0,1,\dots, n-1\}`, and the :math:`\mathrm{ntuple}` type with function type :math:`n →  A`, then the type of :math:`n`-ary operations on :math:`A` is :math:`(n → A) → A`. Evaluating such an operation :math:`f:(n → A) → A` at the tuple :math:`a: n → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
 
@@ -604,7 +602,7 @@ The type of the class :math:`x/R` is a **quotient type**, denoted in this case b
 Quotients in Lean
 ~~~~~~~~~~~~~~~~~~
 
-Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [6]
+Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [4]_
 
 .. index:: lift of; a function
 .. index:: reduction rule
@@ -1088,7 +1086,7 @@ Now is a good time to pause to summarize the shorthand notation defined thus far
 Computation principles
 ----------------------
 
-Finally, let us assert some computation principles for the lifts defined above. [6]_
+Finally, let us assert some computation principles for the lifts defined above.
 
 ::
 
@@ -1441,19 +1439,16 @@ Together with ``quotient.sound``, this implies that the elements of the quotient
    What we mean by "intrinsically computational" ought to become clearer as we progress.
 
 .. [2]
-   Although, as we note below, like everything in type theory, ``α`` may also be viewed as an inhabitant of a type.
+   ``Sort 0`` is the (:term:`impredicative`) type ``Prop`` which we discuss later.
 
 .. [3]
    It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions results in a :term:`Pi type`.
 
 .. [4]
-   Using the tuple constructor described in :numref:`tuple-functors`, we could also represent such an operation as :math:`f: \mathrm{ntuple} A → A`. However,  we wish to postpone taking this viewpoint until we have some experience with categories and functors.
+   Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
 
 .. [5]
-   The issue here is whether we can define :math:`fₗ (x/R)` without invoking some :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
-
-.. [6]
-   Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
+   At issue here is whether we can define :math:`fₗ (x/R)` without invoking some :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
 
 .. .. [7]
    Lean code appearing in this section is drawn mainly from the `quotient.lean`_ file of the `lean-ualib`_ repository.
