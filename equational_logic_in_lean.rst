@@ -5,10 +5,10 @@
 
 .. include:: _static/math_macros.rst
 
-.. _equational-theories-in-lean:
+.. _equational-logic-in-lean:
 
 ============================
-Equational Theories in Lean
+Equational Logic in Lean
 ============================
 
 Varieties in Lean
