@@ -26,6 +26,7 @@
 .. _lattice.lean: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
 .. _Lean: https://leanprover.github.io/
 .. _Lean 2: https://github.com/leanprover/lean2
+.. _Lean 4: https://github.com/leanprover/lean4
 .. _lean extension: https://github.com/leanprover/vscode-lean
 .. _Lean github repository:  https://github.com/leanprover/lean/
 .. _Lean Reference Manual: https://leanprover.github.io/reference/

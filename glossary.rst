@@ -2,7 +2,7 @@
 .. Former name(s): appendix_glossary.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 22 May 2019
-.. Updated: 5 Nov 2019
+.. Updated: 6 Nov 2019
 .. Updated: 27 Oct 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
@@ -53,7 +53,7 @@ Acronyms
       equality reflection
 
     ITP
-      | *n.* interactive theorem prover (or proof assistant), e.g., :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`
+      | *n.* interactive theorem prover (or :term:`proof assistant`), e.g., :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`
       | *v.* interactive theorem proving
 
     ITT
@@ -1157,6 +1157,9 @@ Definitions
     intensional
       An **intensional** definition of a term specifies necessary and sufficient conditions that the term satisfies. In the case of nouns, this is equivalent to specifying all the properties that an object must have in order to be something to which the term refers.
 
+    interactive theorem prover
+      See :term:`proof assistant`.
+
     interior
       If :math:`X` is a :term:`topological space` and :math:`A ⊆ X`, then the union of all :term:`open sets <open set>` contained in :math:`A` is called the **interior** of :math:`A`.
 
@@ -1589,7 +1592,9 @@ Definitions
       That is, for :math:`a ∈ ∏_{0≤i<n} A_i` we define :math:`\Proj\,σ\, a = a ∘ σ`.
 
     proof assistant
-      See :term:`ITP`.
+      A **proof assistant**, or interactive theorem prover (ITP), is specialized software that aids the user in the task of formalizing and proving theorems in an interactive (as opposed to automated) way. Although some proof assistants have features (such as :term:`proof tactics <proof tactic>`) which may provide some automation and proof-search capabilities, proof assitants are distinguished from :term:`automated theorem provers <automated theorem prover>` by the fact that they primarily rely on substantial interaction with the user.
+      
+      Some examples of popular proof assistants are :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`.
 
     proof tactic    
       an automated procedure for constructing and manipulating proof terms.

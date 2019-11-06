@@ -1,69 +1,69 @@
 .. File: preface.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 17 May 2019
-.. Updated: 5 Nov 2019
+.. Updated: 6 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 =======
 Preface
 =======
 
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we have developed a software library, called the `Lean Universal Algebra Library`_ ("Lean Algebra" or 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
+
 Vision
 ----------
 
-To support the formalization of mathematical theorems in type theory, we have begun developing a software library, called the `Lean Universal Algebra Library`_ (or 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 for short).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
+The idea for 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand types (of :term:`type theory`---in particular, :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`) make possible elegant formal representations of recursively defined objects, as well as concise proofs of their properties. These observations suggest that there is much to gain from implementing universal algebra in a language that facilitates working with dependent and inductive types.
 
-Our vision for the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project originated with the observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, the types of :term:`type theory`---in particular, :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`---make possible elegant representations of recursively defined objects, as well as concise proofs of their properties.
+Lean_ is a programming language and :term:`proof assistant`, or "interactive theorem prover" (ITP), that not only supports dependent and inductive types, but also provides powerful :term:`proof tactics <proof tactic>` for proving properties of the objects that inhabit these types. 
 
-Indeed, our mathematical theories can be codified in type theory using a Lean_, which is a programming language and :term:`proof assistant` that not only supports dependent and inductive types, but also provides powerful :term:`proof tactics <proof tactic>` for proving properties of the objects that inhabit these types.
+The goal of the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project is to formalize, in the Lean language, the substantial edifice upon which our mathematical research stands, demonstrating that our work can be implemented formally and effectively in type theory in such a way that we and other working mathematicians can use the resulting library to conduct and formalize further mathematics research.
 
-These observations suggest that there is much to gain from implementing universal algebra in a proof assistant that facilitates working with :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`. Lean is one such proof assistant.
-
-The goal of 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 (and this document) is to start with the edifice upon which our mathematical research stands and show that it can be encoded effectively in type theory in such a way that we and other working mathematicians can use the resulting library to do "real" research mathematics.
-
-Our field is deep and its history rich, so encoding all of our subject's foundations is a daunting and even risky task.  However, our view is that the basics of the theory can stand to be modernized and presented in cleaner, more elegant, and more :term:`constructive` way so that universal algebra can be naturally presented in the language of type theory and formally codified in the Lean proof assistant.
+Our field is deep and its history rich, so encoding all of our subject's foundations may seem like a daunting task and possibly risky investment of time and resources.  However, our view is that the basics of the theory could be well served by a modernized and (where possible) :term:`constructive` presentation, so that universal algebra could be naturally codified in the language of type theory and formally implemented in, and verified by, the Lean proof assistant.
 
 .. Specific examples will be given below in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
-
-Finally, it is important to point out that this is not merely an exercise in translation.  Indeed, Lean was designed with the goal of creating a system in which one could conduct "real" mathematics research, and that is how we intend to use it once we have acheived the goal of implementing the most basic and important parts of the existing theory in a usable Lean library.
 
 -----------------------------------
 
 Objectives
 ---------------
 
-Our objectives include
+We wish to emphasize that our ultimate objective is not a mere translation of existing results into a more modern and formal language.  Indeed, one important goal of the Lean development team is to develop a system that is useful for conducting research in mathematics, and that is how we intend to use our library once we have achieved our immediate objective of implementing the basic foundational core of universal algebra in Lean.
 
-+ incorporating automated proof search for universal algebra;
-+ formalizing theorems emerging from our own mathematics research;
-+ developing domain specific "proof tactics" to express the idioms of universal algebra;
-+ documenting the resulting software library so that others may find it useful.
+To this end, our main objectives include
 
-For our own mathematics research projects, a proof assistant equipped with special libraries of definitions and results from algebra and lattice theory, as well as specialized tactics to automate the standard proof idioms of our field, will be very useful. Our goal is to demonstrate (to ourselves and our colleagues) the utility of such libraries and tactics for proving "real world" theorems.
++ developing domain specific "proof tactics" to express the idioms of universal algebra,
++ incorporating automated proof search for universal algebra, and
++ formalizing theorems emerging from our own mathematics research,
++ documenting the resulting software libraries so they are useable by other working mathematicians.
+
+For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Our goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
 
 -----------------------------------
 
 Why Lean?
 ---------
 
-We chose the Lean_ proof assistant because it is designed and developed by logicians and computer scientists working together to create a language and syntax that presents mathematical theorems and proofs *as they should be*, by which we mean that working in the language feels almost as natural as working in the informal language of mathematics and is easily adopted by mathematicians who lack special training in computer science.
+Lean_ is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. The language draws on decades of experience in interactive and automated theorem provers (e.g., `Coq`_, Isabelle/HOL, and Z3). Its logic is very expressive and facilitates powerful proof automation. The system is easy to extend via :term:`metaprograms <metaprogram>` that can be written *in the Lean language itself*. In this way, Lean narrows the gap between interactive and automated theorem proving.
 
-Lean is a relatively new programming language and proof assistant developed at Microsoft Research and Carnegie Mellon University. Lean draws on decades of experience in interactive and automatic theorem provers (e.g., `Coq`_, Isabelle/HOL, and Z3). Its logic is very expressive, and emphasis is placed on *powerful proof automation*. The system is easy to extend via :ref:`metaprograms <metaprogramming>` developed in the same language used to express specifications and proofs in Lean. In this way, Lean narrows the gap between interactive and automated theorem proving.
+Because it is designed and developed by logicians and computer scientists working together to create a language and syntax that presents mathematical theorems and proofs *as they should be*, working in the language feels almost as natural as working in the informal language of mathematics. Therefore, the Lean libraries that we develop should be easily adopted by working mathematicians, including those who lack special training in computer science.
 
-There are many other reasons Lean is an excellent platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood* without special training. In fact, working in Lean usually leads to formal proofs that are cleaner, more concise, and shorter than the corresponding proofs in the language of informal mathematics.
+We chose the Lean proof assistant for these reasons, but there are other reasons Lean has turned out to be an excellent platform for this project. For instance, it is unique among computer-based theorem proving tools in that its *proofs tend to be easy to read and understood*. In fact, working in Lean often leads to formal proofs that are clearer and more concise than proofs that are constructed and presented in the language of informal mathematics.
 
-Lean is a very young language, and its domain-specific libraries are small but growing. We feel it is vital to get involved at this early stage and play a role in its development. If we leave it to our colleagues in computer science, they will likely have our *perceived* needs and use cases in mind, and the libraries and tools that come out of their effort may not meet the needs and expectations of most working mathematicians.
+Lean is a relatively young language, and its domain-specific libraries are small but growing. Thus is the stage at which we must be involved in Lean's development. If this effort rests solely on the shoulders of our expert and eminently capable colleagues in computer science, then the sophisticated libraries and powerful tools that they produce may, in the end, fail to meet the basic needs and expectations of the working mathematician.
 
-We conclude this section with a note that is important for anyone interested in `Homotopy Type Theory`_ (HoTT).  Unfortunately, the current version of Lean does not support HoTT. There is, however, a frozen version (`Lean 2`_) that does supports HoTT and there is a `2015 post by Floris van Doorn`_ that gives a nice overview of the use of Lean 2 for homotopy type theory.
+We conclude this section with a remark that is important for those interested in `homotopy type theory`_ (HoTT).  Unfortunately, the current version of Lean does not fully support the :term:`proof-relevant` mathematics on which the univalent foundations program is based. There is, however, a frozen version of of the language (`Lean 2`_) which does support HoTT. [1]_
+
+The next release of Lean will be `Lean 4`_ which, at the time of this writing, is not yet released.  Lean 4 has been in the works for quite some time.  We do not know whether Lean 4 will support proof-relevant mathematics and the univalent foundations program.
 
 -----------------------------------
 
 Intended audience
 ------------------
 
-This document describes the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project and the associated Lean library (lean-ualib_) Lean Universal Algebra Library with (hopefully) enough details so that working mathematicians, and possibly some normal people, might be able to learn enough about Lean and our library to put them to use when creating, formalizing, and verifying new mathematics.
+This document describes the Lean Algebra project and the associated Lean Universal Algebra Library (lean-ualib_) in enough detail so that working mathematicians (and possibly some normal people) might be able to learn enough about Lean and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
 
-While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`) and, to a lesser extent, category theory (as presented by categorytheory.gitlab.io_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Chapter %s <postmodern-algebra>`.
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`, and to a lesser extent category theory, as presented in categorytheory.gitlab.io_ or :cite:`Riehl:2017`. (Category theory is not really needed until :numref:`Chapter %s <postmodern-algebra>`.)
 
 Some prior exposure to :term:`type theory` and Lean would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the following references to fill in gaps as needed:
 
@@ -124,8 +124,8 @@ This is a work in progress and any feedback you can provide us with would be muc
 .. rubric:: Footnotes
 
 .. [1]
-   As of this writing (9 June 2019), this documentation describes code residing in (the william_ branch of) the `lean-ualib`_ repository. Eventually, the latest code will reside on the master_ branch and the docs will describe the code on that branch.
-
+   See the `2015 post by Floris van Doorn`_ which gives a nice overview of Lean 2 for homotopy type theory.
+ 
 .. [2]
    For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,HoTT:2013`.
 

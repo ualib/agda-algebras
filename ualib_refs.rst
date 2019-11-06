@@ -174,6 +174,15 @@
        PUBLISHER = {Springer-Verlag},
        ADDRESS = {Berlin, Heidelberg}
      }
+     @BOOK{Riehl:2017,
+       TITLE={Category Theory in Context},
+       AUTHOR={Riehl, E.},
+       ISBN={9780486820804},
+       SERIES={Aurora: Dover Modern Math Originals},
+       URL={http://www.math.jhu.edu/~eriehl/context/},
+       YEAR={2017},
+       PUBLISHER={Dover Publications}
+     }
      @BOOK{Rudin:1987,
        AUTHOR = {Rudin, Walter},
        TITLE = {Real and complex analysis},
