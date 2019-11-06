@@ -1,6 +1,7 @@
 .. File: algebras.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 11 Oct 2019
+.. Updated: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst
@@ -18,13 +19,15 @@ Our vision for the `lean-ualib`_ (Lean Universal Algebra Library) originated wit
 
 These observations suggest that there is much to gain from implementing universal algebra in a proof assistant that offers powerful tools for working with :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`. Lean is one such proof assistant.
 
-The goal of the `Lean Universal Algebra Library`_, and this documentation explaining it, is to demonstrate that our vision manifests in a careful (and, whenever possible, :term:`constructive`) presentation of the elementary theory of universal algebra in the language of type theory, along with a formal implementation of this theory in the Lean proof assistant.  Specific examples of this manifestation appear below in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
+The goal of the `Lean Universal Algebra Library`_, and this documentation explaining it, is to demonstrate that our vision manifests in a careful (and, whenever possible, :term:`constructive`) presentation of the elementary theory of universal algebra in the language of type theory, along with a formal implementation of this theory in the Lean proof assistant.  Specific examples will be given below in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
 
 .. In particular, our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of these underlying themes motivating our work.
 
-Specifically, we present fundamental definitions and theorems about :term:`subalgebras <subalgebra>`, terms, and clones---first in this chapter using the informal language of universal algebra, and then in the next chapter using the formal language of Lean.
+Specifically, in this chapter and :numref:`Chapter %s <terms-and-clones>` we use the informal language of universal algebra to present fundamental definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`Chapters %s <algebras-in-lean>` and :numref:`%s <terms-and-clones-in-lean>` we show how the definitions and results that we have presented in the informal language can be formalized (or "implemented") in type theory using Lean.
 
-The idea is to demonstrate the power and utility of implementing the theory in a formal language that supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving (by induction) properties of these objects.
+The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving (by induction) properties of these objects.
+
+Finally, it is important to point out that this is not merely an exercise in translation.  Indeed, Lean was designed with the goal of creating a system in which one could conduct "real" mathematics research, and that is how we intend to use it once we have acheived the goal of implementing the most basic and important parts of the existing theory in a usable Lean library (`lean-ualib`_).
 
 -----------------------------------------
 
@@ -197,76 +200,9 @@ We call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (althoug
 
    The constants :math:`0^ℤ` and :math:`1^ℤ` are nullary operations. Of course we usually just write :math:`+` for :math:`+^ℤ`, etc.
 
-More examples of algebraic structures that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) are described in the next section.
+More :ref:`examples of algebraic structures <examples-of-algebras>` that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) appear in the appendix.
 
 Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we will incorporate in our development later. (See :numref:`Chapter %s <postmodern-algebra>`.)
-
-.. index:: ! magma, ! groupoid, ! binar, ! vector space, ! bilinear algebra, ! associative algebra, ! semigroup, ! monoid, ! group, multiplicative inverse, ! abelian group, additive identity, additive inverse,! ring, ! unital ring, ! multiplicative identity, ! unit, ! division ring, ! field, ! module 
-
-.. _examples-of-algebras:
-
-Examples of algebras
-~~~~~~~~~~~~~~~~~~~~~~
-
-Recall from above that an algebra :math:`𝔸` is an ordered pair :math:`𝔸 = ⟨A, F^𝔸⟩` where :math:`A` is a nonempty set and :math:`F` is a family of finitary operations on :math:`A`.
-
-The set :math:`A` is called the **universe** of :math:`𝔸`, and the elements :math:`f^𝔸 ∈ F` are called the **basic operations** of :math:`𝔸`.
-
-(In practice we often write :math:`f` instead of :math:`f^𝔸` when no ambiguity could result from this shorthand.
-
-Here is a list of a few of the most frequently encountered and historically important algebraic structures. [4]_
-
-* **Magma**. An algebra :math:`⟨A, ⋅⟩` with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
-
-* **Semigroup**. A magma :math:`⟨A, ⋅⟩` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma whose binary operation satisfies :math:`∀ a, b, c ∈ A`, :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
-
-* **Monoid**. If :math:`⟨A, ⋅⟩` is a semigroup and if :math:`e ∈ A` is a *multiplicative identity* (i.e., :math:`∀ a ∈ A`, :math:`e ⋅ a = a ⋅ e = a`), then :math:`⟨A, \{e, ⋅\}⟩` is called a **monoid**.
-
-* **Group**. A **group** is a monoid along with a unary operation :math:`^{-1}` called *multiplicative inverse*. That is, the reduct :math:`⟨ A, \{e, ⋅\}⟩` is a monoid and :math:`^{-1}`
-  satisfies :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`, for all :math:`a ∈ A`.
-  
-* **Abelian group**. A group is called **abelian** just in case its binary operation is commutative, in which case we usually denote the operation by :math:`+` instead of :math:`⋅`. Also in this case we let :math:`0` (instead of :math:`e`) denote the *additive identity*, and we let :math:`-\,` (instead of :math:`^{-1}`) denote the *additive inverse*. Thus, an **abelian group** is a group :math:`𝔸 = ⟨ A, 0, -,+⟩` such that :math:`a+b = b+a` for all :math:`a, b ∈ A`.
-
-* **Ring**. An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
-
-  #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
-  #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
-  #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
-
-  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
-
-  If :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ R` is called a **unit** if it has a multiplicative inverse, that is, there exists :math:`s ∈ R` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
-
-* **Division ring**.  A ring in which every non-zero element is a unit is called a **division ring**.
-
-* **Field**. A commutative division ring is called a **field**.
-
-* **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
-
-  #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
-  #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
-  #. :math:`f_r(f_s(x)) = f_{rs}(x)`
-  #. :math:`f_1(x) = x`.
-
-  Note that Condition 1 says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`, while the other conditions amount to the following: (1) the set :math:`E := \{f_r ∣ r∈ R\}` of endomorphisms is a ring with unit where multiplication is function composition, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`E`.
-
-  One reason modules are important is that every ring is, up to isomorphism, a ring of endomorphisms of some abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
-
-* **Vector space**. In :math:`R` happens to be a field, then an :math:`R`-module is typically called a **vector space** over :math:`R`.
-
-* **Bilinear algebra**. If :math:`𝔽 = ⟨F, \{0, 1, -, ⋅\}⟩` is a field, then the algebra :math:`𝔸 = ⟨A, \{0, -, +, ⋅\} ∪ \{f_r ∣ r ∈ F\}⟩` is called a **bilinear algebra** over :math:`𝔽` provided
-
-  #. :math:`⟨A, \{0, -, +\} ∪ \{f_r ∣ r ∈ F\}⟩` is a vector space over :math:`𝔽` and 
-  #. :math:`∀ a, b, c ∈ A`, :math:`∀ r ∈ F`,
-
-     .. math:: \begin{gather}
-               (a + b) ⋅ c = (a ⋅ c) + (b ⋅ c),\\
-               c ⋅ (a + b) = (c ⋅ a) + (c ⋅ b),\\
-               a ⋅ f_r(b) = f_r(a ⋅ b) = f_r(a) ⋅ b.
-               \end{gather}
-
-  If in addition :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)` for all :math:`a, b, c ∈ A`, then :math:`𝔸` is called an **associative algebra** over :math:`𝔽`. Thus an associative algebra over a field has both a vector space reduct and a ring reduct. An example of an associative algebra is the space of *linear transformations* (endomorphisms) of any vector space into itself.
-
 
 ---------------------------
 
@@ -464,7 +400,7 @@ Let :math:`\{A_i: i ∈ I\}` be a collection of sets (for some :math:`I ⊆ ℕ`
    
 This correspondence simply records the fact that the product type (on the left of the ⟷ symbol) is a special kind of function type (depicted on the right of ⟷ using the usual arrow notation for function types).
 
-In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} A_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i`.  As explained in :numref:`pi-types`, such a function (or product) type is known as a :term:`dependent type`.
+In other words, :eq:`7` says that an element of the product type :math:`∏_{i∈I} A_i` is a function from :math:`I` into :math:`⋃_{i∈I} A_i`.  As explained in the section on :ref:`Pi types <pi-types>`, such a function (or product) type is known as a :term:`dependent type`.
 
 Given a subset :math:`J ⊆ I`, a function :math:`σ: J → I`, and an element :math:`a ∈ ∏_{i∈I} A_i`, consider the composition :math:`a ∘ σ`. This is a function from :math:`J` to :math:`⋃_{j∈J} A_{σ\, j}`, where :math:`(a ∘ σ)\, j ∈ A_{σ\, j}`.
 
@@ -535,7 +471,7 @@ In other words, :math:`θ σ` consists of all pairs in :math:`A^2` that land in 
 
    whence, :math:`θ_g = map \, (\Proj\, σ)^{-1} \, θ`.
 
-#. If :math:`f: X → A` and :math:`g: X → B` are functions defined  on the same domain :math:`X`, then :math:`(f,g): X → A × B` is the unique function that composes with the first projection to give :math:`f` and composes with the second projection to give :math:`g`. For example, in the last remark there appears the expression :math:`(\Proj\, σ\, a, \Proj\, σ \, a') = (a ∘ σ, a' ∘ σ)`, which has type :math:`( ∏_{j<k} A_{σ\, j} )^2`. [5]_
+#. If :math:`f: X → A` and :math:`g: X → B` are functions defined  on the same domain :math:`X`, then :math:`(f,g): X → A × B` is the unique function that composes with the first projection to give :math:`f` and composes with the second projection to give :math:`g`. For example, in the last remark there appears the expression :math:`(\Proj\, σ\, a, \Proj\, σ \, a') = (a ∘ σ, a' ∘ σ)`, which has type :math:`( ∏_{j<k} A_{σ\, j} )^2`. [4]_
 
 #. If the domain of :math:`σ` is a singleton, :math:`k = \{0\}`, then of course :math:`σ` is just a one-element list, say, :math:`σ = (j)`. In such cases, we write :math:`\Proj\, j` instead of :math:`\Proj\, {(j)}`.  Similarly, we write and :math:`\mathbf{0}\, j` and :math:`θ\, j` instead of :math:`\mathbf{0}\, {(j)}` and :math:`θ\, {(j)}`. Thus, :math:`\Proj\, j \, a = a\, j`, and :math:`\mathbf{0} \, j = \{(a, a') ∈ A^2 ∣ a \, j = a' \, j\}`, and, if :math:`θ ∈ \Con 𝔸_j`, then :math:`θ \, j = \{(a, a') ∈ A^2 ∣ a \, j \mathrel{\theta} a'\, j\}`.
 
@@ -747,9 +683,6 @@ Here is a small collection of basic observations that we will need later. When w
    The term :math:`σ`-**algebra** has a special meaning, different from ours, in other areas of mathematics such as real analysis, probability, and measure theory.
 
 .. [4]
-   A list of many others may be found at http://www.math.chapman.edu/~jipsen/structures/doku.php/index.html.
-
-.. [5]
    In retrospect, a more appropriate name for :math:`\mathbf{0} σ` might be :math:`Δ_σ`, or even :math:`=_σ`, but this may lead to conflicts with more standard notational conventions.
 
 

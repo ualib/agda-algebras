@@ -1,6 +1,7 @@
 .. File: appendix_glossary.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 11 Oct 2019
+.. Updated: 5 Nov 2019
 .. Updated: 30 Oct 2019
 .. Updated: 27 Oct 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
@@ -11,15 +12,18 @@
 
 .. highlight:: lean
 
-.. _appendix-glossary:
 
-Glossary
---------
+GLOSSARY
+=========
+
+.. contents:: :local:
+    :depth: 2
+
 
 .. _acronyms:
 
 Acronyms
-~~~~~~~~~
+--------
 
 .. glossary::
 
@@ -74,10 +78,446 @@ Acronyms
       `Uniqueness of Identity Proofs <https://ncatlab.org/nlab/show/axiom+UIP>`_
 
 
+--------------------------
+
+
+.. index:: ! magma, ! groupoid, ! binar, ! vector space, ! bilinear algebra, ! associative algebra, ! semigroup, ! monoid, ! group, multiplicative inverse, ! abelian group, additive identity, additive inverse,! ring, ! unital ring, ! multiplicative identity, ! unit, ! division ring, ! field, ! module 
+
+.. _examples-of-algebras:
+
+Examples of algebras
+----------------------
+
+Recall from above that an algebra :math:`𝔸` is an ordered pair :math:`𝔸 = ⟨A, F^𝔸⟩` where :math:`A` is a nonempty set and :math:`F` is a family of finitary operations on :math:`A`.
+
+The set :math:`A` is called the **universe** of :math:`𝔸`, and the elements :math:`f^𝔸 ∈ F` are called the **basic operations** of :math:`𝔸`.
+
+(In practice we often write :math:`f` instead of :math:`f^𝔸` when no ambiguity could result from this shorthand.
+
+Here is a list of a few of the most frequently encountered and historically important algebraic structures. [4]_
+
+* **Magma**. An algebra :math:`⟨A, ⋅⟩` with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
+
+* **Semigroup**. A magma :math:`⟨A, ⋅⟩` whose binary operation is associative is called a **semigroup**.  That is, a semigroup is a magma whose binary operation satisfies :math:`∀ a, b, c ∈ A`, :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)`.
+
+* **Monoid**. If :math:`⟨A, ⋅⟩` is a semigroup and if :math:`e ∈ A` is a *multiplicative identity* (i.e., :math:`∀ a ∈ A`, :math:`e ⋅ a = a ⋅ e = a`), then :math:`⟨A, \{e, ⋅\}⟩` is called a **monoid**.
+
+* **Group**. A **group** is a monoid along with a unary operation :math:`^{-1}` called *multiplicative inverse*. That is, the reduct :math:`⟨ A, \{e, ⋅\}⟩` is a monoid and :math:`^{-1}`
+  satisfies :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`, for all :math:`a ∈ A`.
+  
+* **Abelian group**. A group is called **abelian** just in case its binary operation is commutative, in which case we usually denote the operation by :math:`+` instead of :math:`⋅`. Also in this case we let :math:`0` (instead of :math:`e`) denote the *additive identity*, and we let :math:`-\,` (instead of :math:`^{-1}`) denote the *additive inverse*. Thus, an **abelian group** is a group :math:`𝔸 = ⟨ A, 0, -,+⟩` such that :math:`a+b = b+a` for all :math:`a, b ∈ A`.
+
+* **Ring**. An algebra :math:`⟨R, \{0, -, +, ⋅\}⟩` is called a **ring** just in case the following conditions hold:
+
+  #. the reduct :math:`⟨R, \{0, -,+\}⟩` is an abelian group,
+  #. the reduct :math:`⟨R, ⋅ ⟩` is a semigroup, and
+  #. "multiplication" :math:`⋅` distributes over "addition" :math:`+`; that is, :math:`∀ a, b, c ∈ R`, :math:`a ⋅ (b+c) = a ⋅ b + a ⋅ c` and :math:`(a+b)⋅ c = a ⋅ c + b ⋅ c`.
+
+  A **ring with unity** (or **unital ring**) is an algebra :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` with a ring reduct :math:`⟨R, \{0, -, +, ⋅\}⟩` and a *multiplicative identity* :math:`1 ∈ R`; that is :math:`∀ r ∈ R`, :math:`r ⋅ 1 = r = 1 ⋅ r`.
+
+  If :math:`⟨R, \{0, 1, -, +, ⋅\}⟩` is a unital ring, an element :math:`r ∈ R` is called a **unit** if it has a multiplicative inverse, that is, there exists :math:`s ∈ R` with :math:`r ⋅ s = 1 = s ⋅ r`.  (We usually denote such an :math:`s` by :math:`r^{-1}`.)
+
+* **Division ring**.  A ring in which every non-zero element is a unit is called a **division ring**.
+
+* **Field**. A commutative division ring is called a **field**.
+
+* **Module**. Let :math:`R` be a ring with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an abelian group reduct :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
+
+  #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
+  #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
+  #. :math:`f_r(f_s(x)) = f_{rs}(x)`
+  #. :math:`f_1(x) = x`.
+
+  Note that Condition 1 says that each :math:`f_r` is an :term:`endomorphism` of the abelian group :math:`⟨ M, \{0, -, +\}⟩`, while the other conditions amount to the following: (1) the set :math:`E := \{f_r ∣ r∈ R\}` of endomorphisms is a ring with unit where multiplication is function composition, and (2) the map :math:`r ↦ f_r` is a ring :term:`epimorphism` from :math:`R` onto :math:`E`.
+
+  One reason modules are important is that every ring is, up to isomorphism, a ring of endomorphisms of some abelian group. This fact is analogous to the more familiar theorem of Cayley stating that every group is isomorphic to a group of permutations of some set.
+
+* **Vector space**. In :math:`R` happens to be a field, then an :math:`R`-module is typically called a **vector space** over :math:`R`.
+
+* **Bilinear algebra**. If :math:`𝔽 = ⟨F, \{0, 1, -, ⋅\}⟩` is a field, then the algebra :math:`𝔸 = ⟨A, \{0, -, +, ⋅\} ∪ \{f_r ∣ r ∈ F\}⟩` is called a **bilinear algebra** over :math:`𝔽` provided
+
+  #. :math:`⟨A, \{0, -, +\} ∪ \{f_r ∣ r ∈ F\}⟩` is a vector space over :math:`𝔽` and 
+  #. :math:`∀ a, b, c ∈ A`, :math:`∀ r ∈ F`,
+
+     .. math:: \begin{gather}
+               (a + b) ⋅ c = (a ⋅ c) + (b ⋅ c),\\
+               c ⋅ (a + b) = (c ⋅ a) + (c ⋅ b),\\
+               a ⋅ f_r(b) = f_r(a ⋅ b) = f_r(a) ⋅ b.
+               \end{gather}
+
+  If in addition :math:`(a ⋅ b) ⋅ c = a ⋅ (b ⋅ c)` for all :math:`a, b, c ∈ A`, then :math:`𝔸` is called an **associative algebra** over :math:`𝔽`. Thus an associative algebra over a field has both a vector space reduct and a ring reduct. An example of an associative algebra is the space of *linear transformations* (endomorphisms) of any vector space into itself.
+
+--------------------
+
+.. _examples-of-categories:
+
+Examples of categories
+-----------------------
+
+.. glossary::
+
+    1
+      The only object is :math:`0`; the only morphism is the identity :math:`\id_0: 0 ↦ 0`.
+
+    2
+      There are two objects, :math:`0` and :math:`1`; there is one nonidentity morphism :math:`f: 0 ↦ 1`.
+
+    3
+      There are three objects, :math:`0`, :math:`1`, and :math:`2`; there are three nonidentity morphisms: :math:`f: 0 ↦ 1`, :math:`g: 1 ↦ 2`, and :math:`h: 0 ↦ 2`.
+
+    Cat 
+      the (large) category of small categories; it has small categories as objects and functors :math:`F : \mathcal C → \mathcal D` as morphisms.
+
+    Set
+      the category whose objects are the sets and whose morphisms are the functions on sets.
+
+    Grph
+      the category whose objects are the (directed) graphs; the morphisms are the :term:`graph morphisms <graph morphism>`.
+
+    Mon
+      the category whose objects are the :term:`monoids <monoid>` and whose morphisms are the :term:`monoid homomorphisms <monoid homomorphism>`.
+
+    Par
+      the category whose objects are sets and whose morphisms are the :term:`partial functions <partial function>`.
+
+    Rel
+      the category whose objects are sets and whose morphisms are the :term:`relations <relation>` on sets.
+
+    Fin
+      a category whose objects are the finite sets; the morphisms are the functions on finite sets.
+
+    Pos
+      a category whose objects are the :term:`posets <poset>`; the morphisms are the :term:`monotone functions <monotone function>`.
+
+    Lat
+      a category whose objects are the :term:`lattices <lattice>`; the morphisms are the :term:`lattice homomorphisms <lattice homomorphism>`.
+
+    CLat
+      a category whose objects are the :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
+
+    BLat
+      a category whose objects are the :term:`Boolean lattices <Boolean algebra>`; the morphisms are the :term:`Boolean lattice homomorphisms <Boolean algebra homomorphism>`.
+
+    HLat
+      a category whose objects are the :term:`Heyting lattices <Heyting algebra>`; the morphisms are the :term:`Heyting lattice homomorphisms <Heyting algebra homomorphism>`
+
+    ACLat
+      a category whose objects are :term:`algebraic <algebraic lattice>`, :term:`complete lattices <complete lattice>`; the morphisms are the :term:`complete lattice homomorphisms <complete lattice homomorphism>`.
+
+    Arrow
+      Given a category :math:`\mathcal C`, the **arrow category** :math:`\mathcal C^→` has as objects the triples :math:`(A, B, f)` satisfying :math:`A, B ∈  \mathcal C_{\mathrm{obj}}` and :math:`f ∈ \mathcal C(A,B)`, and as morphisms the pairs :math:`(h_1, h_2) : (A, B, f) → (C, D, g)` such that :math:`h_1 ∈ \mathcal C(A,C)`, :math:`h_2 ∈ \mathcal C(B, D)` and :math:`g \circ h_1 = h_2 \circ f`.
+
+    Slice
+      Given a category :math:`\mathcal C` and an object :math:`C ∈ \mathcal C_{\mathrm{obj}} `, the **slice category** :math:`\mathcal C/C` has objects the pairs :math:`(A, f)` such that :math:`f ∈ \mathcal C(A, C)`, and morphisms :math:`h : (A, f) → (B, g)` such that :math:`h ∈ \mathcal C(A, B)` and :math:`g ∘ h = f`.
+
+    Comma
+      Given categories :math:`\mathcal C` and :math:`\mathcal D` and functors :math:`F : \mathcal C → \mathcal D` and :math:`G : \mathcal C' → \mathcal D` (with a common :term:`codomain`), the **comma category** is denoted by :math:`(F ↓ G)` and has objects the triples :math:`(A, f, A')`, where :math:`A ∈ \mathcal C_{\mathrm{obj}}`, :math:`A' ∈ \mathcal C'_{\mathrm{obj}}`, and :math:`f ∈ \mathcal D(FA, GA')`, and morphisms the pairs :math:`(φ, ψ) : (A, f, A') → (B, g, B')`, where :math:`φ ∈ \mathcal C(A, B)`, :math:`ψ ∈ \mathcal C'(A',B')` and :math:`G ψ ∘ f = g ∘ F φ`.
+
+--------------------------
+
+
+.. _symbols:
+
+Symbols
+-----------------
+
+The list below shows what to type (e.g., in the vscode IDE with lean extension) to produce some of the special characters used in the `lean-ualib`_.
+
+.. glossary::
+
+    { }
+      Surrounds implicit argument(s) and directs parser to use *agressive* type inference; see the :ref:`appendix section on implicit arguments <implicit-arguments>`.
+
+    ⦃ ⦄
+      (Type with ``\{{``.) Surrounds implicit argument(s) and directs parser to use *conservative* type inference; see the :ref:`appendix section on implicit arguments <implicit-arguments>`.
+
+    𝔸
+      ``\A`` (or ``\BbbA``)
+
+    𝔹 
+      ``\BbbB``
+
+    ℂ
+      ``\C`` (or ``\BbbC``)
+
+    ℕ
+      ``\N`` (or ``\nat`` or ``\BbbN``)
+      
+    𝕋 
+      ``\BbbT``
+      
+    ℤ
+      ``\Z`` (or ``\Int`` or ``\BbbZ``)
+
+    L
+      ``\mscrL``
+
+    h₁
+      ``h\1`` (or ``h\_1``)
+      
+    h₂
+      ``h\2``, etc.
+
+    fₗ
+      ``f\_l``
+  
+    f̃
+      ``f\tilde``
+
+    R̃
+      ``R\tilde``
+
+    f̂
+      ``f\hat``                          
+
+    å
+      ``\aa``
+  
+    ě
+      ``\ve``
+    
+    ö
+      ``\"o``
+      
+    ç
+      ``\cc``
+
+    α
+      ``\a`` (or ``\alpha``)
+      
+    β
+      ``\b``
+      
+    γ
+      ``\g``
+
+    Γ 
+      ``\G``
+
+    δ
+      ``\de`` (or ``\delta``)
+
+    Δ 
+      ``\D`` (or ``\Delta``)
+
+    ε
+      ``\e`` (or ``\epsilon``)
+
+    ι
+      ``\iota``
+
+    λ
+      ``\lamda`` (or ``\Gl`` or ``\la`` or ``\fun``)
+      
+    Λ
+      ``\L`` (or ``\GL`` or ``\Lambda``)
+
+    ρ
+      ``\rho``
+
+    σ
+      ``\s`` (or ``\sigma``)
+      
+    Σ
+      ``\S`` (or ``\Sigma``)
+      
+    ∑
+      ``\sum``
+
+    ∏
+      ``\prod``
+
+    Π
+      ``\p`` (or ``\Pi``)
+
+    π
+      ``\pi``
+       
+    ϕ
+      ``\phi``
+
+    Φ
+      ``\Phi``
+
+    æ
+      ``\ae``
+
+    Æ
+      ``\AE``
+
+    œ
+      ``\oe``
+    
+    Œ
+      ``\OE``
+
+    ∩
+      ``\i``  (or ``\cap`` or ``\intersection``)
+  
+    ⋂
+      ``\I`` (or ``\bigcap`` or ``\Intersection``)
+  
+    ∪
+      ``\un`` (or ``cup`` or ``\union``)
+  
+    ⋃
+      ``\Un`` (or ``\bigcup`` or ``\Union``)
+
+    ∧
+      ``\an`` (or ``\and`` or ``\wedge``)
+
+    ⋀
+      ``\And`` (or ``\bigwedge``)
+
+    ∨
+      ``\vee`` (or ``\or``)
+
+    ⋁
+      ``\Or`` (or ``\bigvee``)
+
+    ¬
+      ``\n`` (or ``\neg``)
+
+    ∘
+      ``\o`` (or ``\circ``)
+
+    ⊚
+      ``\oo``
+
+    ×
+      ``\x`` (or ``\times``)
+
+    ∃
+      ``\ex`` (or ``\exists``)
+
+    ∀
+      ``\al`` (or ``\all`` or ``\forall``)
+
+    ∈
+      ``\in``
+
+    ∋
+      ``\ni``
+
+    ∉
+      ``\inn``, ``\nin`` (or ``\notin``, ``\nni``)
+
+    ≤
+      ``\leq``
+
+    ≥
+      ``\geq``                               
+
+    ⊆
+      ``\ss`` (or ``\subseteq``)
+
+    ⊇
+      ``\supseteq``        
+
+    ⊂
+      ``\subset``
+
+    ⊃
+      ``\supset``                         
+
+    ≪
+      ``\ll``
+
+    ≫
+      ``\gg``                                 
+
+    ⋆
+      ``\star``
+
+    ∗
+      ``\ast``                              
+
+    ≈
+      ``\~~`` (or ``\approx``)
+
+    ∼
+      ``\sim``               
+
+    ≡
+      ``\equiv``
+
+    ≅
+      ``\cong``                            
+
+    ⟨
+      ``\<`` (or ``\langle``)
+
+
+    ⟩
+      ``\>`` (or ``\rangle``)     
+
+    ‹
+      ``\f<`` (or ``\f``)
+
+    ›
+      ``\f>`` (or ``\fr``)            
+
+    ◀
+      ``\T``
+
+    ▸
+      ``\t``                                   
+
+    ←
+      ``\l`` (or ``->``)
+
+    →
+      ``\to`` (or ``\r``)            
+
+    ⟶
+      ``\hom`` (or ``-->``)                            
+
+    ↑
+      ``\u``
+
+    ↓
+      ``\d``                                   
+
+    ⟹
+      ``==>`` (or ``\nattrans``)                       
+
+    ⟺
+      ``\iff``                                         
+
+    ↦
+      ``\mapsto`` (or ``\r-``)                        |
+
+    ↠
+      ``\rr`` or ``\twoheadrightarrow``                
+
+    ↣
+      ``\pr`` or ``\r->``                              
+
+    ∅
+      ``\emp`` (or ``\empty`` or ``\emptyset``)        
+
+    ⊢
+      ``\vdash``
+
+    ⊨
+      ``\vDash``
+
+    ⫢
+      ``\vDdash``
+
+    ⊧
+      ``\models``              
+
+    ⋈
+      ``\j`` (or ``\bowtie``)
+
+----------------------------
+
+
 .. _definitions:
 
 Definitions
-~~~~~~~~~~~~
+--------------------
 
 .. glossary::
 
@@ -1127,7 +1567,7 @@ Definitions
       Given two objects :math:`A` and :math:`B` a **product** of :math:`A` and :math:`B` is defined to be an object, :math:`A × B`, along with :term:`morphisms <morphism>` :math:`π_1: A × B → A` and :math:`π_2: A × B → B` such that for every object :math:`X` and all morphisms :math:`f: X → A` and :math:`g: X → B` there exists a unique morphism :math:`⟨f,g⟩: X → A × B` such that :math:`p_1 ∘ ⟨f,g⟩ = f` and :math:`p_2 ∘ ⟨f,g⟩ = g`.
       
     product σ-algebra
-      Let :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [4]_
+      Let :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [5]_
   
     product topology
       Let :math:`\{(X_λ, τ_λ)\}_{λ∈ Λ}` be a collection of :term:`topological spaces <topological space>` indexed by a set :math:`Λ`. The **product topology** on the :term:`Cartesian product` :math:`∏_{λ∈ Λ}X_λ` is the topology that has a :term:`base` consisting of sets of the form :math:`∏_{λ∈Λ}V_λ`, where :math:`V_λ ∈ τ_λ` and :math:`V_λ = X_λ` for all but finitely many :math:`λ`.
@@ -1166,7 +1606,7 @@ Definitions
       (See also https://ncatlab.org/nlab/show/proofs+as+programs and :term:`Curry-Howard correspondence` and :term:`propositions-as-types`.)
 
     proposition extensionality
-      This axiom asserts that when two propositions imply one another, they are actually equal. This is consistent with set-theoretic interpretations in which any element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in any context.
+      This axiom asserts that when two propositions imply one another, they are :term:`definitionally equal`. This is consistent with set-theoretic interpretations in which an element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in every context.
       
       (See also the `Proposition Extensionality <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#propositional-extensionality>`_ section of the :term:`TPIL`.)
 
@@ -1492,7 +1932,7 @@ Definitions
     vector space
       If :math:`F` is a :term:`field`, then an :math:`F`-:term:`module` is called a **vector space** over :math:`F`.
 
---------------------------
+--------------------------------
 
 .. rubric:: Footnotes
 
@@ -1506,6 +1946,9 @@ Definitions
    The use of this term is not quite standardized; some (e.g., Rudin :cite:`Rudin:1987`) call any open set containing :math:`p` a "neighborhood of :math:`p`".
 
 .. [4]
+   A list of many others may be found at http://www.math.chapman.edu/~jipsen/structures/doku.php/index.html.
+
+.. [5]
    This notation is not completely standard. In :cite:`Aliprantis:1998` (page 154) for example, :math:`𝔐 ⊗ 𝔑` denotes what we call :math:`𝔐 × 𝔑`, while :math:`σ(𝔐 ⊗ 𝔑)` denotes what we have labeled :math:`𝔐 ⊗ 𝔑`. At the opposite extreme, Rudin (in :cite:`Rudin:1987`) simply takes :math:`𝔐 × 𝔑` to be the :term:`σ-algebra` generated by the sets :math:`\{A × B ∣ A ∈ 𝔐, B ∈ 𝔑\}`.
 
 ----------------------

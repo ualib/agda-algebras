@@ -1,6 +1,7 @@
 .. File: appendix_lsl.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 11 Oct 2019
+.. Updated: 5 Nov 2019
 .. Updated: 27 Oct 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
@@ -10,13 +11,17 @@
 
 .. _the-lean-stl:
 
+=============
 The Lean STL
--------------
+=============
+
+.. contents:: :local:
+    :depth: 1
 
 We first collect for easy reference some links to some of the basic components of the `Lean Standard Library`_ (:term:`LSTL`).  Thereafter, we dissect some of these components with special attention to those that are needed for implementing universal algebra in Lean.
 
 Some basic components
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 While Lean doesn't have a formal API, per se, you can browse the source code of the core Lean library to see what built-in types, definitions, and theorems are available in the :term:`LSTL`.
 
@@ -49,7 +54,7 @@ For example, some of the most important of these objects are implemented in the 
 .. _extensionality-in-the-lstl:
 
 Extensionality
-~~~~~~~~~~~~~~~~~
+-----------------------
 
 .. index:: !Leibniz equal, function extensionality
 .. index:: keyword: funext
@@ -236,7 +241,7 @@ Finally, the ``funext`` theorem asserts that function extensionality *is* functi
 .. _subsingleton-type-class:
 
 Subsingleton type class
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 The ``subsingleton`` type class is used in the definition of ``quotient.rec_on_subsingleton`` and related theorems. Any type inhabited by a single element is a subsingleton type. Here is the definition.
 
@@ -312,7 +317,7 @@ We say "``x`` belongs to ``A``", and write ``x ∈ A``, if and only if the propo
 .. _intersection-and-union:
 
 Intersection and union
-~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 Let ``S`` be a family of sets of type :math:`α`.
 
@@ -348,7 +353,7 @@ The **union of sets** is implemented in lattice.lean_ similarly.
 .. index:: domain, range
 
 Relations in Lean
-~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 In the last chapter, we noted that set theorists think of a binary relation :math:`R` on a set :math:`A` as a set of ordered pairs, so that :math:`R(a, b)` really means :math:`(a, b) \in R`. An alternative is to think of :math:`R` as a function which, when applied to :math:`a` and :math:`B`, returns the proposition that :math:`R(a, b)` holds. This is the viewpoint adopted by Lean: a binary relation on a type ``A`` is a function ``A → A → Prop``. Remember that the arrows associate to the right, so ``A → A → Prop`` really means ``A → (A → Prop)``. So, given ``a: A``, ``R a`` is a predicate (the property of being related to ``A``), and given ``a b: A``, ``R a b`` is a proposition.
 
@@ -415,12 +420,13 @@ In one of these examples we show ``R x z`` follows from the assumptions ``h: tra
     ∀ x y z, R x y → R y z → R x z
 
     example {A: Type} (R: A → A → Prop)
-    (h: transitive R) (x y z: A) (h₁: R x y) (h₂: R y z): R x z :=
+    (h: transitive R) (x y z: A)
+    (h₁: R x y) (h₂: R y z): R x z :=
     h _ _ _ h₁ h₂
 
   end prelim
 
-But typing underscores is annoying; we should make ``x y z`` implicit arguments so that the underscores are unnecessary.
+But typing all these underscores can get annoying; we should make ``x y z`` implicit so we can omit these underscores.
 
 ::
 
@@ -450,7 +456,7 @@ It is possible to provide the implicit parameters explicitly, but then the ``@``
 .. _preorders-and-equivalences-in-lean:
 
 Preorders and equivalences
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 In the :ref:`appendix section on equivalence relations <equivalence-relations>` we learned that an equivalence relation is a symmetric preorder---equivalently, a reflexive, symmetric, and transitive binary relation. We will define such a relation in Lean shortly, but first let's define preorder.
 
@@ -573,7 +579,7 @@ Finally, we prove that an equivalence relation (defined as a reflexive, symmetri
 .. _partial-orders-in-lean:
 
 Partial orders
-~~~~~~~~~~~~~~
+-----------------------
 
 Building on our Lean definition of :term:`preorder`, we can define a :term:`partial order` in Lean as an antisymmetric preorder.
 
@@ -770,7 +776,7 @@ In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.l
 .. _quotients-in-the-LSTL:
 
 Quotients in the LSTL
-~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 To gain a better understanding of the implementation of quotients in the `Lean Standard Library`_, we will dissect the code in the file `quot.lean`_, which resides in the `lean/library/init/data`_ directory of the :term:`LSTL`.
 
@@ -857,7 +863,7 @@ and returns a proof of the assertion that *every* ``r``-class belongs to ``β``.
 .. _the-quot-namespace:
 
 The quot namespace
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Without further ado, here is the ``quot`` namespace as defined in the :term:`LSTL`.  We will dissect this code below.
 
@@ -1466,7 +1472,7 @@ In the second part of `quot.lean`_ is the ``quotient`` namespace.
 .. _quotient-theorems:
 
 Quotient theorems
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 The third and final part of the `quot.lean`_ file proves some theorems about the quotient types defined above.
 

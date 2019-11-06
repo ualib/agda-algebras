@@ -1,6 +1,7 @@
 .. File: appendix_lean_basics.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 11 Oct 2019
+.. Updated: 5 Nov 2019
 .. Updated: 27 Oct 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
@@ -10,9 +11,12 @@
 
 .. _lean-basics:
 
-
+=============
 Lean Basics
-------------
+=============
+
+.. contents:: :local:
+    :depth: 1
 
 In this appendix we describe the various features and aspects of Lean_ on which our algebra library (lean-ualib_) depends.
 
@@ -29,7 +33,7 @@ Some good references for the material in this chapter are the following:
 .. _leans-type-hierarchy:
 
 Lean's type hierarchy
-~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 (See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.)
 
@@ -38,93 +42,116 @@ Like its more mature cousins Coq and Agda, Lean takes for its logical foundation
 Sort and Type
 ~~~~~~~~~~~~~
 
-The following excerpt from the `Lean Reference Manual`_ explains the correspondence between ``Sort`` and ``Type``.
+Here is a brief summary of the explanation given in the `Lean Reference Manual`_ of the correspondence between ``Sort`` and ``Type``.
 
   Every type in Lean is, by definition, an expression of type ``Sort u`` for some universe level ``u``. A universe level is one of the following:
 
-  + a natural number, ``n``
-  + a universe variable, ``u`` (declared with the command universe or universes)
-  + an expression ``u + n``, where ``u`` is a universe level and ``n`` is a natural number
-  + an expression ``max u v``, where ``u`` and ``v`` are universes
-  + an expression ``imax u v``, where ``u`` and ``v`` are universe levels
+  * a natural number, ``n``
+  * a universe variable, ``u`` (declared with the command universe or universes)
+  * an expression ``u + n``, where ``u`` is a universe level and ``n`` is a natural number
+  * an expression ``max u v``, where ``u`` and ``v`` are universes
+  * an expression ``imax u v``, where ``u`` and ``v`` are universe levels
 
   The last one denotes the universe level 0 if ``v`` is 0, and ``max u v`` otherwise.
 
-  .. code-block:: lean
+.. proof:example::
 
-     universes u v                    -- Lean Output
-                                      -- -----------
-     #check Sort u                    -- Sort u : Type u
-     #check Sort 5                    -- Type 4 : Type 5
-     #check Sort (u + 1)              -- Type u : Type (u+1)
-     #check Sort (u + 3)              -- Type (u+2) : Type (u+3)
-     #check Sort (max u v)            -- Sort (max u v) : Type (max u v)
-     #check Sort (max (u + 3) v)      -- Sort (max (u+3) v) : Type (max (u+3) v)
-     #check Sort (imax (u + 3) v)     -- Sort (imax (u+3) v) : Type (imax (u+3) v)
-     #check Prop                      -- Prop : Type
-     #check Type                      -- Type : Type 1
+   Let's see some actual Lean code demonstrating some of the assertions above.
+
+   ::
+
+     universes u v                -- Lean Output
+                                  -- -----------
+     #check Sort u                -- Sort u: Type u
+     #check Sort 5                -- Type 4: Type 5
+     #check Sort (u + 1)          -- Type u: Type (u+1)
+     #check Sort (u + 3)          -- Type (u+2): Type (u+3)
+     #check Sort (max u v)        -- Sort (max u v): Type (max u v)
+     #check Sort (max (u + 3) v)  -- Sort (max (u+3) v): Type (max (u+3) v)
+     #check Sort (imax (u + 3) v) -- Sort (imax (u+3) v): Type (imax (u+3) v)
+     #check Prop                  -- Prop : Type
+     #check Type                  -- Type : Type 1
 
 .. index:: keyword: Type, Type 0, Type 1, ...
 
-Lean has a hierarchy of :math:`\omega`-many type universe levels. We want some operations to be *polymorphic* over type universes.
+In Lean, ``Type`` is an abbreviation for ``Type 0``, which is an abbreviation for ``Sort 1``.
 
-For example, ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature:
+Lean has a hierarchy of ω-many type universe levels. We want some operations to be *polymorphic* over type universes.
 
-.. code-block:: lean
+.. proof:example::
 
-   #check @list    -- answer: Type u → Type u
+   ``list α`` should make sense for any type ``α``, no matter which universe ``α`` lives in. This explains why ``list`` has the following type signature:
 
-Here ``u`` is a variable ranging over type levels.
+   ::
 
-Think of ``Type 0`` as a universe of "small" or "ordinary" types. ``Type 1`` is then a larger universe of types that contains ``Type 0`` as an *element*, and ``Type 2`` is an even larger universe of types, that contains ``Type 1`` as an element. The list is indefinite, so that there is a ``Type n`` for every natural number ``n``. ``Type`` is an abbreviation for ``Type 0``.
+      #check @list    -- answer: Type u → Type u
+
+   Here ``u`` is a variable ranging over type levels.
+
+Think of ``Type 0`` as a universe of "small" or "ordinary" types.
+
+``Type 1`` is a larger universe, and ``Type 0`` *inhabits* (is an *element* of) ``Type 1``.
+
+``Type 2`` is an even larger universe of types which contains ``Type 1`` as an element, etc.
+
+The list is infinite---for every natural number ``n`` there exists ``Type (n-1)`` and ``Type n``, and ``Type (n-1)`` has type ``Type n`` (i.e., ``Type (n-1): Type n``).
 
 .. index:: ! predicative, ! ramified, ! impredicative
 .. index:: keyword: Prop
 
-The upshot of this **ramified** arrangement is that the types described in the last paragraph are :term:`predicative`, which means that their definitions are not self-referential. By avoiding self-referential definitions, we avoid Russel's paradox. However, in certain specific situations we *do* want to employ a self-referential type, so Lean supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
+The upshot of this **ramified** arrangement is that the types described above are :term:`predicative`, which means that their definitions are not self-referential.
+
+By avoiding self-referential definitions, we avoid Russel's paradox.
+
+On the other hand, in some special situations we *do* want to employ a self-referential type, so Lean supplies us with exactly one. It is the type ``Prop`` of propositions, and it is :term:`impredicative` (self-referential).
+
+-----------------------
 
 .. _implicit-arguments:
 
 Implicit arguments
-~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful. The `TPL`_ sections on `Implicit Arguments`_ and `More on Implicit Arguments`_ explain this topic in detail.  In the present section we merely collect a few fine points and technicalities that come up in `lean-ualib`_.
+Lean's support of implicit arguments and type-inference is quite powerful and extremely helpful. The `TPL`_ sections on `Implicit Arguments`_ and `More on Implicit Arguments`_ explain this topic in detail.  In the present section we merely collect a few fine points and technicalities that are relevant to our development of the Lean Universal Algebra Library (`lean-ualib`_).
 
-By default, Lean inserts, and eagerly tries to infer the type of, the implicit argument.  For example,
+By default, Lean inserts, and eagerly tries to infer the types of, implicit arguments.
 
-::
+.. proof:example::
 
-  -- Aggressive type inference.
+   ::
 
-  definition id₁ {α: Type} (x: α): α := x
+     -- Aggressive type inference.
 
-  #check id₁    -- ℕ → ℕ
+     definition id₁ {α: Type} (x: α): α := x
+     #check id₁    -- ℕ → ℕ
 
-In this case, Lean seems a bit presumptuous since the type ``α`` is not known, so there's no evidence for the typing judgments ``x: ℕ`` nor ``id₁: ℕ → ℕ``.
+   In this case, Lean behaves a bit presumptuously---the type ``α`` is not known, so there's no evidence for the typing judgments ``x: ℕ`` nor ``id₁: ℕ → ℕ``.
 
-If we instead use double curly braces ``{{ … }}``, or their unicode equivalents ``⦃ … ⦄``, this tells the parser to be more conservative about inserting the argument and inferring its type. [1]_
+   If instead we use double curly braces ``{{ … }}`` (or their unicode equivalent ``⦃ … ⦄``) this tells the parser to be more conservative about inserting the argument and inferring its type. [1]_
 
-::
+   ::
 
-  -- Conservative type inference.
+     -- Conservative type inference.
 
-  definition id₂ ⦃α: Type⦄ (x: α): α := x
+     definition id₂ ⦃α: Type⦄ (x: α): α := x
+     #check id₂     -- Π ⦃α: Type⦄, α → α
 
-  #check id₂     -- Π ⦃α: Type⦄, α → α
-
+-----------------------
 
 .. _pattern-matching:
 
 Pattern matching
-~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 .. todo:: write this section
 
+-----------------------
 
 .. _the-elaboration-engine:
 
 Elaboration engine
-~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
+
 
 On top of the Lean kernel there is a powerful *elaboration engine* that can
 
@@ -147,43 +174,18 @@ Lean does most of these things simultaneously. For example, the term constructed
 (For a nice overview of the elaboration engine, see this `2015 post by Floris van Doorn`_.)
 
 
-Comparison of ITPs
-~~~~~~~~~~~~~~~~~~~~
-
-The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
-
-Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It is based on Martin Lof :term:`type theory`.
-
-.. ; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
-
-Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
-
-.. ; url: http://coq.inria.fr .
-
-NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
-
-.. ; url: http://www.nuprl.org/
-
-Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It is based on :term:`CiC`.
-
-.. ; url: https://leanprover.github.io/
-
-.. + NuPRL_ . :term:`extensional`, :term:`predicative`
-.. + Coq_ .  :term:`intensional`, :term:`impredicative`
-.. + Agda_ . :term:`intensional`, :term:`predicative`
-.. + Lean_  :term:`extensional`, :term:`impredicative`
-
+-----------------------
 
 .. index:: dependent type
 
 .. _dependent-types-in-lean:
 
-Dependent types
-~~~~~~~~~~~~~~~~~
+Dependent types in Lean
+-----------------------
 
-.. todo:: write brief intro to dependent types
+In this section we describe some of the most important :term:`dependent types <dependent type>` in Lean.
 
-.. index:: ! type of; dependent functions
+(For a more general discussion of dependent types, please see the :ref:`section on type theory <type-theory>` and, more specifically, the :ref:`subsection on dependent types <dependent-types>`.)
 
 .. _pi-type:
 
@@ -228,44 +230,53 @@ To see why ``Σ(x:A),B x`` is a *dependent type*, consider the following example
   structure psigma {α : Sort u} (β : α → Sort v) :=
   mk :: (fst : α) (snd : β fst)
 
+-----------------------------------
 
 .. index:: inductive type
 
 .. _inductive-types-in-lean:
 
-Inductive types
-~~~~~~~~~~~~~~~
+Inductive types in Lean
+-------------------------
 
 .. todo:: write brief intro to inductive types
 
+------------------------------------
+
+.. _classical-reasoning:
+
+Classical reasoning in Lean
+-----------------------------------------
+
+Our presentation in this brief subsection was informed by the nice discussion in the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some points from the tutorial are repeated here for clarity and to keep this presentation self-contained.
+
+The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and (as explained above) a countable hierarchy of universes that starts with the :term:`impredicative` ``Prop`` type at the bottom.
+
+Lean extends the :term:`CiC` with additional axioms and rules in order to make the language more expressive and versatile so that the statements of theorems and the constructions of proofs are simpler and more elegant.
+
+Of course, adding axioms to a foundational system can be dangerous. Apart from the usual concerns about correctness and consistency, we also have to consider whether theorems and proofs expressed in the extended system have computational content.  This will depend on whether certain classical axioms are employed in the proofs.
+
+Type theory in general (and Lean in particular) is designed to support both constructive (or "computational") reasoning *and* classical reasoning, and the assertion that type theory (or Lean) is at odds with classical reasoning is simply false. Rather, we can introduce classical reasoning withing the logical framework of type theory (and Lean) as desired, as long as we keep in mind that, if we do so, then our proofs may no longer have computational content.
+
+If we adhere to the "computationally pure" fragment type theory, forgoing classical axioms and derivation rules, then we can rest assured that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, every closed, computationally pure expression of type ℕ will reduce to a number.
+
+---------------------
+
 .. index:: ! extensionality
-
-.. _extensionality:
-
-Extensionality
-~~~~~~~~~~~~~~~~~~
-
-This section takes as its starting point the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.  Some material from that tutorial is repeated here for clarity and to keep this section self-contained.
-
 .. index:: proposition extensionality, function extensionality, law of the excluded middle, Choice
 .. index:: extensional equality of; propositions
 .. index:: extensional equality of; functions
 .. index:: extensional equality of; sets
 
-Classical and constructive reasoning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _extensionality:
 
-The version of the :term:`Calculus of Inductive Constructions` (CiC) implemented in Lean includes :term:`dependent function types <dependent function type>`, :term:`inductive types <inductive type>`, and a countable hierarchy of universes that starts with the :term:`impredicative` ``Prop`` type at the bottom. (See the :ref:`appendix section on Lean's type hierarchy <leans-type-hierarchy>` for more details about Lean's type hierarchy.)
+Extensionality
+---------------------------
 
-Lean extends the :term:`CiC` with additional axioms and rules in order to make the language more expressive and versatile so that the statements of theorems and the constructions of proofs are simpler and more elegant.
+What makes Lean Special?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Adding axioms to a foundational system can have negative consequences, beyond concerns about correctness and consistency. In particular, whether the theorems and proofs expressed in the extended system have computational content depends on whether we abstain from the use of certain classical axioms.
-
-Lean is designed to support **classical reasoning** as well as **computational** (or **constructive**) **reasoning**.
-
-By adhering to a "computationally pure" fragment of logic, we enjoy guarantees that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, every closed computationally pure expression of type ℕ will reduce to a number.
-
-Two axioms that the `Lean Standard Library`_ (:term:`LSTL`) adds to :term:`CiC` are :term:`proposition extensionality` and a :term:`quotient` construction, which in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
+Two axioms that the :term:`LSTL` adds to :term:`CiC` are :term:`proposition extensionality` and a :term:`quotient` construction, which in turn imply the principle of :term:`function extensionality`.  These extensions are used to develop theories of sets and finite sets, but as we will see,
 
   *using such axiomatic extensions can block evaluation in Lean's kernel*
 
@@ -279,42 +290,39 @@ and since these axioms only add new propositions, they admit a computational int
 
 The :term:`LSTL` supports the classical :term:`law of the excluded middle` (em) as an optional axiom that the user can assume when necessary.  We can invoke ``em`` if we explicitly open the classical fragment of the library with the directive ``open classical``, and then we can write proofs that argue by case analysis on the two possible cases for a given proposition ``P``, that is, either ``P`` or ``¬ P``.
 
+.. index:: elimination rule; (for disjunction)
+
 .. proof:example::
 
    In classical logic, for all propositions ``P`` and ``Q`` the implication ``P → Q`` is equivalent to the disjunction ``¬ P ∨ Q``.  The left-to-right direction of this equivalence is proved in Lean using ``em``, as we now show.
 
-.. index:: elimination rule; (for disjunction)
+   ::
 
-::
+     open classical
 
-  open classical
+     example (P Q: Prop): (P → Q) → ¬ P ∨ Q :=
+     assume f: P → Q,
+     or.elim (em P)
+       (assume h: P, or.inr (f h))
+       (assume h: ¬ P, or.inl h)
 
-  example (P Q: Prop): (P → Q) → ¬ P ∨ Q :=
-  assume f: P → Q,
-  or.elim (em P)
-    (assume h: P, or.inr (f h))
-    (assume h: ¬ P, or.inl h)
+   (Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of Lean novices who might be puzzled by it: ``or.elim`` means "apply the **disjunction elimination** rule", :math:`∨\mathrm E`.  In this case, we apply :math:`∨\mathrm E` to the disjunction ``em P``, that is, ``P ∨ ¬ P``, and the final two lines handle each disjunct in turn.)
 
-(Here's a brief dissection of the line ``or.elim (em P)`` from the last example, for the benefit of Lean novices who might be puzzled by it: ``or.elim`` means "apply the **disjunction elimination** rule", :math:`∨\mathrm E`.  In this case, we apply :math:`∨\mathrm E` to the disjunction ``em P``, that is, ``P ∨ ¬ P``, and the final two lines handle each disjunct in turn.)
+   On the other hand, the converse---that is, ``¬ P ∨ Q → (P → Q)``---can be proved without the help of classical axioms, so the next block of code need not be preceded by ``open classical``.
 
-.. proof:example::
+   ::
 
-   On the other hand, the converse of the example above---that is, ``¬ P ∨ Q → (P → Q)``---can be proved without the help of classical axioms, so the code below need not be preceded by ``open classical``.
-
-::
-
-  example (P Q: Prop): ¬ P ∨ Q → (P → Q) :=
-  assume (h: ¬ P ∨ Q) (p: P), show Q, from
-  or.elim h
-    (assume np: ¬ P, false.elim (np p))
-    (assume q : Q, q)
-
+     example (P Q: Prop): ¬ P ∨ Q → (P → Q) :=
+     assume (h: ¬ P ∨ Q) (p: P), show Q, from
+     or.elim h
+       (assume np: ¬ P, false.elim (np p))
+       (assume q : Q, q)
 
 Like proposition extensionality, the use of :term:`em` may block evaluation in the Lean kernel, yet admit a computational interpretation after compilation to byte-code.
 
 The `Lean Standard Library`_ also defines a :term:`Choice` principle, but this principle is entirely antithetical to a computational interpretation since it magically produces "data" from a proposition that asserts the existence of Choice.
 
-Use of :term:`Choice` is essential to some classical constructions and it can be imported in Lean when needed. However,
+The use of Choice is essential to some classical constructions and it can be imported in Lean when needed. However,
 
   *expressions that use Choice to produce data do not have any computational interpretation*.
 
@@ -330,12 +338,12 @@ To summarize, on top of the framework of universes, :term:`dependent function ty
 + a :term:`quotient` construction, which implies :term:`function extensionality`
 + a :term:`Choice` principle, which produces data from an existential proposition.
 
-The first two of these are compatible with byte-code evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations.
+The first two of these are compatible with byte-code evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations. [2]_
 
 Philosophical and foundational issues
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(This section is essentially a summary of the nice discussion of the same topic that one finds in the `Historical and Philosophical Context <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#historical-and-philosophical-context>`_ section of `TPL`_.)
+Our presentation in this brief subsection is meant to merely summarize the nice discussion found in the `Historical and Philosophical Context <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#historical-and-philosophical-context>`_ section of `TPL`_.
 
 It is widely accepted that computational considerations are important to mathematics, but there are different views about the best means of addressing these computational concerns.
 
@@ -347,7 +355,7 @@ Lean is designed to support both approaches. Core parts of the library are devel
 
 Lean has a noncumulative hierarchy of universes ``Prop``, ``Type``, ``Type 1``, ``Type 2``, ...
 
-The bottom universe ``Prop`` is special because, unlike the others, it is :term:`impredicative`.  Roughly, and in general, this means "self-referencing". More precisely, and in this context, impredicative means that if we quantify a ``Prop`` over a larger type, the result is again a ``Prop``.
+The bottom universe ``Prop`` is special because, unlike the others, it is :term:`impredicative`.  In general, this means "self-referencing".  In this context, more precisely it means that if we quantify a ``Prop`` over a larger type, the result is again a ``Prop``.
 
 The type ``Prop`` is also :term:`proof-irrelevant`. This means that for a fixed ``A: Prop``, all proofs of the proposition :math:`A` are :term:`definitionally equal`.
 
@@ -381,7 +389,7 @@ It is only the :term:`Choice` principle, discussed in more detail `here <https:/
 .. _proposition-extensionality:
 
 Proposition extensionality
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An extensionality axiom is an equivalence relation that represents some notion of equality.
 
@@ -398,36 +406,42 @@ This axiom is useful when reasoning about classes of :term:`logically equivalent
     -- END
   end extensionality
 
-This principle is consistent with set-theoretic interpretations in which an element ``a:Prop`` is either empty or a singleton.  The axiom also has the consequence that equivalent propositions can be substituted for one another in every context.
+This principle is consistent with set-theoretic interpretations in which an element ``a:Prop`` is either empty or a singleton.
 
-::
+The ``propext`` axiom has the consequence that equivalent propositions can be substituted for one another in every context.
 
-  section
-    variables a b c d e: Prop
-    variable p: Prop → Prop
+.. proof:example::
 
-    example (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
-    propext h ▸ iff.refl _
+   ::
 
-    example (h: a ↔ b) (h₁: p a): p b :=
-    propext h ▸ h₁
-  end
+     section
+       variables a b c d e: Prop
+       variable p: Prop → Prop
 
-The first example could be proved without ``propext`` using the fact that the propositional connectives respect propositional equivalence.
+       example (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
+       propext h ▸ iff.refl _
 
-The second example represents a more essential use of ``propext``. In fact, it is equivalent to ``propext`` itself. (Exercise!)
+       example (h: a ↔ b) (h₁: p a): p b :=
+       propext h ▸ h₁
 
-Given a definition or theorem in Lean, ``#print axioms`` will display the axioms on which it depends.
+   The first example could be proved without ``propext`` using the fact that the propositional connectives respect propositional equivalence.
 
-::
+   The second example represents a more essential use of ``propext``. In fact, it is equivalent to ``propext`` itself. (Exercise!)
 
-  variables a b c d e: Prop
-  variable p: Prop → Prop
+Given a definition or theorem in Lean, the directive ``#print axioms`` usefully displays the axioms on which it depends.
 
-  theorem thm (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
-  propext h ▸ iff.refl _
+.. proof:example::
 
-  #print axioms thm  -- propext
+   ::
+
+     variables a b c d e: Prop
+     variable p: Prop → Prop
+
+     theorem thm (h: a ↔ b): (c ∧ a ∧ d → e) ↔ (c ∧ b ∧ d → e) :=
+     propext h ▸ iff.refl _
+
+     #print axioms thm  -- propext
+
 
 .. index:: ! function extensionality
 .. index:: ! extensional equality of; functions
@@ -436,7 +450,7 @@ Given a definition or theorem in Lean, ``#print axioms`` will display the axioms
 .. _function-extensionality:
 
 Function extensionality
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **function extensionality** axiom is the equivalence relation on functions according to which two functions of type ``Π(x:α), β x`` are extensionally equal if they agree on all inputs.
 
@@ -464,7 +478,7 @@ To do this requires that we understand *quotients* and *setoids*---two concepts 
 .. index:: quotient
 
 Extensionality in Lean
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Function extensionality follows from the existence of *quotients* (discussed in detail in :numref:`quotient-types`) and in the :term:`LSTL` the theorem ``funext`` is proved in the file `funext.lean <https://github.com/leanprover/lean/blob/master/library/init/funext.lean>`_ using the quotient construction.  (We will dissect the `funext.lean`_ program in the :ref:`appendix section on extensionality <proof-of-funext>`.)
 
@@ -542,7 +556,7 @@ We can then define the empty set, ∅, as well as set intersection, union, etc. 
 
   end extensionality
 
-The following is an example of how function extensionality can block computation in the Lean kernel. [2]_
+The following is an example of how function extensionality can block computation in the Lean kernel. [3]_
 
 ::
 
@@ -591,6 +605,47 @@ Current research aims to extend type theory to permit reductions for casts invol
 
 Given an appropriate semantics, it makes sense to reduce terms in ways that preserve their meaning, ignoring the intermediate bookkeeping needed to make the reductions type check. Thus, adding new axioms in ``Prop`` does not matter; by proof irrelevance, an expression in ``Prop`` carries no information, and can be safely ignored by the reduction procedures.
 
+-----------------------
+
+.. _metaprogramming:
+
+Metaprogramming
+----------------
+
+Lean_ is easy to extend via **metaprogramming**. Briefly, a :term:`metaprogram` is a program whose purpose is to modify the behavior of other programs. :term:`Proof tactics <proof tactic>` form an important class of metaprograms.
+
+An nice feature of Lean_ is that *metaprograms can be written in the Lean language* itself, rather that in the lower level language (C/C++) that was used to create Lean. Thus the metaprogramming language is the same logical language that we use to express specifications, propositions, and proofs.
+
+.. todo:: complete this section
+
+-----------------------
+
+Comparison of ITPs
+-----------------------
+
+The following popular :term:`ITPs <ITP>` are all based on some flavor of :term:`dependent type` theory.  One may distinguish them by the philosophical and foundational assumptions on which they are based. Two basic criterion along these lines are whether they are :term:`intensional` or :term:`extensional` and whether they are :term:`predicative` or :term:`impredicative`.  All four of these languages support :term:`dependent types <dependent type>`.
+
+Agda_ is an :term:`intensional`, :term:`predicative` :term:`ITP` developed at Chalmers University in (Göteborg).  It is based on Martin Lof :term:`type theory`.
+
+.. ; url: https://wiki.portal.chalmers.se/agda/pmwiki.php .
+
+Coq_ is an :term:`intensional`, :term:`impredicative` :term:`ITP` developed at INRIA in France.  It is based on :term:`CiC`.
+
+.. ; url: http://coq.inria.fr .
+
+NuPRL_ is an :term:`extensional`, :term:`predicative` :term:`ITP` developed at Cornell University in Ithaca (USA).  It is based on Martin Lof :term:`type theory`.
+
+.. ; url: http://www.nuprl.org/
+
+Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at Microsoft Research and Carnegie Mellon University (USA). It is based on :term:`CiC`.
+
+.. ; url: https://leanprover.github.io/
+
+.. + NuPRL_ . :term:`extensional`, :term:`predicative`
+.. + Coq_ .  :term:`intensional`, :term:`impredicative`
+.. + Agda_ . :term:`intensional`, :term:`predicative`
+.. + Lean_  :term:`extensional`, :term:`impredicative`
+
 -----------------------------------
 
 .. rubric:: Footnotes
@@ -601,7 +656,11 @@ Given an appropriate semantics, it makes sense to reduce terms in ways that pres
 .. .. [2] The symbol ``⋂`` is produced by typing ``\bigcap``, and the ``0`` subscript is obtained by typing ``\0``.
 
 .. [2]
-   see, e.g., `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
+   See the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
+
+
+.. [3]
+   See, e.g., `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 
 .. .. [2]

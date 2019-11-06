@@ -101,7 +101,10 @@ This is a work in progress and any feedback you can provide us with would be muc
 
 ---------------------------
 
-For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,Nederpelt:2014,HoTT:2013`.
+For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,HoTT:2013`.
+
 
 .. include:: hyperlink_references.rst
+
+.. For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,Nederpelt:2014,HoTT:2013`.
 

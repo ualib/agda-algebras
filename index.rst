@@ -1,7 +1,10 @@
-.. 𝖫∃∀𝖭 𝖴𝔫𝔦𝔳𝔢𝔯𝔰𝔞𝔩 ∀𝔩𝔤𝔢𝔟𝔯𝔞 𝖫𝔦𝔟𝔯𝔞𝔯𝔶
+.. File: index.rst
+.. Author: William DeMeo <williamdemeo@gmail.com>
+.. Date: 14 May 2019
+.. Updated: 5 Nov 2019
+.. Updated: 19 Oct 2019
+.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
-.. 𝖫∃∀𝖭 𝖴nι<ερσαλ ∀lgebra 𝖫𝗂𝖻𝗋𝖺𝗋𝗒 𝗋𝖺𝗋𝗒
-.. 𝗂𝗏𝖾𝗋𝗌𝖺𝗅
 
 𝖫∃∀𝖭 ⋁𝗇𝗂𝗏𝖾𝗋𝗌𝖺𝗅 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 𝖫𝗂𝖻𝗋𝖺𝗋𝗒
 =================================
@@ -11,8 +14,8 @@
     :maxdepth: 2
 
     preface
-    types
     algebras
+    types_for_algebras
     algebras_in_lean
     terms_and_clones
     terms_and_clones_in_lean
@@ -32,9 +35,6 @@ Appendix
     appendix_lean_basics
     appendix_lsl
     appendix_exercises
-    appendix_glossary
-    appendix_categories
-    appendix_symbols
 
 Back Matter
 ============
@@ -43,6 +43,7 @@ Back Matter
     :maxdepth: 1
 
     refs
+    glossary
     genindex
     license
 

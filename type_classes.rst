@@ -1,6 +1,7 @@
 .. File: type_classes.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 1 Nov 2019
+.. Date: 2 Nov 2019
+.. Updated: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. highlight:: lean
@@ -483,15 +484,15 @@ Coercions using type classes
 
 The most basic type of coercion maps elements of one type to elements of another; e.g., by a coercion from ``nat`` to ``int``, we identify ``n: nat`` with the integer ``n: int``.
 
-But some coercions depend on parameters. For example, we may wish to view ``l: list α`` (with parameter ``α``) as an inhabitant of ``set α`` by taking the ``set`` of elements that appear in ``l``. The corresponding coercion is defined on the *family* of types ``list α``, parameterized by ``α``.
+Coercions may depend on parameters. For instance, we may view ``l: list α`` (with parameter ``α``) as inhabiting ``set α`` by taking the set of elements that appear in ``l``. The corresponding coercion is defined on the *family* of types ``list α`` (parameterized by ``α``).
 
-In Lean, there are three kinds of coercions that work on a family of types or a type class. These provide maps from a family of types (e.g., ``list α``) to, respectively,
+In Lean, there are three kinds of coercions that work on a family of types or a type class. These map a family of types (e.g., ``list α``) to, respectively,
 
   #. another family of types (e.g., ``set α``),
   #. the class of sorts (e.g., ``Type u``), or
   #. the class of function types (e.g., ``α → α``).
 
-We now consider each of the three flavors of coercion in turn.
+Let's consider each of these flavors of coercion in turn.
 
 #. **Type family to type family**. This is the first kind of coersion.  It allows us to view an inhabitant of a member of the source family as inhabiting a corresponding member of the target family.
 
@@ -566,12 +567,10 @@ We now consider each of the three flavors of coercion in turn.
 
 ------------------------------
 
-.. _algebraic-structure-hierarcy:
+Coersions in algebraic type classes
+------------------------------------
 
-Algebraic structure hierarcy
------------------------------
-
-In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``.  Here are the definitions of these coercions in the :term:`LSTL`.
+In our ``algebra`` type, defined in the file `basic.lean`_, we used ``has_coe_to_sort`` and ``has_coe_to_fun``.  Here are the definitions of these coercions in the :term:`LSTL`.
 
 ::
 
@@ -580,6 +579,17 @@ In our ``algebra`` type, we used ``has_coe_to_sort`` and ``has_coe_to_fun``.  He
 
   class has_coe_to_fun (a : Sort u) : Sort (max u (v+1)) :=
   (F : a → Sort v) (coe : Π x, F x)
+
+The purpose of these coersions is so that we may write 𝔸
+
+
+
+.. _algebraic-structure-hierarcy:
+
+Algebraic structure hierarcy
+-----------------------------
+
+
 
 Group-like structures
 ~~~~~~~~~~~~~~~~~~~~~~~~

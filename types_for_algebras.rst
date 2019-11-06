@@ -1,210 +1,29 @@
-.. File: types.rst
+.. File: types_for_algebras.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 11 Oct 2019
+.. Updated: 5 Nov 2019
+.. Previous name(s): types.rst
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst
 
 .. role:: cat
 
-.. _types:
+.. highlight:: lean
 
-=====
-Types
-=====
+.. _types-for-algebra:
 
-This section presents little more of the rudiments of :term:`type theory` than we will need for formalizing universal algebra in the Lean_ :term:`proof assistant`.  For more details, a very nice and gentle introduction to type theory and Lean is the textbook `Logic and Proof`_, by Avigad, et al.
+===================
+Types for Algebras
+===================
+
+This section assumes the reader is familiar with :term:`type theory` and the Lean_ :term:`proof assistant`. 
+
+For those without this background, we have provided a summary of the needed prerequisites in the appendix.
+
+For more details, a very nice and gentle introduction to type theory and Lean is the textbook `Logic and Proof`_, by Avigad, et al.
 
 A more comprehensive yet still gentle treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced books on this topic are *Type Theory and Formal Proof* by Nederpelt and Geuvers :cite:`Nederpelt:2014` and *Homotopy Type Theory: Univalent Foundations of Mathematics* (aka "The HoTT Book") :cite:`HoTT:2013`, which was authored by roughly two dozen participants of the Univalent Foundations Program held in 2013 at the `IAS <https://www.ias.edu/>`.
-
-We begin with a slogan that may be helpful to those who know about sets but have no prior exposure to type theory.
-
-  *In set theory virtually everything* **is** *a set, in type theory, vitually everything* **has** *a type*.
-
-----------------------------------
-
-.. index:: pair: implication elimination; modus ponens
-
-.. _curry-howard:
-
-Curry-Howard correspondence
-----------------------------
-
-The rule for :term:`function application <eval>` corresponds, under the :term:`Curry-Howard <Curry-Howard correspondence>` (or :term:`propositions-as-types`/:term:`proofs-as-programs`) :term:`correspondence <Curry-Howard correspondence>`, to the :term:`implication elimination` rule of natural deduction (sometimes called :term:`modus ponens`). This simply codifies our intuitive notion of function application, viz., applying the function :math:`f: A → B` to an element :math:`a` of :math:`A` yields a member :math:`f\,a` of the codomain :math:`B`.
-
-If we interpret the types :math:`A` and :math:`B` as propositions and the function :math:`f: A → B` as a proof of the proposition ":math:`A` implies :math:`B`," and if we view :math:`a` as a proof of :math:`A`, then the application rule is the so called :term:`implication elimination` rule (or, :term:`modus ponens`); that is, "if :math:`A` and :math:`A → B`, then :math:`B`."
-
----------------------------------------
-
-.. index:: type of; dependent functions
-.. index:: type of; dependent pairs
-.. index:: type of; lists
-.. index:: type of; vectors
-
-.. _dependent-types:
-
-Dependent types
----------------
-
-.. Lean_ is a :term:`functional programming` language and interactive theorem prover that supports :term:`dependent types <dependent type>`.
-
-In this section we show how :term:`dependent types <dependent type>` can be used to represent many concepts that are important in universal algebra, in a way that is precise, elegant, and intrinsically computational. [1]_ 
-
-Before trying to understand why dependent types are useful, it helps to know what dependent types are. So we begin by explaining what makes a type dependent.
-
-Types can depend on *parameters*.  For example, if ``α`` is a type, then ``list α`` is the type of lists whose entries have type ``α``.  The type ``list α``  depends on the parameter ``α``. The type of vectors of length ``n`` with entries from ``α`` is sometimes denoted by ``vec α n``. This type depends on the parameter ``α`` (the type of the elements that populate the vectors) and the *value* ``n`` of type ``ℕ`` (denoting the length of the vectors).
-
-The type ``list α`` is an example of a :term:`polymorphic type`, which is not what we mean by a "dependent type."  Of course ``list α`` does depends on the argument ``α``, and this dependence distinguishes, say, ``list ℕ`` from ``list bool``.  But the argument ``α`` is not a particular *value* (or *inhabitant*) of a type, but rather a type parameter, and we call this kind of dependence **polymorphism**.
-
-Contrast this with the type ``vec α n``, which depends on the parameter ``α`` as well as the *value* of the variable ``n``. The dependence of the type ``vec α n`` on the value ``n`` is the sort of dependence for which we reserve the label "dependent type."
-
-This example is somewhat misleading. It is not true that the only dependent types are those that depend on a concrete value of a type, e.g., ``n`` in the last example. In fact, types themselves inhabit other types.  Indeed, in type theory, *everything* (even types) inhabits a type.
-
-For example, if ``α: Type``, then ``α`` is both a type in its own right and an inhabitant of the ``Type`` type (which is Lean syntax for the "ground type", or ``Sort 1``). [2]_
-
-Consider the ``cons`` function that inserts a new element at the head of a list. What type should ``cons`` have?  Before answering, let us consider a few facts.
-
-* For each type ``α``, ``cons α`` is the insertion function for lists of type ``list α``; it takes an element ``a:α`` and a list ``l:list α``, and returns a new list---the concatenation of ``a`` with the list ``l`` (sometimes denoted ``a::l``).
-
-* ``cons`` is polymorphic and should behave in roughly the same way for lists with entries of type ℕ, or ``bool``, or an arbitrary type ``α``. 
-
-* ``cons α`` has type ``α → list α → list α``.
-
-But what about ``cons`` itself?  We might try ``cons: Type → α → list α → list α``, but this somehow choses a specific inhabitant of ``Type``---namely, ``α``---in advance, which we don't want.
-
-Instead, since ``cons`` should be polymorphic, the caller of ``cons`` is free to choose some (any) type ``α:Type`` as the first argument; then (and only then) do we know the types, ``α`` and ``list α``, of the second and third arguments to ``cons``.
-
-.. index:: ! Pi type
-.. index:: type of; dependent functions
-
-.. _pi-types:
-
-Pi types
-~~~~~~~~~
-
-What we need in the situation just described is known as a :term:`Pi type`, or :term:`dependent function type <Pi type>`.  In the ``cons`` example, the correct typing judgement is
-
-  ``cons: Π(a:Type), (α → list α → list α).``
-  
-Before explaining this notation and the type that it represents, let us first describe Pi types more generally.
-
-If ``α`` is a type, we write ``α:Type``.  Then a function ``β`` of type ``α → Type`` represents a family of types, one type ``β x`` for each member ``x`` of the type ``α``.  The product of all these types is denoted by
-
-  ``Π(a:α), β a``, 
-  
-which is itself a type, and is called a **dependent function type**.  This name arises because, for each inhabitant ``f: Π(a:α), β a``, we see that the type of the image ``f a`` of each ``a:α`` may depend on ``a``.  Precisely, ``f a: β a`` for each ``a:α``.
-
-Suppose for all ``a:α`` the type ``β a`` does *not* depend on ``a``. Then ``Π(a:α), β a`` is equivalent to the (nondependent) function type ``α → β``.  Whence we see that ``α → β`` is a special case of the type ``Π(a:α), β a``. Indeed, in dependent type theory (and in Lean) Pi types may be viewed as fundamental and function types as a special case.
-
-To summarize, for each type ``α:Type`` and for every family of types ``β: α → Type``, we have the :term:`Pi type`, ``Π(a:α), β a`` which generalizes the function type ``α → β`` by allowing each section ``β a`` of the codomain to depend on a value ``a:α`` of the domain.
-
-.. index:: type of; booleans
-.. index:: Cartesian product
-
-.. proof:example:: Cartesian product
-
-   The simplest example of a Pi type is the **Cartesian product** :math:`B₀ × B₁` which is the set of all functions of the form :math:`f: \{0, 1\} → B₀ ∪ B₁` such that :math:`f \, 0 ∈ B₀` and :math:`f\, 1 ∈ B₁`.
-
-   Suppose ``B₀:Type`` and ``B₁:Type`` are types and let ``bool`` denote the **Boolean type** inhabited by just ``0`` and ``1``.
-   
-   Let ``B: bool → Type`` be the function defined by ``B 0 = B₀`` and ``B 1 = B₁``.
-   
-   Then we represent the Cartesian product :math:`B_0 × B_1` by the type ``Π(i:bool), B i``. [3]_
-
-.. index:: ! Sigma type
-
-.. index:: type of; dependent pairs
-
-.. _sigma-types:
-
-Sigma types
-~~~~~~~~~~~
-
-Similarly, a :term:`Sigma type`, also known as the `dependent pair type <sigma-type>`_, generalizes the Cartesian product ``α × β`` by allowing the *type* of the second argument of an ordered pair to depend on the *value* of the first.
-
-Sigma types arise from a type ``α:Type`` and a "type former" ``β: α → Type``, and are denoted using the ``Σ`` symbol, as follows:
-
-  ``Σ(a:α), β a``. 
-
-This type is inhabited by the "dependent pairs" ``(x,y)``, where ``x`` has type ``α`` and ``y`` has type ``β x``.
-
-.. index:: ! disjoint union
-
-.. proof:example:: Disjoint union in general
-
-   The simplest example of a Sigma type is the disjoint union of two types, say, ``X:Type`` and ``Y:Type``. This is comprised of all pairs of the form ``(0,x)`` for ``x:X`` and ``(1,y)`` for ``y:Y``, and is sometimes denoted by ``X ∐ Y``.
-   
-   Note that the value of the first coordinate of such pairs indicates the type to which the second coordinate belongs.
-   
-   Expressing ``X ∐ Y`` in the ``Σ`` notation, we have ``α = bool`` and ``β: bool → X ∪ Y`` where ``β 0: X`` and ``β 1: Y``. Thus,
-   
-     ``X ∐ Y = Σ(a:bool), β a``.
-
-.. proof:example:: Disjoint union example
-
-   Suppose ``X =  {a, b}`` and ``Y = {a, b, c}``. Then, 
-
-     ``X ∐ Y = {(0,a), (0,b), (1,a), (1,b), (1,c)}``.
-
-   If ``(i,a): X ∐ Y``, then the second coordinate is the ``a`` of type ``A`` if ``i = 0``, while ``a:B`` if ``i = 1``.
-   
-   Some authors prefer to use an "injection" function, say, ``ι``, to indicate the set from which an element originated; in the present example,
-
-     ``X ∐ Y = {ι0 a, ι0 b, ι1 a, ι1 b, ι1 c}``.
-
-   (For ι type ``\iota``; some authors write ``inl`` ("in left") and ``inr`` ("in right") for ``ι0`` and ``ι1``.)
-
------------------------------------------------------
-
-.. index:: partial application
-
-.. _partial-application:
-
-Partial application
--------------------
-
-Let :math:`I` be a nonempty set and :math:`\{A_i | i: I\}` a family of sets.
-
-Elements of the product :math:`∏_{i∈ I} A_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a\,i: A_i`.
-
-Let :math:`J ⊆ I` and let :math:`g: J → I` be one-to-one. Then, as above, :math:`a ∘ g: ∏_{j: J} A_{g(j)}` gives the projection of :math:`a` onto certain coordinates of the full product, namely, the coordinates :math:`\im g = \{g\, j ∣ j:J\}`.
-
-Suppose :math:`f` is a self-map of the set :math:`A := ∏_{i: I} A_i`. That is, :math:`f: A → A`. If :math:`I = \{0, 1, \dots, n-1\}`, then :math:`A = ∏_{i=0}^{n-1} A_i` and the (curried) type of :math:`f` is
-
-.. math:: f: A_0 → (A_1 → (A_2 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
-
-For a given :math:`a_0: A_0`, the function :math:`f` partially applied at the first coordinate has type
-
-.. math:: f\, a_0: A_1 → (A_2 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
-
-For elements :math:`a_0` and :math:`a_1` inhabiting types :math:`A_0` and :math:`A_1` (resp.), the partial application of :math:`f` to these elements yields the following function and typing judgment:
-
-.. math:: f a_0 a_1: A_2 → (A_3 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1}))\cdots ).
-
-In general, for :math:`a_i: A_i`, :math:`0 ≤ i < ℓ`,
-
-.. math:: f a_0 a_1 \dots a_{ℓ-1}: A_ℓ → (A_{ℓ+1} → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
-
-.. Asynchronous currying
-.. ~~~~~~~~~~~~~~~~~~~~~
-
-.. It would be useful to have a means of partial function application in case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`, or in case we wish to partially apply a function to an arbitrary subset of its operands (coordinates of its domain).
-
-.. Suppose, as above,
-
-.. * :math:`𝔸 = ∏_{i:I} A_i`,
-
-.. * :math:`g: J → I` (one-to-one),
-
-.. * :math:`a ∘ g: ∏_{j:J} A_{g(j)}`, for each :math:`a : ∏_{i:I} A_i`.
-
-.. Let :math:`f` have type :math:`∏_{i:I} A_i → ∏_{i:I} A_i`, which means that if we apply :math:`f` to an element :math:`a : ∏_{i:I} A_i` the result has the same type, that is, :math:`f a : ∏_{i:I} A_i`.
-
-.. We may wish to apply :math:`f` to just a portion of :math:`a` but it may not be the case that :math:`I` is a subset of :math:`ℕ`, or an ordered enumeration of some other set, so there is no natural notion of “the first :math:`ℓ` operands.” Even if there was such a notion, we may wish to partially apply :math:`f` to something other than the first :math:`ℓ` operands. Therefore, we define a more general notion of partial application as follows: :math:`f` partially applied to the coordinates :math:`\im g = \{g(j) ∣ j: J\}` of the element :math:`a` gives the function : type judgment
-
-.. .. math:: f ∘ (a ∘ g): ∏_{\substack{i: I\\ i ∉ \im g}} A_i → ∏_{i:I} A_i.
-
-.. .. todo:: define/describe the asynchronous curry type
 
 ------------------------------
 
@@ -602,7 +421,7 @@ The type of the class :math:`x/R` is a **quotient type**, denoted in this case b
 Quotients in Lean
 ~~~~~~~~~~~~~~~~~~
 
-Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [4]_
+Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [1]_
 
 .. index:: lift of; a function
 .. index:: reduction rule
@@ -754,7 +573,7 @@ Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`
 
 If :math:`f` :term:`lifts <lifts (v)>` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the :term:`lift <lift (n)>` of :math:`f` from :math:`α` to :math:`α/R`.
 
-The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [5]_
+The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
 
 .. index:: keyword: quot.lift
 
@@ -786,7 +605,7 @@ The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additio
     infix `ℓ`:50 := quot.lift
 
     -- quot.colift
-    -- lift to a function with quotient codomain (instead of domain)
+    -- lift to a function with quot codomain (instead of domain)
     constant quot.colift:
     Π {α: Type u} {β: Type v} {R: β → β → Prop} (f: α → β),
     α → quot R
@@ -831,7 +650,9 @@ The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additio
 
 The constant ``quot.lift`` takes a function ``f: α → β`` and, if ``h`` is a proof that ``f`` respects ``R`` (in the sense of the last sentence; i.e., ``f ⫢ R``), then ``quot.lift f h`` is the corresponding function on ``quot R``, that is, the lift of ``f`` to ``quot R``.
 
-The idea is for each ``a:α``, the function ``quot.lift f h`` maps the ``R``-class ``quot.mk R a`` to ``f a``, where ``h`` is a proof that this function is well defined.
+The idea is that ``∀ a:α`` the function ``quot.lift f h`` maps the whole ``R``-class containing ``a``---namely, ``quot.mk R a``---to the element ``f a``, where ``h`` is a proof that this function is well defined. That is, 
+
+      ``∀ a:α, (quot.lift f h) (quot.mk R a) = f a.``
 
 .. In fact, this computation principle is declared as a reduction rule in Lean, so it is built into the logical framework and is applied automatically (which explains why the computation principle below can be proved with just ``rfl``).
 
@@ -1137,31 +958,31 @@ Finally, let us assert some computation principles for the lifts defined above.
 
     -- BEGIN
 
-    -- computation principle for function lift
+    --Computation principle for function lift
     axiom flift_comp_principle
     {α: Type u} {R: α → α → Prop} {β : Type v}
     (f: α → β) (h: f ⫢ R):
     ∀ (a: α), (f ℓ h) (a/R) = f a
 
-    -- The same flift principle, assuming instead that (uncurry) R
-    -- belongs to the kernel of f and applying the kernel_resp theorem.
+    --The same flift principle, assuming (uncurry) R belongs
+    --to the kernel of f and applying the kernel_resp theorem.
     axiom flift_comp_principle'
     {α : Type u} {R: α → α → Prop} {β: Type v}
     (f: α → β) (h: R̃ ⊆ ker f): ∀ (a: α),
     (f ℓ (iff.elim_right (kernel_resp f) h)) (a/R) = f a
 
-    -- computation principle for colift
+    --Computation principle for colift
     axiom colift_comp_principle
     {α: Type u} {β: Type v} {R: β → β → Prop}
     (f: α → β): ∀ (a: α),
     (quot.colift f) a = (f a)/R
 
-    -- computation principle for tuple lift
+    --Computation principle for tuple lift
     axiom tlift_comp_principle
     {α: Type u} {R: α → α → Prop} {β: Type v}
     (τ: β → α): ∀ (b : β), [τ] b = (τ b)/R
 
-    -- computation principle for operation lift
+    --Computation principle for operation lift
     axiom olift_comp_principle
     {α: Type u} {R: α → α → Prop} {β: Type v}
     (g: (β → α) → α) (h : g ⊧ R): ∀ (τ : β → α),
@@ -1435,20 +1256,15 @@ Together with ``quotient.sound``, this implies that the elements of the quotient
 
 .. rubric:: Footnotes
 
+
 .. [1]
-   What we mean by "intrinsically computational" ought to become clearer as we progress.
-
-.. [2]
-   ``Sort 0`` is the (:term:`impredicative`) type ``Prop`` which we discuss later.
-
-.. [3]
-   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions results in a :term:`Pi type`.
-
-.. [4]
    Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
 
-.. [5]
+.. [2]
    At issue here is whether we can define :math:`fₗ (x/R)` without invoking some :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
+
+.. .. [2]
+..    ``Sort 0`` is the (:term:`impredicative`) type ``Prop`` which we discuss later.
 
 .. .. [7]
    Lean code appearing in this section is drawn mainly from the `quotient.lean`_ file of the `lean-ualib`_ repository.

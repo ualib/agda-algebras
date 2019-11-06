@@ -1,6 +1,7 @@
 .. File: terms_and_clones.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 2 Oct 2019
+.. Updated: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst

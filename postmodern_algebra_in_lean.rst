@@ -1,6 +1,7 @@
 .. File: postmodern_algebra_in_lean.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 19 Jun 2019
+.. Updated: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst
@@ -8,6 +9,8 @@
 .. role:: cat
 
 .. role:: code
+
+.. highlight:: lean
 
 .. _postmodern-algebra-in-lean:
 
@@ -18,29 +21,30 @@ Postmodern Algebra in Lean
 Categories in Lean
 ------------------
 
-.. highlight:: lean
+.. proof:example::
 
-**Example**.
+   ::
 
-::
+     import category_theory.category category_theory.functor
+     universes u v
+     open category_theory
 
-  import category_theory.category category_theory.functor
-  universes u v
-  open category_theory
+     variable (C : Type u)
+     variable [category.{u v} C]
+     variables A B : C
 
-  variable (C : Type u)
-  variable [category.{u v} C]
-  variables A B : C
+     #check A ⟶ B   -- Type v
 
-  #check A ⟶ B   -- Type v
+.. todo:: write this section
 
+------------------------
 
 .. _tuple-functors-in-lean:
 
 Tuple functors in Lean
 ----------------------
 
-.. todo:: complete this section
+.. todo:: write this section
 
 -------------------------------------
 
@@ -49,7 +53,8 @@ Tuple functors in Lean
 General composition in Lean
 ---------------------------
 
-.. todo:: complete this section
+.. todo:: write this section
+
 
 fork and eval
 ~~~~~~~~~~~~~
@@ -83,14 +88,14 @@ fork and eval
 F-algebras in Lean
 ------------------
 
-.. todo:: complete this section
+.. todo:: write this section
 
 .. _f-algebra-homomorphisms-in-lean:
 
 F-algebra homomorphisms
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: complete this section
+.. todo:: write this section
 
 --------------------
 
@@ -103,8 +108,6 @@ F-algebra homomorphisms
 Observations, categorically, in Lean
 ----------------------------------------
 
-.. todo:: complete this section
+.. todo:: write this section
 
-.. _categorytheory.gitlab.io: https://categorytheory.gitlab.io
-
-.. _Lean: https://leanprover.github.io/
+.. include:: hyperlink_references.rst
