@@ -1,8 +1,8 @@
-.. File: appendix_glossary.rst
+.. File: glossary.rst
+.. Former name(s): appendix_glossary.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 11 Oct 2019
+.. Date: 22 May 2019
 .. Updated: 5 Nov 2019
-.. Updated: 30 Oct 2019
 .. Updated: 27 Oct 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 

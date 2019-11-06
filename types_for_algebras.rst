@@ -1,6 +1,6 @@
 .. File: types_for_algebras.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 11 Oct 2019
+.. Date: 11 Sep 2019
 .. Updated: 5 Nov 2019
 .. Previous name(s): types.rst
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
@@ -25,319 +25,203 @@ For more details, a very nice and gentle introduction to type theory and Lean is
 
 A more comprehensive yet still gentle treatment is *Foundations for Programming Languages* by Mitchell :cite:`Mitchell:1996`. More advanced books on this topic are *Type Theory and Formal Proof* by Nederpelt and Geuvers :cite:`Nederpelt:2014` and *Homotopy Type Theory: Univalent Foundations of Mathematics* (aka "The HoTT Book") :cite:`HoTT:2013`, which was authored by roughly two dozen participants of the Univalent Foundations Program held in 2013 at the `IAS <https://www.ias.edu/>`.
 
-------------------------------
+-----------------------------------------
 
-.. _tuple-functors:
+.. _type-theory:
 
-Tuple functors
---------------
+Type theory
+-----------
 
-This (and the next) section assumes the reader knows what a functor is (see, e.g., categorytheory.gitlab.io_, for the definition). However, nothing beyond the basic definitions of category theory is required, so readers with no prior exposure to that subject should be able to comprehend all of the concepts we introduce here.
+This section highlights some of the rudiments of type theory with which we expect our dear reader is familiar.
 
-For :math:`m: ℕ`, the :math:`\mathrm{mtuple}` functor on :cat:`Set` is denoted and defined as follows by its action on
+Here is a slogan that may be helpful to those who know about sets but have no prior exposure to type theory.
 
-+ **objects**: if :math:`A` is a set, then :math:`\mathrm{mtuple}(A) := \{(a_0, \dots, a_{m-1}) ∣ a_i : A\}`;
-
-+ **arrows**: if :math:`f: A → B` is a function from the set :math:`A` to the set :math:`B`, then :math:`\mathrm{mtuple} f: \mathrm{mtuple}(A) → \mathrm{mtuple}(B)` is defined for each :math:`(a_0, \dots, a_{m-1})` of type :math:`\mathrm{mtuple}(A)` as follows:
-
-.. math:: \mathrm{mtuple} f (a_0, \dots, a_{m-1}) = (f a_0, \dots, f a_{m-1}),
-
-which inhabits the type :math:`\mathrm{mtuple}(A)`.
-
-We use the standard set-theoretic convention that identifies the natural number :math:`0≤ m < ω` with the set :math:`\{0,1,\dots, m-1\}`.
-
-Then :math:`a:=(a_0, \dots, a_{m-1})` has type :math:`\mathrm{mtuple}(A)` iff it can be identified with a function of type :math:`m → A`; that is, iff the mtuple :math:`(a_0, \dots, a_{m-1})` is equivalent to the function :math:`a: m → A` defined for each :math:`0 ≤ i < n` by :math:`a(i) = a_i`.
-
-Thus, we have the following equivalence of types: :math:`\mathrm{mtuple}(A) ≅ m \to A`.
-
-Let :math:`m = (m_0, \dots, m_{n-1}): \mathrm{ntuple}(ℕ)`.
-
-The :math:`\mathbf{mtuple}` functor is defined as follows by its action on
-
-+ **objects**: if :math:`A` is a set, then
-
-  .. math:: \mathbf{mtuple}(A) = \{((a_{00}, \dots, a_{0(m_1-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(m_n-1)})) ∣ a_{ij} : A\}.
-
-  (We may write :math:`𝐚_i` in place of :math:`(a_{i0}, \dots, a_{i(k-1)})`, if :math:`k` is clear from context.)
-
-+ **arrows**: if :math:`f` is a function from :math:`A` to :math:`B`, then :math:`\mathbf{mtuple} f :  \mathbf{mtuple}(A) →  \mathbf{mtuple}(B)` is defined for each :math:`(𝐚_0, \dots, 𝐚_{n-1})` in :math:`\mathbf{mtuple}(A)` as follows:
-
-  .. math:: \mathbf{mtuple} f (𝐚_1, \dots, 𝐚_n) &= (\mathrm{m_1tuple}f 𝐚_1, \dots, \mathrm{m_ntuple} f 𝐚_n) \\
-                                            &= ((f a_{11}, \dots, f a_{1m_1}), \dots, (f a_{n1}, \dots, f a_{nm_n})).
-
-Notice that :math:`𝐚_i` has type :math:`\mathrm{m_ituple}(A)` iff it can be represented as a function of type :math:`m_i → A`; that is, iff the tuple :math:`(a_{i0}, \dots, a_{i(m_i-1)})` is (the graph of) the function defined by :math:`𝐚_i(j) = a_{ij}` for each :math:`0 ≤ j < m_i`.
-
-Thus, if :math:`m = (m_0, \dots, m_{n-1}): \mathrm{ntuple}(ℕ)`, then :math:`\mathbf{mtuple}(A)` is the :term:`dependent function type`,
-
-.. math:: ∏_{(i:n)} (m_i → A).
-
--------------------------------------
-
-.. index:: fork, dependent fork, eval
-
-.. _general-composition:
-
-General composition
--------------------
-
-In this section we give a somewhat unconventional presentation of general composition of functions and operations. We feel our presentation is more elegant and concise than those typically found in books on universal algebra.
-
-Of course, to each, his own, particularly when it comes to notational sensibilities.  But aesthetics aside, our main reason for what may seem like a belabored discussion of such an elementary topic is that our definition---via composition of the standard "fork" and "eval" operators familiar to most (functional) programmers---leads to a more natural and efficient implementation of general composition in any functional programming language that supports dependent types.
-
-.. index:: ! fork, ! eval
-
-.. _fork:
-
-fork
-~~~~
-
-Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and functions :math:`f: A → B` and :math:`g: A → C`, there exists a unique function :math:`(f, g): A → B × C` such that :math:`π_1 (f, g) = f` and :math:`π_2 (f, g) = g`.
-
-Evidently, this (the so called :term:`universal mapping <universal mapping property>`) is defined for each :math:`a: A` by :math:`(f, g)\, a = (f\,a, g\,a)`.
-
-Denote and define the (nondependent) **fork operator** (on :math:`A`, :math:`B`, and :math:`C`) by
-
-.. math:: \fork: (A → B) → (A → C) → A → (B × C),
-
-and, for each :math:`f: A → B` and :math:`g: A → C`, 
-
-.. math:: \fork \, f\, g: A → (B × C)
-
-is the function that takes each :math:`a:A` to the pair,
+  *In set theory virtually everything* **is** *a set*.
   
-.. math:: (\fork \, f\, g)\, a = (f\,a, g\,a): B × C.
+  *In type theory, virtually everything* **has** *a type*.
 
-(Of course, we could have taken the domain of :math:`\fork` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
 
-The definition of the universal mapping for the product naturally generalizes to arbitrary collections of functions with common domain.  Therefore, it's no surprise that the definition of :math:`\fork` is just a special case of a more general definition that operates on :term:`dependent function types <dependent function type>`, as we now describe.
+.. index:: pair: implication elimination; modus ponens
 
-If :math:`n<ω` and if :math:`f_i: A → B_i` for each :math:`0≤ i < n`, then there exists a unique function of type :math:`A → (B_0 × \cdots × B_{n-1})` whose :math:`k`-th projection is :math:`f_k`.  Precisely, this function is denoted by :math:`(f_0, \dots, f_{n-1})` and defined for each :math:`a:A` by
+.. _curry-howard:
 
-.. math:: (f_0, \dots, f_{n-1})\, a = (f_0\, a, \dots, f_{n-1}\, a).
+Curry-Howard correspondence
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-More generally still, if :math:`I` is a type and :math:`f: ∏_{(i:I)} (A → B_i)` denotes an :math:`I`-tuple of functions, then we define :math:`\fork f : A → ∏_{(i:I)}B_i` to be the function that takes :math:`a:A` to the :math:`I`-tuple :math:`\fork f \, a`, where :math:`\fork f \, a \, i = f_i\, a`.
+The rule for :term:`function application <eval>` corresponds, under the :term:`Curry-Howard <Curry-Howard correspondence>` (or :term:`propositions-as-types`/:term:`proofs-as-programs`) :term:`correspondence <Curry-Howard correspondence>`, to the :term:`implication elimination` rule of natural deduction (sometimes called :term:`modus ponens`). This simply codifies our intuitive notion of function application, viz., applying the function :math:`f: A → B` to an element :math:`a` of :math:`A` yields a member :math:`f\,a` of the codomain :math:`B`.
 
-.. .. raw:: latex
-..    \begin{prooftree}
-..    \AXM{\exists x A(x)}
-..    \AXM{}
-..    \RLM{1}
-..    \UIM{A(y)}
-..    \noLine
-..    \UIM{\vdots}
-..    \noLine
-..    \UIM{B}
-..    \RLM{1}
-..    \BIM{B}
-..    \end{prooftree}
+If we interpret the types :math:`A` and :math:`B` as propositions and the function :math:`f: A → B` as a proof of the proposition ":math:`A` implies :math:`B`," and if we view :math:`a` as a proof of :math:`A`, then the application rule is the so called :term:`implication elimination` rule (or, :term:`modus ponens`); that is, "if :math:`A` and :math:`A → B`, then :math:`B`."
 
-.. .. include:: latex_images/first_order_logic.8.tex
+.. index:: type of; dependent functions
+.. index:: type of; dependent pairs
+.. index:: type of; lists
+.. index:: type of; vectors
 
-To generalize in another direction, suppose that :math:`A` is a type and :math:`B: A → \Type` and :math:`C: A → \Type` are such that, for each :math:`a:A`, we have types :math:`B a` and :math:`C a`.
+.. _dependent-types:
 
-Denote and define the (dependent) **fork operator** by
+Dependent types
+~~~~~~~~~~~~~~~~~~~~
 
-.. math:: \fork: ∏_{(x:A)} B x → ∏_{(y:A)} C y → ∏_{(a:A)} (B a × C a),
+.. Lean_ is a :term:`functional programming` language and interactive theorem prover that supports :term:`dependent types <dependent type>`.
 
-and, for each :math:`f: ∏_{(x:A)} B x` and :math:`g: ∏_{(y:A)} C y`,
+In this section we show how :term:`dependent types <dependent type>` can be used to represent many concepts that are important in universal algebra, in a way that is precise, elegant, and intrinsically computational. [1]_ 
 
-.. math:: \fork \, f\, g: ∏_{(a:A)} B a × C a
+Before trying to understand why dependent types are useful, it helps to know what dependent types are. So we begin by explaining what makes a type dependent.
 
-is the function that maps each :math:`a:A` to the pair
+Types can depend on *parameters*.  For example, if ``α`` is a type, then ``list α`` is the type of lists whose entries have type ``α``.  The type ``list α``  depends on the parameter ``α``. The type of vectors of length ``n`` with entries from ``α`` is sometimes denoted by ``vec α n``. This type depends on the parameter ``α`` (the type of the elements that populate the vectors) and the *value* ``n`` of type ``ℕ`` (denoting the length of the vectors).
 
-.. math:: (\fork \, f\, g)\, a = (f\,a, g\,a): B a × C a.
+The type ``list α`` is an example of a :term:`polymorphic type`, which is not what we mean by a "dependent type."  Of course ``list α`` does depends on the argument ``α``, and this dependence distinguishes, say, ``list ℕ`` from ``list bool``.  But the argument ``α`` is not a particular *value* (or *inhabitant*) of a type, but rather a type parameter, and we call this kind of dependence **polymorphism**.
 
-(Incidentally, since we opted for a "curried" version of :math:`\fork`, we can partially apply it, obtaining the typing judgment,
+Contrast this with the type ``vec α n``, which depends on the parameter ``α`` as well as the *value* of the variable ``n``. The dependence of the type ``vec α n`` on the value ``n`` is the sort of dependence for which we reserve the label "dependent type."
 
-.. math:: \fork \, f: ∏_{(a:A)} C a → ∏_{(a:A)} (B a × C a).)
+This example is somewhat misleading. It is not true that the only dependent types are those that depend on a concrete value of a type, e.g., ``n`` in the last example. In fact, types themselves inhabit other types.  Indeed, in type theory, *everything* (even types) inhabits a type.
 
-The last two generalizations above may be viewed as special cases of our final definition of :math:`\fork`.
+For example, if ``α: Type``, then ``α`` is both a type in its own right and an inhabitant of the ``Type`` type (which is Lean syntax for the "ground type", or ``Sort 1``). [2]_
 
-Suppose :math:`I` and :math:`A` are types, and let :math:`B: I → A → \Type` be a **type constructor**; that is, for each :math:`i:I` and :math:`a:A` we obtain a new type by applying :math:`B`, namely, :math:`Bia: \Type`.
+Consider the ``cons`` function that inserts a new element at the head of a list. What type should ``cons`` have?  Before answering, let us consider a few facts.
 
-Next suppose that for each :math:`i:I` we have a dependent function :math:`f_i: ∏_{(a:A)} B i a` (so the codomain types of :math:`f_i` depend on both :math:`i` and :math:`a`. Let :math:`f: ∏_{(i:I)} ∏_{(a:A)}B i a` be the tuple of these functions; that is, for each :math:`i:I` we have :math:`f\, i = f_i`.
+* For each type ``α``, ``cons α`` is the insertion function for lists of type ``list α``; it takes an element ``a:α`` and a list ``l:list α``, and returns a new list---the concatenation of ``a`` with the list ``l`` (sometimes denoted ``a::l``).
 
-Then, :math:`\fork f` is the function that maps each :math:`a:A` to the function :math:`\fork f \, a` of type :math:`∏_{(i:I)} Bia`.  Thus, for each :math:`a:A` and :math:`i:I`, we have :math:`(\fork f \, a)\, i = f_i\, a`.
+* ``cons`` is polymorphic and should behave in roughly the same way for lists with entries of type ℕ, or ``bool``, or an arbitrary type ``α``. 
 
-To summarize, 
+* ``cons α`` has type ``α → list α → list α``.
 
-.. math:: \fork: ∏_{(i:I)} ∏_{(a:A)}B i a →∏_{(a:A)} ∏_{(i:I)} B i a;
+But what about ``cons`` itself?  We might try ``cons: Type → α → list α → list α``, but this somehow choses a specific inhabitant of ``Type``---namely, ``α``---in advance, which we don't want.
 
-so if we have an :math:`I`-tuple :math:`f: ∏_{(i:I)} ∏_{(a:A)}B i a` of dependent functions, then
+Instead, since ``cons`` should be polymorphic, the caller of ``cons`` is free to choose some (any) type ``α:Type`` as the first argument; then (and only then) do we know the types, ``α`` and ``list α``, of the second and third arguments to ``cons``.
 
-.. math:: \fork f : ∏_{(a:A)} ∏_{(i:I)} B i a. 
+.. index:: ! Pi type
+.. index:: type of; dependent functions
 
-.. _eval:
+.. _pi-types:
 
-eval
-~~~~
+Pi types
+~~~~~~~~~
 
-Next, we define a :term:`function application <eval>` operation on types :math:`A` and :math:`B`.
+What we need in the situation just described is known as a :term:`Pi type`, or :term:`dependent function type <Pi type>`.  In the ``cons`` example, the correct typing judgement is
 
-Denote and define the **eval operator** by
-
-.. math:: \eval: ((A → B) × A) → B
-
-and for each :math:`f: A → B`, :math:`\eval \, f` is the function that maps each :math:`a: A` to :math:`f\, a:B`. 
-
-Notice that :math:`\eval` is polymorphic as it depends on the types :math:`A` and :math:`B`. Indeed,
-
-.. math:: \eval: ∏_{(A: \mathsf{Type})} ∏_{(B: \mathsf{Type})} ((A → B) × A) → B,
-
-so it would seem that when we introduced the :math:`\eval` operation above, we should have said,
-
-  "...the eval operator *on* :math:`A` *and* :math:`B` is denoted by :math:`\eval \, A \, B: ((A → B) × A) → B`..."
+  ``cons: Π(a:Type), (α → list α → list α).``
   
-However, our implementation of :math:`\eval` will use :term:`implicit arguments <implicit arguments>`, so that :math:`A` and :math:`B` need not be mentioned explicitly.
+Before explaining this notation and the type that it represents, let us first describe Pi types more generally.
 
-.. proof:example::
+If ``α`` is a type, we write ``α:Type``.  Then a function ``β`` of type ``α → Type`` represents a family of types, one type ``β x`` for each member ``x`` of the type ``α``.  The product of all these types is denoted by
 
-   As an example of function application with dependent types, let :math:`f: ∏_{a:A}(Ca → D)` and :math:`g: ∏_{(a:A)} Ca`. Then for each :math:`a:A` we have :math:`f\,a : Ca → D` and :math:`g\,a: Ca`. Thus, :math:`\eval\, (f\,a, g\,a) = (f\,a)(g\,a): D`.
-
-   We can also specify the types explicitly if desired, as in,
-
-   .. math:: (@ \eval\ Ca \ D) (f\,a, g\,a) = (f\,a)(g\, a).
-
-   As shown here, the :math:`@` symbol indicates that we will explicitly specify all arguments. (Lean_ also uses the :math:`@` symbol for this purpose.)
-
-.. proof:example::
-
-   Let us briefly mention a typical use case on which our definition of general composition in :numref:`general-composition-of-operations` will depend. (For more details, see the next section.) In the foregoing descriptions of :math:`\fork` and :math:`\eval`, make the following substitutions:
-
-     * :math:`n = \{0,1,\dots, n-1\}` for :math:`A`, 
+  ``Π(a:α), β a``, 
   
-     * :math:`A` for :math:`D`, and
-  
-     * :math:`k_i → A` for :math:`Ca`, for each :math:`i:n`.
+which is itself a type, and is called a **dependent function type**.  This name arises because, for each inhabitant ``f: Π(a:α), β a``, we see that the type of the image ``f a`` of each ``a:α`` may depend on ``a``.  Precisely, ``f a: β a`` for each ``a:α``.
 
-   Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus,
+Suppose for all ``a:α`` the type ``β a`` does *not* depend on ``a``. Then ``Π(a:α), β a`` is equivalent to the (nondependent) function type ``α → β``.  Whence we see that ``α → β`` is a special case of the type ``Π(a:α), β a``. Indeed, in dependent type theory (and in Lean) Pi types may be viewed as fundamental and function types as a special case.
 
-   .. math:: (\fork \, g \, a)\, i = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A),
+To summarize, for each type ``α:Type`` and for every family of types ``β: α → Type``, we have the :term:`Pi type`, ``Π(a:α), β a`` which generalizes the function type ``α → β`` by allowing each section ``β a`` of the codomain to depend on a value ``a:α`` of the domain.
 
-   and :math:`\eval \, (\fork \, g\, a) \, i = \eval(g\,i, a\,i) = (g\,i)(a\,i): A`.
+.. index:: type of; booleans
+.. index:: Cartesian product
 
-.. _general-composition-of-operations:
+.. proof:example:: Cartesian product
 
-General composition of operations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   The simplest example of a Pi type is the **Cartesian product** :math:`B₀ × B₁` which is the set of all functions of the form :math:`f: \{0, 1\} → B₀ ∪ B₁` such that :math:`f \, 0 ∈ B₀` and :math:`f\, 1 ∈ B₁`.
 
-In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).
+   Suppose ``B₀:Type`` and ``B₁:Type`` are types and let ``bool`` denote the **Boolean type** inhabited by just ``0`` and ``1``.
+   
+   Let ``B: bool → Type`` be the function defined by ``B 0 = B₀`` and ``B 1 = B₁``.
+   
+   Then we represent the Cartesian product :math:`B_0 × B_1` by the type ``Π(i:bool), B i``. [3]_
 
-By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`.
+.. index:: ! Sigma type
 
-If we identify the natural number :math:`n: ℕ` with the set :math:`\{0,1,\dots, n-1\}`, and the :math:`\mathrm{ntuple}` type with function type :math:`n →  A`, then the type of :math:`n`-ary operations on :math:`A` is :math:`(n → A) → A`. Evaluating such an operation :math:`f:(n → A) → A` at the tuple :math:`a: n → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
+.. index:: type of; dependent pairs
 
-.. .. raw:: latex
+.. _sigma-types:
 
-..   \begin{prooftree}
-..   \AxiomC{$f : (n → A) → A$}
-..   \AxiomC{$a : n → A$}
-..   \RightLabel{$_{(→ \mathrm{E})}$}
-..   \BinaryInfC{$f a : A$}
-..   \end{prooftree}
+Sigma types
+~~~~~~~~~~~
 
-Letting :math:`a_i` denote the value of :math:`a` at :math:`i`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f\,a = f(a_0, \dots, a_{n-1})`.
+Similarly, a :term:`Sigma type`, also known as the `dependent pair type <sigma-type>`_, generalizes the Cartesian product ``α × β`` by allowing the *type* of the second argument of an ordered pair to depend on the *value* of the first.
 
-Denote and define the collection of all finitary operations on :math:`A` by
+Sigma types arise from a type ``α:Type`` and a "type former" ``β: α → Type``, and are denoted using the ``Σ`` symbol, as follows:
 
-.. math:: \mathrm{Op}(A) = A^{A^n} \cong ⋃_{n<ω} (A^n → A) \cong ⋃_{n<ω} ((n → A) → A).
+  ``Σ(a:α), β a``. 
 
-We now develop a general formulation of composition of operations on sets that is more elegant and computationally practical than the standard formulation, but we first briefly review the standard description of operation composition.
+This type is inhabited by the "dependent pairs" ``(x,y)``, where ``x`` has type ``α`` and ``y`` has type ``β x``.
 
-Let :math:`f : (n → A) → A` be an :math:`n`-ary operation and for each :math:`0≤ i < n` let :math:`g_i : (k_i → A) → A` a :math:`k_i`-ary operation on :math:`A`. The **composition of** :math:`f` **with** :math:`(g_0, \dots, g_{n-1})`, denoted :math:`f ∘ (g_0, \dots, g_{n-1})`, is usually expressed as follows: for each
+.. index:: ! disjoint union
 
-.. math:: ((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})): A^{k_0} × \cdots × A^{k_{n-1}},
-   :label: args
+.. proof:example:: Disjoint union in general
 
-.. math:: f & ∘ (g_0, \dots, g_{n-1})((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)}))\\
-                &= f(g_0(a_{00}, \dots, a_{0(k_0-1)}), \dots, g_{n-1}(a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})).
+   The simplest example of a Sigma type is the disjoint union of two types, say, ``X:Type`` and ``Y:Type``. This is comprised of all pairs of the form ``(0,x)`` for ``x:X`` and ``(1,y)`` for ``y:Y``, and is sometimes denoted by ``X ∐ Y``.
+   
+   Note that the value of the first coordinate of such pairs indicates the type to which the second coordinate belongs.
+   
+   Expressing ``X ∐ Y`` in the ``Σ`` notation, we have ``α = bool`` and ``β: bool → X ∪ Y`` where ``β 0: X`` and ``β 1: Y``. Thus,
+   
+     ``X ∐ Y = Σ(a:bool), β a``.
 
-This notation is ugly and tedious and lends itself poorly to computation. Let us try to clean it up.
+.. proof:example:: Disjoint union example
 
-Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathrm{Op}(A)`.
+   Suppose ``X =  {a, b}`` and ``Y = {a, b, c}``. Then, 
 
-Let :math:`g: ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.
+     ``X ∐ Y = {(0,a), (0,b), (1,a), (1,b), (1,c)}``.
 
-Let :math:`a: ∏_{(i:n)} (k_i → A)` be such that for each :math:`0≤ i < n` we have a function :math:`a\,i: k_i → A` which is defined for each :math:`0≤ j < k_i` by :math:`a\,i\,j = a_{ij}`.
-  
-Then the :math:`n`-tuple of arguments in expression :eq:`args` above can be identified with the :math:`n`-tuple :math:`a = (a\,0, \dots, a\,(n-1))` of functions.
+   If ``(i,a): X ∐ Y``, then the second coordinate is the ``a`` of type ``A`` if ``i = 0``, while ``a:B`` if ``i = 1``.
+   
+   Some authors prefer to use an "injection" function, say, ``ι``, to indicate the set from which an element originated; in the present example,
 
-Recalling the definitions of :math:`\fork` (:numref:`fork`) and :math:`\eval` (:numref:`eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
+     ``X ∐ Y = {ι0 a, ι0 b, ι1 a, ι1 b, ι1 c}``.
 
-If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then 
+   (For ι type ``\iota``; some authors write ``inl`` ("in left") and ``inr`` ("in right") for ``ι0`` and ``ι1``.)
 
-.. math:: \fork \, g\, a: ∏_{(i:n)}\bigl((k_i → A) → A\bigr) \times (k_i → A)
 
-is the function that maps each :math:`0≤ i < n` to the pair
+.. index:: partial application
 
-.. math:: (\fork \, g\, a)\, i = (g\,i, a\,i): \bigl((k_i → A) → A\bigr) × (k_i → A).
+.. _partial-application:
 
-Applying :math:`g\,i` to :math:`a\,i` with the :math:`\eval` function, we have
+Partial application
+~~~~~~~~~~~~~~~~~~~~
 
-.. math:: \eval \, (\fork \, g\, a)\, i = \eval \, (g\,i, a\,i) = (g\,i)(a\,i).
+Let :math:`I` be a nonempty set and :math:`\{A_i | i: I\}` a family of sets.
 
-Observe that the codomain :math:`A` of the function :math:`\eval\, (\fork \, g\, a)` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case, resulting in the typing judgment, :math:`\eval \, (\fork \, g\, a): n → A`.
+Elements of the product :math:`∏_{i∈ I} A_i` are functions :math:`a: I → ⋃_{i:I} A_{i}` such that for each :math:`i` we have :math:`a\,i: A_i`.
 
-.. On the other hand,
+Let :math:`J ⊆ I` and let :math:`g: J → I` be one-to-one. Then, as above, :math:`a ∘ g: ∏_{j: J} A_{g(j)}` gives the projection of :math:`a` onto certain coordinates of the full product, namely, the coordinates :math:`\im g = \{g\, j ∣ j:J\}`.
 
-.. .. math:: \eval\,\fork \, g: ∏_{(i:n)}  (k_i → A) → (n → A).
+Suppose :math:`f` is a self-map of the set :math:`A := ∏_{i: I} A_i`. That is, :math:`f: A → A`. If :math:`I = \{0, 1, \dots, n-1\}`, then :math:`A = ∏_{i=0}^{n-1} A_i` and the (curried) type of :math:`f` is
 
-Thus, if
+.. math:: f: A_0 → (A_1 → (A_2 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
 
-  :math:`f: (n → A) → A` (an :math:`n`-ary operation) and 
-  
-  :math:`g: ∏_{(i:n)} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
-  
-  denote and define the **composition of** :math:`f` **with** :math:`g` as follows:
+For a given :math:`a_0: A_0`, the function :math:`f` partially applied at the first coordinate has type
 
-.. math:: f \comp g := f \, \eval \, \fork \, g: ∏_{(i:n)}((k_i → A) → A).
+.. math:: f\, a_0: A_1 → (A_2 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
 
-Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\eval \, \fork \, g \, a` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \eval \, \fork \, g \, a` has type :math:`A`, as desired.
+For elements :math:`a_0` and :math:`a_1` inhabiting types :math:`A_0` and :math:`A_1` (resp.), the partial application of :math:`f` to these elements yields the following function and typing judgment:
 
-.. _greater-generality:
+.. math:: f a_0 a_1: A_2 → (A_3 → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1}))\cdots ).
 
-Greater generality
-~~~~~~~~~~~~~~~~~~
+In general, for :math:`a_i: A_i`, :math:`0 ≤ i < ℓ`,
 
-In the last section we looked at an operation :math:`f` on a set :math:`A`. We took the domain of :math:`f` to be :math:`n → A` (the type of :math:`n`-tuples over :math:`A`) for some :math:`n`.  In particular, we assumed that :math:`A` was a set, and that the arity of :math:`f` was some natural number, say, :math:`n`. Although this is the standard setup in universal algebra.  However, it is not necessary to be so specific about the arities, domains, and codomains of operations.
+.. math:: f a_0 a_1 \dots a_{ℓ-1}: A_ℓ → (A_{ℓ+1} → \cdots → (A_{n-3} → (A_{n-2} → A_{n-1} ) ) \cdots ).
 
-In this section we start with two types :math:`α` and :math:`γ` and consider :math:`γ`-**ary operations on** :math:`α`---e.g., :math:`f: (γ → α) → α`---and show how to express composition of operations in this general context.
+.. Asynchronous currying
+.. ~~~~~~~~~~~~~~~~~~~~~
 
-Suppose that for each :math:`i: γ` we have a type :math:`γ_i` and an operation :math:`g_i` of type :math:`(γ_i → α) → α` on :math:`α`.
+.. It would be useful to have a means of partial function application in case the domain :math:`I` is not simply :math:`\{0, 1, \dots, n-1\}`, or in case we wish to partially apply a function to an arbitrary subset of its operands (coordinates of its domain).
 
-Denote by :math:`G` the ":math:`γ`-tuple" of these operations; that is, for each :math:`i: γ` the ":math:`i`-th component" of :math:`G` is 
-:math:`G\, i = g_i`. Evidently, this results in the typing judgment,
+.. Suppose, as above,
 
-.. math:: G: ∏_{(i:γ)} ((γ_i → α) → α).
+.. * :math:`𝔸 = ∏_{i:I} A_i`,
 
-Even in this more general context, we can still use the fork and eval maps introduced above to express composition of operations.
-Indeed, we *define* the **composition of** :math:`f` **with** :math:`G` to be
+.. * :math:`g: J → I` (one-to-one),
 
-.. math:: f \, \eval \, \fork \, G.
+.. * :math:`a ∘ g: ∏_{j:J} A_{g(j)}`, for each :math:`a : ∏_{i:I} A_i`.
 
-Let us adopt the following convenient notation:
+.. Let :math:`f` have type :math:`∏_{i:I} A_i → ∏_{i:I} A_i`, which means that if we apply :math:`f` to an element :math:`a : ∏_{i:I} A_i` the result has the same type, that is, :math:`f a : ∏_{i:I} A_i`.
 
-  *Denote by* :math:`\comp` *the general composition operation* :math:`\eval \, \fork`.
+.. We may wish to apply :math:`f` to just a portion of :math:`a` but it may not be the case that :math:`I` is a subset of :math:`ℕ`, or an ordered enumeration of some other set, so there is no natural notion of “the first :math:`ℓ` operands.” Even if there was such a notion, we may wish to partially apply :math:`f` to something other than the first :math:`ℓ` operands. Therefore, we define a more general notion of partial application as follows: :math:`f` partially applied to the coordinates :math:`\im g = \{g(j) ∣ j: J\}` of the element :math:`a` gives the function : type judgment
 
-Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f \comp G := f \, \eval \, \fork \, G`.  Evidently, this yields the typing judgment,
+.. .. math:: f ∘ (a ∘ g): ∏_{\substack{i: I\\ i ∉ \im g}} A_i → ∏_{i:I} A_i.
 
-.. math:: f \comp G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
+.. .. todo:: define/describe the asynchronous curry type
 
-Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have,
 
-.. math:: a\, i : γ_i → α \quad \text{ and } \quad  G\, i : (γ_i → α) → α,
-
-so evaluation of :math:`\comp\, G \, a` at a particular :math:`i: γ` is simply function application. That is,
-
-.. math:: \comp \,G \, a \, i:= \eval \, \fork \, G \, a \, i = (G\, i)(a\, i): α.
-
-Thus, :math:`\comp\, G \, a` has type :math:`γ → α`, which is precisely the domain type of :math:`f`.
-
-To summarize, we have the following typing judgments:
-
-.. math:: \comp\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
-
-whence :math:`f \comp G \, a: α` is well-typed.
 
 ----------------------------
 
@@ -421,7 +305,7 @@ The type of the class :math:`x/R` is a **quotient type**, denoted in this case b
 Quotients in Lean
 ~~~~~~~~~~~~~~~~~~
 
-Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [1]_
+Four quotient types are defined as constants in the :term:`LSTL`.  For consistency, we have decided to redefine these types in the `lean-ualib`_, as follows: [4]_
 
 .. index:: lift of; a function
 .. index:: reduction rule
@@ -573,7 +457,7 @@ Let :math:`f[R] := \{(f x, f y) ∈ β × β ∣ (x, y) ∈ R\}` and let :math:`
 
 If :math:`f` :term:`lifts <lifts (v)>` from :math:`α` to :math:`α/R`, then there is a function :math:`fₗ : α/R → β` defined by :math:`fₗ (x/R) = f x`, for each :math:`x/R: α/R`. We call this function the :term:`lift <lift (n)>` of :math:`f` from :math:`α` to :math:`α/R`.
 
-The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [2]_
+The `Lean Standard Library`_ (:term:`LSTL`) extends the :term:`CiC` with additional constants that construct such lifts, and make the equation :math:`fₗ(x/R) = f x` available as a definitional reduction rule. [5]_
 
 .. index:: keyword: quot.lift
 
@@ -1258,18 +1142,37 @@ Together with ``quotient.sound``, this implies that the elements of the quotient
 
 
 .. [1]
-   Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
+   What we mean by "intrinsically computational" ought to become clearer as we progress.
 
 .. [2]
+   ``Sort 0`` is the (:term:`impredicative`) type ``Prop`` which we discuss later.
+
+.. [3]
+   It is more common in mathematics to view :math:`B_0 × B_1` as the collection of pairs :math:`\{(b_0, b_1): b_i ∈ B_i, i = 0, 1\}`, but identifying tuples with functions results in a :term:`Pi type`.
+
+.. [4]
+   Definitions in the ``ualib`` namespace are not part of Lean's built-in logical framework, so the computation principles we would like these definitions to satisfy must be assumed (as an ``axiom``), rather than proved (as a ``theorem``). If we had stuck with the ``quot`` constants defined in the `Lean Standard Library`_ (instead of defining our own versions of these constants), we could have *proved* the the ``flift_comp_principle``,  since this principle is taken as part of the logical framework of the :term:`LSTL`.
+
+.. [5]
    At issue here is whether we can define :math:`fₗ (x/R)` without invoking some :term:`Choice` axiom.  Indeed, :math:`x/R` is a class of inhabitants of type :math:`α` and, if :math:`fₗ(x/R)` is taken to be the value returned when :math:`f` is evaluated at some member of this class, then we must have a way to choose one such member.  Note that we use :math:`x/R` to denote the :math:`R`-class containing :math:`x`, while the notation defined in the :term:`LSTL` for this :math:`R`-class is :math:`⟦x⟧`.
 
-.. .. [2]
-..    ``Sort 0`` is the (:term:`impredicative`) type ``Prop`` which we discuss later.
+
+.. include:: hyperlink_references.rst
+
+
+
+
+
+
+
+
+
+
+
 
 .. .. [7]
    Lean code appearing in this section is drawn mainly from the `quotient.lean`_ file of the `lean-ualib`_ repository.
 
-.. include:: hyperlink_references.rst
 
 
 .. Recall that in the `Lean Standard Library`_, ``α × β`` represents the Cartesian product of the types ``α`` and ``β``. To illustrate the use of quotients, let us define the type of **unordered pairs** of elements of a type ``α`` as a quotient of the type ``α × α``.

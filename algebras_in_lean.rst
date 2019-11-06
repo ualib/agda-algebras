@@ -1,8 +1,7 @@
 .. File: algebras_in_lean.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 11 Oct 2019
+.. Date: 23 May 2019
 .. Updated: 5 Nov 2019
-.. Updated: 4 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst

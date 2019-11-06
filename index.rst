@@ -17,8 +17,7 @@
     algebras
     types_for_algebras
     algebras_in_lean
-    terms_and_clones
-    terms_and_clones_in_lean
+    clones_and_terms_in_lean
     type_classes
     equational_logic
     equational_logic_in_lean

@@ -1,6 +1,6 @@
 .. File: algebras.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 11 Oct 2019
+.. Date: 17 May 2019
 .. Updated: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
@@ -15,19 +15,326 @@
 Algebras
 ========
 
-Our vision for the `lean-ualib`_ (Lean Universal Algebra Library) originated with our observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, :term:`type theory` in general, and :term:`dependent <dependent type>` and :term:`inductive types <inductive type>` in particular, facilitates elegant representations of recursively defined objects. Such objects can therefore be implemented in a :term:`proof assistant` such as `Lean`_, a language that not only supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, but also provides powerful :term:`tactics <proof tactic>` for proving properties of objects that inhabit these types.
+In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`Chapters %s <algebras-in-lean>` and :numref:`%s <clones-and-terms-in-lean>` we will show how the definitions and results presented in this section can be formalized (or "implemented") in type theory using Lean.
 
-These observations suggest that there is much to gain from implementing universal algebra in a proof assistant that offers powerful tools for working with :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`. Lean is one such proof assistant.
+The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving properties of these objects.
 
-The goal of the `Lean Universal Algebra Library`_, and this documentation explaining it, is to demonstrate that our vision manifests in a careful (and, whenever possible, :term:`constructive`) presentation of the elementary theory of universal algebra in the language of type theory, along with a formal implementation of this theory in the Lean proof assistant.  Specific examples will be given below in :numref:`subalgebras-in-lean`, :numref:`terms-in-lean`, and :numref:`clones-in-lean`.
+------------------------------
 
-.. In particular, our Lean_ implementation of the notion of :term:`subuniverse` illustrates one of these underlying themes motivating our work.
+.. _tuple-functors:
 
-Specifically, in this chapter and :numref:`Chapter %s <terms-and-clones>` we use the informal language of universal algebra to present fundamental definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`Chapters %s <algebras-in-lean>` and :numref:`%s <terms-and-clones-in-lean>` we show how the definitions and results that we have presented in the informal language can be formalized (or "implemented") in type theory using Lean.
+Tuple functors
+--------------
 
-The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving (by induction) properties of these objects.
+This (and the next) section assumes the reader knows what a functor is (see, e.g., categorytheory.gitlab.io_, for the definition). However, nothing beyond the basic definitions of category theory is required, so readers with no prior exposure to that subject should be able to comprehend all of the concepts we introduce here.
 
-Finally, it is important to point out that this is not merely an exercise in translation.  Indeed, Lean was designed with the goal of creating a system in which one could conduct "real" mathematics research, and that is how we intend to use it once we have acheived the goal of implementing the most basic and important parts of the existing theory in a usable Lean library (`lean-ualib`_).
+For :math:`m: ℕ`, the :math:`\mathrm{mtuple}` functor on :cat:`Set` is denoted and defined as follows by its action on
+
++ **objects**: if :math:`A` is a set, then :math:`\mathrm{mtuple}(A) := \{(a_0, \dots, a_{m-1}) ∣ a_i : A\}`;
+
++ **arrows**: if :math:`f: A → B` is a function from the set :math:`A` to the set :math:`B`, then :math:`\mathrm{mtuple} f: \mathrm{mtuple}(A) → \mathrm{mtuple}(B)` is defined for each :math:`(a_0, \dots, a_{m-1})` of type :math:`\mathrm{mtuple}(A)` as follows:
+
+.. math:: \mathrm{mtuple} f (a_0, \dots, a_{m-1}) = (f a_0, \dots, f a_{m-1}),
+
+which inhabits the type :math:`\mathrm{mtuple}(A)`.
+
+We use the standard set-theoretic convention that identifies the natural number :math:`0≤ m < ω` with the set :math:`\{0,1,\dots, m-1\}`.
+
+Then :math:`a:=(a_0, \dots, a_{m-1})` has type :math:`\mathrm{mtuple}(A)` iff it can be identified with a function of type :math:`m → A`; that is, iff the mtuple :math:`(a_0, \dots, a_{m-1})` is equivalent to the function :math:`a: m → A` defined for each :math:`0 ≤ i < n` by :math:`a(i) = a_i`.
+
+Thus, we have the following equivalence of types: :math:`\mathrm{mtuple}(A) ≅ m \to A`.
+
+Let :math:`m = (m_0, \dots, m_{n-1}): \mathrm{ntuple}(ℕ)`.
+
+The :math:`\mathbf{mtuple}` functor is defined as follows by its action on
+
++ **objects**: if :math:`A` is a set, then
+
+  .. math:: \mathbf{mtuple}(A) = \{((a_{00}, \dots, a_{0(m_1-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(m_n-1)})) ∣ a_{ij} : A\}.
+
+  (We may write :math:`𝐚_i` in place of :math:`(a_{i0}, \dots, a_{i(k-1)})`, if :math:`k` is clear from context.)
+
++ **arrows**: if :math:`f` is a function from :math:`A` to :math:`B`, then :math:`\mathbf{mtuple} f :  \mathbf{mtuple}(A) →  \mathbf{mtuple}(B)` is defined for each :math:`(𝐚_0, \dots, 𝐚_{n-1})` in :math:`\mathbf{mtuple}(A)` as follows:
+
+  .. math:: \mathbf{mtuple} f (𝐚_1, \dots, 𝐚_n) &= (\mathrm{m_1tuple}f 𝐚_1, \dots, \mathrm{m_ntuple} f 𝐚_n) \\
+                                            &= ((f a_{11}, \dots, f a_{1m_1}), \dots, (f a_{n1}, \dots, f a_{nm_n})).
+
+Notice that :math:`𝐚_i` has type :math:`\mathrm{m_ituple}(A)` iff it can be represented as a function of type :math:`m_i → A`; that is, iff the tuple :math:`(a_{i0}, \dots, a_{i(m_i-1)})` is (the graph of) the function defined by :math:`𝐚_i(j) = a_{ij}` for each :math:`0 ≤ j < m_i`.
+
+Thus, if :math:`m = (m_0, \dots, m_{n-1}): \mathrm{ntuple}(ℕ)`, then :math:`\mathbf{mtuple}(A)` is the :term:`dependent function type`,
+
+.. math:: ∏_{(i:n)} (m_i → A).
+
+-------------------------------------
+
+.. index:: fork, dependent fork, eval
+
+.. _general-composition:
+
+General composition
+-------------------
+
+In this section we give a somewhat unconventional presentation of general composition of functions and operations. We feel our presentation is more elegant and concise than those typically found in books on universal algebra.
+
+Of course, to each, his own, particularly when it comes to notational sensibilities.  But aesthetics aside, our main reason for what may seem like a belabored discussion of such an elementary topic is that our definition---via composition of the standard "fork" and "eval" operators familiar to most (functional) programmers---leads to a more natural and efficient implementation of general composition in any functional programming language that supports dependent types.
+
+.. index:: ! fork, ! eval
+
+.. _fork:
+
+fork
+~~~~
+
+Recall the definition of :term:`product`.  Given types :math:`A`, :math:`B`, :math:`C`, and functions :math:`f: A → B` and :math:`g: A → C`, there exists a unique function :math:`(f, g): A → B × C` such that :math:`π_1 (f, g) = f` and :math:`π_2 (f, g) = g`.
+
+Evidently, this (the so called :term:`universal mapping <universal mapping property>`) is defined for each :math:`a: A` by :math:`(f, g)\, a = (f\,a, g\,a)`.
+
+Denote and define the (nondependent) **fork operator** (on :math:`A`, :math:`B`, and :math:`C`) by
+
+.. math:: \fork: (A → B) → (A → C) → A → (B × C),
+
+and, for each :math:`f: A → B` and :math:`g: A → C`, 
+
+.. math:: \fork \, f\, g: A → (B × C)
+
+is the function that takes each :math:`a:A` to the pair,
+  
+.. math:: (\fork \, f\, g)\, a = (f\,a, g\,a): B × C.
+
+(Of course, we could have taken the domain of :math:`\fork` to be :math:`(A → B) × (A → C)`, but we prefer the "curried" version defined above for a number of reasons; e.g., it's easier to implement partial application of a curried function.)
+
+The definition of the universal mapping for the product naturally generalizes to arbitrary collections of functions with common domain.  Therefore, it's no surprise that the definition of :math:`\fork` is just a special case of a more general definition that operates on :term:`dependent function types <dependent function type>`, as we now describe.
+
+If :math:`n<ω` and if :math:`f_i: A → B_i` for each :math:`0≤ i < n`, then there exists a unique function of type :math:`A → (B_0 × \cdots × B_{n-1})` whose :math:`k`-th projection is :math:`f_k`.  Precisely, this function is denoted by :math:`(f_0, \dots, f_{n-1})` and defined for each :math:`a:A` by
+
+.. math:: (f_0, \dots, f_{n-1})\, a = (f_0\, a, \dots, f_{n-1}\, a).
+
+More generally still, if :math:`I` is a type and :math:`f: ∏_{(i:I)} (A → B_i)` denotes an :math:`I`-tuple of functions, then we define :math:`\fork f : A → ∏_{(i:I)}B_i` to be the function that takes :math:`a:A` to the :math:`I`-tuple :math:`\fork f \, a`, where :math:`\fork f \, a \, i = f_i\, a`.
+
+.. .. raw:: latex
+..    \begin{prooftree}
+..    \AXM{\exists x A(x)}
+..    \AXM{}
+..    \RLM{1}
+..    \UIM{A(y)}
+..    \noLine
+..    \UIM{\vdots}
+..    \noLine
+..    \UIM{B}
+..    \RLM{1}
+..    \BIM{B}
+..    \end{prooftree}
+
+.. .. include:: latex_images/first_order_logic.8.tex
+
+To generalize in another direction, suppose that :math:`A` is a type and :math:`B: A → \Type` and :math:`C: A → \Type` are such that, for each :math:`a:A`, we have types :math:`B a` and :math:`C a`.
+
+Denote and define the (dependent) **fork operator** by
+
+.. math:: \fork: ∏_{(x:A)} B x → ∏_{(y:A)} C y → ∏_{(a:A)} (B a × C a),
+
+and, for each :math:`f: ∏_{(x:A)} B x` and :math:`g: ∏_{(y:A)} C y`,
+
+.. math:: \fork \, f\, g: ∏_{(a:A)} B a × C a
+
+is the function that maps each :math:`a:A` to the pair
+
+.. math:: (\fork \, f\, g)\, a = (f\,a, g\,a): B a × C a.
+
+(Incidentally, since we opted for a "curried" version of :math:`\fork`, we can partially apply it, obtaining the typing judgment,
+
+.. math:: \fork \, f: ∏_{(a:A)} C a → ∏_{(a:A)} (B a × C a).)
+
+The last two generalizations above may be viewed as special cases of our final definition of :math:`\fork`.
+
+Suppose :math:`I` and :math:`A` are types, and let :math:`B: I → A → \Type` be a **type constructor**; that is, for each :math:`i:I` and :math:`a:A` we obtain a new type by applying :math:`B`, namely, :math:`Bia: \Type`.
+
+Next suppose that for each :math:`i:I` we have a dependent function :math:`f_i: ∏_{(a:A)} B i a` (so the codomain types of :math:`f_i` depend on both :math:`i` and :math:`a`. Let :math:`f: ∏_{(i:I)} ∏_{(a:A)}B i a` be the tuple of these functions; that is, for each :math:`i:I` we have :math:`f\, i = f_i`.
+
+Then, :math:`\fork f` is the function that maps each :math:`a:A` to the function :math:`\fork f \, a` of type :math:`∏_{(i:I)} Bia`.  Thus, for each :math:`a:A` and :math:`i:I`, we have :math:`(\fork f \, a)\, i = f_i\, a`.
+
+To summarize, 
+
+.. math:: \fork: ∏_{(i:I)} ∏_{(a:A)}B i a →∏_{(a:A)} ∏_{(i:I)} B i a;
+
+so if we have an :math:`I`-tuple :math:`f: ∏_{(i:I)} ∏_{(a:A)}B i a` of dependent functions, then
+
+.. math:: \fork f : ∏_{(a:A)} ∏_{(i:I)} B i a. 
+
+.. _eval:
+
+eval
+~~~~
+
+Next, we define a :term:`function application <eval>` operation on types :math:`A` and :math:`B`.
+
+Denote and define the **eval operator** by
+
+.. math:: \eval: ((A → B) × A) → B
+
+and for each :math:`f: A → B`, :math:`\eval \, f` is the function that maps each :math:`a: A` to :math:`f\, a:B`. 
+
+Notice that :math:`\eval` is polymorphic as it depends on the types :math:`A` and :math:`B`. Indeed,
+
+.. math:: \eval: ∏_{(A: \mathsf{Type})} ∏_{(B: \mathsf{Type})} ((A → B) × A) → B,
+
+so it would seem that when we introduced the :math:`\eval` operation above, we should have said,
+
+  "...the eval operator *on* :math:`A` *and* :math:`B` is denoted by :math:`\eval \, A \, B: ((A → B) × A) → B`..."
+  
+However, our implementation of :math:`\eval` will use :term:`implicit arguments <implicit arguments>`, so that :math:`A` and :math:`B` need not be mentioned explicitly.
+
+.. proof:example::
+
+   As an example of function application with dependent types, let :math:`f: ∏_{a:A}(Ca → D)` and :math:`g: ∏_{(a:A)} Ca`. Then for each :math:`a:A` we have :math:`f\,a : Ca → D` and :math:`g\,a: Ca`. Thus, :math:`\eval\, (f\,a, g\,a) = (f\,a)(g\,a): D`.
+
+   We can also specify the types explicitly if desired, as in,
+
+   .. math:: (@ \eval\ Ca \ D) (f\,a, g\,a) = (f\,a)(g\, a).
+
+   As shown here, the :math:`@` symbol indicates that we will explicitly specify all arguments. (Lean_ also uses the :math:`@` symbol for this purpose.)
+
+.. proof:example::
+
+   Let us briefly mention a typical use case on which our definition of general composition in :numref:`general-composition-of-operations` will depend. (For more details, see the next section.) In the foregoing descriptions of :math:`\fork` and :math:`\eval`, make the following substitutions:
+
+     * :math:`n = \{0,1,\dots, n-1\}` for :math:`A`, 
+  
+     * :math:`A` for :math:`D`, and
+  
+     * :math:`k_i → A` for :math:`Ca`, for each :math:`i:n`.
+
+   Then :math:`g: ∏_{(i:n)} ((k_i → A) → A)` is an :math:`n`-tuple of operations on :math:`A` and :math:`a: ∏_{(i:n)}(k_i → A)` is an :math:`n`-tuple of tuples of elements of type :math:`A`.  Thus,
+
+   .. math:: (\fork \, g \, a)\, i = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A),
+
+   and :math:`\eval \, (\fork \, g\, a) \, i = \eval(g\,i, a\,i) = (g\,i)(a\,i): A`.
+
+.. _general-composition-of-operations:
+
+General composition of operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).
+
+By an :math:`n`-**ary operation** on the set :math:`A` we mean a function :math:`f: A^n → A`, that takes an :math:`n`-tuple :math:`(a_0, \dots, a_{n-1})` of elements of type :math:`A` and returns an element :math:`f(a_0,\dots, a_{n-1})` of type :math:`A`.
+
+If we identify the natural number :math:`n: ℕ` with the set :math:`\{0,1,\dots, n-1\}`, and the :math:`\mathrm{ntuple}` type with function type :math:`n →  A`, then the type of :math:`n`-ary operations on :math:`A` is :math:`(n → A) → A`. Evaluating such an operation :math:`f:(n → A) → A` at the tuple :math:`a: n → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
+
+.. .. raw:: latex
+
+..   \begin{prooftree}
+..   \AxiomC{$f : (n → A) → A$}
+..   \AxiomC{$a : n → A$}
+..   \RightLabel{$_{(→ \mathrm{E})}$}
+..   \BinaryInfC{$f a : A$}
+..   \end{prooftree}
+
+Letting :math:`a_i` denote the value of :math:`a` at :math:`i`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f\,a = f(a_0, \dots, a_{n-1})`.
+
+Denote and define the collection of all finitary operations on :math:`A` by
+
+.. math:: \mathrm{Op}(A) = A^{A^n} \cong ⋃_{n<ω} (A^n → A) \cong ⋃_{n<ω} ((n → A) → A).
+
+We now develop a general formulation of composition of operations on sets that is more elegant and computationally practical than the standard formulation, but we first briefly review the standard description of operation composition.
+
+Let :math:`f : (n → A) → A` be an :math:`n`-ary operation and for each :math:`0≤ i < n` let :math:`g_i : (k_i → A) → A` a :math:`k_i`-ary operation on :math:`A`. The **composition of** :math:`f` **with** :math:`(g_0, \dots, g_{n-1})`, denoted :math:`f ∘ (g_0, \dots, g_{n-1})`, is usually expressed as follows: for each
+
+.. math:: ((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})): A^{k_0} × \cdots × A^{k_{n-1}},
+   :label: args
+
+.. math:: f & ∘ (g_0, \dots, g_{n-1})((a_{00}, \dots, a_{0(k_0-1)}), \dots, (a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)}))\\
+                &= f(g_0(a_{00}, \dots, a_{0(k_0-1)}), \dots, g_{n-1}(a_{(n-1)0}, \dots, a_{(n-1)(k_{n-1}-1)})).
+
+This notation is ugly and tedious and lends itself poorly to computation. Let us try to clean it up.
+
+Consider the :math:`n`-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathrm{Op}(A)`.
+
+Let :math:`g: ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each :math:`0 ≤ i < n` by :math:`g\,i = g_i`.
+
+Let :math:`a: ∏_{(i:n)} (k_i → A)` be such that for each :math:`0≤ i < n` we have a function :math:`a\,i: k_i → A` which is defined for each :math:`0≤ j < k_i` by :math:`a\,i\,j = a_{ij}`.
+  
+Then the :math:`n`-tuple of arguments in expression :eq:`args` above can be identified with the :math:`n`-tuple :math:`a = (a\,0, \dots, a\,(n-1))` of functions.
+
+Recalling the definitions of :math:`\fork` (:numref:`fork`) and :math:`\eval` (:numref:`eval`), it is not hard to see how to perform general composition using these definitions and dependent types.
+
+If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then 
+
+.. math:: \fork \, g\, a: ∏_{(i:n)}\bigl((k_i → A) → A\bigr) \times (k_i → A)
+
+is the function that maps each :math:`0≤ i < n` to the pair
+
+.. math:: (\fork \, g\, a)\, i = (g\,i, a\,i): \bigl((k_i → A) → A\bigr) × (k_i → A).
+
+Applying :math:`g\,i` to :math:`a\,i` with the :math:`\eval` function, we have
+
+.. math:: \eval \, (\fork \, g\, a)\, i = \eval \, (g\,i, a\,i) = (g\,i)(a\,i).
+
+Observe that the codomain :math:`A` of the function :math:`\eval\, (\fork \, g\, a)` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case, resulting in the typing judgment, :math:`\eval \, (\fork \, g\, a): n → A`.
+
+.. On the other hand,
+
+.. .. math:: \eval\,\fork \, g: ∏_{(i:n)}  (k_i → A) → (n → A).
+
+Thus, if
+
+  :math:`f: (n → A) → A` (an :math:`n`-ary operation) and 
+  
+  :math:`g: ∏_{(i:n)} ((k_i → A) → A)` (an :math:`n`-tuple of operations), then we 
+  
+  denote and define the **composition of** :math:`f` **with** :math:`g` as follows:
+
+.. math:: f \comp g := f \, \eval \, \fork \, g: ∏_{(i:n)}((k_i → A) → A).
+
+Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\eval \, \fork \, g \, a` has type :math:`n → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \eval \, \fork \, g \, a` has type :math:`A`, as desired.
+
+.. _greater-generality:
+
+Greater generality
+~~~~~~~~~~~~~~~~~~
+
+In the last section we looked at an operation :math:`f` on a set :math:`A`. We took the domain of :math:`f` to be :math:`n → A` (the type of :math:`n`-tuples over :math:`A`) for some :math:`n`.  In particular, we assumed that :math:`A` was a set, and that the arity of :math:`f` was some natural number, say, :math:`n`. Although this is the standard setup in universal algebra.  However, it is not necessary to be so specific about the arities, domains, and codomains of operations.
+
+In this section we start with two types :math:`α` and :math:`γ` and consider :math:`γ`-**ary operations on** :math:`α`---e.g., :math:`f: (γ → α) → α`---and show how to express composition of operations in this general context.
+
+Suppose that for each :math:`i: γ` we have a type :math:`γ_i` and an operation :math:`g_i` of type :math:`(γ_i → α) → α` on :math:`α`.
+
+Denote by :math:`G` the ":math:`γ`-tuple" of these operations; that is, for each :math:`i: γ` the ":math:`i`-th component" of :math:`G` is 
+:math:`G\, i = g_i`. Evidently, this results in the typing judgment,
+
+.. math:: G: ∏_{(i:γ)} ((γ_i → α) → α).
+
+Even in this more general context, we can still use the fork and eval maps introduced above to express composition of operations.
+Indeed, we *define* the **composition of** :math:`f` **with** :math:`G` to be
+
+.. math:: f \, \eval \, \fork \, G.
+
+Let us adopt the following convenient notation:
+
+  *Denote by* :math:`\comp` *the general composition operation* :math:`\eval \, \fork`.
+
+Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f \comp G := f \, \eval \, \fork \, G`.  Evidently, this yields the typing judgment,
+
+.. math:: f \comp G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
+
+Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have,
+
+.. math:: a\, i : γ_i → α \quad \text{ and } \quad  G\, i : (γ_i → α) → α,
+
+so evaluation of :math:`\comp\, G \, a` at a particular :math:`i: γ` is simply function application. That is,
+
+.. math:: \comp \,G \, a \, i:= \eval \, \fork \, G \, a \, i = (G\, i)(a\, i): α.
+
+Thus, :math:`\comp\, G \, a` has type :math:`γ → α`, which is precisely the domain type of :math:`f`.
+
+To summarize, we have the following typing judgments:
+
+.. math:: \comp\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
+
+whence :math:`f \comp G \, a: α` is well-typed.
+
+
+
 
 -----------------------------------------
 
@@ -518,6 +825,310 @@ On the other hand, if :math:`g: A^m → A`---equivalently, :math:`g: (m → A) �
 If :math:`f: (ρ f → B) → B` is a :math:`ρ f`-ary operation on :math:`B`, if :math:`a: ρ f → A` is a :math:`ρ f`-tuple on :math:`A`, and if :math:`h: A → B`, then
 :math:`h ∘ a: ρ f → B`, so :math:`f (h ∘ a): B`.
 
+----------------------------------------------
+
+
+.. index:: ! clone
+.. index:: ! clone of projections
+.. index:: ! clone of polynomial operations
+.. index:: ! clone of term operations
+
+.. _clones:
+
+Clones
+------
+
+**Formalization**. For a description of our implementation (in `Lean`_) of the objects described in this section, see :numref:`Chapter %s <clones-and-terms-in-lean>`.
+
+An **operational clone** (or just **clone**) on a nonempty set :math:`A` is a set of operations on :math:`A` that contains the projection operations and is closed under general composition.
+
+Let :math:`𝖢 A` denote the collection of all clones on :math:`A`.
+
+The smallest clone on :math:`A` is the **clone of projections**, which we denote and define as follows:
+
+.. math:: \Proj  A = ⋃_{i < n < ω}  \{π^n_i : ∀ a ∈ A^n,\ π^n_i\, a = a(i)\}.
+
+Let us set down some conventions that will help simplify notation.  Recall, the natural number :math:`k< ω` may be constructed as (or at least identified with) the set :math:`\{0,1,\dots, k-1\}`, and this will be helpful here.
+
+For each :math:`k< ω`, denote and define the tuple :math:`\pi^k: k → ((k → A) → A)` of all :math:`k`-ary projections on :math:`A` as follows: for each :math:`0≤ i < k`,  :math:`π^k(i)` is the :math:`i`-th :math:`k`-ary projection operation that takes each :math:`k`-tuple :math:`a: k → A` to its entry at index :math:`i`:
+
+.. math:: π^k (i) a = a(i).
+
+Observe that if :math:`f: (k → A) → A` is a :math:`k`-ary operation on :math:`A`, then 
+
+The **clone of term operations** of a σ-algebra 𝔸 is the smallest clone on :math:`A` containing the basic operations of 𝔸; this is
+denoted and defined by
+
+.. math:: \Clo (F^𝔸) = ⋂ \{ U ∈ 𝖢 A ∣ F^𝔸 ⊆ U\}.
+
+The set of :math:`n`-ary members of :math:`\Clo (F^𝔸)` is sometimes denoted by :math:`\Clo _n (F^𝔸)` (despite the fact that the latter is clearly not a clone).
+
+The **clone of polynomial operations** (or **polynomial clone**) of a σ-algebra 𝔸 is denoted by :math:`\Pol (F^𝔸)` and is defined to be the clone generated by the collection consisting of the basic operations (i.e., :math:`F^𝔸`) of 𝔸 along with the **constants** on :math:`A`. [6]_
+
+The set of :math:`n`-ary members of :math:`\Pol (F^𝔸)` is sometimes denoted by :math:`\Pol _n (F^𝔸)`. 
+
+.. .. [9] Lean's built-in sigma type is defined as follows: :math:`structure sigma {α : Type u} (β : α → Type v) := mk :: (fst : α) (snd : β fst)`
+
+The clone :math:`\Clo (F^𝔸)` is associated with the algebra :math:`𝔸` only insofar as the former is constructed out of the basic operations of 𝔸 and the set :math:`A` on which those operations are defined.  However, all that is required when defining a clone is a set :math:`A` and some collection :math:`F` of operations defined on :math:`A`; from only these ingredients, we can construct the clone generated by :math:`F`, which we denote by :math:`\Clo (F)`.
+
+Thus
+
+  *the clone of terms operations can be implemented (e.g., in Lean) as an inductive type*.
+  
+The following theorem makes this more precise (cf. Theorem 4.32 of :cite:`Bergman:2012`). (See also :numref:`Chapter %s <inductively-defined-types>`, where we formalize this in Lean.)
+
+.. We seek a "bottom-up," inductive description of the members of :math:`\Clo (F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <thm-1-14>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available.
+
+..  Theorem  4.3. of Bergman [1].
+
+.. _obs-five:
+
+.. proof:observation::
+
+   Let :math:`A` be a set and let :math:`F ⊆ \Op (A):= ⋃_{n<ω} A^{A^n}` be a collection of operations on :math:`A`.
+   
+   Define :math:`F_0 := \Proj (A)` (the set of projections on :math:`A`) and for all :math:`0 ≤ n < ω` let
+ 
+   .. math:: F_{n+1} := F_n ∪ \{ f g \mid f ∈ F, g : ρf → (F_n ∩ (ρg → A)) \}.
+ 
+   Then :math:`\Clo (F) = ⋃_n F_n`.
+ 
+   .. container:: toggle
+    
+      .. container:: header
+  
+         *Proof*.
+
+      Let :math:`F̄ = ⋃_n F_n`. It is easy to argue by induction that every :math:`F_n` is a subset of :math:`\Clo (F)`. Thus, :math:`F ⊆ \Clo (F)`.
+    
+      For the converse, we must show that :math:`F̄` is a clone that contains :math:`F`.
+    
+      Obviously :math:`F̄` contains the projection operations, :math:`F_0 ⊆ F̄`.
+
+      For every :math:`f ∈ F`, we have :math:`f π^k ∈ F_1 ⊆ F̄`, where :math:`k:= ρ f`.
+ 
+      We are reduced to showing that :math:`F̄` is closed under generalized composition. This follows from the following claim.
+ 
+      **Claim**. If :math:`f ∈ F_n` and :math:`g_0, \dots, g_{ρ f-1} ∈ F_m` are all :math:`k`-ary, then :math:`f g \in F_{n+m}`, where we have defined :math:`g: ρ f → (k → A) → A` to be the tuple given by :math:`g\,i = g_i` for each :math:`0 ≤ i < ρ f`.
+
+      Note that the types match up; indeed, for each :math:`a: (k → A) → A`, we have
+
+      .. math:: f (g ∘ a) = f(g_0(a_0, \dots, a_{k-1}), 
+ 
+      We prove the claim by induction on :math:`n`.
+      
+      If :math:`n = 0` then :math:`f` is a projection, so :math:`f g = g_i ∈ F_{0+m}` for some :math:`0≤ i < ρ f`.
+
+      Assume the claim holds for :math:`n` and that :math:`f ∈ F_{n+1} - F_n`.
+      
+      From the definition, there is a :math:`t`-ary operation :math:`f_i ∈ F` and a :math:`t`-tuple :math:`h = (h_0, \dots, h_{t-1}) ∈ t → F_n`, such that :math:`f = f_i h`. (Note that :math:`h: t → (ρ f → A) → A` is given by :math:`h(j) = h_j`, and that the arity of each :math:`h_i` must be equal to that of :math:`f`, namely :math:`ρ f`.)
+      
+      By the induction hypothesis, for each :math:`i ≤ k`, :math:`h_i' = h_i g \in F_{n+m}` (where, as above, :math:`g = (g_0, \dots, g_{k-1})`).
+      
+      Applying the definition, :math:`f_1 h' ∈ F_{n+m+1} = F_{(n+1)+m}`. Since 
+      
+      .. math:: f_1 h' = f_1 ∘ (h_1 g, \dots, h_t g) = f g,
+
+      the claim is proved. □
+
+------------------------
+
+.. index:: ! term, ! term algebra, ! σ-term 
+
+.. _terms:
+
+Terms
+-----
+
+**Formalization**. For a description of our implementation (in `Lean`_) of the objects described in this section, see :numref:`Chapter %s <clones-and-terms-in-lean>`.
+
+Fix a :term:`signature` :math:`σ = (F, ρ)`, let :math:`X` be a set of **variables**, and assume :math:`X ∩ F = ∅`.
+
+By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members of :math:`X ∪ F`, and we will denote the concatenation of such sequences by simple juxtaposition.
+
+Let :math:`F_0` denote the set of nullary operation symbols. We define by induction on :math:`n` the sets :math:`T_n` of **terms on** :math:`X ∪ F` as follows:
+
+.. math::      T_0 &= X ∪ F_0;\\
+           T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: ρf → T_n \},
+
+and we define the collection of **terms of signature** :math:`σ` **over** :math:`X` by :math:`T_σ(X) = ⋃_{n < ω}T_n`.
+
+By a :math:`σ`-**term** we mean a term in the signature :math:`σ`. 
+
+The definition of :math:`T_σ (X)` is recursive, indicating that
+
+  *terms can be implemented as an inductive type*
+
+(in Lean, for example). We confirm this in :numref:`Chapter %s <inductively-defined-types>` below.
+
+Before doing so, let us impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic facts about this important algebra. These will be formalized in :numref:`Chapter %s <inductively-defined-types>`, giving us a chance to show off inductively defined types in Lean.
+
+If :math:`t` is a term, then the **height** of :math:`t` is denoted by :math:`|t|` and defined to be the least :math:`n` such that :math:`t ∈ T_n`. The height of is a useful index for recursion and induction.
+
+.. Let :math:`ρ: T_σ(X) → ℕ` denote the **arity function for term**, defined as follows:
+.. .. math:: ρ t = \min \{n ∣t ∈ T_n,\; 0≤ n < ω\}.
+
+Notice that :math:`T_σ (X)` is nonempty iff :math:`X ∪ F_0` is nonempty.
+
+If :math:`T_σ (X)` is nonempty, then we can impose upon it an algebraic structure, which we denote by :math:`𝕋_σ (X)` (or :math:`𝕋` when :math:`σ` and :math:`X` are clear from context).
+
+We call :math:`𝕋_σ (X)` the **term algebra in the signature** :math:`σ` **over** :math:`X` (or, the :math:`σ`-**term algebra over** :math:`X`); it is constructed as follows:
+
+  For every basic operation symbol :math:`f ∈ F` let :math:`f^𝕋` be the operation on :math:`T_σ (X)` that maps each tuple :math:`s: ρ f → T_σ (X)` to the formal term :math:`f\,s`; define :math:`𝕋_σ(X)` to be the algebra with universe :math:`T_σ (X)` and basic operations :math:`\{f^𝕋 | f ∈ F\}`. [5]_
+
+Let us now prove a couple of easy but important consequences of these definitions.
+
+.. about the :math:`σ`-term algebra over :math:`X`.
+
+.. _obs-six:
+
+.. proof:observation::
+
+   #. :math:`𝕋 := 𝕋_σ(X)` is generated by :math:`X`.
+ 
+   #. For every :math:`\sigma`-algebra :math:`𝔸 = ⟨A, F^𝔸⟩` and function :math:`g: X → A` there is a unique homomorphism :math:`h: 𝕋 → 𝔸` such that :math:`h|_X = g`.
+ 
+   .. container:: toggle
+    
+      .. container:: header
+     
+         *Proof*.
+     
+      The definition of :math:`𝕋` exactly parallels the construction in :numref:`Theorem %s <thm-1-14>`. That accounts for the first assertion.
+     
+      For the second assertion, define :math:`h\,t` by induction on the :term:`height` of :math:`|t|`.
+     
+      Suppose :math:`|t| = 0`.  Then :math:`t ∈ X ∪ F_0`.
+      
+      If :math:`t ∈ X`, then define :math:`h\,t = g\,t`. If :math:`t ∈ F_0`, then let :math:`h\,t = t^𝔸`.
+     
+      For the inductive step, assume :math:`|t| = n + 1`. Then :math:`t = f\,s` for some :math:`f ∈ F` and :math:`s: ρ f → T_n`, where for each :math:`0 ≤ i< ρ f` the term :math:`s\, i` has height at most :math:`n`. We define :math:`h\,t = f^𝔸(h ∘ s) = f^𝔸(h\,s_1, \dots, h\,s_k)`.
+     
+      By its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`. The uniqueness of :math:`h` follows from :numref:`Obs %s <obs-two>`. ☐
+
+.. index:: interpretation (of a term), ! arity (of a term)
+
+.. _interpretation-of-a-term:
+
+Interpretation of a term
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+..  and let :math:`T_n := T_σ(X_n)` be the subalgebra of :math:`T_σ(X_ω)` generated by :math:`X_n`.  Then, :math:`T_0 ⊆  T_1 ⊆ T_2 ⊆ \cdots` and :math:`T_σ(X_ω) = ⋃_{n<ω}  T_n`.
+
+We denote and define the set :math:`X := \{x_0,x_1,\dots \}` of variable symbols, and for each natural number :math:`n` we let :math:`X_n:=\{x_0,x_1,\dots, x_{n-1}\}`.
+
+Let :math:`σ = (F, ρ)` be a signature, :math:`𝔸` a :math:`σ`-algebra, and :math:`𝕋` the :math:`σ`-term algebra over :math:`X`; that is, 
+
+.. math:: 𝔸 := ⟨A, F^𝔸⟩ \quad \text{ and } \quad 𝕋 := ⟨T_σ(X), F^𝕋⟩. 
+
+Each operation symbol :math:`f ∈ F` gives rise to
+
+#.  a :math:`ρ f`-ary operation on :math:`T_σ(X)`, denoted by :math:`f^𝕋`, which maps each :math:`ρ f`-tuple :math:`s: ρ f → T_σ(X)` to the formal term :math:`f \,s` in :math:`T_σ(X)`, and
+
+#.  a :math:`ρ f`-ary operation on :math:`A`, denoted by :math:`f^𝔸`, which maps each :math:`ρ f`-tuple :math:`a: ρ f → A` to the element :math:`f^𝔸 \,a` in :math:`A`. The operation :math:`f^𝔸` is called the **interpretation of** :math:`f` **in the algebra** :math:`𝔸`.  
+
+In the present section we explain how to define the interpretation of a :math:`σ`-term in a :math:`σ`-algebra.
+
+As usual, for each :math:`0<n<ω` we identify the :math:`n`-tuple :math:`(x_0, x_1, \dots, x_{n-1})` with the function :math:`x: n → X_n` defined by :math:`x\, i = x_i` :math:`(0≤i<n)`.
+
+Recall, a term :math:`t` is either a variable, say, :math:`t = x`, or has the form :math:`t = f \,s` for some operation symbol :math:`f ∈ F`, and some :math:`ρ f`-tuple :math:`s: ρ f → T_σ (X)` of terms.
+
+.. and suppose :math:`|t| = n`.
+..  : (n → X_n) → T_n` be an :math:`n`-ary term. 
+
+Let :math:`t ∈ T_σ(X)` be a term. Define the **operation** :math:`t^𝔸` **on** :math:`A` by recursion on the :term:`height` :math:`|t|` of :math:`t` as follows: for each tuple :math:`a: X → A` of :math:`A`, 
+
+#. (:math:`|t| = 0`) if :math:`t` is the variable :math:`x_i ∈ X`, then :math:`t^𝔸 \, a = π^X_i\, a = a\, i`,
+#. (:math:`|t| = n+1`) if :math:`t = f\, s` where :math:`f ∈ F` is an operation symbol and :math:`s: ρ f → T_n` is a tuple of terms whose heights are at most :math:`n` (i.e., :math:`∀ i < ρf, |s\, i| ≤ n`), then :math:`t^𝔸 = f^𝔸 \, s^𝔸`.
+ 
+.. .. Let :math:`X_ω := \{x_0, x_1, \dots\}` be a collection of variables and define :math:`X_n:=\{x_0, x_1, \dots, x_{n-1}\}`.
+
+In the next observation, assume :math:`𝔸 = ⟨A, F^𝔸⟩` and :math:`𝔹 = ⟨B, F^𝔹⟩` are algebras in the same signature :math:`σ = (F, ρ)`, and let :math:`t ∈ T_σ (X)` be an :math:`n`-ary term.
+
+In particular, as we just explained, :math:`t` has an interpretation in :math:`𝔸`, denoted by :math:`t^𝔸 a = t^𝔸 (a\, 0, a\, 1, \dots, a\, (n-1))`, where :math:`a: n → A`, as well as an interpretation :math:`t^𝔹: (n → B) → B` in :math:`𝔹`.
+    
+.. _thm-4-32:
+
+.. _obs-seven:
+
+.. proof:observation:: homomorphisms commute with terms
+
+   #. :math:`g: 𝔸 → 𝔹` is a homomorphism, then :math:`g ∘ a: n → B` is the :math:`n`-tuple whose :math:`i`-th component is :math:`(g ∘ a)\, i = g(a\, i)`, and
+  
+      .. math:: g(t^𝔸 a) = t^𝔹(g ∘ a).
+
+   .. container:: toggle
+    
+      .. container:: header
+    
+        *Proof*.
+    
+      This is an easy induction on :math:`|t|`. ☐
+    
+.. _obs-eight:
+
+.. proof:observation:: terms respect congruences
+
+   If :math:`θ` is a congruence of :math:`𝔸` and :math:`a, a': n → A` are :math:`n`-tuples over :math:`A`, then
+    
+   .. math:: (a, a') ∈ θ \; ⟹  \; (t^𝔸\,a, t^𝔸\,a') ∈ θ.
+
+   .. container:: toggle
+    
+      .. container:: header
+    
+        *Proof*.
+    
+      This follows from :numref:`Obs %s <obs-seven>` by taking :math:`⟨B, F^𝔹⟩ = ⟨A, F^𝔸⟩/θ = ⟨A/θ, F^{𝔸/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
+    
+.. _obs-nine:
+
+.. proof:observation:: subuniverse generation as image of terms
+
+   If :math:`Y` is a subset of :math:`A`, then
+
+      .. math:: \Sg^{𝔸}(Y) = \{ t^𝔸 \, a ∣ t ∈ T_σ(X_n), \, n ∈ ℕ, \; a: ρ t → Y\}.
+
+   .. container:: toggle
+    
+      .. container:: header
+    
+        *Proof*.
+    
+      A straightforward induction on the height of :math:`t` shows that every subuniverse is closed under the action of :math:`t^𝔸`. Thus the right-hand side is contained in the left. On the other hand, the right-hand side is a subuniverse that contains the elements of :math:`Y` (take :math:`t = x_1`), so it contains :math:`\Sg^{𝔸}(Y)` as the latter is the smallest subuniverse containing :math:`Y`. ☐
+
+.. todo:: complete this section (include material on free algebras)
+
+.. .. index:: ! Malcev condition, ! Taylor term
+..
+.. Special terms
+.. ~~~~~~~~~~~~~~
+.. .. _thm-4-3:
+..
+.. .. proof:theorem::
+..
+..    Let :math:`X` be a set and :math:`σ = (F, ρ)` a signature. Define
+..
+..    .. math:: F_0 &= X;\\
+..          F_{n+1} &= F_n ∪ \{ f g ∣ f ∈ F, g : ρf → (F_n ∩ (ρ g → X)) \}, \quad n < ω.
+..
+..    Then :math:`\Clo ^X(F) = ⋃_n F_n`.
+..
+..
+.. For a nonempty set :math:`A`, we let :math:`𝖮_A` denote the set of all finitary operations on :math:`A`. That is, :math:`𝖮_A = ⋃_{n∈ ℕ} A^{A^n}` on :math:`A` is a subset of :math:`𝖮_A` that contains all projection operations and is closed under the (partial) operation of :ref:`general composition <general-composition>`.
+..
+.. If :math:`𝔸 = ⟨ A, F^𝔸 ⟩` denotes the algebra with universe :math:`A` and set of basic operations :math:`F`, then :math:`\Clo  (𝔸)` denotes the clone generated by :math:`F`, which is also known as the **clone of term operations** of :math:`𝔸`.
+..
+.. We will discuss varieties in more detail later, but for now define a :index:`variety` to be a collection of algebras of the same signature which is defined by a set of identities. [3]_ 
+..   
+.. In 1977, Walter Taylor showed (:cite:`Taylor1977`) that a variety 𝕍 satisfies some nontrivial :term:`idempotent` :term:`Malcev condition` if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`0 ≤ i < n` there is an identity of the form 
+..
+..    .. math:: t(∗, \cdots, ∗, x, ∗, \cdots, ∗) ≈ t(∗, \cdots, ∗, y, ∗, \cdots, ∗)
+..
+.. that is true in 𝕍 and is such where distinct variables :math:`x` and :math:`y` appear in the :math:`i`-th position on each side of the identity. Such a term :math:`t` now goes by the name :index:`Taylor term`.
+
+.. .. [3]
+..   We will also have much to say about Malcev conditions, but for now we ask the reader to trust us when we say that such conditions play an important role in many deep results in universal algebra.
 
 --------------------------
 
@@ -664,12 +1275,7 @@ Here is a small collection of basic observations that we will need later. When w
 **Formalization**. Our formal implementation (in `Lean`_) of :numref:`Obs %s <obs-four>` is described in :numref:`factoring-homomorphisms`, and is included in the `birkhoff.lean`_ file of the `lean-ualib`_ library.
 
 
-.. Formalization
-.. -------------
-
-.. Our formal implementation (in `Lean`_) of these objects is described in :numref:`Sections %s <basic-facts-in-lean>`, :numref:`%s <terms-in-lean>`, and :numref:`%s <clones-in-lean>`.
-
-------------------------
+---------------------------
 
 .. rubric:: Footnotes
 
@@ -684,6 +1290,17 @@ Here is a small collection of basic observations that we will need later. When w
 
 .. [4]
    In retrospect, a more appropriate name for :math:`\mathbf{0} σ` might be :math:`Δ_σ`, or even :math:`=_σ`, but this may lead to conflicts with more standard notational conventions.
+
+.. [5]
+   By "the constants on :math:`A`" we mean the **constant operations**; i.e., functions :math:`f: A → A` such that :math:`∀ a ∈ A, f(a) = c`, for some :math:`c ∈ A`.
+
+.. [6]
+   The construction of :math:`𝕋_ρ (X)` may seem to be making something out of nothing, but it plays an significant role in the theory.
+
+.. include:: hyperlink_references.rst
+
+
+
 
 
 .. include:: hyperlink_references.rst

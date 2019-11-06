@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
+# File: conf.py
+# Date: 22 May 2019
+# Updated: 5 Nov 2019
+# Last Author: William DeMeo
+#
 # Lean Universal Algebra Library documentation build configuration file, created by
 # sphinx-quickstart on Mon May 13 2019.
 # Note that not all possible configuration values are present in this

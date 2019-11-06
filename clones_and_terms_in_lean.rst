@@ -1,16 +1,18 @@
-.. File: terms_and_clones_in_lean.rst
+.. File: clones_and_terms_in_lean.rst
+.. Previous name(s): terms_and_clones_in_lean.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 2019.10.11
+.. Date: 11 Jun 2019
+.. Update: 5 Nov 2019
 .. Copyright (c) 2019 William DeMeo (see the LICENSE file)
 
 .. include:: _static/math_macros.rst
 
 .. highlight:: lean
 
-.. _terms-and-clones-in-lean:
+.. _clones-and-terms-in-lean:
 
 ==================================
-Terms and Clones in Lean
+Clones and Terms in Lean
 ==================================
 
 .. _inductively-defined-types:
@@ -22,42 +24,19 @@ We briefly introduced inductively defined types in :numref:`inductive-types`.  M
 
 The availability and utility of inductively defined types were among our primary original motivations for formalizing universal algebra in a language (like Lean) that supports such types. In the present chapter, we show how these types come into play in our formalization project.  
 
----------------------------------------------
+-------------------------------
 
-.. index:: variables, word, term, free algebra
-.. index:: universal for; σ-algebras
-.. index:: absolutely free for; σ-algebras
+.. _the-recursor:
 
-.. _terms-in-lean:
+The recursor
+------------
 
-Terms in Lean
--------------
+Each inductively defined type, say ``foo``, is accompanied by an elimination principle known as a **recursor** (denoted by ``foo.rec`` in Lean). This elimination principle is what makes the type "inductive"; it allows us to define a function on ``foo`` by assigning values for each of ``foo``'s constructors.
 
-The Lean code described in this section is in the source files ``free.lean`` and ``term.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
+.. todo:: write this section; include an example.
 
-As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`T(X)` of all terms of a given signature over a collection :math:`X` of variables.
+.. \ref{sec:leans-hierarchy-of-sorts-and-types})
 
-.. include:: _static/free.lean.1.rst
-
-Notice the ``local notation`` that is defined so that we can write, e.g., ``f: ℱ`` instead of ``f: σ.ℱ`` and ``ρ f`` instead of ``σ.ρ f``. This is merely syntactic sugar that makes the formal Lean syntax for operation symbols match the informal syntax familiar to algebraists. [2]_ 
-
-The collection of terms over :math:`X` along with the operations :math:`F^{𝕋(X)} := \{\mathsf{app} f ∣ f: F\}` forms an algebra in the signature :math:`σ = (F, ρ)`, which we denote and define by :math:`𝕋(X) = ⟨T(X), F^{𝕋(X)}⟩` .
-
-Now, suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the signature σ and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
-
-Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is **universal for** σ-algebras. Some authors say, ":math:`𝕋(X)` is **absolutely free for** σ-algebras," in this and only this case.
-
-Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
-
-.. include:: _static/free.lean.2.rst
-
-If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of :math:`h` to all of :math:`𝕋(X)` is defined inductively as follows:
-
-.. include:: _static/free.lean.3.rst
-
-To prove that the term algebra is universal for σ-algebras, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
-
-.. include:: _static/free.lean.4.rst
 
 ---------------------------------------------
 
@@ -100,18 +79,43 @@ Finally, we check that the foregoing definition is indeed a clone and that it is
 
 .. include:: _static/clone.lean.3.rst
 
--------------------------------
 
-.. _the-recursor:
+---------------------------------------------
 
-The recursor
-------------
+.. index:: variables, word, term, free algebra
+.. index:: universal for; σ-algebras
+.. index:: absolutely free for; σ-algebras
 
-Each inductively defined type, say ``foo``, is accompanied by an elimination principle known as a **recursor** (denoted by ``foo.rec`` in Lean). This elimination principle is what makes the type "inductive"; it allows us to define a function on ``foo`` by assigning values for each of ``foo``'s constructors.
+.. _terms-in-lean:
 
-.. todo:: complete this section; include an example.
+Terms in Lean
+-------------
 
-.. \ref{sec:leans-hierarchy-of-sorts-and-types})
+The Lean code described in this section is in the source files ``free.lean`` and ``term.lean``, which reside in the ``src`` directory of the lean-ualib_ repository. [1]_
+
+As a second demonstration of inductive types in Lean, we define a type representing the (infinite) collection :math:`T(X)` of all terms of a given signature over a collection :math:`X` of variables.
+
+.. include:: _static/free.lean.1.rst
+
+Notice the ``local notation`` that is defined so that we can write, e.g., ``f: ℱ`` instead of ``f: σ.ℱ`` and ``ρ f`` instead of ``σ.ρ f``. This is merely syntactic sugar that makes the formal Lean syntax for operation symbols match the informal syntax familiar to algebraists. [2]_ 
+
+The collection of terms over :math:`X` along with the operations :math:`F^{𝕋(X)} := \{\mathsf{app} f ∣ f: F\}` forms an algebra in the signature :math:`σ = (F, ρ)`, which we denote and define by :math:`𝕋(X) = ⟨T(X), F^{𝕋(X)}⟩` .
+
+Now, suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra in the signature σ and :math:`h : X → A` is an arbitrary function.  We will show that :math:`h : X → A` has a unique *extension* (or *lift*) to a homomorphism from :math:`𝕋(X)` to 𝔸.
+
+Since 𝔸 and :math:`h : X → A` are arbitrary, this unique homomorphic lifting property holds universally; accordingly we say that the term algebra :math:`𝕋(X)` is **universal for** σ-algebras. Some authors say, ":math:`𝕋(X)` is **absolutely free for** σ-algebras," in this and only this case.
+
+Before implementing the formal proof of this fact in Lean, let us first define some domain specific syntactic sugar.
+
+.. include:: _static/free.lean.2.rst
+
+If :math:`h : X → A` is a function defined on the generators of the term algebra, then the *lift* (or *extension*) of :math:`h` to all of :math:`𝕋(X)` is defined inductively as follows:
+
+.. include:: _static/free.lean.3.rst
+
+To prove that the term algebra is universal for σ-algebras, we show that the lift of an arbitrary function :math:`h : X → A` is a homomorphism and that this lift is unique.
+
+.. include:: _static/free.lean.4.rst
 
 ---------------------------------------------------
 

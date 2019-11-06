@@ -15,6 +15,7 @@
 .. _Coq: http://coq.inria.fr
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
 .. _Dependent Types: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types
+.. _Emacs: https://www.gnu.org/software/emacs/
 .. _Equality Section: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
@@ -62,6 +63,7 @@
 .. _this gist: https://gist.github.com/andrejbauer/3cc438ab38646516e5e9278fdb22022c
 .. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
 .. _type theory: https://en.wikipedia.org/wiki/Type_theory
+.. _Type Theory and Formal Proof: <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
 .. _vscode: https://code.visualstudio.com/
 .. _wf.lean: https://github.com/leanprover/lean/blob/master/library/init/wf.lean
 .. _william: https://gitlab.com/ualib/lean-ualib/tree/william
