@@ -88,29 +88,30 @@ There are installation instructions in the main README.md file in that repositor
 
 #. clone the lean-ualib_ repository with, e.g.,
 
-   ```sh
-   git clone git@gitlab.com:ualib/lean-ualib.git
-   ```
+   .. code-block:: bash
+
+      git clone git@gitlab.com:ualib/lean-ualib.git
+
 
    OR
 
-   ```sh
-   git clone https://gitlab.com/ualib/lean-ualib.git
-   ```
+   .. code-block:: bash
+
+      git clone https://gitlab.com/ualib/lean-ualib.git
+
 
 #. Change into the lean-ualib directory and run `leanpkg build`:
 
-   ```sh
-   cd lean-ualib;
-   leanpkg build
-   ```
+   .. code-block:: bash
+
+      cd lean-ualib; leanpkg build
 
 -----------------------------------
 
 Acknowledgments
 ---------------
 
-This manual and the software library that it documents are open access projects maintained on Gitlab. Besides the main authors, a number of other people have also contributed to the ualib project.  We are especially grateful to Jeremy Avigad, Andrej Bauer, Clifford Bergman, Peter Jipsen, Miklos Maroti, and Ralph Freese for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
+This manual and the software library that it documents are open access projects maintained on Gitlab. Besides the main authors, a number of other people have contributed to the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project.  We are especially grateful to Jeremy Avigad, Andrej Bauer, Clifford Bergman, Venanzio Capretta, Peter Jipsen, Miklos Maroti, and Ralph Freese for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
 
 ----------------------
 
