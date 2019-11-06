@@ -11,9 +11,9 @@ Preface
 Vision
 ----------
 
-To support the formalization of mathematical theorems in type theory, we have begun developing a software library, called the `Lean Universal Algebra Library`_ (or "𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺" for short).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
+To support the formalization of mathematical theorems in type theory, we have begun developing a software library, called the `Lean Universal Algebra Library`_ (or 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 for short).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
 
-Our vision for 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 originated with the observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, the types of :term:`type theory`---in particular, :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`---make possible elegant representations of recursively defined objects, as well as concise proofs of their properties.
+Our vision for the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project originated with the observation that, on the one hand, a number of the most basic and important constructs in universal algebra can be defined recursively, while on the other hand, the types of :term:`type theory`---in particular, :term:`dependent <dependent type>` and :term:`inductive types <inductive type>`---make possible elegant representations of recursively defined objects, as well as concise proofs of their properties.
 
 Indeed, our mathematical theories can be codified in type theory using a Lean_, which is a programming language and :term:`proof assistant` that not only supports dependent and inductive types, but also provides powerful :term:`proof tactics <proof tactic>` for proving properties of the objects that inhabit these types.
 
@@ -61,7 +61,7 @@ We conclude this section with a note that is important for anyone interested in 
 Intended audience
 ------------------
 
-This document describes the Lean Universal Algebra Library with (hopefully) enough details so that working mathematicians, and possibly some normal people, might be able to learn enough about Lean and our library to put them to use when creating, formalizing, and verifying new mathematics.
+This document describes the 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project and the associated Lean library (lean-ualib_) Lean Universal Algebra Library with (hopefully) enough details so that working mathematicians, and possibly some normal people, might be able to learn enough about Lean and our library to put them to use when creating, formalizing, and verifying new mathematics.
 
 While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra (as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`) and, to a lesser extent, category theory (as presented by categorytheory.gitlab.io_ or `Category Theory in Context`_). Category theory is not needed until :numref:`Chapter %s <postmodern-algebra>`.
 
