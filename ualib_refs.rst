@@ -68,6 +68,27 @@
        NOTE = {Version 8.0},
        URL = {http://coq.inria.fr}
      }
+     @ARTICLE{Coquand:1988,
+       AUTHOR = {T. Coquand and G. Huet},
+       TITLE={The Calculus of Constructions},
+       JOURNAL = {Inform. and Comput.},
+       VOLUME = {76},
+       NUMBER = {2--3},
+       PAGES = {95--120},
+       YEAR = {1988}
+     }
+    @INPROCEEDINGS{Coquand:1990,
+       AUTHOR = {T. Coquand and C. Paulin},
+       TITLE={Inductively defined types},
+       YEAR = {1990},
+       BOOKTITLE = {COLOG-88},
+       SERIES = {Lecture Notes in Computer Science},
+       VOLUME = {417},
+       PAGES = {50--66},
+       LOCATION = {Tallinn, 1988},
+       PUBLISHER = {Springer},
+       ADDRESS = {Berlin}
+     }
      @MISC {Constable:1979,
        AUTHOR = {Robert L. Constable and Joseph L. Bates},
        TITLE = {PRL Project: Proof/Program Refinement Logic},
@@ -101,7 +122,7 @@
        URL = {https://arxiv.org/abs/1712.06469}
      }
      @BOOK {McKenzie:1987,
-       AUTHOR = {McKenzie, Ralph N. and McNulty, George F. and Taylor, Walter F.},
+       AUTHOR = {Ralph N. McKenzie and George F. McNulty and Walter F. Taylor},
        TITLE = {Algebras, lattices, varieties. {V}ol. {I}},
        SERIES = {The Wadsworth \& Brooks/Cole Mathematics Series},
        PUBLISHER = {Wadsworth \& Brooks/Cole Advanced Books \& Software, Monterey, CA},

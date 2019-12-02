@@ -43,6 +43,7 @@ Back Matter
 
     refs
     glossary
+    appendix_acronyms_and_symbols
     genindex
     license
 

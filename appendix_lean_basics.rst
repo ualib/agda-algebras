@@ -18,9 +18,12 @@ Lean Basics
 .. contents:: :local:
     :depth: 1
 
-In this appendix we describe the various features and aspects of Lean_ on which our algebra library (lean-ualib_) depends.
+Introduction
+-------------
 
-Some of the topics discussed here involve the `Lean standard library`_.  Others relate to the mathlib_ Lean community project.
+In this appendix we describe the various features and aspects of Lean_, the proof assistant and programming language in and for which the Lean Universal Algebra Library (lean-ualib_) is implemented.
+
+Some of the topics discussed here involve the `Lean standard library`_ while others relate to the Lean community project called Mathlib_ (though Mathlib_ may itself be considered part of the "standard" Lean library).
 
 Some good references for the material in this chapter are the following:
 
@@ -30,19 +33,52 @@ Some good references for the material in this chapter are the following:
   + `Logic and Proof`_
   + `Mathlib documentation`_
 
+-------------------------
+
+
+.. index:: ! typing judgment, ! term, constant, lambda abstraction, application, type universe, equivalence relation, definitional equality, ! Calculus of Inductive Constructions, ! lambda calculus
+
+
+Types and terms in the CIC
+
+--------------------------
+
+Like Coq_, Lean is an extension of the :term:`Calculus of Inductive Constructions` (:term:`CIC`) (:cite:`Coquand:1988` :cite:`Coquand:1990`), which is an extension of the :term:`lambda calculus`.
+
+The substitution of ``a`` for every occurrence of ``x`` in the term ``t`` is denoted by some authors as ``t[a/x]`` and by other authors as ``[a/x]t``.  Both expressions are read as "``a`` for ``x`` in ``t``."
+
+Type theory is founded upon judgments.  A **typing judgment** is a judgment of the form ``t:T``, which expresses the assertion, "the term ``t`` is of type ``T``."  Equivalent means of expressing the same judgment are the following: "``t`` *has* type ``T``," "``t`` *inhabits* ``T``," and "``t`` is an *inhabitant* of ``T``."
+
+Thus, the colon symbol is a relation from terms to types, and the pair ``(t, T)`` belongs to this relation iff ``t:T`` iff ``t`` has type ``T``.
+
+Technically, each term inhabits exactly one type so ``:`` is actually a *function* (from the collection of terms to the collection of types).  [1]_, [2]_
+
+A **term** in the CIC is one of the following:
+
+* A **constant** is a named, typed declaration. For example, ``nat.zero`` is a constant of type ``nat``. The constructors and recursor of an inductive type can be viewed as constants.
+
+* A **lambda abstraction** inhabits a function type. If ``t:T`` is a term in which a variable ``x:A`` (possibly) appears, then the lambda abstraction ``λ(x:A),t`` is a term of type ``Π(x:A),T``.
+
+* An **application** is formed by applying a term of function type (e.g., ``α → β``) to an argument (e.g., of type ``α``). Function application is denoted by *apposition*. More precisely, a function's argument appears immediately after the function symbol; e.g., ``M: α → β`` applied to ``N: α`` is denoted by ``M N``.
+
+* A **type universe** is a type of types. We denote the type universe at *level* ``u`` by ``Type u``. Type universes usually appear as the second (right-hand side) argument of the colon ``:`` relation.  However, type universes are themselves terms in the language, and each term has a type.  The type of ``Type u`` is the type universe that is one level higher than ``u``; that is, ``Type u: Type (u+1)``.  (See also the section on :ref:`leans-type-hierarchy` below.)
+
+Terms of the CIC have a computational interpretation. There are reduction rules that define an :term:`equivalence relation` on the set of terms. The application of a :term:`Pi <Pi type>` or lambda abstraction to a term of the abstracted type reduces to a substitution: that is, if ``T:B`` and ``a:A``, then ``(λx:A,T) a`` reduces to ``T[a/x]``.
+
+Two terms that are equivalent under this notion of reduction are said to be :term:`definitionally equal`. This sense of equality is distinct from the internal notion of equality (defined below).
+
 .. _leans-type-hierarchy:
 
 Lean's type hierarchy
 -----------------------
 
-(See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.)
+The structure of type universes varies between implementations of the CIC. To consistently include general inductive types, the CIC is organized as a hierarchy of type universes ``Sort u``, for ``u ≥ 0``, such that ``Sort u: Sort (u+1)``. The rules for computing the universe level of inductively defined types are subtle and discussed in :cite:`Coquand:1990` and :cite:`deMoura:2014`.
 
-Like its more mature cousins Coq and Agda, Lean takes for its logical foundations *dependent type theory* with *inductive types* and a countable hierarchy of *universes*. However, unlike Coq or Agda, Lean's universes are *non-cumulative*. This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use :term:`universe polymorphism` and lifting constructions.
-
-Sort and Type
-~~~~~~~~~~~~~
+Like its more mature cousins Coq_ and Agda_, Lean takes for its logical foundations *dependent type theory* with *inductive types* and a countable hierarchy of *universes*. However, unlike Coq or Agda, Lean's universes are *non-cumulative*. This is not a problem since, in places where we might exploit universe cumulativity in Coq, we can instead use :term:`universe polymorphism` and lifting constructions.
 
 Here is a brief summary of the explanation given in the `Lean Reference Manual`_ of the correspondence between ``Sort`` and ``Type``.
+
+(See also the section of the `Lean Tutorial`_ called `Universe Levels <http://leanprover.github.io/tutorial/06_Inductive_Types.html>`_.)
 
   Every type in Lean is, by definition, an expression of type ``Sort u`` for some universe level ``u``. A universe level is one of the following:
 
@@ -127,7 +163,7 @@ By default, Lean inserts, and eagerly tries to infer the types of, implicit argu
 
    In this case, Lean behaves a bit presumptuously---the type ``α`` is not known, so there's no evidence for the typing judgments ``x: ℕ`` nor ``id₁: ℕ → ℕ``.
 
-   If instead we use double curly braces ``{{ … }}`` (or their unicode equivalent ``⦃ … ⦄``) this tells the parser to be more conservative about inserting the argument and inferring its type. [1]_
+   If instead we use double curly braces ``{{ … }}`` (or their unicode equivalent ``⦃ … ⦄``) this tells the parser to be more conservative about inserting the argument and inferring its type. [3]_
 
    ::
 
@@ -239,7 +275,33 @@ To see why ``Σ(x:A),B x`` is a *dependent type*, consider the following example
 Inductive types in Lean
 -------------------------
 
-.. todo:: write brief intro to inductive types
+Types can be defined inductively, by providing a list of their **constructors**, which, as their name suggests, indicate how to *construct* inhabitants of the type.
+
+.. proof:example::
+
+   * The **empty type** is an inductive type with no constructors.
+
+   * The **unit type** is an inductive type with one constructor, ``unit.star: unit``
+
+   * the **natural number type** is an inductive type with two constructors,
+
+       ``nat.zero : nat``
+    
+       ``nat.succ : nat → nat``
+
+Every inductive type has an associated **recursor** (or, **destructor**), which is a term describing how to define a function mapping out of the type.
+
+.. proof:example::
+
+   To define ``f: nat → int`` using ``nat.rec``, we provide two arguments. The first is the value of ``f (nat.zero)``; the second (of type ``nat → int → int``), is the value of ``f (nat.succ n)``, which is defined in terms of ``n`` and the value of ``f n``.
+
+In addition, the application of the recursor for an inductive type I to a closed term i : I
+reduces to the application to i of the corresponding case of the recursor. If f : nat → nat is
+defined using nat.rec , as above, with arguments k : nat and λ m v, t , then f nat.zero reduces
+to k and f (nat.succ n) reduces to t[n/m][(f n)/v] .
+Following the Curry–Howard correspondence [85], propositions can be expressed in the same
+language as datatypes. One can think of a term P : Type as a proposition, and a term p : P as a
+14
 
 ------------------------------------
 
@@ -338,7 +400,7 @@ To summarize, on top of the framework of universes, :term:`dependent function ty
 + a :term:`quotient` construction, which implies :term:`function extensionality`
 + a :term:`Choice` principle, which produces data from an existential proposition.
 
-The first two of these are compatible with byte-code evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations. [2]_
+The first two of these are compatible with byte-code evaluation, despite blocking normalization within Lean, whereas the third does not admit computational interpretations. [4]_
 
 Philosophical and foundational issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -556,7 +618,7 @@ We can then define the empty set, ∅, as well as set intersection, union, etc. 
 
   end extensionality
 
-The following is an example of how function extensionality can block computation in the Lean kernel. [3]_
+The following is an example of how function extensionality can block computation in the Lean kernel. [5]_
 
 ::
 
@@ -651,16 +713,24 @@ Lean_ is an :term:`extensional`, :term:`impredicative` :term:`ITP` developed at 
 .. rubric:: Footnotes
 
 .. [1]
+   Although, as we will see, *coercions* can make it less clear that ``:`` is really a function.
+
+.. [2]
+   As with every binary relation, ``:`` induces a natural Galois correspondence. If ``𝒞 ⊆ Terms`` is a collection of terms and ``𝒯 ⊆ Types`` a collection of types, then we could define,
+
+   .. math:: \operatorname{Fix} 𝒞 &:= \{𝖳: \mathsf{Type} ∣ 𝗍 : 𝖳 \text{ for all } 𝗍 ∈ 𝒞 \}\\ \operatorname{Inv}𝒯  &:= \{t: \mathsf{Term} ∣ 𝗍 : 𝖳 \text{ for all } 𝖳 ∈ 𝒯\}.
+
+.. [3]
    On some systems, typing ``\{{`` and hitting the spacebar produces both left and right double curly braces---i.e., ``⦃ ⦄``.   On other systems, perhaps the ``\}}`` is needed for the closing ``⦄`` symbol. If neither works, the ascii symbols ``{{`` and ``}}`` may be used instead.
 
 .. .. [2] The symbol ``⋂`` is produced by typing ``\bigcap``, and the ``0`` subscript is obtained by typing ``\0``.
 
-.. [2]
+.. [4]
    See the `Axioms and Computation`_ section of the `Theorem Proving in Lean`_ tutorial.
 
 
-.. [3]
-   See, e.g., `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
+.. [5]
+   See `Section 24 of Logic and Proof <https://leanprover.github.io/logic_and_proof/nd_quickref.html>`_.
 
 
 .. .. [2]
