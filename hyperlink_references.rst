@@ -41,7 +41,7 @@
 .. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
 .. _logic.lean: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
 .. _master: https://gitlab.com/ualib/lean-ualib/tree/master
-.. _mathlib: https://github.com/leanprover-community/mathlib/
+.. _Mathlib: https://github.com/leanprover-community/mathlib/
 .. _Mathlib documentation: https://leanprover-community.github.io/papers/mathlib-paper.pdf
 .. _`mathlib/src/data/set/basic.lean`: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
 .. _More on Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments

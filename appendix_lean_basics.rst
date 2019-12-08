@@ -212,8 +212,6 @@ Lean does most of these things simultaneously. For example, the term constructed
 
 -----------------------
 
-.. index:: dependent type
-
 .. _dependent-types-in-lean:
 
 Dependent types in Lean
@@ -223,7 +221,7 @@ In this section we describe some of the most important :term:`dependent types <d
 
 (For a more general discussion of dependent types, please see the :ref:`section on type theory <type-theory>` and, more specifically, the :ref:`subsection on dependent types <dependent-types>`.)
 
-.. _pi-type:
+.. _pi-type-sec:
 
 Pi type
 ~~~~~~~
@@ -245,7 +243,7 @@ To see why ``Π(x:A),B x`` is a *dependent type*, consider the following example
 
 .. index:: ! type of; dependent pairs
 
-.. _sig-type:
+.. _sigma-type-sec:
 
 Sigma type
 ~~~~~~~~~~~
@@ -320,7 +318,7 @@ Of course, adding axioms to a foundational system can be dangerous. Apart from t
 
 Type theory in general (and Lean in particular) is designed to support both constructive (or "computational") reasoning *and* classical reasoning, and the assertion that type theory (or Lean) is at odds with classical reasoning is simply false. Rather, we can introduce classical reasoning withing the logical framework of type theory (and Lean) as desired, as long as we keep in mind that, if we do so, then our proofs may no longer have computational content.
 
-If we adhere to the "computationally pure" fragment type theory, forgoing classical axioms and derivation rules, then we can rest assured that closed expressions in the system evaluate to :term:`canonical normal forms <canonical normal form>`. For example, every closed, computationally pure expression of type ℕ will reduce to a number.
+If we adhere to the "computationally pure" fragment type theory, forgoing classical axioms and derivation rules, then we can rest assured that closed expressions in the system evaluate to :term:`canonical normal forms <canonical form>`. For example, every closed, computationally pure expression of type ℕ will reduce to a number.
 
 ---------------------
 
@@ -445,10 +443,9 @@ If we adopt a proof-irrelevant ``Prop``, then we might consider it legitimate to
 
 It is only the :term:`Choice` principle, discussed in more detail `here <https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#choice>`_, that completely erases the distinction between the "proof-irrelevant" and "data-relevant" parts of the theory.
 
-.. index:: ! proposition extensionality
 .. index:: extensional equality of; propositions
 
-.. _proposition-extensionality:
+.. _proposition-extensionality-sec:
 
 Proposition extensionality
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -169,7 +169,7 @@ We explain how the correspondence between tuples and functions works using a sim
 The ``algebra_on`` type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses a :ref:`dependent function type <pi-type>` (or "Pi type").
+Before defining a type of universal algebras, we first define a type called ``algebra_on`` which will be the **type of interpretations of operations** of a given signature. Our definition of ``algebra_on`` uses a :term:`dependent function type` (or "Pi type").
 
 Given a signature :math:`σ = (F, ρ)` and a carrier type :math:`α`, an inhabitant of ``algebra_on σ α`` is determined by assigning an interpretation to each operation symbol :math:`f : F`.  Such an interpretation is a function of type :math:`(ρ f → α) → α` (which *depends* on :math:`f`).
 
@@ -181,7 +181,7 @@ Here is the implementation.
 
 .. include:: _static/basic.lean.6.rst
 
-Since the :ref:`dependent function type <pi-type>` or "Pi type" (denoted ``pi`` or ``Π`` in Lean_) is among one of the most important types in dependent type theory, let us pause pause for a moment to discuss it.
+Since the :term:`dependent function type`, or "Pi type" (denoted ``pi`` or ``Π`` in Lean_), is among one of the most important types in dependent type theory, let us pause pause for a moment to discuss it.
 
 A **Pi type**, such as :math:`Π_{(x:A)} B x`, is also known as a *dependent function type* because it generalizes the function type :math:`A → B` by allowing :math:`B x` (the type of the codomain) to depend on a *value* :math:`x : A` of the domain. (See the :ref:`section on dependent types <dependent-types>` for more about dependent types.)
  

@@ -516,7 +516,7 @@ Let's prove this now. First recall that the commands
 
 fix a relation ``R`` and introduce the symbol ``≈`` to denote it. Thus, in the assumptions ``reflexive (≈)`` and ``symmetric (≈)``, the notation ``(≈)`` denotes ``R``.
 
-(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see the :ref:`symbol appendix <symbols>`.)
+(The symbol ``≈`` is produced by typing ``\~~`` or ``\approx``; see the :ref:`Acronyms and Symbols Appendix <acronyms-and-symbols>`.)
 
 ::
 
@@ -678,7 +678,7 @@ In the example below, having fixed a partial order, ``R``, we define the corresp
 
 Notice that we have used suggestive names ``reflR``, ``transR``, ``antisymmR`` to help remember which hypothesis is which.
 
-The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see the :ref:`symbol appendix <symbols>`).
+The proof also uses anonymous ``have`` and ``assume``, referring back to them with the French quotes (produced by typing ``\f<`` and ``\f>``; see the :ref:`Acronyms and Symbols Appendix <acronyms-and-symbols>`).
 
 Remember also that ``eq.subst ‹a = c› ‹a ≤ b›`` is a proof of the fact that amounts for substituting ``c`` for ``a`` in ``a ≤ b``. You can also use the equivalent notation ``‹a = c› ▸ ‹a ≤ b›``, where the triangle is written ``\t``.
 
@@ -713,7 +713,7 @@ In the first example, we use the anonymous ``assume`` and ``have``, and then ref
 
 In the second example, we abbreviate ``and.left h`` and ``and.right h`` as ``h.left`` and ``h.right``, respectively. We also abbreviate ``and.intro h.right h.left`` with an anonymous constructor, writing ``⟨h.right, h.left⟩``. Lean figures out that we are trying to prove a conjunction, and figures out that ``and.intro`` is the relevant introduction principle.
 
-(You can produce angled brackets by typing ``\<`` and ``\>`` or by typing ``\langle`` and ``\rangle``; see the :ref:`symbol appendix <symbols>`.)
+(Angled brackets are produced by typing ``\langle`` for ``⟨`` and ``\rangle`` for ``⟩``, although ``\<`` and ``\>`` work on most systems; see the :ref:`Acronyms and Symbols Appendix <acronyms-and-symbols>`.)
 
 .. .. _equality-in-lean:
 

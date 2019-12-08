@@ -127,8 +127,6 @@ To summarize, for each type ``α:Type`` and for every family of types ``β: α �
    
    Then we represent the Cartesian product :math:`B_0 × B_1` by the type ``Π(i:bool), B i``. [3]_
 
-.. index:: ! Sigma type
-
 .. index:: type of; dependent pairs
 
 .. _sigma-types:
@@ -136,7 +134,7 @@ To summarize, for each type ``α:Type`` and for every family of types ``β: α �
 Sigma types
 ~~~~~~~~~~~
 
-Similarly, a :term:`Sigma type`, also known as the `dependent pair type <sigma-type>`_, generalizes the Cartesian product ``α × β`` by allowing the *type* of the second argument of an ordered pair to depend on the *value* of the first.
+Similarly, a :term:`Sigma type`, also known as the *dependent pair type*, generalizes the Cartesian product ``α × β`` by allowing the *type* of the second argument of an ordered pair to depend on the *value* of the first.
 
 Sigma types arise from a type ``α:Type`` and a "type former" ``β: α → Type``, and are denoted using the ``Σ`` symbol, as follows:
 

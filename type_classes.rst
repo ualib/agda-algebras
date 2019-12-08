@@ -15,21 +15,41 @@ In this chapter we explain *type classes* and *coercions*, and we show how these
 
 **References**. The `chapter on Type Classes <https://leanprover.github.io/theorem_proving_in_lean/type_classes.html>`_ in TPL_ provides further background, and the `Coercions using Type Classes`_ section of TPL_ is also helpful.
 
------------------------
+.. -----------------------
 
-.. _type-classes-and-coercions:
+.. .. _type-classes-and-coercions:
 
-Type classes and coercions
------------------------------
-
-Type classes
-~~~~~~~~~~~~~
+.. Type classes and coercions
+.. -----------------------------
 
 A **type class** is a family of types; each type in the family is called an **instance** of the type class.
 
 To have Lean infer an implicit argument using the type class mechanism, the argument in question should appear inside square brackets (instead of curly braces) in the declaration.
 
 Type classes are used to provide hints to the elaborator when searching for an element of a certain type class.  The elaborator consults a table of declared instances of a particular type.
+
+To bundle, or not to bundle
+------------------------------
+
+The `Mathlib documentation`_ (Sec 4.4.1) explains the notion of a "bundled" type class as follows:   
+
+  "When creating a type class, one important design decision is which parts of the definition to put as parameters to the type class and which parts to store within the element itself, accessible via a projection. We refer to a type class as **unbundled** if it has many parameters and **bundled** if the parameters are moved to projections.
+  
+  For example, given the definitions
+
+    #. ``Group = {(X, ◦) | (X, ◦) is a group}``
+    #. ``group X = {◦ | (X, ◦) is a group}``
+    #. ``is_group X ◦ ↔ (X, ◦) is a group``
+
+  we would call ``Group`` a bundled definition, ``is_group`` an unbundled definition, and ``group`` a semi-bundled definition. All of these say essentially the same thing from a mathematical point of view, but the choice of which to use has a significant impact on formalization."
+
+Mathlib_ takes the semi-bundled approach; carrier types are unbundled, while all operations are bundled into the type class.
+
+For use with type classes, fully bundling presents a problem since a type class query should have (essentially) at most one solution, and only the parameters affect the type class search. When the type is exposed but not the operation, as with ``group X``, then we can anoint a canonical group associated to the type ``X`` if there is one.
+
+For instance, ``add_group ℤ`` will find the canonical additive group ``(ℤ, +)`` of addition on integers.
+
+By contrast, fully bundled definitions are appropriate for canonical structures. These are found, for example, in Coq's Mathematical Components library.
 
 Before diving into examples of type classes, we must first explain what a type *coersion* is. That is the subject of the next subsection.
 
@@ -38,7 +58,7 @@ Before diving into examples of type classes, we must first explain what a type *
 .. _coercions:
 
 Coercions
-~~~~~~~~~~
+----------
 
 A very nice feature of Lean that is useful for, among other things, bridging the gap between informal and formal mathematics is called type **coercion**.
 

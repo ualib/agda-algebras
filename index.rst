@@ -42,8 +42,12 @@ Back Matter
     :maxdepth: 1
 
     refs
-    glossary
-    appendix_acronyms_and_symbols
+    notation_and_examples
+    acronyms_and_symbols
+    glossary_complexity
+    glossary_logic
+    glossary_structures
+    glossary_topology
     genindex
     license
 

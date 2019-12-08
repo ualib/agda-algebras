@@ -54,9 +54,9 @@ Dually, :math:`\Th(𝒦)` is the class of identities modelled by all algebras in
 
 Alternatively and equivalently we could define "equational class" and "equational theory" in terms of the two :term:`closure operators <closure operator>` induced by the Galois pair :math:`(\Mod, \Th)`.  Indeed, :math:`\Mod \Th: 𝒫 (𝒜) → 𝒫(𝒜)` is a closure operator on :math:`𝒜` and :math:`\Th \Mod: 𝒫 (ℰ) → 𝒫(ℰ)` is a closure operator on :math:`ℰ`, and 
 
-* an **equational class** is a :math:`\Mod \Th`-:term:`closed` set of :math:`σ`-algebras;
+* an **equational class** is a :math:`\Mod \Th`-:term:`closed set` of :math:`σ`-algebras;
 
-* an **equational theory** is a :math:`\Th \Mod`-:term:`closed` set of :math:`σ`-identities.
+* an **equational theory** is a :math:`\Th \Mod`-:term:`closed set` of :math:`σ`-identities.
 
 (Here, as usual, :math:`𝒫` denotes the :term:`power set operator`.)
 

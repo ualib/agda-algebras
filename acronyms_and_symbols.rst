@@ -1,11 +1,7 @@
------------------
+.. _acronyms-and-symbols:
 
-.. _acronyms:
-
-Acronyms and symbols
+Acronyms and Symbols
 ---------------------
-
-.. glossary::
 
 .. glossary::
 
