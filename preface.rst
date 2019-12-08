@@ -127,8 +127,8 @@ This is a work in progress and any feedback you can provide us with would be muc
 .. [1]
    See the `2015 post by Floris van Doorn`_ which gives a nice overview of Lean 2 for homotopy type theory.
  
-.. .. [2]
-..    For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,HoTT:2013`.
+.. [2]
+   For some reason, the following references cannot be found by the sphinx compiler when cited elsewhere unless we cite them here first: :cite:`Mitchell:1996,HoTT:2013`.
 
 .. include:: hyperlink_references.rst
 

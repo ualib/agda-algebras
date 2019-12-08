@@ -295,6 +295,15 @@ Glossary: topology and analysis
 
      Thus, a norm is a :term:`seminorm` satisfying: :math:`\|x\| = 0` only if :math:`x = 0`.
 
+   normed linear space
+     A **normed linear space** (or **normed vector space**) is a pair :math:`(X, \|\,⋅\,\|)` consisting of a :term:`vector space` :math:`X` and a :term:`norm` :math:`\|\,⋅\,\|` defined on :math:`X`.
+ 
+   normed vector space
+     See: :term:`normed linear space`
+ 
+   nowhere dense
+     A set :math:`G` is **nowhere dense** in :math:`X` if the :term:`closure` of :math:`G` contains no nonempty open subsets of :math:`X`. Equivalently, the :term:`interior` of the closure of :math:`G` is empty (in symbols, :math:`Ḡ^o = ∅`).
+ 
    open ball
      Let :math:`(X, d)` be a :term:`metric space`. If :math:`x ∈ X` and :math:`r > 0` are fixed, then the set denoted and defined by :math:`B(x, r) = \{y ∈ X ∣ d(x,y) < r\}` is called the **open ball** with center :math:`x` and radius :math:`r`.
 

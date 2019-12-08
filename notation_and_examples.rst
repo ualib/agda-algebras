@@ -209,21 +209,6 @@ Examples of categories
 
 ---------------------------
 
-Open problems
----------------
-
-#. Bounded Linear Width Conjecture
-
-#. PCSP(3-color,100-color) (or even just PCSP(3-color,6-color)) is not known to be NP-complete :cite:`Barto:2018`, :cite:`Brakensiek:2016`
-
-#. The decision version of CSP(𝔸) and the search version are polytime equivalent :cite:`Bulatov:2005`.
-
-   The decision version of PCSP(𝔸, 𝔹) can be reduced to the search version, but it is an open problem whether they are equivalent.
-
-#. Let ℓ be the list of properties preserved under :term:`Maltsev product`, and suppose 𝒱 has one property in ℓ and 𝒲 has another.  Is every finite member of 𝖧(𝒱 ∘ 𝒲) is tractable?
-
-------------------------
-
 .. rubric:: Footnotes
 
 .. [1]

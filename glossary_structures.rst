@@ -324,6 +324,9 @@ Glossary: structures, categories, varieties
     finite set
       A set is called **finite** if it contains only a finite number of elements.
  
+    finitely based
+      A variety (or algebra) is called **finitely based** if it has a finite :term:`base`.
+
     finitely generated variety
       A :term:`variety` is called **finitely generated** if it is of the form :math:`𝒱(K)` where :math:`K` is a finite set of finite algebras.
       
@@ -452,6 +455,20 @@ Glossary: structures, categories, varieties
     inner product space
       An **inner product space** is a vector space equipped with an :term:`inner product`.
  
+    interpretation
+      Let 𝒱 and 𝒲 be two varieties of algebraic structures. Suppose the algebras in 𝒱 have signature :math:`σ = (F, ρ)`, while those in 𝒲 have signature :math:`σ' = (F', ρ')`.
+
+      A **strict interpretation** of 𝒱 in 𝒲 is a mapping :math:`D` from the set :math:`F` of operation symbols of 𝒱 to the term algebra :math:`T_{σ'}(X_ω)` of 𝒲 such that
+
+        #. arities are preserved: :math:`∀ f ∈ F, ρ f = ρ'(D(f))`;
+        #. for every algebra 𝐁 ∈ 𝒲, the algebra :math:`𝐁^D := ⟨B, \{D(f)^𝐁 : f ∈ F\}⟩` belongs to 𝒱.
+
+      An **insignificant interpretation** of 𝒱 simply replaces nullary operation symbols with their corresponding constant unary terms.
+
+      An **interpretation** of 𝒱 in 𝒲 consists of an (optional) insignificant interpretation followed by a strict interpretation.
+
+      The transformations that are interpretations can be characterized succinctly using category theory, as follows: :math:`T: 𝒲 → 𝒱` is an interpretation iff it is a functor that commutes with the forgetful functor. In other words, for every :math:`𝐀, 𝐁 ∈ 𝒲` and homomorphism :math:`h: 𝐀 → 𝐁`,  the  underlying universes of 𝐀 and  :math:`T(𝐀)` are the same and :math:`h: T(𝐀) → T(𝐁)` is  a  homomorphism.
+
     isomorphism
       A morphism :math:`f: A → B` is called an **isomorphism** if there exists a morphism :math:`g: A → B` such that :math:`g ∘ f= \mathrm{id}_A` and :math:`f ∘ g = \mathrm{id}_B`. We write :math:`f^{-1}` to denote :math:`g` when it exists.
  
@@ -509,7 +526,7 @@ Glossary: structures, categories, varieties
       An algebra with a single binary operation is called a **magma** (or **groupoid** or **binar**). The operation is usually denoted by :math:`+` or :math:`⋅`, and we write :math:`a+b` or :math:`a ⋅ b` (or just :math:`ab`) for the image of :math:`(a, b)` under this operation, which we call the *sum* or *product* of :math:`a` and :math:`b`, respectively.
  
     Maltsev class
-      We can formalize the notion of Maltsev condition through that of interpretation.
+      We can formalize the notion of Maltsev condition through that of :term:`interpretation`.
       
       Write 𝒱 ≤ 𝒲 if there is an :term:`interpretation` of the variety 𝒱 in the variety 𝒲. 
       
@@ -523,8 +540,11 @@ Glossary: structures, categories, varieties
       
       Finally, a **weak Maltsev class** is the intersection of a countable family of Maltsev classes.
 
+    Maltsev condition
+      See: :term:`Maltsev class`
+
     Maltsev term
-      See :term:`Maltsev term`
+      See: :term:`Maltsev term`
 
     Maltsev product
       Let 𝒱 and 𝒲 be idempotent varieties. The **Maltsev product** (or **Maltsev  product**) of 𝒱 and 𝒲 is the class
@@ -599,12 +619,12 @@ Glossary: structures, categories, varieties
     monotone function
       Given :term:`posets <poset>` :math:`⟨A, ≤ᴬ⟩` and :math:`(B, ≤ᴮ)` we say that a function :math:`f: A → B` is **monotone** from :math:`⟨A, ≤ᴬ⟩` to :math:`⟨B, ≤ᴮ ⟩` when for any :math:`x, y ∈ A` we have that :math:`x ≤ᴬ y` implies that :math:`f(x) ≤ᴮ f(y)`.
       
-      (See also :term:`monotone increasing function`.)
+      See also: :term:`monotone increasing function`
  
     monotone increasing function
       A real- or extended real-valued function :math:`f` deifned on :math:`ℝ` is called **monotone increasing** (or **monotonically increasing**) on the interval :math:`[a,b] ⊆ ℝ` if :math:`a≤ x < y ≤ b` implies :math:`f(x) ≤ f(y)`.
       
-      (See also :term:`monotone function`.)
+      See also: :term:`monotone function`
  
     morphism
       If :math:`𝔸 = ⟨A, F^𝔸⟩` and :math:`𝔹 = ⟨B, F^𝔹⟩` are :term:`algebraic structures <algebraic structure>` in the :term:`signature` :math:`σ = (F, ρ)`, then a **morphism** (or **homomorphism**) :math:`h: 𝔸 → 𝔹` is a function from :math:`A` to :math:`B` that preserves (or commutes with) all operations; that is, for all :math:`f∈ F`, for all :math:`a_1, \dots, a_{ρ f} ∈ A`,
@@ -626,18 +646,6 @@ Glossary: structures, categories, varieties
     near unanimity term
       An idempotent term w(x₁, ..., xₖ) satisfying w(y,x,...,x) ≈ w(x,y,x,...,x) ≈ ... ≈ w(x,...,x,y) ≈ x is called a **near unanimity** (or **NU**) term.
 
-    normal form
-      In :term:`dependent type theory`, every term has a computational behavior and may be *reduced* using certain reduction rules (e.g., the α, β, η rules).  The form beyond which a term :math:`t` cannot be reduced, if such a form exists, is called the **normal form** of :math:`t`. 
-  
-    normed linear space
-      A **normed linear space** (or **normed vector space**) is a pair :math:`(X, \|\,⋅\,\|)` consisting of a :term:`vector space` :math:`X` and a :term:`norm` :math:`\|\,⋅\,\|` defined on :math:`X`.
- 
-    normed vector space
-      See :term:`normed linear space`.
- 
-    nowhere dense
-      A set :math:`G` is **nowhere dense** in :math:`X` if the :term:`closure` of :math:`G` contains no nonempty open subsets of :math:`X`. Equivalently, the :term:`interior` of the closure of :math:`G` is empty (in symbols, :math:`Ḡ^o = ∅`).
- 
     nullary operation
       An operation :math:`f` on a set :math:`A` is called **nullary** if the arity of :math:`f` is 0; that is, :math:`f: () → A`; equialently, :math:`f` takes no arguments, so is simply a (constant) element of :math:`A`.
  
@@ -727,14 +735,6 @@ Glossary: structures, categories, varieties
       .. math:: \mathrm{Proj}\, σ: ∏_{0≤i< n} A_i → ∏_{0≤i<k} A_{σ\, i};  \ \ a ↦ a ∘ σ.
  
       That is, for :math:`a ∈ ∏_{0≤i<n} A_i` we define :math:`\mathrm{Proj}\,σ\, a = a ∘ σ`.
- 
-    pseudoelementary class
-      A **pseudoelementary class** is a class of structures derived from an :term:`axiomatizable` class by omitting some of its sorts and relations.
-      
-      This is the mathematical logic analog of the notion in category theory of (the codomain of) a forgetful functor. Axiomatizable classes are (vacuously) pseudoelementary but the converse is not always true; nevertheless pseudoelementary classes share some of the properties of axiomatizable classes such as being closed under :term:`ultraproduct`.
- 
-    quasiidentity
-      A **quasiidentity** in the language L is an implication of the form s₁ ≈ t₁ ∧ ... ∧ sₙ ≈ tₙ ⟶  s ≈ t, where s, s₁, ..., sₙ, t, t₁, ..., tₙ are terms built up from variables using the operation symbols of L.
  
     quasivariety
       A **quasivariety** is a class K of algebras of the same signature satisfying any of the following equivalent conditions:
@@ -914,6 +914,9 @@ Glossary: structures, categories, varieties
         * If :math:`t: \{0, \dots, (n-1)\} → 𝒯` is an :math:`n`-tuple of terms and :math:`f ∈ 𝐅` is a function symbol of arity :math:`ρ f = n`, then :math:`f t` is a term.
         * :math:`t` is a terms if it can be obtained in finitely many steps from some combination of the three items above.
  
+    term-equivalent
+      The varieties 𝒱 and 𝒲 are called **term-equivalent** if there are interpretations :math:`D` of 𝒱 in 𝒲 and :math:`E` of 𝒲 in 𝒱 such that for every 𝐀 ∈ 𝒱 and 𝐁 ∈ 𝒲 we have :math:`𝐀^{ED} = 𝐀` and :math:`𝐁^{DE} = 𝐁`.
+
     terminal object
       An object :math:`\mathbf{1}` is called a **terminal** (or **bound**) **object** if for every object :math:`A` in the same category there exists a unique morphism :math:`⟨\ ⟩_A: A → \mathbf{1}`.
  
