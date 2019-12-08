@@ -10,8 +10,8 @@
 
 .. highlight:: lean
 
-Structures, categories, varieties
----------------------------------
+Glossary: structures, categories, varieties
+-------------------------------------------
 
 .. glossary:: 
 
