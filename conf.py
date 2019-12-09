@@ -146,11 +146,11 @@ html_theme_options = {
     'head_font_family': 'Times New Roman, Times, serif',
     'code_bg': 'white',
     'extra_nav_links': {
-        'PDF version (coming soon)': 'ualib.pdf',
-        'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
-        'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/'
+        # 'PDF version (coming soon)': 'ualib.pdf',
+        # 'lean-ualib gitlab repository': 'https://gitlab.com/ualib/lean-ualib',
+        # 'logicalfoundations.org': 'https://logicalfoundations.gitlab.io/'
     },
-    'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
+    # 'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
     # 'sidebar_width' : '200px',
     # 'page_width' : '960px',
     # 'fixed_sidebar' : True
