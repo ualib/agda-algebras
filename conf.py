@@ -256,5 +256,6 @@ rst_epilog = """
 
 .. raw:: html
 
-    Please email comments, suggestions, and corrections to <a href="mailto:williamdemeo@gmail.com">williamdemeo@gmail.com</a>
 """
+
+#..    Please email comments, suggestions, and corrections to <a href="mailto:williamdemeo@gmail.com">williamdemeo@gmail.com</a>
