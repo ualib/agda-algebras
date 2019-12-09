@@ -614,6 +614,10 @@ Algebraic structure hierarcy
 Group-like structures
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. .. raw:: html
+
+..    <img src="_static/grouplike_hierarchy.png">
+
 .. include:: grouplike_hierarchy.tex
 
 .. todo:: write this section
@@ -631,6 +635,10 @@ Group-like structures
 
 Ring-like structures
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+.. .. raw:: html
+
+..    <img src="_static/structure_hierarchy_dual_no_rng.png">
 
 .. include:: structure_hierarchy_dual_no_rng.tex
 
