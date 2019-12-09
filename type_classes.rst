@@ -31,6 +31,34 @@ Type classes are used to provide hints to the elaborator when searching for an e
 To bundle, or not to bundle
 ------------------------------
 
+In systems like Agda_ or Coq_ or Lean_ there are many different ways in which we can represent algebraic objects. At one extreme of the design space, we may define the (conjunction of) laws of a particular structure as an :math:`n`-ary predicate over :math:`n` components. For instance, a reflexive relation may be defined (in Lean) as follows:
+
+::
+
+  def reflexive {α: Type} (R: α → α → Prop): Prop := ∀ x, R x x
+  
+While the flexibility of such a definition is attractive, in practice it is not very convenient to work with structures defined in this way.  For instance, stating theorems about abstract instances of such structures requires enumerating all components along with the structure (predicate) of interest.
+
+When applying theorems about these objects, we must either enumerate its (non-inferrable) components, or else let the system declare metavariables that must be resolved later.
+
+This makes all but the most trivial applications of the theorems quite tedious, and renders the implementation of proof search mechanisms impractical.
+
+Another disadvantage of the "unbundled" approach to defining algebraic structures is the lack of canonical names for particular components of the structures; this  makes it difficult to associate idiomatic notations with them.
+
+These are real problems and the two most advanced formalizations of abstract algebraic structures in the Coq_  proof assistant (namely, CoRN :cite:`CruzFilipe:2004` and SSReflect :cite:`Garillot:2009`) address these issues by favoring bundled representation schemes, using records with one or more of the components as fields instead of parameters.
+
+At the other extreme of the design space, For reflexive relations, the following is a fully bundled representation:
+
+::
+
+  structure ReflexiveRelation: Type :=
+  mk :: (α: Type) (R: α → α → Prop) (reflexive: ∀ x, R x x)
+
+Superficially, this instantly solves the problems described above: reflexive relations can now be declared and passed as self-contained packages, and the rr rel projection now constitutes a canonical name for relations that are known to be reflexive, and we could bind a notation to it. While there is no conventional notation for reflexive relations, the situation is the same in the context of, say, a
+semiring, where we would bind + and ∗ notations to the record field projections.
+
+Unfortunately, despite its apparent virtues, the bundled representation introduces serious problems of its own, the most immediate and prominent one being a lack of support for sharing components between structures, which is needed to cope with overlapping multiple inheritance.
+
 The `Mathlib documentation`_ (Sec 4.4.1) explains the notion of a "bundled" type class as follows:   
 
   "When creating a type class, one important design decision is which parts of the definition to put as parameters to the type class and which parts to store within the element itself, accessible via a projection. We refer to a type class as **unbundled** if it has many parameters and **bundled** if the parameters are moved to projections.

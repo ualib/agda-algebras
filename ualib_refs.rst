@@ -195,6 +195,16 @@
        MRNUMBER = {1275826 (95h:18007)},
        MRREVIEWER = {Ji{\v{r}}{\'{\i}} Ad{\'a}mek}
      }
+     @InProceedings {CruzFilipe:2004,
+       AUTHOR = {Cruz-Filipe, Lu{\'i}s and Geuvers, Herman and Wiedijk, Freek},
+       EDITOR = {Asperti, Andrea and Bancerek, Grzegorz and Trybulec, Andrzej},
+       TITLE = {C-CoRN, the Constructive Coq Repository at Nijmegen},
+       BOOKTITLE = {Mathematical Knowledge Management},
+       ADDRESS = {Berlin, Heidelberg},
+       PAGES = {88--103},
+       ABSTRACT = {We present C-CoRN, the Constructive Coq Repository at Nijmegen. It consists of a mathematical library of constructive algebra and analysis formalized in the theorem prover Coq. We explain the structure and the contents of the library and we discuss the motivation and some (possible) applications of such a library.},
+       ISBN = {978-3-540-27818-4}
+     }
      @MISC {Finster:2018,
        AUTHOR = {Eric Finster},
        TITLE = {Higher Algebra in Type Theory},
@@ -202,7 +212,7 @@
        HOWPUBLISHED = {{G}it{H}ub.com},
        URL = {https://github.com/ericfinster/higher-alg}
      }
-     @ARTICLE{Freese:2017,
+     @ARTICLE {Freese:2017,
        AUTHOR = {Freese, Ralph and McKenzie, Ralph},
        TITLE = {Maltsev families of varieties closed under join or Maltsev product},
        JOURNAL = {Algebra universalis},
@@ -224,7 +234,19 @@
        HOWPUBLISHED = {arXiv},
        URL = {https://arxiv.org/abs/1712.06469}
      }
-     @BOOK{Hobby:1988,
+     @INPROCEEDINGS {Garillot:2009,
+       AUTHOR = {Garillot, Fran{\c{c}}ois and Gonthier, Georges and Mahboubi, Assia and Rideau, Laurence},
+       EDITOR = {Berghofer, Stefan and Nipkow, Tobias and Urban, Christian and Wenzel, Makarius},
+       TITLE = {Packaging Mathematical Structures},
+       BOOKTITLE = {Theorem Proving in Higher Order Logics},
+       YEAR = {2009},
+       PUBLISHER = {Springer Berlin Heidelberg},
+       ADDRESS = {Berlin, Heidelberg},
+       PAGES = {327--342},
+       ABSTRACT = {This paper proposes generic design patterns to define and combine algebraic structures, using dependent records, coercions and type inference, inside the Coq system. This alternative to telescopes in particular supports multiple inheritance, maximal sharing of notations and theories, and automated structure inference. Our methodology is robust enough to handle a hierarchy comprising a broad variety of algebraic structures, from types with a choice operator to algebraically closed fields. Interfaces for the structures enjoy the convenience of a classical setting, without requiring any axiom. Finally, we present two applications of our proof techniques: a key lemma for characterising the discrete logarithm, and a matrix decomposition problem.},
+       ISBN = {978-3-642-03359-9}
+     }
+     @BOOK {Hobby:1988,
        AUTHOR     = {Hobby, David and McKenzie, Ralph},
        TITLE      = {The structure of finite algebras},
        SERIES     = {Contemporary Mathematics},
@@ -237,22 +259,6 @@
        MRCLASS    = {08A05 (03C05 08-02 08B05)},
        MRNUMBER   = {958685 (89m:08001)},
        MRREVIEWER = {Joel Berman}
-     }
-     @ARTICLE{Idziak:2010,
-       AUTHOR = {Idziak, Pawe{\l} and Markovi{\'c}, Petar and McKenzie, Ralph and Valeriote, Matthew and Willard, Ross},
-       TITLE = {Tractability and learnability arising from algebras with few subpowers},
-       JOURNAL = {SIAM J. Comput.},
-       FJOURNAL = {SIAM Journal on Computing},
-       VOLUME = {39},
-       YEAR = {2010},
-       NUMBER = {7},
-       PAGES = {3023--3037},
-       ISSN = {0097-5397},
-       CODEN = {SMJCAT},
-       MRCLASS = {68Q25 (08A70 68T99)},
-       MRNUMBER = {2678065},
-       DOI = {10.1137/090775646},
-       URL = {http://dx.doi.org/10.1137/090775646}
      }
      @ARTICLE {Idziak:2010,
        AUTHOR = {Idziak, Pawe{\l} and Markovi{\'c}, Petar and McKenzie, Ralph and Valeriote, Matthew and Willard, Ross},
@@ -317,7 +323,7 @@
        MRNUMBER = {3728284},
        URL = {https://amzn.to/2V5NMHn}
      }
-     @BOOK{Nederpelt:2014,
+     @BOOK {Nederpelt:2014,
        AUTHOR = {Rob Nederpelt and Herman Geuvers},
        TITLE = {Type theory and formal proof},
        YEAR = {2014},
@@ -344,7 +350,7 @@
        PUBLISHER = {Springer-Verlag},
        ADDRESS = {Berlin, Heidelberg}
      }
-     @BOOK{Riehl:2017,
+     @BOOK {Riehl:2017,
        TITLE={Category Theory in Context},
        AUTHOR={Riehl, E.},
        ISBN={9780486820804},
@@ -353,7 +359,7 @@
        YEAR={2017},
        PUBLISHER={Dover Publications}
      }
-     @BOOK{Rudin:1987,
+     @BOOK {Rudin:1987,
        AUTHOR = {Rudin, Walter},
        TITLE = {Real and complex analysis},
        EDITION = {Third},
@@ -373,6 +379,19 @@
        URL = {https://books.google.com/books?id=i5SlbIA-KwUC},
        YEAR = {2011},
        PUBLISHER = {Wiley}
+     }
+     @ARTICLE {Spitters:2011,
+       AUTHOR    = {Bas Spitters and Eelis van der Weegen},
+       TITLE     = {Type Classes for Mathematics in Type Theory},
+       JOURNAL   = {CoRR},
+       VOLUME    = {abs/1102.1323},
+       YEAR      = {2011},
+       URL       = {http://arxiv.org/abs/1102.1323},
+       ARCHIVEPREFIX = {arXiv},
+       EPRINT    = {1102.1323},
+       TIMESTAMP = {Mon, 13 Aug 2018 16:45:57 +0200},
+       BIBURL    = {https://dblp.org/rec/bib/journals/corr/abs-1102-1323},
+       BIBSOURCE = {dblp computer science bibliography, https://dblp.org}
      }
      @ARTICLE {Taylor:1977,
        AUTHOR = {Taylor, Walter},
