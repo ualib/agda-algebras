@@ -9,11 +9,10 @@
 𝖫∃∀𝖭 ⋁𝗇𝗂𝗏𝖾𝗋𝗌𝖺𝗅 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 𝖫𝗂𝖻𝗋𝖺𝗋𝗒
 =================================
 
-.. toctree::
-    :numbered:
-    :maxdepth: 2
+The notes that I had previously posted here, primarily for my own reference and edification, have been removed.
 
-    preface
+Please consult the official documentation at https://leanprover.github.io/
+
 ..  algebras
 ..  types_for_algebras
 ..  algebras_in_lean
