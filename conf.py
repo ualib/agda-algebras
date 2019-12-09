@@ -249,13 +249,4 @@ texinfo_documents = [
 
 # -- Options for Epub output -------------------------------------------------
 
-# A string of reStructuredText that will be included at the end of every source file that is read.
-rst_epilog = """
-
-.. include:: hyperlink_references.rst
-
-.. raw:: html
-
-"""
-
 #..    Please email comments, suggestions, and corrections to <a href="mailto:williamdemeo@gmail.com">williamdemeo@gmail.com</a>
