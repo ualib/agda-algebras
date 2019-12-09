@@ -29,8 +29,8 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = u'𝖫∃∀𝖭 ⋀𝖫𝖦∃𝖡𝖱⋀'
-copyright = u'2019, William DeMeo and Siva Somayyajula'
-author = u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula'
+copyright = u'2019, William DeMeo'
+author = u'William DeMeo'
 
 # The short X.Y version.
 version = u'0'
@@ -223,7 +223,7 @@ proof_latex_notheorem = ["definition", "theorem", "proof"]
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ualib.tex', u'𝖫∃∀𝖭 ∀𝖫𝖦∃𝖡𝖱∀',
-     u'William DeMeo, Hyeyoung Shin, and Siva Somayyajula', 'manual'),
+     u'William DeMeo', 'manual'),
 ]
 
 #tikz_proc_suite = 'GhostScript'

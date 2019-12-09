@@ -8,11 +8,13 @@
 Preface
 =======
 
-Due to a claims of plagiarism, I have removed the notes that I had previously posted here.
+Due to claims of plagiarism, the notes that I had previously posted here, primarily for my own reference and edification, have been removed.
 
-I apologize if you are visiting this page hoping to learn how to use Lean to do mathematics.
+I apologize if you had been consulting these materials in an attempt to learn how to use Lean to do mathematics.
 
-Please consult the "official" sources.
+Instead, please consult the official documentation (e.g., https://leanprover.github.io/)
+
+Goodbye and good luck.
 
 .. To support formalization in type theory of research level mathematics in universal algebra and related fields, we have developed a software library, called the `Lean Universal Algebra Library`_ ("Lean Algebra" or 𝖫∃∀𝖭 ⋀𝗅𝗀𝖾𝖻𝗋𝖺).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
 
