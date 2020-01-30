@@ -134,7 +134,7 @@ html_theme_options = {
     'head_font_family': 'Times New Roman, Times, serif',
     'code_bg': 'white',
     'extra_nav_links': {
-        'PDF version': '_static/agda-ualib.pdf'
+        'PDF version': 'agda-ualib.pdf'
     },
     'donate_url': 'https://www.gofundme.com/formal-foundations-for-informal-mathematics'
     # 'sidebar_width' : '200px',
