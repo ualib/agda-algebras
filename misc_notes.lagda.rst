@@ -10,7 +10,7 @@
 Note on axiom K
 ~~~~~~~~~~~~~~~~
 
-In `nlab <https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29>`_ , **axiom K** is explained as follows [1]_ :
+`nlab <https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29>`_ describes **axiom K** as follows [1]_ :
 
   "[when added, axiom K turns `intensional type theory <https://ncatlab.org/nlab/show/intensional+type+theory>`_ ] into `extensional type theory <https://ncatlab.org/nlab/show/extensional+type+theory>`_ ---or more precisely, what is called `here <https://ncatlab.org/nlab/show/extensional+type+theory>`_ 'propositionally extensional type theory.' In the language of `homotopy type theory <https://ncatlab.org/nlab/show/homotopy+type+theory>`_ , this means that all types are `h-sets <https://ncatlab.org/nlab/show/h-sets>`_ , accordingly axiom K is incompatible with the `univalence axiom <https://ncatlab.org/nlab/show/univalence+axiom>`_ .
 
