@@ -10,3 +10,4 @@ exclude
 .venv
 .vscode
 *~
+*.agdai
