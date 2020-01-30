@@ -61,23 +61,23 @@ extensions = [
 #                     'numbering-level': 2
 # }]
 
-# proof_theorem_types = {
-#     "axiom": "Axiom",
-#     "conjecture": "Conjecture",
-#     "corollary": "Corollary",
-#     "definition": "Definition",
-#     "example": "Example",
-#     "examples": "Examples",
-#     "exercise": "Exercise",
-#     "lemma": "Lemma",
-#     "notation": "Notation",
-#     "observation": "Observation",
-#     "proof": "Proof",
-#     "property": "Property",
-#     "question": "Question",
-#     "prop": "Proposition",
-#     "theorem": "Theorem"
-# }
+proof_theorem_types = {
+    "axiom": "Axiom",
+    "conjecture": "Conjecture",
+    "corollary": "Corollary",
+    "definition": "Definition",
+    "example": "Example",
+    "examples": "Examples",
+    "exercise": "Exercise",
+    "lemma": "Lemma",
+    "notation": "Notation",
+    "observation": "Observation",
+    "proof": "Proof",
+    "property": "Property",
+    "question": "Question",
+    "prop": "Proposition",
+    "theorem": "Theorem"
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

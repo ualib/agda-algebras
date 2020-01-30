@@ -195,6 +195,7 @@ comm-hom-term {A} {B} g (node 𝓸 args) tup =
      ( ∀-extensionality  λ i -> comm-hom-term g (args i) tup  ) ⟩
     (B ⟦ 𝓸 ⟧) ( λ i → (args i ̂ B) (⟦ g ⟧ₕ ∘ tup) )
   ∎
+
 --
 --
 -- PROOF of (2).
@@ -222,7 +223,7 @@ compatible-term A (node 𝓸 args) θ p =
 --           → (B → B → C) → (A → B) → (A → A → C)
 --  _*_ on f = λ x y → f x * f y
 --
---So
+--So 
 --  (⟦ θ ⟧ᵣ Function.on (λ tup → (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup }))) .i .j``
 --means
 --  ((λ tup → (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) .i)

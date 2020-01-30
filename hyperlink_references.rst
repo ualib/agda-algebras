@@ -26,6 +26,7 @@
 .. _Emacs: https://www.gnu.org/software/emacs/
 .. _Equality Section: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+.. _function extensionality: https://ncatlab.org/nlab/show/function+extensionality
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
 .. _HoTT: https://homotopytypetheory.org/
