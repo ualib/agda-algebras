@@ -8,7 +8,6 @@
 
 open import Level
 open import basic 
-open algebra
 open signature
 
 module free {S : signature}{X : Set} where
@@ -18,11 +17,9 @@ open import Function using (_∘_)
 open import Relation.Unary
 open import Relation.Binary hiding (Total)
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym)
+open Eq using (_≡_; refl; cong; sym; isEquivalence)
 open Eq.≡-Reasoning
 import Relation.Binary.EqReasoning as EqR
-
-
 
 --------------------------------------------------------------
 
@@ -35,13 +32,11 @@ data Term : Set where
   node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> Term) -> Term
 
 
---------------------------------------------------------------
-
-
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
 ----------------------------------
 
+open algebra
 open Term
 
 
@@ -49,64 +44,37 @@ free : algebra S
 
 free = record { ⟦_⟧ᵤ = Term ; _⟦_⟧ = node }
 
+--------------------------------------------------------------
+-- analogue for setoid-based algebras
 
+open Algebra
 
-
----------------------------------------------------------------
-
-
-
+Free : Algebra S
+Free = record {
+         ⟦_⟧ᵣ = record {
+                 Carrier = Term ;
+                 _≈_ = _≡_ ;
+                 isEquivalence = isEquivalence
+                 } ;
+         _⟦_⟧ = node  }
 
 -------------------------------------
 -- The UNIVERSAL PROPERTY of free
--------------------------------------
-
 -- 1. every h : X -> ⟦ A ⟧ᵤ  lifts to a hom from free to A.
-
 -- 2. the induced hom is unique.
 
-
-----------------------------------------
-
+-- PROOF.
 -- 1.a. Every map  (X -> A)  "lifts".
-
 free-lift : {A : algebra  S}(h : X -> ⟦ A ⟧ᵤ) -> ⟦ free ⟧ᵤ -> ⟦ A ⟧ᵤ
-
 free-lift h (generator x) = h x
-
 free-lift {A} h (node 𝓸 args) = (A ⟦ 𝓸 ⟧) λ{i -> free-lift {A} h (args i)}
-
-
-
-
-
-----------------------------------------
-
-
-
-
-
 -- 1.b. The lift is a hom.
-
 open hom
-
 lift-hom : {A : algebra S} (h : X -> ⟦ A ⟧ᵤ) -> hom free A
-
 lift-hom {A} h = record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
-
-
-
-----------------------------------------------------------------
-
-
-
-
 -- 2. The lift to  (free -> A)  is unique.
-
-
---    We need EXTENSIONALITY for this  (imported from util.agda)
-
+--    (We need EXTENSIONALITY for this (imported from util.agda))
 free-unique : {A : algebra S}
   ->    ( f g : hom free A )
   ->    ( ∀ x  ->  ⟦ f ⟧ₕ (generator x) ≡ ⟦ g ⟧ₕ (generator x) )
@@ -115,9 +83,6 @@ free-unique : {A : algebra S}
   ->    ⟦ f ⟧ₕ t ≡ ⟦ g ⟧ₕ t
 
 free-unique {A} f g p (generator x) = p x
-
-
-
 free-unique {A} f g p (node 𝓸 args) =
    begin
      ⟦ f ⟧ₕ (node 𝓸 args)
@@ -130,8 +95,23 @@ free-unique {A} f g p (node 𝓸 args) =
      ⟦ g ⟧ₕ (node 𝓸 args)
    ∎
 
+----------------------------------------
+-- setoid-based analogues
 
--------------------------------------------------------
+open Setoid 
+Free-Lift : {A : Algebra  S}(h : X -> Carrier ⟦ A ⟧ᵣ) -> Carrier ⟦ Free ⟧ᵣ -> Carrier ⟦ A ⟧ᵣ
+Free-Lift h (generator x) = h x
+Free-Lift {A} h (node 𝓸 args) = (A ⟦ 𝓸 ⟧) λ i -> Free-Lift {A} h (args i)
+
+----------------------------------------
+
+-- 1.b. The lift is a hom.
+
+open Hom
+
+Lift-Hom : {A : Algebra S} (h : X -> Carrier ⟦ A ⟧ᵣ) -> Hom Free A
+Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → Setoid.refl ⟦ A ⟧ᵣ }
+
 
 
 --------------------------
@@ -157,11 +137,9 @@ free-unique {A} f g p (node 𝓸 args) =
 
 -- Here's the Agda implementation of the foregoing definition.
 
-_̂_ : Term -> (A : algebra S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
-((generator x) ̂ A) tup = tup x
-((node 𝓸 args) ̂ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̂ A) tup }
-
-
+_̇_ : Term -> (A : algebra S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
+((generator x) ̇ A) tup = tup x
+((node 𝓸 args) ̇ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̇ A) tup }
 
 -- Recall, Theorem 4.32 of Bergman.
 -- Let A and B be algebras of type S. Then the following hold:
@@ -181,19 +159,19 @@ comm-hom-term : {A B : algebra S}
   ->    (g : hom A B) -> (t : Term)
   ->    (tup : X -> ⟦ A ⟧ᵤ)
        ------------------------------
-  ->     ⟦ g ⟧ₕ ((t ̂ A) tup) ≡ (t ̂ B) (⟦ g ⟧ₕ ∘ tup)
+  ->     ⟦ g ⟧ₕ ((t ̇ A) tup) ≡ (t ̇ B) (⟦ g ⟧ₕ ∘ tup)
 --
-comm-hom-term g (generator x) tup = refl
+comm-hom-term g (generator x) tup = Eq.refl
 comm-hom-term {A} {B} g (node 𝓸 args) tup =  
--- Goal: ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) ≡
---       (B ⟦ 𝓸 ⟧) (λ { i → (args i ̂ B) ((λ {.x} → ⟦ g ⟧ₕ) ∘ tup) })
+-- Goal: ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̇ A) tup })) ≡
+--       (B ⟦ 𝓸 ⟧) (λ { i → (args i ̇ B) ((λ {.x} → ⟦ g ⟧ₕ) ∘ tup) })
   begin
-    ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup }))
-  ≡⟨ homo g ( λ i → (args i ̂ A) tup )⟩
-    (B ⟦ 𝓸 ⟧) ( λ i → ⟦ g ⟧ₕ ((args i ̂ A) tup) )
+    ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̇ A) tup }))
+  ≡⟨ homo g ( λ i → (args i ̇ A) tup )⟩
+    (B ⟦ 𝓸 ⟧) ( λ i → ⟦ g ⟧ₕ ((args i ̇ A) tup) )
   ≡⟨ cong ((B ⟦_⟧)_)
      ( ∀-extensionality  λ i -> comm-hom-term g (args i) tup  ) ⟩
-    (B ⟦ 𝓸 ⟧) ( λ i → (args i ̂ B) (⟦ g ⟧ₕ ∘ tup) )
+    (B ⟦ 𝓸 ⟧) ( λ i → (args i ̇ B) (⟦ g ⟧ₕ ∘ tup) )
   ∎
 
 --
@@ -209,14 +187,35 @@ compatible-term : (A : algebra S)
  ->               (t : Term)
  ->               (θ : con A)
                  -------------------
- ->               compatible-fun (t ̂ A) ⟦ θ ⟧ᵣ
+ ->               compatible-fun (t ̇ A) ⟦ θ ⟧ᵣ
 
 compatible-term A (generator x) θ p = p x
 compatible-term A (node 𝓸 args) θ p =
-  --Goal: ( ⟦ θ ⟧ᵣ Function.on
-  --        ( λ tup → (A ⟦ 𝓸 ⟧) (λ i → (args i ̂ A) tup ) )
-  --      ) .i .j
-  (compat θ 𝓸)  λ i -> (compatible-term A (args i) θ) p
+  --Goal:
+  -- ( ⟦ θ ⟧ᵣ Function.on
+  --   ( λ tup -> (A ⟦ 𝓸 ⟧) (λ i -> (args i ̇ A) tup) )
+  -- ) .i .j
+  compat θ 𝓸 λ{ i -> (compatible-term A (args i) θ) p }
+
+--------------------------------------------------------------
+-- analogues for setoid-based algebras
+
+open Setoid
+
+_̂_ : Term -> (A : Algebra S) -> (X -> Carrier ⟦ A ⟧ᵣ) -> Carrier ⟦ A ⟧ᵣ
+((generator x) ̂ A) tup = tup x
+((node 𝓸 args) ̂ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̂ A) tup }
+
+open Con
+
+Compatible-Term :
+    (A : Algebra S) -> (t : Term) -> (θ : Con A)
+    ----------------------------------------------
+  ->   compatible-fun (t ̂ A) ⟦ θ ⟧ᵣ
+
+Compatible-Term A (generator x) θ p = p x
+Compatible-Term A (node 𝓸 args) θ p =
+  compat θ  λ{ k -> (Compatible-Term A (args k) θ) p }
 
 --Function.on is the operation,
 --  _on_ : ∀ {a b c} {A : Set a} {B : Set b} {C : Set c}
@@ -270,14 +269,3 @@ compatible-term A (node 𝓸 args) θ p =
 -- S    : signature
 
 --------------------------------------------------
-
-
-
-
--- -- Compatible-Term : ∀ {S : signature}
--- --  ->               (t : Term)
--- --  ->               (A : Algebra S)
--- --  ->               (θ : Con A)
--- --                  -------------------
--- --  ->               Compatible t A θ
--- -- Compatible-Term = ?

@@ -90,9 +90,9 @@ data operation (γ α : Set) : Set where
 --A data type for ALGEBRAS
 -----------------------------
 
---open operation
 open signature
  
+-- basic algebra
 record algebra (S : signature) : Set₁ where
 
   field
@@ -102,6 +102,7 @@ record algebra (S : signature) : Set₁ where
 
 open B.Setoid
 
+-- setoid-based algebra (algebra whose carrier is a setoid)
 record Algebra (S : signature) : Set₁ where
 
   field
@@ -115,7 +116,6 @@ record Algebra (S : signature) : Set₁ where
 
 open algebra
 
-
 record hom {S : signature}
   (A : algebra S) (B : algebra S) : Set where
 
@@ -127,6 +127,9 @@ record hom {S : signature}
     -- The property the map must have to be a hom:
     homo : ∀ {𝓸 : ⟨ S ⟩ₒ} (args : Fin (⟨ S ⟩ₐ 𝓸) -> ⟦ A ⟧ᵤ)
            ->  ⟦_⟧ₕ ((A ⟦ 𝓸 ⟧) args) ≡ (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args)
+
+--------------------------------------------------------------
+-- analogue for setoid-based algebras
 
 open Algebra
 
@@ -140,17 +143,7 @@ record Hom {S : signature}
 
     -- The property the map must have to be a hom:
     Homo : ∀ {𝓸 : ⟨ S ⟩ₒ} (args : Fin (⟨ S ⟩ₐ 𝓸) -> Carrier ⟦ A ⟧ᵣ)
-           ->  ((_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ   ((B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args)))
-
-
-
-
-----------------------------
-
--- ... now let's talk about  terms ...
-
--- ... (go to file: free.agda) ...
-
+      ->   (_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
 
 
 ---------------------
@@ -166,6 +159,9 @@ A ≅ᵤ B = (∃ f : hom A B)
   ->    (∃ g : hom B A)
   ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity ⟦ A ⟧ᵤ )
       ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity ⟦ B ⟧ᵤ )
+
+--------------------------------------------------------------
+-- analogue for setoid-based algebras
 
 open Hom
 
@@ -210,6 +206,8 @@ record con {S : signature} (A : algebra S) : Set₁ where
     equiv : IsEquivalence ⟦_⟧ᵣ
     compat : compatible-alg A ⟦_⟧ᵣ
 
+---------------------------------------------
+-- analogues for setoid-based algebras
 
 Compatible : ∀ {S : signature}
   ->            ⟨ S ⟩ₒ  ->  (A : Algebra S)
@@ -272,29 +270,6 @@ Quotient A θ =
 
 -----------------------------------------------
 
-
-
-------------------------------------------------
-
--------------------
---NOTES on Axiom K
--------------------
--- The following point was briefly mentioned but not discussed
--- ∵ time contraints:
-
--- When added to intensional type theory, "axiom K" turns it into extensional type theory,
--- or, more precisely, what we call here "propositionally extensional type theory."
-
---In the language of homotopy type theory (HoTT), this means that all types are h-sets
---
--- (so, axiom K is incompatible with the univalence axiom of HoTT)
-
--- Heuristically, axiom K asserts that a term of an identity type (equivalences
--- of terms) is propositionally equal to the canonical equality proof---i.e.,
--- proof-by-reflexivity, aka "refl".
-
-------------------------------------------------
-
 ----------------
 --NOTES on Fin
 ----------------
@@ -327,6 +302,7 @@ Quotient A θ =
 --note that tabulate is defined by recursion over the length of the
 --result list, even though it is an implicit argument.
 --
+
 ------------------------------------------------------------
 
 ---------------
