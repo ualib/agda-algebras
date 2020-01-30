@@ -3,16 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Formalizing universal algebra with dependent and inductive types
-=================================================================
+The Agda Universal Algebra Library
+==================================
 
-JMM Special Session on Algebras and Algorithms 
-
-
-William DeMeo
-
-
-Denver, Colorado, Wed 15 Jan 2020
 
 
 

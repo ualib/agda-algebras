@@ -24,6 +24,8 @@ sys.path.insert(0, os.path.abspath('.'))
 project = u'agda-ualib'
 copyright = u'2019, William DeMeo'
 author = u'William DeMeo'
+date = u'30 Jan 2020'
+#address = u'Praha, Czechia`
 
 # The short X.Y version.
 version = u'0'
