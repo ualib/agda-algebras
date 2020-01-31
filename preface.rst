@@ -40,7 +40,7 @@ To this end, our main objectives include
 + developing domain specific "proof tactics" to express the idioms of universal algebra,
 + incorporating automated proof search for universal algebra, and
 + formalizing theorems emerging from our own mathematics research,
-+ documenting the resulting software libraries so they are useable by other working mathematicians.
++ documenting the resulting software libraries so they are usable by other working mathematicians.
 
 For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Our goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
 
@@ -86,7 +86,24 @@ There are installation instructions in the main README.md file in that repositor
 Acknowledgments
 ---------------
 
-This manual and the software library that it documents are open access projects maintained on Gitlab. Besides the main authors, a number of other people have contributed to the ⋀𝗀𝖽𝖺 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project.  We are especially grateful to `Clifford Bergman`_, `Siva Somayyajula`_, `Venanzio Capretta`_, `Andrej Bauer`_, `Miklós Maróti`_, `Ralph Freese`_, and `Jeremy Avigad`_ for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project (often without knowing it).
+This manual, as well as the software library that it documents, are open access projects maintained on Gitlab by `William DeMeo <mailto:williamdemeo@gmail.com>`_.
+
+Besides Dr. DeMeo, a number of other people have contributed to this project---some directly, others indirectly.  Special thanks go to `Clifford Bergman`_, `Siva Somayyajula`_, `Venanzio Capretta`_, `Andrej Bauer`_, `Miklós Maróti`_, `Ralph Freese`_, and `Jeremy Avigad`_ for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project, often without even knowing it.
+
+Attributions and citations
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+William DeMeo (hereinafter, "The Author") is currently the sole developer of the `Agda Universal Algebra Library`_ (`agda-ualib`_) and the only author of its documentation (the web page(s) and/or latex document(s) you are now reading).
+
+Regarding the mathematical results that are implemented in the `agda-ualib`_ library, as well as the presentation and informal statements of these results in the documentation, THE AUTHOR MAKES NO CLAIMS TO ORIGINALITY.
+
+Regarding the Agda source code in the `agda-ualib`_ library, this is due to The Author.
+
+HOWEVER, the development of the `agda-ualib`_ and its documentation has been informed by, and has greatly benefited from, the references listed in the :ref:`references` Section below.
+
+Throughout the documentation, the reader may occasionally come accross an "Attribution Note," denoted by **A.N.**  Nonetheless,
+
+  LACK OF ATTRIBUTION OR CITATION SHOULD NOT BE CONSTRUED AS A CLAIM OF ORIGINALITY.
 
 ----------------------
 
@@ -96,11 +113,12 @@ This manual and the software library that it documents are open access projects 
 References
 ------------
 
-The following Agda documentation and tutorials are quite helpful and informed our development.
+The following Agda documentation and tutorials are excellent.  They have been quite helpful to The Author of `agda-ualib`_, and have informed the development of the latter and its documentation.
 
 * Altenkirk, `Computer Aided Formal Reasoning`_
 * Bove and Dybjer, `Dependent Types at Work`_
 * Escardo, `Introduction to Univalent Foundations of Mathematics with Agda`_
+* Gunther, Gadea, Pagano, `Formalization of Universal Algebra in Agda`_
 * János, `Agda Tutorial`_
 * Norell and Chapman, `Dependently Typed Programming in Agda`_
 * Wadler, `Programming Language Foundations in Agda`_

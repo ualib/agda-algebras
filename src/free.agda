@@ -112,8 +112,6 @@ open Hom
 Lift-Hom : {A : Algebra S} (h : X -> Carrier ⟦ A ⟧ᵣ) -> Hom Free A
 Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → Setoid.refl ⟦ A ⟧ᵣ }
 
-
-
 --------------------------
 --INTERPRETATION OF TERMS
 --------------------------
@@ -133,7 +131,6 @@ Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → Setoi
 
 --     (t ̂ A) tup = ((𝓸 args) ̂ A) tup
 --                  = (A ⟦ 𝓸 ⟧) λ{ i -> ((args i) ̂ A) tup }
-
 
 -- Here's the Agda implementation of the foregoing definition.
 
@@ -174,7 +171,6 @@ comm-hom-term {A} {B} g (node 𝓸 args) tup =
     (B ⟦ 𝓸 ⟧) ( λ i → (args i ̇ B) (⟦ g ⟧ₕ ∘ tup) )
   ∎
 
---
 --
 -- PROOF of (2).
 --
@@ -251,21 +247,10 @@ Compatible-Term A (node 𝓸 args) θ p =
 --  induct A θ args i = compatible-term A (args i) θ 
 
 
------------------------------
+-------------------------------------------------------------
 
+--Finally, we prove the third claim.
+--   (3) For every subset Y of A,
+--       Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}.
+--
 
---After inserting `` (compat θ 𝓸) ?``, the  new goal is:
--- Goal: lift-rel ⟦ θ ⟧ᵣ (λ { i → (args i ̂ A) .i })
---       (λ { i → (args i ̂ A) .j })
--- ————————————————————————————————————————————————————————————
--- p    : lift-rel ⟦ θ ⟧ᵣ .i .j
--- .j   : X → ⟦ A ⟧ᵤ
--- .i   : X → ⟦ A ⟧ᵤ
--- θ    : con A
--- args : Fin (⟨ S ⟩ₐ 𝓸) → Term
--- 𝓸    : ⟨ S ⟩ₒ
--- A    : algebra S
--- X    : Set
--- S    : signature
-
---------------------------------------------------

@@ -25,6 +25,7 @@
 .. _dependent types in Lean: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types
 .. _Emacs: https://www.gnu.org/software/emacs/
 .. _Equality Section: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
+.. _Formalization of Universal Algebra in Agda: http://www.sciencedirect.com/science/article/pii/S1571066118300768
 .. _free.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
 .. _function extensionality: https://ncatlab.org/nlab/show/function+extensionality
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
