@@ -187,8 +187,52 @@ Here is the Agda code proving these facts.
 
 ----------------------------
 
-Interpretation of a term
--------------------------
+Essential arity
+------------------
+
+The definition of arity of an operation or term is a bit nuanced as the next example demonstrates.
+
+.. proof:example:: arity of a term
+
+   Suppose 𝑓 is a binary term, and 𝑝 and 𝑞 are ternary terms.
+
+   What is the arity of the following term?
+
+   .. math:: 𝑡(𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧) = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))
+     :label: arity1
+
+   On the face of it, it seems safe to say that 𝑡 has arity 6, since it is expressible as a function
+   of 6 variables.
+
+   But what if we decided to throw in some useless (or "dummy") variables, like so,
+
+   .. math:: t'(𝑢', 𝑣', 𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧, 𝑧') = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))?
+     :label: arity2
+
+   And what happens if :math:`𝑝(𝑥, 𝑦, 𝑧) = 𝑧`? Then 𝑝 only depends on one of its arguments and we could replace it with :math:`𝑝'(𝑧) = 𝑝(𝑥, 𝑦, 𝑧)`. Thus, 𝑡 may be expressed as,
+
+   .. math:: 𝑡''(𝑢, 𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))).
+     :label: arity3
+	     
+   The respective arities of :math:`𝑡, 𝑡'` and :math:`𝑡''` are 6, 9, and 5, yet :eq:`arity1`--:eq:`arity3` merely give three different ways to present the term :math:`𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))`.
+   
+As the example demonstrates, the notion of arity of a term is not uniquely defined (modulo equivalence of terms). As such, it is sometimes useful to speak of the **essential arity** of a term, which is defined to be the minimum number of variables required to express that term; it should be clear that this is equal to the number of arguments with respect to which the term is not constant.
+
+.. proof:example:: essential arity of a term
+
+   It is impossible to know the essential arity of a term until we know that of each of its subterms.
+
+   Picking up where we left off in the previous example, suppose 𝑓 depends on both of its arguments and :math:`𝑞(𝑢, 𝑣, 𝑤) = 𝑓(𝑣, 𝑤)`. Then 𝑡 is expressible as
+
+   .. math:: s(𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑓(𝑣, 𝑤))
+
+   and we finally see the lower bound on the number of variables required to express 𝑡, namely 4.  Therefore, 𝑡 has essential arity 4.
+
+
+------------------------------------------------------------------
+
+Interpretation of terms
+-----------------------
 
 **TODO** This section needs to be rewritten.
 

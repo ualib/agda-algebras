@@ -31,7 +31,6 @@ data Term : Set where
   generator : X -> Term
   node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> Term) -> Term
 
-
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
 ----------------------------------
@@ -253,4 +252,156 @@ Compatible-Term A (node 𝓸 args) θ p =
 --   (3) For every subset Y of A,
 --       Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}.
 --
+
+----------------------------------------------------
+
+
+--Alternative approach to interpretation.
+
+-- Essential arity
+------------------
+
+-- The definition of "arity" of a term is a bit nuanced as the following example shows:
+
+-- Example. Suppose 𝑓 is a binary term, and 𝑝 and 𝑞 are ternary terms.
+
+-- How should we define the "arity" of the following term?
+
+--   𝑓(𝑝(𝑥, 𝑦, 𝑧), f(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))
+
+-- On the face of it, it seems safe to say t has arity 6 since we express it as a function
+-- of 6 variables as follows:
+
+--   t(𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧) = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))
+
+-- But what if 𝑝(𝑥,𝑦,𝑧) = 𝑧?  Then we would say that the "essential arity" of g is 1 since
+-- we can express g and t equivalently as 𝑝'(𝑧) = 𝑝(𝑥,𝑦,𝑧) and 
+
+--   t'(𝑢, 𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤)),
+
+-- resp., in which case it seems the "arity" of t is really 5 (or maybe, to be safe, *at most* 5).
+
+-- By now it should be clear that we can't know the *essential* arity of t (that is, the minimum
+-- number of variables required to express t) until we know the essential arities of 𝑓, 𝑝, and 𝑞.
+
+-- If, for example, 𝑞(𝑢, 𝑣, 𝑤) = 𝑓(𝑣, 𝑤), then t is expressible as
+
+--  t''(𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑓(𝑣, 𝑤))
+
+-- If moreover we know that 𝑓 has essential arity 2, then this is as far as we can reduce the
+-- argument list of t so we can conclude that t has essential arity 4.
+
+
+--Interpretation of Terms
+--========================
+
+
+
+Now, if X = {x₀, x₁, x₂,...}, then we can re-write the term in the following equivalent way:
+
+--   t(x₀, x₁, x₂, x₃, x₄, x₅) = f(g(x₃, x₄, x₅), f(x₂, x₃), h(x₀, x₁, x₂)).
+
+-- If 𝒙 : ω -> X, where 𝒙 𝑖 = xᵢ, then t can be expressed as
+
+--   t 𝒙 = f(g(π₃𝒙, π₄𝒙, π₅𝒙), f(π₂𝒙, π₃𝒙), h(π₀𝒙, π₁𝒙, π₂𝒙)),
+
+-- where πᵢ is the project onto the (zero offset) 𝑖-th coordinate.
+
+-- (N.B. "zero offset" means that the smallest index (subscript) is 0; to avoid confusion, we refer to this as the index not of the "1st coordinate" but of the "0th coordinate.")
+--Given a set ``X`` and an algebra ``𝐀 = ⟨A,...⟩``, we call a function ``ctx : X → A`` a **context**.
+
+--**Definition**. (cf Def 4.31 of Bergman)
+--
+--Let :math:`t` be a term of arity :math:`ρ t`, and 𝐀 an algebra, in the signature :math:`S`.
+--
+--The **interpretation** of :math:`t` in 𝐀---often denoted in the literature by :math:`t^𝚨`---is the :math:`(ρ t)`-ary operation on :math:`A` defined by recursion on the structure of :math:`t`, as follows:
+
+--1. if :math:`t` is the variable :math:`x ∈ X`, then in the context ``ctx`` we take :math:`t^𝚨` to be the projection onto the coordinate containing ``ctx x``.
+
+--2. if :math:`t = 𝓸 𝐟`, where 𝓸 is a basic operation symbol with interpretation :math:`𝓸^𝚨` in 𝚨 and :math:`𝐟 : (ρ 𝓸) →` Term is a (ρ 𝓸)-tuple of terms, each with interpretation :math:`(𝐟 i)^𝚨`, then we take :math:`t^𝐀(𝐟)` to be :math:`𝓸^𝐀 \bigl( λ \{ (i : ρ 𝓸) . (𝐟 i)^𝐀\}\bigr)`.
+
+-- Let's translate this definition using the Agda syntax we developed above.
+
+-- Let ``t`` be a term, 𝐀 an algebra,  of signature ``S``.
+
+-- The **interpretation** of :math:`t` in 𝐀---often denoted in the literature by :math:`t^𝚨`---is an operation of :math:`A` defined by recursion on the structure of :math:`t`.
+
+-- 1. If ``t`` is a variable, say, ``x : X``, then we define ``(t ̂ A) : ⟦ A ⟧ᵤ -> ⟦ A ⟧ᵤ`` for each ``a : ⟦ A ⟧ᵤ`` by ``(t ̂ A) a = a``.
+
+-- 2. If ``t = 𝓸 𝐟``, where ``𝓸 : ⟨ S ⟩ₒ`` is a basic operation symbol with interpretation ``A ⟦ 𝓸 ⟧`` in 𝚨, and if ``𝐟 : ⟨ S ⟩ₐ 𝓸 -> Term`` is a ``(⟨ S ⟩ₐ 𝓸)``-tuple of terms with interpretations ``(𝐟 i) ̂ A`` for each ``i : ⟨ S ⟩ₐ 𝓸``, then we define
+
+--    ``(t ̂ A) = (𝓸 𝐟) ̂ A = (A ⟦ 𝓸 ⟧) λ{i -> (𝐟 i) ̂ A}``
+
+
+-- Here's how we would implement this in Agda.
+
+
+-- .. code-block:: agda
+
+--    _̂_ : {ℓ₁ : Level} -> Term -> (A : algebra {ℓ₁} S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
+
+--    ((generator x) ̂ A) tup = tup x
+
+--    ((node 𝓸 args) ̂ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̂ A) tup }
+
+
+-- Recall, Theorem 4.32 of Bergman.
+
+-- **Theorem**. Let ``A`` and ``B`` be algebras of ``signature S``. The following hold:
+
+--   1. For every n-ary term ``t`` and homomorphism ``g: A —> B``, ``g(tᴬ(a₁,...,aₙ)) = tᴮ(g(a₁),...,g(aₙ))``.
+
+--   2. For every term ``t ∈ T(X)`` and every ``θ ∈ Con(A)``, ``a θ b => t(a) θ t(b)``.
+
+--   3. For every subset ``Y`` of ``A``, we have
+
+--      ``Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}``.
+
+-- Let's prove the first of these in Agda.
+
+-- **Claim**. homomorphisms commute with terms.
+
+
+--    .. code-block:: agda
+
+--       comm-hom-term : {A B : algebra S}
+--         ->            (g : Hom A B) -> (t : Term)
+-- 	->            (tup : X -> ⟦ A ⟧ᵤ)
+--                ----------------------------------------------
+-- 	->       ⟦ g ⟧ₕ ((t ̂ A) tup) ≡ (t ̂ B) (⟦ g ⟧ₕ ∘ tup)
+
+--       comm-hom-term g (generator x) tup = refl
+
+--       comm-hom-term {A} {B} g (node 𝓸 args) tup =  
+
+--       -- Goal: ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) ≡
+--       --  (B ⟦ 𝓸 ⟧) (λ { i → (args i ̂ B) ((λ {.x} → ⟦ g ⟧ₕ) ∘ tup) })
+
+--         begin
+
+-- 	  ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup }))
+
+-- 	≡⟨ homo g (λ { i → (args i ̂ A) tup }) ⟩
+
+-- 	  (B ⟦ 𝓸 ⟧) (λ { i → ⟦ g ⟧ₕ ((args i ̂ A) tup) })
+
+-- 	≡⟨ cong ((B ⟦_⟧)_) (∀-extensionality (induct g tup args)) ⟩
+
+-- 	  (B ⟦ 𝓸 ⟧) (λ { i → (args i ̂ B) (⟦ g ⟧ₕ ∘ tup)})
+
+-- 	∎
+
+-- 	where
+
+-- 	  induct : {A B : algebra S}
+-- 	    ->     (g : Hom A B)
+--             ->     (tup : X -> ⟦ A ⟧ᵤ)
+--             ->     (args : ⟨ S ⟩ₐ 𝓸 → Term)
+--             ->     (i : ⟨ S ⟩ₐ 𝓸)
+--                ---------------------------------------------------------
+--             ->    ⟦ g ⟧ₕ ((args i ̂ A) tup) ≡ (args i ̂ B) (⟦ g ⟧ₕ ∘ tup)
+
+-- 	  induct g' tup' args' i' = comm-hom-term g' (args' i') tup' 
+
+
 

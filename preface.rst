@@ -103,7 +103,7 @@ HOWEVER, the development of the `agda-ualib`_ and its documentation has been inf
 
 Throughout the documentation, the reader may occasionally come accross an "Attribution Note," denoted by **A.N.**  Nonetheless,
 
-  LACK OF ATTRIBUTION OR CITATION SHOULD NOT BE CONSTRUED AS A CLAIM OF ORIGINALITY.
+  LACK OF ATTRIBUTION OR CITATION SHOULD NOT BE CONSTRUED AS A CLAIM TO ORIGINALITY.
 
 ----------------------
 

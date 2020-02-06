@@ -39,44 +39,9 @@ isCompatible A θ = ∀{𝓸 : ⟨ S ⟩ₒ}
   ->                 θ ((A ⟦ 𝓸 ⟧) arg1) ((A ⟦ 𝓸 ⟧) arg2)
 
 
-record con (A : algebra S) : Set₁ where
-  field
-    ⟦_⟧ᵣ : Rel ⟦ A ⟧ᵤ zero
-    equiv : IsEquivalence ⟦_⟧ᵣ
-    compatible : isCompatible A ⟦_⟧ᵣ
-
 
 open Setoid
 open Algebra
-
-IsCompatible : ∀ (A : Algebra S) -> Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
-
-IsCompatible A θ = ∀{𝓸 : ⟨ S ⟩ₒ}
-  ->               (arg1 arg2 : Fin (⟨ S ⟩ₐ 𝓸) -> Carrier ⟦ A ⟧ᵣ) 
-  ->               ( ∀ i -> θ (arg1 i) (arg2 i) )
-                 -------------------------------------------
-  ->               θ ((A ⟦ 𝓸 ⟧) arg1) ((A ⟦ 𝓸 ⟧) arg2)
-
-
-record Con (A : Algebra S) : Set₁ where
-  field
-    ⟦_⟧ᵣ : Rel (Carrier ⟦ A ⟧ᵣ) zero
-    equiv : IsEquivalence ⟦_⟧ᵣ
-    compatible : IsCompatible A ⟦_⟧ᵣ
-
-open Con
-
-Quotient : (A : Algebra S) -> (θ : Con A) -> Algebra S
-Quotient A θ =
-  record {
-
-    ⟦_⟧ᵣ = record {
-          Carrier = Carrier ⟦ A ⟧ᵣ ;
-          _≈_ = ⟦ θ ⟧ᵣ;
-          isEquivalence = equiv θ } ;
-
-    _⟦_⟧ = A ⟦_⟧ }
-
 
 
 -- Recall, Theorem 4.32 of Bergman.
