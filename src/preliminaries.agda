@@ -22,6 +22,9 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning
 open import Function
+open import Agda.Builtin.Nat public
+  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+--  using    ( _+_; _*_ )
 ----------------------------------------------------------------------
 
 ---------------
@@ -324,6 +327,9 @@ I p = p
   --Implication binds less tightly than any other operator. Thus, A ⊎ B -> B ⊎ A
   --parses as (A ⊎ B) -> (B ⊎ A).
 
+-- subset
+_⊆_ : ∀ {X : Set} -> (A : X -> Prp) -> (B : X -> Prp) -> Prp
+A ⊆ B = ∀ i -> A i ⇒ B i
 
 
   -------------------------------------------------------------
@@ -977,9 +983,13 @@ inv f .(f x) (im x) = x  -- Cool!!!
 -------------------
 --
 infixr 40 _::_
-data List {ℓ : Level} (A : Set ℓ) : Set (suc ℓ) where
+data List (A : Set) : Set where
   [] : List A
   _::_ : A -> List A -> List A
+
+-- data List' {ℓ : Level} (A : Set ℓ) : Set (suc ℓ) where
+--   [] : List' A
+--   _::_ : A -> List' A -> List' A
 
 identity : ∀{ℓ : Level} (A : Set ℓ) -> A -> A
 identity A x = x
@@ -998,7 +1008,15 @@ _++_ : {A : Set} -> List A -> List A -> List A
 (x :: xs) ++ ys = x :: (xs ++ ys)
 
 
+foldleft : {A B : Set} -> List A -> B -> (B -> A -> B) -> B
+foldleft [] z f = z
+foldleft (x :: l) z f = foldleft l (f z x) f
 
+--brief sanity check of foldleft
+testlist : List ℕ
+testlist = 0 :: (1 :: (2 :: []))
+x = foldleft testlist 0 _+_
+--type C-c C-n x to see that the result is 3, as expected.
 
 
 

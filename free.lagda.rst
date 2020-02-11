@@ -234,28 +234,28 @@ As the example demonstrates, the notion of arity of a term is not uniquely defin
 Interpretation of terms
 -----------------------
 
-**TODO** This section needs to be rewritten.
-
-Given a set ``X`` and an algebra ``𝐀 = ⟨A,...⟩``, we call a function ``ctx : X → A`` a **context**.
-
+.. 𝐀 = ⟨𝐴,...⟩ be an algebra
+   
 .. proof:definition:: cf. 4.31 of Bergman
 
-   Let  and 𝐀 be an algebra of signature :math:`S`.
+   Let 𝑿 be an infinite set (of variables), and let 𝑨 = ⟨𝐴,...⟩ be an algebra of signature :math:`S`.
 
-   Let :math:`t` be an :math:`(ρ t)`-ary term of signature :math:`S`.
+   .. , and let 𝑐 : ω → 𝑿 be an injective function. (We might call 𝑐 a "choice function" or "indexing function".)
 
-   The **interpretation** of :math:`t` in 𝐀---often denoted in the literature by :math:`t^𝚨`---is the :math:`(ρ t)`-ary operation on :math:`A` defined by recursion on the structure of :math:`t`, as follows:
+   If :math:`t` is a :math:`(ρ t)`-ary term symbol in the signature :math:`S`, and if we select a :math:`(ρ t)`-tuple of variables, say :math:`x : (ρ t) → X`, then the term associated with the symbols :math:`t` and :math:`x` is :math:`t(x)`.
 
-     #. if :math:`t` is the variable :math:`x ∈ X`, then in the context ``ctx`` we take :math:`t^𝚨` to be the projection onto the coordinate containing ``ctx x``.
+   The **interpretation** of :math:`t(x)` in 𝑨, often denoted by :math:`t^𝑨(x)`, is the :math:`(ρ t)`-ary operation on :math:`A` defined by recursion on the structure of :math:`t`, as follows:
 
-     #. if :math:`t = 𝓸 𝐟`, where 𝓸 is a basic operation symbol with interpretation :math:`𝓸^𝚨` in 𝚨 and :math:`𝐟 : (ρ 𝓸) →` Term is a (ρ 𝓸)-tuple of terms, each with interpretation :math:`(𝐟 i)^𝚨`, then we take :math:`t^𝐀(𝐟)` to be :math:`𝓸^𝐀 \bigl( λ \{ (i : ρ 𝓸) . (𝐟 i)^𝐀\}\bigr)`.
+     #. if :math:`t(x)` is simply the variable :math:`x i ∈ X`, and if 𝑎 is a :math:`(ρ t)`-tuple of :math:`A`, then :math:`t^𝑨(a) = a i`; that is, :math:`t^𝑨(a)` is the projection of the input tuple onto its :math:`i`-th coordinate.
+
+     #. if :math:`t = 𝓸 𝑓`, where 𝓸 is a basic operation symbol with interpretation :math:`𝓸^𝑨` in 𝑨 and :math:`𝑓 : (ρ 𝓸) →` Term is a (ρ 𝓸)-tuple of terms, each with interpretation :math:`(𝑓 i)^𝑨`, then :math:`t^𝑨(𝑓)` is :math:`𝓸^𝑨 \bigl( λ (i : ρ 𝓸) . (𝑓 i)^𝑨\bigr)`.
 
 
 Let's translate this definition into the Agda syntax developed above.
 
-#. If ``t`` is a variable, say, ``x : X``, then we define ``(t ̂ A) : ⟦ A ⟧ᵤ -> ⟦ A ⟧ᵤ`` for each ``a : ⟦ A ⟧ᵤ`` by ``(t ̂ A) a = a``.
+#. If ``t x`` is a variable, say, ``x i : X``, then we define ``(t ̂ A) : (Fin ⟨ S ⟩ₐ tFin ⟦ A ⟧ᵤ -> ⟦ A ⟧ᵤ`` for each ``a : ⟦ A ⟧ᵤ`` by ``(t ̂ A) a = a``.
 
-#. If ``t = 𝓸 𝐟``, where ``𝓸 : ⟨ S ⟩ₒ`` is a basic operation symbol with interpretation ``A ⟦ 𝓸 ⟧`` in 𝚨, and if ``𝐟 : ⟨ S ⟩ₐ 𝓸 -> Term`` is a ``(⟨ S ⟩ₐ 𝓸)``-tuple of terms with interpretations ``(𝐟 i) ̂ A`` for each ``i : ⟨ S ⟩ₐ 𝓸``, then we define
+#. If ``t = 𝓸 𝐟``, where ``𝓸 : ⟨ S ⟩ₒ`` is a basic operation symbol with interpretation ``A ⟦ 𝓸 ⟧`` in 𝚨, and if ``𝐟 : Fin ⟨ S ⟩ₐ 𝓸 -> Term`` is a ``(⟨ S ⟩ₐ 𝓸)``-tuple of terms with interpretations ``(𝐟 i) ̂ A`` for each ``i : ⟨ S ⟩ₐ 𝓸``, then we define
 
    ``(t ̂ A) = (𝓸 𝐟) ̂ A = (A ⟦ 𝓸 ⟧) λ{i -> (𝐟 i) ̂ A}``
 

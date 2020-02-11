@@ -10,9 +10,9 @@ open import Level
 open import basic 
 open signature
 
-module free {S : signature}{X : Set} where
+module free {S : signature} {X : Set} where
 
-open import preliminaries  using (_⊎_ ; ∀-extensionality; ∑)
+open import preliminaries  using (_⊎_ ; ∀-extensionality; ∑; List)
 open import Function using (_∘_)
 open import Relation.Unary
 open import Relation.Binary hiding (Total)
@@ -20,16 +20,35 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym; isEquivalence)
 open Eq.≡-Reasoning
 import Relation.Binary.EqReasoning as EqR
+open import Relation.Nullary using (¬_)
+open import Relation.Nullary.Negation using ()
+  renaming (contradiction to ¬¬-intro)
 
+open import Agda.Builtin.Nat public
+  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+--  using    ( _+_; _*_ )
+
+open import Data.Fin public
+  -- (See "NOTE on Fin" section below)
+  hiding ( _+_; _<_ )
+  renaming ( suc to fsucc; zero to fzero )
 --------------------------------------------------------------
 
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
+open List
+
 
 data Term : Set where
   generator : X -> Term
   node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> Term) -> Term
+
+open Term
+
+-- map-Term : (Term -> Term) -> Term -> Term
+-- map-Term f (generator x) = f (generator x)
+-- map-Term f (node 𝓸 t) = node 𝓸 (λ i -> map-Term f (t i))
 
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
@@ -40,7 +59,6 @@ open Term
 
 
 free : algebra S
-
 free = record { ⟦_⟧ᵤ = Term ; _⟦_⟧ = node }
 
 --------------------------------------------------------------
@@ -67,6 +85,7 @@ Free = record {
 free-lift : {A : algebra  S}(h : X -> ⟦ A ⟧ᵤ) -> ⟦ free ⟧ᵤ -> ⟦ A ⟧ᵤ
 free-lift h (generator x) = h x
 free-lift {A} h (node 𝓸 args) = (A ⟦ 𝓸 ⟧) λ{i -> free-lift {A} h (args i)}
+
 -- 1.b. The lift is a hom.
 open hom
 lift-hom : {A : algebra S} (h : X -> ⟦ A ⟧ᵤ) -> hom free A
@@ -245,13 +264,16 @@ Compatible-Term A (node 𝓸 args) θ p =
 --    ->     compatible-fun (args i ̂ A) ⟦ θ ⟧ᵣ
 --  induct A θ args i = compatible-term A (args i) θ 
 
-
+---------------------------------------------------------
+--TODO
+--arity of a term.
+-- ⟨_⟩ₜ : Term -> ℕ
+-- ⟨ generator x ⟩ₜ = 1
+-- ⟨ node 𝓸 x ⟩ₜ = ⟨ S ⟩ₐ 𝓸 + locsum (⟨ S ⟩ₐ 𝓸) x
+--   where
+--     locsum : (n : ℕ) -> (a : Fin n) -> (Fin n -> Term) -> ℕ
+--     locsum n a f = ?
 -------------------------------------------------------------
-
---Finally, we prove the third claim.
---   (3) For every subset Y of A,
---       Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}.
---
 
 ----------------------------------------------------
 
@@ -295,9 +317,7 @@ Compatible-Term A (node 𝓸 args) θ p =
 --Interpretation of Terms
 --========================
 
-
-
-Now, if X = {x₀, x₁, x₂,...}, then we can re-write the term in the following equivalent way:
+-- Now, if X = {x₀, x₁, x₂,...}, then we can re-write the term in the following equivalent way:
 
 --   t(x₀, x₁, x₂, x₃, x₄, x₅) = f(g(x₃, x₄, x₅), f(x₂, x₃), h(x₀, x₁, x₂)).
 
