@@ -6,7 +6,7 @@
 .. _refs:
 
 REFERENCES
-~~~~~~~~~~~~~
+============
 
 .. bibliography:: ualib_refs.bib
    :style: plain

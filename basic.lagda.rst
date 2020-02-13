@@ -5,7 +5,7 @@
 .. Note: This was used for the second part of my talk at JMM Special Session.
 .. Copyright (c) 2019 William DeMeo
 
-.. _Datatypes for Algebras:
+.. _datatypes for algebras:
 
 Datatypes for Algebras
 ========================
@@ -50,8 +50,10 @@ We don't have the time (or patience!) to describe each of the above directives. 
 
 -----------------------------------
 
-Signatures
--------------
+.. _signatures in agda:
+
+Signatures in Agda
+--------------------
 
 We may wish to encode arity as an arbitrary type (which Agda denotes ``Set``).
 
@@ -93,8 +95,10 @@ So let us define ``signature`` once and for all as follows:
 
 -----------------------------------
 
-Operations
---------------
+.. _operations in agda:
+
+Operations in Agda
+--------------------
 
 
 .. code-block:: agda
@@ -118,8 +122,11 @@ Here, ``γ`` is an "arity type" and ``α`` is a "universe type".
 
 -----------------------------------
 
-Algebras
---------------
+
+.. _algebras in agda:
+
+Algebras in Agda
+--------------------
 
 
 .. code-block:: agda
@@ -166,8 +173,10 @@ That's a *little* better... but feel free to invent your own syntax!
 
 -----------------------------------
 
-Homomorphisms
-----------------
+.. _homomorphisms in agda:
+
+Homomorphisms in Agda
+---------------------------
 
 .. code-block:: agda
 

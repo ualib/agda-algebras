@@ -5,7 +5,7 @@
 .. Note: This was used for the second part of my talk at JMM Special Session.
 .. Copyright (c) 2019 William DeMeo
 
-.. _Datatypes for Terms:
+.. _datatypes for terms:
 
 Datatypes for Terms 
 ======================
@@ -187,68 +187,12 @@ Here is the Agda code proving these facts.
 
 ----------------------------
 
-Essential arity
-------------------
-
-The definition of arity of an operation or term is a bit nuanced as the next example demonstrates.
-
-.. proof:example:: arity of a term
-
-   Suppose 𝑓 is a binary term, and 𝑝 and 𝑞 are ternary terms.
-
-   What is the arity of the following term?
-
-   .. math:: 𝑡(𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧) = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))
-     :label: arity1
-
-   On the face of it, it seems safe to say that 𝑡 has arity 6, since it is expressible as a function
-   of 6 variables.
-
-   But what if we decided to throw in some useless (or "dummy") variables, like so,
-
-   .. math:: t'(𝑢', 𝑣', 𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧, 𝑧') = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))?
-     :label: arity2
-
-   And what happens if :math:`𝑝(𝑥, 𝑦, 𝑧) = 𝑧`, so that 𝑝 depends on just one of its arguments? Then we could replace it with :math:`𝑝'(𝑧) = 𝑝(𝑥, 𝑦, 𝑧)`, and 𝑡 could be expressed as,
-
-   .. math:: 𝑡''(𝑢, 𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))).
-     :label: arity3
-	     
-   The respective arities of :math:`𝑡, 𝑡'` and :math:`𝑡''` are 6, 9, and 5, yet :eq:`arity1`--:eq:`arity3` merely give three different ways to present the term :math:`𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))`.
-   
-As the example demonstrates, the notion of arity of a term is not uniquely defined (modulo equivalence of terms). As such, it is sometimes useful to speak of the **essential arity** of a term, which is defined to be the minimum number of variables required to express that term; it should be clear that this is equal to the number of arguments with respect to which the term is not constant.
-
-.. proof:example:: essential arity of a term
-
-   It is impossible to know the essential arity of a term until we know that of each of its subterms.
-
-   Picking up where we left off in the previous example, suppose 𝑓 depends on both of its arguments and :math:`𝑞(𝑢, 𝑣, 𝑤) = 𝑓(𝑣, 𝑤)`. Then 𝑡 is expressible as
-
-   .. math:: s(𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑓(𝑣, 𝑤))
-
-   and we finally see the lower bound on the number of variables required to express 𝑡, namely 4.  Therefore, 𝑡 has essential arity 4.
-
-
-------------------------------------------------------------------
 
 Interpretation of terms
 -----------------------
 
 .. 𝐀 = ⟨𝐴,...⟩ be an algebra
    
-.. proof:definition:: cf. 4.31 of Bergman
-
-   Let 𝑿 be an infinite set (of variables), and let 𝑨 = ⟨𝐴,...⟩ be an algebra of signature :math:`S`.
-
-   .. , and let 𝑐 : ω → 𝑿 be an injective function. (We might call 𝑐 a "choice function" or "indexing function".)
-
-   If :math:`t` is a :math:`(ρ t)`-ary term symbol in the signature :math:`S`, and if we select a :math:`(ρ t)`-tuple of variables, say :math:`x : (ρ t) → X`, then the term associated with the symbols :math:`t` and :math:`x` is :math:`t(x)`.
-
-   The **interpretation** of :math:`t(x)` in 𝑨, often denoted by :math:`t^𝑨(x)`, is the :math:`(ρ t)`-ary operation on :math:`A` defined by recursion on the structure of :math:`t`, as follows:
-
-     #. if :math:`t(x)` is simply the variable :math:`x i ∈ X`, and if 𝑎 is a :math:`(ρ t)`-tuple of :math:`A`, then :math:`t^𝑨(a) = a i`; that is, :math:`t^𝑨(a)` is the projection of the input tuple onto its :math:`i`-th coordinate.
-
-     #. if :math:`t = 𝓸 𝑓`, where 𝓸 is a basic operation symbol with interpretation :math:`𝓸^𝑨` in 𝑨 and :math:`𝑓 : (ρ 𝓸) →` Term is a (ρ 𝓸)-tuple of terms, each with interpretation :math:`(𝑓 i)^𝑨`, then :math:`t^𝑨(𝑓)` is :math:`𝓸^𝑨 \bigl( λ (i : ρ 𝓸) . (𝑓 i)^𝑨\bigr)`.
 
 
 Let's translate this definition into the Agda syntax developed above.

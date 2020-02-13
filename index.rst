@@ -14,15 +14,23 @@ The Agda Universal Algebra Library
    :maxdepth: 2
 
    preface.rst
+   algebras.lagda.rst
    basic.lagda.rst
    free.lagda.rst
    subuniverse.lagda.rst
-
+   facts.lagda.rst
+   birkhoff.lagda.rst
+   
 Appendix
 -----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   misc_notes.lagda.rst
    refs
+   appendix_prerequisites.rst
+   misc_notes.lagda.rst
+   acronyms_and_symbols.rst
+   glossary
+   genindex
+

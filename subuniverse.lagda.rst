@@ -6,7 +6,7 @@
 
 .. _Datatypes for Subalgebras:
 
-Datatypes for Subuniverses and Subalgebras
+Datatypes for Subalgebras
 ============================================
 
 (The code described in this chapter resides in ``subuniverse.agda``.)
@@ -37,8 +37,10 @@ As usual, we begin by setting some options and importing some modules.
 
 -----------------------------------------------
 
-Subuniverses
-------------------
+.. _subuniverses in agda:
+
+Subuniverses in Agda
+----------------------
 
 To test whether a subset of a universe is a subuniverse, first we have to decide how to model subsets.
 
@@ -86,8 +88,10 @@ To reiterate, we have ``sset : Pred ⟦ A ⟧ᵤ ℓ``, indicating that ``sset``
 
 -----------------------------------------------
 
-Subalgebras
----------------
+.. _subalgebras in agda:
+
+Subalgebras in Agda
+----------------------
 
 Finally, we define a datatype for subalgebras of a given algebra ``A``.  We choose record with three fields:
 
@@ -150,8 +154,10 @@ Finally, we define a datatype for subalgebras of a given algebra ``A``.  We choo
       
 ----------------------------
 
-Subuniverse generation
------------------------
+.. _subuniverse generation in agda:
+
+Subuniverse generation in Agda
+---------------------------------
 
 Let 𝑨 = ⟨ A, ...⟩ be an algebra and X ⊆ A a subset of the universe of 𝑨.  
 
