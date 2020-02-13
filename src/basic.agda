@@ -112,8 +112,8 @@ record algebraP (S : signature) : Set₁ where
 
   field
     ⟦_⟧ₚ : Pred (S Ω) zero
-    _⟦_⟧ₒ : (𝓸 : S 𝓕) -> (ℕ -> (S Ω)) -> (S Ω)
-    cl : ∀ (𝓸 : S 𝓕) (args : ℕ -> (S Ω))
+    _⟦_⟧ₒ : (𝓸 : S 𝓕) -> (ℕ -> (S Ω)) -> (S Ω) -- I don't like this type signature.
+    cl : ∀ (𝓸 : S 𝓕) (args : ℕ -> (S Ω))      --  (it's very imprecise)   :'(
          -> (∀(i : ℕ) -> (args i) ∈ ⟦_⟧ₚ)
         ------------------------------------------------
          -> _⟦_⟧ₒ 𝓸 args ∈ ⟦_⟧ₚ
@@ -146,6 +146,23 @@ record hom {S : signature}
            ->  ⟦_⟧ₕ ((A ⟦ 𝓸 ⟧) args) ≡ (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args)
 
 --------------------------------------------------------------
+-- analogue for predicate-based algebras
+
+open algebraP
+
+record homP {S : signature}
+  (A : algebraP S) (B : algebraP S) : Set where
+
+  field
+
+    -- The map:
+    hmap : S Ω -> S Ω  -- <-- type is not very precise :'(
+
+    -- The property the map must have to be a hom:
+    homoP : ∀ {𝓸 : S 𝓕} (args : ℕ -> (S Ω))
+           ->  hmap ((A ⟦ 𝓸 ⟧ₒ) args) ≡ (B ⟦ 𝓸 ⟧ₒ) (hmap ∘ args)
+
+--------------------------------------------------------------
 -- analogue for setoid-based algebras
 
 open Algebra
@@ -174,21 +191,34 @@ _≅ᵤ_ :  {S : signature}
 
 A ≅ᵤ B = (∃ f : hom A B)
   ->    (∃ g : hom B A)
-  ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity ⟦ A ⟧ᵤ )
-      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity ⟦ B ⟧ᵤ )
+  ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity _ ) -- ⟦ A ⟧ᵤ
+      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- ⟦ B ⟧ᵤ 
+
+--------------------------------------------------------------
+-- analogue for predicate-based algebras
+
+open homP
+
+_≅ₚ_ :  {S : signature}
+       (A : algebraP S) -> (B : algebraP S) -> Set _
+
+A ≅ₚ B = (∃ f : homP A B)
+  ->    (∃ g : homP B A)
+  ->    ( (hmap g) ∘ (hmap f) ≡ identity _ )
+      ∧ ( (hmap f) ∘ (hmap g) ≡ identity _ )
 
 --------------------------------------------------------------
 -- analogue for setoid-based algebras
 
 open Hom
 
-_≅_ : {S : signature}
+_≅ₛ_ : {S : signature}
       (A : Algebra S) -> (B : Algebra S) -> Set _
 
-A ≅ B = (∃ f : Hom A B)
+A ≅ₛ B = (∃ f : Hom A B)
   ->    (∃ g : Hom B A)
-  ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity (Carrier ⟦ A ⟧ᵣ) )
-      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity (Carrier ⟦ B ⟧ᵣ)  )
+  ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity _ ) -- (Carrier ⟦ A ⟧ᵣ) )
+      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- (Carrier ⟦ B ⟧ᵣ)  )
 
 
 lift-rel : {ℓ : Level} {Idx : Set} {X : Set}
@@ -197,21 +227,17 @@ lift-rel : {ℓ : Level} {Idx : Set} {X : Set}
   ->       Rel (Idx -> X) ℓ
 lift-rel R = λ args₁ args₂ -> ∀ i -> R (args₁ i) (args₂ i)
 
-
 compatible-fun : ∀{α γ : Set}
   ->   ((γ -> α) -> α)  ->  (Rel α zero)  ->  Set
 compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
 
--- compatible-fun : ∀{S : signature}{X : Set} --{n : ℕ}
---   -> (A : algebra S) -> ((X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ)  
---   ->  (Rel ⟦ A ⟧ᵤ zero)  ->  Set
--- compatible-fun A f 𝓻 = compatible-func f 𝓻
-
+-- relation compatible with an operation
 compatible : ∀ {S : signature}
   ->  (A : algebra S)  ->   S 𝓕  
   ->   Rel ⟦ A ⟧ᵤ zero  ->  Set _
 compatible A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
+-- relation compatible with all operations of an algebra
 compatible-alg : ∀ {S : signature}
   ->  (A : algebra S) -> Rel ⟦ A ⟧ᵤ zero -> Set _
 compatible-alg {S} A 𝓻 = ∀ 𝓸 -> compatible A 𝓸 𝓻
@@ -223,8 +249,25 @@ record con {S : signature} (A : algebra S) : Set₁ where
     equiv : IsEquivalence ⟦_⟧ᵣ
     compat : compatible-alg A ⟦_⟧ᵣ
 
----------------------------------------------
--- analogues for setoid-based algebras
+-----------------------------------------------------------
+-- Analogues for predicate-based algebras.
+compatibleP : ∀ {S : signature}
+  ->  (A : algebraP S)  ->   S 𝓕  
+  ->   Rel (S Ω) zero  ->  Set _
+compatibleP A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧ₒ) ]⇒ 𝓻
+
+compatible-algP : ∀ {S : signature}
+  ->  (A : algebraP S) -> Rel (S Ω) zero -> Set _
+compatible-algP {S} A 𝓻 = ∀ 𝓸 -> compatibleP A 𝓸 𝓻
+
+record conP {S : signature} (A : algebraP S) : Set₁ where
+  field
+    𝓡 : Rel (S Ω) zero     -- type 𝓡 as `\MCR`
+    equivP : IsEquivalence 𝓡
+    compatP : compatible-algP A 𝓡
+
+----------------------------------------------------------
+-- Analogues for setoid-based algebras
 
 Compatible : ∀ {S : signature}
   ->            S 𝓕  ->  (A : Algebra S)
@@ -261,6 +304,11 @@ Quotient A θ =
 
 ------------------------------------------------------------------
 -------------    MISC EXPERIMENTAL STUFF (not used)  -------------
+
+-- compatible-fun : ∀{S : signature}{X : Set} --{n : ℕ}
+--   -> (A : algebra S) -> ((X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ)  
+--   ->  (Rel ⟦ A ⟧ᵤ zero)  ->  Set
+-- compatible-fun A f 𝓻 = compatible-func f 𝓻
 
 -----------------------------
 --Nullary symbols (contants)
