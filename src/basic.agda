@@ -31,10 +31,10 @@ open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 --  using    ( _+_; _*_ )
 
-open import Data.Fin public
-  -- (See "NOTE on Fin" section below)
-  hiding ( _+_; _<_ )
-  renaming ( suc to fsucc; zero to fzero )
+-- open import Data.Fin public
+--   -- (See "NOTE on Fin" section below)
+--   hiding ( _+_; _<_ )
+--   renaming ( suc to fsucc; zero to fzero )
 
 -----------------------------------------------
 
@@ -45,20 +45,17 @@ open import Data.Fin public
 
 record signature : Set₁ where 
   field
-    ⟨_⟩ₒ : Set         -- operation symbols.
-    ⟨_⟩ₐ : ⟨_⟩ₒ -> ℕ   -- Each operation symbol has an arity.
+    _Ω : Set         -- The "überuniverse" (all universes are subsets of Ω)
+    _𝓕 : Set        -- operation symbols.
+    _ρ : _𝓕 -> ℕ   -- Each operation symbol has an arity.
                       
 -- (for now, use natural number arities, but this isn't essential)
 
---   If   S : signature   is a signature...
-
---     ⟨ S ⟩ₒ
-
---   ...denotes the operation symbols of S.
-
---   If  𝓸 : ⟨ S ⟩ₒ  is an operation symbol,
-
---       ⟨ S ⟩ₐ 𝓸 is the arity of 𝓸.
+--   If   σ : signature   is a signature...
+--     σ Ω denotes the überuniverse of S.
+--     σ 𝓕 denotes the operation symbols of S.
+--   If  𝓸 : σ 𝓕  is an operation symbol...
+--       (σ ρ 𝓸) is the arity of 𝓸.
 
 
 -----------------------------------------------
@@ -95,10 +92,31 @@ open signature
 -- basic algebra
 record algebra (S : signature) : Set₁ where
 
-  field
+  field 
     ⟦_⟧ᵤ : Set
-    _⟦_⟧ : (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> ⟦_⟧ᵤ) -> ⟦_⟧ᵤ
+    _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> ⟦_⟧ᵤ) -> ⟦_⟧ᵤ
 
+-- basic algebra
+record algebraP (S : signature) : Set₁ where
+
+  field
+    ⟦_⟧ₚ : Pred (S Ω) zero
+    _⟦_⟧ₒ : (𝓸 : S 𝓕) -> (ℕ -> (S Ω)) -> (S Ω)
+    cl : ∀ (𝓸 : S 𝓕) (args : ℕ -> (S Ω))
+         -> (∀(i : ℕ) -> (args i) ∈ ⟦_⟧ₚ)
+        ------------------------------------------------
+         -> _⟦_⟧ₒ 𝓸 args ∈ ⟦_⟧ₚ
+
+
+--basic algebra on a given universe
+record algebra_on (S : signature) (X : Set) (B : Pred X zero) : Set  where
+  field
+     --    car : (x : X) -> B x
+    _⟦_⟧s : (𝓸 : S 𝓕) -> (ℕ -> (x : X) -> B x) -> ((x : X) -> B x)
+
+-- mkalgebra : (S : signature) -> (X : Set) -> (B : Pred X zero)
+--   -> (A : algebra_on S X B) -> algebra S
+-- mkalgebra S X B A = record { ⟦_⟧ᵤ = X; _⟦_⟧ = _⟦_⟧s A }
 
 open B.Setoid
 
@@ -107,7 +125,7 @@ record Algebra (S : signature) : Set₁ where
 
   field
     ⟦_⟧ᵣ : B.Setoid zero zero
-    _⟦_⟧ : (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> Carrier ⟦_⟧ᵣ) ->  Carrier ⟦_⟧ᵣ
+    _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> Carrier ⟦_⟧ᵣ) ->  Carrier ⟦_⟧ᵣ
 
 
 ----------------------------------
@@ -125,7 +143,7 @@ record hom {S : signature}
     ⟦_⟧ₕ : ⟦ A ⟧ᵤ -> ⟦ B ⟧ᵤ 
 
     -- The property the map must have to be a hom:
-    homo : ∀ {𝓸 : ⟨ S ⟩ₒ} (args : Fin (⟨ S ⟩ₐ 𝓸) -> ⟦ A ⟧ᵤ)
+    homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> ⟦ A ⟧ᵤ)
            ->  ⟦_⟧ₕ ((A ⟦ 𝓸 ⟧) args) ≡ (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args)
 
 --------------------------------------------------------------
@@ -142,7 +160,7 @@ record Hom {S : signature}
     ⟦_⟧ₕ : Carrier ⟦ A ⟧ᵣ -> Carrier ⟦ B ⟧ᵣ 
 
     -- The property the map must have to be a hom:
-    Homo : ∀ {𝓸 : ⟨ S ⟩ₒ} (args : Fin (⟨ S ⟩ₐ 𝓸) -> Carrier ⟦ A ⟧ᵣ)
+    Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> Carrier ⟦ A ⟧ᵣ)
       ->   (_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
 
 
@@ -191,7 +209,7 @@ compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
 -- compatible-fun A f 𝓻 = compatible-func f 𝓻
 
 compatible : ∀ {S : signature}
-  ->  (A : algebra S)  ->   ⟨ S ⟩ₒ  
+  ->  (A : algebra S)  ->   S 𝓕  
   ->   Rel ⟦ A ⟧ᵤ zero  ->  Set _
 compatible A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
@@ -210,13 +228,13 @@ record con {S : signature} (A : algebra S) : Set₁ where
 -- analogues for setoid-based algebras
 
 Compatible : ∀ {S : signature}
-  ->            ⟨ S ⟩ₒ  ->  (A : Algebra S)
+  ->            S 𝓕  ->  (A : Algebra S)
   ->            Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
 Compatible 𝓸 A 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
 Compatible-Alg : ∀ {S : signature}
   -> (A : Algebra S) -> Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
-Compatible-Alg {S} A 𝓻 = ∀{𝓸 : ⟨ S ⟩ₒ} -> Compatible 𝓸 A 𝓻
+Compatible-Alg {S} A 𝓻 = ∀{𝓸 : S 𝓕} -> Compatible 𝓸 A 𝓻
 
 
 record Con {S : signature} (A : Algebra S) : Set₁ where

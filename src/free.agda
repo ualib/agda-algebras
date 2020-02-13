@@ -28,10 +28,10 @@ open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 --  using    ( _+_; _*_ )
 
-open import Data.Fin public
-  -- (See "NOTE on Fin" section below)
-  hiding ( _+_; _<_ )
-  renaming ( suc to fsucc; zero to fzero )
+-- open import Data.Fin public
+--   -- (See "NOTE on Fin" section below)
+--   hiding ( _+_; _<_ )
+--   renaming ( suc to fsucc; zero to fzero )
 --------------------------------------------------------------
 
 ----------------------------
@@ -42,7 +42,7 @@ open List
 
 data Term : Set where
   generator : X -> Term
-  node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (Fin (⟨ S ⟩ₐ 𝓸) -> Term) -> Term
+  node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (ℕ -> Term) -> Term
 
 open Term
 
@@ -156,7 +156,9 @@ _̇_ : Term -> (A : algebra S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
 ((generator x) ̇ A) tup = tup x
 ((node 𝓸 args) ̇ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̇ A) tup }
 
--- Recall, Theorem 4.32 of Bergman.
+-- Recall (cf. Theorem 4.32 of Bergman)
+--
+-- Theorem 1.
 -- Let A and B be algebras of type S. Then the following hold:
 --
 --   (1) For every n-ary term t and homomorphism g: A —> B, 
@@ -166,10 +168,9 @@ _̇_ : Term -> (A : algebra S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
 --   (3) For every subset Y of A,
 --       Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}.
 --
--- PROOF of (1)
+-- PROOF.
 --
--- (1) homomorphisms commute with terms
---
+-- (1) (homomorphisms commute with terms).
 comm-hom-term : {A B : algebra S}
   ->    (g : hom A B) -> (t : Term)
   ->    (tup : X -> ⟦ A ⟧ᵤ)
@@ -189,12 +190,8 @@ comm-hom-term {A} {B} g (node 𝓸 args) tup =
     (B ⟦ 𝓸 ⟧) ( λ i → (args i ̇ B) (⟦ g ⟧ₕ ∘ tup) )
   ∎
 
---
--- PROOF of (2).
---
 -- (2) For every term t ∈ T(X) and every θ ∈ Con(A), 
 --     a θ b => t(a) θ t(b).
---
 open con
 
 compatible-term : (A : algebra S)
@@ -258,24 +255,25 @@ Compatible-Term A (node 𝓸 args) θ p =
 --
 --  induct : (A : algebra S)
 --    ->     (θ : con A)
---    ->     (args : Fin (⟨ S ⟩ₐ 𝓸) → Term)
+--    ->     (args : ℕ → Term)
 --    ->     (i : Fin (⟨ S ⟩ₐ 𝓸))
 --          -------------------
 --    ->     compatible-fun (args i ̂ A) ⟦ θ ⟧ᵣ
 --  induct A θ args i = compatible-term A (args i) θ 
 
 ---------------------------------------------------------
---TODO
---arity of a term.
--- ⟨_⟩ₜ : Term -> ℕ
--- ⟨ generator x ⟩ₜ = 1
--- ⟨ node 𝓸 x ⟩ₜ = ⟨ S ⟩ₐ 𝓸 + locsum (⟨ S ⟩ₐ 𝓸) x
---   where
---     locsum : (n : ℕ) -> (a : Fin n) -> (Fin n -> Term) -> ℕ
---     locsum n a f = ?
--------------------------------------------------------------
 
-----------------------------------------------------
+-- ARITY OF A TERM
+argsum : ℕ -> (ℕ -> ℕ) -> ℕ
+argsum nzero f = 0
+argsum (succ n) f = f n + argsum n f
+
+⟨_⟩ₜ : Term -> ℕ
+⟨ generator x ⟩ₜ = 1
+⟨ node 𝓸 args ⟩ₜ = ⟨ S ⟩ₐ 𝓸 + argsum (⟨ S ⟩ₐ 𝓸) (λ i -> ⟨ args i ⟩ₜ)
+
+
+-------------------------------------------------------------
 
 
 --Alternative approach to interpretation.

@@ -24,53 +24,20 @@ open Eq.≡-Reasoning
 open import Function
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
 --  using    ( _+_; _*_ )
 ----------------------------------------------------------------------
 
 ---------------
 --BOOLEAN Type
 ---------------
-
 data Bool : Set where
   true : Bool
   false : Bool
 
-----------------------------------------------------------------------
-
-----------------------------
---FUNCTION COMPOSITION Def
-----------------------------
--- infixr 40 _∘_
-
-------------------
---Basic version
--- _∘_ : ∀ {A B C : Set} -> (B -> C) -> (A -> B) -> A -> C
--- g ∘ f = λ x -> g (f x)
-
------------------------
---More general version
--- _∘_ : {A : Set}{B : A -> Set}
---       {C : (x : A) -> B x -> Set}
---       (f : {x : A}(y : B x) -> C x y)
---       (g : (x : A) -> B x)   (x : A)
---     ------------------------------------
---   ->  C x (g x)
-
--- (f ∘ g) x = f (g x)
-
-----------------------------
---Even more general version
--- _∘_ : ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂} {C : Set ℓ₃}
---   -> (B -> C) -> (A -> B) -> A -> C
--- (g ∘ f) x = g (f x)
-
-----------------------------------------------------------------------
-
-
 ------------------
 --SET ISOMORPHISM
 -------------------
-
 infix 0 _≃_
 record _≃_ (A B : Set) : Set where
   field
@@ -328,8 +295,8 @@ I p = p
   --parses as (A ⊎ B) -> (B ⊎ A).
 
 -- subset
-_⊆_ : ∀ {X : Set} -> (A : X -> Prp) -> (B : X -> Prp) -> Prp
-A ⊆ B = ∀ i -> A i ⇒ B i
+-- _⊆_ : ∀ {X : Set} -> (A : X -> Prp) -> (B : X -> Prp) -> Prp
+-- A ⊆ B = ∀ i -> A i ⇒ B i
 
 
   -------------------------------------------------------------
@@ -427,13 +394,13 @@ infixr 0 _⇔_
   --if both A holds and B holds. We formalise this idea by
   --declaring a suitable inductive type.
 
-data _×_ (A B : Set) : Set where
+-- data _×_ (A B : Set) : Set where
 
-  ⟨_,_⟩ : A  ->  B
-         ---------
-    ->    A × B
+--   ⟨_,_) : A  ->  B
+--          ---------
+--     ->    A × B
 
-  --Evidence that A × B holds is of the form ⟨ M , N ⟩, where M
+  --Evidence that A × B holds is of the form ⟨ M , N ), where M
   --provides evidence that A holds and N provides evidence that B holds.
 
   --Given evidence that A × B holds, we can conclude that either A holds or B holds.
@@ -444,18 +411,18 @@ fst : ∀ {A B : Set}
          --------
   ->      A
 
-fst ⟨ x , y ⟩ = x
+fst ( x , y ) = x
 
 snd : ∀ {A B : Set}
   ->    A × B
        -------
   ->    B
-snd ⟨ x , y ⟩ = y
+snd ( x , y ) = y
 
-η-× : ∀ {A B : Set} (w : A × B) -> ⟨ fst w , snd w ⟩ ≡ w
-η-× ⟨ x , y ⟩ = refl
+η-× : ∀ {A B : Set} (w : A × B) -> ( fst w , snd w ) ≡ w
+η-× ( x , y ) = refl
 
-infixr 2 _×_
+--infixr 2 _×_
 
   -- --Thus, m ≤ n × n ≤ p parses as (m ≤ n) × (n ≤ p).
 
@@ -463,20 +430,20 @@ comm-× : ∀ {A B : Set} -> A × B ≃ B × A
 comm-× =
   record
     {
-    to = λ {⟨ x , y ⟩ -> ⟨ y , x ⟩} ;
-    from = λ {⟨ y , x ⟩ -> ⟨ x , y ⟩};
-    from∘to = λ {⟨ x , y ⟩ -> refl} ;
-    to∘from = λ {⟨ y , x ⟩ -> refl}
+    to = λ {( x , y ) -> ( y , x )} ;
+    from = λ {( y , x ) -> ( x , y )};
+    from∘to = λ {( x , y ) -> refl} ;
+    to∘from = λ {( y , x ) -> refl}
     }
 
 assoc-× : ∀ {A B C : Set} -> (A × B) × C ≃ A × (B × C)
 assoc-× =
   record
     {
-    to = λ {⟨ ⟨ x , y ⟩ , z ⟩ -> ⟨ x , ⟨ y , z ⟩ ⟩} ;
-    from = λ {⟨ x , ⟨ y , z ⟩ ⟩ -> ⟨ ⟨ x , y ⟩ , z ⟩ };
-    from∘to = λ {⟨ ⟨ x , y ⟩ , z ⟩ -> refl } ;
-    to∘from = λ {⟨ x , ⟨ y , z ⟩ ⟩ -> refl }
+    to = λ {( ( x , y ) , z ) -> ( x , ( y , z ) )} ;
+    from = λ {( x , ( y , z ) ) -> ( ( x , y ) , z ) };
+    from∘to = λ {( ( x , y ) , z ) -> refl } ;
+    to∘from = λ {( x , ( y , z ) ) -> refl }
     }
 
 
@@ -651,9 +618,9 @@ data ⊤ : Set where
 ⊤-lidentity =
   record
     {
-    to = λ { ⟨ tt , x ⟩ -> x };
-    from = λ { x -> ⟨ tt , x ⟩ };
-    from∘to = λ { ⟨ tt , x ⟩ -> refl };
+    to = λ { ( tt , x ) -> x };
+    from = λ { x -> ( tt , x ) };
+    from∘to = λ { ( tt , x ) -> refl };
     to∘from = λ y → refl
     }
 
@@ -788,10 +755,10 @@ currying : ∀ {A B C : Set} -> (A -> B -> C) ≃ (A × B -> C)
 currying =
   record
     {
-    to = λ {f -> λ { ⟨ x , y ⟩ -> f x y}} ;
-    from = λ {f -> λ { x y -> f ⟨ x , y ⟩}} ;
+    to = λ {f -> λ { ( x , y ) -> f x y}} ;
+    from = λ {f -> λ { x y -> f ( x , y )}} ;
     from∘to = λ f → refl ;
-    to∘from = λ g → extensionality λ {⟨ x , y ⟩ → refl}
+    to∘from = λ g → extensionality λ {( x , y ) → refl}
     }
 
   --Corresponding to the law (p * n) ^ m = (p ^ m) * (n ^ m)
@@ -804,10 +771,10 @@ currying =
 ->-distrib-× =
   record
     {
-    to = λ f → ⟨ (λ x → fst (f x)) , (λ x → snd (f x)) ⟩ ;
-    from = λ {⟨ f , g ⟩ -> λ x -> ⟨ f x , g x ⟩} ;
+    to = λ f → ( (λ x → fst (f x)) , (λ x → snd (f x)) ) ;
+    from = λ {( f , g ) -> λ x -> ( f x , g x )} ;
     from∘to = λ f → extensionality λ x → η-× (f x) ;
-    to∘from = λ {⟨ f , g ⟩ -> refl}
+    to∘from = λ {( f , g ) -> refl}
   }
 
 
@@ -836,7 +803,7 @@ currying =
 
   --Lemma.
 η-abs : ∀ {A : Set} {B C : A -> Set} (f : (x : A) -> B x × C x) -> (x : A) -> B x × C x
-η-abs f = λ a -> ⟨ fst (f a) , snd (f a) ⟩
+η-abs f = λ a -> ( fst (f a) , snd (f a) )
 
   --Lemma.
 η-dep-× : ∀ {A : Set} {B C : A -> Set} (f : (x : A) -> B x × C x) -> (η-abs f) ≡ f
@@ -849,16 +816,16 @@ currying =
     {
     to =  -- Goal: ((x : .A) → .B x) × ((x : .A) → .C x)
           -- have: p  : (x : .A) → .B x × .C x
-          λ p -> ⟨ (λ x -> fst (p x)) , (λ x -> snd (p x)) ⟩ ;
+          λ p -> ( (λ x -> fst (p x)) , (λ x -> snd (p x)) ) ;
   
-    from = λ p a -> ⟨ (fst p) a , (snd p) a ⟩ ;
+    from = λ p a -> ( (fst p) a , (snd p) a ) ;
 
     from∘to =  -- f  : (x : .A) → .B x × .C x
-               -- Goal: (λ a → ⟨ fst (f a) , snd (f a) ⟩) ≡ f
+               -- Goal: (λ a → ( fst (f a) , snd (f a) )) ≡ f
                λ f -> η-dep-× f ;
 
     to∘from = -- g  : ((x : .A) → .B x) × ((x : .A) → .C x)
-              -- Goal: ⟨ (λ x → fst g x) , (λ x → snd g x) ⟩ ≡ g
+              -- Goal: ( (λ x → fst g x) , (λ x → snd g x) ) ≡ g
               λ g -> η-× g
     }     
 
@@ -881,7 +848,7 @@ data ∑ (A : Set) (B : A -> Set) : Set where
 -- infix 2 ∑-syntax
 -- syntax ∑-syntax A (λ x -> B) = ∑[ x ∈ A ] B
 
---Evidence that Σ[ x ∈ A ] B x holds is of the form ⟨ M , N ⟩ where M is a term
+--Evidence that Σ[ x ∈ A ] B x holds is of the form ( M , N ) where M is a term
 --of type A, and N is evidence that B M holds.
 
 ----------------------------------------
@@ -895,38 +862,44 @@ data ∃' (A : Set)(P : A -> Prp) : Prp where
   _,_ : (a : A) -> P a -> ∃' A P
 
 --Here's the definition on Set (instead of Prp).
-∃ : ∀ {A : Set} (B : A -> Set) -> Set
-∃ {A} B = ∑ A B
+-- ∃ : ∀ {A : Set} (B : A -> Set) -> Set
+-- ∃ {A} B = ∑ A B
 
-∃-syntax = ∃
-syntax ∃-syntax {A} (λ x -> B) = ∃[ x ∈ A ] B
+-- ∃-syntax = ∃
+-- syntax ∃-syntax {A} (λ x -> B) = ∃[ x ∈ A ] B
 
 --If for every x : A we have B x -> C, and ∃(x : A) B x, then
 --we may conclude that C holds.
 
-∃-elim : ∀ {A : Set} {B : A -> Set} {C : Set}
-  ->     (∀ x -> B x -> C)  ->  ∃[ x ∈ A ] B x
-        -----------------------------------
-  ->                  C
-∃-elim f ⟨ x , y ⟩ = f x y
+-- ∃-elim : ∀ {A : Set} {B : A -> Set} {C : Set}
+--   ->     (∀ x -> B x -> C)  ->  ∃[ x ∈ A ] B x
+--         -----------------------------------
+--   ->                  C
+-- ∃-elim f ( x , y ) = f x y
+
+-- ∃-elim : ∀ {A : Set} {B : A -> Set} {C : Set}
+--   ->     (∀ x -> B x -> C)  ->  ∃[ A ] B 
+--         -----------------------------------
+--   ->                  C
+-- ∃-elim f ( x , y ) = f x y
 
 --This is a generalization of currying.
 --Here f has type (∀ x -> B x -> C), or (∃[ x ] B x) -> C,
---(i.e., ∑ A B -> C) and ⟨ x , y ⟩ has type ∃[ x ] B x (i.e., ∑ A B),
---and we are saying that f can be applied to ⟨ x , y ⟩ as simply f x y.
+--(i.e., ∑ A B -> C) and ( x , y ) has type ∃[ x ] B x (i.e., ∑ A B),
+--and we are saying that f can be applied to ( x , y ) as simply f x y.
   
 --Indeed, there is an isomorphism.
 
-∀∃-currying : ∀ {A : Set} {B : A -> Set} {C : Set}
-  -> (∀ x -> B x -> C) ≃ (∃[ x ∈ A ] B x -> C)
-∀∃-currying =
-  record
-    {
-    to = λ{ f -> λ{ ⟨ x , y ⟩ -> f x y }} ;
-    from = λ{ g -> λ{x -> λ{y -> g ⟨ x , y ⟩ }}} ;
-    from∘to = λ{ f -> refl } ;
-    to∘from = λ{ g -> extensionality  λ{ ⟨ x , y ⟩ -> refl }}
-    }
+-- ∀∃-currying : ∀ {A : Set} {B : A -> Set} {C : Set}
+--   -> (∀ x -> B x -> C) ≃ (∃[ x ∈ A ] B x -> C)
+-- ∀∃-currying =
+--   record
+--     {
+--     to = λ{ f -> λ{ ( x , y ) -> f x y }} ;
+--     from = λ{ g -> λ{x -> λ{y -> g ( x , y ) }}} ;
+--     from∘to = λ{ f -> refl } ;
+--     to∘from = λ{ g -> extensionality  λ{ ( x , y ) -> refl }}
+--     }
 
 --N.B. the code to establish the isomorphism is identical to that for implication.
 
@@ -938,20 +911,20 @@ syntax ∃-syntax {A} (λ x -> B) = ∃[ x ∈ A ] B
 --   ∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} →
 --     ∃[ x ] (B x ⊎ C x) ≃ (∃[ x ] B x) ⊎ (∃[ x ] C x)
 
-∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} ->
-     ∃[ x ∈ A ] (B x ⊎ C x) ≃ (∃[ x ∈ A ] B x) ⊎ (∃[ x ∈ A ] C x)
-∃-distrib-⊎ =
-  record
-    {
-    to = λ{ ⟨ x , inl y ⟩ -> inl ⟨ x , y ⟩;
-            ⟨ x , inr y ⟩ -> inr ⟨ x , y ⟩ };
-    from = λ{ (inl ⟨ x , y ⟩) -> ⟨ x , inl y ⟩;
-              (inr ⟨ x , y ⟩) -> ⟨ x , inr y ⟩ };
-    from∘to = λ{ ⟨ x , inl y ⟩ -> refl;
-                 ⟨ x , inr y ⟩ -> refl } ;
-    to∘from = λ{ (inl ⟨ x , y ⟩) -> refl ;
-                 (inr ⟨ x , y ⟩) -> refl }
-    }
+-- ∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} ->
+--      ∃[ x ∈ A ] (B x ⊎ C x) ≃ (∃[ x ∈ A ] B x) ⊎ (∃[ x ∈ A ] C x)
+-- ∃-distrib-⊎ =
+--   record
+--     {
+--     to = λ{ ( x , inl y ) -> inl ( x , y );
+--             ( x , inr y ) -> inr ( x , y ) };
+--     from = λ{ (inl ( x , y )) -> ( x , inl y );
+--               (inr ( x , y )) -> ( x , inr y ) };
+--     from∘to = λ{ ( x , inl y ) -> refl;
+--                  ( x , inr y ) -> refl } ;
+--     to∘from = λ{ (inl ( x , y )) -> refl ;
+--                  (inr ( x , y )) -> refl }
+--     }
 
 
 
@@ -1022,4 +995,33 @@ x = foldleft testlist 0 _+_
 
 
 
+
+----------------------------
+--FUNCTION COMPOSITION Def
+----------------------------
+-- infixr 40 _∘_
+
+------------------
+--Basic version
+-- _∘_ : ∀ {A B C : Set} -> (B -> C) -> (A -> B) -> A -> C
+-- g ∘ f = λ x -> g (f x)
+
+-----------------------
+--More general version
+-- _∘_ : {A : Set}{B : A -> Set}
+--       {C : (x : A) -> B x -> Set}
+--       (f : {x : A}(y : B x) -> C x y)
+--       (g : (x : A) -> B x)   (x : A)
+--     ------------------------------------
+--   ->  C x (g x)
+
+-- (f ∘ g) x = f (g x)
+
+----------------------------
+--Even more general version
+-- _∘_ : ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂} {C : Set ℓ₃}
+--   -> (B -> C) -> (A -> B) -> A -> C
+-- (g ∘ f) x = g (f x)
+
+----------------------------------------------------------------------
 

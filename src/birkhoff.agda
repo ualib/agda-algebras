@@ -27,24 +27,16 @@ ker f  = λ x y -> f x ≡ f y
 -- FUNCTIONS
 -------------
 
-  --equalizer of functions
-
+--equalizer
 E : {A : Set} {B : Set}
     (f g : A -> B) -> A -> Prp
-
 E = λ f g x -> f x ≡ g x
 
-
-
 --equalizer of homs
-
-open Hom
-
+open hom
 E-hom : {A B : algebra S}
-        (f g : Hom A B) -> (⟦ A ⟧ᵤ) -> Prp
-
+        (f g : hom A B) -> (⟦ A ⟧ᵤ) -> Prp
 E-hom f g a = ⟦ f ⟧ₕ a ≡ ⟦ g ⟧ₕ a
-
 
 --surjectivity
 epic : {A B : Set} (g : A -> B) -> Prp
@@ -77,14 +69,11 @@ bijective g = epic g ∧ monic g
 --isomorphic to a member of 𝓚.
 --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
-
 contains : {A : Set} -> (L : List A) -> A -> Prp
 contains [] a = ⊥
 contains (h :: tail) a = (h ≡ a) ∨ (contains tail a)
 
-
 --data class-of-algebras : Set where
-
 
 -- --Hom-closed
 -- H-closed : (𝓚 : Pred (algebra S)) -> Prp

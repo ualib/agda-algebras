@@ -20,7 +20,6 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
 open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax)
 
-
 ---------------------------
 -- CONGRUENCE RELATIONS
 --------------------------
@@ -33,16 +32,13 @@ open algebra
 isCompatible : ∀ (A : algebra S) -> Rel ⟦ A ⟧ᵤ zero -> Set _
 
 isCompatible A θ = ∀{𝓸 : ⟨ S ⟩ₒ}
-  ->               (arg1 arg2 : Fin (⟨ S ⟩ₐ 𝓸) -> ⟦ A ⟧ᵤ) 
+  ->               (arg1 arg2 : ℕ -> ⟦ A ⟧ᵤ) 
   ->               ( ∀ i -> θ (arg1 i) (arg2 i) )
                  -------------------------------------------
   ->                 θ ((A ⟦ 𝓸 ⟧) arg1) ((A ⟦ 𝓸 ⟧) arg2)
 
-
-
 open Setoid
 open Algebra
-
 
 -- Recall, Theorem 4.32 of Bergman.
 -- Let A and B be algebras of type S. Then the following hold:
