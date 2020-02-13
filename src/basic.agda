@@ -57,8 +57,17 @@ record signature : Set₁ where
 --   If  𝓸 : σ 𝓕  is an operation symbol...
 --       (σ ρ 𝓸) is the arity of 𝓸.
 
-
------------------------------------------------
+data monoid-op : Set where
+  e : monoid-op
+  · : monoid-op
+  
+monoid-sig : signature 
+monoid-sig =
+  record
+    { _Ω = ℕ
+    ; _𝓕 = monoid-op
+    ; _ρ = λ {e -> 0; · -> 2}
+    }
 
 
 -----------------------------
