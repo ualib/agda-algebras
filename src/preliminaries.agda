@@ -1025,3 +1025,123 @@ x = foldleft testlist 0 _+_
 
 ----------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------
+-------------    MISC STUFF (not used)  -------------
+
+--NOTES on Fin
+----------------
+-- Previously, we used our own Fin type, defined as follows
+--
+-- data Fin : Nat -> Set where
+--   fzero : {n : Nat} -> Fin (succ n)
+--   fsucc : {n : Nat} -> Fin n -> Fin (succ n)
+--
+--fzero belongs to Fin (succ n) for every n, and if a belongs
+--to Fin n, then fsucc a belongs to Fin (succ n).
+--
+-- data Empty : Set where
+--   empty : Fin zero -> Empty
+--
+--Example. turn a list into a function from indices to elements.
+--
+-- _!_ : {n : Nat}{A : Set} -> Vec A n -> Fin n -> A
+-- [] ! ()
+-- (x :: xs) ! fzero = x
+-- (x :: xs) ! (fsucc i) = xs ! i
+--
+--inversely, turn a function (from indices to elements) into a
+--list of values of the function.
+--
+-- tabulate : {n : nat}{a : set} -> (fin n -> a) -> vec a n
+-- tabulate {zero} f = []
+-- tabulate {succ n} f = f fzero :: tabulate (f ∘ fsucc)
+--
+--note that tabulate is defined by recursion over the length of the
+--result list, even though it is an implicit argument.
+
+---------------
+--NOTES on ≡
+---------------
+--(see: p.12 of norell-chapman, p.23 of bove-dybjer) 
+--
+-- data _≡_ {a : set} (x : a) : a → set where
+--   refl : x ≡ x
+--
+-- data _==_ {a : set} : a -> a -> set where
+--   refl : (a : a) -> a == a
+--
+-- {-# builtin equality _≡_ #-}
+--
+--The rule of ==-elimination is the rule that allows
+--us to substitute equals for equals:
+--(see p.23 of Bove-Dybjer) 
+--
+-- subst : {A : Set} -> {C : A -> Set} -> {x y : A} -> x == y -> C x -> C y
+-- subst (refl a) c = c
+--
+--This is proved by pattern matching: the only possibility
+--to prove a == b is if they have the same canonical form c.
+--In this case, (the canonical forms of) C a and C b
+--are also the same; hence they contain the same elements.
+--
+--The K and S combinators
+--(see: Bove-Dybjer, p. 8)
+--
+-- K : (A B : Set) -> A -> B -> A
+-- K _ _ x _ = x
+--
+-- S : (A B C : Set) -> (A -> B -> C) -> (A -> B) -> A -> C
+-- S _ _ _ f g x = f x (g x)
+--
+--(see: Bove-Dybjer, p. 9)
+--
+-- if_then_else_ : {C : Set} -> Bool -> C -> C -> C
+-- if true then x else y = x
+-- if false then x else y = y
+--
+--(Note the mix-fix syntax and the implicit argument which gives a readable version.)
+--
+--The primitive recursion combinator for natural numbers.
+--(see: Bove-Dybjer, p. 9)
+--
+-- natrec : {C : Set} -> C -> (Nat -> C -> C) -> Nat -> C
+-- natrec p h zero = p
+-- natrec p h (succ n) = h n (natrec p h n)
+--
+-- From Bove-Dybjer, p. 9.
+--
+--   "It is a functional (higher-order function) defined by primitive 
+--   recursion. It receives four arguments: the first (which is implicit)
+--   is the return type, the second (called p in the equations) is the
+--   element returned in the base case, the third (called h in the 
+--   equations) is the step function, and the last is the natural 
+--   number on which we perform the recursion"
+--
+--Here is how we could define add and mult on nat using natrec.
+--(see: Bove-Dybjer, p. 10)
+--
+-- plus : Nat -> Nat -> Nat
+-- plus n m = natrec m (\x y -> succ y) n
+--
+-- mult : Nat -> Nat -> Nat
+-- mult n m = natrec zero (\x y -> plus y m) n
+--
+--Example proof.
+--Suppose we wish to prove that the two addition functions we have
+--defined, + and plus, given the same result.  Here's how:
+--
+-- eq-plus-rec : (n m : Nat) -> ((n + m) == plus n m)
+-- eq-plus-rec n m = natrec (refl m) (\k' ih -> eq-succ ih) n
+
+
+
