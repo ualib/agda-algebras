@@ -56,7 +56,7 @@ Sg : (𝑨 : algebraP S)
   ->   (X ⊆ ⟦ 𝑨 ⟧ₚ)
       -------------------  
   ->   Pred (S Ω) zero
-Sg 𝑨 X p = ⋂ (Pred (S Ω) (Level.suc zero)) ({!!}) 
+Sg 𝑨 X p = {!!} --⋂ (Pred (S Ω) (Level.suc zero)) ({!!}) 
 -- {!(IsSubuniverse 𝑨 U) × (X ⊆ U)!}
 
 

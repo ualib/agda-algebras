@@ -46,8 +46,6 @@ E-hom f g a = ⟦ f ⟧ₕ a ≡ ⟦ g ⟧ₕ a
 
 open Eq.≡-Reasoning
 module _  {A B C : algebra S} where
-  open hom
-
   comp : hom A B → hom B C → hom A C
   -- WTS ∀ (f ∈ S) (x : (ρ f) → A), (h ○ i) (fA x) = fC ((h ○ i) ○ x)
   comp (mkhom h α) (mkhom i β) =
@@ -60,12 +58,18 @@ module _  {A B : algebra S} where
     let mkhom i β = g in
     trans (α _) (trans {!!} (sym (β _)))
 
--- (subset : (ₚ))
-data Sg' (A : algebra S) (A₀ : Pred (S Ω) zero) (isSub : X ⊆ ⟦ A ⟧) : Pred (S Ω) zero where
+  --open import Relation.Binary
+  --open Setoid
+
+  homDet : {f g : hom A B} {X : Pred (S Ω) zero} → (∀ {x} → x ∈ X → (⟦ f ⟧  x) ≡ (⟦ g ⟧  x)) → (∀ {x} → ⟦ f ⟧  x ≡ ⟦ g ⟧  x)
+  homDet = {!!}
+
+
+{-data Sg' (A : algebra S) (A₀ : Pred (S Ω) zero) (isSub : X ⊆ ⟦ A ⟧) : Pred (S Ω) zero where
   var : ∀ {x} → x ∈ A₀ → Sg' A A₀ isSub x
   app : ∀ {f : S 𝓕} {a : ℕ → ⟦ A ⟧ᵤ} →
     (∀ (i : ℕ) → Sg' A A₀ isSub ?) →
-    Sg' A A₀ isSub ((A ⟦ f ⟧) a)
+    Sg' A A₀ isSub ((A ⟦ f ⟧) a)-}
 
 --surjectivity
 epic : {A B : Set} (g : A -> B) -> Prp

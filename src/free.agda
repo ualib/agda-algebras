@@ -42,7 +42,7 @@ open List
 
 data Term : Set where
   generator : X -> Term
-  node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (ℕ -> Term) -> Term
+  node : ∀ (𝓸 : S 𝓕) -> (ℕ -> Term) -> Term
 
 open Term
 
@@ -270,7 +270,7 @@ argsum (succ n) f = f n + argsum n f
 
 ⟨_⟩ₜ : Term -> ℕ
 ⟨ generator x ⟩ₜ = 1
-⟨ node 𝓸 args ⟩ₜ = ⟨ S ⟩ₐ 𝓸 + argsum (⟨ S ⟩ₐ 𝓸) (λ i -> ⟨ args i ⟩ₜ)
+⟨ node 𝓸 args ⟩ₜ = (S ρ) 𝓸 + argsum ((S ρ) 𝓸) (λ i -> ⟨ args i ⟩ₜ)
 
 
 -------------------------------------------------------------
