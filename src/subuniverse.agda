@@ -4,6 +4,7 @@
 --Updated: 6 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --allow-unsolved-metas #-}
 
 open import Level
 
@@ -55,8 +56,8 @@ Sg : (𝑨 : algebraP S)
   ->   (X ⊆ ⟦ 𝑨 ⟧ₚ)
       -------------------  
   ->   Pred (S Ω) zero
-Sg 𝑨 X p = {!⋂ _ (λ U -> (IsSubuniverse 𝑨 U) × (X ⊆ U))!} -- 
-
+Sg 𝑨 X p = ⋂ (Pred (S Ω) (Level.suc zero)) ({!!}) 
+-- {!(IsSubuniverse 𝑨 U) × (X ⊆ U)!}
 
 
 -- --subalgebra intersection
@@ -78,7 +79,7 @@ Sg 𝑨 X p = {!⋂ _ (λ U -> (IsSubuniverse 𝑨 U) × (X ⊆ U))!} --
 
 
 record subuniverse {A : algebra S} : Set (suc ℓ) where
-
+  constructor mksub
   field
     sset : Pred ⟦ A ⟧ᵤ ℓ
     closed : OpClosed A sset    

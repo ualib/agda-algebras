@@ -135,7 +135,7 @@ open algebra
 
 record hom {S : signature}
   (A : algebra S) (B : algebra S) : Set where
-
+  constructor mkhom
   field
 
     -- The map:
@@ -169,7 +169,6 @@ open Algebra
 
 record Hom {S : signature}
   (A : Algebra S) (B : Algebra S) : Set where
-
   field
 
     -- The map:

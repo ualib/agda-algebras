@@ -13,6 +13,8 @@
 --   Norell and Chapman (http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf)
 --   Wadler (https://plfa.github.io/)
 
+{-# OPTIONS --without-K --exact-split #-}
+
 open import Level
 --open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
 
@@ -21,7 +23,7 @@ module preliminaries where
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning
-open import Function
+open import Function hiding (_⇔_)
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
