@@ -18,7 +18,6 @@ open import Level
 open import preliminaries
 open import Relation.Unary
 import Relation.Binary as B
---import Relation.Binary.Indexed as I
 open import Relation.Binary.Core
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
@@ -29,12 +28,6 @@ open import Function.Equality hiding (_∘_)
 
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
---  using    ( _+_; _*_ )
-
--- open import Data.Fin public
---   -- (See "NOTE on Fin" section below)
---   hiding ( _+_; _<_ )
---   renaming ( suc to fsucc; zero to fzero )
 
 -----------------------------------------------
 
@@ -93,7 +86,7 @@ data operation (γ α : Set) : Set where
 -----------------------------------
 
 -----------------------------
---A data type for ALGEBRAS
+--Data types for ALGEBRAS
 -----------------------------
 
 open signature

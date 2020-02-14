@@ -22,8 +22,8 @@ sys.path.insert(0, os.path.abspath('.'))
 
 #project = u'⋀𝖦𝖣⋀ ⋀𝖫𝖦∃𝖡𝖱⋀'
 project = u'agda-ualib'
-copyright = u'2019, William DeMeo'
-author = u'William DeMeo'
+copyright = u'2019, William DeMeo and Siva Somayyajula'
+author = u'William DeMeo and Siva Somayyajula'
 date = u'30 Jan 2020'
 #address = u'Praha, Czechia`
 
@@ -213,7 +213,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'agda-ualib.tex', u'Agda Universal Algebra Library',
-     u'William DeMeo', 'manual'),
+     u'William DeMeo and Siva Somayyajula', 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------------

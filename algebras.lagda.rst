@@ -140,7 +140,7 @@ Thus, if
   
   denote and define the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f\ \mathsf{comp}\ g := f \, \mathsf{eval} \, \mathsf{fork} \, g: ∏_{(i:n)}((\mathsf{Fin}(k_i) → A) → A).
+.. math:: f\, \mathsf{comp}\, g := f \, \mathsf{eval} \, \mathsf{fork} \, g: ∏_{(i:n)}((\mathsf{Fin}(k_i) → A) → A).
 
 Indeed, if :math:`a: ∏_{(i:n)}(\mathsf{Fin}(k_i) → A)`, then :math:`\mathsf{eval} \, \mathsf{fork} \, g \, a` has type :math:`\mathsf{Fin}(n) → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \mathsf{eval} \, \mathsf{fork} \, g \, a` has type :math:`A`, as desired.
 
@@ -169,9 +169,9 @@ Let us adopt the following convenient notation:
 
   *Denote by* :math:`\mathsf{comp}` *the general composition operation* :math:`\mathsf{eval} \, \mathsf{fork}`.
 
-Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f \mathsf{comp} G := f \, \mathsf{eval} \, \mathsf{fork} \, G`.  Evidently, this yields the typing judgment,
+Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f\, \mathsf{comp}\, G := f \, \mathsf{eval} \, \mathsf{fork} \, G`.  Evidently, this yields the typing judgment,
 
-.. math:: f \mathsf{comp} G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
+.. math:: f\, \mathsf{comp}\, G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
 
 Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each :math:`i:γ` we have,
 
@@ -187,7 +187,7 @@ To summarize, we have the following typing judgments:
 
 .. math:: \mathsf{comp}\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
 
-whence :math:`f \mathsf{comp} G \, a: α` is well-typed.
+whence :math:`f \, \mathsf{comp}\, G \, a: α` is well-typed.
 
 
 ----------------------------------------
@@ -209,29 +209,29 @@ If the arity of :math:`f` is :math:`n`, then we call :math:`f` an :math:`n`-**ar
 
 If :math:`A` is a set and :math:`f` is a :math:`ρ f`-ary function on :math:`A`, then we often write :math:`f: A^{ρf} → A` to indicate this.
 
-On the other hand, the arguments of such a function form a :math:`ρ f`-tuple, :math:`(a_0, a_1, \dots, a_{ρf -1})`, which may be viewed as the graph of the function :math:`a: ρf → A`, where :math:`a\, i = a_i`.
+On the other hand, the arguments of such a function form a :math:`ρ f`-tuple, :math:`(a_0, a_1, \dots, a_{ρf -1})`, which may be viewed as the graph of the function :math:`a: \mathsf{Fin}(ρf) → A`, where :math:`a\, i = a_i`.
 
-Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :math:`ρ f → A` of functions from :math:`\{0, 1, \dots, ρ f-1\}` to :math:`A`, we identify the function type :math:`A^{ρ f} → A` with the function (or "functional") type :math:`(ρf → A) → A`. [2]_
+Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :math:`\mathsf{Fin}(ρ f) → A` of functions from :math:`\{0, 1, \dots, ρ f-1\}` to :math:`A`, we identify the function type :math:`A^{ρ f} → A` with the function (or "functional") type :math:`(\mathsf{Fin}(ρf) → A) → A`. [2]_
 
 **Example**.
 
    Suppose 
 
-     :math:`g : (m → A) → A` is an :math:`m`-ary operation on :math:`A`, and 
+     :math:`g : (\mathsf{Fin}(m) → A) → A` is an :math:`m`-ary operation on :math:`A`, and 
    
-     :math:`a : m → A` is an :math:`m`-tuple on :math:`A`.
+     :math:`a : \mathsf{Fin}(m) → A` is an :math:`m`-tuple on :math:`A`.
 
    Then :math:`g\, a = g(a\, 0, a\, 1, \dots, a\, (m-1))` has type :math:`A`.
 
    Suppose
 
-     :math:`f : (ρf → B) → B` is a :math:`ρf`-ary operation on :math:`B`,
+     :math:`f : (\mathsf{Fin}(ρf) → B) → B` is a :math:`ρf`-ary operation on :math:`B`,
 
-     :math:`a : ρf → A` is a :math:`ρf`-tuple on :math:`A`, and
+     :math:`a : \mathsf{Fin}(ρf) → A` is a :math:`ρf`-tuple on :math:`A`, and
 
      :math:`h : A → B`.
       
-   Then :math:`h ∘ a : ρf → B` and :math:`f (h ∘ a) : B`.
+   Then :math:`h ∘ a : \mathsf{Fin}(ρf) → B` and :math:`f (h ∘ a) : B`.
 
 It is important to be familiar with the classical notions of signature and arity, since these are used at the present time by virtually all algebraists.
 
@@ -266,33 +266,36 @@ An **algebraic structure** (or **algebra**) is a pair :math:`𝑨 = ⟨A, F⟩` 
 A better approach
 ~~~~~~~~~~~~~~~~~
 
+.. todo:: remove redundancies in this section
+	  
 We start with a set :math:`F` and call the members of :math:`F` "operation symbols."  An **operation symbol** is simply an object that has an associated **arity**.
 
-We denote the arity of :math:`f` by :math:`ρ \,f`, where :math:`ρ: F → N` is an "arity function" that maps :math:`F` into some "arity type" :math:`N`.  Often we take the arity type to be :math:`ℕ`, so that the arity of each symbol is a natural number, :math:`N = ℕ`, and :math:`ρ \, f ∈ ℕ` for all :math:`f∈ F`. 
+We denote the arity of :math:`f` by :math:`ρ \,f`, where :math:`ρ: F → N` is an "arity function" that maps :math:`F` into some "arity type" :math:`N`.  Usually we take the arity type to be :math:`ℕ`, so that the arity of each symbol is a natural number, :math:`N = ℕ`, and :math:`ρ \, f ∈ ℕ` for all :math:`f∈ F`. 
 
 A pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an **arity function** :math:`ρ: F → N` is called a **signature** (or **similarity type**).
 
 An **algebraic structure** (or **algebra**) in the signature :math:`σ = (F, ρ)` is denoted by :math:`𝑨 = ⟨A, F^𝑨⟩` and consists of 
 
   #. :math:`A` := a set, called the **carrier** (or **universe**) of the algebra,
-  #. :math:`F^𝑨 = \{ f^𝑨 ∣ f ∈ F, \ f^𝑨 : (ρ f → A) → A \}` is a collection of operations on :math:`A`,
+  #. :math:`F^𝑨 = \{ f^𝑨 ∣ f ∈ F, \ f^𝑨 : (\mathsf{Fin}(ρ f) → A) → A \}` is a collection of operations on :math:`A`,
   #. a collection of identities satisfied by elements of :math:`A` and operations in :math:`F^𝑨`.
 
 Note that to each operation symbol :math:`f∈ F` corresponds an operation :math:`f^𝑨` on :math:`A` of arity :math:`ρ f`; we call this :math:`f^𝑨` the **interpretation** of :math:`f` in :math:`𝑨`.
 
 We call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (although this is not standard). [3]_ 
 
-**Example**.
+..
+   **Example**.
 
-  Consider the set of integers :math:`ℤ` with operation symbols :math:`F = \{0, 1, -(\,), +, ⋅\}`, which have respective arities :math:`\{0, 0, 1, 2, 2\}`.
+     Consider the set of integers :math:`ℤ` with operation symbols :math:`F = \{0, 1, -(\,), +, ⋅\}`, which have respective arities :math:`\{0, 0, 1, 2, 2\}`.
 
-  The operation :math:`+^ℤ` is the usual binary addition, while :math:`-^ℤ(\,)` is negation, which takes the integer :math:`z` to :math:`-^ℤ(z) = -z`.
+     The operation :math:`+^ℤ` is the usual binary addition, while :math:`-^ℤ(\,)` is negation, which takes the integer :math:`z` to :math:`-^ℤ(z) = -z`.
 
-  The constants :math:`0^ℤ` and :math:`1^ℤ` are nullary operations. Of course we usually just write :math:`+` for :math:`+^ℤ`, etc.
+     The constants :math:`0^ℤ` and :math:`1^ℤ` are nullary operations. Of course we usually just write :math:`+` for :math:`+^ℤ`, etc.
 
-.. More :ref:`examples of algebraic structures <examples-of-algebras>` that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) appear in the appendix.
+   .. More :ref:`examples of algebraic structures <examples-of-algebras>` that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) appear in the appendix.
 
-Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
+   Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
 
 .. (See :numref:`Chapter %s <postmodern-algebra>`.)
 
@@ -315,7 +318,7 @@ Suppose :math:`𝑨 = ⟨A, F^𝑨⟩` is an algebra. Recall, the (nonempty) set
 
 We call a subset :math:`B ⊆ A` **closed under** (the operations in) :math:`F^𝑨` if for each :math:`f ∈ F` and all :math:`b_0, \dots, b_{ρf-1} ∈ B` we have :math:`f^𝑨(b_0, \dots, b_{ρ f-1}) ∈ B`.  Equivalently,
 
-.. math:: ∀ f ∈ F,\ ∀ b: ρ f → B, \ (f^𝑨 \, b) ∈ B`.
+.. math:: ∀ f ∈ F,\ ∀ b: \mathsf{Fin}(ρ f) → B, \ (f^𝑨 \, b) ∈ B`.
 
 If a subset :math:`B ⊆ A` is closed under :math:`F^𝑨`, then we call :math:`B` a **subuniverse** of :math:`𝑨`.
 
@@ -358,10 +361,9 @@ We can also use recursion to define the **subuniverse of** 𝑨 **generated by a
 Subdirect products
 -------------------
 
-If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : k → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
+If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : \mathsf{Fin}(k) → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
 
-Let :math:`F` be a set of operation symbols and for each :math:`i<n` let :math:`𝑨_i = ⟨ A_i, F ⟩` be an algebra of type :math:`F`. If :math:`𝑨 = ∏_{i<n}𝑨_i` is the product of these algebras, then a relation :math:`R` over :math:`𝑨` with scope :math:`σ` is called **compatible with** 𝑨 if it is closed under the basic operations in
-:math:`F`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨ R, F ⟩` is a subalgebra of :math:`\prod_{j<k} 𝑨_{σ(j)}`.
+Let :math:`F` be a set of operation symbols and for each :math:`i<n` let :math:`𝑨_i = ⟨ A_i, F ⟩` be an algebra of type :math:`F`. If :math:`𝑨 = ∏_{i<n}𝑨_i` is the product of these algebras, then a relation :math:`R` over :math:`𝑨` with scope :math:`σ` is called **compatible with** 𝑨 if it is closed under the basic operations in :math:`F`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨ R, F ⟩` is a subalgebra of :math:`\prod_{j<k} 𝑨_{σ(j)}`.
 
 If :math:`R` is compatible with the product algebra and if the projection of :math:`R` onto each factor is surjective, then :math:`ℝ` is called a **subdirect product** of the algebras in the list :math:`(𝑨_{σ(0)}, 𝑨_{σ(1)}, \dots, 𝑨_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{\mathrm{sd}} \prod_{j< k} 𝑨_{σ(j)}`.
 
@@ -381,7 +383,7 @@ Homomorphisms
 
 Let :math:`𝑩 = ⟨ B, F^𝑩 ⟩` and :math:`𝑪 = ⟨ C, F^𝑪 ⟩` be algebras of the same signature, and let :math:`h: B → C` be a function (e.g., on sets).
 
-Take an operation symbol :math:`f ∈ F`, and suppose that for all :math:`ρ f`-tuples :math:`b: ρ f → B` of :math:`B` the following equation holds:
+Take an operation symbol :math:`f ∈ F`, and suppose that for all :math:`ρ f`-tuples :math:`b: \mathsf{Fin}(ρ f) → B` of :math:`B` the following equation holds:
 
 .. math:: h (f^𝑩 \, b) = f^𝑪 (h ∘ b).
 
@@ -429,11 +431,11 @@ The smallest clone on :math:`A` is the **clone of projections**, which we denote
 
 Let us set down some conventions that will help simplify notation.  Recall, the natural number :math:`k< ω` may be constructed as (or at least identified with) the set :math:`\{0,1,\dots, k-1\}`, and this will be helpful here.
 
-For each :math:`k< ω`, denote and define the tuple :math:`\pi^k: k → ((k → A) → A)` of all :math:`k`-ary projections on :math:`A` as follows: for each :math:`0≤ i < k`,  :math:`π^k(i)` is the :math:`i`-th :math:`k`-ary projection operation that takes each :math:`k`-tuple :math:`a: k → A` to its entry at index :math:`i`:
+For each :math:`k< ω`, denote and define the tuple :math:`\pi^k: (\mathsf{Fin}(k) → A) → A` of all :math:`k`-ary projections on :math:`A` as follows: for each :math:`0≤ i < k`,  :math:`π^k(i)` is the :math:`i`-th :math:`k`-ary projection operation that takes each :math:`k`-tuple :math:`a: \mathsf{Fin}(k) → A` to its entry at index :math:`i`:
 
 .. math:: π^k (i) a = a(i).
 
-Observe that if :math:`f: (k → A) → A` is a :math:`k`-ary operation on :math:`A`, then 
+Observe that if :math:`f: (\mathsf{Fin}(k) → A) → A` is a :math:`k`-ary operation on :math:`A`, then 
 
 The **clone of term operations** of a σ-algebra 𝑨 is the smallest clone on :math:`A` containing the basic operations of 𝑨; this is
 denoted and defined by
@@ -472,7 +474,7 @@ By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members 
 Let :math:`F_0` denote the set of nullary operation symbols. We define by induction on :math:`n` the sets :math:`T_n` of **terms on** :math:`X ∪ F` as follows:
 
 .. math::      T_0 &= X ∪ F_0;\\
-           T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: ρf → T_n \},
+           T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: \mathsf{Fin}(ρf) → T_n \},
 
 and we define the collection of **terms of signature** :math:`σ` **over** :math:`X` by :math:`T_σ(X) = ⋃_{n < ω}T_n`.
 
@@ -497,7 +499,7 @@ If :math:`T_σ (X)` is nonempty, then we can impose upon it an algebraic structu
 
 We call :math:`𝑻_σ (X)` the **term algebra in the signature** :math:`σ` **over** :math:`X` (or, the :math:`σ`-**term algebra over** :math:`X`); it is constructed as follows:
 
-  For every basic operation symbol :math:`f ∈ F` let :math:`f^𝑻` be the operation on :math:`T_σ (X)` that maps each tuple :math:`s: ρ f → T_σ (X)` to the formal term :math:`f\,s`; define :math:`𝑻_σ(X)` to be the algebra with universe :math:`T_σ (X)` and basic operations :math:`\{f^𝑻 | f ∈ F\}`. [5]_
+  For every basic operation symbol :math:`f ∈ F` let :math:`f^𝑻` be the operation on :math:`T_σ (X)` that maps each tuple :math:`s: \mathsf{Fin}(ρ f) → T_σ (X)` to the formal term :math:`f\,s`; define :math:`𝑻_σ(X)` to be the algebra with universe :math:`T_σ (X)` and basic operations :math:`\{f^𝑻 | f ∈ F\}`. [5]_
 
 
 .. _essential arity:
@@ -560,15 +562,15 @@ Let :math:`σ = (F, ρ)` be a signature, :math:`𝑨` a :math:`σ`-algebra, and 
 
 Each operation symbol :math:`f ∈ F` gives rise to
 
-#.  a :math:`ρ f`-ary operation on :math:`T_σ(X)`, denoted by :math:`f^𝑻`, which maps each :math:`ρ f`-tuple :math:`s: ρ f → T_σ(X)` to the formal term :math:`f \,s` in :math:`T_σ(X)`, and
+#.  a :math:`ρ f`-ary operation on :math:`T_σ(X)`, denoted by :math:`f^𝑻`, which maps each :math:`ρ f`-tuple :math:`s: \mathsf{Fin}(ρ f) → T_σ(X)` to the formal term :math:`f \,s` in :math:`T_σ(X)`, and
 
-#.  a :math:`ρ f`-ary operation on :math:`A`, denoted by :math:`f^𝑨`, which maps each :math:`ρ f`-tuple :math:`a: ρ f → A` to the element :math:`f^𝑨 \,a` in :math:`A`. The operation :math:`f^𝑨` is called the **interpretation of** :math:`f` **in the algebra** :math:`𝑨`.  
+#.  a :math:`ρ f`-ary operation on :math:`A`, denoted by :math:`f^𝑨`, which maps each :math:`ρ f`-tuple :math:`a: \mathsf{Fin}(ρ f) → A` to the element :math:`f^𝑨 \,a` in :math:`A`. The operation :math:`f^𝑨` is called the **interpretation of** :math:`f` **in the algebra** :math:`𝑨`.  
 
 In the present section we explain how to define the interpretation of a :math:`σ`-term in a :math:`σ`-algebra.
 
 As usual, for each :math:`0<n<ω` we identify the :math:`n`-tuple :math:`(x_0, x_1, \dots, x_{n-1})` with the function :math:`x: \mathsf{Fin}(n) → X_n` defined by :math:`x\, i = x_i` :math:`(0≤i<n)`.
 
-Recall, a term :math:`t` is either a variable, say, :math:`t = x`, or has the form :math:`t = f \,s` for some operation symbol :math:`f ∈ F`, and some :math:`ρ f`-tuple :math:`s: ρ f → T_σ (X)` of terms.
+Recall, a term :math:`t` is either a variable, say, :math:`t = x`, or has the form :math:`t = f \,s` for some operation symbol :math:`f ∈ F`, and some :math:`ρ f`-tuple :math:`s: \mathsf{Fin}(ρ f) → T_σ (X)` of terms.
 
 .. and suppose :math:`|t| = n`.
 ..  : (\mathsf{Fin}(n) → X_n) → T_n` be an :math:`n`-ary term. 
@@ -576,7 +578,7 @@ Recall, a term :math:`t` is either a variable, say, :math:`t = x`, or has the fo
 Let :math:`t ∈ T_σ(X)` be a term. Define the **operation** :math:`t^𝑨` **on** :math:`A` by recursion on the :term:`height` :math:`|t|` of :math:`t` as follows: for each tuple :math:`a: X → A` of :math:`A`, 
 
 #. (:math:`|t| = 0`) if :math:`t` is the variable :math:`x_i ∈ X`, then :math:`t^𝑨 \, a = π^X_i\, a = a\, i`,
-#. (:math:`|t| = n+1`) if :math:`t = f\, s` where :math:`f ∈ F` is an operation symbol and :math:`s: ρ f → T_n` is a tuple of terms whose heights are at most :math:`n` (i.e., :math:`∀ i < ρf, |s\, i| ≤ n`), then :math:`t^𝑨 = f^𝑨 \, s^𝑨`.
+#. (:math:`|t| = n+1`) if :math:`t = f\, s` where :math:`f ∈ F` is an operation symbol and :math:`s: \mathsf{Fin}(ρ f) → T_n` is a tuple of terms whose heights are at most :math:`n` (i.e., :math:`∀ i < ρf, |s\, i| ≤ n`), then :math:`t^𝑨 = f^𝑨 \, s^𝑨`.
  
 .. .. Let :math:`X_ω := \{x_0, x_1, \dots\}` be a collection of variables and define :math:`X_n:=\{x_0, x_1, \dots, x_{n-1}\}`.
 
@@ -623,7 +625,7 @@ Let :math:`𝒜_σ`, resp. :math:`ℰ_σ`, denote the class of all :math:`σ`-al
 
 For :math:`𝔸 ∈ 𝒦 ⊆ 𝒜_σ` and :math:`p ≈ q ∈ Σ ⊆ ℰ_σ`, we say
 
-* :math:`𝔸` **models** :math:`p ≈ q`, denoted :math:`𝔸 ⊧ p ≈ q`, just in case :math:`p^𝔸 = q^𝔸` *extensionally* (i.e., :math:`ρ t = ρ s` and :math:`∀ a: ρ p → A, \; p^𝔸 \, a = q^𝔸 \, a`.); [7]_
+* :math:`𝔸` **models** :math:`p ≈ q`, denoted :math:`𝔸 ⊧ p ≈ q`, just in case :math:`p^𝔸 = q^𝔸` *extensionally* (i.e., :math:`ρ t = ρ s` and :math:`∀ a: \mathsf{Fin}(ρ p) → A, \; p^𝔸 \, a = q^𝔸 \, a`.); [7]_
 
 * :math:`𝔸` **models** :math:`Σ`, denoted :math:`𝔸 ⊧ Σ`, just in case :math:`𝔸 ⊧ p ≈ q` for every :math:`p ≈ q` in :math:`Σ`;
 
@@ -784,12 +786,12 @@ We start with the simple observation that composing homomorphisms gives a homomo
    
       It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
 
-      Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b: ρ f → B`; we will show that
+      Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b: \mathsf{Fin}(ρ f) → B`; we will show that
       
       .. math:: f^𝑪 (k ∘ b) = k (f^𝑩(b)).
          :label: hom1
 
-      Let :math:`a: ρ f → A` be such that :math:`g ∘ a = b`.  Then the left hand side of :eq:`hom1` is :math:`f^𝑪 (k ∘ g ∘ a) = f^𝑪 (h ∘ a)`, which is equal to :math:`h (f^𝑨 (a))` since :math:`h` is a homomorphism.
+      Let :math:`a: \mathsf{Fin}(ρ f) → A` be such that :math:`g ∘ a = b`.  Then the left hand side of :eq:`hom1` is :math:`f^𝑪 (k ∘ g ∘ a) = f^𝑪 (h ∘ a)`, which is equal to :math:`h (f^𝑨 (a))` since :math:`h` is a homomorphism.
    
       Therefore,
    
@@ -828,7 +830,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
      If :math:`A_0 ≠ ∅`, then
 
-     .. math:: A_{n+1} =  A_n ∪ \{ f\, a ∣ f ∈ F, \ a ∈ ρ f → A_n\}.
+     .. math:: A_{n+1} =  A_n ∪ \{ f\, a ∣ f ∈ F, \ a ∈ \mathsf{Fin}(ρ f) → A_n\}.
         :label: subalgebra-inductive
 
    Then the subuniverse of 𝑨 generated by :math:`A_0` is :math:`\mathsf{Sg}^𝑨(A_0) = ⋃_{n<ω} A_n`.
@@ -841,7 +843,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
       
       Let :math:`Y := ⋃_{n < ω} A_n`. Clearly :math:`A_n ⊆ Y ⊆ A`, for every :math:`n < ω`. In particular :math:`A = A_0 ⊆ Y`. We first show that :math:`Y` is a subuniverse of 𝑨.
 
-      Let :math:`f` be a basic :math:`k`-ary operation and let :math:`a: k → Y` be a :math:`k`-tuple of elements of :math:`Y`.
+      Let :math:`f` be a basic :math:`k`-ary operation and let :math:`a: \mathsf{Fin}(k) → Y` be a :math:`k`-tuple of elements of :math:`Y`.
     
       From the construction of :math:`Y`, there is an :math:`n < ω` such that :math:`∀ i,\ a,\ i ∈ A_n`.
     
@@ -855,7 +857,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
       
       Assume :math:`A_n ⊆ \mathsf{Sg}^𝑨(A_0)`.  We show :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`.
       
-      If :math:`b ∈ A_{n+1} - A_n`, then :math:`b = f\, a` for a basic :math:`k`-ary operation :math:`f` and some :math:`a: k → A_n`.
+      If :math:`b ∈ A_{n+1} - A_n`, then :math:`b = f\, a` for a basic :math:`k`-ary operation :math:`f` and some :math:`a: \mathsf{Fin}(k) → A_n`.
       
       But :math:`∀ i, \ a i ∈ \mathsf{Sg}^𝑨(A_0)` and since this latter object is a subuniverse, :math:`b ∈ \mathsf{Sg}^𝑨(X)` as well.
     
@@ -891,7 +893,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
    
    Define :math:`F_0 := \mathsf{Proj} (A)` (the set of projections on :math:`A`) and for all :math:`0 ≤ n < ω` let
  
-   .. math:: F_{n+1} := F_n ∪ \{ f g \mid f ∈ F, g : ρf → (F_n ∩ (ρg → A)) \}.
+   .. math:: F_{n+1} := F_n ∪ \{ f g \mid f ∈ F, g : \mathsf{Fin}(ρ f) → (F_n ∩ (ρg → A)) \}.
  
    Then :math:`\mathsf{Clo}(F) = ⋃_n F_n`.
  
@@ -911,9 +913,9 @@ We start with the simple observation that composing homomorphisms gives a homomo
  
       We are reduced to showing that :math:`F̄` is closed under generalized composition. This follows from the following claim.
  
-      **Claim**. If :math:`f ∈ F_n` and :math:`g_0, \dots, g_{ρ f-1} ∈ F_m` are all :math:`k`-ary, then :math:`f g \in F_{n+m}`, where we have defined :math:`g: ρ f → (k → A) → A` to be the tuple given by :math:`g\,i = g_i` for each :math:`0 ≤ i < ρ f`.
+      **Claim**. If :math:`f ∈ F_n` and :math:`g_0, \dots, g_{ρ f-1} ∈ F_m` are all :math:`k`-ary, then :math:`f g \in F_{n+m}`, where we have defined :math:`g: \mathsf{Fin}(ρ f) → (k → A) → A` to be the tuple given by :math:`g\,i = g_i` for each :math:`0 ≤ i < ρ f`.
 
-      Note that the types match up; indeed, for each :math:`a: (k → A) → A`, we have
+      Note that the types match up; indeed, for each :math:`a: (\mathsf{Fin}(k) → A) → A`, we have
 
       .. math:: f (g ∘ a) = f(g_0(a_0, \dots, a_{k-1}), 
  
@@ -923,7 +925,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       Assume the claim holds for :math:`n` and that :math:`f ∈ F_{n+1} - F_n`.
       
-      From the definition, there is a :math:`t`-ary operation :math:`f_i ∈ F` and a :math:`t`-tuple :math:`h = (h_0, \dots, h_{t-1}) ∈ t → F_n`, such that :math:`f = f_i h`. (Note that :math:`h: t → (ρ f → A) → A` is given by :math:`h(j) = h_j`, and that the arity of each :math:`h_i` must be equal to that of :math:`f`, namely :math:`ρ f`.)
+      From the definition, there is a :math:`t`-ary operation :math:`f_i ∈ F` and a :math:`t`-tuple :math:`h = (h_0, \dots, h_{t-1}) ∈ t → F_n`, such that :math:`f = f_i h`. (Note that :math:`h: \mathsf{Fin}(t) → (\mathsf{Fin}(ρ f) → A) → A` is given by :math:`h(j) = h_j`, and that the arity of each :math:`h_i` must be equal to that of :math:`f`, namely :math:`ρ f`.)
       
       By the induction hypothesis, for each :math:`i ≤ k`, :math:`h_i' = h_i g \in F_{n+m}` (where, as above, :math:`g = (g_0, \dots, g_{k-1})`).
       
@@ -1088,9 +1090,9 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
       
           Fix :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \mathsf{Hom}(𝕋(X_ω), 𝔸)`.
       
-          We must show :math:`∀ a: ρ p → A` that :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`.
+          We must show :math:`∀ a: \mathsf{Fin}(ρ p) → A` that :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`.
 
-          Fix :math:`a: ρ p → A`.
+          Fix :math:`a: \mathsf{Fin}(ρ p) → A`.
 
           By :math:`𝔸 ⊧ p ≈ q` we have :math:`p^{𝔸} = q^{𝔸}` which implies :math:`p^{𝔸}(h ∘ a) = q^{𝔸}(h ∘ a)`.
       
@@ -1100,7 +1102,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
       
           We must show :math:`𝒦 ⊧ p ≈ q`.
           
-          Fix :math:`𝔸 ∈ 𝒦` and :math:`a: ρ p → A`.
+          Fix :math:`𝔸 ∈ 𝒦` and :math:`a: \mathsf{Fin}(ρ p) → A`.
           
           We must prove :math:`p^𝔸 \, a = q^𝔸\, a`.
           
