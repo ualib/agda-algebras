@@ -10,7 +10,7 @@ open import Level
 open import basic 
 open signature
 
-module free {S : signature} {X : Set} where
+module free  {S : signature} {X : Set} where
 
 open import preliminaries  using (_⊎_ ; ∀-extensionality; ∑; List)
 open import Function using (_∘_)
@@ -37,18 +37,10 @@ open import Agda.Builtin.Nat public
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
-open List
-
 
 data Term : Set where
   generator : X -> Term
-  node : ∀ (𝓸 : ⟨ S ⟩ₒ) -> (ℕ -> Term) -> Term
-
-open Term
-
--- map-Term : (Term -> Term) -> Term -> Term
--- map-Term f (generator x) = f (generator x)
--- map-Term f (node 𝓸 t) = node 𝓸 (λ i -> map-Term f (t i))
+  node : ∀ (𝓸 : S 𝓕) -> (ℕ -> Term) -> Term
 
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
@@ -56,7 +48,6 @@ open Term
 
 open algebra
 open Term
-
 
 free : algebra S
 free = record { ⟦_⟧ᵤ = Term ; _⟦_⟧ = node }
@@ -75,8 +66,12 @@ Free = record {
                  } ;
          _⟦_⟧ = node  }
 
+
 -------------------------------------
 -- The UNIVERSAL PROPERTY of free
+
+-- We first prove this for algebras whose carriers are mere sets.
+
 -- 1. every h : X -> ⟦ A ⟧ᵤ  lifts to a hom from free to A.
 -- 2. the induced hom is unique.
 
@@ -113,8 +108,13 @@ free-unique {A} f g p (node 𝓸 args) =
      ⟦ g ⟧ₕ (node 𝓸 args)
    ∎
 
-----------------------------------------
--- setoid-based analogues
+
+
+---------------------------------------------------------------
+-- SETOID-based analogue
+--
+-- Next we prove the universal property of Free for algebras
+-- whose carriers are setoids.
 
 open Setoid 
 Free-Lift : {A : Algebra  S}(h : X -> Carrier ⟦ A ⟧ᵣ) -> Carrier ⟦ Free ⟧ᵣ -> Carrier ⟦ A ⟧ᵣ
@@ -122,13 +122,90 @@ Free-Lift h (generator x) = h x
 Free-Lift {A} h (node 𝓸 args) = (A ⟦ 𝓸 ⟧) λ i -> Free-Lift {A} h (args i)
 
 ----------------------------------------
-
 -- 1.b. The lift is a hom.
-
 open Hom
-
 Lift-Hom : {A : Algebra S} (h : X -> Carrier ⟦ A ⟧ᵣ) -> Hom Free A
 Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → Setoid.refl ⟦ A ⟧ᵣ }
+
+-- 2. The lift to  (free -> A)  is unique.
+--    (We need EXTENSIONALITY for this (imported from util.agda))
+Free-Unique : {A : Algebra S}
+  ->    ( f g : Hom Free A )
+  ->    ( ∀ x  ->   (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ (generator x)) (⟦ g ⟧ₕ (generator x)) )
+  ->    (t : Term)
+       ---------------------------
+  ->    ( ⟦ A ⟧ᵣ ≈  ⟦ f ⟧ₕ t ) (⟦ g ⟧ₕ t)
+   --   ⟦ f ⟧ₕ (node 𝓸 args)
+   -- ≡⟨ Homo f args  ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ f ⟧ₕ (args i))
+   -- ≡⟨ cong ((A ⟦_⟧)_)
+   --    ( ∀-extensionality λ i -> free-unique f g p (args i) ) ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ g ⟧ₕ (args i))
+   -- ≡⟨ sym (homo g args) ⟩
+   --   ⟦ g ⟧ₕ (node 𝓸 args)
+
+Free-Unique {A} f g p (generator x) = p x
+Free-Unique {A} f g p (node 𝓸 args) rewrite (λ { i → Free-Unique f g p (args i) }) = ?
+
+-- Goal: (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ (node 𝓸 args)) (⟦ g ⟧ₕ (node 𝓸 args))
+-- ————————————————————————————————————————————————————————————
+-- args : ℕ → Term
+-- 𝓸    : S 𝓕
+-- p    : (x : X) →
+--        (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ (generator x)) (⟦ g ⟧ₕ (generator x))
+-- g    : Hom Free A
+-- f    : Hom Free A
+-- A    : Algebra S
+-- X    : Set
+-- S    : signature
+
+-- (λ i -> Free-Unique f g p (args i)): 
+--   (i : ℕ) → (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ (args i)) (⟦ g ⟧ₕ (args i))
+
+-- So we want 
+--  ⟦ A ⟧ᵣ ≈
+--   ((A ⟦ _𝓸_ f g p 𝓸 args ⟧) ((λ {.x} → ⟦ f ⟧ₕ) ∘ args))
+--   ((A ⟦ _𝓸_ f g p 𝓸 args ⟧) ((λ {.x} → ⟦ g ⟧ₕ) ∘ args))
+
+-- Homo f:
+   -- {𝓸 : S 𝓕} (args : ℕ → Carrier ⟦ Free ⟧ᵣ) →
+   --  (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ ((Free ⟦ 𝓸 ⟧) args))
+   --          ((A ⟦ 𝓸 ⟧) ((λ {.x} → ⟦ f ⟧ₕ) ∘ args))
+-- Homo f args :
+-- (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ ((Free ⟦ _𝓸_ f g p 𝓸 args ⟧) args))
+--          ((A ⟦ _𝓸_ f g p 𝓸 args ⟧) ((λ {.x} → ⟦ f ⟧ₕ) ∘ args))
+
+-- Homo g args :
+-- (⟦ A ⟧ᵣ ≈ ⟦ g ⟧ₕ ((Free ⟦ _𝓸_ f g p 𝓸 args ⟧) args))
+--          ((A ⟦ _𝓸_ f g p 𝓸 args ⟧) ((λ {.x} → ⟦ g ⟧ₕ) ∘ args))
+
+-- If we had relational reasoning... we'd do:
+   -- begin≈
+   --   (⟦ f ⟧ₕ (node 𝓸 args)
+   -- ⟦ A ⟧ᵣ≈⟨ Homo f args  ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ f ⟧ₕ (args i))
+   -- ⟦ A ⟧ᵣ≈⟨ cong ((A ⟦_⟧)_)
+   --    ( ∀-extensionality λ i -> Free-Unique f g p (args i) ) ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ g ⟧ₕ (args i))
+   -- ⟦ A ⟧ᵣ≈⟨ sym (Homo g args) ⟩
+   --   ⟦ g ⟧ₕ (node 𝓸 args)
+   -- ∎≈
+
+
+
+--    ( ∀-extensionality λ i -> free-unique f g p (args i) ) ⟩
+
+--      ( ∀-extensionality  ) ⟩
+   -- begin
+   --   ⟦ f ⟧ₕ (node 𝓸 args)
+   -- ≡⟨ Homo f args  ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ f ⟧ₕ (args i))
+   -- ≡⟨ cong ((A ⟦_⟧)_)
+   --    ( ∀-extensionality λ i -> free-unique f g p (args i) ) ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ g ⟧ₕ (args i))
+   -- ≡⟨ Eq.sym (Homo g args) ⟩
+   --   ⟦ g ⟧ₕ (node 𝓸 args)
+   -- ∎
 
 --------------------------
 --INTERPRETATION OF TERMS
@@ -270,7 +347,7 @@ argsum (succ n) f = f n + argsum n f
 
 ⟨_⟩ₜ : Term -> ℕ
 ⟨ generator x ⟩ₜ = 1
-⟨ node 𝓸 args ⟩ₜ = ⟨ S ⟩ₐ 𝓸 + argsum (⟨ S ⟩ₐ 𝓸) (λ i -> ⟨ args i ⟩ₜ)
+⟨ node 𝓸 args ⟩ₜ = (S ρ) 𝓸 + argsum ((S ρ) 𝓸) (λ i -> ⟨ args i ⟩ₜ)
 
 
 -------------------------------------------------------------

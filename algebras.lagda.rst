@@ -20,8 +20,19 @@ In this chapter we use the informal language of universal algebra to present fou
 
 The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving properties of these objects.
 
-------------------------------
+One goal of our project was to provide, as a "proof of concept" a formal implementation of a deep result in universal algebra. As the focus of this goal, we have chosen what was among the first major results of the theory of universal algebras---namely, the celebrated `HSP Theorem`_ that Garrett Birkhoff proved in 1933. (`The original paper is available online <https://web.archive.org/web/20180330012312/https://pdfs.semanticscholar.org/a282/3f992ea5e2d2a1e989ce01844da71e4ec6a5.pdf>`_.)
 
+A nice (informal) proof of the HSP Theorem appears on pages 106 and 107 of Cliff Bergman's book :cite:`Bergman:2012`. Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book.  Nonetheless, Cliff's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
+
+On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from Bergman's book, and present them as a list of results at the end of this chapter, so that we can more easily try (in :numref:`Chapter %s <basic facts in agda>`) to implement each proof, one-by-one in Agda.
+
+Of course, when we quote or paraphrase a result from Cliff's book, we will include a citation that indicates where the corresponding result is found in the book. When doing so, we will use the acronym :term:`UAFST` to refer to the book.
+
+We owe Cliff a huge debt of gratitude for authoring such a beautiful and constructive (wherever possible) treatment of basic universal algebra.
+
+..  Birkhoff, G. (Oct 1935), "On the structure of abstract algebras" (PDF), Proceedings of the Cambridge Philosophical Society, 31 (4): 433–454, archived from the original (pdf) on 2018-03-30
+
+------------------------------
 
 .. index:: ! graph (of a function)
 .. index:: ! idempotent, ! projection
@@ -454,7 +465,7 @@ Thus
 
   *the clone of terms operations can be implemented as an inductive type*.
   
-We will make this precise below (see :numref:`Observation %s <obs 7>` and cf. Theorem 4.32 of :cite:`Bergman:2012`).
+We will make this precise below (see :numref:`Observation %s <obs 7>` and :term:`UAFST` Thm 4.32).
 
 ------------------------
 
@@ -471,7 +482,7 @@ Fix a :term:`signature` :math:`σ = (F, ρ)`, let :math:`X` be a set of **variab
 
 By a **word** on :math:`X ∪ F` we mean a nonempty, finite sequence of members of :math:`X ∪ F`, and we will denote the concatenation of such sequences by simple juxtaposition.
 
-Let :math:`F_0` denote the set of nullary operation symbols. We define by induction on :math:`n` the sets :math:`T_n` of **terms on** :math:`X ∪ F` as follows:
+Let :math:`F_0` denote the set of nullary operation symbols. We define by induction on :math:`n` the sets :math:`T_n` of **terms on** :math:`X ∪ F` as follows (cf. :term:`UAFST` Def 4.19):
 
 .. math::      T_0 &= X ∪ F_0;\\
            T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: \mathsf{Fin}(ρf) → T_n \},
@@ -583,7 +594,7 @@ Let :math:`t ∈ T_σ(X)` be a term. Define the **operation** :math:`t^𝑨` **o
 .. .. Let :math:`X_ω := \{x_0, x_1, \dots\}` be a collection of variables and define :math:`X_n:=\{x_0, x_1, \dots, x_{n-1}\}`.
 
 
-..  **Definition**. (cf. 4.31 of Bergman)
+..  **Definition**. UAFST 4.31
 
       Let 𝑿 be an infinite set (of variables), and let 𝑨 = ⟨𝐴,...⟩ be an algebra of signature :math:`S`.
 
@@ -658,16 +669,11 @@ Alternatively and equivalently we could define "equational class" and "equationa
 Basic facts
 ------------
 
-We conclude this chapter with a list of basic facts (as well as proofs, in some cases).  These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, :numref:`Obs %s <obs 1>`, :numref:`Obs %s <obs 2>`, etc.
+We conclude this chapter with a list of basic facts (as well as proofs, in some cases).  These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, :numref:`Obs %s <obs 1>`, :numref:`Obs %s <obs 2>`, etc.  As mentioned above, we use the acronym :term:`UAFST` to cite the book :cite:`Bergman:2012`.
 
 Throughout this section,
 
   :math:`𝑨 = ⟨A, F^𝑨⟩, \ 𝑩 = ⟨B, F^𝑩⟩, \ 𝑪 = ⟨C, F^𝑪⟩\ ` are algebras in the same signature :math:`σ = (F, ρ)`.
-
-.. (cf. :cite:`Bergman:2012` Thm. 1.14).
-
-.. in :numref:`subuniverse-and-subalgebra` 
-
 
 We start with the simple observation that composing homomorphisms gives a homomorphism.
 
@@ -686,7 +692,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. _obs 1:
 
-.. proof:observation:: Equalizers
+.. proof:observation:: UAFST Exercise 1.4.6.a
 
    If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, then the **equalizer** of :math:`g` and :math:`h`, which we denote :math:`𝖤(g,h) = \{a: A ∣ g\, a = h\, a\}`, is a subuniverse of 𝑨.
 
@@ -710,7 +716,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. _obs 2:
 
-.. proof:observation:: Homs determined on generating sets
+.. proof:observation:: UAFST Exercise 1.4.6.b
 
    If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, if the set :math:`X ⊆ A` generates 𝑨, and if :math:`g|_X = h|_X`, then :math:`g = h`.
 
@@ -740,7 +746,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. _obs 3:
 
-.. proof:observation::
+.. proof:observation:: UAFST Exercise 1.4.6.c
 
    If :math:`A, B` are finite and :math:`X` generates 𝑨, then :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`.
 
@@ -816,11 +822,9 @@ We start with the simple observation that composing homomorphisms gives a homomo
 .. SUBUNIVERSE GENERATION
 .. -------------------------------------------
 
-.. _thm 1.14:
-
 .. _obs 6:
 
-.. proof:observation:: Subuniverse generation
+.. proof:observation:: UAFST Thm 1.14
 
    Let :math:`𝑨 = ⟨A, F^{𝑨}⟩`  be  an  algebra in the signature :math:`σ = (F, ρ)` and let :math:`A_0` be a subset of :math:`A`.
 
@@ -863,7 +867,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
     
       Therefore, :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`, as desired. ☐ 
 
-.. The argument in the proof of :numref:`Theorem %s <thm 1.14>` is of a type that one encounters frequently throughout algebra. It has two parts.
+.. The argument in the proof of :numref:`Obs <obs 6>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
 ..   #. Some set :math:`Y` is shown to be a subuniverse of 𝑨 that contains :math:`A_0`.
 
@@ -883,11 +887,11 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. We seek a "bottom-up," inductive description of the members of :math:`\mathsf{Clo}(F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <obs 6>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available.
 
-..  Theorem  4.3. of Bergman [1].
 
 .. _obs 7:
 
-.. proof:observation::
+.. proof:observation:: UAFST Thm 4.3
+
 
    Let :math:`A` be a set and let :math:`F ⊆ \mathsf{Op}(A):= ⋃_{n<ω} A^{A^n}` be a collection of operations on :math:`A`.
    
@@ -937,7 +941,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. _obs 8:
 
-.. proof:observation::
+.. proof:observation:: UAFST Thm 4.21
 
    #. :math:`𝑻 := 𝑻_σ(X)` is generated by :math:`X`.
  
@@ -949,7 +953,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
      
          *Proof*.
      
-      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <thm 1.14>`. That accounts for the first assertion.
+      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <obs 6>`. That accounts for the first assertion.
      
 
       For the second assertion, define :math:`h\,t` by induction on the :term:`height` of :math:`|t|`.
@@ -1076,7 +1080,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
 
 .. _obs 13:   
 
-.. proof:observation:: 
+.. proof:observation:: UAFST Lem 4.37
 
    :math:`𝒦 ⊧ p ≈ q` if and only if :math:`∀ 𝔸 ∈ 𝒦`, :math:`∀ h ∈ \mathsf{Hom}(𝕋(X_ω), 𝔸)`, :math:`h\, p^𝔸 = h\, q^𝔸`.
 
@@ -1140,14 +1144,14 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
       
       Recall that :math:`𝔽_{𝒦}(X_ω) = 𝕋/λ ∈ 𝖲 𝖯 (𝒦)`.
       
-      From (1) and Lemma 4.36 of :cite:`Bergman:2012` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (3) holds.
+      From (1) and Lemma 4.36 of :term:`UAFST` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (3) holds.
 
       From (3), :math:`p^{𝔽} \, [x] = q^{𝔽} \, [x]`, where :math:`[x]: ρ p → 𝔽_𝒦 (X_ω)` is defined by :math:`[x]\, i = x_i/λ`.
       
       From the definition of 𝔽, :math:`p^{𝕋}\, x ≡_λ q^{𝕋} ×`, from which (2) follows since :math:`p = p^{𝕋}\, x` 
       and :math:`q = q^{𝕋}\, x`.
 
-      Finally assume (2). We wish to apply Lemma 4.37 of :cite:`Bergman:2012`.
+      Finally assume (2). We wish to apply Lemma 4.37 of :term:`UAFST`.
       
       Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \mathsf{Hom}(𝕋, 𝔸)`.
       
@@ -1171,7 +1175,7 @@ The last result tells us that we can determine whether an identity is true in a 
  
          *Proof*.
       
-      Since :math:`𝔽_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Theorem 4.38 of :cite:`Bergman:2012`. (See :numref:`Obs %s <obs 14>` above.)
+      Since :math:`𝔽_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Thm 4.38 of :term:`UAFST`. (See :numref:`Obs %s <obs 14>` above.)
       
       So assume that :math:`p^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n) = q^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n)`.
       
@@ -1193,9 +1197,9 @@ We end this subsection with yet another standard but important result.
 
     Every  finitely  generated  variety  is  locally finite.
 
-    (See Theorem 3.49 of :cite:`Bergman:2012` for proof.)
+    (See Thm 3.49 of :term:`UAFST` for the proof.)
 
-    The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :cite:`Bergman:2012`).
+    The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :term:`UAFST`).
 
 
    

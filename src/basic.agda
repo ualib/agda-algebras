@@ -39,7 +39,7 @@ open import Agda.Builtin.Nat public
 record signature : Set₁ where 
   field
     _Ω : Set         -- The "überuniverse" (all universes are subsets of Ω)
-    _𝓕 : Set        -- operation symbols.
+    _𝓕 : Set        -- operation symbols (type 𝓕 with `\MCF`)
     _ρ : _𝓕 -> ℕ   -- Each operation symbol has an arity.
                       
 -- (for now, use natural number arities, but this isn't essential)
@@ -170,7 +170,7 @@ record Hom {S : signature}
 
     -- The property the map must have to be a hom:
     Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> Carrier ⟦ A ⟧ᵣ)
-      ->   (_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
+      ->   (⟦ B ⟧ᵣ ≈  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ)  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
 
 
 ---------------------
