@@ -12,28 +12,57 @@
 --   Páli Gábor János (https://people.inf.elte.hu/pgj/agda/tutorial/Index.html)
 --   Norell and Chapman (http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf)
 --   Wadler (https://plfa.github.io/)
+--
+-- as well as the Setoids.agda file by Gunther, Gadea, and Pagano [1].
+--
 
-open import Level
---open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
+{-# OPTIONS --without-K --exact-split #-}
 
 module preliminaries where
 
-import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym)
+open import Level renaming (suc to lsuc ; zero to lzero)
+open import Data.Bool renaming (_≟_ to _≟b_)
+open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
+open import Relation.Unary hiding (_⊆_;_⇒_)
+open import Relation.Binary hiding (Total;_⇒_;Setoid) 
+import Relation.Binary.EqReasoning as EqR
+open import Relation.Binary.PropositionalEquality as Eq
+  hiding ( Reveal_·_is_;[_];isEquivalence;∀-extensionality)
+open Eq using (_≡_; sym)
 open Eq.≡-Reasoning
 open import Function
-open import Agda.Builtin.Nat public
-  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
-open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
---  using    ( _+_; _*_ )
-----------------------------------------------------------------------
+open import Function.Equality renaming (_∘_ to _∘ₛ_) hiding (setoid;cong)
 
+-- --A simpler setoid than the one in Relation.Binary of Agda std lib.
+record Setoid : Set₁ where
+  field
+    Carrier : Set
+    _≈_ : Carrier -> Carrier -> Set
+    isEquivalence : IsEquivalence _≈_
+
+open import Data.Fin hiding (_+_)
+
+import Relation.Binary.EqReasoning as EqR
+
+open Setoid -- renaming (refl to rfl)
+
+{- Carrier -}
+-- ∥_∥ : ∀ {l₁ l₂} → (Setoid l₁ l₂) → Set l₁
+-- ∥ S ∥ =  Carrier S
+∥_∥ : Setoid → Set
+∥ S ∥ =  Carrier S
+
+-- record _→̃̃_ {ℓ₁ ℓ₂ : Level} (A B : Setoid ℓ₁ ℓ₂) : Set where
+--   field
+--     _⟨$⟩_  : Carrier A  -> Carrier B 
+--     cong : ∀ {a a'} -> _≈_ A a a' -> _≈_ B (_⟨$⟩ a) (_⟨$⟩ a')
+  
 ---------------
 --BOOLEAN Type
 ---------------
-data Bool : Set where
-  true : Bool
-  false : Bool
+-- data Bool : Set where
+--   true : Bool
+--   false : Bool
 
 ------------------
 --SET ISOMORPHISM
@@ -179,7 +208,7 @@ open _≲_
   record {
     to = λ x -> x ;
     from = λ x -> x ;
-    from∘to = λ x -> refl
+    from∘to = λ x -> Eq.refl
   }
 
 ≲-trans : ∀ {A B C : Set}
@@ -289,7 +318,7 @@ I p = p
   --Implication elimination followed by implication introduction is the identity.
 
 η--> : ∀ {A B : Set} (f : A -> B) -> (λ (x : A) -> f x) ≡ f
-η--> f = refl
+η--> f = Eq.refl
 
   --Implication binds less tightly than any other operator. Thus, A ⊎ B -> B ⊎ A
   --parses as (A ⊎ B) -> (B ⊎ A).
@@ -299,90 +328,89 @@ I p = p
 -- A ⊆ B = ∀ i -> A i ⇒ B i
 
 
-  -------------------------------------------------------------
+-------------------------------------------------------------
 
-  ----------------------------------
-  --CONJUNCTION Type  (∧ = \and)
-  ----------------------------------
-  --A proof of P ∧ Q is a pair of proofs one of P and one of Q.
+----------------------------------
+--CONJUNCTION Type  (⋀ = \bigwedge)
+----------------------------------
+--A proof of P ⋀ Q is a pair of proofs one of P and one of Q.
 
-  --The ∧-intro ("and introduction") rule.
-data _∧_ (P Q : Prp) : Prp where
+infixr 2 _⋀_
 
-  _,_ :  P  ->  Q
+--The ⋀-intro ("and introduction") rule.
+data _⋀_ (P Q : Prp) : Prp where   -- type ⋀ with `\bigwedge`
+  _&_ :  P  ->  Q
        ------------
-    ->    P ∧ Q
+    ->    P ⋀ Q
 
-infixr 2 _∧_
-
-  --The left ∧-elim ("and elimination") rule.
+--The left ⋀-elim ("and elimination") rule.
 left : {P Q : Prp}
 
-  ->   P ∧ Q
+  ->   P ⋀ Q
       --------
   ->    P
     
-left (p , q) = p
+left (p & q) = p
 
-  --The right ∧-elim ("and elimination") rule.
+  --The right ⋀-elim ("and elimination") rule.
 right : {P Q : Prp}
 
-  ->   P ∧ Q
+  ->   P ⋀ Q
       --------
   ->    Q
 
-right (p , q) = q
+right (p & q) = q
 
-  --A simple tautology: ∧ is commutative.
-comm-∧ : {P Q : Prp} -> P ∧ Q ⇒ Q ∧ P
-comm-∧ (p , q) = q , p
+  --A simple tautology: ⋀ is commutative.
+comm-⋀ : {P Q : Prp} -> P ⋀ Q ⇒ Q ⋀ P
+comm-⋀ (p & q) = q & p
 
-  -------------------------------
-  --DISJUNCTION Type (∨ = \or)
-  -------------------------------
-  --A proof of P ∨ Q is either a proof of P (prefixed with inl,
-  --for "in left" or "left introduction") or a proof of Q
-  --(prefixed with inr, for "in right").
+----------------------------------
+--DISJUNCTION Type (⋁ = \bigvee)
+----------------------------------
+--A proof of P ⋁ Q is either a proof of P (prefixed with inl,
+--for "in left" or "left introduction") or a proof of Q
+--(prefixed with inr, for "in right").
 
-data _∨_ (P Q : Prp) : Prp where
+data _⋁_ (P Q : Prp) : Prp where
 
   inl :    P
         -------
-    ->   P ∨ Q
+    ->   P ⋁ Q
       
   inr :    Q
         -------
-    ->   P ∨ Q
+    ->   P ⋁ Q
 
-infixr 1 _∨_
+infixr 1 _⋁_
 
-  -- ∨ is commutative
-∨-comm : {P Q : Prp} -> P ∨ Q ⇒ Q ∨ P
-∨-comm (inl p) = inr p
-∨-comm (inr q) = inl q
+-- ⋁ is commutative
+⋁-comm : {P Q : Prp} -> P ⋁ Q ⇒ Q ⋁ P
+⋁-comm (inl p) = inr p
+⋁-comm (inr q) = inl q
 
-  -- ∧ distributes over ∨
-∧-distrib-∨-=> : {P Q R : Prp} -> P ∧ (Q ∨ R) ⇒ (P ∧ Q) ∨ (P ∧ R)
-∧-distrib-∨-=> (p , inl q) = inl (p , q)
-∧-distrib-∨-=> (p , inr r) = inr (p , r)
+-- ⋀ distributes over ⋁
+⋀-distrib-⋁-=> : {P Q R : Prp} -> P ⋀ (Q ⋁ R) ⇒ (P ⋀ Q) ⋁ (P ⋀ R)
+⋀-distrib-⋁-=> (p & inl q) = inl (p & q)
+⋀-distrib-⋁-=> (p & inr r) = inr (p & r)
 
-∧-distrib-∨-<= : {P Q R : Prp} -> (P ∧ Q) ∨ (P ∧ R) ⇒ P ∧ (Q ∨ R)
-∧-distrib-∨-<= (inl (p , q)) = (p , inl q)
-∧-distrib-∨-<= (inr (p , r)) = (p , inr r)
+⋀-distrib-⋁-<= : {P Q R : Prp} -> (P ⋀ Q) ⋁ (P ⋀ R) ⇒ P ⋀ (Q ⋁ R)
+⋀-distrib-⋁-<= (inl (p & q)) = (p & inl q)
+⋀-distrib-⋁-<= (inr (p & r)) = (p & inr r)
 
   -------------------------------------------
   --LOGICAL EQUIVALENCE Def (⇔ = \iff)
   -------------------------------------------
-  --Define ⇔ in terms of ∧ and ⇒ 
+  --Define ⇔ in terms of ⋀ and ⇒ 
 _⇔_ : Prp -> Prp -> Prp
-P ⇔ Q = (P ⇒ Q) ∧ (Q ⇒ P)
+P ⇔ Q = (P ⇒ Q) ⋀ (Q ⇒ P)
 
 infixr 0 _⇔_
 
   --we can combine the two lemmas above to prove the distributivity 
   --as a logical equivalence.
-∧-distrib-∨ : {P Q R : Prp} ->  P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)
-∧-distrib-∨ = ∧-distrib-∨-=> , ∧-distrib-∨-<=
+⋀-distrib-⋁ : {P Q R : Prp} ->  P ⋀ (Q ⋁ R) ⇔ (P ⋀ Q) ⋁ (P ⋀ R)
+⋀-distrib-⋁ = ⋀-distrib-⋁-=> & ⋀-distrib-⋁-<=
 
   ---------------------------------------------------
 
@@ -420,7 +448,7 @@ snd : ∀ {A B : Set}
 snd ( x , y ) = y
 
 η-× : ∀ {A B : Set} (w : A × B) -> ( fst w , snd w ) ≡ w
-η-× ( x , y ) = refl
+η-× ( x , y ) = Eq.refl
 
 --infixr 2 _×_
 
@@ -601,7 +629,7 @@ postulate
   --The trivially true proposition (type) has a trivial proof.
   --There is an introduction rule, but no elimination because we can't
   --get something for nothing.
-  --We can view ⊤ as a special case of ∧ with no arguments. 
+  --We can view ⊤ as a special case of ⋀ with no arguments. 
 data ⊤ : Set where
 
   tt : ---
@@ -702,8 +730,8 @@ uniq-⊥ h ()
 
   {- Some basic facts about negation. -}
 
-contradict : {P : Prp} -> ¬ (P ∧ ¬ P)
-contradict (p , np) = np p
+contradict : {P : Prp} -> ¬ (P ⋀ ¬ P)
+contradict (p & np) = np p
   --Explanation. Assume: (p, np). Prove false.
   --Consider the term np p. We have a function np: P -> ⊥
   --that takes a proof of P and outputs ⊥.
@@ -720,16 +748,16 @@ contrapos pq nq p = nq (pq p)
 
   {- Let's prove the de Morgan laws -}
 
-deMorgan¬∨ : {P Q : Prp} -> ¬ (P ∨ Q) ⇒ ¬ P ∧ ¬ Q 
-deMorgan¬∨ npq = (λ p -> npq (inl p)) , λ q -> npq (inr q)
+deMorgan¬∨ : {P Q : Prp} -> ¬ (P ⋁ Q) ⇒ ¬ P ⋀ ¬ Q 
+deMorgan¬∨ npq = (λ p -> npq (inl p)) & λ q -> npq (inr q)
   
-deMorgan¬∧¬ : {P Q : Prp} -> (¬ P) ∧ (¬ Q) ⇒ ¬ (P ∨ Q)
-deMorgan¬∧¬ (np , nq) (inl p) = np p
-deMorgan¬∧¬ (np , nq) (inr q) = nq q
+deMorgan¬⋀¬ : {P Q : Prp} -> (¬ P) ⋀ (¬ Q) ⇒ ¬ (P ⋁ Q)
+deMorgan¬⋀¬ (np & nq) (inl p) = np p
+deMorgan¬⋀¬ (np & nq) (inr q) = nq q
   
-deMorgan¬∨¬ : {P Q : Prp} -> (¬ P) ∨ (¬ Q) ⇒ ¬ (P ∧ Q)
-deMorgan¬∨¬ (inl np) (p , q) = np p
-deMorgan¬∨¬ (inr nq) (p , q) = nq q
+deMorgan¬⋁¬ : {P Q : Prp} -> (¬ P) ⋁ (¬ Q) ⇒ ¬ (P ⋀ Q)
+deMorgan¬⋁¬ (inl np) (p & q) = np p
+deMorgan¬⋁¬ (inr nq) (p & q) = nq q
 
  
 
@@ -951,19 +979,6 @@ inv f .(f x) (im x) = x  -- Cool!!!
 -------------------------------------------------------------------
 
 
--------------------
---LIST Type
--------------------
---
-infixr 40 _::_
-data List (A : Set) : Set where
-  [] : List A
-  _::_ : A -> List A -> List A
-
--- data List' {ℓ : Level} (A : Set ℓ) : Set (suc ℓ) where
---   [] : List' A
---   _::_ : A -> List' A -> List' A
-
 identity : ∀{ℓ : Level} (A : Set ℓ) -> A -> A
 identity A x = x
 
@@ -971,25 +986,32 @@ apply : (A : Set)(B : A -> Set) ->
         ((x : A) -> B x) -> (a : A) -> B a
 apply A B f a = f a
 
-map : {A B : Set} -> (A -> B) -> List A -> List B
+------------------------------------------
+--LIST Type (using builtin list for now)
+infixr 40 _::_
+data List (a : Set) : Set where
+  [] : List a
+  _::_ : a -> List a -> List a
+
+map : {a b : Set} -> (a -> b) -> List a -> List b
 map f []        = []
 map f (x :: xs) = f x :: map f xs
 
---list addition (i.e., concatenation)
-_++_ : {A : Set} -> List A -> List A -> List A
-[] ++ ys = ys
-(x :: xs) ++ ys = x :: (xs ++ ys)
+-- --list addition (i.e., concatenation)
+-- _++_ : {a : set} -> list a -> list a -> list a
+-- [] ++ ys = ys
+-- (x :: xs) ++ ys = x :: (xs ++ ys)
 
 
-foldleft : {A B : Set} -> List A -> B -> (B -> A -> B) -> B
-foldleft [] z f = z
-foldleft (x :: l) z f = foldleft l (f z x) f
+-- foldleft : {A B : Set} -> List A -> B -> (B -> A -> B) -> B
+-- foldleft [] z f = z
+-- foldleft (x :: l) z f = foldleft l (f z x) f
 
---brief sanity check of foldleft
-testlist : List ℕ
-testlist = 0 :: (1 :: (2 :: []))
-x = foldleft testlist 0 _+_
---type C-c C-n x to see that the result is 3, as expected.
+-- --brief sanity check of foldleft
+-- testlist : List ℕ
+-- testlist = 0 :: (1 :: (2 :: []))
+-- x = foldleft testlist 0 _+_
+-- --type C-c C-n x to see that the result is 3, as expected.
 
 
 
@@ -1145,3 +1167,8 @@ x = foldleft testlist 0 _+_
 
 
 
+
+
+-- [1] Gunther, Gadea, and Pagano, "Formalization of Universal Algebra in Agda",
+--     Elec. Notes in Th. Comp. Sci., 2018.
+--     URL = {http://www.sciencedirect.com/science/article/pii/S1571066118300768},
