@@ -21,7 +21,7 @@ open import Relation.Unary hiding (_⊆_;_⇒_)
 open import Relation.Binary hiding (Total;_⇒_;Setoid) 
 import Relation.Binary.EqReasoning as EqR
 open import Relation.Binary.PropositionalEquality as Eq
-  hiding ( Reveal_·_is_;[_];isEquivalence;∀-extensionality)
+  hiding ( Reveal_·_is_;[_];∀-extensionality)
 open Eq using (_≡_; sym)
 open Eq.≡-Reasoning
 open import Function
@@ -182,10 +182,10 @@ record Hom {S : signature}
   field
 
     -- The map:
-    ⟦_⟧ₕ : Carrier ⟦ A ⟧ᵣ -> Carrier ⟦ B ⟧ᵣ 
+    ⟦_⟧ₕ : ∥ ⟦ A ⟧ᵣ ∥ -> ∥ ⟦ B ⟧ᵣ ∥
 
     -- The property the map must have to be a hom:
-    Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> Carrier ⟦ A ⟧ᵣ)
+    Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> ∥ ⟦ A ⟧ᵣ ∥)
       ->   (⟦ B ⟧ᵣ ≈  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ)  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
 
 
@@ -285,17 +285,17 @@ record conP {S : signature} (A : algebraP S) : Set₁ where
 
 Compatible : ∀ {S : signature}
   ->            S 𝓕  ->  (A : Algebra S)
-  ->            Rel (Carrier ⟦ A ⟧ᵣ) lzero -> Set _
+  ->            Rel ∥ ⟦ A ⟧ᵣ ∥  lzero -> Set _
 Compatible 𝓸 A 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
 Compatible-Alg : ∀ {S : signature}
-  -> (A : Algebra S) -> Rel (Carrier ⟦ A ⟧ᵣ) lzero -> Set _
+  -> (A : Algebra S) -> Rel ∥ ⟦ A ⟧ᵣ ∥  lzero -> Set _
 Compatible-Alg {S} A 𝓻 = ∀{𝓸 : S 𝓕} -> Compatible 𝓸 A 𝓻
 
 
 record Con {S : signature} (A : Algebra S) : Set₁ where
   field
-    ⟦_⟧ᵣ : Rel (Carrier ⟦ A ⟧ᵣ) lzero
+    ⟦_⟧ᵣ : Rel ∥ ⟦ A ⟧ᵣ ∥  lzero
     equiv : IsEquivalence ⟦_⟧ᵣ
     compat : Compatible-Alg A ⟦_⟧ᵣ
 
@@ -308,9 +308,9 @@ Quotient A θ =
   record {
 
     ⟦_⟧ᵣ = record {
-            Carrier = Carrier ⟦ A ⟧ᵣ ;
+            Carrier = ∥ ⟦ A ⟧ᵣ ∥;
             _≈_ = ⟦ θ ⟧ᵣ;
-            isEquivalence = equiv θ } ;
+            isEquiv = equiv θ } ;
 
     _⟦_⟧ = A ⟦_⟧ }
 
