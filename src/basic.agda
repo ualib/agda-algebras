@@ -5,38 +5,27 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
---without-K disables Streicher's K axiom (see "NOTES on Axiom K" below).
-
---exact-split makes Agda to only accept definitions with the equality sign "=" that
---behave like so-called judgmental or definitional equalities.
-
+-- `--without-K` disables Streicher's K axiom (see "NOTES on Axiom K" below).
+-- `--exact-split` makes Agda to only accept definitions with the equality
+-- sign "=" that behave like so-called judgmental or definitional equalities.
 
 module basic where
 
-open import Level
 open import preliminaries
-open import Relation.Unary
-import Relation.Binary as B
---import Relation.Binary.Indexed as I
-open import Relation.Binary.Core
-import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl)
-open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax)
-open import Function using (_∘_)
-open import Function.Equality hiding (_∘_)
 
-
+open import Level renaming (suc to lsuc ; zero to lzero)
+open import Data.Product using (_×_; Σ; _,_; ∃; Σ-syntax; ∃-syntax)
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
---  using    ( _+_; _*_ )
-
--- open import Data.Fin public
---   -- (See "NOTE on Fin" section below)
---   hiding ( _+_; _<_ )
---   renaming ( suc to fsucc; zero to fzero )
-
------------------------------------------------
-
+open import Relation.Unary hiding (_⊆_;_⇒_)
+open import Relation.Binary hiding (Total;_⇒_;Setoid) 
+import Relation.Binary.EqReasoning as EqR
+open import Relation.Binary.PropositionalEquality as Eq
+  hiding ( Reveal_·_is_;[_];∀-extensionality)
+open Eq using (_≡_; sym)
+open Eq.≡-Reasoning
+open import Function
+open import Function.Equality renaming (_∘_ to _∘ₛ_) hiding (setoid;cong)
 
 --------------------------------
 -- A data type for SIGNATURES
@@ -45,86 +34,107 @@ open import Agda.Builtin.Nat public
 record signature : Set₁ where 
   field
     _Ω : Set         -- The "überuniverse" (all universes are subsets of Ω)
-    _𝓕 : Set        -- operation symbols.
+    _𝓕 : Set        -- operation symbols (type 𝓕 with `\MCF`)
     _ρ : _𝓕 -> ℕ   -- Each operation symbol has an arity.
-                      
--- (for now, use natural number arities, but this isn't essential)
+                     -- (for now, we use natural number arities)
 
---   If   σ : signature   is a signature...
---     σ Ω denotes the überuniverse of S.
---     σ 𝓕 denotes the operation symbols of S.
---   If  𝓸 : σ 𝓕  is an operation symbol...
---       (σ ρ 𝓸) is the arity of 𝓸.
+--If `S : signature` is a signature, then `S Ω` denotes the überuniverse of `S`.
+--and `S 𝓕` denotes the operation symbols of `S`.
+--If `𝓸 : σ 𝓕`  is an operation symbol, then `S ρ 𝓸` is the arity of `𝓸`.
 
-data monoid-op : Set where
-  e : monoid-op
-  · : monoid-op
+data op-monoid : Set where
+  e : op-monoid
+  · : op-monoid
   
-monoid-sig : signature 
-monoid-sig =
+sig-monoid : signature 
+sig-monoid =
   record
     { _Ω = ℕ
-    ; _𝓕 = monoid-op
+    ; _𝓕 = op-monoid
     ; _ρ = λ {e -> 0; · -> 2}
     }
 
+-- vvvvvvvvvvvvvvvvvvvvvvv BEGIN GGP Section 1 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+-- Occasionally, we experiment with datatypes that are more similar to the
+-- datatypes defined by Gunther, Gadea, Pigano, who implemented the rudiments
+-- of (multisorted) universal algebra in 2017. We will mark datatypes that are
+-- modeled on the latter with the acronym GGP.
+--
+-- Here are our some examples of such "GGP types.
+-- (see p. 149 of [1])
+record Signature-GGP : Set₁ where
+  field
+    sorts : Set
+    ops  : List sorts × sorts -> Set
+
+data monoid-op-GGP : List ⊤ × ⊤ -> Set where
+  e : monoid-op-GGP ([] , tt)
+  · : monoid-op-GGP ( tt :: (tt :: []) , tt )
+
+monoid-sig-GGP : Signature-GGP
+monoid-sig-GGP = record { sorts = ⊤ ; ops = monoid-op-GGP }
+
+data actMonₛ-GGP : Set where
+  mon : actMonₛ-GGP
+  set : actMonₛ-GGP
+
+open actMonₛ-GGP
+
+data actMonₒ-GGP : (List actMonₛ-GGP) × actMonₛ-GGP -> Set where
+  e : actMonₒ-GGP ([] , mon)
+  * : actMonₒ-GGP ( mon :: [] , mon )
+  · : actMonₒ-GGP ( (mon :: (set :: [])) , set )
+
+actMon-sig-GGP : Signature-GGP
+actMon-sig-GGP = record { sorts = actMonₛ-GGP ; ops = actMonₒ-GGP }
+
+-- ^^^^^^^^^^^^^^^^^^^^^  END GGP Section 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -----------------------------
 --A data type for OPERATIONS
 -----------------------------
-
-
 data operation (γ α : Set) : Set where
-
   o : ((γ -> α) -> α) -> operation γ α
-
 -- Here, γ is an "arity type" and α is a "universe type".
-
--- Example: the i-th γ-ary projection operation on α
-
--- could be implemented like this:
-
+-- Example: the i-th γ-ary proj op on α is implemented as,
 π : ∀ {γ α : Set} -> (i : γ) -> operation γ α
-
 π i =  o λ x -> x i
 
-
------------------------------------
-
 -----------------------------
---A data type for ALGEBRAS
+--Data types for ALGEBRAS
 -----------------------------
-
 open signature
- 
 --Here are 3 flavors of algebras.
 
 --1. algebra (with carrier of type Set)
 record algebra (S : signature) : Set₁ where
-
   field 
     ⟦_⟧ᵤ : Set
     _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> ⟦_⟧ᵤ) -> ⟦_⟧ᵤ
 
 -- 2. algebra (with carrier a predicate on Ω)
 record algebraP (S : signature) : Set₁ where
-
   field
-    ⟦_⟧ₚ : Pred (S Ω) zero
+    ⟦_⟧ₚ : Pred (S Ω) lzero
     _⟦_⟧ₒ : (𝓸 : S 𝓕) -> (ℕ -> (S Ω)) -> (S Ω) -- I don't like this type signature.
     cl : ∀ (𝓸 : S 𝓕) (args : ℕ -> (S Ω))      --  (it's very imprecise)   :'(
          -> (∀(i : ℕ) -> (args i) ∈ ⟦_⟧ₚ)
         ------------------------------------------------
          -> _⟦_⟧ₒ 𝓸 args ∈ ⟦_⟧ₚ
 
-open B.Setoid
+--Using a slightly simpler Setoid type than that found in Relation.Binary of Agda stdlib.
+open Setoid  --see: preliminaries.agda
 
 -- 3. algebra (with carrier a Setoid)
 record Algebra (S : signature) : Set₁ where
-
   field
-    ⟦_⟧ᵣ : B.Setoid zero zero
+    ⟦_⟧ᵣ : Setoid
     _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> Carrier ⟦_⟧ᵣ) ->  Carrier ⟦_⟧ᵣ
+
+
+-- vvvvvvvvvvvvvvvvvvvvvvv   BEGIN GGP Section 2.   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+--
+-- ^^^^^^^^^^^^^^^^^^^^^^^^  END GGP Section 2. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ----------------------------------
 --A data type for HOMOMORPHISMS
@@ -171,11 +181,16 @@ record Hom {S : signature}
   field
 
     -- The map:
-    ⟦_⟧ₕ : Carrier ⟦ A ⟧ᵣ -> Carrier ⟦ B ⟧ᵣ 
+    ⟦_⟧ₕ : ∥ ⟦ A ⟧ᵣ ∥ -> ∥ ⟦ B ⟧ᵣ ∥
 
     -- The property the map must have to be a hom:
-    Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> Carrier ⟦ A ⟧ᵣ)
-      ->   (_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
+    Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> ∥ ⟦ A ⟧ᵣ ∥)
+      ->   (⟦ B ⟧ᵣ ≈  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ)  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
+
+
+-- vvvvvvvvvvvvvvvvvvvvvvv   BEGIN GGP Section 3.   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+--
+-- ^^^^^^^^^^^^^^^^^^^^^^^^  END GGP Section 3. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 ---------------------
@@ -190,7 +205,7 @@ _≅ᵤ_ :  {S : signature}
 A ≅ᵤ B = (∃ f : hom A B)
   ->    (∃ g : hom B A)
   ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity _ ) -- ⟦ A ⟧ᵤ
-      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- ⟦ B ⟧ᵤ 
+      ⋀ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- ⟦ B ⟧ᵤ 
 
 --------------------------------------------------------------
 -- analogue for predicate-based algebras
@@ -203,7 +218,7 @@ _≅ₚ_ :  {S : signature}
 A ≅ₚ B = (∃ f : homP A B)
   ->    (∃ g : homP B A)
   ->    ( (hmap g) ∘ (hmap f) ≡ identity _ )
-      ∧ ( (hmap f) ∘ (hmap g) ≡ identity _ )
+      ⋀ ( (hmap f) ∘ (hmap g) ≡ identity _ )
 
 --------------------------------------------------------------
 -- analogue for setoid-based algebras
@@ -216,7 +231,7 @@ _≅ₛ_ : {S : signature}
 A ≅ₛ B = (∃ f : Hom A B)
   ->    (∃ g : Hom B A)
   ->    ( (⟦ g ⟧ₕ ∘ ⟦ f ⟧ₕ) ≡ identity _ ) -- (Carrier ⟦ A ⟧ᵣ) )
-      ∧ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- (Carrier ⟦ B ⟧ᵣ)  )
+      ⋀ ( (⟦ f ⟧ₕ ∘ ⟦ g ⟧ₕ) ≡ identity _ ) -- (Carrier ⟦ B ⟧ᵣ)  )
 
 
 lift-rel : {ℓ : Level} {Idx : Set} {X : Set}
@@ -226,24 +241,24 @@ lift-rel : {ℓ : Level} {Idx : Set} {X : Set}
 lift-rel R = λ args₁ args₂ -> ∀ i -> R (args₁ i) (args₂ i)
 
 compatible-fun : ∀{α γ : Set}
-  ->   ((γ -> α) -> α)  ->  (Rel α zero)  ->  Set
+  ->   ((γ -> α) -> α)  ->  (Rel α lzero)  ->  Set
 compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
 
 -- relation compatible with an operation
 compatible : ∀ {S : signature}
   ->  (A : algebra S)  ->   S 𝓕  
-  ->   Rel ⟦ A ⟧ᵤ zero  ->  Set _
+  ->   Rel ⟦ A ⟧ᵤ lzero  ->  Set _
 compatible A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
 -- relation compatible with all operations of an algebra
 compatible-alg : ∀ {S : signature}
-  ->  (A : algebra S) -> Rel ⟦ A ⟧ᵤ zero -> Set _
+  ->  (A : algebra S) -> Rel ⟦ A ⟧ᵤ lzero -> Set _
 compatible-alg {S} A 𝓻 = ∀ 𝓸 -> compatible A 𝓸 𝓻
 
 
 record con {S : signature} (A : algebra S) : Set₁ where
   field
-    ⟦_⟧ᵣ : Rel ⟦ A ⟧ᵤ zero
+    ⟦_⟧ᵣ : Rel ⟦ A ⟧ᵤ lzero
     equiv : IsEquivalence ⟦_⟧ᵣ
     compat : compatible-alg A ⟦_⟧ᵣ
 
@@ -251,16 +266,16 @@ record con {S : signature} (A : algebra S) : Set₁ where
 -- Analogues for predicate-based algebras.
 compatibleP : ∀ {S : signature}
   ->  (A : algebraP S)  ->   S 𝓕  
-  ->   Rel (S Ω) zero  ->  Set _
+  ->   Rel (S Ω) lzero  ->  Set _
 compatibleP A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧ₒ) ]⇒ 𝓻
 
 compatible-algP : ∀ {S : signature}
-  ->  (A : algebraP S) -> Rel (S Ω) zero -> Set _
+  ->  (A : algebraP S) -> Rel (S Ω) lzero -> Set _
 compatible-algP {S} A 𝓻 = ∀ 𝓸 -> compatibleP A 𝓸 𝓻
 
 record conP {S : signature} (A : algebraP S) : Set₁ where
   field
-    𝓡 : Rel (S Ω) zero     -- type 𝓡 as `\MCR`
+    𝓡 : Rel (S Ω) lzero     -- type 𝓡 as `\MCR`
     equivP : IsEquivalence 𝓡
     compatP : compatible-algP A 𝓡
 
@@ -269,17 +284,17 @@ record conP {S : signature} (A : algebraP S) : Set₁ where
 
 Compatible : ∀ {S : signature}
   ->            S 𝓕  ->  (A : Algebra S)
-  ->            Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
+  ->            Rel ∥ ⟦ A ⟧ᵣ ∥  lzero -> Set _
 Compatible 𝓸 A 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
 
 Compatible-Alg : ∀ {S : signature}
-  -> (A : Algebra S) -> Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
+  -> (A : Algebra S) -> Rel ∥ ⟦ A ⟧ᵣ ∥  lzero -> Set _
 Compatible-Alg {S} A 𝓻 = ∀{𝓸 : S 𝓕} -> Compatible 𝓸 A 𝓻
 
 
 record Con {S : signature} (A : Algebra S) : Set₁ where
   field
-    ⟦_⟧ᵣ : Rel (Carrier ⟦ A ⟧ᵣ) zero
+    ⟦_⟧ᵣ : Rel ∥ ⟦ A ⟧ᵣ ∥  lzero
     equiv : IsEquivalence ⟦_⟧ᵣ
     compat : Compatible-Alg A ⟦_⟧ᵣ
 
@@ -292,12 +307,16 @@ Quotient A θ =
   record {
 
     ⟦_⟧ᵣ = record {
-            Carrier = Carrier ⟦ A ⟧ᵣ ;
+            Carrier = ∥ ⟦ A ⟧ᵣ ∥;
             _≈_ = ⟦ θ ⟧ᵣ;
-            isEquivalence = equiv θ } ;
+            isEquiv = equiv θ } ;
 
     _⟦_⟧ = A ⟦_⟧ }
 
+
+-- vvvvvvvvvvvvvvvvvvvvvvv   BEGIN GGP Section 4.   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+--
+-- ^^^^^^^^^^^^^^^^^^^^^^^^  END GGP Section 4. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 ------------------------------------------------------------------
@@ -365,4 +384,8 @@ Quotient A θ =
 -- enter the symbol over which you wish to induct.
 
 
-
+-- References:
+--
+-- [1] Gunther, Gadea, and Pagano, "Formalization of Universal Algebra in Agda",
+--     Elec. Notes in Th. Comp. Sci., 2018.
+--     URL = {http://www.sciencedirect.com/science/article/pii/S1571066118300768},

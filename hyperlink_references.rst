@@ -31,6 +31,7 @@
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
 .. _HoTT: https://homotopytypetheory.org/
+.. _HSP Theorem: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
 .. _Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 .. _Inductive Types in Lean: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 .. _inductive types: https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types
@@ -96,4 +97,3 @@
 .. _Agda Tutorial: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
 .. _Dependently Typed Programming in Agda: http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf
 .. _Programming Language Foundations in Agda: https://plfa.github.io/
-

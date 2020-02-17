@@ -95,6 +95,9 @@ Acronyms and Symbols
    TT
      (intuitionistic) :term:`type theory`
 
+   UAFST
+     :cite:`Bergman:2012` *Universal Algebra: fundamentals and selected topics*, by Clifford Bergman, CRC Press 2012. 
+
    UIP
      `Uniqueness of Identity Proofs <https://ncatlab.org/nlab/show/axiom+UIP>`_
 

@@ -5,26 +5,29 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
-open import Level
+open import preliminaries
+-- open import preliminaries  using (_⊎_ ; ∀-extensionality; ∑; List)
 open import basic 
-open signature
 
-module free {S : signature} {X : Set} where
+module free  {S : signature} {X : Set} where
 
-open import preliminaries  using (_⊎_ ; ∀-extensionality; ∑; List)
-open import Function using (_∘_)
-open import Relation.Unary
-open import Relation.Binary hiding (Total)
+open import Level
+open import Agda.Builtin.Nat public
+  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
+open import Relation.Unary hiding (_⊆_;_⇒_)
+-- open import Relation.Binary.Core using (IsEquivalence)
+--open import Relation.Binary using (IsEquivalence)
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym; isEquivalence)
+  hiding (setoid; Reveal_·_is_;[_];∀-extensionality)
+open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning
-import Relation.Binary.EqReasoning as EqR
+open import Function using (_∘_)
+open import Function.Equality renaming (_∘_ to _∘ₛ_) hiding (cong)
+
 open import Relation.Nullary using (¬_)
 open import Relation.Nullary.Negation using ()
   renaming (contradiction to ¬¬-intro)
-
-open import Agda.Builtin.Nat public
-  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 --  using    ( _+_; _*_ )
 
 -- open import Data.Fin public
@@ -33,10 +36,11 @@ open import Agda.Builtin.Nat public
 --   renaming ( suc to fsucc; zero to fzero )
 --------------------------------------------------------------
 
+
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
-open List
+open signature
 
 
 data Term : Set where
@@ -56,26 +60,38 @@ open Term
 open algebra
 open Term
 
-
 free : algebra S
 free = record { ⟦_⟧ᵤ = Term ; _⟦_⟧ = node }
 
 --------------------------------------------------------------
 -- analogue for setoid-based algebras
-
+open Setoid
 open Algebra
 
 Free : Algebra S
-Free = record {
-         ⟦_⟧ᵣ = record {
-                 Carrier = Term ;
-                 _≈_ = _≡_ ;
-                 isEquivalence = isEquivalence
-                 } ;
-         _⟦_⟧ = node  }
+Free =
+  record {
+    ⟦_⟧ᵣ =
+      record {
+        Carrier = Term;
+        _≈_ = _≡_;
+        isEquiv =
+          record {
+            refl = λ {x} → refl;
+            sym = sym;
+            trans  = λ {i} {j} {k} p q
+                     ->  begin i ≡⟨ p ⟩ j ≡⟨ q ⟩ k ∎
+          }
+      };
+    _⟦_⟧ = node
+  }
+
 
 -------------------------------------
 -- The UNIVERSAL PROPERTY of free
+
+-- We first prove this for algebras whose carriers are mere sets.
+
 -- 1. every h : X -> ⟦ A ⟧ᵤ  lifts to a hom from free to A.
 -- 2. the induced hom is unique.
 
@@ -112,22 +128,49 @@ free-unique {A} f g p (node 𝓸 args) =
      ⟦ g ⟧ₕ (node 𝓸 args)
    ∎
 
-----------------------------------------
--- setoid-based analogues
+
+
+---------------------------------------------------------------
+-- SETOID-based analogue
+--
+-- Next we prove the universal property of Free for algebras
+-- whose carriers are setoids.
 
 open Setoid 
-Free-Lift : {A : Algebra  S}(h : X -> Carrier ⟦ A ⟧ᵣ) -> Carrier ⟦ Free ⟧ᵣ -> Carrier ⟦ A ⟧ᵣ
+Free-Lift : {A : Algebra  S}(h : X -> ∥ ⟦ A ⟧ᵣ ∥) -> ∥ ⟦ Free ⟧ᵣ ∥ -> ∥ ⟦ A ⟧ᵣ ∥
 Free-Lift h (generator x) = h x
 Free-Lift {A} h (node 𝓸 args) = (A ⟦ 𝓸 ⟧) λ i -> Free-Lift {A} h (args i)
 
 ----------------------------------------
-
 -- 1.b. The lift is a hom.
-
 open Hom
+Lift-Hom : {A : Algebra S} (h : X -> ∥ ⟦ A ⟧ᵣ ∥) -> Hom Free A
+Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → {!!}}
+-- Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → refl ⟦ A ⟧ᵣ }
 
-Lift-Hom : {A : Algebra S} (h : X -> Carrier ⟦ A ⟧ᵣ) -> Hom Free A
-Lift-Hom {A} h = record { ⟦_⟧ₕ = Free-Lift {A} h; Homo = λ args → Setoid.refl ⟦ A ⟧ᵣ }
+-- 2. The lift to  (free -> A)  is unique.
+--    (We need EXTENSIONALITY for this (imported from util.agda))
+Free-Unique : {A : Algebra S}
+  ->    ( f g : Hom Free A )
+  ->    ( ∀ x  ->   (⟦ A ⟧ᵣ ≈ ⟦ f ⟧ₕ (generator x)) (⟦ g ⟧ₕ (generator x)) )
+  ->    (t : Term)
+       ---------------------------
+  ->    ( ⟦ A ⟧ᵣ ≈  ⟦ f ⟧ₕ t ) (⟦ g ⟧ₕ t)
+   --   ⟦ f ⟧ₕ (node 𝓸 args)
+Free-Unique = {!!}
+--    ( ∀-extensionality λ i -> free-unique f g p (args i) ) ⟩
+
+--      ( ∀-extensionality  ) ⟩
+   -- begin
+   --   ⟦ f ⟧ₕ (node 𝓸 args)
+   -- ≡⟨ Homo f args  ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ f ⟧ₕ (args i))
+   -- ≡⟨ cong ((A ⟦_⟧)_)
+   --    ( ∀-extensionality λ i -> free-unique f g p (args i) ) ⟩
+   --   (A ⟦ 𝓸 ⟧) (λ i -> ⟦ g ⟧ₕ (args i))
+   -- ≡⟨ Eq.sym (Homo g args) ⟩
+   --   ⟦ g ⟧ₕ (node 𝓸 args)
+   -- ∎
 
 --------------------------
 --INTERPRETATION OF TERMS
@@ -212,7 +255,7 @@ compatible-term A (node 𝓸 args) θ p =
 
 open Setoid
 
-_̂_ : Term -> (A : Algebra S) -> (X -> Carrier ⟦ A ⟧ᵣ) -> Carrier ⟦ A ⟧ᵣ
+_̂_ : Term -> (A : Algebra S) -> (X -> ∥ ⟦ A ⟧ᵣ ∥) -> ∥ ⟦ A ⟧ᵣ ∥
 ((generator x) ̂ A) tup = tup x
 ((node 𝓸 args) ̂ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̂ A) tup }
 
