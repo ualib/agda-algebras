@@ -1,7 +1,7 @@
 --File: basic.agda
---Author: William DeMeo
+--Author: William DeMeo and Siva Somayyajula
 --Date: 24 Dec 2019
---Updated: 15 Feb 2020
+--Updated: 17 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
 
@@ -144,7 +144,7 @@ open algebra
 
 record hom {S : signature}
   (A : algebra S) (B : algebra S) : Set where
-
+  constructor mkhom
   field
 
     -- The map:
@@ -178,7 +178,6 @@ open Algebra
 
 record Hom {S : signature}
   (A : Algebra S) (B : Algebra S) : Set where
-
   field
 
     -- The map:

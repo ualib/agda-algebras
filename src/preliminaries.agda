@@ -18,6 +18,9 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
+open import Level
+--open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
+
 module preliminaries where 
 
 open import Level renaming (suc to lsuc ; zero to lzero)
@@ -33,17 +36,12 @@ open import Relation.Binary.PropositionalEquality as Eq
 --   hiding ( Reveal_·_is_;[_];isEquivalence;∀-extensionality)
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning
-open import Function using (_∘_)
-open import Function.Equality renaming (_∘_ to _∘ₛ_) hiding (setoid;cong)
-
--- a simpler "IsEquivalence" than the one in `agda-stdlib/Relation/Binary/Core.agda`
--- record IsEquivalence {A : Set}
---                      (_≈_ : A -> A -> Set) : Set where
---   field
---     reflexive  : Reflexive _≈_
---     symmetric   : Symmetric _≈_
---     transitive : Transitive _≈_
-
+open import Function -- hiding (_⇔_)
+open import Agda.Builtin.Nat public
+  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax; _×_)
+--  using    ( _+_; _*_ )
+----------------------------------------------------------------------
 
 -- --A simpler setoid than the one in Relation.Binary of Agda std lib.
 record Setoid : Set₁ where

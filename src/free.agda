@@ -1,8 +1,7 @@
 --File: free.agda
---Author: William DeMeo
+--Author: William DeMeo and Siva Somayyajula
 --Date: 25 Dec 2019
---Updated: 10 Jan 2020
---Note: This was used for the second part of my talk at JMM Special Session.
+--Updated: 17 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
 
@@ -47,6 +46,12 @@ open signature
 data Term : Set where
   generator : X -> Term
   node : ∀ (𝓸 : S 𝓕) -> (ℕ -> Term) -> Term
+
+open Term
+
+-- map-Term : (Term -> Term) -> Term -> Term
+-- map-Term f (generator x) = f (generator x)
+-- map-Term f (node 𝓸 t) = node 𝓸 (λ i -> map-Term f (t i))
 
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
@@ -382,81 +387,13 @@ argsum (succ n) f = f n + argsum n f
 -- The **interpretation** of :math:`t` in 𝐀---often denoted in the literature by :math:`t^𝚨`---is an operation of :math:`A` defined by recursion on the structure of :math:`t`.
 
 -- 1. If ``t`` is a variable, say, ``x : X``, then we define ``(t ̂ A) : ⟦ A ⟧ᵤ -> ⟦ A ⟧ᵤ`` for each ``a : ⟦ A ⟧ᵤ`` by ``(t ̂ A) a = a``.
-
 -- 2. If ``t = 𝓸 𝐟``, where ``𝓸 : ⟨ S ⟩ₒ`` is a basic operation symbol with interpretation ``A ⟦ 𝓸 ⟧`` in 𝚨, and if ``𝐟 : ⟨ S ⟩ₐ 𝓸 -> Term`` is a ``(⟨ S ⟩ₐ 𝓸)``-tuple of terms with interpretations ``(𝐟 i) ̂ A`` for each ``i : ⟨ S ⟩ₐ 𝓸``, then we define
-
 --    ``(t ̂ A) = (𝓸 𝐟) ̂ A = (A ⟦ 𝓸 ⟧) λ{i -> (𝐟 i) ̂ A}``
 
-
 -- Here's how we would implement this in Agda.
-
-
 -- .. code-block:: agda
-
 --    _̂_ : {ℓ₁ : Level} -> Term -> (A : algebra {ℓ₁} S) -> (X -> ⟦ A ⟧ᵤ) -> ⟦ A ⟧ᵤ
-
 --    ((generator x) ̂ A) tup = tup x
-
 --    ((node 𝓸 args) ̂ A) tup = (A ⟦ 𝓸 ⟧) λ{i -> (args i ̂ A) tup }
-
-
--- Recall, Theorem 4.32 of Bergman.
-
--- **Theorem**. Let ``A`` and ``B`` be algebras of ``signature S``. The following hold:
-
---   1. For every n-ary term ``t`` and homomorphism ``g: A —> B``, ``g(tᴬ(a₁,...,aₙ)) = tᴮ(g(a₁),...,g(aₙ))``.
-
---   2. For every term ``t ∈ T(X)`` and every ``θ ∈ Con(A)``, ``a θ b => t(a) θ t(b)``.
-
---   3. For every subset ``Y`` of ``A``, we have
-
---      ``Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}``.
-
--- Let's prove the first of these in Agda.
-
--- **Claim**. homomorphisms commute with terms.
-
-
---    .. code-block:: agda
-
---       comm-hom-term : {A B : algebra S}
---         ->            (g : Hom A B) -> (t : Term)
--- 	->            (tup : X -> ⟦ A ⟧ᵤ)
---                ----------------------------------------------
--- 	->       ⟦ g ⟧ₕ ((t ̂ A) tup) ≡ (t ̂ B) (⟦ g ⟧ₕ ∘ tup)
-
---       comm-hom-term g (generator x) tup = refl
-
---       comm-hom-term {A} {B} g (node 𝓸 args) tup =  
-
---       -- Goal: ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) ≡
---       --  (B ⟦ 𝓸 ⟧) (λ { i → (args i ̂ B) ((λ {.x} → ⟦ g ⟧ₕ) ∘ tup) })
-
---         begin
-
--- 	  ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup }))
-
--- 	≡⟨ homo g (λ { i → (args i ̂ A) tup }) ⟩
-
--- 	  (B ⟦ 𝓸 ⟧) (λ { i → ⟦ g ⟧ₕ ((args i ̂ A) tup) })
-
--- 	≡⟨ cong ((B ⟦_⟧)_) (∀-extensionality (induct g tup args)) ⟩
-
--- 	  (B ⟦ 𝓸 ⟧) (λ { i → (args i ̂ B) (⟦ g ⟧ₕ ∘ tup)})
-
--- 	∎
-
--- 	where
-
--- 	  induct : {A B : algebra S}
--- 	    ->     (g : Hom A B)
---             ->     (tup : X -> ⟦ A ⟧ᵤ)
---             ->     (args : ⟨ S ⟩ₐ 𝓸 → Term)
---             ->     (i : ⟨ S ⟩ₐ 𝓸)
---                ---------------------------------------------------------
---             ->    ⟦ g ⟧ₕ ((args i ̂ A) tup) ≡ (args i ̂ B) (⟦ g ⟧ₕ ∘ tup)
-
--- 	  induct g' tup' args' i' = comm-hom-term g' (args' i') tup' 
-
 
 

@@ -1,7 +1,7 @@
 --File: quotient.agda
---AUTHOR: William DeMeo
+--Author: William DeMeo and Siva Somayyajula
 --DATE: 28 Jan 2020
---UPDATED: 28 Jan 2020
+--UPDATED: 17 Feb 2020
 
 open import Level
 open import basic
@@ -31,7 +31,7 @@ open algebra
 
 isCompatible : ∀ (A : algebra S) -> Rel ⟦ A ⟧ᵤ zero -> Set _
 
-isCompatible A θ = ∀{𝓸 : ⟨ S ⟩ₒ}
+isCompatible A θ = ∀{𝓸 : S 𝓕}
   ->               (arg1 arg2 : ℕ -> ⟦ A ⟧ᵤ) 
   ->               ( ∀ i -> θ (arg1 i) (arg2 i) )
                  -------------------------------------------

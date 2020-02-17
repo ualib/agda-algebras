@@ -1,7 +1,7 @@
 --File: birkhoff.agda
---AUTHOR: William DeMeo
+--AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 13 Jan 2020
---UPDATED: 24 Jan 2020
+--UPDATED: 17 Feb 2020
 
 open import Level
 open import basic
@@ -12,8 +12,13 @@ open import preliminaries
 open import Relation.Unary
 open import Relation.Binary.Core
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl)
+open Eq using (_≡_; refl; cong; trans; sym)
 open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax)
+
+--open import Function.Core using (_∘_)
+open import Function using (_∘_)
+
+--open import Axiom.Extensionality.Propositional
 
 module birkhoff {S : signature} where
 
@@ -27,6 +32,8 @@ ker f  = λ x y -> f x ≡ f y
 -- FUNCTIONS
 -------------
 
+-- composition of homs
+
 --equalizer
 E : {A : Set} {B : Set}
     (f g : A -> B) -> A -> Prp
@@ -37,6 +44,34 @@ open hom
 E-hom : {A B : algebra S}
         (f g : hom A B) -> (⟦ A ⟧ᵤ) -> Prp
 E-hom f g a = ⟦ f ⟧ₕ a ≡ ⟦ g ⟧ₕ a
+
+open Eq.≡-Reasoning
+module _  {A B C : algebra S} where
+  comp : hom A B → hom B C → hom A C
+  -- WTS ∀ (f ∈ S) (x : (ρ f) → A), (h ○ i) (fA x) = fC ((h ○ i) ○ x)
+  comp (mkhom h α) (mkhom i β) =
+    mkhom (i ∘ h) (λ x → trans (cong i (α x)) (β _))
+
+module _  {A B : algebra S} where
+  eqIsSub : hom A B → hom A B → subuniverse {A = A}
+  eqIsSub f g = mksub (E-hom f g) λ x i eq →
+    let mkhom h α = f in
+    let mkhom i β = g in
+    trans (α _) (trans {!!} (sym (β _)))
+
+  --open import Relation.Binary
+  --open Setoid
+
+  --commenting this out because it was already proved in 
+  -- homDet : {f g : hom A B} {X : Pred (S Ω) zero} → (∀ {x} → x ∈ X → (⟦ f ⟧ₕ  x) ≡ (⟦ g ⟧ₕ  x)) → (∀ {x} → ⟦ f ⟧ₕ  x ≡ ⟦ g ⟧ₕ  x)
+  -- homDet = {!!}
+
+
+{-data Sg' (A : algebra S) (A₀ : Pred (S Ω) zero) (isSub : X ⊆ ⟦ A ⟧) : Pred (S Ω) zero where
+  var : ∀ {x} → x ∈ A₀ → Sg' A A₀ isSub x
+  app : ∀ {f : S 𝓕} {a : ℕ → ⟦ A ⟧ᵤ} →
+    (∀ (i : ℕ) → Sg' A A₀ isSub ?) →
+    Sg' A A₀ isSub ((A ⟦ f ⟧) a)-}
 
 --surjectivity
 epic : {A B : Set} (g : A -> B) -> Prp
@@ -49,6 +84,10 @@ monic g = ∀ x₁ x₂ -> g x₁ ≡ g x₂ -> x₁ ≡ x₂
 --bijectivity
 bijective : {A B : Set} (g : A -> B) -> Prp
 bijective g = epic g ∧ monic g
+
+
+
+
 
 ---------------------------------------------------------------------
 
