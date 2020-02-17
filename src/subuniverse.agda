@@ -1,7 +1,7 @@
 --File: subuniverse.agda
---Author: William DeMeo
+--Author: William DeMeo and Siva Somayyajula
 --Date: 10 Jan 2020
---Updated: 6 Feb 2020
+--Updated: 17 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
 {-# OPTIONS --allow-unsolved-metas #-}

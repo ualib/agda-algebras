@@ -1,7 +1,7 @@
 --File: birkhoff.agda
---AUTHOR: William DeMeo
+--AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 13 Jan 2020
---UPDATED: 24 Jan 2020
+--UPDATED: 17 Feb 2020
 
 open import Level
 open import basic
@@ -15,7 +15,8 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; trans; sym)
 open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax)
 
-open import Function.Core using (_∘_)
+--open import Function.Core using (_∘_)
+open import Function using (_∘_)
 
 --open import Axiom.Extensionality.Propositional
 
@@ -61,8 +62,9 @@ module _  {A B : algebra S} where
   --open import Relation.Binary
   --open Setoid
 
-  homDet : {f g : hom A B} {X : Pred (S Ω) zero} → (∀ {x} → x ∈ X → (⟦ f ⟧  x) ≡ (⟦ g ⟧  x)) → (∀ {x} → ⟦ f ⟧  x ≡ ⟦ g ⟧  x)
-  homDet = {!!}
+  --commenting this out because it was already proved in 
+  -- homDet : {f g : hom A B} {X : Pred (S Ω) zero} → (∀ {x} → x ∈ X → (⟦ f ⟧ₕ  x) ≡ (⟦ g ⟧ₕ  x)) → (∀ {x} → ⟦ f ⟧ₕ  x ≡ ⟦ g ⟧ₕ  x)
+  -- homDet = {!!}
 
 
 {-data Sg' (A : algebra S) (A₀ : Pred (S Ω) zero) (isSub : X ⊆ ⟦ A ⟧) : Pred (S Ω) zero where

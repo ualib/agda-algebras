@@ -1,8 +1,7 @@
 --File: basic.agda
---Author: William DeMeo
+--Author: William DeMeo and Siva Somayyajula
 --Date: 24 Dec 2019
---Updated: 10 Jan 2020
---Note: This was used for the first part of my talk at JMM Special Session.
+--Updated: 17 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
 
