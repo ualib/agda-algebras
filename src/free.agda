@@ -64,22 +64,27 @@ open Setoid
 open Algebra
 
 Free : Algebra S
-Free =
-  record {
-    ⟦_⟧ᵣ =
-      record {
-        Carrier = Term;
-        _≈_ = _≡_;
-        isEquiv =
-          record {
-            refl = λ {x} → refl;
-            sym = sym;
-            trans  = λ {i} {j} {k} p q
-                     ->  begin i ≡⟨ p ⟩ j ≡⟨ q ⟩ k ∎
-          }
-      };
-    _⟦_⟧ = node
-  }
+Free = record
+       { ⟦_⟧ᵣ = record
+               { Carrier = Term
+               ; _≈_ = _≡_
+               ; isEquiv = isequiv
+               }
+       ; _⟦_⟧ = node
+       }
+       where
+         isequiv = record
+                   { refl = λ {x} → refl
+                   ; sym = sym
+                   ; trans = λ {i} {j} {k} p q
+                              ->  begin
+                                    i
+                                  ≡⟨ p ⟩
+                                    j
+                                  ≡⟨ q ⟩
+                                    k
+                                  ∎
+                   }
 
 
 -------------------------------------
