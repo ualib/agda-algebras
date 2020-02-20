@@ -21,10 +21,10 @@ module _ {i j k : Level} {S : Signature i j} {A : Algebra k S} (X : Pred ∣ A �
   -- By induction on x ∈ Sg X, show x ∈ Y
   sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
   sgIsSmallest {Y} YIsSub X⊆Y (app o {x} x∈∈SgX) = app∈Y where
-    -- First, show the arguments are in Y
+    -- First, show the args are in Y
     x∈∈Y : x ∈∈ Y
     x∈∈Y i = sgIsSmallest YIsSub X⊆Y (x∈∈SgX i)
 
-    -- Since Y is a subuniverse of A, it contains the application of o
+    -- Since Y is a subuniverse of A, it contains the application of o to said args
     app∈Y : ⟦ A ⟧ o x ∈ Y
     app∈Y = YIsSub o x x∈∈Y
