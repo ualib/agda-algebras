@@ -1,3 +1,9 @@
+--File: Preliminaries.agda
+--Author: William DeMeo and Siva Somayyajula
+--Date: 20 Feb 2020 
+--Updated: 21 Feb 2020
+--Notes: Based on the file `preliminaries.agda` (27 Dec 2019).
+
 {-# OPTIONS --without-K --exact-split #-}
 
 --`without-K` disables Streicher's K axiom; see "Note on axiom K" 
@@ -11,10 +17,12 @@ module Preliminaries where
 
 -- Export common imports
 open import Level public renaming (suc to lsuc ; zero to lzero)
-open import Data.Product using (∃; _,_) public
+open import Data.Product using (∃; _,_; _×_) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 open import Relation.Unary using (Pred; _∈_; _⊆_) public
-open import Relation.Binary.PropositionalEquality using (_≡_; refl) public
+import Relation.Binary.PropositionalEquality as Eq
+open Eq using (_≡_; refl; cong; sym) public
+open Eq.≡-Reasoning public
 open import Function using (_∘_) public
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
@@ -32,6 +40,63 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
       -------------------
   ->    Set (i ⊔ k)
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
+
+
+
+
+
+  ----------------------------------------------------------------
+
+
+  ----------------------------
+  --EXTENSIONALITY Postulate
+  ----------------------------
+  --The only way to distinguish functions is by applying them; if two functions
+  --applied to the same argument always yield the same result, then they are
+  --the same function. It is the converse of cong-app.
+  --
+  --Agda DOES NOT PRESUME EXTENSIONALITY, but we can POSTULATE that it holds.
+  --This postulate is okay since it's CONSISTENT with the theory underlying Agda.
+
+  --------------------------------------
+  --Ordinary function extensionality
+postulate
+  extensionality : ∀ {A B : Set} {f g : A -> B}
+    ->             (∀ (x : A) -> f x ≡ g x)
+                  --------------------------
+    ->             f ≡ g
+                   
+  --------------------------------------
+  --Dependent function extensionality
+postulate
+  ∀-extensionality :
+    ∀ {A : Set} {B : A -> Set} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+postulate
+  ∀-extensionality-ℓ :
+    ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+  -------------------------------------------------------------
+  --Dependent function extensionality (with product codomain)
+postulate
+  extensionality-dep-× :
+    ∀ {A : Set} {B C : A -> Set} {f g : (x : A) -> B x × C x}
+      ->   (∀ (x : A) -> ∣ f x ∣ ≡ ∣ g x ∣ -> ⟦ f x ⟧ ≡ ⟦ g x ⟧)
+          --------------------------------------------------
+      ->   f ≡ g
+
+
+
+
+
+
+
 
 --=============================================================================
 -- MISC NOTES

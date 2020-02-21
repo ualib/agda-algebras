@@ -1,4 +1,12 @@
-open import Preliminaries using (Level; suc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
+--File: Subuniverse.agda
+--Author: William DeMeo and Siva Somayyajula
+--Date: 20 Feb 2020
+--Updated: 21 Feb 2020
+--Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
+
+{-# OPTIONS --without-K --exact-split #-}
+
+open import Preliminaries using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
 
 open import Basic
 open import Hom
@@ -13,30 +21,32 @@ IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =          -- type \MiF
 --   (o : F) (x : ρ o → a) → x ∈∈ B → 𝑨 o x ∈ B
 
 module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} where
-
+  
   data Sg (X : Pred ∣ 𝑨 ∣ k) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
-    app :  (𝓸 : ∣ S ∣) {𝒂 : ⟦ S ⟧ 𝓸 → ∣ 𝑨 ∣}
+    app :  (𝓸 : ∣ S ∣) {𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ }
       ->     im 𝒂 ⊆ Sg X
            --------------------------------
       ->    ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X  
 
-module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ k) where
-  sgIsSub : IsSubuniverse {𝑨 = 𝑨} (Sg {𝑨 = 𝑨} X)
-  sgIsSub 𝓸 x α = app 𝓸 α
+module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ k)
+  where
+    sgIsSub : IsSubuniverse {𝑨 = 𝑨} (Sg {𝑨 = 𝑨} X)
+    sgIsSub 𝓸 𝒂 α = app 𝓸 α
 
-  sgIsSmallest : {Y : Pred ∣ 𝑨 ∣ k}
-    ->           IsSubuniverse {𝑨 = 𝑨} Y
-    ->           X ⊆ Y
-                -----------------------------
-    ->           Sg {𝑨 = 𝑨} X ⊆ Y
-  -- By induction on x ∈ Sg X, show x ∈ Y
-  sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
-  sgIsSmallest {Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
-    -- First, show the args are in Y
-    im𝒂⊆Y : im 𝒂 ⊆ Y
-    im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
+    sgIsSmallest : {Y : Pred ∣ 𝑨 ∣ k}
+      ->           IsSubuniverse {𝑨 = 𝑨} Y
+      ->           X ⊆ Y
+                  -----------------------------
+      ->           Sg {𝑨 = 𝑨} X ⊆ Y
+    -- By induction on x ∈ Sg X, show x ∈ Y
+    sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
+    sgIsSmallest {Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
+      -- First, show the args are in Y
+      im𝒂⊆Y : im 𝒂 ⊆ Y
+      im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
 
-    -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
-    app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
-    app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
+      -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
+      app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
+      app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
+--
