@@ -1,4 +1,5 @@
-open import Preliminaries using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
+open import Preliminaries
+  using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
 open import Basic
 
 module Hom where
@@ -8,23 +9,35 @@ private
     i j k : Level
     S : Signature i j
 
--- The category of algebras Alg with morphisms as Homs
-Hom : Algebra k S → Algebra k S → Set _
-Hom {S = F , ρ} (a , A) (b , B) =
-  ∃ λ (f : a → b) → (o : F) (x : ρ o → a) → f (A o x) ≡ B o (f ∘ x)
+--The category of algebras Alg with morphisms as Homs
 
-id : (A : Algebra k S) → Hom A A
-id (a , A) = (λ x → x) , λ _ _ → refl
+Hom : Algebra k S -> Algebra k S -> Set _
+Hom {S = 𝑭 , ρ} (A , 𝑨) (B , 𝑩) =
+    ∃ λ (f : A -> B) -> (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
+     -----------------------------------------
+      ->    f (𝑨 𝓸 𝒂) ≡ 𝑩 𝓸 (f ∘ 𝒂)
+
+id : (𝑨 : Algebra k S) -> Hom 𝑨 𝑨
+id (A , 𝑨) = (λ x -> x) , λ _ _ -> refl
 
 private
   variable
-    A B : Algebra k S
+    𝑨 𝑩 : Algebra k S
 
-_>>>_ : {C : Algebra k S} → Hom A B → Hom B C → Hom A C
-_>>>_ {S = F , ρ} {A = a , A} {C = c , C} (f , α) (g , β) = g ∘ f , γ where
-  γ : (o : F) (x : ρ o → a) → (g ∘ f) (A o x) ≡ C o (g ∘ f ∘ x)
-  γ o x rewrite α o x = β o (f ∘ x)
+_>>>_ : {𝑪 : Algebra k S}
+
+  ->   Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
+      -------------------------
+  ->         Hom 𝑨 𝑪
+
+_>>>_ {S = 𝑭 , ρ} {𝑨 = (A , 𝑭ᴬ)} {𝑪 = (C , 𝑭ᶜ)}
+      (f , α) (g , β) = g ∘ f , γ
+        where
+          γ :    (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
+               ---------------------------------------
+            ->   (g ∘ f) (𝑭ᴬ 𝓸 𝒂) ≡ 𝑭ᶜ 𝓸 (g ∘ f ∘ 𝒂)
+          γ 𝓸 𝒂 rewrite α 𝓸 𝒂 = β 𝓸 (f ∘ 𝒂)
 
 -- Equalizers in Alg
-_~_ : Hom A B → Hom A B → Pred ∣ A ∣ _
+_~_ : Hom 𝑨 𝑩 → Hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ _
 _~_ (f , _) (g , _) x = f x ≡ g x

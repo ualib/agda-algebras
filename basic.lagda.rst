@@ -15,237 +15,217 @@ Datatypes for Algebras
 Preliminaries
 -------------------------
 
-All but the most trivial Agda programs typically begin by importing stuff from existing libraries (e.g., the `Agda Standard Library`_) and setting some options that effect how Agda behaves. In particular, one can specify which logical axioms and deduction rules one wishes to assume. 
+All but the most trivial Agda programs typically begin by importing from existing libraries (e.g., the `Agda Standard Library`_) and setting some options that effect how Agda behaves. In particular, logical axioms and deduction rules can be specified according to what one wishes to assume. 
 
-For example, here's the start of the first Agda source file in our library, which we call ``basic.agda``.
+For example, here's the start of the first Agda source file in our library, which we call ``Preliminaries.agda``.
 
 .. code-block:: agda
 
-    {-# OPTIONS --without-K --exact-split #-}
+   {-# OPTIONS --without-K --exact-split #-}
 
-    --without-K disables Streicher's K axiom
-    --(see "NOTES on Axiom K" below).
+     --`without-K` disables Streicher's K axiom; see "Note on axiom K" 
+     --            of the ualib documentation (ualib.org).
+     --
+     --`exact-split` makes Agda to only accept definitions with the
+     --              equality sign "=" that behave like so-called
+     --              judgmental or definitional equalities.
 
-    --exact-split makes Agda to only accept definitions
-    --with the equality sign "=" that behave like so-called
-    --judgmental or definitional equalities.
+   module Preliminaries where
 
-    module basic where
+   -- Export common imports
+   open import Level public
+   open import Data.Product using (∃; _,_) public
+     renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+   open import Relation.Unary using (Pred; _∈_; _⊆_) public
+   open import Relation.Binary.PropositionalEquality using (_≡_; refl) public
+   open import Function using (_∘_) public
 
-    open import Level
-    open import preliminaries
-    open import Relation.Unary
-    import Relation.Binary as B
-    open import Relation.Binary.Core
-    import Relation.Binary.PropositionalEquality as Eq
-    open Eq using (_≡_; refl)
-    open import Data.Product using (Σ; _,_; ∃; Σ-syntax; ∃-syntax)
-    open import Function using (_∘_)
-    open import Function.Equality hiding (_∘_)
-    open import Agda.Builtin.Nat public
-      renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
-    open import Data.Fin public hiding ( _+_; _<_ )
-      renaming ( suc to fsucc; zero to fzero )
+We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
-We don't have the space (or patience!) to describe each of the above directives. Instead, we refer the reader to the above mentioned documentation (as well as the brief :ref:`axiomk` below, explaining the ``--without-K`` option).
+The remainder of the ``Preliminaries.agda`` file gives 2 alternative notations for the same simple concept.
+
+.. code-block:: agda
+
+   --1--
+   _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
+     ->   (A -> B)
+     ->   Pred B k
+	 ---------------
+     ->   Set (i ⊔ k)
+   _∈∈_ {A = A} f S = (x : A) -> f x ∈ S
+
+   --2--
+   im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
+     ->    (A -> B)
+     ->    Pred B k
+	 -------------------
+     ->    Set (i ⊔ k)
+   im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
+
 
 -----------------------------------
+
+.. _signatures operations and algebras:
+
+Signatures, Operations, and Algebras
+------------------------------------
+
+We may wish to encode arity as an arbitrary type (which Agda denotes ``Set``).
+
+The contents of the  agda-ualib_ file ``Basic.agda`` are as follows:
+
+.. code-block:: agda
+
+   open import Preliminaries
+     using (Level; lzero; lsuc;_⊔_; ∃; _,_)
+
+   module Basic where
+
+   -- Operations and projections
+   module _ {i j} where
+     Op : Set i → Set j → Set (i ⊔ j)
+     Op I A = (I → A) → A
+
+     π : {I : Set i} {A : Set j} → I → Op I A
+     π i x = x i
+
+   -- i is the universe in which the carrier lives
+   -- j is the universe in which the arities live
+   Signature : (i j : Level) → Set (lsuc (i ⊔ j))
+   Signature i j = ∃ λ (F : Set i) → F → Set j
+
+   -- k is the universe in which the operational type lives
+   Algebra : {i j : Level}
+	     (k : Level)  ->  Signature i j
+	     -------------------------------
+     ->      Set (i ⊔ j ⊔ lsuc k)
+   Algebra k (𝐹 , ρ) =
+     ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
 
 .. _signatures in agda:
 
 Signatures in Agda
---------------------
+~~~~~~~~~~~~~~~~~~~~~
 
-We may wish to encode arity as an arbitrary type (which Agda denotes ``Set``).
+   
+Notice that, when importing ``Data.Product``, we renamed ``proj₁`` to ``∣_∣`` and ``proj₂`` to ``⟦_⟧``.  Consequently, if e.g. ``S : Signature i j``, then
 
-.. code-block:: agda
+  ``∣ S ∣`` = the set of operation symbols (which we sometimes call ``𝑭``), and
 
-   --------------------------------
-   -- A data type for SIGNATURES
-   --------------------------------
+  ``⟦ S ⟧`` = the arity function (which we sometimes call ``ρ``).
 
-   record signature : Set₁ where 
-     field
-       _Ω : Set       -- The "überuniverse" (all universes are subsets of Ω)
-       _𝓕 : Set      -- operation symbols.
-       _ρ : _𝓕 -> ℕ -- Each operation symbol has an arity.
-                      
-       -- (for now, use natural number arities, but this isn't essential)
+If  ``𝓸 : ∣ S ∣``  is an operation symbol of the signature ``S``, then ``⟦ S ⟧ 𝓸`` denotes the arity of ``𝓸``.
 
-If ``S : signature``, then ``S Ω`` denotes the **überuniverse** of ``S``---the set of which all carriers are subsets--- and ``S 𝓕`` denotes the operation symbols of ``S``.
+.. For example, the signature of a monoid could be implemented like so.
 
-If  ``𝓸 : S 𝓕``  is an operation symbol of the signature ``S``, then ``S ρ 𝓸`` denotes the arity of ``𝓸``.
+.. .. code-block:: agda
 
-For example, the signature of a monoid could be implemented like so.
+   ..
+      data monoid-op : Set where
+	e : monoid-op
+	· : monoid-op
 
-.. code-block:: agda
+      monoid-sig : signature 
+      monoid-sig =
+	record
+	  { _Ω = ℕ
+	  ; _𝓕 = monoid-op
+	  ; _ρ = λ {e -> 0; · -> 2}
+	  }
 
-   data monoid-op : Set where
-     e : monoid-op
-     · : monoid-op
-
-   monoid-sig : signature 
-   monoid-sig =
-     record
-       { _Ω = ℕ
-       ; _𝓕 = monoid-op
-       ; _ρ = λ {e -> 0; · -> 2}
-       }
-
-
------------------------------------
 
 .. _operations in agda:
 
 Operations in Agda
---------------------
+~~~~~~~~~~~~~~~~~~~~~
 
-
-.. code-block:: agda
-
-   data operation (γ α : Set) : Set where
-
-   o : ((γ -> α) -> α) -> operation γ α
-
-Here, ``γ`` is an "arity type" and ``α`` is a "universe type".
-
-**Example**. the ``i``-th ``γ``-ary projection operation on ``α`` could be implemented like this:
+As seen above, we represent the notions **operation** and **projection** in Agda as follows:
 
 .. code-block:: agda
 
-   π : ∀ {γ α : Set} -> (i : γ) -> operation γ α
+   -- Operations and projections
+   module _ {i j} where
+     Op : Set i → Set j → Set (i ⊔ j)
+     Op I A = (I → A) → A
 
-   π i =  o λ x -> x i
+     π : {I : Set i} {A : Set j} → I → Op I A
+     π i x = x i
 
-
------------------------------------
-
+The last two lines above codify the ``i``-th ``I``-ary projection operation on ``A``.
 
 .. _algebras in agda:
 
 Algebras in Agda
---------------------
+~~~~~~~~~~~~~~~~~~
 
-We have defined three alternative different datatypes for representing algebraic structures.
+An algebraic structure is represented in our library using the following type:
 
-The first is the simplest, but also the least flexible.
+.. code-block:: agda
 
-#. **Algebra with carrier of type** ``Set``.
+   -- k is the universe in which the operational type lives
+   Algebra : {i j : Level}
+	     (k : Level)  ->  Signature i j
+	     -------------------------------
+     ->      Set (i ⊔ j ⊔ lsuc k)
+   Algebra k (𝐹 , ρ) =
+     ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
 
-   .. code-block:: agda
-
-      open signature
-
-      record algebra (S : signature) : Set₁ where
-
-        field 
-          ⟦_⟧ᵤ : Set
-          _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> ⟦_⟧ᵤ) -> ⟦_⟧ᵤ
-
-   If ``(A : algebra S)`` is an algebra of ``signature S``, then ``⟦ A ⟧ᵤ`` denotes the **universe** (or "carrier") of ``A``.
-
-   If ``(𝓸 : S 𝓕)`` is an operation symbol of ``S``, then ``A ⟦ 𝓸 ⟧``  denotes the **interpretation** of ``𝓸`` in ``A``.
-
-
-#. **Algebra with carrier of type** ``Pred (S Ω) zero`` (a predicate on ``S Ω``).
-
-   When considering substructures, it helps to view all carriers of algebras as subuniverses of some über universe, or "überverse" ``S Ω``.  This is the motivation for our second datatype for algebras, where the universe of an algebra is a predicate of the überverse ``S Ω``.
-
-   .. code-block:: agda
-
-      open signature
-
-      record algebraP (S : signature) : Set₁ where
-
-      field
-        ⟦_⟧ₚ : Pred (S Ω) zero
-        _⟦_⟧ₒ : (𝓸 : S 𝓕) -> (ℕ -> (S Ω)) -> (S Ω)
-        cl : ∀ (𝓸 : S 𝓕) (args : ℕ -> (S Ω))     
-             -> (∀(i : ℕ) -> (args i) ∈ ⟦_⟧ₚ)
-            ------------------------------------------------
-             -> _⟦_⟧ₒ 𝓸 args ∈ ⟦_⟧ₚ
-
-   Note that, because the type signature of ``_⟦_⟧ₒ`` is not as precise as that of ``_⟦_⟧``, we must add a condition ``cl`` which asserts that the carrier (predicate) is closed under all operations.
-
-#. **Algebra with carrier of type** ``Setoid``.
-
-   Finally, when working with quotients, it may help to have a definition of an algebra whose carrier is a ``Setoid`` (a set equipped with a special notion of equivalence of elements of the set.
-
-   .. code-block:: agda
-
-      open signature
-      open B.Setoid
-
-      record Algebra (S : signature) : Set₁ where
-
-        field
-          ⟦_⟧ᵣ : B.Setoid zero zero
-          _⟦_⟧ : (𝓸 : S 𝓕) -> (ℕ -> Carrier ⟦_⟧ᵣ) ->  Carrier ⟦_⟧ᵣ
+We will have much to say about this type later.  For now, we continue setting down our Agda syntax for the basic objects of universal algebra.
 
 -----------------------------------
 
 .. _homomorphisms in agda:
 
 Homomorphisms in Agda
----------------------------
+----------------------
 
-We begin this section with the definition of homomorphisms on the first algebra datatype above.  Thereafter, we will define analogous notions for the other algebra datatypes.
+The file called ``Hom.agda`` in agda-ualib_ implements the notions **homomorphism** and **equalizer**, as follows:
 
-#. **Homomorphisms for algebras with carriers of type** ``Set``.
+.. code-block:: agda
 
-   .. code-block:: agda
+   open import Preliminaries
+     using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
+   open import Basic
 
-      open algebra
+   module Hom where
 
-      record hom {S : signature}
-        (A : algebra S) (B : algebra S) : Set where
+   private
+     variable
+       i j k : Level
+       S : Signature i j
 
-        field
+   --The category of algebras Alg with morphisms as Homs
 
-          -- The map:
-          ⟦_⟧ₕ : ⟦ A ⟧ᵤ -> ⟦ B ⟧ᵤ 
+   Hom : Algebra k S -> Algebra k S -> Set _
+   Hom {S = 𝑭 , ρ} (A , 𝑨) (B , 𝑩) =
+       ∃ λ (f : A -> B) -> (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
+	-----------------------------------------
+	 ->    f (𝑨 𝓸 𝒂) ≡ 𝑩 𝓸 (f ∘ 𝒂)
 
-          -- The property the map must have to be a hom:
-          homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> ⟦ A ⟧ᵤ)
-                 ->  ⟦_⟧ₕ ((A ⟦ 𝓸 ⟧) args) ≡ (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args)
+   id : (𝑨 : Algebra k S) -> Hom 𝑨 𝑨
+   id (A , 𝑨) = (λ x -> x) , λ _ _ -> refl
 
-#. **Homomorphisms algebras with carriers of type** ``Pred (S Ω) zero``.
+   private
+     variable
+       𝑨 𝑩 : Algebra k S
 
-   .. code-block:: agda
+   _>>>_ : {𝑪 : Algebra k S}
 
-      open algebraP
+     ->   Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
+	 -------------------------
+     ->         Hom 𝑨 𝑪
 
-      record homP {S : signature}
-	(A : algebraP S) (B : algebraP S) : Set where
+   _>>>_ {S = 𝑭 , ρ} {𝑨 = (A , 𝑭ᴬ)} {𝑪 = (C , 𝑭ᶜ)}
+	 (f , α) (g , β) = g ∘ f , γ
+	   where
+	     γ :    (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
+		  ---------------------------------------
+	       ->   (g ∘ f) (𝑭ᴬ 𝓸 𝒂) ≡ 𝑭ᶜ 𝓸 (g ∘ f ∘ 𝒂)
+	     γ 𝓸 𝒂 rewrite α 𝓸 𝒂 = β 𝓸 (f ∘ 𝒂)
 
-	field
-
-	  -- The map:
-	  hmap : S Ω -> S Ω  -- <-- type is not very precise :'(
-
-	  -- The property the map must have to be a hom:
-	  homoP : ∀ {𝓸 : S 𝓕} (args : ℕ -> (S Ω))
-		 ->  hmap ((A ⟦ 𝓸 ⟧ₒ) args) ≡ (B ⟦ 𝓸 ⟧ₒ) (hmap ∘ args)
-
-
-#. **Homomorphisms for algebra with carriers of type** ``Setoid``.
-
-   .. code-block:: agda
-
-      open Algebra
-
-      record Hom {S : signature}
-	(A : Algebra S) (B : Algebra S) : Set where
-
-	field
-
-	  -- The map:
-	  ⟦_⟧ₕ : Carrier ⟦ A ⟧ᵣ -> Carrier ⟦ B ⟧ᵣ 
-
-	  -- The property the map must have to be a hom:
-	  Homo : ∀ {𝓸 : S 𝓕} (args : ℕ -> Carrier ⟦ A ⟧ᵣ)
-	    ->   (_≈_ ⟦ B ⟧ᵣ)  ⟦ (A ⟦ 𝓸 ⟧) args ⟧ₕ  ( (B ⟦ 𝓸 ⟧) (⟦_⟧ₕ ∘ args) )
-
+   -- Equalizers in Alg
+   _~_ : Hom 𝑨 𝑩 → Hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ _
+   _~_ (f , _) (g , _) x = f x ≡ g x
 
 -----------------------------------------------
 
