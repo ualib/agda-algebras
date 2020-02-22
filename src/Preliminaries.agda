@@ -20,6 +20,7 @@ open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Product using (∃; _,_; _×_) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 open import Relation.Unary using (Pred; _∈_; _⊆_) public
+open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym) public
 open Eq.≡-Reasoning public

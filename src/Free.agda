@@ -10,17 +10,16 @@
 open import Preliminaries
 open import Basic 
 open import Hom
+open import Congruence
 
-module Free {i j k ℓ : Level} {S : Signature i j} {X : Set k}  where
+module Free {i j k : Level} {S : Signature i j}  where
 
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
 -- open signature
 
-
--- data Term : Set (i ⊔ j ⊔ k ⊔ ℓ) where
-data Term : Set (i ⊔ j ⊔ k) where
+data Term {X : Set} : Set (i ⊔ j ⊔ k) where
   generator : X -> Term
   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term
 
@@ -50,13 +49,20 @@ map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
 
 -- PROOF.
 -- 1.a. Every map  (X -> A)  "lifts".
-free-lift : ∀{ℓ} {𝑨 : Algebra ℓ S}(h : X -> ∣ 𝑨 ∣) -> ∣ 𝔉 ∣ -> ∣ 𝑨 ∣
+--∀{ℓ : Level} 
+free-lift : {ℓ : Level} {𝑨 : Algebra ℓ S} {X : Set}
+  ->        (h : X -> ∣ 𝑨 ∣)
+          -----------------------------------
+  ->        ∣ 𝔉 ∣ -> ∣ 𝑨 ∣
 free-lift h (generator x) = h x
-free-lift {ℓ} {𝑨 = (A , 𝐹ᴬ)} h (node 𝓸 args) = (𝐹ᴬ 𝓸) λ{i -> free-lift {ℓ} {(A , 𝐹ᴬ)} h (args i)}
+free-lift {ℓ} {𝑨 = (A , 𝐹ᴬ)} h (node 𝓸 args) = (𝐹ᴬ 𝓸) λ{i -> free-lift  {ℓ} {(A , 𝐹ᴬ)} h (args i)}
 
 -- 1.b. The lift is a hom.
-lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S} (h : X -> ∣ 𝑨 ∣) -> Hom 𝔉 𝑨
-lift-hom {𝑨} h = free-lift {i ⊔ j ⊔ k}{𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
+lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S} {X : Set}
+  ->       (h : X -> ∣ 𝑨 ∣)
+          ------------------------------------
+  ->       Hom 𝔉 𝑨
+lift-hom {𝑨}{X} h = free-lift {i ⊔ j ⊔ k}{𝑨}{X} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
@@ -85,53 +91,39 @@ free-unique {𝑨} f g p (node 𝓸 args) =
      ∣ g ∣ (node 𝓸 args)
    ∎
 
-
 --------------------------
 --INTERPRETATION OF TERMS
 --------------------------
-
 --(cf Def 4.31 of Bergman)
+--Let 𝒕 : Term be a term, 𝑨 an algebra, in the signature S. We define an
+--n-ary operation, denoted (𝒕 ̂ 𝑨), on 𝑨 by recursion on the struct of 𝒕.
+-- 1. if 𝒕 is the var x ∈ X, 𝒂 : X -> ∣ 𝑨 ∣ a tuple from A, then (t ̂ 𝑨) 𝒂 = 𝒂 x.
+-- 2. if 𝒕 = 𝓸 args, 𝓸 ∈ ∣ S ∣ an op symbol, args : ⟦ S ⟧ 𝓸 -> Term a
+--    (⟦ S ⟧ 𝓸)-tuple of terms, 𝒂 : X -> ∣ A ∣ a tuple from A, then
+--    (t ̂ 𝑨) 𝒂 = ((𝓸 args) ̂ 𝑨) 𝒂 = (⟦ 𝑨 ⟧ 𝓸) λ{ i -> ((args i) ̂ 𝑨) 𝒂 }
 
---Let 𝒕 : Term be a term, 𝑨 an algebra, in the signature S.
---We define an n-ary operation, denoted (𝒕 ̂ 𝑨), on 𝑨 by recursion on
---the structure of 𝒕, as follows:
-
--- (1) if 𝒕 is the variable x ∈ X and 𝒂 : X -> ∣ 𝑨 ∣ is a tuple of elements of A,
---     then we define (t ̂ 𝑨) 𝒂 = 𝒂 x.
-
--- (2) if 𝒕 = 𝓸 args, where 𝓸 ∈ ∣ S ∣ is an operation symbol (of arity ⟦ S ⟧ 𝓸),
---        args : ⟦ S ⟧ 𝓸 -> Term is an (⟦ S ⟧ 𝓸)-tuple of terms, and
---        𝒂 : X -> ∣ A ∣ is a tuple of elements of A, then we define
-
---     (t ̂ 𝑨) 𝒂 = ((𝓸 args) ̂ 𝑨) 𝒂
---                  = (⟦ 𝑨 ⟧ 𝓸) λ{ i -> ((args i) ̂ 𝑨) 𝒂 }
-
--- Here's the Agda implementation of the foregoing definition.
-
-_̇_ : Term -> (𝑨 : Algebra k S) -> (X -> ∣ 𝑨 ∣) -> ∣ 𝑨 ∣
+_̇_ :  ∀{ℓ : Level} {𝑨 : Algebra ℓ S} {X : Set}
+    --  ->        {𝑨 : Algebra (i ⊔ j ⊔ k) S}
+   -> Term -> (𝑨 : Algebra ℓ S) -> (X -> ∣ 𝑨 ∣) -> ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args) ̇ 𝑨) 𝒂 = (⟦ 𝑨 ⟧ 𝓸) λ{i -> (args i ̇ 𝑨) 𝒂 }
 
 -- Recall (cf. Theorem 4.32 of Bergman)
---
 -- Theorem 1.
 -- Let A and B be algebras of type S. Then the following hold:
---
---   (1) For every n-ary term t and homomorphism g: A —> B, 
---       g(tᴬ(a₁,...,aₙ)) = tᴮ(g(a₁),...,g(aₙ)).
---   (2) For every term t ∈ T(X) and every θ ∈ Con(A), 
---       a θ b => t(a) θ t(b).
---   (3) For every subset Y of A,
---       Sg(Y) = { t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, and aᵢ ∈ Y, for i ≤ n}.
---
+-- 1. For every n-ary term t and homomorphism g: A —> B, 
+--    g(tᴬ(a₁,...,aₙ)) = tᴮ(g(a₁),...,g(aₙ)).
+-- 2. For every term t ∈ T(X) and every θ ∈ Con(A), 
+--    a θ b => t(a) θ t(b).
+-- 3. For every subset Y of A,
+--    Sg(Y) = {t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 -- PROOF.
---
--- (1) (homomorphisms commute with terms).
-comm-hom-term : {𝑨 𝑩 : Algebra k S}
-  ->    (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
-  ->    (𝒂 : X -> ∣ 𝑨 ∣)
-       ------------------------------
-  ->     ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
+-- 1. (homomorphisms commute with terms).
+comm-hom-term : {𝑨 𝑩 : Algebra (i ⊔ j ⊔ k) S} {X : Set}
+  ->            (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
+  ->            (𝒂 : X -> ∣ 𝑨 ∣)
+              ----------------------------------------
+  ->            ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
 --
 comm-hom-term g (generator x) 𝒂 = refl
 comm-hom-term {𝑨} {𝑩} g (node 𝓸 args) 𝒂 =
@@ -139,65 +131,25 @@ comm-hom-term {𝑨} {𝑩} g (node 𝓸 args) 𝒂 =
     ∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (λ i₁ → (args i₁ ̇ 𝑨) 𝒂))
   ≡⟨ ⟦ g ⟧ 𝓸 ( λ r → (args r ̇ 𝑨) 𝒂 ) ⟩
     (⟦ 𝑩 ⟧ 𝓸) ( λ i₁ →  ∣ g ∣ ((args i₁ ̇ 𝑨) 𝒂) )
-    ≡⟨ cong (⟦ 𝑩 ⟧ _) (( ∀-extensionality-ℓ₁-ℓ₂ {j} {k}
+    ≡⟨ cong (⟦ 𝑩 ⟧ _) (( ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂⊔ℓ₃ {j} {i} {k}
                          (λ i₁ -> comm-hom-term g (args i₁) 𝒂  )
                       ))
      ⟩
     (⟦ 𝑩 ⟧ 𝓸) ( λ r -> (args r ̇ 𝑩) (∣ g ∣ ∘ 𝒂) )
   ∎
--- (2) For every term t ∈ T(X) and every θ ∈ Con(A), 
---     a θ b => t(a) θ t(b).
 
--- compatible-term : (A : Algebra k S)
---  ->               (t : Term)
---  ->               (θ : con A)
---                  -------------------
---  ->               compatible-fun (t ̇ A) ⟦ θ ⟧ᵣ
+--For 2 of Thm 1, we need congruences (see Congruence.agda).
+-- 2. If t : Term, θ : Con A, then a θ b => t(a) θ t(b).
+compatible-term : {ℓ : Level}
+  ->              (𝑨 : Algebra ℓ S)
+  ->              (𝒕 : Term)
+  ->              (θ : con 𝑨)
+                 ------------------------------------
+  ->              compatible-fun {ℓ}  (𝒕 ̇ 𝑨) ∣ θ ∣
 
--- compatible-term A (generator x) θ p = p x
--- compatible-term A (node 𝓸 args) θ p =
---   --Goal:
---   -- ( ⟦ θ ⟧ᵣ Function.on
---   --   ( λ tup -> (A ⟦ 𝓸 ⟧) (λ i -> (args i ̇ A) tup) )
---   -- ) .i .j
---   compat θ 𝓸 λ{ i -> (compatible-term A (args i) θ) p }
-
--- Compatible-Term A (generator x) θ p = p x
--- Compatible-Term A (node 𝓸 args) θ p =
---   compat θ  λ{ k -> (Compatible-Term A (args k) θ) p }
-
---Function.on is the operation,
---  _on_ : ∀ {a b c} {A : Set a} {B : Set b} {C : Set c}
---           → (B → B → C) → (A → B) → (A → A → C)
---  _*_ on f = λ x y → f x * f y
---
---So 
---  (⟦ θ ⟧ᵣ Function.on (λ tup → (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup }))) .i .j``
---means
---  ((λ tup → (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) .i)
---  ⟦ θ ⟧ᵣ
---  ((λ tup → (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) tup })) .j)
---Equivalently,
---   ⟦ θ ⟧ᵣ
---    (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) .i })
---    (A ⟦ 𝓸 ⟧) (λ { i → (args i ̂ A) .j })                   (1)
---We have,  ``p : lift-rel ⟦ θ ⟧ᵣ .i .j`` and the induction hypothesis,
---    ∀ i -> ⟦ θ ⟧ᵣ ((args i ̂ A) .i) ((args i ̂ A) .j)         (IH)
---which is equivalent to
---    lift-rel ⟦ θ ⟧ᵣ (λ { i → (args i ̂ A) .i }) (λ { i → (args i ̂ A) .j })
---Then we use
---    lift-rel ⟦ θ ⟧ᵣ =[ (A ⟦ 𝓸 ⟧) ]⇒ ⟦ θ ⟧ᵣ                    (2)
---to get (1).
---We get (2) from: compatible-alg A ⟦ θ ⟧ᵣ {𝓸}, which we get from ``compat θ {𝓸}``
---We get (IH) from: 
---
---  induct : (A : algebra S)
---    ->     (θ : con A)
---    ->     (args : ℕ → Term)
---    ->     (i : Fin (⟨ S ⟩ₐ 𝓸))
---          -------------------
---    ->     compatible-fun (args i ̂ A) ⟦ θ ⟧ᵣ
---  induct A θ args i = compatible-term A (args i) θ 
+compatible-term A (generator x) θ p = p x
+compatible-term A (node 𝓸 args) θ p =
+  ⟦ ⟦ θ ⟧ ⟧ 𝓸 λ{ i -> (compatible-term A (args i) θ) p }
 
 ---------------------------------------------------------
 
