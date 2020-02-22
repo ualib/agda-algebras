@@ -76,7 +76,7 @@ free-unique {𝑨} f g p (node 𝓸 args) =
    ≡⟨ ⟦ f ⟧ 𝓸 args ⟩
      (⟦ 𝑨 ⟧ 𝓸) (λ i -> ∣ f ∣ (args i))
    ≡⟨ cong (⟦ 𝑨 ⟧ _)
-        (∀-extensionality-ℓ {j} {i} {k}
+        (∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂⊔ℓ₃ {j} {i} {k}
           ( λ i -> free-unique {𝑨} f g p (args i))
         )
     ⟩
@@ -134,17 +134,17 @@ comm-hom-term : {𝑨 𝑩 : Algebra k S}
   ->     ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
 --
 comm-hom-term g (generator x) 𝒂 = refl
-comm-hom-term {𝑨 = (A , 𝐹ᴬ)} {𝑩 = (B , 𝐹ᴮ)}
-  g (node 𝓸 args) 𝒂 = {!!}
-  -- begin
-  --   ⟦ g ⟧ₕ ((A ⟦ 𝓸 ⟧) (λ { i → (args i ̇ A) tup }))
-  -- ≡⟨ homo g ( λ i → (args i ̇ A) tup )⟩
-  --   (B ⟦ 𝓸 ⟧) ( λ i → ⟦ g ⟧ₕ ((args i ̇ A) tup) )
-  -- ≡⟨ cong ((B ⟦_⟧)_)
-  --    ( ∀-extensionality  λ i -> comm-hom-term g (args i) tup  ) ⟩
-  --   (B ⟦ 𝓸 ⟧) ( λ i → (args i ̇ B) (⟦ g ⟧ₕ ∘ tup) )
-  -- ∎
-
+comm-hom-term {𝑨} {𝑩} g (node 𝓸 args) 𝒂 =
+  begin
+    ∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (λ i₁ → (args i₁ ̇ 𝑨) 𝒂))
+  ≡⟨ ⟦ g ⟧ 𝓸 ( λ r → (args r ̇ 𝑨) 𝒂 ) ⟩
+    (⟦ 𝑩 ⟧ 𝓸) ( λ i₁ →  ∣ g ∣ ((args i₁ ̇ 𝑨) 𝒂) )
+    ≡⟨ cong (⟦ 𝑩 ⟧ _) (( ∀-extensionality-ℓ₁-ℓ₂ {j} {k}
+                         (λ i₁ -> comm-hom-term g (args i₁) 𝒂  )
+                      ))
+     ⟩
+    (⟦ 𝑩 ⟧ 𝓸) ( λ r -> (args r ̇ 𝑩) (∣ g ∣ ∘ 𝒂) )
+  ∎
 -- (2) For every term t ∈ T(X) and every θ ∈ Con(A), 
 --     a θ b => t(a) θ t(b).
 

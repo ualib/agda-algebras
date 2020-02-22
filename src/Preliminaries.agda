@@ -77,6 +77,34 @@ postulate
 
 postulate
   ∀-extensionality-ℓ :
+    ∀ {ℓ : Level} {A : Set ℓ} {B : A -> Set ℓ} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+postulate
+  ∀-extensionality-ℓ₁-ℓ₂ :
+    ∀ {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : A -> Set ℓ₂} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+postulate
+  ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂ :
+    ∀ {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂)} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+postulate
+  ∀-extensionality-ℓ₁-ℓ₂⊔ℓ₃ :
+    ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
+    ->    (∀ (x : A) -> f x ≡ g x)
+         -------------------------
+    ->    f ≡ g
+
+postulate
+  ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂⊔ℓ₃ :
     ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
     ->    (∀ (x : A) -> f x ≡ g x)
          -------------------------
