@@ -44,6 +44,21 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    Set (i ⊔ k)
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
+data Image_∋_  {A : Set} {B : Set}(f : A -> B) : B -> Set where
+  im : (x : A) -> Image f ∋ f x
+
+-- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set (suc ℓ) where
+--   im : (x : A) -> Image f ∋ f x
+
+-- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set ℓ where
+--   im : (x : A) -> Image f ∋ f x
+
+--N.B. the assertion Image f ∋ y must come with a proof, which is of the
+--form ∃a f a = y, so we have a witness, so the inverse can be "computed"
+--in the following way:
+inv : {A B : Set}(f : A -> B)(y : B) -> Image f ∋ y -> A
+inv f .(f x) (im x) = x  -- Cool!!!
+
 
 ----------------------------
 --EXTENSIONALITY Postulate

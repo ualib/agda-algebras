@@ -15,10 +15,18 @@ open import Hom
 IsSubuniverse : {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S}
               -----------------------------------------------------------
   ->            Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
-IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =          -- type \MiF\^A for 𝐹ᴬ
+IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =        -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → im 𝒂 ⊆ B → 𝐹ᴬ 𝓸 𝒂 ∈ B
 -- IsSubuniverse {S = F , ρ} {𝑨 = a , 𝑨} B =
 --   (o : F) (x : ρ o → a) → x ∈∈ B → 𝑨 o x ∈ B
+
+module _ {i j k : Level} {S : Signature i j} where
+
+  record subuniverse  {𝑨 : Algebra k S} : Set (i ⊔ j ⊔ lsuc k) where
+    constructor mksub
+    field
+      sset : Pred ∣ 𝑨 ∣ k
+      isSub : IsSubuniverse {𝑨 = 𝑨} sset    
 
 module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} where
   
@@ -49,4 +57,4 @@ module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 
       -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
       app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
       app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
---
+
