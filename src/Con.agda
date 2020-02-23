@@ -1,7 +1,7 @@
 --File: Congruence.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 22 Feb 2020
---Updated: 22 Feb 2020
+--Updated: 23 Feb 2020
 --Notes: Based on the parts of the file `basic.agda` (24 Dec 2019).
 
 {-# OPTIONS --without-K --exact-split #-}

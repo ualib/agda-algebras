@@ -1,7 +1,7 @@
 --File: Free.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Updated: 21 Feb 2020
+--Updated: 23 Feb 2020
 --Notes: Based on the file `free.agda` (25 Dec 2019).
 --       Used for 2nd half of talk at JMM Special Session (Jan 2020).
 
@@ -64,14 +64,14 @@ free-lift {𝑨} h (node 𝓸 args) =
 lift-hom : {𝑨 : Algebra k S}
   ->       (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
-  ->       Hom 𝔉 𝑨
+  ->       Hom {i} {j} {k} 𝔉 𝑨
 lift-hom {𝑨} h = free-lift {𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
 free-unique : {𝑨 : Algebra k S}
-  ->    ( f g : Hom 𝔉 𝑨 )
+  ->    ( f g : Hom {i} {j} {k} 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
        ---------------------------
@@ -96,7 +96,7 @@ free-unique {𝑨} f g p (node 𝓸 args) =
 --SUGAR:  𝓸 ̂ 𝑨  ≡  ⟦ 𝑨 ⟧ 𝓸   -------------------------------------
 --Before proceding, we define some syntactic sugar that allows us
 --to replace ⟦ 𝑨 ⟧ 𝓸 with (the more standard-looking) 𝓸 ̂ 𝑨.
-_̂_ : {ℓ₁ : Level}
+_̂_ : ∀{ℓ₁ : Level}
   ->  (𝓸 : ∣ S ∣) ->  (𝑨 : Algebra ℓ₁ S)
   ->  (⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣) -> ∣ 𝑨 ∣
 𝓸 ̂ 𝑨 = λ x → (⟦ 𝑨 ⟧ 𝓸) x
@@ -133,7 +133,7 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
 comm-hom-term : (𝑨 𝑩 : Algebra k S)
-  ->            (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
+  ->            (g : Hom {i} {j} {k} 𝑨 𝑩) -> (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
   ->            ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)

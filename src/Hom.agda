@@ -1,34 +1,29 @@
 --File: Hom.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Updated: 21 Feb 2020
+--Updated: 23 Feb 2020
 
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
+--  using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
 open import Basic
 
-module Hom where
-
-private
-  variable
-    i j k : Level
-    S : Signature i j
+module Hom {i j k : Level} {S : Signature i j} where
 
 --The category of algebras Alg with morphisms as Homs
 
 Hom₀ : Algebra k S -> Algebra k S -> Set _
-Hom₀ {S = 𝐹 , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
-    ∃ λ (f : A -> B) -> (𝓸 : 𝐹) (𝒂 : ρ 𝓸 -> A)
+Hom₀ (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
+    ∃ λ (f : A -> B) -> (𝓸 : ∣ S ∣) (𝒂 : ⟦ S ⟧ 𝓸 -> A)
      -----------------------------------------
       ->    f (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᴮ 𝓸 (f ∘ 𝒂)
 
 --(We need more level-generality, e.g., in Free.agda)
 Hom : ∀{ℓ₁ ℓ₂ : Level}
-  -> Algebra ℓ₁ S -> Algebra ℓ₂ S -> Set _
-Hom {S = 𝐹 , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
-    ∃ λ (f : A -> B) -> (𝓸 : 𝐹) (𝒂 : ρ 𝓸 -> A)
+  -> Algebra ℓ₁ S -> Algebra ℓ₂ S -> Set (i ⊔ j ⊔ ℓ₁ ⊔ ℓ₂)
+Hom (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
+    ∃ λ (f : A -> B) -> (𝓸 : ∣ S ∣) (𝒂 : ⟦ S ⟧ 𝓸 -> A)
      -----------------------------------------
       ->    f (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᴮ 𝓸 (f ∘ 𝒂)
 
@@ -47,10 +42,10 @@ _>>>_ : {𝑪 : Algebra ℓ₃ S}
       -------------------------
   ->         Hom 𝑨 𝑪
 
-_>>>_ {S = 𝐹 , ρ} {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
+_>>>_ {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
       (f , α) (g , β) = g ∘ f , γ
         where
-          γ :    (𝓸 : 𝐹) (𝒂 : ρ 𝓸 -> A)
+          γ :    (𝓸 : ∣ S ∣) (𝒂 : ⟦ S ⟧ 𝓸 -> A)
                ---------------------------------------
             ->   (g ∘ f) (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᶜ 𝓸 (g ∘ f ∘ 𝒂)
           γ 𝓸 𝒂 rewrite α 𝓸 𝒂 = β 𝓸 (f ∘ 𝒂)

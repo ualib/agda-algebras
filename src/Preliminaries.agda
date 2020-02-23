@@ -45,32 +45,26 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
 
+----------------------------
+--EXTENSIONALITY Postulate
+----------------------------
+--The only way to distinguish functions is by applying them; if two functions
+--applied to the same argument always yield the same result, then they are
+--the same function. It is the converse of cong-app.
+--
+--Agda DOES NOT PRESUME EXTENSIONALITY, but we can POSTULATE that it holds.
+--This postulate is okay since it's CONSISTENT with the theory underlying Agda.
 
-
-
-  ----------------------------------------------------------------
-
-
-  ----------------------------
-  --EXTENSIONALITY Postulate
-  ----------------------------
-  --The only way to distinguish functions is by applying them; if two functions
-  --applied to the same argument always yield the same result, then they are
-  --the same function. It is the converse of cong-app.
-  --
-  --Agda DOES NOT PRESUME EXTENSIONALITY, but we can POSTULATE that it holds.
-  --This postulate is okay since it's CONSISTENT with the theory underlying Agda.
-
-  --------------------------------------
-  --Ordinary function extensionality
+--------------------------------------
+--Ordinary function extensionality
 postulate
   extensionality : ∀ {A B : Set} {f g : A -> B}
     ->             (∀ (x : A) -> f x ≡ g x)
                   --------------------------
     ->             f ≡ g
                    
-  --------------------------------------
-  --Dependent function extensionality
+--------------------------------------
+--Dependent function extensionality
 postulate
   ∀-extensionality :
     ∀ {A : Set} {B : A -> Set} {f g : ∀(x : A) -> B x}

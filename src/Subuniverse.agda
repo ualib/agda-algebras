@@ -1,12 +1,13 @@
 --File: Subuniverse.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Updated: 21 Feb 2020
+--Updated: 23 Feb 2020
 --Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split #-}
 
-open import Preliminaries using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
+open import Preliminaries
+  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
 
 open import Basic
 open import Hom
@@ -16,7 +17,6 @@ IsSubuniverse : {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S}
   ->            Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
 IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =          -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → im 𝒂 ⊆ B → 𝐹ᴬ 𝓸 𝒂 ∈ B
-
 -- IsSubuniverse {S = F , ρ} {𝑨 = a , 𝑨} B =
 --   (o : F) (x : ρ o → a) → x ∈∈ B → 𝑨 o x ∈ B
 
