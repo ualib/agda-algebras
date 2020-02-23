@@ -124,21 +124,21 @@ bijective g = epic g × monic g
 --         Since X generates 𝑨, ∃ term t (or arity n = ρt, say) and a tuple x: n -> X of generators
 --         such that a = t^𝑨 x. Since f|_X = g|_X, f ∘ x = (f x₀, ..., f xₙ) = (g x₀,...,g xₙ) = g ∘ x,
 --         so f a = f(t^𝑨 x) = t^𝑩 (f ∘ x) = t^𝑩 (g ∘ x) = g(t^𝑨 x) = g a.     ☐
-liftHomUnique : {𝑨 𝑩 : Algebra k S}
+HomUnique : {𝑨 𝑩 : Algebra k S}
   ->            (X : Pred ∣ 𝑨 ∣ k)
   ->            (f g : Hom{i}{j}{k} 𝑨 𝑩)
   ->            (∀ x -> x ∈ X -> ∣ f ∣ x ≡ ∣ g ∣ x)
               -----------------------------
   ->            (∀ a -> a ∈ Sg {𝑨 = 𝑨} X -> ∣ f ∣ a ≡ ∣ g ∣ a)
-liftHomUnique {𝑨} {𝑩} X f g fx≡gx a (var x) = (fx≡gx) a x
-liftHomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) = 
+HomUnique {𝑨} {𝑩} X f g fx≡gx a (var x) = (fx≡gx) a x
+HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) = 
   begin
     ∣ f ∣ (⟦ 𝑨 ⟧ 𝓸 𝒂)
   ≡⟨ ⟦ f ⟧ 𝓸 𝒂 ⟩
     ⟦ 𝑩 ⟧ 𝓸 (∣ f ∣ ∘ 𝒂)
   ≡⟨ cong (⟦ 𝑩 ⟧ _)
      (∀-extensionality-ℓ₁-ℓ₂{j}{k}
-       λ i₁ -> liftHomUnique{𝑨}{𝑩}
+       λ i₁ -> HomUnique{𝑨}{𝑩}
                X f g fx≡gx (𝒂 i₁)(im𝒂⊆SgX i₁)
      )
    ⟩
