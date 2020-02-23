@@ -17,6 +17,8 @@ module Preliminaries where
 
 -- Export common imports
 open import Level public renaming (suc to lsuc ; zero to lzero)
+open import Data.Empty using (⊥) public
+open import Data.Bool using (Bool) public
 open import Data.Product using (∃; _,_; _×_) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 open import Relation.Unary using (Pred; _∈_; _⊆_) public

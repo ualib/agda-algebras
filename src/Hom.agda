@@ -18,7 +18,15 @@ private
 
 --The category of algebras Alg with morphisms as Homs
 
-Hom : Algebra k S -> Algebra k S -> Set _
+Hom₀ : Algebra k S -> Algebra k S -> Set _
+Hom₀ {S = 𝐹 , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
+    ∃ λ (f : A -> B) -> (𝓸 : 𝐹) (𝒂 : ρ 𝓸 -> A)
+     -----------------------------------------
+      ->    f (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᴮ 𝓸 (f ∘ 𝒂)
+
+--(We need more level-generality, e.g., in Free.agda)
+Hom : ∀{ℓ₁ ℓ₂ : Level}
+  -> Algebra ℓ₁ S -> Algebra ℓ₂ S -> Set _
 Hom {S = 𝐹 , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
     ∃ λ (f : A -> B) -> (𝓸 : 𝐹) (𝒂 : ρ 𝓸 -> A)
      -----------------------------------------
@@ -29,9 +37,11 @@ id (A , 𝑨) = (λ x -> x) , λ _ _ -> refl
 
 private
   variable
-    𝑨 𝑩 : Algebra k S
+    ℓ₂ ℓ₃ : Level
+    𝑨 : Algebra k S
+    𝑩 : Algebra ℓ₂ S
 
-_>>>_ : {𝑪 : Algebra k S}
+_>>>_ : {𝑪 : Algebra ℓ₃ S}
 
   ->   Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
       -------------------------
