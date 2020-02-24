@@ -7,54 +7,62 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
+  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_; ⋂)
 
 open import Basic
-open import Hom
+open import Free using (Term)
 
-IsSubuniverse : {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S}
-              -----------------------------------------------------------
-  ->            Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
+private
+  variable
+    i j k l : Level
+    S : Signature i j
+    𝑨 : Algebra k S
+
+IsSubuniverse : {S : Signature i j} {𝑨 : Algebra k S}
+              ---------------------------------------
+              → Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
 IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =        -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → im 𝒂 ⊆ B → 𝐹ᴬ 𝓸 𝒂 ∈ B
--- IsSubuniverse {S = F , ρ} {𝑨 = a , 𝑨} B =
---   (o : F) (x : ρ o → a) → x ∈∈ B → 𝑨 o x ∈ B
 
-module _ {i j k : Level} {S : Signature i j} where
-
-  record subuniverse  {𝑨 : Algebra k S} : Set (i ⊔ j ⊔ lsuc k) where
-    constructor mksub
-    field
-      sset : Pred ∣ 𝑨 ∣ k
-      isSub : IsSubuniverse {𝑨 = 𝑨} sset    
-
-module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} where
-  
-  data Sg (X : Pred ∣ 𝑨 ∣ k) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) where
+module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
+  data Sg (X : Pred ∣ 𝑨 ∣ l) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k ⊔ l) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
     app :  (𝓸 : ∣ S ∣) {𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ }
-      ->     im 𝒂 ⊆ Sg X
-           --------------------------------
-      ->    ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X  
+      →   im 𝒂 ⊆ Sg X
+      ------------------
+      → ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X
 
-module _ {i j k : Level} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ k)
-  where
-    sgIsSub : IsSubuniverse {𝑨 = 𝑨} (Sg {𝑨 = 𝑨} X)
-    sgIsSub 𝓸 𝒂 α = app 𝓸 α
+sgIsSub : (X : Pred ∣ 𝑨 ∣ l) → IsSubuniverse {𝑨 = 𝑨} (Sg X)
+sgIsSub _ 𝓸 𝒂 α = app 𝓸 α
 
-    sgIsSmallest : {Y : Pred ∣ 𝑨 ∣ k}
-      ->           IsSubuniverse {𝑨 = 𝑨} Y
-      ->           X ⊆ Y
-                  -----------------------------
-      ->           Sg {𝑨 = 𝑨} X ⊆ Y
-    -- By induction on x ∈ Sg X, show x ∈ Y
-    sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
-    sgIsSmallest {Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
-      -- First, show the args are in Y
-      im𝒂⊆Y : im 𝒂 ⊆ Y
-      im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
+-- WARNING: if you move X into the scope of sgIsSmallest, you get the following error:
+-- "An internal error has occurred. Please report this as a bug.
+--  Location of the error: src/full/Agda/TypeChecking/Monad/Context.hs:119"
+-- I think it has to do with variable generalization
+module _ {X : Pred ∣ 𝑨 ∣ l} where
+  sgIsSmallest : {m : Level} {Y : Pred ∣ 𝑨 ∣ m}
+    → IsSubuniverse Y
+    → X ⊆ Y
+    -----------------
+    → Sg X ⊆ Y
+  -- By induction on x ∈ Sg X, show x ∈ Y
+  sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
+  sgIsSmallest {Y = Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
+    -- First, show the args are in Y
+    im𝒂⊆Y : im 𝒂 ⊆ Y
+    im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
 
-      -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
-      app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
-      app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
+    -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
+    app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
+    app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
 
+-- Same issue here as above
+module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
+  sub-inter-is-sub : ((i : I) → IsSubuniverse (A i)) → IsSubuniverse (⋂ I A)
+  sub-inter-is-sub Ai-is-Sub 𝓸 𝒂 im𝒂⊆⋂A = α where
+    α : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ ⋂ I A
+    -- Suffices to show (i : I) → ⟦ A ⟧ 𝓸 𝒂 ∈ A i
+    -- Immediate from A i being a subuniverse
+    α i = Ai-is-Sub i 𝓸 𝒂 λ j → im𝒂⊆⋂A j i
+
+-- Term S X ⊆ Image  ∋ 
