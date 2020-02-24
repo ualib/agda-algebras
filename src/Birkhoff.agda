@@ -18,9 +18,9 @@ open import Subuniverse
 
 module Birkhoff {i j k : Level} {S : Signature i j}  where
 
-------------------------------------------------------
+-------------------------------------------------------------------------------
 --KERNEL OF A FUNCTION
-----------------------
+-----------------------
 
 -- ...as a relation.
 ker : {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
@@ -28,47 +28,44 @@ ker : {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
 ker f x y = f x ≡ f y
 
 -- ...as a binary predicate.
-KER : {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->  (f : A -> B) -> Pred (A × A) ℓ₂
 KER f (x , y) = f x ≡ f y
 
-------------------------------------------------------
---EQUALIZER OF FUNCTIONS
-------------------------
+-------------------------------------------------------------------------------
+-- MISC Defs
+-------------
+--surjectivity
+epic : {A B : Set} (g : A -> B) -> Set _
+epic g = ∀ y -> Image g ∋ y
+
+Epic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
+Epic g = ∀ y -> Image g ∋ y
+
+--injectivity
+monic : {A B : Set} (g : A -> B) -> Set _
+monic g = ∀ x₁ x₂ -> g x₁ ≡ g x₂ -> x₁ ≡ x₂
+
+--bijectivity
+bijective : {A B : Set} (g : A -> B) -> Set _
+bijective g = epic g × monic g
+
+-------------------------------------------------------------------------------
+--EQUALIZERS
+-------------
+
+--...of functions
 𝑬 :   {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->  (f g : A -> B) -> Pred A ℓ₂
 𝑬 f g x = f x ≡ g x
 
-------------------------------------------------------
---EQUALIZER OF HOMS
--------------------
+--..of homs
 --EH :  {ℓ₁ ℓ₂ : Level} {𝑨 : Algebra ℓ₁ S} {𝑩 : Algebra ℓ₂ S}
 EqHom :  {𝑨 𝑩 : Algebra k S}
   ->  (f g : Hom {i} {j} {k} 𝑨 𝑩) -> Pred ∣ 𝑨 ∣ k
 EqHom f g x = ∣ f ∣ x ≡ ∣ g ∣ x
 
 -- (See also Siva's (infix) def of _~_ in the Hom.agda file.)
-
----------------------
---COMPOSITION OF HOMS
----------------------
-
--- Obs 2.0. Composing homs gives a hom.
--- See also: Siva's (infix) def of _>>>_ in the Hom.agda file.
-HCompClosed : ∀{ℓ₁ ℓ₂ ℓ₃ : Level}
-  ->       {𝑨 : Algebra ℓ₁ S}
-  ->       {𝑩 : Algebra ℓ₂ S}
-  ->       {𝑪 : Algebra ℓ₃ S}
-  ->       Hom {i} {j} {k} 𝑨 𝑩  ->  Hom {i} {j} {k} 𝑩 𝑪
-         -------------------------
-  ->       Hom  {i} {j} {k} 𝑨 𝑪
-HCompClosed {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
-  (f , h₁) (g , h₂) = g ∘ f , γ
-    where
-      γ :    (𝓸 : ∣ S ∣) (𝒂 : ⟦ S ⟧ 𝓸 -> A)
-          ---------------------------------------
-        ->   (g ∘ f) (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᶜ 𝓸 (g ∘ f ∘ 𝒂)
-      γ 𝓸 𝒂 rewrite h₁ 𝓸 𝒂 = h₂ 𝓸 (f ∘ 𝒂)
 
 EqClosed : ∀{𝓸 : ∣ S ∣}{𝑨 𝑩 : Algebra k S}
   ->        (f g : Hom {i} {j} {k} 𝑨 𝑩)
@@ -97,19 +94,26 @@ EqSub : {𝑨 𝑩 : Algebra k S}
 EqSub{𝑨}{𝑩} f g =
   mksub (EqHom{𝑨}{𝑩} f g) λ 𝓸 𝒂 x -> EqClosed{𝓸}{𝑨}{𝑩} f g 𝒂 x
 
--- Misc definitions -----------------------------------
---surjectivity
-epic : {A B : Set} (g : A -> B) -> Set _
-epic g = ∀ y -> Image g ∋ y
+-------------------------------------------------------------------------------
+--COMPOSITION OF HOMS
+---------------------
 
---injectivity
-monic : {A B : Set} (g : A -> B) -> Set _
-monic g = ∀ x₁ x₂ -> g x₁ ≡ g x₂ -> x₁ ≡ x₂
-
---bijectivity
-bijective : {A B : Set} (g : A -> B) -> Set _
-bijective g = epic g × monic g
-------------------------------------------------------
+-- Obs 2.0. Composing homs gives a hom.
+-- See also: Siva's (infix) def of _>>>_ in the Hom.agda file.
+HCompClosed : ∀{ℓ₁ ℓ₂ ℓ₃ : Level}
+  ->       {𝑨 : Algebra ℓ₁ S}
+  ->       {𝑩 : Algebra ℓ₂ S}
+  ->       {𝑪 : Algebra ℓ₃ S}
+  ->       Hom {i} {j} {k} 𝑨 𝑩  ->  Hom {i} {j} {k} 𝑩 𝑪
+         -------------------------
+  ->       Hom  {i} {j} {k} 𝑨 𝑪
+HCompClosed {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
+  (f , h₁) (g , h₂) = g ∘ f , γ
+    where
+      γ :    (𝓸 : ∣ S ∣) (𝒂 : ⟦ S ⟧ 𝓸 -> A)
+          ---------------------------------------
+        ->   (g ∘ f) (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᶜ 𝓸 (g ∘ f ∘ 𝒂)
+      γ 𝓸 𝒂 rewrite h₁ 𝓸 𝒂 = h₂ 𝓸 (f ∘ 𝒂)
 
 -- Obs 2.2. Homs are determined by their values on a generating set (UAFST Ex. 1.4.6.b)
 -- If f, g : Hom(𝑨,𝑩), X ⊆ A generates 𝑨, and f|_X = g|_X, then f = g.
@@ -144,8 +148,27 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 -- PROOF. By Obs 2, a hom is uniquely determined by its restriction to a generating set.
 --   If X generates 𝑨, then since there are exactly |B|^|X| functions from X to B, the result holds. □
 
+
+------------------------------------------------------
 -- Obs 2.4. Factorization of homs.
--- If g ∈ Epi(𝑨, 𝑩), h ∈ Hom(𝑨, 𝑪), and ker g ⊆ ker h, then ∃ k ∈ Hom(𝑩, 𝑪), h = k ∘ g.
+-- If f ∈ Epi(𝑨, 𝑪), g ∈ Hom(𝑨, 𝑩), and ker g ⊆ ker f, then ∃ h ∈ Hom(𝑩, 𝑪), f = h ∘ g.
+--
+--         𝑨---f---> 𝑪
+--          \       7
+--           \     /
+--          g \   / ∃h
+--             v /
+--              𝑩
+--
+homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
+  ->        (f : Hom{i}{j}{k} 𝑨 𝑪)
+  ->        (g : Hom{i}{j}{k} 𝑨 𝑩)
+  ->        KER ∣ g ∣ ⊆ KER ∣ f ∣
+  ->        Epic ∣ f ∣
+      --------------------------------------------------
+  ->   ∃ λ (h : Hom{i}{j}{k} 𝑩 𝑪) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf fEpic = ({!!} , {!!}) , {!!}
+
 -- PROOF. We define k ∈ Hom(𝑩, 𝑪) as follows: Fix b ∈ B. Since g is surjective, the set g^{-1}{b} ⊆ A
 --   is nonempty, and since ker g ⊆ ker h, every element of g^{-1}{b} is mapped by h to a single
 --   element of C. Label this element cb. That is, h(a) = cb, for all a ∈ g^{-1}{b}. For each such b,
@@ -172,6 +195,7 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 --   f^𝑪(k ∘ b) = f^𝑪(k ∘ g ∘ a) = f^𝑪(h ∘ a) = h(f^𝑨(a)) = (k ∘ g)(f^𝑨(a)) = k(f^𝑩(g ∘ a)) = k(f^𝑩(b)),
 --
 --   as desired, where the penultimate equality holds by virtue of the fact that g is a hom. ☐
+
 
 -- Obs 2.5. Suppose Aᵢ ≤ 𝑨 for all i in some set I. Then ⋂ᵢ Aᵢ is a subuniverse of 𝑨.
 
