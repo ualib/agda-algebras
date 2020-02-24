@@ -44,20 +44,22 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    Set (i ⊔ k)
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
-data Image_∋_ {i j : Level} {A : Set i} {B : Set j}(f : A -> B) : B -> Set (i ⊔ j) where
-  im : (x : A) -> Image f ∋ f x
+------------------
+--SET ISOMORPHISM
+-------------------
+infix 0 _≃_
+record _≃_ (A B : Set) : Set where
+  field
+    to : A -> B
+    from : B -> A
 
--- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set (suc ℓ) where
---   im : (x : A) -> Image f ∋ f x
+    --from is left-inv for to
+    from∘to : ∀ (x : A) -> from (to x) ≡ x
 
--- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set ℓ where
---   im : (x : A) -> Image f ∋ f x
+    --from is right-inv for to
+    to∘from : ∀ (y : B) -> to (from y) ≡ y  
 
---N.B. the assertion Image f ∋ y must come with a proof, which is of the
---form ∃a f a = y, so we have a witness, so the inverse can be "computed"
---in the following way:
-inv : {A B : Set}(f : A -> B)(y : B) -> Image f ∋ y -> A
-inv f .(f x) (im x) = x  -- Cool!!!
+open _≃_
 
 
 ----------------------------
@@ -101,40 +103,113 @@ postulate
          -------------------------
     ->    f ≡ g
 
-postulate
-  ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂ :
-    ∀ {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂)} {f g : ∀(x : A) -> B x}
-    ->    (∀ (x : A) -> f x ≡ g x)
-         -------------------------
-    ->    f ≡ g
-
-postulate
-  ∀-extensionality-ℓ₁-ℓ₂⊔ℓ₃ :
-    ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
-    ->    (∀ (x : A) -> f x ≡ g x)
-         -------------------------
-    ->    f ≡ g
-
-postulate
-  ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂⊔ℓ₃ :
-    ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
-    ->    (∀ (x : A) -> f x ≡ g x)
-         -------------------------
-    ->    f ≡ g
-
-  -------------------------------------------------------------
-  --Dependent function extensionality (with product codomain)
-postulate
-  extensionality-dep-× :
-    ∀ {A : Set} {B C : A -> Set} {f g : (x : A) -> B x × C x}
-      ->   (∀ (x : A) -> ∣ f x ∣ ≡ ∣ g x ∣ -> ⟦ f x ⟧ ≡ ⟦ g x ⟧)
-          --------------------------------------------------
-      ->   f ≡ g
+-- (more extensionality postulates we haven't used appear at bottom of this file for now)
 
 
 
+data Image_∋_ {i j : Level} {A : Set i} {B : Set j}
+              (f : A -> B) : Pred B (i ⊔ j)
+  where
+  im : (x : A) -> Image f ∋ f x
 
 
+image_ : {i j : Level} {A : Set i} {B : Set j}
+  ->  (A -> B) ->  Pred B (i ⊔ j)
+image f = λ b -> ∃ λ a -> b ≡ f a
+
+-- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set (suc ℓ) where
+--   im : (x : A) -> Image f ∋ f x
+
+-- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set ℓ where
+--   im : (x : A) -> Image f ∋ f x
+
+--N.B. the assertion Image f ∋ y must come with a proof, which is of the
+--form ∃a f a = y, so we have a witness, so the inverse can be "computed"
+--in the following way:
+Inv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) ->  (b : B) -> Image f ∋ b -> A
+Inv f .(f a) (im a) = a  -- Cool!!!
+
+-- special case for Set
+inv : {A B : Set}(f : A -> B)(b : B) -> Image f ∋ b -> A
+inv{A}{B} = Inv {lzero}{lzero}{A}{B}
+
+InvIsInv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
+  ->       (f : A -> B)
+  ->       (b : B) -> (b∈Imgf : Image f ∋ b)
+         --------------------------------------
+  ->      f (Inv f b b∈Imgf) ≡ b
+InvIsInv f .(f a) (im a) = refl
+
+-------------------------------------------------------------------------------
+identity : {ℓ : Level} (A : Set ℓ) -> A -> A
+identity{ℓ} A x = x
+--(see also `id` in Hom.agda)
+
+-- Epic (surjective) function from Set ℓ₁ to Set ℓ₂
+Epic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
+Epic g = ∀ y -> Image g ∋ y
+
+-- special case: epic function on Set
+epic : {A B : Set} (g : A -> B) -> Set _
+epic {A}{B} g = Epic {lzero}{lzero}{A}{B} g
+
+-- pseudo-inverse of an epic function
+EpicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->      (f : A -> B)
+  ->      Epic f
+         -----------------
+  ->       B -> A
+EpicInv f fEpic b = Inv f b (fEpic b)
+
+-- The psudo-inverse of an epic is the right inverse.
+EInvIsRInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->         (f : A -> B)
+  ->         (fEpic : Epic f)
+    ----------------------------------------
+  -> f ∘ (EpicInv f fEpic) ≡ identity B
+EInvIsRInv f fEpic = (∀-extensionality-ℓ₁-ℓ₂)
+                     (λ x → InvIsInv f x (fEpic x))
+
+--Monics (injectivity) ----------------------------------
+-- monic function from Set ℓ₁ to Set ℓ₂
+Monic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
+Monic g = ∀ a₁ a₂ -> g a₁ ≡ g a₂ -> a₁ ≡ a₂
+
+-- special case: monic function on Set
+monic : {A B : Set} (g : A -> B) -> Set _
+monic {A}{B} g = Monic {lzero} {lzero} {A}{B} g
+
+-- pseudo-inverse of a monic function
+MonicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->       (f : A -> B)
+  ->       Monic f
+         -----------------
+  ->       (b : B) -> Image f ∋ b -> A
+MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
+
+-- The psudo-inverse of a monic is the left inverse.
+-- MInvIsLInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+--   ->         (f : A -> B)
+--   ->         (fMonic : Monic f)
+--            ----------------------------------------
+--   ->        (MonicInv f fMonic) ∘ f ≡ identity A
+-- MInvIsLInv f fMonic =  ?
+  -- ->         (g : (b : B) -> Image f ∋ b → A) -- Pred B (ℓ₁ ⊔ ℓ₂))
+  -- ->         g ≡ (MonicInv f fMonic)
+
+-- InvIsInv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
+--   ->  (f : A -> B) -> (finv : B -> A)
+--   ->  finv ≡ Inv f
+--   ->  (finv ∘ f) ≡ identity A × (f ∘ finv) ≡ identity B
+-- InvIsInv f finv finv≡Invf = ?
+
+--bijectivity
+bijective : {A B : Set} (g : A -> B) -> Set _
+bijective g = epic g × monic g
+
+Bijective : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
+Bijective g = Epic g × Monic g
 
 
 
@@ -180,3 +255,53 @@ postulate
 -- For a proof by structural induction over a recursively defined data type,
 -- make a hole, enter the hole, type C-c C-c, and when prompted enter the
 -- symbol over which you wish to induct.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- postulate
+--   ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂ :
+--     ∀ {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂)} {f g : ∀(x : A) -> B x}
+--     ->    (∀ (x : A) -> f x ≡ g x)
+--          -------------------------
+--     ->    f ≡ g
+
+-- postulate
+--   ∀-extensionality-ℓ₁-ℓ₂⊔ℓ₃ :
+--     ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
+--     ->    (∀ (x : A) -> f x ≡ g x)
+--          -------------------------
+--     ->    f ≡ g
+
+-- postulate
+--   ∀-extensionality-ℓ₁-ℓ₁⊔ℓ₂⊔ℓ₃ :
+--     ∀ {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : A -> Set (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)} {f g : ∀(x : A) -> B x}
+--     ->    (∀ (x : A) -> f x ≡ g x)
+--          -------------------------
+--     ->    f ≡ g
+
+--   -------------------------------------------------------------
+--   --Dependent function extensionality (with product codomain)
+-- postulate
+--   extensionality-dep-× :
+--     ∀ {A : Set} {B C : A -> Set} {f g : (x : A) -> B x × C x}
+--       ->   (∀ (x : A) -> ∣ f x ∣ ≡ ∣ g x ∣ -> ⟦ f x ⟧ ≡ ⟦ g x ⟧)
+--           --------------------------------------------------
+--       ->   f ≡ g
+

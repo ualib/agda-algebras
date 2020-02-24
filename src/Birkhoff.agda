@@ -33,24 +33,6 @@ KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
 KER f (x , y) = f x ≡ f y
 
 -------------------------------------------------------------------------------
--- MISC Defs
--------------
---surjectivity
-epic : {A B : Set} (g : A -> B) -> Set _
-epic g = ∀ y -> Image g ∋ y
-
-Epic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
-Epic g = ∀ y -> Image g ∋ y
-
---injectivity
-monic : {A B : Set} (g : A -> B) -> Set _
-monic g = ∀ x₁ x₂ -> g x₁ ≡ g x₂ -> x₁ ≡ x₂
-
---bijectivity
-bijective : {A B : Set} (g : A -> B) -> Set _
-bijective g = epic g × monic g
-
--------------------------------------------------------------------------------
 --EQUALIZERS
 -------------
 
@@ -151,28 +133,74 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 
 ------------------------------------------------------
 -- Obs 2.4. Factorization of homs.
--- If f ∈ Epi(𝑨, 𝑪), g ∈ Hom(𝑨, 𝑩), and ker g ⊆ ker f, then ∃ h ∈ Hom(𝑩, 𝑪), f = h ∘ g.
+-- If f ∈ Hom(𝑨, 𝑩), g ∈ Hom(𝑨, 𝑪), g epic, Ker g ⊆ Ker f, then ∃ h ∈ Hom(𝑪, 𝑩), f = h ∘ g.
 --
---         𝑨---f---> 𝑪
+--         𝑨---f---> 𝑩
 --          \       7
 --           \     /
 --          g \   / ∃h
 --             v /
---              𝑩
+--              𝑪
 --
-homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
-  ->        (f : Hom{i}{j}{k} 𝑨 𝑪)
-  ->        (g : Hom{i}{j}{k} 𝑨 𝑩)
-  ->        KER ∣ g ∣ ⊆ KER ∣ f ∣
-  ->        Epic ∣ f ∣
-      --------------------------------------------------
-  ->   ∃ λ (h : Hom{i}{j}{k} 𝑩 𝑪) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
-homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf fEpic = ({!!} , {!!}) , {!!}
+-- To do this constructively, we need the following
+-- Fact. The inverse of an Epic function is total.
 
--- PROOF. We define k ∈ Hom(𝑩, 𝑪) as follows: Fix b ∈ B. Since g is surjective, the set g^{-1}{b} ⊆ A
---   is nonempty, and since ker g ⊆ ker h, every element of g^{-1}{b} is mapped by h to a single
---   element of C. Label this element cb. That is, h(a) = cb, for all a ∈ g^{-1}{b}. For each such b,
---   and its associated cb, define k(b) = cb. Consider the foregoing "construction" of the function k.
+EInv : {𝑨 𝑪 : Algebra k S} 
+  ->    (g : Hom{i}{j}{k} 𝑨 𝑪)
+  ->    Epic ∣ g ∣
+        -----------------------
+  ->    ∣ 𝑪 ∣ -> ∣ 𝑨 ∣
+EInv{𝑨}{𝑪} g gEpic = (λ c → EpicInv ∣ g ∣ gEpic c)
+
+-- EInv_isInv : {𝑨 𝑪 : Algebra k S} 
+--   ->         (g : Hom 𝑨 𝑪)
+--   ->         (gEpic : Epic ∣ g ∣)
+--   ->          (ginv : Hom 𝑪 𝑨)
+--   ->          ginv ≡ EHInv g gEpic
+--        -----------------------------------------------------
+--   ->   (∣ g ∣ ∘ ∣ ginv ∣ ≡ ∣ id 𝑪 ∣ × ∣ ginv ∣ ∘ ∣ g ∣ ≡ ∣ id 𝑨 ∣)
+-- EHInv_isInv = {!!}
+
+homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
+  ->        (f : Hom{i}{j}{k} 𝑨 𝑩)
+  ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
+  ->        KER ∣ g ∣ ⊆ KER ∣ f ∣
+  ->        Epic ∣ g ∣
+      --------------------------------------------------
+  ->   ∃ λ (h : Hom{i}{j}{k} 𝑪 𝑩) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (C , 𝐹ᶜ)}
+  f g Kg⊆Kf gEpic = ((λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) , {!hIsHomCB!}) , {!!}
+  where
+    hIsHomCB = λ 𝓸 𝒄 ->
+      begin
+        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 𝒄))
+      ≡⟨⟩
+        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 (identity {k} ∣ 𝑪 ∣ ∘ 𝒄)))
+      ≡⟨ involved {𝓸} {𝒄} ⟩
+        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic ∘ 𝒄))))
+      ≡⟨ cong (∣ f ∣ (EpicInv (∣ g ∣) gEpic(_))) (sym (⟦ g ⟧ 𝓸 (λ x -> EpicInv ∣ g ∣ gEpic (𝒄 x)))) ⟩
+        ∣ f ∣ (EpicInv (∣ g ∣) gEpic (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (EpicInv ∣ g ∣ gEpic ∘ 𝒄))))
+      ≡⟨ cong ∣ f ∣ {!!} ⟩
+        ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 ((EpicInv ∣ g ∣ gEpic) ∘ 𝒄))
+      ≡⟨ ⟦ f ⟧ 𝓸 ((EpicInv ∣ g ∣ gEpic) ∘ 𝒄) ⟩
+        ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (EpicInv ∣ g ∣ gEpic (𝒄 i₁)))
+      ∎
+      where
+        involved : {𝓸 : ∣ S ∣} 
+          ->       {𝒄 : ⟦ S ⟧ 𝓸 -> ∣ 𝑪 ∣}
+          ->  ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 ((identity {k} ∣ 𝑪 ∣) ∘ 𝒄)))
+              ≡ ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 ((∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) ∘ 𝒄)))
+        involved = {!!}
+        
+
+
+
+-- PROOF. We define h ∈ Hom 𝑪 𝑩 as follows: Fix c ∈ C. Since g is surjective, g^{-1}{c} ⊆ A ≠ ∅,
+--   and ker g ⊆ ker f implies every a ∈ g^{-1}{b} is mapped by f to a single b ∈ B.
+--   Label this unique element bc. That is, f(a) = bc, for all a ∈ g^{-1}{c}. For each such c,
+--   and its associated bc, define h(c) = bc.
+
+--   Consider the foregoing "construction" of the function h.
 --   While it's true that for each b ∈ B there exists a cb such that h(a) = cb for all a ∈ g^{-1}{b},
 --   it's also true that we have no means of producing such cb constructively. One could argue that
 --   each cb is easily computed as cb = h(a) for some (every) a ∈ g^{-1}{b}. But this requires
