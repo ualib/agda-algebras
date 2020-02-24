@@ -99,7 +99,7 @@ EqClosed {𝓸} {𝑨} {𝑩} f g 𝒂 p =
 EqSub : {𝑨 𝑩 : Algebra k S}
   ->    (f g : Hom{i}{j}{k} 𝑨 𝑩)
        -----------------------------
-  ->    subuniverse
+  ->    Subuniverse
 EqSub{𝑨}{𝑩} f g =
   mksub (EqHom{𝑨}{𝑩} f g) λ 𝓸 𝒂 x -> EqClosed{𝓸}{𝑨}{𝑩} f g 𝒂 x
 --
