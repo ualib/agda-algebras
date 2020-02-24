@@ -21,7 +21,7 @@ open import Data.Empty using (⊥) public
 open import Data.Bool using (Bool) public
 open import Data.Product using (∃; _,_; _×_) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
-open import Relation.Unary using (Pred; _∈_; _⊆_) public
+open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; sym) public
@@ -44,7 +44,7 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    Set (i ⊔ k)
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
-data Image_∋_  {A : Set} {B : Set}(f : A -> B) : B -> Set where
+data Image_∋_ {i j : Level} {A : Set i} {B : Set j}(f : A -> B) : B -> Set (i ⊔ j) where
   im : (x : A) -> Image f ∋ f x
 
 -- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set (suc ℓ) where

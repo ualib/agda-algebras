@@ -12,7 +12,7 @@ open import Basic
 open import Hom
 open import Con
 
-module Free {i j k : Level} {S : Signature i j} {X : Set k}  where
+module Free {i j k : Level} (S : Signature i j) (X : Set k)  where
 
 ----------------------------
 -- TERMS in the signature S
