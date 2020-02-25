@@ -130,10 +130,9 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 -- PROOF. By Obs 2, a hom is uniquely determined by its restriction to a generating set.
 --   If X generates 𝑨, then since there are exactly |B|^|X| functions from X to B, the result holds. □
 
-
 ------------------------------------------------------
 -- Obs 2.4. Factorization of homs.
--- If f ∈ Hom(𝑨, 𝑩), g ∈ Hom(𝑨, 𝑪), g epic, Ker g ⊆ Ker f, then ∃ h ∈ Hom(𝑪, 𝑩), f = h ∘ g.
+-- If f : Hom 𝑨 𝑩, g : Hom 𝑨 𝑪, g epic, Ker g ⊆ Ker f, then ∃ h ∈ Hom 𝑪 𝑩, f = h ∘ g.
 --
 --         𝑨---f---> 𝑩
 --          \       7
@@ -142,25 +141,6 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 --             v /
 --              𝑪
 --
--- To do this constructively, we need the following
--- Fact. The inverse of an Epic function is total.
-
-EInv : {𝑨 𝑪 : Algebra k S} 
-  ->    (g : Hom{i}{j}{k} 𝑨 𝑪)
-  ->    Epic ∣ g ∣
-        -----------------------
-  ->    ∣ 𝑪 ∣ -> ∣ 𝑨 ∣
-EInv{𝑨}{𝑪} g gEpic = (λ c → EpicInv ∣ g ∣ gEpic c)
-
--- EInv_isInv : {𝑨 𝑪 : Algebra k S} 
---   ->         (g : Hom 𝑨 𝑪)
---   ->         (gEpic : Epic ∣ g ∣)
---   ->          (ginv : Hom 𝑪 𝑨)
---   ->          ginv ≡ EHInv g gEpic
---        -----------------------------------------------------
---   ->   (∣ g ∣ ∘ ∣ ginv ∣ ≡ ∣ id 𝑪 ∣ × ∣ ginv ∣ ∘ ∣ g ∣ ≡ ∣ id 𝑨 ∣)
--- EHInv_isInv = {!!}
-
 homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
   ->        (f : Hom{i}{j}{k} 𝑨 𝑩)
   ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
@@ -168,49 +148,53 @@ homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
   ->        Epic ∣ g ∣
       --------------------------------------------------
   ->   ∃ λ (h : Hom{i}{j}{k} 𝑪 𝑩) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
-homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (C , 𝐹ᶜ)}
-  f g Kg⊆Kf gEpic = ((λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) , hIsHomCB) ,
-    ∀-extensionality-ℓ₁-ℓ₂ λ x
-    -- Goal: ∣ f ∣ x ≡ ((λ {x = x₁} c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) ∘ ∣ g ∣) x
-      -> Kg⊆Kf (begin
-                  (∣ g ∣ x)
-                ≡⟨  sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ x )) ⟩
-                  (∣ g ∣ ((EpicInv ∣ g ∣ gEpic )(∣ g ∣ x)))
-                ∎)
-  where
-    hIsHomCB = λ 𝓸 𝒄 ->
-      let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in 
-        begin
-          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 𝒄))
-        ≡⟨⟩
-          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (identity {k} ∣ 𝑪 ∣ ∘ 𝒄)))
-        ≡⟨ cong ∣ f ∣ ((cong gInv) (cong (⟦ 𝑪 ⟧ 𝓸)
-           (∀-extensionality-ℓ₁-ℓ₂ {j}{k} λ x →
-             begin
-               (𝒄 x)
-             ≡⟨ refl ⟩
-               identity ∣ 𝑪 ∣ (𝒄 x)
-             ≡⟨ sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (𝒄 x)) ⟩
-               (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) (𝒄 x)
-             ∎
-           )))
-         ⟩
-          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (gInv ∘ 𝒄))))
-        ≡⟨ cong ∣ f ∣ ((cong gInv) (sym (⟦ g ⟧ 𝓸 λ x -> (EpicInv ∣ g ∣ gEpic (𝒄 x))))) ⟩
-          ∣ f ∣ (gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
-        ≡⟨ useker 𝓸 𝒄 ⟩
-          ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))
-        ≡⟨ ⟦ f ⟧ 𝓸 (gInv ∘ 𝒄) ⟩
-          ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (gInv (𝒄 i₁)))
-        ∎
-        where
-          useker = λ 𝓸 𝒄 ->
-            let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in
-            Kg⊆Kf (begin
-                     ∣ g ∣ ( gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
-                  ≡⟨ (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄)))) ⟩
-                     ∣ g ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄) )
-                  ∎)
+
+homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
+  ( (λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c) ) , hIsHomCB ) ,
+    -- First, prove ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+    ∀-extensionality-ℓ₁-ℓ₂ λ x ->
+      Kg⊆Kf ( begin (∣ g ∣ x)
+              ≡⟨  sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ x )) ⟩
+                (∣ g ∣ ((EpicInv ∣ g ∣ gEpic )(∣ g ∣ x)))
+              ∎ )
+    where
+    -- Next prove h is a hom.
+      hIsHomCB =
+        λ 𝓸 𝒄 -> let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in 
+          begin
+            ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 𝒄))
+          ≡⟨⟩
+            ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (identity {k} ∣ 𝑪 ∣ ∘ 𝒄)))
+          ≡⟨ cong ∣ f ∣ ((cong gInv) (cong (⟦ 𝑪 ⟧ 𝓸)
+               (∀-extensionality-ℓ₁-ℓ₂ {j}{k} λ x →
+                 begin
+                   (𝒄 x)
+                 ≡⟨ refl ⟩
+                   identity ∣ 𝑪 ∣ (𝒄 x)
+                 ≡⟨ sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (𝒄 x)) ⟩
+                   (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) (𝒄 x)
+                 ∎
+               )))
+           ⟩
+            ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (gInv ∘ 𝒄))))
+          ≡⟨ cong ∣ f ∣ ((cong gInv) (sym (⟦ g ⟧ 𝓸 λ x -> (EpicInv ∣ g ∣ gEpic (𝒄 x))))) ⟩
+            ∣ f ∣ (gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
+          ≡⟨ useker 𝓸 𝒄 ⟩
+            ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))
+          ≡⟨ ⟦ f ⟧ 𝓸 (gInv ∘ 𝒄) ⟩
+            ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (gInv (𝒄 i₁)))
+          ∎ where useker = λ 𝓸 𝒄 ->
+                    let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in
+                      Kg⊆Kf (
+                        begin
+                          ∣ g ∣ ( gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
+                        ≡⟨ (cong-app (EInvIsRInv ∣ g ∣ gEpic)
+                          (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
+                         ⟩
+                           ∣ g ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄) )
+                        ∎
+                      )
+    
 
 
 -- PROOF. We define h ∈ Hom 𝑪 𝑩 as follows: Fix c ∈ C. Since g is surjective, g^{-1}{c} ⊆ A ≠ ∅,
