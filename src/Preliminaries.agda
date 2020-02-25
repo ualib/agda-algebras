@@ -24,7 +24,7 @@ open import Data.Product using (∃; _,_; _×_) public
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym) public
+open Eq using (_≡_; refl; cong; cong-app; sym) public
 open Eq.≡-Reasoning public
 open import Function using (_∘_) public
 open import Agda.Builtin.Nat public

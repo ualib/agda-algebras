@@ -169,7 +169,14 @@ homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
       --------------------------------------------------
   ->   ∃ λ (h : Hom{i}{j}{k} 𝑪 𝑩) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
 homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (C , 𝐹ᶜ)}
-  f g Kg⊆Kf gEpic = ((λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) , {!hIsHomCB!}) , {!!}
+  f g Kg⊆Kf gEpic = ((λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) , hIsHomCB) ,
+    ∀-extensionality-ℓ₁-ℓ₂ λ x
+    -- Goal: ∣ f ∣ x ≡ ((λ {x = x₁} c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) ∘ ∣ g ∣) x
+      -> Kg⊆Kf (begin
+                  (∣ g ∣ x)
+                ≡⟨  sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ x )) ⟩
+                  (∣ g ∣ ((EpicInv ∣ g ∣ gEpic )(∣ g ∣ x)))
+                ∎)
   where
     hIsHomCB = λ 𝓸 𝒄 ->
       let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in 
@@ -183,7 +190,7 @@ homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (
                (𝒄 x)
              ≡⟨ refl ⟩
                identity ∣ 𝑪 ∣ (𝒄 x)
-             ≡⟨ {!!} ⟩
+             ≡⟨ sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (𝒄 x)) ⟩
                (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) (𝒄 x)
              ∎
            )))
@@ -191,11 +198,19 @@ homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (
           ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (gInv ∘ 𝒄))))
         ≡⟨ cong ∣ f ∣ ((cong gInv) (sym (⟦ g ⟧ 𝓸 λ x -> (EpicInv ∣ g ∣ gEpic (𝒄 x))))) ⟩
           ∣ f ∣ (gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
-        ≡⟨ cong ∣ f ∣ {!!} ⟩
+        ≡⟨ useker 𝓸 𝒄 ⟩
           ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))
         ≡⟨ ⟦ f ⟧ 𝓸 (gInv ∘ 𝒄) ⟩
           ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (gInv (𝒄 i₁)))
         ∎
+        where
+          useker = λ 𝓸 𝒄 ->
+            let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in
+            Kg⊆Kf (begin
+                     ∣ g ∣ ( gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
+                  ≡⟨ (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄)))) ⟩
+                     ∣ g ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄) )
+                  ∎)
 
 
 -- PROOF. We define h ∈ Hom 𝑪 𝑩 as follows: Fix c ∈ C. Since g is surjective, g^{-1}{c} ⊆ A ≠ ∅,
