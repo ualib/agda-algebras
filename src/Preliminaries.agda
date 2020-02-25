@@ -167,7 +167,7 @@ EInvIsRInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->         (f : A -> B)
   ->         (fEpic : Epic f)
     ----------------------------------------
-  -> f ∘ (EpicInv f fEpic) ≡ identity B
+  -> f ∘ (EpicInv f fEpic) ≡ identity {ℓ₂} B
 EInvIsRInv f fEpic = (∀-extensionality-ℓ₁-ℓ₂)
                      (λ x → InvIsInv f x (fEpic x))
 

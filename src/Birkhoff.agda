@@ -172,27 +172,30 @@ homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (
   f g Kg⊆Kf gEpic = ((λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c)) , {!hIsHomCB!}) , {!!}
   where
     hIsHomCB = λ 𝓸 𝒄 ->
-      begin
-        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 𝒄))
-      ≡⟨⟩
-        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 (identity {k} ∣ 𝑪 ∣ ∘ 𝒄)))
-      ≡⟨ involved {𝓸} {𝒄} ⟩
-        ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic ∘ 𝒄))))
-      ≡⟨ cong (∣ f ∣ (EpicInv (∣ g ∣) gEpic(_))) (sym (⟦ g ⟧ 𝓸 (λ x -> EpicInv ∣ g ∣ gEpic (𝒄 x)))) ⟩
-        ∣ f ∣ (EpicInv (∣ g ∣) gEpic (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (EpicInv ∣ g ∣ gEpic ∘ 𝒄))))
-      ≡⟨ cong ∣ f ∣ {!!} ⟩
-        ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 ((EpicInv ∣ g ∣ gEpic) ∘ 𝒄))
-      ≡⟨ ⟦ f ⟧ 𝓸 ((EpicInv ∣ g ∣ gEpic) ∘ 𝒄) ⟩
-        ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (EpicInv ∣ g ∣ gEpic (𝒄 i₁)))
-      ∎
-      where
-        involved : {𝓸 : ∣ S ∣} 
-          ->       {𝒄 : ⟦ S ⟧ 𝓸 -> ∣ 𝑪 ∣}
-          ->  ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 ((identity {k} ∣ 𝑪 ∣) ∘ 𝒄)))
-              ≡ ∣ f ∣ (EpicInv ∣ g ∣ gEpic (⟦ 𝑪 ⟧ 𝓸 ((∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) ∘ 𝒄)))
-        involved = {!!}
-        
-
+      let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in 
+        begin
+          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 𝒄))
+        ≡⟨⟩
+          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (identity {k} ∣ 𝑪 ∣ ∘ 𝒄)))
+        ≡⟨ cong ∣ f ∣ ((cong gInv) (cong (⟦ 𝑪 ⟧ 𝓸)
+           (∀-extensionality-ℓ₁-ℓ₂ {j}{k} λ x →
+             begin
+               (𝒄 x)
+             ≡⟨ refl ⟩
+               identity ∣ 𝑪 ∣ (𝒄 x)
+             ≡⟨ {!!} ⟩
+               (∣ g ∣ ∘ (EpicInv ∣ g ∣ gEpic)) (𝒄 x)
+             ∎
+           )))
+         ⟩
+          ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (gInv ∘ 𝒄))))
+        ≡⟨ cong ∣ f ∣  {!!} ⟩
+          ∣ f ∣ (gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
+        ≡⟨ cong ∣ f ∣ {!!} ⟩
+          ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))
+        ≡⟨ ⟦ f ⟧ 𝓸 (gInv ∘ 𝒄) ⟩
+          ⟦ 𝑩 ⟧ 𝓸 (λ i₁ → ∣ f ∣ (gInv (𝒄 i₁)))
+        ∎
 
 
 -- PROOF. We define h ∈ Hom 𝑪 𝑩 as follows: Fix c ∈ C. Since g is surjective, g^{-1}{c} ⊆ A ≠ ∅,
