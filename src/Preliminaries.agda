@@ -154,7 +154,7 @@ Epic g = ∀ y -> Image g ∋ y
 epic : {A B : Set} (g : A -> B) -> Set _
 epic {A}{B} g = Epic {lzero}{lzero}{A}{B} g
 
--- pseudo-inverse of an epic function
+-- The (pseudo-)inverse of an epic function
 EpicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->      (f : A -> B)
   ->      Epic f
@@ -162,7 +162,7 @@ EpicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->       B -> A
 EpicInv f fEpic b = Inv f b (fEpic b)
 
--- The psudo-inverse of an epic is the right inverse.
+-- The (psudo-)inverse of an epic is the right inverse.
 EInvIsRInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->         (f : A -> B)
   ->         (fEpic : Epic f)
@@ -171,8 +171,18 @@ EInvIsRInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
 EInvIsRInv f fEpic = (∀-extensionality-ℓ₁-ℓ₂)
                      (λ x → InvIsInv f x (fEpic x))
 
---Monics (injectivity) ----------------------------------
--- monic function from Set ℓ₁ to Set ℓ₂
+-- (this belongs elsewhere)
+-- The (pseudo-)inverse of an epimorphism is total.
+-- EInvTotal : {𝑨 𝑪 : Algebra k S} 
+--   ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
+--   ->        Epic ∣ g ∣
+--            -----------------------
+--   ->        ∣ 𝑪 ∣ -> ∣ 𝑨 ∣
+-- EInvTotal{𝑨}{𝑪} g gEpic = (λ c → EpicInv ∣ g ∣ gEpic c)
+
+---------------------------------------------------------
+--Monics (injectivity)
+--monic function from Set ℓ₁ to Set ℓ₂
 Monic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
 Monic g = ∀ a₁ a₂ -> g a₁ ≡ g a₂ -> a₁ ≡ a₂
 
@@ -180,7 +190,7 @@ Monic g = ∀ a₁ a₂ -> g a₁ ≡ g a₂ -> a₁ ≡ a₂
 monic : {A B : Set} (g : A -> B) -> Set _
 monic {A}{B} g = Monic {lzero} {lzero} {A}{B} g
 
--- pseudo-inverse of a monic function
+--The (pseudo-)inverse of a monic function
 MonicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->       (f : A -> B)
   ->       Monic f
@@ -188,21 +198,13 @@ MonicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->       (b : B) -> Image f ∋ b -> A
 MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
 
--- The psudo-inverse of a monic is the left inverse.
+-- The (psudo-)inverse of a monic is the left inverse.
 -- MInvIsLInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
 --   ->         (f : A -> B)
 --   ->         (fMonic : Monic f)
 --            ----------------------------------------
 --   ->        (MonicInv f fMonic) ∘ f ≡ identity A
 -- MInvIsLInv f fMonic =  ?
-  -- ->         (g : (b : B) -> Image f ∋ b → A) -- Pred B (ℓ₁ ⊔ ℓ₂))
-  -- ->         g ≡ (MonicInv f fMonic)
-
--- InvIsInv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
---   ->  (f : A -> B) -> (finv : B -> A)
---   ->  finv ≡ Inv f
---   ->  (finv ∘ f) ≡ identity A × (f ∘ finv) ≡ identity B
--- InvIsInv f finv finv≡Invf = ?
 
 --bijectivity
 bijective : {A B : Set} (g : A -> B) -> Set _
@@ -212,6 +214,89 @@ Bijective : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> 
 Bijective g = Epic g × Monic g
 
 
+----------------------------------------------------------------------
+--SUBSETS (embeddings)
+-----------------------
+
+--Embedding shows that the first type is included in the second.
+infix 0 _≲_
+
+-- record _≲_ {ℓ : Level} (A : Set ℓ) (B : Set ℓ) : Set ℓ where
+--   field
+--     to   : A -> B
+--     from : B -> A
+--     from∘to : ∀ (x : A) -> from (to x) ≡ x
+
+record _≲_ (A : Set) (B : Set) : Set where
+  field
+    to   : A -> B
+    from : B -> A
+    from∘to : ∀ (x : A) -> from (to x) ≡ x
+
+open _≲_
+
+--Embedding is a preorder (reflexive and transitive)
+≲-refl : ∀ {A : Set}
+        ------------
+  ->      A ≲ A
+
+≲-refl =
+  record {
+    to = λ x -> x ;
+    from = λ x -> x ;
+    from∘to = λ x -> Eq.refl
+  }
+
+≲-trans : ∀ {A B C : Set}
+  ->      A ≲ B  ->  B ≲ C
+         ------------------
+  ->          A ≲ C
+
+≲-trans A≲B B≲C =
+  record {
+    to   = to B≲C ∘ to A≲B ;
+    from = from A≲B ∘ from B≲C ;
+    from∘to = λ x ->
+      begin -- Goal: (from A≲B ∘ from B≲C) ((to B≲C ∘ to A≲B) x) ≡ x
+        from A≲B (from B≲C (to B≲C (to A≲B x)))
+      ≡⟨ cong (from A≲B) (from∘to B≲C (to A≲B x))  ⟩
+        from A≲B (to A≲B x)
+      ≡⟨ from∘to A≲B x ⟩
+        x
+      ∎
+  }
+
+--------------------------------
+--REASONING with the ≲ relation
+--------------------------------
+
+module ≲-Reasoning where
+
+  infix  1 ≲-begin_
+  infixr 2 _≲⟨_⟩_
+  infix  3 _≲-∎
+
+  ≲-begin_ : ∀ {A B : Set}
+    ->     A ≲ B
+           -----
+    ->     A ≲ B
+  ≲-begin A≲B = A≲B
+
+  _≲⟨_⟩_ : ∀ (x : Set) {y z : Set}
+    ->    x ≲ y  ->  y ≲ z
+          ----------------
+    ->     x ≲ z
+  x ≲⟨ x≲y ⟩ y≲z = ≲-trans x≲y y≲z
+
+
+  _≲-∎ : ∀ (x : Set)
+         ---------
+    ->   x ≲ x
+  x ≲-∎ = ≲-refl
+
+open ≲-Reasoning
+
+--------------------------------------------------------
 
 --=============================================================================
 -- MISC NOTES
