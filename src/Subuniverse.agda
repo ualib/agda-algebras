@@ -7,10 +7,22 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_; ⋂)
+  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_; ⋂; ∃; _≡_)
 
 open import Basic
 open import Free using (Term)
+
+module Subuniverse where
+
+module _ {i j k l : Level} {S : Signature i j} where
+  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra (k ⊔ l) S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+    mem : {P : Pred ∣ A ∣ l} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
+      ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) →
+        ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
+      A is-supalgebra-of (∃ P , B)
+
+  _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
+  B is-subalgebra-of A = A is-supalgebra-of B
 
 private
   variable
@@ -74,3 +86,6 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
     α i = Ai-is-Sub i 𝓸 𝒂 λ j → im𝒂⊆⋂A j i
 
 -- Term S X ⊆ Image  ∋ 
+
+
+
