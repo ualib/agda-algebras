@@ -189,7 +189,7 @@ homFactor{𝑨}{𝑩}{𝑪}   -- = (A , 𝐹ᴬ)}{𝑩 = (B , 𝐹ᴮ)}{𝑪 = (
            )))
          ⟩
           ∣ f ∣ (gInv (⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ (gInv ∘ 𝒄))))
-        ≡⟨ cong ∣ f ∣  {!!} ⟩
+        ≡⟨ cong ∣ f ∣ ((cong gInv) (sym (⟦ g ⟧ 𝓸 λ x -> (EpicInv ∣ g ∣ gEpic (𝒄 x))))) ⟩
           ∣ f ∣ (gInv (∣ g ∣ (⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))))
         ≡⟨ cong ∣ f ∣ {!!} ⟩
           ∣ f ∣ ( ⟦ 𝑨 ⟧ 𝓸 (gInv ∘ 𝒄))
