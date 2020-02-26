@@ -7,10 +7,12 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_; ⋂)
+  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_; ⋂; ∃; _≡_)
 
 open import Basic
 open import Free using (Term)
+
+module Subuniverse where
 
 private
   variable
@@ -74,3 +76,6 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
     α i = Ai-is-Sub i 𝓸 𝒂 λ j → im𝒂⊆⋂A j i
 
 -- Term S X ⊆ Image  ∋ 
+
+
+

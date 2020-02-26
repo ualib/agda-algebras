@@ -19,8 +19,7 @@ module Preliminaries where
 open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Empty using (⊥) public
 open import Data.Bool using (Bool) public
-open import Data.Product using (∃; _,_; _×_) public
-  renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
@@ -29,6 +28,9 @@ open Eq.≡-Reasoning public
 open import Function using (_∘_) public
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
+
+∣_∣ = proj₁
+⟦_⟧ = proj₂
 
 _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   (A -> B)
@@ -107,10 +109,10 @@ postulate
 
 
 
-data Image_∋_ {i j : Level} {A : Set i} {B : Set j}
+data Image {i j : Level} {A : Set i} {B : Set j}
               (f : A -> B) : Pred B (i ⊔ j)
   where
-  im : (x : A) -> Image f ∋ f x
+  im : (x : A) -> f x ∈ Image f
 
 
 image_ : {i j : Level} {A : Set i} {B : Set j}
@@ -127,16 +129,16 @@ image f = λ b -> ∃ λ a -> b ≡ f a
 --form ∃a f a = y, so we have a witness, so the inverse can be "computed"
 --in the following way:
 Inv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) ->  (b : B) -> Image f ∋ b -> A
+  ->  (f : A -> B) ->  (b : B) -> b ∈ Image f -> A
 Inv f .(f a) (im a) = a  -- Cool!!!
 
 -- special case for Set
-inv : {A B : Set}(f : A -> B)(b : B) -> Image f ∋ b -> A
+inv : {A B : Set}(f : A -> B)(b : B) -> b ∈ Image f -> A
 inv{A}{B} = Inv {lzero}{lzero}{A}{B}
 
 InvIsInv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
   ->       (f : A -> B)
-  ->       (b : B) -> (b∈Imgf : Image f ∋ b)
+  ->       (b : B) -> (b∈Imgf : b ∈ Image f)
          --------------------------------------
   ->      f (Inv f b b∈Imgf) ≡ b
 InvIsInv f .(f a) (im a) = refl
@@ -148,7 +150,7 @@ identity{ℓ} A x = x
 
 -- Epic (surjective) function from Set ℓ₁ to Set ℓ₂
 Epic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
-Epic g = ∀ y -> Image g ∋ y
+Epic g = ∀ y -> y ∈ Image g
 
 -- special case: epic function on Set
 epic : {A B : Set} (g : A -> B) -> Set _
@@ -195,7 +197,7 @@ MonicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->       (f : A -> B)
   ->       Monic f
          -----------------
-  ->       (b : B) -> Image f ∋ b -> A
+  ->       (b : B) -> b ∈ Image f -> A
 MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
 
 -- The (psudo-)inverse of a monic is the left inverse.

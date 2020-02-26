@@ -8,7 +8,7 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_;⊥;Bool)
+  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
 
 module Basic where
 
@@ -32,6 +32,32 @@ Algebra : {i j : Level}
   ->      Set (i ⊔ j ⊔ lsuc k)
 Algebra k (𝐹 , ρ) =
   ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
+
+private
+  variable
+    i j k l : Level
+    S : Signature i j
+
+-- Indexed product of algebras is an algebra
+-- The trick is to view the Pi-type as a dependent product i.e.
+-- A i1 × A i2 × A i3 × ... = (i : I) → A i
+Π : ∀ {m} {I : Set m} → (I → Algebra k S) → Algebra (k ⊔ m) S
+Π {I = I} A = ((i : I) → ∣ A i ∣) , λ 𝓸 x i → ⟦ A i ⟧ 𝓸 λ j → x j i
+
+-- Subalgebras
+module _ {i j k l : Level} {S : Signature i j} where
+  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra (k ⊔ l) S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+    mem : {P : Pred ∣ A ∣ l} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
+            ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) →
+              ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
+          A is-supalgebra-of (∃ P , B)
+
+  _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
+  B is-subalgebra-of A = A is-supalgebra-of B
+
+data P {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+  base : {A : Algebra k S} → A ∈ K → A ∈ P K
+  prod : {I : Set k} {A : I → Algebra k S} → (∀ i → A i ∈ P K) → Π A ∈ P K
 
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`
