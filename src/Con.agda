@@ -51,3 +51,37 @@ Con : (𝑨 : Algebra k S)
 Con 𝑨 = ∃ λ (θ : Rel ∣ 𝑨 ∣ k)
           -> IsEquivalence θ × compatible-alg 𝑨 θ
 
+con : (𝑨 : Algebra k S)
+       -----------------------
+  ->   Pred (Rel ∣ 𝑨 ∣ k) _
+con 𝑨 = λ θ → IsEquivalence θ × compatible-alg 𝑨 θ
+        --  -> 
+
+--a single θ-class of A
+_/_ : {A : Set k} -> (a : A) -> Rel A k -> Pred A _
+a / θ = λ x → θ a x
+
+--the collection of θ-classes of A
+_//_ : (A : Set k) -> Rel A k -> Set _
+A // θ = ∃ λ C -> (∃ λ a -> C ≡ a / θ)
+
+
+_IsHomImageOf_ : (𝑩 : Algebra (lsuc k) S)
+  ->             (𝑨 : Algebra k S)
+  ->             Set _
+𝑩 IsHomImageOf 𝑨 = ∃ λ (θ : Rel ∣ 𝑨 ∣ k) -> con 𝑨 θ -> (∣ 𝑨 ∣ // θ) ≃ ∣ 𝑩 ∣
+
+-- HomImagesOf : Algebra k S -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+-- HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
+
+HomImagesOf : Algebra k S -> Pred (Algebra _ S) _
+HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
+
+-- HomImagesOfClass : Pred (Algebra k S) (i ⊔ j ⊔ k) -> Pred (Algebra (lsuc k) S) _
+-- HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 × 𝑩 IsHomImageOf 𝑨
+
+HomImagesOfClass : Pred (Algebra _ S) _ -> Pred (Algebra _ S) _
+HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 × 𝑩 IsHomImageOf 𝑨
+
+IsHClosed : Pred (Pred (Algebra k S) _) _
+IsHClosed = λ 𝓚 -> HomImagesOfClass 𝓚 ⊆ 𝓚
