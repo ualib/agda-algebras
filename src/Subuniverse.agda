@@ -24,6 +24,14 @@ IsSubuniverse : {S : Signature i j} {𝑨 : Algebra k S}
 IsSubuniverse {S = (𝐹 , ρ)} {𝑨 = (A , 𝐹ᴬ)} B =        -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → im 𝒂 ⊆ B → 𝐹ᴬ 𝓸 𝒂 ∈ B
 
+module _ {i j k : Level} {S : Signature i j} where
+
+  record Subuniverse  {𝑨 : Algebra k S} : Set (i ⊔ j ⊔ lsuc k) where
+    constructor mksub
+    field
+      sset : Pred ∣ 𝑨 ∣ k
+      isSub : IsSubuniverse {𝑨 = 𝑨} sset    
+
 module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
   data Sg (X : Pred ∣ 𝑨 ∣ l) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k ⊔ l) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X

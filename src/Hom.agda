@@ -11,6 +11,7 @@ open import Basic
 
 module Hom {i j k : Level} {S : Signature i j} where
 
+
 --The category of algebras Alg with morphisms as Homs
 
 Hom₀ : Algebra k S -> Algebra k S -> Set _
@@ -53,3 +54,5 @@ _>>>_ {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
 -- Equalizers in Alg
 _~_ : Hom 𝑨 𝑩 → Hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ _
 _~_ (f , _) (g , _) x = f x ≡ g x
+
+
