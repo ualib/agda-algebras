@@ -1,7 +1,7 @@
 --File: Subuniverse.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Updated: 23 Feb 2020
+--Updated: 26 Feb 2020
 --Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split #-}
@@ -67,6 +67,7 @@ module _ {X : Pred ∣ 𝑨 ∣ l} where
     app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
 
 -- Same issue here as above
+-- Obs 2.5. Suppose Aᵢ ≤ 𝑨 for all i in some set I. Then ⋂ᵢ Aᵢ is a subuniverse of 𝑨.
 module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
   sub-inter-is-sub : ((i : I) → IsSubuniverse (A i)) → IsSubuniverse (⋂ I A)
   sub-inter-is-sub Ai-is-Sub 𝓸 𝒂 im𝒂⊆⋂A = α where
