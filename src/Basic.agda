@@ -8,7 +8,7 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred)
+  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
 
 module Basic where
 
@@ -55,7 +55,9 @@ module _ {i j k l : Level} {S : Signature i j} where
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
 
---data H : where
+data P {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+  base : {A : Algebra k S} → A ∈ K → A ∈ P K
+  prod : {I : Set k} {A : I → Algebra k S} → (∀ i → A i ∈ P K) → Π A ∈ P K
 
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`
