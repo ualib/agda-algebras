@@ -14,16 +14,6 @@ open import Free using (Term)
 
 module Subuniverse where
 
-module _ {i j k l : Level} {S : Signature i j} where
-  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra (k ⊔ l) S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-    mem : {P : Pred ∣ A ∣ l} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
-      ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) →
-        ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
-      A is-supalgebra-of (∃ P , B)
-
-  _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
-  B is-subalgebra-of A = A is-supalgebra-of B
-
 private
   variable
     i j k l : Level
