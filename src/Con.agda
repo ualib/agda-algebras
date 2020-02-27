@@ -72,11 +72,11 @@ open Congruence
 _//_ : (A : Set k) -> Rel A k -> Set _
 A // θ = ∃ λ (C : Pred A _) -> (∃ λ a -> C ≡ [ a ] θ)
 
+
 _/_ : (𝑨 : Algebra k S)
   ->  Congruence 𝑨
      -----------------------
   ->  Algebra (lsuc k) S
-
 𝑨 / θ = ( ( ∣ 𝑨 ∣ // ∥ θ ∥ ) , -- carrier
            ( λ 𝓸 args        -- operations
                -> ( [ ⟦ 𝑨 ⟧ 𝓸 (λ i₁ -> ∣ ⟦ args i₁ ⟧ ∣) ] ∥ θ ∥ ) ,
@@ -84,9 +84,8 @@ _/_ : (𝑨 : Algebra k S)
            )
          )
 
-
-_IsHomImageOf_ : (𝑩 : Algebra _ S)
-  ->             (𝑨 : Algebra _ S)
+_IsHomImageOf_ : (𝑩 : Algebra (lsuc k) S)
+  ->             (𝑨 : Algebra k S)
   ->             Set _
 𝑩 IsHomImageOf 𝑨 =
   ∃ λ (θ : Rel ∣ 𝑨 ∣ k) -> con 𝑨 θ
@@ -95,14 +94,15 @@ _IsHomImageOf_ : (𝑩 : Algebra _ S)
 HomImagesOf : Algebra k S -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
 HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
 
--- HomImagesOf : Algebra k S -> Pred (Algebra _ S) _
--- HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
+_IsHomImageOfClass_ : Algebra (lsuc k) S -> Pred (Algebra k S) k -> Set _
+𝑩 IsHomImageOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
 
--- HomImagesOfClass : Pred (Algebra k S) k -> Pred (Algebra k S) (lsuc k)
--- HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
+HomImagesOfClass : Pred (Algebra k S) k -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
 
--- HomImagesOfClass : Pred (Algebra _ S) _ -> Pred (Algebra _ S) _
--- HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 × 𝑩 IsHomImageOf 𝑨
-
--- IsHClosed : Pred (Pred (Algebra  _ S) _ ) _ -- (lsuc k)
--- IsHClosed = λ 𝓚 -> HomImagesOfClass 𝓚 ⊆ 𝓚
+-- This doesn't work! >_<
+-- _IsHClosed : Pred (Algebra k S) k -> Set _
+-- 𝓚 IsHClosed = ∀ 𝑨 -> 𝑨 ∈ 𝓚 -> (𝑩 : Algebra (lsuc k) S)
+--   ->             𝑩 IsHomImageOf 𝑨
+--              -------------------------
+--   ->             𝑩 ∈ 𝓚
