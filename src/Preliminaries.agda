@@ -46,24 +46,6 @@ im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    Set (i ⊔ k)
 im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
-------------------
---SET ISOMORPHISM
--------------------
-infix 0 _≃_
-record _≃_ (A B : Set) : Set where
-  field
-    to : A -> B
-    from : B -> A
-
-    --from is left-inv for to
-    from∘to : ∀ (x : A) -> from (to x) ≡ x
-
-    --from is right-inv for to
-    to∘from : ∀ (y : B) -> to (from y) ≡ y  
-
-open _≃_
-
-
 ----------------------------
 --EXTENSIONALITY Postulate
 ----------------------------
@@ -216,6 +198,133 @@ Bijective : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> 
 Bijective g = Epic g × Monic g
 
 
+------------------
+--SET ISOMORPHISM
+-------------------
+infix 0 _≃₀_
+record _≃₀_ (A B : Set) : Set where
+  field
+    to : A -> B
+    from : B -> A
+
+    --from is left-inv for to
+    from∘to : ∀ (x : A) -> from (to x) ≡ x
+
+    --from is right-inv for to
+    to∘from : ∀ (y : B) -> to (from y) ≡ y  
+
+-- open _≃₀_
+
+--More general
+
+infix 0 _≃_
+record _≃_ {ℓ : Level} (A B : Set ℓ) : Set ℓ where
+  field
+    to : A -> B
+    from : B -> A
+
+    --from is left-inv for to
+    from∘to : ∀ (x : A) -> from (to x) ≡ x
+
+    --from is right-inv for to
+    to∘from : ∀ (y : B) -> to (from y) ≡ y  
+
+open _≃_
+
+-------------------------------------------------------------------
+
+-------------------------------
+--ISOMORPHISM IS AN EQUIVALENCE
+-------------------------------
+--Isomorphism is an equivalence (reflexive, symmetric, transitive).
+--To show reflexivity, take both to and from to be the identity function.
+≃-refl : ∀ {ℓ : Level} {A : Set ℓ}
+         ----------
+  ->      A ≃ A
+
+≃-refl =
+  record
+    {
+      to      = λ{x -> x};
+      from    = λ{y -> y};
+      from∘to = λ{x -> refl};
+      to∘from = λ{y -> refl}
+    }  
+
+≃-sym : ∀ {ℓ : Level} {A B : Set ℓ}
+  ->    A ≃ B
+        ------
+  ->    B ≃ A
+≃-sym A≃B =
+  record
+    {
+    to = from A≃B;
+    from = to A≃B;
+    from∘to = to∘from A≃B;
+    to∘from = from∘to A≃B
+    }
+
+≃-trans : ∀ {ℓ : Level} {A B C : Set ℓ}
+  ->      A ≃ B  ->  B ≃ C
+          ----------------
+  ->      A ≃ C
+≃-trans A≃B B≃C =
+  record
+    {
+    to      = to B≃C ∘ to A≃B ;
+    from    = from A≃B ∘ from B≃C ;
+    from∘to = λ {x ->
+      begin -- Goal: (from A≃B ∘ from B≃C) ((to B≃C ∘ to A≃B) x) ≡ x
+        from A≃B ((from B≃C ∘ to B≃C) ((to A≃B) x))
+      ≡⟨ cong (from A≃B) (from∘to B≃C (to A≃B x)) ⟩
+        from A≃B (to A≃B x)
+      ≡⟨ from∘to A≃B x ⟩
+        x
+      ∎} ;
+    to∘from = λ {y ->
+      begin -- Goal: (to B≃C ∘ to A≃B) ((from A≃B ∘ from B≃C) y) ≡ y
+        to B≃C (to A≃B (from A≃B (from B≃C y)))
+      ≡⟨ cong (to B≃C) (to∘from A≃B (from B≃C y)) ⟩
+        to B≃C (from B≃C y)
+      ≡⟨ to∘from B≃C y ⟩
+        y
+      ∎}
+    }
+
+-----------------------------------------------------------------------
+
+--------------------------------------
+--Reasoning for Isomorphism
+--------------------------------------
+--Here's a variant of equational reasoning for isomorphism.
+--The form that corresponds to _≡⟨⟩_ is omitted, since trivial
+--isomorphisms arise far less often than trivial equalities.
+
+--Chains of Set isomorphisms
+module ≃-Reasoning {ℓ : Level} where
+
+  infix  1 ≃-begin_
+  infixr 2 _≃⟨_⟩_
+  infix  3 _≃-∎
+
+  ≃-begin_ : ∀ {A B : Set ℓ}
+    ->     A ≃ B
+           -----
+    ->     A ≃ B
+  ≃-begin A≃B = A≃B
+
+  _≃⟨_⟩_ : ∀ (x : Set ℓ) {y z : Set ℓ}
+    ->    x ≃ y  ->  y ≃ z
+          ----------------
+    ->     x ≃ z
+  x ≃⟨ x≃y ⟩ y≃z = ≃-trans x≃y y≃z
+
+  _≃-∎ : ∀ (x : Set ℓ)
+         ---------
+    ->   x ≃ x
+  x ≃-∎ = ≃-refl
+
+open ≃-Reasoning
 ----------------------------------------------------------------------
 --SUBSETS (embeddings)
 -----------------------

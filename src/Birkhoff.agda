@@ -1,7 +1,7 @@
 --File: Birkhoff.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 23 Feb 2020
---UPDATED: 23 Feb 2020
+--UPDATED: 26 Feb 2020
 --Notes: Based on the file `birkhoff.agda` (23 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split #-}
@@ -151,14 +151,14 @@ homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
 
 homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
   ( (λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c) ) , hIsHomCB ) ,
-    -- First, prove ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+    --Prove: The diagram above commutes; i.e., ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
     ∀-extensionality-ℓ₁-ℓ₂ λ x ->
       Kg⊆Kf ( begin (∣ g ∣ x)
               ≡⟨  sym (cong-app (EInvIsRInv ∣ g ∣ gEpic) (∣ g ∣ x )) ⟩
                 (∣ g ∣ ((EpicInv ∣ g ∣ gEpic )(∣ g ∣ x)))
               ∎ )
     where
-    -- Next prove h is a hom.
+    --Prove: h : Hom 𝑪 𝑩
       hIsHomCB =
         λ 𝓸 𝒄 -> let gInv = λ c -> (EpicInv ∣ g ∣ gEpic) c in 
           begin
@@ -196,38 +196,8 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
                       )
     
 
-
--- PROOF. We define h ∈ Hom 𝑪 𝑩 as follows: Fix c ∈ C. Since g is surjective, g^{-1}{c} ⊆ A ≠ ∅,
---   and ker g ⊆ ker f implies every a ∈ g^{-1}{b} is mapped by f to a single b ∈ B.
---   Label this unique element bc. That is, f(a) = bc, for all a ∈ g^{-1}{c}. For each such c,
---   and its associated bc, define h(c) = bc.
-
---   Consider the foregoing "construction" of the function h.
---   While it's true that for each b ∈ B there exists a cb such that h(a) = cb for all a ∈ g^{-1}{b},
---   it's also true that we have no means of producing such cb constructively. One could argue that
---   each cb is easily computed as cb = h(a) for some (every) a ∈ g^{-1}{b}. But this requires
---   producing a particular a ∈ g^{-1}{b} to use as "input" to the function h. How do we select such
---   an element from the (nonempty) set g^{-1}{b}?
---      
---   Unfortunately, it seems we must appeal to the Axiom of Choice here, and concede that the
---   function k cannot be constructively defined. Nonetheless, we forge ahead (nonconstructively) and
---   define k as described above, using the Axiom of Choice to compute a cb for each b ∈ B.
---
---   It is then easy to see that k ∘ g = h.  Indeed, for each a ∈ A, we have a ∈ g^{-1}{g(a)}, so
---   k(g(a)) = h(a) by definition.
---
---   Finally, to prove that k is a hom, fix an operation symbol f ∈ 𝓕 and a tuple b: Fin(ρ f) -> B; we
---   must show f^𝑪 (k ∘ b) = k (f^𝑩(b)).
---
---   Let a : Fin(ρ f) -> A be such that g ∘ a = b.  Then the left hand side is
---   f^𝑪 (k ∘ g ∘ a) = f^𝑪 (h ∘ a), which is equal to h (f^𝑨 (a)) since h is a hom. Therefore,
---
---   f^𝑪(k ∘ b) = f^𝑪(k ∘ g ∘ a) = f^𝑪(h ∘ a) = h(f^𝑨(a)) = (k ∘ g)(f^𝑨(a)) = k(f^𝑩(g ∘ a)) = k(f^𝑩(b)),
---
---   as desired, where the penultimate equality holds by virtue of the fact that g is a hom. ☐
-
-
 -- Obs 2.5. Suppose Aᵢ ≤ 𝑨 for all i in some set I. Then ⋂ᵢ Aᵢ is a subuniverse of 𝑨.
+-- (proved in Subuniverse.agda; see sub-inter-is-sub)
 
 -- Obs 2.6. Inductive version of Sg^𝑨.                                                        
 -- Let 𝑨 be an algebra in the signature S and A₀ a subset of A. Define, by recursion on n,
@@ -279,17 +249,10 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 --   The uniqueness of h follows from Obs 2. ☐
 
 -- Obs 2.9. Homs commute with terms. (UAFST Thm 4.32)
--- Let t ∈ T_σ (X) be an n-ary term and let t^𝑨 be its interpretation in 𝑨, so
--- t^𝑨 a = t^𝑨 (a 0, a 1, ..., a (n-1)), for each a : Fin(n) -> A. Similarly,
--- t^𝑩: (Fin(n) -> B) -> B is the interpretation of t in 𝑩. If g: 𝑨 → 𝑩 is a hom,
--- then g ∘ a: Fin(n) → B is the n-tuple whose i-th component is (g ∘ a) i = g(a i),
--- and g(t^𝑨 a) = t^𝑩(g ∘ a) holds.
--- PROOF. Easy induction on term height |t|. ☐
+-- (proved in Free.agda; see comm-hom-term)
 
 -- Obs 2.10. Terms respect congruences.
--- If θ is a congruence of 𝑨 and a, a': Fin(n) -> A are n-tuples over A, then
---     (a, a') ∈ θ  ⟹  (t^𝑨 a, t^𝑨 a') ∈ θ.
--- PROOF. Apply Obs 8 with ⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩ and g = the canonical hom. ☐
+-- (proved in Free.agda; see compatible-term)
 
 -- Obs 2.11 (on subuniverse generation as image of terms).
 -- If Y is a subset of A, then

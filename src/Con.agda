@@ -51,3 +51,58 @@ Con : (𝑨 : Algebra k S)
 Con 𝑨 = ∃ λ (θ : Rel ∣ 𝑨 ∣ k)
           -> IsEquivalence θ × compatible-alg 𝑨 θ
 
+con : (𝑨 : Algebra k S)
+       -----------------------
+  ->   Pred (Rel ∣ 𝑨 ∣ k) _
+con 𝑨 = λ θ → IsEquivalence θ × compatible-alg 𝑨 θ
+        --  -> 
+record Congruence (𝑨 : Algebra k S) : Set (i ⊔ j ⊔ lsuc k) where
+  constructor mkcon
+  field
+    ∥_∥ : Rel ∣ 𝑨 ∣ k
+    Compatible : compatible-alg 𝑨 ∥_∥
+    IsEquiv : IsEquivalence ∥_∥
+open Congruence 
+
+--a single θ-class of A
+[_]_ : {A : Set k} -> (a : A) -> Rel A k -> Pred A _
+[ a ] θ = λ x → θ a x
+
+--the collection of θ-classes of A
+_//_ : (A : Set k) -> Rel A k -> Set _
+A // θ = ∃ λ (C : Pred A _) -> (∃ λ a -> C ≡ [ a ] θ)
+
+
+_/_ : (𝑨 : Algebra k S)
+  ->  Congruence 𝑨
+     -----------------------
+  ->  Algebra (lsuc k) S
+𝑨 / θ = ( ( ∣ 𝑨 ∣ // ∥ θ ∥ ) , -- carrier
+           ( λ 𝓸 args        -- operations
+               -> ( [ ⟦ 𝑨 ⟧ 𝓸 (λ i₁ -> ∣ ⟦ args i₁ ⟧ ∣) ] ∥ θ ∥ ) ,
+                  ( ⟦ 𝑨 ⟧ 𝓸 (λ i₁ -> ∣ ⟦ args i₁ ⟧ ∣) , refl )
+           )
+         )
+
+_IsHomImageOf_ : (𝑩 : Algebra (lsuc k) S)
+  ->             (𝑨 : Algebra k S)
+  ->             Set _
+𝑩 IsHomImageOf 𝑨 =
+  ∃ λ (θ : Rel ∣ 𝑨 ∣ k) -> con 𝑨 θ
+    ->   (∣ 𝑨 ∣ // θ) ≃ ∣ 𝑩 ∣
+
+HomImagesOf : Algebra k S -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
+
+_IsHomImageOfClass_ : Algebra (lsuc k) S -> Pred (Algebra k S) k -> Set _
+𝑩 IsHomImageOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
+
+HomImagesOfClass : Pred (Algebra k S) k -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
+
+-- This doesn't work! >_<
+-- _IsHClosed : Pred (Algebra k S) k -> Set _
+-- 𝓚 IsHClosed = ∀ 𝑨 -> 𝑨 ∈ 𝓚 -> (𝑩 : Algebra (lsuc k) S)
+--   ->             𝑩 IsHomImageOf 𝑨
+--              -------------------------
+--   ->             𝑩 ∈ 𝓚
