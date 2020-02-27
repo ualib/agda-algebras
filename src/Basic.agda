@@ -8,7 +8,8 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
+  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_)
+--  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
 
 module Basic where
 

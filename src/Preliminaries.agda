@@ -19,18 +19,21 @@ module Preliminaries where
 open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Empty using (⊥) public
 open import Data.Bool using (Bool) public
-open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
+--open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
+open import Data.Product using (∃; _,_; _×_) public
+  renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; cong-app; sym) public
+open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public
 open Eq.≡-Reasoning public
 open import Function using (_∘_) public
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 
-∣_∣ = proj₁
-⟦_⟧ = proj₂
+-- ∣_∣ = proj₁
+-- ⟦_⟧ = proj₂
 
 _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   (A -> B)
@@ -39,12 +42,12 @@ _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   Set (i ⊔ k)
 _∈∈_ {A = A} f S = (x : A) -> f x ∈ S
 
-im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
+Im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    (A -> B)
   ->    Pred B k
       -------------------
   ->    Set (i ⊔ k)
-im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
+Im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
 ----------------------------
 --EXTENSIONALITY Postulate

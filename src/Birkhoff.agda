@@ -44,13 +44,13 @@ KER f (x , y) = f x ≡ f y
 --..of homs
 --EH :  {ℓ₁ ℓ₂ : Level} {𝑨 : Algebra ℓ₁ S} {𝑩 : Algebra ℓ₂ S}
 EqHom :  {𝑨 𝑩 : Algebra k S}
-  ->  (f g : Hom {i} {j} {k} 𝑨 𝑩) -> Pred ∣ 𝑨 ∣ k
+  ->  (f g : Hom 𝑨 𝑩) -> Pred ∣ 𝑨 ∣ k
 EqHom f g x = ∣ f ∣ x ≡ ∣ g ∣ x
 
 -- (See also Siva's (infix) def of _~_ in the Hom.agda file.)
 
 EqClosed : ∀{𝓸 : ∣ S ∣}{𝑨 𝑩 : Algebra k S}
-  ->        (f g : Hom {i} {j} {k} 𝑨 𝑩)
+  ->        (f g : Hom 𝑨 𝑩)
   ->        (𝒂 : (⟦ S ⟧ 𝓸)  → ∣ 𝑨 ∣)
   ->        (∀ x -> (𝒂 x) ∈ (EqHom {𝑨} {𝑩} f g))
          -----------------------------------------------------
@@ -70,7 +70,7 @@ EqClosed {𝓸} {𝑨} {𝑩} f g 𝒂 p =
 -- Obs 2.1. Equalizer of homs is a subuniverse.
 -- Equalizer 𝑬(f, g) of f, g : Hom 𝑨 𝑩 is a subuniverse of 𝑨.
 EqSub : {𝑨 𝑩 : Algebra k S}
-  ->    (f g : Hom{i}{j}{k} 𝑨 𝑩)
+  ->    (f g : Hom 𝑨 𝑩)
        -----------------------------
   ->    Subuniverse
 EqSub{𝑨}{𝑩} f g =
@@ -86,9 +86,9 @@ HCompClosed : ∀{ℓ₁ ℓ₂ ℓ₃ : Level}
   ->       {𝑨 : Algebra ℓ₁ S}
   ->       {𝑩 : Algebra ℓ₂ S}
   ->       {𝑪 : Algebra ℓ₃ S}
-  ->       Hom {i} {j} {k} 𝑨 𝑩  ->  Hom {i} {j} {k} 𝑩 𝑪
+  ->       Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
          -------------------------
-  ->       Hom  {i} {j} {k} 𝑨 𝑪
+  ->       Hom 𝑨 𝑪
 HCompClosed {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
   (f , h₁) (g , h₂) = g ∘ f , γ
     where
@@ -105,7 +105,7 @@ HCompClosed {𝑨 = (A , 𝐹ᴬ)} {𝑪 = (C , 𝐹ᶜ)}
 --         so f a = f(t^𝑨 x) = t^𝑩 (f ∘ x) = t^𝑩 (g ∘ x) = g(t^𝑨 x) = g a.     ☐
 HomUnique : {𝑨 𝑩 : Algebra k S}
   ->            (X : Pred ∣ 𝑨 ∣ k)
-  ->            (f g : Hom{i}{j}{k} 𝑨 𝑩)
+  ->            (f g : Hom 𝑨 𝑩)
   ->            (∀ x -> x ∈ X -> ∣ f ∣ x ≡ ∣ g ∣ x)
               -----------------------------
   ->            (∀ a -> a ∈ Sg {𝑨 = 𝑨} X -> ∣ f ∣ a ≡ ∣ g ∣ a)
@@ -142,12 +142,12 @@ HomUnique {𝑨} {𝑩} X f g fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
 --              𝑪
 --
 homFactor : {𝑨 : Algebra k S}{𝑩 : Algebra k S}{𝑪 : Algebra k S}
-  ->        (f : Hom{i}{j}{k} 𝑨 𝑩)
-  ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
+  ->        (f : Hom 𝑨 𝑩)
+  ->        (g : Hom 𝑨 𝑪)
   ->        KER ∣ g ∣ ⊆ KER ∣ f ∣
   ->        Epic ∣ g ∣
       --------------------------------------------------
-  ->   ∃ λ (h : Hom{i}{j}{k} 𝑪 𝑩) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+  ->   ∃ λ (h : Hom 𝑪 𝑩) -> ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
 
 homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
   ( (λ c → ∣ f ∣ (EpicInv ∣ g ∣ gEpic c) ) , hIsHomCB ) ,
