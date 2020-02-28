@@ -102,13 +102,13 @@ image_ : {i j : Level} {A : Set i} {B : Set j}
   ->  (A -> B) ->  Pred B (i ⊔ j)
 image f = λ b -> ∃ λ a -> b ≡ f a
 
-ImageIsImage : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
-  ->           (f : A -> B)
-  ->           (b : B) -> (a : A)
-  ->           b ≡ f a
-             --------------------
-  ->           Image f ∋ b
-ImageIsImage {A = A} {B = B} = λ f b a b≡fa → eq b a b≡fa
+-- ImageIsImage : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+--   ->           (f : A -> B)
+--   ->           (b : B) -> (a : A)
+--   ->           b ≡ f a
+--              --------------------
+--   ->           Image f ∋ b
+-- ImageIsImage {A = A} {B = B} = λ f b a b≡fa → eq b a b≡fa
 
 
 --N.B. the assertion Image f ∋ y must come with a proof, which is of the

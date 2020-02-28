@@ -142,7 +142,16 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     B≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒃) (λ x → sub-term-closed B≤𝑨 (𝒕 x) 𝒃 𝒃∈B)
     -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
-  -- Next we prove that
-  -- The image of terms is a subuniverse of 𝑨.
-  -- That is, ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨. 
-  -- img-of-terms-is-sub : ... (todo)
+  -- sub-term-closed proves 
+  --   Sg^𝑨(Y) ⊇ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y } := ImageTerms
+
+  -- Next we prove Sg^{𝑨}(Y) ⊆ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
+  -- There are two steps:
+  -- 1. The image of Y under all terms, which we will call TermImageY, is a subuniverse of 𝑨.
+  --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨.
+  -- 2. Y ⊆ TermImageY
+  -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y, so Sg^𝑨(Y) ⊆ TermImageY ∎
+  --
+  --  TermImageY : (todo)
+  --
+  --  img-of-terms-is-sub : ... (todo)
