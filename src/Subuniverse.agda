@@ -117,7 +117,7 @@ data H {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra 
   hhom : {A B : Algebra k S} {f : Hom A B} → A ∈ K → B ∈ K →
     SubunivAlg (hom-image-is-sub f) ∈ H K
 -}
-module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X : Set k) where
+module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
 
   -- Obs 2.11 (on subuniverse generation as image of terms).
   -- If Y is a subset of A, then
@@ -144,14 +144,22 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
 
   -- sub-term-closed proves 
   --   Sg^𝑨(Y) ⊇ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y } := ImageTerms
-
-  -- Next we prove Sg^{𝑨}(Y) ⊆ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
+  -- Next we prove
+  --   Sg^{𝑨}(Y) ⊆ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
+  --
   -- There are two steps:
-  -- 1. The image of Y under all terms, which we will call TermImageY, is a subuniverse of 𝑨.
-  --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨.
-  -- 2. Y ⊆ TermImageY
-  -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y, so Sg^𝑨(Y) ⊆ TermImageY ∎
   --
-  --  TermImageY : (todo)
+  -- 1. The image of Y under all terms, which we will call `TermImage Y`, is a
+  --    subuniverse of 𝑨. That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨.
+  -- 2. Y ⊆ TermImageY (obvious)
+  -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
+  --    so Sg^𝑨(Y) ⊆ TermImageY ∎
   --
+  TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
+  TermImage Y = λ (𝒂 : ∣ 𝑨 ∣ ) -> ∃ λ (𝒕 : Term) -> ∃ λ (args : X -> ∣ 𝑨 ∣) -> (∀ i -> args i ∈ Y) -> 𝒂 ≡ (𝒕 ̇ 𝑨) args
+
+  Y⊆TermImageY : {X : Set k} (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
+  Y⊆TermImageY{X} Y {x} x∈Y  =  generator {!!} , (λ x₁ → x) , λ x₁ → refl
+  
+
   --  img-of-terms-is-sub : ... (todo)
