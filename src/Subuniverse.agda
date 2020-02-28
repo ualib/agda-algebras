@@ -89,40 +89,16 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
 open import Hom
 
 module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (f : Hom 𝑨 𝑩) where
-  HomImage : Pred ∣ 𝑩 ∣ _
-  HomImage = Image ∣ f ∣
+  HomImage : ∣ 𝑩 ∣ -> Set k
+  HomImage = λ b -> Image ∣ f ∣ ∋ b
 
-  -- postulate hom-image-is-sub : HomImage ∈ Subuniverses 𝑩
-  -- --hom-image-is-sub 𝓸 y α = let α i = ⟦ f ⟧ 𝓸 i in {!!}
   hom-image-is-sub : HomImage ∈ Subuniverses 𝑩
-  hom-image-is-sub 𝓸 𝒃 𝒃∈Imf = let 𝒂 = λ x -> Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) in
-    let pf = ⟦ f ⟧ 𝓸 𝒂 in
-    -- let 𝒄 = (λ x -> ∣ f ∣ (Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x))) in 
-    let 𝒃≡𝒄 = ∀-extensionality-ℓ₁-ℓ₂ (λ x -> InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)) in
-    let pf2 = cong ( ⟦ 𝑩 ⟧ 𝓸 ) in
-    let 𝒃𝒄∈Ker⟦𝑩⟧𝓸 = pf2 𝒃≡𝒄 in
-    let fin = trans pf 𝒃𝒄∈Ker⟦𝑩⟧𝓸 in {!!}
---
--- Goal: Image ∣ f ∣ (⟦ 𝑩 ⟧ 𝓸 𝒃)
--- ————————————————————————————————————————————————————————————
--- fin   : ∣ f ∣ (⟦ 𝑨 ⟧ 𝓸 (λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x))) ≡
---         ⟦ 𝑩 ⟧ 𝓸 (λ x → 𝒃 x)
--- 𝒃𝒄∈Ker⟦𝑩⟧𝓸
---       : ⟦ 𝑩 ⟧ 𝓸 (λ x → ∣ f ∣ (Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x))) ≡
---         ⟦ 𝑩 ⟧ 𝓸 (λ x → 𝒃 x)
--- pf2   : {x y : ⟦ S ⟧ 𝓸 → ∣ 𝑩 ∣} → x ≡ y → ⟦ 𝑩 ⟧ 𝓸 x ≡ ⟦ 𝑩 ⟧ 𝓸 y
--- 𝒃≡𝒄   : (λ x → ∣ f ∣ (Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x))) ≡ (λ x → 𝒃 x)
--- pf    : ∣ f ∣ (⟦ 𝑨 ⟧ 𝓸 (λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x))) ≡
---         ⟦ 𝑩 ⟧ 𝓸 (λ x → ∣ f ∣ (Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)))
--- 𝒂     : (x : ⟦ S ⟧ 𝓸) → ∣ 𝑨 ∣
--- 𝒃∈Imf : (x : ⟦ S ⟧ 𝓸) → HomImage (𝒃 x)
--- 𝒃     : ⟦ S ⟧ 𝓸 → ∣ 𝑩 ∣
--- 𝓸     : ∣ S ∣
--- f     : Hom 𝑨 𝑩
--- B     : Pred ∣ 𝑨 ∣ l
--- 𝑩     : Algebra k S
--- 𝑨     : Algebra k S
--- S     : Signature i j
+  hom-image-is-sub 𝓸 𝒃 𝒃∈Imf = 
+    let 𝒂 = λ x -> Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) in
+    let 𝒃≡𝒄 = ∀-extensionality-ℓ₁-ℓ₂
+              (λ x -> InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)) in 
+    let fin = trans (⟦ f ⟧ 𝓸 𝒂) (cong ( ⟦ 𝑩 ⟧ 𝓸 ) 𝒃≡𝒄) in
+      eq (⟦ 𝑩 ⟧ 𝓸 (λ x → 𝒃 x)) ( ⟦ 𝑨 ⟧ 𝓸 𝒂) (sym fin)
 
 -- Paper-pencil-proof.
 -- Let 𝓸 be an op symbol.  Let args : ⟦ S ⟧ 𝓸 -> ∣ 𝑩 ∣ be a (⟦ S ⟧ 𝓸)-tuple of elements ∣ 𝑩 ∣.
@@ -135,14 +111,6 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l}
 -- (⟦ 𝑩 ⟧ 𝓸) args = (⟦ 𝑩 ⟧ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Image ∣ f ∣ 
 
 
--- Find x : A, such that f x = proj₂ 𝑩 𝓸 𝒂
--- Subuniverses : {S : Signature i j} → (𝑨 : Algebra k S) →
---               ---------------------------------------
---                Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
--- Subuniverses {S = 𝐹 , ρ} (A , 𝐹ᴬ) B =        -- type \MiF\^A for 𝐹ᴬ
---   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → im 𝒂 ⊆ B → 𝐹ᴬ 𝓸 𝒂 ∈ B
-
-
 {-
 -- Problem is, don't think you can convert this to an equational definition
 -- since it's not well-founded
@@ -151,8 +119,4 @@ data H {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra 
   hhom : {A B : Algebra k S} {f : Hom A B} → A ∈ K → B ∈ K →
     SubunivAlg (hom-image-is-sub f) ∈ H K
 -}
-
--- Term S X ⊆ Image  ∋
-
-
 

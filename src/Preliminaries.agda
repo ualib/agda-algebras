@@ -92,41 +92,44 @@ postulate
 
 -- (more extensionality postulates we haven't used appear at bottom of this file for now)
 
-
-
-data Image {i j : Level} {A : Set i} {B : Set j}
-              (f : A -> B) : Pred B (i ⊔ j)
+data Image_∋_ {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁}{B : Set ℓ₂}
+              (f : A -> B) : B -> Set (ℓ₁ ⊔ ℓ₂)
   where
-  im : (x : A) -> f x ∈ Image f
-
+  im : (x : A) -> Image f ∋ f x
+  eq : (b : B) -> (a : A) -> b ≡ f a -> Image f ∋ b
 
 image_ : {i j : Level} {A : Set i} {B : Set j}
   ->  (A -> B) ->  Pred B (i ⊔ j)
 image f = λ b -> ∃ λ a -> b ≡ f a
 
--- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set (suc ℓ) where
---   im : (x : A) -> Image f ∋ f x
+ImageIsImage : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->           (f : A -> B)
+  ->           (b : B) -> (a : A)
+  ->           b ≡ f a
+             --------------------
+  ->           Image f ∋ b
+ImageIsImage {A = A} {B = B} = λ f b a b≡fa → eq b a b≡fa
 
--- data Image_∋_ {ℓ : Level} {A B : Set ℓ}(f : A -> B) : B -> Set ℓ where
---   im : (x : A) -> Image f ∋ f x
 
 --N.B. the assertion Image f ∋ y must come with a proof, which is of the
 --form ∃a f a = y, so we have a witness, so the inverse can be "computed"
 --in the following way:
 Inv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) ->  (b : B) -> b ∈ Image f -> A
+  ->  (f : A -> B) ->  (b : B) -> Image f ∋ b -> A
 Inv f .(f a) (im a) = a  -- Cool!!!
+Inv f b (eq b a b≡fa) = a
 
 -- special case for Set
-inv : {A B : Set}(f : A -> B)(b : B) -> b ∈ Image f -> A
+inv : {A B : Set}(f : A -> B)(b : B) -> Image f ∋ b -> A
 inv{A}{B} = Inv {lzero}{lzero}{A}{B}
 
 InvIsInv : {ℓ₁ ℓ₂ : Level}{A : Set ℓ₁} {B : Set ℓ₂}
   ->       (f : A -> B)
-  ->       (b : B) -> (b∈Imgf : b ∈ Image f)
+  ->       (b : B) -> (b∈Imgf : Image f ∋ b)
          --------------------------------------
   ->      f (Inv f b b∈Imgf) ≡ b
 InvIsInv f .(f a) (im a) = refl
+InvIsInv f b (eq b a b≡fa) = sym b≡fa
 
 -------------------------------------------------------------------------------
 identity : {ℓ : Level} (A : Set ℓ) -> A -> A
@@ -135,7 +138,7 @@ identity{ℓ} A x = x
 
 -- Epic (surjective) function from Set ℓ₁ to Set ℓ₂
 Epic : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂} (g : A -> B) -> Set _
-Epic g = ∀ y -> y ∈ Image g
+Epic g = ∀ y -> Image g ∋ y
 
 -- special case: epic function on Set
 epic : {A B : Set} (g : A -> B) -> Set _
@@ -182,7 +185,7 @@ MonicInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
   ->       (f : A -> B)
   ->       Monic f
          -----------------
-  ->       (b : B) -> b ∈ Image f -> A
+  ->       (b : B) -> Image f ∋ b -> A
 MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
 
 -- The (psudo-)inverse of a monic is the left inverse.
