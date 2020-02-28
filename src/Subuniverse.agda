@@ -158,6 +158,10 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
   TermImage Y = λ (𝒂 : ∣ 𝑨 ∣ ) -> ∃ λ (𝒕 : Term) -> ∃ λ (args : X -> ∣ 𝑨 ∣) -> (∀ i -> args i ∈ Y) -> 𝒂 ≡ (𝒕 ̇ 𝑨) args
 
+  --TermImage is a subuniverse
+  TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> TermImage Y ∈ Subuniverses 𝑨
+  TermImageSub Y = λ 𝓸 𝒂 x → {!!} , (λ x₁ → {!!}) , λ x₁ → {!!}
+
   Y⊆TermImageY : {X : Set k} (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
   Y⊆TermImageY{X} Y {x} x∈Y  =  generator {!!} , (λ x₁ → x) , λ x₁ → refl
   
