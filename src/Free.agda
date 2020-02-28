@@ -12,13 +12,16 @@ open import Basic
 open import Hom
 open import Con
 
-module Free {i j k : Level} (S : Signature i j) (X : Set k)  where
+module Free {i j k : Level} {S : Signature i j} {X : Set k}  where
 
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
 -- open signature
 
+-- data Term : Set (i ⊔ j ⊔ k) where
+--   generator : X -> Term
+--   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term
 data Term : Set (i ⊔ j ⊔ k) where
   generator : X -> Term
   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term

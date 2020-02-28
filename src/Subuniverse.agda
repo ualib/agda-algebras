@@ -7,10 +7,8 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
---  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;Im_⊆_; _⊆_; ⋂; ∃; _≡_; Image; _∘_; refl;Inv)
--- proj₁;proj₂; 
 open import Basic
-open import Free using (Term)
+open import Free
 
 module Subuniverse where
 
@@ -119,4 +117,32 @@ data H {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra 
   hhom : {A B : Algebra k S} {f : Hom A B} → A ∈ K → B ∈ K →
     SubunivAlg (hom-image-is-sub f) ∈ H K
 -}
+module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X : Set k) where
 
+  -- Obs 2.11 (on subuniverse generation as image of terms).
+  -- If Y is a subset of A, then
+  --   Sg^{𝑨}(Y) = { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
+  -- Paper-pencil-proof.
+  --   Induction on the height of t shows that every subuniverse is closed under the action
+  --   of t^𝑨. Thus the right-hand side is contained in the left. On the other hand, the
+  --   right-hand side is a subuniverse that contains the elements of Y (take t = x₁), so it
+  --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y. ☐
+
+  -- To prove Obs 2.11, we first prove the following usefull lemma:
+
+  -- Subuniverses are closed under the action of term operations.
+  sub-term-closed : B ∈ Subuniverses 𝑨
+    ->              (𝒕 : Term)
+    ->              (𝒃 : X -> ∣ 𝑨 ∣)
+    ->              (∀ i -> 𝒃 i ∈ B)
+                 -------------------------
+    ->              ((𝒕 ̇ 𝑨) 𝒃) ∈ B
+  sub-term-closed B≤𝑨 (generator x) 𝒃 𝒃∈B = 𝒃∈B x
+  sub-term-closed B≤𝑨 (node 𝓸 𝒕) 𝒃 𝒃∈B =
+    B≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒃) (λ x → sub-term-closed B≤𝑨 (𝒕 x) 𝒃 𝒃∈B)
+    -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
+
+  -- Next we prove that
+  -- The image of terms is a subuniverse of 𝑨.
+  -- That is, ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨. 
+  -- img-of-terms-is-sub : ... (todo)
