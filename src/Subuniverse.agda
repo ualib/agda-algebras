@@ -115,6 +115,15 @@ data HClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algeb
     A ∈ HClo K → B ∈ HClo K → SubunivAlg {i} {j} {k} {S} {B} {HomImage {i} {j} {k} {S} {A} {B} f}
       (hom-image-is-sub {i} {j} {k} {S} {A} {B} f) ∈ HClo K
 
+
+data VClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+  vbase : {A : Algebra k S} → A ∈ K → A ∈ VClo K
+  vprod : {I : Set k} {A : I → Algebra _ S} → (∀ i → A i ∈ VClo K) → Π A ∈ VClo K
+  vsub : ∀ {A : Algebra _ S} {B : Algebra _ S} → A ∈ VClo K → B is-subalgebra-of A → B ∈ VClo K
+  vhom : {A B : Algebra k S} {f : Hom A B} →
+    A ∈ VClo K → B ∈ VClo K → SubunivAlg {i} {j} {k} {S} {B} {HomImage {i} {j} {k} {S} {A} {B} f}
+      (hom-image-is-sub {i} {j} {k} {S} {A} {B} f) ∈ VClo K
+
 module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
 
   -- Obs 2.11 (on subuniverse generation as image of terms).
