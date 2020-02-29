@@ -25,8 +25,8 @@ Subuniverses : {S : Signature i j} → (𝑨 : Algebra k S) →
 Subuniverses {S = 𝐹 , ρ} (A , 𝐹ᴬ) a =        -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → Im 𝒂 ⊆ a → 𝐹ᴬ 𝓸 𝒂 ∈ a
 
-module _ {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (P : B ∈ Subuniverses 𝑨) where
-  SubunivAlg : Algebra (k ⊔ l) S
+module _ {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
+  SubunivAlg : Algebra k S
   SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
   --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
 
@@ -86,12 +86,12 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
 
 open import Hom
 
-module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (f : Hom 𝑨 𝑩) where
+module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
   HomImage : ∣ 𝑩 ∣ -> Set k
   HomImage = λ b -> Image ∣ f ∣ ∋ b
 
   hom-image-is-sub : HomImage ∈ Subuniverses 𝑩
-  hom-image-is-sub 𝓸 𝒃 𝒃∈Imf = 
+  hom-image-is-sub 𝓸 𝒃 𝒃∈Imf =
     let 𝒂 = λ x -> Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) in
     let 𝒃≡𝒄 = ∀-extensionality-ℓ₁-ℓ₂
               (λ x -> InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)) in 
@@ -108,15 +108,13 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l}
 -- Sine f : Hom 𝑨 𝑩, we have
 -- (⟦ 𝑩 ⟧ 𝓸) args = (⟦ 𝑩 ⟧ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Image ∣ f ∣ 
 
+-- RIP typechecker 19??-2020
+data HClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+  hbase : {A : Algebra k S} → A ∈ K → A ∈ HClo K
+  hhom : {A B : Algebra k S} {f : Hom A B} →
+    A ∈ HClo K → B ∈ HClo K → SubunivAlg {i} {j} {k} {S} {B} {HomImage {i} {j} {k} {S} {A} {B} f}
+      (hom-image-is-sub {i} {j} {k} {S} {A} {B} f) ∈ HClo K
 
-{-
--- Problem is, don't think you can convert this to an equational definition
--- since it's not well-founded
-data H {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) {!!} where
-  hbase : {A : Algebra k S} → A ∈ K → A ∈ H K
-  hhom : {A B : Algebra k S} {f : Hom A B} → A ∈ K → B ∈ K →
-    SubunivAlg (hom-image-is-sub f) ∈ H K
--}
 module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
 
   -- Obs 2.11 (on subuniverse generation as image of terms).
@@ -171,7 +169,7 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
 
   --2. Y ⊆ TermImageY
   Y⊆TermImageY : {X : Set k} (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
-  Y⊆TermImageY{X} Y {x} x∈Y  =  generator {!!} , (λ x₁ → x) , λ x₁ → refl
+  Y⊆TermImageY{X} Y {x} x∈Y = generator {!!} , (λ _ → x) , λ x₁ → refl
   
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
   

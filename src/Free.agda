@@ -54,26 +54,26 @@ map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
 -- 1.a. Every map  (X -> A)  "lifts".
 --∀{ℓ : Level} 
 --free-lift : {𝑨 : Algebra  (i ⊔ j ⊔ k) S}
-free-lift : {𝑨 : Algebra  k S}
+free-lift : ∀ {l} {𝑨 : Algebra l S}
   ->        (h : X -> ∣ 𝑨 ∣)
           -----------------------------------
   ->        ∣ 𝔉 ∣ -> ∣ 𝑨 ∣
 free-lift h (generator x) = h x
-free-lift {𝑨} h (node 𝓸 args) =
-  (⟦ 𝑨 ⟧ 𝓸) λ{i -> free-lift {𝑨} h (args i)}
+free-lift {𝑨 = 𝑨} h (node 𝓸 args) =
+  (⟦ 𝑨 ⟧ 𝓸) λ{i -> free-lift {𝑨 = 𝑨} h (args i)}
 
 -- 1.b. The lift is a hom.
 --lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S}
-lift-hom : {𝑨 : Algebra k S}
+lift-hom : ∀ {l} {𝑨 : Algebra l S}
   ->       (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
   ->       Hom 𝔉 𝑨
-lift-hom {𝑨} h = free-lift {𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
+lift-hom {𝑨 = 𝑨} h = free-lift {𝑨 = 𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
-free-unique : {𝑨 : Algebra k S}
+free-unique : ∀ {l} {𝑨 : Algebra l S}
   ->    ( f g : Hom 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
@@ -81,14 +81,14 @@ free-unique : {𝑨 : Algebra k S}
   ->    ∣ f ∣ t ≡ ∣ g ∣ t
 
 free-unique f g p (generator x) = p x
-free-unique {𝑨} f g p (node 𝓸 args) =
+free-unique {l} {𝑨} f g p (node 𝓸 args) =
    begin
      ( ∣ f ∣ )(node 𝓸 args)
    ≡⟨ ⟦ f ⟧ 𝓸 args ⟩
      (⟦ 𝑨 ⟧ 𝓸) (λ i -> ∣ f ∣ (args i))
    ≡⟨ cong (⟦ 𝑨 ⟧ _)
-        (∀-extensionality-ℓ₁-ℓ₂ {j} {k}
-          ( λ i -> free-unique {𝑨} f g p (args i))
+        (∀-extensionality-ℓ₁-ℓ₂ {j} {l}
+          ( λ i -> free-unique {𝑨 = 𝑨} f g p (args i))
         )
     ⟩
      (⟦ 𝑨 ⟧ 𝓸) (λ i -> ∣ g ∣ (args i))
@@ -135,19 +135,19 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 --    Sg(Y) = {t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
-comm-hom-term : (𝑨 𝑩 : Algebra k S)
+comm-hom-term : ∀ {l m} → (𝑨 : Algebra l S) (𝑩 : Algebra m S)
   ->            (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
   ->            ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
 
 comm-hom-term 𝑨 𝑩 g (generator x) 𝒂 = refl
-comm-hom-term 𝑨 𝑩 g (node 𝓸 args) 𝒂 =
+comm-hom-term {m = m} 𝑨 𝑩 g (node 𝓸 args) 𝒂 =
   begin
     ∣ g ∣ ((𝓸 ̂ 𝑨)  (λ i₁ → (args i₁ ̇ 𝑨) 𝒂))
   ≡⟨ ⟦ g ⟧ 𝓸 ( λ r → (args r ̇ 𝑨) 𝒂 ) ⟩
     (𝓸 ̂ 𝑩) ( λ i₁ →  ∣ g ∣ ((args i₁ ̇ 𝑨) 𝒂) )
-    ≡⟨ cong (_ ̂ 𝑩) (( ∀-extensionality-ℓ₁-ℓ₂ {j} {k}
+    ≡⟨ cong (_ ̂ 𝑩) (( ∀-extensionality-ℓ₁-ℓ₂ {j} {m}
                          (λ i₁ -> comm-hom-term 𝑨 𝑩 g (args i₁) 𝒂  )
                       ))
      ⟩
@@ -166,6 +166,12 @@ compatible-term : (𝑨 : Algebra k S)
 compatible-term 𝑨 (generator x) θ p = p x
 compatible-term 𝑨 (node 𝓸 args) θ p =
   ⟦ ⟦ θ ⟧ ⟧ 𝓸 λ{ x -> (compatible-term 𝑨 (args x) θ) p }
+
+_⊢_≈_ : ∀ {l} → Algebra l S → Term → Term → Set _
+𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
+
+_⊢_≋_ : ∀ {l m} → Pred (Algebra l S) m → Term → Term → Set _
+_⊢_≋_ {l} K p q = ∀ (𝑨 : Algebra l S) → 𝑨 ⊢ p ≈ q
 
 ---------------------------------------------------------
 
