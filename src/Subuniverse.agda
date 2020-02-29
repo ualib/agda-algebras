@@ -148,23 +148,34 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
   --    so Sg^𝑨(Y) ⊆ TermImageY ∎
   TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
-  TermImage Y = λ (𝒂 : ∣ 𝑨 ∣ ) -> ∃ λ (𝒕 : Term) -> ∃ λ (args : X -> ∣ 𝑨 ∣)
-    ->          (∀ i -> args i ∈ Y)
+  TermImage Y = λ (a : ∣ 𝑨 ∣ )
+    ->          ∃ λ (ta : Term × ( X -> ∣ 𝑨 ∣ ) )
+    ->          (∀ i -> ⟦ ta ⟧ i ∈ Y)
               -----------------------------
-    ->          𝒂 ≡ (𝒕 ̇ 𝑨) args
+    ->          a ≡ (∣ ta ∣ ̇ 𝑨) ⟦ ta ⟧
 
   --1. TermImage is a subuniverse
   TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
                 -------------------------------
     ->           TermImage Y ∈ Subuniverses 𝑨
-  TermImageSub Y 𝓸 𝒂 𝓸->TermY =
-    ⟦ 𝔉 ⟧ 𝓸 (λ 𝒇 -> ∣ 𝓸->TermY 𝒇 ∣) ,
-      (λ 𝒊 → ⟦ 𝑨 ⟧ 𝓸 λ 𝓪 -> ∣ ⟦ 𝓸->TermY 𝓪 ⟧ ∣ 𝒊) ,
-        λ 𝔂 → {!!}
+  TermImageSub = λ Y₁ 𝓸 𝒂 ta ->
+    let tt = λ x₁ -> ∣ ∣ ta x₁ ∣ ∣ in 
+    let ttA = λ x₁ -> (∣ ∣ ta x₁ ∣ ∣ ̇ 𝑨) in 
+    let Args = λ x₁ -> ⟦ ∣ ta x₁ ∣ ⟧ in
+    let pf = λ x₁ -> ⟦ ta x₁ ⟧ in 
+    let TFA = ttA Fork Args in
+    let 𝒂' = ⟦ 𝑨 ⟧ 𝓸 Eval TFA in
+    let fin = ⟦ 𝑨 ⟧ 𝓸 𝒂 ≡ 𝒂' in ( node 𝓸 tt , Args {!!} ) , λ x → {!!}
+      -- (⟦ 𝔉 ⟧ 𝓸 tt , Args {!!} ) ,  λ x → cong ( ⟦ 𝑨 ⟧ 𝓸 ) {!!}
 
+  -- We must show TY := { t^𝑨 𝒂 : t ∈ T_σ(X_n), n ∈ ℕ, 𝒂 : Fin(ρ t) -> Y } is a subalgebra.
+  -- That is,  ∀ 𝓸 : ∣ S ∣, if args : ⟦ S ⟧ 𝓸 -> TY, then ⟦ 𝑨 ⟧ 𝓸 args ∈ TY.
+  -- args : ⟦ S ⟧ 𝓸 -> TY means, ∀ i -> ∃ 𝒕ᵢ -> ∃ 𝒂ᵢ -> args i ≡ 𝒕ᵢ^𝑨 𝒂ᵢ.
+  -- Then ⟦ 𝑨 ⟧ 𝓸 args = ⟦ 𝑨 ⟧ 𝓸 (λ i -> args i) = ⟦ 𝑨 ⟧ 𝓸 (λ i -> 𝒕ᵢ^𝑨 𝒂ᵢ)
+ 
   --2. Y ⊆ TermImageY
   Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
-  Y⊆TermImageY {x} Y {a} a∈Y = generator x , (λ x -> a) , λ x → refl
+  Y⊆TermImageY {x} Y {a} a∈Y = ( generator x , (λ x -> a) ) , λ x₁ → refl
   
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y
   --    Proof: see `sgIsSmallest`

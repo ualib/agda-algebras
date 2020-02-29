@@ -151,7 +151,7 @@ Thus, if
   
   denote and define the **composition of** :math:`f` **with** :math:`g` as follows:
 
-.. math:: f\, \mathsf{comp}\, g := f \, \mathsf{eval} \, \mathsf{fork} \, g: ∏_{(i:n)}((\mathsf{Fin}(k_i) → A) → A).
+.. math:: f\, \mathsf{comp}\, g := f \, \mathsf{eval} \, \mathsf{fork} \, g: \bigl(∏_{(i:n)}(\mathsf{Fin}(k_i) → A)\bigr) → A.
 
 Indeed, if :math:`a: ∏_{(i:n)}(\mathsf{Fin}(k_i) → A)`, then :math:`\mathsf{eval} \, \mathsf{fork} \, g \, a` has type :math:`\mathsf{Fin}(n) → A`, which is the domain type of :math:`f`; therefore, :math:`f\, \mathsf{eval} \, \mathsf{fork} \, g \, a` has type :math:`A`, as desired.
 

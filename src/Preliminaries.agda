@@ -413,6 +413,54 @@ module ≲-Reasoning where
 
 open ≲-Reasoning
 
+
+
+-- Special dependent functions (fork and join/eval)
+
+---------------------------------------------------
+--Forks
+------
+
+-- binary fork
+fork₂ : {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁}{B : Set ℓ₂}{C : Set ℓ₃}
+  ->   (A -> B) -> (A -> C) -> A -> (B × C)
+fork₂ f g a = f a , g a
+
+dep-fork₂ : ∀ {a b c : Level} {A : Set a}{B : A -> Set b}{C : A -> Set c}
+  ->        (f : (a : A) -> B a) -> (g : (a : A) -> C a) -> ∀ (a : A) -> (B a × C a)
+dep-fork₂ f g a = (f a , g a)
+
+_Fork_ : ∀ {i j a : Level}{I : Set i}{J : I -> Set j}{A : Set a}
+  ->      ((i : I) -> (J i -> A) -> A)
+  ->      ((i : I) -> (J i -> A))
+        ---------------------------
+  ->        I -> A
+f Fork 𝒂𝒂 = λ i -> (f i)(𝒂𝒂 i)
+-- e.g., (f₁,…,fₙ)((a11,…,a1n), …, (an1,…,ann)) = (f₁(a11,…,a1n), …,fₙ(an1,…,ann))
+-- 𝒂𝒂 : (i : I) -> (J i -> A)
+-- f : (i : I) -> (J i -> A) -> A
+-- forkA f 𝒂𝒂 : I -> A 
+
+------------------------------------------------------------------------------
+--EVAL. Function application on types A and B.
+eval : ∀ {a b : Level} {A : Set a}{B : Set b} -> ((A -> B) × A) -> B
+eval (f , a) = f a
+
+_Eval_ : ∀ {i a : Level} {I : Set i}{A : Set a}
+  ->      ((I -> A) -> A)
+  ->      (I -> A)
+        --------------------
+  ->      A
+f Eval a = f a
+
+--GENERAL COMPOSITION.
+_Comp_ : ∀ {i j a : Level}{I : Set i}{J : I -> Set j}{A : Set a}
+  ->     ((I -> A) -> A)
+  ->     ((i : I) -> (J i -> A) -> A)
+       ---------------------------------------
+  ->     ((i : I) -> (J i -> A)) -> A
+f Comp g = λ 𝒂𝒂 → f Eval (g Fork 𝒂𝒂)
+
 --------------------------------------------------------
 
 --=============================================================================
