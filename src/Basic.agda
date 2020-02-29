@@ -8,7 +8,8 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
+  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_)
+--  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_)
 
 module Basic where
 
@@ -25,9 +26,12 @@ module _ {i j} where
 Signature : (i j : Level) → Set (lsuc (i ⊔ j))
 Signature i j = ∃ λ (F : Set i) → F → Set j
 
+private
+  variable
+    i j : Level
+
 -- k is the universe in which the operational type lives
-Algebra : {i j : Level}
-          (k : Level)  ->  Signature i j
+Algebra : (k : Level)  ->  Signature i j
           -------------------------------
   ->      Set (i ⊔ j ⊔ lsuc k)
 Algebra k (𝐹 , ρ) =
@@ -35,13 +39,13 @@ Algebra k (𝐹 , ρ) =
 
 private
   variable
-    i j k l : Level
+    k l m : Level
     S : Signature i j
 
 -- Indexed product of algebras is an algebra
 -- The trick is to view the Pi-type as a dependent product i.e.
 -- A i1 × A i2 × A i3 × ... = (i : I) → A i
-Π : ∀ {m} {I : Set m} → (I → Algebra k S) → Algebra (k ⊔ m) S
+Π : {I : Set m} → (I → Algebra k S) → Algebra (k ⊔ m) S
 Π {I = I} A = ((i : I) → ∣ A i ∣) , λ 𝓸 x i → ⟦ A i ⟧ 𝓸 λ j → x j i
 
 -- Subalgebras
@@ -55,9 +59,19 @@ module _ {i j k l : Level} {S : Signature i j} where
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
 
-data P {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-  base : {A : Algebra k S} → A ∈ K → A ∈ P K
-  prod : {I : Set k} {A : I → Algebra k S} → (∀ i → A i ∈ P K) → Π A ∈ P K
+{-data Su {i j k l} {s : Signature i j} (K : Pred (Algebra k s) l) : Pred (Algebra k s) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+  sbase : {A : Algebra k s} → A ∈ K → A ∈ Su K
+  sub : ∀ {A : Algebra k s} {B : Algebra k s} → A ∈ Su K → B is-subalgebra-of A → B ∈ Su K
+-}
+
+-- Homomorphic images are canonically algebras since they are subuniverses
+-- 
+-- SubunivAlg (hom-image-is-sub f)
+
+data P {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) :
+  Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+    pbase : {A : Algebra k S} → A ∈ K → A ∈ P K
+    prod : {I : Set k} {A : I → Algebra k S} → (∀ i → A i ∈ P K) → Π A ∈ P K
 
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`
@@ -73,8 +87,3 @@ data monoid-op : Set where
 
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
-
-
-
-
-

@@ -12,13 +12,16 @@ open import Basic
 open import Hom
 open import Con
 
-module Free {i j k : Level} (S : Signature i j) (X : Set k)  where
+module Free {i j k : Level} {S : Signature i j} {X : Set k}  where
 
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
 -- open signature
 
+-- data Term : Set (i ⊔ j ⊔ k) where
+--   generator : X -> Term
+--   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term
 data Term : Set (i ⊔ j ⊔ k) where
   generator : X -> Term
   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term
@@ -36,7 +39,7 @@ map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
 -- open Algebra
 -- open Term
 
-𝔉 : Algebra (i ⊔ j ⊔ k) S
+𝔉 : Algebra _ S
 𝔉 = Term , node
 --record { ⟦_⟧ᵤ = Term ; _⟦_⟧ = node }
 -------------------------------------
@@ -64,14 +67,14 @@ free-lift {𝑨} h (node 𝓸 args) =
 lift-hom : {𝑨 : Algebra k S}
   ->       (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
-  ->       Hom {i} {j} {k} 𝔉 𝑨
+  ->       Hom 𝔉 𝑨
 lift-hom {𝑨} h = free-lift {𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
 free-unique : {𝑨 : Algebra k S}
-  ->    ( f g : Hom {i} {j} {k} 𝔉 𝑨 )
+  ->    ( f g : Hom 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
        ---------------------------
@@ -133,7 +136,7 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
 comm-hom-term : (𝑨 𝑩 : Algebra k S)
-  ->            (g : Hom {i} {j} {k} 𝑨 𝑩) -> (𝒕 : Term)
+  ->            (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
   ->            ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
