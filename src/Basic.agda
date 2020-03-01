@@ -8,8 +8,8 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
---  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_; Lift)
+  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool;
+         _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
 
 module Basic where
 
@@ -48,35 +48,47 @@ private
 Π : {I : Set m} → (I → Algebra k S) → Algebra (k ⊔ m) S
 Π {I = I} A = ((i : I) → ∣ A i ∣) , λ 𝓸 x i → ⟦ A i ⟧ 𝓸 λ j → x j i
 
--- Keep I at the same universe as A so that both A and Π A can be classified by PClo
+-- Keep I at the same universe as A so that both A and Π A can
+-- be classified by PClo
 data PClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) :
   Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-    pbase : {A : Algebra _ S} → A ∈ K → A ∈ PClo K
-    prod : {I : Set k} {A : I → Algebra _ S} → (∀ i → A i ∈ PClo K) → Π A ∈ PClo K
+    pbase : {A : Algebra _ S} -> A ∈ K -> A ∈ PClo K
+    prod : {I : Set k} {A : I -> Algebra _ S}
+      ->   (∀ i -> A i ∈ PClo K) -> Π A ∈ PClo K
 
 -- Subalgebras
 module _ {i j k : Level} {S : Signature i j} where
-  -- To keep A at same universe level as ∃ P , B, force P to live in the same universe
-  -- We need to do this so that both A and ∃ P , B can be classified by the same predicate SClo
-  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k)) where
-    mem : {P : Pred ∣ A ∣ k} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
-            ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) → ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
-          A is-supalgebra-of (∃ P , B)
+  -- To keep A at same universe level as ∃ P , B, force P to live
+  -- in the same universe. We need to do this so that both A and
+  -- ∃ P , B can be classified by the same predicate SClo.
+  data _is-supalgebra-of_ (A : Algebra k S) :
+    Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k))
+    where
+    mem : {P : Pred ∣ A ∣ k} {B : (o : ∣ S ∣)
+      ->  Op (⟦ S ⟧ o) (∃ P)}
+      ->  ((o : ∣ S ∣) -> (x : ⟦ S ⟧ o -> ∃ P)
+            ->  ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣))
+      ->  A is-supalgebra-of (∃ P , B)
 
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
 
-  data SClo (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-    sbase : {A : Algebra _ S} → A ∈ K → A ∈ SClo K
-    sub : ∀ {A : Algebra _ S} {B : Algebra _ S} → A ∈ SClo K → B is-subalgebra-of A → B ∈ SClo K
+  data SClo (K : Pred (Algebra k S) l) :
+    Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l))
+    where
+    sbase : {A : Algebra _ S} -> A ∈ K -> A ∈ SClo K
+    sub : ∀ {A : Algebra _ S} {B : Algebra _ S}
+      ->  A ∈ SClo K
+      ->  B is-subalgebra-of A
+      ->  B ∈ SClo K
 
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`
---  and `·`, of arities 0 and 2, of types `(Empty -> A) -> A` and
---  `(Bool -> A) -> A`, resp. The types indicate that `e` is
---  nullary (i.e., takes no args, equivalently, takes args of
---  type `Empty -> A`), while `·` is binary, as indicated by
---  argument type `Bool -> A`.
+--  and `·`, of arities 0 and 2, of types `(Empty -> A) -> A`
+--  and `(Bool -> A) -> A`, resp. The types indicate that `e`
+--  is nullary (i.e., takes no args, equivalently, takes args
+--  of type `Empty -> A`), while `·` is binary, as indicated
+--  by argument type `Bool -> A`.
 
 data monoid-op : Set where
   e : monoid-op
