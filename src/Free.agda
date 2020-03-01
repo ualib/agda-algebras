@@ -124,7 +124,7 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x -> (args x ̇ 𝑨) 𝒂 }
 
--- Recall (cf. Theorem 4.32 of Bergman)
+-- Recall (cf. UAFST Thm 4.32)
 -- Theorem 1.
 -- Let A and B be algebras of type S. Then the following hold:
 -- 1. For every n-ary term t and homomorphism g: A —> B, 
@@ -167,6 +167,9 @@ compatible-term 𝑨 (generator x) θ p = p x
 compatible-term 𝑨 (node 𝓸 args) θ p =
   ⟦ ⟦ θ ⟧ ⟧ 𝓸 λ{ x -> (compatible-term 𝑨 (args x) θ) p }
 
+-- For proof of item (3), see `TermImageSub` in Subuniverse.agda.
+
+------------------------------------------------------------------
 _⊢_≈_ : ∀ {l} → Algebra l S → Term → Term → Set _
 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 

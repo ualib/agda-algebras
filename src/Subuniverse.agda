@@ -28,10 +28,10 @@ Subuniverses {S = 𝐹 , ρ} (A , 𝐹ᴬ) a =        -- type \MiF\^A for 𝐹�
 module _ {i j k : Level} {S : Signature i j} where
   -- To keep A at same universe level as ∃ P , B, force P to live in the same universe
   -- We need to do this so that both A and ∃ P , B can be classified by the same predicate SClo
-  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k)) where
-    mem : {P : Pred ∣ A ∣ k} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
-            ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) → ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
-          A is-supalgebra-of (∃ P , B)
+  data _is-supalgebra-of_ (𝑨 : Algebra k S) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k)) where
+    mem : {P : Pred ∣ 𝑨 ∣ k} {B : (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) (∃ P)} →
+            ((𝓸 : ∣ S ∣) → (x : ⟦ S ⟧ 𝓸 → ∃ P) → ∣ B 𝓸 x ∣ ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i → ∣ x i ∣)) →
+          𝑨 is-supalgebra-of (∃ P , B)
 
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
@@ -121,17 +121,6 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
 
 module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
 
-  -- Obs 2.11 (on subuniverse generation as image of terms).
-  -- If Y is a subset of A, then
-  --   Sg^{𝑨}(Y) = { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
-  -- Paper-pencil-proof.
-  --   Induction on the height of t shows that every subuniverse is closed under the action
-  --   of t^𝑨. Thus the right-hand side is contained in the left. On the other hand, the
-  --   right-hand side is a subuniverse that contains the elements of Y (take t = x₁), so it
-  --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y. ☐
-
-  -- To prove Obs 2.11, we first prove the following usefull lemma:
-
   -- Subuniverses are closed under the action of term operations.
   sub-term-closed : B ∈ Subuniverses 𝑨
     ->              (𝒕 : Term)
@@ -144,9 +133,20 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     B≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒃) (λ x → sub-term-closed B≤𝑨 (𝒕 x) 𝒃 𝒃∈B)
     -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
-  -- sub-term-closed proves Sg^𝑨(Y) ⊇ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y } := ImageTerms
-  -- Next we prove Sg^{𝑨}(Y) ⊆ { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }, as follows:
-  -- 1. The image of Y under all terms, which we will call `TermImage Y`, is a subuniverse of 𝑨.
+  -- Obs 2.11 (on subuniverse generation as image of terms) (cf. UAFST Thm 4.32(3))
+  -- If Y is a subset of A, then
+  --    Sg(Y) = {t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
+  -- Or, in our notation, 
+  --   Sg^{𝑨}(Y) = { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y }.
+  -- Paper-pencil-proof.
+  --   Induction on the height of t shows that every subuniverse is closed
+  --   under the action of t^𝑨. Thus the right-hand side (RHS) is contained
+  --   in the left. The formalization is given by `sub-term-closed`; it proves
+  --      Sg^{𝑨}(Y) ⊇ { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y }.
+  --   On the other hand, the RHS is a subuniverse that contains Y (take t = x₁), so
+  --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y. ☐
+  --   So, we prove Sg^{𝑨}(Y) ⊆ { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } following these steps:
+  -- 1. The image of Y under all terms, `TermImage Y`, is a subuniverse of 𝑨.
   --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨.
   -- 2. Y ⊆ TermImageY (obvious)
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
@@ -154,7 +154,7 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
   TermImage Y = λ (a : ∣ 𝑨 ∣ )
     ->          ∃ λ (ta : Term × ( X -> ∣ 𝑨 ∣ ) )
-    ->          (∀ i -> ⟦ ta ⟧ i ∈ Y)
+    ->          (∀ x -> ⟦ ta ⟧ x ∈ Y)
               -----------------------------
     ->          a ≡ (∣ ta ∣ ̇ 𝑨) ⟦ ta ⟧
 
@@ -162,7 +162,7 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
                 -------------------------------
     ->           TermImage Y ∈ Subuniverses 𝑨
-  TermImageSub = λ Y₁ 𝓸 𝒂 ta ->
+  TermImageSub Y 𝓸 𝒂 ta =
     let tt = λ x₁ -> ∣ ∣ ta x₁ ∣ ∣ in 
     let ttA = λ x₁ -> (∣ ∣ ta x₁ ∣ ∣ ̇ 𝑨) in 
     let Args = λ x₁ -> ⟦ ∣ ta x₁ ∣ ⟧ in
@@ -172,10 +172,21 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     let fin = ⟦ 𝑨 ⟧ 𝓸 𝒂 ≡ 𝒂' in ( node 𝓸 tt , Args {!!} ) , λ x → {!!}
       -- (⟦ 𝔉 ⟧ 𝓸 tt , Args {!!} ) ,  λ x → cong ( ⟦ 𝑨 ⟧ 𝓸 ) {!!}
 
-  -- We must show TY := { t^𝑨 𝒂 : t ∈ T_σ(X_n), n ∈ ℕ, 𝒂 : Fin(ρ t) -> Y } is a subalgebra.
+  -- We must show TY := { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } is a subalgebra.
   -- That is,  ∀ 𝓸 : ∣ S ∣, if args : ⟦ S ⟧ 𝓸 -> TY, then ⟦ 𝑨 ⟧ 𝓸 args ∈ TY.
-  -- args : ⟦ S ⟧ 𝓸 -> TY means, ∀ i -> ∃ 𝒕ᵢ -> ∃ 𝒂ᵢ -> args i ≡ 𝒕ᵢ^𝑨 𝒂ᵢ.
-  -- Then ⟦ 𝑨 ⟧ 𝓸 args = ⟦ 𝑨 ⟧ 𝓸 (λ i -> args i) = ⟦ 𝑨 ⟧ 𝓸 (λ i -> 𝒕ᵢ^𝑨 𝒂ᵢ)
+  -- args : ⟦ S ⟧ 𝓸 -> TY means, ∀ i -> ∃ ∣ taᵢ ∣ : Term × ( X -> ∣ 𝑨 ∣ )
+  --   ->   (∀ x -> ⟦ ∣ taᵢ ∣ ⟧ x ∈ Y)  ->  args i ≡ (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧
+  -- It follows that 
+  --   ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> args i) ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧)
+  -- Remains to show ∃ TA such that ∣ ∣ TA ∣ ∣ : Term and ⟦ ∣ TA ∣ ⟧ : X -> ∣ 𝑨 ∣ satisfy:
+  --   ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (∣ ∣ TA ∣ ∣ ̇ 𝑨) ⟦ ∣ TA ∣ ⟧
+  -- 
+  -- Since args : ⟦ S ⟧ 𝓸 -> TY and ∀ i -> ∣ ∣ taᵢ ∣ ∣ , ⟦ ∣ taᵢ ∣ ⟧ satisfy
+  --    args i ≡ (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧,
+  -- we have, by ∀-extensionality, args ≡ λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧
+  -- Then, by cong (⟦ 𝑨 ⟧ 𝓸) we have the desired equivalence:
+  -- ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧)
+  --
  
   --2. Y ⊆ TermImageY
   Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
