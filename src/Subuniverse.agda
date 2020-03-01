@@ -9,6 +9,7 @@
 open import Preliminaries
 open import Basic
 open import Free
+open import Hom
 
 module Subuniverse where
 
@@ -36,7 +37,7 @@ module _ {i j k : Level} {S : Signature i j} where
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
 
-module _ {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
+module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
   SubunivAlg : Algebra k S
   SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
   --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
@@ -59,8 +60,13 @@ module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
       ------------------
       → ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X
 
-sgIsSub : (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
+sgIsSub : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
 sgIsSub _ 𝓸 𝒂 α = app 𝓸 α
+
+-- Even though sgIsSub {i} {j} {k} {k} {S} {𝑨} X has type Sg X ∈ Subuniverses 𝑨
+-- SubunivAlg refuses to take it as an argument!!! What's going on???
+--postulate hom-sg-to-fun : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S} {𝑩 : Algebra l S} {X : Pred ∣ 𝑨 ∣ k} → Hom (SubunivAlg {i} {j} {k} {S} {𝑨} {B = Sg X} (sgIsSub ?)) 𝑩 → (∃ X → ∣ 𝑩 ∣)
+--hom-sg-to-fun = {!!}
 
 -- WARNING: if you move X into the scope of sgIsSmallest, you get the following error:
 -- "An internal error has occurred. Please report this as a bug.
@@ -94,8 +100,6 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
     α i = Ai-is-Sub i 𝓸 𝒂 λ j → im𝒂⊆⋂A j i
 
 -- Hom is subuniverse
-
-open import Hom
 
 module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
   HomImage : ∣ 𝑩 ∣ -> Set k
