@@ -1,7 +1,7 @@
 --File: Subuniverse.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Updated: 26 Feb 2020
+--Up6 
 --Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
@@ -158,6 +158,32 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
               -----------------------------
     ->          a ≡ (∣ ta ∣ ̇ 𝑨) ⟦ ta ⟧
 
+  TermHelper : {𝓸 : ∣ S ∣} -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred (⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ ) (i ⊔ j ⊔ k)
+  TermHelper {𝓸} Y = λ (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
+    ->          ∃ λ (𝒕𝒂 :  ⟦ S ⟧ 𝓸 -> Term )
+    ->          ∃ λ (args :  ⟦ S ⟧ 𝓸 -> ( X -> ∣ 𝑨 ∣ ) )
+    ->          ∀ i -> (∀ x -> (args i) x ∈ Y)
+              -----------------------------
+    ->           𝒂 i ≡ ( (𝒕𝒂 i)  ̇ 𝑨) (args i)
+
+
+  TermHelper2 : {𝓸 : ∣ S ∣} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
+    ->               (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
+    ->               (𝒂 ∈ TermHelper Y)
+                   ----------------------------------------
+    ->               (∀ i -> (𝒂 i) ∈ TermImage Y)
+  TermHelper2 {𝓸} Y 𝒂 TIH = λ i₁ ->
+     (∣ TIH ∣ i₁ ,  ∣ ⟦ TIH ⟧ ∣ i₁) , λ x ->  ⟦ ⟦ TIH ⟧ ⟧ i₁ x
+
+  TermHelper3 : {𝓸 : ∣ S ∣} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
+    ->               (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
+    ->               (𝒂 ∈ TermHelper Y)
+                   ----------------------------------------
+    ->               ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ TermImage Y
+  TermHelper3 {𝓸} Y 𝒂 TIH = {!!} , {!!}
+
+
+  
   --1. TermImage is a subuniverse
   TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
                 -------------------------------
@@ -169,8 +195,8 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     let pf = λ x₁ -> ⟦ ta x₁ ⟧ in 
     let TFA = ttA Fork Args in
     let 𝒂' = ⟦ 𝑨 ⟧ 𝓸 Eval TFA in
-    let fin = ⟦ 𝑨 ⟧ 𝓸 𝒂 ≡ 𝒂' in ( node 𝓸 tt , Args {!!} ) , λ x → {!!}
-      -- (⟦ 𝔉 ⟧ 𝓸 tt , Args {!!} ) ,  λ x → cong ( ⟦ 𝑨 ⟧ 𝓸 ) {!!}
+    let fin = ⟦ 𝑨 ⟧ 𝓸 𝒂 ≡ 𝒂' in ( node 𝓸 tt ,  {!!} ) , λ x → cong (⟦ 𝑨 ⟧ 𝓸) {!!}
+
 
   -- We must show TY := { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } is a subalgebra.
   -- That is,  ∀ 𝓸 : ∣ S ∣, if args : ⟦ S ⟧ 𝓸 -> TY, then ⟦ 𝑨 ⟧ 𝓸 args ∈ TY.
