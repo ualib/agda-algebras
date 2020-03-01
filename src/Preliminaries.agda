@@ -62,11 +62,16 @@ Im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 --------------------------------------
 --Ordinary function extensionality
 postulate
-  extensionality : ∀ {A B : Set} {f g : A -> B}
+  extensionality : ∀ {i j} {A : Set i} {B : Set j} {f g : A -> B}
     ->             (∀ (x : A) -> f x ≡ g x)
                   --------------------------
     ->             f ≡ g
-                   
+
+-- Opposite of function extensionality
+intensionality : ∀ {i j} {A : Set i} {B : Set j} {f g : A -> B} →
+  f ≡ g → (x : A) -> f x ≡ g x
+intensionality refl _ = refl
+
 --------------------------------------
 --Dependent function extensionality
 postulate

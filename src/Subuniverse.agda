@@ -4,7 +4,7 @@
 --Updated: 26 Feb 2020
 --Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
 
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
 
 open import Preliminaries
 open import Basic
@@ -24,6 +24,17 @@ Subuniverses : {S : Signature i j} → (𝑨 : Algebra k S) →
                Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
 Subuniverses {S = 𝐹 , ρ} (A , 𝐹ᴬ) a =        -- type \MiF\^A for 𝐹ᴬ
   (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → Im 𝒂 ⊆ a → 𝐹ᴬ 𝓸 𝒂 ∈ a
+
+module _ {i j k : Level} {S : Signature i j} where
+  -- To keep A at same universe level as ∃ P , B, force P to live in the same universe
+  -- We need to do this so that both A and ∃ P , B can be classified by the same predicate SClo
+  data _is-supalgebra-of_ (A : Algebra k S) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k)) where
+    mem : {P : Pred ∣ A ∣ k} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)} →
+            ((o : ∣ S ∣) → (x : ⟦ S ⟧ o → ∃ P) → ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣)) →
+          A is-supalgebra-of (∃ P , B)
+
+  _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
+  B is-subalgebra-of A = A is-supalgebra-of B
 
 module _ {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
   SubunivAlg : Algebra k S
@@ -107,22 +118,6 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
 -- i.e., ∀ i₁ ->  ∣ f ∣ 𝒂 i₁ = args i₁.
 -- Sine f : Hom 𝑨 𝑩, we have
 -- (⟦ 𝑩 ⟧ 𝓸) args = (⟦ 𝑩 ⟧ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Image ∣ f ∣ 
-
--- RIP typechecker 19??-2020
-data HClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-  hbase : {A : Algebra k S} → A ∈ K → A ∈ HClo K
-  hhom : {A B : Algebra k S} {f : Hom A B} →
-    A ∈ HClo K → B ∈ HClo K → SubunivAlg {i} {j} {k} {S} {B} {HomImage {i} {j} {k} {S} {A} {B} f}
-      (hom-image-is-sub {i} {j} {k} {S} {A} {B} f) ∈ HClo K
-
-
-data VClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-  vbase : {A : Algebra k S} → A ∈ K → A ∈ VClo K
-  vprod : {I : Set k} {A : I → Algebra _ S} → (∀ i → A i ∈ VClo K) → Π A ∈ VClo K
-  vsub : ∀ {A : Algebra _ S} {B : Algebra _ S} → A ∈ VClo K → B is-subalgebra-of A → B ∈ VClo K
-  vhom : {A B : Algebra k S} {f : Hom A B} →
-    A ∈ VClo K → B ∈ VClo K → SubunivAlg {i} {j} {k} {S} {B} {HomImage {i} {j} {k} {S} {A} {B} f}
-      (hom-image-is-sub {i} {j} {k} {S} {A} {B} f) ∈ VClo K
 
 module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
 
