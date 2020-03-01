@@ -23,7 +23,7 @@ For example, here's the start of the first Agda source file in our library, whic
 
    {-# OPTIONS --without-K --exact-split #-}
 
-     --`without-K` disables Streicher's K axiom; see "Note on axiom K" 
+   --`without-K` disables Streicher's K axiom; see "Note on axiom K" 
      --            of the ualib documentation (ualib.org).
      --
      --`exact-split` makes Agda to only accept definitions with the
@@ -33,35 +33,25 @@ For example, here's the start of the first Agda source file in our library, whic
    module Preliminaries where
 
    -- Export common imports
-   open import Level public
-   open import Data.Product using (∃; _,_) public
+   open import Level public renaming (suc to lsuc ; zero to lzero)
+   open import Data.Empty using (⊥) public
+   open import Data.Bool using (Bool) public
+   --open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
+   open import Data.Product using (∃; _,_; _×_) public
      renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
-   open import Relation.Unary using (Pred; _∈_; _⊆_) public
-   open import Relation.Binary.PropositionalEquality using (_≡_; refl) public
+
+   open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
+   open import Relation.Binary public
+   import Relation.Binary.PropositionalEquality as Eq
+   open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public
+   open Eq.≡-Reasoning public
    open import Function using (_∘_) public
+   open import Agda.Builtin.Nat public
+     renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 
 We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
-The remainder of the ``Preliminaries.agda`` file gives 2 alternative notations for the same simple concept.
-
-.. code-block:: agda
-
-   --1--
-   _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
-     ->   (A -> B)
-     ->   Pred B k
-	 ---------------
-     ->   Set (i ⊔ k)
-   _∈∈_ {A = A} f S = (x : A) -> f x ∈ S
-
-   --2--
-   im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
-     ->    (A -> B)
-     ->    Pred B k
-	 -------------------
-     ->    Set (i ⊔ k)
-   im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
-
+The full ``Preliminaries.agda`` file, which defines other notation and objects we will use throughout the library, appears in the appendix :ref:`preliminaries.agda`. We will describe each of the objects defined therein as they come up in later sections.
 
 -----------------------------------
 
@@ -76,8 +66,11 @@ The contents of the  agda-ualib_ file ``Basic.agda`` are as follows:
 
 .. code-block:: agda
 
+   {-# OPTIONS --without-K --exact-split #-}
+
    open import Preliminaries
-     using (Level; lzero; lsuc;_⊔_; ∃; _,_)
+     using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool;
+	    _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
 
    module Basic where
 
@@ -89,25 +82,86 @@ The contents of the  agda-ualib_ file ``Basic.agda`` are as follows:
      π : {I : Set i} {A : Set j} → I → Op I A
      π i x = x i
 
-   -- i is the universe in which the carrier lives
+   -- i is the universe in which the operation symbols lives
    -- j is the universe in which the arities live
-   Signature : (i j : Level) → Set (lsuc (i ⊔ j))
+   Signature : (i j : Level) → Set _
    Signature i j = ∃ λ (F : Set i) → F → Set j
 
+   private
+     variable
+       i j : Level
+
    -- k is the universe in which the operational type lives
-   Algebra : {i j : Level}
-	     (k : Level)  ->  Signature i j
+   Algebra : (k : Level)  ->  Signature i j
 	     -------------------------------
-     ->      Set (i ⊔ j ⊔ lsuc k)
+     ->      Set _
    Algebra k (𝐹 , ρ) =
      ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
+
+   private
+     variable
+       k l m : Level
+       S : Signature i j
+
+   -- Indexed product of algebras is an algebra
+   -- The trick is to view the Pi-type as a dependent product i.e.
+   -- A i1 × A i2 × A i3 × ... = (i : I) → A i
+   Π : {I : Set m} → (I → Algebra k S) → Algebra (k ⊔ m) S
+   Π {I = I} A = ((i : I) → ∣ A i ∣) , λ 𝓸 x i → ⟦ A i ⟧ 𝓸 λ j → x j i
+
+   -- Keep I at the same universe as A so that both A and Π A can
+   -- be classified by PClo
+   data PClo {i j k l} {S : Signature i j} (K : Pred (Algebra k S) l) :
+     Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+       pbase : {A : Algebra _ S} -> A ∈ K -> A ∈ PClo K
+       prod : {I : Set k} {A : I -> Algebra _ S}
+	 ->   (∀ i -> A i ∈ PClo K) -> Π A ∈ PClo K
+
+   -- Subalgebras
+   module _ {i j k : Level} {S : Signature i j} where
+     -- To keep A at same universe level as ∃ P , B, force P to live
+     -- in the same universe. We need to do this so that both A and
+     -- ∃ P , B can be classified by the same predicate SClo.
+     data _is-supalgebra-of_ (A : Algebra k S) :
+       Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k))
+       where
+       mem : {P : Pred ∣ A ∣ k} {B : (o : ∣ S ∣) -> Op (⟦ S ⟧ o) (∃ P)}
+	 ->  ((o : ∣ S ∣) -> (x : ⟦ S ⟧ o -> ∃ P)
+	   -> ∣ B o x ∣ ≡ ⟦ A ⟧ o (λ i → ∣ x i ∣))
+	 ->  A is-supalgebra-of (∃ P , B)
+
+     _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
+     B is-subalgebra-of A = A is-supalgebra-of B
+
+     data SClo (K : Pred (Algebra k S) l) :
+       Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l))
+       where
+       sbase : {A : Algebra _ S} -> A ∈ K -> A ∈ SClo K
+       sub : ∀ {A : Algebra _ S} {B : Algebra _ S}
+	 ->  A ∈ SClo K
+	 ->  B is-subalgebra-of A
+	 ->  B ∈ SClo K
+
+   --Example: monoid
+   --  A monoid signature has two operation symbols, say, `e`
+   --  and `·`, of arities 0 and 2, of types `(Empty -> A) -> A`
+   --  and `(Bool -> A) -> A`, resp. The types indicate that `e`
+   --  is nullary (i.e., takes no args, equivalently, takes args
+   --  of type `Empty -> A`), while `·` is binary, as indicated
+   --  by argument type `Bool -> A`.
+
+   data monoid-op : Set where
+     e : monoid-op
+     · : monoid-op
+
+   monoid-sig : Signature _ _
+   monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
 
 .. _signatures in agda:
 
 Signatures in Agda
 ~~~~~~~~~~~~~~~~~~~~~
 
-   
 Notice that, when importing ``Data.Product``, we renamed ``proj₁`` to ``∣_∣`` and ``proj₂`` to ``⟦_⟧``.  Consequently, if e.g. ``S : Signature i j``, then
 
   ``∣ S ∣`` = the set of operation symbols (which we sometimes call ``𝑭``), and
@@ -115,23 +169,6 @@ Notice that, when importing ``Data.Product``, we renamed ``proj₁`` to ``∣_�
   ``⟦ S ⟧`` = the arity function (which we sometimes call ``ρ``).
 
 If  ``𝓸 : ∣ S ∣``  is an operation symbol of the signature ``S``, then ``⟦ S ⟧ 𝓸`` denotes the arity of ``𝓸``.
-
-.. For example, the signature of a monoid could be implemented like so.
-
-.. .. code-block:: agda
-
-   ..
-      data monoid-op : Set where
-	e : monoid-op
-	· : monoid-op
-
-      monoid-sig : signature 
-      monoid-sig =
-	record
-	  { _Ω = ℕ
-	  ; _𝓕 = monoid-op
-	  ; _ρ = λ {e -> 0; · -> 2}
-	  }
 
 
 .. _operations in agda:
@@ -179,49 +216,47 @@ We will have much to say about this type later.  For now, we continue setting do
 Homomorphisms in Agda
 ----------------------
 
-The file called ``Hom.agda`` in agda-ualib_ implements the notions **homomorphism** and **equalizer**, as follows:
+The file called ``Hom.agda`` in agda-ualib_ implements the notions **homomorphism** and **equalizer**. Here are the contents of ``Hom.agda``.
 
 .. code-block:: agda
 
+   {-# OPTIONS --without-K --exact-split #-}
+
    open import Preliminaries
-     using (Level; ∃; _,_; ∣_∣; _≡_; refl; _∘_; Pred)
    open import Basic
 
    module Hom where
 
    private
      variable
-       i j k : Level
+       i j k l m : Level
        S : Signature i j
+       𝑨 : Algebra k S
+       𝑩 : Algebra l S
+       𝑪 : Algebra m S
 
    --The category of algebras Alg with morphisms as Homs
-
-   Hom : Algebra k S -> Algebra k S -> Set _
-   Hom {S = 𝑭 , ρ} (A , 𝑨) (B , 𝑩) =
-       ∃ λ (f : A -> B) -> (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
+   Hom : Algebra k S -> Algebra l S -> Set _
+   Hom {S = F , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) =
+       ∃ λ (f : A -> B) -> (𝓸 : F) (𝒂 : ρ 𝓸 -> A)
 	-----------------------------------------
-	 ->    f (𝑨 𝓸 𝒂) ≡ 𝑩 𝓸 (f ∘ 𝒂)
+	 ->    f (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᴮ 𝓸 (f ∘ 𝒂)
 
    id : (𝑨 : Algebra k S) -> Hom 𝑨 𝑨
    id (A , 𝑨) = (λ x -> x) , λ _ _ -> refl
 
-   private
-     variable
-       𝑨 𝑩 : Algebra k S
-
-   _>>>_ : {𝑪 : Algebra k S}
-
-     ->   Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
-	 -------------------------
+   _>>>_ : {S : Signature i j} {𝑨 : Algebra k S}
+	   {𝑩 : Algebra l S} {𝑪 : Algebra m S}
+     ->    Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
+	   ---------------------
      ->         Hom 𝑨 𝑪
-
-   _>>>_ {S = 𝑭 , ρ} {𝑨 = (A , 𝑭ᴬ)} {𝑪 = (C , 𝑭ᶜ)}
+   _>>>_ {S = F , ρ} {𝑨 = A , 𝐹ᴬ} {𝑪 = C , 𝐹ᶜ}
 	 (f , α) (g , β) = g ∘ f , γ
 	   where
-	     γ :    (𝓸 : 𝑭) (𝒂 : ρ 𝓸 -> A)
-		  ---------------------------------------
-	       ->   (g ∘ f) (𝑭ᴬ 𝓸 𝒂) ≡ 𝑭ᶜ 𝓸 (g ∘ f ∘ 𝒂)
-	     γ 𝓸 𝒂 rewrite α 𝓸 𝒂 = β 𝓸 (f ∘ 𝒂)
+	   γ :    (𝓸 : F) (𝒂 : ρ 𝓸 -> A)
+		---------------------------------------
+	     ->   (g ∘ f) (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᶜ 𝓸 (g ∘ f ∘ 𝒂)
+	   γ 𝓸 𝒂 rewrite α 𝓸 𝒂 = β 𝓸 (f ∘ 𝒂)
 
    -- Equalizers in Alg
    _~_ : Hom 𝑨 𝑩 → Hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ _
@@ -285,106 +320,106 @@ We define a type for **isomorphism** for each of the three flavors of algebra da
 Congruence relations in Agda
 ---------------------------------
 
-Next we wish to define a type for congruence relations. For this we need functions that test whether a given operation or term is **compatible** with a given relation. 
+Next we define a type for congruence relations. For this we define functions that test whether a given operation or term is **compatible** with a given relation. The notions are defined in the file ``Con.agda``, the contents of which are shown below.
 
-Again, we develop the notions for each of our algebra datatypes.
+.. code-block:: agda
 
-#. **Congruences for algebras with carriers of type** ``Set``.
+   {-# OPTIONS --without-K --exact-split #-}
 
-   .. code-block:: agda
+   open import Preliminaries
+   open import Basic 
+   open import Hom
 
-      lift-rel : {ℓ : Level} {Idx : Set} {X : Set}
-	->         Rel X ℓ
-		-----------------
-	->       Rel (Idx -> X) ℓ
-      lift-rel R = λ args₁ args₂ -> ∀ i -> R (args₁ i) (args₂ i)
+   module Con {i j k : Level} {S : Signature i j}  where
 
-      compatible-fun : ∀{α γ : Set}
-	->   ((γ -> α) -> α)  ->  (Rel α zero)  ->  Set
-      compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
+   -- lift a binary relation from pairs to pairs of tuples.
+   lift-rel : ∀{ℓ₁ : Level} {Idx : Set ℓ₁} {ℓ₂ : Level} {Z : Set ℓ₂}
+    ->         Rel Z ℓ₂
+	    -----------------
+    ->       Rel (Idx -> Z) (ℓ₁ ⊔ ℓ₂)
+   lift-rel R = λ args₁ args₂ -> ∀ i -> R (args₁ i) (args₂ i)
 
-      -- relation compatible with an operation
-      compatible : ∀ {S : signature}
-	->  (A : algebra S)  ->   S 𝓕  
-	->   Rel ⟦ A ⟧ᵤ zero  ->  Set _
-      compatible A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
+   -- compatibility of a give function-relation pair
+   compatible-fun : ∀ {ℓ₁ ℓ₂ : Level} {γ : Set ℓ₁} {Z : Set ℓ₂}
+    ->             ((γ -> Z) -> Z)
+    ->             (Rel Z ℓ₂)
+		  -----------------------------------------
+    ->             Set (ℓ₁ ⊔ ℓ₂)
+   compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
 
-      -- relation compatible with all operations of an algebra
-      compatible-alg : ∀ {S : signature}
-	->  (A : algebra S) -> Rel ⟦ A ⟧ᵤ zero -> Set _
-      compatible-alg {S} A 𝓻 = ∀ 𝓸 -> compatible A 𝓸 𝓻
+   -- relation compatible with an operation
+   compatible : (𝑨 : Algebra k S)
+    ->         ∣ S ∣
+    ->         Rel ∣ 𝑨 ∣ k
+	     -------------------------------
+    ->         Set (j ⊔ k)
+   compatible 𝑨 𝓸 𝓻 =
+    (lift-rel {j} {⟦ S ⟧ 𝓸} {k} {∣ 𝑨 ∣}  𝓻) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ 𝓻
 
-      -- Congruence relations
-      record con {S : signature} (A : algebra S) : Set₁ where
-        field
-	  ⟦_⟧ᵣ : Rel ⟦ A ⟧ᵤ zero
-	  equiv : IsEquivalence ⟦_⟧ᵣ
-	  compat : compatible-alg A ⟦_⟧ᵣ
+   -- relation compatible with all operations of an algebra
+   compatible-alg : (𝑨 : Algebra k S)
+    ->            Rel ∣ 𝑨 ∣ k
+		------------------------------
+    ->             Set (i ⊔ j ⊔ k)
+   compatible-alg 𝑨 𝓻 = ∀ 𝓸 -> compatible 𝑨 𝓸 𝓻
 
-#. **Congruences for algebras with carriers of type** ``Pred (S Ω) zero``.
+   -- Congruence relations
+   Con : (𝑨 : Algebra k S)
+	 -----------------------
+    ->    Set (i ⊔ j ⊔ lsuc k)
+   --  ->    Set (lsuc i ⊔ lsuc j ⊔ lsuc k)
+   Con 𝑨 = ∃ λ (θ : Rel ∣ 𝑨 ∣ k)
+	    -> IsEquivalence θ × compatible-alg 𝑨 θ
 
-   .. code-block:: agda
+   con : (𝑨 : Algebra k S)
+	 -----------------------
+    ->   Pred (Rel ∣ 𝑨 ∣ k) _
+   con 𝑨 = λ θ → IsEquivalence θ × compatible-alg 𝑨 θ
+	  --  -> 
+   record Congruence (𝑨 : Algebra k S) : Set (i ⊔ j ⊔ lsuc k) where
+    constructor mkcon
+    field
+      ∥_∥ : Rel ∣ 𝑨 ∣ k
+      Compatible : compatible-alg 𝑨 ∥_∥
+      IsEquiv : IsEquivalence ∥_∥
+   open Congruence 
 
-      compatibleP : ∀ {S : signature}
-	->  (A : algebraP S)  ->   S 𝓕  
-	->   Rel (S Ω) zero  ->  Set _
-      compatibleP A 𝓸 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧ₒ) ]⇒ 𝓻
+   --a single θ-class of A
+   [_]_ : {A : Set k} -> (a : A) -> Rel A k -> Pred A _
+   [ a ] θ = λ x → θ a x
 
-      compatible-algP : ∀ {S : signature}
-	->  (A : algebraP S) -> Rel (S Ω) zero -> Set _
-      compatible-algP {S} A 𝓻 = ∀ 𝓸 -> compatibleP A 𝓸 𝓻
-
-      record conP {S : signature} (A : algebraP S) : Set₁ where
-	field
-	  𝓡 : Rel (S Ω) zero     -- type 𝓡 as `\MCR`
-	  equivP : IsEquivalence 𝓡
-	  compatP : compatible-algP A 𝓡
-
-#. **Congruences for algebras with carriers of type** ``Setoid``.
-
-   .. code-block:: agda
-
-      Compatible : ∀ {S : signature}
-	->            S 𝓕  ->  (A : Algebra S)
-	->            Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
-      Compatible 𝓸 A 𝓻 = (lift-rel 𝓻) =[ (A ⟦ 𝓸 ⟧) ]⇒ 𝓻
-
-      Compatible-Alg : ∀ {S : signature}
-	-> (A : Algebra S) -> Rel (Carrier ⟦ A ⟧ᵣ) zero -> Set _
-      Compatible-Alg {S} A 𝓻 = ∀{𝓸 : S 𝓕} -> Compatible 𝓸 A 𝓻
-
-
-      record Con {S : signature} (A : Algebra S) : Set₁ where
-	field
-	  ⟦_⟧ᵣ : Rel (Carrier ⟦ A ⟧ᵣ) zero
-	  equiv : IsEquivalence ⟦_⟧ᵣ
-	  compat : Compatible-Alg A ⟦_⟧ᵣ
-
--------------------------------------------
-
-.. _quotients in agda:
-
-Quotients in Agda
----------------------
-
-   .. code-block:: agda
-
-      open Con
+   --the collection of θ-classes of A
+   _//_ : (A : Set k) -> Rel A k -> Set _
+   A // θ = ∃ λ (C : Pred A _) -> (∃ λ a -> C ≡ [ a ] θ)
 
 
-      Quotient : {S : signature} (A : Algebra S) -> (θ : Con A) -> Algebra S
+   _/_ : (𝑨 : Algebra k S)
+    ->  Congruence 𝑨
+       -----------------------
+    ->  Algebra (lsuc k) S
+   𝑨 / θ = ( ( ∣ 𝑨 ∣ // ∥ θ ∥ ) , -- carrier
+	     ( λ 𝓸 args        -- operations
+		 -> ( [ ⟦ 𝑨 ⟧ 𝓸 (λ i₁ -> ∣ ⟦ args i₁ ⟧ ∣) ] ∥ θ ∥ ) ,
+		    ( ⟦ 𝑨 ⟧ 𝓸 (λ i₁ -> ∣ ⟦ args i₁ ⟧ ∣) , refl )
+	     )
+	   )
 
-      Quotient A θ =
-	record {
+   _IsHomImageOf_ : (𝑩 : Algebra (lsuc k) S)
+    ->             (𝑨 : Algebra k S)
+    ->             Set _
+   𝑩 IsHomImageOf 𝑨 =
+    ∃ λ (θ : Rel ∣ 𝑨 ∣ k) -> con 𝑨 θ
+      ->   (∣ 𝑨 ∣ // θ) ≃ ∣ 𝑩 ∣
 
-	  ⟦_⟧ᵣ = record {
-		  Carrier = Carrier ⟦ A ⟧ᵣ ;
-		  _≈_ = ⟦ θ ⟧ᵣ;
-		  isEquivalence = equiv θ } ;
+   HomImagesOf : Algebra k S -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+   HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 IsHomImageOf 𝑨 
 
-	  _⟦_⟧ = A ⟦_⟧ }
+   _IsHomImageOfClass_ : Algebra (lsuc k) S -> Pred (Algebra k S) k -> Set _
+   𝑩 IsHomImageOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
 
-
+   HomImagesOfClass : Pred (Algebra k S) k
+     ->               Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+   HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 IsHomImageOf 𝑨
 
 ----------------------------
 
