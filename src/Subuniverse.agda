@@ -153,10 +153,13 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   --    so Sg^𝑨(Y) ⊆ TermImageY ∎
   TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
   TermImage Y = λ (a : ∣ 𝑨 ∣ )
-    ->          ∃ λ (ta : Term × ( X -> ∣ 𝑨 ∣ ) )
-    ->          (∀ x -> ⟦ ta ⟧ x ∈ Y)
-              -----------------------------
-    ->          a ≡ (∣ ta ∣ ̇ 𝑨) ⟦ ta ⟧
+     --    ->          ∃ λ (ta : Term × ( X -> ∣ 𝑨 ∣ ) )
+    ->          ∃ λ (𝒕 : Term)
+    ->          a ≡ evalt 𝒕
+      where
+        evalt : ∣ 𝑨 ∣ -> Term -> ∣ 𝑨 ∣
+        evalt a (generator x) = a  -- ∃ λ (arg : X -> ∣ 𝑨 ∣ ) -> (a ≡ arg x)
+        evalt a (node 𝓸 𝒕) = ∃ λ (args : ⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ ) -> (a ≡ (⟦ 𝑨 ⟧ 𝓸) ((λ i -> (𝒕 i) ̇ 𝑨) Fork args))
 
   TermHelper : {𝓸 : ∣ S ∣} -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred (⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ ) (i ⊔ j ⊔ k)
   TermHelper {𝓸} Y = λ (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
@@ -180,9 +183,15 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     ->               (𝒂 ∈ TermHelper Y)
                    ----------------------------------------
     ->               ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ TermImage Y
-  TermHelper3 {𝓸} Y 𝒂 TIH = {!!} , {!!}
+  TermHelper3 {𝓸} Y 𝒂 TIH =
+    let TH2 = TermHelper2 Y 𝒂 TIH in {!!} , {!!}
+    -- (node 𝓸 (λ i -> ∣ ∣ TH2 i ∣ ∣ ) , ⟦ ∣ TH2 _ ∣ ⟧) , λ x → cong ( ⟦ 𝑨 ⟧ 𝓸 )  ((∀-extensionality-ℓ₁-ℓ₂) λ x₁ → refl)
+    -- (node 𝓸 (λ a -> ∣ TIH ∣ Fork a) , {!!}) , {!!}
 
-
+-- We have, for each 𝒂 i, a term 𝒕 : i -> term and
+-- args : i -> (X -> ∣ 𝑨 ∣ ) such that 𝒂 i = (𝒕 i) (args i).
+-- But we need to combine these terms (easy: node 𝓸 𝒕)
+-- AND the arguments so that args : X -> ∣ 𝑨 ∣.
   
   --1. TermImage is a subuniverse
   TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
