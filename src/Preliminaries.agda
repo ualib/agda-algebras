@@ -20,10 +20,10 @@ open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Empty using (⊥) public
 open import Data.Bool using (Bool) public
 --open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
-open import Data.Product using (∃; _,_; _×_) public
+open import Data.Product using (∃; _,_; _×_;Σ-syntax) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 
-open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
+open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂; ⋃) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public

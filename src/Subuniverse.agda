@@ -1,7 +1,7 @@
 --File: Subuniverse.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
---Up6 
+--Updated: 26 Feb 2020
 --Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
@@ -9,6 +9,7 @@
 open import Preliminaries
 open import Basic
 open import Free
+open import Hom
 
 module Subuniverse where
 
@@ -36,7 +37,7 @@ module _ {i j k : Level} {S : Signature i j} where
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
   B is-subalgebra-of A = A is-supalgebra-of B
 
-module _ {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
+module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
   SubunivAlg : Algebra k S
   SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
   --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
@@ -59,8 +60,13 @@ module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
       ------------------
       → ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X
 
-sgIsSub : (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
+sgIsSub : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
 sgIsSub _ 𝓸 𝒂 α = app 𝓸 α
+
+-- Even though sgIsSub {i} {j} {k} {k} {S} {𝑨} X has type Sg X ∈ Subuniverses 𝑨
+-- SubunivAlg refuses to take it as an argument!!! What's going on???
+--postulate hom-sg-to-fun : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S} {𝑩 : Algebra l S} {X : Pred ∣ 𝑨 ∣ k} → Hom (SubunivAlg {i} {j} {k} {S} {𝑨} {B = Sg X} (sgIsSub ?)) 𝑩 → (∃ X → ∣ 𝑩 ∣)
+--hom-sg-to-fun = {!!}
 
 -- WARNING: if you move X into the scope of sgIsSmallest, you get the following error:
 -- "An internal error has occurred. Please report this as a bug.
@@ -95,8 +101,6 @@ module _ {m : Level} {I : Set l} {A : I → Pred ∣ 𝑨 ∣ m} where
 
 -- Hom is subuniverse
 
-open import Hom
-
 module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
   HomImage : ∣ 𝑩 ∣ -> Set k
   HomImage = λ b -> Image ∣ f ∣ ∋ b
@@ -119,7 +123,7 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
 -- Sine f : Hom 𝑨 𝑩, we have
 -- (⟦ 𝑩 ⟧ 𝓸) args = (⟦ 𝑩 ⟧ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Image ∣ f ∣ 
 
-module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X Y : Set k) where
+module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X : Set k) where
 
   -- Subuniverses are closed under the action of term operations.
   sub-term-closed : B ∈ Subuniverses 𝑨
@@ -147,65 +151,36 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y. ☐
   --   So, we prove Sg^{𝑨}(Y) ⊆ { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } following these steps:
   -- 1. The image of Y under all terms, `TermImage Y`, is a subuniverse of 𝑨.
-  --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) ≤ 𝑨.
+  --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) Y ≤ 𝑨.
   -- 2. Y ⊆ TermImageY (obvious)
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
   --    so Sg^𝑨(Y) ⊆ TermImageY ∎
-  TermImage : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)
-  TermImage Y = λ (a : ∣ 𝑨 ∣ )
-     --    ->          ∃ λ (ta : Term × ( X -> ∣ 𝑨 ∣ ) )
-    ->          ∃ λ (𝒕 : Term)
-    ->          a ≡ evalt 𝒕
-      where
-        evalt : ∣ 𝑨 ∣ -> Term -> ∣ 𝑨 ∣
-        evalt a (generator x) = a  -- ∃ λ (arg : X -> ∣ 𝑨 ∣ ) -> (a ≡ arg x)
-        evalt a (node 𝓸 𝒕) = ∃ λ (args : ⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ ) -> (a ≡ (⟦ 𝑨 ⟧ 𝓸) ((λ i -> (𝒕 i) ̇ 𝑨) Fork args))
 
-  TermHelper : {𝓸 : ∣ S ∣} -> Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) -> Pred (⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ ) (i ⊔ j ⊔ k)
-  TermHelper {𝓸} Y = λ (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
-    ->          ∃ λ (𝒕𝒂 :  ⟦ S ⟧ 𝓸 -> Term )
-    ->          ∃ λ (args :  ⟦ S ⟧ 𝓸 -> ( X -> ∣ 𝑨 ∣ ) )
-    ->          ∀ i -> (∀ x -> (args i) x ∈ Y)
-              -----------------------------
-    ->           𝒂 i ≡ ( (𝒕𝒂 i)  ̇ 𝑨) (args i)
-
-
-  TermHelper2 : {𝓸 : ∣ S ∣} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
-    ->               (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
-    ->               (𝒂 ∈ TermHelper Y)
-                   ----------------------------------------
-    ->               (∀ i -> (𝒂 i) ∈ TermImage Y)
-  TermHelper2 {𝓸} Y 𝒂 TIH = λ i₁ ->
-     (∣ TIH ∣ i₁ ,  ∣ ⟦ TIH ⟧ ∣ i₁) , λ x ->  ⟦ ⟦ TIH ⟧ ⟧ i₁ x
-
-  TermHelper3 : {𝓸 : ∣ S ∣} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
-    ->               (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ )
-    ->               (𝒂 ∈ TermHelper Y)
-                   ----------------------------------------
-    ->               ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ TermImage Y
-  TermHelper3 {𝓸} Y 𝒂 TIH =
-    let TH2 = TermHelper2 Y 𝒂 TIH in {!!} , {!!}
-    -- (node 𝓸 (λ i -> ∣ ∣ TH2 i ∣ ∣ ) , ⟦ ∣ TH2 _ ∣ ⟧) , λ x → cong ( ⟦ 𝑨 ⟧ 𝓸 )  ((∀-extensionality-ℓ₁-ℓ₂) λ x₁ → refl)
-    -- (node 𝓸 (λ a -> ∣ TIH ∣ Fork a) , {!!}) , {!!}
-
--- We have, for each 𝒂 i, a term 𝒕 : i -> term and
--- args : i -> (X -> ∣ 𝑨 ∣ ) such that 𝒂 i = (𝒕 i) (args i).
--- But we need to combine these terms (easy: node 𝓸 𝒕)
--- AND the arguments so that args : X -> ∣ 𝑨 ∣.
+  _ForkTerm_ : {𝓸 : ∣ S ∣ } -> (⟦ S ⟧ 𝓸 -> Term) -> (⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
+    ->          ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣
+  𝒕 ForkTerm args = (λ i -> ((𝒕 i) ̇ 𝑨) (args i))
   
-  --1. TermImage is a subuniverse
-  TermImageSub : (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k))
-                -------------------------------
-    ->           TermImage Y ∈ Subuniverses 𝑨
-  TermImageSub Y 𝓸 𝒂 ta =
-    let tt = λ x₁ -> ∣ ∣ ta x₁ ∣ ∣ in 
-    let ttA = λ x₁ -> (∣ ∣ ta x₁ ∣ ∣ ̇ 𝑨) in 
-    let Args = λ x₁ -> ⟦ ∣ ta x₁ ∣ ⟧ in
-    let pf = λ x₁ -> ⟦ ta x₁ ⟧ in 
-    let TFA = ttA Fork Args in
-    let 𝒂' = ⟦ 𝑨 ⟧ 𝓸 Eval TFA in
-    let fin = ⟦ 𝑨 ⟧ 𝓸 𝒂 ≡ 𝒂' in ( node 𝓸 tt ,  {!!} ) , λ x → cong (⟦ 𝑨 ⟧ 𝓸) {!!}
+  data TermImage (Y : Pred ∣ 𝑨 ∣ k) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) where
+    var : ∀ {y : ∣ 𝑨 ∣} -> y ∈ Y -> y ∈ TermImage Y
+    app : (𝓸 : ∣ S ∣) (𝒕 : ⟦ S ⟧ 𝓸 -> Term)(𝒔 : ⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
+      ->  (∀ i x -> 𝒔 i x ∈ TermImage Y)
+         -------------------------------------------
+      ->  (⟦ 𝑨 ⟧ 𝓸 (𝒕 ForkTerm 𝒔)) ∈ TermImage Y
 
+  --     -- General construction of an element of TermImage:
+  const : ∣ 𝑨 ∣ -> X -> ∣ 𝑨 ∣
+  const a = λ x -> a
+
+  -- To decide if a ∈ ∣ 𝑨 ∣ is constructable by terms acting on a subset Y ⊆ ∣ 𝑨 ∣,
+  -- we should be able to construct a as follows:
+  -- either a ∈ Y, in which case a ≡ generator x  (x ↦ a)
+  -- or a ∉ Y, and there ∃ t : Term where
+  -- t = node 𝓸 tt and ∃ y : ⟦ S ⟧ 𝓸 -> TermImage Y
+  -- a ≡ ⟦ 𝑨 ⟧ 𝓸 tt Fork y
+
+  --1. TermImage is a subuniverse
+  TermImageIsSub : (Y : Pred ∣ 𝑨 ∣ k) → TermImage Y ∈ Subuniverses 𝑨
+  TermImageIsSub Y 𝓸 𝒂 x = {!!}
 
   -- We must show TY := { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } is a subalgebra.
   -- That is,  ∀ 𝓸 : ∣ S ∣, if args : ⟦ S ⟧ 𝓸 -> TY, then ⟦ 𝑨 ⟧ 𝓸 args ∈ TY.
@@ -224,15 +199,15 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   --
  
   --2. Y ⊆ TermImageY
-  Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
-  Y⊆TermImageY {x} Y {a} a∈Y = ( generator x , (λ x -> a) ) , λ x₁ → refl
+  -- Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
+  -- Y⊆TermImageY {x} Y {a} a∈Y = ( generator x , (λ x -> a) ) , λ x₁ → refl
   
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y
   --    Proof: see `sgIsSmallest`
 
   --Finally, we can prove the desired inclusion.
-  SgY⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Sg Y ⊆ TermImage Y
-  SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageSub Y) (Y⊆TermImageY{x} Y)
+  -- SgY⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Sg Y ⊆ TermImage Y
+  -- SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageSub Y) (Y⊆TermImageY{x} Y)
 
   -- We should now be able to prove the following (if we wanted to):
   -- SgY≃TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> (Sg Y) ≃ (TermImage Y)
