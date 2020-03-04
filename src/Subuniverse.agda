@@ -174,9 +174,9 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   -- To decide if a ∈ ∣ 𝑨 ∣ is constructable by terms acting on a subset Y ⊆ ∣ 𝑨 ∣,
   -- we should be able to construct a as follows:
   -- either a ∈ Y, in which case a ≡ generator x  (x ↦ a)
-  -- or a ∉ Y, and there ∃ t : Term where
-  -- t = node 𝓸 tt and ∃ y : ⟦ S ⟧ 𝓸 -> TermImage Y
-  -- a ≡ ⟦ 𝑨 ⟧ 𝓸 tt Fork y
+  -- or a ∉ Y, and ∃ t : Term where
+  --   t = node 𝓸 tt, and ∃ y : ⟦ S ⟧ 𝓸 -> TermImage Y and
+  --   a ≡ ⟦ 𝑨 ⟧ 𝓸 tt Fork y
 
   --1. TermImage is a subuniverse
   TermImageIsSub : (Y : Pred ∣ 𝑨 ∣ k) → TermImage Y ∈ Subuniverses 𝑨
