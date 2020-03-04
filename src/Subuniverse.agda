@@ -148,7 +148,7 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   --   in the left. The formalization is given by `sub-term-closed`; it proves
   --      Sg^{𝑨}(Y) ⊇ { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y }.
   --   On the other hand, the RHS is a subuniverse that contains Y (take t = x₁), so
-  --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y. ☐
+  --   contains Sg^{𝑨}(Y), as the latter is the smallest subuniverse containing Y.
   --   So, we prove Sg^{𝑨}(Y) ⊆ { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } following these steps:
   -- 1. The image of Y under all terms, `TermImage Y`, is a subuniverse of 𝑨.
   --    That is, TermImageY = ⋃{𝒕:Term} Image (𝒕 ̇ 𝑨) Y ≤ 𝑨.

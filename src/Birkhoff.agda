@@ -2,7 +2,8 @@
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 23 Feb 2020
 --UPDATED: 26 Feb 2020
---Notes: Based on the file `birkhoff.agda` (23 Jan 2020).
+--NOTATION: see notes at bottom of Preliminaries.agda
+--NOTES: Based on the file `birkhoff.agda` (23 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split #-}
 

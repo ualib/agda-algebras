@@ -481,6 +481,24 @@ f Comp g = λ 𝒂𝒂 → f Eval (g Fork 𝒂𝒂)
 -- MISC NOTES
 --============
 --
+-- SPECIAL NOTATIONS (and how to type them)
+-- ----------------------------------------
+--
+-- Levels              | ℓ₁, ℓ₂, etc.  |   `\ell\_1`, `\ell\_2`, etc.
+-- Structures          | 𝑨, 𝑩, etc.    | `\MIA`, `\MIB`, etc.
+-- Free/Term algebra   | 𝔉             | `\MfF`
+-- Sets of structures  | 𝓐, 𝓚, etc.  | `\MCA`, `\MCK`, etc.
+-- Operation Symbols   | 𝓸, etc.       | `\MCo`, etc.
+-- Interpr. of term t  | t ̇ 𝑨         | `t \^. \MIA`
+-- Interpr. of op 𝓸   | 𝓸 ̂ 𝑨         | `\MCo \^ \MIA`
+-- Vectors/tuples      | 𝒂, 𝒕, etc.     | `\MIa`, `\MIt`, etc.
+-- First projection    | proj₁ or  ∣ ∣   | `proj\_1` or `\|` `\|`
+-- Second projection:  | proj₂ or ⟦ ⟧   | `proj\_2` or `\[[` `\]]`
+-- Embedding           | ≲             | `\<~`
+-- Isomorphism of sets | ≃             | `\~-`
+--
+-- ---------
+--
 -- When importing `Data.Product` we rename `proj₁` to `∣_∣` and `proj₂` to `⟦_⟧`.
 -- If, e.g., `S : Signature i j`, then
 --   ∣ S ∣ = the set of operation symbols (which we used to call 𝓕).

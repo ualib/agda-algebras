@@ -62,3 +62,12 @@ data monoid-op : Set where
 
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
+
+-- Binary product of algebras
+_⊗_ : Algebra k S -> Algebra k S -> Algebra k S
+𝑨 ⊗ 𝑩 = (∣ 𝑨 ∣ × ∣ 𝑩 ∣) , λ 𝓸 x → ( ⟦ 𝑨 ⟧ 𝓸 (λ i -> ∣ x i ∣ ) , ⟦ 𝑩 ⟧ 𝓸 (λ i -> ⟦ x i ⟧ ) )
+
+-- General product of algebras
+⊗ : {ℓ : Level} {I : Set ℓ} -> (I -> Algebra k S) -> Algebra (ℓ ⊔ k) S
+⊗ 𝓐 = ( ∀ i -> ∣ (𝓐 i) ∣) , λ 𝓸 x i → ⟦ 𝓐 i ⟧ 𝓸 λ j -> (x j i)
+-- (  , λ 𝓸 x → ? )
