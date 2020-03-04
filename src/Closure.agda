@@ -16,7 +16,6 @@ data PClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) :
   Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
     pbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
     prod : {I : Set k} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → ⊗ 𝓐 ∈ PClo 𝓚
---    prod : {I : Set k} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → Π 𝓐 ∈ PClo 𝓚
 
 -- Subalgebras
 module _ {i j k l : Level} {S : Signature i j} where
@@ -48,16 +47,17 @@ module _ {i j k l m} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set 
     -- Goal: (p ̇ ⊗ 𝓐) x ≡ (q ̇ ⊗ 𝓐) x
     begin
       (p ̇ ⊗ 𝓐) x
-    ≡⟨ {!!} ⟩
+    ≡⟨ iterp-prod p 𝓐 x ⟩
       (λ i -> (p ̇ (𝓐 i))(λ j -> x j i))
-    ≡⟨ {!!} ⟩
+    ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x₂ → {!!}) ⟩
       (λ i -> (q ̇ (𝓐 i))(λ j -> x j i))
-    ≡⟨ {!!} ⟩
+    ≡⟨ sym (iterp-prod q 𝓐 x)  ⟩
       (q ̇ ⊗ 𝓐) x
     ∎
 
-  -- Goal: (p ̇ ⊗ 𝓐) x ≡ (q ̇ ⊗ 𝓐) x
+  -- Goal: (p ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂) ≡ (q ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂)
   -- ————————————————————————————————————————————————————————————
+  -- x₂ : I
   -- x  : X → ∣ ⊗ 𝓐 ∣
   -- x₁ : (i₁ : I) → 𝓐 i₁ ∈ PClo 𝓚
   -- α  : 𝓚 ⊢ p ≋ q
