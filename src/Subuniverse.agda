@@ -167,10 +167,6 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
          -------------------------------------------
       ->  (⟦ 𝑨 ⟧ 𝓸 (𝒕 ForkTerm 𝒔)) ∈ TermImage Y
 
-  --     -- General construction of an element of TermImage:
-  const : ∣ 𝑨 ∣ -> X -> ∣ 𝑨 ∣
-  const a = λ x -> a
-
   -- To decide if a ∈ ∣ 𝑨 ∣ is constructable by terms acting on a subset Y ⊆ ∣ 𝑨 ∣,
   -- we should be able to construct a as follows:
   -- either a ∈ Y, in which case a ≡ generator x  (x ↦ a)
