@@ -17,7 +17,7 @@ module Preliminaries where
 
 -- Export common imports
 open import Level public renaming (suc to lsuc ; zero to lzero)
-open import Data.Empty using (⊥) public
+open import Data.Empty using (⊥; ⊥-elim) public
 open import Data.Bool using (Bool) public
 --open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
 open import Data.Product using (∃; _,_; _×_;Σ-syntax) public

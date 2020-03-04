@@ -15,7 +15,7 @@ open import Hom
 data PClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) :
   Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
     pbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
-    prod : {I : Set k} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → ⊗ 𝓐 ∈ PClo 𝓚
+    prod : {I : Set k} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → Π 𝓐 ∈ PClo 𝓚
 
 -- Subalgebras
 module _ {i j k l : Level} {S : Signature i j} where
@@ -38,21 +38,21 @@ data VClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) : Pred (Al
     𝑨 ∈ VClo 𝓚 → 𝑩 ∈ VClo 𝓚 → SubunivAlg {S = S} {𝑩} {HomImage {S = S} {𝑨} {𝑩} f}
       (hom-image-is-sub {S = S} {𝑨} {𝑩} f) ∈ VClo 𝓚
 
-module _ {i j k l m} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set m) where
+module _ {i j k l} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set k) where
   open import Free{S = S}{X = X}
 
   pclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (PClo 𝓚 ⊢ p ≋ q)
-  pclo-id1 {p} α (pbase x) = α x
+  pclo-id1 {p} {q} α (pbase x) = α x
   pclo-id1 {p} {q} α (prod{I}{𝓐} x₁) = extensionality λ x -> 
-    -- Goal: (p ̇ ⊗ 𝓐) x ≡ (q ̇ ⊗ 𝓐) x
+    -- Goal: (p ̇ Π 𝓐) x ≡ (q ̇ Π 𝓐) x
     begin
-      (p ̇ ⊗ 𝓐) x
+      (p ̇ Π 𝓐) x
     ≡⟨ iterp-prod p 𝓐 x ⟩
       (λ i -> (p ̇ (𝓐 i))(λ j -> x j i))
-    ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x₂ → {!!}) ⟩
+    ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x₂ → {!!})  ⟩ 
       (λ i -> (q ̇ (𝓐 i))(λ j -> x j i))
     ≡⟨ sym (iterp-prod q 𝓐 x)  ⟩
-      (q ̇ ⊗ 𝓐) x
+      (q ̇ Π 𝓐) x
     ∎
 
   -- Goal: (p ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂) ≡ (q ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂)
