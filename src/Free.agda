@@ -124,7 +124,7 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x -> (args x ̇ 𝑨) 𝒂 }
 
--- Recall (cf. Theorem 4.32 of Bergman)
+-- Recall (cf. UAFST Thm 4.32)
 -- Theorem 1.
 -- Let A and B be algebras of type S. Then the following hold:
 -- 1. For every n-ary term t and homomorphism g: A —> B, 
@@ -167,6 +167,9 @@ compatible-term 𝑨 (generator x) θ p = p x
 compatible-term 𝑨 (node 𝓸 args) θ p =
   ⟦ ⟦ θ ⟧ ⟧ 𝓸 λ{ x -> (compatible-term 𝑨 (args x) θ) p }
 
+-- For proof of item (3), see `TermImageSub` in Subuniverse.agda.
+
+------------------------------------------------------------------
 _⊢_≈_ : ∀ {l} → Algebra l S → Term → Term → Set _
 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 
@@ -176,7 +179,14 @@ _⊢_≋_ {l} K p q = {𝑨 : Algebra l S} → 𝑨 ∈ K → 𝑨 ⊢ p ≈ q
 ---------------------------------------------------------
 
 
+  -- const : ∣ 𝑨 ∣ -> X -> ∣ 𝑨 ∣
+  -- const a = λ x -> a
+-- module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S}(X : Set k) where
 
+--   _ForkTerm_ : {𝓸 : ∣ S ∣ }-> (⟦ S ⟧ 𝓸 -> Term) -> (⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
+--     ->          ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣
+--   𝒕 ForkTerm args = (λ i -> ((𝒕 i) ̇ 𝑨) (args i))
+  
 
 
 

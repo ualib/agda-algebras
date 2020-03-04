@@ -20,10 +20,10 @@ open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Empty using (⊥) public
 open import Data.Bool using (Bool) public
 --open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
-open import Data.Product using (∃; _,_; _×_) public
+open import Data.Product using (∃; _,_; _×_;Σ-syntax) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 
-open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂) public
+open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂; ⋃) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public
@@ -445,6 +445,15 @@ f Fork 𝒂𝒂 = λ i -> (f i)(𝒂𝒂 i)
 -- 𝒂𝒂 : (i : I) -> (J i -> A)
 -- f : (i : I) -> (J i -> A) -> A
 -- forkA f 𝒂𝒂 : I -> A 
+-- Suppose we have
+-- 𝒂 : ∀ i -> X -> ∣ 𝑨 ∣ and
+-- 𝒕 : ∀ i -> Term so that
+-- ∀ i -> (𝒕 i) (𝒂 i) : ∣ 𝑨 ∣
+-- Now consider ⟦ 𝑨 ⟧ 𝓸 (𝒕 0 𝒂 0, ..., 𝒕 k 𝒂 k).
+-- We want to express this as a single term 𝒕𝒕 and a single
+-- argument 𝒂𝒂 as follows:
+-- ⟦ 𝑨 ⟧ 𝓸 𝒕𝒕 𝒂𝒂 ≡ ⟦ 𝑨 ⟧ 𝓸 (𝒕 0 𝒂 0, ..., 𝒕 k 𝒂 k)
+-- The right hand side is ⟦ 𝑨 ⟧ 𝓸 (𝒕 Fork 𝒂)
 
 ------------------------------------------------------------------------------
 --EVAL. Function application on types A and B.
