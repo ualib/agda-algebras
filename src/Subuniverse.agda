@@ -169,16 +169,18 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
   --2. Y ⊆ TermImageY
-  -- Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
-  -- Y⊆TermImageY {x} Y {a} a∈Y = ( generator x , (λ x -> a) ) , λ x₁ → refl
+  Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ k) -> Y ⊆ TermImage Y
+  Y⊆TermImageY {x} Y {a} a∈Y = var a∈Y
+  -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
   
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y
   --    Proof: see `sgIsSmallest`
 
   --Finally, we can prove the desired inclusion.
-  -- SgY⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Sg Y ⊆ TermImage Y
-  -- SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageSub Y) (Y⊆TermImageY{x} Y)
+  SgY⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ k) -> Sg Y ⊆ TermImage Y
+  SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x} Y)
 
-  -- We should now be able to prove the following (if we wanted to):
-  -- SgY≃TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> (Sg Y) ≃ (TermImage Y)
+  -- Now we should be able to prove something like the following
+  -- (if we wanted to bother generalizing the relation ≃ to predicates):
+  -- SgY≃TermImageY : (Y : Pred ∣ 𝑨 ∣ k) ->  (TermImage Y) ≃ (Sg Y)
   -- SgY≃TermImageY {x} Y = ? 
