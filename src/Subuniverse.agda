@@ -156,44 +156,18 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y (see `sgIsSmallest`)
   --    so Sg^𝑨(Y) ⊆ TermImageY ∎
 
-  _ForkTerm_ : {𝓸 : ∣ S ∣ } -> (⟦ S ⟧ 𝓸 -> Term) -> (⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
-    ->          ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣
-  𝒕 ForkTerm args = (λ i -> ((𝒕 i) ̇ 𝑨) (args i))
-  
   data TermImage (Y : Pred ∣ 𝑨 ∣ k) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k) where
     var : ∀ {y : ∣ 𝑨 ∣} -> y ∈ Y -> y ∈ TermImage Y
-    app : (𝓸 : ∣ S ∣) (𝒕 : ⟦ S ⟧ 𝓸 -> Term)(𝒔 : ⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
-      ->  (∀ i x -> 𝒔 i x ∈ TermImage Y)
+    app : (𝓸 : ∣ S ∣) (𝒕 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣)
+      ->  (∀ i -> 𝒕 i ∈ TermImage Y)
          -------------------------------------------
-      ->  (⟦ 𝑨 ⟧ 𝓸 (𝒕 ForkTerm 𝒔)) ∈ TermImage Y
-
-  -- To decide if a ∈ ∣ 𝑨 ∣ is constructable by terms acting on a subset Y ⊆ ∣ 𝑨 ∣,
-  -- we should be able to construct a as follows:
-  -- either a ∈ Y, in which case a ≡ generator x  (x ↦ a)
-  -- or a ∉ Y, and ∃ t : Term where
-  --   t = node 𝓸 tt, and ∃ y : ⟦ S ⟧ 𝓸 -> TermImage Y and
-  --   a ≡ ⟦ 𝑨 ⟧ 𝓸 tt Fork y
+      ->  (⟦ 𝑨 ⟧ 𝓸 𝒕) ∈ TermImage Y
 
   --1. TermImage is a subuniverse
   TermImageIsSub : (Y : Pred ∣ 𝑨 ∣ k) → TermImage Y ∈ Subuniverses 𝑨
-  TermImageIsSub Y 𝓸 𝒂 x = {!!}
+  TermImageIsSub Y  = λ 𝓸 𝒂 x → app 𝓸 𝒂 x
+  -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
-  -- We must show TY := { 𝒕^𝑨 𝒂 : 𝒕 ∈ Term{X}, 𝒂 : X -> Y } is a subalgebra.
-  -- That is,  ∀ 𝓸 : ∣ S ∣, if args : ⟦ S ⟧ 𝓸 -> TY, then ⟦ 𝑨 ⟧ 𝓸 args ∈ TY.
-  -- args : ⟦ S ⟧ 𝓸 -> TY means, ∀ i -> ∃ ∣ taᵢ ∣ : Term × ( X -> ∣ 𝑨 ∣ )
-  --   ->   (∀ x -> ⟦ ∣ taᵢ ∣ ⟧ x ∈ Y)  ->  args i ≡ (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧
-  -- It follows that 
-  --   ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> args i) ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧)
-  -- Remains to show ∃ TA such that ∣ ∣ TA ∣ ∣ : Term and ⟦ ∣ TA ∣ ⟧ : X -> ∣ 𝑨 ∣ satisfy:
-  --   ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (∣ ∣ TA ∣ ∣ ̇ 𝑨) ⟦ ∣ TA ∣ ⟧
-  -- 
-  -- Since args : ⟦ S ⟧ 𝓸 -> TY and ∀ i -> ∣ ∣ taᵢ ∣ ∣ , ⟦ ∣ taᵢ ∣ ⟧ satisfy
-  --    args i ≡ (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧,
-  -- we have, by ∀-extensionality, args ≡ λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧
-  -- Then, by cong (⟦ 𝑨 ⟧ 𝓸) we have the desired equivalence:
-  -- ⟦ 𝑨 ⟧ 𝓸 args ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i -> (∣ ∣ taᵢ ∣ ∣ ̇ 𝑨) ⟦ ∣ taᵢ ∣ ⟧)
-  --
- 
   --2. Y ⊆ TermImageY
   -- Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k)) -> Y ⊆ TermImage Y
   -- Y⊆TermImageY {x} Y {a} a∈Y = ( generator x , (λ x -> a) ) , λ x₁ → refl

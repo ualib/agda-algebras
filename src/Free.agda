@@ -181,6 +181,12 @@ _⊢_≋_ {l} K p q = {𝑨 : Algebra l S} → 𝑨 ∈ K → 𝑨 ⊢ p ≈ q
 
   -- const : ∣ 𝑨 ∣ -> X -> ∣ 𝑨 ∣
   -- const a = λ x -> a
+-- module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S}(X : Set k) where
+
+--   _ForkTerm_ : {𝓸 : ∣ S ∣ }-> (⟦ S ⟧ 𝓸 -> Term) -> (⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
+--     ->          ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣
+--   𝒕 ForkTerm args = (λ i -> ((𝒕 i) ̇ 𝑨) (args i))
+  
 
 
 
