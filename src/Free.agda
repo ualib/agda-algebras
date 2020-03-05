@@ -124,14 +124,14 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x -> (args x ̇ 𝑨) 𝒂 }
 
-iterp-prod : {ℓ : Level}{I : Set ℓ}
+interp-prod : {ℓ : Level}{I : Set ℓ}
   ->         (p : Term)
   ->         (𝓐 : I -> Algebra ℓ S)
   ->         (x : X -> ∀ i -> ∣ (𝓐 i) ∣)
   ->         (p ̇ Π 𝓐) x ≡ (λ i → (p ̇ 𝓐 i) (λ j -> x j i))
-iterp-prod (generator x₁) 𝓐 x = refl
-iterp-prod (node 𝓸 𝒕) 𝓐 x =
-  let IH = λ x₁ -> iterp-prod (𝒕 x₁) 𝓐 x in
+interp-prod (generator x₁) 𝓐 x = refl
+interp-prod (node 𝓸 𝒕) 𝓐 x =
+  let IH = λ x₁ -> interp-prod (𝒕 x₁) 𝓐 x in
     begin
       ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x)
     ≡⟨ cong (⟦ Π 𝓐 ⟧ 𝓸 ) (extensionality IH) ⟩
@@ -140,6 +140,24 @@ iterp-prod (node 𝓸 𝒕) 𝓐 x =
       (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
     ∎
 
+
+interp-prod2 : {ℓ : Level}{I : Set ℓ}
+  ->         (p : Term)
+  ->         (𝓐 : I -> Algebra ℓ S)
+  ->         p ̇ Π 𝓐 ≡ λ (args : X -> ∣ Π 𝓐 ∣ ) ->
+                          (λ i → (p ̇ 𝓐 i) (λ x -> args x i))
+interp-prod2 (generator x₁) 𝓐 = refl
+interp-prod2 (node 𝓸 𝒕) 𝓐 = extensionality λ x -> 
+  let IH = λ x₁ -> interp-prod (𝒕 x₁) 𝓐 x in 
+    -- Goal: ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x) ≡
+    --       (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ x₂ → x x₂ i₁)))
+    begin
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x)
+    ≡⟨ cong (⟦ Π 𝓐 ⟧ 𝓸 ) (extensionality IH) ⟩
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ≡⟨ refl ⟩
+      (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ∎
 
 
 -- Recall (cf. UAFST Thm 4.32)

@@ -23,8 +23,8 @@ private
 Subuniverses : {S : Signature i j} → (𝑨 : Algebra k S) →
               ---------------------------------------
                Pred (Pred ∣ 𝑨 ∣ l) (i ⊔ j ⊔ k ⊔ l)
-Subuniverses {S = 𝐹 , ρ} (A , 𝐹ᴬ) a =        -- type \MiF\^A for 𝐹ᴬ
-  (𝓸 : 𝐹) (𝒂 : ρ 𝓸 → A) → Im 𝒂 ⊆ a → 𝐹ᴬ 𝓸 𝒂 ∈ a
+Subuniverses {S = S} 𝑨 B =
+  (𝓸 : ∣ S ∣ ) -> (𝒂 : ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣ ) ->  Im 𝒂 ⊆ B → ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ B
 
 module _ {i j k : Level} {S : Signature i j} where
   -- To keep A at same universe level as ∃ P , B, force P to live in the same universe
@@ -60,7 +60,8 @@ module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
       ------------------
       → ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Sg X
 
-sgIsSub : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S} (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
+sgIsSub : ∀ {i j k l} {S : Signature i j} {𝑨 : Algebra k S}
+          (X : Pred ∣ 𝑨 ∣ l) → Sg X ∈ Subuniverses 𝑨
 sgIsSub _ 𝓸 𝒂 α = app 𝓸 α
 
 -- Even though sgIsSub {i} {j} {k} {k} {S} {𝑨} X has type Sg X ∈ Subuniverses 𝑨

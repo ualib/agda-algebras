@@ -14,8 +14,10 @@ open import Hom
 -- Keep I at the same universe as A so that both A and Π A can be classified by PClo
 data PClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) :
   Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
-    pbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
+    pbase : {𝑨 : Algebra k S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
     prod : {I : Set k} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → Π 𝓐 ∈ PClo 𝓚
+
+module _ {i j k l : Level} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) where
 
 -- Subalgebras
 module _ {i j k l : Level} {S : Signature i j} where
@@ -43,41 +45,39 @@ module _ {i j k l} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set k)
 
   pclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (PClo 𝓚 ⊢ p ≋ q)
   pclo-id1 {p} {q} α (pbase x) = α x
-  pclo-id1 {p} {q} α (prod{I}{𝓐} x₁) = extensionality λ x -> 
-    -- Goal: (p ̇ Π 𝓐) x ≡ (q ̇ Π 𝓐) x
-    begin
-      (p ̇ Π 𝓐) x
-    ≡⟨ iterp-prod p 𝓐 x ⟩
-      (λ i -> (p ̇ (𝓐 i))(λ j -> x j i))
-    ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x₂ → {!!})  ⟩ 
-      (λ i -> (q ̇ (𝓐 i))(λ j -> x j i))
-    ≡⟨ sym (iterp-prod q 𝓐 x)  ⟩
-      (q ̇ Π 𝓐) x
-    ∎
+  pclo-id1 {p} {q} α (prod{I}{𝓐} x₁) =
+      begin
+        (p ̇ Π 𝓐)
+      ≡⟨ interp-prod2 p 𝓐 ⟩
+        (λ (args : X -> ∣ Π 𝓐 ∣ ) -> (λ i₁ → (p ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
+      ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x
+           -> ∀-extensionality-ℓ₁-ℓ₂ λ x₂
+                -> cong-app ((pclo-id1{p}{q} α) (x₁ x₂))
+                     (λ x₃ → x x₃ x₂)) ⟩
+        (λ (args : X -> ∣ Π 𝓐 ∣ ) -> (λ i₁ → (q ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
+      ≡⟨ sym (interp-prod2 q 𝓐) ⟩
+        (q ̇ Π 𝓐)
+      ∎
 
-  -- Goal: (p ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂) ≡ (q ̇ 𝓐 x₂) (λ j₁ → x j₁ x₂)
-  -- ————————————————————————————————————————————————————————————
-  -- x₂ : I
-  -- x  : X → ∣ ⊗ 𝓐 ∣
-  -- x₁ : (i₁ : I) → 𝓐 i₁ ∈ PClo 𝓚
-  -- α  : 𝓚 ⊢ p ≋ q
-  -- q  : Term
-  -- p  : Term
-  -- X  : Set m
-  -- 𝓚  : Pred (Algebra k S) l
-  -- 𝓐  : I → Algebra k S
-  -- I  : Set k
+  sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
+  sclo-id1 {p} {q} α (sbase x) = α x
+  sclo-id1 {p} {q} α (sub{𝑨}{𝑩} 𝑨∈SClo𝓚 (mem B≤𝑨)) =
+    let 𝑨⊢p≈q = (sclo-id1{p}{q} α) 𝑨∈SClo𝓚 in 
+      begin
+        p ̇ 𝑩
+      ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x → {!!}) ⟩
+        q ̇ 𝑩
+      ∎
 
-  -- pclo-id1 {p} α (pbase 𝑨∈𝓚) = α 𝑨∈𝓚
-  -- pclo-id1 {p} {q} α Π∈𝓚 = {!!} -- (prod {𝑨 = 𝑨} Π∈𝓚) = ?
-    --extensionality λ a →
-    --let β i = intensionality (pclo-id1 {p} {q} α (Π∈𝓚 i)) λ x → a x i in
-    --{!!}
+  hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
+  hclo-id1 {p} {q} α (hbase x) = α x
+  hclo-id1 {p} {q} α (hhom x x₁) = {!!}
 
-  postulate
-    sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
-    hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
-    vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
+  vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
+  vclo-id1 {p} {q} α (vbase x) = α x
+  vclo-id1 {p} {q} α (vprod x₁) = {!!}
+  vclo-id1 {p} {q} α (vsub x x₁) = {!!}
+  vclo-id1 {p} {q} α (vhom x x₁) = {!!}
 
   pclo-id2 : ∀ {p q} → (PClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   pclo-id2 p 𝑨∈𝓚 = p (pbase 𝑨∈𝓚)
