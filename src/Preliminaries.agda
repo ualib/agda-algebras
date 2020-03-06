@@ -49,6 +49,13 @@ Im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
   ->    Set (i ⊔ k)
 Im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
 
+img : {k : Level} {X : Set k} {A : Set k}
+  ->  (x : X -> A) -> (P : Pred A k)
+  ->  Im x ⊆ P
+  ->  X -> ∃ P
+img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
+
+
 ----------------------------
 --EXTENSIONALITY Postulate
 ----------------------------
@@ -114,7 +121,6 @@ image f = λ b -> ∃ λ a -> b ≡ f a
 --              --------------------
 --   ->           Image f ∋ b
 -- ImageIsImage {A = A} {B = B} = λ f b a b≡fa → eq b a b≡fa
-
 
 --N.B. the assertion Image f ∋ y must come with a proof, which is of the
 --form ∃a f a = y, so we have a witness, so the inverse can be "computed"

@@ -49,29 +49,87 @@ module _ {i j k l} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set k)
       begin
         (p ̇ Π 𝓐)
       ≡⟨ interp-prod2 p 𝓐 ⟩
-        (λ (args : X -> ∣ Π 𝓐 ∣ ) -> (λ i₁ → (p ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
+        (λ (args : X -> ∣ Π 𝓐 ∣ )
+          -> (λ i₁ -> (p ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
       ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x
            -> ∀-extensionality-ℓ₁-ℓ₂ λ x₂
                 -> cong-app ((pclo-id1{p}{q} α) (x₁ x₂))
                      (λ x₃ → x x₃ x₂)) ⟩
-        (λ (args : X -> ∣ Π 𝓐 ∣ ) -> (λ i₁ → (q ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
+        (λ (args : X -> ∣ Π 𝓐 ∣ )
+          -> (λ i₁ -> (q ̇ 𝓐 i₁) (λ x -> (args x) i₁)))
       ≡⟨ sym (interp-prod2 q 𝓐) ⟩
         (q ̇ Π 𝓐)
       ∎
 
   sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
   sclo-id1 {p} {q} α (sbase x) = α x
-  sclo-id1 {p} {q} α (sub{𝑨}{𝑩} 𝑨∈SClo𝓚 (mem B≤𝑨)) =
+  sclo-id1 {p} {q} α (sub{𝑨}{𝑩} 𝑨∈SClo𝓚 (mem B≤𝑨)) = 
     let 𝑨⊢p≈q = (sclo-id1{p}{q} α) 𝑨∈SClo𝓚 in 
       begin
         p ̇ 𝑩
       ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x → {!!}) ⟩
         q ̇ 𝑩
       ∎
+-- Goal: (p ̇ (∃ P , B)) x ≡ (q ̇ (∃ P , B)) x
+-- ————————————————————————————————————————————————————————————
+-- 𝑨⊢p≈q   : 𝑨 ⊢ p ≈ q
+-- 𝑩       : Algebra k S
+-- x       : X → ∃ P
+-- B≤𝑨     : (𝓸 : ∣ S ∣) (x₁ : ⟦ S ⟧ 𝓸 → ∃ P) →
+--           ∣ B 𝓸 x₁ ∣ ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i₁ → ∣ x₁ i₁ ∣)
+-- 𝑨∈SClo𝓚 : 𝑨 ∈ SClo 𝓚
+-- α       : 𝓚 ⊢ p ≋ q
+-- q       : Term
+-- p       : Term
+-- X       : Set k
+-- 𝓚       : Pred (Algebra k S) l
+-- B       : (𝓸 : ∣ S ∣) → Op (⟦ S ⟧ 𝓸) (∃ P)  (not in scope)
+-- P       : Pred ∣ 𝑨 ∣ k  (not in scope)
+-- 𝑨       : Algebra k S
+
+-- data HClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
+--   hbase : {𝑨 : Algebra k S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
+--   hhom : {𝑨 B : Algebra k S} {f : Hom 𝑨 B} →
+--     𝑨 ∈ HClo 𝓚 → B ∈ HClo 𝓚 → SubunivAlg {S = S} {B} {HomImage {S = S} {𝑨} {B} f}
+--       (hom-image-is-sub {S = S} {𝑨} {B} f) ∈ HClo 𝓚
 
   hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
   hclo-id1 {p} {q} α (hbase x) = α x
-  hclo-id1 {p} {q} α (hhom x x₁) = {!!}
+  hclo-id1 {p} {q} α (hhom{𝑨}{𝑩}{f} 𝑨∈HClo𝓚 𝑩∈HClo𝓚 ) =
+    let 𝑨⊢p≈q = (hclo-id1{p}{q} α) 𝑨∈HClo𝓚 in
+    let 𝑩⊢p≈q = (hclo-id1{p}{q} α) 𝑩∈HClo𝓚 in
+    let hyp𝑨 = cong-app (𝑨⊢p≈q)  in
+    let hyp𝑩 = cong-app (𝑩⊢p≈q)  in
+    let subuni = SubunivAlg{i}{j}{k}{S}{𝑩}{HomImage{i}{j}{k}{S}{𝑨}{𝑩} f}
+                 (hom-image-is-sub ((λ z → ∣ f ∣ z) , ⟦ f ⟧)) in 
+       begin
+         (p ̇ subuni)
+       ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x → {!!}) ⟩
+         (q ̇ subuni)
+       ∎
+       -- begin
+       --   (p ̇ SubunivAlg (hom-image-is-sub f))
+       -- ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x → {!!}) ⟩
+       --   (q ̇ SubunivAlg (hom-image-is-sub f))
+       -- ∎
+
+       -- Goal: (p ̇ SubunivAlg (hom-image-is-sub ((λ z → ∣ f ∣ z) , ⟦ f ⟧)))
+       --       x
+       --       ≡ (q ̇ SubunivAlg (hom-image-is-sub ((λ z → ∣ f ∣ z) , ⟦ f ⟧))) x
+       -- ————————————————————————————————————————————————————————————
+       -- 𝑨⊢p≈q   : 𝑨 ⊢ p ≈ q
+       -- x       : X →
+       --           ∣ SubunivAlg (hom-image-is-sub ((λ z → ∣ f ∣ z) , ⟦ f ⟧)) ∣
+       -- 𝑩∈HClo𝓚 : 𝑩 ∈ HClo 𝓚
+       -- 𝑨∈HClo𝓚 : 𝑨 ∈ HClo 𝓚
+       -- α       : 𝓚 ⊢ p ≋ q
+       -- q       : Term
+       -- p       : Term
+       -- X       : Set k
+       -- 𝓚       : Pred (Algebra k S) l
+       -- f       : Hom 𝑨 B
+       -- 𝑩       : Algebra k S
+
 
   vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
   vclo-id1 {p} {q} α (vbase x) = α x

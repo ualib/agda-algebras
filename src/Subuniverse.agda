@@ -35,22 +35,27 @@ module _ {i j k : Level} {S : Signature i j} where
           𝑨 is-supalgebra-of (∃ P , B)
 
   _is-subalgebra-of_ : Algebra _ S → Algebra _ S → Set _
-  B is-subalgebra-of A = A is-supalgebra-of B
+  𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
 
-module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
-  SubunivAlg : Algebra k S
-  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
-  --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
-
-  subuniv-to-subalg : SubunivAlg is-subalgebra-of 𝑨
-  subuniv-to-subalg = mem λ _ _ → refl
-
-module _ {i j k : Level} {S : Signature i j} where
+module _ {i j k : Level} {S : Signature i j}   where
   record Subuniverse  {𝑨 : Algebra k S} : Set (i ⊔ j ⊔ lsuc k) where
     constructor mksub
     field
       sset  : Pred ∣ 𝑨 ∣ k
       isSub : sset ∈ Subuniverses 𝑨
+
+module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {X : Set k} where
+  SubunivAlg : {B : Pred ∣ 𝑨 ∣ k} -> B ∈ Subuniverses 𝑨 -> Algebra k S
+  SubunivAlg{B} P = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
+  --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
+
+  subuniv-to-subalg : {B : Pred ∣ 𝑨 ∣ k} -> (P : B ∈ Subuniverses 𝑨) -> (SubunivAlg{B} P) is-subalgebra-of 𝑨
+  subuniv-to-subalg P = mem λ _ _ → refl
+
+  subalg-to-subuniv :  {P : Pred ∣ 𝑨 ∣ k} {B : (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) (∃ P)}
+    ->                 (∃ P , B) is-subalgebra-of 𝑨 -> P ∈ Subuniverses 𝑨
+  subalg-to-subuniv{P}{B} sub = λ 𝓸 𝒂 x → {!!}
+
 
 module _ {i j k l : Level} {S : Signature i j} {𝑨 : Algebra k S} where
   data Sg (X : Pred ∣ 𝑨 ∣ l) : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ k ⊔ l) where
@@ -124,19 +129,54 @@ module _ {S : Signature i j} {𝑨 𝑩 : Algebra k S} (f : Hom 𝑨 𝑩) where
 -- Sine f : Hom 𝑨 𝑩, we have
 -- (⟦ 𝑩 ⟧ 𝓸) args = (⟦ 𝑩 ⟧ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Image ∣ f ∣ 
 
-module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} (X : Set k) where
+module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l} {P : Pred ∣ 𝑨 ∣ k} {B : (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) (∃ P)} {X : Set k} where
 
   -- Subuniverses are closed under the action of term operations.
-  sub-term-closed : B ∈ Subuniverses 𝑨
+  sub-term-closed : P ∈ Subuniverses 𝑨
     ->              (𝒕 : Term)
-    ->              (𝒃 : X -> ∣ 𝑨 ∣)
-    ->              (∀ i -> 𝒃 i ∈ B)
+    ->              (𝒙 : X -> ∣ 𝑨 ∣)
+    ->              (∀ i -> 𝒙 i ∈ P)
                  -------------------------
-    ->              ((𝒕 ̇ 𝑨) 𝒃) ∈ B
-  sub-term-closed B≤𝑨 (generator x) 𝒃 𝒃∈B = 𝒃∈B x
-  sub-term-closed B≤𝑨 (node 𝓸 𝒕) 𝒃 𝒃∈B =
-    B≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒃) (λ x → sub-term-closed B≤𝑨 (𝒕 x) 𝒃 𝒃∈B)
+    ->              ((𝒕 ̇ 𝑨) 𝒙) ∈ P
+  sub-term-closed P≤𝑨 (generator x) 𝒙 𝒙∈P = 𝒙∈P x
+  sub-term-closed P≤𝑨 (node 𝓸 𝒕) 𝒙 𝒙∈P =
+    P≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒙) (λ x → sub-term-closed P≤𝑨 (𝒕 x) 𝒙 𝒙∈P)
     -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
+
+  subalg2subuniv = subalg-to-subuniv{i}{j}{k}{S}{𝑨}{X}{P}{B}
+  
+  interp-sub : (sub : (∃ P , B) is-subalgebra-of 𝑨)
+    ->         (p : Term)
+    ->         (x  : X -> ∣ 𝑨 ∣ )
+    ->         (Imx⊆P : Im x ⊆ P)
+    ->         (p ̇ (∃ P , B)) (img x P Imx⊆P) ≡
+               ((p ̇ 𝑨) x , sub-term-closed (subalg2subuniv sub) p x Imx⊆P )
+  interp-sub sub p x Imx⊆P = {!!}
+
+-- subalg-to-subuniv :  {P : Pred ∣ 𝑨 ∣ k} {B : (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) (∃ P)}
+--     ->                 (∃ P , B) is-subalgebra-of 𝑨 -> P ∈ Subuniverses 𝑨
+
+-- interp-sub : (𝑩 : Algebra k S)
+  --   ->         (sub : 𝑩 is-subalgebra-of 𝑨)
+  --   ->         (p : Term)
+  --   ->         (x  : X -> ∣ 𝑨 ∣ )
+  --   ->         (p ̇ 𝑩) (λ x -> P x ) ≡  (p ̇ 𝑨) x
+  -- interp-sub (generator x₁) x = {!!}
+  -- interp-sub (node 𝓸 𝒕) x = {!!}
+
+
+  -- interp-sub : {ℓ : Level}{I : Set ℓ}
+  --   ->         (p : Term) -> (𝑩 : Algebra k S)
+  --   ->         (sub : 𝑩 is-subalgebra-of 𝑨)
+  --   ->         (x  : X -> ∣ 𝑨 ∣ )
+  --   ->         Im x ⊆ ∣ 𝑩 ∣
+  --   ->         (p ̇ 𝑩) x ≡  (p ̇ 𝑨) x
+  -- interp-sub (generator x₁) x = {!!}
+  -- interp-sub (node 𝓸 𝒕) x = {!!}
+
+
+
+
 
   -- Obs 2.11 (on subuniverse generation as image of terms) (cf. UAFST Thm 4.32(3))
   -- If Y is a subset of A, then

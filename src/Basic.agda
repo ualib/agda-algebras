@@ -34,8 +34,8 @@ private
 Algebra : (k : Level)  ->  Signature i j
           -------------------------------
   ->      Set _
-Algebra k (𝐹 , ρ) =
-  ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
+Algebra k S =
+  ∃ λ (A : Set k) -> (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) A
 
 private
   variable
@@ -64,6 +64,6 @@ monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
 
 -- Binary product of algebras
-_⊗_ : Algebra k S -> Algebra k S -> Algebra k S
-𝑨 ⊗ 𝑩 = (∣ 𝑨 ∣ × ∣ 𝑩 ∣) , λ 𝓸 x → ( ⟦ 𝑨 ⟧ 𝓸 (λ i -> ∣ x i ∣ ) , ⟦ 𝑩 ⟧ 𝓸 (λ i -> ⟦ x i ⟧ ) )
-
+-- _⊗_ : Algebra k S -> Algebra k S -> Algebra k S
+-- 𝑨 ⊗ 𝑩 = (∣ 𝑨 ∣ × ∣ 𝑩 ∣) , λ 𝓸 x → ( ⟦ 𝑨 ⟧ 𝓸 (λ i -> ∣ x i ∣ ) , ⟦ 𝑩 ⟧ 𝓸 (λ i -> ⟦ x i ⟧ ) )
+-- (let's reserve ⊗ for tensor product)
