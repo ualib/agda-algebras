@@ -148,7 +148,7 @@ html_theme_options = {
 html_static_path = ['_static']
 
 html_logo = '_static/lambda.jpg'
-html_favicon = '_static/lambda.jpg'
+html_favicon = '_static/favicon.jpg'
 html_show_sourcelink = False
 #html_output_encoding = 'ascii'
 
