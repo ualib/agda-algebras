@@ -30,39 +30,8 @@ Hom 𝑨 𝑩 = ∃ λ (f : ∣ 𝑨 ∣ -> ∣ 𝑩 ∣ )
 id : (𝑨 : Algebra k S) -> Hom 𝑨 𝑨
 id (A , 𝑨) = (λ x -> x) , λ _ _ -> refl
 
--------------------------------------------------------------------------------
---KERNEL OF A FUNCTION
------------------------
 
--- ...as a relation.
-ker : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) -> Rel A ℓ₂
-ker f x y = f x ≡ f y
-
--- ...as a binary predicate.
-KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) -> Pred (A × A) ℓ₂
-KER f (x , y) = f x ≡ f y
-
-
---Isomorphism
-Iso : Algebra k S -> Algebra k S -> Set _
-Iso 𝑨 𝑩 = ∃ λ (f : Hom 𝑨 𝑩)
-  ->          ∃ λ (g : Hom 𝑩 𝑨)
-             -----------------------------
-  ->          ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ id 𝑩 ∣ × ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ id 𝑨 ∣
-
-𝟎 : (A : Set k) -> Rel A k
-𝟎 A a₁ a₂ = a₁ ≡ a₂
-
-
-AlgebraIso : (𝑨 𝑩 : Algebra k S)
-  ->           Pred (Hom 𝑨 𝑩) (lsuc k)
-AlgebraIso 𝑨 𝑩  = λ f → ker ∣ f ∣ ≡ 𝟎 ∣ 𝑨 ∣
-
-_≅_ : Rel (Algebra k S) (i ⊔ j ⊔ lsuc k)
-𝑨 ≅ 𝑩 = ∃ λ (f : Hom 𝑨 𝑩) -> f ∈ AlgebraIso 𝑨 𝑩
-
+--Homomorphism composition
 _>>>_ : Hom 𝑨 𝑩  ->  Hom 𝑩 𝑪
         ---------------------
   ->         Hom 𝑨 𝑪
@@ -74,6 +43,49 @@ f >>> g = ∣ g ∣ ∘ ∣ f ∣ , γ
       -> (∣ g ∣ ∘ ∣ f ∣ ) (⟦ 𝑨 ⟧ 𝓸 𝒂) ≡ ⟦ 𝑪 ⟧ 𝓸 (∣ g ∣ ∘ ∣ f ∣ ∘ 𝒂)
     γ 𝓸 𝒂 rewrite ⟦ f ⟧ 𝓸 𝒂 = ⟦ g ⟧ 𝓸 (∣ f ∣ ∘ 𝒂)
 
+-----------------------------------------------------------------
+--KERNEL (of a function)
+------------------------
+
+-- ...as a relation.
+ker : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Rel A ℓ₂
+ker f x y = f x ≡ f y
+
+-- ...as a binary predicate.
+KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Pred (A × A) ℓ₂
+KER f (x , y) = f x ≡ f y
+
+-----------------------------------------------------------------
+--The "trivial" or "diagonal" or "identity" relation.
+𝟎 : (A : Set k) -> Rel A k
+𝟎 A a₁ a₂ = a₁ ≡ a₂
+
+-----------------------------------------------------------------
+--Isomorphism
+Iso : Algebra k S -> Algebra k S -> Set _
+Iso 𝑨 𝑩 = ∃ λ (f : Hom 𝑨 𝑩)
+  ->          ∃ λ (g : Hom 𝑩 𝑨)
+             -----------------------------
+  ->          ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ id 𝑩 ∣ × ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ id 𝑨 ∣
+
+--For algebras, isomorphisms are simply homs with 0 kernel.
+--N.B. not true for general structures (with relations).
+AlgebraIso : (𝑨 𝑩 : Algebra k S)
+  ->           Pred (Hom 𝑨 𝑩) (lsuc k)
+AlgebraIso 𝑨 𝑩  = λ f → ker ∣ f ∣ ≡ 𝟎 ∣ 𝑨 ∣
+
+_≅_ : Rel (Algebra k S) (i ⊔ j ⊔ lsuc k)
+𝑨 ≅ 𝑩 = ∃ λ (f : Hom 𝑨 𝑩) -> f ∈ AlgebraIso 𝑨 𝑩
+
+--We could prove something like this (later)...
+-- IsoAlgebraIsAlgebraIso :  (𝑨 𝑩 : Algebra k S)
+--   ->                      (f : Hom 𝑨 𝑩)
+--   ->                      AlgebraIso 𝑨 𝑩 ⇔ Iso 𝑨 𝑩
+-- IsoAlgebraIsAlgebraIso 𝑨 𝑩 = ?
+
+-----------------------------------------------------------------
 -- Equalizers in Alg
 _~_ : Hom 𝑨 𝑩 → Hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ _
 _~_ (f , _) (g , _) x = f x ≡ g x

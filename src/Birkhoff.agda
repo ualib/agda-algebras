@@ -17,7 +17,7 @@ open import Free
 open import Subuniverse
 --open import Axiom.Extensionality.Propositional
 
-module Birkhoff {i j k : Level} {S : Signature i j}  where
+module Birkhoff {l i j k : Level} {S : Signature i j}  where
 
 -------------------------------------------------------------------------------
 --EQUALIZERS
@@ -209,10 +209,12 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 --data class-of-algebras : Set where
 
 --Hom-closed
-H-closed : (𝓚 : Pred (Algebra k S)) -> Set _
-H-closed 𝓚 = ∀ (A : Algebra S)  ->  (𝓚 A)
-  ->     (∃ θ : Con A)   ->   (∃ C : Algebra S)
-  ->     (𝓚 C) × (A / θ) ≅ C
+H-closed : (𝓚 : Pred (Algebra (k ⊔ lsuc k) S) l) -> Pred (Algebra (k ⊔ lsuc k) S) (lsuc (i ⊔ j ⊔ k ⊔ l))
+H-closed 𝓚 = λ 𝑨 → (𝓚 𝑨)
+  ->     (∃ θ : Congruence 𝑨)
+  ->     (∃ 𝑪 : Algebra (k ⊔ lsuc k) S)
+        ------------------------------
+  ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
 
 -- --Sub-closed
 -- -- SC : (𝓚 : List (algebra S)) -> Prp
