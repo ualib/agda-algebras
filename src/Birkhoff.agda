@@ -210,8 +210,8 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 
 --Hom-closed
 H-closed : (𝓚 : Pred (Algebra k S) l)
-  ->       Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l))
-H-closed 𝓚 = λ 𝑨 → (𝓚 𝑨)
+  ->       Pred (Algebra (lsuc k) S) k
+H-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / 𝟎))
   ->     (∃ θ : Congruence 𝑨)
   ->     (∃ 𝑪 : Algebra k S)
         ------------------------------

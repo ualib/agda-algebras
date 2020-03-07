@@ -8,16 +8,30 @@
 
 open import Preliminaries
 open import Basic 
-open import Hom
+-- open import Hom
 
-module Con {i j k : Level} {S : Signature i j}  where
+module Con {i j k ℓ : Level} {S : Signature i j}  where
+
+-----------------------------------------------------------------
+--The "trivial" or "diagonal" or "identity" relation.
+𝟎 : {ℓ : Level} (A : Set ℓ) -> Rel A ℓ
+𝟎 A a₁ a₂ = a₁ ≡ a₂
+
+𝟎-isEquiv : {ℓ : Level} {A : Set ℓ} -> IsEquivalence{ℓ}{ℓ}{A} (𝟎 A)
+𝟎-isEquiv =
+  record
+  { refl = λ {x} → refl
+  ; sym = sym
+  ; trans = λ {i} {j} {k} z z₁ → begin i ≡⟨ z ⟩ j ≡⟨ z₁ ⟩ k ∎
+  }
+-- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
 -- lift a binary relation from pairs to pairs of tuples.
 lift-rel : ∀{ℓ₁ : Level} {Idx : Set ℓ₁} {ℓ₂ : Level} {Z : Set ℓ₂}
-  ->         Rel Z ℓ₂
+  ->       Rel Z ℓ₂
           -----------------
   ->       Rel (Idx -> Z) (ℓ₁ ⊔ ℓ₂)
-lift-rel R = λ args₁ args₂ -> ∀ i -> R (args₁ i) (args₂ i)
+lift-rel R 𝒂₁ 𝒂₂ = ∀ i -> R (𝒂₁ i) (𝒂₂ i)
 
 -- compatibility of a give function-relation pair
 compatible-fun : ∀ {ℓ₁ ℓ₂ : Level} {γ : Set ℓ₁} {Z : Set ℓ₂}
@@ -28,13 +42,13 @@ compatible-fun : ∀ {ℓ₁ ℓ₂ : Level} {γ : Set ℓ₁} {Z : Set ℓ₂}
 compatible-fun f 𝓻 = (lift-rel 𝓻) =[ f ]⇒ 𝓻
 
 -- relation compatible with an operation
-compatible : (𝑨 : Algebra k S)
-  ->         ∣ S ∣
-  ->         Rel ∣ 𝑨 ∣ k
-           -------------------------------
-  ->         Set (j ⊔ k)
-compatible 𝑨 𝓸 𝓻 =
-  (lift-rel {j} {⟦ S ⟧ 𝓸} {k} {∣ 𝑨 ∣}  𝓻) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ 𝓻
+compatible : (𝑨 : Algebra k S) -> ∣ S ∣ -> Rel ∣ 𝑨 ∣ k -> Set (j ⊔ k)
+compatible 𝑨 𝓸 𝓻 = (lift-rel 𝓻) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ 𝓻
+--compatible 𝑨 𝓸 𝓻 = (lift-rel {j} {⟦ S ⟧ 𝓸} {k} {∣ 𝑨 ∣}  𝓻) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ 𝓻
+
+lift-𝟎 : ∀{Idx : Set k}{Z : Set ℓ} -> Rel (Idx -> Z) (k ⊔ ℓ)
+lift-𝟎{Z = Z} = lift-rel (𝟎 Z)
+--lift-𝟎{Idx}{Z} = lift-rel{k}{Idx}{ℓ}{Z} (𝟎 Z)
 
 -- relation compatible with all operations of an algebra
 compatible-alg : (𝑨 : Algebra k S)
@@ -42,6 +56,32 @@ compatible-alg : (𝑨 : Algebra k S)
               ------------------------------
   ->             Set (i ⊔ j ⊔ k)
 compatible-alg 𝑨 𝓻 = ∀ 𝓸 -> compatible 𝑨 𝓸 𝓻
+
+--The 𝟎 relation is always compatible
+--(This should be the easiest compatiblity to prove.)
+--(If it's hard, there's something wrong.)
+𝟎-isCompatible : {𝑨 : Algebra k S}
+  ->             (𝓸 : ∣ S ∣ )
+               ------------------------------------
+  ->             compatible 𝑨 𝓸 (𝟎 ∣ 𝑨 ∣)
+𝟎-isCompatible{𝑨} = λ 𝓸 x  →
+  let ans = lift-rel (𝟎 ∣ 𝑨 ∣ ) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ (𝟎 ∣ 𝑨 ∣ ) in
+    begin
+      ⟦ 𝑨 ⟧ 𝓸 _
+    ≡⟨ {!!} ⟩
+      ⟦ 𝑨 ⟧ 𝓸 _
+    ∎
+  
+-- compatible : (𝑨 : Algebra k S) -> ∣ S ∣ -> Rel ∣ 𝑨 ∣ k -> Set (j ⊔ k)
+-- compatible 𝑨 𝓸 𝓻 = (lift-rel {j} {⟦ S ⟧ 𝓸} {k} {∣ 𝑨 ∣}  𝓻) =[ (⟦ 𝑨 ⟧ 𝓸) ]⇒ 𝓻
+
+𝟎-isCompatible-alg : {𝑨 : Algebra k S}
+               ------------------------------------
+  ->             compatible-alg 𝑨 (𝟎 ∣ 𝑨 ∣)
+𝟎-isCompatible-alg{𝑨} = λ 𝓸 args -> {!!}
+  -- let i-𝓸 = ⟦ 𝑨 ⟧ 𝓸 i₁ in
+  -- let j-𝓸 = ⟦ 𝑨 ⟧ 𝓸 j₁ in
+
 
 -- Congruence relations
 Con : (𝑨 : Algebra k S)
@@ -63,6 +103,14 @@ record Congruence (𝑨 : Algebra k S) : Set (i ⊔ j ⊔ lsuc k) where
     Compatible : compatible-alg 𝑨 ∥_∥
     IsEquiv : IsEquivalence ∥_∥
 open Congruence 
+
+--The "trivial" or "diagonal" or "identity" relation.
+⟦𝟎⟧ : (𝑨 : Algebra k S) -> Congruence 𝑨
+⟦𝟎⟧ 𝑨 = mkcon (𝟎 ∣ 𝑨 ∣)
+              (λ 𝓸 x → {!!})
+              (𝟎-isEquiv )
+
+
 
 --a single θ-class of A
 [_]_ : {A : Set k} -> (a : A) -> Rel A k -> Pred A _
