@@ -209,7 +209,8 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 --data class-of-algebras : Set where
 
 --Hom-closed
-H-closed : (𝓚 : Pred (Algebra (k ⊔ lsuc k) S) l) -> Pred (Algebra (k ⊔ lsuc k) S) (lsuc (i ⊔ j ⊔ k ⊔ l))
+H-closed : (𝓚 : Pred (Algebra (k ⊔ lsuc k) S) l)
+  ->       Pred (Algebra (k ⊔ lsuc k) S) (lsuc (i ⊔ j ⊔ k ⊔ l))
 H-closed 𝓚 = λ 𝑨 → (𝓚 𝑨)
   ->     (∃ θ : Congruence 𝑨)
   ->     (∃ 𝑪 : Algebra (k ⊔ lsuc k) S)
