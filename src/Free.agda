@@ -64,30 +64,29 @@ free-lift {𝑨 = 𝑨} h (node 𝓸 args) =
 
 -- 1.b. The lift is a hom.
 --lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S}
-lift-hom : ∀ {l} {𝑨 : Algebra l S}
-  ->       (h : X -> ∣ 𝑨 ∣)
+lift-hom : {𝑨 : Algebra k S} (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
-  ->       Hom 𝔉 𝑨
+  ->       Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨
 lift-hom {𝑨 = 𝑨} h = free-lift {𝑨 = 𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
-free-unique : ∀ {l} {𝑨 : Algebra l S}
-  ->    ( f g : Hom 𝔉 𝑨 )
+free-unique : {𝑨 : Algebra k S}
+  ->    ( f g : Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
        ---------------------------
   ->    ∣ f ∣ t ≡ ∣ g ∣ t
 
 free-unique f g p (generator x) = p x
-free-unique {l} {𝑨} f g p (node 𝓸 args) =
+free-unique {𝑨} f g p (node 𝓸 args) =
    begin
      ( ∣ f ∣ )(node 𝓸 args)
    ≡⟨ ⟦ f ⟧ 𝓸 args ⟩
      (⟦ 𝑨 ⟧ 𝓸) (λ i -> ∣ f ∣ (args i))
    ≡⟨ cong (⟦ 𝑨 ⟧ _)
-        (∀-extensionality-ℓ₁-ℓ₂ {j} {l}
+        (∀-extensionality-ℓ₁-ℓ₂ {j} 
           ( λ i -> free-unique {𝑨 = 𝑨} f g p (args i))
         )
     ⟩
@@ -136,7 +135,8 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
 comm-hom-term : ∀ {l m} → (𝑨 : Algebra l S) (𝑩 : Algebra m S)
-  ->            (g : Hom 𝑨 𝑩) -> (𝒕 : Term)
+  ->            (g : Hom{i}{j}{m}{m}{m}{S}{𝑩}{𝑩}{𝑩}{l}{m} 𝑨 𝑩)
+  ->            (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
   ->            ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
@@ -177,24 +177,6 @@ _⊢_≋_ : ∀ {l m} → Pred (Algebra l S) m → Term → Term → Set _
 _⊢_≋_ {l} K p q = {𝑨 : Algebra l S} → 𝑨 ∈ K → 𝑨 ⊢ p ≈ q
 
 ---------------------------------------------------------
-
-
-  -- const : ∣ 𝑨 ∣ -> X -> ∣ 𝑨 ∣
-  -- const a = λ x -> a
--- module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S}(X : Set k) where
-
---   _ForkTerm_ : {𝓸 : ∣ S ∣ }-> (⟦ S ⟧ 𝓸 -> Term) -> (⟦ S ⟧ 𝓸 -> X -> ∣ 𝑨 ∣ )
---     ->          ⟦ S ⟧ 𝓸 -> ∣ 𝑨 ∣
---   𝒕 ForkTerm args = (λ i -> ((𝒕 i) ̇ 𝑨) (args i))
-  
-
-
-
-
-
-
-
-
 
 
 
