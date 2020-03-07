@@ -19,20 +19,6 @@ open import Subuniverse
 module Birkhoff {i j k : Level} {S : Signature i j}  where
 
 -------------------------------------------------------------------------------
---KERNEL OF A FUNCTION
------------------------
-
--- ...as a relation.
-ker : {ℓ₁ ℓ₂ ℓ₃ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) -> Rel A ℓ₂
-ker f x y = f x ≡ f y
-
--- ...as a binary predicate.
-KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
-  ->  (f : A -> B) -> Pred (A × A) ℓ₂
-KER f (x , y) = f x ≡ f y
-
--------------------------------------------------------------------------------
 --EQUALIZERS
 -------------
 
@@ -221,11 +207,11 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 
 --data class-of-algebras : Set where
 
--- --Hom-closed
--- H-closed : (𝓚 : Pred (algebra S)) -> Prp
--- H-closed 𝓚 = ∀ (A : algebra S)  ->  (𝓚 A)
---   ->     (∃ θ : Con A)   ->   (∃ C : algebra S)
---   ->     (𝓚 C) ∧ (A / θ ≅ C)
+--Hom-closed
+H-closed : (𝓚 : Pred (Algebra k S)) -> Set _
+H-closed 𝓚 = ∀ (A : Algebra S)  ->  (𝓚 A)
+  ->     (∃ θ : Con A)   ->   (∃ C : Algebra S)
+  ->     (𝓚 C) × (A / θ) ≅ C
 
 -- --Sub-closed
 -- -- SC : (𝓚 : List (algebra S)) -> Prp
