@@ -209,21 +209,13 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 --data class-of-algebras : Set where
 
 --Hom-closed
-H-closed : (𝓚 : Pred (Algebra (k ⊔ lsuc k) S) l)
-  ->       Pred (Algebra (k ⊔ lsuc k) S) (lsuc (i ⊔ j ⊔ k ⊔ l))
+H-closed : (𝓚 : Pred (Algebra k S) l)
+  ->       Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l))
 H-closed 𝓚 = λ 𝑨 → (𝓚 𝑨)
   ->     (∃ θ : Congruence 𝑨)
-  ->     (∃ 𝑪 : Algebra (k ⊔ lsuc k) S)
+  ->     (∃ 𝑪 : Algebra k S)
         ------------------------------
   ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
-
--- --Sub-closed
--- -- SC : (𝓚 : List (algebra S)) -> Prp
--- -- SC 𝓚 = ∀(A : algebra S) -> (contains 𝓚 A)
--- --   -> (B : subalgebra A) -> (∃ C : algebra S)
--- --   -> (contains 𝓚 C) ∧ B ≃ C
-
-
 
 -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
 -- satisfies exaxtly the same set of identities as does 𝒦.
