@@ -8,7 +8,6 @@
 
 open import Preliminaries
 open import Basic 
--- open import Hom
 
 module Con where
 

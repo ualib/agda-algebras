@@ -8,14 +8,11 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import Preliminaries
---  using (Level; lsuc; _⊔_; _,_; ∣_∣; ⟦_⟧; Pred; _∈_; _∈∈_;im_⊆_; _⊆_)
-
 open import Basic
 open import Hom
 open import Con
 open import Free
 open import Subuniverse
---open import Axiom.Extensionality.Propositional
 
 module Birkhoff {l i j k : Level} {S : Signature i j}  where
 
