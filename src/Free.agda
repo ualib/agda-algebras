@@ -66,14 +66,14 @@ free-lift {𝑨 = 𝑨} h (node 𝓸 args) =
 --lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S}
 lift-hom : {𝑨 : Algebra k S} (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
-  ->       Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨
+  ->       Hom 𝔉 𝑨
 lift-hom {𝑨 = 𝑨} h = free-lift {𝑨 = 𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
 free-unique : {𝑨 : Algebra k S}
-  ->    ( f g : Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨 )
+  ->    ( f g : Hom 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
        ---------------------------
@@ -171,7 +171,7 @@ interp-prod2 (node 𝓸 𝒕) 𝓐 = extensionality λ x ->
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
 comm-hom-term : ∀ {l m} → (𝑨 : Algebra l S) (𝑩 : Algebra m S)
-  ->            (g : Hom{i}{j}{m}{m}{m}{S}{𝑩}{𝑩}{𝑩}{l}{m} 𝑨 𝑩)
+  ->            (g : Hom 𝑨 𝑩)
   ->            (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
@@ -196,7 +196,7 @@ compatible-term : (𝑨 : Algebra k S)
   ->              (𝒕 : Term)
   ->              (θ : Con 𝑨)
                  ------------------------------------
-  ->              compatible-fun {i} {j} {k} {S} (𝒕 ̇ 𝑨) ∣ θ ∣
+  ->              compatible-fun (𝒕 ̇ 𝑨) ∣ θ ∣
   -- wjd: I don't know why this ^^^^^^^^^^^^^^^^^ combination
   --      of implicit vars works... very weird.
 compatible-term 𝑨 (generator x) θ p = p x

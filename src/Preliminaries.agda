@@ -30,6 +30,7 @@ open import Function using (_∘_) public
 open import Agda.Builtin.Nat public
   renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 
+
 _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   (A -> B)
   ->   Pred B k
@@ -50,6 +51,20 @@ img : {k : Level} {X : Set k} {A : Set k}
   ->  X -> ∃ P
 img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
 
+
+-------------------------------------------------------------------------------
+--KERNEL OF A FUNCTION
+-----------------------
+
+-- ...as a relation.
+ker : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Rel A ℓ₂
+ker f x y = f x ≡ f y
+
+-- ...as a binary predicate.
+KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Pred (A × A) ℓ₂
+KER f (x , y) = f x ≡ f y
 
 ----------------------------
 --EXTENSIONALITY Postulate
@@ -587,4 +602,6 @@ f Comp g = λ 𝒂𝒂 → f Eval (g Fork 𝒂𝒂)
 --       ->   (∀ (x : A) -> ∣ f x ∣ ≡ ∣ g x ∣ -> ⟦ f x ⟧ ≡ ⟦ g x ⟧)
 --           --------------------------------------------------
 --       ->   f ≡ g
+
+
 

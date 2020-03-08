@@ -28,9 +28,8 @@ module _ {i j k l : Level} {S : Signature i j} where
 -- RIP typechecker 19??-2020
 data HClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
   hbase : {𝑨 : Algebra k S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
-  hhom : {𝑨 B : Algebra k S} {f : Hom 𝑨 B} →
-    𝑨 ∈ HClo 𝓚 → B ∈ HClo 𝓚 → SubunivAlg {S = S} {B} {HomImage {S = S} {𝑨} {B} f}
-      (hom-image-is-sub {S = S} {𝑨} {B} f) ∈ HClo 𝓚
+  hhom : {𝑨 𝑩 : Algebra k S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ HClo 𝓚 → 𝑩 ∈ HClo 𝓚
+    ->   (SubunivAlg{S = S}{𝑨 = 𝑩} {HomImage{S = S}{𝑨 = 𝑨}{𝑩 = 𝑩} f} (hom-image-is-sub{S = S}{𝑨}{𝑩} f)) ∈ HClo 𝓚
 
 data VClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
   vbase : {𝑨 : Algebra k S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ VClo 𝓚

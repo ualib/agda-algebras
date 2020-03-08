@@ -44,7 +44,12 @@ module _ {i j k : Level} {S : Signature i j}   where
       sset  : Pred ∣ 𝑨 ∣ k
       isSub : sset ∈ Subuniverses 𝑨
 
-module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {X : Set k} where
+ -- {X : Set k}
+ -- module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} {B : Pred ∣ 𝑨 ∣ k} (P : B ∈ Subuniverses 𝑨) where
+ --  SubunivAlg : Algebra k S
+ --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
+  --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
+module _ {i j k} {S : Signature i j} {𝑨 : Algebra k S} where
   SubunivAlg : {B : Pred ∣ 𝑨 ∣ k} -> B ∈ Subuniverses 𝑨 -> Algebra k S
   SubunivAlg{B} P = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (∣_∣ ∘ x) , P 𝓸 (∣_∣ ∘ x) (⟦_⟧ ∘ x)
   --  SubunivAlg = ∃ B , λ 𝓸 x → ⟦ 𝑨 ⟧ 𝓸 (proj₁ ∘ x) , P 𝓸 (proj₁ ∘ x) (proj₂ ∘ x)
@@ -143,7 +148,7 @@ module _  {S : Signature i j} {𝑨 𝑩 : Algebra k S} {B : Pred ∣ 𝑨 ∣ l
     P≤𝑨 𝓸 (λ z → (𝒕 z ̇ 𝑨) 𝒙) (λ x → sub-term-closed P≤𝑨 (𝒕 x) 𝒙 𝒙∈P)
     -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
-  subalg2subuniv = subalg-to-subuniv{i}{j}{k}{S}{𝑨}{X}{P}{B}
+  subalg2subuniv = subalg-to-subuniv{i}{j}{k}{S}{𝑨}{P}{B}
   
   interp-sub : (sub : (∃ P , B) is-subalgebra-of 𝑨)
     ->         (p : Term)

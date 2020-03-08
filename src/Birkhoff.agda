@@ -202,23 +202,47 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 
 --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
+hom-closed : (𝓚 : Pred (Algebra (lsuc k) S) l)
+  -> Pred (Algebra k S) _ -- (l ⊔ i ⊔ j ⊔ lsuc (lsuc k))
+hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
+  ->     (∃ θ : Congruence 𝑨)
+  ->     (∃ 𝑪 : Algebra (lsuc k) S)
+        ------------------------------
+  ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+
 -- contains : {A : Set} -> (L : List A) -> A -> Prp
 -- contains [] a = ⊥
 -- contains (h :: tail) a = (h ≡ a) ⋁ (contains tail a)
 
---data class-of-algebras : Set where
 
---Hom-closed
-H-closed : (𝓚 : Pred (Algebra k S) l)
-  ->       Pred (Algebra (lsuc k) S) k
-H-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / 𝟎))
-  ->     (∃ θ : Congruence 𝑨)
-  ->     (∃ 𝑪 : Algebra k S)
-        ------------------------------
-  ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+-- record AlgebraClass (ℓ : Level) : Set ℓ where
+--   algebras : Pred (Algebra ℓ S) (lsuc ℓ)
+--   nextclass : AlgebraClass (lsuc ℓ)
 
+-- record AlgebraClass : Set _ where
+--   algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
+
+--hom-closed
+-- hom-closed : Pred (AlgebraClass lzero) _
+-- hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
+  -- -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
+  --       ------------------------------
+  -- ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
 -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
 -- satisfies exaxtly the same set of identities as does 𝒦.
+-- module _  {i j : Level} {S : Signature i j}  where
+-- open AlgebraClass
+
+-- data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
+--   hombase : {𝑨 : Algebra ℓ S} → 𝑨 ∈ (algebras 𝓚) ℓ  → 𝑨 ∈ HomClo 𝓚
+--   homstep : {𝑨 : Algebra ℓ S} ->  𝑨 ∈ HomClo 𝓚
+--     ->     (∃ θ : Congruence 𝑨)
+--     ->     (𝑪 : Algebra (lsuc ℓ) S)
+--           ------------------------------
+--     ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((𝑨 / θ) ≅ 𝑪)
+
+-- {f : Hom 𝑨 𝑩} → 𝑨 ∈ HomClo 𝓚 → 𝑩 ∈ HClo 𝓚
+--     ->   (SubunivAlg{S = S}{𝑨 = 𝑩} {HomImage{S = S}{𝑨 = 𝑨}{𝑩 = 𝑩} f} (hom-image-is-sub{S = S}{𝑨}{𝑩} f)) ∈ HClo 𝓚
 
 
 -- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom(𝑻(X_ω), 𝑨), h p^𝑨 = h q^𝑨`. (UAFST Lem 4.37)
