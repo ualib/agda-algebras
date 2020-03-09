@@ -66,7 +66,11 @@ module _ {i j k l} (S : Signature i j) (𝓚 : Pred (Algebra k S) l) (X : Set k)
     let 𝑨⊢p≈q = (sclo-id1{p}{q} α) 𝑨∈SClo𝓚 in 
       begin
         p ̇ 𝑩
-      ≡⟨ ∀-extensionality-ℓ₁-ℓ₂ (λ x → {!!}) ⟩
+      ≡⟨ refl ⟩
+        (p ̇ (∣ 𝑩 ∣ , ⟦ 𝑩 ⟧)) 
+      ≡⟨ {!!}  ⟩
+        (q ̇ (∣ 𝑩 ∣ , ⟦ 𝑩 ⟧)) 
+      ≡⟨ refl ⟩
         q ̇ 𝑩
       ∎
 -- Goal: (p ̇ (∃ P , B)) x ≡ (q ̇ (∃ P , B)) x

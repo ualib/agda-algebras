@@ -180,7 +180,7 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
                       )
     
 
---------------
+---------------------------------------------------------------------------------
 -- VARIETIES
 --------------
 
@@ -196,21 +196,119 @@ homFactor{𝑨}{𝑩}{𝑪} f g Kg⊆Kf gEpic =
 --class 𝓚, H(𝓚), S(𝓚), P(𝓚) are closed under isomorphic images.
 --On those rare occasions that we need it, we can write I(𝓚) for the class of algebras
 --isomorphic to a member of 𝓚.
-
 --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
-hom-closed : (𝓚 : Pred (Algebra (lsuc k) S) l)
-  -> Pred (Algebra k S) _ -- (l ⊔ i ⊔ j ⊔ lsuc (lsuc k))
-hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
-  ->     (∃ θ : Congruence 𝑨)
-  ->     (∃ 𝑪 : Algebra (lsuc k) S)
-        ------------------------------
-  ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+module _ {i j : Level} {S : Signature i j}  where
 
--- contains : {A : Set} -> (L : List A) -> A -> Prp
--- contains [] a = ⊥
--- contains (h :: tail) a = (h ≡ a) ⋁ (contains tail a)
+  ------------------------------------------------------------------------------
+  --  H(𝓚) for the class of all homomorphic images of members of 𝓚;
+  _HomImageOf_ : ∀{k : Level} (𝑩 : Algebra (lsuc k) S)
+    ->             (𝑨 : Algebra k S)
+    ->             Set _
+  𝑩 HomImageOf 𝑨 =
+    ∃ λ (θ : Rel ∣ 𝑨 ∣ _) -> con 𝑨 θ
+      ->   (∣ 𝑨 ∣ // θ) ≃ ∣ 𝑩 ∣
 
+  HomImagesOf : {k : Level} -> (Algebra k S) -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+  HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 HomImageOf 𝑨 
+
+  _HomImageOfClass_ : ∀{k : Level} -> (Algebra (lsuc k) S) -> (Pred (Algebra k S) (lsuc k)) -> Set _
+  𝑩 HomImageOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 HomImageOf 𝑨
+
+  HomImagesOfClass : {k : Level}
+    ->               Pred (Algebra k S) (lsuc k)
+    ->               Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
+  HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 HomImageOf 𝑨
+
+  -- Here 𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
+  -- represents a (Level-indexed) collection of classes.
+  HClosed : (∀(ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
+    ->      (ℓ₂ : Level) -> (Algebra (lsuc ℓ₂) S)
+    ->      Set (i ⊔ j ⊔ (lsuc (lsuc ℓ₂)))
+  HClosed 𝓛𝓚 = λ ℓ 𝑩 -> 𝑩 HomImageOfClass (𝓛𝓚 ℓ) -> 𝑩 ∈ (𝓛𝓚 (lsuc ℓ)) 
+  
+  --  P(𝓚) for the class of all algebras isomorphic to a direct product of members of 𝓚
+  PClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
+    ->      (ℓ₂ : Level) -> (I : Set ℓ₂) -> (𝓐 : I → Algebra ℓ₂ S) 
+    ->      (∀ i -> 𝓐 i ∈ 𝓛𝓚 ℓ₂) -> Set _ 
+  PClosed 𝓛𝓚 = λ ℓ₂ I 𝓐 ∀i𝓐i∈𝓛𝓚 → Π 𝓐 ∈ 𝓛𝓚 ℓ₂
+
+  --  S(𝓚) for the class of all algebras isomorphic to a subalgebra of a member of 𝓚
+  _SubalgebraOfClass_ : ∀{k : Level} -> (Algebra k S) -> (Pred (Algebra k S) (lsuc k)) -> Set _
+  𝑩 SubalgebraOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 is-subalgebra-of 𝑨
+
+  SClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
+    ->      (ℓ₂ : Level) -> (𝑩 : Algebra ℓ₂ S) -> Set _ 
+  SClosed 𝓛𝓚 = λ ℓ 𝑩 -> 𝑩 SubalgebraOfClass (𝓛𝓚 ℓ) -> 𝑩 ∈ 𝓛𝓚 ℓ
+
+  -- SubalgebrasOfClass : {k : Level}
+  --   ->               Pred (Algebra k S) (lsuc k)
+  --   ->               Pred (Algebra k S) _
+  -- SubalgebrasOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 is-subalgebra-of 𝑨
+
+
+-- Notes on homomorphic images
+-- ----------------------------
+-- The homomorphic image of f : Hom 𝑨 𝑩 is the image of ∣ 𝑨 ∣ under f,
+-- which, in "set-builder" notation, is simply Im f = {f a : a ∈ ∣ 𝑨 ∣ }.
+
+-- As we have proved Im f is a subuniverse of 𝑩.
+
+-- However, there is another means of representing the collection "H 𝑨"
+-- of all homomorphic images of 𝑨 without ever referring to codomain
+-- algebras (like 𝑩 above).
+
+-- Here's how: by the first isomorphism theorem, for each f : Hom 𝑨 𝑩,
+-- there exists a congruence θ of 𝑨 (which is the kernel of f) that
+-- satisfies 𝑨 / θ ≅ Im f.
+
+-- Therefore, a nice way to get a handle on the collection H 𝑨 of all
+-- homomorphic images of 𝑨 is to simply consider the collection Con 𝑨 of
+-- all congruence relations of 𝑨.  Indeed, by the above remark, we have
+
+--   H 𝑨 = { 𝑨 / θ : θ ∈ Con 𝑨 }.
+
+-- So, I define the following in Birkhoff.agda:
+
+--   hom-closed : (𝓚 : Pred (Algebra (lsuc k) S) l)
+--     -> Pred (Algebra k S) _
+--   hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
+--     ->     (∃ θ : Congruence 𝑨)
+--     ->     (∃ 𝑪 : Algebra (lsuc k) S)
+--     ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+
+-- To get this to type check, you can probably see the problem I
+-- was confronted with and the trick I used to resolve it.
+
+-- The class 𝓚 is a collection of algebras whose universes live at some level.
+
+-- (Above I used `lsuck k`.)
+
+-- However, if 𝑨 is an algebra with ∣ 𝑨 ∣ : Set k, then the quotient structure
+-- (as it is now defined in Con.agda), has type 𝑨 / θ : Set (lsuc k).
+
+-- So, in order for the class 𝓚 to contain both 𝑨 and all its quotients 𝑨 / θ
+-- (i.e. all its hom images) it seems we need to somehow define a class of
+-- algebras that have different universe levels.
+
+-- Can we define a data type with such "universe level polymorphism"?
+
+-- Without that, you can see in the definition above how I got around the problem.
+-- Instead of assuming that 𝑨 itself belongs to 𝓚, I assume that the "quotient"
+-- 𝑨 / ⟦𝟎⟧ (which is isomorphic to 𝑨) belongs to 𝓚.
+
+-- This is a hack and, worse, it won't do for us. We need something inductive because
+-- we will also need that if 𝑪 ≅ 𝑨 / θ ∈ 𝓚, then also 𝑪 / ψ ≅ (𝑨 / θ) / ψ ∈ 𝓚.
+
+-- So, if we want 𝓚 to be closed under all quotients, we cannot determine
+-- in advance the universe levels of the algebras that belong to 𝓚.
+
+-- Right now I'm trying to come up with a datatype for classes of algebras that
+-- has some sort of inductive notion of the universe levels involved.
+
+-- It seems we're testing the limits of Agda's universe level paradigm... which may
+-- be a good thing.  Maybe we can invent a cool new type to solve the problem, or
+-- we may have to try to extend Agda's capabilities.
 
 -- record AlgebraClass (ℓ : Level) : Set ℓ where
 --   algebras : Pred (Algebra ℓ S) (lsuc ℓ)
@@ -259,6 +357,11 @@ hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
 
 
 
+
+
+-- contains : {A : Set} -> (L : List A) -> A -> Prp
+-- contains [] a = ⊥
+-- contains (h :: tail) a = (h ≡ a) ⋁ (contains tail a)
 
 
 
