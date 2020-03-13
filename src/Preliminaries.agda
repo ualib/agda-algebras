@@ -21,6 +21,7 @@ open import Data.Empty using (⊥; ⊥-elim) public
 open import Data.Bool using (Bool) public
 open import Data.Product using (∃; _,_; _×_;Σ-syntax) public
   renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+open import Data.Product.Properties using (,-injectiveˡ;,-injectiveʳ;,-injective)
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂; ⋃) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
@@ -50,6 +51,32 @@ img : {k : Level} {X : Set k} {A : Set k}
   ->  Im x ⊆ P
   ->  X -> ∃ P
 img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
+
+≡-elim-left : {ℓ₁ ℓ₂ : Level}{A₁ A₂ : Set ℓ₁}{B₁ B₂ : Set ℓ₂}
+  ->            (A₁ , B₁) ≡ (A₂ , B₂) -> A₁ ≡ A₂
+≡-elim-left x = ∣ ,-injective x ∣
+
+≡-elim-right : {ℓ₁ ℓ₂ : Level}{A₁ A₂ : Set ℓ₁}{B₁ B₂ : Set ℓ₂}
+  ->            (A₁ , B₁) ≡ (A₂ , B₂) -> B₁ ≡ B₂
+≡-elim-right x = ⟦ ,-injective x ⟧
+
+cong-app-pred : ∀{a ℓ : Level}{A : Set a}{B₁ B₂ : Pred A ℓ}(x : A)
+  ->          x ∈ B₁   ->   B₁ ≡ B₂
+            -------------------------
+  ->                x ∈ B₂
+cong-app-pred x x∈B₁ B₁≡B₂ rewrite cong-app B₁≡B₂ x = x∈B₁
+
+cong-pred : ∀{a ℓ : Level}{A : Set a}{B : Pred A ℓ}(x y : A)
+  ->          x ∈ B   ->   x ≡ y
+            -------------------------
+  ->                y ∈ B
+cong-pred{B = B} x y x∈B x≡y rewrite cong B x≡y = x∈B
+
+-- ∃ : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
+-- ∃ = Σ _
+
+-- ≡-∃-elim : ∀{ℓ} {A : Set ℓ}{B₁ B₂ : A → Set ℓ} -> ∃ B₁ ≡ ∃ B₂ -> Set ℓ
+-- ≡-∃-elim = λ x → {!∣ x ∣!}
 
 
 -------------------------------------------------------------------------------
