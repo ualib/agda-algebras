@@ -11,7 +11,7 @@ open import Basic
 open import Free
 open import Hom
 
-module Subuniverse-dev {i j : Level}{S : Signature i j} where
+module Subuniverse {i j : Level}{S : Signature i j} where
 
 Subuniverses : {ℓ₁ ℓ₂ : Level}(𝑨 : Algebra ℓ₁ S)
   ->           Pred (Pred ∣ 𝑨 ∣ ℓ₂) (i ⊔ j ⊔ ℓ₁ ⊔ ℓ₂)
