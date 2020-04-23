@@ -5,7 +5,7 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓡; 𝓢; 𝓣; 𝓞; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟙; 𝟚; _×_; _≡_; refl; _∼_; ≡-sym; _≡⟨_⟩_; _∎; ap; _⁻¹)
+open import UF-Prelude using (𝓤; 𝓤₀;𝓥; 𝓦; 𝓡; 𝓞; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟙; 𝟚; _×_; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹)
 open import UF-Basic using (Signature; Algebra)
 open import UF-Extensionality using (propext; dfunext; funext)
 open import UF-Singleton using (is-subsingleton; is-set)
@@ -18,11 +18,11 @@ module UF-Con where
 --Equivalence relations and blocks
 
 --For a binary relation ≈ on A, denote a single ≈-class (containing a) by `[ a ] ≈`
-[_]_ : {𝓤 : Universe} {A : 𝓤 ̇} →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+[_]_ :  {A : 𝓤 ̇} →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
 [ a ] _≈_ = Σ x ꞉ _ ,  a ≈ x
 
 --...denote the collection of all ≈-classes of A by `A // ≈`.
-_//_ : {𝓤 : Universe} (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+_//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
 A // ≈ = Σ C ꞉ _ ,   Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
 
 is-subsingleton-valued : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
@@ -55,7 +55,7 @@ is-equivalence-relation _≈_ = is-subsingleton-valued _≈_  × reflexive _≈_
   →         is-set A
   →         is-equivalence-relation {𝓤} {𝓤} {A} 𝟎
 𝟎-on-set-is-equiv pe fe {A} Aset =
-  Aset , refl , (λ x y x≡y → ≡-sym x≡y) , λ x y z x≡y y≡z → x ≡⟨ x≡y ⟩ y ≡⟨ y≡z ⟩ z ∎ 
+  Aset , refl , (λ x y x≡y → x≡y ⁻¹) , λ x y z x≡y y≡z → x ≡⟨ x≡y ⟩ y ≡⟨ y≡z ⟩ z ∎ 
 
 𝟎-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence {𝓤}{𝓤}{A} 𝟎
 𝟎-IsEquivalence = record { rfl = ρ ; sym = σ ; trans = τ }
@@ -94,7 +94,7 @@ module _ {S : Signature 𝓞 𝓥}  where
   𝟎-compatible fe {𝑨} = λ 𝓸 args → 𝟎-compatible-op fe {𝑨} 𝓸 args
 
   -- Congruence relations
-  Con : {𝓤 : Universe} (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  Con : (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
   con : (𝑨 : Algebra 𝓤 S)  →  Pred (Rel ∣ 𝑨 ∣ 𝓤) _

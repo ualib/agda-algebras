@@ -5,24 +5,24 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude
-open import UF-Basic
+open import UF-Prelude using (𝓡; 𝓢; 𝓣; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓞; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; _×_)
+open import UF-Basic using (Signature; Algebra) -- ; Π')
 
 module UF-Hom where
 
 
 --The category of algebras Alg with morphisms as Homs
-Hom : {S : Signature 𝓞 𝓥} → Algebra 𝓤 S -> Algebra 𝓣 S -> 𝓤 ⊔ 𝓣 ⊔ 𝓥 ⊔ 𝓞 ̇
+Hom : {S : Signature 𝓞 𝓥} → Algebra 𝓤 S -> Algebra 𝓦 S  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
 Hom {S = F , ρ} (A , 𝐹ᴬ) (B , 𝐹ᴮ) = Σ f ꞉ (A → B) ,
   ( (𝓸 : F ) → ( 𝒂 : ρ 𝓸 → A )  → f (𝐹ᴬ 𝓸 𝒂) ≡ 𝐹ᴮ 𝓸 (f ∘ 𝒂) )
 
 𝓲𝓭 : {S : Signature 𝓞 𝓥} (A : Algebra 𝓤 S) → Hom A A
 𝓲𝓭 _ = (λ x -> x) , λ _ _ -> refl _
 
-module _ {𝔛 𝔜 ℨ : Universe} {S : Signature 𝓞 𝓥} {A : Algebra 𝔛 S} {B : Algebra 𝔜 S} {C : Algebra ℨ S} where
+module _ {S : Signature 𝓞 𝓥} {A : Algebra 𝓤 S} {B : Algebra 𝓦 S} {C : Algebra 𝓣 S} where
 
 -- Equalizers in Alg
-  _~_ : Hom A B → Hom A B → 𝔛 ⊔ 𝔜 ̇
+  _~_ : Hom A B → Hom A B → 𝓤 ⊔ 𝓦 ̇
   _~_ (f , _) (g , _) = Σ x ꞉ ∣ A ∣ , f x ≡ g x
 
   --Homomorphism composition
@@ -43,11 +43,11 @@ module _ {𝔛 𝔜 ℨ : Universe} {S : Signature 𝓞 𝓥} {A : Algebra 𝔛 
 -- _≅[_]_ : (𝑨 : Algebra 𝓤 S) → Hom A B → Hom 𝑩 𝑨 -> Set (k ⊔ l)
 -- 𝑨 ≅[ f ] 𝑩  = ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ Id 𝑩 ∣ × ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ id 𝑨 ∣
 
-_≅_ : {𝔛 𝔜 : Universe} {S : Signature 𝓞 𝓥} (A : Algebra 𝔛 S) (B : Algebra 𝔜 S) → 𝔛 ⊔ 𝔜 ⊔ 𝓞 ⊔ 𝓥 ̇
+_≅_ : {S : Signature 𝓞 𝓥} (A : Algebra 𝓤 S) (B : Algebra 𝓦 S) → 𝓤 ⊔ 𝓦 ⊔ 𝓞 ⊔ 𝓥 ̇
 A ≅ B =  Σ f ꞉ (Hom A B) ,   Σ g ꞉ (Hom B A) ,
              ( ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝓲𝓭 B ∣ )   ×   ( ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝓲𝓭 A ∣ )
 
-Iso : {𝔛 𝔜 : Universe} {S : Signature 𝓞 𝓥} (A : Algebra 𝔛 S) (B : Algebra 𝔜 S) → 𝔛 ⊔ 𝔜 ⊔ 𝓞 ⊔ 𝓥 ̇
+Iso : {S : Signature 𝓞 𝓥} (A : Algebra 𝓤 S) (B : Algebra 𝓦 S) → 𝓤 ⊔ 𝓦 ⊔ 𝓞 ⊔ 𝓥 ̇
 Iso A B = A ≅ B -- alias
 
 -- 𝟎 : {ℓ : Level} (A : Set ℓ) -> Rel A ℓ
