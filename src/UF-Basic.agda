@@ -8,10 +8,8 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 --open import Preliminaries  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
-open import UF-Prelude
--- using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_)
---; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication)
-
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚 )
+--; universe-of; id; 𝑖𝑑; _∘_; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication
 
 module UF-Basic where
 

@@ -31,7 +31,7 @@ module _ {𝔛 𝔜 ℨ : Universe} {S : Signature 𝓞 𝓥} {A : Algebra 𝔛 
     →             Hom A C
   (f , fhom) >>> (g , ghom) = g ∘ f , γ
     where
-      γ :      (𝓸 : ∣ S ∣ ) → ( 𝒂 : ∥ S ∥ 𝓸 -> ∣ A ∣ )
+      γ :      (𝓸 : ∣ S ∣ ) → ( 𝒂 : ∥ S ∥ 𝓸 → ∣ A ∣ )
              -------------------------------------------------
        →   ( g ∘ f ) ( ∥ A ∥ 𝓸 𝒂 )  ≡  ∥ C ∥ 𝓸 ( g ∘ f ∘ 𝒂)
       γ 𝓸 𝒂  =   ( g ∘ f ) (∥ A ∥ 𝓸 𝒂)     ≡⟨ ap (λ - → g -) (fhom 𝓸 𝒂) ⟩
@@ -43,8 +43,12 @@ module _ {𝔛 𝔜 ℨ : Universe} {S : Signature 𝓞 𝓥} {A : Algebra 𝔛 
 -- _≅[_]_ : (𝑨 : Algebra 𝓤 S) → Hom A B → Hom 𝑩 𝑨 -> Set (k ⊔ l)
 -- 𝑨 ≅[ f ] 𝑩  = ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ Id 𝑩 ∣ × ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ id 𝑨 ∣
 
-Iso : {𝔛 𝔜 : Universe} {S : Signature 𝓞 𝓥}(A : Algebra 𝔛 S)(B : Algebra 𝔜 S) → 𝔛 ⊔ 𝔜 ⊔ 𝓞 ⊔ 𝓥 ̇
-Iso A B = Σ f ꞉ (Hom A B) , Σ g ꞉ (Hom B A) ,  ( ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝓲𝓭 B ∣ )   ×   ( ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝓲𝓭 A ∣ )
+_≅_ : {𝔛 𝔜 : Universe} {S : Signature 𝓞 𝓥} (A : Algebra 𝔛 S) (B : Algebra 𝔜 S) → 𝔛 ⊔ 𝔜 ⊔ 𝓞 ⊔ 𝓥 ̇
+A ≅ B =  Σ f ꞉ (Hom A B) ,   Σ g ꞉ (Hom B A) ,
+             ( ∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝓲𝓭 B ∣ )   ×   ( ∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝓲𝓭 A ∣ )
+
+Iso : {𝔛 𝔜 : Universe} {S : Signature 𝓞 𝓥} (A : Algebra 𝔛 S) (B : Algebra 𝔜 S) → 𝔛 ⊔ 𝔜 ⊔ 𝓞 ⊔ 𝓥 ̇
+Iso A B = A ≅ B -- alias
 
 -- 𝟎 : {ℓ : Level} (A : Set ℓ) -> Rel A ℓ
 -- 𝟎 A a₁ a₂ = a₁ ≡ a₂

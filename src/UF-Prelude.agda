@@ -56,7 +56,7 @@ universe-of {𝓤} X = 𝓤
 
 --"We will refer to universes by letters 𝓤,𝓥,𝓦,𝓣 (type these with, resp, ``\MCU``, ``\MCV``, etc)"
 variable
- 𝓜 𝓞 𝓤 𝓥 𝓦 𝓣 : Universe
+  𝓚 𝓛 𝓜 𝓝 𝓞 𝓟 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 : Universe
 
 
 
