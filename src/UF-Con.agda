@@ -41,8 +41,19 @@ is-equivalence-relation : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
 is-equivalence-relation _≈_ = is-subsingleton-valued _≈_  × reflexive _≈_  × symmetric _≈_  × transitive _≈_
 
 --The "trivial" or "diagonal" or "identity" relation.
-𝟎 : {A : 𝓤 ̇} → Rel A 𝓤
-𝟎 a b = a ≡ b
+𝟎 : {A : 𝓤 ̇} → 𝓤 ̇
+𝟎{𝓤} {A} = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
+
+𝟎-rel : {A : 𝓤 ̇} → Rel A 𝓤
+𝟎-rel a b = a ≡ b
+
+--...as a binary predicate:
+𝟎-pred : {A : 𝓤 ̇} → Pred (A × A) 𝓤
+𝟎-pred (a , a') = a ≡ a'
+
+--...as a binary predicate:
+𝟎'' : {A : 𝓤 ̇} → 𝓤 ̇
+𝟎'' {𝓤} {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
 -- 𝟎 : {𝓤 : Universe} (A : 𝓤 ̇) → 𝓤 ̇
 -- 𝟎 A = Σ a ꞉ (A × A) , pr₁ a ≡ pr₂ a
@@ -53,20 +64,20 @@ is-equivalence-relation _≈_ = is-subsingleton-valued _≈_  × reflexive _≈_
 
 𝟎-on-set-is-equiv : propext 𝓤 → dfunext 𝓤 𝓤 → {A : 𝓤 ̇}
   →         is-set A
-  →         is-equivalence-relation {𝓤} {𝓤} {A} 𝟎
+  →         is-equivalence-relation {𝓤} {𝓤} {A} 𝟎-rel
 𝟎-on-set-is-equiv pe fe {A} Aset =
   Aset , refl , (λ x y x≡y → x≡y ⁻¹) , λ x y z x≡y y≡z → x ≡⟨ x≡y ⟩ y ≡⟨ y≡z ⟩ z ∎ 
 
-𝟎-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence {𝓤}{𝓤}{A} 𝟎
+𝟎-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence {𝓤}{𝓤}{A} 𝟎-rel
 𝟎-IsEquivalence = record { rfl = ρ ; sym = σ ; trans = τ }
  where
-  ρ : Reflexive 𝟎
+  ρ : Reflexive 𝟎-rel
   ρ {x} =  x ≡⟨ refl x ⟩ x ∎
 
-  σ : Symmetric 𝟎
+  σ : Symmetric 𝟎-rel
   σ {x} {y} x≡y = x≡y ⁻¹
 
-  τ : Transitive 𝟎
+  τ : Transitive 𝟎-rel
   τ {x} {y} {z} x≡y y≡z = x ≡⟨ x≡y ⟩ y ≡⟨ y≡z ⟩ z ∎
 
 --lift a binary relation from pairs to pairs of tuples.
@@ -87,10 +98,10 @@ module _ {S : Signature 𝓞 𝓥}  where
   compatible : (𝑨 : Algebra 𝓤 S) -> Rel ∣ 𝑨 ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
   compatible {𝓤} 𝑨 𝓻 = ∀ 𝓸 → compatible-op{𝓤}{𝑨} 𝓸 𝓻
 
-  𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 S} → (𝓸 : ∣ S ∣) → compatible-op {𝓤}{𝑨} 𝓸 𝟎
+  𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 S} → (𝓸 : ∣ S ∣) → compatible-op {𝓤}{𝑨} 𝓸 𝟎-rel
   𝟎-compatible-op fe {𝑨} 𝓸 ptws𝟎  = ap  (∥ 𝑨 ∥ 𝓸) (fe (λ x → ptws𝟎 x))
 
-  𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 S} → compatible 𝑨 𝟎
+  𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 S} → compatible 𝑨 𝟎-rel
   𝟎-compatible fe {𝑨} = λ 𝓸 args → 𝟎-compatible-op fe {𝑨} 𝓸 args
 
   -- Congruence relations
@@ -110,7 +121,7 @@ module _ {S : Signature 𝓞 𝓥}  where
 
   --The "trivial" or "diagonal" or "identity" relation.
   Δ : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
-  Δ fe 𝑨 = mkcon 𝟎
+  Δ fe 𝑨 = mkcon 𝟎-rel
                 ( 𝟎-compatible fe {𝑨} )
                 ( 𝟎-IsEquivalence )
 
