@@ -7,11 +7,11 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
-open import UF-Prelude using (𝓤; 𝓤₀;𝓥; 𝓡; 𝓞; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
+open import UF-Prelude using (𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓡; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
 open import UF-Basic using (Signature; Algebra; Π')
 open import UF-Hom using (Hom)
 open import UF-Con using (Con; compatible-fun)
-open import UF-Extensionality using (propext; dfunext; funext; _∈_)
+open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext)
 open import Relation.Unary using (Pred)
 --open import UF-Rel
 
@@ -117,32 +117,31 @@ interp-prod fe (node 𝓸 𝒕) 𝓐 x =
       ∥ Π' 𝓐 ∥ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁))) ≡⟨ refl _ ⟩   -- refl ⟩
       (λ i₁ → ∥ 𝓐 i₁ ∥ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))  ∎
 
-
--- interp-prod2 : funext 𝓥 𝓤  → {I : 𝓤 ̇} →   (p : Term)  → ( 𝓐 : I → Algebra 𝓤 S )
---  →              p ̇ Π' 𝓐   ≡    λ (args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (p ̇ 𝓐 i) (λ x → args x i))
--- interp-prod2 fe (generator x₁) 𝓐 = refl _
--- interp-prod2 fe (node 𝓸 𝒕) 𝓐 = fe  ( λ x →
---           --       let IH = λ x₁ → interp-prod fe (𝒕 x₁) 𝓐 x in 
---         ∥ Π' 𝓐 ∥ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π' 𝓐) x)                                  ≡⟨ {!!} ⟩                -- cong (⟦ Π 𝓐 ⟧ 𝓸 ) (extensionality IH) ⟩
---         ∥ Π' 𝓐 ∥ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))   ≡⟨ {!!} ⟩        --refl ⟩
---         (λ i₁ → ∥ 𝓐 i₁ ∥ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))  ∎ )
+interp-prod2 : global-funext → {I : 𝓤 ̇} (p : Term) ( A : I → Algebra 𝓤 S )
+ →              (p ̇ Π' A)  ≡  λ (args : X → ∣ Π' A ∣ ) → ( λ ᵢ → (p ̇ A ᵢ ) ( λ x → args x ᵢ ) )
+interp-prod2 fe (generator x₁) A = refl _
+interp-prod2 fe (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ ) →
+  let IH = λ x → interp-prod fe (𝒕 x) A  in
+  let tᴬ = λ z → 𝒕 z ̇ Π' A in
+    ( 𝓸 ̂ Π' A )  ( λ s → tᴬ s tup )                                    ≡⟨ refl _ ⟩
+    ∥ Π' A ∥ 𝓸 ( λ s →  tᴬ s tup )                                     ≡⟨ ap ( ∥ Π' A ∥ 𝓸 ) (fe  λ x → IH x tup) ⟩
+    ∥ Π' A ∥ 𝓸 (λ s → (λ ⱼ → (𝒕 s ̇ A ⱼ ) ( λ ℓ → tup ℓ ⱼ ) ) )  ≡⟨ refl _ ⟩
+    ( λ ᵢ → (𝓸 ̂ A ᵢ ) (λ s → (𝒕 s ̇ A ᵢ ) (λ ℓ → tup ℓ ᵢ ) ) )     ∎
 
 
 -- Recall (cf. UAFST Thm 4.32)
--- Theorem 1.
--- Let A and B be algebras of type S. Then the following hold:
--- 1. For every n-ary term t and homomorphism g: A —> B, 
---    g(tᴬ(a₁,...,aₙ)) = tᴮ(g(a₁),...,g(aₙ)).
--- 2. For every term t ∈ T(X) and every θ ∈ Con(A), 
---    a θ b => t(a) θ t(b).
--- 3. For every subset Y of A,
---    Sg(Y) = {t(a₁,...,aₙ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
--- PROOF.
--- 1. (homomorphisms commute with terms).
+-- Theorem 1. If A and B are algebras of type S, then the following hold:
+--   1. For every n-ary term t and homomorphism g: A → B,  g ( tᴬ ( a₁, ..., aₙ ) ) = tᴮ ( g (a₁), ..., g (aₙ) ).
+--
+--  2. For every term t ∈ T(X) and every θ ∈ Con(A),  a θ b → t(a) θ t(b).
+--
+--  3. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
+--
+-- Proof of 1. (homomorphisms commute with terms).
 comm-hom-term : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S)
  →                   (g : Hom 𝑨 𝑩)   →  (𝒕 : Term)  →   (𝒂 : X → ∣ 𝑨 ∣)
-                      --------------------------------------------------
- →                      ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
+                      --------------------------------------------
+ →                           ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
 
 comm-hom-term fe 𝑨 𝑩 g (generator x) 𝒂 = refl _
 comm-hom-term  fe 𝑨 𝑩 g (node 𝓸 args) 𝒂 =
@@ -150,27 +149,26 @@ comm-hom-term  fe 𝑨 𝑩 g (node 𝓸 args) 𝒂 =
     (𝓸 ̂ 𝑩) ( λ i₁ →  ∣ g ∣ ((args i₁ ̇ 𝑨) 𝒂) )    ≡⟨ ap (_ ̂ 𝑩) ( fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 g (args i₁) 𝒂) ) ⟩
     (𝓸 ̂ 𝑩) ( λ r -> (args r ̇ 𝑩) (∣ g ∣ ∘ 𝒂) )        ∎
 
---For 2 of Thm 1, we need congruences (see Congruence.agda).
--- 2. If t : Term, θ : Con A, then a θ b => t(a) θ t(b).
+-- Proof of 2.  (If t : Term, θ : Con A, then a θ b  →  t(a) θ t(b). )
 compatible-term :   (𝑨 : Algebra 𝓤 S) →  (𝒕 : Term)  → (θ : Con 𝑨)
-                         -----------------------------------------------
- →                      compatible-fun (𝒕 ̇ 𝑨) ∣ θ ∣
-  -- wjd: I don't know why this ^^^^^^^^^^^^^^^^^ combination
-  --      of implicit vars works... very weird.
+                         ------------------------------------------
+ →                              compatible-fun (𝒕 ̇ 𝑨) ∣ θ ∣
+
 compatible-term 𝑨 (generator x) θ p = p x
 compatible-term 𝑨 (node 𝓸 args) θ p = ∥ ∥ θ ∥ ∥ 𝓸 λ{ x -> (compatible-term 𝑨 (args x) θ) p }
 
--- For proof of item (3), see `TermImageSub` in Subuniverse.agda.
+-- For proof of 3, see `TermImageSub` in Subuniverse.agda.
 
 ------------------------------------------------------------------
-_⊢_≈_ : Algebra 𝓤 S → Term → Term → Set _
+_⊢_≈_ : Algebra 𝓤 S → Term → Term → 𝓤 ̇
 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 
--- _⊢_≋_ : Pred (Algebra 𝓤 S) 𝓡 → Term → Term → Set _
--- _⊢_≋_ 𝓚 p q = {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ⊢ p ≈ q
+_⊢_≋_ : Pred (Algebra 𝓤 S) 𝓡 → Term → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓡 ̇
+_⊢_≋_ 𝓚 p q = {A : Algebra 𝓤 S} → 𝓚 A → A ⊢ p ≈ q
+
+
 
 ---------------------------------------------------------
-
 
 
 -- ARITY OF A TERM

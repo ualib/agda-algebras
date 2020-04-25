@@ -7,10 +7,7 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
---open import Preliminaries  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚 )
---; universe-of; id; 𝑖𝑑; _∘_; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication
-
+open import UF-Prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚 )
 module UF-Basic where
 
 -- -- Operations and projections
@@ -29,20 +26,17 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , (F → 𝓥 ̇)
 Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
 Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : F)  → Op (ρ 𝓸) A )
 
--- Indexed product of algebras is an algebra
--- The trick is to view the Pi-type as a dependent product i.e.
--- A i1 × A i2 × A i3 × ... = (i : I) → A i
+-- Indexed product of algebras is an algebra. The trick is to view the Pi-type as a dependent product
+-- i.e. A ₁ × A ₂ × A ₃ × ⋯ = ( ᵢ : I ) → A ᵢ
 
-module _ {𝓜 𝓞 𝓥 : Universe} {S : Signature 𝓞 𝓥} where
-
-  Π' : {I : 𝓜 ̇} → (I → Algebra 𝓤 S) → Algebra (𝓤 ⊔ 𝓜) S
-  Π' {I = I} 𝔄 = ( (i : I) → ∣ 𝔄 i ∣ ) ,  λ 𝓸 x i → ∥ 𝔄 i ∥ 𝓸 λ 𝓥 → x 𝓥 i
+module _ {S : Signature 𝓞 𝓥} where
+  Π' : {I : 𝓘 ̇}( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
+  Π' A =  ( ( ᵢ : _) → ∣ A ᵢ ∣ ) ,  λ 𝓸 x ᵢ → ∥ A ᵢ ∥ 𝓸 λ 𝓥 → x 𝓥 ᵢ
 
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`  and `·`, of arities 0 and 2 (thus, of types `(𝟘 → A) → A`
 --  and `(𝟚 → A) → A`) resp. The types indicate that `e` is nullary (i.e., takes no args, equivalently, takes args
 --  of type `𝟘 → A`), while `·` is binary (as indicated  by argument type `𝟚 -> A`).
-
 data monoid-op : 𝓤₀ ̇ where
   e : monoid-op
   · : monoid-op
