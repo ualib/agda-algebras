@@ -8,8 +8,7 @@
 
 module UF-Extensionality where
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; codomain; _+_; inl; inr; domain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_)
-
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_)
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop)
 
@@ -930,31 +929,12 @@ subsingleton-univalence-≃ : propext 𝓤 → dfunext 𝓤 𝓤
 
 subsingleton-univalence-≃ pe fe X P P✧ = Id→Eq P X , subsingleton-univalence pe fe P P✧ X
 
---added later (see: https://www.cs.bham.ac.uk/~mhe/agda-new/UF-Equiv-FunExt.html#9373 )
-
--- propext-funext-give-prop-ua : propext 𝓤 → funext 𝓤 𝓤
---                             → (X : 𝓤 ̇ ) (P : 𝓤 ̇ ) → is-prop P → is-equiv (Id→Eq X P)
--- propext-funext-give-prop-ua {𝓤} pe fe X P i = (eqtoid , η) , (eqtoid , ε)
---  where
---   l : X ≃ P → is-prop X
---   l (f , _ , (s , fs)) = retract-of-subsingleton (s , (f , fs)) i
---   eqtoid : X ≃ P → X ≡ P
---   eqtoid (f , (r , rf) , h) = pe (l (f , (r , rf) , h)) i f r
---   m : is-prop (X ≃ P)
---   m (f , e) (f' , e') = to-Σ-≡ (dfunext fe (λ x → i (f x) (f' x)) ,
---                                 being-equiv-is-subsingleton fe f' _ e')
---   η : (e : X ≃ P) → Id→Eq X P (eqtoid e) ≡ e
---   η e = m (Id→Eq X P (eqtoid e)) e
---   ε : (q : X ≡ P) → eqtoid (Id→Eq X P q) ≡ q
---   ε q =  subsingleton-univalence pe fe P i X (eqtoid (Id→Eq X P q)) q
-
--- prop-univalent-≃ : propext 𝓤 → funext 𝓤 𝓤 → ( X P : 𝓤 ̇) → is-prop P → (X ≡ P) ≃ (X ≃ P)
--- prop-univalent-≃ pe fe X P i = Id→Eq X P , propext-funext-give-prop-ua pe fe X P i
-
 --"We also need a version of propositional extensionality for the type `Ω 𝓤` of subsingletons in a given universe `𝓤`, which lives
 -- in the next universe:
 Ω : (𝓤 : Universe) → 𝓤 ⁺ ̇
 Ω 𝓤 = Σ P ꞉ 𝓤 ̇ , is-subsingleton P
+
+--So an element of Ω 𝓤 is a pair (P , P✧), where P✧ is a proof that P is a subsingleton.
 
 _holds : Ω 𝓤 → 𝓤 ̇
 _holds (P , P✧) = P
@@ -1082,5 +1062,38 @@ subset-extensionality' {𝓤} 𝓤★ = subset-extensionality (univalence-gives-
 -- univalence for sets (see the HoTT book or https://www.cs.bham.ac.uk/~mhe/agda-new/OrdinalOfOrdinals.html ).
 
 
+-------------------------------------------------------------------------------
+-- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
 
+_∈∈𝓟_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →   𝓟 B → 𝓤 ⊔ 𝓥 ̇
+_∈∈𝓟_  f S = (x : _) → f x ∈ S
+
+Im_⊆𝓟_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → 𝓟 B → 𝓤 ⊔ 𝓥 ̇
+Im_⊆𝓟_ {A = A} f S = (x : A) → f x ∈ S
+
+-------------------------------------------------------------------------------------------------------------
+-- Images and surjections.
+image : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+image f = Σ y ꞉ (codomain f) , ∃! x ꞉ (domain f) , f x ≡ y
+
+-- img : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (P : Y → Ω 𝓥) →  Im f ⊆ P  → X → Σ P
+-- img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
+
+restriction : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → image f → Y
+restriction f (y , _) = y
+
+cong-app-𝓟 : ∀ { A : 𝓤 ̇ } { B₁ B₂ : 𝓟 A} (x : A)
+ →          x ∈ B₁   →   B₁ ≡ B₂
+            -------------------------
+ →                    x ∈ B₂
+cong-app-𝓟 {𝓤}{A}{B₁}{B₂} x x∈B₁ B₁≡B₂ = B₁⊆B₂ x x∈B₁
+ where
+  B₁⊆B₂ : B₁ ⊆ B₂
+  B₁⊆B₂ = pr₁ (⊆-refl-consequence B₁ B₂ B₁≡B₂)
+
+cong-𝓟 : {A : 𝓤 ̇ } {B : 𝓟 A} (x y : A)
+ →            x ∈ B   →   x ≡ y
+            -------------------------
+ →                   y ∈ B
+cong-𝓟 {A = A}{B = B} x y x∈B x≡y  = transport (λ - → B - holds) x≡y x∈B
 

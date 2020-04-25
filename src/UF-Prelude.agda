@@ -7,6 +7,9 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
+open import Relation.Unary using (Pred; _∈_; _⊆_)
+open import Data.Product  renaming (_,_ to _؛_) using (∃) -- ; _,_; _×_;Σ-syntax) public renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+
 module UF-Prelude where
 
 --------------------------------------------------------------------------------------------
@@ -58,7 +61,12 @@ universe-of {𝓤} X = 𝓤
 variable
   𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓟 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 : Universe
 
-
+------------------------------------------------------------------------
+-- Unary relations (aka predicates).  (cf. Relation/Unary.agda from the Agda std lib)
+-- `Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
+-- Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
+-- Pred : ∀ {𝓤} → 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
+-- Pred A 𝓥 = A → 𝓥 ̇
 
 -- The one-element type (type `\b1` to get 𝟙; and type `\*` to get ⋆)
 --"We place it in the first universe, `𝓤₀ ̇` [= `Set (lsuc lzero)`] and we name its unique element `⋆`.
@@ -595,27 +603,6 @@ codomain {𝓤} {𝓥} {X} {Y} _ = Y
 type-of : {X : 𝓤 ̇} → X → 𝓤 ̇
 type-of {𝓤} {X} x = X
 
-------------------------------------
--- _∨_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
--- A ∨ B = ∥ A + B ∥
-
--- infixl 20 _∨_
-
--- ∃ : {X : 𝓤 ̇ } → (X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--- ∃ A = (∥ Σ A ∥)
-
--- -∃ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--- -∃ X Y = ∃ Y
-
--- syntax -∃ A (λ x → b) = ∃ x ꞉ A , b
-
--- infixr -1 -∃
-
--- ∨-is-subsingleton : {A : 𝓤 ̇ } {B : 𝓥 ̇ } → is-subsingleton (A ∨ B)
--- ∨-is-subsingleton = ∥∥-is-subsingleton
-
--- ∃-is-subsingleton : {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } → is-subsingleton (∃ A)
--- ∃-is-subsingleton = ∥∥-is-subsingleton
 
 
 
@@ -739,6 +726,7 @@ rdner q = refl q
 -- Given an identification `p : x ≡ x'` we get an identification `ap f p : f x ≡ f x'` for any `f : X → Y`:
 ap : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X} → x ≡ x' → f x ≡ f x'
 ap f {x} {x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
+--NOTATION (cf. `cong` in `Relation/Binary/PropositionalEquality/Core.agda` )
 
 --"Here the symbol "`-`", which is not to be confused with the symbol "`_`", is a variable. We will adopt the
 -- convention in these notes of using this variable name "`-`" to make clear which part of an expression we
@@ -1285,39 +1273,94 @@ module basic-arithmetic-and-order where
 
 
 
+-- =====================================================================
+-- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
 
 
---MHE says, "without the following list of operator precedences and associativities (left or right) this file [HoTT-UF-Agda.agda] doesn't parse."
+--_∈∈_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →  𝓟 B → 𝓤 ⊔ 𝓥 ̇
+_∈∈_ :  {A : 𝓤 ̇} {B : 𝓦 ̇} →  (A  →  B) →  Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
+_∈∈_  f S = (x : _) → f x ∈ S
 
--- infix   0 _∼_
--- infixr 50 _,_
--- infixr 30 _×_
--- infixr 20 _+_
--- infixl 20 _∨_
--- infixl 70 _∘_
--- infix   0 _≡_
--- infix  10 _⇔_
--- infixl 30 _∙_
--- infixr  0 _≡⟨_⟩_
--- infix   1 _∎
--- infix  40 _⁻¹
--- infix  10 _◁_
--- infixr  0 _◁⟨_⟩_
--- infix   1 _◀
--- infix  10 _≃_
--- infixl 30 _●_
--- infixr  0 _≃⟨_⟩_
--- infix   1 _■
--- infix  40 _∈_
--- infix  30 _[_,_]
--- infixr -1 -Σ
--- infixr -1 -Π
--- infixr -1 -∃!
--- infix  20 _∩_
--- infix  20 _∪_
+--Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → 𝓟 B → 𝓤 ⊔ 𝓥 ̇
+Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
+Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
--- But let's not declare all of these here.  Instead, we will try to place these fixity/precedence declarations
--- at the appropriate places in the appropriate files (i.e., near where the underlying symbols are defined).
+img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → ∃ P
+img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ ؛ Imf⊆P x₁
+
+≡-elim-left :  {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂)   →   A₁ ≡ A₂
+≡-elim-left e = ap pr₁ e
+
+≡-elim-right : { A₁ A₂ : 𝓤 ̇ } { B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂) → B₁ ≡ B₂
+≡-elim-right e = ap pr₂ e
+
+-------------------------------------------------------------------------------------------------------------
+-- Images and surjections.
+-- image : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+-- image f = Σ y ꞉ (codomain f) , ∃! x ꞉ (domain f) , f x ≡ y
+
+-- restriction : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → image f → Y
+-- restriction f (y , _) = y
+
+--NOTATION (cf. Relation/Binary/PropositionalEquality/Core.agda)
+cong : {X : 𝓤 ̇} {Y : 𝓦 ̇} (f : X → Y){x y : X} → x ≡ y → f x ≡ f y
+cong  = ap
+
+-- cf. Relation/Binary/Core.agda
+cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
+cong-app {f = f} (refl _) a = refl (f a)
+
+cong-app-pred : ∀ { A : 𝓤 ̇ } { B₁ B₂ : Pred A 𝓤} (x : A)
+ →          x ∈ B₁   →   B₁ ≡ B₂
+            -------------------------
+ →                    x ∈ B₂
+cong-app-pred x x∈B₁ (refl _) = x∈B₁
+
+cong-pred : {A : 𝓤 ̇ } {B : Pred A 𝓤} (x y : A)
+ →            x ∈ B   →   x ≡ y
+               -------------------------
+ →                   y ∈ B
+cong-pred x .x x∈B (refl .x) = x∈B
+
+
+data Image_∋_ {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
+  where
+  im : (x : A) → Image f ∋ f x
+  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
+
+image_ : {A : 𝓤 ̇} {B : 𝓦 ̇} → (A → B) → Pred B (𝓤 ⊔ 𝓦)
+image f = λ b → ∃ λ a → b ≡ f a
+
+ImageIsImage :  {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) (b : B) (a : A)
+ →                  b ≡ f a    →     Image f ∋ b
+ImageIsImage {A = A} {B = B} f b a b≡fa = eq b a b≡fa
+
+--N.B. the assertion Image f ∋ y must come with a proof, which is of the
+--form ∃a f a = y, so we have a witness, so the inverse can be "computed"
+--in the following way:
+Inv : {A : 𝓤 ̇}  {B : 𝓦 ̇} (f : A → B) (b : B) → Image f ∋ b  →  A
+Inv f .(f a) (im a) = a  -- Cool!!!
+Inv f b (eq b a b≡fa) = a
+
+-- special case for Set
+inv : {A B : 𝓤₀ ̇}(f : A → B)(b : B) → Image f ∋ b → A
+inv{A}{B} = Inv {𝓤₀}{𝓤₀}{A}{B}
+
+InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (b : B) (b∈Imgf : Image f ∋ b)
+             --------------------------------------
+ →          f (Inv f b b∈Imgf) ≡ b
+InvIsInv f .(f a) (im a) = refl _
+InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
+
+
+
+
+
+
+
+
+
+
 
 
 

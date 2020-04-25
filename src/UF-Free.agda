@@ -5,7 +5,7 @@
 --Notes: Based on the file `free.agda` (25 Dec 2019).
 --       Used for 2nd half of talk at JMM Special Session (Jan 2020).
 
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UF-Prelude using (𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓡; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
 open import UF-Basic using (Signature; Algebra; Π')
