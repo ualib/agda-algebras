@@ -1067,6 +1067,7 @@ subset-extensionality' {𝓤} 𝓤★ = subset-extensionality (univalence-gives-
 -------------------------------------------------------------------------------
 -- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
 
+
 _∈∈𝓟_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →   𝓟 B → 𝓤 ⊔ 𝓥 ̇
 _∈∈𝓟_  f S = (x : _) → f x ∈ S
 
@@ -1099,3 +1100,9 @@ cong-𝓟 : {A : 𝓤 ̇ } {B : 𝓟 A} (x y : A)
  →                   y ∈ B
 cong-𝓟 {A = A}{B = B} x y x∈B x≡y  = transport (λ - → B - holds) x≡y x∈B
 
+
+KER-𝓟 :  {A : 𝓤 ̇} {B : 𝓦 ̇} → is-set B → (f : A → B) → A → A → Ω 𝓦
+KER-𝓟 Bset f x y = (f x ≡ f y) , Bset (f x) (f y)
+
+ker-𝓟 :  {A B : 𝓤 ̇} → is-set B → (f : A → B) → A → A → Ω 𝓤
+ker-𝓟 {𝓤} = KER-𝓟 {𝓤}{𝓤}

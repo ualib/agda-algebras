@@ -7,7 +7,7 @@
 
 open import UF-Prelude using (𝓡; 𝓢; 𝓣; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓞; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; _×_)
 open import UF-Basic using (Signature; Algebra)
-open import UF-Rel using (Ker; Rel)
+open import UF-Rel using (ker; Rel)
 open import UF-Con using (𝟎)
 open import UF-Singleton using (is-singleton)
 
@@ -52,7 +52,7 @@ module _ {S : Signature 𝓞 𝓥}  where
 
   --For algebras, isomorphisms are simply homs with 0 kernel.
   is-algebra-iso : {A B : Algebra 𝓤 S} (f : Hom A B) → 𝓤 ⁺ ̇
-  is-algebra-iso {𝓤}{A} f =  Ker ∣ f ∣ ≡ 𝟎 {𝓤}{∣ A ∣}
+  is-algebra-iso {𝓤}{A} f =  ker ∣ f ∣ ≡ 𝟎 {𝓤}{∣ A ∣}
 
   AlgebraIsos : (A B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   AlgebraIsos {𝓤} A B = Σ f ꞉ (Hom A B) , is-algebra-iso {𝓤} {A} {B} f

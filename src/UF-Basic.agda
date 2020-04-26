@@ -20,7 +20,7 @@ Op I A = (I → A) → A
 -- 𝓞 is the universe in which the operation symbols lives
 -- 𝓥 is the universe in which the arities live
 Signature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
-Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , (F → 𝓥 ̇)
+Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
 
 -- 𝓤 is the universe level of carriers (or "universes") of structures
 Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇

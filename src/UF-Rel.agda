@@ -25,23 +25,23 @@ Rel A 𝓝 = REL A A 𝓝
 KER : {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → 𝓤 ⊔ 𝓦 ̇
 KER {𝓤}{𝓦}{A} f = Σ x ꞉ A , Σ y ꞉ A , f x ≡ f y
 
-Ker : {A B : 𝓤 ̇} → (f : A → B) → 𝓤 ̇
-Ker {𝓤} = KER{𝓤}{𝓤}
+ker : {A B : 𝓤 ̇} → (f : A → B) → 𝓤 ̇
+ker {𝓤} = KER{𝓤}{𝓤}
 
 -- ...as a relation.
 KER-rel : {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → Rel A 𝓦
 KER-rel f x y = f x ≡ f y
 
 -- ...as a relation in the special case 𝓦 ≡ 𝓤.
-Ker-rel : {A B : 𝓤 ̇} → (f : A → B) → Rel A 𝓤
-Ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
+ker-rel : {A B : 𝓤 ̇} → (f : A → B) → Rel A 𝓤
+ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
 -- ...as a binary predicate.
 KER-pred :  {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → Pred (A × A) 𝓦
 KER-pred f (x , y) = f x ≡ f y
 -- ...as a binary predicate in the special case 𝓦 ≡ 𝓤.
-Ker-pred :  {A : 𝓤 ̇} {B : 𝓤 ̇} → (f : A → B) → Pred (A × A) 𝓤
-Ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
+ker-pred :  {A : 𝓤 ̇} {B : 𝓤 ̇} → (f : A → B) → Pred (A × A) 𝓤
+ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
 
 --Implication/containment (could also be written _⊆_.).

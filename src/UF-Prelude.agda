@@ -8,8 +8,8 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Relation.Unary using (Pred; _∈_; _⊆_)
-open import Data.Product  renaming (_,_ to _؛_) using (∃) -- ; _,_; _×_;Σ-syntax) public renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+--open import Relation.Unary using (Pred; _∈_; _⊆_)
+--open import Data.Product  renaming (_,_ to _؛_) using (∃) -- ; _,_; _×_;Σ-syntax) public renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 
 module UF-Prelude where
 
@@ -60,14 +60,8 @@ universe-of {𝓤} X = 𝓤
 
 --"We will refer to universes by letters 𝓤,𝓥,𝓦,𝓣 (type these with, resp, ``\MCU``, ``\MCV``, etc)"
 variable
-  𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓟 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 : Universe
+  𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 : Universe
 
-------------------------------------------------------------------------
--- Unary relations (aka predicates).  (cf. Relation/Unary.agda from the Agda std lib)
--- `Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
--- Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
--- Pred : ∀ {𝓤} → 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
--- Pred A 𝓥 = A → 𝓥 ̇
 
 -- The one-element type (type `\b1` to get 𝟙; and type `\*` to get ⋆)
 --"We place it in the first universe, `𝓤₀ ̇` [= `Set (lsuc lzero)`] and we name its unique element `⋆`.
@@ -151,6 +145,7 @@ is-empty X = X → 𝟘
 -- amounts to `(𝟘 → 𝟙) ≡ 𝟙`, which in turn says that there is precisely one function `𝟘 → 𝟙`, namely
 -- the (vacuous) function."
 
+-- open import Agda.Builtin.Nat public renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 ------------------------------------------------------------------------
 --"The type `ℕ` of natural numbers"
 -- ------------------------------
@@ -193,6 +188,8 @@ data ℕ : 𝓤₀ ̇ where
  →              ℕ → X
 ℕ-iteration X x f = ℕ-recursion X x (λ _ x → f x) -- !!WARNING!! Agda is capable of automatically
                                                                        --                 filling in the wrong proof term here.
+
+
 --"We now define addition and multiplication for the sake of illustration.
 -- We first do it in Peano style. We will create a local `module` so definitions are not globally visible;
 -- things in the module are indented and are visible outside the module only if we `open` the module or
@@ -210,7 +207,7 @@ module Arithmetic where
 module Arithmetic' where
 
  _+_ _×_ : ℕ → ℕ → ℕ
- 
+
  x + y = h y
   where
    h : ℕ → ℕ
@@ -244,16 +241,7 @@ module ℕ-order where
  infix 10 _≤_
  infix 10 _≥_
 
---"Exercise. Write it using `ℕ-induction`, recursion or iteration, as appropriate."
---SOLUTION. come back later (and/or see HoTT-UF-Agda.html#someexercisessol)
---"Exercise. After learning about the types `Σ` and `_≡_` explained below, prove 
--- > `x ≤ y` if and only if `Σ \(z : ℕ) → x + z ≡ y`."
---SOLUTION. come back to this later (and/or see HoTT-UF-Agda.html#basicarithmetic)
---"After learning univalence prove that in this case this implies `(x ≤ y) ≡ Σ \(z : ℕ) → x + z ≡ y`."
---SOLUTION. come back later (see: HoTT-UF-Agda.html#additionalexercisessol and HoTT-UF-Agda.html#univalence).
---"That bi-implication can be turned into equality only holds for types that are subsingletons and this is
---called propositional extensionality." (HoTT-UF-Agda.html#univalence-gives-propext, HoTT-UF-Agda.html#propext)."
-
+------------------------------------------------------------------------------------------------
 --"The identity function (in two versions with different implicit arguments)
 id : {X : 𝓤 ̇} → X → X
 id x = x
@@ -262,8 +250,7 @@ id x = x
 𝑖𝑑 X = id
 
 
-
--------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
 -- The identity type former `Id`, also written `_≡_`
 -- see: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#identitytype
 
@@ -279,10 +266,10 @@ data Id {𝓤} (X : 𝓤 ̇) : X → X → 𝓤 ̇ where
 
    Here we have a TYPE FAMILY indexed by the ELEMENTS of a given type. As Escardo puts it,
 
-  "Given a type `X` in a universe `𝓤`, we define a FUNCTION `Id X : X → X → 𝓤` by some mysterious sort of induction. It is this that
-   prevents us from being able to prove that the only element of the type `Id X x x` is `refl x`, or that the type `Id X x y` has at most one
-   element no matter what `y : X` is. There is however, one interesting, and crucial, thing we CAN prove---namely that for a fixed `x : X`, the
-   type
+  "Given a type `X` in a universe `𝓤`, we define a FUNCTION `Id X : X → X → 𝓤` by some mysterious sort of induction.
+   It is this that prevents us from being able to prove that the only element of the type `Id X x x` is `refl x`, or that the type
+   `Id X x y` has at most one element no matter what `y : X` is. There is however, one interesting, and crucial, thing we CAN
+   prove---namely that for a fixed `x : X`, the type
                `Σ y ꞉ Y , Id X x y` is a singleton    (or, in the old notation, `Σ λ (y ꞉ Y) → Id X x y`is a singleton)
 
    [...but we cannot prove that there is only one proof of this?]  <== Question. -}
@@ -297,8 +284,8 @@ x ≡ y = Id _ x y
 ≡-sym : {X : 𝓤 ̇ }{x y : X} → x ≡ y → y ≡ x
 ≡-sym (refl _) = refl _
 
---"Another intuition for the type family `_≡_ : X → X → 𝓤` is that it gives the least reflexive relation on the type `X`, as suggested by
--- Martin-Löf's induction principle J (discussed below)."
+--"Another intuition for the type family `_≡_ : X → X → 𝓤` is that it gives the least reflexive relation on the type `X`,
+-- as suggested by Martin-Löf's induction principle J (discussed below)."
 
 {-"Whereas we can make the intuition that `x ≡ x` has precisely one element good by POSTULATING a certain `K` axiom due to
    Thomas Streicher (which comes with Agda by default but we have disabled above) we cannot PROVE that `refl x` is the only element of
@@ -381,17 +368,6 @@ x ≡ y = Id _ x y
  →                      B y p -- B y p : 𝓥 ̇  -- 𝕁 will prove A x y p, which we must tranfer into B y p
 ℍ' X x B Bxr x (refl x) =  𝕁 (B x (refl x)) (λ x₁ y₁ x₁≡y₁ → B x (refl x)) (λ _ → Bxr) Bxr Bxr (refl Bxr)
 
------ !!! I don't yet fully understand how ℍ' and 𝕁 work... come back to this!!! --------
-
-{-NOTATION.
-  "The symbols "`=`" and "`≡`" are swapped with respect to the HoTT book convention for definitional/judgemental equality and
-   type valued equality, and there is nothing we can do about that because "`=`" is a reserved Agda symbol for definitional equality.
-   Irrespective of this, it does make sense to use "`≡`" with a triple bar, if we understand this as indicating that there are multiple
-   ways of identifying two things in general.
-
-  "With this, we have concluded the rendering of our spartan MLTT in Agda notation." -}
-
-
 -------------------------------------------------------------------------------------------------------
 -- SUMS AND PRODUCTS.
 --The binary sum type constructor `_+_`.  The "disjoint sum" (or "direct sum") of the types `X` and `Y`. Elements of the type
@@ -443,30 +419,24 @@ pattern ₁ = inr ⋆
 𝟚-induction' : (A : 𝟚 → 𝓤 ̇) → A ₀ → A ₁ → (n : 𝟚) → A n
 𝟚-induction' A a₀ a₁ = +-induction A (𝟙-induction (λ z → A (inl z)) a₀) (𝟙-induction (λ z → A (inr z)) a₁)
 
---------------------------------------------------------
+-- -------------------------------------------------------------------------------------
+--`Σ` types
+{-"Given universes `𝓤` and `𝓥`, a type `X : 𝓤` and a type family `Y : X → 𝓥`, we want to construct its sum, which is
+   a type whose elements are of the form `(x , y)`, with `x : X` and `y : Y x`. This sum type will live in the lub `𝓤 ⊔ 𝓥`
+   of the universes `𝓤` and `𝓥`. We will write `Σ Y` for this sum, with `X`, as well as the universes, implicit.
 
--- -----------
--- `Σ` types
--- -----------
---"Given universes `𝓤` and `𝓥`, a type `X : 𝓤` and a type family `Y : X → 𝓥`, we want to construct its sum,
--- which is a type whose elements are of the form `(x , y)`, with `x : X` and `y : Y x`. This sum type will live
--- in the lub `𝓤 ⊔ 𝓥` of the universes `𝓤` and `𝓥`. We will write `Σ Y` for this sum, with `X`, as well as
--- the universes, implicit.
+  "Often Agda, and people, can figure out what the unwritten type `X` is, from the definition of `Y`. But sometimes there
+   may be either lack of enough information, or of enough concentration power by people, or of sufficiently powerful inference
+   algorithms in the implementation of Agda. In such cases we can write `Σ λ(x : X) → Y x`, because `Y = λ (x : X) → Y x`
+   by a so-called η-rule.
 
---"Often Agda, and people, can figure out what the unwritten type `X` is, from the definition of `Y`. But sometimes
--- there may be either lack of enough information, or of enough concentration power by people, or of sufficiently
--- powerful inference algorithms in the implementation of Agda. In such cases we can write `Σ λ(x : X) → Y x`,
--- because `Y = λ (x : X) → Y x` by a so-called η-rule.
+  "However, we will often use the synonym `\` of `λ` for `Σ`, as if considering it as part of the `Σ` syntax: `Σ \(x : X) → Y x`.
 
---"However, we will often use the synonym `\` of `λ` for `Σ`, as if considering it as part of the `Σ` syntax:
--- `Σ \(x : X) → Y x`.
+  "In MLTT we would write this as `Σ (x : X), Y x`, for example with the indexing `x : X` written as a subscript of `Σ` or under it.
 
---"In MLTT we would write this as `Σ (x : X), Y x`, for example with the indexing `x : X` written as a subscript of
--- `Σ` or under it.
-
---"Or it may be that the name `Y` is not defined, and we work with a nameless family defined on the fly, as in the
--- exercise proposed above: `Σ \(z : ℕ) → x + z ≡ y`, where `Y z = (x + z ≡ y)` in this case, and where we haven't
--- defined the identity type former `_≡_` yet.
+  "Or it may be that the name `Y` is not defined, and we work with a nameless family defined on the fly, as in the exercise
+   proposed above: `Σ \(z : ℕ) → x + z ≡ y`, where `Y z = (x + z ≡ y)` in this case, and where we haven't defined the identity
+   type former `_≡_` yet." -}
 
 --"We can construct the `Σ` type former as follows in Agda:
 infixr 50 _,_
@@ -502,10 +472,8 @@ infixr -1 -Σ
 -Σ X Y = Σ Y
 syntax -Σ X (λ x → y) = Σ x ꞉ X , y -- type `꞉` as `\:4`
 
---"For some reason, Agda has this kind of definition backwards: the definiendum and the definiens are swapped with respect
--- to the normal convention of writing what is defined on the left-hand side of the equality sign.
--- Notice also that "꞉" in the above syntax definition is not the same as “:”, even though they may look the same.
--- For the above notation Σ x ꞉ A , b, the symbol “꞉” has to be typed “\:4” in the emacs Agda mode.
+--!!!WARNING!!!  "꞉" in the above syntax definition is not the same as ":", even though they may look the same.
+-- To produce the Σ x ꞉ A , b used above, you must type the "꞉" symbol as `\:4` in the emacs Agda mode.
 
 --"To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all
 -- `x : X` and `y : Y x`.  This is called `Σ` induction or `Σ` elimination, or `uncurry`, after Haskell Curry.
@@ -1031,248 +999,66 @@ succ-lc = succ-elim -- alias
   
 ℕ-has-decidable-equality = ℕ-decidable
 
---"*Exercise*. Students should do this kind of thing at least once in their academic life: rewrite the
--- above proof of the decidability of equality of `ℕ` to use the `ℕ-induction` principle instead of
--- pattern matching and recursion, to understand by themselves that this can be done."
-
---"We now move to basic arithmetic, and we use a module for that."
-module basic-arithmetic-and-order where
-
-  open ℕ-order public
-  open Arithmetic renaming (_+_ to _∔_) hiding (_×_)
-
-  --"We can show that addition is associative as follows, by induction on `z`, where `IH` stands for
-  -- "induction hypothesis":
-  +-assoc : (x y z : ℕ) -> (x ∔ y) ∔ z ≡ x ∔ (y ∔ z)
-  +-assoc x y 0 = (x ∔ y) ∔ 0 ≡⟨ refl _ ⟩ x ∔ (y ∔ 0) ∎
-  +-assoc x y (succ z) = (x ∔ y) ∔ succ z   ≡⟨ refl _     ⟩
-                         succ ((x ∔ y) ∔ z) ≡⟨ ap succ IH ⟩
-                         succ (x ∔ (y ∔ z)) ≡⟨ refl _     ⟩
-                         x ∔ (y ∔ succ z)   ∎
-   where
-    IH : (x ∔ y) ∔ z ≡ x ∔ (y ∔ z)
-    IH = +-assoc x y z
-
-  --"Notice that the proofs `refl _` should be read as 'by definition' or 'by construction'. They are not necessary, because Agda
-  -- knows the definitions and silently expands them when necessary, but we are writing them here for the sake of clarity. Elsewhere
-  -- in these notes, we do occasionally rely on silent expansions of definitions. Here is the version with the silent expansion of definitions,
-  -- for the sake of illustration (the author of these notes can write, but not read it the absence of the above verbose version):
-  +-assoc' : (x y z : ℕ) -> (x ∔ y) ∔ z ≡ x ∔ (y ∔ z)
-  +-assoc' x y zero = refl (x ∔ y)
-  +-assoc' x y (succ z) = ap succ (+-assoc' x y z)
-
-  --"We defined addition by induction on the second argument. Next we show that the base case and induction step of a definition by
-  -- induction on the first argument hold (but of course not definitionally). We do this by induction on the second argument."
-  +-base-on-first : (x : ℕ) -> 0 ∔ x ≡ x
-  +-base-on-first 0        = refl 0
-  +-base-on-first (succ x) = ap succ (+-base-on-first x) 
-
-  +-step-on-first : (x y : ℕ) -> succ x ∔ y ≡ succ (x ∔ y)
-  +-step-on-first x zero     = refl (succ x)
-  +-step-on-first x (succ y) = ap succ (+-step-on-first x y)
-
-  --"Using this, the commutativity of addition can be proved by induction on the first argument."
-  +-comm : (x y : ℕ) -> x ∔ y ≡ y ∔ x
-  +-comm 0 y        = +-base-on-first y
-  +-comm (succ x) y = -- Goal: succ x ∔ y ≡ succ (y ∔ x)
-    succ x ∔ y  ≡⟨ +-step-on-first x y ⟩
-    succ(x ∔ y) ≡⟨ ap succ (+-comm x y) ⟩
-    succ(y ∔ x) ∎
-
-  --"We now show that addition is cancellable in its left argument, by induction on the left argument:"
-  +-lc :  (x y z : ℕ) -> x ∔ y ≡ x ∔ z -> y ≡ z
-  +-lc 0 y z p =   -- Goal: y ≡ z
-    y     ≡⟨  (+-base-on-first y)⁻¹ ⟩
-    0 ∔ y ≡⟨ p ⟩
-    0 ∔ z ≡⟨ +-base-on-first z ⟩
-    z     ∎
-  +-lc (succ x) y z p = IH
-   where
-    q = succ (x ∔ y) ≡⟨ (+-step-on-first x y)⁻¹ ⟩
-        succ x ∔ y   ≡⟨ p ⟩
-        succ x ∔ z   ≡⟨ +-step-on-first x z ⟩
-        succ (x ∔ z) ∎
-
-    IH : y ≡ z
-    IH = +-lc x y z (succ-elim q)
-
--- COME BACK TO THIS SECTION LATER --
---"Now we solve part of an exercise given above, namely that `(x ≤ y) ⇔ Σ \(z : ℕ) → x + z ≡ y`."
---"First we name the alternative definition of `≤`:"
---\begin{code}\end{code}
---"Next we show that the two relations `≤` and `≼` imply each other."
---"In both cases, we proceed by induction on both arguments."
---\begin{code}\end{code}
---"[Later](HoTT-UF-Agda.html#additionalexercisesswol) we will show that `(x ≤ y) ≡ Σ \(z : ℕ) → x + z ≡ y`, using univalence."
---"We now develop some generally useful material regarding the order `≤` on natural numbers. First, it is reflexive, transitive and antisymmetric:""
---\begin{code}\end{code}
---"The type of roots of a function:"
---\begin{code}\end{code}
---"The type of minimal roots of a function:"
---\begin{code}\end{code}
---"Given any root, we can find a minimal root."
---\begin{code}\end{code}
-
-  _≼_ : ℕ → ℕ → 𝓤₀ ̇
-  x ≼ y = Σ \(z : ℕ) → x ∔ z ≡ y
-
-  ≤-gives-≼ : (x y : ℕ) → x ≤ y → x ≼ y
-  ≤-gives-≼ 0 0               l = 0 , refl 0
-  ≤-gives-≼ 0 (succ y)        l = succ y , +-base-on-first (succ y)
-  ≤-gives-≼ (succ x) 0        l = !𝟘 (succ x ≼ zero) l
-  ≤-gives-≼ (succ x) (succ y) l = γ
-   where
-    IH : x ≼ y
-    IH = ≤-gives-≼ x y l
-
-    z : ℕ
-    z = pr₁ IH
-
-    p : x ∔ z ≡ y
-    p = pr₂ IH
-
-    γ : succ x ≼ succ y
-    γ = z , (succ x ∔ z   ≡⟨ +-step-on-first x z ⟩
-             succ (x ∔ z) ≡⟨ ap succ p           ⟩
-             succ y       ∎)
-
-  ≼-gives-≤ : (x y : ℕ) → x ≼ y → x ≤ y
-
-  ≼-gives-≤ 0 0               (z , p) = ⋆
-
-  ≼-gives-≤ 0 (succ y)        (z , p) = ⋆
-
-  ≼-gives-≤ (succ x) 0        (z , p) = positive-not-zero (x ∔ z) q
-   where
-    q = succ (x ∔ z) ≡⟨ (+-step-on-first x z)⁻¹ ⟩
-        succ x ∔ z   ≡⟨ p                       ⟩
-        zero         ∎
-
-  ≼-gives-≤ (succ x) (succ y) (z , p) = IH
-   where
-    q = succ (x ∔ z) ≡⟨ (+-step-on-first x z)⁻¹ ⟩
-        succ x ∔ z   ≡⟨ p                       ⟩
-        succ y       ∎
-
-    IH : x ≤ y
-    IH = ≼-gives-≤ x y (z , succ-lc q)
-
-  ≤-refl : (n : ℕ) → n ≤ n
-  ≤-refl zero     = ⋆
-  ≤-refl (succ n) = ≤-refl n
-
-  ≤-trans : (l m n : ℕ) → l ≤ m → m ≤ n → l ≤ n
-  ≤-trans zero m n p q = ⋆
-  ≤-trans (succ l) zero n p q = !𝟘 (succ l ≤ n) p
-  ≤-trans (succ l) (succ m) zero p q = q
-  ≤-trans (succ l) (succ m) (succ n) p q = ≤-trans l m n p q
-
-  ≤-anti : (m n : ℕ) → m ≤ n → n ≤ m → m ≡ n
-  ≤-anti zero zero p q = refl zero
-  ≤-anti zero (succ n) p q = !𝟘 (zero ≡ succ n) q
-  ≤-anti (succ m) zero p q = !𝟘 (succ m ≡ zero) p
-  ≤-anti (succ m) (succ n) p q = ap succ (≤-anti m n p q)
-
-  ≤-succ : (n : ℕ) → n ≤ succ n
-  ≤-succ zero     = ⋆
-  ≤-succ (succ n) = ≤-succ n
-
-  zero-minimal : (n : ℕ) → zero ≤ n
-  zero-minimal n = ⋆
-
-  unique-minimal : (n : ℕ) → n ≤ zero → n ≡ zero
-  unique-minimal zero p = refl zero
-  unique-minimal (succ n) p = !𝟘 (succ n ≡ zero) p
-
-  ≤-split : (m n : ℕ) → m ≤ succ n → (m ≤ n) + (m ≡ succ n)
-  ≤-split zero n l = inl l
-  ≤-split (succ m) zero l = inr (ap succ (unique-minimal m l))
-  ≤-split (succ m) (succ n) l = +-recursion inl (inr ∘ ap succ) (≤-split m n l)
-
-  _<_ : ℕ → ℕ → 𝓤₀ ̇
-  x < y = succ x ≤ y
-
-  infix 10 _<_
-
-  not-<-gives-≥ : (m n : ℕ) → ¬(n < m) → m ≤ n
-  not-<-gives-≥ zero n u = zero-minimal n
-  not-<-gives-≥ (succ m) zero = dni (zero < succ m) (zero-minimal m)
-  not-<-gives-≥ (succ m) (succ n) = not-<-gives-≥ m n
-
-  bounded-∀-next : (A : ℕ → 𝓤 ̇ ) (k : ℕ)
-                 → A k
-                 → ((n : ℕ) → n < k → A n)
-                 → (n : ℕ) → n < succ k → A n
-  bounded-∀-next A k a φ n l = +-recursion f g s
-   where
-    s : (n < k) + (succ n ≡ succ k)
-    s = ≤-split (succ n) k l
-
-    f : n < k → A n
-    f = φ n
-
-    g : succ n ≡ succ k → A n
-    g p = transport A ((succ-lc p)⁻¹) a
-
-  root : (ℕ → ℕ) → 𝓤₀ ̇
-  root f = Σ \(n : ℕ) → f n ≡ 0
-
-  _has-no-root<_ : (ℕ → ℕ) → ℕ → 𝓤₀ ̇
-  f has-no-root< k = (n : ℕ) → n < k → f n ≢ 0
-
-  is-minimal-root : (ℕ → ℕ) → ℕ → 𝓤₀ ̇
-  is-minimal-root f m = (f m ≡ 0) × (f has-no-root< m)
-
-  at-most-one-minimal-root : (f : ℕ → ℕ) (m n : ℕ)
-                           → is-minimal-root f m → is-minimal-root f n → m ≡ n
-
-  at-most-one-minimal-root f m n (p , φ) (q , ψ) = c m n a b
-   where
-    a : ¬(m < n)
-    a u = ψ m u p
-
-    b : ¬(n < m)
-    b v = φ n v q
-
-    c : (m n : ℕ) → ¬(m < n) → ¬(n < m) → m ≡ n
-    c m n u v = ≤-anti m n (not-<-gives-≥ m n v) (not-<-gives-≥ n m u)
-
-  minimal-root : (ℕ → ℕ) → 𝓤₀ ̇
-  minimal-root f = Σ \(m : ℕ) → is-minimal-root f m
-
-  minimal-root-is-root : ∀ f → minimal-root f → root f
-  minimal-root-is-root f (m , p , _) = m , p
-
-  bounded-ℕ-search : ∀ k f → (minimal-root f) + (f has-no-root< k)
-  bounded-ℕ-search zero f = inr (λ n → !𝟘 (f n ≢ 0))
-  bounded-ℕ-search (succ k) f = +-recursion φ γ (bounded-ℕ-search k f)
-   where
-    A : ℕ → (ℕ → ℕ) → 𝓤₀ ̇
-    A k f = (minimal-root f) + (f has-no-root< k)
-
-    φ : minimal-root f → A (succ k) f
-    φ = inl
-
-    γ : f has-no-root< k → A (succ k) f
-    γ u = +-recursion γ₀ γ₁ (ℕ-has-decidable-equality (f k) 0)
-     where
-      γ₀ : f k ≡ 0 → A (succ k) f
-      γ₀ p = inl (k , p , u)
-
-      γ₁ : f k ≢ 0 → A (succ k) f
-      γ₁ v = inr (bounded-∀-next (λ n → f n ≢ 0) k v u)
-
-  root-gives-minimal-root : ∀ f → root f → minimal-root f
-  root-gives-minimal-root f (n , p) = γ
-   where
-    g : ¬(f has-no-root< (succ n))
-    g φ = φ n (≤-refl n) p
-
-    γ : minimal-root f
-    γ = right-fails-gives-left-holds (bounded-ℕ-search (succ n) f) g
 
 
 
+
+
+
+
+------------------------------------------------------------------------
+-- Unary relations (aka predicates).  (cf. Relation/Unary.agda from the Agda std lib)
+-- `Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
+-- Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
+Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
+Pred A 𝓥 = A → 𝓥 ̇
+------------------------------------------------------------------------
+-- Membership (cf. Relation/Unary.agda from the Agda std lib)
+infix 4 _∈_ _∉_
+_∈_ : {A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
+x ∈ P = P x
+
+_∉_ : {A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
+x ∉ P = ¬ (x ∈ P)
+
+------------------------------------------------------------------------
+-- Subset relations (cf. Relation/Unary.agda from the Agda std lib)
+infix 4 _⊆_ _⊇_
+_⊆_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
+
+_⊇_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+P ⊇ Q = Q ⊆ P
+
+
+------------------------------------------------------------------------
+-- Existential quantifiers (cf. agda-stdlib Data/Product.agda)
+-- ∃ :  ∀ {A : 𝓤 ̇} → (A → 𝓦 ̇) → 𝓤 ⊔ 𝓦 ̇
+-- ∃ S = Σ S
+
+-- ∄ : ∀ {A : 𝓤 ̇} → (A → 𝓦 ̇) → 𝓤 ⊔ 𝓦 ̇
+-- ∄ P = ¬ (∃ P)
+
+-- ∃₂ : ∀ {A : Set a} {B : A → Set b}
+-- (C : (x : A) → B x → Set c) → Set (a ⊔ b ⊔ c)
+-- ∃₂ C = ∃ λ a → ∃ λ b → C a b
+
+-- -- Unique existence (parametrised by an underlying equality).
+
+-- ∃! : {A : Set a} → (A → A → Set ℓ) → (A → Set b) → Set (a ⊔ b ⊔ ℓ)
+-- ∃! _≈_ B = ∃ λ x → B x × (∀ {y} → B y → x ≈ y)
+
+-- -- Syntax
+
+-- ∃-syntax : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
+-- ∃-syntax = ∃
+
+-- syntax ∃-syntax (λ x → B) = ∃[ x ] B
+
+-- ∄-syntax : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
+-- ∄-syntax = ∄
+
+-- syntax ∄-syntax (λ x → B) = ∄[ x ] B
 
 -- =====================================================================
 -- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
@@ -1286,8 +1072,8 @@ _∈∈_  f S = (x : _) → f x ∈ S
 Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
-img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → ∃ P
-img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ ؛ Imf⊆P x₁
+img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → Σ P
+img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
 ≡-elim-left :  {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂)   →   A₁ ≡ A₂
 ≡-elim-left e = ap pr₁ e
@@ -1307,7 +1093,7 @@ img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ ؛ Imf⊆P x₁
 cong : {X : 𝓤 ̇} {Y : 𝓦 ̇} (f : X → Y){x y : X} → x ≡ y → f x ≡ f y
 cong  = ap
 
--- cf. Relation/Binary/Core.agda
+-- -- cf. Relation/Binary/Core.agda
 cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
 cong-app {f = f} (refl _) a = refl (f a)
 
@@ -1351,18 +1137,4 @@ InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (b : B) (b∈Imgf : Image f
  →          f (Inv f b b∈Imgf) ≡ b
 InvIsInv f .(f a) (im a) = refl _
 InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
