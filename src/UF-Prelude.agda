@@ -2,8 +2,9 @@
 --BLAME: williamdemeo@gmail.com
 --DATE: 21 Apr 2020
 --UPDATED: 21 Apr 2020
---NOTE:  Some of what appears in this file is based on Martin Escardo's HoTT/UF notes.
---          (cf. https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ )
+--REF:  Some of what appears in this file is based on Martin Escardo's HoTT/UF notes.
+--     cf. https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
+--     In particular, comments appearing in quotes below, along with the code to which those comments refer, are due to Martin Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -1328,23 +1329,22 @@ data Image_∋_ {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) : B → 𝓤 ⊔ 𝓦
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
-image_ : {A : 𝓤 ̇} {B : 𝓦 ̇} → (A → B) → Pred B (𝓤 ⊔ 𝓦)
-image f = λ b → ∃ λ a → b ≡ f a
+-- image_ : {A : 𝓤 ̇} {B : 𝓦 ̇} → (A → B) → Pred B (𝓤 ⊔ 𝓦)
+-- image f = λ b → ∃ λ a → b ≡ f a
 
 ImageIsImage :  {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) (b : B) (a : A)
  →                  b ≡ f a    →     Image f ∋ b
 ImageIsImage {A = A} {B = B} f b a b≡fa = eq b a b≡fa
 
---N.B. the assertion Image f ∋ y must come with a proof, which is of the
---form ∃a f a = y, so we have a witness, so the inverse can be "computed"
---in the following way:
+--N.B. the assertion Image f ∋ y must come with a proof, which is of the form ∃a f a = y, so we have a witness.
+--Thus, the inverse can be "computed" in the following way:
 Inv : {A : 𝓤 ̇}  {B : 𝓦 ̇} (f : A → B) (b : B) → Image f ∋ b  →  A
 Inv f .(f a) (im a) = a  -- Cool!!!
 Inv f b (eq b a b≡fa) = a
 
 -- special case for Set
 inv : {A B : 𝓤₀ ̇}(f : A → B)(b : B) → Image f ∋ b → A
-inv{A}{B} = Inv {𝓤₀}{𝓤₀}{A}{B}
+inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
 
 InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (b : B) (b∈Imgf : Image f ∋ b)
              --------------------------------------

@@ -1,9 +1,10 @@
 --FILE: UF-Singleton.agda
 --DATE: 18 Mar 2020
---BLAME: <williamdemeo@gmail.com>
+--BLAME: williamdemeo@gmail.com
 --REF: Based on Martin Escardo's course notes
---SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subsingletonsandsets
---      and https://www.cs.bham.ac.uk/~mhe/agda-new/UF-Subsingletons.html
+--     cf. https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subsingletonsandsets
+--         https://www.cs.bham.ac.uk/~mhe/agda-new/UF-Subsingletons.html
+--     In particular, comments appearing in quotes below, along with the code to which those comments refer, are due to Martin Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 

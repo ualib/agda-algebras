@@ -2,8 +2,10 @@
 --DATE: 4 Apr 2020
 --BLAME: williamdemeo@gmail.com
 --REF: Based on Martin Escardo's course notes
---      cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua
---           https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#hfunext
+--     cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua
+--          https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#hfunext
+--     In particular, comments appearing in quotes below, along with the code to which those comments refer, are due to Martin Escardo.
+
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module UF-Extensionality where

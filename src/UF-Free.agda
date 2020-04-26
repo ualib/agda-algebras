@@ -3,7 +3,6 @@
 --Date: 20 Feb 2020
 --Updated: 23 Feb 2020
 --Notes: Based on the file `free.agda` (25 Dec 2019).
---       Used for 2nd half of talk at JMM Special Session (Jan 2020).
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
