@@ -6,14 +6,15 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
-open import UF-Prelude
-open import UF-Basic
-open import UF-Free
-open import UF-Hom
+open import UF-Prelude using (𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq)
+
+open import UF-Basic using (Signature; Algebra; Op)
+open import UF-Free using (Term; _̇_; _̂_; generator; node)
+open import UF-Hom using (Hom)
 open import UF-Rel using (Transitive)
 open import UF-Extensionality using (funext)
 
-open import Relation.Unary using (⋂; ⋃) 
+open import Relation.Unary using (⋂)
 
 module UF-Subuniverse {S : Signature 𝓞 𝓥} where
 
@@ -53,7 +54,7 @@ record Subuniverse  {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ wher
     isSub : sset ∈ Subuniverses 𝑨
 
 module _ {𝑨 : Algebra 𝓤 S} where
-  data Sg (X : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
+  data Sg (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
     app :  ( 𝓸 : ∣ S ∣ ) { 𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ }
       →       Im 𝒂 ⊆ Sg X
@@ -72,7 +73,7 @@ module _ {𝑨 : Algebra 𝓤 S} where
   --  Location of the error: src/full/Agda/TypeChecking/Monad/Context.hs:119"
   -- I think it has to do with variable generalization
   --module _ where
-  sgIsSmallest : { X : Pred ∣ 𝑨 ∣ 𝓤  } {Y : Pred ∣ 𝑨 ∣ 𝓤 }
+  sgIsSmallest : { X : Pred ∣ 𝑨 ∣ 𝓡  } {Y : Pred ∣ 𝑨 ∣ 𝓢 }
     → Y ∈ Subuniverses 𝑨
     → X ⊆ Y
     -----------------
@@ -168,11 +169,11 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
   --    Proof: see `sgIsSmallest`
 
   --Finally, we can prove the desired inclusion.
-  -- SgY⊆TermImageY : {x : X} → (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
-  -- SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x} Y)
+  SgY⊆TermImageY : {x : X} → (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
+  SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x} Y)
 
   -- Now we should be able to prove something like the following
-  -- (if we wanted to bother generalizing the relation ≃ to predicates):
+  -- (if we could be bothered to generalize the relation ≃ to predicates):
   -- SgY≃TermImageY : (Y : Pred ∣ 𝑨 ∣ k) ->  (TermImage Y) ≃ (Sg Y)
   -- SgY≃TermImageY {x} Y = ? 
 
