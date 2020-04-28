@@ -1138,3 +1138,54 @@ InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (b : B) (b∈Imgf : Image f
 InvIsInv f .(f a) (im a) = refl _
 InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
 
+-- Epic (surjective) function from 𝓤 ̇ to 𝓦 ̇
+Epic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Epic g = ∀ y → Image g ∋ y
+
+-- special case: epic function on Set
+epic : {A B : 𝓤₀ ̇} (g : A → B) → _ ̇
+epic = Epic {𝓤₀} {𝓤₀}
+
+-- The (pseudo-)inverse of an epic function
+EpicInv : {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) → Epic f → B → A
+EpicInv f fEpic b = Inv f b (fEpic b)
+
+
+-- (this belongs elsewhere)
+-- The (pseudo-)inverse of an epimorphism is total.
+-- EInvTotal : {𝑨 𝑪 : Algebra k S} 
+--   ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
+--   ->        Epic ∣ g ∣
+--            -----------------------
+--   ->        ∣ 𝑪 ∣ -> ∣ 𝑨 ∣
+-- EInvTotal{𝑨}{𝑪} g gEpic = (λ c → EpicInv ∣ g ∣ gEpic c)
+
+---------------------------------------------------------
+--Monics (injectivity)
+--monic function from Set ℓ₁ to Set ℓ₂
+Monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
+
+-- special case: monic function on Set
+monic : {A B : 𝓤₀ ̇} (g : A → B) -> _ ̇
+monic = Monic {𝓤₀}{𝓤₀}
+
+--The (pseudo-)inverse of a monic function
+MonicInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) → Monic f
+ →         (b : B) → Image f ∋ b → A
+MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
+
+-- The (psudo-)inverse of a monic is the left inverse.
+-- MInvIsLInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+--   ->         (f : A -> B)
+--   ->         (fMonic : Monic f)
+--            ----------------------------------------
+--   ->        (MonicInv f fMonic) ∘ f ≡ identity A
+-- MInvIsLInv f fMonic =  ?
+
+--bijectivity
+bijective : {A B : 𝓤₀ ̇} (g : A → B) → _ ̇
+bijective g = epic g × monic g
+
+Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Bijective g = Epic g × Monic g

@@ -21,9 +21,6 @@ module UF-Free {S : Signature 𝓞 𝓥} {X : 𝓤 ̇} where
 ----------------------------
 -- open signature
 
--- data Term : Set (i ⊔ j ⊔ k) where
---   generator : X -> Term
---   node : (𝓸 : ∣ S ∣) -> (𝒕 : ⟦ S ⟧ 𝓸 -> Term) -> Term
 data Term  : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X -> Term
   node : (𝓸 : ∣ S ∣) -> (𝒕 : ∥ S ∥ 𝓸 -> Term) -> Term
@@ -37,9 +34,6 @@ map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
 ----------------------------------
 -- TERM ALGEBRA (for signature S)
 ----------------------------------
-
--- open Algebra
--- open Term
 
 𝔉 : Algebra _ S
 𝔉 = Term , node

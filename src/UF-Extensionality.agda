@@ -10,7 +10,7 @@
 
 module UF-Extensionality where
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_)
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv)
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop)
 
@@ -111,8 +111,7 @@ hfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } (f g : Π A) → is-equi
 hfunext-gives-dfunext : hfunext 𝓤 𝓥 → dfunext 𝓤 𝓥
 hfunext-gives-dfunext hfe {X} {A} {f} {g} = inverse (happly f g) (hfe f g)
 
---"Voevodsky showed that all these notions of function extensionality are logically equivalent to saying that products of singletons are
--- singletons:
+--"Voevodsky showed that all these notions of function extensionality are logically equivalent to saying that products of singletons are singletons:
 vvfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
 vvfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ }
  →               ( (x : X) → is-singleton (A x) )
@@ -1100,9 +1099,14 @@ cong-𝓟 : {A : 𝓤 ̇ } {B : 𝓟 A} (x y : A)
  →                   y ∈ B
 cong-𝓟 {A = A}{B = B} x y x∈B x≡y  = transport (λ - → B - holds) x≡y x∈B
 
-
 KER-𝓟 :  {A : 𝓤 ̇} {B : 𝓦 ̇} → is-set B → (f : A → B) → A → A → Ω 𝓦
 KER-𝓟 Bset f x y = (f x ≡ f y) , Bset (f x) (f y)
 
 ker-𝓟 :  {A B : 𝓤 ̇} → is-set B → (f : A → B) → A → A → Ω 𝓤
 ker-𝓟 {𝓤} = KER-𝓟 {𝓤}{𝓤}
+
+-- The (psudo-)inverse of an epic is the right inverse.
+EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B)  (fEpic : Epic f)
+ →            f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
+EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
+

@@ -19,7 +19,7 @@ open import Relation.Unary using (⋂)
 module UF-Subuniverse {S : Signature 𝓞 𝓥} where
 
 Subuniverses : (𝑨 : Algebra 𝓤 S) → Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
-Subuniverses 𝑨 B = (𝓸 : ∣ S ∣) (𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) → Im 𝒂 ⊆ B → ∥ 𝑨 ∥ 𝓸 𝒂 ∈ B
+Subuniverses (A , Fᴬ) B = ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → A ) → Im 𝒂 ⊆ B → Fᴬ 𝓸 𝒂 ∈ B
 
 -- To keep A at same universe level as ∃ P , B, force P to live in the same universe
 -- We need to do this so that both A and ∃ P , B can be classified by the same predicate SClo
@@ -113,7 +113,7 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩) where
      ζ = fe (λ x → InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) )
 
      γ : ∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x) ≡ ∣ f ∣ (∥ 𝑨 ∥ 𝓸 (λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)))
-     γ =   ∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)       ≡⟨ ap (λ - → ∥ 𝑩 ∥ 𝓸 - ) ζ ⁻¹ ⟩
+     γ =   ∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)       ≡⟨ ap ( ∥ 𝑩 ∥ 𝓸 ) ζ ⁻¹ ⟩
             ( ∥ 𝑩 ∥ 𝓸 ) ( ∣ f ∣ ∘ ar )     ≡⟨ ( ∥ f ∥ 𝓸 ar ) ⁻¹ ⟩
              ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 ar )          ∎
 
