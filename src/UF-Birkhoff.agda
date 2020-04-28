@@ -213,6 +213,12 @@ module _ {S : Signature 𝓞 𝓥}  where
    →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤) ) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
+  -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
+  -- satisfies exaxtly the same set of identities as does 𝒦.
+  -- Recall, Th𝓚 denotes the set of identities satisfied by all A ∈ 𝓚.
+  --  𝑻𝒉 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+
 
 --------------------------------------------------------------------------------------------------
 

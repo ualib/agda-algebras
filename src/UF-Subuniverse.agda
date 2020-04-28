@@ -103,7 +103,7 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩) where
   HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
   HomImage = λ b → Image ∣ f ∣ ∋ b
 
-  hom-image-is-sub : funext 𝓥 𝓤 → HomImage ∈ Subuniverses 𝑩
+  hom-image-is-sub : funext 𝓥 𝓤 → (HomImage ∈ Subuniverses 𝑩)
   hom-image-is-sub fe 𝓸 𝒃 𝒃∈Imf =
     eq (∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)) ( ∥ 𝑨 ∥ 𝓸 ar) γ
     where
