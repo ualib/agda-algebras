@@ -199,41 +199,38 @@ module _ {S : Signature 𝓞 𝓥}  where
   -- Subalgebras.
   -- Let 𝕊(𝓚) denote the class of algebras isomorphic to a subalgebra of a member of 𝓚.
 
-  _is-subalgebra-of-class_ : {𝓤 : Universe}  (𝑩 : Algebra 𝓤 S) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → _ ̇
+  _is-subalgebra-of-class_ : {𝓤 : Universe}  (𝑩 : Algebra 𝓤 S) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   𝑩 is-subalgebra-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
 
-  SubalgebraOfClass-pred_ : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra 𝓤 S) _
+  SubalgebraOfClass-pred_ : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺))
   SubalgebraOfClass-pred 𝓚 = λ 𝑩 → Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
 
-  SubalgebrasOfClass 𝕊 : {𝓤 : Universe} →  Pred (Algebra 𝓤 S) (𝓤 ⁺ )  → _ ̇
+  SubalgebrasOfClass 𝕊 : {𝓤 : Universe} →  Pred (Algebra 𝓤 S) (𝓤 ⁺ )  →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   SubalgebrasOfClass  𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (𝑩 is-subalgebra-of-class 𝓚)
   𝕊 = SubalgebrasOfClass
 
-  SubalgebrasOfClass-pred : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) →  _ ̇
-  SubalgebrasOfClass-pred 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (SubalgebraOfClass-pred 𝓚) 𝑩
-
   𝕊-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) )
-   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → _ ̇
+   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤) ) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
-  -- 𝕊-closed-pred  :  Pred ( (𝓤 : Universe) → (Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) ) _
-  -- 𝕊-closed-pred 𝓛𝓚 = λ 𝓤 𝑩 → (SubalgebraOfClass-pred (𝓛𝓚 𝓤) ) 𝑩 → (𝑩 ∈ 𝓛𝓚 𝓤)
 
+--------------------------------------------------------------------------------------------------
 
 -- Notes on homomorphic images and their types
 -- ---------------------------------------
--- The homomorphic image of f : Hom 𝑨 𝑩 is the image of ∣ 𝑨 ∣ under f, which, in "set-builder" notation, is simply Im f = {f a : a ∈ ∣ 𝑨 ∣ }.
+-- The homomorphic image of f : Hom 𝑨 𝑩 is the image of ∣ 𝑨 ∣ under f, which, in "set-builder" notation, is simply
+-- Im f = {f a : a ∈ ∣ 𝑨 ∣ }.
 
 -- As we have proved, Im f is a subuniverse of 𝑩.
 
--- However, there is another means of representing the collection "H 𝑨" of all homomorphic images of 𝑨 without ever referring to codomain
--- algebras (like 𝑩 above).
+-- However, there is another means of representing the collection "H 𝑨" of all homomorphic images of 𝑨 without ever
+-- referring to codomain algebras (like 𝑩 above).
 
--- Here's how: by the first isomorphism theorem, for each f : Hom 𝑨 𝑩, there exists a congruence θ of 𝑨 (which is the kernel of f) that
--- satisfies 𝑨 / θ ≅ Im f.
+-- Here's how: by the first isomorphism theorem, for each f : Hom 𝑨 𝑩, there exists a congruence θ of 𝑨 (which is the
+-- kernel of f) that satisfies 𝑨 / θ ≅ Im f.
 
--- Therefore, a nice way to get a handle on the collection H 𝑨 of all homomorphic images of 𝑨 is to simply consider the collection Con 𝑨 of
--- all congruence relations of 𝑨.  Indeed, by the above remark, we have
+-- Therefore, a nice way to get a handle on the collection H 𝑨 of all homomorphic images of 𝑨 is to simply consider the
+-- collection Con 𝑨 of all congruence relations of 𝑨.  Indeed, by the above remark, we have
 
 --   H 𝑨 = { 𝑨 / θ : θ ∈ Con 𝑨 }.
 
@@ -247,39 +244,43 @@ module _ {S : Signature 𝓞 𝓥}  where
 -- The class 𝓚 is a collection of algebras whose universes live at some level.
 -- (Above I used `𝓤 ⁺`.)
 
--- However, if 𝑨 is an algebra with ∣ 𝑨 ∣ : 𝓤 ̇, then the quotient structure  (as it is now defined in Con.agda), has type 𝑨 / θ : 𝓤 ⁺ ̇
+-- However, if 𝑨 is an algebra with ∣ 𝑨 ∣ : 𝓤 ̇, then the quotient structure  (as it is now defined in Con.agda), has
+-- type 𝑨 / θ : 𝓤 ⁺ ̇
 
--- So, in order for the class 𝓚 to contain both 𝑨 and all its quotients 𝑨 / θ (i.e. all its hom images) it seems we need to somehow define a class of
--- algebras that have different universe levels.
+-- So, in order for the class 𝓚 to contain both 𝑨 and all its quotients 𝑨 / θ (i.e. all its hom images) it seems we need to
+-- somehow define a class of algebras that have different universe levels.
 
 -- Can we define a data type with such "universe level polymorphism"?
 
--- Without that, you can see in the definition above how I got around the problem. Instead of assuming that 𝑨 itself belongs to 𝓚,
--- I assume that the "quotient" 𝑨 / ∥𝟎∥ (which is isomorphic to 𝑨) belongs to 𝓚.
+-- Without that, you can see in the definition above how I got around the problem. Instead of assuming that 𝑨 itself belongs
+-- to 𝓚, I assume that the "quotient" 𝑨 / ∥𝟎∥ (which is isomorphic to 𝑨) belongs to 𝓚.
 
 -- This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if 𝑪 ≅ 𝑨 / θ ∈ 𝓚,
 -- then also 𝑪 / ψ ≅ (𝑨 / θ) / ψ ∈ 𝓚.
 
--- So, if we want 𝓚 to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to 𝓚.
+-- So, if we want 𝓚 to be closed under all quotients, we cannot determine in advance the universe levels of the algebras
+-- that belong to 𝓚.
 
--- Right now I'm trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
+-- I'm trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
 
--- It seems we're testing the limits of Agda's universe level paradigm... which may be a good thing.  Maybe we can invent a cool new type to
--- solve the problem, or we may have to try to extend Agda's capabilities.
+-- It seems we may be testing the limits of Agda's universe level paradigm..  Maybe we can invent a new type to solve the problem,
+-- or we may have to try to extend Agda's capabilities.
 
--- record AlgebraClass (ℓ : Level) : Set ℓ where
---   algebras : Pred (Algebra ℓ S) (lsuc ℓ)
---   nextclass : AlgebraClass (lsuc ℓ)
+-- record AlgebraClass (𝓤 : Universe) : 𝓤 ̇ where
+--   algebras : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )
+--   nextclass : AlgebraClass ( 𝓤 ⁺ )
 
 -- record AlgebraClass : Set _ where
 --   algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
 
---hom-closed
--- hom-closed : Pred (AlgebraClass lzero) _
--- hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
-  -- -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
-  --       ------------------------------
-  -- ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+-- module _ {S : Signature 𝓞 𝓥} where
+
+--   hom-closed : Pred (AlgebraClass lzero) _
+--   hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
+--   -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
+--         ------------------------------
+--   ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+
 -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
 -- satisfies exaxtly the same set of identities as does 𝒦.
 -- module _  {i j : Level} {S : Signature i j}  where
