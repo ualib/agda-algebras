@@ -7,10 +7,10 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
-open import UF-Prelude
+open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; codomain; _×_; _+_; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∙_; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app )
 open import UF-Basic
 open import UF-Hom
-open import UF-Rel using (ker-pred)
+open import UF-Rel using (ker-pred; Rel)
 open import UF-Con
 open import UF-Free
 open import UF-Subuniverse
@@ -114,7 +114,7 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
     h = λ c → f ( gInv c )
 
     ξ : (x : A) → ker-pred g (x , gInv (g x))
-    ξ x =  ( cong-app (EInvIsRInv fe g gEpic) ( g x ) )⁻¹ 
+    ξ x =  ( cong-app (EInvIsRInv fe g gEpic) ( g x ) )⁻¹
 
     f≡h∘g : f ≡ h ∘ g
     f≡h∘g = fe  λ x → Kg⊆Kf (ξ x)
@@ -157,48 +157,59 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
 -- --isomorphic to a member of 𝓚.
 -- --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
--- module _ {i j : Level} {S : Signature i j}  where
+module _ {S : Signature 𝓞 𝓥}  where
 
---   ------------------------------------------------------------------------------
---   --  H(𝓚) for the class of all homomorphic images of members of 𝓚;
---   _HomImageOf_ : ∀{k : Level} (𝑩 : Algebra (lsuc k) S)
---     ->             (𝑨 : Algebra k S)
---     ->             Set _
---   𝑩 HomImageOf 𝑨 =
---     ∃ λ (θ : Rel ∣ 𝑨 ∣ _) -> con 𝑨 θ
---       ->   (∣ 𝑨 ∣ // θ) ≃ ∣ 𝑩 ∣
+  ------------------------------------------------------------------------------
+  -- Homomorphic Images.
+  -- Let  ℍ  (𝓚)  denote the class of homomorphic images of members of 𝓚.
 
---   HomImagesOf : {k : Level} -> (Algebra k S) -> Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
---   HomImagesOf 𝑨 = λ 𝑩 -> 𝑩 HomImageOf 𝑨 
+  _is-hom-image-of_ : {𝓤 : Universe} (𝑩 : Algebra (𝓤 ⁺) S) → (𝑨 : Algebra 𝓤 S)  →   𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  𝑩 is-hom-image-of 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ _ ) , con 𝑨 θ  × ( ( ∣ 𝑨 ∣ // θ ) ≡ ∣ 𝑩 ∣ )
 
---   _HomImageOfClass_ : ∀{k : Level} -> (Algebra (lsuc k) S) -> (Pred (Algebra k S) (lsuc k)) -> Set _
---   𝑩 HomImageOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 HomImageOf 𝑨
+  HomImagesOf : (Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra _ S) , 𝑩 is-hom-image-of 𝑨
 
---   HomImagesOfClass : {k : Level}
---     ->               Pred (Algebra k S) (lsuc k)
---     ->               Pred (Algebra (lsuc k) S) (i ⊔ j ⊔ lsuc k)
---   HomImagesOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 HomImageOf 𝑨
+  HomImagesOf-pred : (Algebra 𝓤 S) → Pred (Algebra ( 𝓤 ⁺ ) S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))
+  HomImagesOf-pred 𝑨 = λ 𝑩 → 𝑩 is-hom-image-of 𝑨
 
---   -- Here 𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
---   -- represents a (Level-indexed) collection of classes.
---   HClosed : (∀(ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
---     ->      (ℓ₂ : Level) -> (Algebra (lsuc ℓ₂) S)
---     ->      Set (i ⊔ j ⊔ (lsuc (lsuc ℓ₂)))
---   HClosed 𝓛𝓚 = λ ℓ 𝑩 -> 𝑩 HomImageOfClass (𝓛𝓚 ℓ) -> 𝑩 ∈ (𝓛𝓚 (lsuc ℓ)) 
-  
---   --  P(𝓚) = the class of all algebras isomorphic to a direct product of members of 𝓚
---   PClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
---     ->      (ℓ₂ : Level) -> (I : Set ℓ₂) -> (𝓐 : I → Algebra ℓ₂ S) 
---     ->      (∀ i -> 𝓐 i ∈ 𝓛𝓚 ℓ₂) -> Set _ 
---   PClosed 𝓛𝓚 = λ ℓ₂ I 𝓐 ∀i𝓐i∈𝓛𝓚 → Π 𝓐 ∈ 𝓛𝓚 ℓ₂
+  _is-hom-image-of-class_ : {𝓤 : Universe} → ( Algebra ( 𝓤 ⁺ ) S ) → ( Pred (Algebra 𝓤 S) (𝓤 ⁺) ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) , ( 𝑨 ∈ 𝓚 ) × ( 𝑩 is-hom-image-of 𝑨 )
 
---   --  S(𝓚) = the class of all algebras isomorphic to a subalgebra of a member of 𝓚
---   SubalgebraOfClass : ∀{ℓ : Level} -> (𝑩 : Algebra ℓ S) -> (Pred (Algebra ℓ S) (lsuc ℓ)) -> Set _
---   SubalgebraOfClass{ℓ} 𝑩 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 ->  (∣ 𝑩 ∣ ≡ Pred ∣ 𝑨 ∣ _) -> _is-subalgebra-of-A{i}{j}{S}{ℓ}{𝑨 = 𝑨}{𝑨}{∣ 𝑩 ∣} 𝑩
+  HomImagesOfClass ℍ  : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , ( 𝑩 is-hom-image-of-class 𝓚 )
+  ℍ 𝓚 = HomImagesOfClass 𝓚
 
---   SClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
---     ->      (ℓ₂ : Level) -> (𝑩 : Algebra ℓ₂ S) -> Set _ 
---   SClosed 𝓛𝓚 = λ ℓ 𝑩 -> SubalgebraOfClass 𝑩 (𝓛𝓚 ℓ) -> 𝑩 ∈ 𝓛𝓚 ℓ
+  -- HomImagesOfClass-pred : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra ( 𝓤 ⁺ ) S ) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ )
+  -- HomImagesOfClass-pred 𝓚 = λ 𝑩 → Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  ( 𝑩 HomImageOf 𝑨 )
+
+  -- Here 𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) represents a (Universe-indexed) collection of classes.
+  ℍ-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
+   →           (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)  →   𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  ℍ-closed 𝓛𝓚 = λ 𝓤 𝑩 → 𝑩 is-hom-image-of-class (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 (𝓤 ⁺) )
+
+  ---------------------------------------------------------------------------------
+  -- Products.
+  -- Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of members of 𝓚.
+
+  ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
+    →      (𝓘 : Universe )  ( I : 𝓘 ̇ )  ( 𝓐 : I → Algebra 𝓘 S )
+    →      (( i : I ) → 𝓐 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
+  ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ ( 𝓛𝓚 𝓘 )
+
+  -------------------------------------------------------------------------------------
+  -- Subalgebras.
+  -- Let 𝕊(𝓚) denote the class of algebras isomorphic to a subalgebra of a member of 𝓚.
+
+  _is-subalgebra-of-class_ : {𝓤 : Universe}  (𝑩 : Algebra 𝓤 S) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → _ ̇
+  𝑩 is-subalgebra-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
+
+  SubalgebrasOfClass 𝕊 : {𝓤 : Universe} →  Pred (Algebra 𝓤 S) (𝓤 ⁺ )  → _ ̇
+  SubalgebrasOfClass  𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (𝑩 is-subalgebra-of-class 𝓚)
+  𝕊 = SubalgebrasOfClass
+
+  𝕊-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) )
+   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → _ ̇
+  𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤) ) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
 --   SubalgebrasOfClass : {ℓ : Level}
 --     ->               Pred (Algebra ℓ S) (lsuc ℓ)
@@ -206,109 +217,92 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
 --   SubalgebrasOfClass{ℓ} 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> _is-subalgebra-of-A{i}{j}{S}{ℓ}{𝑨 = 𝑨}{𝑨} 𝑩
 
 
--- -- Notes on homomorphic images
--- -- ----------------------------
--- -- The homomorphic image of f : Hom 𝑨 𝑩 is the image of ∣ 𝑨 ∣ under f,
--- -- which, in "set-builder" notation, is simply Im f = {f a : a ∈ ∣ 𝑨 ∣ }.
+-- Notes on homomorphic images and their types
+-- ---------------------------------------
+-- The homomorphic image of f : Hom 𝑨 𝑩 is the image of ∣ 𝑨 ∣ under f, which, in "set-builder" notation, is simply Im f = {f a : a ∈ ∣ 𝑨 ∣ }.
 
--- -- As we have proved Im f is a subuniverse of 𝑩.
+-- As we have proved, Im f is a subuniverse of 𝑩.
 
--- -- However, there is another means of representing the collection "H 𝑨"
--- -- of all homomorphic images of 𝑨 without ever referring to codomain
--- -- algebras (like 𝑩 above).
+-- However, there is another means of representing the collection "H 𝑨" of all homomorphic images of 𝑨 without ever referring to codomain
+-- algebras (like 𝑩 above).
 
--- -- Here's how: by the first isomorphism theorem, for each f : Hom 𝑨 𝑩,
--- -- there exists a congruence θ of 𝑨 (which is the kernel of f) that
--- -- satisfies 𝑨 / θ ≅ Im f.
+-- Here's how: by the first isomorphism theorem, for each f : Hom 𝑨 𝑩, there exists a congruence θ of 𝑨 (which is the kernel of f) that
+-- satisfies 𝑨 / θ ≅ Im f.
 
--- -- Therefore, a nice way to get a handle on the collection H 𝑨 of all
--- -- homomorphic images of 𝑨 is to simply consider the collection Con 𝑨 of
--- -- all congruence relations of 𝑨.  Indeed, by the above remark, we have
+-- Therefore, a nice way to get a handle on the collection H 𝑨 of all homomorphic images of 𝑨 is to simply consider the collection Con 𝑨 of
+-- all congruence relations of 𝑨.  Indeed, by the above remark, we have
 
--- --   H 𝑨 = { 𝑨 / θ : θ ∈ Con 𝑨 }.
+--   H 𝑨 = { 𝑨 / θ : θ ∈ Con 𝑨 }.
 
--- -- So, I define the following in Birkhoff.agda:
+-- So, we could define the following:
 
--- --   hom-closed : (𝓚 : Pred (Algebra (lsuc k) S) l)
--- --     -> Pred (Algebra k S) _
--- --   hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
--- --     ->     (∃ θ : Congruence 𝑨)
--- --     ->     (∃ 𝑪 : Algebra (lsuc k) S)
--- --     ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+--   hom-closed : (𝓚 : Pred (Algebra (𝓤 ⁺) S) l) → Pred (Algebra 𝓤 S) _
+--   hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (∥𝟎∥ 𝑨)))
+--     →     (∃ θ : Congruence 𝑨)  →  (∃ 𝑪 : Algebra (𝓤 ⁺) S)  →   (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
 
--- -- To get this to type check, you can probably see the problem I
--- -- was confronted with and the trick I used to resolve it.
+-- To get this to type check, you can probably see the problem I was confronted with and the trick I used to resolve it.
+-- The class 𝓚 is a collection of algebras whose universes live at some level.
+-- (Above I used `𝓤 ⁺`.)
 
--- -- The class 𝓚 is a collection of algebras whose universes live at some level.
+-- However, if 𝑨 is an algebra with ∣ 𝑨 ∣ : 𝓤 ̇, then the quotient structure  (as it is now defined in Con.agda), has type 𝑨 / θ : 𝓤 ⁺ ̇
 
--- -- (Above I used `lsuck k`.)
+-- So, in order for the class 𝓚 to contain both 𝑨 and all its quotients 𝑨 / θ (i.e. all its hom images) it seems we need to somehow define a class of
+-- algebras that have different universe levels.
 
--- -- However, if 𝑨 is an algebra with ∣ 𝑨 ∣ : Set k, then the quotient structure
--- -- (as it is now defined in Con.agda), has type 𝑨 / θ : Set (lsuc k).
+-- Can we define a data type with such "universe level polymorphism"?
 
--- -- So, in order for the class 𝓚 to contain both 𝑨 and all its quotients 𝑨 / θ
--- -- (i.e. all its hom images) it seems we need to somehow define a class of
--- -- algebras that have different universe levels.
+-- Without that, you can see in the definition above how I got around the problem. Instead of assuming that 𝑨 itself belongs to 𝓚,
+-- I assume that the "quotient" 𝑨 / ∥𝟎∥ (which is isomorphic to 𝑨) belongs to 𝓚.
 
--- -- Can we define a data type with such "universe level polymorphism"?
+-- This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if 𝑪 ≅ 𝑨 / θ ∈ 𝓚,
+-- then also 𝑪 / ψ ≅ (𝑨 / θ) / ψ ∈ 𝓚.
 
--- -- Without that, you can see in the definition above how I got around the problem.
--- -- Instead of assuming that 𝑨 itself belongs to 𝓚, I assume that the "quotient"
--- -- 𝑨 / ⟦𝟎⟧ (which is isomorphic to 𝑨) belongs to 𝓚.
+-- So, if we want 𝓚 to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to 𝓚.
 
--- -- This is a hack and, worse, it won't do for us. We need something inductive because
--- -- we will also need that if 𝑪 ≅ 𝑨 / θ ∈ 𝓚, then also 𝑪 / ψ ≅ (𝑨 / θ) / ψ ∈ 𝓚.
+-- Right now I'm trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
 
--- -- So, if we want 𝓚 to be closed under all quotients, we cannot determine
--- -- in advance the universe levels of the algebras that belong to 𝓚.
+-- It seems we're testing the limits of Agda's universe level paradigm... which may be a good thing.  Maybe we can invent a cool new type to
+-- solve the problem, or we may have to try to extend Agda's capabilities.
 
--- -- Right now I'm trying to come up with a datatype for classes of algebras that
--- -- has some sort of inductive notion of the universe levels involved.
+-- record AlgebraClass (ℓ : Level) : Set ℓ where
+--   algebras : Pred (Algebra ℓ S) (lsuc ℓ)
+--   nextclass : AlgebraClass (lsuc ℓ)
 
--- -- It seems we're testing the limits of Agda's universe level paradigm... which may
--- -- be a good thing.  Maybe we can invent a cool new type to solve the problem, or
--- -- we may have to try to extend Agda's capabilities.
+-- record AlgebraClass : Set _ where
+--   algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
 
--- -- record AlgebraClass (ℓ : Level) : Set ℓ where
--- --   algebras : Pred (Algebra ℓ S) (lsuc ℓ)
--- --   nextclass : AlgebraClass (lsuc ℓ)
+--hom-closed
+-- hom-closed : Pred (AlgebraClass lzero) _
+-- hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
+  -- -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
+  --       ------------------------------
+  -- ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+-- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
+-- satisfies exaxtly the same set of identities as does 𝒦.
+-- module _  {i j : Level} {S : Signature i j}  where
+-- open AlgebraClass
 
--- -- record AlgebraClass : Set _ where
--- --   algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
+-- data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
+--   hombase : {𝑨 : Algebra ℓ S} → 𝑨 ∈ (algebras 𝓚) ℓ  → 𝑨 ∈ HomClo 𝓚
+--   homstep : {𝑨 : Algebra ℓ S} ->  𝑨 ∈ HomClo 𝓚
+--     ->     (∃ θ : Congruence 𝑨)
+--     ->     (𝑪 : Algebra (lsuc ℓ) S)
+--           ------------------------------
+--     ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((𝑨 / θ) ≅ 𝑪)
 
--- --hom-closed
--- -- hom-closed : Pred (AlgebraClass lzero) _
--- -- hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
---   -- -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
---   --       ------------------------------
---   -- ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
--- -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
--- -- satisfies exaxtly the same set of identities as does 𝒦.
--- -- module _  {i j : Level} {S : Signature i j}  where
--- -- open AlgebraClass
+-- {f : Hom 𝑨 𝑩} → 𝑨 ∈ HomClo 𝓚 → 𝑩 ∈ HClo 𝓚
+--     ->   (SubunivAlg{S = S}{𝑨 = 𝑩} {HomImage{S = S}{𝑨 = 𝑨}{𝑩 = 𝑩} f} (hom-image-is-sub{S = S}{𝑨}{𝑩} f)) ∈ HClo 𝓚
 
--- -- data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
--- --   hombase : {𝑨 : Algebra ℓ S} → 𝑨 ∈ (algebras 𝓚) ℓ  → 𝑨 ∈ HomClo 𝓚
--- --   homstep : {𝑨 : Algebra ℓ S} ->  𝑨 ∈ HomClo 𝓚
--- --     ->     (∃ θ : Congruence 𝑨)
--- --     ->     (𝑪 : Algebra (lsuc ℓ) S)
--- --           ------------------------------
--- --     ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((𝑨 / θ) ≅ 𝑪)
+-- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom(𝑻(X_ω), 𝑨), h p^𝑨 = h q^𝑨`. (UAFST Lem 4.37)
 
--- -- {f : Hom 𝑨 𝑩} → 𝑨 ∈ HomClo 𝓚 → 𝑩 ∈ HClo 𝓚
--- --     ->   (SubunivAlg{S = S}{𝑨 = 𝑩} {HomImage{S = S}{𝑨 = 𝑨}{𝑩 = 𝑩} f} (hom-image-is-sub{S = S}{𝑨}{𝑩} f)) ∈ HClo 𝓚
+-- Obs 2.14. Let 𝒦 be a class of algebras and p ≈ q an equation. The following are equivalent.
+-- 1. 𝒦 ⊧ p ≈ q.
+-- 2. (p, q) belongs to the congruence λ_𝒦 on 𝑻(X_ω).
+-- 3. 𝑭_𝒦(X_ω) ⊧ p ≈ q.
 
-
--- -- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom(𝑻(X_ω), 𝑨), h p^𝑨 = h q^𝑨`. (UAFST Lem 4.37)
-
--- -- Obs 2.14. Let 𝒦 be a class of algebras and p ≈ q an equation. The following are equivalent.
--- -- 1. 𝒦 ⊧ p ≈ q.
--- -- 2. (p, q) belongs to the congruence λ_𝒦 on 𝑻(X_ω).
--- -- 3. 𝑭_𝒦(X_ω) ⊧ p ≈ q.
-
--- -- Obs 2.15. Let 𝒦 be a class of algebras, p, q terms (say, n-ary), Y a set, and y₁,..., yₙ
--- -- distinct elements of Y. Then 𝒦 ⊧ p ≈ q iff p^{𝑭_𝒦(Y)}(y₁,..., yₙ) = q^{𝑭_𝒦}(Y)(y₁, ..., yₙ).
--- -- In particular, 𝒦 ⊧ p ≈ q iff 𝑭_𝒦(Xₙ) ⊧ p ≈ q.
+-- Obs 2.15. Let 𝒦 be a class of algebras, p, q terms (say, n-ary), Y a set, and y₁,..., yₙ
+-- distinct elements of Y. Then 𝒦 ⊧ p ≈ q iff p^{𝑭_𝒦(Y)}(y₁,..., yₙ) = q^{𝑭_𝒦}(Y)(y₁, ..., yₙ).
+-- In particular, 𝒦 ⊧ p ≈ q iff 𝑭_𝒦(Xₙ) ⊧ p ≈ q.
 
 
 
@@ -318,9 +312,9 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
 
 
 
--- -- contains : {A : Set} -> (L : List A) -> A -> Prp
--- -- contains [] a = ⊥
--- -- contains (h :: tail) a = (h ≡ a) ⋁ (contains tail a)
+-- contains : {A : Set} -> (L : List A) -> A -> Prp
+-- contains [] a = ⊥
+-- contains (h :: tail) a = (h ≡ a) ⋁ (contains tail a)
 
 
 
