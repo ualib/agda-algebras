@@ -10,7 +10,7 @@
 
 module UF-Extensionality where
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv)
+open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id)
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop)
 
@@ -1143,3 +1143,22 @@ dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : 
 
 ∀-dep-extensionality : 𝓤ω
 ∀-dep-extensionality = ∀ {𝓤 𝓥} → dep-extensionality 𝓤 𝓥
+
+
+-----------
+
+extensionality-lemma : {I : 𝓘 ̇}{X : 𝓤 ̇} {A : I → 𝓥 ̇}( p q : (i : I) → (X → A i) → 𝓣 ̇ ) ( args : X → (Π A) )
+ →       p ≡ q
+ →  ( λ i → (p i ) ( λ x → args x i ) ) ≡ ( λ i → (q i ) ( λ x → args x i ) )
+extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
+
+
+
+-- We have: Id ((X → ∣ 𝓐 i ∣) → ∣ 𝓐 i ∣) (p ̇ 𝓐 i) (q ̇ 𝓐 i)
+-- We want:  (λ i  →   p i) ≡  (λ i → q i)
+module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : global-dfunext)  where
+
+  ext-lemma :  ( p q : (i : I) → (X → A i) → A i )
+   →           ( (i : I) (args : X → A i) →  Id ( A i ) (p i args) (q i args) )
+   →            p ≡ q
+  ext-lemma p q H = fe λ x → fe (H x)

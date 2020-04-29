@@ -10,7 +10,7 @@ open import UF-Prelude
 open import UF-Basic
 open import UF-Subuniverse
 open import UF-Hom
-open import UF-Extensionality using (funext; global-funext; happly)
+open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
 open import UF-Free -- using (_⊢_; _⊢_≋_)
 
 -- Products.
@@ -38,9 +38,7 @@ module _ {S : Signature 𝓞 𝓥} {𝑨 𝑩 : Algebra 𝓤 S} {fe : funext �
     vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
     vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
 
-module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funext) where
-  --(fevu : funext 𝓥 𝓤) (feuv : funext 𝓤 𝓥) (feuu : funext 𝓤 𝓤) where
-  --open import Free{S = S}{X = X}
+module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤) where
 
   pclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (PClo 𝓚 ⊢ p ≋ q)
   pclo-id1 {p} {q} α (pbase x) = α x
@@ -48,12 +46,13 @@ module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : �
    where
     IH : (i : I) (args : X → ∣ 𝓐 i ∣ ) → (p ̇ 𝓐 i) args ≡ (q ̇ 𝓐 i) args
     IH = λ i → cong-app ( ( pclo-id1{p}{q} α ) ( 𝓐-P𝓚  i ) )
+    IH' = λ i → pclo-id1{p}{q} α  ( 𝓐-P𝓚  i )
     γ : p ̇ (Π' 𝓐)  ≡ q ̇ (Π' 𝓐)
-    γ = (p ̇ (Π' 𝓐) )                                                                          ≡⟨ interp-prod2 gfe p 𝓐 ⟩
-          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) ) ≡⟨ gfe {!!} ⟩
+    γ = (p ̇ (Π' 𝓐) )     ≡⟨ interp-prod2 gfe p 𝓐 ⟩
+          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) )
+                                ≡⟨  dfe (λ args → ( ap (λ - → (λ i → ( - i ) (λ x → args x i ) ) )  (dfe IH') ) )  ⟩
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )   ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
-          (q ̇ (Π' 𝓐) )                                           ∎
-
+          (q ̇ (Π' 𝓐) )     ∎
 
   sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
   sclo-id1 {p} {q} α (sbase x) = α x
