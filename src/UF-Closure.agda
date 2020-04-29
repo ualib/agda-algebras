@@ -26,24 +26,20 @@ module _ {S : Signature 𝓞 𝓥} where
     sbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
     sub : {𝑨 𝑩 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ SClo 𝓚
 
-module _ {S : Signature 𝓞 𝓥} {𝑨 𝑩 : Algebra 𝓤 S} {fext : funext 𝓥 𝓤} (f : Hom 𝑨 𝑩) where
+module _ {S : Signature 𝓞 𝓥} {𝑨 𝑩 : Algebra 𝓤 S} {fe : funext 𝓥 𝓤} (f : Hom 𝑨 𝑩) where
   -- Hom Images
   data HClo {S : Signature 𝓞 𝓥} (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) ( 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
     hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
-    hhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ HClo 𝓚 → 𝑩 ∈ HClo 𝓚
-     →    SubunivAlg {S = S} {𝑨 = 𝑩} { HomImage{S = S}{𝑨 = 𝑨}{𝑩 = 𝑩} f } {{!!}}
-             ( hom-image-is-sub{S = S} {𝑨 = 𝑨}{𝑩 = 𝑩} f fext ) ∈ HClo 𝓚
-        -- We need to specify the operations (of type `(𝓸 : ∣ S ∣) → Op (∥ S ∥ 𝓸) (Σ (HomImage f))` ) in the hole
+    hhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ HClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ HClo 𝓚
 
   data VClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
     vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ VClo 𝓚
     vprod : {I : 𝓤 ̇} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ VClo 𝓚) → Π' 𝓐 ∈ VClo 𝓚
     vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
-    vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} →
-      𝑨 ∈ VClo 𝓚 → 𝑩 ∈ VClo 𝓚 → SubunivAlg {S = S} {𝑨 = 𝑩} {HomImage {S = S} {𝑨 = 𝑨} {𝑩 = 𝑩} f} { {!!} }
-        ( hom-image-is-sub {S = S} {𝑨 = 𝑨} {𝑩 = 𝑩} f fext ) ∈ VClo 𝓚
+    vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
 
-module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funext) (fe : funext 𝓥 𝓤) where
+module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funext) where
+  --(fevu : funext 𝓥 𝓤) (feuv : funext 𝓤 𝓥) (feuu : funext 𝓤 𝓤) where
   --open import Free{S = S}{X = X}
 
   pclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (PClo 𝓚 ⊢ p ≋ q)
@@ -52,7 +48,6 @@ module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : �
    where
     IH : (i : I) (args : X → ∣ 𝓐 i ∣ ) → (p ̇ 𝓐 i) args ≡ (q ̇ 𝓐 i) args
     IH = λ i → cong-app ( ( pclo-id1{p}{q} α ) ( 𝓐-P𝓚  i ) )
-
     γ : p ̇ (Π' 𝓐)  ≡ q ̇ (Π' 𝓐)
     γ = (p ̇ (Π' 𝓐) )                                                                          ≡⟨ interp-prod2 gfe p 𝓐 ⟩
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) ) ≡⟨ gfe {!!} ⟩
@@ -63,7 +58,7 @@ module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : �
   sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
   sclo-id1 {p} {q} α (sbase x) = α x
 
-  sclo-id1 {generator x} {generator x₁} α (sub {𝑨} {.(Σ _ , _)} (sbase x₂) (mem B≤𝑨)) = γ
+  sclo-id1 {generator x} {generator x₁} α (sub {𝑨} {.(Σ _ , _)} (sbase x₂) (mem B≤𝑨 )) = γ
     where
       γ : ((generator x) ̇ (Σ _ , _)) ≡ ((generator x₁) ̇ (Σ _ , _) )
       γ =  (λ 𝒂 → 𝒂 x) ≡⟨ {!!}  ⟩
@@ -92,31 +87,8 @@ module _ (S : Signature 𝓞 𝓥) (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : �
       γ : ((node 𝓸 𝒕) ̇ (Σ _ , _)) ≡ ((node 𝓸₁ 𝒕₁) ̇ (Σ _ , _) )
       γ = {!!}
 
-    -- let 𝑨⊢p≈q = (sclo-id1{p}{q} α) 𝑨∈SClo𝓚 in
-    --     p ̇ 𝑩                     ≡⟨ refl _ ⟩
-    --     p ̇ (∣ 𝑩 ∣ , ∥ 𝑩 ∥)       ≡⟨ γ ⟩ 
-    --     q ̇ (∣ 𝑩 ∣ , ∥ 𝑩 ∥)       ≡⟨ refl _ ⟩
-    --     q ̇ 𝑩                     ∎
-    -- where
-    --   γ : ( p ̇ ( ∣ 𝑩 ∣ , ∥ 𝑩 ∥ ) )≡ ( q ̇ ( ∣ 𝑩 ∣ , ∥ 𝑩 ∥ ) )
-    --   γ = gfe λ x → {!!}
 
--- -- ————————————————————————————————————————————————————————————
--- -- 𝑨⊢p≈q   : 𝑨 ⊢ p ≈ q
--- -- 𝑩       : Algebra k S
--- -- x       : X → ∃ P
--- -- B≤𝑨     : (𝓸 : ∣ S ∣) (x₁ : ⟦ S ⟧ 𝓸 → ∃ P) →
--- --           ∣ B 𝓸 x₁ ∣ ≡ ⟦ 𝑨 ⟧ 𝓸 (λ i₁ → ∣ x₁ i₁ ∣)
--- -- 𝑨∈SClo𝓚 : 𝑨 ∈ SClo 𝓚
--- -- α       : 𝓚 ⊢ p ≋ q
--- -- q       : Term
--- -- p       : Term
--- -- X       : Set k
--- -- 𝓚       : Pred (Algebra k S) l
--- -- B       : (𝓸 : ∣ S ∣) → Op (⟦ S ⟧ 𝓸) (∃ P)  (not in scope)
--- -- P       : Pred ∣ 𝑨 ∣ k  (not in scope)
--- -- 𝑨       : Algebra k S
-
+-- -- ———————————————————————————————————————————————————————
 -- -- data HClo {i j k l} {S : Signature i j} (𝓚 : Pred (Algebra k S) l) : Pred (Algebra k S) (lsuc (i ⊔ j ⊔ k ⊔ l)) where
 -- --   hbase : {𝑨 : Algebra k S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
 -- --   hhom : {𝑨 B : Algebra k S} {f : Hom 𝑨 B} →

@@ -6,7 +6,7 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
-open import UF-Prelude using (𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq)
+open import UF-Prelude using (𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im)
 
 open import UF-Basic using (Signature; Algebra; Op)
 open import UF-Free using (Term; _̇_; _̂_; generator; node)
@@ -21,20 +21,40 @@ module UF-Subuniverse {S : Signature 𝓞 𝓥} where
 Subuniverses : (𝑨 : Algebra 𝓤 S) → Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
 Subuniverses (A , Fᴬ) B = ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → A ) → Im 𝒂 ⊆ B → Fᴬ 𝓸 𝒂 ∈ B
 
--- To keep A at same universe level as ∃ P , B, force P to live in the same universe
--- We need to do this so that both A and ∃ P , B can be classified by the same predicate SClo
-data _is-supalgebra-of_ (A : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-  mem : {B : Pred ∣ A ∣ 𝓤}   {𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B)} 
-    →  ( ( 𝓸 : ∣ S ∣ ) → ( 𝒂 : ∥ S ∥ 𝓸 → Σ B) → ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ A ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) ) →
-        A is-supalgebra-of (Σ B , 𝐹)
-
--- is-supalgebra-of-elim : (𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤) ( 𝐹 : (𝓸 : ∣ S ∣ ) → Op (∥ S ∥ 𝓸) (∃ B))
---   →                    𝑩 ≡ (∃ B , 𝐹)  → 𝑨 is-supalgebra-of (∃ B , 𝐹)
---   →                    ( ( 𝓸 : ∣ S ∣ ) → ( 𝒂 : ∥ S ∥ 𝓸 → ∃ B) → ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) )
--- is-supalgebra-of-elim 𝑩 p b .(𝑩 ≡ (∃ p , b)) (mem .(∃ p , b) eq1 eq2) 𝓸 x = ?
+-- To keep A at same universe level as Σ B , 𝐹 , force B to live in the same universe.
+-- We need to do this so that both A and Σ B , 𝐹 can be classified by the same predicate SClo.
+data _is-supalgebra-of_ (𝑨 : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+  mem :   {B : Pred ∣ 𝑨 ∣ 𝓤}  { 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
+    →    ( ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → Σ B )  →  ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) )
+    →    𝑨 is-supalgebra-of (Σ B , 𝐹)
 
 _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 B is-subalgebra-of A = A is-supalgebra-of B
+
+
+--------------------------------
+-- Elimination rule for sub/supalgebra.
+-- For some reason, I'm able to get an elimination rule only for `A-is-supalgebra-of_` for fixed A.  (todo: try to fix this)
+module _
+  {𝑨 : Algebra 𝓤 S}
+  {𝑩 : Algebra 𝓤 S}
+  {B : Pred ∣ 𝑨 ∣ 𝓤}
+  { 𝐹 : (𝓸 : ∣ S ∣) → Op (∥ S ∥ 𝓸) ( Σ B ) }   where
+
+  data A-is-supalgebra-of_  : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+    mem :  {𝑩 : Algebra 𝓤 S}
+      →    ( {𝓸 : ∣ S ∣ } { x : ∥ S ∥ 𝓸 → Σ B}  →  ∣ 𝐹 𝓸 x ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ x i ∣ ) )
+      →    𝑩 ≡ ( Σ B , 𝐹 ) → A-is-supalgebra-of 𝑩
+
+  _is-subalgebra-of-A : Algebra 𝓤 S  →  _ ̇
+  𝑩 is-subalgebra-of-A = A-is-supalgebra-of 𝑩
+
+  is-supalgebra-elim : A-is-supalgebra-of ( Σ B , 𝐹 )
+    →                 𝑩 ≡ ( Σ B , 𝐹 )    → ( ∀ ( 𝓸 : ∣ S ∣ ) ( x : ∥ S ∥ 𝓸 → Σ B )
+    →                 ∣ 𝐹 𝓸 x ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ x i ∣ ) )
+  is-supalgebra-elim (mem .{(Σ B , 𝐹)} eq1 _ ) _ 𝓸 x = eq1
+-------------------------
+
 
 module _ {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
   {𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B)}
@@ -44,7 +64,7 @@ module _ {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
   SubunivAlg = Σ B , λ 𝓸 x → ∥ 𝑨 ∥ 𝓸 ( ∣_∣ ∘ x ) , B∈SubA 𝓸 ( ∣_∣ ∘ x ) (∥_∥ ∘ x)
 
   subuniv-to-subalg : SubunivAlg is-subalgebra-of 𝑨
-  subuniv-to-subalg = mem {B = B} {𝐹 = ∥ SubunivAlg ∥ } λ 𝓸 𝒂 → refl _
+  subuniv-to-subalg = mem {B = B} { 𝐹 = ∥ SubunivAlg ∥ } λ 𝓸 𝒂 → refl _
   --    mem {B = B} {𝐹 = ∥ SubunivAlg ∥}   ( Σ B , ∥ SubunivAlg ∥ ) {!!} -- refl _ (λ 𝓸 x -> refl _)  --
 
 record Subuniverse  {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
@@ -99,12 +119,24 @@ module _ {𝑨 : Algebra 𝓤 S}  {I : 𝓘 ̇} {A : I → Pred ∣ 𝑨 ∣ �
 
 -- Hom is subuniverse
 
-module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩) where
+module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
   HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
   HomImage = λ b → Image ∣ f ∣ ∋ b
 
-  hom-image-is-sub : funext 𝓥 𝓤 → (HomImage ∈ Subuniverses 𝑩)
-  hom-image-is-sub fe 𝓸 𝒃 𝒃∈Imf =
+  hom-image : 𝓤 ̇
+  hom-image = Σ b ꞉ ∣ 𝑩 ∣ , Image ∣ f ∣ ∋ b
+
+  hom-image-alg : Algebra 𝓤 S
+  hom-image-alg = hom-image , λ 𝓸 x →
+    let 𝒂 = λ y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) ) in
+    let 𝓸𝒂 =  ∥ 𝑨 ∥ 𝓸 𝒂 in
+    ( ∣ f ∣ 𝓸𝒂 , im 𝓸𝒂 )
+
+  -- hom-to-subalg : HomImage is-subalgebra-of 𝑩
+  -- hom-to-subalg = ?
+
+  hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses 𝑩
+  hom-image-is-sub {fe} 𝓸 𝒃 𝒃∈Imf =
     eq (∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)) ( ∥ 𝑨 ∥ 𝓸 ar) γ
     where
      ar : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣

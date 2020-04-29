@@ -1063,17 +1063,16 @@ subset-extensionality' {𝓤} 𝓤★ = subset-extensionality (univalence-gives-
 -- univalence for sets (see the HoTT book or https://www.cs.bham.ac.uk/~mhe/agda-new/OrdinalOfOrdinals.html ).
 
 
--------------------------------------------------------------------------------
--- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
-
-
+-- =====================================
+-- Stuff from our old Preliminaries.agda file (moderately tweaked)
+-- ----------------------------------------------------
 _∈∈𝓟_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →   𝓟 B → 𝓤 ⊔ 𝓥 ̇
 _∈∈𝓟_  f S = (x : _) → f x ∈ S
 
 Im_⊆𝓟_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → 𝓟 B → 𝓤 ⊔ 𝓥 ̇
 Im_⊆𝓟_ {A = A} f S = (x : A) → f x ∈ S
 
--------------------------------------------------------------------------------------------------------------
+-----------------------
 -- Images and surjections.
 image : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 image f = Σ y ꞉ (codomain f) , ∃! x ꞉ (domain f) , f x ≡ y
@@ -1110,3 +1109,37 @@ EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B)  (fE
  →            f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
 EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
 
+-------------------------------------------------------
+-- Function extensionality from univalence
+-- ------------------------------------
+--"Function extensionality says that any two pointwise equal functions are equal. This is known to be not provable or disprovable in MLTT.
+-- It is an independent statement, which we abbreviate as `funext`.
+-- funext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
+-- funext 𝓤 𝓥 = {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {f g : X → Y} → f ∼ g → f ≡ g
+--------------------------------------
+--Ordinary function extensionality
+extensionality : ∀ 𝓤 𝓦  → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
+extensionality 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
+ →                f ∼ g   →   f ≡ g
+
+-- Opposite of function extensionality
+intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : 𝓦 ̇ } {f g : A → B}
+ →                f ≡ g  →  (x : A)
+                  ------------------
+ →                    f x ≡ g x
+
+intensionality (refl _) _ = refl _
+
+--------------------------------------
+--Dependent function extensionality
+-- dfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
+-- dfunext 𝓤 𝓥 = {X : 𝓤 ̇} {A : X → 𝓥 ̇} {f g : Π A} → f ∼ g → f ≡ g
+dep-extensionality : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
+dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : A) → B x}
+ →                      f ∼ g    →   f ≡ g
+
+∀-extensionality : 𝓤ω
+∀-extensionality = ∀  {𝓤 𝓥} → extensionality 𝓤 𝓥
+
+∀-dep-extensionality : 𝓤ω
+∀-dep-extensionality = ∀ {𝓤 𝓥} → dep-extensionality 𝓤 𝓥
