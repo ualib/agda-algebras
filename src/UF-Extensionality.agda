@@ -1152,12 +1152,14 @@ extensionality-lemma : {I : 𝓘 ̇}{X : 𝓤 ̇} {A : I → 𝓥 ̇}( p q : (i 
  →  ( λ i → (p i ) ( λ x → args x i ) ) ≡ ( λ i → (q i ) ( λ x → args x i ) )
 extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
-
-
 module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : global-dfunext)  where
 
   ext-lemma :  ( p q : (i : I) → (X → A i) → A i )
    →           ( (i : I) (args : X → A i) →  Id ( A i ) (p i args) (q i args) )
    →            p ≡ q
   ext-lemma p q H = fe λ x → fe (H x)
+
+-----------------
+
+
 

@@ -22,8 +22,8 @@ module UF-Free {S : Signature 𝓞 𝓥} {X : 𝓤 ̇} where
 -- open signature
 
 data Term  : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
-  generator : X -> Term
-  node : (𝓸 : ∣ S ∣) -> (𝒕 : ∥ S ∥ 𝓸 -> Term) -> Term
+  generator : X → Term
+  node : ( 𝓸 : ∣ S ∣ )  →  ( 𝒕 : ∥ S ∥ 𝓸 → Term )  →  Term
 
 open Term
 
@@ -99,7 +99,7 @@ _̂_ :  (𝓸 : ∣ S ∣ ) → (𝑨 : Algebra 𝓤 S)
 --Interpretation of a term.
 _̇_ : Term → (𝑨 : Algebra 𝓤 S) →  ( X → ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
-((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x -> (args x ̇ 𝑨) 𝒂 }
+((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x → (args x ̇ 𝑨) 𝒂 }
 
 interp-prod : funext 𝓥 𝓤 → {I : 𝓤 ̇} (p : Term)  (𝓐 : I → Algebra 𝓤 S) ( x : X → ∀ i → ∣ (𝓐 i) ∣ )
  →              (p ̇ (Π' 𝓐)) x  ≡   (λ i → (p ̇ 𝓐 i) (λ j -> x j i))

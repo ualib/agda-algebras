@@ -996,14 +996,8 @@ succ-lc = succ-elim -- alias
   f : decidable (x ≡ y) -> decidable (succ x ≡ succ y)
   f (inl p) = inl (ap succ p)
   f (inr k) = inr (λ (s : succ x ≡ succ y) -> k (succ-elim s))
-  
+
 ℕ-has-decidable-equality = ℕ-decidable
-
-
-
-
-
-
 
 
 ------------------------------------------------------------------------
@@ -1139,11 +1133,11 @@ InvIsInv f .(f a) (im a) = refl _
 InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
 
 -- Epic (surjective) function from 𝓤 ̇ to 𝓦 ̇
-Epic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Epic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) →  𝓤 ⊔ 𝓦 ̇
 Epic g = ∀ y → Image g ∋ y
 
 -- special case: epic function on Set
-epic : {A B : 𝓤₀ ̇} (g : A → B) → _ ̇
+epic : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
 epic = Epic {𝓤₀} {𝓤₀}
 
 -- The (pseudo-)inverse of an epic function
@@ -1153,7 +1147,7 @@ EpicInv f fEpic b = Inv f b (fEpic b)
 
 -- (this belongs elsewhere)
 -- The (pseudo-)inverse of an epimorphism is total.
--- EInvTotal : {𝑨 𝑪 : Algebra k S} 
+-- EInvTotal : {𝑨 𝑪 : Algebra k S}
 --   ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
 --   ->        Epic ∣ g ∣
 --            -----------------------
@@ -1163,11 +1157,11 @@ EpicInv f fEpic b = Inv f b (fEpic b)
 ---------------------------------------------------------
 --Monics (injectivity)
 --monic function from Set ℓ₁ to Set ℓ₂
-Monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
 
 -- special case: monic function on Set
-monic : {A B : 𝓤₀ ̇} (g : A → B) -> _ ̇
+monic : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
 monic = Monic {𝓤₀}{𝓤₀}
 
 --The (pseudo-)inverse of a monic function
@@ -1184,8 +1178,8 @@ MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
 -- MInvIsLInv f fMonic =  ?
 
 --bijectivity
-bijective : {A B : 𝓤₀ ̇} (g : A → B) → _ ̇
+bijective : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
 bijective g = epic g × monic g
 
-Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → _ ̇
+Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × Monic g

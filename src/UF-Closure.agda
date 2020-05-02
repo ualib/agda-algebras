@@ -66,21 +66,23 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
 
   hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
   hclo-id1 {p} {q} 𝓚⊢p≋q (hbase A∈𝓚) =  𝓚⊢p≋q A∈𝓚
-  hclo-id1 {p} {q} 𝓚⊢p≋q (hhom{A}{B}{f} A∈HClo𝓚 ) = 
-    let A⊢p≈q = (hclo-id1{p}{q} 𝓚⊢p≋q ) A∈HClo𝓚 in
-    let hypA = cong-app (A⊢p≈q)  in 
-    let HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f in
-    let 𝒂 = λ x y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) ) in
-      (p ̇ HIA)       ≡⟨ refl _ ⟩
-       ( λ ( args : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (args x) ) )
-        --     ≡⟨ ? ⟩
-        -- ( λ ( args : X → ∣ HIA ∣ ) → ∣ f ∣ (  (p ̇ A) ( λ x → 𝒂 args x ) ) )
-                 ≡⟨ gfe (λ b → {!!}) ⟩
-        -- ( λ ( args : X → ∣ HIA ∣ ) → ∣ f ∣  ( (q ̇ A) ( λ x → 𝒂 args x ) ) )
-        --       ≡⟨ ? ⟩
-       ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )
-              ≡⟨ refl _  ⟩
-       (q ̇ HIA)     ∎
+  hclo-id1 {p} {q} 𝓚⊢p≋q (hhom{A}{B}{f} A∈HClo𝓚 ) =  γ
+   where
+    A⊢p≈q = (hclo-id1{p}{q} 𝓚⊢p≋q ) A∈HClo𝓚
+    hypA = cong-app (A⊢p≈q)
+    𝒂 = λ x y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) )
+    HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
+
+    -- φ : ( args : X → ∣ HIA ∣ ) (p : Term)
+    --  → ( (p ̇ HIA) ( λ x → (args x) ) ) ≡ ( ( ∣ f ∣ ) (  (p ̇ A) ( λ x → 𝒂 args x ) ) )
+    -- φ = ?
+
+    -- idea: write a helper function, similar to interp-prod, but for hom-image-alg interpretation (of a given term operation).
+    γ : (p ̇ HIA) ≡ (q ̇ HIA)
+    γ = (p ̇ HIA)                                                                      ≡⟨ refl _ ⟩
+          ( λ ( args : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (args x) ) )         ≡⟨ {!!} ⟩   -- gfe (λ b → {!!})
+          ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )         ≡⟨ refl _ ⟩
+          (q ̇ HIA)                                                                     ∎
 
   hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
