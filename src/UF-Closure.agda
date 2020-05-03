@@ -63,6 +63,7 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
   sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   sclo-id2 p 𝑨∈𝓚 = p (sbase 𝑨∈𝓚)
 
+
   hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
   hclo-id1 {p} {q} 𝓚⊢p≋q (hbase A∈𝓚) =  𝓚⊢p≋q A∈𝓚
   hclo-id1 {p} {q} 𝓚⊢p≋q (hhom{A}{B}{f} A∈HClo𝓚 ) =  γ
@@ -73,14 +74,18 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
     IH : (p ̇ A) ≡ (q ̇ A)
     IH = A⊢p≈q
 
-    hypA = cong-app (A⊢p≈q)
     𝒂 = λ x y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) )
+
     HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
 
     φ : ( 𝒃 : X → ∣ HIA ∣ ) (p : Term)
      → ( (p ̇ HIA) 𝒃 ) ≡  ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) )
-    φ 𝒃 (generator x) = {!!}
-    φ 𝒃 (node 𝓸 𝒕) = {!!}
+    φ 𝒃 (generator x) =  𝒃 x ≡⟨ {!!} ⟩ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x) ∎
+    φ 𝒃 (node 𝓸 𝒕) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH2 x)
+     where
+      φIH2 : (x : ∥ S ∥ 𝓸)
+       → ( 𝒕 x ̇ HIA ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ A ) (𝒂 𝒃) ) , im ((𝒕 x ̇ A) (𝒂 𝒃 ) )
+      φIH2 x = φ 𝒃 (𝒕 x)
 
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
     γ = (p ̇ HIA)                                                               ≡⟨ refl _ ⟩
@@ -93,7 +98,6 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
 
   hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
-
 
 -- vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
 -- vclo-id1 {p} {q} α (vbase x) = α x
