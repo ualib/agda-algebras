@@ -405,7 +405,7 @@ data _+_ {𝓤 𝓥} (X : 𝓤 ̇) (Y : 𝓥 ̇) : 𝓤 ⊔ 𝓥 ̇ where
 
 𝟚 : 𝓤₀ ̇
 𝟚 = 𝟙 + 𝟙
-  
+
 --"We can name the left and right points as follows, using patterns, so that they can be used in pattern matching:
 pattern ₀ = inl ⋆
 pattern ₁ = inr ⋆
@@ -1183,3 +1183,35 @@ bijective g = epic g × monic g
 
 Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × Monic g
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

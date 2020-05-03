@@ -6,7 +6,7 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
-open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; transport)
+open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; transport; codomain; domain)
 
 open import UF-Basic using (Signature; Algebra; Op)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
@@ -53,7 +53,6 @@ module _
     →                 𝑩 ≡ ( Σ B , 𝐹 )    → ( ∀ ( 𝓸 : ∣ S ∣ ) ( x : ∥ S ∥ 𝓸 → Σ B )
     →                 ∣ 𝐹 𝓸 x ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ x i ∣ ) )
   is-supalgebra-elim (mem .{(Σ B , 𝐹)} eq1 _ ) _ 𝓸 x = eq1
--------------------------
 
 
 module _ {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
@@ -123,17 +122,23 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
   HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
   HomImage = λ b → Image ∣ f ∣ ∋ b
 
+  -- hom-image : 𝓤 ̇
+  -- hom-image = Σ b ꞉ ∣ 𝑩 ∣ , Image ∣ f ∣ ∋ b
+
   hom-image : 𝓤 ̇
-  hom-image = Σ b ꞉ ∣ 𝑩 ∣ , Image ∣ f ∣ ∋ b
+  hom-image = Σ (Image_∋_ ∣ f ∣)
+
+  fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ f ∣)
+  fres a = ∣ f ∣ a , im a
 
   hom-image-alg : Algebra 𝓤 S
   hom-image-alg = hom-image , ops-interp
    where
     𝒂 : {𝓸 : ∣ S ∣ } ( x : ∥ S ∥ 𝓸 → hom-image ) (y : ∥ S ∥ 𝓸)   →   ∣ 𝑨 ∣
-    𝒂 x y = Inv ∣ f ∣ ∣ x y ∣ ∥ x y ∥
+    𝒂 x y = Inv ∣ f ∣  ∣ x y ∣ ∥ x y ∥
 
     ops-interp : ( 𝓸 : ∣ S ∣ ) → Op (∥ S ∥ 𝓸) hom-image
-    ops-interp = λ 𝓸 x →( ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 (𝒂 x) ) , im ( ∥ 𝑨 ∥ 𝓸 (𝒂 x) ) )
+    ops-interp = λ 𝓸 x →( ∣ f ∣  ( ∥ 𝑨 ∥ 𝓸 (𝒂 x) ) , im ( ∥ 𝑨 ∥ 𝓸 (𝒂 x) ) )
 
   hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses 𝑩
   hom-image-is-sub {fe} 𝓸 𝒃 𝒃∈Imf =
@@ -156,52 +161,50 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
   -- i.e., ∀ i₁ ->  ∣ f ∣ 𝒂 i₁ = args i₁.  Since f : Hom 𝑨 𝑩, we have
   -- (∥ 𝑩 ∥ 𝓸) args = (∥ 𝑩 ∥ 𝓸) (∣ f ∣ ∘ 𝒂) = ∣ f ∣ ∥ 𝑨 ∥ 𝓸 𝒂 ∈ Image ∣ f ∣
 
-  hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ }( p : Term )
-   →    ( p ̇ hom-image-alg ) ≡ ( λ (𝒂 : X → ∣ hom-image-alg ∣ ) →
-                                              ∣ f ∣  ( ( p ̇ 𝑨 ) ( λ x → Inv ∣ f ∣ ( ∣ 𝒂 x ∣ ) ( ∥ 𝒂 x ∥ ) ) ) ,
-                                              im ( ( p ̇ 𝑨 ) ( λ x → Inv ∣ f ∣ ( ∣ 𝒂 x ∣ ) ( ∥ 𝒂 x ∥ ) ) )     )
+  finv : {X : 𝓤 ̇ } (𝒃 : X → ∣ hom-image-alg ∣ ) (x : X) → ∣ 𝑨 ∣
+  finv = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
 
-  hom-image-term-interp  {fe} (generator x) = fe γ
-   where
-    left = λ 𝒂 → ∣ 𝒂 x ∣ ≡⟨ InvIsInv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥ ⟩ ∣ f ∣ (Inv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥) ∎
-    right = λ 𝒂 → ∥ 𝒂 x ∥ ≡⟨ refl _ ⟩ im (Inv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥)  ∎
-    γ = λ 𝒂 → 𝒂 x                                                                 ≡⟨ refl _ ⟩
-                    ∣ 𝒂 x ∣ , ∥ 𝒂 x ∥                                                   ≡⟨ {!!} ⟩
-                    ∣ f ∣ (Inv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥) , im (Inv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥) ∎
+  -- hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term ) (𝒃 : X → ∣ hom-image-alg ∣ )
+  --   →                            ( p ̇ hom-image-alg ) 𝒃 ≡ ∣ f ∣  ( ( p ̇ 𝑨 ) ( finv 𝒃 ) ) , im ( ( p ̇ 𝑨 ) ( finv 𝒃 ) )
 
+  -- hom-image-term-interp {fe} {X} (generator x) 𝒃 =
+  --   let ∣𝒃x∣ = ∣ 𝒃 x ∣ in
+  --   let ∥𝒃x∥ = ∥ 𝒃 x ∥ in
+  --   let r1 = ∣ f ∣ (finv 𝒃 x) in
+  --   let r2 = im ( finv 𝒃 x ) in
+  --   let left = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ in
+  --   let fst = ∣ 𝒃 x ∣ ≡⟨ left ⁻¹ ⟩ r1 ∎ in {!!}
+  --       -- Goal: 𝒃 x ≡ ∣ f ∣ (finv 𝒃 x) , im (finv 𝒃 x)
+  --         --  𝒃 x                                 ≡⟨ refl _ ⟩
+  --         -- ∣ 𝒃 x ∣ , ∥ 𝒃 x ∥                    ≡⟨ ap (λ - → - , ∥ 𝒃 x ∥) fst ⟩
+  --         -- ∣ f ∣ (finv 𝒃 x) , ∥ 𝒃 x ∥           ≡⟨ ? ⟩
+  --         -- ∣ f ∣ (finv 𝒃 x) , im {A = ∣ 𝑨 ∣} {B = ∣ 𝑩 ∣} (finv 𝒃 x)       ∎
 
-  hom-image-term-interp {fe}{X} (node 𝓸 𝒕) = γ
-   where
-    finv : (args : X → ∣ hom-image-alg ∣ ) (x : X) → ∣ 𝑨 ∣
-    finv = λ 𝒂 x → Inv ∣ f ∣ ∣ 𝒂 x ∣ ∥ 𝒂 x ∥
+  -- hom-image-term-interp {fe}{X} (node 𝓸 𝒕) 𝒃 = {!!}
+  --  where
+  --   IH : (x : ∥ S ∥ 𝓸)
+  --    → ( 𝒕 x ̇ hom-image-alg ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) , im ((𝒕 x ̇ 𝑨) (finv 𝒃 ) )
+  --   IH x = hom-image-term-interp{fe}{X}(𝒕 x) 𝒃
 
-    IH : (x : ∥ S ∥ 𝓸) → ( 𝒕 x ̇ hom-image-alg )
-          ≡ ( λ 𝒂 → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒂) ) , im ((𝒕 x ̇ 𝑨) (finv 𝒂 ) ) )
-    IH x = hom-image-term-interp{fe}{X}(𝒕 x)
+  --   com-hom-𝓸 :  ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) )
+  --                        ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
+  --   com-hom-𝓸 = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
 
-    com-hom-𝓸 : (args : X → ∣ hom-image-alg ∣ )
-     →               ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv args ) ) )
-                         ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv args ) ) ) )
-    com-hom-𝓸 args = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv args ) )
+  --   com-hom-t : (x : ∥ S ∥ 𝓸)
+  --    →    ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) ( finv 𝒃 ) ) ≡ (𝒕 x ̇ 𝑩) (∣ f ∣ ∘ (finv 𝒃 ) )
+  --   com-hom-t x = comm-hom-term fe 𝑨 𝑩 f (𝒕 x) (finv 𝒃)
 
-    com-hom-t : (x : ∥ S ∥ 𝓸) (args : X → ∣ hom-image-alg ∣ )
-     →    ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) ( finv args ) )
-              ≡ (𝒕 x ̇ 𝑩) (∣ f ∣ ∘ (finv args) )
-    com-hom-t x args = comm-hom-term fe 𝑨 𝑩 f (𝒕 x) (finv args)
+  --   com-hom-𝓸' : ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) )
+  --                         ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
+  --   com-hom-𝓸' = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
 
-    com-hom-𝓸' : (args : X → ∣ hom-image-alg ∣ )
-     →              ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv args ) ) )
-                          ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv args ) ) ) )
-    com-hom-𝓸' args = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv args ) )
-
-    γ :   ( λ 𝒂 → (𝓸 ̂ hom-image-alg) (λ x → (𝒕 x ̇ hom-image-alg) 𝒂 ) )
-         ≡ (λ args → ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv args) ) ) ,
-              im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv args ) ) ) )
-
-    γ = ( λ 𝒂 → (𝓸 ̂ hom-image-alg) (λ x → ( 𝒕 x ̇ hom-image-alg ) 𝒂 ) ) ≡⟨ {!!} ⟩
-         ( λ 𝒂 → (𝓸 ̂ hom-image-alg ) (λ x → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒂) ) , im ( (𝒕 x ̇ 𝑨) (finv 𝒂 ) ) ) ) ≡⟨ {!!} ⟩
-         (λ 𝒂 → ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒂) ) ) ,
-             im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒂 ) ) ) )   ∎
+  --   γ :  (x : ∥ S ∥ 𝓸)
+  --    →  ( (𝒕 x ̇ hom-image-alg) 𝒃 ) ≡ ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,
+  --                                               im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )
+  --   γ = 
+  --      ( 𝓸 ̂ hom-image-alg ) (λ x → ( 𝒕 x ̇ hom-image-alg ) 𝒃 )  ≡⟨ {!!} ⟩
+  --      ( 𝓸 ̂ hom-image-alg ) (λ x → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) )  , im ( (𝒕 x ̇ 𝑨) (finv 𝒃 ) ) ) ≡⟨ {!!} ⟩
+  --      ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,  im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )   ∎
 
 module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 ̇)  where
 

@@ -44,13 +44,12 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
   pclo-id1 {p} {q} α (pbase x) = α x
   pclo-id1 {p} {q} α (prod{I}{𝓐} 𝓐-P𝓚 ) = γ
    where
-    IH : (i : I) (args : X → ∣ 𝓐 i ∣ ) → (p ̇ 𝓐 i) args ≡ (q ̇ 𝓐 i) args
-    IH = λ i → cong-app ( ( pclo-id1{p}{q} α ) ( 𝓐-P𝓚  i ) )
-    IH' = λ i → pclo-id1{p}{q} α  ( 𝓐-P𝓚  i )
+    IH : (i : I)  → (p ̇ 𝓐 i) ≡ (q ̇ 𝓐 i)
+    IH = λ i → pclo-id1{p}{q} α  ( 𝓐-P𝓚  i )
     γ : p ̇ (Π' 𝓐)  ≡ q ̇ (Π' 𝓐)
     γ = (p ̇ (Π' 𝓐) )     ≡⟨ interp-prod2 gfe p 𝓐 ⟩
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) )
-                                ≡⟨  dfe (λ args → ( ap (λ - → (λ i → ( - i ) (λ x → args x i ) ) )  (dfe IH') ) )  ⟩
+                                ≡⟨  dfe (λ args → ( ap (λ - → (λ i → ( - i ) (λ x → args x i ) ) )  (dfe IH) ) )  ⟩
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )   ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
           (q ̇ (Π' 𝓐) )     ∎
 
@@ -68,21 +67,29 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
   hclo-id1 {p} {q} 𝓚⊢p≋q (hbase A∈𝓚) =  𝓚⊢p≋q A∈𝓚
   hclo-id1 {p} {q} 𝓚⊢p≋q (hhom{A}{B}{f} A∈HClo𝓚 ) =  γ
    where
+    A⊢p≈q : A ⊢ p ≈ q
     A⊢p≈q = (hclo-id1{p}{q} 𝓚⊢p≋q ) A∈HClo𝓚
+
+    IH : (p ̇ A) ≡ (q ̇ A)
+    IH = A⊢p≈q
+
     hypA = cong-app (A⊢p≈q)
     𝒂 = λ x y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) )
     HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
 
-    -- φ : ( args : X → ∣ HIA ∣ ) (p : Term)
-    --  → ( (p ̇ HIA) ( λ x → (args x) ) ) ≡ ( ( ∣ f ∣ ) (  (p ̇ A) ( λ x → 𝒂 args x ) ) )
-    -- φ = ?
+    φ : ( 𝒃 : X → ∣ HIA ∣ ) (p : Term)
+     → ( (p ̇ HIA) 𝒃 ) ≡  ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) )
+    φ 𝒃 (generator x) = {!!}
+    φ 𝒃 (node 𝓸 𝒕) = {!!}
 
-    -- idea: write a helper function, similar to interp-prod, but for hom-image-alg interpretation (of a given term operation).
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
-    γ = (p ̇ HIA)                                                                      ≡⟨ refl _ ⟩
-          ( λ ( args : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (args x) ) )         ≡⟨ {!!} ⟩   -- gfe (λ b → {!!})
-          ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )         ≡⟨ refl _ ⟩
-          (q ̇ HIA)                                                                     ∎
+    γ = (p ̇ HIA)                                                               ≡⟨ refl _ ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )         ≡⟨ gfe (λ x → φ x p) ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) )
+                                                                                    ≡⟨ ap (λ - → (λ 𝒃 → ∣ f ∣ (- (λ x → 𝒂 𝒃 x) )   , im (-  (λ x → 𝒂 𝒃 x) )) ) IH ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) )  ≡⟨ ( gfe (λ x → φ x q) )⁻¹ ⟩
+          ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )   ≡⟨ refl _ ⟩
+          (q ̇ HIA)                                                                ∎
 
   hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
