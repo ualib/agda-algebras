@@ -6,7 +6,7 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓡; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
+open import UF-Prelude using (Universe; 𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
 open import UF-Basic using (Signature; Algebra; Π')
 open import UF-Hom using (Hom)
 open import UF-Con using (Con; compatible-fun)
@@ -14,34 +14,34 @@ open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-fun
 open import Relation.Unary using (Pred)
 --open import UF-Rel
 
-module UF-Free {S : Signature 𝓞 𝓥} {X : 𝓤 ̇} where
+module UF-Free {S : Signature 𝓞 𝓥}  where
 
 ----------------------------
 -- TERMS in the signature S
 ----------------------------
 -- open signature
+module _ {X : 𝓤 ̇} where
+  data Term  : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
+    generator : X → Term
+    node : ( 𝓸 : ∣ S ∣ )  →  ( 𝒕 : ∥ S ∥ 𝓸 → Term )  →  Term
 
-data Term  : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
-  generator : X → Term
-  node : ( 𝓸 : ∣ S ∣ )  →  ( 𝒕 : ∥ S ∥ 𝓸 → Term )  →  Term
+  open Term
 
-open Term
+  map-Term : (Term -> Term) -> Term -> Term
+  map-Term f (generator x) = f (generator x)
+  map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
 
-map-Term : (Term -> Term) -> Term -> Term
-map-Term f (generator x) = f (generator x)
-map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
+  ----------------------------------
+  -- TERM ALGEBRA (for signature S)
+  ----------------------------------
 
-----------------------------------
--- TERM ALGEBRA (for signature S)
-----------------------------------
-
-𝔉 : Algebra _ S
-𝔉 = Term , node
+  𝔉 : Algebra _ S
+  𝔉 = Term , node
 
 -------------------------------------
 -- The UNIVERSAL PROPERTY of free
 
-module _  {𝑨 : Algebra 𝓤 S} where
+module _ {X : 𝓤 ̇} {𝑨 : Algebra 𝓤 S} where
 
   -- We first prove this for algebras whose carriers are mere sets.
 
@@ -63,7 +63,7 @@ module _  {𝑨 : Algebra 𝓤 S} where
   --    (We need EXTENSIONALITY for this (imported from util.agda))
   free-unique : funext 𝓥 𝓤 → ( f g : Hom 𝔉 𝑨 )
    →             ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
-   →             (t : Term)
+   →             (t : Term {X = X})
                   ---------------------------
    →              ∣ f ∣ t ≡ ∣ g ∣ t
 
@@ -97,11 +97,11 @@ _̂_ :  (𝓸 : ∣ S ∣ ) → (𝑨 : Algebra 𝓤 S)
 -- Here is how we implement this definition in Agda.
 
 --Interpretation of a term.
-_̇_ : Term → (𝑨 : Algebra 𝓤 S) →  ( X → ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
+_̇_ : {X : 𝓤 ̇ } → Term → (𝑨 : Algebra 𝓤 S) →  ( X → ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x → (args x ̇ 𝑨) 𝒂 }
 
-interp-prod : funext 𝓥 𝓤 → {I : 𝓤 ̇} (p : Term)  (𝓐 : I → Algebra 𝓤 S) ( x : X → ∀ i → ∣ (𝓐 i) ∣ )
+interp-prod : funext 𝓥 𝓤 → {X I : 𝓤 ̇} (p : Term)  (𝓐 : I → Algebra 𝓤 S) ( x : X → ∀ i → ∣ (𝓐 i) ∣ )
  →              (p ̇ (Π' 𝓐)) x  ≡   (λ i → (p ̇ 𝓐 i) (λ j -> x j i))
 interp-prod fe (generator x₁) 𝓐 x = refl _
 interp-prod fe (node 𝓸 𝒕) 𝓐 x =
@@ -110,10 +110,10 @@ interp-prod fe (node 𝓸 𝒕) 𝓐 x =
       ∥ Π' 𝓐 ∥ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁))) ≡⟨ refl _ ⟩   -- refl ⟩
       (λ i₁ → ∥ 𝓐 i₁ ∥ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))  ∎
 
-interp-prod2 : global-funext → {I : 𝓤 ̇} (p : Term) ( A : I → Algebra 𝓤 S )
+interp-prod2 : global-funext → {X I : 𝓤 ̇} (p : Term) ( A : I → Algebra 𝓤 S )
  →              (p ̇ Π' A)  ≡  λ (args : X → ∣ Π' A ∣ ) → ( λ ᵢ → (p ̇ A ᵢ ) ( λ x → args x ᵢ ) )
 interp-prod2 fe (generator x₁) A = refl _
-interp-prod2 fe (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ ) →
+interp-prod2 fe {X = X} (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ ) →
   let IH = λ x → interp-prod fe (𝒕 x) A  in
   let tᴬ = λ z → 𝒕 z ̇ Π' A in
     ( 𝓸 ̂ Π' A )  ( λ s → tᴬ s tup )                                    ≡⟨ refl _ ⟩
@@ -131,7 +131,7 @@ interp-prod2 fe (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ ) →
 --  3. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 --
 -- Proof of 1. (homomorphisms commute with terms).
-comm-hom-term : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S)
+comm-hom-term : funext 𝓥 𝓤 → {X : 𝓤 ̇} (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S)
  →                   (g : Hom 𝑨 𝑩)   →  (𝒕 : Term)  →   (𝒂 : X → ∣ 𝑨 ∣)
                       --------------------------------------------
  →                           ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
@@ -143,8 +143,8 @@ comm-hom-term  fe 𝑨 𝑩 g (node 𝓸 args) 𝒂 =
     (𝓸 ̂ 𝑩) ( λ r -> (args r ̇ 𝑩) (∣ g ∣ ∘ 𝒂) )        ∎
 
 -- Proof of 2.  (If t : Term, θ : Con A, then a θ b  →  t(a) θ t(b). )
-compatible-term :   (𝑨 : Algebra 𝓤 S) →  (𝒕 : Term)  → (θ : Con 𝑨)
-                         ------------------------------------------
+compatible-term :    {X : 𝓤 ̇} (𝑨 : Algebra 𝓤 S) ( 𝒕 : Term {X = X} ) (θ : Con 𝑨)
+                         ------------------------------------------------------
  →                              compatible-fun (𝒕 ̇ 𝑨) ∣ θ ∣
 
 compatible-term 𝑨 (generator x) θ p = p x
@@ -153,11 +153,11 @@ compatible-term 𝑨 (node 𝓸 args) θ p = ∥ ∥ θ ∥ ∥ 𝓸 λ{ x -> (c
 -- For proof of 3, see `TermImageSub` in Subuniverse.agda.
 
 ------------------------------------------------------------------
-_⊢_≈_ : Algebra 𝓤 S → Term → Term → 𝓤 ̇
+_⊢_≈_ : {X : 𝓤 ̇} → Algebra 𝓤 S → Term {X = X} → Term → 𝓤 ̇
 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 
-_⊢_≋_ : Pred (Algebra 𝓤 S) 𝓡 → Term → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓡 ̇
-_⊢_≋_ 𝓚 p q = {A : Algebra 𝓤 S} → 𝓚 A → A ⊢ p ≈ q
+_⊢_≋_ : {𝓤 : Universe} {X : 𝓤 ̇} → Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+_⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
 
 
 

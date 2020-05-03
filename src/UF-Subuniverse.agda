@@ -164,7 +164,7 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
   finv : {X : 𝓤 ̇ } (𝒃 : X → ∣ hom-image-alg ∣ ) (x : X) → ∣ 𝑨 ∣
   finv = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
 
-  -- hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term ) (𝒃 : X → ∣ hom-image-alg ∣ )
+  -- hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term {X = X} ) (𝒃 : X → ∣ hom-image-alg ∣ )
   --   →                            ( p ̇ hom-image-alg ) 𝒃 ≡ ∣ f ∣  ( ( p ̇ 𝑨 ) ( finv 𝒃 ) ) , im ( ( p ̇ 𝑨 ) ( finv 𝒃 ) )
 
   -- hom-image-term-interp {fe} {X} (generator x) 𝒃 =

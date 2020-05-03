@@ -13,11 +13,10 @@ open import UF-Hom
 open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
 open import UF-Free
 
-module UF-Closure  {S : Signature 𝓞 𝓥}  where
+module UF-Closure  {S : Signature 𝓞 𝓥}  {X : 𝓤 ̇} where
 
 -- Products.
-data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) :
-  Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
+data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
     pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
     prod : {I : 𝓤 ̇} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ PClo 𝓚) → Π' 𝓐 ∈ PClo 𝓚
 
@@ -38,7 +37,10 @@ data VClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔
   vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
   vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
 
-module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤) where
+module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤) {X : 𝓤 ̇} where
+
+  _⊢'_≋_ : Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+  _⊢'_≋_ = _⊢_≋_ {X = X}
 
   pclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (PClo 𝓚 ⊢ p ≋ q)
   pclo-id1 {p} {q} α (pbase x) = α x
@@ -53,14 +55,14 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )   ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
           (q ̇ (Π' 𝓐) )     ∎
 
-  pclo-id2 : ∀ {p q} → (PClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
+  pclo-id2 : ∀ {p q} → ( (PClo 𝓚) ⊢' p ≋ q ) → (𝓚 ⊢ p ≋ q)
   pclo-id2 p 𝑨∈𝓚 = p (pbase 𝑨∈𝓚)
 
-  sclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
+  sclo-id1 : ∀ {p q} → (𝓚 ⊢' p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
   sclo-id1 {p} {q} 𝓚⊢p≋q (sbase A∈𝓚) = 𝓚⊢p≋q A∈𝓚
   sclo-id1 {p} {q} 𝓚⊢p≋q (sub{A}{B} A∈SClo𝓚 B≤A) = {!!}
 
-  sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
+  sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   sclo-id2 p 𝑨∈𝓚 = p (sbase 𝑨∈𝓚)
 
   hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
@@ -75,7 +77,7 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
 
     HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
 
-    𝒂 : {𝓸 : ∣ S ∣ } ( 𝒃 : X → Σ (Image_∋_ ∣ f ∣ ) )  ( x : X )   →   ∣ A ∣
+    𝒂 :  ( 𝒃 : X → Σ (Image_∋_ ∣ f ∣ ) )  ( x : X )   →   ∣ A ∣
     𝒂 = λ 𝒃 x → ( Inv ∣ f ∣ ( ∣ 𝒃 x ∣ ) ( ∥ 𝒃 x ∥ ) )
 
     hom-image-term-interpretation hiti :  ( 𝒃 : X → ∣ HIA ∣  )  (p : Term)
@@ -103,7 +105,7 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
           ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )   ≡⟨ refl _ ⟩
           (q ̇ HIA)                                                                ∎
 
-  hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
+  hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
 
 -- vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
@@ -112,7 +114,7 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
 -- vclo-id1 {p} {q} α (vsub x x₁) = {!!}
 -- vclo-id1 {p} {q} α (vhom x x₁) = {!!}
 
-  vclo-id2 : ∀ {p q} → (VClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
+  vclo-id2 : ∀ {p q} → (VClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   vclo-id2 p 𝑨∈𝓚 = p (vbase 𝑨∈𝓚)
 
 --   postulate
