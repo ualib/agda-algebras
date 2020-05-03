@@ -63,7 +63,6 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
   sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊢ p ≋ q) → (𝓚 ⊢ p ≋ q)
   sclo-id2 p 𝑨∈𝓚 = p (sbase 𝑨∈𝓚)
 
-
   hclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (HClo 𝓚 ⊢ p ≋ q)
   hclo-id1 {p} {q} 𝓚⊢p≋q (hbase A∈𝓚) =  𝓚⊢p≋q A∈𝓚
   hclo-id1 {p} {q} 𝓚⊢p≋q (hhom{A}{B}{f} A∈HClo𝓚 ) =  γ
@@ -74,25 +73,33 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (X : 𝓤 ̇) (gfe : global-funex
     IH : (p ̇ A) ≡ (q ̇ A)
     IH = A⊢p≈q
 
-    𝒂 = λ x y → ( Inv ∣ f ∣ ( ∣ x y ∣ ) ( ∥ x y ∥ ) )
-
     HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
 
-    φ : ( 𝒃 : X → ∣ HIA ∣ ) (p : Term)
-     → ( (p ̇ HIA) 𝒃 ) ≡  ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) )
-    φ 𝒃 (generator x) =  𝒃 x ≡⟨ {!!} ⟩ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x) ∎
-    φ 𝒃 (node 𝓸 𝒕) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH2 x)
+    𝒂 : {𝓸 : ∣ S ∣ } ( 𝒃 : X → Σ (Image_∋_ ∣ f ∣ ) )  ( x : X )   →   ∣ A ∣
+    𝒂 = λ 𝒃 x → ( Inv ∣ f ∣ ( ∣ 𝒃 x ∣ ) ( ∥ 𝒃 x ∥ ) )
+
+    hom-image-term-interpretation hiti :  ( 𝒃 : X → ∣ HIA ∣  )  (p : Term)
+     →     ( p ̇ HIA ) 𝒃  ≡  ∣ f ∣ ( (p ̇ A) ( λ i → 𝒂 𝒃 i ) ) , im ( (p ̇ A) ( λ i → 𝒂 𝒃 i ) )
+
+    hom-image-term-interpretation 𝒃 (generator x) =
+     let iiif = ( InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ )⁻¹ in
+      𝒃 x ≡⟨  {!!}  ⟩ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x) ∎
+
+    hom-image-term-interpretation 𝒃 (node 𝓸 𝒕) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
      where
-      φIH2 : (x : ∥ S ∥ 𝓸)
+      φIH : (x : ∥ S ∥ 𝓸)
        → ( 𝒕 x ̇ HIA ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ A ) (𝒂 𝒃) ) , im ((𝒕 x ̇ A) (𝒂 𝒃 ) )
-      φIH2 x = φ 𝒃 (𝒕 x)
+      φIH x = hom-image-term-interpretation 𝒃 (𝒕 x)
+
+    hiti = hom-image-term-interpretation  -- alias
+
 
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
     γ = (p ̇ HIA)                                                               ≡⟨ refl _ ⟩
-          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )         ≡⟨ gfe (λ x → φ x p) ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )         ≡⟨ gfe (λ x → hiti x p) ⟩
           ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) )
                                                                                     ≡⟨ ap (λ - → (λ 𝒃 → ∣ f ∣ (- (λ x → 𝒂 𝒃 x) )   , im (-  (λ x → 𝒂 𝒃 x) )) ) IH ⟩
-          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) )  ≡⟨ ( gfe (λ x → φ x q) )⁻¹ ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) )  ≡⟨ ( gfe (λ x → hiti x q) )⁻¹ ⟩
           ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )   ≡⟨ refl _ ⟩
           (q ̇ HIA)                                                                ∎
 
