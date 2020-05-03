@@ -52,7 +52,8 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
     γ = (p ̇ (Π' 𝓐) )     ≡⟨ interp-prod2 gfe p 𝓐 ⟩
           ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) )
                                 ≡⟨  dfe (λ args → ( ap (λ - → (λ i → ( - i ) (λ x → args x i ) ) )  (dfe IH) ) )  ⟩
-          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )   ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
+          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )
+                                 ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
           (q ̇ (Π' 𝓐) )     ∎
 
   pclo-id2 : ∀ {p q} → ( (PClo 𝓚) ⊢' p ≋ q ) → (𝓚 ⊢ p ≋ q)
@@ -97,22 +98,26 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
 
 
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
-    γ = (p ̇ HIA)                                                               ≡⟨ refl _ ⟩
-          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )         ≡⟨ gfe (λ x → hiti x p) ⟩
-          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) )
-                                                                                    ≡⟨ ap (λ - → (λ 𝒃 → ∣ f ∣ (- (λ x → 𝒂 𝒃 x) )   , im (-  (λ x → 𝒂 𝒃 x) )) ) IH ⟩
-          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → ∣ f ∣ ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) )  ≡⟨ ( gfe (λ x → hiti x q) )⁻¹ ⟩
-          ( λ ( args : X → ∣ HIA ∣ ) → (q ̇ HIA) ( λ x → (args x) ) )   ≡⟨ refl _ ⟩
-          (q ̇ HIA)                                                                ∎
+    γ = (p ̇ HIA)
+              ≡⟨ refl _ ⟩
+          ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )
+              ≡⟨ gfe (λ x → hiti x p) ⟩
+          ( λ 𝒃 → ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) )
+              ≡⟨ ap (λ - → λ 𝒃 → ∣ f ∣ (- (λ x → 𝒂 𝒃 x) )  , im (-  (λ x → 𝒂 𝒃 x) )) IH ⟩
+          ( λ 𝒃 → ∣ f ∣ ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (q ̇ A) ( λ x → 𝒂 𝒃 x ) ) )
+              ≡⟨ ( gfe (λ x → hiti x q) )⁻¹ ⟩
+          ( λ 𝒃 → (q ̇ HIA) ( λ x → (𝒃 x) ) )
+              ≡⟨ refl _ ⟩
+          (q ̇ HIA)    ∎
 
   hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
 
--- vclo-id1 : ∀ {p q} → (𝓚 ⊢ p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
--- vclo-id1 {p} {q} α (vbase x) = α x
--- vclo-id1 {p} {q} α (vprod x₁) = {!!}
--- vclo-id1 {p} {q} α (vsub x x₁) = {!!}
--- vclo-id1 {p} {q} α (vhom x x₁) = {!!}
+  vclo-id1 : ∀ {p q} → (𝓚 ⊢' p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
+  vclo-id1 {p} {q} α (vbase A∈𝓚) = α A∈𝓚
+  vclo-id1 {p} {q} α (vprod allAi∈VClo𝓚) = {!!}
+  vclo-id1 {p} {q} α ( vsub A∈VClo𝓚 B≤A ) = {!!}
+  vclo-id1 {p} {q} α ( vhom 𝑨∈VClo𝓚 ) = {!!}
 
   vclo-id2 : ∀ {p q} → (VClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   vclo-id2 p 𝑨∈𝓚 = p (vbase 𝑨∈𝓚)
