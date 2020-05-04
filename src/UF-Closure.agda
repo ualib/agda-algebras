@@ -96,7 +96,6 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
 
     hiti = hom-image-term-interpretation  -- alias
 
-
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
     γ = (p ̇ HIA)
               ≡⟨ refl _ ⟩
@@ -110,21 +109,41 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
               ≡⟨ refl _ ⟩
           (q ̇ HIA)    ∎
 
+  --   postulate
+  --     homclo-id2 : ∀ {p q} → {𝑨 : Algebra k S} → (h : Hom 𝔉 𝑨) → ∣ h ∣ p ≡ ∣ h ∣ q → 𝓚 ⊢ p ≋ q
   hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
 
+
   vclo-id1 : ∀ {p q} → (𝓚 ⊢' p ≋ q) → (VClo 𝓚 ⊢ p ≋ q)
   vclo-id1 {p} {q} α (vbase A∈𝓚) = α A∈𝓚
-  vclo-id1 {p} {q} α (vprod allAi∈VClo𝓚) = {!!}
-  vclo-id1 {p} {q} α ( vsub A∈VClo𝓚 B≤A ) = {!!}
-  vclo-id1 {p} {q} α ( vhom 𝑨∈VClo𝓚 ) = {!!}
+  vclo-id1 {p} {q} α (vprod{I = I}{𝓐 = 𝓐} allAi∈VClo𝓚) = γ
+    where
+     IH : (i : I) → 𝓐 i ⊢ p ≈ q
+     IH i = vclo-id1{p}{q} α (allAi∈VClo𝓚 i)
+
+     γ : p ̇ (Π' 𝓐)  ≡ q ̇ (Π' 𝓐)
+     γ = (p ̇ (Π' 𝓐) )     ≡⟨ interp-prod2 gfe p 𝓐 ⟩
+          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → ( λ i → (p ̇ 𝓐 i ) ( λ x → (args x) i ) ) )
+                                ≡⟨  dfe (λ args → ( ap (λ - → (λ i → ( - i ) (λ x → args x i ) ) )  (dfe IH) ) )  ⟩
+          ( λ ( args : X → ∣ Π' 𝓐 ∣ ) → (λ i → (q ̇ 𝓐 i ) (λ x → (args x) i ) ) )
+                                 ≡⟨ (interp-prod2 gfe q 𝓐)⁻¹ ⟩
+          (q ̇ (Π' 𝓐) )     ∎
+
+  --vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
+  vclo-id1 {p} {q} α ( vsub {𝑨 = A}{𝑩 = B} A∈VClo𝓚 B≤A ) = γ
+    where
+     γ : B ⊢ p ≈ q
+     γ = {!!}
+
+  --vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
+  vclo-id1 {p} {q} α ( vhom{𝑨 = A}{𝑩 = B}{f = f} 𝑨∈VClo𝓚 ) = γ
+    where
+     γ : hom-image-alg{𝑨 = A}{𝑩 = B} f ⊢ p ≈ q
+     γ = {!!}
 
   vclo-id2 : ∀ {p q} → (VClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   vclo-id2 p 𝑨∈𝓚 = p (vbase 𝑨∈𝓚)
-
---   postulate
---     homclo-id1 : ∀ {p q} → 𝓚 ⊢ p ≋ q → {𝑨 : Algebra k S} → (h : Hom 𝔉 𝑨) → ∣ h ∣ p ≡ ∣ h ∣ q
---     homclo-id2 : ∀ {p q} → {𝑨 : Algebra k S} → (h : Hom 𝔉 𝑨) → ∣ h ∣ p ≡ ∣ h ∣ q → 𝓚 ⊢ p ≋ q
 
   -- sclo-id1 {generator x} {generator x₁} α (sub {𝑨} {.(Σ _ , _)} (sbase x₂) (mem B≤𝑨 )) = γ
   --   where
