@@ -24,13 +24,28 @@ Subuniverses (A , Fᴬ) B = ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → A )
 -- To keep A at same universe level as Σ B , 𝐹 , force B to live in the same universe.
 -- We need to do this so that both A and Σ B , 𝐹 can be classified by the same predicate SClo.
 data _is-supalgebra-of_ (𝑨 : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-  mem :   {B : Pred ∣ 𝑨 ∣ 𝓤}  { 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
-    →    ( ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → Σ B )  →  ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) )
-    →    𝑨 is-supalgebra-of (Σ B , 𝐹)
+  mem :   (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+   →      ( ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → Σ B )  →  ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) )
+   →      𝑨 is-supalgebra-of (Σ B , 𝐹)
 
 _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-B is-subalgebra-of A = A is-supalgebra-of B
+𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
 
+-- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨.
+-- So we need an elimination rule.
+-- is-subalg-elim : (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+--  →               𝑨 is-supalgebra-of 𝑩
+--  →               𝑩 ≡ (Σ B , 𝐹)
+--  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
+--  →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
+-- is-subalg-elim 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 x) eqv 𝓸 𝒃 =
+--  let xo = x 𝓸 in {!!}
+
+-- tB≡tA : {X : 𝓤 ̇} {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
+--  →      𝑨 is-supalgebra-of (Σ B , 𝐹 )
+--  →      (𝒕 : Term {X = X} ) ( 𝒃 : X → Σ B )
+--  →      ( 𝒕 ̇ (Σ B , 𝐹) )( λ x →  𝒃 x ) ≡ (𝒕 ̇ 𝑨) (λ x →  ∣ 𝒃 x ∣ )
+-- tB≡tA A≥B 𝒕 𝒃 = ?
 
 --------------------------------
 -- Elimination rule for sub/supalgebra.
@@ -63,8 +78,18 @@ module _ {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
   SubunivAlg = Σ B , λ 𝓸 x → ∥ 𝑨 ∥ 𝓸 ( ∣_∣ ∘ x ) , B∈SubA 𝓸 ( ∣_∣ ∘ x ) (∥_∥ ∘ x)
 
   subuniv-to-subalg : SubunivAlg is-subalgebra-of 𝑨
-  subuniv-to-subalg = mem {B = B} { 𝐹 = ∥ SubunivAlg ∥ } λ 𝓸 𝒂 → refl _
-  --    mem {B = B} {𝐹 = ∥ SubunivAlg ∥}   ( Σ B , ∥ SubunivAlg ∥ ) {!!} -- refl _ (λ 𝓸 x -> refl _)  --
+  subuniv-to-subalg = mem B ∥ SubunivAlg ∥ λ 𝓸 𝒂 → refl _
+
+  --Interpretation of a term in a subalgebra.
+  -- _̇_ : {X : 𝓤 ̇ } → Term → (𝑨 : Algebra 𝓤 S) →  ( X → ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
+  -- ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
+  -- ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x → (args x ̇ 𝑨) 𝒂 }
+
+  -- interp-subalg : funext 𝓥 𝓤 → {X : 𝓤 ̇} (p : Term) 
+  --  →           (p ̇ SubunivAlg) ≡  (λ ( 𝒃 : X → ∣ SubunivAlg ∣ ) → (p ̇ 𝑨) (λ x → ∣ 𝒃 x ∣) )
+  -- interp-subalg fe p = ?
+
+
 
 record Subuniverse  {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
   constructor mksub

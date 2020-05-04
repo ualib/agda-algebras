@@ -13,7 +13,7 @@ open import UF-Hom
 open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
 open import UF-Free
 
-module UF-Closure  {S : Signature 𝓞 𝓥}  {X : 𝓤 ̇} where
+module UF-Closure  {S : Signature 𝓞 𝓥}  where
 
 -- Products.
 data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
@@ -23,7 +23,11 @@ data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 
 -- Subalgebras
 data SClo ( 𝓚 : Pred ( Algebra 𝓤 S ) 𝓣 ) : Pred ( Algebra 𝓤 S ) ( 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
   sbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
-  sub : {𝑨 𝑩 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ SClo 𝓚
+  --  sub : {𝑨 𝑩 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ SClo 𝓚
+  -- sub : {𝑨 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ SClo 𝓚
+  sub : {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }( B∈SubA : B ∈ Subuniverses 𝑨) → 𝑨 ∈ SClo 𝓚
+    → SubunivAlg{𝑨 = 𝑨}{B = B}{𝐹 = 𝐹} B∈SubA ∈ SClo 𝓚
+  -- sub : {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) } → 𝑨 ∈ SClo 𝓚 → 𝑨 is-supalgebra-of (Σ B , 𝐹) → (Σ B , 𝐹) ∈ SClo 𝓚
 
 -- Hom Images
 data HClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) ( 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
@@ -37,7 +41,7 @@ data VClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔
   vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
   vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
 
-module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤) {X : 𝓤 ̇} where
+module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤)  {X : 𝓤 ̇} where
 
   _⊢'_≋_ : Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
   _⊢'_≋_ = _⊢_≋_ {X = X}
@@ -61,7 +65,29 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
 
   sclo-id1 : ∀ {p q} → (𝓚 ⊢' p ≋ q) → (SClo 𝓚 ⊢ p ≋ q)
   sclo-id1 {p} {q} 𝓚⊢p≋q (sbase A∈𝓚) = 𝓚⊢p≋q A∈𝓚
-  sclo-id1 {p} {q} 𝓚⊢p≋q (sub{A}{B} A∈SClo𝓚 B≤A) = {!!}
+  sclo-id1 {p} {q} 𝓚⊢p≋q (sub {𝑨 = 𝑨} {B = B} {𝐹 = 𝐹} B∈SubA A∈SClo𝓚) = γ
+   where
+    IH :   p ̇ 𝑨  ≡  q ̇ 𝑨
+    IH = sclo-id1{p}{q} 𝓚⊢p≋q A∈SClo𝓚
+
+    𝑩 : Algebra 𝓤 S
+    𝑩 = SubunivAlg{𝑨 = 𝑨}{B = B}{𝐹 = 𝐹} B∈SubA
+    -- We need to do this so that both A and Σ B , 𝐹 can be classified by the same predicate SClo.
+    -- tB≡tA : ∀ 𝒕 → ( 𝒃 : X → Σ B ) → ( 𝒕 ̇ (Σ B , 𝐹) )( λ x →  𝒃 x ) ≡ (𝒕 ̇ 𝑨) (λ x →  ∣ 𝒃 x ∣ )
+    -- tB≡tA 𝒕 = ?
+     -- mem :   {B : Pred ∣ 𝑨 ∣ 𝓤}  { 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
+     --   →    ( ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → Σ B )  →  ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣ ) )
+     --   →    𝑨 is-supalgebra-of (Σ B , 𝐹)
+    uni2alg : 𝑩 is-subalgebra-of 𝑨
+    uni2alg = {!!}
+
+    γ :   p ̇ 𝑩  ≡  q ̇ 𝑩
+    γ = let sts = uni2alg in
+           gfe λ 𝒃 →
+              (p ̇ 𝑩) 𝒃 ≡⟨ {!!} ⟩  we need an elimination rule here (see is-subalg-elim in UF-Subuniverse.agda)
+              -- (p ̇ uni2alg) 𝒃 ≡⟨ IH ⟩
+              -- (q ̇ uni2alg) 𝒃 ≡⟨ ? ⟩
+              (q ̇ 𝑩) 𝒃  ∎
 
   sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊢' p ≋ q) → (𝓚 ⊢ p ≋ q)
   sclo-id2 p 𝑨∈𝓚 = p (sbase 𝑨∈𝓚)
