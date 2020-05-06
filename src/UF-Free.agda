@@ -12,7 +12,6 @@ open import UF-Hom using (Hom)
 open import UF-Con using (Con; compatible-fun)
 open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext)
 open import Relation.Unary using (Pred)
---open import UF-Rel
 
 module UF-Free {S : Signature 𝓞 𝓥}  where
 

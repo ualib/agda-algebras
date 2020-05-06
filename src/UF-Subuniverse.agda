@@ -1,4 +1,4 @@
---File: Subuniverse.agda
+--File: UF-Subuniverse.agda
 --Author: William DeMeo and Siva Somayyajula
 --Date: 20 Feb 2020
 --Updated: 26 Feb 2020
@@ -12,7 +12,7 @@ open import UF-Basic using (Signature; Algebra; Op)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 open import UF-Hom using (Hom)
 open import UF-Rel using (Transitive)
-open import UF-Extensionality using (funext; global-funext; dfunext; global-dfunext)
+open import UF-Extensionality using (funext; global-funext; dfunext; global-dfunext; intensionality)
 
 open import Relation.Unary using (⋂)
 
@@ -33,13 +33,35 @@ _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ �
 
 -- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨.
 -- So we need an elimination rule.
--- is-subalg-elim : (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+-- is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
 --  →               𝑨 is-supalgebra-of 𝑩
 --  →               𝑩 ≡ (Σ B , 𝐹)
 --  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
 --  →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
--- is-subalg-elim 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 x) eqv 𝓸 𝒃 =
---  let xo = x 𝓸 in {!!}
+-- is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 x) eqv 𝓸 𝒃 =
+--  let xo = x 𝓸 in
+--  let eqx = intensionality eqv x in ?
+--  where
+--   B≡B₁ : B ≡ B₁
+--   B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
+
+--   γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+--   γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩
+--         ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
+
+-- Goal: B i ≡ B₁ i
+----------------------------
+-- i   : ∣ 𝑨 ∣
+-- 𝒃   : ∥ S ∥ 𝓸 → Σ B
+-- 𝓸   : ∣ S ∣
+-- eqv : Σ B₁ , 𝐹 ≡ Σ B , F
+-- x   : (𝓸₁ : ∣ S ∣) (𝒂 : ∥ S ∥ 𝓸₁ → Σ B₁) →
+--       ∣ 𝐹 𝓸₁ 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸₁ (λ i₁ → ∣ 𝒂 i₁ ∣)
+-- 𝐹   : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B₁)
+-- B₁  : Pred ∣ 𝑨 ∣ 𝓤
+-- F   : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B)
+-- B   : Pred ∣ 𝑨 ∣ 𝓤
+-- 𝑨   : Algebra 𝓤 S
 
 -- tB≡tA : {X : 𝓤 ̇} {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
 --  →      𝑨 is-supalgebra-of (Σ B , 𝐹 )
@@ -287,42 +309,3 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
 
 
 
--- fhom    : (𝓸₁ : Σ.x S) (𝒂₁ : Σ.y S 𝓸₁ → Σ.x A) →
--- pr₁ f (Σ.y A 𝓸₁ 𝒂₁) ≡ Σ.y B 𝓸₁ (λ x → pr₁ f (𝒂₁ x))
--- fhom    = ∥ f ∥
-
-
-
-
-      -- φIH : (x : ∥ S ∥ 𝓸) → Id (Σ (Image_∋_ ∣ f ∣)) ((𝒕 x ̇ HIA) 𝒃) (∣ f ∣ ((𝒕 x ̇ A) (𝒂 𝒃)) , im ((𝒕 x ̇ A) (𝒂 𝒃)))
-      -- φIH = λ x → φ 𝒃 (𝒕 x)
-      --   hypA = cong-app (A⊢p≈q)
-
-    -- φ : ( 𝒃 : X → ∣ HIA ∣ ) (p : Term)
-    --  → ( (p ̇ HIA) 𝒃 ) ≡  ∣ f ∣ ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) ) , im ( (p ̇ A) ( λ x → 𝒂 𝒃 x ) )
-    -- φ 𝒃 (generator x) =  𝒃 x ≡⟨ {!!} ⟩ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x) ∎
-    -- φ 𝒃 (node 𝓸 𝒕) =
-    --  let lhs = (𝓸 ̂ HIA) (λ x → (𝒕 x ̇ HIA) 𝒃) in
-    --  let rhs1 = ∣ f ∣ ((𝓸 ̂ A) (λ x → (𝒕 x ̇ A) (𝒂 𝒃))) in
-    --  let rhs2 = im ((𝓸 ̂ A) (λ x → (𝒕 x ̇ A) (𝒂 𝒃))) in
-    --    lhs ≡⟨ ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH2 x) ⟩  rhs1 , rhs2 ∎
-    --  where
-      -- fhom : (a : ∥ S ∥ 𝓸 → ∣ A ∣ )
-      --  →    ∣ f ∣ ( (𝓸 ̂ A) a ) ≡ (𝓸 ̂ B) ( ∣ f ∣ ∘ a )
-      -- fhom a = ∥ f ∥ 𝓸 a
-
-      -- φIH2 : (x : ∥ S ∥ 𝓸)
-      --  → ( 𝒕 x ̇ HIA ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ A ) (𝒂 𝒃) ) , im ((𝒕 x ̇ A) (𝒂 𝒃 ) )
-      -- φIH2 x = φ 𝒃 (𝒕 x)
-
-      -- com-hom-𝓸 :  ∣ f ∣ ( (𝓸 ̂ A) (λ x → (𝒕 x ̇ A) ( 𝒂 𝒃 ) ) )
-      --                      ≡ ( (𝓸 ̂ B) (λ x → ∣ f ∣ ( (𝒕 x ̇ A) ( 𝒂 𝒃 ) ) ) )
-      -- com-hom-𝓸 = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ A) ( 𝒂 𝒃 ) )
-
-      -- com-hom-t : (x : ∥ S ∥ 𝓸)
-      --  →    ∣ f ∣ ( ( 𝒕 x ̇ A ) ( 𝒂 𝒃 ) ) ≡ (𝒕 x ̇ B) (∣ f ∣ ∘ (𝒂 𝒃 ) )
-      -- com-hom-t x = comm-hom-term gfe A B f (𝒕 x) (𝒂 𝒃)
-
-      -- com-hom-𝓸' : ∣ f ∣ ( (𝓸 ̂ A) (λ x → (𝒕 x ̇ A) ( 𝒂 𝒃 ) ) )
-      --                       ≡ ( (𝓸 ̂ B) (λ x → ∣ f ∣ ( (𝒕 x ̇ A) ( 𝒂 𝒃 ) ) ) )
-      -- com-hom-𝓸' = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ A) ( 𝒂 𝒃 ) )

@@ -84,7 +84,7 @@ module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfu
     γ :   p ̇ 𝑩  ≡  q ̇ 𝑩
     γ = let sts = uni2alg in
            gfe λ 𝒃 →
-              (p ̇ 𝑩) 𝒃 ≡⟨ {!!} ⟩  we need an elimination rule here (see is-subalg-elim in UF-Subuniverse.agda)
+              (p ̇ 𝑩) 𝒃 ≡⟨ {!!} ⟩  -- we need an elimination rule here (see is-subalg-elim in UF-Subuniverse.agda)
               -- (p ̇ uni2alg) 𝒃 ≡⟨ IH ⟩
               -- (q ̇ uni2alg) 𝒃 ≡⟨ ? ⟩
               (q ̇ 𝑩) 𝒃  ∎

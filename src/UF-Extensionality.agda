@@ -1130,6 +1130,17 @@ intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : 𝓦 ̇ } {f g : A → B}
 
 intensionality (refl _) _ = refl _
 
+-- sigma-intensionality : ∀{𝓤 𝓦} {X : 𝓤 ̇} { A B : X → 𝓦 ̇ }
+--  →                         Σ A  ≡  Σ B  →   (x : X)
+--                           --------------------------
+--  →                            (x , A x)  ≡  (x , B x)
+
+-- sigma-intensionality eqv x = {!!}
+
+
+
+
+
 --------------------------------------
 --Dependent function extensionality
 -- dfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
@@ -1147,6 +1158,7 @@ dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : 
 
 -----------
 
+
 extensionality-lemma : {I : 𝓘 ̇}{X : 𝓤 ̇} {A : I → 𝓥 ̇}( p q : (i : I) → (X → A i) → 𝓣 ̇ ) ( args : X → (Π A) )
  →       p ≡ q
  →  ( λ i → (p i ) ( λ x → args x i ) ) ≡ ( λ i → (q i ) ( λ x → args x i ) )
@@ -1162,4 +1174,35 @@ module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : global-dfunext)
 -----------------
 
 
+
+-- scratch work:
+
+
+-- I suspect the following is false, unless we assume the types are subsingletons (i.e., sets).
+-- sigma-elim : {fe : global-funext} {X : 𝓤 ̇}
+--                 ( A B : X → 𝓥 ̇ )   →   Σ A  ≡  Σ B
+--                ---------------------------------
+--  →                            A  ≡  B
+
+-- sigma-elim {𝓤} {𝓥} {fe} {X} A B eqv = γ
+--  where
+--   SA SB : 𝓤 ⊔ 𝓥 ̇
+--   SA = Σ x ꞉ X , A x
+--   SB = Σ x ꞉ X , B x
+
+--   SA≡SB : SA ≡ SB
+--   SA≡SB = eqv
+
+--   SAx : (x : X) (p : A x) → SA
+--   SAx x p = x , p
+
+--   xAx≡xBx : (x : X) → (x , A x) ≡ (x , B x)
+--   xAx≡xBx x = {!SA≡SB x!}
+
+--   γ : A ≡ B
+--   γ = fe λ x →
+--     A x             ≡⟨ refl _ ⟩
+--     pr₂ (x , A x)  ≡⟨  {!!}   ⟩
+--     pr₂ (x , B x)  ≡⟨ refl _ ⟩
+--     B x             ∎
 

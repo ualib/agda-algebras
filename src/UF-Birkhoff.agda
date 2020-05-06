@@ -1,11 +1,11 @@
---File: Birkhoff.agda
+--File: UF-Birkhoff.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 23 Feb 2020
 --UPDATED: 26 Feb 2020
 --NOTATION: see notes at bottom of Preliminaries.agda
 --NOTES: Based on the file `birkhoff.agda` (23 Jan 2020).
 
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app )
 open import UF-Basic using (Signature; Algebra; Π')
@@ -34,7 +34,7 @@ module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
             ----------------------------------------
  →          ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 𝒂 ) ≡ ∣ g ∣ ( ∥ 𝑨 ∥ 𝓸 𝒂 )
 
-𝑬𝑯-is-closed fe {𝓸 = 𝓸} {𝑨 = A , Fᴬ} {𝑩 = B , Fᴮ} (f , fhom) (g , ghom) 𝒂 p = 
+𝑬𝑯-is-closed fe {𝓸 = 𝓸} {𝑨 = A , Fᴬ} {𝑩 = B , Fᴮ} (f , fhom) (g , ghom) 𝒂 p =
    f ( Fᴬ 𝓸 𝒂)                     ≡⟨ fhom 𝓸 𝒂 ⟩
    Fᴮ 𝓸 ( λ i  →  f ( 𝒂 i ) )    ≡⟨ ap ( Fᴮ _ ) ( fe p ) ⟩
    Fᴮ 𝓸 ( λ i →  g  ( 𝒂 i ) )    ≡⟨ (ghom 𝓸 𝒂)⁻¹ ⟩
