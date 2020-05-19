@@ -31,8 +31,7 @@ is-univalent 𝓤 = (X Y : 𝓤 ̇) → is-equiv (Id→Eq X Y)
 -- `Id→Eq`.
 
 --"We emphasize that this doesn't posit that univalence holds. It says what univalence is (like the type
--- that says what the twin-prime conjecture is.
-
+-- that says what the twin-prime conjecture is).
 univalence-≃ : is-univalent 𝓤 → (X Y : 𝓤 ̇) → (X ≡ Y) ≃ (X ≃ Y)
 univalence-≃ ua X Y = Id→Eq X Y , ua X Y
 

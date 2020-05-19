@@ -7,7 +7,9 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚 )
+open import UF-Prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; ℕ )
+-- open import Data.Fin using (Fin)
+
 module UF-Basic where
 
 -- -- Operations and projections
@@ -36,11 +38,19 @@ module _ {S : Signature 𝓞 𝓥} where
 --Example: monoid
 --  A monoid signature has two operation symbols, say, `e`  and `·`, of arities 0 and 2 (thus, of types `(𝟘 → A) → A`
 --  and `(𝟚 → A) → A`) resp. The types indicate that `e` is nullary (i.e., takes no args, equivalently, takes args
---  of type `𝟘 → A`), while `·` is binary (as indicated  by argument type `𝟚 -> A`).
+--  of type `𝟘 → A`), while `·` is binary (as indicated  by argument type `𝟚 → A`).
 data monoid-op : 𝓤₀ ̇ where
   e : monoid-op
   · : monoid-op
 
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+
+module _ {S : Signature 𝓞 𝓥} {n : ℕ} where
+
+  -- cyclic_shift : {A : 𝓤 ̇} (f : Op (Fin n) A) (m : Fin n) → Op (Fin n) A
+  -- cyclic_shift f m = ?
+
+-- isCyclic : {I : Fin n} {A : 𝓤 ̇} (f : Op I A)
+--    →    (args : I → A) → 
 

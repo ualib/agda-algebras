@@ -719,27 +719,6 @@ f ∼ g = ∀ x → f x ≡ g x
 -- `(x : _) → f x ≡ g x`, or, with our `Π` notation, `Π \x → f x ≡ g x`, or, with our `domain` notation
 -- `(x : domain f) → f x ≡ g x`.
 
-   -- infix   0 _∼_
-   -- infixr 50 _,_
-   -- infixr 30 _×_
-   -- infixr 20 _+_
-   -- infixl 70 _∘_
-   -- infix   0 _≡_
-   -- infix  10 _⇔_
-   -- infixl 30 _∙_
-   -- infixr  0 _≡⟨_⟩_
-   -- infix   1 _∎
-   -- infix  40 _⁻¹
-   -- infix  10 _◁_
-   -- infixr  0 _◁⟨_⟩_
-   -- infix   1 _◀
-   -- infix  10 _≃_
-   -- infixl 30 _●_
-   -- infixr  0 _≃⟨_⟩_
-   -- infix   1 _■
-   -- infix  40 _∈_
-   -- infix  30 _[_,_]
-
 --more equations for transport, including a dependent version
 transport-× : {X : 𝓤 ̇ }(A : X → 𝓥 ̇ )(B : X → 𝓦 ̇ ){x y : X}
               (p : x ≡ y)    {c : A x × B x}
@@ -999,13 +978,13 @@ succ-lc = succ-elim -- alias
 
 ℕ-has-decidable-equality = ℕ-decidable
 
-
 ------------------------------------------------------------------------
 -- Unary relations (aka predicates).  (cf. Relation/Unary.agda from the Agda std lib)
 -- `Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
 -- Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
 Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
 Pred A 𝓥 = A → 𝓥 ̇
+
 ------------------------------------------------------------------------
 -- Membership (cf. Relation/Unary.agda from the Agda std lib)
 infix 4 _∈_ _∉_
@@ -1074,6 +1053,13 @@ img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
 ≡-elim-right : { A₁ A₂ : 𝓤 ̇ } { B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂) → B₁ ≡ B₂
 ≡-elim-right e = ap pr₂ e
+
+-- TODO: prove the following
+-- ≡-×-intro : { A₁ A₂ : 𝓤 ̇ } { B₁ B₂ : 𝓦 ̇ }
+--  →            A₁ ≡ A₂   →   B₁ ≡ B₂
+--                ------------------------
+--  →              (A₁ , B₁) ≡ (A₂ , B₂)
+-- ≡-×-intro pl pr = {!!}
 
 -------------------------------------------------------------------------------------------------------------
 -- Images and surjections.
@@ -1183,7 +1169,6 @@ bijective g = epic g × monic g
 
 Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × Monic g
-
 
 
 

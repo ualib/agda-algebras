@@ -10,7 +10,9 @@
 
 module UF-Extensionality where
 
-open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id)
+-- open import Data.Bool using (Bool; true; false)
+
+open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id; 𝟙; 𝟚; ₀; ₁; ≡-elim-right; 𝟙-is-not-𝟘)
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop)
 
@@ -1130,21 +1132,8 @@ intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : 𝓦 ̇ } {f g : A → B}
 
 intensionality (refl _) _ = refl _
 
--- sigma-intensionality : ∀{𝓤 𝓦} {X : 𝓤 ̇} { A B : X → 𝓦 ̇ }
---  →                         Σ A  ≡  Σ B  →   (x : X)
---                           --------------------------
---  →                            (x , A x)  ≡  (x , B x)
-
--- sigma-intensionality eqv x = {!!}
-
-
-
-
-
 --------------------------------------
 --Dependent function extensionality
--- dfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
--- dfunext 𝓤 𝓥 = {X : 𝓤 ̇} {A : X → 𝓥 ̇} {f g : Π A} → f ∼ g → f ≡ g
 dep-extensionality : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
 dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : A) → B x}
  →                      f ∼ g    →   f ≡ g
@@ -1154,10 +1143,6 @@ dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : 
 
 ∀-dep-extensionality : 𝓤ω
 ∀-dep-extensionality = ∀ {𝓤 𝓥} → dep-extensionality 𝓤 𝓥
-
-
------------
-
 
 extensionality-lemma : {I : 𝓘 ̇}{X : 𝓤 ̇} {A : I → 𝓥 ̇}( p q : (i : I) → (X → A i) → 𝓣 ̇ ) ( args : X → (Π A) )
  →       p ≡ q
@@ -1173,36 +1158,69 @@ module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : global-dfunext)
 
 -----------------
 
-
-
 -- scratch work:
-
 
 -- I suspect the following is false, unless we assume the types are subsingletons (i.e., sets).
 -- sigma-elim : {fe : global-funext} {X : 𝓤 ̇}
 --                 ( A B : X → 𝓥 ̇ )   →   Σ A  ≡  Σ B
 --                ---------------------------------
 --  →                            A  ≡  B
-
 -- sigma-elim {𝓤} {𝓥} {fe} {X} A B eqv = γ
 --  where
 --   SA SB : 𝓤 ⊔ 𝓥 ̇
 --   SA = Σ x ꞉ X , A x
 --   SB = Σ x ꞉ X , B x
-
+--
 --   SA≡SB : SA ≡ SB
 --   SA≡SB = eqv
-
+--
 --   SAx : (x : X) (p : A x) → SA
 --   SAx x p = x , p
-
+--
 --   xAx≡xBx : (x : X) → (x , A x) ≡ (x , B x)
 --   xAx≡xBx x = {!SA≡SB x!}
-
+--
 --   γ : A ≡ B
 --   γ = fe λ x →
 --     A x             ≡⟨ refl _ ⟩
 --     pr₂ (x , A x)  ≡⟨  {!!}   ⟩
 --     pr₂ (x , B x)  ≡⟨ refl _ ⟩
 --     B x             ∎
+
+-- I suspect the following is false. 
+-- sigma-intensionality : ∀{𝓤 𝓦} {X : 𝓤 ̇} { A B : X → 𝓦 ̇ }
+--  →                         Σ A  ≡  Σ B  →   (x : X)
+--                           --------------------------
+--  →                            (x , A x)  ≡  (x , B x)
+-- sigma-intensionality eqv x = {!!}
+
+-- In fact Siva has a counterexample.
+B₁ : 𝟚 → 𝓤₀ ̇
+B₁ ₀ = 𝟘
+B₁ ₁ = 𝟙
+B₂ : 𝟚 → 𝓤₀ ̇
+B₂ ₀ = 𝟙
+B₂ ₁ = 𝟘
+
+siva's-counterexample : ( B₁ ≡ B₂ )  ×  ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
+siva's-counterexample = γ
+ where
+  ζ : ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
+  ζ (₀ , p) = 𝟙-is-not-𝟘 ((ap pr₂ p)⁻¹)
+  ζ (₁ , p) = 𝟙-is-not-𝟘 (ap pr₂ p)
+
+  f : Σ B₁ → Σ B₂
+  f (₀ , p) = ₁ , p
+  f (₁ , p) = ₀ , p
+
+  g : Σ B₂ → Σ B₁
+  g (₀ , p) = ₁ , p
+  g (₁ , p) = ₀ , p
+
+  f∼g :  f ∘ g ∼ id
+  f∼g (₀ , p) = refl (₀ , p)
+  f∼g (₁ , y) = refl (₁ , y)
+
+  γ : ( B₁ ≡ B₂ )  ×  ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
+  γ = {!!} , ζ
 
