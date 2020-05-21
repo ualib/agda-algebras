@@ -743,7 +743,7 @@ inverses-are-retractions f e x = ap fiber-point p
  where p : inverse f e (f x) , inverses-are-sections f e (f x) ≡ x , refl (f x)
        p = inverse-centrality f e (f x) (x , (refl (f x)))
 
---ALIAS. retraction <→ left-inverse
+--ALIAS. retraction ↔ left-inverse
 inv-elim-left : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y)(e : is-equiv f) → inverse f e ∘ f ∼ id
 inv-elim-left = inverses-are-retractions
 

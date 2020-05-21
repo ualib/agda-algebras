@@ -39,14 +39,13 @@ Eq→Id : is-univalent 𝓤 → (X Y : 𝓤 ̇) → X ≃ Y → X ≡ Y
 Eq→Id ua X Y = inverse (Id→Eq X Y) (ua X Y)
 
 --[Recall,
---  "To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives
---   `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is the identity function of the universe `𝓤₀`. More
---   generally, we have the following conversion of type identifications into functions:
+--  "To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘`
+--  where `id` is the identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type
+--  identifications into functions:
 --     Id→Fun : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇ ))
---  "Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.
---   An equivalent definition is the following, where this time the identity function is that
---   of the type `X`:
+--  "Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
+--  following, where this time the identity function is that of the type `X`:
 --     Id→Fun' : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun' (refl X) = 𝑖𝑑 X
 --
@@ -66,16 +65,14 @@ Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)
  →              Id→fun p ≡ Id→Fun p
 Id→funs-agree (refl X) = refl (𝑖𝑑 X)
 
---"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied
--- the main concepts of univalent mathematics in a pure, spartan MLTT. It is the concepts of hlevel,
--- including singleton, subsingleton and set, and the notion of equivalence that are at the heart of
--- univalent mathematics. Univalence *is* a fundamental ingredient, but first we need the correct
--- notion of equivalence to be able to formulate it.
+--"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent
+-- mathematics in a pure, spartan MLTT.  It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of equivalence
+-- that are at the heart of univalent mathematics.  Univalence *is* a fundamental ingredient, but first we need the correct notion of
+-- equivalence to be able to formulate it.
 
---"*Remark*. If we formulate univalence with invertible maps instead of equivalences, we get a statement
--- that is provably false in MLTT, and this is one of the reasons why Voevodsky's notion of equivalence is
--- important. (This is Exercise 4.6 of the HoTT book.) There is a solution in Coq by Mike Shulman
--- (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"
+--"*Remark*. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
+-- and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
+-- There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"
 
 ------------------------------------------------------------------------------
 -- Example of a type that is not a set under univalence
