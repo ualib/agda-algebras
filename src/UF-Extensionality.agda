@@ -14,7 +14,7 @@ module UF-Extensionality where
 
 open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id; 𝟙; 𝟚; ₀; ₁; ≡-elim-right; 𝟙-is-not-𝟘)
 
-open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop)
+open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop; 𝟙-is-singleton)
 
 open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel_; to-Σ-≡'; singletons-are-sets; wconstant; Hedberg; types-with-wconstant-≡-endomaps-are-sets; to-Σ-≡; singleton-types'-are-singletons; _◁_; retract-of-singleton; has-section; singleton-type; _≃_; fiber; is-equiv; invertible; id-is-equiv; invertibles-are-equivs; inverse; equivs-are-invertible; ≃-gives-▷; _●_; ≃-sym; Σ-≡-≃; Σ-cong; _≃⟨_⟩_; _■; Σ-flip; ∘-is-equiv; inversion-involutive; invertibility-gives-≃; ⌜_⌝; ⌜⌝-is-equiv; inverses-are-sections; inverses-are-retractions)
 
@@ -1194,33 +1194,41 @@ module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : global-dfunext)
 --  →                            (x , A x)  ≡  (x , B x)
 -- sigma-intensionality eqv x = {!!}
 
--- In fact Siva has a counterexample.
-B₁ : 𝟚 → 𝓤₀ ̇
-B₁ ₀ = 𝟘
-B₁ ₁ = 𝟙
-B₂ : 𝟚 → 𝓤₀ ̇
-B₂ ₀ = 𝟙
-B₂ ₁ = 𝟘
+-- Indeed, it is false, and Siva provided a counterexample.
+module siva's-counterexample (ua : is-univalent 𝓤₀) where
+  B₁ B₂ : 𝟚 → 𝓤₀ ̇
+  B₁ = λ{₀ → 𝟘; ₁ → 𝟙}
+  B₂ = λ{₀ → 𝟙; ₁ → 𝟘}
 
-siva's-counterexample : ( B₁ ≡ B₂ )  ×  ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
-siva's-counterexample = γ
- where
-  ζ : ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
-  ζ (₀ , p) = 𝟙-is-not-𝟘 ((ap pr₂ p)⁻¹)
-  ζ (₁ , p) = 𝟙-is-not-𝟘 (ap pr₂ p)
+  counterex : ( Σ B₁ ≡ Σ B₂ )  ×  ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
+  counterex = ( Eq→Id ua (Σ B₁) (Σ B₂) ξ  ,  ζ )
+   where
+    ζ : ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
+    ζ (₀ , p) = 𝟙-is-not-𝟘 ((ap pr₂ p)⁻¹)
+    ζ (₁ , p) = 𝟙-is-not-𝟘 (ap pr₂ p)
 
-  f : Σ B₁ → Σ B₂
-  f (₀ , p) = ₁ , p
-  f (₁ , p) = ₀ , p
+    f : Σ B₁ → Σ B₂
+    f (₀ , p) = ₁ , p
+    f (₁ , p) = ₀ , p
 
-  g : Σ B₂ → Σ B₁
-  g (₀ , p) = ₁ , p
-  g (₁ , p) = ₀ , p
+    g : Σ B₂ → Σ B₁
+    g (₀ , p) = ₁ , p
+    g (₁ , p) = ₀ , p
 
-  f∼g :  f ∘ g ∼ id
-  f∼g (₀ , p) = refl (₀ , p)
-  f∼g (₁ , y) = refl (₁ , y)
+    f∼g :  f ∘ g ∼ id
+    f∼g (₀ , p) = refl (₀ , p)
+    f∼g (₁ , y) = refl (₁ , y)
 
-  γ : ( B₁ ≡ B₂ )  ×  ¬ ( Σ x ꞉ 𝟚 , (x , B₁ x) ≡ (x , B₂ x) )
-  γ = {!!} , ζ
+    g∼f :  g ∘ f ∼ id
+    g∼f (₀ , p) = refl (₀ , p)
+    g∼f (₁ , y) = refl (₁ , y)
+
+    f-is-invertible : invertible f
+    f-is-invertible = g , g∼f , f∼g
+
+    f-is-equiv : is-equiv f
+    f-is-equiv = invertibles-are-equivs f f-is-invertible
+
+    ξ : Σ B₁ ≃ Σ B₂
+    ξ = f , f-is-equiv
 
