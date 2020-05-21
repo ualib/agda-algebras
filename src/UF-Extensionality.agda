@@ -16,7 +16,7 @@ open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _�
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop; 𝟙-is-singleton)
 
-open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel_; to-Σ-≡'; singletons-are-sets; wconstant; Hedberg; types-with-wconstant-≡-endomaps-are-sets; to-Σ-≡; singleton-types'-are-singletons; _◁_; retract-of-singleton; has-section; singleton-type; _≃_; fiber; is-equiv; invertible; id-is-equiv; invertibles-are-equivs; inverse; equivs-are-invertible; ≃-gives-▷; _●_; ≃-sym; Σ-≡-≃; Σ-cong; _≃⟨_⟩_; _■; Σ-flip; ∘-is-equiv; inversion-involutive; invertibility-gives-≃; ⌜_⌝; ⌜⌝-is-equiv; inverses-are-sections; inverses-are-retractions)
+open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel_; to-Σ-≡'; singletons-are-sets; wconstant; Hedberg; types-with-wconstant-≡-endomaps-are-sets; to-Σ-≡; singleton-types'-are-singletons; _◁_; retract-of-singleton; has-section; singleton-type; _≃_; fiber; is-equiv; invertible; id-is-equiv; invertibles-are-equivs; inv-elim-left; inv-elim-right; inverse; equivs-are-invertible; ≃-gives-▷; _●_; ≃-sym; Σ-≡-≃; Σ-cong; _≃⟨_⟩_; _■; Σ-flip; ∘-is-equiv; inversion-involutive; invertibility-gives-≃; ⌜_⌝; ⌜⌝-is-equiv; inverses-are-sections; inverses-are-retractions)
 
 open import UF-Univalence using (is-univalent; equivs-are-lc; ΠΣ-distr-≃; maps-of-singletons-are-equivs; NatΣ-equiv-gives-fiberwise-equiv; pr₁-equiv; Eq→Id; to-subtype-≡; Id→Eq; subsingleton-criterion'; equiv-to-subsingleton; has-retraction; joyal-equivs-are-invertible; is-joyal-equiv; ×-is-subsingleton'; Σ-assoc; Σ-is-subsingleton; logically-equivalent-subsingletons-are-equivalent; Id→fun; ×-is-subsingleton; 𝕁-equiv; is-hae; transport-ap-≃; haes-are-equivs; transport-map-along-≃)
 
@@ -30,15 +30,42 @@ funext 𝓤 𝓥 = {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {f g : X → Y} → f ∼ g →
 
 --"There will be two seemingly stronger statements, namely the generalization to dependent functions, and the requirement that the
 -- canonical map `f ≡ g → f ∼ g` is an equivalence.
+
 --"*Exercise*. Assuming `funext`, prove that if a function `f : X → Y` is an equivalence then so is the precomposition
 -- map `_∘ f : (Y → Z) → (X → Z)`."
+--SOLUTION.
+module _ (feuw : funext 𝓤 𝓦) (fewu : funext 𝓦 𝓤) (feuv : funext 𝓤 𝓥)(fevw : funext 𝓥 𝓦)
+  {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇} (f : X → Y) where
+
+  _∘f : (g : Y → Z) → (X → Z)
+  g ∘f = g ∘ f
+
+  fequiv-implies-_∘fequiv : is-equiv f → is-equiv _∘f
+  fequiv-implies-_∘fequiv  fequiv = invertibles-are-equivs _∘f postcomp-is-invertible
+   where
+    f⁻¹ : Y → X
+    f⁻¹ = inverse f fequiv
+
+    _∘finv : (X → Z) → (Y → Z)
+    gf ∘finv = λ y → gf (f⁻¹ y)
+
+    ∘f∼∘finv : ( _∘f ) ∘ ( _∘finv ) ∼ id
+    ∘f∼∘finv gf = feuw (λ x → ap (λ - → gf -) (inv-elim-left f fequiv x) )
+
+    ∘finv∼∘f : ( _∘finv ) ∘ ( _∘f ) ∼ id
+    ∘finv∼∘f g = fevw λ y → ap (λ - → g -) ((inv-elim-right f fequiv y))
+
+    postcomp-is-invertible : invertible _∘f
+    postcomp-is-invertible = _∘finv , ∘finv∼∘f , ∘f∼∘finv
+
+
 --"The crucial step in Voevodsky's proof (see: https://www.math.uwo.ca/faculty/kapulkin/notes/ua_implies_fe.pdf )
--- that univalence implies `funext` is to establish the conclusion of the above exercise assuming univalence instead. We prove this by
--- equivalence induction on `f`, which means that we only need to consider the case when `f` is an identity function, for which
--- precomposition with `f` is itself an identity function (of a function type), and hence an equivalence:
+-- that univalence implies funext is to establish the conclusion of the above exercise assuming univalence instead."
+-- We prove this by equivalence induction on f, which means that we only need to consider the case when f is an identity
+-- function, for which [_∘f,  the "post-composition-with-f map"] is itself an identity function, hence an equivalence:
 precomp-is-equiv : is-univalent 𝓤
  →               (X Y : 𝓤 ̇ )   (f : X → Y)   →     is-equiv f   →    (Z : 𝓤 ̇ )
-                ------------------------------------------------------
+                   ------------------------------------------------------
  →                             is-equiv (λ (g : Y → Z) → g ∘ f)
 precomp-is-equiv {𝓤} ua =  𝕁-equiv ua
      ( λ X Y (f : X → Y) → (Z : 𝓤 ̇ ) → is-equiv (λ g → g ∘ f) )
@@ -1065,22 +1092,17 @@ subset-extensionality' {𝓤} 𝓤★ = subset-extensionality (univalence-gives-
 -- univalence for sets (see the HoTT book or https://www.cs.bham.ac.uk/~mhe/agda-new/OrdinalOfOrdinals.html ).
 
 
--- =====================================
+-- =========================================
 -- Stuff from our old Preliminaries.agda file (moderately tweaked)
--- ----------------------------------------------------
+-- -----------------------------------------------------------
 _∈∈𝓟_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →   𝓟 B → 𝓤 ⊔ 𝓥 ̇
 _∈∈𝓟_  f S = (x : _) → f x ∈ S
 
 Im_⊆𝓟_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → 𝓟 B → 𝓤 ⊔ 𝓥 ̇
 Im_⊆𝓟_ {A = A} f S = (x : A) → f x ∈ S
 
------------------------
--- Images and surjections.
 image : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 image f = Σ y ꞉ (codomain f) , ∃! x ꞉ (domain f) , f x ≡ y
-
--- img : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (P : Y → Ω 𝓥) →  Im f ⊆ P  → X → Σ P
--- img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
 
 restriction : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → image f → Y
 restriction f (y , _) = y
@@ -1113,12 +1135,7 @@ EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
 
 -------------------------------------------------------
 -- Function extensionality from univalence
--- ------------------------------------
 --"Function extensionality says that any two pointwise equal functions are equal. This is known to be not provable or disprovable in MLTT.
--- It is an independent statement, which we abbreviate as `funext`.
--- funext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
--- funext 𝓤 𝓥 = {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {f g : X → Y} → f ∼ g → f ≡ g
---------------------------------------
 --Ordinary function extensionality
 extensionality : ∀ 𝓤 𝓦  → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
 extensionality 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}

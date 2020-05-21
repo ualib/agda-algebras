@@ -115,13 +115,13 @@ transport∙ F f (refl t) = refl (transport F f)
 
   --            F
   --     s -------------> Fs
-  --      |                      /    \
-  --   f  |   transport Ff /        \
-  --      |                 ↙             |
-  --     t --------> Ft             |  transport F (f ∘ g)
-  --      |                  \            |
+  --      |                        /     \
+  --   f  |   transport Ff /         \
+  --      |                   ↙             |
+  --     t --------> Ft              |  transport F (f ∘ g)
+  --      |                    \            |
   --   g  |   transport Fg \        /
-  --      |                       ↘  ↙
+  --      |                         ↘  ↙
   --      u------------->  Fg
 
 --"Functions of a type into a universe can be considered as generalized presheaves, which
@@ -167,7 +167,7 @@ transport-ap G f (refl u₀) w = refl w
 ------------------------------------------------------------------------------------
 -- Identifications that depend on identifications
 -- -----------------------------------------------
---"If we have an identification `p : A ≡ B` of two types `A` and `B`, and elements `a : A` and `b : B`, we cannot ask directly 
+--"If we have an identification `p : A ≡ B` of two types `A` and `B`, and elements `a : A` and `b : B`, we cannot ask directly
 -- whether `a ≡ b`, because although the types are identified by `p`, they are not necessarily the same, in the sense of
 -- definitional equality. This is not merely a syntactical restriction of our formal system, but instead a fundamental fact that
 -- reflects the philosophy of univalent mathematics. For instance, consider the type"
@@ -183,7 +183,7 @@ data Color : 𝓤₀ ̇ where
 -- colors with bits. So, it is not enough to have `Color ≡ 𝟚` to be able to compare a color `c : Color` with a bit `b : 𝟚`. So
 -- the meaningful comparison in the more general situation is `transport id p a ≡ b` for a specific `p : A ≡ B`, where `id`
 -- is the identity function of the universe where the types `A` and `B` live, and hence `transport id : A ≡ B → (A → B)` is
--- the function that transforms identifications into functions... More generally, we want to consider the situation in which we
+-- the function that transforms identifications into functions.  More generally, we want to consider the situation in which we
 -- replace the identity function `id` of the universe where `A` and `B` live by an arbitrary type family, which is what we do now.
 
 --"If we have a type `X : 𝓤 ̇`, a type family `F : X → 𝓥 ̇`, points `u₀ u : X`, and an identification `p : u₀ ≡ u`, then we

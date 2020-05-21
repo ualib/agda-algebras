@@ -12,6 +12,7 @@ open import UF-Basic using (Signature; Algebra; Op)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 open import UF-Hom using (Hom)
 open import UF-Rel using (Transitive)
+open import UF-Equality using (to-Σ-≡; from-Σ-≡)
 open import UF-Extensionality using (funext; global-funext; dfunext; global-dfunext; intensionality)
 
 open import Relation.Unary using (⋂)
@@ -33,21 +34,21 @@ _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ �
 
 -- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨.
 -- So we need an elimination rule.
--- is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
---  →               𝑨 is-supalgebra-of 𝑩
---  →               𝑩 ≡ (Σ B , 𝐹)
---  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
---  →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
--- is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 x) eqv 𝓸 𝒃 =
---  let xo = x 𝓸 in
---  let eqx = intensionality eqv x in ?
---  where
---   B≡B₁ : B ≡ B₁
---   B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
+is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+ →               𝑨 is-supalgebra-of 𝑩
+ →               𝑩 ≡ (Σ B , 𝐹)
+ →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
+ →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
+is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 Fᴮ≡Fᴬ) eqv 𝓸 𝒃 =
+ let eqvF = Fᴮ≡Fᴬ 𝓸 in γ
+ -- let eqx = intensionality eqv x in ?
+ where
+  B≡B₁ : B ≡ B₁
+  B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
 
---   γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
---   γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩
---         ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
+  γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+  γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩  -- from-Σ-≡  Fᴮ≡Fᴬ
+        ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
 
 -- Goal: B i ≡ B₁ i
 ----------------------------

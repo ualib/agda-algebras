@@ -1004,49 +1004,20 @@ _⊇_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣
 P ⊇ Q = Q ⊆ P
 
 
-------------------------------------------------------------------------
--- Existential quantifiers (cf. agda-stdlib Data/Product.agda)
--- ∃ :  ∀ {A : 𝓤 ̇} → (A → 𝓦 ̇) → 𝓤 ⊔ 𝓦 ̇
--- ∃ S = Σ S
-
--- ∄ : ∀ {A : 𝓤 ̇} → (A → 𝓦 ̇) → 𝓤 ⊔ 𝓦 ̇
--- ∄ P = ¬ (∃ P)
-
--- ∃₂ : ∀ {A : Set a} {B : A → Set b}
--- (C : (x : A) → B x → Set c) → Set (a ⊔ b ⊔ c)
--- ∃₂ C = ∃ λ a → ∃ λ b → C a b
-
--- -- Unique existence (parametrised by an underlying equality).
-
--- ∃! : {A : Set a} → (A → A → Set ℓ) → (A → Set b) → Set (a ⊔ b ⊔ ℓ)
--- ∃! _≈_ B = ∃ λ x → B x × (∀ {y} → B y → x ≈ y)
-
--- -- Syntax
-
--- ∃-syntax : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
--- ∃-syntax = ∃
-
--- syntax ∃-syntax (λ x → B) = ∃[ x ] B
-
--- ∄-syntax : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
--- ∄-syntax = ∄
-
--- syntax ∄-syntax (λ x → B) = ∄[ x ] B
 
 -- =====================================================================
 -- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
 
-
---_∈∈_ :  {A : 𝓤 ̇} {B : 𝓥 ̇} →  (A  →  B) →  𝓟 B → 𝓤 ⊔ 𝓥 ̇
 _∈∈_ :  {A : 𝓤 ̇} {B : 𝓦 ̇} →  (A  →  B) →  Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 _∈∈_  f S = (x : _) → f x ∈ S
 
---Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → 𝓟 B → 𝓤 ⊔ 𝓥 ̇
 Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
 img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → Σ P
 img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
+-- img : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (P : Y → Ω 𝓥) →  Im f ⊆ P  → X → Σ P
+-- img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
 
 ≡-elim-left :  {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂)   →   A₁ ≡ A₂
 ≡-elim-left e = ap pr₁ e
