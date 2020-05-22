@@ -451,50 +451,44 @@ hedberg {𝓤}{X} d = types-with-wconstant-≡-endomaps-are-sets X (hedberg-lemm
 
 
 
-
-
 -------------------------------------------------------------------------------------------------
--- RETRACTS.
--- see https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#retracts
+{-RETRACTS
+   ----------
+   As MHE explains (see https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#retracts )
+   retract are used as a mathematical technique to transfer properties between types.
 
-{-"We use retracts as a mathematical technique to transfer properties between types. For instance, retracts of singletons are
-   singletons. Showing that a particular type `X` is a singleton may be rather difficult to do directly by applying the definition
-   of singleton and the definition of the particular type, but it may be easy to show that `X` is a retract of `Y` for a type `Y`
-   that is already known to be a singleton. In these notes, a major application will be to get a simple proof of the fact that
-   invertible maps are equivalences in the sense of Voevodsky." -}
+  "For instance, retracts of singletons are singletons. Showing that a particular type `X` is a singleton may be difficult to do directly...
+   but it may be easy to show that `X` is a retract of `Y` for a type `Y` that is already known to be a singleton.... a major application
+   will be to get a simple proof of the fact that invertible maps are equivalences in the sense of Voevodsky." -}
 
---"A *section* of a function is simply a right inverse, by definition:
-has-section : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
-has-section r = Σ s ꞉ (codomain r → domain r), r ∘ s ∼ id                --i.e., ∀ (y : Y) , (r ∘ s) y = id y = y
-
-has-right-inv : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+--A *section* of a function g : Y → X is a right inverse (i.e., f : X → Y such that g ∘ f = id)
+has-section has-right-inv is-surjective : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (Y → X) → 𝓤 ⊔ 𝓥 ̇
+has-section g = Σ f ꞉ (codomain g → domain g), g ∘ f ∼ id         --i.e., ∀ (x : X) , (g ∘ f) x ≡ id x ≡ x
 has-right-inv = has-section -- alias
+is-surjective = has-section  -- alias (recall, surjective functions are those with sections)
 
-{-"Notice that `has-section r` is the type of all sections `(s , η)` of `r`, which may well be empty. So a point of this type is a
-   designated section `s` of `r`, together with the datum `η` [which is a proof of `r ∘ s ~ id`].
+--A *retraction* of a function f : X → Y is a left inverse (i.e., g : Y → X such that g ∘ f = id)
+has-retraction has-left-inv is-injective : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+has-retraction r = Σ s ꞉ (codomain r → domain r),  s ∘ r ∼ id        --i.e., ∀ (x : X) , (s ∘ r) x ≡ id x ≡ x
+has-left-inv = has-retraction  -- alias
+is-injective = has-retraction    -- alias  (recall, injective functions are those with retractions)
 
-  "Unless the domain of `r` is a set, this datum is not property, and we may well have an element `(s , η')` of the type
-   `has-section r` with `η'` distinct from `η` for the same `s`. -}
-
---"`X` is a retract of `Y`, written `X ◁ Y`, iff ∃ function `Y → X` that has a section.
+--X is a retract of Y, written X ◁ Y, iff ∃ function g : Y → X that has a section (right-inverse).
 _◁_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ◁ with `\lhd`
-X ◁ Y = Σ r ꞉ (Y → X), has-section r
+X ◁ Y = Σ g ꞉ (Y → X), has-section g
 infix  10 _◁_
+--An inhabitant `𝓻 : X ◁ Y` of a retraction type is a triple `𝓻 = (g , f , η)` where g : Y → X  is a surjective function with section
+--`(f , η) : has-section g`, so f : X → Y and `η : g ∘ f ~ id`.
 
-{-[Intuition: `X ◁ Y` iff  ∃ `r : Y → X` and `∃ s : X → Y , r ∘ s ~ id` (the identity on X);
-                         iff ∃ `r : Y → X` with a *right* inverse s : X → Y.
-   Recall, a `r : Y → X` has a right inv iff it's surjective; in this sense, `X ◁ Y` asserts that `X` "embeds into" `Y`.
 
-   An inhabitant `t : X ◁ Y` of a retraction type is a triple `t = (r , s , η)` where
-       r : Y → X  (a surjective function with a section)
-       (s , η) : has-section r
-   so `s : X → Y` and `η : r ∘ s ~ id`.  In particular, `η` is a proof that `r` and `s` compose to the identity on X. ]-}
+--X embeds in Y, written X ↪ Y, iff ∃ function f : X → Y that has a retraction (left-inverse).
+_↪_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ↪ with `\hookrightarrow`
+X ↪ Y = Σ f ꞉ (X → Y), has-retraction f
+infix  10 _↪_
+--An inhabitant `𝓮 : X ↪ Y` of an embedding type is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function with retraction
+-- (g , ε) : has-retraction f so g : Y → X and ε : g ∘ f ~ id.
 
---"The type [X ◁ Y] actually collects all the ways in which the type `X` can be a retract of the
--- type `Y`, and so is data or structure on `X` and `Y`, rather than a property of them.
-
---"A function that has a section is called a retraction. We use this terminology, ambiguously, also for the function that projects
--- out the retraction:
+--"A function that has a section is called a retraction. We use this... also for the function that projects out the retraction:
 retraction : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ◁ Y → Y → X
 retraction (r , s , η) = r
 
