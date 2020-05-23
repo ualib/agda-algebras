@@ -1,9 +1,12 @@
 --FILE: UF-Embedding.agda
 --DATE: 22 Apr 2020
---BLAME: <williamdemeo@gmail.com>
---REF: Based on Martin Escardo's course notes
+--UPDATE: 23 May 2020
+--BLAME: williamdemeo@gmail.com
+--REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#equivconstructions
---     and https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#yoneda
+--      https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#yoneda
+--      In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
+--      Throughout, MHE = Martin Hötzel Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 

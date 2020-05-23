@@ -1,14 +1,17 @@
 --FILE: UF-Equality.agda
 --DATE: 19 Mar 2020
+--UPDATE: 23 May 2020
 --BLAME: williamdemeo@gmail.com
---REF: Based on Martin Escardo's course notes
+--REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#identitytypeuf
+--       In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
+--       Throughout, MHE = Martin Hötzel Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module UF-Equality where
 
-open import UF-Prelude using (𝓤₀; 𝓤; 𝓥; 𝓦; _̇; _⊔_; 𝑖𝑑; _∼_; codomain; id; ℕ; zero; succ; 𝟘; 𝟙; ¬; is-empty; !𝟘; _∘_; domain; Σ; -Σ; Σ-induction; curry; pr₁; pr₂; _,_; 𝟚; _×_; inl; inr; Id;_≡_;refl; _∙_; _⁻¹; ap; _≡⟨_⟩_;_∎; transport; decidable;has-decidable-equality;𝟚-has-decidable-equality; ℕ-has-decidable-equality; pred)
+open import UF-Prelude using (𝓤₀; 𝓤; 𝓥; 𝓦; _̇; _⊔_; 𝑖𝑑; _∼_; codomain; id; ℕ; zero; succ; 𝟘; 𝟙; ¬; is-empty; !𝟘; _∘_; domain; Σ; -Σ; Σ-induction; curry; pr₁; pr₂; _,_; 𝟚; _×_; inl; inr; Id; _≡_; refl; _∙_; _⁻¹; ap; _≡⟨_⟩_;_∎; transport; decidable;has-decidable-equality;𝟚-has-decidable-equality; ℕ-has-decidable-equality; pred)
 
 open import UF-Singleton using (center;is-set;is-singleton;is-subsingleton;singletons-are-subsingletons;𝟘-is-subsingleton;𝟙-is-subsingleton; centrality)
 
@@ -485,8 +488,8 @@ infix  10 _◁_
 _↪_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ↪ with `\hookrightarrow`
 X ↪ Y = Σ f ꞉ (X → Y), has-retraction f
 infix  10 _↪_
---An inhabitant `𝓮 : X ↪ Y` of an embedding type is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function with retraction
--- (g , ε) : has-retraction f so g : Y → X and ε : g ∘ f ~ id.
+--An inhabitant `𝓮 : X ↪ Y` of an embedding type is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function (the embedding map)
+--with retraction (g , ε) : has-retraction f so g : Y → X and ε : g ∘ f ~ id.
 
 --"A function that has a section is called a retraction. We use this... also for the function that projects out the retraction:
 retraction : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ◁ Y → Y → X
@@ -495,18 +498,28 @@ retraction (r , s , η) = r
 section : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ◁ Y → X → Y
 section (r , s , η) = s
 
-retract-equation : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }  (ρ : X ◁ Y)
-                  -----------------------------------
- →                (retraction ρ ∘ section ρ) ∼ (𝑖𝑑 X)
-
+retract-equation : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }  (ρ : X ◁ Y) → (retraction ρ ∘ section ρ) ∼ (𝑖𝑑 X)
 retract-equation (r , s , η) = η
 
-retraction-has-section : {X : 𝓤 ̇} {Y : 𝓥 ̇} (ρ : X ◁ Y)
- →                            has-section (retraction ρ)
+retraction-has-section : {X : 𝓤 ̇} {Y : 𝓥 ̇} (ρ : X ◁ Y) → has-section (retraction ρ)
 retraction-has-section (r , h) = h
 
+--Similarly, for embeddings and their left inverses (which we call "extractions"):
+extraction left-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↪ Y → Y → X
+extraction (f , g , ε) = g
+left-inverse = extraction -- alias
 
---"We have an identity retraction:"
+embedding right-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↪ Y → X → Y
+embedding (f , g , ε) = f
+right-inverse = embedding -- alias
+
+--The name "extraction" seems suitable since embedding followed by extraction is identity:
+embedding-equation : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (𝓮 : X ↪ Y)
+ →                 (extraction 𝓮 ∘ embedding 𝓮) ∼ (𝑖𝑑 X)
+embedding-equation (f , g , ε) = ε
+--(The name enforces the order---you only can't extract something that isn't first embedded.)
+
+--An identity retraction
 id-◁ : (X : 𝓤 ̇) → X ◁ X
 id-◁ X = 𝑖𝑑 X , 𝑖𝑑 X , refl
 
@@ -645,36 +658,29 @@ singleton-types'-are-singletons X u = singleton-type'-center u , singleton-type'
 
 
 ------------------------------------------------------------------------------------------
--- EQUIVALENCE.
---FILE: UF-Equivalence.agda
---BLAME: williamdemeo@gmail.com
---DATE: 26 Mar 2020
+--EQUIVALENCE.
 --REF: Based on Martin Escardo's course notes
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#fibersandequivalences
+--NOTE: formerly this content was in the file UF-Equivalence.agda, which was since merged into this file
 
 -----------------------------------------------------------------------
 -- Voevodsky's notion of type equivalence
 -- ---------------------------------------
---"The main notions of univalent mathematics conceived by Voevodsky, with formulations
--- in MLTT, are those of singleton type (or contractible type), hlevel (including the
--- notions of subsingleton and set), and of type equivalence, which we define now.
+--(Paraphrazing Escardo) the main notions of univalent mathematics conceived of by Voevodsky are
+--  * `singleton` types (called "contractible" types by Voevodsky),
+--  * `hlevel` (including the notions of `subsingleton` and `set`), and
+--  * type equivalence.
+--In this section "type equivalence" is defined.
 
---"We begin with a discussion of the notion of *invertible function*, whose only
--- difference with the notion of equivalence is that it is data rather than property:
-
+--"We begin with... *invertible function*, whose only difference from "equivalence" is that it is data rather than property.
 invertible : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 invertible f = Σ g ꞉ (codomain f → domain f) , (g ∘ f ∼ id) × (f ∘ g ∼ id)
 
---"The situation is that we will have a logical equivalence between
--- * *data* establishing invertibility of a given function, and
--- * the *property* of the function being an equivalence.
---"Mathematically, what happens is that the type
---
---   `is-equiv f`  IS A RETRACT OF THE TYPE   `invertible f`
---
--- This retraction property is not easy to show, and there are many approaches. We discuss
--- an approach we came up with while developing these lecture notes, which is intended to
--- be relatively simple and direct, but the reader should consult other approaches, such
+--"...we will have a logical equivalence between *data* establishing invertibility of a function, and the *property* of the function being an equivalence."
+
+--"Mathematically, what happens is that the type `is-equiv f` is a retract of the type `invertible f`. This retraction property is not easy to
+-- show, and there are many approaches. We discuss an approach we [i.e., MHE] came up with while developing these lecture notes, which is
+-- intended to be relatively simple and direct, but the reader should consult other approaches, such
 -- as that of the HoTT book, which has a well-established categorical pedigree.
 
 --"The problem with the notion of invertibility of `f` is that, while we have that the inverse `g`
@@ -724,9 +730,7 @@ inverses-are-sections f e y = fiber-identification (center ((fiber f y)) (e y))
 inv-elim-right : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y)(e : is-equiv f) → f ∘ inverse f e ∼ id
 inv-elim-right = inverses-are-sections
 
---[This says `inverse f e` is a *right* inverse of f. We can also show `inverse f e` is a *left* inverse of f,
--- but this takes a bit more work.]
-
+--[This says `inverse f e` is a *right* inverse of f. We can also show `inverse f e` is a *left* inverse of f, but this takes a bit more work.]
 inverse-centrality : {X : 𝓤 ̇}{Y : 𝓥 ̇} (f : X → Y)(e : is-equiv f)(y : Y) (t : fiber f y)
  →                  (inverse f e y , inverses-are-sections f e y) ≡ t
 inverse-centrality f e y = centrality (fiber f y) (e y)
@@ -751,69 +755,80 @@ equivs-are-invertible f e = f⁻ , f⁻∘f∼id , f∘f⁻∼id
 equiv-inv : {X : 𝓤 ̇}{Y : 𝓥 ̇} (f : X → Y) → is-equiv f → invertible f
 equiv-inv = equivs-are-invertible
 
---"The non-trivial direction derives the equivalence property from invertibility data,
--- for which we use the retraction techniques explained above (see Retract.agda).
+--EXERCISE.
+--Given `f : X → Y` and `e : is-equiv f`, prove that the inverse of f, `inverse f e` is itself invertible.
+--SOLUTION.
+equiv-invertible-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (e : is-equiv f) → invertible (inverse f e)
+equiv-invertible-inverse f e = f , inverses-are-sections f e , inverses-are-retractions f e
 
--- Exercise. Given `f : X → Y` and `e : is-equiv f`, prove that the inverse of f, `inverse f e`
--- is itself invertible by completing the following.
--- equiv-invertible-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (e : is-equiv f) → invertible (inverse f e)
--- equiv-invertible-inverse f e = ?
--- SOLUTION.
--- equiv-invertible-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (e : is-equiv f) → invertible (inverse f e)
--- equiv-invertible-inverse f e = f , inverses-are-sections f e ,  inverse-is-retraction f e
-
--- Exercise. Given `f : X → Y` and `e : is-equiv f`, try to prove that the inverse of f is unique by
---           completing the following or, if it seems impossible, explain why.
+--EXERCISE.
+--Given f : X → Y and e : is-equiv f, prove that the inverse of f is unique by completing the following or, if it seems impossible, explain why.
 -- inverse-is-inverse : {X : 𝓤 ̇}{Y : 𝓥 ̇} (f : X → Y)(e : is-equiv f)((g , η) : invertible f) → g ∼ inverse f e
--- inverse-is-inverse f e (g , η) = 
+-- inverse-is-inverse f e (g , η) = ?
+--SOLUTION.
+inverse-is-unique : {X : 𝓤 ̇}{Y : 𝓥 ̇} (f : X → Y)(e : is-equiv f)((g , η) : invertible f) → g ∼ inverse f e
+inverse-is-unique {Y = Y} f e (g , η) = γ
+  where
+   ζ : (y : Y) → (f (pr₁ (pr₁ (e y)))) ≡ y
+   ζ y = pr₂ (pr₁ (e y) )
 
---"Suppose invertibility data for a map `f : X → Y` are given as follows:
--- > `g : Y → X` , `η : (x : X) → g (f x) ≡ x` ,  `ε : (y : Y) → f (g y) ≡ y`
--- and that a point `y₀` in the codomain of `f` is given. We need to show that the fiber
--- `Σ x ꞉ X , f x ≡ y₀` of `y₀` is a singleton.
+   ξ : (y : Y) → g (f (pr₁ (pr₁ (e y)))) ≡ pr₁ (pr₁ (e y))
+   ξ y = (pr₁ η) (pr₁ (pr₁ (e y)))
 
---"1. We first use the assumption `ε` to show that the type `f (g y) ≡ y₀` is a retract
---    of the type `y ≡ y₀` for any given `y : Y`.
+   τ : (y : Y) → pr₁ (pr₁ (e y)) ≡ inverse f e (f (pr₁ (pr₁ (e y))))
+   τ y = ((inverses-are-retractions f e) (pr₁ (pr₁ (e y))))⁻¹
+
+   γ : (y : Y) → g y ≡ inverse f e y
+   γ y = let x = pr₁ (pr₁ (e y)) in
+     g y                     ≡⟨ ap (λ - → g -) (ζ y)⁻¹ ⟩
+     g (f x)                 ≡⟨ ξ y ⟩
+     x                        ≡⟨ τ y ⟩
+     (inverse f e) (f x)  ≡⟨ ap (λ - → inverse f e -) (ζ y) ⟩
+     inverse f e y        ∎
+
+--"The non-trivial direction derives the equivalence property from invertibility data, for which we use...retraction.
+-- Suppose invertibility data for a map `f : X → Y` are given as follows:
 --
---    To get the section `s : f (g y) ≡ y₀ → y ≡ y₀`, we transport along the
---    identification `ε y : f (g y) ≡ y` over the family `A - = (- ≡ y₀)`, which can be
---    abbreviated as `_≡ y₀`.
+--    `g : Y → X` , `η : (x : X) → g (f x) ≡ x` ,  `ε : (y : Y) → f (g y) ≡ y`
 --
---    To get the retraction `r` in the opposite direction, we transport along the inverse
---    of the identification `ε y` over the same family. We already know that this gives a
---    section-retraction pair by `transport-is-section`.
+-- and a point `y₀` in `codomain f` is given. We  show the fiber `Σ x ꞉ X , f x ≡ y₀` of `y₀` is a singleton.
 --
--- 2. Next, the type `Σ x ꞉ X , f x ≡ y₀` is a retract of the type `Σ y ꞉ Y , f (g y) ≡ y₀`
+-- 1. use assumption `ε` to show the type `f (g y) ≡ y₀` is a retract  of the type `y ≡ y₀` for any given `y : Y`.
+--
+--   To get the section `s : f (g y) ≡ y₀ → y ≡ y₀`, we transport along the identification `ε y : f (g y) ≡ y` over the family
+--   `A - = (- ≡ y₀)`, which can be abbreviated as `_≡ y₀`.
+--
+--   To get the retraction `r` in the opposite direction, we transport along the inverse of the identification `ε y` over the same family.
+--   (We already know that this gives a section-retraction pair by `transport-is-section`.)
+--
+-- 2. the type `Σ x ꞉ X , f x ≡ y₀` is a retract of the type `Σ y ꞉ Y , f (g y) ≡ y₀`
 --    (by `Σ-reindexing-retract` using the assumption that `η` exibits `g` as a section of `f`)
---    which in turn is a retract of the type `Σ y ꞉ Y , y ≡ y₀` by applying `Σ` to both sides
---    of the retraction `(f (g y) ≡ y₀) ◁ (y ≡ y₀)` of the previous step.
+--    which in turn is a retract of the type `Σ y ꞉ Y , y ≡ y₀` by applying `Σ` to both sides of the retraction
+--    `(f (g y) ≡ y₀) ◁ (y ≡ y₀)` of the previous step.
 --
 --    This amounts to saying the type `fiber f y₀` is a retract of `singleton-type y₀`.
 
--- 3. But then we are done, because singleton types are singletons and retractions of
---    singletons are singletons.
+-- 3. But then we are done, because singleton types are singletons and retractions of singletons are singletons.
 --
---    [Summary:
+--Summary: Recall, the reindexing retraction of `Σ` types:"
 --
---     Recall, the reindexing retraction of `Σ` types:"
+--  Σ-reindexing-retract : {X : 𝓤 ̇} {Y : 𝓥 ̇}{A : X → 𝓦 ̇}
+--                         (r : Y → X)   →   has-section r
+--                       ------------------------------
+--   →                   (Σ x ꞉ X , A x) ◁ (Σ y ꞉ Y , A (r y))
 --
---      Σ-reindexing-retract : {X : 𝓤 ̇} {Y : 𝓥 ̇}{A : X → 𝓦 ̇}
---                             (r : Y → X)   →   has-section r
---                           --------------------------------------
---       →                    (Σ x ꞉ X , A x) ◁ (Σ y ꞉ Y , A (r y))
+--  So we apply this with r = g and A = λ x → (f x ≡ y₀), to get
 --
---     So we apply this with r = g and A = λ x → (f x ≡ y₀), to get
+--    Σ x ꞉ X , f x ≡ y₀   ◁   Σ y ꞉ Y , f (g y) ≡ y₀
 --
---      Σ x ꞉ X , f x ≡ y₀   ◁   Σ y ꞉ Y , f (g y) ≡ y₀
+--  Recall, `f (g y) ≡ y₀  ◁  y ≡ y₀` means `∃ r : (y ≡ y₀) → (f (g y) ≡ y₀),
 --
---     Recall,  `f (g y) ≡ y₀  ◁  y ≡ y₀` means `∃ r : (y ≡ y₀) → (f (g y) ≡ y₀),
+--    ∀ p : (f (g y) ≡ y₀),    ∃! q : (y ≡ y₀) st r q = p`
 --
---        ∀ p : (f (g y) ≡ y₀),    ∃! q : (y ≡ y₀) st r q = p`
+--  Next, apply `Σ` to both sides of the retract  (f (g y) ≡ y₀)  ◁  (y ≡ y₀) to get
 --
---     Next, apply `Σ` to both sides of the retract  (f (g y) ≡ y₀)  ◁  (y ≡ y₀) to get
---
---                           ◁   Σ y ꞉ Y , f (g y) ≡ y₀   ◁   Σ y ꞉ Y , y ≡ y₀ ]
---
+--    Σ y ꞉ Y , f (g y) ≡ y₀   ◁   Σ y ꞉ Y , y ≡ y₀.
+
 invertibles-are-equivs : {X : 𝓤 ̇}{Y : 𝓥 ̇}
               (f : X → Y)    →    invertible f
            ---------------------------------

@@ -1,8 +1,8 @@
---File: UF-Basic.agda
---Author: William DeMeo and Siva Somayyajula
---Date: 20 Feb 2020
---Updated: 21 Feb 2020
---Notes: Based on the file `basic.agda` (24 Dec 2019).
+--FILE: UF-Basic.agda
+--AUTHOR: William DeMeo and Siva Somayyajula
+--DATE: 20 Feb 2020
+--UPDATE: 23 May 2020
+--REF: Based on the file `basic.agda` (24 Dec 2019).
 --       Used for 1st half of talk at JMM Special Session (Jan 2020).
 
 {-# OPTIONS --without-K --exact-split --safe #-}

@@ -1,8 +1,7 @@
---File: UF-Subuniverse.agda
---Author: William DeMeo and Siva Somayyajula
---Date: 20 Feb 2020
---Updated: 26 Feb 2020
---Notes: Based on the file `subuniverse.agda` (10 Jan 2020).
+--FILE: UF-Subuniverse.agda
+--AUTHOR: William DeMeo and Siva Somayyajula
+--DATE: 20 Feb 2020
+--UPDATE: 23 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
@@ -32,48 +31,35 @@ data _is-supalgebra-of_ (𝑨 : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 �
 _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
 
--- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨.
--- So we need an elimination rule.
-is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
- →               𝑨 is-supalgebra-of 𝑩
- →               𝑩 ≡ (Σ B , 𝐹)
- →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
- →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
-is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 Fᴮ≡Fᴬ) eqv 𝓸 𝒃 =
- let eqvF = Fᴮ≡Fᴬ 𝓸 in γ
- -- let eqx = intensionality eqv x in ?
- where
-  B≡B₁ : B ≡ B₁
-  B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
+--------------------------------
+-- Elimination rule for sub/supalgebra.
+-- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨. So we need an elimination rule.
+-- For some reason, I'm able to get an elimination rule only for `A-is-supalgebra-of_` for fixed A.  (todo: try to fix this)
 
-  γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
-  γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩  -- from-Σ-≡  Fᴮ≡Fᴬ
-        ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
-
--- Goal: B i ≡ B₁ i
-----------------------------
--- i   : ∣ 𝑨 ∣
--- 𝒃   : ∥ S ∥ 𝓸 → Σ B
--- 𝓸   : ∣ S ∣
--- eqv : Σ B₁ , 𝐹 ≡ Σ B , F
--- x   : (𝓸₁ : ∣ S ∣) (𝒂 : ∥ S ∥ 𝓸₁ → Σ B₁) →
---       ∣ 𝐹 𝓸₁ 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸₁ (λ i₁ → ∣ 𝒂 i₁ ∣)
--- 𝐹   : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B₁)
--- B₁  : Pred ∣ 𝑨 ∣ 𝓤
--- F   : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B)
--- B   : Pred ∣ 𝑨 ∣ 𝓤
--- 𝑨   : Algebra 𝓤 S
-
+--The "uniform" (i.e., unrestricted) elimination rule (that we want, but that doesn't work yet).
+-- is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+--  →               𝑨 is-supalgebra-of 𝑩
+--  →               𝑩 ≡ (Σ B , 𝐹)
+--  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
+--  →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
+-- is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 Fᴮ≡Fᴬ) eqv 𝓸 𝒃 =
+--  let eqvF = Fᴮ≡Fᴬ 𝓸 in γ
+--  where
+--   B≡B₁ : B ≡ B₁
+--   B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
+--
+--   γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+--   γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩  -- from-Σ-≡  Fᴮ≡Fᴬ
+--         ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
+--
 -- tB≡tA : {X : 𝓤 ̇} {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
 --  →      𝑨 is-supalgebra-of (Σ B , 𝐹 )
 --  →      (𝒕 : Term {X = X} ) ( 𝒃 : X → Σ B )
 --  →      ( 𝒕 ̇ (Σ B , 𝐹) )( λ x →  𝒃 x ) ≡ (𝒕 ̇ 𝑨) (λ x →  ∣ 𝒃 x ∣ )
 -- tB≡tA A≥B 𝒕 𝒃 = ?
 
---------------------------------
--- Elimination rule for sub/supalgebra.
--- For some reason, I'm able to get an elimination rule only for `A-is-supalgebra-of_` for fixed A.  (todo: try to fix this)
-module _
+
+module _  -- The "non-uniform" (i.e., restricted to a fixed A) elimination rule. (It works, but we'd prefer the one above.)
   {𝑨 : Algebra 𝓤 S}
   {𝑩 : Algebra 𝓤 S}
   {B : Pred ∣ 𝑨 ∣ 𝓤}

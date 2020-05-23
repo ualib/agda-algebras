@@ -1,10 +1,11 @@
 --FILE: UF-Prelude.agda
 --BLAME: williamdemeo@gmail.com
 --DATE: 21 Apr 2020
---UPDATED: 21 Apr 2020
---REF:  Some of what appears in this file is based on Martin Escardo's HoTT/UF notes.
---     cf. https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
---     In particular, comments appearing in quotes below, along with the code to which those comments refer, are due to Martin Escardo.
+--UPDATE: 23 May 2020
+--REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
+--SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
+--       In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
+--       Throughout, MHE = Martin Hötzel Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 

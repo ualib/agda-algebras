@@ -1,8 +1,11 @@
 --FILE: UF-Univalence.agda
 --DATE: 29 Mar 2020
---BLAME: <williamdemeo@gmail.com>
---REF: Based on Martin Escardo's course notes
---SEE:  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#univalence
+--UPDATE: 23 May 2020
+--BLAME: williamdemeo@gmail.com
+--REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
+--SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#univalence
+--      In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
+--      Throughout, MHE = Martin Hötzel Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -19,19 +22,15 @@ open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; �
 -- -------------------------------
 {-"There is a canonical transformation `(X Y : 𝓤 ̇ ) → X ≡ Y → X ≃ Y` that sends the identity identification `refl X : X ≡ X` to the identity
    equivalence `id-≃ X : X ≃ X`. The univalence axiom, for the universe `𝓤`, says that this canonical map is itself an equivalence. -}
-
 Id→Eq : (X Y : 𝓤 ̇) → X ≡ Y → X ≃ Y
 Id→Eq X X (refl X) = id-≃ X
 
 is-univalent : (𝓤 : Universe) → 𝓤 ⁺ ̇
 is-univalent 𝓤 = (X Y : 𝓤 ̇) → is-equiv (Id→Eq X Y)
 
---"Thus, the univalence of the universe `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical
--- bijection with equivalences `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is
--- `Id→Eq`.
-
---"We emphasize that this doesn't posit that univalence holds. It says what univalence is (like the type
--- that says what the twin-prime conjecture is).
+--"Thus, the univalence of the universe `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical bijection with equivalences
+-- `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is `Id→Eq`. We emphasize that this doesn't posit that univalence
+-- holds. It says what univalence is (like the type that says what the twin-prime conjecture is).
 univalence-≃ : is-univalent 𝓤 → (X Y : 𝓤 ̇) → (X ≡ Y) ≃ (X ≃ Y)
 univalence-≃ ua X Y = Id→Eq X Y , ua X Y
 
@@ -39,25 +38,21 @@ Eq→Id : is-univalent 𝓤 → (X Y : 𝓤 ̇) → X ≃ Y → X ≡ Y
 Eq→Id ua X Y = inverse (Id→Eq X Y) (ua X Y)
 
 --[Recall,
---  "To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘`
---  where `id` is the identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type
---  identifications into functions:
+-- "To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is the
+--  identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type identifications into functions:
 --     Id→Fun : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇ ))
---  "Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
+--  Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
 --  following, where this time the identity function is that of the type `X`:
 --     Id→Fun' : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun' (refl X) = 𝑖𝑑 X
 --
 --     Id→Funs-agree : {X Y : 𝓤 ̇ } (p : X ≡ Y) → Id→Fun p ≡ Id→Fun' p
 --     Id→Funs-agree (refl X) = refl (𝑖𝑑 X)
---
---  "So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`.
---   We apply this function to `⋆ : 𝟙` to conclude the proof.
+--  So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`. We apply this function to `⋆ : 𝟙` to conclude the proof."
 --]
 
 --"Here is a third way to convert a type identification into a function:
-
 Id→fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
 Id→fun {𝓤}{X}{Y} p = ⌜ Id→Eq X Y p ⌝
 
@@ -65,21 +60,16 @@ Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)
  →              Id→fun p ≡ Id→Fun p
 Id→funs-agree (refl X) = refl (𝑖𝑑 X)
 
---"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent
--- mathematics in a pure, spartan MLTT.  It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of equivalence
--- that are at the heart of univalent mathematics.  Univalence *is* a fundamental ingredient, but first we need the correct notion of
--- equivalence to be able to formulate it.
-
---"*Remark*. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
--- and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
--- There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"
+{-"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent mathematics
+    in a pure, spartan MLTT. It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of equivalence that are at the heart
+    of univalent mathematics. Univalence is a fundamental ingredient, but first we need the correct notion of equivalence to be able to formulate it.
+    Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
+    and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
+    There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"  -}
 
 ------------------------------------------------------------------------------
--- Example of a type that is not a set under univalence
--- ----------------------------------------------------
-
+--Example of a type that is not a set under univalence
 --"We have two automorphisms of `𝟚`, namely the identity function and the map that swaps ₀ and ₁:
-
 swap₂ : 𝟚 → 𝟚
 swap₂ ₀ = ₁
 swap₂ ₁ = ₀
@@ -93,9 +83,7 @@ swap₂-is-equiv : is-equiv swap₂
 swap₂-is-equiv = invertibles-are-equivs swap₂ (swap₂ , swap₂-involutive , swap₂-involutive )
 
 --"We now use a local module to assume univalence of the first universe in the construction of our example:
-
 module example-of-a-nonset (ua : is-univalent 𝓤₀) where
-
   -- The above gives two distinct equivalences:
   e₀ : 𝟚 ≃ 𝟚
   e₀ = id-≃ 𝟚
@@ -113,7 +101,6 @@ module example-of-a-nonset (ua : is-univalent 𝓤₀) where
     r = ap (λ - → - ₁) q
 
   -- Using univalence, we get two different identifications of the type `𝟚` with itself:
-
   p₀ : 𝟚 ≡ 𝟚
   p₀ = Eq→Id ua 𝟚 𝟚 e₀
 
@@ -133,26 +120,14 @@ module example-of-a-nonset (ua : is-univalent 𝓤₀) where
   𝓤₀-is-not-a-set set𝓤₀ = p₀-is-not-p₁ q
    where q : p₀ ≡ p₁
          q = set𝓤₀ 𝟚 𝟚 p₀ p₁
-
--- For more examples, see Kraus and Sattler (https://arxiv.org/abs/1311.4002).
+--"For more examples, see Kraus and Sattler (https://arxiv.org/abs/1311.4002)."
 
 --------------------------------------------------------------------------
--- Exercises
--- ---------
+--Exercises.
+--"Here are some facts whose proofs are left to the reader but that we will need from the next section onwards. Sample solutions are given below."
 
--- Here are some facts whose proofs are left to the reader but that we will need from the next section
--- onwards. Sample solutions are given below.
-
--- --------------------
--- Formulations
--- --------------------
-
--- Define functions for the following type declarations. As a matter of procedure, we suggest to import
--- this file in a solutions file and add another declaration with the same type and new name e.g.
--- `sections-are-lc-solution`, because we already have solutions in this file. It is important not to
--- forget to include the option `--without-K` in the solutions file that imports (the Agda version of)
--- this file.
-
+--Formulations.
+--"Define functions for the following type declarations.
 subsingleton-criterion : {X : 𝓤 ̇ } → (X → is-singleton X)
                             ---------------------------------
  →                                is-subsingleton X
@@ -179,13 +154,13 @@ retract-of-subsingleton-first-try : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → Y ◁ X �
 retract-of-subsingleton-first-try (g , f , η) X✧ = λ v₀ v₁ →
   v₀ ≡⟨ (η v₀)⁻¹ ⟩ g (f v₀) ≡⟨ ap g (X✧ (f v₀) (f v₁)) ⟩ g (f v₁) ≡⟨ η v₁ ⟩  v₁ ∎
 
-left-cancellable one-to-one : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+left-cancellable injective : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 left-cancellable f = {u u' : domain f} → f u ≡ f u' → u ≡ u'
-one-to-one = left-cancellable --alias.
+injective = left-cancellable --alias.
 
 lc-maps-reflect-subsingletons : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
          (f : X → Y)    →    left-cancellable f    →    is-subsingleton Y
-      ----------------------------------------------------------------
+      --------------------------------------------------------
  →                            is-subsingleton X
 lc-maps-reflect-subsingletons f lcf Y✧ u u' = lcf (Y✧ (f u) (f u'))
 
@@ -210,10 +185,10 @@ equiv-to-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → X ≃ Y → is-subsing
 equiv-to-subsingleton (f , feq) = lc-maps-reflect-subsingletons f (equivs-are-lc f feq)
 
 comp-inverses : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ }  (f : X → Y) (g : Y → Z)
-                               (feq : is-equiv f)  (geq : is-equiv g)  (f⁻ : Y → X) (g⁻ : Z → Y)
- →                           f⁻ ∼ inverse f feq      →      g⁻ ∼ inverse g geq
-                               --------------------------------------------
- →                           f⁻ ∘ g⁻ ∼ inverse (g ∘ f) (∘-is-equiv geq feq)
+                       (feq : is-equiv f)  (geq : is-equiv g)  (f⁻ : Y → X) (g⁻ : Z → Y)
+ →                   f⁻ ∼ inverse f feq      →      g⁻ ∼ inverse g geq
+                      --------------------------------------------
+ →                   f⁻ ∘ g⁻ ∼ inverse (g ∘ f) (∘-is-equiv geq feq)
 comp-inverses f g feq geq f⁻ g⁻ finv ginv w =
  let f⁻¹ = inverse f feq in
  let g⁻¹ = inverse g geq in
@@ -223,15 +198,22 @@ comp-inverses f g feq geq f⁻ g⁻ finv ginv w =
   inverse (g ∘ f) (∘-is-equiv geq feq) w  ∎
 
 {---------------------------------------------------------------------------------------------------
-    Let us review Hedberg's Theorem, which is what we need in order to prove `subtypes-of-sets-are-sets`.
-    Hedberg says that a type is a set iff its identity types have designated `wconstant` endomaps:
+ Let us review Hedberg's Theorem, which is what we need in order to prove `subtypes-of-sets-are-sets`.
+ Hedberg says that a type is a set iff its identity types have designated `wconstant` endomaps.
+ Here is the type signature of Hedberg's Theorem:
+
        `Hedberg' : {X : 𝓤 ̇} (x : X) → ((y : X) → wconstant-endomap (x ≡ y)) → (y : X) → is-subsingleton (x ≡ y)`
-    Recall, the notion of constant map: `wconstant f = (x x' : domain f) -> f x ≡ f x'`  and the types whose
-    identity types have `wconstant` endomaps: `wconstant-endomap X = Σ f ꞉ (X -> X) , wconstant f`
-    Recall, `wconstant-≡-endomaps X = (x y : X) → wconstant-endomap (x ≡ y)`. We also had the following
-    (which is immediate from the definitions and recalling that `is-set X = (x y : X) -> is-subsingleton (x ≡ y)`)
-     `sets-have-wconstant-≡-endomaps : (X : 𝓤 ̇) -> is-set X -> wconstant-≡-endomaps X`
-    HEDBERG'S THEOREM is the converse of the preceding result.
+
+ Recall, the notion of constant map: `wconstant f = (x x' : domain f) → f x ≡ f x'`
+ and the types whose identity types have `wconstant` endomaps: `wconstant-endomap X = Σ f ꞉ (X → X) , wconstant f`
+
+ Recall, `wconstant-≡-endomaps X = (x y : X) → wconstant-endomap (x ≡ y)`.
+ We also had the following (which is immediate from the definitions and recalling that `is-set X = (x y : X) → is-subsingleton (x ≡ y)`)
+
+     `sets-have-wconstant-≡-endomaps : (X : 𝓤 ̇) → is-set X → wconstant-≡-endomaps X`
+
+ HEDBERG'S THEOREM is the converse of the preceding result; that is,
+
      `types-with-wconstant-≡-endomaps-are-sets : (X : 𝓤 ̇) → wconstant-≡-endomaps X → is-set X`
 ------------------------------------------------------------------------------------------------------}
 subtypes-of-sets-are-sets : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (m : X → Y)
@@ -239,7 +221,7 @@ subtypes-of-sets-are-sets : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (m : X → Y)
                  --------------------------------
  →                           is-set X
 
-subtypes-of-sets-are-sets {X = X} m mlc Yset = types-with-wconstant-≡-endomaps-are-sets X wconst≡endoX 
+subtypes-of-sets-are-sets {X = X} m mlc Yset = types-with-wconstant-≡-endomaps-are-sets X wconst≡endoX
   where
    f : {u v : X} → u ≡ v → u ≡ v
    f p = mlc (ap m p)
@@ -260,8 +242,7 @@ equiv-to-set X≃Y = subtypes-of-sets-are-sets ⌜ X≃Y ⌝ (equivs-are-lc ⌜ 
 sections-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f g : X → Y)
  →                    has-retraction f   →  g ∼ f
                       -----------------------------
- →                          has-retraction g         --Recall, has-retraction s = Σ r ꞉ (codomain s → domain s), r ∘ s ∼ id;
-                                                            -- intuition: `has-retraction s`  ⇔   "s has a left inverse"
+ →                          has-retraction g   -- intuition: `has-retraction g`  ⇔   "g has a left inverse"
 
 sections-closed-under-∼ f g (⁻f , flinv) g∼f = (⁻f , glinv)
  where
@@ -271,8 +252,8 @@ sections-closed-under-∼ f g (⁻f , flinv) g∼f = (⁻f , glinv)
 retractions-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f g : X → Y)
  →           has-section f  →   g ∼ f
                ------------------------
- →            has-section g                  --Recall, has-section s = Σ r ꞉ (codomain s → domain s), s ∘ r ∼ id
-                                                   -- (intuition: s has a right inverse)
+ →                has-section g   -- (intuition:  `has-section g`  ⇔  "g has a right inverse")
+
 retractions-closed-under-∼ f g (f⁻ , frinv) g∼f = (f⁻ , grinv)
  where
   grinv : g ∘ f⁻ ∼ id

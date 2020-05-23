@@ -1,8 +1,7 @@
---File: UF-Free.agda
---Author: William DeMeo and Siva Somayyajula
---Date: 20 Feb 2020
---Updated: 23 Feb 2020
---Notes: Based on the file `free.agda` (25 Dec 2019).
+--FILE: UF-Free.agda
+--AUTHOR: William DeMeo and Siva Somayyajula
+--DATE: 20 Feb 2020
+--UPDATE: 23 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -17,8 +16,6 @@ module UF-Free {S : Signature 𝓞 𝓥}  where
 
 ----------------------------
 -- TERMS in the signature S
-----------------------------
--- open signature
 module _ {X : 𝓤 ̇} where
   data Term  : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
     generator : X → Term
@@ -32,18 +29,14 @@ module _ {X : 𝓤 ̇} where
 
   ----------------------------------
   -- TERM ALGEBRA (for signature S)
-  ----------------------------------
-
   𝔉 : Algebra _ S
   𝔉 = Term , node
 
 -------------------------------------
 -- The UNIVERSAL PROPERTY of free
-
 module _ {X : 𝓤 ̇} {𝑨 : Algebra 𝓤 S} where
 
   -- We first prove this for algebras whose carriers are mere sets.
-
   -- 1. every h : X -> ⟦ A ⟧ᵤ  lifts to a hom from free to A.
   -- 2. the induced hom is unique.
 
@@ -55,8 +48,7 @@ module _ {X : 𝓤 ̇} {𝑨 : Algebra 𝓤 S} where
 
   -- 1.b. The lift is a hom.
   lift-hom : (h : X → ∣ 𝑨 ∣) →  Hom 𝔉 𝑨
-  lift-hom  h = free-lift h , λ 𝓸 𝒂 → ap (∥ 𝑨 ∥ _) (refl _) --cong (⟦ 𝑨 ⟧ _) refl
-  --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
+  lift-hom  h = free-lift h , λ 𝓸 𝒂 → ap (∥ 𝑨 ∥ _) (refl _)
 
   -- 2. The lift to  (free -> A)  is unique.
   --    (We need EXTENSIONALITY for this (imported from util.agda))
@@ -85,7 +77,6 @@ _̂_ :  (𝓸 : ∣ S ∣ ) → (𝑨 : Algebra 𝓤 S)
 
 ----------------------------------------------------------------------
 --INTERPRETATION OF TERMS
---------------------------
 --(cf Def 4.31 of Bergman)
 --Let 𝒕 : Term be a term, 𝑨 an algebra, in the signature S. We define an
 --n-ary operation, denoted (𝒕 ̇ 𝑨), on 𝑨 by recursion on the struct of 𝒕.

@@ -1,14 +1,13 @@
 --FILE: UF-Rel.agda
 --BLAME: William DeMeo
 --DATE: 23 Apr 2020
---UPDATED: 23 Apr 2020
---NOTE: This is essentially a transcription of the Agda std lib 1.1 file Binary/Core.agda, slightly modified to comport with UF notation.
---NOTE: The person(s) named above make(s) no claims about novelty, usefulness, or correctness of the contents of this file.
+--UPDATE: 23 May 2020
+--REF: Much of this file simply transcribes some of the Agda std lib 1.1 file Binary/Core.agda, slightly modified to comport with UF notation.
+--       The person(s) named above makes no claims as to the novelty, usefulness, or correctness of the contents of this file.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UF-Prelude using (Universe; 𝓤; 𝓥; 𝓦; 𝓡; 𝓢; 𝓣; _⁺; _̇;_⊔_; _×_; _,_; _≡_; _≡⟨_⟩_; _∎; ¬; _+_; Σ; -Σ )
-
 open import Relation.Unary using (Pred)
 
 module UF-Rel where

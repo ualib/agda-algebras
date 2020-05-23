@@ -1,7 +1,7 @@
 --FILE: UF-Con.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 22 Feb 2020
---UPDATED: 23 Apr 2020
+--UPDATED: 23 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 

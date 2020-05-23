@@ -1,9 +1,8 @@
---File: UF-Birkhoff.agda
+--FILE: UF-Birkhoff.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 23 Feb 2020
---UPDATED: 26 Feb 2020
---NOTATION: see notes at bottom of Preliminaries.agda
---NOTES: Based on the file `birkhoff.agda` (23 Jan 2020).
+--UPDATE: 23 May 2020
+--REF: Based on the file `birkhoff.agda` (23 Jan 2020).
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -18,7 +17,6 @@ open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext)
 module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 -------------------------------------------------------------------------------
 --EQUALIZERS
--------------
 
 --...of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (f g : A → B) → Pred A 𝓦

@@ -1,17 +1,16 @@
---File: UF-Closure.agda
+--FILE: UF-Closure.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 1 Mar 2020
---UPDATED: 28 Apr 2020
---NOTATION: 𝑨 `\MIA`, 𝑩 `\MIB`, 𝓐 `\MCA`, 𝓚 `\MCK`, 𝓤 ̇ `\MCU \^.`
+--UPDATE: 25 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude
-open import UF-Basic
-open import UF-Subuniverse
-open import UF-Hom
+open import UF-Prelude using (Universe; 𝓜; 𝓞; 𝓣; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∈_; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; Image_∋_; Inv; im; InvIsInv)
+open import UF-Basic using (Signature; Algebra; Π'; Op)
+open import UF-Subuniverse using (Subuniverses; SubunivAlg; hom-image-alg; _is-subalgebra-of_)
+open import UF-Hom using (Hom)
 open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
-open import UF-Free
+open import UF-Free using (Term; generator; node; _⊢_≋_; _⊢_≈_; _̇_; _̂_; interp-prod2)
 
 module UF-Closure  {S : Signature 𝓞 𝓥}  where
 
