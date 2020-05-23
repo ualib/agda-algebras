@@ -227,24 +227,24 @@ module _ {i j : Level} {S : Signature i j}  where
     ->      Set (i ⊔ j ⊔ (lsuc (lsuc ℓ₂)))
   HClosed 𝓛𝓚 = λ ℓ 𝑩 -> 𝑩 HomImageOfClass (𝓛𝓚 ℓ) -> 𝑩 ∈ (𝓛𝓚 (lsuc ℓ)) 
   
-  --  P(𝓚) for the class of all algebras isomorphic to a direct product of members of 𝓚
+  --  P(𝓚) = the class of all algebras isomorphic to a direct product of members of 𝓚
   PClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
     ->      (ℓ₂ : Level) -> (I : Set ℓ₂) -> (𝓐 : I → Algebra ℓ₂ S) 
     ->      (∀ i -> 𝓐 i ∈ 𝓛𝓚 ℓ₂) -> Set _ 
   PClosed 𝓛𝓚 = λ ℓ₂ I 𝓐 ∀i𝓐i∈𝓛𝓚 → Π 𝓐 ∈ 𝓛𝓚 ℓ₂
 
-  --  S(𝓚) for the class of all algebras isomorphic to a subalgebra of a member of 𝓚
-  _SubalgebraOfClass_ : ∀{k : Level} -> (Algebra k S) -> (Pred (Algebra k S) (lsuc k)) -> Set _
-  𝑩 SubalgebraOfClass 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 is-subalgebra-of 𝑨
+  --  S(𝓚) = the class of all algebras isomorphic to a subalgebra of a member of 𝓚
+  SubalgebraOfClass : ∀{ℓ : Level} -> (𝑩 : Algebra ℓ S) -> (Pred (Algebra ℓ S) (lsuc ℓ)) -> Set _
+  SubalgebraOfClass{ℓ} 𝑩 𝓚 = ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 ->  (∣ 𝑩 ∣ ≡ Pred ∣ 𝑨 ∣ _) -> _is-subalgebra-of-A{i}{j}{S}{ℓ}{𝑨 = 𝑨}{𝑨}{∣ 𝑩 ∣} 𝑩
 
   SClosed : (𝓛𝓚 : (ℓ₁ : Level) -> Pred (Algebra ℓ₁ S) (lsuc ℓ₁))
     ->      (ℓ₂ : Level) -> (𝑩 : Algebra ℓ₂ S) -> Set _ 
-  SClosed 𝓛𝓚 = λ ℓ 𝑩 -> 𝑩 SubalgebraOfClass (𝓛𝓚 ℓ) -> 𝑩 ∈ 𝓛𝓚 ℓ
+  SClosed 𝓛𝓚 = λ ℓ 𝑩 -> SubalgebraOfClass 𝑩 (𝓛𝓚 ℓ) -> 𝑩 ∈ 𝓛𝓚 ℓ
 
-  -- SubalgebrasOfClass : {k : Level}
-  --   ->               Pred (Algebra k S) (lsuc k)
-  --   ->               Pred (Algebra k S) _
-  -- SubalgebrasOfClass 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> 𝑩 is-subalgebra-of 𝑨
+  SubalgebrasOfClass : {ℓ : Level}
+    ->               Pred (Algebra ℓ S) (lsuc ℓ)
+    ->               Pred (Algebra ℓ S) _
+  SubalgebrasOfClass{ℓ} 𝓚 = λ 𝑩 -> ∃ λ 𝑨 -> 𝑨 ∈ 𝓚 -> _is-subalgebra-of-A{i}{j}{S}{ℓ}{𝑨 = 𝑨}{𝑨} 𝑩
 
 
 -- Notes on homomorphic images

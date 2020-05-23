@@ -6,31 +6,28 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
---`without-K` disables Streicher's K axiom; see "Note on axiom K" 
-  --            of the ualib documentation (ualib.org).
-  --
-  --`exact-split` makes Agda to only accept definitions with the
-  --              equality sign "=" that behave like so-called
+  --`exact-split` makes Agda to only accept definitions with the equality sign "=" that behave like so-called
   --              judgmental or definitional equalities.
+
+  -- `without-K` disables Streicher's K axiom (see "Note on axiom K" ualib.org).
+  -- Instead of K, we adopt Voevodsky's univalence axiom; as such, we can't prove in general that the type `x ≣ x`
+  -- has only the one inhabitant `refl x` (cf. Hofmann and Streicher's model of tt where types are `1`-groupoids.)
 
 module Preliminaries where
 
--- Export common imports
+open import Universes public renaming (_≡_ to _≣_; refl to rfl; Id to 𝔦𝔡)
 open import Level public renaming (suc to lsuc ; zero to lzero)
 open import Data.Empty using (⊥; ⊥-elim) public
 open import Data.Bool using (Bool) public
-open import Data.Product using (∃; _,_; _×_;Σ-syntax) public
-  renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+open import Data.Product using (∃; _,_; _×_;Σ-syntax) public renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
 open import Data.Product.Properties using (,-injectiveˡ;,-injectiveʳ;,-injective)
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂; ⋃) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public
+open Eq using (_≡_;refl; trans; cong; cong-app; sym; subst) public
 open Eq.≡-Reasoning public
 open import Function using (_∘_) public
-open import Agda.Builtin.Nat public
-  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
-
+open import Agda.Builtin.Nat public renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 
 _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   (A -> B)

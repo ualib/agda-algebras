@@ -4,7 +4,7 @@ As of 22 June 2019, **this is still a work in progress**.
 
 ## Introduction
 
-This repository contains the [documentation](https://ualib.gitlab.io/) for the [Lean Universal Algebra Library](https://gitlab.com/ualib/lean-ualib?nav_source=navbar), aka [lean-ualib](https://gitlab.com/ualib/lean-ualib?nav_source=navbar).
+This repository contains the [documentation](https://ualib.gitlab.io/) for the [Agda Universal Algebra Library](https://gitlab.com/ualib/agda-ualib?nav_source=navbar), aka [agda-ualib](https://gitlab.com/ualib/agda-ualib?nav_source=navbar).
 
 The docs are served at [ualib.org](https://ualib.gitlab.io/), and are built from [reStructuredText](http://docutils.sourceforge.net/rst.html) (rst) files using [Sphinx](http://www.sphinx-doc.org).
 
@@ -65,8 +65,6 @@ In any case, please [email me](mailto:williamdemeo@gmail.com) if you have troubl
 ## Contributing instructions
 
 Pull requests with corrections are welcome.
-
-Try to follow the [standard Lean commit conventions](https://github.com/leanprover/lean/blob/master/doc/commit_convention.md), but don't let aherence to strict conventions discourage you from contributing.
 
 If you have questions about whether a change will be considered helpful, please [send an email William DeMeo](mailto:williamdemeo@gmail.com).
 
@@ -144,13 +142,6 @@ Here are some resources to help you get started editing [reStructuredText](http:
 
 ------------------------------------------
 
-## Test the Lean code snippets
-
-``` sh
-make leantest
-```
-
--------------------------------
 
 ## Keeping your fork up-to-date
 

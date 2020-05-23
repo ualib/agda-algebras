@@ -109,21 +109,21 @@ sgIsSub _ 𝓸 𝒂 α = app 𝓸 α
 --  Location of the error: src/full/Agda/TypeChecking/Monad/Context.hs:119"
 -- I think it has to do with variable generalization
 
-sgIsSmallest : {ℓ : Level}{𝑨 : Algebra ℓ S} {Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ ℓ)} {X : Pred ∣ 𝑨 ∣ ℓ}
-  ->           Y ∈ Subuniverses 𝑨
-  ->           X ⊆ Y
-              -----------------
-  ->           Sg X ⊆ Y
+-- sgIsSmallest : {ℓ : Level}{𝑨 : Algebra ℓ S} {Y : Pred ∣ 𝑨 ∣ (i ⊔ j ⊔ ℓ)} {X : Pred ∣ 𝑨 ∣ ℓ}
+--   ->           Y ∈ Subuniverses 𝑨
+--   ->           X ⊆ Y
+--               -----------------
+--   ->           Sg X ⊆ Y
 -- By induction on x ∈ Sg X, show x ∈ Y
-sgIsSmallest {𝑨 = 𝑨}{Y = Y}{X = X} Y∈Sub𝑨 X⊆Y (var v∈X) = X⊆Y v∈X
-sgIsSmallest {𝑨 = 𝑨}{Y = Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
-  -- First, show the args are in Y
-  im𝒂⊆Y : Im 𝒂 ⊆ Y
-  im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
+-- sgIsSmallest {𝑨 = 𝑨}{Y = Y}{X = X} Y∈Sub𝑨 X⊆Y (var v∈X) = X⊆Y v∈X
+-- sgIsSmallest {𝑨 = 𝑨}{Y = Y} YIsSub X⊆Y (app 𝓸 {𝒂} im𝒂⊆SgX) = app∈Y where
+--   -- First, show the args are in Y
+--   im𝒂⊆Y : Im 𝒂 ⊆ Y
+--   im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
 
-  -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
-  app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
-  app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
+--   -- Since Y is a subuniverse of 𝑨, it contains the application of 𝓸 to said args
+--   app∈Y : ⟦ 𝑨 ⟧ 𝓸 𝒂 ∈ Y
+--   app∈Y = YIsSub 𝓸 𝒂 im𝒂⊆Y
 
 -- Same issue here as above
 -- Obs 2.5. Suppose Aᵢ ≤ 𝑨 for all i in some set I. Then ⋂ᵢ Aᵢ is a subuniverse of 𝑨.
@@ -194,8 +194,8 @@ Y⊆TermImageY {x = x} Y {a} a∈Y = var a∈Y
 --    Proof: see `sgIsSmallest`
 
 --Finally, we can prove the desired inclusion.
-SgY⊆TermImageY : {ℓ : Level} {X : Set ℓ} {x : X}{𝑨 : Algebra ℓ S} -> (Y : Pred ∣ 𝑨 ∣ ℓ) -> Sg{𝑨 = 𝑨} Y ⊆ TermImage Y
-SgY⊆TermImageY {x = x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x = x} Y)
+-- SgY⊆TermImageY : {ℓ : Level} {X : Set ℓ} {x : X}{𝑨 : Algebra ℓ S} -> (Y : Pred ∣ 𝑨 ∣ ℓ) -> Sg{𝑨 = 𝑨} Y ⊆ TermImage Y
+-- SgY⊆TermImageY {x = x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x = x} Y)
 
   -- Now we should be able to prove something like the following
   -- (if we wanted to bother generalizing the relation ≃ to predicates):
