@@ -143,7 +143,9 @@ Nat F G = (s : domain F) → F s → G s
 --       ↓          ↓                      ↓          is referred to as "naturality")
 --       t         F t  --- αₜ  ---> G t
 --
---The Agda definition of `Nat` above is more general as F and G are not required to have the same codomains.]
+--The Agda definition of `Nat` above is more general as F and G are not required to have the same codomains.
+--On the other hand, it seems this development only concerns the categories of types where the objects (say, s t : X) are inhabitants
+--of a given type X and the arrows (say, p : s ≡ t) are identifications of these objects.]
 
 --"We don't need to specify the naturality condition, because it is automatic:
 Nats-are-natural : {X : 𝓤 ̇} (F : X → 𝓥 ̇) (G : X → 𝓦 ̇)
@@ -152,11 +154,11 @@ Nats-are-natural : {X : 𝓤 ̇} (F : X → 𝓥 ̇) (G : X → 𝓦 ̇)
  →                α t ∘ transport F p ≡ transport G p ∘ α s
 Nats-are-natural F G α (refl s) = refl (α s)
 
---       s         F s --- αₛ ---> G s
---        |           |                      |
---    p  |      Fp  |                      |  Gp
---       ↓          ↓                     ↓
---       t        F t  --- αₜ  ---> G t
+--     s                         F s --- αₛ --->  G s
+--     |                           |                         |
+--   p : s ≡ t          transport F p           transport G p
+--     ↓                         ↓                        ↓
+--     t                        F t  --- αₜ  ---> G t
 
 --"We will use the following constructions a number of times:
 NatΣ : {X : 𝓤 ̇}{F : X → 𝓥 ̇}{G : X → 𝓦 ̇} → Nat F G   →    Σ F    →   Σ G

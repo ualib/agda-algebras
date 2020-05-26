@@ -52,19 +52,22 @@ is-magma-hom 𝑴 𝑵 f =  ( x y :  ⟨ 𝑴 ⟩ ) → f (x ·⟨ 𝑴 ⟩ y) �
 id-is-magma-hom : (𝑴 : Magma 𝓤) → is-magma-hom 𝑴 𝑴  (𝑖𝑑 ⟨ 𝑴 ⟩ )
 id-is-magma-hom 𝑴 = λ x y → refl (x ·⟨ 𝑴 ⟩ y)
 
+--isomorphism (magmas implicit)
 is-magma-iso' : {𝑴 𝑵 : Magma 𝓤} → (⟨ 𝑴 ⟩ → ⟨ 𝑵 ⟩ ) → 𝓤 ̇
 is-magma-iso' {𝑴 = 𝑴} {𝑵 = 𝑵} f =
  is-magma-hom 𝑴 𝑵 f × ( Σ g ꞉ ( ⟨ 𝑵 ⟩ → ⟨ 𝑴 ⟩ ) ,
   is-magma-hom 𝑵 𝑴 g × (g ∘ f ∼ 𝑖𝑑 ⟨ 𝑴 ⟩ ) × (f ∘ g ∼ 𝑖𝑑 ⟨ 𝑵 ⟩ ) )
 
+--isomorphism (magmas explicit)
 is-magma-iso : (𝑴 𝑵 : Magma 𝓤) → (⟨ 𝑴 ⟩ → ⟨ 𝑵 ⟩ ) → 𝓤 ̇
 is-magma-iso 𝑴 𝑵 f = is-magma-iso' {𝑴 = 𝑴} {𝑵 = 𝑵} f
--- so `is-magma-iso f` is a tuple `( fhom , g , ghom , g∼f , f∼g )`, where
---  `fhom   : is-magma-hom 𝑴 𝑵 f`
---  `g        ꞉  ⟨ 𝑵 ⟩ → ⟨ 𝑴 ⟩ `
---  `ghom   : is-magma-hom 𝑵 𝑴 g`
---  `g∼f     : g ∘ f ∼ 𝑖𝑑 ⟨ 𝑴 ⟩`
---  `f∼g     : f ∘ g ∼ 𝑖𝑑 ⟨ 𝑵 ⟩`
+
+{-`is-magma-iso f` is a tuple `( fhom , g , ghom , g∼f , f∼g )`, where
+     `fhom   : is-magma-hom 𝑴 𝑵 f`
+     `g        ꞉  ⟨ 𝑵 ⟩ → ⟨ 𝑴 ⟩ `
+     `ghom   : is-magma-hom 𝑵 𝑴 g`
+     `g∼f     : g ∘ f ∼ 𝑖𝑑 ⟨ 𝑴 ⟩`
+     `f∼g     : f ∘ g ∼ 𝑖𝑑 ⟨ 𝑵 ⟩` -}
 
 id-is-magma-iso : (𝑴 : Magma 𝓤) → is-magma-iso 𝑴 𝑴 (𝑖𝑑 ⟨ 𝑴 ⟩)
 id-is-magma-iso 𝑴 = id-is-magma-hom 𝑴 , 𝑖𝑑 ⟨ 𝑴 ⟩ , id-is-magma-hom 𝑴 , refl , refl
@@ -85,18 +88,14 @@ _≅ₘ_ : Magma 𝓤 → Magma 𝓤 → 𝓤 ̇
 magma-Id→iso : {𝑴 𝑵 : Magma 𝓤} → 𝑴 ≡ 𝑵 → 𝑴 ≅ₘ 𝑵
 magma-Id→iso 𝑴≡𝑵 = Id→iso 𝑴≡𝑵 , Id→iso-is-iso 𝑴≡𝑵
 
---WHY THE SETHOOD CONDITION:
+--WHY THE SETHOOD CONDITION 1:
 --"If we omit the sethood condition in the definition of the type of magmas, we get the type
 -- of what we could call `∞`-magmas (then the type of magmas could be called `0-Magma`)."
-
 ∞-Magma : (𝓤 : Universe) → 𝓤 ⁺ ̇
 ∞-Magma 𝓤 = Σ X ꞉ 𝓤 ̇ , (X → X → X)
 
---"A *monoid* is a set equipped with an associative binary operation and with a two-sided
--- neutral element, and so we get the type of monoids as follows.
---
+--Monoid (a set equipped with an associative binary operation and a two-sided neutral element)
 --"We first define the three laws:
-
 left-neutral : {X : 𝓤 ̇} → X → (X → X → X) → 𝓤 ̇
 left-neutral e _·_ = ∀ x → e · x ≡ x
 
@@ -106,39 +105,19 @@ right-neutral e _·_ = ∀ x → x · e ≡ x
 associative : {X : 𝓤 ̇} → (X → X → X) → 𝓤 ̇
 associative _·_ = ∀ x y z → (x · y) · z ≡ x · (y · z) 
 
---"Then a monoid is a set equipped with such `e` and `_·_` satisfying these three laws:
-
 Monoid : (𝓤 : Universe) → 𝓤 ⁺ ̇
-Monoid 𝓤 = Σ X ꞉ 𝓤 ̇ ,
- is-set X × (Σ · ꞉ (X → X → X) , (Σ e ꞉ X , (left-neutral e ·)
-                                           × (right-neutral  e ·)
-                                           × (associative ·)))
+Monoid 𝓤 = Σ X ꞉ 𝓤 ̇ , is-set X × (Σ · ꞉ (X → X → X) , (Σ e ꞉ X , (left-neutral e ·)
+                                                 × (right-neutral  e ·)
+                                                 × (associative ·)))
 
---"*Remark.* People are more likely to use records in Agda rather than iterated `Σ`s as
--- above (recall that we defined `Σ` using a record). This is fine, because records amount
--- to iterated `Σ` types (recall that also `_×_` is a `Σ` type, by definition). Here, however,
--- we are being deliberately spartan. Once we have defined our Agda notation for MLTT, we
--- want to stick to it. This is for teaching purposes (of MLTT, encoded in Agda, not of Agda
--- itself in its full glory).
+--WHY THE SETHOOD CONDITION 2:
+--(paraphrasing MHE) We could drop `is-set X`, but then we wouldn't get "reasonable" `∞`-monoids, but rather "wild `∞`-monoids"
+-- or "incoherent `∞`-monoids" because in monoids *with sets as carriers* the neutrality and associativity equations can hold in at
+-- most one way, by definition of set. If we drop the sethood requirement, these equations can hold in multiple ways, and we would be
+-- forced to consider equations between the identifications, ad infinitum, which is what "coherence data" means. The wildness or
+-- incoherence amounts to the absence of such data.
 
---"We could drop the `is-set X` condition, but then we wouldn't get `∞`-monoids in any
--- reasonable sense. We would instead get "wild `∞`-monoids" or "incoherent `∞`-monoids".
--- The reason is that in monoids (with sets as carriers) the neutrality and associativity
--- equations can hold in at most one way, by definition of set. But if we drop the sethood
--- requirement, then the equations can hold in multiple ways. And then one is forced to
--- consider equations between the identifications (all the way up in the ∞-case), which is
--- what "coherence data" means. The wildness or incoherence amounts to the absence of such
--- data.
-
---"Similarly to the situation with magmas, identifications of monoids are in bijection with
--- monoid isomorphisms, assuming univalence. For this to be the case, it is absolutely necessary
--- that the carrier of a monoid is a set rather than an arbitrary type, for otherwise the monoid
--- equations can hold in many possible ways, and we would need to consider a notion of monoid
--- isomorphism that in addition to preserving the neutral element and the multiplication,
--- preserves the associativity identifications.
-
---"*Exercise*. Define the type of groups (with sets as carriers)."
--- SOLUTION.
+--Groups over sets.
 invleft : {X : 𝓤 ̇} → X → (X → X → X) → (X → X) → 𝓤 ̇
 invleft e _·_ _⁻¹̇ = ∀ x → ((x ⁻¹̇) · x) ≡ e
 
@@ -146,16 +125,11 @@ invright : {X : 𝓤 ̇} → X → (X → X → X) → (X → X) → 𝓤 ̇
 invright e _·_ _⁻¹̇ = ∀ x → (x · (x ⁻¹̇)) ≡ e
 
 Group : (𝓤 : Universe) → 𝓤 ⁺ ̇
-Group 𝓤 = Σ X ꞉ 𝓤 ̇ , is-set X
- × (Σ · ꞉ (X → X → X) ,
-    (Σ e ꞉ X , (left-neutral e ·)
-             × (right-neutral e ·)
-             × (associative ·)
-             × (Σ ⁻¹̇ ꞉ (X → X) ,
-                invleft e · ⁻¹̇ × invright e · ⁻¹̇)
-     )
-    )
-  
+Group 𝓤 = Σ X ꞉ 𝓤 ̇ , is-set X × (Σ · ꞉ (X → X → X) ,  (Σ e ꞉ X , (left-neutral e ·)
+                                               × (right-neutral e ·)
+                                               × (associative ·)
+                                               × (Σ ⁻¹̇ ꞉ (X → X) , invleft e · ⁻¹̇ × invright e · ⁻¹̇) ) )
+
 -- ⟨_⟩ : Group 𝓤 → 𝓤 ̇
 -- ⟨ G , i , _·_ ⟩ = G
 

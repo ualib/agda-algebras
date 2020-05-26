@@ -5,13 +5,13 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
-open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; transport; codomain; domain)
+open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; pr₂; transport; codomain; domain)
 
 open import UF-Basic using (Signature; Algebra; Op)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 open import UF-Hom using (Hom)
 open import UF-Rel using (Transitive)
-open import UF-Equality using (to-Σ-≡; from-Σ-≡)
+open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat)
 open import UF-Extensionality using (funext; global-funext; dfunext; global-dfunext; intensionality)
 
 open import Relation.Unary using (⋂)
@@ -37,21 +37,69 @@ _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ �
 -- For some reason, I'm able to get an elimination rule only for `A-is-supalgebra-of_` for fixed A.  (todo: try to fix this)
 
 --The "uniform" (i.e., unrestricted) elimination rule (that we want, but that doesn't work yet).
--- is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
---  →               𝑨 is-supalgebra-of 𝑩
---  →               𝑩 ≡ (Σ B , 𝐹)
---  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
---  →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
--- is-subalg-elim fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 Fᴮ≡Fᴬ) eqv 𝓸 𝒃 =
---  let eqvF = Fᴮ≡Fᴬ 𝓸 in γ
---  where
---   B≡B₁ : B ≡ B₁
---   B≡B₁ = fe λ i → B i ≡⟨ {!!} ⟩ B₁ i ∎
+is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+ →               𝑨 is-supalgebra-of 𝑩
+ →               𝑩 ≡ (Σ B , 𝐹)
+ →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
+ →               ∣ 𝐹 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
+is-subalg-elim{𝓤 = 𝓤} fe 𝑨 .(Σ B₁ , 𝐹) B F (mem B₁ 𝐹 Fᴮ≡Fᴬ) eqv 𝓸 𝒃 = γ
+ where
+  -- ΣB = pr₁ ( Σ B , F),  ΣB₁ = pr₁ (Σ B₁ , 𝐹)
+
+  ΣB≡ΣB₁ : Σ B ≡ Σ B₁
+  ΣB≡ΣB₁ = (ap (λ - → pr₁ -) eqv)⁻¹
+
+  eqvF : ((𝒂 : ∥ S ∥ 𝓸 → Σ B₁) → ∣ 𝐹 𝓸 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒂 i ∣))
+  eqvF = Fᴮ≡Fᴬ 𝓸
+
+  transB : B ≡ B₁
+  transB  = fe λ x → ζ x
+   where
+    ξ :  (Σ B) → (Σ B₁)
+    ξ (x , bx) = {!!}
+    ζ : (x : ∣ 𝑨 ∣) → B x ≡ B₁ x
+    ζ x = {!!}
+
+  β : Nat B B₁
+  β = λ s x →  {! !} -- {!transport (eqv ⁻¹) x!}
+
+  -- B≡B₁ : B ≡ B₁
+  -- B≡B₁ = fe λ i → B i ≡⟨ {!ΣB≡ΣB₁ i)!} ⟩ B₁ i ∎
+
+  γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+  γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩  -- from-Σ-≡  Fᴮ≡Fᴬ
+        ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
+
+  -- ζ :  F 𝓸 𝒃 ≡ (𝐹 𝓸 (λ i → transport (𝒃 i) eqv))
+  -- ζ = {!!}
+
+-- we have:
+-- 𝐹     : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B₁)
+-- B₁    : Pred ∣ 𝑨 ∣ 𝓤
+-- F     : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B)
+
+
+-- B     : Pred ∣ 𝑨 ∣ 𝓤
+-- eqv   : Σ B₁ , 𝐹 ≡ Σ B , F
+-- Fᴮ≡Fᴬ : (𝓸₁ : ∣ S ∣) (𝒂 : ∥ S ∥ 𝓸₁ → Σ B₁) → ∣ 𝐹 𝓸₁ 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝓸₁ (λ i → ∣ 𝒂 i ∣)
+
+-- use these assumptions to show
+-- ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+-- First show  ∣ F 𝓸 𝒃 ∣ ≡ ∣ 𝐹 𝓸 𝒃 ∣
+-- Of course, Agda will complain: (B x) !=< (B₁ x) of type (Set 𝓤) when checking 𝒃 has type ∥ S ∥ 𝓸 → Σ B₁,
+-- Not only must we transport `𝒃 : ∥ S ∥ 𝓸 → Σ B` to `𝒃' : ∥ S ∥ 𝓸 → Σ B₁`, we also must transport 
+-- F : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B)   to   𝐹     : (𝓸₁ : ∣ S ∣) → Op (∥ S ∥ 𝓸₁) (Σ B₁).
+-- It seems we need a functor acting on the category with types as objects and operations on types as arrows:
 --
---   γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
---   γ = ∣ F 𝓸 𝒃 ∣ ≡⟨ {!!} ⟩  -- from-Σ-≡  Fᴮ≡Fᴬ
---         ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)  ∎
---
+--    Σ B , F                 ∣ F 𝓸 𝒃 ∣
+--       |
+--     eqv
+--       |
+--    Σ B₁ , 𝐹              ∣ 𝑭 𝓸 𝒃' ∣
+--       |
+--     eqv
+
+
 -- tB≡tA : {X : 𝓤 ̇} {𝑨 : Algebra _ S} {B : Pred ∣ 𝑨 ∣ 𝓤 }{ 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
 --  →      𝑨 is-supalgebra-of (Σ B , 𝐹 )
 --  →      (𝒕 : Term {X = X} ) ( 𝒃 : X → Σ B )

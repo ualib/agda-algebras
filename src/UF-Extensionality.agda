@@ -1151,6 +1151,14 @@ intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : 𝓦 ̇ } {f g : A → B}
 
 intensionality (refl _) _ = refl _
 
+-- dependent intensionality
+dep-intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : A → 𝓦 ̇ } {f g : ∀(x : A) → B x}
+ →                f ≡ g  →  (x : A)
+                    ------------------
+ →                    f x ≡ g x
+
+dep-intensionality (refl _) _ = refl _
+
 --------------------------------------
 --Dependent function extensionality
 dep-extensionality : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇

@@ -123,45 +123,21 @@ is-empty X = X → 𝟘
 ¬ : 𝓤 ̇ → 𝓤 ̇
 ¬ X = X → 𝟘
 
---"This says that a type is empty precisely when we have a function to the empty type. Assuming univalence, once we have defined
--- the identity type former `_≡_`, we will be able to prove that `(is-empty X) ≡ (X ≃ 𝟘)`, where `X ≃ 𝟘` is the type of bijections,
--- or equivalences, from `X` to `𝟘`.
+{- "This says that a type is empty precisely when we have a function to the empty type....
+    With univalence we will be able to show that "(*false* → *true*) `≡` *true*", which
+    amounts to `(𝟘 → 𝟙) ≡ 𝟙`, which in turn says that there is precisely one function `𝟘 → 𝟙`, namely
+    the (vacuous) function." -}
 
---"We will also be able to prove things like `(2 + 2 ≡ 5) ≡ 𝟘` and `(2 + 2 ≡ 4) ≡ 𝟙`.
--- This is for *numbers*. If we define *types* `𝟚 = 𝟙 + 𝟙` and `𝟜 = 𝟚 + 𝟚` with two and four elements,
--- respectively, where we are anticipating the definition of `_+_` for types, then we will instead have
--- `𝟚 + 𝟚 ≡ 𝟜` is a type with `4!` elements, which is the number of permutations of a set with four
--- elements, rather than a truth value `𝟘` or `𝟙`, as a consequence of the univalence axiom.
-
---"That is, we will have `(𝟚 + 𝟚 ≡ 𝟜) ≃ (𝟜 + 𝟜 + 𝟜 + 𝟜 + 𝟜 + 𝟜)`, so that the type identity `𝟚 + 𝟚 ≡ 𝟜`
--- holds in [many more ways](https://arxiv.org/abs/math/9802029) (see Categorification paper) than the
--- numerical equation `2 + 2 ≡ 4`.
-
---"The above is possible only because universes are genuine types and hence their elements (that is,
--- types) have identity types themselves, so that writing `X ≡ Y` for types `X` and `Y` (inhabiting the same
--- universe) is allowed.
-
---"When we view `𝟘` as *false*, we can read the definition of the *negation* `¬ X` as saying that "`X`
--- implies *false*". With univalence we will be able to show that "(*false* → *true*) `≡` *true*", which
--- amounts to `(𝟘 → 𝟙) ≡ 𝟙`, which in turn says that there is precisely one function `𝟘 → 𝟙`, namely
--- the (vacuous) function."
-
--- open import Agda.Builtin.Nat public renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
-------------------------------------------------------------------------
---"The type `ℕ` of natural numbers"
--- ------------------------------
-
---"The def is similar but not quite the same as the one via Peano Axioms."
+--"The type `ℕ` of natural numbers.  (The def is similar but not quite the same as the one via Peano Axioms.)
 data ℕ : 𝓤₀ ̇ where
  zero : ℕ
  succ : ℕ → ℕ
 
 {-# BUILTIN NATURAL ℕ #-}
 
---"In the following, the type family `A` can be seen as playing the role of a property of elements of `ℕ`,
--- except that it doesn't need to be necessarily subsingleton valued. When it is, the *type* of the function
--- gives the familiar principle of mathematical induction for natural numbers, whereas, in general, its
--- definition says how to compute with induction.
+--"In the following, the type family `A` can be seen as playing the role of a property of elements of `ℕ`, except that it doesn't need to
+-- be necessarily subsingleton valued. When it is, the *type* of the function gives the familiar principle of mathematical induction for natural
+-- numbers, whereas, in general, its definition says how to compute with induction.
 ℕ-induction : (A : ℕ → 𝓤 ̇)
  →            A 0 --                             base step      : "A 0 holds"
  →            ((n : ℕ) → A n → A (succ n)) -- induction step : "∀n, if A n, then A (succ n) holds"
@@ -174,22 +150,19 @@ data ℕ : 𝓤₀ ̇ where
   h zero = a₀
   h (succ n) = f n (h n)
 
---"Notice also that `ℕ-induction` is the dependently typed version of primitive recursion, where the
--- non-dependently typed version is
+--"Notice also that `ℕ-induction` is the dependently typed version of primitive recursion, where the non-dependently typed version is
 ℕ-recursion : (X : 𝓤 ̇)  →  X  →  (ℕ → X → X)
               --------------------------------------
  →                     ℕ → X
 ℕ-recursion X = ℕ-induction λ _ → X
 
---"The following special case occurs often (and is related to the fact that `ℕ` is the initial algebra
--- of the functor `𝟙 + (-)`)
+--"The following special case occurs often (and is related to the fact that `ℕ` is the initial algebra of the functor `𝟙 + (-)`)
 ℕ-iteration : (X : 𝓤 ̇)
  →            X    →   (X → X)
              --------------------
  →              ℕ → X
 ℕ-iteration X x f = ℕ-recursion X x (λ _ x → f x) -- !!WARNING!! Agda is capable of automatically
                                                                        --                 filling in the wrong proof term here.
-
 
 --"We now define addition and multiplication for the sake of illustration.
 -- We first do it in Peano style. We will create a local `module` so definitions are not globally visible;
@@ -499,35 +472,26 @@ X × Y = Σ x ꞉ X , Y
 _×'_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
 X ×' Y = Σ λ(x : X) → Y
 
---"We have seen by way of examples that the function type symbol `→` represents logical implication, and that a
--- dependent function type (x : X) → A x` represents a universal quantification.
+{-(paraphrasing MHE)
+  The general type `Σ (x : X) , A x`---with `X` a collections of objects and `A : X → 𝓤 ̇` (e.g., a prop) represents *designated*
+  existence---i.e., there is a designated `x : X` with `A x`. An inhabitant of this type is a pair `(x , p)`, with `x : X` and `p : A x`,
+  Here p may be viewed as a proof that (the proposition) A x holds.
 
---"We have the following uses of `Σ`.
---
---×The binary cartesian product represents conjunction "and". If the types `A` and `B` stand for mathematical statements,
--- then the mathematical statement "`A` and `B`" is codified as `A × B`, because to establish "`A` and `B`", we have to
--- provide a pair `(a , b)` of proofs `a : A` and `b : B`. So notice that in type theory proofs are mathematical objects,
--- rather than meta-mathematical entities like in set theory. They are just elements of types.
---
---×The more general type `Σ (x : X), A x`---with `X` a collections of objects and `A` a prop---represents *designated*
--- existence there is a designated `x : X` with `A x`. To establish this, we have to
--- provide a specific element `x : X` and a proof `a : A x`, together in a pair `(x , a)`.
---
---×Later we will discuss *unspecified* existence `∃ (x : X), A x`, which will be obtained by a sort of quotient of
--- `Σ (x : X), A x`, written `∥ Σ (x : X), A x ∥`, that identifies all the elements of the type `Σ (x : X), A x` in
--- a single equivalence class, called its subsingleton (or truth value or propositional) truncation.
---
---×Another reading of `Σ (x : X), A x` is as the type of `x : X` with `A x`, similar to set-theoretical notation
--- `{ x ∈ X | A x }`. But we have to be careful because if there is more than one element in the type `A x`, then `x`
--- will occur more than once in this type. More precisely, for `a₀ a₁ : A x` we have inhabitants `(x , a₀)` and `(x , a₁)`
--- of the type `Σ (x : X), A x`. In such situations, if we don't want that, we have to either ensure that the type `A x`
--- has at most one element for every `x : X`, or instead consider the truncated type `∥ A x ∥` and write `Σ (x : X), ∥ A x ∥`.
---
--- An example is the image of a function `f : X → Y`, which will be defined to be `Σ (y : Y), ∥ Σ (x : X), f x ≡ y ∥`.
---
--- This is the type of `y : Y` for which there is an unspecified `x : X` with `f x ≡ y`.
---
--- (For constructively minded readers, we emphasize that this *doesn't erase* the witness `x:X`.)
+  We could also consider an "unspecified" existence `∃ (x : X), A x`, obtained by a sort of quotient of `Σ (x : X), A x`, denoted by
+  `∥ Σ (x : X), A x ∥`, that identifies all the elements of the type `Σ (x : X), A x` in a single equivalence class, called its "subsingleton truncation."
+  (or "truth value  truncation" or "propositional truncation").
+
+  Another reading of `Σ (x : X), A x` is as the type (or "set") of those `x : X` satisfying `A x`, similar to the set denoted (in "set-builder" notation)
+  by `{ x ∈ X | A x }`... but... WARNING: if there is more than one element in the type `A x`, then `x` will occur more than once in this type.
+  More precisely, for `a₀ a₁ : A x` we have inhabitants `(x , a₀)` and `(x , a₁)` of the type `Σ (x : X), A x`. If we don't want that, we have to
+  either ensure that the type `A x` has at most one element for every `x : X`, or instead consider the truncated type ⌞ A x ⌟ and write
+  `Σ (x : X), ⌞ A x ⌟`.
+
+  N.B. MHE uses ∥ A x ∥ to denote the truncation of A x, but we are sometimes using ∥ p ∥ for the second projection of p, so we prefer to denote
+  truncation with the floor symbols ⌞ and ⌟ (typed with `\c3` and `\c4`, resp).
+
+  Example. The image of a function `f : X → Y` will be defined as `Σ (y : Y), ⌞ Σ (x : X), f x ≡ y ⌟`,  (i.e., those `y : Y` for which ∃ an unspecified
+  `x : X` with `f x ≡ y`. (N.B. this *doesn't erase* the witness `x : X`.) -}
 
 -------------------------------------
 
@@ -1140,34 +1104,6 @@ bijective g = epic g × monic g
 
 Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × Monic g
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
