@@ -221,7 +221,7 @@ id : {X : 𝓤 ̇} → X → X
 id x = x
 
 𝑖𝑑 : (X : 𝓤 ̇) → X → X
-𝑖𝑑 X = id
+𝑖𝑑 X = id {X = X}
 
 
 ------------------------------------------------------------------------------------------------
@@ -251,9 +251,9 @@ data Id {𝓤} (X : 𝓤 ̇) : X → X → 𝓤 ̇ where
 --"We will use the following alternative notation for the identity type former `Id`, where the symbol `_` in the right-hand side of the
 -- definition indicates that we ask Agda to infer which type we are talking about (which is `X`, but this name is not available in the scope
 -- of the DEFINING EQUATION of the type former `_≡_`):
-infix   0 _≡_
 _≡_ : {X : 𝓤 ̇} → X → X → 𝓤 ̇
 x ≡ y = Id _ x y
+infix   0 _≡_
 
 ≡-sym : {X : 𝓤 ̇ }{x y : X} → x ≡ y → y ≡ x
 ≡-sym (refl _) = refl _
@@ -538,44 +538,35 @@ type-of : {X : 𝓤 ̇} → X → 𝓤 ̇
 type-of {𝓤} {X} x = X
 
 
-
-
 -----------------------------------------------------------------------------------------------
--- TRANSPORT.
+--TRANSPORT.
+--"Before embarking on the development of UF within our spartan MLTT, we pause to discuss some basic examples of maths in Martin-Löf tt."
 
-
-{-"Before embarking on the development of univalent mathematics within our spartan MLTT, we pause to discuss some basic
-   examples of mathematics in Martin-Löf type theory." -}
-
-------------------------------------------------------------
--- Transport along an identification
-
+--"Transport along an identification.
 transport : {X : 𝓤 ̇} (F : X → 𝓥 ̇) {s t : X}  →  s ≡ t  →  F s → F t
 transport F (refl s) = 𝑖𝑑 (F s)
 
 --               F
---         s ------> Fs
---         ||              ||
--- refl s ||              ||   transport
---         V              V
---         t ------> Ft
+--          s ------→ Fs
+--           ||               ||
+-- refl s  ||               ||   transport
+--          ⇓              ⇓
+--           t -----→ Ft
 --                F
 
 --"We can equivalently define transport using `𝕁` as follows:"
-
 transport𝕁 : {X : 𝓤 ̇} (A : X → 𝓥 ̇) {x y : X} → x ≡ y  →  A x → A y
 transport𝕁{𝓤}{𝓥}{X} A {x} {y} = 𝕁 X (λ x₁ y₁ _ → A x₁ → A y₁) (λ x₁ → 𝑖𝑑 (A x₁)) x y
 
---"In the same way `ℕ`-recursion can be seen as the non-dependent special case of `ℕ`-induction,
--- the following transport function can be seen as the non-dependent special case of the `≡`-induction
--- principle `ℍ` with some of the arguments permuted and made implicit:
+--"In the same way `ℕ`-recursion can be seen as the non-dependent special case of `ℕ`-induction, the following transport function can
+-- be seen as the non-dependent special case of the `≡`-induction principle `ℍ` with some of the arguments permuted and made implicit:
 nondep-ℍ : {X : 𝓤 ̇} (x : X) (A : X → 𝓥 ̇) → A x → (y : X) → x ≡ y → A y
 nondep-ℍ x A = ℍ x (λ y _ → A y)
 
 transportℍ : {X : 𝓤 ̇} (A : X → 𝓥 ̇ ) {x y : X} → x ≡ y  →  A x  →  A y
 transportℍ A {x} {y} x≡y v = nondep-ℍ x A v y x≡y
 
---"All the above transports coincide:
+--"All of the above transports coincide:
 transport-agreement : {X : 𝓤 ̇ } (A : X → 𝓥 ̇) {x y : X} (p : x ≡ y)
  → (transportℍ A p ≡ transport A p) × (transport𝕁 A p ≡ transport A p)
 transport-agreement  A (refl x) = refl (transport A (refl x)) , refl (transport A (refl x))
@@ -587,28 +578,24 @@ lhs {𝓤}{X}{x}{y} p = x
 rhs : {X : 𝓤 ̇ } {x y : X} → x ≡ y → X
 rhs {𝓤}{X}{x}{y} p = y
 
--- ---------------------------------------------------------------------------
--- Composition of identifications
-
---"Given two identifications `p : x ≡ y` and `q : y ≡ z`, we can compose them to get an identification `p ∙ q : x ≡ z`. This can also
--- be seen as transitivity of equality. Because the type of composition doesn't mention `p` and `q`, we can use the
--- non-dependent version of `≡`-induction.
-infixl 30 _∙_ -- NOTATION: type ∙ using `\.`
+---------------------------------------------------------------------------------------------------
+--"Composition of identifications. Given two identifications `p : x ≡ y` and `q : y ≡ z`, we can compose them to get an
+-- identification `p ∙ q : x ≡ z`. This can also be seen as transitivity of equality.  Because the type of composition doesn't
+-- mention `p` and `q`, we can use the non-dependent version of `≡`-induction.
 _∙_ : {X : 𝓤 ̇}{s t u : X} → s ≡ t → t ≡ u → s ≡ u
 p ∙ q = transport ( lhs p ≡_ ) q p
+infixl 30 _∙_                                            -- NOTATION: type ∙ using `\.`
 
---"Here we are considering the family `F a = (s ≡ a)`, and using the identification `q : t ≡ u` to transport
--- `F t` to `F u`, that is `s ≡ t` to `s ≡ u`.
+--"...we are considering the family `F a = (s ≡ a)`, and using the identification `q : t ≡ u` to transport `F t` to `F u`, that is `s ≡ t` to `s ≡ u`.
 
--- *Exercise*. Can you define an alternative version that uses `p` to transport. Do the two versions give equal results?
+--EXERCISE. Can you define an alternative version that uses `p` to transport. Do the two versions give equal results?
 -- SOLUTION. Use the family F a = (a ≡ u) and use the identification p : s ≡ t to transport F t to F s.
 _⋆'_ : {X : 𝓤 ̇}{s t u : X} → s ≡ t → t ≡ u → s ≡ u
 p ⋆' q = transport (_≡ rhs q) (≡-sym p) q
 
---"When writing `p ∙ q`, we lose information on the lhs and the rhs of the identifications `p : s ≡ t` and `q : t ≡ u`,
--- which makes some definitions hard to read. We now introduce notation to be able to write e.g. s ≡⟨ p ⟩ t ≡⟨ q ⟩ u ∎
--- as a synonym of the expression `p ∙ q` with some of the implicit arguments of `_∙_` made explicit."
---"We have one ternary mixfix operator `_≡⟨_⟩_` and one unary `postfix` operator `_∎`.
+--"When writing `p ∙ q`, we lose information on the lhs and rhs of the identifications `p : s ≡ t` and `q : t ≡ u`, which makes some definitions
+-- hard to read. We now introduce notation to be able to write e.g. s ≡⟨ p ⟩ t ≡⟨ q ⟩ u ∎ as a synonym of the expression `p ∙ q` with some of
+-- the implicit arguments of `_∙_` made explicit. We have one ternary mixfix operator `_≡⟨_⟩_` and one unary `postfix` operator `_∎`.
 infixr  0 _≡⟨_⟩_
 _≡⟨_⟩_ : {X : 𝓤 ̇} (s : X) {t u : X} → s ≡ t → t ≡ u → s ≡ u
 s ≡⟨ p ⟩ q = p ∙ q
@@ -617,170 +604,122 @@ infix   1 _∎
 _∎ : {X : 𝓤 ̇} (s : X) → s ≡ s
 s ∎ = refl s
 
---Inversion of identifications
 --"Given an identification, we get an identification in the opposite direction:
 infix  40 _⁻¹
 _⁻¹ : {X : 𝓤 ̇} → {s t : X} → s ≡ t → t ≡ s
-p ⁻¹ = transport (_≡ lhs p) p (refl (lhs p))  -- Let F a = a ≡ s, and use  ≡ y to transport
-                                                       -- F s (i.e., s ≡ s) to F t (i.e., t ≡ s)
+p ⁻¹ = transport (_≡ lhs p) p (refl (lhs p))
 
---"We can define an alternative of identification composition with this:
+--With this MHE defines an alternative of identification composition and shows it agrees with the previous one.
 _∙'_ : {X : 𝓤 ̇} {s t u : X} → s ≡ t → t ≡ u → s ≡ u
 p ∙' q = transport ( _≡ rhs q ) ( p ⁻¹ ) q
 
---"This agrees with the previous one:"
-∙agreement : {X : 𝓤 ̇}{s t u : X} (p : s ≡ t) (q : t ≡ u)
-  →     p ∙' q ≡ p ∙ q
+∙agreement : {X : 𝓤 ̇}{s t u : X} (p : s ≡ t) (q : t ≡ u) → p ∙' q ≡ p ∙ q
 ∙agreement (refl s) (refl s) = refl (refl s)
 
 --"But `refl t` is a definitional neutral element for one of them on the right and for the other one on the left,
---  * `p ∙ refl t = p`,
---  * `refl t ∙' q = q`,
--- which can be checked as follows"
+-- (i.e., `p ∙ refl t = p` and `refl t ∙' q = q`) which can be checked as follows:
 rdnel : {X : 𝓤 ̇}{s t : X} (p : s ≡ t)  → p ∙ refl t ≡ p
 rdnel p = refl p
-
-∙-right-id : {X : 𝓤 ̇}{s t : X} (p : s ≡ t)  → p ∙ refl t ≡ p
-∙-right-id = rdnel -- alias.
 
 rdner : {X : 𝓤 ̇}{t u : X} (q : t ≡ u)  →  refl t ∙' q ≡ q
 rdner q = refl q
 
-∙'-left-id : {X : 𝓤 ̇}{t u : X} (q : t ≡ u)  →  refl t ∙' q ≡ q
-∙'-left-id = rdner -- alias.
-
---*Exercise*. The identification `refl y` is neutral on both sides of each of the two operations `_∙_` and
+--EXERCISE. The identification `refl y` is neutral on both sides of each of the two operations `_∙_` and
 -- `_∙'_`, although not definitionally. This has to be proved by induction on identifications, as in `∙-agreement`.
 --SOLUTION.
 ∙-left-id : {X : 𝓤 ̇}{t u : X} (q : t ≡ u) → refl t ∙ q ≡ q
 ∙-left-id (refl s) = refl (refl s)
 
--- ----------------------------------------------------------------------------------
--- Application of a function to an identification
--- Given an identification `p : x ≡ x'` we get an identification `ap f p : f x ≡ f x'` for any `f : X → Y`:
-ap : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X} → x ≡ x' → f x ≡ f x'
+------------------------------------------------------------------------------------
+--"Application of a function to an identification. Given an identification `p : x ≡ x'` we get an identification `ap f p : f x ≡ f x'` for any `f : X → Y`:
+ap cong : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X} → x ≡ x' → f x ≡ f x'
 ap f {x} {x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
---NOTATION (cf. `cong` in `Relation/Binary/PropositionalEquality/Core.agda` )
+cong  = ap   -- alias    (NOTATION (cf. `cong` in `Relation/Binary/PropositionalEquality/Core.agda` )
 
---"Here the symbol "`-`", which is not to be confused with the symbol "`_`", is a variable. We will adopt the
--- convention in these notes of using this variable name "`-`" to make clear which part of an expression we
--- are replacing with `transport`.
+--cf. Relation/Binary/Core.agda
+cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
+cong-app {f = f} (refl _) a = refl (f a)
 
---"Notice that we have so far used the recursion principle `transport` only. To reason about `transport`,
--- `_∙_`, `_⁻¹` and `ap`, we will need to use the full induction principle `𝕁` (or equivalently pattern
--- matching on `refl`)."
+--"Notice that we have so far used the recursion principle `transport` only. To reason about `transport`, `_∙_`, `_⁻¹` and `ap`, we
+-- will need to use the full induction principle `𝕁` (or equivalently pattern matching on `refl`)."
 
--- ------------------------------------------------------------------------------
--- Pointwise (extensional) equality of functions
+--------------------------------------------------------------------------------
+--POINTWISE (extensional) EQUALITY OF FUNCTIONS.
 
---"We will work with pointwise equality of functions, defined as follows, which, using univalence,
--- will be equivalent to equality of functions. (see: HoTT-UF-Agda.html#hfunext)."
-
-infix 0 _∼_
+--"We will work with pointwise equality of functions, defined as follows, which, using univalence, will be equivalent to equality of functions:
 _∼_ : {X : 𝓤 ̇} {A : X → 𝓥 ̇} → Π A → Π A → 𝓤 ⊔ 𝓥 ̇
 f ∼ g = ∀ x → f x ≡ g x
-
---"The symbol `∀` is a built-in notation for `Π` . We could equivalently write the *definiens* as
--- `(x : _) → f x ≡ g x`, or, with our `Π` notation, `Π \x → f x ≡ g x`, or, with our `domain` notation
--- `(x : domain f) → f x ≡ g x`.
+infix 0 _∼_
 
 --more equations for transport, including a dependent version
 transport-× : {X : 𝓤 ̇ }(A : X → 𝓥 ̇ )(B : X → 𝓦 ̇ ){x y : X}
-              (p : x ≡ y)    {c : A x × B x}
-             -------------------------------------------------
- → transport (λ x → A x × B x) p c ≡ (transport A p (pr₁ c) ,
-                                        transport B p (pr₂ c))
+                          (p : x ≡ y)                {c : A x × B x}
+                   ----------------------------------------------------------------------
+ →                transport (λ x → A x × B x) p c  ≡   (transport A p (pr₁ c) , transport B p (pr₂ c))
 transport-× A B (refl x) {c} = refl c
 
 transportd : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) (B : (x : X) → A x → 𝓦 ̇ )
-             {x : X} (a : A x) ((a' , b) : Σ a ꞉ A x , B x a)  {y : X}
-             (p : x ≡ y)  →   B x a'
-             ---------------------------------------------------------
- →          B y (transport A p a')
+                   {x : X} (a : A x) ((a' , b) : Σ a ꞉ A x , B x a)  {y : X}
+                   (p : x ≡ y)  →   B x a'
+                 --------------------------------
+ →               B y (transport A p a')
 transportd A B a σ (refl y) = id
 
-transport-Σ : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ )(B : (x : X) → A x → 𝓦 ̇ )
-             {x : X}(y : X)
-             (p : x ≡ y)  (a : A x)   {(a' , b) : Σ a ꞉ A x , B x a}
-       ----------------------------------------------------------------------
- → transport (λ x → Σ y ꞉ A x , B x y) p (a' , b) ≡ transport A p a' ,
-                                                      transportd A B a (a' , b) p b
+transport-Σ : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ )(B : (x : X) → A x → 𝓦 ̇ ){x : X}(y : X)
+                    (p : x ≡ y)      (a : A x)      {(a' , b) : Σ a ꞉ A x , B x a}
+                  -------------------------------------------------------------------------------
+ →               transport (λ x → Σ y ꞉ A x , B x y) p (a' , b)   ≡   transport A p a' , transportd A B a (a' , b) p b
 transport-Σ A B {x} x (refl x) a {σ} = refl σ
 
-
--- Added later. see: https://www.cs.bham.ac.uk/~mhe/agda-new/Id.html#1449
-
-
+--The following was added later by MHE (see: https://www.cs.bham.ac.uk/~mhe/agda-new/Id.html#1449 )
 back-transport : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) {x y : X} → x ≡ y → A y → A x
 back-transport B p = transport B (p ⁻¹)
 
 ------------------------------------------------------------------------------------
--- NEGATION.
----------------------------------------------------------
---"Reasoning with negation
---"We first introduce notation for double and triple negation to avoid the use of brackets.
-¬¬ : 𝓤 ̇ → 𝓤 ̇
+--"NEGATION. We first introduce notation for double and triple negation to avoid the use of brackets.
+¬¬ ¬¬¬ : 𝓤 ̇ → 𝓤 ̇
 ¬¬ A = ¬(¬ A)
-
-¬¬¬ : 𝓤 ̇ → 𝓤 ̇
 ¬¬¬ A = ¬(¬¬ A)
 
---"To prove that `A → ¬¬ A`, that is, `A → ( (A → 𝟘) → 𝟘 )`, we start with a hypothetical element `a : A` and a
--- hypothetical function `u : A → 𝟘` and the goal is to get an element of `𝟘`. All we need to do is to apply the
--- function `u` to `a`. This gives double-negation introduction:
-dni : (A : 𝓤 ̇) → A → ¬¬ A
+--"To prove that `A → ¬¬ A`, start with a hypothetical element `a : A` and function `u : A → 𝟘` and get an element of `𝟘`.
+-- All we need to do is to apply the function `u` to `a`. This gives double-negation introduction (dni or ¬¬-intro):
+dni ¬¬-intro : (A : 𝓤 ̇) → A → ¬¬ A
 dni A a A→𝟘 = A→𝟘 a
-
 ¬¬-intro = dni -- alias
+{-(paraphrasing MHE)
+   There is no general way to implement the converse (i.e., from a function (A → 𝟘) → 𝟘, get a point of A). For truth values A, we can
+   assume this as an axiom if we wish, because it is equivalent to em.  But for arbitrary types `A`, this would be a form of global choice
+   for type theory, and global choice is known to be inconsistent with univalence (see HoTT book, Thm 3.2.2), because there is no way to
+   choose an element of every non-empty type in a way that is invariant under automorphisms. (However, the AoC is consistent with UF.) -}
 
-{-"We don't assume a "double-negation-elimination" rule, like `¬¬-elim : ¬¬ A → A`, and we cannot prove such a rule unless
-   we assume something else (e.g., em, which is equivalent to ¬¬-elim).
-
-  "Mathematically, this says that if we have a point of `A` (we say that `A` is pointed) then `A` is nonempty. There is no
-   general procedure to implement the converse, that is, from a function `(A → 𝟘) → 𝟘` to get a point of `A`. For truth
-   values `A`, we can assume this as an axiom if we wish, because it is equivalent to the law of excluded middle. For arbitrary
-   types `A`, this would be a form of global choice for type theory.  However, global choice is inconsistent with univalence
-   (see HoTT book, Theorem 3.2.2), because there is no way to choose an element of every non-empty type in a way that is
-   invariant under automorphisms. However, the axiom of choice IS consistent with univalent type theory, as stated above." -}
-
---"In the proof of the following, we are given...functions `f : A → B` and `v : B → 𝟘`, and an...element `a : A`, and our goal
--- is to get an element of `𝟘`. But this is easy, because `f a : B` and hence `v (f a) : 𝟘`.
+--(paraphrasing MHE)
+--In the next proof, we are given `f : A → B`, `v : B → 𝟘` and `a : A`, and we want an element of 𝟘 (easy, since `f a : B`, hence `v (f a) : 𝟘`).
 contrapositive : {A : 𝓤 ̇} {B : 𝓥 ̇} → (A → B) → (¬ B → ¬ A)
 contrapositive A→B B→𝟘 = λ a → B→𝟘 (A→B a)
 
---"We have given a logical name to this function. Mathematically, this says that if we have a function `A → B` and `B` is empty,
--- then `A` must be empty, too. And from this we get that three negations imply one:
-tno : (A : 𝓤 ̇) → ¬¬¬ A → ¬ A
+--(paraphrasing MHE) If we have a function `A → B` and `B` is empty, then `A` must be empty, too.
+--From this we get that three negations imply one (we call it "triple negation reduction" or ¬¬¬-elim):
+tno ¬¬¬-elim : (A : 𝓤 ̇) → ¬¬¬ A → ¬ A
 tno A = contrapositive (dni A)
-
 ¬¬¬-elim = tno -- alias
+--"Hence, using `dni` once again, we get that `¬¬¬ A` if and only if `¬ A`."
 
---"Hence, using `dni` once again, we get that `¬¬¬ A` if and only if `¬ A`. It is entertaining to see how Brouwer formulated
--- and proved this fact in his Cambridge Lectures on Intuitionism.
--- (see: https://books.google.co.uk/books/about/Brouwer_s_Cambridge_Lectures_on_Intuitio.html?id=B88L2k5KnkkC&redir_esc=y )
-
---"If we define *logical equivalence* by
-_⇔_  : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+--LOGICAL EQUIVALENCE.
+_⇔_  _iff_  : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
 X ⇔ Y = (X → Y) × (Y → X)
-infix 10 _⇔_
-
-_iff_  : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
 _iff_ = _⇔_ -- alias
+infix 10 _⇔_
 infix 10 _iff_
 
-lr-implication : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (X → Y)
+lr-implication iff-elim-left : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (X → Y)
 lr-implication = pr₁
+iff-elim-left = pr₁         -- alias
 
-iff-elim-left : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (X → Y)
-iff-elim-left = lr-implication -- alias
-
-rl-implication : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (Y → X)
+rl-implication iff-elim-right : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (Y → X)
 rl-implication = pr₂
+iff-elim-right = pr₂       -- alias
 
-iff-elim-right : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (Y → X)
-iff-elim-right = rl-implication -- alias
-
---"then we can render Brouwer’s argument in Agda as follows, where the “established fact” is dni:
+--(paraphrasing MHE) ...then we can render Brouwer’s argument in Agda as follows (where the 'established fact' is ¬¬-intro):
 absurdity³-is-absurdity : {A : 𝓤 ̇} → ¬¬¬ A iff ¬ A
 absurdity³-is-absurdity {𝓤} {A} = firstly , secondly
  where
@@ -793,35 +732,30 @@ absurdity³-is-absurdity {𝓤} {A} = firstly , secondly
 --"We now define a symbol for the negation of equality.
 _≢_ : {X : 𝓤 ̇} → X → X → 𝓤 ̇
 x₁ ≢ x₂ = ¬ (x₁ ≡ x₂)
+infix   0 _≢_
 
---"In the following proof, we have `u : x ≡ y → 𝟘` and need to define a function `y ≡ x → 𝟘`. So all we
--- need to do is to compose the function that inverts identifications with `u`:
+--Here, we have `u≢v : u ≡ v → 𝟘` and we need `v≢u : v ≡ u → 𝟘`, so just compose `u≢v` with the function that inverts ids.
 ≢-sym : {X : 𝓤 ̇} {u v : X} → u ≢ v → v ≢ u
-≢-sym {𝓤} {X} {u}{v} u≡v→𝟘 = λ v≡u → u≡v→𝟘 (v≡u ⁻¹)
+≢-sym {𝓤} {X} {u}{v} u≢v = u≢v ∘ (_⁻¹)
 
---"To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘`
--- where `id` is the identity function of the universe `𝓤₀`. More generally, we have the following conversion of type
--- identifications into functions:
+--(paraphrasing MHE) To show the type `𝟙` is not the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘`
+-- where `id` is the identity on the universe `𝓤₀`. More generally, we have the following conversion of type ids into functions:
 Id→Fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
 Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇))
 
---"Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live. An equivalent
--- definition is the following, where this time the identity function is that of the type `X`:
+--(paraphrasing MHE) Equivalently, we could use the identity on `X`:
 Id→Fun' : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
 Id→Fun' (refl X) = 𝑖𝑑 X
 
-Id→Funs-agree : {X Y : 𝓤 ̇} (p : X ≡ Y)
- →              Id→Fun p ≡ Id→Fun' p
+Id→Funs-agree : {X Y : 𝓤 ̇} (p : X ≡ Y) → Id→Fun p ≡ Id→Fun' p
 Id→Funs-agree (refl X) = refl (𝑖𝑑 X)
 
---"So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`. We apply this
--- function to `⋆ : 𝟙` to conclude the proof.
+--(paraphrasing MHE) So given `p : 𝟙 ≡ 𝟘`, we get a function `𝟙 → 𝟘`. Applying this to `⋆ : 𝟙` we conclude the proof of 𝟙 ≢ 𝟘.
 𝟙-is-not-𝟘 : 𝟙 ≢ 𝟘
 𝟙-is-not-𝟘 𝟙≡𝟘 = Id→Fun 𝟙≡𝟘 ⋆
 
---"To show that the elements `₁` and `₀` of the two-point type `𝟚` are not equal, we reduce to the above case.
---(where, recall, 𝟚 = 𝟙 + 𝟙 is the disjoint sum of singleton type 𝟙 with itself and 
--- we named the left and right points of 𝟚 using patterns `₀ = inl ⋆` and `₁ = inr ⋆`)
+--(paraphrasing MHE) To show that the inhabitants `₁` and `₀` of `𝟚` are not equal, we reduce to the above case.
+--(recall, 𝟚 = 𝟙 + 𝟙 is the disjoint union of 𝟙 with a copy of itself; we named the points of 𝟚 using patterns `₀ = inl ⋆`, `₁ = inr ⋆`)
 ₁-is-not-₀ : ₁ ≢ ₀
 ₁-is-not-₀ ₁≡₀ = 𝟙-is-not-𝟘 𝟙≡𝟘
  where
@@ -831,14 +765,13 @@ Id→Funs-agree (refl X) = refl (𝑖𝑑 X)
 
   𝟙≡𝟘 : 𝟙 ≡ 𝟘
   𝟙≡𝟘 = ap f ₁≡₀
-  
---"*Remark*. Agda allows us to use a pattern `()` to get the following quick proof.  However, this method of
--- proof doesn't belong to the realm of MLTT. Hence we will use the pattern `()` only in the above
--- definition of `𝟘-induction` and nowhere else in these notes.
+
+--"REMARK. Agda allows us to use a pattern `()` to get the following quick proof.  However, this method of proof doesn't belong to the realm
+-- of MLTT. Hence we will use the pattern `()` only in the above definition of `𝟘-induction` and nowhere else.
 ₁-is-not-₀[not-an-MLTT-proof] : ¬(₁ ≡ ₀)
 ₁-is-not-₀[not-an-MLTT-proof] ()
 
---"Perhaps the following is sufficiently self-explanatory given the above:
+--DECIDABILITY.
 decidable : 𝓤 ̇ → 𝓤 ̇
 decidable A = A + ¬ A
 
@@ -851,22 +784,11 @@ has-decidable-equality X = (x₁ x₂ : X) → decidable (x₁ ≡ x₂)
 𝟚-has-decidable-equality ₁ ₀ = inr ₁-is-not-₀
 𝟚-has-decidable-equality ₁ ₁ = inl (refl ₁)
 
-{-"So we consider four cases. In the first and the last, we have equal things and so we give an answer in the left-hand side
-   of the sum. In the middle two, we give an answer in the right-hand side, where we need functions
-   `₀ ≡ ₁ → 𝟘` and `₁ ≡ ₀ → 𝟘`... `≢-sym₁-is-not-₀` and `₁-is-not-₀` respectively.
-
-  "The following is more interesting. We consider the two possible cases for `n`. The first one assumes a hypothetical function
-   `f : ₀ ≡ ₀ → 𝟘`, from which we get `f (refl ₀) : 𝟘`, and then, using `!𝟘`, we get an element of any type we like, which we
-   choose to be `₀ ≡ ₁`, and we are done. The other case `n = ₁` doesn't need to use the hypothesis `f : ₁ ≡ ₀ → 𝟘`,
-   because the desired conclusion holds right away, as it is `₁ ≡ ₁`, which is proved by `refl ₁`. But notice that there is
-   nothing wrong with the hypothesis `f : ₁ ≡ ₀ → 𝟘`. For example, we can use `not-zero-is-one` taking `n` to be `₀`
-   and `f`to be `₁-is-not-₀`, so that the hypotheses can be fulfilled in the second equation. -}
 not-zero-is-one : (n : 𝟚) → n ≢ ₀ → n ≡ ₁
 not-zero-is-one ₀ n≢₀ = !𝟘 (₀ ≡ ₁) (n≢₀ (refl ₀))
 not-zero-is-one ₁ _ = refl ₁
 
---"The following generalizes `₁-is-not-₀`, both in its statement and its proof (so we could have formulated
--- it first and then used it to deduce `₁-is-not-₀`):
+--"The following generalizes `₁-is-not-₀`... (so we could have formulated it first and used it to deduce `₁-is-not-₀`):
 inl-inr-disjoint-images : {X : 𝓤 ̇} {Y : 𝓥 ̇} {x : X} {y : Y} → inl x ≢ inr y
 inl-inr-disjoint-images {𝓤}{𝓥}{X}{Y} inlx≡inry = 𝟙-is-not-𝟘 𝟙≡𝟘
  where
@@ -877,16 +799,17 @@ inl-inr-disjoint-images {𝓤}{𝓥}{X}{Y} inlx≡inry = 𝟙-is-not-𝟘 𝟙�
   𝟙≡𝟘 : 𝟙 ≡ 𝟘
   𝟙≡𝟘 = ap f inlx≡inry
 
---"If `P or Q` holds and `P` fails, then `Q` holds:
-right-fails-gives-left-holds : {P : 𝓤 ̇} {Q : 𝓥 ̇} → P + Q → ¬ Q → P
-right-fails-gives-left-holds (inl p) _ = p
-right-fails-gives-left-holds (inr q) ¬Q = !𝟘 _ (¬Q q)
 
-disjunctive-syllogism = right-fails-gives-left-holds
+--     (P ∨ Q)       ¬Q
+--   --------------- (ds)
+--             P
+disjunctive-syllogism : {P : 𝓤 ̇} {Q : 𝓥 ̇} → P + Q → ¬ Q → P
+disjunctive-syllogism (inl p) _ = p
+disjunctive-syllogism (inr q) ¬Q = !𝟘 _ (¬Q q)
 
--- -----------------------------------------------------------------------------
---"Example: formulation of the twin-prime conjecture
---"We illustrate the above constructs of MLTT to formulate [the Twin Prime] conjecture.
+
+--------------------------------------------------------------------------------
+--"EXAMPLE: formulation of the twin-prime conjecture.  We illustrate the above constructs of MLTT to formulate [the Twin Prime] conjecture.
 module twin-primes where
  open Arithmetic renaming (_×_ to _*_ ; _+_ to _∔_)
  open ℕ-order
@@ -897,16 +820,13 @@ module twin-primes where
  twin-prime-conjecture : 𝓤₀ ̇
  twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n) × is-prime p × is-prime (p ∔ 2)
 
---"Thus, not only can we write down definitions, constructions, theorems and proofs, but also conjectures.
--- They are just definitions of types. Likewise, the univalence axiom (to be formulated in due course) is a type."
-
-
+--(paraphrasing MHE) Thus, we can write not only definitions, constructions, theorems and proofs, but also conjectures.
+--They are just definitions of types.
 
 -------------------------------------------------------------------------------------------------
 -- PEANO  (remaining Peano axioms and basic arithmetic).
 -- see:  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#basicarithmetic
 
---"We first prove the remaining Peano axioms:
 s≢0 : (x : ℕ) -> succ x ≢ 0
 s≢0 x s≡0 = 𝟙-is-not-𝟘 (g s≡0)
  where
@@ -916,8 +836,6 @@ s≢0 x s≡0 = 𝟙-is-not-𝟘 (g s≡0)
 
   g : succ x ≡ 0 -> 𝟙 ≡ 𝟘
   g = ap f
-
-positive-not-zero = s≢0 -- alias
 
 --"To show that the successor function is left cancellable, we can use the following predecessor function."
 pred : ℕ -> ℕ
@@ -945,8 +863,8 @@ succ-lc = succ-elim -- alias
 
 ------------------------------------------------------------------------
 -- Unary relations (aka predicates).  (cf. Relation/Unary.agda from the Agda std lib)
--- `Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
--- Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
+--`Pred A 𝓤` can be viewed as some property that elements of type A might satisfy.
+--Consequently `P : Pred A 𝓤` can also be seen as a subset of A containing all the elements of A that satisfy property P.
 Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
 Pred A 𝓥 = A → 𝓥 ̇
 
@@ -968,10 +886,8 @@ P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 _⊇_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
 P ⊇ Q = Q ⊆ P
 
-
-
--- =====================================================================
--- Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
+------------------------------------------------------------------------
+--Stuff from our old Preliminaries.agda file, moderately notationally tweaked.
 
 _∈∈_ :  {A : 𝓤 ̇} {B : 𝓦 ̇} →  (A  →  B) →  Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 _∈∈_  f S = (x : _) → f x ∈ S
@@ -981,8 +897,6 @@ Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
 img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → Σ P
 img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
--- img : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) (P : Y → Ω 𝓥) →  Im f ⊆ P  → X → Σ P
--- img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
 
 ≡-elim-left :  {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂)   →   A₁ ≡ A₂
 ≡-elim-left e = ap pr₁ e
@@ -995,22 +909,6 @@ img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
                ------------------------
  →              (A₁ , B₁)  ≡  (A₂ , B₂)
 ≡-×-intro (refl _) (refl _) = (refl _)
-
--------------------------------------------------------------------------------------------------------------
--- Images and surjections.
--- image : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
--- image f = Σ y ꞉ (codomain f) , ∃! x ꞉ (domain f) , f x ≡ y
-
--- restriction : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → image f → Y
--- restriction f (y , _) = y
-
---NOTATION (cf. Relation/Binary/PropositionalEquality/Core.agda)
-cong : {X : 𝓤 ̇} {Y : 𝓦 ̇} (f : X → Y){x y : X} → x ≡ y → f x ≡ f y
-cong  = ap
-
--- -- cf. Relation/Binary/Core.agda
-cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
-cong-app {f = f} (refl _) a = refl (f a)
 
 cong-app-pred : ∀ { A : 𝓤 ̇ } { B₁ B₂ : Pred A 𝓤} (x : A)
  →          x ∈ B₁   →   B₁ ≡ B₂
@@ -1040,7 +938,7 @@ ImageIsImage {A = A} {B = B} f b a b≡fa = eq b a b≡fa
 --N.B. the assertion Image f ∋ y must come with a proof, which is of the form ∃a f a = y, so we have a witness.
 --Thus, the inverse can be "computed" in the following way:
 Inv : {A : 𝓤 ̇}  {B : 𝓦 ̇} (f : A → B) (b : B) → Image f ∋ b  →  A
-Inv f .(f a) (im a) = a  -- Cool!!!
+Inv f .(f a) (im a) = a
 Inv f b (eq b a b≡fa) = a
 
 -- special case for Set
@@ -1065,45 +963,31 @@ epic = Epic {𝓤₀} {𝓤₀}
 EpicInv : {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) → Epic f → B → A
 EpicInv f fEpic b = Inv f b (fEpic b)
 
-
--- (this belongs elsewhere)
--- The (pseudo-)inverse of an epimorphism is total.
--- EInvTotal : {𝑨 𝑪 : Algebra k S}
---   ->        (g : Hom{i}{j}{k} 𝑨 𝑪)
---   ->        Epic ∣ g ∣
---            -----------------------
---   ->        ∣ 𝑪 ∣ -> ∣ 𝑨 ∣
--- EInvTotal{𝑨}{𝑪} g gEpic = (λ c → EpicInv ∣ g ∣ gEpic c)
-
 ---------------------------------------------------------
 --Monics (injectivity)
---monic function from Set ℓ₁ to Set ℓ₂
-Monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
-Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
+monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
+monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
 
--- special case: monic function on Set
-monic : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
-monic = Monic {𝓤₀}{𝓤₀}
+monic₀ : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
+monic₀ = monic {𝓤₀}{𝓤₀}
 
 --The (pseudo-)inverse of a monic function
-MonicInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) → Monic f
- →         (b : B) → Image f ∋ b → A
-MonicInv f fMonic  = λ b Imf∋b → Inv f b Imf∋b
+monic-inv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) → monic f
+ →           (b : B) → Image f ∋ b → A
+monic-inv f fmonic  = λ b Imf∋b → Inv f b Imf∋b
 
--- The (psudo-)inverse of a monic is the left inverse.
--- MInvIsLInv : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
---   ->         (f : A -> B)
---   ->         (fMonic : Monic f)
---            ----------------------------------------
---   ->        (MonicInv f fMonic) ∘ f ≡ identity A
--- MInvIsLInv f fMonic =  ?
+--The (psudo-)inverse of a monic is the left inverse.
+monic-inv-is-linv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (fmonic : monic f)
+                   ----------------------------------------
+  →             (x : A) → (monic-inv f fmonic) (f x) (im x) ≡ x
+monic-inv-is-linv f fmonic x = refl x
 
 --bijectivity
 bijective : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
 bijective g = epic g × monic g
 
 Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
-Bijective g = Epic g × Monic g
+Bijective g = Epic g × monic g
 
 
 

@@ -1027,7 +1027,6 @@ transport-is-equiv A (refl x) = id-is-equiv (A x)
 --"Alternatively, we could have used the fact that `transport A (p ⁻¹)` is an inverse of `transport A p`.
 
 --"Here is the promised characterization of equality in `Σ` types:
-
 Σ-≡-≃ : {X : 𝓤 ̇} {A : X → 𝓥 ̇}(σ τ : Σ A)
  →     (σ ≡ τ) ≃ (Σ p ꞉ pr₁ σ ≡ pr₁ τ , transport A p (pr₂ σ) ≡ pr₂ τ)
 Σ-≡-≃ {𝓤} {𝓥} {X}{A} σ τ = invertibility-gives-≃ from-Σ-≡ (to-Σ-≡ , η , ε)

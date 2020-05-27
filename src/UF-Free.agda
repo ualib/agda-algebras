@@ -1,15 +1,16 @@
 --FILE: UF-Free.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 20 Feb 2020
---UPDATE: 23 May 2020
+--UPDATE: 27 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (Universe; 𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_)
-open import UF-Basic using (Signature; Algebra; Π')
+open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; pr₂)
+open import UF-Basic using (Signature; Algebra; Π'; SmallAlgebra; Πₛ)
 open import UF-Hom using (Hom)
 open import UF-Con using (Con; compatible-fun)
-open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext)
+open import UF-Singleton using (is-set)
+open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext; hfunext)
 open import Relation.Unary using (Pred)
 
 module UF-Free {S : Signature 𝓞 𝓥}  where
@@ -23,9 +24,9 @@ module _ {X : 𝓤 ̇} where
 
   open Term
 
-  map-Term : (Term -> Term) -> Term -> Term
+  map-Term : (Term → Term) → Term → Term
   map-Term f (generator x) = f (generator x)
-  map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i -> map-Term f (𝒕 i))
+  map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i → map-Term f (𝒕 i))
 
   ----------------------------------
   -- TERM ALGEBRA (for signature S)
@@ -66,27 +67,22 @@ module _ {X : 𝓤 ̇} {𝑨 : Algebra 𝓤 S} where
       ∣ g ∣ (node 𝓸 args)                 ∎
 
 --SUGAR:  𝓸 ̂ 𝑨  ≡  ⟦ 𝑨 ⟧ 𝓸   -------------------------------------
---Before proceding, we define some syntactic sugar that allows us
---to replace ⟦ 𝑨 ⟧ 𝓸 with (the more standard-looking) 𝓸 ̂ 𝑨.
+--Before proceding, we define some syntactic sugar that allows us to replace ⟦ 𝑨 ⟧ 𝓸 with (the more standard-looking) 𝓸 ̂ 𝑨.
 _̂_ :  (𝓸 : ∣ S ∣ ) → (𝑨 : Algebra 𝓤 S)
  →       ( ∥ S ∥ 𝓸  →  ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
 𝓸 ̂ 𝑨 = λ x → (∥ 𝑨 ∥ 𝓸) x
---We can now write 𝓸 ̂ 𝑨 for the interpretation of the basic
---operation 𝓸 in the algebra 𝑨.  N.B. below, we will write
---   𝒕 ̇ 𝑨    for the interpretation of a TERM 𝒕 in 𝑨.
+--We can now write 𝓸 ̂ 𝑨 for the interpretation of the basic operation 𝓸 in the algebra 𝑨.
+--N.B. below, we will write 𝒕 ̇ 𝑨 for the interpretation of a TERM 𝒕 in 𝑨.
+--(todo: probably we should figure out how to use the same notation for both, if possible)
 
 ----------------------------------------------------------------------
---INTERPRETATION OF TERMS
---(cf Def 4.31 of Bergman)
---Let 𝒕 : Term be a term, 𝑨 an algebra, in the signature S. We define an
---n-ary operation, denoted (𝒕 ̇ 𝑨), on 𝑨 by recursion on the struct of 𝒕.
--- 1. if 𝒕 is the var x ∈ X, 𝒂 : X -> ∣ 𝑨 ∣ a tuple from A, then (t ̇ 𝑨) 𝒂 = 𝒂 x.
--- 2. if 𝒕 = 𝓸 args, 𝓸 ∈ ∣ S ∣ an op symbol, args : ⟦ S ⟧ 𝓸 -> Term a
---    (⟦ S ⟧ 𝓸)-tuple of terms, 𝒂 : X -> ∣ A ∣ a tuple from A, then
---    (𝒕 ̇ 𝑨) 𝒂 = ((𝓸 args) ̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{ i -> ((args i) ̇ 𝑨) 𝒂 }
--- Here is how we implement this definition in Agda.
-
---Interpretation of a term.
+--INTERPRETATION OF TERMS (cf Def 4.31 of Bergman)
+--Let 𝒕 : Term be a term and 𝑨 an S-algebra. We define the n-ary operation 𝒕 ̇ 𝑨 on 𝑨 by structural recursion on 𝒕.
+-- 1. if 𝒕 = x ∈ X (a variable) and 𝒂 : X → ∣ 𝑨 ∣ is a tuple from A, then (t ̇ 𝑨) 𝒂 = 𝒂 x.
+-- 2. if 𝒕 = 𝓸 args, where 𝓸 ∈ ∣ S ∣ is an op symbol and args : ⟦ S ⟧ 𝓸 → Term is an (⟦ S ⟧ 𝓸)-tuple of terms and
+--    𝒂 : X → ∣ A ∣ is a tuple from A, then (𝒕 ̇ 𝑨) 𝒂 = ((𝓸 args) ̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{ i → ((args i) ̇ 𝑨) 𝒂 }
+--
+--Interpretation of terms in Agda.
 _̇_ : {X : 𝓤 ̇ } → Term → (𝑨 : Algebra 𝓤 S) →  ( X → ∣ 𝑨 ∣ ) → ∣ 𝑨 ∣
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x → (args x ̇ 𝑨) 𝒂 }
@@ -108,16 +104,13 @@ interp-prod2 fe {X = X} (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ )
   let tᴬ = λ z → 𝒕 z ̇ Π' A in
     ( 𝓸 ̂ Π' A )  ( λ s → tᴬ s tup )                                    ≡⟨ refl _ ⟩
     ∥ Π' A ∥ 𝓸 ( λ s →  tᴬ s tup )                                     ≡⟨ ap ( ∥ Π' A ∥ 𝓸 ) (fe  λ x → IH x tup) ⟩
-    ∥ Π' A ∥ 𝓸 (λ s → (λ ⱼ → (𝒕 s ̇ A ⱼ ) ( λ ℓ → tup ℓ ⱼ ) ) )  ≡⟨ refl _ ⟩
-    ( λ ᵢ → (𝓸 ̂ A ᵢ ) (λ s → (𝒕 s ̇ A ᵢ ) (λ ℓ → tup ℓ ᵢ ) ) )     ∎
-
+    ∥ Π' A ∥ 𝓸 (λ s → (λ ⱼ → (𝒕 s ̇ A ⱼ ) ( λ ℓ → tup ℓ ⱼ ) ) )    ≡⟨ refl _ ⟩
+    ( λ ᵢ → (𝓸 ̂ A ᵢ ) (λ s → (𝒕 s ̇ A ᵢ ) (λ ℓ → tup ℓ ᵢ ) ) )       ∎
 
 -- Recall (cf. UAFST Thm 4.32)
 -- Theorem 1. If A and B are algebras of type S, then the following hold:
 --   1. For every n-ary term t and homomorphism g: A → B,  g ( tᴬ ( a₁, ..., aₙ ) ) = tᴮ ( g (a₁), ..., g (aₙ) ).
---
 --  2. For every term t ∈ T(X) and every θ ∈ Con(A),  a θ b → t(a) θ t(b).
---
 --  3. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 --
 -- Proof of 1. (homomorphisms commute with terms).
@@ -151,8 +144,8 @@ _⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
 
 
 
----------------------------------------------------------
-
+------------------------------------------------------------------------------------------
+-- Misc unused stuff -----------------------------------------------------------------------
 
 -- ARITY OF A TERM
 -- argsum : ℕ -> (ℕ -> ℕ) -> ℕ
@@ -163,42 +156,3 @@ _⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
 -- ⟨ node 𝓸 args ⟩ₜ = (S ρ) 𝓸 + argsum ((S ρ) 𝓸) (λ i -> ⟨ args i ⟩ₜ)
 
 
--- Goal: B ⊢ p ≈ q
--- ————————————————————————————————————————————————————————————
--- B≤A     : B is-subalgebra-of A
--- A∈SClo𝓚 : A ∈ SClo 𝓚
--- A       : Algebra 𝓤 S
--- B       : Algebra 𝓤 S
--- 𝓚⊢p≋q   : 𝓚 ⊢' p ≋ q
--- q       : Term
--- p       : Term
--- X       : 𝓤 ̇
-
-
---------------------------------------------------------------------
--- vclo-id1 {p} {q} α ( vsub A∈VClo𝓚 B≤A ) = {!!}
---  vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
-
--- Goal: B ⊢ p ≈ q
--- ————————————————————————————————————————————————————————————
--- B≤A     : B is-subalgebra-of A
--- A∈VClo𝓚 : A ∈ VClo 𝓚
--- A       : Algebra 𝓤 S
--- B       : Algebra 𝓤 S
--- α       : 𝓚 ⊢' p ≋ q
--- q       : Term
--- p       : Term
--- X       : 𝓤 ̇
-
-
---   vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
--- Goal: hom-image-alg f ⊢ p ≈ q
--- ————————————————————————————————————————————————————————————
--- 𝑨∈VClo𝓚 : A ∈ VClo 𝓚
--- f       : Hom A B
--- B       : Algebra 𝓤 S
--- A       : Algebra 𝓤 S
--- α       : 𝓚 ⊢' p ≋ q
--- q       : Term
--- p       : Term
--- X       : 𝓤 ̇

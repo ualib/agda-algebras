@@ -130,20 +130,14 @@ Group 𝓤 = Σ X ꞉ 𝓤 ̇ , is-set X × (Σ · ꞉ (X → X → X) ,  (Σ e 
                                                × (associative ·)
                                                × (Σ ⁻¹̇ ꞉ (X → X) , invleft e · ⁻¹̇ × invright e · ⁻¹̇) ) )
 
--- ⟨_⟩ : Group 𝓤 → 𝓤 ̇
--- ⟨ G , i , _·_ ⟩ = G
-
 --"*Exercise*. Write down the various types of categories defined in the HoTT book in Agda."
 
 --"*Exercise*. Try to define a type of topological spaces."
 
 {----------------------------------------------------------------------------
- "Magma equivalences
-  ------------------
-  We now define magma equivalences and show that the type of magma equivalences is identified with the type of magma
-   isomorphisms. In the next section, which proves a *structure identity principles*, we apply this to characterize magma
-   equality and equality of other mathematical structures in terms of equivalences of underlying types. For simplicity we
-   assume global univalence here." -}
+ "Magma equivalences.  We now define magma equivalences and show that the type of magma equivalences is identified with the type of magma
+   isomorphisms. In the next section, which proves a *structure identity principle*, we apply this to characterize magma equality and equality of
+   other mathematical structures in terms of equivalences of underlying types. For simplicity we assume global univalence here." -}
 module magma-equivalences (𝓤★ : Univalence) where
 
  dfe : global-dfunext
