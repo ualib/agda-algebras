@@ -181,24 +181,15 @@ module magma-equivalences (𝓤★ : Univalence) where
     γ : fhom , g , ghom , g∼f , f∼g ≡ fhom' , g' , g'hom , g'∼f , f∼g'
     γ = to-×-≡ (p , to-Σ-≡ (q , ×✧ _ _))
 
- being-magma-iso-is-subsingleton' : {M N : Magma 𝓤} ( f : ⟨ M ⟩ → ⟨ N ⟩ ) → is-subsingleton ( is-magma-iso M N f )
- being-magma-iso-is-subsingleton' {M = M} {N = N} = being-magma-iso-is-subsingleton M N
-
  --"By a magma equivalence we mean an equivalence which is a magma homomorphism. This notion is again a subsingleton type.
- is-magma-equiv' : { M N : Magma 𝓤 } → ( ⟨ M ⟩ → ⟨ N ⟩ ) → 𝓤 ̇
- is-magma-equiv' {M = M} {N = N} f = is-equiv f × is-magma-hom M N f
-
  is-magma-equiv : ( M N : Magma 𝓤 ) → ( ⟨ M ⟩ → ⟨ N ⟩ ) → 𝓤 ̇
- is-magma-equiv M N = is-magma-equiv' {M = M} {N = N}
+ is-magma-equiv M N f = is-equiv f × is-magma-hom M N f
 
  being-magma-equiv-is-subsingleton : (M N : Magma 𝓤) ( f : ⟨ M ⟩ → ⟨ N ⟩ )
   →                     is-subsingleton ( is-magma-equiv M N f )
 
  being-magma-equiv-is-subsingleton M N f =
   ×-is-subsingleton (being-equiv-is-subsingleton dfe dfe f) (being-magma-hom-is-subsingleton M N f)
-
- being-magma-equiv-is-subsingleton' : {M N : Magma 𝓤} ( f : ⟨ M ⟩ → ⟨ N ⟩ ) → is-subsingleton ( is-magma-equiv M N f )
- being-magma-equiv-is-subsingleton' {M = M} {N = N} f = being-magma-equiv-is-subsingleton M N f
 
  --"A function is a magma isomorphism if and only if it is a magma equivalence.
  magma-isos-are-magma-equivs : ( M N : Magma 𝓤 )
@@ -209,9 +200,6 @@ module magma-equivalences (𝓤★ : Univalence) where
   where
    feq : is-equiv f
    feq = invertibles-are-equivs f ( g , g∼f , f∼g )
-
- magma-isos-are-magma-equivs' : { M N : Magma 𝓤 } ( f : ⟨ M ⟩ → ⟨ N ⟩ ) → is-magma-iso M N f → is-magma-equiv M N f
- magma-isos-are-magma-equivs' {M = M} {N = N} = magma-isos-are-magma-equivs M N
 
  magma-equivs-are-magma-isos : ( M N : Magma 𝓤 )
                ( f : ⟨ M ⟩ → ⟨ N ⟩ )    →    is-magma-equiv M N f
@@ -233,9 +221,6 @@ module magma-equivalences (𝓤★ : Univalence) where
       finv ( f (finv a) ·⟨ N ⟩ f (finv b) )    ≡⟨ ap finv  ((fhom (finv a) (finv b) )⁻¹) ⟩
       finv ( f ( (finv a) ·⟨ M ⟩ (finv b) ) )  ≡⟨ finv∼f ( finv a ·⟨ M ⟩ finv b ) ⟩
       ( (finv a) ·⟨ M ⟩ (finv b) )             ∎
-
- magma-equivs-are-magma-isos' : {M N : Magma 𝓤} (f : ⟨ M ⟩ → ⟨ N ⟩) → is-magma-equiv M N f → is-magma-iso M N f
- magma-equivs-are-magma-isos' {M = M} {N = N} = magma-equivs-are-magma-isos M N
 
  --"Because these two notions are subsingleton types, we conclude that they are equivalent.
  magma-iso-charac : ( M N : Magma 𝓤 ) ( f : ⟨ M ⟩ → ⟨ N ⟩ )

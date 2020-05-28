@@ -636,9 +636,13 @@ ap cong : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X} → x ≡ x' → f x
 ap f {x} {x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
 cong  = ap   -- alias    (NOTATION (cf. `cong` in `Relation/Binary/PropositionalEquality/Core.agda` )
 
+ap-cong : {X : 𝓤 ̇} {Y : 𝓥 ̇} {f f' : X → Y}{x x' : X} → f ≡ f' → x ≡ x' → f x ≡ f' x'
+ap-cong {f = f}{x = x} (refl _) (refl _) = refl (f x)
+
 --cf. Relation/Binary/Core.agda
 cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
 cong-app {f = f} (refl _) a = refl (f a)
+
 
 --"Notice that we have so far used the recursion principle `transport` only. To reason about `transport`, `_∙_`, `_⁻¹` and `ap`, we
 -- will need to use the full induction principle `𝕁` (or equivalently pattern matching on `refl`)."

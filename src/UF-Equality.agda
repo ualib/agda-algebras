@@ -1116,6 +1116,8 @@ equiv-to-singleton e = retract-of-singleton (≃-gives-◁ e)
 
 
 
+
+
 ---------------------
 
 
@@ -1155,25 +1157,4 @@ equiv-to-singleton e = retract-of-singleton (≃-gives-◁ e)
 -- inv-invertible f {g , η} = f , inv-ids g (f , pr₂ η , pr₁ η)
 -- end wjd added -----------------
 
-
-
-
-
-
-
 ------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -866,9 +866,10 @@ haes-are-invertible f ( g , η , ε , τ ) = g , η , ε
 
 --------------------------------
 
-transport-ap-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
-                 {x x' : X} (a : x' ≡ x) (b : f x' ≡ f x)
-               → (transport (λ - → f - ≡ f x) a b ≡ refl (f x)) ≃ (ap f a ≡ b)
+transport-ap-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) {x x' : X} 
+                      (a : x' ≡ x)                 (b : f x' ≡ f x)
+          ---------------------------------------------------------
+ →       (transport (λ - → f - ≡ f x) a b ≡ refl (f x))   ≃   (ap f a ≡ b)
 
 transport-ap-≃ f (refl x) b = γ
  where

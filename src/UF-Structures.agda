@@ -1,39 +1,32 @@
 --FILE: UF-Structures.agda
---DATE: 22 Apr 2020
 --BLAME: williamdemeo@gmail.com
---REF: Based on Martin Escardo's course notes
---       cf. https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sip
+--DATE: 22 Apr 2020
+--UPDATE: 28 May 2020
+--REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
+--SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sip 
+--      In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
+--      Throughout, MHE = Martin Hötzel Escardo.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module UF-Structures where
 
-open import UF-Prelude
-  using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇; _⊔_; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_;
-  transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication)
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇; _⊔_; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication)
 
 open import UF-Singleton using (is-set; is-subsingleton; singletons-are-subsingletons)
 
-open import UF-Equality
-  using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■;
-  ⌜_⌝; ⌜⌝-is-equiv; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
+open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ⌜_⌝; ⌜⌝-is-equiv; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
 
-open import UF-Extensionality
-  using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; 
-  Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality')
+open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality')
 
-open import UF-Univalence
-  using (is-univalent; Id→Eq; Σ-assoc; equivs-closed-under-∼; ap₂; ×-is-subsingleton; to-subtype-≡; equiv-to-subsingleton;
-  logically-equivalent-subsingletons-are-equivalent; left-cancellable; subtypes-of-sets-are-sets; Σ-change-of-variable)
+open import UF-Univalence using (is-univalent; Id→Eq; Σ-assoc; equivs-closed-under-∼; ap₂; ×-is-subsingleton; to-subtype-≡; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent; left-cancellable; subtypes-of-sets-are-sets; Σ-change-of-variable)
 
-open import UF-Embedding
-  using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; fiberwise-retractions-are-equivs; universal-fiberwise-equiv;
-  embeddings-are-lc; _↪_; Subtypes; χ-special; χ-special-is-equiv)
+open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; fiberwise-retractions-are-equivs; universal-fiberwise-equiv; embeddings-are-lc; _↪_; Subtypes; χ-special; χ-special-is-equiv)
 
 open import UF-Algebra using (SNS; ⟨_⟩; canonical-map; characterization-of-≡; _≃[_]_)
 
 -------------------------------------------------------------------------------------------------
--- ∞-Magmas
+--∞-Magmas
 module ∞-magma-identity {𝓤 : Universe} where
 
   ∞-magma-structure : 𝓤 ̇ → 𝓤 ̇
@@ -95,7 +88,7 @@ module uf-algebra-with-axioms where
   ⟪_⟫ : {S : 𝓤 ̇ → 𝓥 ̇} {axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇}
    →  (Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s) → 𝓤 ̇
 
-  ⟪ X , _ , _ ⟫ = X           -- NOTATION. Type ⟪ as `\<<` and ⟫ as `\>>`.
+  ⟪ X , _ , _ ⟫ = X           -- NOTATION. Type ⟪ and ⟫ as `\<<` and `\>>`.
 
   --"In the following construction:
   --    * For `ι'` and `ρ'` we use `ι` and `ρ` ignoring the axioms.
@@ -151,8 +144,7 @@ module uf-algebra-with-axioms where
   -- characterization-of-≡ : is-univalent 𝓤 → { S : 𝓤 ̇ → 𝓥 ̇ } ( σ : SNS S 𝓦 ) → ( A B : Σ S ) → ( A ≡ B ) ≃ ( A ≃[ σ ] B )
 
 ------------------------------------------
--- Magmas
--- --------
+--Magmas.
 module magma-identity {𝓤 : Universe} where
 
   open uf-algebra-with-axioms
@@ -183,8 +175,7 @@ module magma-identity {𝓤 : Universe} where
 -- !!! Come back to this later !!!
 
 --------------------------------------------------
--- Pointed types
--- --------------
+--Pointed types.
 module pointed-type-identity {𝓤 : Universe} where
 
   Pointed : 𝓤 ̇ → 𝓤 ̇
@@ -222,13 +213,13 @@ module pointed-type-identity {𝓤 : Universe} where
   characterization-of-characterization-of-pointed-type-≡ 𝓤★ A = refl _
 
 ------------------------------------------------------
--- Combining two mathematical structures
+--Combining two mathematical structures.
 
 {-"We now show how to join two mathematics structures so as to obtain a characterization of the identifications of the join from the
     characterization of the equalities of the structures. For example, we build the characterization of identifications of pointed ∞-magmas from
     the characterizations of the identifications of pointed types and the characterization of the identifications of magmas. Moreover, adding
     axioms, we get a characterization of identifications of monoids which amounts to the characterization of identifications of pointed ∞-magmas.
-    Further adding an axiom, we get an automatic characterization of group identifications. -}
+    Further adding an axiom, we get an automatic characterization of group identifications." -}
 
 module uf-algebra-join where
 
@@ -277,8 +268,7 @@ module uf-algebra-join where
     γ = fiberwise-retractions-are-equivs ( λ z₁ → A x₀ (pr₁ z₁) × B y₀ (pr₂ z₁) )
               (x₀ , y₀) r (λ z₁ → (s z₁ , η z₁))
 
-  --"We consider two given mathematical structures specified by `S₀` and `S₁`, and work with structures specified by their
-  -- combination `λ X → S₀ X × S₁ X`
+  --"We consider two... structures specified by `S₀` and `S₁`, and work with structures specified by their combination `λ X → S₀ X × S₁ X`
   variable 𝓥₀ 𝓥₁ 𝓦₀ 𝓦₁ : Universe
 
   ⟪_⟫ : {S₀ : 𝓤 ̇ → 𝓥₀ ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇} → (Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X) → 𝓤 ̇
@@ -368,9 +358,8 @@ module pointed-∞-magma-identity {𝓤 : Universe} where
    →     ⌜ characterization-of-pointed-magma-≡ 𝓤★ A A ⌝ (refl A)   ≡  ( 𝑖𝑑 ⟪ A ⟫ , id-is-equiv ⟪ A ⟫ , refl _ , refl _ )
   characterization-of-characterization-of-pointed-magma-≡ 𝓤★ A = refl _
 
------------------------------
--- Monoids.
---"In the following example, we combine joins and addition of axioms.
+-----------------------------------------------------------------------------------
+--Monoids. (combining joins and addition of axioms)
 module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   open import UF-Monoid using (left-neutral; right-neutral; associative)
   dfe : dfunext 𝓤 𝓤
@@ -528,8 +517,6 @@ module associative-∞-magma-identity {𝓤 : Universe} {𝓤★ : is-univalent 
                      γ : c ≡ (_·_ , β) , refl _·_ , k
                      γ = ap g q
 
-
-
   --"The promised characterization of associative ∞-magma equality then follows directly from the general structure of identity principle:
   _≅_ : ∞-aMagma → ∞-aMagma → 𝓤 ̇
   ( X , _·_ , α )  ≅  ( Y , _*_ , β ) = Σ f ꞉ (X → Y)
@@ -541,11 +528,8 @@ module associative-∞-magma-identity {𝓤 : Universe} {𝓤★ : is-univalent 
   characterization-of-∞-aMagma-≡ = characterization-of-≡ 𝓤★ sns-data
 
 --------------------------------------------------
--- Groups.
---"We add an axiom to monoids to get groups.
-
+-- Groups. "We add an axiom to monoids to get groups."
 module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
-
   hfe : hfunext 𝓤 𝓤
   hfe = univalence-gives-hfunext 𝓤★
 
@@ -595,18 +579,16 @@ module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   characterization-of-group-≡ : (A B : Group) → (A ≡ B) ≃ (A ≅ B)
   characterization-of-group-≡ = characterization-of-≡ 𝓤★ sns-data
 
-  --"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
+  --"EXERCISE. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
   -- identification to the identity equivalence.
-
   -- SOLUTION.
   characterization-of-characterization-of-group-≡ : (𝓤★ : is-univalent 𝓤) (A : Group)
    →     ⌜ characterization-of-group-≡ A A ⌝ (refl A)   ≡  ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ , refl _  )
   characterization-of-characterization-of-group-≡ 𝓤★ A = refl _
 
---"*Exercise*. In the case of groups, as opposed to monoids, the preservation of the unit follows from the preservation of the
+--"EXERCISE. In the case of groups, as opposed to monoids, the preservation of the unit follows from the preservation of the
 -- multiplication, and hence one can remove `f d ≡ e` from the above definition. Prove that `(A ≅ B) ≃ (A ≅' B)` and hence,
 -- by transitivity, `(A ≡ B) ≃ (A ≅' B)` where
-
   _≅'_ : Group → Group → 𝓤 ̇
   (X , ( (_·_ , d) , _) , _) ≅' (Y , ( (_*_ , e) , _) , _) =
     Σ f ꞉ (X → Y) , is-equiv f
@@ -793,7 +775,7 @@ module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
 
      2. A subgroup of a group `G` is a group `H` *together* with a homomorphic embedding `H → G`. With this second  definition, two
         subgroups `H` and `H'` are equal iff the embeddings `H → G` and `H' → G` can be completed to a commutative triangle by a
-        group isomorphism `H → H'`, which is necessarily unique when it exists (cf. the discussion of equality in slice types below. -}
+        group isomorphism `H → H'`, which is necessarily unique when it exists (cf. the discussion of equality in slice types below."  -}
 
 module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
