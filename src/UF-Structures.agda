@@ -17,7 +17,7 @@ open import UF-Singleton using (is-set; is-subsingleton; singletons-are-subsingl
 
 open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
 
-open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality'; ⊆-is-subsingleton)
+open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality'; ⊆-is-subsingleton; _/_)
 
 open import UF-Univalence using (is-univalent; Id→Eq; Σ-assoc; equivs-closed-under-∼; ap₂; ×-is-subsingleton; to-subtype-≡; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent; left-cancellable; subtypes-of-sets-are-sets; Σ-change-of-variable)
 
@@ -1088,11 +1088,18 @@ module slice-identity {𝓤 𝓥 : Universe} (R : 𝓥 ̇) where
    θ : {X : 𝓤 ̇} (g h : S X) → is-equiv (canonical-map ι ρ g h)
    θ g h = equivs-closed-under-∼ (id-is-equiv (g ≡ h) ) cme
 
+ _≅_  : 𝓤 / R → 𝓤 / R → 𝓤 ⊔ 𝓥 ̇
+ (X , g) ≅ (Y , h) = Σ f ꞉ (X → Y), is-equiv f × (g ≡ h ∘ f )
+
+ characterization-of-/-≡ : is-univalent 𝓤 → (A B : 𝓤 / R) → (A ≡ B) ≃ (A ≅ B)
+ characterization-of-/-≡ ua = characterization-of-≡ ua sns-data
+
 --[ wjd:  TODO: do these exercises... they are important/relevant ]
 
 --EXERCISE. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
 --identification to the identity equivalence.
 
---EXERCISE Apply the ideas of this section to characterize equality of the type `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) ,
---is-embedding f × is-homomorphism H G f` as discussed in the section on subgroup equality."
+--EXERCISE Apply the ideas of this section to characterize equality of the type
+-- `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) , is-embedding f × is-homomorphism H G f`
+-- as discussed in the section on subgroup equality."
 
