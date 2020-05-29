@@ -14,11 +14,11 @@ module UF-Extensionality where
 
 -- open import Data.Bool using (Bool; true; false)
 
-open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id; 𝟙; 𝟚; ₀; ₁; ≡-elim-right; 𝟙-is-not-𝟘)
+open import UF-Prelude using (Universe; 𝓘; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; 𝓤ω; 𝑖𝑑; id; ℕ; is-empty; 𝟘; !𝟘; ¬; zero; succ; _∘_; _,_; _×_; Σ; -Σ; pr₁; pr₂; Π; -Π; _+_; inl; inr; domain; codomain; _≡_; refl; ap;_≡⟨_⟩_;_∎;_∼_; transport; _⁻¹; _⇔_; Epic; EpicInv; InvIsInv; Id; 𝟙; 𝟚; ₀; ₁; ≡-elim-right; 𝟙-is-not-𝟘; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (is-center; is-set; is-singleton; is-subsingleton; center;centrality; singletons-are-subsingletons; pointed-subsingletons-are-singletons; EM; is-prop; 𝟙-is-singleton)
 
-open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel_; to-Σ-≡'; singletons-are-sets; wconstant; Hedberg; types-with-wconstant-≡-endomaps-are-sets; to-Σ-≡; singleton-types'-are-singletons; _◁_; retract-of-singleton; has-section; singleton-type; _≃_; fiber; is-equiv; invertible; id-is-equiv; invertibles-are-equivs; inv-elim-left; inv-elim-right; inverse; equivs-are-invertible; ≃-gives-▷; _●_; ≃-sym; Σ-≡-≃; Σ-cong; _≃⟨_⟩_; _■; Σ-flip; ∘-is-equiv; inversion-involutive; invertibility-gives-≃; ⌜_⌝; ⌜⌝-is-equiv; inverses-are-sections; inverses-are-retractions)
+open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel_; to-Σ-≡'; singletons-are-sets; wconstant; Hedberg; types-with-wconstant-≡-endomaps-are-sets; to-Σ-≡; singleton-types'-are-singletons; _◁_; retract-of-singleton; has-section; singleton-type; _≃_; fiber; is-equiv; invertible; id-is-equiv; invertibles-are-equivs; inv-elim-left; inv-elim-right; inverse; equivs-are-invertible; ≃-gives-▷; _●_; ≃-sym; Σ-≡-≃; Σ-cong; _≃⟨_⟩_; _■; Σ-flip; ∘-is-equiv; inversion-involutive; invertibility-gives-≃; inverses-are-sections; inverses-are-retractions)
 
 open import UF-Univalence using (is-univalent; equivs-are-lc; ΠΣ-distr-≃; maps-of-singletons-are-equivs; NatΣ-equiv-gives-fiberwise-equiv; pr₁-equiv; Eq→Id; to-subtype-≡; Id→Eq; subsingleton-criterion'; equiv-to-subsingleton; has-retraction; joyal-equivs-are-invertible; is-joyal-equiv; ×-is-subsingleton'; Σ-assoc; Σ-is-subsingleton; logically-equivalent-subsingletons-are-equivalent; Id→fun; ×-is-subsingleton; 𝕁-equiv; is-hae; transport-ap-≃; haes-are-equivs; transport-map-along-≃)
 
@@ -336,12 +336,12 @@ is-map-classifier 𝓤 = (Y : 𝓤 ̇) → is-equiv (χ Y)
     p : Σ (fiber f) ≡ X
     p = Eq→Id 𝓤★ ( Σ (fiber f) ) X e
 
-    observation : ⌜ ≃-sym e ⌝ ≡ ( λ x → f x , x , refl (f x) )
+    observation : ∣ ≃-sym e ∣ ≡ ( λ x → f x , x , refl (f x) )
     observation = refl _ -- (λ x → f x , x , refl (f x))
 
     q : transport (λ - → - → Y) p pr₁ ≡ f
     q = transport (λ - → - → Y) p pr₁  ≡⟨ transport-map-along-≃ 𝓤★ e pr₁ ⟩
-          pr₁ ∘  ⌜ ≃-sym e ⌝                 ≡⟨ refl f ⟩
+          pr₁ ∘  ∣ ≃-sym e ∣                 ≡⟨ refl f ⟩
           f                                          ∎
 
     r : (Σ (fiber f) , pr₁) ≡ (X , f)
@@ -650,10 +650,10 @@ hlevel-relation-is-subsingleton {𝓤} fe (succ n) X =
 Π-cong fe fe' {X} {Y} {Y'} φ = invertibility-gives-≃ F (G , GF , FG)
  where
   f : (x : X) → Y x → Y' x
-  f x = ⌜ φ x ⌝
+  f x = ∣ φ x ∣
 
   fxeq : (x : X) → is-equiv (f x)
-  fxeq x = ⌜⌝-is-equiv (φ x)
+  fxeq x = ∥ φ x ∥
 
   g : (x : X) → Y' x → Y x
   g x = inverse (f x) (fxeq x)
@@ -938,7 +938,7 @@ subsingleton-univalence {𝓤} pe fe P P✧ X = γ
     ℓ P≃X = equiv-to-subsingleton (≃-sym P≃X) P✧
 
     eqtoid : P ≃ X → P ≡ X
-    eqtoid P≃X = pe P✧ ( equiv-to-subsingleton (≃-sym P≃X) P✧ ) ⌜ P≃X ⌝ ⌜ ≃-sym P≃X ⌝
+    eqtoid P≃X = pe P✧ ( equiv-to-subsingleton (≃-sym P≃X) P✧ ) ∣ P≃X ∣ ∣ ≃-sym P≃X ∣
 
     P≃X✧ : is-subsingleton (P ≃ X)
     P≃X✧ (f , feq) (f' , f'eq) = to-subtype-≡ (being-equiv-is-subsingleton fe fe) ( fe ( λ x → X✧ (f x) (f' x) ) )

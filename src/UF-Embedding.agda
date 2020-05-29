@@ -12,11 +12,11 @@
 
 module UF-Embedding where
 
-open import UF-Prelude using (Universe; 𝓤₀; 𝓤; 𝓥; 𝓦; 𝓣;  _̇; _⊔_; _⁺; id; 𝑖𝑑; _∘_; ₀; ₁; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; codomain; _×_; Id; _≡_; ≡-sym; refl; 𝕁; ℍ; _∼_; _∙_; ap; _⁻¹; transport; _≡⟨_⟩_; _∎; _⋆'_; type-of; 𝟙)
+open import UF-Prelude using (Universe; 𝓤₀; 𝓤; 𝓥; 𝓦; 𝓣;  _̇; _⊔_; _⁺; id; 𝑖𝑑; _∘_; ₀; ₁; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; codomain; _×_; Id; _≡_; ≡-sym; refl; 𝕁; ℍ; _∼_; _∙_; ap; _⁻¹; transport; _≡⟨_⟩_; _∎; _⋆'_; type-of; 𝟙; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (is-set; is-singleton; is-subsingleton; pointed-subsingletons-are-singletons; singletons-are-subsingletons; 𝟙-is-singleton; center)
 
-open import UF-Equality using (Nat; Nats-are-natural; NatΣ; _◁_;  Σ-retract; singleton-type';retract-of-singleton;singleton-types'-are-singletons; has-section; retraction; retraction-has-section; singleton-type; singleton-types-are-singletons; _≃_; ⌜_⌝; id-≃; is-equiv; invertibles-are-equivs; ≃-gives-▷; fiber; ≃-sym; _≃⟨_⟩_; _■; Σ-cong; equiv-to-singleton; _●_; inverse; inverses-are-sections; inverses-are-retractions; invertible; invertibility-gives-≃; id-is-equiv; ⌜⌝-is-equiv)
+open import UF-Equality using (Nat; Nats-are-natural; NatΣ; _◁_;  Σ-retract; singleton-type';retract-of-singleton;singleton-types'-are-singletons; has-section; retraction; retraction-has-section; singleton-type; singleton-types-are-singletons; _≃_;  id-≃; is-equiv; invertibles-are-equivs; ≃-gives-▷; fiber; ≃-sym; _≃⟨_⟩_; _■; Σ-cong; equiv-to-singleton; _●_; inverse; inverses-are-sections; inverses-are-retractions; invertible; invertibility-gives-≃; id-is-equiv)
 
 open import UF-Univalence using (is-univalent; Id→Eq; NatΣ-equiv-gives-fiberwise-equiv; maps-of-singletons-are-equivs; ΠΣ-distr-≃; pr₁-≃; univalence-≃; equiv-to-subsingleton; to-subtype-≡; Σ-is-subsingleton; lc-maps-reflect-subsingletons; sections-are-lc; ⁻¹-≃; singleton-equiv-lemma; left-cancellable; Σ-assoc; Σ-change-of-variable; equiv-to-set)
 
@@ -244,7 +244,7 @@ embeddings-are-lc :  {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
  →                        is-embedding f
                           ------------------------
  →                        left-cancellable f
-embeddings-are-lc f fem {x} {y}  = ⌜ embedding-criterion-converse f fem x y ⌝
+embeddings-are-lc f fem {x} {y}  = ∣ embedding-criterion-converse f fem x y ∣
 
 --"*Exercise*. Left cancellable maps into *sets* are always embeddings.
 
@@ -822,11 +822,11 @@ mc-gives-sc {𝓤} s P Y = γ
        b = Σ-change-of-variable (λ A → Π (P ∘ A) )  (χ Y)  (s Y)    -- N.B.  λ A → Π (P ∘ A) ≡ λ A → (x : Y) → P (A x)
        c = ΠΣ-distr-≃
 
-    observation : χ-special P Y ≡ ⌜ e ⌝
+    observation : χ-special P Y ≡ ∣ e ∣
     observation = refl _
 
     γ : is-equiv (χ-special P Y)
-    γ = ⌜⌝-is-equiv e
+    γ = ∥ e ∥
 
 --"Therefore we have the following canonical equivalence:
 χ-special-is-equiv : is-univalent 𝓤 → dfunext 𝓤 (𝓤 ⁺)

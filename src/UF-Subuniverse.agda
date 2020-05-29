@@ -1,18 +1,18 @@
 --FILE: UF-Subuniverse.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 20 Feb 2020
---UPDATE: 23 May 2020
+--UPDATE: 29 May 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-} --allow-unsolved-metas #-}
 
-open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; pr₂; transport; codomain; domain; ≡-elim-right; _∼_; id; cong-app; ap-cong)
+open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; pr₂; transport; codomain; domain; ≡-elim-right; _∼_; id; cong-app; ap-cong; _∙_; 𝑖𝑑)
 
 open import UF-Basic using (Signature; Algebra; Op; SmallAlgebra)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 open import UF-Hom using (Hom)
 open import UF-Rel using (Transitive)
-open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat; _≃_; from-×-≡; inverse; inv-elim-left)
-open import UF-Univalence using (Id→Eq)
+open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat; _≃_; from-×-≡; inverse; inv-elim-right; fiber; is-equiv; id-≃)
+open import UF-Univalence using (Id→Eq; is-univalent)
 open import UF-Extensionality using (funext; global-funext; dfunext; global-dfunext; intensionality)
 
 open import Relation.Unary using (⋂)
@@ -36,61 +36,7 @@ _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ �
 -- Elimination rule for sub/supalgebra.
 -- We must be able to make use of the fact that the operations in 𝑩 are the same as those in 𝑨. So we need an elimination rule.
 -- For some reason, I'm able to get an elimination rule only for `A-is-supalgebra-of_` for fixed A.  (todo: try to fix this)
-
---The "uniform" (i.e., unrestricted) elimination rule (that we want, but that doesn't work yet).
-is-subalg-elim : global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤)  ( F : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
- →               𝑨 is-supalgebra-of 𝑩
- →              ∣ 𝑩 ∣ ≡ Σ B
- →               𝑩 ≡ (Σ B , F)
- →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
- →               ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
-is-subalg-elim{𝓤 = 𝓤} fe 𝑨 .(Σ B' , F') B F (mem B' F' Fᴮ≡Fᴬ) eqvB eqv 𝓸 𝒃 = γ
- where
-  -- ΣB = pr₁ ( Σ B , F),  ΣB₁ = pr₁ (Σ B₁ , 𝐹)
-
-  ΣB≡ΣB' : Σ B ≡ Σ B'
-  ΣB≡ΣB' = eqvB ⁻¹ -- (ap (λ - → pr₁ -) eqv)⁻¹
-
-  ΣB≃ΣB' : Σ B ≃ Σ B'
-  ΣB≃ΣB' = Id→Eq (Σ B) (Σ B') ΣB≡ΣB'
-  -- ...so ΣB≃ΣB' is  a pair (f, p) where f : Σ B → Σ B' and p : is-equiv f
-
-  ξ :  (Σ B) → (Σ B')
-  ξ p = ∣ ΣB≃ΣB' ∣  p
-
-  ξ⁻¹ : (Σ B') → (Σ B)
-  ξ⁻¹ = inverse ∣ ΣB≃ΣB' ∣ ∥ ΣB≃ΣB' ∥
-
-  ξ⁻¹∼ξ : ξ⁻¹ ∘ ξ ∼ id
-  ξ⁻¹∼ξ = inv-elim-left ξ ∥ ΣB≃ΣB' ∥
-
-  ζ :  (ξ⁻¹ ∘ ξ) ∘ 𝒃 ∼ 𝒃
-  ζ x =  ( (ξ⁻¹ ∘ ξ) ∘ 𝒃) x    ≡⟨ refl _ ⟩
-           (ξ⁻¹ ∘ ξ) (𝒃 x)     ≡⟨ ξ⁻¹∼ξ (𝒃 x) ⟩
-           id (𝒃 x)               ≡⟨ refl _ ⟩
-           𝒃 x                   ∎
-
-  κ :  (λ x → ∣ ξ⁻¹ ( ξ (𝒃 x) ) ∣ )  ≡  (λ x → ∣ 𝒃 x ∣ )
-  κ = fe λ x → ap (λ - → ∣ - ∣ ) (ζ x)
-
-  τ : (𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) ( p : ( i : ∥ S ∥ 𝓸) → B (𝒂 i) )
-   → ∣ F 𝓸 (λ i → ( 𝒂 i , p i) ) ∣ ≡ ∣ F' 𝓸 (λ i → ξ (𝒂 i , p i)) ∣
-  τ 𝒂 p  = {!!}
-  -- τ : (𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) ( p : ( i : ∥ S ∥ 𝓸) → B (𝒂 i) ) ( p' : ( i : ∥ S ∥ 𝓸) → B' (𝒂 i) )
-  --  → ∣ F 𝓸 (λ i → ( 𝒂 i , p i) ) ∣ ≡ ∣ F' 𝓸 (λ i → (𝒂 i , p' i)) ∣
-  -- τ 𝒂 p p' = {!!}
-
-  -- F≡F' :  ∣ F 𝓸 𝒃 ∣ ≡ ∣ F' 𝓸 (ξ ∘ 𝒃) ∣
-  -- F≡F' =  ap (λ - → ∣ - ∣ ) {!ap (λ - → !}
-
-  γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
-  γ = let eqF = Fᴮ≡Fᴬ 𝓸  in
-        ∣ F 𝓸 𝒃 ∣                             ≡⟨ {!!} ⟩
-       ∣ F' 𝓸 ( λ i → ξ  (𝒃 i) ) ∣         ≡⟨ Fᴮ≡Fᴬ 𝓸 (λ i →  ξ  (𝒃 i)) ⟩
-        ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ ξ (𝒃 i) ∣ )     ≡⟨ ap (λ - → (∥ 𝑨 ∥ 𝓸 -) ) (fe λ x → {!!})   ⟩
-        ∥ 𝑨 ∥ 𝓸 ( ∣_∣ ∘ ξ⁻¹ ∘ ξ ∘ 𝒃 )    ≡⟨ ap (λ - → (∥ 𝑨 ∥ 𝓸 - ) ) κ  ⟩
-        ∥ 𝑨 ∥ 𝓸 ( ∣_∣ ∘  𝒃 )  ∎
-
+-- (Failed attempt to prove "uniform" elimination rule was moved to bottom of this file and commented out.)
 
 module _  -- The "non-uniform" (i.e., restricted to a fixed A) elimination rule. (It works, but we'd prefer the one above.)
   {𝑨 : Algebra 𝓤 S}
@@ -329,3 +275,83 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
 
 
 
+
+-- -----------------------------------------------------------------------------------
+-- -- (the following type-checks, as of 29 May 2020, but holes remain)
+-- --The "uniform" (i.e., unrestricted) elimination rule (that we want, but that doesn't work yet).
+-- is-subalg-elim : is-univalent 𝓤 → global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤) ( F : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
+--  →               𝑨 is-supalgebra-of 𝑩 → 𝑩 ≡ (Σ B , F)
+--  →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
+--  →               ∣ F 𝓸 𝒃 ∣  ≡   ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
+-- is-subalg-elim{𝓤 = 𝓤} 𝓤★ fe 𝑨 .(Σ B' , F') B F (mem B' F' Fᴮ≡Fᴬ) eqv 𝓸 𝒃 = γ
+--  where
+--   𝑩 𝑪 : Algebra 𝓤 S
+--   𝑩 = Σ B' , F'
+--   𝑪 = Σ B , F
+
+--   𝑩≡𝑪 : 𝑩 ≡ 𝑪
+--   𝑩≡𝑪 = eqv
+
+--   AlgEquiv : (𝑫 : Algebra 𝓤 S) → 𝑫 ≡ (Σ B , F) → 𝑫 ≡ (Σ B' , F')
+--   AlgEquiv 𝑫 eqv' = eqv'  ∙ (eqv ⁻¹) 
+
+--   ΣB'≡ΣB : Σ B' ≡ Σ B
+--   ΣB'≡ΣB = ap (λ - → pr₁ -) 𝑩≡𝑪
+
+--   ΣB'≃ΣB : Σ B' ≃ Σ B
+--   ΣB'≃ΣB = Id→Eq (Σ B') (Σ B) ΣB'≡ΣB -- ...so ΣB≃ΣB' is a pair (f, p) where f : Σ B → Σ B' and p : is-equiv f
+
+--   -- Id→Eq : (X Y : 𝓤 ̇) → X ≡ Y → X ≃ Y
+--   -- Id→Eq X X (refl X) = id-≃ X
+--   -- id-≃ : (X : 𝓤 ̇) → X ≃ X
+--   -- id-≃ X = 𝑖𝑑 X , id-is-equiv X
+
+--   ξ :  (Σ B') → (Σ B)
+--   ξ = ∣ ΣB'≃ΣB ∣
+
+--   ξ-is-equiv : is-equiv ξ
+--   ξ-is-equiv = ∥ ΣB'≃ΣB ∥
+
+--   ξ⁻¹ : (Σ B) → (Σ B')
+--   ξ⁻¹ = inverse ξ ξ-is-equiv
+
+--   constfst : (p : Σ B)  →  pr₁ p ≡ pr₁ ( ξ⁻¹ p )
+--   constfst p = {!refl _!} 
+
+--   ζ :  (ξ ∘ ξ⁻¹) ∘ 𝒃 ∼ 𝒃
+--   ζ x =  ( ( ξ ∘ ξ⁻¹ ) ∘ 𝒃) x  ≡⟨ refl _ ⟩
+--            ( ξ ∘ ξ⁻¹ ) (𝒃 x)      ≡⟨ inv-elim-right ξ ξ-is-equiv (𝒃 x) ⟩
+--            id (𝒃 x)                ≡⟨ refl _ ⟩
+--            𝒃 x                     ∎
+
+--   τ : (𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) ( p : ( i : ∥ S ∥ 𝓸) → B (𝒂 i) )
+--    → ∣ F 𝓸 (λ i → ( 𝒂 i , p i) ) ∣ ≡ ∣ F' 𝓸 (λ i → ξ⁻¹ (𝒂 i , p i)) ∣
+--   τ 𝒂 p  = {!!}
+
+--   κ : ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘ ξ⁻¹ ∘ 𝒃 )  ≡ ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘  𝒃 )
+--   κ = ap (λ - → (∥ 𝑨 ∥ 𝓸 -) ) (fe λ x → (constfst (𝒃 x))⁻¹ )
+
+--   γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
+--   γ = let eqF = Fᴮ≡Fᴬ 𝓸  in
+--         ∣ F 𝓸 𝒃 ∣                            ≡⟨ τ (λ i → ∣ 𝒃 i ∣ ) (λ i → ∥ 𝒃 i ∥ ) ⟩
+--        ∣ F' 𝓸 ( λ i → ξ⁻¹  (𝒃 i) ) ∣         ≡⟨ Fᴮ≡Fᴬ 𝓸 (λ i →  ξ⁻¹  (𝒃 i)) ⟩
+--        ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘ ξ⁻¹ ∘ 𝒃 )          ≡⟨ κ ⟩
+--         ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘  𝒃 )  ∎
+
+--   ξ-monic : (p q : Σ B')  →  ξ p ≡ ξ q → p ≡ q
+--   ξ-monic p q ξ≡ξ = ap (λ - → pr₁ - ) ψ 
+--    where
+
+--     f1 : fiber ξ ( ξ p )
+--     f1 = p , refl _
+
+--     f2 : fiber ξ ( ξ p )
+--     f2 = q , (ξ≡ξ ⁻¹)
+
+--     ψ : f1 ≡ f2
+--     ψ = let eq = ξ-is-equiv ( ξ p )  in
+--            let c = ∣ eq ∣ in
+--            let c-is-center = ∥ eq ∥ in
+--              f1    ≡⟨ (c-is-center f1 )⁻¹ ⟩
+--              c     ≡⟨ c-is-center f2 ⟩
+--              f2    ∎

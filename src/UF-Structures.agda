@@ -11,11 +11,11 @@
 
 module UF-Structures where
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇; _⊔_; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication)
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇; _⊔_; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (is-set; is-subsingleton; singletons-are-subsingletons)
 
-open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ⌜_⌝; ⌜⌝-is-equiv; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
+open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
 
 open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality')
 
@@ -26,16 +26,15 @@ open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-a
 open import UF-Algebra using (SNS; ⟨_⟩; canonical-map; characterization-of-≡; _≃[_]_)
 
 -------------------------------------------------------------------------------------------------
---∞-Magmas
+--∞-Magmas.
 module ∞-magma-identity {𝓤 : Universe} where
-
   ∞-magma-structure : 𝓤 ̇ → 𝓤 ̇
   ∞-magma-structure X = X → X → X
 
   ∞-Magma : 𝓤 ⁺ ̇
   ∞-Magma = Σ X ꞉ 𝓤 ̇ , ∞-magma-structure X
 
-  --Standard notion of structure for ∞-Magmas
+  --Standard notion of structure (SNS) for ∞-Magmas
   sns-data : SNS ∞-magma-structure 𝓤
   sns-data = (ι , ρ , θ)
    where
@@ -65,36 +64,30 @@ module ∞-magma-identity {𝓤 : Universe} where
   characterization-of-∞-Magma-≡ : is-univalent 𝓤 → (A B : ∞-Magma) → (A ≡ B) ≃ (A ≅ B)
   characterization-of-∞-Magma-≡ 𝓤★ = characterization-of-≡ 𝓤★ sns-data
 
-  --"The above equivalence is characterized by induction on identifications as the function that maps the reflexive identification
-  -- to the identity equivalence:
+  --"The above equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence:
   characterization-of-characterization-of-∞-Magma-≡ : (𝓤★ : is-univalent 𝓤) (A : ∞-Magma)
-   →       ⌜ characterization-of-∞-Magma-≡ 𝓤★ A A ⌝ (refl A)    ≡    ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ )
+   →       ∣ characterization-of-∞-Magma-≡ 𝓤★ A A ∣ (refl A)    ≡    ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ )
   characterization-of-characterization-of-∞-Magma-≡ 𝓤★ A = refl _
 
-
-{-"Adding axioms. We account for situations in which axioms are considered using a submodule and by reduction to the characterization of
-   identifications given in the module `UF-Algebra`. -}
+--ADDING AXIOMS.
+--"We account for axioms using a submodule and by reduction to the characterization of identifications given in the module `UF-Algebra`."
 module uf-algebra-with-axioms where
+  --(paraphrasing MHE) Given structure map `S` and subsingleton-valued axioms for types with structure `S`, the first construction
+  --builds `SNS` data on `S'` defined by `S' X = Σ s ꞉ S X , axioms X s` from given `SNS` data on `S`.
 
-  --"The first construction, given `S` as above, and given subsingleton-valued axioms for types equipped with structure specified
-  -- by `S`, builds `SNS` data on `S'` defined by `S' X = Σ s ꞉ S X , axioms X s` from given `SNS` data on `S`.  For that purpose we
-  -- first define a forgetful map `Σ S' → Σ S` and an underlying-type function `Σ S → 𝓤`:
+  --For this MHE first defines a forgetful map `Σ S' → Σ S` and an underlying-type function `Σ S → 𝓤`:
   [_] : {S : 𝓤 ̇ → 𝓥 ̇} {axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇}
    →  (Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s) → Σ S
-
-
   [ X , s , _ ] = (X , s)
 
   ⟪_⟫ : {S : 𝓤 ̇ → 𝓥 ̇} {axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇}
    →  (Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s) → 𝓤 ̇
-
   ⟪ X , _ , _ ⟫ = X           -- NOTATION. Type ⟪ and ⟫ as `\<<` and `\>>`.
 
   --"In the following construction:
   --    * For `ι'` and `ρ'` we use `ι` and `ρ` ignoring the axioms.
   --    * For `θ'` we need more work, but the essence of the construction is the fact that the projection`S' X → S X`
   --      that forgets the axioms is an embedding precisely because the axioms are subsingleton-valued.
-
   add-axioms : {S : 𝓤 ̇ → 𝓥 ̇}  (axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇)
    →             ( (X : 𝓤 ̇)  (s : S X)  →  is-subsingleton (axioms X s) )
    →             SNS S 𝓣
@@ -132,21 +125,19 @@ module uf-algebra-with-axioms where
       γ : is-equiv (canonical-map ι' ρ' (s , a) (t , b) )
       γ = equivs-closed-under-∼ e ℓ
 
-  --"And with this we can formulate and prove what `add-axioms` achieves, namely that the characterization of the identity
-  -- type remains the same, ignoring the axioms:
-  characterization-of-≡-with-axioms : is-univalent 𝓤
-   → {S : 𝓤 ̇ → 𝓥 ̇ } (σ : SNS S 𝓣) (axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇)
-   → ( (X : 𝓤 ̇) (s : S X) → is-subsingleton (axioms X s) )
-   → (A B : Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s)
-   → (A ≡ B) ≃ ( [ A ] ≃[ σ ] [ B ] )
+  --with this MHE formulates and proves what `add-axioms` achieves: the characterization of the identity type remains the same, ignoring the axioms.
+  characterization-of-≡-with-axioms : is-univalent 𝓤 → {S : 𝓤 ̇ → 𝓥 ̇ }
+                                                    ( σ : SNS S 𝓣 )   ( axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇ )
+   →                                             ( (X : 𝓤 ̇) (s : S X) → is-subsingleton (axioms X s) )
+   →                                             ( A B : Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s )
+                                                  ---------------------------------------------------
+   →                                              (A ≡ B) ≃ ( [ A ] ≃[ σ ] [ B ] )
   characterization-of-≡-with-axioms 𝓤★ σ axioms axiomsXs✧ = characterization-of-≡ 𝓤★ (add-axioms axioms axiomsXs✧ σ)
-  --Recall,
-  -- characterization-of-≡ : is-univalent 𝓤 → { S : 𝓤 ̇ → 𝓥 ̇ } ( σ : SNS S 𝓦 ) → ( A B : Σ S ) → ( A ≡ B ) ≃ ( A ≃[ σ ] B )
+  --Recall, `characterization-of-≡ : is-univalent 𝓤 → { S : 𝓤 ̇ → 𝓥 ̇ } ( σ : SNS S 𝓦 ) → ( A B : Σ S ) → ( A ≡ B ) ≃ ( A ≃[ σ ] B )`
 
 ------------------------------------------
 --Magmas.
 module magma-identity {𝓤 : Universe} where
-
   open uf-algebra-with-axioms
 
   Magma : 𝓤 ⁺ ̇
@@ -156,21 +147,15 @@ module magma-identity {𝓤 : Universe} where
   (X , _∙_ , _) ≅ (Y , _*_ , _) = Σ f ꞉ (X → Y) , is-equiv f  × ( ( λ x x' → f (x ∙ x') ) ≡ (λ x x' → f x * f x') )
 
   characterization-of-Magma-≡ : is-univalent 𝓤 → (A B : Magma ) → (A ≡ B) ≃ (A ≅ B)
-  characterization-of-Magma-≡ 𝓤★ =
-    characterization-of-≡-with-axioms 𝓤★
-      ∞-magma-identity.sns-data
-         ( λ X s → is-set X )
-         ( λ X s → being-set-is-subsingleton (univalence-gives-dfunext 𝓤★ ) )
+  characterization-of-Magma-≡ 𝓤★ = characterization-of-≡-with-axioms 𝓤★
+    ∞-magma-identity.sns-data   ( λ X s → is-set X )   ( λ X s → being-set-is-subsingleton (univalence-gives-dfunext 𝓤★ ) )
 
-  --"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
-  -- identification to the identity equivalence.
-
-  --SOLUTION.
+  --"The above equivalence is characterized by induction on identifications as the function that maps reflexivity identification to the identity equivalence.
   characterization-of-characterization-of-Magma-≡ : (𝓤★ : is-univalent 𝓤) (A : Magma)
-   →       ⌜ characterization-of-Magma-≡ 𝓤★ A A ⌝ (refl A)    ≡    ( 𝑖𝑑 ⟪ A ⟫ , id-is-equiv ⟪ A ⟫ , refl _ )
+   →       ∣ characterization-of-Magma-≡ 𝓤★ A A ∣ (refl A)    ≡    ( 𝑖𝑑 ⟪ A ⟫ , id-is-equiv ⟪ A ⟫ , refl _ )
   characterization-of-characterization-of-Magma-≡ 𝓤★ A = refl _
 
---"*Exercise*. Characterize identifications of monoids along the above lines. It  is convenient to redefine the type of monoids to an equivalent
+--EXERCISE. Characterize identifications of monoids along the above lines.  It is convenient to redefine the type of monoids to an equivalent
 -- type in the above format of structure with axioms. The following development solves this exercise.
 -- !!! Come back to this later !!!
 
@@ -200,21 +185,18 @@ module pointed-type-identity {𝓤 : Universe} where
   (X , x₀) ≅ (Y , y₀) = Σ f ꞉ (X → Y) , is-equiv f × (f x₀ ≡ y₀)
 
   characterization-of-pointed-type-≡ :  is-univalent 𝓤 → (A B : Σ Pointed)
-                                                    -----------------------------------
-   →                                                           (A ≡ B) ≃ (A ≅ B)
-
+                                                      ---------------------------------
+   →                                                        (A ≡ B)   ≃   (A ≅ B)
   characterization-of-pointed-type-≡ 𝓤★ = characterization-of-≡ 𝓤★ sns-data
 
-  --"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
-  -- identification to the identity equivalence.
-  -- SOLUTION.
+  --EXERCISE. This equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence.
+  --SOLUTION.
   characterization-of-characterization-of-pointed-type-≡ : (𝓤★ : is-univalent 𝓤) (A : Σ Pointed)
-   →       ⌜ characterization-of-pointed-type-≡ 𝓤★ A A ⌝ (refl A)    ≡    ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ )
+   →       ∣ characterization-of-pointed-type-≡ 𝓤★ A A ∣ (refl A)    ≡    ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ )
   characterization-of-characterization-of-pointed-type-≡ 𝓤★ A = refl _
 
-------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 --Combining two mathematical structures.
-
 {-"We now show how to join two mathematics structures so as to obtain a characterization of the identifications of the join from the
     characterization of the equalities of the structures. For example, we build the characterization of identifications of pointed ∞-magmas from
     the characterizations of the identifications of pointed types and the characterization of the identifications of magmas. Moreover, adding
@@ -223,7 +205,7 @@ module pointed-type-identity {𝓤 : Universe} where
 
 module uf-algebra-join where
 
-  --"We begin with the following technical lemma:
+  --MHE begins with the following technical lemma:
   technical-lemma : { X : 𝓤 ̇ } { A : X → X → 𝓥 ̇ } { Y : 𝓦 ̇ } { B : Y → Y → 𝓣 ̇ }
             (f : (x₀ x₁ : X) → x₀ ≡ x₁ → A x₀ x₁)     (g : (y₀ y₁ : Y) → y₀ ≡ y₁ → B y₀ y₁)
    →      ( (x₀ x₁ : X) → is-equiv ( f x₀ x₁ ) ) →  ( (y₀ y₁ : Y) → is-equiv ( g y₀ y₁ ) )
@@ -268,7 +250,7 @@ module uf-algebra-join where
     γ = fiberwise-retractions-are-equivs ( λ z₁ → A x₀ (pr₁ z₁) × B y₀ (pr₂ z₁) )
               (x₀ , y₀) r (λ z₁ → (s z₁ , η z₁))
 
-  --"We consider two... structures specified by `S₀` and `S₁`, and work with structures specified by their combination `λ X → S₀ X × S₁ X`
+  --MHE then considers two structures specified by `S₀` and `S₁`, and works with structures specified by their combination `λ X → S₀ X × S₁ X`
   variable 𝓥₀ 𝓥₁ 𝓦₀ 𝓦₁ : Universe
 
   ⟪_⟫ : {S₀ : 𝓤 ̇ → 𝓥₀ ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇} → (Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X) → 𝓤 ̇
@@ -280,9 +262,11 @@ module uf-algebra-join where
   [_]₁ :  {S₀ : 𝓤 ̇ → 𝓥₀ ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇} → (Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X) → Σ S₁
   [ X , s₀ , s₁ ]₁ = (X , s₁)
 
-  --"The main construction in this submodule is this:
-  join :  {S₀ : 𝓤 ̇ → 𝓥₀ ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇} → SNS S₀ 𝓦₀ → SNS S₁ 𝓦₁
-   →                                                     SNS (λ X → S₀ X × S₁ X) (𝓦₀ ⊔ 𝓦₁)
+  --MAIN CONSTRUCTION IN THIS SUBMODULE
+  join :  {S₀ : 𝓤 ̇ → 𝓥₀ ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇}
+   →        SNS S₀ 𝓦₀    →    SNS S₁ 𝓦₁
+          ------------------------------------------
+   →      SNS (λ X → S₀ X × S₁ X) (𝓦₀ ⊔ 𝓦₁)
 
   join {𝓤} {𝓥₀}  {𝓥₁}  {𝓦₀} {𝓦₁} {S₀} {S₁} (ι₀ , ρ₀ , θ₀) (ι₁ , ρ₁ , θ₁)  = ι , ρ , θ
    where
@@ -310,7 +294,7 @@ module uf-algebra-join where
        γ : is-equiv ( canonical-map ι ρ (s₀ , s₁)  (t₀ , t₁) )
        γ = equivs-closed-under-∼ ceq cm∼c
 
-  --"We then can characterize the identity type of structures in the join by the following relation:
+  --MHE then characterizes the identity type of structures in the join by the following relation:
   _≃⟦_,_⟧_ : {S₀ : 𝓤 ̇ → 𝓥 ̇}  {S₁ : 𝓤 ̇ → 𝓥₁ ̇}
    →             (Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X) → SNS S₀ 𝓦₀ → SNS S₁ 𝓦₁
    →             (Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X)
@@ -318,55 +302,48 @@ module uf-algebra-join where
   A ≃⟦ σ₀ , σ₁ ⟧ B = Σ f ꞉ ( ⟪ A ⟫ → ⟪ B ⟫ ) , Σ feq ꞉ is-equiv f ,
                                  UF-Algebra.homomorphic σ₀ [ A ]₀ [ B ]₀ (f , feq)  ×  UF-Algebra.homomorphic σ₁ [ A ]₁ [ B ]₁ (f , feq)
 
-  --"The following is then immediate from the join construction and the general structure identity principle:
+  --From this, the join construction, and the general structure identity principle, MHE proves,
   characterization-of-join-≡ : is-univalent 𝓤 → {S₀ : 𝓤 ̇ → 𝓥 ̇} {S₁ : 𝓤 ̇ → 𝓥₁ ̇}
               (σ₀ : SNS S₀ 𝓦₀)    (σ₁ : SNS S₁ 𝓦₁)    ( A B : Σ X ꞉ 𝓤 ̇ , S₀ X × S₁ X )
            ----------------------------------------------------------------------
     →                                     (A ≡ B) ≃ ( A ≃⟦ σ₀ , σ₁ ⟧ B )
-
   characterization-of-join-≡ 𝓤★ σ₀ σ₁ = characterization-of-≡ 𝓤★ (join σ₀ σ₁)
 
-  --"This concludes the submodule. Some examples of uses of this follow."
+--"This concludes the `uf-algebra-join` submodule. Some examples of uses of this follow."
 
------------------------------------------------------------------------------
--- Pointed ∞-magmas.
+-----------------------------------------------------------------------------------------------
+--Pointed ∞-magmas.
 module pointed-∞-magma-identity {𝓤 : Universe} where
-
   open uf-algebra-join
 
   ∞-Magma∙ : 𝓤 ⁺ ̇
   ∞-Magma∙ = Σ X ꞉ 𝓤 ̇ , (X → X → X) × X
 
   _≅_ : ∞-Magma∙ → ∞-Magma∙ → 𝓤 ̇
-  (X , _∙_ , x₀) ≅ (Y , _*_ , y₀) =
-      Σ f ꞉ (X → Y) ,    is-equiv f
-                         ×   ( (λ x x' → f (x ∙ x') ) ≡ (λ x x' → f x * f x') )
-                         ×   (f x₀ ≡ y₀)
+  (X , _∙_ , x₀) ≅ (Y , _*_ , y₀)  =  Σ f ꞉ (X → Y) ,    is-equiv f
+                                                                 ×   ( (λ x x' → f (x ∙ x') ) ≡ (λ x x' → f x * f x') )
+                                                                 ×   (f x₀ ≡ y₀)
 
+  characterization-of-pointed-magma-≡ : is-univalent 𝓤  →  (A B : ∞-Magma∙)
+                                                      --------------------------------------
+   →                                                            (A ≡ B)   ≃   (A ≅ B)
+  characterization-of-pointed-magma-≡ 𝓤★ = characterization-of-join-≡ 𝓤★  ∞-magma-identity.sns-data   pointed-type-identity.sns-data
 
-  characterization-of-pointed-magma-≡ : is-univalent 𝓤
-   →                           (A B : ∞-Magma∙)
-                              -------------------
-   →                           (A ≡ B)  ≃  (A ≅ B)
-  characterization-of-pointed-magma-≡ 𝓤★ = characterization-of-join-≡ 𝓤★
-                                                                    ∞-magma-identity.sns-data
-                                                                    pointed-type-identity.sns-data
-
-  --"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
-  -- identification to the identity equivalence.
+  --EXERCISE. This equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence.
+  --SOLUTION.
   characterization-of-characterization-of-pointed-magma-≡ : (𝓤★ : is-univalent 𝓤) (A : ∞-Magma∙)
-   →     ⌜ characterization-of-pointed-magma-≡ 𝓤★ A A ⌝ (refl A)   ≡  ( 𝑖𝑑 ⟪ A ⟫ , id-is-equiv ⟪ A ⟫ , refl _ , refl _ )
+   →     ∣ characterization-of-pointed-magma-≡ 𝓤★ A A ∣ (refl A)   ≡  ( 𝑖𝑑 ⟪ A ⟫ , id-is-equiv ⟪ A ⟫ , refl _ , refl _ )
   characterization-of-characterization-of-pointed-magma-≡ 𝓤★ A = refl _
 
 -----------------------------------------------------------------------------------
 --Monoids. (combining joins and addition of axioms)
 module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   open import UF-Monoid using (left-neutral; right-neutral; associative)
-  dfe : dfunext 𝓤 𝓤
-  dfe = univalence-gives-dfunext 𝓤★
-
   open uf-algebra-join
   open uf-algebra-with-axioms
+
+  dfe : dfunext 𝓤 𝓤
+  dfe = univalence-gives-dfunext 𝓤★
 
   monoid-structure : 𝓤 ̇ → 𝓤 ̇
   monoid-structure X = (X → X → X) × X
@@ -380,26 +357,26 @@ module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   monoid-axioms-subsingleton : (X : 𝓤 ̇) (s : monoid-structure X)
    →                                is-subsingleton (monoid-axioms X s)
   monoid-axioms-subsingleton X ( _·_ , e ) s = γ s
-   where
-    Xset : is-set X
-    Xset = pr₁ s
+    where
+      Xset : is-set X
+      Xset = pr₁ s
 
-    γ : is-subsingleton ( monoid-axioms X ( _·_ , e ) )
-    γ = ×-is-subsingleton (being-set-is-subsingleton dfe)
-         ( ×-is-subsingleton
-             ( Π-is-subsingleton dfe ( λ x → Xset (e · x) x ) )
-         ( ×-is-subsingleton
-            ( Π-is-subsingleton dfe ( λ x → Xset (x · e) x) )
-                ( Π-is-subsingleton dfe ( λ x → Π-is-subsingleton dfe
-                                                    ( λ y → Π-is-subsingleton dfe
-                                                       ( λ z → Xset ( (x · y) · z ) ( x · (y · z) ) ) ) ) ) ) )
+      γ : is-subsingleton ( monoid-axioms X ( _·_ , e ) )
+      γ = ×-is-subsingleton (being-set-is-subsingleton dfe)
+                ( ×-is-subsingleton
+                    ( Π-is-subsingleton dfe ( λ x → Xset (e · x) x ) )
+                    ( ×-is-subsingleton
+                        ( Π-is-subsingleton dfe ( λ x → Xset (x · e) x) )
+                        ( Π-is-subsingleton dfe
+                            ( λ x → Π-is-subsingleton dfe ( λ y → Π-is-subsingleton dfe ( λ z → Xset ( (x · y) · z ) ( x · (y · z) ) ) ) )
+                        )
+                    )
+                )
 
   sns-data : SNS ( λ X → Σ s ꞉ monoid-structure X , monoid-axioms X s ) 𝓤
   sns-data = add-axioms
-                     monoid-axioms   monoid-axioms-subsingleton
-                       ( join
-                           ∞-magma-identity.sns-data
-                           pointed-type-identity.sns-data )
+                    monoid-axioms   monoid-axioms-subsingleton
+                    ( join  ∞-magma-identity.sns-data   pointed-type-identity.sns-data )   --   SNS S 𝓣
 
   _≅_ : Monoid → Monoid → 𝓤 ̇
   ( X , ( _∙_ , d ) , _ ) ≅ ( Y , ( _*_ , e ) , _ ) =
@@ -412,10 +389,9 @@ module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
    →                                                   (A ≡ B) ≃ (A ≅ B)
   characterization-of-monoid-≡ 𝓤★ = characterization-of-≡ 𝓤★ sns-data
 
-  --"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
-  -- identification to the identity equivalence.
+  --EXERCISE. This equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence.
   characterization-of-characterization-of-monoid-≡ : (𝓤★ : is-univalent 𝓤) (A : Monoid)
-   →     ⌜ characterization-of-monoid-≡ 𝓤★ A A ⌝ (refl A)   ≡  ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ , refl _  )
+   →     ∣ characterization-of-monoid-≡ 𝓤★ A A ∣ (refl A)   ≡  ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ , refl _  )
   characterization-of-characterization-of-monoid-≡ 𝓤★ A = refl _
 
 ----------------------------------------
@@ -579,14 +555,13 @@ module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   characterization-of-group-≡ : (A B : Group) → (A ≡ B) ≃ (A ≅ B)
   characterization-of-group-≡ = characterization-of-≡ 𝓤★ sns-data
 
-  --"EXERCISE. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
-  -- identification to the identity equivalence.
+  --EXERCISE. This equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence.
   -- SOLUTION.
   characterization-of-characterization-of-group-≡ : (𝓤★ : is-univalent 𝓤) (A : Group)
-   →     ⌜ characterization-of-group-≡ A A ⌝ (refl A)   ≡  ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ , refl _  )
+   →     ∣ characterization-of-group-≡ A A ∣ (refl A)   ≡  ( 𝑖𝑑 ⟨ A ⟩ , id-is-equiv ⟨ A ⟩ , refl _ , refl _  )
   characterization-of-characterization-of-group-≡ 𝓤★ A = refl _
 
---"EXERCISE. In the case of groups, as opposed to monoids, the preservation of the unit follows from the preservation of the
+--EXERCISE. In the case of groups, as opposed to monoids, the preservation of the unit follows from the preservation of the
 -- multiplication, and hence one can remove `f d ≡ e` from the above definition. Prove that `(A ≅ B) ≃ (A ≅' B)` and hence,
 -- by transitivity, `(A ≡ B) ≃ (A ≅' B)` where
   _≅'_ : Group → Group → 𝓤 ̇
@@ -749,11 +724,11 @@ module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   forget-unit-preservation : (G H : Group) → (G ≅ H) → (G ≅' H)
   forget-unit-preservation G H (f , e , m , _) = f , e , m
 
-  NB : (G H : Group) → ⌜ ≅-agreement G H ⌝ ≡ forget-unit-preservation G H
+  NB : (G H : Group) → ∣ ≅-agreement G H ∣ ≡ forget-unit-preservation G H
   NB G H = refl _
 
   forget-unit-preservation-is-equiv : (G H : Group) → is-equiv (forget-unit-preservation G H)
-  forget-unit-preservation-is-equiv G H = ⌜⌝-is-equiv (≅-agreement G H)
+  forget-unit-preservation-is-equiv G H = ∥ ≅-agreement G H ∥
 
   --"This completes the solution of the exercise."                                         ∎
 
@@ -1040,15 +1015,15 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
        Subgroups     ≃     ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )
 
   characterization-of-the-type-of-subgroups =
-   Subgroups                                                                                                                            ≃⟨ i ⟩
-   ( Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed (_∈ A) )                                                                                   ≃⟨ ii ⟩
-   ( Σ (X , h , e) ꞉ Subtypes ⟨ G ⟩ , group-closed (fiber h) )                                                              ≃⟨ iii ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , group-closed (fiber h) )                                                       ≃⟨ iv ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ T X , is-homomorphism (X , τ) G h )                               ≃⟨ v ⟩
+   Subgroups                                                                                                                      ≃⟨ i ⟩
+   ( Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed (_∈ A) )                                                                               ≃⟨ ii ⟩
+   ( Σ (X , h , e) ꞉ Subtypes ⟨ G ⟩ , group-closed (fiber h) )                                                          ≃⟨ iii ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , group-closed (fiber h) )                                                    ≃⟨ iv ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ T X , is-homomorphism (X , τ) G h )                              ≃⟨ v ⟩
    ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ e ꞉ is-embedding h , Σ τ ꞉ T X , is-homomorphism (X , τ) G h )  ≃⟨ vi ⟩
    ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ τ ꞉ T X , Σ e ꞉ is-embedding h , is-homomorphism (X , τ) G h )  ≃⟨ vii ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ T X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )         ≃⟨ viii ⟩
-   ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )                      ■
+   ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ T X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )        ≃⟨ viii ⟩
+   ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )                   ■
     where
      φ : Subtypes ⟨ G ⟩ → 𝓟 ⟨ G ⟩
      φ = χ-special is-subsingleton ⟨ G ⟩
@@ -1067,7 +1042,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
   --"In particular, a subgroup induces a genuine group, which is homomorphically embedded into the ambient group.
   induced-group : Subgroups → Group
-  induced-group S = pr₁ (⌜ characterization-of-the-type-of-subgroups ⌝ S)
+  induced-group S = pr₁ (∣ characterization-of-the-type-of-subgroups ∣ S)
 
 --------------------------------------------------------
 -- The slice type.

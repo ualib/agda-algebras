@@ -11,7 +11,7 @@
 
 module UF-Equality where
 
-open import UF-Prelude using (𝓤₀; 𝓤; 𝓥; 𝓦; _̇; _⊔_; 𝑖𝑑; _∼_; codomain; id; ℕ; zero; succ; 𝟘; 𝟙; ¬; is-empty; !𝟘; _∘_; domain; Σ; -Σ; Σ-induction; curry; pr₁; pr₂; _,_; 𝟚; _×_; inl; inr; Id; _≡_; refl; _∙_; _⁻¹; ap; _≡⟨_⟩_;_∎; transport; decidable;has-decidable-equality;𝟚-has-decidable-equality; ℕ-has-decidable-equality; pred)
+open import UF-Prelude using (𝓤₀; 𝓤; 𝓥; 𝓦; _̇; _⊔_; 𝑖𝑑; _∼_; codomain; id; ℕ; zero; succ; 𝟘; 𝟙; ¬; is-empty; !𝟘; _∘_; domain; Σ; -Σ; Σ-induction; curry; pr₁; pr₂; _,_; 𝟚; _×_; inl; inr; Id; _≡_; refl; _∙_; _⁻¹; ap; _≡⟨_⟩_;_∎; transport; decidable;has-decidable-equality;𝟚-has-decidable-equality; ℕ-has-decidable-equality; pred; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (center;is-set;is-singleton;is-subsingleton;singletons-are-subsingletons;𝟘-is-subsingleton;𝟙-is-subsingleton; centrality)
 
@@ -956,24 +956,23 @@ _≃_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
 X ≃ Y = Σ f ꞉ (X → Y) , is-equiv f
 infix  10 _≃_
 
-
---"Notice that this doesn't just say that `X` and `Y` are equivalent: the type `X ≃ Y` collects all the ways in which the types `X` and `Y`
--- are equivalent. For example, the two-point type `𝟚` is equivalent to itself in two ways, by the identity map, and by the map that
--- interchanges its two points, and hence the type `𝟚 ≃ 𝟚` has two elements.
+{-(paraphrasing MHE) This doesn't just say `X` and `Y` are equivalent; the type `X ≃ Y` collects all the ways in which the types
+   `X` and `Y` are equivalent. For example, the two-point type `𝟚` is equivalent to itself in two ways, by the identity map, and by
+   the map that interchanges its two points, and hence the type `𝟚 ≃ 𝟚` has two elements.   -}
 
 --"Again it is convenient to have special names for its first and second projections:
-Eq→fun : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ≃ Y → X → Y
-Eq→fun (f , f-eq) = f
+-- Eq→fun : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ≃ Y → X → Y
+-- Eq→fun (f , f-eq) = f
 
---ALIAS. NOTATION. type ⌜ and ⌝ with `\c1` and `\c2`; type ≃ with `\∼-`; type → with `\r1`
-⌜_⌝ : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ≃ Y → X → Y
-⌜_⌝ = Eq→fun 
-
-Eq→fun-is-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} (e : X ≃ Y) → is-equiv (⌜ e ⌝)
+Eq→fun-is-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} (e : X ≃ Y) → is-equiv (∣ e ∣)
 Eq→fun-is-equiv (f , f-eq) = f-eq
 
-⌜⌝-is-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} (e : X ≃ Y) → is-equiv (⌜ e ⌝)
-⌜⌝-is-equiv = Eq→fun-is-equiv
+--wjd: deleting the next def for now (for consistency, let's stick to `∣_∣` and `∥_∥` for the first and second projections).
+-- ⌜_⌝ : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ≃ Y → X → Y
+-- ⌜_⌝ = Eq→fun
+-- ⌜⌝-is-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} (e : X ≃ Y) → is-equiv (⌜ e ⌝)
+-- ⌜⌝-is-equiv = Eq→fun-is-equiv
+--wjd: when using a projection, we should know exactly what it represents, without needing a special name to remind us.
 
 invertibility-gives-≃ : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → invertible f → X ≃ Y
 invertibility-gives-≃ f invf = f , invertible-equiv f invf
@@ -1014,8 +1013,8 @@ _≃⟨_⟩_ : (X : 𝓤 ̇) {Y : 𝓥 ̇} {Z : 𝓦 ̇} → X ≃ Y → Y ≃ Z
 _ ≃⟨ d ⟩ e = d ● e
 
 infix   1 _■  -- NOTATION. type ■ with `\sq1`
-_■ : (X : 𝓤 ̇) → X ≃ X  
-_■ = id-≃   
+_■ : (X : 𝓤 ̇) → X ≃ X
+_■ = id-≃
 
 --"We conclude this section with some important examples.
 
@@ -1078,16 +1077,16 @@ ap-pr₂-to-×-≡ (refl x) (refl y) = refl (refl y)
 Σ-cong {𝓤} {𝓥} {𝓦} {X}{A}{B} φ = invertibility-gives-≃ (NatΣ f) (NatΣ g , NatΣ-η , NatΣ-ε)
  where
   f : (x : X) → A x → B x
-  f x = ⌜ φ x ⌝
+  f x = ∣ φ x ∣
 
   g : (x : X) → B x → A x
-  g x = inverse (f x) (⌜⌝-is-equiv (φ x))
+  g x = inverse (f x) ∥ φ x ∥
 
   η : (x : X) (a : A x) → g x (f x a) ≡ a
-  η x = inv-elim-left (f x) (⌜⌝-is-equiv (φ x))
+  η x = inv-elim-left (f x) ∥ φ x ∥
 
   ε : (x : X) (b : B x) → f x (g x b) ≡ b
-  ε x = inv-elim-right (f x)  (⌜⌝-is-equiv (φ x))
+  ε x = inv-elim-right (f x)  ∥ φ x ∥
 
   NatΣ-η : (w : Σ A) → NatΣ g (NatΣ f w) ≡ w
   NatΣ-η (x , a) = x , g x (f x a) ≡⟨ to-Σ-≡' (η x a) ⟩ x , a ∎

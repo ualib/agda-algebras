@@ -11,11 +11,11 @@
 
 module UF-Univalence where
 
-open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; ¬; id; 𝑖𝑑; 𝟚; _×_; _+_; inl; inr; _∘_; ₀; ₁; _,_; Σ; -Σ; domain; codomain; pr₁; pr₂; Π; -Π; _≡_; refl; ap; _≡⟨_⟩_; _∎; _∼_; _⁻¹; transport; Id→Fun; _≢_; _⇔_; ₁-is-not-₀; Σ-induction)
+open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; ¬; id; 𝑖𝑑; 𝟚; _×_; _+_; inl; inr; _∘_; ₀; ₁; _,_; Σ; -Σ; domain; codomain; pr₁; pr₂; Π; -Π; _≡_; refl; ap; _≡⟨_⟩_; _∎; _∼_; _⁻¹; transport; Id→Fun; _≢_; _⇔_; ₁-is-not-₀; Σ-induction; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (is-set; is-singleton; is-subsingleton; singletons-are-subsingletons; pointed-subsingletons-are-singletons; center; centrality)
 
-open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; ⁻¹-involutive; wconstant-≡-endomaps; types-with-wconstant-≡-endomaps-are-sets; _◁_; has-section; singleton-type; singleton-type'; retract-of-singleton; singleton-types'-are-singletons;_≃_; ⌜_⌝; id-≃; is-equiv; ∘-is-equiv; ⌜⌝-is-equiv; ≃-gives-▷; equiv-to-singleton; ≃-sym; fiber; inverse; inverse-of-∘; invertible; equivs-are-invertible;  to-×-≡;  inv-elim-right; inv-elim-left; invertibles-are-equivs; invertibility-gives-≃; Σ-cong; inverses-are-equivs; inverses-are-retractions; inverses-are-sections; fiber-point; fiber-identification; transport-ap; apd; transport-is-retraction)
+open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; ⁻¹-involutive; wconstant-≡-endomaps; types-with-wconstant-≡-endomaps-are-sets; _◁_; has-section; singleton-type; singleton-type'; retract-of-singleton; singleton-types'-are-singletons;_≃_; id-≃; is-equiv; ∘-is-equiv; ≃-gives-▷; equiv-to-singleton; ≃-sym; fiber; inverse; inverse-of-∘; invertible; equivs-are-invertible;  to-×-≡;  inv-elim-right; inv-elim-left; invertibles-are-equivs; invertibility-gives-≃; Σ-cong; inverses-are-equivs; inverses-are-retractions; inverses-are-sections; fiber-point; fiber-identification; transport-ap; apd; transport-is-retraction)
 
 -----------------------------------------------------------------------------
 -- Voevodsky's univalence axiom
@@ -54,7 +54,7 @@ Eq→Id ua X Y = inverse (Id→Eq X Y) (ua X Y)
 
 --"Here is a third way to convert a type identification into a function:
 Id→fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
-Id→fun {𝓤}{X}{Y} p = ⌜ Id→Eq X Y p ⌝
+Id→fun {𝓤}{X}{Y} p = ∣ Id→Eq X Y p ∣
 
 Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)
  →              Id→fun p ≡ Id→Fun p
@@ -95,7 +95,7 @@ module example-of-a-nonset (ua : is-univalent 𝓤₀) where
   e₀-is-not-e₁ p = ₁-is-not-₀ r
    where
     q : id ≡ swap₂
-    q = ap ⌜_⌝ p  -- so q is ⌜ e₀ ⌝ ≡ ⌜ e₁ ⌝
+    q = ap pr₁ p  -- so q is ⌜ e₀ ⌝ ≡ ⌜ e₁ ⌝
 
     r : ₁ ≡ ₀
     r = ap (λ - → - ₁) q
@@ -237,7 +237,7 @@ equiv-to-set : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
               --------------------
  →                 is-set X
 
-equiv-to-set X≃Y = subtypes-of-sets-are-sets ⌜ X≃Y ⌝ (equivs-are-lc ⌜ X≃Y ⌝ (⌜⌝-is-equiv X≃Y))
+equiv-to-set X≃Y = subtypes-of-sets-are-sets ∣ X≃Y ∣ (equivs-are-lc ∣ X≃Y ∣ ∥ X≃Y ∥ )
 
 sections-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f g : X → Y)
  →                    has-retraction f   →  g ∼ f
@@ -562,8 +562,7 @@ ap₂ f (refl u) ( refl v) = refl (f u v)
 
 
 ---------------------------------------------------------------------------
--- A characterization of univalence
--- ----------------------------------
+-- A characterization of univalence.
 
 -- We begin with two general results, which will be placed in a more general context later.
 equiv-singleton-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }
@@ -617,13 +616,7 @@ univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (uni
 
 --------------------------------------------------------------------------------------------------------------
 -- EQUIVALENCE INDUCTION.
-
---FILE: EquivalenceInduction.agda
---DATE: 3 Apr 2020
---BLAME: <williamdemeo@gmail.com>
---REF: Based on Martin Escardo's course notes
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#equivalenceinduction
-
 
 {- "Under univalence, we get induction principles for type equivalences, corresponding to the induction principles `ℍ` and `𝕁`
     for identifications.  To prove a property of equivalences, it is enough to prove it for the identity equivalence `id-≃ X` for all `X`.
@@ -793,12 +786,12 @@ transport-map-along-≡ (refl X) = refl
 
 transport-map-along-≃ : (𝓤★ : is-univalent 𝓤) {X Y Z : 𝓤 ̇}
                                    (X≃Y : X ≃ Y)    (g : X → Z)
- →                               transport (λ - → - → Z) (Eq→Id 𝓤★ X Y X≃Y) g  ≡   g ∘ ⌜ ≃-sym X≃Y ⌝
+ →                               transport (λ - → - → Z) (Eq→Id 𝓤★ X Y X≃Y) g  ≡   g ∘ ∣ ≃-sym X≃Y ∣
 transport-map-along-≃ {𝓤} 𝓤★ {X}{Y}{Z} = 𝕁-≃ 𝓤★ A a X Y
  where
   A : (X Y : 𝓤 ̇ ) → X ≃ Y → 𝓤 ̇
   A X Y e = (g : X → Z) → transport (λ - → - → Z) (Eq→Id 𝓤★ X Y e) g
-                        ≡ g ∘ ⌜ ≃-sym e ⌝
+                        ≡ g ∘ ∣ ≃-sym e ∣
   a : (X : 𝓤 ̇ ) → A X X (id-≃ X)
   a X g = transport (λ - → - → Z) (Eq→Id 𝓤★ X X (id-≃ X)) g ≡⟨ q      ⟩
           transport (λ - → - → Z) (refl X) g                ≡⟨ refl _ ⟩
@@ -867,7 +860,7 @@ haes-are-invertible f ( g , η , ε , τ ) = g , η , ε
 --------------------------------
 
 transport-ap-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) {x x' : X} 
-                      (a : x' ≡ x)                 (b : f x' ≡ f x)
+                      (a : x' ≡ x)        (b : f x' ≡ f x)
           ---------------------------------------------------------
  →       (transport (λ - → f - ≡ f x) a b ≡ refl (f x))   ≃   (ap f a ≡ b)
 
@@ -883,7 +876,7 @@ haes-are-equivs f (g , η , ε , τ) y = γ
   c (x , refl .(f x)) = q
    where
     p : transport (λ - → f - ≡ f x) (η x) (ε (f x)) ≡ refl (f x)
-    p = ⌜ ≃-sym (transport-ap-≃ f (η x) (ε (f x))) ⌝ (τ x)
+    p = ∣ ≃-sym (transport-ap-≃ f (η x) (ε (f x))) ∣ (τ x)
 
     q : (g (f x) , ε (f x)) ≡ (x , refl (f x))
     q = to-Σ-≡ (η x , p)
@@ -946,7 +939,7 @@ equivs-are-haes {𝓤} {𝓥} {X} {Y} f i = (g , η , ε , τ)
       t = (transport-ap (λ - → f - ≡ f x) pr₁ p b)⁻¹
 
     γ : ap f (η x) ≡ ε (f x)
-    γ = ⌜ transport-ap-≃ f a b ⌝ q
+    γ = ∣ transport-ap-≃ f a b ∣ q
 
 -- equivs-are-haes' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
 --                  → is-equiv f → is-hae f
