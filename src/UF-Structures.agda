@@ -1,7 +1,7 @@
 --FILE: UF-Structures.agda
 --BLAME: williamdemeo@gmail.com
 --DATE: 22 Apr 2020
---UPDATE: 28 May 2020
+--UPDATE: 29 May 2020
 --REF: Much of this file is based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sip 
 --      In particular, the quoted comments below, along with sections of code to which those comments refer, are due to Martin Escardo.
@@ -17,7 +17,7 @@ open import UF-Singleton using (is-set; is-subsingleton; singletons-are-subsingl
 
 open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
 
-open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality')
+open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality'; ⊆-is-subsingleton)
 
 open import UF-Univalence using (is-univalent; Id→Eq; Σ-assoc; equivs-closed-under-∼; ap₂; ×-is-subsingleton; to-subtype-≡; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent; left-cancellable; subtypes-of-sets-are-sets; Σ-change-of-variable)
 
@@ -38,7 +38,7 @@ module ∞-magma-identity {𝓤 : Universe} where
   sns-data : SNS ∞-magma-structure 𝓤
   sns-data = (ι , ρ , θ)
    where
-    ι : (A B : ∞-Magma) →  ⟨ A ⟩ ≃ ⟨ B ⟩  → 𝓤 ̇
+    ι : (A 𝑩 : ∞-Magma) →  ⟨ A ⟩ ≃ ⟨ 𝑩 ⟩  → 𝓤 ̇
     ι (X , _·_) (Y , _*_) (f , _) = (λ x x' → f (x · x')) ≡ (λ x x' → f x * f x')
 
     ρ : (A : ∞-Magma) → ι A A (id-≃ ⟨ A ⟩)
@@ -49,8 +49,7 @@ module ∞-magma-identity {𝓤 : Universe} where
 
     h (refl _·_) = refl (refl _·_)
 
-    θ : {X : 𝓤 ̇ } (_·_ _*_ : ∞-magma-structure X)
-      → is-equiv (canonical-map ι ρ _·_ _*_)
+    θ : {X : 𝓤 ̇ } (_·_ _*_ : ∞-magma-structure X) → is-equiv (canonical-map ι ρ _·_ _*_)
 
     θ _·_ _*_ = equivs-closed-under-∼ ( id-is-equiv (_·_ ≡ _*_) ) h
 
@@ -61,7 +60,7 @@ module ∞-magma-identity {𝓤 : Universe} where
             Σ f ꞉ (X → Y), is-equiv f
                          × ((λ x x' → f (x · x')) ≡ (λ x x' → f x * f x'))
 
-  characterization-of-∞-Magma-≡ : is-univalent 𝓤 → (A B : ∞-Magma) → (A ≡ B) ≃ (A ≅ B)
+  characterization-of-∞-Magma-≡ : is-univalent 𝓤 → (A 𝑩 : ∞-Magma) → (A ≡ 𝑩) ≃ (A ≅ 𝑩)
   characterization-of-∞-Magma-≡ 𝓤★ = characterization-of-≡ 𝓤★ sns-data
 
   --"The above equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence:
@@ -98,8 +97,8 @@ module uf-algebra-with-axioms where
     S' : 𝓤 ̇ → 𝓥 ⊔ 𝓦 ̇
     S' X = Σ s ꞉ S X , axioms X s
 
-    ι' : ( A B : Σ S' ) → ⟨ A ⟩ ≃ ⟨ B ⟩ → 𝓣 ̇
-    ι' A B = ι [ A ] [ B ]
+    ι' : ( A 𝑩 : Σ S' ) → ⟨ A ⟩ ≃ ⟨ 𝑩 ⟩ → 𝓣 ̇
+    ι' A 𝑩 = ι [ A ] [ 𝑩 ]
 
     ρ' : (A : Σ S') → ι' A A (id-≃ ⟨ A ⟩)
     ρ' A = ρ [ A ]
@@ -129,11 +128,11 @@ module uf-algebra-with-axioms where
   characterization-of-≡-with-axioms : is-univalent 𝓤 → {S : 𝓤 ̇ → 𝓥 ̇ }
                                                     ( σ : SNS S 𝓣 )   ( axioms : (X : 𝓤 ̇) → S X → 𝓦 ̇ )
    →                                             ( (X : 𝓤 ̇) (s : S X) → is-subsingleton (axioms X s) )
-   →                                             ( A B : Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s )
+   →                                             ( A 𝑩 : Σ X ꞉ 𝓤 ̇ , Σ s ꞉ S X , axioms X s )
                                                   ---------------------------------------------------
-   →                                              (A ≡ B) ≃ ( [ A ] ≃[ σ ] [ B ] )
+   →                                              (A ≡ 𝑩) ≃ ( [ A ] ≃[ σ ] [ 𝑩 ] )
   characterization-of-≡-with-axioms 𝓤★ σ axioms axiomsXs✧ = characterization-of-≡ 𝓤★ (add-axioms axioms axiomsXs✧ σ)
-  --Recall, `characterization-of-≡ : is-univalent 𝓤 → { S : 𝓤 ̇ → 𝓥 ̇ } ( σ : SNS S 𝓦 ) → ( A B : Σ S ) → ( A ≡ B ) ≃ ( A ≃[ σ ] B )`
+  --Recall, `characterization-of-≡ : is-univalent 𝓤 → { S : 𝓤 ̇ → 𝓥 ̇ } ( σ : SNS S 𝓦 ) → ( A 𝑩 : Σ S ) → ( A ≡ 𝑩 ) ≃ ( A ≃[ σ ] 𝑩 )`
 
 ------------------------------------------
 --Magmas.
@@ -146,7 +145,7 @@ module magma-identity {𝓤 : Universe} where
   _≅_ : Magma → Magma → 𝓤 ̇
   (X , _∙_ , _) ≅ (Y , _*_ , _) = Σ f ꞉ (X → Y) , is-equiv f  × ( ( λ x x' → f (x ∙ x') ) ≡ (λ x x' → f x * f x') )
 
-  characterization-of-Magma-≡ : is-univalent 𝓤 → (A B : Magma ) → (A ≡ B) ≃ (A ≅ B)
+  characterization-of-Magma-≡ : is-univalent 𝓤 → (A 𝑩 : Magma ) → (A ≡ 𝑩) ≃ (A ≅ 𝑩)
   characterization-of-Magma-≡ 𝓤★ = characterization-of-≡-with-axioms 𝓤★
     ∞-magma-identity.sns-data   ( λ X s → is-set X )   ( λ X s → being-set-is-subsingleton (univalence-gives-dfunext 𝓤★ ) )
 
@@ -169,7 +168,7 @@ module pointed-type-identity {𝓤 : Universe} where
   sns-data : SNS Pointed 𝓤
   sns-data = (ι , ρ , θ)
    where
-    ι : (A B : Σ Pointed) → ⟨ A ⟩ ≃ ⟨ B ⟩ → 𝓤 ̇
+    ι : (A 𝑩 : Σ Pointed) → ⟨ A ⟩ ≃ ⟨ 𝑩 ⟩ → 𝓤 ̇
     ι (X , x₀) (Y , y₀) (f , _) = (f x₀ ≡ y₀)
 
     ρ : (A : Σ Pointed) → ι A A (id-≃ ⟨ A ⟩)
@@ -184,9 +183,9 @@ module pointed-type-identity {𝓤 : Universe} where
   _≅_ : Σ Pointed → Σ Pointed → 𝓤 ̇
   (X , x₀) ≅ (Y , y₀) = Σ f ꞉ (X → Y) , is-equiv f × (f x₀ ≡ y₀)
 
-  characterization-of-pointed-type-≡ :  is-univalent 𝓤 → (A B : Σ Pointed)
+  characterization-of-pointed-type-≡ :  is-univalent 𝓤 → (A 𝑩 : Σ Pointed)
                                                       ---------------------------------
-   →                                                        (A ≡ B)   ≃   (A ≅ B)
+   →                                                        (A ≡ 𝑩)   ≃   (A ≅ 𝑩)
   characterization-of-pointed-type-≡ 𝓤★ = characterization-of-≡ 𝓤★ sns-data
 
   --EXERCISE. This equivalence is characterized by induction on identifications as the function that maps reflexivity to the identity equivalence.
@@ -767,7 +766,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
   infixl 42 _·_
 
-  --"We abbreviate "closed under the group operations" by "group-closed":
+  --"We abbreviate 'closed under the group operations' by `group-closed`:
   group-closed : ( ⟨ G ⟩ → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
   group-closed 𝓐 = 𝓐 (unit G) × ( ( x y : ⟨ G ⟩ ) → 𝓐 x → 𝓐 y → 𝓐 (x · y) )
                                              × ( ( x : ⟨ G ⟩ ) → 𝓐 x → 𝓐 (inv G x) )
@@ -777,6 +776,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
   Subgroups : 𝓤 ⁺ ̇
   Subgroups = Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed ( _∈ A )
 
+  --the carrier of a given subgroup
   ⟪_⟫ : Subgroups → 𝓟 ⟨ G ⟩
   ⟪ A , _ , _ , _ ⟫ = A
 
@@ -809,21 +809,17 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
                                             ( powersets-are-sets' 𝓤★ ⟪ S ⟫ ⟪ T ⟫ )
 
   --[Here are some useful lemmas extracted from MHE's proof of `subgroup-equality` for clarity.]
-
-  --[This lemma is called `f` in MHE's proof of `subgroup-equality`]
-  subgroup-equality-gives-membership-equiv :    (S T : Subgroups)    →     S ≡ T
-                                                                 ----------------------------------
-   →                                                             (x : ⟨ G ⟩) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫
-
+  subgroup-equality-gives-membership-equiv : (S T : Subgroups)   --[called `f` in MHE's proof]
+   →                                  S ≡ T
+                        -----------------------------------
+   →                   (x : ⟨ G ⟩) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫
   subgroup-equality-gives-membership-equiv S T S≡T x =
     transport (λ - → x ∈ ⟪ - ⟫) S≡T , transport (λ - → x ∈ ⟪ - ⟫) (S≡T ⁻¹)
 
-  --[This lemma is called `h` in MHE's proof of `subgroup-equality`]
-  membership-equiv-gives-carrier-equality :   (S T : Subgroups)
-   →                                                        ( (x : ⟨ G ⟩ ) →  x ∈ ⟪ S ⟫  ⇔  x ∈ ⟪ T ⟫ )
-                                                              --------------------------------------
-   →                                                                     ⟪ S ⟫ ≡ ⟪ T ⟫
-
+  membership-equiv-gives-carrier-equality :   (S T : Subgroups)   --[called `h` in MHE's proof]
+   →                   ( (x : ⟨ G ⟩ ) →  x ∈ ⟪ S ⟫  ⇔  x ∈ ⟪ T ⟫ )
+                        -----------------------------------------
+   →                                   ⟪ S ⟫ ≡ ⟪ T ⟫
   membership-equiv-gives-carrier-equality S T φ = subset-extensionality' 𝓤★ α β
     where
       α : ⟪ S ⟫ ⊆ ⟪ T ⟫
@@ -834,33 +830,59 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
   --[This lemma is called `g` in MHE's proof of `subgroup-equality`]
   membership-equiv-gives-subgroup-equality :   (S T : Subgroups)
-   →                                                            ( ( x : ⟨ G ⟩ ) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫ )
-                                                                 ---------------------------------------
-   →                                                                             S ≡ T
+   →                   ( ( x : ⟨ G ⟩ ) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫ )
+                         ---------------------------------------
+   →                                       S ≡ T
   membership-equiv-gives-subgroup-equality S T =
     inverse ( ap-⟪⟫ S T) (ap-⟪⟫-is-equiv S T) ∘ (membership-equiv-gives-carrier-equality S T)
 
+  membership-equiv-is-subsingleton :  (S T : Subgroups)  →  is-subsingleton ((x : ⟨ G ⟩) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫)
+  membership-equiv-is-subsingleton S T =
+   Π-is-subsingleton dfe ( λ x → ×-is-subsingleton
+                                      (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ T ⟫ x ) )
+                                      (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ S ⟫ x ) )
+                                  ) 
+
   --"It follows that two subgroups are equal if and only if they have the same elements:
-  subgroup-equality :        (S T : Subgroups)
-                            --------------------------------------------------------
-   →                       ( S ≡ T )    ≃    ( ( x : ⟨ G ⟩ )  → ( x ∈ ⟪ S ⟫ ) ⇔ ( x ∈ ⟪ T ⟫ ) )
+  subgroup-equality :  (S T : Subgroups)
+   →          ( S ≡ T )    ≃    ( ( x : ⟨ G ⟩ )  → ( x ∈ ⟪ S ⟫ ) ⇔ ( x ∈ ⟪ T ⟫ ) )
 
   subgroup-equality S T =
     logically-equivalent-subsingletons-are-equivalent _ _
-      (subgroups-form-a-set S T)
-        (Π-is-subsingleton dfe
-          ( λ x → ×-is-subsingleton
-            (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ T ⟫ x ) )
-            (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ S ⟫ x ) )
-          )
-        )
+      (subgroups-form-a-set S T) (membership-equiv-is-subsingleton S T)
       (subgroup-equality-gives-membership-equiv S T , membership-equiv-gives-subgroup-equality S T)
+
+
+  --[wjd added]-------------------------------------------------------------------------------------
+  --The converse of `membership-equiv-gives-carrier-equality` is obvious.
+  carrier-equality-gives-membership-equiv :   (S T : Subgroups)
+   →                            ⟪ S ⟫ ≡ ⟪ T ⟫
+                  ----------------------------------------
+   →              ( ( x : ⟨ G ⟩ ) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫ )
+  carrier-equality-gives-membership-equiv S T (refl _) x = id , id
+
+  --so we have...
+  carrier-equiv :   (S T : Subgroups)    →   ( ( x : ⟨ G ⟩ ) → x ∈ ⟪ S ⟫ ⇔ x ∈ ⟪ T ⟫ )    ≃      ( ⟪ S ⟫ ≡ ⟪ T ⟫ )
+  carrier-equiv S T = logically-equivalent-subsingletons-are-equivalent _ _
+    ( membership-equiv-is-subsingleton S T )  ( powersets-are-sets' 𝓤★ ⟪ S ⟫ ⟪ T ⟫ )
+    ( membership-equiv-gives-carrier-equality S T , carrier-equality-gives-membership-equiv S T )
+
+  --...which yields an alternative subgroup equality lemma.
+  subgroup-equality' :  (S T : Subgroups)   →   ( S ≡ T )    ≃   ( ⟪ S ⟫ ≡ ⟪ T ⟫ )
+  subgroup-equality' S T =
+   (S ≡ T)                                                         ≃⟨ subgroup-equality S T ⟩
+   ( ( x : ⟨ G ⟩ )  → ( x ∈ ⟪ S ⟫ ) ⇔ ( x ∈ ⟪ T ⟫ ) )  ≃⟨ carrier-equiv S T ⟩
+   (⟪ S ⟫ ≡ ⟪ T ⟫)                                            ■
+  --------------------------------------------------------------------------------------------------
+
 
   --"As an application of the subtype classifier, we now show that the type of subgroups is equivalent to the type
   -- `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) , is-embedding f × is-homomorphism H G f`
-  -- It [is] convenient to introduce notation for the type of group structures satisfying the group axioms:
-  T : 𝓤 ̇ → 𝓤 ̇
-  T X = Σ ( (_·_ , e) , a) ꞉ group-structure X , group-axiom X (_·_ , e)
+
+  --Following MHE, we introduce notation for the type of group structures satisfying the group axioms.
+  --(though we use 𝔾 where MHE uses T)
+  𝔾 : 𝓤 ̇ → 𝓤 ̇
+  𝔾 X = Σ ( (_·_ , e) , a) ꞉ group-structure X , group-axiom X (_·_ , e)
 
   --"We use an anonymous module to give common assumptions for the following few lemmas:
   module _ {X : 𝓤 ̇} (h : X → ⟨ G ⟩ ) (hem : is-embedding h) where
@@ -871,12 +893,12 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
     having-group-closed-fiber-is-subsingleton : is-subsingleton ( group-closed (fiber h) )
     having-group-closed-fiber-is-subsingleton = being-group-closed-subset-is-subsingleton (λ x → (fiber h x , hem x) )
 
-    at-most-one-homomorphic-structure : is-subsingleton (Σ τ ꞉ T X , is-homomorphism (X , τ) G h )
+    at-most-one-homomorphic-structure : is-subsingleton (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )
     at-most-one-homomorphic-structure
       ( ( ( ( _*_ , unitH ) , maxioms ) , gaxiom) , (pmult , punit) )
       ( ( ( ( _*'_ , unitH' ) , maxioms' ) , gaxiom') , (pmult' , punit') ) = γ
      where
-      τ τ' : T X
+      τ τ' : 𝔾 X
       τ = ( ( _*_ , unitH ) , maxioms ) , gaxiom
       τ' = ( ( _*'_ , unitH' ) , maxioms' ) , gaxiom'
 
@@ -907,7 +929,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
       γ = to-subtype-≡ (λ τ → being-hom-is-subsingleton (X , τ) G h) τ≡τ'
 
     group-closed-fiber-gives-homomorphic-structure : group-closed (fiber h)
-     →                         (Σ τ ꞉ T X , is-homomorphism (X , τ) G h)
+     →                         (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
     group-closed-fiber-gives-homomorphic-structure (unitc , mulc , invc) = τ , hhom
       where
         hfib : (x : X) → fiber h (h x)
@@ -972,13 +994,13 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
         Xset : is-set X
         Xset = subtypes-of-sets-are-sets h h-lc (group-is-set G)
 
-        τ : T X
+        τ : 𝔾 X
         τ = ( ( _*_ , unitH ) , ( Xset , unitH-left , unitH-right , assocH ) ) , group-axiomH
 
         hhom : is-homomorphism (X , τ) G h
         hhom = gfe (λ x → gfe (pmul x) ) , punit
 
-    homomorphic-structure-gives-group-closed-fiber : (Σ τ ꞉ T X , is-homomorphism (X , τ) G h)
+    homomorphic-structure-gives-group-closed-fiber : (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
      →                                                                                group-closed (fiber h)
     homomorphic-structure-gives-group-closed-fiber
       ( ( ( ( _*_ , unitH) , maxioms) , gaxiom) , (pmult , punit) ) = unitc , mulc , invc
@@ -1003,7 +1025,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
              inv G x      ∎ )
 
     --"What is important for our purposes is this:
-    fiber-structure-lemma : group-closed (fiber h) ≃ (Σ τ ꞉ T X , is-homomorphism (X , τ) G h)
+    fiber-structure-lemma : group-closed (fiber h) ≃ (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
     fiber-structure-lemma = logically-equivalent-subsingletons-are-equivalent _ _
                                         having-group-closed-fiber-is-subsingleton
                                         at-most-one-homomorphic-structure
@@ -1019,10 +1041,10 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
    ( Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed (_∈ A) )                                                                               ≃⟨ ii ⟩
    ( Σ (X , h , e) ꞉ Subtypes ⟨ G ⟩ , group-closed (fiber h) )                                                          ≃⟨ iii ⟩
    ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , group-closed (fiber h) )                                                    ≃⟨ iv ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ T X , is-homomorphism (X , τ) G h )                              ≃⟨ v ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ e ꞉ is-embedding h , Σ τ ꞉ T X , is-homomorphism (X , τ) G h )  ≃⟨ vi ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ τ ꞉ T X , Σ e ꞉ is-embedding h , is-homomorphism (X , τ) G h )  ≃⟨ vii ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ T X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )        ≃⟨ viii ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )                              ≃⟨ v ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ e ꞉ is-embedding h , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )  ≃⟨ vi ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ τ ꞉ 𝔾 X , Σ e ꞉ is-embedding h , is-homomorphism (X , τ) G h )  ≃⟨ vii ⟩
+   ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ 𝔾 X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )        ≃⟨ viii ⟩
    ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )                   ■
     where
      φ : Subtypes ⟨ G ⟩ → 𝓟 ⟨ G ⟩
