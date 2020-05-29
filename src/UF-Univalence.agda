@@ -18,19 +18,18 @@ open import UF-Singleton using (is-set; is-singleton; is-subsingleton; singleton
 open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; ⁻¹-involutive; wconstant-≡-endomaps; types-with-wconstant-≡-endomaps-are-sets; _◁_; has-section; singleton-type; singleton-type'; retract-of-singleton; singleton-types'-are-singletons;_≃_; id-≃; is-equiv; ∘-is-equiv; ≃-gives-▷; equiv-to-singleton; ≃-sym; fiber; inverse; inverse-of-∘; invertible; equivs-are-invertible;  to-×-≡;  inv-elim-right; inv-elim-left; invertibles-are-equivs; invertibility-gives-≃; Σ-cong; inverses-are-equivs; inverses-are-retractions; inverses-are-sections; fiber-point; fiber-identification; transport-ap; apd; transport-is-retraction)
 
 -----------------------------------------------------------------------------
--- Voevodsky's univalence axiom
--- -------------------------------
-{-"There is a canonical transformation `(X Y : 𝓤 ̇ ) → X ≡ Y → X ≃ Y` that sends the identity identification `refl X : X ≡ X` to the identity
-   equivalence `id-≃ X : X ≃ X`. The univalence axiom, for the universe `𝓤`, says that this canonical map is itself an equivalence. -}
+--Voevodsky's univalence axiom.
+{-"There is a canonical transformation `(X Y : 𝓤 ̇ ) → X ≡ Y → X ≃ Y` that sends the identity identification `refl X : X ≡ X` to the
+   identity equivalence `id-≃ X : X ≃ X`. The univalence axiom, for the universe `𝓤`, says this canonical map is itself an equivalence. -}
 Id→Eq : (X Y : 𝓤 ̇) → X ≡ Y → X ≃ Y
 Id→Eq X X (refl X) = id-≃ X
 
 is-univalent : (𝓤 : Universe) → 𝓤 ⁺ ̇
 is-univalent 𝓤 = (X Y : 𝓤 ̇) → is-equiv (Id→Eq X Y)
 
---"Thus, the univalence of the universe `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical bijection with equivalences
--- `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is `Id→Eq`. We emphasize that this doesn't posit that univalence
--- holds. It says what univalence is (like the type that says what the twin-prime conjecture is).
+--"Thus, the univalence of the universe `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical bijection with
+-- equivalences `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is `Id→Eq`. We emphasize that this doesn't
+-- posit that univalence holds. It says what univalence is (like the type that says what the twin-prime conjecture is).
 univalence-≃ : is-univalent 𝓤 → (X Y : 𝓤 ̇) → (X ≡ Y) ≃ (X ≃ Y)
 univalence-≃ ua X Y = Id→Eq X Y , ua X Y
 
@@ -38,34 +37,35 @@ Eq→Id : is-univalent 𝓤 → (X Y : 𝓤 ̇) → X ≃ Y → X ≡ Y
 Eq→Id ua X Y = inverse (Id→Eq X Y) (ua X Y)
 
 --[Recall,
--- "To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is the
---  identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type identifications into functions:
+--"To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is
+-- the identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type identifications into functions:
 --     Id→Fun : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇ ))
---  Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
---  following, where this time the identity function is that of the type `X`:
+-- Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
+-- following, where this time the identity function is that of the type `X`:
 --     Id→Fun' : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
 --     Id→Fun' (refl X) = 𝑖𝑑 X
 --
 --     Id→Funs-agree : {X Y : 𝓤 ̇ } (p : X ≡ Y) → Id→Fun p ≡ Id→Fun' p
 --     Id→Funs-agree (refl X) = refl (𝑖𝑑 X)
---  So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`. We apply this function to `⋆ : 𝟙` to conclude the proof."
+-- So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`. We apply this function to `⋆ : 𝟙`
+-- to conclude the proof."
 --]
 
 --"Here is a third way to convert a type identification into a function:
 Id→fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
 Id→fun {𝓤}{X}{Y} p = ∣ Id→Eq X Y p ∣
 
-Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)
- →              Id→fun p ≡ Id→Fun p
+Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)   →   Id→fun p  ≡  Id→Fun p
 Id→funs-agree (refl X) = refl (𝑖𝑑 X)
 
-{-"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent mathematics
-    in a pure, spartan MLTT. It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of equivalence that are at the heart
-    of univalent mathematics. Univalence is a fundamental ingredient, but first we need the correct notion of equivalence to be able to formulate it.
-    Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
-    and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
-    There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"  -}
+{-"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent
+  mathematics in a pure, spartan MLTT. It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of
+  equivalence that are at the heart of univalent mathematics. Univalence is a fundamental ingredient, but first we need the correct
+  notion of equivalence to be able to formulate it.
+  Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
+  and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
+  There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"  -}
 
 ------------------------------------------------------------------------------
 --Example of a type that is not a set under univalence

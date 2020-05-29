@@ -467,16 +467,14 @@ hedberg {𝓤}{X} d = types-with-wconstant-≡-endomaps-are-sets X (hedberg-lemm
    will be to get a simple proof of the fact that invertible maps are equivalences in the sense of Voevodsky." -}
 
 --A *section* of a function g : Y → X is a right inverse (i.e., f : X → Y such that g ∘ f = id)
-has-section has-right-inv is-surjective : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (Y → X) → 𝓤 ⊔ 𝓥 ̇
+has-section has-right-inv : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (Y → X) → 𝓤 ⊔ 𝓥 ̇
 has-section g = Σ f ꞉ (codomain g → domain g), g ∘ f ∼ id         --i.e., ∀ (x : X) , (g ∘ f) x ≡ id x ≡ x
 has-right-inv = has-section -- alias
-is-surjective = has-section  -- alias (recall, surjective functions are those with sections)
 
 --A *retraction* of a function f : X → Y is a left inverse (i.e., g : Y → X such that g ∘ f = id)
-has-retraction has-left-inv is-injective : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+has-retraction has-left-inv : {X : 𝓤 ̇}{Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 has-retraction r = Σ s ꞉ (codomain r → domain r),  s ∘ r ∼ id        --i.e., ∀ (x : X) , (s ∘ r) x ≡ id x ≡ x
 has-left-inv = has-retraction  -- alias
-is-injective = has-retraction    -- alias  (recall, injective functions are those with retractions)
 
 --X is a retract of Y, written X ◁ Y, iff ∃ function g : Y → X that has a section (right-inverse).
 _◁_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ◁ with `\lhd`
@@ -485,13 +483,14 @@ infix  10 _◁_
 --An inhabitant `𝓻 : X ◁ Y` of a retraction type is a triple `𝓻 = (g , f , η)` where g : Y → X  is a surjective function with section
 --`(f , η) : has-section g`, so f : X → Y and `η : g ∘ f ~ id`.
 
-
---X embeds in Y, written X ↪ Y, iff ∃ function f : X → Y that has a retraction (left-inverse).
-_↪_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ↪ with `\hookrightarrow`
-X ↪ Y = Σ f ꞉ (X → Y), has-retraction f
-infix  10 _↪_
---An inhabitant `𝓮 : X ↪ Y` of an embedding type is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function (the embedding map)
+--wjd added:
+--X injects into Y, written X ↣ Y, iff ∃ function f : X → Y that has a retraction (left-inverse).
+_↣_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ↣ with `\r->` or `\rightarrowtail`
+X ↣ Y = Σ f ꞉ (X → Y), has-retraction f
+infix  10 _↣_
+--An inhabitant `inj : X ↣ Y` of an "injection type" is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function
 --with retraction (g , ε) : has-retraction f so g : Y → X and ε : g ∘ f ~ id.
+--Remarks on injections (and whether they should be thought of as embeddings) appear near the bottom of this file.
 
 --"A function that has a section is called a retraction. We use this... also for the function that projects out the retraction:
 retraction : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ◁ Y → Y → X
@@ -506,28 +505,36 @@ retract-equation (r , s , η) = η
 retraction-has-section : {X : 𝓤 ̇} {Y : 𝓥 ̇} (ρ : X ◁ Y) → has-section (retraction ρ)
 retraction-has-section (r , h) = h
 
---Similarly, for embeddings and their left inverses (which we call "extractions"):
-extraction left-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↪ Y → Y → X
-extraction (f , g , ε) = g
-left-inverse = extraction -- alias
-
-embedding right-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↪ Y → X → Y
-embedding (f , g , ε) = f
-right-inverse = embedding -- alias
-
---The name "extraction" seems suitable since embedding followed by extraction is identity:
-embedding-equation : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (𝓮 : X ↪ Y)
- →                 (extraction 𝓮 ∘ embedding 𝓮) ∼ (𝑖𝑑 X)
-embedding-equation (f , g , ε) = ε
---(The name enforces the order---you only can't extract something that isn't first embedded.)
-
---An identity retraction
+--identity retraction
 id-◁ : (X : 𝓤 ̇) → X ◁ X
 id-◁ X = 𝑖𝑑 X , 𝑖𝑑 X , refl
 
---"*Exercise*. The identity retraction is by no means the only retraction of a type onto itself in general, of course.
+
+--wjd added------------------------------------------------------------------------------------
+--Similarly, for injections and their left inverses (which we call "extractions"):
+extraction left-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↣ Y → Y → X
+extraction (f , g , ε) = g             --(Recall, `X ↣ Y` is notation for `Σ f ꞉ (X → Y) , has-retraction f`)
+left-inverse = extraction -- alias
+
+injection right-inverse : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↣ Y → X → Y
+injection (f , g , ε) = f
+right-inverse = injection -- alias
+
+--The name "extraction" seems suitable since embedding followed by extraction is identity:
+extraction-equation : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (𝓮 : X ↣ Y)
+ →                 (extraction 𝓮 ∘ injection 𝓮) ∼ (𝑖𝑑 X)
+extraction-equation (f , g , ε) = ε
+--(The name enforces the order---you can't extract something that isn't first injected.)
+
+--identity extraction
+id-↣ : (X : 𝓤 ̇) → X ↣ X
+id-↣ X = 𝑖𝑑 X , 𝑖𝑑 X , refl
+---------------------------------------------------------------------------------------
+
+
+--"EXERCISE. The identity retraction is by no means the only retraction of a type onto itself in general, of course.
 -- Prove that we have (that is, produce an element of the type) `ℕ ◁ ℕ` with the function `pred : ℕ → ℕ` defined
--- above as the retraction. Try to produce more inhabitants of this type.
+-- above as the retraction. Try to produce more inhabitants of this type."
 --
 --SOLUTION.
 --example 1.
@@ -540,10 +547,8 @@ id-◁ X = 𝑖𝑑 X , 𝑖𝑑 X , refl
 ℕ-◁-ℕ-add-two : ℕ ◁ ℕ 
 ℕ-◁-ℕ-add-two = sub-two , add-two , refl
  where
-  add-two : ℕ → ℕ
+  add-two sub-two : ℕ → ℕ
   add-two n = succ (succ n)
-
-  sub-two : ℕ → ℕ
   sub-two 0 = 0
   sub-two (succ 0) = succ 0
   sub-two (succ (succ n)) = n
@@ -552,9 +557,7 @@ id-◁ X = 𝑖𝑑 X , 𝑖𝑑 X , refl
 _◁∘_ : {X : 𝓤 ̇} {Y : 𝓥 ̇} {Z : 𝓦 ̇} → X ◁ Y → Y ◁ Z → X ◁ Z
 (r , s , η) ◁∘ (r' , s' , η') = (r ∘ r' , s' ∘ s , η'')
  where  -- Goal: (λ x → r (r' (s' (s x)))) ∼ (λ x → x)
-  η'' = λ x → r (r' (s' (s x))) ≡⟨ ap r (η' (s x)) ⟩
-                         r (s x) ≡⟨ η x ⟩
-                               x ∎
+  η'' = λ x → r (r' (s' (s x)))   ≡⟨ ap r (η' (s x)) ⟩  r (s x)   ≡⟨ η x ⟩  x ∎
 
 --"For notational convenience we also define composition with an implicit argument made explicit, and introduce postfix notation
 -- for the identity retraction.
@@ -588,13 +591,11 @@ infix   1 _◀    -- NOTATION. Type ◀ with `\T` or `\T1`
   η' : (σ : Σ A) → NatΣ r (NatΣ s σ) ≡ σ
   η' (x , a) = x , r x (s x a) ≡⟨ to-Σ-≡' (η x a) ⟩ x , a ∎
 
---"We have that `transport A (p ⁻¹)` is a two-sided inverse of `transport A p` using the functoriality of `transport A`, or
--- directly by induction on `p`:
+--"...`transport A (p ⁻¹)` is a two-sided inverse of `transport A p` using the functoriality of `transport A`, or directly by induction on `p`:
 transport-is-retraction : {X : 𝓤 ̇}
            (A : X → 𝓥 ̇)   {x y : X}   (p : x ≡ y)
-        -- ------------------------------------
+        --------------------------------------
  →     transport A p ∘ transport A (p ⁻¹) ∼ 𝑖𝑑 (A y)
-
 transport-is-retraction A (refl x) = refl
 
 transport-is-section : {X : 𝓤 ̇}
@@ -1114,14 +1115,28 @@ equiv-to-singleton : {X : 𝓤 ̇} {Y : 𝓥 ̇}
 equiv-to-singleton e = retract-of-singleton (≃-gives-◁ e)
 
 
+------------------------------------------------------------------------------------------------------------
+{- wjd: Remarks on embedding property of, and notation for,  `pr₁ (has-section g)`
+  Let X and Y be types and let f : X → Y be a function.
+  If `(g , p) : has-retraction f`, then g : Y → X and g ∘ f ∼ id   (i.e., ∀ x → (g ∘ f) x ≡ x )
+  and so `(f , p) : has-section g`.
+  Intuitively, we think of this as saying that f has a left inverse and is thus injective and, dually, g has a right-inverse and is thus
+  surjective.  Moreover, we like to think of injective functions as embeddings, and indeed this intuition is valid when X and Y are sets.
+  However, for more general types, injective functions need not be embeddings. So...
+  We commend out the following because we will reserve the symbol ↪ for true embeddings for general types.
+  see: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings
+  and https://lmcs.episciences.org/2027 -}
 
+-- --X embeds in Y, written X ↪ Y, iff ∃ function f : X → Y that has a retraction (left-inverse).
+-- _↪_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇              -- NOTATION: type ↪ with `\hookrightarrow`
+-- X ↪ Y = Σ f ꞉ (X → Y), has-retraction f
+-- infix  10 _↪_
+--An inhabitant `𝓮 : X ↪ Y` of an embedding type is a triple `𝓮 = (f , g , ε)` where `f : X → Y`  is an injective function (the embedding map)
+--with retraction (g , ε) : has-retraction f so g : Y → X and ε : g ∘ f ~ id.
 
-
----------------------
-
-
-
--- wjd added -----------------
+------------------------------------------------------------------------------------------
+--wjd: misc experimental/unused stuff.
+--
 --[`(g , η) : invertible f`  ==>  `g : Y → X`  and  `pr₁ η : (g ∘ f ∼ id)`  and  `pr₂ η : (f ∘ g ∼ id)`]
 -- Exercise. Complete the following definitions for extracting the inverse map and
 --           left- (resp. right-) identity of an invertible function.
@@ -1155,5 +1170,3 @@ equiv-to-singleton e = retract-of-singleton (≃-gives-◁ e)
 -- inv-invertible : {X : 𝓤 ̇} {Y : 𝓥 ̇}(f : X → Y){gη : invertible f} → invertible (pr₁ gη)
 -- inv-invertible f {g , η} = f , inv-ids g (f , pr₂ η , pr₁ η)
 -- end wjd added -----------------
-
-------------------------------------------------------------------------------------------------------------
