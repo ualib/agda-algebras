@@ -969,9 +969,9 @@ EpicInv f fEpic b = Inv f b (fEpic b)
 
 ---------------------------------------------------------
 --Monics (injectivity)
+--see also: `left-cancellable` aka `injective` in the `UF-Univalence` module.
 monic : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
 monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
-
 monic₀ : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
 monic₀ = monic {𝓤₀}{𝓤₀}
 

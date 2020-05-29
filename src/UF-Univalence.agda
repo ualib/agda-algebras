@@ -13,7 +13,7 @@ module UF-Univalence where
 
 open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; ¬; id; 𝑖𝑑; 𝟚; _×_; _+_; inl; inr; _∘_; ₀; ₁; _,_; Σ; -Σ; domain; codomain; pr₁; pr₂; Π; -Π; _≡_; refl; ap; _≡⟨_⟩_; _∎; _∼_; _⁻¹; transport; Id→Fun; _≢_; _⇔_; ₁-is-not-₀; Σ-induction; ∣_∣; ∥_∥)
 
-open import UF-Singleton using (is-set; is-singleton; is-subsingleton; singletons-are-subsingletons; pointed-subsingletons-are-singletons; center; centrality)
+open import UF-Singleton using (is-set; is-singleton; is-subsingleton; singletons-are-subsingletons; pointed-subsingletons-are-singletons; center; centrality; is-center)
 
 open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; ⁻¹-involutive; wconstant-≡-endomaps; types-with-wconstant-≡-endomaps-are-sets; _◁_; has-section; singleton-type; singleton-type'; retract-of-singleton; singleton-types'-are-singletons;_≃_; id-≃; is-equiv; ∘-is-equiv; ≃-gives-▷; equiv-to-singleton; ≃-sym; fiber; inverse; inverse-of-∘; invertible; equivs-are-invertible;  to-×-≡;  inv-elim-right; inv-elim-left; invertibles-are-equivs; invertibility-gives-≃; Σ-cong; inverses-are-equivs; inverses-are-retractions; inverses-are-sections; fiber-point; fiber-identification; transport-ap; apd; transport-is-retraction)
 
@@ -63,6 +63,7 @@ Id→funs-agree (refl X) = refl (𝑖𝑑 X)
   mathematics in a pure, spartan MLTT. It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of
   equivalence that are at the heart of univalent mathematics. Univalence is a fundamental ingredient, but first we need the correct
   notion of equivalence to be able to formulate it.
+
   Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
   and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
   There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"  -}
@@ -83,7 +84,7 @@ swap₂-is-equiv : is-equiv swap₂
 swap₂-is-equiv = invertibles-are-equivs swap₂ (swap₂ , swap₂-involutive , swap₂-involutive )
 
 --"We now use a local module to assume univalence of the first universe in the construction of our example:
-module example-of-a-nonset (ua : is-univalent 𝓤₀) where
+module example-of-a-nonset (𝓤₀★ : is-univalent 𝓤₀) where
   -- The above gives two distinct equivalences:
   e₀ : 𝟚 ≃ 𝟚
   e₀ = id-≃ 𝟚
@@ -102,25 +103,24 @@ module example-of-a-nonset (ua : is-univalent 𝓤₀) where
 
   -- Using univalence, we get two different identifications of the type `𝟚` with itself:
   p₀ : 𝟚 ≡ 𝟚
-  p₀ = Eq→Id ua 𝟚 𝟚 e₀
+  p₀ = Eq→Id 𝓤₀★ 𝟚 𝟚 e₀
 
   p₁ : 𝟚 ≡ 𝟚
-  p₁ = Eq→Id ua 𝟚 𝟚 e₁
+  p₁ = Eq→Id 𝓤₀★ 𝟚 𝟚 e₁
 
   --If `𝓤₀` is a set, then the ids `p₀` and `p₁` would be equal... but...
   p₀-is-not-p₁ : p₀ ≢ p₁
   p₀-is-not-p₁ q = e₀-is-not-e₁ r
    where
-    r = e₀             ≡⟨ (inv-elim-right (Id→Eq 𝟚 𝟚) (ua 𝟚 𝟚) e₀)⁻¹ ⟩
-        Id→Eq 𝟚 𝟚 p₀  ≡⟨ ap (Id→Eq 𝟚 𝟚) q ⟩
-        Id→Eq 𝟚 𝟚 p₁ ≡⟨ inv-elim-right (Id→Eq 𝟚 𝟚) (ua 𝟚 𝟚) e₁ ⟩
-        e₁             ∎
+    r = e₀                    ≡⟨ (inv-elim-right (Id→Eq 𝟚 𝟚) (𝓤₀★ 𝟚 𝟚) e₀)⁻¹ ⟩
+          Id→Eq 𝟚 𝟚 p₀ ≡⟨ ap (Id→Eq 𝟚 𝟚) q ⟩
+          Id→Eq 𝟚 𝟚 p₁ ≡⟨ inv-elim-right (Id→Eq 𝟚 𝟚) (𝓤₀★ 𝟚 𝟚) e₁ ⟩
+          e₁                    ∎
   -- ...so,
   𝓤₀-is-not-a-set : ¬(is-set (𝓤₀ ̇))
-  𝓤₀-is-not-a-set set𝓤₀ = p₀-is-not-p₁ q
-   where q : p₀ ≡ p₁
-         q = set𝓤₀ 𝟚 𝟚 p₀ p₁
+  𝓤₀-is-not-a-set set𝓤₀ = p₀-is-not-p₁ (set𝓤₀ 𝟚 𝟚 p₀ p₁)
 --"For more examples, see Kraus and Sattler (https://arxiv.org/abs/1311.4002)."
+--[wjd: see also Siva's example near bottom of UF-Extensionality module.]
 
 --------------------------------------------------------------------------
 --Exercises.
@@ -129,15 +129,9 @@ module example-of-a-nonset (ua : is-univalent 𝓤₀) where
 --Formulations.
 --"Define functions for the following type declarations.
 subsingleton-criterion : {X : 𝓤 ̇ } → (X → is-singleton X)
-                            ---------------------------------
- →                                is-subsingleton X
-subsingleton-criterion f x = singletons-are-subsingletons (domain f) (f x) x
-
-subsingleton-criterion-first-try : {X : 𝓤 ̇ } → (X → is-singleton X) → is-subsingleton X
-subsingleton-criterion-first-try f x = λ y → x  ≡⟨ (cent x)⁻¹ ⟩ c ≡⟨ cent y ⟩ y ∎
- where
-  c = pr₁ (f x)
-  cent = pr₂ (f x)
+                               ---------------------------------
+ →                                  is-subsingleton X
+subsingleton-criterion f  x  =  singletons-are-subsingletons ( domain f ) ( f x ) x
 
 subsingleton-criterion' : {X : 𝓤 ̇ } → (X → is-subsingleton X) → is-subsingleton X
 subsingleton-criterion' f x y = f x x y
@@ -315,7 +309,7 @@ equivs-closed-under-∼ {f = f} {g = g} 𝓔f g∼f = joyal-equivs-are-equivs g 
 
 equiv-to-singleton' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
  →               X ≃ Y     →     is-singleton X
-                --------------------------------
+                ------------------------------
  →                     is-singleton Y 
 equiv-to-singleton' X≃Y = equiv-to-singleton (≃-sym X≃Y)  -- alt proof:   = retract-of-singleton (≃-gives-▷ X≃Y)
   -- Recall,   retract-of-singleton : ... Y ◁ X  →  is-singleton X → is-singleton Y, and,  ≃-gives-▷ : ... X ≃ Y -> Y ◁ X
@@ -323,13 +317,14 @@ equiv-to-singleton' X≃Y = equiv-to-singleton (≃-sym X≃Y)  -- alt proof:   
 pr₁-lc : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }   →   ( (x : X) → is-subsingleton (F x) )
                                                    -------------------------------------
  →                                                 left-cancellable ( λ (t : Σ F) → pr₁ t )
-pr₁-lc Fx✧ prx≡prx' = to-Σ-≡ (prx≡prx' , Fx✧ _ _ _)
+pr₁-lc  x↦Fx✧  prx≡prx'  =  to-Σ-≡   (prx≡prx' ,   x↦Fx✧  _ _ _)
 
 subsets-of-sets-are-sets : (X : 𝓤 ̇) (F : X → 𝓥 ̇ )
  →                 is-set X    →    ( (x : X) → is-subsingleton (F x) )
                     -------------------------------------------
  →                 is-set (Σ x ꞉ X , F x)
-subsets-of-sets-are-sets X F Xset Fx✧ = subtypes-of-sets-are-sets pr₁ (pr₁-lc Fx✧) Xset
+subsets-of-sets-are-sets X  F  X-is-set  x↦Fx✧ =
+ subtypes-of-sets-are-sets pr₁ (pr₁-lc  x↦Fx✧) X-is-set
 --Recall, subtypes-of-sets-are-sets : ... (m : X → Y) → left-cancellable m  →  is-set Y → is-set X
 --Here, we have `m = pr₁` and `pr₁-lc Fx✧` says `pr₁` is `lc`. 
 
@@ -337,11 +332,11 @@ to-subtype-≡ : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {x x' : X} {v : F x} {v' : 
  →       ( (x : X) → is-subsingleton (F x) )      →      x ≡ x'
            -----------------------------------------------
  →                             (x , v) ≡ (x' , v')
-to-subtype-≡ {𝓤}{𝓥} {X} {F} {x}{x'} {v} {v'} Fx✧ x≡x' = to-Σ-≡ (x≡x' , goal)
+to-subtype-≡ {𝓤}{𝓥} {X} {F} {x}{x'} {v} {v'} x↦Fx✧ x≡x' = to-Σ-≡ (x≡x' , goal)
  --Recall, to-Σ-≡ : ... {(σ₁ , σ₂) (τ₁ , τ₂) : Σ F}  → Σ p ꞉ σ₁ ≡ τ₁ , transport F p σ₂ ≡  τ₂  → σ ≡ τ
  where
-  Fx'✧ : is-subsingleton (F x')   --Recall, is-subsingleton (F x') = (v v' : F x') -> v ≡ v'
-  Fx'✧ = Fx✧ x'
+  Fx'✧ : is-subsingleton (F x')   --Recall, is-subsingleton (F x') = (v v' : F x') → v ≡ v'
+  Fx'✧ = x↦Fx✧ x'
 
   vᵗ : F x'
   vᵗ = transport F   x≡x'   v  --  Recall, transport : (F : X → 𝓥 ̇) →  x ≡ x'  →  F x → F x'
@@ -361,26 +356,28 @@ to-subtype-≡ {𝓤}{𝓥} {X} {F} {x}{x'} {v} {v'} Fx✧ x≡x' = to-Σ-≡ (x
 pr₁-equiv : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } →  ( (x : X) → is-singleton (F x) )
                ----------------------------------------------------
  →                    is-equiv (λ (t : Σ F) → pr₁ t)
-pr₁-equiv {𝓤} {𝓥} {X}{F} Fx✦ = invertibles-are-equivs pr₁ (g , η , ε)
+pr₁-equiv {𝓤} {𝓥} {X}{F}  x↦Fx✦ = invertibles-are-equivs pr₁ (g , η , ε)
  --To use `invertibles-are-equivs` we must show that pr₁ is invertible, and recall the definition
  --    `invertible f = Σ g ꞉ (codomain f → domain f) , (g ∘ f ∼ id) × (f ∘ g ∼ id)`
  --So to prove `f = pr₁` is invertible we must provide `g` and a proof `(η , ε)` that `g` is an inverse.
  where
   g : X → Σ F
-  g x = x , pr₁ (Fx✦ x)
+  g x = x , pr₁ (x↦Fx✦ x)
 
   ε : pr₁ ∘ g ∼ id -- (the identity on X)
   ε x = refl (pr₁ (g x))
 
   η : g ∘ pr₁ ∼ id  -- (the identity on Σ F)
-  η (x , v) = to-subtype-≡ ( λ x → singletons-are-subsingletons (F x) (Fx✦ x) ) (ε x)
+  η (x , v) = to-subtype-≡ ( λ x → singletons-are-subsingletons (F x) (x↦Fx✦ x) ) (ε x)
   --Recall, to-subtype-≡ : ... ( (x : X) → is-subsingleton (F x) )  →  x ≡ x'  → (x , v) ≡ (x' , v')
 
 pr₁-≃ : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }  → ( (x : X) → is-singleton (F x) )  →  Σ F ≃ X
-pr₁-≃ Fx✦ = pr₁ , pr₁-equiv Fx✦
+pr₁-≃   x↦Fx✦  =  pr₁ , pr₁-equiv x↦Fx✦
+
 
 ΠΣ-distr-≃ : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {P : (x : X) → F x → 𝓦 ̇ }
  →          (Π x ꞉ X , Σ v ꞉ F x , P x v) ≃ (Σ f ꞉ Π F , Π x ꞉ X , P x (f x))
+
 ΠΣ-distr-≃ {𝓤} {𝓥} {𝓦} {X} {F} {P} = invertibility-gives-≃ φ ( ψ , refl , refl )
  where   --ε : φ ∘ ψ ∼ id ;    ε = refl  ;   η : ψ ∘ φ ∼ id  ;  η = refl
   φ : ( Π x ꞉ X , Σ v ꞉ F x , P x v ) → Σ f ꞉ Π F , Π x ꞉ X , P x (f x)
@@ -389,8 +386,10 @@ pr₁-≃ Fx✦ = pr₁ , pr₁-equiv Fx✦
   ψ : ( Σ f ꞉ Π F , Π x ꞉ X , P x (f x) ) →  Π x ꞉ X , Σ v ꞉ F x , P x v
   ψ (f , φ) x = f x , φ x
 
+
 Σ-assoc : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {𝓕 : Σ F → 𝓦 ̇ }
  →          Σ 𝓕 ≃ (Σ u ꞉ X , Σ v ꞉ F u , 𝓕 (u , v))
+
 Σ-assoc {𝓤} {𝓥} {𝓦} {X} {F} {𝓕} = invertibility-gives-≃ f ( g , refl , refl )
  where
   f : Σ 𝓕 →  Σ u ꞉ X , Σ v ꞉ F u , 𝓕 (u , v)
@@ -413,7 +412,7 @@ singleton-types-≃ u = Σ-cong λ u' → ⁻¹-≃ u u'
 -- Σ-cong : {X : 𝓤 ̇} {A : X → 𝓥 ̇}{B : X → 𝓦 ̇} → ((x : X) → A x ≃ B x) → Σ A ≃ Σ B
 
 singletons-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }  → is-singleton X    →    is-singleton Y
-                                                ---------------------------------
+                                                   ---------------------------------
  →                                                               X ≃ Y
 singletons-≃ {𝓤} {𝓥} {X} {Y} X⋆ Y⋆ = invertibility-gives-≃ f (g , η , ε)
  where
@@ -430,8 +429,8 @@ singletons-≃ {𝓤} {𝓥} {X} {Y} X⋆ Y⋆ = invertibility-gives-≃ f (g , 
  ε = centrality Y Y⋆ -- or pr₂ Y⋆
 
 maps-of-singletons-are-equivs : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
- →                is-singleton X    →      is-singleton Y
-                 ------------------------------------------
+ →                is-singleton X    →     is-singleton Y
+                   ----------------------------------
  →                               is-equiv f
 maps-of-singletons-are-equivs {𝓤} {𝓥} {X} {Y} f X⋆ Y⋆ = invertibles-are-equivs f (g , η , ε)
  where
@@ -442,14 +441,14 @@ maps-of-singletons-are-equivs {𝓤} {𝓥} {X} {Y} f X⋆ Y⋆ = invertibles-ar
  η = centrality X X⋆
 
  ε : f ∘ g ∼ id
- ε y = Y-is-subsingleton (f (g y)) y      -- recall, `is-subsingleton X = (x y : X) → x ≡ y`
+ ε y = Y-is-subsingleton (f (g y)) y
   where
    Y-is-subsingleton : is-subsingleton Y
    Y-is-subsingleton = singletons-are-subsingletons Y Y⋆
 
 logically-equivalent-subsingletons-are-equivalent : (X : 𝓤 ̇ ) (Y : 𝓥 ̇ )
  →            is-subsingleton X    →    is-subsingleton Y   →    X ⇔ Y
-             ----------------------------------------------------------
+              ------------------------------------------------------
  →                                            X ≃ Y
 
 logically-equivalent-subsingletons-are-equivalent X Y Xss Yss ( f , g ) =
@@ -461,9 +460,9 @@ singletons-are-equivalent : (X : 𝓤 ̇ ) (Y : 𝓥 ̇ )
  →                                        X ≃ Y
 singletons-are-equivalent {𝓤} {𝓥} X Y = singletons-≃ {𝓤}{𝓥}{X}{Y}
 
---Before proving the next theorem, let's review the type `Nat` (natural transformations) and their naturality. Recall,
---if F G : 𝓒 → 𝓓  are functors, a nat tran from F to G is an indexed family {αₛ : s ∈ 𝓒₀} of arrows of 𝓓
---satisfying the following naturality condition:  If s t : 𝓒ₒ,  f : Hom(s, t), then the following diagram commutes:
+--[Before proving the next theorem, let's review the type `Nat` (natural transformations) and their naturality. Recall,
+-- if F G : 𝓒 → 𝓓  are functors, a nat tran from F to G is an indexed family {αₛ : s ∈ 𝓒₀} of arrows of 𝓓
+-- satisfying the following naturality condition:  If s t : 𝓒ₒ,  f : Hom(s, t), then the following diagram commutes:
 --      s        F s ---- αₛ ----> G s
 --      |           |                       |
 --    f |       Ff |                       | Gf
@@ -476,14 +475,7 @@ singletons-are-equivalent {𝓤} {𝓥} X Y = singletons-≃ {𝓤}{𝓥}{X}{Y}
 --
 -- NatΣ : {X : 𝓤 ̇}{F : X → 𝓥 ̇}{G : X → 𝓦 ̇} → Nat F G → Σ F → Σ G
 -- NatΣ α (s , v) = s , α s v
---Recall, if F : X → 𝓥 ̇, then Σ F is the dependent pair type whose inhabitants have the form (x , F x).
-
--- transport-ap : {X : 𝓤 ̇} {Y : 𝓥 ̇} (A : Y → 𝓦 ̇)
--- (f : X → Y)    {x x' : X}
--- (p : x ≡ x')    (a : A (f x))
--- ---------------------------------------------------
--- →        transport (A ∘ f) p a ≡ transport A (ap f p) a
--- transport-ap A f (refl x) a = refl a
+-- Recall, if F : X → 𝓥 ̇, then Σ F is the dependent pair type whose inhabitants have the form (x , F x).
 
 NatΣ-fiber-equiv : {X : 𝓤 ̇ } (F : X → 𝓥 ̇ )   (G : X → 𝓦 ̇ )
                    (α : Nat F G)   (s : X)   (w : G s)
@@ -497,10 +489,10 @@ NatΣ-fiber-equiv F G α s w = invertibility-gives-≃ f (g , ε , η)
   g : fiber (NatΣ α) (s , w) → fiber (α s) w
   g ((s , a) , refl _) = a , refl (α s a)
 
-  ε : g ∘ f ∼ id  -- (λ x₁ → g (f x₁)) ∼ (λ x₁ → x₁)
-  ε (a , refl _) = refl (a , refl (α s a)) 
+  ε : g ∘ f ∼ id
+  ε (a , refl _) = refl (a , refl (α s a))
 
-  η : f ∘ g ∼ id   -- (λ x₁ → f (g x₁)) ∼ (λ x₁ → x₁)
+  η : f ∘ g ∼ id
   η ((x , a) , refl _) = refl (( x , a) , refl (NatΣ α (x , a) ))
 
 NatΣ-equiv-gives-fiberwise-equiv : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {G : X → 𝓦 ̇ }
@@ -511,7 +503,7 @@ NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w =
  where
   d : fiber (α x) w ≃ fiber (NatΣ α) (x , w)
   d = NatΣ-fiber-equiv F G α x w
-  
+
   s : is-singleton (fiber (NatΣ α) (x , w))
   s = eqα (x , w)
 
@@ -532,20 +524,22 @@ NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w =
   uv-is-center :  ∀ p → (u , v) ≡ p
   uv-is-center (u' , v') = to-×-≡ (u-is-center u' , v-is-center v')
 
-×-is-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → is-subsingleton X     →    is-subsingleton Y
-                                                       -----------------------------------------
- →                                                              is-subsingleton (X × Y)
+×-is-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
+ →               is-subsingleton X     →    is-subsingleton Y
+                  ---------------------------------------
+ →                           is-subsingleton (X × Y)
 ×-is-subsingleton X✧ Y✧ = Σ-is-subsingleton X✧ (λ _ → Y✧)
 
 ×-is-subsingleton' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
  →          ( (Y → is-subsingleton X) × (X → is-subsingleton Y) )
-              ---------------------------------------------------
+              -----------------------------------------------
  →                           is-subsingleton (X × Y)
 ×-is-subsingleton'  {𝓤} {𝓥} {X} {Y} (Gv✧ , Fu✧) (u , v) (u' , v') = to-×-≡ (Gv✧ v u u' , Fu✧ u v v')
 
-×-is-subsingleton'-back : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }  →  is-subsingleton (X × Y)
-                               ---------------------------------------------------
- →                            (Y → is-subsingleton X) × (X → is-subsingleton Y)
+×-is-subsingleton'-back : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
+ →                    is-subsingleton (X × Y)
+            -----------------------------------------------
+ →          (Y → is-subsingleton X) × (X → is-subsingleton Y)
 ×-is-subsingleton'-back  {𝓤} {𝓥} {X} {Y} XY✧ = Gv✧ , Fu✧
  where
   Gv✧ : Y → is-subsingleton X
@@ -556,25 +550,23 @@ NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w =
 
 ap₂ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ } (f : X → Y → Z) {u u' : X} {v v' : Y}
  →                u ≡ u'     →     v ≡ v'
-                --------------------------
- →                     f u v ≡ f u' v'
+                  ----------------------
+ →                    f u v ≡ f u' v'
 ap₂ f (refl u) ( refl v) = refl (f u v)
 
-
 ---------------------------------------------------------------------------
--- A characterization of univalence.
-
--- We begin with two general results, which will be placed in a more general context later.
-equiv-singleton-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }
-          (u₀ : X)    ( f : (u : X) → u₀ ≡ u → F u )
- →      ( (u : X) → is-equiv (f u) )
-        -------------------------------------------
- →             is-singleton (Σ F)
-equiv-singleton-lemma {𝓤}{𝓥} {X}{F} u₀ f fueq = γ
+--A characterization of univalence.
+--REF: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#unicharac
+equiv-singleton-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }  ( u₀ : X )
+                                  ( f : (u : X) → u₀ ≡ u → F u )
+ →                             ( (u : X) → is-equiv (f u) )
+                                ---------------------------------
+ →                              is-singleton (Σ F)
+equiv-singleton-lemma {𝓤}{𝓥} {X}{F}  u₀  f  u↦fu-equiv  =  γ
  where
   abstract
    e : (u : X) → (u₀ ≡ u) ≃ F u
-   e u = f u , fueq u
+   e u = f u ,  u↦fu-equiv  u
 
    d : singleton-type' u₀ ≃ Σ F
    d = Σ-cong e              -- Recall,  Σ-cong : ...  (A x ≃ B x) → Σ A ≃ Σ B
@@ -582,10 +574,11 @@ equiv-singleton-lemma {𝓤}{𝓥} {X}{F} u₀ f fueq = γ
    γ : is-singleton (Σ F)
    γ = equiv-to-singleton (≃-sym d) (singleton-types'-are-singletons X u₀)
 
-singleton-equiv-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }
-         (u₀ : X)  ( f : (u : X) → u₀ ≡ u → F u )       →      is-singleton (Σ F)
-       ------------------------------------------------------------------
- →                (u : X) → is-equiv (f u)
+singleton-equiv-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }  ( u₀ : X )
+                                  ( f : (u : X) → u₀ ≡ u → F u )
+ →                             is-singleton (Σ F)
+                                ----------------------------------
+ →                              (u : X) → is-equiv (f u)
 singleton-equiv-lemma {𝓤} {𝓥} {X} {F} u₀ f ΣF✦ = γ
  where
   abstract
@@ -607,6 +600,7 @@ univalence⇒ 𝓤★ X₀ = equiv-singleton-lemma X₀ (Id→Eq X₀) (𝓤★ 
 
 --"(Of course, this doesn't say that there is only one type `X` equivalent to `X₀`, or only one equivalence from `X₀` to `X`,
 -- because equality of `Σ` types is given by transport in the second component along an identification in the first component.)
+
 -- We can replace *singleton* by *subsingleton* and still have a logical equivalence, and we sometimes need the characterization in this form:
 univalence→ : is-univalent 𝓤 → (X₀ : 𝓤 ̇) → is-subsingleton (Σ X ꞉ 𝓤 ̇ , X₀ ≃ X)
 univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (univalence⇒ 𝓤★ X₀)
@@ -1083,3 +1077,16 @@ half-adjoint-condition f e = pr₂ (pr₂ (pr₂ (equivs-are-haes f e)))
 --      by-∙assoc   = ∙assoc ((ε (f (g (f x))))⁻¹) (ε (f (g (f x)))) (ap f (η x))
 --      by-q        = ap ((ε (f (g (f x))))⁻¹ ∙_) (q ⁻¹)
 
+
+
+-----------------------------------------------------------------
+--wjd: miscellaneous unused/experimental stuff:
+-- subsingleton-criterion-first-try : {X : 𝓤 ̇ } → (X → is-singleton X) → is-subsingleton X
+-- subsingleton-criterion-first-try x↦X✦ x  x'  =
+-- x  ≡⟨ (c-is-center x)⁻¹ ⟩  c  ≡⟨ c-is-center x' ⟩  x'  ∎
+-- where
+-- c : (domain x↦X✦)
+-- c = pr₁ (x↦X✦ x)
+
+-- c-is-center : is-center (domain x↦X✦) c
+-- c-is-center = pr₂ (x↦X✦ x)

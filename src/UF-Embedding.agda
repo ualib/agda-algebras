@@ -26,26 +26,23 @@ open import UF-Extensionality using (_/_; is-map-classifier; ∃!; -∃!; ∃!-i
 -- Some constructions with types of equivalences
 --"We first prove some properties of equivalence symmetrization and composition."
 
-id-≃-left : dfunext 𝓥 (𝓤 ⊔ 𝓥) → dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)      --[Recall, `_●_ :... → X ≃ Y → Y ≃ Z → X ≃ Z`
+id-≃-left : dfunext 𝓥 (𝓤 ⊔ 𝓥) → dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)      --[Recall, `_●_ : ... → X ≃ Y → Y ≃ Z → X ≃ Z`
  →           {X : 𝓤 ̇}    {Y : 𝓥 ̇}    (α : X ≃ Y)                                    --          `(f , d) ● (f' , e) = f' ∘ f , ∘-is-equiv e d`   ]
-              ---------------------------------------
- →            id-≃ X ● α ≡ α
-
+              --------------------------------
+ →                     id-≃ X ● α ≡ α
 id-≃-left fe fe' α =  to-subtype-≡ (being-equiv-is-subsingleton fe fe') (refl _)
 
 ≃-sym-left-inverse : dfunext 𝓥 𝓥 → {X : 𝓤 ̇}  {Y : 𝓥 ̇} (α : X ≃ Y)
-                            ----------------------------------------------
- →                           ≃-sym α ● α   ≡   id-≃ Y
-
+ →                       ≃-sym α ● α   ≡   id-≃ Y
 ≃-sym-left-inverse fe (f , e) = to-subtype-≡ (being-equiv-is-subsingleton fe fe) ff⁻
  where
   ff⁻ : f ∘ inverse f e ≡ id
   ff⁻ = fe (inverses-are-sections f e)
 
-≃-sym-right-inverse :    dfunext 𝓤 𝓤 → {X : 𝓤 ̇}  {Y : 𝓥 ̇} (α : X ≃ Y)
-                                  ------------------------------------------
- →                                       α ● ≃-sym α   ≡   id-≃ X
-
+≃-sym-right-inverse : dfunext 𝓤 𝓤
+ →                         {X : 𝓤 ̇}   {Y : 𝓥 ̇}   (α : X ≃ Y)
+                           --------------------------------
+ →                           α ● ≃-sym α   ≡   id-≃ X
 ≃-sym-right-inverse fe (f , e) = to-subtype-≡ (being-equiv-is-subsingleton fe fe) f⁻f
  where
   f⁻f : (inverse f e) ∘ f ≡ id
@@ -53,17 +50,16 @@ id-≃-left fe fe' α =  to-subtype-≡ (being-equiv-is-subsingleton fe fe') (re
 
 --"We then transfer the above to equivalence types:
 ≃-Sym : dfunext 𝓥 (𝓤 ⊔ 𝓥) → dfunext 𝓤 (𝓤 ⊔ 𝓥) → dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)
- →                                 {X : 𝓤 ̇}     {Y : 𝓥 ̇}
-                                   ---------------------
- →                                  (X ≃ Y)   ≃   (Y ≃ X)
+ →       {X : 𝓤 ̇}  {Y : 𝓥 ̇}    →     (X ≃ Y)   ≃   (Y ≃ X)
 
 ≃-Sym fe₀ fe₁ fe₂ = ≃-sym , ≃-sym-is-equiv fe₀ fe₁ fe₂
 
 ≃-Comp : dfunext 𝓦 (𝓥 ⊔ 𝓦) → dfunext (𝓥 ⊔ 𝓦)  (𝓥 ⊔ 𝓦) → dfunext 𝓥 𝓥
  →         dfunext 𝓦 (𝓤 ⊔ 𝓦) → dfunext (𝓤 ⊔ 𝓦)  (𝓤 ⊔ 𝓦) → dfunext 𝓤 𝓤
- →         {X : 𝓤 ̇}    {Y : 𝓥 ̇}    (Z : 𝓦 ̇)
-          ----------------------------------
- →         X ≃ Y   →     (Y ≃ Z)   ≃   (X ≃ Z)
+ →         {X : 𝓤 ̇} {Y : 𝓥 ̇} (Z : 𝓦 ̇)
+ →                  X ≃ Y
+             -------------------
+ →          (Y ≃ Z)   ≃   (X ≃ Z)
 ≃-Comp fe₀ fe₁ fe₂ fe₃ fe₄ fe₅ Z X≃Y = invertibility-gives-≃ (X≃Y ●_) inv-X≃Y-●
   where
    inv-X≃Y-● : invertible (X≃Y ●_)
@@ -74,23 +70,20 @@ id-≃-left fe fe' α =  to-subtype-≡ (being-equiv-is-subsingleton fe fe') (re
                        ( ≃-sym X≃Y ● X≃Y ) ● β    ≡⟨ ap (_● β) (≃-sym-left-inverse fe₂ X≃Y ) ⟩
                         id-≃ _ ● β                        ≡⟨ id-≃-left fe₀ fe₁ _ ⟩
                         β                                      ∎
-
       ξ : ( λ δ → X≃Y ● (≃-sym X≃Y ● δ) ) ∼ id
       ξ = λ δ → X≃Y ● (≃-sym X≃Y ● δ)  ≡⟨ ●-assoc fe₃ fe₄ X≃Y (≃-sym X≃Y) δ ⟩
                        (X≃Y ● ≃-sym X≃Y) ● δ  ≡⟨ ap (_● δ) (≃-sym-right-inverse fe₅ X≃Y ) ⟩
                         id-≃ _ ● δ                    ≡⟨ id-≃-left fe₃ fe₄ _ ⟩
                         δ                                   ∎
 
-
---"Using this we get the following self-congruence property of equivalences:
+--Using this MHE gives the following self-congruence property of equivalences:
 Eq-Eq-cong' : dfunext 𝓥 (𝓤 ⊔ 𝓥) →  dfunext (𝓤 ⊔ 𝓥)  (𝓤 ⊔ 𝓥) → dfunext 𝓤 𝓤
  →               dfunext 𝓥 (𝓥 ⊔ 𝓦) → dfunext (𝓥 ⊔ 𝓦)  (𝓥 ⊔ 𝓦) → dfunext 𝓦 𝓦
  →               dfunext 𝓦 (𝓥 ⊔ 𝓦) →  dfunext 𝓥 𝓥 → dfunext 𝓦 (𝓦 ⊔ 𝓣)
  →               dfunext (𝓦 ⊔ 𝓣) (𝓦 ⊔ 𝓣) → dfunext 𝓣 𝓣 → dfunext 𝓣 (𝓦 ⊔ 𝓣)
  →               {X : 𝓤 ̇} {Y : 𝓥 ̇} {A : 𝓦 ̇} {B : 𝓣 ̇}
-                  -----------------------------------------------------------------
- →                  X ≃ A   →   Y ≃ B   →    (X ≃ Y)   ≃   (A ≃ B)
---Eq-Eq-cong' fe₀ fe₁ fe₂ fe₃ fe₄ fe₅ fe₆ fe₇ fe₈ fe₉ fe₁₀ fe₁₁ {X} {Y} {A} {B} α β = {!!}
+                  --------------------------------------------
+ →                X ≃ A   →   Y ≃ B   →    (X ≃ Y)   ≃   (A ≃ B)
 Eq-Eq-cong' fevuv feuvuv feuu fevvw fevwvw feww fewvw fevv fewwt fewtwt fett fetwt {X} {Y} {A} {B} X≃A Y≃B =
    X ≃ Y     ≃⟨ ≃-Comp fevuv feuvuv feuu fevvw fevwvw feww Y (≃-sym X≃A) ⟩
    A ≃ Y     ≃⟨ ≃-Sym fevvw fewvw fevwvw ⟩
@@ -98,26 +91,23 @@ Eq-Eq-cong' fevuv feuvuv feuu fevvw fevwvw feww fewvw fevv fewwt fewtwt fett fet
    B ≃ A     ≃⟨ ≃-Sym fewwt fetwt fewtwt ⟩
    A ≃ B     ■
 
---"The above shows why global function extensionality would be a better assumption in practice.
-Eq-Eq-cong : global-dfunext → {X : 𝓤 ̇} {Y : 𝓥 ̇} {A : 𝓦 ̇} {B : 𝓣 ̇}
-                  --------------------------------------------------
- →                     X ≃ A   →   Y ≃ B   →    (X ≃ Y)   ≃   (A ≃ B)
-
+--"The above shows why global function extensionality would be a better assumption in practice."
+--[N.B. We can't simply delete `Eq-Eq-cong'` and adopt the following simpler version because the former is used below.]
+Eq-Eq-cong : (fe : global-dfunext) {X : 𝓤 ̇} {Y : 𝓥 ̇} {A : 𝓦 ̇} {B : 𝓣 ̇}
+ →               X ≃ A      →      Y ≃ B
+                 ------------------------
+ →                (X ≃ Y)   ≃   (A ≃ B)
 Eq-Eq-cong fe = Eq-Eq-cong' fe fe fe fe fe fe fe fe fe fe fe fe
 
 -----------------------------------------------------------------------------------------
--- Type embeddings
--- --------------
-
---"A function is called an embedding if its fibers are all subsingletons. In particular, equivalences are embeddings. However, sections of
--- types more general than sets don't need to be embeddings (see: https://lmcs.episciences.org/2027 ).
+--Type embeddings.
+--"A function is called an embedding if its fibers are all subsingletons. In particular, equivalences are embeddings.
+-- However, sections of types more general than sets don't need to be embeddings (see: https://lmcs.episciences.org/2027 ).
 is-embedding : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
 
-being-embedding-is-subsingleton : global-dfunext
- →                     {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
-                        ----------------------------
- →                     is-subsingleton (is-embedding f)
+being-embedding-is-subsingleton : global-dfunext → {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
+ →                                        is-subsingleton (is-embedding f)
 
 being-embedding-is-subsingleton fe f = Π-is-subsingleton fe (λ x → being-subsingleton-is-subsingleton fe )
 
@@ -141,10 +131,7 @@ pr₁-embedding Ax✧ x ( (x , a) , refl x ) ( (x , a') , refl x ) = ap (λ - �
 
 --"*Exercise*. Show that the converse of `pr₁-embedding` holds.
 
-equivs-are-embeddings : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (f : X → Y)    →   is-equiv f
-                                                  --------------------------------
- →                                                             is-embedding f
-
+equivs-are-embeddings : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (f : X → Y) → is-equiv f → is-embedding f
 equivs-are-embeddings f feq y = singletons-are-subsingletons (fiber f y) (feq y)
 
 id-is-embedding : {X : 𝓤 ̇} → is-embedding (𝑖𝑑 X)
@@ -233,17 +220,14 @@ embedding-gives-ap-is-equiv {𝓤}{𝓥} {X} f fem = γ
                 ( Σ x' ꞉ X , f x ≡ f x' ) ( x , refl (f x) ) (s x) )
 
 embedding-criterion-converse : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                                        is-embedding f
-                                        -------------------------------
- →                                      ( (x x' : X) → (f x ≡ f x') ≃ (x ≡ x') )
+ →                             is-embedding f
+                     -------------------------------
+ →                   ( (x x' : X) → (f x ≡ f x') ≃ (x ≡ x') )
 embedding-criterion-converse f fem x' x = ≃-sym (ap f {x'} {x} , embedding-gives-ap-is-equiv f fem x' x )
 
 --"Hence embeddings of arbitrary types are left cancellable, but the converse fails in general.
 
-embeddings-are-lc :  {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                        is-embedding f
-                          ------------------------
- →                        left-cancellable f
+embeddings-are-lc :  {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y) → is-embedding f → left-cancellable f
 embeddings-are-lc f fem {x} {y}  = ∣ embedding-criterion-converse f fem x y ∣
 
 --"*Exercise*. Left cancellable maps into *sets* are always embeddings.

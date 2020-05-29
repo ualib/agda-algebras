@@ -353,9 +353,9 @@ module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   Monoid : 𝓤 ⁺ ̇
   Monoid = Σ X ꞉ 𝓤 ̇ , Σ s ꞉ monoid-structure X , monoid-axioms X s
 
-  monoid-axioms-subsingleton : (X : 𝓤 ̇) (s : monoid-structure X)
+  monoid-axioms-is-subsingleton : (X : 𝓤 ̇) (s : monoid-structure X)
    →                                is-subsingleton (monoid-axioms X s)
-  monoid-axioms-subsingleton X ( _·_ , e ) s = γ s
+  monoid-axioms-is-subsingleton X ( _·_ , e ) s = γ s
     where
       Xset : is-set X
       Xset = pr₁ s
@@ -374,7 +374,7 @@ module monoid-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
 
   sns-data : SNS ( λ X → Σ s ꞉ monoid-structure X , monoid-axioms X s ) 𝓤
   sns-data = add-axioms
-                    monoid-axioms   monoid-axioms-subsingleton
+                    monoid-axioms   monoid-axioms-is-subsingleton
                     ( join  ∞-magma-identity.sns-data   pointed-type-identity.sns-data )   --   SNS S 𝓣
 
   _≅_ : Monoid → Monoid → 𝓤 ̇
@@ -732,25 +732,27 @@ module group-identity {𝓤 : Universe} (𝓤★ : is-univalent 𝓤) where
   --"This completes the solution of the exercise."                                         ∎
 
 ------------------------------------------------------
--- Subgroups.
+-- Subgroups. REF: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip
 {-"It is common mathematical practice to regard isomorphic groups to be the same, which is a theorem in univalent mathematics, with the
    notion of sameness articulated by the identity type, as shown above. However, for some purposes, we may wish to consider two groups
    to be the same if they have the same elements. For example, in order to show that the subgroups of a group form an algebraic lattice
    with the finitely generated subgroups as the compact elements, it is this notion of equality that is used, with subgroup containment as
    the lattice order.
 
-  "Asking whether two groups have the same elements in univalent mathematics doesn't make sense unless they are subgroups of the same
-   ambient group.  In the same way that in univalent mathematics two members of the powerset are equal iff they have the same elements,
-   two subgroups are equal if and only if they have the same elements. This can be formulated and proved in two equivalent ways.
+  (paraphrasing MHE)
+    Asking whether two groups have the same elements in univalent mathematics doesn't make sense unless they are subgroups of the same
+    ambient group.  As in both UF and set theory, two members of a powerset are equal iff they have the same elements, similarly, two subgroups
+    are equal if and only if they have the same elements. This can be formulated and proved in two equivalent ways.
 
-     1. A subgroup is an element of the powerset of the underlying set of the group that is closed under the group operations.  So the
-        type of subgroups of a given group is embedded as a subtype of the powerset of the underlying set and hence inherits the
-        characterization of equality from the powerset.
+    1. A subgroup is an element of the powerset of the underlying set of the group that is closed under the group operations.
+    2. A subgroup of a group `G` is a group `H` together with a homomorphic embedding `H → G`.
 
-     2. A subgroup of a group `G` is a group `H` *together* with a homomorphic embedding `H → G`. With this second  definition, two
-        subgroups `H` and `H'` are equal iff the embeddings `H → G` and `H' → G` can be completed to a commutative triangle by a
-        group isomorphism `H → H'`, which is necessarily unique when it exists (cf. the discussion of equality in slice types below."  -}
+    From 1, the type of subgroups of G is embedded as a subtype of the powerset of the underlying carrier of G and hence inherits the
+    characterization of equality from the powerset.
 
+    From 2, two subgroups `H` and `H'` are equal iff the embeddings `H → G` and `H' → G` can be completed to a commutative triangle by
+    a group isomorphism `H → H'`, which is necessarily unique when it exists (cf. the discussion of equality in slice types below).
+-}
 module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
  gfe : global-dfunext
@@ -875,8 +877,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
    (⟪ S ⟫ ≡ ⟪ T ⟫)                                            ■
   --------------------------------------------------------------------------------------------------
 
-
-  --"As an application of the subtype classifier, we now show that the type of subgroups is equivalent to the type
+  --As an application of the subtype classifier, MHE shows that the type of subgroups is equivalent to the type
   -- `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) , is-embedding f × is-homomorphism H G f`
 
   --Following MHE, we introduce notation for the type of group structures satisfying the group axioms.
@@ -884,7 +885,6 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
   𝔾 : 𝓤 ̇ → 𝓤 ̇
   𝔾 X = Σ ( (_·_ , e) , a) ꞉ group-structure X , group-axiom X (_·_ , e)
 
-  --"We use an anonymous module to give common assumptions for the following few lemmas:
   module _ {X : 𝓤 ̇} (h : X → ⟨ G ⟩ ) (hem : is-embedding h) where
     private
      h-lc : left-cancellable h
@@ -923,7 +923,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
       r = to-×-≡ (p , q)
 
       τ≡τ' : τ ≡ τ'
-      τ≡τ' = to-subtype-≡ (group-axiom-is-subsingleton X) (to-subtype-≡ (monoid-axioms-subsingleton X) r)
+      τ≡τ' = to-subtype-≡ (group-axiom-is-subsingleton X) (to-subtype-≡ (monoid-axioms-is-subsingleton X) r)
 
       γ : (τ , τhom) ≡ (τ' , τ'hom)
       γ = to-subtype-≡ (λ τ → being-hom-is-subsingleton (X , τ) G h) τ≡τ'
@@ -1000,8 +1000,10 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
         hhom : is-homomorphism (X , τ) G h
         hhom = gfe (λ x → gfe (pmul x) ) , punit
 
-    homomorphic-structure-gives-group-closed-fiber : (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
-     →                                                                                group-closed (fiber h)
+
+    homomorphic-structure-gives-group-closed-fiber :
+       (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)    →   group-closed (fiber h)
+
     homomorphic-structure-gives-group-closed-fiber
       ( ( ( ( _*_ , unitH) , maxioms) , gaxiom) , (pmult , punit) ) = unitc , mulc , invc
         where
@@ -1025,46 +1027,45 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
              inv G x      ∎ )
 
     --"What is important for our purposes is this:
-    fiber-structure-lemma : group-closed (fiber h) ≃ (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
-    fiber-structure-lemma = logically-equivalent-subsingletons-are-equivalent _ _
-                                        having-group-closed-fiber-is-subsingleton
-                                        at-most-one-homomorphic-structure
-                                        (group-closed-fiber-gives-homomorphic-structure ,
-                                         homomorphic-structure-gives-group-closed-fiber)
+    fiber-structure-lemma :  group-closed (fiber h)  ≃  (Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h)
+    fiber-structure-lemma =
+      logically-equivalent-subsingletons-are-equivalent _ _
+        having-group-closed-fiber-is-subsingleton   at-most-one-homomorphic-structure
+          ( group-closed-fiber-gives-homomorphic-structure ,  homomorphic-structure-gives-group-closed-fiber )
 
   --"This is the end of the anonymous submodule and we can now prove the desired result. We apply the material on the subtype classifier.
   characterization-of-the-type-of-subgroups :
        Subgroups     ≃     ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )
 
   characterization-of-the-type-of-subgroups =
-   Subgroups                                                                                                                      ≃⟨ i ⟩
-   ( Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed (_∈ A) )                                                                               ≃⟨ ii ⟩
-   ( Σ (X , h , e) ꞉ Subtypes ⟨ G ⟩ , group-closed (fiber h) )                                                          ≃⟨ iii ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , group-closed (fiber h) )                                                    ≃⟨ iv ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )                              ≃⟨ v ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ e ꞉ is-embedding h , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )  ≃⟨ vi ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ τ ꞉ 𝔾 X , Σ e ꞉ is-embedding h , is-homomorphism (X , τ) G h )  ≃⟨ vii ⟩
-   ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ 𝔾 X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )        ≃⟨ viii ⟩
-   ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )                   ■
-    where
-     φ : Subtypes ⟨ G ⟩ → 𝓟 ⟨ G ⟩
-     φ = χ-special is-subsingleton ⟨ G ⟩
+    Subgroups                                                                                                                        ≃⟨ i ⟩
+    ( Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed (_∈ A) )                                                                                 ≃⟨ ii ⟩
+    ( Σ (X , h , e) ꞉ Subtypes ⟨ G ⟩ , group-closed (fiber h) )                                                            ≃⟨ iii ⟩
+    ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , group-closed (fiber h) )                                                       ≃⟨ iv ⟩
+    ( Σ X ꞉ 𝓤 ̇ , Σ (h , e) ꞉ X ↪ ⟨ G ⟩ , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )                              ≃⟨ v ⟩
+    ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ e ꞉ is-embedding h , Σ τ ꞉ 𝔾 X , is-homomorphism (X , τ) G h )  ≃⟨ vi ⟩
+    ( Σ X ꞉ 𝓤 ̇ , Σ h  ꞉ (X → ⟨ G ⟩ ) , Σ τ ꞉ 𝔾 X , Σ e ꞉ is-embedding h , is-homomorphism (X , τ) G h )  ≃⟨ vii ⟩
+    ( Σ X ꞉ 𝓤 ̇ , Σ τ ꞉ 𝔾 X , Σ h  ꞉ (X → ⟨ G ⟩ ) , is-embedding h × is-homomorphism (X , τ) G h )        ≃⟨ viii ⟩
+    ( Σ H ꞉ Group  ,  Σ h ꞉ ( ⟨ H ⟩ → ⟨ G ⟩ ) ,  is-embedding h × is-homomorphism H G h )                     ■
+     where
+       φ : Subtypes ⟨ G ⟩ → 𝓟 ⟨ G ⟩
+       φ = χ-special is-subsingleton ⟨ G ⟩
 
-     φeq : is-equiv φ
-     φeq = χ-special-is-equiv (𝓤★ 𝓤) gfe is-subsingleton ⟨ G ⟩
+       φeq : is-equiv φ
+       φeq = χ-special-is-equiv (𝓤★ 𝓤) gfe is-subsingleton ⟨ G ⟩
 
-     i = id-≃ Subgroups
-     ii = Σ-change-of-variable (λ (A : 𝓟 ⟨ G ⟩) → group-closed (_∈ A) ) φ φeq
-     iii = Σ-assoc
-     iv = Σ-cong (λ X → Σ-cong ( λ (h , e) → fiber-structure-lemma h e) )
-     v = Σ-cong λ X → Σ-assoc
-     vi = Σ-cong λ X → Σ-cong ( λ h → Σ-flip) 
-     vii = Σ-cong λ X → Σ-flip
-     viii = ≃-sym Σ-assoc
+       i = id-≃ Subgroups
+       ii = Σ-change-of-variable (λ (A : 𝓟 ⟨ G ⟩) → group-closed (_∈ A) ) φ φeq
+       iii = Σ-assoc
+       iv = Σ-cong (λ X → Σ-cong ( λ (h , e) → fiber-structure-lemma h e) )
+       v = Σ-cong λ X → Σ-assoc
+       vi = Σ-cong λ X → Σ-cong ( λ h → Σ-flip) 
+       vii = Σ-cong λ X → Σ-flip
+       viii = ≃-sym Σ-assoc
 
   --"In particular, a subgroup induces a genuine group, which is homomorphically embedded into the ambient group.
   induced-group : Subgroups → Group
-  induced-group S = pr₁ (∣ characterization-of-the-type-of-subgroups ∣ S)
+  induced-group S = pr₁ ( ∣ characterization-of-the-type-of-subgroups ∣ S )
 
 --------------------------------------------------------
 -- The slice type.
@@ -1087,8 +1088,11 @@ module slice-identity {𝓤 𝓥 : Universe} (R : 𝓥 ̇) where
    θ : {X : 𝓤 ̇} (g h : S X) → is-equiv (canonical-map ι ρ g h)
    θ g h = equivs-closed-under-∼ (id-is-equiv (g ≡ h) ) cme
 
---"*Exercise*. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
--- identification to the identity equivalence.
---"*Exercise.* Apply the ideas of this section to characterize equality of the type `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) ,
--- is-embedding f × is-homomorphism H G f` as discussed in the section on subgroup equality."
+--[ wjd:  TODO: do these exercises... they are important/relevant ]
+
+--EXERCISE. The above equivalence is characterized by induction on identifications as the function that maps the reflexive
+--identification to the identity equivalence.
+
+--EXERCISE Apply the ideas of this section to characterize equality of the type `Σ H ꞉ Group , Σ f ꞉ (⟨ H ⟩ → ⟨ G ⟩) ,
+--is-embedding f × is-homomorphism H G f` as discussed in the section on subgroup equality."
 
