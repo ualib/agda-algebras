@@ -22,9 +22,10 @@ open import Relation.Unary using (⋂)
 module UF-Subuniverse {S : Signature 𝓞 𝓥} (𝓤★ : Univalence) where
 
 --We consider the subalgebras of a given arbitrary "overalgebra" 𝑨.
-module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
 --REF: This module generalizes MHE's `ambient` module. It does for subuniverses what MHE does for subgroups.
 --       cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip )
+
+module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
 
   gfe : global-dfunext
   gfe = univalence-gives-global-dfunext 𝓤★
@@ -36,65 +37,62 @@ module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
   subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
 
-  ⟪_⟫ : subuniverse → 𝓟 ∣ 𝑨 ∣
-  ⟪ B , _ ⟫ = B
-
   being-op-closed-is-subsingleton : ( B : 𝓟 ∣ 𝑨 ∣ ) → is-subsingleton ( op-closed ( _∈₀ B ) )
   being-op-closed-is-subsingleton B =  Π-is-subsingleton gfe
    ( λ 𝓸 → Π-is-subsingleton gfe (λ 𝒂 → Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton B ( ∥ 𝑨 ∥ 𝓸 𝒂 ) ) ) )
 
-  ⟪⟫-is-embedding : is-embedding ⟪_⟫
-  ⟪⟫-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
+  pr₁-is-embedding : is-embedding ∣_∣
+  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
 
   --so equality of subalgebras is equality of their underlying subsets in the powerset:
-  ap-⟪⟫ : (B C : subuniverse) → B ≡ C → ⟪ B ⟫ ≡ ⟪ C ⟫
-  ap-⟪⟫ B C = ap ⟪_⟫
+  ap-pr₁ : (B C : subuniverse) → B ≡ C → ∣ B ∣ ≡ ∣ C ∣
+  ap-pr₁ B C = ap ∣_∣
 
-  ap-⟪⟫-is-equiv : (B C : subuniverse) → is-equiv (ap-⟪⟫ B C)
-  ap-⟪⟫-is-equiv = embedding-gives-ap-is-equiv ⟪_⟫ ⟪⟫-is-embedding
+  ap-pr₁-is-equiv : (B C : subuniverse) → is-equiv (ap-pr₁ B C)
+  ap-pr₁-is-equiv = embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
 
   subuniverse-is-a-set : is-set subuniverse
   subuniverse-is-a-set B C = equiv-to-subsingleton
-                                            ( ap-⟪⟫ B C , ap-⟪⟫-is-equiv B C )
-                                            ( powersets-are-sets' 𝓤★ ⟪ B ⟫ ⟪ C ⟫ )
+                                            ( ap-pr₁ B C , ap-pr₁-is-equiv B C )
+                                            ( powersets-are-sets' 𝓤★ ∣ B ∣  ∣ C ∣ )
 
   --Here are some useful lemmas extracted from MHE's proof of `subgroup-equality`.
   subuniverse-equality-gives-membership-equiv : (B C : subuniverse)    --[called `f` in MHE's proof]
    →                                  B ≡ C
                         -----------------------------------
-   →                   ( x : ∣ 𝑨 ∣ ) → x ∈₀ ⟪ B ⟫ ⇔ x ∈₀ ⟪ C ⟫
+   →                   ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣
   subuniverse-equality-gives-membership-equiv B C B≡C x =
-    transport (λ - → x ∈₀ ⟪ - ⟫) B≡C , transport (λ - → x ∈₀ ⟪ - ⟫) (B≡C ⁻¹)
+    transport (λ - → x ∈₀ ∣ - ∣) B≡C , transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
 
   membership-equiv-gives-carrier-equality :   (B C : subuniverse)   --[called `h` in MHE's proof]
-   →                   ( (x : ∣ 𝑨 ∣ ) →  x ∈₀ ⟪ B ⟫  ⇔  x ∈₀ ⟪ C ⟫ )
+   →                   ( (x : ∣ 𝑨 ∣ ) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣ )
                         -----------------------------------------
-   →                                   ⟪ B ⟫ ≡ ⟪ C ⟫
+   →                                   ∣ B ∣ ≡ ∣ C ∣
   membership-equiv-gives-carrier-equality B C φ = subset-extensionality' 𝓤★ α β
     where
-      α :  ⟪ B ⟫ ⊆₀ ⟪ C ⟫
+      α :  ∣ B ∣ ⊆₀ ∣ C ∣
       α x = lr-implication (φ x)
 
-      β : ⟪ C ⟫ ⊆₀ ⟪ B ⟫
+      β : ∣ C ∣ ⊆₀ ∣ B ∣
       β x = rl-implication (φ x)
 
   membership-equiv-gives-subuniverse-equality :   (B C : subuniverse) --[lemma `g` in MHE's proof]
-   →                   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ⟪ B ⟫ ⇔ x ∈₀ ⟪ C ⟫ )
+   →                   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
                          ---------------------------------------
    →                                       B ≡ C
   membership-equiv-gives-subuniverse-equality B C =
-    inverse ( ap-⟪⟫ B C) (ap-⟪⟫-is-equiv B C) ∘ (membership-equiv-gives-carrier-equality B C)
+    inverse ( ap-pr₁ B C) (ap-pr₁-is-equiv B C) ∘ (membership-equiv-gives-carrier-equality B C)
 
-  membership-equiv-is-subsingleton :  (B C : subuniverse)  →  is-subsingleton ( ( x : ∣ 𝑨 ∣ )  → x ∈₀ ⟪ B ⟫ ⇔ x ∈₀ ⟪ C ⟫)
+  membership-equiv-is-subsingleton :  (B C : subuniverse)  →  is-subsingleton ( ( x : ∣ 𝑨 ∣ )  → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
   membership-equiv-is-subsingleton B C =
    Π-is-subsingleton gfe ( λ x → ×-is-subsingleton
-                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ⟪ C ⟫ x ) )
-                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ⟪ B ⟫ x ) )
+                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ C ∣ x ) )
+                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ B ∣ x ) )
                                   )
 
   --so two subuniverses are equal if and only if they have the same elements:
   subuniverse-equality :  (B C : subuniverse)
-   →          ( B ≡ C )    ≃    ( ( x : ∣ 𝑨 ∣ )  → ( x ∈₀ ⟪ B ⟫ ) ⇔ ( x ∈₀ ⟪ C ⟫ ) )
+   →          ( B ≡ C )    ≃    ( ( x : ∣ 𝑨 ∣ )  → ( x ∈₀ ∣ B ∣ ) ⇔ ( x ∈₀ ∣ C ∣ ) )
 
   subuniverse-equality B C =
     logically-equivalent-subsingletons-are-equivalent _ _
@@ -103,22 +101,22 @@ module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
 
   --The converse of `membership-equiv-gives-carrier-equality` is obvious.
   carrier-equality-gives-membership-equiv :   (B C : subuniverse)
-   →                            ⟪ B ⟫ ≡ ⟪ C ⟫
+   →                            ∣ B ∣ ≡ ∣ C ∣
                   ----------------------------------------
-   →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ⟪ B ⟫ ⇔ x ∈₀ ⟪ C ⟫ )
+   →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
   carrier-equality-gives-membership-equiv B C (refl _) x = id , id
 
   --so we have...
-  carrier-equiv :   ( B C : subuniverse )    →   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ⟪ B ⟫ ⇔ x ∈₀ ⟪ C ⟫ )    ≃      ( ⟪ B ⟫ ≡ ⟪ C ⟫ )
+  carrier-equiv :   ( B C : subuniverse )    →   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )    ≃      ( ∣ B ∣ ≡ ∣ C ∣ )
   carrier-equiv B C = logically-equivalent-subsingletons-are-equivalent _ _
-    ( membership-equiv-is-subsingleton B C )  ( powersets-are-sets' 𝓤★ ⟪ B ⟫ ⟪ C ⟫ )
+    ( membership-equiv-is-subsingleton B C )  ( powersets-are-sets' 𝓤★ ∣ B ∣ ∣ C ∣ )
     ( membership-equiv-gives-carrier-equality B C , carrier-equality-gives-membership-equiv B C )
 
   --...which yields an alternative subuniverse equality lemma.
-  subuniverse-equality' :  (B C : subuniverse)   →   ( B ≡ C )    ≃   ( ⟪ B ⟫ ≡ ⟪ C ⟫ )
+  subuniverse-equality' :  (B C : subuniverse)   →   ( B ≡ C )    ≃   ( ∣ B ∣ ≡ ∣ C ∣ )
   subuniverse-equality' B C =  ( B ≡ C )                 ≃⟨ subuniverse-equality B C ⟩
-   ( ( x :  ∣ 𝑨 ∣ )  →  x ∈₀ ⟪ B ⟫ ⇔  x ∈₀ ⟪ C ⟫  )  ≃⟨ carrier-equiv B C ⟩
-   ( ⟪ B ⟫ ≡ ⟪ C ⟫ )                                           ■
+   ( ( x :  ∣ 𝑨 ∣ )  →  x ∈₀ ∣ B ∣ ⇔  x ∈₀ ∣ C ∣  )  ≃⟨ carrier-equiv B C ⟩
+   ( ∣ B ∣ ≡ ∣ C ∣ )                                           ■
 
 ------------------------------------------------------------------------------------------------------------
 
