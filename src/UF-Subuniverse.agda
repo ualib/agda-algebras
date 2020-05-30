@@ -9,13 +9,13 @@ open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤
 
 open import UF-Basic using (Signature; Algebra; Op; SmallAlgebra)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
-open import UF-Hom using (Hom)
+open import UF-Hom using (Hom; is-homomorphism)
 open import UF-Rel using (Transitive)
-open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat; _≃_; from-×-≡; inverse; inv-elim-right; fiber; is-equiv; id-≃; _≃⟨_⟩_; _■)
+open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat; _≃_; from-×-≡; inverse; inv-elim-right; fiber; is-equiv; id-≃; _≃⟨_⟩_; _■; _●_ )
 open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv)
 open import UF-Univalence using (Id→Eq; is-univalent; ×-is-subsingleton; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent)
 open import UF-Singleton using (is-subsingleton; is-set)
-open import UF-Extensionality renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)  using (funext; global-funext; dfunext; global-dfunext; intensionality; Univalence; 𝓟; ∈-is-subsingleton; univalence-gives-dfunext; univalence-gives-global-dfunext; Π-is-subsingleton; powersets-are-sets'; subset-extensionality')
+open import UF-Extensionality renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)  using (funext; global-funext; dfunext; global-dfunext; intensionality; Univalence; 𝓟; ∈-is-subsingleton; univalence-gives-dfunext; univalence-gives-global-dfunext; Π-is-subsingleton; powersets-are-sets'; subset-extensionality'; dep-intensionality)
 
 open import Relation.Unary using (⋂)
 
@@ -114,9 +114,10 @@ module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
 
   --...which yields an alternative subuniverse equality lemma.
   subuniverse-equality' :  (B C : subuniverse)   →   ( B ≡ C )    ≃   ( ∣ B ∣ ≡ ∣ C ∣ )
-  subuniverse-equality' B C =  ( B ≡ C )                 ≃⟨ subuniverse-equality B C ⟩
-   ( ( x :  ∣ 𝑨 ∣ )  →  x ∈₀ ∣ B ∣ ⇔  x ∈₀ ∣ C ∣  )  ≃⟨ carrier-equiv B C ⟩
-   ( ∣ B ∣ ≡ ∣ C ∣ )                                           ■
+  subuniverse-equality' B C = ( subuniverse-equality B C ) ● ( carrier-equiv B C )
+
+-----------------------------------------------------------------------------------------------------------
+
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -256,17 +257,24 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
 
   hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses 𝑩
   hom-image-is-sub {fe} 𝓸 𝒃 𝒃∈Imf =
-    eq (∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)) ( ∥ 𝑨 ∥ 𝓸 ar) γ
+     -- eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
+    eq (∥ 𝑩 ∥ 𝓸 𝒃) ( ∥ 𝑨 ∥ 𝓸 ar) γ
     where
      ar : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣
      ar = λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)
 
+     ζ : (λ x → ∣ f ∣ (ar x)) ≡ (λ x → 𝒃 x)
      ζ = fe (λ x → InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) )
 
      γ : ∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x) ≡ ∣ f ∣ (∥ 𝑨 ∥ 𝓸 (λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)))
      γ =   ∥ 𝑩 ∥ 𝓸 (λ x → 𝒃 x)       ≡⟨ ap ( ∥ 𝑩 ∥ 𝓸 ) ζ ⁻¹ ⟩
-            ( ∥ 𝑩 ∥ 𝓸 ) ( ∣ f ∣ ∘ ar )     ≡⟨ ( ∥ f ∥ 𝓸 ar ) ⁻¹ ⟩
+            ( ∥ 𝑩 ∥ 𝓸 ) ( ∣ f ∣ ∘ ar )     ≡⟨ intensionality ξ ar ⟩ -- ( ∥ f ∥ 𝓸 ar ) ⁻¹
              ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 ar )          ∎
+      where
+       τ :  (λ (𝓸 : ∣ S ∣ ) ( ar  : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) → ( ∥ 𝑩 ∥ 𝓸 ) ( ∣ f ∣ ∘ ar ))  ≡  ( λ (𝓸 : ∣ S ∣ ) ( ar : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) → ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 ar ) )
+       τ =  ( ∥ f ∥  )⁻¹
+       ξ :  ( λ (ar  : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣) → ( ∥ 𝑩 ∥ 𝓸 ) ( ∣ f ∣ ∘ ar ))  ≡  ( λ (ar : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) → ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 ar ) )
+       ξ = dep-intensionality τ 𝓸
 
   -- Paper-pencil-proof.
   -- Let 𝓸 be an op symbol.  Let args : ∥ S ∥ 𝓸 → ∣ 𝑩 ∣ be a (∥ S ∥ 𝓸)-tuple of elements ∣ 𝑩 ∣.

@@ -15,7 +15,7 @@ open import UF-Prelude using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _�
 
 open import UF-Singleton using (is-set; is-subsingleton; singletons-are-subsingletons)
 
-open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip)
+open import UF-Equality using (refl-left ; ap-id; singleton-type'; singleton-types'-are-singletons; _≃_;  id-≃; is-equiv; id-is-equiv; Σ-≡-≃; Σ-cong; ≃-sym; _≃⟨_⟩_; _■; ∘-is-equiv; inverse; to-×-≡; ap-pr₁-to-×-≡; ap-pr₂-to-×-≡; inverses-are-sections; fiber; fiber-point; fiber-identification; Σ-flip; _●_)
 
 open import UF-Extensionality using (∃!; -∃!; being-set-is-subsingleton; univalence-gives-dfunext; dfunext; Π-is-subsingleton; hfunext; univalence-gives-hfunext; Π-is-set; Univalence; global-dfunext; univalence-gives-global-dfunext; 𝓟; _∈_; ∈-is-subsingleton; powersets-are-sets'; _⊆_; subset-extensionality'; ⊆-is-subsingleton; _/_)
 
@@ -24,6 +24,7 @@ open import UF-Univalence using (is-univalent; Id→Eq; Σ-assoc; equivs-closed-
 open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; fiberwise-retractions-are-equivs; universal-fiberwise-equiv; embeddings-are-lc; _↪_; Subtypes; χ-special; χ-special-is-equiv)
 
 open import UF-Algebra using (SNS; ⟨_⟩; canonical-map; characterization-of-≡; _≃[_]_)
+open import UF-Hom using (Hom)
 
 -------------------------------------------------------------------------------------------------
 --∞-Magmas.
@@ -773,7 +774,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
   group-closed 𝓐 = 𝓐 (unit G) × ( ( x y : ⟨ G ⟩ ) → 𝓐 x → 𝓐 y → 𝓐 (x · y) )
                                              × ( ( x : ⟨ G ⟩ ) → 𝓐 x → 𝓐 (inv G x) )
 
-  --The collection of subgroups of a group G is defined here to be the collection of all subsets A : 𝓟 ⟨ G ⟩ for which 
+  --The collection of subgroups of a group G is defined here to be the collection of all subsets A : 𝓟 ⟨ G ⟩ for which
   -- we have proof that A is closed under the group operations (really that consists of three (sub)proofs).
   Subgroups : 𝓤 ⁺ ̇
   Subgroups = Σ A ꞉ 𝓟 ⟨ G ⟩ , group-closed ( _∈ A )
@@ -843,7 +844,7 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
    Π-is-subsingleton dfe ( λ x → ×-is-subsingleton
                                       (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ T ⟫ x ) )
                                       (Π-is-subsingleton dfe  ( λ _ → ∈-is-subsingleton ⟪ S ⟫ x ) )
-                                  ) 
+                                  )
 
   --"It follows that two subgroups are equal if and only if they have the same elements:
   subgroup-equality :  (S T : Subgroups)
@@ -871,10 +872,8 @@ module subgroup-identity (𝓤 : Universe) (𝓤★ : Univalence) where
 
   --...which yields an alternative subgroup equality lemma.
   subgroup-equality' :  (S T : Subgroups)   →   ( S ≡ T )    ≃   ( ⟪ S ⟫ ≡ ⟪ T ⟫ )
-  subgroup-equality' S T =
-   (S ≡ T)                                                         ≃⟨ subgroup-equality S T ⟩
-   ( ( x : ⟨ G ⟩ )  → ( x ∈ ⟪ S ⟫ ) ⇔ ( x ∈ ⟪ T ⟫ ) )  ≃⟨ carrier-equiv S T ⟩
-   (⟪ S ⟫ ≡ ⟪ T ⟫)                                            ■
+  subgroup-equality' S T = ( subgroup-equality S T ) ● ( carrier-equiv S T )
+
   --------------------------------------------------------------------------------------------------
 
   --As an application of the subtype classifier, MHE shows that the type of subgroups is equivalent to the type
