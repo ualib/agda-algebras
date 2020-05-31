@@ -7,119 +7,19 @@
 
 open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓡; 𝓢; 𝓣; 𝓤; 𝓥; 𝓦;  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; _×_; _⊆_; _∈_; Image_∋_; Im_⊆_; Inv; InvIsInv; eq; im; pr₁; pr₂; transport; codomain; domain; ≡-elim-right; _∼_; id; cong-app; ap-cong; _∙_; 𝑖𝑑; _⇔_; lr-implication; rl-implication)
 
-open import UF-Basic using (Signature; Algebra; Op; SmallAlgebra)
+open import UF-Basic using (Signature; Algebra; Op; SmallAlgebra; algebra-on)
 open import UF-Free using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 open import UF-Hom using (Hom; is-homomorphism)
 open import UF-Rel using (Transitive)
 open import UF-Equality using (to-Σ-≡; from-Σ-≡; Nat; _≃_; from-×-≡; inverse; inv-elim-right; fiber; is-equiv; id-≃; _≃⟨_⟩_; _■; _●_ )
-open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv)
-open import UF-Univalence using (Id→Eq; is-univalent; ×-is-subsingleton; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent)
+open import UF-Embedding using (is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; embeddings-are-lc)
+open import UF-Univalence using (Id→Eq; is-univalent; ×-is-subsingleton; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent; left-cancellable)
 open import UF-Singleton using (is-subsingleton; is-set)
 open import UF-Extensionality renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)  using (funext; global-funext; dfunext; global-dfunext; intensionality; Univalence; 𝓟; ∈-is-subsingleton; univalence-gives-dfunext; univalence-gives-global-dfunext; Π-is-subsingleton; powersets-are-sets'; subset-extensionality'; dep-intensionality)
 
 open import Relation.Unary using (⋂)
 
-module UF-Subuniverse {S : Signature 𝓞 𝓥} (𝓤★ : Univalence) where
-
---We consider the subalgebras of a given arbitrary "overalgebra" 𝑨.
---REF: This module generalizes MHE's `ambient` module. It does for subuniverses what MHE does for subgroups.
---       cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip )
-
-module overalgebra ( 𝑨 : Algebra 𝓤 S ) where
-
-  gfe : global-dfunext
-  gfe = univalence-gives-global-dfunext 𝓤★
-
-  op-closed : ( ∣ 𝑨 ∣ → 𝓦 ̇ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-  op-closed B = ( 𝓸 : ∣ S ∣ )  ( 𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ )
-   → ( ( i : ∥ S ∥ 𝓸 ) → B ( 𝒂 i ) ) → B ( ∥ 𝑨 ∥ 𝓸 𝒂 )
-
-  subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
-
-  being-op-closed-is-subsingleton : ( B : 𝓟 ∣ 𝑨 ∣ ) → is-subsingleton ( op-closed ( _∈₀ B ) )
-  being-op-closed-is-subsingleton B =  Π-is-subsingleton gfe
-   ( λ 𝓸 → Π-is-subsingleton gfe (λ 𝒂 → Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton B ( ∥ 𝑨 ∥ 𝓸 𝒂 ) ) ) )
-
-  pr₁-is-embedding : is-embedding ∣_∣
-  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
-
-  --so equality of subalgebras is equality of their underlying subsets in the powerset:
-  ap-pr₁ : (B C : subuniverse) → B ≡ C → ∣ B ∣ ≡ ∣ C ∣
-  ap-pr₁ B C = ap ∣_∣
-
-  ap-pr₁-is-equiv : (B C : subuniverse) → is-equiv (ap-pr₁ B C)
-  ap-pr₁-is-equiv = embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
-
-  subuniverse-is-a-set : is-set subuniverse
-  subuniverse-is-a-set B C = equiv-to-subsingleton
-                                            ( ap-pr₁ B C , ap-pr₁-is-equiv B C )
-                                            ( powersets-are-sets' 𝓤★ ∣ B ∣  ∣ C ∣ )
-
-  --Here are some useful lemmas extracted from MHE's proof of `subgroup-equality`.
-  subuniverse-equality-gives-membership-equiv : (B C : subuniverse)    --[called `f` in MHE's proof]
-   →                                  B ≡ C
-                        -----------------------------------
-   →                   ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣
-  subuniverse-equality-gives-membership-equiv B C B≡C x =
-    transport (λ - → x ∈₀ ∣ - ∣) B≡C , transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
-
-  membership-equiv-gives-carrier-equality :   (B C : subuniverse)   --[called `h` in MHE's proof]
-   →                   ( (x : ∣ 𝑨 ∣ ) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣ )
-                        -----------------------------------------
-   →                                   ∣ B ∣ ≡ ∣ C ∣
-  membership-equiv-gives-carrier-equality B C φ = subset-extensionality' 𝓤★ α β
-    where
-      α :  ∣ B ∣ ⊆₀ ∣ C ∣
-      α x = lr-implication (φ x)
-
-      β : ∣ C ∣ ⊆₀ ∣ B ∣
-      β x = rl-implication (φ x)
-
-  membership-equiv-gives-subuniverse-equality :   (B C : subuniverse) --[lemma `g` in MHE's proof]
-   →                   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
-                         ---------------------------------------
-   →                                       B ≡ C
-  membership-equiv-gives-subuniverse-equality B C =
-    inverse ( ap-pr₁ B C) (ap-pr₁-is-equiv B C) ∘ (membership-equiv-gives-carrier-equality B C)
-
-  membership-equiv-is-subsingleton :  (B C : subuniverse)  →  is-subsingleton ( ( x : ∣ 𝑨 ∣ )  → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
-  membership-equiv-is-subsingleton B C =
-   Π-is-subsingleton gfe ( λ x → ×-is-subsingleton
-                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ C ∣ x ) )
-                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ B ∣ x ) )
-                                  )
-
-  --so two subuniverses are equal if and only if they have the same elements:
-  subuniverse-equality :  (B C : subuniverse)
-   →          ( B ≡ C )    ≃    ( ( x : ∣ 𝑨 ∣ )  → ( x ∈₀ ∣ B ∣ ) ⇔ ( x ∈₀ ∣ C ∣ ) )
-
-  subuniverse-equality B C =
-    logically-equivalent-subsingletons-are-equivalent _ _
-      (subuniverse-is-a-set B C) (membership-equiv-is-subsingleton B C)
-      (subuniverse-equality-gives-membership-equiv B C , membership-equiv-gives-subuniverse-equality B C)
-
-  --The converse of `membership-equiv-gives-carrier-equality` is obvious.
-  carrier-equality-gives-membership-equiv :   (B C : subuniverse)
-   →                            ∣ B ∣ ≡ ∣ C ∣
-                  ----------------------------------------
-   →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
-  carrier-equality-gives-membership-equiv B C (refl _) x = id , id
-
-  --so we have...
-  carrier-equiv :   ( B C : subuniverse )    →   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )    ≃      ( ∣ B ∣ ≡ ∣ C ∣ )
-  carrier-equiv B C = logically-equivalent-subsingletons-are-equivalent _ _
-    ( membership-equiv-is-subsingleton B C )  ( powersets-are-sets' 𝓤★ ∣ B ∣ ∣ C ∣ )
-    ( membership-equiv-gives-carrier-equality B C , carrier-equality-gives-membership-equiv B C )
-
-  --...which yields an alternative subuniverse equality lemma.
-  subuniverse-equality' :  (B C : subuniverse)   →   ( B ≡ C )    ≃   ( ∣ B ∣ ≡ ∣ C ∣ )
-  subuniverse-equality' B C = ( subuniverse-equality B C ) ● ( carrier-equiv B C )
-
------------------------------------------------------------------------------------------------------------
-
-
-------------------------------------------------------------------------------------------------------------
+module UF-Subuniverse {S : Signature 𝓞 𝓥} where
 
 Subuniverses : (𝑨 : Algebra 𝓤 S) → Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
 Subuniverses (A , Fᴬ) B = ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸 → A ) → Im 𝒂 ⊆ B → Fᴬ 𝓸 𝒂 ∈ B
@@ -286,47 +186,6 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩)  where
   finv : {X : 𝓤 ̇ } (𝒃 : X → ∣ hom-image-alg ∣ ) (x : X) → ∣ 𝑨 ∣
   finv = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
 
-  -- hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term {X = X} ) (𝒃 : X → ∣ hom-image-alg ∣ )
-  --   →                            ( p ̇ hom-image-alg ) 𝒃 ≡ ∣ f ∣  ( ( p ̇ 𝑨 ) ( finv 𝒃 ) ) , im ( ( p ̇ 𝑨 ) ( finv 𝒃 ) )
-
-  -- hom-image-term-interp {fe} {X} (generator x) 𝒃 =
-  --   let ∣𝒃x∣ = ∣ 𝒃 x ∣ in
-  --   let ∥𝒃x∥ = ∥ 𝒃 x ∥ in
-  --   let r1 = ∣ f ∣ (finv 𝒃 x) in
-  --   let r2 = im ( finv 𝒃 x ) in
-  --   let left = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ in
-  --   let fst = ∣ 𝒃 x ∣ ≡⟨ left ⁻¹ ⟩ r1 ∎ in {!!}
-  --       -- Goal: 𝒃 x ≡ ∣ f ∣ (finv 𝒃 x) , im (finv 𝒃 x)
-  --         --  𝒃 x                                 ≡⟨ refl _ ⟩
-  --         -- ∣ 𝒃 x ∣ , ∥ 𝒃 x ∥                    ≡⟨ ap (λ - → - , ∥ 𝒃 x ∥) fst ⟩
-  --         -- ∣ f ∣ (finv 𝒃 x) , ∥ 𝒃 x ∥           ≡⟨ ? ⟩
-  --         -- ∣ f ∣ (finv 𝒃 x) , im {A = ∣ 𝑨 ∣} {B = ∣ 𝑩 ∣} (finv 𝒃 x)       ∎
-
-  -- hom-image-term-interp {fe}{X} (node 𝓸 𝒕) 𝒃 = {!!}
-  --  where
-  --   IH : (x : ∥ S ∥ 𝓸)
-  --    → ( 𝒕 x ̇ hom-image-alg ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) , im ((𝒕 x ̇ 𝑨) (finv 𝒃 ) )
-  --   IH x = hom-image-term-interp{fe}{X}(𝒕 x) 𝒃
-
-  --   com-hom-𝓸 :  ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) )
-  --                        ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
-  --   com-hom-𝓸 = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
-
-  --   com-hom-t : (x : ∥ S ∥ 𝓸)
-  --    →    ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) ( finv 𝒃 ) ) ≡ (𝒕 x ̇ 𝑩) (∣ f ∣ ∘ (finv 𝒃 ) )
-  --   com-hom-t x = comm-hom-term fe 𝑨 𝑩 f (𝒕 x) (finv 𝒃)
-
-  --   com-hom-𝓸' : ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) )
-  --                         ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
-  --   com-hom-𝓸' = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
-
-  --   γ :  (x : ∥ S ∥ 𝓸)
-  --    →  ( (𝒕 x ̇ hom-image-alg) 𝒃 ) ≡ ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,
-  --                                               im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )
-  --   γ = 
-  --      ( 𝓸 ̂ hom-image-alg ) (λ x → ( 𝒕 x ̇ hom-image-alg ) 𝒃 )  ≡⟨ {!!} ⟩
-  --      ( 𝓸 ̂ hom-image-alg ) (λ x → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) )  , im ( (𝒕 x ̇ 𝑨) (finv 𝒃 ) ) ) ≡⟨ {!!} ⟩
-  --      ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,  im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )   ∎
 
 module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 ̇)  where
 
@@ -379,7 +238,60 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
   -- Now we should be able to prove something like the following
   -- (if we could be bothered to generalize the relation ≃ to predicates):
   -- SgY≃TermImageY : (Y : Pred ∣ 𝑨 ∣ k) ->  (TermImage Y) ≃ (Sg Y)
-  -- SgY≃TermImageY {x} Y = ? 
+  -- SgY≃TermImageY {x} Y = ?
+
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+-- -----------------------------------------------------------------------------------
+-- -- (the following type-checks, but holes remain)
+  -- hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term {X = X} ) (𝒃 : X → ∣ hom-image-alg ∣ )
+  --   →                            ( p ̇ hom-image-alg ) 𝒃 ≡ ∣ f ∣  ( ( p ̇ 𝑨 ) ( finv 𝒃 ) ) , im ( ( p ̇ 𝑨 ) ( finv 𝒃 ) )
+
+  -- hom-image-term-interp {fe} {X} (generator x) 𝒃 =
+  --   let ∣𝒃x∣ = ∣ 𝒃 x ∣ in
+  --   let ∥𝒃x∥ = ∥ 𝒃 x ∥ in
+  --   let r1 = ∣ f ∣ (finv 𝒃 x) in
+  --   let r2 = im ( finv 𝒃 x ) in
+  --   let left = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ in
+  --   let fst = ∣ 𝒃 x ∣ ≡⟨ left ⁻¹ ⟩ r1 ∎ in {!!}
+  --       -- Goal: 𝒃 x ≡ ∣ f ∣ (finv 𝒃 x) , im (finv 𝒃 x)
+  --         --  𝒃 x                                 ≡⟨ refl _ ⟩
+  --         -- ∣ 𝒃 x ∣ , ∥ 𝒃 x ∥                    ≡⟨ ap (λ - → - , ∥ 𝒃 x ∥) fst ⟩
+  --         -- ∣ f ∣ (finv 𝒃 x) , ∥ 𝒃 x ∥           ≡⟨ ? ⟩
+  --         -- ∣ f ∣ (finv 𝒃 x) , im {A = ∣ 𝑨 ∣} {B = ∣ 𝑩 ∣} (finv 𝒃 x)       ∎
+
+  -- hom-image-term-interp {fe}{X} (node 𝓸 𝒕) 𝒃 = {!!}
+  --  where
+  --   IH : (x : ∥ S ∥ 𝓸)  → ( 𝒕 x ̇ hom-image-alg ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) , im ((𝒕 x ̇ 𝑨) (finv 𝒃 ) )
+  --   IH x = hom-image-term-interp{fe}{X}(𝒕 x) 𝒃
+
+  --   com-hom-𝓸 :  ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
+  --   com-hom-𝓸 = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
+
+  --   com-hom-t : (x : ∥ S ∥ 𝓸) →    ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) ( finv 𝒃 ) ) ≡ (𝒕 x ̇ 𝑩) (∣ f ∣ ∘ (finv 𝒃 ) )
+  --   com-hom-t x = comm-hom-term fe 𝑨 𝑩 f (𝒕 x) (finv 𝒃)
+
+  --   com-hom-𝓸' : ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
+  --   com-hom-𝓸' = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
+
+  --   γ :  (x : ∥ S ∥ 𝓸) →  ( (𝒕 x ̇ hom-image-alg) 𝒃 ) ≡ ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,
+  --                                               im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )
+  --   γ = ( 𝓸 ̂ hom-image-alg ) (λ x → ( 𝒕 x ̇ hom-image-alg ) 𝒃 )  ≡⟨ {!!} ⟩
+  --      ( 𝓸 ̂ hom-image-alg ) (λ x → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) )  , im ( (𝒕 x ̇ 𝑨) (finv 𝒃 ) ) ) ≡⟨ {!!} ⟩
+  --      ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,  im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )   ∎
 
 
 
@@ -464,3 +376,116 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
 --              f1    ≡⟨ (c-is-center f1 )⁻¹ ⟩
 --              c     ≡⟨ c-is-center f2 ⟩
 --              f2    ∎
+
+
+
+
+--The next submodule, called `overalgebra`, is a generalization of MHE's implementation of subgroups.
+--We consider the subalgebras of a given arbitrary "overalgebra" 𝑨.
+--REF: This module generalizes MHE's `ambient` module. It does for subuniverses what MHE does for subgroups.
+--       cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip )
+module overalgebra ( 𝑨 : Algebra 𝓤 S )  (𝓤★ : Univalence) where
+
+  gfe : global-dfunext
+  gfe = univalence-gives-global-dfunext 𝓤★
+
+  op-closed : ( ∣ 𝑨 ∣ → 𝓦 ̇ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+  op-closed B = ( 𝓸 : ∣ S ∣ )  ( 𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ )
+   → ( ( i : ∥ S ∥ 𝓸 ) → B ( 𝒂 i ) ) → B ( ∥ 𝑨 ∥ 𝓸 𝒂 )
+
+  subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
+
+  being-op-closed-is-subsingleton : ( B : 𝓟 ∣ 𝑨 ∣ ) → is-subsingleton ( op-closed ( _∈₀ B ) )
+  being-op-closed-is-subsingleton B =  Π-is-subsingleton gfe
+   ( λ 𝓸 → Π-is-subsingleton gfe (λ 𝒂 → Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton B ( ∥ 𝑨 ∥ 𝓸 𝒂 ) ) ) )
+
+  pr₁-is-embedding : is-embedding ∣_∣
+  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
+
+  --so equality of subalgebras is equality of their underlying subsets in the powerset:
+  ap-pr₁ : (B C : subuniverse) → B ≡ C → ∣ B ∣ ≡ ∣ C ∣
+  ap-pr₁ B C = ap ∣_∣
+
+  ap-pr₁-is-equiv : (B C : subuniverse) → is-equiv (ap-pr₁ B C)
+  ap-pr₁-is-equiv = embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
+
+  subuniverse-is-a-set : is-set subuniverse
+  subuniverse-is-a-set B C = equiv-to-subsingleton
+                                            ( ap-pr₁ B C , ap-pr₁-is-equiv B C )
+                                            ( powersets-are-sets' 𝓤★ ∣ B ∣  ∣ C ∣ )
+
+  --Here are some useful lemmas extracted from MHE's proof of `subgroup-equality`.
+  subuniverse-equality-gives-membership-equiv : (B C : subuniverse)    --[called `f` in MHE's proof]
+   →                                  B ≡ C
+                        -----------------------------------
+   →                   ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣
+  subuniverse-equality-gives-membership-equiv B C B≡C x =
+    transport (λ - → x ∈₀ ∣ - ∣) B≡C , transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
+
+  membership-equiv-gives-carrier-equality :   (B C : subuniverse)   --[called `h` in MHE's proof]
+   →                   ( (x : ∣ 𝑨 ∣ ) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣ )
+                        -----------------------------------------
+   →                                   ∣ B ∣ ≡ ∣ C ∣
+  membership-equiv-gives-carrier-equality B C φ = subset-extensionality' 𝓤★ α β
+    where
+      α :  ∣ B ∣ ⊆₀ ∣ C ∣
+      α x = lr-implication (φ x)
+
+      β : ∣ C ∣ ⊆₀ ∣ B ∣
+      β x = rl-implication (φ x)
+
+  membership-equiv-gives-subuniverse-equality :   (B C : subuniverse) --[lemma `g` in MHE's proof]
+   →                   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
+                         ---------------------------------------
+   →                                       B ≡ C
+  membership-equiv-gives-subuniverse-equality B C =
+    inverse ( ap-pr₁ B C) (ap-pr₁-is-equiv B C) ∘ (membership-equiv-gives-carrier-equality B C)
+
+  membership-equiv-is-subsingleton :  (B C : subuniverse)  →  is-subsingleton ( ( x : ∣ 𝑨 ∣ )  → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+  membership-equiv-is-subsingleton B C =
+   Π-is-subsingleton gfe ( λ x → ×-is-subsingleton
+                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ C ∣ x ) )
+                                      (Π-is-subsingleton gfe  ( λ _ → ∈-is-subsingleton ∣ B ∣ x ) )
+                                  )
+
+  --so two subuniverses are equal if and only if they have the same elements:
+  subuniverse-equality :  (B C : subuniverse)
+   →          ( B ≡ C )    ≃    ( ( x : ∣ 𝑨 ∣ )  → ( x ∈₀ ∣ B ∣ ) ⇔ ( x ∈₀ ∣ C ∣ ) )
+
+  subuniverse-equality B C =
+    logically-equivalent-subsingletons-are-equivalent _ _
+      (subuniverse-is-a-set B C) (membership-equiv-is-subsingleton B C)
+      (subuniverse-equality-gives-membership-equiv B C , membership-equiv-gives-subuniverse-equality B C)
+
+  --The converse of `membership-equiv-gives-carrier-equality` is obvious.
+  carrier-equality-gives-membership-equiv :   (B C : subuniverse)
+   →                            ∣ B ∣ ≡ ∣ C ∣
+                  ----------------------------------------
+   →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
+  carrier-equality-gives-membership-equiv B C (refl _) x = id , id
+
+  --so we have...
+  carrier-equiv :   ( B C : subuniverse )    →   ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )    ≃      ( ∣ B ∣ ≡ ∣ C ∣ )
+  carrier-equiv B C = logically-equivalent-subsingletons-are-equivalent _ _
+    ( membership-equiv-is-subsingleton B C )  ( powersets-are-sets' 𝓤★ ∣ B ∣ ∣ C ∣ )
+    ( membership-equiv-gives-carrier-equality B C , carrier-equality-gives-membership-equiv B C )
+
+  --...which yields an alternative subuniverse equality lemma.
+  subuniverse-equality' :  (B C : subuniverse)   →   ( B ≡ C )    ≃   ( ∣ B ∣ ≡ ∣ C ∣ )
+  subuniverse-equality' B C = ( subuniverse-equality B C ) ● ( carrier-equiv B C )
+
+-----------------------------------------------------------------------------------------------------------
+
+  -- module _ {X : 𝓤 ̇} (h : X → ∣ 𝑨 ∣ ) (hem : is-embedding h) where
+  --   private
+  --    h-lc : left-cancellable h
+  --    h-lc = embeddings-are-lc h hem
+
+  --   having-closed-fiber-is-subsingleton : is-subsingleton ( op-closed (fiber h) )
+  --   having-closed-fiber-is-subsingleton = being-op-closed-is-subsingleton (λ x → (fiber h x , hem x) )
+
+  --   at-most-one-homomorphic-structure : is-subsingleton (Σ 𝑩 ꞉ (algebra-on {𝓤} X) , (is-homomorphism  ∣ 𝑩 ∣  𝑨 h ) )
+  --   at-most-one-homomorphic-structure = ?
+
+

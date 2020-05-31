@@ -14,7 +14,7 @@ open import UF-Extensionality using (dep-intensionality; hfunext; Π-is-set)
 
 module UF-Basic where
 
--- -- Operations and projections
+-- Operations and projections
 Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
 Op I A = (I → A) → A
 
@@ -34,6 +34,11 @@ SmallAlgebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature �
 SmallAlgebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  is-set A × ( (𝓸 : F)  → Op (ρ 𝓸) A )
 
 module _ {S : Signature 𝓞 𝓥}  where
+-- algebra-on : (X : 𝓤) → 𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+-- algebra-on X = Σ A : 𝓤 ̇ , (A ≡ X) × ( ( 𝓸 : F ) → Op ( ∥ S ∥ 𝓸 ) A
+  algebra-on :  {𝓤 : Universe} (X : 𝓤 ̇ ) → 𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+  algebra-on {𝓤} X = Σ A ꞉ (Algebra 𝓤 S)  , ( ∣ A ∣ ≡ X )
+
   Π' : {I : 𝓘 ̇}( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
   Π' A =  ( ( ᵢ : _) → ∣ A ᵢ ∣ ) ,  λ 𝓸 x ᵢ → ∥ A ᵢ ∥ 𝓸 λ 𝓥 → x 𝓥 ᵢ
 
