@@ -27,7 +27,7 @@ all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with f = ∀  (𝓸 : �
 intensional-hom : (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S) → ( ∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 intensional-hom 𝑨 𝑩 f = all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with f
 
-Hom : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+Hom : Algebra 𝓦 S → Algebra 𝓤 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 Hom 𝑨 𝑩 = Σ f ꞉ ( ∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with f
 
 --  2. full intensionality (intensional with respect to both 𝓸 and 𝒂)

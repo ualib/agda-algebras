@@ -177,7 +177,7 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (f : hom 𝑨 𝑩)  where
   finv = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
 
 
-module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 ̇)  where
+module _ { X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇ } {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (Y : 𝓤 ̇)  where
 
   -- Obs 2.11 (on subuniverse generation as image of terms). If Y is a subset of A, then
   --   Sg^{𝑨}(Y) = { t^𝑨 a : t ∈ T_σ(X_n), n ∈ ℕ, a: Fin(ρ t) -> Y }.
@@ -214,16 +214,20 @@ module _  {𝑨 𝑩 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤} (X Y : 𝓤 
   -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
   --2. Y ⊆ TermImageY
-  Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ 𝓤) -> Y ⊆ TermImage Y
-  Y⊆TermImageY {x} Y {a} a∈Y = var a∈Y
+  -- Y⊆TermImageY : {x : X} -> (Y : Pred ∣ 𝑨 ∣ 𝓤) -> Y ⊆ TermImage Y
+  -- Y⊆TermImageY {x} Y {a} a∈Y = var a∈Y
+  Y⊆TermImageY : (Y : Pred ∣ 𝑨 ∣ 𝓤) → Y ⊆ TermImage Y
+  Y⊆TermImageY Y {a} a∈Y = var a∈Y
   -- AUTOMATION WORKS! (this proof was found automatically by C-c C-a)
 
   -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y
   --    Proof: see `sgIsSmallest`
 
   --Finally, we can prove the desired inclusion.
-  SgY⊆TermImageY : {x : X} → (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
-  SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x} Y)
+  -- SgY⊆TermImageY : {x : X} → (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
+  -- SgY⊆TermImageY {x} Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY{x} Y)
+  SgY⊆TermImageY : (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
+  SgY⊆TermImageY Y = sgIsSmallest (TermImageIsSub Y) (Y⊆TermImageY Y)
 
   -- Now we should be able to prove something like the following
   -- (if we could be bothered to generalize the relation ≃ to predicates):

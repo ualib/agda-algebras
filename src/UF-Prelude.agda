@@ -61,7 +61,7 @@ universe-of {𝓤} X = 𝓤
 
 --"We will refer to universes by letters 𝓤,𝓥,𝓦,𝓣 (type these with, resp, ``\MCU``, ``\MCV``, etc)"
 variable
-  𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 : Universe
+  𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 𝓧 : Universe
 
 
 -- The one-element type (type `\b1` to get 𝟙; and type `\*` to get ⋆)

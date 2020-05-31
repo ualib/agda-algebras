@@ -6,24 +6,24 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app; _⇔_ )
+open import UF-Prelude using (Universe; 𝓞; 𝓣; 𝓤; 𝓥; 𝓦; 𝓧; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app; _⇔_; refl )
 open import UF-Basic using (Signature; Algebra; Π')
-open import UF-Hom using (hom)
+open import UF-Hom using (HOM; Hom; hom)
 open import UF-Rel using (ker-pred; Rel)
 open import UF-Con using (con; _//_)
-open import UF-Free using (Term; 𝔉; _̇_)
+open import UF-Free using (Term; 𝔉; _̇_; comm-hom-term'; _⊢_≈_; _⊢_≋_; 𝔉-interp )
 open import UF-Subuniverse using (Subuniverse; mksub; Sg; _is-subalgebra-of_; var; app)
-open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext)
+open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext; intensionality)
 
 module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 
 ----------------------------------------------------------------------------------------
 --Theories and Models.
-_⊢_≈_ : {X : 𝓤 ̇} → Algebra 𝓤 S → Term {X = X} → Term → 𝓤 ̇
-𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
+-- _⊢_≈_ : Algebra 𝓤 S → Term → Term → 𝓤 ̇
+-- 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 
-_⊢_≋_ : {𝓤 : Universe} {X : 𝓤 ̇} → Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-_⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
+-- _⊢_≋_ : Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+-- _⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
 
 -------------------------------------------------------------------------------
 --Equalizers.
@@ -139,21 +139,35 @@ SubalgebrasOfClass  𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (𝑩 is-subalgebra-of-cl
 --  𝑻𝒉 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 
-module _   (𝓚 : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)) )where
+module _ (gfe : global-funext) { X : 𝓧 ̇ } (𝓚 : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)) ) where
 -- Recall, `𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨`
 --           `𝓚 ⊢ p ≋ q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q`
 
-  -- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom(𝑻(X_ω), 𝑨), h p^𝑨 = h q^𝑨`. (UAFST Lem 4.37)
-  identity-implies-preserved-by-homs : {X : 𝓤 ̇}  (p q : Term {X = X})
+  -- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom 𝔉 𝑨 , h p = h q`. (UAFST Lem 4.37)
+  identity-implies-preserved-by-homs :  (p q : Term {X = X})
    →                                 𝓚 ⊢ p ≋ q
-               -----------------------------------------------------------
-   →         (𝑨 : Algebra 𝓤 S) (KA : 𝓚 𝑨) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q
-  identity-implies-preserved-by-homs p q 𝓚⊢p≋q  𝑨  KA (h , hhom) = γ
+               ---------------------------------------------------------
+   →         (𝑨 : Algebra 𝓤 S) (KA : 𝓚 𝑨) (h : hom 𝔉 𝑨) → ∣ h ∣ p ≡ ∣ h ∣ q
+  identity-implies-preserved-by-homs p q 𝓚⊢p≋q  𝑨  KA h = γ
+   -- let cht = comm-hom-term' fe 𝔉 𝑨 h p in {!!}
    where
-    γ :  h p ≡ h q
+    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+    pA≡qA = 𝓚⊢p≋q KA
+
+    pAh≡qAh : ∀ (𝒂 : X → ∣ 𝔉 ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+    pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
+
+    hpa≡hqa :  ∀ (𝒂 : X → ∣ 𝔉 ∣ ) →  ∣ h ∣ (𝔉-interp p 𝒂)  ≡ ∣ h ∣ (𝔉-interp q 𝒂)
+    hpa≡hqa = {!!}
+    -- hp≡hq : ∣ h ∣ ∘ (p ̇ 𝔉)  ≡ ∣ h ∣ ∘ (q ̇ 𝔉)
+    -- hp≡hq = ?
+
+--    Since h is a hom, we obtain h ((p ̇ 𝔉) 𝒂) = h ((q ̇ 𝔉) 𝒂), as desired.
+
+    γ :  ∣ h ∣ p ≡ ∣ h ∣ q
     γ = {!!}
 
-  preserved-by-homs-implies-identity : {X : 𝓤 ̇}  (p q : Term {X = X}) →
+  preserved-by-homs-implies-identity : (p q : Term{X = X} ) →
                ( ∀(𝑨 : Algebra 𝓤 S)(KA : 𝑨 ∈ 𝓚) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q )
                -----------------------------------------------------------------
    →                              𝓚 ⊢ p ≋ q
@@ -162,7 +176,7 @@ module _   (𝓚 : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)) )w
     γ : 𝑨 ⊢ p ≈ q
     γ = {!!}
 
-  identity-iff-preserved-by-homs : {X : 𝓤 ̇}  (p q : Term {X = X})
+  identity-iff-preserved-by-homs :  (p q : Term {X = X})
    →                  (𝓚 ⊢ p ≋ q) ⇔ (∀ (𝑨 : Algebra 𝓤 S)(KA : 𝓚 𝑨) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q )
   identity-iff-preserved-by-homs  p q = ( identity-implies-preserved-by-homs p q , preserved-by-homs-implies-identity p q )
   -- pencil-paper-proof:
