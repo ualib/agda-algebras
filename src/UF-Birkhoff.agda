@@ -6,22 +6,33 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app )
+open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app; _⇔_ )
 open import UF-Basic using (Signature; Algebra; Π')
 open import UF-Hom using (hom)
 open import UF-Rel using (ker-pred; Rel)
 open import UF-Con using (con; _//_)
+open import UF-Free using (Term; 𝔉; _̇_)
 open import UF-Subuniverse using (Subuniverse; mksub; Sg; _is-subalgebra-of_; var; app)
 open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext)
 
 module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
+
+----------------------------------------------------------------------------------------
+--Theories and Models.
+_⊢_≈_ : {X : 𝓤 ̇} → Algebra 𝓤 S → Term {X = X} → Term → 𝓤 ̇
+𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
+
+_⊢_≋_ : {𝓤 : Universe} {X : 𝓤 ̇} → Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+_⊢_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q
+
 -------------------------------------------------------------------------------
---EQUALIZERS.
+--Equalizers.
 
 --...of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (f g : A → B) → Pred A 𝓦
 𝑬 f g x = f x ≡ g x
---..of homs
+
+--..of homs  (see also definition 𝓔 in UF-Hom)
 𝑬𝑯 : {A B : Algebra 𝓤 S} (f g : hom A B) → Pred ∣ A ∣ 𝓤
 𝑬𝑯 f g x = ∣ f ∣ x ≡ ∣ g ∣ x
 
@@ -46,20 +57,11 @@ module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 -------------------------------------------------------------------------------
 -- COMPOSITION OF HOMS.
 -- Obs 2.0. Composing homs gives a hom.
--- See also: Siva's (infix) def of _>>>_ in the Hom.agda file.
-HCompClosed : {𝑨 : Algebra 𝓤 S} {𝑩 : Algebra 𝓦 S} {𝑪 : Algebra 𝓣 S}
- →               hom 𝑨 𝑩    →    hom 𝑩 𝑪
-                  ---------------------------
- →                          hom 𝑨 𝑪
-HCompClosed {𝑨 = A , FA} {𝑩 = B , FB} { 𝑪 = C , FC } (f , fhom) (g , ghom) = g ∘ f , γ
-    where
-      γ : ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸  →  A )  →  ( g ∘ f ) ( FA 𝓸 𝒂 ) ≡ FC 𝓸 ( g ∘ f ∘ 𝒂 )
-      γ 𝓸 𝒂 = (g ∘ f) (FA 𝓸 𝒂)     ≡⟨ ap g ( fhom 𝓸 𝒂 ) ⟩
-                  g (FB 𝓸 (f ∘ 𝒂))     ≡⟨ ghom 𝓸 ( f ∘ 𝒂 ) ⟩
-                  FC 𝓸 (g ∘ f ∘ 𝒂)     ∎
+-- >>> Proved in UF-Hom <<<
 
 -- Obs 2.2. Homs are determined by their values on a generating set (UAFST Ex. 1.4.6.b)
 -- If f, g : Hom(𝑨,𝑩), X ⊆ A generates 𝑨, and f|_X = g|_X, then f = g.
+-- (N.B. this is proved here, and not in, say, UF-Hom, because we use `Sg` from UF-Subuniverse.)
 -- PROOF.  Suppose the X ⊆ A generates 𝑨 and f|_X = g|_X. Fix an arbitrary a: A.  We show f a = g a.
 --         Since X generates 𝑨, ∃ term t (or arity n = ρt, say) and a tuple x: n -> X of generators
 --         such that a = t^𝑨 x. Since f|_X = g|_X, f ∘ x = (f x₀, ..., f xₙ) = (g x₀,...,g xₙ) = g ∘ x,
@@ -78,62 +80,14 @@ HomUnique fe { 𝑨 = A , Fᴬ } { 𝑩 = B , Fᴮ } X (f , fhom) (g , ghom) fx�
     where induction-hypothesis =
                λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X (f , fhom) (g , ghom) fx≡gx (𝒂 x)( im𝒂⊆SgX x )
 
+
 -- Obs 2.3. If A, B are finite and X generates 𝑨, then |Hom(𝑨, 𝑩)| ≤ |B|^|X|.
 -- PROOF. By Obs 2, a hom is uniquely determined by its restriction to a generating set.
 --   If X generates 𝑨, then since there are exactly |B|^|X| functions from X to B, the result holds. □
 
 ------------------------------------------------------
 -- Obs 2.4. Factorization of homs.
--- If f : Hom 𝑨 𝑩, g : Hom 𝑨 𝑪, g epic, Ker g ⊆ Ker f, then ∃ h ∈ Hom 𝑪 𝑩, f = h ∘ g.
---
---        𝑨----f-----> 𝑩
---         \              7
---           \          /
---           g \      / ∃h
---                v  /
---                 𝑪
---
-homFactor : funext 𝓤 𝓤
- →           {𝑨 𝑩 𝑪 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) (g : hom 𝑨 𝑪)
- →           ker-pred ∣ g ∣ ⊆ ker-pred ∣ f ∣  →   Epic ∣ g ∣
-              -------------------------------------------
- →              Σ h ꞉ ( hom 𝑪 𝑩 ) ,  ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
-
---Prove: The diagram above commutes; i.e., ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
-homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g , ghom) Kg⊆Kf gEpic =
-  ( h , hIsHomCB ) ,  f≡h∘g
-  where
-    gInv : C → A
-    gInv = λ c → (EpicInv g gEpic) c
-
-    h : C → B
-    h = λ c → f ( gInv c )
-
-    ξ : (x : A) → ker-pred g (x , gInv (g x))
-    ξ x =  ( cong-app (EInvIsRInv fe g gEpic) ( g x ) )⁻¹
-
-    f≡h∘g : f ≡ h ∘ g
-    f≡h∘g = fe  λ x → Kg⊆Kf (ξ x)
-
-    ζ : (𝓸 : ∣ S ∣ ) ( 𝒄 : ∥ S ∥ 𝓸 → C ) ( x : ∥ S ∥ 𝓸 ) → 𝒄 x ≡ ( g ∘ gInv ) (𝒄 x)
-    ζ 𝓸 𝒄 x = (cong-app (EInvIsRInv fe g gEpic) (𝒄 x))⁻¹
-
-    ι : (𝓸 : ∣ S ∣ )  ( 𝒄 : ∥ S ∥ 𝓸 → C )
-         →    (λ x → 𝒄 x) ≡ (λ x → g (gInv (𝒄 x)))
-    ι 𝓸 𝒄 = ap (λ - → - ∘ 𝒄) (( EInvIsRInv fe g gEpic )⁻¹)
-
-    useker : (𝓸 : ∣ S ∣ )   ( 𝒄 : ∥ S ∥ 𝓸 → C )
-     →       f ( gInv ( g ( FA 𝓸 ( λ x → gInv (𝒄 x) ) ) ) ) ≡ f ( FA 𝓸 ( λ x → gInv (𝒄 x) ) )
-    useker = λ 𝓸 𝒄 → Kg⊆Kf ( cong-app (EInvIsRInv fe g gEpic)  ( g ( FA 𝓸 (gInv ∘ 𝒄) ) ) )
-
-    hIsHomCB : (𝓸 : ∣ S ∣ )    ( 𝒂 : ∥ S ∥ 𝓸 → C )
-     →          h ( FC 𝓸 𝒂 )  ≡  FB 𝓸 ( λ x → h (𝒂 x) )
-    hIsHomCB = λ 𝓸 𝒄 →
-      f ( gInv ( FC 𝓸 𝒄 ) )                          ≡⟨ ap (f ∘ gInv) (ap (FC 𝓸) (ι 𝓸 𝒄)) ⟩
-      f ( gInv ( FC 𝓸 (  g ∘ ( gInv ∘ 𝒄 ) ) ) )   ≡⟨ ap (λ - → f ( gInv - ) ) ( ghom 𝓸 (gInv ∘ 𝒄)  )⁻¹ ⟩
-      f ( gInv ( g ( FA 𝓸 ( gInv ∘ 𝒄 ) ) ) )      ≡⟨ useker 𝓸 𝒄 ⟩
-      f ( FA 𝓸 ( gInv ∘ 𝒄 ) )                       ≡⟨ fhom 𝓸 (gInv ∘ 𝒄) ⟩
-      FB 𝓸 ( λ x → f ( gInv ( 𝒄 x ) ) )          ∎
+-- >>> Proved in UF-Hom <<<
 
 ---------------------------------------------------------------------------------
 --VARIETIES.
@@ -151,69 +105,75 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
 --isomorphic to a member of 𝓚.
 --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
-module _ {S : Signature 𝓞 𝓥}  where
+------------------------------------------------------------------------------
+-- Homomorphic Images. (moved to file UF-Hom.agda)
 
-  ------------------------------------------------------------------------------
-  -- Homomorphic Images.
-  -- Let  ℍ  (𝓚)  denote the class of homomorphic images of members of 𝓚.
+---------------------------------------------------------------------------------
+-- Products.
+-- Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of members of 𝓚.
+ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
+  →      (𝓘 : Universe )  ( I : 𝓘 ̇ )  ( 𝓐 : I → Algebra 𝓘 S )
+  →      (( i : I ) → 𝓐 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
+ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ ( 𝓛𝓚 𝓘 )
 
-  _is-hom-image-of_ : {𝓤 : Universe} (𝑩 : Algebra (𝓤 ⁺) S) → (𝑨 : Algebra 𝓤 S)  →   𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  𝑩 is-hom-image-of 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ _ ) , con 𝑨 θ  × ( ( ∣ 𝑨 ∣ // θ ) ≡ ∣ 𝑩 ∣ )
+-------------------------------------------------------------------------------------
+-- Subalgebras.
+-- Let 𝕊(𝓚) denote the class of algebras isomorphic to a subalgebra of a member of 𝓚.
+_is-subalgebra-of-class_ : {𝓤 : Universe}  (𝑩 : Algebra 𝓤 S) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+𝑩 is-subalgebra-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
 
-  HomImagesOf : (Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra _ S) , 𝑩 is-hom-image-of 𝑨
+SubalgebraOfClass-pred_ : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺))
+SubalgebraOfClass-pred 𝓚 = λ 𝑩 → Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
 
-  HomImagesOf-pred : (Algebra 𝓤 S) → Pred (Algebra ( 𝓤 ⁺ ) S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))
-  HomImagesOf-pred 𝑨 = λ 𝑩 → 𝑩 is-hom-image-of 𝑨
+SubalgebrasOfClass 𝕊 : {𝓤 : Universe} →  Pred (Algebra 𝓤 S) (𝓤 ⁺ )  →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+SubalgebrasOfClass  𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (𝑩 is-subalgebra-of-class 𝓚)
+𝕊 = SubalgebrasOfClass
 
-  _is-hom-image-of-class_ : {𝓤 : Universe} → ( Algebra ( 𝓤 ⁺ ) S ) → ( Pred (Algebra 𝓤 S) (𝓤 ⁺) ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) , ( 𝑨 ∈ 𝓚 ) × ( 𝑩 is-hom-image-of 𝑨 )
+𝕊-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) )
+ →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤) ) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
-  HomImagesOfClass ℍ  : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , ( 𝑩 is-hom-image-of-class 𝓚 )
-  ℍ 𝓚 = HomImagesOfClass 𝓚
-
-  -- HomImagesOfClass-pred : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra ( 𝓤 ⁺ ) S ) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ )
-  -- HomImagesOfClass-pred 𝓚 = λ 𝑩 → Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  ( 𝑩 HomImageOf 𝑨 )
-
-  -- Here 𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) represents a (Universe-indexed) collection of classes.
-  ℍ-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
-   →           (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)  →   𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  ℍ-closed 𝓛𝓚 = λ 𝓤 𝑩 → 𝑩 is-hom-image-of-class (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 (𝓤 ⁺) )
-
-  ---------------------------------------------------------------------------------
-  -- Products.
-  -- Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of members of 𝓚.
-
-  ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
-    →      (𝓘 : Universe )  ( I : 𝓘 ̇ )  ( 𝓐 : I → Algebra 𝓘 S )
-    →      (( i : I ) → 𝓐 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
-  ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ ( 𝓛𝓚 𝓘 )
-
-  -------------------------------------------------------------------------------------
-  -- Subalgebras.
-  -- Let 𝕊(𝓚) denote the class of algebras isomorphic to a subalgebra of a member of 𝓚.
-
-  _is-subalgebra-of-class_ : {𝓤 : Universe}  (𝑩 : Algebra 𝓤 S) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  𝑩 is-subalgebra-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
-
-  SubalgebraOfClass-pred_ : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺))
-  SubalgebraOfClass-pred 𝓚 = λ 𝑩 → Σ 𝑨 ꞉ (Algebra _ S) ,  ( 𝑨 ∈ 𝓚 ) ×  (𝑩 is-subalgebra-of 𝑨)
-
-  SubalgebrasOfClass 𝕊 : {𝓤 : Universe} →  Pred (Algebra 𝓤 S) (𝓤 ⁺ )  →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  SubalgebrasOfClass  𝓚 = Σ 𝑩 ꞉ (Algebra _ S) , (𝑩 is-subalgebra-of-class 𝓚)
-  𝕊 = SubalgebrasOfClass
-
-  𝕊-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) )
-   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤) ) → (𝑩 ∈ 𝓛𝓚 𝓤)
-
-  -- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
-  -- satisfies exaxtly the same set of identities as does 𝒦.
-  -- Recall, Th𝓚 denotes the set of identities satisfied by all A ∈ 𝓚.
-  --  𝑻𝒉 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- Obs 2.12. ∀ 𝒦 (classes of structures) each of the classes 𝖲(𝒦), 𝖧(𝒦), 𝖯(𝒦), 𝕍(𝒦)
+-- satisfies exaxtly the same set of identities as does 𝒦.
+-- Recall, Th𝓚 denotes the set of identities satisfied by all A ∈ 𝓚.
+--  𝑻𝒉 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 
+module _   (𝓚 : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)) )where
+-- Recall, `𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨`
+--           `𝓚 ⊢ p ≋ q = {A : Algebra _ S} → 𝓚 A → A ⊢ p ≈ q`
+
+  -- Obs 2.13. 𝒦 ⊧ p ≈ q iff ∀ 𝑨 ∈ 𝒦, ∀ h ∈ Hom(𝑻(X_ω), 𝑨), h p^𝑨 = h q^𝑨`. (UAFST Lem 4.37)
+  identity-implies-preserved-by-homs : {X : 𝓤 ̇}  (p q : Term {X = X})
+   →                                 𝓚 ⊢ p ≋ q
+               -----------------------------------------------------------
+   →         (𝑨 : Algebra 𝓤 S) (KA : 𝓚 𝑨) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q
+  identity-implies-preserved-by-homs p q 𝓚⊢p≋q  𝑨  KA (h , hhom) = γ
+   where
+    γ :  h p ≡ h q
+    γ = {!!}
+
+  preserved-by-homs-implies-identity : {X : 𝓤 ̇}  (p q : Term {X = X}) →
+               ( ∀(𝑨 : Algebra 𝓤 S)(KA : 𝑨 ∈ 𝓚) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q )
+               -----------------------------------------------------------------
+   →                              𝓚 ⊢ p ≋ q
+  preserved-by-homs-implies-identity p q all-hp≡hq {A = 𝑨} KA = γ
+   where
+    γ : 𝑨 ⊢ p ≈ q
+    γ = {!!}
+
+  identity-iff-preserved-by-homs : {X : 𝓤 ̇}  (p q : Term {X = X})
+   →                  (𝓚 ⊢ p ≋ q) ⇔ (∀ (𝑨 : Algebra 𝓤 S)(KA : 𝓚 𝑨) (hh : hom 𝔉 𝑨) → ∣ hh ∣ p ≡ ∣ hh ∣ q )
+  identity-iff-preserved-by-homs  p q = ( identity-implies-preserved-by-homs p q , preserved-by-homs-implies-identity p q )
+  -- pencil-paper-proof:
+  -- ⇒ Assume 𝒦 ⊧ p ≈ q. Fix 𝑨 ∈ 𝒦 and h : hom 𝔉 𝑨.  We must show h p ≡ h q.
+  --    Fix 𝒂 : X → Term.   By 𝑨 ⊧ p ≈ q we have p ̇ 𝑨 = q ̇ 𝑨 which implies (p ̇ 𝑨)(h ∘ 𝒂) = (q ̇ 𝑨)(h ∘ 𝒂).
+  --    Since h is a hom, we obtain h ((p ̇ 𝔉) 𝒂) = h ((q ̇ 𝔉) 𝒂), as desired.
+  -- ⇐ Assume ∀ 𝑨 ∈ 𝒦, ∀ h : hom 𝔉 𝑨, h p ≡ h q.  We must show 𝒦 ⊧ p ≈ q.
+  --    Fix 𝑨 ∈ 𝒦 and 𝒂 : (ρ p) → ∣ 𝑨 ∣.  We must prove (p ̇ 𝑨) 𝒂 = (q ̇ 𝑨) 𝒂.
+  --    Define h₀ : X → A so that ∀i → ∃ x → h₀ x = 𝒂 i.  Let 𝒙 : (ρ p) → X be such that h₀ (𝒙 i) = 𝒂 i.
+  --    By Obs 6, h₀ extends to a homomorphism h : hom 𝔉 𝑨.  By assumption h p = h q, and since h is a hom,
+  --    (p ̇ 𝑨) 𝒂 =  (p ̇ 𝑨) (h ∘ 𝒙) = h (p ̇ 𝔉) 𝒙 = h p = h q = h (q ̇ 𝔉) 𝒙 = (q ̇ 𝑨) (h ∘ 𝒙) = (q ̇ 𝑨) 𝒂
 
 --------------------------------------------------------------------------------------------------
 
