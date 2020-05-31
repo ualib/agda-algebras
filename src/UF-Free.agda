@@ -7,7 +7,7 @@
 
 open import UF-Prelude using (Universe; 𝓘; 𝓜; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; pr₂; Id)
 open import UF-Basic using (Signature; Algebra; Π'; SmallAlgebra; Πₛ)
-open import UF-Hom using (Hom; Hom-EXT)
+open import UF-Hom using (HOM; Hom; hom)
 open import UF-Con using (Con; compatible-fun)
 open import UF-Singleton using (is-set)
 open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext; hfunext; intensionality)
@@ -43,51 +43,50 @@ module _ {X : 𝓤 ̇} {𝑨 : Algebra 𝓤 S} where
   -- PROOF.
   -- We prove this twice, once for each variation on the definition of homomorphism.
 
-  --I. Intensional version.
-
   --1.a. Every map  (X → A)  "lifts".
   free-lift : (h : X → ∣ 𝑨 ∣)  →   ∣ 𝔉 ∣ → ∣ 𝑨 ∣
   free-lift h (generator x) = h x
   free-lift h (node 𝓸 args) = (∥ 𝑨 ∥ 𝓸) λ{i → free-lift  h (args i)}
 
-  --1.b. The lift is a hom.
-  lift-hom : (h : X → ∣ 𝑨 ∣) →  Hom 𝔉 𝑨
-  lift-hom  h = free-lift h , refl _
+  --I. Extensional proofs (using hom's) -----------------------------------------------
+  --1.b.' The lift is (extensionally) a hom
+  lift-hom : (h : X → ∣ 𝑨 ∣) →  hom 𝔉 𝑨
+  lift-hom h = free-lift h , λ 𝓸 𝒂 → ap (∥ 𝑨 ∥ _) (refl _)
 
-  --2. The lift to  (free → A)  is unique.
-  --   N.B. using the new "intensional" def of hom, we don't need function extensionality to prove uniqueness!
-  free-unique : funext 𝓥 𝓤 → ( f g : Hom 𝔉 𝑨 )
-   →             ( ∣ f ∣ ∘ generator ) ≡ ( ∣ g ∣ ∘ generator )
-   →             (t : Term {X = X})
-                  --------------------------------
-   →              ∣ f ∣ t ≡ ∣ g ∣ t
-
-  free-unique fe f g p (generator x) = intensionality p x
-  free-unique fe f g p (node 𝓸 args) =
-      ( ∣ f ∣ )(node 𝓸 args)       ≡⟨ ap (λ - → - 𝓸 args) ∥ f ∥  ⟩
-      (∥ 𝑨 ∥ 𝓸) ( ∣ f ∣ ∘ args )   ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-unique fe f g p (args i)) ) ⟩
-      (∥ 𝑨 ∥ 𝓸) ( ∣ g ∣ ∘ args )   ≡⟨ (ap (λ - → - 𝓸 args) ∥ g ∥ ) ⁻¹ ⟩
-      ∣ g ∣ (node 𝓸 args)         ∎
-
-  --II. Extensional version.
-  --1.b.' The lift is a hom-EXT (extensional version)
-  lift-hom-EXT : (h : X → ∣ 𝑨 ∣) →  Hom-EXT 𝔉 𝑨
-  lift-hom-EXT h = free-lift h , λ 𝓸 𝒂 → ap (∥ 𝑨 ∥ _) (refl _)
-
-  -- 2.' The lift to  (free -> A)  is unique.
-  --Using the old definition of homomorphism, we will need function extensionality to prove the uniqueness result.
-  free-unique-EXT : funext 𝓥 𝓤 → ( f g : Hom-EXT 𝔉 𝑨 )
+  -- 2.' The lift to  (free → A)  is (extensionally) unique.
+  free-unique : funext 𝓥 𝓤 → ( f g : hom 𝔉 𝑨 )
    →             ( ∀ x  →  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
    →             (t : Term {X = X})
                   ---------------------------
    →              ∣ f ∣ t ≡ ∣ g ∣ t
 
-  free-unique-EXT fe f g p (generator x) = p x
-  free-unique-EXT fe f g p (node 𝓸 args) =
+  free-unique fe f g p (generator x) = p x
+  free-unique fe f g p (node 𝓸 args) =
       ( ∣ f ∣ )(node 𝓸 args)             ≡⟨ ∥ f ∥ 𝓸 args ⟩
-      (∥ 𝑨 ∥ 𝓸) (λ i -> ∣ f ∣ (args i))   ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-unique-EXT fe f g p (args i)) ) ⟩
+      (∥ 𝑨 ∥ 𝓸) (λ i -> ∣ f ∣ (args i))   ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-unique fe f g p (args i)) ) ⟩
       (∥ 𝑨 ∥ 𝓸) (λ i -> ∣ g ∣ (args i))   ≡⟨ (∥ g ∥ 𝓸 args)⁻¹ ⟩
       ∣ g ∣ (node 𝓸 args)                 ∎
+
+
+  --II. Intensional proofs (using HOM's) ---------------------------------------------
+  --1.b. that free-lift is (intensionally) a hom.
+  lift-HOM : (h : X → ∣ 𝑨 ∣) →  HOM 𝔉 𝑨
+  lift-HOM  h = free-lift h , refl _
+
+  --2. The lift to  (free → A)  is (intensionally) unique.
+  --   N.B. using the new "intensional" def of hom, we don't need function extensionality to prove uniqueness!
+  free-intensionally-unique : funext 𝓥 𝓤 → ( f g : HOM 𝔉 𝑨 )
+   →             ( ∣ f ∣ ∘ generator ) ≡ ( ∣ g ∣ ∘ generator )
+   →             (t : Term {X = X})
+                  --------------------------------
+   →              ∣ f ∣ t ≡ ∣ g ∣ t
+
+  free-intensionally-unique fe f g p (generator x) = intensionality p x
+  free-intensionally-unique fe f g p (node 𝓸 args) =
+      ( ∣ f ∣ )(node 𝓸 args)       ≡⟨ ap (λ - → - 𝓸 args) ∥ f ∥  ⟩
+      (∥ 𝑨 ∥ 𝓸) ( ∣ f ∣ ∘ args )   ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-intensionally-unique fe f g p (args i)) ) ⟩
+      (∥ 𝑨 ∥ 𝓸) ( ∣ g ∣ ∘ args )   ≡⟨ (ap (λ - → - 𝓸 args) ∥ g ∥ ) ⁻¹ ⟩
+      ∣ g ∣ (node 𝓸 args)         ∎
 
 --SUGAR:  𝓸 ̂ 𝑨  ≡  ⟦ 𝑨 ⟧ 𝓸   -------------------------------------
 --Before proceding, we define some syntactic sugar that allows us to replace ⟦ 𝑨 ⟧ 𝓸 with (the more standard-looking) 𝓸 ̂ 𝑨.
@@ -137,7 +136,7 @@ interp-prod2 fe {X = X} (node 𝓸 𝒕) A = fe λ ( tup : X → ∣ Π' A ∣ )
 --  3. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 --
 -- Proof of 1. (homomorphisms commute with terms).
-comm-hom-term : funext 𝓤 (𝓤 ⊔ 𝓥)  → funext 𝓥 𝓤  → {X : 𝓤 ̇} (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S) (g : Hom 𝑨 𝑩)  (𝒕 : Term {X = X})
+comm-hom-term : funext 𝓤 (𝓤 ⊔ 𝓥)  → funext 𝓥 𝓤  → {X : 𝓤 ̇} (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S) (g : HOM 𝑨 𝑩)  (𝒕 : Term {X = X})
  →                    ∣ g ∣ ∘  (𝒕 ̇ 𝑨)    ≡    (𝒕 ̇ 𝑩) ∘ (λ 𝒂 → ∣ g ∣ ∘ 𝒂 )
  -- Goal: ∣ g ∣ ∘ (λ 𝒂 → (𝓸 ̂ 𝑨) (λ x → (args x ̇ 𝑨) 𝒂)) ≡  (λ 𝒂 → (𝓸 ̂ 𝑩) (λ x → (args x ̇ 𝑩) 𝒂)) ∘ _∘_ ∣ g ∣
 comm-hom-term feu fev 𝑨 𝑩 g (generator x) = refl _
@@ -176,7 +175,7 @@ compatible-term 𝑨 (node 𝓸 args) θ p = ∥ ∥ θ ∥ ∥ 𝓸 λ{ x → (
 -- EXTENSIONAL VERSIONS.
 -- Proof of 1. (homomorphisms commute with terms).
 comm-hom-term' : funext 𝓥 𝓤 → {X : 𝓤 ̇} (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓤 S)
- →                   (g : Hom-EXT 𝑨 𝑩)   →  (𝒕 : Term)  →   (𝒂 : X → ∣ 𝑨 ∣)
+ →                   (g : hom 𝑨 𝑩)   →  (𝒕 : Term)  →   (𝒂 : X → ∣ 𝑨 ∣)
                       --------------------------------------------
  →                           ∣ g ∣ ((𝒕 ̇ 𝑨) 𝒂) ≡ (𝒕 ̇ 𝑩) (∣ g ∣ ∘ 𝒂)
 

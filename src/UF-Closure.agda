@@ -8,7 +8,7 @@
 open import UF-Prelude using (Universe; 𝓜; 𝓞; 𝓣; 𝓤; 𝓤₀;𝓥; 𝓦; _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; _≡_; refl; _∈_; _∼_; _≡⟨_⟩_; _∎; ap; _⁻¹; _∘_; Pred; Image_∋_; Inv; im; InvIsInv)
 open import UF-Basic using (Signature; Algebra; Π'; Op)
 open import UF-Subuniverse using (Subuniverses; SubunivAlg; hom-image-alg; _is-subalgebra-of_)
-open import UF-Hom using (Hom)
+open import UF-Hom using (hom)
 open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
 open import UF-Free using (Term; generator; node; _⊢_≋_; _⊢_≈_; _̇_; _̂_; interp-prod2)
 
@@ -31,14 +31,14 @@ data SClo ( 𝓚 : Pred ( Algebra 𝓤 S ) 𝓣 ) : Pred ( Algebra 𝓤 S ) ( �
 -- Hom Images
 data HClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) ( 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
   hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
-  hhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ HClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ HClo 𝓚
+  hhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : hom 𝑨 𝑩} → 𝑨 ∈ HClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ HClo 𝓚
 
 -- Varieties
 data VClo  (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
   vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ VClo 𝓚
   vprod : {I : 𝓤 ̇} {𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ VClo 𝓚) → Π' 𝓐 ∈ VClo 𝓚
   vsub : ∀ {𝑨 : Algebra _ S} {𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
-  vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
+  vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
 
 module _  (𝓚 : Pred (Algebra 𝓤 S) 𝓣 ) (gfe : global-funext) ( dfe : dfunext 𝓤 𝓤)  {X : 𝓤 ̇} where
 

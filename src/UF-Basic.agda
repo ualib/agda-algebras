@@ -28,14 +28,19 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
 
 -- 𝓤 is the universe level of carriers (or "universes") of structures
 Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
-Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : F)  → Op (ρ 𝓸) A )
+Algebra 𝓤 {𝓞} {𝓥} S = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : ∣ S ∣ )  → Op ( ∥ S ∥ 𝓸) A )
+-- Alternative notation (more in line with the lit) is also possible:
+-- Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : F )  → Op ( ρ 𝓸) A )
+-- where S = (F , ρ) is the signature with F the set of operation symbols and ρ the arity function.
 
+--We could insist that the carrier of an algebra is a *set* (i.e., a type with at most 1 way to prove 2 elements equal).
+--The assumption `is-set A` could be included as follows:
 SmallAlgebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
 SmallAlgebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  is-set A × ( (𝓸 : F)  → Op (ρ 𝓸) A )
 
 module _ {S : Signature 𝓞 𝓥}  where
--- algebra-on : (X : 𝓤) → 𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
--- algebra-on X = Σ A : 𝓤 ̇ , (A ≡ X) × ( ( 𝓸 : F ) → Op ( ∥ S ∥ 𝓸 ) A
+
+  --if the set X on which we wish to define an algebra is already given...
   algebra-on :  {𝓤 : Universe} (X : 𝓤 ̇ ) → 𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
   algebra-on {𝓤} X = Σ A ꞉ (Algebra 𝓤 S)  , ( ∣ A ∣ ≡ X )
 

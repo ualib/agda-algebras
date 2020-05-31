@@ -8,7 +8,7 @@
 
 open import UF-Prelude using (Universe; 𝓞; 𝓤; 𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_; _∘_; _,_; Σ; -Σ; _×_; _≡_; _≡⟨_⟩_; _∎; ap; _⁻¹; Pred; _∈_; _⊆_; ∣_∣; ∥_∥; Epic; EpicInv; cong-app )
 open import UF-Basic using (Signature; Algebra; Π')
-open import UF-Hom using (Hom)
+open import UF-Hom using (hom)
 open import UF-Rel using (ker-pred; Rel)
 open import UF-Con using (con; _//_)
 open import UF-Subuniverse using (Subuniverse; mksub; Sg; _is-subalgebra-of_; var; app)
@@ -16,18 +16,17 @@ open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext)
 
 module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 -------------------------------------------------------------------------------
---EQUALIZERS
+--EQUALIZERS.
 
 --...of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (f g : A → B) → Pred A 𝓦
 𝑬 f g x = f x ≡ g x
-
 --..of homs
-𝑬𝑯 : {A B : Algebra 𝓤 S} (f g : Hom A B) → Pred ∣ A ∣ 𝓤
+𝑬𝑯 : {A B : Algebra 𝓤 S} (f g : hom A B) → Pred ∣ A ∣ 𝓤
 𝑬𝑯 f g x = ∣ f ∣ x ≡ ∣ g ∣ x
 
 𝑬𝑯-is-closed : funext 𝓥 𝓤 → {𝓸 : ∣ S ∣ } {𝑨 𝑩 : Algebra 𝓤 S}
-              (f g : Hom 𝑨 𝑩)     (𝒂 : ( ∥ S ∥ 𝓸 )  → ∣ 𝑨 ∣ )
+              (f g : hom 𝑨 𝑩)     (𝒂 : ( ∥ S ∥ 𝓸 )  → ∣ 𝑨 ∣ )
  →          ( ( x : ∥ S ∥ 𝓸 ) → ( 𝒂 x ) ∈ ( 𝑬𝑯 {A = 𝑨} {B = 𝑩} f g ) )
             ----------------------------------------
  →          ∣ f ∣ ( ∥ 𝑨 ∥ 𝓸 𝒂 ) ≡ ∣ g ∣ ( ∥ 𝑨 ∥ 𝓸 𝒂 )
@@ -40,18 +39,18 @@ module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 
 -- Obs 2.1. Equalizer of homs is a subuniverse.
 -- Equalizer `𝑬𝑯 f g`  of `f g : Hom 𝑨 𝑩` is a subuniverse of 𝑨.
-𝑬𝑯-is-subuniverse :  funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S} (f g : Hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+𝑬𝑯-is-subuniverse :  funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S} (f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
-  mksub ( 𝑬𝑯 {A = 𝑨}{B = 𝑩} f g ) λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩}  f g 𝒂 x 
+  mksub ( 𝑬𝑯 {A = 𝑨}{B = 𝑩} f g ) λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩}  f g 𝒂 x
 
 -------------------------------------------------------------------------------
 -- COMPOSITION OF HOMS.
 -- Obs 2.0. Composing homs gives a hom.
 -- See also: Siva's (infix) def of _>>>_ in the Hom.agda file.
 HCompClosed : {𝑨 : Algebra 𝓤 S} {𝑩 : Algebra 𝓦 S} {𝑪 : Algebra 𝓣 S}
- →               Hom 𝑨 𝑩    →    Hom 𝑩 𝑪
+ →               hom 𝑨 𝑩    →    hom 𝑩 𝑪
                   ---------------------------
- →                          Hom 𝑨 𝑪
+ →                          hom 𝑨 𝑪
 HCompClosed {𝑨 = A , FA} {𝑩 = B , FB} { 𝑪 = C , FC } (f , fhom) (g , ghom) = g ∘ f , γ
     where
       γ : ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸  →  A )  →  ( g ∘ f ) ( FA 𝓸 𝒂 ) ≡ FC 𝓸 ( g ∘ f ∘ 𝒂 )
@@ -66,12 +65,12 @@ HCompClosed {𝑨 = A , FA} {𝑩 = B , FB} { 𝑪 = C , FC } (f , fhom) (g , gh
 --         such that a = t^𝑨 x. Since f|_X = g|_X, f ∘ x = (f x₀, ..., f xₙ) = (g x₀,...,g xₙ) = g ∘ x,
 --         so f a = f(t^𝑨 x) = t^𝑩 (f ∘ x) = t^𝑩 (g ∘ x) = g(t^𝑨 x) = g a.     ☐
 HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S}
-                ( X : Pred ∣ 𝑨 ∣ 𝓤 )       ( f g : Hom 𝑨 𝑩 )
+                ( X : Pred ∣ 𝑨 ∣ 𝓤 )       ( f g : hom 𝑨 𝑩 )
  →            ( ∀ ( x : ∣ 𝑨 ∣ )  →  x ∈ X  →  ∣ f ∣ x ≡ ∣ g ∣ x )
                -----------------------------------------------------
  →             ( ∀ ( a : ∣ 𝑨 ∣ ) → a ∈ Sg {𝑨 = 𝑨} X → ∣ f ∣ a ≡ ∣ g ∣ a )
 HomUnique _ _ _ _ fx≡gx a (var x) = (fx≡gx) a x
-HomUnique fe { 𝑨 = A , Fᴬ } { 𝑩 = B , Fᴮ } X (f , fhom) (g , ghom) fx≡gx a ( app 𝓸 {𝒂} im𝒂⊆SgX ) = 
+HomUnique fe { 𝑨 = A , Fᴬ } { 𝑩 = B , Fᴮ } X (f , fhom) (g , ghom) fx≡gx a ( app 𝓸 {𝒂} im𝒂⊆SgX ) =
     f ( Fᴬ 𝓸 𝒂)        ≡⟨ fhom 𝓸 𝒂 ⟩
     Fᴮ 𝓸 ( f ∘ 𝒂 )     ≡⟨ ap (Fᴮ 𝓸) (fe induction-hypothesis) ⟩
     Fᴮ 𝓸 ( g ∘ 𝒂)      ≡⟨ ( ghom 𝓸 𝒂 )⁻¹ ⟩
@@ -95,10 +94,10 @@ HomUnique fe { 𝑨 = A , Fᴬ } { 𝑩 = B , Fᴮ } X (f , fhom) (g , ghom) fx�
 --                 𝑪
 --
 homFactor : funext 𝓤 𝓤
- →           {𝑨 𝑩 𝑪 : Algebra 𝓤 S} (f : Hom 𝑨 𝑩) (g : Hom 𝑨 𝑪)
+ →           {𝑨 𝑩 𝑪 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) (g : hom 𝑨 𝑪)
  →           ker-pred ∣ g ∣ ⊆ ker-pred ∣ f ∣  →   Epic ∣ g ∣
               -------------------------------------------
- →              Σ h ꞉ ( Hom 𝑪 𝑩 ) ,  ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+ →              Σ h ꞉ ( hom 𝑪 𝑩 ) ,  ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
 
 --Prove: The diagram above commutes; i.e., ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
 homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g , ghom) Kg⊆Kf gEpic =
@@ -136,23 +135,21 @@ homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g 
       f ( FA 𝓸 ( gInv ∘ 𝒄 ) )                       ≡⟨ fhom 𝓸 (gInv ∘ 𝒄) ⟩
       FB 𝓸 ( λ x → f ( gInv ( 𝒄 x ) ) )          ∎
 
--- ---------------------------------------------------------------------------------
--- -- VARIETIES
--- --------------
+---------------------------------------------------------------------------------
+--VARIETIES.
+--cf. Def 1.10 of Bergman
+--Let 𝓚 be a class of similar algebras. We write
+--  H(𝓚) for the class of all homomorphic images of members of 𝓚;
+--  S(𝓚) for the class of all algebras isomorphic to a subalgebra of a member of 𝓚;
+--  P(𝓚) for the class of all algebras isomorphic to a direct product of members of 𝓚;
+--We say that 𝓚 is closed under the formation of homomorphic images if H(𝓚) ⊆ 𝓚,
+--and similarly for subalgebras and products.
 
--- --cf Def 1.10 of Bergman
--- --Let 𝓚 be a class of similar algebras. We write
--- --  H(𝓚) for the class of all homomorphic images of members of 𝓚;
--- --  S(𝓚) for the class of all algebras isomorphic to a subalgebra of a member of 𝓚;
--- --  P(𝓚) for the class of all algebras isomorphic to a direct product of members of 𝓚;
--- --We say that 𝓚 is closed under the formation of homomorphic images if H(𝓚) ⊆ 𝓚,
--- --and similarly for subalgebras and products.
-
--- --Notice that all three of these "class operators" are designed so that for any
--- --class 𝓚, H(𝓚), S(𝓚), P(𝓚) are closed under isomorphic images.
--- --On those rare occasions that we need it, we can write I(𝓚) for the class of algebras
--- --isomorphic to a member of 𝓚.
--- --Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
+--Notice that all three of these "class operators" are designed so that for any
+--class 𝓚, H(𝓚), S(𝓚), P(𝓚) are closed under isomorphic images.
+--On those rare occasions that we need it, we can write I(𝓚) for the class of algebras
+--isomorphic to a member of 𝓚.
+--Finally, we call 𝓚 a VARIETY if it is closed under each of H, S and P.
 
 module _ {S : Signature 𝓞 𝓥}  where
 
