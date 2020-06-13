@@ -36,10 +36,10 @@ ker-rel : {A B : 𝓤 ̇} → (f : A → B) → Rel A 𝓤
 ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
 -- ...as a binary predicate.
-KER-pred :  {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → Pred (A × A) 𝓦
+KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} (f : A → B) → Pred (A × A) 𝓦
 KER-pred f (x , y) = f x ≡ f y
 -- ...as a binary predicate in the special case 𝓦 ≡ 𝓤.
-ker-pred :  {A : 𝓤 ̇} {B : 𝓤 ̇} → (f : A → B) → Pred (A × A) 𝓤
+ker-pred : {A : 𝓤 ̇}{B : 𝓤 ̇} (f : A → B) → Pred (A × A) 𝓤
 ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
 

@@ -69,14 +69,20 @@ hom 𝑨 𝑩 = Σ f ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨
 
 -- Obs 2.0. Composing homs gives a hom. (proved in UF-Hom)
 -- See also: Siva's (infix) def of _>>>_ in the Hom.agda file.
-HCompClosed : {𝑨 : Algebra 𝓤 S} {𝑩 : Algebra 𝓦 S} {𝑪 : Algebra 𝓣 S}
- →               hom 𝑨 𝑩    →    hom 𝑩 𝑪
-                  ---------------------------
- →                          hom 𝑨 𝑪
-HCompClosed {𝑨 = A , FA} {𝑩 = B , FB} { 𝑪 = C , FC } (f , fhom) (g , ghom) = g ∘ f , γ
-    where
-      γ : ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸  →  A )  →  ( g ∘ f ) ( FA 𝓸 𝒂 ) ≡ FC 𝓸 ( g ∘ f ∘ 𝒂 )
-      γ 𝓸 𝒂 = (g ∘ f) (FA 𝓸 𝒂)     ≡⟨ ap g ( fhom 𝓸 𝒂 ) ⟩
+HCompClosed : {𝑨 : Algebra 𝓤 S}
+              {𝑩 : Algebra 𝓦 S}
+              {𝑪 : Algebra 𝓣 S}
+ →            hom 𝑨 𝑩    →    hom 𝑩 𝑪
+             ---------------------------
+ →                   hom 𝑨 𝑪
+
+HCompClosed {𝑨 = A , FA}{𝑩 = B , FB}{ 𝑪 = C , FC }
+ (f , fhom) (g , ghom) = g ∘ f , γ
+  where
+   γ : ( 𝓸 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝓸  →  A )
+    →  ( g ∘ f ) ( FA 𝓸 𝒂 ) ≡ FC 𝓸 ( g ∘ f ∘ 𝒂 )
+
+   γ 𝓸 𝒂 = (g ∘ f) (FA 𝓸 𝒂)     ≡⟨ ap g ( fhom 𝓸 𝒂 ) ⟩
                   g (FB 𝓸 (f ∘ 𝒂))     ≡⟨ ghom 𝓸 ( f ∘ 𝒂 ) ⟩
                   FC 𝓸 (g ∘ f ∘ 𝒂)     ∎
 
@@ -96,56 +102,65 @@ module _ {A : Algebra 𝓤 S} {B : Algebra 𝓦 S} {C : Algebra 𝓣 S} where
 -- Obs 2.4. Factorization of homs.
 -- If f : Hom 𝑨 𝑩, g : Hom 𝑨 𝑪, g epic, Ker g ⊆ Ker f, then ∃ h ∈ Hom 𝑪 𝑩, f = h ∘ g.
 --
---        𝑨----f-----> 𝑩
---         \              7
---           \          /
---           g \      / ∃h
---                v  /
---                 𝑪
+--        𝑨---f---> 𝑩
+--         \       ↑
+--          \     /
+--        g  \   / ∃h
+--            ↓ /
+--            𝑪
 --
-homFactor : funext 𝓤 𝓤
- →           {𝑨 𝑩 𝑪 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) (g : hom 𝑨 𝑪)
- →           ker-pred ∣ g ∣ ⊆ ker-pred ∣ f ∣  →   Epic ∣ g ∣
-              -------------------------------------------
- →              Σ h ꞉ ( hom 𝑪 𝑩 ) ,  ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
+homFactor : funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 S}
+            (f : hom 𝑨 𝑩) (g : hom 𝑨 𝑪)
+ →          ker-pred ∣ g ∣ ⊆ ker-pred ∣ f ∣  →   Epic ∣ g ∣
+            -------------------------------------------
+ →           Σ h ꞉ ( hom 𝑪 𝑩 ) ,  ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
 
 --Prove: The diagram above commutes; i.e., ∣ f ∣ ≡ ∣ h ∣ ∘ ∣ g ∣
-homFactor fe {𝑨 = A , FA } { 𝑩 = B , FB } { 𝑪 = C , FC } (f , fhom) (g , ghom) Kg⊆Kf gEpic =
-  ( h , hIsHomCB ) ,  f≡h∘g
+homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
+          (f , fhom) (g , ghom) Kg⊆Kf gEpic =
+ (h , hIsHomCB) ,  f≡h∘g
   where
-    gInv : C → A
-    gInv = λ c → (EpicInv g gEpic) c
+   gInv : C → A
+   gInv = λ c → (EpicInv g gEpic) c
 
-    h : C → B
-    h = λ c → f ( gInv c )
+   h : C → B
+   h = λ c → f ( gInv c )
 
-    ξ : (x : A) → ker-pred g (x , gInv (g x))
-    ξ x =  ( cong-app (EInvIsRInv fe g gEpic) ( g x ) )⁻¹
+   ξ : (x : A) → ker-pred g (x , gInv (g x))
+   ξ x =  ( cong-app (EInvIsRInv fe g gEpic) ( g x ) )⁻¹
 
-    f≡h∘g : f ≡ h ∘ g
-    f≡h∘g = fe  λ x → Kg⊆Kf (ξ x)
+   f≡h∘g : f ≡ h ∘ g
+   f≡h∘g = fe  λ x → Kg⊆Kf (ξ x)
 
-    ζ : (𝓸 : ∣ S ∣ ) ( 𝒄 : ∥ S ∥ 𝓸 → C ) ( x : ∥ S ∥ 𝓸 ) → 𝒄 x ≡ ( g ∘ gInv ) (𝒄 x)
-    ζ 𝓸 𝒄 x = (cong-app (EInvIsRInv fe g gEpic) (𝒄 x))⁻¹
+   ζ : (𝓸 : ∣ S ∣ ) ( 𝒄 : ∥ S ∥ 𝓸 → C ) ( x : ∥ S ∥ 𝓸 ) → 𝒄 x ≡ ( g ∘ gInv ) (𝒄 x)
+   ζ 𝓸 𝒄 x = (cong-app (EInvIsRInv fe g gEpic) (𝒄 x))⁻¹
 
-    ι : (𝓸 : ∣ S ∣ )  ( 𝒄 : ∥ S ∥ 𝓸 → C )
-         →    (λ x → 𝒄 x) ≡ (λ x → g (gInv (𝒄 x)))
-    ι 𝓸 𝒄 = ap (λ - → - ∘ 𝒄) (( EInvIsRInv fe g gEpic )⁻¹)
+   ι : (𝓸 : ∣ S ∣ )  ( 𝒄 : ∥ S ∥ 𝓸 → C )
+    →  (λ x → 𝒄 x) ≡ (λ x → g (gInv (𝒄 x)))
+   ι 𝓸 𝒄 = ap (λ - → - ∘ 𝒄)
+               (EInvIsRInv fe g gEpic)⁻¹
 
-    useker : (𝓸 : ∣ S ∣ )   ( 𝒄 : ∥ S ∥ 𝓸 → C )
-     →       f ( gInv ( g ( FA 𝓸 ( λ x → gInv (𝒄 x) ) ) ) ) ≡ f ( FA 𝓸 ( λ x → gInv (𝒄 x) ) )
-    useker = λ 𝓸 𝒄 → Kg⊆Kf ( cong-app (EInvIsRInv fe g gEpic)  ( g ( FA 𝓸 (gInv ∘ 𝒄) ) ) )
+   useker : (𝓸 : ∣ S ∣)  (𝒄 : ∥ S ∥ 𝓸 → C)
+    → f(gInv(g(FA 𝓸(λ x → gInv (𝒄 x))))) ≡ f(FA 𝓸(λ x → gInv(𝒄 x)))
+   useker = λ 𝓸 𝒄 → Kg⊆Kf
+                     (cong-app
+                      ( EInvIsRInv fe g gEpic )
+                      ( g(FA 𝓸(gInv ∘ 𝒄)) )
+                     )
 
-    hIsHomCB : (𝓸 : ∣ S ∣ )    ( 𝒂 : ∥ S ∥ 𝓸 → C )
-     →          h ( FC 𝓸 𝒂 )  ≡  FB 𝓸 ( λ x → h (𝒂 x) )
-    hIsHomCB = λ 𝓸 𝒄 →
-      f ( gInv ( FC 𝓸 𝒄 ) )                          ≡⟨ ap (f ∘ gInv) (ap (FC 𝓸) (ι 𝓸 𝒄)) ⟩
-      f ( gInv ( FC 𝓸 (  g ∘ ( gInv ∘ 𝒄 ) ) ) )   ≡⟨ ap (λ - → f ( gInv - ) ) ( ghom 𝓸 (gInv ∘ 𝒄)  )⁻¹ ⟩
-      f ( gInv ( g ( FA 𝓸 ( gInv ∘ 𝒄 ) ) ) )      ≡⟨ useker 𝓸 𝒄 ⟩
-      f ( FA 𝓸 ( gInv ∘ 𝒄 ) )                       ≡⟨ fhom 𝓸 (gInv ∘ 𝒄) ⟩
-      FB 𝓸 ( λ x → f ( gInv ( 𝒄 x ) ) )          ∎
-
-
+   hIsHomCB : (𝓸 : ∣ S ∣ )    ( 𝒂 : ∥ S ∥ 𝓸 → C )
+    →          h ( FC 𝓸 𝒂 )  ≡  FB 𝓸 ( λ x → h (𝒂 x) )
+   hIsHomCB 𝓸 𝒄 =
+    f (gInv (FC 𝓸 𝒄))               ≡⟨ i ⟩
+    f (gInv (FC 𝓸 (g ∘ (gInv ∘ 𝒄)))) ≡⟨ ii ⟩
+    f (gInv (g (FA 𝓸 (gInv ∘ 𝒄))))  ≡⟨ iii ⟩
+    f (FA 𝓸 (gInv ∘ 𝒄))             ≡⟨ iv ⟩
+    FB 𝓸 (λ x → f (gInv (𝒄 x)))     ∎
+    where
+     i  = ap (f ∘ gInv) (ap (FC 𝓸) (ι 𝓸 𝒄))
+     ii = ap (λ - → f (gInv -)) (ghom 𝓸 (gInv ∘ 𝒄))⁻¹
+     iii = useker 𝓸 𝒄
+     iv = fhom 𝓸 (gInv ∘ 𝒄)
 ------------------------------------------------------------------------------
 -- Homomorphic Images.
 -- Let  ℍ  (𝓚)  denote the class of homomorphic images of members of 𝓚.

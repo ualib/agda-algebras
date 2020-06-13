@@ -3,7 +3,7 @@
 
   -- Homs are determined by their values on a generating set.
   -- (See UF-Birkhoff.agda)
-  
+
   HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (f g : hom 𝑨 𝑩)
    →        (∀ ( x : ∣ 𝑨 ∣ )  →  x ∈ X  →  ∣ f ∣ x ≡ ∣ g ∣ x)

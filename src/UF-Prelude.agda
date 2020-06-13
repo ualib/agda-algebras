@@ -896,38 +896,44 @@ P ⊇ Q = Q ⊆ P
 _∈∈_ :  {A : 𝓤 ̇} {B : 𝓦 ̇} →  (A  →  B) →  Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 _∈∈_  f S = (x : _) → f x ∈ S
 
-Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } →  (A → B)  → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
+Im_⊆_ : {A : 𝓤 ̇} {B : 𝓥 ̇} → (A → B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
 img :  {X : 𝓤 ̇ } {Y : 𝓤 ̇} (f : X → Y) (P : Pred Y 𝓤) → Im f ⊆ P →  X → Σ P
 img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
-≡-elim-left :  {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂)   →   A₁ ≡ A₂
+≡-elim-left : {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇ }
+ →            (A₁ , B₁) ≡ (A₂ , B₂)
+              ----------------------
+ →                   A₁ ≡ A₂
 ≡-elim-left e = ap pr₁ e
 
-≡-elim-right : { A₁ A₂ : 𝓤 ̇ } { B₁ B₂ : 𝓦 ̇ } → (A₁ , B₁) ≡ (A₂ , B₂) → B₁ ≡ B₂
+≡-elim-right : {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇}
+ →             (A₁ , B₁) ≡ (A₂ , B₂)
+              -----------------------
+ →                    B₁ ≡ B₂
 ≡-elim-right e = ap pr₂ e
 
-≡-×-intro : { A₁ A₂ : 𝓤 ̇ } { B₁ B₂ : 𝓦 ̇ }
- →            A₁ ≡ A₂   →   B₁ ≡ B₂
-               ------------------------
- →              (A₁ , B₁)  ≡  (A₂ , B₂)
+≡-×-intro : {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇}
+ →           A₁ ≡ A₂  →  B₁ ≡ B₂
+          ------------------------
+ →          (A₁ , B₁) ≡ (A₂ , B₂)
 ≡-×-intro (refl _) (refl _) = (refl _)
 
-cong-app-pred : ∀ { A : 𝓤 ̇ } { B₁ B₂ : Pred A 𝓤} (x : A)
- →          x ∈ B₁   →   B₁ ≡ B₂
-            -------------------------
- →                    x ∈ B₂
+cong-app-pred : ∀{A : 𝓤 ̇}{B₁ B₂ : Pred A 𝓤}
+                (x : A) →  x ∈ B₁  →  B₁ ≡ B₂
+               ------------------------------
+ →                         x ∈ B₂
 cong-app-pred x x∈B₁ (refl _) = x∈B₁
 
-cong-pred : {A : 𝓤 ̇ } {B : Pred A 𝓤} (x y : A)
- →            x ∈ B   →   x ≡ y
-               -------------------------
- →                   y ∈ B
+cong-pred : {A : 𝓤 ̇}{B : Pred A 𝓤}
+            (x y : A) →  x ∈ B  →  x ≡ y
+            ----------------------------
+ →                       y ∈ B
 cong-pred x .x x∈B (refl .x) = x∈B
 
 
-data Image_∋_ {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
+data Image_∋_ {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
@@ -935,13 +941,17 @@ data Image_∋_ {A : 𝓤 ̇} {B : 𝓦 ̇ } (f : A → B) : B → 𝓤 ⊔ 𝓦
 -- image_ : {A : 𝓤 ̇} {B : 𝓦 ̇} → (A → B) → Pred B (𝓤 ⊔ 𝓦)
 -- image f = λ b → ∃ λ a → b ≡ f a
 
-ImageIsImage :  {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) (b : B) (a : A)
- →                  b ≡ f a    →     Image f ∋ b
-ImageIsImage {A = A} {B = B} f b a b≡fa = eq b a b≡fa
+ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}
+               (f : A → B) (b : B) (a : A)
+ →              b ≡ f a
+              ----------------------------
+ →              Image f ∋ b
+ImageIsImage {A = A}{B = B} f b a b≡fa = eq b a b≡fa
 
---N.B. the assertion Image f ∋ y must come with a proof, which is of the form ∃a f a = y, so we have a witness.
---Thus, the inverse can be "computed" in the following way:
-Inv : {A : 𝓤 ̇}  {B : 𝓦 ̇} (f : A → B) (b : B) → Image f ∋ b  →  A
+--N.B. the assertion Image f ∋ y must come with a proof, which is of the form
+--∃a f a = y, so we have a witness. Thus, the inverse can be "computed" in the
+--following way:
+Inv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B) → Image f ∋ b  →  A
 Inv f .(f a) (im a) = a
 Inv f b (eq b a b≡fa) = a
 
@@ -949,9 +959,10 @@ Inv f b (eq b a b≡fa) = a
 inv : {A B : 𝓤₀ ̇}(f : A → B)(b : B) → Image f ∋ b → A
 inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
 
-InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (b : B) (b∈Imgf : Image f ∋ b)
-             --------------------------------------
- →          f (Inv f b b∈Imgf) ≡ b
+InvIsInv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B)
+           (b : B) (b∈Imgf : Image f ∋ b)
+          ---------------------------------
+ →         f (Inv f b b∈Imgf) ≡ b
 InvIsInv f .(f a) (im a) = refl _
 InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
 
@@ -981,16 +992,17 @@ monic-inv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) → monic f
 monic-inv f fmonic  = λ b Imf∋b → Inv f b Imf∋b
 
 --The (psudo-)inverse of a monic is the left inverse.
-monic-inv-is-linv : {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B) (fmonic : monic f)
+monic-inv-is-linv : {A : 𝓤 ̇}{B : 𝓦 ̇}
+                    (f : A → B) (fmonic : monic f)(x : A)
                    ----------------------------------------
-  →             (x : A) → (monic-inv f fmonic) (f x) (im x) ≡ x
+  →                 (monic-inv f fmonic) (f x) (im x) ≡ x
 monic-inv-is-linv f fmonic x = refl x
 
 --bijectivity
-bijective : {A B : 𝓤₀ ̇} (g : A → B) → 𝓤₀ ̇
+bijective : {A B : 𝓤₀ ̇}(g : A → B) → 𝓤₀ ̇
 bijective g = epic g × monic g
 
-Bijective : {A : 𝓤 ̇} {B : 𝓦 ̇} (g : A → B) → 𝓤 ⊔ 𝓦 ̇
+Bijective : {A : 𝓤 ̇}{B : 𝓦 ̇}(g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × monic g
 
 

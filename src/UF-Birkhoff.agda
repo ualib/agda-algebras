@@ -48,18 +48,18 @@ module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
    Fᴮ 𝓸 ( λ i →  g  ( 𝒂 i ) )    ≡⟨ (ghom 𝓸 𝒂)⁻¹ ⟩
    g ( Fᴬ 𝓸 𝒂)                     ∎
 
--- Obs 2.1. Equalizer of homs is a subuniverse.
+-- Obs 2.0. Equalizer of homs is a subuniverse.
 -- Equalizer `𝑬𝑯 f g`  of `f g : Hom 𝑨 𝑩` is a subuniverse of 𝑨.
 𝑬𝑯-is-subuniverse :  funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S} (f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
-  mksub ( 𝑬𝑯 {A = 𝑨}{B = 𝑩} f g ) λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩}  f g 𝒂 x
+ mksub ( 𝑬𝑯 {A = 𝑨}{B = 𝑩} f g ) λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩}  f g 𝒂 x
 
 -------------------------------------------------------------------------------
 -- COMPOSITION OF HOMS.
--- Obs 2.0. Composing homs gives a hom.
+-- Obs 2.1. Composing homs gives a hom.
 -- >>> Proved in UF-Hom <<<
 
--- Obs 2.2. Homs are determined by their values on a generating set (UAFST Ex. 1.4.6.b)
+-- Obs 2.3. Homs are determined by their values on a generating set (UAFST Ex. 1.4.6.b)
 -- If f, g : Hom(𝑨,𝑩), X ⊆ A generates 𝑨, and f|_X = g|_X, then f = g.
 -- (N.B. this is proved here, and not in, say, UF-Hom, because we use `Sg` from UF-Subuniverse.)
 -- PROOF.  Suppose the X ⊆ A generates 𝑨 and f|_X = g|_X. Fix an arbitrary a: A.  We show f a = g a.
@@ -67,18 +67,22 @@ module UF-Birkhoff  {S : Signature 𝓞 𝓥}  where
 --         such that a = t^𝑨 x. Since f|_X = g|_X, f ∘ x = (f x₀, ..., f xₙ) = (g x₀,...,g xₙ) = g ∘ x,
 --         so f a = f(t^𝑨 x) = t^𝑩 (f ∘ x) = t^𝑩 (g ∘ x) = g(t^𝑨 x) = g a.     ☐
 HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S}
-                ( X : Pred ∣ 𝑨 ∣ 𝓤 )       ( f g : hom 𝑨 𝑩 )
- →            ( ∀ ( x : ∣ 𝑨 ∣ )  →  x ∈ X  →  ∣ f ∣ x ≡ ∣ g ∣ x )
-               -----------------------------------------------------
- →             ( ∀ ( a : ∣ 𝑨 ∣ ) → a ∈ Sg {𝑨 = 𝑨} X → ∣ f ∣ a ≡ ∣ g ∣ a )
+            (X : Pred ∣ 𝑨 ∣ 𝓤)  (f g : hom 𝑨 𝑩)
+ →          (∀ ( x : ∣ 𝑨 ∣ )  →  x ∈ X  →  ∣ f ∣ x ≡ ∣ g ∣ x)
+           -------------------------------------------------
+ →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ f ∣ a ≡ ∣ g ∣ a)
+
 HomUnique _ _ _ _ fx≡gx a (var x) = (fx≡gx) a x
-HomUnique fe { 𝑨 = A , Fᴬ } { 𝑩 = B , Fᴮ } X (f , fhom) (g , ghom) fx≡gx a ( app 𝓸 {𝒂} im𝒂⊆SgX ) =
-    f ( Fᴬ 𝓸 𝒂)        ≡⟨ fhom 𝓸 𝒂 ⟩
-    Fᴮ 𝓸 ( f ∘ 𝒂 )     ≡⟨ ap (Fᴮ 𝓸) (fe induction-hypothesis) ⟩
-    Fᴮ 𝓸 ( g ∘ 𝒂)      ≡⟨ ( ghom 𝓸 𝒂 )⁻¹ ⟩
-    g ( Fᴬ 𝓸 𝒂 )       ∎
-    where induction-hypothesis =
-               λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X (f , fhom) (g , ghom) fx≡gx (𝒂 x)( im𝒂⊆SgX x )
+HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
+ (f , fhom) (g , ghom) fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
+  f ( Fᴬ 𝓸 𝒂)        ≡⟨ fhom 𝓸 𝒂 ⟩
+  Fᴮ 𝓸 ( f ∘ 𝒂 )     ≡⟨ ap (Fᴮ 𝓸) (fe induction-hypothesis) ⟩
+  Fᴮ 𝓸 ( g ∘ 𝒂)      ≡⟨ ( ghom 𝓸 𝒂 )⁻¹ ⟩
+  g ( Fᴬ 𝓸 𝒂 )       ∎
+  where
+   induction-hypothesis =
+    λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
+     (f , fhom) (g , ghom) fx≡gx (𝒂 x)(im𝒂⊆SgX x)
 
 
 -- Obs 2.3. If A, B are finite and X generates 𝑨, then |Hom(𝑨, 𝑩)| ≤ |B|^|X|.
@@ -163,7 +167,6 @@ module _ (gfe : global-funext) { X : 𝓧 ̇ } (𝓚 : Pred (Algebra 𝓤 S) (�
     -- hp≡hq = ?
 
 --    Since h is a hom, we obtain h ((p ̇ 𝔉) 𝒂) = h ((q ̇ 𝔉) 𝒂), as desired.
-
     γ :  ∣ h ∣ p ≡ ∣ h ∣ q
     γ = {!!}
 
