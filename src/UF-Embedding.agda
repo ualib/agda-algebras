@@ -12,7 +12,7 @@
 
 module UF-Embedding where
 
-open import UF-Prelude using (Universe; 𝓤₀; 𝓤; 𝓥; 𝓦; 𝓣;  _̇; _⊔_; _⁺; id; 𝑖𝑑; _∘_; ₀; ₁; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; codomain; _×_; Id; _≡_; ≡-sym; refl; 𝕁; ℍ; _∼_; _∙_; ap; _⁻¹; transport; _≡⟨_⟩_; _∎; _⋆'_; type-of; 𝟙; ∣_∣; ∥_∥)
+open import UF-Prelude using (Universe; 𝓤₀; 𝓤; 𝓥; 𝓦; 𝓣;  _̇; _⊔_; _⁺; id; 𝑖𝑑; _∘_; ₀; ₁; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; codomain; _×_; Id; _≡_; ≡-sym; refl; 𝕁; _∼_; _∙_; ap; _⁻¹; transport; _≡⟨_⟩_; _∎; _⋆'_; type-of; 𝟙; ∣_∣; ∥_∥)
 
 open import UF-Singleton using (is-set; is-singleton; is-subsingleton; pointed-subsingletons-are-singletons; singletons-are-subsingletons; 𝟙-is-singleton; center)
 

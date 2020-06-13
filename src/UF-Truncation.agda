@@ -17,7 +17,7 @@ open import UF-Prelude using (Universe; 𝓣; 𝓤₀; 𝓤; 𝓥; 𝓦; _⁺; _
 
 open import UF-Singleton using (is-set; is-singleton; is-subsingleton; singletons-are-subsingletons; center; is-center; EM; em-irrefutable; em'-irrefutable; is-prop; 𝟙-is-subsingleton; 𝟘-is-subsingleton)
 
-open import UF-Equality using (wconstant; wconstant-endomap; has-section; singleton-types'-are-singletons; singleton-type'; _≃_;  id-≃; is-equiv; fiber; equiv-to-singleton; Σ-cong; transport-is-equiv; ≃-sym; invertibility-gives-≃; ⌜_⌝; ⌜⌝-is-equiv)
+open import UF-Equality using (wconstant; wconstant-endomap; has-section; singleton-types'-are-singletons; singleton-type'; _≃_;  id-≃; is-equiv; fiber; equiv-to-singleton; Σ-cong; transport-is-equiv; ≃-sym; invertibility-gives-≃; Eq→fun-is-equiv)
 
 open import UF-Univalence using (to-subtype-≡; ×-is-subsingleton; subsingleton-criterion; equiv-to-subsingleton; logically-equivalent-subsingletons-are-equivalent; equiv-to-set; Id→fun; equivs-are-lc)
 
@@ -1337,7 +1337,7 @@ Impredicativity-gives-PR {𝓤} {𝓥} pe fe ( 𝓞 , Ω𝓤≃𝓞 ) P P✧ = Q
   𝟙'✧ : is-subsingleton 𝟙'
   𝟙'✧ (lift ⋆) (lift ⋆) = refl (lift ⋆)
   down : Ω 𝓤 → 𝓞
-  down = ⌜ Ω𝓤≃𝓞 ⌝
+  down = pr₁ Ω𝓤≃𝓞
   𝓞-is-set : is-set 𝓞
   𝓞-is-set = equiv-to-set (≃-sym Ω𝓤≃𝓞 ) (Ω-is-a-set fe pe)
   Q : 𝓥 ̇
@@ -1345,7 +1345,7 @@ Impredicativity-gives-PR {𝓤} {𝓥} pe fe ( 𝓞 , Ω𝓤≃𝓞 ) P P✧ = Q
   Q✧ : is-subsingleton Q
   Q✧ = 𝓞-is-set (down (Lift 𝓤 𝟙 , 𝟙'✧) ) (down (P , P✧))
   φ : Q → P
-  φ q = Id→fun (ap _holds (equivs-are-lc down (⌜⌝-is-equiv Ω𝓤≃𝓞) q) ) (lift ⋆)
+  φ q = Id→fun (ap _holds (equivs-are-lc down (Eq→fun-is-equiv Ω𝓤≃𝓞) q) ) (lift ⋆)
   γ : P → Q
   γ p = ap down (to-subtype-≡ (λ _ → being-subsingleton-is-subsingleton fe)
                                    (pe 𝟙'✧ P✧ (λ _ → p) (λ _ → lift ⋆ ) ) )
