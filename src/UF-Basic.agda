@@ -1,9 +1,7 @@
 --FILE: UF-Basic.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 20 Feb 2020
---UPDATE: 23 May 2020
---REF: Based on the file `basic.agda` (24 Dec 2019).
---       Used for 1st half of talk at JMM Special Session (Jan 2020).
+--UPDATE: 13 Jun 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -31,12 +29,14 @@ Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 �
 Algebra 𝓤 {𝓞} {𝓥} S = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : ∣ S ∣ )  → Op ( ∥ S ∥ 𝓸) A )
 -- Alternative notation (more in line with the lit) is also possible:
 -- Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ( (𝓸 : F )  → Op ( ρ 𝓸) A )
--- where S = (F , ρ) is the signature with F the set of operation symbols and ρ the arity function.
+-- where S = (F , ρ) is the signature with F the set of operation symbols
+-- and ρ the arity function.
 
---We could insist that the carrier of an algebra is a *set* (i.e., a type with at most 1 way to prove 2 elements equal).
+--We could insist that the carrier of an algebra is a *set*
+--(i.e., a type with at most 1 way to prove 2 elements equal).
 --The assumption `is-set A` could be included as follows:
-SmallAlgebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe} → (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
-SmallAlgebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  is-set A × ( (𝓸 : F)  → Op (ρ 𝓸) A )
+SmallAlgebra : (𝓤 : Universe){𝓞 𝓥 : Universe}(S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+SmallAlgebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ , is-set A × ((𝓸 : F) → Op (ρ 𝓸) A)
 
 module _ {S : Signature 𝓞 𝓥}  where
 
@@ -49,31 +49,29 @@ module _ {S : Signature 𝓞 𝓥}  where
 
   -- We now want to construct a small algebra out of a product of small algebras.
   -- But for that we need that the products of "sets" is a "set".
-  product-of-sets-is-set : (hfe : hfunext 𝓘 𝓤) (I : 𝓘 ̇)(X : I → 𝓤 ̇) → ((i : I) → is-set (X i)) → is-set (Π X)
+  product-of-sets-is-set : (hfe : hfunext 𝓘 𝓤) 
+                           (I : 𝓘 ̇)(X : I → 𝓤 ̇)
+   →                       ((i : I) → is-set (X i))
+                          --------------------------
+   →                       is-set (Π X)
   product-of-sets-is-set hfe I X ∀Xset = Π-is-set hfe ∀Xset
 
   -- product of small algebras
-  Πₛ : {hfe : hfunext 𝓘 𝓤}  {I : 𝓘 ̇}( A : I → SmallAlgebra 𝓤 S ) → SmallAlgebra (𝓤 ⊔ 𝓘) S
-  Πₛ {hfe = hfe} {I = I} A =  ( ( ᵢ : _) → ∣ A ᵢ ∣ ) ,  ( product-of-sets-is-set hfe I ( λ ᵢ → ∣ A ᵢ ∣ )
-                                                                         ( λ ᵢ → ∣ ∥ A ᵢ ∥ ∣ ) ) ,   -- is-set ∣ A ᵢ ∣
-             λ 𝓸 x ᵢ → ∥ ∥ A ᵢ ∥ ∥ 𝓸 λ 𝓥 → x 𝓥 ᵢ   -- ops are same as for Π' (the Algebra product)
+  Πₛ : {hfe : hfunext 𝓘 𝓤}{I : 𝓘 ̇}(A : I → SmallAlgebra 𝓤 S) → SmallAlgebra (𝓤 ⊔ 𝓘) S
+  Πₛ {hfe = hfe}{I = I} A = ((i : _) → ∣ A i ∣) ,
+                             (product-of-sets-is-set hfe I (λ i → ∣ A i ∣)
+                              (λ i → ∣ ∥ A i ∥ ∣)) ,   -- is-set ∣ A ᵢ ∣
+                               λ 𝓸 x i → ∥ ∥ A i ∥ ∥ 𝓸 λ 𝓥 → x 𝓥 i  --same ops as Π' (Alg prod)
 
 --Example: monoid
---  A monoid signature has two operation symbols, say, `e`  and `·`, of arities 0 and 2 (thus, of types `(𝟘 → A) → A`
---  and `(𝟚 → A) → A`) resp. The types indicate that `e` is nullary (i.e., takes no args, equivalently, takes args
---  of type `𝟘 → A`), while `·` is binary (as indicated  by argument type `𝟚 → A`).
+-- A monoid signature has two operation symbols, say, `e`  and `·`, of arities 0 and 2
+-- (thus, of types `(𝟘 → A) → A` and `(𝟚 → A) → A`) resp. The types indicate that `e` is
+-- nullary (i.e., takes no args, equivalently, takes args--  of type `𝟘 → A`), while `·`
+-- is binary (as indicated  by argument type `𝟚 → A`).
 data monoid-op : 𝓤₀ ̇ where
   e : monoid-op
   · : monoid-op
 
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
-
-module _ {S : Signature 𝓞 𝓥} {n : ℕ} where
-
-  -- cyclic_shift : {A : 𝓤 ̇} (f : Op (Fin n) A) (m : Fin n) → Op (Fin n) A
-  -- cyclic_shift f m = ?
-
--- isCyclic : {I : Fin n} {A : 𝓤 ̇} (f : Op I A)
---    →    (args : I → A) → 
 
