@@ -675,16 +675,7 @@ Throughout this section,
 
   :math:`𝑨 = ⟨A, F^𝑨⟩, \ 𝑩 = ⟨B, F^𝑩⟩, \ 𝑪 = ⟨C, F^𝑪⟩\ ` are algebras in the same signature :math:`σ = (F, ρ)`.
 
-We start with the simple observation that composing homomorphisms gives a homomorphism.
-
-.. _composition of homomorphisms:
-
-.. _obs 0:
-
-.. proof:observation:: composing homs gives a hom
-
-   If :math:`g: \mathsf{Hom}(𝑨, 𝑩)` and :math:`h: \mathsf{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathsf{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
-
+We start with the simple observation that equalizers of homomorphisms are subuniverses.
 
 .. index:: ! equalizer
 
@@ -714,7 +705,19 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 1>` is described in :numref:`equalizer-as-subuniverse`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
 
+Next, composing homomorphisms gives a homomorphism.
+
+.. _composition of homomorphisms:
+
 .. _obs 2:
+
+.. proof:observation:: composing homs gives a hom
+
+   If :math:`g: \mathsf{Hom}(𝑨, 𝑩)` and :math:`h: \mathsf{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathsf{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
+
+Next, homomorphisms are uniquely determined by their values on generating sets.
+
+.. _obs 3:
 
 .. proof:observation:: UAFST Exercise 1.4.6.b
 
@@ -742,9 +745,11 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       ☐
 
-.. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 2>` is described in :numref:`homomorphisms-that-agree-on-a-generating-set`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
+.. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 3>` is described in :numref:`homomorphisms-that-agree-on-a-generating-set`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
 
-.. _obs 3:
+A corollary of the last result is an easily proved bound on the cardinality of :math:`|\mathsf{Hom}(𝑨, 𝑩)|`.
+
+.. _obs 4:
 
 .. proof:observation:: UAFST Exercise 1.4.6.c
 
@@ -756,11 +761,13 @@ We start with the simple observation that composing homomorphisms gives a homomo
     
          *Proof*.
 
-      By :numref:`Obs %s <obs 2>`, a homomorphism is uniquely determined by its restriction to a generating set.
+      By :numref:`Obs %s <obs 3>`, a homomorphism is uniquely determined by its restriction to a generating set.
 
       If :math:`X` generates 𝑨, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`. ☐
     
-.. _obs 4:
+Here is an elementary result about factorability of homomorphisms.
+
+.. _obs 5:
 
 .. proof:observation::
 
@@ -788,7 +795,9 @@ We start with the simple observation that composing homomorphisms gives a homomo
       
       One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
       
-      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Chapter %s <basic facts in agda>` when we implement :numref:`Obs %s <obs 4>` in Agda.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`.
+..      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Chapter %s <basic facts in agda>` when we implement :numref:`Obs %s <obs 4>` in Agda.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the
+
+      (**Question**. Do we need Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`?)
    
       It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
 
@@ -809,20 +818,25 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
 
-.. .. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 4>` is described in :numref:`factoring homomorphisms`, and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
+.. .. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 5>` is described in :numref:`factoring homomorphisms`, and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
 
-.. _obs 5:
+Next we observe that the intersection of subuniverses is again a subuniverse.
+
+.. _obs 6:
 
 .. proof:observation::
 
    Suppose :math:`A_i ≤ 𝑨` for all :math:`i` in some set :math:`I`. Then :math:`⋂_{i∈ I} A_i` is a subuniverse of :math:`𝑨`.
 
+The proof is left as an easy exercise.
 
 .. --------------------------------------------------------------------------------------
 .. SUBUNIVERSE GENERATION
 .. -------------------------------------------
 
-.. _obs 6:
+Here is the theorem that critically provides us with the means to generate subuniverses recursively.
+
+.. _obs 7:
 
 .. proof:observation:: UAFST Thm 1.14
 
@@ -867,7 +881,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
     
       Therefore, :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`, as desired. ☐ 
 
-.. The argument in the proof of :numref:`Obs <obs 6>` is of a type that one encounters frequently throughout algebra. It has two parts.
+.. The argument in the proof of :numref:`Obs <obs 7>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
 ..   #. Some set :math:`Y` is shown to be a subuniverse of 𝑨 that contains :math:`A_0`.
 
@@ -888,7 +902,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 .. We seek a "bottom-up," inductive description of the members of :math:`\mathsf{Clo}(F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <obs 6>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available.
 
 
-.. _obs 7:
+.. _obs 8:
 
 .. proof:observation:: UAFST Thm 4.3
 
@@ -939,7 +953,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       the claim is proved. □
 
-.. _obs 8:
+.. _obs 9:
 
 .. proof:observation:: UAFST Thm 4.21
 
@@ -953,7 +967,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
      
          *Proof*.
      
-      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <obs 6>`. That accounts for the first assertion.
+      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <obs 7>`. That accounts for the first assertion.
      
 
       For the second assertion, define :math:`h\,t` by induction on the :term:`height` of :math:`|t|`.
@@ -964,7 +978,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
      
       For the inductive step, assume :math:`|t| = n + 1`. Then :math:`t = f\,s` for some :math:`f ∈ F` and :math:`s: ρ f → T_n`, where for each :math:`0 ≤ i< ρ f` the term :math:`s\, i` has height at most :math:`n`. We define :math:`h\,t = f^𝑨(h ∘ s) = f^𝑨(h\,s_1, \dots, h\,s_k)`.
      
-      By its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`. The uniqueness of :math:`h` follows from :numref:`Obs %s <obs 2>`. ☐
+      By its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`. The uniqueness of :math:`h` follows from :numref:`Obs %s <obs 3>`. ☐
    
 In the next observation, assume :math:`𝑨 = ⟨A, F^𝑨⟩` and :math:`𝑩 = ⟨B, F^𝑩⟩` are algebras in the same signature :math:`σ = (F, ρ)`, and let :math:`t ∈ T_σ (X)` be an :math:`n`-ary term.
 
@@ -972,7 +986,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
 .. _thm 4.32:
 
-.. _obs 9:
+.. _obs 10:
 
 .. proof:observation:: homomorphisms commute with terms
 
@@ -988,7 +1002,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
       This is an easy induction on :math:`|t|`. ☐
     
-.. _obs 10:
+.. _obs 11:
 
 .. proof:observation:: terms respect congruences
 
@@ -1004,7 +1018,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
       This follows from :numref:`Obs %s <obs 8>` by taking :math:`⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
     
-.. _obs 11:
+.. _obs 12:
 
 .. proof:observation:: subuniverse generation as image of terms
 
@@ -1059,7 +1073,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
 
 .. (fact-m1)
    
-.. _obs 12:
+.. _obs 13:
 
 .. proof:observation::
 
@@ -1078,7 +1092,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
 
 .. fact-m2
 
-.. _obs 13:   
+.. _obs 14:   
 
 .. proof:observation:: UAFST Lem 4.37
 
@@ -1122,7 +1136,7 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
 
 .. (fact-m3)
 
-.. _obs 14:   
+.. _obs 15:   
 
 .. proof:observation:: 
 
@@ -1162,7 +1176,7 @@ The last result tells us that we can determine whether an identity is true in a 
 
 .. (fact-m4):
 
-.. _obs 15:   
+.. _obs 16:   
 
 .. proof:observation:: 
 
@@ -1191,7 +1205,7 @@ The last result tells us that we can determine whether an identity is true in a 
 
 We end this subsection with yet another standard but important result.
 
-.. _obs 16:   
+.. _obs 17:   
 
 .. proof:observation::
 
