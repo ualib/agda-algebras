@@ -19,39 +19,26 @@ open import UF-Equality using (subsingletons-are-sets; Nat; NatΣ;  to-Σ-≡; �
 
 -----------------------------------------------------------------------------
 --Voevodsky's univalence axiom.
-{-"There is a canonical transformation `(X Y : 𝓤 ̇ ) → X ≡ Y → X ≃ Y` that sends the identity identification `refl X : X ≡ X` to the
-   identity equivalence `id-≃ X : X ≃ X`. The univalence axiom, for the universe `𝓤`, says this canonical map is itself an equivalence. -}
+{-"There is a canonical transformation `(X Y : 𝓤 ̇ ) → X ≡ Y → X ≃ Y` that sends the identity identification
+   `refl X : X ≡ X` to the identity equivalence `id-≃ X : X ≃ X`. The univalence axiom, for the universe `𝓤`,
+   says this canonical map is itself an equivalence.                           -}
 Id→Eq : (X Y : 𝓤 ̇) → X ≡ Y → X ≃ Y
 Id→Eq X X (refl X) = id-≃ X
 
 is-univalent : (𝓤 : Universe) → 𝓤 ⁺ ̇
 is-univalent 𝓤 = (X Y : 𝓤 ̇) → is-equiv (Id→Eq X Y)
 
---"Thus, the univalence of the universe `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical bijection with
--- equivalences `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is `Id→Eq`. We emphasize that this doesn't
--- posit that univalence holds. It says what univalence is (like the type that says what the twin-prime conjecture is).
+--"...univalence of `𝓤` says that identifications `X ≡ Y` of types in `𝓤` are in canonical bijection with
+-- equivalences `X ≃ Y`, if by bijection we mean equivalence, where the canonical bijection is `Id→Eq`.
+-- We emphasize that this doesn't posit that univalence holds. It says what univalence is.
 univalence-≃ : is-univalent 𝓤 → (X Y : 𝓤 ̇) → (X ≡ Y) ≃ (X ≃ Y)
 univalence-≃ ua X Y = Id→Eq X Y , ua X Y
 
 Eq→Id : is-univalent 𝓤 → (X Y : 𝓤 ̇) → X ≃ Y → X ≡ Y
 Eq→Id ua X Y = inverse (Id→Eq X Y) (ua X Y)
 
---[Recall,
---"To show that the type `𝟙` is not equal to the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is
--- the identity function of the universe `𝓤₀`.   More generally, we have the following conversion of type identifications into functions:
---     Id→Fun : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
---     Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇ ))
--- Here the identity function is that of the universe `𝓤` where the types `X` and `Y` live.  An equivalent definition is the
--- following, where this time the identity function is that of the type `X`:
---     Id→Fun' : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
---     Id→Fun' (refl X) = 𝑖𝑑 X
---
---     Id→Funs-agree : {X Y : 𝓤 ̇ } (p : X ≡ Y) → Id→Fun p ≡ Id→Fun' p
---     Id→Funs-agree (refl X) = refl (𝑖𝑑 X)
--- So if we have a hypothetical identification `p : 𝟙 ≡ 𝟘`, then we get a function `𝟙 → 𝟘`. We apply this function to `⋆ : 𝟙`
--- to conclude the proof."
---]
-
+--Recall,  Id→Fun : {X Y : 𝓤 ̇ } → X ≡ Y → X → Y
+--         Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇ ))
 --"Here is a third way to convert a type identification into a function:
 Id→fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
 Id→fun {𝓤}{X}{Y} p = ∣ Id→Eq X Y p ∣
@@ -59,14 +46,14 @@ Id→fun {𝓤}{X}{Y} p = ∣ Id→Eq X Y p ∣
 Id→funs-agree : {X Y : 𝓤 ̇}(p : X ≡ Y)   →   Id→fun p  ≡  Id→Fun p
 Id→funs-agree (refl X) = refl (𝑖𝑑 X)
 
-{-"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main concepts of univalent
-  mathematics in a pure, spartan MLTT. It is the concepts of hlevel (including singleton, subsingleton and set) and the notion of
-  equivalence that are at the heart of univalent mathematics. Univalence is a fundamental ingredient, but first we need the correct
-  notion of equivalence to be able to formulate it.
+{-"What characterizes univalent mathematics is not the univalence axiom. We have defined and studied the main
+   concepts of univalent mathematics in a pure, spartan MLTT. It is the concepts of hlevel (including singleton,
+   subsingleton and set) and the notion of equivalence that are at the heart of univalent mathematics. Univalence
+   is a fundamental ingredient, but first we need the correct notion of equivalence to be able to formulate it.
 
-  Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is provably false in MLTT,
-  and this is one of the reasons why Voevodsky's notion of equivalence is important. (This is Exercise 4.6 of the HoTT book.)
-  There is a solution in Coq by Mike Shulman  (see https://github.com/HoTT/HoTT/blob/master/contrib/HoTTBookExercises.v)"  -}
+  "Remark. If we formulate univalence with invertible maps instead of equivalences, we get a statement that is
+   provably false in MLTT, and this is one of the reasons why Voevodsky's notion of equivalence is important.
+   (This is Exercise 4.6 of the HoTT book.) -}
 
 ------------------------------------------------------------------------------
 --Example of a type that is not a set under univalence
@@ -124,13 +111,13 @@ module example-of-a-nonset (𝓤₀★ : is-univalent 𝓤₀) where
 
 --------------------------------------------------------------------------
 --Exercises.
---"Here are some facts whose proofs are left to the reader but that we will need from the next section onwards. Sample solutions are given below."
+--"Here are some facts whose proofs are left to the reader but that we will need from the next section
+-- onwards. Sample solutions are given below."
 
 --Formulations.
---"Define functions for the following type declarations.
 subsingleton-criterion : {X : 𝓤 ̇ } → (X → is-singleton X)
-                               ---------------------------------
- →                                  is-subsingleton X
+                       ------------------------------------
+ →                            is-subsingleton X
 subsingleton-criterion f  x  =  singletons-are-subsingletons ( domain f ) ( f x ) x
 
 subsingleton-criterion' : {X : 𝓤 ̇ } → (X → is-subsingleton X) → is-subsingleton X
@@ -138,35 +125,31 @@ subsingleton-criterion' f x y = f x x y
 
 retract-of-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
  →               Y ◁ X  →  is-subsingleton X
-                  -----------------------------
- →                       is-subsingleton Y
+                -----------------------------
+ →                  is-subsingleton Y
 retract-of-subsingleton (g , f , η) X✧ =
  subsingleton-criterion λ x → retract-of-singleton (g , f , η)
   ( pointed-subsingletons-are-singletons (codomain f) (f x) X✧ )
-
-retract-of-subsingleton-first-try : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → Y ◁ X → is-subsingleton X → is-subsingleton Y
-retract-of-subsingleton-first-try (g , f , η) X✧ = λ v₀ v₁ →
-  v₀ ≡⟨ (η v₀)⁻¹ ⟩ g (f v₀) ≡⟨ ap g (X✧ (f v₀) (f v₁)) ⟩ g (f v₁) ≡⟨ η v₁ ⟩  v₁ ∎
 
 left-cancellable injective : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 left-cancellable f = {u u' : domain f} → f u ≡ f u' → u ≡ u'
 injective = left-cancellable --alias.
 
-lc-maps-reflect-subsingletons : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
-         (f : X → Y)    →    left-cancellable f    →    is-subsingleton Y
-      --------------------------------------------------------
- →                            is-subsingleton X
+lc-maps-reflect-subsingletons : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y)
+ →       left-cancellable f    →   is-subsingleton Y
+        ----------------------------------------------
+ →                  is-subsingleton X
 lc-maps-reflect-subsingletons f lcf Y✧ u u' = lcf (Y✧ (f u) (f u'))
 
 has-retraction has-left-inv : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 has-retraction s = Σ r ꞉ (codomain s → domain s), r ∘ s ∼ id
 has-left-inv = has-retraction -- alias
 
-sections-are-lc : {X : 𝓤 ̇ } {A : 𝓥 ̇ } (s : X → A) →  has-retraction s → left-cancellable s
+sections-are-lc : {X : 𝓤 ̇}{A : 𝓥 ̇}(s : X → A) →  has-retraction s → left-cancellable s
 sections-are-lc s (r , s-is-right-inv-to-r) {u}{u'} su≡su' =
  u ≡⟨ (s-is-right-inv-to-r u)⁻¹ ⟩ r (s u)  ≡⟨ ap r su≡su' ⟩ r (s u')  ≡⟨ s-is-right-inv-to-r u' ⟩ u' ∎
 
-equivs-have-retractions : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → is-equiv f → has-retraction f
+equivs-have-retractions : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y) → is-equiv f → has-retraction f
 equivs-have-retractions f feq = inverse f feq , inv-elim-left f feq
 
 equivs-have-sections : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → is-equiv f → has-section f
@@ -175,14 +158,16 @@ equivs-have-sections f feq = inverse f feq , inv-elim-right f feq
 equivs-are-lc : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → is-equiv f → left-cancellable f
 equivs-are-lc f feq = sections-are-lc f (equivs-have-retractions f feq)
 
-equiv-to-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → X ≃ Y → is-subsingleton Y → is-subsingleton X
+equiv-to-subsingleton : {X : 𝓤 ̇}{Y : 𝓥 ̇} → X ≃ Y → is-subsingleton Y → is-subsingleton X
 equiv-to-subsingleton (f , feq) = lc-maps-reflect-subsingletons f (equivs-are-lc f feq)
 
-comp-inverses : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ }  (f : X → Y) (g : Y → Z)
-                       (feq : is-equiv f)  (geq : is-equiv g)  (f⁻ : Y → X) (g⁻ : Z → Y)
- →                   f⁻ ∼ inverse f feq      →      g⁻ ∼ inverse g geq
-                      --------------------------------------------
- →                   f⁻ ∘ g⁻ ∼ inverse (g ∘ f) (∘-is-equiv geq feq)
+comp-inverses : {X : 𝓤 ̇}{Y : 𝓥 ̇}{Z : 𝓦 ̇}
+                (f : X → Y)  (g : Y → Z)
+                (feq : is-equiv f)  (geq : is-equiv g)
+                (f⁻ : Y → X) (g⁻ : Z → Y)
+ →              f⁻ ∼ inverse f feq    →    g⁻ ∼ inverse g geq
+                ---------------------------------------------
+ →              f⁻ ∘ g⁻ ∼ inverse (g ∘ f) (∘-is-equiv geq feq)
 comp-inverses f g feq geq f⁻ g⁻ finv ginv w =
  let f⁻¹ = inverse f feq in
  let g⁻¹ = inverse g geq in
@@ -196,26 +181,28 @@ comp-inverses f g feq geq f⁻ g⁻ finv ginv w =
  Hedberg says that a type is a set iff its identity types have designated `wconstant` endomaps.
  Here is the type signature of Hedberg's Theorem:
 
-       `Hedberg' : {X : 𝓤 ̇} (x : X) → ((y : X) → wconstant-endomap (x ≡ y)) → (y : X) → is-subsingleton (x ≡ y)`
+   `Hedberg' : {X : 𝓤 ̇} (x : X) → ((y : X) → wconstant-endomap (x ≡ y)) → (y : X) → is-subsingleton (x ≡ y)`
 
  Recall, the notion of constant map: `wconstant f = (x x' : domain f) → f x ≡ f x'`
  and the types whose identity types have `wconstant` endomaps: `wconstant-endomap X = Σ f ꞉ (X → X) , wconstant f`
 
  Recall, `wconstant-≡-endomaps X = (x y : X) → wconstant-endomap (x ≡ y)`.
- We also had the following (which is immediate from the definitions and recalling that `is-set X = (x y : X) → is-subsingleton (x ≡ y)`)
+ We also had the following (which is immediate from definitions and recalling that
+ `is-set X = (x y : X) → is-subsingleton (x ≡ y)`)
 
-     `sets-have-wconstant-≡-endomaps : (X : 𝓤 ̇) → is-set X → wconstant-≡-endomaps X`
+   `sets-have-wconstant-≡-endomaps : (X : 𝓤 ̇) → is-set X → wconstant-≡-endomaps X`
 
  HEDBERG'S THEOREM is the converse of the preceding result; that is,
 
      `types-with-wconstant-≡-endomaps-are-sets : (X : 𝓤 ̇) → wconstant-≡-endomaps X → is-set X`
 ------------------------------------------------------------------------------------------------------}
-subtypes-of-sets-are-sets : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (m : X → Y)
+subtypes-of-sets-are-sets : {X : 𝓤 ̇}{Y : 𝓥 ̇}(m : X → Y)
  →               left-cancellable m  →  is-set Y
                  --------------------------------
  →                           is-set X
 
-subtypes-of-sets-are-sets {X = X} m mlc Yset = types-with-wconstant-≡-endomaps-are-sets X wconst≡endoX
+subtypes-of-sets-are-sets {X = X} m mlc Yset =
+ types-with-wconstant-≡-endomaps-are-sets X wconst≡endoX
   where
    f : {u v : X} → u ≡ v → u ≡ v
    f p = mlc (ap m p)
@@ -227,27 +214,29 @@ subtypes-of-sets-are-sets {X = X} m mlc Yset = types-with-wconstant-≡-endomaps
    wconst≡endoX u v = (f , κ u v)
 
 equiv-to-set : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
- →           X ≃ Y  →  is-set Y
+ →             X ≃ Y  →  is-set Y
               --------------------
  →                 is-set X
 
 equiv-to-set X≃Y = subtypes-of-sets-are-sets ∣ X≃Y ∣ (equivs-are-lc ∣ X≃Y ∣ ∥ X≃Y ∥ )
 
-sections-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f g : X → Y)
- →                    has-retraction f   →  g ∼ f
-                      -----------------------------
- →                          has-retraction g   -- intuition: `has-retraction g`  ⇔   "g has a left inverse"
+sections-closed-under-∼ : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f g : X → Y)
+ →                        has-retraction f   →  g ∼ f
+                         -----------------------------
+ →                          has-retraction g
 
+-- intuition: `has-retraction g`  ⇔   "g has a left inverse"
 sections-closed-under-∼ f g (⁻f , flinv) g∼f = (⁻f , glinv)
  where
   glinv : ⁻f ∘ g ∼ id
   glinv = λ x → ⁻f (g x) ≡⟨ ap ⁻f (g∼f x) ⟩ ⁻f (f x) ≡⟨ flinv x ⟩ x ∎
 
-retractions-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f g : X → Y)
- →           has-section f  →   g ∼ f
-               ------------------------
- →                has-section g   -- (intuition:  `has-section g`  ⇔  "g has a right inverse")
+retractions-closed-under-∼ : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f g : X → Y)
+ →                           has-section f  →   g ∼ f
+                            --------------------------
+ →                                 has-section g
 
+-- (intuition:  `has-section g`  ⇔  "g has a right inverse")
 retractions-closed-under-∼ f g (f⁻ , frinv) g∼f = (f⁻ , grinv)
  where
   grinv : g ∘ f⁻ ∼ id
@@ -258,7 +247,7 @@ is-joyal-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 is-joyal-equiv f = has-section f × has-retraction f  -- i.e., `has-right-inv f × has-left-inv f`
 
 --"Provide definitions for the following type declarations:"
-one-inverse : {X : 𝓤 ̇ } {Y : 𝓥 ̇}  (f : X → Y) (⁻f f⁻ : Y → X)
+one-inverse : {X : 𝓤 ̇ } {Y : 𝓥 ̇}(f : X → Y)(⁻f f⁻ : Y → X)
  →               (⁻f ∘ f ∼ id)     →      (f ∘ f⁻ ∼ id)
                 -------------------------------------
  →                               ⁻f ∼ f⁻
@@ -267,7 +256,8 @@ one-inverse f ⁻f f⁻ flinv frinv x = ⁻f x ≡⟨ ap ⁻f ((frinv x)⁻¹) �
 joyal-equivs-are-invertible : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
               (f : X → Y)     →      is-joyal-equiv f
            ---------------------------------------
- →                      invertible f       -- i.e.,   Σ g ꞉ (codomain f -> domain f) , (g ∘ f ∼ id) × (f ∘ g ∼ id)
+ →                      invertible f
+-- i.e.,   Σ g ꞉ (codomain f -> domain f) , (g ∘ f ∼ id) × (f ∘ g ∼ id)
 joyal-equivs-are-invertible f ( (f⁻ , frinv) , (⁻f , flinv) ) = ( f⁻ , (rinv-is-linv , frinv) )
  where
    ⁻f∼f⁻ : ⁻f ∼ f⁻
@@ -282,21 +272,21 @@ joyal-equivs-are-equivs : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
  →                  is-equiv f
 joyal-equivs-are-equivs f jf = invertibles-are-equivs f (joyal-equivs-are-invertible f jf)
 
-invertibles-are-joyal-equivs : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
+invertibles-are-joyal-equivs : {X : 𝓤 ̇}{Y : 𝓥 ̇}
            (f : X → Y)     →     invertible f
-         ---------------------------------
+            ---------------------------------
  →                  is-joyal-equiv f
 
 invertibles-are-joyal-equivs f ( g , (gf∼id , fg∼id) ) = ( (g , fg∼id) , (g , gf∼id) )
 
 equivs-are-joyal-equivs : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
             (f : X → Y)     →      is-equiv f
-         ---------------------------------
+            ---------------------------------
  →                is-joyal-equiv f
 equivs-are-joyal-equivs f 𝓔f = invertibles-are-joyal-equivs f (equivs-are-invertible f 𝓔f)
 
-equivs-closed-under-∼ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {f g : X → Y}
- →         is-equiv f       →       g ∼ f
+equivs-closed-under-∼ : {X : 𝓤 ̇}{Y : 𝓥 ̇}{f g : X → Y}
+ →           is-equiv f    →     g ∼ f
             ------------------------------
  →                    is-equiv g
 equivs-closed-under-∼ {f = f} {g = g} 𝓔f g∼f = joyal-equivs-are-equivs g jg
@@ -307,31 +297,34 @@ equivs-closed-under-∼ {f = f} {g = g} 𝓔f g∼f = joyal-equivs-are-equivs g 
   jg : is-joyal-equiv g
   jg = (retractions-closed-under-∼ f g hsf g∼f , sections-closed-under-∼ f g hrf g∼f)
 
-equiv-to-singleton' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
+equiv-to-singleton' : {X : 𝓤 ̇}{Y : 𝓥 ̇}
  →               X ≃ Y     →     is-singleton X
                 ------------------------------
- →                     is-singleton Y 
-equiv-to-singleton' X≃Y = equiv-to-singleton (≃-sym X≃Y)  -- alt proof:   = retract-of-singleton (≃-gives-▷ X≃Y)
-  -- Recall,   retract-of-singleton : ... Y ◁ X  →  is-singleton X → is-singleton Y, and,  ≃-gives-▷ : ... X ≃ Y -> Y ◁ X
+ →                     is-singleton Y
+equiv-to-singleton' X≃Y = equiv-to-singleton (≃-sym X≃Y)
+-- alt proof:   = retract-of-singleton (≃-gives-▷ X≃Y)
+-- Recall,   retract-of-singleton : ... Y ◁ X  →  is-singleton X → is-singleton Y, and,
+-- ≃-gives-▷ : ... X ≃ Y -> Y ◁ X
 
-pr₁-lc : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }   →   ( (x : X) → is-subsingleton (F x) )
-                                                   -------------------------------------
- →                                                 left-cancellable ( λ (t : Σ F) → pr₁ t )
-pr₁-lc  x↦Fx✧  prx≡prx'  =  to-Σ-≡   (prx≡prx' ,   x↦Fx✧  _ _ _)
+pr₁-lc : {X : 𝓤 ̇}{F : X → 𝓥 ̇}
+ →       ((x : X) → is-subsingleton (F x))
+        ----------------------------------------
+ →      left-cancellable ( λ (t : Σ F) → pr₁ t )
+pr₁-lc x↦Fx✧ prx≡prx' = to-Σ-≡ (prx≡prx' , x↦Fx✧ _ _ _)
 
 subsets-of-sets-are-sets : (X : 𝓤 ̇) (F : X → 𝓥 ̇ )
- →                 is-set X    →    ( (x : X) → is-subsingleton (F x) )
-                    -------------------------------------------
- →                 is-set (Σ x ꞉ X , F x)
+ →        is-set X   →   ((x : X) → is-subsingleton (F x))
+         --------------------------------------------------
+ →             is-set (Σ x ꞉ X , F x)
 subsets-of-sets-are-sets X  F  X-is-set  x↦Fx✧ =
  subtypes-of-sets-are-sets pr₁ (pr₁-lc  x↦Fx✧) X-is-set
 --Recall, subtypes-of-sets-are-sets : ... (m : X → Y) → left-cancellable m  →  is-set Y → is-set X
---Here, we have `m = pr₁` and `pr₁-lc Fx✧` says `pr₁` is `lc`. 
+--Here, we have `m = pr₁` and `pr₁-lc Fx✧` says `pr₁` is `lc`.
 
 to-subtype-≡ : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {x x' : X} {v : F x} {v' : F x'}
- →       ( (x : X) → is-subsingleton (F x) )      →      x ≡ x'
-           -----------------------------------------------
- →                             (x , v) ≡ (x' , v')
+ →             ((x : X) → is-subsingleton (F x))    →    x ≡ x'
+              ---------------------------------------------------
+ →                           (x , v) ≡ (x' , v')
 to-subtype-≡ {𝓤}{𝓥} {X} {F} {x}{x'} {v} {v'} x↦Fx✧ x≡x' = to-Σ-≡ (x≡x' , goal)
  --Recall, to-Σ-≡ : ... {(σ₁ , σ₂) (τ₁ , τ₂) : Σ F}  → Σ p ꞉ σ₁ ≡ τ₁ , transport F p σ₂ ≡  τ₂  → σ ≡ τ
  where
@@ -344,18 +337,18 @@ to-subtype-≡ {𝓤}{𝓥} {X} {F} {x}{x'} {v} {v'} x↦Fx✧ x≡x' = to-Σ-�
   goal : vᵗ ≡ v'
   goal = Fx'✧ vᵗ v'
 
---Before considering the next theorem, recall that if `F : X → 𝓥 ̇` , then an inhabitant `t` of the dependent pair
--- type `Σ F` has the form t = (x, F x), with `pr₁ t = x : X` and `pr₂ t = F x : 𝓥 ̇`. Now, if `𝓕 : Σ F → X`
---is defined by `𝓕 t = pr₁ t = pr₁ (x , F x) = x`, and if `x₁ : X ̇`, then we can consider `fiber 𝓕 x₁` which is the
---collection of all `(x , F x) ∈ domain 𝓕 ( = Σ F)` such that `x ≡ x₁`.
+{-Before considering the next theorem, recall that if `F : X → 𝓥 ̇` , then an inhabitant `t` of the
+  dependent pair type `Σ F` has the form t = (x, F x), with `pr₁ t = x : X` and `pr₂ t = F x : 𝓥 ̇`.
+  If `𝓕 : Σ F → X` is defined by `𝓕 t = pr₁ t = pr₁ (x , F x) = x`, and if `x₁ : X ̇`, then we can
+  consider `fiber 𝓕 x₁` which is the collection of all `(x , F x) ∈ domain 𝓕 ( = Σ F)` such that `x ≡ x₁`.
+  The next theorem will establish that if `F x` is a singleton for every `x`, then such fibers are also
+  singletons: i.e., the following implication holds::
+    `( (x : X) → is-singleton (F x) ) → is-equiv (λ (t : Σ F) → pr₁ t)` -}
 
---The next theorem will establish that if `F x` is a singleton for every `x`, then such fibers are also singletons:
---i.e., the following implication holds:: `( (x : X) → is-singleton (F x) ) → is-equiv (λ (t : Σ F) → pr₁ t)` where, recall,
---`is-equiv (λ (t : Σ F) → pr₁ t) :  ( v : codomain (λ (t : Σ F) → pr₁ t) ) → is-singleton (fiber  (λ (t : Σ F) → pr₁ t) v)`
-
-pr₁-equiv : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } →  ( (x : X) → is-singleton (F x) )
-               ----------------------------------------------------
- →                    is-equiv (λ (t : Σ F) → pr₁ t)
+pr₁-equiv : {X : 𝓤 ̇}{F : X → 𝓥 ̇}
+ →          ((x : X) → is-singleton (F x))
+           ---------------------------------
+ →          is-equiv (λ (t : Σ F) → pr₁ t)
 pr₁-equiv {𝓤} {𝓥} {X}{F}  x↦Fx✦ = invertibles-are-equivs pr₁ (g , η , ε)
  --To use `invertibles-are-equivs` we must show that pr₁ is invertible, and recall the definition
  --    `invertible f = Σ g ꞉ (codomain f → domain f) , (g ∘ f ∼ id) × (f ∘ g ∼ id)`
@@ -408,12 +401,12 @@ singleton-types-≃ : {X : 𝓤 ̇ } (u : X) → singleton-type' u ≃ singleton
 singleton-types-≃ u = Σ-cong λ u' → ⁻¹-≃ u u'
 --Recall, `singleton-type {𝓤}{X} u₀ = Σ u ꞉ X , u ≡ u₀
 --   and, `singleton-type' {𝓤}{X} u₀ = Σ u ꞉ X , u₀ ≡ u
---Recall,
--- Σ-cong : {X : 𝓤 ̇} {A : X → 𝓥 ̇}{B : X → 𝓦 ̇} → ((x : X) → A x ≃ B x) → Σ A ≃ Σ B
+--Recall, Σ-cong : {X : 𝓤 ̇} {A : X → 𝓥 ̇}{B : X → 𝓦 ̇} → ((x : X) → A x ≃ B x) → Σ A ≃ Σ B
 
-singletons-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }  → is-singleton X    →    is-singleton Y
-                                                   ---------------------------------
- →                                                               X ≃ Y
+singletons-≃ : {X : 𝓤 ̇}{Y : 𝓥 ̇}
+ →             is-singleton X    →    is-singleton Y
+              ----------------------------------------
+ →                             X ≃ Y
 singletons-≃ {𝓤} {𝓥} {X} {Y} X⋆ Y⋆ = invertibility-gives-≃ f (g , η , ε)
  where
  f : X → Y
@@ -428,59 +421,60 @@ singletons-≃ {𝓤} {𝓥} {X} {Y} X⋆ Y⋆ = invertibility-gives-≃ f (g , 
  ε : f ∘ g ∼ id
  ε = centrality Y Y⋆ -- or pr₂ Y⋆
 
-maps-of-singletons-are-equivs : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
- →                is-singleton X    →     is-singleton Y
-                   ----------------------------------
- →                               is-equiv f
-maps-of-singletons-are-equivs {𝓤} {𝓥} {X} {Y} f X⋆ Y⋆ = invertibles-are-equivs f (g , η , ε)
- where
- g : Y → X
- g y = center X X⋆
-
- η : g ∘ f ∼ id
- η = centrality X X⋆
-
- ε : f ∘ g ∼ id
- ε y = Y-is-subsingleton (f (g y)) y
+maps-of-singletons-are-equivs : {X : 𝓤 ̇}{Y : 𝓥 ̇}
+             (f : X → Y)  →  is-singleton X  →  is-singleton Y
+           ------------------------------------------------------
+ →                            is-equiv f
+maps-of-singletons-are-equivs {𝓤} {𝓥} {X} {Y} f X⋆ Y⋆ =
+ invertibles-are-equivs f (g , η , ε)
   where
-   Y-is-subsingleton : is-subsingleton Y
-   Y-is-subsingleton = singletons-are-subsingletons Y Y⋆
+   g : Y → X
+   g y = center X X⋆
 
-logically-equivalent-subsingletons-are-equivalent : (X : 𝓤 ̇ ) (Y : 𝓥 ̇ )
- →            is-subsingleton X    →    is-subsingleton Y   →    X ⇔ Y
-              ------------------------------------------------------
- →                                            X ≃ Y
+   η : g ∘ f ∼ id
+   η = centrality X X⋆
+
+   ε : f ∘ g ∼ id
+   ε y = Y-is-subsingleton (f (g y)) y
+    where
+     Y-is-subsingleton : is-subsingleton Y
+     Y-is-subsingleton = singletons-are-subsingletons Y Y⋆
+
+logically-equivalent-subsingletons-are-equivalent : (X : 𝓤 ̇)(Y : 𝓥 ̇)
+ →            is-subsingleton X  →  is-subsingleton Y  →  X ⇔ Y
+              ----------------------------------------------------
+ →                               X ≃ Y
 
 logically-equivalent-subsingletons-are-equivalent X Y Xss Yss ( f , g ) =
  invertibility-gives-≃ f ( g , (λ x → Xss (g (f x)) x) , λ x → Yss (f (g x)) x )
 
-singletons-are-equivalent : (X : 𝓤 ̇ ) (Y : 𝓥 ̇ )
- →                    is-singleton X    →      is-singleton Y
-                     ------------------------------------------
- →                                        X ≃ Y
+singletons-are-equivalent : (X : 𝓤 ̇)(Y : 𝓥 ̇)
+ →              is-singleton X    →      is-singleton Y
+               ------------------------------------------
+ →                             X ≃ Y
 singletons-are-equivalent {𝓤} {𝓥} X Y = singletons-≃ {𝓤}{𝓥}{X}{Y}
 
---[Before proving the next theorem, let's review the type `Nat` (natural transformations) and their naturality. Recall,
--- if F G : 𝓒 → 𝓓  are functors, a nat tran from F to G is an indexed family {αₛ : s ∈ 𝓒₀} of arrows of 𝓓
--- satisfying the following naturality condition:  If s t : 𝓒ₒ,  f : Hom(s, t), then the following diagram commutes:
---      s        F s ---- αₛ ----> G s
---      |           |                       |
---    f |       Ff |                       | Gf
---      ↓         ↓                      ↓
---      t        F t ---- αₜ  ----> G t
---
--- In the MLTT setup we have developed, the naturality of the Nat type is automatic.
---    Nats-are-natural : {X : 𝓤 ̇} (F : X → 𝓥 ̇) (G : X → 𝓦 ̇) (α : Nat F G) {s t : X}  (p : s ≡ t) →
---         α s ∘ transport F p ≡ transport G p ∘ α t
---
--- NatΣ : {X : 𝓤 ̇}{F : X → 𝓥 ̇}{G : X → 𝓦 ̇} → Nat F G → Σ F → Σ G
--- NatΣ α (s , v) = s , α s v
--- Recall, if F : X → 𝓥 ̇, then Σ F is the dependent pair type whose inhabitants have the form (x , F x).
+{-Before proving the next theorem, let's review the type `Nat` (natural transformations) and their naturality.
+  Recall, if F G : 𝓒 → 𝓓  are functors, a nat tran from F to G is an indexed family {αₛ : s ∈ 𝓒₀} of arrows of 𝓓
+ satisfying the following naturality condition:  If s t : 𝓒ₒ,  f : Hom(s, t), then the following diagram commutes:
+      s        F s ---- αₛ ----> G s
+      |          |                |
+    f |       Ff |                | Gf
+      ↓          ↓                ↓
+      t        F t ---- αₜ  ----> G t
 
-NatΣ-fiber-equiv : {X : 𝓤 ̇ } (F : X → 𝓥 ̇ )   (G : X → 𝓦 ̇ )
+ In the MLTT setup we have developed, the naturality of the Nat type is automatic.
+    Nats-are-natural : {X : 𝓤 ̇} (F : X → 𝓥 ̇) (G : X → 𝓦 ̇) (α : Nat F G) {s t : X}  (p : s ≡ t) →
+         α s ∘ transport F p ≡ transport G p ∘ α t
+
+ NatΣ : {X : 𝓤 ̇}{F : X → 𝓥 ̇}{G : X → 𝓦 ̇} → Nat F G → Σ F → Σ G
+ NatΣ α (s , v) = s , α s v
+ Recall, if F : X → 𝓥 ̇, then Σ F is the dependent pair type whose inhabitants have the form (x , F x). -}
+
+NatΣ-fiber-equiv : {X : 𝓤 ̇}(F : X → 𝓥 ̇)(G : X → 𝓦 ̇)
                    (α : Nat F G)   (s : X)   (w : G s)
-           --------------------------------------------------------------
- →            fiber (α s) w ≃ fiber (NatΣ α) (s , w)
+                  -----------------------------------------
+ →                 fiber (α s) w ≃ fiber (NatΣ α) (s , w)
 NatΣ-fiber-equiv F G α s w = invertibility-gives-≃ f (g , ε , η)
  where
   f : fiber (α s) w → fiber (NatΣ α) (s , w)
@@ -495,10 +489,10 @@ NatΣ-fiber-equiv F G α s w = invertibility-gives-≃ f (g , ε , η)
   η : f ∘ g ∼ id
   η ((x , a) , refl _) = refl (( x , a) , refl (NatΣ α (x , a) ))
 
-NatΣ-equiv-gives-fiberwise-equiv : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ } {G : X → 𝓦 ̇ }
-                       (α : Nat F G)    →   is-equiv (NatΣ α)
-                   --------------------------------------
- →                         ( (x : X) → is-equiv (α x) )
+NatΣ-equiv-gives-fiberwise-equiv : {X : 𝓤 ̇}{F : X → 𝓥 ̇}{G : X → 𝓦 ̇}
+                    (α : Nat F G)    →   is-equiv (NatΣ α)
+                  ----------------------------------------
+ →                      (x : X) → is-equiv (α x)
 NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w = γ
  where
   d : fiber (α x) w ≃ fiber (NatΣ α) (x , w)
@@ -510,36 +504,38 @@ NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w =
   γ : is-singleton (fiber (α x) w)
   γ = equiv-to-singleton d s
 
-Σ-is-subsingleton : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }
- →                is-subsingleton X   →  ( (u : X) → is-subsingleton (F u) )
-                 -----------------------------------------------------
- →                                is-subsingleton (Σ F)
+Σ-is-subsingleton : {X : 𝓤 ̇}{F : X → 𝓥 ̇}
+ →      is-subsingleton X   →  ((u : X) → is-subsingleton (F u))
+       -----------------------------------------------------------
+ →                 is-subsingleton (Σ F)
 Σ-is-subsingleton X✧ Fu✧ (u , Fu) (u' , Fu') = to-subtype-≡ Fu✧ (X✧ u u')
 
-×-is-singleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } →  is-singleton X    →    is-singleton Y
-                                                 --------------------------------------
- →                                                       is-singleton (X × Y)
+×-is-singleton : {X : 𝓤 ̇}{Y : 𝓥 ̇}
+ →               is-singleton X    →    is-singleton Y
+                ---------------------------------------
+ →                       is-singleton (X × Y)
 ×-is-singleton (u , u-is-center) (v , v-is-center) = (u , v) , uv-is-center
  where
   uv-is-center :  ∀ p → (u , v) ≡ p
   uv-is-center (u' , v') = to-×-≡ (u-is-center u' , v-is-center v')
 
 ×-is-subsingleton : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
- →               is-subsingleton X     →    is-subsingleton Y
-                  ---------------------------------------
+ →                  is-subsingleton X     →    is-subsingleton Y
+                   ----------------------------------------------
  →                           is-subsingleton (X × Y)
 ×-is-subsingleton X✧ Y✧ = Σ-is-subsingleton X✧ (λ _ → Y✧)
 
-×-is-subsingleton' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
- →          ( (Y → is-subsingleton X) × (X → is-subsingleton Y) )
-              -----------------------------------------------
- →                           is-subsingleton (X × Y)
-×-is-subsingleton'  {𝓤} {𝓥} {X} {Y} (Gv✧ , Fu✧) (u , v) (u' , v') = to-×-≡ (Gv✧ v u u' , Fu✧ u v v')
-
-×-is-subsingleton'-back : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
- →                    is-subsingleton (X × Y)
-            -----------------------------------------------
+×-is-subsingleton' : {X : 𝓤 ̇}{Y : 𝓥 ̇}
  →          (Y → is-subsingleton X) × (X → is-subsingleton Y)
+            -------------------------------------------------
+ →                           is-subsingleton (X × Y)
+×-is-subsingleton'  {𝓤} {𝓥} {X} {Y} (Gv✧ , Fu✧) (u , v) (u' , v') =
+ to-×-≡ (Gv✧ v u u' , Fu✧ u v v')
+
+×-is-subsingleton'-back : {X : 𝓤 ̇}{Y : 𝓥 ̇}
+ →                        is-subsingleton (X × Y)
+                 --------------------------------------------------
+ →                (Y → is-subsingleton X) × (X → is-subsingleton Y)
 ×-is-subsingleton'-back  {𝓤} {𝓥} {X} {Y} XY✧ = Gv✧ , Fu✧
  where
   Gv✧ : Y → is-subsingleton X
@@ -548,20 +544,21 @@ NatΣ-equiv-gives-fiberwise-equiv {𝓤} {𝓥} {𝓦} {X} {F} {G} α eqα x w =
   Fu✧ : X → is-subsingleton Y
   Fu✧ u v v' = ap pr₂ (XY✧ (u , v) (u , v'))
 
-ap₂ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ } (f : X → Y → Z) {u u' : X} {v v' : Y}
- →                u ≡ u'     →     v ≡ v'
-                  ----------------------
- →                    f u v ≡ f u' v'
+ap₂ : {X : 𝓤 ̇}{Y : 𝓥 ̇}{Z : 𝓦 ̇}(f : X → Y → Z)
+      {u u' : X}{v v' : Y}
+ →    u ≡ u'   →    v ≡ v'
+     ----------------------
+ →       f u v ≡ f u' v'
 ap₂ f (refl u) ( refl v) = refl (f u v)
 
 ---------------------------------------------------------------------------
 --A characterization of univalence.
 --REF: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#unicharac
-equiv-singleton-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }  ( u₀ : X )
-                                  ( f : (u : X) → u₀ ≡ u → F u )
- →                             ( (u : X) → is-equiv (f u) )
-                                ---------------------------------
- →                              is-singleton (Σ F)
+equiv-singleton-lemma : {X : 𝓤 ̇}{F : X → 𝓥 ̇}(u₀ : X)
+                        (f : (u : X) → u₀ ≡ u → F u)
+ →                      ((u : X) → is-equiv (f u))
+                       ------------------------------
+ →                       is-singleton (Σ F)
 equiv-singleton-lemma {𝓤}{𝓥} {X}{F}  u₀  f  u↦fu-equiv  =  γ
  where
   abstract
@@ -574,11 +571,11 @@ equiv-singleton-lemma {𝓤}{𝓥} {X}{F}  u₀  f  u↦fu-equiv  =  γ
    γ : is-singleton (Σ F)
    γ = equiv-to-singleton (≃-sym d) (singleton-types'-are-singletons X u₀)
 
-singleton-equiv-lemma : {X : 𝓤 ̇ } {F : X → 𝓥 ̇ }  ( u₀ : X )
-                                  ( f : (u : X) → u₀ ≡ u → F u )
- →                             is-singleton (Σ F)
-                                ----------------------------------
- →                              (u : X) → is-equiv (f u)
+singleton-equiv-lemma : {X : 𝓤 ̇}{F : X → 𝓥 ̇}(u₀ : X)
+                        (f : (u : X) → u₀ ≡ u → F u)
+ →                      is-singleton (Σ F)
+                        ----------------------------------
+ →                      (u : X) → is-equiv (f u)
 singleton-equiv-lemma {𝓤} {𝓥} {X} {F} u₀ f ΣF✦ = γ
  where
   abstract
@@ -598,38 +595,31 @@ univalence⇒ 𝓤★ X₀ = equiv-singleton-lemma X₀ (Id→Eq X₀) (𝓤★ 
 ⇒univalence : ( (X₀ : 𝓤 ̇) → is-singleton (Σ X ꞉ 𝓤 ̇ , X₀ ≃ X) ) → is-univalent 𝓤
 ⇒univalence ΣX✦ X₀ = singleton-equiv-lemma X₀ (Id→Eq X₀) (ΣX✦ X₀)
 
---"(Of course, this doesn't say that there is only one type `X` equivalent to `X₀`, or only one equivalence from `X₀` to `X`,
--- because equality of `Σ` types is given by transport in the second component along an identification in the first component.)
-
--- We can replace *singleton* by *subsingleton* and still have a logical equivalence, and we sometimes need the characterization in this form:
+--"We can replace *singleton* by *subsingleton* and still have a logical equivalence, and we sometimes need
+-- the characterization in this form:
 univalence→ : is-univalent 𝓤 → (X₀ : 𝓤 ̇) → is-subsingleton (Σ X ꞉ 𝓤 ̇ , X₀ ≃ X)
 univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (univalence⇒ 𝓤★ X₀)
 
 →univalence : ( (X₀ : 𝓤 ̇) → is-subsingleton (Σ X ꞉ 𝓤 ̇ , X₀ ≃ X)) → is-univalent 𝓤
 →univalence ΣX✧ = ⇒univalence ( λ X → pointed-subsingletons-are-singletons (Σ (X ≃_) ) ( X , id-≃ X ) (ΣX✧ X) )
 
---------------------------------------------------------------------------------------------------------------
--- EQUIVALENCE INDUCTION.
+------------------------------------------------------------------------------------------------------------
+--EQUIVALENCE INDUCTION.
 --SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#equivalenceinduction
 
-{- "Under univalence, we get induction principles for type equivalences, corresponding to the induction principles `ℍ` and `𝕁`
-    for identifications.  To prove a property of equivalences, it is enough to prove it for the identity equivalence `id-≃ X` for all `X`.
+{-"Under univalence, we get induction principles for type equivalences...To prove a property of
+   equivalences, it is enough to prove it for the identity equivalence `id-≃ X` for all `X`.
 
-    Our objective is to get the induction principles `ℍ-≃` and `𝕁-≃` below and their corresponding equations. As above, it is easy to
-    define `𝕁-≃` from `ℍ-≃`, and it is harder to define `ℍ-≃` directly, and it is much harder to prove the desired equation for
-    `ℍ-≃` directly. In order to make this easy, we define an auxiliary induction principle `𝔾-≃`, from which we trivially derive `ℍ-≃`,
-    and whose equation is easy to prove.
-
-    The reason the induction principle `𝔾-≃` and its equation are easy to construct and prove is that the type `Σ Y ꞉ 𝓤 ̇ , X ≃ Y`
-    is a singleton by univalence, which considerably simplifies reasoning about transport. For `ℍ-≃` we consider `Y : 𝓤` and `e : X ≃ Y`
-    separately, whereas for `G-≃` we treat them as a pair `(Y , e)`. The point is that the type of such pairs is a singleton by univalence."
--}
+  "Our objective is to get the induction principles `ℍ-≃` and `𝕁-≃` below and their corresponding
+   equations...In order to make this easy, we define an auxiliary induction principle `𝔾-≃`, from
+   which we trivially derive `ℍ-≃`, and whose equation is easy to prove. -}
 
 𝔾-≃ : is-univalent 𝓤
- →      (X : 𝓤 ̇)     ( A : (Σ Y ꞉ 𝓤 ̇ , X ≃ Y) → 𝓥 ̇ )
- →      A (X , id-≃ X)   →     (Y : 𝓤 ̇)   (X≃Y : X ≃ Y)
-         ----------------------------------------------
- →                    A (Y , X≃Y)
+ →     (X : 𝓤 ̇) (A : (Σ Y ꞉ 𝓤 ̇ , X ≃ Y) → 𝓥 ̇)
+ →     A (X , id-≃ X)
+ →     (Y : 𝓤 ̇)    (X≃Y : X ≃ Y)
+      -------------------------------
+ →     A (Y , X≃Y)
 𝔾-≃ {𝓤} 𝓤★ X A v Y X≃Y = transport A p v
  where
     t : Σ Y ꞉ 𝓤 ̇ , X ≃ Y
@@ -639,14 +629,16 @@ univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (uni
     p = univalence→ {𝓤} 𝓤★ X t (Y , X≃Y)
 
 𝔾-≃-equation : (𝓤★ : is-univalent 𝓤)
- →       (X : 𝓤 ̇)     ( A : (Σ Y ꞉ 𝓤 ̇ , X ≃ Y) → 𝓥 ̇ )     ( v : A ( X , id-≃ X) )
-          --------------------------------------------------------------------
- →                        𝔾-≃ 𝓤★ X A v X (id-≃ X) ≡ v
+                (X : 𝓤 ̇)
+                (A : (Σ Y ꞉ 𝓤 ̇ , X ≃ Y) → 𝓥 ̇)
+                (v : A ( X , id-≃ X))
+               ---------------------------------
+ →              𝔾-≃ 𝓤★ X A v X (id-≃ X) ≡ v
 𝔾-≃-equation {𝓤} {𝓥} 𝓤★ X A v =
-  𝔾-≃ 𝓤★ X A v X (id-≃ X)    ≡⟨ refl _ ⟩
-  transport A p v                     ≡⟨ ap (λ - → transport A - v) q ⟩
-  transport A (refl t) v              ≡⟨ refl _ ⟩
-  v                                         ∎
+  𝔾-≃ 𝓤★ X A v X (id-≃ X) ≡⟨ refl _ ⟩
+  transport A p v          ≡⟨ ap (λ - → transport A - v) q ⟩
+  transport A (refl t) v   ≡⟨ refl _ ⟩
+  v                        ∎
   where
     t : Σ Y ꞉ 𝓤 ̇ , X ≃ Y
     t = X , id-≃ X
@@ -655,44 +647,50 @@ univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (uni
     p = univalence→ {𝓤} 𝓤★ X t t
 
     q : p ≡ refl t
-    q = subsingletons-are-sets (Σ Y ꞉ 𝓤 ̇ , X ≃ Y) (univalence→ {𝓤} 𝓤★ X) t t p (refl t)
+    q = subsingletons-are-sets (Σ Y ꞉ 𝓤 ̇ , X ≃ Y)
+            (univalence→ {𝓤} 𝓤★ X) t t p (refl t)
 
 ℍ-≃ : is-univalent 𝓤
- →     (X : 𝓤 ̇)          ( A : (Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇ )
- →     A X (id-≃ X)       →      (Y : 𝓤 ̇)   (X≃Y : X ≃ Y)
-        -------------------------------------------------
- →                     A Y  X≃Y
+ →     (X : 𝓤 ̇) ( A : (Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇ )
+ →     A X (id-≃ X)
+ →     (Y : 𝓤 ̇)   (X≃Y : X ≃ Y)
+      ------------------------------
+ →      A Y  X≃Y
 ℍ-≃ 𝓤★ X A = 𝔾-≃ 𝓤★ X (Σ-induction A)
 
 ℍ-≃-equation : (𝓤★ : is-univalent 𝓤)
- →          (X : 𝓤 ̇)     ( A : (Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇ )     ( v : A X (id-≃ X) )
-             --------------------------------------------------------------------
- →                             ℍ-≃ 𝓤★ X A v X (id-≃ X) ≡ v
+               (X : 𝓤 ̇)
+               (A : (Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇)
+               (v : A X (id-≃ X))
+               -------------------------------
+ →             ℍ-≃ 𝓤★ X A v X (id-≃ X) ≡ v
 ℍ-≃-equation 𝓤★ X A = 𝔾-≃-equation 𝓤★ X (Σ-induction A)
 
---"The induction principle `ℍ-≃` keeps `X` fixed and lets `Y` vary, while the induction principle `𝕁-≃` lets both vary:
+--"The induction principle `ℍ-≃` keeps `X` fixed and lets `Y` vary, while...`𝕁-≃` lets both vary:
 𝕁-≃ : is-univalent 𝓤
- →       ( A : (X Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇ )
- →       ( (X : 𝓤 ̇) → A X X (id-≃ X) )
- →       (X Y : 𝓤 ̇)       (X≃Y : X ≃ Y)
-          ---------------------------------
- →          A X Y  X≃Y
+ →       (A : (X Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇)
+ →       ((X : 𝓤 ̇) → A X X (id-≃ X))
+ →       (X Y : 𝓤 ̇)    (X≃Y : X ≃ Y)
+         -------------------------------
+ →        A X Y  X≃Y
 𝕁-≃ 𝓤★ A φ X = ℍ-≃ 𝓤★ X (A X) (φ X)
 
 𝕁-≃-equation : (𝓤★ : is-univalent 𝓤)
- →             ( A : (X Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇ )
- →             ( φ : (X  : 𝓤 ̇)  → A X X (id-≃ X) )
- →             (X : 𝓤 ̇)
-               -------------------------------------------
+               (A : (X Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇)
+               (φ : (X  : 𝓤 ̇)  → A X X (id-≃ X))
+               (X : 𝓤 ̇)
+               -------------------------------
  →             𝕁-≃ 𝓤★ A φ X X (id-≃ X) ≡ φ X
 𝕁-≃-equation 𝓤★ A φ X = ℍ-≃-equation 𝓤★ X (A X) (φ X)
 
---"A second set of equivalence induction principles refer to `is-equiv` rather than `≃` and are proved by reduction to the first version `ℍ-≃`:
+--"A second set of equivalence induction principles refer to `is-equiv` rather than `≃`...
 ℍ-equiv : is-univalent 𝓤
- →       (X : 𝓤 ̇)   ( A : (Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇ )    →   A X (𝑖𝑑 X)
- →       (Y : 𝓤 ̇)    (f : X → Y)    →    is-equiv f
-           -------------------------------------------------------------
- →          A Y f
+ →       (X : 𝓤 ̇) (A : (Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇)
+ →       A X (𝑖𝑑 X)
+ →       (Y : 𝓤 ̇) (f : X → Y)
+ →       is-equiv f
+         ----------------------
+ →        A Y f
 ℍ-equiv {𝓤} {𝓥} 𝓤★ X A v Y f feq = γ (f , feq)
  where
   B : (Y : 𝓤 ̇) → X ≃ Y → 𝓥 ̇
@@ -704,33 +702,35 @@ univalence→ 𝓤★ X₀ = singletons-are-subsingletons (Σ (X₀ ≃_) ) (uni
   γ : (X≃Y : X ≃ Y) → B Y X≃Y
   γ = ℍ-≃ 𝓤★ X B b Y
 
---"The above and the following say that to prove a property of *functions* holds for all equivalences, it is enough to prove it for all identity functions:
+--"The above and the following say that to prove a property of *functions* holds for all equivalences,
+-- it is enough to prove it for all identity functions:
 𝕁-equiv : is-univalent 𝓤
- →        ( A : (X Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇ )   →   ( (X : 𝓤 ̇) → A X X (𝑖𝑑 X) )
- →        (X Y : 𝓤 ̇)   (f : X → Y)     →     is-equiv f
-            --------------------------------------------------------------------
- →         A X Y f
+ →        (A : (X Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇)
+ →        ((X : 𝓤 ̇) → A X X (𝑖𝑑 X))
+ →        (X Y : 𝓤 ̇) (f : X → Y)
+ →        is-equiv f
+         --------------------------
+ →        A X Y f
 𝕁-equiv 𝓤★ A φ X = ℍ-equiv 𝓤★ X (A X) (φ X)
 
 --"And the following is an immediate consequence of the fact that invertible maps are equivalences:
 𝕁-invertible :  is-univalent 𝓤
- →       ( A : (X Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇ )  →    ( (X : 𝓤 ̇) → A X X (𝑖𝑑 X) )
- →       (X Y : 𝓤 ̇)   (f : X → Y)     →     invertible f
-          --------------------------------------------------------
- →         A X Y f
+ →               (A : (X Y : 𝓤 ̇) → (X → Y) → 𝓥 ̇)
+ →               ((X : 𝓤 ̇) → A X X (𝑖𝑑 X))
+ →               (X Y : 𝓤 ̇) (f : X → Y)
+ →               invertible f
+                -------------------------
+ →               A X Y f
 𝕁-invertible 𝓤★ A φ X Y f finv = 𝕁-equiv 𝓤★ A φ X Y f (invertibles-are-equivs f finv)
 
---"For example, using `ℍ-equiv` we see that for any pair of functions `F : 𝓤 ̇ → 𝓤 ̇ `, `𝓕 : {X Y : 𝓤 ̇ } → (X → Y) → F X → F Y`,
--- if `𝓕` preserves identities then it automatically preserves composition of equivalences. More generally, it is enough that at least
--- one of the factors is an equivalence:
 automatic-equiv-functoriality :
         (F : 𝓤 ̇ →  𝓤 ̇)
-        ( 𝓕 : {X Y : 𝓤 ̇} → (X → Y) → F X → F Y )
-        ( 𝓕-id : {X : 𝓤 ̇} → 𝓕 (𝑖𝑑 X) ≡ 𝑖𝑑 (F X) )
-        {X Y Z : 𝓤 ̇}    (f : X → Y)    (g : Y → Z)
- →    is-univalent 𝓤     →    is-equiv f + is-equiv g
-       --------------------------------------------------------
- →    𝓕 (g ∘ f)  ≡   𝓕 g ∘ 𝓕 f
+        (𝓕 : {X Y : 𝓤 ̇} → (X → Y) → F X → F Y)
+        (𝓕-id : {X : 𝓤 ̇} → 𝓕 (𝑖𝑑 X) ≡ 𝑖𝑑 (F X))
+        {X Y Z : 𝓤 ̇}  (f : X → Y)  (g : Y → Z)
+ →      is-univalent 𝓤   →   is-equiv f + is-equiv g
+       ------------------------------------------------
+ →            𝓕 (g ∘ f)  ≡   𝓕 g ∘ 𝓕 f
 automatic-equiv-functoriality {𝓤} F 𝓕 𝓕-id {X}{Y}{Z} f g 𝓤★ = γ
  where
   γ : is-equiv f + is-equiv g → 𝓕 (g ∘ f) ≡ 𝓕 g ∘ 𝓕 f
@@ -751,36 +751,36 @@ automatic-equiv-functoriality {𝓤} F 𝓕 𝓕-id {X}{Y}{Z} f g 𝓤★ = γ
 
 --"Here is another example:
 Σ-change-of-variable' : is-univalent 𝓤
- →      {X Y : 𝓤 ̇}    (A : X → 𝓥 ̇ )     (f : X → Y)    →    (feq : is-equiv f)
-         ----------------------------------------------------------
- →       ( Σ x ꞉ X , A x ) ≡ ( Σ y ꞉ Y , A ( inverse f feq y ) )
-Σ-change-of-variable' {𝓤}{𝓥} 𝓤★ {X}{Y} A f feq = ℍ-≃ 𝓤★ X B b Y (f , feq)
-   where
-    B : (Y : 𝓤 ̇) → X ≃ Y → (𝓤 ⊔ 𝓥) ⁺ ̇
-    B Y (f , feq) = Σ A ≡ ( Σ (A ∘ inverse f feq) )
+ →      {X Y : 𝓤 ̇} (A : X → 𝓥 ̇) (f : X → Y)
+ →      (feq : is-equiv f)
+        -------------------------------------------------
+ →      (Σ x ꞉ X , A x) ≡ (Σ y ꞉ Y , A (inverse f feq y ))
+Σ-change-of-variable' {𝓤}{𝓥} 𝓤★ {X}{Y} A f feq =
+ ℍ-≃ 𝓤★ X B b Y (f , feq)
+  where
+   B : (Y : 𝓤 ̇) → X ≃ Y → (𝓤 ⊔ 𝓥) ⁺ ̇
+   B Y (f , feq) = Σ A ≡ (Σ (A ∘ inverse f feq))
 
-    b : B X (id-≃ X)
-    b = refl (Σ A)
+   b : B X (id-≃ X)
+   b = refl (Σ A)
 
---"An unprimed version of this is given below, after we study half adjoint equivalences. The above version using the inverse of `f` can be
--- proved directly by induction, but the following version is perhaps more natural.
+--"An unprimed version of this is given below, after we study half adjoint equivalences.
 Σ-change-of-variable'' : is-univalent 𝓤
- →        {X Y : 𝓤 ̇}  (A : Y → 𝓥 ̇ )   (f : X → Y)
- →         is-equiv f
-           ------------------------------------------------
- →         ( Σ y ꞉ Y , A y ) ≡ ( Σ x ꞉ X , A ( f x ) )
+ →        {X Y : 𝓤 ̇} (A : Y → 𝓥 ̇ ) (f : X → Y)
+ →        is-equiv f
+          -----------------------------------------
+ →        (Σ y ꞉ Y , A y)  ≡  (Σ x ꞉ X , A ( f x ))
 Σ-change-of-variable'' 𝓤★ A f  feq =
-  Σ-change-of-variable' 𝓤★ A (inverse f feq) (inverses-are-equivs f feq)
+ Σ-change-of-variable' 𝓤★ A (inverse f feq) (inverses-are-equivs f feq)
 
---"This particular proof works only because inversion is involutive on the nose. As another example we have the following:
-transport-map-along-≡ : {X Y Z : 𝓤 ̇}
-                                   (X≡Y : X ≡ Y)    (g : X → Z)
- →                               transport (λ - → - → Z) X≡Y g  ≡   g ∘ Id→fun (X≡Y ⁻¹)
+--"This particular proof works only because inversion is involutive on the nose. As another example we have...
+transport-map-along-≡ : {X Y Z : 𝓤 ̇}  (X≡Y : X ≡ Y)    (g : X → Z)
+ →           transport (λ - → - → Z) X≡Y g  ≡   g ∘ Id→fun (X≡Y ⁻¹)
 transport-map-along-≡ (refl X) = refl
 
 transport-map-along-≃ : (𝓤★ : is-univalent 𝓤) {X Y Z : 𝓤 ̇}
-                                   (X≃Y : X ≃ Y)    (g : X → Z)
- →                               transport (λ - → - → Z) (Eq→Id 𝓤★ X Y X≃Y) g  ≡   g ∘ ∣ ≃-sym X≃Y ∣
+          (X≃Y : X ≃ Y)    (g : X → Z)
+ →        transport (λ - → - → Z) (Eq→Id 𝓤★ X Y X≃Y) g  ≡   g ∘ ∣ ≃-sym X≃Y ∣
 transport-map-along-≃ {𝓤} 𝓤★ {X}{Y}{Z} = 𝕁-≃ 𝓤★ A a X Y
  where
   A : (X Y : 𝓤 ̇ ) → X ≃ Y → 𝓤 ̇
@@ -800,61 +800,69 @@ transport-map-along-≃ {𝓤} 𝓤★ {X}{Y}{Z} = 𝕁-≃ 𝓤★ A a X Y
 -- Half adjoint equivalences
 -- see: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#haes
 
---"An often useful alternative formulation of the notion of equivalence is that of half adjoint equivalence. If we have a function
--- `f : X → Y` with invertibility data `g : Y → X` , `η : g ∘ f ∼ id`, `ε : f ∘ g ∼ id`, then for any `x : X` we have that
--- `ap f (η x)` and `ε (f x)` are two identifications of type `f (g (f x)) ≡ f x`. The half adjoint condition says that these two identifications
--- are themselves identified. The addition of the constraint `τ x : ap f (η x) ≡ ε (f x)` turns invertibility, which is data in general,
--- into property of `f`
+{-"An often useful alternative formulation of the notion of equivalence is that of half adjoint equivalence.
+   If we have a function `f : X → Y` with invertibility data `g : Y → X` , `η : g ∘ f ∼ id`, `ε : f ∘ g ∼ id`,
+   then for any `x : X` we have that `ap f (η x)` and `ε (f x)` are two identifications of type
+   `f (g (f x)) ≡ f x`. The half adjoint condition says that these two identifications are themselves identified.
+   The addition of the constraint `τ x : ap f (η x) ≡ ε (f x)` turns invertibility, which is data in general,
+   into property of `f` -}
 is-hae : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 is-hae f = Σ g ꞉ (codomain f → domain f) ,
-                    Σ η ꞉ g ∘ f ∼ id , ( Σ ε ꞉ f ∘ g ∼ id , ( (x : domain f) → ap f (η x) ≡ ε (f x) ) )
+                 Σ η ꞉ g ∘ f ∼ id ,
+                   ( Σ ε ꞉ f ∘ g ∼ id , ((x : domain f) → ap f (η x) ≡ ε (f x)) )
 
 --"The following just forgets the constraint `τ`:
-haes-are-invertible : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (f : X → Y) → is-hae f
-                                                           -----------------------
- →                                                             invertible f
+haes-are-invertible : {X : 𝓤 ̇} {Y : 𝓥 ̇}
+ →                    (f : X → Y)   →   is-hae f
+                     -----------------------------
+ →                           invertible f
 haes-are-invertible f ( g , η , ε , τ ) = g , η , ε
 
 --LEFT OFF HERE-------------------------------------------
 
---"Hence half adjoint equivalences are equivalences, because invertible maps are equivalences. But it is also easy to prove this directly, avoiding
--- the detour via invertible maps. We begin with a construction which will be used a number of times in connection with half adjoint equivalences.
+--"Hence half adjoint equivalences are equivalences, because invertible maps are equivalences.
+-- But it is also easy to prove this directly, avoiding the detour via invertible maps. We begin with a
+-- construction which will be used a number of times in connection with half adjoint equivalences.
 -- \begin{code}\end{code}
 
---"To recover the constraint for all equivalences, and hence for all invertible maps, under univalence, it is enough to give the constraint for
--- identity maps:
+--"To recover the constraint for all equivalences, and hence for all invertible maps, under univalence,
+-- it is enough to give the constraint for identity maps:
 --\begin{code}\end{code}
 
---"The above can be proved without univalence as follows. This argument also allows us to have `X` and `Y` in different universes. An example
--- of an equivalence of types in different universes is `Id→Eq`, as stated by univalence.
+--"The above can be proved without univalence as follows. This argument also allows us to have `X` and `Y` in
+-- different universes. An example of an equivalence of types in different universes is `Id→Eq`, as stated
+-- by univalence.
 --\begin{code}\end{code}
 
---"We wrote the above proof of `equivs-are-haes` in a deliberately verbose form to aid understanding. Here is the same proof in a
--- perversely reduced form:
+--"We wrote the above proof of `equivs-are-haes` in a deliberately verbose form to aid understanding. Here is
+-- the same proof in a perversely reduced form:
 --\begin{code}\end{code}
 
---"Notice that we have the following factorization, on the nose, of the construction of invertibility data from the equivalence property:
+--"Notice that we have the following factorization, on the nose, of the construction of invertibility data from
+-- the equivalence property:
 --\begin{code}\end{code}
 
---"Instead of working with the notion of half adjoint equivalence, we can just work with Voevodsky's notion of equivalence, and use the fact
--- that it satisfies the half adjoint condition:
+--"Instead of working with the notion of half adjoint equivalence, we can just work with Voevodsky's notion of
+-- equivalence, and use the fact that it satisfies the half adjoint condition:
 --\begin{code}\end{code}
 
---"Here is an example, where, compared to `Σ-change-of-variable', we remove univalence from the hypothesis, generalize the universe of the
--- type `Y`, and weaken equality to equivalence in the conclusion. Notice that the proof starts as that of `Σ-reindexing-retract`
+--"Here is an example, where, compared to `Σ-change-of-variable', we remove univalence from the hypothesis,
+-- generalize the universe of the type `Y`, and weaken equality to equivalence in the conclusion. Notice that
+-- the proof starts as that of `Σ-reindexing-retract`
 --\begin{code}\end{code}
 
---"For the sake of completeness, we also include the proof from the HoTT book that invertible maps are half adjoint equivalences, which uses a
--- standard argument coming from category theory. We first need some naturality lemmas:
+--"For the sake of completeness, we also include the proof from the HoTT book that invertible maps are half
+-- adjoint equivalences, which uses a standard argument coming from category theory. We first need some
+-- naturality lemmas:
 --\begin{code}\end{code}
 
---The idea of the following proof is to improve `ε` to be able to give the required `τ`:
+--"The idea of the following proof is to improve `ε` to be able to give the required `τ`:
 --\begin{code}\end{code}
 
 --------------------------------
 
-transport-ap-≃ : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) {x x' : X} 
-                      (a : x' ≡ x)        (b : f x' ≡ f x)
+transport-ap-≃ : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X}
+                 (a : x' ≡ x)    (b : f x' ≡ f x)
           ---------------------------------------------------------
  →       (transport (λ - → f - ≡ f x) a b ≡ refl (f x))   ≃   (ap f a ≡ b)
 
@@ -878,17 +886,10 @@ haes-are-equivs f (g , η , ε , τ) y = γ
   γ : is-singleton (fiber f y)
   γ = (g y , ε y) , c
 
--- id-is-hae : (X : 𝓤 ̇ ) → is-hae (𝑖𝑑 X)
--- id-is-hae X = 𝑖𝑑 X , refl , refl , (λ x → refl (refl x))
-
--- ua-equivs-are-haes : is-univalent 𝓤
---                    → {X Y : 𝓤 ̇ } (f : X → Y)
---                    → is-equiv f → is-hae f
-
--- ua-equivs-are-haes ua {X} {Y} = 𝕁-equiv ua (λ X Y f → is-hae f) id-is-hae X Y
-
-equivs-are-haes : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
-                → is-equiv f → is-hae f
+equivs-are-haes : {X : 𝓤 ̇} {Y : 𝓥 ̇}
+               (f : X → Y)  →  is-equiv f
+              ----------------------------
+ →                     is-hae f
 
 equivs-are-haes {𝓤} {𝓥} {X} {Y} f i = (g , η , ε , τ)
  where
@@ -935,43 +936,15 @@ equivs-are-haes {𝓤} {𝓥} {X} {Y} f i = (g , η , ε , τ)
     γ : ap f (η x) ≡ ε (f x)
     γ = ∣ transport-ap-≃ f a b ∣ q
 
--- equivs-are-haes' : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
---                  → is-equiv f → is-hae f
 
--- equivs-are-haes' f e = (inverse f e ,
---                         inverses-are-retractions f e ,
---                         inverses-are-sections f e ,
---                         τ)
---  where
---   τ : ∀ x → ap f (inverses-are-retractions f e x) ≡ inverses-are-sections f e (f x)
---   τ x = ⌜ transport-ap-≃ f (ap pr₁ p) (pr₂ φ) ⌝ q
---    where
---     φ : fiber f (f x)
---     φ = pr₁ (e (f x))
-
---     p : φ ≡ (x , refl (f x))
---     p = pr₂ (e (f x)) (x , refl (f x))
-
---     q : transport (λ - → f - ≡ f x) (ap pr₁ p) (pr₂ φ) ≡ refl (f x)
---     q = (transport-ap (λ - → f - ≡ f x) pr₁ p ( ( pr₂ φ ) ) )⁻¹ ⋆' apd pr₂ p  -- ∙
-
-
-
-
--- equiv-invertible-hae-factorization : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
---                                    → equivs-are-invertible f
---                                    ∼ haes-are-invertible f ∘ equivs-are-haes f
-
--- equiv-invertible-hae-factorization f e = refl (equivs-are-invertible f e)
-
-half-adjoint-condition : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) (e : is-equiv f) (x : X)
-                       → ap f (inverses-are-retractions f e x) ≡ inverses-are-sections f e (f x)
-
+half-adjoint-condition : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y) (e : is-equiv f) (x : X)
+ →                       ap f (inverses-are-retractions f e x) ≡ inverses-are-sections f e (f x)
 half-adjoint-condition f e = pr₂ (pr₂ (pr₂ (equivs-are-haes f e)))
 
-Σ-change-of-variable : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (A : Y → 𝓦 ̇ ) (f : X → Y)
-                     → is-equiv f → (Σ y ꞉ Y , A y) ≃ (Σ x ꞉ X , A (f x))
-
+Σ-change-of-variable : {X : 𝓤 ̇}{Y : 𝓥 ̇}(A : Y → 𝓦 ̇)
+                       (f : X → Y)   →    is-equiv f
+                      -------------------------------------
+ →                     (Σ y ꞉ Y , A y) ≃ (Σ x ꞉ X , A (f x))
 Σ-change-of-variable {𝓤} {𝓥} {𝓦} {X} {Y} A f i = γ
  where
   g = inverse f i
@@ -997,10 +970,10 @@ half-adjoint-condition f e = pr₂ (pr₂ (pr₂ (equivs-are-haes f e)))
     a' : A (f (g (f x)))
     a' = transport A ((ε (f x))⁻¹) a
 
-    q = transport (A ∘ f) (η x)  a' ≡⟨ transport-ap A f (η x) a'             ⟩
-        transport A (ap f (η x)) a' ≡⟨ ap (λ - → transport A - a') (τ x)     ⟩
-        transport A (ε (f x))    a' ≡⟨ transport-is-retraction A (ε (f x)) a ⟩
-        a                          ∎
+    q = transport (A ∘ f) (η x)  a'  ≡⟨ transport-ap A f (η x) a'             ⟩
+        transport A (ap f (η x)) a'  ≡⟨ ap (λ - → transport A - a') (τ x)     ⟩
+        transport A (ε (f x))    a'  ≡⟨ transport-is-retraction A (ε (f x)) a ⟩
+        a                            ∎
 
     p : (g (f x) , transport A ((ε (f x))⁻¹) a) ≡ (x , a)
     p = to-Σ-≡ (η x , q)

@@ -22,19 +22,15 @@ open import UF-Equality using (Nat; NatΣ; subsingletons-are-sets; _is-of-hlevel
 
 open import UF-Univalence using (is-univalent; equivs-are-lc; ΠΣ-distr-≃; maps-of-singletons-are-equivs; NatΣ-equiv-gives-fiberwise-equiv; pr₁-equiv; Eq→Id; to-subtype-≡; Id→Eq; subsingleton-criterion'; equiv-to-subsingleton; has-retraction; joyal-equivs-are-invertible; is-joyal-equiv; ×-is-subsingleton'; Σ-assoc; Σ-is-subsingleton; logically-equivalent-subsingletons-are-equivalent; Id→fun; ×-is-subsingleton; 𝕁-equiv; is-hae; transport-ap-≃; haes-are-equivs; transport-map-along-≃)
 
--------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
 -- Function extensionality from univalence
--- ------------------------------------
---"Function extensionality says that any two pointwise equal functions are equal. This is known to be not provable or disprovable in MLTT.
--- It is an independent statement, which we abbreviate as `funext`.
 funext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
 funext 𝓤 𝓥 = {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {f g : X → Y} → f ∼ g → f ≡ g
+-- (N.B. funext is known to be independent of MLTT)
 
---"There will be two seemingly stronger statements, namely the generalization to dependent functions, and the requirement that the
--- canonical map `f ≡ g → f ∼ g` is an equivalence.
-
---"*Exercise*. Assuming `funext`, prove that if a function `f : X → Y` is an equivalence then so is the precomposition
--- map `_∘ f : (Y → Z) → (X → Z)`."
+--"*Exercise*. Assuming `funext`, prove that if a function `f : X → Y` is an equivalence then so is the
+-- precomposition map `_∘ f : (Y → Z) → (X → Z)`."
 --SOLUTION.
 module _ (feuw : funext 𝓤 𝓦) (fewu : funext 𝓦 𝓤) (feuv : funext 𝓤 𝓥)(fevw : funext 𝓥 𝓦)
   {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇} (f : X → Y) where
@@ -62,16 +58,17 @@ module _ (feuw : funext 𝓤 𝓦) (fewu : funext 𝓦 𝓤) (feuv : funext 𝓤
 
 
 --"The crucial step in Voevodsky's proof (see: https://www.math.uwo.ca/faculty/kapulkin/notes/ua_implies_fe.pdf )
--- that univalence implies funext is to establish the conclusion of the above exercise assuming univalence instead."
--- We prove this by equivalence induction on f, which means that we only need to consider the case when f is an identity
--- function, for which [_∘f,  the "post-composition-with-f map"] is itself an identity function, hence an equivalence:
+-- that univalence implies funext is to establish the conclusion of the above exer. assuming univalence instead."
+--(the proof here is by equivalence induction on f)
+
 precomp-is-equiv : is-univalent 𝓤
- →               (X Y : 𝓤 ̇ )   (f : X → Y)   →     is-equiv f   →    (Z : 𝓤 ̇ )
-                   ------------------------------------------------------
- →                             is-equiv (λ (g : Y → Z) → g ∘ f)
+ →                 (X Y : 𝓤 ̇)   (f : X → Y)
+ →                 is-equiv f  →  (Z : 𝓤 ̇ )
+                  ---------------------------------
+ →                 is-equiv (λ (g : Y → Z) → g ∘ f)
 precomp-is-equiv {𝓤} ua =  𝕁-equiv ua
-     ( λ X Y (f : X → Y) → (Z : 𝓤 ̇ ) → is-equiv (λ g → g ∘ f) )
-     ( λ X Z → id-is-equiv (X → Z) )
+  ( λ X Y (f : X → Y) → (Z : 𝓤 ̇ ) → is-equiv (λ g → g ∘ f) )
+  ( λ X Z → id-is-equiv (X → Z) )
 
 --"With this we can prove the desired result as follows.
 univalence-gives-funext : is-univalent 𝓤 → funext 𝓥 𝓤
@@ -111,28 +108,28 @@ univalence-gives-funext {𝓤} {𝓥} ua {X} {Y} {f₀} {f₁} = γ
   γ : f₀ ∼ f₁ → f₀ ≡ f₁
   γ h = ap (λ π x → π (f₀ x , f₁ x , h x)) q
 
---"This definition of `γ` is probably too concise. Here are all the steps performed silently by Agda, by expanding judgmental equalities,
--- indicated with `refl` here:
+--"This definition of `γ` is probably too concise. Here are all the steps performed silently by Agda,
+-- by expanding judgmental equalities, indicated with `refl` here:
   γ' : f₀ ∼ f₁ → f₀ ≡ f₁
-  γ' h = f₀                             ≡⟨ refl _                               ⟩
+  γ' h = f₀                        ≡⟨ refl _                               ⟩
     (λ x → f₀ x)                   ≡⟨ refl _                               ⟩
     (λ x → π₀ (f₀ x , f₁ x , h x)) ≡⟨ ap (λ - x → - (f₀ x , f₁ x , h x)) q ⟩
     (λ x → π₁ (f₀ x , f₁ x , h x)) ≡⟨ refl _                               ⟩
     (λ x → f₁ x)                   ≡⟨ refl _                               ⟩
     f₁                             ∎
 
---"So notice that this relies on the so-called η-rule for judgmental equality of functions, namely `f = λ x → f x`. Without it, we would
--- only get that `f₀ ∼ f₁ → (λ x → f₀ x) ≡ (λ x → f₁ x)` instead.
+--"So notice that this relies on the so-called η-rule for judgmental equality of functions, namely
+-- `f = λ x → f x`. Without it, we would only get that `f₀ ∼ f₁ → (λ x → f₀ x) ≡ (λ x → f₁ x)` instead.
 
---------------------------------------------------------------
--- Variations of function extensionality and their logical equivalence
--- -------------------------------------------------------
+-----------------------------------------------------------------------
+--Variations of function extensionality and their logical equivalence.
+
 --"Dependent function extensionality:
 dfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
 dfunext 𝓤 𝓥 = {X : 𝓤 ̇} {A : X → 𝓥 ̇} {f g : Π A} → f ∼ g → f ≡ g
 
---"The above says that there is some map `f ~ g → f ≡ g`. The following instead says that the canonical map `happly` in the other
--- direction is an equivalence:
+--"The above says that there is some map `f ~ g → f ≡ g`.  The following instead says that the
+-- canonical map `happly` in the other direction is an equivalence:
 happly : {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } (f g : Π A) → f ≡ g → f ∼ g
 happly f g p x = ap (λ - → - x) p
 
@@ -142,12 +139,13 @@ hfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } (f g : Π A) → is-equi
 hfunext-gives-dfunext : hfunext 𝓤 𝓥 → dfunext 𝓤 𝓥
 hfunext-gives-dfunext hfe {X} {A} {f} {g} = inverse (happly f g) (hfe f g)
 
---"Voevodsky showed that all these notions of function extensionality are logically equivalent to saying that products of singletons are singletons:
+--"Voevodsky showed that all these notions of function extensionality are logically equivalent to saying
+-- that products of singletons are singletons:
 vvfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
 vvfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ }
- →               ( (x : X) → is-singleton (A x) )
-                  ---------------------------
- →                    is-singleton (Π A)
+ →              ((x : X) → is-singleton (A x))
+                ------------------------------
+ →                 is-singleton (Π A)
 
 dfunext-gives-vvfunext : dfunext 𝓤 𝓥 → vvfunext 𝓤 𝓥
 dfunext-gives-vvfunext fe {X} {A} Ax✦ = γ
@@ -162,10 +160,10 @@ dfunext-gives-vvfunext fe {X} {A} Ax✦ = γ
   γ = f , c
 
 --"We need some lemmas to get `hfunext` from `vvfunext`:
-postcomp-invertible : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {A : 𝓦 ̇ }
- →               funext 𝓦 𝓤  →     funext 𝓦 𝓥
- →               (f : X → Y)    →         invertible f
-                  -------------------------------------
+postcomp-invertible : {X : 𝓤 ̇}{Y : 𝓥 ̇}{A : 𝓦 ̇}
+ →               funext 𝓦 𝓤   →   funext 𝓦 𝓥
+ →               (f : X → Y)    →   invertible f
+                  ---------------------------------
  →               invertible (λ (h : A → X) → f ∘ h)
 postcomp-invertible {𝓤} {𝓥} {𝓦} {X} {Y} {A} nfe nfe' f (g , η , ε) = γ
  where
@@ -186,8 +184,8 @@ postcomp-invertible {𝓤} {𝓥} {𝓦} {X} {Y} {A} nfe nfe' f (g , η , ε) = 
 
 postcomp-is-equiv : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {A : 𝓦 ̇ }
  →                funext 𝓦 𝓤   →   funext 𝓦 𝓥
- →                (f : X → Y)     →      is-equiv f
-                 -----------------------------------
+ →                (f : X → Y)    →   is-equiv f
+                 ----------------------------------
  →                is-equiv (λ (h : A → X) → f ∘ h)
 
 postcomp-is-equiv fe fe' f feq = invertibles-are-equivs  (λ h → f ∘ h)
@@ -217,8 +215,8 @@ vvfunext-gives-hfunext vfe {X} {Y} f = γ
   γ : (g : Π Y) → is-equiv (happly f g)
   γ = NatΣ-equiv-gives-fiberwise-equiv (happly f) i
 
---"And finally the seemingly rather weak, non-dependent version `funext` implies the seemingly strongest version, which closes the
--- circle of logical equivalences.
+--"And finally the seemingly rather weak, non-dependent version `funext` implies the seemingly
+-- strongest version, which closes the circle of logical equivalences.
 funext-gives-vvfunext : funext 𝓤 (𝓤 ⊔ 𝓥) → funext 𝓤 𝓤 → vvfunext 𝓤 𝓥
 funext-gives-vvfunext {𝓤} {𝓥} fe fe' {X} {A} φ = γ
  where
@@ -277,26 +275,26 @@ abstract
 
 ---------------------------------------------------------------------
 --"Universes are map classifiers.
--- Under univalence, a universe `𝓤` becomes a map classifier, in the sense that maps from a type `X` in `𝓤` into a type `Y`
--- in `𝓤` are in canonical bijection with functions `Y → 𝓤`. Using the following slice notation, this amounts to a bijection between
--- `𝓤 / Y` and `Y → 𝓤`:
+-- Under univalence, a universe `𝓤` becomes a map classifier, in the sense that maps from a type `X`
+-- in `𝓤` into a type `Y` in `𝓤` are in canonical bijection with functions `Y → 𝓤`. Using the following
+-- slice notation, this amounts to a bijection between `𝓤 / Y` and `Y → 𝓤`:
 _/_ : (𝓤 : Universe) → 𝓥 ̇ → 𝓤 ⁺ ⊔ 𝓥 ̇
 𝓤 / Y = Σ X ꞉ 𝓤 ̇ , (X → Y)
 
---[Recall, if 𝓤 is a category, and Y an object of 𝓤, then the slice category is denoted 𝓤 / Y; it has
--- objects: arrows f : X → Y and
--- morphisms: functions g : X → X' such that f' ∘ g = f, where f' : X' → Y is an object of 𝓤 / Y.
---
---      X ---- g --->  X'
---       \                  /
---         f               f'
---           \          /
---              ↘   ↙
---                 Y
---
+{-Recall, if 𝓤 is a category, and Y an object of 𝓤, then the slice category is denoted 𝓤 / Y; it has
+   objects   : arrows f : X → Y and
+   morphisms : functions g : X → X' such that f' ∘ g = f, where f' : X' → Y is an object of 𝓤 / Y.
+
+      X --- g --> X'
+       \         /
+        f       f'
+         \     /
+          ↘   ↙
+            Y                                              -}
+
 --"We need the following lemma, which has other uses:
 total-fiber-is-domain : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
-                            ------------------------------
+                        --------------------------------
  →                             Σ (fiber f) ≃ X
 total-fiber-is-domain {𝓤}{𝓥}{X}{Y} f = invertibility-gives-≃ g ( h , h∼g , g∼h)
   where
@@ -316,17 +314,18 @@ total-fiber-is-domain {𝓤}{𝓥}{X}{Y} f = invertibility-gives-≃ g ( h , h�
 χ : (Y : 𝓤 ̇) → 𝓤 / Y → (Y → 𝓤 ̇)
 χ Y (X , f) = fiber f
 
---"We say that a universe is a *map classifier* if the above function is an equivalence for every `Y` in the universe:
+--"We say that a universe is a *map classifier* if the above function is an equivalence for every `Y` in 𝓤 ̇
 is-map-classifier : (𝓤 : Universe) → 𝓤 ⁺ ̇
 is-map-classifier 𝓤 = (Y : 𝓤 ̇) → is-equiv (χ Y)
 
---"Any `Y → 𝓤` is the characteristic function of some map into `Y` by taking its total space and the first projection:
+--"Any `Y → 𝓤` is the characteristic function of some map into `Y` by taking its total space and the 1st proj:
 𝕋 : (Y : 𝓤 ̇) → (Y → 𝓤 ̇) → 𝓤 / Y
 𝕋 Y A = Σ A , pr₁
 
-χη : is-univalent 𝓤  →  (Y : 𝓤 ̇) (σ : 𝓤 / Y)
-      ---------------------------------------
- →                  𝕋 Y (χ Y σ) ≡ σ
+χη : is-univalent 𝓤
+ →   (Y : 𝓤 ̇) (σ : 𝓤 / Y)
+     -----------------------
+ →    𝕋 Y (χ Y σ) ≡ σ
 
 χη 𝓤★ Y (X , f) = r
   where
@@ -347,9 +346,11 @@ is-map-classifier 𝓤 = (Y : 𝓤 ̇) → is-equiv (χ Y)
     r : (Σ (fiber f) , pr₁) ≡ (X , f)
     r = to-Σ-≡ (p , q)
 
-χε :    is-univalent 𝓤 → dfunext 𝓤 (𝓤 ⁺) → (Y : 𝓤 ̇) (A : Y → 𝓤 ̇)
-        ----------------------------------------------------------
- →                             χ Y (𝕋 Y A) ≡ A
+χε : is-univalent 𝓤
+ →   dfunext 𝓤 (𝓤 ⁺)
+ →   (Y : 𝓤 ̇) (A : Y → 𝓤 ̇)
+     ------------------------
+ →    χ Y (𝕋 Y A) ≡ A
 
 χε 𝓤★ fe Y A = fe γ
   where
@@ -369,31 +370,31 @@ is-map-classifier 𝓤 = (Y : 𝓤 ̇) → is-equiv (χ Y)
     γ y = Eq→Id 𝓤★ _ _ (invertibility-gives-≃ (f y) (g y , g∼f y , f∼g y) )
 
 universes-are-map-classifiers : is-univalent 𝓤 → dfunext 𝓤 (𝓤 ⁺)
-                                         ----------------------------------
- →                                        is-map-classifier 𝓤
+                                ----------------------------------
+ →                                    is-map-classifier 𝓤
 
 universes-are-map-classifiers 𝓤★ fe Y = invertibles-are-equivs (χ Y) ( 𝕋 Y , χη 𝓤★ Y , χε 𝓤★ fe Y )
 
 --"Therefore we have the following canonical equivalence:
 map-classification : is-univalent 𝓤 → dfunext 𝓤 (𝓤 ⁺) → (Y : 𝓤 ̇)
-                      ------------------------------------------------
- →                        𝓤 / Y     ≃     ( Y → 𝓤 ̇ )
+                    ------------------------------------------------
+ →                        𝓤 / Y   ≃   (Y → 𝓤 ̇)
 map-classification 𝓤★ fe Y = χ Y , universes-are-map-classifiers 𝓤★ fe Y
 
--------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
 --"The univalence axiom is a (sub) singleton.
 -- If we use a type as an axiom, it should better have at most one element.)
 
 --"We prove some generally useful lemmas first.
 Π-is-subsingleton : dfunext 𝓤 𝓥
- →          {X : 𝓤 ̇} {A : X → 𝓥 ̇} → ( (x : X) → is-subsingleton (A x) )
-             -----------------------------------------------------
- →                is-subsingleton (Π A)
+ →          {X : 𝓤 ̇} {A : X → 𝓥 ̇}
+ →          ((x : X) → is-subsingleton (A x))
+            ---------------------------------
+ →           is-subsingleton (Π A)
 
 Π-is-subsingleton fe Ax✧ f g = fe (λ x → Ax✧ x (f x) (g x))
 
-being-singleton-is-subsingleton : dfunext 𝓤 𝓤
- →                   {X : 𝓤 ̇}    →     is-subsingleton (is-singleton X)
+being-singleton-is-subsingleton : dfunext 𝓤 𝓤 → {X : 𝓤 ̇} → is-subsingleton (is-singleton X)
 being-singleton-is-subsingleton fe {X} (x , φ) (y , γ) = p
  where
  i : is-subsingleton X
@@ -412,27 +413,31 @@ being-singleton-is-subsingleton fe {X} (x , φ) (y , γ) = p
  p = to-subtype-≡ a b
 
 being-equiv-is-subsingleton : dfunext 𝓥 (𝓤 ⊔ 𝓥) → dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)
- →                                  {X : 𝓤 ̇}  {Y : 𝓥 ̇}  (f : X → Y)
-                                     ------------------------------
- →                                   is-subsingleton (is-equiv f)
-being-equiv-is-subsingleton fe fe' f = Π-is-subsingleton fe (λ x → being-singleton-is-subsingleton fe')
+ →                            {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
+                              -----------------------------------
+ →                              is-subsingleton (is-equiv f)
+being-equiv-is-subsingleton fe fe' f =
+  Π-is-subsingleton fe (λ x → being-singleton-is-subsingleton fe')
 
 
 --"In passing, we fulfill a promise made above:
-subsingletons-are-retracts-of-logically-equivalent-types :  {X : 𝓤 ̇}  {Y : 𝓥 ̇}
- →                      is-subsingleton X      →      (X ⇔ Y)
-                         -----------------------------------
- →                                           X ◁ Y
-subsingletons-are-retracts-of-logically-equivalent-types X✧ (f , g) = g , f , η
- where
-  η : g ∘ f ∼ id
-  η x = X✧ (g (f x)) x
+subsingletons-are-retracts-of-logically-equivalent-types :
+           {X : 𝓤 ̇}{Y : 𝓥 ̇}
+ →         is-subsingleton X
+ →         (X ⇔ Y)
+          --------------------
+ →          X ◁ Y
+subsingletons-are-retracts-of-logically-equivalent-types X✧ (f , g) =
+ g , f , η
+  where
+   η : g ∘ f ∼ id
+   η x = X✧ (g (f x)) x
 
 equivalence-property-is-retract-of-invertibility-data :
-                  dfunext 𝓥 (𝓤 ⊔ 𝓥)  →   dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)
- →              {X : 𝓤 ̇}  {Y : 𝓥 ̇}  (f : X → Y)
-                  -----------------------------
- →                 is-equiv f ◁ invertible f
+      dfunext 𝓥 (𝓤 ⊔ 𝓥)  →  dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)
+ →    {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
+      --------------------------------
+ →       is-equiv f ◁ invertible f
 
 equivalence-property-is-retract-of-invertibility-data fe fe' f =
    subsingletons-are-retracts-of-logically-equivalent-types
@@ -456,10 +461,10 @@ univalence-is-subsingleton {𝓤} 𝓤⁺★ = subsingleton-criterion' γ
                 ( λ X → Π-is-subsingleton dfe₂
                   ( λ Y → being-equiv-is-subsingleton dfe₁ dfe₂ (Id→Eq X Y) ) )
 
---"So if all universes are univalent then "being univalent" is a subsingleton, and hence a singleton. This hypothesis of global univalence
--- cannot be expressed in our MLTT that only has `ω` many universes, because global univalence would have to live in the first universe
--- after them. Agda does have such a universe `𝓤ω,` and so we can formulate it here. There would be no problem in extending our
--- MLTT to have such a universe if we so wished, in which case we would be able to formulate and prove:
+{-"So if all universes are univalent then "being univalent" is a subsingleton, and hence a singleton.
+   This hypothesis of global univalence cannot be expressed in our MLTT that only has `ω` many universes,
+   because global univalence would have to live in the first universe after them. Agda does have such a
+   universe `𝓤ω,` and so we can formulate it here. -}
 Univalence : 𝓤ω
 Univalence = ∀ 𝓤 → is-univalent 𝓤
 
@@ -470,13 +475,6 @@ univalence-is-singleton : Univalence → is-singleton (is-univalent 𝓤)
 univalence-is-singleton {𝓤} 𝓤★ =
   pointed-subsingletons-are-singletons (is-univalent 𝓤) (𝓤★ 𝓤) (univalence-is-subsingletonω 𝓤★)
 
---"That the type `Univalence` would be a subsingleton can't even be formulated in the absence of a successor `𝓤ω⁺`
--- of `𝓤ω`, and Agda doesn't have such a successor universe (but there isn't any fundamental reason why it couldn't
--- have it). In the absence of a universe `𝓤ω` in our MLTT, we can simply have an axiom schema, consisting of
--- `ω`-many axioms, stating that each universe is univalent. Then we can prove in our MLTT that the univalence property
--- for each universe is a (sub)singleton, with `ω`-many proofs (or just one schematic proof with a free variable for a
--- universe `𝓤ₙ`).
---
 --"It follows immediately from the above that global univalence gives global function extensionality.
 global-dfunext : 𝓤ω
 global-dfunext = ∀ {𝓤 𝓥} → dfunext 𝓤 𝓥
@@ -493,14 +491,13 @@ global-hfunext = ∀ {𝓤 𝓥} → hfunext 𝓤 𝓥
 univalence-gives-global-hfunext : Univalence → global-hfunext
 univalence-gives-global-hfunext 𝓤★ {𝓤}{𝓥} = univalence-gives-hfunext' (𝓤★ 𝓤) ( 𝓤★ (𝓤 ⊔ 𝓥) )
 
-
 -----------------------------------------------------------------------------------
--- Unique existence in univalent mathematics
--- --------------------------------------
---"Unique existence of `x : X` with `A x` in univalent mathematics, written `∃! x ꞉ X , A x` or simply `∃! A`, requires that not only
--- the `x : X` but also the `a : A x` to be unique. More precisely, we require that there is a unique PAIR `(x , a) : Σ A`. This is
--- particularly important in the formulation of universal properties involving types that are not necessarily sets, where it generalizes
--- the categorical notion of uniqueness up to unique isomorphism.
+--Unique existence in univalent mathematics.
+{-"Unique existence of `x : X` with `A x` in univalent mathematics, written `∃! x ꞉ X , A x` or simply
+   `∃! A`, requires that not only the `x : X` but also the `a : A x` to be unique. More precisely, we
+   require that there is a unique PAIR `(x , a) : Σ A`. This is particularly important in the formulation
+   of universal properties involving types that are not necessarily sets, where it generalizes the
+   categorical notion of uniqueness up to unique isomorphism.           -}
 
 ∃! : {X : 𝓤 ̇} → (X → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
 ∃! A = is-singleton (Σ A)
@@ -514,10 +511,11 @@ syntax -∃! A (λ x → b) = ∃! x ꞉ A , b
 ∃!-is-subsingleton : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥) → is-subsingleton (∃! A)
 ∃!-is-subsingleton A fe = being-singleton-is-subsingleton fe
 
-unique-existence-gives-weak-unique-existence : {X : 𝓤 ̇ }
-                 (A : X → 𝓥 ̇ )      →       (∃! x ꞉ X , A x)
-            -------------------------------------------------
- →         (Σ x ꞉ X , A x) × ( (x y : X) → A x → A y → x ≡ y )
+unique-existence-gives-weak-unique-existence :
+                {X : 𝓤 ̇}  (A : X → 𝓥 ̇)
+ →              (∃! x ꞉ X , A x)
+                ---------------------------------------------------
+ →              (Σ x ꞉ X , A x) × ( (x y : X) → A x → A y → x ≡ y )
 unique-existence-gives-weak-unique-existence A s = center (Σ A) s , u
  where
   u : ∀ x y → A x → A y → x ≡ y
@@ -525,9 +523,10 @@ unique-existence-gives-weak-unique-existence A s = center (Σ A) s , u
 
 --"The converse holds if each `A x` is a subsingleton:
 weak-unique-existence-gives-unique-existence-sometimes :
-        {X : 𝓤 ̇ }  (A : X → 𝓥 ̇ )   →  ( (x : X) → is-subsingleton (A x) )
- →    ( (Σ x ꞉ X , A x) × ((x y : X) → A x → A y → x ≡ y) )
-       -----------------------------------------------------------------
+        {X : 𝓤 ̇}  (A : X → 𝓥 ̇)
+ →      ((x : X) → is-subsingleton (A x))
+ →      (Σ x ꞉ X , A x) × ((x y : X) → A x → A y → x ≡ y)
+       ----------------------------------------------------
  →      (∃! x ꞉ X , A x)
 
 weak-unique-existence-gives-unique-existence-sometimes A Ax✧ ((x , a) , u) = (x , a) , φ
@@ -555,7 +554,7 @@ being-subsingleton-is-subsingleton fe {X} X✧ X✧' = X✧≡X✧'
   Xset = subsingletons-are-sets X X✧
 
   a : (x y : X) → X✧ x y ≡ X✧' x y
-  a x y = Xset x y (X✧ x y) (X✧' x y) 
+  a x y = Xset x y (X✧ x y) (X✧' x y)
 
   b : (x : X) → X✧ x ≡ X✧' x
   b x = fe (a x)
