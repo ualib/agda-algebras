@@ -92,7 +92,8 @@ Eq-Eq-cong' fevuv feuvuv feuu fevvw fevwvw feww fewvw fevv fewwt fewtwt fett fet
    A ≃ B     ■
 
 --"The above shows why global function extensionality would be a better assumption in practice."
---[N.B. We can't simply delete `Eq-Eq-cong'` and adopt the following simpler version because the former is used below.]
+--[N.B. We can't simply delete `Eq-Eq-cong'` and adopt the following simpler version because the
+-- former is used below.]
 Eq-Eq-cong : (fe : global-dfunext) {X : 𝓤 ̇} {Y : 𝓥 ̇} {A : 𝓦 ̇} {B : 𝓣 ̇}
  →               X ≃ A      →      Y ≃ B
                  ------------------------
@@ -101,51 +102,57 @@ Eq-Eq-cong fe = Eq-Eq-cong' fe fe fe fe fe fe fe fe fe fe fe fe
 
 -----------------------------------------------------------------------------------------
 --Type embeddings.
---"A function is called an embedding if its fibers are all subsingletons. In particular, equivalences are embeddings.
--- However, sections of types more general than sets don't need to be embeddings (see: https://lmcs.episciences.org/2027 ).
+--"A function is called an embedding if its fibers are all subsingletons. In particular, equivalences
+-- are embeddings. However, sections of types more general than sets don't need to be embeddings
+-- (see: https://lmcs.episciences.org/2027 ).
 is-embedding : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X → Y) → 𝓤 ⊔ 𝓥 ̇
 is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
 
 being-embedding-is-subsingleton : global-dfunext → {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                                        is-subsingleton (is-embedding f)
+ →                                is-subsingleton (is-embedding f)
 
-being-embedding-is-subsingleton fe f = Π-is-subsingleton fe (λ x → being-subsingleton-is-subsingleton fe )
+being-embedding-is-subsingleton fe f =
+ Π-is-subsingleton fe (λ x → being-subsingleton-is-subsingleton fe )
 
 --"For example, if `A` is a subsingleton, then the second projection `A × X → X` is an embedding:
-pr₂-embedding : (A : 𝓤 ̇) (X : 𝓥 ̇)  →  is-subsingleton A
-                    --------------------------------------
- →                 is-embedding ( λ (z : A × X) → pr₂ z )
-pr₂-embedding A X A✧ x ( (a , x) , refl x ) ( (a' , x) , refl x ) = p
+pr₂-embedding : (A : 𝓤 ̇) (X : 𝓥 ̇)
+ →              is-subsingleton A
+               -------------------------------------
+ →              is-embedding (λ (z : A × X) → pr₂ z)
+pr₂-embedding A X A✧ x ((a , x) , refl x) ((a' , x) , refl x) = p
  where
   p : (a , x) , refl x ≡ (a' , x) , refl x
   p = ap (λ - → ( ( - , x ) , refl x ) ) (A✧ a a')
 
 --"*Exercise*. Show that the converse of `pr₂-embedding` holds.
 
---"More generally, with the arguments swapped, the projection `Σ A → X` is an embedding if `A x` is a subsingleton for every `x : X`:
+--"More generally, with the arguments swapped, the projection `Σ A → X` is an embedding if `A x`
+-- is a subsingleton for every `x : X`:
 pr₁-embedding :  {X : 𝓤 ̇} {A : X → 𝓥 ̇}
- →                   ( (x : X) → is-subsingleton (A x) )
-                     ---------------------------------
- →                   is-embedding ( λ (σ : Σ A) → pr₁ σ )
+ →               ((x : X) → is-subsingleton (A x))
+                -----------------------------------
+ →               is-embedding (λ (σ : Σ A) → pr₁ σ)
 pr₁-embedding Ax✧ x ( (x , a) , refl x ) ( (x , a') , refl x ) = ap (λ - → (x , -) , refl x) (Ax✧ x a a')
 
 --"*Exercise*. Show that the converse of `pr₁-embedding` holds.
 
-equivs-are-embeddings : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (f : X → Y) → is-equiv f → is-embedding f
+equivs-are-embeddings : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y) → is-equiv f → is-embedding f
 equivs-are-embeddings f feq y = singletons-are-subsingletons (fiber f y) (feq y)
 
 id-is-embedding : {X : 𝓤 ̇} → is-embedding (𝑖𝑑 X)
 id-is-embedding {𝓤}{X} = equivs-are-embeddings id (id-is-equiv X)
 
-∘-embedding :  {X : 𝓤 ̇} {Y : 𝓥 ̇} {Z : 𝓦 ̇} {f : X → Y} {g : Y → Z}
- →               is-embedding g     →     is-embedding f
-                   -----------------------------------
- →                           is-embedding (g ∘ f)
+∘-embedding : {X : 𝓤 ̇}{Y : 𝓥 ̇}{Z : 𝓦 ̇}
+              {f : X → Y}{g : Y → Z}
+ →            is-embedding g   →   is-embedding f
+              -------------------------------------
+ →                   is-embedding (g ∘ f)
 
-∘-embedding {𝓤}{𝓥}{𝓦}{X}{Y}{Z} {f}{g} gem fem = hem
+∘-embedding {𝓤}{𝓥}{𝓦}{X}{Y}{Z}{f}{g} gem fem = hem
  where
   hem : (z : Z) → is-subsingleton (fiber (g ∘ f) z)
-  hem z = lc-maps-reflect-subsingletons (φ z) (sections-are-lc (φ z) (γ z , η z) ) (Az✧ z)
+  hem z = lc-maps-reflect-subsingletons (φ z)
+           (sections-are-lc (φ z) (γ z , η z)) (Az✧ z)
    where
     A : (z : Z) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
     A z = Σ (y , p) ꞉ fiber g z , fiber f y
@@ -164,14 +171,15 @@ id-is-embedding {𝓤}{X} = equivs-are-embeddings id (id-is-equiv X)
 
 
 --"We can use the following criterion to prove that some maps are embeddings:
-embedding-lemma :  {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                 ( (x : X) → is-singleton ( fiber f (f x) ) )
-                   -----------------------------------
+embedding-lemma :  {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y)
+ →                 ((x : X) → is-singleton (fiber f (f x)))
+                   -----------------------------------------
  →                           is-embedding f
 embedding-lemma f fibff✧ = γ
  where
   γ : (y : codomain f) (u v : fiber f y) → u ≡ v
-  γ y (x , fx≡y) fibfy = singletons-are-subsingletons (fiber f y) fibfy✧ (x , fx≡y) fibfy
+  γ y (x , fx≡y) fibfy =
+   singletons-are-subsingletons (fiber f y) fibfy✧ (x , fx≡y) fibfy
    where
     fibffx≡fibfy : fiber f (f x) ≡ fiber f y
     fibffx≡fibfy = ap (fiber f) fx≡y
@@ -179,8 +187,8 @@ embedding-lemma f fibff✧ = γ
     fibfy✧ = transport is-singleton fibffx≡fibfy (fibff✧ x)
 
 embedding-criterion : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                    ( (x x' : X) → (f x ≡ f x') ≃ (x ≡ x') )
-                       --------------------------------
+ →                    ((x x' : X) → (f x ≡ f x') ≃ (x ≡ x'))
+                      ---------------------------------------
  →                           is-embedding f
 embedding-criterion f feq = embedding-lemma f b
  where
@@ -195,17 +203,19 @@ embedding-criterion f feq = embedding-lemma f b
   b : (x : X) → is-singleton ( fiber f (f x) )
   b x = equiv-to-singleton (a' x) (singleton-types-are-singletons X x)
 
---"An equivalent formulation of `f` being an embedding is that the map `ap f {x} {x'} : x ≡ x' → f x ≡ f x'` is an equivalence for all `x x' : X`.
+--"An equivalent formulation of `f` being an embedding is that the map
+-- `ap f {x} {x'} : x ≡ x' → f x ≡ f x'` is an equivalence for all `x x' : X`.
 ap-is-equiv-gives-embedding : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
- →                 ( (x x' : X) → is-equiv ( ap f {x} {x'} ) )
+ →                 ((x x' : X) → is-equiv (ap f {x} {x'}))
                    -----------------------------------
  →                           is-embedding f
-ap-is-equiv-gives-embedding f apeq = embedding-criterion f (λ x' x → ≃-sym (ap f {x'} {x} , apeq x' x) )
+ap-is-equiv-gives-embedding f apeq =
+ embedding-criterion f (λ x' x → ≃-sym (ap f {x'} {x} , apeq x' x))
 
 embedding-gives-ap-is-equiv : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
  →                           is-embedding f
                    -----------------------------------
- →                 ( (x x' : X) → is-equiv ( ap f {x} {x'} ) )
+ →                 ((x x' : X) → is-equiv (ap f {x} {x'}))
 embedding-gives-ap-is-equiv {𝓤}{𝓥} {X} f fem = γ
  where
   d : (x' : X) → ( Σ x ꞉ X , f x' ≡ f x ) ≃ ( Σ x ꞉ X , f x ≡ f x' )
@@ -223,7 +233,8 @@ embedding-criterion-converse : {X : 𝓤 ̇} {Y : 𝓥 ̇} (f : X → Y)
  →                             is-embedding f
                      -------------------------------
  →                   ( (x x' : X) → (f x ≡ f x') ≃ (x ≡ x') )
-embedding-criterion-converse f fem x' x = ≃-sym (ap f {x'} {x} , embedding-gives-ap-is-equiv f fem x' x )
+embedding-criterion-converse f fem x' x =
+ ≃-sym (ap f {x'} {x} , embedding-gives-ap-is-equiv f fem x' x )
 
 --"Hence embeddings of arbitrary types are left cancellable, but the converse fails in general.
 
@@ -239,7 +250,8 @@ embeddings-are-lc f fem {x} {y}  = ∣ embedding-criterion-converse f fem x y �
 --  →                           is-equiv f
 -- embedding-with-section-is-equiv f fem (g , g∼f)  y = {!!}
 
--- --"Later we will see that a necessary and sufficient condition for an embedding to be an equivalence is that it is as surjection.
+-- --"Later we will see that a necessary and sufficient condition for an embedding to be an equivalence
+-- is that it is as surjection.
 
 -- --"If a type `Y` is embedded into `Z`, then the function type `X → Y` is embedded into `X → Z`. More generally, if `A x` is
 -- -- embedded into `B x` for every `x : X`, then the dependent function type `Π A` is embedded into `Π B`.
@@ -250,7 +262,7 @@ embeddings-are-lc f fem {x} {y}  = ∣ embedding-criterion-converse f fem x y �
 -- -- is that if `A x` implies `B x` for all `x : X`, and `A x` holds for all `x : X`, then `B x` holds for all `x : X` too.)
 -- NatΠ-is-embedding : hfunext 𝓤 𝓥 → hfunext 𝓤 𝓦
 --  →             {X : 𝓤 ̇} {A : X → 𝓥 ̇} {B : X → 𝓦 ̇} (τ : Nat A B)
---  →             ( (x : X) → is-embedding (τ x) )
+--  →             ((x : X) → is-embedding (τ x))
 --                -----------------------------------------------
 --  →               is-embedding (NatΠ τ)
 -- NatΠ-is-embedding v w {X} {A} τ τxem = {!!}
@@ -262,24 +274,24 @@ X ↪ Y = Σ f ꞉ (X → Y) , is-embedding f
 -- Emb→fun : {X : 𝓤 ̇} {Y : 𝓥 ̇} → X ↪ Y → X → Y
 -- Emb→fun (f , _) = f
 
+-- DO THESE NEXT:
 
--- --"The following justifies the terminology *subsingleton*:
+--"The following justifies the terminology *subsingleton*:
+--"*Exercise*. Show that `is-subsingleton X ⇔ (X ↪ 𝟙)`.
+-- (see: HoTT-UF-Agda.html#the-subsingletons-are-the-subtypes-of-a-singleton ) 
+--"*Exercise*. Hence assuming function extensionality and propositional extensionality, conclude
+-- that `is-subsingleton X ≡ (X ↪ 𝟙)`.
+-- (see: HoTT-UF-Agda.html#the-subsingletons-are-the-subtypes-of-a-singleton )
 
--- --"*Exercise*. Show that `is-subsingleton X ⇔ (X ↪ 𝟙)`.
--- -- (see: HoTT-UF-Agda.html#the-subsingletons-are-the-subtypes-of-a-singleton ) 
--- --"*Exercise*. Hence assuming function extensionality and propositional extensionality, conclude that `is-subsingleton X ≡ (X ↪ 𝟙)`.
--- -- (see: HoTT-UF-Agda.html#the-subsingletons-are-the-subtypes-of-a-singleton )
-
--- --"*Exercise*. Show that the map `Fin : ℕ → 𝓤₀` defined above is left-cancellable but not an embedding.
-
+--"*Exercise*. Show that the map `Fin : ℕ → 𝓤₀` defined above is left-cancellable but not an embedding.
 
 {---------------------------------------------------------------------------------------------
  "The Yoneda Lemma for types
   ---------------------------
-  As we have seen (in the section on the identity type in univalent mathematics) a TYPE `X` can be seen as an ∞-groupoid and hence
-  as an ∞-category, with identifications as the arrows. Likewise a UNIVERSE `𝓤` can be seen as the ∞-generalization of the category of
-  sets, with functions as the arrows. Hence a TYPE FAMILY `A : X → 𝓤` can be seen as an ∞-presheaf, because groupoids are self-dual
-  categories. -}
+  As we have seen (in the section on the identity type in univalent mathematics) a TYPE `X` can be seen
+  as an ∞-groupoid and hence as an ∞-category, with identifications as the arrows. Likewise a UNIVERSE
+  `𝓤` can be seen as the ∞-generalization of the category of sets, with functions as the arrows. Hence
+  a TYPE FAMILY `A : X → 𝓤` can be seen as an ∞-presheaf, because groupoids are self-dual categories. -}
 
 --"With this view, the identity type former `Id X : X → X → 𝓤` plays the role of the Yoneda embedding.
 𝓨 : {X : 𝓤 ̇} → X → (X → 𝓤 ̇)
@@ -289,70 +301,80 @@ X ↪ Y = Σ f ꞉ (X → Y) , is-embedding f
 𝑌 : (X : 𝓤 ̇) → X → (X → 𝓤 ̇)
 𝑌 {𝓤} X  = 𝓨 {𝓤} {X}
 
---"By our definition of `Nat`, for any `A : X → 𝓥 ̇` and `x : X` we have `Nat (𝓨 x) A = (y : X) → x ≡ y → A y`, and, by
--- `Nats-are-natural`, we have that `Nat (𝓨 x) A` is the type of natural transformations from the presheaf `𝓨 x` to the
--- presheaf `A`. The starting point of the Yoneda Lemma, in our context, is that every such natural transformation is a transport.
-transport-lemma : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
- →                     (τ : Nat (𝓨 x) A)   →    (y : X)   ( x≡y  :  x ≡ y )
- →                τ y x≡y  ≡  transport A x≡y ( τ x (refl x) )
+{-"By our definition of `Nat`, for any `A : X → 𝓥 ̇` and `x : X` we have
+   `Nat (𝓨 x) A = (y : X) → x ≡ y → A y`, and, by `Nats-are-natural`, we have that
+   `Nat (𝓨 x) A` is the type of natural transformations from the presheaf `𝓨 x` to the presheaf `A`.
+   The starting point of the Yoneda Lemma, in our context, is that every such natural transformation
+   is a transport. -}
+transport-lemma : {X : 𝓤 ̇}(A : X → 𝓥 ̇)(x : X)
+                  (τ : Nat (𝓨 x) A)  (y : X)  (x≡y : x ≡ y)
+                ----------------------------------------------
+ →                τ y x≡y  ≡  transport A x≡y (τ x (refl x))
 transport-lemma A x τ x (refl x) = refl ( τ x (refl x) )
 
---"We denote the point `τ x (refl x)` in the above lemma by `𝓔 A x τ` as refer to it as the YONEDA ELEMENT of the transformation `τ`.
-𝓔 : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X) → Nat (𝓨 x) A → A x
+--"We denote the point `τ x (refl x)` in the above lemma by `𝓔 A x τ` and refer to it as the
+-- YONEDA ELEMENT of the transformation `τ`.
+𝓔 : {X : 𝓤 ̇}(A : X → 𝓥 ̇)(x : X) → Nat (𝓨 x) A → A x
 𝓔 A x τ = τ x (refl x)
 
---"The function `𝓔 A x : Nat (𝓨 x) A → A x` is an equivalence with inverse `𝓝 A x : A x → Nat (𝓨 x) A`, the transport natural
--- transformation induced by `A` and `x`:
+--"The function `𝓔 A x : Nat (𝓨 x) A → A x` is an equivalence with inverse
+-- `𝓝 A x : A x → Nat (𝓨 x) A`, the transport natural transformation induced by `A` and `x`:
 𝓝 : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x₀ : X) → A x₀ → Nat (𝓨 x₀) A
 𝓝 A x₀ a x p = transport A p a
 
 yoneda-η : dfunext 𝓤 (𝓤 ⊔ 𝓥) → dfunext 𝓤 𝓥 →  {X : 𝓤 ̇}
-                       (A : X → 𝓥 ̇)       (x : X)
-                    ----------------------------
- →                     𝓝 A x ∘ 𝓔 A x ∼ id
+           (A : X → 𝓥 ̇)   (x : X)
+           ------------------------
+ →           𝓝 A x ∘ 𝓔 A x ∼ id
 
 yoneda-η fe fe' A x = γ
  where
-  γ : (τ : Nat (𝓨 x) A) → ( λ y p → transport A p (τ x (refl x) ) ) ≡ τ
-  γ τ = fe ( λ y → fe' ( λ p → ( transport-lemma A x τ y p )⁻¹ ) )
+  γ : (τ : Nat (𝓨 x) A) → (λ y p → transport A p (τ x (refl x))) ≡ τ
+  γ τ = fe (λ y → fe' (λ p → (transport-lemma A x τ y p)⁻¹ ))
 
-yoneda-ε : {X : 𝓤 ̇}   (A : X → 𝓥 ̇)     (x : X)
-                          -------------------------
- →                          𝓔 A x ∘ 𝓝 A x ∼ id
+yoneda-ε : {X : 𝓤 ̇}(A : X → 𝓥 ̇)(x : X)
+           --------------------------------
+ →              𝓔 A x ∘ 𝓝 A x ∼ id
 yoneda-ε A x = γ
  where -- γ : 𝓝 A x ∘ 𝓔 A x ∼ id
     γ : (a : A x) → transport A (refl x) a ≡ a
     γ = refl
 
 --"By a fiberwise equivalence we mean a natural transformation whose components are all equivalences:
-is-fiberwise-equiv : {X : 𝓤 ̇} {A : X → 𝓥 ̇} {B : X → 𝓦 ̇} → Nat A B → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇ 
+is-fiberwise-equiv : {X : 𝓤 ̇}{A : X → 𝓥 ̇}{B : X → 𝓦 ̇} → Nat A B → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
 is-fiberwise-equiv τ = ∀ x → is-equiv (τ x)
 
 𝓔-is-equiv : dfunext 𝓤 (𝓤 ⊔ 𝓥) → dfunext 𝓤 𝓥
- →                {X : 𝓤 ̇}    (A : X → 𝓥 ̇)
-                  --------------------------
- →                is-fiberwise-equiv (𝓔 A)
-𝓔-is-equiv fe fe' A x = invertibles-are-equivs (𝓔 A x) (𝓝 A x ,  yoneda-η fe fe' A x ,  yoneda-ε A x)
+ →           {X : 𝓤 ̇}  (A : X → 𝓥 ̇)
+            ---------------------------
+ →           is-fiberwise-equiv (𝓔 A)
+𝓔-is-equiv fe fe' A x =
+ invertibles-are-equivs (𝓔 A x) (𝓝 A x , yoneda-η fe fe' A x , yoneda-ε A x)
 
 𝓝-is-equiv : dfunext 𝓤 (𝓤 ⊔ 𝓥) → dfunext 𝓤 𝓥
- →                {X : 𝓤 ̇}    (A : X → 𝓥 ̇)
-                  --------------------------
- →                is-fiberwise-equiv (𝓝 A)
-𝓝-is-equiv fe fe' A x = invertibles-are-equivs (𝓝 A x) (𝓔 A x , yoneda-ε A x , yoneda-η fe fe' A x)
+ →            {X : 𝓤 ̇} (A : X → 𝓥 ̇)
+             --------------------------
+ →            is-fiberwise-equiv (𝓝 A)
+𝓝-is-equiv fe fe' A x =
+ invertibles-are-equivs (𝓝 A x) (𝓔 A x , yoneda-ε A x , yoneda-η fe fe' A x)
 
---"This gives the Yoneda Lemma for types (see: https://homotopytypetheory.org/2012/05/02/a-type-theoretical-yoneda-lemma/),
---which says that natural transformations from `𝓨 x` to `A` are in canonical bijection with elements of `A x`:
+--"This gives the Yoneda Lemma for types
+-- (see: https://homotopytypetheory.org/2012/05/02/a-type-theoretical-yoneda-lemma/),
+-- which says that natural transformations from `𝓨 x` to `A` are in canonical bijection with
+-- elements of `A x`:
 Yoneda-Lemma : dfunext 𝓤 (𝓤 ⊔ 𝓥) → dfunext 𝓤 𝓥
- →                {X : 𝓤 ̇}   (A : X → 𝓥 ̇)   (x : X)
-                  -----------------------------------
- →                     Nat (𝓨 x) A   ≃   A x
+ →             {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
+               --------------------------------------
+ →                  Nat (𝓨 x) A  ≃  A x
 Yoneda-Lemma fe fe' A x = 𝓔 A x , 𝓔-is-equiv fe fe' A x
 
---"A universal element of a presheaf `A` corresponds in our context to an element of the type `is-singleton (Σ A)`, which can also be written
--- `∃! A`. If the transport transformation is a fiberwise equivalence, then `A` has a universal element. More generally, we have the following:
-retract-universal-lemma :  {X : 𝓤 ̇}    (A : X → 𝓥 ̇)   (x : X)
- →                   ( (y : X) → A y ◁ (x ≡ y) )
- →                    ∃! A
+--"A universal element of a presheaf `A` corresponds in our context to an element of the type
+-- `is-singleton (Σ A)`, which can also be written `∃! A`. If the transport transformation is a
+-- fiberwise equivalence, then `A` has a universal element. More generally, we have the following:
+retract-universal-lemma : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
+ →                        ((y : X) → A y ◁ (x ≡ y))
+                         ------------------------------
+ →                                  ∃! A
 retract-universal-lemma A x ρ = A✦
  where
   σ : Σ A ◁ singleton-type' x
@@ -361,9 +383,9 @@ retract-universal-lemma A x ρ = A✦
   A✦ : ∃! A
   A✦ = retract-of-singleton σ (singleton-types'-are-singletons (domain A) x)
 
-fiberwise-equiv-universal :  {X : 𝓤 ̇}
-       (A : X → 𝓥 ̇)   (x : X)   (τ : Nat (𝓨 x) A)  →  is-fiberwise-equiv τ
-      --------------------------------------------------------------
+fiberwise-equiv-universal : {X : 𝓤 ̇}(A : X → 𝓥 ̇)(x : X)
+                            (τ : Nat (𝓨 x) A)  →  is-fiberwise-equiv τ
+                           ---------------------------------------------
  →                                ∃! A
 
 fiberwise-equiv-universal A x τ e = retract-universal-lemma A x ρ
@@ -373,9 +395,9 @@ fiberwise-equiv-universal A x τ e = retract-universal-lemma A x ρ
 
 --"Conversely:
 universal-fiberwise-equiv :  {X : 𝓤 ̇}
-       (A : X → 𝓥 ̇)   →   ∃! A   →   (x : X)   ( τ : Nat (𝓨 x) A )
-     --------------------------------------------------------
- →                         is-fiberwise-equiv τ
+       (A : X → 𝓥 ̇)  →  ∃! A  →  (x : X)  (τ : Nat (𝓨 x) A)
+       -------------------------------------------------------
+ →                 is-fiberwise-equiv τ
 universal-fiberwise-equiv {𝓤} {𝓥} {X} A u x τ = γ
  where
   g : singleton-type' x → Σ A
@@ -387,9 +409,11 @@ universal-fiberwise-equiv {𝓤} {𝓥} {X} A u x τ = γ
   γ : is-fiberwise-equiv τ
   γ = NatΣ-equiv-gives-fiberwise-equiv τ e
 
---"In particular, the induced transport transformation `τ = 𝓝 A x a` is a fiberwise equivalence if and only if there is a unique `x : X` with
--- `A x`, which we abbreviate as `∃! A`. A corollary is the following characterization of function extensionality, similar to the above
--- characterization of univalence, by taking the transformation `τ = happly f`, because `hfe f` says that `τ` is a fiberwise equivalence:
+--"In particular, the induced transport transformation `τ = 𝓝 A x a` is a fiberwise equivalence if
+-- and only if there is a unique `x : X` with `A x`, which we abbreviate as `∃! A`. A corollary is
+-- the following characterization of function extensionality, similar to the above characterization
+-- of univalence, by taking the transformation `τ = happly f`, because `hfe f` says that `τ` is a
+-- fiberwise equivalence:
 hfunext→ : hfunext 𝓤 𝓥 → ( (X : 𝓤 ̇ ) (A : X → 𝓥 ̇ ) (f : Π A) → ∃! g ꞉ Π A , f ∼ g )
 
 hfunext→ hfe X A f = fiberwise-equiv-universal (f ∼_) f (happly f) (hfe f)
@@ -401,40 +425,42 @@ hfunext→ hfe X A f = fiberwise-equiv-universal (f ∼_) f (happly f) (hfe f)
 --"We also have the following general corollaries:
 
 --"...if we have a fiberwise retraction, then any natural transformation is an equivalence.
-fiberwise-equiv-criterion : {X : 𝓤 ̇}  (A : X → 𝓥 ̇ )  (x : X)
- →                 ( (y : X)  →  A y ◁ ( x ≡ y ) )   →    (τ : Nat (𝓨 x) A)
-                    -------------------------------------------------
- →                                is-fiberwise-equiv τ
+fiberwise-equiv-criterion : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
+ →                          ((y : X) →  A y ◁ (x ≡ y))  →  (τ : Nat (𝓨 x) A)
+                           ----------------------------------------------------
+ →                                   is-fiberwise-equiv τ
 
-fiberwise-equiv-criterion A x fibret τ = universal-fiberwise-equiv A (retract-universal-lemma A x fibret) x τ
+fiberwise-equiv-criterion A x fibret τ =
+  universal-fiberwise-equiv A (retract-universal-lemma A x fibret) x τ
 
 --"...if we have a fiberwise equivalence, then any natural transformation is a fiberwise equivalence:
-fiberwise-equiv-criterion' : {X : 𝓤 ̇}  (A : X → 𝓥 ̇ )  (x : X)
- →                 ( (y : X)  →  ( x ≡ y ) ≃ A y )   →    (τ : Nat (𝓨 x) A)
-                    -------------------------------------------------
+fiberwise-equiv-criterion' : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
+ →                           ((y : X)  →  (x ≡ y) ≃ A y)  →  (τ : Nat (𝓨 x) A)
+                            ----------------------------------------------------
  →                                is-fiberwise-equiv τ
 
-fiberwise-equiv-criterion' A x fibeq = fiberwise-equiv-criterion A x (λ y → ≃-gives-▷ (fibeq y) )
+fiberwise-equiv-criterion' A x fibeq =
+  fiberwise-equiv-criterion A x (λ y → ≃-gives-▷ (fibeq y) )
 
 --"A presheaf (X → 𝓥 ̇) is called *representable* if it is pointwise equivalent to a presheaf of the form `𝓨 x`.
 
 --[presheaf extensionality]
 _≃̇_ : {X : 𝓤 ̇} → (X → 𝓥 ̇) → (X → 𝓦 ̇) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
-A ≃̇ B = ∀ x → A x ≃ B x  
+A ≃̇ B = ∀ x → A x ≃ B x
 
 is-representable : {X : 𝓤 ̇} → (X → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
 is-representable A = Σ x ꞉ domain A , 𝓨 x ≃̇ A
 
 representable-universal : {X : 𝓤 ̇}
-               (A : X → 𝓥 ̇) → is-representable A
-            --------------------------------------
+                          (A : X → 𝓥 ̇) → is-representable A
+                         --------------------------------------
  →                           ∃! A
 representable-universal A (x , 𝓨x≃̇A) = retract-universal-lemma A x ( λ x → ≃-gives-▷ (𝓨x≃̇A x) )
 
 universal-representable : {X : 𝓤 ̇}
-                     {A : X → 𝓥 ̇} → ∃! A
-                   -------------------------
- →                    is-representable A
+                          {A : X → 𝓥 ̇} → ∃! A
+                         -------------------------
+ →                          is-representable A
 universal-representable {𝓤} {𝓥} {X} {A} ( (x , v) , xvcen ) = x , φ
  where
   𝓝Axv-fweq : is-fiberwise-equiv (𝓝 A x v)
@@ -445,11 +471,11 @@ universal-representable {𝓤} {𝓥} {X} {A} ( (x , v) , xvcen ) = x , φ
 
 --"Combining `retract-universal-lemma` and `universal-fiberwise-equiv` we get the following:
 -- (see also: https://github.com/HoTT/book/issues/718#issuecomment-65378867 )
-fiberwise-retractions-are-equivs : {X : 𝓤 ̇}
-                          (A : X → 𝓥 ̇) (x : X)   →   (τ : Nat (𝓨 x) A)
- →                      ( (y : X) → has-section (τ y) )
-                        -----------------------------------------
- →                        is-fiberwise-equiv τ
+fiberwise-retractions-are-equivs : {X : 𝓤 ̇} (A : X → 𝓥 ̇) (x : X)
+                                   (τ : Nat (𝓨 x) A)
+ →                                 ((y : X) → has-section (τ y))
+                                  --------------------------------
+ →                                    is-fiberwise-equiv τ
 
 fiberwise-retractions-are-equivs {𝓤} {𝓥} {X}  A x τ s = γ
  where
@@ -464,8 +490,8 @@ fiberwise-retractions-are-equivs {𝓤} {𝓥} {X}  A x τ s = γ
 
 --"Perhaps the following formulation is more appealing:
 fiberwise-◁-gives-≃ : (X : 𝓤 ̇) (A : X → 𝓥 ̇) (x : X)
- →                         ( (y : X) → A y ◁ (x ≡ y) )
- →                         ( (y : X) → A y ≃ (x ≡ y) )
+ →                    ((y : X) → A y ◁ (x ≡ y))
+ →                    ((y : X) → A y ≃ (x ≡ y))
 
 fiberwise-◁-gives-≃ X A x ρ = γ
  where
@@ -480,17 +506,18 @@ fiberwise-◁-gives-≃ X A x ρ = γ
 
 --"We have the following corollary:
 embedding-criterion' : {X : 𝓤 ̇} {Y : 𝓥 ̇}  (f : X → Y)
- →                         ( (x x' : X) → (f x ≡ f x') ◁ (x ≡ x') )
-                            ---------------------------------
+ →                     ((x x' : X) → (f x ≡ f x') ◁ (x ≡ x'))
+                      ---------------------------------------
  →                                is-embedding f
 embedding-criterion' f ρ = embedding-criterion f
   ( λ x → fiberwise-◁-gives-≃ (domain f) ( λ - → f x ≡ f - )  x (ρ x) )
 
---"*Exercise.* It also follows that `f` is an embedding if and only if the map `ap f {x} {x'}` has a section.
+--"*Exercise.* It also follows that `f` is an embedding if and only if the map `ap f {x} {x'}`
+-- has a section.
 
-
--- To prove that  `𝓨 {𝓤} {X}` is an embedding (see: https://arxiv.org/abs/1903.01211 ) of `X` into `X → 𝓤` for any type `X : 𝓤`, we need the
--- following two lemmas, which are interesting in their own right:
+-- To prove that  `𝓨 {𝓤} {X}` is an embedding (see: https://arxiv.org/abs/1903.01211 ) of `X`
+-- into `X → 𝓤` for any type `X : 𝓤`, we need the following two lemmas, which are interesting in
+-- their own right:
 being-fiberwise-equiv-is-subsingleton : global-dfunext
  →                      {X : 𝓤 ̇} {A : X → 𝓥 ̇} {B : X → 𝓦 ̇}
  →                      (τ : Nat A B)
@@ -499,7 +526,9 @@ being-fiberwise-equiv-is-subsingleton : global-dfunext
 being-fiberwise-equiv-is-subsingleton fe τ =
   Π-is-subsingleton fe (λ y → being-equiv-is-subsingleton fe fe (τ y) )
 
-being-representable-is-subsingleton : global-dfunext → {X : 𝓤 ̇} (A : X → 𝓥 ̇) → is-subsingleton (is-representable A)
+being-representable-is-subsingleton : global-dfunext
+ →                 {X : 𝓤 ̇}(A : X → 𝓥 ̇)
+ →                 is-subsingleton (is-representable A)
 being-representable-is-subsingleton fe {X} A r₀ r₁ = r₀≡r₁
  where
   ∃!A : ∃! A
@@ -507,13 +536,14 @@ being-representable-is-subsingleton fe {X} A r₀ r₁ = r₀≡r₁
 
   is-fweq✦ : (x : X) (τ : Nat (𝓨 x) A) → is-singleton (is-fiberwise-equiv τ)
   is-fweq✦ x τ = pointed-subsingletons-are-singletons
-                       (is-fiberwise-equiv τ) (universal-fiberwise-equiv A ∃!A x τ) (being-fiberwise-equiv-is-subsingleton fe τ)
+                       (is-fiberwise-equiv τ) (universal-fiberwise-equiv A ∃!A x τ)
+                       (being-fiberwise-equiv-is-subsingleton fe τ)
 
   ε : (x : X) → (𝓨 x ≃̇ A) ≃ A x
-  ε x = ( (y : X) → 𝓨 x y ≃ A y)                           ≃⟨ ΠΣ-distr-≃ ⟩
-            (Σ τ ꞉ Nat (𝓨 x) A , is-fiberwise-equiv τ)   ≃⟨ pr₁-≃ (is-fweq✦ x) ⟩
-            Nat (𝓨 x) A                                          ≃⟨ Yoneda-Lemma fe fe A x ⟩
-            A x                                                      ■
+  ε x = ((y : X) → 𝓨 x y ≃ A y)                    ≃⟨ ΠΣ-distr-≃ ⟩
+        (Σ τ ꞉ Nat (𝓨 x) A , is-fiberwise-equiv τ) ≃⟨ pr₁-≃ (is-fweq✦ x) ⟩
+        Nat (𝓨 x) A                                ≃⟨ Yoneda-Lemma fe fe A x ⟩
+        A x                                         ■
 
   δ : is-representable A ≃ Σ A
   δ = Σ-cong ε
@@ -534,9 +564,9 @@ being-representable-is-subsingleton fe {X} A r₀ r₁ = r₀≡r₁
   dfe : global-dfunext
   dfe = univalence-gives-global-dfunext 𝓤★
 
-  p = λ x → (𝓨 x ≡ A)                          ≃⟨ i x ⟩
-                  ( (y : X) → 𝓨 x y ≡ A y )      ≃⟨ ii x ⟩
-                  ( (y : X) → 𝓨 x y ≃ A y )      ■
+  p = λ x → (𝓨 x ≡ A)               ≃⟨ i x ⟩
+            ((y : X) → 𝓨 x y ≡ A y) ≃⟨ ii x ⟩
+            ((y : X) → 𝓨 x y ≃ A y) ■
     where
      i = λ x → (happly (𝓨 x) A , hfe (𝓨 x) A)
      ii = λ x → Π-cong dfe dfe (λ y → univalence-≃ (𝓤★ 𝓤) (𝓨 x y) (A y) )
@@ -561,10 +591,12 @@ being-representable-is-subsingleton fe {X} A r₀ r₁ = r₀≡r₁
 
 ----------------------------------------------------------------------------------
 --Universe lifting.
---"Universes are not cumulative on the nose in Agda, in the sense that from `X : 𝓤` we would get that `X : 𝓤⁺` or that `X : 𝓤 ⊔ 𝓥`.
--- Instead we work with embeddings of universes into larger universes.
+--"Universes are not cumulative on the nose in Agda, in the sense that from `X : 𝓤` we would get
+-- that `X : 𝓤⁺` or that `X : 𝓤 ⊔ 𝓥`. Instead we work with embeddings of universes into larger
+-- universes.
 
---"The following together with its induction principle should be considered as part of the universe handling of our spartan Martin-Löf type theory:
+--"The following together with its induction principle should be considered as part of the universe
+-- handling of our spartan Martin-Löf type theory:
 record Lift {𝓤 : Universe} (𝓥 : Universe) (X : 𝓤 ̇) : 𝓤 ⊔ 𝓥 ̇ where
  constructor lift
  field
@@ -591,8 +623,9 @@ Lift-recursion : ∀ {𝓤} 𝓥 {X : 𝓤 ̇} {B : 𝓦 ̇}
  →                  (X → B)  →  Lift 𝓥 X → B
 Lift-recursion 𝓥 {X} {B} = Lift-induction 𝓥 X λ _ → B
 
---"This gives an equivalence `lift : X → Lift 𝓥 X` and hence an embedding `Lift 𝓥 : 𝓤 ̇ → 𝓤 ⊔ 𝓥`. The following two constructions can be
--- performed with induction, but actually hold on the nose by the so-called `η` rule for records.
+--"This gives an equivalence `lift : X → Lift 𝓥 X` and hence an embedding `Lift 𝓥 : 𝓤 ̇ → 𝓤 ⊔ 𝓥`.
+-- The following two constructions can be performed with induction, but actually hold on the nose by
+-- the so-called `η` rule for records.
 -- (see https://agda.readthedocs.io/en/latest/language/record-types.html#eta-expansion )
 lower-lift : {X : 𝓤 ̇} (x : X) → lower {𝓤} {𝓥} (lift x) ≡ x
 lower-lift = refl
@@ -608,7 +641,8 @@ Lift-≃ {𝓤} {𝓥} X = invertibility-gives-≃ lower ( lift , lift-lower , l
 
 --"With universe lifting, we can generalize equivalence induction as follows, in several steps.
 
---"Firstly, function extensionality for a pair of universes gives function extensionality for any pair of lower universes:
+--"Firstly, function extensionality for a pair of universes gives function extensionality for any
+-- pair of lower universes:
 lower-dfunext : ∀ 𝓦 𝓣 𝓤 𝓥 → dfunext (𝓤 ⊔ 𝓦) (𝓥 ⊔ 𝓣) → dfunext 𝓤 𝓥
 lower-dfunext 𝓦 𝓣 𝓤 𝓥 fe {X} {A} {f} {g} h = f≡g
  where
@@ -628,10 +662,13 @@ lower-dfunext 𝓦 𝓣 𝓤 𝓥 fe {X} {A} {f} {g} h = f≡g
   f≡g : f ≡ g
   f≡g = ap (λ f' x → lower (f' (lift x) ) ) f'≡g'
 
---"Secondly, a function from a universe to a higher universe is an embedding provided it maps any type to an equivalent type and the two
--- universes are univalent:
-universe-embedding-criterion : is-univalent 𝓤 → is-univalent (𝓤 ⊔ 𝓥) → (f : 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇)
- →                                           ( (X : 𝓤 ̇) → f X ≃ X )      →      is-embedding f
+--"Secondly, a function from a universe to a higher universe is an embedding provided it maps any type
+-- to an equivalent type and the two universes are univalent:
+universe-embedding-criterion : is-univalent 𝓤 → is-univalent (𝓤 ⊔ 𝓥)
+ →                             (f : 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇)
+ →                             ((X : 𝓤 ̇) → f X ≃ X)
+                              ------------------------
+ →                             is-embedding f
 
 universe-embedding-criterion {𝓤} {𝓥} 𝓤★ 𝓤⊔𝓥★ f e = embedding-criterion f γ
  where
@@ -656,11 +693,15 @@ universe-embedding-criterion {𝓤} {𝓥} 𝓤★ 𝓤⊔𝓥★ f e = embeddin
 
 
 --"In particular, the function `Lift` is an embedding:
-Lift-is-embedding : is-univalent 𝓤 → is-univalent (𝓤 ⊔ 𝓥) → is-embedding (Lift {𝓤} 𝓥 )
-Lift-is-embedding {𝓤} {𝓥} 𝓤★ 𝓤⊔𝓥★ = universe-embedding-criterion {𝓤}{𝓥} 𝓤★ 𝓤⊔𝓥★ (Lift 𝓥) Lift-≃
+Lift-is-embedding : is-univalent 𝓤
+ →                  is-univalent (𝓤 ⊔ 𝓥)
+ →                  is-embedding (Lift {𝓤} 𝓥 )
+Lift-is-embedding {𝓤} {𝓥} 𝓤★ 𝓤⊔𝓥★ =
+ universe-embedding-criterion {𝓤}{𝓥} 𝓤★ 𝓤⊔𝓥★ (Lift 𝓥) Lift-≃
 
---"Thirdly, we have a generalization of `univalence→` from a single universe to a pair of universes. We work with two symmetrical versions,
--- where the second is derived from the first. We use an anonymous module to assume univalence in the following couple of construction:
+--"Thirdly, we have a generalization of `univalence→` from a single universe to a pair of universes.
+-- We work with two symmetrical versions, where the second is derived from the first. We use an
+-- anonymous module to assume univalence in the following couple of construction:
 module _ {𝓤 𝓥 : Universe} (𝓥★ : is-univalent 𝓥) (𝓤⊔𝓥★ : is-univalent (𝓤 ⊔ 𝓥) ) where
  private
   fe : dfunext (𝓤 ⊔ 𝓥) (𝓤 ⊔ 𝓥)
@@ -672,7 +713,7 @@ module _ {𝓤 𝓥 : Universe} (𝓥★ : is-univalent 𝓥) (𝓤⊔𝓥★ : 
   fe₂ : dfunext 𝓥 𝓥
   fe₂ = lower-dfunext 𝓤 𝓤 𝓥 𝓥 fe
   fe₃ : dfunext 𝓤 𝓤
-  fe₃ = lower-dfunext 𝓥 𝓥 𝓤 𝓤 fe 
+  fe₃ = lower-dfunext 𝓥 𝓥 𝓤 𝓤 fe
 
  univalence→' : (X : 𝓤 ̇) → is-subsingleton ( Σ Y ꞉ 𝓥 ̇ , X ≃ Y )
  univalence→' X = γ
