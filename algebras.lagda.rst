@@ -7,8 +7,6 @@
 
 .. .. include:: _static/math_macros.rst
 
-.. role:: cat
-.. role:: code
 
 .. _algebras:
 
@@ -48,7 +46,7 @@ The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the s
 
 If :math:`m` is a natural number, we write :math:`m: ℕ` and say ":math:`m` has type ℕ." [1]_
 
-In set theory, we typically denote and define natural numbers by :math:`m := \{0, 1, \dots, m-1\}`.  However, it systems based on type theory (such as Agda_ or Lean_), we use a type to denote finite sets, called ``Fin``.  We will define this type precisely later, but for now we simply use the notation :math:`\mathsf{Fin}(m)` to denote the ``m``-element set (for each natural number :math:`m`).  That is, *for now* we let,
+In set theory, we typically denote and define natural numbers by :math:`m := \{0, 1, \dots, m-1\}`.  However, in systems based on type theory (such as Agda_ or Lean_), we use a type to denote finite sets, called ``Fin``.  We will define this type precisely later, but for now we simply use the notation :math:`\mathsf{Fin}(m)` to denote the ``m``-element set (for each natural number :math:`m`).  That is, *for now* we let,
 
 .. math:: \mathsf{Fin}(m) := \{0, 1, \dots, m-1\}.
 
@@ -97,7 +95,7 @@ Important examples of idempotent operations are the projections. If :math:`k` an
 General composition
 -------------------
 
-In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).  We will identify the :math:`\mathsf{ntuple}` type with the function type :math:`\mathsf{Fin}(n) →  A`.  Thus, the type of :math:`n`-ary operations on :math:`A` is :math:`(\mathsf{Fin}(n) → A) → A`.  Evaluating such an operation at the tuple :math:`a: \mathsf{Fin}(n) → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
+In universal algebra we mainly deal with *finitary* operations in **Set** (the category of sets).  We will identify the :math:`\mathsf{ntuple}` type with the function type :math:`\mathsf{Fin}(n) →  A`.  Thus, the type of :math:`n`-ary operations on :math:`A` is :math:`(\mathsf{Fin}(n) → A) → A`.  Evaluating such an operation at the tuple :math:`a: \mathsf{Fin}(n) → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
 
 Letting :math:`a_i` denote the value of :math:`a` at "input" (or "index") :math:`i < n`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f\,a = f(a_0, \dots, a_{n-1})`, for each  :math:`f: (\mathsf{Fin}(n) → A) → A`. 
 
@@ -306,7 +304,7 @@ We call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (althoug
 
    .. More :ref:`examples of algebraic structures <examples-of-algebras>` that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) appear in the appendix.
 
-   Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
+   Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than **Set**, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
 
 .. (See :numref:`Chapter %s <postmodern-algebra>`.)
 
