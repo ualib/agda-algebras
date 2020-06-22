@@ -1,10 +1,8 @@
-.. FILE: UF-Birkhoff.agda
+.. FILE: birkhoff.lagda.rst
 .. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 27 Oct 2019
-.. UPDATE: 20 Jun 2020
+.. UPDATE: 21 Jun 2020
 .. COPYRIGHT: (c) 2019 William DeMeo and Siva Somayyajula
-
-.. open import UF-Extensionality using (funext; global-funext; EInvIsRInv; dfunext; intensionality)
 
 .. _birkhoffs-hsp-theorem:
 
