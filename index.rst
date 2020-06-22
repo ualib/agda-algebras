@@ -16,9 +16,9 @@ The Agda Universal Algebra Library
    preface.rst
    algebras.lagda.rst
    basic.lagda.rst
-   free.lagda.rst
-   subuniverse.lagda.rst
-   facts.lagda.rst
+   morphisms.lagda.rst
+   subuniverses.lagda.rst
+   terms.lagda.rst
    birkhoff.lagda.rst
    
 Appendix
