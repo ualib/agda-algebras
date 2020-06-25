@@ -261,7 +261,7 @@ Let  ``𝑯 𝓚``  denote the class of homomorphic images of members of 𝓚.
    𝑯 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
    𝑯 𝓚 = HomImagesOfClass 𝓚
 
-   -- Here 𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) represents a (Universe-indexed) collection of classes.
+   -- Here 𝓛𝓚 represents a (Universe-indexed) collection of classes.
    𝑯-closed  :  (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
     →           (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)  →   𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
    𝑯-closed 𝓛𝓚 = λ 𝓤 𝑩 → 𝑩 is-hom-image-of-class (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 (𝓤 ⁺))
