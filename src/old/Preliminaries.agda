@@ -6,34 +6,28 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
---`without-K` disables Streicher's K axiom; see "Note on axiom K" 
-  --            of the ualib documentation (ualib.org).
-  --
-  --`exact-split` makes Agda to only accept definitions with the
-  --              equality sign "=" that behave like so-called
+  --`exact-split` makes Agda to only accept definitions with the equality sign "=" that behave like so-called
   --              judgmental or definitional equalities.
+
+  -- `without-K` disables Streicher's K axiom (see "Note on axiom K" ualib.org).
+  -- Instead of K, we adopt Voevodsky's univalence axiom; as such, we can't prove in general that the type `x ≣ x`
+  -- has only the one inhabitant `refl x` (cf. Hofmann and Streicher's model of tt where types are `1`-groupoids.)
 
 module Preliminaries where
 
--- Export common imports
+open import Universes public renaming (_≡_ to _≣_; refl to rfl; Id to 𝔦𝔡)
 open import Level public renaming (suc to lsuc ; zero to lzero)
-open import Data.Empty using (⊥) public
+open import Data.Empty using (⊥; ⊥-elim) public
 open import Data.Bool using (Bool) public
---open import Data.Product using (∃; _,_; _×_; proj₁; proj₂) public
-open import Data.Product using (∃; _,_; _×_;Σ-syntax) public
-  renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
-
+open import Data.Product using (∃; _,_; _×_;Σ-syntax) public renaming (proj₁ to ∣_∣; proj₂ to ⟦_⟧)
+open import Data.Product.Properties using (,-injectiveˡ;,-injectiveʳ;,-injective)
 open import Relation.Unary using (Pred; _∈_; _⊆_; ⋂; ⋃) public
 open import Relation.Binary public
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; trans; cong; cong-app; sym; subst) public
+open Eq using (_≡_;refl; trans; cong; cong-app; sym; subst) public
 open Eq.≡-Reasoning public
 open import Function using (_∘_) public
-open import Agda.Builtin.Nat public
-  renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
-
--- ∣_∣ = proj₁
--- ⟦_⟧ = proj₂
+open import Agda.Builtin.Nat public renaming ( Nat to ℕ; _-_ to _∸_; zero to nzero; suc to succ )
 
 _∈∈_ : {i j k : Level} {A : Set i} {B : Set j}
   ->   (A -> B)
@@ -48,6 +42,53 @@ Im_⊆_ : {i j k : Level} {A : Set i} {B : Set j}
       -------------------
   ->    Set (i ⊔ k)
 Im_⊆_ {A = A} f S = (x : A) -> f x ∈ S
+
+img : {k : Level} {X : Set k} {A : Set k}
+  ->  (x : X -> A) -> (P : Pred A k)
+  ->  Im x ⊆ P
+  ->  X -> ∃ P
+img {A = A} x P Imf⊆P = λ x₁ → x x₁ , Imf⊆P x₁
+
+≡-elim-left : {ℓ₁ ℓ₂ : Level}{A₁ A₂ : Set ℓ₁}{B₁ B₂ : Set ℓ₂}
+  ->            (A₁ , B₁) ≡ (A₂ , B₂) -> A₁ ≡ A₂
+≡-elim-left x = ∣ ,-injective x ∣
+
+≡-elim-right : {ℓ₁ ℓ₂ : Level}{A₁ A₂ : Set ℓ₁}{B₁ B₂ : Set ℓ₂}
+  ->            (A₁ , B₁) ≡ (A₂ , B₂) -> B₁ ≡ B₂
+≡-elim-right x = ⟦ ,-injective x ⟧
+
+cong-app-pred : ∀{a ℓ : Level}{A : Set a}{B₁ B₂ : Pred A ℓ}(x : A)
+  ->          x ∈ B₁   ->   B₁ ≡ B₂
+            -------------------------
+  ->                x ∈ B₂
+cong-app-pred x x∈B₁ B₁≡B₂ rewrite cong-app B₁≡B₂ x = x∈B₁
+
+cong-pred : ∀{a ℓ : Level}{A : Set a}{B : Pred A ℓ}(x y : A)
+  ->          x ∈ B   ->   x ≡ y
+            -------------------------
+  ->                y ∈ B
+cong-pred{B = B} x y x∈B x≡y rewrite cong B x≡y = x∈B
+
+-- ∃ : ∀ {A : Set a} → (A → Set b) → Set (a ⊔ b)
+-- ∃ = Σ _
+
+-- ≡-∃-elim : ∀{ℓ} {A : Set ℓ}{B₁ B₂ : A → Set ℓ} -> ∃ B₁ ≡ ∃ B₂ -> Set ℓ
+-- ≡-∃-elim = λ x → {!∣ x ∣!}
+
+
+-------------------------------------------------------------------------------
+--KERNEL OF A FUNCTION
+-----------------------
+
+-- ...as a relation.
+ker : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Rel A ℓ₂
+ker f x y = f x ≡ f y
+
+-- ...as a binary predicate.
+KER : {ℓ₁ ℓ₂ : Level} {A : Set ℓ₁} {B : Set ℓ₂}
+  ->  (f : A -> B) -> Pred (A × A) ℓ₂
+KER f (x , y) = f x ≡ f y
 
 ----------------------------
 --EXTENSIONALITY Postulate
@@ -114,7 +155,6 @@ image f = λ b -> ∃ λ a -> b ≡ f a
 --              --------------------
 --   ->           Image f ∋ b
 -- ImageIsImage {A = A} {B = B} = λ f b a b≡fa → eq b a b≡fa
-
 
 --N.B. the assertion Image f ∋ y must come with a proof, which is of the
 --form ∃a f a = y, so we have a witness, so the inverse can be "computed"
@@ -481,6 +521,24 @@ f Comp g = λ 𝒂𝒂 → f Eval (g Fork 𝒂𝒂)
 -- MISC NOTES
 --============
 --
+-- SPECIAL NOTATIONS (and how to type them)
+-- ----------------------------------------
+--
+-- Levels              | ℓ₁, ℓ₂, etc.  |   `\ell\_1`, `\ell\_2`, etc.
+-- Structures          | 𝑨, 𝑩, etc.    | `\MIA`, `\MIB`, etc.
+-- Free/Term algebra   | 𝔉             | `\MfF`
+-- Sets of structures  | 𝓐, 𝓚, etc.  | `\MCA`, `\MCK`, etc.
+-- Operation Symbols   | 𝓸, etc.       | `\MCo`, etc.
+-- Interpr. of term t  | t ̇ 𝑨         | `t \^. \MIA`
+-- Interpr. of op 𝓸   | 𝓸 ̂ 𝑨         | `\MCo \^ \MIA`
+-- Vectors/tuples      | 𝒂, 𝒕, etc.     | `\MIa`, `\MIt`, etc.
+-- First projection    | proj₁ or  ∣ ∣   | `proj\_1` or `\|` `\|`
+-- Second projection:  | proj₂ or ⟦ ⟧   | `proj\_2` or `\[[` `\]]`
+-- Embedding           | ≲             | `\<~`
+-- Isomorphism of sets | ≃             | `\~-`
+--
+-- ---------
+--
 -- When importing `Data.Product` we rename `proj₁` to `∣_∣` and `proj₂` to `⟦_⟧`.
 -- If, e.g., `S : Signature i j`, then
 --   ∣ S ∣ = the set of operation symbols (which we used to call 𝓕).
@@ -568,4 +626,6 @@ f Comp g = λ 𝒂𝒂 → f Eval (g Fork 𝒂𝒂)
 --       ->   (∀ (x : A) -> ∣ f x ∣ ≡ ∣ g x ∣ -> ⟦ f x ⟧ ≡ ⟦ g x ⟧)
 --           --------------------------------------------------
 --       ->   f ≡ g
+
+
 

@@ -148,8 +148,8 @@ html_theme_options = {
 html_static_path = ['_static']
 
 html_logo = '_static/lambda.jpg'
-html_favicon = '_static/favicon.ico'
-html_show_sourcelink = False
+html_favicon = '_static/favicon.jpg'
+html_show_sourcelink = True
 #html_output_encoding = 'ascii'
 
 # Custom sidebar templates, must be a dictionary that maps document names to template names.

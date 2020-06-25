@@ -1,14 +1,12 @@
 .. File: algebras.lagda.rst
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 11 Feb 2020
-.. Updated: 11 Feb 2020
+.. Updated: 22 Jun 2020
 .. Copyright (c) 2019 William DeMeo
 
 
 .. .. include:: _static/math_macros.rst
 
-.. role:: cat
-.. role:: code
 
 .. _algebras:
 
@@ -22,15 +20,11 @@ The idea is to demonstrate the power and utility of implementing our mathematica
 
 One goal of our project was to provide, as a "proof of concept" a formal implementation of a deep result in universal algebra. As the focus of this goal, we have chosen what was among the first major results of the theory of universal algebras---namely, the celebrated `HSP Theorem`_ that Garrett Birkhoff proved in 1933. (`The original paper is available online <https://web.archive.org/web/20180330012312/https://pdfs.semanticscholar.org/a282/3f992ea5e2d2a1e989ce01844da71e4ec6a5.pdf>`_.)
 
-A nice (informal) proof of the HSP Theorem appears on pages 106 and 107 of Cliff Bergman's book :cite:`Bergman:2012`. Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book.  Nonetheless, Cliff's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
+A nice (informal) proof of the HSP Theorem appears on pages 106 and 107 of Cliff Bergman's book :cite:`Bergman:2012`. Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book.  Nonetheless, Professor Bergman's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
 
-On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from Bergman's book, and present them as a list of results at the end of this chapter, so that we can more easily try (in :numref:`Chapter %s <basic facts in agda>`) to implement each proof, one-by-one in Agda.
+On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from :cite:`Bergman:2012`, and present them as a list of results at the end of this chapter, and then later, in :numref:`Section %s <basic facts in agda>`, we will formalize each of these results in Agda.
 
-Of course, when we quote or paraphrase a result from Cliff's book, we will include a citation that indicates where the corresponding result is found in the book. When doing so, we will use the acronym :term:`UAFST` to refer to the book.
-
-We owe Cliff a huge debt of gratitude for authoring such a beautiful and constructive (wherever possible) treatment of basic universal algebra.
-
-..  Birkhoff, G. (Oct 1935), "On the structure of abstract algebras" (PDF), Proceedings of the Cambridge Philosophical Society, 31 (4): 433–454, archived from the original (pdf) on 2018-03-30
+Whenever we quote or paraphrase a result from :cite:`Bergman:2012` book, we will include a citation that indicates where the corresponding result is found in the book.
 
 ------------------------------
 
@@ -48,7 +42,7 @@ The symbols ℕ, ω, and ``nat`` are used interchangeably; they all denote the s
 
 If :math:`m` is a natural number, we write :math:`m: ℕ` and say ":math:`m` has type ℕ." [1]_
 
-In set theory, we typically denote and define natural numbers by :math:`m := \{0, 1, \dots, m-1\}`.  However, it systems based on type theory (such as Agda_ or Lean_), we use a type to denote finite sets, called ``Fin``.  We will define this type precisely later, but for now we simply use the notation :math:`\mathsf{Fin}(m)` to denote the ``m``-element set (for each natural number :math:`m`).  That is, *for now* we let,
+In set theory, we typically denote and define natural numbers by :math:`m := \{0, 1, \dots, m-1\}`.  However, in systems based on type theory (such as Agda_ or Lean_), we use a type to denote finite sets, called ``Fin``.  We will define this type precisely later, but for now we simply use the notation :math:`\mathsf{Fin}(m)` to denote the ``m``-element set (for each natural number :math:`m`).  That is, *for now* we let,
 
 .. math:: \mathsf{Fin}(m) := \{0, 1, \dots, m-1\}.
 
@@ -97,7 +91,7 @@ Important examples of idempotent operations are the projections. If :math:`k` an
 General composition
 -------------------
 
-In universal algebra we mainly deal with *finitary* operations in :cat:`Set` (the category of sets).  We will identify the :math:`\mathsf{ntuple}` type with the function type :math:`\mathsf{Fin}(n) →  A`.  Thus, the type of :math:`n`-ary operations on :math:`A` is :math:`(\mathsf{Fin}(n) → A) → A`.  Evaluating such an operation at the tuple :math:`a: \mathsf{Fin}(n) → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
+In universal algebra we mainly deal with *finitary* operations in **Set** (the category of sets).  We will identify the :math:`\mathsf{ntuple}` type with the function type :math:`\mathsf{Fin}(n) →  A`.  Thus, the type of :math:`n`-ary operations on :math:`A` is :math:`(\mathsf{Fin}(n) → A) → A`.  Evaluating such an operation at the tuple :math:`a: \mathsf{Fin}(n) → A` is simply function application, expressed by the usual rule (sometimes called "implication elimination" or "modus ponens").
 
 Letting :math:`a_i` denote the value of :math:`a` at "input" (or "index") :math:`i < n`, and identifying :math:`a` with it's graph (the tuple :math:`(a_0, \dots, a_{n-1})`), we have :math:`f\,a = f(a_0, \dots, a_{n-1})`, for each  :math:`f: (\mathsf{Fin}(n) → A) → A`. 
 
@@ -306,7 +300,7 @@ We call an algebra in the signature :math:`σ` a :math:`σ`-**algebra** (althoug
 
    .. More :ref:`examples of algebraic structures <examples-of-algebras>` that have historically played a central role in mathematics over the last century (e.g., groups, rings, modules) appear in the appendix.
 
-   Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than :cat:`Set`, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
+   Some of the renewed interest in universal algebra focuses on representations of algebras in categories other than **Set**, such as multisorted algebras, and higher-type universal algebra :cite:`Adamek:2011`, :cite:`Behrisch:2012`, :cite:`Finster:2018`, :cite:`Gepner:2018`, :cite:`Meinke:1992`). These are natural generalizations that we plan to incorporate in our development later.
 
 .. (See :numref:`Chapter %s <postmodern-algebra>`.)
 
@@ -465,7 +459,7 @@ Thus
 
   *the clone of terms operations can be implemented as an inductive type*.
   
-We will make this precise below (see :numref:`Observation %s <obs 7>` and :term:`UAFST` Thm 4.32).
+We will make this precise below (see :numref:`Observation %s <obs 7>`).
 
 ------------------------
 
@@ -669,22 +663,16 @@ Alternatively and equivalently we could define "equational class" and "equationa
 Basic facts
 ------------
 
-We conclude this chapter with a list of basic facts (as well as proofs, in some cases).  These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, :numref:`Obs %s <obs 1>`, :numref:`Obs %s <obs 2>`, etc.  As mentioned above, we use the acronym :term:`UAFST` to cite the book :cite:`Bergman:2012`.
+We conclude this chapter with a list of basic facts (as well as proofs, in some cases).  These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, :numref:`Obs %s <obs 1>`, :numref:`Obs %s <obs 2>`, etc.
 
 Throughout this section,
 
   :math:`𝑨 = ⟨A, F^𝑨⟩, \ 𝑩 = ⟨B, F^𝑩⟩, \ 𝑪 = ⟨C, F^𝑪⟩\ ` are algebras in the same signature :math:`σ = (F, ρ)`.
 
-We start with the simple observation that composing homomorphisms gives a homomorphism.
+Equalizers
+~~~~~~~~~~~~~
 
-.. _composition of homomorphisms:
-
-.. _obs 0:
-
-.. proof:observation:: composing homs gives a hom
-
-   If :math:`g: \mathsf{Hom}(𝑨, 𝑩)` and :math:`h: \mathsf{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathsf{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
-
+We start with the simple observation that equalizers of homomorphisms are subuniverses.
 
 .. index:: ! equalizer
 
@@ -692,7 +680,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
 .. _obs 1:
 
-.. proof:observation:: UAFST Exercise 1.4.6.a
+.. proof:observation:: Exercise 1.4.6.a of :cite:`Bergman:2012`
 
    If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, then the **equalizer** of :math:`g` and :math:`h`, which we denote :math:`𝖤(g,h) = \{a: A ∣ g\, a = h\, a\}`, is a subuniverse of 𝑨.
 
@@ -712,13 +700,30 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       ☐
 
-.. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 1>` is described in :numref:`equalizer-as-subuniverse`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
+The Agda formalization of this result and its proof is presented in :numref:`Obs %s <obs 1>`.
+
+Homomorphisms
+~~~~~~~~~~~~~~~
+
+Another easy fact is that composing homomorphisms results in a homomorphism.
+
+.. _composition of homomorphisms:
 
 .. _obs 2:
 
-.. proof:observation:: UAFST Exercise 1.4.6.b
+.. proof:observation:: composing homs gives a hom
 
-   If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, if the set :math:`X ⊆ A` generates 𝑨, and if :math:`g|_X = h|_X`, then :math:`g = h`.
+   If :math:`g: \mathsf{Hom}(𝑨, 𝑩)` and :math:`h: \mathsf{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathsf{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
+
+The easy proof of this fact is formalized in :numref:`obs 2 agda` .
+
+Another elementary result is that homomorphisms are uniquely determined by the values they take on generating sets.
+
+.. _obs 3:
+
+.. proof:observation:: Exercise 1.4.6.b of :cite:`Bergman:2012`
+
+   Let 𝑨 = ⟨𝐴, …⟩ and 𝑩 be 𝑆-algebras and :math:`f, g` homomorphisms from 𝑨 to 𝑩. If the subset 𝐴₀ ⊆ 𝐴 generates 𝑨, and if :math:`f` and :math:`g` agree on 𝐴₀, then :math:`f = g`.
 
    .. container:: toggle
     
@@ -726,27 +731,27 @@ We start with the simple observation that composing homomorphisms gives a homomo
   
          *Proof*.
 
-      Suppose the subset :math:`X ⊆ A` generates :math:`⟨A, F^𝑨⟩` and suppose :math:`g|_X = h|_X`.
+      We show that :math:`f` and :math:`g` are extensionally equal (that is, :math:`f\, a = g\, a` for every :math:`a \in A`). So, fix an arbitrary :math:`a \in A`. Since :math:`𝐴₀` generates 𝑨, there exists a term :math:`t` and a tuple :math:`𝒂 : X → 𝐴₀` of generators such that :math:`a = t^𝑨\, 𝒂`.
  
-      Fix an arbitrary :math:`a: A`. We show :math:`g\, a = h\, a`.
- 
-      Since :math:`X` generates 𝑨, there exists a term :math:`t` and a tuple :math:`x: ρt → X` of generators such that :math:`a = t^𝑨\, x`.
- 
-      Therefore, since :math:`g|_X = h|_X`, we have
+      Since :math:`f|_{𝐴₀} = g|_{𝐴₀}`, we have
     
-      .. math:: g ∘ x = (g\, x_0, \dots, g\, x_{ρ t}) = (h\, x_0, \dots, h\, x_{ρ t}) = h ∘ x,
+      .. math:: f ∘ 𝒂 = (f\, 𝒂(0), f\, 𝒂(1), \dots) = (g \, 𝒂(0), g\, 𝒂(1), \dots) = g ∘ 𝒂,
 
       so
 
-      .. math:: g\, a = g(t^𝑨 \, x) = t^𝑩 (g ∘ x) = t^𝑩 (h ∘ x) = h(t^𝑨 \,x) = h\, a.
+      .. math:: f\, a = f(t^𝑨 \, 𝒂) = t^𝑩 (f ∘ 𝒂) = t^𝑩 (g ∘ 𝒂) = g(t^𝑨 \,𝒂) = g\, a.
 
       ☐
 
-.. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 2>` is described in :numref:`homomorphisms-that-agree-on-a-generating-set`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
+Our Agda proof of :numref:`Obs %s <obs 3>` is called ``HomUnique``.  It is presented :numref:`obs 3 agda`.
 
-.. _obs 3:
+.. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 3>` is described in :numref:`homomorphisms-that-agree-on-a-generating-set`,  and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
 
-.. proof:observation:: UAFST Exercise 1.4.6.c
+A corollary of the last result is an easily proved bound on the cardinality of :math:`|\mathsf{Hom}(𝑨, 𝑩)|`.
+
+.. _obs 4:
+
+.. proof:observation:: Exercise 1.4.6.c of :cite:`Bergman:2012`
 
    If :math:`A, B` are finite and :math:`X` generates 𝑨, then :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`.
 
@@ -756,11 +761,13 @@ We start with the simple observation that composing homomorphisms gives a homomo
     
          *Proof*.
 
-      By :numref:`Obs %s <obs 2>`, a homomorphism is uniquely determined by its restriction to a generating set.
+      By :numref:`Obs %s <obs 3>`, a homomorphism is uniquely determined by its restriction to a generating set.
 
       If :math:`X` generates 𝑨, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`. ☐
     
-.. _obs 4:
+Here is an elementary result about factorability of homomorphisms.  The informal proof is presented below and its formalization in :numref:`obs 5 agda`.
+
+.. _obs 5:
 
 .. proof:observation::
 
@@ -788,7 +795,9 @@ We start with the simple observation that composing homomorphisms gives a homomo
       
       One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
       
-      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Chapter %s <basic facts in agda>` when we implement :numref:`Obs %s <obs 4>` in Agda.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`.
+..      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Chapter %s <basic facts in agda>` when we implement :numref:`Obs %s <obs 4>` in Agda.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the
+
+      (**Question**. Do we need Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`?)
    
       It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
 
@@ -809,22 +818,27 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
 
-.. .. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 4>` is described in :numref:`factoring homomorphisms`, and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
+.. .. **Formalization**. Our formal implementation of :numref:`Obs %s <obs 5>` is described in :numref:`factoring homomorphisms`, and is included in the `birkhoff.agda`_ file of the `agda-ualib`_ library.
 
-.. _obs 5:
+Next we observe that the intersection of subuniverses is again a subuniverse.
+
+.. _obs 6:
 
 .. proof:observation::
 
    Suppose :math:`A_i ≤ 𝑨` for all :math:`i` in some set :math:`I`. Then :math:`⋂_{i∈ I} A_i` is a subuniverse of :math:`𝑨`.
 
+(The proof is easy.)
 
 .. --------------------------------------------------------------------------------------
 .. SUBUNIVERSE GENERATION
 .. -------------------------------------------
 
-.. _obs 6:
+Here is the theorem that critically provides us with the means to generate subuniverses recursively.
 
-.. proof:observation:: UAFST Thm 1.14
+.. _obs 7:
+
+.. proof:observation:: Thm 1.14 of :cite:`Bergman:2012`
 
    Let :math:`𝑨 = ⟨A, F^{𝑨}⟩`  be  an  algebra in the signature :math:`σ = (F, ρ)` and let :math:`A_0` be a subset of :math:`A`.
 
@@ -867,7 +881,7 @@ We start with the simple observation that composing homomorphisms gives a homomo
     
       Therefore, :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`, as desired. ☐ 
 
-.. The argument in the proof of :numref:`Obs <obs 6>` is of a type that one encounters frequently throughout algebra. It has two parts.
+.. The argument in the proof of :numref:`Obs <obs 7>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
 ..   #. Some set :math:`Y` is shown to be a subuniverse of 𝑨 that contains :math:`A_0`.
 
@@ -888,10 +902,20 @@ We start with the simple observation that composing homomorphisms gives a homomo
 .. We seek a "bottom-up," inductive description of the members of :math:`\mathsf{Clo}(F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <obs 6>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available.
 
 
-.. _obs 7:
+..
+   Inductive version of Clo(F).  (UAFST Thm 4.3) Let A be a set and let F ⊆ Op(A):= ⋃ₙ A^Aⁿ be a collection of operations on A. Define F_0 := Proj(A) (the set of projection operations on A), and for all 0 ≤ n < ω, F_{n+1} := Fₙ ∪ {f g | f ∈ F, g : Fin(ρ f) -> Fₙ ∩ (Fin(ρg) -> A)}. Then Clo(F) = ⋃ₙ Fₙ.
 
-.. proof:observation:: UAFST Thm 4.3
+   *Proof*. Let F̄ = ⋃ₙ Fₙ. By induction, every Fₙ is a subset of Clo(F). Thus, F ⊆ Clo(F). For the converse inclusion, we must show F` is a clone that contains F. Obviously F contains the projection operations, F₀ ⊆ F̄. For every f ∈ F, we have f πᵏ ∈ F₁ ⊆ F̄, where k := ρ f. We must show that F̄ is closed under generalized composition. This follows from the following subclaim.
 
+     *Subclaim*. If f ∈ Fₙ and all entries of g := (g₀, ..., g_{ρf - 1} ∈ Fₘ are k-ary, then f g ∈ F_{n+m},
+     where we have defined g: Fin(ρ f) -> (k -> A) -> A to be the tuple given by g i = gᵢ for
+     each 0 ≤ i < ρ f.
+
+   By induction on n: If n = 0 then f is a projection, so f g = gᵢ ∈ Fₘ for some 0 ≤ i < ρ f. Assume (IH) claim holds for n and f ∈ F_{n+1} - Fₙ.  By def, ∃ t-ary op fᵢ ∈ F, ∃ t-tuple, h = (h₀, ..., h_{t-1}) ∈ t -> Fₙ, such that f = fᵢ h. (N.B. h: Fin(t) → (Fin(ρ f) → A) → A is given by h(j) = hⱼ, and the arity of each hᵢ must be equal to that of f, namely ρ f.) By (IH) for each i ≤ k, hᵢ = hᵢ g ∈ F_{n+m}, where as above g = (g₀,...,g_{k-1}). By def, f₁ h' ∈ F_{n+m+1} = F_{(n+1)+m}. Since f₁ h' = f₁ ∘ (h₁ g, ..., hₜ g) = f g, the claim is proved. □
+
+.. _obs 8:
+
+.. proof:observation:: Thm 4.3 of :cite:`Bergman:2012`
 
    Let :math:`A` be a set and let :math:`F ⊆ \mathsf{Op}(A):= ⋃_{n<ω} A^{A^n}` be a collection of operations on :math:`A`.
    
@@ -939,9 +963,11 @@ We start with the simple observation that composing homomorphisms gives a homomo
 
       the claim is proved. □
 
-.. _obs 8:
+Our formal implementation of :numref:`Obs %s <obs 8>` appears in :numref:`obs 8 agda`.
 
-.. proof:observation:: UAFST Thm 4.21
+.. _obs 9:
+
+.. proof:observation:: Thm 4.21 of :cite:`Bergman:2012`
 
    #. :math:`𝑻 := 𝑻_σ(X)` is generated by :math:`X`.
  
@@ -953,9 +979,8 @@ We start with the simple observation that composing homomorphisms gives a homomo
      
          *Proof*.
      
-      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <obs 6>`. That accounts for the first assertion.
+      The definition of :math:`𝑻` exactly parallels the construction in :numref:`Theorem %s <obs 7>`. That accounts for the first assertion.
      
-
       For the second assertion, define :math:`h\,t` by induction on the :term:`height` of :math:`|t|`.
      
       Suppose :math:`|t| = 0`.  Then :math:`t ∈ X ∪ F_0`.
@@ -964,19 +989,21 @@ We start with the simple observation that composing homomorphisms gives a homomo
      
       For the inductive step, assume :math:`|t| = n + 1`. Then :math:`t = f\,s` for some :math:`f ∈ F` and :math:`s: ρ f → T_n`, where for each :math:`0 ≤ i< ρ f` the term :math:`s\, i` has height at most :math:`n`. We define :math:`h\,t = f^𝑨(h ∘ s) = f^𝑨(h\,s_1, \dots, h\,s_k)`.
      
-      By its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`. The uniqueness of :math:`h` follows from :numref:`Obs %s <obs 2>`. ☐
+      By its very definition, :math:`h` is a homomorphism that agrees with :math:`g` on :math:`X`. The uniqueness of :math:`h` follows from :numref:`Obs %s <obs 3>`. ☐
    
+Our formal implementation of :numref:`Obs %s <obs 9>` appears in :numref:`obs 9 agda`.
+
 In the next observation, assume :math:`𝑨 = ⟨A, F^𝑨⟩` and :math:`𝑩 = ⟨B, F^𝑩⟩` are algebras in the same signature :math:`σ = (F, ρ)`, and let :math:`t ∈ T_σ (X)` be an :math:`n`-ary term.
 
 In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`interpretation of terms`). We denote the interpretation of :math:`t` in :math:`𝑨` by :math:`t^𝑨 a = t^𝑨 (a\, 0, a\, 1, \dots, a\, (n-1))`, where :math:`a: \mathsf{Fin}(n) → A`. Similarly, :math:`t^𝑩: (\mathsf{Fin}(n) → B) → B` is the interpretation of :math:`t` in :math:`𝑩`.
     
 .. _thm 4.32:
 
-.. _obs 9:
+.. _obs 10:
 
 .. proof:observation:: homomorphisms commute with terms
 
-   #. :math:`g: 𝑨 → 𝑩` is a homomorphism, then :math:`g ∘ a: \mathsf{Fin}(n) → B` is the :math:`n`-tuple whose :math:`i`-th component is :math:`(g ∘ a)\, i = g(a\, i)`, and
+   #. If :math:`f : 𝑨 → 𝑩` is a homomorphism, then :math:`g ∘ a: \mathsf{Fin}(n) → B` is the :math:`n`-tuple whose :math:`i`-th component is :math:`(g ∘ a)\, i = g(a\, i)`, and
   
       .. math:: g(t^𝑨 a) = t^𝑩(g ∘ a).
 
@@ -988,13 +1015,13 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
       This is an easy induction on :math:`|t|`. ☐
     
-.. _obs 10:
+We implement this result in Agda in :numref:`obs 10 agda`.
+
+.. _obs 11:
 
 .. proof:observation:: terms respect congruences
 
-   If :math:`θ` is a congruence of :math:`𝑨` and :math:`a, a': \mathsf{Fin}(n) → A` are :math:`n`-tuples over :math:`A`, then
-    
-   .. math:: (a, a') ∈ θ \; ⟹  \; (t^𝑨\,a, t^𝑨\,a') ∈ θ.
+   Let 𝑨 be an 𝑆-algebra, 𝑡 a term in the language of 𝑆, and θ a congruence of 𝑨.  Then for all tuples 𝒂, 𝒃 : 𝑋 → 𝑨, we have (∀ i, 𝒂(i) θ 𝒃(i)) → (t^𝑨 𝒂) θ (t^𝑨 𝒃).
 
    .. container:: toggle
     
@@ -1004,13 +1031,15 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
       This follows from :numref:`Obs %s <obs 8>` by taking :math:`⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
     
-.. _obs 11:
+Our formal implementation of :numref:`Obs %s <obs 11>` is presented in :numref:`obs 11 agda` as part of the ``terms`` module of the ``agda-ualib``.
+
+.. _obs 12:
 
 .. proof:observation:: subuniverse generation as image of terms
 
    If :math:`Y` is a subset of :math:`A`, then
 
-      .. math:: \mathsf{Sg}^{𝑨}(Y) = \{ t^𝑨 \, a ∣ t ∈ T_σ(X_n), \, n ∈ ℕ, \; a: ρ t → Y\}.
+      .. math:: \mathsf{Sg}^{𝑨}(Y) = \{t^𝑨 𝒂 : t ∈ T(X), 𝒂 : X → Y\}.
 
    .. container:: toggle
     
@@ -1018,8 +1047,9 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
     
         *Proof*.
     
-      A straightforward induction on the height of :math:`t` shows that every subuniverse is closed under the action of :math:`t^𝑨`. Thus the right-hand side is contained in the left. On the other hand, the right-hand side is a subuniverse that contains the elements of :math:`Y` (take :math:`t = x_1`), so it contains :math:`\mathsf{Sg}^{𝑨}(Y)` as the latter is the smallest subuniverse containing :math:`Y`. ☐
+      A straightforward induction on the height of :math:`t` shows that every subuniverse is closed under the action of :math:`t^𝑨`. Thus the right-hand side is contained in the left. On the other hand, the right-hand side is a subuniverse that contains the elements of :math:`Y` (take :math:`t = x`), so it contains :math:`\mathsf{Sg}^{𝑨}(Y)` as the latter is the smallest subuniverse containing :math:`Y`. ☐
 
+Our formal implementation of :numref:`Obs %s <obs 12>` is presented in :numref:`obs 12 agda` as part of the ``subuniverses`` module of the ``agda-ualib``.
 
 .. -----------------------------------------------------------------
 .. MALCEV TERMS and CONDITIONS
@@ -1059,30 +1089,31 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
 
 .. (fact-m1)
    
-.. _obs 12:
+.. _obs 13:
 
-.. proof:observation::
+.. proof:observation:: Lem 4.36 of :cite:`Bergman:2012`
 
-   For every class 𝒦, each of the classes :math:`𝖲(𝒦)`, :math:`𝖧(𝒦)`, :math:`𝖯(𝒦)`, and :math:`𝕍(𝒦)` satisfies exactly the same identities as does 𝒦.
+   If 𝒦 is a class of 𝑆-algebras, then each of the classes 𝑺(𝒦), 𝑯(𝒦), 𝑷(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦.
 
-   .. container:: toggle
- 
-      .. container:: header
- 
-         *Proof*.
+.. container:: toggle
 
-      We prove the result for :math:`𝖧(𝒦)` and leave the others as exercises.
+   .. container:: header
 
-      Clearly :math:`𝒦 ⊆ 𝖧(𝒦)`, so :math:`\mathsf{Th} \, 𝖧 (𝒦) ⊆  \mathsf{Th} \,𝒦`. 
+      *Proof*.
 
+   We prove the result for 𝑯(𝒦). 𝒦 ⊆ 𝑯(𝒦), so Th 𝑯 (𝒦) ⊆  Th 𝒦 …
+
+We present a formalization of this result and its proof in :numref:`obs 13 agda`.
 
 .. fact-m2
 
-.. _obs 13:   
+.. _obs 14:   
 
-.. proof:observation:: UAFST Lem 4.37
+.. proof:observation:: Lem 4.37 of :cite:`Bergman:2012`
 
-   :math:`𝒦 ⊧ p ≈ q` if and only if :math:`∀ 𝔸 ∈ 𝒦`, :math:`∀ h ∈ \mathsf{Hom}(𝕋(X_ω), 𝔸)`, :math:`h\, p^𝔸 = h\, q^𝔸`.
+   Let 𝓚 be a class of 𝑆-algebras, 𝔉 the term algebra and 𝑝, 𝑞 terms in the language of 𝑆. Then,
+
+   .. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝔉, 𝑨), h ∘ p^𝔉 = h ∘ q^𝔉.
 
    .. container:: toggle
  
@@ -1090,84 +1121,63 @@ In particular, :math:`t` has an interpretation in :math:`𝑨` (see :numref:`int
  
          *Proof*.
       
-      (⇒) Assume that :math:`𝒦 ⊧ p ≈ q`.
-      
-          Fix :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \mathsf{Hom}(𝕋(X_ω), 𝔸)`.
-      
-          We must show :math:`∀ a: \mathsf{Fin}(ρ p) → A` that :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`.
+      Let 𝔉 denote the term algebra, ∣ 𝔉 ∣ the collection of terms, in the language of 𝑆.
 
-          Fix :math:`a: \mathsf{Fin}(ρ p) → A`.
+      (⇒) Assume :math:`𝒦 ⊧ p ≈ q`. Fix 𝑨 ∈ 𝒦,  :math:`h : 𝔉 → 𝑨`, and 𝒂 : X → ∣ 𝔉 ∣.  By 𝑨 ⊧ p ≈ q we have :math:`p^𝑨 = q^𝑨` which implies :math:`p^𝑨(h ∘ 𝒂) = q^𝑨(h ∘ 𝒂). Since :math:`h` is a homomorphism, we obtain :math:`h (p^𝔉 𝒂) = h (q^𝔉 𝒂)`, as desired.
 
-          By :math:`𝔸 ⊧ p ≈ q` we have :math:`p^{𝔸} = q^{𝔸}` which implies :math:`p^{𝔸}(h ∘ a) = q^{𝔸}(h ∘ a)`.
-      
-          Since :math:`h` is a homomorphism, we obtain :math:`h(p^{𝔸}\, a) = h(q^{𝔸}\, a)`, as desired.
+      (⇐) Assume :math:`∀ 𝑨 ∈ 𝒦, ∀ h : \mathrm{Hom} 𝔉 𝑨`, we have :math:`h ∘ p^𝔉 = h ∘ q^𝔉`. Fix 𝑨 ∈ 𝒦 and 𝒂 : X → ∣ 𝑨 ∣.  We prove :math:`p^𝑨 𝒂 = q^𝑨 𝒂`.  By :numref:`Obs %s <obs 9>`, 𝒂 extends to a homomorphism from 𝔉 to 𝑨. Denote this extension by 𝒂̂.  By assumption  :math:`𝒂̂ ∘ p^𝔉 = 𝒂̂ ∘ q^𝔉`, and since 𝒂̂ is a homomorphism, :math:`p^𝑨 𝒂 =  p^𝑨(𝒂̂ ∘ x) = 𝒂̂ (p^𝑨 x) = 𝒂̂ (q^𝑨 x) = q^𝑨 (𝒂̂ ∘ x) = q^𝑨 𝒂`.
 
-      (⇐) Assume :math:`∀ 𝔸 ∈ 𝒦`, :math:`∀ h ∈ \mathsf{Hom}(𝕋(X_ω), 𝔸)`, :math:`h\, p^𝔸 = h\, q^𝔸`.
-      
-          We must show :math:`𝒦 ⊧ p ≈ q`.
-          
-          Fix :math:`𝔸 ∈ 𝒦` and :math:`a: \mathsf{Fin}(ρ p) → A`.
-          
-          We must prove :math:`p^𝔸 \, a = q^𝔸\, a`.
-          
-          Let :math:`h_0 : X_ω → A` be a function with :math:`h_0\, x\, i = a\, i` for all :math:`0≤ i < ρ p`, for some :math:`x: ρ p → X_ω`.
-          
-          By :numref:`Obs %s <obs 6>`, :math:`h_0` extends to a homomorphism :math:`h` from :math:`𝕋(X_ω)` to 𝔸.
-      
-          By assumption :math:`h\, p^𝔸 = h\, q^𝔸`, and since :math:`h` is a homomorphism,
-      
-          .. math:: p^{𝔸}\, a =  p^{𝔸}(h ∘ x) = h(p^{𝔸} \, x) = h(q^𝔸 \, x) = q^𝔸 (h ∘ x) = q^𝔸 \, a,
-      
-          so :math:`p^{𝔸}\, a = q^𝔸 \, a`, as desired. ☐
+A formalization of this result is presented in :numref:`obs 14 agda`.
 
 .. (fact-m3)
 
-.. _obs 14:   
+.. _obs 15:
 
-.. proof:observation:: 
+.. _Thm 4.38:
 
-   Let 𝒦 be a class of algebras and :math:`p ≈ q` an equation. The following are equivalent.
+.. proof:theorem:: Thm. 4.38 of :cite:`Bergman:2012`
 
-     #. :math:`𝒦 ⊧ p ≈ q`.
+   Let 𝒦 be a class of algebras and 𝑝 ≈ 𝑞 an equation. The following are equivalent.
 
-     #. :math:`(p, q)` belongs to the congruence :math:`λ_{𝒦}` on :math:`𝕋(X_ω)`.
-
-     #. :math:`𝔽_{𝒦}(X_ω) ⊧ p ≈ q`.
+    #. 𝒦 ⊧ 𝑝 ≈ 𝑞.
+    #. (𝑝, 𝑞) belongs to the congruence :math:`λ_𝒦` on 𝑻(𝑋).
+    #. :math:`𝑭_𝒦(X) ⊧ 𝑝 ≈ 𝑞`.
 
    .. container:: toggle
- 
+
       .. container:: header
- 
+
          *Proof*.
-      
-      We shall show (1) ⟹ (3) ⟹ (2) ⟹ (1). 
-      
-      Recall that :math:`𝔽_{𝒦}(X_ω) = 𝕋/λ ∈ 𝖲 𝖯 (𝒦)`.
-      
-      From (1) and Lemma 4.36 of :term:`UAFST` we have :math:`𝖲 𝖯 (𝒦) ⊧ p ≈ q`. Thus (3) holds.
 
-      From (3), :math:`p^{𝔽} \, [x] = q^{𝔽} \, [x]`, where :math:`[x]: ρ p → 𝔽_𝒦 (X_ω)` is defined by :math:`[x]\, i = x_i/λ`.
-      
-      From the definition of 𝔽, :math:`p^{𝕋}\, x ≡_λ q^{𝕋} ×`, from which (2) follows since :math:`p = p^{𝕋}\, x` 
-      and :math:`q = q^{𝕋}\, x`.
+      Recall that :math:`𝑭_𝒦(X) = 𝑻/λ ∈ 𝑺𝑷(𝒦)`. We show (1) ⟹ (3) ⟹ (2) ⟹ (1).
 
-      Finally assume (2). We wish to apply Lemma 4.37 of :term:`UAFST`.
-      
-      Let :math:`𝔸 ∈ 𝒦` and :math:`h ∈ \mathsf{Hom}(𝕋, 𝔸)`.
-      
-      Then :math:`𝕋/\ker h ∈ 𝖲 (𝔸) ⊆ 𝖲(𝒦)` so :math:`\ker h ⊇ λ`.  Thus, (2) implies :math:`h\, p = h\, q` hence (1) holds, completing the proof. ☐
+      (1) ⟹ (3). From (1) and :numref:`Obs %s <obs 13>` we have 𝑺𝑷(𝒦) ⊧ 𝑝 ≈ 𝑞. Thus (3) holds.
 
-The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝔽(X_ω)`. Sometimes it is convenient to work with algebras free on other generating sets besides :math:`X_ω`. The following corollary takes care of that for us.
+      (3) ⟹ (2). From (3), :math:`p^𝑭 [x] = q^𝑭 [x]`, where [x]: X → 𝑭_𝒦 (X) is defined by [x] 𝑖 = 𝑥ᵢ/λ. From the definition of 𝑭, :math:`p^𝑻 x ≡λ q^𝑻 x`, from which (2) follows since :math:`p = p^𝑻 x` and :math:`q = q^𝑻 x`.
+
+      (2) ⟹ (1). We wish to apply :numref:`Obs %s <obs 14>`. Let 𝑨 ∈ 𝒦 and :math:`h ∈ \mathrm{Hom}(𝔉, 𝑨)`. Then :math:`𝔉/\mathrm{ker} h ∈ 𝑺(𝑨) ⊆ 𝑺(𝒦)` so :math:`\mathrm{ker} h ⊇ λ`.  Thus, (2) implies :math:`h p = h q` hence (1) holds.
+
+The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝑭(X)`.
+
+.. Sometimes it is convenient to work with algebras free on other generating sets besides 𝑋. The following corollary takes care of that for us.
+
+.. .. _Obs 2.16:
+.. .. _Thm 4.41:
+
+.. .. proof:theorem:: Birkhoff (1935) Every  finitely  generated  variety  is  locally finite. (UAFST Thm 3.49)
+
+.. (This is not needed for the HSP theorem, but we might want to prove it next.)
+
+.. The converse of the last theorem is false.  That is, ∃ loc fin varieties that are not finitely generated(e.g., the variety of p-algebras; see UAFSt Cor. 4.55).
 
 
 .. (fact-m4):
 
-.. _obs 15:   
+.. _obs 16:   
 
-.. proof:observation:: 
+.. proof:observation:: Cor. 4.39 of :cite:`Bergman:2012`
 
-   Let :math:`𝒦` be a class of algebras, :math:`p` and :math:`q` :math:`n`-ary terms, :math:`Y` a set and :math:`y_1, \dots, y_n` distinct elements of :math:`Y`. Then :math:`𝒦 ⊧ p ≈ q` if and only if
-   :math:`p^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n) = q^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n)`. In particular, :math:`𝒦 ⊧ p ≈ q` if and only if :math:`𝔽_{𝒦}(X_n) ⊧ p ≈ q`.
+   Let 𝒦 be a class of algebras, 𝑝, 𝑞 terms (say, 𝑛-ary), 𝑌 a set, and 𝑦₁, …, 𝑦ₙ distinct elements of 𝑌. Then 𝒦 ⊧ 𝑝 ≈ 𝑞 if and only if :math:`p^{𝑭_𝒦(𝑌)}(y₁, …, yₙ) = q^{𝑭_𝒦}(𝑌)(y₁, …, yₙ)`. In particular, 𝒦 ⊧ 𝑝 ≈ 𝑞 iff 𝑭_𝒦(𝑋ₙ) ⊧ 𝑝 ≈ 𝑞.
 
    .. container:: toggle
  
@@ -1175,33 +1185,25 @@ The last result tells us that we can determine whether an identity is true in a 
  
          *Proof*.
       
-      Since :math:`𝔽_{𝒦}(Y) ∈ 𝖲 𝖯 (𝒦)`, the left-to-right direction uses the same argument as in Thm 4.38 of :term:`UAFST`. (See :numref:`Obs %s <obs 14>` above.)
-      
-      So assume that :math:`p^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n) = q^{𝔽_{𝒦}(Y)}(y_1, \dots, y_n)`.
-      
-      To show that :math:`𝒦 ⊧ p ≈ q`, let :math:`𝔸 = ⟨ A, f^{𝔸} ⟩ ∈ 𝒦` and :math:`a_1, \dots, a_n ∈ A`. We must show :math:`p^{𝔸}(a_1, \dots, a_n) = q^{𝔸}(a_1, \dots, a_n)`.
+      Since :math:`𝑭_𝒦(Y) ∈ 𝑺 𝑷(𝒦)`, the left-to-right direction uses the same argument as in :numref:`Thm %s <Thm 4.38>`.  So assume that :math:`p^{𝑭_𝒦(Y)}(y₁, …, yₙ) = q^{𝑭_𝒦(Y)}(y₁, …, yₙ)`. To show that 𝒦 ⊧ 𝑝 ≈ 𝑞, let 𝑨 = ⟨𝐴, 𝑓^𝑨 ⟩ ∈ 𝒦 and 𝑎₁, ..., 𝑎ₙ ∈ 𝐴. We must show :math:`p^𝑨(a₁, …, aₙ) = q^𝑨(a₁, …,aₙ)`. There is a homomorphism :math:`h : 𝔽_𝒦(Y) → (A, f^𝑨)` such that :math:`h(yᵢ) = aᵢ` for :math:`i ≤ n`. Then,
 
-      There is a homomorphism :math:`h : 𝔽_{𝒦}(Y) → (A, f^A)` such that :math:`h(y_i) = a_i` for :math:`i ≤ n`. Then
-
-      .. math:: p^{𝔸}(a_1, \dots, a_n) &= p^{𝔸}(h (y_1), \dots, h (y_n)) = h(p^{𝔽_𝒦(Y)}(y_1, \dots, y_n))\\
-                                       &= h(q^{𝔽_𝒦(Y)}(y_1, \dots, y_n)) = q^{𝔸}(h(y_1), \dots, h(y_n))\\
-                                       &= q^{𝔸}(a_1, \dots, a_n).
-
-      It now follows from :numref:`Obs %s <obs 12>` that every equational class is a variety. The converse is **Birkhoff's HSP Theorem**. ☐
-
-We end this subsection with yet another standard but important result.
-
-.. _obs 16:   
-
-.. proof:observation::
-
-    Every  finitely  generated  variety  is  locally finite.
-
-    (See Thm 3.49 of :term:`UAFST` for the proof.)
-
-    The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :term:`UAFST`).
+      .. math:: p^𝑨(a₁, …, aₙ) = p^𝑨(h(y₁), …, h(yₙ)) = h(p^{𝑭_𝒦(Y)}(y₁, …,yₙ)) = h(q^{𝑭_𝒦(Y)}(y₁, …,yₙ)) = q^𝑨(h(y₁), …, h(yₙ)) = q^𝑨(a₁, …, aₙ).
 
 
+It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is **Birkhoff's Theorem**.
+
+..
+   We end this subsection with yet another standard but important result.
+
+   .. _obs 17:   
+
+   .. proof:observation::
+
+       Every  finitely  generated  variety  is  locally finite.
+
+       (See Thm 3.49 of :term:`UAFST` for the proof.)
+
+       The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :term:`UAFST`).
    
 
 ---------------------------

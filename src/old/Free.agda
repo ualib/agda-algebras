@@ -66,14 +66,14 @@ free-lift {𝑨 = 𝑨} h (node 𝓸 args) =
 --lift-hom : {𝑨 : Algebra (i ⊔ j ⊔ k) S}
 lift-hom : {𝑨 : Algebra k S} (h : X -> ∣ 𝑨 ∣)
           ------------------------------------
-  ->       Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨
+  ->       Hom 𝔉 𝑨
 lift-hom {𝑨 = 𝑨} h = free-lift {𝑨 = 𝑨} h , λ 𝓸 𝒂 → cong (⟦ 𝑨 ⟧ _) refl
 --record { ⟦_⟧ₕ = free-lift {A} h; homo = λ args → refl }
 
 -- 2. The lift to  (free -> A)  is unique.
 --    (We need EXTENSIONALITY for this (imported from util.agda))
 free-unique : {𝑨 : Algebra k S}
-  ->    ( f g : Hom{i}{j}{k}{k}{k}{S}{𝑨}{𝑨}{𝑨} 𝔉 𝑨 )
+  ->    ( f g : Hom 𝔉 𝑨 )
   ->    ( ∀ x  ->  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
   ->    (t : Term)
        ---------------------------
@@ -123,6 +123,42 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 ((node 𝓸 args)̇ 𝑨) 𝒂 = (𝓸 ̂ 𝑨) λ{x -> (args x ̇ 𝑨) 𝒂 }
 
+interp-prod : {ℓ : Level}{I : Set ℓ}
+  ->         (p : Term)
+  ->         (𝓐 : I -> Algebra ℓ S)
+  ->         (x : X -> ∀ i -> ∣ (𝓐 i) ∣)
+  ->         (p ̇ Π 𝓐) x ≡ (λ i → (p ̇ 𝓐 i) (λ j -> x j i))
+interp-prod (generator x₁) 𝓐 x = refl
+interp-prod (node 𝓸 𝒕) 𝓐 x =
+  let IH = λ x₁ -> interp-prod (𝒕 x₁) 𝓐 x in
+    begin
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x)
+    ≡⟨ cong (⟦ Π 𝓐 ⟧ 𝓸 ) (extensionality IH) ⟩
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ≡⟨ refl ⟩
+      (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ∎
+
+
+interp-prod2 : {ℓ : Level}{I : Set ℓ}
+  ->         (p : Term)
+  ->         (𝓐 : I -> Algebra ℓ S)
+  ->         p ̇ Π 𝓐 ≡ λ (args : X -> ∣ Π 𝓐 ∣ ) ->
+                          (λ i → (p ̇ 𝓐 i) (λ x -> args x i))
+interp-prod2 (generator x₁) 𝓐 = refl
+interp-prod2 (node 𝓸 𝒕) 𝓐 = extensionality λ x -> 
+  let IH = λ x₁ -> interp-prod (𝒕 x₁) 𝓐 x in 
+    -- Goal: ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x) ≡
+    --       (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ x₂ → x x₂ i₁)))
+    begin
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ Π 𝓐) x)
+    ≡⟨ cong (⟦ Π 𝓐 ⟧ 𝓸 ) (extensionality IH) ⟩
+      ⟦ Π 𝓐 ⟧ 𝓸 (λ x₁ → (λ i₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ≡⟨ refl ⟩
+      (λ i₁ → ⟦ 𝓐 i₁ ⟧ 𝓸 (λ x₁ → (𝒕 x₁ ̇ 𝓐 i₁) (λ j₁ → x j₁ i₁)))
+    ∎
+
+
 -- Recall (cf. UAFST Thm 4.32)
 -- Theorem 1.
 -- Let A and B be algebras of type S. Then the following hold:
@@ -135,7 +171,7 @@ _̇_ : {ℓ₁ : Level} -> Term -> (𝑨 : Algebra ℓ₁ S) -> (X -> ∣ 𝑨 �
 -- PROOF.
 -- 1. (homomorphisms commute with terms).
 comm-hom-term : ∀ {l m} → (𝑨 : Algebra l S) (𝑩 : Algebra m S)
-  ->            (g : Hom{i}{j}{m}{m}{m}{S}{𝑩}{𝑩}{𝑩}{l}{m} 𝑨 𝑩)
+  ->            (g : Hom 𝑨 𝑩)
   ->            (𝒕 : Term)
   ->            (𝒂 : X -> ∣ 𝑨 ∣)
               ----------------------------------------
@@ -160,7 +196,7 @@ compatible-term : (𝑨 : Algebra k S)
   ->              (𝒕 : Term)
   ->              (θ : Con 𝑨)
                  ------------------------------------
-  ->              compatible-fun {i} {j} {k} {S} (𝒕 ̇ 𝑨) ∣ θ ∣
+  ->              compatible-fun (𝒕 ̇ 𝑨) ∣ θ ∣
   -- wjd: I don't know why this ^^^^^^^^^^^^^^^^^ combination
   --      of implicit vars works... very weird.
 compatible-term 𝑨 (generator x) θ p = p x
@@ -174,7 +210,7 @@ _⊢_≈_ : ∀ {l} → Algebra l S → Term → Term → Set _
 𝑨 ⊢ p ≈ q = p ̇ 𝑨 ≡ q ̇ 𝑨
 
 _⊢_≋_ : ∀ {l m} → Pred (Algebra l S) m → Term → Term → Set _
-_⊢_≋_ {l} K p q = {𝑨 : Algebra l S} → 𝑨 ∈ K → 𝑨 ⊢ p ≈ q
+_⊢_≋_ {l}{m} 𝓚 p q = {𝑨 : Algebra l S} → 𝑨 ∈ 𝓚 → 𝑨 ⊢ p ≈ q
 
 ---------------------------------------------------------
 

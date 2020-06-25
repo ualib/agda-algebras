@@ -7,13 +7,14 @@
 
 {-# OPTIONS --without-K --exact-split #-}
 
-open import Preliminaries
-  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
---  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; proj₁; proj₂; _∘_; Pred; _∈_; Lift)
+open import Preliminaries  using (Level; lzero; lsuc;_⊔_; ∃; _,_; ⊥; Bool; _×_; ∣_∣; ⟦_⟧; _≡_; _∘_; Pred; _∈_; Lift)
+-- open import Universe using (Universe; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; _⁺; _̇;_⊔_)
+--; universe-of; id; 𝑖𝑑; _∘_; _,_; Σ; -Σ; pr₁; pr₂; Π; -Π; domain; _×_; _≡_; refl; _∼_; transport; _≡⟨_⟩_; _∎; ap; _∙_; _⁻¹; _⇔_; _iff_; lr-implication; rl-implication)
+
 
 module Basic where
 
--- Operations and projections
+-- -- Operations and projections
 module _ {i j} where
   Op : Set i → Set j → Set (i ⊔ j)
   Op I A = (I → A) → A
@@ -34,8 +35,8 @@ private
 Algebra : (k : Level)  ->  Signature i j
           -------------------------------
   ->      Set _
-Algebra k (𝐹 , ρ) =
-  ∃ λ (A : Set k) -> (𝓸 : 𝐹) -> Op (ρ 𝓸) A
+Algebra k S =
+  ∃ λ (A : Set k) -> (𝓸 : ∣ S ∣) -> Op (⟦ S ⟧ 𝓸) A
 
 private
   variable
@@ -62,3 +63,8 @@ data monoid-op : Set where
 
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
+
+-- Binary product of algebras
+-- _⊗_ : Algebra k S -> Algebra k S -> Algebra k S
+-- 𝑨 ⊗ 𝑩 = (∣ 𝑨 ∣ × ∣ 𝑩 ∣) , λ 𝓸 x → ( ⟦ 𝑨 ⟧ 𝓸 (λ i -> ∣ x i ∣ ) , ⟦ 𝑩 ⟧ 𝓸 (λ i -> ⟦ x i ⟧ ) )
+-- (let's reserve ⊗ for tensor product)
