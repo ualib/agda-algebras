@@ -13,12 +13,12 @@ Preliminaries
 -------------
 
 ::
+
    {-# OPTIONS --without-K --exact-split --safe #-}
 
    open import prelude
    open import basic using (Signature; Algebra)
-   open import relations using (ker; ker-pred; Rel)
-   open import congruences using (𝟎; con; _//_)
+   open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
    module morphisms {S : Signature 𝓞 𝓥} where
 

@@ -20,14 +20,17 @@ The file starts, as usual, with a list of imports.
 
    open import prelude
    open import basic using (Signature; Algebra; Op)
-   open import terms using (Term; _̇_; _̂_; generator; node; comm-hom-term)
+   open import relations using (transitive)
    open import morphisms using (HOM; Hom; hom; is-homomorphism)
-   open import relations using (Transitive)
+   open import terms using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 
    open import Relation.Unary using (⋂)
 
-Subuniverses
----------------
+
+.. _subuniverses in agda:
+
+Subuniverses in Agda
+---------------------
 
 We begin the ``subuniverses`` module with a straightforward definition of the collection of subuniverses of an algebra 𝑨.  Since a subuniverse is a subset of the domain of 𝑨, it is defined as a predicate on ∣ 𝑨 ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ 𝑨 ∣.
 
@@ -104,7 +107,7 @@ Next we formalize the important theorem about subuniverse generation that we pre
 Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a collection {𝐴ᵢ ∣ 𝐴ᵢ ≤ 𝑨} of subuniverses of an algebra 𝑨 is again a subuniverse of 𝑨.  We formalize the statement and proof of this easy fact in Agda as follows.
 
 ::
- 
+
    module _ {𝑨 : Algebra 𝓤 S}  {I : 𝓘 ̇} {A : I → Pred ∣ 𝑨 ∣ 𝓣} where
     sub-inter-is-sub : ( (i : I) → A i ∈ Subuniverses 𝑨) → ⋂ I A ∈ Subuniverses 𝑨
     sub-inter-is-sub Ai-is-Sub 𝓸 𝒂 im𝒂⊆⋂A = α where
@@ -371,7 +374,7 @@ Following MHE's analogous development for groups and their subgroups (cf. `Subgr
     --   at-most-one-homomorphic-structure = ?
 
 
------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 
 The image of an intensional HOM is a subuniverse. (N.B. the proof still requires function extensionality. Question: Is it necessary?)
 
@@ -494,166 +497,5 @@ It seems we may be testing the limits of Agda's universe level paradigm. Maybe w
 
 
 
-
-
-
-
-
-
-..
-   ===========================================================
-                         MISC UNUSED STUFF BELOW
-   ===========================================================
-
-..
-   -----------------------------------------------------------------------------------
-   -- (the following type-checks, but holes remain)
-     hom-image-term-interp : {fe : global-dfunext} {X : 𝓤 ̇ } ( p : Term {X = X} ) (𝒃 : X → ∣ hom-image-alg ∣ )
-       →                            ( p ̇ hom-image-alg ) 𝒃 ≡ ∣ f ∣  ( ( p ̇ 𝑨 ) ( finv 𝒃 ) ) , im ( ( p ̇ 𝑨 ) ( finv 𝒃 ) )
-
-     hom-image-term-interp {fe} {X} (generator x) 𝒃 =
-       let ∣𝒃x∣ = ∣ 𝒃 x ∣ in
-       let ∥𝒃x∥ = ∥ 𝒃 x ∥ in
-       let r1 = ∣ f ∣ (finv 𝒃 x) in
-       let r2 = im ( finv 𝒃 x ) in
-       let left = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ in
-       let fst = ∣ 𝒃 x ∣ ≡⟨ left ⁻¹ ⟩ r1 ∎ in {!!}
-           -- Goal: 𝒃 x ≡ ∣ f ∣ (finv 𝒃 x) , im (finv 𝒃 x)
-             --  𝒃 x                                 ≡⟨ refl _ ⟩
-             -- ∣ 𝒃 x ∣ , ∥ 𝒃 x ∥                    ≡⟨ ap (λ - → - , ∥ 𝒃 x ∥) fst ⟩
-             -- ∣ f ∣ (finv 𝒃 x) , ∥ 𝒃 x ∥           ≡⟨ ? ⟩
-             -- ∣ f ∣ (finv 𝒃 x) , im {A = ∣ 𝑨 ∣} {B = ∣ 𝑩 ∣} (finv 𝒃 x)       ∎
-
-     hom-image-term-interp {fe}{X} (node 𝓸 𝒕) 𝒃 = {!!}
-      where
-       IH : (x : ∥ S ∥ 𝓸)  → ( 𝒕 x ̇ hom-image-alg ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) , im ((𝒕 x ̇ 𝑨) (finv 𝒃 ) )
-       IH x = hom-image-term-interp{fe}{X}(𝒕 x) 𝒃
-
-       com-hom-𝓸 :  ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
-       com-hom-𝓸 = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
-
-       com-hom-t : (x : ∥ S ∥ 𝓸) →    ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) ( finv 𝒃 ) ) ≡ (𝒕 x ̇ 𝑩) (∣ f ∣ ∘ (finv 𝒃 ) )
-       com-hom-t x = comm-hom-term fe 𝑨 𝑩 f (𝒕 x) (finv 𝒃)
-
-       com-hom-𝓸' : ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) ≡ ( (𝓸 ̂ 𝑩) (λ x → ∣ f ∣ ( (𝒕 x ̇ 𝑨) ( finv 𝒃 ) ) ) )
-       com-hom-𝓸' = ∥ f ∥ 𝓸 ( λ x → (𝒕 x ̇ 𝑨) ( finv 𝒃 ) )
-
-       γ :  (x : ∥ S ∥ 𝓸) →  ( (𝒕 x ̇ hom-image-alg) 𝒃 ) ≡ ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,
-                                                   im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )
-       γ = ( 𝓸 ̂ hom-image-alg ) (λ x → ( 𝒕 x ̇ hom-image-alg ) 𝒃 )  ≡⟨ {!!} ⟩
-          ( 𝓸 ̂ hom-image-alg ) (λ x → ∣ f ∣ ( ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) )  , im ( (𝒕 x ̇ 𝑨) (finv 𝒃 ) ) ) ≡⟨ {!!} ⟩
-          ∣ f ∣ ( (𝓸 ̂ 𝑨) (λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃) ) ) ,  im ( (𝓸 ̂ 𝑨) ( λ x → ( 𝒕 x ̇ 𝑨 ) (finv 𝒃 ) ) )   ∎
-
-
-
-
-.. (Failed attempt to prove "uniform" elimination rule was moved to bottom of this file and commented out.)
-
-.. The "non-uniform" (i.e., restricted to a fixed A) elimination rule. (It works, but we'd prefer uniform version.)
-
-..
-   ::
-
-      module _
-       {𝑨 : Algebra 𝓤 S}
-       {𝑩 : Algebra 𝓤 S}
-       {B : Pred ∣ 𝑨 ∣ 𝓤}
-       {𝐹 : (𝓸 : ∣ S ∣) → Op (∥ S ∥ 𝓸) (Σ B)}   where
-
-       data A-is-supalgebra-of_  : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-        mem :  {𝑩 : Algebra 𝓤 S}
-         →    ( {𝓸 : ∣ S ∣ } { x : ∥ S ∥ 𝓸 → Σ B}  →  ∣ 𝐹 𝓸 x ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ x i ∣ ) )
-         →    𝑩 ≡ ( Σ B , 𝐹 ) → A-is-supalgebra-of 𝑩
-
-       _is-subalgebra-of-A : Algebra 𝓤 S  →  _ ̇
-       𝑩 is-subalgebra-of-A = A-is-supalgebra-of 𝑩
-
-       is-supalgebra-elim : A-is-supalgebra-of ( Σ B , 𝐹 )
-        →                 𝑩 ≡ ( Σ B , 𝐹 )    → ( ∀ ( 𝓸 : ∣ S ∣ ) ( x : ∥ S ∥ 𝓸 → Σ B )
-        →                 ∣ 𝐹 𝓸 x ∣ ≡ ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ x i ∣ ) )
-       is-supalgebra-elim (mem .{(Σ B , 𝐹)} eq1 _ ) _ 𝓸 x = eq1
-
-
-
-..
-   -----------------------------------------------------------------------------------
-   -- (the following type-checks, as of 29 May 2020, but holes remain)
-   --The "uniform" (i.e., unrestricted) elimination rule (that we want, but that doesn't work yet).
-   is-subalg-elim : is-univalent 𝓤 → global-funext → (𝑨 𝑩 : Algebra 𝓤 S) (B : Pred ∣ 𝑨 ∣ 𝓤) ( F : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) )
-    →               𝑨 is-supalgebra-of 𝑩 → 𝑩 ≡ (Σ B , F)
-    →               ( 𝓸 : ∣ S ∣ ) ( 𝒃 : ∥ S ∥ 𝓸 → Σ B )
-    →               ∣ F 𝓸 𝒃 ∣  ≡   ∥ 𝑨 ∥ 𝓸 ( λ i → ∣ 𝒃 i ∣ )
-   is-subalg-elim{𝓤 = 𝓤} 𝓤★ fe 𝑨 .(Σ B' , F') B F (mem B' F' Fᴮ≡Fᴬ) eqv 𝓸 𝒃 = γ
-    where
-     𝑩 𝑪 : Algebra 𝓤 S
-     𝑩 = Σ B' , F'
-     𝑪 = Σ B , F
-
-     𝑩≡𝑪 : 𝑩 ≡ 𝑪
-     𝑩≡𝑪 = eqv
-
-     AlgEquiv : (𝑫 : Algebra 𝓤 S) → 𝑫 ≡ (Σ B , F) → 𝑫 ≡ (Σ B' , F')
-     AlgEquiv 𝑫 eqv' = eqv'  ∙ (eqv ⁻¹) 
-
-     ΣB'≡ΣB : Σ B' ≡ Σ B
-     ΣB'≡ΣB = ap (λ - → pr₁ -) 𝑩≡𝑪
-
-     ΣB'≃ΣB : Σ B' ≃ Σ B
-     ΣB'≃ΣB = Id→Eq (Σ B') (Σ B) ΣB'≡ΣB -- ...so ΣB≃ΣB' is a pair (f, p) where f : Σ B → Σ B' and p : is-equiv f
-
-     -- Id→Eq : (X Y : 𝓤 ̇) → X ≡ Y → X ≃ Y
-     -- Id→Eq X X (refl X) = id-≃ X
-     -- id-≃ : (X : 𝓤 ̇) → X ≃ X
-     -- id-≃ X = 𝑖𝑑 X , id-is-equiv X
-
-     ξ :  (Σ B') → (Σ B)
-     ξ = ∣ ΣB'≃ΣB ∣
-
-     ξ-is-equiv : is-equiv ξ
-     ξ-is-equiv = ∥ ΣB'≃ΣB ∥
-
-     ξ⁻¹ : (Σ B) → (Σ B')
-     ξ⁻¹ = inverse ξ ξ-is-equiv
-
-     constfst : (p : Σ B)  →  pr₁ p ≡ pr₁ ( ξ⁻¹ p )
-     constfst p = {!refl _!} 
-
-     ζ :  (ξ ∘ ξ⁻¹) ∘ 𝒃 ∼ 𝒃
-     ζ x =  ( ( ξ ∘ ξ⁻¹ ) ∘ 𝒃) x  ≡⟨ refl _ ⟩
-              ( ξ ∘ ξ⁻¹ ) (𝒃 x)      ≡⟨ inv-elim-right ξ ξ-is-equiv (𝒃 x) ⟩
-              id (𝒃 x)                ≡⟨ refl _ ⟩
-              𝒃 x                     ∎
-
-     τ : (𝒂 : ∥ S ∥ 𝓸 → ∣ 𝑨 ∣ ) ( p : ( i : ∥ S ∥ 𝓸) → B (𝒂 i) )
-      → ∣ F 𝓸 (λ i → ( 𝒂 i , p i) ) ∣ ≡ ∣ F' 𝓸 (λ i → ξ⁻¹ (𝒂 i , p i)) ∣
-     τ 𝒂 p  = {!!}
-
-     κ : ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘ ξ⁻¹ ∘ 𝒃 )  ≡ ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘  𝒃 )
-     κ = ap (λ - → (∥ 𝑨 ∥ 𝓸 -) ) (fe λ x → (constfst (𝒃 x))⁻¹ )
-
-     γ : ∣ F 𝓸 𝒃 ∣ ≡ ∥ 𝑨 ∥ 𝓸 (λ i → ∣ 𝒃 i ∣)
-     γ = let eqF = Fᴮ≡Fᴬ 𝓸  in
-           ∣ F 𝓸 𝒃 ∣                            ≡⟨ τ (λ i → ∣ 𝒃 i ∣ ) (λ i → ∥ 𝒃 i ∥ ) ⟩
-          ∣ F' 𝓸 ( λ i → ξ⁻¹  (𝒃 i) ) ∣         ≡⟨ Fᴮ≡Fᴬ 𝓸 (λ i →  ξ⁻¹  (𝒃 i)) ⟩
-          ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘ ξ⁻¹ ∘ 𝒃 )          ≡⟨ κ ⟩
-           ∥ 𝑨 ∥ 𝓸 ( pr₁ ∘  𝒃 )  ∎
-
-     ξ-monic : (p q : Σ B')  →  ξ p ≡ ξ q → p ≡ q
-     ξ-monic p q ξ≡ξ = ap (λ - → pr₁ - ) ψ 
-      where
-
-       f1 : fiber ξ ( ξ p )
-       f1 = p , refl _
-
-       f2 : fiber ξ ( ξ p )
-       f2 = q , (ξ≡ξ ⁻¹)
-
-       ψ : f1 ≡ f2
-       ψ = let eq = ξ-is-equiv ( ξ p )  in
-              let c = ∣ eq ∣ in
-              let c-is-center = ∥ eq ∥ in
-                f1    ≡⟨ (c-is-center f1 )⁻¹ ⟩
-                c     ≡⟨ c-is-center f2 ⟩
-                f2    ∎
 
 

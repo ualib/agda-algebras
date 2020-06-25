@@ -336,7 +336,7 @@ What follows is a list of useful definitions from model theory.
      See also: https://ncatlab.org/nlab/show/normal+form
 
    NuPRL
-     An :term:`extensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin Lof type theory; url: http://www.nuprl.org/
+     An :term:`extensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin-Löf type theory; url: http://www.nuprl.org/
 
    Pi type
      The **Pi type** :math:`Π(x:A),B x`, also known as a **dependent function type**, is a dependent type that generalizes the type :math:`A → B`; it is a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x`.

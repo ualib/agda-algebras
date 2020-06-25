@@ -15,10 +15,12 @@ The Agda Universal Algebra Library
 
    preface.rst
    algebras.lagda.rst
+   prelude.lagda.rst
    basic.lagda.rst
+   relations.lagda.rst
    morphisms.lagda.rst
-   subuniverses.lagda.rst
    terms.lagda.rst
+   subuniverses.lagda.rst
    birkhoff.lagda.rst
    
 Appendix

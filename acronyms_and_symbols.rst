@@ -53,6 +53,9 @@ Acronyms and Symbols
    LSTL
      `Lean Standard Library`_
 
+   MHE
+     `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe/>`_
+
    NC
      is the class of decision problems decidable in polylogarithmic (or, O(logᶜ n)) time on a parallel computer with a polynomial number of processors.
 

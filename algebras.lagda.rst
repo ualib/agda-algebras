@@ -22,7 +22,7 @@ One goal of our project was to provide, as a "proof of concept" a formal impleme
 
 A nice (informal) proof of the HSP Theorem appears on pages 106 and 107 of Cliff Bergman's book :cite:`Bergman:2012`. Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book.  Nonetheless, Professor Bergman's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
 
-On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from :cite:`Bergman:2012`, and present them as a list of results at the end of this chapter, and then later, in :numref:`Section %s <basic facts in agda>`, we will formalize each of these results in Agda.
+On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from :cite:`Bergman:2012`, and present them as a list of results at the end of this chapter, and then later, in :numref:`birkhoffs theorem in agda`, we will formalize each of these results in Agda.
 
 Whenever we quote or paraphrase a result from :cite:`Bergman:2012` book, we will include a citation that indicates where the corresponding result is found in the book.
 
@@ -204,8 +204,6 @@ whence :math:`f \, \mathsf{comp}\, G \, a: α` is well-typed.
 Signatures
 ----------
 
-(Our formal `Agda`_ implementation of the concept of signature is described in :numref:`signatures in agda`.)
-
 Classically, a **signature** is a pair :math:`(F, ρ)` consisting of a set :math:`F` of operation symbols and an "arity" function :math:`ρ: F → ℕ`.
 
 For each operation symbol :math:`f ∈ F`, the value :math:`ρ f` is the **arity** of :math:`f`. (Intuitively, the arity can be thought of as the "number of arguments" that :math:`f` takes as "input".)
@@ -239,6 +237,8 @@ Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :ma
    Then :math:`h ∘ a : \mathsf{Fin}(ρf) → B` and :math:`f (h ∘ a) : B`.
 
 It is important to be familiar with the classical notions of signature and arity, since these are used at the present time by virtually all algebraists.
+
+Our formal implementation of the concept of signature in `Agda`_ is described in :numref:`signatures in agda`.)
 
 .. In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theoretic definitions of these concepts and show how this alternative presentation can often simplify implementation of the mathematics in :term:`type theory`.
 
@@ -890,7 +890,7 @@ Here is the theorem that critically provides us with the means to generate subun
 ..   #. One concludes that :math:`Y = \mathsf{Sg}^𝑨 (A_0)`.
 
 
-**Formalization**. Our formal implementation of the concept of subalgebra is described in :numref:`Sections %s <subalgebras in agda>`.
+Our formal implementation of the concept of subalgebra is described in :numref:`Sections %s <subuniverses in agda>`.
 
 .. and is included in the `subuniverse.agda`_ file of the `agda-ualib`_ library.
 
@@ -963,7 +963,7 @@ Here is the theorem that critically provides us with the means to generate subun
 
       the claim is proved. □
 
-Our formal implementation of :numref:`Obs %s <obs 8>` appears in :numref:`obs 8 agda`.
+Our formal implementation of terms and the term algebra is presented in :numref:`terms`.
 
 .. _obs 9:
 

@@ -22,7 +22,6 @@
 .. _Coq: http://coq.inria.fr
 .. _core.lean: https://github.com/leanprover/lean/blob/master/library/init/core.lean
 .. _dependent types: https://en.wikipedia.org/wiki/Dependent_type
-.. _dependent types in Lean: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#dependent-types
 .. _Emacs: https://www.gnu.org/software/emacs/
 .. _Equality Section: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
 .. _Formalization of Universal Algebra in Agda: http://www.sciencedirect.com/science/article/pii/S1571066118300768
@@ -31,6 +30,7 @@
 .. _function.lean: https://github.com/leanprover/lean/blob/master/library/init/function.lean
 .. _functions.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
 .. _HoTT: https://homotopytypetheory.org/
+.. _HoTT-UF-in-Agda: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html
 .. _HSP Theorem: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
 .. _Implicit Arguments: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 .. _Inductive Types in Lean: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
@@ -86,6 +86,7 @@
 .. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
 .. _type theory: https://en.wikipedia.org/wiki/Type_theory
 .. _Type Theory and Formal Proof: <https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction>`_
+.. _Type Topology: <https://github.com/martinescardo/TypeTopology>`_
 .. _Univalent Foundations with Agda: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#additionalexercisessol
 .. _Venanzio Capretta: https://www.duplavis.com/venanzio/
 .. _vscode: https://code.visualstudio.com/

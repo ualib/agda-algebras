@@ -6,9 +6,11 @@
 .. open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext; hfunext; intensionality)
 .. open import Relation.Unary using (Pred)
 
-=======
-Terms
-=======
+.. _terms in agda:
+
+===============
+Terms in Agda
+===============
 
 ::
 
@@ -17,7 +19,7 @@ Terms
    open import prelude
    open import basic using (Signature; Algebra; Π')
    open import morphisms using (HOM; Hom; hom)
-   open import congruences using (Con; compatible-fun)
+   open import relations using (Con; compatible-fun)
 
    module terms {S : Signature 𝓞 𝓥} where  -- 𝓞 ⊔ 𝓥 ⊔ 𝓤
 
@@ -246,8 +248,9 @@ Extensional versions
    compatible-term' 𝑨 (generator x) θ p = p x
    compatible-term' 𝑨 (node 𝓸 args) θ p = ∥ ∥ θ ∥ ∥ 𝓸 λ{ x → (compatible-term' 𝑨 (args x) θ) p }
 
-   -- For proof of 3, see `TermImageSub` in Subuniverse.agda.
-   #. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
+For proof of 3, see `TermImageSub` in Subuniverse.agda.
+
+..    #. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 
 
 

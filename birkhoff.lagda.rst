@@ -4,9 +4,11 @@
 .. UPDATE: 22 Jun 2020
 .. REF: Based on the file `birkhoff.agda` (23 Jan 2020).
 
-=========================
-Birkhoff's HSP Theorem
-=========================
+.. _birkhoffs theorem in agda:
+
+============================
+Birkhoff's theorem in Agda
+============================
 
 The following is Birkhoff's celebrated HSP theorem. The proof we give here (and formalize in Agda) is the same one that appears in Cliff Bergman's excellent textbook on universal algebra (see :cite:`Bergman:2012`, Thm 4.41).
 
@@ -48,8 +50,7 @@ Preliminaries
   open import prelude
   open import basic using (Signature; Algebra; Π')
   open import morphisms using (HOM; Hom; hom; is-homomorphism)
-  open import relations using (ker-pred; Rel)
-  open import congruences using (con; _//_)
+  open import relations using (ker-pred; Rel; con; _//_)
   open import terms using (Term; generator; 𝔉; _̇_; comm-hom-term'; lift-hom; interp-prod)
   open import subuniverses using (Subuniverse; mksub; Sg; _is-subalgebra-of_; var; app; Subalgebra)
 
