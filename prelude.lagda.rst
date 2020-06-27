@@ -28,7 +28,7 @@ This specifies Agda ``OPTIONS`` that we will use throughout the library.  For ex
 Universes
 ~~~~~~~~~~
 
-We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda directive ``module prelude where``.  We then immediately import the ``Universes`` module from Martin Hötzel Escardo's (MHE's) `Type Topology`_ library. 
+We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda directive ``module prelude where``.  We then immediately import the ``Universes`` module from Martin Hötzel Escardo's (:term:`MHE`'s) `Type Topology`_ library. 
 
 ::
 
@@ -36,59 +36,72 @@ We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda d
 
     open import Universes public
 
-This ``Universes`` module provides, among other things, an elegant notation for type universes. (MHE has produced an outstanding set of notes on `HoTT-UF-in-Agda`_, which we highly recommend to those wanting more details than we provide here.)
+This ``Universes`` module provides, among other things, an elegant notation for type universes. (:term:`MHE` has produced an outstanding set of notes on `HoTT-UF-in-Agda`_, which we highly recommend to those wanting more details than we provide here.)
 
-Following MHE, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣 (type these in `agda2-mode` with ``\MCU``, ``\MCV``, etc).  We add a few more to Martin's list.
+Following :term:`MHE`, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣 (type these in `agda2-mode` with ``\MCU``, ``\MCV``, etc).  We add a few more to Martin's list.
 
 ::
 
     variable
       𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
-In the ``Universes`` module, MHE defines the ̇ operator which maps a universe `𝓤` (i.e., a level) to `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`, a.k.a. Type (𝓤 ⁺).  That is, `𝓤 ̇` is simply an alias for `Set 𝓤`, and we have `Set 𝓤 : Set (lsuc 𝓤)`. The level lzero is renamed 𝓤₀, so `𝓤₀ ̇` is an alias for Set lzero. (This corresponds to `Sort 0` in Lean.) Thus, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we denote by `𝓤₀ ⁺ ̇`
+In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a universe `𝓤` (i.e., a level) to `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`, a.k.a. Type (𝓤 ⁺).  That is, `𝓤 ̇` is simply an alias for `Set 𝓤`, and we have `Set 𝓤 : Set (lsuc 𝓤)`. The level lzero is renamed 𝓤₀, so `𝓤₀ ̇` is an alias for Set lzero. (This corresponds to `Sort 0` in Lean.) Thus, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we denote by `𝓤₀ ⁺ ̇`
 
-The following table translates between standard Agda syntax, MHE syntax and Lean syntax.
+.. The following table translates between standard Agda syntax, :term:`MHE` syntax and Lean syntax.
 
-+----------------------+--------------------------+-----------------------------+
-| Agda                 | MHE Notation             | Lean analog                 |
-+======================+==========================+=============================+
-| ``Level``            | ``Universe``             | ``universe``                |
-|  ``lzero``           | ``𝓤₀``                   | ``0 : universe``            |
-| ``Set lzero``        | ``𝓤₀ ̇`` ( = ``Type 𝓤₀``) | ``Sort 0``                  |
-|  ``lsuc lzero``      | ``𝓤₀ ⁺``                 | ``1 : universe``            |
-| ``Set (lsuc lzero)`` | ``𝓤₀ ⁺ ̇``                | ``Sort 1 = Type = Type 0``  |
-+----------------------+--------------------------+-----------------------------+
+.. +----------------------+--------------------------+-----------------------------+
+   | Agda                 |  :term:`MHE` Notation    | Lean analog                 |
+   +======================+==========================+=============================+
+   | ``Level``            | ``Universe``             | ``universe``                |
+   |  ``lzero``           | ``𝓤₀``                   | ``0 : universe``            |
+   | ``Set lzero``        | ``𝓤₀ ̇`` ( = ``Type 𝓤₀``) | ``Sort 0``                  |
+   |  ``lsuc lzero``      | ``𝓤₀ ⁺``                 | ``1 : universe``            |
+   | ``Set (lsuc lzero)`` | ``𝓤₀ ⁺ ̇``                | ``Sort 1 = Type = Type 0``  |
+   +----------------------+--------------------------+-----------------------------+
 
 Public imports
 ~~~~~~~~~~~~~~~
 
-Next we import other parts of Martin's `Type Topology`_ library, using the Agda directive ``public``, which means these imports will be available wherever the ``prelude`` module in imported.  We describe some of these imports later, when making use of them, but we don't describe each one in detail. (The interested or confused reader should consult `HoTT-UF-in-Agda`_ to learn more.)
+Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the Agda directive ``public``, which means these imports will be available wherever the ``prelude`` module in imported.  We describe some of these imports later, when making use of them, but we don't describe each one in detail. (The interested or confused reader should consult `HoTT-UF-in-Agda`_ to learn more.)
 
 ::
 
-    open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓻ℯ𝓯𝓵) public
+    open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
+     refl to 𝓻ℯ𝓯𝓵) public
+
     pattern refl x = 𝓻ℯ𝓯𝓵 {x = x}
+
     open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
+
     open import MGS-MLTT using (_∘_; domain; codomain; transport;
      _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
      _⇔_; lr-implication; rl-implication; id; _⁻¹) public
-    open import MGS-Equivalences using (is-equiv; inverse; invertible) public
-    open import MGS-Subsingleton-Theorems using (funext; dfunext;
-     is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
-     univalence-gives-global-dfunext; Π-is-subsingleton; _≃_;
-     logically-equivalent-subsingletons-are-equivalent; _●_) public
-    open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_) using (𝓟;
-     ∈-is-subsingleton; equiv-to-subsingleton; powersets-are-sets';
-     subset-extensionality') public
-    open import MGS-Embeddings using (is-embedding; pr₁-embedding; is-set; _↪_;
-     embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton) public
-    -- open import MGS-Quotient using (is-subsingleton-valued) public
 
-.. MHE explains, "This says we are defining a binary operator `_,_` to construct the elements of this type as `x , y`. The definition says that an element of `Σ Y` has two `fields`, giving the types for them."
+    open import MGS-Equivalences using (is-equiv; inverse;
+     invertible) public
+
+    open import MGS-Subsingleton-Theorems using (funext;
+     dfunext; is-singleton; is-subsingleton; is-prop; Univalence;
+     global-dfunext; univalence-gives-global-dfunext; _●_; _≃_;
+     logically-equivalent-subsingletons-are-equivalent;
+     Π-is-subsingleton) public
+
+    open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
+     using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
+     powersets-are-sets'; subset-extensionality') public
+
+    open import MGS-Embeddings using (is-embedding; pr₁-embedding;
+     is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
+     ×-is-subsingleton) public
 
 .. We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
 .. The full ``prelude.lagda.rst`` file, which defines other notation and objects we will use throughout the library, appears in the appendix :ref:`preliminaries.agda`. We will describe each of the objects defined therein as they come up in later sections.
+
+----------------------------------------------
+
+Dependent pair type
+--------------------
 
 Our preferred notations for the first and second projections of a product are ``∣_∣`` and ``∥_∥``, respectively; however, we will sometimes use the more standard ``pr₁`` and ``pr₂`` for compatibility with other libraries and sometimes for readability.
 
@@ -100,7 +113,7 @@ Our preferred notations for the first and second projections of a product are ``
     ∥_∥ : {X : 𝓤 ̇}{Y : X → 𝓥 ̇} → (z : Σ Y) → Y (pr₁ z)
     ∥ x , y ∥ = y
 
-For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y`` more than Agda's standard syntax (``Σ λ(x ꞉ X) → y``). `MHE`_ shows us how to define a version of Σ that makes the preferred notation available by making index type explicit.
+For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y`` more than Agda's standard syntax (``Σ λ(x ꞉ X) → y``). :term:`MHE` shows us how to define a version of Σ that makes the preferred notation available by making index type explicit.
 
 .. code-block:: agda
 
@@ -111,7 +124,7 @@ For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y`` m
 
 **WARNING**. The symbol `꞉` in the above syntax definition is not the same as `:`, even though they may look very similar. When entering `Σ x ꞉ A , b`, we must type `\:4` in `agda2-mode` to obtain the `꞉` symbol.
 
-MHE explains, Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`.  This is called `Σ` induction or `Σ` elimination (or `uncurry`).
+:term:`MHE` explains, Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`.  This is called `Σ` induction or `Σ` elimination (or `uncurry`).
 
 .. code-block:: agda
 
@@ -136,10 +149,12 @@ Here's the special case in which the type `Y` doesn't depend on `X`.
     _×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
     X × Y = Σ x ꞉ X , Y
 
-The Pi type former
--------------------
+----------------------------------------
 
-MHE introduces the notation `Π` for them, similar to that for `Σ`.
+Dependent function type
+---------------------------
+
+:term:`MHE` introduces the notation `Π` for them, similar to that for `Σ`.
 
 .. code-block:: agda
 
@@ -176,9 +191,14 @@ MHE introduces the notation `Π` for them, similar to that for `Σ`.
     _⁻¹ : {X : 𝓤 ̇} → {s t : X} → s ≡ t → t ≡ s
     p ⁻¹ = transport (_≡ lhs p) p (refl _) --  (lhs p))
 
+-------------------------------------------------------
+
+Application
+------------
+
 An important tool that we use often in Agda proofs is application of a function to an identification `p : x ≡ x'`. We apply the ``ap`` operator to obtain the identification `ap f p : f x ≡ f x'` when given `p : x ≡ x'` and `f : X → Y`.
 
-Since ``ap`` is already defined in MHE's `Type Topolgy` library, we don't redefine it here.  However, we do define some variations of ``ap`` that are sometimes useful.
+Since ``ap`` is already defined in :term:`MHE`'s `Type Topolgy` library, we don't redefine it here.  However, we do define some variations of ``ap`` that are sometimes useful.
 
 ::
 
@@ -196,12 +216,14 @@ Here is a related tool that we borrow from the ``Relation/Binary/Core.agda`` mod
     cong-app : ∀ {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
     cong-app {f = f} (refl _) a = refl _
 
-.. "Notice that we have so far used the recursion principle `transport` only. To reason about `transport`, `_∙_`, `_⁻¹` and `ap`, we will need to use the full induction principle `𝕁` (or equivalently pattern matching on `refl`)."
+----------------------------------------
 
 Function extensionality
 ------------------------
 
-We will work with pointwise equality of functions, which MHE defines (in `Type Topology`_ ) as follows:
+Extensional equality of functions, or :term:`function extensionality`, means that any two point-wise equal functions are equal.  As :term:`MHE` points out, this is known to be not provable or disprovable in Martin-Löf Type Theory (MLTT).
+
+Nonetheless, we will mainly work with pointwise equality of functions, which :term:`MHE` defines (in `Type Topology`_ ) as follows:
 
 .. code-block:: agda
 
@@ -211,138 +233,7 @@ We will work with pointwise equality of functions, which MHE defines (in `Type T
 
 (The `_∼_` relation will be equivalent to equality of functions, once we have the principle of *univalence* at our disposal.)
 
-.. Here are some more equations for transport, including a dependent version.
-
-..  transport-× : {X : 𝓤 ̇ }(A : X → 𝓥 ̇ )(B : X → 𝓦 ̇)
-                  {x y : X}(p : x ≡ y){c : A x × B x}
-                 ---------------------------------------------------
-     →            transport (λ x → A x × B x) p c
-                   ≡ (transport A p (pr₁ c) , transport B p (pr₂ c))
-    transport-× A B (refl _) {c} = refl _
-
-    transportd : {X : 𝓤 ̇}
-                 (A : X → 𝓥 ̇)(B : (x : X) → A x → 𝓦 ̇)
-                 {x : X} (a : A x)
-                 ((a' , b) : Σ a ꞉ A x , B x a)  {y : X}
-                 (p : x ≡ y)  →   B x a'
-                 --------------------------------
-     →           B y (transport A p a')
-    transportd A B a σ (refl _) = id
-
-    transport-Σ : {X : 𝓤 ̇}
-                  (A : X → 𝓥 ̇)(B : (x : X) → A x → 𝓦 ̇)
-                  {x : X} (y : X) (p : x ≡ y) (a : A x)
-                  {(a' , b) : Σ a ꞉ A x , B x a}
-                 ---------------------------------------------------
-     →            transport (λ x → Σ y ꞉ A x , B x y) p (a' , b)
-                   ≡ transport A p a' , transportd A B a (a' , b) p b
-    transport-Σ A B {x} x (refl _) a {σ} = refl _
-
-.. The following was added later by MHE (see: https://www.cs.bham.ac.uk/~mhe/agda-new/Id.html#1449 )
-
-    back-transport : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) {x y : X} → x ≡ y → A y → A x
-    back-transport B p = transport B (p ⁻¹)
-
-
-.. Negation
-.. ---------
-.. We first introduce notation for double and triple negation to avoid the use of brackets.
-    ¬¬ ¬¬¬ : 𝓤 ̇ → 𝓤 ̇
-    ¬¬ A = ¬(¬ A)
-    ¬¬¬ A = ¬(¬¬ A)
-   To prove `A → ¬¬ A`, start with a hypothetical element `a : A` and function `u : A → 𝟘` and get an element of `𝟘`."
-    dni ¬¬-intro : (A : 𝓤 ̇) → A → ¬¬ A
-    dni A a A→𝟘 = A→𝟘 a
-    ¬¬-intro = dni -- alias
-
-.. Paraphrasing MHE, there is no general way to implement the converse (i.e., from a function (A → 𝟘) → 𝟘, get a point of A). For truth values A, we can assume this as an axiom if we wish, because it is equivalent to em. But for arbitrary types `A`, this would be a form of global choice for type theory, and global choice is known to be inconsistent with univalence (see HoTT book, Thm 3.2.2), because there is no way to choose an element of every non-empty type in a way that is invariant under automorphisms. (However, the AoC is consistent with UF.)
-
-.. In the next proof, we are given `f : A → B`, `v : B → 𝟘` and `a : A`, and we want an element of 𝟘 (easy, since `f a : B`, hence `v (f a) : 𝟘`).
-
-..  contrapositive : {A : 𝓤 ̇} {B : 𝓥 ̇} → (A → B) → (¬ B → ¬ A)
-    contrapositive A→B B→𝟘 = λ a → B→𝟘 (A→B a)
-
-.. Paraphrasing MHE, if we have a function `A → B` and `B` is empty, then `A` must be empty, too. From this we get that three negations imply one (we call it "triple negation reduction" or ¬¬¬-elim):
-    tno ¬¬¬-elim : (A : 𝓤 ̇) → ¬¬¬ A → ¬ A
-    tno A = contrapositive (dni A)
-    ¬¬¬-elim = tno -- alias
-
-.. Hence, using `dni` once again, we get that `¬¬¬ A` if and only if `¬ A`.
-
-.. Logical equivalence
-   --------------------
-    _⇔_  _iff_  : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
-    X ⇔ Y = (X → Y) × (Y → X)
-    _iff_ = _⇔_ -- alias
-    infix 10 _⇔_
-    infix 10 _iff_
-
-    lr-implication iff-elim-left : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (X → Y)
-    lr-implication = pr₁
-    iff-elim-left = pr₁         -- alias
-
-    rl-implication iff-elim-right : {X : 𝓤 ̇} {Y : 𝓥 ̇} → (X iff Y) → (Y → X)
-    rl-implication = pr₂
-    iff-elim-right = pr₂       -- alias
-
-.. We now define a symbol for the negation of equality.
-    _≢_ : {X : 𝓤 ̇} → X → X → 𝓤 ̇
-    x₁ ≢ x₂ = ¬ (x₁ ≡ x₂)
-    infix   0 _≢_
-
-.. Here, we have `u≢v : u ≡ v → 𝟘` and we need `v≢u : v ≡ u → 𝟘`, so just compose `u≢v` with the function that inverts ids.
-    ≢-sym : {X : 𝓤 ̇} {u v : X} → u ≢ v → v ≢ u
-    ≢-sym {𝓤} {X} {u}{v} u≢v = u≢v ∘ (_⁻¹)
-
-.. Paraphrasing MHE, to show the type `𝟙` is not the type `𝟘`, we use that `transport id` gives `𝟙 ≡ 𝟘 → id 𝟙 → id 𝟘` where `id` is the identity on the universe `𝓤₀`. More generally, we have the following conversion of type ids into functions:
-    Id→Fun : {X Y : 𝓤 ̇} → X ≡ Y → X → Y
-    Id→Fun {𝓤} = transport (𝑖𝑑 (𝓤 ̇))
-.. Paraphrasing MHE, so given `p : 𝟙 ≡ 𝟘`, we get a function `𝟙 → 𝟘`. Applying this to `⋆ : 𝟙` we conclude the proof of 𝟙 ≢ 𝟘.
-    𝟙-is-not-𝟘 : 𝟙 ≢ 𝟘
-    𝟙-is-not-𝟘 𝟙≡𝟘 = Id→Fun 𝟙≡𝟘 ⋆
-.. Paraphrasing MHE, to show that the inhabitants `₁` and `₀` of `𝟚` are not equal, we reduce to the above case. (recall, 𝟚 = 𝟙 + 𝟙 is the disjoint union of 𝟙 with a copy of itself; we named the points of 𝟚 using patterns `₀ = inl ⋆`, `₁ = inr ⋆`)
-    ₁-is-not-₀ : ₁ ≢ ₀
-    ₁-is-not-₀ ₁≡₀ = 𝟙-is-not-𝟘 𝟙≡𝟘
-     where
-      f : 𝟚 → 𝓤₀ ̇  -- 𝟚→𝓤₀̇
-      f ₀ = 𝟘
-      f ₁ = 𝟙
-
-      𝟙≡𝟘 : 𝟙 ≡ 𝟘
-      𝟙≡𝟘 = ap f ₁≡₀
-
-.. Decidability
-.. ---------------
-    decidable : 𝓤 ̇ → 𝓤 ̇
-    decidable A = A + ¬ A
-
-    has-decidable-equality : (X : 𝓤 ̇) → 𝓤 ̇
-    has-decidable-equality X = (x₁ x₂ : X) → decidable (x₁ ≡ x₂)
-
-    𝟚-has-decidable-equality : has-decidable-equality 𝟚
-    𝟚-has-decidable-equality ₀ ₀ = inl (refl _)
-    𝟚-has-decidable-equality ₀ ₁ = inr (≢-sym ₁-is-not-₀)
-    𝟚-has-decidable-equality ₁ ₀ = inr ₁-is-not-₀
-    𝟚-has-decidable-equality ₁ ₁ = inl (refl _)
-
-    not-zero-is-one : (n : 𝟚) → n ≢ ₀ → n ≡ ₁
-    not-zero-is-one ₀ n≢₀ = !𝟘 (₀ ≡ ₁) (n≢₀ (refl _ ))
-    not-zero-is-one ₁ _ = refl _
-
-.. The following generalizes `₁-is-not-₀`... (so we could have formulated it first and used it to deduce `₁-is-not-₀`):
-    inl-inr-disjoint-images : {X : 𝓤 ̇} {Y : 𝓥 ̇} {x : X} {y : Y} → inl x ≢ inr y
-    inl-inr-disjoint-images {𝓤}{𝓥}{X}{Y} inlx≡inry = 𝟙-is-not-𝟘 𝟙≡𝟘
-     where
-      f : X + Y → 𝓤₀ ̇
-      f (inl x) = 𝟙
-      f (inr y) = 𝟘
-
-      𝟙≡𝟘 : 𝟙 ≡ 𝟘
-      𝟙≡𝟘 = ap f inlx≡inry
-
-    disjunctive-syllogism : {P : 𝓤 ̇} {Q : 𝓥 ̇} → P + Q → ¬ Q → P
-    disjunctive-syllogism (inl p) _ = p
-    disjunctive-syllogism (inr q) ¬Q = !𝟘 _ (¬Q q)
+-------------------------------------------------------
 
 Predicates, Subsets
 ---------------------
@@ -384,6 +275,8 @@ The subset relation is then denoted, as usual, with the ``⊆`` symbol (cf. ``Re
 
     _⊇_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
     P ⊇ Q = Q ⊆ P
+
+-------------------------------------------------------
 
 Miscellany
 --------------
@@ -487,6 +380,13 @@ The (pseudo-)inverse of an epic function is
     EpicInv f fEpic b = Inv f b (fEpic b)
 
 
+    -- The (psudo-)inverse of an epic is the right inverse.
+    EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B)  (fEpic : Epic f)
+     →            f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
+    EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
+
+
+
 Monics (or injective) functions are defined this way (see also: `left-cancellable` aka `injective` in the `UF-Univalence` module).
 
 ::
@@ -519,18 +419,14 @@ Finally, we define bijective functions as follows.
     Bijective g = Epic g × monic g
 
 
-Extensionality
-------------------
+---------------------------------------------
 
-Extensional equality of functions, or :term:`function extensionality`, means that any two point-wise equal functions are equal.  As MHE explains, this is known to be not provable or disprovable in Martin-Löf Type Theory (MLTT).
+More extensionality
+--------------------
+
+Here we collect miscellaneous definitions and proofs related to extensionality that will come in handy later.
 
 ::
-
-    -- The (psudo-)inverse of an epic is the right inverse.
-    EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇} {B : 𝓦 ̇} (f : A → B)  (fEpic : Epic f)
-     →            f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
-    EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
-
 
     -------------------------------------------------------
     -- Function extensionality from univalence
@@ -548,8 +444,9 @@ Extensional equality of functions, or :term:`function extensionality`, means tha
     intensionality  (refl _ ) _  = refl _
 
     -- dependent intensionality
-    dep-intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇} {B : A → 𝓦 ̇ } {f g : ∀(x : A) → B x}
-     →                f ≡ g  →  (x : A)
+    dep-intensionality : ∀ {𝓤 𝓦}{A : 𝓤 ̇}{B : A → 𝓦 ̇}
+                         {f g : ∀(x : A) → B x}
+     →                   f ≡ g  →  (x : A)
                         ------------------
      →                    f x ≡ g x
 
@@ -558,8 +455,8 @@ Extensional equality of functions, or :term:`function extensionality`, means tha
     --------------------------------------
     --Dependent function extensionality
     dep-extensionality : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
-    dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇} {f g : ∀(x : A) → B x}
-     →                      f ∼ g    →   f ≡ g
+    dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇} {B : A → 𝓦 ̇}
+      {f g : ∀(x : A) → B x} →  f ∼ g  →  f ≡ g
 
     ∀-extensionality : 𝓤ω
     ∀-extensionality = ∀  {𝓤 𝓥} → extensionality 𝓤 𝓥
@@ -572,56 +469,8 @@ Extensional equality of functions, or :term:`function extensionality`, means tha
      →  ( λ i → (p i ) ( λ x → args x i ) ) ≡ ( λ i → (q i ) ( λ x → args x i ) )
     extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
-    -- module _  {I : 𝓘 ̇}  {X : 𝓤 ̇} {A : I → 𝓥 ̇} (fe : Fun-Ext)  where
-
-    --   ext-lemma :  ( p q : (i : I) → (X → A i) → A i )
-    --    →           ( (i : I) (args : X → A i) →  ID (A i) (p i args) (q i args) )
-    --    →            p ≡ q
-    --   ext-lemma p q H = fe λ x → fe (H x)
 
 ------------------
 
 .. include:: hyperlink_references.rst
-
-
-
-
-
-..
-   -- .. -----------------------------------------------------------------------------------------
-   --    N.B. The following variations of function extensionality are borrowed (with permission)
-   --    from Martin Escardo's UF/HoTT MGS course notes.  We include them here because Martin has
-   --    altered their definitions in his latest TypeTopology library, and the revised versions
-   --    are not all backward compatible with code based on the versions below.
-
-   --    Here is the definition of **dependent function extensionality**.
-   --    ::
-
-   --        dfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
-   --        dfunext 𝓤 𝓥 = {X : 𝓤 ̇} {A : X → 𝓥 ̇} {f g : Π A} → f ∼ g → f ≡ g
-
-   --    As MHE explains, the above definition says that there exists a map `f ~ g → f ≡ g`, whereas the following says that the canonical map `happly` in the other direction is an equivalence.
-
-   --    ::
-   --        happly : {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } (f g : Π A) → f ≡ g → f ∼ g
-   --        happly f g p x = ap (λ - → - x) p
-
-   --        hfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
-   --        hfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } (f g : Π A) → is-equiv (happly f g)
-
-   --        hfunext-gives-dfunext : hfunext 𝓤 𝓥 → dfunext 𝓤 𝓥
-   --        hfunext-gives-dfunext hfe {X} {A} {f} {g} = inverse (happly f g) (hfe f g)
-
-   --    As MHE explains, Voevodsky showed that all these notions of function extensionality are logically equivalent to saying that products of singletons are singletons.
-
-   --    ::
-   --        vvfunext : ∀ 𝓤 𝓥 → (𝓤 ⊔ 𝓥)⁺ ̇
-   --        vvfunext 𝓤 𝓥 = {X : 𝓤 ̇ } {A : X → 𝓥 ̇ }
-   --         →              ((x : X) → is-singleton (A x))
-   --                        ------------------------------
-   --         →                 is-singleton (Π A)
-
-   -- ::
-   --     global-dfunext : 𝓤ω
-   --     global-dfunext = ∀ {𝓤 𝓥} → DN-funext 𝓤 𝓥
 
