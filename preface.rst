@@ -96,7 +96,7 @@ Regarding the mathematical results that are implemented in the `agda-ualib`_ lib
 
 Regarding the Agda source code in the `agda-ualib`_ library, this is mainly due to The Authors.
 
-HOWEVER, we have benefited from the outstanding lecture notes on `Univalent Foundations and Homotopy Type Theory <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes>`_ and the `Type Topology`_ Agda Library, both by `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe>`_.  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the `Midlands Graduate School in the Foundations of Computing Science <http://events.cs.bham.ac.uk/mgs2019/>` in Birmingham in 2019.
+HOWEVER, we have benefited from the outstanding lecture notes on `Univalent Foundations and Homotopy Type Theory <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes>`_ and the `Type Topology`_ Agda Library, both by `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe>`_.  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the `Midlands Graduate School in the Foundations of Computing Science <http://events.cs.bham.ac.uk/mgs2019/>`_ in Birmingham in 2019.
 
 The development of the `agda-ualib`_ and its documentation is informed by and benefits from the references listed in the :ref:`references` section below.
 
