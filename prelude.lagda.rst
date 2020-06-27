@@ -102,7 +102,7 @@ Our preferred notations for the first and second projections of a product are ``
 
 For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y`` more than Agda's standard syntax (``Σ λ(x ꞉ X) → y``). `MHE`_ shows us how to define a version of Σ that makes the preferred notation available by making index type explicit.
 
-.. code-block::
+.. code-block:: agda
 
     infixr -1 -Σ
     -Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
@@ -113,7 +113,7 @@ For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y`` m
 
 MHE explains, Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`.  This is called `Σ` induction or `Σ` elimination (or `uncurry`).
 
-.. code-block::
+.. code-block:: agda
 
     Σ-induction : {X : 𝓤 ̇}{Y : X → 𝓥 ̇}{A : Σ Y → 𝓦 ̇}
      →            ((x : X)(y : Y x) → A (x , y))
@@ -130,7 +130,7 @@ MHE explains, Sigma induction as follows: "To prove that `A z` holds for all `z 
 
 Here's the special case in which the type `Y` doesn't depend on `X`.
 
-.. code-block::
+.. code-block:: agda
 
     infixr 30 _×_
     _×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
@@ -141,7 +141,7 @@ The Pi type former
 
 MHE introduces the notation `Π` for them, similar to that for `Σ`.
 
-.. code-block::
+.. code-block:: agda
 
     Π : {X : 𝓤 ̇} (A : X → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
     Π {𝓤} {𝓥} {X} A = (x : X) → A x
@@ -203,7 +203,8 @@ Function extensionality
 
 We will work with pointwise equality of functions, which MHE defines (in `Type Topology`_ ) as follows:
 
-.. code-block::
+.. code-block:: agda
+
     _∼_ : {X : 𝓤 ̇} {A : X → 𝓥 ̇} → Π A → Π A → 𝓤 ⊔ 𝓥 ̇
     f ∼ g = ∀ x → f x ≡ g x
     infix 0 _∼_
