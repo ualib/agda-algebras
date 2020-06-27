@@ -1,13 +1,11 @@
-.. File: morphisms.lagda.rst
+.. File: homomorphisms.lagda.rst
 .. Author: William DeMeo and Siva Somayyajula
 .. Date: 20 Feb 2020
-.. Updated: 22 Jun 2020
+.. Updated: 27 Jun 2020
 
-
-===========
-Morphisms
-===========
-
+========================
+Homomorphisms in Agda
+========================
 
 Preliminaries
 -------------
@@ -20,7 +18,7 @@ Preliminaries
    open import basic using (Signature; Algebra)
    open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
-   module morphisms {S : Signature 𝓞 𝓥} where
+   module homomorphisms {S : Signature 𝓞 𝓥} where
 
 
 Intensionally homomorphic

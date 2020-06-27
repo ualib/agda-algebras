@@ -1,13 +1,13 @@
 .. FILE: birkhoff.lagda.rst
 .. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 23 Feb 2020
-.. UPDATE: 22 Jun 2020
+.. UPDATE: 27 Jun 2020
 .. REF: Based on the file `birkhoff.agda` (23 Jan 2020).
 
 .. _birkhoffs theorem in agda:
 
 ============================
-Birkhoff's theorem in Agda
+Birkhoff's Theorem in Agda
 ============================
 
 The following is Birkhoff's celebrated HSP theorem. The proof we give here (and formalize in Agda) is the same one that appears in Cliff Bergman's excellent textbook on universal algebra (see :cite:`Bergman:2012`, Thm 4.41).
@@ -43,16 +43,29 @@ In the ``birkhoff`` module of ``agda-ualib`` we formalize the above proof.  The 
 Preliminaries
 -----------------
 
+As usual, we start with the imports we will need below.
+
 ::
 
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
   open import basic using (Signature; Algebra; Π')
-  open import morphisms using (HOM; Hom; hom; is-homomorphism)
   open import relations using (ker-pred; Rel; con; _//_)
-  open import terms using (Term; generator; 𝔉; _̇_; comm-hom-term'; lift-hom; interp-prod)
-  open import subuniverses using (Subuniverse; mksub; Sg; _is-subalgebra-of_; var; app; Subalgebra)
+  open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
+
+  open import terms using (Term; generator; 𝔉; _̇_; comm-hom-term';
+                           lift-hom; interp-prod)
+
+  open import subuniverses using (Subuniverse; mksub; var; app; Sg;
+                                  _is-subalgebra-of_; Subalgebra)
+
+The Birkhoff module
+----------------------
+
+We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` usually represents an arbitrary collection of "variables" (e.g., generators of the term algebra).
+
+::
 
   module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇}  where
 
@@ -96,7 +109,8 @@ The equalizer of two homomorphisms is actually a subalgebra of these common doma
   𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
    →  {𝑨 𝑩 : Algebra 𝓤 S}(f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
   𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
-   mksub ( 𝑬𝑯 {A = 𝑨}{B = 𝑩} f g ) λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g 𝒂 x
+   mksub (𝑬𝑯 {A = 𝑨}{B = 𝑩} f g)
+    λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g 𝒂 x
 
 .. _obs 3 agda:
 
@@ -247,10 +261,14 @@ Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of me
 
       γ : (p ̇ Π' 𝓐) ≡ (q ̇ Π' 𝓐)
       γ = gfe λ 𝒂 →
-       (p ̇ Π' 𝓐) 𝒂 ≡⟨ interp-prod gfe p 𝓐 𝒂 ⟩
-       (λ i → ((p ̇ (𝓐 i)) (λ x → (𝒂 x) i))) ≡⟨ gfe (λ i → cong-app (all𝓐⊧p≈q i) (λ x → (𝒂 x) i)) ⟩
-       (λ i → ((q ̇ (𝓐 i)) (λ x → (𝒂 x) i))) ≡⟨ (interp-prod gfe q 𝓐 𝒂)⁻¹ ⟩
-       (q ̇ Π' 𝓐) 𝒂                          ∎
+       (p ̇ Π' 𝓐) 𝒂
+         ≡⟨ interp-prod gfe p 𝓐 𝒂 ⟩
+       (λ i → ((p ̇ (𝓐 i)) (λ x → (𝒂 x) i)))
+         ≡⟨ gfe (λ i → cong-app (all𝓐⊧p≈q i) (λ x → (𝒂 x) i)) ⟩
+       (λ i → ((q ̇ (𝓐 i)) (λ x → (𝒂 x) i)))
+         ≡⟨ (interp-prod gfe q 𝓐 𝒂)⁻¹ ⟩
+       (q ̇ Π' 𝓐) 𝒂
+         ∎
 
 
 
@@ -262,23 +280,26 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
 ::
 
   _is-subalgebra-of-class_ : {𝓤 : Universe}(𝑩 : Algebra 𝓤 S)
-   →                         Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  𝑩 is-subalgebra-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × (𝑩 is-subalgebra-of 𝑨)
+   →                         Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  𝑩 is-subalgebra-of-class 𝓚 =
+   Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × (𝑩 is-subalgebra-of 𝑨)
 
   module _
    (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
-   (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) { X : 𝓧 ̇ }
+   (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))){X : 𝓧 ̇}
    (𝓤★ : Univalence) where
 
    gfe : global-dfunext
    gfe = univalence-gives-global-dfunext 𝓤★
 
    SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   SubalgebrasOfClass 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × Subalgebra{𝑨 = 𝑨} 𝓤★
+   SubalgebrasOfClass 𝓚 =
+    Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × Subalgebra{𝑨 = 𝑨} 𝓤★
 
    𝕊-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
     →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   𝕊-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤)) → (𝑩 ∈ 𝓛𝓚 𝓤)
+   𝕊-closed 𝓛𝓚 =
+    λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤)) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
    subalgebras-preserve-identities : (p q : Term{X = X})
     →  (𝓚 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝓚)
@@ -311,10 +332,11 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
      h-hom = pr₂ ∥ pr₂ subalg ∥
 
      ξ : (𝒃 : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) 𝒃) ≡ h ((q ̇ 𝑩) 𝒃)
-     ξ 𝒃 = h ((p ̇ 𝑩) 𝒃)   ≡⟨ comm-hom-term' gfe 𝑩 𝑨 (h , h-hom) p 𝒃 ⟩
-           (p ̇ 𝑨) (h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃)  ⟩
-           (q ̇ 𝑨) (h ∘ 𝒃) ≡⟨ (comm-hom-term' gfe 𝑩 𝑨 (h , h-hom) q 𝒃)⁻¹ ⟩
-           h ((q ̇ 𝑩) 𝒃)   ∎
+     ξ 𝒃 =
+      h ((p ̇ 𝑩) 𝒃)  ≡⟨ comm-hom-term' gfe 𝑩 𝑨 (h , h-hom) p 𝒃 ⟩
+      (p ̇ 𝑨)(h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃) ⟩
+      (q ̇ 𝑨)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gfe 𝑩 𝑨 (h , h-hom) q 𝒃)⁻¹ ⟩
+      h ((q ̇ 𝑩) 𝒃)  ∎
 
      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
      hlc hb≡hb' = (embeddings-are-lc h h-emb) hb≡hb'
@@ -336,7 +358,10 @@ We now formalize this result in Agda.
 
 ::
 
-  module _ (gfe : global-dfunext) (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) { X : 𝓧 ̇ } where
+  module _
+   (gfe : global-dfunext)
+   (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+   { X : 𝓧 ̇ } where
 
    -- ⇒ (the "only if" direction)
    identities-are-compatible-with-homs : (p q : Term)
@@ -344,21 +369,24 @@ We now formalize this result in Agda.
          ----------------------------------------------------
     →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝔉{X = X})) ≡ ∣ h ∣ ∘ (q ̇ 𝔉)
    -- Here, the inferred types are
-   -- ``𝑨 : Algebra 𝓤 S``, ``KA : 𝓚 𝑨``, ``h : hom (𝔉{X = X}) 𝑨``
+   -- 𝑨 : Algebra 𝓤 S, KA : 𝓚 𝑨, h : hom (𝔉{X = X}) 𝑨
 
    identities-are-compatible-with-homs p q 𝓚⊧p≋q 𝑨 KA h = γ
     where
      pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
      pA≡qA = 𝓚⊧p≋q KA
 
-     pAh≡qAh : ∀ (𝒂 : X → ∣ 𝔉 ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+     pAh≡qAh : ∀(𝒂 : X → ∣ 𝔉 ∣)
+      →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
      pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
-     hpa≡hqa :  ∀ (𝒂 : X → ∣ 𝔉 ∣ ) →  ∣ h ∣ ((p ̇ 𝔉) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝔉) 𝒂)
-     hpa≡hqa 𝒂 = ∣ h ∣ ((p ̇ 𝔉) 𝒂)   ≡⟨ comm-hom-term' gfe 𝔉 𝑨 h p 𝒂 ⟩
-                 (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂)  ≡⟨ pAh≡qAh 𝒂 ⟩
-                 (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)  ≡⟨ (comm-hom-term' gfe 𝔉 𝑨 h q 𝒂)⁻¹ ⟩
-                 ∣ h ∣ ((q ̇ 𝔉) 𝒂)   ∎
+     hpa≡hqa : ∀(𝒂 : X → ∣ 𝔉 ∣)
+      →        ∣ h ∣ ((p ̇ 𝔉) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝔉) 𝒂)
+     hpa≡hqa 𝒂 =
+      ∣ h ∣ ((p ̇ 𝔉) 𝒂)  ≡⟨ comm-hom-term' gfe 𝔉 𝑨 h p 𝒂 ⟩
+      (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
+      (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term' gfe 𝔉 𝑨 h q 𝒂)⁻¹ ⟩
+      ∣ h ∣ ((q ̇ 𝔉) 𝒂)  ∎
 
      γ : ∣ h ∣ ∘ (p ̇ 𝔉) ≡ ∣ h ∣ ∘ (q ̇ 𝔉)
      γ = gfe hpa≡hqa
@@ -368,7 +396,7 @@ We now formalize this result in Agda.
     →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝔉) ≡ ∣ h ∣ ∘ (q ̇ 𝔉))
          -----------------------------------------------
     →                𝓚 ⊧ p ≋ q
-   --Infered types: ``𝑨 : Algebra 𝓤 S``, ``KA : 𝑨 ∈ 𝓚``, ``h : hom 𝔉 𝑨``
+   --Inferred types: 𝑨 : Algebra 𝓤 S, KA : 𝑨 ∈ 𝓚, h : hom 𝔉 𝑨
 
    homs-are-compatible-with-identities p q all-hp≡hq {A = 𝑨} KA = γ
     where
@@ -377,21 +405,29 @@ We now formalize this result in Agda.
 
      γ : 𝑨 ⊧ p ≈ q
      γ = gfe λ 𝒂 →
-      (p ̇ 𝑨) 𝒂                   ≡⟨ refl _ ⟩
-      (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)  ≡⟨(comm-hom-term' gfe 𝔉 𝑨 (h 𝒂) p generator)⁻¹ ⟩
-      (∣ h 𝒂 ∣ ∘ (p ̇ 𝔉)) generator ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-      (∣ h 𝒂 ∣ ∘ (q ̇ 𝔉)) generator ≡⟨ (comm-hom-term' gfe 𝔉 𝑨 (h 𝒂) q generator) ⟩
-      (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)  ≡⟨ refl _ ⟩
-      (q ̇ 𝑨) 𝒂                   ∎
+      (p ̇ 𝑨) 𝒂
+        ≡⟨ refl _ ⟩
+      (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+        ≡⟨(comm-hom-term' gfe 𝔉 𝑨 (h 𝒂) p generator)⁻¹ ⟩
+      (∣ h 𝒂 ∣ ∘ (p ̇ 𝔉)) generator
+        ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
+      (∣ h 𝒂 ∣ ∘ (q ̇ 𝔉)) generator
+        ≡⟨ (comm-hom-term' gfe 𝔉 𝑨 (h 𝒂) q generator) ⟩
+      (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+        ≡⟨ refl _ ⟩
+      (q ̇ 𝑨) 𝒂
+        ∎
 
    compatibility-of-identities-and-homs : (p q : Term)
-    →  (𝓚 ⊧ p ≋ q) ⇔ (∀ 𝑨 KA hh → ∣ hh ∣ ∘ (p ̇ 𝔉) ≡ ∣ hh ∣ ∘ (q ̇ 𝔉))
-   --inferred types: ``𝑨 : Algebra 𝓤 S``, ``KA : 𝑨 ∈ 𝓚``, ``hh : hom 𝔉 𝑨``.
+    →  (𝓚 ⊧ p ≋ q)
+        ⇔ (∀ 𝑨 KA hh → ∣ hh ∣ ∘ (p ̇ 𝔉) ≡ ∣ hh ∣ ∘ (q ̇ 𝔉))
+   --inferred types: 𝑨 : Algebra 𝓤 S, KA : 𝑨 ∈ 𝓚, hh : hom 𝔉 𝑨.
 
    compatibility-of-identities-and-homs p q =
-     identities-are-compatible-with-homs p q , homs-are-compatible-with-identities p q
+     identities-are-compatible-with-homs p q ,
+     homs-are-compatible-with-identities p q
 
+------------------
 
-
-
+.. include:: hyperlink_references.rst
 

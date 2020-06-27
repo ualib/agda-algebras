@@ -1,7 +1,7 @@
 .. FILE: prelude.lagda.rst
-.. BLAME: williamdemeo@gmail.com
+.. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 21 Apr 2020
-.. UPDATE: 16 Jun 2020
+.. UPDATE: 27 Jun 2020
 .. REF: Some parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 .. SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
 .. Throughout, MHE = Martin Hötzel Escardo.
@@ -49,15 +49,15 @@ In the ``Universes`` module, MHE defines the ̇ operator which maps a universe `
 
 The following table translates between standard Agda syntax, MHE syntax and Lean syntax.
 
-+----------------------|-------------------------------|------------------------------+
-| Agda                 | MHE Notation                  |        Lean analog           |
-+----------------------|-------------------------------|------------------------------+
-|  ``Level``           |   ``Universe``                |  ``universe``                |
-|   ``lzero``          |   ``𝓤₀``                     |  ``0 : universe``            |
-|  ``Set lzero``       |   ``𝓤₀ ̇`` ( = ``Type 𝓤₀``) |  ``Sort 0``                  |
-|   ``lsuc lzero``     |   ``𝓤₀ ⁺``                   |  ``1 : universe``            |
-| ``Set (lsuc lzero)`` |   ``𝓤₀ ⁺ ̇``                 |  ``Sort 1 = Type = Type 0``  |
-+----------------------|-------------------------------|------------------------------+
++----------------------+--------------------------+-----------------------------+
+| Agda                 | MHE Notation             | Lean analog                 |
++======================+==========================+=============================+
+| ``Level``            | ``Universe``             | ``universe``                |
+|  ``lzero``           | ``𝓤₀``                   | ``0 : universe``            |
+| ``Set lzero``        | ``𝓤₀ ̇`` ( = ``Type 𝓤₀``) | ``Sort 0``                  |
+|  ``lsuc lzero``      | ``𝓤₀ ⁺``                 | ``1 : universe``            |
+| ``Set (lsuc lzero)`` | ``𝓤₀ ⁺ ̇``                | ``Sort 1 = Type = Type 0``  |
++----------------------+--------------------------+-----------------------------+
 
 Public imports
 ~~~~~~~~~~~~~~~
@@ -578,6 +578,13 @@ Extensional equality of functions, or :term:`function extensionality`, means tha
     --    →           ( (i : I) (args : X → A i) →  ID (A i) (p i args) (q i args) )
     --    →            p ≡ q
     --   ext-lemma p q H = fe λ x → fe (H x)
+
+------------------
+
+.. include:: hyperlink_references.rst
+
+
+
 
 
 ..

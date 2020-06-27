@@ -6,9 +6,6 @@
 The Agda Universal Algebra Library
 ==================================
 
-
-
-
 .. toctree::
    :numbered:
    :maxdepth: 2
@@ -18,7 +15,7 @@ The Agda Universal Algebra Library
    prelude.lagda.rst
    basic.lagda.rst
    relations.lagda.rst
-   morphisms.lagda.rst
+   homomorphisms.lagda.rst
    terms.lagda.rst
    subuniverses.lagda.rst
    birkhoff.lagda.rst

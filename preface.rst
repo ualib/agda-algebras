@@ -53,8 +53,6 @@ This document describes the Agda Universal Algebra Library (agda-ualib_) in enou
 
 While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, :cite:`Bergman:2012` or :cite:`McKenzie:1987`, and to a lesser extent category theory, as presented in categorytheory.gitlab.io_ or :cite:`Riehl:2017`.
 
-.. (Category theory is not really needed until :numref:`Chapter %s <postmodern-algebra>`.)
-
 Some prior exposure to `type theory`_ and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the references mentioned in :ref:`references` to fill in gaps as needed.
   
 Finally, it is assumed that while reading these materials the reader is actively experimenting with Agda using emacs_ with its `agda2-mode`_ extension installed.
@@ -64,20 +62,19 @@ Finally, it is assumed that while reading these materials the reader is actively
 Installing the library
 -----------------------------
 
-The main repository for the agda-ualib_ is https://gitlab.com/ualib/agda-ualib.
+The main repository for the agda-ualib_ is https://gitlab.com/ualib/ualib.gitlab.io (which will become publicly available again in the summer of 2020).
 
 There are installation instructions in the main README.md file in that repository, but really all you need to do is have a working Agda (and agda2-mode) installation and clone the agda-ualib_ repository with, e.g.,
 
    .. code-block:: bash
 
-      git clone git@gitlab.com:ualib/agda-ualib.git
-
+      git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 
    OR
 
    .. code-block:: bash
 
-      git clone https://gitlab.com/ualib/agda-ualib.git
+      git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 
 (We assume you have ``Agda`` and ``agda2-mode`` installed on your machine. If not, follow the directions on `the main Agda website <Agda>`_ to install them.)
 
@@ -93,20 +90,17 @@ Besides Dr. DeMeo, a number of other people have contributed to this project---s
 Attributions and citations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-William DeMeo (hereinafter, "The Author") is currently the sole developer of the `Agda Universal Algebra Library`_ (`agda-ualib`_) and the only author of its documentation (the web page(s) and/or latex document(s) you are now reading).
+William DeMeo and Siva Somayyajula (hereinafter, "The Authors") are the developers of the `Agda Universal Algebra Library`_ (`agda-ualib`_).
 
-Regarding the mathematical results that are implemented in the `agda-ualib`_ library, as well as the presentation and informal statements of these results in the documentation, THE AUTHOR MAKES NO CLAIMS TO ORIGINALITY.
+Regarding the mathematical results that are implemented in the `agda-ualib`_ library, as well as the presentation and informal statements of these results in the documentation, The Authors makes no claims to originality.
 
-Regarding the Agda source code in the `agda-ualib`_ library, this is due to The Author.
+Regarding the Agda source code in the `agda-ualib`_ library, this is mainly due to The Authors.
 
-HOWEVER, the development of the `agda-ualib`_ and its documentation has been informed by, and has greatly benefited from, the references listed in the :ref:`references` Section below.
+HOWEVER, we have benefited from the outstanding lecture notes on `Univalent Foundations and Homotopy Type Theory <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes>`_ and the `Type Topology`_ Agda Library, both by `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe>`_.  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the `Midlands Graduate School in the Foundations of Computing Science <http://events.cs.bham.ac.uk/mgs2019/>` in Birmingham in 2019.
 
-Throughout the documentation, the reader may occasionally come accross an "Attribution Note," denoted by **A.N.**  Nonetheless,
-
-  LACK OF ATTRIBUTION OR CITATION SHOULD NOT BE CONSTRUED AS A CLAIM TO ORIGINALITY.
+The development of the `agda-ualib`_ and its documentation is informed by and benefits from the references listed in the :ref:`references` section below.
 
 ----------------------
-
 
 .. _references:
 

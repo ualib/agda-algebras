@@ -51,8 +51,7 @@
 .. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
 .. _`lean/library/init/data`: https://github.com/leanprover/lean/tree/master/library/init/data
 .. _lean_src: https://github.com/leanprover/lean
-.. _lean-ualib: https://gitlab.com/ualib/lean-ualib/
-.. _agda-ualib: https://gitlab.com/ualib/agda-ualib/
+.. _agda-ualib: https://gitlab.com/ualib/ualib.gitlab.io
 .. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
 .. _logic.lean: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
 .. _master: https://gitlab.com/ualib/lean-ualib/tree/master

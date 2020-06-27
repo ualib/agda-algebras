@@ -14,7 +14,7 @@
 Algebras
 ========
 
-In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`Chapters %s <Datatypes for Algebras>`--:numref:`%s <Datatypes for Subalgebras>`, we show how the definitions and results presented in this section can be formalized (or "implemented") in type theory using Agda.
+In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`types for algebras` --:numref:`types for subalgebras`, we show how the definitions and results presented in this section can be formalized (or "implemented") in type theory using Agda.
 
 The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving properties of these objects.
 
@@ -238,9 +238,7 @@ Thus, by identifying the :math:`ρ f`-th power :math:`A^{ρf}` with the type :ma
 
 It is important to be familiar with the classical notions of signature and arity, since these are used at the present time by virtually all algebraists.
 
-Our formal implementation of the concept of signature in `Agda`_ is described in :numref:`signatures in agda`.)
-
-.. In :numref:`Chapter %s <postmodern-algebra>` we give alternative, category theoretic definitions of these concepts and show how this alternative presentation can often simplify implementation of the mathematics in :term:`type theory`.
+Our formal implementation of the concept of signature in `Agda`_ is described in :numref:`operations and signatures in agda`.)
 
 --------------------------
 
@@ -489,9 +487,9 @@ The definition of :math:`T_σ (X)` is recursive, indicating that
 
   *terms can be implemented as an inductive type*.
 
-We will confirm this in :numref:`Chapter %s <datatypes for terms>` when we implement terms using an inductive type.
+We will confirm this in :numref:`types for terms` when we implement terms using an inductive type.
 
-Before doing so, let us impose an algebraic structure on :math:`T_σ (X)`, and then state and prove some basic facts about this important algebra. These will be formalized in :numref:`Chapter %s <datatypes for terms>`, giving us a chance to show off inductively defined types in Agda.
+Moreover, we will formalize the an algebraic structure on :math:`T_σ (X)`, called the **term algebra** in the signature σ. We describe it here and then state and prove some basic facts about this important algebra. These will be formalized in :numref:`types for terms` and :numref:`birkhoffs theorem in agda`, giving us a chance to show off inductively defined types in Agda.
 
 If :math:`t` is a term, then the **height** of :math:`t` is denoted by :math:`|t|` and defined to be the least :math:`n` such that :math:`t ∈ T_n`. The height of is a useful index for recursion and induction.
 

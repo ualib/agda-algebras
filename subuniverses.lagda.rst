@@ -3,9 +3,11 @@
 .. DATE: 20 Feb 2020
 .. UPDATE: 17 Jun 2020
 
-====================
-Subalgebras in Agda
-====================
+.. _types for subalgebras:
+
+=====================
+Types for Subalgebras
+=====================
 
 Preliminaries
 ------------------
@@ -21,7 +23,7 @@ The file starts, as usual, with a list of imports.
    open import prelude
    open import basic using (Signature; Algebra; Op)
    open import relations using (transitive)
-   open import morphisms using (HOM; Hom; hom; is-homomorphism)
+   open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
    open import terms using (Term; _̇_; _̂_; generator; node; comm-hom-term)
 
    open import Relation.Unary using (⋂)
@@ -70,7 +72,7 @@ Next we formalize the important theorem about subuniverse generation that we pre
 
 ::
 
-   record Subuniverse  {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
+   record Subuniverse {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
     constructor mksub
     field
       sset  : Pred ∣ 𝑨 ∣ 𝓤
@@ -496,6 +498,10 @@ It seems we may be testing the limits of Agda's universe level paradigm. Maybe w
 
 
 
+
+------------------
+
+.. include:: hyperlink_references.rst
 
 
 

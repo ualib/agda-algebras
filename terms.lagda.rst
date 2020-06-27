@@ -1,16 +1,21 @@
-.. FILE: UF-Free.agda
+.. FILE: terms.lagda.rst
 .. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 20 Feb 2020
-.. UPDATE: 27 May 2020
+.. UPDATE: 27 Jun 2020
 
 .. open import UF-Extensionality using (propext; dfunext; funext; _∈_; global-funext; hfunext; intensionality)
 .. open import Relation.Unary using (Pred)
 
-.. _terms in agda:
+.. _types for terms:
 
 ===============
-Terms in Agda
+Types for Terms
 ===============
+
+Preliminaries
+-------------
+
+As usual, we start with the imports we will need below.
 
 ::
 
@@ -18,54 +23,58 @@ Terms in Agda
 
    open import prelude
    open import basic using (Signature; Algebra; Π')
-   open import morphisms using (HOM; Hom; hom)
+   open import homomorphisms using (HOM; Hom; hom)
    open import relations using (Con; compatible-fun)
+
+Terms in Agda
+------------------------
+
+We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called ``terms``. We start by defining a datatype called ``Term`` which, not surprisingly, represents the type of terms.
+
+::
 
    module terms {S : Signature 𝓞 𝓥} where  -- 𝓞 ⊔ 𝓥 ⊔ 𝓤
 
-   module _  where
+   module _ where
      data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
        generator : X → Term {X = X}
        node : ( 𝓸 : ∣ S ∣ )  →  ( 𝒕 : ∥ S ∥ 𝓸 → Term {X = X} )  →  Term {X = X}
 
      open Term
 
-     -- map-Term : (Term → Term) → Term → Term
-     -- map-Term f (generator x) = f (generator x)
-     -- map-Term f (node 𝓸 𝒕) = node 𝓸 (λ i → map-Term f (𝒕 i))
-
 The term algebra
-----------------------------------
+~~~~~~~~~~~~~~~~~~
+
+The term algebra was described informally in :numref:`terms`.  Here is how we implement this important algebra in Agda.
 
 ::
 
      𝔉 : {X : 𝓧 ̇} → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
      𝔉 {X = X} = Term{X = X} , node
 
-The Universal Property of free
--------------------------------------
+The universal property of 𝔉
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We prove
 
-  #. every h : X → ⟦ A ⟧ᵤ  lifts to a hom from free to A.
-  #. the induced hom is unique.
-
+  #. every `ℎ : X → ∥ 𝑨 ∥  lifts to a hom from 𝔉 to 𝑨.
+  #. the induced homomorphism is unique.
 
 ::
 
-   module _   {𝑨 : Algebra 𝓤 S} { X : 𝓧 ̇ } where
+   module _ {𝑨 : Algebra 𝓤 S} { X : 𝓧 ̇} where
 
     --1.a. Every map  (X → A)  "lifts".
     free-lift : (h : X → ∣ 𝑨 ∣)  →   ∣ 𝔉 ∣ → ∣ 𝑨 ∣
     free-lift h (generator x) = h x
     free-lift h (node 𝓸 args) = (∥ 𝑨 ∥ 𝓸) λ{i → free-lift  h (args i)}
 
-    --I. Extensional proofs (using hom's) -----------------------------------------------
+    --I. Extensional proofs (using hom's)
     --1.b.' The lift is (extensionally) a hom
     lift-hom : (h : X → ∣ 𝑨 ∣) →  hom 𝔉 𝑨
     lift-hom h = free-lift h , λ 𝓸 𝒂 → ap (∥ 𝑨 ∥ _) (refl _)
 
-    -- 2.' The lift to  (free → A)  is (extensionally) unique.
+    --2.' The lift to  (free → A)  is (extensionally) unique.
     free-unique : funext 𝓥 𝓤 → ( f g : hom (𝔉 {X = X}) 𝑨 )
      →             ( ∀ x  →  ∣ f ∣ (generator x) ≡ ∣ g ∣ (generator x) )
      →             (t : Term )
@@ -74,10 +83,10 @@ We prove
 
     free-unique fe f g p (generator x) = p x
     free-unique fe f g p (node 𝓸 args) =
-       ( ∣ f ∣ )(node 𝓸 args)             ≡⟨ ∥ f ∥ 𝓸 args ⟩
-       (∥ 𝑨 ∥ 𝓸) (λ i → ∣ f ∣ (args i))   ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-unique fe f g p (args i)) ) ⟩
-       (∥ 𝑨 ∥ 𝓸) (λ i → ∣ g ∣ (args i))   ≡⟨ (∥ g ∥ 𝓸 args)⁻¹ ⟩
-       ∣ g ∣ (node 𝓸 args)                 ∎
+       (∣ f ∣)(node 𝓸 args)            ≡⟨ ∥ f ∥ 𝓸 args ⟩
+       (∥ 𝑨 ∥ 𝓸)(λ i → ∣ f ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) (fe (λ i → free-unique fe f g p (args i))) ⟩
+       (∥ 𝑨 ∥ 𝓸)(λ i → ∣ g ∣ (args i))  ≡⟨ (∥ g ∥ 𝓸 args)⁻¹ ⟩
+       ∣ g ∣ (node 𝓸 args)             ∎
 
 
 Intensional proofs
@@ -254,4 +263,8 @@ For proof of 3, see `TermImageSub` in Subuniverse.agda.
 
 
 
+
+------------------
+
+.. include:: hyperlink_references.rst
 
