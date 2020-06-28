@@ -28,9 +28,9 @@ The following is Birkhoff's celebrated HSP theorem. The proof we give here (and 
 
       Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
-      Let :math:`𝔸 ∈ 𝒲^†` and 𝑌 a set of cardinality :math:`\max(|A|, ω)`. Choose a surjection :math:`h_0 : Y → A`.
+      Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
 
-      By :numref:`Obs %s <obs 9>` (Thm. 4.21 of :cite:`Bergman:2012`), :math:`h_0` extends to an epimorphism :math:`h: 𝕋(Y) → 𝔸`.
+      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝔸`.
 
       Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`.
 

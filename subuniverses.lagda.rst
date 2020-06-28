@@ -64,6 +64,7 @@ Next we define a data type that represents the property of being a subuniverse. 
     subuniv-to-subalg : SubunivAlg is-subalgebra-of 𝑨
     subuniv-to-subalg = mem B ∥ SubunivAlg ∥ λ 𝓸 𝒂 → (refl _)
 
+.. _obs 7 agda:
 
 Subuniverse generation
 ~~~~~~~~~~~~~~~~~~~~~~~~
