@@ -29,7 +29,8 @@ As usual, we start with the imports we will need below.
 Terms in Agda
 ------------------------
 
-We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called ``terms``. We start by defining a datatype called ``Term`` which, not surprisingly, represents the type of terms.
+We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called ``terms``. We start by defining a datatype called ``Term`` which, not surprisingly, represents the type of terms.  The type ``X :  𝓧 ̇`` represents an arbitrary (infinite) collection of "variables."
+
 
 ::
 

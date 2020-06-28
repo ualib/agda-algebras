@@ -32,7 +32,7 @@ The following is Birkhoff's celebrated HSP theorem. The proof we give here (and 
 
       By :numref:`Obs %s <obs 9>` (Thm. 4.21 of :cite:`Bergman:2012`), :math:`h_0` extends to an epimorphism :math:`h: 𝕋(Y) → 𝔸`.
 
-      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`. [2]_
+      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`.
 
       We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
 
@@ -63,7 +63,7 @@ As usual, we start with the imports we will need below.
 The Birkhoff module
 ----------------------
 
-We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` usually represents an arbitrary collection of "variables" (e.g., generators of the term algebra).
+We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝔉).
 
 ::
 
@@ -74,20 +74,19 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
 Equalizers
 ~~~~~~~~~~~~~~
 
-The equalizer of two functions (resp., homomorphisms) ``f g : A → B`` is the subset of ``A`` on which the functions agree.  We formalize this notion in Agda as follows.
+The equalizer of two functions (resp., homomorphisms) ``f g : A → B`` is the subset of ``A`` on which the values of the functions ``f`` and ``g`` agree.  We formalize this notion in Agda as follows.
 
 ::
 
-  --Equalizers
-  --...of functions
+  --Equalizers of functions
   𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (f g : A → B) → Pred A 𝓦
   𝑬 f g x = f x ≡ g x
 
-  --..of homs  (see also definition 𝓔 in UF-Hom)
-  𝑬𝑯 : {A B : Algebra 𝓤 S} (f g : hom A B) → Pred ∣ A ∣ 𝓤
+  --Equalizers of homomorphisms (see also the definition 𝓔 in the ``homomorphisms`` module)
+  𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 S} (f g : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
   𝑬𝑯 f g x = ∣ f ∣ x ≡ ∣ g ∣ x
 
-The equalizer of two homomorphisms is actually a subalgebra of these common domain.  Indeed,
+It turns out that the equalizer of two homomorphisms ``f g : hom 𝑨 𝑩`` is a subalgebra of their common domain ``∣ 𝑨 ∣`` since it is closed under the operations of ``𝑨``, as we now prove.
 
 ::
 
@@ -105,7 +104,11 @@ The equalizer of two homomorphisms is actually a subalgebra of these common doma
      Fᴮ 𝓸 (g ∘ 𝒂)  ≡⟨ (ghom 𝓸 𝒂)⁻¹ ⟩
      g (Fᴬ 𝓸 𝒂)    ∎
 
-  -- Obs 2.0. Equalizer of homs is a subuniverse.
+Thus, ``𝑬𝑯`` is a subuniverse of ``𝑨``.
+
+::
+
+  -- Equalizer of homs is a subuniverse.
   𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
    →  {𝑨 𝑩 : Algebra 𝓤 S}(f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
   𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
@@ -117,7 +120,7 @@ The equalizer of two homomorphisms is actually a subalgebra of these common doma
 Homomorphisms
 ~~~~~~~~~~~~~~
 
-The `morphisms` module formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as we stated and proved informally in :numref:`Obs %s <obs 3>`.  (N.B. this is proved here, and not in the ``morphisms`` module because we use ``Sg`` from the ``subuniverses`` module.)
+The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  (This is proved here, and not in :numref:`homomorphisms module` because we need ``Sg`` from the :numref:`subuniverses module (Section %s) <subuniverses module>`.)
 
 ::
 

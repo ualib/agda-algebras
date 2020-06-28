@@ -1407,6 +1407,11 @@ Glossary: structures, categories, varieties
         * If :math:`t: \{0, \dots, (n-1)\} → 𝒯` is an :math:`n`-tuple of terms and :math:`f ∈ 𝐅` is a function symbol of arity :math:`ρ f = n`, then :math:`f t` is a term.
         * :math:`t` is a terms if it can be obtained in finitely many steps from some combination of the three items above.
  
+    term algebra
+      Consider the collection :math:`T_σ (X)` of :term:`terms <term>` in the signature σ. We impose upon :math:`T_σ (X)` an algebraic structure, which we denote by 𝔉. We call 𝔉 the **term algebra in the signature** :math:`σ` **over** :math:`X` (or, the :math:`σ`-**term algebra over** :math:`X`); it is constructed as follows:
+
+      For every basic operation symbol :math:`f ∈ F` let :math:`f^𝔉` be the operation on :math:`T_σ (X)` that maps each tuple :math:`s: ρ f → T_σ (X)` to the formal term :math:`f\,s`; define 𝔉 to be the algebra with universe :math:`T_σ (X)` and basic operations :math:`\{f^𝔉 | f ∈ F\}`.
+
     term-equivalent
       The varieties 𝒱 and 𝒲 are called **term-equivalent** if there are interpretations :math:`D` of 𝒱 in 𝒲 and :math:`E` of 𝒲 in 𝒱 such that for every 𝐀 ∈ 𝒱 and 𝐁 ∈ 𝒲 we have :math:`𝐀^{ED} = 𝐀` and :math:`𝐁^{DE} = 𝐁`.
 

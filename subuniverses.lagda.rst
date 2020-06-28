@@ -29,10 +29,10 @@ The file starts, as usual, with a list of imports.
    open import Relation.Unary using (⋂)
 
 
-.. _subuniverses in agda:
+.. _subuniverses module:
 
-Subuniverses in Agda
----------------------
+The subuniverses module
+------------------------
 
 We begin the ``subuniverses`` module with a straightforward definition of the collection of subuniverses of an algebra 𝑨.  Since a subuniverse is a subset of the domain of 𝑨, it is defined as a predicate on ∣ 𝑨 ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ 𝑨 ∣.
 
@@ -235,8 +235,11 @@ Now we should be able to prove something like the following (if we could be both
 
 -----------------------------------------------------------------------------------
 
-The next submodule, called `overalgebra`, is a generalization of MHE's implementation of subgroups.
-We consider the subalgebras of a given arbitrary "overalgebra" 𝑨.
+
+Subalgebras in Agda
+---------------------
+
+The next submodule is a generalization of MHE's implementation of subgroups. We consider the subalgebras of a given arbitrary "overalgebra" 𝑨.
 
 **Ref**. This module generalizes MHE's `ambient` module. It does for subuniverses what MHE does for subgroups. cf.  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip )
 
@@ -378,6 +381,9 @@ Following MHE's analogous development for groups and their subgroups (cf. `Subgr
 
 ----------------------------------------------------------------------------------------------
 
+The intensional-hom-image module
+---------------------------------
+
 The image of an intensional HOM is a subuniverse. (N.B. the proof still requires function extensionality. Question: Is it necessary?)
 
 ::
@@ -423,7 +429,6 @@ The image of an intensional HOM is a subuniverse. (N.B. the proof still requires
 
     finv' : {X : 𝓤 ̇ } (𝒃 : X → ∣ HOM-image-alg ∣ ) (x : X) → ∣ 𝑨 ∣
     finv' = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
-
 
 
 

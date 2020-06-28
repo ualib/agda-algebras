@@ -3,12 +3,16 @@
 .. Date: 20 Feb 2020
 .. Updated: 27 Jun 2020
 
+.. _homomorphisms in agda:
+
 ========================
 Homomorphisms in Agda
 ========================
 
 Preliminaries
 -------------
+
+As usual, we start with the imports we will need below.
 
 ::
 
@@ -17,6 +21,15 @@ Preliminaries
    open import prelude
    open import basic using (Signature; Algebra)
    open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
+
+.. _homomorphisms module:
+
+The homomorphisms module
+-------------------------
+
+We start the ``homomorphisms`` module with a fixed signature ``S``.
+
+::
 
    module homomorphisms {S : Signature 𝓞 𝓥} where
 
