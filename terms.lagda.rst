@@ -53,6 +53,8 @@ The term algebra was described informally in :numref:`terms`.  Here is how we im
      𝔉 : {X : 𝓧 ̇} → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
      𝔉 {X = X} = Term{X = X} , node
 
+.. _obs 9 in agda:
+
 The universal property of 𝔉
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -173,7 +175,7 @@ Let `𝒕 : Term` be a term and `𝑨` an S-algebra. We define the n-ary operati
        ∥ Π' A ∥ 𝓸 (λ s → (λ ⱼ → (𝒕 s ̇ A ⱼ ) (λ ℓ → tup ℓ ⱼ )))    ≡⟨ refl _ ⟩
        (λ ᵢ → (𝓸 ̂ A ᵢ ) (λ s → (𝒕 s ̇ A ᵢ ) (λ ℓ → tup ℓ ᵢ )))       ∎
 
-.. _obs 10 agda:
+.. _obs 10 in agda:
 
 Compatibility of homs and terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,7 +213,7 @@ In this section we present the formal proof of the fact that homomorphisms commu
         ih' = gfe λ i → IH' i
 
 
-.. _obs 11 agda:
+.. _obs 11 in agda:
 
 Compatibility of congruences and terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

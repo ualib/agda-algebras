@@ -10,35 +10,7 @@
 Birkhoff's Theorem in Agda
 ============================
 
-The following is Birkhoff's celebrated HSP theorem. The proof we give here (and formalize in Agda) is the same one that appears in Cliff Bergman's excellent textbook on universal algebra (see :cite:`Bergman:2012`, Thm 4.41).
-
-.. proof:theorem::
-
-   Every variety is an equational class.
-
-   .. container:: toggle
-
-      .. container:: header
-
-         *Proof*.
-
-      Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
-
-      To this end, take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
-
-      Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
-
-      Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
-
-      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`.
-
-      Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`.
-
-      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`.
-
-      Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
-
-In the ``birkhoff`` module of ``agda-ualib`` we formalize the above proof.  The sections below contain literate Agda code that implements each step of the formal proof.
+Here we give a formal proof in Agda of :ref:`Birkhoff's theorem <birkhoffs theorem>` (:numref:`%s <birkhoffs theorem>`), which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).  The sections below contain (literate) Agda code that formalizes each step of the (informal) proof we saw above in :numref:`birkhoffs theorem`.
 
 Preliminaries
 -----------------
@@ -67,7 +39,7 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
 
 ::
 
-  module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇}  where
+  module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇ }  where
 
 .. _obs 1 in agda:
 
@@ -142,7 +114,7 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalize
       λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
       (f , fhom)(g , ghom) fx≡gx (𝒂 x) ( im𝒂⊆SgX x )
 
-Obs 2.3. If A, B are finite and X generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣ X ∣}`.
+Obs 2.3. If A, B are finite and X generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
 Proof. By Obs 2, a hom is uniquely determined by its restriction to a generating set. If X generates 𝑨, then since there are exactly |B|^|X| functions from X to B, the result holds. □
 
 (todo) formalize Obs 2.3.
@@ -220,12 +192,12 @@ We formalize these notions in Agda as follows.
 
 ::
 
-  _⊧_≈_ : {X : 𝓧 ̇} → Algebra 𝓤 S
+  _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
    →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 
   𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
-  _⊧_≋_ : {X : 𝓧 ̇} → Pred (Algebra 𝓤 S) 𝓦
+  _⊧_≋_ : {X : 𝓧 ̇ } → Pred (Algebra 𝓤 S) 𝓦
    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
 
   _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
@@ -254,7 +226,7 @@ Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of me
     (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) { X : 𝓧 ̇ } where
 
     products-preserve-identities : (p q : Term{X = X})
-          (I : 𝓤 ̇) (𝓐 : I → Algebra 𝓤 S)
+          (I : 𝓤 ̇ ) (𝓐 : I → Algebra 𝓤 S)
      →    𝓚 ⊧ p ≋ q  →  ((i : I) → 𝓐 i ∈ 𝓚)
      →    Π' 𝓐 ⊧ p ≈ q
     products-preserve-identities p q I 𝓐 𝓚⊧p≋q all𝓐i∈𝓚 = γ
@@ -289,7 +261,7 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
 
   module _
    (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
-   (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))){X : 𝓧 ̇}
+   (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))){X : 𝓧 ̇ }
    (𝓤★ : Univalence) where
 
    gfe : global-dfunext

@@ -750,7 +750,7 @@ Next is a theorem that provides a means of generating subuniverses recursively.
 
 ..   #. One concludes that :math:`Y = \mathsf{Sg}^𝑨 (A_0)`.
 
-Our Agda implementation of the concept of subalgebra is described in :numref:`Sections %s <subuniverses in agda>`, and our formalization of :numref:`Obs. %s <obs 7>` and its proof will be presented in :numref:`obs 7 in agda`.
+We describe our Agda implementation of the concept of subalgebra in :numref:`subuniverses in agda`, and we present our formalization of :numref:`Obs. %s <obs 7>` in :numref:`obs 7 in agda`.
 
 .. --------------------------------------------------------------------------------------
 .. CLONE GENERATION
@@ -796,7 +796,8 @@ Our Agda implementation of the concept of subalgebra is described in :numref:`Se
 
       the claim is proved. □
 
-Our formal implementation of terms and the term algebra is presented in :numref:`terms`.
+We implement terms and the term algebra in Agda in the ``terms`` module, as described in :numref:`terms`. Also in the ``terms`` module, and presented in :numref:`obs 9 in agda`, is a formal proof of the next result.
+
 
 .. _obs 9:
 
@@ -817,8 +818,6 @@ Our formal implementation of terms and the term algebra is presented in :numref:
       Suppose ∣𝑡∣ = 0.  Then 𝑡 ∈ 𝑋 ∪ 𝐹₀. If 𝑡 ∈ 𝑋, then define ℎ 𝑡 = 𝑔 𝑡. If 𝑡 ∈ 𝐹₀, then let :math:`h\,t = t^𝑨`.
 
       For the induction step, assume ∣𝑡∣ = 𝑛 + 1. Then 𝑡 = 𝑓 𝑠 for some 𝑓 ∈ 𝐹 and 𝑠 : ρ 𝑓 → 𝑇ₙ, where for each 0 ≤ 𝑖 < ρ𝑓 the term 𝑠 𝑖 has height at most 𝑛. We define :math:`h\,t = f^𝑨(h ∘ s) = f^𝑨(h\,s_1, …, h\,s_k)`. By its very definition, ℎ is a homomorphism that agrees with :math:`g` on 𝑋. The uniqueness of ℎ follows from :numref:`Obs %s <obs 3>`.
-
-Our formal implementation of :numref:`Obs %s <obs 9>` appears in :numref:`obs 9 in agda`.
 
 In the next observation, assume :math:`𝑨 = ⟨A, F^𝑨⟩` and :math:`𝑩 = ⟨B, F^𝑩⟩` are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆.
 
@@ -1017,19 +1016,45 @@ The last result tells us that we can determine whether an identity is true in a 
       .. math:: p^𝑨(a₁, …, aₙ) = p^𝑨(h(y₁), …, h(yₙ)) = h(p^{𝑭_𝒦(Y)}(y₁, …,yₙ)) = h(q^{𝑭_𝒦(Y)}(y₁, …,yₙ)) = q^𝑨(h(y₁), …, h(yₙ)) = q^𝑨(a₁, …, aₙ).
 
 
-It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is **Birkhoff's Theorem**.
+It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
 
-..
-   We end this subsection with yet another standard but important result.
+The proof we will give here is the same as the one that appears in Cliff Bergman's textbook (:cite:`Bergman:2012`, Thm 4.41).  It is also the same one that we will formalize in Agda in the ``birkhoff`` module of the `agda-ualib`_ . We present the formal proof in :numref:`birkhoffs theorem in agda`.
 
+
+.. _birkhoffs theorem:
+
+.. proof:theorem::
+
+   Every variety is an equational class.
+
+   .. container:: toggle
+
+      .. container:: header
+
+         *Proof*.
+
+      Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
+
+      To this end, take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
+
+      Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
+
+      Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
+
+      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`.
+
+      Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`.
+
+      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`.
+
+      Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
+
+
+.. We end this subsection with yet another standard but important result.
    .. _obs 17:
-
    .. proof:observation::
-
        Every  finitely  generated  variety  is  locally finite.
-
        (See Thm 3.49 of :term:`UAFST` for the proof.)
-
        The converse of the last theorem is false.  That is, there exist locally finite varieties that are not finitely generated (e.g., the variety of :math:`p`-algebras; see Cor. 4.55 of :term:`UAFST`).
 
 ---------------------------
