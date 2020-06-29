@@ -128,7 +128,7 @@ Equalizers in Alg
    𝓔 (f , _) (g , _) = Σ x ꞉ _ , f x ≡ g x
 
 
-.. _obs 2 agda:
+.. _obs 2 in agda:
 
 Compositions of homomorphisms
 --------------------------------
@@ -172,7 +172,7 @@ Compositions of homomorphisms
           ∥ C ∥ 𝓸 (g ∘ f ∘ 𝒂)  ∎
 
 
-.. _obs 5 agda:
+.. _obs 5 in agda:
 
 
 Factorization of homomorphisms

@@ -58,7 +58,7 @@ The universal property of 𝔉
 
 We prove
 
-  #. every `ℎ : X → ∥ 𝑨 ∥  lifts to a hom from 𝔉 to 𝑨.
+  #. every ℎ : X → ∥ 𝑨 ∥  lifts to a homomorphism from 𝔉 to 𝑨.
   #. the induced homomorphism is unique.
 
 ::

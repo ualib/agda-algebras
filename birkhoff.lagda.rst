@@ -24,21 +24,21 @@ The following is Birkhoff's celebrated HSP theorem. The proof we give here (and 
 
       Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
 
-      To this end, take :math:`Σ = \mathsf{Th}(𝒲)`. Let :math:`𝒲^† := \mathsf{Mod}(Σ)`.
+      To this end, take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
 
       Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
       Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
 
-      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝔸`.
+      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`.
 
-      Furthermore, since :math:`𝔽_𝒲(Y) = 𝕋(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝕋(Y) → 𝔽_𝒲`.
+      Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`.
 
-      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map :math:`f: 𝔽_𝒲(Y) → 𝔸` such that :math:`f ∘ g = h`.
+      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`.
 
-      Since :math:`h` is epic, so is :math:`f`. Hence :math:`𝔸 ∈ 𝑯 (𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof. ☐
+      Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
 
-In the ``birkhoff`` module of ``agda-ualib`` we formalize the above proof.  The sections below contain literate Agda code that implement and describe this formalization.
+In the ``birkhoff`` module of ``agda-ualib`` we formalize the above proof.  The sections below contain literate Agda code that implements each step of the formal proof.
 
 Preliminaries
 -----------------
@@ -69,7 +69,7 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
 
   module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇}  where
 
-.. _obs 1 agda:
+.. _obs 1 in agda:
 
 Equalizers
 ~~~~~~~~~~~~~~
@@ -93,7 +93,7 @@ It turns out that the equalizer of two homomorphisms ``f g : hom 𝑨 𝑩`` is 
   𝑬𝑯-is-closed : funext 𝓥 𝓤
    →       {𝓸 : ∣ S ∣ } {𝑨 𝑩 : Algebra 𝓤 S}
            (f g : hom 𝑨 𝑩)   (𝒂 : (∥ S ∥ 𝓸) → ∣ 𝑨 ∣)
-   →       ((x : ∥ S ∥ 𝓸) → (𝒂 x) ∈ (𝑬𝑯 {A = 𝑨}{B = 𝑩} f g))
+   →       ((x : ∥ S ∥ 𝓸) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} f g))
            --------------------------------------------------
    →        ∣ f ∣ (∥ 𝑨 ∥ 𝓸 𝒂) ≡ ∣ g ∣ (∥ 𝑨 ∥ 𝓸 𝒂)
 
@@ -112,15 +112,15 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``𝑨``.
   𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
    →  {𝑨 𝑩 : Algebra 𝓤 S}(f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
   𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
-   mksub (𝑬𝑯 {A = 𝑨}{B = 𝑩} f g)
+   mksub (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} f g)
     λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g 𝒂 x
 
-.. _obs 3 agda:
+.. _obs 3 in agda:
 
 Homomorphisms
 ~~~~~~~~~~~~~~
 
-The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  (This is proved here, and not in :numref:`homomorphisms module` because we need ``Sg`` from the :numref:`subuniverses module (Section %s) <subuniverses module>`.)
+The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  This is proved here, and not in :numref:`homomorphisms module` because we need ``Sg`` from the ``subuniverses`` module (see :numref:`subuniverses in agda`).
 
 ::
 
@@ -235,7 +235,7 @@ for every class 𝒦 of structures, each of the classes 𝑺(𝒦), 𝑯(𝒦), 
 
 We formalize the notion of closure under the taking of homomorphic images in the `morphisms` module.  Here we will formalize closure under the taking of products and subuniverses, and prove that these closures preserve identities.
 
-.. _obs 13 agda:
+.. _obs 13 in agda:
 
 Identities in products
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -348,7 +348,7 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
      γ = gfe λ 𝒃 → hlc (ξ 𝒃)
 
 
-.. _obs 14 agda:
+.. _obs 14 in agda:
 
 Identities preserved by homs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
