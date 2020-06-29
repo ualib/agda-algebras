@@ -11,7 +11,7 @@ Relations in Agda
 
 Here we describe the ``relations`` module of the `agda-ualib`_.
 
-**N.B.** Some of the code described in this section was borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
+**N.B.** Some of the code described in this section is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
 
 Preliminaries
 ---------------
@@ -53,32 +53,32 @@ The kernel of a function can be defined in many ways. For example,
 
 ::
 
-   KER : {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → 𝓤 ⊔ 𝓦 ̇
+   KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → 𝓤 ⊔ 𝓦 ̇
    KER {𝓤}{𝓦}{A} f = Σ x ꞉ A , Σ y ꞉ A , f x ≡ f y
 
-   ker : {A B : 𝓤 ̇} → (f : A → B) → 𝓤 ̇
+   ker : {A B : 𝓤 ̇ } → (f : A → B) → 𝓤 ̇
    ker {𝓤} = KER{𝓤}{𝓤}
 
 or as a relation...
 
 ::
 
-   KER-rel : {A : 𝓤 ̇} {B : 𝓦 ̇} → (f : A → B) → Rel A 𝓦
+   KER-rel : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → Rel A 𝓦
    KER-rel f x y = f x ≡ f y
 
    -- (in the special case 𝓦 ≡ 𝓤)
-   ker-rel : {A B : 𝓤 ̇} → (f : A → B) → Rel A 𝓤
+   ker-rel : {A B : 𝓤 ̇ } → (f : A → B) → Rel A 𝓤
    ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
 or a binary predicate...
 
 ::
 
-   KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} (f : A → B) → Pred (A × A) 𝓦
+   KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } (f : A → B) → Pred (A × A) 𝓦
    KER-pred f (x , y) = f x ≡ f y
 
    -- (in the special case 𝓦 ≡ 𝓤)
-   ker-pred : {A : 𝓤 ̇}{B : 𝓤 ̇} (f : A → B) → Pred (A × A) 𝓤
+   ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } (f : A → B) → Pred (A × A) 𝓤
    ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
 --------------------------------------
@@ -90,19 +90,28 @@ We denote and define implication or containment (which could also be written _�
 
 ::
 
-   _⇒_ : {A : 𝓤 ̇}  {B : 𝓥 ̇}  → REL A B 𝓡 → REL A B 𝓢 → 𝓤 ⊔ 𝓥 ⊔ 𝓡 ⊔ 𝓢 ̇
+   _⇒_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ }
+    →    REL A B 𝓡 → REL A B 𝓢
+    →    𝓤 ⊔ 𝓥 ⊔ 𝓡 ⊔ 𝓢 ̇
+
    P ⇒ Q = ∀ {i j} → P i j → Q i j
+
    infixr 4 _⇒_
 
-   _on_ : {A : 𝓤 ̇}  {B : 𝓥 ̇}  {C : 𝓦 ̇} → (B → B → C) → (A → B) → (A → A → C)
+   _on_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } {C : 𝓦 ̇ }
+    →     (B → B → C) → (A → B) → (A → A → C)
    _*_ on f = λ x y → f x * f y
 
 Here is a more general version of implication 
 
 ::
 
-   _=[_]⇒_ : {A : 𝓤 ̇}  {B : 𝓥 ̇} → Rel A 𝓡 → (A → B) → Rel B 𝓢 →  𝓤 ⊔ 𝓡 ⊔ 𝓢 ̇
+   _=[_]⇒_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ }
+    →        Rel A 𝓡 → (A → B) → Rel B 𝓢
+    →        𝓤 ⊔ 𝓡 ⊔ 𝓢 ̇
+
    P =[ f ]⇒ Q = P ⇒ (Q on f)
+
    infixr 4 _=[_]⇒_
 
 
@@ -131,7 +140,7 @@ For a binary relation ≈ on A, denote a single ≈-class (containing a) by `[ a
 
 ::
 
-   [_]_ :  {A : 𝓤 ̇} →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+   [_]_ :  {A : 𝓤 ̇ } →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
    [ a ] _≈_ = Σ x ꞉ _ ,  a ≈ x
 
 and denote the collection of all ≈-classes of A by `A // ≈`.
@@ -148,10 +157,10 @@ The "trivial" or "diagonal" or "identity" relation is,
 
 ::
 
-   𝟎 : {A : 𝓤 ̇} → 𝓤 ̇
+   𝟎 : {A : 𝓤 ̇ } → 𝓤 ̇
    𝟎{𝓤} {A} = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
 
-   𝟎-rel : {A : 𝓤 ̇} → Rel A 𝓤
+   𝟎-rel : {A : 𝓤 ̇ } → Rel A 𝓤
    𝟎-rel a b = a ≡ b
 
 or, in various other guises, 
@@ -159,18 +168,18 @@ or, in various other guises,
 ::
 
    -- ...as a binary predicate:
-   𝟎-pred : {A : 𝓤 ̇} → Pred (A × A) 𝓤
+   𝟎-pred : {A : 𝓤 ̇ } → Pred (A × A) 𝓤
    𝟎-pred (a , a') = a ≡ a'
 
    --...as a binary predicate:
-   𝟎'' : {A : 𝓤 ̇} → 𝓤 ̇
+   𝟎'' : {A : 𝓤 ̇ } → 𝓤 ̇
    𝟎'' {𝓤} {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
 The "universal" or "total" or "all" relation.
 
 ::
 
-   𝟏 : {A : 𝓤 ̇} → Rel A 𝓤₀
+   𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
    𝟏 a b = 𝟙
 
 Equivalence relations
@@ -184,7 +193,7 @@ First, we use a record.
 
 ::
 
-   record IsEquivalence {A : 𝓤 ̇} (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
+   record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
      field
        rfl  : reflexive _≈_
        sym   : symmetric _≈_
@@ -205,7 +214,7 @@ Of course, `𝟎` is an equivalence relation, a fact we can prove as follows.
 
 ::
 
-   𝟎-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence {𝓤}{𝓤}{A} 𝟎-rel
+   𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence {𝓤}{𝓤}{A} 𝟎-rel
    𝟎-IsEquivalence = record { rfl = ρ ; sym = σ ; trans = τ }
     where
      ρ : reflexive 𝟎-rel
@@ -221,7 +230,9 @@ We define the **lift** of a binary relation from pairs to pairs of tuples as fol
 
 ::
 
-   lift-rel :  {γ : 𝓥 ̇} {Z : 𝓤 ̇} → Rel Z 𝓦 → (γ → Z) → (γ → Z) → 𝓥 ⊔ 𝓦 ̇
+   lift-rel : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
+    →         Rel Z 𝓦 → (γ → Z) → (γ → Z)
+    →         𝓥 ⊔ 𝓦 ̇
    lift-rel R 𝒇 𝒈 = ∀ x → R (𝒇 x) (𝒈 x)
 
 
@@ -229,7 +240,9 @@ We define **compatibility** of a given function-relation pair as follows:
 
 ::
 
-   compatible-fun : {γ : 𝓥 ̇} {Z : 𝓤 ̇} ( 𝒇 : (γ → Z) → Z )  (𝑹 : Rel Z 𝓦) →  𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+   compatible-fun : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
+                    (𝒇 : (γ → Z) → Z)(𝑹 : Rel Z 𝓦)
+    →               𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
    compatible-fun 𝒇 𝑹 = (lift-rel 𝑹) =[ 𝒇 ]⇒ 𝑹
 
 
@@ -240,7 +253,9 @@ Finally, we come to the definition of a congruence, which we define in a module 
    module _ {S : Signature 𝓞 𝓥}  where
 
      -- relation compatible with an operation
-     compatible-op : {𝑨 : Algebra 𝓤 S} → ∣ S ∣ → Rel ∣ 𝑨 ∣ 𝓤 → 𝓥 ⊔ 𝓤 ̇
+     compatible-op : {𝑨 : Algebra 𝓤 S}
+      →              ∣ S ∣ → Rel ∣ 𝑨 ∣ 𝓤
+      →              𝓥 ⊔ 𝓤 ̇
      compatible-op {𝓤} {𝑨} 𝓸 𝓻 = (lift-rel 𝓻) =[ (∥ 𝑨 ∥ 𝓸) ]⇒ 𝓻
 
      --The given relation is compatible with all ops of an algebra.
@@ -250,16 +265,19 @@ Finally, we come to the definition of a congruence, which we define in a module 
      𝟎-compatible-op : funext 𝓥 𝓤
       →                {𝑨 : Algebra 𝓤 S} (𝓸 : ∣ S ∣)
       →                compatible-op {𝓤}{𝑨} 𝓸 𝟎-rel
-     𝟎-compatible-op fe {𝑨 = 𝑨} 𝓸 ptws𝟎  = ap  (∥ 𝑨 ∥ 𝓸) (fe (λ x → ptws𝟎 x))
-     -- 𝟎-rel : {A : 𝓤 ̇} → Rel A 𝓤
-     -- 𝟎-rel a b = a ≡ b
+     𝟎-compatible-op fe {𝑨 = 𝑨} 𝓸 ptws𝟎  =
+      ap (∥ 𝑨 ∥ 𝓸) (fe (λ x → ptws𝟎 x))
 
-     𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 S} → compatible 𝑨 𝟎-rel
-     𝟎-compatible fe {𝑨} = λ 𝓸 args → 𝟎-compatible-op fe {𝑨} 𝓸 args
+     𝟎-compatible : funext 𝓥 𝓤
+      →             {𝑨 : Algebra 𝓤 S}
+      →             compatible 𝑨 𝟎-rel
+     𝟎-compatible fe {𝑨} =
+      λ 𝓸 args → 𝟎-compatible-op fe {𝑨} 𝓸 args
 
      -- Congruence relations
      Con : (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-     Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
+     Con {𝓤} 𝑨 =
+      Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
      con : (𝑨 : Algebra 𝓤 S)  →  Pred (Rel ∣ 𝑨 ∣ 𝓤) _
      con 𝑨 = λ θ → IsEquivalence θ × compatible 𝑨 θ
@@ -284,12 +302,12 @@ We construct the "trivial" or "diagonal" or "identity" relation and prove it is 
      _╱_ : (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
             ---------------------------------
       →     Algebra (𝓤 ⁺) S
-     𝑨 ╱ θ = ( ( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
-                ( λ 𝓸 args        -- operations
-                    → ( [ ∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩ ) ,
-                       ( ∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) , refl _ )
-                )
-              )
+     𝑨 ╱ θ = (( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
+               (λ 𝓸 args        -- operations
+                → ([ ∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+                  (∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) , refl _ )
+               )
+             )
 
 
 
