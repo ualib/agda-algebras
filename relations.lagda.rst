@@ -256,23 +256,23 @@ Finally, we come to the definition of a congruence, which we define in a module 
      compatible-op : {𝑨 : Algebra 𝓤 S}
       →              ∣ S ∣ → Rel ∣ 𝑨 ∣ 𝓤
       →              𝓥 ⊔ 𝓤 ̇
-     compatible-op {𝓤} {𝑨} 𝓸 𝓻 = (lift-rel 𝓻) =[ (∥ 𝑨 ∥ 𝓸) ]⇒ 𝓻
+     compatible-op {𝓤} {𝑨} 𝑓 𝓻 = (lift-rel 𝓻) =[ (∥ 𝑨 ∥ 𝑓) ]⇒ 𝓻
 
      --The given relation is compatible with all ops of an algebra.
      compatible : (𝑨 : Algebra 𝓤 S) -> Rel ∣ 𝑨 ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
-     compatible {𝓤} 𝑨 𝓻 = ∀ 𝓸 → compatible-op{𝓤}{𝑨} 𝓸 𝓻
+     compatible {𝓤} 𝑨 𝓻 = ∀ 𝑓 → compatible-op{𝓤}{𝑨} 𝑓 𝓻
 
      𝟎-compatible-op : funext 𝓥 𝓤
-      →                {𝑨 : Algebra 𝓤 S} (𝓸 : ∣ S ∣)
-      →                compatible-op {𝓤}{𝑨} 𝓸 𝟎-rel
-     𝟎-compatible-op fe {𝑨 = 𝑨} 𝓸 ptws𝟎  =
-      ap (∥ 𝑨 ∥ 𝓸) (fe (λ x → ptws𝟎 x))
+      →                {𝑨 : Algebra 𝓤 S} (𝑓 : ∣ S ∣)
+      →                compatible-op {𝓤}{𝑨} 𝑓 𝟎-rel
+     𝟎-compatible-op fe {𝑨 = 𝑨} 𝑓 ptws𝟎  =
+      ap (∥ 𝑨 ∥ 𝑓) (fe (λ x → ptws𝟎 x))
 
      𝟎-compatible : funext 𝓥 𝓤
       →             {𝑨 : Algebra 𝓤 S}
       →             compatible 𝑨 𝟎-rel
      𝟎-compatible fe {𝑨} =
-      λ 𝓸 args → 𝟎-compatible-op fe {𝑨} 𝓸 args
+      λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
      -- Congruence relations
      Con : (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
@@ -303,9 +303,9 @@ We construct the "trivial" or "diagonal" or "identity" relation and prove it is 
             ---------------------------------
       →     Algebra (𝓤 ⁺) S
      𝑨 ╱ θ = (( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
-               (λ 𝓸 args        -- operations
-                → ([ ∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-                  (∥ 𝑨 ∥ 𝓸 (λ i₁ -> ∣ ∥ args i₁ ∥ ∣) , refl _ )
+               (λ 𝑓 args        -- operations
+                → ([ ∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+                  (∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
                )
              )
 

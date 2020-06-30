@@ -46,35 +46,36 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
 Equalizers
 ~~~~~~~~~~~~~~
 
-The equalizer of two functions (resp., homomorphisms) ``f g : A → B`` is the subset of ``A`` on which the values of the functions ``f`` and ``g`` agree.  We formalize this notion in Agda as follows.
+The equalizer of two functions (resp., homomorphisms) ``g h : A → B`` is the subset of ``A`` on which the values of the functions ``g`` and ``h`` agree.  We formalize this notion in Agda as follows.
 
 ::
 
   --Equalizers of functions
-  𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (f g : A → B) → Pred A 𝓦
-  𝑬 f g x = f x ≡ g x
+  𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
+  𝑬 g h x = g x ≡ h x
 
-  --Equalizers of homomorphisms (see also the definition 𝓔 in the ``homomorphisms`` module)
-  𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 S} (f g : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
-  𝑬𝑯 f g x = ∣ f ∣ x ≡ ∣ g ∣ x
+  --Equalizers of homomorphisms
+  𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 S} (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
+  𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+  --cf. definition 𝓔 in the homomorphisms module
 
-It turns out that the equalizer of two homomorphisms ``f g : hom 𝑨 𝑩`` is a subalgebra of their common domain ``∣ 𝑨 ∣`` since it is closed under the operations of ``𝑨``, as we now prove.
+It turns out that the equalizer of two homomorphisms is closed under the operations of ``𝑨`` and is therefore a subalgebra of the common domain, as we now prove.
 
 ::
 
   𝑬𝑯-is-closed : funext 𝓥 𝓤
-   →       {𝓸 : ∣ S ∣ } {𝑨 𝑩 : Algebra 𝓤 S}
-           (f g : hom 𝑨 𝑩)   (𝒂 : (∥ S ∥ 𝓸) → ∣ 𝑨 ∣)
-   →       ((x : ∥ S ∥ 𝓸) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} f g))
-           --------------------------------------------------
-   →        ∣ f ∣ (∥ 𝑨 ∥ 𝓸 𝒂) ≡ ∣ g ∣ (∥ 𝑨 ∥ 𝓸 𝒂)
+   →      {𝑓 : ∣ S ∣ } {𝑨 𝑩 : Algebra 𝓤 S}
+          (g h : hom 𝑨 𝑩)  (𝒂 : (∥ S ∥ 𝑓) → ∣ 𝑨 ∣)
+   →      ((x : ∥ S ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
+          --------------------------------------------------
+   →       ∣ g ∣ (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∣ h ∣ (∥ 𝑨 ∥ 𝑓 𝒂)
 
-  𝑬𝑯-is-closed fe {𝓸 = 𝓸}{𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ}
-   (f , fhom)(g , ghom) 𝒂 p =
-     f (Fᴬ 𝓸 𝒂)    ≡⟨ fhom 𝓸 𝒂 ⟩
-     Fᴮ 𝓸 (f ∘ 𝒂)  ≡⟨ ap (Fᴮ _ )(fe p) ⟩
-     Fᴮ 𝓸 (g ∘ 𝒂)  ≡⟨ (ghom 𝓸 𝒂)⁻¹ ⟩
-     g (Fᴬ 𝓸 𝒂)    ∎
+  𝑬𝑯-is-closed fe {𝑓 = 𝑓}{𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ}
+   (g , ghom)(h , hhom) 𝒂 p =
+     g (Fᴬ 𝑓 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
+     Fᴮ 𝑓 (g ∘ 𝒂)  ≡⟨ ap (Fᴮ _ )(fe p) ⟩
+     Fᴮ 𝑓 (h ∘ 𝒂)  ≡⟨ (hhom 𝑓 𝒂)⁻¹ ⟩
+     h (Fᴬ 𝑓 𝒂)    ∎
 
 Thus, ``𝑬𝑯`` is a subuniverse of ``𝑨``.
 
@@ -82,10 +83,10 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``𝑨``.
 
   -- Equalizer of homs is a subuniverse.
   𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
-   →  {𝑨 𝑩 : Algebra 𝓤 S}(f g : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
-  𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g =
-   mksub (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} f g)
-    λ 𝓸 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩} f g 𝒂 x
+   →  {𝑨 𝑩 : Algebra 𝓤 S}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+  𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨} {𝑩 = 𝑩} g h =
+   mksub (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h)
+    λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨} {𝑩 = 𝑩} g h 𝒂 x
 
 .. _obs 3 in agda:
 
@@ -97,29 +98,27 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalize
 ::
 
   HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 S}
-             (X : Pred ∣ 𝑨 ∣ 𝓤)  (f g : hom 𝑨 𝑩)
-   →         (∀ ( x : ∣ 𝑨 ∣ )  →  x ∈ X  →  ∣ f ∣ x ≡ ∣ g ∣ x)
+             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+   →         (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
            ---------------------------------------------------
-   →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ f ∣ a ≡ ∣ g ∣ a)
+   →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
-  HomUnique _ _ _ _ fx≡gx a (var x) = (fx≡gx) a x
+  HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
   HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
-   (f , fhom) (g , ghom) fx≡gx a (app 𝓸 {𝒂} im𝒂⊆SgX) =
-    f (Fᴬ 𝓸 𝒂)     ≡⟨ fhom 𝓸 𝒂 ⟩
-    Fᴮ 𝓸 (f ∘ 𝒂 )   ≡⟨ ap (Fᴮ 𝓸) (fe induction-hypothesis) ⟩
-    Fᴮ 𝓸 (g ∘ 𝒂)    ≡⟨ ( ghom 𝓸 𝒂 )⁻¹ ⟩
-    g ( Fᴬ 𝓸 𝒂 )   ∎
+   (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
+    g (Fᴬ 𝑓 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
+    Fᴮ 𝑓 (g ∘ 𝒂 )   ≡⟨ ap (Fᴮ 𝑓) (fe induction-hypothesis) ⟩
+    Fᴮ 𝑓 (h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
+    h ( Fᴬ 𝑓 𝒂 )   ∎
    where
     induction-hypothesis =
       λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
-      (f , fhom)(g , ghom) fx≡gx (𝒂 x) ( im𝒂⊆SgX x )
+      (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-Obs 2.3. If A, B are finite and X generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
-Proof. By Obs 2, a hom is uniquely determined by its restriction to a generating set. If X generates 𝑨, then since there are exactly |B|^|X| functions from X to B, the result holds. □
+**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
+Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
 
-(todo) formalize Obs 2.3.
-
-Obs 2.4. Factorization of homs. (This is proved in the `morphisms` module.)
+.. todo:: formalize **Obs**.
 
 
 The closure operators 𝑯, 𝑺, 𝑷
@@ -131,9 +130,9 @@ Let 𝓚 be a class of 𝑆-algebras. Define
 
   * 𝑯(𝓚) = homomorphic images of members of 𝓚;
   * 𝑺(𝓚) = algebras isomorphic to a subalgebra of a member of 𝓚;
-  * 𝑷(𝓚) = algebras isomorphic to a direct product of members of 𝓚;
+  * 𝑷(𝓚) = algebras isomorphic to a direct product of members of 𝓚.
 
-It is not hard to check that 𝑯, 𝑺, and 𝑷 are closure operators. A class 𝓚 of 𝑆-algebras is said to be *closed under the formation of homomorphic images* if 𝑯(𝓚) ⊆ 𝓚. Similarly, 𝓚 is *closed under the formation of subalgebras* (resp., *products*) provided 𝑺(𝓚) ⊆ 𝓚 (resp., 𝑷(𝓚) ⊆ 𝓚).
+As a straight-forward verification confirms, 𝑯, 𝑺, and 𝑷 are closure operators. A class 𝓚 of 𝑆-algebras is said to be *closed under the formation of homomorphic images* if 𝑯(𝓚) ⊆ 𝓚. Similarly, 𝓚 is *closed under the formation of subalgebras* (resp., *products*) provided 𝑺(𝓚) ⊆ 𝓚 (resp., 𝑷(𝓚) ⊆ 𝓚).
 
 An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class 𝑯(𝓚) (resp., S(𝓚); resp., P(𝓚)) is closed under isomorphism.
 
@@ -216,10 +215,10 @@ Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of me
 
 ::
 
-  ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ) )
-   →      (𝓘 : Universe )  ( I : 𝓘 ̇ )  ( 𝓐 : I → Algebra 𝓘 S )
+  ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
+   →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝓐 : I → Algebra 𝓘 S)
    →      (( i : I ) → 𝓐 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
-  ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ ( 𝓛𝓚 𝓘 )
+  ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ (𝓛𝓚 𝓘)
 
   module _
     (gfe : global-dfunext)
