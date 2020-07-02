@@ -8,7 +8,7 @@
 open import prelude
 open import basic using (Signature; Algebra; Π')
 open import relations using (ker-pred; Rel; con; _//_)
-open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
+open import homomorphisms using (HOM; Hom; hom; is-homomorphism; 𝑯-closed)
 
 open import terms using (Term; generator; 𝔉; _̇_; comm-hom-term';
                          lift-hom; interp-prod)
@@ -65,20 +65,11 @@ HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
   induction-hypothesis =
     λ x → HomUnique fe {𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ} X
     (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
-_⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
- →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 
-𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-
-_⊧_≋_ : {X : 𝓧 ̇ } → Pred (Algebra 𝓤 S) 𝓦
- →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
-
-_⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
-
-ℙ-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
+𝑷-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝓐 : I → Algebra 𝓘 S)
  →      (( i : I ) → 𝓐 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
-ℙ-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ (𝓛𝓚 𝓘)
+𝑷-closed 𝓛𝓚 = λ 𝓘 I 𝓐 𝓐i∈𝓛𝓚 →  Π' 𝓐  ∈ (𝓛𝓚 𝓘)
 
 module _
   (gfe : global-dfunext)
@@ -120,9 +111,9 @@ module _
  SubalgebrasOfClass 𝓚 =
   Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × Subalgebra{𝑨 = 𝑨} 𝓤★
 
- 𝕊-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+ 𝑺-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- 𝕊-closed 𝓛𝓚 =
+ 𝑺-closed 𝓛𝓚 =
   λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤)) → (𝑩 ∈ 𝓛𝓚 𝓤)
 
  subalgebras-preserve-identities : (p q : Term{X = X})
@@ -237,13 +228,45 @@ module _
    identities-are-compatible-with-homs p q ,
    homs-are-compatible-with-identities p q
 
- Th : 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ ((𝓤 ⁺) ⁺) ̇
- Th = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝓚 ⊧ p ≋ q
+ 𝕍-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+  →         (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)
+  →         _ ̇
+ 𝕍-closed 𝓛𝓚 = λ 𝓤 𝑩 → (𝑯-closed 𝓛𝓚 𝓤 𝑩) × (𝑺-closed 𝓛𝓚 (𝓤 ⁺) 𝑩) × (𝑷-closed 𝓛𝓚 𝓤 𝑩)
 
 
-    --    To this end, take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
 
-    -- Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
+ Th : (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+  →   𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ ((𝓤 ⁺) ⁺) ̇
+ Th 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
+
+ Mod : (Σ' : Pred (Term{X = X} × Term) 𝓤)
+  →    𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ (𝓤 ⁺) ̇
+ Mod Σ' = Σ 𝑨 ꞉ (Algebra 𝓤 S) , ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
+
+ --Birkhoff's Theorem: Every variety is an equational class.
+
+ Birkhoff : (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+  →         𝕍-closed 𝒦  →  Mod Th 𝒦 ⊆ 𝒦
+ Birkhoff = ?
+ --Let 𝒲 be a class of algebras that is closed under H, S, and P.
+ --We must find a set Σ of equations such that 𝒲 = Mod(Σ).  For this will prove that 𝒲
+ --is the class of algebras satisfying the set of equations Σ (i.e., 𝒲 is an equational class).
+ --The obvious choice for Σ is the set of all equations that hold in 𝒲.
+ --Let Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
+
+-- Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
+
+-- Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
+
+-- By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`.
+
+-- Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`.
+
+-- We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`.
+
+-- Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
+ -- Let Σ = Th(𝒲). Let 𝒲† := Mod(Σ).
+ -- Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
 
     -- Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
 

@@ -1,5 +1,5 @@
 .. FILE: relations.lagda.rst
-.. BLAME: William DeMeo and Siva Somayyajula
+.. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 23 Apr 2020
 .. UPDATE: 16 Jun 2020
 .. REF: Some of this file is simply a translation of the Agda standard library file Binary/Core.agda

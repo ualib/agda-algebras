@@ -1018,7 +1018,7 @@ The last result tells us that we can determine whether an identity is true in a 
 
 It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
 
-The proof we will give here is the same as the one that appears in Cliff Bergman's textbook (:cite:`Bergman:2012`, Thm 4.41).  It is also the same one that we will formalize in Agda in the ``birkhoff`` module of the `agda-ualib`_ . We present the formal proof in :numref:`birkhoffs theorem in agda`.
+The statement and proof we give here is the same as that of Theorem 4.41 in Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the ``birkhoff`` module of the `agda-ualib`_ (see :numref:`birkhoffs theorem in agda`).
 
 
 .. _birkhoffs theorem:
@@ -1033,21 +1033,9 @@ The proof we will give here is the same as the one that appears in Cliff Bergman
 
          *Proof*.
 
-      Let 𝒲 be a variety. We must find a set of equations that axiomatizes 𝒲. The obvious choice is to use the set of all equations that hold in 𝒲.
+      Let 𝒲 be a class of algebras closed under 𝑯, 𝑺, and 𝑷 (i.e., a variety). We must find a set Σ of equations that axiomatizes 𝒲, as this will prove that 𝒲 is the class of algebras satisfying the set of equations Σ (i.e., that 𝒲 is an equational class). The obvious choice for Σ is to use the set of all equations that hold in 𝒲. That is, we take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).  Clearly, :math:`𝒲 ⊆ 𝒲^†`. We prove the reverse inclusion.
 
-      To this end, take Σ = Th(𝒲). Let :math:`𝒲^† :=` Mod(Σ).
-
-      Clearly, :math:`𝒲 ⊆ 𝒲^†`. We shall prove the reverse inclusion.
-
-      Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
-
-      By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`.
-
-      Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`.
-
-      We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`.
-
-      Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
+      Let :math:`𝑨 ∈ 𝒲^†` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴. By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝔉(𝑌) → 𝑨`. Furthermore, since :math:`𝔽_𝒲(Y) = 𝑻(Y)/Θ_𝒲`, there is an epimorphism :math:`g: 𝑻(Y) → 𝔽_𝒲`. We claim that :math:`\ker g ⊆ \ker h`. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that :math:`f ∘ g = h`. Since ℎ is epic, so is 𝑓. Hence :math:`𝑨 ∈ 𝑯(𝔽_{𝒲}(Y)) ⊆ 𝒲` completing the proof.
 
 
 .. We end this subsection with yet another standard but important result.
