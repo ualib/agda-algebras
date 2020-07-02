@@ -2,12 +2,12 @@
 .. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 2 Jul 2020
 
-=====================
-Closure operators
-======================
+===========================
+Equational Logic in Agda
+===========================
 
-The operators 𝑯, 𝑺, 𝑷
-----------------------
+Closure operators
+-----------------
 
 Fix a signature 𝑆.
 
@@ -66,11 +66,16 @@ We would like to know how to construct 𝕍(𝓚) directly from 𝓚, but it's n
 
 ---------------------------------------------------
 
-The closure module
+Equational classes
 ---------------------
 
-Preliminaries
-~~~~~~~~~~~~~~~~~~~
+In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook :cite:`Bergman:2012`) proclaims, "Now, finally, we can formalize the idea we have been using since the first page of this text."  He then proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
+
+Let 𝑆 be a signature.  An **identity** or **equation** in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝔉. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  In this  situation,  we  write 𝑨 ⊧ 𝑝 ≈ 𝑞.
+
+If 𝓚 is a class of 𝑆-algebras, we write 𝓚 ⊧ 𝑝 ≋ 𝑞 if, for every 𝑨 ∈ 𝓚, 𝑨 ⊧ 𝑝 ≈ 𝑞. Finally, if 𝓔 is a set of equations, we write 𝓚 ⊧ 𝓔 if every member of 𝓚 satisfies every member of 𝓔.
+
+We formalize these notions in Agda in the ``closure`` module, which begins as follows.
 
 ::
 
@@ -85,20 +90,6 @@ Preliminaries
 
   module closure {S : Signature 𝓞 𝓥} where
 
-
-Equational classes
-~~~~~~~~~~~~~~~~~~~~~~
-
-In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook :cite:`Bergman:2012`) proclaims, "Now, finally, we can formalize the idea we have been using since the first page of this text."  He then proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
-
-Let 𝑆 be a signature.  An **identity** or **equation** in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝔉. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  In this  situation,  we  write 𝑨 ⊧ 𝑝 ≈ 𝑞.
-
-If 𝓚 is a class of 𝑆-algebras, we write 𝓚 ⊧ 𝑝 ≋ 𝑞 if, for every 𝑨 ∈ 𝓚, 𝑨 ⊧ 𝑝 ≈ 𝑞. Finally, if 𝓔 is a set of equations, we write 𝓚 ⊨ 𝓔 if every member of 𝓚 satisfies every member of 𝓔.
-
-We formalize these notions in Agda as follows.
-
-::
-
   _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
    →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 
@@ -109,6 +100,12 @@ We formalize these notions in Agda as follows.
 
   _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
 
+
+---------------------------------------------
+
+Identity preservation
+----------------------
+
 Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely,
 for every class 𝒦 of structures, each of the classes 𝑺(𝒦), 𝑯(𝒦), 𝑷(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦.
 
@@ -117,7 +114,7 @@ We formalize the notion of closure under the taking of homomorphic images in the
 .. _obs 13 in agda:
 
 Identities in products
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of members of 𝓚.
 
@@ -153,16 +150,15 @@ Let ℙ (𝓚) denote the class of algebras isomorphic to a direct product of me
          ∎
 
 
-
 Identities in subalgebras
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a member of 𝓚. We show that every term equation, 𝑝 ≈ 𝑞, that is satisfied by all 𝑨 ∈ 𝓚 is also satisfied by all 𝑩 ∈ 𝑺(𝓚).
 
 ::
 
-  _is-subalgebra-of-class_ : {𝓤 : Universe}(𝑩 : Algebra 𝓤 S)
-   →                         Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  _is-subalgebra-of-class_ : {𝓤 : Universe} (𝑩 : Algebra 𝓤 S)
+   →                 Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   𝑩 is-subalgebra-of-class 𝓚 =
    Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × (𝑩 is-subalgebra-of 𝑨)
 
@@ -227,14 +223,17 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
      γ = gfe λ 𝒃 → hlc (ξ 𝒃)
 
 
-  -- Product Closure
+Closure under H, S, P
+----------------------
+
+::
+
   data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
    pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
    prod : {I : 𝓤 ̇ }{𝓐 : I → Algebra _ S}
     →     (∀ i → 𝓐 i ∈ PClo 𝓚)
     →     Π' 𝓐 ∈ PClo 𝓚
 
-  -- Subalgebra Closure
   data SClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
    sbase : {𝑨 : Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
    --sub : {𝑨 𝑩 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ SClo 𝓚
@@ -245,20 +244,23 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
     →    𝑨 ∈ SClo 𝓚
     →    SubunivAlg{𝑨 = 𝑨}{B = B}{𝐹 = 𝐹} B∈SubA ∈ SClo 𝓚
 
-  -- Homomorphic Image Closure
   data HClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
    hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
    hhom : {𝑨 𝑩 : Algebra 𝓤 S}{f : hom 𝑨 𝑩}
     →     𝑨 ∈ HClo 𝓚
     →     hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ HClo 𝓚
 
-  -- Variety Closure
   data VClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
    vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ VClo 𝓚
    vprod : {I : 𝓤 ̇ }{𝓐 : I → Algebra _ S} → (∀ i → 𝓐 i ∈ VClo 𝓚) → Π' 𝓐 ∈ VClo 𝓚
    vsub : ∀{𝑨 : Algebra _ S}{𝑩 : Algebra _ S} → 𝑨 ∈ VClo 𝓚 → 𝑩 is-subalgebra-of 𝑨 → 𝑩 ∈ VClo 𝓚
    vhom : {𝑨 𝑩 : Algebra 𝓤 S}{f : hom 𝑨 𝑩}
     →     𝑨 ∈ VClo 𝓚 → hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
+
+---------------------------------------------
+
+Alternative formulations
+----------------------------
 
 ::
 
@@ -363,8 +365,6 @@ Let 𝑺(𝓚) denote the class of algebras isomorphic to a subalgebra of a memb
                ≡⟨ refl _ ⟩
            (q ̇ HIA)    ∎
 
-   --   postulate
-   --     homclo-id2 : ∀ {p q} → {𝑨 : Algebra k S} → (h : Hom 𝔉 𝑨) → ∣ h ∣ p ≡ ∣ h ∣ q → 𝓚 ⊧ p ≋ q
    hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊧' p ≋ q) → (𝓚 ⊧ p ≋ q)
    hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
 

@@ -18,6 +18,7 @@ The Agda Universal Algebra Library
    homomorphisms.lagda.rst
    terms.lagda.rst
    subuniverses.lagda.rst
+   closure.lagda.rst
    birkhoff.lagda.rst
    
 Appendix
