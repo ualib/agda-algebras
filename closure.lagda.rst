@@ -82,11 +82,16 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
+
   open import basic using (Signature; Algebra; Π'; Op)
-  open import subuniverses using (Subuniverses; SubunivAlg; hom-image-alg; _is-subalgebra-of_; Subalgebra)
+
+  open import subuniverses using (Subuniverses; SubunivAlg;
+   hom-image-alg; _is-subalgebra-of_; Subalgebra)
+
   open import homomorphisms using (hom; is-homomorphism)
-  -- open import UF-Extensionality using (funext; global-funext; global-dfunext; happly; extensionality-lemma; dfunext)
-  open import terms using (Term; generator; node; _̇_; _̂_; interp-prod2; interp-prod; comm-hom-term')
+
+  open import terms using (Term; generator; node; _̇_; _̂_;
+   interp-prod2; interp-prod; comm-hom-term')
 
   module closure {S : Signature 𝓞 𝓥} where
 
