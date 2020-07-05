@@ -9,8 +9,8 @@ open import basic using (Signature; Algebra; Op)
 open import relations using (transitive)
 open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
 
-open import terms
- using (Term; _̇_; _̂_; generator; node; comm-hom-term)
+open import terms using (Term; _̇_; _̂_; generator; node;
+ comm-hom-term; comm-hom-term')
 
 open import Relation.Unary using (⋂)
 
@@ -31,6 +31,11 @@ data _is-supalgebra-of_
 
 _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
+
+_is-subalgebra-of-class_ : {𝓤 : Universe}(𝑩 : Algebra 𝓤 S)
+ →            Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+𝑩 is-subalgebra-of-class 𝓚 =
+   Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × (𝑩 is-subalgebra-of 𝑨)
 
 module _
  {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
@@ -116,17 +121,17 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (ℎ : hom 𝑨 𝑩)  where
 
  hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses 𝑩
  hom-image-is-sub {fe} 𝑓 𝒃 𝒃∈Imf =
-  eq (∥ 𝑩 ∥ 𝑓 (λ x → 𝒃 x)) ( ∥ 𝑨 ∥ 𝑓 ar) γ
+  eq (∥ 𝑩 ∥ 𝑓 𝒃) ( ∥ 𝑨 ∥ 𝑓 ar) γ
    where
     ar : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣
     ar = λ x → Inv ∣ ℎ ∣ (𝒃 x) (𝒃∈Imf x)
 
-    ζ : (λ x → ∣ ℎ ∣ (ar x)) ≡ (λ x → 𝒃 x)
+    ζ : ∣ ℎ ∣ ∘ ar ≡ 𝒃
     ζ = fe (λ x → InvIsInv ∣ ℎ ∣ (𝒃 x) (𝒃∈Imf x))
 
-    γ : ∥ 𝑩 ∥ 𝑓 (λ x → 𝒃 x)
+    γ : ∥ 𝑩 ∥ 𝑓 𝒃
          ≡ ∣ ℎ ∣ (∥ 𝑨 ∥ 𝑓 (λ x → Inv ∣ ℎ ∣ (𝒃 x)(𝒃∈Imf x)))
-    γ = ∥ 𝑩 ∥ 𝑓 (λ x → 𝒃 x)  ≡⟨ ap ( ∥ 𝑩 ∥ 𝑓 ) (ζ ⁻¹) ⟩
+    γ = ∥ 𝑩 ∥ 𝑓 𝒃            ≡⟨ ap ( ∥ 𝑩 ∥ 𝑓 ) (ζ ⁻¹) ⟩
         (∥ 𝑩 ∥ 𝑓)(∣ ℎ ∣ ∘ ar) ≡⟨ ( ∥ ℎ ∥ 𝑓 ar ) ⁻¹ ⟩
         ∣ ℎ ∣ (∥ 𝑨 ∥ 𝑓 ar)    ∎
 
@@ -173,6 +178,8 @@ module _
  SgY⊆TermImageY : (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
  SgY⊆TermImageY Y = sgIsSmallest (TermImageIsSub Y)
                                  (Y⊆TermImageY Y)
+
+
 
 module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
 
@@ -284,6 +291,83 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
  Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 S) ,
                  Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
                    is-embedding h × is-homomorphism 𝑩 𝑨 h
+
+module _
+ -- (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+ -- (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+ {𝓤 : Universe}
+ {X : 𝓧 ̇ }
+ {𝓤★ : Univalence} where
+
+ _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
+  →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+
+ 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+
+ _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+
+ _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
+
+ gdfe : global-dfunext
+ gdfe = univalence-gives-global-dfunext 𝓤★
+
+ SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ SubalgebrasOfClass 𝓚 =
+  Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × Subalgebra{𝑨 = 𝑨} 𝓤★
+
+ data SClo (𝓚 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+  sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
+  sub : (SAK : SubalgebrasOfClass 𝓚) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝓚
+
+ 𝑺-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ 𝑺-closed 𝓛𝓚 =
+  λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤)) → (𝑩 ∈ 𝓛𝓚 𝓤)
+
+ subalgebras-preserve-identities : (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
+  →  (𝓚 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝓚)
+  →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+ subalgebras-preserve-identities 𝓚 p q 𝓚⊧p≋q SAK = γ
+  where
+
+  𝑨 : Algebra 𝓤 S
+  𝑨 = ∣ SAK ∣
+
+  𝑨∈𝓚 : 𝑨 ∈ 𝓚
+  𝑨∈𝓚 = ∣ pr₂ SAK ∣
+
+  𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
+  𝑨⊧p≈q = 𝓚⊧p≋q 𝑨∈𝓚
+
+  subalg : Subalgebra{𝑨 = 𝑨} 𝓤★
+  subalg = ∥ pr₂ SAK ∥
+
+  𝑩 : Algebra 𝓤 S
+  𝑩 = pr₁ subalg
+
+  h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  h = ∣ pr₂ subalg ∣
+
+  hem : is-embedding h
+  hem = pr₁ ∥ pr₂ subalg ∥
+
+  hhm : is-homomorphism 𝑩 𝑨 h
+  hhm = pr₂ ∥ pr₂ subalg ∥
+
+  ξ : (𝒃 : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) 𝒃) ≡ h ((q ̇ 𝑩) 𝒃)
+  ξ 𝒃 =
+   h ((p ̇ 𝑩) 𝒃)  ≡⟨ comm-hom-term' gdfe 𝑩 𝑨 (h , hhm) p 𝒃 ⟩
+   (p ̇ 𝑨)(h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃) ⟩
+   (q ̇ 𝑨)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gdfe 𝑩 𝑨 (h , hhm) q 𝒃)⁻¹ ⟩
+   h ((q ̇ 𝑩) 𝒃)  ∎
+
+  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+  γ : 𝑩 ⊧ p ≈ q
+  γ = gdfe λ 𝒃 → hlc (ξ 𝒃)
+
 
 -- HOM image is subuniverse
 module intensional-hom-image

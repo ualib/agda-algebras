@@ -129,7 +129,8 @@ Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras
 
 .. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝔉, 𝑨), h ∘ p^𝔉 = h ∘ q^𝔉.
 
-We now formalize this result in Agda.
+We now formalize this result in Agda. First, we define the syntax for ``⊧``.
+
 
 ::
 
@@ -137,6 +138,19 @@ We now formalize this result in Agda.
    (gfe : global-dfunext)
    (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
    { X : 𝓧 ̇ } where
+
+   -- Duplicating definition of ⊧ so we don't have to import from closure module.
+   -- (Remove these definitions later once closure module is working.)
+   _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
+    →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+
+   𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+
+   _⊧_≋_ : {X : 𝓧 ̇ } → Pred (Algebra 𝓤 S) 𝓦
+    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+
+   _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
+
 
    -- ⇒ (the "only if" direction)
    identities-are-compatible-with-homs : (p q : Term)
