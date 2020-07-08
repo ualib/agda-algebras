@@ -1,7 +1,7 @@
 .. FILE: prelude.lagda.rst
 .. AUTHOR: William DeMeo and Siva Somayyajula
 .. DATE: 21 Apr 2020
-.. UPDATE: 27 Jun 2020
+.. UPDATE: 8 Jul 2020
 .. REF: Some parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 .. SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
 .. Throughout, MHE = Martin Hötzel Escardo.
@@ -12,10 +12,18 @@
 Agda Preliminaries
 ========================
 
+**Notation**. Some acronyms we use frequently in this chapter are these.
+
+  * :term:`MHE` = `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe/>`_
+  * :term:`MLTT` = `Martin-Löf Type Theory <https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory>`_
+
+
+----------------------------------------------------
+
 Options and imports
 --------------------
 
-All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries (e.g., the `Agda Standard Library`_ or, in our case, Martin Escardo's `Type Topology`_ library). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
+All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries (e.g., the `Agda Standard Library`_ or, in our case, :term:`MHE`'s `Type Topology`_ library). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
 
 For example, here's the start of the first Agda source file in our library, which we call ``prelude.lagda.rst``.
 
@@ -23,7 +31,13 @@ For example, here's the start of the first Agda source file in our library, whic
 
    {-# OPTIONS --without-K --exact-split --safe #-}
 
-This specifies Agda ``OPTIONS`` that we will use throughout the library.  For example, the ``without-K`` option disables Streicher's K axiom, and ``exact-split`` makes Agda accept only those definitions with the equality sign "=" that behave like so-called *judgmental* or *definitional* equalities.
+This specifies Agda ``OPTIONS`` that we will use throughout the library.
+
+  * ``without-K`` disables `Streicher's K axiom <https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29>`_ ;
+
+  * ``exact-split`` makes Agda accept only those definitions that behave like so-called *judgmental* or *definitional* equalities.  :term:`MHE` explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators."
+
+  * ``safe`` ensures that nothing is postulated outright---every non-:term:`MLTT` axiom has to be an explicit assumption (e.g., an argument to a function or module).
 
 Universes
 ~~~~~~~~~~
@@ -58,6 +72,9 @@ In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a un
    |  ``lsuc lzero``      | ``𝓤₀ ⁺``                 | ``1 : universe``            |
    | ``Set (lsuc lzero)`` | ``𝓤₀ ⁺ ̇``                | ``Sort 1 = Type = Type 0``  |
    +----------------------+--------------------------+-----------------------------+
+
+To justify the introduction of this somewhat nonstandard notation for universe levels, :term:`MHE` points out that the Agda library uses ``Level`` for universes (so what we write as ``𝓤 ̇`` is written ``Set 𝓤`` in standard Agda), but in univalent mathematics the types in ``𝓤 ̇`` need not be sets, so the standard Agda notation can be misleading. Furthermore, the standard notation places emphasis on levels rather than universes themselves.
+
 
 Public imports
 ~~~~~~~~~~~~~~~

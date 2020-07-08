@@ -56,6 +56,9 @@ Acronyms and Symbols
    MHE
      `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe/>`_
 
+   MLTT
+     `Martin-Löf Type Theory <https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory>`_
+
    NC
      is the class of decision problems decidable in polylogarithmic (or, O(logᶜ n)) time on a parallel computer with a polynomial number of processors.
 

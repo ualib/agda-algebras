@@ -55,6 +55,9 @@ What follows is a list of useful definitions from model theory.
    automated theorem prover
      See: https://en.wikipedia.org/wiki/Automated_theorem_proving
 
+   axiom K
+     See: https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29
+
    axiomatizable
      An **axiomatizable** (or **elementary**) class is a class that consists of all structures satisfying a fixed first-order :term:`theory`.
 

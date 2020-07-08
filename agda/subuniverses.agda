@@ -16,59 +16,59 @@ open import Relation.Unary using (⋂)
 
 module subuniverses {S : Signature 𝓞 𝓥} where
 
-Subuniverses : (𝑨 : Algebra 𝓤 S)
- →             Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
+Subuniverses : (A : Algebra 𝓤 S)
+ →             Pred (Pred ∣ A ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
 
-Subuniverses (A , Fᴬ) B =
- (𝑓 : ∣ S ∣)(𝒂 : ∥ S ∥ 𝑓 → A) → Im 𝒂 ⊆ B → Fᴬ 𝑓 𝒂 ∈ B
+Subuniverses (A , FA) B =
+ (f : ∣ S ∣)(a : ∥ S ∥ f → A) → Im a ⊆ B → FA f a ∈ B
 
 data _is-supalgebra-of_
- (𝑨 : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-  mem : (B : Pred ∣ 𝑨 ∣ 𝓤) (𝐹 : (𝑓 : ∣ S ∣)
-   →    Op (∥ S ∥ 𝑓) (Σ B)) → ((𝑓 : ∣ S ∣)(𝒂 : ∥ S ∥ 𝑓 → Σ B)
-   →    ∣ 𝐹 𝑓 𝒂 ∣ ≡ ∥ 𝑨 ∥ 𝑓 (λ i → ∣ 𝒂 i ∣))
-   →    𝑨 is-supalgebra-of (Σ B , 𝐹)
+ (A : Algebra 𝓤 S) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+  mem : (B : Pred ∣ A ∣ 𝓤) (F : (f : ∣ S ∣)
+   →    Op (∥ S ∥ f) (Σ B)) → ((f : ∣ S ∣)(a : ∥ S ∥ f → Σ B)
+   →    ∣ F f a ∣ ≡ ∥ A ∥ f (λ i → ∣ a i ∣))
+   →    A is-supalgebra-of (Σ B , F)
 
 _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
+B is-subalgebra-of A = A is-supalgebra-of B
 
-_is-subalgebra-of-class_ : {𝓤 : Universe}(𝑩 : Algebra 𝓤 S)
+_is-subalgebra-of-class_ : {𝓤 : Universe}(B : Algebra 𝓤 S)
  →            Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-𝑩 is-subalgebra-of-class 𝓚 =
-   Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × (𝑩 is-subalgebra-of 𝑨)
+B is-subalgebra-of-class 𝒦 =
+   Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × (B is-subalgebra-of A)
 
 module _
- {𝑨 : Algebra 𝓤 S} {B : Pred ∣ 𝑨 ∣ 𝓤}
- {𝐹 : (𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) (Σ B)}
- (B∈SubA : B ∈ Subuniverses 𝑨) where
+ {A : Algebra 𝓤 S} {B : Pred ∣ A ∣ 𝓤}
+ {F : (f : ∣ S ∣) → Op (∥ S ∥ f) (Σ B)}
+ (B∈SubA : B ∈ Subuniverses A) where
 
  SubunivAlg : Algebra 𝓤 S
  SubunivAlg =
-  Σ B , λ 𝑓 x → ∥ 𝑨 ∥ 𝑓 (∣_∣ ∘ x) , B∈SubA 𝑓 (∣_∣ ∘ x)(∥_∥ ∘ x)
+  Σ B , λ f x → ∥ A ∥ f (∣_∣ ∘ x) , B∈SubA f (∣_∣ ∘ x)(∥_∥ ∘ x)
 
- subuniv-to-subalg : SubunivAlg is-subalgebra-of 𝑨
- subuniv-to-subalg = mem B ∥ SubunivAlg ∥ λ 𝑓 𝒂 → (refl _)
+ subuniv-to-subalg : SubunivAlg is-subalgebra-of A
+ subuniv-to-subalg = mem B ∥ SubunivAlg ∥ λ f a → (refl _)
 
-record Subuniverse {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
+record Subuniverse {A : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
  constructor mksub
  field
-   sset  : Pred ∣ 𝑨 ∣ 𝓤
-   isSub : sset ∈ Subuniverses 𝑨
+   sset  : Pred ∣ A ∣ 𝓤
+   isSub : sset ∈ Subuniverses A
 
-module _ {𝑨 : Algebra 𝓤 S} where
+module _ {A : Algebra 𝓤 S} where
 
- data Sg (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
+ data Sg (X : Pred ∣ A ∣ 𝓣) : Pred ∣ A ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
   var : ∀ {v} → v ∈ X → v ∈ Sg X
-  app :  ( 𝑓 : ∣ S ∣ ) { 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ }
-   →       Im 𝒂 ⊆ Sg X
+  app :  ( f : ∣ S ∣ ) { a : ∥ S ∥ f → ∣ A ∣ }
+   →       Im a ⊆ Sg X
           -----------------
-   →       ∥ 𝑨 ∥ 𝑓 𝒂 ∈ Sg X
+   →       ∥ A ∥ f a ∈ Sg X
 
- sgIsSub : (X : Pred ∣ 𝑨 ∣ 𝓤) → Sg X ∈ Subuniverses 𝑨
- sgIsSub _ 𝑓 𝒂 α = app 𝑓 α
+ sgIsSub : (X : Pred ∣ A ∣ 𝓤) → Sg X ∈ Subuniverses A
+ sgIsSub _ f a α = app f α
 
- sgIsSmallest : {X : Pred ∣ 𝑨 ∣ 𝓡} {Y : Pred ∣ 𝑨 ∣ 𝓢}
-  →             Y ∈ Subuniverses 𝑨
+ sgIsSmallest : {X : Pred ∣ A ∣ 𝓡} {Y : Pred ∣ A ∣ 𝓢}
+  →             Y ∈ Subuniverses A
   →             X ⊆ Y
                -----------------
   →              Sg X ⊆ Y
@@ -76,129 +76,129 @@ module _ {𝑨 : Algebra 𝓤 S} where
  -- By induction on x ∈ Sg X, show x ∈ Y
  sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
 
- sgIsSmallest {Y = Y} YIsSub X⊆Y (app 𝑓 {𝒂} im𝒂⊆SgX) = app∈Y
+ sgIsSmallest {Y = Y} YIsSub X⊆Y (app f {a} ima⊆SgX) = app∈Y
   where
    -- First, show the args are in Y
-   im𝒂⊆Y : Im 𝒂 ⊆ Y
-   im𝒂⊆Y i = sgIsSmallest YIsSub X⊆Y (im𝒂⊆SgX i)
+   ima⊆Y : Im a ⊆ Y
+   ima⊆Y i = sgIsSmallest YIsSub X⊆Y (ima⊆SgX i)
 
-   --Since Y is a subuniverse of 𝑨, it contains the application
-   app∈Y : ∥ 𝑨 ∥ 𝑓 𝒂 ∈ Y          --           of 𝑓 to said args.
-   app∈Y = YIsSub 𝑓 𝒂 im𝒂⊆Y
+   --Since Y is a subuniverse of A, it contains the application
+   app∈Y : ∥ A ∥ f a ∈ Y          --           of f to said args.
+   app∈Y = YIsSub f a ima⊆Y
 
 module _
- {𝑨 : Algebra 𝓤 S} {I : 𝓘 ̇}
- {𝐴 : I → Pred ∣ 𝑨 ∣ 𝓣} where
+ {A : Algebra 𝓤 S} {I : 𝓘 ̇}
+ {𝐴 : I → Pred ∣ A ∣ 𝓣} where
 
- sub-inter-is-sub : ((i : I) → 𝐴 i ∈ Subuniverses 𝑨)
-  →                 ⋂ I 𝐴 ∈ Subuniverses 𝑨
+ sub-inter-is-sub : ((i : I) → 𝐴 i ∈ Subuniverses A)
+  →                 ⋂ I 𝐴 ∈ Subuniverses A
 
- sub-inter-is-sub Ai-is-Sub 𝑓 𝒂 im𝒂⊆⋂A = α
+ sub-inter-is-sub Ai-is-Sub f a ima⊆⋂A = α
   where
-   α : ∥ 𝑨 ∥ 𝑓 𝒂 ∈ ⋂ I 𝐴
-   α i = Ai-is-Sub i 𝑓 𝒂 λ j → im𝒂⊆⋂A j i
+   α : ∥ A ∥ f a ∈ ⋂ I 𝐴
+   α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
-module _ {𝑨 𝑩 : Algebra 𝓤 S} (ℎ : hom 𝑨 𝑩)  where
+module _ {A B : Algebra 𝓤 S} (ℎ : hom A B)  where
 
- HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
+ HomImage : ∣ B ∣ → 𝓤 ̇
  HomImage = λ b → Image ∣ ℎ ∣ ∋ b
 
  hom-image : 𝓤 ̇
  hom-image = Σ (Image_∋_ ∣ ℎ ∣)
 
- fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ ℎ ∣)
+ fres : ∣ A ∣ → Σ (Image_∋_ ∣ ℎ ∣)
  fres a = ∣ ℎ ∣ a , im a
 
  hom-image-alg : Algebra 𝓤 S
  hom-image-alg = hom-image , ops-interp
   where
-   𝒂 : {𝑓 : ∣ S ∣ }(x : ∥ S ∥ 𝑓 → hom-image)(y : ∥ S ∥ 𝑓) → ∣ 𝑨 ∣
-   𝒂 x y = Inv ∣ ℎ ∣  ∣ x y ∣ ∥ x y ∥
+   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
+   a x y = Inv ∣ ℎ ∣  ∣ x y ∣ ∥ x y ∥
 
-   ops-interp : (𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) hom-image
+   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
    ops-interp =
-    λ 𝑓 x → (∣ ℎ ∣  (∥ 𝑨 ∥ 𝑓 (𝒂 x)) , im (∥ 𝑨 ∥ 𝑓 (𝒂 x)))
+    λ f x → (∣ ℎ ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 
- hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses 𝑩
- hom-image-is-sub {fe} 𝑓 𝒃 𝒃∈Imf =
-  eq (∥ 𝑩 ∥ 𝑓 𝒃) ( ∥ 𝑨 ∥ 𝑓 ar) γ
+ hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses B
+ hom-image-is-sub {fe} f b b∈Imf =
+  eq (∥ B ∥ f b) ( ∥ A ∥ f ar) γ
    where
-    ar : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣
-    ar = λ x → Inv ∣ ℎ ∣ (𝒃 x) (𝒃∈Imf x)
+    ar : ∥ S ∥ f → ∣ A ∣
+    ar = λ x → Inv ∣ ℎ ∣ (b x) (b∈Imf x)
 
-    ζ : ∣ ℎ ∣ ∘ ar ≡ 𝒃
-    ζ = fe (λ x → InvIsInv ∣ ℎ ∣ (𝒃 x) (𝒃∈Imf x))
+    ζ : ∣ ℎ ∣ ∘ ar ≡ b
+    ζ = fe (λ x → InvIsInv ∣ ℎ ∣ (b x) (b∈Imf x))
 
-    γ : ∥ 𝑩 ∥ 𝑓 𝒃
-         ≡ ∣ ℎ ∣ (∥ 𝑨 ∥ 𝑓 (λ x → Inv ∣ ℎ ∣ (𝒃 x)(𝒃∈Imf x)))
-    γ = ∥ 𝑩 ∥ 𝑓 𝒃            ≡⟨ ap ( ∥ 𝑩 ∥ 𝑓 ) (ζ ⁻¹) ⟩
-        (∥ 𝑩 ∥ 𝑓)(∣ ℎ ∣ ∘ ar) ≡⟨ ( ∥ ℎ ∥ 𝑓 ar ) ⁻¹ ⟩
-        ∣ ℎ ∣ (∥ 𝑨 ∥ 𝑓 ar)    ∎
+    γ : ∥ B ∥ f b
+         ≡ ∣ ℎ ∣ (∥ A ∥ f (λ x → Inv ∣ ℎ ∣ (b x)(b∈Imf x)))
+    γ = ∥ B ∥ f b            ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
+        (∥ B ∥ f)(∣ ℎ ∣ ∘ ar) ≡⟨ ( ∥ ℎ ∥ f ar ) ⁻¹ ⟩
+        ∣ ℎ ∣ (∥ A ∥ f ar)    ∎
 
 module _
  {X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇}
- {𝑨 𝑩 : Algebra 𝓤 S}
- {B : Pred ∣ 𝑨 ∣ 𝓤}
+ {A B : Algebra 𝓤 S}
+ {B : Pred ∣ A ∣ 𝓤}
  (Y : 𝓤 ̇) where
 
- sub-term-closed : B ∈ Subuniverses 𝑨
-  →                (𝒕 : Term)(𝒃 : X → ∣ 𝑨 ∣)
-  →                (∀ i → 𝒃 i ∈ B)
+ sub-term-closed : B ∈ Subuniverses A
+  →                (t : Term)(b : X → ∣ A ∣)
+  →                (∀ i → b i ∈ B)
                  ---------------------------
-  →                ((𝒕 ̇ 𝑨) 𝒃) ∈ B
+  →                ((t ̇ A) b) ∈ B
 
- sub-term-closed B≤𝑨 (generator x) 𝒃 𝒃∈B = 𝒃∈B x
+ sub-term-closed B≤A (generator x) b b∈B = b∈B x
 
- sub-term-closed B≤𝑨 (node 𝑓 𝒕) 𝒃 𝒃∈B =
-   B≤𝑨 𝑓 (λ z → (𝒕 z ̇ 𝑨) 𝒃)
-         (λ x → sub-term-closed B≤𝑨 (𝒕 x) 𝒃 𝒃∈B)
+ sub-term-closed B≤A (node f t) b b∈B =
+   B≤A f (λ z → (t z ̇ A) b)
+         (λ x → sub-term-closed B≤A (t x) b b∈B)
 
- data TermImage (Y : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
-  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage Y
-  app : (𝑓 : ∣ S ∣) (𝒕 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣)
-   →    (∀ i  →  𝒕 i ∈ TermImage Y)
+ data TermImage (Y : Pred ∣ A ∣ 𝓤) : Pred ∣ A ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
+  var : ∀ {y : ∣ A ∣} → y ∈ Y → y ∈ TermImage Y
+  app : (f : ∣ S ∣) (t : ∥ S ∥ f → ∣ A ∣)
+   →    (∀ i  →  t i ∈ TermImage Y)
        -------------------------------
-   →    (∥ 𝑨 ∥ 𝑓 𝒕) ∈ TermImage Y
+   →    (∥ A ∥ f t) ∈ TermImage Y
 
  --1. TermImage is a subuniverse
- TermImageIsSub : (Y : Pred ∣ 𝑨 ∣ 𝓤)
-  →               TermImage Y ∈ Subuniverses 𝑨
+ TermImageIsSub : (Y : Pred ∣ A ∣ 𝓤)
+  →               TermImage Y ∈ Subuniverses A
 
- TermImageIsSub Y = λ 𝑓 𝒂 x → app 𝑓 𝒂 x
+ TermImageIsSub Y = λ f a x → app f a x
 
  --2. Y ⊆ TermImageY
- Y⊆TermImageY : (Y : Pred ∣ 𝑨 ∣ 𝓤)
+ Y⊆TermImageY : (Y : Pred ∣ A ∣ 𝓤)
   →             Y ⊆ TermImage Y
 
  Y⊆TermImageY Y {a} a∈Y = var a∈Y
 
- -- 3. Sg^𝑨(Y) is the smallest subuniverse containing Y
+ -- 3. Sg^A(Y) is the smallest subuniverse containing Y
  --    Proof: see `sgIsSmallest`
 
- SgY⊆TermImageY : (Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg Y ⊆ TermImage Y
+ SgY⊆TermImageY : (Y : Pred ∣ A ∣ 𝓤) → Sg Y ⊆ TermImage Y
  SgY⊆TermImageY Y = sgIsSmallest (TermImageIsSub Y)
                                  (Y⊆TermImageY Y)
 
 
 
-module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
+module _ {A : Algebra 𝓤 S} (UV : Univalence) where
 
  gfe : global-dfunext
- gfe = univalence-gives-global-dfunext 𝓤★
+ gfe = univalence-gives-global-dfunext UV
 
- op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- op-closed B = (𝑓 : ∣ S ∣)(𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣)
-  → ((i : ∥ S ∥ 𝑓) → B (𝒂 i)) → B (∥ 𝑨 ∥ 𝑓 𝒂)
+ op-closed : (∣ A ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ op-closed B = (f : ∣ S ∣)(a : ∥ S ∥ f → ∣ A ∣)
+  → ((i : ∥ S ∥ f) → B (a i)) → B (∥ A ∥ f a)
 
  subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
+ subuniverse = Σ B ꞉ (𝓟 ∣ A ∣) , op-closed ( _∈₀ B)
 
- being-op-closed-is-subsingleton : (B : 𝓟 ∣ 𝑨 ∣)
+ being-op-closed-is-subsingleton : (B : 𝓟 ∣ A ∣)
   →           is-subsingleton (op-closed ( _∈₀ B ))
  being-op-closed-is-subsingleton B = Π-is-subsingleton gfe
-  (λ 𝑓 → Π-is-subsingleton gfe
-   (λ 𝒂 → Π-is-subsingleton gfe
-    (λ _ → ∈-is-subsingleton B (∥ 𝑨 ∥ 𝑓 𝒂))))
+  (λ f → Π-is-subsingleton gfe
+   (λ a → Π-is-subsingleton gfe
+    (λ _ → ∈-is-subsingleton B (∥ A ∥ f a))))
 
  pr₁-is-embedding : is-embedding ∣_∣
  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
@@ -215,22 +215,22 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
  subuniverse-is-a-set : is-set subuniverse
  subuniverse-is-a-set B C = equiv-to-subsingleton
                            (ap-pr₁ B C , ap-pr₁-is-equiv B C)
-                           (powersets-are-sets' 𝓤★ ∣ B ∣ ∣ C ∣)
+                           (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
 
  subuniverse-equality-gives-membership-equiv : (B C : subuniverse)
   →                                  B ≡ C
                       -----------------------------------
-  →                   ( x : ∣ 𝑨 ∣ ) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣)
+  →                   ( x : ∣ A ∣ ) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣)
  subuniverse-equality-gives-membership-equiv B C B≡C x =
   transport (λ - → x ∈₀ ∣ - ∣) B≡C ,
    transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
 
  membership-equiv-gives-carrier-equality : (B C : subuniverse)
-  →          ((x : ∣ 𝑨 ∣) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
+  →          ((x : ∣ A ∣) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
             -----------------------------------------
   →                       ∣ B ∣ ≡ ∣ C ∣
  membership-equiv-gives-carrier-equality B C φ =
-  subset-extensionality' 𝓤★ α β
+  subset-extensionality' UV α β
    where
     α :  ∣ B ∣ ⊆₀ ∣ C ∣
     α x = lr-implication (φ x)
@@ -239,7 +239,7 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
     β x = rl-implication (φ x)
 
  membership-equiv-gives-subuniverse-equality : (B C : subuniverse)
-  →            (( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+  →            (( x : ∣ A ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
                ---------------------------------------
   →                          B ≡ C
  membership-equiv-gives-subuniverse-equality B C =
@@ -248,7 +248,7 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
      ∘ (membership-equiv-gives-carrier-equality B C)
 
  membership-equiv-is-subsingleton : (B C : subuniverse)
-  →    is-subsingleton (( x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+  →    is-subsingleton (( x : ∣ A ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
  membership-equiv-is-subsingleton B C =
   Π-is-subsingleton gfe
    (λ x → ×-is-subsingleton
@@ -256,7 +256,7 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
       (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ B ∣ x )))
 
  subuniverse-equality : (B C : subuniverse)
-  →    (B ≡ C)  ≃  ((x : ∣ 𝑨 ∣)  → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣))
+  →    (B ≡ C)  ≃  ((x : ∣ A ∣)  → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣))
 
  subuniverse-equality B C =
   logically-equivalent-subsingletons-are-equivalent _ _
@@ -268,16 +268,16 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
  carrier-equality-gives-membership-equiv : (B C : subuniverse)
   →                            ∣ B ∣ ≡ ∣ C ∣
                 ----------------------------------------
-  →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
+  →              ( ( x : ∣ A ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
  carrier-equality-gives-membership-equiv B C (refl _) x = id , id
 
  --so we have...
  carrier-equiv : (B C : subuniverse)
-  →   ((x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣) ≃ (∣ B ∣ ≡ ∣ C ∣)
+  →   ((x : ∣ A ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣) ≃ (∣ B ∣ ≡ ∣ C ∣)
  carrier-equiv B C =
   logically-equivalent-subsingletons-are-equivalent _ _
    (membership-equiv-is-subsingleton B C)
-    (powersets-are-sets' 𝓤★ ∣ B ∣ ∣ C ∣)
+    (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
      (membership-equiv-gives-carrier-equality B C ,
        carrier-equality-gives-membership-equiv B C)
 
@@ -288,134 +288,134 @@ module _ {𝑨 : Algebra 𝓤 S} (𝓤★ : Univalence) where
   (subuniverse-equality B C) ● (carrier-equiv B C)
 
  Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 S) ,
-                 Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
-                   is-embedding h × is-homomorphism 𝑩 𝑨 h
+ Subalgebra = Σ B ꞉ (Algebra 𝓤 S) ,
+                 Σ h ꞉ (∣ B ∣ → ∣ A ∣) ,
+                   is-embedding h × is-homomorphism B A h
 
 module _
- -- (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
- -- (𝓚' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+ -- (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+ -- (𝒦' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
  {𝓤 : Universe}
  {X : 𝓧 ̇ }
- {𝓤★ : Univalence} where
+ {UV : Univalence} where
 
  _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
   →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 
- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+ A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
 
  _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
 
- _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
+ _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
  gdfe : global-dfunext
- gdfe = univalence-gives-global-dfunext 𝓤★
+ gdfe = univalence-gives-global-dfunext UV
 
  SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- SubalgebrasOfClass 𝓚 =
-  Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝓚) × Subalgebra{𝑨 = 𝑨} 𝓤★
+ SubalgebrasOfClass 𝒦 =
+  Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × Subalgebra{A = A} UV
 
- data SClo (𝓚 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-  sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
-  sub : (SAK : SubalgebrasOfClass 𝓚) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝓚
+ data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+  sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
+  sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
 
- 𝑺-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
-  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- 𝑺-closed 𝓛𝓚 =
-  λ 𝓤 𝑩 → (𝑩 is-subalgebra-of-class (𝓛𝓚 𝓤)) → (𝑩 ∈ 𝓛𝓚 𝓤)
+ 𝑺-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+  →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ 𝑺-closed ℒ𝒦 =
+  λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
 
- subalgebras-preserve-identities : (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
-  →  (𝓚 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝓚)
+ subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
+  →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
- subalgebras-preserve-identities 𝓚 p q 𝓚⊧p≋q SAK = γ
+ subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
   where
 
-  𝑨 : Algebra 𝓤 S
-  𝑨 = ∣ SAK ∣
+  A : Algebra 𝓤 S
+  A = ∣ SAK ∣
 
-  𝑨∈𝓚 : 𝑨 ∈ 𝓚
-  𝑨∈𝓚 = ∣ pr₂ SAK ∣
+  A∈𝒦 : A ∈ 𝒦
+  A∈𝒦 = ∣ pr₂ SAK ∣
 
-  𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
-  𝑨⊧p≈q = 𝓚⊧p≋q 𝑨∈𝓚
+  A⊧p≈q : A ⊧ p ≈ q
+  A⊧p≈q = 𝒦⊧p≋q A∈𝒦
 
-  subalg : Subalgebra{𝑨 = 𝑨} 𝓤★
+  subalg : Subalgebra{A = A} UV
   subalg = ∥ pr₂ SAK ∥
 
-  𝑩 : Algebra 𝓤 S
-  𝑩 = pr₁ subalg
+  B : Algebra 𝓤 S
+  B = pr₁ subalg
 
-  h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  h : ∣ B ∣ → ∣ A ∣
   h = ∣ pr₂ subalg ∣
 
   hem : is-embedding h
   hem = pr₁ ∥ pr₂ subalg ∥
 
-  hhm : is-homomorphism 𝑩 𝑨 h
+  hhm : is-homomorphism B A h
   hhm = pr₂ ∥ pr₂ subalg ∥
 
-  ξ : (𝒃 : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) 𝒃) ≡ h ((q ̇ 𝑩) 𝒃)
-  ξ 𝒃 =
-   h ((p ̇ 𝑩) 𝒃)  ≡⟨ comm-hom-term' gdfe 𝑩 𝑨 (h , hhm) p 𝒃 ⟩
-   (p ̇ 𝑨)(h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃) ⟩
-   (q ̇ 𝑨)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gdfe 𝑩 𝑨 (h , hhm) q 𝒃)⁻¹ ⟩
-   h ((q ̇ 𝑩) 𝒃)  ∎
+  ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+  ξ b =
+   h ((p ̇ B) b)  ≡⟨ comm-hom-term' gdfe B A (h , hhm) p b ⟩
+   (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+   (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gdfe B A (h , hhm) q b)⁻¹ ⟩
+   h ((q ̇ B) b)  ∎
 
   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
   hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
 
-  γ : 𝑩 ⊧ p ≈ q
-  γ = gdfe λ 𝒃 → hlc (ξ 𝒃)
+  γ : B ⊧ p ≈ q
+  γ = gdfe λ b → hlc (ξ b)
 
 
 -- HOM image is subuniverse
 module intensional-hom-image
- {𝑨 𝑩 : Algebra 𝓤 S} (f : HOM 𝑨 𝑩)  where
+ {A B : Algebra 𝓤 S} (h : HOM A B)  where
 
- HOMImage : ∣ 𝑩 ∣ → 𝓤 ̇
- HOMImage = λ b → Image ∣ f ∣ ∋ b
+ HOMImage : ∣ B ∣ → 𝓤 ̇
+ HOMImage = λ b → Image ∣ h ∣ ∋ b
 
  HOM-image : 𝓤 ̇
- HOM-image = Σ (Image_∋_ ∣ f ∣)
+ HOM-image = Σ (Image_∋_ ∣ h ∣)
 
- fres' : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ f ∣)
- fres' a = ∣ f ∣ a , im a
+ fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+ fres' a = ∣ h ∣ a , im a
 
  HOM-image-alg : Algebra 𝓤 S
  HOM-image-alg = HOM-image , ops-interp
   where
-   𝒂 : {𝑓 : ∣ S ∣} (x : ∥ S ∥ 𝑓 → HOM-image) (y : ∥ S ∥ 𝑓)
-    →  ∣ 𝑨 ∣
-   𝒂 x y = Inv ∣ f ∣  ∣ x y ∣ ∥ x y ∥
+   a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
+    →  ∣ A ∣
+   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
 
-   ops-interp : ( 𝑓 : ∣ S ∣ ) → Op (∥ S ∥ 𝑓) HOM-image
-   ops-interp = λ 𝑓 x →(∣ f ∣ (∥ 𝑨 ∥ 𝑓 (𝒂 x)) , im (∥ 𝑨 ∥ 𝑓 (𝒂 x)))
+   ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
+   ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 
- HOM-image-is-sub : funext 𝓥 𝓤 → HOMImage ∈ Subuniverses 𝑩
- HOM-image-is-sub fe 𝑓 𝒃 𝒃∈Imf = eq (∥ 𝑩 ∥ 𝑓 𝒃) (∥ 𝑨 ∥ 𝑓 ar) γ
+ HOM-image-is-sub : funext 𝓥 𝓤 → HOMImage ∈ Subuniverses B
+ HOM-image-is-sub fe f b b∈Imh = eq (∥ B ∥ f b) (∥ A ∥ f ar) γ
   where
-   ar : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣
-   ar = λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)
+   ar : ∥ S ∥ f → ∣ A ∣
+   ar = λ x → Inv ∣ h ∣ (b x) (b∈Imh x)
 
-   ζ : (λ x → ∣ f ∣ (ar x)) ≡ (λ x → 𝒃 x)
-   ζ = fe (λ x → InvIsInv ∣ f ∣ (𝒃 x) (𝒃∈Imf x) )
+   ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
+   ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imh x) )
 
-   γ : ∥ 𝑩 ∥ 𝑓 (λ x → 𝒃 x)
-        ≡ ∣ f ∣ (∥ 𝑨 ∥ 𝑓 (λ x → Inv ∣ f ∣ (𝒃 x) (𝒃∈Imf x)))
-   γ =   ∥ 𝑩 ∥ 𝑓 (λ x → 𝒃 x)      ≡⟨ ap ( ∥ 𝑩 ∥ 𝑓 ) ζ ⁻¹ ⟩
-         ( ∥ 𝑩 ∥ 𝑓 ) ( ∣ f ∣ ∘ ar ) ≡⟨ intensionality ξ ar ⟩
-          ∣ f ∣ ( ∥ 𝑨 ∥ 𝑓 ar )      ∎
+   γ : ∥ B ∥ f (λ x → b x)
+        ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x) (b∈Imh x)))
+   γ =   ∥ B ∥ f (λ x → b x)      ≡⟨ ap ( ∥ B ∥ f ) ζ ⁻¹ ⟩
+         ( ∥ B ∥ f ) ( ∣ h ∣ ∘ ar ) ≡⟨ intensionality ξ ar ⟩
+          ∣ h ∣ ( ∥ A ∥ f ar )      ∎
     where
-     τ : (λ 𝑓 ar → (∥ 𝑩 ∥ 𝑓)(∣ f ∣ ∘ ar))
-          ≡ (λ 𝑓 ar → ∣ f ∣ (∥ 𝑨 ∥ 𝑓 ar ))
-     τ = (∥ f ∥)⁻¹
-     ξ : (λ (ar : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣) → (∥ 𝑩 ∥ 𝑓)(∣ f ∣ ∘ ar))
-          ≡ (λ (ar : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣) → ∣ f ∣ (∥ 𝑨 ∥ 𝑓 ar))
-     ξ = dep-intensionality τ 𝑓
+     τ : (λ f ar → (∥ B ∥ f)(∣ h ∣ ∘ ar))
+          ≡ (λ f ar → ∣ h ∣ (∥ A ∥ f ar ))
+     τ = (∥ h ∥)⁻¹
+     ξ : (λ (ar : ∥ S ∥ f → ∣ A ∣) → (∥ B ∥ f)(∣ h ∣ ∘ ar))
+          ≡ (λ (ar : ∥ S ∥ f → ∣ A ∣) → ∣ h ∣ (∥ A ∥ f ar))
+     ξ = dep-intensionality τ f
 
- finv' : {X : 𝓤 ̇ } (𝒃 : X → ∣ HOM-image-alg ∣) (x : X) → ∣ 𝑨 ∣
- finv' = λ 𝒃 x → Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
+ hinv' : {X : 𝓤 ̇ } (b : X → ∣ HOM-image-alg ∣) (x : X) → ∣ A ∣
+ hinv' = λ b x → Inv ∣ h ∣ ∣ b x ∣ ∥ b x ∥
 
 
 
@@ -424,40 +424,40 @@ module intensional-hom-image
 -- Notes on homomorphic images and their types
 -- --------------------------------------------
 
--- The homomorphic image of `f : Hom 𝑨 𝑩` is the image of `∣ 𝑨 ∣` under `f`, which, in "set-builder" notation, is simply `Im f = {f a : a ∈ ∣ 𝑨 ∣ }`.
+-- The homomorphic image of `f : Hom A B` is the image of `∣ A ∣` under `f`, which, in "set-builder" notation, is simply `Im f = {f a : a ∈ ∣ A ∣ }`.
 
--- As we have proved, `Im f` is a subuniverse of `𝑩`.
+-- As we have proved, `Im f` is a subuniverse of `B`.
 
--- However, there is another means of representing the collection "H 𝑨" of all homomorphic images of 𝑨 without ever referring to codomain algebras (like 𝑩 above).
+-- However, there is another means of representing the collection "H A" of all homomorphic images of A without ever referring to codomain algebras (like B above).
 
--- Here's how: by the first isomorphism theorem, for each `f : Hom 𝑨 𝑩`, there exists a congruence `θ` of `𝑨` (which is the kernel of `f`) that satisfies `𝑨 / θ ≅ Im f`.
+-- Here's how: by the first isomorphism theorem, for each `f : Hom A B`, there exists a congruence `θ` of `A` (which is the kernel of `f`) that satisfies `A / θ ≅ Im f`.
 
--- Therefore, we have a handle on the collection `H 𝑨` of all homomorphic images of `𝑨` if we simply consider the collection `Con 𝑨` of all congruence relations of `𝑨`.  Indeed, by the above remark, we have
+-- Therefore, we have a handle on the collection `H A` of all homomorphic images of `A` if we simply consider the collection `Con A` of all congruence relations of `A`.  Indeed, by the above remark, we have
 
---   `H 𝑨 = { 𝑨 / θ : θ ∈ Con 𝑨 }`.
+--   `H A = { A / θ : θ ∈ Con A }`.
 
 -- So, we could define the following:
 
 -- .. code-block::
 
---    hom-closed : (𝓚 : Pred (Algebra (𝓤 ⁺) S) l)
+--    hom-closed : (𝒦 : Pred (Algebra (𝓤 ⁺) S) l)
 --     →           Pred (Algebra 𝓤 S) _
---     hom-closed 𝓚 = λ 𝑨 → (𝓚 (𝑨 / (∥𝟎∥ 𝑨)))
---       →             (∃ θ : Congruence 𝑨)
---       →             (∃ 𝑪 : Algebra (𝓤 ⁺) S)
---       →             (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+--     hom-closed 𝒦 = λ A → (𝒦 (A / (∥𝟎∥ A)))
+--       →             (∃ θ : Congruence A)
+--       →             (∃ C : Algebra (𝓤 ⁺) S)
+--       →             (𝒦 C) × ((A / θ) ≅ C)
 
--- To get this to type check, we have an apparent problem, and we need a trick to resolve it. The class 𝓚 is a collection of algebras whose universes live at some level. (Above we use `𝓤 ⁺`.)
+-- To get this to type check, we have an apparent problem, and we need a trick to resolve it. The class 𝒦 is a collection of algebras whose universes live at some level. (Above we use `𝓤 ⁺`.)
 
--- However, if `𝑨` is an algebra with `∣ 𝑨 ∣ : 𝓤 ̇`, then the quotient structure  (as it is now defined in Con.agda), has type `𝑨 / θ : 𝓤 ⁺ ̇`. So, in order for the class `𝓚` to contain both `𝑨` and all its quotients `𝑨 / θ` (i.e. all its homomorphic images), we need to somehow define a class of algebras that have different universe levels.
+-- However, if `A` is an algebra with `∣ A ∣ : 𝓤 ̇`, then the quotient structure  (as it is now defined in Con.agda), has type `A / θ : 𝓤 ⁺ ̇`. So, in order for the class `𝒦` to contain both `A` and all its quotients `A / θ` (i.e. all its homomorphic images), we need to somehow define a class of algebras that have different universe levels.
 
 -- Can we define a data type with such "universe level polymorphism"?
 
--- Without that, we use a trick to get around the problem. Instead of assuming that `𝑨` itself belongs to `𝓚`, we could instead take the "quotient" `𝑨 / ∥𝟎∥` (which is isomorphic to `𝑨`) as belonging to `𝓚`.
+-- Without that, we use a trick to get around the problem. Instead of assuming that `A` itself belongs to `𝒦`, we could instead take the "quotient" `A / ∥𝟎∥` (which is isomorphic to `A`) as belonging to `𝒦`.
 
--- This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if `𝑪 ≅ 𝑨 / θ ∈ 𝓚`, then also `𝑪 / ψ ≅ (𝑨 / θ) / ψ ∈ 𝓚`.
+-- This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if `C ≅ A / θ ∈ 𝒦`, then also `C / ψ ≅ (A / θ) / ψ ∈ 𝒦`.
 
--- So, if we want `𝓚` to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to `𝓚`.
+-- So, if we want `𝒦` to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to `𝒦`.
 
 -- We are trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
 
@@ -474,21 +474,21 @@ module intensional-hom-image
 --    module _ {S : Signature 𝓞 𝓥} where
 
 --     hom-closed : Pred (AlgebraClass lzero) _
---     hom-closed 𝓚 = ∀ 𝑨 -> (algebras 𝓚) 𝑨 -- (𝓚 (𝑨 / (⟦𝟎⟧ 𝑨)))
---      -> ∀ (θ : Congruence 𝑨) -> (∃ 𝑪 : Algebra lsuc ℓ S)
+--     hom-closed 𝒦 = ∀ A -> (algebras 𝒦) A -- (𝒦 (A / (⟦𝟎⟧ A)))
+--      -> ∀ (θ : Congruence A) -> (∃ C : Algebra lsuc ℓ S)
 --           ------------------------------
---      ->     (𝓚 𝑪) × ((𝑨 / θ) ≅ 𝑪)
+--      ->     (𝒦 C) × ((A / θ) ≅ C)
 
 
 --    module _  {S : Signature 𝓞 𝓥}  where
 --     open AlgebraClass
 
---     data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
---      hombase : {𝑨 : Algebra ℓ S} → 𝑨 ∈ (algebras 𝓚) ℓ  → 𝑨 ∈ HomClo 𝓚
---      homstep : {𝑨 : Algebra ℓ S} ->  𝑨 ∈ HomClo 𝓚
---        ->     (∃ θ : Congruence 𝑨)
---        ->     (𝑪 : Algebra (lsuc ℓ) S)
+--     data HomClo {ℓ : Level} (𝒦 : AlgebraClass) : Pred AlgebraClass _ where
+--      hombase : {A : Algebra ℓ S} → A ∈ (algebras 𝒦) ℓ  → A ∈ HomClo 𝒦
+--      homstep : {A : Algebra ℓ S} ->  A ∈ HomClo 𝒦
+--        ->     (∃ θ : Congruence A)
+--        ->     (C : Algebra (lsuc ℓ) S)
 --              ------------------------------
---        ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((𝑨 / θ) ≅ 𝑪)
+--        ->     C ∈ (algebras (lsuc ℓ) 𝒦) × ((A / θ) ≅ C)
 
 
