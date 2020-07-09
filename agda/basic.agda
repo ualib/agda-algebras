@@ -25,7 +25,7 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
 
 Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
  →        (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
-Algebra 𝓤 {𝓞}{𝓥} S = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) A)
+Algebra 𝓤 {𝓞}{𝓥} S = Σ A ꞉ 𝓤 ̇ , ((f : ∣ S ∣) → Op (∥ S ∥ f) A)
 
 data monoid-op : 𝓤₀ ̇ where
  e : monoid-op
@@ -37,6 +37,6 @@ monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
 module _ {S : Signature 𝓞 𝓥}  where
 
- Π' : {I : 𝓘 ̇ }( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
- Π' A =  (( ᵢ : _) → ∣ A ᵢ ∣) ,  λ 𝑓 x ᵢ → ∥ A ᵢ ∥ 𝑓 λ 𝓥 → x 𝓥 ᵢ
+ Π' : {I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
+ Π' 𝒜 =  (( i : _) → ∣ 𝒜 i ∣) ,  λ f x i → ∥ 𝒜 i ∥ f λ 𝓥 → x 𝓥 i
 

@@ -18,33 +18,32 @@ open import terms using (Term; generator; node; _̇_; _̂_; interp-prod2;
 module closure
  {S : Signature 𝓞 𝓥}
  {𝓤 : Universe}
- {𝓤★ : Univalence}
+ {ua : Univalence}
  {X : 𝓤 ̇ } -- {X : 𝓧 ̇ }
  (gfe : global-dfunext)
  (dfe : dfunext 𝓤 𝓤) where
 
 -- Product Closure
-𝑷-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
+𝑷-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
- →      (( i : I ) → 𝒜 i ∈ 𝓛𝓚 𝓘 ) → 𝓘 ⁺ ̇
-𝑷-closed 𝓛𝓚 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝓚 →  Π' 𝒜  ∈ (𝓛𝓚 𝓘)
+ →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
+𝑷-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 𝓘)
 
--- data PClo (𝓚 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-data PClo (𝓚 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ PClo 𝓚
+data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
  prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
-  →     (∀ i → 𝒜 i ∈ PClo 𝓚)
-  →     Π' 𝒜 ∈ PClo 𝓚
+  →     (∀ i → 𝒜 i ∈ PClo 𝒦)
+  →     Π' 𝒜 ∈ PClo 𝒦
 
 _⊧_≈_ : Algebra 𝓤 S
  →      Term{X = X} → Term → 𝓤 ̇
 
-𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
 
 _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
-_⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
+_⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
 products-preserve-identities :
       (p q : Term{X = X})
@@ -56,295 +55,252 @@ products-preserve-identities :
 products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
  where
    γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
-   γ = gfe λ 𝒂 →
-    (p ̇ Π' 𝒜) 𝒂
-      ≡⟨ interp-prod gfe p 𝒜 𝒂 ⟩
-    (λ i → ((p ̇ (𝒜 i)) (λ x → (𝒂 x) i)))
-      ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (𝒂 x) i)) ⟩
-    (λ i → ((q ̇ (𝒜 i)) (λ x → (𝒂 x) i)))
-      ≡⟨ (interp-prod gfe q 𝒜 𝒂)⁻¹ ⟩
-    (q ̇ Π' 𝒜) 𝒂
+   γ = gfe λ a →
+    (p ̇ Π' 𝒜) a
+      ≡⟨ interp-prod gfe p 𝒜 a ⟩
+    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
+      ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
+    (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
+      ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+    (q ̇ Π' 𝒜) a
       ∎
 
 products-in-class-preserve-identities :
-     (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+     (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
      (p q : Term{X = X})
      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
- →   𝓚 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝓚)
+ →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
      ------------------------------------
  →    Π' 𝒜 ⊧ p ≈ q
 
-products-in-class-preserve-identities 𝓚 p q I 𝒜 𝓚⊧p≋q all𝒜i∈𝓚 = γ
+products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
  where
    𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
-   𝒜⊧p≈q i = 𝓚⊧p≋q (all𝒜i∈𝓚 i)
+   𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
 
    γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
 -- Subalgebra Closure
-data SClo (𝓚 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ SClo 𝓚
- sub : {𝑨 : Algebra _ S} → 𝑨 ∈ SClo 𝓚 → (sa : Subalgebra {𝑨 = 𝑨} 𝓤★) → ∣ sa ∣ ∈ SClo 𝓚
+data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
+ sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
 
 -- Homomorphic Image Closure
-data HClo (𝓚 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ HClo 𝓚
- hhom : {𝑨 𝑩 : Algebra 𝓤 S}{f : hom 𝑨 𝑩}
-  →     𝑨 ∈ HClo 𝓚
-  →     hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ HClo 𝓚
+data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ hbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ HClo 𝒦
+ hhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
+  →     A ∈ HClo 𝒦
+  →     hom-image-alg {A = A}{B = B} ϕ ∈ HClo 𝒦
 
 -- Variety Closure
-data VClo (𝓚 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝓚 → 𝑨 ∈ VClo 𝓚
- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝓚) → Π' 𝒜 ∈ VClo 𝓚
- vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝓚 → (sa : Subalgebra {𝑨 = 𝑨} 𝓤★) → ∣ sa ∣ ∈ VClo 𝓚
- vhom : {𝑨 𝑩 : Algebra 𝓤 S}{f : hom 𝑨 𝑩}
-  →     𝑨 ∈ VClo 𝓚 → hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
+data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+ vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ VClo 𝒦
+ vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
+  →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
 
-module _ (𝓚 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
+module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
 
- pclo-id1 : ∀ {p q} → (𝓚 ⊧ p ≋ q) → (PClo 𝓚 ⊧ p ≋ q)
+ pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
  pclo-id1 {p} {q} α (pbase x) = α x
- pclo-id1 {p} {q} α (prod{I}{𝒜} 𝒜-P𝓚 ) = γ
+ pclo-id1 {p} {q} α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
   where
    IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
-   IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝓚  i )
+   IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝒦  i )
    γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
    γ = products-preserve-identities p q I 𝒜 IH
 
- pclo-id2 : ∀{p q} → ((PClo 𝓚) ⊧ p ≋ q ) → (𝓚 ⊧ p ≋ q)
- pclo-id2 p 𝑨∈𝓚 = p (pbase 𝑨∈𝓚)
+ pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
+ pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
 
- sclo-id1 : ∀{p q} → (𝓚 ⊧ p ≋ q) → (SClo 𝓚 ⊧ p ≋ q)
- sclo-id1 {p} {q} 𝓚⊧p≋q (sbase A∈𝓚) = 𝓚⊧p≋q A∈𝓚
- sclo-id1 {p} {q} 𝓚⊧p≋q (sub {𝑨 = 𝑨} A∈SClo𝓚 sa) = γ
+ sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
+ sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
+ sclo-id1 {p} {q} 𝒦⊧p≋q (sub {A = A} A∈SClo𝒦 sa) = γ
   where
-   𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
-   𝑨⊧p≈q = sclo-id1{p}{q} 𝓚⊧p≋q A∈SClo𝓚
+   A⊧p≈q : A ⊧ p ≈ q
+   A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
-   𝑩 : Algebra 𝓤 S
-   𝑩 = ∣ sa ∣
+   B : Algebra 𝓤 S
+   B = ∣ sa ∣
 
-   h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+   h : ∣ B ∣ → ∣ A ∣
    h = pr₁ ∥ sa ∥
 
    hem : is-embedding h
    hem = ∣ pr₂ ∥ sa ∥ ∣
 
-   hhm : is-homomorphism 𝑩 𝑨 h
+   hhm : is-homomorphism B A h
    hhm = ∥ pr₂ ∥ sa ∥ ∥
 
-   ξ : (𝒃 : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) 𝒃) ≡ h ((q ̇ 𝑩) 𝒃)
-   ξ 𝒃 =
-    h ((p ̇ 𝑩) 𝒃)  ≡⟨ comm-hom-term' gfe 𝑩 𝑨 (h , hhm) p 𝒃 ⟩
-    (p ̇ 𝑨)(h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃) ⟩
-    (q ̇ 𝑨)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gfe 𝑩 𝑨 (h , hhm) q 𝒃)⁻¹ ⟩
-    h ((q ̇ 𝑩) 𝒃)  ∎
+   ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+   ξ b =
+    h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
+    (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+    (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+    h ((q ̇ B) b)  ∎
 
    hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
    hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
 
-   γ : p ̇ 𝑩 ≡ q ̇ 𝑩
-   γ = gfe λ 𝒃 → hlc (ξ 𝒃)
+   γ : p ̇ B ≡ q ̇ B
+   γ = gfe λ b → hlc (ξ b)
 
- sclo-id2 : ∀ {p q} → (SClo 𝓚 ⊧ p ≋ q) → (𝓚 ⊧ p ≋ q)
- sclo-id2 p 𝑨∈𝓚 = p (sbase 𝑨∈𝓚)
+ sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
 
- hclo-id1 : ∀{p q} → (𝓚 ⊧ p ≋ q) → (HClo 𝓚 ⊧ p ≋ q)
- hclo-id1 {p}{q} 𝓚⊧p≋q (hbase A∈𝓚) = 𝓚⊧p≋q A∈𝓚
- hclo-id1 {p}{q} 𝓚⊧p≋q (hhom{A}{B}{f} A∈HClo𝓚) = γ
+ hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
+ hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
+ hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{A}{B}{ϕ} A∈HClo𝒦) = γ
   where
    A⊧p≈q : A ⊧ p ≈ q
-   A⊧p≈q = (hclo-id1{p}{q} 𝓚⊧p≋q ) A∈HClo𝓚
+   A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
 
    IH : (p ̇ A) ≡ (q ̇ A)
    IH = A⊧p≈q
 
-   HIA = hom-image-alg{𝑨 = A}{𝑩 = B} f
-   -- HIA = Σ (Image_∋_ ∣ f ∣) ,  ops-interp
+   HIA = hom-image-alg{A = A}{B = B} ϕ
+   -- HIA = Σ (Image_∋_ ∣ ϕ ∣) ,  ops-interp
    -- (where ops-interp : (𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) hom-image
 
-   𝒂 : (𝒃 : X → Σ (Image_∋_ ∣ f ∣))(x : X) → ∣ A ∣
-   𝒂 = λ 𝒃 x → (Inv ∣ f ∣ (∣ 𝒃 x ∣)(∥ 𝒃 x ∥))
+   preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
+   preim = λ b x → (Inv ∣ ϕ ∣ (∣ b x ∣)(∥ b x ∥))
 
-   ζ : (𝒃 : X → Σ (Image_∋_ ∣ f ∣))(x : X) → ∣ f ∣ (𝒂 𝒃 x) ≡ ∣ 𝒃 x ∣
-   ζ 𝒃 x = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥
+   ζ : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ ϕ ∣ (preim b x) ≡ ∣ b x ∣
+   ζ b x = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
 
 
-   τ : (𝑎 : X → ∣ A ∣ ) → ∣ f ∣ ((p ̇ A) 𝑎) ≡ ∣ f ∣ ((q ̇ A) 𝑎)
-   τ 𝑎 = ap (λ - → ∣ f ∣ - ) (intensionality IH 𝑎)
+   τ : (𝑎 : X → ∣ A ∣ ) → ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡ ∣ ϕ ∣ ((q ̇ A) 𝑎)
+   τ 𝑎 = ap (λ - → ∣ ϕ ∣ - ) (intensionality IH 𝑎)
 
-   ψ : (𝑎 : X → ∣ A ∣ ) → (p ̇ B) (∣ f ∣ ∘ 𝑎) ≡ (q ̇ B) (∣ f ∣ ∘ 𝑎)
+   ψ : (𝑎 : X → ∣ A ∣ ) → (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡ (q ̇ B) (∣ ϕ ∣ ∘ 𝑎)
    ψ 𝑎 =
-    (p ̇ B) (∣ f ∣ ∘ 𝑎) ≡⟨ (comm-hom-term' gfe A B f p 𝑎)⁻¹ ⟩
-    ∣ f ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
-    ∣ f ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B f q 𝑎 ⟩
-    (q ̇ B) (∣ f ∣ ∘ 𝑎) ∎
+    (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡⟨ (comm-hom-term' gfe A B ϕ p 𝑎)⁻¹ ⟩
+    ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
+    ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
+    (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
 
-   ψ' : (𝑏 : X → Σ (Image_∋_ ∣ f ∣ )) → (p ̇ B) 𝑏  ≡ (q ̇ B) 𝑏
-   ψ' 𝑏  = {!!}
-   -- ψ' : (𝑏 : X → ∣ B ∣ ) → (∀ x → Image ∣ f ∣ ∋ (𝑏 x)) → (p ̇ B) 𝑏  ≡ (q ̇ B) 𝑏
-   -- ψ' 𝑏 Imgf∋b = {!!}
-    -- (p ̇ B) (∣ f ∣ ∘ 𝑎) ≡⟨ (comm-hom-term' gfe A B f p 𝑎)⁻¹ ⟩
-    -- ∣ f ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
-    -- ∣ f ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B f q 𝑎 ⟩
-    -- (q ̇ B) (∣ f ∣ ∘ 𝑎) ∎
+   ψ' : (b : X → ∣ B ∣ ) → (∀ x → Image ∣ ϕ ∣ ∋ (b x)) → (p ̇ B) b  ≡ (q ̇ B) b
+   ψ' b Imgϕ∋b = {!!}
+   -- (p ̇ B) (∣ ϕ ∣ ∘ preim) ≡⟨ (comm-hom-term' gfe A B ϕ p preim)⁻¹ ⟩
+   -- ∣ ϕ ∣ ((p ̇ A) preim) ≡⟨ τ preim ⟩
+   -- ∣ ϕ ∣ ((q ̇ A) preim) ≡⟨ comm-hom-term' gfe A B ϕ q preim ⟩
+   -- (q ̇ B) (∣ ϕ ∣ ∘ preim) ∎
 
    γ : (p ̇ HIA) ≡ (q ̇ HIA)
    γ = {!!} -- (p ̇ HIA)
    --       ≡⟨ refl _ ⟩
-   --     (λ (𝒃 : X → ∣ HIA ∣) → (p ̇ HIA) 𝒃)
+   --     (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
    --       ≡⟨ gfe (λ x → hiti x p) ⟩
-   --     (λ 𝒃 → ∣ f ∣ ((p ̇ A) (𝒂 𝒃)) , im ((p ̇ A) (𝒂 𝒃)))
-   --       ≡⟨ ap (λ - → λ 𝒃 → ∣ f ∣ (- (𝒂 𝒃))  , im (- (𝒂 𝒃))) IH ⟩
-   --     (λ 𝒃 → ∣ f ∣ ((q ̇ A) (𝒂 𝒃)) , im ((q ̇ A)(𝒂 𝒃)))
+   --     (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
+   --       ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
+   --     (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
    --       ≡⟨ (gfe (λ x → hiti x q))⁻¹ ⟩
-   --     (λ 𝒃 → (q ̇ HIA) 𝒃)
+   --     (λ b → (q ̇ HIA) b)
    --       ≡⟨ refl _ ⟩
    --     (q ̇ HIA)    ∎
 
 
-   hom-image-term-interp : (𝒃 : X → ∣ HIA ∣)(p : Term)
-    → ∣ (p ̇ HIA ) 𝒃 ∣ ≡ ∣ f ∣ ((p ̇ A)(𝒂 𝒃))
-   hom-image-term-interp 𝒃 (generator x) = (ζ 𝒃 x)⁻¹
-   hom-image-term-interp 𝒃 (node 𝓸 𝒕) = {!!} -- ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
+   hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
+    → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
+   hom-image-term-interp b (generator x) = (ζ b x)⁻¹
+   hom-image-term-interp b (node 𝓸 t) = {!!} -- ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
 
-   hom-image-term-interpretation hiti : (𝒃 : X → ∣ HIA ∣)(p : Term)
-    → (p ̇ HIA ) 𝒃 ≡ ∣ f ∣ ((p ̇ A)(𝒂 𝒃)) , im ((p ̇ A)(𝒂 𝒃))
+   hom-image-term-interpretation hiti : (b : X → ∣ HIA ∣)(p : Term)
+    → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-   hom-image-term-interpretation 𝒃 (generator x) = {!!}
+   hom-image-term-interpretation b (generator x) = {!!}
     where
-     iiif : ∣ 𝒃 x ∣ ≡ ∣ f ∣ (Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥)
-     iiif = InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ ⁻¹
+     iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
+     iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹
 
-     fstbx : ∣ 𝒃 x ∣ ≡ ∣ f ∣ (𝒂 𝒃 x)
-     fstbx = ζ 𝒃 x ⁻¹
-     -- we need a proof of `Image ∣ f ∣ ∋ pr₁ (𝒃 x)`
-     -- and 𝒃 takes x to ∣ HIA ∣ = hom-image = Σ (Image_∋_ ∣ ℎ ∣)
-     ∥bx∥ : Image ∣ f ∣ ∋ pr₁ (𝒃 x)
-     ∥bx∥ = ∥ 𝒃 x ∥
+     fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
+     fstbx = ζ b x ⁻¹
+     -- we need a proof of `Image ∣ ϕ ∣ ∋ pr₁ (b x)`
+     -- and b takes x to ∣ HIA ∣ = hom-image = Σ (Image_∋_ ∣ ℎ ∣)
+     ∥bx∥ : Image ∣ ϕ ∣ ∋ pr₁ (b x)
+     ∥bx∥ = ∥ b x ∥
 
-     -- γ : 𝒃 x ≡ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x)
-     -- γ = 𝒃 x ≡⟨ refl _ ⟩ ∣ 𝒃 x ∣ , ∥ 𝒃 x ∥
-     --         ≡⟨ {!!} ⟩ ∣ f ∣ (Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥) , im (Inv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥)
-     --         ≡⟨ refl _ ⟩ ∣ f ∣ (𝒂 𝒃 x) , im (𝒂 𝒃 x) ∎
+     -- γ : b x ≡ ∣ ϕ ∣ (preim b x) , im (preim b x)
+     -- γ = b x ≡⟨ refl _ ⟩ ∣ b x ∣ , ∥ b x ∥
+     --         ≡⟨ {!!} ⟩ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥) , im (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
+     --         ≡⟨ refl _ ⟩ ∣ ϕ ∣ (preim b x) , im (preim b x) ∎
 
-   hom-image-term-interpretation 𝒃 (node 𝓸 𝒕) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
+   hom-image-term-interpretation b (node 𝓸 t) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
     where
      φIH : (x : ∥ S ∥ 𝓸)
-      → (𝒕 x ̇ HIA) 𝒃  ≡ ∣ f ∣ (( 𝒕 x ̇ A )(𝒂 𝒃)) , im ((𝒕 x ̇ A)(𝒂 𝒃))
-     φIH x = hom-image-term-interpretation 𝒃 (𝒕 x)
+      → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
+     φIH x = hom-image-term-interpretation b (t x)
 
    hiti = hom-image-term-interpretation  -- alias
 
-   -- γ : (p ̇ HIA) ≡ (q ̇ HIA)
-   -- γ = (p ̇ HIA)
-   --       ≡⟨ refl _ ⟩
-   --     (λ (𝒃 : X → ∣ HIA ∣) → (p ̇ HIA) 𝒃)
-   --       ≡⟨ gfe (λ x → hiti x p) ⟩
-   --     (λ 𝒃 → ∣ f ∣ ((p ̇ A) (𝒂 𝒃)) , im ((p ̇ A) (𝒂 𝒃)))
-   --       ≡⟨ ap (λ - → λ 𝒃 → ∣ f ∣ (- (𝒂 𝒃))  , im (- (𝒂 𝒃))) IH ⟩
-   --     (λ 𝒃 → ∣ f ∣ ((q ̇ A) (𝒂 𝒃)) , im ((q ̇ A)(𝒂 𝒃)))
-   --       ≡⟨ (gfe (λ x → hiti x q))⁻¹ ⟩
-   --     (λ 𝒃 → (q ̇ HIA) 𝒃)
-   --       ≡⟨ refl _ ⟩
-   --     (q ̇ HIA)    ∎
+ hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
- hclo-id2 : ∀ {p q} → (HClo 𝓚 ⊧ p ≋ q) → (𝓚 ⊧ p ≋ q)
- hclo-id2 p 𝑨∈𝓚 = p (hbase 𝑨∈𝓚)
-
- vclo-id1 : ∀ {p q} → (𝓚 ⊧ p ≋ q) → (VClo 𝓚 ⊧ p ≋ q)
- vclo-id1 {p} {q} α (vbase A∈𝓚) = α A∈𝓚
- vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝓚) = γ
+ vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
+ vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
+ vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
    where
     IH : (i : I) → 𝒜 i ⊧ p ≈ q
-    IH i = vclo-id1{p}{q} α (𝒜∈VClo𝓚 i)
+    IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
 
     γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
     γ = products-preserve-identities p q I 𝒜 IH
 
- vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝓚 sa ) = γ
+ vclo-id1 {p} {q} α ( vsub {A = A} A∈VClo𝒦 sa ) = γ
    where
-    𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
-    𝑨⊧p≈q = vclo-id1{p}{q} α A∈VClo𝓚
+    A⊧p≈q : A ⊧ p ≈ q
+    A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-    𝑩 : Algebra 𝓤 S
-    𝑩 = ∣ sa ∣
+    B : Algebra 𝓤 S
+    B = ∣ sa ∣
 
-    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+    h : ∣ B ∣ → ∣ A ∣
     h = pr₁ ∥ sa ∥
 
     hem : is-embedding h
     hem = ∣ pr₂ ∥ sa ∥ ∣
 
-    hhm : is-homomorphism 𝑩 𝑨 h
+    hhm : is-homomorphism B A h
     hhm = ∥ pr₂ ∥ sa ∥ ∥
 
-    ξ : (𝒃 : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) 𝒃) ≡ h ((q ̇ 𝑩) 𝒃)
-    ξ 𝒃 =
-     h ((p ̇ 𝑩) 𝒃)  ≡⟨ comm-hom-term' gfe 𝑩 𝑨 (h , hhm) p 𝒃 ⟩
-     (p ̇ 𝑨)(h ∘ 𝒃) ≡⟨ intensionality 𝑨⊧p≈q (h ∘ 𝒃) ⟩
-     (q ̇ 𝑨)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gfe 𝑩 𝑨 (h , hhm) q 𝒃)⁻¹ ⟩
-     h ((q ̇ 𝑩) 𝒃)  ∎
+    ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+    ξ b =
+     h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
+     (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+     (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+     h ((q ̇ B) b)  ∎
 
     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
     hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
 
-    γ : p ̇ 𝑩 ≡ q ̇ 𝑩
-    γ = gfe λ 𝒃 → hlc (ξ 𝒃)
+    γ : p ̇ B ≡ q ̇ B
+    γ = gfe λ b → hlc (ξ b)
 
- --vhom : {𝑨 𝑩 : Algebra 𝓤 S} {f : Hom 𝑨 𝑩} → 𝑨 ∈ VClo 𝓚 →  hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} f ∈ VClo 𝓚
- vclo-id1 {p}{q} α (vhom{𝑨 = 𝑨}{𝑩 = 𝑩}{f = f} 𝑨∈VClo𝓚) = γ
+ vclo-id1 {p}{q} α (vhom{A = A}{B = B}{ϕ = ϕ} A∈VClo𝒦) = γ
    where
-    𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
-    𝑨⊧p≈q = vclo-id1{p}{q} α 𝑨∈VClo𝓚
+    A⊧p≈q : A ⊧ p ≈ q
+    A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
     HIA : Algebra 𝓤 S
-    HIA = hom-image-alg{𝑨 = 𝑨}{𝑩 = 𝑩} f
+    HIA = hom-image-alg{A = A}{B = B} ϕ
 
-    ar : (X → ∣ HIA ∣ ) → (X → ∣ 𝑨 ∣ )
-    ar b = λ x → Inv ∣ f ∣ ∣ b x ∣ ∥ b x ∥
+    ar : (X → ∣ HIA ∣ ) → (X → ∣ A ∣ )
+    ar b = λ x → Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
 
-    arbr : (X → ∣ HIA ∣ ) → (X → ∣ 𝑩 ∣ )
-    arbr b = λ x →  ∣ f ∣ (Inv ∣ f ∣ ∣ b x ∣ ∥ b x ∥)
+    arbr : (X → ∣ HIA ∣ ) → (X → ∣ B ∣ )
+    arbr b = λ x →  ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
 
     HIA⊧p≈q : HIA ⊧ p ≈ q
-    HIA⊧p≈q = gfe λ 𝒃 → {!!}
+    HIA⊧p≈q = gfe λ b → {!!}
 
     γ : (p ̇ HIA) ≡ (q ̇ HIA)
-    γ = gfe λ 𝒃 →  {!!}
+    γ = gfe λ b →  {!!}
 
 
 
- vclo-id2 : ∀ {p q} → (VClo 𝓚 ⊧ p ≋ q) → (𝓚 ⊧ p ≋ q)
- vclo-id2 p 𝑨∈𝓚 = p (vbase 𝑨∈𝓚)
+ vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
 
- -- sclo-id1 {generator x} {generator x₁} α (sub {𝑨} {.(Σ _ , _)} (sbase x₂) (mem B≤𝑨 )) = γ
- --   where
- --     γ : ((generator x) ̇ (Σ _ , _)) ≡ ((generator x₁) ̇ (Σ _ , _) )
- --     γ =  (λ 𝒂 → 𝒂 x) ≡⟨ {!!}  ⟩
- --            (λ 𝒂 → 𝒂 x₁) ∎
-
- -- sclo-id1 {generator x} {generator x₁} α (sub {𝑨} {.(Σ _ , _)} (sub x₂ x₃) (mem B≤𝑨)) = γ
- --   where
- --     γ : ((generator x) ̇ (Σ _ , _)) ≡ ((generator x₁) ̇ (Σ _ , _) )
- --     γ =  (λ 𝒂 → 𝒂 x) ≡⟨ {!!}  ⟩
- --            (λ 𝒂 → 𝒂 x₁) ∎
-
- -- sclo-id1 {generator x} {node 𝓸 𝒕} α (sub {𝑨} {.(Σ _ , _)} 𝑨∈SClo𝓚 (mem B≤𝑨)) = γ
- --   where
- --     γ : ((generator x) ̇ (Σ _ , _)) ≡ ((node 𝓸 𝒕) ̇ (Σ _ , _) )
- --     γ =  ( λ 𝒂 → 𝒂 x ) ≡⟨ {!!} ⟩
- --           ( λ 𝒂 → (𝓸 ̂ (Σ _ , _) ) (λ x₁ → (𝒕 x₁ ̇ (Σ _ , _) ) 𝒂) )   ∎
-
- -- sclo-id1 {node 𝓸 𝒕} {generator x} α (sub {𝑨} {.(Σ _ , _)} 𝑨∈SClo𝓚 (mem B≤𝑨)) = γ
- --   where
- --     γ : ((node 𝓸 𝒕) ̇ (Σ _ , _)) ≡ ((generator x) ̇ (Σ _ , _) )
- --     γ = ( ( λ 𝒂 → 𝒂 x ) ≡⟨ {!!} ⟩
- --            ( λ 𝒂 → (𝓸 ̂ (Σ _ , _) ) (λ x₁ → (𝒕 x₁ ̇ (Σ _ , _) ) 𝒂) )   ∎ ) ⁻¹
-
- -- sclo-id1 {node 𝓸 𝒕} {node 𝓸₁ 𝒕₁} α (sub {𝑨} {.(Σ _ , _)} 𝑨∈SClo𝓚 (mem B≤𝑨)) = γ
- --   where
- --     γ : ((node 𝓸 𝒕) ̇ (Σ _ , _)) ≡ ((node 𝓸₁ 𝒕₁) ̇ (Σ _ , _) )
- --     γ = {!!}
+ 

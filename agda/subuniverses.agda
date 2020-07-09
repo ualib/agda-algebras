@@ -88,52 +88,52 @@ module _ {A : Algebra 𝓤 S} where
 
 module _
  {A : Algebra 𝓤 S} {I : 𝓘 ̇}
- {𝐴 : I → Pred ∣ A ∣ 𝓣} where
+ {𝒜 : I → Pred ∣ A ∣ 𝓣} where
 
- sub-inter-is-sub : ((i : I) → 𝐴 i ∈ Subuniverses A)
-  →                 ⋂ I 𝐴 ∈ Subuniverses A
+ sub-inter-is-sub : ((i : I) → 𝒜 i ∈ Subuniverses A)
+  →                 ⋂ I 𝒜 ∈ Subuniverses A
 
  sub-inter-is-sub Ai-is-Sub f a ima⊆⋂A = α
   where
-   α : ∥ A ∥ f a ∈ ⋂ I 𝐴
+   α : ∥ A ∥ f a ∈ ⋂ I 𝒜
    α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
-module _ {A B : Algebra 𝓤 S} (ℎ : hom A B)  where
+module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
 
  HomImage : ∣ B ∣ → 𝓤 ̇
- HomImage = λ b → Image ∣ ℎ ∣ ∋ b
+ HomImage = λ b → Image ∣ h ∣ ∋ b
 
  hom-image : 𝓤 ̇
- hom-image = Σ (Image_∋_ ∣ ℎ ∣)
+ hom-image = Σ (Image_∋_ ∣ h ∣)
 
- fres : ∣ A ∣ → Σ (Image_∋_ ∣ ℎ ∣)
- fres a = ∣ ℎ ∣ a , im a
+ fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+ fres a = ∣ h ∣ a , im a
 
  hom-image-alg : Algebra 𝓤 S
  hom-image-alg = hom-image , ops-interp
   where
    a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
-   a x y = Inv ∣ ℎ ∣  ∣ x y ∣ ∥ x y ∥
+   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
 
    ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
    ops-interp =
-    λ f x → (∣ ℎ ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+    λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 
  hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses B
  hom-image-is-sub {fe} f b b∈Imf =
   eq (∥ B ∥ f b) ( ∥ A ∥ f ar) γ
    where
     ar : ∥ S ∥ f → ∣ A ∣
-    ar = λ x → Inv ∣ ℎ ∣ (b x) (b∈Imf x)
+    ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
 
-    ζ : ∣ ℎ ∣ ∘ ar ≡ b
-    ζ = fe (λ x → InvIsInv ∣ ℎ ∣ (b x) (b∈Imf x))
+    ζ : ∣ h ∣ ∘ ar ≡ b
+    ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
 
     γ : ∥ B ∥ f b
-         ≡ ∣ ℎ ∣ (∥ A ∥ f (λ x → Inv ∣ ℎ ∣ (b x)(b∈Imf x)))
+         ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
     γ = ∥ B ∥ f b            ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-        (∥ B ∥ f)(∣ ℎ ∣ ∘ ar) ≡⟨ ( ∥ ℎ ∥ f ar ) ⁻¹ ⟩
-        ∣ ℎ ∣ (∥ A ∥ f ar)    ∎
+        (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
+        ∣ h ∣ (∥ A ∥ f ar)    ∎
 
 module _
  {X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇}
@@ -320,9 +320,9 @@ module _
   sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
   sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
 
- 𝑺-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+ S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
   →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- 𝑺-closed ℒ𝒦 =
+ S-closed ℒ𝒦 =
   λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
 
  subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
@@ -403,13 +403,13 @@ module intensional-hom-image
 
    γ : ∥ B ∥ f (λ x → b x)
         ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x) (b∈Imh x)))
-   γ =   ∥ B ∥ f (λ x → b x)      ≡⟨ ap ( ∥ B ∥ f ) ζ ⁻¹ ⟩
-         ( ∥ B ∥ f ) ( ∣ h ∣ ∘ ar ) ≡⟨ intensionality ξ ar ⟩
-          ∣ h ∣ ( ∥ A ∥ f ar )      ∎
+   γ = ∥ B ∥ f (λ x → b x)   ≡⟨ ap (∥ B ∥ f) ζ ⁻¹ ⟩
+       (∥ B ∥ f) (∣ h ∣ ∘ ar)  ≡⟨ intensionality ξ ar ⟩
+       ∣ h ∣ (∥ A ∥ f ar)      ∎
     where
      τ : (λ f ar → (∥ B ∥ f)(∣ h ∣ ∘ ar))
           ≡ (λ f ar → ∣ h ∣ (∥ A ∥ f ar ))
-     τ = (∥ h ∥)⁻¹
+     τ = ∥ h ∥ ⁻¹
      ξ : (λ (ar : ∥ S ∥ f → ∣ A ∣) → (∥ B ∥ f)(∣ h ∣ ∘ ar))
           ≡ (λ (ar : ∥ S ∥ f → ∣ A ∣) → ∣ h ∣ (∥ A ∥ f ar))
      ξ = dep-intensionality τ f

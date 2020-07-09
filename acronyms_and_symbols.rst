@@ -107,6 +107,9 @@ Acronyms and Symbols
    UIP
      `Uniqueness of Identity Proofs <https://ncatlab.org/nlab/show/axiom+UIP>`_
 
+   UMP
+     universal mapping property
+
 ----------------------------------
 
 

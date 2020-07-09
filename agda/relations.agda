@@ -15,24 +15,24 @@ REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺)
 REL A B 𝓝 = A → B → 𝓝 ̇
 Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
 Rel A 𝓝 = REL A A 𝓝
-KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → 𝓤 ⊔ 𝓦 ̇
-KER {𝓤}{𝓦}{A} f = Σ x ꞉ A , Σ y ꞉ A , f x ≡ f y
+KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → 𝓤 ⊔ 𝓦 ̇
+KER {𝓤}{𝓦}{A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
 
-ker : {A B : 𝓤 ̇ } → (f : A → B) → 𝓤 ̇
+ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
 ker {𝓤} = KER{𝓤}{𝓤}
 
-KER-rel : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → Rel A 𝓦
-KER-rel f x y = f x ≡ f y
+KER-rel : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Rel A 𝓦
+KER-rel g x y = g x ≡ g y
 
 -- (in the special case 𝓦 ≡ 𝓤)
-ker-rel : {A B : 𝓤 ̇ } → (f : A → B) → Rel A 𝓤
+ker-rel : {A B : 𝓤 ̇ } → (A → B) → Rel A 𝓤
 ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
-KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } (f : A → B) → Pred (A × A) 𝓦
-KER-pred f (x , y) = f x ≡ f y
+KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } → (A → B) → Pred (A × A) 𝓦
+KER-pred g (x , y) = g x ≡ g y
 
 -- (in the special case 𝓦 ≡ 𝓤)
-ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } (f : A → B) → Pred (A × A) 𝓤
+ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } → (A → B) → Pred (A × A) 𝓤
 ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
 _⇒_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ }
@@ -45,13 +45,13 @@ infixr 4 _⇒_
 
 _on_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } {C : 𝓦 ̇ }
  →     (B → B → C) → (A → B) → (A → A → C)
-_*_ on f = λ x y → f x * f y
+_*_ on g = λ x y → g x * g y
 
 _=[_]⇒_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ }
  →        Rel A 𝓡 → (A → B) → Rel B 𝓢
  →        𝓤 ⊔ 𝓡 ⊔ 𝓢 ̇
 
-P =[ f ]⇒ Q = P ⇒ (Q on f)
+P =[ g ]⇒ Q = P ⇒ (Q on g)
 
 infixr 4 _=[_]⇒_
 
@@ -116,65 +116,65 @@ is-equivalence-relation _≈_ =
 lift-rel : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
  →         Rel Z 𝓦 → (γ → Z) → (γ → Z)
  →         𝓥 ⊔ 𝓦 ̇
-lift-rel R 𝒇 𝒈 = ∀ x → R (𝒇 x) (𝒈 x)
+lift-rel R f g = ∀ x → R (f x) (g x)
 
 compatible-fun : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
-                 (𝒇 : (γ → Z) → Z)(𝑹 : Rel Z 𝓦)
+                 (f : (γ → Z) → Z)(R : Rel Z 𝓦)
  →               𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-compatible-fun 𝒇 𝑹 = (lift-rel 𝑹) =[ 𝒇 ]⇒ 𝑹
+compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 
 module _ {S : Signature 𝓞 𝓥}  where
 
   -- relation compatible with an operation
-  compatible-op : {𝑨 : Algebra 𝓤 S}
-   →              ∣ S ∣ → Rel ∣ 𝑨 ∣ 𝓤
+  compatible-op : {A : Algebra 𝓤 S}
+   →              ∣ S ∣ → Rel ∣ A ∣ 𝓤
    →              𝓥 ⊔ 𝓤 ̇
-  compatible-op {𝓤} {𝑨} 𝑓 𝓻 = (lift-rel 𝓻) =[ (∥ 𝑨 ∥ 𝑓) ]⇒ 𝓻
+  compatible-op {𝓤} {A} f R = (lift-rel R) =[ (∥ A ∥ f) ]⇒ R
 
   --The given relation is compatible with all ops of an algebra.
-  compatible : (𝑨 : Algebra 𝓤 S) -> Rel ∣ 𝑨 ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
-  compatible {𝓤} 𝑨 𝓻 = ∀ 𝑓 → compatible-op{𝓤}{𝑨} 𝑓 𝓻
+  compatible : (A : Algebra 𝓤 S) → Rel ∣ A ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
+  compatible {𝓤} A R = ∀ f → compatible-op{𝓤}{A} f R
 
   𝟎-compatible-op : funext 𝓥 𝓤
-   →                {𝑨 : Algebra 𝓤 S} (𝑓 : ∣ S ∣)
-   →                compatible-op {𝓤}{𝑨} 𝑓 𝟎-rel
-  𝟎-compatible-op fe {𝑨 = 𝑨} 𝑓 ptws𝟎  =
-   ap (∥ 𝑨 ∥ 𝑓) (fe (λ x → ptws𝟎 x))
+   →                {A : Algebra 𝓤 S} (f : ∣ S ∣)
+   →                compatible-op {𝓤}{A} f 𝟎-rel
+  𝟎-compatible-op fe {A = A} f ptws0  =
+   ap (∥ A ∥ f) (fe (λ x → ptws0 x))
 
   𝟎-compatible : funext 𝓥 𝓤
-   →             {𝑨 : Algebra 𝓤 S}
-   →             compatible 𝑨 𝟎-rel
-  𝟎-compatible fe {𝑨} =
-   λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
+   →             {A : Algebra 𝓤 S}
+   →             compatible A 𝟎-rel
+  𝟎-compatible fe {A} =
+   λ f args → 𝟎-compatible-op fe {A} f args
 
   -- Congruence relations
-  Con : (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  Con {𝓤} 𝑨 =
-   Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
+  Con : (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  Con {𝓤} A =
+   Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
 
-  con : (𝑨 : Algebra 𝓤 S)  →  Pred (Rel ∣ 𝑨 ∣ 𝓤) _
-  con 𝑨 = λ θ → IsEquivalence θ × compatible 𝑨 θ
+  con : (A : Algebra 𝓤 S)  →  Pred (Rel ∣ A ∣ 𝓤) _
+  con A = λ θ → IsEquivalence θ × compatible A θ
 
-  record Congruence (𝑨 : Algebra 𝓤 S) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  record Congruence (A : Algebra 𝓤 S) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
     constructor mkcon
     field
-      ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
-      Compatible : compatible 𝑨 ⟨_⟩
+      ⟨_⟩ : Rel ∣ A ∣ 𝓤
+      Compatible : compatible A ⟨_⟩
       IsEquiv : IsEquivalence ⟨_⟩
   open Congruence
 
-  Δ : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
-  Δ fe 𝑨 = mkcon 𝟎-rel
-                ( 𝟎-compatible fe {𝑨} )
+  Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 S) → Congruence A
+  Δ fe A = mkcon 𝟎-rel
+                ( 𝟎-compatible fe {A} )
                 ( 𝟎-IsEquivalence )
 
-  _╱_ : (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
+  _╱_ : (A : Algebra 𝓤 S) → Congruence A
          ---------------------------------
    →     Algebra (𝓤 ⁺) S
-  𝑨 ╱ θ = (( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
-            (λ 𝑓 args        -- operations
-             → ([ ∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-               (∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+  A ╱ θ = (( ∣ A ∣ // ⟨ θ ⟩ ) , -- carrier
+            (λ f args        -- operations
+             → ([ ∥ A ∥ f (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+               (∥ A ∥ f (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
             )
           )
 
