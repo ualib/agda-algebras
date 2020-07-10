@@ -362,7 +362,7 @@ We will make this precise below (see :numref:`Obs. %s <obs 7>`).
 Terms and free algebras
 ---------------------------
 
-This section is essentially an abridged version of the section of the same title in Cliff Bergman's excellent textbook (:cite:`Bergman:2012`), but slightly revised and transcribed into our notation.  We refer the reader to Section 4.3 of :cite:`Bergman:2012` for more details and examples than we give here.
+This section is based on the section of the same title in Cliff Bergman's excellent textbook (:cite:`Bergman:2012`). Apart from notation, our presentation is quite similar in style and content to Cliff's, but we have attempted to give a more compact, abridged treatment in order to get more quickly to our ultimate goal (in the next chapter), which is to show how it is possible to express the concepts and theorems of universal algebra in type theory and to formalize them in the Agda language.  We refer the reader to Section 4.3 of :cite:`Bergman:2012` for more details and examples about "classical" (informal) universal algebra than we present here.
 
 .. _terms:
 
@@ -388,7 +388,7 @@ If 𝑡 is a term, then the **height** of 𝑡 is denoted by ∣𝑡∣ and defi
 
 If 𝑇(𝑋) is nonempty (equivalently, 𝑋 ∪ 𝐹₀ is nonempty), then we can impose upon it an algebraic structure, which we will denote by 𝑻(X). We call 𝑻(X) the **term algebra in the signature** 𝑆 **over** 𝑋; it is constructed as follows:
 
-For every basic operation symbol 𝑓 ∈ 𝐹 let :math:`f^{𝑻(X)}` be the operation on 𝑇(𝑋) that maps each tuple 𝑠 : ρ𝑓 → 𝑇(𝑋) to the formal term 𝑓 𝑠; define 𝑻(X) to be the algebra with universe 𝑇(𝑋) and basic operations :math:`\{f^{𝑻(X)} | f ∈ F\}`.
+For every basic operation symbol 𝑓 ∈ 𝐹 let :math:`f^{𝑻(X)}` be the operation on 𝑇(𝑋) that maps each tuple :math:`𝑠 : ρ𝑓 → 𝑇(𝑋)` to the formal term 𝑓 𝑠; define 𝑻(X) to be the algebra with universe 𝑇(𝑋) and basic operations :math:`\{f^{𝑻(X)} | f ∈ F\}`.
 
 .. _free algebras:
 

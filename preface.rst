@@ -9,40 +9,39 @@
 Preface
 ========
 
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we are developing a software library, called the `Agda Universal Algebra Library`_ (aka agda-ualib, aka ⋀𝗀𝖽𝖺 ⋀𝗅𝗀𝖾𝖻𝗋𝖺).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra.
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we are developing a software library, called the `Agda Universal Algebra Library`_ (agda-ualib_ ).  Our library contains formal statements and proofs of some of the core, foundational definitions and results universal algebra and is written in Agda_.
 
-We will define some useful datatypes for implementing universal algebra in the `Agda proof assistant <http://hackage.haskell.org/package/Agda-2.6.0.1>`_.
+Agda_ is a programming language and `proof assistant`_, or "interactive theorem prover" (ITP), that not only supports dependent and inductive types, but also provides powerful *proof tactics* for proving things about the objects that inhabit these types. 
 
 ------------------------
 
-Vision
-----------
+Vision and Goals
+----------------------
 
-The idea for the ⋀𝗀𝖽𝖺 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 library originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand types (of `type theory`_ ---in particular, `dependent types`_ and `inductive types`_) make possible elegant formal representations of recursively defined objects, as well as concise proofs of their properties. These observations suggest that there is much to gain from implementing universal algebra in a language that facilitates working with dependent and inductive types.
+The idea for the the Agda Universal Algebra Library (agda-ualib_) originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand the *types* (of `type theory`_ ---in particular, `dependent types`_ and `inductive types`_) make possible elegant formal representations of recursively defined objects, and constructive (*computable*) proofs of their properties. These observations suggest that there is much to gain from implementing universal algebra in a language that facilitates working with dependent and inductive types.
 
-Agda_ is a programming language and `proof assistant`_, or "interactive theorem prover" (ITP), that not only supports dependent and inductive types, but also provides powerful `proof tactics`_ [1]_ for proving properties of the objects that inhabit these types. 
+Primary Goals
+~~~~~~~~~~~~~~~~~~~~
 
-The goal of the ⋀𝗀𝖽𝖺 ⋀𝗅𝗀𝖾𝖻𝗋𝖺 project is to formalize, in the Agda language, the substantial edifice upon which our mathematical research stands, demonstrating that our work can be implemented formally and effectively in type theory in such a way that we and other working mathematicians can use the resulting library to conduct and formalize further mathematics research.
+The first goal of the agda-ualib_ project is to demonstrate that it is possible to express the foundations of universal algebra in type theory and to formalize (and formally verify) the foundations in the Agda programming language. We will formalize a substantial portion of the edifice on which our own mathematical research depends, and demonstrate that our research can also be expressed in type theory and formally implemented in such a way that we and other working mathematicians can understand and verify the results. The resulting library will also serve to educate our peers, and encourage and help them to formally verify their own mathematics research.
 
-Our field is deep and its history rich, so encoding all of our subject's foundations may seem like a daunting task and possibly risky investment of time and resources.  However, our view is that the basics of the theory could be well served by a modernized and (where possible) `constructive <constructive mathematics>`_ presentation, so that universal algebra could be naturally codified in the language of type theory and formally implemented in, and verified by, the Agda proof assistant.
+Our field is deep and wide and codifying all of its foundations may seem like a daunting task and possibly risky investment of time and resources.  However, we believe our subject is well served by a new, modern, `constructive <constructive mathematics>`_ presentation of its foundations.  Our new presentation expresses the foundations of universal algebra in the language of type theory, and uses the Agda proof assistant to codify and formally verify everything.
 
 .. Specific examples will be given below in :numref:`subalgebras-in-Agda`, :numref:`terms-in-Agda`, and :numref:`clones-in-Agda`.
 
------------------------------------
+Secondary Goals
+~~~~~~~~~~~~~~~~~~~~
 
-Objectives
----------------
+We wish to emphasize that our ultimate objective is not merely to translate existing results into a more modern and formal language.  Indeed, one important goal is to develop a system that is useful for conducting research in mathematics, and that is how we intend to use our library once we have achieved our immediate objective of implementing the basic foundational core of universal algebra in Agda.
 
-We wish to emphasize that our ultimate objective is not merely to translate existing results into a more modern and formal language.  Indeed, one important goal of the Agda development team is to develop a system that is useful for conducting research in mathematics, and that is how we intend to use our library once we have achieved our immediate objective of implementing the basic foundational core of universal algebra in Agda.
-
-To this end, our main objectives include
+To this end, our intermediate-term objectives include
 
 + developing domain specific "proof tactics" to express the idioms of universal algebra,
 + incorporating automated proof search for universal algebra, and
 + formalizing theorems emerging from our own mathematics research,
 + documenting the resulting software libraries so they are usable by other working mathematicians.
 
-For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Our goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
+For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
 
 -----------------------------------
 
@@ -83,9 +82,12 @@ There are installation instructions in the main README.md file in that repositor
 Acknowledgments
 ---------------
 
-This manual, as well as the software library that it documents, are open access projects maintained on Gitlab by `William DeMeo <mailto:williamdemeo@gmail.com>`_.
+Besides the main authors and developers of agda-ualib_ (William DeMeo and Siva Somayyajula), a number of other people have contributed to the project in one way or another.
 
-Besides Dr. DeMeo, a number of other people have contributed to this project---some directly, others indirectly.  Special thanks go to `Clifford Bergman`_, `Siva Somayyajula`_, `Venanzio Capretta`_, `Andrej Bauer`_, `Miklós Maróti`_, `Ralph Freese`_, and `Jeremy Avigad`_ for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project, often without even knowing it.
+Special thanks go to `Clifford Bergman`_, `Venanzio Capretta`_, `Andrej Bauer`_, `Miklós Maróti`_, and `Ralph Freese`_, for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project, often without even knowing it.
+
+The first author would also like to thank his postdoctoral advisors and their institutions for supporting (sometimes without their knowledge) work on this project. These include `Libor Barto`_ and Charles University in Prague (Nov 2019--Jun 2021), `Peter Mayr`_ and University of Colorado in Boulder (Aug 2017--May 2019), `Ralph Freese`_ and the University of Hawaii in Honolulu (Aug 2016--May 2017), `Cliff Bergman`_ and Iowa State University in Ames (Aug 2014--May 2016).
+
 
 Attributions and citations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -121,14 +123,6 @@ Finally, the official `Agda Wiki`_, `Agda User's Manual`_, `Agda Language Refere
 
 -----------------------------------
 
-
-.. rubric:: Footnotes
-
-.. [1]
-   See, e.g., `this <http://www.cs.ox.ac.uk/ralf.hinze/WG2.8/33/slides/Ulf.pdf>`_ or
-   `that <https://www.cs.cornell.edu/Info/Projects/NuPrl/book/node94.html>`_.
-
-----------------------
 
 .. include:: hyperlink_references.rst
 

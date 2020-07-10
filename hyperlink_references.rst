@@ -16,6 +16,7 @@
 .. _classes.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/classes.lean
 .. _classical.lean: https://github.com/leanprover/lean/blob/master/library/init/classical.lean
 .. _Clifford Bergman: https://orion.math.iastate.edu/cbergman/
+.. _Cliff Bergman: https://orion.math.iastate.edu/cbergman/
 .. _clone.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/clone.lean
 .. _Coercions using Type Classes: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 .. _constructive mathematics: https://ncatlab.org/nlab/show/constructive+mathematics
@@ -46,6 +47,7 @@
 .. _Lean Standard Library: https://github.com/leanprover/lean
 .. _Lean Tutorial: https://leanprover.github.io/tutorial/
 .. _Lean Universal Algebra Library: https://github.com/UniversalAlgebra/lean-ualib/
+.. _Libor Barto: http://www.karlin.mff.cuni.cz/~barto/
 .. _Agda Universal Algebra Library: https://github.com/UniversalAlgebra/agda-ualib/
 .. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
 .. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
@@ -65,6 +67,7 @@
 .. _OPLSS 2018: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 .. _order.lean: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
 .. _prod.lean: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+.. _Peter Mayr: http://math.colorado.edu/~mayr/
 .. _Programming Languages Foundations in Agda: https://plfa.github.io/
 .. _proof assistant: https://en.wikipedia.org/wiki/Proof_assistant
 .. _proof tactics: https://en.wikipedia.org/wiki/Tactic_(proof_assistant)
