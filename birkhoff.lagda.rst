@@ -32,6 +32,8 @@ As usual, we start with the imports we will need below.
   open import subuniverses using (Subuniverse; mksub; var; app; Sg;
                                   _is-subalgebra-of_; Subalgebra)
 
+.. _the birkhoff module:
+
 The Birkhoff module
 ----------------------
 
