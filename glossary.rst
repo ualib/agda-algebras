@@ -2,7 +2,7 @@
 .. Author: William DeMeo <williamdemeo@gmail.com>
 .. Date: 8 Dec 2019
 .. Updated: 13 Feb 2020
-.. Copyright (c) 2019 William DeMeo (see the LICENSE file)
+.. Copyright (c) 2019 William DeMeo (see the 𝐿ICENSE file)
 
 .. .. include:: _static/math_macros.rst
 
@@ -14,9 +14,52 @@
 Glossary: logic and model theory
 ----------------------------------
 
-Model theory is the study of classes of mathematical structures from the perspective of mathematical logic. The objects of study are models of theories in a formal language. A set of sentences in a formal language is one of the components that form a theory. A model of a theory is a structure (e.g. an interpretation) that satisfies the sentences of that theory.
+Attribution
+~~~~~~~~~~~
 
-What follows is a list of useful definitions from model theory.
+Sources used when compiling the material in this section include the following:
+
+* `Introduction to Model Theory <https://books.google.cz/books?id=0\_NNAR6ztIUC>`_ by Philipp Rothmaler :cite:`Rothmaler:2000`.
+
+* *Complexity of Infinite-Domain Constraint Satisfaction* by Manuel Bodirsky (to appear)
+
+* `Wikipedia.org <https://en.wikipedia.org/>`_
+
+Background
+~~~~~~~~~~
+
+:term:`Model theory <model theory>` is the study of classes of mathematical :term:`structures <structure>` (or :term:`models <model>`) from the perspective of mathematical logic. In particular, the objects of study are models of :term:`theories <theory>` in a formal :term:`language`. Model theory examines semantical elements (meaning and truth) by means of syntactical elements (formulas and proofs) of a language.
+
+Some basic but important facts to keep in mind are these. Every constant symbol is a constant :term:`term`. An :term:`atomic sentence` contains no variables at all. 𝐿anguages without constant symbols have no atomic sentences. Every :term:`language` comes equipped with a countable supply of variables. The cardinality of a language 𝐿 is defined to be ∣𝐿∣ = max {ℵ₀, ∣𝐂 ∪ 𝐅 ∪ 𝐑∣}.
+
+------------------------------
+
+Miscellaneous facts
+~~~~~~~~~~~~~~~~~~~~~
+
+.. proof:lemma::
+
+   For a :term:`language` 𝐿 and an 𝐿-:term:`theory` T, the following are equivalent:
+
+     #. T is :term:`complete <complete theory>`;
+     #. T is a :term:`maximal 𝐿-theory`;
+     #. T is a maximal :term:`consistent` set of :term:`𝐿-sentences <𝐿-sentence>`;
+     #. ∀ ℳ ⊧ T, T = Th ℳ;
+     #. ∃ ℳ ⊧ T, T = Th ℳ.
+
+.. proof:examples::
+
+   :math:`\mathrm{T}^∞` is the theory of the class of all infinite models of T.
+
+   :math:`\mathrm{T}_=` is the **theory of pure identity**, which is the
+
+   :math:`\mathrm{𝐿}_=`-theory of all sets (regarded as :math:`𝐿_=`-structures).
+
+
+Glossary
+~~~~~~~~~
+
+Here is a list of useful definitions from model theory.
 
 .. glossary::
 
@@ -24,12 +67,12 @@ What follows is a list of useful definitions from model theory.
      Two formulas are called **α-equivalent** if one is obtained from the other by renaming bound variables (using variable names that do not clash with existing variable names).
 
    Agda
-     An :term:`intensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin Lof type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php
- 
+     An :term:`intensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin 𝐿of type theory; url: https://wiki.portal.chalmers.se/agda/pmwiki.php
+
    alphabet
      The **alphabet** of the :term:`signature` σ is the collection of symbols in the following list:
 
-       * **logical symbols** 
+       * **logical symbols**
        * **logical connectives**: ¬,  ∧, ∨ (negation, conjunction, disjunction, resp.),
        * **existential quantifier** ∃,
        * **equality** =.
@@ -38,20 +81,20 @@ What follows is a list of useful definitions from model theory.
        * **parentheses** (, )
 
    𝖺𝗍
-     By :math:`𝖺𝗍_𝖫` (or just 𝖺𝗍 when the context makes :math:`𝖫` clear) we mean the class of all atomic :math:`𝖫`-formulas.
+     By :math:`𝖺𝗍_𝐿` (or just 𝖺𝗍 when the context makes :math:`𝐿` clear) we mean the class of all atomic :math:`𝐿`-formulas.
 
    atomic formula
-     An **atomic** :math:`𝖫`**-formula** (or just **atomic formula** when the context makes :math:`𝖫` clear) has one of the following forms:
- 
-       * :math:`s = t`, where :math:`s` and :math:`t` are :math:`𝖫`-terms;
-       * :math:`R t`, where :math:`R` is a relation symbol in :math:`𝖫` and :math:`t: ρ R → 𝒯`  is a tuple of :math:`𝖫`-terms;
- 
+     An **atomic** :math:`𝐿`**-formula** (or just **atomic formula** when the context makes :math:`𝐿` clear) has one of the following forms:
+
+       * :math:`s = t`, where :math:`s` and :math:`t` are :math:`𝐿`-terms;
+       * :math:`R t`, where :math:`R` is a relation symbol in :math:`𝐿` and :math:`t: ρ R → 𝒯`  is a tuple of :math:`𝐿`-terms;
+
    atomic sentence
-     An **atomic** :math:`𝖫`**-sentence** (or just **atomic sentence** when the context makes :math:`𝖫` clear) is either an equation of constant terms or a relational sentence, :math:`R t`, where :math:`t \, i` is a :term:`closed term` for every :math:`i`; in particular,
-     
+     An **atomic** :math:`𝐿`**-sentence** (or just **atomic sentence** when the context makes :math:`𝐿` clear) is either an equation of constant terms or a relational sentence, :math:`R t`, where :math:`t \, i` is a :term:`closed term` for every :math:`i`; in particular,
+
      * *an atomic sentence contains no variables at all*, and
      * *languages without constant symbols have no atomic sentences*.
- 
+
    automated theorem prover
      See: https://en.wikipedia.org/wiki/Automated_theorem_proving
 
@@ -70,12 +113,24 @@ What follows is a list of useful definitions from model theory.
    base
      See: :term:`equational base`
 
+   boolean combination
+     𝐿et Σ be a set of formulae.  A **boolean combination** of Σ is obtained by connecting formulae from Σ using only the logical connectives ∨, ∧, and ¬.
+
+     **Remark**. In this definition, we could have allowed → and ↔ among the logical connectives and we could have omitted ∨.
+
+     **TODO**. Decide whether to include ⊤ and ⊥, by themselves, among boolean combinations, since after all ⊤ and ⊥ are logical connectives.
+
+   boolean closure
+     The **boolean closure** of Σ is the set of all :term:`boolean combinations` of Σ.
+
+     For example, 𝐪𝐟 denotes the set of all boolean combinations of atomic formulae.
+
    bound variable
      A variable that is bound by a quantifier is called a **bound variable**.
-     
+
      For instance, if the "domain of discourse" is the set of natural numbers, then the sentence :math:`∀ x \; (x ≥ 0)` asserts, "every natural number is greater than or equal to zero." The latter is an informal statement that makes no reference to the variable :math:`x`. It is not a statement about a particular variable; it is a statement about all natural numbers. The variable :math:`x` is simply a placeholder, or "dummy variable."  The sentence :math:`∀ x \; (x ≥ 0)` is logically equivalent to the sentence :math:`∀ y \; (y ≥ 0)`.
 
-     A variable that is not bound is called a :term:`free variable`. 
+     A variable that is not bound is called a :term:`free variable`.
 
    Calculus of Inductive Constructions
      See: https://en.wikipedia.org/wiki/Calculus_of_constructions
@@ -91,103 +146,107 @@ What follows is a list of useful definitions from model theory.
 
    categorical
      A :term:`theory` is said to be **categorical** in a given cardinality λ (or just **λ-categorical**) if it has, up to isomorphism, exactly one model of cardinality λ.
- 
-     An L-:term:`theory` is said to be **categorical** if it is categorical in some cardinality λ. We call an L-theory **totally categorical** if it has infinite models and every two models of the same cardinality (finite or inĥnite) are isomorphic.
- 
+
+     An 𝐿-:term:`theory` is said to be **categorical** if it is categorical in some cardinality λ. We call an 𝐿-theory **totally categorical** if it has infinite models and every two models of the same cardinality (finite or inĥnite) are isomorphic.
+
    closed literal
-     A **closed literal** (or **literal sentence**) is a literal with no :term:`free variables <free variable>`.  We denote by :math:`𝖼𝗅_L` the set of all closed :math:`L`-literals (literal :math:`L`-sentences).
+     A **closed literal** (or **literal sentence**) is a literal with no :term:`free variables <free variable>`.  We denote by :math:`𝖼𝗅_𝐿` the set of all closed :math:`𝐿`-literals (literal :math:`𝐿`-sentences).
 
    closed term
      A **closed term** is a term with no free variables.
 
    compatible
-     Let :math:`σ  = (F, ρ)` be an :term:`algebraic signature` and for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}` let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebra. If :math:`𝐀 = ∏_{i:𝐧}𝔸_i` is the product of these algebras, then a relation :math:`R` over 𝐀 with scope σ is called **compatible** with 𝐀 if it is closed under (or "preserved by") the basic operations in :math:`F^𝐀`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨R,F^ℝ⟩` is a subalgebra of :math:`∏_{j:𝐤} 𝔸_{σ(j)}`.
+     𝐿et :math:`σ  = (F, ρ)` be an :term:`algebraic signature` and for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}` let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebra. If :math:`𝐀 = ∏_{i:𝐧}𝔸_i` is the product of these algebras, then a relation :math:`R` over 𝐀 with scope σ is called **compatible** with 𝐀 if it is closed under (or "preserved by") the basic operations in :math:`F^𝐀`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨R,F^ℝ⟩` is a subalgebra of :math:`∏_{j:𝐤} 𝔸_{σ(j)}`.
 
    complete theory
-     A L-theory T is **complete** if for every L-:term:`sentence` φ ∈ L₀, either φ ∈ T or ¬φ ∈ T.  
+     A 𝐿-theory T is **complete** if for every 𝐿-:term:`sentence` φ ∈ 𝐿₀, either φ ∈ T or ¬φ ∈ T.
 
    computable
      See: https://pdfs.semanticscholar.org/1364/d8e8763891b84a9383b722d82294ae0a736b.pdf
- 
-   consistent 
-     :math:`Σ` is **consistent** if :math:`Σ^⊢` contains no :term:`contradictions <contradiction>`; otherwise, Σ is **inconsistent**.  
+
+   consistent
+     :math:`Σ` is **consistent** if :math:`Σ^⊢` (the :term:`deductive closure` of Σ) contains no :term:`contradictions <contradiction>`; otherwise, Σ is **inconsistent**.
 
    constructive
      See: https://plato.stanford.edu/entries/mathematics-constructive/ and https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_mathematics) and https://en.wikipedia.org/wiki/Constructive_proof
- 
+
    contradiction
-     A logical **contradiction** is an 𝖫-sentence of the form φ ∧ ¬ φ.
+     A logical **contradiction** is an 𝐿-sentence of the form φ ∧ ¬ φ.
 
    Coq
      An :term:`intensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: http://coq.inria.fr
-     
+
    Curry-Howard correspondence
      the correspondence between propositions and types, and proofs and programs; a proposition is identified with the type of its proofs, and a proof is a program of that type.
-     
+
+     (Sometimes the misnomer "Curry-Howard isomorphism" is used to refer to the same concept, but this is silly because the correspondence is not even bijective, since not all types are propositions, and so not all programs are proofs of propositions; e.g., ℕ is not a proposition and 0 is not a proof of ℕ.)
+
      See also: https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence
 
    currying
      See: https://en.wikipedia.org/wiki/Currying
 
-   definitionally equal
-     In :term:`type theory`, two terms with the same :term:`normal form` are called **definitionally equal**.
+   decidable language
+     see :term:`recursive language`
 
    deductive closure
-     The **deductive closure** of a set S of statements is the set of all the statements that can be deduced from S.
+     Given a :term:`logic`, the **deductive closure** of a set 𝑆 of statements, denoted by :math:`S^⊢`, is the set statements that can be deduced from 𝑆 using the deduction rules of the given logic.
 
-     In propositional logic, the set of all true propositions exhibits deductive closure: if set O is the set of true propositions, and operation R is :term:`logical consequence` (⊢), then provided that proposition p is a member of O and p is R-related to q (i.e., p {\displaystyle \vdash }\vdash  q), q is also a member of O.
+     We call 𝑆 deductively closed provided :math:`S^⊢ ⊆ S`.
+
+     For example, the set of all :term:`true propositions <true proposition>` of a logic is deductively closed. Indeed, if 𝕋 is the set of true propositions and if a proposition p belongs to 𝕋 and if p is ⊢-related to q (i.e., p ⊢ q), then q also belongs to 𝕋.
 
    definitionally equal
      In :term:`type theory`, two terms with the same :term:`normal form` are called **definitionally equal**.
- 
+
    Δ(𝖢)
      is the **expansion** of Δ by :term:`new constants symbols <new constant symbol>` :math:`C` (not occuring in Δ), which is defined to be the class of all the :term:`formulas <formula>` obtained from formulas φ ∈ Δ upon substituting (at will) elements from C for variables in φ. ("At will" indicates that Δ ⊆ Δ(C).)
- 
+
    Δ-part
-     If Δ is an arbibtrary class of formulas, then the Δ-**part** of an L-theory :math:`T` is :math:`T_Δ = (T ∩ Δ)^⊢`.
+     If Δ is an arbibtrary class of formulas, then the Δ-**part** of an 𝐿-theory :math:`T` is :math:`T_Δ = (T ∩ Δ)^⊢`.
 
    dependent function type
      See: :term:`Pi type`
- 
+
    dependent pair type
      See: :term:`Sigma type`.
- 
+
    dependent product type
      See: :term:`Sigma type`.
- 
+
    dependent type
-     A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``. 
-     
+     A **dependent type** is actually a family of types indexed by some parameter. That is, a dependent type provides a *type schema*, which is a collection of types indexed by a set of values. For example, the type ``Fin n`` of finite sets of size ``n`` is a type that *depends* on the value ``n``.
+
    dependent type theory
      refers to any :term:`type theory` that supports :term:`dependent types <dependent type>`.
- 
+
      In **dependent type theory**, every term has a computational behavior and may be *reduced* using certain reduction rules (e.g., the α, β, η rules).  The form beyond which a term :math:`t` is irreducible, if such a form exists, is called the :term:`normal form` of :math:`t`. Two terms with the same normal form are called :term:`definitionally equal`.
- 
+
    elementary class
      See: :term:`axiomatizable`
 
    elementary map
-     If 𝕄 = ⟨M, ...⟩ and ℕ = ⟨N, ...⟩ are 𝖫-structures, then a map f: M → N is called **elementary** if f: 𝕄 :math:`\stackrel{≡}{↪}` ℕ.
- 
+     If 𝕄 = ⟨M, ...⟩ and ℕ = ⟨N, ...⟩ are 𝐿-structures, then a map f: M → N is called **elementary** if f: 𝕄 :math:`\stackrel{≡}{↪}` ℕ.
+
    elementarily embeddable
-     Let 𝕄 = ⟨M, ...⟩ and ℕ = ⟨N, ...⟩ be 𝖫-structures. We say that 𝕄 is **elementarily embeddable** in ℕ, and we write :math:`𝕄 \stackrel{≡}{↪} ℕ`, if there is an elementary map f: 𝕄 :math:`\stackrel{≡}{↪}` ℕ.
- 
+     𝐿et 𝕄 = ⟨M, ...⟩ and ℕ = ⟨N, ...⟩ be 𝐿-structures. We say that 𝕄 is **elementarily embeddable** in ℕ, and we write :math:`𝕄 \stackrel{≡}{↪} ℕ`, if there is an elementary map f: 𝕄 :math:`\stackrel{≡}{↪}` ℕ.
+
    entailment
      We say that :math:`Σ` **entails** :math:`φ`, and we write :math:`Σ ⊢ φ`, if just in case every model of :math:`Σ` also models :math:`φ`.
 
      See also: :term:`logical consequence`
- 
-   equational base
-     An **equational base** (or **base**) for a variety 𝒱 is a set Σ of equations such that 𝒱 = Mod(Σ). We say that 𝛴 is a base for an algebra 𝐀 if Σ is a base for 𝕍(𝐀) (the variety generated by 𝐀). 
 
-     Let 𝒦 be a class of algebras and Σ a set of equations, each of signature σ = (F, ρ). Recall,
-      
+   equational base
+     An **equational base** (or **base**) for a variety 𝒱 is a set Σ of equations such that 𝒱 = Mod(Σ). We say that 𝛴 is a base for an algebra 𝐀 if Σ is a base for 𝕍(𝐀) (the variety generated by 𝐀).
+
+     𝐿et 𝒦 be a class of algebras and Σ a set of equations, each of signature σ = (F, ρ). Recall,
+
      .. math:: \mathrm{Th}𝒦 = \{p ≈ q : 𝒦 ⊧ p ≈ q\} \qquad \quad \mathrm{Mod} Σ = \{ 𝐀 : 𝐀 ⊧ Σ\}.
- 
+
      Classes of the form Mod Σ are called equational classes, and Σ is called an **equational base** or an :term:`axiomatization` of the class.
-      
+
      Mod Σ is called the class of models of Σ.
-      
+
      Dually, a set of identities of the form Th 𝒦 is called an **equational theory**.
 
    eval
@@ -195,16 +254,16 @@ What follows is a list of useful definitions from model theory.
 
    extensional
      An *extensional* definition of a term lists everything that qualifies as something to which that term refers.
-     
+
      See also: :term:`function extensionality`
- 
+
    fork
-     Let :math:`A` and :math:`D` be types and for each :math:`a: A`, let :math:`C_a` be a type. Then the (dependent) **fork function**, denoted
-  
+     𝐿et :math:`A` and :math:`D` be types and for each :math:`a: A`, let :math:`C_a` be a type. Then the (dependent) **fork function**, denoted
+
      .. math:: \mathbf{fork}: ∏_{a:A}(C_a → D) → ∏_{a:A} C_a → ∏_{a:A} (C_a → D) × C_a,
-     
+
      is defined as follows: for all :math:`h: ∏_{a:A}(C_a → D)` and :math:`k: ∏_{a:A} C_a`,
-     
+
      .. math:: \mathbf{fork}\, (h)(k): ∏_{a:A}((C_a → D) × C_a),
 
      and for each :math:`a:A`,
@@ -214,89 +273,94 @@ What follows is a list of useful definitions from model theory.
      Thus, :math:`\mathbf{eval} \, \mathbf{fork}\, (h)(k)(a) = (h\, a)(k\, a)` is of type :math:`D`.
 
    formula
-     The **formulas** of a :term:`signature` σ (or σ-formulas) are defined recursively as follows:
- 
-       * if :math:`t_1` and :math:`t_2` are :term:`σ-terms <σ-term>`, then :math:`t_1 = t_2` is a σ-formula;
-       * if :math:`t: n → 𝒯` is a tuple of σ-terms and :math:`R ∈ 𝐑` is an :math:`n`-ary relation symbol, then :math:`R t` is a σ-formula;
-       * if φ and ψ are σ-formulas and x is a variable, then ¬ φ, φ ∧ ψ, and ∃ x φ are formulas too;
-       * if φ can be constructed in finitely many steps from some combination of the three items above, then φ is a fornıula.
- 
+     A **formula** in the :term:`signature` 𝑆, or **𝑆-formula** (or just **formula** when the signature is clear from context) is a member of the set of **𝑆-formulae**, which is defined recursively as follows:
+
+       * if 𝑡 and 𝑠 are 𝑆-:term:`terms <term>`, then 𝑡 = 𝑠 is an 𝑆-formula;
+       * if 𝑡 : {0, 1, …, 𝑛-1} → 𝒯 is a tuple of 𝑆-terms and 𝑅 ∈ 𝐑 is an 𝑛-ary relation symbol, then 𝑅 𝑡 is an 𝑆-formula;
+       * if φ and ψ are 𝑆-formulae and 𝑥 is a variable, then ¬ φ, φ ∧ ψ, and ∃ 𝑥 φ are 𝑆-formulae, too;
+       * if φ can be constructed in finitely many steps from some combination of the three items above, then φ is an 𝑆-formula.
+
    free variable
      A variable that is not :term:`bound <bound variable>` by a quantifier is called a **free variable**.
-     
+
      A formula in first-order logic is an assertion about the free variables in the formula.
-     
+
      For example, if the "domain of discourse" is the set of natural numbers, then the formula :math:`∀ y \; (x ≤ y)` asserts that :math:`x` is less or equal every natural number.
-     
-     This is logically equivalent (more precisely, "α-equivalent") to the formula :math:`∀ z \; (x ≤ z)`.  
-     
+
+     This is logically equivalent (more precisely, "α-equivalent") to the formula :math:`∀ z \; (x ≤ z)`.
+
      On the other hand, the formula :math:`\forall y (w \le y)` says that :math:`w` is less than or equal to every natural number. This is an entirely different statement: it says something about :math:`w`, rather than :math:`x`. So renaming a *free* variable changes the meaning of a formula.
 
    function extensionality
-     the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`; such functions are sometimes called "Leibniz equal."
- 
+     the principle that takes two functions :math:`f : X → Y` and :math:`g : X → Y` to be equal just in case :math:`f(x) = g(x)` holds for all :math:`x : X`; such functions are sometimes called "𝐿eibniz equal."
+
    functional programming
      See: https://en.wikipedia.org/wiki/Functional_programming
 
    implication elimination
-     See, e.g., the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `Logic and Proof`_ book.
+     See, e.g., the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `𝐿ogic and Proof`_ book.
 
    implicit arguments
-     See: sections `Implicit arguments`_ and `More on implicit arguments`_ of `TPL`_.
+     See: sections `Implicit arguments`_ and `More on implicit arguments`_ of `TP𝐿`_.
 
    impredicative
      A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
 
-   impredicative
-     A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
- 
    inductive set
      A subset :math:`I` of a :term:`preorder` :math:`X` is called **inductive** if :math:`⋁_X D ∈ I` for every directed subset :math:`D ⊆ X` contained in :math:`I`. That is, if :math:`D ⊆ I`, and if every finite subset of :math:`D` has an upper bound in :math:`D`, then :math:`D` as a least upper bound in :math:`I`.
 
    inductive type
      A type is called **inductive** or **inductively defined** if... (**Todo**: fill in definition)
- 
+
    intensional
      An **intensional** definition of a term specifies necessary and sufficient conditions that the term satisfies. In the case of nouns, this is equivalent to specifying all the properties that an object must have in order to be something to which the term refers.
- 
+
    interactive theorem prover
      See: :term:`proof assistant`
 
-   𝖫
-     The **language** of the signature σ is denoted by 𝖫(σ) (or just 𝖫 if σ is clear from context) and defined to be the set of all :term:`σ-formulas <σ-formula>`.
-     
-   𝖫₀
-     denotes the set all sentences in the language :math:`𝖫`. We call :math:`𝖫_0` the set of ":math:`𝖫`-sentences".
- 
-   𝖫(𝖢)
-     Let 𝖫 be a :term:`language` and C a collection of :term:`new constant symbols <new constant symbol>`. We denote by 𝖫(C) the **expansion** of 𝖫, which is defined to be the (uniquely determined) language of :term:`signature` (𝐂 ∪ C, 𝐅, 𝐑, ρ).
- 
-   𝖫(σ)
-     The **language** of the signature σ is denoted by 𝖫(σ) (or just 𝖫 if σ is clear from context) and defined to be the set of all :term:`σ-formulas <σ-formula>`.
- 
-   𝖫(σ)-structure
-     See: :term:`σ-structure`
- 
+   𝐿
+     see :term:`language`
+
+   𝐿₀
+     denotes the set all sentences in the language 𝐿. We call 𝐿₀ the set of "𝐿-sentences".
+
+   𝐿(𝐶)
+     𝐿et 𝐿 be a :term:`language` and 𝐶 a collection of :term:`new constant symbols <new constant symbol>`. We denote by 𝐿(𝐶) the **expansion** of 𝐿, which is defined to be the (uniquely determined) language of :term:`signature` (𝐂 ∪ 𝐶, 𝐅, 𝐑, ρ).
+
+   𝐿(𝑆)
+     The **language** of the signature 𝑆 is denoted by 𝐿(𝑆) (or just 𝐿 if 𝑆 is clear from context) and defined to be the set of all :term:`𝑆-formulas <𝑆-formula>`.
+
+   𝐿(𝑆)-structure
+     See: :term:`𝑆-structure`
+
+   𝐿-sentence
+     see :term:`sentence` and :term:`𝐿₀`
+
    lambda calculus
-     See: https://en.wikipedia.org/wiki/Lambda_calculus
- 
+     See: https://en.wikipedia.org/wiki/𝐿ambda_calculus
+
+   language
+     The **language** of the :term:`signature` 𝑆, denoted by 𝐿(𝑆) (or just 𝐿 if 𝑆 is clear from context) is the set of all :term:`𝑆-formulae <formula>`.
+
+     Every language 𝐿 comes equipped with a countable supply of variables, and the **cardinality** of the language 𝐿 is ∣𝐿∣ = max {ℵ₀, ∣𝐂 ∪ 𝐅 ∪ 𝐑∣}.
+
    law of the excluded middle
-     This is an axiom of classical logic asserting that for all propositions P either ¬ P or P holds.
-     
+     This is an axiom of classical logic asserting that for all propositions 𝑃 either ¬ 𝑃 or 𝑃 holds.
+
    Lean
      An :term:`extensional`, :term:`impredicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on :term:`CiC`; url: https://leanprover.github.io/.
 
-   language
-     The formal **language** L = L(σ) is the set of all :term:`σ-formulas <formula>`.
-
    Leibniz equal
      See: :term:`function extensionality`
- 
-   literal formula
-     An :math:`L`-**literal formula** (or just **literal** if :math:`L` is clear from context) is an :term:`atomic <atomic formula>` or negated atomic :math:`L`-formula.
 
-     We denote by :math:`𝗅𝗍_L` the set of all :math:`L`-literals; that is, :math:`𝖺𝗍_L ∪ \{¬ φ : φ ∈ 𝖺𝗍_L\}`;
- 
+   literal formula
+     An 𝐿-**literal formula** (or just **literal** if 𝐿 is clear from context) is an :term:`atomic <atomic formula>` or negated atomic 𝐿-formula.
+
+     We denote by :math:`𝗅𝗍_𝐿` the set of all 𝐿-literals; that is, :math:`𝖺𝗍_𝐿 ∪ \{¬ φ : φ ∈ 𝖺𝗍_𝐿\}`;
+
+   logic
+     A **logic** is a :term:`language` (set of formulae) along with an associated set of :term:`inference rules <inference rule>`.
+
    logical consequence
      The **logical consequence** (or **entailment**) relation, denoted by ⊢, is a binary relation on the set of all statements in a language; we write (φ, ψ) ∈ ⊢, or equivalently, φ ⊢ ψ holds, and we say "φ entails ψ" or "ψ is a logical consequence of φ", precisely when the statement ψ can be deduced from the statement φ.
 
@@ -305,75 +369,89 @@ What follows is a list of useful definitions from model theory.
    logically equivalent
      Propositions P and Q are **logically equivalent** provided P implies Q and Q implies P.
 
-   :math:`𝗅𝗍_{𝖫(M)}`
-     is the set of all atomic and negated atomic :math:`𝖫(M)`-formulas.
- 
+   :math:`𝗅𝗍_{𝐿(𝑀)}`
+     is the set of all atomic and negated atomic :math:`𝐿(𝑀)`-formulas.
+
    𝕄 ⊧ φ
      By :math:`𝕄 ⊧ φ` we denote the assertion that φ is :term:`valid` in 𝕄.
- 
+
    metaprogram
      a program whose purpose is to modify the behavior of other programs; :term:`proof tactics <proof tactic>` form an important class of metaprograms.
 
    model
      A **model** of a theory is a :term:`structure` (e.g. an interpretation) that satisfies the :term:`sentences <sentence>` of that theory.
 
+     More precisely, let
+
+     * 𝐿 = the :term:`language` of the :term:`signature` 𝑆,
+     * φ ∈ 𝐿₀, an 𝐿-sentence,
+     * Σ ⊆ 𝐿₀, a collection of 𝐿-sentences,
+     * ℳ = ⟨𝑀, … ⟩ and 𝒩 = ⟨𝑁, … ⟩, 𝑆-structures,
+     * Δ = an arbitrary class of formulas (not necessarily from 𝐿).
+
+     If 𝑀 is not empty and ℳ ⊨ Σ, then ℳ is a **model** of Σ; we also say "ℳ *models* Σ."
+
+     𝐿et Mod(𝐿,Σ) denote the class of 𝑆-structures that model Σ. Then Mod(𝑆,∅) denotes the class of all nonempty 𝑆-structures.
+
    model theory
-     The study of classes of mathematical structures (e.g. groups, fields, graphs, universes of set theory) from the perspective of mathematical logic is called **model theory**. The objects of study are models of :term:`theories <theory>` in a formal :term:`language`. A set of :term:`sentences <sentence>` in a formal language is one of the components that form a theory. 
+     The study of classes of mathematical structures (e.g. groups, fields, graphs, universes of set theory) from the perspective of mathematical logic is called **model theory**. The objects of study are models of :term:`theories <theory>` in a formal :term:`language`. A set of :term:`sentences <sentence>` in a formal language is one of the components that form a theory.
 
      Model theory examines semantical elements (meaning and truth) by means of syntactical elements (formulas and proofs) of a language. Model theory, like proof theory, is an interdisciplinary area that intersects with mathematics, philosophy, and computing science.
- 
+
    modus ponens
      See: :term:`implication elimination`
 
    negative formula
      A negated :term:`positive formula` is called a **negative formula**. The class of all such formulas is denoted by :math:`\boldsymbol{-}`.
- 
+
    new constant symbol
-     Let 𝖫 be a :term:`language`.  A **new constant symbol** (or **new constant**) for 𝖫 is a symbol not already present in the alphabet of 𝖫.
- 
+     𝐿et 𝐿 be a :term:`language`.  A **new constant symbol** (or **new constant**) for 𝐿 is a symbol not already present in the alphabet of 𝐿.
+
    normal form
-     In :term:`dependent type theory`, every term has a computational behavior and may be *reduced* using certain reduction rules (e.g., the α, β, η rules).  The form beyond which a term :math:`t` cannot be reduced, if such a form exists, is called the **normal form** of :math:`t`. 
-  
+     In :term:`dependent type theory`, every term has a computational behavior and may be *reduced* using certain reduction rules (e.g., the α, β, η rules).  The form beyond which a term :math:`t` cannot be reduced, if such a form exists, is called the **normal form** of :math:`t`.
+
      In a :term:`rewriting` system, a term is said to be in **normal form** if it does not admit any further rewrites.
 
      See also: https://ncatlab.org/nlab/show/normal+form
 
-   NuPRL
-     An :term:`extensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin-Löf type theory; url: http://www.nuprl.org/
+   Nuprl
+     `Nuprl <http://www.nuprl.org/>`_ is an :term:`extensional`, :term:`predicative` :term:`ITP` supporting :term:`dependent types <dependent type>` and based on Martin 𝐿of type theory.  It is described on `its wikipedia page <https://en.wikipedia.org/wiki/Nuprl>`_ as follows:
+
+       "Nuprl is a proof development system, providing computer-mediated analysis and proofs of formal mathematical statements, and tools for software verification and optimization... Nuprl functions as an automated theorem proving system and can also be used to provide proof assistance."
 
    Pi type
-     The **Pi type** :math:`Π(x:A),B x`, also known as a **dependent function type**, is a dependent type that generalizes the type :math:`A → B`; it is a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x`.
-     
+     The **Pi type** Π(𝑥 : 𝐴), 𝐵 𝑥, also known as a **dependent function type**, is a dependent type that generalizes the type :math:`A → B`; it is a :term:`dependent type` because the codomain :math:`B x` depends on the value :math:`x`.
+
    polymorphic type
      See: https://ncatlab.org/nlab/show/polymorphism
 
    positive boolean combination
-     Let Σ be a set of :term:`formulas <formula>`. A **positive boolean combination** of formulas from Σ is obtained by connecting formulas from Σ with only ∧ and ∨. 
- 
+     𝐿et Σ be a set of :term:`formulas <formula>`. A **positive boolean combination** of formulas from Σ is obtained by connecting formulas from Σ with only ∧ and ∨.
+
    positive formula
-     A formal obtained from :term:`atomic formulas <atomic formula>` using only ∧, ∨, ∃, ∀ is called a **positive formula**.  The class of all positive formulas (of all possible languages) is denoted by :math:`\boldsymbol{+}`.
- 
+     A formal obtained from :term:`atomic formulas <atomic formula>` using only ∧, ∨, ∃, ∀ is called a **positive formula**.  The class of all positive formulas (of all possible languages) is denoted by :math:`\boldsymbol +`.
+
    power
-     The **power** (or **cardinality**) of an L-:term:`theory` :math:`T` is denoted by :math:`|T|` and defined to be the cardinality of the language L.
+     The **power** (or **cardinality**) of an 𝐿-:term:`theory` :math:`T` is denoted by :math:`|T|` and defined to be the cardinality of the language 𝐿.
 
    pp-construction
-     Let (𝔸, 𝔹) and :math:`(𝔸', 𝔹') = ((A', R_0, \dots, R_{n-1}), (B', S_0, \dots, S_{n-1}))`  be :term:`PCSP templates <PCSP template>`. We say that (𝔸, 𝔹) **pp-constructs** (𝔸', 𝔹') if there is a sequence
-     
+     𝐿et (𝔸, 𝔹) and :math:`(𝔸', 𝔹') = ((A', R_0, \dots, R_{n-1}), (B', S_0, \dots, S_{n-1}))`  be :term:`PCSP templates <PCSP template>`. We say that (𝔸, 𝔹) **pp-constructs** (𝔸', 𝔹') if there is a sequence
+
      .. math:: (𝔸, 𝔹)  = (𝔸_0, 𝔹_0), (𝔸_1, 𝔹_1), \dots, (𝔸_n, 𝔹_n) = (𝔸', 𝔹'),
- 
+
      of PCSP templates such that each :math:`(𝔸_{i+1}, 𝔹_{i+1})` is a :term:`pp-power` or a :term:`homomorphic relaxation` of :math:`(𝔸_i, 𝔹_i)`.
- 
+
    pp-definable
-     Let (𝔸, 𝔹) and :math:`(𝔸', 𝔹') = ((A', R_0, \dots, R_{n-1}), (B', S_0, \dots, S_{n-1}))`  be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is **pp-definable** from  (𝔸, 𝔹) if, for each :math:`0≤ i < n`, there exists a :term:`pp-formula` φ over 𝔸 such that φ defines :math:`R_i` and the formula, obtained by replacing each occurrence of a relation of 𝔸 by the corresponding relation in 𝔹, defines :math:`S_i`. 
- 
-   pp-power
-     We say that (𝔸', 𝔹') is an :math:`n`-th **pp-power** of (𝔸, 𝔹) if :math:`A' = A^n`, :math:`B' = B^n` and (𝔸', 𝔹') is :term:`pp-definable` from (𝔸, 𝔹) (where we view :math:`k`-ary relations on 𝔸' and 𝔹' as :math:`kn`-ary relations on :math:`A` and :math:`B`, respectively).
- 
-   primitive formula
-     A **primitive formula** is a :term:`formula` of the form :math:`∃ x₀, \dots, x₁ \ φ`, where φ is a conjunction of :term:`literals <literal formula>`. (The set :math:`\{x₀,\dots ,x₁\}` may be empty.)
+     𝐿et (𝔸, 𝔹) and :math:`(𝔸', 𝔹') = ((A', R_0, \dots, R_{n-1}), (B', S_0, \dots, S_{n-1}))`  be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is **pp-definable** from  (𝔸, 𝔹) if, for each :math:`0≤ i < n`, there exists a :term:`pp-formula` φ over 𝔸 such that φ defines :math:`R_i` and the formula, obtained by replacing each occurrence of a relation of 𝔸 by the corresponding relation in 𝔹, defines :math:`S_i`.
 
    pp-formula
      A **primitive positive formula** (or **pp-formula**) is a :term:`primitive formula` :math:`∃ x₀, \dots, x₁ \ φ` such that no negated atomic formulas occur in φ.
+
+   pp-power
+     We say that (𝔸', 𝔹') is an :math:`n`-th **pp-power** of (𝔸, 𝔹) if :math:`A' = A^n`, :math:`B' = B^n` and (𝔸', 𝔹') is :term:`pp-definable` from (𝔸, 𝔹) (where we view :math:`k`-ary relations on 𝔸' and 𝔹' as :math:`kn`-ary relations on :math:`A` and :math:`B`, respectively).
+
+   primitive formula
+     A **primitive formula** is a :term:`formula` of the form :math:`∃ x₀, \dots, x₁ \ φ`, where φ is a conjunction of :term:`literals <literal formula>`. (The set :math:`\{x₀,\dots ,x₁\}` may be empty.)
 
    pp-sentence
      A **pp-sentence** is a :term:`pp-formula` that contains no :term:`free variables <free variable>`.
@@ -381,12 +459,21 @@ What follows is a list of useful definitions from model theory.
    predicative
      The opposite of :term:`impredicative`, *predicative* refers to building stratified (or ramified) theories where quantification over lower levels results in variables of some new type, distinguished from the lower types that the variable ranges over.
 
+   primitive formula
+     A **primitive formula** is a :term:`formula` of the form
+
+     .. math:: ∃ x₀, …, x₁ \ φ,
+
+     where φ is a conjunction of :term:`literals <literal formula>`. (The set {𝑥₀, …, 𝑥₁} may be empty.)
+
+     Here's an equivalent definition with slightly more explicit notation, which might make the definition clearer: a formula is called **primitive** if it has the form :math:`∃ 𝐲 ⋀_{i < n} α_i(𝐱, 𝐲)`, where each αᵢ(𝐱, 𝐲) is an atomic or negated :term:`atomic formula`.
+
    proof assistant
      A **proof assistant**, or interactive theorem prover (ITP), is specialized software that aids the user in the task of formalizing and proving theorems in an interactive (as opposed to automated) way. Although some proof assistants have features (such as :term:`proof tactics <proof tactic>`) which may provide some automation and proof-search capabilities, proof assitants are distinguished from :term:`automated theorem provers <automated theorem prover>` by the fact that they primarily rely on substantial interaction with the user.
-     
-     Some examples of popular proof assistants are :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`.
 
-   proof tactic    
+     Some examples of popular proof assistants are :term:`Agda`, :term:`Coq`, :term:`𝐿ean`, and :term:`NuPrl`.
+
+   proof tactic
      an automated procedure for constructing and manipulating proof terms.
 
    proof-irrelevant
@@ -397,41 +484,57 @@ What follows is a list of useful definitions from model theory.
 
    proofs-as-programs
      In :term:`type theory`, constructing a proof of a proposition ``P`` is equivalent to constructing an inhabitant of the type to which ``P`` corresponds (under the :term:`propositions-as-types` correspondence). The construction of such a proof ``p: P`` is viewed as a program that computes ``p`` as output.
-     
+
      See also: https://ncatlab.org/nlab/show/proofs+as+programs and :term:`Curry-Howard correspondence` and :term:`propositions-as-types`
 
    proposition extensionality
      This axiom asserts that when two propositions imply one another, they are :term:`definitionally equal`. This is consistent with set-theoretic interpretations in which an element ``a:Prop`` is either empty or the singleton set ``{*}``, for some distinguished element ``*``. The axiom has the effect that equivalent propositions can be substituted for one another in every context.
-     
+
    propositions-as-types
      In :term:`type theory`, the propositions-as-types correspondence says that propositions and types are essentially the same. A proposition, when viewed as a type, is identified with the collection (or type) of all its proofs, and a type is identified with the proposition that there exists something of that type.
-     
+
      See also: https://ncatlab.org/nlab/show/propositions+as+types and :term:`Curry-Howard correspondence` and :term:`proofs-as-programs`
 
    pseudoelementary class
      A **pseudoelementary class** is a class of structures derived from an :term:`axiomatizable` class by omitting some of its sorts and relations.
-      
+
      This is the mathematical logic analog of the notion in category theory of (the codomain of) a forgetful functor. Axiomatizable classes are (vacuously) pseudoelementary but the converse is not always true; nevertheless pseudoelementary classes share some of the properties of axiomatizable classes such as being closed under :term:`ultraproduct`.
- 
+
    quantifier-free formula
      A **quantifier-free formula** is a :term:`formula` that contains no quantifiers; naturally, we assume ⊤ and ⟂ are quantifier-free formulas.
- 
+
      The class of all quantilier-free formulas (of arbitrary signature) is denoted by 𝐪𝐟.
 
    quasiidentity
-     A **quasiidentity** in the language L is an implication of the form s₁ ≈ t₁ ∧ ... ∧ sₙ ≈ tₙ ⟶  s ≈ t, where s, s₁, ..., sₙ, t, t₁, ..., tₙ are terms built up from variables using the operation symbols of L.
- 
+     A **quasiidentity** in the language 𝐿 is an implication of the form s₁ ≈ t₁ ∧ ... ∧ sₙ ≈ tₙ ⟶  s ≈ t, where s, s₁, ..., sₙ, t, t₁, ..., tₙ are terms built up from variables using the operation symbols of 𝐿.
+
    record
      See: :term:`structure`
 
+   recursive language
+     A `formal language <https://en.wikipedia.org/wiki/Formal_language>`_ is called **recursive** if it is a :term:`recursive subset` of the set of all possible finite sequences over the alphabet of the language. Equivalently, a formal language is recursive if there exists a total :term:`Turing machine` that is total (i.e., always halts) and that, when given a finite sequence of symbols as input, accepts it if it belongs to the language and rejects it otherwise. Recursive languages are also called decidable.
+
+     Source: https://en.wikipedia.org/wiki/Recursive_language
+
+   recursive subset
+     Given a set Ω, a subset 𝑆 ⊆ Ω is called **recursive** if there exists an algorithm that takes as input an element ω ∈ Ω and correctly decides after a finite number of steps whether or not ω belongs to 𝑆.
+
+   recursively enumerable
+     Given a set Ω, a subset 𝑆 ⊆ Ω is called **recursively enumerable** if there exists an algorithm that enumerates all the elements of 𝑆. Equivalently, there exists an algorithm takes input ω ∈ Ω and:
+
+      if ω ∈ 𝑆, answers "yes" (after a finite amount of time);
+      if ω ∉ 𝑆, may not terminate.
+
+     Heuristically, there exists an algorithm that gives no "false positives", i.e., an algorithm that never makes a false claim that ω ∈ 𝑆.
+
    recursor
      Each :term:`inductively defined type <inductive type>` ``T`` is accompanied by an elimination principle known as a **recursor**. It is what makes the type "inductive" by allowing us to define a function on ``T`` by assigning values for each of ``T``'s constructors.
-     
+
    relational structure
      A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
- 
+
      See also: the definition of a :term:`structure`.
- 
+
    rewriting
      See: https://ncatlab.org/nlab/show/rewriting
 
@@ -439,35 +542,35 @@ What follows is a list of useful definitions from model theory.
      A :term:`formula` φ is called a **sentence** (or **closed formula**) if it contains no :term:`free variables <free variable>`; that is, all variables appearing in φ are :term:`bound <bound variable>`.
 
    :math:`Σ^⊢`
-     denotes the set {φ ∈ 𝖫₀ : Σ ⊢ φ} of :term:`logical consequences <logical consequence>` of Σ.
- 
-   :math:`σ`
-     In :term:`model theory`, a **signature** σ = (𝐂, 𝐅, 𝐑, ρ) consists of three (possibly empty) sets 𝐂, 𝐅, and 𝐑---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function ρ: 𝐂 + 𝐅 + 𝐑 → N that assigns an :term:`arity` to each symbol. Often (but not always) N = ℕ. 
- 
+     denotes the set {φ ∈ 𝐿₀ : Σ ⊢ φ} of :term:`logical consequences <logical consequence>` of Σ.
+
    Sigma type
      The **Sigma type** :math:`Σ(x:A),B x`, also known as the **dependent pair type**, generalizes the Cartesian product :math:`A × B` by allowing the type :math:`B x` of the second argument of the ordered pair to depend on the value :math:`x` of the first.
-      
-   σ-formula
+
+   signature
+     In :term:`model theory`, a **signature** 𝑆 = (𝐂, 𝐅, 𝐑, ρ) consists of three (possibly empty) sets 𝐂, 𝐅, and 𝐑---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function ρ: 𝐂 + 𝐅 + 𝐑 → 𝑁 that assigns an :term:`arity` to each symbol. Often (but not always) 𝑁 = ℕ.
+
+   𝑆-formula
      See: :term:`formula`.
- 
-   σ-structure
+
+   𝑆-structure
      See: :term:`structure`.
 
    structure
      A **structure** in the :term:`signature` σ = (𝐂, 𝐅, 𝐑, ρ) consists of the pair 𝔸:=(A, {𝐂^𝔸, 𝐅^𝔸, 𝐑^𝔸}), where A is a set, 𝐂^𝔸 is a collection of named constants in A (one for each constant symbol in 𝐂), 𝐅^𝔸 is the collection of basic operations of 𝔸 (one for each operation symbol in 𝐅), and 𝐑^𝔸 is the collection of relations on 𝔸 (one for each relation symbol in 𝐑).
-     
+
      In programming languages, a non-recursive inductive type that contains only one constructor is called a **structure**. In mathematics, a structure may refer to an :term:`algebraic structure` or a :term:`relational structure`.
 
    substitution
      The notation f ∘ 𝐚 is shorthand for :math:`(f(a_0), f(a_1), \dots)` and :math:`φ_{𝐱}(𝐚)` is shorthand for :math:`[a_0/x_0, a_1/x_1, \dots]φ(x_0, x_1, \dots)`, the sentence obtained from φ upon substituting :math:`a_i` for :math:`x_i`, for all :math:`i`.
- 
+
    theory
-     An :math:`L`-**theory** (or **theory** when the context makes :math:`𝖫` clear) is a :term:`consistent` and :term:`deductively closed <deductive closure>` set of :math:`L`-:term:`sentences <sentence>`.
+     An :math:`𝐿`-**theory** (or **theory** when the context makes :math:`𝐿` clear) is a :term:`consistent` and :term:`deductively closed <deductive closure>` set of :math:`𝐿`-:term:`sentences <sentence>`.
 
    Th ℳ
-     The collection {φ ∈ L₀: ℳ ⊧ φ} of all L-sentences that are true in ℳ is denoted by Th ℳ. This set is sometimes denoted by :math:`\mathrm{Th}_{L_0}`.
+     The collection {φ ∈ 𝐿₀: ℳ ⊧ φ} of all 𝐿-sentences that are true in ℳ is denoted by Th ℳ. This set is sometimes denoted by :math:`\mathrm{Th}_{𝐿_0}`.
 
-     If Δ is an arbibtrary class of formulas, then Th_Δ ℳ := {φ ∈ L₀: φ ∈ Δ,\ ℳ ⊧ φ}, the set of all L-sentences in Δ that are true in ℳ.
+     If Δ is an arbibtrary class of formulas, then Th_Δ ℳ := {φ ∈ 𝐿₀: φ ∈ Δ,\ ℳ ⊧ φ}, the set of all 𝐿-sentences in Δ that are true in ℳ.
 
    true quantified Boolean formula
      The language **TQBF** is a formal language consisting of the **true quantified Boolean formulas**. A (fully) quantified Boolean formula is a formula in quantified propositional logic where every variable is bound using either existential or universal quantifiers at the beginning of the sentence. Such a formula is equivalent to either true or false. If such a formula evaluates to true, then that formula is in the language TQBF.
@@ -480,71 +583,55 @@ What follows is a list of useful definitions from model theory.
    type theory
      **Type theory** internalizes the interpretation of intuitionistic logic proposed by Brouwer, Heyting, and Kolmogorov---the so-called BHK interpretation. The types in type theory play a similar role to that of sets in set theory but *functions definable in type theory are always computable*.
 
-     Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`. 
-      
+     Intuitionistic **type theory** extends the :term:`Curry-Howard correspondence` to predicate logic by introducing :term:`dependent types <dependent type>`.
+
      See also: https://ncatlab.org/nlab/show/type+theory
 
    universal part
      We denote by :math:`\boldsymbol{∀}` the class of formulas in which ∃ does not appear; :math:`\mathrm T_{\boldsymbol ∀} = (\mathrm T ∩ \boldsymbol ∀)^⊢` is the **universal part** of T.
 
    universe polymorphism
-     We give an example to demonstrate this concept, using the syntax of the Lean_ proof assistant.  (Of course, we could have used Agda_ or one of the many other languages that support polymorphism.)
-
-     Given a type ``α``, no matter to which type universe ``α`` belongs, we can form the type ``list α`` of lists of elements of type ``α``, and this type will have the same type universe as ``α``. In other terms, 
-     
-       ``α: Type u`` if and only if ``list α: Type u``.
-       
-     The Lean code for this example follows.
-
-     .. code-block:: lean
-
-       universes u v
-       variables (α: Type u) (β: Type v)
-       #check list      -- Type u_1 → Type u_1
-       #check list α    -- Type u
-       #check list β    -- Type v
-
-     The variable ``u_1`` ranges over type levels.  As the output of the ``#check`` shows, ``list α`` has ``Type u`` because ``α`` has ``Type u``. Similarly for ``list β``. 
+     We use an example to demonstrate this concept. Given a type ``α``, no matter to which type universe ``α`` belongs, we can form the type ``list α`` of lists of elements of type ``α``, and this type will have the same type universe as ``α``. In other terms, ``α: Type u`` if and only if ``list α: Type u``.
 
    valid
-     We say that φ is **valid** in 𝕄, and we write 𝕄 ⊧ φ, if for every tuple 𝐚 from 𝕄 (that is at least as long as 𝐱) the 𝖫-sentence φ(𝐚) is **true** in 𝕄.
+     We say that φ is **valid** in 𝕄, and we write 𝕄 ⊧ φ, if for every tuple 𝐚 from 𝕄 (that is at least as long as 𝐱) the 𝐿-sentence φ(𝐚) is **true** in 𝕄.
 
 -----------------------
 
 Glossary: structures, categories, varieties
 -------------------------------------------
 
-.. glossary:: 
+.. glossary::
 
     abelian group
       A :term:`group` is called **abelian** just in case its binary operation is commutative.
- 
+
     absorbing
-      Let 𝐀 be a finite algebra in a :term:`Taylor variety` 𝒱 and let t ∈ Clo(𝐀) be a :math:`k`-ary term operation of 𝐀.
-      
+      𝐿et 𝐀 be a finite algebra in a :term:`Taylor variety` 𝒱 and let t ∈ Clo(𝐀) be a :math:`k`-ary term operation of 𝐀.
+
       A subalgebra 𝐁 ≤ 𝐀 is said to be **absorbing** in 𝐀 with respect to the **absorbing term** :math:`t` if for all :math:`1 ≤ j ≤ k` and for all
-      
+
       .. math:: (b_1, \dots, b_{j-1}, a, b_{j+1}, \dots, b_k) ∈ B^{j-1} × A × B^{k-j},
- 
+
       we have
- 
+
       .. math:: t^𝐀 (b_1, \dots, b_{j-1}, a, b_{j+1}, \dots, b_k) ∈ B.
- 
+
       In other terms, :math:`t^𝐀[B^{j-1} × A × B^{k-j}] ⊆ B` for all :math:`1 ≤ j ≤ k`, where :math:`t^𝐀[D] := \{t^𝐀(x) : x ∈ D\}`.
- 
+
       We denote the fact that 𝐁 is an absorbing subalgebra of 𝐀 with respect to some term by writing :math:`𝐁 \triangleleft 𝐀`. If we wish to be explicit about the term, we write :math:`𝐁 \triangleleft_t 𝐀`.
- 
+
     absorption-free
       An algebra is said to be **absorption-free** if it has no proper :term:`absorbing` subalgebras.
- 
+
     abstract category
       An **abstract category** is one whose objects are not sets or whose :term:`morphisms <morphism>` are not functions defined on sets.
- 
+
     additive
-      Let :math:`𝔐 = \{M_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  An :math:`R`-valued function :math:`s: 𝔐 → R` defined on the collection :math:`𝔐` is called **additive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{M_γ : γ ∈ Γ\}` is a subcollection of *pairwise disjoint* subsets in :math:`𝔐`, we have
- 
+      𝐿et :math:`𝔐 = \{M_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  An :math:`R`-valued function :math:`s: 𝔐 → R` defined on the collection :math:`𝔐` is called **additive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{M_γ : γ ∈ Γ\}` is a subcollection of *pairwise disjoint* subsets in :math:`𝔐`, we have
+
       .. math:: s \bigl( ⋃_{γ∈Γ}  M_γ \bigr) = ∑_{γ∈ Γ} s (M_γ).
-      
+
     adjoint
       Suppose that :math:`X` and :math:`Y` are :term:`normed linear spaces <normed linear space>` and :math:`T ∈ 𝔅(X, Y)` (a :term:`bounded linear transformation`). The **adjoint** (or **transpose**) of :math:`T` is denoted by :math:`T^†: Y^∗ → X^∗` and defined for each :math:`f∈ Y^∗` by :math:`T^† f = f T`.
       
@@ -554,10 +641,10 @@ Glossary: structures, categories, varieties
       See :term:`structure`.
  
     algebra of functions
-      Let :math:`F` be a :term:`field` and let :math:`F^X` denote the collection of all functions from :math:`X` to :math:`F`.  A subset :math:`𝔄 ⊆ F^X` of :math:`F`-valued functions on :math:`X` is called an **algebra** if it is closed under point-wise product.  That is, for all :math:`f, g ∈ 𝔄`, the function :math:`h = f ⋅ g` defined by :math:`h: x ↦ f(x) ⋅ g(x)` also belongs to :math:`𝔄`.
+      𝐿et :math:`F` be a :term:`field` and let :math:`F^X` denote the collection of all functions from :math:`X` to :math:`F`.  A subset :math:`𝔄 ⊆ F^X` of :math:`F`-valued functions on :math:`X` is called an **algebra** if it is closed under point-wise product.  That is, for all :math:`f, g ∈ 𝔄`, the function :math:`h = f ⋅ g` defined by :math:`h: x ↦ f(x) ⋅ g(x)` also belongs to :math:`𝔄`.
  
     algebra of sets
-      Let :math:`X` be a nonempty set. An **algebra of sets** on :math:`X` is a nonempty collection :math:`𝔄` of subsets of :math:`X` that is :term:`closed <closed set>` under finite unions and complements. (Some authors call this a "field of sets.")
+      𝐿et :math:`X` be a nonempty set. An **algebra of sets** on :math:`X` is a nonempty collection :math:`𝔄` of subsets of :math:`X` that is :term:`closed <closed set>` under finite unions and complements. (Some authors call this a "field of sets.")
  
     algebraic lattice
       a :term:`lattice` generated by its :term:`compact elements <compact element>`. 
@@ -589,7 +676,7 @@ Glossary: structures, categories, varieties
       An example of an associative algebra is the space of :term:`linear transformations <linear transformation>` (:term:`endomorphisms <endomorphism>`) of a vector space into itself.
  
     bilinear algebra
-      Let :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra** over :math:`𝔽` provided :math:`⟨A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a :term:`vector space` over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
+      𝐿et :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra** over :math:`𝔽` provided :math:`⟨A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a :term:`vector space` over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
  
       .. math::   (a + b) ⋅ c &= (a ⋅ c) + (b ⋅ c)\\
                   c ⋅ (a + b) &= (c⋅ a) + (c⋅ b)\\
@@ -601,7 +688,7 @@ Glossary: structures, categories, varieties
       An operation :math:`f` on a set :math:`A` is called **binary** if the arity of :math:`f` is 2.  That is, :math:`f: A × A → A` (or, in curried form, :math:`f: A → A → A`).
  
     Boolean algebra
-      A **Boolean algebra** is a :term:`lattice` L equipped with a unary operation ¬: L → L satisfying
+      A **Boolean algebra** is a :term:`lattice` 𝐿 equipped with a unary operation ¬: 𝐿 → 𝐿 satisfying
 
       .. math:: a ∧ b ≤ c \quad ⟺ \quad a ≤ ¬b ∨ c
 
@@ -617,7 +704,7 @@ Glossary: structures, categories, varieties
       has categories as objects and :term:`functors <functor>` as :term:`morphisms <morphism>`.
  
     chain
-      Let :math:`⟨ X, ≤ ⟩` be a :term:`preordered <preorder>` set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
+      𝐿et :math:`⟨ X, ≤ ⟩` be a :term:`preordered <preorder>` set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
  
     characteristic function
       The **characteristic function** :math:`χ_A` of a subset :math:`A ⊆ X` is the function :math:`χ_A: X → \{0,1\}` that is 1 if and only if :math:`x ∈ A`; that is, :math:`χ_A(x) = 0` if :math:`x ∉ A` and :math:`χ_A(x) = 1` if :math:`x ∈ A`.
@@ -631,7 +718,7 @@ Glossary: structures, categories, varieties
     closed set
       If :math:`𝖢` is a :term:`closure operator` on :math:`X`, then a subset :math:`A ⊆ X` is called **closed** with respect to :math:`𝖢` (or :math:`𝖢`-**closed**) provided :math:`𝖢(A) ⊆ A` (equivalently, :math:`𝖢(A) = A`).
  
-      Here's an important example. Let :math:`σ = (F, ρ)` be a :term:`signature` and :math:`X` a set. Define for each :math:`A ⊆ X` the set :math:`𝖢(A) = \{f\, b ∣ f ∈ F, \, b: ρ f → A\}`.  Then :math:`𝖢` is a closure operator on :math:`X` and a subset :math:`A ⊆ X` is said to be "closed under the operations in :math:`F`" provided :math:`A` is :math:`𝖢`-closed.
+      Here's an important example. 𝐿et :math:`σ = (F, ρ)` be a :term:`signature` and :math:`X` a set. Define for each :math:`A ⊆ X` the set :math:`𝖢(A) = \{f\, b ∣ f ∈ F, \, b: ρ f → A\}`.  Then :math:`𝖢` is a closure operator on :math:`X` and a subset :math:`A ⊆ X` is said to be "closed under the operations in :math:`F`" provided :math:`A` is :math:`𝖢`-closed.
  
     closed term
       A :term:`term` is said to be **closed** (or **constant**) if it contains no :term:`free variables <free variable>`. In particular, every constant symbol in the set 𝐂 of a :term:`signature` is a closed term.
@@ -644,7 +731,7 @@ Glossary: structures, categories, varieties
        Here is an alternative, equivalent definition. The **closure** of :math:`E` is the intersection of all :term:`closed <closed set>` sets containing :math:`E`.
  
     closure operator
-      Let :math:`X` be a set and let :math:`𝒫(X)` denote the collection of all subsets of :math:`X`. A **closure operator** on :math:`X` is a set function :math:`𝖢: 𝒫 (X) → 𝒫 (X)` satisfying the following conditions, for all :math:`A, B ∈ 𝒫 (X)`, 
+      𝐿et :math:`X` be a set and let :math:`𝒫(X)` denote the collection of all subsets of :math:`X`. A **closure operator** on :math:`X` is a set function :math:`𝖢: 𝒫 (X) → 𝒫 (X)` satisfying the following conditions, for all :math:`A, B ∈ 𝒫 (X)`, 
  
       #. :math:`A ⊆ 𝖢(A)`,
       #. :math:`𝖢 ∘ 𝖢 = 𝖢`,
@@ -666,7 +753,7 @@ Glossary: structures, categories, varieties
       See :term:`abelian group`.
  
     compact element
-      an element :math:`x` of a :term:`lattice` :math:`L` is called **compact** provided for all :math:`Y ⊆ L`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
+      an element :math:`x` of a :term:`lattice` :math:`𝐿` is called **compact** provided for all :math:`Y ⊆ 𝐿`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
  
     complete
       A :term:`poset` in which all meets exist is called **complete**.
@@ -717,12 +804,12 @@ Glossary: structures, categories, varieties
       Given two objects :math:`A` and :math:`B` a **coproduct** (or **sum**) of :math:`A` and :math:`B` is denoted by :math:`A+B` and defined to be an object with morphisms :math:`ι_1 : A → A + B` and :math:`ι_2 : B → A + B` such that for every object :math:`X` and all morphisms :math:`u : A → Y` and :math:`v : B → Y` there exists a unique morphism :math:`[u,v] : A+B → Y` such that :math:`[u,v] ∘ ι_1 = u` and :math:`[u,v] ∘ ι_2 = v`.
  
     countably additive
-      Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably additive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of *pairwise disjoint* subsets in :math:`𝒮`, we have
+      𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably additive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of *pairwise disjoint* subsets in :math:`𝒮`, we have
  
      .. math:: s \bigl( ⋃_{γ∈Γ}  A_γ \bigr) = ∑_{γ∈ Γ} s (A_γ).
  
     countably subadditive
-      Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably subadditive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
+      𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably subadditive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
  
     covariant powerset functor
       The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
@@ -751,7 +838,7 @@ Glossary: structures, categories, varieties
       If :math:`F` is :term:`complete`, then :math:`𝔅(X,F)` is complete, hence a :term:`Banach space`.
  
     edge term
-      Let 𝒱 be a variety and k>1, an integer. A (k+1)-ary term t is called a **k-edge term** for 𝒱 if the following k identities hold in 𝒱:
+      𝐿et 𝒱 be a variety and k>1, an integer. A (k+1)-ary term t is called a **k-edge term** for 𝒱 if the following k identities hold in 𝒱:
  
       .. math:: t(y,y,x,x,x,\dots,x) &≈ x\\
                 t(y,x,y,x,x,\dots,x) &≈ x\\
@@ -894,7 +981,7 @@ Glossary: structures, categories, varieties
       See :term:`point`.
  
     graph morphism
-      Let :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
+      𝐿et :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
  
     group
       A **group** is a :term:`monoid` expanded with a unary operation :math:`^{-1}`, called *multiplicative inverse*, which satisfies :math:`∀ a ∈ A`, :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`.
@@ -908,7 +995,7 @@ Glossary: structures, categories, varieties
       If :math:`α` is a type, then we sometimes refer to the **height** of :math:`α`, by which we mean the *universe level* of :math:`α`
       
     Heyting algebra
-      A **Heyting algebra** :math:`⟨L, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ L, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  Logically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
+      A **Heyting algebra** :math:`⟨𝐿, ∧, ∨, ⊥, ⊤, →⟩` is a bounded :term:`lattice` with least and greatest elements ⊥ and ⊤, and a binary "implication" → that satisfies :math:`∀ a, b, c ∈ 𝐿, \ (c ∧ a ≤ b \ ⟺ \ c ≤ a → b)`.  𝐿ogically, this says a → b is the weakest proposition for which the modus ponens rule, :math:`\{a → b, a\} ⊢ b`, is sound. The class of Heyting algebras forms a variety that is finitely axiomatizable.
    
     Heyting algebra homomorphism
       a :term:`lattice homomorphism` that also preserves Heyting implications; that is, if :math:`x, x' ∈ X`, then :math:`f(x → x') = f(x) → f(x')`.
@@ -942,7 +1029,7 @@ Glossary: structures, categories, varieties
       The :term:`free algebra` in a :term:`variety` is a **free object** in a category whose objects are :term:`algebraic structures <algebraic structure>`.
      
     inner product 
-      Let :math:`X` be a :term:`vector space` over the field :math:`F`.  An **inner product** on :math:`X` is a function :math:`⟨·,·⟩: X × X → F` satisfying the following conditions:
+      𝐿et :math:`X` be a :term:`vector space` over the field :math:`F`.  An **inner product** on :math:`X` is a function :math:`⟨·,·⟩: X × X → F` satisfying the following conditions:
  
       #. :math:`⟨⋅,⋅⟩` is linear in the first variable; i.e., :math:`⟨α x + βy, z⟩ = α⟨x,z⟩ + β⟨y,z⟩` for all :math:`α, β ∈ F` and :math:`x, y, z ∈ X`;
       #. :math:`⟨⋅,⋅⟩` is symmetric; i.e., :math:`⟨x, y⟩ = ⟨y, x⟩` for all :math:`x, y ∈ X`; and
@@ -952,7 +1039,7 @@ Glossary: structures, categories, varieties
       An **inner product space** is a vector space equipped with an :term:`inner product`.
  
     interpretation
-      Let 𝒱 and 𝒲 be two varieties of algebraic structures. Suppose the algebras in 𝒱 have signature :math:`σ = (F, ρ)`, while those in 𝒲 have signature :math:`σ' = (F', ρ')`.
+      𝐿et 𝒱 and 𝒲 be two varieties of algebraic structures. Suppose the algebras in 𝒱 have signature :math:`σ = (F, ρ)`, while those in 𝒲 have signature :math:`σ' = (F', ρ')`.
 
       A **strict interpretation** of 𝒱 in 𝒲 is a mapping :math:`D` from the set :math:`F` of operation symbols of 𝒱 to the term algebra :math:`T_{σ'}(X_ω)` of 𝒲 such that
 
@@ -975,11 +1062,11 @@ Glossary: structures, categories, varieties
       See :term:`free monoid`.
  
     language
-      The **language** :math:`L = L(σ)` of the signature σ is the set of all :term:`σ-formulas <formula>`.
+      The **language** :math:`𝐿 = 𝐿(σ)` of the signature σ is the set of all :term:`σ-formulas <formula>`.
  
-      Every language :math:`L` comes equipped with a countable supply of variables.
+      Every language :math:`𝐿` comes equipped with a countable supply of variables.
       
-      If σ =  so the cardinality of :math:`L` is :math:`|L| = \max \{ℵ_0, |𝐂 ∪ 𝐅 ∪ 𝐑|\}`.
+      If σ =  so the cardinality of :math:`𝐿` is :math:`|𝐿| = \max \{ℵ_0, |𝐂 ∪ 𝐅 ∪ 𝐑|\}`.
  
     lattice
       a :term:`poset` whose universe is closed under all *finite* meets and joins is called a lattice.
@@ -1003,7 +1090,7 @@ Glossary: structures, categories, varieties
  
       Here is an easily proved fact that provides equivalent ways to define "linked."
  
-      **Lemma**. Let :math:`R ≤ A_0 × A_1`, let :math:`η_{R_i} = \ker(R ↠ A_i)` denote the kernel of the projection of :math:`R` onto its i-th coordinate, and let :math:`R^{-1} = \{(y,x) ∈ A_1 × A_0 : (x,y) ∈ R\}`. Then the following are equivalent:
+      **𝐿emma**. 𝐿et :math:`R ≤ A_0 × A_1`, let :math:`η_{R_i} = \ker(R ↠ A_i)` denote the kernel of the projection of :math:`R` onto its i-th coordinate, and let :math:`R^{-1} = \{(y,x) ∈ A_1 × A_0 : (x,y) ∈ R\}`. Then the following are equivalent:
         
         #. :math:`R` is linked;
         #. :math:`η_{R_0} ∨ η_{R_1} = 1_R`;
@@ -1043,7 +1130,7 @@ Glossary: structures, categories, varieties
       See: :term:`Maltsev term`
 
     Maltsev product
-      Let 𝒱 and 𝒲 be idempotent varieties. The **Maltsev product** (or **Maltsev  product**) of 𝒱 and 𝒲 is the class
+      𝐿et 𝒱 and 𝒲 be idempotent varieties. The **Maltsev product** (or **Maltsev  product**) of 𝒱 and 𝒲 is the class
  
       .. math:: 𝒱 ∘ 𝒲 = \{𝐀 : ∃ θ ∈ \mathrm{Con} 𝐀, (𝐀/θ ∈ 𝒲 \text{ and } ∀ a ∈ A, a/θ ∈ 𝒱)\}.
  
@@ -1051,7 +1138,7 @@ Glossary: structures, categories, varieties
       
       Freese and McKenzie show in :cite:`Freese:2017` that a number of important properties are preserved under Maltsev product; in particular, they prove,
  
-      **Theorem**. Let 𝒱 and 𝒲 be idempotent varieties. For each of the following properties, P, if both 𝒱 and 𝒲 have P, then so does 𝖧(𝒱 ∘ 𝒲). 
+      **Theorem**. 𝐿et 𝒱 and 𝒲 be idempotent varieties. For each of the following properties, P, if both 𝒱 and 𝒲 have P, then so does 𝖧(𝒱 ∘ 𝒲). 
  
         * P = is idempotent;
         * P = has a :term:`Taylor term`;
@@ -1096,7 +1183,7 @@ Glossary: structures, categories, varieties
       We call 𝐁 a **minimal absorbing subalgebra** of 𝐀, and we write 𝐁 ◁◁ 𝐀, just in case 𝐁 is an absorbing subalgebra of 𝐀 and 𝐁 is minimal (with respect to set inclusion of universes) among the absorbing subalgebras of 𝐀.
  
     module
-      Let :math:`R` be a :term:`ring` with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an :term:`abelian group` :term:`reduct` :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
+      𝐿et :math:`R` be a :term:`ring` with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an :term:`abelian group` :term:`reduct` :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
  
       #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
       #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
@@ -1128,7 +1215,7 @@ Glossary: structures, categories, varieties
       .. math:: f^𝔹 (h\,a_1, \dots, h\,a_{ρ f}) = h f^𝔸(a_1, \dots, a_{ρ f}).
  
     multiplicative inverse
-      Let :math:`𝔸 = ⟨ A, e, ∘, \dots ⟩` be an algebra in a signature with a nullary "identity" operation :math:`e: () → A` and a binary "multiplication" operation :math:`∘: A × A → A`. Then the element :math:`b ∈ A` is a **multiplicative inverse** of :math:`a ∈ A` provided :math:`a ∘ b = e = b ∘ a`.
+      𝐿et :math:`𝔸 = ⟨ A, e, ∘, \dots ⟩` be an algebra in a signature with a nullary "identity" operation :math:`e: () → A` and a binary "multiplication" operation :math:`∘: A × A → A`. Then the element :math:`b ∈ A` is a **multiplicative inverse** of :math:`a ∈ A` provided :math:`a ∘ b = e = b ∘ a`.
  
     natural isomorphism
       An isomorphism in a functor category is referred to as a **natural isomorphism**.
@@ -1146,7 +1233,7 @@ Glossary: structures, categories, varieties
       An operation :math:`f` on a set :math:`A` is called **nullary** if the arity of :math:`f` is 0; that is, :math:`f: () → A`; equialently, :math:`f` takes no arguments, so is simply a (constant) element of :math:`A`.
  
     ω-chain
-      Let :math:`⟨ X, ≤ ⟩` be a preordered set. An ω-**chain** is an enumerable :term:`chain`; that is, a :term:`chain` the elements that can be indexed by the natural numbers.
+      𝐿et :math:`⟨ X, ≤ ⟩` be a preordered set. An ω-**chain** is an enumerable :term:`chain`; that is, a :term:`chain` the elements that can be indexed by the natural numbers.
  
     ω-chain cocomplete
       A :term:`preorder` in which joins of all ω-chains exist is called ω-**chain cocomplete**.
@@ -1190,13 +1277,13 @@ Glossary: structures, categories, varieties
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
  
     pointwise limit
-      Let :math:`f_n: X → [-∞, ∞]` for each :math:`n∈ ℕ`. If the limit :math:`f(x) = \lim_{n→∞} f_n(x)` exist at every :math:`x ∈ X`, then we call :math:`f: X → ℝ` the **pointwise limit** of the sequence :math:`\{f_n\}`. 
+      𝐿et :math:`f_n: X → [-∞, ∞]` for each :math:`n∈ ℕ`. If the limit :math:`f(x) = \lim_{n→∞} f_n(x)` exist at every :math:`x ∈ X`, then we call :math:`f: X → ℝ` the **pointwise limit** of the sequence :math:`\{f_n\}`. 
  
     polymorphic function
       a function that operates in the "same way" independently of the object parameter.
  
     polymorphism
-      Let :math:`𝔸 = ⟨ A, R₁^𝔸, \dots)` and :math:`𝔹 = ⟨ A, R₁^𝔹, \dots)` be relational structures of the same signature. A k-ary (total) function :math:`f: A^k → B` is called a **polymorphism** of (𝔸, 𝔹) if it is :term:`compatible` with every pair :math:`(R_i^𝔸, R_i^𝔹)`, that is, for all tuples :math:`𝐫 ∈ R_i^𝔸`, the tuple :math:`f 𝐫`  is in :math:`R_i^𝔹`.
+      𝐿et :math:`𝔸 = ⟨ A, R₁^𝔸, \dots)` and :math:`𝔹 = ⟨ A, R₁^𝔹, \dots)` be relational structures of the same signature. A k-ary (total) function :math:`f: A^k → B` is called a **polymorphism** of (𝔸, 𝔹) if it is :term:`compatible` with every pair :math:`(R_i^𝔸, R_i^𝔹)`, that is, for all tuples :math:`𝐫 ∈ R_i^𝔸`, the tuple :math:`f 𝐫`  is in :math:`R_i^𝔹`.
  
       We denote the set of all polymorphisms of (𝔸, 𝔹) by Poly(𝔸, 𝔹).
  
@@ -1247,7 +1334,7 @@ Glossary: structures, categories, varieties
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
  
     reduced product
-      Let :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). Let :math:`F` be a :term:`filter` on :math:`I`.
+      𝐿et :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). 𝐿et :math:`F` be a :term:`filter` on :math:`I`.
       
       Define the equivalence relation ~ on the :term:`product` structure :math:`𝐌 := ∏_{i∈ I}𝕄_i` as follows: ∀ 𝐚, 𝐛 ∈ 𝐌, 
  
@@ -1276,7 +1363,7 @@ Glossary: structures, categories, varieties
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
  
     relational structure homomorphism
-      Let :math:`σ = (ℛ, ρ)` be a :term:`signature` for :term:`relational structures <relational structure>`.  Let :math:`𝔸 = ⟨A, ℛ^𝔸⟩` and :math:`𝔹 = ⟨B, ℛ^𝔹⟩` be relational structures in the signature σ. A function :math:`h: A → B` that "respects" or "preserves" the relations in the following sense is called a (relational structure) **homomorphism**: :math:`∀ R ∈ ℛ`, if :math:`(a_0, \dots, a_{n-1}) ∈ R^𝔸`, then :math:`(b_0, \dots, b_{n-1}) ∈ R^𝔹`.
+      𝐿et :math:`σ = (ℛ, ρ)` be a :term:`signature` for :term:`relational structures <relational structure>`.  𝐿et :math:`𝔸 = ⟨A, ℛ^𝔸⟩` and :math:`𝔹 = ⟨B, ℛ^𝔹⟩` be relational structures in the signature σ. A function :math:`h: A → B` that "respects" or "preserves" the relations in the following sense is called a (relational structure) **homomorphism**: :math:`∀ R ∈ ℛ`, if :math:`(a_0, \dots, a_{n-1}) ∈ R^𝔸`, then :math:`(b_0, \dots, b_{n-1}) ∈ R^𝔹`.
  
     respects
       Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
@@ -1332,7 +1419,7 @@ Glossary: structures, categories, varieties
  
       A **semidistributive lattice** is one that is either meet- or join-semidistributive.
  
-      We denote the class of meet-semidistributive lattices by SD∧, but we also use SD∧ as an adjective and write "L is SD∧" to mean "L is meet-semidistributive," i.e., L ∈ SD∧.
+      We denote the class of meet-semidistributive lattices by SD∧, but we also use SD∧ as an adjective and write "𝐿 is SD∧" to mean "𝐿 is meet-semidistributive," i.e., 𝐿 ∈ SD∧.
       
       A variety 𝒱 is called **meet-semidistributive** (or SD∧) if every algebra in 𝒱 has a meet-semidistributive congruence lattice.
       
@@ -1377,7 +1464,7 @@ Glossary: structures, categories, varieties
       If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
  
     subdirect product
-      Let :math:`σ  = (F, ρ)` be an :term:`algebraic signature`, let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebras, one for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}`, and let :math:`𝐀 := ∏_{i:𝐧}𝔸_i` be the product σ-algebra. If :math:`R` is :term:`compatible` with 𝐀 and if the projection of :math:`R` onto each factor is surjective, then :math:`R` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{sd} ∏_{j:𝐤} 𝔸_{σ(j)}`
+      𝐿et :math:`σ  = (F, ρ)` be an :term:`algebraic signature`, let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebras, one for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}`, and let :math:`𝐀 := ∏_{i:𝐧}𝔸_i` be the product σ-algebra. If :math:`R` is :term:`compatible` with 𝐀 and if the projection of :math:`R` onto each factor is surjective, then :math:`R` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{sd} ∏_{j:𝐤} 𝔸_{σ(j)}`
  
     subuniverse
       Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If a subset :math:`B ⊆ A` is closed under :math:`F^𝔸`, then we call :math:`B` a **subuniverse** of :math:`𝔸`.
@@ -1443,7 +1530,7 @@ Glossary: structures, categories, varieties
       An **ultrafilter** on a :term:`poset` P is a maximal :term:`filter` on P, that is, a proper filter on P that will become improper if it is enlarged.
  
     ultraproduct
-      Let :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). Let :math:`U` be an :term:`ultrafilter` on :math:`I`.
+      𝐿et :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). 𝐿et :math:`U` be an :term:`ultrafilter` on :math:`I`.
       
       Define the equivalence relation ~ on the :term:`product` structure :math:`𝐌 := ∏_{i∈ I}𝕄_i` as follows: ∀ 𝐚, 𝐛 ∈ 𝐌, 
  
@@ -1474,7 +1561,7 @@ Glossary: structures, categories, varieties
       the functor :math:`∀ f : P(A) → P(B)` defined by :math:`∀ f (X) = \{y ∈ B : f^{-1}(\{y\}) \subseteq  X\}`, for :math:`X ∈ P(A)`.
  
     universal mapping property
-      Let :math:`η_A : A → |𝔸^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The :term:`functors <functor>` :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every :term:`monoid` :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique :term:`morphism` :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
+      𝐿et :math:`η_A : A → |𝔸^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The :term:`functors <functor>` :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every :term:`monoid` :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique :term:`morphism` :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
  
     universal property
       The **unique morphism property** of the :term:`initial object` in a category is what we refer to as a **universal property,** and we say that the :term:`free object` in a category :math:`𝒞` is "universal" for the category :math:`𝒞`.
@@ -1495,7 +1582,7 @@ Glossary: structures, categories, varieties
       Here :math:`\mathbf 0` denotes the additive identity element of :math:`F`. It follows from properties 2 and 3 that :math:`ν(1) = \mathbf 1`, where :math:`\mathbf 1` denotes the multiplicative identity element of :math:`F`. The real and complex absolute values are examples of valuations.
  
     variety
-      A **variety** (or **equational class**) of structures in the language :math:`L` is one that can be axiomatized by a set of equations in :math:`L`.
+      A **variety** (or **equational class**) of structures in the language :math:`𝐿` is one that can be axiomatized by a set of equations in :math:`𝐿`.
  
     vector space
       If :math:`F` is a :term:`field`, then an :math:`F`-:term:`module` is called a **vector space** over :math:`F`.
@@ -1513,12 +1600,12 @@ Glossary: topology and analysis
      A **Banach space** is a :term:`normed linear space` :math:`(X, \|\,⋅\,\|)` such that :math:`X` is :term:`complete <complete set>` in the metric defined by its norm. (That is, each Cauchy sequence in :math:`(X, \|\,⋅\,\|)` converges to a point in :math:`X`.)
 
    bounded linear functional
-     Let :math:`X` be a :term:`normed linear space` over the :term:`field` :math:`F`.  A **bounded linear functional** on :math:`X` is a :term:`bounded linear transformation` with codomain :math:`F`.
+     𝐿et :math:`X` be a :term:`normed linear space` over the :term:`field` :math:`F`.  A **bounded linear functional** on :math:`X` is a :term:`bounded linear transformation` with codomain :math:`F`.
       
      We denote by :math:`𝔅(X,F)` the collection of all bounded linear functionals on :math:`X`.
 
    bounded linear transformation
-     Let :math:`X` and :math:`Y` be two :term:`normed linear spaces <normed linear space>`. A :term:`linear transformation` :math:`T: X → Y` is called **bounded** if there exists :math:`C > 0` such that
+     𝐿et :math:`X` and :math:`Y` be two :term:`normed linear spaces <normed linear space>`. A :term:`linear transformation` :math:`T: X → Y` is called **bounded** if there exists :math:`C > 0` such that
 
      .. math:: \|Tx\| ≤ C \|x\| \; \text{ for all } x ∈ X.
     
@@ -1577,9 +1664,9 @@ Glossary: topology and analysis
       It's clear that conjugate exponents satisfy :math:`1 < p, q < ∞` and that as :math:`p → 1`, :math:`q → ∞` and vice-versa. Thus, :math:`(1, ∞)` is also regarded as a pair of conjugate exponents.
  
    continuous function
-     Let :math:`(X, τ_1)` and :math:`(Y, τ_2)` be :term:`topological spaces <topological space>`. A function :math:`f: X → Y` is called **continuous** if :math:`f^{-1}(S) ∈ τ_1` for every :math:`S ∈ τ_2`.
+     𝐿et :math:`(X, τ_1)` and :math:`(Y, τ_2)` be :term:`topological spaces <topological space>`. A function :math:`f: X → Y` is called **continuous** if :math:`f^{-1}(S) ∈ τ_1` for every :math:`S ∈ τ_2`.
  
-     Let :math:`(X, |\;\;|_1)` and :math:`(Y, |\;\;|_2)` be :term:`metric spaces <metric space>`. A function :math:`f: X → Y` is called **continuous** at the point :math:`x_0 ∈ X` if for all :math:`ε >0` there exists :math:`δ > 0` such that
+     𝐿et :math:`(X, |\;\;|_1)` and :math:`(Y, |\;\;|_2)` be :term:`metric spaces <metric space>`. A function :math:`f: X → Y` is called **continuous** at the point :math:`x_0 ∈ X` if for all :math:`ε >0` there exists :math:`δ > 0` such that
 
      .. math::  |x - x_0|_1 < δ \, ⟹ \, |f(x) -f(x_0)|_2 < ε.
 
@@ -1618,19 +1705,19 @@ Glossary: topology and analysis
      If :math:`X` is a nonempty set, then :math:`\{∅, X\}` is a topology on :math:`X`, called the **trivial** (or **indiscrete**) **topology**.
 
    ∞-norm
-     Let :math:`(X, 𝔐, μ)` be a :term:`measure space`.  The :math:`∞`-**norm relative to** :math:`μ` is defined for each real- or complex-valued function :math:`f` on :math:`X` by
+     𝐿et :math:`(X, 𝔐, μ)` be a :term:`measure space`.  The :math:`∞`-**norm relative to** :math:`μ` is defined for each real- or complex-valued function :math:`f` on :math:`X` by
    
      .. math:: \|f\|_∞ := \inf \{a∈ ℝ^∗ ∣ μ\{x : |f(x)| > a\} = 0\} = \inf \{a∈ ℝ^∗ ∣ |f(x)| ≤ a \text{ for } μ-\text{a.e. } x∈ X\},
 
      where :math:`ℝ^∗ = ℝ ∪ \{-∞, ∞\}` and :math:`\inf ∅ = ∞`.
 
    integrable
-     A real- or complex-valued :math:`μ`-:term:`measurable function` :math:`f` is called :math:`μ`-**integrable** (or **integrable with respect to** :math:`μ`, or just **integrable**) over :math:`X` if :math:`∫_X |f| \, dμ < ∞`.  We let :math:`L_1(X, μ)` (or :math:`L_1(μ)`, or just :math:`L_1`) denote the collection of functions that are :math:`μ`-integrable over :math:`X`.
+     A real- or complex-valued :math:`μ`-:term:`measurable function` :math:`f` is called :math:`μ`-**integrable** (or **integrable with respect to** :math:`μ`, or just **integrable**) over :math:`X` if :math:`∫_X |f| \, dμ < ∞`.  We let :math:`𝐿_1(X, μ)` (or :math:`𝐿_1(μ)`, or just :math:`𝐿_1`) denote the collection of functions that are :math:`μ`-integrable over :math:`X`.
 
-     When :math:`f∈ L_1(X, μ)` we define the :term:`integral` of :math:`f` over a measurable set :math:`E ⊆ X` by :math:`∫_E f\, dμ = ∫_E f^+\, dμ - ∫_E f^-\, dμ`.
+     When :math:`f∈ 𝐿_1(X, μ)` we define the :term:`integral` of :math:`f` over a measurable set :math:`E ⊆ X` by :math:`∫_E f\, dμ = ∫_E f^+\, dμ - ∫_E f^-\, dμ`.
 
    integral
-     See :term:`Lebesgue integral`.
+     See :term:`𝐿ebesgue integral`.
 
    interior
      If :math:`X` is a :term:`topological space` and :math:`A ⊆ X`, then the union of all :term:`open sets <open set>` contained in :math:`A` is called the **interior** of :math:`A`.
@@ -1641,19 +1728,19 @@ Glossary: topology and analysis
      In other words, :math:`U: ℋ_1 ↠ ℋ_2` is a surjective :term:`isometry` from :math:`ℋ_1` to :math:`ℋ_2`.
 
    isometry
-     Let :math:`(X, \|\,.\,\|_1)` and :math:`(Y, \|\,.\,\|_2)` be :term:`normed linear spaces <normed linear space>`.  A :term:`linear transformation` :math:`T: X → Y` is called an **isometry** if it preserves norms, that is, :math:`\|Tx\|_2 = \|x\|_1` holds for all :math:`x∈ X`.
+     𝐿et :math:`(X, \|\,.\,\|_1)` and :math:`(Y, \|\,.\,\|_2)` be :term:`normed linear spaces <normed linear space>`.  A :term:`linear transformation` :math:`T: X → Y` is called an **isometry** if it preserves norms, that is, :math:`\|Tx\|_2 = \|x\|_1` holds for all :math:`x∈ X`.
 
-   Lebesgue integrable
-     A function that is :term:`integrable` with respect to :term:`Lebesgue measure` is called a **Lebesgue integrable** function.
+   𝐿ebesgue integrable
+     A function that is :term:`integrable` with respect to :term:`𝐿ebesgue measure` is called a **𝐿ebesgue integrable** function.
 
-   Lebesgue integral
-     Let :math:`(X, 𝔐, μ)` be a :term:`measure space`.  If :math:`E ∈ 𝔐` and :math:`s: X → [0, ∞)` is a :term:`measurable <measurable function>` :term:`simple function` of the form :math:`s = ∑_{i=1}^n α_i χ_{A_i}`, where :math:`α_1, \dots, α_n ∈ ℝ` are the distinct values of :math:`s`, then we denote and define the **Lebesgue integral** of :math:`s` over :math:`E` as follows:
+   𝐿ebesgue integral
+     𝐿et :math:`(X, 𝔐, μ)` be a :term:`measure space`.  If :math:`E ∈ 𝔐` and :math:`s: X → [0, ∞)` is a :term:`measurable <measurable function>` :term:`simple function` of the form :math:`s = ∑_{i=1}^n α_i χ_{A_i}`, where :math:`α_1, \dots, α_n ∈ ℝ` are the distinct values of :math:`s`, then we denote and define the **𝐿ebesgue integral** of :math:`s` over :math:`E` as follows:
      
      .. math:: ∫_E s\, dμ := ∑_{i=1}^n α_i μ(A_i ∩ E),
      
      where we adopt the convention that :math:`0⋅∞ = 0` (in case, e.g., :math:`α_i = 0` and :math:`μ(A_i ∩ E) = ∞` for some :math:`1≤ i ≤ n`).
      
-     If :math:`f: X → [0, ∞]` is a nonnegative extended real-valued measurable function and :math:`E∈ 𝔐`, then we denote and define the **Lebesgue integral** of :math:`f` over :math:`E` with respect to the measure :math:`μ` (or, the **integral** of :math:`f`) as follows:
+     If :math:`f: X → [0, ∞]` is a nonnegative extended real-valued measurable function and :math:`E∈ 𝔐`, then we denote and define the **𝐿ebesgue integral** of :math:`f` over :math:`E` with respect to the measure :math:`μ` (or, the **integral** of :math:`f`) as follows:
 
      .. math:: ∫_E f\, dμ := \sup ∫_E s\, dμ,
 
@@ -1661,36 +1748,36 @@ Glossary: topology and analysis
 
      If :math:`μ` is the only :term:`measure` in context, then we may write :math:`∫_E f` in place of :math:`∫_E f\, dμ`, and :math:`∫ f` in place of :math:`∫_X f`.
 
-   Lebesgue measurable function
-     Let :math:`E⊆ ℝ`.  A function :math:`f: E → ℝ` is called **Lebesgue measurable** provided :math:`f^{-1}(G)` is a :term:`Lebesgue measurable set` for every open set :math:`G ⊆ ℝ`.  Equivalently, :math:`f` is Lebesgue measurable iff the set :math:`f^{-1}((α, ∞))` is Lebesgue measurable for every :math:`α ∈ ℝ`.
+   𝐿ebesgue measurable function
+     𝐿et :math:`E⊆ ℝ`.  A function :math:`f: E → ℝ` is called **𝐿ebesgue measurable** provided :math:`f^{-1}(G)` is a :term:`𝐿ebesgue measurable set` for every open set :math:`G ⊆ ℝ`.  Equivalently, :math:`f` is 𝐿ebesgue measurable iff the set :math:`f^{-1}((α, ∞))` is 𝐿ebesgue measurable for every :math:`α ∈ ℝ`.
 
-   Lebesgue measurable set
-     A set that is :term:`measurable <measurable set>` with respect to :term:`Lebesgue measure` is called a **Lebesgue measurable** set; that is, :math:`E⊆ ℝ` is Lebesgue measurable iff
+   𝐿ebesgue measurable set
+     A set that is :term:`measurable <measurable set>` with respect to :term:`𝐿ebesgue measure` is called a **𝐿ebesgue measurable** set; that is, :math:`E⊆ ℝ` is 𝐿ebesgue measurable iff
 
      .. math:: m^∗ A = m^∗ (A ∩ E) + m^∗(A ∩ E^c)\; \text{ holds for all } A ⊆ R.
 
-   Lebesgue measure
-     Let :math:`ℓ` be the :term:`measure` defined on the :term:`semiring <semiring of sets>` :math:`S := \{[a, b) ∣ a, b ∈ ℝ\}` of bounded intervals by :math:`ℓ[a, b)= b-a` for all :math:`a ≤ b`. Let :math:`ℓ^∗: 𝒫(ℝ) → [0, ∞]` be the :term:`outer measure` generated by :math:`ℓ`.  That is, for :math:`E⊆ ℝ`,
+   𝐿ebesgue measure
+     𝐿et :math:`ℓ` be the :term:`measure` defined on the :term:`semiring <semiring of sets>` :math:`S := \{[a, b) ∣ a, b ∈ ℝ\}` of bounded intervals by :math:`ℓ[a, b)= b-a` for all :math:`a ≤ b`. 𝐿et :math:`ℓ^∗: 𝒫(ℝ) → [0, ∞]` be the :term:`outer measure` generated by :math:`ℓ`.  That is, for :math:`E⊆ ℝ`,
      
      .. math:: ℓ^∗(E) := \inf \{∑_{n=1}^∞ m(I_n) ∣ \{I_n\} ⊆ S \text{ and } E ⊆ ⋃_{n=1}^∞ I_n\}
      
-     The measure obtained by restricting :math:`ℓ^∗` to the :term:`measurable subsets <measurable set>` in :math:`𝒫(ℝ)` is called **Lebesgue measure**.
+     The measure obtained by restricting :math:`ℓ^∗` to the :term:`measurable subsets <measurable set>` in :math:`𝒫(ℝ)` is called **𝐿ebesgue measure**.
      
      Observe that the :math:`ℓ^∗`-:term:`measurable subsets <measurable set>` in :math:`𝒫(ℝ)` are those :math:`A∈ 𝒫(ℝ)` satisfying
 
      .. math:: ℓ^∗ E = ℓ^∗(E ∩ A) + ℓ^∗(E ∩ A^c)\; \text{ for all } E ⊆ ℝ.
 
-   Lebesgue null set
-     A **Lebesgue null set** is a set of :term:`Lebesgue measure` zero.
+   𝐿ebesgue null set
+     A **𝐿ebesgue null set** is a set of :term:`𝐿ebesgue measure` zero.
 
-   Lebesgue outer measure
-     See :term:`Lebesgue measure`
+   𝐿ebesgue outer measure
+     See :term:`𝐿ebesgue measure`
 
    limit point
      A point :math:`x` is called a **limit point** (or **accumulation point**) of a set :math:`A` in a topological space if :math:`A ∩ (V \ {x}) ≠ ∅` for every :term:`neighborhood` :math:`V` of :math:`x`.
 
    linear functional
-     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **linear functional** on :math:`X` is a :term:`linear transformation` with :term:`codomain` :math:`F`.
+     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **linear functional** on :math:`X` is a :term:`linear transformation` with :term:`codomain` :math:`F`.
 
    linear operator
      See :term:`linear transformation`.
@@ -1708,20 +1795,20 @@ Glossary: topology and analysis
 
      (These conditions are equivalent to the single condition :math:`∀ α ∈ F`, :math:`∀ x, x' ∈ X`, :math:`T(α x + x') = α T\,x + T\,x'`.)
 
-   Lipschitz condition
-     A function :math:`f` satisfies a **Lipschitz condition** on an interval if there is a constant :math:`M` such that :math:`|f(x) - f(y)| ≤ M|x-y|` for all :math:`x`and :math:`y` in the interval.
+   𝐿ipschitz condition
+     A function :math:`f` satisfies a **𝐿ipschitz condition** on an interval if there is a constant :math:`M` such that :math:`|f(x) - f(y)| ≤ M|x-y|` for all :math:`x`and :math:`y` in the interval.
 
-   Lipschitz constant
-     The number :math:`M` in the definition of :term:`Lipschitz condition` is called the **Lipschitz constant**.
+   𝐿ipschitz constant
+     The number :math:`M` in the definition of :term:`𝐿ipschitz condition` is called the **𝐿ipschitz constant**.
 
-   Lipschitz continuous
-     A function is called **Lipschitz continuous** on an interval if it satisfies a :term:`Lipschitz condition` on that interval.
+   𝐿ipschitz continuous
+     A function is called **𝐿ipschitz continuous** on an interval if it satisfies a :term:`𝐿ipschitz condition` on that interval.
 
    locally compact
      A :term:`topological space` :math:`(X,τ)` is called **locally compact** if every point of :math:`X` has a neighborhood whose :term:`closure` is :term:`compact <compact set>`.
 
    lower limit
-     Let :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \inf \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \sup \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **lower limit** (or **limit inferior**) of :math:`\{a_n\}`, and write :math:`β = \liminf\limits_{n→ ∞} a_n`.  The :term:`upper limit`, :math:`\limsup\limits_{n→ \infty} a_n` is definied similarly.
+     𝐿et :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \inf \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \sup \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **lower limit** (or **limit inferior**) of :math:`\{a_n\}`, and write :math:`β = \liminf\limits_{n→ ∞} a_n`.  The :term:`upper limit`, :math:`\limsup\limits_{n→ \infty} a_n` is definied similarly.
 
      Observe that
 
@@ -1732,7 +1819,7 @@ Glossary: topology and analysis
      (See also the definition of :term:`upper limit` and the remarks following that definition.)
 
    measurable function
-     Let :math:`(X, 𝔐)` and :math:`(Y, 𝔑)` be measurable spaces. A function :math:`f: X → Y` is called :math:`(𝔐, 𝔑)`-**measurable** (or just **measurable**) if :math:`f^{-1}(N) ∈ 𝔐` for every :math:`N ∈ 𝔑`.
+     𝐿et :math:`(X, 𝔐)` and :math:`(Y, 𝔑)` be measurable spaces. A function :math:`f: X → Y` is called :math:`(𝔐, 𝔑)`-**measurable** (or just **measurable**) if :math:`f^{-1}(N) ∈ 𝔐` for every :math:`N ∈ 𝔑`.
 
    measurable set
      If :math:`𝔐` is a :term:`σ-algebra` in :math:`X`, then the members of :math:`𝔐` are called the **measurable sets** in :math:`X`.
@@ -1780,7 +1867,7 @@ Glossary: topology and analysis
      A function :math:`f: X → ℝ` such that :math:`f(x) ≥ 0` for all :math:`x∈ ℝ` is called a **nonnegative function**.  We use the shorthand :math:`f ≥ 0` to denote that :math:`f` is a nonnegative function.
 
    norm
-     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`, and let :math:`|\,⋅\,|: F → [0,∞)` be a :term:`valuation` on :math:`F`.  A **norm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies the following conditions:
+     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`, and let :math:`|\,⋅\,|: F → [0,∞)` be a :term:`valuation` on :math:`F`.  A **norm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies the following conditions:
 
      #. :math:`\|x + y\| ≤ \|x\| + \|y\|`, for all :math:`x, y ∈ X`;
      #. :math:`\|α x\| = |α| \|x\|`, for all :math:`x ∈ X` and :math:`α ∈ F`;
@@ -1798,13 +1885,13 @@ Glossary: topology and analysis
      A set :math:`G` is **nowhere dense** in :math:`X` if the :term:`closure` of :math:`G` contains no nonempty open subsets of :math:`X`. Equivalently, the :term:`interior` of the closure of :math:`G` is empty (in symbols, :math:`Ḡ^o = ∅`).
  
    open ball
-     Let :math:`(X, d)` be a :term:`metric space`. If :math:`x ∈ X` and :math:`r > 0` are fixed, then the set denoted and defined by :math:`B(x, r) = \{y ∈ X ∣ d(x,y) < r\}` is called the **open ball** with center :math:`x` and radius :math:`r`.
+     𝐿et :math:`(X, d)` be a :term:`metric space`. If :math:`x ∈ X` and :math:`r > 0` are fixed, then the set denoted and defined by :math:`B(x, r) = \{y ∈ X ∣ d(x,y) < r\}` is called the **open ball** with center :math:`x` and radius :math:`r`.
 
    open covering
      See :term:`covering`.
 
    open mapping
-     Let :math:`X` and :math:`Y` be metric or topological spaces.  A set function :math:`T: 𝒫(X) → 𝒫(Y)` is called an **open mapping** if :math:`T(G)` is open in :math:`Y` for every open :math:`G ⊆ X`.
+     𝐿et :math:`X` and :math:`Y` be metric or topological spaces.  A set function :math:`T: 𝒫(X) → 𝒫(Y)` is called an **open mapping** if :math:`T(G)` is open in :math:`Y` for every open :math:`G ⊆ X`.
 
    open set
      A subset :math:`V` of a metric or topological space is called **open** if for every :math:`x ∈ V` there is an open ball contained in :math:`V` that contains :math:`x`.
@@ -1827,13 +1914,13 @@ Glossary: topology and analysis
      .. math:: \|T\| = \sup \{ \frac{\|Tx\|}{\|x\|} : x ≠ O\} = \inf \{ C : \|Tx\| ≤ C\|x\| \text{ for all } x\}.
 
    orthogonal set
-     Let :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. A subset :math:`Q ⊆ X` is called **orthogonal** provided :math:`⟨ 𝐮, 𝐯 ⟩ = 0` for all :math:`𝐮 ≠ 𝐯` in :math:`Q`.
+     𝐿et :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. A subset :math:`Q ⊆ X` is called **orthogonal** provided :math:`⟨ 𝐮, 𝐯 ⟩ = 0` for all :math:`𝐮 ≠ 𝐯` in :math:`Q`.
      
    orthonormal basis
      A maximal :term:`orthonormal set` in a :term:`Hilbert space` is known as an **orthonormal basis**. 
 
    orthonormal set
-     Let :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. An :term:`orthogonal set` :math:`U ⊆ X` is called **orthonormal** provided :math:`\|u\| = 1` for all :math:`𝐮 ∈ U`.
+     𝐿et :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. An :term:`orthogonal set` :math:`U ⊆ X` is called **orthonormal** provided :math:`\|u\| = 1` for all :math:`𝐮 ∈ U`.
      
      In other terms, a subset :math:`Q ⊆ X` is called **orthonormal** provided for all :math:`𝐮, 𝐯 ∈ Q`,
 
@@ -1858,10 +1945,10 @@ Glossary: topology and analysis
      Observe that :math:`f` is :term:`measurable <measurable function>` if and only if both the positive and :term:`negative <negative part>` parts of :math:`f` are measurable. Also, :math:`f^+, f^-: X → [0, ∞]`, :math:`f = f^+ - f^-`, and :math:`|f| = f^+ + f^-`.
        
    product σ-algebra
-     Let :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [3]_
+     𝐿et :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [3]_
  
    product topology
-     Let :math:`\{(X_λ, τ_λ)\}_{λ∈ Λ}` be a collection of :term:`topological spaces <topological space>` indexed by a set :math:`Λ`. The **product topology** on the :term:`Cartesian product` :math:`∏_{λ∈ Λ}X_λ` is the topology that has a :term:`base` consisting of sets of the form :math:`∏_{λ∈Λ}V_λ`, where :math:`V_λ ∈ τ_λ` and :math:`V_λ = X_λ` for all but finitely many :math:`λ`.
+     𝐿et :math:`\{(X_λ, τ_λ)\}_{λ∈ Λ}` be a collection of :term:`topological spaces <topological space>` indexed by a set :math:`Λ`. The **product topology** on the :term:`Cartesian product` :math:`∏_{λ∈ Λ}X_λ` is the topology that has a :term:`base` consisting of sets of the form :math:`∏_{λ∈Λ}V_λ`, where :math:`V_λ ∈ τ_λ` and :math:`V_λ = X_λ` for all but finitely many :math:`λ`.
 
      Equivalently, the product topology is the weakest topology that makes all the projection maps :math:`π_λ(\mathbf x) = x_λ` continuous.  In other words, if :math:`Π` denotes the :term:`clone` of all projection operations on :math:`∏_{λ ∈ Λ} X_λ`, then the product topology is the :math:`Π`-topology.
 
@@ -1880,7 +1967,7 @@ Glossary: topology and analysis
      A category :math:`𝒞` is called **self-dual** if :math:`𝒞^{\mathrm{op}} = 𝒞`.
 
    seminorm
-     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **seminorm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies
+     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **seminorm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies
       
      #. :math:`\|x + y\| ≤ \|x\| + \|y\|`, for all :math:`x, y ∈ X`;
      #. :math:`\|α x\| = |α| \|x\|`, for all :math:`x ∈ X` and :math:`α ∈ F`.
@@ -1891,7 +1978,7 @@ Glossary: topology and analysis
    separates the points
      We say that a collection :math:`S` of subsets of :math:`X` **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exist disjoint sets :math:`S_1, S_2∈ S` such that :math:`p ∈ S_1` and :math:`q∈ S_2`.
 
-     Let :math:`F` be a field.  We say that a collection :math:`𝔄⊆ F^X` of :math:`F`-valued functions **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exists :math:`f ∈ 𝔄` such that :math:`f(u) ≠ f (v)`. 
+     𝐿et :math:`F` be a field.  We say that a collection :math:`𝔄⊆ F^X` of :math:`F`-valued functions **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exists :math:`f ∈ 𝔄` such that :math:`f(u) ≠ f (v)`. 
      
    σ-algebra
      A collection :math:`𝔐` of subsets of a nonempty set :math:`X` is called a **σ-algebra** if it satisfies the following conditions:
@@ -1908,7 +1995,7 @@ Glossary: topology and analysis
      If :math:`(X, 𝔐, μ)` is a :term:`measure space`, then :math:`μ` is a **σ-finite measure** provided :math:`X = ⋃_j E_j` for some :math:`E_j ∈ 𝔐` such that :math:`μ E_j < ∞` for all :math:`1≤ j < ∞`.
     
    signed measure
-     Let :math:`(X, 𝔐)` be a :term:`measurable space`. A **signed measure** on :math:`(X, 𝔐)` is a function :math:`ν: 𝔐 → [-∞, ∞]` such that
+     𝐿et :math:`(X, 𝔐)` be a :term:`measurable space`. A **signed measure** on :math:`(X, 𝔐)` is a function :math:`ν: 𝔐 → [-∞, ∞]` such that
      
      #. :math:`ν ∅ = 0`;
      #. :math:`ν` assumes at most one of the values :math:`±∞`;
@@ -1926,7 +2013,7 @@ Glossary: topology and analysis
    simple function
      A complex- or real-valued function :math:`s` whose range consists of only finitely many points is called a **simple function**.
 
-     Let :math:`s` be a simple function with domain :math:`X` and suppose :math:`α_1, \dots, α_n` is the set of distinct values of :math:`s`. If we set :math:`A_i = \{x\in X : s(x) = \alpha_i\}`, then clearly
+     𝐿et :math:`s` be a simple function with domain :math:`X` and suppose :math:`α_1, \dots, α_n` is the set of distinct values of :math:`s`. If we set :math:`A_i = \{x\in X : s(x) = \alpha_i\}`, then clearly
 
      .. math:: s = ∑_{i=1}^n α_i χ_{A_i},
         :label: simple
@@ -1941,7 +2028,7 @@ Glossary: topology and analysis
      A finite linear combination of characteristic functions of bounded intervals of :math:`ℝ` is called a **step function**.
 
    subadditive
-     Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **subadditive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
+     𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **subadditive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
      .. math:: s \bigl( ⋃_{γ∈Γ}  A_γ \bigr) ≤ ∑_{γ∈ Γ} s (A_γ).
 
    topological space
@@ -1958,13 +2045,13 @@ Glossary: topology and analysis
      A set :math:`E` in a metric space is called **totally bounded** if for every :math:`ε > 0` :math:`E` can be covered with finitely many balls of radius :math:`ε`.
 
    translation invariance
-     Let :math:`(X, 𝔐)` be a :term:`measurable space`. Assume there is a binary operation defined on :math:`X`; e.g., addition :math:`+: X× X → X`. A :term:`measure` :math:`μ` on :math:`(X, 𝔐)` is called **translation invariant** provided :math:`μ(E + x) = μ E` holds for all :math:`E ∈ 𝔐` and all :math:`x∈  X`, where :math:`E+x := \{e+x ∣ e∈ E\}`.
+     𝐿et :math:`(X, 𝔐)` be a :term:`measurable space`. Assume there is a binary operation defined on :math:`X`; e.g., addition :math:`+: X× X → X`. A :term:`measure` :math:`μ` on :math:`(X, 𝔐)` is called **translation invariant** provided :math:`μ(E + x) = μ E` holds for all :math:`E ∈ 𝔐` and all :math:`x∈  X`, where :math:`E+x := \{e+x ∣ e∈ E\}`.
 
    triangle inequality
-     Let :math:`(X, \|\,⋅\,\|)` be a metric or normed space.  The inequality :math:`\|x + y\| ≤ \|x\| + \|y\|`, which holds for all :math:`x, y ∈ X` in a metric or normed space, is called the **triangle inequality**.  Equivalently (setting :math:`x = a-b` and :math:`y = b-c`), :math:`\|a - c\| ≤ \|a - b\| + \|b - c\|`.
+     𝐿et :math:`(X, \|\,⋅\,\|)` be a metric or normed space.  The inequality :math:`\|x + y\| ≤ \|x\| + \|y\|`, which holds for all :math:`x, y ∈ X` in a metric or normed space, is called the **triangle inequality**.  Equivalently (setting :math:`x = a-b` and :math:`y = b-c`), :math:`\|a - c\| ≤ \|a - b\| + \|b - c\|`.
  
    uniformly continuous
-     Let :math:`(X, |\, |_X)` and :math:`(Y, |\, |_Y)` be :term:`metric spaces <metric space>`. A function :math:`f : X → Y` is called **uniformly continuous** in :math:`E ⊆ X` if
+     𝐿et :math:`(X, |\, |_X)` and :math:`(Y, |\, |_Y)` be :term:`metric spaces <metric space>`. A function :math:`f : X → Y` is called **uniformly continuous** in :math:`E ⊆ X` if
   
      .. math:: (∀ ε >0)\, (∃ δ >0)\, (∀ x, x_0 ∈ E) \, (|x - x_0| < δ \, ⟹ \, |f(x) -f(x_0)| < ε).
 
@@ -1978,7 +2065,7 @@ Glossary: topology and analysis
      By taking :math:`y = x`, we have :math:`\|U x\|_2 = \|x\|_1`.
 
    upper limit
-     Let :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \sup \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \inf \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **upper limit** (or **limit superior**) of :math:`\{a_n\}`, and write :math:`β = \limsup\limits_{n→ ∞} a_n`.  The :term:`lower limit`, :math:`\liminf\limits_{n→ \infty} a_n` is definied similarly.
+     𝐿et :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \sup \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \inf \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **upper limit** (or **limit superior**) of :math:`\{a_n\}`, and write :math:`β = \limsup\limits_{n→ ∞} a_n`.  The :term:`lower limit`, :math:`\liminf\limits_{n→ \infty} a_n` is definied similarly.
 
      Observe that
 
@@ -2036,7 +2123,7 @@ What follows is a list of useful definitions from computational complexity theor
      We say that 𝔄 is **jointly locally tractable** if, for every natural number, m, there is a polynomial-time algorithm 𝖠ₘ that solves CSP(𝔄,m).  
 
    constraint satisfaction problem
-     Let 𝔄 be a collection of (finite) algebras of the same signature. Define the **constraint satisfaction problem** CSP(𝔄) to be the following decision problem:
+     𝐿et 𝔄 be a collection of (finite) algebras of the same signature. Define the **constraint satisfaction problem** CSP(𝔄) to be the following decision problem:
 
        An n-variable **instance** of CSP(𝔄) is a quadruple (𝒱, 𝒜, 𝒮, ℛ) consisting of
   
@@ -2056,17 +2143,17 @@ What follows is a list of useful definitions from computational complexity theor
      A decision problem is said to have **exponential time** (or **EXPTIME**) complexity if it is solvable by a deterministic Turing machine that runs in :math:`O(2^{p(n)})` time, where :math:`p(n)` is a polynomial function of :math:`n`.
      
    homomorphic relaxation
-     Let (𝔸, 𝔹) and (𝔸', 𝔹') be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is a **homomorphic relaxation** of (𝔸, 𝔹) if there exist :term:`homomorphisms <relational structure homomorphism>` f: 𝔸' → 𝔸 and g: 𝔹 → 𝔹'.
+     𝐿et (𝔸, 𝔹) and (𝔸', 𝔹') be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is a **homomorphic relaxation** of (𝔸, 𝔹) if there exist :term:`homomorphisms <relational structure homomorphism>` f: 𝔸' → 𝔸 and g: 𝔹 → 𝔹'.
       
    locally tractable
      We say that a collection 𝔄 of algebras is **jointly locally tractable** (or just **locally tractable**) if, for every natural number, m, there is a polynomial-time algorithm 𝖠ₘ that solves CSP(𝔄,m).  
 
    logarithmic space
-     A decision problem or language has **logarithmic space complexity** if it can be solved by a deterministic :term:`Turing machine` using a logarithmic amount of writable memory space.  The complexity class of such problems is known as **LOGSPACE** (or **L** or **LSPACE** or **DLOGSPACE**).
+     A decision problem or language has **logarithmic space complexity** if it can be solved by a deterministic :term:`Turing machine` using a logarithmic amount of writable memory space.  The complexity class of such problems is known as **𝐿OGSPACE** (or **𝐿** or **𝐿SPACE** or **D𝐿OGSPACE**).
      
      Formally, a Turing machine has two tapes, one encoding the input which can only be read from, and one of logarithmic size that can be both read from and written to.
      
-     Logarithmic space is sufficient to hold a constant number of pointers into the input and a logarithmic number of boolean flags, and many basic LOGSPACE algorithms use the memory in this way.
+     𝐿ogarithmic space is sufficient to hold a constant number of pointers into the input and a logarithmic number of boolean flags, and many basic 𝐿OGSPACE algorithms use the memory in this way.
 
    Nick's class
      The class **NC** (or "**Nick's Class**") is the class of problems decidable in polylogarithmic (or, O(logᶜ n)) time on a parallel computer with a polynomial number of processors.
@@ -2087,7 +2174,7 @@ What follows is a list of useful definitions from computational complexity theor
      A decision problem has **nondeterministic exponential time** complexity if it can be solved by a nondeterministic Turing machine in :math:`2^{n^{O(1)}}` time.  We let **NEXPTIME** denote the complexity class of problems that have nondeterministic exponential time complexity.
 
    nondeterministic logarithmic space
-     A decision problem or language has **nondeterministic logarithmic space** complexity if it can be solved by a nondeterministic Turing machine using a logarithmic amount of writable memory space.  The class of such problems is usually denote by **NLOGSPACE** (or **NL** or **NLSPACE**).
+     A decision problem or language has **nondeterministic logarithmic space** complexity if it can be solved by a nondeterministic Turing machine using a logarithmic amount of writable memory space.  The class of such problems is usually denote by **N𝐿OGSPACE** (or **N𝐿** or **N𝐿SPACE**).
 
    nondeterministic polynomial time
      A decision problem or language has **nondeterministic polynomial time** complexity if it can be solved by a nondeterministic Turing machine in logarithmic amount of running time.
@@ -2106,7 +2193,7 @@ What follows is a list of useful definitions from computational complexity theor
      The **promise constraint satisfaction problem** (**PCSP**) over the :term:`PCSP template` (𝔸, 𝔹) is denoted PCSP(𝔸, 𝔹) and is defined to be the following decision problem: given a :term:`pp-sentence` φ over the relational symbols :math:`R_1, \dots, R_n`, answer "YES" if φ is true in 𝔸 and answer "No" if φ is not true in 𝔹.
 
    PCSP template
-     Let :math:`𝔸 = ⟨A, R_1^𝔸, \dots, R_ℓ^𝔸⟩` and :math:`𝔹 = ⟨B, R_1^𝔹, \dots, R_ℓ^𝔹⟩` be finite relational structures of the same signature and assume that there exists a homomorphism 𝔸 → 𝔹. Then the pair (𝔸, 𝔹) is called a **promise constraint satisfaction problem template** (or **PCSP template**).
+     𝐿et :math:`𝔸 = ⟨A, R_1^𝔸, \dots, R_ℓ^𝔸⟩` and :math:`𝔹 = ⟨B, R_1^𝔹, \dots, R_ℓ^𝔹⟩` be finite relational structures of the same signature and assume that there exists a homomorphism 𝔸 → 𝔹. Then the pair (𝔸, 𝔹) is called a **promise constraint satisfaction problem template** (or **PCSP template**).
 
    polynomial space
      A decision problem has **polynomial space** complexity if it can be solved by a :term:`Turing machine` using a polynomial amount of space.  The class of such problems is denoted **PSPACE**.
@@ -2122,7 +2209,7 @@ What follows is a list of useful definitions from computational complexity theor
    size
      We bound the **size** of an instance I=⟨𝒱, 𝒜, 𝒮, ℛ⟩ of a :term:`constraint satisfaction problem` CSP(𝔄) as follows:
      
-     Let :math:`q=\max(|A₀|, |A₁|, \dots, |A_{n-1}|)`, let r be the maximum rank of an operation symbol in the similarity type, and p the number of operation symbols.
+     𝐿et :math:`q=\max(|A₀|, |A₁|, \dots, |A_{n-1}|)`, let r be the maximum rank of an operation symbol in the similarity type, and p the number of operation symbols.
      
      Then each member of the list 𝒜 requires at most :math:`pq^r\log q` bits to specify.  Thus,
 
@@ -2178,7 +2265,7 @@ What follows is a list of useful definitions from computational complexity theor
 
 
 
-..     In Lean, one defines function extensionality for functions of (dependent) type :math:`Π(x:α), β x` as follows:
+..     In 𝐿ean, one defines function extensionality for functions of (dependent) type :math:`Π(x:α), β x` as follows:
  
 ..     .. code-block:: lean
  

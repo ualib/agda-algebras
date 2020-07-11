@@ -559,7 +559,7 @@ Alternatively and equivalently we could define "equational class" and "equationa
 
 (where, 𝒫 denotes the :term:`power set operator`).
 
-**N.B.** An equational class is sometimes referred to as a **variety**; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (𝑯), subalgebras (𝑺), and products (𝑷). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in :numref:`the birkhoff module %s <the birkhoff module>` that is described in :numref:`the birkhoff module`.
+**N.B.** An equational class is sometimes referred to as a **variety**; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (𝑯), subalgebras (𝑺), and products (𝑷). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in :numref:`the birkhoff module <the birkhoff module>` described in :numref:`the birkhoff module`.
 
 --------------------------
 
@@ -585,7 +585,7 @@ We start with the simple observation that equalizers of homomorphisms are subuni
 
 .. _obs 1:
 
-.. proof:observation:: Exercise 1.4.6.a of :cite:`Bergman:2012`
+.. proof:observation:: Ex 1.4.6.a of :cite:`Bergman:2012`
 
    If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, then the **equalizer** of :math:`g` and :math:`h`, which we denote :math:`𝖤(g,h) = \{a: A ∣ g\, a = h\, a\}`, is a subuniverse of 𝑨.
 
@@ -626,7 +626,7 @@ Another elementary result is that homomorphisms are uniquely determined by the v
 
 .. _obs 3:
 
-.. proof:observation:: Exercise 1.4.6.b of :cite:`Bergman:2012`
+.. proof:observation:: Ex 1.4.6.b of :cite:`Bergman:2012`
 
    Let 𝑨 = ⟨𝐴, …⟩ and 𝑩 be 𝑆-algebras and :math:`f, g` homomorphisms from 𝑨 to 𝑩. If the subset 𝐴₀ ⊆ 𝐴 generates 𝑨, and if :math:`f` and :math:`g` agree on 𝐴₀, then :math:`f = g`.
 
@@ -654,7 +654,7 @@ A corollary of the last result is an easily proved bound on the cardinality of :
 
 .. _obs 4:
 
-.. proof:observation:: Exercise 1.4.6.c of :cite:`Bergman:2012`
+.. proof:observation:: Ex 1.4.6.c of :cite:`Bergman:2012`
 
    If :math:`A, B` are finite and :math:`X` generates 𝑨, then :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`.
 
@@ -961,7 +961,7 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
 .. _obs 9.4:
 
-.. proof:observation:: Lemma 4.27 of :cite:`Bergman:2012`
+.. proof:observation:: Lem 4.27 of :cite:`Bergman:2012`
 
    If 𝒦 is a class of 𝑆-algebras and 𝑨 an 𝑆-algebra, then :math:`𝑨/Ψ(𝒦)(𝑨)` ∈ SP(𝒦).
 
@@ -979,7 +979,7 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
 .. _obs 9.5:
 
-.. proof:observation:: Theorem 4.28 of :cite:`Bergman:2012`
+.. proof:observation:: Thm 4.28 of :cite:`Bergman:2012`
 
    Let 𝑼 be free for 𝒦 over 𝑋. Then :math:`𝑼/Ψ(𝒦)(𝑼)` is free in SP(𝒦) over :math:`𝑋/Ψ(𝒦)(𝑼)`.
 
@@ -1142,7 +1142,7 @@ A formalization of this result is presented in :numref:`obs 14 in agda`.
 
 .. _Thm 4.38:
 
-.. proof:theorem:: Thm. 4.38 of :cite:`Bergman:2012`
+.. proof:theorem:: Thm 4.38 of :cite:`Bergman:2012`
 
    Let 𝒦 be a class of algebras and 𝑝 ≈ 𝑞 an equation. The following are equivalent.
 
@@ -1182,7 +1182,7 @@ The last result tells us that we can determine whether an identity is true in a 
 
 .. _obs 16:
 
-.. proof:observation:: Cor. 4.39 of :cite:`Bergman:2012`
+.. proof:observation:: Cor 4.39 of :cite:`Bergman:2012`
 
    Let 𝒦 be a class of algebras, 𝑝, 𝑞 terms (say, 𝑛-ary), 𝑌 a set, and 𝑦₁, …, 𝑦ₙ distinct elements of 𝑌. Then 𝒦 ⊧ 𝑝 ≈ 𝑞 if and only if :math:`p^{𝔽(𝒦)(𝑌)}(y₁, …, yₙ) = q^{𝔽(𝒦)}(𝑌)(y₁, …, yₙ)`. In particular, 𝒦 ⊧ 𝑝 ≈ 𝑞 iff 𝔽(𝒦)(𝑋ₙ) ⊧ 𝑝 ≈ 𝑞.
 
