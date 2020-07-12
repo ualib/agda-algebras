@@ -39,26 +39,26 @@ We developed the notion of a term in a signature informally in :numref:`terms`. 
 
   open Term
 
-The term algebra 𝕋(X)
+The term algebra 𝑻(X)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The term algebra was described informally in :numref:`terms`.  We denote this important algebra by 𝕋(X) and we implement it in Agda as follows.
+The term algebra was described informally in :numref:`terms`.  We denote this important algebra by 𝑻(X) and we implement it in Agda as follows.
 
 ::
 
-  --The term algebra 𝕋(X).
-  𝕋 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
-  𝕋 X = Term{X = X} , node
+  --The term algebra 𝑻(X).
+  𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
+  𝑻 X = Term{X = X} , node
 
 
 .. _obs 9 in agda:
 
-The universal property of 𝕋(X)
+The universal property of 𝑻(X)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We prove
 
-  #. every map ``h : 𝑋 → ∣ A ∣`` lifts to a homomorphism from 𝕋(X) to A, and
+  #. every map ``h : 𝑋 → ∣ A ∣`` lifts to a homomorphism from 𝑻(X) to A, and
   #. the induced homomorphism is unique.
 
 ::
@@ -66,17 +66,17 @@ We prove
   module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
    --1.a. Every map (X → A) lifts.
-   free-lift : (h : X → ∣ A ∣)  →  ∣ 𝕋(X) ∣ → ∣ A ∣
+   free-lift : (h : X → ∣ A ∣)  →  ∣ 𝑻(X) ∣ → ∣ A ∣
    free-lift h (generator x) = h x
    free-lift h (node f args) = ∥ A ∥ f λ i → free-lift h (args i)
 
    --I. Extensional proofs (using hom's)
    --1.b.' The lift is (extensionally) a hom
-   lift-hom : (h : X → ∣ A ∣) →  hom  (𝕋(X)) A
+   lift-hom : (h : X → ∣ A ∣) →  hom  (𝑻(X)) A
    lift-hom h = free-lift h , λ f a → ap (∥ A ∥ _) (refl _)
 
    --2.' The lift to (free → A) is (extensionally) unique.
-   free-unique : funext 𝓥 𝓤 → (g h : hom (𝕋(X)) A)
+   free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻(X)) A)
     →           (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
     →           (t : Term )
                ---------------------------
@@ -98,13 +98,13 @@ Here we use ``HOM`` instead of ``hom``. N.B. using this "intensional" definition
 ::
 
    --1.b. that free-lift is (intensionally) a hom.
-   lift-HOM : (h : X → ∣ A ∣) →  HOM (𝕋(X)) A
+   lift-HOM : (h : X → ∣ A ∣) →  HOM (𝑻(X)) A
    lift-HOM  h = free-lift h , refl _
 
    --2. The lift to  (free → A)  is (intensionally) unique.
 
    free-intensionally-unique : funext 𝓥 𝓤
-    →             (g h : HOM (𝕋(X)) A)
+    →             (g h : HOM (𝑻(X)) A)
     →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
     →             (t : Term)
                  --------------------------------

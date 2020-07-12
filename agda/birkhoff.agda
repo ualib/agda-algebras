@@ -9,7 +9,7 @@ open import prelude
 open import basic using (Signature; Algebra; Π')
 open import relations using (ker-pred; Rel; con; _//_)
 open import homomorphisms using (HOM; Hom; hom; is-homomorphism; H-closed)
-open import terms using (Term; generator; 𝕋; _̇_; comm-hom-term';
+open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term';
                          lift-hom; interp-prod)
 
 open import subuniverses using (Subuniverse; mksub; var; app; Sg;
@@ -95,40 +95,40 @@ module _
  identities-are-compatible-with-homs : (p q : Term{X = X})
   →                𝒦 ⊧ p ≋ q
        ----------------------------------------------------
-  →     ∀ A KA h → ∣ h ∣ ∘ (p ̇ (𝕋(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝕋(X)))
+  →     ∀ A KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
  -- Here, the inferred types are
- -- A : Algebra 𝓤 S, KA : 𝒦 A, h : hom ((𝕋(X))) A
+ -- A : Algebra 𝓤 S, KA : 𝒦 A, h : hom ((𝑻(X))) A
 
  identities-are-compatible-with-homs p q 𝒦⊧p≋q A KA h = γ
   where
    pA≡qA : p ̇ A ≡ q ̇ A
    pA≡qA = 𝒦⊧p≋q KA
 
-   pAh≡qAh : ∀(𝒂 : X → ∣ 𝕋(X) ∣ )
+   pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
     →        (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ A)(∣ h ∣ ∘ 𝒂)
    pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
-   hpa≡hqa : ∀(𝒂 : X → ∣ 𝕋(X) ∣ )
-    →        ∣ h ∣ ((p ̇ (𝕋(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝕋(X))) 𝒂)
+   hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
+    →        ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)
    hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ (𝕋(X))) 𝒂)  ≡⟨ comm-hom-term' gfe (𝕋(X)) A h p 𝒂 ⟩
+    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term' gfe (𝑻(X)) A h p 𝒂 ⟩
     (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term' gfe (𝕋(X)) A h q 𝒂)⁻¹ ⟩
-    ∣ h ∣ ((q ̇ (𝕋(X))) 𝒂)  ∎
+    (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term' gfe (𝑻(X)) A h q 𝒂)⁻¹ ⟩
+    ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)  ∎
 
-   γ : ∣ h ∣ ∘ (p ̇ (𝕋(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝕋(X)))
+   γ : ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
    γ = gfe hpa≡hqa
 
  -- ⇐ (the "if" direction)
  homs-are-compatible-with-identities : (p q : Term)
-  →    (∀ A KA h  →  ∣ h ∣ ∘ (p ̇ (𝕋(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝕋(X))))
+  →    (∀ A KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X))))
        -----------------------------------------------
   →                𝒦 ⊧ p ≋ q
- --inferred types: A : Algebra 𝓤 S, KA : A ∈ 𝒦, h : hom (𝕋(X)) A
+ --inferred types: A : Algebra 𝓤 S, KA : A ∈ 𝒦, h : hom (𝑻(X)) A
 
  homs-are-compatible-with-identities p q all-hp≡hq {A = A} KA = γ
   where
-   h : (𝒂 : X → ∣ A ∣) → hom (𝕋(X)) A
+   h : (𝒂 : X → ∣ A ∣) → hom (𝑻(X)) A
    h 𝒂 = lift-hom{A = A} 𝒂
 
    γ : A ⊧ p ≈ q
@@ -136,11 +136,11 @@ module _
     (p ̇ A) 𝒂
       ≡⟨ refl _ ⟩
     (p ̇ A)(∣ h 𝒂 ∣ ∘ generator)
-      ≡⟨(comm-hom-term' gfe (𝕋(X)) A (h 𝒂) p generator)⁻¹ ⟩
-    (∣ h 𝒂 ∣ ∘ (p ̇ (𝕋(X)))) generator
+      ≡⟨(comm-hom-term' gfe (𝑻(X)) A (h 𝒂) p generator)⁻¹ ⟩
+    (∣ h 𝒂 ∣ ∘ (p ̇ (𝑻(X)))) generator
       ≡⟨ ap (λ - → - generator) (all-hp≡hq A KA (h 𝒂)) ⟩
-    (∣ h 𝒂 ∣ ∘ (q ̇ (𝕋(X)))) generator
-      ≡⟨ (comm-hom-term' gfe (𝕋(X)) A (h 𝒂) q generator) ⟩
+    (∣ h 𝒂 ∣ ∘ (q ̇ (𝑻(X)))) generator
+      ≡⟨ (comm-hom-term' gfe (𝑻(X)) A (h 𝒂) q generator) ⟩
     (q ̇ A)(∣ h 𝒂 ∣ ∘ generator)
       ≡⟨ refl _ ⟩
     (q ̇ A) 𝒂
@@ -148,8 +148,8 @@ module _
 
  compatibility-of-identities-and-homs : (p q : Term)
   →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀ A ka hh → ∣ hh ∣ ∘ (p ̇ (𝕋(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝕋(X))))
- --inferred types: A : algebra 𝓤 s, ka : A ∈ 𝒦, hh : hom (𝕋(X)) A.
+      ⇔ (∀ A ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
+ --inferred types: A : algebra 𝓤 s, ka : A ∈ 𝒦, hh : hom (𝑻(X)) A.
 
  compatibility-of-identities-and-homs p q =
    identities-are-compatible-with-homs p q ,
@@ -205,7 +205,7 @@ birkhoff : (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺))
  →         A ∈ Mod (Th (VClo 𝒦)) → A ∈ VClo 𝒦
 birkhoff 𝒦 A g eg A∈ModThV = γ
  where
-  h : hom (𝕋(X)) A
+  h : hom (𝑻(X)) A
   h = lift-hom{A = A}{X = X} g
 
   γ : A ∈ VClo 𝒦
@@ -216,15 +216,15 @@ birkhoff 𝒦 A g eg A∈ModThV = γ
  --equational class). The obvious choice is the set of all equations that hold in 𝒲, that
  --is, Th(𝒲). So, let 𝒲' = Mod(Th(𝒲)). Clearly, 𝒲 ⊆ 𝒲'. We prove the reverse inclusion.
  --Let A ∈ 𝒲' and let 𝑌 be a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴.
- --By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝕋(𝑌) → A`.
- --Since 𝔽_𝒲(Y) = 𝑻(Y)/θ_𝒲, there is an epimorphism g: 𝕋(Y) → 𝔽_𝒲.
+ --By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝑻(𝑌) → A`.
+ --Since 𝔽_𝒲(Y) = 𝑻(Y)/θ_𝒲, there is an epimorphism g: 𝑻(Y) → 𝔽_𝒲.
  --We claim Ker g ⊆ Ker h. If the claim is true, then by :numref:`Obs %s <obs 5>`
  --∃ 𝑓 : 𝔽_𝒲(𝑌) → 𝐴 such that f ∘ g = h and since ℎ is epic, so is 𝑓, so
  --A ∈ H(𝔽_{𝒲}(Y)) ⊆ 𝒲` which will complete the proof.
  --So it remains to prove the claim that Ker g ⊆ Ker h.
- --Let u, v ∈ 𝕋(Y) and assume g(u) = g(v).
- --Since 𝕋(Y) is generated by 𝑌, there are terms 𝑝, 𝑞 ∈ 𝕋(Y) and 𝒚 such that u = p^{𝕋(X)}(𝒚)
- --and v = q^{𝕋(X)}(𝒚). Therefore, p^{𝔽_𝒲} 𝒚 = g(u) = g(v) = q^{𝔽_𝒲} 𝒚.
+ --Let u, v ∈ 𝑻(Y) and assume g(u) = g(v).
+ --Since 𝑻(Y) is generated by 𝑌, there are terms 𝑝, 𝑞 ∈ 𝑻(Y) and 𝒚 such that u = p^{𝑻(X)}(𝒚)
+ --and v = q^{𝑻(X)}(𝒚). Therefore, p^{𝔽_𝒲} 𝒚 = g(u) = g(v) = q^{𝔽_𝒲} 𝒚.
  --Thus 𝒲 ⊧ 𝑝 ≈ 𝑞, hence (𝑝, 𝑞) ∈ Σ. Since A ∈ Mod(Σ) we get A ⊧ 𝑝 ≈ 𝑞.
  --Therefore, ℎ(𝑢) = 𝑝^A(ℎ₀ ∘ 𝒚) = 𝑞^A(ℎ₀ ∘ 𝒚) = ℎ(𝑣), as desired.
 

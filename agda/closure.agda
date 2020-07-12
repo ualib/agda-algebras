@@ -24,10 +24,10 @@ module closure
  (dfe : dfunext 𝓤 𝓤) where
 
 -- Product Closure
-𝑷-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
+P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
-𝑷-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 𝓘)
+P-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 𝓘)
 
 data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
  pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
@@ -181,31 +181,13 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
     ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
     (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
 
-   ψ' : (b : X → ∣ B ∣ ) → (∀ x → Image ∣ ϕ ∣ ∋ (b x)) → (p ̇ B) b  ≡ (q ̇ B) b
-   ψ' b Imgϕ∋b = {!!}
-   -- (p ̇ B) (∣ ϕ ∣ ∘ preim) ≡⟨ (comm-hom-term' gfe A B ϕ p preim)⁻¹ ⟩
-   -- ∣ ϕ ∣ ((p ̇ A) preim) ≡⟨ τ preim ⟩
-   -- ∣ ϕ ∣ ((q ̇ A) preim) ≡⟨ comm-hom-term' gfe A B ϕ q preim ⟩
-   -- (q ̇ B) (∣ ϕ ∣ ∘ preim) ∎
-
-   γ : (p ̇ HIA) ≡ (q ̇ HIA)
-   γ = {!!} -- (p ̇ HIA)
-   --       ≡⟨ refl _ ⟩
-   --     (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
-   --       ≡⟨ gfe (λ x → hiti x p) ⟩
-   --     (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
-   --       ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
-   --     (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
-   --       ≡⟨ (gfe (λ x → hiti x q))⁻¹ ⟩
-   --     (λ b → (q ̇ HIA) b)
-   --       ≡⟨ refl _ ⟩
-   --     (q ̇ HIA)    ∎
-
-
    hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
     → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
    hom-image-term-interp b (generator x) = (ζ b x)⁻¹
-   hom-image-term-interp b (node 𝓸 t) = {!!} -- ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
+   hom-image-term-interp b (node 𝓸 t) =  {!!} -- ap (𝓸 ̂ HIA) ? ? --  gfe φIH
+    where
+     -- φIH : (x : ∥ S ∥ 𝓸) → (t x ̇ HIA) b ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b))
+     -- φIH x = hom-image-term-interp b (t x)
 
    hom-image-term-interpretation hiti : (b : X → ∣ HIA ∣)(p : Term)
     → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
@@ -234,6 +216,20 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
      φIH x = hom-image-term-interpretation b (t x)
 
    hiti = hom-image-term-interpretation  -- alias
+
+   γ : (p ̇ HIA) ≡ (q ̇ HIA)
+   γ = (p ̇ HIA)
+         ≡⟨ refl _ ⟩
+       (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
+         ≡⟨ gfe (λ x → hiti x p) ⟩
+       (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
+         ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
+       (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
+         ≡⟨ (gfe (λ x → hiti x q))⁻¹ ⟩
+       (λ b → (q ̇ HIA) b)
+         ≡⟨ refl _ ⟩
+       (q ̇ HIA)    ∎
+
 
  hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
