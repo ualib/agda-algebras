@@ -200,7 +200,6 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
 
 .. _obs 5 in agda:
 
-
 Factorization of homomorphisms
 -----------------------------------
 

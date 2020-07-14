@@ -81,8 +81,6 @@
 .. _`sigma/`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
 .. _`sigma/basic.lean`: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
 .. _Siva Somayyajula: http://www.cs.cmu.edu/~ssomayya/
-.. _subuniverse.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/subuniverse.lean
-.. _term.lean: https://gitlab.com/ualib/lean-ualib/tree/william/src/term.lean
 .. _Theorem Proving in Lean: https://leanprover.github.io/theorem_proving_in_lean/index.html
 .. _this gist: https://gist.github.com/andrejbauer/3cc438ab38646516e5e9278fdb22022c
 .. _TPL: https://leanprover.github.io/theorem_proving_in_lean/
@@ -100,3 +98,10 @@
 .. _Agda Tutorial: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
 .. _Dependently Typed Programming in Agda: http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf
 .. _Programming Language Foundations in Agda: https://plfa.github.io/
+.. _basic module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst
+.. _birkhoff module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst
+.. _congruences module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst
+.. _homomorphisms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/homomorphisms.lagda.rst
+.. _relations module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/relations.lagda.rst
+.. _subuniverses module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/subuniverses.lagda.rst
+.. _terms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/terms.lagda.rst

@@ -51,15 +51,15 @@ An operation gives rise to a special kind of (𝑛+1)-ary relation, namely
 
 .. math:: Gf := \{(a_0, a_1, \dots, a_{n-1}, b) \in A^{n+1} ∣ b = f(a_0, a_1, \dots, a_{n-1})\},
 
-which is sometimes called the **graph** of :math:`f`.
+which is sometimes called the **graph** of 𝑓.
 
 For two sets 𝐴 and 𝐵, the collection of all functions 𝑓 : 𝐵 → 𝐴 is, for obvious reasons, denoted by :math:`A^B`. If  𝐵 = 𝐴ⁿ, then we have :math:`A^{A^n}`, the collection of all 𝑛-ary operations on 𝐴; as noted above, this can be represented by the function type (𝑛 → 𝐴) → 𝐴.
 
-If we let :math:`\mathsf{Op}_A` denote the collection of all finitary operations on 𝐴, then,
+If we let Op(𝐴) denote the collection of all finitary operations on 𝐴, then,
 
-.. math:: \mathsf{Op}_A = ⋃_{n ∈ ℕ} A^{A^n} = ⋃_{n<ω} ((𝑛 → A) → A).
+.. math:: \mathrm{Op}(𝐴) = ⋃_{n ∈ ℕ} A^{A^n} = ⋃_{n<ω} ((𝑛 → A) → A).
 
-If :math:`F ⊆ \mathsf{Op}_A` is a set of operations on 𝐴, let us denote by 𝐹ₙ the 𝑛-ary operations in 𝐹. Clearly, :math:`F_n = F ∩ A^{A^n}`.
+If 𝐹 ⊆ Op(𝐴) is a set of operations on 𝐴, let us denote by 𝐹ₙ the 𝑛-ary operations in 𝐹. Clearly, :math:`F_n = F ∩ A^{A^n}`.
 
 Given an 𝑛-tuple :math:`a = (a_0, a_1, \dots, a_{n-1}) ∈ A^n`, it helps to be able to refer to the set :math:`\{a_i : 0 ≤ i < n\}` of elements that occur in the tuple without explicitly naming each element in this set.  In fact, we already have notation for this, since an 𝑛-tuple is truly a function, with domain 𝑛 := {0, 1, …, 𝑛-1}, and image the set of elements occuring in the tuple.  Thus, im 𝑎 is {𝑎₀, 𝑎₁, …, 𝑎ₙ₋₁}, where each value is included in the set only once (no repeats). In particular, ∣im 𝑎∣ is a convenient way to write the number of distinct elements that occur in the tuple 𝑎.  For example, if 𝑎 = (1, 1, 3), then im 𝑎 = {1, 3}, and ∣im 𝑎∣ = 2.
 
@@ -72,7 +72,7 @@ General composition
 
 In universal algebra we mainly deal with *finitary* operations in **Set** (the category of sets).  We will identify the ``ntuple`` type with the function type 𝑛 → 𝐴.  Thus, the type of 𝑛-ary operations on 𝐴 is (𝑛 → 𝐴) → 𝐴.  Evaluating such an operation at the tuple 𝑎 : 𝑛 → 𝐴 is simply function application.
 
-As above, we denote and define the collection of all finitary operations on 𝐴 by :math:`\mathsf{Op}(A) = ⋃_{n<ω} ((𝑛 → A) → A)`. Let us now develop a general formulation of composition of operations that is more elegant and computationally practical than the standard formulation.
+As above, we denote and define the collection of all finitary operations on 𝐴 by Op(𝐴) = :math:`⋃_{n<ω}` ((𝑛 → 𝐴) → 𝐴). Let us now develop a general formulation of composition of operations that is more elegant and computationally practical than the standard formulation.
 
 Recall, the standard description of operation composition: if 𝑓 : (𝑛 → 𝐴) → 𝐴 is an 𝑛-ary operation and :math:`g_i : (k_i → A) → A` is a :math:`k_i`-ary operation for each 0 ≤ 𝑖 < 𝑛, then the **composition of** 𝑓 **with** :math:`(g_0, \dots, g_{n-1})`, denoted :math:`f ∘ (g_0, \dots, g_{n-1})`, is usually expressed as follows: for each 𝑛-tuple of tuples,
 
@@ -84,9 +84,9 @@ Recall, the standard description of operation composition: if 𝑓 : (𝑛 → �
 
 This notation is quite ugly and, even worse, it lends itself poorly to computation. Let us clean it up.
 
-Consider the 𝑛-tuple :math:`(g_0, \dots, g_{n-1})` of operations from :math:`\mathsf{Op}(A)`.
+Consider the 𝑛-tuple :math:`(g_0, \dots, g_{n-1})` of operations from Op(𝐴).
 
-Let :math:`g : ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathsf{Op}(A)`, and defined for each 0 ≤ 𝑖 < 𝑛 by :math:`g\,i = g_i`.
+Let :math:`g : ∏_{(i:n)} ((k_i → A) → A)` be the function with domain the set :math:`n = \{0,1,\dots, n-1\}`, codomain :math:`\mathrm{Op}(A)`, and defined for each 0 ≤ 𝑖 < 𝑛 by :math:`g\,i = g_i`.
 
 Let :math:`a : ∏_{(i:n)} (k_i → A)` be such that for each 0 ≤ 𝑖 < 𝑛 we have a function 𝑎 𝑖 : 𝑘ᵢ → 𝐴 which is defined for each 0 ≤ 𝑗 < 𝑘ᵢ by 𝑎 𝑖 𝑗 = 𝑎ᵢⱼ.
 
@@ -96,21 +96,21 @@ Using the :ref:`fork` and :ref:`eval` operators (defined in :ref:`general-compos
 
 If :math:`g: ∏_{(i:n)} ((k_i → A) → A)` and :math:`a: ∏_{(i:n)}(k_i → A)`, then
 
-.. math:: \mathsf{fork} \, g\, a: ∏_{(i:n)}((k_i → A) → A) × (k_i → A)
+.. math:: \mathrm{fork} \, g\, a: ∏_{(i:n)}((k_i → A) → A) × (k_i → A)
 
-is the function that maps each :math:`0≤ i < n` to the pair
+is the function that maps each 0 ≤ 𝑖 < 𝑛 to the pair
 
-.. math:: (\mathsf{fork} \, g\, a)\, i = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A).
+.. math:: (\mathrm{fork} \, g\, a)\, i = (g\,i, a\,i): ((k_i → A) → A) × (k_i → A).
 
-Applying :math:`g\,i` to :math:`a\,i` with the :math:`\mathsf{eval}` function, we have
+Applying :math:`g\,i` to 𝑎 𝑖 with the eval function, we have
 
-.. math:: \mathsf{eval} \, (\mathsf{fork} \, g\, a)\, i = \mathsf{eval} \, (g\,i, a\,i) = (g\,i)(a\,i).
+.. math:: \mathrm{eval} \, (\mathrm{fork} \, g\, a)\, i = \mathrm{eval} \, (g\,i, a\,i) = (g\,i)(a\,i).
 
-Observe that the codomain :math:`A` of the function :math:`\mathsf{eval}\, (\mathsf{fork} \, g\, a)` does not depend on :math:`i`, so the type :math:`∏_{(i:n)} A` simplifies to :math:`n → A` in this case, resulting in the typing judgment, :math:`\mathsf{eval} \, (\mathsf{fork} \, g\, a): n → A`.
+Observe that the codomain 𝐴 of the function eval fork :math:`g\, a` does not depend on 𝑖, so the type :math:`∏_{(i:n)} A` simplifies to 𝑛 → 𝐴 in this case, resulting in the typing judgment, eval fork :math:`g\, a` : 𝑛 → 𝐴.
 
 .. On the other hand,
 
-.. .. math:: \mathsf{eval}\,\mathsf{fork} \, g: ∏_{(i:n)}  (k_i → A) → (n → A).
+.. .. math:: \mathrm{eval}\,\mathrm{fork} \, g: ∏_{(i:n)}  (k_i → A) → (n → A).
 
 Thus, if
 
@@ -120,9 +120,9 @@ Thus, if
 
   denote and define the **composition of** 𝑓 **with** :math:`g` as follows:
 
-.. math:: f\, \mathsf{comp}\, g := f \, \mathsf{eval} \, \mathsf{fork} \, g: \bigl(∏_{(i:n)}(k_i → A)\bigr) → A.
+.. math:: f\, \mathrm{comp}\, g := f \, \mathrm{eval} \, \mathrm{fork} \, g: \bigl(∏_{(i:n)}(k_i → A)\bigr) → A.
 
-Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then :math:`\mathsf{eval} \, \mathsf{fork} \, g \, a` has type 𝑛 → 𝐴, which is the domain type of 𝑓; therefore, :math:`f\, \mathsf{eval} \, \mathsf{fork} \, g \, a` has type 𝐴, as desired.
+Indeed, if :math:`a: ∏_{(i:n)}(k_i → A)`, then eval fork :math:`g \, a` has type 𝑛 → 𝐴, which is the domain type of 𝑓; therefore, 𝑓 eval fork :math:`g \, a` has type 𝐴, as desired.
 
 .. _greater-generality:
 
@@ -141,31 +141,31 @@ Denote by 𝐺 the "γ-tuple" of these operations; that is, for each 𝑖 : γ t
 
 Even in this more general context, we can still use the fork and eval maps introduced in the appendix (see :ref:`general-composition`) to express composition of operations. Indeed, we *define* the **composition of** 𝑓 **with** 𝐺 to be
 
-.. math:: f \, \mathsf{eval} \, \mathsf{fork} \, G.
+.. math:: f \, \mathrm{eval} \, \mathrm{fork} \, G.
 
 Let us adopt the following convenient notation:
 
-  *Denote by* :math:`\mathsf{comp}` *the general composition operation* :math:`\mathsf{eval} \, \mathsf{fork}`.
+  *Denote by* comp *the general composition operation* eval fork.
 
-Then, given :math:`f: (γ → α) → α` and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** :math:`f` **with** :math:`G` is :math:`f\, \mathsf{comp}\, G := f \, \mathsf{eval} \, \mathsf{fork} \, G`.  Evidently, this yields the typing judgment,
+Then, given 𝑓 : (γ → α) → α and :math:`G: ∏_{(i:γ)} ((γ_i → α) → α)`, the **general composition of** 𝑓 **with** 𝐺 is 𝑓 comp 𝐺 := 𝑓 eval fork 𝐺.  Evidently, this yields the typing judgment,
 
-.. math:: f\, \mathsf{comp}\, G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
+.. math:: f\, \mathrm{comp}\, G : \bigl(∏_{(i:γ)}(γ_i → α)\bigr) → α.
 
 Indeed, if :math:`a: ∏_{(i:γ)}(γ_i → α)`, then for each 𝑖 : γ we have,
 
 .. math:: a\, i : γ_i → α \quad \text{ and } \quad  G\, i : (γ_i → α) → α,
 
-so evaluation of :math:`\mathsf{comp}\, G \, a` at a particular 𝑖 : γ is simply function application. That is,
+so evaluation of comp 𝐺 𝑎 at a particular 𝑖 : γ is simply function application. That is,
 
-.. math:: \mathsf{comp} \,G \, a \, i:= \mathsf{eval} \, \mathsf{fork} \, G \, a \, i = (G\, i)(a\, i): α.
+.. math:: \mathrm{comp} \,G \, a \, i:= \mathrm{eval} \, \mathrm{fork} \, G \, a \, i = (G\, i)(a\, i): α.
 
-Thus, :math:`\mathsf{comp}\, G \, a` has type γ → α, which is precisely the domain type of 𝑓.
+Thus, comp 𝐺 𝑎 has type γ → α, which is precisely the domain type of 𝑓.
 
 To summarize, we have the following typing judgments:
 
-.. math:: \mathsf{comp}\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
+.. math:: \mathrm{comp}\, G \, a : γ → α \quad \text{ and } \quad f: (γ → α) → α,
 
-whence :math:`f \, \mathsf{comp}\, G \, a: α` is well-typed.
+whence 𝑓 comp 𝐺 𝑎 : α is well-typed.
 
 
 ----------------------------------------
@@ -232,27 +232,25 @@ Our formal implementation of the concept of algebraic structure is described in 
 Subalgebras
 -------------
 
-This section introduces two important concepts in universal algebra, **subuniverse** and **subalgebra**. Suppose :math:`𝑨 = ⟨A, F^𝑨⟩` is an algebra. Recall, the (nonempty) set :math:`A` is called the **universe** of 𝑨.
+This section introduces two important concepts in universal algebra, **subuniverse** and **subalgebra**. Suppose :math:`𝑨 = ⟨A, F^𝑨⟩` is an algebra. Recall, the (nonempty) set 𝐴 is called the **universe** of 𝑨.
 
-We call a subset :math:`B ⊆ A` **closed under** (the operations in) :math:`F^𝑨` if for each :math:`f ∈ F` and all :math:`b_0, \dots, b_{ρf-1} ∈ B` we have :math:`f^𝑨(b_0, \dots, b_{ρ f-1}) ∈ B`.  Equivalently,
+We call a subset 𝐵 ⊆ 𝐴 **closed under** (the operations in) :math:`F^𝑨` if for each 𝑓 ∈ 𝐹 and all 𝑏 : ρ𝑓 → 𝐵 we have :math:`f^𝑨 \, b ∈ B`.
 
-.. math:: ∀ f ∈ F,\ ∀ b: ρf → B, \ (f^𝑨 \, b) ∈ B.
+If a subset 𝐵 ⊆ 𝐴 is closed under :math:`F^𝑨`, then we call 𝐵 a **subuniverse** of 𝑨.
 
-If a subset :math:`B ⊆ A` is closed under :math:`F^𝑨`, then we call :math:`B` a **subuniverse** of :math:`𝑨`.
+If 𝐵 ≠ ∅ is a subuniverse of 𝑨, and if we let :math:`F^𝑩 = \{ f^𝑨 ↾ B : f ∈ F \}`, then :math:`𝑩 = ⟨ B, F^𝑩 ⟩` is an algebra, called a **subalgebra** of 𝑨. Conversely, all subalgebras are of this form.
 
-If :math:`B ≠ ∅` is a subuniverse of 𝑨, and if we let :math:`F^𝑩 = \{ f^𝑨 ↾ B : f ∈ F \}`, then :math:`𝑩 = ⟨ B, F^𝑩 ⟩` is an algebra, called a **subalgebra** of 𝑨. Conversely, all subalgebras are of this form.
-
-If 𝑩 is a subalgebra of 𝑨, we denote this fact by :math:`𝑩 ≤ 𝑨`. Similarly, we write :math:`B ≤ 𝑨` if :math:`B` is a subuniverse of :math:`𝑨`.  It helps to keep in mind the following consequence of the definitions:
+If 𝑩 is a subalgebra of 𝑨, we denote this fact by 𝑩 ≤ 𝑨. Similarly, we write 𝐵 ≤ 𝑨 if 𝐵 is a subuniverse of 𝑨 (relying on context and notation to disambiguate).  It helps to keep in mind the following consequence of the definitions:
 
   *The empty set is a subuniverse of every algebra, but the universe of an algebra is never empty*.
 
 In other terms, if S(𝑨) denotes the collection of all subalgebras of 𝑨, then
 
-.. math:: \mathrm S(𝑨) = \{⟨B, F^𝑩⟩ : B ≤ 𝑨 \text{ and } B ≠ ∅\}.
+.. math:: \mathrm S(𝑨) = \{⟨B, F^𝑩⟩ : ∅ ≠ B ≤ 𝑨\}.
 
 If 𝒦 is a class of 𝑆-algebras, then the class of all subalgebras of algebras in 𝒦 is denoted by S(𝒦).
 
-It is obvious that the intersection of subuniverses is again a subuniverse. Nevertheless, we will record this observation below (see :numref:`Obs. %s <obs 5>`).
+It is obvious that the intersection of subuniverses is again a subuniverse. Nevertheless, we will record this fact below (see :numref:`Obs. %s <obs 5>`). We will also formalize the statement and proof of this fact in Agda; see :numref:`obs 5 in Agda`.
 
 .. index:: subuniverse generation
 
@@ -277,11 +275,11 @@ We can also use recursion to define the **subuniverse of** 𝑨 **generated by a
 Subdirect products
 -------------------
 
-If :math:`k, n ∈ ℕ`, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if :math:`σ : k → n` is a :math:`k`-tuple, then a relation :math:`R` over :math:`A` with scope :math:`σ` is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
+If 𝑘, 𝑛 ∈ ℕ, if :math:`A = (A_0, A_1, \dots, A_{n-1})` is a list of sets, and if σ : 𝑘 → 𝑛 is a 𝑘-tuple, then a relation 𝑅 over 𝐴 with scope σ is a subset of the Cartesian product :math:`A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}`.
 
-Let 𝑆 = (𝐹, ρ) be a signature and for each 𝑖 < 𝑛 let :math:`𝑨_i = ⟨ A_i, F ⟩` be an 𝑆-algebra. If :math:`𝑨 = ∏_{i<n}𝑨_i` is the product of these algebras, then a relation :math:`R` over :math:`𝑨` with scope :math:`σ` is called **compatible with** 𝑨 if it is closed under the basic operations in :math:`F`. In other words, :math:`R` is compatible if the induced algebra :math:`ℝ = ⟨ R, F ⟩` is a subalgebra of :math:`\prod_{j<k} 𝑨_{σ(j)}`.
+Let 𝑆 = (𝐹, ρ) be a signature and for each 𝑖 < 𝑛 let :math:`𝑨_i = ⟨ A_i, F ⟩` be an 𝑆-algebra. If :math:`𝑨 = ∏_{i<n}𝑨_i` is the product of these algebras, then a relation 𝑅 over 𝐴 with scope σ is called **compatible with** 𝐴 if it is closed under the basic operations in 𝐹. In other words, 𝑅 is compatible if the induced algebra 𝑹 = ⟨𝑅, 𝐹⟩ is a subalgebra of :math:`\prod_{j<k} 𝑨_{σ(j)}`.
 
-If :math:`R` is compatible with the product algebra and if the projection of :math:`R` onto each factor is surjective, then :math:`ℝ` is called a **subdirect product** of the algebras in the list :math:`(𝑨_{σ(0)}, 𝑨_{σ(1)}, \dots, 𝑨_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{\mathrm{sd}} \prod_{j< k} 𝑨_{σ(j)}`.
+If 𝑅 is compatible with the product algebra and if the projection of 𝑅 onto each factor is surjective, then 𝑹 is called a **subdirect product** of the algebras in the list :math:`(𝑨_{σ(0)}, 𝑨_{σ(1)}, \dots, 𝑨_{σ(k-1)})`; we denote this situation by writing :math:`𝑹 ≤_{\mathrm{sd}} \prod_{j< k} 𝑨_{σ(j)}`.
 
 **Formalization**. (not yet implemented)
 
@@ -297,7 +295,7 @@ If :math:`R` is compatible with the product algebra and if the projection of :ma
 Homomorphisms
 -------------
 
-Let :math:`𝑩 = ⟨ B, F^𝑩 ⟩` and :math:`𝑪 = ⟨ C, F^𝑪 ⟩` be algebras of the same signature, and let ℎ : 𝐵 → 𝐶 be a function (e.g., on sets).
+Let :math:`𝑩 = ⟨B, F^𝑩⟩` and :math:`𝑪 = ⟨C, F^𝑪⟩` be algebras of the same signature, and let ℎ : 𝐵 → 𝐶 be a function (e.g., on sets).
 
 Take an operation symbol 𝑓 ∈ 𝐹, and suppose that for all :math:`ρ f`-tuples 𝑏 : ρ𝑓 → 𝐵 of 𝐵 the following equation holds:
 
@@ -305,7 +303,7 @@ Take an operation symbol 𝑓 ∈ 𝐹, and suppose that for all :math:`ρ f`-tu
 
 Then ℎ is said to **respect the interpretation of** 𝑓.
 
-If ℎ respects the interpretation of every 𝑓 ∈ 𝐹, then we call ℎ a **homomorphism** from 𝑩 to 𝑪, and we write ℎ ∈ Hom(𝑩, 𝑪), or simply, ℎ : 𝑩 → 𝑪. (Later, in Agda, we will typically write something like ``h : Hom 𝑩 𝑪``.)
+If ℎ respects the interpretation of every 𝑓 ∈ 𝐹, then we call ℎ a **homomorphism** from 𝑩 to 𝑪, and we write ℎ ∈ Hom(𝑩, 𝑪), or simply, ℎ : 𝑩 → 𝑪. (Later, in Agda, we will typically use notation like ``h : hom B C``, or sometimes ``h : Hom 𝑩 𝑪``.)
 
 A homomorphism ℎ : 𝑩 → 𝑪 is called an **epimorphism** if for every algebra 𝑫 and pair :math:`g_1, g_2: 𝑪 → 𝑫` of homomorphisms, the equation :math:`g_1 ∘ h = g_2 ∘ h` implies :math:`g_1 = g_2`. We often write ℎ : 𝑩 ↠ 𝑪, and say that "ℎ is **epi**" and "ℎ maps 𝑩 **homomorphically onto** 𝑪" in this case.
 
@@ -335,7 +333,7 @@ Let 𝓒𝓵(𝐴) denote the collection of all clones on 𝐴.
 
 The smallest clone on 𝐴 is the **clone of projections**, which we denote and define as follows:
 
-.. math:: \mathsf{Proj}  A = ⋃_{i < n < ω}  \{π^n_i : ∀ a ∈ A^n,\ π^n_i\, a = a(i)\}.
+.. math:: \mathrm{Proj}  A = ⋃_{i < n < ω}  \{π^n_i : ∀ a ∈ A^n,\ π^n_i\, a = a(i)\}.
 
 Recall, the natural number 𝑘 < ω can be constructed as (or at least identified with) the set {0, 1, …, 𝑘-1}. For each 𝑘 < ω, denote and define the tuple πᵏ : (𝑘 → 𝐴) → 𝐴 of all 𝑘-ary projections on 𝐴 as follows: for each 0 ≤ 𝑖 < 𝑘, πᵏ(𝑖) is the 𝑖-th 𝑘-ary projection operation that takes each 𝑘-tuple 𝑎 : 𝑘 → 𝐴 to its entry at index 𝑖, 
 
@@ -347,13 +345,13 @@ The **clone of term operations** of an 𝑆-algebra 𝑨 is the smallest clone o
 
 .. math:: \mathrm{Clo}(F^𝑨) = ⋂ \{ U ∈ 𝓒𝓵 A ∣ F^𝑨 ⊆ U\}.
 
-The set of 𝑛-ary members of :math:`\mathrm{Clo}(F^𝑨)` is sometimes denoted by :math:`\mathsf{Clo}_n (F^𝑨)` (despite the fact that the latter is obviously not a clone).
+The set of 𝑛-ary members of :math:`\mathrm{Clo}(F^𝑨)` is sometimes denoted by :math:`\mathrm{Clo}_n (F^𝑨)` (despite the fact that the latter is obviously not a clone).
 
 The **clone of polynomial operations** (or **polynomial clone**) of an 𝑆-algebra 𝑨 is denoted by :math:`\mathrm{Pol} (F^𝑨)` and is defined to be the clone generated by the collection consisting of the basic operations (i.e., :math:`F^𝑨`) of 𝑨 along with the **constants** on 𝐴. [3]_
 
-The set of :math:`n`-ary members of :math:`\mathsf{Pol} (F^𝑨)` is sometimes denoted by :math:`\mathsf{Pol}_n (F^𝑨)`. 
+The set of 𝑛-ary members of :math:`\mathrm{Pol} (F^𝑨)` is sometimes denoted by :math:`\mathrm{Pol}_n (F^𝑨)`. 
 
-The clone :math:`\mathsf{Clo}(F^𝑨)` is associated with the algebra :math:`𝑨` only insofar as the former is constructed out of the basic operations of 𝑨 and the set :math:`A` on which those operations are defined.  However, all that is required when defining a clone is a set :math:`A` and some collection :math:`F` of operations defined on :math:`A`; from only these ingredients, we can construct the clone generated by :math:`F`, which we denote by :math:`\mathsf{Clo}(F)`.
+The clone :math:`\mathrm{Clo}(F^𝑨)` is associated with the algebra 𝑨 only insofar as the former is constructed out of the basic operations of 𝑨 and the set 𝐴 on which those operations are defined.  However, all that is required when defining a clone is a set 𝐴 and some collection 𝐹 of operations defined on :math:`A`; from only these ingredients, we can construct the clone generated by 𝐹, which we denote by Clo(𝐹).
 
 Thus
 
@@ -595,7 +593,7 @@ We start with the simple observation that equalizers of homomorphisms are subuni
 
 .. proof:observation:: Ex 1.4.6.a of :cite:`Bergman:2012`
 
-   If :math:`g, h : \mathsf{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, then the **equalizer** of :math:`g` and :math:`h`, which we denote :math:`𝖤(g,h) = \{a: A ∣ g\, a = h\, a\}`, is a subuniverse of 𝑨.
+   If :math:`g, h : \mathrm{Hom}(𝑨, 𝑩)` are homomorphisms from 𝑨 to 𝑩, then the **equalizer** of :math:`g` and :math:`h`, which we denote :math:`𝖤(g,h) = \{a: A ∣ g\, a = h\, a\}`, is a subuniverse of 𝑨.
 
    .. container:: toggle
  
@@ -626,7 +624,7 @@ Another easy fact is that composing homomorphisms results in a homomorphism.
 
 .. proof:observation:: composing homs gives a hom
 
-   If :math:`g: \mathsf{Hom}(𝑨, 𝑩)` and :math:`h: \mathsf{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathsf{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
+   If :math:`g: \mathrm{Hom}(𝑨, 𝑩)` and :math:`h: \mathrm{Hom}(𝑩, 𝑪)` (homomorphisms from 𝑨 to 𝑩 and 𝑩 to 𝑪, resp.), then :math:`h \circ g : \mathrm{Hom}(𝑩, 𝑪)` (a homomorphisms from 𝑨 to 𝑪).
 
 The easy proof of this fact is formalized in :numref:`obs 2 in agda` .
 
@@ -658,13 +656,13 @@ Another elementary result is that homomorphisms are uniquely determined by the v
 
 Our Agda proof of :numref:`Obs %s <obs 3>` is called ``HomUnique``.  It is presented :numref:`obs 3 in agda`.
 
-A corollary of the last result is an easily proved bound on the cardinality of :math:`|\mathsf{Hom}(𝑨, 𝑩)|`.
+A corollary of the last result is an easily proved bound on the cardinality of :math:`|\mathrm{Hom}(𝑨, 𝑩)|`.
 
 .. _obs 4:
 
 .. proof:observation:: Ex 1.4.6.c of :cite:`Bergman:2012`
 
-   If :math:`A, B` are finite and :math:`X` generates 𝑨, then :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`.
+   If :math:`A, B` are finite and :math:`X` generates 𝑨, then :math:`|\mathrm{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`.
 
    .. container:: toggle
 
@@ -674,7 +672,7 @@ A corollary of the last result is an easily proved bound on the cardinality of :
 
       By :numref:`Obs %s <obs 3>`, a homomorphism is uniquely determined by its restriction to a generating set.
 
-      If :math:`X` generates 𝑨, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\mathsf{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`. ☐
+      If :math:`X` generates 𝑨, then since there are exactly :math:`|B|^{|X|}` functions from :math:`X` to :math:`B` we have :math:`|\mathrm{Hom}(𝑨, 𝑩)| ≤ |B|^{|X|}`. ☐
 
 Here is an elementary result about factorability of homomorphisms.  The informal proof is presented below and its formalization in :numref:`obs 5 in agda`.
 
@@ -682,9 +680,9 @@ Here is an elementary result about factorability of homomorphisms.  The informal
 
 .. proof:observation::
 
-   If :math:`g ∈ \mathsf{Epi} (𝑨, 𝑩)`, :math:`h ∈ \mathsf{Hom} (𝑨, 𝑪)`, and :math:`\ker g ⊆ \ker h`, then
+   If :math:`g ∈` Hom(𝑨, 𝑩) is surjective, if ℎ ∈ Hom (𝑨, 𝑪), and if ker :math:`g` ⊆ ℎ, then
 
-   .. math:: ∃ k ∈ \mathsf{Hom}(𝑩, 𝑪), \ h = k ∘ g.
+   .. math:: ∃ f ∈ \mathrm{Hom}(𝑩, 𝑪), \ h = f ∘ g.
 
    .. container:: toggle
 
@@ -692,25 +690,17 @@ Here is an elementary result about factorability of homomorphisms.  The informal
 
          *Proof*.
 
-      We define :math:`k ∈ \mathsf{Hom}(𝑩, 𝑪)` as follows:
+      We define 𝑓 ∈ Hom(𝑩, 𝑪) as follows:
 
-      Fix :math:`b ∈ B`.
+      Fix 𝑏 ∈ 𝐵
 
-      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since :math:`\ker g ⊆ \ker h`, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by :math:`h` to a single element of :math:`C`.
+      Since :math:`g` is surjective, the set :math:`g^{-1}\{b\} ⊆ A` is nonempty, and since ker :math:`g` ⊆ ker ℎ, it is clear that every element of :math:`g^{-1}\{b\}` is mapped by ℎ to a single element of 𝐶.
 
       Label this element :math:`c_b`. That is, :math:`h(a) = c_b`, for all :math:`a ∈ g^{-1}\{b\}`.
 
-      For each such :math:`b`, and its associated :math:`c_b`, define :math:`k(b) = c_b`.
+      For each such 𝑏, and its associated :math:`c_b`, define :math:`f(b) = c_b`. [4]_
 
-      The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function :math:`k`. While it's true that for each :math:`b ∈ B` there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a ∈ g^{-1}\{b\}`, it's also true that we have no means of producing such :math:`c_b` constructively.
-
-      One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such an element from the (nonempty) set :math:`g^{-1}\{b\}`?
-
-..      We must appeal to the Axiom of :term:`Choice` at this juncture and concede that the function :math:`k` will not be constructively defined. (We have more to say about this in :numref:`Chapter %s <basic facts in agda>` when we implement :numref:`Obs %s <obs 4>` in Agda.)  Nonetheless, we forge ahead (nonconstructively) and define :math:`k` as described above, using the
-
-      (**Question**. Do we need Axiom of :term:`Choice` to compute a :math:`c_b` for each :math:`b ∈ B`?)
-
-      It is then easy to see that :math:`k ∘ g = h`.  Indeed, for each :math:`a ∈ A`, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`k(g(a)) = h(a)` by definition.
+      It is then easy to see that :math:`f ∘ g = h`.  Indeed, for each 𝑎 ∈ 𝐴, we have :math:`a ∈ g^{-1}\{g(a)\}`, so :math:`f\,g(a) = h(a)` by definition.
 
       Finally, to prove that :math:`k` is a homomorphism, fix an operation symbol :math:`f ∈ F` and a tuple :math:`b:ρf → B`; we will show that
 
@@ -729,9 +719,9 @@ Here is an elementary result about factorability of homomorphisms.  The informal
 
       as desired, where the penultimate equality holds by virtue of the fact that :math:`g` is a homomorphism. ☐
 
-Our formal implementation of :numref:`Obs %s <obs 5>` is presented in :numref:`obs 5 in agda`.
+We formalize :numref:`Obs %s <obs 5>` in the `homomorphisms module`_ of the agda-ualib_; see :numref:`obs 5 in agda`.
 
-Next we observe that the intersection of subuniverses is again a subuniverse, a fact that we prove formally in Agda in :numref:`obs 6 in agda`.
+Next we observe that the intersection of subuniverses is again a subuniverse, a fact that we prove formally in the `subuniverses module`_ of the agda-ualib_; see :numref:`obs 6 in agda`.
 
 .. _obs 6:
 
@@ -768,7 +758,7 @@ Next is a theorem that provides a means of generating subuniverses recursively.
      .. math:: A_{n+1} =  A_n ∪ \{ f\, a ∣ f ∈ F, \ a : ρf → A_n\}.
         :label: subalgebra-inductive
 
-   Then the subuniverse of 𝑨 generated by :math:`A_0` is :math:`\mathsf{Sg}^𝑨(A_0) = ⋃_{n<ω} A_n`.
+   Then the subuniverse of 𝑨 generated by :math:`A_0` is :math:`\mathrm{Sg}^𝑨(A_0) = ⋃_{n<ω} A_n`.
 
    .. container:: toggle
 
@@ -784,19 +774,19 @@ Next is a theorem that provides a means of generating subuniverses recursively.
 
       From its definition, :math:`f \,a ∈ A_{n+1} ⊆ Y`. Since :math:`f` was arbitrary, it follows that :math:`Y` is a subuniverse of 𝑨 containing :math:`A_0`.
 
-      Thus, by :eq:`SgDef`, :math:`\mathsf{Sg}^𝑨(A_0) ⊆ Y`.
+      Thus, by :eq:`SgDef`, :math:`\mathrm{Sg}^𝑨(A_0) ⊆ Y`.
 
-      For the opposite inclusion, it is enough to check, by induction on :math:`n`, that :math:`A_n ⊆ \mathsf{Sg}^𝑨(A_0)`.
+      For the opposite inclusion, it is enough to check, by induction on :math:`n`, that :math:`A_n ⊆ \mathrm{Sg}^𝑨(A_0)`.
 
-      Clearly, :math:`A_0 ⊆ \mathsf{Sg}^𝑨(A_0)`.
+      Clearly, :math:`A_0 ⊆ \mathrm{Sg}^𝑨(A_0)`.
 
-      Assume :math:`A_n ⊆ \mathsf{Sg}^𝑨(A_0)`.  We show :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`.
+      Assume :math:`A_n ⊆ \mathrm{Sg}^𝑨(A_0)`.  We show :math:`A_{n+1} ⊆ \mathrm{Sg}^𝑨(A_0)`.
 
       If :math:`b ∈ A_{n+1} - A_n`, then :math:`b = f\, a` for a basic :math:`k`-ary operation :math:`f` and some :math:`a: k) → A_n`.
 
-      But :math:`∀ i, \ a i ∈ \mathsf{Sg}^𝑨(A_0)` and since this latter object is a subuniverse, :math:`b ∈ \mathsf{Sg}^𝑨(X)` as well.
+      But :math:`∀ i, \ a i ∈ \mathrm{Sg}^𝑨(A_0)` and since this latter object is a subuniverse, :math:`b ∈ \mathrm{Sg}^𝑨(X)` as well.
 
-      Therefore, :math:`A_{n+1} ⊆ \mathsf{Sg}^𝑨(A_0)`, as desired. ☐
+      Therefore, :math:`A_{n+1} ⊆ \mathrm{Sg}^𝑨(A_0)`, as desired. ☐
 
 .. The argument in the proof of :numref:`Obs <obs 7>` is of a type that one encounters frequently throughout algebra. It has two parts.
 
@@ -804,9 +794,9 @@ Next is a theorem that provides a means of generating subuniverses recursively.
 
 ..   #. Every subuniverse containing :math:`A_0` is shown to contain :math:`Y` as well.
 
-..   #. One concludes that :math:`Y = \mathsf{Sg}^𝑨 (A_0)`.
+..   #. One concludes that :math:`Y = \mathrm{Sg}^𝑨 (A_0)`.
 
-We implement the concept of subalgebra in Agda as described in :numref:`subuniverses in agda`, and we formalize :numref:`Obs %s <obs 7>` in :numref:`obs 7 in agda`.
+We formally implement the concept of subalgebra in the `subuniverses module`_ of the agda-ualib_, which we describe in :numref:`subuniverses in agda`. In particular, we describe the formalization of :numref:`Obs %s <obs 7>` in :numref:`obs 7 in agda`.
 
 .. _obs 7.1:
 
@@ -826,9 +816,9 @@ We implement the concept of subalgebra in Agda as described in :numref:`subunive
 
          *Proof*.
 
-      The first two items are easy to prove (exercise).  For the third item, it is easy to check that ℎ is order-preserving on subsets. This and the first two items yield 
+      The first two items are easy to prove (exercise).  For the third item, it is easy to check that ℎ is order-preserving on subsets. This and the first two items yield
 
-      .. math:: 𝑋 ⊆ \mathrm{Sg}^𝑨(𝑋) \; ⇒ \; ℎ(𝑋) ⊆ ℎ(\mathrm{Sg}^𝑨(𝑋)) \; ⇒ \; \mathrm{Sg}^𝑩(ℎ(𝑋)) ⊆ ℎ(\mathrm{Sg}^𝑨(𝑋)). 
+      .. math:: 𝑋 ⊆ \mathrm{Sg}^𝑨(𝑋) \; ⇒ \; ℎ(𝑋) ⊆ ℎ(\mathrm{Sg}^𝑨(𝑋)) \; ⇒ \; \mathrm{Sg}^𝑩(ℎ(𝑋)) ⊆ ℎ(\mathrm{Sg}^𝑨(𝑋)).
 
       Conversely, using the lemma again,
 
@@ -844,13 +834,13 @@ Our formalization of :numref:`Obs %s <obs 7.1>` is presented in :numref:`obs 7.1
 .. CLONE GENERATION
 .. -------------------------------------------
 
-.. We seek a "bottom-up," inductive description of the members of :math:`\mathsf{Clo}(F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <obs 6>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available. Inductive version of Clo(F).  (UAFST Thm 4.3) Let A be a set and let F ⊆ Op(A):= ⋃ₙ A^Aⁿ be a collection of operations on A. Define F_0 := Proj(A) (the set of projection operations on A), and for all 0 ≤ n < ω, F_{n+1} := Fₙ ∪ {f g | f ∈ F, g : ρf → Fₙ ∩ (ρg → A)}. Then Clo(F) = ⋃ₙ Fₙ. *Proof*. Let F̄ = ⋃ₙ Fₙ. By induction, every Fₙ is a subset of Clo(F). Thus, F ⊆ Clo(F). For the converse inclusion, we must show F` is a clone that contains F. Obviously F contains the projection operations, F₀ ⊆ F̄. For every f ∈ F, we have f πᵏ ∈ F₁ ⊆ F̄, where k := ρ f. We must show that F̄ is closed under generalized composition. This follows from the following subclaim.  *Subclaim*. If f ∈ Fₙ and all entries of g := (g₀, ..., g_{ρf - 1} ∈ Fₘ are k-ary, then f g ∈ F_{n+m}, where we have defined g: ρf -> (k -> A) -> A to be the tuple given by g i = gᵢ for  each 0 ≤ i < ρ f. By induction on n: If n = 0 then f is a projection, so f g = gᵢ ∈ Fₘ for some 0 ≤ i < ρ f. Assume (IH) claim holds for n and f ∈ F_{n+1} - Fₙ.  By def, ∃ t-ary op fᵢ ∈ F, ∃ t-tuple, h = (h₀, ..., h_{t-1}) ∈ t -> Fₙ, such that f = fᵢ h. (N.B. h: Fin(t) → (Fin(ρ f) → A) → A is given by h(j) = hⱼ, and the arity of each hᵢ must be equal to that of f, namely ρ f.) By (IH) for each i ≤ k, hᵢ = hᵢ g ∈ F_{n+m}, where as above g = (g₀,...,g_{k-1}). By def, f₁ h' ∈ F_{n+m+1} = F_{(n+1)+m}. Since f₁ h' = f₁ ∘ (h₁ g, ..., hₜ g) = f g, the claim is proved. □
+.. We seek a "bottom-up," inductive description of the members of :math:`\mathrm{Clo}(F)`.  By thinking of the clone itself as a kind of algebra, a description analogous to :numref:`Obs %s <obs 6>` ought to be possible.  In fact, since function composition is associative, a slightly slicker formulation is available. Inductive version of Clo(F).  (UAFST Thm 4.3) Let A be a set and let F ⊆ Op(A):= ⋃ₙ A^Aⁿ be a collection of operations on A. Define F_0 := Proj(A) (the set of projection operations on A), and for all 0 ≤ n < ω, F_{n+1} := Fₙ ∪ {f g | f ∈ F, g : ρf → Fₙ ∩ (ρg → A)}. Then Clo(F) = ⋃ₙ Fₙ. *Proof*. Let F̄ = ⋃ₙ Fₙ. By induction, every Fₙ is a subset of Clo(F). Thus, F ⊆ Clo(F). For the converse inclusion, we must show F` is a clone that contains F. Obviously F contains the projection operations, F₀ ⊆ F̄. For every f ∈ F, we have f πᵏ ∈ F₁ ⊆ F̄, where k := ρ f. We must show that F̄ is closed under generalized composition. This follows from the following subclaim.  *Subclaim*. If f ∈ Fₙ and all entries of g := (g₀, ..., g_{ρf - 1} ∈ Fₘ are k-ary, then f g ∈ F_{n+m}, where we have defined g: ρf -> (k -> A) -> A to be the tuple given by g i = gᵢ for  each 0 ≤ i < ρ f. By induction on n: If n = 0 then f is a projection, so f g = gᵢ ∈ Fₘ for some 0 ≤ i < ρ f. Assume (IH) claim holds for n and f ∈ F_{n+1} - Fₙ.  By def, ∃ t-ary op fᵢ ∈ F, ∃ t-tuple, h = (h₀, ..., h_{t-1}) ∈ t -> Fₙ, such that f = fᵢ h. (N.B. h: Fin(t) → (Fin(ρ f) → A) → A is given by h(j) = hⱼ, and the arity of each hᵢ must be equal to that of f, namely ρ f.) By (IH) for each i ≤ k, hᵢ = hᵢ g ∈ F_{n+m}, where as above g = (g₀,...,g_{k-1}). By def, f₁ h' ∈ F_{n+m+1} = F_{(n+1)+m}. Since f₁ h' = f₁ ∘ (h₁ g, ..., hₜ g) = f g, the claim is proved. □
 
 .. _obs 8:
 
 .. proof:observation:: Thm 4.3 of :cite:`Bergman:2012`
 
-   Let 𝐴 be a set and let :math:`F ⊆ \mathsf{Op}(A):= ⋃_{n<ω} A^{A^n}` be a collection of operations on 𝐴.
+   Let 𝐴 be a set and let :math:`F ⊆ \mathrm{Op}(A):= ⋃_{n<ω} A^{A^n}` be a collection of operations on 𝐴.
 
    Define :math:`F_0 := \mathrm{Proj} (A)` (the set of projections on :math:`A`) and for all :math:`0 ≤ n < ω` let
 
@@ -887,7 +877,7 @@ Our formalization of :numref:`Obs %s <obs 7.1>` is presented in :numref:`obs 7.1
 
       the claim is proved. □
 
-We implement terms and the term algebra in Agda in the ``terms`` module, as described in :numref:`terms`. Also in the ``terms`` module, and presented in :numref:`obs 9 in agda`, is a formal proof of the next result.
+We implement terms and the term algebra in Agda in the `terms module`_, as described in :numref:`terms`. Also in the `terms module`_ is a formal proof of the next result; see :numref:`obs 9 in agda`.
 
 
 .. _obs 9:
@@ -1031,7 +1021,7 @@ In the next observation, assume 𝑨 = :math:`⟨A, F^𝑨⟩` and 𝑩 = :math:
 
       This is an easy induction on ∣𝑡∣.
 
-We implement this result in Agda in :numref:`obs 10 in agda`.
+We formalize :numref:`Obs %s <obs 10>` and its proof in the `terms module`_ of the agda-ualib_, as described in :numref:`obs 10 in agda`.
 
 .. _obs 11:
 
@@ -1047,7 +1037,7 @@ We implement this result in Agda in :numref:`obs 10 in agda`.
 
       This follows from :numref:`Obs %s <obs 10>` by taking :math:`⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
 
-Our formal implementation of :numref:`Obs %s <obs 11>` is presented in :numref:`obs 11 in agda` as part of the ``terms`` module of the ``agda-ualib``.
+We formalize :numref:`Obs %s <obs 11>` and its proof in the `terms module`_ of the agda-ualib_, as described in :numref:`obs 11 in agda`.
 
 .. _obs 12:
 
@@ -1065,7 +1055,7 @@ Our formal implementation of :numref:`Obs %s <obs 11>` is presented in :numref:`
 
       A straightforward induction on the height of 𝑡 shows that every subuniverse is closed under the action of :math:`t^𝑨`. Thus the right-hand side is contained in the left. On the other hand, the right-hand side is a subuniverse that contains the elements of 𝑌 (take 𝑡 = 𝑥), so it contains :math:`\mathrm{Sg}^{𝑨}(Y)` as the latter is the smallest subuniverse containing 𝑌.
 
-Our formal implementation of :numref:`Obs. %s <obs 12>` is presented in :numref:`obs 12 in agda` as part of the ``subuniverses`` module of the ``agda-ualib``.
+We formalize :numref:`Obs. %s <obs 12>` and its proof in the `subuniverses module`_ of the agda-ualib_, as described in :numref:`obs 12 in agda`.
 
 .. -----------------------------------------------------------------
 .. MALCEV TERMS and CONDITIONS
@@ -1083,14 +1073,14 @@ Our formal implementation of :numref:`Obs. %s <obs 12>` is presented in :numref:
 ..    .. math:: F_0 &= X;\\
 ..          F_{n+1} &= F_n ∪ \{ f g ∣ f ∈ F, g : ρf → (F_n ∩ (ρ g → X)) \}, \quad n < ω.
 ..
-..    Then :math:`\mathsf{Clo}^X(F) = ⋃_n F_n`.
+..    Then :math:`\mathrm{Clo}^X(F) = ⋃_n F_n`.
 ..
 ..
-.. For a nonempty set :math:`A`, we let :math:`\mathsf{Op}_A` denote the set of all finitary operations on :math:`A`. That is, :math:`\mathsf{Op}_A = ⋃_{n∈ ℕ} A^{A^n}` on :math:`A` is a subset of :math:`\mathsf{Op}_A` that contains all projection operations and is closed under the (partial) operation of :ref:`<general composition>`.
+.. For a nonempty set :math:`A`, we let :math:`\mathrm{Op}_A` denote the set of all finitary operations on :math:`A`. That is, :math:`\mathrm{Op}_A = ⋃_{n∈ ℕ} A^{A^n}` on :math:`A` is a subset of :math:`\mathrm{Op}_A` that contains all projection operations and is closed under the (partial) operation of :ref:`<general composition>`.
 ..
-.. If :math:`𝑨 = ⟨ A, F^𝑨 ⟩` denotes the algebra with universe :math:`A` and set of basic operations :math:`F`, then :math:`\mathsf{Clo}(𝑨)` denotes the clone generated by :math:`F`, which is also known as the **clone of term operations** of :math:`𝑨`.
+.. If :math:`𝑨 = ⟨ A, F^𝑨 ⟩` denotes the algebra with universe :math:`A` and set of basic operations :math:`F`, then Clo(𝑨) denotes the clone generated by :math:`F`, which is also known as the **clone of term operations** of :math:`𝑨`.
 ..
-.. We will discuss varieties in more detail later, but for now define a :index:`variety` to be a collection of algebras of the same signature which is defined by a set of identities. [3]_
+.. We will discuss varieties in more detail later, but for now define a :index:`variety` to be a collection of algebras of the same signature which is defined by a set of identities. [5]_
 ..
 .. In 1977, Walter Taylor showed (:cite:`Taylor1977`) that a variety 𝕍 satisfies some nontrivial :term:`idempotent` :term:`Malcev condition` if and only if it satisfies one of the following form: for some :math:`n`, 𝕍 has an idempotent :math:`n`-ary term  :math:`t` such that for each :math:`0 ≤ i < n` there is an identity of the form
 ..
@@ -1143,7 +1133,7 @@ We present a formalization of this result and its proof in :numref:`obs 13 in ag
 
       (⇐) Assume ∀ 𝑨 ∈ 𝒦, ∀ ℎ : Hom 𝑻(𝑋) 𝑨, we have :math:`h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}`. Fix 𝑨 ∈ 𝒦 and 𝒂 : X → ∣ 𝑨 ∣.  We prove :math:`p^𝑨 𝒂 = q^𝑨 𝒂`.  By :numref:`Obs. %s <obs 9>`, 𝒂 extends to a homomorphism from 𝑻(𝑋) to 𝑨. Denote this extension by 𝒂̂.  By assumption  :math:`𝒂̂ ∘ p^{𝑻(X)} = 𝒂̂ ∘ q^{𝑻(X)}`, and since 𝒂̂ is a homomorphism, :math:`p^𝑨 𝒂 =  p^𝑨(𝒂̂ ∘ x) = 𝒂̂ (p^𝑨 x) = 𝒂̂ (q^𝑨 x) = q^𝑨 (𝒂̂ ∘ x) = q^𝑨 𝒂`.
 
-A formalization of this result is presented in :numref:`obs 14 in agda`.
+We formalize :numref:`Obs %s <obs 14>` and its proof in the `birkhoff module`_ of the agda-ualib_, as described in :numref:`obs 14 in agda`.
 
 .. (fact-m3)
 
@@ -1210,9 +1200,9 @@ The last result tells us that we can determine whether an identity is true in a 
 Birkhoff's theorem
 ---------------------
 
-It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
+It follows from :numref:`Obs %s <obs 13>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
 
-The statement and proof we give here is the same as that of Theorem 4.41 in Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the ``birkhoff`` module of the `agda-ualib`_ (see :numref:`birkhoffs theorem in agda`).
+The statement and proof we give here is the same as that of Theorem 4.41 in Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the `birkhoff module`_ of the agda-ualib_ (see :numref:`birkhoffs theorem in agda`).
 
 .. proof:theorem::
 
@@ -1258,8 +1248,12 @@ The statement and proof we give here is the same as that of Theorem 4.41 in Clif
 .. [3]
    By "the constants on :math:`A`" we mean the **constant operations**; i.e., functions :math:`f: A → A` such that :math:`∀ a ∈ A, f(a) = c`, for some :math:`c ∈ A`.
 
+.. [4]
+   The observant reader may have noticed a slight-of-hand in the foregoing "construction" of the function 𝑓. While it's true that for each 𝑏 ∈ 𝐵 there exists a :math:`c_b` such that :math:`h(a) = c_b` for all :math:`a ∈ g^{-1}\{b\}`, it's not immediately clear that we have a means of producing such :math:`c_b` constructively.
 
-------------------
+   One could argue that each :math:`c_b` is easily computed as :math:`c_b = h(a)` for some (every) :math:`a ∈ g^{-1}\{b\}`. But this requires producing a particular :math:`a ∈ g^{-1}\{b\}` to use as "input" to the function :math:`h`. How do we select such a "witness" from the set :math:`g^{-1}\{b\}`? Fortunately, for the purposes of formalizing this proof (constructively, in Agda) we will see that our definition of surjective function will supply such a witness whenever it is needed. (See :numref:`obs 5 in agda`.)
+
+      ------------------
 
 .. include:: hyperlink_references.rst
 

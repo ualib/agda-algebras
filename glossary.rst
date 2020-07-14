@@ -298,10 +298,10 @@ Here is a list of useful definitions from model theory.
      See: https://en.wikipedia.org/wiki/Functional_programming
 
    implication elimination
-     See, e.g., the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `𝐿ogic and Proof`_ book.
+     See, e.g., the `section on implication <https://leanprover.github.io/logic_and_proof/propositional_logic.html#implication>`_ in the `Logic and Proof`_ book.
 
    implicit arguments
-     See: sections `Implicit arguments`_ and `More on implicit arguments`_ of `TP𝐿`_.
+     See: sections `Implicit arguments`_ and `More on implicit arguments`_ of `TPL`_.
 
    impredicative
      A self-referencing definition is called **impredicative**. A definition is said to be impredicative if it invokes (mentions or quantifies over) the set being defined, or (more commonly) another set which contains the thing being defined.
@@ -471,7 +471,7 @@ Here is a list of useful definitions from model theory.
    proof assistant
      A **proof assistant**, or interactive theorem prover (ITP), is specialized software that aids the user in the task of formalizing and proving theorems in an interactive (as opposed to automated) way. Although some proof assistants have features (such as :term:`proof tactics <proof tactic>`) which may provide some automation and proof-search capabilities, proof assitants are distinguished from :term:`automated theorem provers <automated theorem prover>` by the fact that they primarily rely on substantial interaction with the user.
 
-     Some examples of popular proof assistants are :term:`Agda`, :term:`Coq`, :term:`𝐿ean`, and :term:`NuPrl`.
+     Some examples of popular proof assistants are :term:`Agda`, :term:`Coq`, :term:`Lean`, and :term:`NuPrl`.
 
    proof tactic
      an automated procedure for constructing and manipulating proof terms.
@@ -607,7 +607,7 @@ Glossary: structures, categories, varieties
       A :term:`group` is called **abelian** just in case its binary operation is commutative.
 
     absorbing
-      𝐿et 𝐀 be a finite algebra in a :term:`Taylor variety` 𝒱 and let t ∈ Clo(𝐀) be a :math:`k`-ary term operation of 𝐀.
+      Let 𝐀 be a finite algebra in a :term:`Taylor variety` 𝒱 and let t ∈ Clo(𝐀) be a :math:`k`-ary term operation of 𝐀.
 
       A subalgebra 𝐁 ≤ 𝐀 is said to be **absorbing** in 𝐀 with respect to the **absorbing term** :math:`t` if for all :math:`1 ≤ j ≤ k` and for all
 
@@ -628,7 +628,7 @@ Glossary: structures, categories, varieties
       An **abstract category** is one whose objects are not sets or whose :term:`morphisms <morphism>` are not functions defined on sets.
 
     additive
-      𝐿et :math:`𝔐 = \{M_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  An :math:`R`-valued function :math:`s: 𝔐 → R` defined on the collection :math:`𝔐` is called **additive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{M_γ : γ ∈ Γ\}` is a subcollection of *pairwise disjoint* subsets in :math:`𝔐`, we have
+      Let :math:`𝔐 = \{M_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  An :math:`R`-valued function :math:`s: 𝔐 → R` defined on the collection :math:`𝔐` is called **additive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{M_γ : γ ∈ Γ\}` is a subcollection of *pairwise disjoint* subsets in :math:`𝔐`, we have
 
       .. math:: s \bigl( ⋃_{γ∈Γ}  M_γ \bigr) = ∑_{γ∈ Γ} s (M_γ).
 
@@ -641,10 +641,10 @@ Glossary: structures, categories, varieties
       See :term:`structure`.
  
     algebra of functions
-      𝐿et :math:`F` be a :term:`field` and let :math:`F^X` denote the collection of all functions from :math:`X` to :math:`F`.  A subset :math:`𝔄 ⊆ F^X` of :math:`F`-valued functions on :math:`X` is called an **algebra** if it is closed under point-wise product.  That is, for all :math:`f, g ∈ 𝔄`, the function :math:`h = f ⋅ g` defined by :math:`h: x ↦ f(x) ⋅ g(x)` also belongs to :math:`𝔄`.
+      Let :math:`F` be a :term:`field` and let :math:`F^X` denote the collection of all functions from :math:`X` to :math:`F`.  A subset :math:`𝔄 ⊆ F^X` of :math:`F`-valued functions on :math:`X` is called an **algebra** if it is closed under point-wise product.  That is, for all :math:`f, g ∈ 𝔄`, the function :math:`h = f ⋅ g` defined by :math:`h: x ↦ f(x) ⋅ g(x)` also belongs to :math:`𝔄`.
  
     algebra of sets
-      𝐿et :math:`X` be a nonempty set. An **algebra of sets** on :math:`X` is a nonempty collection :math:`𝔄` of subsets of :math:`X` that is :term:`closed <closed set>` under finite unions and complements. (Some authors call this a "field of sets.")
+      Let :math:`X` be a nonempty set. An **algebra of sets** on :math:`X` is a nonempty collection :math:`𝔄` of subsets of :math:`X` that is :term:`closed <closed set>` under finite unions and complements. (Some authors call this a "field of sets.")
  
     algebraic lattice
       a :term:`lattice` generated by its :term:`compact elements <compact element>`. 
@@ -676,7 +676,7 @@ Glossary: structures, categories, varieties
       An example of an associative algebra is the space of :term:`linear transformations <linear transformation>` (:term:`endomorphisms <endomorphism>`) of a vector space into itself.
  
     bilinear algebra
-      𝐿et :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra** over :math:`𝔽` provided :math:`⟨A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a :term:`vector space` over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
+      Let :math:`𝔽= ⟨ F, 0, 1, -\, , +, ⋅⟩` be a field. An algebra :math:`𝔸 = ⟨ A, 0, -\, , +, ⋅, f_r⟩_{r∈ F}` is a **bilinear algebra** over :math:`𝔽` provided :math:`⟨A, 0, -, +, ⋅, f_r⟩_{r ∈ F}` is a :term:`vector space` over :math:`𝔽` and for all :math:`a, b, c ∈ A` and all :math:`r ∈ F`, we have
  
       .. math::   (a + b) ⋅ c &= (a ⋅ c) + (b ⋅ c)\\
                   c ⋅ (a + b) &= (c⋅ a) + (c⋅ b)\\
@@ -704,7 +704,7 @@ Glossary: structures, categories, varieties
       has categories as objects and :term:`functors <functor>` as :term:`morphisms <morphism>`.
  
     chain
-      𝐿et :math:`⟨ X, ≤ ⟩` be a :term:`preordered <preorder>` set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
+      Let :math:`⟨ X, ≤ ⟩` be a :term:`preordered <preorder>` set and :math:`C ⊆ X`. We call :math:`C` a **chain** of :math:`⟨ X, ≤ ⟩` if for all :math:`x, y ∈ C` either :math:`x ≤ y` or :math:`y ≤ x` holds.
  
     characteristic function
       The **characteristic function** :math:`χ_A` of a subset :math:`A ⊆ X` is the function :math:`χ_A: X → \{0,1\}` that is 1 if and only if :math:`x ∈ A`; that is, :math:`χ_A(x) = 0` if :math:`x ∉ A` and :math:`χ_A(x) = 1` if :math:`x ∈ A`.
@@ -731,7 +731,7 @@ Glossary: structures, categories, varieties
        Here is an alternative, equivalent definition. The **closure** of :math:`E` is the intersection of all :term:`closed <closed set>` sets containing :math:`E`.
  
     closure operator
-      𝐿et :math:`X` be a set and let :math:`𝒫(X)` denote the collection of all subsets of :math:`X`. A **closure operator** on :math:`X` is a set function :math:`𝖢: 𝒫 (X) → 𝒫 (X)` satisfying the following conditions, for all :math:`A, B ∈ 𝒫 (X)`, 
+      Let :math:`X` be a set and let :math:`𝒫(X)` denote the collection of all subsets of :math:`X`. A **closure operator** on :math:`X` is a set function :math:`𝖢: 𝒫 (X) → 𝒫 (X)` satisfying the following conditions, for all :math:`A, B ∈ 𝒫 (X)`, 
  
       #. :math:`A ⊆ 𝖢(A)`,
       #. :math:`𝖢 ∘ 𝖢 = 𝖢`,
@@ -753,7 +753,7 @@ Glossary: structures, categories, varieties
       See :term:`abelian group`.
  
     compact element
-      an element :math:`x` of a :term:`lattice` :math:`𝐿` is called **compact** provided for all :math:`Y ⊆ 𝐿`, if :math:`x ≤ ⋁ Y`, then there exists a finite subset :math:`F ⊆ Y` such that :math:`x ≤ ⋁ F`.
+      an element 𝑥 of a :term:`lattice` 𝐿 is called **compact** provided for all 𝑌 ⊆ 𝐿, if 𝑥 ≤ ⋁ 𝑌, then there exists a finite subset 𝐹 ⊆ 𝑌 such that 𝑥 ≤ ⋁ 𝐹.
  
     complete
       A :term:`poset` in which all meets exist is called **complete**.
@@ -804,12 +804,12 @@ Glossary: structures, categories, varieties
       Given two objects :math:`A` and :math:`B` a **coproduct** (or **sum**) of :math:`A` and :math:`B` is denoted by :math:`A+B` and defined to be an object with morphisms :math:`ι_1 : A → A + B` and :math:`ι_2 : B → A + B` such that for every object :math:`X` and all morphisms :math:`u : A → Y` and :math:`v : B → Y` there exists a unique morphism :math:`[u,v] : A+B → Y` such that :math:`[u,v] ∘ ι_1 = u` and :math:`[u,v] ∘ ι_2 = v`.
  
     countably additive
-      𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably additive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of *pairwise disjoint* subsets in :math:`𝒮`, we have
+      Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably additive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of *pairwise disjoint* subsets in :math:`𝒮`, we have
  
      .. math:: s \bigl( ⋃_{γ∈Γ}  A_γ \bigr) = ∑_{γ∈ Γ} s (A_γ).
  
     countably subadditive
-      𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably subadditive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
+      Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **countably subadditive** if for every *countable* subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
  
     covariant powerset functor
       The **(covariant) powerset functor** is a functor :math:`P : \mathbf{Set} → \mathbf{Set}` such that for each :math:`f : A → B` the morphism :math:`Pf : PA → PB` is given by :math:`Pf(S) = \{f(x) : x ∈ S\}` for each :math:`S \subseteq A`.
@@ -838,7 +838,7 @@ Glossary: structures, categories, varieties
       If :math:`F` is :term:`complete`, then :math:`𝔅(X,F)` is complete, hence a :term:`Banach space`.
  
     edge term
-      𝐿et 𝒱 be a variety and k>1, an integer. A (k+1)-ary term t is called a **k-edge term** for 𝒱 if the following k identities hold in 𝒱:
+      Let 𝒱 be a variety and k>1, an integer. A (k+1)-ary term t is called a **k-edge term** for 𝒱 if the following k identities hold in 𝒱:
  
       .. math:: t(y,y,x,x,x,\dots,x) &≈ x\\
                 t(y,x,y,x,x,\dots,x) &≈ x\\
@@ -981,7 +981,7 @@ Glossary: structures, categories, varieties
       See :term:`point`.
  
     graph morphism
-      𝐿et :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
+      Let :math:`𝐆_1 =(V_1, E_1)` and :math:`𝐆_2 = (V_2, E_2)` be graphs. We say that a pair of functions :math:`f=(f_v,f_e)` is a **graph morphism** from :math:`𝐆_1` to :math:`𝐆_2` provided :math:`f_v : V_1 → V_2`, :math:`f_e : E_1 → E_2`, and for any edge :math:`e = (v_1,v_2) ∈ E_1` we have that we have :math:`f_e(e) = (f_v(v_1), f_v(v_2))`.
  
     group
       A **group** is a :term:`monoid` expanded with a unary operation :math:`^{-1}`, called *multiplicative inverse*, which satisfies :math:`∀ a ∈ A`, :math:`a ⋅ a^{-1} =  a^{-1} ⋅ a = e`.
@@ -1029,7 +1029,7 @@ Glossary: structures, categories, varieties
       The :term:`free algebra` in a :term:`variety` is a **free object** in a category whose objects are :term:`algebraic structures <algebraic structure>`.
      
     inner product 
-      𝐿et :math:`X` be a :term:`vector space` over the field :math:`F`.  An **inner product** on :math:`X` is a function :math:`⟨·,·⟩: X × X → F` satisfying the following conditions:
+      Let :math:`X` be a :term:`vector space` over the field :math:`F`.  An **inner product** on :math:`X` is a function :math:`⟨·,·⟩: X × X → F` satisfying the following conditions:
  
       #. :math:`⟨⋅,⋅⟩` is linear in the first variable; i.e., :math:`⟨α x + βy, z⟩ = α⟨x,z⟩ + β⟨y,z⟩` for all :math:`α, β ∈ F` and :math:`x, y, z ∈ X`;
       #. :math:`⟨⋅,⋅⟩` is symmetric; i.e., :math:`⟨x, y⟩ = ⟨y, x⟩` for all :math:`x, y ∈ X`; and
@@ -1039,7 +1039,7 @@ Glossary: structures, categories, varieties
       An **inner product space** is a vector space equipped with an :term:`inner product`.
  
     interpretation
-      𝐿et 𝒱 and 𝒲 be two varieties of algebraic structures. Suppose the algebras in 𝒱 have signature :math:`σ = (F, ρ)`, while those in 𝒲 have signature :math:`σ' = (F', ρ')`.
+      Let 𝒱 and 𝒲 be two varieties of algebraic structures. Suppose the algebras in 𝒱 have signature :math:`σ = (F, ρ)`, while those in 𝒲 have signature :math:`σ' = (F', ρ')`.
 
       A **strict interpretation** of 𝒱 in 𝒲 is a mapping :math:`D` from the set :math:`F` of operation symbols of 𝒱 to the term algebra :math:`T_{σ'}(X_ω)` of 𝒲 such that
 
@@ -1090,7 +1090,7 @@ Glossary: structures, categories, varieties
  
       Here is an easily proved fact that provides equivalent ways to define "linked."
  
-      **𝐿emma**. 𝐿et :math:`R ≤ A_0 × A_1`, let :math:`η_{R_i} = \ker(R ↠ A_i)` denote the kernel of the projection of :math:`R` onto its i-th coordinate, and let :math:`R^{-1} = \{(y,x) ∈ A_1 × A_0 : (x,y) ∈ R\}`. Then the following are equivalent:
+      **𝐿emma**. Let :math:`R ≤ A_0 × A_1`, let :math:`η_{R_i} = \ker(R ↠ A_i)` denote the kernel of the projection of :math:`R` onto its i-th coordinate, and let :math:`R^{-1} = \{(y,x) ∈ A_1 × A_0 : (x,y) ∈ R\}`. Then the following are equivalent:
         
         #. :math:`R` is linked;
         #. :math:`η_{R_0} ∨ η_{R_1} = 1_R`;
@@ -1130,7 +1130,7 @@ Glossary: structures, categories, varieties
       See: :term:`Maltsev term`
 
     Maltsev product
-      𝐿et 𝒱 and 𝒲 be idempotent varieties. The **Maltsev product** (or **Maltsev  product**) of 𝒱 and 𝒲 is the class
+      Let 𝒱 and 𝒲 be idempotent varieties. The **Maltsev product** (or **Maltsev  product**) of 𝒱 and 𝒲 is the class
  
       .. math:: 𝒱 ∘ 𝒲 = \{𝐀 : ∃ θ ∈ \mathrm{Con} 𝐀, (𝐀/θ ∈ 𝒲 \text{ and } ∀ a ∈ A, a/θ ∈ 𝒱)\}.
  
@@ -1138,7 +1138,7 @@ Glossary: structures, categories, varieties
       
       Freese and McKenzie show in :cite:`Freese:2017` that a number of important properties are preserved under Maltsev product; in particular, they prove,
  
-      **Theorem**. 𝐿et 𝒱 and 𝒲 be idempotent varieties. For each of the following properties, P, if both 𝒱 and 𝒲 have P, then so does 𝖧(𝒱 ∘ 𝒲). 
+      **Theorem**. Let 𝒱 and 𝒲 be idempotent varieties. For each of the following properties, P, if both 𝒱 and 𝒲 have P, then so does 𝖧(𝒱 ∘ 𝒲). 
  
         * P = is idempotent;
         * P = has a :term:`Taylor term`;
@@ -1183,7 +1183,7 @@ Glossary: structures, categories, varieties
       We call 𝐁 a **minimal absorbing subalgebra** of 𝐀, and we write 𝐁 ◁◁ 𝐀, just in case 𝐁 is an absorbing subalgebra of 𝐀 and 𝐁 is minimal (with respect to set inclusion of universes) among the absorbing subalgebras of 𝐀.
  
     module
-      𝐿et :math:`R` be a :term:`ring` with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an :term:`abelian group` :term:`reduct` :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
+      Let :math:`R` be a :term:`ring` with unit. A **left unitary** :math:`R`-**module** (or simply :math:`R`-**module**) is an algebra :math:`⟨M, \{0, -, +\} ∪ \{f_r : r∈ R\}⟩` with an :term:`abelian group` :term:`reduct` :math:`⟨M, \{0, -, +\}⟩` and unary operations :math:`\{f_r : r ∈ R\}` that satisfy the following: :math:`∀ r, s ∈ R`, :math:`∀ x, y ∈ M`,
  
       #. :math:`f_r(x + y)  = f_r(x) + f_r(y)`
       #. :math:`f_{r+s}(x) = f_r(x) + f_s(x)`
@@ -1215,7 +1215,7 @@ Glossary: structures, categories, varieties
       .. math:: f^𝔹 (h\,a_1, \dots, h\,a_{ρ f}) = h f^𝔸(a_1, \dots, a_{ρ f}).
  
     multiplicative inverse
-      𝐿et :math:`𝔸 = ⟨ A, e, ∘, \dots ⟩` be an algebra in a signature with a nullary "identity" operation :math:`e: () → A` and a binary "multiplication" operation :math:`∘: A × A → A`. Then the element :math:`b ∈ A` is a **multiplicative inverse** of :math:`a ∈ A` provided :math:`a ∘ b = e = b ∘ a`.
+      Let :math:`𝔸 = ⟨ A, e, ∘, \dots ⟩` be an algebra in a signature with a nullary "identity" operation :math:`e: () → A` and a binary "multiplication" operation :math:`∘: A × A → A`. Then the element :math:`b ∈ A` is a **multiplicative inverse** of :math:`a ∈ A` provided :math:`a ∘ b = e = b ∘ a`.
  
     natural isomorphism
       An isomorphism in a functor category is referred to as a **natural isomorphism**.
@@ -1233,7 +1233,7 @@ Glossary: structures, categories, varieties
       An operation :math:`f` on a set :math:`A` is called **nullary** if the arity of :math:`f` is 0; that is, :math:`f: () → A`; equialently, :math:`f` takes no arguments, so is simply a (constant) element of :math:`A`.
  
     ω-chain
-      𝐿et :math:`⟨ X, ≤ ⟩` be a preordered set. An ω-**chain** is an enumerable :term:`chain`; that is, a :term:`chain` the elements that can be indexed by the natural numbers.
+      Let :math:`⟨ X, ≤ ⟩` be a preordered set. An ω-**chain** is an enumerable :term:`chain`; that is, a :term:`chain` the elements that can be indexed by the natural numbers.
  
     ω-chain cocomplete
       A :term:`preorder` in which joins of all ω-chains exist is called ω-**chain cocomplete**.
@@ -1277,13 +1277,13 @@ Glossary: structures, categories, varieties
       Given a category with an initial object :math:`\mathbf{1}` and another object :math:`A`, the morphisms with domain :math:`\mathbf{1}` and codomain :math:`A` are called the **points** or **global elements** of :math:`A`.
  
     pointwise limit
-      𝐿et :math:`f_n: X → [-∞, ∞]` for each :math:`n∈ ℕ`. If the limit :math:`f(x) = \lim_{n→∞} f_n(x)` exist at every :math:`x ∈ X`, then we call :math:`f: X → ℝ` the **pointwise limit** of the sequence :math:`\{f_n\}`. 
+      Let :math:`f_n: X → [-∞, ∞]` for each :math:`n∈ ℕ`. If the limit :math:`f(x) = \lim_{n→∞} f_n(x)` exist at every :math:`x ∈ X`, then we call :math:`f: X → ℝ` the **pointwise limit** of the sequence :math:`\{f_n\}`. 
  
     polymorphic function
       a function that operates in the "same way" independently of the object parameter.
  
     polymorphism
-      𝐿et :math:`𝔸 = ⟨ A, R₁^𝔸, \dots)` and :math:`𝔹 = ⟨ A, R₁^𝔹, \dots)` be relational structures of the same signature. A k-ary (total) function :math:`f: A^k → B` is called a **polymorphism** of (𝔸, 𝔹) if it is :term:`compatible` with every pair :math:`(R_i^𝔸, R_i^𝔹)`, that is, for all tuples :math:`𝐫 ∈ R_i^𝔸`, the tuple :math:`f 𝐫`  is in :math:`R_i^𝔹`.
+      Let :math:`𝔸 = ⟨ A, R₁^𝔸, \dots)` and :math:`𝔹 = ⟨ A, R₁^𝔹, \dots)` be relational structures of the same signature. A k-ary (total) function :math:`f: A^k → B` is called a **polymorphism** of (𝔸, 𝔹) if it is :term:`compatible` with every pair :math:`(R_i^𝔸, R_i^𝔹)`, that is, for all tuples :math:`𝐫 ∈ R_i^𝔸`, the tuple :math:`f 𝐫`  is in :math:`R_i^𝔹`.
  
       We denote the set of all polymorphisms of (𝔸, 𝔹) by Poly(𝔸, 𝔹).
  
@@ -1334,7 +1334,7 @@ Glossary: structures, categories, varieties
       If :math:`R` is an :term:`equivalence relation` on :math:`A`, then the **quotient** of :math:`A` modulo :math:`R` is denoted by :math:`A/R` and is defined to be the collection :math:`\{ a/R ∣ a ∈ A \}` of :term:`equivalence classes <equivalence class>` of :math:`R`.
  
     reduced product
-      𝐿et :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). 𝐿et :math:`F` be a :term:`filter` on :math:`I`.
+      Let :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). Let :math:`F` be a :term:`filter` on :math:`I`.
       
       Define the equivalence relation ~ on the :term:`product` structure :math:`𝐌 := ∏_{i∈ I}𝕄_i` as follows: ∀ 𝐚, 𝐛 ∈ 𝐌, 
  
@@ -1363,7 +1363,7 @@ Glossary: structures, categories, varieties
       A relational structure :math:`𝔸 = ⟨A, ℛ⟩` is a set :math:`A` together with a collection :math:`ℛ` of relations on :math:`A`.
  
     relational structure homomorphism
-      𝐿et :math:`σ = (ℛ, ρ)` be a :term:`signature` for :term:`relational structures <relational structure>`.  𝐿et :math:`𝔸 = ⟨A, ℛ^𝔸⟩` and :math:`𝔹 = ⟨B, ℛ^𝔹⟩` be relational structures in the signature σ. A function :math:`h: A → B` that "respects" or "preserves" the relations in the following sense is called a (relational structure) **homomorphism**: :math:`∀ R ∈ ℛ`, if :math:`(a_0, \dots, a_{n-1}) ∈ R^𝔸`, then :math:`(b_0, \dots, b_{n-1}) ∈ R^𝔹`.
+      Let :math:`σ = (ℛ, ρ)` be a :term:`signature` for :term:`relational structures <relational structure>`.  Let :math:`𝔸 = ⟨A, ℛ^𝔸⟩` and :math:`𝔹 = ⟨B, ℛ^𝔹⟩` be relational structures in the signature σ. A function :math:`h: A → B` that "respects" or "preserves" the relations in the following sense is called a (relational structure) **homomorphism**: :math:`∀ R ∈ ℛ`, if :math:`(a_0, \dots, a_{n-1}) ∈ R^𝔸`, then :math:`(b_0, \dots, b_{n-1}) ∈ R^𝔹`.
  
     respects
       Given a function :math:`f: α → α`, we say that :math:`f` **respects** (or **preserves**) the binary relation :math:`R ⊆ α × α`, and we write :math:`f ⊧ R`, just in case :math:`∀ x, y :α \ (x \mathrel R y \ → \ f x \mathrel R f y)`.
@@ -1464,7 +1464,7 @@ Glossary: structures, categories, varieties
       If :math:`X` is a :term:`dcpo` then the subset :math:`A ⊆ X` is a **subdcpo** of :math:`X` if every directed subset :math:`D ⊆ A` satisfies :math:`⋁_X D ∈ A`.
  
     subdirect product
-      𝐿et :math:`σ  = (F, ρ)` be an :term:`algebraic signature`, let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebras, one for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}`, and let :math:`𝐀 := ∏_{i:𝐧}𝔸_i` be the product σ-algebra. If :math:`R` is :term:`compatible` with 𝐀 and if the projection of :math:`R` onto each factor is surjective, then :math:`R` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{sd} ∏_{j:𝐤} 𝔸_{σ(j)}`
+      Let :math:`σ  = (F, ρ)` be an :term:`algebraic signature`, let :math:`𝔸_i = ⟨A_i, F^{𝔸_i}⟩` be a σ-algebras, one for each :math:`i ∈ 𝐧 := \{0, 1, \dots, n-1\}`, and let :math:`𝐀 := ∏_{i:𝐧}𝔸_i` be the product σ-algebra. If :math:`R` is :term:`compatible` with 𝐀 and if the projection of :math:`R` onto each factor is surjective, then :math:`R` is called a **subdirect product** of the algebras in the list :math:`(𝔸_{σ(0)}, 𝔸_{σ(1)}, \dots, 𝔸_{σ(k-1)})`; we denote this situation by writing :math:`ℝ ≤_{sd} ∏_{j:𝐤} 𝔸_{σ(j)}`
  
     subuniverse
       Suppose :math:`𝔸 = ⟨A, F^𝔸⟩` is an algebra. If a subset :math:`B ⊆ A` is closed under :math:`F^𝔸`, then we call :math:`B` a **subuniverse** of :math:`𝔸`.
@@ -1530,7 +1530,7 @@ Glossary: structures, categories, varieties
       An **ultrafilter** on a :term:`poset` P is a maximal :term:`filter` on P, that is, a proper filter on P that will become improper if it is enlarged.
  
     ultraproduct
-      𝐿et :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). 𝐿et :math:`U` be an :term:`ultrafilter` on :math:`I`.
+      Let :math:`I` be an index set, and let :math:`𝕄_i` be a structure for each :math:`i ∈ I` (all of the same signature). Let :math:`U` be an :term:`ultrafilter` on :math:`I`.
       
       Define the equivalence relation ~ on the :term:`product` structure :math:`𝐌 := ∏_{i∈ I}𝕄_i` as follows: ∀ 𝐚, 𝐛 ∈ 𝐌, 
  
@@ -1561,7 +1561,7 @@ Glossary: structures, categories, varieties
       the functor :math:`∀ f : P(A) → P(B)` defined by :math:`∀ f (X) = \{y ∈ B : f^{-1}(\{y\}) \subseteq  X\}`, for :math:`X ∈ P(A)`.
  
     universal mapping property
-      𝐿et :math:`η_A : A → |𝔸^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The :term:`functors <functor>` :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every :term:`monoid` :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique :term:`morphism` :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
+      Let :math:`η_A : A → |𝔸^*|` be the function that maps :math:`a ∈ A` to the "one-letter word" :math:`a ∈ A^*`. The :term:`functors <functor>` :math:`K (= \ ^∗)` and :math:`U (= |\ |)` are related by the **universal mapping property** of monoids, which says that for every :term:`monoid` :math:`𝐌` and every function :math:`f : A → U 𝐌` there exists a unique :term:`morphism` :math:`f̂ : KA → 𝐌` such that :math:`f = f̂ ∘ η`.
  
     universal property
       The **unique morphism property** of the :term:`initial object` in a category is what we refer to as a **universal property,** and we say that the :term:`free object` in a category :math:`𝒞` is "universal" for the category :math:`𝒞`.
@@ -1600,12 +1600,12 @@ Glossary: topology and analysis
      A **Banach space** is a :term:`normed linear space` :math:`(X, \|\,⋅\,\|)` such that :math:`X` is :term:`complete <complete set>` in the metric defined by its norm. (That is, each Cauchy sequence in :math:`(X, \|\,⋅\,\|)` converges to a point in :math:`X`.)
 
    bounded linear functional
-     𝐿et :math:`X` be a :term:`normed linear space` over the :term:`field` :math:`F`.  A **bounded linear functional** on :math:`X` is a :term:`bounded linear transformation` with codomain :math:`F`.
+     Let :math:`X` be a :term:`normed linear space` over the :term:`field` :math:`F`.  A **bounded linear functional** on :math:`X` is a :term:`bounded linear transformation` with codomain :math:`F`.
       
      We denote by :math:`𝔅(X,F)` the collection of all bounded linear functionals on :math:`X`.
 
    bounded linear transformation
-     𝐿et :math:`X` and :math:`Y` be two :term:`normed linear spaces <normed linear space>`. A :term:`linear transformation` :math:`T: X → Y` is called **bounded** if there exists :math:`C > 0` such that
+     Let :math:`X` and :math:`Y` be two :term:`normed linear spaces <normed linear space>`. A :term:`linear transformation` :math:`T: X → Y` is called **bounded** if there exists :math:`C > 0` such that
 
      .. math:: \|Tx\| ≤ C \|x\| \; \text{ for all } x ∈ X.
     
@@ -1664,9 +1664,9 @@ Glossary: topology and analysis
       It's clear that conjugate exponents satisfy :math:`1 < p, q < ∞` and that as :math:`p → 1`, :math:`q → ∞` and vice-versa. Thus, :math:`(1, ∞)` is also regarded as a pair of conjugate exponents.
  
    continuous function
-     𝐿et :math:`(X, τ_1)` and :math:`(Y, τ_2)` be :term:`topological spaces <topological space>`. A function :math:`f: X → Y` is called **continuous** if :math:`f^{-1}(S) ∈ τ_1` for every :math:`S ∈ τ_2`.
+     Let :math:`(X, τ_1)` and :math:`(Y, τ_2)` be :term:`topological spaces <topological space>`. A function :math:`f: X → Y` is called **continuous** if :math:`f^{-1}(S) ∈ τ_1` for every :math:`S ∈ τ_2`.
  
-     𝐿et :math:`(X, |\;\;|_1)` and :math:`(Y, |\;\;|_2)` be :term:`metric spaces <metric space>`. A function :math:`f: X → Y` is called **continuous** at the point :math:`x_0 ∈ X` if for all :math:`ε >0` there exists :math:`δ > 0` such that
+     Let :math:`(X, |\;\;|_1)` and :math:`(Y, |\;\;|_2)` be :term:`metric spaces <metric space>`. A function :math:`f: X → Y` is called **continuous** at the point :math:`x_0 ∈ X` if for all :math:`ε >0` there exists :math:`δ > 0` such that
 
      .. math::  |x - x_0|_1 < δ \, ⟹ \, |f(x) -f(x_0)|_2 < ε.
 
@@ -1705,7 +1705,7 @@ Glossary: topology and analysis
      If :math:`X` is a nonempty set, then :math:`\{∅, X\}` is a topology on :math:`X`, called the **trivial** (or **indiscrete**) **topology**.
 
    ∞-norm
-     𝐿et :math:`(X, 𝔐, μ)` be a :term:`measure space`.  The :math:`∞`-**norm relative to** :math:`μ` is defined for each real- or complex-valued function :math:`f` on :math:`X` by
+     Let :math:`(X, 𝔐, μ)` be a :term:`measure space`.  The :math:`∞`-**norm relative to** :math:`μ` is defined for each real- or complex-valued function :math:`f` on :math:`X` by
    
      .. math:: \|f\|_∞ := \inf \{a∈ ℝ^∗ ∣ μ\{x : |f(x)| > a\} = 0\} = \inf \{a∈ ℝ^∗ ∣ |f(x)| ≤ a \text{ for } μ-\text{a.e. } x∈ X\},
 
@@ -1728,13 +1728,13 @@ Glossary: topology and analysis
      In other words, :math:`U: ℋ_1 ↠ ℋ_2` is a surjective :term:`isometry` from :math:`ℋ_1` to :math:`ℋ_2`.
 
    isometry
-     𝐿et :math:`(X, \|\,.\,\|_1)` and :math:`(Y, \|\,.\,\|_2)` be :term:`normed linear spaces <normed linear space>`.  A :term:`linear transformation` :math:`T: X → Y` is called an **isometry** if it preserves norms, that is, :math:`\|Tx\|_2 = \|x\|_1` holds for all :math:`x∈ X`.
+     Let :math:`(X, \|\,.\,\|_1)` and :math:`(Y, \|\,.\,\|_2)` be :term:`normed linear spaces <normed linear space>`.  A :term:`linear transformation` :math:`T: X → Y` is called an **isometry** if it preserves norms, that is, :math:`\|Tx\|_2 = \|x\|_1` holds for all :math:`x∈ X`.
 
    𝐿ebesgue integrable
      A function that is :term:`integrable` with respect to :term:`𝐿ebesgue measure` is called a **𝐿ebesgue integrable** function.
 
    𝐿ebesgue integral
-     𝐿et :math:`(X, 𝔐, μ)` be a :term:`measure space`.  If :math:`E ∈ 𝔐` and :math:`s: X → [0, ∞)` is a :term:`measurable <measurable function>` :term:`simple function` of the form :math:`s = ∑_{i=1}^n α_i χ_{A_i}`, where :math:`α_1, \dots, α_n ∈ ℝ` are the distinct values of :math:`s`, then we denote and define the **𝐿ebesgue integral** of :math:`s` over :math:`E` as follows:
+     Let :math:`(X, 𝔐, μ)` be a :term:`measure space`.  If :math:`E ∈ 𝔐` and :math:`s: X → [0, ∞)` is a :term:`measurable <measurable function>` :term:`simple function` of the form :math:`s = ∑_{i=1}^n α_i χ_{A_i}`, where :math:`α_1, \dots, α_n ∈ ℝ` are the distinct values of :math:`s`, then we denote and define the **𝐿ebesgue integral** of :math:`s` over :math:`E` as follows:
      
      .. math:: ∫_E s\, dμ := ∑_{i=1}^n α_i μ(A_i ∩ E),
      
@@ -1749,7 +1749,7 @@ Glossary: topology and analysis
      If :math:`μ` is the only :term:`measure` in context, then we may write :math:`∫_E f` in place of :math:`∫_E f\, dμ`, and :math:`∫ f` in place of :math:`∫_X f`.
 
    𝐿ebesgue measurable function
-     𝐿et :math:`E⊆ ℝ`.  A function :math:`f: E → ℝ` is called **𝐿ebesgue measurable** provided :math:`f^{-1}(G)` is a :term:`𝐿ebesgue measurable set` for every open set :math:`G ⊆ ℝ`.  Equivalently, :math:`f` is 𝐿ebesgue measurable iff the set :math:`f^{-1}((α, ∞))` is 𝐿ebesgue measurable for every :math:`α ∈ ℝ`.
+     Let :math:`E⊆ ℝ`.  A function :math:`f: E → ℝ` is called **𝐿ebesgue measurable** provided :math:`f^{-1}(G)` is a :term:`𝐿ebesgue measurable set` for every open set :math:`G ⊆ ℝ`.  Equivalently, :math:`f` is 𝐿ebesgue measurable iff the set :math:`f^{-1}((α, ∞))` is 𝐿ebesgue measurable for every :math:`α ∈ ℝ`.
 
    𝐿ebesgue measurable set
      A set that is :term:`measurable <measurable set>` with respect to :term:`𝐿ebesgue measure` is called a **𝐿ebesgue measurable** set; that is, :math:`E⊆ ℝ` is 𝐿ebesgue measurable iff
@@ -1757,7 +1757,7 @@ Glossary: topology and analysis
      .. math:: m^∗ A = m^∗ (A ∩ E) + m^∗(A ∩ E^c)\; \text{ holds for all } A ⊆ R.
 
    𝐿ebesgue measure
-     𝐿et :math:`ℓ` be the :term:`measure` defined on the :term:`semiring <semiring of sets>` :math:`S := \{[a, b) ∣ a, b ∈ ℝ\}` of bounded intervals by :math:`ℓ[a, b)= b-a` for all :math:`a ≤ b`. 𝐿et :math:`ℓ^∗: 𝒫(ℝ) → [0, ∞]` be the :term:`outer measure` generated by :math:`ℓ`.  That is, for :math:`E⊆ ℝ`,
+     Let :math:`ℓ` be the :term:`measure` defined on the :term:`semiring <semiring of sets>` :math:`S := \{[a, b) ∣ a, b ∈ ℝ\}` of bounded intervals by :math:`ℓ[a, b)= b-a` for all :math:`a ≤ b`. Let :math:`ℓ^∗: 𝒫(ℝ) → [0, ∞]` be the :term:`outer measure` generated by :math:`ℓ`.  That is, for :math:`E⊆ ℝ`,
      
      .. math:: ℓ^∗(E) := \inf \{∑_{n=1}^∞ m(I_n) ∣ \{I_n\} ⊆ S \text{ and } E ⊆ ⋃_{n=1}^∞ I_n\}
      
@@ -1777,7 +1777,7 @@ Glossary: topology and analysis
      A point :math:`x` is called a **limit point** (or **accumulation point**) of a set :math:`A` in a topological space if :math:`A ∩ (V \ {x}) ≠ ∅` for every :term:`neighborhood` :math:`V` of :math:`x`.
 
    linear functional
-     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **linear functional** on :math:`X` is a :term:`linear transformation` with :term:`codomain` :math:`F`.
+     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **linear functional** on :math:`X` is a :term:`linear transformation` with :term:`codomain` :math:`F`.
 
    linear operator
      See :term:`linear transformation`.
@@ -1808,7 +1808,7 @@ Glossary: topology and analysis
      A :term:`topological space` :math:`(X,τ)` is called **locally compact** if every point of :math:`X` has a neighborhood whose :term:`closure` is :term:`compact <compact set>`.
 
    lower limit
-     𝐿et :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \inf \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \sup \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **lower limit** (or **limit inferior**) of :math:`\{a_n\}`, and write :math:`β = \liminf\limits_{n→ ∞} a_n`.  The :term:`upper limit`, :math:`\limsup\limits_{n→ \infty} a_n` is definied similarly.
+     Let :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \inf \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \sup \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **lower limit** (or **limit inferior**) of :math:`\{a_n\}`, and write :math:`β = \liminf\limits_{n→ ∞} a_n`.  The :term:`upper limit`, :math:`\limsup\limits_{n→ \infty} a_n` is definied similarly.
 
      Observe that
 
@@ -1819,7 +1819,7 @@ Glossary: topology and analysis
      (See also the definition of :term:`upper limit` and the remarks following that definition.)
 
    measurable function
-     𝐿et :math:`(X, 𝔐)` and :math:`(Y, 𝔑)` be measurable spaces. A function :math:`f: X → Y` is called :math:`(𝔐, 𝔑)`-**measurable** (or just **measurable**) if :math:`f^{-1}(N) ∈ 𝔐` for every :math:`N ∈ 𝔑`.
+     Let :math:`(X, 𝔐)` and :math:`(Y, 𝔑)` be measurable spaces. A function :math:`f: X → Y` is called :math:`(𝔐, 𝔑)`-**measurable** (or just **measurable**) if :math:`f^{-1}(N) ∈ 𝔐` for every :math:`N ∈ 𝔑`.
 
    measurable set
      If :math:`𝔐` is a :term:`σ-algebra` in :math:`X`, then the members of :math:`𝔐` are called the **measurable sets** in :math:`X`.
@@ -1867,7 +1867,7 @@ Glossary: topology and analysis
      A function :math:`f: X → ℝ` such that :math:`f(x) ≥ 0` for all :math:`x∈ ℝ` is called a **nonnegative function**.  We use the shorthand :math:`f ≥ 0` to denote that :math:`f` is a nonnegative function.
 
    norm
-     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`, and let :math:`|\,⋅\,|: F → [0,∞)` be a :term:`valuation` on :math:`F`.  A **norm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies the following conditions:
+     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`, and let :math:`|\,⋅\,|: F → [0,∞)` be a :term:`valuation` on :math:`F`.  A **norm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies the following conditions:
 
      #. :math:`\|x + y\| ≤ \|x\| + \|y\|`, for all :math:`x, y ∈ X`;
      #. :math:`\|α x\| = |α| \|x\|`, for all :math:`x ∈ X` and :math:`α ∈ F`;
@@ -1885,13 +1885,13 @@ Glossary: topology and analysis
      A set :math:`G` is **nowhere dense** in :math:`X` if the :term:`closure` of :math:`G` contains no nonempty open subsets of :math:`X`. Equivalently, the :term:`interior` of the closure of :math:`G` is empty (in symbols, :math:`Ḡ^o = ∅`).
  
    open ball
-     𝐿et :math:`(X, d)` be a :term:`metric space`. If :math:`x ∈ X` and :math:`r > 0` are fixed, then the set denoted and defined by :math:`B(x, r) = \{y ∈ X ∣ d(x,y) < r\}` is called the **open ball** with center :math:`x` and radius :math:`r`.
+     Let :math:`(X, d)` be a :term:`metric space`. If :math:`x ∈ X` and :math:`r > 0` are fixed, then the set denoted and defined by :math:`B(x, r) = \{y ∈ X ∣ d(x,y) < r\}` is called the **open ball** with center :math:`x` and radius :math:`r`.
 
    open covering
      See :term:`covering`.
 
    open mapping
-     𝐿et :math:`X` and :math:`Y` be metric or topological spaces.  A set function :math:`T: 𝒫(X) → 𝒫(Y)` is called an **open mapping** if :math:`T(G)` is open in :math:`Y` for every open :math:`G ⊆ X`.
+     Let :math:`X` and :math:`Y` be metric or topological spaces.  A set function :math:`T: 𝒫(X) → 𝒫(Y)` is called an **open mapping** if :math:`T(G)` is open in :math:`Y` for every open :math:`G ⊆ X`.
 
    open set
      A subset :math:`V` of a metric or topological space is called **open** if for every :math:`x ∈ V` there is an open ball contained in :math:`V` that contains :math:`x`.
@@ -1914,13 +1914,13 @@ Glossary: topology and analysis
      .. math:: \|T\| = \sup \{ \frac{\|Tx\|}{\|x\|} : x ≠ O\} = \inf \{ C : \|Tx\| ≤ C\|x\| \text{ for all } x\}.
 
    orthogonal set
-     𝐿et :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. A subset :math:`Q ⊆ X` is called **orthogonal** provided :math:`⟨ 𝐮, 𝐯 ⟩ = 0` for all :math:`𝐮 ≠ 𝐯` in :math:`Q`.
+     Let :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. A subset :math:`Q ⊆ X` is called **orthogonal** provided :math:`⟨ 𝐮, 𝐯 ⟩ = 0` for all :math:`𝐮 ≠ 𝐯` in :math:`Q`.
      
    orthonormal basis
      A maximal :term:`orthonormal set` in a :term:`Hilbert space` is known as an **orthonormal basis**. 
 
    orthonormal set
-     𝐿et :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. An :term:`orthogonal set` :math:`U ⊆ X` is called **orthonormal** provided :math:`\|u\| = 1` for all :math:`𝐮 ∈ U`.
+     Let :math:`(X, ⟨⋅, ⋅⟩)` be an :term:`inner product space`. An :term:`orthogonal set` :math:`U ⊆ X` is called **orthonormal** provided :math:`\|u\| = 1` for all :math:`𝐮 ∈ U`.
      
      In other terms, a subset :math:`Q ⊆ X` is called **orthonormal** provided for all :math:`𝐮, 𝐯 ∈ Q`,
 
@@ -1945,10 +1945,10 @@ Glossary: topology and analysis
      Observe that :math:`f` is :term:`measurable <measurable function>` if and only if both the positive and :term:`negative <negative part>` parts of :math:`f` are measurable. Also, :math:`f^+, f^-: X → [0, ∞]`, :math:`f = f^+ - f^-`, and :math:`|f| = f^+ + f^-`.
        
    product σ-algebra
-     𝐿et :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [3]_
+     Let :math:`(X, 𝔐, μ)` and :math:`(Y, 𝔑, ν)` be :term:`measure spaces <measure space>`. If we want to make the product :math:`X × Y` into a :term:`measurable space`, we naturally consider the :term:`σ-algebra` generated by the sets in :math:`𝔐 × 𝔑 = \{A × B ⊆ X × Y ∣ A ∈ 𝔐, B ∈ 𝔑\}`, and we *define* :math:`𝔐 ⊗ 𝔑 := σ(𝔐 × 𝔑)`; that is, :math:`𝔐 ⊗ 𝔑` is the :term:`σ-algebra` generated by :math:`𝔐 × 𝔑`.  [3]_
  
    product topology
-     𝐿et :math:`\{(X_λ, τ_λ)\}_{λ∈ Λ}` be a collection of :term:`topological spaces <topological space>` indexed by a set :math:`Λ`. The **product topology** on the :term:`Cartesian product` :math:`∏_{λ∈ Λ}X_λ` is the topology that has a :term:`base` consisting of sets of the form :math:`∏_{λ∈Λ}V_λ`, where :math:`V_λ ∈ τ_λ` and :math:`V_λ = X_λ` for all but finitely many :math:`λ`.
+     Let :math:`\{(X_λ, τ_λ)\}_{λ∈ Λ}` be a collection of :term:`topological spaces <topological space>` indexed by a set :math:`Λ`. The **product topology** on the :term:`Cartesian product` :math:`∏_{λ∈ Λ}X_λ` is the topology that has a :term:`base` consisting of sets of the form :math:`∏_{λ∈Λ}V_λ`, where :math:`V_λ ∈ τ_λ` and :math:`V_λ = X_λ` for all but finitely many :math:`λ`.
 
      Equivalently, the product topology is the weakest topology that makes all the projection maps :math:`π_λ(\mathbf x) = x_λ` continuous.  In other words, if :math:`Π` denotes the :term:`clone` of all projection operations on :math:`∏_{λ ∈ Λ} X_λ`, then the product topology is the :math:`Π`-topology.
 
@@ -1967,7 +1967,7 @@ Glossary: topology and analysis
      A category :math:`𝒞` is called **self-dual** if :math:`𝒞^{\mathrm{op}} = 𝒞`.
 
    seminorm
-     𝐿et :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **seminorm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies
+     Let :math:`X` be a :term:`vector space` over the :term:`field` :math:`F`.  A **seminorm** on :math:`X` is a function :math:`\|\;\|: X → [0, ∞)` that satisfies
       
      #. :math:`\|x + y\| ≤ \|x\| + \|y\|`, for all :math:`x, y ∈ X`;
      #. :math:`\|α x\| = |α| \|x\|`, for all :math:`x ∈ X` and :math:`α ∈ F`.
@@ -1978,7 +1978,7 @@ Glossary: topology and analysis
    separates the points
      We say that a collection :math:`S` of subsets of :math:`X` **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exist disjoint sets :math:`S_1, S_2∈ S` such that :math:`p ∈ S_1` and :math:`q∈ S_2`.
 
-     𝐿et :math:`F` be a field.  We say that a collection :math:`𝔄⊆ F^X` of :math:`F`-valued functions **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exists :math:`f ∈ 𝔄` such that :math:`f(u) ≠ f (v)`. 
+     Let :math:`F` be a field.  We say that a collection :math:`𝔄⊆ F^X` of :math:`F`-valued functions **separates the points** of :math:`X` if for every pair :math:`p, q` of distinct points in :math:`X` there exists :math:`f ∈ 𝔄` such that :math:`f(u) ≠ f (v)`. 
      
    σ-algebra
      A collection :math:`𝔐` of subsets of a nonempty set :math:`X` is called a **σ-algebra** if it satisfies the following conditions:
@@ -1995,7 +1995,7 @@ Glossary: topology and analysis
      If :math:`(X, 𝔐, μ)` is a :term:`measure space`, then :math:`μ` is a **σ-finite measure** provided :math:`X = ⋃_j E_j` for some :math:`E_j ∈ 𝔐` such that :math:`μ E_j < ∞` for all :math:`1≤ j < ∞`.
     
    signed measure
-     𝐿et :math:`(X, 𝔐)` be a :term:`measurable space`. A **signed measure** on :math:`(X, 𝔐)` is a function :math:`ν: 𝔐 → [-∞, ∞]` such that
+     Let :math:`(X, 𝔐)` be a :term:`measurable space`. A **signed measure** on :math:`(X, 𝔐)` is a function :math:`ν: 𝔐 → [-∞, ∞]` such that
      
      #. :math:`ν ∅ = 0`;
      #. :math:`ν` assumes at most one of the values :math:`±∞`;
@@ -2013,7 +2013,7 @@ Glossary: topology and analysis
    simple function
      A complex- or real-valued function :math:`s` whose range consists of only finitely many points is called a **simple function**.
 
-     𝐿et :math:`s` be a simple function with domain :math:`X` and suppose :math:`α_1, \dots, α_n` is the set of distinct values of :math:`s`. If we set :math:`A_i = \{x\in X : s(x) = \alpha_i\}`, then clearly
+     Let :math:`s` be a simple function with domain :math:`X` and suppose :math:`α_1, \dots, α_n` is the set of distinct values of :math:`s`. If we set :math:`A_i = \{x\in X : s(x) = \alpha_i\}`, then clearly
 
      .. math:: s = ∑_{i=1}^n α_i χ_{A_i},
         :label: simple
@@ -2028,7 +2028,7 @@ Glossary: topology and analysis
      A finite linear combination of characteristic functions of bounded intervals of :math:`ℝ` is called a **step function**.
 
    subadditive
-     𝐿et :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **subadditive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
+     Let :math:`𝒮 = \{S_λ: λ∈ Λ\}` be a collection of sets and let :math:`R` be a :term:`ring`.  A function :math:`s: 𝒮 → R` is called **subadditive** if for every subset :math:`Γ ⊆ Λ` such that :math:`\{S_γ : γ ∈ Γ\}` is a collection of subsets in :math:`𝒮`, we have
      .. math:: s \bigl( ⋃_{γ∈Γ}  A_γ \bigr) ≤ ∑_{γ∈ Γ} s (A_γ).
 
    topological space
@@ -2045,13 +2045,13 @@ Glossary: topology and analysis
      A set :math:`E` in a metric space is called **totally bounded** if for every :math:`ε > 0` :math:`E` can be covered with finitely many balls of radius :math:`ε`.
 
    translation invariance
-     𝐿et :math:`(X, 𝔐)` be a :term:`measurable space`. Assume there is a binary operation defined on :math:`X`; e.g., addition :math:`+: X× X → X`. A :term:`measure` :math:`μ` on :math:`(X, 𝔐)` is called **translation invariant** provided :math:`μ(E + x) = μ E` holds for all :math:`E ∈ 𝔐` and all :math:`x∈  X`, where :math:`E+x := \{e+x ∣ e∈ E\}`.
+     Let :math:`(X, 𝔐)` be a :term:`measurable space`. Assume there is a binary operation defined on :math:`X`; e.g., addition :math:`+: X× X → X`. A :term:`measure` :math:`μ` on :math:`(X, 𝔐)` is called **translation invariant** provided :math:`μ(E + x) = μ E` holds for all :math:`E ∈ 𝔐` and all :math:`x∈  X`, where :math:`E+x := \{e+x ∣ e∈ E\}`.
 
    triangle inequality
-     𝐿et :math:`(X, \|\,⋅\,\|)` be a metric or normed space.  The inequality :math:`\|x + y\| ≤ \|x\| + \|y\|`, which holds for all :math:`x, y ∈ X` in a metric or normed space, is called the **triangle inequality**.  Equivalently (setting :math:`x = a-b` and :math:`y = b-c`), :math:`\|a - c\| ≤ \|a - b\| + \|b - c\|`.
+     Let :math:`(X, \|\,⋅\,\|)` be a metric or normed space.  The inequality :math:`\|x + y\| ≤ \|x\| + \|y\|`, which holds for all :math:`x, y ∈ X` in a metric or normed space, is called the **triangle inequality**.  Equivalently (setting :math:`x = a-b` and :math:`y = b-c`), :math:`\|a - c\| ≤ \|a - b\| + \|b - c\|`.
  
    uniformly continuous
-     𝐿et :math:`(X, |\, |_X)` and :math:`(Y, |\, |_Y)` be :term:`metric spaces <metric space>`. A function :math:`f : X → Y` is called **uniformly continuous** in :math:`E ⊆ X` if
+     Let :math:`(X, |\, |_X)` and :math:`(Y, |\, |_Y)` be :term:`metric spaces <metric space>`. A function :math:`f : X → Y` is called **uniformly continuous** in :math:`E ⊆ X` if
   
      .. math:: (∀ ε >0)\, (∃ δ >0)\, (∀ x, x_0 ∈ E) \, (|x - x_0| < δ \, ⟹ \, |f(x) -f(x_0)| < ε).
 
@@ -2065,7 +2065,7 @@ Glossary: topology and analysis
      By taking :math:`y = x`, we have :math:`\|U x\|_2 = \|x\|_1`.
 
    upper limit
-     𝐿et :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \sup \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \inf \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **upper limit** (or **limit superior**) of :math:`\{a_n\}`, and write :math:`β = \limsup\limits_{n→ ∞} a_n`.  The :term:`lower limit`, :math:`\liminf\limits_{n→ \infty} a_n` is definied similarly.
+     Let :math:`\{a_n\}` be a sequence in :math:`[-∞, ∞]`, and put :math:`b_k = \sup \{a_k, a_{k+1}, \dots\}` for :math:`k∈ ℕ` and :math:`β = \inf \{b_0, b_1, b_2, \dots \}`. We call :math:`β` the **upper limit** (or **limit superior**) of :math:`\{a_n\}`, and write :math:`β = \limsup\limits_{n→ ∞} a_n`.  The :term:`lower limit`, :math:`\liminf\limits_{n→ \infty} a_n` is definied similarly.
 
      Observe that
 
@@ -2123,7 +2123,7 @@ What follows is a list of useful definitions from computational complexity theor
      We say that 𝔄 is **jointly locally tractable** if, for every natural number, m, there is a polynomial-time algorithm 𝖠ₘ that solves CSP(𝔄,m).  
 
    constraint satisfaction problem
-     𝐿et 𝔄 be a collection of (finite) algebras of the same signature. Define the **constraint satisfaction problem** CSP(𝔄) to be the following decision problem:
+     Let 𝔄 be a collection of (finite) algebras of the same signature. Define the **constraint satisfaction problem** CSP(𝔄) to be the following decision problem:
 
        An n-variable **instance** of CSP(𝔄) is a quadruple (𝒱, 𝒜, 𝒮, ℛ) consisting of
   
@@ -2143,7 +2143,7 @@ What follows is a list of useful definitions from computational complexity theor
      A decision problem is said to have **exponential time** (or **EXPTIME**) complexity if it is solvable by a deterministic Turing machine that runs in :math:`O(2^{p(n)})` time, where :math:`p(n)` is a polynomial function of :math:`n`.
      
    homomorphic relaxation
-     𝐿et (𝔸, 𝔹) and (𝔸', 𝔹') be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is a **homomorphic relaxation** of (𝔸, 𝔹) if there exist :term:`homomorphisms <relational structure homomorphism>` f: 𝔸' → 𝔸 and g: 𝔹 → 𝔹'.
+     Let (𝔸, 𝔹) and (𝔸', 𝔹') be :term:`PCSP templates <PCSP template>`. We say that (𝔸', 𝔹') is a **homomorphic relaxation** of (𝔸, 𝔹) if there exist :term:`homomorphisms <relational structure homomorphism>` f: 𝔸' → 𝔸 and g: 𝔹 → 𝔹'.
       
    locally tractable
      We say that a collection 𝔄 of algebras is **jointly locally tractable** (or just **locally tractable**) if, for every natural number, m, there is a polynomial-time algorithm 𝖠ₘ that solves CSP(𝔄,m).  
@@ -2193,7 +2193,7 @@ What follows is a list of useful definitions from computational complexity theor
      The **promise constraint satisfaction problem** (**PCSP**) over the :term:`PCSP template` (𝔸, 𝔹) is denoted PCSP(𝔸, 𝔹) and is defined to be the following decision problem: given a :term:`pp-sentence` φ over the relational symbols :math:`R_1, \dots, R_n`, answer "YES" if φ is true in 𝔸 and answer "No" if φ is not true in 𝔹.
 
    PCSP template
-     𝐿et :math:`𝔸 = ⟨A, R_1^𝔸, \dots, R_ℓ^𝔸⟩` and :math:`𝔹 = ⟨B, R_1^𝔹, \dots, R_ℓ^𝔹⟩` be finite relational structures of the same signature and assume that there exists a homomorphism 𝔸 → 𝔹. Then the pair (𝔸, 𝔹) is called a **promise constraint satisfaction problem template** (or **PCSP template**).
+     Let :math:`𝔸 = ⟨A, R_1^𝔸, \dots, R_ℓ^𝔸⟩` and :math:`𝔹 = ⟨B, R_1^𝔹, \dots, R_ℓ^𝔹⟩` be finite relational structures of the same signature and assume that there exists a homomorphism 𝔸 → 𝔹. Then the pair (𝔸, 𝔹) is called a **promise constraint satisfaction problem template** (or **PCSP template**).
 
    polynomial space
      A decision problem has **polynomial space** complexity if it can be solved by a :term:`Turing machine` using a polynomial amount of space.  The class of such problems is denoted **PSPACE**.
@@ -2209,7 +2209,7 @@ What follows is a list of useful definitions from computational complexity theor
    size
      We bound the **size** of an instance I=⟨𝒱, 𝒜, 𝒮, ℛ⟩ of a :term:`constraint satisfaction problem` CSP(𝔄) as follows:
      
-     𝐿et :math:`q=\max(|A₀|, |A₁|, \dots, |A_{n-1}|)`, let r be the maximum rank of an operation symbol in the similarity type, and p the number of operation symbols.
+     Let :math:`q=\max(|A₀|, |A₁|, \dots, |A_{n-1}|)`, let r be the maximum rank of an operation symbol in the similarity type, and p the number of operation symbols.
      
      Then each member of the list 𝒜 requires at most :math:`pq^r\log q` bits to specify.  Thus,
 

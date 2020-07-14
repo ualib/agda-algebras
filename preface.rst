@@ -75,7 +75,7 @@ There are installation instructions in the main README.md file in that repositor
 
       git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 
-(We assume you have ``Agda`` and ``agda2-mode`` installed on your machine. If not, follow the directions on `the main Agda website <Agda>`_ to install them.)
+(We assume you have Agda_ and agda2-mode_ installed on your machine. If not, follow the directions on `the main Agda website <Agda>`_ to install them.)
 
 -----------------------------------
 
@@ -92,15 +92,15 @@ The first author would also like to thank his postdoctoral advisors and their in
 Attributions and citations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-William DeMeo and Siva Somayyajula (hereinafter, "The Authors") are the developers of the `Agda Universal Algebra Library`_ (`agda-ualib`_).
+William DeMeo and Siva Somayyajula (hereinafter, "The Authors") are the developers of the `Agda Universal Algebra Library`_ (agda-ualib_).
 
-Regarding the mathematical results that are implemented in the `agda-ualib`_ library, as well as the presentation and informal statements of these results in the documentation, The Authors makes no claims to originality.
+Regarding the mathematical results that are implemented in the agda-ualib_ library, as well as the presentation and informal statements of these results in the documentation, The Authors makes no claims to originality.
 
-Regarding the Agda source code in the `agda-ualib`_ library, this is mainly due to The Authors.
+Regarding the Agda source code in the agda-ualib_ library, this is mainly due to The Authors.
 
 HOWEVER, we have benefited from the outstanding lecture notes on `Univalent Foundations and Homotopy Type Theory <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes>`_ and the `Type Topology`_ Agda Library, both by `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe>`_.  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the `Midlands Graduate School in the Foundations of Computing Science <http://events.cs.bham.ac.uk/mgs2019/>`_ in Birmingham in 2019.
 
-The development of the `agda-ualib`_ and its documentation is informed by and benefits from the references listed in the :ref:`references` section below.
+The development of the agda-ualib_ and its documentation is informed by and benefits from the references listed in the :ref:`references` section below.
 
 ----------------------
 
@@ -109,7 +109,7 @@ The development of the `agda-ualib`_ and its documentation is informed by and be
 References
 ------------
 
-The following Agda documentation and tutorials are excellent.  They have been quite helpful to The Author of `agda-ualib`_, and have informed the development of the latter and its documentation.
+The following Agda documentation and tutorials are excellent.  They have been quite helpful to The Author of agda-ualib_, and have informed the development of the latter and its documentation.
 
 * Altenkirk, `Computer Aided Formal Reasoning`_
 * Bove and Dybjer, `Dependent Types at Work`_
