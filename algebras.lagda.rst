@@ -1202,9 +1202,9 @@ Birkhoff's theorem
 
 It follows from :numref:`Obs %s <obs 13>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
 
-The statement and proof we give here is the same as that of Theorem 4.41 in Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the `birkhoff module`_ of the agda-ualib_ (see :numref:`birkhoffs theorem in agda`).
+The statement and proof we give here is essentially the same as that given in Theorem 4.41 of Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the `birkhoff module`_ of the agda-ualib_; see :numref:`birkhoffs theorem in agda`.
 
-.. proof:theorem::
+.. proof:theorem:: Thm 4.41 of :cite:`Bergman:2012`
 
    Every variety is an equational class.
 
