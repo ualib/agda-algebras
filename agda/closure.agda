@@ -184,7 +184,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
     → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
    hom-image-term-interp b (generator x) = (ζ b x)⁻¹
-   hom-image-term-interp b (node 𝓸 t) =  {!!} -- ap (𝓸 ̂ HIA) ? ? --  gfe φIH
+   hom-image-term-interp b (node 𝓸 t) =  {!!} -- gfe φIH -- ap (𝓸 ̂ HIA) ? ?
     where
      -- φIH : (x : ∥ S ∥ 𝓸) → (t x ̇ HIA) b ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b))
      -- φIH x = hom-image-term-interp b (t x)
@@ -209,7 +209,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
      --         ≡⟨ {!!} ⟩ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥) , im (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
      --         ≡⟨ refl _ ⟩ ∣ ϕ ∣ (preim b x) , im (preim b x) ∎
 
-   hom-image-term-interpretation b (node 𝓸 t) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
+   hom-image-term-interpretation b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
     where
      φIH : (x : ∥ S ∥ 𝓸)
       → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))

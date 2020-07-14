@@ -287,6 +287,8 @@ module _ {A : Algebra 𝓤 S} (UV : Univalence) where
  subuniverse-equality' B C =
   (subuniverse-equality B C) ● (carrier-equiv B C)
 
+
+ -- new definition of subalgebra (includes an embedding)
  Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
  Subalgebra = Σ B ꞉ (Algebra 𝓤 S) ,
                  Σ h ꞉ (∣ B ∣ → ∣ A ∣) ,

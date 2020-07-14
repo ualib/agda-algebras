@@ -567,7 +567,7 @@ Alternatively and equivalently we could define "equational class" and "equationa
 
 (where, 𝒫 denotes the :term:`power set operator`).
 
-**N.B.** An equational class is sometimes referred to as a **variety**; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in :numref:`the birkhoff module <the birkhoff module>` described in :numref:`the birkhoff module`.
+**N.B.** An equational class is sometimes referred to as a **variety**; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in :ref:`the birkhoff module <the birkhoff module>` described in :numref:`the birkhoff module`.
 
 --------------------------
 
@@ -806,6 +806,7 @@ Next is a theorem that provides a means of generating subuniverses recursively.
 
 ..   #. One concludes that :math:`Y = \mathsf{Sg}^𝑨 (A_0)`.
 
+We implement the concept of subalgebra in Agda as described in :numref:`subuniverses in agda`, and we formalize :numref:`Obs %s <obs 7>` in :numref:`obs 7 in agda`.
 
 .. _obs 7.1:
 
@@ -837,8 +838,7 @@ Next is a theorem that provides a means of generating subuniverses recursively.
 
       .. math:: h(\mathrm{Sg}^𝑨(𝑋)) ⊆ h(h⁻¹(\mathrm{Sg}^𝑩(h(X)))) ⊆ \mathrm{Sg}^𝑩(h(X)).
 
-
-We describe our Agda implementation of the concept of subalgebra in :numref:`subuniverses in agda`, and we present our formalization of :numref:`Obs. %s <obs 7>` in :numref:`obs 7 in agda`.
+Our formalization of :numref:`Obs %s <obs 7.1>` is presented in :numref:`obs 7.1 in agda`.
 
 .. --------------------------------------------------------------------------------------
 .. CLONE GENERATION
@@ -952,9 +952,9 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
    If 𝑼 is free for 𝒦 over 𝑋, then it is free for HSP(𝒦) over 𝑋.
 
    .. container:: toggle
- 
+
       .. container:: header
- 
+
          *Proof*.
 
       Let 𝑼 be free for 𝑋 over 𝑋. It suffices to show that if C is one of H, S or P, then 𝑼 has the universal mapping property for C(𝒦) over 𝑋. Consider the case 𝑨 ∈ H(𝒦). Then there is 𝑩 ∈ 𝒦 and a surjective homomorphism 𝑓 : 𝑩 → 𝑨. Let ℎ : 𝑋 → 𝐴 be a function. We must find an extension of h to a homomorphism from 𝑼 to 𝑨. For each 𝑥 ∈ 𝑋 choose an element 𝑏ₓ ∈ 𝑓⁻¹\{ℎ(𝑥)\}. Define the function :math:`𝑔 : 𝑋 → 𝐵` by :math:`g(x) = b_x`. Since 𝑼 is free for 𝒦 and 𝑩 ∈ 𝒦, :math:`g` extends to a homomorphism :math:`g̃ : 𝑼 → 𝑩`. Then :math:`𝑓 ∘ g̃` is the desired extension of ℎ.
@@ -971,46 +971,49 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
 .. proof:observation:: Lem 4.27 of :cite:`Bergman:2012`
 
-   If 𝒦 is a class of 𝑆-algebras and 𝑨 an 𝑆-algebra, then :math:`𝑨/Ψ(𝒦)(𝑨)` ∈ SP(𝒦).
+   If 𝒦 is a class of 𝑆-algebras and 𝑨 an 𝑆-algebra, then 𝑨/Ψ(𝒦, 𝑨) ∈ SP(𝒦).
 
    .. container:: toggle
- 
+
       .. container:: header
- 
+
          *Proof*.
 
       Observe that
 
-      .. math:: 𝑨/Ψ(𝒦)(𝑨) ↪ Π ⟨ 𝑨/θ : θ ∈ ψ(𝒦)(𝑨) ⟩ ∈ \mathrm{PS}(𝒦),
+      .. math:: 𝑨/Ψ(𝒦, 𝑨) ↪ Π ⟨ 𝑨/θ : θ ∈ ψ(𝒦, 𝑨) ⟩ ∈ \mathrm{PS}(𝒦),
 
-      so :math:`𝑨/Ψ(𝒦)(𝑨)` ∈ SPS(𝒦) = SP(𝒦)`.
+      so :math:`𝑨/Ψ(𝒦, 𝑨)` ∈ SPS(𝒦) = SP(𝒦)`.
 
 .. _obs 9.5:
 
 .. proof:observation:: Thm 4.28 of :cite:`Bergman:2012`
 
-   Let 𝑼 be free for 𝒦 over 𝑋. Then :math:`𝑼/Ψ(𝒦)(𝑼)` is free in SP(𝒦) over :math:`𝑋/Ψ(𝒦)(𝑼)`.
+   Let 𝑼 be free for 𝒦 over 𝑋. Then 𝑼/Ψ(𝒦, 𝑼) is free in SP(𝒦) over 𝑋/Ψ(𝒦, 𝑼).
 
    .. container:: toggle
- 
+
       .. container:: header
- 
+
          *Proof*.
 
-      Let :math:`𝑼' = 𝑼/Ψ(𝒦)(𝑼)` and :math:`𝑋' = 𝑋/(Ψ(𝒦)(𝑼) ∩ 𝑋²)`. Since 𝑋 generates 𝑼, it follows from :numref:`Obs %s <obs 7.1>` that 𝑋 generates :math:`𝑼'`. From :numref:`Obs %s <obs 9.4>`, :math:`𝑼' ∈ SP(𝒦)`. If we can show that 𝑼 has the :term:`UMP` for 𝑋, then by :numref:`Obs %s <obs 9.3>` :math:`𝑼'` will be free in SP(𝒦) over 𝑋.
+      Let :math:`𝑼' = 𝑼/Ψ(𝒦, 𝑼)` and :math:`𝑋' = 𝑋/(Ψ(𝒦, 𝑼) ∩ 𝑋²)`. Since 𝑋 generates 𝑼, it follows from :numref:`Obs %s <obs 7.1>` that 𝑋 generates :math:`𝑼'`. From :numref:`Obs %s <obs 9.4>`, :math:`𝑼'` ∈ SP(𝒦). If we can show that 𝑼 has the :term:`UMP` for 𝑋, then by :numref:`Obs %s <obs 9.3>` :math:`𝑼'` will be free in SP(𝒦) over 𝑋.
 
-      Fix 𝑨 ∈ 𝒦 and :math:`ℎ : 𝑋' → 𝐴`, and let 𝑞 be the canonical map from 𝑼 to :math:`𝑼'`. Since 𝑼 is free over 𝑋, there is a homomorphism ℎ̃ : 𝑼 → 𝑨 extending ℎ ∘ 𝑞. Let η = ker ℎ̃. Then 𝑼/η ∈ S(𝑨) ⊆ S(𝒦), so :math:`η ∈ ψ(𝒦)(𝑼)` and therefore :math:`Ψ(𝒦)(𝑼) ≤ η`. Since :math:`Ψ(𝒦)(𝑼) = ker 𝑞`, there is a homomorphism :math:`ℎ' : 𝑼' → 𝑨` such that :math:`ℎ̃ = h' ∘ q`. But now it follows easily that :math:`h'` restricted to :math:`X'` is equal to ℎ.
+      Fix 𝑨 ∈ 𝒦 and :math:`ℎ : 𝑋' → 𝐴`, and let 𝑞 be the canonical map from 𝑼 to :math:`𝑼'`. Since 𝑼 is free over 𝑋, there is a homomorphism ℎ̃ : 𝑼 → 𝑨 extending ℎ ∘ 𝑞. Let η = ker ℎ̃. Then 𝑼/η ∈ S(𝑨) ⊆ S(𝒦), so :math:`η ∈ ψ(𝒦, 𝑼)` and therefore :math:`Ψ(𝒦, 𝑼) ≤ η`. Since :math:`Ψ(𝒦, 𝑼) = ker 𝑞`, there is a homomorphism :math:`ℎ' : 𝑼' → 𝑨` such that :math:`ℎ̃ = h' ∘ q`. But now it follows easily that :math:`h'` restricted to :math:`X'` is equal to ℎ.
+
+
+As Bergman notes (see the remark after Def 4.29 in :cite:`Bergman:2012`), "strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, X), so it doesn’t make sense to talk about 𝑋 generating 𝔽(𝒦, X), [but] as long as 𝒦 contains a nontrivial algebra, :math:`Ψ(𝒦, 𝑋) ∩ 𝑋² = 0_X`. In light of [:numref:`Obs %s <obs 9.2>`], we 
+can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑋) in 𝔽(𝒦, 𝑋). All of these considerations are accounted for in the following corollary."
+
 
 .. _obs 9.6:
 
 .. proof:observation:: Cor 4.30 of :cite:`Bergman:2012`
 
-   Let 𝒱 be a variety of 𝑆-algebras. If 𝑋 ∪ 𝐹₀ ≠ ∅, then 𝔽(𝒱)(𝑋) is free in 𝒱 over 𝑋.  If 𝒱 = 𝕍(𝒦), the variety generated by 𝒦, then 𝔽(𝒱)(𝑋) = 𝔽(𝒦)(𝑋) ∈ SP(𝒦).
+   Let 𝒱 be a variety of 𝑆-algebras. If 𝑋 ∪ 𝐹₀ ≠ ∅, then 𝔽(𝒱, 𝑋) is free in 𝒱 over 𝑋.  If 𝒱 = 𝕍(𝒦), the variety generated by 𝒦, then 𝔽(𝒱, 𝑋) = 𝔽(𝒦, 𝑋) ∈ SP(𝒦).
 
 
-In the next observation, assume :math:`𝑨 = ⟨A, F^𝑨⟩` and :math:`𝑩 = ⟨B, F^𝑩⟩` are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆.
-
-In particular, 𝑡 has an interpretation in 𝑨 (see :numref:`interpretation of a term`), which we denote by :math:`t^𝑨`. Similarly, :math:`t^𝑩` is the interpretation of 𝑡 in 𝑩.
+In the next observation, assume 𝑨 = :math:`⟨A, F^𝑨⟩` and 𝑩 = :math:`⟨B, F^𝑩⟩` are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆.  In particular, 𝑡 has an interpretation in 𝑨 (see :numref:`interpretation of a term`), which we denote by :math:`t^𝑨`. Similarly, :math:`t^𝑩` is the interpretation of 𝑡 in 𝑩.
 
 .. _thm 4.32:
 
@@ -1018,9 +1021,7 @@ In particular, 𝑡 has an interpretation in 𝑨 (see :numref:`interpretation o
 
 .. proof:observation:: homomorphisms commute with terms
 
-   #. If 𝑓 : 𝑨 → 𝑩 is a homomorphism, then :math:`g ∘ a : 𝑛 → B` is the 𝑛-tuple whose 𝑖-th component is :math:`(g ∘ a)\, i = g(a\, i)`, and
-
-      .. math:: g(t^𝑨 a) = t^𝑩(g ∘ a).
+   If 𝑓 : 𝑨 → 𝑩 is a homomorphism, then :math:`g ∘ a : 𝑛 → B` is the 𝑛-tuple whose 𝑖-th component is :math:`(g ∘ a)\, i = g(a\, i)`, and :math:`g(t^𝑨 a) = t^𝑩(g ∘ a)`.
 
    .. container:: toggle
 
@@ -1036,7 +1037,7 @@ We implement this result in Agda in :numref:`obs 10 in agda`.
 
 .. proof:observation:: terms respect congruences
 
-   Let 𝑨 be an 𝑆-algebra, 𝑡 a term in the language of 𝑆, and θ a congruence of 𝑨.  Then for all tuples 𝒂, 𝒃 : 𝑋 → 𝑨, we have (∀ i, 𝒂(i) θ 𝒃(i)) → (t^𝑨 𝒂) θ (t^𝑨 𝒃).
+   Let 𝑨 be an 𝑆-algebra, 𝑡 a term in the language of 𝑆, and θ a congruence of 𝑨.  Then for all tuples 𝒂, 𝒃 : 𝑋 → 𝑨, we have (∀ 𝑖, (𝒂 𝑖) θ (𝒃 i)) → :math:`(t^𝑨 𝒂) \mathrel{θ} (t^𝑨 𝒃)`.
 
    .. container:: toggle
 
@@ -1044,7 +1045,7 @@ We implement this result in Agda in :numref:`obs 10 in agda`.
 
         *Proof*.
 
-      This follows from :numref:`Obs %s <obs 8>` by taking :math:`⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
+      This follows from :numref:`Obs %s <obs 10>` by taking :math:`⟨B, F^𝑩⟩ = ⟨A, F^𝑨⟩/θ = ⟨A/θ, F^{𝑨/θ}⟩` and :math:`g=` the canonical homomorphism. ☐
 
 Our formal implementation of :numref:`Obs %s <obs 11>` is presented in :numref:`obs 11 in agda` as part of the ``terms`` module of the ``agda-ualib``.
 
@@ -1155,8 +1156,8 @@ A formalization of this result is presented in :numref:`obs 14 in agda`.
    Let 𝒦 be a class of algebras and 𝑝 ≈ 𝑞 an equation. The following are equivalent.
 
     #. 𝒦 ⊧ 𝑝 ≈ 𝑞.
-    #. (𝑝, 𝑞) belongs to the congruence :math:`λ(𝒦)(X)` on 𝑻(𝑋).
-    #. :math:`𝔽(𝒦)(X) ⊧ 𝑝 ≈ 𝑞`.
+    #. (𝑝, 𝑞) belongs to the congruence Ψ(𝒦, 𝑋) on 𝑻(𝑋).
+    #. 𝔽(𝒦, 𝑋) ⊧ 𝑝 ≈ 𝑞.
 
    .. container:: toggle
 
@@ -1164,15 +1165,15 @@ A formalization of this result is presented in :numref:`obs 14 in agda`.
 
          *Proof*.
 
-      Recall that :math:`𝔽(𝒦)(X) = 𝑻(X)/λ(𝒦)(𝑋) ∈ SP(𝒦)`. We show (1) ⟹ (3) ⟹ (2) ⟹ (1).
+     To simplify notation, let 𝔽 := 𝔽(𝒦, 𝑋) and Ψ := Ψ(𝒦, 𝑋). Recall that 𝔽 = 𝑻(𝑋)/Ψ ∈ SP(𝒦). We show (1) ⟹ (3) ⟹ (2) ⟹ (1).
 
       (1) ⟹ (3). From (1) and :numref:`Obs %s <obs 13>` we have SP(𝒦) ⊧ 𝑝 ≈ 𝑞. Thus (3) holds.
 
-      (3) ⟹ (2). From (3), :math:`p^𝔽 [x] = q^𝔽 [x]`, where [x]: 𝑋 → 𝔽(𝒦)(𝑋) is defined by [x] 𝑖 = 𝑥ᵢ/λ. From the definition of 𝔽, :math:`p^𝑻 x ≡λ q^𝑻 x`, from which (2) follows since :math:`p = p^𝑻 x` and :math:`q = q^𝑻 x`.
+      (3) ⟹ (2). From (3), :math:`p^𝔽 [x] = q^𝔽 [x]`, where [x]: 𝑋 → 𝔽is defined by [x] 𝑖 = 𝑥ᵢ/Ψ. From the definition of 𝔽, :math:`p^𝑻 𝑥 Ψ q^𝑻 𝑥`, from which (2) follows since :math:`p = p^𝑻 𝑥` and :math:`q = q^𝑻 𝑥`.
 
-      (2) ⟹ (1). We wish to apply :numref:`Obs %s <obs 14>`. Let 𝑨 ∈ 𝒦 and :math:`h ∈ \mathrm{Hom}(𝑻(𝑋), 𝑨)`. Then :math:`𝑻(𝑋)/\mathrm{ker} h ∈ S(𝑨) ⊆ S(𝒦)` so :math:`\mathrm{ker} h ⊇ λ(𝒦)(𝑋)`.  Thus, (2) implies :math:`h p = h q` hence (1) holds.
+      (2) ⟹ (1). We wish to apply :numref:`Obs %s <obs 14>`. Let 𝑨 ∈ 𝒦 and ℎ ∈ Hom(𝑻(𝑋), 𝑨). Then 𝑻(𝑋)/(ker ℎ) ∈ S(𝑨) ⊆ S(𝒦) so ker h ⊇ Ψ.  Thus, (2) implies ℎ 𝑝 = ℎ 𝑞 hence (1) holds.
 
-The last result tells us that we can determine whether an identity is true in a variety by consulting a particular algebra, namely :math:`𝔽(X)`.
+The last result tells us that we can determine whether an identity is true in a variety 𝒱 by consulting a particular algebra, namely 𝔽(𝒱, 𝑋), the free algebra in 𝒱.
 
 .. Sometimes it is convenient to work with algebras free on other generating sets besides 𝑋. The following corollary takes care of that for us.
 
@@ -1185,14 +1186,11 @@ The last result tells us that we can determine whether an identity is true in a 
 
 .. The converse of the last theorem is false.  That is, ∃ loc fin varieties that are not finitely generated(e.g., the variety of p-algebras; see UAFSt Cor. 4.55).
 
-
-.. (fact-m4):
-
 .. _obs 16:
 
 .. proof:observation:: Cor 4.39 of :cite:`Bergman:2012`
 
-   Let 𝒦 be a class of algebras, 𝑝, 𝑞 terms (say, 𝑛-ary), 𝑌 a set, and 𝑦₁, …, 𝑦ₙ distinct elements of 𝑌. Then 𝒦 ⊧ 𝑝 ≈ 𝑞 if and only if :math:`p^{𝔽(𝒦)(𝑌)}(y₁, …, yₙ) = q^{𝔽(𝒦)}(𝑌)(y₁, …, yₙ)`. In particular, 𝒦 ⊧ 𝑝 ≈ 𝑞 iff 𝔽(𝒦)(𝑋ₙ) ⊧ 𝑝 ≈ 𝑞.
+   Let 𝒦 be a class of algebras, 𝑝, 𝑞 terms (say, 𝑛-ary), 𝑋 a set, and 𝑥 a tuple of distinct elements of 𝑋. Then 𝒦 ⊧ 𝑝 ≈ 𝑞 if and only if :math:`p^{𝔽(𝒦, 𝑋)} 𝑥 = q^{𝔽(𝒦, 𝑋)} 𝑥`. In particular, 𝒦 ⊧ 𝑝 ≈ 𝑞 iff 𝔽(𝒦, 𝑋) ⊧ 𝑝 ≈ 𝑞.
 
    .. container:: toggle
 
@@ -1200,17 +1198,21 @@ The last result tells us that we can determine whether an identity is true in a 
 
          *Proof*.
 
-      Since 𝔽(𝒦, 𝑌) ∈ S P(𝒦), the left-to-right direction uses the same argument as in :numref:`Thm %s <Thm 4.38>`.  So assume that :math:`p^{𝔽(𝒦, Y)} 𝑦 = q^{𝔽(𝒦, Y)} 𝑦`. To show that 𝒦 ⊧ 𝑝 ≈ 𝑞, let :math:`𝑨 = ⟨𝐴, 𝑓^𝑨⟩ ∈ 𝒦` and 𝑎 : 𝑌 → 𝐴. We must show :math:`p^𝑨 𝑎 = q^𝑨 𝑎`. There is a homomorphism :math:`h : 𝔽(𝒦, Y) → (A, f^𝑨)` such that ℎ(𝑦 𝑖) = 𝑎 i for 𝑖 ≤ 𝑛. Therefore,
+      Since 𝔽(𝒦, 𝑋) ∈ SP(𝒦), the left-to-right direction uses the same argument as in :numref:`Obs %s <obs 15>`.  So assume that :math:`p^{𝔽(𝒦, 𝑋)} 𝑥 = q^{𝔽(𝒦, 𝑋)} 𝑥`. To show that 𝒦 ⊧ 𝑝 ≈ 𝑞, we fix :math:`𝑨 = ⟨𝐴, 𝑓^𝑨⟩ ∈ 𝒦` and ℎ₀ : 𝑋 → 𝐴, and show that :math:`p^𝑨 ℎ₀ = q^𝑨 ℎ₀`. By :numref:`Obs %s <obs 9>`, ℎ₀ extends to a homomorphism :math:`ℎ' : 𝑻(𝑋) → 𝑨`, so there is a homomorphism :math:`h : 𝔽(𝒦, 𝑋) → (A, f^𝑨)` such that ℎ(𝑥 𝑖) = ℎ₀(𝑥 𝑖) for all 𝑖 ≤ 𝑛. Therefore,
 
-      .. math:: p^𝑨\, 𝑎 = p^𝑨(h ∘ 𝑦) = h(p^{𝔽(𝒦, Y)} 𝑦 = h(q^{𝔽(𝒦, Y)} 𝑦 = q^𝑨(h ∘ 𝑦) = q^𝑨\, 𝑎.
+      .. math:: p^𝑨\, ℎ₀ = p^𝑨\, ℎ = ℎ \, p^{𝔽(𝒦, 𝑋)} = ℎ\, q^{𝔽(𝒦, 𝑋)} = q^𝑨 \, ℎ = q^𝑨\, ℎ₀.
 
+
+--------------------------
+
+.. _birkhoffs theorem:
+
+Birkhoff's theorem
+---------------------
 
 It follows from :numref:`Obs %s <obs 12>` that every equational class is a variety.  The converse is Birkhoff's celebrated HSP theorem which we present next.
 
 The statement and proof we give here is the same as that of Theorem 4.41 in Cliff Bergman's textbook :cite:`Bergman:2012`.  It is this statement and proof that we will formalize in Agda in the ``birkhoff`` module of the `agda-ualib`_ (see :numref:`birkhoffs theorem in agda`).
-
-
-.. _birkhoffs theorem:
 
 .. proof:theorem::
 
@@ -1222,15 +1224,19 @@ The statement and proof we give here is the same as that of Theorem 4.41 in Clif
 
          *Proof*.
 
-      Let 𝒲 be a class of algebras closed under H, S, and P (i.e., a variety). We must find a set Σ of equations that axiomatizes 𝒲, as this will prove that 𝒲 is the class of algebras satisfying the set of equations Σ (i.e., that 𝒲 is an equational class). The obvious choice for Σ is to use the set of all equations that hold in 𝒲. That is, we take Σ = Th(𝒲). Let :math:`𝒲'` = Mod(Σ).  Clearly, :math:`𝒲 ⊆ 𝒲'`. We prove the reverse inclusion.
+      Let 𝒲 be a class of algebras closed under H, S, and P (i.e., a variety). We must find a set Σ of equations that axiomatizes 𝒲 (that is, such that 𝒲 = Mod(Σ)), as this will prove that 𝒲 is the class of algebras satisfying the set of equations Σ (i.e., that 𝒲 is an equational class). The obvious choice for Σ is Th(𝒲), the set of all equations that hold in 𝒲. Let :math:`𝒲'` = Mod(Σ).  Clearly, :math:`𝒲 ⊆ 𝒲'`, so we must prove the reverse inclusion.
 
-      Let :math:`𝑨 ∈ 𝒲'` and 𝑌 a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑌 → 𝐴. By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝑻(𝑌) → 𝑨. Furthermore, since 𝔽(𝒲, Y) = 𝑻(𝑌)/λ(𝒲, 𝑻(𝑌)), there is an epimorphism 𝑔 : 𝑻(𝑌) → 𝔽(𝒲, 𝑌). We claim that ker 𝑔 ⊆ ker ℎ. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽(𝒲, 𝑌) → 𝐴 such that 𝑓 ∘ 𝑔 = ℎ. Since ℎ is epic, so is 𝑓. Hence 𝑨 ∈ H(𝔽(𝒲, 𝑌)) ⊆ 𝒲 completing the proof.
+      Let 𝑨 ∈ 𝒲' and let 𝑋 be a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑋 → 𝐴. By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝑻(𝑋) → 𝑨. Since 𝔽(𝒲, 𝑋) = 𝑻(𝑋)/Ψ(𝒲, 𝑋), there is an epimorphism 𝑔 : 𝑻(𝑋) → 𝔽(𝒲, 𝑋). We claim ker 𝑔 ⊆ ker ℎ. If the claim is true, then by :numref:`Obs %s <obs 5>` there is a map 𝑓 : 𝔽(𝒲, 𝑋) → 𝐴 such that 𝑓 ∘ 𝑔 = ℎ and since ℎ is epic, so is 𝑓, so 𝑨 ∈ H(𝔽(𝒲, 𝑋)) ⊆ 𝒲` which will complete the proof.
 
-      Now we prove the claim. Let 𝑢, 𝑣 ∈ 𝑇(𝑌) and assume 𝑔(𝑢) = 𝑔(𝑣). Since 𝑻(𝑌) is generated by 𝑌, there are terms 𝑝, 𝑞 ∈ 𝑇(Y) and 𝑦 such that 𝑢 = p^{𝑻(𝑌)}(𝑦) and 𝑣 = q^{𝑻(𝑌)}(𝑦). Applying the homomorphism 𝑔,
+      Now we prove the claim that ker 𝑔 ⊆ ker ℎ. Let 𝑢, 𝑣 ∈ 𝑻(𝑋) and assume 𝑔(𝑢) = 𝑔(𝑣). Since 𝑻(𝑋) is generated by 𝑋, there are terms 𝑝, 𝑞 ∈ 𝑻(𝑋) and 𝑥 such that :math:`𝑢 = p^{𝑻(𝑋)}(𝑥)` and :math:`𝑣 = q^{𝑻(X)}(𝑥)`. Therefore, applying the homomorphism 𝑔, we have
 
-      .. math:: p^{𝔽(𝒲, Y)} 𝑦 = 𝑔(𝑢) = 𝑔(𝑣) = q^{𝔽(𝒲, 𝑌)} 𝑦.
+      .. math:: p^{𝔽(𝒲, 𝑋)} 𝑥 = 𝑔(𝑢) = 𝑔(𝑣) = q^{𝔽(𝒲, 𝑋)} 𝑥.
 
-      Thus 𝒲 ⊧ 𝑝 ≈ 𝑞, hence (𝑝, 𝑞) ∈ Σ. Since 𝑨 ∈ Mod(Σ) we get 𝑨 ⊧ 𝑝 ≈ 𝑞. Therefore, ℎ(𝑢) = :math:`𝑝^𝑨(ℎ₀ ∘ 𝑦) = 𝑞^𝑨(ℎ₀ ∘ 𝑦)` = ℎ(𝑣), as desired.
+      Thus 𝒲 ⊧ 𝑝 ≈ 𝑞, hence (𝑝, 𝑞) ∈ Σ. Since 𝑨 ∈ Mod(Σ) we get 𝑨 ⊧ 𝑝 ≈ 𝑞. Therefore, :math:`ℎ(𝑢) = 𝑝^𝑨(ℎ₀ ∘ 𝑥) = 𝑞^𝑨(ℎ₀ ∘ 𝑥) = ℎ(𝑣)`, as desired.
+
+
+
+
 
 .. We end this subsection with yet another standard but important result.
    .. _obs 17:

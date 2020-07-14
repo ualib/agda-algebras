@@ -142,7 +142,9 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
       α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
 
-.. _hom images:
+.. _hom images in agda:
+
+.. _obs 7.1 in agda:
 
 Homomorphic images
 ~~~~~~~~~~~~~~~~~~
