@@ -390,6 +390,8 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
     {X : 𝓧 ̇ }
     {UV : Univalence} where
 
+::
+
     _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
      →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 

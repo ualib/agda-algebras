@@ -218,11 +218,6 @@ Go no further.
 
 You've been warned.
 
-
-------------------------------------------------
-
-This block type-checks.
-
 ::
 
   module _
@@ -230,6 +225,12 @@ This block type-checks.
    (gfe : global-dfunext)
    (dfe : dfunext 𝓤 𝓤)
    where
+
+------------------------------------------------
+
+This block type-checks.
+
+::
 
    pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
    pclo-id1 {p} {q} α (pbase x) = α x
