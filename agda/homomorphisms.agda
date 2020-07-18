@@ -5,7 +5,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra)
+open import basic using (Signature; Algebra; Op)
 open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
 module homomorphisms {S : Signature 𝓞 𝓥} where
@@ -174,6 +174,57 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
+
+
+module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+
+ HomImage : ∣ B ∣ → 𝓤 ̇
+ HomImage = λ b → Image ∣ h ∣ ∋ b
+
+ hom-image : 𝓤 ̇
+ hom-image = Σ (Image_∋_ ∣ h ∣)
+
+ fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+ fres a = ∣ h ∣ a , im a
+
+ hom-image-alg : Algebra 𝓤 S
+ hom-image-alg = hom-image , ops-interp
+  where
+   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image) → ∥ S ∥ f → ∣ A ∣
+   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+
+   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
+   ops-interp =
+    λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+
+
+
+
+module intensional-hom-image
+ {A B : Algebra 𝓤 S} (h : HOM A B)  where
+
+ HOMImage : ∣ B ∣ → 𝓤 ̇
+ HOMImage = λ b → Image ∣ h ∣ ∋ b
+
+ HOM-image : 𝓤 ̇
+ HOM-image = Σ (Image_∋_ ∣ h ∣)
+
+ fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+ fres' a = ∣ h ∣ a , im a
+
+ HOM-image-alg : Algebra 𝓤 S
+ HOM-image-alg = HOM-image , ops-interp
+  where
+   a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
+    →  ∣ A ∣
+   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+
+   ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
+   ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+
+
+
+
 _is-hom-image-of_ : (B : Algebra (𝓤 ⁺) S)
  →                  (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
 
@@ -226,3 +277,82 @@ AlgebraIsos {𝓤} A B = Σ ϕ ꞉ (hom A B) ,
 _≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 A ≈ B = is-singleton (AlgebraIsos A B)
 
+
+
+
+-----------------------------------------------------------------------------------
+
+-- Notes on homomorphic images and their types
+-- --------------------------------------------
+
+-- The homomorphic image of `f : Hom A B` is the image of `∣ A ∣` under `f`, which, in "set-builder" notation, is simply `Im f = {f a : a ∈ ∣ A ∣ }`.
+
+-- As we have proved, `Im f` is a subuniverse of `B`.
+
+-- However, there is another means of representing the collection "H A" of all homomorphic images of A without ever referring to codomain algebras (like B above).
+
+-- Here's how: by the first isomorphism theorem, for each `f : Hom A B`, there exists a congruence `θ` of `A` (which is the kernel of `f`) that satisfies `A / θ ≅ Im f`.
+
+-- Therefore, we have a handle on the collection `H A` of all homomorphic images of `A` if we simply consider the collection `Con A` of all congruence relations of `A`.  Indeed, by the above remark, we have
+
+--   `H A = { A / θ : θ ∈ Con A }`.
+
+-- So, we could define the following:
+
+-- .. code-block::
+
+--    hom-closed : (𝓚 : Pred (Algebra (𝓤 ⁺) S) l)
+--     →           Pred (Algebra 𝓤 S) _
+--     hom-closed 𝓚 = λ A → (𝓚 (A / (∥𝟎∥ A)))
+--       →             (∃ θ : Congruence A)
+--       →             (∃ 𝑪 : Algebra (𝓤 ⁺) S)
+--       →             (𝓚 𝑪) × ((A / θ) ≅ 𝑪)
+
+-- To get this to type check, we have an apparent problem, and we need a trick to resolve it. The class 𝓚 is a collection of algebras whose universes live at some level. (Above we use `𝓤 ⁺`.)
+
+-- However, if `A` is an algebra with `∣ A ∣ : 𝓤 ̇`, then the quotient structure  (as it is now defined in Con.agda), has type `A / θ : 𝓤 ⁺ ̇`. So, in order for the class `𝓚` to contain both `A` and all its quotients `A / θ` (i.e. all its homomorphic images), we need to somehow define a class of algebras that have different universe levels.
+
+-- Can we define a data type with such "universe level polymorphism"?
+
+-- Without that, we use a trick to get around the problem. Instead of assuming that `A` itself belongs to `𝓚`, we could instead take the "quotient" `A / ∥𝟎∥` (which is isomorphic to `A`) as belonging to `𝓚`.
+
+-- This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if `𝑪 ≅ A / θ ∈ 𝓚`, then also `𝑪 / ψ ≅ (A / θ) / ψ ∈ 𝓚`.
+
+-- So, if we want `𝓚` to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to `𝓚`.
+
+-- We are trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
+
+-- It seems we may be testing the limits of Agda's universe level paradigm. Maybe we can invent a new type to solve the problem, or we may have to try to extend Agda's capabilities.
+
+-- ..
+--    record AlgebraClass (𝓤 : Universe) : 𝓤 ̇ where
+--     algebras : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )
+--     nextclass : AlgebraClass ( 𝓤 ⁺ )
+
+--    record AlgebraClass : Set _ where
+--     algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
+
+--    module _ {S : Signature 𝓞 𝓥} where
+
+--     hom-closed : Pred (AlgebraClass lzero) _
+--     hom-closed 𝓚 = ∀ A -> (algebras 𝓚) A -- (𝓚 (A / (⟦𝟎⟧ A)))
+--      -> ∀ (θ : Congruence A) -> (∃ 𝑪 : Algebra lsuc ℓ S)
+--           ------------------------------
+--      ->     (𝓚 𝑪) × ((A / θ) ≅ 𝑪)
+
+
+--    module _  {S : Signature 𝓞 𝓥}  where
+--     open AlgebraClass
+
+--     data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
+--      hombase : {A : Algebra ℓ S} → A ∈ (algebras 𝓚) ℓ  → A ∈ HomClo 𝓚
+--      homstep : {A : Algebra ℓ S} ->  A ∈ HomClo 𝓚
+--        ->     (∃ θ : Congruence A)
+--        ->     (𝑪 : Algebra (lsuc ℓ) S)
+--              ------------------------------
+--        ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((A / θ) ≅ 𝑪)
+
+
+
+
+-- ------------------

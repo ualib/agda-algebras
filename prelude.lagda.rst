@@ -111,6 +111,8 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
      is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
      ×-is-subsingleton) public
 
+    open import MGS-Solved-Exercises using (to-subtype-≡) public
+
 .. We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
 .. The full ``prelude.lagda.rst`` file, which defines other notation and objects we will use throughout the library, appears in the appendix :ref:`preliminaries.agda`. We will describe each of the objects defined therein as they come up in later sections.

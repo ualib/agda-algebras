@@ -28,7 +28,7 @@ module prelude where
  open import MGS-Equivalences using (is-equiv; inverse;
   invertible) public
 
- open import MGS-Subsingleton-Theorems using (funext;
+ open import MGS-Subsingleton-Theorems using (funext; global-hfunext;
   dfunext; is-singleton; is-subsingleton; is-prop; Univalence;
   global-dfunext; univalence-gives-global-dfunext; _●_; _≃_;
   logically-equivalent-subsingletons-are-equivalent;
@@ -36,11 +36,17 @@ module prelude where
 
  open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
   using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
-  powersets-are-sets'; subset-extensionality') public
+  powersets-are-sets'; subset-extensionality'; propext) public
 
  open import MGS-Embeddings using (is-embedding; pr₁-embedding;
   is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
   ×-is-subsingleton) public
+
+ open import MGS-Solved-Exercises using (to-subtype-≡) public
+
+ -- open import MGS-Unique-Existence        public
+ open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
+ -- using (subsingleton-truncations-exist) public
 
  ∣_∣ : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
  ∣ x , y ∣ = x
@@ -130,6 +136,8 @@ module prelude where
 
  -- image_ : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Pred B (𝓤 ⊔ 𝓦)
  -- image f = λ b → ∃ λ a → b ≡ f a
+ -- image : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+ -- image f = Σ y ꞉ codomain f , ∃ x ꞉ domain f , f x ≡ y
 
  ImageIsImage : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
                 (f : A → B) (b : B) (a : A)
@@ -142,8 +150,8 @@ module prelude where
  Inv f .(f a) (im a) = a
  Inv f b (eq b a b≡fa) = a
 
- inv : {A B : 𝓤₀ ̇ }(f : A → B)(b : B) → Image f ∋ b → A
- inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
+ -- inv : {A B : 𝓤₀ ̇ }(f : A → B)(b : B) → image f → A
+ -- inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
 
  InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
             (b : B) (b∈Imgf : Image f ∋ b)

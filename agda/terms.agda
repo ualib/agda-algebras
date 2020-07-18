@@ -5,8 +5,8 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π')
-open import homomorphisms using (HOM; Hom; hom)
+open import basic using (Signature; Algebra; Π'; Op)
+open import homomorphisms using (HOM; Hom; hom; hom-image-alg)
 open import relations using (Con; compatible-fun)
 module terms {S : Signature 𝓞 𝓥} where
 
@@ -233,4 +233,79 @@ compatible-term' A (generator x) θ p = p x
 
 compatible-term' A (node f args) θ p =
  pr₂( ∥ θ ∥ ) f λ{x → (compatible-term' A (args x) θ) p}
+
+
+
+-- Interpretation of terms in homomorphic images
+-- (using subsingleton truncation)
+-- module _
+--  {𝓤 𝓥 : Universe}       -- {ua : Univalence}
+--  (hfe : global-hfunext)
+--  (gfe : global-dfunext)
+--  (dfe : dfunext 𝓤 𝓤)
+--  (pt  : subsingleton-truncations-exist)
+--  (pe  : propext 𝓥)
+--  (X : 𝓤 ̇ ) -- {X : 𝓧 ̇ }
+--  (A B : Algebra 𝓤 S)
+--  (ϕ : hom A B)
+--  (wcem : wconstant-endomap ∣ A ∣)
+--        -- (_≈_ : X → X → 𝓥 ̇ )
+--        -- (≈p  : is-subsingleton-valued _≈_)
+--        -- (≈r  : reflexive _≈_)
+--        -- (≈s  : symmetric _≈_)
+--        -- (≈t  : transitive _≈_)
+--       where
+
+--  open subsingleton-truncations-exist pt renaming (∥_∥ to ⌈_⌉; ∣_∣ to ⌞_⌟) public
+--  open basic-truncation-development pt hfe renaming (∥_∥ to ⟦_⟧; ∣_∣ to ⟪_⟫) public
+--  open exit-∥∥ pt hfe public
+
+--  homimage : 𝓤 ̇
+--  homimage = image ∣ ϕ ∣
+
+--  ∥∥-elim : ⟦ ∣ A ∣ ⟧ → ∣ A ∣
+--  ∥∥-elim = wconstant-endomap-gives-∥∥-choice-function wcem
+--  -- wconstant-endomap-gives-∥∥-choice-function :
+--  --  {X : 𝓤 ̇ } → wconstant-endomap X → (∥ X ∥ → X)
+--  homimageAlgebra : Algebra 𝓤 S
+--  homimageAlgebra = homimage , opsinterp
+--   where
+--    a' : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
+--    a' x y =
+--     let ∣xy∣ = pr₁ (x y) in
+--     let ∥xy∥ = pr₂ (x y) in ∥xy∥ -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
+
+--    a : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → ∣ A ∣
+--    -- a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
+--    a x y =
+--     let ∣xy∣ = pr₁ (x y) in 
+--     let ∥xy∥ = pr₂ (x y) in {!pr₁ (∥∥-elim ∥xy∥)!} -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
+
+--    opsinterp : (f : ∣ S ∣) → Op (∥ S ∥ f) homimage
+--    opsinterp =
+--     -- λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+--     λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , ⟪ ( ∥ A ∥ f (a x) , refl (∣ ϕ ∣ _ )) ⟫ )
+
+--  HIA : Algebra 𝓤 S
+--  HIA = homimageAlgebra -- {A = A}{B = B} ϕ
+
+--  preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
+--  preim = λ b x → (Inv ∣ ϕ ∣ (∣ b x ∣)(∥ b x ∥))
+
+--  ζ : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ ϕ ∣ (preim b x) ≡ ∣ b x ∣
+--  ζ b x = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
+
+ -- hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
+ --  → (p ̇ HIA ) b ≡ ( ∣ ϕ ∣ ((p ̇ A)(preim b)) , ∣ ((p ̇ A)(preim b)) , refl _ ∣ )
+
+ -- hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
+ --  where
+ --   fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
+ --   fstbx = ζ b x ⁻¹
+
+ -- hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
+ --  where
+ --   φIH : (x : ∥ S ∥ 𝓸)
+ --    → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
+ --   φIH x = hom-image-interp b (t x)
 

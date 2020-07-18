@@ -93,17 +93,56 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
   open import terms using (Term; generator; node; _̇_; _̂_;
    interp-prod2; interp-prod; comm-hom-term')
 
-  module closure {S : Signature 𝓞 𝓥} where
+  module closure
+   {S : Signature 𝓞 𝓥}
+   {𝓤 : Universe}
+   {ua : Univalence}
+   {X : 𝓤 ̇ } -- {X : 𝓧 ̇ }
+   (gfe : global-dfunext)
+   (dfe : dfunext 𝓤 𝓤) where
 
-  _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
-   →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+  _⊧_≈_ : Algebra 𝓤 S
+    →      Term{X = X} → Term → 𝓤 ̇
 
   A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
 
-  _⊧_≋_ : {X : 𝓧 ̇ } → Pred (Algebra 𝓤 S) 𝓦
-   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+  _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
   _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
+
+--------------------------------
+
+Closure data types
+-------------------------
+
+::
+
+  data PClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
+   pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
+   prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
+    →     (∀ i → 𝒜 i ∈ PClo 𝒦)
+    →     Π' 𝒜 ∈ PClo 𝒦
+
+  -- Subalgebra Closure
+  data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
+   sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
+
+  -- Homomorphic Image Closure
+  data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   hbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ HClo 𝒦
+   hhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
+    →     A ∈ HClo 𝒦
+    →     hom-image-alg {A = A}{B = B} ϕ ∈ HClo 𝒦
+
+  -- Variety Closure
+  data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
+   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+   vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ VClo 𝒦
+   vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
+    →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
 
 
 ---------------------------------------------
@@ -116,12 +155,13 @@ for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦
 
 We formalize the notion of closure under the taking of homomorphic images in the `morphisms` module.  Here we will formalize closure under the taking of products and subuniverses, and prove that these closures preserve identities.
 
+
 .. _obs 13 in agda:
 
 Identities in products
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let ℙ (𝒦) denote the class of algebras isomorphic to a direct product of members of 𝒦.
+Let P(𝒦) denote the class of algebras isomorphic to a direct product of members of 𝒦.
 
 ::
 
@@ -130,153 +170,66 @@ Let ℙ (𝒦) denote the class of algebras isomorphic to a direct product of me
    →      (( i : I ) → 𝒜 i ∈ 𝓛𝒦 𝓘 ) → 𝓘 ⁺ ̇
   P-closed 𝓛𝒦 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝒦 →  Π' 𝒜  ∈ (𝓛𝒦 𝓘)
 
-  module _
-    (gfe : global-dfunext)
-    (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) { X : 𝓧 ̇ } where
+  products-preserve-identities :
+        (p q : Term{X = X})
+        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+   →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
+       -----------------------------------
+   →     Π' 𝒜 ⊧ p ≈ q
 
-    products-preserve-identities : (p q : Term{X = X})
-          (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
-     →    𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
-     →    Π' 𝒜 ⊧ p ≈ q
-    products-preserve-identities p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
-     where
-      all𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
-      all𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
+  products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
+   where
+     γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
+     γ = gfe λ a →
+      (p ̇ Π' 𝒜) a
+        ≡⟨ interp-prod gfe p 𝒜 a ⟩
+      (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
+        ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
+      (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
+        ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+      (q ̇ Π' 𝒜) a
+        ∎
 
-      γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
-      γ = gfe λ a →
-       (p ̇ Π' 𝒜) a
-         ≡⟨ interp-prod gfe p 𝒜 a ⟩
-       (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
-         ≡⟨ gfe (λ i → cong-app (all𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
-       (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
-         ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
-       (q ̇ Π' 𝒜) a
-         ∎
+  products-in-class-preserve-identities :
+       (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+       (p q : Term{X = X})
+       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+   →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
+       ------------------------------------
+   →    Π' 𝒜 ⊧ p ≈ q
+
+  products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
+   where
+     𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
+     𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
+
+     γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
+     γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
 
-Identities in subalgebras
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦. We show that every term equation, 𝑝 ≈ 𝑞, that is satisfied by all A ∈ 𝒦 is also satisfied by all B ∈ S(𝒦).
+----------------------------------------------------
+
+New experimental stuff.
+
+Turn back now.
+
+Go no further.
+
+You've been warned.
+
+
+------------------------------------------------
+
+This block type-checks.
 
 ::
-
-  _is-subalgebra-of-class_ : {𝓤 : Universe} (B : Algebra 𝓤 S)
-   →                 Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  B is-subalgebra-of-class 𝒦 =
-   Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × (B is-subalgebra-of A)
 
   module _
    (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
-   (𝒦' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))){X : 𝓧 ̇ }
-   (𝓤★ : Univalence) where
-
-   gfe : global-dfunext
-   gfe = univalence-gives-global-dfunext 𝓤★
-
-   SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   SubalgebrasOfClass 𝒦 =
-    Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × Subalgebra{A = A} 𝓤★
-
-   𝕊-closed : (𝓛𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
-    →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   𝕊-closed 𝓛𝒦 =
-    λ 𝓤 B → (B is-subalgebra-of-class (𝓛𝒦 𝓤)) → (B ∈ 𝓛𝒦 𝓤)
-
-   subalgebras-preserve-identities : (p q : Term{X = X})
-    →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
-    →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
-   subalgebras-preserve-identities p q 𝒦⊧p≋q SAK = γ
-    where
-
-     A : Algebra 𝓤 S
-     A = ∣ SAK ∣
-
-     A∈𝒦 : A ∈ 𝒦
-     A∈𝒦 = ∣ pr₂ SAK ∣
-
-     A⊧p≈q : A ⊧ p ≈ q
-     A⊧p≈q = 𝒦⊧p≋q A∈𝒦
-
-     subalg : Subalgebra{A = A} 𝓤★
-     subalg = ∥ pr₂ SAK ∥
-
-     B : Algebra 𝓤 S
-     B = pr₁ subalg
-
-     h : ∣ B ∣ → ∣ A ∣
-     h = ∣ pr₂ subalg ∣
-
-     h-emb : is-embedding h
-     h-emb = pr₁ ∥ pr₂ subalg ∥
-
-     h-hom : is-homomorphism B A h
-     h-hom = pr₂ ∥ pr₂ subalg ∥
-
-     ξ : (𝒃 : X → ∣ B ∣ ) → h ((p ̇ B) 𝒃) ≡ h ((q ̇ B) 𝒃)
-     ξ 𝒃 =
-      h ((p ̇ B) 𝒃)  ≡⟨ comm-hom-term' gfe B A (h , h-hom) p 𝒃 ⟩
-      (p ̇ A)(h ∘ 𝒃) ≡⟨ intensionality A⊧p≈q (h ∘ 𝒃) ⟩
-      (q ̇ A)(h ∘ 𝒃) ≡⟨ (comm-hom-term' gfe B A (h , h-hom) q 𝒃)⁻¹ ⟩
-      h ((q ̇ B) 𝒃)  ∎
-
-     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-     hlc hb≡hb' = (embeddings-are-lc h h-emb) hb≡hb'
-
-     γ : B ⊧ p ≈ q
-     γ = gfe λ 𝒃 → hlc (ξ 𝒃)
-
-
-Closure under H, S, P
-----------------------
-
-::
-
-  data PClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-   pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
-   prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
-    →     (∀ i → 𝒜 i ∈ PClo 𝒦)
-    →     Π' 𝒜 ∈ PClo 𝒦
-
-  data SClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-   sbase : {A : Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
-   --sub : {A B : Algebra _ S} → A ∈ SClo 𝒦 → B is-subalgebra-of A → B ∈ SClo 𝒦
-   --sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → B is-subalgebra-of A → B ∈ SClo 𝒦
-   sub : {A : Algebra _ S} {B : Pred ∣ A ∣ 𝓤 }
-         {𝐹 : (𝓸 : ∣ S ∣) → Op (∥ S ∥ 𝓸) (Σ B)}
-         (B∈SubA : B ∈ Subuniverses A)
-    →    A ∈ SClo 𝒦
-    →    SubunivAlg{A = A}{B = B}{𝐹 = 𝐹} B∈SubA ∈ SClo 𝒦
-
-  data HClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-   hbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ HClo 𝒦
-   hhom : {A B : Algebra 𝓤 S}{f : hom A B}
-    →     A ∈ HClo 𝒦
-    →     hom-image-alg {A = A}{B = B} f ∈ HClo 𝒦
-
-  data VClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-   vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
-   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
-   vsub : ∀{A : Algebra _ S}{B : Algebra _ S} → A ∈ VClo 𝒦 → B is-subalgebra-of A → B ∈ VClo 𝒦
-   vhom : {A B : Algebra 𝓤 S}{f : hom A B}
-    →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} f ∈ VClo 𝒦
-
----------------------------------------------
-
-Alternative formulations
-----------------------------
-
-::
-
-  module _
-   (𝒦 : Pred (Algebra 𝓤 S) 𝓣)
    (gfe : global-dfunext)
    (dfe : dfunext 𝓤 𝓤)
-   {X : 𝓤 ̇ } where
-
-   _⊧'_≋_ : Pred (Algebra 𝓤 S) 𝓦 → Term {X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-   _⊧'_≋_ = _⊧_≋_ {X = X}
+   where
 
    pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
    pclo-id1 {p} {q} α (pbase x) = α x
@@ -285,51 +238,57 @@ Alternative formulations
      IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
      IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝒦  i )
      γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
-     γ =
-      (p ̇ (Π' 𝒜) )
-        ≡⟨ interp-prod2 gfe p 𝒜 ⟩
-      (λ (args : X → ∣ Π' 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → (args x) i)))
-        ≡⟨ dfe (λ args → (ap (λ - → (λ i → (- i)(λ x → args x i))) (dfe IH))) ⟩
-      (λ (args : X → ∣ Π' 𝒜 ∣) → (λ i → (q ̇ 𝒜 i)(λ x → (args x) i)))
-        ≡⟨ (interp-prod2 gfe q 𝒜)⁻¹ ⟩
-      (q ̇ (Π' 𝒜))
-        ∎
+     γ = products-preserve-identities p q I 𝒜 IH
 
-   pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧' p ≋ q ) → (𝒦 ⊧ p ≋ q)
+   pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
    pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
 
-   sclo-id1 : ∀{p q} → (𝒦 ⊧' p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
+   sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
    sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-   sclo-id1 {p} {q} 𝒦⊧p≋q (sub {A = A}{B = B}{𝐹 = 𝐹} B∈SubA A∈SClo𝒦) = γ
+   sclo-id1 {p} {q} 𝒦⊧p≋q (sub {A = A} A∈SClo𝒦 sa) = γ
     where
-     IH : p ̇ A ≡ q ̇ A
-     IH = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
+     A⊧p≈q : A ⊧ p ≈ q
+     A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
      B : Algebra 𝓤 S
-     B = SubunivAlg{A = A}{B = B}{𝐹 = 𝐹} B∈SubA
-     -- We need to do this so that both A and Σ B , 𝐹 can be classified by the same predicate SClo.
-     -- tB≡tA : ∀ 𝒕 → ( 𝒃 : X → Σ B ) → ( 𝒕 ̇ (Σ B , 𝐹) )( λ x →  𝒃 x ) ≡ (𝒕 ̇ A) (λ x →  ∣ 𝒃 x ∣ )
-     -- tB≡tA 𝒕 = ?
-      -- mem :   {B : Pred ∣ A ∣ 𝓤}  { 𝐹 : ( 𝓸 : ∣ S ∣ ) → Op ( ∥ S ∥ 𝓸 ) (Σ B) }
-      --   →    ( ( 𝓸 : ∣ S ∣ ) ( a : ∥ S ∥ 𝓸 → Σ B )  →  ∣ 𝐹 𝓸 a ∣ ≡ ∥ A ∥ 𝓸 (λ i → ∣ a i ∣ ) )
-      --   →    A is-supalgebra-of (Σ B , 𝐹)
-     uni2alg : B is-subalgebra-of A
-     uni2alg = ?
+     B = ∣ sa ∣
+
+     h : ∣ B ∣ → ∣ A ∣
+     h = pr₁ ∥ sa ∥
+
+     hem : is-embedding h
+     hem = ∣ pr₂ ∥ sa ∥ ∣
+
+     hhm : is-homomorphism B A h
+     hhm = ∥ pr₂ ∥ sa ∥ ∥
+
+     ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+     ξ b =
+      h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
+      (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+      (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+      h ((q ̇ B) b)  ∎
+
+     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+     hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
 
      γ : p ̇ B ≡ q ̇ B
-     γ = let sts = uni2alg in
-      gfe λ 𝒃 →
-       (p ̇ B) 𝒃 ≡⟨ ? ⟩  -- we need an elimination rule here (see is-subalg-elim in UF-Subuniverse.agda)
-         -- (p ̇ uni2alg) 𝒃 ≡⟨ IH ⟩
-         -- (q ̇ uni2alg) 𝒃 ≡⟨ ? ⟩
-       (q ̇ B) 𝒃  ∎
+     γ = gfe λ b → hlc (ξ b)
 
-   sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧' p ≋ q) → (𝒦 ⊧ p ≋ q)
+   sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
+
+----------------------------------------------
+
+This block has one hole with goal:
+
+  ``?0 : (x₁ : ∣ B ∣) → is-subsingleton (Image ∣ ϕ ∣ ∋ x₁)``
+
+::
 
    hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
    hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-   hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{A}{B}{f} A∈HClo𝒦) = γ
+   hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{A}{B}{ϕ} A∈HClo𝒦) = γ
     where
      A⊧p≈q : A ⊧ p ≈ q
      A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
@@ -337,72 +296,143 @@ Alternative formulations
      IH : (p ̇ A) ≡ (q ̇ A)
      IH = A⊧p≈q
 
-     HIA = hom-image-alg{A = A}{B = B} f
+     HIA = hom-image-alg{A = A}{B = B} ϕ
+     -- HIA = Σ (Image_∋_ ∣ ϕ ∣) ,  ops-interp
+     -- (where ops-interp : (𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) hom-image
 
-     preim : (𝒃 : X → Σ (Image_∋_ ∣ f ∣))(x : X) → ∣ A ∣
-     preim = λ 𝒃 x → (Inv ∣ f ∣ (∣ 𝒃 x ∣)(∥ 𝒃 x ∥))
+     preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
+     preim = λ b x → (Inv ∣ ϕ ∣ (∣ b x ∣)(∥ b x ∥))
 
-     hom-image-term-interpretation hiti : (𝒃 : X → ∣ HIA ∣)(p : Term)
-      → (p ̇ HIA ) 𝒃 ≡ ∣ f ∣ ((p ̇ A)( λ i → preim 𝒃 i )) , im ((p ̇ A)(λ i → preim 𝒃 i))
+     ζ : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ ϕ ∣ (preim b x) ≡ ∣ b x ∣
+     ζ b x = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
 
-     hom-image-term-interpretation 𝒃 (generator x) =
-      let iiif = ( InvIsInv ∣ f ∣ ∣ 𝒃 x ∣ ∥ 𝒃 x ∥ )⁻¹ in
-       𝒃 x ≡⟨ ? ⟩ ∣ f ∣ (preim 𝒃 x) , im (preim 𝒃 x) ∎
 
-     hom-image-term-interpretation 𝒃 (node 𝓸 𝒕) =  ap (λ - → (𝓸 ̂ HIA) -) (gfe λ x → φIH x)
+     τ : (𝑎 : X → ∣ A ∣ ) → ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡ ∣ ϕ ∣ ((q ̇ A) 𝑎)
+     τ 𝑎 = ap (λ - → ∣ ϕ ∣ - ) (intensionality IH 𝑎)
+
+     ψ : (𝑎 : X → ∣ A ∣ ) → (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡ (q ̇ B) (∣ ϕ ∣ ∘ 𝑎)
+     ψ 𝑎 =
+      (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡⟨ (comm-hom-term' gfe A B ϕ p 𝑎)⁻¹ ⟩
+      ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
+      ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
+      (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
+
+     hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
+      → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
+
+     hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
+      where
+       iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
+       iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹
+
+       fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
+       fstbx = ζ b x ⁻¹
+       -- we need a proof of `Image ∣ ϕ ∣ ∋ pr₁ (b x)`
+       -- and b takes x to ∣ HIA ∣ = hom-image = Σ (Image_∋_ ∣ ℎ ∣)
+       ∥bx∥ : Image ∣ ϕ ∣ ∋ pr₁ (b x)
+       ∥bx∥ = ∥ b x ∥
+
+     hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
       where
        φIH : (x : ∥ S ∥ 𝓸)
-        → ( 𝒕 x ̇ HIA ) 𝒃  ≡ ∣ f ∣ ( ( 𝒕 x ̇ A ) (preim 𝒃) ) , im ((𝒕 x ̇ A) (preim 𝒃 ) )
-       φIH x = hom-image-term-interpretation 𝒃 (𝒕 x)
-
-     hiti = hom-image-term-interpretation  -- alias
+        → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
+       φIH x = hom-image-interp b (t x)
 
      γ : (p ̇ HIA) ≡ (q ̇ HIA)
      γ = (p ̇ HIA)
-               ≡⟨ refl _ ⟩
-           ( λ ( 𝒃 : X → ∣ HIA ∣ ) → (p ̇ HIA) ( λ x → (𝒃 x) ) )
-               ≡⟨ gfe (λ x → hiti x p) ⟩
-           ( λ 𝒃 → ∣ f ∣ ( (p ̇ A) ( λ x → preim 𝒃 x ) ) , im ( (p ̇ A) ( λ x → preim 𝒃 x ) ) )
-               ≡⟨ ap (λ - → λ 𝒃 → ∣ f ∣ (- (λ x → preim 𝒃 x) )  , im (-  (λ x → preim 𝒃 x) )) IH ⟩
-           ( λ 𝒃 → ∣ f ∣ ( (q ̇ A) ( λ x → preim 𝒃 x ) ) , im ( (q ̇ A) ( λ x → preim 𝒃 x ) ) )
-               ≡⟨ ( gfe (λ x → hiti x q) )⁻¹ ⟩
-           ( λ 𝒃 → (q ̇ HIA) ( λ x → (𝒃 x) ) )
-               ≡⟨ refl _ ⟩
-           (q ̇ HIA)    ∎
+           ≡⟨ refl _ ⟩
+         (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
+           ≡⟨ gfe (λ x → hom-image-interp x p) ⟩
+         (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
+           ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
+         (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
+           ≡⟨ (gfe (λ x → hom-image-interp x q))⁻¹ ⟩
+         (λ b → (q ̇ HIA) b)
+           ≡⟨ refl _ ⟩
+         (q ̇ HIA)    ∎
 
-   hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧' p ≋ q) → (𝒦 ⊧ p ≋ q)
+
+The next block type-checks.
+
+::
+
+   hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
-   vclo-id1 : ∀ {p q} → (𝒦 ⊧' p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
+   vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
    vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
-   vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} allAi∈VClo𝒦) = γ
+   vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
      where
       IH : (i : I) → 𝒜 i ⊧ p ≈ q
-      IH i = vclo-id1{p}{q} α (allAi∈VClo𝒦 i)
+      IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
 
       γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
-      γ =
-       (p ̇ (Π' 𝒜))
-         ≡⟨ interp-prod2 gfe p 𝒜 ⟩
-       (λ (args : X → ∣ Π' 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → (args x) i)))
-         ≡⟨ dfe (λ args → (ap (λ - → (λ i → (- i)(λ x → args x i))) (dfe IH))) ⟩
-       (λ (args : X → ∣ Π' 𝒜 ∣) → (λ i → (q ̇ 𝒜 i)(λ x → (args x) i)))
-         ≡⟨ (interp-prod2 gfe q 𝒜)⁻¹ ⟩
-       (q ̇ (Π' 𝒜))
-         ∎
+      γ = products-preserve-identities p q I 𝒜 IH
 
-   --vsub : ∀ {A : Algebra _ S} {B : Algebra _ S} → A ∈ VClo 𝒦 → B is-subalgebra-of A → B ∈ VClo 𝒦
-   vclo-id1 {p} {q} α ( vsub {A = A}{B = B} A∈VClo𝒦 B≤A ) = γ
+   vclo-id1 {p} {q} α ( vsub {A = A} A∈VClo𝒦 sa ) = γ
      where
-      γ : B ⊧ p ≈ q
-      γ = ?
+      A⊧p≈q : A ⊧ p ≈ q
+      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-   --vhom : {A B : Algebra 𝓤 S} {f : Hom A B} → A ∈ VClo 𝒦 →  hom-image-alg {A = A}{B = B} f ∈ VClo 𝒦
-   vclo-id1 {p} {q} α ( vhom{A = A}{B = B}{f = f} A∈VClo𝒦 ) = γ
+      B : Algebra 𝓤 S
+      B = ∣ sa ∣
+
+      h : ∣ B ∣ → ∣ A ∣
+      h = pr₁ ∥ sa ∥
+
+      hem : is-embedding h
+      hem = ∣ pr₂ ∥ sa ∥ ∣
+
+      hhm : is-homomorphism B A h
+      hhm = ∥ pr₂ ∥ sa ∥ ∥
+
+      ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+      ξ b =
+       h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
+       (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+       (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+       h ((q ̇ B) b)  ∎
+
+      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+      hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+      γ : p ̇ B ≡ q ̇ B
+      γ = gfe λ b → hlc (ξ b)
+
+
+The next block has two holes with the same goal:
+
+  ``?1 : (p ̇ HIA) b ≡ (q ̇ HIA) b``
+
+  ``?2 : (p ̇ HIA) b ≡ (q ̇ HIA) b``
+
+::
+
+   vclo-id1 {p}{q} α (vhom{A = A}{B = B}{ϕ = ϕ} A∈VClo𝒦) = γ
      where
-      γ : hom-image-alg{A = A}{B = B} f ⊧ p ≈ q
-      γ = {!!}
+      A⊧p≈q : A ⊧ p ≈ q
+      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-   vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧' p ≋ q) → (𝒦 ⊧ p ≋ q)
+      HIA : Algebra 𝓤 S
+      HIA = hom-image-alg{A = A}{B = B} ϕ
+
+      ar : (X → ∣ HIA ∣ ) → (X → ∣ A ∣ )
+      ar b = λ x → Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
+
+      arbr : (X → ∣ HIA ∣ ) → (X → ∣ B ∣ )
+      arbr b = λ x →  ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
+
+      HIA⊧p≈q : HIA ⊧ p ≈ q
+      HIA⊧p≈q = gfe λ b → {!!}
+
+      γ : (p ̇ HIA) ≡ (q ̇ HIA)
+      γ = gfe λ b →  {!!}
+
+
+   vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
+
+-------------------------
+
+.. include:: hyperlink_references.rst
 

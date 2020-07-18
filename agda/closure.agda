@@ -7,10 +7,10 @@
 open import prelude
 open import basic using (Signature; Algebra; Π'; Op)
 
-open import subuniverses using (Subuniverses; SubunivAlg; hom-image-alg;
- _is-subalgebra-of_; Subalgebra; _is-subalgebra-of-class_; SubalgebrasOfClass)
+open import subuniverses using (Subuniverses; SubunivAlg; _is-subalgebra-of_;
+ Subalgebra; _is-subalgebra-of-class_; SubalgebrasOfClass)
 
-open import homomorphisms using (hom; is-homomorphism)
+open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
 
 open import terms using (Term; generator; node; _̇_; _̂_; interp-prod2;
  interp-prod; comm-hom-term')
@@ -23,6 +23,17 @@ module closure
  (gfe : global-dfunext)
  (dfe : dfunext 𝓤 𝓤) where
 
+_⊧_≈_ : Algebra 𝓤 S
+ →      Term{X = X} → Term → 𝓤 ̇
+
+A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
+
+_⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+ →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+
+_⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
+
+
 -- Product Closure
 P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
@@ -34,16 +45,6 @@ data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞
  prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
   →     Π' 𝒜 ∈ PClo 𝒦
-
-_⊧_≈_ : Algebra 𝓤 S
- →      Term{X = X} → Term → 𝓤 ̇
-
-A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
-
-_⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
- →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-
-_⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
 products-preserve-identities :
       (p q : Term{X = X})
@@ -181,18 +182,18 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
     ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
     (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
 
-   hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
-    → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
-   hom-image-term-interp b (generator x) = (ζ b x)⁻¹
-   hom-image-term-interp b (node 𝓸 t) =  {!!} -- gfe φIH -- ap (𝓸 ̂ HIA) ? ?
-    where
+   -- hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
+   --  → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
+   -- hom-image-term-interp b (generator x) = (ζ b x)⁻¹
+   -- hom-image-term-interp b (node 𝓸 t) =  {!!} -- gfe φIH -- ap (𝓸 ̂ HIA) ? ?
+   --  where
      -- φIH : (x : ∥ S ∥ 𝓸) → (t x ̇ HIA) b ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b))
      -- φIH x = hom-image-term-interp b (t x)
 
-   hom-image-term-interpretation hiti : (b : X → ∣ HIA ∣)(p : Term)
+   hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
     → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-   hom-image-term-interpretation b (generator x) = {!!}
+   hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
     where
      iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
      iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹
@@ -204,28 +205,21 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
      ∥bx∥ : Image ∣ ϕ ∣ ∋ pr₁ (b x)
      ∥bx∥ = ∥ b x ∥
 
-     -- γ : b x ≡ ∣ ϕ ∣ (preim b x) , im (preim b x)
-     -- γ = b x ≡⟨ refl _ ⟩ ∣ b x ∣ , ∥ b x ∥
-     --         ≡⟨ {!!} ⟩ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥) , im (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
-     --         ≡⟨ refl _ ⟩ ∣ ϕ ∣ (preim b x) , im (preim b x) ∎
-
-   hom-image-term-interpretation b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
+   hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
     where
      φIH : (x : ∥ S ∥ 𝓸)
       → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
-     φIH x = hom-image-term-interpretation b (t x)
-
-   hiti = hom-image-term-interpretation  -- alias
+     φIH x = hom-image-interp b (t x)
 
    γ : (p ̇ HIA) ≡ (q ̇ HIA)
    γ = (p ̇ HIA)
          ≡⟨ refl _ ⟩
        (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
-         ≡⟨ gfe (λ x → hiti x p) ⟩
+         ≡⟨ gfe (λ x → hom-image-interp x p) ⟩
        (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
          ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
        (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
-         ≡⟨ (gfe (λ x → hiti x q))⁻¹ ⟩
+         ≡⟨ (gfe (λ x → hom-image-interp x q))⁻¹ ⟩
        (λ b → (q ̇ HIA) b)
          ≡⟨ refl _ ⟩
        (q ̇ HIA)    ∎

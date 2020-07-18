@@ -26,7 +26,7 @@ The file starts, as usual, with a list of imports.
    open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
 
    open import terms
-    using (Term; _̇_; _̂_; generator; node; comm-hom-term)
+    using (Term; _̇_; _̂_; generator; node; comm-hom-term; comm-hom-term')
 
    open import Relation.Unary using (⋂)
 
@@ -61,6 +61,11 @@ Next we define a data type that represents the property of being a subuniverse. 
 
    _is-subalgebra-of_ : Algebra 𝓤 S → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
    B is-subalgebra-of A = A is-supalgebra-of B
+
+   _is-subalgebra-of-class_ : {𝓤 : Universe}(B : Algebra 𝓤 S)
+    →            Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+   B is-subalgebra-of-class 𝒦 =
+    Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × (B is-subalgebra-of A)
 
    module _
     {A : Algebra 𝓤 S} {B : Pred ∣ A ∣ 𝓤}
@@ -142,60 +147,6 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
       α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
 
-.. _hom images in agda:
-
-.. _obs 7.1 in agda:
-
-Homomorphic images
-~~~~~~~~~~~~~~~~~~
-
-Next we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homs appears below, but the proof is essentially the same.)  We also construct the subalgebra whose universe is a homomorphic image.
-
-::
-
-   module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
-
-    HomImage : ∣ B ∣ → 𝓤 ̇
-    HomImage = λ b → Image ∣ h ∣ ∋ b
-
-    hom-image : 𝓤 ̇
-    hom-image = Σ (Image_∋_ ∣ h ∣)
-
-    fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
-    fres a = ∣ h ∣ a , im a
-
-    hom-image-alg : Algebra 𝓤 S
-    hom-image-alg = hom-image , ops-interp
-     where
-      a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
-      a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-      ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
-      ops-interp =
-       λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
-We are about ready to formalize the easy fact that a homomorphic image is a subuniverse, but before doing so, let us go through the steps of the proof informally.  Let f be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ f)-tuple of elements of ∣ B ∣, and assume ∀ 𝑖, b(𝑖) ∈ Image h.  We must show :math:`f^B b ∈ Image h`.  The assumption ∀ 𝑖,  b(𝑖) ∈ Image h implies that there is a (ρ f)-tuple :math:`a : ρ f → ∣ A ∣`  such that h ∘ a = b.  Since h is a homomorphism, we have :math:`f^B b  = f^B (h ∘ a) = h (f^A a) ∈` Image h.
-
-We formalize the proof in Agda as follows.
-
-::
-
-    hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses B
-    hom-image-is-sub {fe} f b b∈Imf =
-     eq (∥ B ∥ f (λ x → b x)) ( ∥ A ∥ f ar) γ
-      where
-       ar : ∥ S ∥ f → ∣ A ∣
-       ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
-
-       ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
-       ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
-
-       γ : ∥ B ∥ f (λ x → b x)
-            ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
-       γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-           (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
-           ∣ h ∣ (∥ A ∥ f ar)    ∎
-
 .. _obs 12 in agda:
 
 Subuniverse generation with terms
@@ -232,6 +183,8 @@ Next we prove :math:`\mathrm{Sg}^{A}(Y) ⊆ \{ t^A a : t ∈ 𝑇(𝑋), a : �
   #. 𝑌 ⊆ TermImage 𝑌 (obvious)
   #. :math:`\mathrm{Sg}^A(Y)` is the smallest subuniverse containing 𝑌 (see `sgIsSmallest`) so :math:`\mathrm{Sg}^A(Y)` ⊆ TermImage 𝑌.
 
+(The last item was already proved above; see ``sgIsSmallest``.)
+
 ::
 
     data TermImage (Y : Pred ∣ A ∣ 𝓤) : Pred ∣ A ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
@@ -253,8 +206,6 @@ Next we prove :math:`\mathrm{Sg}^{A}(Y) ⊆ \{ t^A a : t ∈ 𝑇(𝑋), a : �
 
     Y⊆TermImageY Y {a} a∈Y = var a∈Y
 
-    -- 3. Sg^A(Y) is the smallest subuniverse containing Y
-    --    Proof: see `sgIsSmallest`
 
 Finally, we can prove the desired inclusion.
 
@@ -411,7 +362,7 @@ The converse of `membership-equiv-gives-carrier-equality` is obvious.
     subuniverse-equality' B C =
      (subuniverse-equality B C) ● (carrier-equiv B C)
 
-Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we now show that the type of subuniverses is equivalent to the following type, as an application of the subtype classifyer.
+Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we define the type of subalgebras as follows.
 
 ::
 
@@ -420,7 +371,149 @@ Following MHE's analogous development for groups and their subgroups (cf. `Subgr
                     Σ h ꞉ (∣ B ∣ → ∣ A ∣) ,
                       is-embedding h × is-homomorphism B A h
 
-----------------------------------------------------------------------------------------------
+
+Identities in subalgebras
+-----------------------------
+
+Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``A ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
+
+We first set down some notation for the modeling of identities. The standard notation is ``A ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in A. In otherwords, for all assignments ``a : X → ∣ A ∣`` of values to variables, we have ``(p ̇ A) a ≡ (q ̇ A) a``.
+
+If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
+
+**Unicode Hint**. In Agda type ``\models`` to produce ⊧, type ``\~~`` to produce ≈, and type ``\~~~`` to produce ≋.
+
+::
+
+   module _
+    {𝓤 : Universe}
+    {X : 𝓧 ̇ }
+    {UV : Univalence} where
+
+    _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
+     →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+
+    A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
+
+    _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+     →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+
+    _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
+
+    gdfe : global-dfunext
+    gdfe = univalence-gives-global-dfunext UV
+
+    SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+    SubalgebrasOfClass 𝒦 =
+     Σ A ꞉ (Algebra _ S) , (A ∈ 𝒦) × Subalgebra{A = A} UV
+
+    data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+     sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
+     sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
+
+    S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+     →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+    S-closed ℒ𝒦 =
+     λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
+
+    subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
+     →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+     →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+    subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+     where
+
+     A : Algebra 𝓤 S
+     A = ∣ SAK ∣
+
+     A∈𝒦 : A ∈ 𝒦
+     A∈𝒦 = ∣ pr₂ SAK ∣
+
+     A⊧p≈q : A ⊧ p ≈ q
+     A⊧p≈q = 𝒦⊧p≋q A∈𝒦
+
+     subalg : Subalgebra{A = A} UV
+     subalg = ∥ pr₂ SAK ∥
+
+     B : Algebra 𝓤 S
+     B = pr₁ subalg
+
+     h : ∣ B ∣ → ∣ A ∣
+     h = ∣ pr₂ subalg ∣
+
+     hem : is-embedding h
+     hem = pr₁ ∥ pr₂ subalg ∥
+
+     hhm : is-homomorphism B A h
+     hhm = pr₂ ∥ pr₂ subalg ∥
+
+     ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+     ξ b =
+      h ((p ̇ B) b)  ≡⟨ comm-hom-term' gdfe B A (h , hhm) p b ⟩
+      (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+      (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gdfe B A (h , hhm) q b)⁻¹ ⟩
+      h ((q ̇ B) b)  ∎
+
+     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+     hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+     γ : B ⊧ p ≈ q
+     γ = gdfe λ b → hlc (ξ b)
+
+----------------------------------------------------------------------------
+
+.. _hom images in agda:
+
+.. _obs 7.1 in agda:
+
+Homomorphic images in Agda
+--------------------------
+
+In this section we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homs appears below, but the proof is essentially the same.)  We also construct the subalgebra whose universe is a homomorphic image.
+
+::
+
+   module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+
+    HomImage : ∣ B ∣ → 𝓤 ̇
+    HomImage = λ b → Image ∣ h ∣ ∋ b
+
+    hom-image : 𝓤 ̇
+    hom-image = Σ (Image_∋_ ∣ h ∣)
+
+    fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+    fres a = ∣ h ∣ a , im a
+
+    hom-image-alg : Algebra 𝓤 S
+    hom-image-alg = hom-image , ops-interp
+     where
+      a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
+      a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+
+      ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
+      ops-interp =
+       λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+
+We are about ready to formalize the easy fact that a homomorphic image is a subuniverse, but before doing so, let us go through the steps of the proof informally.  Let 𝑓 be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ 𝑓)-tuple of elements of ∣ 𝑩 ∣, and assume ∀ 𝑖, 𝑏(𝑖) ∈ Image ℎ.  We must show :math:`f^𝑩 b ∈ Image h`.  The assumption ∀ 𝑖,  𝑏(𝑖) ∈ Image ℎ implies that there is a (ρ 𝑓)-tuple :math:`𝑎 : ρ f → ∣ 𝑨 ∣`  such that ℎ ∘ 𝑎 = 𝑏.  Since ℎ is a homomorphism, we have :math:`f^𝑩 𝑏  = f^𝑩 (ℎ ∘ 𝑎) = ℎ (f^𝑨 𝑎) ∈` Image ℎ.
+
+We formalize the proof in Agda as follows.
+
+::
+
+    hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses B
+    hom-image-is-sub {fe} f b b∈Imf =
+     eq (∥ B ∥ f (λ x → b x)) ( ∥ A ∥ f ar) γ
+      where
+       ar : ∥ S ∥ f → ∣ A ∣
+       ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
+
+       ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
+       ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
+
+       γ : ∥ B ∥ f (λ x → b x)
+            ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
+       γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
+           (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
+           ∣ h ∣ (∥ A ∥ f ar)    ∎
 
 The intensional-hom-image module
 ---------------------------------
@@ -478,83 +571,7 @@ The image of an intensional HOM is a subuniverse. (N.B. the proof still requires
     finv' = λ b x → Inv ∣ h ∣ ∣ b x ∣ ∥ b x ∥
 
 
-
---------------------------------------------------------------------------------------------------
-
-Notes on homomorphic images and their types
---------------------------------------------
-
-The homomorphic image of `f : Hom A B` is the image of `∣ A ∣` under `f`, which, in "set-builder" notation, is simply `Im f = {f a : a ∈ ∣ A ∣ }`.
-
-As we have proved, `Im f` is a subuniverse of `B`.
-
-However, there is another means of representing the collection "H A" of all homomorphic images of A without ever referring to codomain algebras (like B above).
-
-Here's how: by the first isomorphism theorem, for each `f : Hom A B`, there exists a congruence `θ` of `A` (which is the kernel of `f`) that satisfies `A / θ ≅ Im f`.
-
-Therefore, we have a handle on the collection `H A` of all homomorphic images of `A` if we simply consider the collection `Con A` of all congruence relations of `A`.  Indeed, by the above remark, we have
-
-  `H A = { A / θ : θ ∈ Con A }`.
-
-So, we could define the following:
-
-.. code-block::
-
-   hom-closed : (𝓚 : Pred (Algebra (𝓤 ⁺) S) l)
-    →           Pred (Algebra 𝓤 S) _
-    hom-closed 𝓚 = λ A → (𝓚 (A / (∥𝟎∥ A)))
-      →             (∃ θ : Congruence A)
-      →             (∃ 𝑪 : Algebra (𝓤 ⁺) S)
-      →             (𝓚 𝑪) × ((A / θ) ≅ 𝑪)
-
-To get this to type check, we have an apparent problem, and we need a trick to resolve it. The class 𝓚 is a collection of algebras whose universes live at some level. (Above we use `𝓤 ⁺`.)
-
-However, if `A` is an algebra with `∣ A ∣ : 𝓤 ̇`, then the quotient structure  (as it is now defined in Con.agda), has type `A / θ : 𝓤 ⁺ ̇`. So, in order for the class `𝓚` to contain both `A` and all its quotients `A / θ` (i.e. all its homomorphic images), we need to somehow define a class of algebras that have different universe levels.
-
-Can we define a data type with such "universe level polymorphism"?
-
-Without that, we use a trick to get around the problem. Instead of assuming that `A` itself belongs to `𝓚`, we could instead take the "quotient" `A / ∥𝟎∥` (which is isomorphic to `A`) as belonging to `𝓚`.
-
-This is a hack and, worse, it won't do for us. We need something inductive because we will also need that if `𝑪 ≅ A / θ ∈ 𝓚`, then also `𝑪 / ψ ≅ (A / θ) / ψ ∈ 𝓚`.
-
-So, if we want `𝓚` to be closed under all quotients, we cannot determine in advance the universe levels of the algebras that belong to `𝓚`.
-
-We are trying to come up with a datatype for classes of algebras that has some sort of inductive notion of the universe levels involved.
-
-It seems we may be testing the limits of Agda's universe level paradigm. Maybe we can invent a new type to solve the problem, or we may have to try to extend Agda's capabilities.
-
-..
-   record AlgebraClass (𝓤 : Universe) : 𝓤 ̇ where
-    algebras : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )
-    nextclass : AlgebraClass ( 𝓤 ⁺ )
-
-   record AlgebraClass : Set _ where
-    algebras : (ℓ : Level) -> Pred (Algebra ℓ S) (lsuc ℓ)
-
-   module _ {S : Signature 𝓞 𝓥} where
-
-    hom-closed : Pred (AlgebraClass lzero) _
-    hom-closed 𝓚 = ∀ A -> (algebras 𝓚) A -- (𝓚 (A / (⟦𝟎⟧ A)))
-     -> ∀ (θ : Congruence A) -> (∃ 𝑪 : Algebra lsuc ℓ S)
-          ------------------------------
-     ->     (𝓚 𝑪) × ((A / θ) ≅ 𝑪)
-
-
-   module _  {S : Signature 𝓞 𝓥}  where
-    open AlgebraClass
-
-    data HomClo {ℓ : Level} (𝓚 : AlgebraClass) : Pred AlgebraClass _ where
-     hombase : {A : Algebra ℓ S} → A ∈ (algebras 𝓚) ℓ  → A ∈ HomClo 𝓚
-     homstep : {A : Algebra ℓ S} ->  A ∈ HomClo 𝓚
-       ->     (∃ θ : Congruence A)
-       ->     (𝑪 : Algebra (lsuc ℓ) S)
-             ------------------------------
-       ->     𝑪 ∈ (algebras (lsuc ℓ) 𝓚) × ((A / θ) ≅ 𝑪)
-
-
-
-
-------------------
+-------------------------
 
 .. include:: hyperlink_references.rst
 

@@ -7,7 +7,7 @@
 open import prelude
 open import basic using (Signature; Algebra; Op)
 open import relations using (transitive)
-open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
+open import homomorphisms using (HOM; Hom; hom; is-homomorphism; HomImage)
 
 open import terms using (Term; _̇_; _̂_; generator; node;
  comm-hom-term; comm-hom-term')
@@ -98,42 +98,6 @@ module _
    α : ∥ A ∥ f a ∈ ⋂ I 𝒜
    α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
-module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
-
- HomImage : ∣ B ∣ → 𝓤 ̇
- HomImage = λ b → Image ∣ h ∣ ∋ b
-
- hom-image : 𝓤 ̇
- hom-image = Σ (Image_∋_ ∣ h ∣)
-
- fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
- fres a = ∣ h ∣ a , im a
-
- hom-image-alg : Algebra 𝓤 S
- hom-image-alg = hom-image , ops-interp
-  where
-   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
-   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
-   ops-interp =
-    λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
- hom-image-is-sub : {funext 𝓥 𝓤} → HomImage ∈ Subuniverses B
- hom-image-is-sub {fe} f b b∈Imf =
-  eq (∥ B ∥ f b) ( ∥ A ∥ f ar) γ
-   where
-    ar : ∥ S ∥ f → ∣ A ∣
-    ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
-
-    ζ : ∣ h ∣ ∘ ar ≡ b
-    ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
-
-    γ : ∥ B ∥ f b
-         ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
-    γ = ∥ B ∥ f b            ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-        (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
-        ∣ h ∣ (∥ A ∥ f ar)    ∎
 
 module _
  {X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇}
@@ -295,8 +259,6 @@ module _ {A : Algebra 𝓤 S} (UV : Univalence) where
                    is-embedding h × is-homomorphism B A h
 
 module _
- -- (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
- -- (𝒦' : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
  {𝓤 : Universe}
  {X : 𝓧 ̇ }
  {UV : Univalence} where
@@ -371,30 +333,30 @@ module _
   γ = gdfe λ b → hlc (ξ b)
 
 
+-- Hom image is subuniverse
+module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+ hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{A = A}{B = B} h) ∈ Subuniverses B
+ hom-image-is-sub {fe} f b b∈Imf =
+  eq (∥ B ∥ f b) ( ∥ A ∥ f ar) γ
+   where
+    ar : ∥ S ∥ f → ∣ A ∣
+    ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
+
+    ζ : ∣ h ∣ ∘ ar ≡ b
+    ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
+
+    γ : ∥ B ∥ f b
+         ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
+    γ = ∥ B ∥ f b            ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
+        (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
+        ∣ h ∣ (∥ A ∥ f ar)    ∎
+
 -- HOM image is subuniverse
 module intensional-hom-image
  {A B : Algebra 𝓤 S} (h : HOM A B)  where
 
- HOMImage : ∣ B ∣ → 𝓤 ̇
- HOMImage = λ b → Image ∣ h ∣ ∋ b
-
- HOM-image : 𝓤 ̇
- HOM-image = Σ (Image_∋_ ∣ h ∣)
-
- fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
- fres' a = ∣ h ∣ a , im a
-
- HOM-image-alg : Algebra 𝓤 S
- HOM-image-alg = HOM-image , ops-interp
-  where
-   a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
-    →  ∣ A ∣
-   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-   ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
-   ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
- HOM-image-is-sub : funext 𝓥 𝓤 → HOMImage ∈ Subuniverses B
+ open homomorphisms.intensional-hom-image
+ HOM-image-is-sub : funext 𝓥 𝓤 → (HOMImage{A = A}{B = B} h) ∈ Subuniverses B
  HOM-image-is-sub fe f b b∈Imh = eq (∥ B ∥ f b) (∥ A ∥ f ar) γ
   where
    ar : ∥ S ∥ f → ∣ A ∣
@@ -416,7 +378,7 @@ module intensional-hom-image
           ≡ (λ (ar : ∥ S ∥ f → ∣ A ∣) → ∣ h ∣ (∥ A ∥ f ar))
      ξ = dep-intensionality τ f
 
- hinv' : {X : 𝓤 ̇ } (b : X → ∣ HOM-image-alg ∣) (x : X) → ∣ A ∣
+ hinv' : {X : 𝓤 ̇ } (b : X → ∣ (HOM-image-alg{A = A}{B = B} h) ∣) (x : X) → ∣ A ∣
  hinv' = λ b x → Inv ∣ h ∣ ∣ b x ∣ ∥ b x ∥
 
 

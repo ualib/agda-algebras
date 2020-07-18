@@ -285,7 +285,7 @@ We now formalize the statement and proof of this basic fact.
 Homomorphic images again
 ------------------------
 
-Let  ``𝑯 𝓚``  denote the class of homomorphic images of members of 𝓚.
+Let  ``H 𝓚``  denote the class of homomorphic images of members of 𝓚.
 
 ::
 
@@ -316,15 +316,15 @@ Let  ``𝑯 𝓚``  denote the class of homomorphic images of members of 𝓚.
    HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
                            (𝑩 is-hom-image-of-class 𝓚)
 
-   𝑯 : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-   𝑯 𝓚 = HomImagesOfClass 𝓚
+   H : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+   H 𝓚 = HomImagesOfClass 𝓚
 
    -- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
-   𝑯-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+   H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
     →         (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)
     →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
 
-   𝑯-closed 𝓛𝓚 =
+   H-closed 𝓛𝓚 =
     λ 𝓤 𝑩 → 𝑩 is-hom-image-of-class (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 (𝓤 ⁺))
 
 
