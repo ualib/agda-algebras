@@ -85,10 +85,9 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   open import basic using (Signature; Algebra; Π'; Op)
 
-  open import subuniverses using (Subuniverses; SubunivAlg;
-   hom-image-alg; _is-subalgebra-of_; Subalgebra)
+  open import subuniverses using (Subuniverses; Subalgebra)
 
-  open import homomorphisms using (hom; is-homomorphism)
+  open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
 
   open import terms using (Term; generator; node; _̇_; _̂_;
    interp-prod2; interp-prod; comm-hom-term')
@@ -97,7 +96,7 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
    {S : Signature 𝓞 𝓥}
    {𝓤 : Universe}
    {ua : Univalence}
-   {X : 𝓤 ̇ } -- {X : 𝓧 ̇ }
+   {X : 𝓤 ̇ }
    (gfe : global-dfunext)
    (dfe : dfunext 𝓤 𝓤) where
 
@@ -119,15 +118,19 @@ Closure data types
 ::
 
   data PClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
-   pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
+   pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
    prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
     →     Π' 𝒜 ∈ PClo 𝒦
 
   -- Subalgebra Closure
   data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
-   sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
+   sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+   sub : {𝑨 : Algebra _ S} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
+
+    -- data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+    --  sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
+    --  sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
 
   -- Homomorphic Image Closure
   data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
@@ -140,7 +143,7 @@ Closure data types
   data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
    vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
    vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
-   vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ VClo 𝒦
+   vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
    vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
     →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
 
@@ -206,8 +209,6 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
      γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
      γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
-
-
 ----------------------------------------------------
 
 New experimental stuff.
@@ -232,6 +233,12 @@ This block type-checks.
 
 ::
 
+   -- S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+   --  →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+   -- S-closed ℒ𝒦 =
+   --  λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
+
+
    pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
    pclo-id1 {p} {q} α (pbase x) = α x
    pclo-id1 {p} {q} α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
@@ -246,28 +253,28 @@ This block type-checks.
 
    sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
    sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-   sclo-id1 {p} {q} 𝒦⊧p≋q (sub {A = A} A∈SClo𝒦 sa) = γ
+   sclo-id1 {p} {q} 𝒦⊧p≋q (sub {𝑨 = 𝑨} A∈SClo𝒦 sa) = γ
     where
-     A⊧p≈q : A ⊧ p ≈ q
+     A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
      B : Algebra 𝓤 S
      B = ∣ sa ∣
 
-     h : ∣ B ∣ → ∣ A ∣
+     h : ∣ B ∣ → ∣ 𝑨 ∣
      h = pr₁ ∥ sa ∥
 
      hem : is-embedding h
      hem = ∣ pr₂ ∥ sa ∥ ∣
 
-     hhm : is-homomorphism B A h
+     hhm : is-homomorphism B 𝑨 h
      hhm = ∥ pr₂ ∥ sa ∥ ∥
 
      ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
      ξ b =
-      h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
-      (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-      (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+      h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B 𝑨 (h , hhm) p b ⟩
+      (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+      (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term' gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
       h ((q ̇ B) b)  ∎
 
      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
@@ -370,28 +377,28 @@ The next block type-checks.
       γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
       γ = products-preserve-identities p q I 𝒜 IH
 
-   vclo-id1 {p} {q} α ( vsub {A = A} A∈VClo𝒦 sa ) = γ
+   vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
      where
-      A⊧p≈q : A ⊧ p ≈ q
+      A⊧p≈q : 𝑨 ⊧ p ≈ q
       A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
       B : Algebra 𝓤 S
       B = ∣ sa ∣
 
-      h : ∣ B ∣ → ∣ A ∣
+      h : ∣ B ∣ → ∣ 𝑨 ∣
       h = pr₁ ∥ sa ∥
 
       hem : is-embedding h
       hem = ∣ pr₂ ∥ sa ∥ ∣
 
-      hhm : is-homomorphism B A h
+      hhm : is-homomorphism B 𝑨 h
       hhm = ∥ pr₂ ∥ sa ∥ ∥
 
       ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
       ξ b =
-       h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B A (h , hhm) p b ⟩
-       (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-       (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gfe B A (h , hhm) q b)⁻¹ ⟩
+       h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B 𝑨 (h , hhm) p b ⟩
+       (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+       (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term' gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
        h ((q ̇ B) b)  ∎
 
       hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'

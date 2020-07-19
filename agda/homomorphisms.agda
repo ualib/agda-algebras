@@ -175,7 +175,6 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
      iv  = ghom f (hInv ∘ c)
 
 
-
 module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
 
  HomImage : ∣ B ∣ → 𝓤 ̇
