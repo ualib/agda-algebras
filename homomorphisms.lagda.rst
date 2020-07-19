@@ -47,7 +47,7 @@ Here we say what it means for an operation 𝑓, interpreted in the algebras �
   op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g =
    ∀( 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ ) → g (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂)
 
-  all-ops-in_and_commute-extensionally-with :
+  all-ops-in_and_commute-with :
    (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
     →   (∣ 𝑨 ∣  → ∣ 𝑩 ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
@@ -70,7 +70,6 @@ And now we define the type of homomorphisms.
 An example of such a homomorphism is the identity map.
 
 ::
-
   𝓲𝓭 :  (A : Algebra 𝓤 S) → hom A A
   𝓲𝓭 _ = (λ x → x) , λ _ _ → refl _ 
 
@@ -84,9 +83,9 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
 
 ::
 
-  HCompClosed : {𝑨 : Algebra 𝓤 S}{𝑩 : Algebra 𝓦 S}
+  HCompClosed : {𝑨 : Algebra 𝓤 S}
+                {𝑩 : Algebra 𝓦 S}
                 {𝑪 : Algebra 𝓣 S}
-
    →            hom 𝑨 𝑩   →   hom 𝑩 𝑪
                ------------------------
    →                   hom 𝑨 𝑪
@@ -102,7 +101,8 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
             FC 𝑓 (h ∘ g ∘ 𝒂) ∎
 
   --Alternative notation for hom composition
-  module _ {A : Algebra 𝓤 S}{B : Algebra 𝓦 S}
+  module _ {A : Algebra 𝓤 S}
+           {B : Algebra 𝓦 S}
            {C : Algebra 𝓣 S} where
 
    _>>>_ : hom A B  → hom B C → hom A C
