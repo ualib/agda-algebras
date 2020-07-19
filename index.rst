@@ -30,6 +30,7 @@ Appendix
    refs
    appendix_prerequisites.rst
    misc_notes.lagda.rst
+   alternatives.lagda.rst
    acronyms_and_symbols.rst
    glossary
    genindex

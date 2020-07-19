@@ -22,10 +22,10 @@ As usual, we start with the imports we will need below.
   open import basic using (Signature; Algebra; Op)
   open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
-.. _homomorphisms module:
+.. _homomorphisms extensionally:
 
-The homomorphisms module
--------------------------
+Homomorphisms extensionally
+---------------------------
 
 We start the ``homomorphisms`` module with a fixed signature ``S``.
 
@@ -34,42 +34,42 @@ We start the ``homomorphisms`` module with a fixed signature ``S``.
   module homomorphisms {S : Signature 𝓞 𝓥} where
 
 
-.. _extensional definition of homomorphism:
+Our implementation of the notion of homomorphisms in the agda-ualib_ is an `extensional` one.  What this means will become clear once we have presented the definitions (cf. :numref:`homomorphisms intensionally`).
 
-Extensional definition of homomorphism
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. Recall, in :numref:`extensionally homomorphic` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`.
+Here we say what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`.
 
 ::
 
-  op_interpreted-in_and_commutes-extensionally-with :
+  op_interpreted-in_and_commutes-with :
    (𝑓 : ∣ S ∣) (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
    (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-  op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-extensionally-with g =
+  op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g =
    ∀( 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ ) → g (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂)
 
   all-ops-in_and_commute-extensionally-with :
    (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
     →   (∣ 𝑨 ∣  → ∣ 𝑩 ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-  all-ops-in 𝑨 and 𝑩 commute-extensionally-with g = ∀ (𝑓 : ∣ S ∣)
-   → op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-extensionally-with g
+  all-ops-in 𝑨 and 𝑩 commute-with g = ∀ (𝑓 : ∣ S ∣)
+   → op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g
 
   is-homomorphism : (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
    →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
   is-homomorphism 𝑨 𝑩 g =
-   all-ops-in 𝑨 and 𝑩 commute-extensionally-with g
+   all-ops-in 𝑨 and 𝑩 commute-with g
 
-The type of (extensional) homomorphisms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+And now we define the type of homomorphisms.
 
 ::
 
   hom : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
   hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
+
+An example of such a homomorphism is the identity map.
+
+::
 
   𝓲𝓭 :  (A : Algebra 𝓤 S) → hom A A
   𝓲𝓭 _ = (λ x → x) , λ _ _ → refl _ 
@@ -84,9 +84,9 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
 
 ::
 
-  HCompClosed : {𝑨 : Algebra 𝓤 S}
-                {𝑩 : Algebra 𝓦 S}
+  HCompClosed : {𝑨 : Algebra 𝓤 S}{𝑩 : Algebra 𝓦 S}
                 {𝑪 : Algebra 𝓣 S}
+
    →            hom 𝑨 𝑩   →   hom 𝑩 𝑪
                ------------------------
    →                   hom 𝑨 𝑪
@@ -102,8 +102,7 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
             FC 𝑓 (h ∘ g ∘ 𝒂) ∎
 
   --Alternative notation for hom composition
-  module _ {A : Algebra 𝓤 S}
-           {B : Algebra 𝓦 S}
+  module _ {A : Algebra 𝓤 S}{B : Algebra 𝓦 S}
            {C : Algebra 𝓣 S} where
 
    _>>>_ : hom A B  → hom B C → hom A C

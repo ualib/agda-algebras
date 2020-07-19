@@ -27,10 +27,12 @@ Here we collect some of the possible alternative implementation choices for refe
 
 --------------------------------------
 
-Intensional homomorphisms
--------------------------
+.. _homomorphisms intensionally:
 
-Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. In :numref:`extensional definition of homomorphism` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`. Recall,
+Homomorphisms intensionally
+---------------------------
+
+Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. In :numref:`homomorphisms extensionally` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`. Recall,
 
 .. code-block::
 
