@@ -200,11 +200,13 @@ Subalgebras in Agda
 
 The next submodule is a generalization of MHE's implementation of subgroups. We consider the subalgebras of an single arbitrary(but fixed) algebra 𝑨.
 
-Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we define the type of subalgebras as follows.
-
 ::
 
   module _ {𝑨 : Algebra 𝓤 S} (UV : Univalence) where
+
+Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we define the type of subalgebras as follows.
+
+::
 
    Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
    Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 S) ,
@@ -350,18 +352,19 @@ Identities in subalgebras
 
 Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``A ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
 
-We first set down some notation for the modeling of identities. The standard notation is ``A ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in A. In otherwords, for all assignments ``a : X → ∣ A ∣`` of values to variables, we have ``(p ̇ A) a ≡ (q ̇ A) a``.
+::
+
+  module _ {𝓤 : Universe} {X : 𝓤 ̇ } {UV : Univalence} where
+
+We first set down some notation for the modeling of identities.
+
+:Unicode Hints: ``\models`` produces ``⊧``; ``\~~`` produces ``≈``; ``\~~~`` produces ``≋``.
+
+The standard notation is ``A ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in A. In otherwords, for all assignments ``a : X → ∣ A ∣`` of values to variables, we have ``(p ̇ A) a ≡ (q ̇ A) a``.
 
 If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
 
-**Unicode Hint**. In Agda type ``\models`` to produce ⊧, type ``\~~`` to produce ≈, and type ``\~~~`` to produce ≋.
-
 ::
-
-  module _
-   {𝓤 : Universe}
-   {X : 𝓤 ̇ }
-   {UV : Univalence} where
 
    _⊧_≈_ : Algebra 𝓤 S
     →      Term{X = X} → Term → 𝓤 ̇

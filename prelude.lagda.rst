@@ -52,14 +52,18 @@ We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda d
 
 This ``Universes`` module provides, among other things, an elegant notation for type universes. (:term:`MHE` has produced an outstanding set of notes on `HoTT-UF-in-Agda`_, which we highly recommend to those wanting more details than we provide here.)
 
-Following :term:`MHE`, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣 (type these in `agda2-mode` with ``\MCU``, ``\MCV``, etc).  We add a few more to Martin's list.
+Following :term:`MHE`, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣.  We add a few more to Martin's list.
 
 ::
 
     variable
       𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
+:Unicode Hints: In agda2-mode_ type ``\MCI``, ``\MCJ``, etc. to obtain 𝓘, 𝓙, etc.
+
 In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a universe ``𝓤`` (i.e., a level) to ``Set 𝓤``, and the latter has type ``Set (lsuc 𝓤)``, or ``Type (𝓤 ⁺)``.  That is, ``𝓤 ̇`` is simply an alias for ``Set 𝓤``, and we have ``Set 𝓤 : Set (lsuc 𝓤)``. The level ``lzero`` is renamed ``𝓤₀``, so ``𝓤₀ ̇`` is an alias for ``Set lzero``. (This corresponds to ``Sort 0`` in Lean_.) Thus, ``Set (lsuc lzero)`` is denoted by ``Set 𝓤₀ ⁺`` which we denote by ``𝓤₀ ⁺ ̇`` .
+
+:Unicode Hints: In agda2-mode_ type ``\MCU \^.``, ``\MCU \^+``, ``\MCU\_0``, and ``\sqcup`` to produce the symbols 𝓤 ̇, 𝓤 ⁺, 𝓤₀, and ⊔.
 
 .. The following table translates between standard Agda syntax, :term:`MHE` syntax and Lean syntax.
 
@@ -113,6 +117,10 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
 
     open import MGS-Solved-Exercises using (to-subtype-≡) public
 
+
+:Unicode Hints: In agda2-mode_ type ``\bJ``, ``\b0``, ``\b1``, ``\b2``, etc. to produce 𝕁, 𝟘, 𝟙, 𝟚, etc. and type ``\cib`` and ``\~-`` to produce ● and ≃.
+
+
 .. We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
 .. The full ``prelude.lagda.rst`` file, which defines other notation and objects we will use throughout the library, appears in the appendix :ref:`preliminaries.agda`. We will describe each of the objects defined therein as they come up in later sections.
@@ -123,6 +131,8 @@ Dependent pair type
 --------------------
 
 Our preferred notations for the first and second projections of a product are ``∣_∣`` and ``∥_∥``, respectively; however, we will sometimes use the more standard ``pr₁`` and ``pr₂`` for compatibility with other libraries and sometimes for readability.
+
+:Unicode Hints: In agda2-mode_ type ``\|`` and ``\||`` to produce ``∣`` and ``∥``; type ``pr\_1`` and ``pr\_2`` to produce ``pr₁`` and ``pr₂``.
 
 ::
 
@@ -141,7 +151,7 @@ For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y``, 
     -Σ X Y = Σ Y
     syntax -Σ X (λ x → y) = Σ x ꞉ X , y -- type `꞉` as `\:4`
 
-**WARNING**. The symbol ``꞉`` in the above syntax definition is not the same as ``:``, even though these symbols look very similar. When entering ``Σ x ꞉ A , b``, we must type ``\:4`` in Emacs ``agda2-mode`` to obtain the correct colon symbol.
+.. warning:: The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression ``Σ x ꞉ X , y`` above is obtained by typing ``\:4`` in agda2-mode_.
 
 :term:`MHE` explains Sigma induction as follows: "To prove that ``A z`` holds for all ``z : Σ Y``, for a given property ``A``, we just prove that we have ``A (x , y)`` for all ``x : X`` and ``y : Y x``.  This is called ``Σ`` induction or ``Σ`` elimination (or ``uncurry``).
 

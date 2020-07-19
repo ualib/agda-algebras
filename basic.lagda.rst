@@ -28,6 +28,10 @@ Like most Agda programs, this one begins with some options and imports.
    open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣;
      _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_)
 
+
+:Unicode Hints: In agda2-mode_ type ``\MCI``, ``\MCU\_0``, ``\sqcup``, ``\b0`` and ``\b2`` to obtain 𝓘, 𝓤₀, ⊔, 𝟘, and 𝟚, respectively.
+
+
 Then we begin the module called ``basic`` using Agda's ``module`` directive.
 
 ::
@@ -129,7 +133,6 @@ A monoid signature has two operation symbols, say, ``e``  and ``·``, of arities
 The types indicate that ``e`` is nullary (i.e., takes no arguments, equivalently, takes args of type ``𝟘 → A``), while ``·`` is binary (as indicated  by argument type ``𝟚 → A``).
 
 We will have more to say about the type of algebras later.  For now, we continue defining the syntax used in the ``agda-ualib`` to represent the basic objects of universal algebra.
-
 
 -----------------------------------
 

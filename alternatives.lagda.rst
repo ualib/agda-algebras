@@ -74,3 +74,8 @@ We could also have constructed an algebra with universe derived from the subuniv
 
     subuniv-to-subalg : SubunivAlg is-subalgebra-of A
     subuniv-to-subalg = mem B ∥ SubunivAlg ∥ λ f a → (refl _)
+
+-------------------------
+
+.. include:: hyperlink_references.rst
+

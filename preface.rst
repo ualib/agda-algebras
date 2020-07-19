@@ -79,6 +79,13 @@ There are installation instructions in the main README.md file in that repositor
 
 -----------------------------------
 
+Unicode hints
+--------------
+
+At various places in the documentation we show how to produce in Emacs agda2-mode_ some of the fancy unicode characters that we use in our code. For example, we might say "type ``\MCI`` to produce the symbol 𝓘".  We hope these occasional hints are convenient for the reader, but they are not meant to be comprehensive. Instead, information about unicode symbols is readily available in Emacs agda2-mode_; simply place the cursor on the character of interest and enter the command ``M-x describe-char``; alternatively, use the shortcut ``M-m h d c``. To see a full list of available characters, enter ``M-x desscribe-input-method`` (or ``C-h I``).
+
+---------------------------------------------------
+
 Acknowledgments
 ---------------
 

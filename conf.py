@@ -76,8 +76,11 @@ proof_theorem_types = {
     "property": "Property",
     "question": "Question",
     "prop": "Proposition",
-    "theorem": "Theorem"
+    "theorem": "Theorem",
 }
+
+# use numbering for section references with :numref:, e.g. 'Section 3.2'.
+numfig = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -113,9 +116,6 @@ highlight_language = 'Agda'
 todo_include_todos = True
 
 source_parsers = {}
-
-# use numbering for section references with :numref:, e.g. 'Section 3.2'.
-numfig = True
 
 #html_theme = "sphinx_rtd_theme"
 
