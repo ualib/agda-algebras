@@ -433,10 +433,10 @@ Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make s
 
 -------------------------------
            
-.. _arities and interpretations:
+.. _arity:
 
-Arities and interpretations
----------------------------------
+Arity
+-----
 
 We denote and define the set :math:`X := \{x_0,x_1,\dots \}` of variable symbols, and for each natural number :math:`n` we let :math:`X_n:=\{x_0,x_1,\dots, x_{n-1}\}`.
 
@@ -496,13 +496,16 @@ As the example demonstrates, the notion of arity of a term is not uniquely defin
 
 
 .. index:: ! interpretation (of a term)
+.. index:: ! term operation
 
-.. _interpretation of a term:
+.. _term operations:
 
-Interpretation of a term
-~~~~~~~~~~~~~~~~~~~~~~~~
+Term Operations
+--------------------
 
-We now explain how to define the interpretation of an 𝑆-term in an 𝑆-algebra. As usual, for each 0 < 𝑛 < ω we identify the 𝑛-tuple :math:`(x_0, x_1, \dots, x_{n-1})` with the function :math:`x:  𝑛 → X_n` defined by :math:`x\, i = x_i` (0 ≤ 𝑖 < 𝑛).
+In :numref:`terms` we defined a term in a given signature.  When we interpret such a term in a particular algebraic structure, we get what is known as a term operation.  In this section we explain how one defines the interpretation of an 𝑆-term in an 𝑆-algebra, and thus how one obtains a term *operation*.
+
+As usual, for each 0 < 𝑛 < ω we identify the 𝑛-tuple :math:`(x_0, x_1, \dots, x_{n-1})` with the function :math:`x:  𝑛 → X_n` defined by :math:`x\, i = x_i` (0 ≤ 𝑖 < 𝑛).
 
 Recall, a term 𝑡 is either a variable, say, 𝑡 = 𝑥, or has the form 𝑡 = 𝑓 𝑠 for some operation symbol 𝑓 ∈ 𝐹, and some ρ𝑓-tuple 𝑠 : ρ𝑓 → 𝑇(𝑋) of terms.
 
