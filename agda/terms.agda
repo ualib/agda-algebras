@@ -115,11 +115,6 @@ module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
    where
     γ = fe λ i → free-intensionally-unique' fe g h p (args i)
 
-_̂_ : (f : ∣ S ∣)
- →   (A : Algebra 𝓤 S)
- →   (∥ S ∥ f  →  ∣ A ∣) → ∣ A ∣
-
-f ̂ A = λ x → (∥ A ∥ f) x
 
 _̇_ : {X : 𝓧 ̇ } → Term{X = X}
  →   (A : Algebra 𝓤 S) → (X → ∣ A ∣) → ∣ A ∣

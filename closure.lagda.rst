@@ -109,6 +109,10 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
+  being-Image-is-subsingleton : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) (b : B)
+   →           is-subsingleton (Image f ∋ b)
+  being-Image-is-subsingleton f b prf1 prf2 = {!!}
+
 --------------------------------
 
 Closure data types
@@ -327,7 +331,7 @@ This block has one hole with goal:
      hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
       → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-     hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
+     hom-image-interp b (generator x) = to-subtype-≡ (being-Image-is-subsingleton ∣ ϕ ∣) fstbx
       where
        iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
        iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹

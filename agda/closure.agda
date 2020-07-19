@@ -5,14 +5,14 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π'; Op)
+open import basic using (Signature; Algebra; Π'; Op; _̂_)
 
 open import subuniverses using (Subuniverses; SubunivAlg; _is-subalgebra-of_;
  Subalgebra; _is-subalgebra-of-class_; SubalgebrasOfClass)
 
 open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
 
-open import terms using (Term; generator; node; _̇_; _̂_; interp-prod2;
+open import terms using (Term; generator; node; _̇_; interp-prod2;
  interp-prod; comm-hom-term')
 
 module closure
@@ -33,6 +33,14 @@ _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
 
 _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
+
+being-Image-is-subsingleton : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) (b : B)
+ →           is-subsingleton (Image f ∋ b)
+being-Image-is-subsingleton f b prf1 prf2 = {!!}
+ -- Π-is-subsingleton gfe
+ --    (λ f → Π-is-subsingleton gfe
+ --     (λ a → Π-is-subsingleton gfe
+ --      (λ _ → ∈-is-subsingleton B (∥ 𝑨 ∥ f a))))
 
 -- Product Closure
 P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
@@ -193,7 +201,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
     → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-   hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
+   hom-image-interp b (generator x) = to-subtype-≡ (being-Image-is-subsingleton ∣ ϕ ∣) fstbx
     where
      iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
      iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹

@@ -5,11 +5,11 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Op)
+open import basic using (Signature; Algebra; Op; _̂_)
 open import relations using (transitive)
 open import homomorphisms using (HOM; Hom; hom; is-homomorphism; HomImage)
 
-open import terms using (Term; _̇_; _̂_; generator; node;
+open import terms using (Term; _̇_; generator; node;
  comm-hom-term; comm-hom-term')
 
 open import Relation.Unary using (⋂)

@@ -117,6 +117,45 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
      α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
 
+
+.. _obs 7.1 in agda:
+
+Homomorphic images are subuniverses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this subsection we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homomorphisms appears in :numref:`the intensional-hom-image module`, but the proof is essentially the same.) Before implementing the result formally in Agda, let us recall the steps of the informal proof.
+
+Let 𝑓 be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ 𝑓)-tuple of elements of ∣ 𝑩 ∣, and assume the image ``Im 𝑏`` of 𝑏 belongs to the image ``Image ℎ`` of ℎ.  We must show that :math:`f^𝑩 b ∈ Image h`.  The assumption ``Im 𝑏 ⊆ Image ℎ`` implies that there is a (ρ 𝑓)-tuple :math:`𝑎 : ρ f → ∣ 𝑨 ∣`  such that ℎ ∘ 𝑎 = 𝑏.  Since ℎ is a homomorphism, we have :math:`f^𝑩 𝑏  = f^𝑩 (ℎ ∘ 𝑎) = ℎ (f^𝑨 𝑎) ∈` Image ℎ.
+
+Finally, recall the definition of ``HomImage`` from the `homomorphisms module`_,
+
+.. code-block::
+
+  HomImage : ∣ B ∣ → 𝓤 ̇
+  HomImage = λ b → Image ∣ h ∣ ∋ b
+
+We are now ready to formalize the proof the proof that homomorphic images are subuniverses.
+
+::
+
+  module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+
+   hom-image-is-sub : {funext 𝓥 𝓤} → HomImage{A = A}{B = B} h ∈ Subuniverses B
+   hom-image-is-sub {fe} f b b∈Imf =
+    eq (∥ B ∥ f (λ x → b x)) ( ∥ A ∥ f ar) γ
+     where
+      ar : ∥ S ∥ f → ∣ A ∣
+      ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
+
+      ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
+      ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
+
+      γ : ∥ B ∥ f (λ x → b x)
+          ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
+      γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
+          (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
+          ∣ h ∣ (∥ A ∥ f ar)    ∎
+
 .. _obs 12 in agda:
 
 Subuniverse generation with terms
@@ -225,7 +264,7 @@ Note that we introduce a new definition of the ``subuniverse`` type here.  In co
 
    op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
    op-closed B = (f : ∣ S ∣)(a : ∥ S ∥ f → ∣ 𝑨 ∣)
-    → Im a ⊆ B → B (∥ 𝑨 ∥ f a)  --  → ((i : ∥ S ∥ f) → B (a i)) → B (∥ 𝑨 ∥ f a)
+    → Im a ⊆ B → B (∥ 𝑨 ∥ f a)
 
    subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
    subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
@@ -347,8 +386,10 @@ The converse of `membership-equiv-gives-carrier-equality` is obvious.
     (subuniverse-equality B C) ● (carrier-equiv B C)
 
 
-Identities in subalgebras
------------------------------
+--------------------------------------------
+
+Subalgebras preserve identities
+-----------------------------------
 
 Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``A ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
 
@@ -425,41 +466,6 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
 
     γ : B ⊧ p ≈ q
     γ = gdfe λ b → hlc (ξ b)
-
-----------------------------------------------------------------------------
-
-.. _hom images in agda:
-
-.. _obs 7.1 in agda:
-
-Homomorphic images in Agda
---------------------------
-
-In this section we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homs appears below, but the proof is essentially the same.) 
-
-We are about ready to formalize the easy fact that a homomorphic image is a subuniverse, but before doing so, let us go through the steps of the proof informally.  Let 𝑓 be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ 𝑓)-tuple of elements of ∣ 𝑩 ∣, and assume ∀ 𝑖, 𝑏(𝑖) ∈ Image ℎ.  We must show :math:`f^𝑩 b ∈ Image h`.  The assumption ∀ 𝑖,  𝑏(𝑖) ∈ Image ℎ implies that there is a (ρ 𝑓)-tuple :math:`𝑎 : ρ f → ∣ 𝑨 ∣`  such that ℎ ∘ 𝑎 = 𝑏.  Since ℎ is a homomorphism, we have :math:`f^𝑩 𝑏  = f^𝑩 (ℎ ∘ 𝑎) = ℎ (f^𝑨 𝑎) ∈` Image ℎ.
-
-We formalize the proof in Agda as follows.
-
-::
-
-  module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
-
-   hom-image-is-sub : {funext 𝓥 𝓤} → HomImage{A = A}{B = B} h ∈ Subuniverses B
-   hom-image-is-sub {fe} f b b∈Imf =
-    eq (∥ B ∥ f (λ x → b x)) ( ∥ A ∥ f ar) γ
-     where
-      ar : ∥ S ∥ f → ∣ A ∣
-      ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
-
-      ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
-      ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
-
-      γ : ∥ B ∥ f (λ x → b x)
-          ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
-      γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-          (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
-          ∣ h ∣ (∥ A ∥ f ar)    ∎
 
 
 -------------------------
