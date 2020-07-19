@@ -19,8 +19,8 @@ As usual, we start with the imports we will need below.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Π')
-  open import homomorphisms using (HOM; Hom; hom)
+  open import basic using (Signature; Algebra; Π'; _̂_)
+  open import homomorphisms using (hom)
   open import relations using (Con; compatible-fun)
 
 Terms in Agda
@@ -66,17 +66,16 @@ We prove
   module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
    --1.a. Every map (X → A) lifts.
-   free-lift : (h : X → ∣ A ∣)  →  ∣ 𝑻(X) ∣ → ∣ A ∣
+   free-lift : (h : X → ∣ A ∣)  →  ∣ 𝑻 X ∣ → ∣ A ∣
    free-lift h (generator x) = h x
    free-lift h (node f args) = ∥ A ∥ f λ i → free-lift h (args i)
 
-   --I. Extensional proofs (using hom's)
-   --1.b.' The lift is (extensionally) a hom
-   lift-hom : (h : X → ∣ A ∣) →  hom  (𝑻(X)) A
+   --1.b. The lift is a hom
+   lift-hom : (h : X → ∣ A ∣) →  hom  (𝑻 X) A
    lift-hom h = free-lift h , λ f a → ap (∥ A ∥ _) (refl _)
 
-   --2.' The lift to (free → A) is (extensionally) unique.
-   free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻(X)) A)
+   --2. The lift to (free → A) is (extensionally) unique.
+   free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) A)
     →           (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
     →           (t : Term )
                ---------------------------
@@ -90,53 +89,6 @@ We prove
     ∣ h ∣ (node f args)             ∎
      where γ = fe λ i → free-unique fe g h p (args i)
 
-Intensional proofs
-~~~~~~~~~~~~~~~~~~~
-
-Here we use ``HOM`` instead of ``hom``. N.B. using this "intensional" definition, we shouldn't need function extensionality to prove uniqueness of the homomorphic extension.
-
-::
-
-   --1.b. that free-lift is (intensionally) a hom.
-   lift-HOM : (h : X → ∣ A ∣) →  HOM (𝑻(X)) A
-   lift-HOM  h = free-lift h , refl _
-
-   --2. The lift to  (free → A)  is (intensionally) unique.
-
-   free-intensionally-unique : funext 𝓥 𝓤
-    →             (g h : HOM (𝑻(X)) A)
-    →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
-    →             (t : Term)
-                 --------------------------------
-    →              ∣ g ∣ t ≡ ∣ h ∣ t
-
-   free-intensionally-unique fe g h p (generator x) =
-    intensionality p x
-
-   free-intensionally-unique fe g h p (node f args) =
-    ∣ g ∣ (node f args)   ≡⟨ ap (λ - → - f args) ∥ g ∥ ⟩
-    ∥ A ∥ f(∣ g ∣ ∘ args) ≡⟨ ap (∥ A ∥ _) γ ⟩
-    ∥ A ∥ f(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
-    ∣ h ∣ (node f args)  ∎
-     where
-      γ = fe λ i → free-intensionally-unique fe g h p (args i)
-
-Interpretations
--------------------
-
-Before proceding, we define some syntactic sugar that allows us to replace ``∥ A ∥ f`` with slightly more standard-looking notation, ``f ̂ A``, where f is an operation symbol of the signature S of A.
-
-::
-
-  _̂_ : (f : ∣ S ∣)
-   →   (A : Algebra 𝓤 S)
-   →   (∥ S ∥ f  →  ∣ A ∣) → ∣ A ∣
-
-  f ̂ A = λ x → (∥ A ∥ f) x
-
-We can now write ``f ̂ A`` for the interpretation of the basic operation ``f`` in the algebra ``A``. N.B. below, we will write ``t ̇ A`` for the interpretation of a *term* ``t`` in ``A``.
-
-.. todo:: Perhaps we can figure out how to use the same notation for both interpretations of operation symbols and terms.
 
 Interpretation of terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,40 +154,27 @@ Compatibility of homs and terms
 
 In this section we present the formal proof of the fact that homomorphisms commute with terms.  More precisely, if A and B are S-algebras, h : A → B a homomorphism, and t a term in the language of S, then for all a : X → ∣ A ∣ we have :math:`h (t^A a) = t^B (h ∘ a)`.
 
-::
-
-  -- Proof of 1. (homomorphisms commute with terms).
-  comm-hom-term : global-dfunext
-   →              {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
-                  (h : HOM A B) (t : Term{X = X})
-                 ---------------------------------------------
-   →              ∣ h ∣ ∘ (t ̇ A) ≡ (t ̇ B) ∘ (λ a → ∣ h ∣ ∘ a )
-
-  comm-hom-term gfe A B h (generator x) = refl _
-
-  comm-hom-term gfe {X = X}A B h (node f args) = γ
-   where
-    γ : ∣ h ∣ ∘ (λ a → (f ̂ A) (λ i → (args i ̇ A) a))
-        ≡ (λ a → (f ̂ B)(λ i → (args i ̇ B) a)) ∘ _∘_ ∣ h ∣
-    γ = ∣ h ∣ ∘ (λ a → (f ̂ A) (λ i → (args i ̇ A) a))
-          ≡⟨ ap (λ - → (λ a → - f (λ i → (args i ̇ A) a))) ∥ h ∥ ⟩
-        (λ a → (f ̂ B)(∣ h ∣ ∘ (λ i →  (args i ̇ A) a)))
-          ≡⟨ refl _ ⟩
-        (λ a → (f ̂ B)(λ i → ∣ h ∣ ((args i ̇ A) a)))
-          ≡⟨ ap (λ - → (λ a → (f ̂ B)(- a))) ih ⟩
-      (λ a → (f ̂ B)(λ i → (args i ̇ B) a)) ∘ _∘_ ∣ h ∣
-          ∎
-      where
-       IH : (a : X → ∣ A ∣)(i : ∥ S ∥ f)
-        →   (∣ h ∣ ∘ (args i ̇ A)) a ≡ ((args i ̇ B) ∘ _∘_ ∣ h ∣) a
-       IH a i = intensionality (comm-hom-term gfe A B h (args i)) a
-
-       ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ A) a)))
-             ≡ (λ a → (λ i → ((args i ̇ B) ∘ _∘_ ∣ h ∣) a))
-       ih = gfe λ a → gfe λ i → IH a i
-
 
 .. _obs 11 in agda:
+
+::
+
+  -- homomorphisms commute with terms.
+  comm-hom-term : global-dfunext --  𝓥 𝓤
+   →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+   →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
+                 --------------------------------------------
+   →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
+
+  comm-hom-term fe A B h (generator x) a = refl _
+
+  comm-hom-term fe A B h (node f args) a =
+   ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
+     ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
+   (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
+     ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term fe A B h (args i₁) a))⟩
+   (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
+     ∎
 
 Compatibility of congruences and terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -244,47 +183,16 @@ Here we present an Agda proof of the fact that terms respect congruences. More p
 
 ::
 
-  compatible-term : {X : 𝓧 ̇}(A : Algebra 𝓤 S)
-                    ( t : Term{X = X} ) (θ : Con A)
-                   ---------------------------------
-   →                 compatible-fun (t ̇ A) ∣ θ ∣
-
-  compatible-term A (generator x) θ p = p x
-  compatible-term A (node f args) θ p =
-   pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
-
-Extensional versions
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  -- Proof of 1. (homomorphisms commute with terms).
-  comm-hom-term' : global-dfunext --  𝓥 𝓤
-   →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
-   →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
-                 --------------------------------------------
-   →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
-
-  comm-hom-term' fe A B h (generator x) a = refl _
-
-  comm-hom-term' fe A B h (node f args) a =
-   ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
-     ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
-   (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
-     ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term' fe A B h (args i₁) a))⟩
-   (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
-     ∎
-
-  -- Proof of 2. (If t : Term, θ : Con A, then a θ b → t(a) θ t(b))
-  compatible-term' : {X : 𝓧 ̇}
+  -- If t : Term, θ : Con A, then a θ b → t(a) θ t(b)
+  compatible-term : {X : 𝓧 ̇}
              (A : Algebra 𝓤 S) (t : Term{X = X}) (θ : Con A)
              --------------------------------------------------
    →                   compatible-fun (t ̇ A) ∣ θ ∣
 
-  compatible-term' A (generator x) θ p = p x
+  compatible-term A (generator x) θ p = p x
 
-  compatible-term' A (node f args) θ p =
-   pr₂( ∥ θ ∥ ) f λ{x → (compatible-term' A (args x) θ) p}
+  compatible-term A (node f args) θ p =
+   pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
 
 For proof of 3, see `TermImageSub` in subuniverses.lagda.
 

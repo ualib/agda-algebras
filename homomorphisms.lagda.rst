@@ -34,77 +34,12 @@ We start the ``homomorphisms`` module with a fixed signature ``S``.
   module homomorphisms {S : Signature 𝓞 𝓥} where
 
 
-Intensionally homomorphic
------------------------------
+.. _extensional definition of homomorphism:
 
-There are two levels of intesionality.
+Extensional definition of homomorphism
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Partial intensionality
-~~~~~~~~~~~~~~~~~~~~~~
-
-Here we assume intensionality with respect to 𝒂, but extensional with respect to 𝑓.
-
-::
-
-  --intensional preservation of operations
-  op_interpreted-in_and_commutes-intensionally-with :
-   (𝑓 : ∣ S ∣) (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
-   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-intensionally-with g =
-   (λ 𝒂 → g (∥ 𝑨 ∥ 𝑓 𝒂) ) ≡ (λ 𝒂 → ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂) )
-
-The implicit typing judgment here is `𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣`, which represents an (∥ S ∥ 𝑓)-tuple of elements from ∣ 𝑨 ∣.
-
-::
-
-  all-ops-in_and_commute-partially-intensionally-with :
-   (𝑨 : Algebra 𝓤 S)(𝑩 : Algebra 𝓦 S)
-   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g =
-   ∀(𝑓 : ∣ S ∣) → op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-intensionally-with g
-
-  intensional-hom : (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
-   →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  intensional-hom 𝑨 𝑩 g =
-   all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g
-
-  Hom : Algebra 𝓦 S → Algebra 𝓤 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  Hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-   all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g
-
-
-Full intensionality
-~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  -- intensional with respect to both 𝑓 and 𝒂)
-  preserves-ops : (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
-   →              (∣ 𝑨 ∣  → ∣ 𝑩 ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  preserves-ops (A , 𝐹ᴬ)(B , 𝐹ᴮ) g =
-   (λ (𝑓 : ∣ S ∣ ) (𝒂 : ∥ S ∥ 𝑓 → A) → g (𝐹ᴬ 𝑓 𝒂))
-    ≡ (λ (𝑓 : ∣ S ∣ ) (𝒂 : ∥ S ∥ 𝑓 → A )  → 𝐹ᴮ 𝑓 (g ∘ 𝒂))
-
-  all-ops-in_and_commute-intensionally-with :
-   (𝑨 : Algebra 𝓤 S)(𝑩 : Algebra 𝓦 S)
-   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  all-ops-in 𝑨 and 𝑩 commute-intensionally-with g =
-   preserves-ops 𝑨 𝑩 g
-
-  --the type of (intensional) homomorphisms
-  HOM : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-  HOM 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-             all-ops-in 𝑨 and 𝑩 commute-intensionally-with g
-
-Extensionally homomorphic
----------------------------
+Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. Recall, in :numref:`extensionally homomorphic` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`.
 
 ::
 

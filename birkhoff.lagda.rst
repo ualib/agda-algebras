@@ -22,15 +22,14 @@ As usual, we start with the imports we will need below.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Π')
+  open import basic using (Signature; Algebra; Π'; _̂_)
   open import relations using (ker-pred; Rel; con; _//_)
-  open import homomorphisms using (HOM; Hom; hom; is-homomorphism)
+  open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
 
-  open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term';
+  open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
                            lift-hom; interp-prod)
 
-  open import subuniverses using (Subuniverse; mksub; var; app; Sg;
-                                  _is-subalgebra-of_; Subalgebra)
+  open import subuniverses using (Subuniverse; mksub; var; app; Sg; Subalgebra)
 
 .. _the birkhoff module:
 
@@ -137,19 +136,22 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
 ::
 
   module _
-   (gfe : global-dfunext)
    (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
-   { X : 𝓧 ̇ } where
+   {UV : Univalence}
+   {X : 𝓤 ̇ }
+   (gfe : global-dfunext)
+   (dfe : dfunext 𝓤 𝓤) where
+
 
    -- Duplicating definition of ⊧ so we don't have to import from closure module.
    -- (Remove these definitions later once closure module is working.)
-   _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 S
-    →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+   _⊧_≈_ : Algebra 𝓤 S
+    →      Term{X = X} → Term → 𝓤 ̇
 
    A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
 
-   _⊧_≋_ : {X : 𝓧 ̇ } → Pred (Algebra 𝓤 S) 𝓦
-    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+   _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
    _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
 
@@ -174,9 +176,9 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
      hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣)
       →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
      hpa≡hqa 𝒂 =
-      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term' gfe (𝑻(X)) A h p 𝒂 ⟩
+      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) A h p 𝒂 ⟩
       (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-      (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term' gfe (𝑻(X)) A h q 𝒂)⁻¹ ⟩
+      (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) A h q 𝒂)⁻¹ ⟩
       ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
 
      γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
@@ -199,11 +201,11 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
       (p ̇ A) 𝒂
         ≡⟨ refl _ ⟩
       (p ̇ A)(∣ h 𝒂 ∣ ∘ generator)
-        ≡⟨(comm-hom-term' gfe (𝑻(X)) A (h 𝒂) p generator)⁻¹ ⟩
+        ≡⟨(comm-hom-term gfe (𝑻(X)) A (h 𝒂) p generator)⁻¹ ⟩
       (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
         ≡⟨ ap (λ - → - generator) (all-hp≡hq A KA (h 𝒂)) ⟩
       (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
-        ≡⟨ (comm-hom-term' gfe (𝑻(X)) A (h 𝒂) q generator) ⟩
+        ≡⟨ (comm-hom-term gfe (𝑻(X)) A (h 𝒂) q generator) ⟩
       (q ̇ A)(∣ h 𝒂 ∣ ∘ generator)
         ≡⟨ refl _ ⟩
       (q ̇ A) 𝒂
@@ -217,6 +219,7 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
    compatibility-of-identities-and-homs p q =
      identities-are-compatible-with-homs p q ,
      homs-are-compatible-with-identities p q
+
 
    -- Product Closure
    P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
@@ -233,7 +236,7 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
    -- Subalgebra Closure
    data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
     sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
-    sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} UV) → ∣ sa ∣ ∈ SClo 𝒦
+    sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = A} UV) → ∣ sa ∣ ∈ SClo 𝒦
 
    -- Homomorphic Image Closure
    data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
@@ -246,7 +249,7 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
    data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
     vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
     vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
-    vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} UV) → ∣ sa ∣ ∈ VClo 𝒦
+    vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = A} UV) → ∣ sa ∣ ∈ VClo 𝒦
     vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
      →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
 
@@ -268,7 +271,7 @@ We now formalize this result in Agda. First, we define the syntax for ``⊧``.
     →         A ∈ Mod (Th (VClo 𝒦)) → A ∈ VClo 𝒦
    birkhoff 𝒦 A g eg A∈ModThV = γ
     where
-     h : hom (𝑻(X)) A
+     h : hom (𝑻 X) A
      h = lift-hom{A = A}{X = X} g
 
      γ : A ∈ VClo 𝒦

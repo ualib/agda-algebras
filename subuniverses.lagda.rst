@@ -21,12 +21,12 @@ The file starts, as usual, with a list of imports.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Op)
+  open import basic using (Signature; Algebra; Op; _̂_)
   open import relations using (transitive)
-  open import homomorphisms using (HOM; Hom; hom; is-homomorphism; hom-image-alg; HomImage)
+  open import homomorphisms using (hom; is-homomorphism; hom-image-alg; HomImage)
 
   open import terms
-   using (Term; _̇_; _̂_; generator; node; comm-hom-term; comm-hom-term')
+   using (Term; _̇_; generator; node; comm-hom-term) 
 
   open import Relation.Unary using (⋂)
 
@@ -415,9 +415,9 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
 
     ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
     ξ b =
-     h ((p ̇ B) b)  ≡⟨ comm-hom-term' gdfe B A (h , hhm) p b ⟩
+     h ((p ̇ B) b)  ≡⟨ comm-hom-term gdfe B A (h , hhm) p b ⟩
      (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-     (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gdfe B A (h , hhm) q b)⁻¹ ⟩
+     (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term gdfe B A (h , hhm) q b)⁻¹ ⟩
      h ((q ̇ B) b)  ∎
 
     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
@@ -460,61 +460,6 @@ We formalize the proof in Agda as follows.
       γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
           (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
           ∣ h ∣ (∥ A ∥ f ar)    ∎
-
-The intensional-hom-image module
----------------------------------
-
-The image of an intensional HOM is a subuniverse. (N.B. the proof still requires function extensionality. Question: Is it necessary?)
-
-::
-
-  -- HOM image is subuniverse
-  module intensional-hom-image
-   {A B : Algebra 𝓤 S} (h : HOM A B)  where
-
-   HOMImage : ∣ B ∣ → 𝓤 ̇
-   HOMImage = λ b → Image ∣ h ∣ ∋ b
-
-   HOM-image : 𝓤 ̇
-   HOM-image = Σ (Image_∋_ ∣ h ∣)
-
-   fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
-   fres' a = ∣ h ∣ a , im a
-
-   HOM-image-alg : Algebra 𝓤 S
-   HOM-image-alg = HOM-image , ops-interp
-    where
-     a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
-      →  ∣ A ∣
-     a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-     ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
-     ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
-   HOM-image-is-sub : funext 𝓥 𝓤 → HOMImage ∈ Subuniverses B
-   HOM-image-is-sub fe f b b∈Imh = eq (∥ B ∥ f b) (∥ A ∥ f ar) γ
-    where
-     ar : ∥ S ∥ f → ∣ A ∣
-     ar = λ x → Inv ∣ h ∣ (b x) (b∈Imh x)
-
-     ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
-     ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imh x) )
-
-     γ : ∥ B ∥ f (λ x → b x)
-          ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x) (b∈Imh x)))
-     γ =   ∥ B ∥ f (λ x → b x)      ≡⟨ ap ( ∥ B ∥ f ) ζ ⁻¹ ⟩
-           ( ∥ B ∥ f ) ( ∣ h ∣ ∘ ar ) ≡⟨ intensionality ξ ar ⟩
-            ∣ h ∣ ( ∥ A ∥ f ar )      ∎
-      where
-       τ : (λ f ar → (∥ B ∥ f)(∣ h ∣ ∘ ar))
-            ≡ (λ f ar → ∣ h ∣ (∥ A ∥ f ar ))
-       τ = (∥ h ∥)⁻¹
-       ξ : (λ (ar : ∥ S ∥ f → ∣ A ∣) → (∥ B ∥ f)(∣ h ∣ ∘ ar))
-            ≡ (λ (ar : ∥ S ∥ f → ∣ A ∣) → ∣ h ∣ (∥ A ∥ f ar))
-       ξ = dep-intensionality τ f
-
-   finv' : {X : 𝓤 ̇ } (b : X → ∣ HOM-image-alg ∣) (x : X) → ∣ A ∣
-   finv' = λ b x → Inv ∣ h ∣ ∣ b x ∣ ∥ b x ∥
 
 
 -------------------------

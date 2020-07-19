@@ -83,14 +83,13 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   open import prelude
 
-  open import basic using (Signature; Algebra; Π'; Op)
+  open import basic using (Signature; Algebra; Π'; Op; _̂_)
 
   open import subuniverses using (Subuniverses; Subalgebra)
 
   open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
 
-  open import terms using (Term; generator; node; _̇_; _̂_;
-   interp-prod2; interp-prod; comm-hom-term')
+  open import terms using (Term; generator; node; _̇_; interp-prod2; interp-prod; comm-hom-term)
 
   module closure
    {S : Signature 𝓞 𝓥}
@@ -272,9 +271,9 @@ This block type-checks.
 
      ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
      ξ b =
-      h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B 𝑨 (h , hhm) p b ⟩
+      h ((p ̇ B) b)  ≡⟨ comm-hom-term gfe B 𝑨 (h , hhm) p b ⟩
       (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-      (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term' gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
+      (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
       h ((q ̇ B) b)  ∎
 
      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
@@ -320,9 +319,9 @@ This block has one hole with goal:
 
      ψ : (𝑎 : X → ∣ A ∣ ) → (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡ (q ̇ B) (∣ ϕ ∣ ∘ 𝑎)
      ψ 𝑎 =
-      (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡⟨ (comm-hom-term' gfe A B ϕ p 𝑎)⁻¹ ⟩
+      (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡⟨ (comm-hom-term gfe A B ϕ p 𝑎)⁻¹ ⟩
       ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
-      ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
+      ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term gfe A B ϕ q 𝑎 ⟩
       (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
 
      hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
@@ -396,9 +395,9 @@ The next block type-checks.
 
       ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
       ξ b =
-       h ((p ̇ B) b)  ≡⟨ comm-hom-term' gfe B 𝑨 (h , hhm) p b ⟩
+       h ((p ̇ B) b)  ≡⟨ comm-hom-term gfe B 𝑨 (h , hhm) p b ⟩
        (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-       (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term' gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
+       (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
        h ((q ̇ B) b)  ∎
 
       hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'

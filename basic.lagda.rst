@@ -23,10 +23,10 @@ Like most Agda programs, this one begins with some options and imports.
 
 ::
 
-   {-# OPTIONS --without-K --exact-split --safe #-}
+  {-# OPTIONS --without-K --exact-split --safe #-}
 
-   open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣;
-     _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_)
+  open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣;
+    _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_)
 
 
 :Unicode Hints: In agda2-mode_ type ``\MCI``, ``\MCU\_0``, ``\sqcup``, ``\b0`` and ``\b2`` to obtain 𝓘, 𝓤₀, ⊔, 𝟘, and 𝟚, respectively.
@@ -36,7 +36,7 @@ Then we begin the module called ``basic`` using Agda's ``module`` directive.
 
 ::
 
-   module basic where
+  module basic where
 
 This is the second module of the `agda-ualib`_ , coming after ``prelude`` (the module that was described in :numref:`agda preliminaries`).
 
@@ -54,13 +54,13 @@ We define the type of **operations**, and give an example (the projections).
 
 ::
 
-   --The type of operations
-   Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
-   Op I A = (I → A) → A
+  --The type of operations
+  Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+  Op I A = (I → A) → A
 
-   --Example. the projections
-   π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
-   π i x = x i
+  --Example. the projections
+  π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+  π i x = x i
 
 
 The type ``Op`` encodes the arity of an operation as an arbitrary type ``I : 𝓥 ̇``, which gives us a very general way to represent an operation as a function type with domain ``I → A`` (the type of "tuples") and codomain ``A``.
@@ -74,10 +74,10 @@ We define an (algebraic) signature like this.
 
 ::
 
-   --𝓞 is the universe in which operation symbols live
-   --𝓥 is the universe in which arities live
-   Signature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
-   Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
+  --𝓞 is the universe in which operation symbols live
+  --𝓥 is the universe in which arities live
+  Signature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
+  Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
 
 In the ``prelude`` module we defined the syntax ``∣_∣`` and ``∥_∥`` for the first and second projections, resp.  Consequently, if ``S : Signature 𝓞 𝓥`` is a signature, then
 
@@ -99,9 +99,9 @@ Finally, we are ready to define the type of algebras in the signature ``S`` (whi
 
 ::
 
-   Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
-    →        (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
-   Algebra 𝓤 {𝓞}{𝓥} S = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) A)
+  Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
+   →        (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+  Algebra 𝓤 {𝓞}{𝓥} S = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) A)
 
 Thus, algebras in the signature ``S`` (or `S``-algebras) inhabit the type ``Algebra 𝓤 {𝓞}{𝓥} S``. (Here, ``𝓤`` is the universe level of the type of carriers (or "universes") of ``S``-algebras.)
 
@@ -109,7 +109,7 @@ As an alternative to this syntax---one that may seem more in line with the stand
 
 .. code-block::
 
-   Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
+  Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
 
 Here ``S = (F , ρ)`` is the signature with ``F`` the set of operation symbols and ``ρ`` the arity function.
 
@@ -122,21 +122,41 @@ A monoid signature has two operation symbols, say, ``e``  and ``·``, of arities
 
 ::
 
-   data monoid-op : 𝓤₀ ̇ where
-    e : monoid-op
-    · : monoid-op
+  data monoid-op : 𝓤₀ ̇ where
+   e : monoid-op
+   · : monoid-op
 
-   monoid-sig : Signature _ _
-   monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+  monoid-sig : Signature _ _
+  monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
 
 The types indicate that ``e`` is nullary (i.e., takes no arguments, equivalently, takes args of type ``𝟘 → A``), while ``·`` is binary (as indicated  by argument type ``𝟚 → A``).
 
 We will have more to say about the type of algebras later.  For now, we continue defining the syntax used in the ``agda-ualib`` to represent the basic objects of universal algebra.
 
------------------------------------
 
+Syntactic sugar for operation interpretation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Before proceding, we define some syntactic sugar that allows us to replace ``∥ A ∥ f`` with slightly more standard-looking notation, ``f ̂ A``, where f is an operation symbol of the signature S of A.
+
+::
+
+  module _ {S : Signature 𝓞 𝓥}  where
+
+   _̂_ : (f : ∣ S ∣)
+    →   (𝑨 : Algebra 𝓤 S)
+    →   (∥ S ∥ f  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+
+   f ̂ 𝑨 = λ x → (∥ 𝑨 ∥ f) x
+
+We can now write ``f ̂ 𝑨`` for the interpretation of the basic operation ``f`` in the algebra ``𝑨``.
+
+:N.B.: Below, we will write ``t ̇ 𝑨`` for the interpretation of a *term* ``t`` in ``𝑨``.
+
+.. todo:: Perhaps we can figure out how to use the same notation for both interpretations of operation symbols and terms.
+
+--------------------------------------------------
 Products of algebras in Agda
 ------------------------------
 
@@ -144,10 +164,10 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 
 ::
 
-   module _ {S : Signature 𝓞 𝓥}  where
+  module _ {S : Signature 𝓞 𝓥}  where
 
-    Π' : {I : 𝓘 ̇ }( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
-    Π' A =  (( ᵢ : _) → ∣ A ᵢ ∣) ,  λ 𝑓 x ᵢ → ∥ A ᵢ ∥ 𝑓 λ 𝓥 → x 𝓥 ᵢ
+   Π' : {I : 𝓘 ̇ }( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
+   Π' A =  (( ᵢ : _) → ∣ A ᵢ ∣) ,  λ 𝑓 x ᵢ → ∥ A ᵢ ∥ 𝑓 λ 𝓥 → x 𝓥 ᵢ
 
 We have used an anonymous module here so that the (fixed) signature ``S`` is available in the definition of the product without mentioning it explicitly.
 

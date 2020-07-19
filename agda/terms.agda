@@ -5,7 +5,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π'; Op)
+open import basic using (Signature; Algebra; Π'; Op; _̂_)
 open import homomorphisms using (HOM; Hom; hom; hom-image-alg)
 open import relations using (Con; compatible-fun)
 module terms {S : Signature 𝓞 𝓥} where
