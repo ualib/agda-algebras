@@ -19,7 +19,7 @@ As usual, we start with the imports we will need below.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Op)
+  open import basic using (Signature; Algebra; Op; _̂_)
   open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
 .. _homomorphisms extensionally:
@@ -45,7 +45,7 @@ Here we say what it means for an operation 𝑓, interpreted in the algebras �
    (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
   op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g =
-   ∀( 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ ) → g (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂)
+   ∀( 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ ) → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
 
   all-ops-in_and_commute-with :
    (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
@@ -70,6 +70,7 @@ And now we define the type of homomorphisms.
 An example of such a homomorphism is the identity map.
 
 ::
+
   𝒾𝒹 :  (A : Algebra 𝓤 S) → hom A A
   𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
 
@@ -90,33 +91,33 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
                ------------------------
    →                   hom 𝑨 𝑪
 
-  HCompClosed {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
+  HCompClosed {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪}
    (g , ghom) (h , hhom) = h ∘ g , γ
     where
-     γ : ( 𝑓 : ∣ S ∣ ) ( 𝒂 : ∥ S ∥ 𝑓  →  A )
-      →  ( h ∘ g ) ( FA 𝑓 𝒂 ) ≡ FC 𝑓 ( h ∘ g ∘ 𝒂 )
+     γ : (𝑓 : ∣ S ∣) (𝒂 : ∥ S ∥ 𝑓  →  ∣ 𝑨 ∣)
+      →  (h ∘ g) ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ 𝒂)
 
-     γ 𝑓 𝒂 = (h ∘ g) (FA 𝑓 𝒂) ≡⟨ ap h ( ghom 𝑓 𝒂 ) ⟩
-            h (FB 𝑓 (g ∘ 𝒂)) ≡⟨ hhom 𝑓 ( g ∘ 𝒂 ) ⟩
-            FC 𝑓 (h ∘ g ∘ 𝒂) ∎
+     γ 𝑓 𝒂 = (h ∘ g) ((𝑓 ̂ 𝑨) 𝒂) ≡⟨ ap h (ghom 𝑓 𝒂) ⟩
+            h ((𝑓 ̂ 𝑩)(g ∘ 𝒂))  ≡⟨ hhom 𝑓 (g ∘ 𝒂) ⟩
+            (𝑓 ̂ 𝑪)(h ∘ g ∘ 𝒂)     ∎
 
   --Alternative notation for hom composition
-  module _ {A : Algebra 𝓤 S}
-           {B : Algebra 𝓦 S}
-           {C : Algebra 𝓣 S} where
+  module _ {𝑨 : Algebra 𝓤 S}
+           {𝑩 : Algebra 𝓦 S}
+           {𝑪 : Algebra 𝓣 S} where
 
-   _>>>_ : hom A B  → hom B C → hom A C
+   _>>>_ : hom 𝑨 𝑩  → hom 𝑩 𝑪 → hom 𝑨 𝑪
 
    (g , ghom) >>> (h , hhom) = h ∘ g , γ
     where
-     γ :      (𝑓 : ∣ S ∣ ) → (𝒂 : ∥ S ∥ 𝑓 → ∣ A ∣)
+     γ :      (𝑓 : ∣ S ∣ ) → (𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣)
           -------------------------------------------
-      →    (h ∘ g) (∥ A ∥ 𝑓 𝒂)  ≡  ∥ C ∥ 𝑓 (h ∘ g ∘ 𝒂)
+      →    (h ∘ g) ((𝑓 ̂ 𝑨) 𝒂)  ≡  (𝑓 ̂ 𝑪)(h ∘ g ∘ 𝒂)
 
      γ 𝑓 𝒂 =
-      (h ∘ g) (∥ A ∥ 𝑓 𝒂) ≡⟨ ap (λ - → h -) (ghom 𝑓 𝒂) ⟩
-       h (∥ B ∥ 𝑓 (g ∘ 𝒂)) ≡⟨ hhom 𝑓 (g ∘ 𝒂) ⟩
-       ∥ C ∥ 𝑓 (h ∘ g ∘ 𝒂) ∎
+      (h ∘ g)((𝑓 ̂ 𝑨) 𝒂)  ≡⟨ ap (λ - → h -)(ghom 𝑓 𝒂) ⟩
+      h ((𝑓 ̂ 𝑩) (g ∘ 𝒂)) ≡⟨ hhom 𝑓 (g ∘ 𝒂) ⟩
+      (𝑓 ̂ 𝑪) (h ∘ g ∘ 𝒂)  ∎
 
 
 .. _obs 5 in agda:
@@ -142,7 +143,7 @@ then there exists ``ϕ : hom 𝑪 𝑩`` such that ``g = ϕ ∘ h``, that is, su
             ↓ /
              𝑪
 
-We now formalize the statement and proof of this basic fact.
+We now formalize the statement and proof of this basic fact. (Notice that the proof is fully constructive.)
 
 ::
 
@@ -152,51 +153,51 @@ We now formalize the statement and proof of this basic fact.
              ---------------------------------------------
    →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-  homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
+  homFactor fe {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪}
    (g , ghom) (h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
     where
-     hInv : C → A
+     hInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
      hInv = λ c → (EpicInv h hEpic) c
 
-     ϕ : C → B
+     ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
      ϕ = λ c → g ( hInv c )
 
-     ξ : (x : A) → ker-pred h (x , hInv (h x))
+     ξ : (x : ∣ 𝑨 ∣) → ker-pred h (x , hInv (h x))
      ξ x =  ( cong-app (EInvIsRInv fe h hEpic) ( h x ) )⁻¹
 
      g≡ϕ∘h : g ≡ ϕ ∘ h
      g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
 
-     ζ : (𝑓 : ∣ S ∣)(𝒄 : ∥ S ∥ 𝑓 → C)(x : ∥ S ∥ 𝑓)
+     ζ : (𝑓 : ∣ S ∣)(𝒄 : ∥ S ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ S ∥ 𝑓)
       →  𝒄 x ≡ (h ∘ hInv)(𝒄 x)
 
      ζ 𝑓 𝒄 x = (cong-app (EInvIsRInv fe h hEpic) (𝒄 x))⁻¹
 
-     ι : (𝑓 : ∣ S ∣)(𝒄 : ∥ S ∥ 𝑓 → C)
+     ι : (𝑓 : ∣ S ∣)(𝒄 : ∥ S ∥ 𝑓 → ∣ 𝑪 ∣)
       →  (λ x → 𝒄 x) ≡ (λ x → h (hInv (𝒄 x)))
 
      ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EInvIsRInv fe h hEpic)⁻¹
 
-     useker : (𝑓 : ∣ S ∣)  (𝒄 : ∥ S ∥ 𝑓 → C)
-      → g (hInv (h (FA 𝑓 (hInv ∘ 𝒄)))) ≡ g(FA 𝑓 (hInv ∘ 𝒄))
+     useker : (𝑓 : ∣ S ∣)  (𝒄 : ∥ S ∥ 𝑓 → ∣ 𝑪 ∣)
+      → g (hInv (h ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄)))) ≡ g ((𝑓 ̂ 𝑨) (hInv ∘ 𝒄))
 
      useker = λ 𝑓 𝒄
       → Kh⊆Kg (cong-app
                (EInvIsRInv fe h hEpic)
-               (h(FA 𝑓(hInv ∘ 𝒄)))
-              )
+               (h ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))))
 
-     ϕIsHomCB : (𝑓 : ∣ S ∣)(𝒂 : ∥ S ∥ 𝑓 → C)
-      →         ϕ (FC 𝑓 𝒂)  ≡  FB 𝑓 (ϕ ∘ 𝒂)
+
+     ϕIsHomCB : (𝑓 : ∣ S ∣)(𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑪 ∣)
+      →         ϕ ((𝑓 ̂ 𝑪) 𝒂)  ≡  (𝑓 ̂ 𝑩)(ϕ ∘ 𝒂)
 
      ϕIsHomCB 𝑓 𝒄 =
-      g (hInv (FC 𝑓 𝒄))                ≡⟨ i   ⟩
-      g (hInv (FC 𝑓 (h ∘ (hInv ∘ 𝒄)))) ≡⟨ ii  ⟩
-      g (hInv (h (FA 𝑓 (hInv ∘ 𝒄))))   ≡⟨ iii ⟩
-      g (FA 𝑓 (hInv ∘ 𝒄))              ≡⟨ iv  ⟩
-      FB 𝑓 (λ x → g (hInv (𝒄 x)))      ∎
+      g (hInv ((𝑓 ̂ 𝑪) 𝒄))                ≡⟨ i   ⟩
+      g (hInv ((𝑓 ̂ 𝑪) (h ∘ (hInv ∘ 𝒄)))) ≡⟨ ii  ⟩
+      g (hInv (h ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))))   ≡⟨ iii ⟩
+      g ((𝑓 ̂ 𝑨) (hInv ∘ 𝒄))              ≡⟨ iv  ⟩
+      (𝑓 ̂ 𝑩)(λ x → g (hInv (𝒄 x)))      ∎
       where
-       i   = ap (g ∘ hInv) (ap (FC 𝑓) (ι 𝑓 𝒄))
+       i   = ap (g ∘ hInv) (ap (𝑓 ̂ 𝑪) (ι 𝑓 𝒄))
        ii  = ap (λ - → g (hInv -)) (hhom 𝑓 (hInv ∘ 𝒄))⁻¹
        iii = useker 𝑓 𝒄
        iv  = ghom 𝑓 (hInv ∘ 𝒄)
