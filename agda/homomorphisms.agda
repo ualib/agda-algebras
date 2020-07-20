@@ -81,8 +81,8 @@ is-homomorphism A B g =
 hom : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
 hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
 
-𝓲𝓭 :  (A : Algebra 𝓤 S) → hom A A
-𝓲𝓭 _ = (λ x → x) , λ _ _ → refl _ 
+𝒾𝒹 :  (A : Algebra 𝓤 S) → hom A A
+𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
 
 HCompClosed : {A : Algebra 𝓤 S}
               {B : Algebra 𝓦 S}
@@ -175,109 +175,110 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
      iv  = ghom f (hInv ∘ c)
 
 
-module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+--Isomorphism
+--For algebras, isomorphisms are simply homs with 0 kernel.
 
- HomImage : ∣ B ∣ → 𝓤 ̇
- HomImage = λ b → Image ∣ h ∣ ∋ b
+-- module _ {𝓤 : Universe} where
 
- hom-image : 𝓤 ̇
- hom-image = Σ (Image_∋_ ∣ h ∣)
+_≅_ : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
+𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) ,
+            (∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝒾𝒹 𝑨 ∣)
 
- fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
- fres a = ∣ h ∣ a , im a
+-- is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
+-- is-algebra-iso {𝑨} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ 𝑨 ∣}
 
- hom-image-alg : Algebra 𝓤 S
- hom-image-alg = hom-image , ops-interp
-  where
-   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image) → ∥ S ∥ f → ∣ A ∣
-   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+-- AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- AlgebraIsos 𝑨 𝑩 = Σ f ꞉ (hom 𝑨 𝑩) , is-algebra-iso {𝑨}{𝑩} f
 
-   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
-   ops-interp =
-    λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+-- _≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+-- 𝑨 ≈ 𝑩 = is-singleton (AlgebraIsos 𝑨 𝑩)
 
 
+-- The following seems to be the most useful definition (for our
+-- purposes) of the class of homomomrphic images of an algebra.
+HomImage : {𝑨 : Algebra 𝓤 S}(𝑩 : Algebra 𝓤 S)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
+HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+                                 is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
-module intensional-hom-image
- {A B : Algebra 𝓤 S} (h : HOM A B)  where
+_is-hom-image-of_ : (𝑩 : Algebra 𝓤 S)
+  →                (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
- HOMImage : ∣ B ∣ → 𝓤 ̇
- HOMImage = λ b → Image ∣ h ∣ ∋ b
+𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , 𝑩 ≅ ∣ 𝑪ϕ ∣
 
- HOM-image : 𝓤 ̇
- HOM-image = Σ (Image_∋_ ∣ h ∣)
+_is-hom-image-of-class_ : {𝓤 : Universe}
+  →                       Algebra 𝓤 S
+  →                       Pred (Algebra 𝓤 S) (𝓤 ⁺)
+  →                       𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
- fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
- fres' a = ∣ h ∣ a , im a
+_is-hom-image-of-class_ {𝓤} 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 S) ,
+                             (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
 
- HOM-image-alg : Algebra 𝓤 S
- HOM-image-alg = HOM-image , ops-interp
-  where
-   a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
-    →  ∣ A ∣
-   a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+HomImagesOfClass : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-   ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
-   ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
+                     (𝑩 is-hom-image-of-class 𝓚)
 
+H : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+H 𝓚 = HomImagesOfClass 𝓚
 
+-- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
+H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+ →         (𝓤 : Universe) → Algebra 𝓤 S
+ →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
+H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
 
-_is-hom-image-of_ : (B : Algebra (𝓤 ⁺) S)
- →                  (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+--  homimage : 𝓤 ̇
+--  homimage = image ∣ ϕ ∣
 
-B is-hom-image-of A = Σ θ ꞉ (Rel ∣ A ∣ _) ,
-                        con A θ  × ((∣ A ∣ // θ) ≡ ∣ B ∣)
+--  ∥∥-elim : ⟦ ∣ A ∣ ⟧ → ∣ A ∣
+--  ∥∥-elim = wconstant-endomap-gives-∥∥-choice-function wcem
+--  -- wconstant-endomap-gives-∥∥-choice-function :
+--  --  {X : 𝓤 ̇ } → wconstant-endomap X → (∥ X ∥ → X)
+--  homimageAlgebra : Algebra 𝓤 S
+--  homimageAlgebra = homimage , opsinterp
+--   where
+--    a' : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
+--    a' x y =
+--     let ∣xy∣ = pr₁ (x y) in
+--     let ∥xy∥ = pr₂ (x y) in ∥xy∥ -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
 
-HomImagesOf : (Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-HomImagesOf A = Σ B ꞉ (Algebra _ S) , B is-hom-image-of A
+--    a : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → ∣ A ∣
+--    -- a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
+--    a x y =
+--     let ∣xy∣ = pr₁ (x y) in 
+--     let ∥xy∥ = pr₂ (x y) in {!pr₁ (∥∥-elim ∥xy∥)!} -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
 
-HomImagesOf-pred : (Algebra 𝓤 S)
- →                 Pred (Algebra ( 𝓤 ⁺ ) S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))
+--    opsinterp : (f : ∣ S ∣) → Op (∥ S ∥ f) homimage
+--    opsinterp =
+--     -- λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+--     λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , ⟪ ( ∥ A ∥ f (a x) , refl (∣ ϕ ∣ _ )) ⟫ )
 
-HomImagesOf-pred A = λ B → B is-hom-image-of A
+--  HIA : Algebra 𝓤 S
+--  HIA = homimageAlgebra -- {A = A}{B = B} ϕ
 
-_is-hom-image-of-class_ : {𝓤 : Universe} → (Algebra (𝓤 ⁺) S)
- →                        (Pred (Algebra 𝓤 S) (𝓤 ⁺))
- →                        𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+--  preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
+--  preim = λ b x → (Inv ∣ ϕ ∣ (∣ b x ∣)(∥ b x ∥))
 
-B is-hom-image-of-class 𝒦 = Σ A ꞉ (Algebra _ S) ,
-                               (A ∈ 𝒦) × (B is-hom-image-of A)
+--  ζ : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ ϕ ∣ (preim b x) ≡ ∣ b x ∣
+--  ζ b x = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
 
-HomImagesOfClass : {𝓤 : Universe}
- →                 Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+ -- hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
+ --  → (p ̇ HIA ) b ≡ ( ∣ ϕ ∣ ((p ̇ A)(preim b)) , ∣ ((p ̇ A)(preim b)) , refl _ ∣ )
 
-HomImagesOfClass 𝒦 = Σ B ꞉ (Algebra _ S) ,
-                        (B is-hom-image-of-class 𝒦)
+ -- hom-image-interp b (generator x) = to-subtype-≡ {!!} fstbx
+ --  where
+ --   fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
+ --   fstbx = ζ b x ⁻¹
 
-H : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-H 𝒦 = HomImagesOfClass 𝒦
-
--- Here ℒ𝒦 represents a (universe-indexed) collection of classes.
-H-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
- →         (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)
- →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-
-H-closed ℒ𝒦 =
- λ 𝓤 B → (B is-hom-image-of-class (ℒ𝒦 𝓤)) → (B ∈ (ℒ𝒦 (𝓤 ⁺)))
-
-_≅_ : (A B : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
-A ≅ B =  Σ ϕ ꞉ (hom A B) , Σ ψ ꞉ (hom B A) ,
-          (∣ ϕ ∣ ∘ ∣ ψ ∣ ≡ ∣ 𝓲𝓭 B ∣) × (∣ ψ ∣ ∘ ∣ ϕ ∣ ≡ ∣ 𝓲𝓭 A ∣)
-
-is-algebra-iso : {A B : Algebra 𝓤 S} (ϕ : hom A B) → 𝓤 ⁺ ̇
-is-algebra-iso {𝓤}{A} ϕ = ker ∣ ϕ ∣ ≡ 𝟎 {𝓤}{∣ A ∣}
-
-AlgebraIsos : (A B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-AlgebraIsos {𝓤} A B = Σ ϕ ꞉ (hom A B) ,
-                        is-algebra-iso {𝓤} {A} {B} ϕ
-
-_≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-A ≈ B = is-singleton (AlgebraIsos A B)
-
-
-
+ -- hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
+ --  where
+ --   φIH : (x : ∥ S ∥ 𝓸)
+ --    → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
+ --   φIH x = hom-image-interp b (t x)
 
 -----------------------------------------------------------------------------------
 

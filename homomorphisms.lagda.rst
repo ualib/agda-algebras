@@ -70,8 +70,8 @@ And now we define the type of homomorphisms.
 An example of such a homomorphism is the identity map.
 
 ::
-  𝓲𝓭 :  (A : Algebra 𝓤 S) → hom A A
-  𝓲𝓭 _ = (λ x → x) , λ _ _ → refl _ 
+  𝒾𝒹 :  (A : Algebra 𝓤 S) → hom A A
+  𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
 
 
 .. _obs 2 in agda:
@@ -201,98 +201,83 @@ We now formalize the statement and proof of this basic fact.
        iii = useker 𝑓 𝒄
        iv  = ghom 𝑓 (hInv ∘ 𝒄)
 
-.. _hom images again:
-
-Homomorphic images again
-------------------------
-
-Let  ``H 𝓚``  denote the class of homomorphic images of members of 𝓚.
-
-::
-
-  _is-hom-image-of_ : (𝑩 : Algebra (𝓤 ⁺) S)
-   →                  (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-
-  𝑩 is-hom-image-of 𝑨 = Σ θ ꞉ (Rel ∣ 𝑨 ∣ _) ,
-                          con 𝑨 θ  × ((∣ 𝑨 ∣ // θ) ≡ ∣ 𝑩 ∣)
-
-  HomImagesOf : (Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra _ S) , 𝑩 is-hom-image-of 𝑨
-
-  HomImagesOf-pred : (Algebra 𝓤 S)
-   →                 Pred (Algebra ( 𝓤 ⁺ ) S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))
-
-  HomImagesOf-pred 𝑨 = λ 𝑩 → 𝑩 is-hom-image-of 𝑨
-
-  _is-hom-image-of-class_ : {𝓤 : Universe} → (Algebra (𝓤 ⁺) S)
-   →                        (Pred (Algebra 𝓤 S) (𝓤 ⁺))
-   →                        𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-
-  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra _ S) ,
-                                 (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
-
-  HomImagesOfClass : {𝓤 : Universe}
-   →                 Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-
-  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
-                          (𝑩 is-hom-image-of-class 𝓚)
-
-  H : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  H 𝓚 = HomImagesOfClass 𝓚
-
-  -- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
-  H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
-   →         (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)
-   →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-
-  H-closed 𝓛𝓚 =
-   λ 𝓤 𝑩 → 𝑩 is-hom-image-of-class (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 (𝓤 ⁺))
-
-::
-
-  module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
-
-   HomImage : ∣ B ∣ → 𝓤 ̇
-   HomImage = λ b → Image ∣ h ∣ ∋ b
-
-   hom-image : 𝓤 ̇
-   hom-image = Σ (Image_∋_ ∣ h ∣)
-
-   fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
-   fres a = ∣ h ∣ a , im a
-
-   hom-image-alg : Algebra 𝓤 S
-   hom-image-alg = hom-image , ops-interp
-    where
-     a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image)(y : ∥ S ∥ f) → ∣ A ∣
-     a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-     ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
-     ops-interp =
-      λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
-
-We also construct the subalgebra whose universe is a homomorphic image.
+-----------------------------------------
 
 Isomorphism
----------------
+-----------
 
 For algebras, isomorphisms are simply homs with 0 kernel.
 
 ::
 
-   _≅_ : (A B : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
-   A ≅ B =  Σ f ꞉ (hom A B) , Σ g ꞉ (hom B A) ,
-             (∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝓲𝓭 B ∣) × (∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝓲𝓭 A ∣)
+  module _ {𝓤 : Universe} where
 
-   is-algebra-iso : {A B : Algebra 𝓤 S} (f : hom A B) → 𝓤 ⁺ ̇
-   is-algebra-iso {𝓤}{A} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ A ∣}
+   _≅_ : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
+   𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) ,
+            (∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝒾𝒹 𝑨 ∣)
 
-   AlgebraIsos : (A B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   AlgebraIsos A B = Σ f ꞉ (hom A B) , is-algebra-iso {A}{B} f
+   is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
+   is-algebra-iso {𝑨} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ 𝑨 ∣}
+
+   AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+   AlgebraIsos 𝑨 𝑩 = Σ f ꞉ (hom 𝑨 𝑩) , is-algebra-iso {𝑨}{𝑩} f
 
    _≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-   A ≈ B = is-singleton (AlgebraIsos A B)
+   𝑨 ≈ 𝑩 = is-singleton (AlgebraIsos 𝑨 𝑩)
+
+
+-----------------------------------------------------
+
+.. _types for homomorphic imageshom images:
+
+Types for homomorphic images
+-----------------------------
+
+The following seem to be the two most useful (for our purposes) types representing homomomrphic images of an algebra.
+
+::
+
+  HomImage : {𝑨 : Algebra 𝓤 S}(𝑩 : Algebra 𝓤 S)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+  HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
+
+  HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+                                 is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+
+Here are some further definitions, derived from the one above, that will come in handy later.
+
+::
+
+  _is-hom-image-of_ : (𝑩 : Algebra 𝓤 S)
+    →                (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+  𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , 𝑩 ≅ ∣ 𝑪ϕ ∣
+
+  _is-hom-image-of-class_ : {𝓤 : Universe}
+   →                       Algebra 𝓤 S
+   →                       Pred (Algebra 𝓤 S) (𝓤 ⁺)
+   →                       𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+  _is-hom-image-of-class_ {𝓤} 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 S) ,
+                             (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
+
+  HomImagesOfClass : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
+                     (𝑩 is-hom-image-of-class 𝓚)
+
+  H : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  H 𝓚 = HomImagesOfClass 𝓚
+
+In the following definition ℒ𝒦 represents a (universe-indexed) collection of classes.
+
+::
+
+  H-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+   →         (𝓤 : Universe) → Algebra 𝓤 S
+   →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+  H-closed ℒ𝒦 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (ℒ𝒦 𝓤) → 𝑩 ∈ (ℒ𝒦 𝓤)
 
 
 

@@ -6,7 +6,7 @@
 
 open import prelude
 open import basic using (Signature; Algebra; Π'; Op; _̂_)
-open import homomorphisms using (HOM; Hom; hom; hom-image-alg)
+open import homomorphisms using (HOM; Hom; hom)
 open import relations using (Con; compatible-fun)
 module terms {S : Signature 𝓞 𝓥} where
 
@@ -20,30 +20,19 @@ open Term
 𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
 𝑻 X = Term{X = X} , node
 
-𝔉 : {X : 𝓧 ̇} → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
-𝔉 {X = X} = Term{X = X} , node
-
 module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
  --1.a. Every map (X → A) lifts.
- free-lift : (h : X → ∣ A ∣)  →   ∣ 𝑻(X) ∣ → ∣ A ∣
+ free-lift : (h : X → ∣ A ∣)  →   ∣ 𝑻 X ∣ → ∣ A ∣
  free-lift h (generator x) = h x
  free-lift h (node f args) = ∥ A ∥ f λ i → free-lift h (args i)
 
- free-lift' : (h : X → ∣ A ∣)  →   ∣ 𝔉 ∣ → ∣ A ∣
- free-lift' h (generator x) = h x
- free-lift' h (node f args) = ∥ A ∥ f λ i → free-lift' h (args i)
-
- --I. Extensional proofs (using hom's)
- --1.b.' The lift is (extensionally) a hom
- lift-hom : (h : X → ∣ A ∣) →  hom (𝑻(X)) A
+ --1.b. The lift is (extensionally) a hom
+ lift-hom : (h : X → ∣ A ∣) →  hom (𝑻 X) A
  lift-hom h = free-lift h , λ f a → ap (∥ A ∥ _) (refl _)
 
- lift-hom' : (h : X → ∣ A ∣) →  hom 𝔉 A
- lift-hom' h = free-lift' h , λ f a → ap (∥ A ∥ _) (refl _)
-
- --2.' The lift to (free → A) is (extensionally) unique.
- free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻(X)) A)
+ --2. The lift to (free → A) is (extensionally) unique.
+ free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) A)
   →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
   →            (t : Term )
               ---------------------------
@@ -57,30 +46,13 @@ module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
     ∣ h ∣ (node f args)             ∎
     where γ = fe λ i → free-unique fe g h p (args i)
 
- free-unique' : funext 𝓥 𝓤 → (g h : hom (𝔉 {X = X}) A)
-  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
-  →            (t : Term )
-              ---------------------------
-  →            ∣ g ∣ t ≡ ∣ h ∣ t
-
- free-unique' fe g h p (generator x) = p x
- free-unique' fe g h p (node f args) =
-    ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-    ∥ A ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ A ∥ _) γ ⟩
-    ∥ A ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
-    ∣ h ∣ (node f args)             ∎
-    where γ = fe λ i → free-unique' fe g h p (args i)
-
  --1.b. that free-lift is (intensionally) a hom.
- lift-HOM : (h : X → ∣ A ∣) →  HOM (𝑻(X)) A
+ lift-HOM : (h : X → ∣ A ∣) →  HOM (𝑻 X) A
  lift-HOM  h = free-lift h , refl _
-
- lift-HOM' : (h : X → ∣ A ∣) →  HOM 𝔉 A
- lift-HOM'  h = free-lift' h , refl _
 
  --2. The lift to  (free → A)  is (intensionally) unique.
  free-intensionally-unique : funext 𝓥 𝓤
-  →             (g h : HOM (𝑻(X)) A)
+  →             (g h : HOM (𝑻 X) A)
   →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
   →             (t : Term)
                --------------------------------
@@ -96,24 +68,6 @@ module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
   ∣ h ∣ (node f args)  ∎
    where
     γ = fe λ i → free-intensionally-unique fe g h p (args i)
-
- free-intensionally-unique' : funext 𝓥 𝓤
-  →             (g h : HOM (𝔉{X = X}) A)
-  →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
-  →             (t : Term)
-               --------------------------------
-  →              ∣ g ∣ t ≡ ∣ h ∣ t
-
- free-intensionally-unique' fe g h p (generator x) =
-  intensionality p x
-
- free-intensionally-unique' fe g h p (node f args) =
-  ∣ g ∣ (node f args)   ≡⟨ ap (λ - → - f args) ∥ g ∥ ⟩
-  ∥ A ∥ f(∣ g ∣ ∘ args) ≡⟨ ap (∥ A ∥ _) γ ⟩
-  ∥ A ∥ f(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
-  ∣ h ∣ (node f args)  ∎
-   where
-    γ = fe λ i → free-intensionally-unique' fe g h p (args i)
 
 
 _̇_ : {X : 𝓧 ̇ } → Term{X = X}
@@ -163,15 +117,43 @@ interp-prod2 fe {X = X} (node f t) A =
       ∎
 
 -- Proof of 1. (homomorphisms commute with terms).
-comm-hom-term : global-dfunext
+comm-hom-term : global-dfunext --  𝓥 𝓤
+ →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+ →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
+               --------------------------------------------
+ →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
+
+comm-hom-term fe A B h (generator x) a = refl _
+
+comm-hom-term fe A B h (node f args) a =
+ ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
+   ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
+ (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
+   ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term fe A B h (args i₁) a))⟩
+ (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
+   ∎
+
+-- Proof of 2. (If t : Term, θ : Con A, then a θ b → t(a) θ t(b))
+compatible-term : {X : 𝓧 ̇}
+           (A : Algebra 𝓤 S) (t : Term{X = X}) (θ : Con A)
+           --------------------------------------------------
+ →                   compatible-fun (t ̇ A) ∣ θ ∣
+
+compatible-term A (generator x) θ p = p x
+
+compatible-term A (node f args) θ p =
+ pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
+
+-- Proof of 1. ("intensional" version)
+comm-hom-term' : global-dfunext
  →              {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
                 (h : HOM A B) (t : Term{X = X})
                ---------------------------------------------
  →              ∣ h ∣ ∘ (t ̇ A) ≡ (t ̇ B) ∘ (λ a → ∣ h ∣ ∘ a )
 
-comm-hom-term gfe A B h (generator x) = refl _
+comm-hom-term' gfe A B h (generator x) = refl _
 
-comm-hom-term gfe {X = X}A B h (node f args) = γ
+comm-hom-term' gfe {X = X}A B h (node f args) = γ
  where
   γ : ∣ h ∣ ∘ (λ a → (f ̂ A) (λ i → (args i ̇ A) a))
       ≡ (λ a → (f ̂ B)(λ i → (args i ̇ B) a)) ∘ _∘_ ∣ h ∣
@@ -186,50 +168,20 @@ comm-hom-term gfe {X = X}A B h (node f args) = γ
     where
      IH : (a : X → ∣ A ∣)(i : ∥ S ∥ f)
       →   (∣ h ∣ ∘ (args i ̇ A)) a ≡ ((args i ̇ B) ∘ _∘_ ∣ h ∣) a
-     IH a i = intensionality (comm-hom-term gfe A B h (args i)) a
+     IH a i = intensionality (comm-hom-term' gfe A B h (args i)) a
 
      ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ A) a)))
            ≡ (λ a → (λ i → ((args i ̇ B) ∘ _∘_ ∣ h ∣) a))
      ih = gfe λ a → gfe λ i → IH a i
 
-compatible-term : {X : 𝓧 ̇}(A : Algebra 𝓤 S)
+compatible-term' : {X : 𝓧 ̇}(A : Algebra 𝓤 S)
                   ( t : Term{X = X} ) (θ : Con A)
                  ---------------------------------
  →                 compatible-fun (t ̇ A) ∣ θ ∣
 
-compatible-term A (generator x) θ p = p x
-compatible-term A (node f args) θ p =
- pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
-
--- Proof of 1. (homomorphisms commute with terms).
-comm-hom-term' : global-dfunext --  𝓥 𝓤
- →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
- →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
-               --------------------------------------------
- →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
-
-comm-hom-term' fe A B h (generator x) a = refl _
-
-comm-hom-term' fe A B h (node f args) a =
- ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
-   ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
- (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
-   ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term' fe A B h (args i₁) a))⟩
- (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
-   ∎
-
--- Proof of 2. (If t : Term, θ : Con A, then a θ b → t(a) θ t(b))
-compatible-term' : {X : 𝓧 ̇}
-           (A : Algebra 𝓤 S) (t : Term{X = X}) (θ : Con A)
-           --------------------------------------------------
- →                   compatible-fun (t ̇ A) ∣ θ ∣
-
 compatible-term' A (generator x) θ p = p x
-
 compatible-term' A (node f args) θ p =
  pr₂( ∥ θ ∥ ) f λ{x → (compatible-term' A (args x) θ) p}
-
-
 
 -- Interpretation of terms in homomorphic images
 -- (using subsingleton truncation)

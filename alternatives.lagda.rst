@@ -17,9 +17,10 @@ Here we collect some of the possible alternative implementation choices for refe
 
   open import prelude
   open import basic using (Signature; Algebra; Op; _̂_)
-  open import relations using (transitive; ker; ker-pred; Rel; 𝟎; con; _//_; Con; compatible-fun)
-  open import homomorphisms using (hom; is-homomorphism)
+  open import homomorphisms using (hom; is-homomorphism; 𝒾𝒹)
   open import terms using (Term; _̇_; generator; node; comm-hom-term; 𝑻)
+  open import relations using (transitive; ker; ker-pred;
+   Rel; 𝟎; con; _//_; Con; compatible-fun)
 
   open import Relation.Unary using (⋂)
 
@@ -103,8 +104,112 @@ Full intensionality
   HOM 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
              all-ops-in 𝑨 and 𝑩 commute-intensionally-with g
 
+------------------------------------
+
+Alternative hom images
+--------------------------
+
+::
+
+  module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+
+   HomImage : ∣ B ∣ → 𝓤 ̇
+   HomImage = λ b → Image ∣ h ∣ ∋ b
+
+   hom-image : 𝓤 ̇
+   hom-image = Σ (Image_∋_ ∣ h ∣)
+
+   fres : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+   fres a = ∣ h ∣ a , im a
+
+   hom-image-alg : Algebra 𝓤 S
+   hom-image-alg = hom-image , ops-interp
+    where
+     a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image) → ∥ S ∥ f → ∣ A ∣
+     a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+
+     ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
+     ops-interp =
+      λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
+
+  module intensional-hom-image
+   {A B : Algebra 𝓤 S} (h : HOM A B)  where
+
+   HOMImage : ∣ B ∣ → 𝓤 ̇
+   HOMImage = λ b → Image ∣ h ∣ ∋ b
+
+   HOM-image : 𝓤 ̇
+   HOM-image = Σ (Image_∋_ ∣ h ∣)
+
+   fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
+   fres' a = ∣ h ∣ a , im a
+
+   HOM-image-alg : Algebra 𝓤 S
+   HOM-image-alg = HOM-image , ops-interp
+    where
+     a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
+      →  ∣ A ∣
+     a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
+
+     ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
+     ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 
 
+  _is-hom-image-of_ : (B : Algebra (𝓤 ⁺) S)
+   →                  (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+
+  B is-hom-image-of A = Σ θ ꞉ (Rel ∣ A ∣ _) ,
+                          con A θ  × ((∣ A ∣ // θ) ≡ ∣ B ∣)
+
+  HomImagesOf : (Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  HomImagesOf A = Σ B ꞉ (Algebra _ S) , B is-hom-image-of A
+
+  HomImagesOf-pred : (Algebra 𝓤 S)
+   →                 Pred (Algebra ( 𝓤 ⁺ ) S) (𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))
+
+  HomImagesOf-pred A = λ B → B is-hom-image-of A
+
+  _is-hom-image-of-class_ : {𝓤 : Universe} → (Algebra (𝓤 ⁺) S)
+   →                        (Pred (Algebra 𝓤 S) (𝓤 ⁺))
+   →                        𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+
+  B is-hom-image-of-class 𝒦 = Σ A ꞉ (Algebra _ S) ,
+                                 (A ∈ 𝒦) × (B is-hom-image-of A)
+
+  HomImagesOfClass : {𝓤 : Universe}
+   →                 Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+
+  HomImagesOfClass 𝒦 = Σ B ꞉ (Algebra _ S) ,
+                          (B is-hom-image-of-class 𝒦)
+
+  H : {𝓤 : Universe} → Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  H 𝒦 = HomImagesOfClass 𝒦
+
+  -- Here ℒ𝒦 represents a (universe-indexed) collection of classes.
+  H-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
+   →         (𝓤 : Universe) → (Algebra (𝓤 ⁺) S)
+   →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+
+  H-closed ℒ𝒦 =
+   λ 𝓤 B → (B is-hom-image-of-class (ℒ𝒦 𝓤)) → (B ∈ (ℒ𝒦 (𝓤 ⁺)))
+
+  _≅_ : (A B : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
+  A ≅ B =  Σ ϕ ꞉ (hom A B) , Σ ψ ꞉ (hom B A) ,
+            (∣ ϕ ∣ ∘ ∣ ψ ∣ ≡ ∣ 𝓲𝓭 B ∣) × (∣ ψ ∣ ∘ ∣ ϕ ∣ ≡ ∣ 𝓲𝓭 A ∣)
+
+  is-algebra-iso : {A B : Algebra 𝓤 S} (ϕ : hom A B) → 𝓤 ⁺ ̇
+  is-algebra-iso {𝓤}{A} ϕ = ker ∣ ϕ ∣ ≡ 𝟎 {𝓤}{∣ A ∣}
+
+  AlgebraIsos : (A B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  AlgebraIsos {𝓤} A B = Σ ϕ ꞉ (hom A B) ,
+                          is-algebra-iso {𝓤} {A} {B} ϕ
+
+  _≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+  A ≈ B = is-singleton (AlgebraIsos A B)
+
+
+
+--------------------------------------------
 Alternative subuniverses
 ---------------------------
 

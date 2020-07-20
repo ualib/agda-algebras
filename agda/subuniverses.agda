@@ -321,9 +321,9 @@ module _
 
   ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
   ξ b =
-   h ((p ̇ B) b)  ≡⟨ comm-hom-term' gdfe B A (h , hhm) p b ⟩
+   h ((p ̇ B) b)  ≡⟨ comm-hom-term gdfe B A (h , hhm) p b ⟩
    (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-   (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term' gdfe B A (h , hhm) q b)⁻¹ ⟩
+   (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term gdfe B A (h , hhm) q b)⁻¹ ⟩
    h ((q ̇ B) b)  ∎
 
   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
@@ -334,52 +334,23 @@ module _
 
 
 -- Hom image is subuniverse
-module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
- hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{A = A}{B = B} h) ∈ Subuniverses B
+module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
+ hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
  hom-image-is-sub {fe} f b b∈Imf =
-  eq (∥ B ∥ f b) ( ∥ A ∥ f ar) γ
+  eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
    where
-    ar : ∥ S ∥ f → ∣ A ∣
-    ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
+    ar : ∥ S ∥ f → ∣ 𝑨 ∣
+    ar = λ x → Inv ∣ ϕ ∣ (b x) (b∈Imf x)
 
-    ζ : ∣ h ∣ ∘ ar ≡ b
-    ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
+    ζ : ∣ ϕ ∣ ∘ ar ≡ b
+    ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (b x) (b∈Imf x))
 
-    γ : ∥ B ∥ f b
-         ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
-    γ = ∥ B ∥ f b            ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-        (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
-        ∣ h ∣ (∥ A ∥ f ar)    ∎
+    γ : (f ̂ 𝑩)  b
+         ≡ ∣ ϕ ∣ ((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣ (b x)(b∈Imf x)))
+    γ = (f ̂ 𝑩) b            ≡⟨ ap (f ̂ 𝑩) (ζ ⁻¹) ⟩
+        (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar) ≡⟨ ( ∥ ϕ ∥ f ar ) ⁻¹ ⟩
+        ∣ ϕ ∣ ((f ̂ 𝑨) ar)    ∎
 
--- HOM image is subuniverse
-module intensional-hom-image
- {A B : Algebra 𝓤 S} (h : HOM A B)  where
-
- open homomorphisms.intensional-hom-image
- HOM-image-is-sub : funext 𝓥 𝓤 → (HOMImage{A = A}{B = B} h) ∈ Subuniverses B
- HOM-image-is-sub fe f b b∈Imh = eq (∥ B ∥ f b) (∥ A ∥ f ar) γ
-  where
-   ar : ∥ S ∥ f → ∣ A ∣
-   ar = λ x → Inv ∣ h ∣ (b x) (b∈Imh x)
-
-   ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
-   ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imh x) )
-
-   γ : ∥ B ∥ f (λ x → b x)
-        ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x) (b∈Imh x)))
-   γ = ∥ B ∥ f (λ x → b x)   ≡⟨ ap (∥ B ∥ f) ζ ⁻¹ ⟩
-       (∥ B ∥ f) (∣ h ∣ ∘ ar)  ≡⟨ intensionality ξ ar ⟩
-       ∣ h ∣ (∥ A ∥ f ar)      ∎
-    where
-     τ : (λ f ar → (∥ B ∥ f)(∣ h ∣ ∘ ar))
-          ≡ (λ f ar → ∣ h ∣ (∥ A ∥ f ar ))
-     τ = ∥ h ∥ ⁻¹
-     ξ : (λ (ar : ∥ S ∥ f → ∣ A ∣) → (∥ B ∥ f)(∣ h ∣ ∘ ar))
-          ≡ (λ (ar : ∥ S ∥ f → ∣ A ∣) → ∣ h ∣ (∥ A ∥ f ar))
-     ξ = dep-intensionality τ f
-
- hinv' : {X : 𝓤 ̇ } (b : X → ∣ (HOM-image-alg{A = A}{B = B} h) ∣) (x : X) → ∣ A ∣
- hinv' = λ b x → Inv ∣ h ∣ ∣ b x ∣ ∥ b x ∥
 
 
 

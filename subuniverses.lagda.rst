@@ -23,7 +23,7 @@ The file starts, as usual, with a list of imports.
   open import prelude
   open import basic using (Signature; Algebra; Op; _̂_)
   open import relations using (transitive)
-  open import homomorphisms using (hom; is-homomorphism; hom-image-alg; HomImage)
+  open import homomorphisms using (hom; is-homomorphism; HomImage)
 
   open import terms
    using (Term; _̇_; generator; node; comm-hom-term) 
@@ -138,23 +138,23 @@ We are now ready to formalize the proof the proof that homomorphic images are su
 
 ::
 
-  module _ {A B : Algebra 𝓤 S} (h : hom A B)  where
+  module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
 
-   hom-image-is-sub : {funext 𝓥 𝓤} → HomImage{A = A}{B = B} h ∈ Subuniverses B
+   hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
    hom-image-is-sub {fe} f b b∈Imf =
-    eq (∥ B ∥ f (λ x → b x)) ( ∥ A ∥ f ar) γ
+    eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
      where
-      ar : ∥ S ∥ f → ∣ A ∣
-      ar = λ x → Inv ∣ h ∣ (b x) (b∈Imf x)
+      ar : ∥ S ∥ f → ∣ 𝑨 ∣
+      ar = λ x → Inv ∣ ϕ ∣ (b x) (b∈Imf x)
 
-      ζ : (λ x → ∣ h ∣ (ar x)) ≡ (λ x → b x)
-      ζ = fe (λ x → InvIsInv ∣ h ∣ (b x) (b∈Imf x))
+      ζ : ∣ ϕ ∣ ∘ ar ≡ b
+      ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (b x) (b∈Imf x))
 
-      γ : ∥ B ∥ f (λ x → b x)
-          ≡ ∣ h ∣ (∥ A ∥ f (λ x → Inv ∣ h ∣ (b x)(b∈Imf x)))
-      γ = ∥ B ∥ f (λ x → b x)  ≡⟨ ap ( ∥ B ∥ f ) (ζ ⁻¹) ⟩
-          (∥ B ∥ f)(∣ h ∣ ∘ ar) ≡⟨ ( ∥ h ∥ f ar ) ⁻¹ ⟩
-          ∣ h ∣ (∥ A ∥ f ar)    ∎
+      γ : (f ̂ 𝑩)  b
+           ≡ ∣ ϕ ∣ ((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣ (b x)(b∈Imf x)))
+      γ = (f ̂ 𝑩) b            ≡⟨ ap (f ̂ 𝑩) (ζ ⁻¹) ⟩
+          (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar) ≡⟨ ( ∥ ϕ ∥ f ar ) ⁻¹ ⟩
+          ∣ ϕ ∣ ((f ̂ 𝑨) ar)    ∎
 
 .. _obs 12 in agda:
 

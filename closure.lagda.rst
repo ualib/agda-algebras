@@ -87,9 +87,10 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   open import subuniverses using (Subuniverses; Subalgebra)
 
-  open import homomorphisms using (hom; is-homomorphism; hom-image-alg)
+  open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
 
-  open import terms using (Term; generator; node; _̇_; interp-prod2; interp-prod; comm-hom-term)
+  open import terms using (Term; generator; node; _̇_; interp-prod2;
+   interp-prod; comm-hom-term)
 
   module closure
    {S : Signature 𝓞 𝓥}
@@ -102,12 +103,12 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
   _⊧_≈_ : Algebra 𝓤 S
     →      Term{X = X} → Term → 𝓤 ̇
 
-  A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
+  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
   _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
-  _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
+  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 --------------------------------
 
@@ -116,7 +117,7 @@ Closure data types
 
 ::
 
-  data PClo (𝒦 : Pred (Algebra 𝓤 S) 𝓣) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ) where
+  data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
    pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
    prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
@@ -127,25 +128,17 @@ Closure data types
    sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
    sub : {𝑨 : Algebra _ S} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
 
-    -- data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-    --  sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
-    --  sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
-
   -- Homomorphic Image Closure
   data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   hbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ HClo 𝒦
-   hhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
-    →     A ∈ HClo 𝒦
-    →     hom-image-alg {A = A}{B = B} ϕ ∈ HClo 𝒦
+   hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+   hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
 
   -- Variety Closure
   data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
+   vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
    vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
    vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
-   vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
-    →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
-
+   vhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 ---------------------------------------------
 
@@ -210,33 +203,19 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
 
 ----------------------------------------------------
 
-New experimental stuff.
+Tools for the HSP Proof
+------------------------
 
-Turn back now.
-
-Go no further.
-
-You've been warned.
+Here are some of the key identities we need to complete the proof of Birkhoff's HSP theorem.
 
 ::
 
-  module _
-   (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
-   (gfe : global-dfunext)
-   (dfe : dfunext 𝓤 𝓤)
-   where
+  module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
 
-------------------------------------------------
-
-This block type-checks.
+Identities for product closure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
-
-   -- S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
-   --  →      (𝓤 : Universe) → (B : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   -- S-closed ℒ𝒦 =
-   --  λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
-
 
    pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
    pclo-id1 {p} {q} α (pbase x) = α x
@@ -249,6 +228,11 @@ This block type-checks.
 
    pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
    pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
+
+Identities for subalgebra closure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
 
    sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
    sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
@@ -285,169 +269,124 @@ This block type-checks.
    sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
 
-----------------------------------------------
-
-This block has one hole with state
-
-  ``Goal: fx1≡b ≡ fx2≡b``
-  ``—————————————————————————``
-  ``fx2≡b : Image f ∋ b``
-  ``fx1≡b : Image f ∋ b``
-  ``b     : B``
-  ``f     : A → B``
+Identities for hom image closure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
-
-   being-in-Image-is-subsingleton :
-              {A : 𝓤 ̇} {B : 𝓦 ̇}
-              (f : A → B)   (b : B)
-             ------------------------------
-    →         is-subsingleton (Image f ∋ b)
-
-   being-in-Image-is-subsingleton f b fx1≡b fx2≡b = {!!}
 
    hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
    hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-   hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{A}{B}{ϕ} A∈HClo𝒦) = γ
+   hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhE) = γ
     where
-     A⊧p≈q : A ⊧ p ≈ q
+     A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
 
-     IH : (p ̇ A) ≡ (q ̇ A)
-     IH = A⊧p≈q
+     𝑩 : Algebra 𝓤 S
+     𝑩 = ∣ 𝑩ϕhE ∣
 
-     HIA = hom-image-alg{A = A}{B = B} ϕ
-     -- HIA = Σ (Image_∋_ ∣ ϕ ∣) ,  ops-interp
-     -- (where ops-interp : (𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) hom-image
+     ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+     ϕ = ∣ ∥ 𝑩ϕhE ∥ ∣
 
-     preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
-     preim = λ b x → (Inv ∣ ϕ ∣ (∣ b x ∣)(∥ b x ∥))
+     ϕhom : is-homomorphism 𝑨 𝑩 ϕ
+     ϕhom = ∣ pr₂ ∥ 𝑩ϕhE ∥ ∣
 
-     ζ : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ ϕ ∣ (preim b x) ≡ ∣ b x ∣
-     ζ b x = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
+     ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
+     ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhE ∥ ∥ (𝒃 x)
 
+     preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+     preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
 
-     τ : (𝑎 : X → ∣ A ∣ ) → ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡ ∣ ϕ ∣ ((q ̇ A) 𝑎)
-     τ 𝑎 = ap (λ - → ∣ ϕ ∣ - ) (intensionality IH 𝑎)
+     ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+     ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
 
-     ψ : (𝑎 : X → ∣ A ∣ ) → (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡ (q ̇ B) (∣ ϕ ∣ ∘ 𝑎)
-     ψ 𝑎 =
-      (p ̇ B) (∣ ϕ ∣ ∘ 𝑎) ≡⟨ (comm-hom-term gfe A B ϕ p 𝑎)⁻¹ ⟩
-      ∣ ϕ ∣ ((p ̇ A) 𝑎) ≡⟨ τ 𝑎 ⟩
-      ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term gfe A B ϕ q 𝑎 ⟩
-      (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
-
-     hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
-      → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
-
-     hom-image-interp b (generator x) =
-      to-subtype-≡ (being-in-Image-is-subsingleton ∣ ϕ ∣) fstbx
-      where
-       iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
-       iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹
-
-       fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
-       fstbx = ζ b x ⁻¹
-
-       ∥bx∥ : Image ∣ ϕ ∣ ∋ pr₁ (b x)
-       ∥bx∥ = ∥ b x ∥
-
-     hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
-      where
-       φIH : (x : ∥ S ∥ 𝓸)
-        → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
-       φIH x = hom-image-interp b (t x)
-
-     γ : (p ̇ HIA) ≡ (q ̇ HIA)
-     γ = (p ̇ HIA)
-           ≡⟨ refl _ ⟩
-         (λ (b : X → ∣ HIA ∣) → (p ̇ HIA) b)
-           ≡⟨ gfe (λ x → hom-image-interp x p) ⟩
-         (λ b → ∣ ϕ ∣ ((p ̇ A) (preim b)) , im ((p ̇ A) (preim b)))
-           ≡⟨ ap (λ - → λ b → ∣ ϕ ∣ (- (preim b))  , im (- (preim b))) IH ⟩
-         (λ b → ∣ ϕ ∣ ((q ̇ A) (preim b)) , im ((q ̇ A)(preim b)))
-           ≡⟨ (gfe (λ x → hom-image-interp x q))⁻¹ ⟩
-         (λ b → (q ̇ HIA) b)
-           ≡⟨ refl _ ⟩
-         (q ̇ HIA)    ∎
-
-
-The next block type-checks.
-
-::
+     γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+     γ = gfe λ 𝒃 →
+      (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+      ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+      ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+      (q ̇ 𝑩) 𝒃 ∎
 
    hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
-   vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
-   vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
-   vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
-     where
-      IH : (i : I) → 𝒜 i ⊧ p ≈ q
-      IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
-
-      γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
-      γ = products-preserve-identities p q I 𝒜 IH
-
-   vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
-     where
-      A⊧p≈q : 𝑨 ⊧ p ≈ q
-      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
-
-      B : Algebra 𝓤 S
-      B = ∣ sa ∣
-
-      h : ∣ B ∣ → ∣ 𝑨 ∣
-      h = pr₁ ∥ sa ∥
-
-      hem : is-embedding h
-      hem = ∣ pr₂ ∥ sa ∥ ∣
-
-      hhm : is-homomorphism B 𝑨 h
-      hhm = ∥ pr₂ ∥ sa ∥ ∥
-
-      ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
-      ξ b =
-       h ((p ̇ B) b)  ≡⟨ comm-hom-term gfe B 𝑨 (h , hhm) p b ⟩
-       (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-       (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
-       h ((q ̇ B) b)  ∎
-
-      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-      hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-      γ : p ̇ B ≡ q ̇ B
-      γ = gfe λ b → hlc (ξ b)
-
-
-The next block has two holes with the same goal:
-
-  ``?1 : (p ̇ HIA) b ≡ (q ̇ HIA) b``
-
-  ``?2 : (p ̇ HIA) b ≡ (q ̇ HIA) b``
+Identities for varietal closure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-   vclo-id1 {p}{q} α (vhom{A = A}{B = B}{ϕ = ϕ} A∈VClo𝒦) = γ
-     where
-      A⊧p≈q : A ⊧ p ≈ q
-      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
+   vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
+   vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
+   vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
+    where
+     IH : (i : I) → 𝒜 i ⊧ p ≈ q
+     IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
 
-      HIA : Algebra 𝓤 S
-      HIA = hom-image-alg{A = A}{B = B} ϕ
+     γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
+     γ = products-preserve-identities p q I 𝒜 IH
 
-      ar : (X → ∣ HIA ∣ ) → (X → ∣ A ∣ )
-      ar b = λ x → Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥
+   vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
+    where
+     A⊧p≈q : 𝑨 ⊧ p ≈ q
+     A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-      arbr : (X → ∣ HIA ∣ ) → (X → ∣ B ∣ )
-      arbr b = λ x →  ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
+     𝑩 : Algebra 𝓤 S
+     𝑩 = ∣ sa ∣
 
-      HIA⊧p≈q : HIA ⊧ p ≈ q
-      HIA⊧p≈q = gfe λ b → {!!}
+     h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+     h = pr₁ ∥ sa ∥
 
-      γ : (p ̇ HIA) ≡ (q ̇ HIA)
-      γ = gfe λ b →  {!!}
+     hem : is-embedding h
+     hem = ∣ pr₂ ∥ sa ∥ ∣
 
+     hhm : is-homomorphism 𝑩 𝑨 h
+     hhm = ∥ pr₂ ∥ sa ∥ ∥
+
+     ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
+     ξ b =
+      h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
+      (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+      (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+      h ((q ̇ 𝑩) b)  ∎
+
+     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+     hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+     γ : p ̇ 𝑩 ≡ q ̇ 𝑩
+     γ = gfe λ b → hlc (ξ b)
+
+   vclo-id1 {p}{q} α (vhom{𝑨 = 𝑨} A∈VClo𝒦 𝑩ϕhE) = γ
+    where
+     A⊧p≈q : 𝑨 ⊧ p ≈ q
+     A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
+
+     𝑩 : Algebra 𝓤 S
+     𝑩 = ∣ 𝑩ϕhE ∣
+
+     ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+     ϕ = ∣ ∥ 𝑩ϕhE ∥ ∣
+
+     ϕh : is-homomorphism 𝑨 𝑩 ϕ
+     ϕh = ∣ pr₂ ∥ 𝑩ϕhE ∥ ∣
+
+     ϕE : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
+     ϕE 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhE ∥ ∥ (𝒃 x)
+
+     preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+     preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE 𝒃 x))
+
+     ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+     ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE 𝒃 x)
+
+     γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+     γ = gfe λ 𝒃 →
+      (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+      ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+      ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+      (q ̇ 𝑩) 𝒃 ∎
 
    vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
