@@ -34,14 +34,6 @@ _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
 _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
 
-being-Image-is-subsingleton : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) (b : B)
- →           is-subsingleton (Image f ∋ b)
-being-Image-is-subsingleton f b prf1 prf2 = {!!}
- -- Π-is-subsingleton gfe
- --    (λ f → Π-is-subsingleton gfe
- --     (λ a → Π-is-subsingleton gfe
- --      (λ _ → ∈-is-subsingleton B (∥ 𝑨 ∥ f a))))
-
 -- Product Closure
 P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
@@ -159,6 +151,18 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
  sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
 
+ being-in-Image-is-subsingleton :
+            {A : 𝓤 ̇} {B : 𝓦 ̇}
+            (f : A → B)   (b : B)
+           ------------------------------
+  →         is-subsingleton (Image f ∋ b)
+
+ being-in-Image-is-subsingleton f b fx1≡b fx2≡b = {!!}
+ -- Π-is-subsingleton gfe
+ --    (λ f → Π-is-subsingleton gfe
+ --     (λ a → Π-is-subsingleton gfe
+ --      (λ _ → ∈-is-subsingleton B (∥ 𝑨 ∥ f a))))
+
  hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
  hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
  hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{A}{B}{ϕ} A∈HClo𝒦) = γ
@@ -190,18 +194,12 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
     ∣ ϕ ∣ ((q ̇ A) 𝑎) ≡⟨ comm-hom-term' gfe A B ϕ q 𝑎 ⟩
     (q ̇ B) (∣ ϕ ∣ ∘ 𝑎) ∎
 
-   -- hom-image-term-interp : (b : X → ∣ HIA ∣)(p : Term)
-   --  → ∣ (p ̇ HIA ) b ∣ ≡ ∣ ϕ ∣ ((p ̇ A)(preim b))
-   -- hom-image-term-interp b (generator x) = (ζ b x)⁻¹
-   -- hom-image-term-interp b (node 𝓸 t) =  {!!} -- gfe φIH -- ap (𝓸 ̂ HIA) ? ?
-   --  where
-     -- φIH : (x : ∥ S ∥ 𝓸) → (t x ̇ HIA) b ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b))
-     -- φIH x = hom-image-term-interp b (t x)
 
    hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
     → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-   hom-image-interp b (generator x) = to-subtype-≡ (being-Image-is-subsingleton ∣ ϕ ∣) fstbx
+   hom-image-interp b (generator x) =
+    to-subtype-≡ (being-in-Image-is-subsingleton ∣ ϕ ∣) fstbx
     where
      iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
      iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹

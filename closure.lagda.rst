@@ -109,10 +109,6 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   _⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
 
-  being-Image-is-subsingleton : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) (b : B)
-   →           is-subsingleton (Image f ∋ b)
-  being-Image-is-subsingleton f b prf1 prf2 = {!!}
-
 --------------------------------
 
 Closure data types
@@ -291,11 +287,24 @@ This block type-checks.
 
 ----------------------------------------------
 
-This block has one hole with goal:
+This block has one hole with state
 
-  ``?0 : (x₁ : ∣ B ∣) → is-subsingleton (Image ∣ ϕ ∣ ∋ x₁)``
+  ``Goal: fx1≡b ≡ fx2≡b``
+  ``—————————————————————————``
+  ``fx2≡b : Image f ∋ b``
+  ``fx1≡b : Image f ∋ b``
+  ``b     : B``
+  ``f     : A → B``
 
 ::
+
+   being-in-Image-is-subsingleton :
+              {A : 𝓤 ̇} {B : 𝓦 ̇}
+              (f : A → B)   (b : B)
+             ------------------------------
+    →         is-subsingleton (Image f ∋ b)
+
+   being-in-Image-is-subsingleton f b fx1≡b fx2≡b = {!!}
 
    hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
    hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
@@ -331,15 +340,15 @@ This block has one hole with goal:
      hom-image-interp : (b : X → ∣ HIA ∣)(p : Term)
       → (p ̇ HIA ) b ≡ ∣ ϕ ∣ ((p ̇ A)(preim b)) , im ((p ̇ A)(preim b))
 
-     hom-image-interp b (generator x) = to-subtype-≡ (being-Image-is-subsingleton ∣ ϕ ∣) fstbx
+     hom-image-interp b (generator x) =
+      to-subtype-≡ (being-in-Image-is-subsingleton ∣ ϕ ∣) fstbx
       where
        iiiϕ : ∣ b x ∣ ≡ ∣ ϕ ∣ (Inv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥)
        iiiϕ = InvIsInv ∣ ϕ ∣ ∣ b x ∣ ∥ b x ∥ ⁻¹
 
        fstbx : ∣ b x ∣ ≡ ∣ ϕ ∣ (preim b x)
        fstbx = ζ b x ⁻¹
-       -- we need a proof of `Image ∣ ϕ ∣ ∋ pr₁ (b x)`
-       -- and b takes x to ∣ HIA ∣ = hom-image = Σ (Image_∋_ ∣ ℎ ∣)
+
        ∥bx∥ : Image ∣ ϕ ∣ ∋ pr₁ (b x)
        ∥bx∥ = ∥ b x ∥
 
