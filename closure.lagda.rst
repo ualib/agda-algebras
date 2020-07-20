@@ -71,7 +71,7 @@ Equational classes
 
 In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook :cite:`Bergman:2012`) proclaims, "Now, finally, we can formalize the idea we have been using since the first page of this text."  He then proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
 
-Let 𝑆 be a signature.  An **identity** or **equation** in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝔉. If A is an 𝑆-algebra we say that A **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ A ≡ 𝑞 ̇ A.  In this  situation,  we  write A ⊧ 𝑝 ≈ 𝑞.
+Let 𝑆 be a signature.  An **identity** or **equation** in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻(X). If A is an 𝑆-algebra we say that A **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ A ≡ 𝑞 ̇ A.  In this  situation,  we  write A ⊧ 𝑝 ≈ 𝑞.
 
 If 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if, for every A ∈ 𝒦, A ⊧ 𝑝 ≈ 𝑞. Finally, if 𝓔 is a set of equations, we write 𝒦 ⊧ 𝓔 if every member of 𝒦 satisfies every member of 𝓔.
 

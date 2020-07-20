@@ -64,7 +64,12 @@ Next we formalize the important theorem about subuniverse generation that we pre
      sset  : Pred ∣ 𝑨 ∣ 𝓤
      isSub : sset ∈ Subuniverses 𝑨
 
-  module _ {𝑨 : Algebra 𝓤 S} where
+::
+
+  module _
+   {𝑨 : Algebra 𝓤 S} where
+
+::
 
    data Sg (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
@@ -104,9 +109,9 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
 
 ::
 
-  module _
-   {𝑨 : Algebra 𝓤 S} {I : 𝓘 ̇}
-   {𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣} where
+  module _ {𝑨 : Algebra 𝓤 S}{I : 𝓘 ̇}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣} where
+
+::
 
    sub-inter-is-sub : ((i : I) → 𝒜 i ∈ Subuniverses 𝑨)
     →                 ⋂ I 𝒜 ∈ Subuniverses 𝑨
@@ -123,7 +128,7 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
 Homomorphic images are subuniverses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this subsection we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homomorphisms appears in :numref:`the intensional-hom-image module`, but the proof is essentially the same.) Before implementing the result formally in Agda, let us recall the steps of the informal proof.
+In this subsection we show that the image of an (extensional) homomorphism is a subuniverse.  (A version for intensional homomorphisms appears in :ref:`the intensional-hom-image module`, but the proof is essentially the same.) Before implementing the result formally in Agda, let us recall the steps of the informal proof.
 
 Let 𝑓 be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ 𝑓)-tuple of elements of ∣ 𝑩 ∣, and assume the image ``Im 𝑏`` of 𝑏 belongs to the image ``Image ℎ`` of ℎ.  We must show that :math:`f^𝑩 b ∈ Image h`.  The assumption ``Im 𝑏 ⊆ Image ℎ`` implies that there is a (ρ 𝑓)-tuple :math:`𝑎 : ρ f → ∣ 𝑨 ∣`  such that ℎ ∘ 𝑎 = 𝑏.  Since ℎ is a homomorphism, we have :math:`f^𝑩 𝑏  = f^𝑩 (ℎ ∘ 𝑎) = ℎ (f^𝑨 𝑎) ∈` Image ℎ.
 
@@ -138,7 +143,9 @@ We are now ready to formalize the proof the proof that homomorphic images are su
 
 ::
 
-  module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
+  module _
+   {𝑨 𝑩 : Algebra 𝓤 S}
+   (ϕ : hom 𝑨 𝑩) where
 
    hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
    hom-image-is-sub {fe} f b b∈Imf =
@@ -151,8 +158,9 @@ We are now ready to formalize the proof the proof that homomorphic images are su
       ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (b x) (b∈Imf x))
 
       γ : (f ̂ 𝑩)  b
-           ≡ ∣ ϕ ∣ ((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣ (b x)(b∈Imf x)))
-      γ = (f ̂ 𝑩) b            ≡⟨ ap (f ̂ 𝑩) (ζ ⁻¹) ⟩
+            ≡ ∣ ϕ ∣((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣ (b x)(b∈Imf x)))
+
+      γ = (f ̂ 𝑩) b         ≡⟨ ap (f ̂ 𝑩) (ζ ⁻¹) ⟩
           (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar) ≡⟨ ( ∥ ϕ ∥ f ar ) ⁻¹ ⟩
           ∣ ϕ ∣ ((f ̂ 𝑨) ar)    ∎
 
@@ -166,7 +174,7 @@ Recall :numref:`Obs %s <obs 12>` presenting subuniverse generation using the ima
 ::
 
   module _
-   {X : 𝓤 ̇} -- {X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇}
+   {X : 𝓤 ̇}
    {𝑨 𝑩 : Algebra 𝓤 S}
    {B : Pred ∣ 𝑨 ∣ 𝓤}
    (Y : 𝓤 ̇) where

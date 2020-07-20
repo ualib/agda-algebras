@@ -58,23 +58,28 @@ The universal property of 𝑻(X)
 
 We prove
 
-  #. every map ``h : 𝑋 → ∣ A ∣`` lifts to a homomorphism from 𝑻(X) to A, and
+  #. every map ``h : 𝑋 → ∣ 𝑨 ∣`` lifts to a homomorphism from 𝑻(X) to A, and
   #. the induced homomorphism is unique.
 
 ::
 
   module _ {𝑨 : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
-   --1.a. Every map (X → 𝑨) lifts.
+First, every map ``X → ∣ 𝑨 ∣`` lifts to a homomorphism.
+
+::
+
    free-lift : (h : X → ∣ 𝑨 ∣)  →  ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
    free-lift h (generator x) = h x
    free-lift h (node f args) = ∥ 𝑨 ∥ f λ i → free-lift h (args i)
 
-   --1.b. The lift is a hom
    lift-hom : (h : X → ∣ 𝑨 ∣) →  hom  (𝑻 X) 𝑨
    lift-hom h = free-lift h , λ f a → ap (∥ 𝑨 ∥ _) (refl _)
 
-   --2. The lift to (free → A) is (extensionally) unique.
+Next, the lift to (𝑻 X → A) is unique.
+
+::
+
    free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) 𝑨)
     →           (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
     →           (t : Term )
@@ -157,9 +162,11 @@ In this section we present the formal proof of the fact that homomorphisms commu
 
 .. _obs 11 in agda:
 
+Homomorphisms commute with terms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ::
 
-  -- homomorphisms commute with terms.
   comm-hom-term : global-dfunext --  𝓥 𝓤
    →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
    →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)

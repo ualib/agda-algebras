@@ -34,7 +34,7 @@ We start the ``homomorphisms`` module with a fixed signature ``S``.
   module homomorphisms {S : Signature 𝓞 𝓥} where
 
 
-Our implementation of the notion of homomorphisms in the agda-ualib_ is an `extensional` one.  What this means will become clear once we have presented the definitions (cf. :numref:`homomorphisms intensionally`).
+Our implementation of the notion of homomorphisms in the agda-ualib_ is an `extensional` one.  What this means will become clear once we have presented the definitions (cf. :ref:`Homomorphisms intensionally <homomorphisms intensionally>`).
 
 Here we say what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`.
 
@@ -206,11 +206,14 @@ We now formalize the statement and proof of this basic fact.
 Isomorphism
 -----------
 
+
 For algebras, isomorphisms are simply homs with 0 kernel.
 
 ::
 
   module _ {𝓤 : Universe} where
+
+::
 
    _≅_ : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
    𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) ,
@@ -280,4 +283,7 @@ In the following definition ℒ𝒦 represents a (universe-indexed) collection o
   H-closed ℒ𝒦 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (ℒ𝒦 𝓤) → 𝑩 ∈ (ℒ𝒦 𝓤)
 
 
+------------------
+
+.. include:: hyperlink_references.rst
 

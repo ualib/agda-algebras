@@ -132,28 +132,6 @@ Alternative hom images
      ops-interp =
       λ f x → (∣ h ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 
-  module intensional-hom-image
-   {A B : Algebra 𝓤 S} (h : HOM A B)  where
-
-   HOMImage : ∣ B ∣ → 𝓤 ̇
-   HOMImage = λ b → Image ∣ h ∣ ∋ b
-
-   HOM-image : 𝓤 ̇
-   HOM-image = Σ (Image_∋_ ∣ h ∣)
-
-   fres' : ∣ A ∣ → Σ (Image_∋_ ∣ h ∣)
-   fres' a = ∣ h ∣ a , im a
-
-   HOM-image-alg : Algebra 𝓤 S
-   HOM-image-alg = HOM-image , ops-interp
-    where
-     a : {f : ∣ S ∣} (x : ∥ S ∥ f → HOM-image) (y : ∥ S ∥ f)
-      →  ∣ A ∣
-     a x y = Inv ∣ h ∣  ∣ x y ∣ ∥ x y ∥
-
-     ops-interp : ( f : ∣ S ∣ ) → Op (∥ S ∥ f) HOM-image
-     ops-interp = λ f x →(∣ h ∣ (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
-
 
   _is-hom-image-of_ : (B : Algebra (𝓤 ⁺) S)
    →                  (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
@@ -195,7 +173,7 @@ Alternative hom images
 
   _≅_ : (A B : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
   A ≅ B =  Σ ϕ ꞉ (hom A B) , Σ ψ ꞉ (hom B A) ,
-            (∣ ϕ ∣ ∘ ∣ ψ ∣ ≡ ∣ 𝓲𝓭 B ∣) × (∣ ψ ∣ ∘ ∣ ϕ ∣ ≡ ∣ 𝓲𝓭 A ∣)
+            (∣ ϕ ∣ ∘ ∣ ψ ∣ ≡ ∣ 𝒾𝒹 B ∣) × (∣ ψ ∣ ∘ ∣ ϕ ∣ ≡ ∣ 𝒾𝒹 A ∣)
 
   is-algebra-iso : {A B : Algebra 𝓤 S} (ϕ : hom A B) → 𝓤 ⁺ ̇
   is-algebra-iso {𝓤}{A} ϕ = ker ∣ ϕ ∣ ≡ 𝟎 {𝓤}{∣ A ∣}
@@ -210,6 +188,7 @@ Alternative hom images
 
 
 --------------------------------------------
+
 Alternative subuniverses
 ---------------------------
 
@@ -268,7 +247,6 @@ The image of an intensional HOM is a subuniverse. (N.B. the proof still requires
 
 ::
 
-  -- HOM image is subuniverse
   module intensional-hom-image
    {A B : Algebra 𝓤 S} (h : HOM A B)  where
 

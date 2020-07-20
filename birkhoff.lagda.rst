@@ -104,7 +104,7 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``A``.
 Homomorphisms
 ~~~~~~~~~~~~~~
 
-The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  This is proved here, and not in :numref:`homomorphisms module`, because we need ``Sg`` from the ``subuniverses`` module (see :numref:`subuniverses in agda`).
+The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  This is proved here, and not in the `homomorphisms module`_ because we need ``Sg`` from the ``subuniverses`` module (see :numref:`subuniverses in agda`).
 
 ::
 
