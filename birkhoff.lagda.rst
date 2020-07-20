@@ -49,26 +49,8 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
    {gfe : global-dfunext}
    {dfe : dfunext 𝓤 𝓤} where
 
-  open import closure{S = S}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo) -- ; _⊧_≈_; _⊧_≋_)
+  open import closure{S = S}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
 
-  _⊧_≈_ : Algebra 𝓤 S
-    →      Term{X = X} → Term → 𝓤 ̇
-
-  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-
-  _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
-   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-
-  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
-  -- _⊧_≈_ : Algebra 𝓤 S
-  --   →      Term{X = X} → Term → 𝓤 ̇
-
-  -- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-
-  -- _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
-  --  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-
-  -- _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 .. _obs 1 in agda:
 

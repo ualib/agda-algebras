@@ -7,8 +7,7 @@
 open import prelude
 open import basic using (Signature; Algebra; Π'; Op; _̂_)
 
-open import subuniverses using (Subuniverses; -- SubunivAlg; _is-subalgebra-of_;
- Subalgebra) -- ; -- _is-subalgebra-of-class_; SubalgebrasOfClass)
+open import subuniverses using (Subuniverses; Subalgebra)
 
 open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
 
@@ -19,9 +18,9 @@ module closure
  {S : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {ua : Univalence}
- {X : 𝓤 ̇ } -- {X : 𝓧 ̇ }
- (gfe : global-dfunext)
- (dfe : dfunext 𝓤 𝓤) where
+ {X : 𝓤 ̇ }
+ {gfe : global-dfunext}
+ {dfe : dfunext 𝓤 𝓤} where
 
 _⊧_≈_ : Algebra 𝓤 S
  →      Term{X = X} → Term → 𝓤 ̇
