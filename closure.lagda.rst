@@ -97,8 +97,8 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
    {𝓤 : Universe}
    {ua : Univalence}
    {X : 𝓤 ̇ }
-   (gfe : global-dfunext)
-   (dfe : dfunext 𝓤 𝓤) where
+   {gfe : global-dfunext}
+   {dfe : dfunext 𝓤 𝓤} where
 
   _⊧_≈_ : Algebra 𝓤 S
     →      Term{X = X} → Term → 𝓤 ̇

@@ -6,7 +6,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π')
+open import basic using (Signature; Algebra; Π'; Op; _̂_)
 open import relations using (ker-pred; Rel; con; _//_)
 open import homomorphisms using (HOM; Hom; hom; is-homomorphism; H-closed)
 open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
@@ -15,7 +15,7 @@ open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
 open import subuniverses using (Subuniverse; mksub; var; app; Sg;
           _is-subalgebra-of_; Subalgebra; S-closed)
 
-open import closure using (VClo) -- _⊧_≈_; _⊧_≋)
+-- open import closure using (VClo) -- _⊧_≈_; _⊧_≋)
 
 module birkhoff
  {S : Signature 𝓞 𝓥}
@@ -172,77 +172,96 @@ data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (�
  sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
  sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} UV) → ∣ sa ∣ ∈ SClo 𝒦
 
--- -- Homomorphic Image Closure
--- data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
---  hbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ HClo 𝒦
---  hhom : {A B : Algebra 𝓤 S}{ϕ : hom A B} → A ∈ HClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ HClo 𝒦
+-- module _
+--  {𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )} where
 
--- -- Variety Closure
--- data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
---  vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
---  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
---  vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} UV) → ∣ sa ∣ ∈ VClo 𝒦
---  vhom : {A B : Algebra 𝓤 S}{ϕ : hom A B}
---   →     A ∈ VClo 𝒦 → hom-image-alg {A = A}{B = B} ϕ ∈ VClo 𝒦
-
--- Interpretation of terms in homomorphic images
--- (using subsingleton truncation)
-module _
- {𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )} where
-
- HomImages : Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+HomImages : Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
                           is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
+module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
 
- -- Homomorphic Image Closure
- data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-  hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
-  hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
+ HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
+ HomImage = λ b → Image ∣ ϕ ∣ ∋ b
+
+ hom-image : 𝓤 ̇
+ hom-image = Σ (Image_∋_ ∣ ϕ ∣)
+
+ fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ ϕ ∣)
+ fres a = ∣ ϕ ∣ a , im a
+
+ hom-image-alg : Algebra 𝓤 S
+ hom-image-alg = hom-image , ops-interp
+  where
+   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image) → ∥ S ∥ f → ∣ 𝑨 ∣
+   a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
+
+   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
+   ops-interp = λ f x → (∣ ϕ ∣ ((f ̂ 𝑨) (a x)) , im ((f ̂ 𝑨)(a x)))
+
+
+-- Homomorphic Image Closure
+data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+ hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
+
+
+module _ (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) where
 
  hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
  hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
  hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhomSur) = γ
   where
-   A⊧p≈q : 𝑨 ⊧ p ≈ q
-   A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
+  A⊧p≈q : 𝑨 ⊧ p ≈ q
+  A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
 
-   IH : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-   IH = A⊧p≈q
+  IH : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+  IH = A⊧p≈q
 
-   𝑩 : Algebra 𝓤 S
-   𝑩 = ∣ 𝑩ϕhomSur ∣
+  𝑩 : Algebra 𝓤 S
+  𝑩 = ∣ 𝑩ϕhomSur ∣
 
-   ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
-   ϕ = ∣ ∥ 𝑩ϕhomSur ∥ ∣
+  ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+  ϕ = ∣ ∥ 𝑩ϕhomSur ∥ ∣
 
-   ϕhom : is-homomorphism 𝑨 𝑩 ϕ
-   ϕhom = ∣ pr₂ ∥ 𝑩ϕhomSur ∥ ∣
+  ϕhom : is-homomorphism 𝑨 𝑩 ϕ
+  ϕhom = ∣ pr₂ ∥ 𝑩ϕhomSur ∥ ∣
 
-   ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
-   ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhomSur ∥ ∥ (𝒃 x)
+  ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
+  ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhomSur ∥ ∥ (𝒃 x)
 
-   preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-   preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
+  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
 
-   ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
+  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
 
-   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-   γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃 ∎
+  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+  γ = gfe λ 𝒃 →
+   (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+   ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
+   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+   (q ̇ 𝑩) 𝒃 ∎
 
- hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
+hclo-id2 : ∀ {𝒦 p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
+-- Variety Closure
+data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ vbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ VClo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+ vsub : {A : Algebra 𝓤 S} → A ∈ VClo 𝒦 → (sa : Subalgebra {A = A} UV) → ∣ sa ∣ ∈ VClo 𝒦
+ vhom : {𝑨 𝑩 : Algebra 𝓤 S}{ϕ : hom 𝑨 𝑩}
+  →     𝑨 ∈ VClo 𝒦 → hom-image-alg {𝑨 = 𝑨}{𝑩 = 𝑩} ϕ ∈ VClo 𝒦
 
-
-
+  -- -- Variety Closure
+  -- data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+  --  vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+  --  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+  --  vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
+  --  vhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 TH : (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )) → _ ̇
 TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q

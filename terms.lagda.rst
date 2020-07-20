@@ -63,19 +63,19 @@ We prove
 
 ::
 
-  module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
+  module _ {𝑨 : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
-   --1.a. Every map (X → A) lifts.
-   free-lift : (h : X → ∣ A ∣)  →  ∣ 𝑻 X ∣ → ∣ A ∣
+   --1.a. Every map (X → 𝑨) lifts.
+   free-lift : (h : X → ∣ 𝑨 ∣)  →  ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
    free-lift h (generator x) = h x
-   free-lift h (node f args) = ∥ A ∥ f λ i → free-lift h (args i)
+   free-lift h (node f args) = ∥ 𝑨 ∥ f λ i → free-lift h (args i)
 
    --1.b. The lift is a hom
-   lift-hom : (h : X → ∣ A ∣) →  hom  (𝑻 X) A
-   lift-hom h = free-lift h , λ f a → ap (∥ A ∥ _) (refl _)
+   lift-hom : (h : X → ∣ 𝑨 ∣) →  hom  (𝑻 X) 𝑨
+   lift-hom h = free-lift h , λ f a → ap (∥ 𝑨 ∥ _) (refl _)
 
    --2. The lift to (free → A) is (extensionally) unique.
-   free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) A)
+   free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) 𝑨)
     →           (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
     →           (t : Term )
                ---------------------------
@@ -84,8 +84,8 @@ We prove
    free-unique fe g h p (generator x) = p x
    free-unique fe g h p (node f args) =
     ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-    ∥ A ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ A ∥ _) γ ⟩
-    ∥ A ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
+    ∥ 𝑨 ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
+    ∥ 𝑨 ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
     ∣ h ∣ (node f args)             ∎
      where γ = fe λ i → free-unique fe g h p (args i)
 
@@ -93,19 +93,19 @@ We prove
 Interpretation of terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let ``t : Term`` be a term and ``A`` an S-algebra. We define the 𝑛-ary operation ``t ̇ A`` on ``A`` by structural recursion on ``t``.
+Let ``t : Term`` be a term and ``𝑨`` an S-algebra. We define the 𝑛-ary operation ``t ̇ 𝑨`` on ``𝑨`` by structural recursion on ``t``.
 
-  #. if ``t = x ∈ X`` (a variable) and ``a : X → ∣ A ∣`` is a tuple of elements of ``∣ A ∣``, then ``(t ̇ A) a = a x``.
-  #. if ``t = f args``, where ``f ∈ ∣ S ∣`` is an op symbol and ``args : ∥ S ∥ f → Term`` is an (``∥ S ∥ f``)-tuple of terms and ``a : X → ∣ A ∣`` is a tuple from ``A``, then ``(t ̇ A) a = ((f args) ̇ A) a = (f ̂ A) λ{ i → ((args i) ̇ A) a }``
+  #. if ``t = x ∈ X`` (a variable) and ``a : X → ∣ 𝑨 ∣`` is a tuple of elements of ``∣ 𝑨 ∣``, then ``(t ̇ 𝑨) a = a x``.
+  #. if ``t = f args``, where ``f ∈ ∣ S ∣`` is an op symbol and ``args : ∥ S ∥ f → Term`` is an (``∥ S ∥ f``)-tuple of terms and ``a : X → ∣ 𝑨 ∣`` is a tuple from ``𝑨``, then ``(t ̇ 𝑨) a = ((f args) ̇ 𝑨) a = (f ̂ 𝑨) λ{ i → ((args i) ̇ 𝑨) a }``
 
 ::
 
   _̇_ : {X : 𝓧 ̇ } → Term{X = X}
-   →   (A : Algebra 𝓤 S) → (X → ∣ A ∣) → ∣ A ∣
+   →   (𝑨 : Algebra 𝓤 S) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-  ((generator x)̇ A) a = a x
+  ((generator x)̇ 𝑨) a = a x
 
-  ((node f args)̇ A) a = (f ̂ A) λ{x → (args x ̇ A) a}
+  ((node f args)̇ 𝑨) a = (f ̂ 𝑨) λ{x → (args x ̇ 𝑨) a}
 
 
   interp-prod : funext 𝓥 𝓤
@@ -118,33 +118,33 @@ Let ``t : Term`` be a term and ``A`` an S-algebra. We define the 𝑛-ary operat
 
   interp-prod fe (node f t) 𝒜 x =
    let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
-    ∥ Π' 𝒜 ∥ f (λ x₁ → (t x₁ ̇ Π' 𝒜) x)
-        ≡⟨ ap (∥ Π' 𝒜 ∥ f ) (fe IH) ⟩
-    ∥ Π' 𝒜 ∥ f (λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+    (f ̂ Π' 𝒜)(λ x₁ → (t x₁ ̇ Π' 𝒜) x)
+        ≡⟨ ap (f ̂ Π' 𝒜 ) (fe IH) ⟩
+    (f ̂ Π' 𝒜 )(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
         ≡⟨ refl _ ⟩
-    (λ i₁ → ∥ 𝒜 i₁ ∥ f (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+    (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
         ∎
 
   interp-prod2 : global-dfunext
    →             {X : 𝓧 ̇ }{I : 𝓤 ̇ }
-                 (p : Term{X = X}) (A : I → Algebra 𝓤 S)
+                 (p : Term{X = X}) (𝒜 : I → Algebra 𝓤 S)
     -----------------------------------------------------------
-   → (p ̇ Π' A) ≡ λ(args : X → ∣ Π' A ∣)
-                      → (λ i → (p ̇ A i)(λ x → args x i))
+   → (p ̇ Π' 𝒜) ≡ λ(args : X → ∣ Π' 𝒜 ∣)
+                    → (λ i → (p ̇ 𝒜 i)(λ x → args x i))
 
-  interp-prod2 fe (generator x₁) A = refl _
+  interp-prod2 fe (generator x₁) 𝒜 = refl _
 
-  interp-prod2 fe {X = X} (node f t) A =
-   fe λ (tup : X → ∣ Π' A ∣) →
-    let IH = λ x → interp-prod fe (t x) A  in
-    let tA = λ z → t z ̇ Π' A in
-     (f ̂ Π' A) (λ s → tA s tup)
+  interp-prod2 fe {X = X} (node f t) 𝒜 =
+   fe λ (tup : X → ∣ Π' 𝒜 ∣) →
+    let IH = λ x → interp-prod fe (t x) 𝒜  in
+    let tA = λ z → t z ̇ Π' 𝒜 in
+     (f ̂ Π' 𝒜) (λ s → tA s tup)
         ≡⟨ refl _ ⟩
-     ∥ Π' A ∥ f (λ s →  tA s tup)
-        ≡⟨ ap ( ∥ Π' A ∥ f ) (fe  λ x → IH x tup) ⟩
-     ∥ Π' A ∥ f (λ s → (λ j → (t s ̇ A j)(λ l → tup l j)))
+     (f ̂ Π' 𝒜) (λ s →  tA s tup)
+        ≡⟨ ap (f ̂ Π' 𝒜) (fe  λ x → IH x tup) ⟩
+     (f ̂ Π' 𝒜) (λ s → (λ j → (t s ̇ 𝒜 j)(λ l → tup l j)))
         ≡⟨ refl _ ⟩
-     (λ i → (f ̂ A i)(λ s → (t s ̇ A i)(λ l → tup l i)))
+     (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ l → tup l i)))
         ∎
 
 .. _obs 10 in agda:

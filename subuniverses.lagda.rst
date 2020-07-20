@@ -58,26 +58,26 @@ Next we formalize the important theorem about subuniverse generation that we pre
 
 ::
 
-  record Subuniverse {A : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
+  record Subuniverse {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
    constructor mksub
    field
-     sset  : Pred ∣ A ∣ 𝓤
-     isSub : sset ∈ Subuniverses A
+     sset  : Pred ∣ 𝑨 ∣ 𝓤
+     isSub : sset ∈ Subuniverses 𝑨
 
-  module _ {A : Algebra 𝓤 S} where
+  module _ {𝑨 : Algebra 𝓤 S} where
 
-   data Sg (X : Pred ∣ A ∣ 𝓣) : Pred ∣ A ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
+   data Sg (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
-    app :  ( f : ∣ S ∣ ) { a : ∥ S ∥ f → ∣ A ∣ }
+    app :  ( f : ∣ S ∣ ) { a : ∥ S ∥ f → ∣ 𝑨 ∣ }
      →       Im a ⊆ Sg X
             -----------------
-     →       ∥ A ∥ f a ∈ Sg X
+     →       ∥ 𝑨 ∥ f a ∈ Sg X
 
-   sgIsSub : (X : Pred ∣ A ∣ 𝓤) → Sg X ∈ Subuniverses A
+   sgIsSub : (X : Pred ∣ 𝑨 ∣ 𝓤) → Sg X ∈ Subuniverses 𝑨
    sgIsSub _ f a α = app f α
 
-   sgIsSmallest : {X : Pred ∣ A ∣ 𝓡} {Y : Pred ∣ A ∣ 𝓢}
-    →             Y ∈ Subuniverses A
+   sgIsSmallest : {X : Pred ∣ 𝑨 ∣ 𝓡} {Y : Pred ∣ 𝑨 ∣ 𝓢}
+    →             Y ∈ Subuniverses 𝑨
     →             X ⊆ Y
                  -----------------
     →              Sg X ⊆ Y
@@ -91,8 +91,8 @@ Next we formalize the important theorem about subuniverse generation that we pre
      ima⊆Y : Im a ⊆ Y
      ima⊆Y i = sgIsSmallest YIsSub X⊆Y (ima⊆SgX i)
 
-     --Since Y is a subuniverse of A, it contains the application
-     app∈Y : ∥ A ∥ f a ∈ Y          --           of f to said args.
+     --Since Y is a subuniverse of 𝑨, it contains the application
+     app∈Y : ∥ 𝑨 ∥ f a ∈ Y          --           of f to said args.
      app∈Y = YIsSub f a ima⊆Y
 
 .. _obs 6 in agda:
@@ -100,20 +100,20 @@ Next we formalize the important theorem about subuniverse generation that we pre
 Intersections of subalgebras are subalgebras
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a collection {𝐴ᵢ ∣ 𝐴ᵢ ≤ A} of subuniverses of an algebra A is again a subuniverse of A.  We formalize the statement and proof of this easy fact in Agda as follows.
+Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a collection {𝐴ᵢ ∣ 𝐴ᵢ ≤ 𝑨} of subuniverses of an algebra 𝑨 is again a subuniverse of 𝑨.  We formalize the statement and proof of this easy fact in Agda as follows.
 
 ::
 
   module _
-   {A : Algebra 𝓤 S} {I : 𝓘 ̇}
-   {𝒜 : I → Pred ∣ A ∣ 𝓣} where
+   {𝑨 : Algebra 𝓤 S} {I : 𝓘 ̇}
+   {𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣} where
 
-   sub-inter-is-sub : ((i : I) → 𝒜 i ∈ Subuniverses A)
-    →                 ⋂ I 𝒜 ∈ Subuniverses A
+   sub-inter-is-sub : ((i : I) → 𝒜 i ∈ Subuniverses 𝑨)
+    →                 ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
    sub-inter-is-sub Ai-is-Sub f a ima⊆⋂A = α
     where
-     α : ∥ A ∥ f a ∈ ⋂ I 𝒜
+     α : ∥ 𝑨 ∥ f a ∈ ⋂ I 𝒜
      α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
 
@@ -161,7 +161,7 @@ We are now ready to formalize the proof the proof that homomorphic images are su
 Subuniverse generation with terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Recall :numref:`Obs %s <obs 12>` presenting subuniverse generation using the images of terms: If 𝑌 is a subset of 𝐴, then :math:`\mathrm{Sg}^A(Y) = \{t^A a : t ∈ T(X), a : X → Y\}`. To formalize this in Agda, we first prove that subuniverses are closed under the action of term operations.
+Recall :numref:`Obs %s <obs 12>` presenting subuniverse generation using the images of terms: If 𝑌 is a subset of 𝐴, then :math:`\mathrm{Sg}^𝑨(Y) = \{t^𝑨 a : t ∈ T(X), a : X → Y\}`. To formalize this in Agda, we first prove that subuniverses are closed under the action of term operations.
 
 ::
 
@@ -188,7 +188,7 @@ This proves :math:`\mathrm{Sg}^𝑨(Y) ⊇ \{ t^𝑨 a : t ∈ 𝑇(𝑋), a : �
 Next we prove :math:`\mathrm{Sg}^𝑨(Y) ⊆ \{ t^𝑨 a : t ∈ 𝑇(𝑋), a : 𝑋 → 𝑌 \}` by the following steps:
 
   #. The image of 𝑌 under all terms, which we call `TermImage 𝑌`, is a subuniverse of 𝑨; i.e.,
-     TermImage 𝑌 = :math:`\{ t^𝑨 a : t ∈ 𝑇(𝑋), a : 𝑋 → 𝑌 \} ≤ A`.
+     TermImage 𝑌 = :math:`\{ t^𝑨 a : t ∈ 𝑇(𝑋), a : 𝑋 → 𝑌 \} ≤ 𝑨`.
   #. 𝑌 ⊆ TermImage 𝑌 (obvious)
   #. :math:`\mathrm{Sg}^𝑨(Y)` is the smallest subuniverse containing 𝑌 (see `sgIsSmallest`) so :math:`\mathrm{Sg}^𝑨(Y)` ⊆ TermImage 𝑌.
 
@@ -228,7 +228,7 @@ Finally, we can prove the desired inclusion.
 
 .. code-block::
 
-  SgY≃TermImageY : (Y : Pred ∣ A ∣ k) → (TermImage Y) ≃ (Sg Y)
+  SgY≃TermImageY : (Y : Pred ∣ 𝑨 ∣ k) → (TermImage Y) ≃ (Sg Y)
   SgY≃TermImageY {x} Y = ?
 
 -----------------------------------------------------------------------------------
@@ -391,7 +391,7 @@ The converse of `membership-equiv-gives-carrier-equality` is obvious.
 Subalgebras preserve identities
 -----------------------------------
 
-Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``A ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
+Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``𝑨 ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
 
 ::
 
@@ -401,7 +401,7 @@ We first set down some notation for the modeling of identities.
 
 :Unicode Hints: ``\models`` produces ``⊧``; ``\~~`` produces ``≈``; ``\~~~`` produces ``≋``.
 
-The standard notation is ``A ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in A. In otherwords, for all assignments ``a : X → ∣ A ∣`` of values to variables, we have ``(p ̇ A) a ≡ (q ̇ A) a``.
+The standard notation is ``𝑨 ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in 𝑨. In otherwords, for all assignments ``a : X → ∣ 𝑨 ∣`` of values to variables, we have ``(p ̇ 𝑨) a ≡ (q ̇ 𝑨) a``.
 
 If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
 
@@ -430,41 +430,41 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
    subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
     where
 
-    A : Algebra 𝓤 S
-    A = ∣ SAK ∣
+    𝑨 : Algebra 𝓤 S
+    𝑨 = ∣ SAK ∣
 
-    A∈𝒦 : A ∈ 𝒦
+    A∈𝒦 : 𝑨 ∈ 𝒦
     A∈𝒦 = ∣ pr₂ SAK ∣
 
-    A⊧p≈q : A ⊧ p ≈ q
+    A⊧p≈q : 𝑨 ⊧ p ≈ q
     A⊧p≈q = 𝒦⊧p≋q A∈𝒦
 
-    subalg : Subalgebra {𝑨 = A} UV
+    subalg : Subalgebra {𝑨 = 𝑨} UV
     subalg = ∥ pr₂ SAK ∥
 
-    B : Algebra 𝓤 S
-    B = pr₁ subalg
+    𝑩 : Algebra 𝓤 S
+    𝑩 = pr₁ subalg
 
-    h : ∣ B ∣ → ∣ A ∣
+    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
     h = ∣ pr₂ subalg ∣
 
     hem : is-embedding h
     hem = pr₁ ∥ pr₂ subalg ∥
 
-    hhm : is-homomorphism B A h
+    hhm : is-homomorphism 𝑩 𝑨 h
     hhm = pr₂ ∥ pr₂ subalg ∥
 
-    ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
+    ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
     ξ b =
-     h ((p ̇ B) b)  ≡⟨ comm-hom-term gdfe B A (h , hhm) p b ⟩
-     (p ̇ A)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-     (q ̇ A)(h ∘ b) ≡⟨ (comm-hom-term gdfe B A (h , hhm) q b)⁻¹ ⟩
-     h ((q ̇ B) b)  ∎
+     h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gdfe 𝑩 𝑨 (h , hhm) p b ⟩
+     (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+     (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gdfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+     h ((q ̇ 𝑩) b)  ∎
 
     hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
     hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
 
-    γ : B ⊧ p ≈ q
+    γ : 𝑩 ⊧ p ≈ q
     γ = gdfe λ b → hlc (ξ b)
 
 

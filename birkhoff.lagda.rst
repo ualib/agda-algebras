@@ -25,7 +25,6 @@ As usual, we start with the imports we will need below.
   open import basic using (Signature; Algebra; Π'; _̂_)
   open import relations using (ker-pred; Rel; con; _//_)
   open import homomorphisms using (hom; is-homomorphism)
-  open import closure using (VClo)
   open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
                            lift-hom; interp-prod)
 
@@ -40,7 +39,36 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
 
 ::
 
-  module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇ }  where
+
+  -- module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇ }  where
+  module birkhoff
+   {S : Signature 𝓞 𝓥}
+   {𝓤 : Universe}
+   {ua : Univalence}
+   {X : 𝓤 ̇ }
+   {gfe : global-dfunext}
+   {dfe : dfunext 𝓤 𝓤} where
+
+  open import closure{S = S}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo) -- ; _⊧_≈_; _⊧_≋_)
+
+  _⊧_≈_ : Algebra 𝓤 S
+    →      Term{X = X} → Term → 𝓤 ̇
+
+  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+
+  _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+
+  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+  -- _⊧_≈_ : Algebra 𝓤 S
+  --   →      Term{X = X} → Term → 𝓤 ̇
+
+  -- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+
+  -- _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+  --  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+
+  -- _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 .. _obs 1 in agda:
 
@@ -56,7 +84,7 @@ The equalizer of two functions (resp., homomorphisms) ``g h : A → B`` is the s
   𝑬 g h x = g x ≡ h x
 
   --Equalizers of homomorphisms
-  𝑬𝑯 : {A B : Algebra 𝓤 S} (g h : hom A B) → Pred ∣ A ∣ 𝓤
+  𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 S} (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
   𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
   --cf. definition 𝓔 in the homomorphisms module
 
@@ -65,13 +93,13 @@ It turns out that the equalizer of two homomorphisms is closed under the operati
 ::
 
   𝑬𝑯-is-closed : funext 𝓥 𝓤
-   →      {𝑓 : ∣ S ∣ } {A B : Algebra 𝓤 S}
-          (g h : hom A B)  (𝒂 : (∥ S ∥ 𝑓) → ∣ A ∣)
-   →      ((x : ∥ S ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {A = A}{B = B} g h))
+   →      {𝑓 : ∣ S ∣ } {𝑨 𝑩 : Algebra 𝓤 S}
+          (g h : hom 𝑨 𝑩)  (𝒂 : (∥ S ∥ 𝑓) → ∣ 𝑨 ∣)
+   →      ((x : ∥ S ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
           --------------------------------------------------
-   →       ∣ g ∣ (∥ A ∥ 𝑓 𝒂) ≡ ∣ h ∣ (∥ A ∥ 𝑓 𝒂)
+   →       ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-  𝑬𝑯-is-closed fe {𝑓 = 𝑓}{A = A , Fᴬ}{B = B , Fᴮ}
+  𝑬𝑯-is-closed fe {𝑓 = 𝑓}{𝑨 = A , Fᴬ}{𝑩 = B , Fᴮ}
    (g , ghom)(h , hhom) 𝒂 p =
      g (Fᴬ 𝑓 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
      Fᴮ 𝑓 (g ∘ 𝒂)  ≡⟨ ap (Fᴮ _ )(fe p) ⟩
@@ -84,10 +112,10 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``A``.
 
   -- Equalizer of homs is a subuniverse.
   𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
-   →  {A B : Algebra 𝓤 S}(g h : hom A B) → Subuniverse {A = A}
-  𝑬𝑯-is-subuniverse fe {A = A} {B = B} g h =
-   mksub (𝑬𝑯 {A = A}{B = B} g h)
-    λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {A = A} {B = B} g h 𝒂 x
+   →  {𝑨 𝑩 : Algebra 𝓤 S}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+  𝑬𝑯-is-subuniverse fe {𝑨 = 𝑨}{𝑩 = 𝑩} g h =
+   mksub (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h)
+    λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨}{𝑩 = 𝑩} g h 𝒂 x
 
 .. _obs 3 in agda:
 
@@ -98,14 +126,14 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalize
 
 ::
 
-  HomUnique : funext 𝓥 𝓤 → {A B : Algebra 𝓤 S}
-             (X : Pred ∣ A ∣ 𝓤)  (g h : hom A B)
-   →         (∀ (x : ∣ A ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
+  HomUnique : funext 𝓥 𝓤 → {𝑨 B : Algebra 𝓤 S}
+             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 B)
+   →         (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
            ---------------------------------------------------
-   →        (∀ (a : ∣ A ∣) → a ∈ Sg {A = A} X → ∣ g ∣ a ≡ ∣ h ∣ a)
+   →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
   HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
-  HomUnique fe {A = A , Fᴬ}{B = B , Fᴮ} X
+  HomUnique fe {𝑨 = A , Fᴬ}{B = B , Fᴮ} X
    (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
     g (Fᴬ 𝑓 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
     Fᴮ 𝑓 (g ∘ 𝒂 )   ≡⟨ ap (Fᴮ 𝑓) (fe induction-hypothesis) ⟩
@@ -113,11 +141,11 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms module>` formalize
     h ( Fᴬ 𝑓 𝒂 )   ∎
    where
     induction-hypothesis =
-      λ x → HomUnique fe {A = A , Fᴬ}{B = B , Fᴮ} X
+      λ x → HomUnique fe {𝑨 = A , Fᴬ}{B = B , Fᴮ} X
       (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates A, then ∣Hom(A, B)∣ ≤ :math:`∣B∣^{∣X∣}`.
-Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates A, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
+**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, B)∣ ≤ :math:`∣B∣^{∣X∣}`.
+Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
 
 .. todo:: formalize **Obs**.
 
@@ -128,122 +156,103 @@ Identities preserved by homs
 
 Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 
-.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ A ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), A), h ∘ p^𝑻(X) = h ∘ q^𝑻(X).
+.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^𝑻(X) = h ∘ q^𝑻(X).
 
 We now formalize this result in Agda. First, we define the syntax for ``⊧``.
 
 
 ::
 
-  module _
-   (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
-   -- {UV : Univalence}
-   {X : 𝓤 ̇ }
-   (gfe : global-dfunext)
-   -- (dfe : dfunext 𝓤 𝓤)
-   where
-
-
-   -- Duplicating definition of ⊧ so we don't have to import from closure module.
-   -- (Remove these definitions later once closure module is working.)
-   _⊧_≈_ : Algebra 𝓤 S
-    →      Term{X = X} → Term → 𝓤 ̇
-
-   A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
-
-   _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
-    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-
-   _⊧_≋_ 𝓚 p q = {A : Algebra _ S} → 𝓚 A → A ⊧ p ≈ q
+  module _ (𝓚 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) where
 
 
    -- ⇒ (the "only if" direction)
    identities-are-compatible-with-homs : (p q : Term{X = X})
-    →                𝓚 ⊧ p ≋ q
-         ----------------------------------------------------
-    →     ∀ A KA h → ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-   -- Here, the inferred types are
-   -- A : Algebra 𝓤 S, KA : 𝓚 A, h : hom (𝑻(X){X = X}) A
+     →                𝓚 ⊧ p ≋ q
+          ----------------------------------------------------
+     →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
+    -- Here, the inferred types are
+    -- 𝑨 : Algebra 𝓤 S, KA : 𝓚 𝑨, h : hom (𝑻(X){X = X}) 𝑨
 
-   identities-are-compatible-with-homs p q 𝓚⊧p≋q A KA h = γ
-    where
-     pA≡qA : p ̇ A ≡ q ̇ A
-     pA≡qA = 𝓚⊧p≋q KA
+   identities-are-compatible-with-homs p q 𝓚⊧p≋q 𝑨 KA h = γ
+     where
+      pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+      pA≡qA = 𝓚⊧p≋q KA
 
-     pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣)
-      →        (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ A)(∣ h ∣ ∘ 𝒂)
-     pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
+      pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣)
+       →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+      pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
-     hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣)
-      →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
-     hpa≡hqa 𝒂 =
-      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) A h p 𝒂 ⟩
-      (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-      (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) A h q 𝒂)⁻¹ ⟩
-      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
+      hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣)
+       →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
+      hpa≡hqa 𝒂 =
+       ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) 𝑨 h p 𝒂 ⟩
+       (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
+       (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 h q 𝒂)⁻¹ ⟩
+       ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
 
-     γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-     γ = gfe hpa≡hqa
+      γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
+      γ = gfe hpa≡hqa
 
    -- ⇐ (the "if" direction)
-   homs-are-compatible-with-identities : (p q : Term)
-    →    (∀ A KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
-         -----------------------------------------------
-    →                𝓚 ⊧ p ≋ q
-   --Inferred types: A : Algebra 𝓤 S, KA : A ∈ 𝓚, h : hom 𝑻(X) A
+   homs-are-compatible-with-identities : (p q : Term{X = X})
+     →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻 X)) ≡ ∣ h ∣ ∘ (q ̇ (𝑻 X)))
+          -----------------------------------------------
+     →                𝓚 ⊧ p ≋ q
+    --Inferred types: 𝑨 : Algebra 𝓤 S, KA : 𝑨 ∈ 𝓚, h : hom 𝑻(X) 𝑨
 
-   homs-are-compatible-with-identities p q all-hp≡hq {A = A} KA = γ
-    where
-     h : (𝒂 : X → ∣ A ∣) → hom (𝑻(X)) A
-     h 𝒂 = lift-hom{A = A} 𝒂
+   homs-are-compatible-with-identities p q all-hp≡hq {𝑨 = 𝑨} KA = γ
+     where
+      h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+      h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
 
-     γ : A ⊧ p ≈ q
-     γ = gfe λ 𝒂 →
-      (p ̇ A) 𝒂
-        ≡⟨ refl _ ⟩
-      (p ̇ A)(∣ h 𝒂 ∣ ∘ generator)
-        ≡⟨(comm-hom-term gfe (𝑻(X)) A (h 𝒂) p generator)⁻¹ ⟩
-      (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
-        ≡⟨ ap (λ - → - generator) (all-hp≡hq A KA (h 𝒂)) ⟩
-      (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
-        ≡⟨ (comm-hom-term gfe (𝑻(X)) A (h 𝒂) q generator) ⟩
-      (q ̇ A)(∣ h 𝒂 ∣ ∘ generator)
-        ≡⟨ refl _ ⟩
-      (q ̇ A) 𝒂
-        ∎
+      γ : 𝑨 ⊧ p ≈ q
+      γ = gfe λ 𝒂 →
+       (p ̇ 𝑨) 𝒂
+         ≡⟨ refl _ ⟩
+       (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+         ≡⟨(comm-hom-term gfe (𝑻(X)) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
+       (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
+         ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
+       (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
+         ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 (h 𝒂) q generator) ⟩
+       (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+         ≡⟨ refl _ ⟩
+       (q ̇ 𝑨) 𝒂
+         ∎
 
    compatibility-of-identities-and-homs : (p q : Term)
     →  (𝓚 ⊧ p ≋ q)
-        ⇔ (∀ A KA hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
-   --inferred types: A : Algebra 𝓤 S, KA : A ∈ 𝓚, hh : hom 𝑻(X) A.
+         ⇔ (∀ 𝑨 KA hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
+    --inferred types: 𝑨 : Algebra 𝓤 S, KA : 𝑨 ∈ 𝓚, hh : hom 𝑻(X) 𝑨.
 
    compatibility-of-identities-and-homs p q =
-     identities-are-compatible-with-homs p q ,
-     homs-are-compatible-with-identities p q
+      identities-are-compatible-with-homs p q ,
+      homs-are-compatible-with-identities p q
 
    TH : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
    TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
-   Th : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+   Th : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
    Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
    MOD : Pred (Term{X = X} × Term) 𝓤 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
    MOD Σ' = Σ 𝑨 ꞉ (Algebra 𝓤 S) , ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
 
-   Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ) → Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ )
+   Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
    Mod Σ' = λ 𝑨 → ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
 
    --Birkhoff's theorem: every variety is an equational class.
-   -- birkhoff : (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺))
-   --            (𝑨 : Algebra 𝓤 S)(g : X → ∣ 𝑨 ∣ )(eg : Epic g)
-   --  →         (𝑨 ∈ (Mod (Th (VClo 𝒦)))) → 𝑨 ∈ VClo 𝒦
-   -- birkhoff 𝒦 𝑨 g eg A∈ModThV = γ
-   --  where
-   --   h : hom (𝑻 X) 𝑨
-   --   h = lift-hom{𝑨 = 𝑨}{X = X} g
+   birkhoff : (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺))
+              (𝑨 : Algebra 𝓤 S)(g : X → ∣ 𝑨 ∣ )(eg : Epic g)
+    →         (𝑨 ∈ (Mod (Th (VClo 𝒦)))) → 𝑨 ∈ VClo 𝒦
+   birkhoff 𝒦 𝑨 g eg A∈ModThV = γ
+    where
+     h : hom (𝑻 X) 𝑨
+     h = lift-hom{𝑨 = 𝑨}{X = X} g
 
-   --   γ : 𝑨 ∈ VClo 𝒦
-   --   γ = {!!}
+     γ : 𝑨 ∈ VClo 𝒦
+     γ = {!!}
 
 ------------------
 
