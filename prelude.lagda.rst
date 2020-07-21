@@ -1,7 +1,9 @@
-.. FILE: prelude.lagda.rst
-.. AUTHOR: William DeMeo and Siva Somayyajula
-.. DATE: 21 Apr 2020
-.. UPDATE: 8 Jul 2020
+.. FILE      : prelude.lagda.rst
+.. AUTHOR    : William DeMeo and Siva Somayyajula
+.. DATE      : 21 Apr 2020
+.. UPDATE    : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
+
 .. REF: Some parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
 .. SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/ 
 .. Throughout, MHE = Martin Hötzel Escardo.

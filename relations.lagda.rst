@@ -1,9 +1,12 @@
-.. FILE: relations.lagda.rst
-.. AUTHOR: William DeMeo and Siva Somayyajula
-.. DATE: 23 Apr 2020
-.. UPDATE: 16 Jun 2020
-.. REF: Some of this file is simply a translation of the Agda standard library file Binary/Core.agda
-   into our notation.
+.. FILE      : relations.lagda.rst
+.. AUTHOR    : William DeMeo and Siva Somayyajula
+.. DATE      : 23 Apr 2020
+.. UPDATE    : 21 Jul 2020
+.. Copyright : (c) 2020 William DeMeo
+
+
+.. REF: Some parts of this file is simply a translation of the Agda standard library file Binary/Core.agda
+into our notation.
 
 ====================
 Relations in Agda

@@ -1,7 +1,9 @@
-.. File: homomorphisms.lagda.rst
-.. Author: William DeMeo and Siva Somayyajula
-.. Date: 20 Feb 2020
-.. Updated: 27 Jun 2020
+.. File      : homomorphisms.lagda.rst
+.. Author    : William DeMeo and Siva Somayyajula
+.. Date      : 20 Feb 2020
+.. Updated   : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
+
 
 .. _homomorphisms in agda:
 

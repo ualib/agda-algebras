@@ -1,8 +1,8 @@
-.. file: preface.rst
-.. Author: William DeMeo  <williamdemeo@gmail.com>
-.. Date: 17 May 2019
-.. Updated: 29 Jan 2020
-.. Copyright (c) 2019 William DeMeo
+.. FILE      : preface.rst
+.. AUTHOR    : William DeMeo  <williamdemeo@gmail.com>
+.. DATE      : 17 May 2019
+.. UPDATED   : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
 
 
 

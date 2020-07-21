@@ -15,60 +15,60 @@ open import terms using (Term; generator; node; _̇_; interp-prod2;
  interp-prod; comm-hom-term)
 
 module closure
- {S : Signature 𝓞 𝓥}
+ {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {ua : Univalence}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
-_⊧_≈_ : Algebra 𝓤 S
+_⊧_≈_ : Algebra 𝓤 𝑆
  →      Term{X = X} → Term → 𝓤 ̇
 
 A ⊧ p ≈ q = (p ̇ A) ≡ (q ̇ A)
 
-_⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+_⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
-_⊧_≋_ 𝒦 p q = {A : Algebra _ S} → 𝒦 A → A ⊧ p ≈ q
+_⊧_≋_ 𝒦 p q = {A : Algebra _ 𝑆} → 𝒦 A → A ⊧ p ≈ q
 
 
 -- Closure data types
 
-data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
- prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
+data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ pbase : {A : Algebra 𝓤 𝑆} → A ∈ 𝒦 → A ∈ PClo 𝒦
+ prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
   →     Π' 𝒜 ∈ PClo 𝒦
 
 -- Subalgebra Closure
-data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
- sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
+data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ sbase : {A :  Algebra _ 𝑆} → A ∈ 𝒦 → A ∈ SClo 𝒦
+ sub : {A : Algebra _ 𝑆} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
 
 -- Homomorphic Image Closure
-data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
- hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+ hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
 
 -- Variety Closure
-data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
- vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {A = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
- vhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+ vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {A = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
+ vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 
 
 -- Product Closure
-P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
- →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
+P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
+ →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
 P-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 𝓘)
 
 products-preserve-identities :
       (p q : Term{X = X})
-      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
  →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
      -----------------------------------
  →     Π' 𝒜 ⊧ p ≈ q
@@ -87,9 +87,9 @@ products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
       ∎
 
 products-in-class-preserve-identities :
-     (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+     (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))
      (p q : Term{X = X})
-     (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+     (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
  →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
      ------------------------------------
  →    Π' 𝒜 ⊧ p ≈ q
@@ -102,7 +102,7 @@ products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈�
    γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
-module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
+module _ (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )) where
 
  pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
  pclo-id1 {p} {q} α (pbase x) = α x
@@ -123,7 +123,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    A⊧p≈q : A ⊧ p ≈ q
    A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
-   B : Algebra 𝓤 S
+   B : Algebra 𝓤 𝑆
    B = ∣ sa ∣
 
    h : ∣ B ∣ → ∣ A ∣
@@ -158,7 +158,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    A⊧p≈q : 𝑨 ⊧ p ≈ q
    A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
 
-   𝑩 : Algebra 𝓤 S
+   𝑩 : Algebra 𝓤 𝑆
    𝑩 = ∣ 𝑩ϕhE ∣
 
    ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
@@ -203,7 +203,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    A⊧p≈q : 𝑨 ⊧ p ≈ q
    A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-   𝑩 : Algebra 𝓤 S
+   𝑩 : Algebra 𝓤 𝑆
    𝑩 = ∣ sa ∣
 
    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
@@ -233,7 +233,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
    A⊧p≈q : 𝑨 ⊧ p ≈ q
    A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-   𝑩 : Algebra 𝓤 S
+   𝑩 : Algebra 𝓤 𝑆
    𝑩 = ∣ 𝑩ϕhE ∣
 
    ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣

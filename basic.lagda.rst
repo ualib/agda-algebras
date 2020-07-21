@@ -1,9 +1,11 @@
-.. file: basic.lagda.rst
-.. Author: William DeMeo  <williamdemeo@gmail.com>
-.. Date: 24 Dec 2019
-.. Updated: 25 Jun 2020
+.. FILE      : basic.lagda.rst
+.. AUTHOR    : William DeMeo and Siva Somayyajula
+.. DATE      : 24 Dec 2019
+.. UPDATED   : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
+
 .. Note: This was used for the second part of my talk at JMM Special Session.
-.. Copyright (c) 2019 William DeMeo
+
 
 .. _types for algebras:
 

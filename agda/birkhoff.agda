@@ -16,7 +16,7 @@ open import subuniverses using (Subuniverse; mksub; var; app; Sg;
           _is-subalgebra-of_; Subalgebra; S-closed)
 
 module birkhoff
- {S : Signature 𝓞 𝓥}
+ {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {ua : Univalence}
  {X : 𝓤 ̇ }
@@ -24,21 +24,21 @@ module birkhoff
  (dfe : dfunext 𝓤 𝓤)
    where
 
-open import closure{S = S}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
+open import closure{𝑆 = 𝑆}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
 
 --Equalizers of functions
 E :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
 E g h x = g x ≡ h x
 
 --Equalizers of homomorphisms
-EH : {A B : Algebra 𝓤 S} (g h : hom A B) → Pred ∣ A ∣ 𝓤
+EH : {A B : Algebra 𝓤 𝑆} (g h : hom A B) → Pred ∣ A ∣ 𝓤
 EH g h x = ∣ g ∣ x ≡ ∣ h ∣ x
 --cf. definition 𝓔 in the homomorphisms module
 
 EH-is-closed : funext 𝓥 𝓤
- →      {𝑓 : ∣ S ∣ } {A B : Algebra 𝓤 S}
-        (g h : hom A B)  (𝒂 : (∥ S ∥ 𝑓) → ∣ A ∣)
- →      ((x : ∥ S ∥ 𝑓) → (𝒂 x) ∈ (EH {A = A}{B = B} g h))
+ →      {𝑓 : ∣ 𝑆 ∣ } {A B : Algebra 𝓤 𝑆}
+        (g h : hom A B)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ A ∣)
+ →      ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (EH {A = A}{B = B} g h))
         --------------------------------------------------
  →       ∣ g ∣ (∥ A ∥ 𝑓 𝒂) ≡ ∣ h ∣ (∥ A ∥ 𝑓 𝒂)
 
@@ -51,12 +51,12 @@ EH-is-closed fe {𝑓 = 𝑓}{A = A , FA}{B = B , FB}
 
 -- Equalizer of homs is a subuniverse.
 EH-is-subuniverse : funext 𝓥 𝓤
- →  {A B : Algebra 𝓤 S}(g h : hom A B) → Subuniverse {A = A}
+ →  {A B : Algebra 𝓤 𝑆}(g h : hom A B) → Subuniverse {A = A}
 EH-is-subuniverse fe {A = A} {B = B} g h =
  mksub (EH {A = A}{B = B} g h)
   λ 𝑓 𝒂 x → EH-is-closed fe {A = A} {B = B} g h 𝒂 x
 
-HomUnique : funext 𝓥 𝓤 → {A B : Algebra 𝓤 S}
+HomUnique : funext 𝓥 𝓤 → {A B : Algebra 𝓤 𝑆}
            (X : Pred ∣ A ∣ 𝓤)  (g h : hom A B)
  →         (∀ (x : ∣ A ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
          ---------------------------------------------------
@@ -76,7 +76,7 @@ HomUnique fe {A = A , FA}{B = B , FB} X
 
 module _
  (gfe : global-dfunext)
- (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+ (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
  where
 
  -- ⇒ (the "only if" direction)
@@ -85,7 +85,7 @@ module _
        ----------------------------------------------------
   →     ∀ A KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
  -- Here, the inferred types are
- -- A : Algebra 𝓤 S, KA : 𝒦 A, h : hom ((𝑻(X))) A
+ -- A : Algebra 𝓤 𝑆, KA : 𝒦 A, h : hom ((𝑻(X))) A
 
  identities-are-compatible-with-homs p q 𝒦⊧p≋q A KA h = γ
   where
@@ -112,7 +112,7 @@ module _
   →    (∀ A KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻 X)) ≡ ∣ h ∣ ∘ (q ̇ (𝑻 X)))
        --------------------------------------------------
   →                𝒦 ⊧ p ≋ q
- --inferred types: A : Algebra 𝓤 S, KA : A ∈ 𝒦, h : hom (𝑻(X)) A
+ --inferred types: A : Algebra 𝓤 𝑆, KA : A ∈ 𝒦, h : hom (𝑻(X)) A
 
  homs-are-compatible-with-identities p q all-hp≡hq {A = A} KA = γ
   where
@@ -144,30 +144,30 @@ module _
    homs-are-compatible-with-identities p q
 
 -- Product Closure
-P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
- →      (𝓤 : Universe)(𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
+ →      (𝓤 : Universe)(𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓤 ) → 𝓤 ⁺ ⊔ 𝓘 ⁺ ̇
 P-closed ℒ𝒦 = λ 𝓤 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 (𝓤 ⊔ 𝓘))
 
-data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- pbase : {A : Algebra 𝓤 S} → A ∈ 𝒦 → A ∈ PClo 𝒦
- prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
+data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ pbase : {A : Algebra 𝓤 𝑆} → A ∈ 𝒦 → A ∈ PClo 𝒦
+ prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
   →     Π' 𝒜 ∈ PClo 𝒦
 
 -- Subalgebra Closure
-data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- sbase : {A :  Algebra _ S} → A ∈ 𝒦 → A ∈ SClo 𝒦
- sub : {A : Algebra _ S} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
+data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ sbase : {A :  Algebra _ 𝑆} → A ∈ 𝒦 → A ∈ SClo 𝒦
+ sub : {A : Algebra _ 𝑆} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
 
 -- module _
---  {𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )} where
+--  {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
-HomImages : Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+HomImages : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
                           is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
-module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
+module _ {𝑨 𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)  where
 
  HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
  HomImage = λ b → Image ∣ ϕ ∣ ∋ b
@@ -178,23 +178,23 @@ module _ {𝑨 𝑩 : Algebra 𝓤 S} (ϕ : hom 𝑨 𝑩)  where
  fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ ϕ ∣)
  fres a = ∣ ϕ ∣ a , im a
 
- hom-image-alg : Algebra 𝓤 S
+ hom-image-alg : Algebra 𝓤 𝑆
  hom-image-alg = hom-image , ops-interp
   where
-   a : {f : ∣ S ∣ }(x : ∥ S ∥ f → hom-image) → ∥ S ∥ f → ∣ 𝑨 ∣
+   a : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → hom-image) → ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
    a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
 
-   ops-interp : (f : ∣ S ∣) → Op (∥ S ∥ f) hom-image
+   ops-interp : (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) hom-image
    ops-interp = λ f x → (∣ ϕ ∣ ((f ̂ 𝑨) (a x)) , im ((f ̂ 𝑨)(a x)))
 
 
 -- Homomorphic Image Closure
-data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
- hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
+data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+ hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
 
 
-module _ (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) where
+module _ (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) where
 
  hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
  hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
@@ -206,7 +206,7 @@ module _ (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) where
   IH : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
   IH = A⊧p≈q
 
-  𝑩 : Algebra 𝓤 S
+  𝑩 : Algebra 𝓤 𝑆
   𝑩 = ∣ 𝑩ϕhomSur ∣
 
   ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
@@ -237,28 +237,28 @@ hclo-id2 : ∀ {𝒦 p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
 hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
 
-TH : (𝒦 : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )) → _ ̇
+TH : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )) → _ ̇
 TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
-Th : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
 MOD : (Σ' : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
-MOD Σ' = Σ A ꞉ (Algebra 𝓤 S) , ∀ p q → (p , q) ∈ Σ' → A ⊧ p ≈ q
+MOD Σ' = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ Σ' → A ⊧ p ≈ q
 
-Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
 Mod Σ' = λ A → ∀ p q → (p , q) ∈ Σ' → A ⊧ p ≈ q
 
 -- Birkhoff's theorem: every variety is an equational class.
-birkhoff : (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺))
-           (A : Algebra 𝓤 S)(h₀ : X → ∣ A ∣ )(eg : Epic h₀)
- →         A ∈ Mod (Th (VClo 𝒦)) → A ∈ VClo 𝒦
-birkhoff 𝒦 A h₀ eg A∈ModThV = γ
+birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
+           (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣ )(eg : Epic h₀)
+ →         𝑨 ∈ Mod (Th (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
+birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
  where
-  h : hom (𝑻 X) A
-  h = lift-hom{A = A}{X = X} h₀
+  h : hom (𝑻 X) 𝑨
+  h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
-  γ : A ∈ VClo 𝒦
+  γ : 𝑨 ∈ VClo 𝒦
   γ = {!!}
  --Let 𝒲 be a class of algebras that is closed under H, S, and P.
  --We must find a set Σ of equations such that 𝒲 = Mod(Σ). For this will prove that 𝒲

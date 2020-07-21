@@ -1,8 +1,8 @@
-.. File: algebras.lagda.rst
-.. Author: William DeMeo <williamdemeo@gmail.com>
-.. Date: 11 Feb 2020
-.. Updated: 22 Jun 2020
-.. Copyright (c) 2019 William DeMeo
+.. FILE      : algebras.lagda.rst
+.. AUTHOR    : William DeMeo <williamdemeo@gmail.com>
+.. DATE      : 11 Feb 2020
+.. UPDATED   : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
 
 
 .. _algebras:

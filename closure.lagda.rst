@@ -1,6 +1,8 @@
-.. FILE: closure.lagda.rst
-.. AUTHOR: William DeMeo and Siva Somayyajula
-.. DATE: 2 Jul 2020
+.. FILE      : closure.lagda.rst
+.. AUTHOR    : William DeMeo and Siva Somayyajula
+.. DATE      : 2 Jul 2020
+.. UPDATE    : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
 
 ===========================
 Equational Logic in Agda

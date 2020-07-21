@@ -1,7 +1,9 @@
-.. FILE: birkhoff.lagda.rst
-.. AUTHOR: William DeMeo and Siva Somayyajula
-.. DATE: 23 Feb 2020
-.. UPDATE: 27 Jun 2020
+.. FILE      : birkhoff.lagda.rst
+.. AUTHOR    : William DeMeo and Siva Somayyajula
+.. DATE      : 23 Feb 2020
+.. UPDATE    : 21 Jul 2020
+.. COPYRIGHT : (c) 2020 William DeMeo
+
 .. REF: Based on the file `birkhoff.agda` (23 Jan 2020).
 
 .. _birkhoffs theorem in agda:
@@ -135,10 +137,10 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formaliz
       λ x → HomUnique fe {𝑨}{𝑩} X
       (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
-Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
+.. **Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
+.. Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
 
-.. todo:: formalize **Obs**.
+.. .. todo:: formalize **Obs**.
 
 
 ----------------------------------------------
