@@ -193,7 +193,7 @@ If 𝐴 is a set and 𝑓 is a (ρ 𝑓)-ary operation on 𝐴, we often indicat
 
    Suppose  𝑓 : (ρ𝑓 → 𝐵) → 𝐵 is a ρ𝑓-ary operation on 𝐵, 𝑎 : ρ𝑓 → 𝐴 is a ρ𝑓-tuple on 𝐴, and ℎ : 𝐴 → 𝐵. Then ℎ ∘ 𝑎 : ρ𝑓 → 𝐵 and 𝑓 (ℎ ∘ 𝑎) : 𝐵.
 
-Our formal implementation of the concept of signature in `Agda`_ is described in :numref:`operations and signatures in agda`.)
+Our formal implementation of the concept of signature in `Agda`_ is described in :numref:`signature type`.)
 
 --------------------------
 

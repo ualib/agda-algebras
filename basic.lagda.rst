@@ -10,7 +10,7 @@
 Types for Algebras
 ===================
 
-This chapter describes our formalization (in `Agda`_ ) of basic notions of universal algebra, such as operation, :term:`signature`, and :term:`algebraic structure <algebra>`.  This formalization is implemented in an Agda module of the `agda-ualib`_ called ``basic``.  The Agda source code for the ``basic`` module is actually the (literate) Agda program that you are now reading (which resides in the file ``basic.lagda.rst`` of the `agda-ualib`_).
+This chapter describes the `basic module`_ of the `agda-ualib`_ , which begins our Agda_ formalization of the basic concepts and theorems of universal algebra. In this module we will codify such notions as operation, :term:`signature`, and :term:`algebraic structure <algebra>`.
 
 -----------------------------------
 
@@ -42,13 +42,10 @@ This is the second module of the `agda-ualib`_ , coming after ``prelude`` (the m
 
 -----------------------------------
 
-.. _operations and signatures in agda:
+.. _operation type:
 
-Operations and signatures in Agda
----------------------------------
-
-Operation
-~~~~~~~~~~~
+Operation type
+--------------
 
 We define the type of **operations**, and give an example (the projections).
 
@@ -67,10 +64,14 @@ The type ``Op`` encodes the arity of an operation as an arbitrary type ``I : �
 
 The last two lines of the code block above codify the ``i``-th ``I``-ary projection operation on ``A``.
 
-Signature
-~~~~~~~~~~
+----------------------------------
 
-We define an (algebraic) signature like this.
+.. _signature type:
+
+Signature type
+----------------
+
+We define the signature of an algebraic structure in Agda like this.
 
 ::
 
@@ -79,13 +80,13 @@ We define an (algebraic) signature like this.
   Signature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
   Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
 
-In the ``prelude`` module we defined the syntax ``∣_∣`` and ``∥_∥`` for the first and second projections, resp.  Consequently, if ``S : Signature 𝓞 𝓥`` is a signature, then
+In the `prelude module`_ we defined the syntax ∣_∣ and ∥_∥ for the first and second projections, resp.  Consequently, if ``𝑆 : Signature 𝓞 𝓥`` is a signature, then
 
-  ``∣ S ∣`` denotes the set of operation symbols (which we sometimes call ``F``), and
+  ∣ 𝑆 ∣ denotes the set of operation symbols (which is often called 𝐹), and
 
-  ``∥ S ∥`` denotes the arity function (which we sometimes call ``ρ``).
+  ∥ 𝑆 ∥ denotes the arity function (which is often called ρ).
 
-Thus, if  ``𝑓 : ∣ S ∣``  is an operation symbol in the signature ``S``, then ``∥ S ∥ 𝑓`` is the arity of ``𝑓``.
+Thus, if  𝑓 : ∣ 𝑆 ∣  is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
 
 -----------------------------------
@@ -100,10 +101,10 @@ Finally, we are ready to define the type of algebras in the signature ``S`` (whi
 ::
 
   Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
-   →        (S : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
-  Algebra 𝓤 {𝓞}{𝓥} S = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ S ∣) → Op (∥ S ∥ 𝑓) A)
+   →        (𝑆 : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+  Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A)
 
-Thus, algebras in the signature ``S`` (or `S``-algebras) inhabit the type ``Algebra 𝓤 {𝓞}{𝓥} S``. (Here, ``𝓤`` is the universe level of the type of carriers (or "universes") of ``S``-algebras.)
+Thus, algebras in the signature 𝑆 (or 𝑆-algebras) inhabit the type ``Algebra 𝓤 {𝓞}{𝓥} 𝑆``. (Here, 𝓤 is the universe level of the type of carriers (or "universes") of 𝑆-algebras.)
 
 As an alternative to this syntax---one that may seem more in line with the standard literature---we could write the last line above as
 
@@ -111,9 +112,9 @@ As an alternative to this syntax---one that may seem more in line with the stand
 
   Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
 
-Here ``S = (F , ρ)`` is the signature with ``F`` the set of operation symbols and ``ρ`` the arity function.
+Here ``𝑆 = (F , ρ)`` is the signature with ``F`` the set of operation symbols and ρ the arity function.
 
-Throughout the library, we adopt the (less standard, but more convenient) notations ``𝑓 : ∣ S ∣`` for an operation symbol of the signature ``S``, and ``∥ S ∥ 𝑓`` for the arity of that symbol.
+Throughout the library, we adopt the (less standard, but more convenient) notations 𝑓 : ∣ 𝑆 ∣ for an operation symbol of the signature 𝑆, and ∥ 𝑆 ∥ 𝑓 for the arity of that symbol.
 
 Example
 ~~~~~~~~~~
@@ -138,44 +139,80 @@ We will have more to say about the type of algebras later.  For now, we continue
 Syntactic sugar for operation interpretation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before proceding, we define some syntactic sugar that allows us to replace ``∥ A ∥ f`` with slightly more standard-looking notation, ``f ̂ A``, where f is an operation symbol of the signature S of A.
+Before proceding, we define some syntactic sugar that allows us to replace ∥ 𝑨 ∥ 𝑓 with slightly more standard-looking notation, 𝑓 ̂ 𝑨, where f is an operation symbol of the signature 𝑆 of 𝑨.
 
 ::
 
-  module _ {S : Signature 𝓞 𝓥}  where
+  module _ {𝑆 : Signature 𝓞 𝓥}  where
 
-   _̂_ : (f : ∣ S ∣)
-    →   (𝑨 : Algebra 𝓤 S)
-    →   (∥ S ∥ f  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+   _̂_ : (𝑓 : ∣ 𝑆 ∣)
+    →   (𝑨 : Algebra 𝓤 𝑆)
+    →   (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-   f ̂ 𝑨 = λ x → (∥ 𝑨 ∥ f) x
+   𝑓 ̂ 𝑨 = λ x → (∥ 𝑨 ∥ 𝑓) x
 
    infix 1000 _̂_
 
-We can now write ``f ̂ 𝑨`` for the interpretation of the basic operation ``f`` in the algebra ``𝑨``.
+We can now write 𝑓 ̂ 𝑨 for the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨.
 
-:N.B.: Below, we will write ``t ̇ 𝑨`` for the interpretation of a *term* ``t`` in ``𝑨``.
+:N.B.: Below, we will need slightly different notation, namely, 𝑡 ̇ 𝑨, to represent the interpretation of a :term:`term` 𝑡 in the algebra 𝑨.
 
-.. todo:: Perhaps we can figure out how to use the same notation for both interpretations of operation symbols and terms.
+(In future releases of the agda-ualib_ we may reconsider making it possible to use the same notation interpretations of operation symbols and terms.)
 
 -------------------------------------------------------
 
-Products of algebras in Agda
-------------------------------
+.. _products of algebras:
+
+Products of algebras
+--------------------
 
 The (indexed) product of a collection of algebras is also an algebra if we define such a product as follows:
 
 ::
 
-  module _ {S : Signature 𝓞 𝓥}  where
+  module _ {𝑆 : Signature 𝓞 𝓥}  where
 
-   Π' : {I : 𝓘 ̇ }( A : I → Algebra 𝓤 S ) → Algebra (𝓤 ⊔ 𝓘) S
-   Π' A =  (( ᵢ : _) → ∣ A ᵢ ∣) ,  λ 𝑓 x ᵢ → ∥ A ᵢ ∥ 𝑓 λ 𝓥 → x 𝓥 ᵢ
+   Π' : {I : 𝓘 ̇ }( 𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
+   Π' 𝒜 =  ((i : _) → ∣ 𝒜 i ∣) ,  λ 𝑓 x i → (𝑓 ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
 
-We have used an anonymous module here so that the (fixed) signature ``S`` is available in the definition of the product without mentioning it explicitly.
+We have used an anonymous module here so that the (fixed) signature 𝑆 is available in the definition of the product without mentioning it explicitly.
 
 
 -----------------------------------------------
 
+Unicode Hints
+---------------
+
+Table of some special characters used in the `basic module`_.
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | 𝒂, 𝒃   | ``\MIa``, ``\MIb``     |
+  +--------+------------------------+
+  | 𝒜      | ``\McA``               |
+  +--------+------------------------+
+  | 𝑓 ̂ 𝑨  |  ``\Mif \^ \MIA``      |
+  +--------+------------------------+
+  | ≅      | ``≅`` or ``\cong``     |
+  +--------+------------------------+
+  | ∘      | ``\comp`` or ``\circ`` |
+  +--------+------------------------+
+  | 𝒾𝒹     | ``\Mci\Mcd``           |
+  +--------+------------------------+
+  | ℒ𝒦     | ``\McL\McK``           |
+  +--------+------------------------+
+  | ϕ      | ``\phi``               |
+  +--------+------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+
+------------------
 
 .. include:: hyperlink_references.rst

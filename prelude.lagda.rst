@@ -12,7 +12,9 @@
 Agda Preliminaries
 ========================
 
-**Notation**. Some acronyms we use frequently in this chapter are these.
+This chapter describes the `prelude module`_ of the `agda-ualib`_. The source code for this module comprises the (literate) Agda_ program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file `prelude.lagda.rst <prelude module>`_, which resides in the `git repository of the agda-ualib <agda-ualib>`_.
+
+**Notation**. Here are some acronyms that we use frequently.
 
   * :term:`MHE` = `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe/>`_
   * :term:`MLTT` = `Martin-Löf Type Theory <https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory>`_
@@ -132,14 +134,14 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
 ::
 
     open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
-     refl to 𝓻ℯ𝓯𝓵) public
+     refl to 𝓇ℯ𝒻𝓁) public
 
     pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
     open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
     open import MGS-MLTT using (_∘_; domain; codomain; transport;
-     _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
+     _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
      _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
 
     open import MGS-Equivalences using (is-equiv; inverse;
@@ -172,8 +174,6 @@ Dependent pair type
 --------------------
 
 Our preferred notations for the first and second projections of a product are ``∣_∣`` and ``∥_∥``, respectively; however, we will sometimes use the more standard ``pr₁`` and ``pr₂`` for compatibility with other libraries and sometimes for readability.
-
-:Unicode Hints: In agda2-mode_ type ``\|`` and ``\||`` to produce ``∣`` and ``∥``; type ``pr\_1`` and ``pr\_2`` to produce ``pr₁`` and ``pr₂``.
 
 ::
 
@@ -554,11 +554,24 @@ Here we collect miscellaneous definitions and proofs related to extensionality t
     extensionality-lemma p q args p≡q =
      ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
+---------------------------------------------------------
+
+.. _unicode hints:
 
 Unicode Hints
 ---------------
 
-We assume you are using Emacs in a buffer agda2-mode_ enabled.
+At the end of each chapter of this documentation we show how to produce in Emacs agda2-mode_ some of the fancy unicode characters that we use in our code.
+
+We hope these hints are convenient for the reader, but they are not meant to be comprehensive.
+
+Instead use these Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+
+Finally, here is a table of some of the unicode characters used in the agda-ualib_.
 
   +--------+----------------------+
   | To get | Type                 |
@@ -595,8 +608,6 @@ We assume you are using Emacs in a buffer agda2-mode_ enabled.
   +--------+----------------------+
   | Σ, Π   | ``\Sigma``, ``\Pi``  |
   +--------+----------------------+
-  | 𝕁      | ``\bJ``              |
-  +--------+----------------------+
   | ¬, ⁻¹  |  ``\neg``, ``\^-\^1``|
   +--------+----------------------+
   | ×      | ``\times``           |
@@ -614,6 +625,8 @@ We assume you are using Emacs in a buffer agda2-mode_ enabled.
   | ∘, ●   | ``\cdot``, ``\cib``  |
   +--------+----------------------+
   |  ×     | ``\times``           |
+  +--------+----------------------+
+  | ∣_∣    | ``\|_\|``            |
   +--------+----------------------+
   | ∥_∥    | ``\||_\||``          |
   +--------+----------------------+

@@ -6,6 +6,10 @@
 Equational Logic in Agda
 ===========================
 
+This chapter describes the `closure module`_ of the `agda-ualib`_.
+
+-------------------------------------------
+
 Closure operators
 -----------------
 
@@ -93,22 +97,22 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
    interp-prod; comm-hom-term)
 
   module closure
-   {S : Signature 𝓞 𝓥}
+   {𝑆 : Signature 𝓞 𝓥}
    {𝓤 : Universe}
    {ua : Univalence}
    {X : 𝓤 ̇ }
    {gfe : global-dfunext}
    {dfe : dfunext 𝓤 𝓤} where
 
-  _⊧_≈_ : Algebra 𝓤 S
+  _⊧_≈_ : Algebra 𝓤 𝑆
     →      Term{X = X} → Term → 𝓤 ̇
 
   𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
-  _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+  _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
    →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
-  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 --------------------------------
 
@@ -117,28 +121,28 @@ Closure data types
 
 ::
 
-  data PClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   pbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
-   prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S}
+  data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
+   prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
     →     Π' 𝒜 ∈ PClo 𝒦
 
   -- Subalgebra Closure
-  data SClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   sbase : {𝑨 :  Algebra _ S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-   sub : {𝑨 : Algebra _ S} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
+  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
 
   -- Homomorphic Image Closure
-  data HClo (𝒦 : Pred (Algebra 𝓤 S)(𝓤 ⁺)) : Pred (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   hbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
-   hhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+  data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+   hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
 
   -- Variety Closure
-  data VClo (𝒦 : Pred (Algebra 𝓤 S) (𝓤 ⁺)) : Pred (Algebra 𝓤 S)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   vbase : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ S} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
-   vsub : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
-   vhom : {𝑨 : Algebra 𝓤 S} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+  data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
+   vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 ---------------------------------------------
 
@@ -160,14 +164,14 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
 
 ::
 
-  P-closed : (𝓛𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺ ))
-   →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 S)
+  P-closed : (𝓛𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
+   →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
    →      (( i : I ) → 𝒜 i ∈ 𝓛𝒦 𝓘 ) → 𝓘 ⁺ ̇
   P-closed 𝓛𝒦 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝒦 →  Π' 𝒜  ∈ (𝓛𝒦 𝓘)
 
   products-preserve-identities :
         (p q : Term{X = X})
-        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
    →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
        -----------------------------------
    →     Π' 𝒜 ⊧ p ≈ q
@@ -186,9 +190,9 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
         ∎
 
   products-in-class-preserve-identities :
-       (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))
+       (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))
        (p q : Term{X = X})
-       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 S)
+       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
    →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
        ------------------------------------
    →    Π' 𝒜 ⊧ p ≈ q
@@ -210,7 +214,7 @@ Here are some of the key identities we need to complete the proof of Birkhoff's 
 
 ::
 
-  module _ (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ )) where
+  module _ (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )) where
 
 Identities for product closure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +245,7 @@ Identities for subalgebra closure
      A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
-     B : Algebra 𝓤 S
+     B : Algebra 𝓤 𝑆
      B = ∣ sa ∣
 
      h : ∣ B ∣ → ∣ 𝑨 ∣
@@ -281,7 +285,7 @@ Identities for hom image closure
      A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
 
-     𝑩 : Algebra 𝓤 S
+     𝑩 : Algebra 𝓤 𝑆
      𝑩 = ∣ 𝑩ϕhE ∣
 
      ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
@@ -331,7 +335,7 @@ Identities for varietal closure
      A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-     𝑩 : Algebra 𝓤 S
+     𝑩 : Algebra 𝓤 𝑆
      𝑩 = ∣ sa ∣
 
      h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
@@ -361,7 +365,7 @@ Identities for varietal closure
      A⊧p≈q : 𝑨 ⊧ p ≈ q
      A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
 
-     𝑩 : Algebra 𝓤 S
+     𝑩 : Algebra 𝓤 𝑆
      𝑩 = ∣ 𝑩ϕhE ∣
 
      ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
@@ -390,6 +394,39 @@ Identities for varietal closure
 
    vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
+
+-----------------------------------------------
+
+Unicode Hints
+---------------
+
+Table of some special characters used in the `closure module`_.
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | 𝒂, 𝒃   | ``\MIa``, ``\MIb``     |
+  +--------+------------------------+
+  | 𝑓 ̂ 𝑨  |  ``\Mif \^ \MIA``      |
+  +--------+------------------------+
+  | ≅      | ``≅`` or ``\cong``     |
+  +--------+------------------------+
+  | ∘      | ``\comp`` or ``\circ`` |
+  +--------+------------------------+
+  | 𝒾𝒹     | ``\Mci\Mcd``           |
+  +--------+------------------------+
+  | ℒ𝒦     | ``\McL\McK``           |
+  +--------+------------------------+
+  | ϕ      | ``\phi``               |
+  +--------+------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
 
 -------------------------
 

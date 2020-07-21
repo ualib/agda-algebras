@@ -9,6 +9,8 @@
 Types for Subalgebras
 =====================
 
+This chapter describes the `subuniverses module`_ of the `agda-ualib`_.
+
 Preliminaries
 ------------------
 
@@ -24,10 +26,7 @@ The file starts, as usual, with a list of imports.
   open import basic using (Signature; Algebra; Op; _̂_)
   open import relations using (transitive)
   open import homomorphisms using (hom; is-homomorphism; HomImage)
-
-  open import terms
-   using (Term; _̇_; generator; node; comm-hom-term) 
-
+  open import terms using (Term; _̇_; generator; node; comm-hom-term)
   open import Relation.Unary using (⋂)
 
 
@@ -118,7 +117,7 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
 
    sub-inter-is-sub Ai-is-Sub f a ima⊆⋂A = α
     where
-     α : ∥ 𝑨 ∥ f a ∈ ⋂ I 𝒜
+     α : (f ̂ 𝑨) a ∈ ⋂ I 𝒜
      α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
 
@@ -407,8 +406,6 @@ Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member 
 
 We first set down some notation for the modeling of identities.
 
-:Unicode Hints: ``\models`` produces ``⊧``; ``\~~`` produces ``≈``; ``\~~~`` produces ``≋``.
-
 The standard notation is ``𝑨 ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in 𝑨. In otherwords, for all assignments ``a : X → ∣ 𝑨 ∣`` of values to variables, we have ``(p ̇ 𝑨) a ≡ (q ̇ 𝑨) a``.
 
 If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
@@ -475,6 +472,37 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
     γ : 𝑩 ⊧ p ≈ q
     γ = gdfe λ b → hlc (ξ b)
 
+
+------------------------------------------
+
+Unicode Hints
+---------------
+
+Table of some special characters used in the `subuniverses module`_.
+
+  +--------+------------------------------+
+  | To get | Type                         |
+  +--------+------------------------------+
+  | 𝓘, 𝓣   | ``\MCI``, ``\MCT``           |
+  +--------+------------------------------+
+  | _⊧_≈_  | ``_\models_\~~_``            |
+  +--------+------------------------------+
+  | _⊧_≋_  | ``_\models_\~~~_``           |
+  +--------+------------------------------+
+  | ⊆      | ``\subseteq`` or ``\sub=``   |
+  +--------+------------------------------+
+  | ⋂      | ``\bigcap`` or ``\I``        |
+  +--------+------------------------------+
+  | ξ      | ``\xi``                      |
+  +--------+------------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
 
 -------------------------
 

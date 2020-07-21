@@ -9,6 +9,8 @@
 Homomorphisms in Agda
 ========================
 
+This chapter describes the `homomorphisms module`_ of the `agda-ualib`_.
+
 Preliminaries
 -------------
 
@@ -72,7 +74,7 @@ An example of such a homomorphism is the identity map.
 ::
 
   𝒾𝒹 :  (A : Algebra 𝓤 S) → hom A A
-  𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
+  𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _
 
 
 .. _obs 2 in agda:
@@ -210,7 +212,7 @@ Isomorphism
 -----------
 
 
-For algebras, isomorphisms are simply homs with 0 kernel.
+For algebras, an isomorphism is simply a homomorphism with a trivial kernel.
 
 ::
 
@@ -239,16 +241,21 @@ For algebras, isomorphisms are simply homs with 0 kernel.
 Types for homomorphic images
 -----------------------------
 
-The following seem to be the two most useful (for our purposes) types representing homomomrphic images of an algebra.
+The following seem to be (for our purposes) the two most useful types for representing homomomrphic images of an algebra.
 
 ::
 
-  HomImage : {𝑨 : Algebra 𝓤 S}(𝑩 : Algebra 𝓤 S)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+  HomImage : {𝑨 : Algebra 𝓤 S}
+   (𝑩 : Algebra 𝓤 S)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+
   HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
+
   HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-                                 is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+
+  HomImagesOf {𝓤} 𝑨 =
+    Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+                            is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 Here are some further definitions, derived from the one above, that will come in handy later.
 
@@ -264,16 +271,16 @@ Here are some further definitions, derived from the one above, that will come in
    →                       Pred (Algebra 𝓤 S) (𝓤 ⁺)
    →                       𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-  _is-hom-image-of-class_ {𝓤} 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 S) ,
-                             (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
+  _is-hom-image-of-class_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 S) ,
+                             (𝑨 ∈ 𝒦) × (𝑩 is-hom-image-of 𝑨)
 
   HomImagesOfClass : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
-                     (𝑩 is-hom-image-of-class 𝓚)
+  HomImagesOfClass 𝒦 = Σ 𝑩 ꞉ (Algebra _ S) ,
+                     (𝑩 is-hom-image-of-class 𝒦)
 
   H : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  H 𝓚 = HomImagesOfClass 𝓚
+  H 𝒦 = HomImagesOfClass 𝒦
 
 In the following definition ℒ𝒦 represents a (universe-indexed) collection of classes.
 
@@ -283,8 +290,41 @@ In the following definition ℒ𝒦 represents a (universe-indexed) collection o
    →         (𝓤 : Universe) → Algebra 𝓤 S
    →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-  H-closed ℒ𝒦 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (ℒ𝒦 𝓤) → 𝑩 ∈ (ℒ𝒦 𝓤)
+  H-closed ℒ𝒦 =
+   λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (ℒ𝒦 𝓤) → 𝑩 ∈ (ℒ𝒦 𝓤)
 
+------------------------------------------
+
+Unicode Hints
+---------------
+
+Table of some special characters used in the `homomorphisms module`_.
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | 𝒂, 𝒃   | ``\MIa``, ``\MIb``     |
+  +--------+------------------------+
+  | 𝑓 ̂ 𝑨  |  ``\Mif \^ \MIA``      |
+  +--------+------------------------+
+  | ≅      | ``≅`` or ``\cong``     |
+  +--------+------------------------+
+  | ∘      | ``\comp`` or ``\circ`` |
+  +--------+------------------------+
+  | 𝒾𝒹     | ``\Mci\Mcd``           |
+  +--------+------------------------+
+  | ℒ𝒦     | ``\McL\McK``           |
+  +--------+------------------------+
+  | ϕ      | ``\phi``               |
+  +--------+------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
 
 ------------------
 

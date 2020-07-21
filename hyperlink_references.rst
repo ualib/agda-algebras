@@ -1,10 +1,13 @@
 .. _2015 post by Floris van Doorn: https://homotopytypetheory.org/2015/12/02/the-proof-assistant-lean/
 .. _absolute value: https://en.wikipedia.org/wiki/Absolute_value
 .. _agda2-mode: https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html
+.. _agda-ualib: https://gitlab.com/ualib/ualib.gitlab.io
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
 .. _Agda Language Reference: https://agda.readthedocs.io/en/v2.6.1/language
 .. _Agda Standard Library: https://agda.github.io/agda-stdlib/
 .. _Agda Tools: https://agda.readthedocs.io/en/v2.6.1/tools/
+.. _Agda Tutorial: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
+.. _Agda Universal Algebra Library: https://github.com/UniversalAlgebra/agda-ualib/
 .. _Agda User's Manual: https://agda.readthedocs.io/en/v2.6.1/
 .. _Agda Wiki: https://wiki.portal.chalmers.se/agda/pmwiki.php
 .. _Algebraic Effects and Handlers: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
@@ -49,12 +52,10 @@
 .. _Lean Tutorial: https://leanprover.github.io/tutorial/
 .. _Lean Universal Algebra Library: https://github.com/UniversalAlgebra/lean-ualib/
 .. _Libor Barto: http://www.karlin.mff.cuni.cz/~barto/
-.. _Agda Universal Algebra Library: https://github.com/UniversalAlgebra/agda-ualib/
 .. _`lean/library/init`: https://github.com/leanprover/lean/tree/master/library/init
 .. _`lean/library/init/algebra`: https://github.com/leanprover/lean/blob/master/library/init/algebra
 .. _`lean/library/init/data`: https://github.com/leanprover/lean/tree/master/library/init/data
 .. _lean_src: https://github.com/leanprover/lean
-.. _agda-ualib: https://gitlab.com/ualib/ualib.gitlab.io
 .. _Logic and Proof: https://leanprover.github.io/logic_and_proof/
 .. _logic.lean: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
 .. _master: https://gitlab.com/ualib/lean-ualib/tree/master
@@ -96,13 +97,13 @@
 .. _Introduction to Univalent Foundations of Mathematics with Agda: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 .. _Computer Aided Formal Reasoning: http://www.cs.nott.ac.uk/~psztxa/g53cfr/
 .. _Dependent Types at Work: http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf
-.. _Agda Tutorial: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
 .. _Dependently Typed Programming in Agda: http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf
 .. _Programming Language Foundations in Agda: https://plfa.github.io/
 .. _basic module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst
 .. _birkhoff module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst
 .. _congruences module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst
 .. _homomorphisms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/homomorphisms.lagda.rst
+.. _prelude module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst
 .. _relations module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/relations.lagda.rst
 .. _subuniverses module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/subuniverses.lagda.rst
 .. _terms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/terms.lagda.rst

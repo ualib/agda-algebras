@@ -9,7 +9,7 @@
 Relations in Agda
 ====================
 
-Here we describe the ``relations`` module of the `agda-ualib`_.
+This chapter describes the `relations module`_ of the `agda-ualib`_.
 
 **N.B.** Some of the code described in this section is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
 
@@ -310,7 +310,34 @@ We construct the "trivial" or "diagonal" or "identity" relation and prove it is 
              )
 
 
+------------------------------------------
 
+Unicode Hints
+---------------
+
+Table of some special characters used in the `relations module`_. 
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | ≈      | ``\~~`` or ``\approx`` |
+  +--------+------------------------+
+  | ⇒      | ``\r2`` or ``\=>``     |
+  +--------+------------------------+
+  | 𝟎, 𝟏   | ``\B0``, ``\B1``       |
+  +--------+------------------------+
+  | θ, Δ   | ``\theta``, ``\Delta`` |
+  +--------+------------------------+
+  | ⟨_⟩     | ``\<_\>``             |
+  +--------+------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
 
 ------------------
 

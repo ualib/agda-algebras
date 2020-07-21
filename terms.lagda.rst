@@ -9,6 +9,8 @@
 Types for Terms
 ===============
 
+This chapter describes the `terms module`_ of the `agda-ualib`_.
+
 Preliminaries
 -------------
 
@@ -71,10 +73,10 @@ First, every map ``X → ∣ 𝑨 ∣`` lifts to a homomorphism.
 
    free-lift : (h : X → ∣ 𝑨 ∣)  →  ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
    free-lift h (generator x) = h x
-   free-lift h (node f args) = ∥ 𝑨 ∥ f λ i → free-lift h (args i)
+   free-lift h (node f args) = (f ̂ 𝑨) λ i → free-lift h (args i)
 
    lift-hom : (h : X → ∣ 𝑨 ∣) →  hom  (𝑻 X) 𝑨
-   lift-hom h = free-lift h , λ f a → ap (∥ 𝑨 ∥ _) (refl _)
+   lift-hom h = free-lift h , λ f a → ap (_ ̂ 𝑨) (refl _)
 
 Next, the lift to (𝑻 X → A) is unique.
 
@@ -89,8 +91,8 @@ Next, the lift to (𝑻 X → A) is unique.
    free-unique fe g h p (generator x) = p x
    free-unique fe g h p (node f args) =
     ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-    ∥ 𝑨 ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
-    ∥ 𝑨 ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
+    (f ̂ 𝑨)(λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
+    (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
     ∣ h ∣ (node f args)             ∎
      where γ = fe λ i → free-unique fe g h p (args i)
 
@@ -205,6 +207,41 @@ For proof of 3, see `TermImageSub` in subuniverses.lagda.
 
 ..    #. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 
+
+------------------------------------------
+
+Unicode Hints
+---------------
+
+Table of some special characters used in the `terms module`_.
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | 𝑻      | ``\MIT``               |
+  +--------+------------------------+
+  | t ̇ 𝑨  | ``t \^. \MIA``         |
+  +--------+------------------------+
+  | 𝑓 ̂ 𝑨  |  ``\Mif \^ \MIA``      |
+  +--------+------------------------+
+  | pr₂    | ``pr\_2``              |
+  +--------+------------------------+
+  | ∘      | ``\comp`` or ``\circ`` |
+  +--------+------------------------+
+  | 𝒾𝒹     | ``\Mci\Mcd``           |
+  +--------+------------------------+
+  | ℒ𝒦     | ``\McL\McK``           |
+  +--------+------------------------+
+  | ϕ      | ``\phi``               |
+  +--------+------------------------+
+
+For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+
+Emacs commands for retrieving information about characters or the input method:
+
+  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
 
 ------------------
 
