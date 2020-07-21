@@ -624,5 +624,7 @@ We assume you are using Emacs in a buffer agda2-mode_ enabled.
   | ⊆₀     | ``\subseteq\_0``     |
   +--------+----------------------+
 
+------------------------------------------------------
+
 .. include:: hyperlink_references.rst
 
