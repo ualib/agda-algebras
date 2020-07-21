@@ -12,8 +12,10 @@ Birkhoff's Theorem in Agda
 
 Here we give a formal proof in Agda of :ref:`Birkhoff's theorem <birkhoffs theorem>` (:numref:`%s <birkhoffs theorem>`), which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).  The sections below contain (literate) Agda code that formalizes each step of the (informal) proof we saw above in :numref:`birkhoffs theorem`.
 
-Preliminaries
------------------
+.. _the birkhoff module:
+
+The Birkhoff module
+----------------------
 
 As usual, we start with the imports we will need below.
 
@@ -28,12 +30,8 @@ As usual, we start with the imports we will need below.
   open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
                            lift-hom; interp-prod)
 
-  open import subuniverses using (Subuniverse; mksub; var; app; Sg; Subalgebra)
-
-.. _the birkhoff module:
-
-The Birkhoff module
-----------------------
+  open import subuniverses using (Subuniverse; mksub; var; app;
+                                  Sg; Subalgebra)
 
 We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
 
@@ -49,13 +47,21 @@ We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in
    {gfe : global-dfunext}
    {dfe : dfunext 𝓤 𝓤} where
 
-  open import closure{𝑆 = 𝑆}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
+  open import closure
+   {𝑆 = 𝑆}
+   {𝓤 = 𝓤}
+   {ua = ua}
+   {X = X}
+   {gfe = gfe}
+   {dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
 
+
+-------------------------------------
 
 .. _obs 1 in agda:
 
-Equalizers
-~~~~~~~~~~~~~~
+Equalizers in Agda
+----------------------
 
 The equalizer of two functions (resp., homomorphisms) ``g h : A → B`` is the subset of ``A`` on which the values of the functions ``g`` and ``h`` agree.  We formalize this notion in Agda as follows.
 
@@ -99,46 +105,52 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``A``.
    mksub (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h)
     λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑨 = 𝑨}{𝑩 = 𝑩} g h 𝒂 x
 
+
+-------------------------------------
+
 .. _obs 3 in agda:
 
-Homomorphisms
-~~~~~~~~~~~~~~
+Homomorphism determination
+---------------------------
 
 The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  This is proved here, and not in the `homomorphisms module`_ because we need ``Sg`` from the ``subuniverses`` module (see :numref:`subuniverses in agda`).
 
 ::
 
-  HomUnique : funext 𝓥 𝓤 → {𝑨 B : Algebra 𝓤 𝑆}
-             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 B)
+  HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
+             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
    →         (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
            ---------------------------------------------------
    →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
   HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
-  HomUnique fe {𝑨 = A , Fᴬ}{B = B , Fᴮ} X
+  HomUnique fe {𝑨}{𝑩} X
    (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
-    g (Fᴬ 𝑓 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
-    Fᴮ 𝑓 (g ∘ 𝒂 )   ≡⟨ ap (Fᴮ 𝑓) (fe induction-hypothesis) ⟩
-    Fᴮ 𝑓 (h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
-    h ( Fᴬ 𝑓 𝒂 )   ∎
+    g ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
+    (𝑓 ̂ 𝑩)(g ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩) (fe induction-hypothesis) ⟩
+    (𝑓 ̂ 𝑩)(h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
+    h ((𝑓 ̂ 𝑨) 𝒂)   ∎
    where
     induction-hypothesis =
-      λ x → HomUnique fe {𝑨 = A , Fᴬ}{B = B , Fᴮ} X
+      λ x → HomUnique fe {𝑨}{𝑩} X
       (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, B)∣ ≤ :math:`∣B∣^{∣X∣}`.
+**Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
 Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
 
 .. todo:: formalize **Obs**.
 
+
+----------------------------------------------
+
 .. _obs 14 in agda:
 
-Identities preserved by homs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hom identity preservation
+--------------------------
 
 Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 
-.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^𝑻(X) = h ∘ q^𝑻(X).
+.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.
 
 We now formalize this result in Agda.
 
