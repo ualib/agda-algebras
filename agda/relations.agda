@@ -123,39 +123,39 @@ compatible-fun : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
  →               𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 
-module _ {S : Signature 𝓞 𝓥}  where
+module _ {𝑆 : Signature 𝓞 𝓥}  where
 
   -- relation compatible with an operation
-  compatible-op : {A : Algebra 𝓤 S}
-   →              ∣ S ∣ → Rel ∣ A ∣ 𝓤
+  compatible-op : {A : Algebra 𝓤 𝑆}
+   →              ∣ 𝑆 ∣ → Rel ∣ A ∣ 𝓤
    →              𝓥 ⊔ 𝓤 ̇
   compatible-op {𝓤} {A} f R = (lift-rel R) =[ (∥ A ∥ f) ]⇒ R
 
   --The given relation is compatible with all ops of an algebra.
-  compatible : (A : Algebra 𝓤 S) → Rel ∣ A ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
+  compatible : (A : Algebra 𝓤 𝑆) → Rel ∣ A ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
   compatible {𝓤} A R = ∀ f → compatible-op{𝓤}{A} f R
 
   𝟎-compatible-op : funext 𝓥 𝓤
-   →                {A : Algebra 𝓤 S} (f : ∣ S ∣)
+   →                {A : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
    →                compatible-op {𝓤}{A} f 𝟎-rel
   𝟎-compatible-op fe {A = A} f ptws0  =
    ap (∥ A ∥ f) (fe (λ x → ptws0 x))
 
   𝟎-compatible : funext 𝓥 𝓤
-   →             {A : Algebra 𝓤 S}
+   →             {A : Algebra 𝓤 𝑆}
    →             compatible A 𝟎-rel
   𝟎-compatible fe {A} =
    λ f args → 𝟎-compatible-op fe {A} f args
 
   -- Congruence relations
-  Con : (A : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  Con : (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
   Con {𝓤} A =
    Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
 
-  con : (A : Algebra 𝓤 S)  →  Pred (Rel ∣ A ∣ 𝓤) _
+  con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) _
   con A = λ θ → IsEquivalence θ × compatible A θ
 
-  record Congruence (A : Algebra 𝓤 S) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  record Congruence (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
     constructor mkcon
     field
       ⟨_⟩ : Rel ∣ A ∣ 𝓤
@@ -163,14 +163,14 @@ module _ {S : Signature 𝓞 𝓥}  where
       IsEquiv : IsEquivalence ⟨_⟩
   open Congruence
 
-  Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 S) → Congruence A
+  Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
   Δ fe A = mkcon 𝟎-rel
                 ( 𝟎-compatible fe {A} )
                 ( 𝟎-IsEquivalence )
 
-  _╱_ : (A : Algebra 𝓤 S) → Congruence A
+  _╱_ : (A : Algebra 𝓤 𝑆) → Congruence A
          ---------------------------------
-   →     Algebra (𝓤 ⁺) S
+   →     Algebra (𝓤 ⁺) 𝑆
   A ╱ θ = (( ∣ A ∣ // ⟨ θ ⟩ ) , -- carrier
             (λ f args        -- operations
              → ([ ∥ A ∥ f (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,

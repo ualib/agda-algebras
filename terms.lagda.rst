@@ -33,11 +33,11 @@ We developed the notion of a term in a signature informally in :numref:`terms`. 
 
 ::
 
-  module terms {S : Signature 𝓞 𝓥} where
+  module terms {𝑆 : Signature 𝓞 𝓥} where
 
   data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
    generator : X → Term {X = X}
-   node : (f : ∣ S ∣) → (t : ∥ S ∥ f → Term {X = X}) → Term
+   node : (f : ∣ 𝑆 ∣) → (t : ∥ 𝑆 ∥ f → Term {X = X}) → Term
 
   open Term
 
@@ -49,7 +49,7 @@ The term algebra was described informally in :numref:`terms`.  We denote this im
 ::
 
   --The term algebra 𝑻(X).
-  𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
+  𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) 𝑆
   𝑻 X = Term{X = X} , node
 
 
@@ -60,12 +60,12 @@ The universal property of 𝑻(X)
 
 We prove
 
-  #. every map ``h : 𝑋 → ∣ 𝑨 ∣`` lifts to a homomorphism from 𝑻(X) to A, and
+  #. every map ``h : 𝑋 → ∣ 𝑨 ∣`` lifts to a homomorphism from 𝑻(X) to 𝑨, and
   #. the induced homomorphism is unique.
 
 ::
 
-  module _ {𝑨 : Algebra 𝓤 S} {X : 𝓧 ̇ } where
+  module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
 
 First, every map ``X → ∣ 𝑨 ∣`` lifts to a homomorphism.
 
@@ -78,7 +78,7 @@ First, every map ``X → ∣ 𝑨 ∣`` lifts to a homomorphism.
    lift-hom : (h : X → ∣ 𝑨 ∣) →  hom  (𝑻 X) 𝑨
    lift-hom h = free-lift h , λ f a → ap (_ ̂ 𝑨) (refl _)
 
-Next, the lift to (𝑻 X → A) is unique.
+Next, the lift to (𝑻 X → 𝑨) is unique.
 
 ::
 
@@ -100,15 +100,15 @@ Next, the lift to (𝑻 X → A) is unique.
 Interpretation of terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let ``t : Term`` be a term and ``𝑨`` an S-algebra. We define the 𝑛-ary operation ``t ̇ 𝑨`` on ``𝑨`` by structural recursion on ``t``.
+Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary operation ``t ̇ 𝑨`` on ``𝑨`` by structural recursion on ``t``.
 
   #. if ``t = x ∈ X`` (a variable) and ``a : X → ∣ 𝑨 ∣`` is a tuple of elements of ``∣ 𝑨 ∣``, then ``(t ̇ 𝑨) a = a x``.
-  #. if ``t = f args``, where ``f ∈ ∣ S ∣`` is an op symbol and ``args : ∥ S ∥ f → Term`` is an (``∥ S ∥ f``)-tuple of terms and ``a : X → ∣ 𝑨 ∣`` is a tuple from ``𝑨``, then ``(t ̇ 𝑨) a = ((f args) ̇ 𝑨) a = (f ̂ 𝑨) λ{ i → ((args i) ̇ 𝑨) a }``
+  #. if ``t = f args``, where ``f ∈ ∣ 𝑆 ∣`` is an op symbol and ``args : ∥ 𝑆 ∥ f → Term`` is an (``∥ 𝑆 ∥ f``)-tuple of terms and ``a : X → ∣ 𝑨 ∣`` is a tuple from ``𝑨``, then ``(t ̇ 𝑨) a = ((f args) ̇ 𝑨) a = (f ̂ 𝑨) λ{ i → ((args i) ̇ 𝑨) a }``
 
 ::
 
   _̇_ : {X : 𝓧 ̇ } → Term{X = X}
-   →   (𝑨 : Algebra 𝓤 S) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+   →   (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
   ((generator x)̇ 𝑨) a = a x
 
@@ -117,7 +117,7 @@ Let ``t : Term`` be a term and ``𝑨`` an S-algebra. We define the 𝑛-ary ope
 
   interp-prod : funext 𝓥 𝓤
    →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})
-                (𝒜 : I → Algebra 𝓤 S)
+                (𝒜 : I → Algebra 𝓤 𝑆)
                 (x : X → ∀ i → ∣ (𝒜 i) ∣)
    →            (p ̇ (Π' 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
 
@@ -134,7 +134,7 @@ Let ``t : Term`` be a term and ``𝑨`` an S-algebra. We define the 𝑛-ary ope
 
   interp-prod2 : global-dfunext
    →             {X : 𝓧 ̇ }{I : 𝓤 ̇ }
-                 (p : Term{X = X}) (𝒜 : I → Algebra 𝓤 S)
+                 (p : Term{X = X}) (𝒜 : I → Algebra 𝓤 𝑆)
     -----------------------------------------------------------
    → (p ̇ Π' 𝒜) ≡ λ(args : X → ∣ Π' 𝒜 ∣)
                     → (λ i → (p ̇ 𝒜 i)(λ x → args x i))
@@ -159,7 +159,7 @@ Let ``t : Term`` be a term and ``𝑨`` an S-algebra. We define the 𝑛-ary ope
 Compatibility of homs and terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this section we present the formal proof of the fact that homomorphisms commute with terms.  More precisely, if A and B are S-algebras, h : A → B a homomorphism, and t a term in the language of S, then for all a : X → ∣ A ∣ we have :math:`h (t^A a) = t^B (h ∘ a)`.
+In this section we present the formal proof of the fact that homomorphisms commute with terms.  More precisely, if 𝑨 and 𝑩 are 𝑆-algebras, h : 𝑨 → 𝑩 a homomorphism, and t a term in the language of 𝑆, then for all a : X → ∣ 𝑨 ∣ we have :math:`h (t^𝑨 a) = t^𝑩 (h ∘ a)`.
 
 
 .. _obs 11 in agda:
@@ -170,38 +170,38 @@ Homomorphisms commute with terms
 ::
 
   comm-hom-term : global-dfunext --  𝓥 𝓤
-   →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
-   →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
+   →               {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+   →               (h : hom 𝑨 𝑩) (t : Term{X = X}) (a : X → ∣ 𝑨 ∣)
                  --------------------------------------------
-   →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
+   →               ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
-  comm-hom-term fe A B h (generator x) a = refl _
+  comm-hom-term fe 𝑨 𝑩 h (generator x) a = refl _
 
-  comm-hom-term fe A B h (node f args) a =
-   ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
-     ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
-   (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
-     ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term fe A B h (args i₁) a))⟩
-   (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
+  comm-hom-term fe 𝑨 𝑩 h (node f args) a =
+   ∣ h ∣ ((f ̂ 𝑨)  (λ i₁ → (args i₁ ̇ 𝑨) a))
+     ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a ) ⟩
+   (f ̂ 𝑩) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ 𝑨) a))
+     ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (args i₁) a))⟩
+   (f ̂ 𝑩) (λ r → (args r ̇ 𝑩) (∣ h ∣ ∘ a))
      ∎
 
 Compatibility of congruences and terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here we present an Agda proof of the fact that terms respect congruences. More precisely, we show that for every term t, every θ ∈ Con(A), and all tuples a, b : 𝑋 → A, we have :math:`(∀ i, a(i) \mathrel θ b(i)) → (t^A a) \mathrel θ (t^A b)`.
+Here we present an Agda proof of the fact that terms respect congruences. More precisely, we show that for every term t, every θ ∈ Con(𝑨), and all tuples a, b : 𝑋 → A, we have :math:`(∀ i, a(i) \mathrel θ b(i)) → (t^𝑨 a) \mathrel θ (t^𝑨 b)`.
 
 ::
 
-  -- If t : Term, θ : Con A, then a θ b → t(a) θ t(b)
+  -- If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b)
   compatible-term : {X : 𝓧 ̇}
-             (A : Algebra 𝓤 S) (t : Term{X = X}) (θ : Con A)
+             (𝑨 : Algebra 𝓤 𝑆) (t : Term{X = X}) (θ : Con 𝑨)
              --------------------------------------------------
-   →                   compatible-fun (t ̇ A) ∣ θ ∣
+   →                   compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
-  compatible-term A (generator x) θ p = p x
+  compatible-term 𝑨 (generator x) θ p = p x
 
-  compatible-term A (node f args) θ p =
-   pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
+  compatible-term 𝑨 (node f args) θ p =
+   pr₂( ∥ θ ∥ ) f λ{x → (compatible-term 𝑨 (args x) θ) p}
 
 For proof of 3, see `TermImageSub` in subuniverses.lagda.
 

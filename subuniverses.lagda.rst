@@ -39,13 +39,13 @@ We begin the ``subuniverses`` module with a straightforward definition of the co
 
 ::
 
-  module subuniverses {S : Signature 𝓞 𝓥} where
+  module subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
-  Subuniverses : (𝑨 : Algebra 𝓤 S)
+  Subuniverses : (𝑨 : Algebra 𝓤 𝑆)
    →             Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
 
   Subuniverses 𝑨 B =
-   (f : ∣ S ∣)(a : ∥ S ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
+   (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
 
 
 .. _obs 7 in agda:
@@ -57,7 +57,7 @@ Next we formalize the important theorem about subuniverse generation that we pre
 
 ::
 
-  record Subuniverse {𝑨 : Algebra 𝓤 S} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
+  record Subuniverse {𝑨 : Algebra 𝓤 𝑆} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
    constructor mksub
    field
      sset  : Pred ∣ 𝑨 ∣ 𝓤
@@ -66,13 +66,13 @@ Next we formalize the important theorem about subuniverse generation that we pre
 ::
 
   module _
-   {𝑨 : Algebra 𝓤 S} where
+   {𝑨 : Algebra 𝓤 𝑆} where
 
 ::
 
    data Sg (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
     var : ∀ {v} → v ∈ X → v ∈ Sg X
-    app :  ( f : ∣ S ∣ ) { a : ∥ S ∥ f → ∣ 𝑨 ∣ }
+    app :  ( f : ∣ 𝑆 ∣ ) { a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣ }
      →       Im a ⊆ Sg X
             -----------------
      →       ∥ 𝑨 ∥ f a ∈ Sg X
@@ -108,7 +108,7 @@ Recall from :numref:`Obs %s <obs 6>` that the intersection ⋂ᵢ 𝐴ᵢ of a c
 
 ::
 
-  module _ {𝑨 : Algebra 𝓤 S}{I : 𝓘 ̇}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣} where
+  module _ {𝑨 : Algebra 𝓤 𝑆}{I : 𝓘 ̇}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣} where
 
 ::
 
@@ -143,14 +143,14 @@ We are now ready to formalize the proof the proof that homomorphic images are su
 ::
 
   module _
-   {𝑨 𝑩 : Algebra 𝓤 S}
+   {𝑨 𝑩 : Algebra 𝓤 𝑆}
    (ϕ : hom 𝑨 𝑩) where
 
    hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
    hom-image-is-sub {fe} f b b∈Imf =
     eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
      where
-      ar : ∥ S ∥ f → ∣ 𝑨 ∣
+      ar : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
       ar = λ x → Inv ∣ ϕ ∣ (b x) (b∈Imf x)
 
       ζ : ∣ ϕ ∣ ∘ ar ≡ b
@@ -174,7 +174,7 @@ Recall :numref:`Obs %s <obs 12>` presenting subuniverse generation using the ima
 
   module _
    {X : 𝓤 ̇}
-   {𝑨 𝑩 : Algebra 𝓤 S}
+   {𝑨 𝑩 : Algebra 𝓤 𝑆}
    {B : Pred ∣ 𝑨 ∣ 𝓤}
    (Y : 𝓤 ̇) where
 
@@ -205,7 +205,7 @@ Next we prove :math:`\mathrm{Sg}^𝑨(Y) ⊆ \{ t^𝑨 a : t ∈ 𝑇(𝑋), a :
 
    data TermImage (Y : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
     var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage Y
-    app : (f : ∣ S ∣) (t : ∥ S ∥ f → ∣ 𝑨 ∣)
+    app : (f : ∣ 𝑆 ∣) (t : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣)
      →    (Im t ⊆ TermImage Y)  -- ∀ i  →  t i ∈ TermImage Y
          -------------------------------
      →    (∥ 𝑨 ∥ f t) ∈ TermImage Y
@@ -248,14 +248,14 @@ The next submodule is a generalization of MHE's implementation of subgroups. We 
 
 ::
 
-  module _ {𝑨 : Algebra 𝓤 S} (UV : Univalence) where
+  module _ {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
 
 Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we define the type of subalgebras as follows.
 
 ::
 
    Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 S) ,
+   Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
                    Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
                      is-embedding h × is-homomorphism 𝑩 𝑨 h
 
@@ -270,7 +270,7 @@ Note that we introduce a new definition of the ``subuniverse`` type here.  In co
    gfe = univalence-gives-global-dfunext UV
 
    op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-   op-closed B = (f : ∣ S ∣)(a : ∥ S ∥ f → ∣ 𝑨 ∣)
+   op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣)
     → Im a ⊆ B → B (∥ 𝑨 ∥ f a)
 
    subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
@@ -412,30 +412,30 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
 
 ::
 
-   _⊧_≈_ : Algebra 𝓤 S
+   _⊧_≈_ : Algebra 𝓤 𝑆
     →      Term{X = X} → Term → 𝓤 ̇
 
    𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
-   _⊧_≋_ : Pred (Algebra 𝓤 S) 𝓦
+   _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
     →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
-   _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ S} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+   _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
    gdfe : global-dfunext
    gdfe = univalence-gives-global-dfunext UV
 
-   SubalgebrasOfClass : Pred (Algebra 𝓤 S)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+   SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
    SubalgebrasOfClass 𝒦 =
-    Σ 𝑨 ꞉ (Algebra _ S) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} UV
+    Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} UV
 
-   subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 S) ( 𝓤 ⁺ ))(p q : Term{X = X})
+   subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
     →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
     →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
    subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
     where
 
-    𝑨 : Algebra 𝓤 S
+    𝑨 : Algebra 𝓤 𝑆
     𝑨 = ∣ SAK ∣
 
     A∈𝒦 : 𝑨 ∈ 𝒦
@@ -447,7 +447,7 @@ If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` j
     subalg : Subalgebra {𝑨 = 𝑨} UV
     subalg = ∥ pr₂ SAK ∥
 
-    𝑩 : Algebra 𝓤 S
+    𝑩 : Algebra 𝓤 𝑆
     𝑩 = pr₁ subalg
 
     h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣

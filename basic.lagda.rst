@@ -151,7 +151,7 @@ Before proceding, we define some syntactic sugar that allows us to replace ∥ �
 
    𝑓 ̂ 𝑨 = λ x → (∥ 𝑨 ∥ 𝑓) x
 
-   infix 1000 _̂_
+   infix 40 _̂_
 
 We can now write 𝑓 ̂ 𝑨 for the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨.
 

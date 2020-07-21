@@ -246,43 +246,43 @@ We define **compatibility** of a given function-relation pair as follows:
    compatible-fun 𝒇 𝑹 = (lift-rel 𝑹) =[ 𝒇 ]⇒ 𝑹
 
 
-Finally, we come to the definition of a congruence, which we define in a module (so that we can assume a particular signature ``S`` is present and available in the context).
+Finally, we come to the definition of a congruence, which we define in a module (so that we can assume a particular signature 𝑆 is present and available in the context).
 
 ::
 
-   module _ {S : Signature 𝓞 𝓥}  where
+   module _ {𝑆 : Signature 𝓞 𝓥}  where
 
      -- relation compatible with an operation
-     compatible-op : {𝑨 : Algebra 𝓤 S}
-      →              ∣ S ∣ → Rel ∣ 𝑨 ∣ 𝓤
+     compatible-op : {𝑨 : Algebra 𝓤 𝑆}
+      →              ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓤
       →              𝓥 ⊔ 𝓤 ̇
      compatible-op {𝓤} {𝑨} 𝑓 𝓻 = (lift-rel 𝓻) =[ (∥ 𝑨 ∥ 𝑓) ]⇒ 𝓻
 
      --The given relation is compatible with all ops of an algebra.
-     compatible : (𝑨 : Algebra 𝓤 S) -> Rel ∣ 𝑨 ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
+     compatible : (𝑨 : Algebra 𝓤 𝑆) -> Rel ∣ 𝑨 ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
      compatible {𝓤} 𝑨 𝓻 = ∀ 𝑓 → compatible-op{𝓤}{𝑨} 𝑓 𝓻
 
      𝟎-compatible-op : funext 𝓥 𝓤
-      →                {𝑨 : Algebra 𝓤 S} (𝑓 : ∣ S ∣)
+      →                {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣)
       →                compatible-op {𝓤}{𝑨} 𝑓 𝟎-rel
      𝟎-compatible-op fe {𝑨 = 𝑨} 𝑓 ptws𝟎  =
       ap (∥ 𝑨 ∥ 𝑓) (fe (λ x → ptws𝟎 x))
 
      𝟎-compatible : funext 𝓥 𝓤
-      →             {𝑨 : Algebra 𝓤 S}
+      →             {𝑨 : Algebra 𝓤 𝑆}
       →             compatible 𝑨 𝟎-rel
      𝟎-compatible fe {𝑨} =
       λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
      -- Congruence relations
-     Con : (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+     Con : (𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
      Con {𝓤} 𝑨 =
       Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
-     con : (𝑨 : Algebra 𝓤 S)  →  Pred (Rel ∣ 𝑨 ∣ 𝓤) _
+     con : (𝑨 : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ 𝑨 ∣ 𝓤) _
      con 𝑨 = λ θ → IsEquivalence θ × compatible 𝑨 θ
 
-     record Congruence (𝑨 : Algebra 𝓤 S) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+     record Congruence (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
        constructor mkcon
        field
          ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
@@ -294,14 +294,14 @@ We construct the "trivial" or "diagonal" or "identity" relation and prove it is 
 
 ::
 
-     Δ : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
+     Δ : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆) → Congruence 𝑨
      Δ fe 𝑨 = mkcon 𝟎-rel
                    ( 𝟎-compatible fe {𝑨} )
                    ( 𝟎-IsEquivalence )
 
-     _╱_ : (𝑨 : Algebra 𝓤 S) → Congruence 𝑨
+     _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence 𝑨
             ---------------------------------
-      →     Algebra (𝓤 ⁺) S
+      →     Algebra (𝓤 ⁺) 𝑆
      𝑨 ╱ θ = (( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
                (λ 𝑓 args        -- operations
                 → ([ ∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
