@@ -7,14 +7,14 @@
 .. _birkhoffs theorem in agda:
 
 ============================
-Birkhoff's Theorem in Agda
+HSP Theorem in Agda
 ============================
 
 Here we give a formal proof in Agda of :ref:`Birkhoff's theorem <birkhoffs theorem>` (:numref:`%s <birkhoffs theorem>`), which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).  The sections below contain (literate) Agda code that formalizes each step of the (informal) proof we saw above in :numref:`birkhoffs theorem`.
 
 .. _the birkhoff module:
 
-The Birkhoff module
+The birkhoff module
 ----------------------
 
 As usual, we start with the imports we will need below.
@@ -110,8 +110,8 @@ Thus, ``𝑬𝑯`` is a subuniverse of ``A``.
 
 .. _obs 3 in agda:
 
-Homomorphism determination
----------------------------
+Hom determination
+-----------------
 
 The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in :numref:`Obs %s <obs 3>`.  This is proved here, and not in the `homomorphisms module`_ because we need ``Sg`` from the ``subuniverses`` module (see :numref:`subuniverses in agda`).
 
@@ -145,8 +145,8 @@ Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restrictio
 
 .. _obs 14 in agda:
 
-Hom identity preservation
---------------------------
+Hom-Id compatibility
+---------------------
 
 Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 
@@ -223,6 +223,14 @@ We now formalize this result in Agda.
       identities-are-compatible-with-homs p q ,
       homs-are-compatible-with-identities p q
 
+--------------------------------------------------
+
+
+Equational classes
+--------------------
+
+::
+
    TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
    TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
@@ -234,6 +242,13 @@ We now formalize this result in Agda.
 
    Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
    Mod Σ' = λ 𝑨 → ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
+
+---------------------------------------------------------------
+
+The Agda proof of Birkhoff's theorem
+-------------------------------------
+
+::
 
    --Birkhoff's theorem: every variety is an equational class.
    birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
