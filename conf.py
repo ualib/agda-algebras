@@ -77,6 +77,7 @@ proof_theorem_types = {
     "question": "Question",
     "prop": "Proposition",
     "theorem": "Theorem",
+    "agda": "Agda Artifact",
 }
 
 # use numbering for section references with :numref:, e.g. 'Section 3.2'.

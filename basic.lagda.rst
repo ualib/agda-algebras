@@ -150,13 +150,16 @@ Before proceding, we define some syntactic sugar that allows us to replace ``∥
 
    f ̂ 𝑨 = λ x → (∥ 𝑨 ∥ f) x
 
+   infix 1000 _̂_
+
 We can now write ``f ̂ 𝑨`` for the interpretation of the basic operation ``f`` in the algebra ``𝑨``.
 
 :N.B.: Below, we will write ``t ̇ 𝑨`` for the interpretation of a *term* ``t`` in ``𝑨``.
 
 .. todo:: Perhaps we can figure out how to use the same notation for both interpretations of operation symbols and terms.
 
---------------------------------------------------
+-------------------------------------------------------
+
 Products of algebras in Agda
 ------------------------------
 

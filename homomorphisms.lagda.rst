@@ -130,18 +130,20 @@ As we saw in :numref:`Obs %s <obs 5>`, if
 * ``g : hom 𝑨 𝑩``,
 * ``h : hom 𝑨 𝑪``,
 * ``h`` is surjective, and
-* ``Ker h ⊆ Ker g``,
+* ``ker h ⊆ ker g``,
 
 then there exists ``ϕ : hom 𝑪 𝑩`` such that ``g = ϕ ∘ h``, that is, such that the following diagram commutes;
 
 .. code-block::
 
-        𝑨---g---> 𝑩
-         \       ↑
-          \     /
-        h  \   / ∃ϕ
-            ↓ /
-             𝑪
+        𝑨---- h -->>𝑪
+         \         /
+          \       /
+         g \     / ∃ϕ
+            \   /
+             \ /
+              V
+              𝑩
 
 We now formalize the statement and proof of this basic fact. (Notice that the proof is fully constructive.)
 

@@ -17,7 +17,6 @@ Agda Preliminaries
   * :term:`MHE` = `Martin Hötzel Escardo <https://www.cs.bham.ac.uk/~mhe/>`_
   * :term:`MLTT` = `Martin-Löf Type Theory <https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory>`_
 
-
 ----------------------------------------------------
 
 Options and imports
@@ -33,16 +32,16 @@ For example, here's the start of the first Agda source file in our library, whic
 
 This specifies Agda ``OPTIONS`` that we will use throughout the library.
 
-  * ``without-K`` disables `Streicher's K axiom <https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29>`_ ;
+  * ``without-K`` disables `Streicher's K axiom <https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29>`_ ; see also the `section on axiom K <https://agda.readthedocs.io/en/v2.6.1/language/without-k.html>`_ in the `Agda Language Reference`_ manual.
 
-  * ``exact-split`` makes Agda accept only those definitions that behave like so-called *judgmental* or *definitional* equalities.  :term:`MHE` explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators."
+  * ``exact-split`` makes Agda accept only those definitions that behave like so-called *judgmental* or *definitional* equalities.  :term:`MHE` explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators;" see also the `Pattern matching and equality section <https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality>`_ of the `Agda Tools`_ documentation.
 
-  * ``safe`` ensures that nothing is postulated outright---every non-:term:`MLTT` axiom has to be an explicit assumption (e.g., an argument to a function or module).
+  * ``safe`` ensures that nothing is postulated outright---every non-:term:`MLTT` axiom has to be an explicit assumption (e.g., an argument to a function or module); see also `this section <https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe>`_ of the `Agda Tools`_ documentation and the `Safe Agda section <https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda>`_ of the `Agda Language Reference`_.
 
 Universes
 ~~~~~~~~~~
 
-We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda directive ``module prelude where``.  We then immediately import the ``Universes`` module from Martin Hötzel Escardo's (:term:`MHE`'s) `Type Topology`_ library. 
+We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda directive ``module prelude where``.  We then immediately import the ``Universes`` module from :term:`MHE`'s `Type Topology`_ library.
 
 ::
 
@@ -50,7 +49,9 @@ We begin the first module of `agda-ualib`_, called ``prelude``, using the Agda d
 
     open import Universes public
 
-This ``Universes`` module provides, among other things, an elegant notation for type universes. (:term:`MHE` has produced an outstanding set of notes on `HoTT-UF-in-Agda`_, which we highly recommend to those wanting more details than we provide here.)
+This ``Universes`` module provides, among other things, an elegant notation for type universes that we have fully adopted and we use MHE's notation throughout the agda-ualib_.
+
+:term:`MHE` has authored an outstanding set of notes on `HoTT-UF-in-Agda`_ called `Introduction to Univalent Foundations of Mathematics with Agda`_ . We highly recommend these notes to anyone wanting more details than we provide here about :term:`MLTT` and the Univalent Foundations/HoTT extensions thereof.
 
 Following :term:`MHE`, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣.  We add a few more to Martin's list.
 
@@ -59,13 +60,54 @@ Following :term:`MHE`, we refer to universes using capitalized script letters �
     variable
       𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
-:Unicode Hints: In agda2-mode_ type ``\MCI``, ``\MCJ``, etc. to obtain 𝓘, 𝓙, etc.
+In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to ``Set 𝓤``, and the latter has type ``Set (lsuc 𝓤)``.
 
-In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a universe ``𝓤`` (i.e., a level) to ``Set 𝓤``, and the latter has type ``Set (lsuc 𝓤)``, or ``Type (𝓤 ⁺)``.  That is, ``𝓤 ̇`` is simply an alias for ``Set 𝓤``, and we have ``Set 𝓤 : Set (lsuc 𝓤)``. The level ``lzero`` is renamed ``𝓤₀``, so ``𝓤₀ ̇`` is an alias for ``Set lzero``. (This corresponds to ``Sort 0`` in Lean_.) Thus, ``Set (lsuc lzero)`` is denoted by ``Set 𝓤₀ ⁺`` which we denote by ``𝓤₀ ⁺ ̇`` .
+The level ``lzero`` is renamed 𝓤₀, so 𝓤₀ ̇  is an alias for ``Set lzero`` (which, incidentally, corresponds to ``Sort 0`` in Lean_).
 
-:Unicode Hints: In agda2-mode_ type ``\MCU \^.``, ``\MCU \^+``, ``\MCU\_0``, and ``\sqcup`` to produce the symbols 𝓤 ̇, 𝓤 ⁺, 𝓤₀, and ⊔.
+Although it is nice and short, we won't show all of the ``Universes`` module here.  Instead, we highlight the few lines of code from :term:`MHE`'s ``Universes.lagda`` file that makes available the notational devices that we just described and will adopt throughout the `agda-ualib`_.
 
-.. The following table translates between standard Agda syntax, :term:`MHE` syntax and Lean syntax.
+.. proof:agda:: Universes.lagda excerpt
+
+   .. code-block:: agda
+
+      open import Agda.Primitive public
+        using (_⊔_)
+        renaming (lzero  to  𝓤₀
+                ; lsuc   to  _⁺
+                ; Level  to  Universe
+                ; Setω   to  𝓤ω
+                )
+
+      _̇ : (𝓤 : Universe) → _
+      𝓤 ̇ = Set 𝓤
+
+      𝓤₁ = 𝓤₀ ⁺
+      𝓤₂ = 𝓤₁ ⁺
+
+      _⁺⁺ : Universe → Universe
+      𝓤 ⁺⁺ = 𝓤 ⁺ ⁺
+
+
+Thus, 𝓤 ̇ is simply an alias for ``Set 𝓤``, and we have ``Set 𝓤 : Set (lsuc 𝓤)``.
+
+Finally, ``Set (lsuc lzero)`` is denoted by ``Set 𝓤₀ ⁺`` which (:term:`MHE` and) we denote by ``𝓤₀ ⁺ ̇``.
+
+The following dictionary translates between standard Agda syntax and :term:`MHE`/agda-ualib_ notation.
+
+.. code-block:: agda
+
+   Agda              MHE/agda-ualib
+   ====              ==============
+   Level             Universe
+   lzero             𝓤₀
+   𝓤 : Level         𝓤 : Universe
+   Set lzero         𝓤₀ ̇
+   Set 𝓤             𝓤 ̇
+   lsuc lzero        𝓤₀ ⁺
+   lsuc 𝓤            𝓤 ⁺
+   Set (lsuc lzero)  𝓤₀ ⁺ ̇
+   Set (lsuc 𝓤)      𝓤 ⁺ ̇
+   Setω              𝓤ω
 
 .. +----------------------+--------------------------+-----------------------------+
    | Agda                 |  :term:`MHE` Notation    | Lean analog                 |
@@ -77,7 +119,9 @@ In the ``Universes`` module, :term:`MHE` defines the ̇ operator which maps a un
    | ``Set (lsuc lzero)`` | ``𝓤₀ ⁺ ̇``                | ``Sort 1 = Type = Type 0``  |
    +----------------------+--------------------------+-----------------------------+
 
-To justify the introduction of this somewhat nonstandard notation for universe levels, :term:`MHE` points out that the Agda library uses ``Level`` for universes (so what we write as ``𝓤 ̇`` is written ``Set 𝓤`` in standard Agda), but in univalent mathematics the types in ``𝓤 ̇`` need not be sets, so the standard Agda notation can be misleading. Furthermore, the standard notation places emphasis on levels rather than universes themselves.
+To justify the introduction of this somewhat nonstandard notation for universe levels, :term:`MHE` points out that the Agda library uses ``Level`` for universes (so what we write as 𝓤 ̇ is written ``Set 𝓤`` in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading. Furthermore, the standard notation places emphasis on levels rather than universes themselves.
+
+There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound.  Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the ``_⊔_`` is an Agda primitive designed for precisely this purpose.
 
 
 Public imports
@@ -90,7 +134,7 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
     open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
      refl to 𝓻ℯ𝓯𝓵) public
 
-    pattern refl x = 𝓻ℯ𝓯𝓵 {x = x}
+    pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
     open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
@@ -116,9 +160,6 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
      ×-is-subsingleton) public
 
     open import MGS-Solved-Exercises using (to-subtype-≡) public
-
-
-:Unicode Hints: In agda2-mode_ type ``\bJ``, ``\b0``, ``\b1``, ``\b2``, etc. to produce 𝕁, 𝟘, 𝟙, 𝟚, etc. and type ``\cib`` and ``\~-`` to produce ● and ≃.
 
 
 .. We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
@@ -514,7 +555,74 @@ Here we collect miscellaneous definitions and proofs related to extensionality t
      ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
 
-------------------
+Unicode Hints
+---------------
+
+We assume you are using Emacs in a buffer agda2-mode_ enabled.
+
+  +--------+----------------------+
+  | To get | Type                 |
+  +--------+----------------------+
+  | 𝓘, 𝓙   | ``\MCI``, ``\MCJ``   |
+  +--------+----------------------+
+  | 𝓤 ̇    | ``\MCU \^.``         |
+  +--------+----------------------+
+  | 𝓤 ⁺    | ``\MCU \^+``         |
+  +--------+----------------------+
+  | 𝓤₀     |  ``\MCU\_0``         |
+  +--------+----------------------+
+  |  ⊔     |  ``\sqcup``          |
+  +--------+----------------------+
+  | 𝐴, 𝐵   | ``\MiA``, ``\MiB``   |
+  +--------+----------------------+
+  | 𝑨, 𝑩   | ``\MIA``, ``\MIB``   |
+  +--------+----------------------+
+  | 𝒜, ℬ   | ``\McA``, ``\McB``   |
+  +--------+----------------------+
+  | 𝓐, 𝓑   | ``\MCA``, ``\MCB``   |
+  +--------+----------------------+
+  | t ̇ 𝑨  | ``t \^. \MIA``       |
+  +--------+----------------------+
+  | 𝑓 ̂ 𝑨  | ``\Mif \^ \MIA``     |
+  +--------+----------------------+
+  | ≡      | ``\equiv``           |
+  +--------+----------------------+
+  |  𝓇ℯ𝒻𝓁  | ``\Mcr\Mce\Mcf\Mcl`` |
+  +--------+----------------------+
+  | ≡⟨ ⟩   | ``\equiv\< \>``      |
+  +--------+----------------------+
+  | ∎, ■   | ``\qed``, ``\sq``    |
+  +--------+----------------------+
+  | Σ, Π   | ``\Sigma``, ``\Pi``  |
+  +--------+----------------------+
+  | 𝕁      | ``\bJ``              |
+  +--------+----------------------+
+  | ¬, ⁻¹  |  ``\neg``, ``\^-\^1``|
+  +--------+----------------------+
+  | ×      | ``\times``           |
+  +--------+----------------------+
+  | 𝑖𝑑     | ``\Mii\Mid``         |
+  +--------+----------------------+
+  | 𝓟      | ``\MCP``             |
+  +--------+----------------------+
+  | ↪      | ``\hookrightarrow``  |
+  +--------+----------------------+
+  | 𝟘, 𝟙   | ``\b0``, ``\b1``     |
+  +--------+----------------------+
+  | ⇔      | ``\lr2``             |
+  +--------+----------------------+
+  | ∘, ●   | ``\cdot``, ``\cib``  |
+  +--------+----------------------+
+  |  ×     | ``\times``           |
+  +--------+----------------------+
+  | ∥_∥    | ``\||_\||``          |
+  +--------+----------------------+
+  | ∼,  ≃  | ``\~``, ``\~-``      |
+  +--------+----------------------+
+  | ∈₀     | ``\in\_0``           |
+  +--------+----------------------+
+  | ⊆₀     | ``\subseteq\_0``     |
+  +--------+----------------------+
 
 .. include:: hyperlink_references.rst
 

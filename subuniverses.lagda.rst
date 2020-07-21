@@ -134,7 +134,7 @@ Let 𝑓 be an operation symbol, let :math:`b : ρ f → ∣ B ∣` be a (ρ �
 
 Finally, recall the definition of ``HomImage`` from the `homomorphisms module`_,
 
-.. code-block::
+.. code-block:: agda
 
   HomImage : ∣ B ∣ → 𝓤 ̇
   HomImage = λ b → Image ∣ h ∣ ∋ b
@@ -234,7 +234,7 @@ Finally, we can prove the desired inclusion.
 
 **Exercise**. Prove the following by generalizing the relation ≃ to predicates:
 
-.. code-block::
+.. code-block:: agda
 
   SgY≃TermImageY : (Y : Pred ∣ 𝑨 ∣ k) → (TermImage Y) ≃ (Sg Y)
   SgY≃TermImageY {x} Y = ?

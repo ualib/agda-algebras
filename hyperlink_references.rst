@@ -2,10 +2,11 @@
 .. _absolute value: https://en.wikipedia.org/wiki/Absolute_value
 .. _agda2-mode: https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html
 .. _Agda: https://wiki.portal.chalmers.se/agda/pmwiki.php
+.. _Agda Language Reference: https://agda.readthedocs.io/en/v2.6.1/language
 .. _Agda Standard Library: https://agda.github.io/agda-stdlib/
+.. _Agda Tools: https://agda.readthedocs.io/en/v2.6.1/tools/
+.. _Agda User's Manual: https://agda.readthedocs.io/en/v2.6.1/
 .. _Agda Wiki: https://wiki.portal.chalmers.se/agda/pmwiki.php
-.. _Agda User's Manual: https://agda.readthedocs.io/en/v2.6.0.1/
-.. _Agda Language Reference: https://agda.readthedocs.io/en/v2.6.0.1/language
 .. _Algebraic Effects and Handlers: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 .. _Andrej Bauer: http://www.andrej.com/index.html
 .. _Axioms and Computation: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
