@@ -181,27 +181,6 @@ The Agda proof of Birkhoff's theorem
 
 -----------------------------------------------
 
-Unicode Hints
----------------
-
-Table of some special characters used in the `closure module`_.
-
-  +--------+------------------------+
-  | To get | Type                   |
-  +--------+------------------------+
-  | 𝑬𝑯     | ``\MIE\MIH``           |
-  +--------+------------------------+
-
-See :numref:`unicode hints` for a longer list of symbols used in the agda-ualib_, or better yet, use these
-
-  **Emacs commands providing information about special characters/input methods**:
-
-    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
-
-    * ``M-x describe-input-method`` (or ``C-h I``)
-
-------------------
-
 .. include:: hyperlink_references.rst
 
 
