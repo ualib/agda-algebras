@@ -4,12 +4,9 @@
 .. UPDATED   : 21 Jul 2020
 .. COPYRIGHT : (c) 2020 William DeMeo
 
-.. Note: This was used for the second part of my talk at JMM Special Session.
+.. _algebras in agda:
 
-
-.. _types for algebras:
-
-Types for Algebras
+Algebras in Agda
 ===================
 
 This chapter describes the `basic module`_ of the `agda-ualib`_ , which begins our Agda_ formalization of the basic concepts and theorems of universal algebra. In this module we will codify such notions as operation, :term:`signature`, and :term:`algebraic structure <algebra>`.
@@ -21,7 +18,7 @@ This chapter describes the `basic module`_ of the `agda-ualib`_ , which begins o
 Preliminaries
 -------------------------
 
-Like most Agda programs, this one begins with some options and imports.
+Like most Agda programs, this one begins by satisfying some dependencies.
 
 ::
 
@@ -93,10 +90,10 @@ Thus, if  𝑓 : ∣ 𝑆 ∣  is an operation symbol in the signature 𝑆, the
 
 -----------------------------------
 
-.. _algebras in agda:
+.. _types for algebras:
 
-Algebras in Agda
-------------------
+Types for algebras
+--------------------
 
 Finally, we are ready to define the type of algebras in the signature ``S`` (which we also call "S-algebras").
 
