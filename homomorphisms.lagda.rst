@@ -13,6 +13,8 @@ Homomorphisms in Agda
 
 This chapter describes the `homomorphisms module`_ of the `agda-ualib`_.
 
+-----------------------------------
+
 Preliminaries
 -------------
 
@@ -26,10 +28,12 @@ As usual, we start with the imports we will need below.
   open import basic using (Signature; Algebra; Op; _̂_)
   open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
-.. _homomorphisms extensionally:
+------------------------------------------
 
-Homomorphisms extensionally
----------------------------
+.. _types for homomorphisms:
+
+Types for homomorphisms
+------------------------
 
 We start the ``homomorphisms`` module with a fixed signature ``𝑆``.
 
@@ -81,8 +85,8 @@ An example of such a homomorphism is the identity map.
 
 .. _obs 2 in agda:
 
-Compositions of homomorphisms
---------------------------------
+Composition
+-----------
 
 As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is again a homomorphism.
 
@@ -126,8 +130,8 @@ As we asserted in :numref:`Obs %s <obs 2>`, the composition of homomorphisms is 
 
 .. _obs 5 in agda:
 
-Factorization of homomorphisms
------------------------------------
+Factorization
+-------------
 
 As we saw in :numref:`Obs %s <obs 5>`, if
 
@@ -238,10 +242,10 @@ For algebras, an isomorphism is simply a homomorphism with a trivial kernel.
 
 -----------------------------------------------------
 
-.. _types for homomorphic imageshom images:
+.. _homomorphic images:
 
-Types for homomorphic images
------------------------------
+Homomorphic images
+--------------------
 
 The following seem to be (for our purposes) the two most useful types for representing homomomrphic images of an algebra.
 

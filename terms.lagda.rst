@@ -4,13 +4,16 @@
 .. UPDATE    : 21 Jul 2020
 .. COPYRIGHT : (c) 2020 William DeMeo
 
-.. _types for terms:
+
+.. _terms in agda:
 
 ===============
-Types for Terms
+Terms in Agda
 ===============
 
 This chapter describes the `terms module`_ of the `agda-ualib`_.
+
+--------------------------------
 
 Preliminaries
 -------------
@@ -26,7 +29,11 @@ As usual, we start with the imports we will need below.
   open import homomorphisms using (hom)
   open import relations using (Con; compatible-fun)
 
-Terms in Agda
+------------------------------------------
+
+.. _types for terms:
+
+Types for terms
 ------------------------
 
 We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called ``terms``. We start by defining a datatype called ``Term`` which, not surprisingly, represents the type of terms.  The type ``X :  𝓧 ̇`` represents an arbitrary (infinite) collection of "variables."
@@ -53,11 +60,12 @@ The term algebra was described informally in :numref:`terms`.  We denote this im
   𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) 𝑆
   𝑻 X = Term{X = X} , node
 
+-----------------------------------------------
 
 .. _obs 9 in agda:
 
-The universal property of 𝑻(X)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The universal property
+----------------------
 
 We prove
 
@@ -97,9 +105,10 @@ Next, the lift to (𝑻 X → 𝑨) is unique.
     ∣ h ∣ (node f args)             ∎
      where γ = fe λ i → free-unique fe g h p (args i)
 
+----------------------------------------------
 
-Interpretation of terms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Interpretation
+--------------
 
 Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary operation ``t ̇ 𝑨`` on ``𝑨`` by structural recursion on ``t``.
 
@@ -155,10 +164,12 @@ Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary 
      (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ l → tup l i)))
         ∎
 
+-----------------------------------------------
+
 .. _obs 10 in agda:
 
-Compatibility of homs and terms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compatibility of terms
+-------------------------
 
 In this section we present the formal proof of the fact that homomorphisms commute with terms.  More precisely, if 𝑨 and 𝑩 are 𝑆-algebras, h : 𝑨 → 𝑩 a homomorphism, and t a term in the language of 𝑆, then for all a : X → ∣ 𝑨 ∣ we have :math:`h (t^𝑨 a) = t^𝑩 (h ∘ a)`.
 
@@ -186,7 +197,7 @@ Homomorphisms commute with terms
    (f ̂ 𝑩) (λ r → (args r ̇ 𝑩) (∣ h ∣ ∘ a))
      ∎
 
-Compatibility of congruences and terms
+Congruences commute with terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Here we present an Agda proof of the fact that terms respect congruences. More precisely, we show that for every term t, every θ ∈ Con(𝑨), and all tuples a, b : 𝑋 → A, we have :math:`(∀ i, a(i) \mathrel θ b(i)) → (t^𝑨 a) \mathrel θ (t^𝑨 b)`.

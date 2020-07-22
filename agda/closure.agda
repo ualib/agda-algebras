@@ -11,8 +11,8 @@ open import subuniverses using (Subuniverses; Subalgebra)
 
 open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
 
-open import terms using (Term; generator; node; _̇_; interp-prod2;
- interp-prod; comm-hom-term)
+open import terms using (Term; generator; node; _̇_; interp-prod2; 𝑻;
+ interp-prod; comm-hom-term; lift-hom)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -101,6 +101,81 @@ products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈�
 
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
+
+module _
+ (gfe : global-dfunext)
+ (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+ where
+
+ -- ⇒ (the "only if" direction)
+ identities-are-compatible-with-homs : (p q : Term{X = X})
+  →                𝒦 ⊧ p ≋ q
+       ----------------------------------------------------
+  →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+ -- Here, the inferred types are
+ -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
+
+ identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
+  where
+   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+   pA≡qA = 𝒦⊧p≋q KA
+
+   pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
+    →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+   pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
+
+   hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
+    →        ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)
+   hpa≡hqa 𝒂 =
+    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) 𝑨 h p 𝒂 ⟩
+    (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
+    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 h q 𝒂)⁻¹ ⟩
+    ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)  ∎
+
+   γ : ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+   γ = gfe hpa≡hqa
+
+ -- ⇐ (the "if" direction)
+ homs-are-compatible-with-identities : (p q : Term)
+  →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
+       --------------------------------------------------
+  →                𝒦 ⊧ p ≋ q
+ --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
+
+ homs-are-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
+  where
+   h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+   h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
+
+   γ : 𝑨 ⊧ p ≈ q
+   γ = gfe λ 𝒂 →
+    (p ̇ 𝑨) 𝒂
+      ≡⟨ refl _ ⟩
+    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+      ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
+    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
+      ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
+    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
+      ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
+    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+      ≡⟨ refl _ ⟩
+    (q ̇ 𝑨) 𝒂
+      ∎
+
+ compatibility-of-identities-and-homs : (p q : Term)
+  →  (𝒦 ⊧ p ≋ q)
+      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
+ --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
+
+ compatibility-of-identities-and-homs p q =
+   identities-are-compatible-with-homs p q ,
+   homs-are-compatible-with-identities p q
+
+
+
+
+
+
 
 module _ (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )) where
 

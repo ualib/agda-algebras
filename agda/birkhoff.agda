@@ -81,77 +81,9 @@ HomUnique fe {𝑨}{𝑩} X
   h ((𝑓 ̂ 𝑨) 𝒂 )   ∎
  where
   induction-hypothesis =
-    λ x → HomUnique fe X
+    λ x → HomUnique fe {𝑨}{𝑩} X
     (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-module _
- (gfe : global-dfunext)
- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
- where
-
- -- ⇒ (the "only if" direction)
- identities-are-compatible-with-homs : (p q : Term{X = X})
-  →                𝒦 ⊧ p ≋ q
-       ----------------------------------------------------
-  →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
- -- Here, the inferred types are
- -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
-
- identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
-  where
-   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
-   pA≡qA = 𝒦⊧p≋q KA
-
-   pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
-    →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
-   pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
-
-   hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
-    →        ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)
-   hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) 𝑨 h p 𝒂 ⟩
-    (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 h q 𝒂)⁻¹ ⟩
-    ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)  ∎
-
-   γ : ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
-   γ = gfe hpa≡hqa
-
- -- ⇐ (the "if" direction)
- homs-are-compatible-with-identities : (p q : Term)
-  →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻 X)) ≡ ∣ h ∣ ∘ (q ̇ (𝑻 X)))
-       --------------------------------------------------
-  →                𝒦 ⊧ p ≋ q
- --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
-
- homs-are-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
-  where
-   h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻(X)) 𝑨
-   h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
-
-   γ : 𝑨 ⊧ p ≈ q
-   γ = gfe λ 𝒂 →
-    (p ̇ 𝑨) 𝒂
-      ≡⟨ refl _ ⟩
-    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-      ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
-    (∣ h 𝒂 ∣ ∘ (p ̇ (𝑻(X)))) generator
-      ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-    (∣ h 𝒂 ∣ ∘ (q ̇ (𝑻(X)))) generator
-      ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
-    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-      ≡⟨ refl _ ⟩
-    (q ̇ 𝑨) 𝒂
-      ∎
-
- compatibility-of-identities-and-homs : (p q : Term)
-  →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
- --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
-
- compatibility-of-identities-and-homs p q =
-   identities-are-compatible-with-homs p q ,
-   homs-are-compatible-with-identities p q
 
 -- Equational classes
 TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
@@ -183,7 +115,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
  --equational class). The obvious choice is the set of all equations that hold in 𝒲, that
  --is, Th(𝒲). So, let 𝒲' = Mod(Th(𝒲)). Clearly, 𝒲 ⊆ 𝒲'. We prove the reverse inclusion.
  --Let A ∈ 𝒲' and let 𝑋 be a set of cardinality max(∣𝐴∣, ω). Choose a surjection ℎ₀ : 𝑋 → 𝐴.
- --By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝑻(𝑋) → A`.
+ --By :numref:`Obs %s <obs 9>`, ℎ₀ extends to an epimorphism ℎ : 𝑻(𝑋) → A.
  --Since 𝔽(𝒲, 𝑋) = 𝑻(𝑋)/Ψ(𝒲, 𝑋), there is an epimorphism 𝑔 : 𝑻(𝑋) → 𝔽(𝒲, 𝑋).
  --We claim ker 𝑔 ⊆ ker ℎ. If the claim is true, then by :numref:`Obs %s <obs 5>`
  --∃ 𝑓 : 𝔽(𝒲, 𝑋) → 𝐴 such that 𝑓 ∘ 𝑔 = ℎ and since ℎ is epic, so is 𝑓, so

@@ -14,10 +14,10 @@ HSP Theorem in Agda
 
 Here we give a formal proof in Agda of :ref:`Birkhoff's theorem <birkhoffs theorem>` (:numref:`%s <birkhoffs theorem>`), which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).  The sections below contain (literate) Agda code that formalizes each step of the (informal) proof we saw above in :numref:`birkhoffs theorem`.
 
-.. _the birkhoff module:
+----------------------------------------
 
-The birkhoff module
-----------------------
+Preliminaries
+--------------
 
 As usual, we start with the imports we will need below.
 
@@ -31,7 +31,14 @@ As usual, we start with the imports we will need below.
   open import subuniverses using (Subuniverse; mksub; var; app; Sg)
   open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
 
-We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
+--------------------------------------------
+
+.. _the birkhoff module:
+
+The birkhoff module
+----------------------
+
+We start the `birkhoff module`_ with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
 
 ::
 
@@ -133,94 +140,6 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formaliz
       λ x → HomUnique fe {𝑨}{𝑩} X
       (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-.. **Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
-.. Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
-
-.. .. todo:: formalize **Obs**.
-
-
-----------------------------------------------
-
-.. _obs 14 in agda:
-
-Hom-Id compatibility
----------------------
-
-Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
-
-.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.
-
-We now formalize this result in Agda.
-
-::
-
-  module _ (𝓚 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) where
-
-
-   -- ⇒ (the "only if" direction)
-   identities-are-compatible-with-homs : (p q : Term{X = X})
-     →                𝓚 ⊧ p ≋ q
-          ----------------------------------------------------
-     →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-    -- Here, the inferred types are
-    -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝓚 𝑨, h : hom (𝑻(X){X = X}) 𝑨
-
-   identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
-     where
-      pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
-      pA≡qA = 𝒦⊧p≋q KA
-
-      pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻 X ∣)
-       →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
-      pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
-
-      hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 X ∣)
-       →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
-      hpa≡hqa 𝒂 =
-       ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
-       (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-       (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
-       ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
-
-      γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-      γ = gfe hpa≡hqa
-
-   -- ⇐ (the "if" direction)
-   homs-are-compatible-with-identities : (p q : Term{X = X})
-     →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
-          -----------------------------------------------
-     →                𝓚 ⊧ p ≋ q
-    --Inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝓚, h : hom 𝑻(X) 𝑨
-
-   homs-are-compatible-with-identities p q all-hp≡hq {𝑨 = 𝑨} KA = γ
-     where
-      h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-      h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
-
-      γ : 𝑨 ⊧ p ≈ q
-      γ = gfe λ 𝒂 →
-       (p ̇ 𝑨) 𝒂
-         ≡⟨ refl _ ⟩
-       (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-         ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
-       (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
-         ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-       (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
-         ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
-       (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-         ≡⟨ refl _ ⟩
-       (q ̇ 𝑨) 𝒂
-         ∎
-
-   compatibility-of-identities-and-homs : (p q : Term)
-    →  (𝓚 ⊧ p ≋ q)
-         ⇔ (∀ 𝑨 KA hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
-    --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝓚, hh : hom 𝑻(X) 𝑨.
-
-   compatibility-of-identities-and-homs p q =
-      identities-are-compatible-with-homs p q ,
-      homs-are-compatible-with-identities p q
-
 --------------------------------------------------
 
 
@@ -229,17 +148,17 @@ Equational classes
 
 ::
 
-   TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
-   TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
+  TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
+  TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
-   Th : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-   Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+  Th : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-   MOD : Pred (Term{X = X} × Term) 𝓤 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
-   MOD Σ' = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
+  MOD : Pred (Term{X = X} × Term) 𝓤 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
+  MOD Σ' = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
 
-   Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-   Mod Σ' = λ 𝑨 → ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
+  Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Mod Σ' = λ 𝑨 → ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
 
 ---------------------------------------------------------------
 
@@ -248,17 +167,17 @@ The Agda proof of Birkhoff's theorem
 
 ::
 
-   --Birkhoff's theorem: every variety is an equational class.
-   birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
-              (𝑨 : Algebra 𝓤 𝑆)(g : X → ∣ 𝑨 ∣ )(eg : Epic g)
-    →         (𝑨 ∈ (Mod (Th (VClo 𝒦)))) → 𝑨 ∈ VClo 𝒦
-   birkhoff 𝒦 𝑨 g eg A∈ModThV = γ
-    where
-     h : hom (𝑻 X) 𝑨
-     h = lift-hom{𝑨 = 𝑨}{X = X} g
+  --Birkhoff's theorem: every variety is an equational class.
+  birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
+             (𝑨 : Algebra 𝓤 𝑆)(g : X → ∣ 𝑨 ∣ )(eg : Epic g)
+   →         (𝑨 ∈ (Mod (Th (VClo 𝒦)))) → 𝑨 ∈ VClo 𝒦
+  birkhoff 𝒦 𝑨 g eg A∈ModThV = γ
+   where
+    h : hom (𝑻 X) 𝑨
+    h = lift-hom{𝑨 = 𝑨}{X = X} g
 
-     γ : 𝑨 ∈ VClo 𝒦
-     γ = {!!}
+    γ : 𝑨 ∈ VClo 𝒦
+    γ = {!!}
 
 -----------------------------------------------
 
@@ -284,4 +203,12 @@ See :numref:`unicode hints` for a longer list of symbols used in the agda-ualib_
 ------------------
 
 .. include:: hyperlink_references.rst
+
+
+
+.. **Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
+.. Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
+
+.. .. todo:: formalize **Obs**.
+
 
