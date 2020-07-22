@@ -26,7 +26,7 @@ As usual, we start with the imports we will need below.
 
   open import prelude
   open import basic using (Signature; Algebra; Op; _̂_)
-  open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
+  open import congruences using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
 ------------------------------------------
 

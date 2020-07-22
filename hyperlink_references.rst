@@ -99,11 +99,11 @@
 .. _Dependent Types at Work: http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf
 .. _Dependently Typed Programming in Agda: http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf
 .. _Programming Language Foundations in Agda: https://plfa.github.io/
+.. _prelude module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst
 .. _basic module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst
-.. _birkhoff module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst
 .. _congruences module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst
 .. _homomorphisms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/homomorphisms.lagda.rst
-.. _prelude module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst
-.. _relations module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/relations.lagda.rst
-.. _subuniverses module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/subuniverses.lagda.rst
 .. _terms module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/terms.lagda.rst
+.. _subuniverses module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/subuniverses.lagda.rst
+.. _closure module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst
+.. _birkhoff module: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst

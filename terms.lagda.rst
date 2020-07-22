@@ -27,7 +27,7 @@ As usual, we start with the imports we will need below.
   open import prelude
   open import basic using (Signature; Algebra; ⨅; _̂_)
   open import homomorphisms using (hom)
-  open import relations using (Con; compatible-fun)
+  open import congruences using (Con; compatible-fun)
 
 ------------------------------------------
 

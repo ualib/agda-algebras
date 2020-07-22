@@ -13,14 +13,15 @@ Subalgebras in Agda
 
 This chapter describes the `subuniverses module`_ of the `agda-ualib`_.
 
+We define subuniverses and subalgebras and prove some basic facts about them in this, the `subuniverses.lagda.rst <subuniverses module>`_ file of the agda-ualib_.
+
+
 ---------------------------------------------
 
 Preliminaries
 ------------------
 
-We define subuniverses and subalgebras and prove some basic facts about them in a module called ``subuniverses`` which resides in the ``subuniverses.lagda.rst`` file of the ``agda-ualib`` library.
-
-The file starts, as usual, with a list of imports.
+The `subuniverses.lagda.rst <subuniverses module>`_ file starts, as usual, by satisfying dependencies.
 
 ::
 
@@ -28,7 +29,7 @@ The file starts, as usual, with a list of imports.
 
   open import prelude
   open import basic using (Signature; Algebra; Op; _̂_)
-  open import relations using (transitive)
+  open import congruences using (transitive)
   open import homomorphisms using (hom; is-homomorphism; HomImage)
   open import terms using (Term; _̇_; generator; node; comm-hom-term)
   open import Relation.Unary using (⋂)
@@ -40,7 +41,7 @@ The file starts, as usual, with a list of imports.
 Types for subuniverses
 ------------------------
 
-We begin the ``subuniverses`` module with a straightforward definition of the collection of subuniverses of an algebra A.  Since a subuniverse is a subset of the domain of A, it is defined as a predicate on ∣ A ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ A ∣.
+We begin the `subuniverses module`_ with a straightforward definition of the collection of subuniverses of an algebra A.  Since a subuniverse is a subset of the domain of A, it is defined as a predicate on ∣ A ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ A ∣.
 
 ::
 

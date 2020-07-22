@@ -5,16 +5,15 @@
 .. COPYRIGHT : (c) 2020 William DeMeo
 .. NOTE      : This file used to be called relations.lagda.rst
 
-.. REF: Some parts of this file is simply a translation of the Agda standard library file Binary/Core.agda
-into our notation.
+.. REF: Some parts of this file is simply a translation of the Agda standard library file Binary/Core.agda into our notation.
 
 ====================
 Congruences in Agda
 ====================
 
-This chapter describes the `relations module`_ of the `agda-ualib`_.
+This chapter describes the `congruences module`_ of the `agda-ualib`_.
 
-**N.B.** Some of the code in this section that pertains to relations is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
+**N.B.** Some of the code in this first part of this chapter pertaining to relations is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) that we have translated into our notation for consistency.
 
 -------------------------------------------------
 

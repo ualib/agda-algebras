@@ -14,7 +14,7 @@ The Agda Universal Algebra Library
    algebras.lagda.rst
    prelude.lagda.rst
    basic.lagda.rst
-   relations.lagda.rst
+   congruences.lagda.rst
    homomorphisms.lagda.rst
    terms.lagda.rst
    subuniverses.lagda.rst

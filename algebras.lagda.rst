@@ -11,7 +11,7 @@
 Algebras
 ========
 
-In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`types for algebras` --:numref:`types for subalgebras`, we show how the definitions and results presented in this section can be formalized (or "implemented") in type theory using Agda.
+In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about :term:`subalgebras <subalgebra>`, :term:`terms <term>`, and :term:`clones <clone>`.  In :numref:`algebra type` --:numref:`types for subalgebras`, we show how the definitions and results presented in this section can be formalized (or "implemented") in type theory using Agda.
 
 The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a :term:`constructive` and :term:`computable` way, and for proving properties of these objects.
 
