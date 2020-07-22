@@ -1,20 +1,22 @@
-.. FILE      : relations.lagda.rst
+.. FILE      : congruences.lagda.rst
 .. AUTHOR    : William DeMeo and Siva Somayyajula
 .. DATE      : 23 Apr 2020
 .. UPDATE    : 21 Jul 2020
-.. Copyright : (c) 2020 William DeMeo
-
+.. COPYRIGHT : (c) 2020 William DeMeo
+.. NOTE      : This file used to be called relations.lagda.rst
 
 .. REF: Some parts of this file is simply a translation of the Agda standard library file Binary/Core.agda
 into our notation.
 
 ====================
-Relations in Agda
+Congruences in Agda
 ====================
 
 This chapter describes the `relations module`_ of the `agda-ualib`_.
 
-**N.B.** Some of the code described in this section is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
+**N.B.** Some of the code in this section that pertains to relations is borrowed from similar code in the `Agda standard library`_ (in the file ``Binary/Core.agda``) and translated into our notation for consistency.
+
+-------------------------------------------------
 
 Preliminaries
 ---------------
@@ -26,7 +28,7 @@ Preliminaries
    open import prelude
    open import basic using (Signature; Algebra)
 
-   module relations where
+   module congruences where
 
 --------------------------------------
 
