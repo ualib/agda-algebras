@@ -90,10 +90,10 @@ Thus, if  𝑓 : ∣ 𝑆 ∣  is an operation symbol in the signature 𝑆, the
 
 -----------------------------------
 
-.. _types for algebras:
+.. _algebra type:
 
-Types for algebras
---------------------
+Algebra type
+------------
 
 Finally, we are ready to define the type of algebras in the signature ``S`` (which we also call "S-algebras").
 

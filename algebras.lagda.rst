@@ -904,7 +904,7 @@ We implement terms and the term algebra in Agda in the `terms module`_, as descr
       For the induction step, assume ∣𝑡∣ = 𝑛 + 1. Then 𝑡 = 𝑓 𝑠 for some 𝑓 ∈ 𝐹 and 𝑠 : ρ 𝑓 → 𝑇ₙ, where for each 0 ≤ 𝑖 < ρ𝑓 the term 𝑠 𝑖 has height at most 𝑛. We define :math:`h\,t = f^𝑨(h ∘ s) = f^𝑨(h\,s_1, …, h\,s_k)`. By its very definition, ℎ is a homomorphism that agrees with :math:`g` on 𝑋. The uniqueness of ℎ follows from :numref:`Obs %s <obs 3>`.
 
 
-Let 𝒜𝓁ℊ(𝑆) be the class of all 𝑆-algebras. Then :numref:`Obs %s <obs 9>` can be restated as: 𝑻(𝑋) is free in 𝒜𝓁ℊ(𝑆) over 𝑋. This is sometimes expressed by saying that 𝑻(𝑋) is **absolutely free** over 𝑋.
+Let 𝒦 be the class of 𝑆-algebras. Then :numref:`Obs %s <obs 9>` can be restated as: 𝑻(𝑋) is free in 𝒦 over 𝑋. This is sometimes expressed by saying that 𝑻(𝑋) is **absolutely free** over 𝑋.
 
 .. _obs 9.1:
 
@@ -950,15 +950,17 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
          *Proof*.
 
-      Let 𝑼 be free for 𝑋 over 𝑋. It suffices to show that if C is one of H, S or P, then 𝑼 has the universal mapping property for C(𝒦) over 𝑋. Consider the case 𝑨 ∈ H(𝒦). Then there is 𝑩 ∈ 𝒦 and a surjective homomorphism 𝑓 : 𝑩 → 𝑨. Let ℎ : 𝑋 → 𝐴 be a function. We must find an extension of h to a homomorphism from 𝑼 to 𝑨. For each 𝑥 ∈ 𝑋 choose an element 𝑏ₓ ∈ 𝑓⁻¹\{ℎ(𝑥)\}. Define the function :math:`𝑔 : 𝑋 → 𝐵` by :math:`g(x) = b_x`. Since 𝑼 is free for 𝒦 and 𝑩 ∈ 𝒦, :math:`g` extends to a homomorphism :math:`g̃ : 𝑼 → 𝑩`. Then :math:`𝑓 ∘ g̃` is the desired extension of ℎ.
+      Let 𝑼 be free for 𝒦 over 𝑋. It suffices to show that if C is one of H, S or P, then 𝑼 has the universal mapping property for C(𝒦) over 𝑋.
 
-      Next assume 𝑨 ∈ S(𝒦). Then, 𝑨 ≤ 𝑩 ∈ 𝒦. A mapping ℎ : 𝑋 → 𝐴 is automatically a mapping to 𝐵. By freeness, ℎ extends to a homomorphism :math:`ℎ' : 𝑼 → 𝑩`. Since 𝑋 generates 𝑼,
+      Consider the case 𝑨 ∈ H(𝒦). There is 𝑩 ∈ 𝒦 and a surjective homomorphism 𝑓 : 𝑩 → 𝑨. Let ℎ : 𝑋 → 𝐴 be a function. We must find an extension of h to a homomorphism from 𝑼 to 𝑨. For each 𝑥 ∈ 𝑋 choose an element 𝑏ₓ ∈ 𝑓⁻¹\{ℎ(𝑥)\}. Define the function :math:`𝑔 : 𝑋 → 𝐵` by :math:`g(x) = b_x`. Since 𝑼 is free for 𝒦 over 𝑋, and since 𝑩 ∈ 𝒦, :math:`g` extends to a homomorphism :math:`g' : 𝑼 → 𝑩`, and :math:`𝑓 ∘ g'` is the desired extension of ℎ.
 
-      .. math:: ℎ'(𝑈) = \{h'(u) : u ∈ 𝑈\} = ℎ'(\mathrm{Sg}^𝑼(X)) = \mathrm{Sg}^𝑩(h'(X)) ⊆ 𝐴.
+      Next assume 𝑨 ∈ S(𝒦). Then, 𝑨 ≤ 𝑩 ∈ 𝒦, and a mapping ℎ : 𝑋 → 𝐴 clearly maps 𝑋 into 𝐵. By freeness of 𝑈 for 𝒦 over 𝑋, ℎ extends to a homomorphism :math:`ℎ' : 𝑼 → 𝑩`, and since 𝑋 generates 𝑼, we have
 
-      by :numref:`Obs %s <obs 7.1>`. Consequently, :math:`ℎ'` is actually a map from 𝑈 to 𝐴.
+      .. math:: ℎ'(𝑈) = \{h'(u) : u ∈ 𝑈\} = ℎ'(\mathrm{Sg}^𝑼(X)) = \mathrm{Sg}^𝑩(h'(X)) ⊆ 𝐴,
 
-      Finally, assume 𝑨 = Π 𝑩ᵢ, where 𝑩ᵢ ∈ 𝒦 for each 𝑖. If ℎ : 𝑋 → 𝐴 then for each 𝑖, 𝑝ᵢ ∘ ℎ is a mapping from 𝑋 to 𝐵ᵢ. By freeness we get homomorphisms :math:`ℎᵢ' : 𝑼 → 𝑩ᵢ` which can be reassembled to obtain :math:`ℎ' = Π ℎᵢ' : 𝑼 → 𝑨`.
+      by :numref:`Obs %s <obs 7.1>`. Consequently, :math:`ℎ'` is actually a homomorphism from 𝑈 to 𝐴.
+
+      Finally, let 𝒜 : 𝐼 → 𝒦 denote a collection of algebras in 𝒦 (indexed by 𝐼), let 𝑨 = ∏ 𝒜 be their product, and let πᵢ : ∏ 𝒜 → (𝒜 𝑖) be the 𝑖-th projection map (which of course is a homomorphism).  If ℎ : 𝑋 → 𝐴, then for each 𝑖, the mapping πᵢ ∘ ℎ takes 𝑋 to 𝒜 𝑖. Since 𝑼 is free for 𝒦 over 𝑋, we get homomorphisms :math:`ℎᵢ' : 𝑼 → 𝒜 𝑖`. As one easily verifies, these can be assembled into the desired homomorphism :math:`ℎ' = ∏ ℎᵢ' : 𝑼 → 𝑨`.
 
 .. _obs 9.4:
 

@@ -220,6 +220,9 @@ For proof of 3, see `TermImageSub` in subuniverses.lagda.
 ..    #. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
 
 
+
+
+
 ------------------------------------------
 
 Unicode Hints
