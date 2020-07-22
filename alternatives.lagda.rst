@@ -19,7 +19,7 @@ Here we collect some of the possible alternative implementation choices for refe
   open import basic using (Signature; Algebra; Op; _̂_)
   open import homomorphisms using (hom; is-homomorphism; 𝒾𝒹)
   open import terms using (Term; _̇_; generator; node; comm-hom-term; 𝑻)
-  open import relations using (transitive; ker; ker-pred;
+  open import congruences using (transitive; ker; ker-pred;
    Rel; 𝟎; con; _//_; Con; compatible-fun)
 
   open import Relation.Unary using (⋂)
@@ -33,16 +33,20 @@ Here we collect some of the possible alternative implementation choices for refe
 Homomorphisms intensionally
 ---------------------------
 
-Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. In :numref:`homomorphisms extensionally` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`. Recall,
+Our implementation of the notion of homomorphisms in the agda-ualib is an extensional one. In :numref:`types for homomorphisms` we defined what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function :math:`g : A → B`. Recall,
 
-.. code-block::
+.. code-block:: agda
 
-   op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-extensionally-with g =
-    ∀( 𝒂 : ∥ S ∥ 𝑓 → ∣ 𝑨 ∣ ) → g (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂)
+   op_interpreted-in_and_commutes-with :
+    (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+    (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-which of course says that for every tuple ``𝒂`` of ``∥ S ∥ 𝑓`` elements from ``∣ 𝑨 ∣``, we have ``g (∥ 𝑨 ∥ 𝑓 𝒂) ≡ ∥ 𝑩 ∥ 𝑓 (g ∘ 𝒂)``.
+   op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g =
+    ∀( 𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣ ) → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
 
-An alternative, *intensional* notion of homomorphism might define the commuting of 𝑓 and :math:`g` as follows:
+which of course says that for every tuple 𝒂 of ∥ 𝑆 ∥ 𝑓 elements from ∣ 𝑨 ∣, we have g (𝑓 ̂ 𝑨)𝒂 ≡ (𝑓 ̂ 𝑩)(g ∘ 𝒂).
+
+An alternative, *intensional* notion of homomorphism might define the commuting of 𝑓 and g as follows:
 
 ::
 
@@ -59,23 +63,23 @@ Here we have used an equality that is intensional with respect to 𝒂, but exte
 
 ::
 
-  all-ops-in_and_commute-partially-intensionally-with :
+  all-ops-in_and_commute-intensionally-with :
    (𝑨 : Algebra 𝓤 S)(𝑩 : Algebra 𝓦 S)
    (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-  all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g =
+  all-ops-in 𝑨 and 𝑩 commute-intensionally-with g =
    ∀(𝑓 : ∣ S ∣) → op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-intensionally-with g
 
   intensional-hom : (𝑨 : Algebra 𝓤 S) (𝑩 : Algebra 𝓦 S)
    →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
   intensional-hom 𝑨 𝑩 g =
-   all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g
+   all-ops-in 𝑨 and 𝑩 commute-intensionally-with g
 
   Hom : Algebra 𝓦 S → Algebra 𝓤 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
   Hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-   all-ops-in 𝑨 and 𝑩 commute-partially-intensionally-with g
+   all-ops-in 𝑨 and 𝑩 commute-intensionally-with g
 
 
 Full intensionality
@@ -91,18 +95,18 @@ Full intensionality
    (λ (𝑓 : ∣ S ∣ ) (𝒂 : ∥ S ∥ 𝑓 → A) → g (𝐹ᴬ 𝑓 𝒂))
     ≡ (λ (𝑓 : ∣ S ∣ ) (𝒂 : ∥ S ∥ 𝑓 → A )  → 𝐹ᴮ 𝑓 (g ∘ 𝒂))
 
-  all-ops-in_and_commute-intensionally-with :
+  all-ops-in_and_commute-fully-intensionally-with :
    (𝑨 : Algebra 𝓤 S)(𝑩 : Algebra 𝓦 S)
    (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-  all-ops-in 𝑨 and 𝑩 commute-intensionally-with g =
+  all-ops-in 𝑨 and 𝑩 commute-fully-intensionally-with g =
    preserves-ops 𝑨 𝑩 g
 
   --the type of (intensional) homomorphisms
   HOM : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
   HOM 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-             all-ops-in 𝑨 and 𝑩 commute-intensionally-with g
+             all-ops-in 𝑨 and 𝑩 commute-fully-intensionally-with g
 
 ------------------------------------
 

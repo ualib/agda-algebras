@@ -511,10 +511,10 @@ Recall, a term 𝑡 is either a variable, say, 𝑡 = 𝑥, or has the form 𝑡
 
 Let 𝑡 ∈ 𝑇(𝑋) be an 𝑆-term.  Given an arbitrary 𝑆-algebra 𝑨, we will define a **term operation** on 𝑨 by giving 𝑡 an *interpretation* in 𝑨.  Diverging from standard notation slightly, we will denote this operation by 𝑡 ̇ 𝑨 for reasons that will hopefully be clear when (in :numref:`interpretation`) we define term operations in Agda.  Similarly, 𝑡 ̇ 𝑩 will denote the interpretation of the term 𝑡 in the algebra 𝑩.
 
-The **term operation** 𝑡 ̇ 𝑨 is defined by recursion on the :term:`height` ∣𝑡∣ of 𝑡 as follows: for each tuple 𝑎 : 𝑋 → 𝐴 of 𝐴,
+The **term operation** 𝑡 ̇ 𝑨 is defined by recursion on the :term:`height` ∣𝑡∣ of 𝑡 as follows: for each assignment 𝑎 : 𝑋 → 𝐴 (of values in 𝐴 to variables in 𝑋),
 
-#. (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥ᵢ ∈ 𝑋, then (𝑡 ̇ 𝑨) 𝑎 = :math:`π^X_i\, a = a\, i`,
-#. (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 ∈ 𝐹 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖 < ρ𝑓, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = :math:`f^𝑨 \, s^𝑨`.
+#. (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥, then (𝑡 ̇ 𝑨) 𝑎 = 𝑎 𝑥,
+#. (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = :math:`f^𝑨 \, s^𝑨`.
 
 ----------------------------------------------------------------------------------------------
 
@@ -974,7 +974,7 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
       .. math:: 𝑨/Ψ(𝒦, 𝑨) ↪ Π ⟨ 𝑨/θ : θ ∈ ψ(𝒦, 𝑨) ⟩ ∈ \mathrm{PS}(𝒦),
 
-      so :math:`𝑨/Ψ(𝒦, 𝑨)` ∈ SPS(𝒦) = SP(𝒦)`.
+      so :math:`𝑨/Ψ(𝒦, 𝑨)` ∈ SPS(𝒦) = SP(𝒦).
 
 .. _obs 9.5:
 
@@ -988,7 +988,7 @@ Next we observe that freeness extends from a class 𝒦 to the variety it genera
 
          *Proof*.
 
-      Let :math:`𝑼' = 𝑼/Ψ(𝒦, 𝑼)` and :math:`𝑋' = 𝑋/(Ψ(𝒦, 𝑼) ∩ 𝑋²)`. Since 𝑋 generates 𝑼, it follows from :numref:`Obs %s <obs 7.1>` that 𝑋 generates :math:`𝑼'`. From :numref:`Obs %s <obs 9.4>`, :math:`𝑼'` ∈ SP(𝒦). If we can show that 𝑼 has the :term:`UMP` for 𝑋, then by :numref:`Obs %s <obs 9.3>` :math:`𝑼'` will be free in SP(𝒦) over 𝑋.
+      Let :math:`𝑼' = 𝑼/Ψ(𝒦, 𝑼)` and :math:`𝑋' = 𝑋/(Ψ(𝒦, 𝑼) ∩ 𝑋²)`. Since 𝑋 generates 𝑼, it follows from :numref:`Obs %s <obs 7.1>` that 𝑋 generates :math:`𝑼'`. From :numref:`Obs %s <obs 9.4>`, :math:`𝑼'` ∈ SP(𝒦). If we can show that 𝑼 has the universal mapping property for 𝑋, then by :numref:`Obs %s <obs 9.3>` :math:`𝑼'` will be free in SP(𝒦) over 𝑋.
 
       Fix 𝑨 ∈ 𝒦 and :math:`ℎ : 𝑋' → 𝐴`, and let 𝑞 be the canonical map from 𝑼 to :math:`𝑼'`. Since 𝑼 is free over 𝑋, there is a homomorphism ℎ̃ : 𝑼 → 𝑨 extending ℎ ∘ 𝑞. Let η = ker ℎ̃. Then 𝑼/η ∈ S(𝑨) ⊆ S(𝒦), so :math:`η ∈ ψ(𝒦, 𝑼)` and therefore :math:`Ψ(𝒦, 𝑼) ≤ η`. Since :math:`Ψ(𝒦, 𝑼) = ker 𝑞`, there is a homomorphism :math:`ℎ' : 𝑼' → 𝑨` such that :math:`ℎ̃ = h' ∘ q`. But now it follows easily that :math:`h'` restricted to :math:`X'` is equal to ℎ.
 
