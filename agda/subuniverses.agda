@@ -6,7 +6,7 @@
 
 open import prelude
 open import basic using (Signature; Algebra; Op; _̂_)
-open import relations using (transitive)
+open import congruences using (transitive)
 open import homomorphisms using (HOM; Hom; hom; is-homomorphism; HomImage)
 
 open import terms using (Term; _̇_; generator; node;

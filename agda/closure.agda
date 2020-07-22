@@ -173,11 +173,54 @@ module _
 
 
 
+ -- The free algebra in Agda
+
+ module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
+
+  𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+            Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
+             Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+
+  𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
+  𝑻𝑨 ti = ∣ ti ∣
+
+  𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
+  𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
+
+  𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
+  𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
+
+  𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
+  𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
+
+   -- 𝑻homE : (ti : 𝑻img) → Epic ∣ 𝑻hom ti ∣
+   -- 𝑻homE ti = ∥ pr₂ ∥ ti ∥ ∥
+
+
+  -- 𝑻-kernel : _ ̇
+  -- 𝑻-kernel = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ , ∀ tim → pair ∈ ker-pred ∣ pr₁( ∥ tim ∥ ) ∣
+
+  --   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
+  -- 𝔽: {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  -- 𝔽{𝒦} =  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+
+     -- SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua
+
+     -- record Congruence (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+     --   constructor mkcon
+     --   field
+     --     ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
+     --     Compatible : compatible 𝑨 ⟨_⟩
+     --     IsEquiv : IsEquivalence ⟨_⟩
+     -- open Congruence
 
 
 
 
-module _ (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )) where
+
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
  pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
  pclo-id1 {p} {q} α (pbase x) = α x

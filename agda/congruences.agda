@@ -1,15 +1,14 @@
--- FILE: relations.agda
+-- FILE: congruences.agda
 -- AUTHOR: William DeMeo and Siva Somayyajula
 -- DATE: 30 Jun 2020
--- REF: Some of this file is simply a translation of the Agda standard library file Binary/Core.agda
--- into our notation.
+-- NOTE: This file used to be called relations.agda
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
 open import basic using (Signature; Algebra)
 
-module relations where
+module congruences where
 
 REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺) ̇
 REL A B 𝓝 = A → B → 𝓝 ̇

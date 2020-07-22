@@ -10,15 +10,6 @@ open import basic using (Signature; Algebra; _̂_)
 open import homomorphisms using (hom; is-homomorphism)
 open import subuniverses using (Subuniverse; mksub; var; app; Sg)
 open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
--- open import prelude
--- open import basic using (Signature; Algebra; ⨅; Op; _̂_)
--- open import relations using (ker-pred; Rel; con; _//_)
--- open import homomorphisms using (HOM; Hom; hom; is-homomorphism; H-closed)
--- open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
---                          lift-hom; interp-prod)
-
--- open import subuniverses using (Subuniverse; mksub; var; app; Sg;
---           _is-subalgebra-of_; Subalgebra; S-closed)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -34,7 +25,7 @@ open import closure
  {ua = ua}
  {X = X}
  {gfe = gfe}
- {dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
+ {dfe = dfe} using (VClo; vbase; _⊧_≈_; _⊧_≋_; vclo-id1; vclo-id2)
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -92,11 +83,20 @@ TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-MOD : (Σ' : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
-MOD Σ' = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ Σ' → A ⊧ p ≈ q
+MOD : (ℰ : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
+MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
-Mod Σ' = λ A → ∀ p q → (p , q) ∈ Σ' → A ⊧ p ≈ q
+Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+ThHSP-axiomatizes : {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)}
+                    (p q : ∣ (𝑻 X) ∣ )
+                  -----------------------------------------
+ →                 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+
+ThHSP-axiomatizes p q =
+ (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
+  λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
 
 -- Birkhoff's theorem: every variety is an equational class.
 birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
@@ -107,8 +107,25 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
+  A⊧ : {p q : ∣ (𝑻 X) ∣} → 𝒦 ⊧ p ≋ q → 𝑨 ⊧ p ≈ q
+  A⊧ {p}{q} 𝒦⊧p≋q = ξ
+   where
+    pq∈ : (p , q) ∈ Th (VClo 𝒦)
+    pq∈ = (lr-implication (ThHSP-axiomatizes p q)) 𝒦⊧p≋q
+
+    ξ : 𝑨 ⊧ p ≈ q
+    ξ = A∈ModThV p q pq∈
+
+  -- 𝒦⊧ : {p q : ∣ (𝑻 X) ∣} → (p , q) ∈ Th (VClo 𝒦) → 𝒦 ⊧ p ≋ q
+  -- 𝒦⊧ = λ z z₁ → z (vbase z₁)
+
   γ : 𝑨 ∈ VClo 𝒦
   γ = {!!}
+
+  -- Since
+  -- vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+  -- We need to show there is some 𝑭 ∈ VClo 𝒦 such that (𝑨 , _ , _ ) : HomImagesOf 𝑭
+
  --Let 𝒲 be a class of algebras that is closed under H, S, and P.
  --We must find a set Σ of equations such that 𝒲 = Mod(Σ). For this will prove that 𝒲
  --is the class of algebras satisfying a particular set of equations (i.e., 𝒲 is an
