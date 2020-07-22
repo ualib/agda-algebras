@@ -25,13 +25,13 @@ Preliminaries
    {-# OPTIONS --without-K --exact-split --safe #-}
 
    open import prelude
-   open import basic using (Signature; Algebra)
+   open import basic using (Signature; Algebra; _̂_)
 
    module congruences where
 
 --------------------------------------
 
-Binary relations
+Binary relation type
 ------------------------
 
 Heterogeneous binary relations.
@@ -48,10 +48,9 @@ Homogeneous binary relations.
    Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
    Rel A 𝓝 = REL A A 𝓝
 
---------------------------------------
 
 Kernels
----------
+~~~~~~~~~~~~~~
 
 The kernel of a function can be defined in many ways. For example,
 
@@ -85,10 +84,9 @@ or a binary predicate...
    ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } (f : A → B) → Pred (A × A) 𝓤
    ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
---------------------------------------
 
 Implication
------------------
+~~~~~~~~~~~
 
 We denote and define implication or containment (which could also be written _⊆_) as follows.
 
@@ -186,7 +184,9 @@ The "universal" or "total" or "all" relation.
    𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
    𝟏 a b = 𝟙
 
-Equivalence relations
+----------------------------------
+
+Types for equivalences
 ----------------------
 
 .. The preorders of the standard library are defined in terms of an underlying equivalence relation, and hence equivalence relations are not defined in terms of preorders.
@@ -250,7 +250,12 @@ We define **compatibility** of a given function-relation pair as follows:
    compatible-fun 𝒇 𝑹 = (lift-rel 𝑹) =[ 𝒇 ]⇒ 𝑹
 
 
-Finally, we come to the definition of a congruence, which we define in a module (so that we can assume a particular signature 𝑆 is present and available in the context).
+----------------------------------
+
+Types for congruences
+---------------------
+
+Finally, we come to the definition of a congruence, which we define in a module so we have an ambient signature 𝑆 available.
 
 ::
 
@@ -270,7 +275,7 @@ Finally, we come to the definition of a congruence, which we define in a module 
       →                {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣)
       →                compatible-op {𝓤}{𝑨} 𝑓 𝟎-rel
      𝟎-compatible-op fe {𝑨 = 𝑨} 𝑓 ptws𝟎  =
-      ap (∥ 𝑨 ∥ 𝑓) (fe (λ x → ptws𝟎 x))
+      ap (𝑓 ̂ 𝑨)(fe (λ x → ptws𝟎 x))
 
      𝟎-compatible : funext 𝓥 𝓤
       →             {𝑨 : Algebra 𝓤 𝑆}
@@ -294,6 +299,11 @@ Finally, we come to the definition of a congruence, which we define in a module 
          IsEquiv : IsEquivalence ⟨_⟩
      open Congruence
 
+----------------------------------
+
+The trivial congruence
+~~~~~~~~~~~~~~~~~~~~~~~
+
 We construct the "trivial" or "diagonal" or "identity" relation and prove it is a congruence as follows.
 
 ::
@@ -308,18 +318,22 @@ We construct the "trivial" or "diagonal" or "identity" relation and prove it is 
       →     Algebra (𝓤 ⁺) 𝑆
      𝑨 ╱ θ = (( ∣ 𝑨 ∣ // ⟨ θ ⟩ ) , -- carrier
                (λ 𝑓 args        -- operations
-                → ([ ∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-                  (∥ 𝑨 ∥ 𝑓 (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+                → ([ (𝑓 ̂ 𝑨) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+                  ((𝑓 ̂ 𝑨)(λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
                )
              )
 
+
+We would like to round out this chapter with a formalization of the trivial congruence of the free algebra 𝔽(𝒦, 𝑋), which we called Ψ(𝒦, 𝑻(𝑋)) in :numref:`free algebras`.
+
+Unfortunately, this will have to wait until we have formalized the concepts of subalgebra and closure on which this congruence depends. Thus, our Agda definition of Ψ(𝒦, 𝑻(𝑋)) will appear in the `closure module`_ described in Chapter %s :numref:`equational logic in agda`.
 
 ------------------------------------------
 
 Unicode Hints
 ---------------
 
-Table of some special characters used in the `relations module`_. 
+Table of some special characters used in the `congruences module`_. 
 
   +--------+------------------------+
   | To get | Type                   |

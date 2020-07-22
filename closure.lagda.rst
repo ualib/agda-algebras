@@ -4,7 +4,9 @@
 .. UPDATE    : 21 Jul 2020
 .. COPYRIGHT : (c) 2020 William DeMeo
 
-===========================
+
+.. _equational logic in agda:
+
 Equational Logic in Agda
 ===========================
 
@@ -24,6 +26,7 @@ As usual, the development begins by satisfying dependencies.
   open import basic using (Signature; Algebra; ⨅; Op; _̂_)
   open import subuniverses using (Subuniverses; Subalgebra)
   open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
+  open import congruences using (ker-pred; con; Congruence)
   open import terms using (Term; generator; node; _̇_; interp-prod2;
    interp-prod; comm-hom-term; 𝑻; lift-hom)
 
@@ -353,6 +356,69 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
      γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
 ------------------------------------------
+
+.. _the free algebra in agda:
+
+The free algebra in Agda
+---------------------------
+
+Recall, we proved above that term algebra 𝑻(𝑋) is the absolutely free algebra in the class 𝓚(𝑆) of all 𝑆-structures. In this section, we formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in SP(𝒦) over 𝑋.  Recall, this was defined above in :numref:`free algebras` as follows:
+
+  𝔽(𝒦, 𝑋) := 𝑻(𝑋)/Ψ(𝒦, 𝑻(𝑋)).
+
+Thus, we must first formalize the congruence ψ(𝒦, 𝑻(𝑋)) which is defined by
+
+  Ψ(𝒦, 𝑻(𝑋)) := ⋀ ψ(𝒦, 𝑻(𝑋)),
+
+where ψ(𝒦, 𝑻(𝑋)) := \{θ ∈ Con 𝑻(𝑋) : 𝑨/θ ∈ S(𝒦)\}.
+
+Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make sense to say that "𝑋 generates 𝔽(𝒦, 𝑋)."  But as long as 𝒦 contains a nontrivial algebra, we will have Ψ(𝒦, 𝑻(𝑋)) ∩ 𝑋² ≠ ∅, and we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑻(𝑋)) in 𝔽(𝒦, 𝑋). (See :numref:`Obs %s <obs 9.6>`.)
+
+::
+
+  module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
+
+   𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+   𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+             Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
+              Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+
+   𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
+   𝑻𝑨 ti = ∣ ti ∣
+
+   𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
+   𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
+
+   𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
+   𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
+
+   𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
+   𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
+
+   -- 𝑻homE : (ti : 𝑻img) → Epic ∣ 𝑻hom ti ∣
+   -- 𝑻homE ti = ∥ pr₂ ∥ ti ∥ ∥
+
+
+  -- 𝑻-kernel : _ ̇
+  -- 𝑻-kernel = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ , ∀ tim → pair ∈ ker-pred ∣ pr₁( ∥ tim ∥ ) ∣
+
+  --   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
+  -- 𝔽: {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  -- 𝔽{𝒦} =  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+
+     -- SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua
+
+     -- record Congruence (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+     --   constructor mkcon
+     --   field
+     --     ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
+     --     Compatible : compatible 𝑨 ⟨_⟩
+     --     IsEquiv : IsEquivalence ⟨_⟩
+     -- open Congruence
+
+
+
 
 More tools for Birkhoff's theorem
 ----------------------------------
