@@ -107,6 +107,8 @@ Next, the lift to (𝑻 X → 𝑨) is unique.
 
 ----------------------------------------------
 
+.. _interpretation:
+
 Interpretation
 --------------
 

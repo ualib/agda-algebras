@@ -509,21 +509,17 @@ As usual, for each 0 < 𝑛 < ω we identify the 𝑛-tuple :math:`(x_0, x_1, \d
 
 Recall, a term 𝑡 is either a variable, say, 𝑡 = 𝑥, or has the form 𝑡 = 𝑓 𝑠 for some operation symbol 𝑓 ∈ 𝐹, and some ρ𝑓-tuple 𝑠 : ρ𝑓 → 𝑇(𝑋) of terms.
 
-Let 𝑡 ∈ 𝑇(𝑋) be a term. Define the **term operation** :math:`t^𝑨` on 𝐴 by recursion on the :term:`height` ∣𝑡∣ of 𝑡 as follows: for each tuple 𝑎 : 𝑋 → 𝐴 of 𝐴,
+Let 𝑡 ∈ 𝑇(𝑋) be an 𝑆-term.  Given an arbitrary 𝑆-algebra 𝑨, we will define a **term operation** on 𝑨 by giving 𝑡 an *interpretation* in 𝑨.  Diverging from standard notation slightly, we will denote this operation by 𝑡 ̇ 𝑨 for reasons that will hopefully be clear when (in :numref:`interpretation`) we define term operations in Agda.  Similarly, 𝑡 ̇ 𝑩 will denote the interpretation of the term 𝑡 in the algebra 𝑩.
 
-#. (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥ᵢ ∈ 𝑋, then :math:`t^𝑨 \, a = π^X_i\, a = a\, i`,
-#. (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 ∈ 𝐹 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇ₙ is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖 < ρ𝑓, ∣𝑠 𝑖∣ ≤ 𝑛), then :math:`t^𝑨 = f^𝑨 \, s^𝑨`.
+The **term operation** 𝑡 ̇ 𝑨 is defined by recursion on the :term:`height` ∣𝑡∣ of 𝑡 as follows: for each tuple 𝑎 : 𝑋 → 𝐴 of 𝐴,
 
-
-.. The **interpretation** of :math:`t(x)` in 𝑨, often denoted by :math:`t^𝑨(x)`, is the :math:`(ρ t)`-ary operation on :math:`A` defined by recursion on the structure of :math:`t`, as follows:#. if :math:`t(x)` is simply the variable :math:`x i ∈ X`, and if 𝑎 is a :math:`(ρ t)`-tuple of :math:`A`, then :math:`t^𝑨(a) = a i`; that is, :math:`t^𝑨(a)` is the projection of the input tuple onto its :math:`i`-th coordinate.#. if :math:`t = 𝓸 𝑓`, where 𝓸 is a basic operation symbol with interpretation :math:`𝓸^𝑨` in 𝑨 and :math:`𝑓 : (ρ 𝓸) →` Term is a (ρ 𝓸)-tuple of terms, each with interpretation :math:`(𝑓 i)^𝑨`, then :math:`t^𝑨(𝑓)` is :math:`𝓸^𝑨 \bigl( λ (i : ρ 𝓸) . (𝑓 i)^𝑨\bigr)`.
-
-
-
+#. (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥ᵢ ∈ 𝑋, then (𝑡 ̇ 𝑨) 𝑎 = :math:`π^X_i\, a = a\, i`,
+#. (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 ∈ 𝐹 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖 < ρ𝑓, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = :math:`f^𝑨 \, s^𝑨`.
 
 ----------------------------------------------------------------------------------------------
 
 .. index:: ! model
-.. index:: ! pair: σ-identity; σ-equation
+.. index:: ! pair: 𝑆-identity; 𝑆-equation
 .. index:: ! pair: identity; equation
 .. index:: ! pair: equational base; axiomatization
 .. index:: ! pair: equational theory; theory
@@ -538,35 +534,35 @@ Let 𝑆 = (𝐹, ρ) be a signature and :math:`X := \{x_0, x_1, \dots\}` a coun
 
 An **identity in the signature** 𝑆 (or "𝑆-identity") is an ordered pair of terms (𝑝, 𝑞) ∈ 𝑇(𝑋) × 𝑇(𝑋). We usually write 𝑝 ≈ 𝑞 to indicate such an identity. Although, when we have a collection of identities, say, Σ, we could indicate that 𝑝 ≈ 𝑞 is among the identities in Σ by writing (𝑝, 𝑞) ∈ Σ. We sometimes refer to an identity as an **equation**; for us, the words "identity" and "equation" are synonyms.
 
-Let :math:`𝒜_𝑆`, resp. :math:`ℰ_𝑆`, denote the class of all 𝑆-algebras, resp. 𝑆-identities.
+Let 𝓚(𝑆) and 𝓔(𝑆) denote the classes of all 𝑆-algebras and 𝑆-identities, respectively.
 
-For 𝑨 ∈ 𝒦 ⊆ :math:`𝒜_S` and :math:`(p, q) ∈ Σ ⊆ ℰ_S`, we say that
+For 𝑨 ∈ 𝒦 ⊆ 𝓚(𝑆) and (𝑝, 𝑞) ∈ ℰ ⊆ 𝓔(𝑆), we say that
 
-* 𝑨 **models** 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case :math:`p^𝑨 = q^𝑨` :term:`extensionally <extensional>` (recall, this means ∀ 𝑎 : 𝑋 → 𝐴 we have :math:`p^𝑨 \, a = q^𝑨 \, a`.);
+* 𝑨 **models** 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case 𝑝 ̇ 𝑨 = 𝑞 ̇ 𝑨 :term:`extensionally <extensional>` (i.e., ∀ 𝑎 : 𝑋 → 𝐴, (𝑝 ̇ 𝑨) 𝑎 = (𝑞 ̇ 𝑨) 𝑎);
 
-* 𝑨 **models** Σ, denoted 𝑨 ⊧ Σ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ Σ;
+* 𝑨 **models** ℰ, denoted 𝑨 ⊧ ℰ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ ℰ;
 
-* 𝒦 **models** 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ p ≈ q holds for every 𝑨 in 𝒦;
+* 𝒦 **models** 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every 𝑨 in 𝒦;
 
-* 𝒦 **models** Σ just in case 𝑨 ⊧ Σ for every 𝑨 ∈ 𝒦.
+* 𝒦 **models** ℰ just in case 𝑨 ⊧ ℰ for every 𝑨 ∈ 𝒦.
 
 **Notation**. To produce the symbols ≈ and ⊧ in Emacs ``agda2-mode``, type ``\~~`` and ``\models`` (resp.). To denote "𝒦 models 𝑝 ≈ 𝑞" we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs ``agda2-mode`` with ``\~~~``.
 
-The binary relation :math:`⊧` induces an obvious :term:`Galois connection`. Indeed, the :term:`Galois pair` (Mod, Th) is defined as follows: for all :math:`Σ ⊆ ℰ_S` and :math:`𝒦 ⊆ 𝒜_S`, 
+The binary relation :math:`⊧` induces an obvious :term:`Galois connection`. Indeed, the :term:`Galois pair` (Mod, Th) is defined as follows: for all ℰ ⊆ 𝓔(𝑆) and 𝒦 ⊆ 𝓚(𝑆), 
 
-.. math:: \mathrm{Mod}(Σ) := \{𝑨 ∈ 𝒜_S : 𝑨 ⊧ Σ \} \quad \text{ and } \quad \mathrm{Th}(𝒦) := \{Σ ∈ ℰ_S : 𝒦 ⊧ Σ\}.
+  Mod ℰ := \{ 𝑨 ∈ 𝓚(𝑆) : 𝑨 ⊧ ℰ \}  and Th 𝒦 := \{ℯ ∈ 𝓔(𝑆) : 𝒦 ⊧ ℯ \}.
 
-The first of these, the class of **models** of Σ, contains those and only those algebras modeling every identity in Σ. It is called an **equational class**, and Σ is called an **equational base** for, or an **axiomatization** of, the class.
+The first of these, the class of **models** of ℰ, contains those and only those algebras modeling every identity in ℰ. It is called an **equational class**, and ℰ is called an **equational base** for, or an **axiomatization** of, the class.
 
-Dually, Th(𝒦) is the class of identities modeled by every algebra in 𝒦.  Such a class of identities is called an **equational theory**.
+Dually, Th 𝒦 is the class of identities modeled by every algebra in 𝒦.  Such a class of identities is called an **equational theory**.
 
-Alternatively and equivalently we could define "equational class" and "equational theory" in terms of the two :term:`closure operators <closure operator>` induced by the Galois pair (Mod, Th).  Indeed, :math:`\mathrm{Mod}\, \mathrm{Th} : 𝒫(𝒜) → 𝒫(𝒜)` is a closure operator on 𝒜 and :math:`\mathrm{Th}\, \mathrm{Mod} : 𝒫(ℰ) → 𝒫(ℰ)` is a closure operator on ℰ, and 
+Alternatively and equivalently we could define "equational class" and "equational theory" in terms of the two :term:`closure operators <closure operator>` induced by the Galois pair (Mod, Th).  Indeed, Mod Th : 𝒫 𝓚(𝑆) → 𝒫 𝓚(𝑆) is a closure operator on 𝓚(𝑆) and Th Mod : 𝒫 𝓔(𝑆) → 𝒫 𝓔(𝑆) is a closure operator on 𝓔(𝑆), and
 
 * an **equational class** is a Mod Th-:term:`closed class <closed set>` of 𝑆-algebras;
 
 * an **equational theory** is a Th Mod-:term:`closed set` of 𝑆-identities
 
-(where, 𝒫 denotes the :term:`power set operator`).
+(Here, 𝒫 denotes the :term:`power set operator`.)
 
 **N.B.** An equational class is sometimes referred to as a **variety**; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in :ref:`the birkhoff module <the birkhoff module>` described in :numref:`the birkhoff module`.
 
@@ -1008,7 +1004,7 @@ can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑋) in 𝔽(𝒦, 𝑋). All of these con
    Let 𝒱 be a variety of 𝑆-algebras. If 𝑋 ∪ 𝐹₀ ≠ ∅, then 𝔽(𝒱, 𝑋) is free in 𝒱 over 𝑋.  If 𝒱 = 𝕍(𝒦), the variety generated by 𝒦, then 𝔽(𝒱, 𝑋) = 𝔽(𝒦, 𝑋) ∈ SP(𝒦).
 
 
-In the next observation, assume 𝑨 = :math:`⟨A, F^𝑨⟩` and 𝑩 = :math:`⟨B, F^𝑩⟩` are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆.  In particular, 𝑡 has an interpretation in 𝑨 (see :numref:`interpretation of a term`), which we denote by :math:`t^𝑨`. Similarly, :math:`t^𝑩` is the interpretation of 𝑡 in 𝑩.
+In the next observation, assume 𝑨 = :math:`⟨A, F^𝑨⟩` and 𝑩 = :math:`⟨B, F^𝑩⟩` are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆.  In particular, as explained in :numref:`term operations`, 𝑡 has an interpretation in 𝑨, which (for reasons that will become clear when we define term operations in Agda) we will denote by 𝑡 ̇ 𝑨 and we call a **term operation**. Similarly, :math:`t^𝑩` is the interpretation of 𝑡 in 𝑩.
 
 .. _thm 4.32:
 
