@@ -26,14 +26,10 @@ As usual, we start with the imports we will need below.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Π'; _̂_)
-  open import relations using (ker-pred; Rel; con; _//_)
+  open import basic using (Signature; Algebra; _̂_)
   open import homomorphisms using (hom; is-homomorphism)
-  open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
-                           lift-hom; interp-prod)
-
-  open import subuniverses using (Subuniverse; mksub; var; app;
-                                  Sg; Subalgebra)
+  open import subuniverses using (Subuniverse; mksub; var; app; Sg)
+  open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
 
 We start the ``birkhoff`` module with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
 
@@ -263,6 +259,27 @@ The Agda proof of Birkhoff's theorem
 
      γ : 𝑨 ∈ VClo 𝒦
      γ = {!!}
+
+-----------------------------------------------
+
+Unicode Hints
+---------------
+
+Table of some special characters used in the `closure module`_.
+
+  +--------+------------------------+
+  | To get | Type                   |
+  +--------+------------------------+
+  | 𝑬𝑯     | ``\MIE\MIH``           |
+  +--------+------------------------+
+
+See :numref:`unicode hints` for a longer list of symbols used in the agda-ualib_, or better yet, use these
+
+  **Emacs commands providing information about special characters/input methods**:
+
+    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+    * ``M-x describe-input-method`` (or ``C-h I``)
 
 ------------------
 

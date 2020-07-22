@@ -6,72 +6,82 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π'; Op; _̂_)
-open import relations using (ker-pred; Rel; con; _//_)
-open import homomorphisms using (HOM; Hom; hom; is-homomorphism; H-closed)
-open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
-                         lift-hom; interp-prod)
+open import basic using (Signature; Algebra; _̂_)
+open import homomorphisms using (hom; is-homomorphism)
+open import subuniverses using (Subuniverse; mksub; var; app; Sg)
+open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
+-- open import prelude
+-- open import basic using (Signature; Algebra; ⨅; Op; _̂_)
+-- open import relations using (ker-pred; Rel; con; _//_)
+-- open import homomorphisms using (HOM; Hom; hom; is-homomorphism; H-closed)
+-- open import terms using (Term; generator; 𝑻; _̇_; comm-hom-term;
+--                          lift-hom; interp-prod)
 
-open import subuniverses using (Subuniverse; mksub; var; app; Sg;
-          _is-subalgebra-of_; Subalgebra; S-closed)
+-- open import subuniverses using (Subuniverse; mksub; var; app; Sg;
+--           _is-subalgebra-of_; Subalgebra; S-closed)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {ua : Univalence}
  {X : 𝓤 ̇ }
- (gfe : global-dfunext)
- (dfe : dfunext 𝓤 𝓤)
-   where
+ {gfe : global-dfunext}
+ {dfe : dfunext 𝓤 𝓤} where
 
-open import closure{𝑆 = 𝑆}{𝓤 = 𝓤}{ua = ua}{X = X}{gfe = gfe}{dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
+open import closure
+ {𝑆 = 𝑆}
+ {𝓤 = 𝓤}
+ {ua = ua}
+ {X = X}
+ {gfe = gfe}
+ {dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
 
 --Equalizers of functions
-E :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
-E g h x = g x ≡ h x
+𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
+𝑬 g h x = g x ≡ h x
 
 --Equalizers of homomorphisms
-EH : {A B : Algebra 𝓤 𝑆} (g h : hom A B) → Pred ∣ A ∣ 𝓤
-EH g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 𝑆} (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
+𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
 --cf. definition 𝓔 in the homomorphisms module
 
-EH-is-closed : funext 𝓥 𝓤
- →      {𝑓 : ∣ 𝑆 ∣ } {A B : Algebra 𝓤 𝑆}
-        (g h : hom A B)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ A ∣)
- →      ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (EH {A = A}{B = B} g h))
-        --------------------------------------------------
- →       ∣ g ∣ (∥ A ∥ 𝑓 𝒂) ≡ ∣ h ∣ (∥ A ∥ 𝑓 𝒂)
+𝑬𝑯-is-closed : funext 𝓥 𝓤
+ →     {𝑓 : ∣ 𝑆 ∣ } {𝑨 𝑩 : Algebra 𝓤 𝑆}
+       (g h : hom 𝑨 𝑩)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
+ →     ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
+       --------------------------------------------------
+ →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-EH-is-closed fe {𝑓 = 𝑓}{A = A , FA}{B = B , FB}
+𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩}
  (g , ghom)(h , hhom) 𝒂 p =
-   g (FA 𝑓 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
-   FB 𝑓 (g ∘ 𝒂)  ≡⟨ ap (FB _ )(fe p) ⟩
-   FB 𝑓 (h ∘ 𝒂)  ≡⟨ (hhom 𝑓 𝒂)⁻¹ ⟩
-   h (FA 𝑓 𝒂)    ∎
+   g ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
+   (𝑓 ̂ 𝑩)(g ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
+   (𝑓 ̂ 𝑩)(h ∘ 𝒂)  ≡⟨ (hhom 𝑓 𝒂)⁻¹ ⟩
+   h ((𝑓 ̂ 𝑨) 𝒂)    ∎
 
 -- Equalizer of homs is a subuniverse.
-EH-is-subuniverse : funext 𝓥 𝓤
- →  {A B : Algebra 𝓤 𝑆}(g h : hom A B) → Subuniverse {A = A}
-EH-is-subuniverse fe {A = A} {B = B} g h =
- mksub (EH {A = A}{B = B} g h)
-  λ 𝑓 𝒂 x → EH-is-closed fe {A = A} {B = B} g h 𝒂 x
+𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
+ →  {𝑨 𝑩 : Algebra 𝓤 𝑆}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h =
+ mksub (𝑬𝑯 {𝑨}{𝑩} g h)
+  λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 x
 
-HomUnique : funext 𝓥 𝓤 → {A B : Algebra 𝓤 𝑆}
-           (X : Pred ∣ A ∣ 𝓤)  (g h : hom A B)
- →         (∀ (x : ∣ A ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
+HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
+           (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+ →         (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
          ---------------------------------------------------
- →        (∀ (a : ∣ A ∣) → a ∈ Sg {A = A} X → ∣ g ∣ a ≡ ∣ h ∣ a)
+ →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
 HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
-HomUnique fe {A = A , FA}{B = B , FB} X
+HomUnique fe {𝑨}{𝑩} X
  (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
-  g (FA 𝑓 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
-  FB 𝑓 (g ∘ 𝒂 )   ≡⟨ ap (FB 𝑓) (fe induction-hypothesis) ⟩
-  FB 𝑓 (h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
-  h ( FA 𝑓 𝒂 )   ∎
+  g ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
+  (𝑓 ̂ 𝑩)(g ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
+  (𝑓 ̂ 𝑩)(h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
+  h ((𝑓 ̂ 𝑨) 𝒂 )   ∎
  where
   induction-hypothesis =
-    λ x → HomUnique fe {A = A , FA}{B = B , FB} X
+    λ x → HomUnique fe X
     (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 module _
@@ -83,25 +93,25 @@ module _
  identities-are-compatible-with-homs : (p q : Term{X = X})
   →                𝒦 ⊧ p ≋ q
        ----------------------------------------------------
-  →     ∀ A KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+  →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
  -- Here, the inferred types are
- -- A : Algebra 𝓤 𝑆, KA : 𝒦 A, h : hom ((𝑻(X))) A
+ -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
 
- identities-are-compatible-with-homs p q 𝒦⊧p≋q A KA h = γ
+ identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
   where
-   pA≡qA : p ̇ A ≡ q ̇ A
+   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = 𝒦⊧p≋q KA
 
    pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
-    →        (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ A)(∣ h ∣ ∘ 𝒂)
+    →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
    pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
    hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
     →        ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)
    hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) A h p 𝒂 ⟩
-    (p ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ A)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) A h q 𝒂)⁻¹ ⟩
+    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) 𝑨 h p 𝒂 ⟩
+    (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
+    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 h q 𝒂)⁻¹ ⟩
     ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)  ∎
 
    γ : ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
@@ -109,135 +119,42 @@ module _
 
  -- ⇐ (the "if" direction)
  homs-are-compatible-with-identities : (p q : Term)
-  →    (∀ A KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻 X)) ≡ ∣ h ∣ ∘ (q ̇ (𝑻 X)))
+  →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ (𝑻 X)) ≡ ∣ h ∣ ∘ (q ̇ (𝑻 X)))
        --------------------------------------------------
   →                𝒦 ⊧ p ≋ q
- --inferred types: A : Algebra 𝓤 𝑆, KA : A ∈ 𝒦, h : hom (𝑻(X)) A
+ --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
 
- homs-are-compatible-with-identities p q all-hp≡hq {A = A} KA = γ
+ homs-are-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
   where
-   h : (𝒂 : X → ∣ A ∣) → hom (𝑻(X)) A
-   h 𝒂 = lift-hom{A = A} 𝒂
+   h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻(X)) 𝑨
+   h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
 
-   γ : A ⊧ p ≈ q
+   γ : 𝑨 ⊧ p ≈ q
    γ = gfe λ 𝒂 →
-    (p ̇ A) 𝒂
+    (p ̇ 𝑨) 𝒂
       ≡⟨ refl _ ⟩
-    (p ̇ A)(∣ h 𝒂 ∣ ∘ generator)
-      ≡⟨(comm-hom-term gfe (𝑻 X) A (h 𝒂) p generator)⁻¹ ⟩
+    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+      ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
     (∣ h 𝒂 ∣ ∘ (p ̇ (𝑻(X)))) generator
-      ≡⟨ ap (λ - → - generator) (all-hp≡hq A KA (h 𝒂)) ⟩
+      ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
     (∣ h 𝒂 ∣ ∘ (q ̇ (𝑻(X)))) generator
-      ≡⟨ (comm-hom-term gfe (𝑻 X) A (h 𝒂) q generator) ⟩
-    (q ̇ A)(∣ h 𝒂 ∣ ∘ generator)
+      ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
+    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
       ≡⟨ refl _ ⟩
-    (q ̇ A) 𝒂
+    (q ̇ 𝑨) 𝒂
       ∎
 
  compatibility-of-identities-and-homs : (p q : Term)
   →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀ A ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
- --inferred types: A : algebra 𝓤 s, ka : A ∈ 𝒦, hh : hom (𝑻(X)) A.
+      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
+ --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
 
  compatibility-of-identities-and-homs p q =
    identities-are-compatible-with-homs p q ,
    homs-are-compatible-with-identities p q
 
--- Product Closure
-P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
- →      (𝓤 : Universe)(𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
- →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓤 ) → 𝓤 ⁺ ⊔ 𝓘 ⁺ ̇
-P-closed ℒ𝒦 = λ 𝓤 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  Π' 𝒜  ∈ (ℒ𝒦 (𝓤 ⊔ 𝓘))
-
-data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- pbase : {A : Algebra 𝓤 𝑆} → A ∈ 𝒦 → A ∈ PClo 𝒦
- prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
-  →     (∀ i → 𝒜 i ∈ PClo 𝒦)
-  →     Π' 𝒜 ∈ PClo 𝒦
-
--- Subalgebra Closure
-data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- sbase : {A :  Algebra _ 𝑆} → A ∈ 𝒦 → A ∈ SClo 𝒦
- sub : {A : Algebra _ 𝑆} → A ∈ SClo 𝒦 → (sa : Subalgebra {A = A} ua) → ∣ sa ∣ ∈ SClo 𝒦
-
--- module _
---  {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
-
-HomImages : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
-                          is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
-
-module _ {𝑨 𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)  where
-
- HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
- HomImage = λ b → Image ∣ ϕ ∣ ∋ b
-
- hom-image : 𝓤 ̇
- hom-image = Σ (Image_∋_ ∣ ϕ ∣)
-
- fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ ϕ ∣)
- fres a = ∣ ϕ ∣ a , im a
-
- hom-image-alg : Algebra 𝓤 𝑆
- hom-image-alg = hom-image , ops-interp
-  where
-   a : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → hom-image) → ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
-   a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
-
-   ops-interp : (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) hom-image
-   ops-interp = λ f x → (∣ ϕ ∣ ((f ̂ 𝑨) (a x)) , im ((f ̂ 𝑨)(a x)))
-
-
--- Homomorphic Image Closure
-data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
- hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
-
-
-module _ (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) where
-
- hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
- hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
- hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhomSur) = γ
-  where
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
-
-  IH : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-  IH = A⊧p≈q
-
-  𝑩 : Algebra 𝓤 𝑆
-  𝑩 = ∣ 𝑩ϕhomSur ∣
-
-  ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
-  ϕ = ∣ ∥ 𝑩ϕhomSur ∥ ∣
-
-  ϕhom : is-homomorphism 𝑨 𝑩 ϕ
-  ϕhom = ∣ pr₂ ∥ 𝑩ϕhomSur ∥ ∣
-
-  ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
-  ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhomSur ∥ ∥ (𝒃 x)
-
-  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
-
-  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
-
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 →
-   (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-   ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
-   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-   (q ̇ 𝑩) 𝒃 ∎
-
-hclo-id2 : ∀ {𝒦 p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
-hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
-
-
-TH : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )) → _ ̇
+-- Equational classes
+TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
 TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
 Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
@@ -278,3 +195,97 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
  --Thus 𝒲 ⊧ 𝑝 ≈ 𝑞, hence (𝑝, 𝑞) ∈ Σ. Since A ∈ Mod(Σ) we get A ⊧ 𝑝 ≈ 𝑞.
  --Therefore, :math:`ℎ(𝑢) = 𝑝^A(ℎ₀ ∘ 𝒙) = 𝑞^A(ℎ₀ ∘ 𝒙) = ℎ(𝑣)`, as desired.
 
+
+
+-- -- Product Closure
+-- P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
+--  →      (𝓤 : Universe)(𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+--  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓤 ) → 𝓤 ⁺ ⊔ 𝓘 ⁺ ̇
+-- P-closed ℒ𝒦 = λ 𝓤 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  ⨅ 𝒜  ∈ (ℒ𝒦 (𝓤 ⊔ 𝓘))
+
+-- data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+--  pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
+--  prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
+--   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
+--   →     ⨅ 𝒜 ∈ PClo 𝒦
+
+-- -- Subalgebra Closure
+-- data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+--  sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+--  sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
+
+-- -- module _
+-- --  {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
+
+-- HomImages : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- HomImages 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+--                           is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+
+-- module _ {𝑨 𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)  where
+
+--  HomImage : ∣ 𝑩 ∣ → 𝓤 ̇
+--  HomImage = λ b → Image ∣ ϕ ∣ ∋ b
+
+--  hom-image : 𝓤 ̇
+--  hom-image = Σ (Image_∋_ ∣ ϕ ∣)
+
+--  fres : ∣ 𝑨 ∣ → Σ (Image_∋_ ∣ ϕ ∣)
+--  fres a = ∣ ϕ ∣ a , im a
+
+--  hom-image-alg : Algebra 𝓤 𝑆
+--  hom-image-alg = hom-image , ops-interp
+--   where
+--    a : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → hom-image) → ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
+--    a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
+
+--    ops-interp : (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) hom-image
+--    ops-interp = λ f x → (∣ ϕ ∣ ((f ̂ 𝑨) (a x)) , im ((f ̂ 𝑨)(a x)))
+
+
+-- -- Homomorphic Image Closure
+-- data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+--  hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+--  hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImages 𝑨) → 𝑩 ∈ HClo 𝒦
+
+
+-- module _ (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) where
+
+--  hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
+--  hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
+--  hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhomSur) = γ
+--   where
+--   A⊧p≈q : 𝑨 ⊧ p ≈ q
+--   A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
+
+--   IH : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+--   IH = A⊧p≈q
+
+--   𝑩 : Algebra 𝓤 𝑆
+--   𝑩 = ∣ 𝑩ϕhomSur ∣
+
+--   ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+--   ϕ = ∣ ∥ 𝑩ϕhomSur ∥ ∣
+
+--   ϕhom : is-homomorphism 𝑨 𝑩 ϕ
+--   ϕhom = ∣ pr₂ ∥ 𝑩ϕhomSur ∥ ∣
+
+--   ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
+--   ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhomSur ∥ ∥ (𝒃 x)
+
+--   preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+--   preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
+
+--   ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+--   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
+
+--   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+--   γ = gfe λ 𝒃 →
+--    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+--    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+--    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
+--    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+--    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+--    (q ̇ 𝑩) 𝒃 ∎
+
+-- hclo-id2 : ∀ {𝒦 p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+-- hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)

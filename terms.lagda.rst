@@ -22,7 +22,7 @@ As usual, we start with the imports we will need below.
   {-# OPTIONS --without-K --exact-split --safe #-}
 
   open import prelude
-  open import basic using (Signature; Algebra; Π'; _̂_)
+  open import basic using (Signature; Algebra; ⨅; _̂_)
   open import homomorphisms using (hom)
   open import relations using (Con; compatible-fun)
 
@@ -120,15 +120,15 @@ Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary 
    →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})
                 (𝒜 : I → Algebra 𝓤 𝑆)
                 (x : X → ∀ i → ∣ (𝒜 i) ∣)
-   →            (p ̇ (Π' 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
+   →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
 
   interp-prod fe (generator x₁) 𝒜 x = refl _
 
   interp-prod fe (node f t) 𝒜 x =
    let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
-    (f ̂ Π' 𝒜)(λ x₁ → (t x₁ ̇ Π' 𝒜) x)
-        ≡⟨ ap (f ̂ Π' 𝒜 ) (fe IH) ⟩
-    (f ̂ Π' 𝒜 )(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+    (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)
+        ≡⟨ ap (f ̂ ⨅ 𝒜 ) (fe IH) ⟩
+    (f ̂ ⨅ 𝒜 )(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
         ≡⟨ refl _ ⟩
     (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
         ∎
@@ -137,20 +137,20 @@ Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary 
    →             {X : 𝓧 ̇ }{I : 𝓤 ̇ }
                  (p : Term{X = X}) (𝒜 : I → Algebra 𝓤 𝑆)
     -----------------------------------------------------------
-   → (p ̇ Π' 𝒜) ≡ λ(args : X → ∣ Π' 𝒜 ∣)
+   → (p ̇ ⨅ 𝒜) ≡ λ(args : X → ∣ ⨅ 𝒜 ∣)
                     → (λ i → (p ̇ 𝒜 i)(λ x → args x i))
 
   interp-prod2 fe (generator x₁) 𝒜 = refl _
 
   interp-prod2 fe {X = X} (node f t) 𝒜 =
-   fe λ (tup : X → ∣ Π' 𝒜 ∣) →
+   fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
     let IH = λ x → interp-prod fe (t x) 𝒜  in
-    let tA = λ z → t z ̇ Π' 𝒜 in
-     (f ̂ Π' 𝒜) (λ s → tA s tup)
+    let tA = λ z → t z ̇ ⨅ 𝒜 in
+     (f ̂ ⨅ 𝒜) (λ s → tA s tup)
         ≡⟨ refl _ ⟩
-     (f ̂ Π' 𝒜) (λ s →  tA s tup)
-        ≡⟨ ap (f ̂ Π' 𝒜) (fe  λ x → IH x tup) ⟩
-     (f ̂ Π' 𝒜) (λ s → (λ j → (t s ̇ 𝒜 j)(λ l → tup l j)))
+     (f ̂ ⨅ 𝒜) (λ s →  tA s tup)
+        ≡⟨ ap (f ̂ ⨅ 𝒜) (fe  λ x → IH x tup) ⟩
+     (f ̂ ⨅ 𝒜) (λ s → (λ j → (t s ̇ 𝒜 j)(λ l → tup l j)))
         ≡⟨ refl _ ⟩
      (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ l → tup l i)))
         ∎
@@ -236,13 +236,13 @@ Table of some special characters used in the `terms module`_.
   | ϕ      | ``\phi``               |
   +--------+------------------------+
 
-For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+See :numref:`unicode hints` for a longer list of symbols used in the agda-ualib_, or better yet, use these
 
-Emacs commands for retrieving information about characters or the input method:
+  **Emacs commands providing information about special characters/input methods**:
 
   * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
 
-  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+  * ``M-x describe-input-method`` (or ``C-h I``)
 
 ------------------
 

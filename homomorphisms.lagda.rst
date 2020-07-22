@@ -320,13 +320,13 @@ Table of some special characters used in the `homomorphisms module`_.
   | ϕ      | ``\phi``               |
   +--------+------------------------+
 
-For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+See :numref:`unicode hints` for a longer list of special symbols used in the agda-ualib_, or better yet, use these
 
-Emacs commands for retrieving information about characters or the input method:
+  **Emacs commands providing information about special characters/input methods**:
 
-  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
 
-  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+    * ``M-x describe-input-method`` (or ``C-h I``)
 
 ------------------
 

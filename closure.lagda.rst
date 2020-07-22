@@ -89,7 +89,7 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   open import prelude
 
-  open import basic using (Signature; Algebra; Π'; Op; _̂_)
+  open import basic using (Signature; Algebra; ⨅; Op; _̂_)
 
   open import subuniverses using (Subuniverses; Subalgebra)
 
@@ -127,7 +127,7 @@ Closure data types
    pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
    prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
-    →     Π' 𝒜 ∈ PClo 𝒦
+    →     ⨅ 𝒜 ∈ PClo 𝒦
 
   -- Subalgebra Closure
   data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
@@ -142,7 +142,7 @@ Closure data types
   -- Variety Closure
   data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
    vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → Π' 𝒜 ∈ VClo 𝒦
+   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
    vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
    vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
@@ -169,26 +169,26 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
   P-closed : (𝓛𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
    →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
    →      (( i : I ) → 𝒜 i ∈ 𝓛𝒦 𝓘 ) → 𝓘 ⁺ ̇
-  P-closed 𝓛𝒦 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝒦 →  Π' 𝒜  ∈ (𝓛𝒦 𝓘)
+  P-closed 𝓛𝒦 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝒦 →  ⨅ 𝒜  ∈ (𝓛𝒦 𝓘)
 
   products-preserve-identities :
         (p q : Term{X = X})
         (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
    →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
        -----------------------------------
-   →     Π' 𝒜 ⊧ p ≈ q
+   →     ⨅ 𝒜 ⊧ p ≈ q
 
   products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
    where
-     γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
+     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
      γ = gfe λ a →
-      (p ̇ Π' 𝒜) a
+      (p ̇ ⨅ 𝒜) a
         ≡⟨ interp-prod gfe p 𝒜 a ⟩
       (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
         ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
       (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
         ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
-      (q ̇ Π' 𝒜) a
+      (q ̇ ⨅ 𝒜) a
         ∎
 
   products-in-class-preserve-identities :
@@ -197,14 +197,14 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
    →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
        ------------------------------------
-   →    Π' 𝒜 ⊧ p ≈ q
+   →    ⨅ 𝒜 ⊧ p ≈ q
 
   products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
    where
      𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
      𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
 
-     γ : (p ̇ Π' 𝒜) ≡ (q ̇ Π' 𝒜)
+     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
      γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
 ----------------------------------------------------
@@ -229,7 +229,7 @@ Identities for product closure
     where
      IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
      IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝒦  i )
-     γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
+     γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
      γ = products-preserve-identities p q I 𝒜 IH
 
    pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
@@ -329,7 +329,7 @@ Identities for varietal closure
      IH : (i : I) → 𝒜 i ⊧ p ≈ q
      IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
 
-     γ : p ̇ (Π' 𝒜)  ≡ q ̇ (Π' 𝒜)
+     γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
      γ = products-preserve-identities p q I 𝒜 IH
 
    vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
@@ -422,13 +422,13 @@ Table of some special characters used in the `closure module`_.
   | ϕ      | ``\phi``               |
   +--------+------------------------+
 
-For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+See :numref:`unicode hints` for a longer list of symbols used in the agda-ualib_, or better yet, use these
 
-Emacs commands for retrieving information about characters or the input method:
+  **Emacs commands providing information about special characters/input methods**:
 
-  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
 
-  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+    * ``M-x describe-input-method`` (or ``C-h I``)
 
 -------------------------
 

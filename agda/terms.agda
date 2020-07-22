@@ -5,34 +5,34 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import prelude
-open import basic using (Signature; Algebra; Π'; Op; _̂_)
+open import basic using (Signature; Algebra; ⨅; Op; _̂_)
 open import homomorphisms using (HOM; Hom; hom)
 open import relations using (Con; compatible-fun)
-module terms {S : Signature 𝓞 𝓥} where
+module terms {𝑆 : Signature 𝓞 𝓥} where
 
 data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
   generator : X → Term {X = X}
-  node : (f : ∣ S ∣) → (t : ∥ S ∥ f → Term {X = X}) → Term
+  node : (f : ∣ 𝑆 ∣) → (t : ∥ 𝑆 ∥ f → Term {X = X}) → Term
 
 open Term
 
 --The term algebra 𝑻(X).
-𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) S
+𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) 𝑆
 𝑻 X = Term{X = X} , node
 
-module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
+module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
 
- --1.a. Every map (X → A) lifts.
- free-lift : (h : X → ∣ A ∣)  →   ∣ 𝑻 X ∣ → ∣ A ∣
+ --1.a. Every map (X → 𝑨) lifts.
+ free-lift : (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
  free-lift h (generator x) = h x
- free-lift h (node f args) = ∥ A ∥ f λ i → free-lift h (args i)
+ free-lift h (node f args) = ∥ 𝑨 ∥ f λ i → free-lift h (args i)
 
  --1.b. The lift is (extensionally) a hom
- lift-hom : (h : X → ∣ A ∣) →  hom (𝑻 X) A
- lift-hom h = free-lift h , λ f a → ap (∥ A ∥ _) (refl _)
+ lift-hom : (h : X → ∣ 𝑨 ∣) →  hom (𝑻 X) 𝑨
+ lift-hom h = free-lift h , λ f a → ap (∥ 𝑨 ∥ _) (refl _)
 
- --2. The lift to (free → A) is (extensionally) unique.
- free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) A)
+ --2. The lift to (free → 𝑨) is (extensionally) unique.
+ free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) 𝑨)
   →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
   →            (t : Term )
               ---------------------------
@@ -41,18 +41,18 @@ module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
  free-unique fe g h p (generator x) = p x
  free-unique fe g h p (node f args) =
     ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-    ∥ A ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ A ∥ _) γ ⟩
-    ∥ A ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
+    ∥ 𝑨 ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
+    ∥ 𝑨 ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
     ∣ h ∣ (node f args)             ∎
     where γ = fe λ i → free-unique fe g h p (args i)
 
  --1.b. that free-lift is (intensionally) a hom.
- lift-HOM : (h : X → ∣ A ∣) →  HOM (𝑻 X) A
+ lift-HOM : (h : X → ∣ 𝑨 ∣) →  HOM (𝑻 X) 𝑨
  lift-HOM  h = free-lift h , refl _
 
- --2. The lift to  (free → A)  is (intensionally) unique.
+ --2. The lift to  (free → 𝑨)  is (intensionally) unique.
  free-intensionally-unique : funext 𝓥 𝓤
-  →             (g h : HOM (𝑻 X) A)
+  →             (g h : HOM (𝑻 X) 𝑨)
   →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
   →             (t : Term)
                --------------------------------
@@ -63,125 +63,125 @@ module _ {A : Algebra 𝓤 S} {X : 𝓧 ̇ } where
 
  free-intensionally-unique fe g h p (node f args) =
   ∣ g ∣ (node f args)   ≡⟨ ap (λ - → - f args) ∥ g ∥ ⟩
-  ∥ A ∥ f(∣ g ∣ ∘ args) ≡⟨ ap (∥ A ∥ _) γ ⟩
-  ∥ A ∥ f(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
+  ∥ 𝑨 ∥ f(∣ g ∣ ∘ args) ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
+  ∥ 𝑨 ∥ f(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
   ∣ h ∣ (node f args)  ∎
    where
     γ = fe λ i → free-intensionally-unique fe g h p (args i)
 
 
 _̇_ : {X : 𝓧 ̇ } → Term{X = X}
- →   (A : Algebra 𝓤 S) → (X → ∣ A ∣) → ∣ A ∣
+ →   (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-((generator x)̇ A) a = a x
+((generator x)̇ 𝑨) a = a x
 
-((node f args)̇ A) a = (f ̂ A) λ{x → (args x ̇ A) a}
+((node f args)̇ 𝑨) a = (f ̂ 𝑨) λ{x → (args x ̇ 𝑨) a}
 
 interp-prod : funext 𝓥 𝓤
  →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})
-              (𝒜 : I → Algebra 𝓤 S)
+              (𝒜 : I → Algebra 𝓤 𝑆)
               (x : X → ∀ i → ∣ (𝒜 i) ∣)
- →            (p ̇ (Π' 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
+ →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
 
 interp-prod fe (generator x₁) 𝒜 x = refl _
 
 interp-prod fe (node f t) 𝒜 x =
  let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
-  ∥ Π' 𝒜 ∥ f (λ x₁ → (t x₁ ̇ Π' 𝒜) x)
-      ≡⟨ ap (∥ Π' 𝒜 ∥ f ) (fe IH) ⟩
-  ∥ Π' 𝒜 ∥ f (λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+  ∥ ⨅ 𝒜 ∥ f (λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)
+      ≡⟨ ap (∥ ⨅ 𝒜 ∥ f ) (fe IH) ⟩
+  ∥ ⨅ 𝒜 ∥ f (λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
       ≡⟨ refl _ ⟩
   (λ i₁ → ∥ 𝒜 i₁ ∥ f (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
       ∎
 
 interp-prod2 : global-dfunext
  →             {X : 𝓧 ̇ }{I : 𝓤 ̇ }
-               (p : Term{X = X}) (A : I → Algebra 𝓤 S)
+               (p : Term{X = X}) (𝒜 : I → Algebra 𝓤 𝑆)
      -----------------------------------------------------------
- → (p ̇ Π' A) ≡ λ(args : X → ∣ Π' A ∣)
-                   → (λ i → (p ̇ A i)(λ x → args x i))
+ → (p ̇ ⨅ 𝒜) ≡ λ(args : X → ∣ ⨅ 𝒜 ∣)
+                   → (λ i → (p ̇ 𝒜 i)(λ x → args x i))
 
-interp-prod2 fe (generator x₁) A = refl _
+interp-prod2 fe (generator x₁) 𝒜 = refl _
 
-interp-prod2 fe {X = X} (node f t) A =
-  fe λ (tup : X → ∣ Π' A ∣) →
-   let IH = λ x → interp-prod fe (t x) A  in
-   let tA = λ z → t z ̇ Π' A in
-    (f ̂ Π' A) (λ s → tA s tup)
+interp-prod2 fe {X = X} (node f t) 𝒜 =
+  fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+   let IH = λ x → interp-prod fe (t x) 𝒜  in
+   let tA = λ z → t z ̇ ⨅ 𝒜 in
+    (f ̂ ⨅ 𝒜) (λ s → tA s tup)
       ≡⟨ refl _ ⟩
-    ∥ Π' A ∥ f (λ s →  tA s tup)
-      ≡⟨ ap ( ∥ Π' A ∥ f ) (fe  λ x → IH x tup) ⟩
-    ∥ Π' A ∥ f (λ s → (λ j → (t s ̇ A j)(λ ℓ → tup ℓ j)))
+    (f ̂ ⨅ 𝒜)(λ s →  tA s tup)
+      ≡⟨ ap (f ̂ ⨅ 𝒜) (fe  λ x → IH x tup) ⟩
+    (f ̂ ⨅ 𝒜)(λ s → (λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j)))
       ≡⟨ refl _ ⟩
-    (λ i → (f ̂ A i)(λ s → (t s ̇ A i)(λ ℓ → tup ℓ i)))
+    (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i)))
       ∎
 
 -- Proof of 1. (homomorphisms commute with terms).
 comm-hom-term : global-dfunext --  𝓥 𝓤
- →               {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
- →               (h : hom A B) (t : Term{X = X}) (a : X → ∣ A ∣)
-               --------------------------------------------
- →               ∣ h ∣ ((t ̇ A) a) ≡ (t ̇ B) (∣ h ∣ ∘ a)
+ →       {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+ →       (h : hom 𝑨 𝑩) (t : Term{X = X}) (a : X → ∣ 𝑨 ∣)
+         --------------------------------------------
+ →         ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
-comm-hom-term fe A B h (generator x) a = refl _
+comm-hom-term fe 𝑨 𝑩 h (generator x) a = refl _
 
-comm-hom-term fe A B h (node f args) a =
- ∣ h ∣ ((f ̂ A)  (λ i₁ → (args i₁ ̇ A) a))
-   ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ A) a ) ⟩
- (f ̂ B) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ A) a))
-   ≡⟨ ap (_ ̂ B)(fe (λ i₁ → comm-hom-term fe A B h (args i₁) a))⟩
- (f ̂ B) (λ r → (args r ̇ B) (∣ h ∣ ∘ a))
+comm-hom-term fe 𝑨 𝑩 h (node f args) a =
+ ∣ h ∣ ((f ̂ 𝑨)  (λ i₁ → (args i₁ ̇ 𝑨) a))
+   ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a ) ⟩
+ (f ̂ 𝑩) (λ i₁ →  ∣ h ∣ ((args i₁ ̇ 𝑨) a))
+   ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (args i₁) a))⟩
+ (f ̂ 𝑩) (λ r → (args r ̇ 𝑩) (∣ h ∣ ∘ a))
    ∎
 
--- Proof of 2. (If t : Term, θ : Con A, then a θ b → t(a) θ t(b))
+-- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
 compatible-term : {X : 𝓧 ̇}
-           (A : Algebra 𝓤 S) (t : Term{X = X}) (θ : Con A)
+           (𝑨 : Algebra 𝓤 𝑆) (t : Term{X = X}) (θ : Con 𝑨)
            --------------------------------------------------
- →                   compatible-fun (t ̇ A) ∣ θ ∣
+ →                   compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
-compatible-term A (generator x) θ p = p x
+compatible-term 𝑨 (generator x) θ p = p x
 
-compatible-term A (node f args) θ p =
- pr₂( ∥ θ ∥ ) f λ{x → (compatible-term A (args x) θ) p}
+compatible-term 𝑨 (node f args) θ p =
+ pr₂( ∥ θ ∥ ) f λ{x → (compatible-term 𝑨 (args x) θ) p}
 
 -- Proof of 1. ("intensional" version)
 comm-hom-term' : global-dfunext
- →              {X : 𝓧 ̇}(A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
-                (h : HOM A B) (t : Term{X = X})
+ →              {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+                (h : HOM 𝑨 𝑩) (t : Term{X = X})
                ---------------------------------------------
- →              ∣ h ∣ ∘ (t ̇ A) ≡ (t ̇ B) ∘ (λ a → ∣ h ∣ ∘ a )
+ →              ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a )
 
-comm-hom-term' gfe A B h (generator x) = refl _
+comm-hom-term' gfe 𝑨 𝑩 h (generator x) = refl _
 
-comm-hom-term' gfe {X = X}A B h (node f args) = γ
+comm-hom-term' gfe {X = X}𝑨 𝑩 h (node f args) = γ
  where
-  γ : ∣ h ∣ ∘ (λ a → (f ̂ A) (λ i → (args i ̇ A) a))
-      ≡ (λ a → (f ̂ B)(λ i → (args i ̇ B) a)) ∘ _∘_ ∣ h ∣
-  γ = ∣ h ∣ ∘ (λ a → (f ̂ A) (λ i → (args i ̇ A) a))
-        ≡⟨ ap (λ - → (λ a → - f (λ i → (args i ̇ A) a))) ∥ h ∥ ⟩
-      (λ a → (f ̂ B)(∣ h ∣ ∘ (λ i →  (args i ̇ A) a)))
+  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a))
+      ≡ (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
+  γ = ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a))
+        ≡⟨ ap (λ - → (λ a → - f (λ i → (args i ̇ 𝑨) a))) ∥ h ∥ ⟩
+      (λ a → (f ̂ 𝑩)(∣ h ∣ ∘ (λ i →  (args i ̇ 𝑨) a)))
         ≡⟨ refl _ ⟩
-      (λ a → (f ̂ B)(λ i → ∣ h ∣ ((args i ̇ A) a)))
-        ≡⟨ ap (λ - → (λ a → (f ̂ B)(- a))) ih ⟩
-    (λ a → (f ̂ B)(λ i → (args i ̇ B) a)) ∘ _∘_ ∣ h ∣
+      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
+        ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
+    (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
         ∎
     where
-     IH : (a : X → ∣ A ∣)(i : ∥ S ∥ f)
-      →   (∣ h ∣ ∘ (args i ̇ A)) a ≡ ((args i ̇ B) ∘ _∘_ ∣ h ∣) a
-     IH a i = intensionality (comm-hom-term' gfe A B h (args i)) a
+     IH : (a : X → ∣ 𝑨 ∣)(i : ∥ 𝑆 ∥ f)
+      →   (∣ h ∣ ∘ (args i ̇ 𝑨)) a ≡ ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
+     IH a i = intensionality (comm-hom-term' gfe 𝑨 𝑩 h (args i)) a
 
-     ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ A) a)))
-           ≡ (λ a → (λ i → ((args i ̇ B) ∘ _∘_ ∣ h ∣) a))
+     ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
+           ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
      ih = gfe λ a → gfe λ i → IH a i
 
-compatible-term' : {X : 𝓧 ̇}(A : Algebra 𝓤 S)
-                  ( t : Term{X = X} ) (θ : Con A)
+compatible-term' : {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
+                  ( t : Term{X = X} ) (θ : Con 𝑨)
                  ---------------------------------
- →                 compatible-fun (t ̇ A) ∣ θ ∣
+ →                 compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
-compatible-term' A (generator x) θ p = p x
-compatible-term' A (node f args) θ p =
- pr₂( ∥ θ ∥ ) f λ{x → (compatible-term' A (args x) θ) p}
+compatible-term' 𝑨 (generator x) θ p = p x
+compatible-term' 𝑨 (node f args) θ p =
+ pr₂( ∥ θ ∥ ) f λ{x → (compatible-term' 𝑨 (args x) θ) p}
 
 -- Interpretation of terms in homomorphic images
 -- (using subsingleton truncation)
@@ -193,9 +193,9 @@ compatible-term' A (node f args) θ p =
 --  (pt  : subsingleton-truncations-exist)
 --  (pe  : propext 𝓥)
 --  (X : 𝓤 ̇ ) -- {X : 𝓧 ̇ }
---  (A B : Algebra 𝓤 S)
---  (ϕ : hom A B)
---  (wcem : wconstant-endomap ∣ A ∣)
+--  (𝑨 𝑩 : Algebra 𝓤 𝑆)
+--  (ϕ : hom 𝑨 𝑩)
+--  (wcem : wconstant-endomap ∣ 𝑨 ∣)
 --        -- (_≈_ : X → X → 𝓥 ̇ )
 --        -- (≈p  : is-subsingleton-valued _≈_)
 --        -- (≈r  : reflexive _≈_)
@@ -214,26 +214,26 @@ compatible-term' A (node f args) θ p =
 --  ∥∥-elim = wconstant-endomap-gives-∥∥-choice-function wcem
 --  -- wconstant-endomap-gives-∥∥-choice-function :
 --  --  {X : 𝓤 ̇ } → wconstant-endomap X → (∥ X ∥ → X)
---  homimageAlgebra : Algebra 𝓤 S
+--  homimageAlgebra : Algebra 𝓤 𝑆
 --  homimageAlgebra = homimage , opsinterp
 --   where
---    a' : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
+--    a' : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → homimage)(y : ∥ 𝑆 ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
 --    a' x y =
 --     let ∣xy∣ = pr₁ (x y) in
 --     let ∥xy∥ = pr₂ (x y) in ∥xy∥ -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
 
---    a : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → ∣ A ∣
+--    a : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → homimage)(y : ∥ 𝑆 ∥ f) → ∣ A ∣
 --    -- a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
 --    a x y =
 --     let ∣xy∣ = pr₁ (x y) in 
 --     let ∥xy∥ = pr₂ (x y) in {!pr₁ (∥∥-elim ∥xy∥)!} -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
 
---    opsinterp : (f : ∣ S ∣) → Op (∥ S ∥ f) homimage
+--    opsinterp : (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) homimage
 --    opsinterp =
 --     -- λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , im (∥ A ∥ f (a x)))
 --     λ f x → (∣ ϕ ∣  (∥ A ∥ f (a x)) , ⟪ ( ∥ A ∥ f (a x) , refl (∣ ϕ ∣ _ )) ⟫ )
 
---  HIA : Algebra 𝓤 S
+--  HIA : Algebra 𝓤 𝑆
 --  HIA = homimageAlgebra -- {A = A}{B = B} ϕ
 
 --  preim : (b : X → Σ (Image_∋_ ∣ ϕ ∣))(x : X) → ∣ A ∣
@@ -252,7 +252,7 @@ compatible-term' A (node f args) θ p =
 
  -- hom-image-interp b (node 𝓸 t) = ap (𝓸 ̂ HIA) (gfe φIH)
  --  where
- --   φIH : (x : ∥ S ∥ 𝓸)
+ --   φIH : (x : ∥ 𝑆 ∥ 𝓸)
  --    → (t x ̇ HIA) b  ≡ ∣ ϕ ∣ (( t x ̇ A )(preim b)) , im ((t x ̇ A)(preim b))
  --   φIH x = hom-image-interp b (t x)
 

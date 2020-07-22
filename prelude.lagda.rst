@@ -563,17 +563,7 @@ Here we collect miscellaneous definitions and proofs related to extensionality t
 Unicode Hints
 ---------------
 
-At the end of each chapter of this documentation we show how to produce in Emacs agda2-mode_ some of the fancy unicode characters that we use in our code.
-
-We hope these hints are convenient for the reader, but they are not meant to be comprehensive.
-
-Instead use these Emacs commands for retrieving information about characters or the input method:
-
-  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
-
-  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
-
-Finally, here is a table of some of the unicode characters used in the agda-ualib_.
+Here is a table of some of the unicode characters used in the agda-ualib_.
 
   +--------+----------------------+
   | To get | Type                 |
@@ -638,6 +628,18 @@ Finally, here is a table of some of the unicode characters used in the agda-uali
   +--------+----------------------+
   | ⊆₀     | ``\subseteq\_0``     |
   +--------+----------------------+
+
+At the end of each chapter of this documentation we show how to produce in Emacs agda2-mode_ some of the fancy unicode characters that we use in our code.
+
+We hope these hints are convenient for the reader, but they are not meant to be comprehensive.
+
+Instead use these
+
+  **Emacs commands providing information about special characters/input methods:**
+
+    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+
+    * ``M-x describe-input-method`` (or ``C-h I``)
 
 ------------------------------------------------------
 

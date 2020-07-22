@@ -8,85 +8,85 @@ open import prelude
 open import basic using (Signature; Algebra; Op)
 open import relations using (ker; ker-pred; Rel; 𝟎; con; _//_)
 
-module homomorphisms {S : Signature 𝓞 𝓥} where
+module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
 --intensional preservation of operations
 op_interpreted-in_and_commutes-intensionally-with :
- (f : ∣ S ∣) (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+ (f : ∣ 𝑆 ∣) (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
  (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 op f interpreted-in A and B commutes-intensionally-with g =
  (λ a → g (∥ A ∥ f a) ) ≡ (λ a → ∥ B ∥ f (g ∘ a) )
 
 all-ops-in_and_commute-partially-intensionally-with :
- (A : Algebra 𝓤 S)(B : Algebra 𝓦 S)
+ (A : Algebra 𝓤 𝑆)(B : Algebra 𝓦 𝑆)
  (g : ∣ A ∣  → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 all-ops-in A and B commute-partially-intensionally-with g =
- ∀ (f : ∣ S ∣ )
+ ∀ (f : ∣ 𝑆 ∣ )
   → op f interpreted-in A and B commutes-intensionally-with g
 
-intensional-hom : (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+intensional-hom : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
  →                (∣ A ∣ → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 intensional-hom A B g =
  all-ops-in A and B commute-partially-intensionally-with g
 
-Hom : Algebra 𝓦 S → Algebra 𝓤 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+Hom : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 Hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣) ,
    all-ops-in A and B commute-partially-intensionally-with g
 
 -- intensional with respect to both f and a)
-preserves-ops : (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+preserves-ops : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
  →              (∣ A ∣  → ∣ B ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 preserves-ops (A , 𝐹ᴬ)(B , 𝐹ᴮ) g =
- (λ (f : ∣ S ∣ ) (a : ∥ S ∥ f → A) → g (𝐹ᴬ f a))
-  ≡ (λ (f : ∣ S ∣ ) (a : ∥ S ∥ f → A )  → 𝐹ᴮ f (g ∘ a))
+ (λ (f : ∣ 𝑆 ∣ ) (a : ∥ 𝑆 ∥ f → A) → g (𝐹ᴬ f a))
+  ≡ (λ (f : ∣ 𝑆 ∣ ) (a : ∥ 𝑆 ∥ f → A )  → 𝐹ᴮ f (g ∘ a))
 
 all-ops-in_and_commute-intensionally-with :
- (A : Algebra 𝓤 S)(B : Algebra 𝓦 S)
+ (A : Algebra 𝓤 𝑆)(B : Algebra 𝓦 𝑆)
  (g : ∣ A ∣  → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 all-ops-in A and B commute-intensionally-with g =
  preserves-ops A B g
 
 --the type of (intensional) homomorphisms
-HOM : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+HOM : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 HOM A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣) ,
            all-ops-in A and B commute-intensionally-with g
 
 op_interpreted-in_and_commutes-extensionally-with :
-   (f : ∣ S ∣) (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+   (f : ∣ 𝑆 ∣) (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
    (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 op f interpreted-in A and B commutes-extensionally-with g =
- ∀( a : ∥ S ∥ f → ∣ A ∣ ) → g (∥ A ∥ f a) ≡ ∥ B ∥ f (g ∘ a)
+ ∀( a : ∥ 𝑆 ∥ f → ∣ A ∣ ) → g (∥ A ∥ f a) ≡ ∥ B ∥ f (g ∘ a)
 
 all-ops-in_and_commute-extensionally-with :
-     (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+     (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
  →   (∣ A ∣  → ∣ B ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
-all-ops-in A and B commute-extensionally-with g = ∀ (f : ∣ S ∣)
+all-ops-in A and B commute-extensionally-with g = ∀ (f : ∣ 𝑆 ∣)
   → op f interpreted-in A and B commutes-extensionally-with g
 
-is-homomorphism : (A : Algebra 𝓤 S) (B : Algebra 𝓦 S)
+is-homomorphism : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
  →                (∣ A ∣ → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 is-homomorphism A B g =
  all-ops-in A and B commute-extensionally-with g
 
-hom : Algebra 𝓤 S → Algebra 𝓦 S  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
+hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
 hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
 
-𝒾𝒹 :  (A : Algebra 𝓤 S) → hom A A
+𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
 
-HCompClosed : {A : Algebra 𝓤 S}
-              {B : Algebra 𝓦 S}
-              {C : Algebra 𝓣 S}
+HCompClosed : {A : Algebra 𝓤 𝑆}
+              {B : Algebra 𝓦 𝑆}
+              {C : Algebra 𝓣 𝑆}
  →            hom A B   →   hom B C
              ------------------------
  →                   hom A C
@@ -94,7 +94,7 @@ HCompClosed : {A : Algebra 𝓤 S}
 HCompClosed {A = A , FA}{B = B , FB}{C = C , FC}
  (g , ghom) (h , hhom) = h ∘ g , γ
   where
-   γ : ( f : ∣ S ∣ ) ( a : ∥ S ∥ f  →  A )
+   γ : ( f : ∣ 𝑆 ∣ ) ( a : ∥ 𝑆 ∥ f  →  A )
     →  ( h ∘ g ) ( FA f a ) ≡ FC f ( h ∘ g ∘ a )
 
    γ f a = (h ∘ g) (FA f a) ≡⟨ ap h ( ghom f a ) ⟩
@@ -102,15 +102,15 @@ HCompClosed {A = A , FA}{B = B , FB}{C = C , FC}
           FC f (h ∘ g ∘ a) ∎
 
 --Alternative notation for hom composition
-module _ {A : Algebra 𝓤 S}
-         {B : Algebra 𝓦 S}
-         {C : Algebra 𝓣 S} where
+module _ {A : Algebra 𝓤 𝑆}
+         {B : Algebra 𝓦 𝑆}
+         {C : Algebra 𝓣 𝑆} where
 
   _>>>_ : hom A B  → hom B C → hom A C
 
   (g , ghom) >>> (h , hhom) = h ∘ g , γ
     where
-      γ :      (f : ∣ S ∣ ) → (a : ∥ S ∥ f → ∣ A ∣)
+      γ :      (f : ∣ 𝑆 ∣ ) → (a : ∥ 𝑆 ∥ f → ∣ A ∣)
            -------------------------------------------
        →    (h ∘ g) (∥ A ∥ f a)  ≡  ∥ C ∥ f (h ∘ g ∘ a)
 
@@ -119,7 +119,7 @@ module _ {A : Algebra 𝓤 S}
        h (∥ B ∥ f (g ∘ a)) ≡⟨ hhom f (g ∘ a) ⟩
        ∥ C ∥ f (h ∘ g ∘ a) ∎
 
-homFactor : funext 𝓤 𝓤 → {A B C : Algebra 𝓤 S}
+homFactor : funext 𝓤 𝓤 → {A B C : Algebra 𝓤 𝑆}
             (g : hom A B) (h : hom A C)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
            ---------------------------------------------
@@ -140,17 +140,17 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
    g≡ϕ∘h : g ≡ ϕ ∘ h
    g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
 
-   ζ : (f : ∣ S ∣)(c : ∥ S ∥ f → C)(x : ∥ S ∥ f)
+   ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
     →  c x ≡ (h ∘ hInv)(c x)
 
    ζ f c x = (cong-app (EInvIsRInv fe h hEpic) (c x))⁻¹
 
-   ι : (f : ∣ S ∣)(c : ∥ S ∥ f → C)
+   ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
     →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
 
    ι f c = ap (λ - → - ∘ c)(EInvIsRInv fe h hEpic)⁻¹
 
-   useker : (f : ∣ S ∣)  (c : ∥ S ∥ f → C)
+   useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
     → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
 
    useker = λ f c
@@ -159,7 +159,7 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
              (h(FA f(hInv ∘ c)))
             )
 
-   ϕIsHomCB : (f : ∣ S ∣)(a : ∥ S ∥ f → C)
+   ϕIsHomCB : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → C)
     →         ϕ (FC f a)  ≡  FB f (ϕ ∘ a)
 
    ϕIsHomCB f c =
@@ -180,53 +180,53 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
 
 -- module _ {𝓤 : Universe} where
 
-_≅_ : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
+_≅_ : (𝑨 𝑩 : Algebra 𝓤 𝑆) → 𝓤 ⊔ 𝓞 ⊔ 𝓥 ̇
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) ,
             (∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝒾𝒹 𝑨 ∣)
 
--- is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 S} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
+-- is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 𝑆} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
 -- is-algebra-iso {𝑨} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ 𝑨 ∣}
 
--- AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 -- AlgebraIsos 𝑨 𝑩 = Σ f ꞉ (hom 𝑨 𝑩) , is-algebra-iso {𝑨}{𝑩} f
 
--- _≈_ : Rel (Algebra 𝓤 S) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+-- _≈_ : Rel (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 -- 𝑨 ≈ 𝑩 = is-singleton (AlgebraIsos 𝑨 𝑩)
 
 
 -- The following seems to be the most useful definition (for our
 -- purposes) of the class of homomomrphic images of an algebra.
-HomImage : {𝑨 : Algebra 𝓤 S}(𝑩 : Algebra 𝓤 S)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+HomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓤 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
 HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
-HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 S → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 S) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
                                  is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
-_is-hom-image-of_ : (𝑩 : Algebra 𝓤 S)
-  →                (𝑨 : Algebra 𝓤 S) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+_is-hom-image-of_ : (𝑩 : Algebra 𝓤 𝑆)
+  →                (𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , 𝑩 ≅ ∣ 𝑪ϕ ∣
 
 _is-hom-image-of-class_ : {𝓤 : Universe}
-  →                       Algebra 𝓤 S
-  →                       Pred (Algebra 𝓤 S) (𝓤 ⁺)
+  →                       Algebra 𝓤 𝑆
+  →                       Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)
   →                       𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-_is-hom-image-of-class_ {𝓤} 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 S) ,
+_is-hom-image-of-class_ {𝓤} 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
                              (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
 
-HomImagesOfClass : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ S) ,
+HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
                      (𝑩 is-hom-image-of-class 𝓚)
 
-H : Pred (Algebra 𝓤 S) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+H : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 H 𝓚 = HomImagesOfClass 𝓚
 
 -- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
-H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 S) (𝓤 ⁺))
- →         (𝓤 : Universe) → Algebra 𝓤 S
+H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+ →         (𝓤 : Universe) → Algebra 𝓤 𝑆
  →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
@@ -238,15 +238,15 @@ H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 
 --  ∥∥-elim = wconstant-endomap-gives-∥∥-choice-function wcem
 --  -- wconstant-endomap-gives-∥∥-choice-function :
 --  --  {X : 𝓤 ̇ } → wconstant-endomap X → (∥ X ∥ → X)
---  homimageAlgebra : Algebra 𝓤 S
+--  homimageAlgebra : Algebra 𝓤 𝑆
 --  homimageAlgebra = homimage , opsinterp
 --   where
---    a' : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
+--    a' : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → homimage)(y : ∥ 𝑆 ∥ f) → -∃ ∣ A ∣ (λ x' → ∣ ϕ ∣ x' ≡ pr₁ (x y))
 --    a' x y =
 --     let ∣xy∣ = pr₁ (x y) in
 --     let ∥xy∥ = pr₂ (x y) in ∥xy∥ -- ∥xy∥ -- restriction ∣ ϕ ∣ ( x y )
 
---    a : {f : ∣ S ∣ }(x : ∥ S ∥ f → homimage)(y : ∥ S ∥ f) → ∣ A ∣
+--    a : {f : ∣ 𝑆 ∣ }(x : ∥ 𝑆 ∥ f → homimage)(y : ∥ 𝑆 ∥ f) → ∣ A ∣
 --    -- a x y = Inv ∣ ϕ ∣  ∣ x y ∣ ∥ x y ∥
 --    a x y =
 --     let ∣xy∣ = pr₁ (x y) in 

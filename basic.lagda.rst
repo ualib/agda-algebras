@@ -174,8 +174,10 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 
   module _ {𝑆 : Signature 𝓞 𝓥}  where
 
-   Π' : {I : 𝓘 ̇ }( 𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
-   Π' 𝒜 =  ((i : _) → ∣ 𝒜 i ∣) ,  λ 𝑓 x i → (𝑓 ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
+   ⨅ : {I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
+   ⨅ 𝒜 =  ((i : _) → ∣ 𝒜 i ∣) ,  λ 𝑓 x i → (𝑓 ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
+
+   infixr -1 ⨅
 
 We have used an anonymous module here so that the (fixed) signature 𝑆 is available in the definition of the product without mentioning it explicitly.
 
@@ -206,14 +208,16 @@ Table of some special characters used in the `basic module`_.
   +--------+------------------------+
   | ϕ      | ``\phi``               |
   +--------+------------------------+
+  | ⨅      | ``\Glb``               |
+  +--------+------------------------+
 
-For a more complete list of symbols used in the agda-ualib_, see :numref:`unicode hints`.
+See :numref:`unicode hints` for a longer list of special symbols used in the agda-ualib_, or better yet, use these
 
-Emacs commands for retrieving information about characters or the input method:
+  **Emacs commands providing information about characters or input method**:
 
-  * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
+    * ``M-x describe-char`` (or ``M-m h d c``) with the cursor on the character of interest
 
-  * ``M-x desscribe-input-method`` (or ``C-h I``) (for a list of unicode characters available in agda2-mode_)
+    * ``M-x describe-input-method`` (or ``C-h I``)
 
 ------------------
 
