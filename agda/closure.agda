@@ -65,7 +65,6 @@ data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆
  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 
-
 -- Product Closure
 P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
@@ -128,14 +127,14 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
    hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
-    →        ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂) ≡ ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)
+    →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
    hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ (𝑻(X))) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻(X)) 𝑨 h p 𝒂 ⟩
+    ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
     (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻(X)) 𝑨 h q 𝒂)⁻¹ ⟩
-    ∣ h ∣ ((q ̇ (𝑻(X))) 𝒂)  ∎
+    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
+    ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
 
-   γ : ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+   γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
    γ = gfe hpa≡hqa
 
  -- ⇐ (the "if" direction)
@@ -167,7 +166,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  compatibility-of-identities-and-homs : (p q : Term)
   →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ hh ∣ ∘ (q ̇ (𝑻(X))))
+      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
  --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
 
  compatibility-of-identities-and-homs p q =
