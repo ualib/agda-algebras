@@ -7,6 +7,7 @@
 
 open import prelude
 open import basic using (Signature; Algebra; _̂_)
+open import congruences using (KER-pred) -- ; ker-pred; con; Congruence)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -108,6 +109,9 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
 
     ξ : 𝑨 ⊧ p ≈ q
     ξ = A∈ModThV p q pq∈
+
+  Ψ⊆Kerh : Ψ {𝒦 = 𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh = ?
 
   -- 𝒦⊧ : {p q : ∣ (𝑻 X) ∣} → (p , q) ∈ Th (VClo 𝒦) → 𝒦 ⊧ p ≋ q
   -- 𝒦⊧ = λ z z₁ → z (vbase z₁)

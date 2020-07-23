@@ -109,8 +109,8 @@ products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈�
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
 module _
- (gfe : global-dfunext)
- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺)))
+ {gfe : global-dfunext}
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))}
  where
 
  -- ⇒ (the "only if" direction)
@@ -177,54 +177,35 @@ module _
    identities-are-compatible-with-homs p q ,
    homs-are-compatible-with-identities p q
 
-
-
  -- The free algebra in Agda
  -- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)} where
+-- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)} where
 
-  𝑻HI = HomImagesOf (𝑻 X)
+ 𝑻HI = HomImagesOf (𝑻 X)
 
-  𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+ 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+ 𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
              Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
-  𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
-  𝑻𝑨 ti = ∣ ti ∣
+ 𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
+ 𝑻𝑨 ti = ∣ ti ∣
 
-  𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo 𝒦
-  𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
+ 𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo 𝒦
+ 𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
 
-  𝑻ϕ : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
-  𝑻ϕ ti = pr₁ ∥ ti ∥
+ 𝑻ϕ : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
+ 𝑻ϕ ti = pr₁ ∥ ti ∥
 
-  𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
-  𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
+ 𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
+ 𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
-  𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  𝑻KER = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ ,
+ 𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+ 𝑻KER = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ ,
    ∀ ti → pair ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ pr₁ ∥ ti ∥  ∣
 
-  Ψ𝒦𝑻 : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-  Ψ𝒦𝑻 (x , y) =
-   ∀ ti → ∣ (𝑻ϕ ti) ∣ x ≡ ∣ (𝑻ϕ ti) ∣ y
-
-
-  𝔽: 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  𝔽=  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-
-
-     -- SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua
-
-     -- record Congruence (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
-     --   constructor mkcon
-     --   field
-     --     ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
-     --     Compatible : compatible 𝑨 ⟨_⟩
-     --     IsEquiv : IsEquivalence ⟨_⟩
-     -- open Congruence
-
-
+ Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+ Ψ (x , y) =
+  ∀ ti → ∣ (𝑻ϕ ti) ∣ x ≡ ∣ (𝑻ϕ ti) ∣ y
 
 
 
