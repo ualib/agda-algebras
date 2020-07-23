@@ -29,11 +29,11 @@ module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
  --1.a. Every map (X → 𝑨) lifts.
  free-lift : (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
  free-lift h (generator x) = h x
- free-lift h (node f args) = ∥ 𝑨 ∥ f λ i → free-lift h (args i)
+ free-lift h (node f args) = (f ̂ 𝑨) λ i → free-lift h (args i)
 
  --1.b. The lift is (extensionally) a hom
  lift-hom : (h : X → ∣ 𝑨 ∣) →  hom (𝑻 X) 𝑨
- lift-hom h = free-lift h , λ f a → ap (∥ 𝑨 ∥ _) (refl _)
+ lift-hom h = free-lift h , λ f a → ap (_ ̂ 𝑨) (refl _)
 
  --2. The lift to (free → 𝑨) is (extensionally) unique.
  free-unique : funext 𝓥 𝓤 → (g h : hom (𝑻 X) 𝑨)
@@ -45,8 +45,8 @@ module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
  free-unique fe g h p (generator x) = p x
  free-unique fe g h p (node f args) =
     ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-    ∥ 𝑨 ∥ f (λ i → ∣ g ∣ (args i))  ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
-    ∥ 𝑨 ∥ f (λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
+    (f ̂ 𝑨)(λ i → ∣ g ∣ (args i))  ≡⟨ ap (_ ̂ 𝑨) γ ⟩
+    (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
     ∣ h ∣ (node f args)             ∎
     where γ = fe λ i → free-unique fe g h p (args i)
 
@@ -67,8 +67,8 @@ module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
 
  free-intensionally-unique fe g h p (node f args) =
   ∣ g ∣ (node f args)   ≡⟨ ap (λ - → - f args) ∥ g ∥ ⟩
-  ∥ 𝑨 ∥ f(∣ g ∣ ∘ args) ≡⟨ ap (∥ 𝑨 ∥ _) γ ⟩
-  ∥ 𝑨 ∥ f(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
+  (f ̂ 𝑨)(∣ g ∣ ∘ args) ≡⟨ ap (_ ̂ 𝑨) γ ⟩
+  (f ̂ 𝑨)(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
   ∣ h ∣ (node f args)  ∎
    where
     γ = fe λ i → free-intensionally-unique fe g h p (args i)
@@ -81,10 +81,10 @@ _̇_ : {X : 𝓧 ̇ } → Term{X = X}
 
 ((node f args)̇ 𝑨) a = (f ̂ 𝑨) λ{x → (args x ̇ 𝑨) a}
 
-(𝑝 ̇ 𝑻(X)) (λ x → generator x) = p x1 x2 ...
-(𝑝 ̇ 𝑻(X)) (λ x → node f x) = p x1 x2 ...
+-- (𝑝 ̇ 𝑻(X)) (λ x → generator x) = p x1 x2 ...
+-- (𝑝 ̇ 𝑻(X)) (λ x → node f x) = p x1 x2 ...
+-- 𝑡(𝑠₁, 𝑠₂, ..., 𝑠ₙ) = 𝑡 𝑠₁ 
 
-𝑡(𝑠₁, 𝑠₂, ..., 𝑠ₙ) = 𝑡 𝑠₁ 
 interp-prod : funext 𝓥 𝓤
  →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})
               (𝒜 : I → Algebra 𝓤 𝑆)
@@ -95,11 +95,11 @@ interp-prod fe (generator x₁) 𝒜 x = refl _
 
 interp-prod fe (node f t) 𝒜 x =
  let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
-  ∥ ⨅ 𝒜 ∥ f (λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)
-      ≡⟨ ap (∥ ⨅ 𝒜 ∥ f ) (fe IH) ⟩
-  ∥ ⨅ 𝒜 ∥ f (λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+  (f ̂ ⨅ 𝒜) (λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)
+      ≡⟨ ap (f ̂ ⨅ 𝒜)(fe IH) ⟩
+  (f ̂ ⨅ 𝒜) (λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
       ≡⟨ refl _ ⟩
-  (λ i₁ → ∥ 𝒜 i₁ ∥ f (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
+  (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))
       ∎
 
 interp-prod2 : global-dfunext
@@ -115,7 +115,7 @@ interp-prod2 fe {X = X} (node f t) 𝒜 =
   fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
    let IH = λ x → interp-prod fe (t x) 𝒜  in
    let tA = λ z → t z ̇ ⨅ 𝒜 in
-    (f ̂ ⨅ 𝒜) (λ s → tA s tup)
+    (f ̂ ⨅ 𝒜)(λ s → tA s tup)
       ≡⟨ refl _ ⟩
     (f ̂ ⨅ 𝒜)(λ s →  tA s tup)
       ≡⟨ ap (f ̂ ⨅ 𝒜) (fe  λ x → IH x tup) ⟩
