@@ -6,6 +6,8 @@
 
 open import prelude
 open import basic using (Signature; Algebra; ⨅; Op; _̂_)
+open import congruences using (KER-pred; ker-pred; con; Congruence)
+
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -193,36 +195,23 @@ module _
   𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo 𝒦
   𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
 
-  𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
-  𝑻hom ti = pr₁ ∥ ti ∥
+  𝑻ϕ : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
+  𝑻ϕ ti = pr₁ ∥ ti ∥
 
-  -- 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  -- 𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-  --           Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
-  --            Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+  𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
+  𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
-  -- 𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
-  -- 𝑻𝑨 ti = ∣ ti ∣
+  𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  𝑻KER = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ ,
+   ∀ ti → pair ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ pr₁ ∥ ti ∥  ∣
 
-  -- 𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
-  -- 𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
-
-  -- 𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
-  -- 𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
-
-  -- 𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
-  -- 𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
-
-   -- 𝑻homE : (ti : 𝑻img) → Epic ∣ 𝑻hom ti ∣
-   -- 𝑻homE ti = ∥ pr₂ ∥ ti ∥ ∥
+  Ψ𝒦𝑻 : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Ψ𝒦𝑻 (x , y) =
+   ∀ ti → ∣ (𝑻ϕ ti) ∣ x ≡ ∣ (𝑻ϕ ti) ∣ y
 
 
-  -- 𝑻-kernel : _ ̇
-  -- 𝑻-kernel = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ , ∀ tim → pair ∈ ker-pred ∣ pr₁( ∥ tim ∥ ) ∣
-
-  --   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
-  -- 𝔽: {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  -- 𝔽{𝒦} =  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  𝔽: 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  𝔽=  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 
      -- SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua

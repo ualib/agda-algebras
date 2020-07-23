@@ -113,7 +113,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
   -- 𝒦⊧ = λ z z₁ → z (vbase z₁)
 
   γ : 𝑨 ∈ VClo 𝒦
-  γ = let HIT = HomImagesOf (𝑻 X) in {!!}
+  γ = {!!}
 
   -- Since
   -- vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
