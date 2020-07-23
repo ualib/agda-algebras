@@ -111,7 +111,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
     ξ = A∈ModThV p q pq∈
 
   Ψ⊆Kerh : ∀ pair → pair ∈ Ψ {𝒦 = 𝒦} → pair ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-  Ψ⊆Kerh (p , q) pΨq = {!ζ (λ x → generator x)!}
+  Ψ⊆Kerh (p , q) pΨq = hp≡hq
    where
     𝒦⊧p≋q : 𝒦 ⊧ p ≋ q
     𝒦⊧p≋q = {!!}
@@ -127,19 +127,9 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒕) ∎
 
     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
-    hp≡hq = let hyp = ζ (λ x → generator x) in {!!}
-
-    -- ζ = ∣ h ∣ p ≡⟨ {!!} ⟩
-    --     ((p ̇ 𝑨) ∣ h ∣)  ≡⟨ {!!} ⟩
-    --     ((q ̇ 𝑨) ∣ h ∣) ≡⟨ {!!} ⟩
-    --     ∣ h ∣ q ∎
+    hp≡hq = let ζx = ζ (λ x → generator x) in {!!}
 
   --Want Vclo 𝒦 ⊧ 𝑝 ≈ 𝑞, so that 𝑨 ⊧ 𝑝 ≈ 𝑞,
-  -- comm-hom-term : global-dfunext --  𝓥 𝓤
-  --  →               {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
-  --  →               (h : hom 𝑨 𝑩) (t : Term{X = X}) (a : X → ∣ 𝑨 ∣)
-  --                --------------------------------------------
-  --  →               ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
   --And h 𝑝 x = (𝑝 ̇ 𝑨) h x and h 𝑞 y = (𝑞 ̇ 𝑨) h y
   -- Given generators x and y
