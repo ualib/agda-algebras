@@ -7,20 +7,24 @@
 open import prelude
 open import basic using (Signature; Algebra; ⨅; Op; _̂_)
 
-open import subuniverses using (Subuniverses; Subalgebra)
-
-open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
-
-open import terms using (Term; generator; node; _̇_; interp-prod2; 𝑻;
- interp-prod; comm-hom-term; lift-hom)
-
 module closure
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
  {ua : Univalence}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
+
+open import homomorphisms {𝑆 = 𝑆}
+ using (hom; is-homomorphism; HomImagesOf) public
+
+open import terms {𝑆 = 𝑆}
+ using (Term; generator; node; _̇_; interp-prod2; 𝑻;
+        interp-prod; comm-hom-term; lift-hom) public
+
+open import subuniverses {𝑆 = 𝑆}
+ using (Subuniverse; Subuniverses; Subalgebra; mksub;
+        var; app; Sg) public
+
 
 _⊧_≈_ : Algebra 𝓤 𝑆
  →      Term{X = X} → Term → 𝓤 ̇
@@ -174,25 +178,40 @@ module _
 
 
  -- The free algebra in Agda
+ -- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
+ module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)} where
 
- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
+  𝑻HI = HomImagesOf (𝑻 X)
 
   𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
   𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-            Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
-             Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+             Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
   𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
   𝑻𝑨 ti = ∣ ti ∣
 
-  𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
-  𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
+  𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo 𝒦
+  𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
 
-  𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
-  𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
+  𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
+  𝑻hom ti = pr₁ ∥ ti ∥
 
-  𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
-  𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
+  -- 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+  -- 𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+  --           Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
+  --            Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+
+  -- 𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
+  -- 𝑻𝑨 ti = ∣ ti ∣
+
+  -- 𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
+  -- 𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
+
+  -- 𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
+  -- 𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
+
+  -- 𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
+  -- 𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
 
    -- 𝑻homE : (ti : 𝑻img) → Epic ∣ 𝑻hom ti ∣
    -- 𝑻homE ti = ∥ pr₂ ∥ ti ∥ ∥

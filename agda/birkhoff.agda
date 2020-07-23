@@ -7,13 +7,9 @@
 
 open import prelude
 open import basic using (Signature; Algebra; _̂_)
-open import homomorphisms using (hom; is-homomorphism)
-open import subuniverses using (Subuniverse; mksub; var; app; Sg)
-open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
  {ua : Univalence}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
@@ -21,11 +17,10 @@ module birkhoff
 
 open import closure
  {𝑆 = 𝑆}
- {𝓤 = 𝓤}
  {ua = ua}
  {X = X}
  {gfe = gfe}
- {dfe = dfe} using (VClo; vbase; _⊧_≈_; _⊧_≋_; vclo-id1; vclo-id2)
+ {dfe = dfe}
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -43,12 +38,12 @@ open import closure
        --------------------------------------------------
  →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩}
- (g , ghom)(h , hhom) 𝒂 p =
-   g ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
-   (𝑓 ̂ 𝑩)(g ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
-   (𝑓 ̂ 𝑩)(h ∘ 𝒂)  ≡⟨ (hhom 𝑓 𝒂)⁻¹ ⟩
-   h ((𝑓 ̂ 𝑨) 𝒂)    ∎
+𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p = 
+ --(g , ghom)(h , hhom) 𝒂 p =
+   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
+   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
 
 -- Equalizer of homs is a subuniverse.
 𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
@@ -64,17 +59,14 @@ HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
  →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
 HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
-HomUnique fe {𝑨}{𝑩} X
- (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
-  g ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
-  (𝑓 ̂ 𝑩)(g ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
-  (𝑓 ̂ 𝑩)(h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
-  h ((𝑓 ̂ 𝑨) 𝒂 )   ∎
+HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
+  ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+  (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
+  (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
+  ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )   ∎
  where
   induction-hypothesis =
-    λ x → HomUnique fe {𝑨}{𝑩} X
-    (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
-
+    λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 -- Equational classes
 TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
@@ -89,6 +81,7 @@ MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p
 Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
 Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
+-- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
 ThHSP-axiomatizes : {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)}
                     (p q : ∣ (𝑻 X) ∣ )
                   -----------------------------------------
@@ -120,7 +113,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
   -- 𝒦⊧ = λ z z₁ → z (vbase z₁)
 
   γ : 𝑨 ∈ VClo 𝒦
-  γ = {!!}
+  γ = let HIT = HomImagesOf (𝑻 X) in {!!}
 
   -- Since
   -- vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦

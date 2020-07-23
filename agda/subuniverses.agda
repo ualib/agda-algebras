@@ -7,7 +7,6 @@
 open import prelude
 open import basic using (Signature; Algebra; Op; _̂_)
 open import congruences using (transitive)
-open import homomorphisms using (HOM; Hom; hom; is-homomorphism; HomImage)
 
 open import terms using (Term; _̇_; generator; node;
  comm-hom-term; comm-hom-term')
@@ -15,6 +14,9 @@ open import terms using (Term; _̇_; generator; node;
 open import Relation.Unary using (⋂)
 
 module subuniverses {𝑆 : Signature 𝓞 𝓥} where
+
+open import homomorphisms
+ {𝑆 = 𝑆} using (HOM; Hom; hom; is-homomorphism; HomImage)
 
 Subuniverses : (𝑨 : Algebra 𝓤 𝑆)
  →             Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)

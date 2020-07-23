@@ -6,9 +6,13 @@
 
 open import prelude
 open import basic using (Signature; Algebra; ⨅; Op; _̂_)
-open import homomorphisms using (HOM; Hom; hom)
 open import congruences using (Con; compatible-fun)
+
 module terms {𝑆 : Signature 𝓞 𝓥} where
+
+open import homomorphisms
+ {𝑆 = 𝑆} using (HOM; Hom; hom)
+
 
 data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
   generator : X → Term {X = X}
