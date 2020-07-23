@@ -145,11 +145,11 @@ then there exists ``ϕ : hom 𝑪 𝑩`` such that ``g = ϕ ∘ h``, that is, su
 .. code-block::
 
         𝑨---- h -->>𝑪
-         \         /
-          \       /
-         g \     / ∃ϕ
-            \   /
-             \ /
+         \         .
+          \       .
+           g     ∃ϕ
+            \   .
+             \ .
               V
               𝑩
 

@@ -101,8 +101,8 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
-  A⊧ : {p q : ∣ (𝑻 X) ∣} → 𝒦 ⊧ p ≋ q → 𝑨 ⊧ p ≈ q
-  A⊧ {p}{q} 𝒦⊧p≋q = ξ
+  A⊧ : ∀ p q →  𝒦 ⊧ p ≋ q → 𝑨 ⊧ p ≈ q
+  A⊧ p q 𝒦⊧p≋q = ξ
    where
     pq∈ : (p , q) ∈ Th (VClo 𝒦)
     pq∈ = (lr-implication (ThHSP-axiomatizes p q)) 𝒦⊧p≋q
@@ -110,8 +110,26 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
     ξ : 𝑨 ⊧ p ≈ q
     ξ = A∈ModThV p q pq∈
 
-  Ψ⊆Kerh : Ψ {𝒦 = 𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-  Ψ⊆Kerh = ?
+  Ψ⊆Kerh : ∀ pair → pair ∈ Ψ {𝒦 = 𝒦} → pair ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh (generator x , generator y) pΨq = {!!}
+  Ψ⊆Kerh (generator x , node f t) pΨq = {!!}
+  Ψ⊆Kerh (node f t , generator y) pΨq = {!!}
+  Ψ⊆Kerh (node f t , node g s) pΨq = {!!}
+   -- where
+   --  𝒦⊧p≋q : 𝒦 ⊧ p ≋ q
+   --  𝒦⊧p≋q = {!!}
+
+   --  𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
+   --  𝑨⊧p≈q = A⊧ p q 𝒦⊧p≋q
+
+   --  ζ : ∣ h ∣ p ≡ ∣ h ∣ q
+   --  ζ = {!!}
+  --Want Vclo 𝒦 ⊧ 𝑝 ≈ 𝑞, so that 𝑨 ⊧ 𝑝 ≈ 𝑞,
+
+  --And h 𝑝 x = (𝑝 ̇ 𝑨) h x and h 𝑞 y = (𝑞 ̇ 𝑨) h y
+  -- Given generators x and y
+  --Therefore, ℎ(𝑢) = (𝑝 ̇ 𝑨)(ℎ₀ ∘ 𝑥) = (𝑞 ̇ 𝑨)(ℎ₀ ∘ 𝑥) = ℎ(𝑣),
+  --as desired.
 
   -- 𝒦⊧ : {p q : ∣ (𝑻 X) ∣} → (p , q) ∈ Th (VClo 𝒦) → 𝒦 ⊧ p ≋ q
   -- 𝒦⊧ = λ z z₁ → z (vbase z₁)
@@ -139,7 +157,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
  --𝑝, 𝑞 ∈ 𝑻(𝑋) and 𝒙 such that :math:`𝑢 = p^{𝑻(𝑋)}(𝒙)`
  --and :math:`𝑣 = q^{𝑻(X)}(𝒙)`. Therefore, :math:`p^{𝔽(𝒲, 𝑋)} 𝒙 = 𝑔(𝑢) = 𝑔(𝑣) = q^{𝔽(𝒲, 𝑋)} 𝒙`.
  --Thus 𝒲 ⊧ 𝑝 ≈ 𝑞, hence (𝑝, 𝑞) ∈ Σ. Since A ∈ Mod(Σ) we get A ⊧ 𝑝 ≈ 𝑞.
- --Therefore, :math:`ℎ(𝑢) = 𝑝^A(ℎ₀ ∘ 𝒙) = 𝑞^A(ℎ₀ ∘ 𝒙) = ℎ(𝑣)`, as desired.
+ --Therefore, :math:`ℎ(𝑢) = 𝑝 ̇ 𝑨 (ℎ₀ ∘ 𝒙) = 𝑞^A(ℎ₀ ∘ 𝒙) = ℎ(𝑣)`, as desired.
 
 
 

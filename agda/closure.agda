@@ -108,10 +108,7 @@ products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈�
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
-module _
- {gfe : global-dfunext}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))}
- where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  -- ⇒ (the "only if" direction)
  identities-are-compatible-with-homs : (p q : Term{X = X})
@@ -178,14 +175,11 @@ module _
    homs-are-compatible-with-identities p q
 
  -- The free algebra in Agda
- -- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
--- module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)} where
-
  𝑻HI = HomImagesOf (𝑻 X)
 
  𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
  𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-             Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+           Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
  𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
  𝑻𝑨 ti = ∣ ti ∣
@@ -207,7 +201,18 @@ module _
  Ψ (x , y) =
   ∀ ti → ∣ (𝑻ϕ ti) ∣ x ≡ ∣ (𝑻ϕ ti) ∣ y
 
-
+--N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
+--𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), we need only show that the kernel of
+--the lift h : 𝑻(X) → 𝑨 *contains* Ψ𝒦𝑻!!!
+--
+--    𝑻---- g --->>𝔽  (ker g = Ψ𝒦𝑻)
+--     \         .
+--      \       .
+--       h     ∃ϕ     (want: Ψ𝒦𝑻 ⊆ ker h)
+--        \   .
+--         \ .
+--          V
+--          𝑨
 
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
