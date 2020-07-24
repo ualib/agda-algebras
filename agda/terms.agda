@@ -14,17 +14,22 @@ open import homomorphisms
  {𝑆 = 𝑆} using (HOM; Hom; hom)
 
 
-data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
+data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term {X = X}
-  node : (f : ∣ 𝑆 ∣) → (t : ∥ 𝑆 ∥ f → Term {X = X}) → Term
+  node : (f : ∣ 𝑆 ∣) → (args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
 
 open Term
 
 --The term algebra 𝑻(X).
-𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) 𝑆
+𝑻 : 𝓤 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤) 𝑆
 𝑻 X = Term{X = X} , node
 
-module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
+term-op : {X : 𝓤 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
+term-op f args = node f args
+
+
+
+module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓤 ̇ } where
 
  --1.a. Every map (X → 𝑨) lifts.
  free-lift : (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
@@ -77,13 +82,61 @@ module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
 _̇_ : {X : 𝓧 ̇ } → Term{X = X}
  →   (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-((generator x)̇ 𝑨) a = a x
+((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
 
-((node f args)̇ 𝑨) a = (f ̂ 𝑨) λ{x → (args x ̇ 𝑨) a}
+((node f args) ̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
 
--- (𝑝 ̇ 𝑻(X)) (λ x → generator x) = p x1 x2 ...
--- (𝑝 ̇ 𝑻(X)) (λ x → node f x) = p x1 x2 ...
--- 𝑡(𝑠₁, 𝑠₂, ..., 𝑠ₙ) = 𝑡 𝑠₁ 
+
+-- Want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?
+-- By definition, it depends on the form of 𝑝 as follows:
+-- * if 𝑝 = (generator x), then
+--      (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
+-- * if 𝑝 = (node f args), then
+--      (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+-- Let h : hom (𝑻 X) 𝑨. Then by comm-hom-term,
+-- ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕
+-- * if p = (generator x), then
+--    ∣ h ∣ p ≡ ∣ h ∣ (generator x)
+--           ≡ λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
+--           ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+--    ∣ h ∣ p ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
+--           ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+-- * if p = (node f args), then
+--    ∣ h ∣ p ≡ ∣ h ∣  (p ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+
+-- We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣
+-- such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact in the following module:
+module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
+
+ term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) →
+  node f args ≡ (f ̂ 𝑻(X)) args
+ term-op-interp1 = λ f args → 𝓻ℯ𝓯𝓵
+
+ term-op-interp2 : (f : ∣ 𝑆 ∣)
+                   {a1 a2 : ∥ 𝑆 ∥ f → Term {X = X}}
+  →                a1 ≡ a2
+  →                node f a1 ≡ node f a2
+ term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
+
+ term-op-interp3 : (f : ∣ 𝑆 ∣)
+                   {a1 a2 : ∥ 𝑆 ∥ f → Term {X = X}}
+  →                a1 ≡ a2
+  →                node f a1 ≡ (f ̂ 𝑻(X)) a2
+ term-op-interp3 f {a1}{a2} a1≡a2 =
+  node f a1     ≡⟨ term-op-interp2 f a1≡a2 ⟩
+  node f a2     ≡⟨ term-op-interp1 f a2 ⟩
+  (f ̂ 𝑻(X)) a2 ∎
+
+
+ term-gen : (p : ∣ 𝑻(X) ∣) → Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) generator
+ term-gen (generator x) = (generator x) , (λ x₁ → generator x₁) , 𝓇ℯ𝒻𝓁
+ term-gen (node f args) =
+   node f (λ i → ∣ term-gen (args i) ∣ ) , generator ,
+     term-op-interp3 f (gfe λ i → ∥ ∥ term-gen (args i) ∥ ∥)
+
+
+
+
 
 interp-prod : funext 𝓥 𝓤
  →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})

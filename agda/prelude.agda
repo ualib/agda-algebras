@@ -15,9 +15,9 @@ module prelude where
    𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
  open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
-  refl to 𝓻ℯ𝓯𝓵) public
+  refl to 𝓇ℯ𝒻𝓁) public
 
- pattern refl x = 𝓻ℯ𝓯𝓵 {x = x}
+ pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
  open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
