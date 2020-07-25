@@ -5,10 +5,12 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra)
+open import basic
 
 module congruences where
+
+open import prelude using (Pred; 𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎;
+ refl; _⁻¹; funext; ap) public
 
 REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺) ̇
 REL A B 𝓝 = A → B → 𝓝 ̇

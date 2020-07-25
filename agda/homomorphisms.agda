@@ -4,11 +4,13 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra; Op)
-open import congruences using (ker; ker-pred; Rel; 𝟎; con; _//_)
+open import basic
+open import congruences
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
+
+open import prelude using (_∘_; _∈_; _⊆_; EpicInv; cong-app;
+ EInvIsRInv; Image_∋_) public
 
 --intensional preservation of operations
 op_interpreted-in_and_commutes-intensionally-with :

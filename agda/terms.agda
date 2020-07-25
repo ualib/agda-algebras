@@ -4,15 +4,14 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra; ⨅; Op; _̂_)
-open import congruences using (Con; compatible-fun)
+open import basic
 
 module terms {𝑆 : Signature 𝓞 𝓥} where
 
-open import homomorphisms
- {𝑆 = 𝑆} using (HOM; Hom; hom)
-
+open import congruences
+open import homomorphisms {𝑆 = 𝑆}
+open import prelude using
+ (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂) public
 
 data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term {X = X}
@@ -110,7 +109,7 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
 
  term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) →
   node f args ≡ (f ̂ 𝑻(X)) args
- term-op-interp1 = λ f args → 𝓻ℯ𝓯𝓵
+ term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
  term-op-interp2 : (f : ∣ 𝑆 ∣)
                    {a1 a2 : ∥ 𝑆 ∥ f → Term {X = X}}
@@ -139,7 +138,7 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
 
  term-gen-agreement : (p : ∣ 𝑻(X) ∣)
   →      (p ̇ 𝑻(X)) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻(X)) generator
- term-gen-agreement (generator x) = 𝓻ℯ𝓯𝓵
+ term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
  term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x)) 
 
 

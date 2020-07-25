@@ -4,30 +4,19 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra; ⨅; Op; _̂_)
-open import congruences using (KER-pred; ker-pred; con; Congruence)
-
+open import basic
+open import prelude using (global-dfunext; dfunext)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
- {ua : Univalence}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
-open import homomorphisms {𝑆 = 𝑆}
- using (hom; is-homomorphism; HomImagesOf) public
-
-open import terms {𝑆 = 𝑆}
- using (Term; generator; node; _̇_; interp-prod2; 𝑻;
-        interp-prod; comm-hom-term; lift-hom; term-gen;
-        term-gen-agreement) public
-
-open import subuniverses {𝑆 = 𝑆}
- using (Subuniverse; Subuniverses; Subalgebra; mksub;
-        var; app; Sg) public
-
+open import homomorphisms {𝑆 = 𝑆} public
+open import terms {𝑆 = 𝑆} public
+open import subuniverses {𝑆 = 𝑆} public
+open import congruences public
 
 _⊧_≈_ : Algebra 𝓤 𝑆
  →      Term{X = X} → Term → 𝓤 ̇
@@ -40,33 +29,14 @@ _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 
--- Closure data types
-
+----------------------------------------------------------------------
+--Closure under products
 data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
  pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
  prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
   →     ⨅ 𝒜 ∈ PClo 𝒦
 
--- Subalgebra Closure
-data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
- sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
-
--- Homomorphic Image Closure
-data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
- hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
-
--- Variety Closure
-data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
- vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
- vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
- vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
-
-
--- Product Closure
 P-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
  →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
@@ -107,6 +77,73 @@ products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈�
 
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
+
+----------------------------------------------------------------------
+--Closure under subalgebras
+data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+ sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+
+-- data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+--  sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+--  sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
+
+S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+ →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+S-closed ℒ𝒦 =
+ λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
+
+subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
+ →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+ →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+ where
+
+  𝑨 : Algebra 𝓤 𝑆
+  𝑨 = ∣ SAK ∣
+
+  A∈𝒦 : 𝑨 ∈ 𝒦
+  A∈𝒦 = ∣ pr₂ SAK ∣
+
+  A⊧p≈q : 𝑨 ⊧ p ≈ q
+  A⊧p≈q = 𝒦⊧p≋q A∈𝒦
+
+  subalg : SubalgebrasOf 𝑨
+  subalg = ∥ pr₂ SAK ∥
+
+  𝑩 : Algebra 𝓤 𝑆
+  𝑩 = pr₁ subalg
+
+  h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  h = ∣ pr₂ subalg ∣
+
+  hem : is-embedding h
+  hem = pr₁ ∥ pr₂ subalg ∥
+
+  hhm : is-homomorphism 𝑩 𝑨 h
+  hhm = pr₂ ∥ pr₂ subalg ∥
+
+  ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
+  ξ b =
+   h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
+   (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+   (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+   h ((q ̇ 𝑩) b)  ∎
+
+  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+  γ : 𝑩 ⊧ p ≈ q
+  γ = gfe λ b → hlc (ξ b)
+
+
+----------------------------------------------------------------------
+
+--Closure under hom images
+data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+ hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+
 
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
@@ -262,6 +299,20 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 --         \ .
 --          V
 --          𝑨
+
+
+
+
+-- Variety Closure
+data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+ vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+ vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+ vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+
+
+
 
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 

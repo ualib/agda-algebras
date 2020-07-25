@@ -5,20 +5,17 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra; _̂_)
-open import congruences using (KER-pred) -- ; ker-pred; con; Congruence)
+open import basic
+open import prelude using (global-dfunext; dfunext)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
- {ua : Univalence}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
 open import closure
  {𝑆 = 𝑆}
- {ua = ua}
  {X = X}
  {gfe = gfe}
  {dfe = dfe}
@@ -114,7 +111,7 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
   Ψ⊆Kerh (p , q) pΨq = hp≡hq
    where
     𝒦⊧p≋q : 𝒦 ⊧ p ≋ q
-    𝒦⊧p≋q = {!!}
+    𝒦⊧p≋q {𝑩} KB = {!!}
 
     𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
     𝑨⊧p≈q = A⊧ p q 𝒦⊧p≋q

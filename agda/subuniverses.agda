@@ -4,19 +4,24 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude
-open import basic using (Signature; Algebra; Op; _̂_)
-open import congruences using (transitive)
-
-open import terms using (Term; _̇_; generator; node;
- comm-hom-term; comm-hom-term')
-
-open import Relation.Unary using (⋂)
+open import basic
 
 module subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
-open import homomorphisms
- {𝑆 = 𝑆} using (HOM; Hom; hom; is-homomorphism; HomImage)
+open import congruences
+open import homomorphisms {𝑆 = 𝑆}
+open import terms
+open import Relation.Unary using (⋂)
+
+open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; eq;
+ univalence-gives-global-dfunext; 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Inv; InvIsInv;
+ is-subsingleton; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton;
+ ∈-is-subsingleton; is-embedding; pr₁-embedding; rl-implication; inverse;
+ embedding-gives-ap-is-equiv; is-set;_⇔_;transport; subset-extensionality';
+ equiv-to-subsingleton; powersets-are-sets'; _≃_; id; _●_;
+ logically-equivalent-subsingletons-are-equivalent) public
+
+
 
 Subuniverses : (𝑨 : Algebra 𝓤 𝑆)
  →             Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
@@ -147,7 +152,7 @@ module _
 
 
 
-module _ {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
+module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
 
  gfe : global-dfunext
  gfe = univalence-gives-global-dfunext UV
@@ -254,85 +259,90 @@ module _ {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
   (subuniverse-equality B C) ● (carrier-equiv B C)
 
 
+-- module _ {𝓤 : Universe} (UV : Univalence) where
+
  -- new definition of subalgebra (includes an embedding)
- Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
-                 Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
-                   is-embedding h × is-homomorphism 𝑩 𝑨 h
+SubalgebrasOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+SubalgebrasOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
+                Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
+                  is-embedding h × is-homomorphism 𝑩 𝑨 h
 
-module _
- {𝓤 : Universe}
- {X : 𝓧 ̇ }
- {UV : Univalence} where
+SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × SubalgebrasOf 𝑨
 
- _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 𝑆
-  →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
+-- module _
+--  {𝓤 : Universe}
+--  {X : 𝓧 ̇ }
+--  {UV : Univalence} where
 
- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+--  _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 𝑆
+--   →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
 
- _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
-  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
+--  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
- _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+--  _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
+--   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
 
- gdfe : global-dfunext
- gdfe = univalence-gives-global-dfunext UV
+--  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
- SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- SubalgebrasOfClass 𝒦 =
-  Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra{𝑨 = 𝑨} UV
+--  gdfe : global-dfunext
+--  gdfe = univalence-gives-global-dfunext UV
 
- data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-  sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-  sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
+--  SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+--  SubalgebrasOfClass 𝒦 =
+--   Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra{𝑨 = 𝑨} UV
 
- S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
-  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- S-closed ℒ𝒦 =
-  λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
+--  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+--   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+--   sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
 
- subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
-  →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
-  →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
- subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
-  where
+--  S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+--   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+--  S-closed ℒ𝒦 =
+--   λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
 
-  𝑨 : Algebra 𝓤 𝑆
-  𝑨 = ∣ SAK ∣
+--  subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
+--   →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+--   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+--  subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+--   where
 
-  A∈𝒦 : 𝑨 ∈ 𝒦
-  A∈𝒦 = ∣ pr₂ SAK ∣
+--   𝑨 : Algebra 𝓤 𝑆
+--   𝑨 = ∣ SAK ∣
 
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = 𝒦⊧p≋q A∈𝒦
+--   A∈𝒦 : 𝑨 ∈ 𝒦
+--   A∈𝒦 = ∣ pr₂ SAK ∣
 
-  subalg : Subalgebra{𝑨 = 𝑨} UV
-  subalg = ∥ pr₂ SAK ∥
+--   A⊧p≈q : 𝑨 ⊧ p ≈ q
+--   A⊧p≈q = 𝒦⊧p≋q A∈𝒦
 
-  𝑩 : Algebra 𝓤 𝑆
-  𝑩 = pr₁ subalg
+--   subalg : Subalgebra{𝑨 = 𝑨} UV
+--   subalg = ∥ pr₂ SAK ∥
 
-  h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-  h = ∣ pr₂ subalg ∣
+--   𝑩 : Algebra 𝓤 𝑆
+--   𝑩 = pr₁ subalg
 
-  hem : is-embedding h
-  hem = pr₁ ∥ pr₂ subalg ∥
+--   h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+--   h = ∣ pr₂ subalg ∣
 
-  hhm : is-homomorphism 𝑩 𝑨 h
-  hhm = pr₂ ∥ pr₂ subalg ∥
+--   hem : is-embedding h
+--   hem = pr₁ ∥ pr₂ subalg ∥
 
-  ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
-  ξ b =
-   h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gdfe 𝑩 𝑨 (h , hhm) p b ⟩
-   (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-   (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gdfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-   h ((q ̇ 𝑩) b)  ∎
+--   hhm : is-homomorphism 𝑩 𝑨 h
+--   hhm = pr₂ ∥ pr₂ subalg ∥
 
-  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+--   ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
+--   ξ b =
+--    h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gdfe 𝑩 𝑨 (h , hhm) p b ⟩
+--    (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+--    (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gdfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+--    h ((q ̇ 𝑩) b)  ∎
 
-  γ : 𝑩 ⊧ p ≈ q
-  γ = gdfe λ b → hlc (ξ b)
+--   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+--   hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+--   γ : 𝑩 ⊧ p ≈ q
+--   γ = gdfe λ b → hlc (ξ b)
 
 
 -- Hom image is subuniverse

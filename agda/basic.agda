@@ -5,10 +5,10 @@
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣;
-  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_)
-
 module basic where
+
+open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧;
+  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_; Epic) public
 
 --The type of operations
 Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
@@ -48,3 +48,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
 
  infixr -1 ⨅
 
+ --Usually we want to assume that, given an algebra 𝑨, we can
+ --always find a surjective map h₀ : X → ∣ 𝑨 ∣ from an arbitrary
+ --collection X of "variables" onto the universe of 𝑨.
+ --Here is the type we use when making this assumption.
+
+ _↠_ : 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+ X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
