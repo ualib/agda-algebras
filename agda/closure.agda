@@ -184,39 +184,42 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  compatibility-of-interpretations p q 𝒦⊧p≋q 𝑨 ka hh = γ
   where
-   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) generator
+   g : X → Term
+   g = generator
+
+   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) g
    tgp   = term-gen{gfe = gfe} p
 
-   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , q ≡ (𝓆 ̇ 𝑻(X)) generator
+   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , q ≡ (𝓆 ̇ 𝑻(X)) g
    tgq   = term-gen{gfe = gfe} q
 
    𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
    𝓅 = ∣ tgp ∣
    𝓆 = ∣ tgq ∣
 
-   tt : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → p ≡ (pr₁ (term-gen p) ̇ 𝑻 X) generator)
+   tt : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → p ≡ (𝓅 ̇ 𝑻 X) g)
    tt = ∥ tgp ∥
 
-   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) generator
+   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
    p≡𝓅 = ∥ tt ∥
 
-   tt'   : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → q ≡ (pr₁ (term-gen q) ̇ 𝑻 X) generator)
+   tt'   : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → q ≡ (𝓆 ̇ 𝑻 X) g)
    tt'   = ∥ tgq ∥
 
-   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) generator
+   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
    q≡𝓆 = ∥ tt' ∥
 
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = 𝒦⊧p≋q ka
 
-   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) generator)
+   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) g)
    γ =
-    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
-    ∣ hh ∣ ((p ̇ 𝑻 X) generator) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p generator) ⟩
-    (p ̇ 𝑨) (∣ hh ∣ ∘ generator)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ generator)  ⟩
-    (q ̇ 𝑨) (∣ hh ∣ ∘ generator)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q generator)⁻¹ ⟩
-    ∣ hh ∣ ((q ̇ 𝑻 X) generator) ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
-    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) generator)  ∎
+    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) g)  ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
+    ∣ hh ∣ ((p ̇ 𝑻 X) g)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p g) ⟩
+    (p ̇ 𝑨) (∣ hh ∣ ∘ g)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ g)  ⟩
+    (q ̇ 𝑨) (∣ hh ∣ ∘ g)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q g)⁻¹ ⟩
+    ∣ hh ∣ ((q ̇ 𝑻 X) g)  ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
+    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) g)  ∎
 
 
 
