@@ -128,11 +128,20 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
   (f ̂ 𝑻(X)) a2 ∎
 
 
- term-gen : (p : ∣ 𝑻(X) ∣) → Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) generator
+ term-gen : (p : ∣ 𝑻(X) ∣)
+  →         Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) ,
+              p ≡ (𝓅 ̇ 𝑻(X)) generator
+
  term-gen (generator x) = (generator x) , (λ x₁ → generator x₁) , 𝓇ℯ𝒻𝓁
  term-gen (node f args) =
    node f (λ i → ∣ term-gen (args i) ∣ ) , generator ,
      term-op-interp3 f (gfe λ i → ∥ ∥ term-gen (args i) ∥ ∥)
+
+ term-gen-agreement : (p : ∣ 𝑻(X) ∣)
+  →      (p ̇ 𝑻(X)) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻(X)) generator
+ term-gen-agreement (generator x) = 𝓻ℯ𝓯𝓵
+ term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x)) 
+
 
 
 

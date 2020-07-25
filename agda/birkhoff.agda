@@ -126,10 +126,37 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
      (q ̇ 𝑨) (∣ h ∣ ∘ 𝒕) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒕)⁻¹ ⟩
      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒕) ∎
 
-    -- Want: (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕
-
     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
-    hp≡hq = let ζx = ζ (λ x → generator x) in {!!}
+    hp≡hq =
+      ∣ h ∣ p                      ≡⟨ ap ∣ h ∣ p≡𝓅 ⟩
+      ∣ h ∣ ((𝓅 ̇ 𝑻(X)) generator) ≡⟨ (ap ∣ h ∣ (term-gen-agreement p))⁻¹ ⟩
+      ∣ h ∣ ((p ̇ 𝑻(X)) generator) ≡⟨ ζ generator ⟩
+      ∣ h ∣ ((q ̇ 𝑻(X)) generator) ≡⟨ ap ∣ h ∣ (term-gen-agreement q) ⟩
+      ∣ h ∣ ((𝓆 ̇ 𝑻(X)) generator) ≡⟨ (ap ∣ h ∣ q≡𝓆)⁻¹ ⟩
+      ∣ h ∣ q                      ∎
+      where
+       tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) generator
+       tgp   = term-gen{gfe = gfe} p
+
+       tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , q ≡ (𝓆 ̇ 𝑻(X)) generator
+       tgq   = term-gen{gfe = gfe} q
+
+       𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+       𝓅 = ∣ tgp ∣
+       𝓆 = ∣ tgq ∣
+
+       tt : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → p ≡ (pr₁ (term-gen p) ̇ 𝑻 X) generator)
+       tt = ∥ tgp ∥
+
+       p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) generator
+       p≡𝓅 = ∥ tt ∥
+
+       tt'   : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → q ≡ (pr₁ (term-gen q) ̇ 𝑻 X) generator)
+       tt'   = ∥ tgq ∥
+
+       q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) generator
+       q≡𝓆 = ∥ tt' ∥
+
 
   --h 𝑝 x = (𝑝 ̇ 𝑨) h x and h 𝑞 y = (𝑞 ̇ 𝑨) h y
   -- Given generators x and y

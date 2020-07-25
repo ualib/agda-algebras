@@ -21,7 +21,8 @@ open import homomorphisms {𝑆 = 𝑆}
 
 open import terms {𝑆 = 𝑆}
  using (Term; generator; node; _̇_; interp-prod2; 𝑻;
-        interp-prod; comm-hom-term; lift-hom) public
+        interp-prod; comm-hom-term; lift-hom; term-gen;
+        term-gen-agreement) public
 
 open import subuniverses {𝑆 = 𝑆}
  using (Subuniverse; Subuniverses; Subalgebra; mksub;
@@ -172,6 +173,52 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  compatibility-of-identities-and-homs p q =
    identities-are-compatible-with-homs p q ,
    homs-are-compatible-with-identities p q
+
+
+ --Compatibility of identities with interpretation of terms
+ compatibility-of-interpretations : (p q : Term)
+  →        (𝒦 ⊧ p ≋ q)
+  →        ∀ 𝑨 (ka : 𝑨 ∈ 𝒦) (hh : hom (𝑻 X) 𝑨)
+  →        ∣ hh ∣ ((∣ term-gen{gfe = gfe} p ∣ ̇ 𝑻(X)) generator)
+         ≡ ∣ hh ∣ ((∣ term-gen{gfe = gfe} q ∣ ̇ 𝑻(X)) generator)
+
+ compatibility-of-interpretations p q 𝒦⊧p≋q 𝑨 ka hh = γ
+  where
+   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) generator
+   tgp   = term-gen{gfe = gfe} p
+
+   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , q ≡ (𝓆 ̇ 𝑻(X)) generator
+   tgq   = term-gen{gfe = gfe} q
+
+   𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+   𝓅 = ∣ tgp ∣
+   𝓆 = ∣ tgq ∣
+
+   tt : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → p ≡ (pr₁ (term-gen p) ̇ 𝑻 X) generator)
+   tt = ∥ tgp ∥
+
+   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) generator
+   p≡𝓅 = ∥ tt ∥
+
+   tt'   : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → q ≡ (pr₁ (term-gen q) ̇ 𝑻 X) generator)
+   tt'   = ∥ tgq ∥
+
+   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) generator
+   q≡𝓆 = ∥ tt' ∥
+
+   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+   pA≡qA = 𝒦⊧p≋q ka
+
+   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) generator)
+   γ =
+    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
+    ∣ hh ∣ ((p ̇ 𝑻 X) generator) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p generator) ⟩
+    (p ̇ 𝑨) (∣ hh ∣ ∘ generator)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ generator)  ⟩
+    (q ̇ 𝑨) (∣ hh ∣ ∘ generator)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q generator)⁻¹ ⟩
+    ∣ hh ∣ ((q ̇ 𝑻 X) generator) ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
+    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) generator)  ∎
+
+
 
  -- The free algebra in Agda
  𝑻HI = HomImagesOf (𝑻 X)
