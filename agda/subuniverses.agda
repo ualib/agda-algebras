@@ -13,8 +13,8 @@ open import homomorphisms {𝑆 = 𝑆}
 open import terms
 open import Relation.Unary using (⋂)
 
-open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; eq;
- univalence-gives-global-dfunext; 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Inv; InvIsInv;
+open import prelude using (Im_⊆_; Univalence; embeddings-are-lc;
+ univalence-gives-global-dfunext; 𝓟; _∈₀_; _⊆₀_; pr₁; domain;
  is-subsingleton; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton;
  ∈-is-subsingleton; is-embedding; pr₁-embedding; rl-implication; inverse;
  embedding-gives-ap-is-equiv; is-set;_⇔_;transport; subset-extensionality';

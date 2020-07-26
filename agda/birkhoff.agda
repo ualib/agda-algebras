@@ -12,7 +12,7 @@ module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
- {dfe : dfunext 𝓤 𝓤} where
+ {dfe : dfunext 𝓤 𝓤} {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
 open import closure
  {𝑆 = 𝑆}
@@ -91,10 +91,20 @@ ThHSP-axiomatizes p q =
 
 -- Birkhoff's theorem: every variety is an equational class.
 birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
-           (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣ )(eg : Epic h₀)
+           (𝑨 : Algebra 𝓤 𝑆)
+           ------------------------------------
  →         𝑨 ∈ Mod (Th (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
-birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
+birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
  where
+  ℋ : X ↠ 𝑨
+  ℋ = 𝕏 𝑨
+
+  h₀ : X → ∣ 𝑨 ∣
+  h₀ = ∣ ℋ ∣
+
+  hE : Epic h₀
+  hE = ∥ ℋ ∥
+
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
@@ -107,11 +117,42 @@ birkhoff 𝒦 𝑨 h₀ eg A∈ModThV = γ
     ξ : 𝑨 ⊧ p ≈ q
     ξ = A∈ModThV p q pq∈
 
-  Ψ⊆Kerh : ∀ pair → pair ∈ Ψ {𝒦 = 𝒦} → pair ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-  Ψ⊆Kerh (p , q) pΨq = hp≡hq
+  Ψ→𝒦⊧ : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦} → (𝒦 ⊧ p ≋ q)
+  Ψ→𝒦⊧ p q pΨq = {!!}
+
+  Ψ→hpT≡hqt : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
+   →         ∀ (𝑪 : Algebra 𝓤 𝑆)(KC : 𝑪 ∈ 𝒦)(ϕ : hom (𝑻(X)) 𝑪)
+   →         ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
+  Ψ→hpT≡hqt p q pΨq 𝑪 KC ϕ = {!!}
+
+  Ψ⊆Kerh : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
+   →       (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+
+  Ψ⊆Kerh p q pΨq = hp≡hq
    where
     𝒦⊧p≋q : 𝒦 ⊧ p ≋ q
-    𝒦⊧p≋q {𝑩} KB = {!!}
+    𝒦⊧p≋q {𝑩} KB = ν
+     where
+      𝒢 : X ↠ 𝑩
+      𝒢 = 𝕏 𝑩
+
+      g₀ : X → ∣ 𝑩 ∣
+      g₀ = ∣ 𝒢 ∣
+
+      gE : Epic g₀
+      gE = ∥ 𝒢 ∥
+
+      g : hom (𝑻 X) 𝑩
+      g = lift-hom{𝑨 = 𝑩}{X = X} g₀
+
+      ti : 𝑻img {𝒦 = 𝒦}
+      ti = 𝑩 , g , (sbase KB , lift-of-epic-is-epic g₀ gE )
+
+      pBq : ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+      pBq = pΨq ti
+
+      ν : 𝑩 ⊧ p ≈ q
+      ν = {!!}
 
     𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
     𝑨⊧p≈q = A⊧ p q 𝒦⊧p≋q

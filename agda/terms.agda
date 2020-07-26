@@ -11,7 +11,7 @@ module terms {𝑆 : Signature 𝓞 𝓥} where
 open import congruences
 open import homomorphisms {𝑆 = 𝑆}
 open import prelude using
- (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂) public
+ (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂; Inv; InvIsInv; eq) public
 
 data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term {X = X}
@@ -76,6 +76,36 @@ module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓤 ̇ } where
   ∣ h ∣ (node f args)  ∎
    where
     γ = fe λ i → free-intensionally-unique fe g h p (args i)
+
+
+ --lift agrees on X
+ lift-agrees-on-X : (h₀ : X → ∣ 𝑨 ∣)(x : X)
+                 ------------------------------------
+  →               h₀ x ≡ ∣ lift-hom h₀ ∣ (generator x)
+
+ lift-agrees-on-X h₀ x = refl _
+
+ --Of course, the lift of a surjective map is surjective.
+ lift-of-epic-is-epic : (h₀ : X → ∣ 𝑨 ∣) →  Epic h₀
+                       ---------------------------
+  →                     Epic ∣ lift-hom h₀ ∣
+
+ lift-of-epic-is-epic h₀ hE y = γ
+  where
+   h₀pre : Image h₀ ∋ y
+   h₀pre = hE y
+
+   h₀⁻¹y : X
+   h₀⁻¹y = Inv h₀ y (hE y)
+
+   η : y ≡ ∣ lift-hom h₀ ∣ (generator h₀⁻¹y)
+   η =
+    y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+    h₀ h₀⁻¹y                        ≡⟨ lift-agrees-on-X h₀ h₀⁻¹y ⟩
+    ∣ lift-hom h₀ ∣ (generator h₀⁻¹y) ∎
+
+   γ : Image ∣ lift-hom h₀ ∣ ∋ y
+   γ = eq y (generator h₀⁻¹y) η
 
 
 _̇_ : {X : 𝓧 ̇ } → Term{X = X}
