@@ -169,12 +169,7 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
  term-gen-agreement : (p : ∣ 𝑻(X) ∣)
   →      (p ̇ 𝑻(X)) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻(X)) generator
  term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
- term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x)) 
-
-
-
-
-
+ term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
 
 interp-prod : funext 𝓥 𝓤
  →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})

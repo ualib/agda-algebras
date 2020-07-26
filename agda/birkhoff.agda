@@ -6,7 +6,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext)
+open import prelude using (global-dfunext; dfunext; _∙_)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -117,13 +117,114 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
     ξ : 𝑨 ⊧ p ≈ q
     ξ = A∈ModThV p q pq∈
 
-  Ψ→𝒦⊧ : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦} → (𝒦 ⊧ p ≋ q)
-  Ψ→𝒦⊧ p q pΨq = {!!}
 
-  Ψ→hpT≡hqt : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
+  𝑻img∩𝒦⊧ : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
+   →         (ti : 𝑻img{𝒦 = 𝒦}) → ∣ ti ∣ ⊧ p ≈ q
+  𝑻img∩𝒦⊧ p q pΨq ti = 𝑪⊧p≈q
+   where
+    𝑪 : Algebra 𝓤 𝑆
+    𝑪 = ∣ ti ∣
+
+    ϕ : hom (𝑻 X) 𝑪
+    ϕ = 𝑻ϕ ti
+
+    pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+    pCq = pΨq ti
+
+    g : X → Term
+    g = generator
+
+    tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , p ≡ (𝓅 ̇ 𝑻(X)) g
+    tgp   = term-gen{gfe = gfe} p
+
+    tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , Σ 𝒕 ꞉ (X → ∣ 𝑻(X) ∣) , q ≡ (𝓆 ̇ 𝑻(X)) g
+    tgq   = term-gen{gfe = gfe} q
+
+    𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+    𝓅 = ∣ tgp ∣
+    𝓆 = ∣ tgq ∣
+
+    tt : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → p ≡ (𝓅 ̇ 𝑻 X) g)
+    tt = ∥ tgp ∥
+
+    p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
+    p≡𝓅 = ∥ tt ∥
+
+    tt' : -Σ (X → ∣ 𝑻 X ∣)(λ 𝒕₁ → q ≡ (𝓆 ̇ 𝑻 X) g)
+    tt' = ∥ tgq ∥
+
+    q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
+    q≡𝓆 = ∥ tt' ∥
+
+    agreement1 : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g)
+    agreement1 =
+     ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡⟨ (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ⟩
+     ∣ ϕ ∣ p              ≡⟨ pCq ⟩
+     ∣ ϕ ∣ q              ≡⟨ (ap ∣ ϕ ∣ q≡𝓆)⟩
+     ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g) ∎
+
+    agreement2 : ∣ ϕ ∣ ((p ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) g)
+    agreement2 =
+     ∣ ϕ ∣ ((p ̇ 𝑻(X)) g) ≡⟨ ap ∣ ϕ ∣ (term-gen-agreement p) ⟩
+     ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡⟨ agreement1 ⟩
+     ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g) ≡⟨ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹ ⟩
+     ∣ ϕ ∣ ((q ̇ 𝑻(X)) g) ∎
+
+    lemp : (p ̇ 𝑪) (∣ ϕ ∣ ∘ g) ≡ ∣ ϕ ∣ ((p ̇ 𝑻(X)) g)
+    lemp = (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p g)⁻¹
+
+    lemq : ∣ ϕ ∣ ((q ̇ 𝑻(X)) g) ≡ (q ̇ 𝑪) (∣ ϕ ∣ ∘ g)
+    lemq = comm-hom-term gfe (𝑻 X) 𝑪 ϕ q g
+
+    pCϕ≡qCϕ : (p ̇ 𝑪) (∣ ϕ ∣ ∘ g) ≡ (q ̇ 𝑪) (∣ ϕ ∣ ∘ g)
+    pCϕ≡qCϕ = lemp ∙ agreement2 ∙ lemq
+
+    𝑪⊧p≈q : 𝑪 ⊧ p ≈ q
+    𝑪⊧p≈q = gfe λ 𝒕 → (p ̇ 𝑪) 𝒕 ≡⟨ {!!} ⟩ (q ̇ 𝑪) 𝒕 ∎
+
+
+
+  Ψ→hpT≡hqT : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
    →         ∀ (𝑪 : Algebra 𝓤 𝑆)(KC : 𝑪 ∈ 𝒦)(ϕ : hom (𝑻(X)) 𝑪)
    →         ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
-  Ψ→hpT≡hqt p q pΨq 𝑪 KC ϕ = {!!}
+  Ψ→hpT≡hqT p q pΨq 𝑪 KC ϕ = gfe λ 𝒕 → ζ 𝒕
+   where
+    𝒢 : X ↠ 𝑪
+    𝒢 = 𝕏 𝑪
+
+    g₀ : X → ∣ 𝑪 ∣
+    g₀ = ∣ 𝒢 ∣ -- λ x → ∣ ϕ ∣ (generator x)
+
+    gE : Epic g₀
+    gE = ∥ 𝒢 ∥
+
+    g : hom (𝑻 X) 𝑪
+    g = lift-hom{𝑨 = 𝑪}{X = X} g₀
+
+    ti : 𝑻img {𝒦 = 𝒦}
+    ti = 𝑪 , g , (sbase KC , lift-of-epic-is-epic g₀ gE )
+
+    pCq : ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+    pCq = pΨq ti
+
+    pCq' : ∣ g ∣ p ≡ ∣ g ∣ q
+    pCq' = pΨq ti
+
+
+    -- THIS SHOULD NOT BE PROVABLE!!!
+    𝑪⊧p≈q : 𝑪 ⊧ p ≈ q
+    𝑪⊧p≈q = gfe λ 𝒕 → (p ̇ 𝑪) 𝒕 ≡⟨ {!!} ⟩ (q ̇ 𝑪) 𝒕 ∎
+
+    ζ : (𝒕 : X → ∣ 𝑻(X) ∣) → ∣ ϕ ∣ ((p ̇ 𝑻(X)) 𝒕) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) 𝒕)
+    ζ = λ 𝒕 →
+     ∣ ϕ ∣ ((p ̇ 𝑻(X)) 𝒕) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ p 𝒕 ⟩
+     (p ̇ 𝑪) (∣ ϕ ∣ ∘ 𝒕) ≡⟨ intensionality 𝑪⊧p≈q (∣ ϕ ∣ ∘ 𝒕) ⟩
+     (q ̇ 𝑪) (∣ ϕ ∣ ∘ 𝒕) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ q 𝒕)⁻¹ ⟩
+     ∣ ϕ ∣ ((q ̇ 𝑻(X)) 𝒕) ∎
+
+
+  Ψ→𝒦⊧ : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦} → (𝒦 ⊧ p ≋ q)
+  Ψ→𝒦⊧ p q pΨq = homs-compatible-with-identities p q (Ψ→hpT≡hqT p q pΨq)
 
   Ψ⊆Kerh : ∀ p q → (p , q) ∈ Ψ {𝒦 = 𝒦}
    →       (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
@@ -131,28 +232,7 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
   Ψ⊆Kerh p q pΨq = hp≡hq
    where
     𝒦⊧p≋q : 𝒦 ⊧ p ≋ q
-    𝒦⊧p≋q {𝑩} KB = ν
-     where
-      𝒢 : X ↠ 𝑩
-      𝒢 = 𝕏 𝑩
-
-      g₀ : X → ∣ 𝑩 ∣
-      g₀ = ∣ 𝒢 ∣
-
-      gE : Epic g₀
-      gE = ∥ 𝒢 ∥
-
-      g : hom (𝑻 X) 𝑩
-      g = lift-hom{𝑨 = 𝑩}{X = X} g₀
-
-      ti : 𝑻img {𝒦 = 𝒦}
-      ti = 𝑩 , g , (sbase KB , lift-of-epic-is-epic g₀ gE )
-
-      pBq : ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
-      pBq = pΨq ti
-
-      ν : 𝑩 ⊧ p ≈ q
-      ν = {!!}
+    𝒦⊧p≋q = Ψ→𝒦⊧ p q pΨq
 
     𝑨⊧p≈q : 𝑨 ⊧ p ≈ q
     𝑨⊧p≈q = A⊧ p q 𝒦⊧p≋q
@@ -200,6 +280,17 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
        q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
        q≡𝓆 = ∥ tt' ∥
 
+  --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
+  --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
+  -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+-- HomImagesOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- HomImagesOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+--                                  is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+
+  γ : 𝑨 ∈ VClo 𝒦
+  γ = {!!}
+
 
   --h 𝑝 x = (𝑝 ̇ 𝑨) h x and h 𝑞 y = (𝑞 ̇ 𝑨) h y
   -- Given generators x and y
@@ -213,9 +304,6 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
   -- Ψ⊆Kerh (node f t , node g s) pΨq = {!!}
   -- 𝒦⊧ : {p q : ∣ (𝑻 X) ∣} → (p , q) ∈ Th (VClo 𝒦) → 𝒦 ⊧ p ≋ q
   -- 𝒦⊧ = λ z z₁ → z (vbase z₁)
-
-  γ : 𝑨 ∈ VClo 𝒦
-  γ = {!!}
 
   -- Since
   -- vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦

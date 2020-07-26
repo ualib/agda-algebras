@@ -148,14 +148,14 @@ data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  -- ⇒ (the "only if" direction)
- identities-are-compatible-with-homs : (p q : Term{X = X})
+ identities-compatible-with-homs : (p q : Term{X = X})
   →                𝒦 ⊧ p ≋ q
        ----------------------------------------------------
   →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
  -- Here, the inferred types are
  -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
 
- identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
+ identities-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
   where
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = 𝒦⊧p≋q KA
@@ -176,13 +176,13 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    γ = gfe hpa≡hqa
 
  -- ⇐ (the "if" direction)
- homs-are-compatible-with-identities : (p q : Term)
+ homs-compatible-with-identities : (p q : Term)
   →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
        --------------------------------------------------
   →                𝒦 ⊧ p ≋ q
  --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
 
- homs-are-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
+ homs-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
   where
    h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
    h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
@@ -208,9 +208,8 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
 
  compatibility-of-identities-and-homs p q =
-   identities-are-compatible-with-homs p q ,
-   homs-are-compatible-with-identities p q
-
+   identities-compatible-with-homs p q ,
+   homs-compatible-with-identities p q
 
  --Compatibility of identities with interpretation of terms
  compatibility-of-interpretations : (p q : Term)
@@ -280,12 +279,12 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
  𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
- 𝑻KER = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ ,
-   ∀ ti → pair ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ pr₁ ∥ ti ∥  ∣
+ 𝑻KER = Σ (p , q) ꞉ (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) ,
+   ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ pr₁ ∥ ti ∥  ∣
 
  Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
- Ψ (x , y) =
-  ∀ ti → ∣ (𝑻ϕ ti) ∣ x ≡ ∣ (𝑻ϕ ti) ∣ y
+ Ψ (p , q) =
+  ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
 --𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), we need only show that the kernel of
