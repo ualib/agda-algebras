@@ -23,8 +23,8 @@ module prelude where
 
  open import MGS-MLTT using (_∘_; domain; codomain; transport;
   _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
-  _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
-
+  _⇔_; lr-implication; rl-implication; id; _⁻¹; ap)
+  
  open import MGS-Equivalences using (is-equiv; inverse;
   invertible) public
 
@@ -48,12 +48,14 @@ module prelude where
  open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
  -- using (subsingleton-truncations-exist) public
 
- ∣_∣ : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+ ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
  ∣ x , y ∣ = x
+ fst (x , y) = x
 
- ∥_∥ : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+ ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
  ∥ x , y ∥ = y
-
+ snd (x , y) = y
+ 
  ap-cong : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
            {f g : X → Y} {a b : X}
   →         f ≡ g   →   a ≡ b

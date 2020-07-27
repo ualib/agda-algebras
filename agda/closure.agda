@@ -5,13 +5,14 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext)
+open import prelude using (global-dfunext; dfunext; _∙_; fst; snd)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
  {X : 𝓤 ̇ }
  {gfe : global-dfunext}
- {dfe : dfunext 𝓤 𝓤} where
+ {dfe : dfunext 𝓤 𝓤}
+ {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
 open import homomorphisms {𝑆 = 𝑆} public
 open import terms {𝑆 = 𝑆} public
@@ -27,7 +28,6 @@ _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
  →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
 
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
-
 
 ----------------------------------------------------------------------
 --Closure under products
@@ -135,7 +135,6 @@ subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
 
   γ : 𝑩 ⊧ p ≈ q
   γ = gfe λ b → hlc (ξ b)
-
 
 ----------------------------------------------------------------------
 
@@ -283,6 +282,50 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  Ψ' : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
  Ψ' p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q -- p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
+
+
+ 𝑻img→𝑻⊧ : ∀ p q
+  →        (p , q) ∈ Ψ
+  →        (ti : 𝑻img)
+       -----------------------------------
+  →     ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻(X)) generator)
+      ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) generator)
+ 𝑻img→𝑻⊧ p q pΨq ti = goal1
+  where
+   𝑪 : Algebra 𝓤 𝑆
+   𝑪 = ∣ ti ∣
+
+   ϕ : hom (𝑻 X) 𝑪
+   ϕ = 𝑻ϕ ti
+
+   pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+   pCq = pΨq ti
+
+   g : X → Term
+   g = generator
+
+   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) g
+   tgp   = term-gen{gfe = gfe} p
+
+   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , q ≡ (𝓆 ̇ 𝑻(X)) g
+   tgq   = term-gen{gfe = gfe} q
+
+   𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+   𝓅 = ∣ tgp ∣
+   𝓆 = ∣ tgq ∣
+
+   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
+   p≡𝓅 = ∥ tgp ∥
+
+   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
+   q≡𝓆 = ∥ tgq ∥
+
+   ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g)
+   ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
+
+   goal1 : ∣ ϕ ∣ ((p ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) g)
+   goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
+            ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
 
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
 --𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of
@@ -512,3 +555,193 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
  vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
+
+
+ -- Equational classes
+ TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
+ TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
+
+ Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+
+ MOD : (ℰ : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
+ MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+ Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+ Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+ -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
+ ThHSP-axiomatizes : (p q : ∣ (𝑻 X) ∣)
+           -----------------------------------------
+  →         𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+
+ ThHSP-axiomatizes p q =
+  (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
+   λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
+
+
+ -- pq∈ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → (p , q) ∈ Th (VClo 𝒦)
+ -- pq∈ {p} {q} pΨq {𝑪} 𝑪∈VClo𝒦 = {!γ!}
+ --  where
+
+ --   ℊ : X → Term
+ --   ℊ = generator
+
+ --   ℋ : X ↠ 𝑪
+ --   ℋ = 𝕏 𝑪
+
+ --   h₀ : X → ∣ 𝑪 ∣
+ --   h₀ = fst ℋ
+
+ --   hE : Epic h₀
+ --   hE = snd ℋ
+
+ --   h : hom (𝑻 X) 𝑪
+ --   h = lift-hom{𝑨 = 𝑪}{X = X} h₀
+
+ --   ti : 𝑻img
+ --   ti = 𝑪 , h , (sbase 𝑪∈VClo𝒦 , lift-of-epic-is-epic h₀ hE )
+
+ --   pCq : ∣ h ∣ p ≡ ∣ h ∣ q
+ --   pCq = pΨq ti
+
+ --   pCp : (p : Term) → ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
+ --   pCp p = ξ
+ --    where
+ --     tg𝓅 : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) ℊ
+ --     tg𝓅 = term-gen{gfe = gfe} p
+
+ --     𝓅 : ∣ (𝑻 X) ∣
+ --     𝓅 = ∣ tg𝓅 ∣
+
+ --     tgp : (p ̇ 𝑻(X)) ℊ ≡ (𝓅 ̇ 𝑻(X)) ℊ
+ --     tgp = term-gen-agreement p
+
+ --     p≡𝓅 : p ≡ (p ̇ 𝑻(X)) ℊ
+ --     p≡𝓅 = ∥ tg𝓅 ∥ ∙ (tgp)⁻¹
+
+ --     ξ : ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
+ --     ξ =
+ --      ∣ h ∣ p ≡⟨ ap ∣ h ∣ p≡𝓅 ⟩
+ --       ∣ h ∣ ((p ̇ 𝑻(X)) ℊ)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 h p ℊ ⟩
+ --       (p ̇ 𝑪) (∣ h ∣ ∘ ℊ)  ≡⟨ ap (p ̇ 𝑪) (refl _) ⟩
+ --       (p ̇ 𝑪) h₀ ∎
+
+ --   i' : (p ̇ 𝑪) h₀ ≡ (q ̇ 𝑪) h₀
+ --   i' =
+ --    (p ̇ 𝑪) h₀ ≡⟨ (pCp p)⁻¹ ⟩
+ --    ∣ h ∣ p     ≡⟨ pCq ⟩
+ --    ∣ h ∣ q     ≡⟨ pCp q ⟩
+ --    (q ̇ 𝑪) h₀ ∎
+
+ --   agree0 : ∣ h ∣ ((p ̇ 𝑻(X)) ℊ) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) ℊ)
+ --   agree0 = 𝑻img→𝑻⊧ p q pΨq ti
+
+ --   preim : (𝒄 : X → ∣ 𝑪 ∣) → X → ∣ (𝑻 X) ∣
+ --   preim 𝒄 x = Inv ∣ h ∣ (𝒄 x) ((lift-of-epic-is-epic h₀ hE) (𝒄 x))
+
+ --   agree1 : (𝒕 : X → ∣ (𝑻 X) ∣) → ∣ h ∣ ((p ̇ 𝑻(X)) 𝒕) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒕)
+ --   agree1 𝒕 = {!!}
+
+ --   IInv : (𝒄 : X → ∣ 𝑪 ∣) → ∣ h ∣ ∘ (preim 𝒄) ≡ 𝒄
+ --   IInv 𝒄 = gfe λ x → InvIsInv ∣ h ∣ (𝒄 x) ((lift-of-epic-is-epic h₀ hE) (𝒄 x))
+
+ --   γ : 𝑪 ⊧ p ≈ q
+ --   γ = gfe λ 𝒄 → {!!}
+     -- (p ̇ 𝑪) 𝒄                 ≡⟨ (ap (p ̇ 𝑪) (IInv 𝒄))⁻¹ ⟩
+     -- (p ̇ 𝑪) (∣ g ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 g p (preim 𝒄))⁻¹ ⟩
+     -- ∣ g ∣ ((p ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ agree1 (preim 𝒄) ⟩
+     -- ∣ g ∣ ((q ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 g q (preim 𝒄) ⟩
+     -- (q ̇ 𝑪)(∣ g ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (IInv 𝒄) ⟩
+     -- (q ̇ 𝑪) 𝒄 ∎
+
+
+
+ -- pq∈ {p} {q} pΨq (vbase {𝑪} 𝑪∈𝒦) = i
+ --  where
+ --   ℊ : X → Term
+ --   ℊ = generator
+
+ --   ℋ : X ↠ 𝑪
+ --   ℋ = 𝕏 𝑪
+
+ --   h₀ : X → ∣ 𝑪 ∣
+ --   h₀ = fst ℋ
+
+ --   hE : Epic h₀
+ --   hE = snd ℋ
+
+ --   h : hom (𝑻 X) 𝑪
+ --   h = lift-hom{𝑨 = 𝑪}{X = X} h₀
+
+ --   ti : 𝑻img
+ --   ti = 𝑪 , h , (sbase 𝑪∈𝒦 , lift-of-epic-is-epic h₀ hE )
+
+ --   pCq : ∣ h ∣ p ≡ ∣ h ∣ q
+ --   pCq = pΨq ti
+
+ --   pCp : (p : Term) → ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
+ --   pCp p = ξ
+ --    where
+ --     tg𝓅 : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) ℊ
+ --     tg𝓅 = term-gen{gfe = gfe} p
+
+ --     𝓅 : ∣ (𝑻 X) ∣
+ --     𝓅 = ∣ tg𝓅 ∣
+
+ --     tgp : (p ̇ 𝑻(X)) ℊ ≡ (𝓅 ̇ 𝑻(X)) ℊ
+ --     tgp = term-gen-agreement p
+
+ --     p≡𝓅 : p ≡ (p ̇ 𝑻(X)) ℊ
+ --     p≡𝓅 = ∥ tg𝓅 ∥ ∙ (tgp)⁻¹
+
+ --     ξ : ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
+ --     ξ =
+ --      ∣ h ∣ p ≡⟨ ap ∣ h ∣ p≡𝓅 ⟩
+ --       ∣ h ∣ ((p ̇ 𝑻(X)) ℊ)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 h p ℊ ⟩
+ --       (p ̇ 𝑪) (∣ h ∣ ∘ ℊ)  ≡⟨ ap (p ̇ 𝑪) (refl _) ⟩
+ --       (p ̇ 𝑪) h₀ ∎
+
+ --   i' : (p ̇ 𝑪) h₀ ≡ (q ̇ 𝑪) h₀
+ --   i' =
+ --    (p ̇ 𝑪) h₀ ≡⟨ (pCp p)⁻¹ ⟩
+ --    ∣ h ∣ p     ≡⟨ pCq ⟩
+ --    ∣ h ∣ q     ≡⟨ pCp q ⟩
+ --    (q ̇ 𝑪) h₀ ∎
+
+ --   agree0 : ∣ h ∣ ((p ̇ 𝑻(X)) ℊ) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) ℊ)
+ --   agree0 = 𝑻img→𝑻⊧ p q pΨq ti
+
+ --   preim : (𝒄 : X → ∣ 𝑪 ∣) → X → ∣ (𝑻 X) ∣
+ --   preim 𝒄 x = Inv ∣ h ∣ (𝒄 x) ((lift-of-epic-is-epic h₀ hE) (𝒄 x))
+
+ --   agree1 : (𝒕 : X → ∣ (𝑻 X) ∣) → ∣ h ∣ ((p ̇ 𝑻(X)) 𝒕) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒕)
+ --   agree1 𝒕 = {!!}
+
+ --   IInv : (𝒄 : X → ∣ 𝑪 ∣) → ∣ h ∣ ∘ (preim 𝒄) ≡ 𝒄
+ --   IInv 𝒄 = gfe λ x → InvIsInv ∣ h ∣ (𝒄 x) ((lift-of-epic-is-epic h₀ hE) (𝒄 x))
+
+ --   i : 𝑪 ⊧ p ≈ q
+ --   i = gfe λ 𝒄 → {!!}
+ --     -- (p ̇ 𝑪) 𝒄                 ≡⟨ (ap (p ̇ 𝑪) (IInv 𝒄))⁻¹ ⟩
+ --     -- (p ̇ 𝑪) (∣ g ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 g p (preim 𝒄))⁻¹ ⟩
+ --     -- ∣ g ∣ ((p ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ agree1 (preim 𝒄) ⟩
+ --     -- ∣ g ∣ ((q ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 g q (preim 𝒄) ⟩
+ --     -- (q ̇ 𝑪)(∣ g ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (IInv 𝒄) ⟩
+ --     -- (q ̇ 𝑪) 𝒄 ∎
+
+ -- pq∈ {p} {q} pΨq (vprod{I}{𝒜} allK𝒜i)  = ii
+ --  where
+ --   ii : ⨅ 𝒜 ⊧ p ≈ q
+ --   ii = {!!}
+
+ -- pq∈ {p} {q} pΨq (vsub{𝑨} 𝑨∈VClo𝒦 SAK) = iii
+ --  where
+ --   iii : ∣ SAK ∣ ⊧ p ≈ q
+ --   iii = {!!}
+
+ -- pq∈ {p} {q} pΨq (vhom {𝑨} 𝑨∈VClo𝒦 BH) = iv
+ --  where
+ --   iv : ∣ BH ∣ ⊧ p ≈ q
+ --   iv = {!!}
+
