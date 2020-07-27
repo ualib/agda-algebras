@@ -15,7 +15,7 @@ open import prelude using
 
 data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term {X = X}
-  node : (f : ∣ 𝑆 ∣) → (args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
+  node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
 
 open Term
 

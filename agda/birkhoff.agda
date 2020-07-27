@@ -169,6 +169,35 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
     pCq : ∣ g ∣ p ≡ ∣ g ∣ q
     pCq = pΨq ti
 
+    pCp : (p : Term) → ∣ g ∣ p ≡ (p ̇ 𝑪) g₀
+    pCp p = ξ
+     where
+      tg𝓅 : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) generator
+      tg𝓅 = term-gen{gfe = gfe} p
+
+      𝓅 : ∣ (𝑻 X) ∣
+      𝓅 = ∣ tg𝓅 ∣
+
+      tgp : (p ̇ 𝑻(X)) generator  ≡  (𝓅 ̇ 𝑻(X)) generator
+      tgp = term-gen-agreement p
+
+      p≡𝓅 : p ≡ (p ̇ 𝑻(X)) generator
+      p≡𝓅 = ∥ tg𝓅 ∥ ∙ (tgp)⁻¹
+
+      ξ : ∣ g ∣ p ≡ (p ̇ 𝑪) g₀
+      ξ =
+       ∣ g ∣ p ≡⟨ ap ∣ g ∣ p≡𝓅 ⟩
+       ∣ g ∣ ((p ̇ 𝑻(X)) generator)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 g p (generator) ⟩
+       (p ̇ 𝑪) (∣ g ∣ ∘ generator)  ≡⟨ ap (p ̇ 𝑪) (refl _) ⟩
+       (p ̇ 𝑪) g₀ ∎
+
+    i' : (p ̇ 𝑪) g₀ ≡ (q ̇ 𝑪) g₀
+    i' =
+     (p ̇ 𝑪) g₀ ≡⟨ (pCp p)⁻¹ ⟩
+     ∣ g ∣ p     ≡⟨ pCq ⟩
+     ∣ g ∣ q     ≡⟨ pCp q ⟩
+     (q ̇ 𝑪) g₀ ∎
+
     agree0 : ∣ g ∣ ((p ̇ 𝑻(X)) generator) ≡ ∣ g ∣ ((q ̇ 𝑻(X)) generator)
     agree0 = 𝑻img→𝑻⊧ p q pΨq ti
 
@@ -182,13 +211,13 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
     IInv 𝒄 = gfe λ x → InvIsInv ∣ g ∣ (𝒄 x) ((lift-of-epic-is-epic g₀ gE) (𝒄 x))
 
     i : 𝑪 ⊧ p ≈ q --  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-    i = gfe λ 𝒄 →   -- γ = gfe λ 𝒃 →
-     (p ̇ 𝑪) 𝒄                 ≡⟨ (ap (p ̇ 𝑪) (IInv 𝒄))⁻¹ ⟩
-     (p ̇ 𝑪) (∣ g ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 g p (preim 𝒄))⁻¹ ⟩
-     ∣ g ∣ ((p ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ agree1 (preim 𝒄) ⟩
-     ∣ g ∣ ((q ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 g q (preim 𝒄) ⟩
-     (q ̇ 𝑪)(∣ g ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (IInv 𝒄) ⟩
-     (q ̇ 𝑪) 𝒄 ∎
+    i = gfe λ 𝒄 → {!!}  -- γ = gfe λ 𝒃 →
+     -- (p ̇ 𝑪) 𝒄                 ≡⟨ (ap (p ̇ 𝑪) (IInv 𝒄))⁻¹ ⟩
+     -- (p ̇ 𝑪) (∣ g ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 g p (preim 𝒄))⁻¹ ⟩
+     -- ∣ g ∣ ((p ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ agree1 (preim 𝒄) ⟩
+     -- ∣ g ∣ ((q ̇ 𝑻(X)) (preim 𝒄)) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 g q (preim 𝒄) ⟩
+     -- (q ̇ 𝑪)(∣ g ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (IInv 𝒄) ⟩
+     -- (q ̇ 𝑪) 𝒄 ∎
 
   pq∈ {p} {q} pΨq (vprod{I}{𝒜} allK𝒜i)  = ii
    where

@@ -280,9 +280,13 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  Ψ (p , q) =
   ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
+ Ψ' : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+ Ψ' p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q -- p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+
+
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
---𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), we need only show that the kernel of
---the lift h : 𝑻(X) → 𝑨 *contains* Ψ𝒦𝑻!!!
+--𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of
+--the lift h : 𝑻(X) → 𝑨 *contains* Ψ𝒦𝑻
 --
 --    𝑻---- g --->>𝔽  (ker g = Ψ𝒦𝑻)
 --     \         .
@@ -292,9 +296,50 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 --         \ .
 --          V
 --          𝑨
+  -- record Congruence (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  --   constructor mkcon
+  --   field
+  --     ⟨_⟩ : Rel ∣ A ∣ 𝓤
+  --     Compatible : compatible A ⟨_⟩
+  --     IsEquiv : IsEquivalence ⟨_⟩
+ 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  →              𝓥 ⊔ 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+ 𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻(X)) ]⇒ R
 
+ 𝑻compatible : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ̇
+ 𝑻compatible R = ∀ f → 𝑻compatible-op f R
 
+ record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ⁺ ̇  where
+  constructor mk𝑻con
+  field
+   ⟨_⟩ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+   Compatible : 𝑻compatible ⟨_⟩
+   IsEquiv : IsEquivalence ⟨_⟩
 
+ -- Ψ'-𝑻compatible : 𝑻compatible Ψ'
+ -- Ψ'-𝑻compatible = {!!}
+ -- Ψ'-IsEquiv : IsEquivalence Ψ'
+ -- Ψ'-IsEquiv = {!!}
+ -- ConΨ : 𝑻Congruence
+ -- ConΨ = mk𝑻con Ψ' Ψ'-𝑻compatible Ψ'-IsEquiv
+
+ -- data 𝔽 {X : 𝓤 ̇} :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
+ --  generator : X → 𝔽 {X = X}
+ --  node : (f : ∣ 𝑆 ∣) (args : ∥ 𝑆 ∥ f → 𝔽 {X = X}) → 𝔽
+ --  identities : (𝓡 : Rel 𝔽 𝓤) (f g : ∣ 𝑆 ∣)(a1 : ∥ 𝑆 ∥ f → 𝔽 {X = X}) (a2 : ∥ 𝑆 ∥ g → 𝔽)(_ : 𝓡 (node f a1) (node g a2)) → (node f a1) ≡ (node g a2)
+
+ -- ⟪_⟫_ : (t : Term) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ̇
+ -- ⟪ t ⟫ R = Σ x ꞉ _ ,  R t x
+
+ -- 𝑻/_ : 𝑻Congruence → Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ⁺) 𝑆
+ -- 𝑻/ θ = ((Σ C ꞉ _ , Σ a ꞉ (𝑻(X)) , C ≡ ( ⟪ a ⟫ θ )) , -- carrier
+ --            (λ f args        -- operations
+ --             → ⟪ ((f ̂ 𝑻(X))(λ i₁ → ∣ ∥ args i₁ ∥ ∣)) ⟫ ⟨ θ ⟩ ,
+ --               ((f ̂ 𝑻(X)) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+ --            )
+ --          )
+ -- 𝔽 : Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
+ -- 𝔽 = (𝑻 X) ╱ ConΨ
 
 -- Variety Closure
 data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where

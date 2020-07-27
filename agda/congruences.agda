@@ -14,8 +14,10 @@ open import prelude using (Pred; 𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎;
 
 REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺) ̇
 REL A B 𝓝 = A → B → 𝓝 ̇
+
 Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
 Rel A 𝓝 = REL A A 𝓝
+
 KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → 𝓤 ⊔ 𝓦 ̇
 KER {𝓤}{𝓦}{A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
 
@@ -130,7 +132,7 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
   compatible-op : {A : Algebra 𝓤 𝑆}
    →              ∣ 𝑆 ∣ → Rel ∣ A ∣ 𝓤
    →              𝓥 ⊔ 𝓤 ̇
-  compatible-op {𝓤} {A} f R = (lift-rel R) =[ (∥ A ∥ f) ]⇒ R
+  compatible-op {𝓤} {A} f R = (lift-rel R) =[ f ̂ A ]⇒ R
 
   --The given relation is compatible with all ops of an algebra.
   compatible : (A : Algebra 𝓤 𝑆) → Rel ∣ A ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
@@ -156,7 +158,7 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
   con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) _
   con A = λ θ → IsEquivalence θ × compatible A θ
 
-  record Congruence (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  record Congruence {𝓤 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
     constructor mkcon
     field
       ⟨_⟩ : Rel ∣ A ∣ 𝓤
@@ -174,8 +176,8 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
    →     Algebra (𝓤 ⁺) 𝑆
   A ╱ θ = (( ∣ A ∣ // ⟨ θ ⟩ ) , -- carrier
             (λ f args        -- operations
-             → ([ ∥ A ∥ f (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-               (∥ A ∥ f (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+             → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+               ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
             )
           )
 
