@@ -55,7 +55,7 @@ module prelude where
  ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
  ∥ x , y ∥ = y
  snd (x , y) = y
- 
+
  ap-cong : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
            {f g : X → Y} {a b : X}
   →         f ≡ g   →   a ≡ b
@@ -170,7 +170,6 @@ module prelude where
 
  EpicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → Epic f → B → A
  EpicInv f fEpic b = Inv f b (fEpic b)
-
 
  -- The (psudo-)inverse of an epic is the right inverse.
  EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }

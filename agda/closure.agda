@@ -5,7 +5,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; fst; snd)
+open import prelude using (global-dfunext; dfunext; fst; snd; im)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -15,7 +15,7 @@ module closure
  {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
 open import homomorphisms {𝑆 = 𝑆} public
-open import terms {𝑆 = 𝑆} public
+open import terms {𝑆 = 𝑆} renaming (generator to ℊ) public
 open import subuniverses {𝑆 = 𝑆} public
 open import congruences public
 
@@ -190,13 +190,13 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    γ = gfe λ 𝒂 →
     (p ̇ 𝑨) 𝒂
       ≡⟨ refl _ ⟩
-    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-      ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
-    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
-      ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
-      ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
-    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
+    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
+      ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
+    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) ℊ
+      ≡⟨ ap (λ - → - ℊ) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
+    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) ℊ
+      ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q ℊ) ⟩
+    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
       ≡⟨ refl _ ⟩
     (q ̇ 𝑨) 𝒂
       ∎
@@ -214,50 +214,57 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  compatibility-of-interpretations : (p q : Term)
   →        (𝒦 ⊧ p ≋ q)
   →        ∀ 𝑨 (ka : 𝑨 ∈ 𝒦) (hh : hom (𝑻 X) 𝑨)
-  →        ∣ hh ∣ ((∣ term-gen{gfe = gfe} p ∣ ̇ 𝑻(X)) generator)
-         ≡ ∣ hh ∣ ((∣ term-gen{gfe = gfe} q ∣ ̇ 𝑻(X)) generator)
+  →        ∣ hh ∣ ((∣ term-gen{gfe = gfe} p ∣ ̇ 𝑻(X)) ℊ)
+         ≡ ∣ hh ∣ ((∣ term-gen{gfe = gfe} q ∣ ̇ 𝑻(X)) ℊ)
 
  compatibility-of-interpretations p q 𝒦⊧p≋q 𝑨 ka hh = γ
   where
-   g : X → Term
-   g = generator
-
-   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) g
-   tgp   = term-gen{gfe = gfe} p
-
-   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , q ≡ (𝓆 ̇ 𝑻(X)) g
-   tgq   = term-gen{gfe = gfe} q
-
    𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
-   𝓅 = ∣ tgp ∣
-   𝓆 = ∣ tgq ∣
+   𝓅 = ∣ tg p ∣
+   𝓆 = ∣ tg q ∣
 
-   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
-   p≡𝓅 = ∥ tgp ∥
+   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
+   p≡𝓅 = ∥ tg p ∥
 
-   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
-   q≡𝓆 = ∥ tgq ∥
+   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
+   q≡𝓆 = ∥ tg q ∥
 
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = 𝒦⊧p≋q ka
 
-   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) generator) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) g)
+   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)
    γ =
-    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) g)  ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
-    ∣ hh ∣ ((p ̇ 𝑻 X) g)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p g) ⟩
-    (p ̇ 𝑨) (∣ hh ∣ ∘ g)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ g)  ⟩
-    (q ̇ 𝑨) (∣ hh ∣ ∘ g)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q g)⁻¹ ⟩
-    ∣ hh ∣ ((q ̇ 𝑻 X) g)  ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
-    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) g)  ∎
+    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
+    ∣ hh ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p ℊ) ⟩
+    (p ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ ℊ)  ⟩
+    (q ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q ℊ)⁻¹ ⟩
+    ∣ hh ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
+    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)  ∎
 
+------------------------------------------------------------------------
+-- Equational theories
+-- Equational classes
+TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
+TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
 
+Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
+MOD : (ℰ : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
+MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
+
+ -------------------------------------------------------------------------
  -- The free algebra in Agda
  𝑻HI = HomImagesOf (𝑻 X)
 
  𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
  𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-           Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+            Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
  𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
  𝑻𝑨 ti = ∣ ti ∣
@@ -273,51 +280,108 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
  𝑻KER = Σ (p , q) ꞉ (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) ,
-   ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
+    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
 
  Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
  Ψ (p , q) =
-  ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+   ∀ ti → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻(X))
 
- Ψ' : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
- Ψ' p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q -- p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+ Ψ' : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+ Ψ' (p , q) =
+   ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+
+ Ψ'' : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+ Ψ'' p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q -- p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+
+ 𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆) → Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
+ 𝑻hom-gen 𝑪 = h , lift-of-epic-is-epic h₀ hE
+  where
+    ℋ : X ↠ 𝑪
+    ℋ = 𝕏 𝑪
+
+    h₀ : X → ∣ 𝑪 ∣
+    h₀ = fst ℋ
+
+    hE : Epic h₀
+    hE = snd ℋ
+
+    h : hom (𝑻 X) 𝑪
+    h = lift-hom{𝑨 = 𝑪}{X = X} h₀
+
+
+ SClo𝒦→𝑻img : (𝑪 : Algebra 𝓤 𝑆) → (𝑪 ∈ SClo 𝒦) → 𝑻img
+ SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦 =
+   𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
 
  𝑻img→𝑻⊧ : ∀ p q
-  →        (p , q) ∈ Ψ
+  →        (p , q) ∈ Ψ'
   →        (ti : 𝑻img)
        -----------------------------------
-  →     ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻(X)) generator)
-      ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) generator)
+  →     ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻(X)) ℊ)
+       ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) ℊ)
  𝑻img→𝑻⊧ p q pΨq ti = goal1
-  where
-   𝑪 : Algebra 𝓤 𝑆
-   𝑪 = ∣ ti ∣
+   where
+    𝑪 : Algebra 𝓤 𝑆
+    𝑪 = ∣ ti ∣
 
-   ϕ : hom (𝑻 X) 𝑪
-   ϕ = 𝑻ϕ ti
+    ϕ : hom (𝑻 X) 𝑪
+    ϕ = 𝑻ϕ ti
 
-   pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-   pCq = pΨq ti
+    pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+    pCq = pΨq ti
 
-   g : X → Term
-   g = generator
+    𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+    𝓅 = ∣ tg{X = X}{gfe = gfe} p ∣
+    𝓆 = ∣ tg{X = X}{gfe = gfe} q ∣
 
-   𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
-   𝓅 = ∣ tg{X = X}{gfe = gfe} p ∣
-   𝓆 = ∣ tg{X = X}{gfe = gfe} q ∣
+    p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
+    p≡𝓅 = ∥ tg p ∥
 
-   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
-   p≡𝓅 = ∥ tg p ∥
+    q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
+    q≡𝓆 = ∥ tg q ∥
 
-   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
-   q≡𝓆 = ∥ tg q ∥
+    ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) ℊ) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) ℊ)
+    ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
 
-   ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g)
-   ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
+    goal1 : ∣ ϕ ∣ ((p ̇ 𝑻(X)) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) ℊ)
+    goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
+             ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
 
-   goal1 : ∣ ϕ ∣ ((p ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) g)
-   goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
-            ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
+ Ψ⊆ThSClo𝒦 : Ψ ⊆ Th (SClo 𝒦)
+ Ψ⊆ThSClo𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
+   where
+    ti : 𝑻img
+    ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
+
+    ϕ : hom (𝑻 X) 𝑪
+    ϕ = 𝑻ϕ ti
+
+    ϕE : Epic ∣ ϕ ∣
+    ϕE = 𝑻ϕE ti
+
+    ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+    ϕsur 𝒄 x = ϕE (𝒄 x)
+
+    preim : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ (𝑻 X) ∣
+    preim 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+
+    ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (preim 𝒄) ≡ 𝒄
+    ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+
+    γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
+    γ = pΨq ti
+
+    𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+    𝑪⊧p≈q = gfe λ 𝒄 →
+     (p ̇ 𝑪) 𝒄               ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+     (p ̇ 𝑪) (∣ ϕ ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (preim 𝒄))⁻¹ ⟩
+     ∣ ϕ ∣ ((p ̇ 𝑻(X))(preim 𝒄))     ≡⟨ (intensionality γ (preim 𝒄)) ⟩
+     ∣ ϕ ∣ ((q ̇ 𝑻(X))(preim 𝒄))     ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (preim 𝒄) ⟩
+     (q ̇ 𝑪)(∣ ϕ ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+     (q ̇ 𝑪) 𝒄 ∎
+
+
+
 
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
 --𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of
@@ -337,19 +401,19 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
   --     ⟨_⟩ : Rel ∣ A ∣ 𝓤
   --     Compatible : compatible A ⟨_⟩
   --     IsEquiv : IsEquivalence ⟨_⟩
- 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
   →              𝓥 ⊔ 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
- 𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻(X)) ]⇒ R
+𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻(X)) ]⇒ R
 
- 𝑻compatible : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ̇
- 𝑻compatible R = ∀ f → 𝑻compatible-op f R
+𝑻compatible : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ̇
+𝑻compatible R = ∀ f → 𝑻compatible-op f R
 
- record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ⁺ ̇  where
-  constructor mk𝑻con
-  field
-   ⟨_⟩ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-   Compatible : 𝑻compatible ⟨_⟩
-   IsEquiv : IsEquivalence ⟨_⟩
+record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) ⁺ ̇  where
+ constructor mk𝑻con
+ field
+  ⟨_⟩ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Compatible : 𝑻compatible ⟨_⟩
+  IsEquiv : IsEquivalence ⟨_⟩
 
  -- Ψ'-𝑻compatible : 𝑻compatible Ψ'
  -- Ψ'-𝑻compatible = {!!}
@@ -359,7 +423,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  -- ConΨ = mk𝑻con Ψ' Ψ'-𝑻compatible Ψ'-IsEquiv
 
  -- data 𝔽 {X : 𝓤 ̇} :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
- --  generator : X → 𝔽 {X = X}
+ --  ℊ : X → 𝔽 {X = X}
  --  node : (f : ∣ 𝑆 ∣) (args : ∥ 𝑆 ∥ f → 𝔽 {X = X}) → 𝔽
  --  identities : (𝓡 : Rel 𝔽 𝓤) (f g : ∣ 𝑆 ∣)(a1 : ∥ 𝑆 ∥ f → 𝔽 {X = X}) (a2 : ∥ 𝑆 ∥ g → 𝔽)(_ : 𝓡 (node f a1) (node g a2)) → (node f a1) ≡ (node g a2)
 
@@ -383,9 +447,8 @@ data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆
  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
-
-
-
+-- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
+-- ThVClo⊆ThSClo = ?
 
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
@@ -548,20 +611,6 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
  vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
 
-
- -- Equational classes
- TH : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
- TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
-
- Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
- Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
-
- MOD : (ℰ : Pred (Term{X = X} × Term) 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
- MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
- Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
- Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
  -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
  ThHSP-axiomatizes : (p q : ∣ (𝑻 X) ∣)
            -----------------------------------------
@@ -569,7 +618,9 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
  ThHSP-axiomatizes p q =
   (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
-   λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
+  λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
+
+
 
 
  -- pq∈ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → (p , q) ∈ Th (VClo 𝒦)
@@ -577,7 +628,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
  --  where
 
  --   ℊ : X → Term
- --   ℊ = generator
+ --   ℊ = ℊ
 
  --   ℋ : X ↠ 𝑪
  --   ℋ = 𝕏 𝑪
@@ -652,7 +703,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
  -- pq∈ {p} {q} pΨq (vbase {𝑪} 𝑪∈𝒦) = i
  --  where
  --   ℊ : X → Term
- --   ℊ = generator
+ --   ℊ = ℊ
 
  --   ℋ : X ↠ 𝑪
  --   ℋ = 𝕏 𝑪
@@ -737,3 +788,24 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
  --   iv : ∣ BH ∣ ⊧ p ≈ q
  --   iv = {!!}
 
+    -- pCp : (p : Term) → ∣ ϕ ∣ p ≡ ((p ̇ 𝑪) (∣ ϕ ∣ ∘ _))
+    -- pCp p = ξ
+    --  where
+    --   ℊ : X → ∣ 𝑻(X) ∣
+    --   ℊ = generator
+
+    --   𝓅 : ∣ (𝑻 X) ∣
+    --   𝓅 = ∣ tg{gfe = gfe} p ∣
+
+    --   tgp : (p ̇ 𝑻(X)) ℊ ≡ (𝓅 ̇ 𝑻(X)) ℊ
+    --   tgp = term-gen-agreement p
+
+    --   p≡𝓅 : p ≡ (p ̇ 𝑻(X)) ℊ
+    --   p≡𝓅 = ∥ tg p ∥ ∙ (tgp)⁻¹
+
+    --   ξ : ∣ ϕ ∣ p ≡ ((p ̇ 𝑪) (∣ ϕ ∣ ∘ _))
+    --   ξ =
+    --    ∣ ϕ ∣ p ≡⟨ ap ∣ ϕ ∣ p≡𝓅 ⟩
+    --    ∣ ϕ ∣ ((p ̇ 𝑻(X)) ℊ)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ p ℊ ⟩
+    --    (p ̇ 𝑪) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ ap (p ̇ 𝑪) (refl _) ⟩
+    --    ((p ̇ 𝑪)(∣ ϕ ∣ ∘ _))       ∎

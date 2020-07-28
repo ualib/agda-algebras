@@ -72,12 +72,9 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
 birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
            (𝑨 : Algebra 𝓤 𝑆)
            ------------------------------------
- →         𝑨 ∈ Mod{𝒦} (Th{𝒦} (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
+ →         𝑨 ∈ Mod (Th (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
 birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
  where
-  ℊ : X → Term
-  ℊ = generator
-
   ℋ : X ↠ 𝑨
   ℋ = 𝕏 𝑨
 
@@ -90,17 +87,31 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
-  Ψ⊆ThVClo𝒦 : Ψ{𝒦} ⊆ Th{𝒦} (VClo 𝒦)
-  Ψ⊆ThVClo𝒦 {p , q} pΨq {𝑪} 𝑪∈VClo𝒦 = 𝑪⊧p≈q
+  Ψ⊆ThVClo𝒦 : Ψ{𝒦} ⊆ Th (VClo 𝒦)
+  Ψ⊆ThVClo𝒦 {p , q} pΨq {𝑪} (vbase 𝑪∈𝒦) = γ
    where
-    𝑪⊧p≈q : 𝑪 ⊧ p ≈ q
-    𝑪⊧p≈q = {!!}
+    𝑪∈SClo𝒦 : 𝑪 ∈ SClo 𝒦
+    𝑪∈SClo𝒦 = sbase 𝑪∈𝒦
+    γ : 𝑪 ⊧ p ≈ q
+    γ = Ψ⊆ThSClo𝒦{𝒦}{p , q} pΨq 𝑪∈SClo𝒦
+
+  Ψ⊆ThVClo𝒦 {p , q} pΨq
+   .{((∀ i → fst (𝒜 i)) , (λ f x₁ i → snd (𝒜 i) f (λ 𝓥 → x₁ 𝓥 i)))}
+   (vprod {I = I}{𝒜 = 𝒜} all𝒜i∈VClo𝒦) = {!!}
+
+  Ψ⊆ThVClo𝒦 {p , q} pΨq {.(fst sa)} (vsub x sa) = γ
+   where
+    sa∈SClo𝒦 : ∣ sa ∣ ∈ SClo 𝒦
+    sa∈SClo𝒦 = {!!}
+
+    γ : ∣ sa ∣ ⊧ p ≈ q
+    γ = Ψ⊆ThSClo𝒦{𝒦}{p , q} pΨq sa∈SClo𝒦
+
+  Ψ⊆ThVClo𝒦 {p , q} pΨq .{𝑩} (vhom {𝑨'} A∈VCloK (𝑩 , ϕ , ϕE)) = {!!}
+
 
   Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → 𝑨 ⊧ p ≈ q
-  Ψ⊆A⊧ {p} {q} pΨq = ξ
-   where
-    ξ : 𝑨 ⊧ p ≈ q
-    ξ = A∈ModThV p q (Ψ⊆ThVClo𝒦 pΨq)
+  Ψ⊆A⊧ {p} {q} pΨq = A∈ModThV p q (Ψ⊆ThVClo𝒦{p , q} pΨq)
 
   Ψ⊆Kerh : Ψ{𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
   Ψ⊆Kerh {p , q} pΨq = hp≡hq
@@ -109,7 +120,7 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
     hp≡hq =
       ∣ h ∣ p              ≡⟨ ap ∣ h ∣ (term-agreement{gfe = gfe} p) ⟩
       ∣ h ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h p ℊ) ⟩
-      (p ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ intensionality (Ψ⊆A⊧ pΨq) (∣ h ∣ ∘ ℊ)  ⟩
+      (p ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ intensionality (Ψ⊆A⊧{p}{q} pΨq) (∣ h ∣ ∘ ℊ)  ⟩
       (q ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q ℊ)⁻¹ ⟩
       ∣ h ∣ ((q ̇ 𝑻(X)) ℊ) ≡⟨ (ap ∣ h ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
       ∣ h ∣ q              ∎
