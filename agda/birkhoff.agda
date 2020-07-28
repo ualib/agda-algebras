@@ -6,7 +6,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; _∙_; fst; snd)
+open import prelude using (global-dfunext; dfunext; fst; snd)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -73,7 +73,7 @@ birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
            (𝑨 : Algebra 𝓤 𝑆)
            ------------------------------------
  →         𝑨 ∈ Mod{𝒦} (Th{𝒦} (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
-birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
+birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
  where
   ℊ : X → Term
   ℊ = generator
@@ -90,60 +90,36 @@ birkhoff 𝒦 𝑨 A∈ModThV = γ  --h₀ eg
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
 
-  pq∈ : ∀{p}{q}
-   →    (p , q) ∈ Ψ{𝒦}
-   →    (p , q) ∈ Th{𝒦} (VClo 𝒦)
-  pq∈ {p} {q} pΨq {𝑪} 𝑪∈VClo𝒦 = {!!}
+  Ψ⊆ThVClo𝒦 : Ψ{𝒦} ⊆ Th{𝒦} (VClo 𝒦)
+  Ψ⊆ThVClo𝒦 {p , q} pΨq {𝑪} 𝑪∈VClo𝒦 = 𝑪⊧p≈q
+   where
+    𝑪⊧p≈q : 𝑪 ⊧ p ≈ q
+    𝑪⊧p≈q = {!!}
 
-  A⊧ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → 𝑨 ⊧ p ≈ q
-  A⊧ {p} {q} pΨq = ξ
+  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → 𝑨 ⊧ p ≈ q
+  Ψ⊆A⊧ {p} {q} pΨq = ξ
    where
     ξ : 𝑨 ⊧ p ≈ q
-    ξ = A∈ModThV p q (pq∈ pΨq)
+    ξ = A∈ModThV p q (Ψ⊆ThVClo𝒦 pΨq)
 
-  Ψ⊆Kerh : ∀ p q
-   →      (p , q) ∈ Ψ
-   →      (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-
-  Ψ⊆Kerh p q pΨq = hp≡hq
+  Ψ⊆Kerh : Ψ{𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh {p , q} pΨq = hp≡hq
    where
     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
     hp≡hq =
-      ∣ h ∣ p              ≡⟨ ap ∣ h ∣ p≡𝓅 ⟩
-      ∣ h ∣ ((𝓅 ̇ 𝑻(X)) ℊ) ≡⟨ (ap ∣ h ∣ (term-gen-agreement p))⁻¹ ⟩
-      ∣ h ∣ ((p ̇ 𝑻(X)) ℊ) ≡⟨ 𝑻img→𝑻⊧ p q pΨq ti ⟩
-      ∣ h ∣ ((q ̇ 𝑻(X)) ℊ) ≡⟨ ap ∣ h ∣ (term-gen-agreement q) ⟩
-      ∣ h ∣ ((𝓆 ̇ 𝑻(X)) ℊ) ≡⟨ (ap ∣ h ∣ q≡𝓆)⁻¹ ⟩
+      ∣ h ∣ p              ≡⟨ ap ∣ h ∣ (term-agreement{gfe = gfe} p) ⟩
+      ∣ h ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h p ℊ) ⟩
+      (p ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ intensionality (Ψ⊆A⊧ pΨq) (∣ h ∣ ∘ ℊ)  ⟩
+      (q ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q ℊ)⁻¹ ⟩
+      ∣ h ∣ ((q ̇ 𝑻(X)) ℊ) ≡⟨ (ap ∣ h ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
       ∣ h ∣ q              ∎
-      where
-       tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) ℊ
-       tgp   = term-gen{gfe = gfe} p
-
-       tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , q ≡ (𝓆 ̇ 𝑻(X)) ℊ
-       tgq   = term-gen{gfe = gfe} q
-
-       𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
-       𝓅 = ∣ tgp ∣
-       𝓆 = ∣ tgq ∣
-
-       p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
-       p≡𝓅 = ∥ tgp ∥
-
-       q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
-       q≡𝓆 = ∥ tgq ∥
-
-       𝑨∈SClo𝒦 : 𝑨 ∈ SClo 𝒦
-       𝑨∈SClo𝒦 = {!!}
-
-       ti : 𝑻img
-       ti = 𝑨 , h , (𝑨∈SClo𝒦 , lift-of-epic-is-epic h₀ hE )
 
   --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
   --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
   -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
-  γ : 𝑨 ∈ VClo 𝒦
-  γ = {!!}
+  𝑨∈VClo𝒦 : 𝑨 ∈ VClo 𝒦
+  𝑨∈VClo𝒦 = {!!}
 
 
 

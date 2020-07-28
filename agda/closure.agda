@@ -5,7 +5,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; _∙_; fst; snd)
+open import prelude using (global-dfunext; dfunext; fst; snd)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -282,8 +282,6 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
  Ψ' : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
  Ψ' p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q -- p q = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
-
-
  𝑻img→𝑻⊧ : ∀ p q
   →        (p , q) ∈ Ψ
   →        (ti : 𝑻img)
@@ -304,21 +302,15 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    g : X → Term
    g = generator
 
-   tgp : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) g
-   tgp   = term-gen{gfe = gfe} p
-
-   tgq : Σ 𝓆 ꞉ ∣ 𝑻(X) ∣ , q ≡ (𝓆 ̇ 𝑻(X)) g
-   tgq   = term-gen{gfe = gfe} q
-
    𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
-   𝓅 = ∣ tgp ∣
-   𝓆 = ∣ tgq ∣
+   𝓅 = ∣ tg{X = X}{gfe = gfe} p ∣
+   𝓆 = ∣ tg{X = X}{gfe = gfe} q ∣
 
    p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) g
-   p≡𝓅 = ∥ tgp ∥
+   p≡𝓅 = ∥ tg p ∥
 
    q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) g
-   q≡𝓆 = ∥ tgq ∥
+   q≡𝓆 = ∥ tg q ∥
 
    ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) g) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) g)
    ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
