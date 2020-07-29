@@ -151,11 +151,12 @@ First a data type that represents a class of algebraic structures that is closed
 
 ::
 
-  data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
-   prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
-    →     (∀ i → 𝒜 i ∈ PClo 𝒦)
-    →     ⨅ 𝒜 ∈ PClo 𝒦
+  data PClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) :
+   Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+    pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
+    prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
+     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
+     →     ⨅ 𝒜 ∈ PClo 𝒦
 
 We prove that identities satisfied by all factors of a product are also satisfied by the product.
 
@@ -181,7 +182,7 @@ We prove that identities satisfied by all factors of a product are also satisfie
       (q ̇ ⨅ 𝒜) a
         ∎
 
-  products-in-class-preserve-identities :
+  products-in-class-preserve-ids :
        (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))
        (p q : Term{X = X})
        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
@@ -189,7 +190,7 @@ We prove that identities satisfied by all factors of a product are also satisfie
        ------------------------------------
    →    ⨅ 𝒜 ⊧ p ≈ q
 
-  products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
+  products-in-class-preserve-ids 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
    where
      𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
      𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
@@ -208,14 +209,18 @@ Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member 
 ::
 
   -- Subalgebra Closure
-  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
+   Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+    sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+    sub : {𝑨 : Algebra _ 𝑆}
+     →    𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨)
+     →    ∣ sa ∣ ∈ SClo 𝒦
 
-  subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
-   →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
-   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
-  subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+  subalgebras-preserve-ids : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))
+             (p q : Term{X = X})
+    →        (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+    →        (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+  subalgebras-preserve-ids 𝒦 p q 𝒦⊧p≋q SAK = γ
    where
 
     𝑨 : Algebra 𝓤 𝑆
@@ -270,17 +275,20 @@ We now formalize this result in Agda. Similarly, we define a datatype that repre
 ::
 
   --Closure under hom images
-  data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
-   hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+  data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) :
+   Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+    hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+    hhom : {𝑨 : Algebra 𝓤 𝑆}
+     →     𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨)
+     →     𝑩 ∈ HClo 𝒦
 
   module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
    -- ⇒ (the "only if" direction)
    identities-compatible-with-homs : (p q : Term{X = X})
     →                𝒦 ⊧ p ≋ q
-         ----------------------------------------------------
-    →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+       --------------------------------------------------
+    →  ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
    -- Here, the inferred types are
    -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
 
@@ -296,20 +304,21 @@ We now formalize this result in Agda. Similarly, we define a datatype that repre
      hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
       →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
      hpa≡hqa 𝒂 =
-      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
+      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
       (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-      (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
-      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
+      (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
+      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂) ∎
 
      γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
      γ = gfe hpa≡hqa
 
    -- ⇐ (the "if" direction)
    homs-compatible-with-identities : (p q : Term)
-    →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
-         --------------------------------------------------
-    →                𝒦 ⊧ p ≋ q
-   --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
+    →  (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
+       --------------------------------------------------
+    →              𝒦 ⊧ p ≋ q
+   --inferred types:
+   -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
 
    homs-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
     where
@@ -333,16 +342,18 @@ We now formalize this result in Agda. Similarly, we define a datatype that repre
 
    compatibility-of-identities-and-homs : (p q : Term)
     →  (𝒦 ⊧ p ≋ q)
-        ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
-   --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
+      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
+   --inferred types:
+   -- 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
 
    compatibility-of-identities-and-homs p q =
      identities-compatible-with-homs p q ,
      homs-compatible-with-identities p q
 
-   ---------------------------------------------------------------
+Finally, we prove a useful result about the compatibility of identities with interpretation of terms.
 
-   --Compatibility of identities with interpretation of terms
+::
+
    hom-id-compatibility : (p q : ∣ 𝑻(X) ∣ )
                           (𝑨 : Algebra _ 𝑆)
                           (ϕ : hom (𝑻 X) 𝑨)
@@ -351,12 +362,12 @@ We now formalize this result in Agda. Similarly, we define a datatype that repre
     →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
    hom-id-compatibility p q 𝑨 ϕ pA≡qA =
-      ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement{gfe = gfe} p) ⟩
-      ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ) ⟩
-      (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ ϕ ∣ ∘ ℊ)  ⟩
-      (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
-      ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
-      ∣ ϕ ∣ q  ∎
+    ∣ ϕ ∣ p           ≡⟨ ap ∣ ϕ ∣ (term-agreement{gfe = gfe} p)⟩
+    ∣ ϕ ∣((p ̇ 𝑻 X) ℊ)≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ)⟩
+    (p ̇ 𝑨)(∣ ϕ ∣ ∘ ℊ)≡⟨ intensionality pA≡qA (∣ ϕ ∣ ∘ ℊ)⟩
+    (q ̇ 𝑨)(∣ ϕ ∣ ∘ ℊ)≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
+    ∣ ϕ ∣((q ̇ 𝑻 X) ℊ)≡⟨(ap ∣ ϕ ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
+    ∣ ϕ ∣ q             ∎
 
 
 Equational theories and classes
@@ -366,10 +377,15 @@ Here we define the notation ``Th`` for the identities satisfied by all structure
 
 ::
 
-  Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+   →   Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+
   Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-  Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+
+  Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+   →    Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+
   Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 ------------------------------------------
@@ -398,8 +414,8 @@ Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make s
    𝑻HI = HomImagesOf (𝑻 X)
 
    𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-   𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-              Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+   𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+           Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
    𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
    𝑻𝑨 ti = ∣ ti ∣
@@ -464,14 +480,14 @@ Here are some of the key facts and identities we need to complete the proof of B
 
    SClo𝒦→𝑻img : (𝑪 : Algebra 𝓤 𝑆) → (𝑪 ∈ SClo 𝒦) → 𝑻img
    SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦 =
-     𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
+    𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
 
    𝑻img→𝑻⊧ : ∀ p q
     →        (p , q) ∈ Ψ'
     →        (ti : 𝑻img)
-         -----------------------------------
+         ---------------------------
     →     ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻(X)) ℊ)
-         ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) ℊ)
+            ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) ℊ)
    𝑻img→𝑻⊧ p q pΨq ti = goal1
      where
       𝑪 : Algebra 𝓤 𝑆
@@ -502,36 +518,42 @@ Here are some of the key facts and identities we need to complete the proof of B
 
    Ψ⊆ThSClo𝒦 : Ψ ⊆ Th (SClo 𝒦)
    Ψ⊆ThSClo𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
-     where
-      ti : 𝑻img
-      ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
+    where
+     ti : 𝑻img
+     ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
 
-      ϕ : hom (𝑻 X) 𝑪
-      ϕ = 𝑻ϕ ti
+     ϕ : hom (𝑻 X) 𝑪
+     ϕ = 𝑻ϕ ti
 
-      ϕE : Epic ∣ ϕ ∣
-      ϕE = 𝑻ϕE ti
+     ϕE : Epic ∣ ϕ ∣
+     ϕE = 𝑻ϕE ti
 
-      ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
-      ϕsur 𝒄 x = ϕE (𝒄 x)
+     ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+     ϕsur 𝒄 x = ϕE (𝒄 x)
 
-      preim : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ (𝑻 X) ∣
-      preim 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+     pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ (𝑻 X) ∣
+     pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
 
-      ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (preim 𝒄) ≡ 𝒄
-      ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+     ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
+     ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
 
-      γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
-      γ = pΨq ti
+     γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
+     γ = pΨq ti
 
-      𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
-      𝑪⊧p≈q = gfe λ 𝒄 →
-       (p ̇ 𝑪) 𝒄               ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
-       (p ̇ 𝑪) (∣ ϕ ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (preim 𝒄))⁻¹ ⟩
-       ∣ ϕ ∣ ((p ̇ 𝑻(X))(preim 𝒄))     ≡⟨ (intensionality γ (preim 𝒄)) ⟩
-       ∣ ϕ ∣ ((q ̇ 𝑻(X))(preim 𝒄))     ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (preim 𝒄) ⟩
-       (q ̇ 𝑪)(∣ ϕ ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
-       (q ̇ 𝑪) 𝒄 ∎
+     𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+     𝑪⊧p≈q = gfe λ 𝒄 →
+      (p ̇ 𝑪) 𝒄
+          ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+      (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
+          ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
+      ∣ ϕ ∣ ((p ̇ 𝑻(X))(pre 𝒄))
+          ≡⟨ intensionality γ (pre 𝒄) ⟩
+      ∣ ϕ ∣ ((q ̇ 𝑻(X))(pre 𝒄))
+          ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (pre 𝒄) ⟩
+      (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
+          ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+      (q ̇ 𝑪) 𝒄
+          ∎
 
 
    Ψ⊆Th𝒦 : ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
@@ -547,14 +569,22 @@ Finally, we have a datatype that represents classes of algebras that are close u
 ::
 
   -- Variety Closure
-  data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
-   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
-   vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+  data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
+   Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+    vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
 
--- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
--- ThVClo⊆ThSClo = ?
+    vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
+     →      (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+
+    vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦
+     →     (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+
+    vhom : {𝑨 : Algebra 𝓤 𝑆}
+     →     𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨)
+     →     𝑩 ∈ VClo 𝒦
+
+.. -- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
+   -- ThVClo⊆ThSClo = ?
 
 Identities for product closure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -651,12 +681,18 @@ Identities for hom image closure
 
      γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
      γ = gfe λ 𝒃 →
-      (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-      ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-      ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-      (q ̇ 𝑩) 𝒃 ∎
+      (p ̇ 𝑩) 𝒃
+          ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
+          ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+      ϕ((p ̇ 𝑨)(preim 𝒃))
+          ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+      ϕ((q ̇ 𝑨)(preim 𝒃))
+          ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
+          ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+      (q ̇ 𝑩) 𝒃
+          ∎
 
    hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
@@ -695,10 +731,10 @@ Identities for HSP closure
 
      ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
      ξ b =
-      h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
-      (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-      (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-      h ((q ̇ 𝑩) b)  ∎
+      h ((p ̇ 𝑩) b) ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
+      (p ̇ 𝑨)(h ∘ b)≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+      (q ̇ 𝑨)(h ∘ b)≡⟨(comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+      h ((q ̇ 𝑩) b) ∎
 
      hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
      hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
@@ -731,11 +767,16 @@ Identities for HSP closure
 
      γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
      γ = gfe λ 𝒃 →
-      (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-      ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-      ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+      (p ̇ 𝑩) 𝒃
+          ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+      (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
+          ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+      ϕ((p ̇ 𝑨)(preim 𝒃))
+          ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+      ϕ((q ̇ 𝑨)(preim 𝒃))
+          ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+      (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
+          ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
       (q ̇ 𝑩) 𝒃 ∎
 
    vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
@@ -753,8 +794,8 @@ We conclude the `closure module`_ by proving that a class 𝒦 of structures is 
 
    -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
    ThHSP-axiomatizes : (p q : ∣ (𝑻 X) ∣)
-             -----------------------------------------
-    →         𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+          ---------------------------------------
+    →     𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
 
    ThHSP-axiomatizes p q =
     (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,

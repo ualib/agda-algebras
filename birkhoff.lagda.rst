@@ -159,9 +159,14 @@ The Agda proof of Birkhoff's theorem
       hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
       hp≡hq = hom-id-compatibility{𝒦} p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
 
-    --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
-    --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
-    -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+    --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and
+    --∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣. Then we can prove
+    --𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE)) since
+    --
+    -- vhom : {𝑨 : Algebra 𝓤 𝑆}
+    --  →     𝑨 ∈ VClo 𝒦
+    --  →     ((𝑩 , _ , _) : HomImagesOf 𝑨)
+    --  →     𝑩 ∈ VClo 𝒦
 
     𝑨∈VClo𝒦 : 𝑨 ∈ VClo 𝒦
     𝑨∈VClo𝒦 = {!!}

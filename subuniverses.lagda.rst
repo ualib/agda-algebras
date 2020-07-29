@@ -38,10 +38,11 @@ The `subuniverses.lagda.rst <subuniverses module>`_ file starts, as usual, by fi
 
   open import prelude using (Im_⊆_; Univalence; embeddings-are-lc;
    univalence-gives-global-dfunext; 𝓟; _∈₀_; _⊆₀_; pr₁; domain;
-   is-subsingleton; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton;
-   ∈-is-subsingleton; is-embedding; pr₁-embedding; rl-implication; inverse;
-   embedding-gives-ap-is-equiv; is-set;_⇔_;transport; subset-extensionality';
-   equiv-to-subsingleton; powersets-are-sets'; _≃_; id; _●_;
+   is-subsingleton; Π-is-subsingleton;is-equiv; lr-implication;
+   ×-is-subsingleton; ∈-is-subsingleton; is-embedding; _⇔_;
+   pr₁-embedding; rl-implication; inverse; is-set; id; _●_;
+   embedding-gives-ap-is-equiv; transport; subset-extensionality';
+   equiv-to-subsingleton; powersets-are-sets'; _≃_;
    logically-equivalent-subsingletons-are-equivalent) public
 
 ------------------------------------------------------
@@ -162,7 +163,9 @@ We are now ready to formalize the proof the proof that homomorphic images are su
    {𝑨 𝑩 : Algebra 𝓤 𝑆}
    (ϕ : hom 𝑨 𝑩) where
 
-   hom-image-is-sub : {funext 𝓥 𝓤} → (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
+   hom-image-is-sub : {funext 𝓥 𝓤}
+    →                 (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
+
    hom-image-is-sub {fe} f b b∈Imf =
     eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
      where
@@ -177,7 +180,7 @@ We are now ready to formalize the proof the proof that homomorphic images are su
 
       γ = (f ̂ 𝑩) b         ≡⟨ ap (f ̂ 𝑩) (ζ ⁻¹) ⟩
           (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar) ≡⟨ ( ∥ ϕ ∥ f ar ) ⁻¹ ⟩
-          ∣ ϕ ∣ ((f ̂ 𝑨) ar)    ∎
+          ∣ ϕ ∣ ((f ̂ 𝑨) ar)  ∎
 
 ------------------------------------
 
@@ -267,7 +270,8 @@ The next submodule is a generalization of MHE's implementation of subgroups. We 
 
 ::
 
-  module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
+  module mhe_subgroup_generalization
+   {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
 
 Note that we introduce a new definition of the ``subuniverse`` type here.  In cotrast to our earlier definition of ``Subuniverses``, which uses a predicate on ``∣ 𝑨 ∣`` to represent the underlying set of the subuniverse, here we use the type ``𝓟 ∣ 𝑨 ∣``, the powerset of the universe of ``𝑨``.
 
@@ -291,7 +295,8 @@ Note that we introduce a new definition of the ``subuniverse`` type here.  In co
       (λ _ → ∈-is-subsingleton B (∥ 𝑨 ∥ f a))))
 
    pr₁-is-embedding : is-embedding ∣_∣
-   pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
+   pr₁-is-embedding =
+    pr₁-embedding being-op-closed-is-subsingleton
 
    --so equality of subalgebras is equality of their underlying
    --subsets in the powerset:
@@ -303,9 +308,10 @@ Note that we introduce a new definition of the ``subuniverse`` type here.  In co
     embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
 
    subuniverse-is-a-set : is-set subuniverse
-   subuniverse-is-a-set B C = equiv-to-subsingleton
-                             (ap-pr₁ B C , ap-pr₁-is-equiv B C)
-                             (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
+   subuniverse-is-a-set B C =
+    equiv-to-subsingleton
+    (ap-pr₁ B C , ap-pr₁-is-equiv B C)
+    (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
 
 For a subuniverse B of 𝑨, we want to form a subalgebra 𝑩 = ⟨B, …⟩ of 𝑨 such that the operations of 𝑩 are those of 𝑨 restricted to B.
 
@@ -313,10 +319,11 @@ Here are some useful lemmas extracted from MHE's proof of `subgroup-equality`. T
 
 ::
 
-   subuniverse-equality-gives-membership-equiv : (B C : subuniverse)
-    →                                  B ≡ C
-                        -----------------------------------
-    →                   ( x : ∣ 𝑨 ∣ ) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣)
+   subuniverse-equality-gives-membership-equiv :
+               (B C : subuniverse)
+    →          B ≡ C
+        --------------------------------------
+    →   (x : ∣ 𝑨 ∣) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣)
    subuniverse-equality-gives-membership-equiv B C B≡C x =
     transport (λ - → x ∈₀ ∣ - ∣) B≡C ,
      transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
@@ -325,7 +332,8 @@ The next lemma is called `h` in MHE's proof.
 
 ::
 
-   membership-equiv-gives-carrier-equality : (B C : subuniverse)
+   membership-equiv-gives-carrier-equality :
+               (B C : subuniverse)
     →          ((x : ∣ 𝑨 ∣) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
               -----------------------------------------
     →                       ∣ B ∣ ≡ ∣ C ∣
@@ -342,10 +350,11 @@ The next lemma is called `g` in MHE's proof.
 
 ::
 
-   membership-equiv-gives-subuniverse-equality : (B C : subuniverse)
-    →            (( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
-                 ---------------------------------------
-    →                          B ≡ C
+   membership-equiv-gives-subuniverse-equality :
+           (B C : subuniverse)
+    →      (( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+           ---------------------------------------
+    →                    B ≡ C
    membership-equiv-gives-subuniverse-equality B C =
     inverse (ap-pr₁ B C)
     (ap-pr₁-is-equiv B C)
@@ -356,8 +365,8 @@ The next lemma is called `g` in MHE's proof.
    membership-equiv-is-subsingleton B C =
     Π-is-subsingleton gfe
      (λ x → ×-is-subsingleton
-      (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ C ∣ x ))
-        (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ B ∣ x )))
+     (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ C ∣ x ))
+     (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ B ∣ x )))
 
 So, two subuniverses are equal if and only if they have the same elements (cf. `subgroup-equality <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#371022>`_ ):
 
@@ -368,10 +377,10 @@ So, two subuniverses are equal if and only if they have the same elements (cf. `
 
    subuniverse-equality B C =
     logically-equivalent-subsingletons-are-equivalent _ _
-      (subuniverse-is-a-set B C)
-       (membership-equiv-is-subsingleton B C)
-        (subuniverse-equality-gives-membership-equiv B C ,
-          membership-equiv-gives-subuniverse-equality B C)
+    (subuniverse-is-a-set B C)
+    (membership-equiv-is-subsingleton B C)
+    (subuniverse-equality-gives-membership-equiv B C ,
+     membership-equiv-gives-subuniverse-equality B C)
 
 The converse of `membership-equiv-gives-carrier-equality` is obvious.
 
@@ -388,10 +397,10 @@ The converse of `membership-equiv-gives-carrier-equality` is obvious.
     →   ((x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣) ≃ (∣ B ∣ ≡ ∣ C ∣)
    carrier-equiv B C =
     logically-equivalent-subsingletons-are-equivalent _ _
-     (membership-equiv-is-subsingleton B C)
-      (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
-       (membership-equiv-gives-carrier-equality B C ,
-         carrier-equality-gives-membership-equiv B C)
+    (membership-equiv-is-subsingleton B C)
+    (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
+    (membership-equiv-gives-carrier-equality B C ,
+     carrier-equality-gives-membership-equiv B C)
 
    -- ...which yields an alternative subuniverse equality lemma.
    subuniverse-equality' : (B C : subuniverse)
@@ -410,12 +419,14 @@ Finally, we define, once and for all, the type of subalgebras of an algebra (res
 
   -- new definition of subalgebra (includes an embedding)
   SubalgebrasOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  SubalgebrasOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
-                          Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
-                           is-embedding h × is-homomorphism 𝑩 𝑨 h
+  SubalgebrasOf {𝓤} 𝑨 =
+   Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
+    Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
+     is-embedding h × is-homomorphism 𝑩 𝑨 h
 
   SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × SubalgebrasOf 𝑨
+  SubalgebrasOfClass 𝒦 =
+   Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × SubalgebrasOf 𝑨
 
 
 --------------------------------------------
