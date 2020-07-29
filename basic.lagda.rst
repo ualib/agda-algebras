@@ -18,26 +18,22 @@ This chapter describes the `basic module`_ of the `agda-ualib`_ , which begins o
 Preliminaries
 -------------------------
 
-Like most Agda programs, this one begins by satisfying some dependencies.
+Like most Agda programs, this one begins with some Agda options specifying the foundational choices we wish to make, as explained above.
 
 ::
 
   {-# OPTIONS --without-K --exact-split --safe #-}
 
-  open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣;
-    _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_)
-
-
-:Unicode Hints: In agda2-mode_ type ``\MCI``, ``\MCU\_0``, ``\sqcup``, ``\b0`` and ``\b2`` to obtain 𝓘, 𝓤₀, ⊔, 𝟘, and 𝟚, respectively.
-
-
-Then we begin the module called ``basic`` using Agda's ``module`` directive.
+We begin the `basic module`_ by invoking Agda's ``module`` directive, and then we import some dependencies that we make ``public`` so they are available to all modules that import the `basic module`_.
 
 ::
 
   module basic where
 
-This is the second module of the `agda-ualib`_ , coming after ``prelude`` (the module that was described in :numref:`agda preliminaries`).
+  open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧;
+    _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_; Epic) public
+
+This is the second module of the agda-ualib_ , coming after the `prelude module`_ described in the previous chapter (:numref:`agda preliminaries`).
 
 -----------------------------------
 
@@ -169,8 +165,6 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 
 ::
 
-  module _ {𝑆 : Signature 𝓞 𝓥}  where
-
    ⨅ : {I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
    ⨅ 𝒜 =  ((i : _) → ∣ 𝒜 i ∣) ,  λ 𝑓 x i → (𝑓 ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
 
@@ -178,6 +172,17 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 
 We have used an anonymous module here so that the (fixed) signature 𝑆 is available in the definition of the product without mentioning it explicitly.
 
+-------------------------------------------------------------------------
+
+Arbitrarily many variable symbols
+---------------------------------
+
+Finally, since we typically want to assume that we have an arbitrary large collection ``X`` of variable symbols at our disposal (so that, in particular, given an algebra 𝑨 we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from X to the universe of 𝑨), we define a type for use when making this assumption.
+
+::
+
+   _↠_ : 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+   X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
 -----------------------------------------------
 
@@ -189,7 +194,15 @@ Table of some special characters used in the `basic module`_.
   +--------+------------------------+
   | To get | Type                   |
   +--------+------------------------+
-  | 𝒂, 𝒃   | ``\MIa``, ``\MIb``     |
+  | 𝓘      | \MCI                   |
+  +--------+------------------------+
+  | 𝓤₀     | \MCU\_0                |
+  +--------+------------------------+
+  | ⊔      | \sqcup                 |
+  +--------+------------------------+
+  | 𝟘, 𝟚   | \b0, \b2               |
+  +--------+------------------------+
+  | 𝒂, 𝒃   |  \MIa, \MIb            |
   +--------+------------------------+
   | 𝒜      | ``\McA``               |
   +--------+------------------------+
@@ -207,6 +220,7 @@ Table of some special characters used in the `basic module`_.
   +--------+------------------------+
   | ⨅      | ``\Glb``               |
   +--------+------------------------+
+
 
 See :numref:`unicode hints` for a longer list of special symbols used in the agda-ualib_, or better yet, use these
 

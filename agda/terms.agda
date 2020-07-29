@@ -11,7 +11,8 @@ module terms {𝑆 : Signature 𝓞 𝓥} where
 open import congruences
 open import homomorphisms {𝑆 = 𝑆}
 open import prelude using
- (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂; Inv; InvIsInv; eq; _∙_) public
+ (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂; Inv; InvIsInv;
+  eq; _∙_; fst; snd) public
 
 data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term {X = X}
@@ -177,46 +178,7 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
  term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
 
  term-agreement : (p : ∣ 𝑻(X) ∣) → p ≡ (p ̇ 𝑻(X)) generator
- term-agreement p = p≡𝓅
-  where
-   ℊ : X → ∣ 𝑻(X) ∣
-   ℊ = generator
-
-   𝓅 : ∣ (𝑻 X) ∣
-   𝓅 = ∣ tg p ∣
-
-   tgp : (p ̇ 𝑻(X)) ℊ ≡ (𝓅 ̇ 𝑻(X)) ℊ
-   tgp = term-gen-agreement p
-
-   p≡𝓅 : p ≡ (p ̇ 𝑻(X)) ℊ
-   p≡𝓅 = ∥ tg p ∥ ∙ (tgp)⁻¹
-
- --   pCp : (p : Term) → ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
- --   pCp p = ξ
- --    where
- --     tg𝓅 : Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) ℊ
- --     tg𝓅 = term-gen{gfe = gfe} p
-
- --     𝓅 : ∣ (𝑻 X) ∣
- --     𝓅 = ∣ tg𝓅 ∣
-
- --     tgp : (p ̇ 𝑻(X)) ℊ ≡ (𝓅 ̇ 𝑻(X)) ℊ
- --     tgp = term-gen-agreement p
-
- --     p≡𝓅 : p ≡ (p ̇ 𝑻(X)) ℊ
- --     p≡𝓅 = ∥ tg𝓅 ∥ ∙ (tgp)⁻¹
-
- --     ξ : ∣ h ∣ p ≡ (p ̇ 𝑪) h₀
- --     ξ =
- --      ∣ h ∣ p ≡⟨ ap ∣ h ∣ p≡𝓅 ⟩
- --       ∣ h ∣ ((p ̇ 𝑻(X)) ℊ)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 h p ℊ ⟩
- --       (p ̇ 𝑪) (∣ h ∣ ∘ ℊ)  ≡⟨ ap (p ̇ 𝑪) (refl _) ⟩
- --       (p ̇ 𝑪) h₀ ∎
-
-
-
-
-
+ term-agreement p = snd (tg p) ∙ (term-gen-agreement p)⁻¹
 
 
 interp-prod : funext 𝓥 𝓤

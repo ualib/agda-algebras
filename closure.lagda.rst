@@ -1,7 +1,7 @@
 .. FILE      : closure.lagda.rst
 .. AUTHOR    : William DeMeo and Siva Somayyajula
 .. DATE      : 2 Jul 2020
-.. UPDATE    : 21 Jul 2020
+.. UPDATE    : 29 Jul 2020
 .. COPYRIGHT : (c) 2020 William DeMeo
 
 
@@ -17,18 +17,14 @@ This chapter describes the `closure module`_ of the `agda-ualib`_.
 Preliminaries
 ---------------
 
-As usual, the development begins by satisfying dependencies.
+As usual, the development begins by satisfying dependencies, although this time we postpone some imports until the start of the `closure module`_ so that these later imports can share the same signature with the module.
 
 ::
 
   {-# OPTIONS --without-K --exact-split --safe #-}
-  open import prelude
-  open import basic using (Signature; Algebra; ⨅; Op; _̂_)
-  open import subuniverses using (Subuniverses; Subalgebra)
-  open import homomorphisms using (hom; is-homomorphism; HomImagesOf)
-  open import congruences using (ker-pred; con; Congruence)
-  open import terms using (Term; generator; node; _̇_; interp-prod2;
-   interp-prod; comm-hom-term; 𝑻; lift-hom)
+
+  open import basic
+  open import prelude using (global-dfunext; dfunext; im)
 
 ----------------------------------------------------
 
@@ -101,20 +97,34 @@ Let 𝑆 be a signature.  An **identity** or **equation** in 𝑆 is an ordered 
 
 If 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if, for every A ∈ 𝒦, A ⊧ 𝑝 ≈ 𝑞. Finally, if 𝓔 is a set of equations, we write 𝒦 ⊧ 𝓔 if every member of 𝒦 satisfies every member of 𝓔.
 
-We formalize these notions in Agda in the ``closure`` module, which begins as follows.
+We formalize these notions in Agda in the `closure module`_, which begins as follows. (Note the imports that were postponed until after the start of the closure module so that the imports share the same signature 𝑆 with the `closure module`_.
 
 ::
 
   module closure
    {𝑆 : Signature 𝓞 𝓥}
-   {𝓤 : Universe}
-   {ua : Univalence}
    {X : 𝓤 ̇ }
    {gfe : global-dfunext}
-   {dfe : dfunext 𝓤 𝓤} where
+   {dfe : dfunext 𝓤 𝓤}
+   {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+
+  open import homomorphisms {𝑆 = 𝑆} public
+  open import terms {𝑆 = 𝑆} renaming (generator to ℊ) public
+  open import subuniverses {𝑆 = 𝑆} public
+  open import congruences public
+
+::
+
+Our first definition in the `closure module`_ is notation that represents the satisfaction of equations.
+
+The standard notation is ``𝑨 ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in 𝑨. In otherwords, for all assignments ``a : X → ∣ 𝑨 ∣`` of values to variables, we have ``(p ̇ 𝑨) a ≡ (q ̇ 𝑨) a``.
+
+If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
+
+::
 
   _⊧_≈_ : Algebra 𝓤 𝑆
-    →      Term{X = X} → Term → 𝓤 ̇
+   →      Term{X = X} → Term → 𝓤 ̇
 
   𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
@@ -123,10 +133,21 @@ We formalize these notions in Agda in the ``closure`` module, which begins as fo
 
   _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
---------------------------------
+---------------------------------------------
 
-Closure data types
--------------------------
+Compatibility of identities
+------------------------------
+
+Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely, for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦.
+
+Here we formalize the notion of closure under the taking of products, subalgebras, and homomorphic images, and we prove that each of these closures preserves identities.
+
+.. _obs 13 in agda:
+
+Closure under Products
+~~~~~~~~~~~~~~~~~~~~~~~
+
+First a data type that represents a class of algebraic structures that is closed under the taking of products of algebras in the class can be defined in Agda_ as follows.
 
 ::
 
@@ -136,188 +157,9 @@ Closure data types
     →     (∀ i → 𝒜 i ∈ PClo 𝒦)
     →     ⨅ 𝒜 ∈ PClo 𝒦
 
-  -- Subalgebra Closure
-  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
-
-  -- Homomorphic Image Closure
-  data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
-   hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
-
-  -- Variety Closure
-  data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
-   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ VClo 𝒦
-   vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
-
----------------------------------------------
-
-Compatibility of identities
-------------------------------
-
-Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely, for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦.
-
-Here we formalize the notion of closure under the taking of homomorphic images, subuniverses, and products, and we prove that each of these closures preserves identities.
-
-
-.. _obs 14 in agda:
-
-Hom-Id compatibility
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
-
-.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.
-
-We now formalize this result in Agda.
+We prove that identities satisfied by all factors of a product are also satisfied by the product.
 
 ::
-
-  module _ (𝓚 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))) where
-
-
-   -- ⇒ (the "only if" direction)
-   identities-are-compatible-with-homs : (p q : Term{X = X})
-     →                𝓚 ⊧ p ≋ q
-          ----------------------------------------------------
-     →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-    -- Here, the inferred types are
-    -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝓚 𝑨, h : hom (𝑻(X){X = X}) 𝑨
-
-   identities-are-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
-     where
-      pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
-      pA≡qA = 𝒦⊧p≋q KA
-
-      pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻 X ∣)
-       →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
-      pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
-
-      hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 X ∣)
-       →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
-      hpa≡hqa 𝒂 =
-       ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
-       (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-       (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
-       ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
-
-      γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
-      γ = gfe hpa≡hqa
-
-   -- ⇐ (the "if" direction)
-   homs-are-compatible-with-identities : (p q : Term{X = X})
-     →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
-          -----------------------------------------------
-     →                𝓚 ⊧ p ≋ q
-    --Inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝓚, h : hom 𝑻(X) 𝑨
-
-   homs-are-compatible-with-identities p q all-hp≡hq {𝑨 = 𝑨} KA = γ
-     where
-      h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-      h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
-
-      γ : 𝑨 ⊧ p ≈ q
-      γ = gfe λ 𝒂 →
-       (p ̇ 𝑨) 𝒂
-         ≡⟨ refl _ ⟩
-       (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-         ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p generator)⁻¹ ⟩
-       (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) generator
-         ≡⟨ ap (λ - → - generator) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-       (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) generator
-         ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q generator) ⟩
-       (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ generator)
-         ≡⟨ refl _ ⟩
-       (q ̇ 𝑨) 𝒂
-         ∎
-
-   compatibility-of-identities-and-homs : (p q : Term)
-    →  (𝓚 ⊧ p ≋ q)
-         ⇔ (∀ 𝑨 KA hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
-    --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝓚, hh : hom 𝑻(X) 𝑨.
-
-   compatibility-of-identities-and-homs p q =
-      identities-are-compatible-with-homs p q ,
-      homs-are-compatible-with-identities p q
-
-
-Sub-Id compatibility
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``𝑨 ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
-
-We first set down some notation for the modeling of identities.
-
-The standard notation is ``𝑨 ⊧ p ≈ q``, which means that the identity ``p ≈ q`` is satisfied in 𝑨. In otherwords, for all assignments ``a : X → ∣ 𝑨 ∣`` of values to variables, we have ``(p ̇ 𝑨) a ≡ (q ̇ 𝑨) a``.
-
-If 𝒦 is a class of structures, it is standard to write ``𝒦 ⊧ p ≈ q`` just in case all structures in the class 𝒦 model the identity p ≈ q.  However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing ``𝒦 ⊧ p ≋ q`` to denote this concept.
-
-::
-
-   SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   SubalgebrasOfClass 𝒦 =
-    Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua
-
-   subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
-    →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
-    →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
-   subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
-    where
-
-    𝑨 : Algebra 𝓤 𝑆
-    𝑨 = ∣ SAK ∣
-
-    A∈𝒦 : 𝑨 ∈ 𝒦
-    A∈𝒦 = ∣ pr₂ SAK ∣
-
-    A⊧p≈q : 𝑨 ⊧ p ≈ q
-    A⊧p≈q = 𝒦⊧p≋q A∈𝒦
-
-    subalg : Subalgebra {𝑨 = 𝑨} ua
-    subalg = ∥ pr₂ SAK ∥
-
-    𝑩 : Algebra 𝓤 𝑆
-    𝑩 = pr₁ subalg
-
-    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-    h = ∣ pr₂ subalg ∣
-
-    hem : is-embedding h
-    hem = pr₁ ∥ pr₂ subalg ∥
-
-    hhm : is-homomorphism 𝑩 𝑨 h
-    hhm = pr₂ ∥ pr₂ subalg ∥
-
-    ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
-    ξ b =
-     h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
-     (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-     (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-     h ((q ̇ 𝑩) b)  ∎
-
-    hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-    hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-    γ : 𝑩 ⊧ p ≈ q
-    γ = gfe λ b → hlc (ξ b)
-
-
-.. _obs 13 in agda:
-
-Product-Id compatibility
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-Let P(𝒦) denote the class of algebras isomorphic to a direct product of members of 𝒦.
-
-::
-
-  P-closed : (𝓛𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺ ))
-   →      (𝓘 : Universe) (I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
-   →      (( i : I ) → 𝒜 i ∈ 𝓛𝒦 𝓘 ) → 𝓘 ⁺ ̇
-  P-closed 𝓛𝒦 = λ 𝓘 I 𝒜 𝒜i∈𝓛𝒦 →  ⨅ 𝒜  ∈ (𝓛𝒦 𝓘)
 
   products-preserve-identities :
         (p q : Term{X = X})
@@ -355,6 +197,181 @@ Let P(𝒦) denote the class of algebras isomorphic to a direct product of membe
      γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
      γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
+Closure under subalgebras
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Next, we define a datatype that represents a class of algebraic structures that is closed under the taking of subalgebras.
+
+Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦.  With our new formal definition of Subalgebra, we will show that every term equation, ``p ≈ q``, that is satisfied by all ``𝑨 ∈ 𝒦`` is also satisfied by all ``B ∈ S(𝒦)``. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
+
+
+::
+
+  -- Subalgebra Closure
+  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+
+  subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
+   →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+  subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+   where
+
+    𝑨 : Algebra 𝓤 𝑆
+    𝑨 = ∣ SAK ∣
+
+    A∈𝒦 : 𝑨 ∈ 𝒦
+    A∈𝒦 = ∣ pr₂ SAK ∣
+
+    A⊧p≈q : 𝑨 ⊧ p ≈ q
+    A⊧p≈q = 𝒦⊧p≋q A∈𝒦
+
+    subalg : SubalgebrasOf 𝑨
+    subalg = ∥ pr₂ SAK ∥
+
+    𝑩 : Algebra 𝓤 𝑆
+    𝑩 = pr₁ subalg
+
+    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+    h = ∣ pr₂ subalg ∣
+
+    hem : is-embedding h
+    hem = pr₁ ∥ pr₂ subalg ∥
+
+    hhm : is-homomorphism 𝑩 𝑨 h
+    hhm = pr₂ ∥ pr₂ subalg ∥
+
+    ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
+    ξ b =
+     h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
+     (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
+     (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
+     h ((q ̇ 𝑩) b)  ∎
+
+    hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
+    hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+
+    γ : 𝑩 ⊧ p ≈ q
+    γ = gfe λ b → hlc (ξ b)
+
+
+.. _obs 14 in agda:
+
+Closure under hom images
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Recall (:numref:`Obs %s <obs 14>`) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class.  More precisely, if𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
+
+.. math:: 𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.
+
+We now formalize this result in Agda. Similarly, we define a datatype that represents classes of algebras that include all homomorphic images of algebras in the class, and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
+
+::
+
+  --Closure under hom images
+  data HClo (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
+   hhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+
+  module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
+
+   -- ⇒ (the "only if" direction)
+   identities-compatible-with-homs : (p q : Term{X = X})
+    →                𝒦 ⊧ p ≋ q
+         ----------------------------------------------------
+    →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ (𝑻(X))) ≡ ∣ h ∣ ∘ (q ̇ (𝑻(X)))
+   -- Here, the inferred types are
+   -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom ((𝑻(X))) 𝑨
+
+   identities-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
+    where
+     pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+     pA≡qA = 𝒦⊧p≋q KA
+
+     pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
+      →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+     pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
+
+     hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻(X) ∣ )
+      →        ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)
+     hpa≡hqa 𝒂 =
+      ∣ h ∣ ((p ̇ 𝑻(X)) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
+      (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
+      (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
+      ∣ h ∣ ((q ̇ 𝑻(X)) 𝒂)  ∎
+
+     γ : ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X))
+     γ = gfe hpa≡hqa
+
+   -- ⇐ (the "if" direction)
+   homs-compatible-with-identities : (p q : Term)
+    →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ h ∣ ∘ (q ̇ 𝑻(X)))
+         --------------------------------------------------
+    →                𝒦 ⊧ p ≋ q
+   --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom (𝑻(X)) 𝑨
+
+   homs-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
+    where
+     h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+     h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
+
+     γ : 𝑨 ⊧ p ≈ q
+     γ = gfe λ 𝒂 →
+      (p ̇ 𝑨) 𝒂
+        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
+        ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
+      (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) ℊ
+        ≡⟨ ap (λ - → - ℊ) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
+      (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) ℊ
+        ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q ℊ) ⟩
+      (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
+        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      (q ̇ 𝑨) 𝒂
+        ∎
+
+   compatibility-of-identities-and-homs : (p q : Term)
+    →  (𝒦 ⊧ p ≋ q)
+        ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻(X)))
+   --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom (𝑻(X)) 𝑨.
+
+   compatibility-of-identities-and-homs p q =
+     identities-compatible-with-homs p q ,
+     homs-compatible-with-identities p q
+
+   ---------------------------------------------------------------
+
+   --Compatibility of identities with interpretation of terms
+   hom-id-compatibility : (p q : ∣ 𝑻(X) ∣ )
+                          (𝑨 : Algebra _ 𝑆)
+                          (ϕ : hom (𝑻 X) 𝑨)
+    →                     (𝑨 ⊧ p ≈ q)
+                         -------------------
+    →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+
+   hom-id-compatibility p q 𝑨 ϕ pA≡qA =
+      ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement{gfe = gfe} p) ⟩
+      ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ) ⟩
+      (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ ϕ ∣ ∘ ℊ)  ⟩
+      (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
+      ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
+      ∣ ϕ ∣ q  ∎
+
+
+Equational theories and classes
+---------------------------------
+
+Here we define the notation ``Th`` for the identities satisfied by all structures in a given class, and ``Mod`` for all structures that satisfy a given collection of identities.
+
+::
+
+  Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+
+  Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
+  Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
 ------------------------------------------
 
 .. _the free algebra in agda:
@@ -376,63 +393,175 @@ Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make s
 
 ::
 
-  module _  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} where
+  module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
+
+   𝑻HI = HomImagesOf (𝑻 X)
 
    𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
    𝑻img  =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-             Σ sa ꞉ (Subalgebra{𝑨 = 𝑨} ua) ,
-              Σ ϕ ꞉ hom (𝑻 X) ∣ sa ∣ , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+              Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
    𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
    𝑻𝑨 ti = ∣ ti ∣
 
-   𝑻𝑨∈𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ 𝒦
-   𝑻𝑨∈𝒦 ti = pr₁ ∥ pr₂ ∥ ti ∥ ∥
+   𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo 𝒦
+   𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
 
-   𝑻sub : (ti : 𝑻img) → Algebra 𝓤 𝑆
-   𝑻sub ti = ∣ pr₁ ∥ ti ∥ ∣
+   𝑻ϕ : (ti : 𝑻img) → hom (𝑻 X) (𝑻𝑨 ti)
+   𝑻ϕ ti = pr₁ ∥ ti ∥
 
-   𝑻hom : (ti : 𝑻img) → hom (𝑻 X) (𝑻sub ti)
-   𝑻hom ti = ∣ pr₂ ∥ ti ∥ ∣
+   𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
+   𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
-   -- 𝑻homE : (ti : 𝑻img) → Epic ∣ 𝑻hom ti ∣
-   -- 𝑻homE ti = ∥ pr₂ ∥ ti ∥ ∥
+   𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
+   𝑻KER = Σ (p , q) ꞉ (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) ,
+      ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
+
+   Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+   Ψ (p , q) =
+    ∀ ti → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻(X))
+
+   Ψ' : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
+   Ψ' (p , q) = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+
+N.B. Ψ is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of the lift h : 𝑻(X) → 𝑨 contains Ψ.
+
+.. code-block::
+
+   𝑻---- g --->>𝔽  (ker g = Ψ)
+    \         .
+     \       .
+      h     ∃ϕ     (want: Ψ ⊆ ker h)
+       \   .
+        \ .
+         V
+         𝑨
 
 
-  -- 𝑻-kernel : _ ̇
-  -- 𝑻-kernel = Σ pair ꞉ ∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣ , ∀ tim → pair ∈ ker-pred ∣ pr₁( ∥ tim ∥ ) ∣
-
-  --   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : Subalgebra {𝑨 = 𝑨} ua) → ∣ sa ∣ ∈ SClo 𝒦
-  -- 𝔽: {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ ((𝓤 ⁺) ⁺))} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ̇
-  -- 𝔽{𝒦} =  -- ψ = Σ θ ꞉ Congruence 𝑻(𝑋) , SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-
-
-     -- SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra {𝑨 = 𝑨} ua
-
-     -- record Congruence (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
-     --   constructor mkcon
-     --   field
-     --     ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓤
-     --     Compatible : compatible 𝑨 ⟨_⟩
-     --     IsEquiv : IsEquivalence ⟨_⟩
-     -- open Congruence
-
-
-
+----------------------------------------------------------
 
 More tools for Birkhoff's theorem
 ----------------------------------
 
-Here are some of the key identities we need to complete the proof of Birkhoff's HSP theorem.
+Here are some of the key facts and identities we need to complete the proof of Birkhoff's HSP theorem.
 
 ::
 
-  module _ (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )) where
+   𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆) → Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
+   𝑻hom-gen 𝑪 = h , lift-of-epic-is-epic h₀ hE
+    where
+      ℋ : X ↠ 𝑪
+      ℋ = 𝕏 𝑪
+
+      h₀ : X → ∣ 𝑪 ∣
+      h₀ = fst ℋ
+
+      hE : Epic h₀
+      hE = snd ℋ
+
+      h : hom (𝑻 X) 𝑪
+      h = lift-hom{𝑨 = 𝑪}{X = X} h₀
+
+   SClo𝒦→𝑻img : (𝑪 : Algebra 𝓤 𝑆) → (𝑪 ∈ SClo 𝒦) → 𝑻img
+   SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦 =
+     𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
+
+   𝑻img→𝑻⊧ : ∀ p q
+    →        (p , q) ∈ Ψ'
+    →        (ti : 𝑻img)
+         -----------------------------------
+    →     ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻(X)) ℊ)
+         ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻(X)) ℊ)
+   𝑻img→𝑻⊧ p q pΨq ti = goal1
+     where
+      𝑪 : Algebra 𝓤 𝑆
+      𝑪 = ∣ ti ∣
+
+      ϕ : hom (𝑻 X) 𝑪
+      ϕ = 𝑻ϕ ti
+
+      pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+      pCq = pΨq ti
+
+      𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+      𝓅 = ∣ tg{X = X}{gfe = gfe} p ∣
+      𝓆 = ∣ tg{X = X}{gfe = gfe} q ∣
+
+      p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
+      p≡𝓅 = ∥ tg p ∥
+
+      q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
+      q≡𝓆 = ∥ tg q ∥
+
+      ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻(X)) ℊ) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻(X)) ℊ)
+      ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
+
+      goal1 : ∣ ϕ ∣ ((p ̇ 𝑻(X)) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻(X)) ℊ)
+      goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
+               ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
+
+   Ψ⊆ThSClo𝒦 : Ψ ⊆ Th (SClo 𝒦)
+   Ψ⊆ThSClo𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
+     where
+      ti : 𝑻img
+      ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
+
+      ϕ : hom (𝑻 X) 𝑪
+      ϕ = 𝑻ϕ ti
+
+      ϕE : Epic ∣ ϕ ∣
+      ϕE = 𝑻ϕE ti
+
+      ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+      ϕsur 𝒄 x = ϕE (𝒄 x)
+
+      preim : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ (𝑻 X) ∣
+      preim 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+
+      ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (preim 𝒄) ≡ 𝒄
+      ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+
+      γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻(X))
+      γ = pΨq ti
+
+      𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+      𝑪⊧p≈q = gfe λ 𝒄 →
+       (p ̇ 𝑪) 𝒄               ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+       (p ̇ 𝑪) (∣ ϕ ∣ ∘ (preim 𝒄)) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (preim 𝒄))⁻¹ ⟩
+       ∣ ϕ ∣ ((p ̇ 𝑻(X))(preim 𝒄))     ≡⟨ (intensionality γ (preim 𝒄)) ⟩
+       ∣ ϕ ∣ ((q ̇ 𝑻(X))(preim 𝒄))     ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (preim 𝒄) ⟩
+       (q ̇ 𝑪)(∣ ϕ ∣ ∘ (preim 𝒄))  ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+       (q ̇ 𝑪) 𝒄 ∎
+
+
+   Ψ⊆Th𝒦 : ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
+   Ψ⊆Th𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo𝒦{p , q} pΨq (sbase KA)
+
+-------------------------------------------------------
+
+Closure under HSP
+--------------------
+
+Finally, we have a datatype that represents classes of algebras that are close under the taking of homomorphic images, subalgebras, and products of algebras in the class.
+
+::
+
+  -- Variety Closure
+  data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+   vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+-- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
+-- ThVClo⊆ThSClo = ?
 
 Identities for product closure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
+  module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
    pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
    pclo-id1 {p} {q} α (pbase x) = α x
@@ -446,10 +575,12 @@ Identities for product closure
    pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
    pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
 
+
 Identities for subalgebra closure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
 
    sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
    sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
@@ -486,10 +617,12 @@ Identities for subalgebra closure
    sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
 
+
 Identities for hom image closure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
 
    hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
    hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
@@ -528,8 +661,8 @@ Identities for hom image closure
    hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
-Identities for varietal closure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identities for HSP closure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -607,6 +740,27 @@ Identities for varietal closure
 
    vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
    vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
+
+
+--------------------------------------------------
+
+Axiomatization of a class
+-------------------------
+
+We conclude the `closure module`_ by proving that a class 𝒦 of structures is axiomatized by ``Th (VClo 𝒦)``, which is the set of equations satisfied by all members of the varietal closure of 𝒦.
+
+::
+
+   -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
+   ThHSP-axiomatizes : (p q : ∣ (𝑻 X) ∣)
+             -----------------------------------------
+    →         𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+
+   ThHSP-axiomatizes p q =
+    (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
+    λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
+
+
 
 -----------------------------------------------
 

@@ -157,7 +157,7 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
 
     open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
      using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
-     powersets-are-sets'; subset-extensionality') public
+     powersets-are-sets'; subset-extensionality'; propext) public
 
     open import MGS-Embeddings using (is-embedding; pr₁-embedding;
      is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
@@ -165,25 +165,26 @@ Next we import other parts of :term:`MHE`'s `Type Topology`_ library, using the 
 
     open import MGS-Solved-Exercises using (to-subtype-≡) public
 
+    open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
 
-.. We don't have the space (or patience!) to describe each of the imports appearing in ``Preliminaries.agda``. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
-
-.. The full ``prelude.lagda.rst`` file, which defines other notation and objects we will use throughout the library, appears in the appendix :ref:`preliminaries.agda`. We will describe each of the objects defined therein as they come up in later sections.
+.. We don't have the space or patience to describe each of the imports above. Some of them will come up for discussion in due course. Until then, we refer the reader to the above mentioned documentation, as well as the brief :ref:`axiomk` in the appendix; the latter explains the ``--without-K`` option.
 
 ----------------------------------------------
 
 Dependent pair type
 --------------------
 
-Our preferred notations for the first and second projections of a product are ``∣_∣`` and ``∥_∥``, respectively; however, we will sometimes use the more standard ``pr₁`` and ``pr₂`` for compatibility with other libraries and sometimes for readability.
+Our preferred notations for the first and second projections of a product are ``∣_∣`` and ``∥_∥``, respectively; however, we will sometimes use the more standard ``pr₁`` and ``pr₂``, or even ``fst`` and ``snd``, for emphasis, readability, or compatibility with other libraries.
 
 ::
 
-    ∣_∣ : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+    ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
     ∣ x , y ∣ = x
+    fst (x , y) = x
 
-    ∥_∥ : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+    ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
     ∥ x , y ∥ = y
+    snd (x , y) = y
 
 For the :term:`dependent pair type`, we prefer the notation ``Σ x ꞉ X , y``, which is more pleasing (and more standard in the literature) than Agda's default syntax (``Σ λ(x ꞉ X) → y``), and :term:`MHE` has a useful trick that makes the preferred notation available by making index type explicit.
 

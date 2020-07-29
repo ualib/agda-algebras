@@ -13,22 +13,6 @@ Terms in Agda
 
 This chapter describes the `terms module`_ of the `agda-ualib`_.
 
---------------------------------
-
-Preliminaries
--------------
-
-As usual, we start with the imports we will need below.
-
-::
-
-  {-# OPTIONS --without-K --exact-split --safe #-}
-
-  open import prelude
-  open import basic using (Signature; Algebra; ⨅; _̂_)
-  open import homomorphisms using (hom)
-  open import congruences using (Con; compatible-fun)
-
 ------------------------------------------
 
 .. _types for terms:
@@ -36,16 +20,31 @@ As usual, we start with the imports we will need below.
 Types for terms
 ------------------------
 
-We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called ``terms``. We start by defining a datatype called ``Term`` which, not surprisingly, represents the type of terms.  The type ``X :  𝓧 ̇`` represents an arbitrary (infinite) collection of "variables."
+We developed the notion of a term in a signature informally in :numref:`terms`.  Here we formalize this concept in an Agda module called `terms <terms module>`_.
 
+We start by declaring the module and importing the required dependencies.
 
 ::
 
+  {-# OPTIONS --without-K --exact-split --safe #-}
+
+  open import basic
+
   module terms {𝑆 : Signature 𝓞 𝓥} where
 
-  data Term {X : 𝓧 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓧 ̇  where
-   generator : X → Term {X = X}
-   node : (f : ∣ 𝑆 ∣) → (t : ∥ 𝑆 ∥ f → Term {X = X}) → Term
+  open import congruences
+  open import homomorphisms {𝑆 = 𝑆}
+  open import prelude using
+   (intensionality; global-dfunext; 𝓇ℯ𝒻𝓁; pr₂; Inv; InvIsInv;
+    eq; _∙_; fst; snd) public
+
+Next, we define a datatype called ``Term`` which, not surprisingly, represents the type of terms.  The type ``X :  𝒰 ̇`` represents an arbitrary collection of "variables."
+
+::
+
+  data Term {X : 𝓤 ̇}  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
+    generator : X → Term {X = X}
+    node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
 
   open Term
 
@@ -57,8 +56,12 @@ The term algebra was described informally in :numref:`terms`.  We denote this im
 ::
 
   --The term algebra 𝑻(X).
-  𝑻 : 𝓧 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧) 𝑆
+  𝑻 : 𝓤 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤) 𝑆
   𝑻 X = Term{X = X} , node
+
+  term-op : {X : 𝓤 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term {X = X}) → Term
+  term-op f args = node f args
+
 
 -----------------------------------------------
 
@@ -74,7 +77,7 @@ We prove
 
 ::
 
-  module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓧 ̇ } where
+  module _ {𝑨 : Algebra 𝓤 𝑆} {X : 𝓤 ̇ } where
 
 First, every map ``X → ∣ 𝑨 ∣`` lifts to a homomorphism.
 
@@ -105,6 +108,40 @@ Next, the lift to (𝑻 X → 𝑨) is unique.
     ∣ h ∣ (node f args)             ∎
      where γ = fe λ i → free-unique fe g h p (args i)
 
+Next we note the easy fact that the lift induced by ``h₀`` agrees with ``h₀`` on ``X`` and that the lift is surjective if the ``h₀`` is.
+
+::
+
+   --lift agrees on X
+   lift-agrees-on-X : (h₀ : X → ∣ 𝑨 ∣)(x : X)
+                   ------------------------------------
+    →               h₀ x ≡ ∣ lift-hom h₀ ∣ (generator x)
+
+   lift-agrees-on-X h₀ x = refl _
+
+   --Of course, the lift of a surjective map is surjective.
+   lift-of-epic-is-epic : (h₀ : X → ∣ 𝑨 ∣) →  Epic h₀
+                         ---------------------------
+    →                     Epic ∣ lift-hom h₀ ∣
+
+   lift-of-epic-is-epic h₀ hE y = γ
+    where
+     h₀pre : Image h₀ ∋ y
+     h₀pre = hE y
+
+     h₀⁻¹y : X
+     h₀⁻¹y = Inv h₀ y (hE y)
+
+     η : y ≡ ∣ lift-hom h₀ ∣ (generator h₀⁻¹y)
+     η =
+      y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+      h₀ h₀⁻¹y                        ≡⟨ lift-agrees-on-X h₀ h₀⁻¹y ⟩
+      ∣ lift-hom h₀ ∣ (generator h₀⁻¹y) ∎
+
+     γ : Image ∣ lift-hom h₀ ∣ ∋ y
+     γ = eq y (generator h₀⁻¹y) η
+
+
 ----------------------------------------------
 
 .. _interpretation:
@@ -122,10 +159,45 @@ Let ``t : Term`` be a term and ``𝑨`` an 𝑆-algebra. We define the 𝑛-ary 
   _̇_ : {X : 𝓧 ̇ } → Term{X = X}
    →   (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-  ((generator x)̇ 𝑨) a = a x
+  ((generator x)̇ 𝑨) 𝒂 = 𝒂 x
 
-  ((node f args)̇ 𝑨) a = (f ̂ 𝑨) λ{x → (args x ̇ 𝑨) a}
+  ((node f args)̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
 
+
+Next we show that if ``p : ∣ 𝑻(X) ∣`` is a term, then there exists ``𝓅 : ∣ 𝑻(X) ∣`` and ``𝒕 : X → ∣ 𝑻(X) ∣`` such that ``p ≡ (𝓅 ̇ 𝑻(X)) 𝒕``. We prove this fact in the following module:
+
+::
+
+  module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
+
+   term-op-interp : (f : ∣ 𝑆 ∣)
+                     {a1 a2 : ∥ 𝑆 ∥ f → Term {X = X}}
+    →                a1 ≡ a2
+    →                node f a1 ≡ (f ̂ 𝑻(X)) a2
+   term-op-interp f {a1}{a2} a1≡a2 = (ap (node f) a1≡a2) ∙ 𝓇ℯ𝒻𝓁
+
+   term-gen : (p : ∣ 𝑻(X) ∣)
+    →         Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) generator
+
+   term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
+   term-gen (node f args) =
+     node f (λ i → ∣ term-gen (args i) ∣ ) ,
+       term-op-interp f (gfe λ i → ∥ term-gen (args i) ∥)
+
+   tg : (p : ∣ 𝑻(X) ∣) → Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) generator
+   tg p = term-gen p
+
+   term-gen-agreement : (p : ∣ 𝑻(X) ∣)
+    →      (p ̇ 𝑻(X)) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻(X)) generator
+   term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
+   term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
+
+   term-agreement : (p : ∣ 𝑻(X) ∣) → p ≡ (p ̇ 𝑻(X)) generator
+   term-agreement p = snd (tg p) ∙ (term-gen-agreement p)⁻¹
+
+Next we have some definitions that are sometimes useful when dealing with the interpretations of terms in a product structure.
+
+::
 
   interp-prod : funext 𝓥 𝓤
    →            {X : 𝓧 ̇}{I : 𝓤 ̇}(p : Term{X = X})
@@ -183,11 +255,11 @@ Homomorphisms commute with terms
 
 ::
 
-  comm-hom-term : global-dfunext --  𝓥 𝓤
-   →               {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
-   →               (h : hom 𝑨 𝑩) (t : Term{X = X}) (a : X → ∣ 𝑨 ∣)
-                 --------------------------------------------
-   →               ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
+  comm-hom-term : global-dfunext
+   →     {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+   →     (h : hom 𝑨 𝑩) (t : Term{X = X}) (a : X → ∣ 𝑨 ∣)
+         -----------------------------------------------
+   →     ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
   comm-hom-term fe 𝑨 𝑩 h (generator x) a = refl _
 
@@ -202,26 +274,24 @@ Homomorphisms commute with terms
 Congruences commute with terms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here we present an Agda proof of the fact that terms respect congruences. More precisely, we show that for every term t, every θ ∈ Con(𝑨), and all tuples a, b : 𝑋 → A, we have :math:`(∀ i, a(i) \mathrel θ b(i)) → (t^𝑨 a) \mathrel θ (t^𝑨 b)`.
+Rounding out this chapter is an formal proof of the fact that terms respect congruences.
+
+More precisely, we show that for every term ``t``, every ``θ ∈ Con(𝑨)``, and all tuples ``a, b : 𝑋 → A``, we have ``(∀ i, a(i) θ b(i)) → (t ̇ 𝑨) a θ (t ̇ 𝑨) b.
 
 ::
 
   -- If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b)
   compatible-term : {X : 𝓧 ̇}
-             (𝑨 : Algebra 𝓤 𝑆) (t : Term{X = X}) (θ : Con 𝑨)
-             --------------------------------------------------
-   →                   compatible-fun (t ̇ 𝑨) ∣ θ ∣
+        (𝑨 : Algebra 𝓤 𝑆) (t : Term{X = X}) (θ : Con 𝑨)
+       --------------------------------------------------
+   →         compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
   compatible-term 𝑨 (generator x) θ p = p x
 
   compatible-term 𝑨 (node f args) θ p =
    pr₂( ∥ θ ∥ ) f λ{x → (compatible-term 𝑨 (args x) θ) p}
 
-For proof of 3, see `TermImageSub` in subuniverses.lagda.
-
-..    #. For every subset Y of A,  Sg ( Y ) = { t (a₁, ..., aₙ ) : t ∈ T(Xₙ), n < ω, aᵢ ∈ Y, i ≤ n}.
-
-
+(For proof of 3, see `TermImageSub` in the `subuniverses module`_.)
 
 
 

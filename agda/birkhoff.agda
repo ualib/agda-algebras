@@ -81,8 +81,8 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
   h₀ : X → ∣ 𝑨 ∣
   h₀ = fst ℋ
 
-  hE : Epic h₀
-  hE = snd ℋ
+  -- hE : Epic h₀
+  -- hE = snd ℋ
 
   h : hom (𝑻 X) 𝑨
   h = lift-hom{𝑨 = 𝑨}{X = X} h₀
@@ -98,13 +98,7 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
   Ψ⊆Kerh {p , q} pΨq = hp≡hq
    where
     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
-    hp≡hq =
-      ∣ h ∣ p              ≡⟨ ap ∣ h ∣ (term-agreement{gfe = gfe} p) ⟩
-      ∣ h ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h p ℊ) ⟩
-      (p ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ intensionality (Ψ⊆A⊧{p}{q} pΨq) (∣ h ∣ ∘ ℊ)  ⟩
-      (q ̇ 𝑨) (∣ h ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q ℊ)⁻¹ ⟩
-      ∣ h ∣ ((q ̇ 𝑻(X)) ℊ) ≡⟨ (ap ∣ h ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
-      ∣ h ∣ q              ∎
+    hp≡hq = hom-id-compatibility{𝒦} p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
 
   --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
   --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))

@@ -24,10 +24,14 @@ Preliminaries
 
    {-# OPTIONS --without-K --exact-split --safe #-}
 
-   open import prelude
-   open import basic using (Signature; Algebra; _̂_)
+   open import basic
 
    module congruences where
+
+   open import prelude using (Pred; 𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎;
+    refl; _⁻¹; funext; ap) public
+
+
 
 --------------------------------------
 
@@ -56,32 +60,32 @@ The kernel of a function can be defined in many ways. For example,
 
 ::
 
-   KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → 𝓤 ⊔ 𝓦 ̇
+   KER : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → 𝓤 ⊔ 𝓦 ̇
    KER {𝓤}{𝓦}{A} f = Σ x ꞉ A , Σ y ꞉ A , f x ≡ f y
 
-   ker : {A B : 𝓤 ̇ } → (f : A → B) → 𝓤 ̇
+   ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
    ker {𝓤} = KER{𝓤}{𝓤}
 
 or as a relation...
 
 ::
 
-   KER-rel : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (f : A → B) → Rel A 𝓦
-   KER-rel f x y = f x ≡ f y
+   KER-rel : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Rel A 𝓦
+   KER-rel g x y = g x ≡ g y
 
    -- (in the special case 𝓦 ≡ 𝓤)
-   ker-rel : {A B : 𝓤 ̇ } → (f : A → B) → Rel A 𝓤
+   ker-rel : {A B : 𝓤 ̇ } → (A → B) → Rel A 𝓤
    ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
 or a binary predicate...
 
 ::
 
-   KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } (f : A → B) → Pred (A × A) 𝓦
-   KER-pred f (x , y) = f x ≡ f y
+   KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } → (A → B) → Pred (A × A) 𝓦
+   KER-pred g (x , y) = g x ≡ g y
 
    -- (in the special case 𝓦 ≡ 𝓤)
-   ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } (f : A → B) → Pred (A × A) 𝓤
+   ker-pred : {A : 𝓤 ̇ }{B : 𝓤 ̇ } → (A → B) → Pred (A × A) 𝓤
    ker-pred {𝓤} = KER-pred {𝓤} {𝓤}
 
 

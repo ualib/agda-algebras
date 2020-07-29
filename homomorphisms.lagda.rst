@@ -13,21 +13,6 @@ Homomorphisms in Agda
 
 This chapter describes the `homomorphisms module`_ of the `agda-ualib`_.
 
------------------------------------
-
-Preliminaries
--------------
-
-As usual, we start with the imports we will need below.
-
-::
-
-  {-# OPTIONS --without-K --exact-split --safe #-}
-
-  open import prelude
-  open import basic using (Signature; Algebra; Op; _̂_)
-  open import congruences using (ker; ker-pred; Rel; 𝟎; con; _//_)
-
 ------------------------------------------
 
 .. _types for homomorphisms:
@@ -35,12 +20,19 @@ As usual, we start with the imports we will need below.
 Types for homomorphisms
 ------------------------
 
-We start the ``homomorphisms`` module with a fixed signature ``𝑆``.
+We begin the `homomorphisms module`_ by declaring a fixed signature ``𝑆`` an importing the required dependencies.
 
 ::
 
+  {-# OPTIONS --without-K --exact-split --safe #-}
+
+  open import basic
+  open import congruences
+
   module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
+  open import prelude using (_∘_; _∈_; _⊆_; EpicInv; cong-app;
+   EInvIsRInv; Image_∋_) public
 
 Our implementation of the notion of homomorphisms in the agda-ualib_ is an `extensional` one.  What this means will become clear once we have presented the definitions (cf. :ref:`Homomorphisms intensionally <homomorphisms intensionally>`).
 
@@ -235,9 +227,6 @@ For algebras, an isomorphism is simply a homomorphism with a trivial kernel.
 
    AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
    AlgebraIsos 𝑨 𝑩 = Σ f ꞉ (hom 𝑨 𝑩) , is-algebra-iso {𝑨}{𝑩} f
-
-   _≈_ : Rel (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-   𝑨 ≈ 𝑩 = is-singleton (AlgebraIsos 𝑨 𝑩)
 
 
 -----------------------------------------------------

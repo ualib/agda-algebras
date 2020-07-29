@@ -16,50 +16,33 @@ Here we give a formal proof in Agda of :ref:`Birkhoff's theorem <birkhoffs theor
 
 ----------------------------------------
 
-Preliminaries
---------------
-
-As usual, we start with the imports we will need below.
-
-::
-
-  {-# OPTIONS --without-K --exact-split --safe #-}
-
-  open import prelude
-  open import basic using (Signature; Algebra; _̂_)
-  open import homomorphisms using (hom; is-homomorphism)
-  open import subuniverses using (Subuniverse; mksub; var; app; Sg)
-  open import terms using (Term;generator;𝑻;_̇_;comm-hom-term;lift-hom)
-
---------------------------------------------
-
 .. _the birkhoff module:
 
 The birkhoff module
 ----------------------
 
-We start the `birkhoff module`_ with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
+In addition to the usual importing of dependencies, We start the `birkhoff module`_ with a fixed signature and a type ``X``.  As in the ``terms`` module, ``X`` represents an arbitrary (infinite) collection of "variables" (which will serve as the generators of the :term:`term algebra` 𝑻(X)).
 
 ::
 
 
-  -- module birkhoff {S : Signature 𝓞 𝓥} {X : 𝓧 ̇ }  where
+  {-# OPTIONS --without-K --exact-split --safe #-}
+
+  open import basic
+  open import prelude using (global-dfunext; dfunext)
+
   module birkhoff
    {𝑆 : Signature 𝓞 𝓥}
-   {𝓤 : Universe}
-   {ua : Univalence}
    {X : 𝓤 ̇ }
    {gfe : global-dfunext}
-   {dfe : dfunext 𝓤 𝓤} where
+   {dfe : dfunext 𝓤 𝓤} {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
   open import closure
    {𝑆 = 𝑆}
-   {𝓤 = 𝓤}
-   {ua = ua}
    {X = X}
    {gfe = gfe}
-   {dfe = dfe} using (VClo; _⊧_≈_; _⊧_≋_)
-
+   {dfe = dfe}
+   {𝕏 = 𝕏}
 
 -------------------------------------
 
@@ -86,18 +69,17 @@ It turns out that the equalizer of two homomorphisms is closed under the operati
 ::
 
   𝑬𝑯-is-closed : funext 𝓥 𝓤
-   →      {𝑓 : ∣ 𝑆 ∣ } {𝑨 𝑩 : Algebra 𝓤 𝑆}
-          (g h : hom 𝑨 𝑩)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
-   →      ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
-          --------------------------------------------------
-   →       ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
+   →     {𝑓 : ∣ 𝑆 ∣ } {𝑨 𝑩 : Algebra 𝓤 𝑆}
+         (g h : hom 𝑨 𝑩)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
+   →     ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
+         --------------------------------------------------
+   →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-  𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩}
-   (g , ghom)(h , hhom) 𝒂 p =
-     g ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ghom 𝑓 𝒂 ⟩
-     (𝑓 ̂ 𝑩)(g ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
-     (𝑓 ̂ 𝑩)(h ∘ 𝒂)  ≡⟨ (hhom 𝑓 𝒂)⁻¹ ⟩
-     h ((𝑓 ̂ 𝑨) 𝒂)    ∎
+  𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p = 
+     ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+     (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
+     (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+     ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
 
 Thus, ``𝑬𝑯`` is a subuniverse of ``A``.
 
@@ -129,65 +111,64 @@ The :numref:`homomorphisms module (Section %s) <homomorphisms in agda>` formaliz
    →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
   HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
-  HomUnique fe {𝑨}{𝑩} X
-   (g , ghom) (h , hhom) gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
-    g ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ghom 𝑓 𝒂 ⟩
-    (𝑓 ̂ 𝑩)(g ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩) (fe induction-hypothesis) ⟩
-    (𝑓 ̂ 𝑩)(h ∘ 𝒂)    ≡⟨ ( hhom 𝑓 𝒂 )⁻¹ ⟩
-    h ((𝑓 ̂ 𝑨) 𝒂)   ∎
+  HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
+    ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+    (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
+    (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
+    ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )   ∎
    where
     induction-hypothesis =
-      λ x → HomUnique fe {𝑨}{𝑩} X
-      (g , ghom)(h , hhom) gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+      λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 --------------------------------------------------
-
-
-Equational classes
---------------------
-
-::
-
-  TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → _ ̇
-  TH 𝒦 = Σ (p , q) ꞉ (Term{X = X} × Term) , 𝒦 ⊧ p ≋ q
-
-  Th : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) → Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
-
-  MOD : Pred (Term{X = X} × Term) 𝓤 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ̇
-  MOD Σ' = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
-
-  Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-  Mod Σ' = λ 𝑨 → ∀ p q → (p , q) ∈ Σ' → 𝑨 ⊧ p ≈ q
-
----------------------------------------------------------------
 
 The Agda proof of Birkhoff's theorem
 -------------------------------------
 
 ::
 
-  --Birkhoff's theorem: every variety is an equational class.
+  -- Birkhoff's theorem: every variety is an equational class.
   birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
-             (𝑨 : Algebra 𝓤 𝑆)(g : X → ∣ 𝑨 ∣ )(eg : Epic g)
-   →         (𝑨 ∈ (Mod (Th (VClo 𝒦)))) → 𝑨 ∈ VClo 𝒦
-  birkhoff 𝒦 𝑨 g eg A∈ModThV = γ
+             (𝑨 : Algebra 𝓤 𝑆)
+             ------------------------------------
+   →         𝑨 ∈ Mod (Th (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
+  birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
    where
-    h : hom (𝑻 X) 𝑨
-    h = lift-hom{𝑨 = 𝑨}{X = X} g
+    ℋ : X ↠ 𝑨
+    ℋ = 𝕏 𝑨
 
-    γ : 𝑨 ∈ VClo 𝒦
-    γ = {!!}
+    h₀ : X → ∣ 𝑨 ∣
+    h₀ = fst ℋ
+
+    -- hE : Epic h₀
+    -- hE = snd ℋ
+
+    h : hom (𝑻 X) 𝑨
+    h = lift-hom{𝑨 = 𝑨}{X = X} h₀
+
+    Ψ⊆ThVClo𝒦 : Ψ{𝒦} ⊆ Th (VClo 𝒦)
+    Ψ⊆ThVClo𝒦 {p , q} pΨq =
+     (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th𝒦 p q pΨq)
+
+    Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → 𝑨 ⊧ p ≈ q
+    Ψ⊆A⊧ {p} {q} pΨq = A∈ModThV p q (Ψ⊆ThVClo𝒦{p , q} pΨq)
+
+    Ψ⊆Kerh : Ψ{𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+    Ψ⊆Kerh {p , q} pΨq = hp≡hq
+     where
+      hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
+      hp≡hq = hom-id-compatibility{𝒦} p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
+
+    --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
+    --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
+    -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+    𝑨∈VClo𝒦 : 𝑨 ∈ VClo 𝒦
+    𝑨∈VClo𝒦 = {!!}
 
 -----------------------------------------------
 
 .. include:: hyperlink_references.rst
 
-
-
-.. **Obs**. If 𝐴, 𝐵 are finite and 𝑋 generates 𝑨, then ∣Hom(𝑨, 𝑩)∣ ≤ :math:`∣B∣^{∣X∣}`.
-.. Proof. By ``HomUnique``, a homomorphism is uniquely determined by its restriction to a generating set. If 𝑋 generates 𝑨, then since there are exactly :math:`∣B∣^∣X∣` functions from 𝑋 to 𝐵, the result holds. □
-
-.. .. todo:: formalize **Obs**.
 
 

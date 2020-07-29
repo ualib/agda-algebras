@@ -23,16 +23,14 @@ module prelude where
 
  open import MGS-MLTT using (_∘_; domain; codomain; transport;
   _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
-  _⇔_; lr-implication; rl-implication; id; _⁻¹; ap)
-  
- open import MGS-Equivalences using (is-equiv; inverse;
-  invertible) public
+  _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
+
+ open import MGS-Equivalences using (is-equiv; inverse; invertible) public
 
  open import MGS-Subsingleton-Theorems using (funext; global-hfunext;
   dfunext; is-singleton; is-subsingleton; is-prop; Univalence;
   global-dfunext; univalence-gives-global-dfunext; _●_; _≃_;
-  logically-equivalent-subsingletons-are-equivalent;
-  Π-is-subsingleton) public
+  logically-equivalent-subsingletons-are-equivalent; Π-is-subsingleton) public
 
  open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
   using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
@@ -40,11 +38,11 @@ module prelude where
 
  open import MGS-Embeddings using (is-embedding; pr₁-embedding;
   is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
-  ×-is-subsingleton) public
+  ×-is-subsingleton) --public
 
  open import MGS-Solved-Exercises using (to-subtype-≡) public
 
- -- open import MGS-Unique-Existence        public
+ -- open import MGS-Unique-Existence
  open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
  -- using (subsingleton-truncations-exist) public
 

@@ -21,18 +21,28 @@ We define subuniverses and subalgebras and prove some basic facts about them in 
 Preliminaries
 ------------------
 
-The `subuniverses.lagda.rst <subuniverses module>`_ file starts, as usual, by satisfying dependencies.
+The `subuniverses.lagda.rst <subuniverses module>`_ file starts, as usual, by fixing a signature 𝑆 and satisfying some dependencies.
 
 ::
 
   {-# OPTIONS --without-K --exact-split --safe #-}
 
-  open import prelude
-  open import basic using (Signature; Algebra; Op; _̂_)
-  open import congruences using (transitive)
-  open import homomorphisms using (hom; is-homomorphism; HomImage)
-  open import terms using (Term; _̇_; generator; node; comm-hom-term)
+  open import basic
+
+  module subuniverses {𝑆 : Signature 𝓞 𝓥} where
+
+  open import congruences
+  open import homomorphisms {𝑆 = 𝑆}
+  open import terms
   open import Relation.Unary using (⋂)
+
+  open import prelude using (Im_⊆_; Univalence; embeddings-are-lc;
+   univalence-gives-global-dfunext; 𝓟; _∈₀_; _⊆₀_; pr₁; domain;
+   is-subsingleton; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton;
+   ∈-is-subsingleton; is-embedding; pr₁-embedding; rl-implication; inverse;
+   embedding-gives-ap-is-equiv; is-set;_⇔_;transport; subset-extensionality';
+   equiv-to-subsingleton; powersets-are-sets'; _≃_; id; _●_;
+   logically-equivalent-subsingletons-are-equivalent) public
 
 ------------------------------------------------------
 
@@ -44,8 +54,6 @@ Types for subuniverses
 We begin the `subuniverses module`_ with a straightforward definition of the collection of subuniverses of an algebra A.  Since a subuniverse is a subset of the domain of A, it is defined as a predicate on ∣ A ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ A ∣.
 
 ::
-
-  module subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
   Subuniverses : (𝑨 : Algebra 𝓤 𝑆)
    →             Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
@@ -255,23 +263,11 @@ Finally, we can prove the desired inclusion.
 Types for subalgebras
 ---------------------
 
-The next submodule is a generalization of MHE's implementation of subgroups. We consider the subalgebras of an single arbitrary(but fixed) algebra 𝑨.
+The next submodule is a generalization of MHE's implementation of subgroups. We consider the subalgebras of an single arbitrary(but fixed) algebra 𝑨 and we present a module that generalizes `MHE's ambient module <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip>`_ . It does for subuniverses what MHE does for subgroups.
 
 ::
 
-  module _ {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
-
-Following MHE's analogous development for groups and their subgroups (cf. `Subgroup' <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#372215>`_ ) we define the type of subalgebras as follows.
-
-::
-
-   Subalgebra : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-   Subalgebra = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
-                   Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
-                     is-embedding h × is-homomorphism 𝑩 𝑨 h
-
-
-Next we present a module that generalizes `MHE's ambient module <https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#subgroups-sip>`_ . It does for subuniverses what MHE does for subgroups.
+  module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
 
 Note that we introduce a new definition of the ``subuniverse`` type here.  In cotrast to our earlier definition of ``Subuniverses``, which uses a predicate on ``∣ 𝑨 ∣`` to represent the underlying set of the subuniverse, here we use the type ``𝓟 ∣ 𝑨 ∣``, the powerset of the universe of ``𝑨``.
 
@@ -402,6 +398,25 @@ The converse of `membership-equiv-gives-carrier-equality` is obvious.
     →                      (B ≡ C) ≃ (∣ B ∣ ≡ ∣ C ∣)
    subuniverse-equality' B C =
     (subuniverse-equality B C) ● (carrier-equiv B C)
+
+---------------------------------------------
+
+The type of Subalgebras in Agda
+----------------------------------
+
+Finally, we define, once and for all, the type of subalgebras of an algebra (resp., subalgebras of algebras in a class of algebras) that we will use in the sequel.
+
+::
+
+  -- new definition of subalgebra (includes an embedding)
+  SubalgebrasOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  SubalgebrasOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
+                          Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
+                           is-embedding h × is-homomorphism 𝑩 𝑨 h
+
+  SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × SubalgebrasOf 𝑨
+
 
 --------------------------------------------
 

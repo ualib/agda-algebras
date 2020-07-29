@@ -5,7 +5,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; fst; snd; im)
+open import prelude using (global-dfunext; dfunext; im)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -189,7 +189,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    γ : 𝑨 ⊧ p ≈ q
    γ = gfe λ 𝒂 →
     (p ̇ 𝑨) 𝒂
-      ≡⟨ refl _ ⟩
+      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
     (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
       ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
     (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻(X))) ℊ
@@ -197,7 +197,7 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
     (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻(X))) ℊ
       ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q ℊ) ⟩
     (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
-      ≡⟨ refl _ ⟩
+      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
     (q ̇ 𝑨) 𝒂
       ∎
 
@@ -210,36 +210,24 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    identities-compatible-with-homs p q ,
    homs-compatible-with-identities p q
 
+ ---------------------------------------------------------------
+
  --Compatibility of identities with interpretation of terms
- compatibility-of-interpretations : (p q : Term)
-  →        (𝒦 ⊧ p ≋ q)
-  →        ∀ 𝑨 (ka : 𝑨 ∈ 𝒦) (hh : hom (𝑻 X) 𝑨)
-  →        ∣ hh ∣ ((∣ term-gen{gfe = gfe} p ∣ ̇ 𝑻(X)) ℊ)
-         ≡ ∣ hh ∣ ((∣ term-gen{gfe = gfe} q ∣ ̇ 𝑻(X)) ℊ)
+ hom-id-compatibility : (p q : ∣ 𝑻(X) ∣ )
+                        (𝑨 : Algebra _ 𝑆)
+                        (ϕ : hom (𝑻 X) 𝑨)
+  →                     (𝑨 ⊧ p ≈ q)
+                       -------------------
+  →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
- compatibility-of-interpretations p q 𝒦⊧p≋q 𝑨 ka hh = γ
-  where
-   𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
-   𝓅 = ∣ tg p ∣
-   𝓆 = ∣ tg q ∣
+ hom-id-compatibility p q 𝑨 ϕ pA≡qA =
+    ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement{gfe = gfe} p) ⟩
+    ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ) ⟩
+    (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ ϕ ∣ ∘ ℊ)  ⟩
+    (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
+    ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement{gfe = gfe} q))⁻¹ ⟩
+    ∣ ϕ ∣ q  ∎
 
-   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
-   p≡𝓅 = ∥ tg p ∥
-
-   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
-   q≡𝓆 = ∥ tg q ∥
-
-   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
-   pA≡qA = 𝒦⊧p≋q ka
-
-   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)
-   γ =
-    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
-    ∣ hh ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p ℊ) ⟩
-    (p ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ ℊ)  ⟩
-    (q ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q ℊ)⁻¹ ⟩
-    ∣ hh ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
-    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)  ∎
 
 ------------------------------------------------------------------------
 -- Equational theories and classes
@@ -382,9 +370,6 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
  Ψ⊆Th𝒦 : ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
  Ψ⊆Th𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo𝒦{p , q} pΨq (sbase KA)
-
-  --  γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-  --  γ = {!!}
 
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)).  Therefore, to prove
 --𝑨 is a hom image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of
@@ -623,3 +608,36 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
   (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
   λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
 
+-----------------------------------------------------
+-- Old, unused stuff
+
+ --Compatibility of identities with interpretation of terms
+ compatibility-of-interpretations : (p q : Term)
+  →        (𝒦 ⊧ p ≋ q)
+  →        ∀ 𝑨 (ka : 𝑨 ∈ 𝒦) (hh : hom (𝑻 X) 𝑨)
+  →        ∣ hh ∣ ((∣ term-gen{gfe = gfe} p ∣ ̇ 𝑻(X)) ℊ)
+         ≡ ∣ hh ∣ ((∣ term-gen{gfe = gfe} q ∣ ̇ 𝑻(X)) ℊ)
+
+ compatibility-of-interpretations p q 𝒦⊧p≋q 𝑨 ka hh = γ
+  where
+   𝓅 𝓆 : ∣ 𝑻 X ∣  -- Notation: 𝓅 = \Mcp
+   𝓅 = ∣ tg p ∣
+   𝓆 = ∣ tg q ∣
+
+   p≡𝓅 : p ≡ (𝓅 ̇ 𝑻 X) ℊ
+   p≡𝓅 = ∥ tg p ∥
+
+   q≡𝓆 : q ≡ (𝓆 ̇ 𝑻 X) ℊ
+   q≡𝓆 = ∥ tg q ∥
+
+   pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
+   pA≡qA = 𝒦⊧p≋q ka
+
+   γ : ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ) ≡ ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)
+   γ =
+    ∣ hh ∣ ((𝓅 ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ hh ∣ (term-gen-agreement p))⁻¹ ⟩
+    ∣ hh ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh p ℊ) ⟩
+    (p ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ hh ∣ ∘ ℊ)  ⟩
+    (q ̇ 𝑨) (∣ hh ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 hh q ℊ)⁻¹ ⟩
+    ∣ hh ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ ap ∣ hh ∣ (term-gen-agreement q) ⟩
+    ∣ hh ∣ ((𝓆 ̇ 𝑻 X) ℊ)  ∎
