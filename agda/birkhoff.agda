@@ -6,7 +6,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; fst; snd)
+open import prelude using (global-dfunext; dfunext)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
