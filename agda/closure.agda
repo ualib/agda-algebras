@@ -365,41 +365,28 @@ module _
    h : hom (𝑻 X) 𝑨
    h = lift-hom{𝑨 = 𝑨} h₀
 
+   -- Recall,
+   --
+   --     _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+   --     A // ≈ = Σ C ꞉ _ ,   Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+   --
+   -- so if [a] : ∣ 𝑻 X ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
+   -- representative of the ConΨ-class [a].
+
    ϕ : ∣ 𝑻 X ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
-   ϕ = λ [a] → let a = fst (snd [a]) in ∣ h ∣ a
-
-
--- [_]_ :  {A : 𝓤 ̇ } →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
--- [ a ] _≈_ = Σ x ꞉ _ ,  a ≈ x
-
--- _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
--- A // ≈ = Σ C ꞉ _ ,   Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+   ϕ = λ [a] → ∣ h ∣ (fst ∥ [a] ∥)
 
    ϕhom : is-homomorphism 𝔽 𝑨 ϕ
    ϕhom f a = γ
     where
-     γ : ϕ (∥ 𝔽 ∥ f a) ≡ ∥ 𝑨 ∥ f (λ x → ϕ (a x))
-     γ = {!!}
-
-
--- is-homomorphism : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
---  →                (∣ A ∣ → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
--- is-homomorphism A B g =
---  all-ops-in A and B commute-extensionally-with g
-
--- op f interpreted-in A and B commutes-extensionally-with g =
---  ∀( a : ∥ 𝑆 ∥ f → ∣ A ∣ ) → g (∥ A ∥ f a) ≡ ∥ B ∥ f (g ∘ a)
-
--- all-ops-in_and_commute-extensionally-with :
---      (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
---  →   (∣ A ∣  → ∣ B ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
--- all-ops-in A and B commute-extensionally-with g = ∀ (f : ∣ 𝑆 ∣)
---   → op f interpreted-in A and B commutes-extensionally-with g
-
--- hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
--- hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
+     γ : ϕ ((f ̂ 𝔽) a) ≡ (f ̂ 𝑨) (λ x → ϕ (a x))
+     γ =
+      ϕ ((f ̂ 𝔽) a)                                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      ϕ (([ (f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥) ] ⟨ ConΨ ⟩) ,
+          ((f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥) , refl _ ))    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      ∣ h ∣ ((f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥)) ≡⟨ ∥ h ∥ f ((λ i₁ → fst ∥ a i₁ ∥)) ⟩
+      (f ̂ 𝑨) (∣ h ∣ ∘ (λ i₁ → fst ∥ a i₁ ∥)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      (f ̂ 𝑨) (ϕ ∘ a) ∎
 
  -- 𝔽∈SP : 𝔽 ∈ SClo (PClo 𝒦)
  -- 𝔽∈SP = {!!}
