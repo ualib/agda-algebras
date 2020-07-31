@@ -5,12 +5,22 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-
-module subuniverses {𝑆 : Signature 𝓞 𝓥} where
-
 open import congruences
+
+module subuniverses
+ {𝑆 : Signature 𝓞 𝓥}
+ {𝓤 : Universe}
+ {X : 𝓤 ̇ } 
+ {𝕏 :  {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → X ↠ 𝑨} where
+
 open import homomorphisms {𝑆 = 𝑆}
+
 open import terms
+ {𝑆 = 𝑆}
+ {𝓤 = 𝓤}
+ {X = X}
+ {𝕏 = 𝕏} renaming (generator to ℊ)
+
 open import Relation.Unary using (⋂)
 
 open import prelude using (Im_⊆_; Univalence; embeddings-are-lc;
@@ -39,7 +49,7 @@ data _is-supalgebra-of_
 _is-subalgebra-of_ : Algebra 𝓤 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
 
-_is-subalgebra-of-class_ : {𝓤 : Universe}(𝑩 : Algebra 𝓤 𝑆)
+_is-subalgebra-of-class_ : (𝑩 : Algebra 𝓤 𝑆)
  →            Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of-class 𝒦 =
    Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × (𝑩 is-subalgebra-of 𝑨)
@@ -107,7 +117,6 @@ module _
 
 
 module _
- {X : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇}
  {𝑨 𝑩 : Algebra 𝓤 𝑆}
  {B : Pred ∣ 𝑨 ∣ 𝓤}
  (Y : 𝓤 ̇) where
@@ -118,7 +127,7 @@ module _
                  ---------------------------
   →                ((t ̇ 𝑨) b) ∈ B
 
- sub-term-closed B≤A (generator x) b b∈B = b∈B x
+ sub-term-closed B≤A (ℊ x) b b∈B = b∈B x
 
  sub-term-closed B≤A (node f t) b b∈B =
    B≤A f (λ z → (t z ̇ 𝑨) b)

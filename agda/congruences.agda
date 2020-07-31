@@ -10,7 +10,7 @@ open import basic
 module congruences where
 
 open import prelude using (Pred; 𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎;
- refl; _⁻¹; funext; ap) public
+ refl; _⁻¹; funext; ap; _∙_; 𝓇ℯ𝒻𝓁) public
 
 REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺) ̇
 REL A B 𝓝 = A → B → 𝓝 ̇
@@ -105,16 +105,9 @@ is-equivalence-relation _≈_ =
   × reflexive _≈_ × symmetric _≈_ × transitive _≈_
 
 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence {𝓤}{𝓤}{A} 𝟎-rel
-𝟎-IsEquivalence = record { rfl = ρ ; sym = σ ; trans = τ }
- where
-  ρ : reflexive 𝟎-rel
-  ρ x =  x ≡⟨ refl _ ⟩ x ∎
-
-  σ : symmetric 𝟎-rel
-  σ x y x≡y = x≡y ⁻¹
-
-  τ : transitive 𝟎-rel
-  τ x y z x≡y y≡z = x ≡⟨ x≡y ⟩ y ≡⟨ y≡z ⟩ z ∎
+𝟎-IsEquivalence = record { rfl = λ x → 𝓇ℯ𝒻𝓁
+                         ; sym = λ x y x≡y → x≡y ⁻¹
+                         ; trans = λ x y z x≡y y≡z → x≡y ∙ y≡z }
 
 lift-rel : {γ : 𝓥 ̇ } {Z : 𝓤 ̇ }
  →         Rel Z 𝓦 → (γ → Z) → (γ → Z)
@@ -142,7 +135,7 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
    →                {A : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
    →                compatible-op {𝓤}{A} f 𝟎-rel
   𝟎-compatible-op fe {A = A} f ptws0  =
-   ap (∥ A ∥ f) (fe (λ x → ptws0 x))
+   ap (f ̂ A) (fe (λ x → ptws0 x))
 
   𝟎-compatible : funext 𝓥 𝓤
    →             {A : Algebra 𝓤 𝑆}

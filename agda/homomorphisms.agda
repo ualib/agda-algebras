@@ -84,7 +84,7 @@ hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ �
 hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
 
 𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
-𝒾𝒹 _ = (λ x → x) , λ _ _ → refl _ 
+𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
 HCompClosed : {A : Algebra 𝓤 𝑆}
               {B : Algebra 𝓦 𝑆}
