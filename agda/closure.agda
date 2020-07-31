@@ -260,11 +260,11 @@ Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 𝑻HI = HomImagesOf (𝑻 X)
 
 module _
- {𝓦 𝓣 : Universe}
- {𝒦 : Pred (Algebra 𝓦 𝑆) 𝓣} where
+ {𝓦 : Universe}
+ {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦} where
 
- 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣 ̇
- 𝑻img =  Σ 𝑨 ꞉ (Algebra 𝓦 𝑆) ,
+ 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦 ̇
+ 𝑻img =  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
            Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
  𝑻𝑨 : (ti : 𝑻img) → Algebra _ 𝑆
@@ -279,38 +279,38 @@ module _
  𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
  𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
- 𝑻KER : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣) ̇
+ 𝑻KER : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦) ̇
  𝑻KER = Σ (p , q) ꞉ (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) ,
     ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
 
- Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣)
+ Ψ : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
  Ψ (p , q) =
     ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻(X)) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻(X))
 
- Pred→Rel : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣)
-  →         Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣)
+ Pred→Rel : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
+  →         Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
  Pred→Rel P = λ t1 t2 → P (t1 , t2)
 
- Ψ' : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣)
+ Ψ' : Pred (∣ (𝑻 X) ∣ × ∣ (𝑻 X) ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
  Ψ' (p , q) = ∀(ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
- Ψ-IsEquivalence : IsEquivalence{𝓞 ⊔ 𝓥 ⊔ 𝓤}{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣}{Term} (Pred→Rel Ψ)
+ Ψ-IsEquivalence : IsEquivalence{𝓞 ⊔ 𝓥 ⊔ 𝓤}{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦}{Term} (Pred→Rel Ψ)
  Ψ-IsEquivalence =
   record { rfl = λ p ti → 𝓇ℯ𝒻𝓁
          ; sym = λ p q p≡q ti → (p≡q ti)⁻¹
          ; trans = λ p q r p≡q q≡r ti → (p≡q ti) ∙ (q≡r ti)
          }
 
- 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣) → _ ̇
+ 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦) → _ ̇
  𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻(X)) ]⇒ R
 
- 𝑻compatible : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣) → _ ̇
+ 𝑻compatible : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦) → _ ̇
  𝑻compatible R = ∀ f → 𝑻compatible-op f R
 
- record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣) ⁺ ̇  where
+ record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦) ⁺ ̇  where
   constructor mk𝑻con
   field
-   ⟨_⟩ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ⊔ 𝓣)
+   ⟨_⟩ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
    Compatible : 𝑻compatible ⟨_⟩
    IsEquiv : IsEquivalence ⟨_⟩
 
@@ -319,7 +319,7 @@ module _
  Ψ-𝑻compatible : 𝑻compatible (Pred→Rel Ψ)
  Ψ-𝑻compatible f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
   where
-   𝑨 : Algebra 𝓦 𝑆
+   𝑨 : Algebra 𝓤 𝑆
    𝑨 = 𝑻𝑨 ti
 
    ϕ : hom (𝑻 X) 𝑨
@@ -344,17 +344,19 @@ module _
  ConΨ : 𝑻Congruence
  ConΨ = mk𝑻con (Pred→Rel Ψ) Ψ-𝑻compatible Ψ-IsEquivalence
 
- 𝔽 : Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ⊔ 𝓣) ⁺) 𝑆
- 𝔽 = (( ∣ 𝑻 X ∣ // ⟨ ConΨ ⟩ ) , -- carrier
-          (λ f args            -- operations
-           → ([ (f ̂ 𝑻 X) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ ConΨ ⟩) ,
-             ((f ̂ 𝑻 X) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
-          )
-        )
+ 𝔽 : Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦) ⁺) 𝑆
+ 𝔽 = (
+        -- carrier
+        (  ∣ 𝑻 X ∣ // ⟨ ConΨ ⟩  ) ,
 
- 𝔽-is-universal-for : {𝑨 : Algebra 𝓦 𝑆}
-   →                   𝑨 ∈ 𝒦 →  hom 𝔽 𝑨
- 𝔽-is-universal-for {𝑨 = 𝑨} 𝑨∈𝒦 = ϕ , ϕhom
+        -- operations
+        (  λ f args
+            → ([ (f ̂ 𝑻 X) (λ i₁ → fst ∥ args i₁ ∥) ] ⟨ ConΨ ⟩) ,
+                ((f ̂ 𝑻 X) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
+      )
+
+ 𝔽-is-universal-for : (𝑨 : Algebra 𝓦 𝑆) → hom 𝔽 𝑨
+ 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
   where
    h₀ : X → ∣ 𝑨 ∣
    h₀ = fst (𝕏 𝑨)
@@ -364,12 +366,8 @@ module _
 
    h : hom (𝑻 X) 𝑨
    h = lift-hom{𝑨 = 𝑨} h₀
-
-   -- Recall,
-   --
-   --     _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
-   --     A // ≈ = Σ C ꞉ _ ,   Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
-   --
+   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
    -- so if [a] : ∣ 𝑻 X ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
    -- representative of the ConΨ-class [a].
 
@@ -380,18 +378,43 @@ module _
    ϕhom f a = γ
     where
      γ : ϕ ((f ̂ 𝔽) a) ≡ (f ̂ 𝑨) (λ x → ϕ (a x))
-     γ =
-      ϕ ((f ̂ 𝔽) a)                                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      ϕ (([ (f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥) ] ⟨ ConΨ ⟩) ,
-          ((f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥) , refl _ ))    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      ∣ h ∣ ((f ̂ 𝑻 X) (λ i₁ → fst ∥ a i₁ ∥)) ≡⟨ ∥ h ∥ f ((λ i₁ → fst ∥ a i₁ ∥)) ⟩
-      (f ̂ 𝑨) (∣ h ∣ ∘ (λ i₁ → fst ∥ a i₁ ∥)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      (f ̂ 𝑨) (ϕ ∘ a) ∎
+     γ = ϕ ((f ̂ 𝔽) a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         ϕ (([ (f ̂ 𝑻 X) (λ i → fst ∥ a i ∥) ] ⟨ ConΨ ⟩) ,
+           ((f ̂ 𝑻 X) (λ i → fst ∥ a i ∥) , refl _ ))
+                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         ∣ h ∣ ((f ̂ 𝑻 X) (λ i → fst ∥ a i ∥))
+                        ≡⟨ ∥ h ∥ f ((λ i → fst ∥ a i ∥)) ⟩
+         (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
+                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         (f ̂ 𝑨) (ϕ ∘ a) ∎
 
- -- 𝔽∈SP : 𝔽 ∈ SClo (PClo 𝒦)
- -- 𝔽∈SP = {!!}
 
- SClo→𝑻img : {𝑪 : Algebra 𝓦 𝑆}
+module _
+ {𝓦 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⊔ 𝓦)} where
+
+ 𝒦subset : (𝑩 : Algebra 𝓤 𝑆)
+  →           𝑩 ∈ 𝒦  →  Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
+ 𝒦subset 𝑩 𝑩∈𝒦 = 𝑩 , 𝑩∈𝒦
+
+ 𝒦supset : (BK : Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦) → ∣ BK ∣ ∈ 𝒦
+ 𝒦supset BK = ∥ BK ∥
+
+ 𝒦prod : (I : 𝓦 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆) → hom (𝔽{𝒦 = 𝒦}) (⨅ 𝒜)
+ 𝒦prod I 𝒜  = 𝔽-is-universal-for (⨅ 𝒜)
+
+--  𝔽∈SP : hom 𝔽 ⨅
+
+-- {𝒜 : I → Algebra _ 𝑆}
+ -- To get the full universality of 𝔽, we should also prove that the hom described above
+ -- (in the proof of 𝔽-is-universal-for) is actually unique.
+ -- We'll postpone that for now, but here's a stub.
+ -- 𝔽-hom-unique : {𝑨 : Algebra 𝓦 𝑆}(g h : hom 𝔽 𝑨)
+ --  →              ∣ g ∣ ≡ ∣ h ∣
+ -- 𝔽-hom-unique g h = gfe λ x → {!γ x!}
+ --  where γ : ∀ x → ∣ g ∣ x ≡ ∣ h ∣ x
+ --        γ = {!!}
+
+ SClo→𝑻img : {𝑪 : Algebra 𝓤 𝑆}
   →          (𝑪 ∈ SClo 𝒦) → 𝑻img
  SClo→𝑻img {𝑪 = 𝑪} 𝑪∈SClo𝒦 =
   𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
@@ -402,7 +425,7 @@ module _
 
  𝑻img→𝑻⊧ p q pΨq ti = goal1
   where
-   𝑪 : Algebra 𝓦 𝑆
+   𝑪 : Algebra 𝓤 𝑆
    𝑪 = ∣ ti ∣
 
    ϕ : hom (𝑻 X) 𝑪
@@ -428,8 +451,8 @@ module _
    goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
             ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
 
-Ψ⊆ThSClo : {𝓦 𝓣 : Universe}
-           (𝒦 : Pred (Algebra 𝓦 𝑆) 𝓣)
+Ψ⊆ThSClo : {𝓦 : Universe}
+           (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦)
  →         Ψ ⊆ Th (SClo 𝒦)
 Ψ⊆ThSClo 𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
   where
@@ -464,8 +487,8 @@ module _
     (q ̇ 𝑪) 𝒄 ∎
 
 
-Ψ⊆Th : {𝓦 𝓣 : Universe}
-       (𝒦 : Pred (Algebra 𝓦 𝑆) 𝓣)
+Ψ⊆Th : {𝓦 : Universe}
+       (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦)
  →     ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
 Ψ⊆Th 𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo 𝒦 {p , q} pΨq (sbase KA)
 
@@ -491,6 +514,26 @@ data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆
 
 -- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
 -- ThVClo⊆ThSClo = ?
+
+ -- To complete the proof of Birkhoff, it remains to show that 𝔽 belongs to SP(𝒦).
+ -- For if that is true, then we have an algebra (namely, 𝔽) that belongs to VClo 𝒦
+ -- and such that ∃ hom ϕ : 𝔽 → 𝑨 for all 𝑨 ∈ Mod Th (VClo 𝒦).
+module _
+ {𝓦 𝓣 : Universe}
+ {𝒦 : Pred (Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ⊔ 𝓣) ⁺) 𝑆) 𝓣} where
+  --(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ⊔ 𝓣) ⁺
+ -- Variety Closure
+ -- (𝒦 : Pred (Algebra _ 𝑆) (((𝓞 ⁺) ⁺) ⊔ ((𝓥 ⁺) ⁺) ⊔ ((𝓤 ⁺) ⁺) ⊔ (((𝓦 ⁺) ⁺) ⁺) ⊔ ((𝓣 ⁺) ⁺)))
+ data VClo' : Pred (Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ⊔ 𝓣) ⁺) 𝑆) _ where
+  vbase' : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo'
+  vprod' : {I : 𝓦 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo') → ⨅ 𝒜 ∈ VClo'
+  vsub' : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo' → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo'
+  vhom' : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo' → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo'
+
+
+ --We need to show that 𝔽 
+ 𝔽∈SP : 𝔽 ∈ VClo' -- SClo (PClo 𝒦)
+ 𝔽∈SP = {!!}
 
 module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
 
