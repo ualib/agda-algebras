@@ -11,7 +11,7 @@ module terms
  {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {X : 𝓤 ̇ }
- {𝕏 :  {𝓦 : Universe} (𝑨 : Algebra 𝓦 𝑆) → X ↠ 𝑨} where
+ {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
 open import homomorphisms {𝑆 = 𝑆}
 
@@ -19,15 +19,15 @@ open import prelude using
  (intensionality; global-dfunext; pr₂; Inv; InvIsInv;
   eq; fst; snd) public
 
-data Term  :  𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
+data Term : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term
   node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term) → Term
 
 open Term
 
 --The term algebra 𝑻(X).
-𝑻 : 𝓤 ̇ → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤) 𝑆
-𝑻 X = Term , node
+𝑻 : Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤) 𝑆
+𝑻 = Term , node
 
 term-op : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term ) → Term
 term-op f args = node f args
@@ -35,16 +35,16 @@ term-op f args = node f args
 
 
 --1.a. Every map (X → 𝑨) lifts.
-free-lift : {𝓦 : Universe}{𝑨 : Algebra 𝓦 𝑆} (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+free-lift : {𝑨 : Algebra 𝓤 𝑆} (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 ∣ → ∣ 𝑨 ∣
 free-lift h (generator x) = h x
 free-lift {𝑨 = 𝑨} h (node f args) = (f ̂ 𝑨) λ i → free-lift{𝑨 = 𝑨} h (args i)
 
 --1.b. The lift is (extensionally) a hom
-lift-hom : {𝓦 : Universe}{𝑨 : Algebra 𝓦 𝑆}(h : X → ∣ 𝑨 ∣) →  hom (𝑻 X) 𝑨
+lift-hom : {𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  hom 𝑻 𝑨
 lift-hom {𝑨 = 𝑨} h = free-lift{𝑨 = 𝑨} h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
 --2. The lift to (free → 𝑨) is (extensionally) unique.
-free-unique : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆}(g h : hom (𝑻 X) 𝑨)
+free-unique : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆}(g h : hom 𝑻 𝑨)
  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
  →            (t : Term )
              ---------------------------
@@ -59,12 +59,12 @@ free-unique fe {𝑨} g h p (node f args) =
    where γ = fe λ i → free-unique fe {𝑨} g h p (args i)
 
 --1.b. that free-lift is (intensionally) a hom.
-lift-HOM : {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆}(h : X → ∣ 𝑨 ∣) →  HOM (𝑻 X) 𝑨
+lift-HOM : {𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  HOM 𝑻 𝑨
 lift-HOM{𝑨 = 𝑨}  h = free-lift{𝑨 = 𝑨} h , 𝓇ℯ𝒻𝓁
 
 --2. The lift to  (free → 𝑨)  is (intensionally) unique.
 free-intensionally-unique : funext 𝓥 𝓤
- →             {𝑨 : Algebra 𝓤 𝑆}(g h : HOM (𝑻 X) 𝑨)
+ →             {𝑨 : Algebra 𝓤 𝑆}(g h : HOM 𝑻 𝑨)
  →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
  →             (t : Term)
               --------------------------------
@@ -83,14 +83,14 @@ free-intensionally-unique fe {𝑨} g h p (node f args) =
 
 
 --lift agrees on X
-lift-agrees-on-X : {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
+lift-agrees-on-X : {𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom{𝑨 = 𝑨} h₀ ∣ (generator x)
 
 lift-agrees-on-X h₀ x = 𝓇ℯ𝒻𝓁
 
 --Of course, the lift of a surjective map is surjective.
-lift-of-epic-is-epic : {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆}(h₀ : X → ∣ 𝑨 ∣)
+lift-of-epic-is-epic : {𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)
  →                     Epic h₀
                       ----------------------
  →                     Epic ∣ lift-hom{𝑨 = 𝑨} h₀ ∣
@@ -112,8 +112,8 @@ lift-of-epic-is-epic{𝑨 = 𝑨} h₀ hE y = γ
   γ : Image ∣ lift-hom h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η
 
-𝑻hom-gen : {𝓦 : Universe}(𝑪 : Algebra 𝓦 𝑆)
- →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
+𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆)
+ →         Σ h ꞉ (hom 𝑻 𝑪), Epic ∣ h ∣
 𝑻hom-gen 𝑪 = h , lift-of-epic-is-epic h₀ hE
  where
   h₀ : X → ∣ 𝑪 ∣
@@ -122,7 +122,7 @@ lift-of-epic-is-epic{𝑨 = 𝑨} h₀ hE y = γ
   hE : Epic h₀
   hE = snd (𝕏 𝑪)
 
-  h : hom (𝑻 X) 𝑪
+  h : hom 𝑻 𝑪
   h = lift-hom{𝑨 = 𝑪} h₀
 
 _̇_ : {𝓦 : Universe} → Term
@@ -139,7 +139,7 @@ _̇_ : {𝓦 : Universe} → Term
 --      (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
 -- * if 𝑝 = (node f args), then
 --      (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
--- Let h : hom (𝑻 X) 𝑨. Then by comm-hom-term,
+-- Let h : hom 𝑻 𝑨. Then by comm-hom-term,
 -- ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕
 -- * if p = (generator x), then
 --    ∣ h ∣ p ≡ ∣ h ∣ (generator x)
@@ -152,10 +152,10 @@ _̇_ : {𝓦 : Universe} → Term
 
 -- We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣
 -- such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact in the following module:
-module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
+module _ {gfe : global-dfunext} where
 
  term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term) →
-  node f args ≡ (f ̂ 𝑻(X)) args
+  node f args ≡ (f ̂ 𝑻) args
  term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
  term-op-interp2 : (f : ∣ 𝑆 ∣)
@@ -167,33 +167,33 @@ module _ {X : 𝓤 ̇} {gfe : global-dfunext} where
  term-op-interp3 : (f : ∣ 𝑆 ∣)
                    {a1 a2 : ∥ 𝑆 ∥ f → Term}
   →                a1 ≡ a2
-  →                node f a1 ≡ (f ̂ 𝑻(X)) a2
+  →                node f a1 ≡ (f ̂ 𝑻) a2
  term-op-interp3 f {a1}{a2} a1≡a2 =
   node f a1     ≡⟨ term-op-interp2 f a1≡a2 ⟩
   node f a2     ≡⟨ term-op-interp1 f a2 ⟩
-  (f ̂ 𝑻(X)) a2 ∎
+  (f ̂ 𝑻) a2 ∎
 
- term-gen : (p : ∣ 𝑻(X) ∣)
-  →         Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ (𝑻 X)) generator
+ term-gen : (p : ∣ 𝑻 ∣)
+  →         Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
 
  term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
  term-gen (node f args) =
    node f (λ i → ∣ term-gen (args i) ∣ ) ,
      term-op-interp3 f (gfe λ i → ∥ term-gen (args i) ∥)
 
- tg : (p : ∣ 𝑻(X) ∣) → Σ 𝓅 ꞉ ∣ 𝑻(X) ∣ , p ≡ (𝓅 ̇ 𝑻(X)) generator
+ tg : (p : ∣ 𝑻 ∣) → Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
  tg p = term-gen p
 
  -- term-gen' (generator x) = generator x , ((λ x → generator x) , 𝓇ℯ𝒻𝓁)
  -- term-gen' (node f args) = node f (λ i → ∣ term-gen (args i) ∣ ) , (λ x → generator x) ,
  --     term-op-interp3 f (gfe λ i → ∥ ∥ term-gen (args i) ∥ ∥ )
 
- term-gen-agreement : (p : ∣ 𝑻(X) ∣)
-  →      (p ̇ 𝑻(X)) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻(X)) generator
+ term-gen-agreement : (p : ∣ 𝑻 ∣)
+  →      (p ̇ 𝑻) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻) generator
  term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
- term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
+ term-gen-agreement (node f args) = ap (f ̂ 𝑻) (gfe λ x → term-gen-agreement (args x))
 
- term-agreement : (p : ∣ 𝑻(X) ∣) → p ≡ (p ̇ 𝑻(X)) generator
+ term-agreement : (p : ∣ 𝑻 ∣) → p ≡ (p ̇ 𝑻) generator
  term-agreement p = snd (tg p) ∙ (term-gen-agreement p)⁻¹
 
 

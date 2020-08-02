@@ -11,7 +11,7 @@ module subuniverses
  {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {X : 𝓤 ̇ } 
- {𝕏 :  {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → X ↠ 𝑨} where
+ {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
 
 open import homomorphisms {𝑆 = 𝑆}
 

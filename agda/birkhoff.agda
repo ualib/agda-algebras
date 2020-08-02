@@ -6,20 +6,24 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext)
+open import congruences
+open import prelude using (global-dfunext; dfunext; funext; Pred)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
+ {𝓤 : Universe}
  {X : 𝓤 ̇ }
+ {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {gfe : global-dfunext}
- {dfe : dfunext 𝓤 𝓤} {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+ {dfe : dfunext 𝓤 𝓤} where
 
 open import closure
  {𝑆 = 𝑆}
+ {𝓤 = 𝓤}
  {X = X}
+ {𝕏 = 𝕏}
  {gfe = gfe}
  {dfe = dfe}
- {𝕏 = 𝕏}
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -38,8 +42,7 @@ open import closure
  →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p = 
- --(g , ghom)(h , hhom) 𝒂 p =
-   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+   (∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂))    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
    (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
    (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
    ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
@@ -84,17 +87,17 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
   -- hE : Epic h₀
   -- hE = snd ℋ
 
-  h : hom (𝑻 X) 𝑨
-  h = lift-hom{𝑨 = 𝑨}{X = X} h₀
+  h : hom 𝑻 𝑨
+  h = lift-hom{𝑨 = 𝑨} h₀
 
-  Ψ⊆ThVClo𝒦 : Ψ{𝒦} ⊆ Th (VClo 𝒦)
+  Ψ⊆ThVClo𝒦 : Ψ ⊆ Th (VClo 𝒦)
   Ψ⊆ThVClo𝒦 {p , q} pΨq =
-   (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th𝒦 p q pΨq)
+   (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th p q pΨq)
 
-  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ{𝒦} → 𝑨 ⊧ p ≈ q
+  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
   Ψ⊆A⊧ {p} {q} pΨq = A∈ModThV p q (Ψ⊆ThVClo𝒦{p , q} pΨq)
 
-  Ψ⊆Kerh : Ψ{𝒦} ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh : Ψ ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
   Ψ⊆Kerh {p , q} pΨq = hp≡hq
    where
     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q

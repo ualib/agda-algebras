@@ -7,6 +7,9 @@
 
 module basic where
 
+-- modules that import basic:
+-- congruences, homomorphisms, terms, subuniverses, closure, birkhoff
+
 open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧;
   _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_; Epic) public
 

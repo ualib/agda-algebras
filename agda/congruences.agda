@@ -93,7 +93,7 @@ is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
 𝟏 a b = 𝟙
 
-record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
+record IsEquivalence {𝓤 : Universe} {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
   field
     rfl  : reflexive _≈_
     sym   : symmetric _≈_
@@ -104,7 +104,7 @@ is-equivalence-relation _≈_ =
  is-subsingleton-valued _≈_
   × reflexive _≈_ × symmetric _≈_ × transitive _≈_
 
-𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence {𝓤}{𝓤}{A} 𝟎-rel
+𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤 = 𝓤}{A = A} 𝟎-rel
 𝟎-IsEquivalence = record { rfl = λ x → 𝓇ℯ𝒻𝓁
                          ; sym = λ x y x≡y → x≡y ⁻¹
                          ; trans = λ x y z x≡y y≡z → x≡y ∙ y≡z }
