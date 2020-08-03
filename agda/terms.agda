@@ -6,18 +6,20 @@
 
 open import basic
 open import congruences
+open import prelude using (global-dfunext)
 
 module terms
  {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {X : 𝓤 ̇ }
- {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+ -- {𝕏 : (𝑨 : Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺) 𝑆) → X ↠ 𝑨}
+ {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {gfe : global-dfunext} where
 
 open import homomorphisms {𝑆 = 𝑆}
 
 open import prelude using
- (intensionality; global-dfunext; pr₂; Inv; InvIsInv;
-  eq; fst; snd) public
+ (intensionality; pr₂; Inv; InvIsInv; eq; fst; snd) public
 
 data Term : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇  where
   generator : X → Term
@@ -32,15 +34,13 @@ open Term
 term-op : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term ) → Term
 term-op f args = node f args
 
-
-
 --1.a. Every map (X → 𝑨) lifts.
-free-lift : {𝑨 : Algebra 𝓤 𝑆} (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 ∣ → ∣ 𝑨 ∣
+free-lift : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} (h : X → ∣ 𝑨 ∣)  →   ∣ 𝑻 ∣ → ∣ 𝑨 ∣
 free-lift h (generator x) = h x
 free-lift {𝑨 = 𝑨} h (node f args) = (f ̂ 𝑨) λ i → free-lift{𝑨 = 𝑨} h (args i)
 
 --1.b. The lift is (extensionally) a hom
-lift-hom : {𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  hom 𝑻 𝑨
+lift-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  hom 𝑻 𝑨
 lift-hom {𝑨 = 𝑨} h = free-lift{𝑨 = 𝑨} h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
 --2. The lift to (free → 𝑨) is (extensionally) unique.
@@ -59,7 +59,7 @@ free-unique fe {𝑨} g h p (node f args) =
    where γ = fe λ i → free-unique fe {𝑨} g h p (args i)
 
 --1.b. that free-lift is (intensionally) a hom.
-lift-HOM : {𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  HOM 𝑻 𝑨
+lift-HOM : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  HOM 𝑻 𝑨
 lift-HOM{𝑨 = 𝑨}  h = free-lift{𝑨 = 𝑨} h , 𝓇ℯ𝒻𝓁
 
 --2. The lift to  (free → 𝑨)  is (intensionally) unique.
@@ -83,14 +83,14 @@ free-intensionally-unique fe {𝑨} g h p (node f args) =
 
 
 --lift agrees on X
-lift-agrees-on-X : {𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
+lift-agrees-on-X : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom{𝑨 = 𝑨} h₀ ∣ (generator x)
 
 lift-agrees-on-X h₀ x = 𝓇ℯ𝒻𝓁
 
 --Of course, the lift of a surjective map is surjective.
-lift-of-epic-is-epic : {𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)
+lift-of-epic-is-epic : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)
  →                     Epic h₀
                       ----------------------
  →                     Epic ∣ lift-hom{𝑨 = 𝑨} h₀ ∣
@@ -112,7 +112,7 @@ lift-of-epic-is-epic{𝑨 = 𝑨} h₀ hE y = γ
   γ : Image ∣ lift-hom h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η
 
-𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆)
+𝑻hom-gen : {𝓤 : Universe} (𝑪 : Algebra 𝓤 𝑆)
  →         Σ h ꞉ (hom 𝑻 𝑪), Epic ∣ h ∣
 𝑻hom-gen 𝑪 = h , lift-of-epic-is-epic h₀ hE
  where
@@ -152,54 +152,53 @@ _̇_ : {𝓦 : Universe} → Term
 
 -- We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣
 -- such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact in the following module:
-module _ {gfe : global-dfunext} where
 
- term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term) →
-  node f args ≡ (f ̂ 𝑻) args
- term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
+term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term) →
+ node f args ≡ (f ̂ 𝑻) args
+term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
- term-op-interp2 : (f : ∣ 𝑆 ∣)
-                   {a1 a2 : ∥ 𝑆 ∥ f → Term}
-  →                a1 ≡ a2
-  →                node f a1 ≡ node f a2
- term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
+term-op-interp2 : (f : ∣ 𝑆 ∣)
+                  {a1 a2 : ∥ 𝑆 ∥ f → Term}
+ →                a1 ≡ a2
+ →                node f a1 ≡ node f a2
+term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
 
- term-op-interp3 : (f : ∣ 𝑆 ∣)
-                   {a1 a2 : ∥ 𝑆 ∥ f → Term}
-  →                a1 ≡ a2
-  →                node f a1 ≡ (f ̂ 𝑻) a2
- term-op-interp3 f {a1}{a2} a1≡a2 =
-  node f a1     ≡⟨ term-op-interp2 f a1≡a2 ⟩
-  node f a2     ≡⟨ term-op-interp1 f a2 ⟩
-  (f ̂ 𝑻) a2 ∎
+term-op-interp3 : (f : ∣ 𝑆 ∣)
+                  {a1 a2 : ∥ 𝑆 ∥ f → Term}
+ →                a1 ≡ a2
+ →                node f a1 ≡ (f ̂ 𝑻) a2
+term-op-interp3 f {a1}{a2} a1≡a2 =
+ node f a1     ≡⟨ term-op-interp2 f a1≡a2 ⟩
+ node f a2     ≡⟨ term-op-interp1 f a2 ⟩
+ (f ̂ 𝑻) a2 ∎
 
- term-gen : (p : ∣ 𝑻 ∣)
-  →         Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
+term-gen : (p : ∣ 𝑻 ∣)
+ →         Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
 
- term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
- term-gen (node f args) =
-   node f (λ i → ∣ term-gen (args i) ∣ ) ,
-     term-op-interp3 f (gfe λ i → ∥ term-gen (args i) ∥)
+term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
+term-gen (node f args) =
+  node f (λ i → ∣ term-gen (args i) ∣ ) ,
+    term-op-interp3 f (gfe λ i → ∥ term-gen (args i) ∥)
 
- tg : (p : ∣ 𝑻 ∣) → Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
- tg p = term-gen p
+tg : (p : ∣ 𝑻 ∣) → Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
+tg p = term-gen p
 
- -- term-gen' (generator x) = generator x , ((λ x → generator x) , 𝓇ℯ𝒻𝓁)
- -- term-gen' (node f args) = node f (λ i → ∣ term-gen (args i) ∣ ) , (λ x → generator x) ,
- --     term-op-interp3 f (gfe λ i → ∥ ∥ term-gen (args i) ∥ ∥ )
+-- term-gen' (generator x) = generator x , ((λ x → generator x) , 𝓇ℯ𝒻𝓁)
+-- term-gen' (node f args) = node f (λ i → ∣ term-gen (args i) ∣ ) , (λ x → generator x) ,
+--     term-op-interp3 f (gfe λ i → ∥ ∥ term-gen (args i) ∥ ∥ )
 
- term-gen-agreement : (p : ∣ 𝑻 ∣)
-  →      (p ̇ 𝑻) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻) generator
- term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
- term-gen-agreement (node f args) = ap (f ̂ 𝑻) (gfe λ x → term-gen-agreement (args x))
+term-gen-agreement : (p : ∣ 𝑻 ∣)
+ →      (p ̇ 𝑻) generator  ≡  (∣ term-gen p ∣ ̇ 𝑻) generator
+term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
+term-gen-agreement (node f args) = ap (f ̂ 𝑻) (gfe λ x → term-gen-agreement (args x))
 
- term-agreement : (p : ∣ 𝑻 ∣) → p ≡ (p ̇ 𝑻) generator
- term-agreement p = snd (tg p) ∙ (term-gen-agreement p)⁻¹
+term-agreement : (p : ∣ 𝑻 ∣) → p ≡ (p ̇ 𝑻) generator
+term-agreement p = snd (tg p) ∙ (term-gen-agreement p)⁻¹
 
 
-interp-prod : funext 𝓥 𝓤
- →            {I : 𝓤 ̇}(p : Term)
-              (𝒜 : I → Algebra 𝓤 𝑆)
+interp-prod : {𝓢 : Universe} → funext 𝓥 𝓢
+ →            {I : 𝓢 ̇}(p : Term)
+              (𝒜 : I → Algebra 𝓢 𝑆)
               (x : X → ∀ i → ∣ (𝒜 i) ∣)
  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
 
@@ -224,17 +223,17 @@ interp-prod2 : global-dfunext
 interp-prod2 fe (generator x₁) 𝒜 = 𝓇ℯ𝒻𝓁
 
 interp-prod2 fe (node f t) 𝒜 =
-  fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-   let IH = λ x → interp-prod fe (t x) 𝒜  in
-   let tA = λ z → t z ̇ ⨅ 𝒜 in
-    (f ̂ ⨅ 𝒜)(λ s → tA s tup)
-      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (f ̂ ⨅ 𝒜)(λ s →  tA s tup)
-      ≡⟨ ap (f ̂ ⨅ 𝒜) (fe  λ x → IH x tup) ⟩
-    (f ̂ ⨅ 𝒜)(λ s → (λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j)))
-      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i)))
-      ∎
+ fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  let IH = λ x → interp-prod fe (t x) 𝒜  in
+  let tA = λ z → t z ̇ ⨅ 𝒜 in
+   (f ̂ ⨅ 𝒜)(λ s → tA s tup)
+     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+   (f ̂ ⨅ 𝒜)(λ s →  tA s tup)
+     ≡⟨ ap (f ̂ ⨅ 𝒜) (fe  λ x → IH x tup) ⟩
+   (f ̂ ⨅ 𝒜)(λ s → (λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j)))
+     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+   (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i)))
+     ∎
 
 -- Proof of 1. (homomorphisms commute with terms).
 comm-hom-term : global-dfunext

@@ -6,20 +6,21 @@
 
 open import basic
 open import congruences
+open import prelude using (global-dfunext)
 
 module subuniverses
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
- {X : 𝓤 ̇ } 
- {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+ {X : 𝓤 ̇ }
+ {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {fe : global-dfunext} where
 
 open import homomorphisms {𝑆 = 𝑆}
 
 open import terms
  {𝑆 = 𝑆}
- {𝓤 = 𝓤}
  {X = X}
- {𝕏 = 𝕏} renaming (generator to ℊ)
+ {𝕏 = 𝕏}
+ {gfe = fe} renaming (generator to ℊ)
 
 open import Relation.Unary using (⋂)
 
@@ -39,17 +40,17 @@ Subuniverses : (𝑨 : Algebra 𝓤 𝑆)
 Subuniverses 𝑨 B =
  (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
 
-data _is-supalgebra-of_
+data _is-supalgebra-of_ {𝓤 : Universe}
  (𝑨 : Algebra 𝓤 𝑆) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
   mem : (B : Pred ∣ 𝑨 ∣ 𝓤) (F : (f : ∣ 𝑆 ∣)
    →    Op (∥ 𝑆 ∥ f) (Σ B)) → ((f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → Σ B)
    →    ∣ F f a ∣ ≡ (f ̂ 𝑨)(λ i → ∣ a i ∣))
    →    𝑨 is-supalgebra-of (Σ B , F)
 
-_is-subalgebra-of_ : Algebra 𝓤 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+_is-subalgebra-of_ : {𝓤 : Universe} → Algebra 𝓤 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
 
-_is-subalgebra-of-class_ : (𝑩 : Algebra 𝓤 𝑆)
+_is-subalgebra-of-class_ : {𝓤 : Universe} (𝑩 : Algebra 𝓤 𝑆)
  →            Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 𝑩 is-subalgebra-of-class 𝒦 =
    Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × (𝑩 is-subalgebra-of 𝑨)
@@ -161,16 +162,16 @@ module _
 
 
 
-module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) where
+module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 
  gfe : global-dfunext
- gfe = univalence-gives-global-dfunext UV
+ gfe = univalence-gives-global-dfunext ua
 
- op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
  op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣)
   → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
 
- subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
 
  being-op-closed-is-subsingleton : (B : 𝓟 ∣ 𝑨 ∣)
@@ -195,7 +196,7 @@ module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) 
  subuniverse-is-a-set : is-set subuniverse
  subuniverse-is-a-set B C = equiv-to-subsingleton
                            (ap-pr₁ B C , ap-pr₁-is-equiv B C)
-                           (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
+                           (powersets-are-sets' ua ∣ B ∣ ∣ C ∣)
 
  subuniverse-equality-gives-membership-equiv : (B C : subuniverse)
   →                                  B ≡ C
@@ -210,7 +211,7 @@ module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) 
             -----------------------------------------
   →                       ∣ B ∣ ≡ ∣ C ∣
  membership-equiv-gives-carrier-equality B C φ =
-  subset-extensionality' UV α β
+  subset-extensionality' ua α β
    where
     α :  ∣ B ∣ ⊆₀ ∣ C ∣
     α x = lr-implication (φ x)
@@ -257,7 +258,7 @@ module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) 
  carrier-equiv B C =
   logically-equivalent-subsingletons-are-equivalent _ _
    (membership-equiv-is-subsingleton B C)
-    (powersets-are-sets' UV ∣ B ∣ ∣ C ∣)
+    (powersets-are-sets' ua ∣ B ∣ ∣ C ∣)
      (membership-equiv-gives-carrier-equality B C ,
        carrier-equality-gives-membership-equiv B C)
 
@@ -271,12 +272,12 @@ module mhe_subgroup_generalization {𝑨 : Algebra 𝓤 𝑆} (UV : Univalence) 
 -- module _ {𝓤 : Universe} (UV : Univalence) where
 
  -- new definition of subalgebra (includes an embedding)
-SubalgebrasOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-SubalgebrasOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
+SubalgebrasOf : {𝓢 : Universe} → Algebra 𝓢 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
+SubalgebrasOf {𝓢} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓢 𝑆) ,
                 Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
                   is-embedding h × is-homomorphism 𝑩 𝑨 h
 
-SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+SubalgebrasOfClass : {𝓢 : Universe} → Pred (Algebra 𝓢 𝑆)(𝓢 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
 SubalgebrasOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × SubalgebrasOf 𝑨
 
 -- module _

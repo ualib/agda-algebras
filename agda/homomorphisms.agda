@@ -18,7 +18,7 @@ op_interpreted-in_and_commutes-intensionally-with :
  (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 op f interpreted-in A and B commutes-intensionally-with g =
- (λ a → g (∥ A ∥ f a) ) ≡ (λ a → ∥ B ∥ f (g ∘ a) )
+ (λ a → g ((f ̂ A) a)) ≡ (λ a → (f ̂ B)(g ∘ a))
 
 all-ops-in_and_commute-partially-intensionally-with :
  (A : Algebra 𝓤 𝑆)(B : Algebra 𝓦 𝑆)
@@ -65,7 +65,7 @@ op_interpreted-in_and_commutes-extensionally-with :
    (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 op f interpreted-in A and B commutes-extensionally-with g =
- ∀( a : ∥ 𝑆 ∥ f → ∣ A ∣ ) → g (∥ A ∥ f a) ≡ ∥ B ∥ f (g ∘ a)
+ ∀( a : ∥ 𝑆 ∥ f → ∣ A ∣ ) → g ((f ̂ A) a) ≡ (f ̂ B) (g ∘ a)
 
 all-ops-in_and_commute-extensionally-with :
      (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
