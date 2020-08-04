@@ -43,6 +43,8 @@ module prelude where
  open import MGS-Solved-Exercises using (to-subtype-≡) public
 
  -- open import MGS-Unique-Existence
+ open import MGS-Unique-Existence using (∃!; -∃!) public
+
  open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
  -- using (subsingleton-truncations-exist) public
 

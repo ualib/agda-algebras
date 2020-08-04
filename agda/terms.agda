@@ -1,6 +1,7 @@
--- FILE: terms.agda
--- AUTHOR: William DeMeo and Siva Somayyajula
--- DATE: 30 Jun 2020
+--FILE: terms.agda
+--AUTHOR: William DeMeo and Siva Somayyajula
+--DATE: 30 Jun 2020
+--UPDATE: 4 Aug 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 

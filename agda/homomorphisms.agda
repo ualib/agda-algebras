@@ -9,7 +9,7 @@ open import congruences
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import prelude using (_∘_; _∈_; _⊆_; EpicInv; cong-app;
+open import prelude using (_∘_; _⊆_; EpicInv; cong-app;
  EInvIsRInv; Image_∋_) public
 
 --intensional preservation of operations
