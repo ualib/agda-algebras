@@ -373,49 +373,275 @@ module relatively_free_algebra
 
  open prelude.basic-truncation-development pt hfe renaming (∥_∥ to ⟪_⟫; ∣_∣ to ⌞_⌟) public
 
- _≈_ : ∣ 𝑻 ∣ → ∣ 𝑻 ∣ → ((OVU+ ⊔ 𝔓 ⁺) ⁺) ̇
+ _≈_ : Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺)
  p ≈ q = ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
 
  ≈p : is-subsingleton-valued _≈_
  ≈p = λ t₁ t₂ prf₁ prf₂ → {!!}
 
- Ψ : ∣ 𝑻 ∣ → (∣ 𝑻 ∣ → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺))
- Ψ p q = (p ≈ q) , ≈p p q
+ ≈r : reflexive _≈_
+ ≈r p ti = 𝓇ℯ𝒻𝓁
 
- -- This is the version we work with:
- -- Ψ : Rel ∣ 𝑻 ∣ (OVU+ ⊔ 𝔓 ⁺) ⁺
- -- Ψ p q = ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
+ ≈s : symmetric _≈_
+ ≈s p q p≡q ti = (p≡q ti)⁻¹
 
- 𝑻/Ψ : ((OVU+ ⊔ 𝔓 ⁺) ⁺) ⁺ ̇
- 𝑻/Ψ = image Ψ
+ ≈t : transitive _≈_
+ ≈t p q r p≡q q≡r ti = (p≡q ti) ∙ (q≡r ti)
 
- -- Ψ-is-subsingleton-valued : is-subsingleton-valued Ψ
- -- Ψ-is-subsingleton-valued = λ t₁ t₂ prf₁ prf₂ → {!!}
+ ≈-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} _≈_
 
- Ψ-is-rfl : reflexive _≈_
- Ψ-is-rfl = λ p ti → 𝓇ℯ𝒻𝓁
+ ≈-IsEquivalence = record { rfl = ≈r; sym = ≈s ; trans = ≈t }
 
- Ψ-is-sym : symmetric _≈_
- Ψ-is-sym = λ p q p≡q ti → (p≡q ti)⁻¹
+ _≋_ : {f : ∣ 𝑆 ∣} → Rel (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) ((OVU+ ⊔ 𝔓 ⁺) ⁺)
+ p ≋ q = ∀ i → (p i) ≈ (q i)
 
- Ψ-is-trans : transitive _≈_
- Ψ-is-trans = λ p q r p≡q q≡r ti → (p≡q ti) ∙ (q≡r ti)
+ ≋p : {f : ∣ 𝑆 ∣} → is-subsingleton-valued (_≋_ {f})
+ ≋p = λ x y x≋₁y x≋₂y → gfe λ i → ≈p (x i) (y i) (x≋₁y i) (x≋₂y i)
 
- Ψ-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} _≈_
- Ψ-IsEquivalence =
-  record { rfl = Ψ-is-rfl ; sym = Ψ-is-sym ; trans = Ψ-is-trans }
+ ≋r : {f : ∣ 𝑆 ∣} → reflexive (_≋_ {f})
+ ≋r x i ti = 𝓇ℯ𝒻𝓁
 
- open quotient
-  {𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤} {𝓥 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺ ⊔ 𝔓 ⁺ ⁺}
-  pt
-  hfe
-  pe
-  ∣ 𝑻 ∣
-  _≈_
-  ≈p -- Ψ-is-subsingleton-valued
-  Ψ-is-rfl
-  Ψ-is-sym
-  Ψ-is-trans
+ ≋s : {f : ∣ 𝑆 ∣} → symmetric (_≋_ {f})
+ ≋s x y x≋y i ti = ≈s (x i) (y i) (x≋y i) ti
+
+ ≋t : {f : ∣ 𝑆 ∣} → transitive (_≋_ {f})
+ ≋t x y z x≋y y≋z i ti = ≈t (x i) (y i) (z i) (x≋y i) (y≋z i) ti
+
+ ≋-IsEquivalence : {f : ∣ 𝑆 ∣}
+  →  IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = (∥ 𝑆 ∥ f → ∣ 𝑻 ∣)} (_≋_ {f})
+
+ ≋-IsEquivalence = record { rfl = ≋r ; sym = ≋s ; trans = ≋t }
+
+ ≈Ψ : ∣ 𝑻 ∣ → (∣ 𝑻 ∣ → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺))
+ ≈Ψ p q = (p ≈ q) , ≈p p q
+
+ 𝑻/≈Ψ : ((OVU+ ⊔ 𝔓 ⁺) ⁺) ⁺ ̇
+ 𝑻/≈Ψ = image ≈Ψ
+
+ ≋Ψ : {f : ∣ 𝑆 ∣} → (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → ((∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺))
+ ≋Ψ {f} p q = (lift-rel{γ = ∥ 𝑆 ∥ f}{Z =  ∣ 𝑻 ∣} _≈_) p q , ≋p p q
+
+ 𝑻/≋Ψ : {f : ∣ 𝑆 ∣} → ((OVU+ ⊔ 𝔓 ⁺) ⁺) ⁺ ̇
+ 𝑻/≋Ψ {f} = image (≋Ψ{f})
+
+  -- Recall, image : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+  --         image f = Σ y ꞉ codomain f , ∃ x ꞉ domain f , f x ≡ y
+  --
+  -- So 𝑻/Ψ is a collection of elements [q] : ∣ 𝑻 ∣ → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺)
+  -- where [q] : codomain Ψ , ∃ p : domain Ψ ,
+  --                          Ψ p ≡ [q] = the equivalence class of p
+
+ 𝑻/≈Ψ-isset : is-set 𝑻/≈Ψ
+ 𝑻/≈Ψ-isset = subsets-of-sets-are-sets (∣ 𝑻 ∣ → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺)) _
+               (powersets-are-sets (dfunext-gives-hfunext hunapply) hunapply pe)
+               (λ _ → ∃-is-subsingleton)
+
+ 𝑻/≋Ψ_isset : (f : ∣ 𝑆 ∣ ) → is-set (𝑻/≋Ψ{f})
+ 𝑻/≋Ψ f isset = subsets-of-sets-are-sets ((∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → Ω ((OVU+ ⊔ 𝔓 ⁺) ⁺)) _
+               (powersets-are-sets (dfunext-gives-hfunext hunapply) hunapply pe)
+               (λ _ → ∃-is-subsingleton)
+
+ η : ∣ 𝑻 ∣ → 𝑻/≈Ψ
+ η = corestriction ≈Ψ
+
+ η-surjection : is-surjection η
+ η-surjection = corestriction-surjection ≈Ψ
+
+ η-induction : (P : 𝑻/≈Ψ → 𝓦 ̇ )
+             → ((x' : 𝑻/≈Ψ) → is-subsingleton (P x'))
+             → ((x : ∣ 𝑻 ∣) → P (η x))
+             → (x' : 𝑻/≈Ψ) → P x'
+
+ η-induction = surjection-induction η η-surjection
+
+ η-equiv-equal : {x y : ∣ 𝑻 ∣} → x ≈ y → η x ≡ η y
+ η-equiv-equal {x} {y} e =
+  to-subtype-≡
+    (λ _ → ∃-is-subsingleton)
+    (hunapply (λ z → to-subtype-≡
+                        (λ _ → being-subsingleton-is-subsingleton hunapply)
+                        (pe (≈p x z) (≈p y z) (≈t y x z (≈s x y e)) (≈t x y z e))))
+
+ η-equal-equiv : {x y : ∣ 𝑻 ∣} → η x ≡ η y → x ≈ y
+ η-equal-equiv {x} {y} p = equiv-rel-reflect (ap pr₁ p)
+  where
+   equiv-rel-reflect : ≈Ψ x ≡ ≈Ψ y → x ≈ y
+   equiv-rel-reflect q = b (≈r y)
+    where
+     a : (y ≈ y) ≡ (x ≈ y)
+     a = ap (λ - → pr₁(- y)) (q ⁻¹)
+
+     b : y ≈ y → x ≈ y
+     b = Id→fun a
+
+ universal-property : (A : 𝓦 ̇ )
+                    → is-set A
+                    → (f : ∣ 𝑻 ∣ → A)
+                    → ({x x' : ∣ 𝑻 ∣} → x ≈ x' → f x ≡ f x')
+                    → ∃! f' ꞉ (𝑻/≈Ψ → A), f' ∘ η ≡ f
+
+ universal-property {𝓦} A i f τ = e
+  where
+   G : 𝑻/≈Ψ → 𝓦 ⊔ 𝔉 ̇
+   G x' = Σ a ꞉ A , ∃ x ꞉ ∣ 𝑻 ∣ , (η x ≡ x') × (f x ≡ a)
+
+   φ : (x' : 𝑻/≈Ψ) → is-subsingleton (G x')
+   φ = η-induction _ γ induction-step
+    where
+     induction-step : (y : ∣ 𝑻 ∣) → is-subsingleton (G (η y))
+     induction-step x (a , d) (b , e) = to-subtype-≡ (λ _ → ∃-is-subsingleton) p
+      where
+       h : (Σ x' ꞉ ∣ 𝑻 ∣ , (η x' ≡ η x) × (f x' ≡ a))
+         → (Σ y' ꞉ ∣ 𝑻 ∣ , (η y' ≡ η x) × (f y' ≡ b))
+         → a ≡ b
+       h (x' , r , s) (y' , t , u) = a    ≡⟨ s ⁻¹                         ⟩
+                                     f x' ≡⟨ τ (η-equal-equiv (r ∙ t ⁻¹)) ⟩
+                                     f y' ≡⟨ u                            ⟩
+                                     b    ∎
+
+       p : a ≡ b
+       p = ∥∥-recursion (i a b) (λ σ → ∥∥-recursion (i a b) (h σ) e) d
+
+     γ : (x' : 𝑻/≈Ψ) → is-subsingleton (is-subsingleton (G x'))
+     γ x' = being-subsingleton-is-subsingleton hunapply
+
+   k : (x' : 𝑻/≈Ψ) → G x'
+   k = η-induction _ φ induction-step
+    where
+     induction-step : (y : ∣ 𝑻 ∣) → G (η y)
+     induction-step x = f x , ⌞ x , refl (η x) , refl (f x) ⌟
+
+   f' : 𝑻/≈Ψ → A
+   f' x' = pr₁ (k x')
+
+   r : f' ∘ η ≡ f
+   r = hunapply h
+    where
+     g : (y : ∣ 𝑻 ∣) → ∃ x ꞉ ∣ 𝑻 ∣ , (η x ≡ η y) × (f x ≡ f' (η y))
+     g y = pr₂ (k (η y))
+
+     j : (y : ∣ 𝑻 ∣) → (Σ x ꞉ ∣ 𝑻 ∣ , (η x ≡ η y) × (f x ≡ f' (η y))) → f'(η y) ≡ f y
+     j y (x , p , q) = f' (η y) ≡⟨ q ⁻¹                ⟩
+                       f x      ≡⟨ τ (η-equal-equiv p) ⟩
+                       f y      ∎
+
+     h : (y : ∣ 𝑻 ∣) → f'(η y) ≡ f y
+     h y = ∥∥-recursion (i (f' (η y)) (f y)) (j y) (g y)
+
+   c : (σ : Σ f'' ꞉ (𝑻/≈Ψ → A), f'' ∘ η ≡ f) → (f' , r) ≡ σ
+   c (f'' , s) = to-subtype-≡ (λ g → Π-is-set hfe (λ _ → i) (g ∘ η) f) t
+    where
+     w : ∀ x → f'(η x) ≡ f''(η x)
+     w = happly (f' ∘ η) (f'' ∘ η) (r ∙ s ⁻¹)
+
+     t : f' ≡ f''
+     t = hunapply (η-induction _ (λ x' → i (f' x') (f'' x')) w)
+
+   e : ∃! f' ꞉ (𝑻/≈Ψ → A), f' ∘ η ≡ f
+   e = (f' , r) , c
+
+-----------------------------------------------------------------------
+
+ η≋ : {f : ∣ 𝑆 ∣} → (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → 𝑻/≋Ψ{f}
+ η≋ = corestriction ≋Ψ
+
+ η≋-surjection : {f : ∣ 𝑆 ∣} → is-surjection (η≋ {f})
+ η≋-surjection = corestriction-surjection ≋Ψ
+
+ η≋-induction : {f : ∣ 𝑆 ∣} → (P : 𝑻/≋Ψ → 𝓦 ̇ )
+             → ((x' : 𝑻/≋Ψ) → is-subsingleton (P x'))
+             → ((x : (∥ 𝑆 ∥ f → ∣ 𝑻 ∣)) → P (η≋ x))
+             → (x' : 𝑻/≋Ψ) → P x'
+
+ η≋-induction = surjection-induction η≋ η≋-surjection
+
+ η≋-equiv-equal : {f : ∣ 𝑆 ∣} → {x y : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣} → x ≋ y → η≋ x ≡ η≋ y
+ η≋-equiv-equal {f} {x} {y} e =
+  to-subtype-≡
+    (λ _ → ∃-is-subsingleton)
+    (hunapply (λ z → to-subtype-≡
+                        (λ _ → being-subsingleton-is-subsingleton hunapply)
+                        (pe (≋p x z) (≋p y z) (≋t y x z (≋s x y e)) (≋t x y z e))))
+
+ η≋-equal-equiv : {f : ∣ 𝑆 ∣} → {x y : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣} → η≋ x ≡ η≋ y → x ≋ y
+ η≋-equal-equiv {f} {x} {y} p = equiv-rel-reflect (ap pr₁ p)
+  where
+   equiv-rel-reflect : ≋Ψ x ≡ ≋Ψ y → x ≋ y
+   equiv-rel-reflect q = b (≋r y)
+    where
+     a : (y ≋ y) ≡ (x ≋ y)
+     a = ap (λ - → pr₁(- y)) (q ⁻¹)
+
+     b : y ≋ y → x ≋ y
+     b = Id→fun a
+
+ universal-property≋ : {𝑓 : ∣ 𝑆 ∣}(A : 𝓦 ̇ )
+                    → is-set A
+                    → (f : (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → A)
+                    → ({x x' : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣} → x ≋ x' → f x ≡ f x')
+                    → ∃! f' ꞉ (𝑻/≋Ψ → A), f' ∘ η≋ ≡ f
+
+ universal-property≋ {𝓦} {𝑓} A i f τ = e
+  where
+   G : 𝑻/≋Ψ → 𝓦 ⊔ 𝔉 ̇
+   G x' = Σ a ꞉ A , ∃ x ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) , (η≋ x ≡ x') × (f x ≡ a)
+
+   φ : (x' : 𝑻/≋Ψ) → is-subsingleton (G x')
+   φ = η≋-induction _ γ induction-step
+    where
+     induction-step : (y : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → is-subsingleton (G (η≋ y))
+     induction-step x (a , d) (b , e) = to-subtype-≡ (λ _ → ∃-is-subsingleton) p
+      where
+       h : (Σ x' ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) , (η≋ x' ≡ η≋ x) × (f x' ≡ a))
+         → (Σ y' ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) , (η≋ y' ≡ η≋ x) × (f y' ≡ b))
+         → a ≡ b
+       h (x' , r , s) (y' , t , u) = a    ≡⟨ s ⁻¹                         ⟩
+                                     f x' ≡⟨ τ (η≋-equal-equiv (r ∙ t ⁻¹)) ⟩
+                                     f y' ≡⟨ u                            ⟩
+                                     b    ∎
+       p : a ≡ b
+       p = ∥∥-recursion (i a b) (λ σ → ∥∥-recursion (i a b) (h σ) e) d
+
+     γ : (x' : 𝑻/≋Ψ) → is-subsingleton (is-subsingleton (G x'))
+     γ x' = being-subsingleton-is-subsingleton hunapply
+
+   k : (x' : 𝑻/≋Ψ) → G x'
+   k = η≋-induction _ φ induction-step
+    where
+     induction-step : (y : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → G (η≋ y)
+     induction-step x = f x , ⌞ x , refl (η≋ x) , refl (f x) ⌟
+
+   f' : 𝑻/≋Ψ → A
+   f' x' = pr₁ (k x')
+
+   r : f' ∘ η≋ ≡ f
+   r = hunapply h
+    where
+     g : (y : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → ∃ x ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) , (η≋ x ≡ η≋ y) × (f x ≡ f' (η≋ y))
+     g y = pr₂ (k (η≋ y))
+
+     j : (y : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → (Σ x ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) , (η≋ x ≡ η≋ y) × (f x ≡ f' (η≋ y))) → f'(η≋ y) ≡ f y
+     j y (x , p , q) = f' (η≋ y) ≡⟨ q ⁻¹                ⟩
+                       f x      ≡⟨ τ (η≋-equal-equiv p) ⟩
+                       f y      ∎
+
+     h : (y : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 ∣) → f'(η≋ y) ≡ f y
+     h y = ∥∥-recursion (i (f' (η≋ y)) (f y)) (j y) (g y)
+
+   c : (σ : Σ f'' ꞉ (𝑻/≋Ψ → A), f'' ∘ η≋ ≡ f) → (f' , r) ≡ σ
+   c (f'' , s) = to-subtype-≡ (λ g → Π-is-set hfe (λ _ → i) (g ∘ η≋) f) t
+    where
+     w : ∀ x → f'(η≋ x) ≡ f''(η≋ x)
+     w = happly (f' ∘ η≋) (f'' ∘ η≋) (r ∙ s ⁻¹)
+
+     t : f' ≡ f''
+     t = hunapply (η≋-induction _ (λ x' → i (f' x') (f'' x')) w)
+
+   e : ∃! f' ꞉ (𝑻/≋Ψ → A), f' ∘ η≋ ≡ f
+   e = (f' , r) , c
+
+
+-----------------------------------------------------------------------
 
  𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺) → _ ̇
  𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻) ]⇒ R
@@ -432,8 +658,8 @@ module relatively_free_algebra
    IsSSValued : ∀ x y → is-subsingleton (⟨_⟩ x y)
  open 𝑻Congruence
 
- Ψ-𝑻compatible : 𝑻compatible _≈_
- Ψ-𝑻compatible f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
+ ≈-𝑻compatible : 𝑻compatible _≈_
+ ≈-𝑻compatible f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
   where
    𝑨 : Algebra 𝔖 𝑆
    𝑨 = 𝑻𝑨 ti
@@ -453,58 +679,122 @@ module relatively_free_algebra
          ≡ ∣ ϕ ∣ ((f ̂ 𝑻)(λ i → (𝒔 i ̇ 𝑻) x))
    γ x =
     ∣ ϕ ∣ ((f ̂ 𝑻) (λ i → 𝒕s i x)) ≡⟨ ∥ ϕ ∥ f (λ i → 𝒕s i x) ⟩
-    ((f ̂ 𝑨) (λ i → ∣ ϕ ∣ (𝒕s i x))) ≡⟨  ap (f ̂ 𝑨) (gfe λ i → intensionality (𝒕≡𝒔 i) x) ⟩
-    ((f ̂ 𝑨) (λ i → ∣ ϕ ∣ (𝒔s i x))) ≡⟨  (∥ ϕ ∥ f (λ i → 𝒔s i x))⁻¹ ⟩
-    ∣ ϕ ∣ ((f ̂ 𝑻) (λ i → (𝒔s i x))) ∎
+    ((f ̂ 𝑨)(λ i → ∣ ϕ ∣(𝒕s i x))) ≡⟨ ap(f ̂ 𝑨)(gfe λ i → intensionality(𝒕≡𝒔 i)x)⟩
+    ((f ̂ 𝑨)(λ i → ∣ ϕ ∣(𝒔s i x))) ≡⟨ (∥ ϕ ∥ f (λ i → 𝒔s i x))⁻¹ ⟩
+    ∣ ϕ ∣ ((f ̂ 𝑻) (λ i → (𝒔s i x)))∎
 
  ConΨ : 𝑻Congruence
- ConΨ = mk𝑻con _≈_ Ψ-𝑻compatible Ψ-IsEquivalence ≈p -- Ψ-is-subsingleton-valued
+ ConΨ = mk𝑻con _≈_ ≈-𝑻compatible ≈-IsEquivalence ≈p
+
+ 𝕗← : (f : ∣ 𝑆 ∣) → (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → 𝑻/≈Ψ
+ 𝕗← f args = η ((f ̂ 𝑻) args)
+
+ ≈-combatibility : (f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
+  →                (∀ i → a1 i ≈ a2 i)
+                   -----------------------------
+  →                (f ̂ 𝑻) a1 ≈ (f ̂ 𝑻) a2
+
+ ≈-combatibility = ≈-𝑻compatible
+
+ ≈-is-congruence : (f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
+  →                (∀ i → a1 i ≈ a2 i)
+                  -----------------------------
+  →                (𝕗← f) a1 ≡ (𝕗← f) a2
+
+ ≈-is-congruence f {a1}{a2} a1≈a2 =
+  η-equiv-equal (≈-combatibility f {a1}{a2} a1≈a2)
+
+ ≋-is-congruence : (f : ∣ 𝑆 ∣) {a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
+  →                a1 ≋ a2
+                  -----------------------------
+  →                (𝕗← f) a1 ≡ (𝕗← f) a2
+ ≋-is-congruence f = {!!}
+
+ -- ≈agreement : {f : ∣ 𝑆 ∣} {a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
+ --  →             (∀ i → a1 i ≈ a2 i)
+ --               -----------------------------
+ --  →             η ∘ a1 ≡ η ∘ a2
+
+ -- We want to establish an equivalence ∥ 𝑆 ∥ f → 𝑻/≈Ψ  <-> 𝑻/≋Ψ
+ ≈-≋-agreement : {f : ∣ 𝑆 ∣} {a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
+  →             a1 ≋ a2 → η ∘ a1 ≡ η ∘ a2
+ ≈-≋-agreement {f}{a1}{a2} a1≋a2 =
+  (η ∘ a1) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (λ i → η (a1 i)) ≡⟨ gfe (λ x → η-equiv-equal (a1≋a2 x)) ⟩
+  (λ i → η (a2 i)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (η ∘ a2) ∎
+
+ -- If we can prove the following, then we can use it, along with the universal property,
+ -- to go from (∥ 𝑆 ∥ f → 𝑻/≈Ψ) to 𝑻/≋Ψ{f} to 𝑻/≈Ψ, and this will allow us to define operations
+ -- of the relatively free algebra 𝔽 below.
+ ≈→≋ : {f : ∣ 𝑆 ∣} → (∥ 𝑆 ∥ f → 𝑻/≈Ψ) → 𝑻/≋Ψ{f}
+ ≈→≋ {f} a = γ
+  where
+   α : (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → Ω ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺) ⊔ ((𝔓 ⁺) ⁺))
+   α 𝒕 = δ , ε
+    where
+     δ : (𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺) ⊔ ((𝔓 ⁺) ⁺) ̇
+     δ = {!!}
+     ε : is-subsingleton δ
+     ε = {!!}
+   β : -∃ (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) (λ x → ≋Ψ x ≡ α)
+   β = {!!}
+   γ : 𝑻/≋Ψ{f}
+   γ = α , β
+
+
+ opf : (f : ∣ 𝑆 ∣) → (∥ 𝑆 ∥ f → 𝑻/≈Ψ) → 𝑻/≈Ψ
+ opf f args = let γ = universal-property≋ 𝑻/≈Ψ 𝑻/≈Ψ-isset (𝕗← f) (≋-is-congruence f) in {!!}
 
  𝔽 : Algebra 𝔉 𝑆
- 𝔽 = (
+ 𝔽 = -- let f' = universal-property 𝑻/≈Ψ 𝑻/≈Ψ-is-set in
+     --  let ff = f' η η-equiv-equal in (
         -- carrier
-        (  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩  ) ,
-
+        -- (  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩  ) ,
+        ( 𝑻/≈Ψ ,
+        (  λ f args → {!∣ ff ∣ !} ) )
+            --→ η ((f ̂ 𝑻) (λ i₁ → ∣ args i₁ ∣)) ) )
         -- operations
-        (  λ f args
-            → ([ (f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) ] ⟨ ConΨ ⟩) ,
-                ((f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
-      )
+        -- (  λ f args
+        --     → ([ (f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) ] ⟨ ConΨ ⟩) ,
+        --         ((f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
+        -- (  λ f args
+        --     → (Ψ ((f ̂ 𝑻) (λ i →  ∣ args i ∣) ))   )      )
 
 
  --(N.B. the following did not require truncation.)
- 𝔽-is-universal-for : (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
- 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
-  where
-   h₀ : X → ∣ 𝑨 ∣
-   h₀ = fst (𝕏 𝑨)
+ -- 𝔽-is-universal-for : (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
+ -- 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
+ --  where
+ --   h₀ : X → ∣ 𝑨 ∣
+ --   h₀ = fst (𝕏 𝑨)
 
-   hE : Epic h₀
-   hE = snd (𝕏 𝑨)
+ --   hE : Epic h₀
+ --   hE = snd (𝕏 𝑨)
 
-   h : hom 𝑻 𝑨
-   h = lift-hom{𝑨 = 𝑨} h₀
-   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
-   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
-   -- so if [a] : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
-   -- representative of the ConΨ-class [a].
+ --   h : hom 𝑻 𝑨
+ --   h = lift-hom{𝑨 = 𝑨} h₀
+ --   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+ --   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+ --   -- so if [a] : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
+ --   -- representative of the ConΨ-class [a].
 
-   ϕ : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
-   ϕ = λ [a] → ∣ h ∣ (fst ∥ [a] ∥)
+ --   ϕ : 𝑻/Ψ → ∣ 𝑨 ∣ -- ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
+ --   ϕ = λ [a] → ∣ h ∣ (fst ∥ [a] ∥)
 
-   ϕhom : is-homomorphism 𝔽 𝑨 ϕ
-   ϕhom f a = γ
-    where
-     γ : ϕ ((f ̂ 𝔽) a) ≡ (f ̂ 𝑨) (λ x → ϕ (a x))
-     γ = ϕ ((f ̂ 𝔽) a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-         ϕ (([ (f ̂ 𝑻) (λ i → fst ∥ a i ∥) ] ⟨ ConΨ ⟩) ,
-           ((f ̂ 𝑻) (λ i → fst ∥ a i ∥) , refl _ ))
-                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-         ∣ h ∣ ((f ̂ 𝑻) (λ i → fst ∥ a i ∥))
-                        ≡⟨ ∥ h ∥ f ((λ i → fst ∥ a i ∥)) ⟩
-         (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
-                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-         (f ̂ 𝑨) (ϕ ∘ a) ∎
+ --   ϕhom : is-homomorphism 𝔽 𝑨 ϕ
+ --   ϕhom f a = γ
+ --    where
+ --     γ : ϕ ((f ̂ 𝔽) a) ≡ (f ̂ 𝑨) (λ x → ϕ (a x))
+ --     γ = ϕ ((f ̂ 𝔽) a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+ --         ϕ (([ (f ̂ 𝑻) (λ i → fst ∥ a i ∥) ] ⟨ ConΨ ⟩) ,
+ --           ((f ̂ 𝑻) (λ i → fst ∥ a i ∥) , refl _ ))
+ --                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+ --         ∣ h ∣ ((f ̂ 𝑻) (λ i → fst ∥ a i ∥))
+ --                        ≡⟨ ∥ h ∥ f ((λ i → fst ∥ a i ∥)) ⟩
+ --         (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
+ --                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+ --         (f ̂ 𝑨) (ϕ ∘ a) ∎
 
 
 
