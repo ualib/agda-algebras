@@ -113,11 +113,11 @@ module var-closure {𝔙 : Universe} where
  𝔙++ : Universe
  𝔙++ = OVU++ ⊔ 𝔙 ⁺
 
- data VClo (𝒦 : Pred (Algebra 𝔙+ 𝑆) 𝔙+) : Pred (Algebra 𝔙+ 𝑆) _ where
-  vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-  vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
-  vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
-  vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+ -- data VClo (𝒦 : Pred (Algebra 𝔙+ 𝑆) 𝔙+) : Pred (Algebra 𝔙+ 𝑆) _ where
+ --  vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+ --  vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+ --  vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+ --  vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 
 ------------------------------------------------------------------------
@@ -303,34 +303,48 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
     ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
     ∣ ϕ ∣ q  ∎
 
+data vclo {𝓤 : Universe}
+           (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) :
+            Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+ vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
+ vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
+ vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
+
+V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
+V-closed ℒ𝒦 = λ 𝓢 𝑩 → 𝑩 ∈ vclo (ℒ𝒦 𝓢)
 
 ----------------------------------------------------------------------
 --Closure under subalgebras
 module _
  {𝔓 : Universe}
- -- {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
- -- {𝒦 : Pred (Algebra (OVU+ ⁺) 𝑆) (OVU+ ⁺ ⁺)}
- -- {𝒦𝔓 : Pred (Algebra 𝔓 𝑆) (𝔓 ⁺)}
- -- {𝒦+ : Pred (Algebra (OVU+ ⊔ 𝔓) 𝑆) ((OVU+ ⊔ 𝔓) ⁺)}
- -- {𝒦++ : Pred (Algebra ((OVU+ ⊔ 𝔓) ⁺) 𝑆) ((OVU+ ⊔ 𝔓) ⁺ ⁺)}
+ -- -- {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
+ -- -- {𝒦 : Pred (Algebra (OVU+ ⁺) 𝑆) (OVU+ ⁺ ⁺)}
+ -- -- {𝒦𝔓 : Pred (Algebra 𝔓 𝑆) (𝔓 ⁺)}
+ -- -- {𝒦+ : Pred (Algebra (OVU+ ⊔ 𝔓) 𝑆) ((OVU+ ⊔ 𝔓) ⁺)}
+ -- -- {𝒦++ : Pred (Algebra ((OVU+ ⊔ 𝔓) ⁺) 𝑆) ((OVU+ ⊔ 𝔓) ⁺ ⁺)}
+ -- {𝒦2 : Pred (Algebra ((OVU+ ⊔ 𝔓)) 𝑆) ((OVU+ ⊔ 𝔓))}
+ -- {𝒦3 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)}
+ -- {𝒦4 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺)}
  {𝒦𝔓+ : Pred (Algebra (𝔓 ⁺) 𝑆) (𝔓 ⁺ ⁺)}
- {𝒦3 : Pred (Algebra ((OVU+ ⊔ 𝔓)) 𝑆) ((OVU+ ⊔ 𝔓))}
- {𝒦4 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)}
- {𝒦5 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺ ⁺) ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺ ⁺) ⁺ ⁺)} where
+ -- {𝒦5 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺)}
+ -- {𝒦6 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺ ⁺)}
+ {ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
  𝔖 ℌ 𝔙 𝔉 : Universe
  𝔖 = 𝔓 ⁺
  ℌ = 𝔖 ⁺
  𝔙 = ℌ ⁺
 
- 𝔉⁻⁻ = (OVU+ ⁺ ⊔ ℌ)
- 𝔉⁻ = (OVU+ ⁺ ⊔ 𝔙)
+ 𝔉⁻⁻ = (OVU+ ⊔ 𝔖)
+ 𝔉⁻ = (OVU+ ⁺ ⊔ ℌ)
  𝔉 = (OVU+ ⁺ ⁺ ⊔ 𝔙)
 
  open prod-closure {𝔓 = 𝔓}
  open sub-closure {𝔖 = 𝔖}
  open hom-closure {ℌ = ℌ}
- open var-closure {𝔙 = 𝔉}
+-- open var-closure {𝔙 = 𝔉}
 
  -- data PClo (𝒦 : Pred (Algebra 𝔓+ 𝑆)(𝔓+ ⁺)) : Pred (Algebra 𝔓+ 𝑆) (𝔓++ ⁺) where
  -- data SClo (𝒦 : Pred (Algebra 𝔖+ 𝑆)(𝔖+ ⁺)) : Pred (Algebra 𝔖+ 𝑆) (𝔖++ ⁺) where
@@ -489,26 +503,23 @@ module _
  -- To complete the proof of Birkhoff, it remains to show that 𝔽 belongs to SP(𝒦).
  -- For if that is true, then we have an algebra (namely, 𝔽) that belongs to VClo 𝒦
  -- and such that ∃ hom ϕ : 𝔽 → 𝑨 for all 𝑨 ∈ Mod Th (VClo 𝒦).
- -- data VClo (𝒦 : Pred (Algebra 𝔙+ 𝑆) (𝔙+ ⁺)) : Pred (Algebra 𝔙+ 𝑆) (𝔙++ ⁺) where
- --  vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
- --  vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
- --  vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
- --  vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
- 𝔽∈VClo : 𝔽 ∈ VClo 𝒦4
- 𝔽∈VClo = γ
+
+ 𝔽∈vclo : 𝔽 ∈ vclo (ℒ𝒦 𝔉)
+ 𝔽∈vclo = γ
   where
 
-   ΣP : Pred (Algebra 𝔉 𝑆) _ → _ ̇
+   ΣP : Pred (Algebra 𝔉⁻ 𝑆) _ → _ ̇
    ΣP K = Σ 𝑨 ꞉ (Algebra _ 𝑆) , 𝑨 ∈ K
 
-   ⨅P : Pred (Algebra 𝔉 𝑆) _ → Algebra _ 𝑆
+   ⨅P : Pred (Algebra 𝔉⁻ 𝑆) _ → Algebra _ 𝑆
    ⨅P K = ⨅ (λ (A : (ΣP K)) → ∣ A ∣ )
 
-   ⨅𝒦 : Algebra (𝔉 ⁺) 𝑆
-   ⨅𝒦 = ⨅P 𝒦4
+   ⨅𝒦 : Algebra 𝔉 𝑆
+   ⨅𝒦 = ⨅P (ℒ𝒦 𝔉⁻)
 
-   ⨅𝒦∈VClo : ⨅𝒦 ∈ (VClo 𝒦4)
-   ⨅𝒦∈VClo = {!sprod {I = Pred (Algebra (OVU+ ⁺ ⁺) 𝑆) (OVU+ ⁺ ⁺ ⁺)}{𝒜 = ⨅P} ?!}
+   -- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
+   ⨅𝒦∈vclo : ⨅𝒦 ∈ vclo (ℒ𝒦 _)
+   ⨅𝒦∈vclo = {!vprod ?!}
 
    h : ∣ 𝔽 ∣ → ∣ ⨅𝒦 ∣
    h = {!!}
@@ -522,8 +533,8 @@ module _
    𝔽sub : SubalgebrasOf ⨅𝒦
    𝔽sub = (𝔽 , h , (hembe , hhomo))
 
-   γ : 𝔽 ∈ VClo 𝒦3
-   γ = vsub ⨅𝒦∈VClo 𝔽sub
+   γ : 𝔽 ∈ vclo (ℒ𝒦 𝔉)
+   γ = vsub ⨅𝒦∈vclo 𝔽sub
 
 
 

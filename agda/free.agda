@@ -54,159 +54,6 @@ open import terms
   as discussed above, but also functional and propositional extensionality."
 -}
 
-module quotient
-       {𝓤 𝓥 : Universe}
-       (pt  : subsingleton-truncations-exist)
-       (hfe : global-hfunext)
-       (pe  : propext 𝓥)
-       (X   : 𝓤 ̇ )
-       (_≈_ : X → X → 𝓥 ̇ )
-       (≈p  : is-subsingleton-valued _≈_)
-       (≈r  : reflexive _≈_)
-       (≈s  : symmetric _≈_)
-       (≈t  : transitive _≈_)   where
-
-
- -- open prelude.basic-truncation-development pt hfe using (image; hunapply; ∃-is-subsingleton; corestriction; is-surjection; corestriction-surjection; surjection-induction; ∃; -∃; ∥∥-recursion) renaming (∥_∥ to ⟪_⟫; ∣_∣ to ⌞_⌟) public
-
- open prelude.basic-truncation-development pt hfe renaming (∥_∥ to ⟪_⟫; ∣_∣ to ⌞_⌟) public
-
- {-
-   "From the given relation `_≈_ : X → X → 𝓥 ̇` we define a function `X → (X → Ω 𝓥)`, and we
-   take the quotient `X/≈` to be the image of this function. It is for constructing the image
-   that we need subsingleton truncations. Functional and propositional extensionality are then
-   used to prove that the quotient is a set."
- -}
-
- equiv-rel : X → (X → Ω 𝓥)
- equiv-rel x y = (x ≈ y) , ≈p x y
-
- X/≈ : 𝓥 ⁺ ⊔ 𝓤 ̇
- X/≈ = image equiv-rel
-
- X/≈-is-set : is-set X/≈
- X/≈-is-set = subsets-of-sets-are-sets (X → Ω 𝓥) _
-                (powersets-are-sets (dfunext-gives-hfunext hunapply) hunapply pe)
-                      λ _ → ∃-is-subsingleton
-
- η : X → X/≈
- η = corestriction equiv-rel
- --corestriction takes a function f : X → Y and restricts the codomain to be the image of f
-
-{-
-  "We show that `η` is the universal solution to the problem of transforming equivalence `_≈_`
-  into equality `_≡_`."
--}
-
- η-surjection : is-surjection η
- η-surjection = corestriction-surjection equiv-rel
-
-{-
-  "It is convenient to use the following induction principle for reasoning about the image `X/≈`."
--}
- η-induction : (P : X/≈ → 𝓦 ̇)
-  →            (( x' : X/≈) → is-subsingleton (P x'))
-  →            (( x : X) → P (η x))
-  →            (x' : X/≈ ) → P x'
- η-induction = surjection-induction η η-surjection
-
-{-
-  "The first part of the universal property of `η` says that equivalent points are mapped to identified points:"
--}
- η-equiv-equal : {x y : X} → x ≈ y → η x ≡ η y
- η-equiv-equal {x} {y} e = to-subtype-≡ (λ _ → ∃-is-subsingleton) γ
-  where
-   γ : equiv-rel x ≡ equiv-rel y
-   γ = hunapply ζ
-    where
-     ζ : equiv-rel x ∼ equiv-rel y
-     ζ z = to-subtype-≡ (λ _ → being-subsingleton-is-subsingleton hunapply)
-                        (pe (≈p x z) (≈p y z) (≈t y x z (≈s x y e)) (≈t x y z e))
-
-{-
-  "To prove the required universal property, we also need the fact that `η` reflects equality into equivalence:
--}
- η-equal-equiv : {x y : X} → η x ≡ η y → x ≈ y
- η-equal-equiv {x} {y} p = equiv-rel-reflect (ap pr₁ p)
-  where
-   equiv-rel-reflect : equiv-rel x ≡ equiv-rel y → x ≈ y
-   equiv-rel-reflect q = b (≈r y)
-    where
-     a : (y ≈ y) ≡ (x ≈ y)
-     a = ap (λ - → pr₁ (- y) ) (q ⁻¹)
-     b : y ≈ y → x ≈ y
-     b = Id→fun a
-
-{-
-  "We are now ready to formulate and prove the required universal property of the quotient.
-  What is noteworthy here, regarding universes, is that the universal property says that we
-  can eliminate into any set `A` of any universe `𝓦`.
--}
- universal-property : (A : 𝓦 ̇)
-  →                   is-set A
-  →                   (f : X → A)
-  →                   ({x x' : X} → x ≈ x' → f x ≡ f x' )
-  →                   ∃! f' ꞉ (X/≈ → A) , (f' ∘ η ≡ f)
- universal-property {𝓦} A Aset f τ = e
-  where
-   G : X/≈ → 𝓥 ⁺ ⊔ 𝓤 ⊔ 𝓦 ̇
-   G x' = Σ a ꞉ A , ∃ x ꞉ X , (η x ≡ x' ) × (f x ≡ a)
-
-   φ : (x' : X/≈) → is-subsingleton (G x')
-   φ = η-induction _ γ induction-step
-    where
-     induction-step : (y : X) → is-subsingleton (G (η y))
-     induction-step x (a , d) (b , e) =
-             to-subtype-≡ (λ _ → ∃-is-subsingleton) p
-      where
-       h : (Σ x' ꞉ X , (η x' ≡ η x) × (f x' ≡ a))
-        →  (Σ y' ꞉ X , (η y' ≡ η x) × (f y' ≡ b))
-        →  a ≡ b
-
-       h (x' , ηx'≡ηx , fx'≡a)(y' , ηy'≡ηx , fy'≡b) =
-         a    ≡⟨ fx'≡a ⁻¹ ⟩
-         f x' ≡⟨ τ(η-equal-equiv (ηx'≡ηx ∙ ηy'≡ηx ⁻¹)) ⟩
-         f y' ≡⟨ fy'≡b ⟩
-         b    ∎
-
-       p : a ≡ b
-       p = ∥∥-recursion (Aset a b) (λ σ → ∥∥-recursion (Aset a b) (h σ) e ) d
-
-     γ : (x' : X/≈) → is-subsingleton (is-subsingleton (G x'))
-     γ x' = being-subsingleton-is-subsingleton hunapply
-
-   k : (x' : X/≈) → G x'
-   k = η-induction _ φ induction-step
-    where
-     induction-step : (y : X) → G (η y)
-     induction-step x = f x , ⌞ x , refl (η x) , refl (f x) ⌟
-
-   f' : X/≈ → A
-   f' x' = pr₁ (k x')
-
-   r : f' ∘ η ≡ f
-   r = hunapply h
-    where
-     g :  (y : X) → ∃ x ꞉ X , (η x ≡ η y) × (f x ≡ f' (η y) )
-     g y = pr₂ (k (η y) )
-
-     j : (y : X) → ( Σ x ꞉ X , (η x ≡ η y) × (f x ≡ f' (η y) ) ) → f' (η y) ≡ f y
-     j y (x , p , q) = f' (η y) ≡⟨ q ⁻¹ ⟩ f x ≡⟨ τ (η-equal-equiv p) ⟩ f y ∎
-
-     h : (y : X) → f' (η y) ≡ f y -- f' ∘ η ∼ f
-     h y = ∥∥-recursion (Aset (f' (η y) ) (f y) ) (j y) (g y)
-
-   c : (σ : Σ f'' ꞉ (X/≈ → A) , f'' ∘ η ≡ f) → (f' , r) ≡ σ -- is-center (Σ (λ f'' → f'' ∘ η ≡ f)) (f' , r)
-   c (f'' , s) = to-subtype-≡ (λ g → Π-is-set hfe (λ _ → Aset) (g ∘ η) f) t
-    where
-     w : (x : X) → f' (η x) ≡ f'' (η x)
-     w = happly (f' ∘ η) (f'' ∘ η) (r ∙ s ⁻¹)
-     t : f' ≡ f''
-     t = hunapply (η-induction _ (λ x' → Aset (f' x') (f'' x') ) w)
-   e : ∃! f' ꞉ (X/≈ → A) , f' ∘ η ≡ f
-   e = (f' , r) , c
-
-----------------------------------------------------------------------------
 _⊧_≈_ : {𝓦 : Universe} → Algebra 𝓦 𝑆
  →      Term → Term → 𝓤 ⊔ 𝓦 ̇
 
@@ -216,6 +63,9 @@ _⊧_≋_ : {𝓦 𝓣 : Universe} → Pred (Algebra 𝓦 𝑆) 𝓣
  →      Term → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣 ⊔ 𝓦 ⁺ ̇
 
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+
+OV : Universe → Universe
+OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤
 
 OVU+ : Universe
 OVU+ = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
@@ -279,6 +129,7 @@ module hom-closure {ℌ : Universe} where
   hhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
 
 
+
 module var-closure {𝔙 : Universe} where
 
  𝔙+ : Universe    -- notation: \MfV yields 𝔙
@@ -292,6 +143,18 @@ module var-closure {𝔙 : Universe} where
   vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
   vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
   vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+data vclo {𝓤 : Universe}
+           (𝒦 : Pred (Algebra (𝓤) 𝑆) ((𝓤) ⁺)) :
+            Pred (Algebra 𝓤 𝑆) ((OV 𝓤) ⁺) where
+ vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
+ vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
+ vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
+
+V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+ →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → (OV 𝓢) ⁺ ̇
+V-closed ℒ𝒦 = λ 𝓢 𝑩 → 𝑩 ∈ vclo (ℒ𝒦 𝓢)
 
 ------------------------------------------------------------------------
 -- Equational theories and classes
@@ -310,8 +173,9 @@ Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 module relatively_free_algebra
  {𝔓 : Universe}
  {𝒦𝔓+ : Pred (Algebra (𝔓 ⁺) 𝑆) (𝔓 ⁺ ⁺)}
- {𝒦3 : Pred (Algebra ((OVU+ ⊔ 𝔓)) 𝑆) ((OVU+ ⊔ 𝔓))}
- {𝒦4 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)}
+ {𝒦2 : Pred (Algebra ((OVU+ ⊔ 𝔓)) 𝑆) ((OVU+ ⊔ 𝔓))}
+ {𝒦3 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)}
+ {𝒦4 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺)}
  {𝒦5 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺ ⁺) ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺ ⁺) ⁺ ⁺)}
  (pt  : subsingleton-truncations-exist)
  (hfe : global-hfunext)
@@ -710,11 +574,6 @@ module relatively_free_algebra
   →                (𝕗← f) a1 ≡ (𝕗← f) a2
  ≋-is-congruence f = {!!}
 
- -- ≈agreement : {f : ∣ 𝑆 ∣} {a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
- --  →             (∀ i → a1 i ≈ a2 i)
- --               -----------------------------
- --  →             η ∘ a1 ≡ η ∘ a2
-
  -- We want to establish an equivalence ∥ 𝑆 ∥ f → 𝑻/≈Ψ  <-> 𝑻/≋Ψ
  ≈-≋-agreement : {f : ∣ 𝑆 ∣} {a1 a2 : ∥ 𝑆 ∥ f → ∣ 𝑻 ∣}
   →             a1 ≋ a2 → η ∘ a1 ≡ η ∘ a2
@@ -724,82 +583,93 @@ module relatively_free_algebra
   (λ i → η (a2 i)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
   (η ∘ a2) ∎
 
- -- If we can prove the following, then we can use it, along with the universal property,
- -- to go from (∥ 𝑆 ∥ f → 𝑻/≈Ψ) to 𝑻/≋Ψ{f} to 𝑻/≈Ψ, and this will allow us to define operations
- -- of the relatively free algebra 𝔽 below.
+ -- We use the next lemma, along with the universal property, to go from
+ -- (∥ 𝑆 ∥ f → 𝑻/≈Ψ) to 𝑻/≋Ψ{f} to 𝑻/≈Ψ, as a path to defining operations
+ -- on the relatively free algebra 𝔽 below.
  ≈→≋ : {f : ∣ 𝑆 ∣} → (∥ 𝑆 ∥ f → 𝑻/≈Ψ) → 𝑻/≋Ψ{f}
  ≈→≋ {f} a = γ
   where
    α : (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) → Ω ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺) ⊔ ((𝔓 ⁺) ⁺))
    α 𝒕 = δ , ε
     where
-     δ : (𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺) ⊔ ((𝔓 ⁺) ⁺) ̇
-     δ = {!!}
+     δ : (OVU+ ⊔ 𝔓 ⁺) ⁺ ̇
+     δ = ∣ ≋Ψ 𝒕 𝒕 ∣
      ε : is-subsingleton δ
-     ε = {!!}
+     ε x y = {!!}
    β : -∃ (∥ 𝑆 ∥ f → ∣ 𝑻 ∣) (λ x → ≋Ψ x ≡ α)
    β = {!!}
    γ : 𝑻/≋Ψ{f}
    γ = α , β
 
 
- opf : (f : ∣ 𝑆 ∣) → (∥ 𝑆 ∥ f → 𝑻/≈Ψ) → 𝑻/≈Ψ
- opf f args = let γ = universal-property≋ 𝑻/≈Ψ 𝑻/≈Ψ-isset (𝕗← f) (≋-is-congruence f) in {!!}
+ ≈op : (f : ∣ 𝑆 ∣) → (∥ 𝑆 ∥ f → 𝑻/≈Ψ) → 𝑻/≈Ψ
+ ≈op f args =
+  let γ = universal-property≋ 𝑻/≈Ψ 𝑻/≈Ψ-isset
+           (𝕗← f) (≋-is-congruence f) in ∣ fst γ ∣ (≈→≋ args)
 
  𝔽 : Algebra 𝔉 𝑆
- 𝔽 = -- let f' = universal-property 𝑻/≈Ψ 𝑻/≈Ψ-is-set in
-     --  let ff = f' η η-equiv-equal in (
-        -- carrier
-        -- (  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩  ) ,
-        ( 𝑻/≈Ψ ,
-        (  λ f args → {!∣ ff ∣ !} ) )
-            --→ η ((f ̂ 𝑻) (λ i₁ → ∣ args i₁ ∣)) ) )
-        -- operations
-        -- (  λ f args
-        --     → ([ (f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) ] ⟨ ConΨ ⟩) ,
-        --         ((f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
-        -- (  λ f args
-        --     → (Ψ ((f ̂ 𝑻) (λ i →  ∣ args i ∣) ))   )      )
+ 𝔽 = -- carrier:     (previously:  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ )
+      ( 𝑻/≈Ψ ,
+      -- operations     (previously  (  λ f args
+      (  λ f args → ≈op f args ) )  --   → ([ (f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) ] ⟨ ConΨ ⟩) ,
+                                    --   ((f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
+
+ 𝔽-is-universal-for : (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
+ 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
+  where
+   h₀ : X → ∣ 𝑨 ∣
+   h₀ = fst (𝕏 𝑨)
+
+   hE : Epic h₀
+   hE = snd (𝕏 𝑨)
+
+   h : hom 𝑻 𝑨
+   h = lift-hom{𝑨 = 𝑨} h₀
+   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+   -- so if [a] : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
+   -- representative of the ConΨ-class [a].
+
+   𝑨-isset : is-set ∣ 𝑨 ∣
+   𝑨-isset = {!!}
+
+   ∃ϕ : ∃! ϕ ꞉ (𝑻/≈Ψ → ∣ 𝑨 ∣), ϕ ∘ η ≡ ∣ h ∣
+   ∃ϕ = universal-property (∣ 𝑨 ∣) 𝑨-isset (∣ h ∣) hc
+    where
+     hc : ∀{s t : ∣ 𝑻 ∣} → s ≈ t → (∣ h ∣ s) ≡ (∣ h ∣ t)
+     hc = {!!}
+
+   ϕ : 𝑻/≈Ψ → ∣ 𝑨 ∣ -- ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
+   ϕ = ∣ fst ∃ϕ ∣
+
+   ϕhom : is-homomorphism 𝔽 𝑨 ϕ
+   ϕhom f 𝒕 = γ
+     where
+      ϕη≡h : ϕ ∘ η ≡ ∣ h ∣
+      ϕη≡h = ∥ ∣ ∃ϕ ∣ ∥
+
+      ϕ2 : prelude.is-center (Σ (λ ϕ₁ → ϕ₁ ∘ η ≡ ∣ h ∣)) (pr₁ ∃ϕ)
+      ϕ2 = ∥ ∃ϕ ∥
+      -- lem1 : (f ̂ 𝔽) 𝒕 ≡ (f ̂ 𝔽) (λ i → 𝒕 i) ≡
+
+      γ : ϕ ((f ̂ 𝔽) 𝒕) ≡ (f ̂ 𝑨) (ϕ ∘ 𝒕)
+      γ = ϕ ((f ̂ 𝔽) 𝒕) ≡⟨ {!!} ⟩
+          ∣ h ∣ {!!} ≡⟨ {!!} ⟩
+          (f ̂ 𝑨) (ϕ ∘ 𝒕) ∎
 
 
- --(N.B. the following did not require truncation.)
- -- 𝔽-is-universal-for : (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
- -- 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
- --  where
- --   h₀ : X → ∣ 𝑨 ∣
- --   h₀ = fst (𝕏 𝑨)
-
- --   hE : Epic h₀
- --   hE = snd (𝕏 𝑨)
-
- --   h : hom 𝑻 𝑨
- --   h = lift-hom{𝑨 = 𝑨} h₀
- --   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
- --   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
- --   -- so if [a] : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
- --   -- representative of the ConΨ-class [a].
-
- --   ϕ : 𝑻/Ψ → ∣ 𝑨 ∣ -- ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
- --   ϕ = λ [a] → ∣ h ∣ (fst ∥ [a] ∥)
-
- --   ϕhom : is-homomorphism 𝔽 𝑨 ϕ
- --   ϕhom f a = γ
- --    where
- --     γ : ϕ ((f ̂ 𝔽) a) ≡ (f ̂ 𝑨) (λ x → ϕ (a x))
- --     γ = ϕ ((f ̂ 𝔽) a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- --         ϕ (([ (f ̂ 𝑻) (λ i → fst ∥ a i ∥) ] ⟨ ConΨ ⟩) ,
- --           ((f ̂ 𝑻) (λ i → fst ∥ a i ∥) , refl _ ))
- --                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- --         ∣ h ∣ ((f ̂ 𝑻) (λ i → fst ∥ a i ∥))
- --                        ≡⟨ ∥ h ∥ f ((λ i → fst ∥ a i ∥)) ⟩
- --         (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
- --                        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- --         (f ̂ 𝑨) (ϕ ∘ a) ∎
+         -- ϕ (([ (f ̂ 𝑻) (λ i → ?) ] ⟨ ConΨ ⟩) ,
+         --   ((f ̂ 𝑻) (λ i → fst ∥ a i ∥) , refl _ ))
+         --                ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         -- ∣ h ∣ ((f ̂ 𝑻) (λ i → fst ∥ a i ∥))
+         --                ≡⟨ ∥ h ∥ f ((λ i → fst ∥ a i ∥)) ⟩
+         -- (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
+         --                ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         -- (f ̂ 𝑨) (ϕ ∘ a) ∎
 
 
-
- 𝔽-carrier-is-set : is-set (∣ 𝑻 ∣ // ⟨ ConΨ ⟩)
- 𝔽-carrier-is-set = λ x y x₁ y₁ → {!!}
+ -- 𝔽-carrier-is-set : is-set (∣ 𝑻 ∣ // ⟨ ConΨ ⟩)
+ -- 𝔽-carrier-is-set = λ x y x₁ y₁ → {!!}
  -- subsets-of-sets-are-sets (∣ 𝑻 ∣ → 𝔉 ̇) _ -- (X → Ω 𝓥)
  --               (powersets-are-sets ? ) -- dfunext-gives-hfunext hunapply{X = ∣ 𝑻 ∣})
  --               hunapply{X = ∣ 𝑻 ∣} pe
@@ -828,36 +698,36 @@ module relatively_free_algebra
  --  vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
  --  vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
  --  vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
- -- 𝔽∈VClo : 𝔽 ∈ VClo 𝒦4
- -- 𝔽∈VClo = γ
- --  where
+ 𝔽∈VClo : 𝔽 ∈ VClo 𝒦3
+ 𝔽∈VClo = {!γ!}
+  where
 
- --   ΣP : Pred (Algebra 𝔉 𝑆) _ → _ ̇
- --   ΣP K = Σ 𝑨 ꞉ (Algebra _ 𝑆) , 𝑨 ∈ K
+   ΣP : Pred (Algebra 𝔉 𝑆) _ → _ ̇
+   ΣP K = Σ 𝑨 ꞉ (Algebra _ 𝑆) , 𝑨 ∈ K
 
- --   ⨅P : Pred (Algebra 𝔉 𝑆) _ → Algebra _ 𝑆
- --   ⨅P K = ⨅ (λ (A : (ΣP K)) → ∣ A ∣ )
+   ⨅P : Pred (Algebra 𝔉 𝑆) _ → Algebra _ 𝑆
+   ⨅P K = ⨅ (λ (A : (ΣP K)) → ∣ A ∣ )
 
- --   ⨅𝒦 : Algebra (𝔉 ⁺) 𝑆
- --   ⨅𝒦 = ⨅P 𝒦4
+   ⨅𝒦 : Algebra (𝔉) 𝑆
+   ⨅𝒦 = ⨅P 𝒦3
 
- --   ⨅𝒦∈VClo : ⨅𝒦 ∈ (VClo 𝒦4)
- --   ⨅𝒦∈VClo = {!sprod {I = Pred (Algebra (OVU+ ⁺ ⁺) 𝑆) (OVU+ ⁺ ⁺ ⁺)}{𝒜 = ⨅P} ?!}
+   ⨅𝒦∈VClo : ⨅𝒦 ∈ (vclo 𝒦4)
+   ⨅𝒦∈VClo = {!sprod {I = Pred (Algebra (OVU+ ⁺ ⁺) 𝑆) (OVU+ ⁺ ⁺ ⁺)}{𝒜 = ⨅P} ?!}
 
- --   h : ∣ 𝔽 ∣ → ∣ ⨅𝒦 ∣
- --   h = {!!}
+   h : ∣ 𝔽 ∣ → ∣ ⨅𝒦 ∣
+   h = {!!}
 
- --   hembe : is-embedding h
- --   hembe = {!!}
+   hembe : is-embedding h
+   hembe = {!!}
 
- --   hhomo : is-homomorphism 𝔽 ⨅𝒦 h
- --   hhomo = {!!}
+   hhomo : is-homomorphism 𝔽 ⨅𝒦 h
+   hhomo = {!!}
 
- --   𝔽sub : SubalgebrasOf ⨅𝒦
- --   𝔽sub = (𝔽 , h , (hembe , hhomo))
+   𝔽sub : SubalgebrasOf ⨅𝒦
+   𝔽sub = (𝔽 , h , (hembe , hhomo))
 
- --   γ : 𝔽 ∈ VClo 𝒦3
- --   γ = vsub ⨅𝒦∈VClo 𝔽sub
+   γ : 𝔽 ∈ VClo 𝒦3
+   γ = vsub ⨅𝒦∈VClo 𝔽sub
 
 
 
