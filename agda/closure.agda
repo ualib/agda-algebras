@@ -377,8 +377,8 @@ module _
  𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
     ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
 
- Ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
- Ψ (p , q) =
+ Ψ : Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺) -- Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
+ Ψ p q =
     ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
 
  -- Ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ((𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺) ⁺)
@@ -392,7 +392,7 @@ module _
  Ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
  Ψ' (p , q) = ∀(ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
- Ψ-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} (Pred→Rel Ψ)
+ Ψ-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} Ψ
  Ψ-IsEquivalence =
   record { rfl = λ p ti → 𝓇ℯ𝒻𝓁
          ; sym = λ p q p≡q ti → (p≡q ti)⁻¹
@@ -414,7 +414,7 @@ module _
 
  open 𝑻Congruence
 
- Ψ-𝑻compatible : 𝑻compatible (Pred→Rel Ψ)
+ Ψ-𝑻compatible : 𝑻compatible Ψ
  Ψ-𝑻compatible f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
   where
    𝑨 : Algebra 𝔖 𝑆
@@ -440,7 +440,7 @@ module _
     ∣ ϕ ∣ ((f ̂ 𝑻) (λ i → (𝒔s i x))) ∎
 
  ConΨ : 𝑻Congruence
- ConΨ = mk𝑻con (Pred→Rel Ψ) Ψ-𝑻compatible Ψ-IsEquivalence
+ ConΨ = mk𝑻con Ψ Ψ-𝑻compatible Ψ-IsEquivalence
 
  𝔽 : Algebra 𝔉 𝑆
  𝔽 = (
@@ -453,7 +453,7 @@ module _
                 ((f ̂ 𝑻) (λ i₁ → fst ∥ args i₁ ∥) , 𝓇ℯ𝒻𝓁 )   )
       )
 
- 𝔽-is-universal-for : (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
+ 𝔽-is-universal-for : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
  𝔽-is-universal-for 𝑨 = ϕ , ϕhom
   where
    h₀ : X → ∣ 𝑨 ∣
@@ -485,7 +485,6 @@ module _
          (f ̂ 𝑨) (∣ h ∣ ∘ (λ i → fst ∥ a i ∥))
                         ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
          (f ̂ 𝑨) (ϕ ∘ a) ∎
-
 
 --N.B. Ψ𝒦𝑻 is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove
 --𝑨 is a hom image of 𝔽(𝒦, 𝑻), it suffices to show that the kernel of
@@ -521,14 +520,25 @@ module _
    ⨅𝒦∈vclo : ⨅𝒦 ∈ vclo (ℒ𝒦 _)
    ⨅𝒦∈vclo = {!vprod ?!}
 
+   ϕ : hom 𝔽 ⨅𝒦
+   ϕ = 𝔽-is-universal-for ⨅𝒦
+
    h : ∣ 𝔽 ∣ → ∣ ⨅𝒦 ∣
-   h = {!!}
+   h = ∣ ϕ ∣
+
+   kerh : Rel (∣ 𝑻 ∣ // ⟨ ConΨ ⟩ ) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)
+   kerh s t = h s ≡ h t
+
+   kerh⊆Ψ : ∀(s t : ∣ 𝑻 ∣)(ti : 𝑻img)
+    →       kerh ⟦ s ⟧ ⟦ t ⟧
+    →       ∣ (𝑻ϕ ti) ∣ ∘ (s ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (t ̇ 𝑻)
+   kerh⊆Ψ s t ti kerhst = {!!}
 
    hembe : is-embedding h
    hembe = {!!}
 
    hhomo : is-homomorphism 𝔽 ⨅𝒦 h
-   hhomo = {!!}
+   hhomo = ∥ ϕ ∥
 
    𝔽sub : SubalgebrasOf ⨅𝒦
    𝔽sub = (𝔽 , h , (hembe , hhomo))
