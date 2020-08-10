@@ -71,8 +71,13 @@ module prod-closure {𝔓 : Universe} where
 
 module sub-closure {𝔖 : Universe} where
 
- 𝔖+ : Universe   -- notation: \MfS yields 𝔖
- 𝔖+ = OVU+ ⊔ 𝔖
+ -- 𝔖+ : Universe   -- notation: \MfS yields 𝔖
+ -- 𝔖+ = OVU+ ⊔ 𝔖
+ OV𝔖 : Universe   -- notation: \MfS yields 𝔖
+ OV𝔖 = 𝓞 ⊔ 𝓥 ⊔ 𝔖
+
+ OV𝔖+ : Universe   -- notation: \MfS yields 𝔖
+ OV𝔖+ = 𝓞 ⊔ 𝓥 ⊔ 𝔖 ⁺
 
  𝔖++ : Universe
  𝔖++ = OVU++ ⊔ 𝔖 ⁺
@@ -80,7 +85,7 @@ module sub-closure {𝔖 : Universe} where
  ----------------------------------------------------------------------
  --Closure under subalgebras
 -- data SClo (𝒦 : Pred (Algebra 𝔖+ 𝑆)(𝔖+ ⁺)) : Pred (Algebra 𝔖+ 𝑆) (𝔖++ ⁺) where
- data SClo (𝒦 : Pred (Algebra 𝔖 𝑆)(𝔖 ⁺)) : Pred (Algebra 𝔖 𝑆) (𝔖+ ⁺) where
+ data SClo (𝒦 : Pred (Algebra 𝔖 𝑆) 𝔖) : Pred (Algebra 𝔖 𝑆) OV𝔖+ where
   sbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
@@ -304,14 +309,14 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
     ∣ ϕ ∣ q  ∎
 
 data vclo {𝓤 : Universe}
-           (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) :
+           (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓤) :
             Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
  vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 
-V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤)
  →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
 V-closed ℒ𝒦 = λ 𝓢 𝑩 → 𝑩 ∈ vclo (ℒ𝒦 𝓢)
 
@@ -341,6 +346,9 @@ module _
  𝔉⁻⁻ = (OVU+ ⊔ 𝔖)
  𝔉⁻ = (OVU+ ⁺ ⊔ ℌ)
  𝔉 = (OVU+ ⁺ ⁺ ⊔ 𝔙)
+
+ 𝓜 : Universe
+ 𝓜 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝔓 ⁺ ⁺))
 
  open prod-closure {𝔓 = 𝔓}
  open sub-closure {𝔖 = 𝔖}
@@ -378,20 +386,9 @@ module _
  𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
     ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
 
- Ψ : Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺) -- Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
+ Ψ : Rel ∣ 𝑻 ∣ 𝓜
  Ψ p q =
     ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
-
- -- Ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ((𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺) ⁺)
- -- Ψ (p , q) =
- --    ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
-
- Pred→Rel : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
-  →         Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺)
- Pred→Rel P = λ t1 t2 → P (t1 , t2)
-
- Ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _
- Ψ' (p , q) = ∀(ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
  Ψ-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} Ψ
  Ψ-IsEquivalence =
@@ -400,16 +397,16 @@ module _
          ; trans = λ p q r p≡q q≡r ti → (p≡q ti) ∙ (q≡r ti)
          }
 
- 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺) → _ ̇
+ 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ 𝑻 ∣ 𝓜 → _ ̇   -- ((OVU+ ⊔ 𝔓 ⁺) ⁺)
  𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻) ]⇒ R
 
- 𝑻compatible : Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺) → _ ̇
+ 𝑻compatible : Rel ∣ 𝑻 ∣ 𝓜 → _ ̇
  𝑻compatible R = ∀ f → 𝑻compatible-op f R
 
- record 𝑻Congruence : ((OVU+ ⊔ 𝔓 ⁺) ⁺) ⁺ ̇  where
+ record 𝑻Congruence : 𝓜 ⁺ ̇  where  -- ((OVU+ ⊔ 𝔓 ⁺) ⁺) ⁺
   constructor mk𝑻con
   field
-   ⟨_⟩ : Rel ∣ 𝑻 ∣ ((OVU+ ⊔ 𝔓 ⁺) ⁺)
+   ⟨_⟩ : Rel ∣ 𝑻 ∣ _
    Compatible : 𝑻compatible ⟨_⟩
    IsEquiv : IsEquivalence ⟨_⟩
 
@@ -443,7 +440,7 @@ module _
  ConΨ : 𝑻Congruence
  ConΨ = mk𝑻con Ψ Ψ-𝑻compatible Ψ-IsEquivalence
 
- 𝔽 : Algebra 𝔉 𝑆
+ 𝔽 : Algebra (𝓜 ⁺) 𝑆
  𝔽 = (
         -- carrier
         (  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩  ) ,
@@ -465,10 +462,6 @@ module _
 
    h : hom 𝑻 𝑨
    h = lift-hom{𝑨 = 𝑨} h₀
-   -- Recall, _//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
-   --         A // ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
-   -- so if [a] : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩, then fst ∥ [a] ∥ is a
-   -- representative of the ConΨ-class [a].
 
    ϕ : ∣ 𝑻 ∣ // ⟨ ConΨ ⟩ → ∣ 𝑨 ∣
    ϕ = λ 𝒂 → ∣ h ∣ ⌜ 𝒂 ⌝
@@ -487,64 +480,40 @@ module _
                         ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
          (f ̂ 𝑨) (ϕ ∘ a) ∎
 
---N.B. Ψ𝒦𝑻 is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove
---𝑨 is a hom image of 𝔽(𝒦, 𝑻), it suffices to show that the kernel of
---the lift h : 𝑻 → 𝑨 *contains* Ψ𝒦𝑻
---
---    𝑻---- g --->>𝔽  (ker g = Ψ𝒦𝑻)
---     \         .
---      \       .
---       h     ∃ϕ     (want: Ψ𝒦𝑻 ⊆ ker h)
---        \   .
---         \ .
---          V
---          𝑨
-
- -- To complete the proof of Birkhoff, it remains to show that 𝔽 belongs to SP(𝒦).
- -- For if that is true, then we have an algebra (namely, 𝔽) that belongs to VClo 𝒦
- -- and such that ∃ hom ϕ : 𝔽 → 𝑨 for all 𝑨 ∈ Mod Th (VClo 𝒦).
-
- 𝔽∈vclo : 𝔽 ∈ vclo (ℒ𝒦 𝔉)
+ 𝔽∈vclo : 𝔽 ∈ vclo (ℒ𝒦 (𝓜 ⁺))
  𝔽∈vclo = γ
   where
 
-   ΣP : Pred (Algebra 𝔉 𝑆) (𝔉 ) → _ ̇
+   ΣP : Pred (Algebra 𝓜 𝑆) _ → _ ̇
    ΣP K = Σ 𝑨 ꞉ (Algebra _ 𝑆) , 𝑨 ∈ K
 
-   𝒜 : {K : Pred (Algebra 𝔉 𝑆) _}(I : ΣP K) → Algebra 𝔉 𝑆
+   𝒜 : {K : Pred (Algebra 𝓜 𝑆) _}(I : ΣP K) → Algebra _ 𝑆
    𝒜 {K} I = ∣ I ∣
 
-   ⨅ℒ𝒦 : {I : 𝔉 ̇ }{𝒜 : I → Algebra 𝔉 𝑆}
-    →      (∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝔉))
-    →      Algebra (𝔉) 𝑆
+   ⨅ℒ𝒦 : {I : 𝓜 ⁺ ̇ }{𝒜 : I → Algebra 𝓜 𝑆}
+    →      (∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝓜))
+    →      Algebra _ 𝑆
    ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
 
    -- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
-   ⨅𝒦∈vclo : {I : 𝔉 ̇ }
-              {𝒜 : I → Algebra 𝔉 𝑆}
-              (p : ∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝔉))
-     →        (⨅ℒ𝒦 {I}{𝒜} p ∈ vclo (ℒ𝒦 𝔉))
+   ⨅𝒦∈vclo : {I : 𝓜 ⁺ ̇ }
+              {𝒜 : I → Algebra 𝓜 𝑆}
+              (p : ∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝓜))
+     →        (⨅ℒ𝒦 {I}{𝒜} p ∈ vclo (ℒ𝒦 (𝓜 ⁺)))
 
-   ⨅𝒦∈vclo p = {!vprod p!}
--- data vclo {𝓤 : Universe}
---            (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) :
---             Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
---  vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
---  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
---  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
---  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
+   ⨅𝒦∈vclo p = {!!}
 
-   ΣP⊆vcloℒ𝒦 : (i : ΣP (ℒ𝒦 (𝔉 ⁺))) → 𝒜 i ∈ vclo (ℒ𝒦 𝔉)
+   ΣP⊆vcloℒ𝒦 : (i : ΣP (ℒ𝒦 𝓜)) → 𝒜 i ∈ vclo (ℒ𝒦 𝓜)
    ΣP⊆vcloℒ𝒦 i = γ
     where
-     𝒜i∈ℒ𝒦 : 𝒜 i ∈ (ℒ𝒦 𝔉)
+     𝒜i∈ℒ𝒦 : 𝒜 i ∈ (ℒ𝒦 𝓜)
      𝒜i∈ℒ𝒦 = ∥ i ∥
 
-     γ : 𝒜 i ∈ vclo (ℒ𝒦 𝔉)
+     γ : 𝒜 i ∈ vclo (ℒ𝒦 𝓜)
      γ = vbase 𝒜i∈ℒ𝒦
 
-   𝑨 : Algebra 𝔉 𝑆
-   𝑨 = (⨅ℒ𝒦 {I = ΣP (ℒ𝒦 𝔉)}{𝒜 = 𝒜} ΣP⊆vcloℒ𝒦)
+   𝑨 : Algebra _ 𝑆
+   𝑨 = (⨅ℒ𝒦 {I = ΣP (ℒ𝒦 𝓜)}{𝒜 = 𝒜} ΣP⊆vcloℒ𝒦)
 
    ϕ : hom 𝔽 𝑨
    ϕ = 𝔽-is-universal-for 𝑨
@@ -552,7 +521,7 @@ module _
    h : ∣ 𝔽 ∣ → ∣ 𝑨 ∣
    h = ∣ ϕ ∣
 
-   kerh : Rel (∣ 𝑻 ∣ // ⟨ ConΨ ⟩ ) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺)
+   kerh : Rel (∣ 𝑻 ∣ // ⟨ ConΨ ⟩ ) (𝓜 ⁺)
    kerh s t = h s ≡ h t
 
    kerh⊆Ψ : ∀(s t : ∣ 𝑻 ∣)(ti : 𝑻img)
@@ -567,15 +536,15 @@ module _
      γ = {!!}
 
    hembe : is-embedding h
-   hembe = {!!}
+   hembe = λ y x y₁ → {!!}
 
    hhomo : is-homomorphism 𝔽 𝑨 h
    hhomo = ∥ ϕ ∥
 
    𝔽sub : SubalgebrasOf 𝑨
-   𝔽sub = {!!} -- (𝔽 , h , (hembe , hhomo))
+   𝔽sub = (𝔽 , h , (hembe , hhomo))
 
-   γ : 𝔽 ∈ vclo (ℒ𝒦 𝔉)
+   γ : 𝔽 ∈ vclo (ℒ𝒦 (𝓜 ⁺))
    γ = {!!} -- vsub ⨅𝒦∈vclo 𝔽sub
 
 
