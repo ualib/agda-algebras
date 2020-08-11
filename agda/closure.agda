@@ -31,30 +31,27 @@ open import terms
  {𝕏 = 𝕏}
  {gfe = gfe} renaming (generator to ℊ) public
 
+OV : Universe → Universe
+OV 𝓝 = 𝓞 ⊔ 𝓥 ⊔ 𝓝
+
 _⊧_≈_ : {𝓦 : Universe} → Algebra 𝓦 𝑆
  →      Term → Term → 𝓤 ⊔ 𝓦 ̇
 
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 _⊧_≋_ : {𝓦 𝓣 : Universe} → Pred (Algebra 𝓦 𝑆) 𝓣
- →      Term → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣 ⊔ 𝓦 ⁺ ̇
+ →      Term → Term → (OV 𝓤 ⊔ 𝓣 ⊔ 𝓦 ⁺) ̇
 
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 
-OVU+ : Universe
-OVU+ = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-
-OVU++ : Universe
-OVU++ = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺
-
 module prod-closure {𝔓 : Universe} where
 
  𝔓+ : Universe   -- notation: \MfP yields 𝔓
- 𝔓+ = OVU+ ⊔ 𝔓
+ 𝔓+ = OV (𝓤 ⁺ ⊔ 𝔓)
 
  𝔓++ : Universe
- 𝔓++ = OVU++ ⊔ 𝔓 ⁺
+ 𝔓++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔓 ⁺)
 
  ----------------------------------------------------------------------
  --Closure under products
@@ -71,26 +68,23 @@ module prod-closure {𝔓 : Universe} where
 
 module sub-closure {𝔖 : Universe} where
 
- -- 𝔖+ : Universe   -- notation: \MfS yields 𝔖
- -- 𝔖+ = OVU+ ⊔ 𝔖
  OV𝔖 : Universe   -- notation: \MfS yields 𝔖
- OV𝔖 = 𝓞 ⊔ 𝓥 ⊔ 𝔖
+ OV𝔖 = OV 𝔖
 
  OV𝔖+ : Universe   -- notation: \MfS yields 𝔖
- OV𝔖+ = 𝓞 ⊔ 𝓥 ⊔ 𝔖 ⁺
+ OV𝔖+ = OV (𝔖 ⁺)
 
  𝔖++ : Universe
- 𝔖++ = OVU++ ⊔ 𝔖 ⁺
+ 𝔖++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔖 ⁺)
 
  ----------------------------------------------------------------------
  --Closure under subalgebras
--- data SClo (𝒦 : Pred (Algebra 𝔖+ 𝑆)(𝔖+ ⁺)) : Pred (Algebra 𝔖+ 𝑆) (𝔖++ ⁺) where
- data SClo (𝒦 : Pred (Algebra 𝔖 𝑆) 𝔖) : Pred (Algebra 𝔖 𝑆) OV𝔖+ where
+ data SClo (𝒦 : Pred (Algebra 𝔖 𝑆) (𝔖 ⁺)) : Pred (Algebra 𝔖 𝑆) OV𝔖+ where
   sbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
  S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
-  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → OV (𝓤 ⁺) ̇
  S-closed ℒ𝒦 =
   λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
 
@@ -98,10 +92,10 @@ module sub-closure {𝔖 : Universe} where
 module hom-closure {ℌ : Universe} where
 
  ℌ+ : Universe    -- notation: \MfH yields ℌ
- ℌ+ = OVU+ ⊔ ℌ
+ ℌ+ = OV (𝓤 ⁺ ⊔ ℌ)
 
  ℌ++ : Universe
- ℌ++ = OVU++ ⊔ ℌ ⁺
+ ℌ++ = OV (𝓤 ⁺ ⁺ ⊔ ℌ ⁺)
 
  ----------------------------------------------------------------------
  --Closure under hom images
@@ -113,30 +107,23 @@ module hom-closure {ℌ : Universe} where
 module var-closure {𝔙 : Universe} where
 
  𝔙+ : Universe    -- notation: \MfV yields 𝔙
- 𝔙+ = OVU+ ⊔ 𝔙
+ 𝔙+ = OV (𝓤 ⁺ ⊔ 𝔙)
 
  𝔙++ : Universe
- 𝔙++ = OVU++ ⊔ 𝔙 ⁺
-
- -- data VClo (𝒦 : Pred (Algebra 𝔙+ 𝑆) 𝔙+) : Pred (Algebra 𝔙+ 𝑆) _ where
- --  vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
- --  vprod : {I : 𝔙 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
- --  vsub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
- --  vhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
-
+ 𝔙++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔙 ⁺)
 
 ------------------------------------------------------------------------
 -- Equational theories and classes
-TH : Pred (Algebra 𝓤 𝑆) OVU++ → _ ̇
+TH : Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺ ⁺))  → _ ̇
 TH 𝒦 = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
 
 Th : {𝓦 𝓣 : Universe} → Pred (Algebra 𝓦 𝑆) 𝓣 → Pred (Term × Term) _
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-MOD : (ℰ : Pred (Term × Term) 𝓤) → OVU+ ̇
+MOD : (ℰ : Pred (Term × Term) 𝓤) → OV (𝓤 ⁺) ̇
 MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
-Mod : Pred (Term × Term) OVU++ → Pred (Algebra 𝓤 𝑆) OVU++
+Mod : Pred (Term × Term) (OV (𝓤 ⁺ ⁺)) → Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺ ⁺))
 Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 
@@ -309,56 +296,39 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
     ∣ ϕ ∣ q  ∎
 
 data vclo {𝓤 : Universe}
-           (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓤) :
-            Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+           (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
+            Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺)) where
  vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 
-V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤)
- →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
+V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+ →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → OV (𝓢 ⁺) ̇
 V-closed ℒ𝒦 = λ 𝓢 𝑩 → 𝑩 ∈ vclo (ℒ𝒦 𝓢)
 
 ----------------------------------------------------------------------
 --Closure under subalgebras
 module _
  {𝔓 : Universe}
- -- -- {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
- -- -- {𝒦 : Pred (Algebra (OVU+ ⁺) 𝑆) (OVU+ ⁺ ⁺)}
- -- -- {𝒦𝔓 : Pred (Algebra 𝔓 𝑆) (𝔓 ⁺)}
- -- -- {𝒦+ : Pred (Algebra (OVU+ ⊔ 𝔓) 𝑆) ((OVU+ ⊔ 𝔓) ⁺)}
- -- -- {𝒦++ : Pred (Algebra ((OVU+ ⊔ 𝔓) ⁺) 𝑆) ((OVU+ ⊔ 𝔓) ⁺ ⁺)}
- -- {𝒦2 : Pred (Algebra ((OVU+ ⊔ 𝔓)) 𝑆) ((OVU+ ⊔ 𝔓))}
- -- {𝒦3 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺)}
- -- {𝒦4 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺)}
  {𝒦𝔓+ : Pred (Algebra (𝔓 ⁺) 𝑆) (𝔓 ⁺ ⁺)}
- -- {𝒦5 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺)}
- -- {𝒦6 : Pred (Algebra ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺) 𝑆) ((OVU+ ⊔ 𝔓 ⁺) ⁺ ⁺ ⁺ ⁺ ⁺)}
- {ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤)}
- {ℒ𝒦+ : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
+ {ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)}
+ {ℒ𝒦+ : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺))} where
 
- 𝔖 ℌ 𝔙 𝔉 : Universe
+ 𝔖 ℌ 𝔙 𝔉 𝔉⁻ 𝔉⁻⁻ : Universe
  𝔖 = 𝔓 ⁺
  ℌ = 𝔖 ⁺
  𝔙 = ℌ ⁺
-
- 𝔉⁻⁻ = (OVU+ ⊔ 𝔖)
- 𝔉⁻ = (OVU+ ⁺ ⊔ ℌ)
- 𝔉 = (OVU+ ⁺ ⁺ ⊔ 𝔙)
+ 𝔉⁻⁻ = OV (𝓤 ⁺ ⊔ 𝔖)
+ 𝔉⁻ = (OV (𝓤 ⁺)) ⁺ ⊔ ℌ
+ 𝔉 = (OV (𝓤 ⁺)) ⁺ ⁺ ⊔ 𝔙
 
  𝓜 : Universe
- 𝓜 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝔓 ⁺ ⁺))
+ 𝓜 = OV (𝓤 ⊔ (𝔓 ⁺ ⁺))
 
  open prod-closure {𝔓 = 𝔓}
  open sub-closure {𝔖 = 𝔖}
  open hom-closure {ℌ = ℌ}
--- open var-closure {𝔙 = 𝔉}
-
- -- data PClo (𝒦 : Pred (Algebra 𝔓+ 𝑆)(𝔓+ ⁺)) : Pred (Algebra 𝔓+ 𝑆) (𝔓++ ⁺) where
- -- data SClo (𝒦 : Pred (Algebra 𝔖+ 𝑆)(𝔖+ ⁺)) : Pred (Algebra 𝔖+ 𝑆) (𝔖++ ⁺) where
-
-
 
  -- ==========================================================
  -- The free algebra in Agda
@@ -389,7 +359,7 @@ module _
  Ψ p q =
     ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
 
- Ψ-IsEquivalence : IsEquivalence{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤}{A = ∣ 𝑻 ∣} Ψ
+ Ψ-IsEquivalence : IsEquivalence{𝓤 = OV 𝓤}{A = ∣ 𝑻 ∣} Ψ
  Ψ-IsEquivalence =
   record { rfl = λ p ti → 𝓇ℯ𝒻𝓁
          ; sym = λ p q p≡q ti → (p≡q ti)⁻¹
@@ -482,46 +452,28 @@ module _
  𝔽∈vclo : 𝔽 ∈ vclo (ℒ𝒦 (𝓜 ⁺))
  𝔽∈vclo = γ
   where
-   -- {ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤)}
-   ΣP' : {𝓝 : Universe} → _ ̇
-   ΣP' {𝓝} = Σ 𝑨 ꞉ (Algebra 𝓝 𝑆) , (𝑨 ∈ ℒ𝒦 𝓝)
-
-   ΣP : Pred (Algebra 𝓜 𝑆) _ → _ ̇
+   ΣP : Pred (Algebra 𝓜 𝑆) (𝓜 ⁺) → _ ̇
    ΣP K = Σ 𝑨 ꞉ (Algebra _ 𝑆) , 𝑨 ∈ K
 
+   ΣP' : {𝓝 : Universe} → (OV (𝓝 ⁺)) ̇
+   ΣP' {𝓝} = Σ 𝑨 ꞉ (Algebra 𝓝 𝑆) , (𝑨 ∈ ℒ𝒦 𝓝)
+
+   𝒜 : {K : Pred (Algebra 𝓜 𝑆) (𝓜 ⁺)}(I : ΣP K) → Algebra 𝓜 𝑆
+   𝒜 {K} I = ∣ I ∣
 
    𝒜' : {𝓝 : Universe} (A∈ : (ΣP'{𝓝})) → Algebra 𝓝 𝑆
    𝒜' A∈ = ∣ A∈ ∣
-
-   𝒜 : {K : Pred (Algebra 𝓜 𝑆) _}(I : ΣP K) → Algebra _ 𝑆
-   𝒜 {K} I = ∣ I ∣
-
-   ⨅ℒ𝒦' : {𝓝 : Universe} → Algebra _ 𝑆
-   ⨅ℒ𝒦' {𝓝 = 𝓝} = ⨅{I = (ΣP'{𝓝})} 𝒜'
-
-   ⨅⨅ℒ𝒦 : Algebra _ 𝑆
-   ⨅⨅ℒ𝒦 = ⨅{I = Universe} ⨅ℒ𝒦'
-
- -- ⨅ : {I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
- -- ⨅ 𝒜 =  (( i : _) → ∣ 𝒜 i ∣) ,  λ f x i → (f ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
 
    ⨅ℒ𝒦 : {𝓜 : Universe}{I : 𝓜 ⁺ ̇}{𝒜 : I → Algebra 𝓜 𝑆}
     →      (∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝓜))
     →      Algebra _ 𝑆
    ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
 
-   -- ⨅⨅ℒ𝒦 : Algebra _ 𝑆
-   -- ⨅⨅ℒ𝒦 = ⨅ ({𝓜 : Universe}{I : 𝓜 ⁺ ̇}{𝒜 : I → Algebra 𝓜 𝑆}(p : ∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝓜))
-   --  → (⨅ℒ𝒦 {𝒜 = 𝒜} p))
+   ⨅ℒ𝒦' : (𝓝 : Universe) → Algebra (OV (𝓝 ⁺)) 𝑆
+   ⨅ℒ𝒦' 𝓝 = ⨅{I = (ΣP'{𝓝})} 𝒜'
 
-   -- ⨅ℒ𝒦 : {𝒜 : (𝓜 : Universe)(I : 𝓜 ⁺ ̇) → Algebra 𝓜 𝑆}
-   --  →      (∀ m i → 𝒜 m i ∈ vclo (ℒ𝒦 m))
-   --  →      Algebra _ 𝑆
-   -- ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
-   -- ⨅ℒ𝒦 : {I : 𝓜 ⁺ ̇ }{𝒜 : I → Algebra 𝓜 𝑆}
-   --  →      (∀ i → 𝒜 i ∈ vclo (ℒ𝒦 𝓜))
-   --  →      Algebra _ 𝑆
-   -- ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
+   ⨅⨅ℒ𝒦 : 𝓤ω
+   ⨅⨅ℒ𝒦  = ⨅' ⨅ℒ𝒦'
 
    -- vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
    ⨅𝒦∈vclo : {I : 𝓜 ⁺ ̇ }
@@ -570,29 +522,6 @@ module _
 
      hAB : hom 𝑨 𝑩
      hAB = {!!}
- -- 𝑻img : _ ̇
- -- 𝑻img = Σ 𝑨 ꞉ (Algebra (𝔓 ⁺) 𝑆) ,
- --           Σ ϕ ꞉ hom 𝑻 𝑨 , (𝑨 ∈ SClo(ℒ𝒦 (𝔓 ⁺))) × Epic ∣ ϕ ∣
-
- -- 𝑻𝑨 : (ti : 𝑻img) → Algebra _ 𝑆
- -- 𝑻𝑨 ti = ∣ ti ∣
-
- -- 𝑻𝑨∈SClo : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo (ℒ𝒦 (𝔓 ⁺))
- -- 𝑻𝑨∈SClo ti = ∣ pr₂ ∥ ti ∥ ∣
-
- -- 𝑻ϕ : (ti : 𝑻img) → hom 𝑻 (𝑻𝑨 ti)
- -- 𝑻ϕ ti = pr₁ ∥ ti ∥
-
- -- 𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
- -- 𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
-
- -- 𝑻KER : _ ̇
- -- 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
- --    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
-
- -- Ψ : Rel ∣ 𝑻 ∣ 𝓜
- -- Ψ p q =
- --    ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
 
      γ : ∣ 𝑻ϕ ti ∣ ∘ (s ̇ 𝑻) ≡ ∣ 𝑻ϕ ti ∣ ∘ (t ̇ 𝑻)
      γ = {!!} -- sΨt ti
@@ -608,7 +537,6 @@ module _
 
    γ : 𝔽 ∈ vclo (ℒ𝒦 (𝓜 ⁺))
    γ = {!!} -- vsub ⨅𝒦∈vclo 𝔽sub
-
 
 
  -- To get the full universality of 𝔽, we should also prove that the hom described above
