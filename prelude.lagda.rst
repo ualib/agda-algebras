@@ -326,6 +326,11 @@ Here is the definition (which is similar to the one found in the ``Relation/Unar
     Pred A 𝓥 = A → 𝓥 ̇
 
 
+Below we will often consider predicates over the class of all algebras of a particular type.  We will define the type of algebras ``Algebra 𝓤 𝑆`` (for some universe level 𝓤).  Like all types, ``Algebra 𝓤 𝑆`` itself has a type which happens to be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ (as we will see in :numref:`algebra type`). Therefore, the type of ``Pred (Algebra 𝓤 𝑆) 𝓤`` will be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ as well.
+
+The inhabitants of the type ``Pred (Algebra 𝓤 𝑆) 𝓤`` are maps of the form 𝑨 → 𝓤 ̇; indeed, given an algebra 𝑨 : Algebra 𝓤 𝑆, we have Pred 𝑨 𝓤 = 𝑨 → 𝓤 ̇.
+
+
 The membership relation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
