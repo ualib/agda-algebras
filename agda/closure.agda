@@ -303,12 +303,12 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 --  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
 --  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 data vclo {𝓤 𝓘 : Universe}
-           (𝒦 : Pred (Algebra (𝓤 ⊔ 𝓘) 𝑆) (𝓤 ⊔ 𝓘)) :
-            Pred (Algebra (𝓤 ⊔ 𝓘) 𝑆) (OV ((𝓤 ⊔ 𝓘) ⁺)) where
- vbase : {𝑨 : Algebra (𝓤 ⊔ 𝓘) 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
- vprod : {I : 𝓘 ̇ }{𝒜 : I → Algebra (𝓤 ⊔ 𝓘) 𝑆} → (∀ i → 𝒜 i ∈ vclo{𝓤}{𝓘} 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
- vsub : {𝑨 : Algebra (𝓤 ⊔ 𝓘) 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
- vhom : {𝑨 : Algebra (𝓤 ⊔ 𝓘) 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
+           (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓘) :
+            Pred (Algebra _ 𝑆) (OV (𝓘 ⊔ 𝓤) ⁺) where
+ vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
+ vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
+ vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
+ vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 
 -- V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤)
 --  →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → OV (𝓢 ⁺) ̇
@@ -319,7 +319,7 @@ data vclo {𝓤 𝓘 : Universe}
 module _
  {𝔓 : Universe}
  {𝒦𝔓+ : Pred (Algebra (𝔓 ⁺) 𝑆) (𝔓 ⁺ ⁺)}
- {ℒ𝒦 : (𝓤 𝓘 : Universe) → Pred (Algebra (𝓤 ⊔ 𝓘) 𝑆) (𝓤 ⊔ 𝓘)}
+ {ℒ𝒦 : (𝓤 𝓘 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓘}
  {ℒ𝒦+ : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺))} where
 
  𝔖 ℌ 𝔙 𝔉 𝔉⁻ 𝔉⁻⁻ : Universe
@@ -465,39 +465,29 @@ module _
  𝔽∈vclo : 𝔽 ∈ vclo{𝓜 ⁺}{𝓜 ⁺} (ℒ𝒦 (𝓜 ⁺)(𝓜 ⁺))
  𝔽∈vclo = γ
   where
-   ΣP : {𝓧 : Universe} → Pred (Algebra 𝓧 𝑆) 𝓧 → OV (𝓧 ⁺) ̇
-   ΣP {𝓧 = 𝓧} K = Σ 𝑨 ꞉ (Algebra 𝓧 𝑆) , 𝑨 ∈ K
+   ΣP : {𝓤 𝓘 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓘 → OV (𝓘 ⊔ 𝓤 ⁺) ̇
+   ΣP {𝓤}{𝓘} K = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ K
 
-   ⨅ℒ𝒦 : {𝓤 𝓘 : Universe}{I : 𝓘 ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓘) 𝑆}
-    →      (∀ (i : I) → 𝒜 i ∈ vclo{𝓤}{𝓘} (ℒ𝒦 𝓤 𝓘))
-    →      Algebra (𝓤 ⊔ 𝓘) 𝑆
+   ⨅ℒ𝒦 : {𝓤 𝓘 : Universe}{I : 𝓤 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
+    →      (∀ (i : I) → 𝒜 i ∈ vclo (ℒ𝒦 𝓤 𝓘))
+    →      Algebra 𝓤 𝑆
    ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
 
-   ⨅𝒦∈vclo : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }{𝒜 : I → Algebra (𝓤 ⊔ 𝓘) 𝑆}
+   ⨅𝒦∈vclo : {𝓤 𝓘 : Universe}{I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆}
               (p : ∀ (i : I) → 𝒜 i ∈ vclo (ℒ𝒦 𝓤 𝓘))
      →        (⨅ℒ𝒦 {𝓤 = 𝓤}{𝓘 = 𝓘}{I = I}{𝒜 = 𝒜} p ∈ vclo{𝓤}{𝓘} (ℒ𝒦 𝓤 𝓘))
    ⨅𝒦∈vclo {I = I} p = vprod{I = I} p
 
-   𝒜ΣP : {𝓧 : Universe}
-         {K : Pred (Algebra 𝓧 𝑆) 𝓧}
-    →    ΣP K → Algebra 𝓧 𝑆
+   𝒜ΣP : {𝓤 𝓘 : Universe}{K : Pred (Algebra 𝓤 𝑆) 𝓘}
+    →    ΣP{𝓤 = 𝓤}{𝓘 = 𝓘} K → Algebra 𝓤 𝑆
    𝒜ΣP i = ∣ i ∣
 
-   ΣP⊆vcloℒ𝒦 : {𝓤 𝓘 : Universe}
-                (i : ΣP{𝓧 = (𝓤 ⊔ 𝓘)} (ℒ𝒦 𝓤 𝓘))
-    →           ∣ i ∣ ∈ vclo{𝓤}{𝓘}(ℒ𝒦 𝓤 𝓘)
-   ΣP⊆vcloℒ𝒦 i = vbase ∥ i ∥
+   𝑨 : {𝓤 𝓘 : Universe} → Algebra (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ⊔ 𝓘) 𝑆
+   𝑨 {𝓤}{𝓘} = ⨅ (λ (i : ΣP{𝓤}{𝓘} (ℒ𝒦 𝓤 𝓘)) → ∣ i ∣ )
 
-
-   𝑨 : Algebra (𝓜 ⁺) 𝑆
-   𝑨  = ⨅ℒ𝒦{𝓤 = (𝓜 ⁺)}{𝓘 = (𝓜 ⁺)} {!!}
-
-   𝑨∈vclo : 𝑨 ∈ vclo (ℒ𝒦 (𝓜 ⁺)(𝓜 ⁺))
-   𝑨∈vclo = vprod {!!}
- --vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
-
-   -- {𝓤 = (𝓜 ⁺)}{𝒜 = (𝒜{𝓝 = (𝓜 ⁺)}{K = (ℒ𝒦 (𝓜 ⁺))} )}
-
+   𝑨∈vclo : 𝑨{𝓜}{𝓜} ∈ vclo (ℒ𝒦 (𝓜 ⁺)(𝓜 ⁺))
+   𝑨∈vclo = {!vprod ?!} -- vprod {!!}
+   --vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
 
    ϕ : hom 𝔽 𝑨
    ϕ = 𝔽-is-universal-for 𝑨
@@ -519,7 +509,7 @@ module _
      𝑩∈SCloℒ𝒦 : 𝑩 ∈ SClo(ℒ𝒦 (𝔓 ⁺)(𝔓 ⁺))
      𝑩∈SCloℒ𝒦 = fst ∥ snd ti ∥
 
-     hAB : hom 𝑨 𝑩
+     hAB : hom (𝑨{𝔓}{𝔓}) 𝑩
      hAB = {!!}
 
      γ : ∣ 𝑻ϕ ti ∣ ∘ (s ̇ 𝑻) ≡ ∣ 𝑻ϕ ti ∣ ∘ (t ̇ 𝑻)
@@ -537,13 +527,6 @@ module _
    γ : 𝔽 ∈ vclo (ℒ𝒦 (𝓜 ⁺)(𝓜 ⁺))
    γ = vsub 𝑨∈vclo 𝔽sub
  -- vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
-
-
-     -- sΨt : Ψ s t
-     -- sΨt = ζ
-     --  where
-     --   ζ : (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (s ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (t ̇ 𝑻)
-     --   ζ = {!!}
 
  -- To get the full universality of 𝔽, we should also prove that the hom described above
  -- (in the proof of 𝔽-is-universal-for) is actually unique.
