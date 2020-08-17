@@ -88,5 +88,5 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
  --collection X of "variables" onto the universe of 𝑨.
  --Here is the type we use when making this assumption.
 
- _↠_ : 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+ _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h

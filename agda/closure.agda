@@ -10,185 +10,161 @@ open import prelude using (global-dfunext; dfunext; 𝓤ω)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
- {X : 𝓤 ̇ }
- {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {gfe : global-dfunext}
- {dfe : dfunext 𝓤 𝓤} where
+ {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {gfe : global-dfunext} where
 
 open import homomorphisms {𝑆 = 𝑆} public
 
 open import subuniverses
  {𝑆 = 𝑆}
- {X = X}
  {𝕏 = 𝕏}
  {fe = gfe}
 
 open import terms
  {𝑆 = 𝑆}
- {𝓤 = 𝓤}
- {X = X}
  {𝕏 = 𝕏}
  {gfe = gfe} renaming (generator to ℊ) public
 
-OV : Universe → Universe
-OV 𝓝 = 𝓞 ⊔ 𝓥 ⊔ 𝓝
-
-AlgTyp : Universe
-AlgTyp = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-
-_⊧_≈_ : {𝓦 : Universe} → Algebra 𝓦 𝑆
- →      Term → Term → 𝓤 ⊔ 𝓦 ̇
+_⊧_≈_ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → Algebra 𝓦 𝑆
+ →      Term{𝓤}{X} → Term{𝓤}{X} → 𝓤 ⊔ 𝓦 ̇
 
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
-_⊧_≋_ : {𝓦 𝓣 : Universe} → Pred (Algebra 𝓦 𝑆) 𝓣
- →      Term → Term → (OV 𝓤 ⊔ 𝓣 ⊔ 𝓦 ⁺) ̇
+_⊧_≋_ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+ →      Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)
+ →      Term{𝓤}{X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 
-_⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+_⊧_≋_ {𝓤} {𝓦} 𝒦 p q = {𝑨 : Algebra 𝓦 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 
-module prod-closure {𝔓 : Universe} where
+----------------------------------------------------------------------
+--Closure under products
+data PClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) 𝓤) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+ pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
+ prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
+  →     (∀ i → 𝒜 i ∈ PClo 𝒦)
+  →     ⨅ 𝒜 ∈ PClo 𝒦
 
- 𝔓+ : Universe   -- notation: \MfP yields 𝔓
- 𝔓+ = OV (𝓤 ⁺ ⊔ 𝔓)
-
- 𝔓++ : Universe
- 𝔓++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔓 ⁺)
-
- ----------------------------------------------------------------------
- --Closure under products
- data PClo (𝒦 : Pred (Algebra 𝔓+ 𝑆)(𝔓+ ⁺)) : Pred (Algebra 𝔓+ 𝑆) (𝔓++ ⁺) where
-  pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
-  prod : {I : 𝔓 ̇ }{𝒜 : I → Algebra _ 𝑆}
-   →     (∀ i → 𝒜 i ∈ PClo 𝒦)
-   →     ⨅ 𝒜 ∈ PClo 𝒦
-
- P-closed : (ℒ𝒦 : (𝓣 : Universe) → Pred (Algebra 𝓣 𝑆) (𝓣 ⁺ ))
-  →      (𝓘 : Universe)(I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
-  →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
- P-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  ⨅ 𝒜  ∈ (ℒ𝒦 𝓘)
-
--- module sub-closure {𝔖 : Universe} where
-
---  OV𝔖 : Universe   -- notation: \MfS yields 𝔖
---  OV𝔖 = OV 𝔖
-
---  OV𝔖+ : Universe   -- notation: \MfS yields 𝔖
---  OV𝔖+ = OV (𝔖 ⁺)
-
---  𝔖++ : Universe
---  𝔖++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔖 ⁺)
+P-closed : (ℒ𝒦 : (𝓣 : Universe) → Pred (Algebra 𝓣 𝑆) (𝓣 ⁺ ))
+ →      (𝓘 : Universe)(I : 𝓘 ̇ ) (𝒜 : I → Algebra 𝓘 𝑆)
+ →      (( i : I ) → 𝒜 i ∈ ℒ𝒦 𝓘 ) → 𝓘 ⁺ ̇
+P-closed ℒ𝒦 = λ 𝓘 I 𝒜 𝒜i∈ℒ𝒦 →  ⨅ 𝒜  ∈ (ℒ𝒦 𝓘)
 
 ----------------------------------------------------------------------
 --Closure under subalgebras
-data SClo {𝓤 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
- sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
- sub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+data SClo {𝓤 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) :
+ Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+  sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+  sub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
--- S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
---  →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
--- S-closed ℒ𝒦 =
---  λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
+S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+ →         (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+S-closed ℒ𝒦 =
+ λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
 
-
-module hom-closure {ℌ : Universe} where
-
- ℌ+ : Universe    -- notation: \MfH yields ℌ
- ℌ+ = OV (𝓤 ⁺ ⊔ ℌ)
-
- ℌ++ : Universe
- ℌ++ = OV (𝓤 ⁺ ⁺ ⊔ ℌ ⁺)
-
- ----------------------------------------------------------------------
- --Closure under hom images
- data HClo (𝒦 : Pred (Algebra ℌ+ 𝑆)(ℌ+ ⁺)) : Pred (Algebra ℌ+ 𝑆) (ℌ++ ⁺) where
+----------------------------------------------------------------------
+--Closure under hom images
+data HClo {𝓤 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) :
+ Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
   hbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
   hhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
 
-
-module var-closure {𝔙 : Universe} where
-
- 𝔙+ : Universe    -- notation: \MfV yields 𝔙
- 𝔙+ = OV (𝓤 ⁺ ⊔ 𝔙)
-
- 𝔙++ : Universe
- 𝔙++ = OV (𝓤 ⁺ ⁺ ⊔ 𝔙 ⁺)
-
 ------------------------------------------------------------------------
 -- Equational theories and classes
-TH : Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺ ⁺))  → _ ̇
-TH 𝒦 = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
+TH : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+ →   Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)  → _ ̇
+TH {𝓤}{𝓦}{X} 𝒦 = Σ (p , q) ꞉ (Term{𝓤}{X} × Term{𝓤}{X}) , 𝒦 ⊧ p ≋ q
 
-Th : {𝓦 𝓣 : Universe} → Pred (Algebra 𝓦 𝑆) 𝓣 → Pred (Term × Term) _
+Th : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+ →   Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)
+ →   Pred (Term{𝓤}{X} × Term{𝓤}{X}) _
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-MOD : (ℰ : Pred (Term × Term) 𝓤) → OV (𝓤 ⁺) ̇
-MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+MOD : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+      (ℰ : Pred (Term{𝓤}{X} × Term{𝓤}{X}) 𝓤)
+ →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
 
-Mod : Pred (Term × Term) (OV (𝓤 ⁺ ⁺)) → Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺ ⁺))
-Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+MOD {𝓤}{𝓦} ℰ =
+ Σ A ꞉ (Algebra 𝓦 𝑆) ,
+    ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
+Mod : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+ →    Pred (Term{𝓤}{X} × Term{𝓤}{X}) 𝓤
+ →    Pred (Algebra 𝓦 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦)
 
-module product-compatibility {𝓢 : Universe} where
+Mod {𝓤}{𝓦} ℰ =
+ λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
- products-preserve-identities :
-       (p q : Term)
-       (I : _ ̇ ) (𝒜 : I → Algebra 𝓢 𝑆)
+products-preserve-identities :
+       {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+       {fevw : dfunext 𝓥 𝓦}
+       (p q : Term{𝓤}{X})
+       (I : 𝓦 ̇ ) (𝒜 : I → Algebra 𝓦 𝑆)
   →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
       -----------------------------------
   →     ⨅ 𝒜 ⊧ p ≈ q
 
- products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
+products-preserve-identities
+ {𝓤}{𝓦}{X}{fevw} p q I 𝒜 𝒜⊧p≈q = γ
   where
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = gfe λ a →
     (p ̇ ⨅ 𝒜) a
-      ≡⟨ interp-prod{𝓢 = 𝓢} gfe p 𝒜 a ⟩
+        ≡⟨ interp-prod{𝓤}{𝓦} fevw p 𝒜 a ⟩
     (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
-      ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
+        ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
     (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
-      ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+        ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
     (q ̇ ⨅ 𝒜) a
-      ∎
+        ∎
 
- products-in-class-preserve-identities :
-      (𝒦 : Pred (Algebra 𝓢 𝑆) ( 𝓢 ⁺ ))
-      (p q : Term)
-      (I : 𝓢 ̇ ) (𝒜 : I → Algebra 𝓢 𝑆)
+products-in-class-preserve-identities :
+      {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+      {fevw : dfunext 𝓥 𝓦}
+      (𝒦 : Pred (Algebra 𝓦 𝑆) (𝓦 ⁺))
+      (p q : Term{𝓤}{X})
+      (I : 𝓦 ̇ ) (𝒜 : I → Algebra 𝓦 𝑆)
   →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
       ------------------------------------
   →    ⨅ 𝒜 ⊧ p ≈ q
 
- products-in-class-preserve-identities 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
+products-in-class-preserve-identities
+ {𝓤}{𝓦}{X}{fevw} 𝒦 p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
   where
    𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
    𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
 
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
-   γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
+   γ = products-preserve-identities {𝓤}{𝓦}{X}{fevw} p q I 𝒜 𝒜⊧p≈q
 
-module subalgebra-compatibility {𝓢 : Universe} where
+module subalgebra-compatibility
+ {𝓤 : Universe}
+ {X : 𝓤 ̇ } where
 
- subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓢 𝑆)(𝓢 ⁺)) (p q : Term)
-  →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
+ subalgebras-preserve-identities :
+     (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
+     (p q : Term)
+     (p≋q : 𝒦 ⊧ p ≋ q)
+     (SAK : SubalgebrasOfClass 𝒦)
+    ----------------------------------
   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
- subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
+
+ subalgebras-preserve-identities 𝒦 p q p≋q SAK = γ
   where
 
-   𝑨 : Algebra 𝓢 𝑆
+   𝑨 : Algebra 𝓤 𝑆
    𝑨 = ∣ SAK ∣
 
    A∈𝒦 : 𝑨 ∈ 𝒦
    A∈𝒦 = ∣ pr₂ SAK ∣
 
    A⊧p≈q : 𝑨 ⊧ p ≈ q
-   A⊧p≈q = 𝒦⊧p≋q A∈𝒦
+   A⊧p≈q = p≋q A∈𝒦
 
    subalg : SubalgebrasOf 𝑨
    subalg = ∥ pr₂ SAK ∥
 
-   𝑩 : Algebra 𝓢 𝑆
+   𝑩 : Algebra 𝓤 𝑆
    𝑩 = pr₁ subalg
 
    h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
@@ -214,20 +190,25 @@ module subalgebra-compatibility {𝓢 : Universe} where
    γ = gfe λ b → hlc (ξ b)
 
 
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
 
- -- ⇒ (the "only if" direction)
- identities-compatible-with-homs : (p q : Term)
-  →                𝒦 ⊧ p ≋ q
+-- ⇒ (the "only if" direction)
+identities-compatible-with-homs :
+        {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+        {fevw : funext 𝓥 𝓦}
+        {𝒦 : Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)}
+        (p q : Term{𝓤}{X})
+        (p≋q : 𝒦 ⊧ p ≋ q)
        ----------------------------------------------------
-  →     ∀ 𝑨 KA h → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
- -- Here, the inferred types are
- -- 𝑨 : Algebra 𝓤 𝑆, KA : 𝒦 𝑨, h : hom (𝑻) 𝑨
+ →     ∀ (𝑨 : Algebra 𝓦 𝑆)
+         (KA : 𝒦 𝑨)
+         (h : hom (𝑻{𝓤}{X}) 𝑨)
+        → ∣ h ∣ ∘ (p ̇ 𝑻{𝓤}{X}) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
 
- identities-compatible-with-homs p q 𝒦⊧p≋q 𝑨 KA h = γ
+identities-compatible-with-homs
+ {𝓤}{𝓦}{X}{fevw} {𝒦} p q p≋q 𝑨 KA h = γ
   where
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
-   pA≡qA = 𝒦⊧p≋q KA
+   pA≡qA = p≋q KA
 
    pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻 ∣ )
     →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
@@ -236,75 +217,89 @@ module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)} where
    hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 ∣ )
     →        ∣ h ∣ ((p ̇ 𝑻) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻) 𝒂)
    hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term gfe 𝑻 𝑨 h p 𝒂 ⟩
+    ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺}{𝓦}{𝓤}{X} fevw (𝑻{𝓤}{X}) 𝑨 h p 𝒂 ⟩
     (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe 𝑻 𝑨 h q 𝒂)⁻¹ ⟩
+    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺}{𝓦}{𝓤}{X} fevw 𝑻 𝑨 h q 𝒂)⁻¹ ⟩
     ∣ h ∣ ((q ̇ 𝑻) 𝒂)  ∎
 
    γ : ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
    γ = gfe hpa≡hqa
 
- -- ⇐ (the "if" direction)
- homs-compatible-with-identities : (p q : Term)
-  →    (∀ 𝑨 KA h  →  ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻))
-       --------------------------------------------------
-  →                𝒦 ⊧ p ≋ q
+
+-- ⇐ (the "if" direction)
+homs-compatible-with-identities :
+        {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+        {fevw : funext 𝓥 𝓦}
+        {𝒦 : Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)}
+        (p q : Term{𝓤}{X})
+        (hp≡hq : ∀ (𝑨 : Algebra 𝓦 𝑆)
+                   (KA : 𝑨 ∈ 𝒦)
+                   (h : hom (𝑻{𝓤}{X}) 𝑨)
+                  → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻))
+       ------------------------------------------------------
+ →      𝒦 ⊧ p ≋ q
  --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom 𝑻 𝑨
 
- homs-compatible-with-identities p q all-hp≡hq {𝑨} KA = γ
-  where
-   h : (𝒂 : X → ∣ 𝑨 ∣) → hom 𝑻 𝑨
-   h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
+homs-compatible-with-identities
+ {𝓤}{𝓦}{X}{fevw}{𝒦} p q hp≡hq {𝑨} KA = γ
+ where
+  h : (𝒂 : X → ∣ 𝑨 ∣) → hom 𝑻 𝑨
+  h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
 
-   γ : 𝑨 ⊧ p ≈ q
-   γ = gfe λ 𝒂 →
-    (p ̇ 𝑨) 𝒂
-      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
-      ≡⟨(comm-hom-term gfe 𝑻 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
-    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻)) ℊ
-      ≡⟨ ap (λ - → - ℊ) (all-hp≡hq 𝑨 KA (h 𝒂)) ⟩
-    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻)) ℊ
-      ≡⟨ (comm-hom-term gfe 𝑻 𝑨 (h 𝒂) q ℊ) ⟩
-    (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
-      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (q ̇ 𝑨) 𝒂
-      ∎
+  γ : 𝑨 ⊧ p ≈ q
+  γ = gfe λ 𝒂 →
+   (p ̇ 𝑨) 𝒂
+     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+   (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
+     ≡⟨(comm-hom-term gfe 𝑻 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
+   (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻)) ℊ
+     ≡⟨ ap (λ - → - ℊ) (hp≡hq 𝑨 KA (h 𝒂)) ⟩
+   (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻)) ℊ
+     ≡⟨ (comm-hom-term gfe 𝑻 𝑨 (h 𝒂) q ℊ) ⟩
+   (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
+     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+   (q ̇ 𝑨) 𝒂
+     ∎
 
- compatibility-of-identities-and-homs : (p q : Term)
-  →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀ 𝑨 ka hh → ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
- --inferred types: 𝑨 : algebra 𝓤 s, ka : 𝑨 ∈ 𝒦, hh : hom 𝑻 𝑨.
+compatibility-of-identities-and-homs :
+    {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+    {fevw : funext 𝓥 𝓦}
+    {𝒦 : Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)}
+    (p q : Term{𝓤}{X})
+   -------------------------------------------------
+ →  (𝒦 ⊧ p ≋ q)
+     ⇔ (∀(𝑨 : Algebra 𝓦 𝑆)
+          (KA : 𝑨 ∈ 𝒦)
+          (hh : hom (𝑻{𝓤}{X}) 𝑨)
+       →  ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
 
- compatibility-of-identities-and-homs p q =
-   identities-compatible-with-homs p q ,
-   homs-compatible-with-identities p q
+compatibility-of-identities-and-homs
+ {𝓤}{𝓦}{X} {fevw} {𝒦} p q =
+  identities-compatible-with-homs {𝓤}{𝓦}{X}{fevw}{𝒦} p q ,
+  homs-compatible-with-identities {𝓤}{𝓦}{X}{fevw}{𝒦} p q
 
- ---------------------------------------------------------------
+---------------------------------------------------------------
 
- --Compatibility of identities with interpretation of terms
- hom-id-compatibility : {𝓦 : Universe}(p q : ∣ 𝑻 ∣ )
-                        (𝑨 : Algebra 𝓦 𝑆)
-                        (ϕ : hom 𝑻 𝑨)
-  →                     (𝑨 ⊧ p ≈ q)
-                       -------------------
-  →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+--Compatibility of identities with interpretation of terms
+hom-id-compatibility :
+        {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+        {fevw : funext 𝓥 𝓦}
+        (p q : ∣ 𝑻{𝓤}{X} ∣ )
+        (𝑨 : Algebra 𝓦 𝑆)
+        (ϕ : hom 𝑻 𝑨)
+        (p≈q : 𝑨 ⊧ p ≈ q)
+        -------------------
+ →      ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
- hom-id-compatibility p q 𝑨 ϕ pA≡qA =
+hom-id-compatibility
+ {𝓤}{𝓦}{X}{fevw} p q 𝑨 ϕ p≈q =
     ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement p) ⟩
-    ∣ ϕ ∣ ((p ̇ 𝑻) ℊ)  ≡⟨ (comm-hom-term gfe 𝑻 𝑨 ϕ p ℊ) ⟩
-    (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality pA≡qA (∣ ϕ ∣ ∘ ℊ)  ⟩
-    (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe 𝑻 𝑨 ϕ q ℊ)⁻¹ ⟩
+    ∣ ϕ ∣ ((p ̇ 𝑻) ℊ)  ≡⟨ (comm-hom-term fevw (𝑻{𝓤}{X}) 𝑨 ϕ p ℊ) ⟩
+    (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality p≈q (∣ ϕ ∣ ∘ ℊ)  ⟩
+    (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term fevw (𝑻{𝓤}{X}) 𝑨 ϕ q ℊ)⁻¹ ⟩
     ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
     ∣ ϕ ∣ q  ∎
 
--- data vclo {𝓤 : Universe}
---            (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤)) :
---             Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺)) where
---  vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
---  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
---  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
---  vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 data vclo {𝓤 𝓘 : Universe}
            (𝒦 : Pred (Algebra (𝓤 ⊔ 𝓘) 𝑆) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓘) ⁺)) :
             Pred (Algebra (𝓤 ⊔ 𝓘) 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⊔ (𝓤 ⊔ 𝓘) ⁺) where
@@ -313,81 +308,79 @@ data vclo {𝓤 𝓘 : Universe}
  vsub : {𝑨 : Algebra (𝓤 ⊔ 𝓘) 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
  vhom : {𝑨 : Algebra (𝓤 ⊔ 𝓘) 𝑆} → 𝑨 ∈ vclo{𝓤}{𝓘} 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
 
--- V-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤)
---  →      (𝓢 : Universe) → (𝑩 : Algebra 𝓢 𝑆) → OV (𝓢 ⁺) ̇
--- V-closed ℒ𝒦 = λ 𝓢 𝑩 → 𝑩 ∈ vclo (ℒ𝒦 𝓢)
 
-----------------------------------------------------------------------
---Closure under subalgebras
 module _
- -- {𝔓 : Universe}
- -- {𝒦𝔓+ : Pred (Algebra (𝔓 ⁺) 𝑆) (𝔓 ⁺ ⁺)}
- -- {ℒ𝒦 : (𝓤 𝓘 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓘}
- {ℒ𝒦 : (𝓘 : Universe) → Pred (Algebra 𝓘 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺)}
- {ℒ𝒦' : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤} where 
- -- {ℒ𝒦+ : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (OV (𝓤 ⁺))} where
-
- -- 𝔖 ℌ 𝔙 𝔉 𝔉⁻ 𝔉⁻⁻ : Universe
- -- 𝔖 = 𝔓 ⁺
- -- ℌ = 𝔖 ⁺
- -- 𝔙 = ℌ ⁺
- -- 𝔉⁻⁻ = OV (𝓤 ⁺ ⊔ 𝔖)
- -- 𝔉⁻ = (OV (𝓤 ⁺)) ⁺ ⊔ ℌ
- -- 𝔉 = (OV (𝓤 ⁺)) ⁺ ⁺ ⊔ 𝔙
-
- -- 𝓜 : Universe
- -- 𝓜 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝔓 ⁺ ⁺
-
- 𝓠 : Universe
- 𝓠 = 𝓞 ⊔ 𝓥 ⊔ 𝓤
-
---open sub-closure {𝔖 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- open prod-closure {𝔓 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- open hom-closure {ℌ = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ {ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ {ℒ𝒦' : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) 𝓤} where
 
  -- ==========================================================
  -- The free algebra in Agda
  -- ------------------------
- 𝑻HI = HomImagesOf 𝑻
+ -- 𝑻HI = HomImagesOf 𝑻
 
- 𝑻img : _ ̇
- 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-           Σ ϕ ꞉ hom 𝑻 𝑨 , (𝑨 ∈ SClo(ℒ𝒦 𝓤)) × Epic ∣ ϕ ∣
+ 𝑻img : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → _ ̇
 
- 𝑻𝑨 : (ti : 𝑻img) → Algebra _ 𝑆
+ 𝑻img {𝓤}{𝓦}{X} =
+  Σ 𝑨 ꞉ (Algebra 𝓦 𝑆) ,
+    Σ ϕ ꞉ hom (𝑻{𝓤}{X}) 𝑨 ,
+      (𝑨 ∈ SClo{𝓤 = 𝓦}(ℒ𝒦 𝓦)) × Epic ∣ ϕ ∣
+
+
+ 𝑻𝑨 : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+      (ti : 𝑻img{𝓤}{𝓦}{X})
+  →   Algebra 𝓦 𝑆
+
  𝑻𝑨 ti = ∣ ti ∣
 
- 𝑻𝑨∈SClo : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo (ℒ𝒦 𝓤)
+
+ 𝑻𝑨∈SClo : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+           (ti : 𝑻img{𝓤}{𝓦}{X})
+  →        (𝑻𝑨{𝓤}{𝓦}{X} ti) ∈ SClo (ℒ𝒦 𝓦)
  𝑻𝑨∈SClo ti = ∣ pr₂ ∥ ti ∥ ∣
 
- 𝑻ϕ : (ti : 𝑻img) → hom 𝑻 (𝑻𝑨 ti)
+ 𝑻ϕ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+      (ti : 𝑻img{𝓤}{𝓦}{X})
+  →   hom (𝑻{𝓤}{X}) (𝑻𝑨{𝓤}{𝓦}{X} ti)
+
  𝑻ϕ ti = pr₁ ∥ ti ∥
 
- 𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
+
+ 𝑻ϕE : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+       (ti : 𝑻img{𝓤}{𝓦}{X})
+  →    Epic ∣ (𝑻ϕ ti) ∣
+
  𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
 
- 𝑻KER : _ ̇
- 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
-    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
 
- Ψ : Rel ∣ 𝑻 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- Ψ p q =
-    ∀ (ti : 𝑻img) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
+ 𝑻KER : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → ? ̇
 
- Ψ-IsEquivalence : IsEquivalence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓤)}{A = ∣ 𝑻 ∣} Ψ
+ 𝑻KER {𝓤}{𝓦}{X} = Σ (p , q) ꞉ (∣ 𝑻{𝓤}{X} ∣ × ∣ 𝑻{𝓤}{X} ∣) ,
+    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨{𝓤}{𝓦}{X} ti) ∣} ∣ 𝑻ϕ{𝓤}{𝓦}{X} ti ∣
+
+
+ Ψ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → Rel ∣ 𝑻{𝓤}{X} ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦 ⁺)
+ Ψ {𝓤}{𝓦}{X} p q =
+    ∀ (ti : 𝑻img{𝓤}{𝓦}{X}) → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
+
+
+ Ψ-IsEquivalence : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+  →                IsEquivalence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓤)}{A = ∣ 𝑻 ∣} Ψ
+
  Ψ-IsEquivalence =
   record { rfl = λ p ti → 𝓇ℯ𝒻𝓁
          ; sym = λ p q p≡q ti → (p≡q ti)⁻¹
          ; trans = λ p q r p≡q q≡r ti → (p≡q ti) ∙ (q≡r ti)
          }
 
- 𝑻compatible-op : ∣ 𝑆 ∣ → Rel ∣ 𝑻 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇
+ 𝑻compatible-op : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+  →               ∣ 𝑆 ∣ → Rel ∣ 𝑻{𝓤}{X} ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇
  𝑻compatible-op f R = (lift-rel R) =[ (f ̂ 𝑻) ]⇒ R
 
- 𝑻compatible : Rel ∣ 𝑻 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇
+ 𝑻compatible : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+  →            Rel ∣ 𝑻{𝓤}{X} ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇
  𝑻compatible R = ∀ f → 𝑻compatible-op f R
 
- record 𝑻Congruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺ ̇  where
+ record 𝑻Congruence {𝓤 𝓦 : Universe}{X : 𝓤 ̇} : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺ ̇  where
   constructor mk𝑻con
   field
    ⟨_⟩ : Rel ∣ 𝑻 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
@@ -396,11 +389,11 @@ module _
 
  open 𝑻Congruence
 
- tcongruence : (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺ ̇
- tcongruence = Σ θ ꞉ (Rel ∣ 𝑻 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) , IsEquivalence θ × 𝑻compatible θ
+ tcongruence : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺ ̇
+ tcongruence {𝓤}{𝓦}{X} = Σ θ ꞉ (Rel ∣ 𝑻{𝓤}{X} ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) , IsEquivalence θ × 𝑻compatible θ
 
- Ψ-𝑻compatible : 𝑻compatible Ψ
- Ψ-𝑻compatible f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
+ Ψ-𝑻compatible : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → 𝑻compatible Ψ
+ Ψ-𝑻compatible {𝓤}{𝓦}{X} f {𝒕}{𝒔} 𝒕𝒔∈Ψ ti = gfe λ x → γ x
   where
    𝑨 : Algebra 𝓤 𝑆
    𝑨 = 𝑻𝑨 ti
@@ -424,13 +417,13 @@ module _
     ((f ̂ 𝑨) (λ i → ∣ ϕ ∣ (𝒔s i x))) ≡⟨  (∥ ϕ ∥ f (λ i → 𝒔s i x))⁻¹ ⟩
     ∣ ϕ ∣ ((f ̂ 𝑻) (λ i → (𝒔s i x))) ∎
 
- ConΨ : 𝑻Congruence
+ ConΨ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → 𝑻Congruence
  ConΨ = mk𝑻con Ψ Ψ-𝑻compatible Ψ-IsEquivalence
 
- conΨ : tcongruence
+ conΨ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → tcongruence
  conΨ = Ψ , (Ψ-IsEquivalence , Ψ-𝑻compatible)
 
- 𝔽 : Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺) 𝑆
+ 𝔽 : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺) 𝑆
  𝔽 = (
         -- carrier
         (  ∣ 𝑻 ∣ // ⟨ ConΨ ⟩  ) ,
@@ -441,12 +434,12 @@ module _
                 ((f ̂ 𝑻) (λ i₁ → ⌜ args i₁ ⌝) , 𝓇ℯ𝒻𝓁 )   )
       )
 
- 𝔽-is-universal-for : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → hom 𝔽 𝑨
- 𝔽-is-universal-for 𝑨 = ϕ , ϕhom
+ 𝔽-is-universal-for : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}(𝑨 : Algebra 𝓦 𝑆) → hom 𝔽 𝑨
+ 𝔽-is-universal-for {𝓤}{𝓦}{X} 𝑨 = ϕ , ϕhom
   where
    h₀ : X → ∣ 𝑨 ∣
-   h₀ = fst (𝕏 𝑨)
-
+   h₀ = fst (𝕏{𝓦}{𝓤}{X} 𝑨)
+ 
    hE : Epic h₀
    hE = snd (𝕏 𝑨)
 
@@ -470,7 +463,8 @@ module _
                         ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
          (f ̂ 𝑨) (ϕ ∘ a) ∎
 
- 𝔽∈vclo : 𝔽 ∈ vclo{(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺}{(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺}(ℒ𝒦 ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺))
+ 𝔽∈vclo : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
+  →        𝔽 ∈ vclo{(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺}{(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺}(ℒ𝒦 ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺))
 
  --We will prove this by showing that 𝔽 is a subalgebra of 𝑨{𝓜}{𝓜}, where
  --𝑨{𝓜}{𝓜} is a product of elements from the type Σ 𝑨 ꞉ (Algebra 𝓜 𝑆) , 𝑨 ∈ (ℒ𝒦 𝓜 𝓜).
@@ -482,21 +476,10 @@ module _
  -- γ = vsub 𝑨∈vclo 𝔽sub
 
 
- 𝔽∈vclo = γ
+ 𝔽∈vclo {𝓤}{𝓦}{X} = γ
   where
    ΣP : {𝓘 : Universe} → Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) 𝑆) ((𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺) → (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺ ̇
    ΣP {𝓘} K = Σ 𝑨 ꞉ (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) 𝑆) , 𝑨 ∈ K
-
-   ⨅ℒ𝒦 : {𝓤 𝓘 : Universe}{I : 𝓘 ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓘) 𝑆}
-    →      (∀ (i : I) → 𝒜 i ∈ vclo{𝓤}{𝓘} (ℒ𝒦 (𝓤 ⊔ 𝓘)))
-    →      Algebra (𝓤 ⊔ 𝓘) 𝑆
-   ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
-
-   ⨅𝒦∈vclo : {𝓤 𝓘 : Universe}{I : 𝓘 ⁺ ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓘 ⁺) 𝑆}
-              (p : ∀ (i : I) → 𝒜 i ∈ vclo{𝓤}{𝓘 ⁺} (ℒ𝒦 (𝓤 ⊔ 𝓘 ⁺)))
-     →        ⨅ 𝒜 ∈ vclo{𝓤}{𝓘 ⁺} (ℒ𝒦 (𝓤 ⊔ 𝓘 ⁺))
-
-   ⨅𝒦∈vclo p = vprod p
 
    𝒜ΣP : {𝓘 : Universe}{K : Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) 𝑆) ((𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺)}
     →    ΣP{𝓘} K → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) 𝑆
@@ -514,6 +497,18 @@ module _
    𝑨∈vclo : {𝓘 : Universe}
     →       ⨅𝒜ΣP{𝓘 = 𝓘} ∈ vclo{(𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺}{(𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺} (ℒ𝒦 ((𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺) ⁺))
    𝑨∈vclo {𝓘} = {!!}
+
+   ⨅ℒ𝒦 : {𝓤 𝓘 : Universe}{I : 𝓘 ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓘) 𝑆}
+    →      (∀ (i : I) → 𝒜 i ∈ vclo{𝓤}{𝓘} (ℒ𝒦 (𝓤 ⊔ 𝓘)))
+    →      Algebra (𝓤 ⊔ 𝓘) 𝑆
+   ⨅ℒ𝒦 {𝒜 = 𝒜} _ = ⨅ 𝒜
+
+   ⨅𝒦∈vclo : {𝓤 𝓘 : Universe}{I : 𝓘 ⁺ ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓘 ⁺) 𝑆}
+              (p : ∀ (i : I) → 𝒜 i ∈ vclo{𝓤}{𝓘 ⁺} (ℒ𝒦 (𝓤 ⊔ 𝓘 ⁺)))
+     →        ⨅ 𝒜 ∈ vclo{𝓤}{𝓘 ⁺} (ℒ𝒦 (𝓤 ⊔ 𝓘 ⁺))
+
+   ⨅𝒦∈vclo p = vprod p
+
    --{!⨅𝒦∈vclo{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺)}{𝓘 = ((𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺))}{I = (ΣP{𝓘 = 𝓘} (ℒ𝒦 ((𝓞 ⊔ 𝓥 ⊔ 𝓘 ⁺)  )))} ? !}
    -- vprod{𝒜 = (λ (i : ΣP (ℒ𝒦 ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺))) → ∣ i ∣)} {!!}  -- vprod {!!}
    -- {I =  ΣP{𝓜 ⁺}{𝓜} (ℒ𝒦 (𝓜 ⁺) 𝓜)}{𝒜 = (𝒜ΣP{𝓜}{𝓜 ⁺})} ?
@@ -526,21 +521,28 @@ module _
    h = ∣ ϕ ∣
 
    kerh : Rel (∣ 𝑻 ∣ // ⟨ ConΨ ⟩ ) ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺)
-   kerh s t = h s ≡ h t
+   kerh [s] [t] = h [s] ≡ h [t]
 
    kerh⊆Ψ : ∀(s t : ∣ 𝑻 ∣)(ti : 𝑻img)
     →       kerh ⟦ s ⟧ ⟦ t ⟧
     →       ∣ (𝑻ϕ ti) ∣ ∘ (s ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (t ̇ 𝑻)
    kerh⊆Ψ s t ti kerhst = γ
     where
-     𝑩 : Algebra 𝓤 𝑆
+     𝑩 : Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ⁺) 𝑆
      𝑩 = 𝑻𝑨 ti
 
-     𝑩∈SCloℒ𝒦 : 𝑩 ∈ SClo(ℒ𝒦 𝓤)
-     𝑩∈SCloℒ𝒦 = fst ∥ snd ti ∥
+     𝑩∈SCloℒ𝒦 : 𝑩 ∈ SClo(ℒ𝒦 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+     𝑩∈SCloℒ𝒦 = 𝑻𝑨∈SClo ti
 
-     hAB : hom 𝔽 𝑩
-     hAB = 𝔽-is-universal-for 𝑩
+     𝑩∈ΣP : ΣP{𝓘 = 𝓤} (ℒ𝒦 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+     𝑩∈ΣP = 𝑩 , ?
+
+     hAB : hom 𝑨 𝑩
+     hAB = {!!}
+
+ -- 𝑻img : _ ̇
+ -- 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+ --           Σ ϕ ꞉ hom 𝑻 𝑨 , (𝑨 ∈ SClo(ℒ𝒦 𝓤)) × Epic ∣ ϕ ∣
 
      γ : ∣ 𝑻ϕ ti ∣ ∘ (s ̇ 𝑻) ≡ ∣ 𝑻ϕ ti ∣ ∘ (t ̇ 𝑻)
      γ = {!!}
@@ -623,9 +625,9 @@ module _
 --  -- claim: 𝔽 belongs to SPClo
 --  -- {𝒦 : Pred (Algebra (OVU+ ⁺ ) 𝑆) (OVU+ ⁺ ⁺ )}
 --  -- 𝔽 : Algebra (OVU+ ⁺ ⁺ ⁺) 𝑆
---  -- 𝔽∈SPClo : 𝔽 ∈ SClo{𝓢 = (OVU+ ⁺ ⁺)} PClo{𝓢 = (OVU+ ⁺)} 𝒦
--- -- SubalgebrasOf : {𝓢 : Universe} → Algebra 𝓢 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺ ̇
--- -- SubalgebrasOf {𝓢} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓢 𝑆) ,
+--  -- 𝔽∈SPClo : 𝔽 ∈ SClo{𝓤 = (OVU+ ⁺ ⁺)} PClo{𝓤 = (OVU+ ⁺)} 𝒦
+-- -- SubalgebrasOf : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- -- SubalgebrasOf {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) ,
 -- --                 Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) ,
 -- --                   is-embedding h × is-homomorphism 𝑩 𝑨 h
 
@@ -662,7 +664,7 @@ module _
 --    γ : 𝔽 ∈ SPClo
 --    γ = ssub ⨅𝒦∈SPClo 𝔽sub
 
---  open product-compatibility {𝓢 = OVU+}
+--  open product-compatibility {𝓤 = OVU+}
 
 --  pclo-id1 : ∀ {p q} → (𝒦+ ⊧ p ≋ q) → (PClo 𝒦+ ⊧ p ≋ q)
 --  pclo-id1 {p} {q} α (pbase x) = α x

@@ -31,7 +31,8 @@ We begin the `basic module`_ by invoking Agda's ``module`` directive, and then w
   module basic where
 
   open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧;
-    _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π; _≡_; Epic) public
+    _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π;
+    _≡_; Epic) public
 
 This is the second module of the agda-ualib_ , coming after the `prelude module`_ described in the previous chapter (:numref:`agda preliminaries`).
 
@@ -96,20 +97,29 @@ Finally, we are ready to define the type of algebras in the signature ``S`` (whi
 ::
 
   Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
-   →        (𝑆 : Signature 𝓞 𝓥) →  𝓤 ⁺ ⊔ 𝓥 ⊔ 𝓞 ̇
+   →        (𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
   Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A)
 
-Thus, algebras in the signature 𝑆 (or 𝑆-algebras) inhabit the type ``Algebra 𝓤 {𝓞}{𝓥} 𝑆``. (Here, 𝓤 is the universe level of the type of carriers (or "universes") of 𝑆-algebras.)
+Thus, algebras---in the signature 𝑆 (or 𝑆-algebras) and with carrier types in the universe 𝓤---inhabit the type ``Algebra 𝓤 {𝓞}{𝓥} 𝑆``.  (We may also write ``Algebra 𝓤 𝑆`` since 𝓞 and 𝓥 can be infered from the given signature ``𝑆``.)
 
-As an alternative to this syntax---one that may seem more in line with the standard literature---we could write the last line above as
+In other words,
+
+  *the type* ``Algebra 𝓤 𝑆`` *collects all the algebras of a particular signature* 𝑆 *and carrier type* 𝓤, *and this collection of algebras has type* 𝓞 ⊔ 𝓥 ⊔  𝓤 ⁺ ̇ .
+
+Recall, 𝓞 ⊔ 𝓥 ⊔  𝓤 ⁺ denotes the smallest universe containing 𝓞, 𝓥, and the successor of 𝓤.
+
+:NB: The type ``Algebra 𝓤 𝑆`` doesn't define what an algebra *is* as a property. It defines a type of algebras; certain algebras inhabit this type---namely, the algebras consisting of a universe (say, ``A``) of type 𝓤 ̇ , and a collection ``(𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A`` of operations on ``A``.
+
+Here's an alternative syntax that might seem more familiar to readers of the standard universal algebra literature.
 
 .. code-block::
 
-  Algebra 𝓤 {𝓞} {𝓥} (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
+  Algebra 𝓤 (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
 
-Here ``𝑆 = (F , ρ)`` is the signature with ``F`` the set of operation symbols and ρ the arity function.
+Here ``𝑆 = (F , ρ)`` is the signature, ``F`` the type of operation symbols, and ρ the arity function.
 
-Throughout the library, we adopt the (less standard, but more convenient) notations 𝑓 : ∣ 𝑆 ∣ for an operation symbol of the signature 𝑆, and ∥ 𝑆 ∥ 𝑓 for the arity of that symbol.
+Although this syntax would work equally well, we mention it merely for comparison and to demonstrate the flexibility of Agda. Throughout the library we stick to the syntax ``𝑓 : ∣ 𝑆 ∣`` for an operation symbol of the signature 𝑆, and ``∥ 𝑆 ∥ 𝑓`` for the arity of that symbol. We find these conventions a bit more convenient for programming.
 
 Example
 ~~~~~~~~~~
@@ -130,11 +140,21 @@ The types indicate that ``e`` is nullary (i.e., takes no arguments, equivalently
 
 We will have more to say about the type of algebras later.  For now, we continue defining the syntax used in the ``agda-ualib`` to represent the basic objects of universal algebra.
 
+.. proof:agda-note::
+
+   In the next two subsections, some code will live inside an anonymous module declared with the following syntax
+
+   .. code-block::
+
+      module _ {𝑆 : Signature 𝓞 𝓥}  where
+
+   The code that follows this module declaration is indented by an extra space. As a result the signature 𝑆 will be available to all the extra-indented lines of code.  The anonymous module ends as soon as we return to the usual (no-extra-space) indentation.
+
 
 Syntactic sugar for operation interpretation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before proceding, we define some syntactic sugar that allows us to replace ∥ 𝑨 ∥ 𝑓 with slightly more standard-looking notation, 𝑓 ̂ 𝑨, where f is an operation symbol of the signature 𝑆 of 𝑨.
+Before proceding, we define syntax that allows us to replace ``∥ 𝑨 ∥ 𝑓`` with the slightly more standard-looking ``𝑓 ̂ 𝑨``, where 𝑓 is an operation symbol of the signature 𝑆 of 𝑨.
 
 ::
 
@@ -148,11 +168,9 @@ Before proceding, we define some syntactic sugar that allows us to replace ∥ �
 
    infix 40 _̂_
 
-We can now write 𝑓 ̂ 𝑨 for the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨.
+Now we can use ``𝑓 ̂ 𝑨`` to represent the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨.
 
-:N.B.: Below, we will need slightly different notation, namely, 𝑡 ̇ 𝑨, to represent the interpretation of a :term:`term` 𝑡 in the algebra 𝑨.
-
-(In future releases of the agda-ualib_ we may reconsider making it possible to use the same notation interpretations of operation symbols and terms.)
+:NB: Below, we will need slightly different notation, namely, 𝑡 ̇ 𝑨, to represent the interpretation of a :term:`term` 𝑡 in the algebra 𝑨. (In future releases of the agda-ualib_ we may reconsider making it possible to use the same notation interpretations of operation symbols and terms.)
 
 -------------------------------------------------------
 
@@ -170,7 +188,8 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 
    infixr -1 ⨅
 
-We have used an anonymous module here so that the (fixed) signature 𝑆 is available in the definition of the product without mentioning it explicitly.
+(In ``agda2-mode`` ⨅ is typed as ``\Glb``.)
+
 
 -------------------------------------------------------------------------
 

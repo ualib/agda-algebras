@@ -78,6 +78,7 @@ proof_theorem_types = {
     "prop": "Proposition",
     "theorem": "Theorem",
     "agda": "Agda Artifact",
+    "agda-note": "Agda Note",
 }
 
 # use numbering for section references with :numref:, e.g. 'Section 3.2'.
