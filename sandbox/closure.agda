@@ -14,26 +14,13 @@ module closure
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
-open import homomorphisms {𝑆 = 𝑆} -- public
-open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) -- public
-open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} -- public
-open import congruences -- public
-
--- _⊧_≈_ : Algebra 𝓤 𝑆
---  →      Term{X = X} → Term → 𝓤 ̇
--- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
--- _⊧_≈_ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → Algebra 𝓦 𝑆
---  →      Term{𝓤}{X} → Term{𝓤}{X} → 𝓤 ⊔ 𝓦 ̇
--- 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-
--- _⊧_≋_ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
---  →      Pred (Algebra 𝓦 𝑆) (𝓦 ⁺)
---  →      Term{𝓤}{X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-
--- _⊧_≋_ {𝓤} {𝓦} 𝒦 p q = {𝑨 : Algebra 𝓦 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+open import homomorphisms {𝑆 = 𝑆} public
+open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
+open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} public
+open import congruences public
 
 module closure-definitions
- {𝓤 : Universe} {X : 𝓤 ̇} 
+ {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
  _⊧_≈_ : Algebra 𝓤 𝑆
@@ -89,30 +76,150 @@ module closure-definitions
  -- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
  -- ThVClo⊆ThSClo = ?
 
-module equational-theories
- {𝓤 : Universe} {X : 𝓤 ̇} 
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
-
- open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦} 
-
  ------------------------------------------------------------------------
  -- Equational theories and classes
- -- TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → _ ̇
- -- TH = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
+ TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → _ ̇
+ TH 𝒦 = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
 
  Th :  Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Pred (Term × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
--- data SClo : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
 
- -- MOD : (ℰ : Pred (Term{𝓤}{X} × Term{𝓤}{X}) 𝓤)
- --  →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
- -- MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+ MOD : (ℰ : Pred (Term{𝓤}{X} × Term{𝓤}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+  →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
  Mod : Pred (Term{𝓤}{X} × Term{𝓤}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
   →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-
  Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
+ ---------------------------
+ --The free algebra in Agda
+ ---------------------------
+ 𝑻HI = HomImagesOf (𝑻{𝓤}{X})
+
+ 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
+         Σ ϕ ꞉ hom (𝑻{𝓤}{X}) 𝑨 , (𝑨 ∈ SClo) × Epic ∣ ϕ ∣
+
+ 𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
+ 𝑻𝑨 ti = ∣ ti ∣
+
+ 𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo
+ 𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
+
+ 𝑻ϕ : (ti : 𝑻img) → hom 𝑻 (𝑻𝑨 ti)
+ 𝑻ϕ ti = pr₁ ∥ ti ∥
+
+ 𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
+ 𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
+
+ 𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
+    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
+
+ Ψ : Pred (∣ 𝑻{𝓤}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ Ψ (p , q) =
+  ∀ ti → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
+
+ Ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ Ψ' (p , q) = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
+
+ -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
+ -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
+
+ -- .. code-block::
+
+ --    𝑻---- g --->>𝔽  (ker g = Ψ)
+ --     \         .
+ --      \       .
+ --       h     ∃ϕ     (want: Ψ ⊆ ker h)
+ --        \   .
+ --         \ .
+ --          V
+ --          𝑨
+
+-----------------------------------
+--More tools for Birkhoff's theorem
+--Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
+
+ SClo𝒦→𝑻img : (𝑪 : Algebra 𝓤 𝑆) → 𝑪 ∈ SClo → 𝑻img
+ SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦 =
+  𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
+
+ 𝑻img→𝑻⊧ : ∀ p q   →   (p , q) ∈ Ψ'
+  →        (ti : 𝑻img)
+          ---------------------------
+  →       ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻) ℊ)
+          ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻) ℊ)
+ 𝑻img→𝑻⊧ p q pΨq ti = goal1
+   where
+    𝑪 : Algebra 𝓤 𝑆
+    𝑪 = ∣ ti ∣
+
+    ϕ : hom 𝑻 𝑪
+    ϕ = 𝑻ϕ ti
+
+    pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+    pCq = pΨq ti
+
+    𝓅 𝓆 : ∣ 𝑻 ∣  -- Notation: 𝓅 = \Mcp
+    𝓅 = ∣ tg p ∣
+    𝓆 = ∣ tg q ∣
+
+    p≡𝓅 : p ≡ (𝓅 ̇ 𝑻) ℊ
+    p≡𝓅 = ∥ tg p ∥
+
+    q≡𝓆 : q ≡ (𝓆 ̇ 𝑻) ℊ
+    q≡𝓆 = ∥ tg q ∥
+
+    ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻) ℊ)
+    ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
+
+    goal1 : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
+    goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
+             ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
+
+ Ψ⊆ThSClo𝒦 : Ψ ⊆ (Th SClo)
+ Ψ⊆ThSClo𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
+  where
+   ti : 𝑻img
+   ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
+
+   ϕ : hom 𝑻 𝑪
+   ϕ = 𝑻ϕ ti
+
+   ϕE : Epic ∣ ϕ ∣
+   ϕE = 𝑻ϕE ti
+
+   ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+   ϕsur 𝒄 x = ϕE (𝒄 x)
+
+   pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 ∣
+   pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+
+   ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
+   ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+
+   γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻)
+   γ = pΨq ti
+
+   𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+   𝑪⊧p≈q = gfe λ 𝒄 →
+    (p ̇ 𝑪) 𝒄
+        ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+    (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
+        ≡⟨ (comm-hom-term gfe 𝑻 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
+    ∣ ϕ ∣ ((p ̇ 𝑻)(pre 𝒄))
+        ≡⟨ intensionality γ (pre 𝒄) ⟩
+    ∣ ϕ ∣ ((q ̇ 𝑻)(pre 𝒄))
+        ≡⟨ comm-hom-term gfe 𝑻 𝑪 ϕ q (pre 𝒄) ⟩
+    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
+        ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+    (q ̇ 𝑪) 𝒄
+        ∎
+
+ Ψ⊆Th𝒦 : ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
+ Ψ⊆Th𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo𝒦{p , q} pΨq (sbase KA)
 
 module compatibility
  {𝓤 : Universe}{X : 𝓤 ̇ }
@@ -283,7 +390,6 @@ module compatibility
    homs-compatible-with-identities p q
 
  ---------------------------------------------------------------
-
  --Compatibility of identities with interpretation of terms
  hom-id-compatibility :
         (p q : ∣ 𝑻{𝓤}{X} ∣ )
@@ -301,158 +407,6 @@ module compatibility
     ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)    ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
     ∣ ϕ ∣ q  ∎
 
----------------------------
---The free algebra in Agda
----------------------------
-
-module freealgebra
- {𝓤 : Universe} {X : 𝓤 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
-
- open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
-
- 𝑻HI = HomImagesOf (𝑻{𝓤}{X})
-
- 𝑻img : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) ,
-         Σ ϕ ꞉ hom (𝑻{𝓤}{X}) 𝑨 , (𝑨 ∈ SClo) × Epic ∣ ϕ ∣
-
- 𝑻𝑨 : (ti : 𝑻img) → Algebra 𝓤 𝑆
- 𝑻𝑨 ti = ∣ ti ∣
-
- 𝑻𝑨∈SClo𝒦 : (ti : 𝑻img) → (𝑻𝑨 ti) ∈ SClo
- 𝑻𝑨∈SClo𝒦 ti = ∣ pr₂ ∥ ti ∥ ∣
-
- 𝑻ϕ : (ti : 𝑻img) → hom 𝑻 (𝑻𝑨 ti)
- 𝑻ϕ ti = pr₁ ∥ ti ∥
-
- 𝑻ϕE : (ti : 𝑻img) → Epic ∣ (𝑻ϕ ti) ∣
- 𝑻ϕE ti = ∥ pr₂ ∥ ti ∥ ∥
-
- 𝑻KER : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
-    ∀ ti → (p , q) ∈ KER-pred{B = ∣ (𝑻𝑨 ti) ∣} ∣ 𝑻ϕ ti ∣
-
- Ψ : Pred (∣ 𝑻{𝓤}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- Ψ (p , q) =
-  ∀ ti → ∣ (𝑻ϕ ti) ∣ ∘ (p ̇ 𝑻) ≡ ∣ (𝑻ϕ ti) ∣ ∘ (q ̇ 𝑻)
-
- Ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- Ψ' (p , q) = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
-
-
-
-
- -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
- -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
-
- -- .. code-block::
-
- --    𝑻---- g --->>𝔽  (ker g = Ψ)
- --     \         .
- --      \       .
- --       h     ∃ϕ     (want: Ψ ⊆ ker h)
- --        \   .
- --         \ .
- --          V
- --          𝑨
-
-
------------------------------------
---More tools for Birkhoff's theorem
---Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
-
-module birkhoff-lemmas
- {𝓤 : Universe} {X : 𝓤 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
-
- open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
- open equational-theories {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
- open freealgebra {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
-
- -- (moved to terms.agda)
- -- 𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆) → Σ h ꞉ (hom 𝑻 𝑪), Epic ∣ h ∣
- -- 𝑻hom-gen 𝑪 = h , lift-of-epic-is-epic h₀ hE
-
- SClo𝒦→𝑻img : (𝑪 : Algebra 𝓤 𝑆) → 𝑪 ∈ SClo → 𝑻img
- SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦 =
-  𝑪 , (fst (𝑻hom-gen 𝑪)) , (𝑪∈SClo𝒦 , (snd (𝑻hom-gen 𝑪)))
-
- 𝑻img→𝑻⊧ : ∀ p q   →   (p , q) ∈ Ψ'
-  →        (ti : 𝑻img)
-          ---------------------------
-  →       ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻) ℊ)
-          ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻) ℊ)
- 𝑻img→𝑻⊧ p q pΨq ti = goal1
-   where
-    𝑪 : Algebra 𝓤 𝑆
-    𝑪 = ∣ ti ∣
-
-    ϕ : hom 𝑻 𝑪
-    ϕ = 𝑻ϕ ti
-
-    pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-    pCq = pΨq ti
-
-    𝓅 𝓆 : ∣ 𝑻 ∣  -- Notation: 𝓅 = \Mcp
-    𝓅 = ∣ tg p ∣
-    𝓆 = ∣ tg q ∣
-
-    p≡𝓅 : p ≡ (𝓅 ̇ 𝑻) ℊ
-    p≡𝓅 = ∥ tg p ∥
-
-    q≡𝓆 : q ≡ (𝓆 ̇ 𝑻) ℊ
-    q≡𝓆 = ∥ tg q ∥
-
-    ξ : ∣ ϕ ∣ ((𝓅 ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((𝓆 ̇ 𝑻) ℊ)
-    ξ = (ap ∣ ϕ ∣ p≡𝓅)⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣ q≡𝓆)
-
-    goal1 : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
-    goal1 = (ap ∣ ϕ ∣ (term-gen-agreement p))
-             ∙ ξ ∙ (ap ∣ ϕ ∣ (term-gen-agreement q))⁻¹
-
- Ψ⊆ThSClo𝒦 : Ψ ⊆ (Th SClo)
- Ψ⊆ThSClo𝒦 {p , q} pΨq {𝑪} 𝑪∈SClo𝒦 = 𝑪⊧p≈q
-  where
-   ti : 𝑻img
-   ti = SClo𝒦→𝑻img 𝑪 𝑪∈SClo𝒦
-
-   ϕ : hom 𝑻 𝑪
-   ϕ = 𝑻ϕ ti
-
-   ϕE : Epic ∣ ϕ ∣
-   ϕE = 𝑻ϕE ti
-
-   ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
-   ϕsur 𝒄 x = ϕE (𝒄 x)
-
-   pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 ∣
-   pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
-
-   ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
-   ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
-
-   γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻)
-   γ = pΨq ti
-
-   𝑪⊧p≈q : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
-   𝑪⊧p≈q = gfe λ 𝒄 →
-    (p ̇ 𝑪) 𝒄
-        ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
-    (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
-        ≡⟨ (comm-hom-term gfe 𝑻 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
-    ∣ ϕ ∣ ((p ̇ 𝑻)(pre 𝒄))
-        ≡⟨ intensionality γ (pre 𝒄) ⟩
-    ∣ ϕ ∣ ((q ̇ 𝑻)(pre 𝒄))
-        ≡⟨ comm-hom-term gfe 𝑻 𝑪 ϕ q (pre 𝒄) ⟩
-    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))
-        ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
-    (q ̇ 𝑪) 𝒄
-        ∎
-
-
- Ψ⊆Th𝒦 : ∀ p q → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
- Ψ⊆Th𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo𝒦{p , q} pΨq (sbase KA)
 
 --------------------
 --Closure under HSP
@@ -467,10 +421,7 @@ module closure-identities
  {fevu : dfunext 𝓥 𝓤} where
 
  open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
- open equational-theories {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
  open compatibility {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
- open freealgebra {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
-
 
  --Identities for product closure
  --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

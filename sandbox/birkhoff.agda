@@ -23,11 +23,6 @@ open import closure
  {gfe = gfe}
  {dfe = dfe}
 
-open import homomorphisms {𝑆 = 𝑆} -- public
-open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) -- public
-open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe}
-open import congruences
-
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
 𝑬 g h x = g x ≡ h x
@@ -44,7 +39,7 @@ open import congruences
        --------------------------------------------------
  →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p = 
+𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p =
    (∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂))    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
    (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
    (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
@@ -81,10 +76,7 @@ module birkhoff-theorem
 
  open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
  open closure-identities {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
- open equational-theories {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
  open compatibility {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
- open freealgebra {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
- open birkhoff-lemmas {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
  -- Birkhoff's theorem: every variety is an equational class.
  birkhoff : -- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
