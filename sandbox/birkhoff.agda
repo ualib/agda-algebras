@@ -3,7 +3,8 @@
 --DATE: 30 Jun 2020
 --REF: Based on the file `birkhoff.agda` (23 Jan 2020).
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+-- {-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split #-}
 
 open import basic
 open import congruences
@@ -13,17 +14,23 @@ module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
  {𝓤 : Universe}
  {X : 𝓤 ̇ }
- {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
 open import closure
  {𝑆 = 𝑆}
- {𝓤 = 𝓤}
- {X = X}
+ -- {𝓤 = 𝓤}
+ -- {X = X}
  {𝕏 = 𝕏}
  {gfe = gfe}
- {dfe = dfe}
+ -- {dfe = dfe}
+
+open import subuniverses
+ {𝑆 = 𝑆}
+ {𝕏 = 𝕏}
+ {fe = gfe}
+
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -75,7 +82,7 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
 birkhoff : (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
            (𝑨 : Algebra 𝓤 𝑆)
            ------------------------------------
- →         𝑨 ∈ Mod (Th (VClo 𝒦)) → 𝑨 ∈ VClo 𝒦
+ →         𝑨 ∈ Mod (Th (vclo 𝒦)) → 𝑨 ∈ vclo 𝒦
 birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
  where
   ℋ : X ↠ 𝑨
@@ -90,7 +97,7 @@ birkhoff 𝒦 𝑨 A∈ModThV = 𝑨∈VClo𝒦
   h : hom 𝑻 𝑨
   h = lift-hom{𝑨 = 𝑨} h₀
 
-  Ψ⊆ThVClo𝒦 : Ψ ⊆ Th (VClo 𝒦)
+  Ψ⊆ThVClo𝒦 : Ψ ⊆ Th (vclo 𝒦)
   Ψ⊆ThVClo𝒦 {p , q} pΨq =
    (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th p q pΨq)
 

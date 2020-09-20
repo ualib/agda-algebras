@@ -36,12 +36,15 @@ Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (
 -- BigOp : 𝓥 ̇ → 𝓤ω → _
 -- BigOp I A = (I → A) → A
 
+-- BigAlgebra : {𝓞 𝓥 : Universe}
+--  →        (𝑆 : Signature 𝓞 𝓥) →  𝓤ω
+-- BigAlgebra {𝓞}{𝓥} 𝑆 = b Σω 𝓤 ꞉ Universe ⸲ (Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A))
 
 --𝓞 is the universe in which operation symbols live
 --𝓥 is the universe in which arities live
 -- BigSignature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
 -- BigSignature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
-
+ -- (𝓤 : Universe)
 -- data monoid-op : 𝓤₀ ̇ where
 --  e : monoid-op
 --  · : monoid-op
@@ -67,6 +70,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
 
  -- ⨅' : (𝒜 : (𝓢 : Universe)(I : 𝓢 ̇) → Algebra 𝓢 𝑆 ) →  𝓤ω
  -- ⨅' 𝒜 = ((𝓣 : Universe)(J : 𝓣 ̇) →  ∣ 𝒜 𝓣 J ∣)
+
+ -- A tuple with entries in types in arbitrary universe levels
+ tup : {I : 𝓘 ̇}{uni : I → Universe}(X : (i : I) → (uni i) ̇) → (i : I) → (uni i) ̇
+ tup X i = X i
  ⨅' : (𝒜 : (𝓢 : Universe) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓢 ⁺) 𝑆 ) →  𝓤ω
  ⨅' 𝒜 = ((𝓣 : Universe) →  ∣ 𝒜 𝓣 ∣)
 

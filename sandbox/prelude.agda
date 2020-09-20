@@ -248,7 +248,7 @@ extensionality-lemma : {I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
 extensionality-lemma p q args p≡q =
  ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
-record Σω {X : 𝓤 ̇} (Y : X → 𝓤ω ) : 𝓤ω  where
+record Σω {X : 𝓤ω} (Y : X → 𝓤ω ) : 𝓤ω  where
   constructor
    _⸲_  -- notation: type \,3 for ⸲
   field
@@ -257,7 +257,11 @@ record Σω {X : 𝓤 ̇} (Y : X → 𝓤ω ) : 𝓤ω  where
 
 infixr 50 _⸲_
 
--Σω : (X : 𝓤 ̇) (Y : X → 𝓤ω ) → 𝓤ω
+-Σω : (X : 𝓤ω) (Y : X → 𝓤ω ) → 𝓤ω
 -Σω X Y = Σω Y
 
 syntax -Σω X (λ x → y) = Σω x ꞉ X ⸲ y
+
+_⨉_ : 𝓤ω → 𝓤ω → 𝓤ω
+X ⨉ Y = Σω x ꞉ X ⸲ Y
+
