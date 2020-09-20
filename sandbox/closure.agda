@@ -8,17 +8,16 @@
 open import basic
 open import prelude using (global-dfunext; dfunext; im)
 
-
 module closure
  {𝑆 : Signature 𝓞 𝓥}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} 
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤} where
 
-open import homomorphisms {𝑆 = 𝑆} public
-open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
-open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} public
-open import congruences public
+open import homomorphisms {𝑆 = 𝑆} -- public
+open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) -- public
+open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} -- public
+open import congruences -- public
 
 -- _⊧_≈_ : Algebra 𝓤 𝑆
 --  →      Term{X = X} → Term → 𝓤 ̇
@@ -34,9 +33,8 @@ open import congruences public
 -- _⊧_≋_ {𝓤} {𝓦} 𝒦 p q = {𝑨 : Algebra 𝓦 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 module closure-definitions
- {𝓤 : Universe}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇} where
+ {𝓤 : Universe} {X : 𝓤 ̇} 
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
  _⊧_≈_ : Algebra 𝓤 𝑆
   →      Term{𝓤}{X} → Term → 𝓤 ̇
@@ -92,11 +90,10 @@ module closure-definitions
  -- ThVClo⊆ThSClo = ?
 
 module equational-theories
- {𝓤 : Universe}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇} where
+ {𝓤 : Universe} {X : 𝓤 ̇} 
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
- open closure-definitions {𝓤 = 𝓤}{𝒦 = 𝒦} {X = X}
+ open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦} 
 
  ------------------------------------------------------------------------
  -- Equational theories and classes
@@ -111,18 +108,20 @@ module equational-theories
  --  →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
  -- MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
- Mod : Pred (Term{𝓤}{X} × Term{𝓤}{X}) 𝓤
+ Mod : Pred (Term{𝓤}{X} × Term{𝓤}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
   →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 
  Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 
-module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}{X : 𝓤 ̇ } where
+module compatibility
+ {𝓤 : Universe}{X : 𝓤 ̇ }
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ {fevu : dfunext 𝓥 𝓤} where
 
- open closure-definitions {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
+ open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
- products-preserve-identities : -- {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
-       {fevu : dfunext 𝓥 𝓤}
+ products-preserve-identities :
        (p q : Term{𝓤}{X})
        (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
   →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
@@ -130,7 +129,7 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
   →     ⨅ 𝒜 ⊧ p ≈ q
 
  products-preserve-identities
-  {fevu = fevu} p q I 𝒜 𝒜⊧p≈q = γ
+  p q I 𝒜 𝒜⊧p≈q = γ
    where
     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
     γ = gfe λ a →
@@ -144,8 +143,6 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
         ∎
 
  products-in-class-preserve-identities :
-      {fevu : dfunext 𝓥 𝓤}
-      -- (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
       (p q : Term{𝓤}{X})
       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
   →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
@@ -153,13 +150,13 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
   →    ⨅ 𝒜 ⊧ p ≈ q
 
  products-in-class-preserve-identities
-  {fevu = fevu}  p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
+  p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
    where
     𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
     𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
 
     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
-    γ = products-preserve-identities {fevu} p q I 𝒜 𝒜⊧p≈q
+    γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
  subalgebras-preserve-identities :
      -- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
@@ -211,9 +208,7 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
 
 
  -- ⇒ (the "only if" direction)
- identities-compatible-with-homs : --    {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
-        {fevw : funext 𝓥 𝓤}
-        {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ identities-compatible-with-homs :
         (p q : Term{𝓤}{X})
         (p≋q : 𝒦 ⊧ p ≋ q)
        ----------------------------------------------------
@@ -222,8 +217,8 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
           (h : hom (𝑻{𝓤}{X}) 𝑨)
          → ∣ h ∣ ∘ (p ̇ 𝑻{𝓤}{X}) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
 
- identities-compatible-with-homs -- {𝓤}{𝓦}{X}
-  {fevw = fevw} {𝒦 = 𝒦} p q p≋q 𝑨 KA h = γ
+ identities-compatible-with-homs
+  p q p≋q 𝑨 KA h = γ
    where
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = p≋q KA
@@ -235,9 +230,9 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
    hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 ∣ )
     →        ∣ h ∣ ((p ̇ 𝑻) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻) 𝒂)
    hpa≡hqa 𝒂 =
-    ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺} fevw (𝑻{𝓤}{X}) 𝑨 h p 𝒂 ⟩
+    ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺} fevu (𝑻{𝓤}{X}) 𝑨 h p 𝒂 ⟩
     (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
-    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺} fevw 𝑻 𝑨 h q 𝒂)⁻¹ ⟩
+    (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺} fevu 𝑻 𝑨 h q 𝒂)⁻¹ ⟩
     ∣ h ∣ ((q ̇ 𝑻) 𝒂)  ∎
 
    γ : ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
@@ -245,20 +240,17 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
 
 
  -- ⇐ (the "if" direction)
- homs-compatible-with-identities : --  {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
-        {fevw : funext 𝓥 𝓤}
-        {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ homs-compatible-with-identities :
         (p q : Term{𝓤}{X})
         (hp≡hq : ∀ (𝑨 : Algebra 𝓤 𝑆)
                    (KA : 𝑨 ∈ 𝒦)
                    (h : hom (𝑻{𝓤}{X}) 𝑨)
                   → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻))
        ------------------------------------------------------
-  →      𝒦 ⊧ p ≋ q
+  →     𝒦 ⊧ p ≋ q
  --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom 𝑻 𝑨
 
- homs-compatible-with-identities -- {𝓤}{𝓦}{X}
-  {fevw = fevw}{𝒦 = 𝒦} p q hp≡hq {𝑨} KA = γ
+ homs-compatible-with-identities p q hp≡hq {𝑨} KA = γ
    where
     h : (𝒂 : X → ∣ 𝑨 ∣) → hom 𝑻 𝑨
     h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
@@ -278,27 +270,22 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
      (q ̇ 𝑨) 𝒂
        ∎
 
- compatibility-of-identities-and-homs : -- {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
-    {fevw : funext 𝓥 𝓤}
-    {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-    (p q : Term{𝓤}{X})
-   -------------------------------------------------
-  →  (𝒦 ⊧ p ≋ q)
-      ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)
-           (KA : 𝑨 ∈ 𝒦)
-           (hh : hom (𝑻{𝓤}{X}) 𝑨)
-        →  ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
+ compatibility-of-identities-and-homs :
+     (p q : Term{𝓤}{X})
+     -------------------
+  →  (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)
+                       (KA : 𝑨 ∈ 𝒦)
+                       (hh : hom (𝑻{𝓤}{X}) 𝑨)
+                      →  ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
 
- compatibility-of-identities-and-homs -- {𝓤}{𝓦}{X}
-  {fevw = fevw} {𝒦 = 𝒦} p q =
-   identities-compatible-with-homs {fevw}{𝒦} p q ,
-   homs-compatible-with-identities {fevw}{𝒦} p q
+ compatibility-of-identities-and-homs p q =
+  identities-compatible-with-homs p q ,
+   homs-compatible-with-identities p q
 
  ---------------------------------------------------------------
 
  --Compatibility of identities with interpretation of terms
- hom-id-compatibility : --         {𝓤 𝓦 : Universe}{X : 𝓤 ̇}
-        {fevw : funext 𝓥 𝓤}
+ hom-id-compatibility :
         (p q : ∣ 𝑻{𝓤}{X} ∣ )
         (𝑨 : Algebra 𝓤 𝑆)
         (ϕ : hom 𝑻 𝑨)
@@ -306,13 +293,12 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
         -------------------
   →      ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
- hom-id-compatibility --  {𝓤}{𝓦}{X}
-  {fevw = fevw} p q 𝑨 ϕ p≈q =
+ hom-id-compatibility p q 𝑨 ϕ p≈q =
     ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement p) ⟩
-    ∣ ϕ ∣ ((p ̇ 𝑻) ℊ)  ≡⟨ (comm-hom-term fevw (𝑻{𝓤}{X}) 𝑨 ϕ p ℊ) ⟩
+    ∣ ϕ ∣ ((p ̇ 𝑻) ℊ)    ≡⟨ (comm-hom-term fevu (𝑻{𝓤}{X}) 𝑨 ϕ p ℊ) ⟩
     (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality p≈q (∣ ϕ ∣ ∘ ℊ)  ⟩
-    (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term fevw (𝑻{𝓤}{X}) 𝑨 ϕ q ℊ)⁻¹ ⟩
-    ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
+    (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term fevu (𝑻{𝓤}{X}) 𝑨 ϕ q ℊ)⁻¹ ⟩
+    ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)    ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
     ∣ ϕ ∣ q  ∎
 
 ---------------------------
@@ -320,11 +306,10 @@ module compatibility {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 
 ---------------------------
 
 module freealgebra
- {𝓤 : Universe}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇} where
+ {𝓤 : Universe} {X : 𝓤 ̇}
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
- open closure-definitions {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
+ open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
  𝑻HI = HomImagesOf (𝑻{𝓤}{X})
 
@@ -378,13 +363,12 @@ module freealgebra
 --Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
 
 module birkhoff-lemmas
- {𝓤 : Universe}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇} where
+ {𝓤 : Universe} {X : 𝓤 ̇}
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
- open closure-definitions {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
- open equational-theories {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
- open freealgebra {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
+ open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
+ open equational-theories {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
+ open freealgebra {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
  -- (moved to terms.agda)
  -- 𝑻hom-gen : (𝑪 : Algebra 𝓤 𝑆) → Σ h ꞉ (hom 𝑻 𝑪), Epic ∣ h ∣
@@ -478,15 +462,14 @@ module birkhoff-lemmas
 --homomorphic images, subalgebras, and products of algebras in the class.
 
 module closure-identities
- {𝓤 : Universe}
+ {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇}
  {fevu : dfunext 𝓥 𝓤} where
 
- open closure-definitions {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
- open equational-theories {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
- open compatibility {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
- open freealgebra {𝓤 = 𝓤}{𝒦 = 𝒦}{X = X}
+ open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
+ open equational-theories {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
+ open compatibility {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
+ open freealgebra {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
 
  --Identities for product closure
@@ -499,7 +482,7 @@ module closure-identities
    IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
    IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝒦  i )
    γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-   γ = products-preserve-identities{fevu = fevu} p q I 𝒜 IH
+   γ = products-preserve-identities p q I 𝒜 IH
 
  pclo-id2 : ∀{p q} → ((PClo) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
  pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
@@ -600,7 +583,7 @@ module closure-identities
    IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
 
    γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-   γ = products-preserve-identities{fevu = fevu}  p q I 𝒜 IH
+   γ = products-preserve-identities p q I 𝒜 IH
 
  vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
   where
