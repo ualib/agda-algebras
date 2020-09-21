@@ -96,8 +96,8 @@ Finally, we are ready to define the type of algebras in the signature ``S`` (whi
 
 ::
 
-  Algebra : (𝓤 : Universe) → {𝓞 𝓥 : Universe}
-   →        (𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+  Algebra : (𝓤 : Universe){𝓞 𝓥 : Universe}
+            (𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
   Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A)
 

@@ -113,7 +113,15 @@ module birkhoff-theorem
    --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
    --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
    -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+   𝑪 : Algebra 𝓤 𝑆
+   𝑪 = {!!}
+
+   ϕ : Σ h ꞉ (hom 𝑪 𝑨) , Epic ∣ h ∣
+   ϕ = {!!}
+
+   hic : HomImagesOf 𝑪
+   hic = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
 
    𝑨∈VClo : 𝑨 ∈ VClo
-   𝑨∈VClo = {!!}
+   𝑨∈VClo = vhom{𝑪} {!!} hic
 

@@ -323,5 +323,6 @@ See :numref:`unicode hints` for a longer list of special symbols used in the agd
 
 ------------------
 
+
 .. include:: hyperlink_references.rst
 

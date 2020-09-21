@@ -1,0 +1,1336 @@
+%%
+%% This is file `sample-sigplan.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `sigplan')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-sigplan.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[sigplan,screen]{acmart}
+%\usepackage{amsmath,amscd,amssymb,amsthm}
+%\usepackage{amsfonts}
+%\usepackage{latexsym,enumerate,scalefnt,ifthen}
+%\usepackage{mathtools}
+%\usepackage{stmaryrd}
+
+%% \usepackage[colorlinks=true,urlcolor=black,linkcolor=black,citecolor=black]{hyperref}
+%% \usepackage{url}
+%\usepackage{scalefnt}
+%% \usepackage{tikz}
+%% \usetikzlibrary{math} %needed tikz library
+%% \usepackage{color}
+%% \usepackage[margin=4cm]{geometry}
+%% \usepackage{scrextend}
+\usepackage{agda}
+\usepackage{bbm}
+\usepackage{unixode}
+%\newcommand\mathscr[1]{\ensuremath{\mathcal{#1}}}
+%% \usepackage{newunicodechar}
+%% \newunicodechar{𝑨}{\ensuremath{\mathbf{A}}}
+%% \usepackage{pdfcomment}
+%% \usepackage{color}
+%% \usepackage{todonotes}
+%% \usepackage[yyyymmdd,hhmmss]{datetime}
+%% \usepackage{background}
+%% \backgroundsetup{
+%%   position=current page.east,
+%%   angle=-90,
+%%   nodeanchor=east,
+%%   vshift=-1cm,
+%%   hshift=8cm,
+%%   opacity=1,
+%%   scale=1,
+%%   contents={\textcolor{gray!80}{WORK IN PROGRESS.  DO NOT DISTRIBUTE. (compiled on \today\ at \currenttime)}}
+%% }
+
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{acmcopyright}
+\copyrightyear{2020}
+\acmYear{2020}
+\acmDOI{10.1145/1122445.1122456}
+
+%% These commands are for a PROCEEDINGS abstract or paper.
+\acmConference[CPP '21]{CPP 2021}{January, 2021}{online}
+\acmBooktitle{}
+\acmPrice{}
+\acmISBN{XXX-X-XXXX-XXXX-X/XX/XX}
+
+\usepackage[mathcal]{euscript}
+%\usepackage{amsfonts}
+
+\newcommand{\alg}[1]{\ensuremath{\mathbf{#1}}}  % algebraic structures
+\newcommand{\var}[1]{\ensuremath{\mathscr{#1}}}  % algebraic structures
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{A Constructive, Machine-checked Proof\break of Birkhoff's Theorem}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+%\author{\protect{\href{https://williamdemeo.gitlab.io/}{William DeMeo}}}
+\author{}
+%% \author{William DeMeo}
+%% \email{williamdemeo@gmail.com}
+%% \affiliation{% \\
+%%   \institution{\href{https://www.mff.cuni.cz/en/ka}{Department of Algebra}\\Charles University} %\\ Katedra Algebry, Univerzita Karlova\\
+%%   \streetaddress{Sokolovska 83}
+%%   \city{Prague}
+%%   \state{Czech Republic} %186 00 Praha 8, 186 00 Praha 8, \v{C}esk\'{a} Republika}
+%%   \postcode{186 00} % Prague 8, Czech Republic}
+%% }
+%% %\author{\href{https://hyeyoungshin.github.io/}{Hyeyoung Shin}}
+%% \author{Hyeyoung Shin}
+%% \email{hyeyoungshinw@gmail.com}
+%% \affiliation{
+%%   \institution{\href{https://prl-prg.github.io/}{Faculty of Information Technology}\\Czech Technical University}
+%%   \streetaddress{Thákurova 9}
+%%   \city{Prague} % 6
+%%   \state{Czech Republic}
+%%   \postcode{160 00} 
+%% }
+
+%% %\author{\href{http://www.cs.cmu.edu/~ssomayya/}{Siva Somayyajula}}
+%% \author{Siva Somayyajula}
+%% \email{ssomayya@andrew.cmu.edu}
+%% \affiliation{%
+%%   \institution{\href{https://www.cs.cmu.edu/}{Department of Computer Science}\\
+%%   Carnegie Mellon University}
+%%   \streetaddress{}
+%%   \city{Pittsburgh}
+%%   \state{PA}
+%%   \postcode{}
+%% }
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+%% \renewcommand{\shortauthors}{DeMeo, Shin and Somayyajula}
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+We introduce the Agda Universal Algebra Library (agda-ualib), a project for the formalization of universal algebra in the Agda functional programming language. The primary aim of the project is to develop a usable library that makes Agda more accessible as a tool for producing new mathematics and for formally verifying "known" results.  The authors have implemented a collection of fundamental definitions and theorems from universal algebra in Agda, exhibiting the power of inductive and dependent types for this purpose.  To demonstrate the effectiveness of the library, we describe a major milestone of the project---a formal proof of Birkhoff's HSP Theorem.
+\end{abstract}
+
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10003752.10003790.10003796</concept_id>
+       <concept_desc>Theory of computation~Constructive mathematics</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10003752.10003790.10011740</concept_id>
+       <concept_desc>Theory of computation~Type theory</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10003752.10003790.10002990</concept_id>
+       <concept_desc>Theory of computation~Logic and verification</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010147.10010148.10010164</concept_id>
+       <concept_desc>Computing methodologies~Representation of mathematical objects</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10003752.10010124.10010125.10010130</concept_id>
+       <concept_desc>Theory of computation~Type structures</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Theory of computation~Constructive mathematics}
+\ccsdesc[500]{Theory of computation~Type theory}
+\ccsdesc[500]{Theory of computation~Logic and verification}
+\ccsdesc[300]{Computing methodologies~Representation of mathematical objects}
+\ccsdesc[300]{Theory of computation~Type structures}
+
+
+\keywords{universal algebra, formalization of mathematics, equational logic, type theory}
+
+\maketitle
+
+\section{Introduction}\label{introduction}
+To support formalization in type theory of research level mathematics in universal algebra and related fields, the authors are contributing to the development of the \href{https://ualib.org}{Agda Universal Algebra Library} (\href{https://ualib.org}{agda-ualib}), a software library containing formal statements and proofs of the core definitions and results of universal algebra.
+
+The library and is written in \href{https://wiki.portal.chalmers.se/agda/pmwiki.php}{Agda}~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, but also provides powerful \emph{proof tactics} for proving things about the objects that inhabit these types.
+
+\subsection{Vision and Goals}\label{vision-and-goals}
+The idea for the the Agda Universal Algebra Library originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand the \emph{types}---in particular, dependent and inductive types---make possible precise formal representations of recursively defined objects as well as constructive proofs of their properties, proofs that are computable and composable. These observations suggest that there is much to gain from implementing universal algebra in a language that supports dependent and inductive types.
+
+\subsubsection{Primary Goals}\label{primary-goals}
+The first goal of the \href{https://ualib.org}{agda-ualib} project is to demonstrate that it is possible to express the foundations of universal algebra in type theory and to formalize (and formally verify) the foundations in the
+Agda programming language. We formalize a substantial portion of the edifice on which our own mathematical research depends, and demonstrate that our research can also be expressed in type theory and formally implemented in such a way that we and other working mathematicians can understand and verify the results. The library also serves to educate our peers and encourage them to formally verify their own mathematics research.
+
+Our field is deep and broad, so codifying all of its foundations may seem like a daunting task and possibly risky investment of time and resources. However, we believe the subject is well served by a new, modern, \emph{constructive} presentation of its foundations. Our new presentation expresses the foundations of universal algebra in the language of type theory, and uses the Agda proof assistant to codify and formally verify all aspects of the presentation.
+
+\subsubsection{Secondary Goals}\label{secondary-goals}
+We wish to emphasize that our ultimate objective is not merely to translate existing results into a more modern and formal language. Indeed, one important goal is to develop a system that is useful for conducting research in mathematics, and that is how we intend to use our library once we have achieved our immediate objective of implementing
+the basic foundational core of universal algebra in Agda.
+
+To this end, our intermediate-term objectives include
+\begin{itemize}
+\item developing domain specific ``proof tactics'' to express the idioms of universal algebra,
+\item incorporating automated proof search for universal algebra, and
+\item formalizing theorems emerging from our own mathematics research,
+\item documenting the resulting software libraries so they are usable by other working mathematicians.
+\end{itemize}
+
+For our own mathematics research, our experience taught us very quickly that a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, is extremely useful. Thus, a second goal of the agda-ualib project is to demonstrate the utility of such libraries and tactics for proving new theorems.
+
+%% \subsection{Intended audience}\label{intended-audience}
+%% This paper describes the Agda Universal Algebra Library (\href{https://ualib.org}{agda-ualib}) in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
+
+%% While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, \cite{Bergman:2012} or \cite{McKenzie:1987}, and to a lesser extent category theory, as presented in \cite{Riehl:2017}.
+
+%% Some prior exposure to type theory and Agda would be helpful, but even without this background one should be able to gain something from reading article, by referring to the appendix and glossary, while simultaneously consulting one or more of the references mentioned in the references to fill in gaps as needed.
+
+%% Finally, readers of this paper will benefit most from actively experimenting with Agda and the agda-ualib.
+
+%% \subsection{Installing the library}\label{installing-the-library}
+%% The main repository for the \href{https://ualib.org}{agda-ualib} is \url{https://gitlab.com/ualib/ualib.gitlab.io}.
+
+%% There are installation instructions in the main README.md file in that repository, but really all one needs is a working Agda installation and a clone of the \href{https://ualib.org}{agda-ualib} repository.
+
+
+%% \section{Acknowledgments}\label{acknowledgments}
+%% Besides the main authors and developers of \href{https://ualib.org}{agda-ualib}, a number of other people have contributed to the project in one way or another.
+
+%% Special thanks go to Clifford Bergman, Venanzio Capretta, Andrej Bauer, Miklós Maróti, and Ralph Freese, for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project, often without even knowing it.
+
+%% The first author would also like to thank his postdoctoral advisors and their institutions for supporting work on this project. These include Peter Mayr and University of Colorado in Boulder (Aug 2017--May 2019), Ralph Freese and the University of Hawaii in Honolulu (Aug 2016--May 2017), and Cliff Bergman and Iowa State University in Ames (Aug 2014--May 2016).
+
+%% \subsubsection{Attributions and citations}\label{attributions-and-citations}
+%% Regarding the mathematical results that are implemented in the \href{https://ualib.org}{agda-ualib} library, as well as the presentation and informal statements of these results in the documentation, The Authors makes no claims to originality.
+
+%% Regarding the Agda source code in the \href{https://ualib.org}{agda-ualib} library, this is mainly due to The Authors.
+
+We have benefited enormously from the outstanding lecture notes on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Univalent Foundations and Homotopy Type Theory} and the \href{https://github.com/martinescardo/TypeTopology}{Type Topology} Agda Library, both by \href{https://www.cs.bham.ac.uk/~mhe}{Martin Hötzel Escardo}.
+
+%% The first author is greatly indebted to Martin for teaching him about type theory in Agda at the \href{http://events.cs.bham.ac.uk/mgs2019/}{Midlands Graduate School in the Foundations of Computing Science} in Birmingham in 2019.
+
+%% The development of the \href{https://ualib.org}{agda-ualib} and its documentation is informed by and benefits from the references listed in the references section below.
+
+%% \subsection{References}\label{references}
+%% The following Agda documentation and tutorials are excellent. They have been quite helpful to The Author of \href{https://ualib.org}{agda-ualib}, and have informed the development of the latter and its documentation.
+
+%% \begin{itemize}
+%% \tightlist
+%% \item Altenkirk, \href{}{Computer Aided Formal Reasoning}
+%% \item Bove and Dybjer, \href{}{Dependent Types at Work}
+%% \item Escardo, \href{}{Introduction to Univalent Foundations of Mathematics with Agda}
+%% \item Gunther, Gadea, Pagano, \href{}{Formalization of Universal Algebra in Agda}
+%% \item János, \href{}{Agda Tutorial}
+%% \item Norell and Chapman, \href{}{Dependently Typed Programming in Agda}
+%% \item Wadler, \href{}{Programming Language Foundations in Agda}
+%% \end{itemize}
+
+%% Finally, the official \href{}{Agda Wiki}, \href{}{Agda User's Manual}, \href{}{Agda Language Reference}, and the (open source) \href{}{Agda Standard Library} source code are also quite useful.
+
+
+\section{Algebras}\label{algebras}
+In this chapter we use the informal language of universal algebra to present foundational definitions and theorems about subalgebras, terms, and clones. In Section XX we show how the definitions and results presented in this section can be formalized (or ``implemented'') in type theory using Agda.
+
+The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a constructive and computable way, and for proving properties of these objects.
+
+One goal of our project is to provide, as a ``proof of concept'' a formal implementation of a deep result in universal algebra. As the focus of this goal, we have chosen what was among the first major results of the theory of universal algebras---namely, Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}.
+
+A nice (informal) proof of the HSP Theorem appears on pages 106 and 107 of Cliff Bergman's book~\cite{Bergman:2012}. Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book. Nonetheless, Professor Bergman's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
+
+On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from~\cite{Bergman:2012}, and present them as a list of results at the end of this section, and then later, in Section XX, we will formalize each of these results in Agda.
+
+Whenever we quote or paraphrase a result from~\cite{Bergman:2012}, we will include a citation that indicates where the corresponding result is found in the book.
+
+\subsection{Operations}\label{operations}
+The symbols ℕ, ω, and \texttt{nat} are used interchangeably; they all denote the set of natural numbers. If 𝑚 is a natural number, we write 𝑚 : ℕ and say that 𝑚 \emph{has type} ℕ.\footnote{Viewing 𝑚 : ℕ as roughly equivalent to 𝑚 ∈ ℕ is not totally unreasonable at this point.} We typically denote and define natural numbers by 𝑚 := \{0, 1, \ldots, 𝑚-1\}, and we sometimes formally identify a function with its graph when convenient. For example, the function 𝑎 : 𝑚 → 𝐴 may be viewed as the tuple \((𝑎\,0, 𝑎\,1, …, 𝑎\,(𝑚-1)) : 𝐴^m\).
+%% If ℎ : 𝐴 → 𝐴 and 𝑎 : 𝑚 → 𝐴 are functions, then ℎ ∘ 𝑎 : 𝑚 → 𝐴 denotes the composition of ℎ with 𝑎; this is the function that maps each 𝑖 \textless{} 𝑚 to the element (ℎ ∘ 𝑎)(𝑖) = ℎ(𝑎 𝑖) of 𝐴. We may formally identify the function ℎ ∘ 𝑎 : 𝑚 → 𝐴 with its graph, which of course is the 𝑚-tuple, (ℎ(𝑎 0), ℎ(𝑎 1), …, ℎ(𝑎 (𝑚-1))).
+
+If 𝐴 is a nonempty set and 𝑛 ∈ ℕ, then an 𝑛-\textbf{ary operation} on 𝐴 is a function 𝑓 : \ensuremath{𝐴^n} → 𝐴 which (for \(𝑛 > 0\)) maps each 𝑛-tuple \((𝑎₀, 𝑎₁, …, 𝑎_{n-1})\) in \ensuremath{𝐴^n} to a particular element \(𝑓(𝑎₀, 𝑎₁, …, 𝑎_{n-1})\) in 𝐴. If \(𝑛 = 0\), then 𝑓 : () → 𝐴 may be viewed as a function that takes no arguments and returns an element of 𝐴, in which case 𝑓 is merely notation for a particular element of 𝐴, denoted 𝑓 : 𝐴.
+An operation is called \textbf{nullary} (or constant) if its arity is zero. \textbf{Unary}, \textbf{binary}, and \textbf{ternary} operations have arities 1, 2, and 3, respectively.
+%% An operation gives rise to a special kind of (𝑛+1)-ary relation, namely
+%% \[Gf := \{(a_0, a_1, \dots, a_{n-1}, b) \in A^{n+1} ∣ b = f(a_0, a_1, \dots, a_{n-1})\},\]
+%% which is sometimes called the \textbf{graph} of 𝑓.
+
+For two sets 𝐴, 𝐵, the collection of functions 𝑓 : 𝐵 → 𝐴 is denoted by \(A^B\). Taking 𝐵 = \ensuremath{𝐴^n}, we have \(A^{A^n}\), which is the collection of 𝑛-ary operations on 𝐴; as noted above, this can be represented by the function type (𝑛 → 𝐴) → 𝐴.
+
+If we let Op(𝐴) denote the collection of all finitary operations on 𝐴, then,
+\[\mathrm{Op}(𝐴) = ⋃_{n ∈ ℕ} A^{A^n} = ⋃_{n<ω} ((𝑛 → A) → A).\]
+
+If 𝐹 ⊆ Op(𝐴) is a set of operations on 𝐴, let us denote by \(𝐹_n\) the 𝑛-ary operations in 𝐹. Clearly, \(F_n = F ∩ A^{A^n}\).
+
+Given an 𝑛-tuple \(a = (a_0, a_1, \dots, a_{n-1}) ∈ A^n\), it helps to be able to refer to the set \(\{a_i : 0 ≤ i < n\}\) of elements that occur in the tuple without explicitly naming each element in this set. In fact, we already have notation for this, since an 𝑛-tuple is truly a function, with domain 𝑛 := \{0, 1, …, 𝑛-1\}, and image the set of
+elements occuring in the tuple. Thus, im 𝑎 is \(\{𝑎₀, 𝑎₁, …, 𝑎_{n-1}\}\), where each value is included in the set only once (no repeats). In particular, ∣im 𝑎∣ is a convenient way to write the number of distinct elements that occur in the tuple 𝑎. For example, if 𝑎 = (1, 1, 3), then im 𝑎 = \{1, 3\}, and ∣im 𝑎∣ = 2.
+
+\subsection{Signatures}\label{signatures}
+Recall (from model theory) that a \textbf{signature} 𝑆 = (𝐶, 𝐹, 𝑅, ρ) consists of three (possibly empty) sets 𝐶, 𝐹, and 𝑅 (the \emph{constant symbols}, \emph{function symbols}, and \emph{relation symbols}, respectively), along with a function ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁 that assigns an arity to each symbol. Often (but not always), 𝑁 = ℕ.
+
+As our focus here is universal algebra, we are more concerned with the restricted notion of an \textbf{algebraic signature}, by which we mean a pair 𝑆 = (𝐹, ρ) consisting of a collection 𝐹 of \emph{operation symbols} and an arity function \(ρ : 𝐹 → 𝑁\) that maps each operation symbol to its arity; here, 𝑁 denotes the ``arity type'' (which is sometimes taken to be ℕ). (Intuitively, the arity ρ 𝑓 of an operation symbol 𝑓 ∈ 𝐹 may be thought of as the ``number of arguments'' that 𝑓 takes as ``input''.)
+
+If 𝐴 is a set and 𝑓 is a (ρ 𝑓)-ary operation on 𝐴, we often indicate this by writing \(f : A^{ρ f} → A\). On the other hand, the arguments of such an operation form a (ρ 𝑓)-tuple, say, \((𝑎₀, 𝑎₁, …, a_{ρf-1})\), which may be viewed as the graph of the function 𝑎 : ρ𝑓 → 𝐴, where \(𝑎\, 𝑖 = 𝑎_i\).
+
+(When the codomain of ρ is ℕ, we may view ρ𝑓 as the finite set \{0, 1, …, ρ𝑓 - 1\}. Thus, by identifying the ρ𝑓-th power \(A^{ρf}\) with the type ρ𝑓 → 𝐴 of functions from \{0, 1, …, ρ𝑓 - 1\} to 𝐴, we identify the function type \(A^{ρf} → A\) with the function (or ``functional'') type (ρ𝑓 → 𝐴) → 𝐴.
+
+Our formal implementation of the concept of signature in Agda is described in Section XX.
+
+\subsection{Algebraic Structures}\label{algebraic-structures}
+Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra. In this section we define the main objects of study.
+
+
+An \textbf{algebraic structure} (or \textbf{algebra}) in the signature 𝑆 = (𝐹, ρ) is denoted by 𝑨 = \( ⟨A, F^{\mathbf A}⟩\) and consists of
+
+\begin{itemize}
+\item 𝐴 := a set (or type), called the \textbf{carrier} (or \textbf{universe}) of the algebra,
+\item \(F^𝑨 := \{ f^𝑨 ∣ f ∈ F, \ f^𝑨 : (ρ𝑓 → A) → A \}\), a collection of \textbf{operations} on 𝐴, and
+\item a collection of identities satisfied by elements of 𝐴 and the operations in \(F^𝑨\).
+\end{itemize}
+
+Note that to each operation symbol 𝑓 ∈ 𝐹 corresponds an operation \(f^𝑨\) on 𝐴 of arity ρ𝑓; we call such \(f^𝑨\) an
+\textbf{interpretation} of the symbol 𝑓 in the algebra 𝑨. We call an algebra in the signature 𝑆 an 𝑆-\textbf{algebra}. An algebra is called \textbf{finite} if it has a finite universe, and is called \textbf{trivial} if its universe is a singleton.
+%% Given two algebras 𝑨 and 𝑩, we say that 𝑩 is a \textbf{reduct} of 𝑨 if both algebras have the same universe and 𝑩 can be obtained from 𝑨 by removing some operations.
+
+Our formal implementation of the concept of algebraic structure is described in Section XX.
+
+\subsection{Subalgebras}\label{subalgebras}
+This section introduces two important concepts in universal algebra, \textbf{subuniverse} and \textbf{subalgebra}. Suppose \(𝑨 = ⟨A, F^𝑨⟩\) is an algebra. Recall, the (nonempty) set 𝐴 is called the \textbf{universe} of 𝑨. We call a subset 𝐵 ⊆ 𝐴 \textbf{closed under} (the operations in) \(F^𝑨\) if for each 𝑓 ∈ 𝐹 and all 𝑏 : ρ𝑓 → 𝐵 we have \(f^𝑨 \, b ∈ B\). If a subset 𝐵 ⊆ 𝐴 is closed under \(F^𝑨\), then we call 𝐵 a \textbf{subuniverse} of 𝑨.
+
+If 𝐵 ≠ ∅ is a subuniverse of 𝑨, and if we let \(F^𝑩 = \{ f^𝑨 ↾ B : f ∈ F \}\), then \(𝑩 = ⟨ B, F^𝑩 ⟩\) is an algebra,
+called a \textbf{subalgebra} of 𝑨. Conversely, all subalgebras are of this form.
+
+If 𝑩 is a subalgebra of 𝑨, we denote this fact by 𝑩 ≤ 𝑨. Similarly, we write 𝐵 ≤ 𝑨 if 𝐵 is a subuniverse of 𝑨 (relying on context and notation to disambiguate).
+
+%% It helps to keep in mind the following consequence of the definitions:
+%% \begin{quote}\emph{The empty set is a subuniverse of every algebra, but the universe of an algebra is never empty}.\end{quote} In other terms, if S(𝑨) denotes the collection of all subalgebras of 𝑨, then \[\mathrm S(𝑨) = \{⟨B, F^𝑩⟩ : ∅ ≠ B ≤ 𝑨\}.\]
+
+If 𝒦 is a class of 𝑆-algebras, then the class of all subalgebras of algebras in 𝒦 is denoted by S(𝒦).
+
+It is obvious that the intersection of subuniverses is again a subuniverse. Nevertheless, we will record this fact below (see Obs XX of Sec XX). %%\%s \textless{}obs 5\textgreater{}).
+We will also formalize the statement and proof of this fact in Agda; see Section XX. %% (obs 5 in Agda).
+
+\subsubsection{Subuniverse generation}\label{subuniverse-generation}
+As above S(𝑨) denotes the collection of all subalgebras of 𝑨. If 𝑨 is an algebra and 𝐴₀ ⊆ 𝐴 a subset of the universe of 𝑨, then the \textbf{subuniverse of} 𝑨 \textbf{generated by} 𝐴₀ is denoted by \(\mathrm{Sg}^𝑨(A_0)\) and defined to be the smallest subuniverse of 𝑨 containing 𝐴₀. Equivalently,
+\[\mathrm{Sg}^{𝑨}(A_0)  =  ⋂ \{ U ∈ \mathrm S(𝑨) ∣ A_0 ⊆ U \}.\]
+
+We can also use recursion to define the \textbf{subuniverse of} 𝑨 \textbf{generated by a set} and prove that this new definition is equivalent to the one given above. We will do this below in Obs. XX of Sec XX. % (obs 7)
+
+%% \subsection{Subdirect products}\label{subdirect-products}
+%% If 𝑘, 𝑛 ∈ ℕ, if \(A = (A_0, A_1, \dots, A_{n-1})\) is a list of sets, and if σ : 𝑘 → 𝑛 is a 𝑘-tuple, then a relation 𝑅 over 𝐴 with scope σ is a subset of the Cartesian product \(A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}\).
+
+%% Let 𝑆 = (𝐹, ρ) be a signature and for each 𝑖 \textless{} 𝑛 let \(𝑨_i = ⟨ A_i, F ⟩\) be an 𝑆-algebra. If \(𝑨 = ∏_{i<n}𝑨_i\) is the product of these algebras, then a relation 𝑅 over 𝐴 with scope σ is called \textbf{compatible with} 𝐴 if it is closed under the basic operations in 𝐹. In other words, 𝑅 is compatible if the induced algebra 𝑹 = ⟨𝑅, 𝐹⟩ is a subalgebra of \(\prod_{j<k} 𝑨_{σ(j)}\).
+
+%% If 𝑅 is compatible with the product algebra and if the projection of 𝑅 onto each factor is surjective, then 𝑹 is called a \textbf{subdirect product} of the algebras in the list \((𝑨_{σ(0)}, 𝑨_{σ(1)}, \dots, 𝑨_{σ(k-1)})\); we denote this situation by writing \(𝑹 ≤_{\mathrm{sd}} \prod_{j< k} 𝑨_{σ(j)}\).
+%% \textbf{Formalization}. (not yet implemented)
+
+\subsection{Homomorphisms}\label{homomorphisms}
+Let \(𝑩 = ⟨B, F^𝑩⟩\) and \(𝑪 = ⟨C, F^𝑪⟩\) be algebras of the same signature, and let ℎ : 𝐵 → 𝐶 be a function (e.g., on sets).
+
+Take an operation symbol 𝑓 ∈ 𝐹, and suppose that for all \(ρ f\)-tuples 𝑏 : ρ𝑓 → 𝐵 of 𝐵 the following equation holds:
+\[h (f^𝑩 \, b) = f^𝑪 (h ∘ b).\]
+
+Then ℎ is said to \textbf{respect the interpretation of} 𝑓.
+
+If ℎ respects the interpretation of every 𝑓 ∈ 𝐹, then we call ℎ a \textbf{homomorphism} from 𝑩 to 𝑪, and we write ℎ ∈ Hom(𝑩, 𝑪), or simply, ℎ : 𝑩 → 𝑪. (Later, in Agda, we will typically use notation like \texttt{h\ :\ hom\ B\ C}, or sometimes \texttt{h\ :\ Hom\ 𝑩\ 𝑪}.)
+
+A homomorphism ℎ : 𝑩 → 𝑪 is called an \textbf{epimorphism} if for every algebra 𝑫 and pair \(g_1, g_2: 𝑪 → 𝑫\) of homomorphisms, the equation \(g_1 ∘ h = g_2 ∘ h\) implies \(g_1 = g_2\). We often write ℎ : 𝑩 ↠ 𝑪, and say that ``ℎ is \textbf{epi}'' and ``ℎ maps 𝑩 \textbf{homomorphically onto} 𝑪'' in this case.
+
+A homomorphism ℎ : 𝑩 → 𝑪 is called a \textbf{monomorphism} if for every algebra 𝑨 and every pair \(g_1, g_2: 𝑨 → 𝑩\) of homomorphisms, the equation \(h ∘ g_1 = h ∘ g_2\) implies \(g_1 = g_2\). We sometimes write ℎ : 𝑨 ↣ 𝑩, and say that ``ℎ is \textbf{mono}'' and ``ℎ maps 𝑩 \textbf{homomorphically into} 𝑪'' in this case.
+↣
+If 𝑨, 𝑩 are 𝑆-algebras and ℎ : 𝑨 → 𝑩 is a homomorphism, then the image ℎ(𝐴) of 𝐴 under ℎ is called a \textbf{homomorphic image} of 𝑨. The collection of all homomorphic images of an 𝑆-algebra 𝑨 is the class denoted and defined by
+\[\mathrm H(𝑨) := \{h(𝐴) : h \text{ is a hom from 𝑨 to some 𝑆-algebra}\}.\]
+
+If 𝒦 is a class of 𝑆-algebras, then the class of all homomorphic images of algebras in 𝒦 is denoted by H(𝒦).
+
+\subsection{Clones}\label{clones}
+An \textbf{operational clone} (or just \textbf{clone}) on a nonempty set 𝐴 is a collection of operations on 𝐴 that contains the projection operations and is closed under general composition.
+%% Let \(𝓒ℓ(𝐴)\) denote the collection of all clones on 𝐴.
+
+The smallest clone on 𝐴 is the \textbf{clone of projections}, which we denote and define as follows:
+\[\mathrm{Proj}  A = ⋃_{i < n < ω}  \{π^n_i : ∀ a ∈ A^n,\ π^n_i\, a = a(i)\}.\]
+
+Recall, the natural number 𝑘 \textless{} ω can be constructed as (or at least identified with) the set \{0, 1, …, 𝑘-1\}. For each 𝑘 \textless{} ω, denote and define the tuple πᵏ : (𝑘 → 𝐴) → 𝐴 of all 𝑘-ary projections on 𝐴 as follows: for each 0 ≤ 𝑖 \textless{} 𝑘, πᵏ(𝑖) is the 𝑖-th 𝑘-ary projection operation that takes each 𝑘-tuple \(𝑎 : 𝑘 → 𝐴\) to its
+entry at index 𝑖, \[π^k (i) a = a(i).\]
+The \textbf{clone of term operations} of an 𝑆-algebra 𝑨 is the smallest clone on 𝐴 containing the basic operations of 𝑨; this is denoted and defined by \[\mathrm{Clo}(F^𝑨) = ⋂ \{ U ∈ 𝓒𝓵 A ∣ F^𝑨 ⊆ U\}.\]
+
+The set of 𝑛-ary members of \(\mathrm{Clo}(F^𝑨)\) is sometimes denoted by \(\mathrm{Clo}_n (F^𝑨)\) (despite the fact that the latter is obviously not a clone).
+
+The \textbf{clone of polynomial operations} (or \textbf{polynomial clone}) of an 𝑆-algebra 𝑨 is denoted by \(\mathrm{Pol} (F^𝑨)\) and is defined to be the clone generated by the collection consisting of the basic operations (i.e., \(F^𝑨\)) of 𝑨 along with the \textbf{constants} on 𝐴.\footnote{By ``the constants on \(A\)'' we mean the \textbf{constant operations}; i.e., functions \(f: A → A\) such that \(∀ a ∈ A, f(a) = c\), for some \(c ∈ A\).} The set of 𝑛-ary members of \(\mathrm{Pol} (F^𝑨)\) is sometimes denoted by \(\mathrm{Pol}_n (F^𝑨)\).
+
+The clone \(\mathrm{Clo}(F^𝑨)\) is associated with the algebra 𝑨 only insofar as the former is constructed out of the basic operations of 𝑨 and the set 𝐴 on which those operations are defined. However, all that is required when defining a clone is a set 𝐴 and some collection 𝐹 of operations defined on \(A\); from only these ingredients, we can construct the clone generated by 𝐹, which we denote by Clo(𝐹). Thus \emph{the clone of terms operations can be implemented as an inductive type}. We will make this precise below (see Obs XX). %(obs 7)
+
+\subsection{Terms and free algebras}\label{terms-and-free-algebras}
+This section is based on the section of the same title in Cliff Bergman's excellent textbook (\cite{Bergman:2012}). Apart from notation, our presentation is quite similar in style and content to Cliff's, but we have attempted to give a more compact, abridged treatment in order to get more quickly to our ultimate goal (in the next chapter), which is to show how it is possible to express the concepts and theorems of universal algebra in type theory and to formalize them in the Agda language. We refer the reader to Section 4.3 of \cite{Bergman:2012} for more details and examples about ``classical'' (informal) universal algebra than we present here.
+
+\subsubsection{Terms}\label{terms}
+Fix a signature 𝑆 = (𝐹, ρ), let 𝑋 be a set of \textbf{variables}, and assume 𝑋 ∩ 𝐹 = ∅.
+
+By a \textbf{word} on 𝑋 ∪ 𝐹 we mean a nonempty, finite sequence of members of 𝑋 ∪ 𝐹, and we will denote the concatenation of such sequences by simple juxtaposition.
+
+Let 𝐹₀ denote the set of nullary operation symbols of 𝑆. We define by induction on 𝑛 the sets 𝑇ₙ of \textbf{terms on} 𝑋 ∪ 𝐹 as follows (cf.~\cite{Bergman:2012} Def.~4.19):
+\[\begin{array}{rl}
+  T_0 &= X ∪ F_0;\\
+  T_{n+1} &= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: ρf → T_n \},
+  \end{array}\]
+and we define the collection of \textbf{terms of signature} 𝑆 \textbf{over} 𝑋 by 𝑇(𝑋) = \(⋃_{n < ω}T_n\).
+
+By an 𝑆-\textbf{term} we mean a term in the signature 𝑆.
+
+The definition of 𝑇(𝑋) is recursive, indicating that \emph{terms could be implemented as an inductive type}. We will confirm this in types for terms when we implement terms in Agda. Moreover, we will formalize an algebraic structure on 𝑇(𝑋), called the \textbf{term algebra} in the signature 𝑆. We describe it here and then state and prove some basic facts about this important algebra. These will be formalized in types for terms and birkhoffs theorem in agda, giving us a chance to show off inductively defined types in Agda.
+
+If 𝑡 is a term, then the \textbf{height} of 𝑡 is denoted by ∣𝑡∣ and defined to be the least 𝑛 such that 𝑡 ∈ 𝑇ₙ. The height is a useful index for recursion and induction.
+
+If 𝑇(𝑋) is nonempty (equivalently, 𝑋 ∪ 𝐹₀ is nonempty), then we can impose upon it an algebraic structure, which we will denote by 𝑻(𝑋). We call 𝑻(𝑋) the \textbf{term algebra in the signature} 𝑆 \textbf{over} 𝑋; it is constructed as follows:
+\begin{itemize}
+\item for each operation symbol 𝑓 ∈ 𝐹, let \(f^{𝑻(X)}\) be the operation on 𝑇(𝑋) that maps each tuple \(𝑠 : ρ𝑓 → 𝑇(𝑋)\) to the formal term 𝑓 𝑠;
+\item define 𝑻(𝑋) to be the algebra with universe 𝑇(𝑋) and operations \(\{f^{𝑻(X)} | f ∈ F\}\).
+\end{itemize}
+
+\subsubsection{Free algebras}\label{free-algebras}
+Fix a signature 𝑆 = (𝐹, ρ), let 𝒦 be a class of 𝑆-algebras, let \(𝑼 = ⟨𝑈, 𝐹^𝑼⟩\) be an 𝑆-algebra, and let 𝑋 be a subset of 𝑈. We say that
+\begin{itemize}
+\item 𝑼 has the universal mapping property for 𝒦 over 𝑋 if for every 𝑨 ∈ 𝒦 and every function ℎ : 𝑋 → 𝐴, there is a homomorphism \(h' : 𝑼 → 𝑨\) that agrees with ℎ on 𝑋;
+\item 𝑼 is free for 𝒦 over 𝑋 if it has the universal mapping property and is generated by 𝑋;
+\item 𝑼 is free in 𝒦 over 𝑋 if it is free for 𝒦 over 𝑋 and belongs to 𝒦.
+\end{itemize}
+We use the next definition to take a free algebra \emph{for} a class 𝒦 and produce the free algebra \emph{in} 𝒦. Let 𝒦 be a class of 𝑆-algebras and 𝑨 an 𝑆-algebra. Define \(ψ(𝒦, 𝑨) := \{θ ∈ Con 𝑨 : 𝑨/θ ∈ S(𝒦)\}\) and \(Ψ(𝒦, 𝑨) := ⋀ ψ(𝒦, 𝑨)\). Notice that \(ψ(𝒦, 𝑨)\) may be empty, in which case \(Ψ(𝒦, 𝑨) = 1_A\) and \(𝑨/Ψ(𝒦, 𝑨)\) is trivial.
+
+The free algebra is constructed using the above definitions for the special case in which 𝑨 is the algebra 𝑻(𝑋) of 𝑆-terms over 𝑋.
+
+Since 𝑻(𝑋) is free for the class 𝓚(𝑆) of all 𝑆-algebras, it follows that 𝑻(𝑋) is free for every subclass 𝒦 of 𝓚(𝑆).
+
+Of course, 𝑻(𝑋) is not necessarily a member of 𝒦, but we can form the quotient of 𝑻(𝑋) modulo the congruence Ψ(𝒦, 𝑻(𝑋)), which we denote by \(𝔽(𝒦, 𝑋) := 𝑻(𝑋)/Ψ(𝒦, 𝑻(𝑋))\).
+
+The algebra 𝔽(𝒦, 𝑋) is called the \textbf{free algebra over} 𝒦 \textbf{generated by} 𝑋.
+
+It should be clear that 𝔽(𝒦, 𝑋) is a subdirect product of the algebras \{𝑻(𝑋)/θ\}, where θ ranges over ψ(𝒦, 𝑻(𝑋))\}, so it belongs to SP(𝒦). Therefore, we say that 𝔽(𝒦, 𝑋) is free \emph{in} SP(𝒦).
+
+We formalize the free algebra in the free algebra in agda.
+
+\subsection{Arity}\label{arity}
+We denote and define the set \(X := \{x_0,x_1,\dots \}\) of variable symbols, and for each natural number \(n\) we let \(X_n:=\{x_0,x_1,\dots, x_{n-1}\}\).
+
+Let 𝑆 = (𝐹, ρ) be a signature, 𝑨 an 𝑆-algebra, and 𝑻(X) the term algebra over 𝑋; that is,
+\[𝑨 := ⟨A, F^𝑨⟩ \quad \text{ and } \quad 𝑻(X) := ⟨T(X), F^{𝑻(X)}⟩.\]
+Each operation symbol 𝑓 ∈ 𝐹 gives rise to
+\begin{itemize}
+\item a ρ𝑓-ary operation on 𝑇(𝑋), denoted by \(f^{𝑻(X)}\), which maps each tuple \(𝑠 : ρ𝑓 → 𝑇(𝑋)\) to the formal term 𝑓 𝑠 in 𝑇(𝑋), and
+\item a ρ𝑓-ary operation on 𝐴, denoted by \(f^𝑨\), which maps each tuple \(𝑎 : ρ𝑓 → 𝐴\) to the element \(f^𝑨 \,a\) in 𝐴. The operation \(f^𝑨\) is called the \textbf{interpretation of} 𝑓 \textbf{in the algebra} \(𝑨\).
+\end{itemize}
+
+\begin{comment}
+\subsubsection{Essential arity}\label{essential-arity}
+The definition of arity of an operation or term is a bit nuanced as the next example demonstrates.
+\textbf{Example}.
+\begin{quote}
+Suppose 𝑓 is a binary term, and 𝑝 and 𝑞 are ternary terms. What is the arity of the following term?
+\[𝑡(𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧) = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))\]
+On the face of it, it seems safe to say that 𝑡 has arity 6, since it is expressible as a function of 6 variables.
+
+But what if we decided to throw in some useless (or ``dummy'') variables, like so,
+\[t'(𝑢', 𝑣', 𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧, 𝑧') = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))?\]
+
+And what happens if \(𝑝(𝑥, 𝑦, 𝑧) = 𝑧\), so that 𝑝 depends on just one of its arguments? Then we could replace it with \(𝑝'(𝑧) = 𝑝(𝑥, 𝑦, 𝑧)\), and 𝑡 could be expressed as,
+\[𝑡''(𝑢, 𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))).\]
+
+The respective arities of \(𝑡, 𝑡'\) and \(𝑡''\) are 6, 9, and 5, yet arity1--arity3 merely give three different ways to present the term \(𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))\).
+\end{quote}
+
+As the example demonstrates, the notion of arity of a term is not uniquely defined (modulo equivalence of terms). As such, it is sometimes useful to speak of the \textbf{essential arity} of a term, which is defined to be the minimum number of variables required to express that term; it should be clear that this is equal to the number of arguments
+with respect to which the term is not constant.
+\textbf{Example}.
+\begin{quote} It is impossible to know the essential arity of a term until we know
+that of each of its subterms. Picking up where we left off in the previous example, suppose 𝑓 depends on both of its arguments and \(𝑞(𝑢, 𝑣, 𝑤) = 𝑓(𝑣, 𝑤)\). Then 𝑡 is expressible as
+\[s(𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑓(𝑣, 𝑤))\]
+and we finally see the lower bound on the number of variables required to express 𝑡, namely 4. Therefore, 𝑡 has essential arity 4.
+\end{quote}
+\end{comment}
+
+\subsection{Term Operations}\label{term-operations}
+In terms we defined a term in a given signature. When we interpret such a term in a particular algebraic structure, we get what is known as a term operation. In this section we explain how one defines the interpretation of an 𝑆-term in an 𝑆-algebra, and thus how one obtains a term \emph{operation}.
+
+%% As usual, for each 0 \textless{} 𝑛 \textless{} ω we identify the 𝑛-tuple \((x_0, x_1, \dots, x_{n-1})\) with the function \(x:  𝑛 → X_n\) defined by \(x\, i = x_i\) (0 ≤ 𝑖 \textless{} 𝑛).
+
+Recall, a term 𝑡 is either a variable, say, 𝑡 = 𝑥, or has the form 𝑡 = 𝑓 𝑠 for some operation symbol 𝑓 ∈ 𝐹, and some ρ𝑓-tuple 𝑠 : ρ𝑓 → 𝑇(𝑋) of terms.
+
+Let 𝑡 ∈ 𝑇(𝑋) be an 𝑆-term. Given an arbitrary 𝑆-algebra 𝑨, we will define a \textbf{term operation} on 𝑨 by giving 𝑡 an \emph{interpretation} in 𝑨. Diverging from standard notation slightly, we will denote this operation by 𝑡 ̇ 𝑨 for reasons that will hopefully be clear when (in interpretation) we define term operations in Agda. Similarly, 𝑡 ̇ 𝑩 will denote the interpretation of the term 𝑡 in the algebra 𝑩.
+
+The \textbf{term operation} 𝑡 ̇ 𝑨 is defined by recursion on the height ∣𝑡∣ of 𝑡 as follows: for each assignment 𝑎 : 𝑋 → 𝐴 (of values in 𝐴 to variables in 𝑋),
+\begin{itemize}
+\item (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥, then (𝑡 ̇ 𝑨) 𝑎 = 𝑎 𝑥,
+\item (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = \(f^𝑨 \, s^𝑨\).
+\end{itemize}
+
+\subsection{Models and theories}\label{models-and-theories}
+Let 𝑆 = (𝐹, ρ) be a signature and \(X := \{x_0, x_1, \dots\}\) a countable collection of variable symbols.
+
+An \textbf{identity in the signature} 𝑆 (or ``𝑆-identity'') is an ordered pair of terms (𝑝, 𝑞) ∈ 𝑇(𝑋) × 𝑇(𝑋). We usually write 𝑝 ≈ 𝑞 to indicate such an identity. Although, when we have a collection of identities, say, Σ, we could indicate that 𝑝 ≈ 𝑞 is among the identities in Σ by writing (𝑝, 𝑞) ∈ Σ. We sometimes refer to an identity as an \textbf{equation}; for us, the words ``identity'' and ``equation'' are synonyms.
+
+Let 𝓚(𝑆) and 𝓔(𝑆) denote the classes of all 𝑆-algebras and 𝑆-identities, respectively. For \(𝑨 ∈ 𝒦 ⊆ 𝓚(𝑆)\) and \((𝑝, 𝑞) ∈ ℰ ⊆ 𝓔(𝑆)\), we say that
+\begin{itemize}
+\item 𝑨 \textbf{models} 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case 𝑝 ̇ 𝑨 = 𝑞 ̇ 𝑨 extensionally (i.e., ∀ 𝑎 : 𝑋 → 𝐴, (𝑝 ̇ 𝑨) 𝑎 = (𝑞 ̇ 𝑨) 𝑎);
+\item 𝑨 \textbf{models} ℰ, denoted 𝑨 ⊧ ℰ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ ℰ;
+\item 𝒦 \textbf{models} 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every 𝑨 in 𝒦;
+\item 𝒦 \textbf{models} ℰ just in case 𝑨 ⊧ ℰ for every 𝑨 ∈ 𝒦.
+\end{itemize}
+
+\noindent \textbf{Notation}. To produce the symbols ≈ and ⊧ in Emacs \texttt{agda2-mode}, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models} (resp.). To denote ``𝒦 models 𝑝 ≈ 𝑞'' we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs \texttt{agda2-mode} with \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
+
+The binary relation \(⊧\) induces an obvious Galois connection. Indeed, the Galois pair (Mod, Th) is defined as follows: for all ℰ ⊆ 𝓔(𝑆) and 𝒦 ⊆ 𝓚(𝑆),
+\[Mod ℰ := \{ 𝑨 ∈ 𝓚(𝑆) : 𝑨 ⊧ ℰ \} and Th 𝒦 := \{ℯ ∈ 𝓔(𝑆) : 𝒦 ⊧ ℯ \}.\]
+The first of these, the class of \textbf{models} of ℰ, contains those and only those algebras modeling every identity in ℰ. It is called an \textbf{equational class}, and ℰ is called an \textbf{equational base} for, or an \textbf{axiomatization} of, the class. Dually, Th 𝒦 is the class of identities modeled by every algebra in 𝒦. Such a class of identities is called an \textbf{equational theory}.
+
+Alternatively and equivalently we could define ``equational class'' and ``equational theory'' in terms of the two
+closure operators \textless{}closure operator\textgreater{} induced by the Galois pair (Mod, Th). Indeed, Mod Th : 𝒫 𝓚(𝑆) → 𝒫 𝓚(𝑆) is a closure operator on 𝓚(𝑆) and Th Mod : 𝒫 𝓔(𝑆) → 𝒫 𝓔(𝑆) is a closure operator on 𝓔(𝑆), and
+
+\begin{itemize}
+\item an \textbf{equational class} is a Mod Th-closed class \textless{}closed set\textgreater{} of 𝑆-algebras;
+\item an \textbf{equational theory} is a Th Mod-closed set of 𝑆-identities
+\end{itemize}
+(Here, 𝒫 denotes the powerset functor.)
+
+\noindent \textbf{N.B.} An equational class is sometimes referred to as a \textbf{variety}; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's
+theorem is one of our main goals which we achieve in the \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst}{birkhoff module} described in Section XX.
+
+\subsection{Basic facts}\label{basic-facts}
+We conclude this chapter with a list of basic facts and their (informal) proofs. These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, Obs 1, Obs 2, etc. Each of these observations is formalized in Agda in the \href{https://ualib.org}{agda-ualib}.
+
+Throughout this section, \(𝑨 = ⟨A, F^𝑨⟩, \ 𝑩 = ⟨B, F^𝑩⟩, \ 𝑪 = ⟨C, F^𝑪⟩\ \) are algebras in the same signature 𝑆 = (𝐹, ρ).
+
+\subsubsection{Equalizers}\label{equalizers}
+We start with the simple observation that equalizers of homomorphisms are subuniverses. The Agda formalization of this result and its proof is presented in obs 1 in agda.
+
+\subsubsection{Homomorphisms}\label{homomorphisms-1}
+Another easy fact is that composing homomorphisms results in a homomorphism. The easy proof of this fact is formalized in obs 2 in agda .
+
+Another elementary result is that homomorphisms are uniquely determined by the values they take on generating sets. Our Agda proof of Obs \%s \textless{}obs 3\textgreater{} is called
+\texttt{HomUnique}. It is presented obs 3 in agda.
+
+%A corollary of the last result is an easily proved bound on the cardinality of \(|\mathrm{Hom}(𝑨, 𝑩)|\).
+
+Here is an elementary result about factorability of homomorphisms. The informal proof is presented below and its formalization in obs 5 in agda.
+
+We formalize Obs \%s \textless{}obs 5\textgreater{} in the \href{}{homomorphisms module} of the \href{}{agda-ualib}; see
+obs 5 in agda.
+
+Next we observe that the intersection of subuniverses is again a subuniverse, a fact that we prove formally in the \href{}{subuniverses module} of the \href{}{agda-ualib}; see obs 6 in agda.
+
+Next is a theorem that provides a means of generating subuniverses recursively.
+
+We formally implement the concept of subalgebra in the \href{}{subuniverses module} of the \href{}{agda-ualib}, which we describe in subuniverses in agda. In particular, we describe the formalization of Obs \%s \textless{}obs 7\textgreater{} in obs 7 in agda.
+
+Our formalization of Obs \%s \textless{}obs 7.1\textgreater{} is presented in obs 7.1 in agda.
+
+We implement terms and the term algebra in Agda in the \href{}{terms module}, as described in terms. Also in the \href{}{terms module} is a formal proof of the next result; see obs 9 in agda.
+
+Let 𝒦 be the class of 𝑆-algebras. Then Obs \%s \textless{}obs 9\textgreater{} can be restated as: 𝑻(𝑋) is free
+in 𝒦 over 𝑋. This is sometimes expressed by saying that 𝑻(𝑋) is \textbf{absolutely free} over 𝑋.
+
+It follows from Obs \%s \textless{}obs 9.2\textgreater{} that, up to isomorphism, a free algebra is determined by the cardinality of a free generating set.
+
+Next we observe that freeness extends from a class 𝒦 to the variety it generates.
+
+As Bergman notes (see the remark after Def 4.29 in~\cite{Bergman:2012}), ``strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, X), so it doesn't make sense to talk about 𝑋 generating 𝔽(𝒦, X), {[}but{]} as long as 𝒦 contains a nontrivial algebra, \(Ψ(𝒦, 𝑋) ∩ 𝑋² = 0_X\). In light of {[}Obs \%s \textless{}obs 9.2\textgreater{}{]}, we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑋) in 𝔽(𝒦, 𝑋). All of these considerations are accounted for in the following corollary.''
+
+In the next observation, assume 𝑨 = \(⟨A, F^𝑨⟩\) and 𝑩 = \(⟨B, F^𝑩⟩\) are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆. In particular, as explained in term operations, 𝑡 has an interpretation in 𝑨, which (for reasons that will become clear when we define term operations in Agda) we will denote by 𝑡 ̇ 𝑨 and we call a \textbf{term operation}. Similarly, \(t^𝑩\) is the interpretation of 𝑡 in 𝑩.
+
+We formalize Obs \%s \textless{}obs 10\textgreater{} and its proof in the \href{}{terms module} of the \href{}{agda-ualib}, as described in obs 10 in agda.
+
+We formalize Obs \%s \textless{}obs 11\textgreater{} and its proof in the \href{}{terms module} of the \href{}{agda-ualib}, as described in obs 11 in agda.
+
+We formalize Obs. \%s \textless{}obs 12\textgreater{} and its proof in the \href{}{subuniverses module} of the \href{}{agda-ualib}, as described in obs 12 in agda.
+
+%% \emph{Proof}.
+%% We prove the result for H(𝒦). 𝒦 ⊆ H(𝒦), so Th H (𝒦) ⊆ Th 𝒦 …
+
+We present a formalization of this result and its proof in obs 13 in agda.
+
+We formalize Obs \%s \textless{}obs 14\textgreater{} and its proof in the \href{}{birkhoff module} of the \href{}{agda-ualib}, as described in obs 14 in agda.
+
+The last result tells us that we can determine whether an identity is true in a variety 𝒱 by consulting a particular algebra, namely 𝔽(𝒱, 𝑋), the free algebra in 𝒱.
+
+\subsection{Birkhoff's theorem}\label{birkhoffs-theorem}
+It follows from Obs 13 that every equational class is a variety. The converse is the celebrated HSP Theorem of Birkhoff.
+
+\noindent \textbf{Theorem}~\cite{Birkhoff:1935}. Every class of algebraic structures that is closed under the taking of homomorphisms, subalgebras, and arbitrary products is an equational class.
+
+In other terms, if a class 𝒦 of algebras is closed under H, S, P, then there exists a set ℰ of identities such that 𝒦 is the class of all algebras that model ℰ.
+
+%% The statement and proof we give here is essentially the same as that given in Theorem 4.41 of Cliff Bergman's textbook~\cite{Bergman:2012}. It is this statement and proof that we will formalize in Agda in the \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst}{birkhoff module} of the \href{https://ualib.org}{agda-ualib}; see birkhoffs theorem in agda.
+
+\section{Algebras in Agda}
+This chapter describes the basic module of the agda-ualib, which begins our Agda formalization of the basic concepts and theorems of universal algebra. In this module we will codify such notions as operation, signature, and algebraic structure.
+
+\subsection{Preliminaries}
+Like most Agda programs, this one begins with some Agda options specifying the foundational choices we wish to make, as explained above.
+
+\begin{code}%
+\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaKeyword{OPTIONS}\AgdaSpace{}%
+\AgdaPragma{--without-K}\AgdaSpace{}%
+\AgdaPragma{--exact-split}\AgdaSpace{}%
+\AgdaPragma{--safe}\AgdaSpace{}%
+\AgdaSymbol{\#-\}}\<%
+\\
+\>[0]\<%
+\end{code}
+
+We begin the basic module by invoking Agda's module directive, and then we import some dependencies that we make public so they are available to all modules that import the basic module.
+
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{basic}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{prelude}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaPostulate{Universe}\AgdaSymbol{;}\AgdaSpace{}%
+%\AgdaGeneralizable{𝓘}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaPrimitive{𝓤₀}\AgdaSymbol{;}
+\AgdaGeneralizable{𝓥}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaGeneralizable{𝓣}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSymbol{;}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaPrimitive{\AgdaUnderscore{}⁺}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇}}\AgdaSymbol{;}\AgdaOperator{\AgdaPrimitive{\AgdaUnderscore{}⊔\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaRecord{Σ}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{-Σ}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{𝟘}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{𝟚}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSymbol{;}\<%
+\\
+%
+\>[2]\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\end{code}
+
+This is the second module of the agda-ualib, coming after the prelude module described in the previous chapter.
+
+\subsection{Operation type}
+
+We define the type of **operations**, and give an example (the projections).
+
+\begin{code}%
+\>[0]\AgdaComment{--The type of operations}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--Example. the projections}\<%
+\\
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\<%
+\end{code}
+
+The type Op encodes the arity of an operation as an arbitrary type I : 𝓥 ̇, which gives us a completely general way to represent an operation as a function type with domain I → A (the type of "tuples") and codomain A.
+
+The last two lines of the code block above codify the i-th I-ary projection operation on A.
+
+\subsection{Signature type}
+
+We define the signature of an algebraic structure in Agda like this.
+
+\begin{code}%
+\>[0]\AgdaComment{--𝓞: level at which operation symbol types live}\<%
+\\
+\>[0]\AgdaComment{--𝓥: level at which arity types live}\<%
+\\
+\>[0]\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{F}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}%
+\>[27]\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaBound{F}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\end{code}
+
+In the prelude module we defined the syntax ∣\_∣ and ∥\_∥ for the first and second projections, resp.  Consequently, if 𝑆 : Signature 𝓞 𝓥 is a signature, then
+
+∣ 𝑆 ∣ denotes the set of operation symbols (which is often called 𝐹), and
+
+∥ 𝑆 ∥ denotes the arity function (which is often called ρ).
+
+Thus, if  𝑓 : ∣ 𝑆 ∣  is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
+
+\subsection{Algebra type}
+
+Finally, we are ready to define the type of algebras in the signature ``S`` (which we also call "S-algebras").
+
+\begin{code}%
+\>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[98I]\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)\{}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[98I]%
+\>[10]\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[33]\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSymbol{\}\{}\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}\<%
+\\
+\>[.][@{}l@{}]\<[98I]%
+\>[10]
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\end{code}
+
+Thus, algebras---in the signature 𝑆 (or 𝑆-algebras) and with carrier types in the universe 𝓤---inhabit the type Algebra 𝓤 {𝓞}{𝓥} 𝑆.  (We may also write Algebra 𝓤 𝑆 since 𝓞 and 𝓥 can be infered from the given signature 𝑆.)
+
+In other words,
+
+  *the type* Algebra 𝓤 𝑆 \emph{collects all the algebras of a particular signature 𝑆 and carrier type 𝓤, and this collection of algebras has type 𝓞 ⊔ 𝓥 ⊔  𝓤 ⁺ ̇}.
+
+Recall, 𝓞 ⊔ 𝓥 ⊔  𝓤 ⁺ denotes the smallest universe containing 𝓞, 𝓥, and the successor of 𝓤.
+
+The type Algebra 𝓤 𝑆 doesn't define what an algebra *is* as a property. It defines a type of algebras; certain algebras inhabit this type---namely, the algebras consisting of a universe (say, A) of type 𝓤 ̇ , and a collection (𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A of operations on A.
+
+Here's an alternative syntax that might seem more familiar to readers of the standard universal algebra literature.
+
+  Algebra 𝓤 (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
+
+Here 𝑆 = (F , ρ) is the signature, F the type of operation symbols, and ρ the arity function.
+
+Although this syntax would work equally well, we mention it merely for comparison and to demonstrate the flexibility of Agda. Throughout the library we stick to the syntax 𝑓 : ∣ 𝑆 ∣ for an operation symbol of the signature 𝑆, and ∥ 𝑆 ∥ 𝑓 for the arity of that symbol. We find these conventions a bit more convenient for programming.
+
+\subsubsection{Example}
+A monoid signature has two operation symbols, say, e  and ·, of arities 0 and 2 (thus, of types (𝟘 → A) → A and (𝟚 → A) → A), resp.
+
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{𝓤₀}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaInductiveConstructor{e}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\<%
+\\
+%
+\>[1]\AgdaInductiveConstructor{·}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{monoid-sig}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaFunction{monoid-sig}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaInductiveConstructor{e}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝟘}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaInductiveConstructor{·}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝟚}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\end{code}
+
+The types indicate that e is nullary (i.e., takes no arguments, equivalently, takes args of type 𝟘 → A), while · is binary (as indicated  by argument type 𝟚 → A).
+
+We will have more to say about the type of algebras later.  For now, we continue defining the syntax used in the agda-ualib to represent the basic objects of universal algebra.
+
+\subsubsection{Syntactic sugar for operation interpretation}
+Before proceding, we define syntax that allows us to replace ∥ 𝑨 ∥ 𝑓 with the slightly more standard-looking 𝑓 ̂ 𝑨, where 𝑓 is an operation symbol of the signature 𝑆 of 𝑨.
+
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}%
+\>[30]\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̂\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[6]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaSymbol{→}%
+\>[6]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}%
+\>[16]\AgdaSymbol{→}%
+\>[19]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{40}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̂\AgdaUnderscore{}}}\<%
+\end{code}
+
+Now we can use 𝑓 ̂ 𝑨 to represent the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨.
+
+N.B. Below, we will need slightly different notation, namely, 𝑡 ̇ 𝑨, to represent the interpretation of a :term:`term` 𝑡 in the algebra 𝑨. (In future releases of the agda-ualib we may reconsider making it possible to use the same notation interpretations of operation symbols and terms.)
+
+\subsection{Products of algebras}
+
+The (indexed) product of a collection of algebras is also an algebra if we define such a product as follows:
+
+\begin{code}%
+%
+\>[1]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓘}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓘}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{=}%
+\>[8]\AgdaSymbol{((}\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}%
+\>[31]\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{i}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{infixr}\AgdaSpace{}%
+\AgdaNumber{-1}\AgdaSpace{}%
+\AgdaFunction{⨅}\<%
+\end{code}
+
+(In agda2-mode ⨅ is typed as \textbackslash Glb.)
+
+\subsection{Arbitrarily many variable symbols}
+
+Finally, since we typically want to assume that we have an arbitrary large collection X of variable symbols at our disposal (so that, in particular, given an algebra 𝑨 we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from X to the universe of 𝑨), we define a type for use when making this assumption.
+
+\begin{code}%
+%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaBound{h}\<%
+\end{code}
+
+\begin{comment}
+\section{Algebras in Agda}\label{algebras-in-agda}
+This section describes the \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst}{basic
+module} of the \href{https://ualib.org}{agda-ualib}, which begins our \href{https://wiki.portal.chalmers.se/agda/pmwiki.php}{Agda} formalization of the basic concepts and theorems of universal algebra.
+In this module we will codify such notions as operation, signature, and algebraic structure.
+
+\subsection{Preliminaries}\label{preliminaries}
+Like most Agda programs, this one begins with some Agda options specifying the foundational choices we wish to make.
+
+\begin{verbatim}
+  {-# OPTIONS --without-K --exact-split --safe #-}
+\end{verbatim}
+
+We begin the
+\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst}{basic
+module} by invoking Agda's \texttt{module} directive, and then we import
+some dependencies that we make \texttt{public} so they are available to
+all modules that import the
+\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst}{basic
+module}.
+
+\begin{code}
+module basic where
+
+open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧;
+  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Π;
+  _≡_; Epic) public
+\end{code}
+
+This is the second module of the \href{https://ualib.org}{agda-ualib} ,
+coming after the
+\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst}{prelude
+module} described in the previous chapter (agda preliminaries).
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{Operation type}\label{operation-type}
+
+We define the type of \textbf{operations}, and give an example (the
+projections).
+
+\begin{code}
+--The type of operations
+Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+Op I A = (I → A) → A
+
+--Example. the projections
+π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+π i x = x i
+\end{code}
+
+The type \texttt{Op} encodes the arity of an operation as an arbitrary
+type \texttt{I\ :\ 𝓥\ ̇}, which gives us a very general way to represent
+an operation as a function type with domain \texttt{I\ →\ A} (the type
+of ``tuples'') and codomain \texttt{A}.
+
+The last two lines of the code block above codify the \texttt{i}-th
+\texttt{I}-ary projection operation on \texttt{A}.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{Signature type}\label{signature-type}
+
+We define the signature of an algebraic structure in Agda like this.
+
+\begin{code}
+--𝓞 is the universe in which operation symbols live
+--𝓥 is the universe in which arities live
+Signature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
+Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
+\end{code}
+
+In the
+\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst}{prelude
+module} we defined the syntax ∣\_∣ and ∥\_∥ for the first and second
+projections, resp. Consequently, if \texttt{𝑆\ :\ Signature\ 𝓞\ 𝓥} is a
+signature, then
+
+\begin{quote}
+∣ 𝑆 ∣ denotes the set of operation symbols (which is often called 𝐹),
+and
+
+∥ 𝑆 ∥ denotes the arity function (which is often called ρ).
+\end{quote}
+
+Thus, if 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥
+𝑓 is the arity of 𝑓.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{Algebra type}\label{algebra-type}
+
+Finally, we are ready to define the type of algebras in the signature
+\texttt{S} (which we also call ``S-algebras'').
+
+\begin{code}
+Algebra : (𝓤 : Universe){𝓞 𝓥 : Universe}
+          (𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) A)
+\end{code}
+
+Thus, algebras---in the signature 𝑆 (or 𝑆-algebras) and with carrier
+types in the universe 𝓤---inhabit the type
+\texttt{Algebra\ 𝓤\ \{𝓞\}\{𝓥\}\ 𝑆}. (We may also write
+\texttt{Algebra\ 𝓤\ 𝑆} since 𝓞 and 𝓥 can be infered from the given
+signature \texttt{𝑆}.)
+
+In other words,
+
+\begin{quote}
+\emph{the type} \texttt{Algebra\ 𝓤\ 𝑆} \emph{collects all the algebras
+of a particular signature} 𝑆 \emph{and carrier type} 𝓤, \emph{and this
+collection of algebras has type} 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ .
+\end{quote}
+
+Recall, 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ denotes the smallest universe containing 𝓞, 𝓥, and
+the successor of 𝓤.
+
+\begin{description}
+\item[NB]
+The type \texttt{Algebra\ 𝓤\ 𝑆} doesn't define what an algebra \emph{is}
+as a property. It defines a type of algebras; certain algebras inhabit
+this type---namely, the algebras consisting of a universe (say,
+\texttt{A}) of type 𝓤 ̇ , and a collection
+\texttt{(𝑓\ :\ ∣\ 𝑆\ ∣)\ →\ Op\ (∥\ 𝑆\ ∥\ 𝑓)\ A} of operations on
+\texttt{A}.
+\end{description}
+
+Here's an alternative syntax that might seem more familiar to readers of
+the standard universal algebra literature.
+
+\begin{code}
+Algebra 𝓤 (F , ρ) = Σ A ꞉ 𝓤 ̇ ,  ((𝑓 : F )  → Op (ρ 𝑓) A )
+\end{code}
+
+Here \texttt{𝑆\ =\ (F\ ,\ ρ)} is the signature, \texttt{F} the type of
+operation symbols, and ρ the arity function.
+
+Although this syntax would work equally well, we mention it merely for
+comparison and to demonstrate the flexibility of Agda. Throughout the
+library we stick to the syntax \texttt{𝑓\ :\ ∣\ 𝑆\ ∣} for an operation
+symbol of the signature 𝑆, and \texttt{∥\ 𝑆\ ∥\ 𝑓} for the arity of that
+symbol. We find these conventions a bit more convenient for programming.
+
+\subsubsection{Example}\label{example}
+
+A monoid signature has two operation symbols, say, \texttt{e} and
+\texttt{·}, of arities 0 and 2 (thus, of types \texttt{(𝟘\ →\ A)\ →\ A}
+and \texttt{(}𝟚\texttt{\ →\ A)\ →\ A}), resp.
+
+\(\mathbb{2}\)
+
+\begin{code}
+data monoid-op : 𝓤₀ ̇ where
+ e : monoid-op
+ · : monoid-op
+
+monoid-sig : Signature _ _
+monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+\end{code}
+
+The types indicate that \texttt{e} is nullary (i.e., takes no arguments,
+equivalently, takes args of type \texttt{𝟘\ →\ A}), while \texttt{·} is
+binary (as indicated by argument type \texttt{𝟚\ →\ A}).
+
+We will have more to say about the type of algebras later. For now, we
+continue defining the syntax used in the \texttt{agda-ualib} to
+represent the basic objects of universal algebra.
+
+\subsubsection{Syntactic sugar for operation
+interpretation}\label{syntactic-sugar-for-operation-interpretation}
+
+Before proceding, we define syntax that allows us to replace
+\texttt{∥\ 𝑨\ ∥\ 𝑓} with the slightly more standard-looking
+\texttt{𝑓\ ̂\ 𝑨}, where 𝑓 is an operation symbol of the signature 𝑆 of 𝑨.
+
+\begin{code}
+module _ {𝑆 : Signature 𝓞 𝓥}  where
+
+ _̂_ : (𝑓 : ∣ 𝑆 ∣)
+  →   (𝑨 : Algebra 𝓤 𝑆)
+  →   (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+
+ 𝑓 ̂ 𝑨 = λ x → (∥ 𝑨 ∥ 𝑓) x
+
+ infix 40 _̂_
+\end{code}
+
+Now we can use \texttt{𝑓\ ̂\ 𝑨} to represent the interpretation of the
+basic operation symbol 𝑓 in the algebra 𝑨.
+
+\begin{description}
+\item[NB]
+Below, we will need slightly different notation, namely, 𝑡 ̇ 𝑨, to
+represent the interpretation of a term 𝑡 in the algebra 𝑨. (In future
+releases of the \href{https://ualib.org}{agda-ualib} we may reconsider
+making it possible to use the same notation interpretations of operation
+symbols and terms.)
+\end{description}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{Products of algebras}\label{products-of-algebras}
+
+The (indexed) product of a collection of algebras is also an algebra if
+we define such a product as follows:
+
+\begin{code}
+⨅ : {I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓤 ⊔ 𝓘) 𝑆
+⨅ 𝒜 =  ((i : _) → ∣ 𝒜 i ∣) ,  λ 𝑓 x i → (𝑓 ̂ 𝒜 i) λ 𝓥 → x 𝓥 i
+
+infixr -1 ⨅
+\end{code}
+
+(In \texttt{agda2-mode} ⨅ is typed as \texttt{\textbackslash{}Glb}.)
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{Arbitrarily many variable
+symbols}\label{arbitrarily-many-variable-symbols}
+
+Finally, since we typically want to assume that we have an arbitrary
+large collection \texttt{X} of variable symbols at our disposal (so
+that, in particular, given an algebra 𝑨 we can always find a surjective
+map h₀ : X → ∣ 𝑨 ∣ from X to the universe of 𝑨), we define a type for
+use when making this assumption.
+
+\begin{code}
+_↠_ : 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+\end{code}
+\end{comment}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{ualib_refs}
+\end{document}
+% \endinput
+%%
+%% End of file `sample-sigplan.tex'.
