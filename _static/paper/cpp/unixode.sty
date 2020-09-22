@@ -7,18 +7,29 @@
 \ProvidesPackage{unixode}[2012/05/10]
 
 \RequirePackage{ifxetex}
+\RequirePackage{mathrsfs}
+\RequirePackage{amsbsy}
+\RequirePackage{amssymb}
+\RequirePackage[mathcal]{euscript}
+\RequirePackage[scr=boondoxo]{mathalfa}
+%\RequirePackage{bbm}
+\RequirePackage{bbold}
+
+%% \RequirePackage{fontspec} %,unicode-math}
+%% \setmainfont{TeX Gyre Pagella}
+%% \setmathfont{XITS Math}
+
+
+\newcommand*{\threesim}{%
+\mathrel{\vcenter{\offinterlineskip
+\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
 
 \ifxetex
 %\RequirePackage{mathspec}
 %\RequirePackage{fontspec}
 
-\RequirePackage{mathrsfs}
-\RequirePackage{amsbsy}
-\RequirePackage[mathcal]{euscript}
-\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
-\newcommand*{\threesim}{%
-\mathrel{\vcenter{\offinterlineskip
-\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+%% \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 
 %\defaultfontfeatures{Ligatures=TeX}
 \usepackage{newunicodechar}
@@ -41,6 +52,7 @@
 \newunicodechar{σ}{\ensuremath{\sigma}}
 \newunicodechar{τ}{\ensuremath{\tau}}
 \newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{ϕ}{\ensuremath{\phi}}
 \newunicodechar{χ}{\ensuremath{\chi}}
 \newunicodechar{ψ}{\ensuremath{\psi}}
 \newunicodechar{ω}{\ensuremath{\omega}}
@@ -101,7 +113,10 @@
 \newunicodechar{√}{\ensuremath{\sqrt}}
 
 \newunicodechar{⬝}{\ensuremath{\cdot}}
-\newunicodechar{̇}{\ensuremath{^\centerdot}}
+\newunicodechar{̇}{\ensuremath{\phantom{i}^\centerdot}}
+\newunicodechar{̂}{\ensuremath{\,\hat{\phantom{i}}}}
+%% \DeclareUnicodeCharacter{775}{\ensuremath{\mathrel{\phantom{i}^\centerdot}}} % _ ̇_
+%% \DeclareUnicodeCharacter{770}{\ensuremath{\mathrel{\hat{\phantom{x}}}}}   % _ ^_
 \newunicodechar{•}{\ensuremath{\bullet}}
 \newunicodechar{∘}{\ensuremath{\circ}}
 \newunicodechar{∗}{\ensuremath{\ast}}
@@ -162,19 +177,25 @@
 \newunicodechar{∌}{\ensuremath{\notni}}
 \newunicodechar{∅}{\ensuremath{\emptyset}}
 
+\newunicodechar{╱}{\ensuremath{\diagup}}
 \newunicodechar{⧵}{\ensuremath{\setminus}}
 \newunicodechar{†}{\ensuremath{\dagger}}
 \newunicodechar{‡}{\ensuremath{\ddagger}}
  
 
+\newunicodechar{⌜}{\ensuremath{\ulcorner}}
+\newunicodechar{⌝}{\ensuremath{\urcorner}}
 \newunicodechar{⌞}{\ensuremath{\llcorner}}
 \newunicodechar{⌟}{\ensuremath{\lrcorner}}
+
 \newunicodechar{⦃}{\ensuremath{\{\!|}}
 \newunicodechar{⦄}{\ensuremath{|\!\}}}
 \newunicodechar{∣}{\ensuremath{\mid}}
 \newunicodechar{∥}{\ensuremath{\parallel}}
 \newunicodechar{⟨}{\ensuremath{\langle}}
 \newunicodechar{⟩}{\ensuremath{\rangle}}
+
+\newunicodechar{∎}{\ensuremath{\blacksquare}}
 
 \newunicodechar{⁰}{\ensuremath{^0}}
 \newunicodechar{¹}{\ensuremath{^1}}
@@ -356,28 +377,79 @@
 \newunicodechar{𝒴}{\ensuremath{\mathscr{Y}}}
 \newunicodechar{𝒵}{\ensuremath{\mathscr{Z}}}
 
-\newunicodechar{𝓔}{\ensuremath{\pmb{\mathscr{E}}}}
-\newunicodechar{𝓕}{\ensuremath{\pmb{\mathscr{F}}}}
-\newunicodechar{𝓖}{\ensuremath{\pmb{\mathscr{G}}}}
-\newunicodechar{𝓗}{\ensuremath{\pmb{\mathscr{H}}}}
-\newunicodechar{𝓘}{\ensuremath{\pmb{\mathscr{I}}}}
-\newunicodechar{𝓙}{\ensuremath{\pmb{\mathscr{J}}}}
-\newunicodechar{𝓚}{\ensuremath{\pmb{\mathscr{K}}}}
-\newunicodechar{𝓛}{\ensuremath{\pmb{\mathscr{L}}}}
-\newunicodechar{𝓜}{\ensuremath{\pmb{\mathscr{M}}}}
-\newunicodechar{𝓝}{\ensuremath{\pmb{\mathscr{N}}}}
-\newunicodechar{𝓞}{\ensuremath{\pmb{\mathscr{O}}}}
-\newunicodechar{𝓠}{\ensuremath{\pmb{\mathscr{Q}}}}
-\newunicodechar{𝓡}{\ensuremath{\pmb{\mathscr{R}}}}
-\newunicodechar{𝓢}{\ensuremath{\pmb{\mathscr{S}}}}
-\newunicodechar{𝓣}{\ensuremath{\pmb{\mathscr{T}}}}
-\newunicodechar{𝓤}{\ensuremath{\pmb{\mathscr{U}}}}
-\newunicodechar{𝓥}{\ensuremath{\pmb{\mathscr{V}}}}
-\newunicodechar{𝓦}{\ensuremath{\pmb{\mathscr{W}}}}
-\newunicodechar{𝓧}{\ensuremath{\pmb{\mathscr{X}}}}
-\newunicodechar{𝓨}{\ensuremath{\pmb{\mathscr{Y}}}}
-\newunicodechar{𝓩}{\ensuremath{\pmb{\mathscr{Z}}}}
+%% Universe symbols
+%\definecolor{AgdaBound}                 {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
+%% \newunicodechar{𝓔}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{E}}}}}
+%% \newunicodechar{𝓕}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{F}}}}}
+%% \newunicodechar{𝓖}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{G}}}}}
+%% \newunicodechar{𝓗}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{H}}}}}
+%% \newunicodechar{𝓘}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{I}}}}}
+%% \newunicodechar{𝓙}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{J}}}}}
+%% \newunicodechar{𝓚}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{K}}}}}
+%% \newunicodechar{𝓛}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{L}}}}}
+%% \newunicodechar{𝓜}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{M}}}}}
+%% \newunicodechar{𝓝}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{N}}}}}
+%% \newunicodechar{𝓞}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{O}}}}}
+%% \newunicodechar{𝓠}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Q}}}}}
+%% \newunicodechar{𝓡}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{R}}}}}
+%% \newunicodechar{𝓢}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{S}}}}}
+%% \newunicodechar{𝓣}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{T}}}}}
+%% \newunicodechar{𝓤}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{U}}}}}
+%% \newunicodechar{𝓥}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{V}}}}}
+%% \newunicodechar{𝓦}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{W}}}}}
+%% \newunicodechar{𝓧}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{X}}}}}
+%% \newunicodechar{𝓨}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Y}}}}}
+%% \newunicodechar{𝓩}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Z}}}}}
 
+\newunicodechar{𝓔}{{\ensuremath{\pmb{\mathscr{E}}}}}
+\newunicodechar{𝓕}{{\ensuremath{\pmb{\mathscr{F}}}}}
+\newunicodechar{𝓖}{{\ensuremath{\pmb{\mathscr{G}}}}}
+\newunicodechar{𝓗}{{\ensuremath{\pmb{\mathscr{H}}}}}
+\newunicodechar{𝓘}{{\ensuremath{\pmb{\mathscr{I}}}}}
+\newunicodechar{𝓙}{{\ensuremath{\pmb{\mathscr{J}}}}}
+\newunicodechar{𝓚}{{\ensuremath{\pmb{\mathscr{K}}}}}
+\newunicodechar{𝓛}{{\ensuremath{\pmb{\mathscr{L}}}}}
+\newunicodechar{𝓜}{{\ensuremath{\pmb{\mathscr{M}}}}}
+\newunicodechar{𝓝}{{\ensuremath{\pmb{\mathscr{N}}}}}
+\newunicodechar{𝓞}{{\ensuremath{\pmb{\mathscr{O}}}}}
+\newunicodechar{𝓠}{{\ensuremath{\pmb{\mathscr{Q}}}}}
+\newunicodechar{𝓡}{{\ensuremath{\pmb{\mathscr{R}}}}}
+\newunicodechar{𝓢}{{\ensuremath{\pmb{\mathscr{S}}}}}
+\newunicodechar{𝓣}{{\ensuremath{\pmb{\mathscr{T}}}}}
+\newunicodechar{𝓤}{{\ensuremath{\pmb{\mathscr{U}}}}}
+\newunicodechar{𝓥}{{\ensuremath{\pmb{\mathscr{V}}}}}
+\newunicodechar{𝓦}{{\ensuremath{\pmb{\mathscr{W}}}}}
+\newunicodechar{𝓧}{{\ensuremath{\pmb{\mathscr{X}}}}}
+\newunicodechar{𝓨}{{\ensuremath{\pmb{\mathscr{Y}}}}}
+\newunicodechar{𝓩}{{\ensuremath{\pmb{\mathscr{Z}}}}}
+
+\newunicodechar{𝒂}{\ensuremath{\pmb{a}}}
+\newunicodechar{𝒃}{\ensuremath{\pmb{b}}}
+\newunicodechar{𝒄}{\ensuremath{\pmb{𝒄}}}
+\newunicodechar{𝒄}{\ensuremath{\pmb{𝒄}}}
+\newunicodechar{𝒅}{\ensuremath{\pmb{𝒅}}}
+\newunicodechar{𝒆}{\ensuremath{\pmb{𝒆}}}
+\newunicodechar{𝒇}{\ensuremath{\pmb{𝒇}}}
+\newunicodechar{𝒈}{\ensuremath{\pmb{𝒈}}}
+\newunicodechar{𝒉}{\ensuremath{\pmb{𝒉}}}
+\newunicodechar{𝒊}{\ensuremath{\pmb{𝒊}}}
+\newunicodechar{𝒋}{\ensuremath{\pmb{𝒋}}}
+\newunicodechar{𝒌}{\ensuremath{\pmb{𝒌}}}
+\newunicodechar{𝒍}{\ensuremath{\pmb{𝒍}}}
+\newunicodechar{𝒎}{\ensuremath{\pmb{𝒎}}}
+\newunicodechar{𝒏}{\ensuremath{\pmb{𝒏}}}
+\newunicodechar{𝒐}{\ensuremath{\pmb{𝒐}}}
+\newunicodechar{𝒑}{\ensuremath{\pmb{𝒑}}}
+\newunicodechar{𝒒}{\ensuremath{\pmb{𝒒}}}
+\newunicodechar{𝒓}{\ensuremath{\pmb{𝒓}}}
+\newunicodechar{𝒔}{\ensuremath{\pmb{𝒔}}}
+\newunicodechar{𝒕}{\ensuremath{\pmb{𝒕}}}
+\newunicodechar{𝒖}{\ensuremath{\pmb{𝒖}}}
+\newunicodechar{𝒗}{\ensuremath{\pmb{𝒗}}}
+\newunicodechar{𝒘}{\ensuremath{\pmb{𝒘}}}
+\newunicodechar{𝒙}{\ensuremath{\pmb{𝒙}}}
+\newunicodechar{𝒚}{\ensuremath{\pmb{𝒚}}}
+\newunicodechar{𝒛}{\ensuremath{\pmb{𝒛}}}
 
 % \newunicodechar{𝓔}{\ensuremath{\mathbfcal{E}}}
 
@@ -438,6 +510,7 @@
 \newunicodechar{𝔜}{\ensuremath{\mathfrak{Y}}}
 \newunicodechar{ℨ}{\ensuremath{\mathfrak{Z}}}
 
+\newcommand\mathbbm[1]{\mathbb{#1}}
 \newunicodechar{𝟘}{\ensuremath{\mathbbm{0}}}
 \newunicodechar{𝟙}{\ensuremath{\mathbbm{1}}}
 \newunicodechar{𝟚}{\ensuremath{\mathbbm{2}}}
@@ -448,6 +521,11 @@
 \newunicodechar{𝟟}{\ensuremath{\mathbbm{7}}}
 \newunicodechar{𝟠}{\ensuremath{\mathbbm{8}}}
 \newunicodechar{𝟡}{\ensuremath{\mathbbm{9}}}
+
+\newunicodechar{𝟎}{\ensuremath{\mathbf{0}}}
+\newunicodechar{𝟏}{\ensuremath{\mathbf{1}}}
+\newunicodechar{𝟐}{\ensuremath{\mathbf{2}}}
+
 
 \newunicodechar{𝔸}{\ensuremath{\mathbb{A}}}
 \newunicodechar{𝔹}{\ensuremath{\mathbb{B}}}
@@ -643,9 +721,25 @@
 \newunicodechar{𝑧}{\ensuremath{z}}
 
 \newunicodechar{꞉}{\ensuremath{:}}
+%% \DeclareUnicodeCharacter{9585}{\ensuremath{\theta}}
 
 \else
+\usepackage[mathletters,autogenerated]{ucs}
 \usepackage[utf8x]{inputenc}
-\SetUnicodeOption{mathletters}
-\DeclareUnicodeCharacter{952}{\ensuremath{\theta}}
+%% \usepackage[utf8x]{inputenc}
+%% \SetUnicodeOption{mathletters}
+%\DeclareUnicodeCharacter{952}{\ensuremath{\theta}}
+\DeclareUnicodeCharacter{775}{\ensuremath{\mathrel{\phantom{i}^\centerdot}}} % _ ̇_
+\DeclareUnicodeCharacter{770}{\ensuremath{\mathrel{\hat{\phantom{x}}}}}   % _ ^_
+\DeclareUnicodeCharacter{8871}{\ensuremath{\models}}                      % ⊧
+\DeclareUnicodeCharacter{8779}{\ensuremath{\threesim}}                    % ≋
+\DeclareUnicodeCharacter{42889}{\ensuremath{:}}                           % ꞉
+\DeclareUnicodeCharacter{10757}{\ensuremath{\bigsqcap}}                   % ⨅
+\DeclareUnicodeCharacter{8718}{\ensuremath{\blacksquare}}                  % ∎
+\DeclareUnicodeCharacter{8988}{\ensuremath{\ulcorner}} % ⌜
+\DeclareUnicodeCharacter{8989}{\ensuremath{\urcorner}}  % ⌝
+\DeclareUnicodeCharacter{8990}{\ensuremath{\llcorner}}  % ⌞
+\DeclareUnicodeCharacter{8991}{\ensuremath{\lrcorner}}  % ⌟
+\DeclareUnicodeCharacter{9585}{\ensuremath{\diagup}}  % ╱
+
 \fi

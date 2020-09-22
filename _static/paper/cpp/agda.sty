@@ -24,6 +24,10 @@
 
 \DeclareOption{bw}   {\newcommand{\AgdaColourScheme}{bw}}
 \DeclareOption{conor}{\newcommand{\AgdaColourScheme}{conor}}
+\DeclareOption{conorwjd}{\newcommand{\AgdaColourScheme}{conorwjd}}
+\DeclareOption{wjd}{\newcommand{\AgdaColourScheme}{wjd}}
+\DeclareOption{newwjd}{\newcommand{\AgdaColourScheme}{newwjd}}
+\DeclareOption{wjdsimple}{\newcommand{\AgdaColourScheme}{wjdsimple}}
 
 \newif\if@AgdaEnableReferences\@AgdaEnableReferencesfalse
 \DeclareOption{references}{
@@ -130,8 +134,8 @@
 
 % ----------------------------------
 % The black and white colour scheme.
-\ifthenelse{\equal{\AgdaColourScheme}{bw}}{
-
+\ifthenelse{\equal{\AgdaColourScheme}{bw}}
+{
     % Aspect colours.
     \definecolor{AgdaComment}      {HTML}{000000}
     \definecolor{AgdaPragma}       {HTML}{000000}
@@ -167,10 +171,10 @@
     % Misc.
     \definecolor{AgdaHole}              {HTML}{BEBEBE}
 
-% ----------------------------------
-% Conor McBride's colour scheme.
-}{ \ifthenelse{\equal{\AgdaColourScheme}{conor}}{
-
+    % ----------------------------------
+    % Conor McBride's colour scheme.
+}{\ifthenelse{\equal{\AgdaColourScheme}{conor}}
+  {
     % Aspect colours.
     \definecolor{AgdaComment}      {HTML}{B22222}
     \definecolor{AgdaPragma}       {HTML}{000000}
@@ -202,6 +206,167 @@
     \definecolor{AgdaTerminationProblem}{HTML}{FF0000}
     \definecolor{AgdaIncompletePattern} {HTML}{A020F0}
     \definecolor{AgdaError}             {HTML}{F4A460}
+
+    % Misc.
+    \definecolor{AgdaHole}              {HTML}{9DFF9D}
+
+    % -------------------------------------------
+    % Conor McBride's scheme with gray comments and
+    % a subtler purple bound and generalizable symbols
+}{\ifthenelse{\equal{\AgdaColourScheme}{conorwjd}}
+  {
+    % Aspect colours.
+    \definecolor{AgdaComment}      {HTML}{95A5A6} %{B22222} %{6E896C}%{717D7E} %{95A5A6} %{99A3A4}
+    \definecolor{AgdaPragma}       {HTML}{000000}
+    \definecolor{AgdaKeyword}      {HTML}{000000}
+    \definecolor{AgdaString}       {HTML}{000000}
+    \definecolor{AgdaNumber}       {HTML}{000000}
+    \definecolor{AgdaSymbol}       {HTML}{000000}
+    \definecolor{AgdaPrimitiveType}{HTML}{0000CD}
+
+    % NameKind colours.
+    \definecolor{AgdaBound}                 {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
+    \definecolor{AgdaGeneralizable}         {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
+    \definecolor{AgdaInductiveConstructor}  {HTML}{8B0000}
+    \definecolor{AgdaCoinductiveConstructor}{HTML}{8B0000}
+    \definecolor{AgdaDatatype}              {HTML}{0000CD}
+    \definecolor{AgdaField}                 {HTML}{8B0000}
+    \definecolor{AgdaFunction}              {HTML}{006400}
+    \definecolor{AgdaMacro}                 {HTML}{006400}
+    \definecolor{AgdaModule}                {HTML}{006400}
+    \definecolor{AgdaPostulate}             {HTML}{006400}
+    \definecolor{AgdaPrimitive}             {HTML}{006400}
+    \definecolor{AgdaRecord}                {HTML}{0000CD}
+    \definecolor{AgdaArgument}              {HTML}{404040}
+
+    % Other aspect colours.
+    \definecolor{AgdaDottedPattern}     {HTML}{000000}
+    \definecolor{AgdaUnsolvedMeta}      {HTML}{FFD700}
+    \definecolor{AgdaUnsolvedConstraint}{HTML}{FFD700}
+    \definecolor{AgdaTerminationProblem}{HTML}{FF0000}
+    \definecolor{AgdaIncompletePattern} {HTML}{A020F0}
+    \definecolor{AgdaError}             {HTML}{F4A460}
+
+    % Misc.
+    \definecolor{AgdaHole}              {HTML}{9DFF9D}
+
+% ----------------------------------
+% William DeMeo's colour scheme.
+}{\ifthenelse{\equal{\AgdaColourScheme}{wjd}}
+ {
+    % Aspect colours.
+    \definecolor{AgdaComment}      {HTML}{779775} %{6E896C}%{717D7E} %{95A5A6} %{99A3A4}
+    \definecolor{AgdaPragma}       {HTML}{000000}
+    \definecolor{AgdaKeyword}      {HTML}{AB9405} %{D7A269} %{E5D9AA} %CD6600}
+    \definecolor{AgdaString}       {HTML}{B22222}
+    \definecolor{AgdaNumber}       {HTML}{A020F0}
+    \definecolor{AgdaSymbol}       {HTML}{404040}  %{#4F4F4B
+    \definecolor{AgdaPrimitiveType}{HTML}{383C70} %{817ED1} %{0000CD}
+
+    % NameKind colours.
+    \definecolor{AgdaBound}                 {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
+    %\definecolor{AgdaBound}                 {HTML}{4F4F4B} %{000000}
+    \definecolor{AgdaGeneralizable}         {HTML}{7F7AEE} %{4F4F4B} %{000000}
+    \definecolor{AgdaInductiveConstructor}  {HTML}{008B00}
+    \definecolor{AgdaCoinductiveConstructor}{HTML}{8B7500}
+    \definecolor{AgdaDatatype}              {HTML}{0588AB} %{059FAB}{06C9D9}{6C9CA6}{71B4D4}{4E6C97}{0000CD}
+    \definecolor{AgdaField}                 {HTML}{EE1289}
+    \definecolor{AgdaFunction}              {HTML}{0588AB} %{059FAB}{06C9D9}{6C9CA6}{71B4D4}{4E6C97}{0000CD}
+    \definecolor{AgdaMacro}                 {HTML}{458B74}
+    \definecolor{AgdaModule}                {HTML}{6A75E6} %{A020F0}
+    \definecolor{AgdaPostulate}             {HTML}{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaPrimitive}             {HTML}{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaRecord}                {HTML}{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaArgument}              {HTML}{404040}
+
+    % Other aspect colours.
+    \definecolor{AgdaDottedPattern}     {HTML}{4F4F4B} %{000000}
+    \definecolor{AgdaUnsolvedMeta}      {HTML}{FFFF00}
+    \definecolor{AgdaUnsolvedConstraint}{HTML}{FFFF00}
+    \definecolor{AgdaTerminationProblem}{HTML}{FFA07A}
+    \definecolor{AgdaIncompletePattern} {HTML}{F5DEB3}
+    \definecolor{AgdaError}             {HTML}{FF0000}
+
+    % Misc.
+    \definecolor{AgdaHole}              {HTML}{9DFF9D}
+
+}
+% ----------------------------------
+% William DeMeo's simple colour scheme.
+{\ifthenelse{\equal{\AgdaColourScheme}{wjdsimple}}
+ {
+    % Aspect colours.
+    \definecolor{AgdaComment}      {HTML}{779775} %{6E896C}%{717D7E} %{95A5A6} %{99A3A4}
+    \definecolor{AgdaPragma}       {HTML}{000000}
+    \definecolor{AgdaKeyword}      {HTML}{AB9405} %{D7A269} %{E5D9AA} %CD6600}
+    \definecolor{AgdaString}       {HTML}{B22222}
+    \definecolor{AgdaNumber}       {HTML}{A020F0}
+    \definecolor{AgdaSymbol}       {HTML}{1C04E7} %{404040}  %{#4F4F4B
+    \definecolor{AgdaPrimitiveType}{HTML}{383C70} %{817ED1} %{0000CD}
+
+    % NameKind colours.
+    \definecolor{AgdaBound}                 {HTML}{1C04E7} %{4F4F4B} %{000000}
+    \definecolor{AgdaGeneralizable}         {HTML}{1C04E7} %{4F4F4B} %{000000}
+    \definecolor{AgdaInductiveConstructor}  {HTML}{008B00}
+    \definecolor{AgdaCoinductiveConstructor}{HTML}{8B7500}
+    \definecolor{AgdaDatatype}              {HTML}{1C04E7} %
+    \definecolor{AgdaField}                 {HTML}{1C04E7} %{EE1289}
+    \definecolor{AgdaFunction}              {HTML}{1C04E7} %{0588AB}
+    \definecolor{AgdaMacro}                 {HTML}{458B74}
+    \definecolor{AgdaModule}                {HTML}{1C04E7} %{6A75E6} %{A020F0}
+    \definecolor{AgdaPostulate}             {HTML}{1C04E7} %{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaPrimitive}             {HTML}{1C04E7} %{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaRecord}                {HTML}{1C04E7} %{383C70} %{817ED1} %{0000CD}
+    \definecolor{AgdaArgument}              {HTML}{1C04E7} %{404040}
+
+    % Other aspect colours.
+    \definecolor{AgdaDottedPattern}     {HTML}{4F4F4B} %{000000}
+    \definecolor{AgdaUnsolvedMeta}      {HTML}{FFFF00}
+    \definecolor{AgdaUnsolvedConstraint}{HTML}{FFFF00}
+    \definecolor{AgdaTerminationProblem}{HTML}{FFA07A}
+    \definecolor{AgdaIncompletePattern} {HTML}{F5DEB3}
+    \definecolor{AgdaError}             {HTML}{FF0000}
+
+    % Misc.
+    \definecolor{AgdaHole}              {HTML}{9DFF9D}
+
+
+}
+% -------------------------------------------------------
+% The nearly standard colour scheme (with muted comments)
+{\ifthenelse{\equal{\AgdaColourScheme}{newwjd}}
+ {
+    % Aspect colours.
+    \definecolor{AgdaComment}      {HTML}{779775} %{B22222}
+    \definecolor{AgdaPragma}       {HTML}{000000}
+    \definecolor{AgdaKeyword}      {HTML}{CD6600}
+    \definecolor{AgdaString}       {HTML}{B22222}
+    \definecolor{AgdaNumber}       {HTML}{A020F0}
+    \definecolor{AgdaSymbol}       {HTML}{404040}
+    \definecolor{AgdaPrimitiveType}{HTML}{0000CD}
+
+    % NameKind colours.
+    \definecolor{AgdaBound}                 {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
+    \definecolor{AgdaGeneralizable}         {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}{HTML}{000000}
+    \definecolor{AgdaInductiveConstructor}  {HTML}{008B00}
+    \definecolor{AgdaCoinductiveConstructor}{HTML}{8B7500}
+    \definecolor{AgdaDatatype}              {HTML}{0000CD}
+    \definecolor{AgdaField}                 {HTML}{EE1289}
+    \definecolor{AgdaFunction}              {HTML}{0000CD}
+    \definecolor{AgdaMacro}                 {HTML}{458B74}
+    \definecolor{AgdaModule}                {HTML}{A020F0}
+    \definecolor{AgdaPostulate}             {HTML}{0000CD}
+    \definecolor{AgdaPrimitive}             {HTML}{0000CD}
+    \definecolor{AgdaRecord}                {HTML}{0000CD}
+    \definecolor{AgdaArgument}              {HTML}{404040}
+
+    % Other aspect colours.
+    \definecolor{AgdaDottedPattern}     {HTML}{000000}
+    \definecolor{AgdaUnsolvedMeta}      {HTML}{FFFF00}
+    \definecolor{AgdaUnsolvedConstraint}{HTML}{FFFF00}
+    \definecolor{AgdaTerminationProblem}{HTML}{FFA07A}
+    \definecolor{AgdaIncompletePattern} {HTML}{F5DEB3}
+    \definecolor{AgdaError}             {HTML}{FF0000}
 
     % Misc.
     \definecolor{AgdaHole}              {HTML}{9DFF9D}
@@ -243,7 +408,7 @@
 
     % Misc.
     \definecolor{AgdaHole}              {HTML}{9DFF9D}
-}}
+}}}}}}
 
 % ----------------------------------------------------------------------
 % Commands.
