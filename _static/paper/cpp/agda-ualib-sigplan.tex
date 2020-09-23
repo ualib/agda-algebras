@@ -1909,7 +1909,7 @@ Finally, recall the definition of \texttt{HomImage} from the \homomorphismsmodul
   HomImage = λ b → Image ∣ h ∣ ∋ b
 \end{verbatim}
 We are now ready to formalize the proof the proof that homomorphic images are subuniverses.
-\begin{code}\input{subuniverses/subintersection.tex}\end{code}
+\begin{code}\input{subuniverses/homimagesub.tex}\end{code}
 
 \subsection{Generation with terms}\label{generation-with-terms}
 Recall Obs 12 presenting subuniverse generation using the images of terms: If 𝑌 is a subset of 𝐴, then \(\mathrm{Sg}^𝑨(Y) = \{t^𝑨 a : t ∈ T(X), a : X → Y\}\). To formalize this in Agda, we first prove that subuniverses are closed under the action of term operations.
@@ -2088,19 +2088,17 @@ where ψ(𝒦, 𝑻(𝑋)) := \{θ ∈ Con 𝑻(𝑋) : 𝑨/θ ∈ S(𝒦)\}.
 %% Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make sense to say that ``𝑋 generates 𝔽(𝒦, 𝑋).'' But as long as 𝒦 contains a nontrivial algebra, we will have Ψ(𝒦, 𝑻(𝑋)) ∩ 𝑋² ≠ ∅, and we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑻(𝑋)) in 𝔽(𝒦, 𝑋). (See Obs \%s \textless{}obs 9.6\textgreater{}.)
 \begin{code}\input{closure/free.tex}\end{code}
 
-N.B. Ψ is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)). Therefore, to prove 𝑨 is a
-homomorphic image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of
-the lift h : 𝑻(X) → 𝑨 contains Ψ.
+N.B. Ψ is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)). Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of the lift h : 𝑻(X) → 𝑨 contains Ψ.
 
 \begin{verbatim}
-𝑻---- g --->>𝔽  (ker g = Ψ)
- \         .
-  \       .
-   h     ∃ϕ     (want: Ψ ⊆ ker h)
-    \   .
-     \ .
-      V
-      𝑨
+   𝑻---- 𝑔 --->>𝔽  (ker 𝑔 = Ψ)
+    \         .
+     \       .
+      ℎ     ∃ϕ     (want: Ψ ⊆ ker ℎ)
+       \   .
+        \ .
+         V
+         𝑨
 \end{verbatim}
 
 \subsection{More tools for Birkhoff's theorem}\label{more-tools-for-birkhoffs-theorem}
@@ -2110,243 +2108,61 @@ Here are some of the key facts and identities we need to complete the proof of B
 
 \subsection{Closure under HSP}\label{closure-under-hsp}
 Finally, we have a datatype that represents classes of algebras that are close under the taking of homomorphic images, subalgebras, and products of algebras in the class.
+%% \begin{verbatim}
+%% -- Variety Closure
+%% data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
+%%  Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
+%%   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
+%%   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
+%%    →      (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+%%   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦
+%%    →     (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+%%   vhom : {𝑨 : Algebra 𝓤 𝑆}
+%%    →     𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨)
+%%    →     𝑩 ∈ VClo 𝒦
+%% \end{verbatim}
+\subsubsection{Identities for product closure}\label{identities-for-product-closure}
+\begin{code}\input{closure/pclo-id.tex}\end{code}
 
-\begin{verbatim}
--- Variety Closure
-data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
- Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-  vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
 
-  vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
-   →      (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
+\subsubsection{Identities for subalgebra closure}\label{identities-for-subalgebra-closure}
+\begin{code}\input{closure/sclo-id.tex}\end{code}
 
-  vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦
-   →     (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+\subsubsection{Identities for hom image closure}\label{identities-for-hom-image-closure}
+\begin{code}\input{closure/hclo-id.tex}\end{code}
 
-  vhom : {𝑨 : Algebra 𝓤 𝑆}
-   →     𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨)
-   →     𝑩 ∈ VClo 𝒦
-\end{verbatim}
+\subsubsection{Identities for HSP closure}\label{identities-for-hsp-closure}
+\begin{code}\input{closure/vclo-id.tex}\end{code}
 
-\subsubsection{Identities for product
-closure}\label{identities-for-product-closure}
-
-\begin{verbatim}
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )} where
-
- pclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
- pclo-id1 {p} {q} α (pbase x) = α x
- pclo-id1 {p} {q} α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
-  where
-   IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
-   IH = λ i → pclo-id1{p}{q} α  ( 𝒜-P𝒦  i )
-   γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-   γ = products-preserve-identities p q I 𝒜 IH
-
- pclo-id2 : ∀{p q} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
- pclo-id2 p A∈𝒦 = p (pbase A∈𝒦)
-\end{verbatim}
-
-\subsubsection{Identities for subalgebra
-closure}\label{identities-for-subalgebra-closure}
-
-:
-
-\begin{verbatim}
-sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
-sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-sclo-id1 {p} {q} 𝒦⊧p≋q (sub {𝑨 = 𝑨} A∈SClo𝒦 sa) = γ
- where
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
-
-  B : Algebra 𝓤 𝑆
-  B = ∣ sa ∣
-
-  h : ∣ B ∣ → ∣ 𝑨 ∣
-  h = pr₁ ∥ sa ∥
-
-  hem : is-embedding h
-  hem = ∣ pr₂ ∥ sa ∥ ∣
-
-  hhm : is-homomorphism B 𝑨 h
-  hhm = ∥ pr₂ ∥ sa ∥ ∥
-
-  ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
-  ξ b =
-   h ((p ̇ B) b)  ≡⟨ comm-hom-term gfe B 𝑨 (h , hhm) p b ⟩
-   (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-   (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
-   h ((q ̇ B) b)  ∎
-
-  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-  γ : p ̇ B ≡ q ̇ B
-  γ = gfe λ b → hlc (ξ b)
-
-sclo-id2 : ∀ {p q} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
-sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
-\end{verbatim}
-
-\subsubsection{Identities for hom image
-closure}\label{identities-for-hom-image-closure}
-
-:
-
-\begin{verbatim}
-hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
-hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
-hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhE) = γ
- where
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = (hclo-id1{p}{q} 𝒦⊧p≋q ) A∈HClo𝒦
-
-  𝑩 : Algebra 𝓤 𝑆
-  𝑩 = ∣ 𝑩ϕhE ∣
-
-  ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
-  ϕ = ∣ ∥ 𝑩ϕhE ∥ ∣
-
-  ϕhom : is-homomorphism 𝑨 𝑩 ϕ
-  ϕhom = ∣ pr₂ ∥ 𝑩ϕhE ∥ ∣
-
-  ϕsur : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
-  ϕsur 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhE ∥ ∥ (𝒃 x)
-
-  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur 𝒃 x))
-
-  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur 𝒃 x)
-
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 →
-   (p ̇ 𝑩) 𝒃
-       ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
-       ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-   ϕ((p ̇ 𝑨)(preim 𝒃))
-       ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-   ϕ((q ̇ 𝑨)(preim 𝒃))
-       ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
-       ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-   (q ̇ 𝑩) 𝒃
-       ∎
-
-hclo-id2 : ∀ {p q} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
-hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
-\end{verbatim}
-
-\subsubsection{Identities for HSP
-closure}\label{identities-for-hsp-closure}
-
-\begin{verbatim}
-vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
-vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
-vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
- where
-  IH : (i : I) → 𝒜 i ⊧ p ≈ q
-  IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
-
-  γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-  γ = products-preserve-identities p q I 𝒜 IH
-
-vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
- where
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
-
-  𝑩 : Algebra 𝓤 𝑆
-  𝑩 = ∣ sa ∣
-
-  h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-  h = pr₁ ∥ sa ∥
-
-  hem : is-embedding h
-  hem = ∣ pr₂ ∥ sa ∥ ∣
-
-  hhm : is-homomorphism 𝑩 𝑨 h
-  hhm = ∥ pr₂ ∥ sa ∥ ∥
-
-  ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
-  ξ b =
-   h ((p ̇ 𝑩) b) ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
-   (p ̇ 𝑨)(h ∘ b)≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-   (q ̇ 𝑨)(h ∘ b)≡⟨(comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-   h ((q ̇ 𝑩) b) ∎
-
-  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-  γ : p ̇ 𝑩 ≡ q ̇ 𝑩
-  γ = gfe λ b → hlc (ξ b)
-
-vclo-id1 {p}{q} α (vhom{𝑨 = 𝑨} A∈VClo𝒦 𝑩ϕhE) = γ
- where
-  A⊧p≈q : 𝑨 ⊧ p ≈ q
-  A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
-
-  𝑩 : Algebra 𝓤 𝑆
-  𝑩 = ∣ 𝑩ϕhE ∣
-
-  ϕ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
-  ϕ = ∣ ∥ 𝑩ϕhE ∥ ∣
-
-  ϕh : is-homomorphism 𝑨 𝑩 ϕ
-  ϕh = ∣ pr₂ ∥ 𝑩ϕhE ∥ ∣
-
-  ϕE : (𝒃 : X → ∣ 𝑩 ∣ )(x : X) → Image ϕ ∋ (𝒃 x)
-  ϕE 𝒃 x = ∥ pr₂ ∥ 𝑩ϕhE ∥ ∥ (𝒃 x)
-
-  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE 𝒃 x))
-
-  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE 𝒃 x)
-
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 →
-   (p ̇ 𝑩) 𝒃
-       ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
-       ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-   ϕ((p ̇ 𝑨)(preim 𝒃))
-       ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-   ϕ((q ̇ 𝑨)(preim 𝒃))
-       ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
-       ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-   (q ̇ 𝑩) 𝒃 ∎
-
-vclo-id2 : ∀ {p q} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
-vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
 \subsection{Axiomatization of a class}\label{axiomatization-of-a-class}
+We conclude the \closuremodule by proving that a class 𝒦 of structures is axiomatized by \texttt{Th\ (VClo\ 𝒦)}, which is the set of equations satisfied by all members of the varietal closure of 𝒦.
+\begin{code}\input{closure/vclo-th.tex}\end{code}
 
-We conclude the
-\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst}{closure
-module} by proving that a class 𝒦 of structures is axiomatized by
-\texttt{Th\ (VClo\ 𝒦)}, which is the set of equations satisfied by all
-members of the varietal closure of 𝒦.
 
-\begin{verbatim}
--- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
-ThHSP-axiomatizes : (p q : ∣ (𝑻 X) ∣)
-       ---------------------------------------
- →     𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%   Birkhoff's Theorem   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{HSP Theorem in Agda}\label{hsp-theorem-in-agda}
+Here we give a formal proof in Agda of Birkhoff's theorem, which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).
 
-ThHSP-axiomatizes p q =
- (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
- λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
-\end{verbatim}
+\subsection{The birkhoff module}\label{the-birkhoff-module}
+In addition to the usual importing of dependencies, We start the \birkhoffmodule with a fixed signature and a type \texttt{X}. As in the \termsmodule, \texttt{X} represents an arbitrary (infinite) collection of ``variables'' (which will serve as the generators of the term algebra 𝑻(X)).
+\begin{code}\input{birkhoff/birkprelude.tex}\end{code}
 
-%% \input{birkhoff.tex}
+\subsection{Equalizers in Agda}\label{equalizers-in-agda}
+The equalizer of two functions (resp., homomorphisms) \texttt{g\ h\ :\ A\ →\ B} is the subset of \texttt{A} on which the values of the functions \texttt{g} and \texttt{h} agree. We formalize this notion in Agda as follows.
+\begin{code}\input{birkhoff/equalizers.tex}\end{code}
+It turns out that the equalizer of two homomorphisms is closed under the operations of \texttt{A} and is therefore a subalgebra of the common domain, as we now prove.
+\begin{code}\input{birkhoff/equalizersClosed.tex}\end{code}
+Thus, \texttt{𝑬𝑯} is a subuniverse of \texttt{A}.
 
+\subsection{Hom determination}\label{hom-determination}
+The \homomorphismsmodule formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in Obs 3. This is proved here, and not in the \homomorphismsmodule because we need \texttt{Sg} from the \texttt{subuniverses} module. % See Section XX
+\begin{code}\input{birkhoff/homUnique.tex}\end{code}
+
+\subsection{The Agda proof of Birkhoff's theorem}\label{the-agda-proof-of-birkhoffs-theorem}
+\begin{code}\input{birkhoff/birkhoffsTheorem.tex}\end{code}
 
 \section{Acknowledgments}\label{acknowledgments}
 %% Besides the main authors and developers of \agdaualib, a number of other people have contributed to the project in one way or another.
