@@ -134,21 +134,12 @@ Since every file in \agdaualib begins with the same \AgdaKeyword{OPTIONS} line a
 \paragraph*{Universes}
 The first module of the \agdaualib, called \texttt{prelude}, begins by importing the \texttt{Universes} module from the \typetopology library which provides, among other things, an elegant notation for type universes adopted throughout \agdaualib.
 \begin{code}
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{prelude}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Universes}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \end{code}
-Thus, following Escardo, \agdaualib uses capitalized script letters, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓣 to denote universes. The \texttt{Universes} module also defines the ̇ operator mapping a universe \ab 𝓤 to \texttt{Set}\ \ab 𝓤, the latter having type \texttt{Set (lsuc}\ \ab 𝓤\texttt{)}.  The level \texttt{lzero} is renamed \ab{𝓤₀}, so \ab{𝓤₀}\ ̇ is an alias for \texttt{Set\ lzero}. We won't describe the entire \texttt{Universes} module here; suffice it to highlight the few key notational devices adopted throughout \agdaualib. In particular, \texttt{Set\ (lsuc\ lzero)} is denoted by \texttt{Set}\ \ab 𝓤₀\ ⁺ which is denoted by \ab 𝓤₀\ ⁺\ ̇.
-%% The appendix below contains a dictionary for translating between standard Agda syntax and MHE/\href{https://gitlab.com/ualib/ualib.gitlab.io}{agda-ualib} notation.
-%% To justify the introduction of this somewhat nonstandard notation for universe levels, Escardo points out that the Agda library uses \texttt{Level} for universes (so what we write as 𝓤 ̇ is written \texttt{Set\ 𝓤} in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading. Furthermore, the standard notation places emphasis on levels rather than universes themselves.
+Following Martin Escardo, the \agdaualib uses capitalized script letters, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓣 to denote universes. The \texttt{Universes} module also defines the ̇ operator mapping a universe \ab 𝓤 to \texttt{Set}\ \ab 𝓤, the latter having type \texttt{Set (lsuc}\ \ab 𝓤\texttt{)}.  The level \texttt{lzero} is renamed \ab{𝓤₀}, so \ab{𝓤₀}\ ̇ is an alias for \texttt{Set\ lzero}. We won't describe the entire \texttt{Universes} module here; suffice it to highlight the few key notational devices adopted throughout \agdaualib. In particular, \texttt{Set\ (lsuc\ lzero)} is denoted by \texttt{Set}\ \ab 𝓤₀\ ⁺ which is denoted by \ab 𝓤₀\ ⁺\ ̇.
 Finally, there are many occasions calling for a type that lives in the universe that is the least upper bound of two universe, say, \ab 𝓤~ ̇ and \ab 𝓥\ ̇. The universe \ab 𝓤~⊔~\ab 𝓥~ ̇ denotes this least upper bound.
 
 Besides notations for universes, many other components are imported from \typetopology.  A full list of these appears in the Appendix~\ref{sec:imports-from-type-topology}.  Hereinafter, we won't mention the imports declared in each \agdaualib module that we describe.
@@ -318,13 +309,10 @@ In \agdaualib, the type of algebras in the signature 𝑆, also known as 𝑆-\t
 \end{code}
 Thus an 𝑆-algebra, with carrier type in \AgdaBound{𝓤}~̇, inhabits the type \algebraUS.  (Notice that we may leave off the implicits \AgdaBound{𝓞} and \AgdaBound{𝓥} if they can be inferred from the context.)
 
-Let us emphasize, \algebraUS \emph{is the type inhabited by all algebras of signature} \ab{𝑆} \emph{and carrier type} \ab 𝓤\ ̇, and the type of this type of algebras turns out to be \ab 𝓞 ⊔ \ab 𝓥 ⊔  \ab 𝓤\ ⁺\ ̇.
+Let us emphasize, \algebraUS \emph{is the type inhabited by all algebras of signature} \ab{𝑆} \emph{and carrier type} \ab 𝓤\ ̇, and the type of this type of algebras turns out to be \ab 𝓞 ⊔ \ab 𝓥 ⊔  \ab 𝓤\ ⁺\ ̇. The type \algebraUS doesn't define what an algebra \emph{is}; it merely defines a type of algebras. Certain algebras inhabit this type---namely, the algebras consisting of a universe (say, \AgdaBound{A}) of type \ab 𝓤 ̇, and a collection \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}\AgdaSymbol{→}\AgdaSpace{}\AgdaFunction{Op}\AgdaSpace{}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}\AgdaBound{A} of operations on \AgdaBound{A}.
 
-The type \algebraUS doesn't define what an algebra \emph{is}; it merely defines a type of algebras. Certain algebras inhabit this type---namely, the algebras consisting of a universe (say, \AgdaBound{A}) of type \ab 𝓤 ̇, and a collection \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}\AgdaSymbol{→}\AgdaSpace{}\AgdaFunction{Op}\AgdaSpace{}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}\AgdaBound{A}\AgdaSymbol{)}
-of operations on \AgdaBound{A}.
-
-\paragraph*{Example} A monoid signature has two operation symbols, \AgdaInductiveConstructor{e} and \AgdaInductiveConstructor{·}; the first is nullary and the second binary. Thus, the types are (𝟘 → A) → A and (𝟚 → A) → A), respectively.
+\paragraph*{Example} A monoid signature has two operation symbols, say, \AgdaInductiveConstructor{e} and \AgdaInductiveConstructor{∗}; the first is nullary and the second binary. Thus, the respective types are (𝟘 → A) → A and (𝟚 → A) → A.
 \begin{code}%
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{monoid-op}\AgdaSpace{}%
@@ -365,9 +353,7 @@ of operations on \AgdaBound{A}.
 \AgdaFunction{𝟚}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \end{code}
-The types indicate that \AgdaInductiveConstructor{e} is nullary (i.e., takes no arguments), so has type 𝟘 → A, while \AgdaInductiveConstructor{∗} is binary, so has type 𝟚 → A.
-
-We will have more to say about the type of algebras later.  For now we continue describing the key definitions and syntax used in \agdaualib to represent the basic objects of universal algebra.
+%% We will have more to say about the type of algebras later.  For now we continue describing the key definitions and syntax used in \agdaualib to represent the basic objects of universal algebra.
 
 \paragraph*{Syntactic sugar for operation interpretation}
 The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSpace{} with the slightly more intuitive \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}. (The latter is a metaphor for \(f^\mathbf{A}\), which is the universally accepted notation for the operation symbol 𝑓 interpreted in the algebra 𝑨.)
@@ -417,11 +403,9 @@ The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\
 \end{code}
 Thus, from now on \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{} will denote the interpretation of the operation symbol \AgdaBound{𝑓} in the algebra \AgdaBound{𝑨}.  (Later we introduce a slightly different notation, \AgdaBound{𝑡}\AgdaSpace{}\AgdaOperator{\AgdaFunction{ ̇ }}\AgdaSpace{}\AgdaBound{𝑨}, when representing the interpretation of a \emph{term} \AgdaBound{𝑡} in the algebra \AgdaBound{𝑨}).
 
-\subsection{Products of algebras}
-The type of (indexed) products of a collection of algebras is also a type of algebras if we define such products as shown below. (In agda2-mode ⨅ is typed as \textbackslash Glb.)
-:
+\subsection{Product type}
+The type of (indexed) products of a collection of algebras (of the same type) is also a type of algebras which we define as follows:\footnote{In agda2-mode ⨅ is typed as \textbackslash Glb.}
 \begin{code}%
-%
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
@@ -474,11 +458,9 @@ The type of (indexed) products of a collection of algebras is also a type of alg
 \end{code}
 
 \subsection{Arbitrarily many variable symbols}
-
-Finally, since we typically want to assume that we have an arbitrarily large collection X of variable symbols at our disposal (so that, in particular, given an algebra 𝑨 we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from X to the universe of 𝑨), we define a type for use when making this assumption.
+We make the standard assumption that there is always a sufficiently large collection \AgdaBound{X} of variable symbols at our disposal. For instance, given an algebra \AgdaBound{𝑨} we will want to assume that we can always find a surjective mapping of type \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{→}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}}. We define the type that we will use when making this assumption as follows.
 
 \begin{code}%
-%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{𝓧}\AgdaSpace{}%
@@ -516,14 +498,11 @@ Finally, since we typically want to assume that we have an arbitrarily large col
 %% \input{prelude.tex}
 %% \input{basic.tex}
 \section{Congruences in Agda}\label{sec:cons-in-agda}
-This section describes the \consmodule of the \agdaualib.
-%% , although we don't discuss parts of that module which duplicate functionality of the \href{https://agda.github.io/agda-stdlib/}{Agda standard library} (\texttt{Binary/Core.agda}).
+Of course, congruences play a central role in mathematics, and this is especially so in universal algebra. 
 
-%% \subsection{Preliminaries}\label{preliminaries}
-%% \begin{code} \input{congruences/conprelim.tex} \end{code}
-
-\subsection{Binary relation type}\label{binary-relation-type}
-Heterogeneous binary relations.
+\subsection{Binary relations}\label{binary-relations-kernels}
+Before defining a type for congruences, we first need a type for binary relations.  The standard one from the
+\texttt{Binary/Core.agda} module of the \agdastdlib, translated into Escardo's universe notation is
 \begin{code}%
 \>[0]\AgdaFunction{REL}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -557,8 +536,8 @@ Heterogeneous binary relations.
 \AgdaBound{𝓝}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
-
-Homogeneous binary relations.
+Though the definition that tends to be used more often is the following special case:
+%% There is also a ``homogeneous'' version where \AgdaGeneralizable{𝓦} is assumed to be \AgdaGeneralizable{𝓤}.
 \begin{code}%
 \>[0]\AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -585,23 +564,64 @@ Homogeneous binary relations.
 \AgdaBound{𝓝}\<%
 \end{code}
 
-\paragraph*{Kernels}\label{kernels}
-The kernel of a function can be defined in many ways. For example,
-\begin{code} \input{congruences/KER.tex} \end{code}
-or as a relation\ldots{}
-\begin{code} \input{congruences/KER-rel.tex} \end{code}
-or a binary predicate …
-\begin{code}\input{congruences/KER-pred.tex}\end{code}
+An example of a binary relation is the ``trivial'' or ``diagonal'' or ``identity'' relation. This could be defined in Agda as a general type, or as an inhabitant of the \AgdaFunction{Rel}\AgdaSpace{}\AgdaBound{A}\AgdaSpace{}\AgdaGeneralizable{𝓤} type that we just defined.
+\begin{code}
+\>[0]\AgdaFunction{𝟎}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{𝟎}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{b}\<%
+\\
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\<%
+\\
+\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{b}\<%
+\end{code}
 
-%% \subsubsection{Implication}\label{implication}
-%% We denote and define implication or containment (which could also be
-%% written \_⊆\_) as follows.
-%% \begin{code}\input{congruences/implication.tex}\end{code}
-%% Here is a more general version of implication.
-%% \begin{code}\input{congruences/generalImplication.tex}\end{code}
+\paragraph*{Kernel types}
+Three natural and essentially equivalent ways to define the kernel of a function in type theory are as a general type, as a relation, or as a predicate.  These are implemented in \agdaualib as follows:
+\begin{code}\input{congruences/kernel.tex}\end{code}
 
 \paragraph*{Properties of binary relations}\label{properties-of-binary-relations}
-Reflexivity of a binary relation (say, \texttt{≈}) on \texttt{X}, can be defined without an underlying equality as follows.
+Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈}) on \texttt{X}, is defined in the obvious way. Here is reflexivity. (Symmetry and transitivity are similar.)
 \begin{code}
 \>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -630,13 +650,11 @@ Reflexivity of a binary relation (say, \texttt{≈}) on \texttt{X}, can be defin
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-Similarly, we have the usual notion of symmetric and transitive binary relation (though we won't reproduce their implementations here).
-%% \begin{code}\input{congruences/symmtrans.tex}\end{code}
+
 
 \paragraph*{Classes of a binary relation}
-For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 𝑎 by {[} 𝑎 {]} ≈. Indeed,
+For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 𝑎 by {[} 𝑎 {]} ≈.
 \begin{code}
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[8]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
@@ -672,64 +690,11 @@ For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-The collection of all ≈-classes of 𝐴 is represented by 𝐴 // ≈, defined by
+We denote by \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈}\AgdaSpace{}
+%𝐴 // ≈
+the collection of all ≈-classes of 𝐴, defined as follows:
 \begin{code}\input{congruences/relationClasses.tex}\end{code}
-The ``trivial'' or ``diagonal'' or ``identity'' relation could be defined in many ways.  Here are two that are particularly easy to employ.
-\begin{code}
-\>[0]\AgdaFunction{𝟎}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{𝟎}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\<%
-\\
-\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\<%
-\end{code}
-%% or, in various other guises,
-%% \begin{code}\input{congruences/trivialRelationPred.tex}\end{code}
-The ``universal'' or ``total'' or ``all'' relation is defined similarly.
-%% \begin{code}\input{congruences/universalRelation.tex}\end{code}
+
 
 \subsection{Types for equivalences}\label{types-for-equivalences}
 A useful representation of an equivalence relation in Agda is the one defined in \agdaualib as a record.
