@@ -1,0 +1,515 @@
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{homFactor}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[765I]\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[765I]%
+\>[10]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaFunction{ker-pred}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{ker-pred}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}%
+\>[45]\AgdaSymbol{→}%
+\>[49]\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[10]\AgdaComment{---------------------------------}\<%
+\\
+%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaFunction{homFactor}\AgdaSpace{}%
+%% \AgdaBound{fe}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaArgument{A}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{A}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaBound{FA}\AgdaSymbol{\}\{}\AgdaArgument{B}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{B}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaBound{FB}\AgdaSymbol{\}\{}\AgdaArgument{C}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaBound{FC}\AgdaSymbol{\}}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaBound{ghom}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaBound{hhom}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{Kh⊆Kg}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSpace{}%
+%% \AgdaSymbol{=}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{(}\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaFunction{ϕIsHomCB}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaFunction{g≡ϕ∘h}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaKeyword{where}\<%
+%% \\
+%% \>[2][@{}l@{\AgdaIndent{0}}]%
+%% \>[3]\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{A}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{EpicInv}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{c}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{B}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaSpace{}%
+%% \AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{ker-pred}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+%% \AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{=}%
+%% \>[10]\AgdaSymbol{(}\AgdaSpace{}%
+%% \AgdaFunction{cong-app}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{EInvIsRInv}\AgdaSpace{}%
+%% \AgdaBound{fe}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{g≡ϕ∘h}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{h}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{g≡ϕ∘h}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{fe}%
+%% \>[15]\AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{Kh⊆Kg}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ξ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ζ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSymbol{)}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaSymbol{→}%
+%% \>[7]\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaFunction{hInv}\AgdaSymbol{)(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ζ}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{cong-app}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{EInvIsRInv}\AgdaSpace{}%
+%% \AgdaBound{fe}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ι}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaSymbol{→}%
+%% \>[7]\AgdaSymbol{(λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaSymbol{(λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)))}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ι}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ap}\AgdaSpace{}%
+%% \AgdaSymbol{(λ}\AgdaSpace{}%
+%% \AgdaBound{-}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{-}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{)(}\AgdaFunction{EInvIsRInv}\AgdaSpace{}%
+%% \AgdaBound{fe}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{useker}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}%
+%% \>[25]\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FA}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))))}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSymbol{(}\AgdaBound{FA}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{useker}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{Kh⊆Kg}%
+%% \>[1007I]\AgdaSymbol{(}\AgdaFunction{cong-app}\<%
+%% \\
+%% \>[1007I][@{}l@{\AgdaIndent{0}}]%
+%% \>[13]\AgdaSymbol{(}\AgdaFunction{EInvIsRInv}\AgdaSpace{}%
+%% \AgdaBound{fe}\AgdaSpace{}%
+%% \AgdaBound{h}\AgdaSpace{}%
+%% \AgdaBound{hEpic}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[13]\AgdaSymbol{(}\AgdaBound{h}\AgdaSymbol{(}\AgdaBound{FA}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{)))}\<%
+%% \\
+%% \>[.][@{}l@{}]\<[1007I]%
+%% \>[12]\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{a}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaSymbol{→}%
+%% \>[14]\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FC}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{a}\AgdaSymbol{)}%
+%% \>[26]\AgdaOperator{\AgdaDatatype{≡}}%
+%% \>[29]\AgdaBound{FB}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{a}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSpace{}%
+%% \AgdaSymbol{=}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[4]\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FC}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))}%
+%% \>[37]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaFunction{i}%
+%% \>[44]\AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FC}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))))}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaFunction{ii}%
+%% \>[44]\AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FA}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))))}%
+%% \>[37]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaFunction{iii}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FA}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))}%
+%% \>[37]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaFunction{iv}%
+%% \>[44]\AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaBound{FB}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)))}%
+%% \>[37]\AgdaOperator{\AgdaFunction{∎}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaKeyword{where}\<%
+%% \\
+%% \>[4][@{}l@{\AgdaIndent{0}}]%
+%% \>[5]\AgdaFunction{i}%
+%% \>[9]\AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ap}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaFunction{hInv}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ap}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{FC}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ι}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \>[5]\AgdaFunction{ii}%
+%% \>[9]\AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ap}\AgdaSpace{}%
+%% \AgdaSymbol{(λ}\AgdaSpace{}%
+%% \AgdaBound{-}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaBound{-}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{hhom}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+%% \\
+%% %
+%% \>[5]\AgdaFunction{iii}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{useker}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{c}\<%
+%% \\
+%% %
+%% \>[5]\AgdaFunction{iv}%
+%% \>[9]\AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{ghom}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{hInv}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{c}\AgdaSymbol{)}\<%
+
