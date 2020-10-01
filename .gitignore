@@ -17,3 +17,5 @@ exclude
 *.log
 *.out
 *.vtc
+*.ptb
+*.tar.gz
