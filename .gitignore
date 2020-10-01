@@ -12,3 +12,8 @@ exclude
 *~
 *.agdai
 .DS_Store
+*.aux
+*.blg
+*.log
+*.out
+*.vtc

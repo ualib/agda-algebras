@@ -1,3 +1,4 @@
+\begin{code}
 -- FILE: basic.agda
 -- AUTHOR: William DeMeo and Siva Somayyajula
 -- DATE: 30 Jun 2020
@@ -45,12 +46,12 @@ Algebra 𝓤 {𝓞}{𝓥} 𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (
 -- BigSignature : (𝓞 𝓥 : Universe) → 𝓞 ⁺ ⊔ 𝓥 ⁺ ̇
 -- BigSignature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇  , ( F → 𝓥 ̇ )
  -- (𝓤 : Universe)
--- data monoid-op : 𝓤₀ ̇ where
---  e : monoid-op
---  · : monoid-op
+data monoid-op : 𝓤₀ ̇ where
+ e : monoid-op
+ · : monoid-op
 
--- monoid-sig : Signature _ _
--- monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+monoid-sig : Signature _ _
+monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
@@ -97,3 +98,4 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
 
  _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+\end{code}

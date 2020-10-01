@@ -1,3 +1,4 @@
+\begin{code}
 -- FILE: congruences.agda
 -- AUTHOR: William DeMeo and Siva Somayyajula
 -- DATE: 30 Jun 2020
@@ -180,5 +181,4 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
                ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
             )
           )
-
-
+\end{code}

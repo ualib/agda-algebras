@@ -369,7 +369,7 @@ The types indicate that \AgdaInductiveConstructor{e} is nullary (i.e., takes no 
 
 We will have more to say about the type of algebras later.  For now we continue describing the key definitions and syntax used in \agdaualib to represent the basic objects of universal algebra.
 
-\subsubsection{Syntactic sugar for operation interpretation}
+\paragraph*{Syntactic sugar for operation interpretation}
 The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSpace{} with the slightly more intuitive \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}. (The latter is a metaphor for \(f^\mathbf{A}\), which is the universally accepted notation for the operation symbol 𝑓 interpreted in the algebra 𝑨.)
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -418,7 +418,8 @@ The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\
 Thus, from now on \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{} will denote the interpretation of the operation symbol \AgdaBound{𝑓} in the algebra \AgdaBound{𝑨}.  (Later we introduce a slightly different notation, \AgdaBound{𝑡}\AgdaSpace{}\AgdaOperator{\AgdaFunction{ ̇ }}\AgdaSpace{}\AgdaBound{𝑨}, when representing the interpretation of a \emph{term} \AgdaBound{𝑡} in the algebra \AgdaBound{𝑨}).
 
 \subsection{Products of algebras}
-The (indexed) product of a collection of algebras is also an algebra if we define such a product as follows:
+The type of (indexed) products of a collection of algebras is also a type of algebras if we define such products as shown below. (In agda2-mode ⨅ is typed as \textbackslash Glb.)
+:
 \begin{code}%
 %
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
@@ -470,15 +471,7 @@ The (indexed) product of a collection of algebras is also an algebra if we defin
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaBound{i}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{-1}\AgdaSpace{}%
-\AgdaFunction{⨅}\<%
 \end{code}
-(In agda2-mode ⨅ is typed as \textbackslash Glb.)
 
 \subsection{Arbitrarily many variable symbols}
 
@@ -592,7 +585,7 @@ Homogeneous binary relations.
 \AgdaBound{𝓝}\<%
 \end{code}
 
-\subsubsection{Kernels}\label{kernels}
+\paragraph*{Kernels}\label{kernels}
 The kernel of a function can be defined in many ways. For example,
 \begin{code} \input{congruences/KER.tex} \end{code}
 or as a relation\ldots{}
@@ -607,7 +600,7 @@ or a binary predicate …
 %% Here is a more general version of implication.
 %% \begin{code}\input{congruences/generalImplication.tex}\end{code}
 
-\subsubsection{Properties of binary relations}\label{properties-of-binary-relations}
+\paragraph*{Properties of binary relations}\label{properties-of-binary-relations}
 Reflexivity of a binary relation (say, \texttt{≈}) on \texttt{X}, can be defined without an underlying equality as follows.
 \begin{code}
 \>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
@@ -640,7 +633,7 @@ Reflexivity of a binary relation (say, \texttt{≈}) on \texttt{X}, can be defin
 Similarly, we have the usual notion of symmetric and transitive binary relation (though we won't reproduce their implementations here).
 %% \begin{code}\input{congruences/symmtrans.tex}\end{code}
 
-\subsubsection{Classes of a binary relation}
+\paragraph*{Classes of a binary relation}
 For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 𝑎 by {[} 𝑎 {]} ≈. Indeed,
 \begin{code}
 \\[\AgdaEmptyExtraSkip]%
@@ -742,17 +735,17 @@ The ``universal'' or ``total'' or ``all'' relation is defined similarly.
 A useful representation of an equivalence relation in Agda is the one defined in \agdaualib as a record.
 \begin{code}\>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\>[12]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
 \\
-\>[10]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\>[12]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \\
-\>[10]\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[12]\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -769,23 +762,24 @@ A useful representation of an equivalence relation in Agda is the one defined in
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaField{rfl}%
-\>[9]\AgdaSymbol{:}\AgdaSpace{}%
+\>[11]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \\
 %
 \>[4]\AgdaField{sym}%
-\>[10]\AgdaSymbol{:}\AgdaSpace{}%
+\>[11]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{symmetric}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \\
 %
 \>[4]\AgdaField{trans}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\>[11]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{transitive}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \end{code}
 An alternative that is sometimes useful is
+
 \begin{code}\>[0]\AgdaFunction{is-equivalence-relation}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%

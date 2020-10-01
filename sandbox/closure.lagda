@@ -1,3 +1,4 @@
+\begin{code}
 --FILE: closure.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 4 Aug 2020
@@ -622,4 +623,4 @@ module closure-identities
  ThHSP-axiomatizes p q =
   (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
   λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
-
+\end{code}

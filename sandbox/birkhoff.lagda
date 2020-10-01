@@ -1,3 +1,4 @@
+\begin{code}
 --FILE: birkhoff.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 30 Jun 2020
@@ -124,4 +125,4 @@ module birkhoff-theorem
 
    𝑨∈VClo : 𝑨 ∈ VClo
    𝑨∈VClo = vhom{𝑪} {!!} hic
-
+\end{code}

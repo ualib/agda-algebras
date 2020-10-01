@@ -1,3 +1,4 @@
+\begin{code}
 -- FILE: prelude.agda
 -- AUTHOR: William DeMeo and Siva Somayyajula
 -- DATE: 30 Jun 2020
@@ -265,3 +266,4 @@ syntax -Σω X (λ x → y) = Σω x ꞉ X ⸲ y
 _⨉_ : 𝓤ω → 𝓤ω → 𝓤ω
 X ⨉ Y = Σω x ꞉ X ⸲ Y
 
+\end{code}
