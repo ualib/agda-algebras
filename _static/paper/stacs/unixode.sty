@@ -10,6 +10,7 @@
 \RequirePackage{amsbsy}
 \RequirePackage{amssymb}
 \RequirePackage{stmaryrd}
+\RequirePackage{pifont} % for ● symbol (\ding{108}) 
 %% \RequirePackage[mathcal]{euscript}
 \RequirePackage[scr=boondoxo]{mathalfa}
 %\RequirePackage{bbm}
@@ -121,7 +122,8 @@
 \newunicodechar{·}{\ensuremath{\cdot}}
 \newunicodechar{∗}{\ensuremath{\ast}}
 \newunicodechar{⋆}{\ensuremath{\star}}
-
+\newunicodechar{⁺}{\ensuremath{\phantom{i}^+}}
+\newunicodechar{●}{\ensuremath{\ding{108}}}
 \newunicodechar{⁻}{\ensuremath{^{\textup{\kern1pt\rule{2pt}{0.3pt}\kern-1pt}}}}
 \newunicodechar{▸}{\ensuremath{\blacktriangleright}}
 
@@ -154,6 +156,7 @@
 \newunicodechar{↓}{\ensuremath{\downarrow}}
 \newunicodechar{↿}{\ensuremath{\upharpoonleft}}
 \newunicodechar{↾}{\ensuremath{\upharpoonright}}
+\newunicodechar{↪}{\ensuremath{\hookrightarrow}}
 
 \newunicodechar{∩}{\ensuremath{\cap}}
 \newunicodechar{∪}{\ensuremath{\cup}}
@@ -190,6 +193,8 @@
 
 \newunicodechar{⦃}{\ensuremath{\{\!|}}
 \newunicodechar{⦄}{\ensuremath{|\!\}}}
+\newunicodechar{⟦}{\ensuremath{\llbracket}}
+\newunicodechar{⟧}{\ensuremath{\rrbracket}}
 \newunicodechar{∣}{\ensuremath{\mid}}
 \newunicodechar{∥}{\ensuremath{\parallel}}
 \newunicodechar{⟨}{\ensuremath{\langle}}
@@ -380,26 +385,6 @@
 %% Universe symbols
 %\definecolor{AgdaBound}                 {HTML}{7F7AEE} %{3104E7} %{1C04E7} %{A020F0}
 %% \newunicodechar{𝓔}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{E}}}}}
-%% \newunicodechar{𝓕}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{F}}}}}
-%% \newunicodechar{𝓖}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{G}}}}}
-%% \newunicodechar{𝓗}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{H}}}}}
-%% \newunicodechar{𝓘}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{I}}}}}
-%% \newunicodechar{𝓙}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{J}}}}}
-%% \newunicodechar{𝓚}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{K}}}}}
-%% \newunicodechar{𝓛}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{L}}}}}
-%% \newunicodechar{𝓜}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{M}}}}}
-%% \newunicodechar{𝓝}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{N}}}}}
-%% \newunicodechar{𝓞}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{O}}}}}
-%% \newunicodechar{𝓠}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Q}}}}}
-%% \newunicodechar{𝓡}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{R}}}}}
-%% \newunicodechar{𝓢}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{S}}}}}
-%% \newunicodechar{𝓣}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{T}}}}}
-%% \newunicodechar{𝓤}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{U}}}}}
-%% \newunicodechar{𝓥}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{V}}}}}
-%% \newunicodechar{𝓦}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{W}}}}}
-%% \newunicodechar{𝓧}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{X}}}}}
-%% \newunicodechar{𝓨}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Y}}}}}
-%% \newunicodechar{𝓩}{\textcolor{AgdaBound}{\ensuremath{\pmb{\mathscr{Z}}}}}
 
 \newunicodechar{𝓔}{{\ensuremath{\pmb{\mathscr{E}}}}}
 \newunicodechar{𝓕}{{\ensuremath{\pmb{\mathscr{F}}}}}
@@ -412,6 +397,7 @@
 \newunicodechar{𝓜}{{\ensuremath{\pmb{\mathscr{M}}}}}
 \newunicodechar{𝓝}{{\ensuremath{\pmb{\mathscr{N}}}}}
 \newunicodechar{𝓞}{{\ensuremath{\pmb{\mathscr{O}}}}}
+\newunicodechar{𝓟}{{\ensuremath{\pmb{\mathscr{P}}}}}
 \newunicodechar{𝓠}{{\ensuremath{\pmb{\mathscr{Q}}}}}
 \newunicodechar{𝓡}{{\ensuremath{\pmb{\mathscr{R}}}}}
 \newunicodechar{𝓢}{{\ensuremath{\pmb{\mathscr{S}}}}}

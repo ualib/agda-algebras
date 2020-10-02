@@ -1,4 +1,4 @@
-\documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2019}
+\documentclass[a4paper,USenglish,cleveref,autoref,thm-restate,anonymous]{lipics-v2019}
 %This is a template for producing LIPIcs articles. 
 %See lipics-manual.pdf for further information.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
@@ -11,27 +11,35 @@
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
 \usepackage{mymacros}
+\usepackage{todonotes}
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
 \title{Universal Algebra in Martin-L\"of Type Theory\\ with Agda} %TODO Please add
 
 \titlerunning{Universal Algebra in MLTT with Agda} %TODO optional, please use if title is longer than one line
 
-\author{William DeMeo}{Department of Algebra, Faculty of Mathematics and Physics, Charles University, Prague}{Czech Republic}{https://orcid.org/0000-0003-1832-5690}{}
+\author{William DeMeo}{Department of Algebra, Faculty of Mathematics and Physics, Charles University, Czech Republic}{williamdemeo@gmail.com}{https://orcid.org/0000-0003-1832-5690}{}
+\author{Hyeyoung Shin}{Faculty of Information Technology, Czech Technical University, Czech Republic}{hyeyoungshinw@gmail.com}{}{}
+%% %\author{\href{https://hyeyoungshin.github.io/}{Hyeyoung Shin}}
+\author{Siva Somayyajula}{Department of Computer Science, Carnegie Mellon University, USA}{ssomayya@andrew.cmu.edu}{}{}
+%% \affiliation{% \institution{\href{https://www.cs.cmu.edu/}{}\city{Pittsburgh}\state{PA}%\author{\href{http://www.cs.cmu.edu/~ssomayya/}{Siva Somayyajula}}
+%% \institution{\href{https://prl-prg.github.io/}\streetaddress{Thákurova 9}\city{Prague 6}  \state{Czech Republic} \postcode{160 00} 
 %TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional
+%% \email{williamdemeo@gmail.com}
+%% \affiliation{% \\
+%%   \institution{\href{https://www.mff.cuni.cz/en/ka}{Department of Algebra}\\Charles University} %\\ Katedra Algebry, Univerzita Karlova\\%%   \streetaddress{Sokolovska 83}
+%% 186 00 Praha, \v{C}esk\'{a} Republika}
 
-\authorrunning{W.\,J.\,DeMeo}
-\Copyright{William DeMeo}
+\authorrunning{W.~DeMeo, H.~Shin, S.~Somayyajula}
+\Copyright{William DeMeo, Hyeyoung Shin, Siva Somayyajula}
 %
 %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm
 \ccsdesc[500]{Theory of computation~Logic and verification}
 \ccsdesc[300]{Theory of computation~Constructive mathematics}
 \ccsdesc[300]{Theory of computation~Type theory}
 \ccsdesc[300]{Computing methodologies~Representation of mathematical objects}
-%% \ccsdesc[300]{Theory of computation~Type structures}
 
 \keywords{universal algebra, formalization of mathematics, equational logic, type theory, constructive mathematics}
-
 %% \category{} %optional, e.g. invited paper
 
 %% \relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
@@ -67,12 +75,14 @@
 
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
-We present the \AgdaUALib (\agdaualib), the result of an effort to use the Agda functional programming language to formalize universal algebra, model theory, and equational logic in Martin-L\"of type theory.
-The latest version of \agdaualib formalizes a substantial number of definitions and theorems from general algebra and logic, and the implementation of these foundations in Agda makes essential use of inductive and dependent types. Indeed, \agdaualib showcases the power and utility of such types for formalizing mathematics.  To demonstrate, in this paper we highlight some of the significant theorems we have formalized thus far, most notably the theorem of Garrett Birkhoff asserting that a class of algebraic structures is closed under homomorphic images, substructures, and arbitrary products if and only if it is the class of models of some set of equations. Ours is the first formal proof of this theorem that we know of.
+We present the \AgdaUALib (or \agdaualib for short), the result of our effort to formalize universal algebra, model theory, and equational logic in Martin-L\"of type theory using the \agda functional programming language.
+The latest version of the \agdaualib formalizes a substantial number of definitions and theorems from general algebra and logic, and the implementation of these foundations in Agda makes essential use of inductive and dependent types. Indeed, the \agdaualib showcases the expressive power of these types, and the ease and precision with which they can be used to formalize mathematics.  To demonstrate, we highlight some of the significant theorems that are already formalized in the \agdaualib, most notably the theorem of Garrett Birkhoff asserting that a class of algebraic structures is closed under homomorphic images, substructures, and arbitrary products if and only if it is the class of models of some set of equations. Ours is the first formal proof of this theorem that we know of.
 \end{abstract}
 
+\newpage
+
 \section{Introduction}\label{sec:introduction}
-To support formalization in type theory of research level mathematics in general algebra, model theory, and equational logic, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal definitions, theorem statements, and proofs comprising a substantial part of the core foundations of these mathematical theories.
+To support formalization in type theory of research level mathematics in general algebra, model theory, and equational logic, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal definitions, theorem statements, and proofs comprising a substantial part of the foundational core of these mathematical theories.
 
 The \agdaualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on \textit{Martin-L\"of type theory} (MLTT) that not only supports dependent and inductive types, but also provides powerful \emph{proof tactics} for proving things about the objects that inhabit these types.
 
@@ -87,7 +97,7 @@ The idea for the the Agda Universal Algebra Library originated with the observat
 %% Our field is deep and broad, so codifying all of its foundations may seem like a daunting task and a risky investment of time and resources. However, we believe the subject is well served by a new, modern, \emph{constructive} presentation of its foundations.  Furthermore, the mere act of reinterpreting the foundations in an alternative system offers a fresh perspective, yielding new insights into our mathematics research.
 
 %% \paragraph*{...discovering the new}
-We wish to emphasize that our ultimate objective is not merely to translate existing mathematics into a more modern and formal language, although that is an important part of this effort.  Another equally important goal is to develop a library that facilitates new research in mathematics. In our own work, experience has taught us that a proof assistant equipped with specialized libraries for our areas of expertise, as well as domain-specific tactics to automate the proof idioms of our field, can be extremely powerful.  Thus, one of our aims is to demonstrate the prominent role that \agdaualib can play in proving new theorems, and discovering and exploring new mathematical theories.
+We wish to emphasize that our ultimate objective is not merely to translate existing mathematics into a more modern and formal language, although that is an important part of this effort.  Another equally important goal is to develop a library that facilitates new research in mathematics. In our own work, experience has taught us that a proof assistant equipped with specialized libraries for our areas of expertise, as well as domain-specific tactics to automate the proof idioms of our field, can be extremely powerful.  Thus, one of our aims is to demonstrate the prominent role that the \agdaualib can play in proving new theorems, and discovering and exploring new mathematical theories.
 
 %% \subsection{Main contributions}
 %% This paper describes the formal implementation of some deep results in universal algebra in type theory using the Agda language.  In particular, we describe our formalization of Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}---one of the first major results belonging properly to the theory of universal algebras. To our knowledge, ours is the first formal, constructive proof of the HSP theorem. In fact, we prove a result that is slightly stronger than the analogous one appearing in the mathematics literature (e.g.,~\cite{Birkhoff:1935},~\cite{McKenzie:1987},~\cite{Bergman:2012}).  Indeed, as we show in Section~\ref{sec:}, the latter are nonconstructive proofs that rely on the Axiom of Choice.
@@ -109,10 +119,10 @@ Finally, Section~\ref{sec:equational-logic-in-agda} shows how we represent the b
 Here we describe the code that gets us up and running with Agda.  The code is contained in an Agda module inside the \agdaualib called the \preludemodule. As with all the Agda modules we describe in this paper, The full source code of the \preludemodule is available in the \href{https://gitlab.com/ualib/ualib.gitlab.io}{gitlab repository of the agda-ualib} available at \ualibgitlabio.
 
 \subsection{Options}\label{options}
-All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries, and \agdaualib programs are no different. However, all of the imports have so far come exclusively from Martin Escardo's \typetopology library.  Besides being an excellent library full of useful foundations, Escardo's library is based on a very minimal Martin-L\"of type theory, and each addition to this scaffold is made very deliberately and is carefully explained in the excellent set of notes, \hottufinagda.  The latter describes the \typetopology library in great detail, and is available on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Escardo's website}.\footnote{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{\url{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}}\\
+All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries, and modules in the \agdaualib are no different. However, all imports in the \agdaualib come exclusively from Martin Escardo's \typetopology library.  Besides being an excellent foundation on which to build, Martin's library is based on a very terse Martin-L\"of type theory, and each addition to this skeleton frame is very deliberate and carefully explained in the Martin's excellent set of notes, \hottufinagda.  The latter describes the \typetopology library in great detail, and is available on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Escardo's website}.\footnote{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{\url{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}}\\
   Escardo's notes are an excellent resource for anyone seeking more details about MLTT and Univalent Foundations/HoTT extensions thereof.}
 
-To wit, each file in \typetopology (as well as \agdaualib) begins with the line
+To wit, each file in \typetopology (as well as the \agdaualib) begins with the line
 \begin{code}
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
@@ -127,22 +137,22 @@ which reduces the foundational assumptions Agda makes as follows:
 \item \texttt{exact-split} instructs Agda to accept only definitions that do behave like \emph{judgmental} or \emph{definitional} equalities.\footnote{Escardo explains this by saying that ``pattern matching corresponds to Martin-Löf eliminators;'' see the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#pattern-matching-and-equality}{Pattern matching and equality section} of the \agdatools documentation.}
 \item \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom must be an explicit assumption (e.g., an argument to a function or module);\footnote{See \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#cmdoption-safe}{cmdoption-safe section} of the \agdatools documentation and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html\#safe-agda}{Safe Agda section} of the \agdalangref manual.}
 \end{itemize}
-Since every file in \agdaualib begins with the same \AgdaKeyword{OPTIONS} line as the one shown above, we won't mention the \AgdaKeyword{OPTIONS} directive again.
+Since every file in the \agdaualib begins with the same first line, we won't mention the \AgdaKeyword{OPTIONS} directive again.
 
 \subsection{Imports}\label{imports}
-
 \paragraph*{Universes}
-The first module of the \agdaualib, called \texttt{prelude}, begins by importing the \texttt{Universes} module from the \typetopology library which provides, among other things, an elegant notation for type universes adopted throughout \agdaualib.
+The first module of the \agdaualib, called \texttt{prelude}, begins by importing the \universesmodule from the \typetopology library which provides, among other things, an elegant notation for type universes adopted throughout the \agdaualib.
 \begin{code}
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Universes}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \end{code}
-Following Martin Escardo, the \agdaualib uses capitalized script letters, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓣 to denote universes. The \texttt{Universes} module also defines the ̇ operator mapping a universe \ab 𝓤 to \texttt{Set}\ \ab 𝓤, the latter having type \texttt{Set (lsuc}\ \ab 𝓤\texttt{)}.  The level \texttt{lzero} is renamed \ab{𝓤₀}, so \ab{𝓤₀}\ ̇ is an alias for \texttt{Set\ lzero}. We won't describe the entire \texttt{Universes} module here; suffice it to highlight the few key notational devices adopted throughout \agdaualib. In particular, \texttt{Set\ (lsuc\ lzero)} is denoted by \texttt{Set}\ \ab 𝓤₀\ ⁺ which is denoted by \ab 𝓤₀\ ⁺\ ̇.
-Finally, there are many occasions calling for a type that lives in the universe that is the least upper bound of two universe, say, \ab 𝓤~ ̇ and \ab 𝓥\ ̇. The universe \ab 𝓤~⊔~\ab 𝓥~ ̇ denotes this least upper bound.
+Following Martin Escardo, the \agdaualib uses capitalized script letters, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓣 to denote universes. The \universesmodule also defines the ̇ operator mapping a universe \ab 𝓤 to \texttt{Set}\ \ab 𝓤, the latter having type \texttt{Set (lsuc}\ \ab 𝓤\texttt{)}.
+%% The level \texttt{lzero} is renamed \ab{𝓤₀}, so \ab{𝓤₀}\ ̇ is an alias for \texttt{Set\ lzero}.
+We needn't describe the \universesmodule in great detail. Suffice it to highlight the main notational conventions established in Escardo's \typetopology library and adopted throughout the \agdaualib. In particular, \texttt{Set\ (lsuc\ lzero)} is denoted by \texttt{Set}\ \ab 𝓤₀\ ⁺ which is denoted by \ab 𝓤₀\ ⁺\ ̇. Also, will often need a type that lives in the universe that is the least upper bound of two universe, say, \ab 𝓤~ ̇ and \ab 𝓥\ ̇. The universe \ab 𝓤~⊔~\ab 𝓥~ ̇ denotes this least upper bound.
 
-Besides notations for universes, many other components are imported from \typetopology.  A full list of these appears in the Appendix~\ref{sec:imports-from-type-topology}.  Hereinafter, we won't mention the imports declared in each \agdaualib module that we describe.
+Besides notations for universes, a fair number of other components are imported from \typetopology. A full list of these appears in Appendix~\ref{sec:imports-from-type-topology}.  Hereinafter, we won't mention the imports declared in each \agdaualib module.
 
 \section{Algebras in Agda}\label{sec:algebras-in-agda}
 The \basicmodule of the \agdaualib begins the Agda formalization of the basic components of universal algebra. In particular, such notions as operation, signature, and algebraic structure are codified in the language of MLTT.
@@ -173,7 +183,7 @@ The type of an \textbf{operation} is defined as follows.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \end{code}
-This type encodes the arity of an operation as an arbitrary type \ab 𝐼 : \ab 𝓥 ̇, yielding a completely general representation of an operation as a function type with domain \ab 𝐼 → \ab 𝐴 (heuristically, the type of ``tuples of length~|~\ab 𝐼~|'') and codomain \ab 𝐴. For example, here is how the usual \emph{projection operations} could be defined as inhabitants of the type
+Here the arity of an operation is represented as an arbitrary type \ab 𝐼 : \ab 𝓥 ̇, yielding a completely general representation of an operation as a function type with domain \ab 𝐼 → \ab 𝐴 (heuristically, the type of ``tuples of length~|~\ab 𝐼~|'') and codomain \ab 𝐴. For example, here is how the usual \emph{projection operations} could be defined as inhabitants of the type
 \AgdaFunction{Op}\AgdaSpace{}\AgdaBound{I}\AgdaSpace{}\AgdaBound{A}.
 \begin{code}%
 \>[0]\AgdaFunction{π}\AgdaSpace{}%
@@ -247,7 +257,7 @@ The \agdaualib defines the signature of an algebraic structure in Agda as follow
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \end{code}
-Here we use \AgdaBound{𝓞} to represent the universe that operation symbol types inhabit, while \AgdaBound{𝓥} is the universe that arity types inhabit.
+Here \AgdaBound{𝓞} represents the universe that operation symbol types inhabit, while arity types inhabit the universe \AgdaBound{𝓥}.
 
 The \preludemodule of \agdaualib defines the syntax ∣\_∣ and ∥\_∥ for the first and second projections, respectively, so if \AgdaBound{𝑆}\AgdaSpace{}\AgdaFunction{꞉}\AgdaSpace{}\signatureOV is a signature, then \AgdaFunction{∣}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaFunction{∣} denotes the set of operation symbols, and \AgdaFunction{∥}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaFunction{∥} denotes the arity function. Thus, we write \AgdaFunction{𝑓}\AgdaSpace{}\AgdaFunction{꞉}\AgdaSpace{}\AgdaFunction{∣}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaFunction{∣} to mean that \AgdaFunction{𝑓} inhabits the type of operation symbols in the signature \AgdaBound{𝑆}, and \AgdaFunction{∥}\AgdaSpace{}\AgdaBound{𝑆}\AgdaSpace{}\AgdaFunction{∥}\AgdaSpace{}\AgdaFunction{𝑓} denotes the arity of \AgdaFunction{𝑓}.
 
@@ -255,22 +265,20 @@ The \preludemodule of \agdaualib defines the syntax ∣\_∣ and ∥\_∥ for th
 In \agdaualib, the type of algebras in the signature 𝑆, also known as 𝑆-\textbf{algebras}, is
 \begin{code}%
 \>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[98I]\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)\{}\AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[98I]%
-\>[10]\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Signature}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[33]\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -284,10 +292,7 @@ In \agdaualib, the type of algebras in the signature 𝑆, also known as 𝑆-\t
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSymbol{\}\{}\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}\<%
-\\
-\>[.][@{}l@{}]\<[98I]%
-\>[10]
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
@@ -356,7 +361,8 @@ Let us emphasize, \algebraUS \emph{is the type inhabited by all algebras of sign
 %% We will have more to say about the type of algebras later.  For now we continue describing the key definitions and syntax used in \agdaualib to represent the basic objects of universal algebra.
 
 \paragraph*{Syntactic sugar for operation interpretation}
-The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSpace{} with the slightly more intuitive \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}. (The latter is a metaphor for \(f^\mathbf{A}\), which is the universally accepted notation for the operation symbol 𝑓 interpreted in the algebra 𝑨.)
+The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}\AgdaBound{𝑓}\AgdaSpace{} with the slightly more intuitive \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}.%
+\footnote{\AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨} is a metaphor for \(f^\mathbf{A}\), which is the standard notation for the interpretation of 𝑓 in 𝑨.}
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̂\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -404,7 +410,7 @@ The \agdaualib defines syntactic sugar that allows us to replace \AgdaOperator{\
 Thus, from now on \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{} will denote the interpretation of the operation symbol \AgdaBound{𝑓} in the algebra \AgdaBound{𝑨}.  (Later we introduce a slightly different notation, \AgdaBound{𝑡}\AgdaSpace{}\AgdaOperator{\AgdaFunction{ ̇ }}\AgdaSpace{}\AgdaBound{𝑨}, when representing the interpretation of a \emph{term} \AgdaBound{𝑡} in the algebra \AgdaBound{𝑨}).
 
 \subsection{Product type}
-The type of (indexed) products of a collection of algebras (of the same type) is also a type of algebras which we define as follows:\footnote{In agda2-mode ⨅ is typed as \textbackslash Glb.}
+The type of (indexed) product of a collection of algebras (of the same type) is also a type of algebras; it is defined as follows:\footnote{In agda2-mode ⨅ is typed as \textbackslash Glb.}
 \begin{code}%
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -564,7 +570,7 @@ Though the definition that tends to be used more often is the following special 
 \AgdaBound{𝓝}\<%
 \end{code}
 
-An example of a binary relation is the ``trivial'' or ``diagonal'' or ``identity'' relation. This could be defined in Agda as a general type, or as an inhabitant of the \AgdaFunction{Rel}\AgdaSpace{}\AgdaBound{A}\AgdaSpace{}\AgdaGeneralizable{𝓤} type that we just defined.
+An example of a binary relation is the ``trivial'' relation. This could be defined in Agda as a general type, or as an inhabitant of the \AgdaFunction{Rel}\AgdaSpace{}\AgdaBound{A}\AgdaSpace{}\AgdaGeneralizable{𝓤} type that we just defined.
 \begin{code}
 \>[0]\AgdaFunction{𝟎}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -617,11 +623,11 @@ An example of a binary relation is the ``trivial'' or ``diagonal'' or ``identity
 \end{code}
 
 \paragraph*{Kernel types}
-Three natural and essentially equivalent ways to define the kernel of a function in type theory are as a general type, as a relation, or as a predicate.  These are implemented in \agdaualib as follows:
+Three natural and essentially equivalent ways to define the kernel of a function in type theory are as a general type, as a relation, or as a predicate.
 \begin{code}\input{congruences/kernel.tex}\end{code}
 
 \paragraph*{Properties of binary relations}\label{properties-of-binary-relations}
-Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈}) on \texttt{X}, is defined in the obvious way. Here is reflexivity. (Symmetry and transitivity are similar.)
+Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈}) on \texttt{X}, are defined in the obvious way. For instance, here is reflexivity.
 \begin{code}
 \>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -650,10 +656,11 @@ Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈})
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-
+Symmetry and transitivity are defined similarly.
 
 \paragraph*{Classes of a binary relation}
-For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 𝑎 by {[} 𝑎 {]} ≈.
+For a binary relation ≈ on A, the ≈-class containing 𝑎 is denoted in \agdaualib by \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}\AgdaBound{≈}.
 \begin{code}
 \>[0]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -690,260 +697,78 @@ For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-We denote by \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈}\AgdaSpace{}
-%𝐴 // ≈
-the collection of all ≈-classes of 𝐴, defined as follows:
-\begin{code}\input{congruences/relationClasses.tex}\end{code}
+In set theory, the quotient of a set 𝐴 modulo an equivalence relation ≈ is properly regarded as the set of ≈-classes of elements from the set.  We define a \textbf{quotient type} to capture this notion. We denote the quotient of a \emph{type} \AgdaBound{A} modulo an equivalence relation type \AgdaBound{≈} by \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈} and we define this quotienting type as an infix operation.
+\begin{code}
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}//\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[8]\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaBound{A}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}%
+\AgdaBound{≈}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaFunction{,}%
+\>[21]\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}%
+\>[32]\AgdaBound{C}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaBound{≈}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\end{code}
+%\AgdaSpace{}\AgdaFunction{꞉}\AgdaSpace{}
+It is important to observe that the inhabitants of this quotient type are not mere \AgdaBound{≈}-classes (as we typically view elements of quotients in set theory).  Instead, an inhabitant \AgdaBound{𝒂} of the type \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈} is by definition a triple, \AgdaSymbol{(}\AgdaSpace{}\AgdaBound{C}\AgdaSpace{},\AgdaSpace{}\AgdaBound{𝑎}\AgdaSpace{},\AgdaSpace{}\AgdaFunction{𝑝}\AgdaSpace{}\AgdaSymbol{)}, where \AgdaBound{C} is a \AgdaBound{≈}-class, \AgdaBound{𝑎} has type \AgdaBound{A}\AgdaSpace{}, and \AgdaFunction{𝑝} is a proof that \AgdaBound{C} is the \AgdaBound{≈}-class containing \AgdaBound{𝑎}; that is, \AgdaBound{C}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaBound{≈}\AgdaSpace{}%
+\AgdaSymbol{)}.
+
+Those who have experience with quotients will already appreciate the implication of the above definition.  Since a quotient class always comes equipped with a representative element (as well as a proof that the representative belongs to the class), we never have to worry about choosing representatives. This is important if we want our proofs to be constructive since we will often need to get our hands on quotient class representatives, and we want to do so without appealing to the Axiom of Choice.
+\begin{code}\input{congruences/relationClasses.tex}\end{code}\todo{next say something about is-subsingleton-valued}
 
 
 \subsection{Types for equivalences}\label{types-for-equivalences}
-A useful representation of an equivalence relation in Agda is the one defined in \agdaualib as a record.
-\begin{code}\>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\>[12]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
-\\
-\>[12]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[12]\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaGeneralizable{𝓡}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{field}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[4]\AgdaField{rfl}%
-\>[11]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-%
-\>[4]\AgdaField{sym}%
-\>[11]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-%
-\>[4]\AgdaField{trans}\AgdaSpace{}%
-\>[11]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\end{code}
-An alternative that is sometimes useful is
+A common way to represent an equivalence relation in Agda is as a record.
+\begin{code}\input{congruences/equiv1.tex}\end{code}
+Here's an alternative that is sometimes useful.
+\begin{code}\input{congruences/equiv2.tex}\end{code}
+As an example application of the first version, we can prove that 𝟎 is an equivalence relation.
+\begin{code}\input{congruences/zeroIsEquiv.tex}\end{code}
 
-\begin{code}\>[0]\AgdaFunction{is-equivalence-relation}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaGeneralizable{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-equivalence-relation}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\end{code}
-
-As an example application of the first version, we can prove that the trivial relation, 𝟎, defined above is an equivalence relation.
-\begin{code}\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[10]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[10]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
-\\
-\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{=}\<%
-\>[740I]\AgdaKeyword{record}\<%
-\\
-\>[.][@{}l@{}]\<[740I]%
-\>[25]\AgdaSymbol{\{}\AgdaSpace{}%
-\AgdaField{rfl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-\>[.][@{}l@{}]\<[740I]%
-\>[25]\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaField{sym}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{x≡y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x≡y}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁻¹}}\<%
-\\
-\>[.][@{}l@{}]\<[740I]%
-\>[25]\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaField{trans}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaBound{x≡y}\AgdaSpace{}%
-\AgdaBound{y≡z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x≡y}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaBound{y≡z}\<%
-\\
-\>[.][@{}l@{}]\<[740I]%
-\>[25]\AgdaSymbol{\}}\<%
-\end{code}
-
-Two more definitions that will be important in some of the proofs appearing in later sections are that of a \textbf{lift} of a binary relation from pairs to pairs of tuples, and that of \textbf{compatibility} of a given function-relation pair. These are defined in the \agdaualib as follows:
-\begin{code}\>[0]\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaSymbol{:}
-\>[10]\AgdaSymbol{\{}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Z}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[10]\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[10]\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\end{code}
-
-\begin{code}\>[0]\AgdaFunction{compatible-fun}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[806I]\AgdaSymbol{\{}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Z}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[806I]%
-\>[17]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)(}\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSymbol{)}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[17]\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{compatible-fun}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{R}%
-\>[20]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{=[}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]⇒}}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\end{code}
+The lift of functions and relations will play a role in some proofs in the sequel. The \textbf{lift} takes a binary relation from pairs to pairs of tuples.
+\begin{code}\input{congruences/lift-rel.tex}\end{code}
+Of course, the notion of \textbf{compatibility} of function-relation pairs plays an major role in universal algebra. Here is how this concept is codified in \agdaualib.
+\begin{code}\input{congruences/compatible-fun.tex}\end{code}
 
 \subsection{Types for congruences}\label{types-for-congruences}
-Finally, we come to the important definition of congruence. The \agdaualib defines congruence inside a module so that an ambient signature \ab 𝑆 is available.
+Finally, we come to the definition of congruence. The \agdaualib defines congruence inside a module so that an ambient signature \ab 𝑆 is available.
 \begin{code}\input{congruences/TypesForCongruences.tex}\end{code}
 
 For example, one constructs the ``trivial'' (or ``diagonal'' or ``identity'') congruence relation as follows:
@@ -1063,10 +888,7 @@ a datatype called \texttt{Term} which, naturally, represents the type of terms. 
 \begin{code}\input{terms/term.tex}\end{code}
 \begin{code}\input{terms/termalg.tex}\end{code}
 
-%%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COMMENT
-\begin{comment}
-
-  \subsection{The universal property}\label{the-universal-property}
+\subsection{The universal property}\label{the-universal-property}
   We prove
   \begin{enumerate}
   \item every map \texttt{h\ :\ 𝑋\ →\ ∣\ 𝑨\ ∣} lifts to a homomorphism from 𝑻(X) to 𝑨, and
@@ -1112,11 +934,6 @@ a datatype called \texttt{Term} which, naturally, represents the type of terms. 
   Rounding out this section is an formal proof of the fact that terms respect congruences. More precisely, we show that for every term \texttt{t}, every \texttt{θ\ ∈\ Con(𝑨)}, and all tuples \texttt{a,\ b\ :\ 𝑋\ →\ A}, we have
 
 
-  TODO
-
-\end{comment}
-%%                                       COMMENT >>>>>>>>>>>>>>>>>>>>>>>>>>
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Subalgebras in Agda}\label{sec:subs-in-agda}
 This section describes the \subsmodule of the \agdaualib where subuniverses and subalgebras are defined and some basic facts about them are proved.
@@ -1130,20 +947,13 @@ This section describes the \subsmodule of the \agdaualib where subuniverses and 
 The module begins with a straightforward definition of the collection of subuniverses of an algebra 𝑨. Since a subuniverse is a subset of the domain of 𝐴, it is defined as a predicate on ∣~𝑨~∣. Thus, the collection of subuniverses is a predicate on predicates on ∣~𝑨~∣.
 \begin{code}\input{subuniverses/sub.tex}\end{code}
 
-%%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COMMENT
-\begin{comment}
 Before describing subuniverse generation, we will need to dispense with some more technicalities.
 \begin{code}\input{subuniverses/technical.tex}\end{code}
-\end{comment}
-%%                                       COMMENT >>>>>>>>>>>>>>>>>>>>>>>>>>
-
 
 \subsection{Subuniverse generation}\label{subuniverse-generation}
 Next we demonstrate how to formalize an important theorem about subuniverse generation. Recall, if \(A = ⟨𝐴, …⟩\) is an 𝑆-algebra, if \(∅ ≠ 𝐴₀ ⊆ 𝐴\), and if we define by recursion the sets \(A_{n+1} = Aₙ ∪ \{ f a : f ∈ F, a : ρ f → Aₙ \}\), then the subuniverse of A generated by 𝐴₀ is \(\mathrm{Sg}^A(A₀) = ⋃ₙ Aₙ\).
 \begin{code}\input{subuniverses/sg.tex}\end{code}
 
-%%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COMMENT
-\begin{comment}
 \subsection{Closure under intersection}\label{closure-under-intersection}
 Recall from Obs 6 that the intersection ⋂ᵢ 𝐴ᵢ of a collection \{𝐴ᵢ ∣ 𝐴ᵢ ≤ 𝑨\} of subuniverses of an algebra 𝑨 is
 again a subuniverse of 𝑨. We formalize the statement and proof of this easy fact in Agda as follows.
@@ -1250,42 +1060,61 @@ The converse of membership-equiv-gives-carrier-equality is obvious.
 \subsection{The type of Subalgebras in Agda}\label{the-type-of-subalgebras-in-agda}
 Finally, we define, once and for all, the type of subalgebras of an algebra (resp., subalgebras of algebras in a class of algebras) that we will use in the sequel.
 \begin{code}\input{subuniverses/newsub.tex}\end{code}
-\end{comment}
-%%                                       COMMENT >>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Equational Logic in Agda}\label{equational-logic-in-agda}
+
+\section{Equational logic in Agda}\label{equational-logic-in-agda}
+Here we define the notation \texttt{Th} for the identities satisfied by all structures in a given class, and \texttt{Mod} for all structures that satisfy a given collection of identities.
+
+
+
+
+
+\subsection{Models and theories}\label{models-and-theories}
+Let 𝑆 = (𝐹, ρ) be a signature and \(X := \{x_0, x_1, \dots\}\) a countable collection of variable symbols.
+
+An \textbf{identity in the signature} 𝑆 (or ``𝑆-identity'') is an ordered pair of terms (𝑝, 𝑞) ∈ 𝑇(𝑋) × 𝑇(𝑋). We usually write 𝑝 ≈ 𝑞 to indicate such an identity. Although, when we have a collection of identities, say, Σ, we could indicate that 𝑝 ≈ 𝑞 is among the identities in Σ by writing (𝑝, 𝑞) ∈ Σ. We sometimes refer to an identity as an \textbf{equation}; for us, the words ``identity'' and ``equation'' are synonyms.
+
+Let 𝓚(𝑆) and 𝓔(𝑆) denote the classes of all 𝑆-algebras and 𝑆-identities, respectively. For \(𝑨 ∈ 𝒦 ⊆ 𝓚(𝑆)\) and \((𝑝, 𝑞) ∈ ℰ ⊆ 𝓔(𝑆)\), we say that
+\begin{itemize}
+\item 𝑨 \textbf{models} 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case 𝑝 ̇ 𝑨 = 𝑞 ̇ 𝑨 extensionally (i.e., ∀ 𝑎 : 𝑋 → 𝐴, (𝑝 ̇ 𝑨) 𝑎 = (𝑞 ̇ 𝑨) 𝑎);
+\item 𝑨 \textbf{models} ℰ, denoted 𝑨 ⊧ ℰ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ ℰ;
+\item 𝒦 \textbf{models} 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every 𝑨 in 𝒦;
+\item 𝒦 \textbf{models} ℰ just in case 𝑨 ⊧ ℰ for every 𝑨 ∈ 𝒦.
+\end{itemize}
+
+\noindent \textbf{Notation}. To produce the symbols ≈ and ⊧ in Emacs \texttt{agda2-mode}, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models} (resp.). To denote ``𝒦 models 𝑝 ≈ 𝑞'' we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs \texttt{agda2-mode} with \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
+
+The binary relation \(⊧\) induces an obvious Galois connection. Indeed, the Galois pair (Mod, Th) is defined as follows: for all ℰ ⊆ 𝓔(𝑆) and 𝒦 ⊆ 𝓚(𝑆),
+\begin{align*}
+\mathrm{Mod} ℰ &:= \{ 𝑨 ∈ 𝓚(𝑆) : 𝑨 ⊧ ℰ \}, \text{ and }\\
+\mathrm{Th} 𝒦 &:= \{ℯ ∈ 𝓔(𝑆) : 𝒦 ⊧ ℯ \}.
+\end{align*}
+
+The first of these, the class of \textbf{models} of ℰ, contains those and only those algebras modeling every identity in ℰ. It is called an \textbf{equational class}, and ℰ is called an \textbf{equational base} for, or an \textbf{axiomatization} of, the class. Dually, Th 𝒦 is the class of identities modeled by every algebra in 𝒦. Such a class of identities is called an \textbf{equational theory}.
+
+Alternatively and equivalently we could define ``equational class'' and ``equational theory'' in terms of the two
+closure operators \textless{}closure operator\textgreater{} induced by the Galois pair (Mod, Th). Indeed, Mod Th : 𝒫 𝓚(𝑆) → 𝒫 𝓚(𝑆) is a closure operator on 𝓚(𝑆) and Th Mod : 𝒫 𝓔(𝑆) → 𝒫 𝓔(𝑆) is a closure operator on 𝓔(𝑆), and
+
+\begin{itemize}
+\item an \textbf{equational class} is a Mod Th-closed class \textless{}closed set\textgreater{} of 𝑆-algebras;
+\item an \textbf{equational theory} is a Th Mod-closed set of 𝑆-identities
+\end{itemize}
+(Here, 𝒫 denotes the powerset functor.)
+
+\noindent \textbf{N.B.} An equational class is sometimes referred to as a \textbf{variety}; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in the \birkhoffmodule described in Section~\ref{sec:}.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
+
+\section{Closure}
 This section describes the \closuremodule of the \agdaualib.
 
-\subsection{Preliminaries}\label{preliminaries}
-As usual, the development begins by satisfying dependencies, although this time we postpone some imports until the start of the \closuremodule so that these later imports can share the same signature with the module.
-
-%\\[\AgdaEmptyExtraSkip]%
-\begin{code}
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{basic}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{prelude}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{dfunext}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaInductiveConstructor{im}\AgdaSymbol{)}\<%
-\end{code}
-
-\subsection{Closure operators}\label{closure-operators}
+\subsection{Closure operators}\label{sec:closure-operators}
 Fix a signature 𝑆. Let 𝒦 be a class of 𝑆-algebras. Define
 \begin{itemize}
 \item H(𝒦) = homomorphic images of members of 𝒦;
@@ -1298,12 +1127,12 @@ An algebra is a homomorphic image (resp., subalgebra; resp., product) of every a
 
 The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators. If C₁ and C₂ are closure operators on classes of structures, let us say that C₁ ≤ C₂ if for every class 𝒦 we have C₁(𝒦) ⊆ C₂(𝒦).
 
-\subsection{Equational classes}\label{equational-classes}
+\subsection{Equational classes}\label{sec:equational-classes}
 A class 𝒦 of 𝑆-algebras is called a \textbf{variety} if it is closed under each of the closure operators H, S, and P introduced above; the corresponding closure operator is often denoted 𝕍. Thus, if 𝒦 is a class of similar algebras, then the \textbf{variety generated by} 𝒦 is denoted by 𝕍(𝒦) and defined to be the smallest class that contains 𝒦 and is closed under H, S, and P.
 
 We would like to know how to construct 𝕍(𝒦) directly from 𝒦, but it's not immediately obvious how many times we would have to apply the operators H, S, P before the result stabilizes to form a variety---the \textbf{variety generated by} 𝒦. Fortunately, Garrett Birkhoff proved that if we apply the operators in the correct order, then it suffices to apply each one only once.
 
-\subsection{Types for identities}\label{types-for-identities}
+\subsection{Types for identities}\label{sec:types-for-identities}
 In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook Bergman:2012) proclaims, ``Now, finally, we can formalize the idea we have been using since the first page of this text.'' He then proceeds to define \textbf{identities of terms} as follows (paraphrasing for notational consistency):
 
 Let 𝑆 be a signature. An \textbf{identity} or \textbf{equation} in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻(X). If A is an 𝑆-algebra we say that A \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝~̇~A~≡~𝑞~̇~A. In this situation, we write A ⊧ 𝑝 ≈ 𝑞.
@@ -1320,19 +1149,17 @@ If 𝒦 is a class of structures, it is standard to write \texttt{𝒦\ ⊧\ p\ 
 We will also formalize the notions of closure under the taking of products, subalgebras, and homomorphic images, and later prove that each of these closures preserves identities.
 \begin{code}\input{closure/clomod.tex}\end{code}
 
-%%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COMMENT
-\begin{comment}
 \subsection{Compatibility of identities}\label{compatibility-of-identities}
 Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely, for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦. We prove that identities satisfied by all factors of a product are also satisfied by the product.
 \begin{code}\input{closure/prodcomp.tex}\end{code}
 
-\subsubsection{Closure under subalgebras}\label{closure-under-subalgebras}
+\paragraph*{Closure under subalgebras}
 Above we define a datatype SClo that represents a class of algebraic structures that is closed under the taking of subalgebras.
 
 Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦. With our new formal definition of Subalgebra, we will show that every term equation, \texttt{p\ ≈\ q}, that is satisfied by all \texttt{𝑨\ ∈\ 𝒦} is also satisfied by all \texttt{B\ ∈\ S(𝒦)}. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
 \begin{code}\input{closure/subcomp.tex}\end{code}
 
-\subsubsection{Closure under hom images}\label{closure-under-hom-images}
+\paragraph*{Closure under hom images}
 Recall (Obs 14) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 \[𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.\]
 We now formalize this result in Agda. Similarly, we define a datatype that represents classes of algebras that include all homomorphic images of algebras in the class, and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
@@ -1341,8 +1168,25 @@ We now formalize this result in Agda. Similarly, we define a datatype that repre
 Finally, we prove a useful result about the compatibility of identities with interpretation of terms.
 \begin{code}\input{closure/homidcomp.tex}\end{code}
 
-\subsection{Equational theories and classes}\label{equational-theories-and-classes}
-Here we define the notation \texttt{Th} for the identities satisfied by all structures in a given class, and \texttt{Mod} for all structures that satisfy a given collection of identities.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %% \begin{verbatim}
 %% Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) →   Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
@@ -1411,10 +1255,6 @@ Finally, we have a datatype that represents classes of algebras that are close u
 We conclude the \closuremodule by proving that a class 𝒦 of structures is axiomatized by \texttt{Th\ (VClo\ 𝒦)}, which is the set of equations satisfied by all members of the varietal closure of 𝒦.
 \begin{code}\input{closure/vclo-th.tex}\end{code}
 
-\end{comment}
-                     %%%  COMMENT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%   Birkhoff's Theorem   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1450,7 +1290,6 @@ Some of our intermediate-term objectives include
 \item formalizing theorems emerging from our own mathematics research,
 \item documenting the resulting software libraries so they are usable by other working mathematicians.
 \end{itemize}
-
 
 \section{Acknowledgments}\label{acknowledgments}
 %% Besides the main authors and developers of \agdaualib, a number of other people have contributed to the project in one way or another.
@@ -1858,39 +1697,6 @@ The \textbf{term operation} 𝑡 ̇ 𝑨 is defined by recursion on the height �
 \item (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = \(f^{𝑨} \, s^{𝑨}\).
 \end{itemize}
 
-\subsection{Models and theories}\label{models-and-theories}
-Let 𝑆 = (𝐹, ρ) be a signature and \(X := \{x_0, x_1, \dots\}\) a countable collection of variable symbols.
-
-An \textbf{identity in the signature} 𝑆 (or ``𝑆-identity'') is an ordered pair of terms (𝑝, 𝑞) ∈ 𝑇(𝑋) × 𝑇(𝑋). We usually write 𝑝 ≈ 𝑞 to indicate such an identity. Although, when we have a collection of identities, say, Σ, we could indicate that 𝑝 ≈ 𝑞 is among the identities in Σ by writing (𝑝, 𝑞) ∈ Σ. We sometimes refer to an identity as an \textbf{equation}; for us, the words ``identity'' and ``equation'' are synonyms.
-
-Let 𝓚(𝑆) and 𝓔(𝑆) denote the classes of all 𝑆-algebras and 𝑆-identities, respectively. For \(𝑨 ∈ 𝒦 ⊆ 𝓚(𝑆)\) and \((𝑝, 𝑞) ∈ ℰ ⊆ 𝓔(𝑆)\), we say that
-\begin{itemize}
-\item 𝑨 \textbf{models} 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case 𝑝 ̇ 𝑨 = 𝑞 ̇ 𝑨 extensionally (i.e., ∀ 𝑎 : 𝑋 → 𝐴, (𝑝 ̇ 𝑨) 𝑎 = (𝑞 ̇ 𝑨) 𝑎);
-\item 𝑨 \textbf{models} ℰ, denoted 𝑨 ⊧ ℰ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ ℰ;
-\item 𝒦 \textbf{models} 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every 𝑨 in 𝒦;
-\item 𝒦 \textbf{models} ℰ just in case 𝑨 ⊧ ℰ for every 𝑨 ∈ 𝒦.
-\end{itemize}
-
-\noindent \textbf{Notation}. To produce the symbols ≈ and ⊧ in Emacs \texttt{agda2-mode}, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models} (resp.). To denote ``𝒦 models 𝑝 ≈ 𝑞'' we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs \texttt{agda2-mode} with \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
-
-The binary relation \(⊧\) induces an obvious Galois connection. Indeed, the Galois pair (Mod, Th) is defined as follows: for all ℰ ⊆ 𝓔(𝑆) and 𝒦 ⊆ 𝓚(𝑆),
-\begin{align*}
-\mathrm{Mod} ℰ &:= \{ 𝑨 ∈ 𝓚(𝑆) : 𝑨 ⊧ ℰ \}, \text{ and }\\
-\mathrm{Th} 𝒦 &:= \{ℯ ∈ 𝓔(𝑆) : 𝒦 ⊧ ℯ \}.
-\end{align*}
-
-The first of these, the class of \textbf{models} of ℰ, contains those and only those algebras modeling every identity in ℰ. It is called an \textbf{equational class}, and ℰ is called an \textbf{equational base} for, or an \textbf{axiomatization} of, the class. Dually, Th 𝒦 is the class of identities modeled by every algebra in 𝒦. Such a class of identities is called an \textbf{equational theory}.
-
-Alternatively and equivalently we could define ``equational class'' and ``equational theory'' in terms of the two
-closure operators \textless{}closure operator\textgreater{} induced by the Galois pair (Mod, Th). Indeed, Mod Th : 𝒫 𝓚(𝑆) → 𝒫 𝓚(𝑆) is a closure operator on 𝓚(𝑆) and Th Mod : 𝒫 𝓔(𝑆) → 𝒫 𝓔(𝑆) is a closure operator on 𝓔(𝑆), and
-
-\begin{itemize}
-\item an \textbf{equational class} is a Mod Th-closed class \textless{}closed set\textgreater{} of 𝑆-algebras;
-\item an \textbf{equational theory} is a Th Mod-closed set of 𝑆-identities
-\end{itemize}
-(Here, 𝒫 denotes the powerset functor.)
-
-\noindent \textbf{N.B.} An equational class is sometimes referred to as a \textbf{variety}; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in the \birkhoffmodule described in Section~\ref{sec:}.
 
 \subsection{Basic facts}\label{basic-facts}
 We conclude this section with a list of basic facts and their (informal) proofs. These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, Obs 1, Obs 2, etc. Each of these observations is formalized in Agda in the \agdaualib.
