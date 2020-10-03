@@ -1,94 +1,92 @@
+\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[3]\AgdaSymbol{→}%
+\>[20]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
+\\
+%
+\>[3]\AgdaSymbol{→}%
+\>[20]\AgdaFunction{compatible-op}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaGeneralizable{𝓤}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaFunction{𝟎-rel}\<%
+\\
+%
+\>[2]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{ptws0}%
+\>[38]\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[3]\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{ptws0}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\<%
+\\
+%
 \\[\AgdaEmptyExtraSkip]%
 %
-%% \>[2]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaFunction{funext}\AgdaSpace{}%
-%% \AgdaBound{𝓥}\AgdaSpace{}%
-%% \AgdaGeneralizable{𝓤}\<%
-%% \\
-%% \>[2][@{}l@{\AgdaIndent{0}}]%
-%% \>[3]\AgdaSymbol{→}%
-%% \>[20]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaFunction{Algebra}\AgdaSpace{}%
-%% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-%% \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-%% \AgdaBound{𝑆}\AgdaSpace{}%
-%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
-%% \\
-%% %
-%% \>[3]\AgdaSymbol{→}%
-%% \>[20]\AgdaFunction{compatible-op}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaGeneralizable{𝓤}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaBound{f}\AgdaSpace{}%
-%% \AgdaFunction{𝟎-rel}\<%
-%% \\
-%% %
-%% \>[2]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-%% \AgdaBound{fe}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaArgument{A}\AgdaSpace{}%
-%% \AgdaSymbol{=}\AgdaSpace{}%
-%% \AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaBound{f}\AgdaSpace{}%
-%% \AgdaBound{ptws0}%
-%% \>[38]\AgdaSymbol{=}\<%
-%% \\
-%% \>[2][@{}l@{\AgdaIndent{0}}]%
-%% \>[3]\AgdaFunction{ap}\AgdaSpace{}%
-%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-%% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-%% \AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
-%% \AgdaSymbol{(λ}\AgdaSpace{}%
-%% \AgdaBound{x}\AgdaSpace{}%
-%% \AgdaSymbol{→}\AgdaSpace{}%
-%% \AgdaBound{ptws0}\AgdaSpace{}%
-%% \AgdaBound{x}\AgdaSymbol{))}\<%
-%% \\
-%% %
-%% \\[\AgdaEmptyExtraSkip]%
-%% %
-%% \>[2]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaFunction{funext}\AgdaSpace{}%
-%% \AgdaBound{𝓥}\AgdaSpace{}%
-%% \AgdaGeneralizable{𝓤}\<%
-%% \\
-%% \>[2][@{}l@{\AgdaIndent{0}}]%
-%% \>[3]\AgdaSymbol{→}%
-%% \>[17]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaFunction{Algebra}\AgdaSpace{}%
-%% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-%% \AgdaBound{𝑆}\AgdaSymbol{\}}\<%
-%% \\
-%% %
-%% \>[3]\AgdaSymbol{→}%
-%% \>[17]\AgdaFunction{compatible}\AgdaSpace{}%
-%% \AgdaBound{A}\AgdaSpace{}%
-%% \AgdaFunction{𝟎-rel}\<%
-%% \\
-%% %
-%% \>[2]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
-%% \AgdaBound{fe}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaSymbol{=}\<%
-%% \\
-%% \>[2][@{}l@{\AgdaIndent{0}}]%
-%% \>[3]\AgdaSymbol{λ}\AgdaSpace{}%
-%% \AgdaBound{f}\AgdaSpace{}%
-%% \AgdaBound{args}\AgdaSpace{}%
-%% \AgdaSymbol{→}\AgdaSpace{}%
-%% \AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-%% \AgdaBound{fe}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaBound{f}\AgdaSpace{}%
-%% \AgdaBound{args}\<%
-%% \\
-%% %
+\>[2]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[3]\AgdaSymbol{→}%
+\>[17]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\<%
+\\
+%
+\>[3]\AgdaSymbol{→}%
+\>[17]\AgdaFunction{compatible}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{𝟎-rel}\<%
+\\
+%
+\>[2]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[3]\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{args}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{args}\<%
+\\
+%
 \>[2]\AgdaFunction{Δ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{funext}\AgdaSpace{}%

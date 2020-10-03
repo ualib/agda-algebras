@@ -87,18 +87,16 @@ hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
 𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
-HCompClosed : {A : Algebra 𝓤 𝑆}
-              {B : Algebra 𝓦 𝑆}
+HCompClosed : {A : Algebra 𝓤 𝑆} {B : Algebra 𝓦 𝑆}
               {C : Algebra 𝓣 𝑆}
- →            hom A B   →   hom B C
-             ------------------------
- →                   hom A C
+ →            hom A B  →  hom B C
+              --------------------
+ →            hom A C
 
-HCompClosed {A = A , FA}{B = B , FB}{C = C , FC}
+HCompClosed {A = A , FA} {B = B , FB} {C = C , FC}
  (g , ghom) (h , hhom) = h ∘ g , γ
   where
-   γ : ( f : ∣ 𝑆 ∣ ) ( a : ∥ 𝑆 ∥ f  →  A )
-    →  ( h ∘ g ) ( FA f a ) ≡ FC f ( h ∘ g ∘ a )
+   γ : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f  →  A) → (h ∘ g)(FA f a) ≡ FC f (h ∘ g ∘ a)
 
    γ f a = (h ∘ g) (FA f a) ≡⟨ ap h ( ghom f a ) ⟩
           h (FB f (g ∘ a)) ≡⟨ hhom f ( g ∘ a ) ⟩
