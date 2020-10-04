@@ -748,38 +748,11 @@ Those who have experience with quotients should be able to appreciate the ramifi
 In \agdaualib this is easy since, given a quotient class, say, \AgdaBound{𝒞}\AgdaSpace{}\AgdaSymbol{=}\AgdaSpace{}\AgdaSymbol{(}\AgdaSpace{}\AgdaBound{C}\AgdaSpace{},\AgdaSpace{}\AgdaBound{𝑎}\AgdaSpace{},\AgdaSpace{}\AgdaFunction{𝑝}\AgdaSpace{}\AgdaSymbol{)}, we can extract the representative \AgdaBound{𝑎} of the class simply by applying the second and then first projections, an operation denoted and defined in the \agdaualib as follows:
 \begin{code}\input{congruences/relationClasses.tex}\end{code}
 
-\subsection{Singletons and subsingletons}
-\todo{next say something about is-subsingleton-valued}
-\begin{code}
-\>[0]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaGeneralizable{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-subsingleton-valued}%
-\>[24]\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-prop}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
-\end{code}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% \subsection{Singletons and subsingletons}
+%% \todo{next say something about is-subsingleton-valued}
+%% \begin{code}\input{congruences/singletons.tex}\end{code}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Types for equivalences}\label{sec:types-for-equivalences}
 A common way to represent an equivalence relation in Agda is as a record.
@@ -919,7 +892,7 @@ To give an example of how one applies the definition of (extensional) homomorphi
 \begin{code}\input{homomorphisms/homcomp.tex}\end{code}
 
 \subsection{Factoring homomorphisms}
-As another example, we prove that if 𝑔 is a homomorphism from 𝑨 to 𝑩, if ℎ is a homomorphism from 𝑨 to 𝑪, if ℎ is surjective, and if ker ℎ ⊆ ker 𝑔, then there exists a homomorphism ϕ from 𝑪 to 𝑩 such that 𝑔 = ϕ ∘ ℎ.  This claim is formalized in the \agdaualib as follows:
+As another example, we prove that if \AB g is a homomorphism from \AB 𝑨 to \AB 𝑩, if \AB ℎ is a homomorphism from \AB 𝑨 to \AB 𝑪, if \AB ℎ is surjective, and if ker \AB ℎ ⊆ ker \AB g, then there exists a homomorphism \AB ϕ from \AB 𝑪 to \AB 𝑩 such that \AB 𝑔 \AS\AgdaSymbol{=}\ASϕ\AS\AgdaFunction{∘}\AS\AB ℎ.  This claim is formalized in the \agdaualib as follows:
 %% , that is, such that the following diagram commutes:
 %% \begin{verbatim}
 %%    𝑨---- ℎ -->>𝑪
@@ -941,25 +914,22 @@ The notion of isomorphism between two algebras is represented in the \agdaualib,
 \begin{code}\input{homomorphisms/iso.tex}\end{code}
 
 \subsection{Homomorphic images}\label{sec:homomorphic-images}
-The range or ``image'' of a homomorphism plays a significant role in universal algebra, and the following seem to be (for our purposes) the two most useful types for representing homomomrphic images of an algebra.
+The image of an algebra \AgdaBound{𝑨} under a homomorphism, or ``homomorphic image'' of \AgdaBound 𝑨, plays a significant role in universal algebra, and the types below give two useful ways of representing homomomrphic images in \agda. (See the \preludemodule for the definition of \AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}\AgdaUnderscore{}}}.)
 \begin{code}\input{homomorphisms/homimage.tex}\end{code}
-%% Here are some further definitions, derived from the one above, that will come in handy later.
-%% \begin{code}\input{homomorphisms/homimageextras.tex}\end{code}
-%% Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
-%% \begin{code}\input{homomorphisms/hclosed.tex}\end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Terms in Agda}\label{sec:terms-in-agda}
-Here we describe the \termsmodule of the \agdaualib which, after the usual assortment of preliminaries, defines the \AgdaDatatype{Term} datatype that represents the type of terms. The type \ab 𝑋 : \ab 𝒰 ̇ represents an arbitrary collection of variables symbols.\\[-5mm]
+Here we describe the \termsmodule of the \agdaualib which defines the \AgdaDatatype{Term} datatype that represents the type of terms. (Here, as usual, the type \ab 𝑋 : \ab 𝒰 ̇ represents an arbitrary collection of variables symbols.)\\[-5mm]
 \begin{code}\input{terms/term.tex}\end{code}
-Using the \AgdaDatatype{Term} type, we now define the term algebra type, denoted here by \AgdaFunction{𝑻}\AgdaSymbol{(}\AgdaBound{X}\AgdaSymbol{)}.
+Using the \AgdaDatatype{Term} type, we define the \textbf{term algebra} type as follows:
+%% , denoted here by \AgdaFunction{𝑻}\AgdaSymbol{(}\AgdaBound{X}\AgdaSymbol{)}.
 \begin{code}\input{terms/termalg.tex}\end{code}
-The universe is the collection of terms over \AgdaBound{X} and the operations are those defined in the \AgdaInductiveConstructor{node} constructor of the \AgdaDatatype{Term} datatype.
+The universe is the collection of terms over \AgdaBound{X} and the operations are those given by the \AgdaInductiveConstructor{node} constructor of the \AgdaDatatype{Term} datatype.
 
 \subsection{The universal property}\label{sec:the-universal-property}
-What we have developed so far is already enough to formalize the proofs of some important facts. Indeed, we can now formally prove that 
+What we have developed so far is already enough to formalize the proofs of some important facts. Indeed, we can now formally prove that the term algebra \AgdaFunction{𝑻}\AgdaSymbol{(}\AgdaBound{X}\AgdaSymbol{)} is absolutely free.  In other words,
 \begin{enumerate}
 \item every map \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -967,7 +937,7 @@ What we have developed so far is already enough to formalize the proofs of some 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}} lifts to a homomorphism from \AgdaFunction{𝑻}\AgdaSymbol{(}\AgdaBound{X}\AgdaSymbol{)} to \AgdaBound{𝑨}, and
+\AgdaOperator{\AgdaFunction{∣}} lifts to a homomorphism from \TX to \AB 𝑨, and
 \item the induced homomorphism is unique.
 \end{enumerate}
 Here's proof of the first item. %First we show that every map \texttt{X\ →\ ∣\ 𝑨\ ∣} lifts to a homomorphism.
@@ -980,12 +950,15 @@ The proof that this lift to \AgdaFunction{𝑻}\AgdaSymbol{(}\AgdaBound{X}\AgdaS
 %%   \begin{code}\input{terms/liftagreement.tex}\end{code}
 
 \subsection{Interpretation of terms}\label{sec:interpretation-of-terms}
-Let 𝑡 be an 𝑆-term and 𝑨 an 𝑆-algebra. The induced 𝑛-ary operation 𝑡\ ̇\ 𝑨 is defined by structural recursion on 𝑡 as follows:
+Let \AgdaBound{𝑡} be an 𝑆-term and \AgdaBound{𝑨} an 𝑆-algebra. The induced 𝑛-ary operation \AgdaBound{𝑡}\ ̇\ 𝑨 is defined by structural recursion on 𝑡 as follows:
 \begin{itemize}
-\item If 𝑡 = 𝑥 ∈ 𝑋 is a variable and 𝒂 : 𝑋 → ∣ 𝑨 ∣ is a tuple of elements of ∣ 𝑨 ∣, then\\ (𝑡\ ̇\ 𝑨) 𝒂 = 𝒂 𝑥.
-\item If 𝑡 = 𝑓 𝒔, where 𝑓 ∈ ∣ 𝑆 ∣ is an operation symbol, 𝒔 : ∥ 𝑆 ∥ 𝑓 → 𝑇(𝑋) is a tuple of terms, and 𝒂 : 𝑋 → ∣ 𝑨 ∣ is a tuple of elements of ∣ 𝑨 ∣, then
+\item If \AB 𝑡\AS\AgdaSymbol{=}\AS\AB 𝑥\AS\ASy{∈}\AS\AB 𝑋 is a variable and \AB 𝒂\AS\AgdaSymbol{:}\AS\AB 𝑋\AS\AgdaSymbol{→}\AS\univA is a tuple of elements of \univA, then
+\begin{quote}
+  \tA\AgdaSpace{}\AgdaBound{𝒂}\AgdaSpace{}\AgdaSymbol{=}\AS\AB 𝒂\AS\AB 𝑥.
+\end{quote}
+\item If \AB 𝑡\AS\AgdaSymbol{=}\AS\AB 𝑓\AS\AB 𝒔, where \AB 𝑓\AS\AgdaSymbol{∈}\AS\univS is an operation symbol, \AB 𝒔\AS\AgdaSymbol{:}\AS\arityS\AS\AB 𝑓\AS\AgdaSymbol{→}\AS\AB \TX is a tuple of terms, and \AB 𝒂\AS\AgdaSymbol{:}\AS\AB 𝑋\ASy →\AS\univA is a tuple of elements of \univA, then
   \begin{quote}
-    (𝑡\ ̇\ 𝑨)\ 𝒂\ =\ ((𝑓\ 𝒔)\ ̇\ 𝑨)\ 𝒂\ =\ (𝑓\ ̂\ 𝑨)(λ 𝑖 → ((𝒔\ 𝑖)\ ̇\ 𝑨)\ 𝒂).
+    \tA\AgdaSpace{}\AgdaBound{𝒂}\AgdaSpace{}\AgdaSymbol{=}\AS\fsA\AS\AB 𝒂\AS\ASy{=}\AS\fA\ASy{(λ}\AS\AB 𝑖\AS\ASy{→}\AS\siA\AS\AB 𝒂\AgdaSymbol{)}.
     \end{quote}
 \end{itemize}
 Here is the Agda implementation of this recursive definition.
@@ -1002,7 +975,7 @@ Here is the Agda implementation of this recursive definition.
 \end{comment}
 
 \subsection{Compatibility of terms}
-We next formalize the proofs of two important compatibility results. The first asserts that homomorphisms commute with terms; the second, that congruences commute with terms.  Both proofs are by induction and structural recursion does most of the heavy lifting.
+We next formalize the proofs of two important compatibility results. The first asserts that homomorphisms commute with terms; the second, that congruences commute with terms.  Both proofs are by induction, and structural recursion does most of the heavy lifting.
 \paragraph*{Homomorphisms commute with terms}\label{sec:homomorphisms-commute-with-terms}
 \begin{code}\input{terms/commhom.tex}\end{code}
 
@@ -1017,21 +990,13 @@ Here's the formal proof that terms respect congruences.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Subalgebras in Agda}\label{sec:sec:subs-in-agda}
-This section describes the \subsmodule of the \agdaualib where subuniverses and subalgebras are defined and some basic facts about them proved.
-
-%% \subsection{Preliminaries}\label{sec:preliminaries}
-%% The \subsmodule starts, as usual, by fixing a signature 𝑆 and satisfying some dependencies.
-
-%% \subsection{Types for subuniverses}\label{sec:types-for-subuniverses}
-%% \begin{code}\input{subuniverses/subprelude.tex}\end{code}
-
-The module begins with a straightforward definition of the collection of subuniverses of an algebra \algA. Since a subuniverse is a subset of the domain \univA of \algA, it is defined as a predicate on this domain. Thus, a collection of subuniverses will be a predicate on predicates on \univA.
+This section describes the \subsmodule of the \agdaualib where subuniverses and subalgebras are defined and some basic facts about them proved. The module begins with a straightforward definition of the collection of subuniverses of an algebra \algA. Since a subuniverse is a subset of the domain \univA of \algA, it is defined as a predicate on this domain. Thus, a collection of subuniverses is a predicate on predicates on \univA.
 \begin{code}\input{subuniverses/sub.tex}\end{code}
 
 %% Next we wish to describing how one generates subuniverses, but to do so we first need to dispense with a few more technicalities.\begin{code}\input{subuniverses/technical.tex}\end{code}
 
 \subsection{Subuniverse generation}\label{sec:subuniverse-generation}
-Next we demonstrate how to formalize an important theorem about subuniverse generation. Recall, if \(A = ⟨𝐴, …⟩\) is an 𝑆-algebra, if \(∅ ≠ 𝐴₀ ⊆ 𝐴\), and if we define by recursion the sets \(A_{n+1} = Aₙ ∪ \{ f a : f ∈ F, a : ρ f → Aₙ \}\), then the subuniverse of A generated by 𝐴₀ is \(\mathrm{Sg}^A(A₀) = ⋃ₙ Aₙ\).
+Next we demonstrate how to formalize an important theorem about subuniverse generation. Recall, if \AB𝑨\AS\ASy{=}\AS\ASy{(}\AB 𝐴, …\AgdaSymbol{)} is an 𝑆-algebra, if \(∅ ≠ 𝐴₀ ⊆ 𝐴\), and if we define by recursion the sets \(A_{n+1} = Aₙ ∪ \{ f a : f ∈ F, a : ρ f → Aₙ \}\), then the subuniverse of A generated by 𝐴₀ is \(\mathrm{Sg}^A(A₀) = ⋃ₙ Aₙ\).
 \begin{code}\input{subuniverses/sg.tex}\end{code}
 
 \subsection{Closure under intersection}\label{sec:closure-under-intersection}
