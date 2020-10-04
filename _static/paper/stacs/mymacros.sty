@@ -1,5 +1,6 @@
 \RequirePackage[newwjd]{agda}
 \RequirePackage{unixode}
+\RequirePackage{xspace}
 %% \RequirePackage[mathcal]{euscript}
 
 \newcommand\ab[1]{\AgdaBound{#1}}
@@ -11,27 +12,28 @@
 \newcommand\signatureOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
 
 \newcommand\algebraUS{\AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}\xspace}
-\newcommand\algebraOVUS{\AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSymbol{\}\{}\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}\AgdaBound{𝑆}}
+\newcommand\algebraOVUS{\AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSymbol{\}\{}\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}\AgdaBound{𝑆}\xspace}
+\newcommand\algA{\AgdaBound{𝑨}\xspace}
+\newcommand\univA{\AgdaOperator{\AgdaFunction{∣}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{∣}}\xspace}
 
-\RequirePackage{xspace}
 \newcommand\universesmodule{\href{https://github.com/williamdemeo/TypeTopology/blob/master/source/Universes.lagda}%
-  {\texttt{Universes} module}\xspace}
+  {\AgdaModule{Universes} module}\xspace}
 \newcommand\preludemodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst}%
-  {\texttt{prelude} module}\xspace}
+  {\AgdaModule{prelude} module}\xspace}
 \newcommand\basicmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/basic.lagda.rst}%
-  {\texttt{basic} module}\xspace}
+  {\AgdaModule{basic} module}\xspace}
 \newcommand\consmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst}%
-  {\texttt{congruences} module}\xspace}
+  {\AgdaModule{congruences} module}\xspace}
 \newcommand\homsmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/homomorphisms.lagda.rst}%
-  {\texttt{homomorphisms} module}\xspace}
+  {\AgdaModule{homomorphisms} module}\xspace}
 \newcommand\termsmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/terms.lagda.rst}%
-  {\texttt{terms} module}\xspace}
+  {\AgdaModule{terms} module}\xspace}
 \newcommand\subsmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/subuniverses.lagda.rst}%
-  {\texttt{subuniverses} module}\xspace}
+  {\AgdaModule{subuniverses} module}\xspace}
 \newcommand\closuremodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/congruences.lagda.rst}%
-  {\texttt{closure} module}\xspace}
+  {\AgdaModule{closure} module}\xspace}
 \newcommand\birkhoffmodule{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst}%
-  {\texttt{birkhoff} module}\xspace}
+  {\AgdaModule{birkhoff} module}\xspace}
 
 \newcommand\agdaualib{\href{https://ualib.org}%
   {\textsf{UALib}}\xspace}
@@ -45,7 +47,7 @@
   {\textsf{Type Topology}}\xspace}
 \newcommand\hottufinagda{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{\textit{Univalent Foundations and Homotopy Type Theory}}\xspace}
 \newcommand\mhenotes{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Univalent Foundations and Homotopy Type Theory}\xspace}
-\newcommand\agdalngref{\href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language Reference}\xspace}
+\newcommand\agdalangref{\href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language Reference}\xspace}
 \newcommand\agdatools{\href{https://agda.readthedocs.io/en/v2.6.1/tools/}{Agda Tools}\xspace}
 \newcommand\agdastdlib{\href{https://agda.github.io/agda-stdlib/}{Agda standard library}}
 
