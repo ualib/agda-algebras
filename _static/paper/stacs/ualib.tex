@@ -19,15 +19,7 @@
 
 \author{William DeMeo}{Department of Algebra, Faculty of Mathematics and Physics, Charles University, Czech Republic}{williamdemeo@gmail.com}{https://orcid.org/0000-0003-1832-5690}{}
 \author{Hyeyoung Shin}{Faculty of Information Technology, Czech Technical University, Czech Republic}{hyeyoungshinw@gmail.com}{}{}
-%% %\author{\href{https://hyeyoungshin.github.io/}{Hyeyoung Shin}}
 \author{Siva Somayyajula}{Department of Computer Science, Carnegie Mellon University, USA}{ssomayya@andrew.cmu.edu}{}{}
-%% \affiliation{% \institution{\href{https://www.cs.cmu.edu/}{}\city{Pittsburgh}\state{PA}%\author{\href{http://www.cs.cmu.edu/~ssomayya/}{Siva Somayyajula}}
-%% \institution{\href{https://prl-prg.github.io/}\streetaddress{Thákurova 9}\city{Prague 6}  \state{Czech Republic} \postcode{160 00} 
-%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional
-%% \email{williamdemeo@gmail.com}
-%% \affiliation{% \\
-%%   \institution{\href{https://www.mff.cuni.cz/en/ka}{Department of Algebra}\\Charles University} %\\ Katedra Algebry, Univerzita Karlova\\%%   \streetaddress{Sokolovska 83}
-%% 186 00 Praha, \v{C}esk\'{a} Republika}
 
 \authorrunning{W.~DeMeo, H.~Shin, S.~Somayyajula}
 \Copyright{William DeMeo, Hyeyoung Shin, Siva Somayyajula}
@@ -42,30 +34,30 @@
 %% \category{} %optional, e.g. invited paper
 
 %% \relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
-\relatedversion{An extended version of the paper is available at \url{...}.}
+%% \relatedversion{An extended version of the paper is available at \url{...}.}
 
-\supplement{documentation: \href{https://ualib.org}{ualib.org}; source code: \href{https://gitlab.com/ualib/ualib.gitlab.io/}{gitlab.com/ualib/ualib.gitlab.io/}}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+\supplement{\agdaualib source code: \href{https://gitlab.com/ualib/ualib.gitlab.io/}{https://gitlab.com/ualib/ualib.gitlab.io/}\\\phantom{\textbf{Supplementary Mater}}\agdaualib documentation: \href{https://ualib.org}{https://ualib.org}}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
 
 %\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
 
-\acknowledgements{I want to thank \dots}%optional
+\acknowledgements{The authors thank Clifford Bergman, Venanzio Capretta, Andrej Bauer, Miklós Maróti, and Ralph Freese, for helpful discussions and encouragement.  The \agdaualib has also benefited substantially from \href{https://www.cs.bham.ac.uk/~mhe}{Martin Escardo's} outstanding \typetopology Agda library and his notes on \hottufinagda in which that library is so lucidly described.  Finally, we thank Ulf Norell and his collaborators for creating the wonderful Agda language~\cite{Norell:2009}.}
 
-%\nolinenumbers %uncomment to disable line numbering
+\nolinenumbers %uncomment to disable line numbering
 
-%\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\EventEditors{John Q. Open and Joan R. Access}
-\EventNoEds{2}
-\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
-\EventShortTitle{CVIT 2016}
-\EventAcronym{CVIT}
-\EventYear{2016}
-\EventDate{December 24--27, 2016}
-\EventLocation{Little Whinging, United Kingdom}
-\EventLogo{}
-\SeriesVolume{42}
-\ArticleNo{23}
+%% \EventEditors{John Q. Open and Joan R. Access}
+%% \EventNoEds{2}
+%% \EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+%% \EventShortTitle{CVIT 2016}
+%% \EventAcronym{CVIT}
+%% \EventYear{2016}
+%% \EventDate{December 24--27, 2016}
+%% \EventLocation{Little Whinging, United Kingdom}
+%% \EventLogo{}
+%% \SeriesVolume{42}
+%% \ArticleNo{23}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -400,7 +392,7 @@ The \agdaualib allows us to replace \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{
 Thus, from now on \AgdaBound{𝑓}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{} will denote the interpretation of the operation symbol \AgdaBound{𝑓} in the algebra \AgdaBound{𝑨}.  (Later we introduce a slightly different notation, \AgdaBound{𝑡}\AgdaSpace{}\AgdaOperator{\AgdaFunction{ ̇ }}\AgdaSpace{}\AgdaBound{𝑨}, when representing the interpretation of a \emph{term} \AgdaBound{𝑡} in the algebra \AgdaBound{𝑨}).
 
 \subsection{Product type}
-The type of (indexed) product of a collection of algebras (of the same type) is also a type of algebras; it is defined as follows:\footnote{In agda2-mode ⨅ is typed as \textbackslash Glb.}
+The type of (indexed) product of a collection of algebras (of the same type) is also a type of algebras; it is defined as follows:\footnote{In \agdamode ⨅ is typed as \textbackslash Glb.}
 \begin{code}%
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -616,7 +608,7 @@ Three natural and essentially equivalent ways to define the kernel of a function
 \begin{code}\input{congruences/kernel.tex}\end{code}
 
 \paragraph*{Properties of binary relations}\label{sec:properties-of-binary-relations}
-Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈}) on \texttt{X}, are defined in the obvious way. For instance, here is reflexivity.
+Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{\Aapprox }) on \texttt{X}, are defined in the obvious way. For instance, here is reflexivity.
 \begin{code}
 \>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -636,22 +628,22 @@ Reflexivity, symmetry, and transitivity of a binary relation (say, \texttt{≈})
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 \>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}\Aapprox \AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\Aapprox }}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
 Symmetry and transitivity are defined similarly.
 
 \paragraph*{Classes of a binary relation}
 If \AgdaBound{A}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaGeneralizable{𝓤} is a type,
-\AgdaBound{≈} a binary relation on \AgdaBound{A}, and \AgdaBound{a}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{A},
-then the \AgdaBound{≈}-class containing \AgdaBound{𝑎} is denoted in \agdaualib by
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}\AgdaBound{≈}.
+\AgdaBound{\Aapprox } a binary relation on \AgdaBound{A}, and \AgdaBound{a}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{A},
+then the \AgdaBound{\Aapprox }-class containing \AgdaBound{𝑎} is denoted in \agdaualib by
+\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}\AgdaBound{\Aapprox }.
 \begin{code}
 \>[0]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -677,18 +669,18 @@ then the \AgdaBound{≈}-class containing \AgdaBound{𝑎} is denoted in \agdaua
 \>[0]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{≈}\AgdaSpace{}%
+\AgdaBound{\Aapprox }\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{,}%
-\>[21]\AgdaBound{≈}\AgdaSpace{}%
+\>[21]\AgdaBound{\Aapprox }\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-In set theory, the quotient of a set 𝐴 modulo an equivalence relation ≈ is the set of ≈-classes of 𝐴, where two elements 𝑥, 𝑦 are in the same class iff 𝑥 ≈ 𝑦. In the \agdaualib the type that captures this notion is the quotient of a type \AgdaBound{A} modulo an equivalence relation type \AgdaBound{≈}. We denote such quotients by \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈}, and we define \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}//\AgdaUnderscore{}}}\AgdaSpace{} as an infix operation, as shown below.
+In set theory, the quotient of a set 𝐴 modulo an equivalence relation \Aapprox  is the set of \Aapprox -classes of 𝐴, where two elements 𝑥, 𝑦 are in the same class iff 𝑥 \Aapprox  𝑦. In the \agdaualib the type that captures this notion is the quotient of a type \AgdaBound{A} modulo an equivalence relation type \AgdaBound{\Aapprox }. We denote such quotients by \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{\Aapprox }, and we define \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}//\AgdaUnderscore{}}}\AgdaSpace{} as an infix operation, as shown below.
 \begin{code}
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}//\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -710,7 +702,7 @@ In set theory, the quotient of a set 𝐴 modulo an equivalence relation ≈ is 
 \\
 \>[0]\AgdaBound{A}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}%
-\AgdaBound{≈}\AgdaSpace{}%
+\AgdaBound{\Aapprox }\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
@@ -728,19 +720,19 @@ In set theory, the quotient of a set 𝐴 modulo an equivalence relation ≈ is 
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{≈}\AgdaSpace{}%
+\AgdaBound{\Aapprox }\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \end{code}
 %\AgdaSpace{}\AgdaFunction{꞉}\AgdaSpace{}
-It is important to observe that, unlike the elements of a quotient in set theory, the inhabitants of the quotient type defined above are not mere \AgdaBound{≈}-classes.  Instead, each inhabitant of the type \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{≈} is by definition a triple, \AgdaSymbol{(}\AgdaSpace{}\AgdaBound{C}\AgdaSpace{},\AgdaSpace{}\AgdaBound{𝑎}\AgdaSpace{},\AgdaSpace{}\AgdaFunction{𝑝}\AgdaSpace{}\AgdaSymbol{)}, where \AgdaBound{C} is a \AgdaBound{≈}-class, \AgdaBound{𝑎} has type \AgdaBound{A}\AgdaSpace{}, and \AgdaFunction{𝑝} is a proof that \AgdaBound{C} is the \AgdaBound{≈}-class containing \AgdaBound{𝑎}; that is, \AgdaBound{C}\AgdaSpace{}%
+It is important to observe that, unlike the elements of a quotient in set theory, the inhabitants of the quotient type defined above are not mere \AgdaBound{\Aapprox }-classes.  Instead, each inhabitant of the type \AgdaBound{A}\AgdaSpace{}\AgdaOperator{\AgdaFunction{//}}\AgdaSpace{}\AgdaBound{\Aapprox } is by definition a triple, \AgdaSymbol{(}\AgdaSpace{}\AgdaBound{C}\AgdaSpace{},\AgdaSpace{}\AgdaBound{𝑎}\AgdaSpace{},\AgdaSpace{}\AgdaFunction{𝑝}\AgdaSpace{}\AgdaSymbol{)}, where \AgdaBound{C} is a \AgdaBound{\Aapprox }-class, \AgdaBound{𝑎} has type \AgdaBound{A}\AgdaSpace{}, and \AgdaFunction{𝑝} is a proof that \AgdaBound{C} is the \AgdaBound{\Aapprox }-class containing \AgdaBound{𝑎}; that is, \AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{≈}\AgdaSpace{}%
+\AgdaBound{\Aapprox }\AgdaSpace{}%
 \AgdaSymbol{)}.
-Thus, given an element \AgdaBound{a}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{A} and an equivalence relation \AgdaBound{≈} we form the \AgdaBound{≈}-class containing \AgdaBound{a} as the triple, \AgdaSymbol{(}\AgdaSpace{}\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}\AgdaBound{≈}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}\AgdaSymbol{)}. In fact the \agdaualib defines a function for that.  It uses infix notation and is defined as follows.
+Thus, given an element \AgdaBound{a}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{A} and an equivalence relation \AgdaBound{\Aapprox } we form the \AgdaBound{\Aapprox }-class containing \AgdaBound{a} as the triple, \AgdaSymbol{(}\AgdaSpace{}\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}\AgdaBound{\Aapprox }\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaBound{a}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}\AgdaSymbol{)}. In fact the \agdaualib defines a function for that.  It uses infix notation and is defined as follows.
 \begin{code}\input{congruences/relationClassesIntro.tex}\end{code}
 
 Those who have experience with quotients should be able to appreciate the ramifications of the above definitions.  Since a quotient class always comes equipped with a representative element (as well as a proof that the representative belongs to the class), we never have to worry about choosing representatives. This is important because we often want to get our hands on quotient class representatives, and to do so constructively we must avoid the Axiom of Choice.
@@ -775,7 +767,7 @@ We finally arrive at the definition of congruence, which the \agdaualib defines 
 
 \subsection{Quotient algebras}
 An important type for algebraic work is that of a quotient algebra, which the \agdaualib defines as follows:%
-\footnote{In Emacs \texttt{agda2-mode} one types \texttt{\textbackslash ---} and then \texttt{C-f} or the right-arrow key a number of times to produce the special ╱ symbol that we use for quotients.}
+\footnote{In \emacs \agdamode one types \texttt{\textbackslash ---} and then \texttt{C-f} or the right-arrow key a number of times to produce the special ╱ symbol that we use for quotients.}
 \begin{code}\input{congruences/quotient.tex}\end{code}
 
 
@@ -914,9 +906,8 @@ The notion of isomorphism between two algebras is represented in the \agdaualib,
 \begin{code}\input{homomorphisms/iso.tex}\end{code}
 
 \subsection{Homomorphic images}\label{sec:homomorphic-images}
-The image of an algebra \AgdaBound{𝑨} under a homomorphism, or ``homomorphic image'' of \AgdaBound 𝑨, plays a significant role in universal algebra, and the types below give two useful ways of representing homomomrphic images in \agda. (See the \preludemodule for the definition of \AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}\AgdaUnderscore{}}}.)
+The image of an algebra \AgdaBound{𝑨} under a homomorphism, or ``homomorphic image'' of \AgdaBound 𝑨, plays a significant role in universal algebra, and the types below give two useful ways of representing homomomrphic images in \agda.\footnote{See the \preludemodule for the definition of \AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}\AgdaUnderscore{}}}.}
 \begin{code}\input{homomorphisms/homimage.tex}\end{code}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -990,19 +981,20 @@ Here's the formal proof that terms respect congruences.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Subalgebras in Agda}\label{sec:sec:subs-in-agda}
-This section describes the \subsmodule of the \agdaualib where subuniverses and subalgebras are defined and some basic facts about them proved. The module begins with a straightforward definition of the collection of subuniverses of an algebra \algA. Since a subuniverse is a subset of the domain \univA of \algA, it is defined as a predicate on this domain. Thus, a collection of subuniverses is a predicate on predicates on \univA.
+This section describes the \subsmodule of the \agdaualib where subuniverses and subalgebras are defined and some basic facts about them proved. The module begins with a straightforward definition of the collection of subuniverses of an algebra \algA. Since a subuniverse is a subset of the domain \univA of \algA, it is defined as a predicate on this domain. Thus, a collection of subuniverses is a predicate on predicates on \univA.%
+\footnote{The syntax \AgdaOperator{\AgdaDatatype{Im}}\AgdaSpace{}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\AgdaOperator{\AgdaDatatype{⊆}}\AgdaSpace{}\AgdaUnderscore{}}} is defined in the \preludemodule.}
 \begin{code}\input{subuniverses/sub.tex}\end{code}
-
 %% Next we wish to describing how one generates subuniverses, but to do so we first need to dispense with a few more technicalities.\begin{code}\input{subuniverses/technical.tex}\end{code}
 
 \subsection{Subuniverse generation}\label{sec:subuniverse-generation}
-Next we demonstrate how to formalize an important theorem about subuniverse generation. Recall, if \AB𝑨\AS\ASy{=}\AS\ASy{(}\AB 𝐴, …\AgdaSymbol{)} is an 𝑆-algebra, if \(∅ ≠ 𝐴₀ ⊆ 𝐴\), and if we define by recursion the sets \(A_{n+1} = Aₙ ∪ \{ f a : f ∈ F, a : ρ f → Aₙ \}\), then the subuniverse of A generated by 𝐴₀ is \(\mathrm{Sg}^A(A₀) = ⋃ₙ Aₙ\).
+Next we demonstrate how to formalize an important theorem about subuniverse generation. Recall, if \AB𝑨\AS\ASy{=}\AS⟨\AB 𝐴, …⟩ is an 𝑆-algebra, \ASy ∅\AS\ASy ≠\AS\AB 𝐴\(_0\)\AS\ASy ⊆\AS\AB 𝐴, and if we define by recursion the sets
+\begin{quote}
+  \AgdaBound{A}\(_{n+1}\)\AS\ASy{=}\AS\AB A\(_n\)\AS\ASy{∪}\AS \{ \fA\AS\AB a\AS|\AS\AB f\AS\ASy :\AS\univS\ASy ,\AS\AB a\ASy :\AS\arityS\AS\AB f\ASy →\AS\AB Aₙ \},
+\end{quote}
+then the subuniverse of A generated by 𝐴₀ is \(\mathrm{Sg}^A(A₀) = ⋃ₙ Aₙ\).
 \begin{code}\input{subuniverses/sg.tex}\end{code}
-
-\subsection{Closure under intersection}\label{sec:closure-under-intersection}
-Recall from Obs 6 that the intersection ⋂ᵢ 𝐴ᵢ of a collection \{𝐴ᵢ ∣ 𝐴ᵢ ≤ 𝑨\} of subuniverses of an algebra 𝑨 is
-again a subuniverse of 𝑨. We formalize the statement and proof of this easy fact in Agda as follows.
-\begin{code}\input{subuniverses/subintersection.tex}\end{code}
+We now verify that this definition of the subalgebra generated by \AB X is correct; that is, it's the smallest subalgebra containing \AB X.
+\begin{code}\input{subuniverses/sgsmallest.tex}\end{code}
 
 \subsection{Homomorphic images are subuniverses}\label{sec:homomorphic-images-are-subuniverses}
 In this subsection we show that the image of a homomorphism is a subuniverse of the codomain algebra. Before implementing the result formally in Agda, let us recall the informal proof.  Assume we have a homomorphism
@@ -1031,7 +1023,7 @@ such that
 \end{quote}
 %% \(f^𝑩 𝑏  = f^𝑩 (\AgdaBound{ϕ} ∘ 𝑎) = \AgdaBound{ϕ} (f^𝑨 𝑎) ∈\) Image \AgdaBound{ϕ}.
 
-Now, once we recall the definition of \AgdaFunction{HomImage} from the \homsmodule, described above in Section~\ref{sec:homomorphic-images},
+Now, once we recall the definition of \AgdaFunction{HomImage} from the \homsmodule, described above in Section~\ref{sec:homomorphic-images},\footnote{See the \preludemodule for the definition of \AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}\AgdaUnderscore{}}}.}
 \begin{code}
 \>[0]\AgdaFunction{HomImage}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1156,144 +1148,157 @@ The converse of membership-equiv-gives-carrier-equality is obvious.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Equational logic in Agda}\label{sec:equational-logic-in-agda}
-Here we define the notation \texttt{Th} for the identities satisfied by all structures in a given class, and \texttt{Mod} for all structures that satisfy a given collection of identities.
+We begin this section by defining the notation \AF{Th} for the identities satisfied by all structures in a given class, and \AF{Mod} for all structures that satisfy a given collection of identities. Then we define the closure operators \AF H, \AF S, \AF P, and \emph{variety}. In Section~\ref{sec:types-for-identities}, we describe the \closuremodule of the \agdaualib in which we formalize these basic notions of equational logic in type theory. In particular, we will present inductive types that define \AF H-, \AF S-, and \AF P-closed classes recursively.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Models and theories}\label{sec:models-and-theories}
-Let 𝑆 = (𝐹, ρ) be a signature and \(X := \{x_0, x_1, \dots\}\) a countable collection of variable symbols.
+Let \AB 𝑆 be a signature and \AB X an infinite collection of variable symbols. An \textbf{identity in the signature} \AB 𝑆 (or ``\AB 𝑆-identity'') is an ordered pair of terms (\AB 𝑝\AS\ASy ,\AS\AB 𝑞) in \TX\AS\ASy{×}\AS\TX. We often write \AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 to indicate such an identity, but when we have a collection \AB Σ of identities, we write (\AB 𝑝\AS\ASy ,\AS\AB 𝑞)\AS\Ain \AS\AB Σ to denote that \AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 belongs to \AB Σ.  We sometimes refer to an identity as an \textbf{equation}; for us, the words ``identity'' and ``equation'' are synonyms.
 
-An \textbf{identity in the signature} 𝑆 (or ``𝑆-identity'') is an ordered pair of terms (𝑝, 𝑞) ∈ 𝑇(𝑋) × 𝑇(𝑋). We usually write 𝑝 ≈ 𝑞 to indicate such an identity. Although, when we have a collection of identities, say, Σ, we could indicate that 𝑝 ≈ 𝑞 is among the identities in Σ by writing (𝑝, 𝑞) ∈ Σ. We sometimes refer to an identity as an \textbf{equation}; for us, the words ``identity'' and ``equation'' are synonyms.
+Let \AB 𝓚(\AB 𝑆) and \AB 𝓔(\AB 𝑆) denote the classes of all \AB 𝑆-algebras and \AB 𝑆-identities, respectively. If \AB 𝒦\AS\ASy ⊆\AS\AB 𝓚(\AB 𝑆) is a subclass and if \AB 𝑨\AS\Ain \AS\AB 𝒦, and (\AB 𝑝\AS\ASy ,\AS\AB 𝑞)\AS\Ain \AS\AB ℰ\AS\ASy ⊆\AS\AB 𝓔(\AB 𝑆), we say that%
+\footnote{To produce the symbols \Aapprox  and \Amodels  in \emacs \agdamode, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models}, respectively.}
+\begin{romanenumerate}
+\item \AB 𝑨 \textbf{models} \AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞, denoted \AB 𝑨\AS\ASy \Amodels \AS\AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞, just in case \termA 𝑝\AS\ASy =\AS\termA 𝑞 extensionally, that is, \ASy ∀\AS\AB 𝑎\AS\ASy :\AS\AB 𝑋\AS\ASy →\AS\AB 𝐴\AS\ASy ,\AS\termA 𝑝\AS\AB 𝑎\AS\ASy =\AS\termA q\AS\AB 𝑎;
+\item \AB 𝑨 \textbf{models} \AB ℰ, denoted \AB 𝑨\AS\ASy \Amodels \AS\AB ℰ, just in case \AB 𝑨\AS\ASy \Amodels \AS\AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 holds for every (\AB 𝑝\AS\ASy ,\AS\AB 𝑞)\AS\Ain \AS\AB ℰ;
+\item \AB 𝒦 \textbf{models} \AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 just in case \AB 𝑨\AS\ASy \Amodels \AS\AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 holds for every \AB 𝑨 in \AB 𝒦;
+\item \AB 𝒦 \textbf{models} \AB ℰ just in case \AB 𝑨\AS\ASy \Amodels \AS\AB ℰ for every \AB 𝑨\AS\Ain \AS\AB 𝒦.
+\end{romanenumerate}
 
-Let 𝓚(𝑆) and 𝓔(𝑆) denote the classes of all 𝑆-algebras and 𝑆-identities, respectively. For \(𝑨 ∈ 𝒦 ⊆ 𝓚(𝑆)\) and \((𝑝, 𝑞) ∈ ℰ ⊆ 𝓔(𝑆)\), we say that
+\noindent \textbf{Notation}.  To denote ``\AB 𝒦 models \AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞'' we will use \AB 𝒦\AS\ASy \Amodels \AS\AB 𝑝\AS \Aapproxxx \AS\AB 𝑞 instead of the more standard \AB 𝒦\AS\ASy \Amodels \AS\AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 to distinguish it from \AB 𝑨\AS\ASy \Amodels \AS\AB 𝑝\AS\ASy \Aapprox \AS\AB 𝑞 in our Agda implementation, since these must be represented by distinct types.%
+\footnote{The symbol \Aapproxxx is produced in \emacs \agdamode with \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.}
+
+The binary relation \AS \Amodels  induces an obvious \textbf{Galois connection}. Indeed, the Galois pair (\AF{Mod}, \AF{Th}) is defined as follows: for all \AB ℰ\AS\ASy ⊆\AS\AB 𝓔(\AB 𝑆) and \AB 𝒦\AS\ASy ⊆\AS\AB 𝓚(\AB 𝑆),
+\begin{quote}
+\AF{Mod} \AB ℰ := \{ \AB 𝑨\AS\Ain \AS\AB 𝓚(\AB 𝑆)\AS\ASy :\AS\AB 𝑨\AS\ASy \Amodels \AS\AB ℰ \} and
+\AF{Th} \AB 𝒦 := \{\AB ℯ\AS\Ain \AS\AB 𝓔(\AB𝑆)\AS\ASy :\AS\AB 𝒦\AS\ASy \Amodels \AS\AB ℯ \}.
+\end{quote}
+The first of these, the class of \textbf{models} of \AB ℰ, contains those and only those algebras modeling every identity in \AB ℰ. It is called an \textbf{equational class}, and \AB ℰ is called an \textbf{equational base} for, or an \textbf{axiomatization} of, the class. Dually, \AF{Th} \AB 𝒦 is the class of identities modeled by every algebra in \AB 𝒦. Such a class of identities is called an \textbf{equational theory}.
+
+Equivalently equational classes and theories can be defined in terms of the two closure operators induced by the Galois pair (\AF{Mod}, \AF{Th}). Indeed, \AF{Mod} \AF{Th} and \AF{Th} \AF{Mod} are closure operators on \AB 𝓚(\AB 𝑆) and \AB 𝓔(\AB 𝑆), respectively, and
 \begin{itemize}
-\item 𝑨 \textbf{models} 𝑝 ≈ 𝑞, denoted 𝑨 ⊧ 𝑝 ≈ 𝑞, just in case 𝑝 ̇ 𝑨 = 𝑞 ̇ 𝑨 extensionally (i.e., ∀ 𝑎 : 𝑋 → 𝐴, (𝑝 ̇ 𝑨) 𝑎 = (𝑞 ̇ 𝑨) 𝑎);
-\item 𝑨 \textbf{models} ℰ, denoted 𝑨 ⊧ ℰ, just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every (𝑝, 𝑞) ∈ ℰ;
-\item 𝒦 \textbf{models} 𝑝 ≈ 𝑞 just in case 𝑨 ⊧ 𝑝 ≈ 𝑞 holds for every 𝑨 in 𝒦;
-\item 𝒦 \textbf{models} ℰ just in case 𝑨 ⊧ ℰ for every 𝑨 ∈ 𝒦.
+\item an \textbf{equational class} is a \AF{Mod} \AF{Th}-closed class of \AB 𝑆-algebras;
+\item an \textbf{equational theory} is a \AF{Th} \AF{Mod}-closed set of \AB 𝑆-identities.
 \end{itemize}
+%% (Here, \AB 𝒫 denotes the powerset functor.)
 
-\noindent \textbf{Notation}. To produce the symbols ≈ and ⊧ in Emacs \texttt{agda2-mode}, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models} (resp.). To denote ``𝒦 models 𝑝 ≈ 𝑞'' we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs \texttt{agda2-mode} with \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The binary relation \(⊧\) induces an obvious Galois connection. Indeed, the Galois pair (Mod, Th) is defined as follows: for all ℰ ⊆ 𝓔(𝑆) and 𝒦 ⊆ 𝓚(𝑆),
-\begin{align*}
-\mathrm{Mod} ℰ &:= \{ 𝑨 ∈ 𝓚(𝑆) : 𝑨 ⊧ ℰ \}, \text{ and }\\
-\mathrm{Th} 𝒦 &:= \{ℯ ∈ 𝓔(𝑆) : 𝒦 ⊧ ℯ \}.
-\end{align*}
+\subsection{H S P}\label{sec:closure-operators}
+An equational class is sometimes referred to as a \textbf{variety}, due to the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (\AF H), subalgebras (\AF S), and products (\AF P). A formal \agda proof of Birkhoff's theorem is one of our main goals which we achieve in the \birkhoffmodule presented in Section~\ref{sec:the-birkhoff-module}.
 
-The first of these, the class of \textbf{models} of ℰ, contains those and only those algebras modeling every identity in ℰ. It is called an \textbf{equational class}, and ℰ is called an \textbf{equational base} for, or an \textbf{axiomatization} of, the class. Dually, Th 𝒦 is the class of identities modeled by every algebra in 𝒦. Such a class of identities is called an \textbf{equational theory}.
-
-Alternatively and equivalently we could define ``equational class'' and ``equational theory'' in terms of the two
-closure operators \textless{}closure operator\textgreater{} induced by the Galois pair (Mod, Th). Indeed, Mod Th : 𝒫 𝓚(𝑆) → 𝒫 𝓚(𝑆) is a closure operator on 𝓚(𝑆) and Th Mod : 𝒫 𝓔(𝑆) → 𝒫 𝓔(𝑆) is a closure operator on 𝓔(𝑆), and
-
+To make these notions precise, fix a signature \AB 𝑆, let \AB 𝒦 be a class of \AB 𝑆-algebras, and define
 \begin{itemize}
-\item an \textbf{equational class} is a Mod Th-closed class \textless{}closed set\textgreater{} of 𝑆-algebras;
-\item an \textbf{equational theory} is a Th Mod-closed set of 𝑆-identities
+\item \AF H(\AB 𝒦) = homomorphic images of members of \AB 𝒦;
+\item \AF S(\AB 𝒦) = algebras isomorphic to a subalgebra of a member of \AB 𝒦;
+\item \AF P(\AB 𝒦) = algebras isomorphic to a direct product of members of \AB 𝒦.
 \end{itemize}
-(Here, 𝒫 denotes the powerset functor.)
+As a straight-forward verification confirms, \AF H, \AF S, and \AF P are closure operators. A class \AB 𝒦 of \AB 𝑆-algebras is said to be \emph{closed under the formation of homomorphic images} if \AF H(\AB 𝒦)\AS\ASy ⊆\AS\AB 𝒦. Similarly, \AB 𝒦 is \emph{closed under the formation of subalgebras} (resp., \emph{products}) provided \AF S(\AB 𝒦)\AS\ASy ⊆\AS\AB 𝒦 (resp., \AF P(\AB 𝒦)\AS\ASy ⊆\AS\AB 𝒦).
 
-\noindent \textbf{N.B.} An equational class is sometimes referred to as a \textbf{variety}; this is because of the celebrated Birkhoff theorem which states that a class of algebraic structures is an equational class if and only if it is closed under the taking of homomorphic images (H), subalgebras (S), and products (P). A formal Agda proof of Birkhoff's theorem is one of our main goals which we achieve in the \birkhoffmodule described in Section~\ref{sec:}.
+%% An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \AF H(\AB 𝒦) (resp., \AF S(\AB 𝒦); resp., \AF P(\AB 𝒦)) is closed under isomorphism.
 
+%% The operators \AF H, \AF S, and \AF P can be composed with one another repeatedly, forming yet more closure operators.
+%% If C₁ and C₂ are closure operators on classes of structures, let us say that C₁ ≤ C₂ if for every class 𝒦 we have C₁(𝒦) ⊆ C₂(𝒦).
 
+%% \subsection{Equational classes}\label{sec:equational-classes}
+A class \AB 𝒦 of \AB 𝑆-algebras is called a \textbf{variety} if it is closed under each of the closure operators \AF H, \AF S, and \AF P. The corresponding closure operator---that is, the composition \AF H \AF S \AF P---is often denoted \AF 𝕍. Thus, if \AB 𝒦 is a class of similar algebras, then the \textbf{variety generated by} \AB 𝒦 is denoted by \AF 𝕍(\AB 𝒦) (= \AF H \AF S \AF P(\AB 𝒦)) and defined to be the smallest class that contains \AF 𝒦 and is closed under \AF H, \AF S, and \AF P.
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-
-\section{Closure}\label{sec:closure}
-This section describes the \closuremodule of the \agdaualib.
-
-\subsection{Closure operators}\label{sec:closure-operators}
-Fix a signature 𝑆. Let 𝒦 be a class of 𝑆-algebras. Define
-\begin{itemize}
-\item H(𝒦) = homomorphic images of members of 𝒦;
-\item S(𝒦) = algebras isomorphic to a subalgebra of a member of 𝒦;
-\item P(𝒦) = algebras isomorphic to a direct product of members of 𝒦.
-\end{itemize}
-As a straight-forward verification confirms, H, S, and P are closure operators. A class 𝒦 of 𝑆-algebras is said to be \emph{closed under the formation of homomorphic images} if H(𝒦) ⊆ 𝒦. Similarly, 𝒦 is \emph{closed under the formation of subalgebras} (resp., \emph{products}) provided S(𝒦) ⊆ 𝒦 (resp., P(𝒦) ⊆ 𝒦).
-
-An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class H(𝒦) (resp., S(𝒦); resp., P(𝒦)) is closed under isomorphism.
-
-The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators. If C₁ and C₂ are closure operators on classes of structures, let us say that C₁ ≤ C₂ if for every class 𝒦 we have C₁(𝒦) ⊆ C₂(𝒦).
-
-\subsection{Equational classes}\label{sec:equational-classes}
-A class 𝒦 of 𝑆-algebras is called a \textbf{variety} if it is closed under each of the closure operators H, S, and P introduced above; the corresponding closure operator is often denoted 𝕍. Thus, if 𝒦 is a class of similar algebras, then the \textbf{variety generated by} 𝒦 is denoted by 𝕍(𝒦) and defined to be the smallest class that contains 𝒦 and is closed under H, S, and P.
-
-We would like to know how to construct 𝕍(𝒦) directly from 𝒦, but it's not immediately obvious how many times we would have to apply the operators H, S, P before the result stabilizes to form a variety---the \textbf{variety generated by} 𝒦. Fortunately, Garrett Birkhoff proved that if we apply the operators in the correct order, then it suffices to apply each one only once.
+To construct \AF 𝕍(\AB 𝒦) from \AB 𝒦, it's not obvious how many times the operators \AF H, \AF S, \AF P must be applied before the result stabilizes to form the variety generated by \AB 𝒦. Fortunately, Garrett Birkhoff proved in~\cite{Birkhoff:1935} that if they are applied in the correct order---namely, \AF P followed by \AF S followed by \AF H---then it suffices to apply each operator only once.
 
 \subsection{Types for identities}\label{sec:types-for-identities}
-In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook Bergman:2012) proclaims, ``Now, finally, we can formalize the idea we have been using since the first page of this text.'' He then proceeds to define \textbf{identities of terms} as follows (paraphrasing for notational consistency):
+%% In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of his universal algebra textbook Bergman:2012) proclaims, ``Now, finally, we can formalize the idea we have been using since the first page of this text.'' He then proceeds to define \textbf{identities of terms} as follows (paraphrasing for notational consistency):
 
-Let 𝑆 be a signature. An \textbf{identity} or \textbf{equation} in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻(X). If A is an 𝑆-algebra we say that A \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝~̇~A~≡~𝑞~̇~A. In this situation, we write A ⊧ 𝑝 ≈ 𝑞.
-If 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if, for every A ∈ 𝒦, A ⊧ 𝑝 ≈ 𝑞. Finally, if 𝓔 is a set of equations, we write 𝒦 ⊧ 𝓔 if every member of 𝒦 satisfies every member of 𝓔.
+%% Let \AB 𝑆 be a signature. An \textbf{identity} or \textbf{equation} in \AB 𝑆 is an ordered pair of terms, written \AB 𝑝 \Aapprox \AB 𝑞, from the term algebra \TX. If \AB 𝑨 is an \AB 𝑆-algebra we say that \AB 𝑨 \textbf{satisfies} 𝑝 \Aapprox  𝑞 if 𝑝~̇~A~≡~𝑞~̇~A. In this situation, we write A \Amodels  𝑝 \Aapprox  𝑞.
+%% If 𝒦 is a class of 𝑆-algebras, we write 𝒦 \Amodels  𝑝 ≋ 𝑞 if, for every A ∈ 𝒦, A \Amodels  𝑝 \Aapprox  𝑞. Finally, if 𝓔 is a set of equations, we write 𝒦 \Amodels  𝓔 if every member of 𝒦 satisfies every member of 𝓔.
 
-We formalize these notions in Agda in the \closuremodule, which begins with the usual assortment of preliminaries that we won't describe here.  Thereafter, the module begins in earnest with
+We now describe the \closuremodule, which formalizes the notions of equational logic that we introduced above.
+%% Thereafter, the module begins in earnest with
 %% as follows. (Note the imports that were postponed until after the start of the closure module so that the imports share the same signature 𝑆 with the \closuremodule).
 %% \begin{code}\input{closure/clo1.tex}\end{code}
 %% Our first definition in the \closuremodule is 
-notation that represents the satisfaction of equations. The standard notation is \texttt{𝑨\ ⊧\ p\ ≈\ q}, which means that the identity \texttt{p\ ≈\ q} is satisfied in 𝑨. In otherwords, for all assignments \texttt{a\ :\ X\ →\ ∣\ 𝑨\ ∣} of values to variables, we have \texttt{(p\ ̇\ 𝑨)\ a\ ≡\ (q\ ̇\ 𝑨)\ a}.
+%% notation that represents the satisfaction of equations. The standard notation is \texttt{𝑨\ \Amodels \ p\ \Aapprox \ q}, which means that the identity \texttt{p\ \Aapprox \ q} is satisfied in 𝑨. In otherwords, for all assignments \texttt{a\ :\ X\ →\ ∣\ 𝑨\ ∣} of values to variables, we have \texttt{(p\ ̇\ 𝑨)\ a\ ≡\ (q\ ̇\ 𝑨)\ a}.
+%% If 𝒦 is a class of structures, it is standard to write \texttt{𝒦\ \Amodels \ p\ \Aapprox \ q} just in case all structures in the class 𝒦 model the identity p \Aapprox  q. However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing \texttt{𝒦\ \Amodels \ p\ ≋\ q} to denote this concept.
+In particular, we will also formalize the notions of closure under the taking of products, subalgebras, and homomorphic images, and later prove that each of these closure operations preserves identities.
 
-If 𝒦 is a class of structures, it is standard to write \texttt{𝒦\ ⊧\ p\ ≈\ q} just in case all structures in the class 𝒦 model the identity p ≈ q. However, because a class of structures has a different type than a single structure, we will need different notation, so we have settled on writing \texttt{𝒦\ ⊧\ p\ ≋\ q} to denote this concept.
-
-We will also formalize the notions of closure under the taking of products, subalgebras, and homomorphic images, and later prove that each of these closures preserves identities.
+\paragraph*{Equations and models}
+First the notation for modeling of equations is defined.
 \begin{code}\input{closure/clomod.tex}\end{code}
+The operators \AF{Th} and \AF{Mod} are defined as follows:
+\begin{code}\input{closure/ModTh.tex}\end{code}
 
-\subsection{Compatibility of identities}\label{sec:compatibility-of-identities}
-Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely, for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦), 𝕍(𝒦) satisfies the same set of identities as does 𝒦. We prove that identities satisfied by all factors of a product are also satisfied by the product.
+\paragraph*{H, S, P, and V}
+Next, for each operator \AF H, \AF S, and \AF P, we formalize the closure under that operator as an inductive type.
+\begin{code}\input{closure/clHSP.tex}\end{code}
+Finally, the closure under the composition \AF H \AF S \AF P is also defined by recursion using the following inductive type.
+\begin{code}\input{closure/clvar.tex}\end{code}
+
+\subsection{Compatibility of H, S, and P with identities}\label{sec:compatibility-of-identities}
+Identities are compatible with the formation of subalgebras, homomorphic images and products. More precisely, for every class 𝒦 of structures, each of the classes S(𝒦), H(𝒦), P(𝒦) (hence, 𝕍(𝒦)) satisfies the same set of identities as does 𝒦.
+
+\paragraph*{Compatibility of products}
+We prove that identities satisfied by all factors of a product are also satisfied by the product.
 \begin{code}\input{closure/prodcomp.tex}\end{code}
 
-\paragraph*{Closure under subalgebras}
+\paragraph*{Compatibility of subalgebras}
 Above we define a datatype SClo that represents a class of algebraic structures that is closed under the taking of subalgebras.
 
-Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦. With our new formal definition of Subalgebra, we will show that every term equation, \texttt{p\ ≈\ q}, that is satisfied by all \texttt{𝑨\ ∈\ 𝒦} is also satisfied by all \texttt{B\ ∈\ S(𝒦)}. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
+Let S(𝒦) denote the class of algebras isomorphic to a subalgebra of a member of 𝒦. With our new formal definition of Subalgebra, we will show that every term equation, \texttt{p\ \Aapprox \ q}, that is satisfied by all \texttt{𝑨\ ∈\ 𝒦} is also satisfied by all \texttt{B\ ∈\ S(𝒦)}. In other words, the collection of identities modeled by a given class of algebras is also modeled by all of the subalgebras of that class.
 \begin{code}\input{closure/subcomp.tex}\end{code}
 
-\paragraph*{Closure under hom images}
-Recall (Obs 14) that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra 𝑻(X) into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
-\[𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, ∀ h ∈ \mathrm{Hom}(𝑻(X), 𝑨), h ∘ p^{𝑻(X)} = h ∘ q^{𝑻(X)}.\]
+\paragraph*{Compatibility of homomorphisms}
+An identity \AB p\AS \Aapprox\AS\AB q is satisfied by all algebras in a class if and only if \AB p\AS \Aapprox\AS\AB q is compatible with all homomorphisms from \TX into algebras of the class.
+
+More precisely, if \AB 𝒦 is a class of \AB 𝑆-algebras and \AB 𝑝, \AB 𝑞 terms in the language of \AB 𝑆, then,
+\begin{quote}
+\AB 𝒦\AS\Amodels\AS\AB p\AS\Aapprox\AS\AB  q\AS\AS ↔\AS\AS\ASy ∀\AS\AB 𝑨\AS\ASy ∈\AS\AB 𝒦\AS\ASy ,\AS\ASy ∀\AS\AB h\AS\ASy ∈\AS\AF{Hom}\AS\TX\AS \AB 𝑨\AS\ASy ,\AB h\AS\ASy ∘\AS\termTX p\AS\ASy =\AS\AB h\AS\ASy ∘\AS\termTX q.
+\end{quote}
 We now formalize this result in Agda. Similarly, we define a datatype that represents classes of algebras that include all homomorphic images of algebras in the class, and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
 \begin{code}\input{closure/homcomp.tex}\end{code}
 
-Finally, we prove a useful result about the compatibility of identities with interpretation of terms.
+Finally, here's a useful result about compatibility of identities and interpretation of terms.
 \begin{code}\input{closure/homidcomp.tex}\end{code}
 
 
 
+\subsection{Closure under H, S, and P}\label{sec:closure-under-hsp}
+\subsubsection{Identities for product closure}\label{sec:identities-for-product-closure}
+\begin{code}\input{closure/pclo-id.tex}\end{code}
+
+\subsubsection{Identities for subalgebra closure}\label{sec:identities-for-subalgebra-closure}
+\begin{code}\input{closure/sclo-id.tex}\end{code}
+
+\subsubsection{Identities for hom image closure}\label{sec:identities-for-hom-image-closure}
+\begin{code}\input{closure/hclo-id.tex}\end{code}
+
+\subsubsection{Identities for HSP closure}\label{sec:identities-for-hsp-closure}
+Finally, we have a datatype that represents classes of algebras that are close under the taking of homomorphic images, subalgebras, and products of algebras in the class.
+\begin{code}\input{closure/vclo-id.tex}\end{code}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\subsection{Axiomatization of a class}\label{sec:axiomatization-of-a-class}
+We now prove that a class \AB 𝒦 of structures is axiomatized by \AB{Th}\AS (\AB{VClo}\AS\AB 𝒦), which is the set of equations satisfied by all members of the varietal closure of \AB 𝒦.
+\begin{code}\input{closure/vclo-th.tex}\end{code}
 
 %% \begin{verbatim}
 %% Th : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) →   Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺)
-%% Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+%% Th 𝒦 = λ (p , q) → 𝒦 \Amodels  p ≋ q
 %% Mod : Pred (Term{X = X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺) →    Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ )
-%% Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+%% Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A \Amodels  p \Aapprox  q
 %% \end{verbatim}
 
 \subsection{The free algebra in Agda}\label{sec:the-free-algebra-in-agda}
-Recall, we proved above that term algebra 𝑻(𝑋) is the absolutely free algebra in the class 𝓚(𝑆) of all 𝑆-structures. In this section, we formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in SP(𝒦) over 𝑋. Recall, this was defined above in free algebras as follows:
-\[𝔽(𝒦, 𝑋) := 𝑻(𝑋)/Ψ(𝒦, 𝑻(𝑋)).\]
-Thus, we must first formalize the congruence ψ(𝒦, 𝑻(𝑋)) which is defined by
-\[Ψ(𝒦, 𝑻(𝑋)) := ⋀ ψ(𝒦, 𝑻(𝑋)),\]
-where ψ(𝒦, 𝑻(𝑋)) := \{θ ∈ Con 𝑻(𝑋) : 𝑨/θ ∈ S(𝒦)\}.
+We proved in Section~\ref{sec:the-universal-property} above that term algebra \TX is absolutely free in the class \AB 𝓚(\AB 𝑆) of all \AB 𝑆-structures. In this section, we formalize, for a given class \AB 𝒦 of \AB 𝑆-algebras, the (relatively) free algebra in SP(\AB 𝒦) over \AB 𝑋. Recall, this is defined as follows:
+\begin{quote}
+𝔽(\AB 𝒦, \AB 𝑋) := \TX/\AB Ψ(\AB 𝒦, \TX).
+\end{quote}
+Thus, we must first formalize the congruence \AB Ψ(\AB 𝒦, \TX) which is defined by
+\begin{quote}
+Ψ(\AB 𝒦, \TX) := ⋀ ψ(\AB 𝒦, \TX),
+\end{quote}
+where ψ(\AB 𝒦, \TX) := \{θ ∈ Con \TX : \AB 𝑨/θ ∈ S(\AB 𝒦)\}.
 %% Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make sense to say that ``𝑋 generates 𝔽(𝒦, 𝑋).'' But as long as 𝒦 contains a nontrivial algebra, we will have Ψ(𝒦, 𝑻(𝑋)) ∩ 𝑋² ≠ ∅, and we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑻(𝑋)) in 𝔽(𝒦, 𝑋). (See Obs \%s \textless{}obs 9.6\textgreater{}.)
 \begin{code}\input{closure/free.tex}\end{code}
 
-N.B. Ψ is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)). Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻(X)), it suffices to show that the kernel of the lift h : 𝑻(X) → 𝑨 contains Ψ.
+N.B. Ψ is the kernel of \TX → 𝔽(\AB 𝒦, \TX). Therefore, to prove \AB 𝑨 is a homomorphic image of 𝔽(\AB 𝒦, \TX), it suffices to show that the kernel of the lift \AB h : \TX → \AB 𝑨 contains Ψ. (See figure below.)
 
 \begin{verbatim}
    𝑻---- 𝑔 --->>𝔽  (ker 𝑔 = Ψ)
@@ -1310,40 +1315,6 @@ N.B. Ψ is the kernel of 𝑻(X) → 𝔽(𝒦, 𝑻(X)). Therefore, to prove �
 Here are some of the key facts and identities we need to complete the proof of Birkhoff's HSP theorem.
 \begin{code}\input{closure/birkhofftools.tex}\end{code}
 
-
-\subsection{Closure under HSP}\label{sec:closure-under-hsp}
-Finally, we have a datatype that represents classes of algebras that are close under the taking of homomorphic images, subalgebras, and products of algebras in the class.
-%% \begin{verbatim}
-%% -- Variety Closure
-%% data VClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) :
-%%  Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
-%%   vbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
-%%   vprod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆}
-%%    →      (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
-%%   vsub : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦
-%%    →     (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
-%%   vhom : {𝑨 : Algebra 𝓤 𝑆}
-%%    →     𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨)
-%%    →     𝑩 ∈ VClo 𝒦
-%% \end{verbatim}
-\subsubsection{Identities for product closure}\label{sec:identities-for-product-closure}
-\begin{code}\input{closure/pclo-id.tex}\end{code}
-
-
-\subsubsection{Identities for subalgebra closure}\label{sec:identities-for-subalgebra-closure}
-\begin{code}\input{closure/sclo-id.tex}\end{code}
-
-\subsubsection{Identities for hom image closure}\label{sec:identities-for-hom-image-closure}
-\begin{code}\input{closure/hclo-id.tex}\end{code}
-
-\subsubsection{Identities for HSP closure}\label{sec:identities-for-hsp-closure}
-\begin{code}\input{closure/vclo-id.tex}\end{code}
-
-
-\subsection{Axiomatization of a class}\label{sec:axiomatization-of-a-class}
-We conclude the \closuremodule by proving that a class 𝒦 of structures is axiomatized by \texttt{Th\ (VClo\ 𝒦)}, which is the set of equations satisfied by all members of the varietal closure of 𝒦.
-\begin{code}\input{closure/vclo-th.tex}\end{code}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%   Birkhoff's Theorem   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1351,15 +1322,15 @@ We conclude the \closuremodule by proving that a class 𝒦 of structures is axi
 Here we give a formal proof in Agda of Birkhoff's theorem, which says that a variety is an equational class. In other terms, if a class 𝒦 of algebras is closed under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is the class of algebras that model a particular set of identities).
 
 \subsection{The birkhoff module}\label{sec:the-birkhoff-module}
-In addition to the usual importing of dependencies, We start the \birkhoffmodule with a fixed signature and a type \texttt{X}. As in the \termsmodule, \texttt{X} represents an arbitrary (infinite) collection of ``variables'' (which will serve as the generators of the term algebra 𝑻(X)).
-\begin{code}\input{birkhoff/birkprelude.tex}\end{code}
+In addition to the usual importing of dependencies, We start the \birkhoffmodule with a fixed signature and a type \AB X. As in the previous modules, \AB X represents an arbitrary (infinite) collection of ``variables,'' which will serve as the generators of the term algebra \TX.
+%% \begin{code}\input{birkhoff/birkprelude.tex}\end{code}
 
 \subsection{Equalizers in Agda}\label{sec:equalizers-in-agda}
-The equalizer of two functions (resp., homomorphisms) \texttt{g\ h\ :\ A\ →\ B} is the subset of \texttt{A} on which the values of the functions \texttt{g} and \texttt{h} agree. We formalize this notion in Agda as follows.
+The equalizer of two functions (resp., homomorphisms) \AB g\AS,\AS\AB h\AS\ASy :\AS\AB A\AS\ASy →\AS\AB B is the subset of \AB A on which the values of the functions \AB g and \AB h agree. We formalize this notion in Agda as follows.
 \begin{code}\input{birkhoff/equalizers.tex}\end{code}
-It turns out that the equalizer of two homomorphisms is closed under the operations of \texttt{A} and is therefore a subalgebra of the common domain, as we now prove.
+It turns out that the equalizer of two homomorphisms is closed under the operations of \AB 𝑨 and is therefore a subalgebra of the common domain, as we now prove.
 \begin{code}\input{birkhoff/equalizersClosed.tex}\end{code}
-Thus, \texttt{𝑬𝑯} is a subuniverse of \texttt{A}.
+Thus, \AF{𝑬𝑯} is a subuniverse of \AB 𝑨.
 
 \subsection{Hom determination}\label{sec:hom-determination}
 The \homsmodule formalizes the notion of homomorphism and proves some basic facts about them. Here we show that homomorphisms are determined by their values on a generating set, as stated and proved informally in Obs 3. This is proved here, and not in the \homsmodule because we need \texttt{Sg} from the \texttt{subuniverses} module. See Section~\ref{sec:}.
@@ -1380,7 +1351,7 @@ Some of our intermediate-term objectives include
 \item documenting the resulting software libraries so they are usable by other working mathematicians.
 \end{itemize}
 
-\section{Acknowledgments}\label{sec:acknowledgments}
+%% \section{Acknowledgments}\label{sec:acknowledgments}
 %% Besides the main authors and developers of \agdaualib, a number of other people have contributed to the project in one way or another.
 
 %% Special thanks go to Clifford Bergman, Venanzio Capretta, Andrej Bauer, Miklós Maróti, and Ralph Freese, for many helpful discussions, as well as the invaluable instruction, advice, and encouragement that they continue to lend to this project, often without even knowing it.
@@ -1392,9 +1363,9 @@ Some of our intermediate-term objectives include
 
 %% Regarding the Agda source code in the \agdaualib library, this is mainly due to The Authors.
 
-We have benefited enormously from \href{https://www.cs.bham.ac.uk/~mhe}{Martin Escardo's} outstanding \typetopology Agda library and the notes on \hottufinagda in which that library is so lucidly described.
+%% We have benefited enormously from \href{https://www.cs.bham.ac.uk/~mhe}{Martin Escardo's} outstanding \typetopology Agda library and the notes on \hottufinagda in which that library is so lucidly described.
 
-Of course, the (current incarnation\footnote{previous versions were based on Coq and Lean}) \agdaualib library depends on the wonderful Agda programming language~\cite{Norell:2009}.
+%% Of course, the (current incarnation\footnote{previous versions were based on Coq and Lean}) \agdaualib library depends on the wonderful Agda programming language~\cite{Norell:2009}.
 
 %% The first author is greatly indebted to Martin for teaching him about type theory in Agda at the \href{http://events.cs.bham.ac.uk/mgs2019/}{Midlands Graduate School in the Foundations of Computing Science} in Birmingham in 2019.
 
@@ -1431,8 +1402,10 @@ Here is a complete list of all definitions \agdaualib imports from Martin Escard
 \section{Miscellaneous proofs}\label{sec:appendix-miscproofs}
 \subsection{Homomorphism factorization theorem}\label{sec:appendix-homfactor}
 \begin{code}\input{homomorphisms/homfactor.tex}\end{code}
-
-
+\subsection{Closure under intersection}\label{sec:closure-under-intersection}
+The intersection ⋂ᵢ \AB 𝐴\(_i\) of a collection \{\AB 𝐴\(_i\)\AS ∣\AS\AB 𝐴\(_i\)\AS\ASy ≤\AS\AB 𝑨\}
+of subuniverses of an algebra \AB 𝑨 is again a subuniverse of \AB 𝑨. Here is how we formalize the proof of this easy fact in Agda.
+\begin{code}\input{subuniverses/subintersection.tex}\end{code}
 
 \section{Styles of lists, enumerations, and descriptions}\label{sec:itemStyles}
 List of different predefined enumeration styles:
@@ -1479,7 +1452,7 @@ List of different predefined enumeration styles:
 %\item \dots
 \end{description}
 
-\cref{testenv-proposition} and \autoref{testenv-proposition} ...
+\cref{sec:testenv-proposition} and \autoref{sec:testenv-proposition} ...
 
 \section{Theorem-like environments}\label{sec:theorem-environments}
 
@@ -1548,1050 +1521,4 @@ Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui
 
 \end{document}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{ualib_refs}
-\end{document}
-
-\vskip1cm
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\appendix
-
-\begin{center}
-\large{APPENDIX}
-\end{center}
-
-\section{Algebras}\label{sec:algebras}
-In this section we use the informal language of universal algebra to present foundational definitions and theorems about subalgebras, terms, and clones. In Section~\ref{sec:} we show how the definitions and results presented in this section can be formalized (or ``implemented'') in type theory using Agda.
-
-The idea is to demonstrate the power and utility of implementing our mathematical are of expertise in a formal language that supports dependent and inductive types, which are essential for expressing and working with infinite objects in a constructive and computable way, and for proving properties of these objects.
-
-
-\subsection{Operations}\label{sec:operations}
-The symbols ℕ, ω, and \texttt{nat} are used interchangeably; they all denote the set of natural numbers. If 𝑚 is a natural number, we write 𝑚 : ℕ and say that 𝑚 \emph{has type} ℕ.\footnote{Viewing 𝑚 : ℕ as roughly equivalent to 𝑚 ∈ ℕ is not totally unreasonable at this point.} We typically denote and define natural numbers by 𝑚 := \{0, 1, \ldots, 𝑚-1\}, and we sometimes formally identify a function with its graph when convenient. For example, the function 𝑎 : 𝑚 → 𝐴 may be viewed as the tuple \((𝑎\,0, 𝑎\,1, …, 𝑎\,(𝑚-1)) : 𝐴^m\).
-%% If ℎ : 𝐴 → 𝐴 and 𝑎 : 𝑚 → 𝐴 are functions, then ℎ ∘ 𝑎 : 𝑚 → 𝐴 denotes the composition of ℎ with 𝑎; this is the function that maps each 𝑖 \textless{} 𝑚 to the element (ℎ ∘ 𝑎)(𝑖) = ℎ(𝑎 𝑖) of 𝐴. We may formally identify the function ℎ ∘ 𝑎 : 𝑚 → 𝐴 with its graph, which of course is the 𝑚-tuple, (ℎ(𝑎 0), ℎ(𝑎 1), …, ℎ(𝑎 (𝑚-1))).
-
-If 𝐴 is a nonempty set and 𝑛 ∈ ℕ, then an 𝑛-\textbf{ary operation} on 𝐴 is a function 𝑓 : \ensuremath{𝐴^n} → 𝐴 which (for \(𝑛 > 0\)) maps each 𝑛-tuple \((𝑎₀, 𝑎₁, …, 𝑎_{n-1})\) in \ensuremath{𝐴^n} to a particular element \(𝑓(𝑎₀, 𝑎₁, …, 𝑎_{n-1})\) in 𝐴. If \(𝑛 = 0\), then 𝑓 : () → 𝐴 may be viewed as a function that takes no arguments and returns an element of 𝐴, in which case 𝑓 is merely notation for a particular element of 𝐴, denoted 𝑓 : 𝐴.
-An operation is called \textbf{nullary} (or constant) if its arity is zero. \textbf{Unary}, \textbf{binary}, and \textbf{ternary} operations have arities 1, 2, and 3, respectively.
-%% An operation gives rise to a special kind of (𝑛+1)-ary relation, namely
-%% \[Gf := \{(a_0, a_1, \dots, a_{n-1}, b) \in A^{n+1} ∣ b = f(a_0, a_1, \dots, a_{n-1})\},\]
-%% which is sometimes called the \textbf{graph} of 𝑓.
-
-For two sets 𝐴, 𝐵, the collection of functions 𝑓 : 𝐵 → 𝐴 is denoted by \(A^B\). Taking 𝐵 = \ensuremath{𝐴^n}, we have \(A^{A^n}\), which is the collection of 𝑛-ary operations on 𝐴; as noted above, this can be represented by the function type (𝑛 → 𝐴) → 𝐴.
-
-If we let Op(𝐴) denote the collection of all finitary operations on 𝐴, then,
-\[\mathrm{Op}(𝐴) = ⋃_{n ∈ ℕ} A^{A^n} = ⋃_{n<ω} ((𝑛 → A) → A).\]
-
-If 𝐹 ⊆ Op(𝐴) is a set of operations on 𝐴, let us denote by \(𝐹_n\) the 𝑛-ary operations in 𝐹. Clearly, \(F_n = F ∩ A^{A^n}\).
-
-Given an 𝑛-tuple \(a = (a_0, a_1, \dots, a_{n-1}) ∈ A^n\), it helps to be able to refer to the set \(\{a_i : 0 ≤ i < n\}\) of elements that occur in the tuple without explicitly naming each element in this set. In fact, we already have notation for this, since an 𝑛-tuple is truly a function, with domain 𝑛 := \{0, 1, …, 𝑛-1\}, and image the set of
-elements occuring in the tuple. Thus, im 𝑎 is \(\{𝑎₀, 𝑎₁, …, 𝑎_{n-1}\}\), where each value is included in the set only once (no repeats). In particular, ∣im 𝑎∣ is a convenient way to write the number of distinct elements that occur in the tuple 𝑎. For example, if 𝑎 = (1, 1, 3), then im 𝑎 = \{1, 3\}, and ∣im 𝑎∣ = 2.
-
-\subsection{Signatures}\label{sec:signatures}
-Recall (from model theory) that a \textbf{signature} 𝑆 = (𝐶, 𝐹, 𝑅, ρ) consists of three (possibly empty) sets 𝐶, 𝐹, and 𝑅 (the \emph{constant symbols}, \emph{function symbols}, and \emph{relation symbols}, respectively), along with a function ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁 that assigns an arity to each symbol. Often (but not always), 𝑁 = ℕ.
-
-As our focus here is universal algebra, we are more concerned with the restricted notion of an \textbf{algebraic signature}, by which we mean a pair 𝑆 = (𝐹, ρ) consisting of a collection 𝐹 of \emph{operation symbols} and an arity function \(ρ : 𝐹 → 𝑁\) that maps each operation symbol to its arity; here, 𝑁 denotes the ``arity type'' (which is sometimes taken to be ℕ). (Intuitively, the arity ρ 𝑓 of an operation symbol 𝑓 ∈ 𝐹 may be thought of as the ``number of arguments'' that 𝑓 takes as ``input''.)
-
-If 𝐴 is a set and 𝑓 is a (ρ 𝑓)-ary operation on 𝐴, we often indicate this by writing \(f : A^{ρ f} → A\). On the other hand, the arguments of such an operation form a (ρ 𝑓)-tuple, say, \((𝑎₀, 𝑎₁, …, a_{ρf-1})\), which may be viewed as the graph of the function 𝑎 : ρ𝑓 → 𝐴, where \(𝑎\, 𝑖 = 𝑎_i\).
-
-(When the codomain of ρ is ℕ, we may view ρ𝑓 as the finite set \{0, 1, …, ρ𝑓 - 1\}. Thus, by identifying the ρ𝑓-th power \(A^{ρf}\) with the type ρ𝑓 → 𝐴 of functions from \{0, 1, …, ρ𝑓 - 1\} to 𝐴, we identify the function type \(A^{ρf} → A\) with the function (or ``functional'') type (ρ𝑓 → 𝐴) → 𝐴.
-
-Our formal implementation of the concept of signature in Agda is described in Section~\ref{sec:}.
-
-\subsection{Algebraic Structures}\label{sec:algebraic-structures}
-Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra. In this section we define the main objects of study.
-
-
-An \textbf{algebraic structure} (or \textbf{algebra}) in the signature 𝑆 = (𝐹, ρ) is denoted by 𝑨 = \( ⟨A, F^{\mathbf A}⟩\) and consists of
-
-\begin{itemize}
-\item 𝐴 := a set (or type), called the \textbf{carrier} (or \textbf{universe}) of the algebra,
-\item \(F^{𝑨} := \{ f^{𝑨} ∣ f ∈ F, \ f^{𝑨} : (ρ𝑓 → A) → A \}\), a collection of \textbf{operations} on 𝐴, and
-\item a collection of identities satisfied by elements of 𝐴 and the operations in \(F^{𝑨}\).
-\end{itemize}
-
-Note that to each operation symbol 𝑓 ∈ 𝐹 corresponds an operation \(f^{𝑨}\) on 𝐴 of arity ρ𝑓; we call such \(f^{𝑨}\) an
-\textbf{interpretation} of the symbol 𝑓 in the algebra 𝑨. We call an algebra in the signature 𝑆 an 𝑆-\textbf{algebra}. An algebra is called \textbf{finite} if it has a finite universe, and is called \textbf{trivial} if its universe is a singleton.
-%% Given two algebras 𝑨 and 𝑩, we say that 𝑩 is a \textbf{reduct} of 𝑨 if both algebras have the same universe and 𝑩 can be obtained from 𝑨 by removing some operations.
-
-Our formal implementation of the concept of algebraic structure is described in Section~\ref{sec:}.
-
-\subsection{Subalgebras}\label{sec:subalgebras}
-This section introduces two important concepts in universal algebra, \textbf{subuniverse} and \textbf{subalgebra}. Suppose \(𝑨 = ⟨A, F^{𝑨}⟩\) is an algebra. Recall, the (nonempty) set 𝐴 is called the \textbf{universe} of 𝑨. We call a subset 𝐵 ⊆ 𝐴 \textbf{closed under} (the operations in) \(F^{𝑨}\) if for each 𝑓 ∈ 𝐹 and all 𝑏 : ρ𝑓 → 𝐵 we have \(f^{𝑨} \, b ∈ B\). If a subset 𝐵 ⊆ 𝐴 is closed under \(F^{𝑨}\), then we call 𝐵 a \textbf{subuniverse} of 𝑨.
-
-If 𝐵 ≠ ∅ is a subuniverse of 𝑨, and if we let \(F^{𝑩} = \{ f^{𝑨} ↾ B : f ∈ F \}\), then \(𝑩 = ⟨ B, F^{𝑩} ⟩\) is an algebra,
-called a \textbf{subalgebra} of 𝑨. Conversely, all subalgebras are of this form.
-
-If 𝑩 is a subalgebra of 𝑨, we denote this fact by 𝑩 ≤ 𝑨. Similarly, we write 𝐵 ≤ 𝑨 if 𝐵 is a subuniverse of 𝑨 (relying on context and notation to disambiguate).
-
-%% It helps to keep in mind the following consequence of the definitions:
-%% \begin{quote}\emph{The empty set is a subuniverse of every algebra, but the universe of an algebra is never empty}.\end{quote} In other terms, if S(𝑨) denotes the collection of all subalgebras of 𝑨, then \[\mathrm S(𝑨) = \{⟨B, F^{𝑩}⟩ : ∅ ≠ B ≤ 𝑨\}.\]
-
-If 𝒦 is a class of 𝑆-algebras, then the class of all subalgebras of algebras in 𝒦 is denoted by S(𝒦).
-
-It is obvious that the intersection of subuniverses is again a subuniverse. Nevertheless, we will record this fact below (see Obs~\ref{obs:} of Sec~\ref{sec:}). %%\%s \textless{}obs 5\textgreater{}).
-We will also formalize the statement and proof of this fact in Agda; see Section~\ref{sec:}. %% (obs 5 in Agda).
-
-\subsubsection{Subuniverse generation}\label{sec:subuniverse-generation}
-As above S(𝑨) denotes the collection of all subalgebras of 𝑨. If 𝑨 is an algebra and 𝐴₀ ⊆ 𝐴 a subset of the universe of 𝑨, then the \textbf{subuniverse of} 𝑨 \textbf{generated by} 𝐴₀ is denoted by \(\mathrm{Sg}^{𝑨}(A_0)\) and defined to be the smallest subuniverse of 𝑨 containing 𝐴₀. Equivalently,
-\[\mathrm{Sg}^{𝑨}(A_0)  =  ⋂ \{ U ∈ \mathrm S(𝑨) ∣ A_0 ⊆ U \}.\]
-
-We can also use recursion to define the \textbf{subuniverse of} 𝑨 \textbf{generated by a set} and prove that this new definition is equivalent to the one given above. We will do this below in Obs.~\ref{obs:} of Sec~\ref{sec:}. % (obs 7)
-
-%% \subsection{Subdirect products}\label{sec:subdirect-products}
-%% If 𝑘, 𝑛 ∈ ℕ, if \(A = (A_0, A_1, \dots, A_{n-1})\) is a list of sets, and if σ : 𝑘 → 𝑛 is a 𝑘-tuple, then a relation 𝑅 over 𝐴 with scope σ is a subset of the Cartesian product \(A_{σ(0)} × A_{σ(1)} × \cdots × A_{σ(k-1)}\).
-
-%% Let 𝑆 = (𝐹, ρ) be a signature and for each 𝑖 \textless{} 𝑛 let \(𝑨_i = ⟨ A_i, F ⟩\) be an 𝑆-algebra. If \(𝑨 = ∏_{i<n}𝑨_i\) is the product of these algebras, then a relation 𝑅 over 𝐴 with scope σ is called \textbf{compatible with} 𝐴 if it is closed under the basic operations in 𝐹. In other words, 𝑅 is compatible if the induced algebra 𝑹 = ⟨𝑅, 𝐹⟩ is a subalgebra of \(\prod_{j<k} 𝑨_{σ(j)}\).
-
-%% If 𝑅 is compatible with the product algebra and if the projection of 𝑅 onto each factor is surjective, then 𝑹 is called a \textbf{subdirect product} of the algebras in the list \((𝑨_{σ(0)}, 𝑨_{σ(1)}, \dots, 𝑨_{σ(k-1)})\); we denote this situation by writing \(𝑹 ≤_{\mathrm{sd}} \prod_{j< k} 𝑨_{σ(j)}\).
-%% \textbf{Formalization}. (not yet implemented)
-
-\subsection{Homomorphisms}\label{sec:homomorphisms}
-Let \(𝑩 = ⟨B, F^{𝑩}⟩\) and \(𝑪 = ⟨C, F^{𝑪}⟩\) be algebras of the same signature, and let ℎ : 𝐵 → 𝐶 be a function (e.g., on sets).
-
-Take an operation symbol 𝑓 ∈ 𝐹, and suppose that for all \(ρ f\)-tuples 𝑏 : ρ𝑓 → 𝐵 of 𝐵 the following equation holds:
-\[h (f^{𝑩} \, b) = f^{𝑪} (h ∘ b).\]
-
-Then ℎ is said to \textbf{respect the interpretation of} 𝑓.
-
-If ℎ respects the interpretation of every 𝑓 ∈ 𝐹, then we call ℎ a \textbf{homomorphism} from 𝑩 to 𝑪, and we write ℎ ∈ Hom(𝑩, 𝑪), or simply, ℎ : 𝑩 → 𝑪. (Later, in Agda, we will typically use notation like \texttt{h\ :\ hom\ B\ C}, or sometimes \texttt{h\ :\ Hom\ 𝑩\ 𝑪}.)
-
-A homomorphism ℎ : 𝑩 → 𝑪 is called an \textbf{epimorphism} if for every algebra 𝑫 and pair \(g_1, g_2: 𝑪 → 𝑫\) of homomorphisms, the equation \(g_1 ∘ h = g_2 ∘ h\) implies \(g_1 = g_2\). We often write ℎ : 𝑩 ↠ 𝑪, and say that ``ℎ is \textbf{epi}'' and ``ℎ maps 𝑩 \textbf{homomorphically onto} 𝑪'' in this case.
-
-A homomorphism ℎ : 𝑩 → 𝑪 is called a \textbf{monomorphism} if for every algebra 𝑨 and every pair \(g_1, g_2: 𝑨 → 𝑩\) of homomorphisms, the equation \(h ∘ g_1 = h ∘ g_2\) implies \(g_1 = g_2\). We sometimes write ℎ : 𝑨 ↣ 𝑩, and say that ``ℎ is \textbf{mono}'' and ``ℎ maps 𝑩 \textbf{homomorphically into} 𝑪'' in this case.
-↣
-If 𝑨, 𝑩 are 𝑆-algebras and ℎ : 𝑨 → 𝑩 is a homomorphism, then the image ℎ(𝐴) of 𝐴 under ℎ is called a \textbf{homomorphic image} of 𝑨. The collection of all homomorphic images of an 𝑆-algebra 𝑨 is the class denoted and defined by
-\[\mathrm H(𝑨) := \{h(𝐴) : h \text{ is a hom from 𝑨 to some 𝑆-algebra}\}.\]
-
-If 𝒦 is a class of 𝑆-algebras, then the class of all homomorphic images of algebras in 𝒦 is denoted by H(𝒦).
-
-\subsection{Clones}\label{sec:clones}
-An \textbf{operational clone} (or just \textbf{clone}) on a nonempty set 𝐴 is a collection of operations on 𝐴 that contains the projection operations and is closed under general composition.
-%% Let \(𝓒ℓ(𝐴)\) denote the collection of all clones on 𝐴.
-
-The smallest clone on 𝐴 is the \textbf{clone of projections}, which we denote and define as follows:
-\[\mathrm{Proj}  A = ⋃_{i < n < ω}  \{π^n_i : ∀ a ∈ A^n,\ π^n_i\, a = a(i)\}.\]
-
-Recall, the natural number 𝑘 \textless{} ω can be constructed as (or at least identified with) the set \{0, 1, …, 𝑘-1\}. For each 𝑘 \textless{} ω, denote and define the tuple πᵏ : (𝑘 → 𝐴) → 𝐴 of all 𝑘-ary projections on 𝐴 as follows: for each 0 ≤ 𝑖 \textless{} 𝑘, πᵏ(𝑖) is the 𝑖-th 𝑘-ary projection operation that takes each 𝑘-tuple \(𝑎 : 𝑘 → 𝐴\) to its
-entry at index 𝑖, \[π^k (i) a = a(i).\]
-The \textbf{clone of term operations} of an 𝑆-algebra 𝑨 is the smallest clone on 𝐴 containing the basic operations of 𝑨; this is denoted and defined by \[\mathrm{Clo}(F^{𝑨}) = ⋂ \{ U ∈ 𝓒𝓵 A ∣ F^{𝑨} ⊆ U\}.\]
-
-The set of 𝑛-ary members of \(\mathrm{Clo}(F^{𝑨})\) is sometimes denoted by \(\mathrm{Clo}_n (F^{𝑨})\) (despite the fact that the latter is obviously not a clone).
-
-The \textbf{clone of polynomial operations} (or \textbf{polynomial clone}) of an 𝑆-algebra 𝑨 is denoted by \(\mathrm{Pol} (F^{𝑨})\) and is defined to be the clone generated by the collection consisting of the basic operations (i.e., \(F^{𝑨}\)) of 𝑨 along with the \textbf{constants} on 𝐴.\footnote{By ``the constants on \(A\)'' we mean the \textbf{constant operations}; i.e., functions \(f: A → A\) such that \(∀ a ∈ A, f(a) = c\), for some \(c ∈ A\).} The set of 𝑛-ary members of \(\mathrm{Pol} (F^{𝑨})\) is sometimes denoted by \(\mathrm{Pol}_n (F^{𝑨})\).
-
-The clone \(\mathrm{Clo}(F^{𝑨})\) is associated with the algebra 𝑨 only insofar as the former is constructed out of the basic operations of 𝑨 and the set 𝐴 on which those operations are defined. However, all that is required when defining a clone is a set 𝐴 and some collection 𝐹 of operations defined on \(A\); from only these ingredients, we can construct the clone generated by 𝐹, which we denote by Clo(𝐹). Thus \emph{the clone of terms operations can be implemented as an inductive type}. We will make this precise below (see Obs~\ref{obs:}). %(obs 7)
-
-\subsection{Terms and free algebras}\label{sec:terms-and-free-algebras}
-This section is based on the section of the same title in Cliff Bergman's excellent textbook (\cite{Bergman:2012}). Apart from notation, our presentation is quite similar in style and content to Cliff's, but we have attempted to give a more compact, abridged treatment in order to get more quickly to our ultimate goal (in the next section), which is to show how it is possible to express the concepts and theorems of universal algebra in type theory and to formalize them in the Agda language. We refer the reader to Section 4.3 of \cite{Bergman:2012} for more details and examples about ``classical'' (informal) universal algebra than we present here.
-
-\subsubsection{Terms}\label{sec:terms}
-Fix a signature 𝑆 = (𝐹, ρ), let 𝑋 be a set of \textbf{variables}, and assume 𝑋 ∩ 𝐹 = ∅.
-
-By a \textbf{word} on 𝑋 ∪ 𝐹 we mean a nonempty, finite sequence of members of 𝑋 ∪ 𝐹, and we will denote the concatenation of such sequences by simple juxtaposition.
-
-Let 𝐹₀ denote the set of nullary operation symbols of 𝑆. We define by induction on 𝑛 the sets \(𝑇_n\) of \textbf{terms on} 𝑋 ∪ 𝐹 as follows (cf.~\cite{Bergman:2012} Def.~4.19):
-\begin{align*}
-  T_0 &:= X ∪ F_0;\\
-  T_{n+1} &:= T_n ∪ \{ f\, s ∣ f ∈  F, \ s: ρf → T_n \},
-\end{align*}
-and we define the collection of \textbf{terms of signature} 𝑆 \textbf{over} 𝑋 by 𝑇(𝑋) = \(⋃_{n < ω}T_n\). By an 𝑆-\textbf{term} we mean a term in the signature 𝑆. If 𝑡 is a term, then the \textbf{height} of 𝑡 is denoted by ∣𝑡∣ and defined to be the least 𝑛 such that \(𝑡 ∈ 𝑇_n\). The height is a useful index for recursion and induction.
-
-The definition of 𝑇(𝑋) is recursive, suggesting that terms can be implemented as an inductive type. We will confirm this in Section~\ref{sec:} when we implement terms in Agda. Moreover, we will formalize an algebraic structure on 𝑇(𝑋), called the \textbf{term algebra} in the signature 𝑆. We describe it here and then state and prove some basic facts about this important algebra. These will be formalized in Sections~\ref{sec:} and~\ref{sec:}. % types for terms and birkhoffs theorem in agda
-
-If 𝑇(𝑋) is nonempty (equivalently, 𝑋 ∪ 𝐹₀ is nonempty), then we can impose upon it an algebraic structure, which we will denote by 𝑻(𝑋). We call 𝑻(𝑋) the \textbf{term algebra in the signature} 𝑆 \textbf{over} 𝑋; it is constructed as follows:
-\begin{itemize}
-\item for each operation symbol 𝑓 ∈ 𝐹, let \(f^{𝑻(X)}\) be the operation on 𝑇(𝑋) that maps each tuple \(𝑠 : ρ𝑓 → 𝑇(𝑋)\) to the formal term 𝑓 𝑠;
-\item define 𝑻(𝑋) to be the algebra with universe 𝑇(𝑋) and operations \(\{f^{𝑻(X)} | f ∈ F\}\).
-\end{itemize}
-
-\subsubsection{Free algebras}\label{sec:free-algebras}
-Fix a signature 𝑆 = (𝐹, ρ), let 𝒦 be a class of 𝑆-algebras, let \(𝑼 = ⟨𝑈, 𝐹^{𝑼}⟩\) be an 𝑆-algebra, and let 𝑋 be a subset of 𝑈. We say that
-\begin{itemize}
-\item 𝑼 has the universal mapping property for 𝒦 over 𝑋 if for every 𝑨 ∈ 𝒦 and every function ℎ : 𝑋 → 𝐴, there is a homomorphism \(h' : 𝑼 → 𝑨\) that agrees with ℎ on 𝑋;
-\item 𝑼 is free for 𝒦 over 𝑋 if it has the universal mapping property and is generated by 𝑋;
-\item 𝑼 is free in 𝒦 over 𝑋 if it is free for 𝒦 over 𝑋 and belongs to 𝒦.
-\end{itemize}
-We use the next definition to take a free algebra \emph{for} a class 𝒦 and produce the free algebra \emph{in} 𝒦. Let 𝒦 be a class of 𝑆-algebras and 𝑨 an 𝑆-algebra. Define \(ψ(𝒦, 𝑨) := \{θ ∈ Con 𝑨 : 𝑨/θ ∈ S(𝒦)\}\) and \(Ψ(𝒦, 𝑨) := ⋀ ψ(𝒦, 𝑨)\). Notice that \(ψ(𝒦, 𝑨)\) may be empty, in which case \(Ψ(𝒦, 𝑨) = 1_A\) and \(𝑨/Ψ(𝒦, 𝑨)\) is trivial.
-
-The free algebra is constructed using the above definitions for the special case in which 𝑨 is the algebra 𝑻(𝑋) of 𝑆-terms over 𝑋. Since 𝑻(𝑋) is free for the class 𝓚(𝑆) of all 𝑆-algebras, it follows that 𝑻(𝑋) is free for every subclass 𝒦 of 𝓚(𝑆). Of course, 𝑻(𝑋) is not necessarily a member of 𝒦, but we can form the quotient of 𝑻(𝑋) modulo the congruence Ψ(𝒦, 𝑻(𝑋)), which we denote by \(𝔽(𝒦, 𝑋) := 𝑻(𝑋)/Ψ(𝒦, 𝑻(𝑋))\). The algebra 𝔽(𝒦, 𝑋) is called the \textbf{free algebra over} 𝒦 \textbf{generated by} 𝑋. It should be clear that 𝔽(𝒦, 𝑋) is a subdirect product of the algebras \{𝑻(𝑋)/θ\}, where θ ranges over ψ(𝒦, 𝑻(𝑋))\}, so it belongs to SP(𝒦). Therefore, we say that 𝔽(𝒦, 𝑋) is free \emph{in} SP(𝒦).
-
-We formalize the free algebra in Section~\ref{sec:}. %the free algebra in agda.
-
-\subsection{Arity}\label{sec:arity}
-We denote and define the set \(X := \{x_0,x_1,\dots \}\) of variable symbols, and for each natural number \(n\) we let \(X_n:=\{x_0,x_1,\dots, x_{n-1}\}\).
-
-Let 𝑆 = (𝐹, ρ) be a signature, 𝑨 an 𝑆-algebra, and 𝑻(X) the term algebra over 𝑋; that is,
-\[𝑨 := ⟨A, F^{𝑨}⟩ \quad \text{ and } \quad 𝑻(X) := ⟨T(X), F^{𝑻(X)}⟩.\]
-Each operation symbol 𝑓 ∈ 𝐹 gives rise to
-\begin{itemize}
-\item a ρ𝑓-ary operation on 𝑇(𝑋), denoted by \(f^{𝑻(X)}\), which maps each tuple \(𝑠 : ρ𝑓 → 𝑇(𝑋)\) to the formal term 𝑓 𝑠 in 𝑇(𝑋), and
-\item a ρ𝑓-ary operation on 𝐴, denoted by \(f^{𝑨}\), which maps each tuple \(𝑎 : ρ𝑓 → 𝐴\) to the element \(f^{𝑨} \,a\) in 𝐴. The operation \(f^{𝑨}\) is called the \textbf{interpretation of} 𝑓 \textbf{in the algebra} \(𝑨\).
-\end{itemize}
-
-\begin{comment}
-\subsubsection{Essential arity}\label{sec:essential-arity}
-The definition of arity of an operation or term is a bit nuanced as the next example demonstrates.
-\textbf{Example}.
-\begin{quote}
-Suppose 𝑓 is a binary term, and 𝑝 and 𝑞 are ternary terms. What is the arity of the following term?
-\[𝑡(𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧) = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))\]
-On the face of it, it seems safe to say that 𝑡 has arity 6, since it is expressible as a function of 6 variables.
-
-But what if we decided to throw in some useless (or ``dummy'') variables, like so,
-\[t'(𝑢', 𝑣', 𝑢, 𝑣, 𝑤, 𝑥, 𝑦, 𝑧, 𝑧') = 𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))?\]
-
-And what happens if \(𝑝(𝑥, 𝑦, 𝑧) = 𝑧\), so that 𝑝 depends on just one of its arguments? Then we could replace it with \(𝑝'(𝑧) = 𝑝(𝑥, 𝑦, 𝑧)\), and 𝑡 could be expressed as,
-\[𝑡''(𝑢, 𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))).\]
-
-The respective arities of \(𝑡, 𝑡'\) and \(𝑡''\) are 6, 9, and 5, yet arity1--arity3 merely give three different ways to present the term \(𝑓(𝑝(𝑥, 𝑦, 𝑧), 𝑓(𝑤, 𝑥), 𝑞(𝑢, 𝑣, 𝑤))\).
-\end{quote}
-
-As the example demonstrates, the notion of arity of a term is not uniquely defined (modulo equivalence of terms). As such, it is sometimes useful to speak of the \textbf{essential arity} of a term, which is defined to be the minimum number of variables required to express that term; it should be clear that this is equal to the number of arguments
-with respect to which the term is not constant.
-\textbf{Example}.
-\begin{quote} It is impossible to know the essential arity of a term until we know
-that of each of its subterms. Picking up where we left off in the previous example, suppose 𝑓 depends on both of its arguments and \(𝑞(𝑢, 𝑣, 𝑤) = 𝑓(𝑣, 𝑤)\). Then 𝑡 is expressible as
-\[s(𝑣, 𝑤, 𝑥, 𝑧) = 𝑓(𝑝'(𝑧), 𝑓(𝑤, 𝑥), 𝑓(𝑣, 𝑤))\]
-and we finally see the lower bound on the number of variables required to express 𝑡, namely 4. Therefore, 𝑡 has essential arity 4.
-\end{quote}
-\end{comment}
-
-\subsection{Term Operations}\label{sec:term-operations}
-In terms we defined a term in a given signature. When we interpret such a term in a particular algebraic structure, we get what is known as a term operation. In this section we explain how one defines the interpretation of an 𝑆-term in an 𝑆-algebra, and thus how one obtains a term \emph{operation}.
-
-%% As usual, for each 0 \textless{} 𝑛 \textless{} ω we identify the 𝑛-tuple \((x_0, x_1, \dots, x_{n-1})\) with the function \(x:  𝑛 → X_n\) defined by \(x\, i = x_i\) (0 ≤ 𝑖 \textless{} 𝑛).
-
-Recall, a term 𝑡 is either a variable, say, 𝑡 = 𝑥, or has the form 𝑡 = 𝑓 𝑠 for some operation symbol 𝑓 ∈ 𝐹, and some ρ𝑓-tuple 𝑠 : ρ𝑓 → 𝑇(𝑋) of terms.
-
-Let 𝑡 ∈ 𝑇(𝑋) be an 𝑆-term. Given an arbitrary 𝑆-algebra 𝑨, we will define a \textbf{term operation} on 𝑨 by giving 𝑡 an \emph{interpretation} in 𝑨. Diverging from standard notation slightly, we will denote this operation by 𝑡 ̇ 𝑨 for reasons that will hopefully be clear when (in interpretation) we define term operations in Agda. Similarly, 𝑡 ̇ 𝑩 will denote the interpretation of the term 𝑡 in the algebra 𝑩.
-
-The \textbf{term operation} 𝑡 ̇ 𝑨 is defined by recursion on the height ∣𝑡∣ of 𝑡 as follows: for each assignment 𝑎 : 𝑋 → 𝐴 (of values in 𝐴 to variables in 𝑋),
-\begin{itemize}
-\item (∣𝑡∣ = 0) if 𝑡 is the variable 𝑥, then (𝑡 ̇ 𝑨) 𝑎 = 𝑎 𝑥,
-\item (∣𝑡∣ = 𝑛+1) if 𝑡 = 𝑓 𝑠 where 𝑓 is an operation symbol and 𝑠 : ρ𝑓 → 𝑇(X) is a tuple of terms whose heights are at most 𝑛 (i.e., ∀ 𝑖, ∣𝑠 𝑖∣ ≤ 𝑛), then 𝑡 ̇ 𝑨 = \(f^{𝑨} \, s^{𝑨}\).
-\end{itemize}
-
-
-\subsection{Basic facts}\label{sec:basic-facts}
-We conclude this section with a list of basic facts and their (informal) proofs. These results are classical, straightforward consequences of the definitions above. We will need them below and when we cite them later, we will refer to them as, e.g, Obs 1, Obs 2, etc. Each of these observations is formalized in Agda in the \agdaualib.
-
-Throughout this section, \(𝑨 = ⟨A, F^{𝑨}⟩, \ 𝑩 = ⟨B, F^{𝑩}⟩, \ 𝑪 = ⟨C, F^{𝑪}⟩\ \) are algebras in the same signature 𝑆 = (𝐹, ρ).
-
-\subsubsection{Equalizers}\label{sec:equalizers}
-We start with the simple observation that equalizers of homomorphisms are subuniverses. The Agda formalization of this result and its proof is presented in obs 1 in agda.
-
-\subsubsection{Homomorphisms}\label{sec:homomorphisms-1}
-Another easy fact is that composing homomorphisms results in a homomorphism. The easy proof of this fact is formalized in obs 2 in agda .
-
-Another elementary result is that homomorphisms are uniquely determined by the values they take on generating sets. Our Agda proof of Obs \%s \textless{}obs 3\textgreater{} is called
-\texttt{HomUnique}. It is presented obs 3 in agda.
-
-%A corollary of the last result is an easily proved bound on the cardinality of \(|\mathrm{Hom}(𝑨, 𝑩)|\).
-
-Here is an elementary result about factorability of homomorphisms. The informal proof is presented below and its formalization in obs 5 in agda.
-
-We formalize Obs \%s \textless{}obs 5\textgreater{} in the \homomorphismsmodule of the \agdaualib; see obs 5 in agda.
-
-Next we observe that the intersection of subuniverses is again a subuniverse, a fact that we prove formally in the \subsmodule of the \agdaualib; see obs 6 in agda.
-
-Next is a theorem that provides a means of generating subuniverses recursively.
-
-We formally implement the concept of subalgebra in the \subsmodule of the \agdaualib, which we describe in subuniverses in agda. In particular, we describe the formalization of Obs 7 in Section~\ref{sec:}. %obs 7.1 in agda.
-
-Our formalization of Obs 7.1 is presented in Section~\ref{sec:}. %obs 7.1 in agda.
-
-We implement terms and the term algebra in Agda in the \termsmodule, as described in terms. Also in the \termsmodule is a formal proof of the next result; see Section~\ref{sec:}. %obs 9 in agda.
-
-Let 𝒦 be the class of 𝑆-algebras. Then Obs 9 can be restated as: 𝑻(𝑋) is free in 𝒦 over 𝑋. This is sometimes expressed by saying that 𝑻(𝑋) is \textbf{absolutely free} over 𝑋.
-
-It follows from Obs 9.2 that, up to isomorphism, a free algebra is determined by the cardinality of a free generating set.
-
-Next we observe that freeness extends from a class 𝒦 to the variety it generates.
-
-As Bergman notes (see the remark after Def 4.29 in~\cite{Bergman:2012}), ``strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, X), so it doesn't make sense to talk about 𝑋 generating 𝔽(𝒦, X), [but] as long as 𝒦 contains a nontrivial algebra, \(Ψ(𝒦, 𝑋) ∩ 𝑋² = 0_X\). In light of Obs 9.2, we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑋) in 𝔽(𝒦, 𝑋). All of these considerations are accounted for in the following corollary.''
-
-In the next observation, assume 𝑨 = \(⟨A, F^{𝑨}⟩\) and 𝑩 = \(⟨B, F^{𝑩}⟩\) are 𝑆-algebras , and let 𝑡 ∈ 𝑇(𝑋) be a term in the language of 𝑆. In particular, as explained in term operations, 𝑡 has an interpretation in 𝑨, which (for reasons that will become clear when we define term operations in Agda) we will denote by 𝑡 ̇ 𝑨 and we call a \textbf{term operation}. Similarly, \(t^{𝑩}\) is the interpretation of 𝑡 in 𝑩.
-
-We formalize Obs 10 and its proof in the \termsmodule of the \agdaualib, as described in Section~\ref{sec:}. %obs 10 in agda.
-
-We formalize Obs 11 and its proof in the \termsmodule of the \agdaualib, as described in Section~\ref{sec:}. %obs 11 in agda.
-
-We formalize Obs12 and its proof in the \subsmodule of the \agdaualib, as described in Section~\ref{sec:}. %obs 12 in agda.
-
-%% \emph{Proof}.
-%% We prove the result for H(𝒦). 𝒦 ⊆ H(𝒦), so Th H (𝒦) ⊆ Th 𝒦 …
-
-We present a formalization of this result and its proof in Section~\ref{sec:}. %obs 13 in agda.
-
-We formalize Obs 14 and its proof in the \birkhoffmodule of the \agdaualib, as described in Section~\ref{sec:itemStyles}. %obs 14 in agda.
-
-The last result tells us that we can determine whether an identity is true in a variety 𝒱 by consulting a particular algebra, namely 𝔽(𝒱, 𝑋), the free algebra in 𝒱.
-
-\subsection{Birkhoff's theorem}\label{sec:birkhoffs-theorem}
-It follows from Obs 13 that every equational class is a variety. The converse is the celebrated HSP Theorem of Birkhoff.
-
-\noindent \textbf{Theorem}~\cite{Birkhoff:1935}. Every class of algebraic structures that is closed under the taking of homomorphisms, subalgebras, and arbitrary products is an equational class.
-
-In other terms, if a class 𝒦 of algebras is closed under H, S, P, then there exists a set ℰ of identities such that 𝒦 is the class of all algebras that model ℰ.
-
-%% The statement and proof we give here is essentially the same as that given in Theorem 4.41 of Cliff Bergman's textbook~\cite{Bergman:2012}. It is this statement and proof that we will formalize in Agda in the \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/birkhoff.lagda.rst}{birkhoff module} of the \agdaualib; see birkhoffs theorem in agda.
-
-%% \section{Notation dictionary}
-%% \begin{Shaded}
-%% \begin{Highlighting}[]
-%% \NormalTok{Agda              MHE/agda-ualib}
-%% \NormalTok{====              ==============}
-%% \NormalTok{Level             Universe}
-%% \NormalTok{lzero             𝓤₀}
-%% \NormalTok{𝓤 }\OtherTok{:}\NormalTok{ Level         𝓤 }\OtherTok{:}\NormalTok{ Universe}
-%% \DataTypeTok{Set}\NormalTok{ lzero         𝓤₀ ̇}
-%% \DataTypeTok{Set}\NormalTok{ 𝓤             𝓤 ̇}
-%% \NormalTok{lsuc lzero        𝓤₀ ⁺}
-%% \NormalTok{lsuc 𝓤            𝓤 ⁺}
-%% \DataTypeTok{Set} \OtherTok{(}\NormalTok{lsuc lzero}\OtherTok{)}\NormalTok{  𝓤₀ ⁺ ̇}
-%% \DataTypeTok{Set} \OtherTok{(}\NormalTok{lsuc 𝓤}\OtherTok{)}\NormalTok{      𝓤 ⁺ ̇}
-%% \NormalTok{Setω              𝓤ω}
-%% \end{Highlighting}
-%% \end{Shaded}
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
-
-
-
-
-\subsubsection{Public imports}\label{sec:public-imports}
-Next we import other parts of MHE's
-\href{\%3Chttps://github.com/martinescardo/TypeTopology\%3E\%60_}{Type
-Topology} library, using the Agda directive \texttt{public}, which means
-these imports will be available wherever the \texttt{prelude} module in
-imported. We describe some of these imports later, when making use of
-them, but we don't describe each one in detail. (The interested or
-confused reader should consult
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html}{HoTT-UF-in-Agda}
-to learn more.)
-
-\begin{verbatim}
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
- refl to 𝓇ℯ𝒻𝓁) public
-
-pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
-
-open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
-
-open import MGS-MLTT using (_∘_; domain; codomain; transport;
- _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
- _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
-
-open import MGS-Equivalences using (is-equiv; inverse;
- invertible) public
-
-open import MGS-Subsingleton-Theorems using (funext;
- dfunext; is-singleton; is-subsingleton; is-prop; Univalence;
- global-dfunext; univalence-gives-global-dfunext; _●_; _≃_;
- logically-equivalent-subsingletons-are-equivalent;
- Π-is-subsingleton) public
-
-open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
- using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
- powersets-are-sets'; subset-extensionality'; propext) public
-
-open import MGS-Embeddings using (is-embedding; pr₁-embedding;
- is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
- ×-is-subsingleton) public
-
-open import MGS-Solved-Exercises using (to-subtype-≡) public
-
-open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Dependent pair type}\label{sec:dependent-pair-type}
-
-Our preferred notations for the first and second projections of a
-product are \texttt{∣\_∣} and \texttt{∥\_∥}, respectively; however, we
-will sometimes use the more standard \texttt{pr₁} and \texttt{pr₂}, or
-even \texttt{fst} and \texttt{snd}, for emphasis, readability, or
-compatibility with other libraries.
-
-\begin{verbatim}
-∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
-∣ x , y ∣ = x
-fst (x , y) = x
-
-∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
-∥ x , y ∥ = y
-snd (x , y) = y
-\end{verbatim}
-
-For the dependent pair type, we prefer the notation
-\texttt{Σ\ x\ ꞉\ X\ ,\ y}, which is more pleasing (and more standard in
-the literature) than Agda's default syntax
-(\texttt{Σ\ λ(x\ ꞉\ X)\ →\ y}), and MHE has a useful trick that makes
-the preferred notation available by making index type explicit.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{infixr}\NormalTok{ -1 -Σ}
-\NormalTok{-Σ }\OtherTok{:} \OtherTok{\{}\NormalTok{𝓤 𝓥 }\OtherTok{:}\NormalTok{ Universe}\OtherTok{\}} \OtherTok{(}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{)} \OtherTok{(}\NormalTok{Y }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{)} \OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{-Σ X Y }\OtherTok{=}\NormalTok{ Σ Y}
-\KeywordTok{syntax}\NormalTok{ -Σ X }\OtherTok{(λ}\NormalTok{ x }\OtherTok{→}\NormalTok{ y}\OtherTok{)} \OtherTok{=}\NormalTok{ Σ x ꞉ X , y }\CommentTok{-- type `꞉` as `\textbackslash{}:4`}
-\end{Highlighting}
-\end{Shaded}
-
-The symbol ꞉ is not the same as : despite how similar they may appear.
-The correct colon in the expression \texttt{Σ\ x\ ꞉\ X\ ,\ y} above is
-obtained by typing \texttt{\textbackslash{}:4} in
-\href{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html}{agda2-mode}.
-
-MHE explains Sigma induction as follows: "To prove that \texttt{A\ z}
-holds for all \texttt{z\ :\ Σ\ Y}, for a given property \texttt{A}, we
-just prove that we have \texttt{A\ (x\ ,\ y)} for all \texttt{x\ :\ X}
-and \texttt{y\ :\ Y\ x}. This is called \texttt{Σ} induction or
-\texttt{Σ} elimination (or \texttt{uncurry}).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Σ-induction }\OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}\{}\NormalTok{Y }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{\}\{}\NormalTok{A }\OtherTok{:}\NormalTok{ Σ Y }\OtherTok{→}\NormalTok{ 𝓦 ̇ }\OtherTok{\}}
- \OtherTok{→}            \OtherTok{((}\NormalTok{x }\OtherTok{:}\NormalTok{ X}\OtherTok{)(}\NormalTok{y }\OtherTok{:}\NormalTok{ Y x}\OtherTok{)} \OtherTok{→}\NormalTok{ A }\OtherTok{(}\NormalTok{x , y}\OtherTok{))}
-              \CommentTok{-------------------------------}
- \OtherTok{→}            \OtherTok{((}\NormalTok{x , y}\OtherTok{)} \OtherTok{:}\NormalTok{ Σ Y}\OtherTok{)} \OtherTok{→}\NormalTok{ A }\OtherTok{(}\NormalTok{x , y}\OtherTok{)}
-\NormalTok{Σ-induction g }\OtherTok{(}\NormalTok{x , y}\OtherTok{)} \OtherTok{=}\NormalTok{ g x y}
-
-\NormalTok{curry }\OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}\{}\NormalTok{Y }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{\}\{}\NormalTok{A }\OtherTok{:}\NormalTok{ Σ Y }\OtherTok{→}\NormalTok{ 𝓦 ̇ }\OtherTok{\}}
- \OtherTok{→}      \OtherTok{(((}\NormalTok{x , y}\OtherTok{)} \OtherTok{:}\NormalTok{ Σ Y }\OtherTok{)} \OtherTok{→}\NormalTok{ A }\OtherTok{(}\NormalTok{x , y}\OtherTok{))}
-       \CommentTok{---------------------------------}
- \OtherTok{→}      \OtherTok{((}\NormalTok{x }\OtherTok{:}\NormalTok{ X}\OtherTok{)} \OtherTok{(}\NormalTok{y }\OtherTok{:}\NormalTok{ Y x}\OtherTok{)} \OtherTok{→}\NormalTok{ A }\OtherTok{(}\NormalTok{x , y}\OtherTok{))}
-\NormalTok{curry f x y }\OtherTok{=}\NormalTok{ f }\OtherTok{(}\NormalTok{x , y}\OtherTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-The special case in which the type \texttt{Y} doesn't depend on
-\texttt{X} is of course the usual Cartesian product.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{infixr} \DecValTok{30} \OtherTok{_}\NormalTok{×}\OtherTok{_}
-\OtherTok{_}\NormalTok{×}\OtherTok{_} \OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{X × Y }\OtherTok{=}\NormalTok{ Σ x ꞉ X , Y}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Dependent function type}\label{sec:dependent-function-type}
-
-To make the syntax for \texttt{Π} conform to the standard notation for
-``Pi types'' (or dependent function type), MHE uses the same trick as
-the one used above for ``Sigma types.''
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Π }\OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}} \OtherTok{(}\NormalTok{A }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{)} \OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{Π }\OtherTok{\{}\NormalTok{𝓤}\OtherTok{\}} \OtherTok{\{}\NormalTok{𝓥}\OtherTok{\}} \OtherTok{\{}\NormalTok{X}\OtherTok{\}}\NormalTok{ A }\OtherTok{=} \OtherTok{(}\NormalTok{x }\OtherTok{:}\NormalTok{ X}\OtherTok{)} \OtherTok{→}\NormalTok{ A x}
-
-\NormalTok{-Π }\OtherTok{:} \OtherTok{\{}\NormalTok{𝓤 𝓥 }\OtherTok{:}\NormalTok{ Universe}\OtherTok{\}(}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{)(}\NormalTok{Y }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{)} \OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{-Π X Y }\OtherTok{=}\NormalTok{ Π Y}
-\KeywordTok{infixr}\NormalTok{ -1 -Π}
-\KeywordTok{syntax}\NormalTok{ -Π A }\OtherTok{(λ}\NormalTok{ x }\OtherTok{→}\NormalTok{ b}\OtherTok{)} \OtherTok{=}\NormalTok{ Π x ꞉ A , b}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Application}\label{sec:application}
-
-An important tool that we use often in Agda proofs is application of a
-function to an identification \texttt{p\ :\ x\ ≡\ x\textquotesingle{}}.
-We apply the \texttt{ap} operator to obtain the identification
-\texttt{ap\ f\ p\ :\ f\ x\ ≡\ f\ x\textquotesingle{}} when given
-\texttt{p\ :\ x\ ≡\ x\textquotesingle{}} and \texttt{f\ :\ X\ →\ Y}.
-
-Since \texttt{ap} is already defined in MHE's Type Topolgy library, we
-don't redefine it here. However, we do define some variations of
-\texttt{ap} that are sometimes useful.
-
-\begin{verbatim}
-ap-cong : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }
-          {f g : X → Y} {a b : X}
- →         f ≡ g   →   a ≡ b
-         -----------------------
- →            f a ≡ g b
-
-ap-cong (refl _) (refl _) = refl _
-\end{verbatim}
-
-Here is a related tool that we borrow from the
-\texttt{Relation/Binary/Core.agda} module of the
-\href{https://agda.github.io/agda-stdlib/}{Agda standard library}.
-
-\begin{verbatim}
-cong-app : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ }
-           {f g : (a : A) → B a}
- →          f ≡ g   →   (a : A)
-          -----------------------
- →              f a ≡ g a
-
-cong-app (refl _) a = refl _
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Function extensionality}\label{sec:function-extensionality}
-
-Extensional equality of functions, or function extensionality, means that any two point-wise equal functions are equal. As MHE points out, this is known to be not provable or disprovable in Martin-Löf type theory.
-
-Nonetheless, we will mainly work with pointwise equality of functions, which MHE defines (in
-\href{\%3Chttps://github.com/martinescardo/TypeTopology\%3E\%60_}{Type Topology} ) as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\OtherTok{_}\NormalTok{∼}\OtherTok{_} \OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}} \OtherTok{\{}\NormalTok{A }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{\}} \OtherTok{→}\NormalTok{ Π A }\OtherTok{→}\NormalTok{ Π A }\OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇ }
-\NormalTok{f ∼ g }\OtherTok{=} \OtherTok{∀}\NormalTok{ x }\OtherTok{→}\NormalTok{ f x ≡ g x}
-\KeywordTok{infix} \DecValTok{0} \OtherTok{_}\NormalTok{∼}\OtherTok{_}
-\end{Highlighting}
-\end{Shaded}
-
-(The \texttt{\_∼\_} relation will be equivalent to equality of
-functions, once we have the principle of \emph{univalence} at our
-disposal.)
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Predicates, Subsets}\label{sec:predicates-subsets}
-
-We need a mechanism for implementing the notion of subsets in Agda. A
-typical one is called \texttt{Pred} (for predicate). More generally,
-\texttt{Pred\ A\ 𝓤} can be viewed as the type of a property that
-elements of type \texttt{A} might satisfy. We write
-\texttt{P\ :\ Pred\ A\ 𝓤} (read ``\texttt{P} has type
-\texttt{Pred\ A\ 𝓤}'') to represent the subset of elements of \texttt{A}
-that satisfy property \texttt{P}.
-
-Here is the definition (which is similar to the one found in the
-\texttt{Relation/Unary.agda} file of
-\href{https://agda.github.io/agda-stdlib/}{Agda standard library} ).
-
-\begin{verbatim}
-Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
-Pred A 𝓥 = A → 𝓥 ̇
-\end{verbatim}
-
-Below we will often consider predicates over the class of all algebras
-of a particular type. We will define the type of algebras
-\texttt{Algebra\ 𝓤\ 𝑆} (for some universe level 𝓤). Like all types,
-\texttt{Algebra\ 𝓤\ 𝑆} itself has a type which happens to be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-̇ (as we will see in algebra type). Therefore, the type of
-\texttt{Pred\ (Algebra\ 𝓤\ 𝑆)\ 𝓤} will be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ as well.
-
-The inhabitants of the type \texttt{Pred\ (Algebra\ 𝓤\ 𝑆)\ 𝓤} are maps
-of the form 𝑨 → 𝓤 ̇; indeed, given an algebra 𝑨 : Algebra 𝓤 𝑆, we have
-Pred 𝑨 𝓤 = 𝑨 → 𝓤 ̇.
-
-\subsubsection{The membership relation}\label{sec:the-membership-relation}
-
-We introduce notation so that we may indicate that \texttt{x} ``belongs
-to'' a ``subset'' \texttt{P}, or that \texttt{x} ``has property''
-\texttt{P}, by writing either \texttt{x\ ∈\ P} or \texttt{P\ x} (cf.
-\texttt{Relation/Unary.agda} in the
-\href{https://agda.github.io/agda-stdlib/}{Agda standard library} ).
-
-\begin{verbatim}
-infix 4 _∈_ _∉_
-_∈_ : {A : 𝓤 ̇ } → A → Pred A 𝓦 → 𝓦 ̇
-x ∈ P = P x
-
-_∉_ : {A : 𝓤 ̇ } → A → Pred A 𝓦 → 𝓦 ̇
-x ∉ P = ¬ (x ∈ P)
-\end{verbatim}
-
-\subsubsection{Subset relations}\label{sec:subset-relations}
-
-The subset relation is then denoted, as usual, with the \texttt{⊆}
-symbol (cf. \texttt{Relation/Unary.agda} in the
-\href{https://agda.github.io/agda-stdlib/}{Agda standard library} ).
-
-\begin{verbatim}
-infix 4 _⊆_ _⊇_
-_⊆_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
-P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
-
-_⊇_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
-P ⊇ Q = Q ⊆ P
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Miscellany}\label{sec:miscellany}
-
-Finally, we include the following list of ``utilities'' that will come
-in handy later. Most of these are self-explanatory, but we make a few
-remarks below when we feel there is something worth noting.
-
-\begin{verbatim}
-_∈∈_ : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A  →  B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
-_∈∈_ f S = (x : _) → f x ∈ S
-
-Im_⊆_ : {A : 𝓤 ̇ } {B : 𝓥 ̇ } → (A → B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
-Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
-
-img : {X : 𝓤 ̇ } {Y : 𝓤 ̇ }
-      (f : X → Y) (P : Pred Y 𝓤)
- →    Im f ⊆ P →  X → Σ P
-img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
-
-≡-elim-left : {A₁ A₂ : 𝓤 ̇ } {B₁ B₂ : 𝓦 ̇ }
- →            (A₁ , B₁) ≡ (A₂ , B₂)
-              ----------------------
- →                   A₁ ≡ A₂
-≡-elim-left e = ap pr₁ e
-
-≡-elim-right : {A₁ A₂ : 𝓤 ̇ }{B₁ B₂ : 𝓦 ̇ }
- →             (A₁ , B₁) ≡ (A₂ , B₂)
-              -----------------------
- →                    B₁ ≡ B₂
-≡-elim-right e = ap pr₂ e
-
-≡-×-intro : {A₁ A₂ : 𝓤 ̇ } {B₁ B₂ : 𝓦 ̇ }
- →           A₁ ≡ A₂  →  B₁ ≡ B₂
-          ------------------------
- →          (A₁ , B₁) ≡ (A₂ , B₂)
-≡-×-intro (refl _ ) (refl _ ) = (refl _ )
-
-cong-app-pred : ∀{A : 𝓤 ̇ }{B₁ B₂ : Pred A 𝓤}
-                (x : A) →  x ∈ B₁  →  B₁ ≡ B₂
-               ------------------------------
- →                         x ∈ B₂
-cong-app-pred x x∈B₁ (refl _ ) = x∈B₁
-
-cong-pred : {A : 𝓤 ̇ }{B : Pred A 𝓤}
-            (x y : A) →  x ∈ B  →  x ≡ y
-            ----------------------------
- →                       y ∈ B
-cong-pred x .x x∈B (refl _ ) = x∈B
-
-
-data Image_∋_ {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
-  where
-  im : (x : A) → Image f ∋ f x
-  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
-
--- image_ : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Pred B (𝓤 ⊔ 𝓦)
--- image f = λ b → ∃ λ a → b ≡ f a
-
-ImageIsImage : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-               (f : A → B) (b : B) (a : A)
- →              b ≡ f a
-              ----------------------------
- →              Image f ∋ b
-ImageIsImage {A = A}{B = B} f b a b≡fa = eq b a b≡fa
-\end{verbatim}
-
-N.B. the assertion \texttt{Image\ f\ ∋\ y} must come with a proof, which
-is of the form \texttt{∃a\ f\ a\ =\ y}, so we have a witness. Thus, the
-inverse can be ``computed'' in the following way:
-
-\begin{verbatim}
-Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(b : B) → Image f ∋ b  →  A
-Inv f .(f a) (im a) = a
-Inv f b (eq b a b≡fa) = a
-\end{verbatim}
-
-The special case for Set (i.e., \texttt{𝓤₀\ ̇}) is
-
-\begin{verbatim}
-inv : {A B : 𝓤₀ ̇ }(f : A → B)(b : B) → Image f ∋ b → A
-inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
-
-InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
-           (b : B) (b∈Imgf : Image f ∋ b)
-          ---------------------------------
- →         f (Inv f b b∈Imgf) ≡ b
-InvIsInv f .(f a) (im a) = refl _
-InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
-\end{verbatim}
-
-An epic (or surjective) function from 𝓤 ̇ to 𝓦 ̇ (and the special case for
-\texttt{𝓤₀\ ̇}) is defined as follows.
-
-\begin{verbatim}
-Epic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) →  𝓤 ⊔ 𝓦 ̇
-Epic g = ∀ y → Image g ∋ y
-
-epic : {A B : 𝓤₀ ̇ } (g : A → B) → 𝓤₀ ̇
-epic = Epic {𝓤₀} {𝓤₀}
-\end{verbatim}
-
-The (pseudo-)inverse of an epic function is
-
-\begin{verbatim}
-EpicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → Epic f → B → A
-EpicInv f fEpic b = Inv f b (fEpic b)
-
-
--- The (psudo-)inverse of an epic is the right inverse.
-EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-             (f : A → B)  (fEpic : Epic f)
-            ---------------------------------
- →           f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
-EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
-\end{verbatim}
-
-Monics (or injective) functions are defined this way.
-
-\begin{verbatim}
-monic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) → 𝓤 ⊔ 𝓦 ̇
-monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
-monic₀ : {A B : 𝓤₀ ̇ } (g : A → B) → 𝓤₀ ̇
-monic₀ = monic {𝓤₀}{𝓤₀}
-
---The (pseudo-)inverse of a monic function
-monic-inv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → monic f
- →           (b : B) → Image f ∋ b → A
-monic-inv f fmonic  = λ b Imf∋b → Inv f b Imf∋b
-
---The (psudo-)inverse of a monic is the left inverse.
-monic-inv-is-linv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-                    (f : A → B) (fmonic : monic f)(x : A)
-                   ----------------------------------------
-  →                 (monic-inv f fmonic) (f x) (im x) ≡ x
-monic-inv-is-linv f fmonic x = refl _
-\end{verbatim}
-
-Finally, we define bijective functions as follows.
-
-\begin{verbatim}
-bijective : {A B : 𝓤₀ ̇ }(g : A → B) → 𝓤₀ ̇
-bijective g = epic g × monic g
-
-Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(g : A → B) → 𝓤 ⊔ 𝓦 ̇
-Bijective g = Epic g × monic g
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{More extensionality}\label{sec:more-extensionality}
-
-Here we collect miscellaneous definitions and proofs related to
-extensionality that will come in handy later.
-
-\begin{verbatim}
--------------------------------------------------------
---Function extensionality from univalence
-
---Ordinary function extensionality
-extensionality : ∀ 𝓤 𝓦  → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
-extensionality 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
- →                f ∼ g   →   f ≡ g
-
---Opposite of function extensionality
-intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
- →                f ≡ g  →  (x : A)
-                  ------------------
- →                    f x ≡ g x
-
-intensionality  (refl _ ) _  = refl _
-
---Dependent intensionality
-dep-intensionality : ∀ {𝓤 𝓦}{A : 𝓤 ̇ }{B : A → 𝓦 ̇ }
-                     {f g : ∀(x : A) → B x}
- →                   f ≡ g  →  (x : A)
-                    ------------------
- →                    f x ≡ g x
-
-dep-intensionality (refl _ ) _ = refl _
-
---------------------------------------
---Dependent function extensionality
-dep-extensionality : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
-dep-extensionality 𝓤 𝓦 = {A : 𝓤 ̇ } {B : A → 𝓦 ̇ }
-  {f g : ∀(x : A) → B x} →  f ∼ g  →  f ≡ g
-
-∀-extensionality : 𝓤ω
-∀-extensionality = ∀  {𝓤 𝓥} → extensionality 𝓤 𝓥
-
-∀-dep-extensionality : 𝓤ω
-∀-dep-extensionality = ∀ {𝓤 𝓥} → dep-extensionality 𝓤 𝓥
-
-extensionality-lemma : {I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
-                       (p q : (i : I) → (X → A i) → 𝓣 ̇ )
-                       (args : X → (Π A))
- →                     p ≡ q
-   -------------------------------------------------------------
- → (λ i → (p i)(λ x → args x i)) ≡ (λ i → (q i)(λ x → args x i))
-
-extensionality-lemma p q args p≡q =
- ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Unicode Hints}\label{sec:unicode-hints}
-
-Here is a table of some of the unicode characters used in the
-\href{https://gitlab.com/ualib/ualib.gitlab.io}{agda-ualib}.
-
-\begin{quote}
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-To get\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-Type\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝓘, 𝓙\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MCI}, \texttt{\textbackslash{}MCJ}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝓤 ̇ \textbar{}\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MCU\ \textbackslash{}\^{}.}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝓤 ⁺\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MCU\ \textbackslash{}\^{}+}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-𝓤₀\strut
-\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-\texttt{\textbackslash{}MCU\textbackslash{}\_0}
-\end{quote}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-⊔
-\end{quote}\strut
-\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-\texttt{\textbackslash{}sqcup}
-\end{quote}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝐴, 𝐵\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MiA}, \texttt{\textbackslash{}MiB}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝑨, 𝑩\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MIA}, \texttt{\textbackslash{}MIB}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝒜, ℬ\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}McA}, \texttt{\textbackslash{}McB}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝓐, 𝓑\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MCA}, \texttt{\textbackslash{}MCB}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-t ̇ 𝑨 \textbar{}\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{t\ \textbackslash{}\^{}.\ \textbackslash{}MIA}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝑓 ̂ 𝑨 \textbar{}\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}Mif\ \textbackslash{}\^{}\ \textbackslash{}MIA}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-≡\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}equiv}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-𝓇ℯ𝒻𝓁
-\end{quote}\strut
-\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}Mcr\textbackslash{}Mce\textbackslash{}Mcf\textbackslash{}Mcl}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-≡⟨ ⟩\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}equiv\textbackslash{}\textless{}\ \textbackslash{}\textgreater{}}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∎, ■\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}qed}, \texttt{\textbackslash{}sq}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-Σ, Π\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}Sigma}, \texttt{\textbackslash{}Pi}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-¬, ⁻¹\strut
-\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-\texttt{\textbackslash{}neg},
-\texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1}
-\end{quote}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-×\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}times}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝑖𝑑\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}Mii\textbackslash{}Mid}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝓟\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}MCP}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-↪\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}hookrightarrow}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-𝟘, 𝟙\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}b0}, \texttt{\textbackslash{}b1}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-⇔\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}lr2}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∘, ●\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}cdot}, \texttt{\textbackslash{}cib}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\begin{quote}
-×
-\end{quote}\strut
-\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}times}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∣\_∣\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}\textbar{}\_\textbackslash{}\textbar{}}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∥\_∥\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}\textbar{}\textbar{}\_\textbackslash{}\textbar{}\textbar{}}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∼, ≃\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}\textasciitilde{}},
-\texttt{\textbackslash{}\textasciitilde{}-}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-∈₀\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}in\textbackslash{}\_0}\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-⊆₀\strut
-\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-\texttt{\textbackslash{}subseteq\textbackslash{}\_0}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\end{longtable}
-\end{quote}
-
-At the end of each section of this documentation we show how to produce
-in Emacs
-\href{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html}{agda2-mode}
-some of the fancy unicode characters that we use in our code.
-
-We hope these hints are convenient for the reader, but they are not
-meant to be comprehensive.
-
-Instead use these
-
-\begin{quote}
-\textbf{Emacs commands providing information about special
-characters/input methods:}
-
-\begin{quote}
-\begin{itemize}
-\tightlist
-\item
-  \texttt{M-x\ describe-char} (or \texttt{M-m\ h\ d\ c}) with the cursor
-  on the character of interest
-\item
-  \texttt{M-x\ describe-input-method} (or \texttt{C-h\ I})
-\end{itemize}
-\end{quote}
-\end{quote}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

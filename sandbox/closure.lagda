@@ -24,13 +24,26 @@ module closure-definitions
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
- _⊧_≈_ : Algebra 𝓤 𝑆
-  →      Term{𝓤}{X} → Term → 𝓤 ̇
+ _⊧_≈_ : Algebra 𝓤 𝑆 → Term{𝓤}{X} → Term → 𝓤 ̇
  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
- _⊧_≋_ : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-  →      Term{𝓤}{X} → Term{𝓤}{X} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ _⊧_≋_ : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Term → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+
+ ------------------------------------------------------------------------
+ -- Equational theories and classes
+ -- TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → _ ̇
+ -- TH 𝒦 = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
+
+ Th :  Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Pred (Term × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+
+ -- MOD : (ℰ : Pred (Term × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ --  →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ -- MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
+ Mod : Pred (Term × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
  ----------------------------------------------------------------------
  --Closure under products
@@ -76,22 +89,6 @@ module closure-definitions
 
  -- ThVClo⊆ThSClo : Th (VClo 𝒦) ⊆ Th (SClo 𝒦)
  -- ThVClo⊆ThSClo = ?
-
- ------------------------------------------------------------------------
- -- Equational theories and classes
- TH : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → _ ̇
- TH 𝒦 = Σ (p , q) ꞉ (Term × Term) , 𝒦 ⊧ p ≋ q
-
- Th :  Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Pred (Term × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
-
- MOD : (ℰ : Pred (Term{𝓤}{X} × Term{𝓤}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
-  →    𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- MOD ℰ = Σ A ꞉ (Algebra 𝓤 𝑆) , ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
- Mod : Pred (Term{𝓤}{X} × Term{𝓤}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
  ---------------------------
  --The free algebra in Agda
@@ -229,36 +226,26 @@ module compatibility
 
  open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
 
- products-preserve-identities :
-       (p q : Term{𝓤}{X})
-       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
-  →    ((i : I) → (𝒜 i) ⊧ p ≈ q)
-      -----------------------------------
-  →     ⨅ 𝒜 ⊧ p ≈ q
+ products-preserve-identities : (p q : Term{𝓤}{X}) (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+  →                             ((i : I) → (𝒜 i) ⊧ p ≈ q)
+                                ------------------------------------------------------
+  →                             ⨅ 𝒜 ⊧ p ≈ q
 
- products-preserve-identities
-  p q I 𝒜 𝒜⊧p≈q = γ
+ products-preserve-identities p q I 𝒜 𝒜⊧p≈q = γ
    where
     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
     γ = gfe λ a →
-     (p ̇ ⨅ 𝒜) a
-        ≡⟨ interp-prod{𝓤 = 𝓤} fevu p 𝒜 a ⟩
-     (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i)))
-        ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
-     (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i)))
-        ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
-     (q ̇ ⨅ 𝒜) a
-        ∎
+     (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod{𝓤 = 𝓤} fevu p 𝒜 a ⟩
+     (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜⊧p≈q i) (λ x → (a x) i)) ⟩
+     (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+     (q ̇ ⨅ 𝒜) a                           ∎
 
- products-in-class-preserve-identities :
-      (p q : Term{𝓤}{X})
-      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
-  →   𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
-      ------------------------------------
-  →    ⨅ 𝒜 ⊧ p ≈ q
+ products-in-class-preserve-identities : (p q : Term{𝓤}{X}) (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+  →                                      𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
+                                         -----------------------------------------------------
+  →                                       ⨅ 𝒜 ⊧ p ≈ q
 
- products-in-class-preserve-identities
-  p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
+ products-in-class-preserve-identities p q I 𝒜 𝒦⊧p≋q all𝒜i∈𝒦 = γ
    where
     𝒜⊧p≈q : ∀ i → (𝒜 i) ⊧ p ≈ q
     𝒜⊧p≈q i = 𝒦⊧p≋q (all𝒜i∈𝒦 i)
@@ -266,17 +253,13 @@ module compatibility
     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
     γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
- subalgebras-preserve-identities :
-     -- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
-     (p q : Term)
-     (p≋q : 𝒦 ⊧ p ≋ q)
-     (SAK : SubalgebrasOfClass' 𝒦)
-    ----------------------------------
-  →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
+ subalgebras-preserve-identities : (p q : Term) (p≋q : 𝒦 ⊧ p ≋ q)
+                                   (SAK : SubalgebrasOfClass' 𝒦)
+                                   ----------------------------------
+  →                                (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
 
  subalgebras-preserve-identities p q p≋q SAK = γ
   where
-
    𝑨 : Algebra 𝓤 𝑆
    𝑨 = ∣ SAK ∣
 
@@ -316,14 +299,11 @@ module compatibility
 
 
  -- ⇒ (the "only if" direction)
- identities-compatible-with-homs :
-        (p q : Term{𝓤}{X})
-        (p≋q : 𝒦 ⊧ p ≋ q)
-       ----------------------------------------------------
-  →     ∀ (𝑨 : Algebra 𝓤 𝑆)
-          (KA : 𝒦 𝑨)
-          (h : hom (𝑻{𝓤}{X}) 𝑨)
-         → ∣ h ∣ ∘ (p ̇ 𝑻{𝓤}{X}) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
+ identities-compatible-with-homs : (p q : Term{𝓤}{X})
+                                   (p≋q : 𝒦 ⊧ p ≋ q)
+                                  ------------------------------------------------------
+  →                                ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻{𝓤}{X}) 𝑨)
+                                   →  ∣ h ∣ ∘ (p ̇ 𝑻{𝓤}{X}) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
 
  identities-compatible-with-homs
   p q p≋q 𝑨 KA h = γ
@@ -331,12 +311,10 @@ module compatibility
    pA≡qA : p ̇ 𝑨 ≡ q ̇ 𝑨
    pA≡qA = p≋q KA
 
-   pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻 ∣ )
-    →        (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+   pAh≡qAh : ∀(𝒂 : X → ∣ 𝑻 ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
    pAh≡qAh 𝒂 = intensionality pA≡qA (∣ h ∣ ∘ 𝒂)
 
-   hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 ∣ )
-    →        ∣ h ∣ ((p ̇ 𝑻) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻) 𝒂)
+   hpa≡hqa : ∀(𝒂 : X → ∣ 𝑻 ∣ ) → ∣ h ∣ ((p ̇ 𝑻) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻) 𝒂)
    hpa≡hqa 𝒂 =
     ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term{𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺} fevu (𝑻{𝓤}{X}) 𝑨 h p 𝒂 ⟩
     (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ pAh≡qAh 𝒂 ⟩
@@ -348,14 +326,12 @@ module compatibility
 
 
  -- ⇐ (the "if" direction)
- homs-compatible-with-identities :
-        (p q : Term{𝓤}{X})
-        (hp≡hq : ∀ (𝑨 : Algebra 𝓤 𝑆)
-                   (KA : 𝑨 ∈ 𝒦)
-                   (h : hom (𝑻{𝓤}{X}) 𝑨)
-                  → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻))
-       ------------------------------------------------------
-  →     𝒦 ⊧ p ≋ q
+ homs-compatible-with-identities : (p q : Term{𝓤}{X})
+                                   (hp≡hq : ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦) (h : hom (𝑻{𝓤}{X}) 𝑨)
+                                            → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻))
+                                   ----------------------------------------------------------------
+  →                                 𝒦 ⊧ p ≋ q
+
  --inferred types: 𝑨 : Algebra 𝓤 𝑆, KA : 𝑨 ∈ 𝒦, h : hom 𝑻 𝑨
 
  homs-compatible-with-identities p q hp≡hq {𝑨} KA = γ
@@ -365,40 +341,29 @@ module compatibility
 
     γ : 𝑨 ⊧ p ≈ q
     γ = gfe λ 𝒂 →
-     (p ̇ 𝑨) 𝒂
-       ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-     (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
-       ≡⟨(comm-hom-term gfe 𝑻 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
-     (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻)) ℊ
-       ≡⟨ ap (λ - → - ℊ) (hp≡hq 𝑨 KA (h 𝒂)) ⟩
-     (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻)) ℊ
-       ≡⟨ (comm-hom-term gfe 𝑻 𝑨 (h 𝒂) q ℊ) ⟩
-     (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)
-       ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-     (q ̇ 𝑨) 𝒂
-       ∎
+     (p ̇ 𝑨) 𝒂            ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+     (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨(comm-hom-term gfe 𝑻 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
+     (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻)) ℊ  ≡⟨ ap (λ - → - ℊ) (hp≡hq 𝑨 KA (h 𝒂)) ⟩
+     (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻)) ℊ  ≡⟨ (comm-hom-term gfe 𝑻 𝑨 (h 𝒂) q ℊ) ⟩
+     (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+     (q ̇ 𝑨) 𝒂             ∎
 
- compatibility-of-identities-and-homs :
-     (p q : Term{𝓤}{X})
-     -------------------
-  →  (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)
-                       (KA : 𝑨 ∈ 𝒦)
-                       (hh : hom (𝑻{𝓤}{X}) 𝑨)
-                      →  ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
+ compatibility-of-identities-and-homs : (p q : Term{𝓤}{X})
+                                        -------------------------------------------------------
+  →                                      (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)
+                                                           (KA : 𝑨 ∈ 𝒦)
+                                                            (hh : hom (𝑻{𝓤}{X}) 𝑨)
+                                                          →   ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
 
- compatibility-of-identities-and-homs p q =
-  identities-compatible-with-homs p q ,
-   homs-compatible-with-identities p q
+ compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
+                                              homs-compatible-with-identities p q
 
  ---------------------------------------------------------------
  --Compatibility of identities with interpretation of terms
- hom-id-compatibility :
-        (p q : ∣ 𝑻{𝓤}{X} ∣ )
-        (𝑨 : Algebra 𝓤 𝑆)
-        (ϕ : hom 𝑻 𝑨)
-        (p≈q : 𝑨 ⊧ p ≈ q)
-        -------------------
-  →      ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+ hom-id-compatibility : (p q : ∣ 𝑻{𝓤}{X} ∣ ) (𝑨 : Algebra 𝓤 𝑆)
+                        (ϕ : hom 𝑻 𝑨) (p≈q : 𝑨 ⊧ p ≈ q)
+                       ----------------------------------------
+  →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
  hom-id-compatibility p q 𝑨 ϕ p≈q =
     ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agreement p) ⟩
@@ -406,7 +371,7 @@ module compatibility
     (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality p≈q (∣ ϕ ∣ ∘ ℊ)  ⟩
     (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term fevu (𝑻{𝓤}{X}) 𝑨 ϕ q ℊ)⁻¹ ⟩
     ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)    ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
-    ∣ ϕ ∣ q  ∎
+    ∣ ϕ ∣ q              ∎
 
 
 --------------------
