@@ -70,7 +70,7 @@ We present the \AgdaUALib (or \agdaualib for short), the result of our effort to
 The latest version of the \agdaualib formalizes a substantial number of definitions and theorems from general algebra and logic, and the implementation of these foundations in Agda makes essential use of inductive and dependent types. Indeed, the \agdaualib showcases the expressive power of these types, and the ease and precision with which they can be used to formalize mathematics.  To demonstrate, we highlight some of the significant theorems that are already formalized in the \agdaualib, most notably the theorem of Garrett Birkhoff asserting that a class of algebraic structures is closed under homomorphic images, substructures, and arbitrary products if and only if it is the class of models of some set of equations. Ours is the first formal proof of this theorem that we know of.
 \end{abstract}
 
-\newpage
+%% \newpage
 
 \section{Introduction}\label{sec:introduction}
 To support formalization in type theory of research level mathematics in general algebra, model theory, and equational logic, we present the Agda Universal Algebra Library (\agdaualib), a software library of formal definitions, theorems and their proofs comprising a substantial part of the foundational core of these mathematical theories.
@@ -1249,7 +1249,7 @@ An identity \AB p\AS \Aapprox\AS\AB q is satisfied by all algebras in a class if
 
 More precisely, if \AB 𝒦 is a class of \AB 𝑆-algebras and \AB 𝑝, \AB 𝑞 terms in the language of \AB 𝑆, then,
 \begin{quote}
-\AB 𝒦\AS\Amodels\AS\AB p\AS\Aapprox\AS\AB  q\AS\AS ↔\AS\AS\ASy ∀\AS\AB 𝑨\AS\ASy ∈\AS\AB 𝒦\AS\ASy ,\AS\ASy ∀\AS\AB h\AS\ASy ∈\AS\AF{Hom}\AS\TX\AS \AB 𝑨\AS\ASy ,\AB h\AS\ASy ∘\AS\termTX p\AS\ASy =\AS\AB h\AS\ASy ∘\AS\termTX q.
+\AB 𝒦\AS\Amodels\AS\AB p\AS\Aapprox\AS\AB  q\AS\AS ⇔\AS\AS\ASy ∀\AS\AB 𝑨\AS\ASy ∈\AS\AB 𝒦\AS\ASy ,\AS\ASy ∀\AS\AB h\AS\ASy ∈\AS\AF{Hom}\AS\TX\AS \AB 𝑨\AS\ASy ,\AB h\AS\ASy ∘\AS\termTX p\AS\ASy =\AS\AB h\AS\ASy ∘\AS\termTX q.
 \end{quote}
 We now formalize this result in Agda. Similarly, we define a datatype that represents classes of algebras that include all homomorphic images of algebras in the class, and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
 \begin{code}\input{closure/homcomp.tex}\end{code}
@@ -1260,19 +1260,38 @@ Finally, here's a useful result about compatibility of identities and interpreta
 
 
 \subsection{Closure under H, S, and P}\label{sec:closure-under-hsp}
-\subsubsection{Identities for product closure}\label{sec:identities-for-product-closure}
+\paragraph*{Identities for product closure}
+Next we prove
+\begin{itemize}
+\item \AgdaFunction{pclo-id1}: if every algebra in the class \AB 𝒦 satisfies a particular identity, say 𝑝 ≈ 𝑞, then every algebra in the closure \AgdaDatatype{PClo} of \AB 𝒦 under the taking of arbitrary products also satisfies 𝑝 ≈ 𝑞, and, conversely,
+\item \AgdaFunction{pclo-id2}: if every algebra of the product closure \AgdaDatatype{PClo} of \AB 𝒦 satisfies 𝑝 ≈ 𝑞, then so does every algebra in \AB 𝒦.
+\end{itemize}
+The second item is obvious since \AB 𝒦 ⊆ \AgdaDatatype{PClo}.
 \begin{code}\input{closure/pclo-id.tex}\end{code}
 
-\subsubsection{Identities for subalgebra closure}\label{sec:identities-for-subalgebra-closure}
+\paragraph*{Identities for subalgebra closure}
+Here we prove
+\begin{itemize}
+\item \AgdaFunction{sclo-id1}: if every algebra in the class \AB 𝒦 satisfies 𝑝 ≈ 𝑞, then so does every algebra in the closure \AgdaDatatype{SClo} of \AB 𝒦 under the taking of subalgebras; and, conversely,
+\item \AgdaFunction{sclo-id2}: if every algebra of the subalgebra closure \AgdaDatatype{SClo} of \AB 𝒦 satisfies 𝑝 ≈ 𝑞, then so does every algebra in \AB 𝒦.
+\end{itemize}
 \begin{code}\input{closure/sclo-id.tex}\end{code}
 
-\subsubsection{Identities for hom image closure}\label{sec:identities-for-hom-image-closure}
+\paragraph*{Identities for hom image closure}
+We prove
+\begin{itemize}
+\item \AgdaFunction{hclo-id1}: if every algebra in the class \AB 𝒦 satisfies a 𝑝 ≈ 𝑞, then so does every algebra in the closure \AgdaDatatype{HClo} of \AB 𝒦 under the taking of homomorphic images; and, conversely,
+\item \AgdaFunction{hclo-id2}: if every algebra of the homomorphic image closure \AgdaDatatype{HClo} of \AB 𝒦 satisfies 𝑝 ≈ 𝑞, then so does every algebra in \AB 𝒦.
+\end{itemize}
 \begin{code}\input{closure/hclo-id.tex}\end{code}
 
-\subsubsection{Identities for HSP closure}\label{sec:identities-for-hsp-closure}
-Finally, we have a datatype that represents classes of algebras that are close under the taking of homomorphic images, subalgebras, and products of algebras in the class.
+\paragraph*{Identities for HSP closure}
+Finally, we prove
+\begin{itemize}
+\item \AgdaFunction{vclo-id1}: if every algebra in the class \AB 𝒦 satisfies a 𝑝 ≈ 𝑞, then so does every algebra in the closure \AgdaDatatype{VClo} of \AB 𝒦 under the taking of homomorphic images, subalgebras, and products; and, conversely,
+\item \AgdaFunction{vclo-id2}: if every algebra of the varietal closure \AgdaDatatype{VClo} of \AB 𝒦 satisfies 𝑝 ≈ 𝑞, then so does every algebra in \AB 𝒦.
+\end{itemize}
 \begin{code}\input{closure/vclo-id.tex}\end{code}
-
 
 \subsection{Axiomatization of a class}\label{sec:axiomatization-of-a-class}
 We now prove that a class \AB 𝒦 of structures is axiomatized by \AB{Th}\AS (\AB{VClo}\AS\AB 𝒦), which is the set of equations satisfied by all members of the varietal closure of \AB 𝒦.

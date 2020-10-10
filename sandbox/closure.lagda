@@ -7,7 +7,7 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; im)
+open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂) --  ｛_｝; 
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -253,12 +253,12 @@ module compatibility
     γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
     γ = products-preserve-identities p q I 𝒜 𝒜⊧p≈q
 
- subalgebras-preserve-identities : (p q : Term) (p≋q : 𝒦 ⊧ p ≋ q)
+ subalgebras-preserve-identities : {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}(p q : Term) (p≋q : 𝒦 ⊧ p ≋ q)
                                    (SAK : SubalgebrasOfClass' 𝒦)
                                    ----------------------------------
   →                                (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
 
- subalgebras-preserve-identities p q p≋q SAK = γ
+ subalgebras-preserve-identities {𝒦} p q p≋q SAK = γ
   where
    𝑨 : Algebra 𝓤 𝑆
    𝑨 = ∣ SAK ∣
@@ -351,8 +351,7 @@ module compatibility
  compatibility-of-identities-and-homs : (p q : Term{𝓤}{X})
                                         -------------------------------------------------------
   →                                      (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)
-                                                           (KA : 𝑨 ∈ 𝒦)
-                                                            (hh : hom (𝑻{𝓤}{X}) 𝑨)
+                                                           (KA : 𝑨 ∈ 𝒦)(hh : hom 𝑻 𝑨)
                                                           →   ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
 
  compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
@@ -406,38 +405,26 @@ module closure-identities
 
  --Identities for subalgebra closure
  --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ -- The singleton set.
+ ｛_｝ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ ｛ 𝑨 ｝ 𝑩 = 𝑨 ≡ 𝑩
 
  sclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (SClo ⊧ p ≋ q)
  sclo-id1 {p} {q} 𝒦⊧p≋q (sbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
- sclo-id1 {p} {q} 𝒦⊧p≋q (sub {𝑨 = 𝑨} A∈SClo𝒦 sa) = γ
-  where
-   A⊧p≈q : 𝑨 ⊧ p ≈ q
-   A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
+ sclo-id1 {p} {q} 𝒦⊧p≋q (sub {𝑨 = 𝑨} A∈SClo𝒦 sa) =
+  subalgebras-preserve-identities p q 𝒦A⊧p≋q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa)
+  --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
 
-   B : Algebra 𝓤 𝑆
-   B = ∣ sa ∣
+   where
+    A⊧p≈q : 𝑨 ⊧ p ≈ q
+    A⊧p≈q = sclo-id1{p}{q} 𝒦⊧p≋q A∈SClo𝒦
 
-   h : ∣ B ∣ → ∣ 𝑨 ∣
-   h = pr₁ ∥ sa ∥
+    Asingleton⊧p≋q : ｛ 𝑨 ｝ ⊧ p ≋ q
+    Asingleton⊧p≋q (refl _)  = A⊧p≈q
 
-   hem : is-embedding h
-   hem = ∣ pr₂ ∥ sa ∥ ∣
-
-   hhm : is-homomorphism B 𝑨 h
-   hhm = ∥ pr₂ ∥ sa ∥ ∥
-
-   ξ : (b : X → ∣ B ∣ ) → h ((p ̇ B) b) ≡ h ((q ̇ B) b)
-   ξ b =
-    h ((p ̇ B) b)  ≡⟨ comm-hom-term gfe B 𝑨 (h , hhm) p b ⟩
-    (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-    (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe B 𝑨 (h , hhm) q b)⁻¹ ⟩
-    h ((q ̇ B) b)  ∎
-
-   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-   hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-   γ : p ̇ B ≡ q ̇ B
-   γ = gfe λ b → hlc (ξ b)
+    𝒦A⊧p≋q : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+    𝒦A⊧p≋q {𝑩} (inj₁ x) = 𝒦⊧p≋q x
+    𝒦A⊧p≋q {𝑩} (inj₂ y) = Asingleton⊧p≋q y
 
  sclo-id2 : ∀ {p q} → (SClo ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  sclo-id2 p A∈𝒦 = p (sbase A∈𝒦)
@@ -445,7 +432,6 @@ module closure-identities
 
  --Identities for hom image closure
  --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
  hclo-id1 : ∀{p q} → (𝒦 ⊧ p ≋ q) → (HClo ⊧ p ≋ q)
  hclo-id1 {p}{q} 𝒦⊧p≋q (hbase A∈𝒦) = 𝒦⊧p≋q A∈𝒦
  hclo-id1 {p}{q} 𝒦⊧p≋q (hhom{𝑨} A∈HClo𝒦 𝑩ϕhE) = γ
@@ -473,69 +459,46 @@ module closure-identities
 
    γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
    γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃
-        ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
-        ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))
-        ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))
-        ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
-        ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃
-        ∎
+    (p ̇ 𝑩) 𝒃              ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+    (q ̇ 𝑩) 𝒃               ∎
 
  hclo-id2 : ∀ {p q} → (HClo ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  hclo-id2 p A∈𝒦 = p (hbase A∈𝒦)
 
  --Identities for HSP closure
  --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
  vclo-id1 : ∀ {p q} → (𝒦 ⊧ p ≋ q) → (VClo ⊧ p ≋ q)
  vclo-id1 {p} {q} α (vbase A∈𝒦) = α A∈𝒦
- vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo𝒦) = γ
+ vclo-id1 {p} {q} α (vprod{I = I}{𝒜 = 𝒜} 𝒜∈VClo) = γ
   where
    IH : (i : I) → 𝒜 i ⊧ p ≈ q
-   IH i = vclo-id1{p}{q} α (𝒜∈VClo𝒦 i)
+   IH i = vclo-id1{p}{q} α (𝒜∈VClo i)
 
    γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 IH
 
- vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo𝒦 sa ) = γ
+ vclo-id1 {p} {q} α ( vsub {𝑨 = 𝑨} A∈VClo sa ) =
+  subalgebras-preserve-identities  p q 𝒦A⊧p≋q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa)
+   where
+    A⊧p≈q : 𝑨 ⊧ p ≈ q
+    A⊧p≈q = vclo-id1{p}{q} α A∈VClo
+
+    Asingleton⊧p≋q : ｛ 𝑨 ｝ ⊧ p ≋ q
+    Asingleton⊧p≋q (refl _)  = A⊧p≈q
+
+    𝒦A⊧p≋q : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+    𝒦A⊧p≋q {𝑩} (inj₁ x) = α x
+    𝒦A⊧p≋q {𝑩} (inj₂ y) = Asingleton⊧p≋q y
+
+
+ vclo-id1 {p}{q} α (vhom{𝑨 = 𝑨} A∈VClo 𝑩ϕhE) = γ
   where
    A⊧p≈q : 𝑨 ⊧ p ≈ q
-   A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
-
-   𝑩 : Algebra 𝓤 𝑆
-   𝑩 = ∣ sa ∣
-
-   h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-   h = pr₁ ∥ sa ∥
-
-   hem : is-embedding h
-   hem = ∣ pr₂ ∥ sa ∥ ∣
-
-   hhm : is-homomorphism 𝑩 𝑨 h
-   hhm = ∥ pr₂ ∥ sa ∥ ∥
-
-   ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
-   ξ b =
-    h ((p ̇ 𝑩) b) ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
-    (p ̇ 𝑨)(h ∘ b)≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
-    (q ̇ 𝑨)(h ∘ b)≡⟨(comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-    h ((q ̇ 𝑩) b) ∎
-
-   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-   hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
-   γ : p ̇ 𝑩 ≡ q ̇ 𝑩
-   γ = gfe λ b → hlc (ξ b)
-
- vclo-id1 {p}{q} α (vhom{𝑨 = 𝑨} A∈VClo𝒦 𝑩ϕhE) = γ
-  where
-   A⊧p≈q : 𝑨 ⊧ p ≈ q
-   A⊧p≈q = vclo-id1{p}{q} α A∈VClo𝒦
+   A⊧p≈q = vclo-id1{p}{q} α A∈VClo
 
    𝑩 : Algebra 𝓤 𝑆
    𝑩 = ∣ 𝑩ϕhE ∣
@@ -557,17 +520,12 @@ module closure-identities
 
    γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
    γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃
-        ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃))
-        ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))
-        ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))
-        ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))
-        ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃 ∎
+    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality A⊧p≈q (preim 𝒃)) ⟩
+    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+    (q ̇ 𝑩) 𝒃                ∎
 
  vclo-id2 : ∀ {p q} → (VClo ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  vclo-id2 p A∈𝒦 = p (vbase A∈𝒦)
