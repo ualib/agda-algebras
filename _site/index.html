@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Agda Universal Algebra Library (UALib) </title>
+    <link rel="stylesheet" type="text/css" href="css/Agda.css">
+  </head>
+  <body>
+	<style>
+	body, html {
+        width: 800px;
+        margin:0 auto;
+	}
+	code {
+	color: MidnightBlue;
+	}
+	</style>
+    <div class="container">
+      <!--
+
+LICENSE:
+
+The software in this file is subject to the GNU General Public License v3.0.
+
+The text other than software is copyright of the author. It can be
+used for scholarly purposes subject to the usual academic conventions
+of citation.
+
+-->
+
+<!--
+
+  * The file ualib.lagda is *not* meant to be read by people.
+
+  * It is used to automatically generate the following files, which are
+    meant to be read by people:
+
+    - https://ualib.org/ualib.html
+
+    - https://ualib.org/ualib.pdf
+
+  * The html file is better rendered and probably easier to read than
+    the pdf file, but both have internal links, including to the Agda
+    definitions.
+
+  * Warning: this file takes a long time to be checked by Agda.  We
+    are avoiding a modular development so that a single pdf file with
+    internal links, including to the Agda definitions, can be
+    produced. This works by first using Agda to generate html for the
+    Agda code, then using jekyll to process the markdown code to
+    generate html for everything else, and finally using google-chrome
+    in headless mode to generate pdf from the html code.  See the makefile.
+
+-->
+
+<h1 id="the-agda-universal-algebra-library-ualib"><a id="ualib">The Agda Universal Algebra Library (UALib)</a></h1>
+
+<p>10 Oct 2020, version of 11 October 2020, 15:10.</p>
+
+<p><a href="https://williamdemeo.gitlab.io">William DeMeo</a></p>
+
+<h2 id="preface">Preface</h2>
+
+<p>To support formalization in type theory of research level mathematics in
+universal algebra and related fields, we are developing a software
+library, called the <a href="https://github.com/UniversalAlgebra/agda-ualib/">Agda Universal Algebra
+Library</a>
+(<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> ). Our library
+contains formal statements and proofs of some of the core, foundational
+definitions and results universal algebra and is written in
+<a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a>.</p>
+
+<p><a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a> is a programming
+language and <a href="https://en.wikipedia.org/wiki/Proof_assistant">proof
+assistant</a>, or
+“interactive theorem prover” (ITP), that not only supports dependent and
+inductive types, but also provides powerful <em>proof tactics</em> for proving
+things about the objects that inhabit these types.</p>
+
+<h3 id="vision-and-goals">Vision and Goals</h3>
+
+<p>The idea for the the Agda Universal Algebra Library
+(<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a>) originated with
+the observation that, on the one hand a number of basic and important
+constructs in universal algebra can be defined recursively, and theorems
+about them proved inductively, while on the other hand the <em>types</em> (of
+<a href="https://en.wikipedia.org/wiki/Type_theory">type theory</a> —in
+particular, <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent
+types</a> and <a href="https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types">inductive
+types</a>)
+make possible elegant formal representations of recursively defined
+objects, and constructive (<em>computable</em>) proofs of their properties.
+These observations suggest that there is much to gain from implementing
+universal algebra in a language that facilitates working with dependent
+and inductive types.</p>
+
+<h4 id="primary-goals">Primary Goals</h4>
+
+<p>The first goal of the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> project is to
+demonstrate that it is possible to express the foundations of universal
+algebra in type theory and to formalize (and formally verify) the
+foundations in the Agda programming language. We will formalize a
+substantial portion of the edifice on which our own mathematical
+research depends, and demonstrate that our research can also be
+expressed in type theory and formally implemented in such a way that we
+and other working mathematicians can understand and verify the results.
+The resulting library will also serve to educate our peers, and
+encourage and help them to formally verify their own mathematics
+research.</p>
+
+<p>Our field is deep and wide and codifying all of its foundations may seem
+like a daunting task and possibly risky investment of time and
+resources. However, we believe our subject is well served by a new,
+modern, <a href="constructive%20mathematics">constructive</a> presentation of its
+foundations. Our new presentation expresses the foundations of universal
+algebra in the language of type theory, and uses the Agda proof
+assistant to codify and formally verify everything.</p>
+
+<h4 id="secondary-goals">Secondary Goals</h4>
+
+<p>We wish to emphasize that our ultimate objective is not merely to
+translate existing results into a more modern and formal language.
+Indeed, one important goal is to develop a system that is useful for
+conducting research in mathematics, and that is how we intend to use our
+library once we have achieved our immediate objective of implementing
+the basic foundational core of universal algebra in Agda.</p>
+
+<p>To this end, our intermediate-term objectives include</p>
+
+<ul>
+  <li>developing domain specific “proof tactics” to express the idioms of universal algebra,</li>
+  <li>incorporating automated proof search for universal algebra, and</li>
+  <li>formalizing theorems emerging from our own mathematics research,</li>
+  <li>documenting the resulting software libraries so they are usable by
+other working mathematicians.</li>
+</ul>
+
+<p>For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.</p>
+
+<h3 id="intended-audience">Intended audience</h3>
+
+<p>This document describes the Agda Universal Algebra Library
+(<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a>) in enough
+detail so that working mathematicians (and possibly some normal people,
+too) might be able to learn enough about Agda and its libraries to put
+them to use when creating, formalizing, and verifying new mathematics.</p>
+
+<p>While there are no strict prerequisites, we expect anyone with an
+interest in this work will have been motivated by prior exposure to
+universal algebra, as presented in, say, Bergman:2012 or McKenzie:1987,
+and to a lesser extent category theory, as presented in
+<a href="https://categorytheory.gitlab.io">categorytheory.gitlab.io</a> or
+Riehl:2017.</p>
+
+<p>Some prior exposure to <a href="https://en.wikipedia.org/wiki/Type_theory">type
+theory</a> and Agda would be
+helpful, but even without this background one might still be able to get
+something useful out of this by referring to the appendix and glossary,
+while simultaneously consulting one or more of the references mentioned
+in references to fill in gaps as needed.</p>
+
+<p>Finally, it is assumed that while reading these materials the reader is
+actively experimenting with Agda using
+<a href="https://www.gnu.org/software/emacs/">emacs</a> with its
+<a href="https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html">agda2-mode</a>
+extension installed.</p>
+
+<h3 id="installing-the-library">Installing the library</h3>
+
+<p>The main repository for the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> is
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">https://gitlab.com/ualib/ualib.gitlab.io</a> (which will become publicly
+available again in the summer of 2020).</p>
+
+<p>There are installation instructions in the main README.md file in that
+repository, but really all you need to do is have a working Agda (and
+agda2-mode) installation and clone the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> repository with,
+e.g.,</p>
+
+<p>``` {.sourceCode .bash}
+git clone git@gitlab.com:ualib/ualib.gitlab.io.git</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+OR
+
+``` {.sourceCode .bash}
+git clone https://gitlab.com/ualib/ualib.gitlab.io.git
+</code></pre></div></div>
+
+<p>(We assume you have
+<a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a> and
+<a href="https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html">agda2-mode</a>
+installed on your machine. If not, follow the directions on <a href="Agda">the main
+Agda website</a> to install them.)</p>
+
+<h3 id="unicode-hints">Unicode hints</h3>
+
+<p>At the end of each chapter of this documentation we show how to produce
+in Emacs
+<a href="https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html">agda2-mode</a>
+some of the fancy unicode characters that we use in our code. For
+example, we might say “type <code class="language-plaintext highlighter-rouge">\MCI</code> to produce the symbol 𝓘”. We hope
+these occasional hints are convenient for the reader, but they are not
+meant to be comprehensive. Instead, information about unicode symbols is
+readily available in Emacs
+<a href="https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html">agda2-mode</a>;
+simply place the cursor on the character of interest and enter the
+command <code class="language-plaintext highlighter-rouge">M-x describe-char</code>; alternatively, use the shortcut
+<code class="language-plaintext highlighter-rouge">M-m h d c</code>. To see a full list of available characters, enter
+<code class="language-plaintext highlighter-rouge">M-x describe-input-method</code> (or <code class="language-plaintext highlighter-rouge">C-h I</code>).</p>
+
+<h3 id="acknowledgments">Acknowledgments</h3>
+
+<p>Besides the main authors and developers of
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> (William DeMeo
+and Siva Somayyajula), a number of other people have contributed to the
+project in one way or another.</p>
+
+<p>Special thanks go to <a href="https://orion.math.iastate.edu/cbergman/">Clifford
+Bergman</a>, <a href="https://www.duplavis.com/venanzio/">Venanzio
+Capretta</a>, <a href="http://www.andrej.com/index.html">Andrej
+Bauer</a>, <a href="http://www.math.u-szeged.hu/~mmaroti/">Miklós
+Maróti</a>, and <a href="https://math.hawaii.edu/~ralph/">Ralph
+Freese</a>, for many helpful discussions,
+as well as the invaluable instruction, advice, and encouragement that
+they continue to lend to this project, often without even knowing it.</p>
+
+<p>The first author would also like to thank his postdoctoral advisors and
+their institutions for supporting (sometimes without their knowledge)
+work on this project. These include <a href="http://www.karlin.mff.cuni.cz/~barto/">Libor
+Barto</a> and Charles University in
+Prague (Nov 2019–Jun 2021), <a href="http://math.colorado.edu/~mayr/">Peter
+Mayr</a> and University of Colorado in
+Boulder (Aug 2017–May 2019), <a href="https://math.hawaii.edu/~ralph/">Ralph
+Freese</a> and the University of Hawaii in
+Honolulu (Aug 2016–May 2017), <a href="https://orion.math.iastate.edu/cbergman/">Cliff
+Bergman</a> and Iowa State
+University in Ames (Aug 2014–May 2016).</p>
+
+<h3 id="attributions-and-citations">Attributions and citations</h3>
+
+<p>William DeMeo and Siva Somayyajula (hereinafter, “The Authors”) are the
+developers of the <a href="https://github.com/UniversalAlgebra/agda-ualib/">Agda Universal Algebra
+Library</a>
+(<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a>).</p>
+
+<p>Regarding the mathematical results that are implemented in the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> library, as well
+as the presentation and informal statements of these results in the
+documentation, The Authors makes no claims to originality.</p>
+
+<p>Regarding the Agda source code in the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> library, this is
+mainly due to The Authors.</p>
+
+<p>HOWEVER, we have benefited from the outstanding lecture notes on
+<a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes">Univalent Foundations and Homotopy Type
+Theory</a>
+and the <a href="%3Chttps://github.com/martinescardo/TypeTopology%3E%60_">Type
+Topology</a> Agda
+Library, both by <a href="https://www.cs.bham.ac.uk/~mhe">Martin Hötzel
+Escardo</a>. The first author is greatly
+indebted to Martin for teaching him about type theory in Agda at the
+<a href="http://events.cs.bham.ac.uk/mgs2019/">Midlands Graduate School in the Foundations of Computing
+Science</a> in Birmingham in 2019.</p>
+
+<p>The development of the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a> and its
+documentation is informed by and benefits from the references listed in
+the references section below.</p>
+
+<h3 id="references">References</h3>
+
+<p>The following Agda documentation and tutorials are excellent. They have
+been quite helpful to The Author of
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a>, and have
+informed the development of the latter and its documentation.</p>
+
+<ul>
+  <li>Altenkirk, <a href="http://www.cs.nott.ac.uk/~psztxa/g53cfr/">Computer Aided Formal
+Reasoning</a></li>
+  <li>Bove and Dybjer, <a href="http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf">Dependent Types at
+Work</a></li>
+  <li>Escardo, <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html">Introduction to Univalent Foundations of Mathematics with
+Agda</a></li>
+  <li>Gunther, Gadea, Pagano, <a href="http://www.sciencedirect.com/science/article/pii/S1571066118300768">Formalization of Universal Algebra in
+Agda</a></li>
+  <li>János, <a href="https://people.inf.elte.hu/pgj/agda/tutorial/Index.html">Agda
+Tutorial</a></li>
+  <li>Norell and Chapman, <a href="http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf">Dependently Typed Programming in
+Agda</a></li>
+  <li>Wadler, <a href="https://plfa.github.io/">Programming Language Foundations in
+Agda</a></li>
+</ul>
+
+<p>Finally, the official <a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda
+Wiki</a>, <a href="https://agda.readthedocs.io/en/v2.6.1/">Agda User’s
+Manual</a>, <a href="https://agda.readthedocs.io/en/v2.6.1/language">Agda Language
+Reference</a>, and the
+(open source) <a href="https://agda.github.io/agda-stdlib/">Agda Standard
+Library</a> source code are also quite
+useful.</p>
+
+<hr />
+
+<h2 id="agda-preliminaries">Agda Preliminaries</h2>
+
+<p>This chapter describes the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/prelude.lagda.rst">prelude
+module</a>
+of the <a href="https://gitlab.com/ualib/ualib.gitlab.io">agda-ualib</a>. The
+source code for this module comprises the (literate)
+<a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a> program that was
+used to generate the html page displaying the sentence you are now
+reading. This source code inhabits the file
+<a href="prelude%20module">prelude.lagda.rst</a>, which resides in the <a href="agda-ualib">git
+repository of the agda-ualib</a>.</p>
+
+<p><strong>Notation</strong>. Here are some acronyms that we use frequently.</p>
+
+<ul>
+  <li>MHE = <a href="https://www.cs.bham.ac.uk/~mhe/">Martin Hötzel Escardo</a></li>
+  <li>MLTT = <a href="https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory">Martin-Löf Type Theory</a></li>
+</ul>
+
+<hr />
+
+<h2 id="options-and-imports">Options and imports</h2>
+
+<p>All but the most trivial Agda programs begin by setting some options
+that effect how Agda behaves and importing from existing libraries
+(e.g., the <a href="https://agda.github.io/agda-stdlib/">Agda Standard Library</a>
+or, in our case, MHE’s <a href="%3Chttps://github.com/martinescardo/TypeTopology%3E%60_">Type
+Topology</a>
+library). In particular, logical axioms and deduction rules can be
+specified according to what one wishes to assume.</p>
+
+<p>For example, we begin our agda development with the line</p>
+
+<pre class="Agda">
+<a id="14204" class="Symbol">{-#</a> <a id="14208" class="Keyword">OPTIONS</a> <a id="14216" class="Pragma">--without-K</a> <a id="14228" class="Pragma">--exact-split</a> <a id="14242" class="Pragma">--safe</a> <a id="14249" class="Symbol">#-}</a>
+
+<a id="14254" class="Keyword">module</a> <a id="14261" href="ualib.html" class="Module">ualib</a> <a id="14267" class="Keyword">where</a>
+</pre>
+
+<p>This specifies Agda <code class="language-plaintext highlighter-rouge">OPTIONS</code> that we will use throughout the library.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">without-K</code> disables <a href="https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29">Streicher’s K axiom</a>;
+see also the <a href="https://agda.readthedocs.io/en/v2.6.1/language/without-k.html">section on axiom K</a>
+in the <a href="https://agda.readthedocs.io/en/v2.6.1/language">Agda Language Reference</a> manual.</li>
+  <li><code class="language-plaintext highlighter-rouge">exact-split</code> makes Agda accept only those definitions that behave
+like so-called <em>judgmental</em> or <em>definitional</em> equalities. MHE
+explains this by saying it “makes sure that pattern matching
+corresponds to Martin-Löf eliminators;” see also the <a href="https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality">Pattern
+matching and equality
+section</a>
+of the <a href="https://agda.readthedocs.io/en/v2.6.1/tools/">Agda Tools</a>
+documentation.</li>
+  <li><code class="language-plaintext highlighter-rouge">safe</code> ensures that nothing is postulated outright—every
+non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module);
+see also <a href="https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe">this section</a>
+of the <a href="https://agda.readthedocs.io/en/v2.6.1/tools/">Agda Tools</a> documentation and the
+<a href="https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda">Safe Agda section</a>
+of the <a href="https://agda.readthedocs.io/en/v2.6.1/language">Agda Language Reference</a>.</li>
+</ul>
+
+<h3 id="universes">Universes</h3>
+
+<p>We import the <code class="language-plaintext highlighter-rouge">Universes</code> module from MHE’s <a href="%3Chttps://github.com/martinescardo/TypeTopology%3E%60_">Type Topology</a>
+library.</p>
+
+<pre class="Agda">
+<a id="15824" class="Keyword">open</a> <a id="15829" class="Keyword">import</a> <a id="15836" href="Universes.html" class="Module">Universes</a> <a id="15846" class="Keyword">public</a>
+</pre>
+
+<p>This <code class="language-plaintext highlighter-rouge">Universes</code> module provides, among other things, an elegant notation for type universes that we have fully adopted and we use MHE’s notation throughout the <a href="https://gitlab.com/ualib/ualib.gitlab.io">UALib</a>.</p>
+
+<p>MHE has authored an outstanding set of notes on <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html">HoTT-UF-in-Agda</a> called <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html">Introduction to Univalent Foundations of Mathematics with Agda</a>. We highly recommend these notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.</p>
+
+<p>Following MHE, we refer to universes using capitalized script letters 𝓤,𝓥,𝓦,𝓣. We add a few more to Martin’s list.</p>
+
+<pre class="Agda">
+<a id="16650" class="Keyword">variable</a> <a id="16659" href="ualib.html#16659" class="Generalizable">𝓘</a> <a id="16661" href="ualib.html#16661" class="Generalizable">𝓙</a> <a id="16663" href="ualib.html#16663" class="Generalizable">𝓚</a> <a id="16665" href="ualib.html#16665" class="Generalizable">𝓛</a> <a id="16667" href="ualib.html#16667" class="Generalizable">𝓜</a> <a id="16669" href="ualib.html#16669" class="Generalizable">𝓝</a> <a id="16671" href="ualib.html#16671" class="Generalizable">𝓞</a> <a id="16673" href="ualib.html#16673" class="Generalizable">𝓠</a> <a id="16675" href="ualib.html#16675" class="Generalizable">𝓡</a> <a id="16677" href="ualib.html#16677" class="Generalizable">𝓢</a> <a id="16679" href="ualib.html#16679" class="Generalizable">𝓧</a> <a id="16681" class="Symbol">:</a> <a id="16683" href="Agda.Primitive.html#423" class="Postulate">Universe</a>
+</pre>
+
+<p>In the <code class="language-plaintext highlighter-rouge">Universes</code> module, MHE defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to <code class="language-plaintext highlighter-rouge">Set 𝓤</code>, and the latter has type <code class="language-plaintext highlighter-rouge">Set (lsuc 𝓤)</code>.</p>
+
+<p>The level <code class="language-plaintext highlighter-rouge">lzero</code> is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for <code class="language-plaintext highlighter-rouge">Set lzero</code> (which, incidentally, corresponds to <code class="language-plaintext highlighter-rouge">Sort 0</code> in <a href="https://leanprover.github.io/">Lean</a>).</p>
+
+<p>Although it is nice and short, we won’t show all of the <code class="language-plaintext highlighter-rouge">Universes</code> module here. Instead, we highlight the few lines of code from MHE’s <code class="language-plaintext highlighter-rouge">Universes.lagda</code> file that makes available the notational devices that we just described and will adopt throughout the <a href="https://gitlab.com/ualib/ualib.gitlab.io">UALib</a>.</p>
+
+<p>Thus, 𝓤 ̇ is simply an alias for <code class="language-plaintext highlighter-rouge">Set 𝓤</code>, and we have <code class="language-plaintext highlighter-rouge">Set 𝓤 : Set (lsuc 𝓤)</code>.</p>
+
+<p>Finally, <code class="language-plaintext highlighter-rouge">Set (lsuc lzero)</code> is denoted by <code class="language-plaintext highlighter-rouge">Set 𝓤₀ ⁺</code> which (MHE and) we denote by <code class="language-plaintext highlighter-rouge">𝓤₀ ⁺ ̇</code>.</p>
+
+<p>The following dictionary translates between standard Agda syntax and MHE/<a href="https://gitlab.com/ualib/ualib.gitlab.io">UALib</a> notation.</p>
+
+<pre><code class="language-agda">Agda              MHE/UALib
+====              ==============
+Level             Universe
+lzero             𝓤₀
+𝓤 : Level         𝓤 : Universe
+Set lzero         𝓤₀ ̇
+Set 𝓤             𝓤 ̇
+lsuc lzero        𝓤₀ ⁺
+lsuc 𝓤            𝓤 ⁺
+Set (lsuc lzero)  𝓤₀ ⁺ ̇
+Set (lsuc 𝓤)      𝓤 ⁺ ̇
+Setω              𝓤ω
+</code></pre>
+
+<p>To justify the introduction of this somewhat nonstandard notation for
+universe levels, MHE points out that the Agda library uses <code class="language-plaintext highlighter-rouge">Level</code> for
+universes (so what we write as 𝓤 ̇ is written <code class="language-plaintext highlighter-rouge">Set 𝓤</code> in standard Agda),
+but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the
+standard Agda notation can be misleading. Furthermore, the standard
+notation places emphasis on levels rather than universes themselves.</p>
+
+<p>There will be many occasions calling for a type living in the universe
+that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The
+universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to
+denote the universe level corresponding to the least upper bound of the
+levels 𝓤 and 𝓥, where the <code class="language-plaintext highlighter-rouge">_⊔_</code> is an Agda primitive designed for
+precisely this purpose.</p>
+
+<h3 id="public-imports">Public imports</h3>
+
+<p>Next we import other parts of MHE’s <a href="%3Chttps://github.com/martinescardo/TypeTopology%3E%60_">Type
+Topology</a>
+library, using the Agda directive <code class="language-plaintext highlighter-rouge">public</code>, which means these imports
+will be available wherever the <code class="language-plaintext highlighter-rouge">prelude</code> module in imported. We describe
+some of these imports later, when making use of them, but we don’t
+describe each one in detail. (The interested or confused reader should
+consult
+<a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html">HoTT-UF-in-Agda</a>
+to learn more.)</p>
+
+<pre class="Agda">
+<a id="19282" class="Keyword">open</a> <a id="19287" class="Keyword">import</a> <a id="19294" href="Identity-Type.html" class="Module">Identity-Type</a> <a id="19308" class="Keyword">renaming</a> <a id="19317" class="Symbol">(</a><a id="19318" href="Identity-Type.html#121" class="Datatype Operator">_≡_</a> <a id="19322" class="Symbol">to</a> <a id="19325" class="Keyword">infix</a> <a id="19331" class="Number">0</a> <a id="_≡_"></a><a id="19333" href="ualib.html#19333" class="Datatype Operator">_≡_</a> <a id="19337" class="Symbol">;</a>
+ <a id="19340" href="Identity-Type.html#162" class="InductiveConstructor">refl</a> <a id="19345" class="Symbol">to</a> <a id="_≡_.refl"></a><a id="19348" href="ualib.html#19348" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a><a id="19352" class="Symbol">)</a> <a id="19354" class="Keyword">public</a>
+
+<a id="19362" class="Keyword">pattern</a> <a id="refl"></a><a id="19370" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="19375" href="ualib.html#19389" class="Bound">x</a> <a id="19377" class="Symbol">=</a> <a id="19379" href="ualib.html#19348" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="19384" class="Symbol">{</a>x <a id="19387" class="Symbol">=</a> <a id="19389" href="ualib.html#19389" class="Bound">x</a><a id="19390" class="Symbol">}</a>
+
+<a id="19393" class="Keyword">open</a> <a id="19398" class="Keyword">import</a> <a id="19405" href="Sigma-Type.html" class="Module">Sigma-Type</a> <a id="19416" class="Keyword">renaming</a> <a id="19425" class="Symbol">(</a><a id="19426" href="Sigma-Type.html#188" class="InductiveConstructor Operator">_,_</a> <a id="19430" class="Symbol">to</a> <a id="19433" class="Keyword">infixr</a> <a id="19440" class="Number">50</a> <a id="_,_"></a><a id="19443" href="ualib.html#19443" class="InductiveConstructor Operator">_,_</a><a id="19446" class="Symbol">)</a> <a id="19448" class="Keyword">public</a>
+
+<a id="19456" class="Keyword">open</a> <a id="19461" class="Keyword">import</a> <a id="19468" href="MGS-MLTT.html" class="Module">MGS-MLTT</a> <a id="19477" class="Keyword">using</a> <a id="19483" class="Symbol">(</a><a id="19484" href="MGS-MLTT.html#3813" class="Function Operator">_∘_</a><a id="19487" class="Symbol">;</a> <a id="19489" href="MGS-MLTT.html#3944" class="Function">domain</a><a id="19495" class="Symbol">;</a> <a id="19497" href="MGS-MLTT.html#4021" class="Function">codomain</a><a id="19505" class="Symbol">;</a> <a id="19507" href="MGS-MLTT.html#4946" class="Function">transport</a><a id="19516" class="Symbol">;</a>
+ <a id="19519" href="MGS-MLTT.html#5997" class="Function Operator">_≡⟨_⟩_</a><a id="19525" class="Symbol">;</a> <a id="19527" href="MGS-MLTT.html#6079" class="Function Operator">_∎</a><a id="19529" class="Symbol">;</a> <a id="19531" href="MGS-MLTT.html#2942" class="Function">pr₁</a><a id="19534" class="Symbol">;</a> <a id="19536" href="MGS-MLTT.html#3001" class="Function">pr₂</a><a id="19539" class="Symbol">;</a> <a id="19541" href="MGS-MLTT.html#3074" class="Function">-Σ</a><a id="19543" class="Symbol">;</a> <a id="19545" href="MGS-MLTT.html#3562" class="Function">Π</a><a id="19546" class="Symbol">;</a> <a id="19548" href="MGS-MLTT.html#956" class="Function">¬</a><a id="19549" class="Symbol">;</a> <a id="19551" href="MGS-MLTT.html#3515" class="Function Operator">_×_</a><a id="19554" class="Symbol">;</a> <a id="19556" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a><a id="19558" class="Symbol">;</a> <a id="19560" href="MGS-MLTT.html#6747" class="Function Operator">_∼_</a><a id="19563" class="Symbol">;</a> <a id="19565" href="MGS-MLTT.html#2104" class="Datatype Operator">_+_</a><a id="19568" class="Symbol">;</a> <a id="19570" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="19571" class="Symbol">;</a> <a id="19573" href="MGS-MLTT.html#408" class="Function">𝟙</a><a id="19574" class="Symbol">;</a> <a id="19576" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="19577" class="Symbol">;</a>
+ <a id="19580" href="MGS-MLTT.html#7080" class="Function Operator">_⇔_</a><a id="19583" class="Symbol">;</a> <a id="19585" href="MGS-MLTT.html#7133" class="Function">lr-implication</a><a id="19599" class="Symbol">;</a> <a id="19601" href="MGS-MLTT.html#7214" class="Function">rl-implication</a><a id="19615" class="Symbol">;</a> <a id="19617" href="MGS-MLTT.html#3744" class="Function">id</a><a id="19619" class="Symbol">;</a> <a id="19621" href="MGS-MLTT.html#6125" class="Function Operator">_⁻¹</a><a id="19624" class="Symbol">;</a> <a id="19626" href="MGS-MLTT.html#6613" class="Function">ap</a><a id="19628" class="Symbol">)</a> <a id="19630" class="Keyword">public</a>
+
+<a id="19638" class="Keyword">open</a> <a id="19643" class="Keyword">import</a> <a id="19650" href="MGS-Equivalences.html" class="Module">MGS-Equivalences</a> <a id="19667" class="Keyword">using</a> <a id="19673" class="Symbol">(</a><a id="19674" href="MGS-Equivalences.html#868" class="Function">is-equiv</a><a id="19682" class="Symbol">;</a> <a id="19684" href="MGS-Equivalences.html#979" class="Function">inverse</a><a id="19691" class="Symbol">;</a>
+ <a id="19694" href="MGS-Equivalences.html#370" class="Function">invertible</a><a id="19704" class="Symbol">)</a> <a id="19706" class="Keyword">public</a>
+
+<a id="19714" class="Keyword">open</a> <a id="19719" class="Keyword">import</a> <a id="19726" href="MGS-Subsingleton-Theorems.html" class="Module">MGS-Subsingleton-Theorems</a> <a id="19752" class="Keyword">using</a> <a id="19758" class="Symbol">(</a><a id="19759" href="MGS-FunExt-from-Univalence.html#393" class="Function">funext</a><a id="19765" class="Symbol">;</a>
+ <a id="19768" href="MGS-FunExt-from-Univalence.html#2039" class="Function">dfunext</a><a id="19775" class="Symbol">;</a> <a id="19777" href="MGS-Basic-UF.html#428" class="Function">is-singleton</a><a id="19789" class="Symbol">;</a> <a id="19791" href="MGS-Basic-UF.html#743" class="Function">is-subsingleton</a><a id="19806" class="Symbol">;</a> <a id="19808" href="MGS-Basic-UF.html#1827" class="Function">is-prop</a><a id="19815" class="Symbol">;</a> <a id="19817" href="MGS-Subsingleton-Theorems.html#2964" class="Function">Univalence</a><a id="19827" class="Symbol">;</a>
+ <a id="19830" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a><a id="19844" class="Symbol">;</a> <a id="19846" href="MGS-Subsingleton-Theorems.html#3528" class="Function">univalence-gives-global-dfunext</a><a id="19877" class="Symbol">;</a> <a id="19879" href="MGS-Equivalences.html#6164" class="Function Operator">_●_</a><a id="19882" class="Symbol">;</a> <a id="19884" href="MGS-Equivalences.html#5035" class="Function Operator">_≃_</a><a id="19887" class="Symbol">;</a>
+ <a id="19890" href="MGS-Solved-Exercises.html#5136" class="Function">logically-equivalent-subsingletons-are-equivalent</a><a id="19939" class="Symbol">;</a>
+ <a id="19942" href="MGS-Subsingleton-Theorems.html#393" class="Function">Π-is-subsingleton</a><a id="19959" class="Symbol">)</a> <a id="19961" class="Keyword">public</a>
+
+<a id="19969" class="Keyword">open</a> <a id="19974" class="Keyword">import</a> <a id="19981" href="MGS-Powerset.html" class="Module">MGS-Powerset</a> <a id="19994" class="Keyword">renaming</a> <a id="20003" class="Symbol">(</a><a id="20004" href="MGS-Powerset.html#4924" class="Function Operator">_∈_</a> <a id="20008" class="Symbol">to</a> <a id="_∈_"></a><a id="20011" href="ualib.html#20011" class="Function Operator">_∈₀_</a><a id="20015" class="Symbol">;</a> <a id="20017" href="MGS-Powerset.html#4976" class="Function Operator">_⊆_</a> <a id="20021" class="Symbol">to</a> <a id="_⊆_"></a><a id="20024" href="ualib.html#20024" class="Function Operator">_⊆₀_</a><a id="20028" class="Symbol">)</a>
+ <a id="20031" class="Keyword">using</a> <a id="20037" class="Symbol">(</a><a id="20038" href="MGS-Powerset.html#4551" class="Function">𝓟</a><a id="20039" class="Symbol">;</a> <a id="20041" href="MGS-Powerset.html#5040" class="Function">∈-is-subsingleton</a><a id="20058" class="Symbol">;</a> <a id="20060" href="MGS-Solved-Exercises.html#1652" class="Function">equiv-to-subsingleton</a><a id="20081" class="Symbol">;</a>
+ <a id="20084" href="MGS-Powerset.html#4586" class="Function">powersets-are-sets&#39;</a><a id="20103" class="Symbol">;</a> <a id="20105" href="MGS-Powerset.html#6079" class="Function">subset-extensionality&#39;</a><a id="20127" class="Symbol">;</a> <a id="20129" href="MGS-Powerset.html#382" class="Function">propext</a><a id="20136" class="Symbol">)</a> <a id="20138" class="Keyword">public</a>
+
+<a id="20146" class="Keyword">open</a> <a id="20151" class="Keyword">import</a> <a id="20158" href="MGS-Embeddings.html" class="Module">MGS-Embeddings</a> <a id="20173" class="Keyword">using</a> <a id="20179" class="Symbol">(</a><a id="20180" href="MGS-Embeddings.html#384" class="Function">is-embedding</a><a id="20192" class="Symbol">;</a> <a id="20194" href="MGS-Embeddings.html#1089" class="Function">pr₁-embedding</a><a id="20207" class="Symbol">;</a>
+ <a id="20210" href="MGS-Basic-UF.html#1929" class="Function">is-set</a><a id="20216" class="Symbol">;</a> <a id="20218" href="MGS-Embeddings.html#6370" class="Function Operator">_↪_</a><a id="20221" class="Symbol">;</a> <a id="20223" href="MGS-Embeddings.html#3808" class="Function">embedding-gives-ap-is-equiv</a><a id="20250" class="Symbol">;</a> <a id="20252" href="MGS-Embeddings.html#4830" class="Function">embeddings-are-lc</a><a id="20269" class="Symbol">;</a>
+ <a id="20272" href="MGS-Solved-Exercises.html#6381" class="Function">×-is-subsingleton</a><a id="20289" class="Symbol">)</a> <a id="20291" class="Keyword">public</a>
+
+<a id="20299" class="Keyword">open</a> <a id="20304" class="Keyword">import</a> <a id="20311" href="MGS-Solved-Exercises.html" class="Module">MGS-Solved-Exercises</a> <a id="20332" class="Keyword">using</a> <a id="20338" class="Symbol">(</a><a id="20339" href="MGS-Solved-Exercises.html#4076" class="Function">to-subtype-≡</a><a id="20351" class="Symbol">)</a> <a id="20353" class="Keyword">public</a>
+
+<a id="20361" class="Keyword">open</a> <a id="20366" class="Keyword">import</a> <a id="20373" href="MGS-Subsingleton-Truncation.html" class="Module">MGS-Subsingleton-Truncation</a> <a id="20401" class="Keyword">hiding</a> <a id="20408" class="Symbol">(</a><a id="20409" href="MGS-MLTT.html#4242" class="InductiveConstructor">refl</a><a id="20413" class="Symbol">;</a> <a id="20415" href="MGS-Powerset.html#4924" class="Function Operator">_∈_</a><a id="20418" class="Symbol">;</a> <a id="20420" href="MGS-Powerset.html#4976" class="Function Operator">_⊆_</a><a id="20423" class="Symbol">)</a> <a id="20425" class="Keyword">public</a>
+</pre>
+
+<hr />
+
+<h3 id="dependent-pair-type">Dependent pair type</h3>
+
+<p>Our preferred notations for the first and second projections of a
+product are <code class="language-plaintext highlighter-rouge">∣_∣</code> and <code class="language-plaintext highlighter-rouge">∥_∥</code>, respectively; however, we will sometimes
+use the more standard <code class="language-plaintext highlighter-rouge">pr₁</code> and <code class="language-plaintext highlighter-rouge">pr₂</code>, or even <code class="language-plaintext highlighter-rouge">fst</code> and <code class="language-plaintext highlighter-rouge">snd</code>, for
+emphasis, readability, or compatibility with other libraries.</p>
+
+<pre class="Agda">
+<a id="∣_∣"></a><a id="20823" href="ualib.html#20823" class="Function Operator">∣_∣</a> <a id="fst"></a><a id="20827" href="ualib.html#20827" class="Function">fst</a> <a id="20831" class="Symbol">:</a> <a id="20833" class="Symbol">{</a><a id="20834" href="ualib.html#20834" class="Bound">X</a> <a id="20836" class="Symbol">:</a> <a id="20838" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="20840" href="Universes.html#403" class="Function Operator">̇</a> <a id="20842" class="Symbol">}{</a><a id="20844" href="ualib.html#20844" class="Bound">Y</a> <a id="20846" class="Symbol">:</a> <a id="20848" href="ualib.html#20834" class="Bound">X</a> <a id="20850" class="Symbol">→</a> <a id="20852" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="20854" href="Universes.html#403" class="Function Operator">̇</a><a id="20855" class="Symbol">}</a> <a id="20857" class="Symbol">→</a> <a id="20859" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="20861" href="ualib.html#20844" class="Bound">Y</a> <a id="20863" class="Symbol">→</a> <a id="20865" href="ualib.html#20834" class="Bound">X</a>
+<a id="20867" href="ualib.html#20823" class="Function Operator">∣</a> <a id="20869" href="ualib.html#20869" class="Bound">x</a> <a id="20871" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="20873" href="ualib.html#20873" class="Bound">y</a> <a id="20875" href="ualib.html#20823" class="Function Operator">∣</a> <a id="20877" class="Symbol">=</a> <a id="20879" href="ualib.html#20869" class="Bound">x</a>
+<a id="20881" href="ualib.html#20827" class="Function">fst</a> <a id="20885" class="Symbol">(</a><a id="20886" href="ualib.html#20886" class="Bound">x</a> <a id="20888" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="20890" href="ualib.html#20890" class="Bound">y</a><a id="20891" class="Symbol">)</a> <a id="20893" class="Symbol">=</a> <a id="20895" href="ualib.html#20886" class="Bound">x</a>
+
+<a id="∥_∥"></a><a id="20898" href="ualib.html#20898" class="Function Operator">∥_∥</a> <a id="snd"></a><a id="20902" href="ualib.html#20902" class="Function">snd</a> <a id="20906" class="Symbol">:</a> <a id="20908" class="Symbol">{</a><a id="20909" href="ualib.html#20909" class="Bound">X</a> <a id="20911" class="Symbol">:</a> <a id="20913" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="20915" href="Universes.html#403" class="Function Operator">̇</a> <a id="20917" class="Symbol">}{</a><a id="20919" href="ualib.html#20919" class="Bound">Y</a> <a id="20921" class="Symbol">:</a> <a id="20923" href="ualib.html#20909" class="Bound">X</a> <a id="20925" class="Symbol">→</a> <a id="20927" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="20929" href="Universes.html#403" class="Function Operator">̇</a> <a id="20931" class="Symbol">}</a> <a id="20933" class="Symbol">→</a> <a id="20935" class="Symbol">(</a><a id="20936" href="ualib.html#20936" class="Bound">z</a> <a id="20938" class="Symbol">:</a> <a id="20940" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="20942" href="ualib.html#20919" class="Bound">Y</a><a id="20943" class="Symbol">)</a> <a id="20945" class="Symbol">→</a> <a id="20947" href="ualib.html#20919" class="Bound">Y</a> <a id="20949" class="Symbol">(</a><a id="20950" href="MGS-MLTT.html#2942" class="Function">pr₁</a> <a id="20954" href="ualib.html#20936" class="Bound">z</a><a id="20955" class="Symbol">)</a>
+<a id="20957" href="ualib.html#20898" class="Function Operator">∥</a> <a id="20959" href="ualib.html#20959" class="Bound">x</a> <a id="20961" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="20963" href="ualib.html#20963" class="Bound">y</a> <a id="20965" href="ualib.html#20898" class="Function Operator">∥</a> <a id="20967" class="Symbol">=</a> <a id="20969" href="ualib.html#20963" class="Bound">y</a>
+<a id="20971" href="ualib.html#20902" class="Function">snd</a> <a id="20975" class="Symbol">(</a><a id="20976" href="ualib.html#20976" class="Bound">x</a> <a id="20978" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="20980" href="ualib.html#20980" class="Bound">y</a><a id="20981" class="Symbol">)</a> <a id="20983" class="Symbol">=</a> <a id="20985" href="ualib.html#20980" class="Bound">y</a>
+</pre>
+
+<p>For the dependent pair type, we prefer the notation <code class="language-plaintext highlighter-rouge">Σ x ꞉ X , y</code>, which
+is more pleasing (and more standard in the literature) than Agda’s
+default syntax (<code class="language-plaintext highlighter-rouge">Σ λ(x ꞉ X) → y</code>), and MHE has a useful trick that makes
+the preferred notation available by making index type explicit.</p>
+
+<pre><code class="language-agda">infixr -1 -Σ
+-Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-Σ X Y = Σ Y
+syntax -Σ X (λ x → y) = Σ x ꞉ X , y -- type `꞉` as `\:4`
+</code></pre>
+
+<div class="admonition warning">
+
+The symbol ꞉ is not the same as : despite how similar they may appear.
+The correct colon in the expression `Σ x ꞉ X , y` above is obtained by
+typing `\:4` in
+[agda2-mode](https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html).
+
+</div>
+
+<p>MHE explains Sigma induction as follows: “To prove that <code class="language-plaintext highlighter-rouge">A z</code> holds for
+all <code class="language-plaintext highlighter-rouge">z : Σ Y</code>, for a given property <code class="language-plaintext highlighter-rouge">A</code>, we just prove that we have
+<code class="language-plaintext highlighter-rouge">A (x , y)</code> for all <code class="language-plaintext highlighter-rouge">x : X</code> and <code class="language-plaintext highlighter-rouge">y : Y x</code>. This is called <code class="language-plaintext highlighter-rouge">Σ</code> induction
+or <code class="language-plaintext highlighter-rouge">Σ</code> elimination (or <code class="language-plaintext highlighter-rouge">uncurry</code>).</p>
+
+<pre><code class="language-agda">Σ-induction : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
+ →            ((x : X)(y : Y x) → A (x , y))
+              -------------------------------
+ →            ((x , y) : Σ Y) → A (x , y)
+Σ-induction g (x , y) = g x y
+
+curry : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
+ →      (((x , y) : Σ Y ) → A (x , y))
+       ---------------------------------
+ →      ((x : X) (y : Y x) → A (x , y))
+curry f x y = f (x , y)
+</code></pre>
+
+<p>The special case in which the type <code class="language-plaintext highlighter-rouge">Y</code> doesn’t depend on <code class="language-plaintext highlighter-rouge">X</code> is of
+course the usual Cartesian product.</p>
+
+<pre><code class="language-agda">infixr 30 _×_
+_×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+X × Y = Σ x ꞉ X , Y
+</code></pre>
+
+<hr />
+
+<h3 id="dependent-function-type">Dependent function type</h3>
+
+<p>To make the syntax for <code class="language-plaintext highlighter-rouge">Π</code> conform to the standard notation for “Pi
+types” (or dependent function type), MHE uses the same trick as the one
+used above for “Sigma types.”</p>
+
+<pre><code class="language-agda">Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+Π {𝓤} {𝓥} {X} A = (x : X) → A x
+
+-Π : {𝓤 𝓥 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-Π X Y = Π Y
+infixr -1 -Π
+syntax -Π A (λ x → b) = Π x ꞉ A , b
+</code></pre>
+
+<hr />
+
+<h3 id="application">Application</h3>
+
+<p>An important tool that we use often in Agda proofs is application of a
+function to an identification <code class="language-plaintext highlighter-rouge">p : x ≡ x'</code>. We apply the <code class="language-plaintext highlighter-rouge">ap</code> operator
+to obtain the identification <code class="language-plaintext highlighter-rouge">ap f p : f x ≡ f x'</code> when given
+<code class="language-plaintext highlighter-rouge">p : x ≡ x'</code> and <code class="language-plaintext highlighter-rouge">f : X → Y</code>.</p>
+
+<p>Since <code class="language-plaintext highlighter-rouge">ap</code> is already defined in MHE’s Type Topolgy library, we don’t
+redefine it here. However, we do define some variations of <code class="language-plaintext highlighter-rouge">ap</code> that are
+sometimes useful.</p>
+
+<pre class="Agda">
+<a id="ap-cong"></a><a id="23538" href="ualib.html#23538" class="Function">ap-cong</a> <a id="23546" class="Symbol">:</a> <a id="23548" class="Symbol">{</a><a id="23549" href="ualib.html#23549" class="Bound">X</a> <a id="23551" class="Symbol">:</a> <a id="23553" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="23555" href="Universes.html#403" class="Function Operator">̇</a><a id="23556" class="Symbol">}{</a><a id="23558" href="ualib.html#23558" class="Bound">Y</a> <a id="23560" class="Symbol">:</a> <a id="23562" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="23564" href="Universes.html#403" class="Function Operator">̇</a><a id="23565" class="Symbol">}{</a><a id="23567" href="ualib.html#23567" class="Bound">f</a> <a id="23569" href="ualib.html#23569" class="Bound">g</a> <a id="23571" class="Symbol">:</a> <a id="23573" href="ualib.html#23549" class="Bound">X</a> <a id="23575" class="Symbol">→</a> <a id="23577" href="ualib.html#23558" class="Bound">Y</a><a id="23578" class="Symbol">}</a> <a id="23580" class="Symbol">{</a><a id="23581" href="ualib.html#23581" class="Bound">a</a> <a id="23583" href="ualib.html#23583" class="Bound">b</a> <a id="23585" class="Symbol">:</a> <a id="23587" href="ualib.html#23549" class="Bound">X</a><a id="23588" class="Symbol">}</a>
+ <a id="23591" class="Symbol">→</a>        <a id="23600" href="ualib.html#23567" class="Bound">f</a> <a id="23602" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="23604" href="ualib.html#23569" class="Bound">g</a>  <a id="23607" class="Symbol">→</a>  <a id="23610" href="ualib.html#23581" class="Bound">a</a> <a id="23612" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="23614" href="ualib.html#23583" class="Bound">b</a>
+          <a id="23626" class="Comment">-----------------</a>
+ <a id="23645" class="Symbol">→</a>        <a id="23654" href="ualib.html#23567" class="Bound">f</a> <a id="23656" href="ualib.html#23581" class="Bound">a</a> <a id="23658" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="23660" href="ualib.html#23569" class="Bound">g</a> <a id="23662" href="ualib.html#23583" class="Bound">b</a>
+
+<a id="23665" href="ualib.html#23538" class="Function">ap-cong</a> <a id="23673" class="Symbol">(</a><a id="23674" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="23679" class="Symbol">_)</a> <a id="23682" class="Symbol">(</a><a id="23683" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="23688" class="Symbol">_)</a> <a id="23691" class="Symbol">=</a> <a id="23693" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="23698" class="Symbol">_</a>
+</pre>
+
+<p>Here is a related tool that we borrow from the <code class="language-plaintext highlighter-rouge">Relation/Binary/Core.agda</code> module of the <a href="https://agda.github.io/agda-stdlib/">Agda standard library</a>.</p>
+
+<pre class="Agda">
+<a id="cong-app"></a><a id="23877" href="ualib.html#23877" class="Function">cong-app</a> <a id="23886" class="Symbol">:</a> <a id="23888" class="Symbol">{</a><a id="23889" href="ualib.html#23889" class="Bound">A</a> <a id="23891" class="Symbol">:</a> <a id="23893" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="23895" href="Universes.html#403" class="Function Operator">̇</a><a id="23896" class="Symbol">}{</a><a id="23898" href="ualib.html#23898" class="Bound">B</a> <a id="23900" class="Symbol">:</a> <a id="23902" href="ualib.html#23889" class="Bound">A</a> <a id="23904" class="Symbol">→</a> <a id="23906" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="23908" href="Universes.html#403" class="Function Operator">̇</a><a id="23909" class="Symbol">}{</a><a id="23911" href="ualib.html#23911" class="Bound">f</a> <a id="23913" href="ualib.html#23913" class="Bound">g</a> <a id="23915" class="Symbol">:</a> <a id="23917" class="Symbol">(</a><a id="23918" href="ualib.html#23918" class="Bound">a</a> <a id="23920" class="Symbol">:</a> <a id="23922" href="ualib.html#23889" class="Bound">A</a><a id="23923" class="Symbol">)</a> <a id="23925" class="Symbol">→</a> <a id="23927" href="ualib.html#23898" class="Bound">B</a> <a id="23929" href="ualib.html#23918" class="Bound">a</a><a id="23930" class="Symbol">}</a>
+ <a id="23933" class="Symbol">→</a>          <a id="23944" href="ualib.html#23911" class="Bound">f</a> <a id="23946" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="23948" href="ualib.html#23913" class="Bound">g</a>   <a id="23952" class="Symbol">→</a>   <a id="23956" class="Symbol">(</a><a id="23957" href="ualib.html#23957" class="Bound">a</a> <a id="23959" class="Symbol">:</a> <a id="23961" href="ualib.html#23889" class="Bound">A</a><a id="23962" class="Symbol">)</a>
+          <a id="23974" class="Comment">-----------------------</a>
+ <a id="23999" class="Symbol">→</a>              <a id="24014" href="ualib.html#23911" class="Bound">f</a> <a id="24016" href="ualib.html#23957" class="Bound">a</a> <a id="24018" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="24020" href="ualib.html#23913" class="Bound">g</a> <a id="24022" href="ualib.html#23957" class="Bound">a</a>
+
+<a id="24025" href="ualib.html#23877" class="Function">cong-app</a> <a id="24034" class="Symbol">(</a><a id="24035" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="24040" class="Symbol">_)</a> <a id="24043" href="ualib.html#24043" class="Bound">a</a> <a id="24045" class="Symbol">=</a> <a id="24047" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="24052" class="Symbol">_</a>
+</pre>
+
+<hr />
+
+<h3 id="function-extensionality">Function extensionality</h3>
+
+<p>Extensional equality of functions, or function extensionality, means
+that any two point-wise equal functions are equal. As MHE points out,
+this is known to be not provable or disprovable in Martin-Löf Type
+Theory (MLTT).</p>
+
+<p>Nonetheless, we will mainly work with pointwise equality of functions,
+which MHE defines (in <a href="%3Chttps://github.com/martinescardo/TypeTopology%3E%60_">Type
+Topology</a> ) as
+follows:</p>
+
+<pre><code class="language-agda">_∼_ : {X : 𝓤 ̇ } {A : X → 𝓥 ̇ } → Π A → Π A → 𝓤 ⊔ 𝓥 ̇ 
+f ∼ g = ∀ x → f x ≡ g x
+infix 0 _∼_
+</code></pre>
+
+<p>(The <code class="language-plaintext highlighter-rouge">_∼_</code> relation will be equivalent to equality of functions, once we
+have the principle of <em>univalence</em> at our disposal.)</p>
+
+<hr />
+
+<h3 id="predicates-subsets">Predicates, Subsets</h3>
+
+<p>We need a mechanism for implementing the notion of subsets in Agda. A
+typical one is called <code class="language-plaintext highlighter-rouge">Pred</code> (for predicate). More generally, <code class="language-plaintext highlighter-rouge">Pred A 𝓤</code>
+can be viewed as the type of a property that elements of type <code class="language-plaintext highlighter-rouge">A</code> might
+satisfy. We write <code class="language-plaintext highlighter-rouge">P : Pred A 𝓤</code> (read “<code class="language-plaintext highlighter-rouge">P</code> has type <code class="language-plaintext highlighter-rouge">Pred A 𝓤</code>”) to
+represent the subset of elements of <code class="language-plaintext highlighter-rouge">A</code> that satisfy property <code class="language-plaintext highlighter-rouge">P</code>.</p>
+
+<p>Here is the definition (which is similar to the one found in the
+<code class="language-plaintext highlighter-rouge">Relation/Unary.agda</code> file of <a href="https://agda.github.io/agda-stdlib/">Agda standard
+library</a> ).</p>
+
+<pre class="Agda">
+<a id="Pred"></a><a id="25427" href="ualib.html#25427" class="Function">Pred</a> <a id="25432" class="Symbol">:</a> <a id="25434" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="25436" href="Universes.html#403" class="Function Operator">̇</a> <a id="25438" class="Symbol">→</a> <a id="25440" class="Symbol">(</a><a id="25441" href="ualib.html#25441" class="Bound">𝓥</a> <a id="25443" class="Symbol">:</a> <a id="25445" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="25453" class="Symbol">)</a> <a id="25455" class="Symbol">→</a> <a id="25457" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="25459" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="25461" href="ualib.html#25441" class="Bound">𝓥</a> <a id="25463" href="Agda.Primitive.html#606" class="Primitive Operator">⁺</a> <a id="25465" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="25467" href="ualib.html#25427" class="Function">Pred</a> <a id="25472" href="ualib.html#25472" class="Bound">A</a> <a id="25474" href="ualib.html#25474" class="Bound">𝓥</a> <a id="25476" class="Symbol">=</a> <a id="25478" href="ualib.html#25472" class="Bound">A</a> <a id="25480" class="Symbol">→</a> <a id="25482" href="ualib.html#25474" class="Bound">𝓥</a> <a id="25484" href="Universes.html#403" class="Function Operator">̇</a>
+</pre>
+
+<p>Below we will often consider predicates over the class of all algebras
+of a particular type. We will define the type of algebras <code class="language-plaintext highlighter-rouge">Algebra 𝓤 𝑆</code>
+(for some universe level 𝓤). Like all types, <code class="language-plaintext highlighter-rouge">Algebra 𝓤 𝑆</code> itself has a
+type which happens to be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ (as we will see in algebra type).
+Therefore, the type of <code class="language-plaintext highlighter-rouge">Pred (Algebra 𝓤 𝑆) 𝓤</code> will be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ as
+well.</p>
+
+<p>The inhabitants of the type <code class="language-plaintext highlighter-rouge">Pred (Algebra 𝓤 𝑆) 𝓤</code> are maps of the form
+𝑨 → 𝓤 ̇; indeed, given an algebra 𝑨 : Algebra 𝓤 𝑆, we have Pred 𝑨 𝓤 = 𝑨 →
+𝓤 ̇.</p>
+
+<h3 id="the-membership-relation">The membership relation</h3>
+
+<p>We introduce notation so that we may indicate that <code class="language-plaintext highlighter-rouge">x</code> “belongs to” a
+“subset” <code class="language-plaintext highlighter-rouge">P</code>, or that <code class="language-plaintext highlighter-rouge">x</code> “has property” <code class="language-plaintext highlighter-rouge">P</code>, by writing either <code class="language-plaintext highlighter-rouge">x ∈ P</code>
+or <code class="language-plaintext highlighter-rouge">P x</code> (cf. <code class="language-plaintext highlighter-rouge">Relation/Unary.agda</code> in the <a href="https://agda.github.io/agda-stdlib/">Agda standard
+library</a> ).</p>
+
+<pre class="Agda">
+<a id="26308" class="Keyword">infix</a> <a id="26314" class="Number">4</a> <a id="26316" href="ualib.html#26324" class="Function Operator">_∈_</a> <a id="26320" href="ualib.html#26375" class="Function Operator">_∉_</a>
+<a id="_∈_"></a><a id="26324" href="ualib.html#26324" class="Function Operator">_∈_</a> <a id="26328" class="Symbol">:</a> <a id="26330" class="Symbol">{</a><a id="26331" href="ualib.html#26331" class="Bound">A</a> <a id="26333" class="Symbol">:</a> <a id="26335" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26337" href="Universes.html#403" class="Function Operator">̇</a> <a id="26339" class="Symbol">}</a> <a id="26341" class="Symbol">→</a> <a id="26343" href="ualib.html#26331" class="Bound">A</a> <a id="26345" class="Symbol">→</a> <a id="26347" href="ualib.html#25427" class="Function">Pred</a> <a id="26352" href="ualib.html#26331" class="Bound">A</a> <a id="26354" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26356" class="Symbol">→</a> <a id="26358" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26360" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="26362" href="ualib.html#26362" class="Bound">x</a> <a id="26364" href="ualib.html#26324" class="Function Operator">∈</a> <a id="26366" href="ualib.html#26366" class="Bound">P</a> <a id="26368" class="Symbol">=</a> <a id="26370" href="ualib.html#26366" class="Bound">P</a> <a id="26372" href="ualib.html#26362" class="Bound">x</a>
+
+<a id="_∉_"></a><a id="26375" href="ualib.html#26375" class="Function Operator">_∉_</a> <a id="26379" class="Symbol">:</a> <a id="26381" class="Symbol">{</a><a id="26382" href="ualib.html#26382" class="Bound">A</a> <a id="26384" class="Symbol">:</a> <a id="26386" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26388" href="Universes.html#403" class="Function Operator">̇</a> <a id="26390" class="Symbol">}</a> <a id="26392" class="Symbol">→</a> <a id="26394" href="ualib.html#26382" class="Bound">A</a> <a id="26396" class="Symbol">→</a> <a id="26398" href="ualib.html#25427" class="Function">Pred</a> <a id="26403" href="ualib.html#26382" class="Bound">A</a> <a id="26405" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26407" class="Symbol">→</a> <a id="26409" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26411" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="26413" href="ualib.html#26413" class="Bound">x</a> <a id="26415" href="ualib.html#26375" class="Function Operator">∉</a> <a id="26417" href="ualib.html#26417" class="Bound">P</a> <a id="26419" class="Symbol">=</a> <a id="26421" href="MGS-MLTT.html#956" class="Function">¬</a> <a id="26423" class="Symbol">(</a><a id="26424" href="ualib.html#26413" class="Bound">x</a> <a id="26426" href="ualib.html#26324" class="Function Operator">∈</a> <a id="26428" href="ualib.html#26417" class="Bound">P</a><a id="26429" class="Symbol">)</a>
+</pre>
+
+<hr />
+
+<h3 id="subset-relations-and-operations">Subset relations and operations</h3>
+
+<p>The subset relation is then denoted, as usual, with the <code class="language-plaintext highlighter-rouge">⊆</code> symbol (cf.
+<code class="language-plaintext highlighter-rouge">Relation/Unary.agda</code> in the <a href="https://agda.github.io/agda-stdlib/">Agda standard
+library</a> ).</p>
+
+<pre class="Agda">
+<a id="26707" class="Keyword">infix</a> <a id="26713" class="Number">4</a> <a id="26715" href="ualib.html#26723" class="Function Operator">_⊆_</a> <a id="26719" href="ualib.html#26807" class="Function Operator">_⊇_</a>
+<a id="_⊆_"></a><a id="26723" href="ualib.html#26723" class="Function Operator">_⊆_</a> <a id="26727" class="Symbol">:</a> <a id="26729" class="Symbol">{</a><a id="26730" href="ualib.html#26730" class="Bound">A</a> <a id="26732" class="Symbol">:</a> <a id="26734" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26736" href="Universes.html#403" class="Function Operator">̇</a> <a id="26738" class="Symbol">}</a> <a id="26740" class="Symbol">→</a> <a id="26742" href="ualib.html#25427" class="Function">Pred</a> <a id="26747" href="ualib.html#26730" class="Bound">A</a> <a id="26749" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26751" class="Symbol">→</a> <a id="26753" href="ualib.html#25427" class="Function">Pred</a> <a id="26758" href="ualib.html#26730" class="Bound">A</a> <a id="26760" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="26762" class="Symbol">→</a> <a id="26764" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26766" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="26768" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26770" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="26772" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="26774" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="26776" href="ualib.html#26776" class="Bound">P</a> <a id="26778" href="ualib.html#26723" class="Function Operator">⊆</a> <a id="26780" href="ualib.html#26780" class="Bound">Q</a> <a id="26782" class="Symbol">=</a> <a id="26784" class="Symbol">∀</a> <a id="26786" class="Symbol">{</a><a id="26787" href="ualib.html#26787" class="Bound">x</a><a id="26788" class="Symbol">}</a> <a id="26790" class="Symbol">→</a> <a id="26792" href="ualib.html#26787" class="Bound">x</a> <a id="26794" href="ualib.html#26324" class="Function Operator">∈</a> <a id="26796" href="ualib.html#26776" class="Bound">P</a> <a id="26798" class="Symbol">→</a> <a id="26800" href="ualib.html#26787" class="Bound">x</a> <a id="26802" href="ualib.html#26324" class="Function Operator">∈</a> <a id="26804" href="ualib.html#26780" class="Bound">Q</a>
+
+<a id="_⊇_"></a><a id="26807" href="ualib.html#26807" class="Function Operator">_⊇_</a> <a id="26811" class="Symbol">:</a> <a id="26813" class="Symbol">{</a><a id="26814" href="ualib.html#26814" class="Bound">A</a> <a id="26816" class="Symbol">:</a> <a id="26818" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26820" href="Universes.html#403" class="Function Operator">̇</a> <a id="26822" class="Symbol">}</a> <a id="26824" class="Symbol">→</a> <a id="26826" href="ualib.html#25427" class="Function">Pred</a> <a id="26831" href="ualib.html#26814" class="Bound">A</a> <a id="26833" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26835" class="Symbol">→</a> <a id="26837" href="ualib.html#25427" class="Function">Pred</a> <a id="26842" href="ualib.html#26814" class="Bound">A</a> <a id="26844" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="26846" class="Symbol">→</a> <a id="26848" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26850" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="26852" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="26854" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="26856" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="26858" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="26860" href="ualib.html#26860" class="Bound">P</a> <a id="26862" href="ualib.html#26807" class="Function Operator">⊇</a> <a id="26864" href="ualib.html#26864" class="Bound">Q</a> <a id="26866" class="Symbol">=</a> <a id="26868" href="ualib.html#26864" class="Bound">Q</a> <a id="26870" href="ualib.html#26723" class="Function Operator">⊆</a> <a id="26872" href="ualib.html#26860" class="Bound">P</a>
+
+<a id="26875" class="Keyword">infixr</a> <a id="26882" class="Number">1</a> <a id="26884" href="ualib.html#26913" class="Datatype Operator">_⊎_</a>
+
+<a id="26889" class="Comment">-- Disjoint Union.</a>
+<a id="26908" class="Keyword">data</a> <a id="_⊎_"></a><a id="26913" href="ualib.html#26913" class="Datatype Operator">_⊎_</a> <a id="26917" class="Symbol">(</a><a id="26918" href="ualib.html#26918" class="Bound">A</a> <a id="26920" class="Symbol">:</a> <a id="26922" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="26924" href="Universes.html#403" class="Function Operator">̇</a><a id="26925" class="Symbol">)</a> <a id="26927" class="Symbol">(</a><a id="26928" href="ualib.html#26928" class="Bound">B</a> <a id="26930" class="Symbol">:</a> <a id="26932" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="26934" href="Universes.html#403" class="Function Operator">̇</a><a id="26935" class="Symbol">)</a> <a id="26937" class="Symbol">:</a> <a id="26939" href="ualib.html#26922" class="Bound">𝓤</a> <a id="26941" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="26943" href="ualib.html#26932" class="Bound">𝓥</a> <a id="26945" href="Universes.html#403" class="Function Operator">̇</a> <a id="26947" class="Keyword">where</a>
+  <a id="_⊎_.inj₁"></a><a id="26955" href="ualib.html#26955" class="InductiveConstructor">inj₁</a> <a id="26960" class="Symbol">:</a> <a id="26962" class="Symbol">(</a><a id="26963" href="ualib.html#26963" class="Bound">x</a> <a id="26965" class="Symbol">:</a> <a id="26967" href="ualib.html#26918" class="Bound">A</a><a id="26968" class="Symbol">)</a> <a id="26970" class="Symbol">→</a> <a id="26972" href="ualib.html#26918" class="Bound">A</a> <a id="26974" href="ualib.html#26913" class="Datatype Operator">⊎</a> <a id="26976" href="ualib.html#26928" class="Bound">B</a>
+  <a id="_⊎_.inj₂"></a><a id="26980" href="ualib.html#26980" class="InductiveConstructor">inj₂</a> <a id="26985" class="Symbol">:</a> <a id="26987" class="Symbol">(</a><a id="26988" href="ualib.html#26988" class="Bound">y</a> <a id="26990" class="Symbol">:</a> <a id="26992" href="ualib.html#26928" class="Bound">B</a><a id="26993" class="Symbol">)</a> <a id="26995" class="Symbol">→</a> <a id="26997" href="ualib.html#26918" class="Bound">A</a> <a id="26999" href="ualib.html#26913" class="Datatype Operator">⊎</a> <a id="27001" href="ualib.html#26928" class="Bound">B</a>
+
+<a id="27004" class="Comment">-- Union.</a>
+<a id="27014" class="Keyword">infixr</a> <a id="27021" class="Number">6</a> <a id="27023" href="ualib.html#27027" class="Function Operator">_∪_</a>
+<a id="_∪_"></a><a id="27027" href="ualib.html#27027" class="Function Operator">_∪_</a> <a id="27031" class="Symbol">:</a> <a id="27033" class="Symbol">{</a><a id="27034" href="ualib.html#27034" class="Bound">A</a> <a id="27036" class="Symbol">:</a> <a id="27038" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27040" href="Universes.html#403" class="Function Operator">̇</a><a id="27041" class="Symbol">}</a> <a id="27043" class="Symbol">→</a> <a id="27045" href="ualib.html#25427" class="Function">Pred</a> <a id="27050" href="ualib.html#27034" class="Bound">A</a> <a id="27052" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="27054" class="Symbol">→</a> <a id="27056" href="ualib.html#25427" class="Function">Pred</a> <a id="27061" href="ualib.html#27034" class="Bound">A</a> <a id="27063" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="27065" class="Symbol">→</a> <a id="27067" href="ualib.html#25427" class="Function">Pred</a> <a id="27072" href="ualib.html#27034" class="Bound">A</a> <a id="27074" class="Symbol">_</a>
+<a id="27076" href="ualib.html#27076" class="Bound">P</a> <a id="27078" href="ualib.html#27027" class="Function Operator">∪</a> <a id="27080" href="ualib.html#27080" class="Bound">Q</a> <a id="27082" class="Symbol">=</a> <a id="27084" class="Symbol">λ</a> <a id="27086" href="ualib.html#27086" class="Bound">x</a> <a id="27088" class="Symbol">→</a> <a id="27090" href="ualib.html#27086" class="Bound">x</a> <a id="27092" href="ualib.html#26324" class="Function Operator">∈</a> <a id="27094" href="ualib.html#27076" class="Bound">P</a> <a id="27096" href="ualib.html#26913" class="Datatype Operator">⊎</a> <a id="27098" href="ualib.html#27086" class="Bound">x</a> <a id="27100" href="ualib.html#26324" class="Function Operator">∈</a> <a id="27102" href="ualib.html#27080" class="Bound">Q</a>
+
+
+<a id="27106" class="Comment">-- The empty set.</a>
+<a id="∅"></a><a id="27124" href="ualib.html#27124" class="Function">∅</a> <a id="27126" class="Symbol">:</a> <a id="27128" class="Symbol">{</a><a id="27129" href="ualib.html#27129" class="Bound">A</a> <a id="27131" class="Symbol">:</a> <a id="27133" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27135" href="Universes.html#403" class="Function Operator">̇</a><a id="27136" class="Symbol">}</a> <a id="27138" class="Symbol">→</a> <a id="27140" href="ualib.html#25427" class="Function">Pred</a> <a id="27145" href="ualib.html#27129" class="Bound">A</a> <a id="27147" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a>
+<a id="27150" href="ualib.html#27124" class="Function">∅</a> <a id="27152" class="Symbol">=</a> <a id="27154" class="Symbol">λ</a> <a id="27156" href="ualib.html#27156" class="Bound">_</a> <a id="27158" class="Symbol">→</a> <a id="27160" href="MGS-MLTT.html#712" class="Function">𝟘</a>
+</pre>
+
+<hr />
+
+<h3 id="miscellany">Miscellany</h3>
+
+<p>Finally, we include the following list of “utilities” that will come in
+handy later. Most of these are self-explanatory, but we make a few
+remarks below when we feel there is something worth noting.</p>
+
+<pre class="Agda">
+<a id="_∈∈_"></a><a id="27477" href="ualib.html#27477" class="Function Operator">_∈∈_</a> <a id="27482" class="Symbol">:</a> <a id="27484" class="Symbol">{</a><a id="27485" href="ualib.html#27485" class="Bound">A</a> <a id="27487" class="Symbol">:</a> <a id="27489" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27491" href="Universes.html#403" class="Function Operator">̇</a> <a id="27493" class="Symbol">}</a> <a id="27495" class="Symbol">{</a><a id="27496" href="ualib.html#27496" class="Bound">B</a> <a id="27498" class="Symbol">:</a> <a id="27500" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="27502" href="Universes.html#403" class="Function Operator">̇</a> <a id="27504" class="Symbol">}</a> <a id="27506" class="Symbol">→</a> <a id="27508" class="Symbol">(</a><a id="27509" href="ualib.html#27485" class="Bound">A</a>  <a id="27512" class="Symbol">→</a>  <a id="27515" href="ualib.html#27496" class="Bound">B</a><a id="27516" class="Symbol">)</a> <a id="27518" class="Symbol">→</a> <a id="27520" href="ualib.html#25427" class="Function">Pred</a> <a id="27525" href="ualib.html#27496" class="Bound">B</a> <a id="27527" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="27529" class="Symbol">→</a> <a id="27531" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27533" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="27535" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="27537" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="27539" href="ualib.html#27477" class="Function Operator">_∈∈_</a> <a id="27544" href="ualib.html#27544" class="Bound">f</a> <a id="27546" href="ualib.html#27546" class="Bound">S</a> <a id="27548" class="Symbol">=</a> <a id="27550" class="Symbol">(</a><a id="27551" href="ualib.html#27551" class="Bound">x</a> <a id="27553" class="Symbol">:</a> <a id="27555" class="Symbol">_)</a> <a id="27558" class="Symbol">→</a> <a id="27560" href="ualib.html#27544" class="Bound">f</a> <a id="27562" href="ualib.html#27551" class="Bound">x</a> <a id="27564" href="ualib.html#26324" class="Function Operator">∈</a> <a id="27566" href="ualib.html#27546" class="Bound">S</a>
+
+<a id="Im_⊆_"></a><a id="27569" href="ualib.html#27569" class="Function Operator">Im_⊆_</a> <a id="27575" class="Symbol">:</a> <a id="27577" class="Symbol">{</a><a id="27578" href="ualib.html#27578" class="Bound">A</a> <a id="27580" class="Symbol">:</a> <a id="27582" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27584" href="Universes.html#403" class="Function Operator">̇</a> <a id="27586" class="Symbol">}</a> <a id="27588" class="Symbol">{</a><a id="27589" href="ualib.html#27589" class="Bound">B</a> <a id="27591" class="Symbol">:</a> <a id="27593" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="27595" href="Universes.html#403" class="Function Operator">̇</a> <a id="27597" class="Symbol">}</a> <a id="27599" class="Symbol">→</a> <a id="27601" class="Symbol">(</a><a id="27602" href="ualib.html#27578" class="Bound">A</a> <a id="27604" class="Symbol">→</a> <a id="27606" href="ualib.html#27589" class="Bound">B</a><a id="27607" class="Symbol">)</a> <a id="27609" class="Symbol">→</a> <a id="27611" href="ualib.html#25427" class="Function">Pred</a> <a id="27616" href="ualib.html#27589" class="Bound">B</a> <a id="27618" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="27620" class="Symbol">→</a> <a id="27622" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27624" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="27626" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="27628" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="27630" href="ualib.html#27569" class="Function Operator">Im_⊆_</a> <a id="27636" class="Symbol">{</a><a id="27637" class="Argument">A</a> <a id="27639" class="Symbol">=</a> <a id="27641" href="ualib.html#27641" class="Bound">A</a><a id="27642" class="Symbol">}</a> <a id="27644" href="ualib.html#27644" class="Bound">f</a> <a id="27646" href="ualib.html#27646" class="Bound">S</a> <a id="27648" class="Symbol">=</a> <a id="27650" class="Symbol">(</a><a id="27651" href="ualib.html#27651" class="Bound">x</a> <a id="27653" class="Symbol">:</a> <a id="27655" href="ualib.html#27641" class="Bound">A</a><a id="27656" class="Symbol">)</a> <a id="27658" class="Symbol">→</a> <a id="27660" href="ualib.html#27644" class="Bound">f</a> <a id="27662" href="ualib.html#27651" class="Bound">x</a> <a id="27664" href="ualib.html#26324" class="Function Operator">∈</a> <a id="27666" href="ualib.html#27646" class="Bound">S</a>
+
+<a id="img"></a><a id="27669" href="ualib.html#27669" class="Function">img</a> <a id="27673" class="Symbol">:</a> <a id="27675" class="Symbol">{</a><a id="27676" href="ualib.html#27676" class="Bound">X</a> <a id="27678" class="Symbol">:</a> <a id="27680" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27682" href="Universes.html#403" class="Function Operator">̇</a> <a id="27684" class="Symbol">}</a> <a id="27686" class="Symbol">{</a><a id="27687" href="ualib.html#27687" class="Bound">Y</a> <a id="27689" class="Symbol">:</a> <a id="27691" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27693" href="Universes.html#403" class="Function Operator">̇</a> <a id="27695" class="Symbol">}</a>
+      <a id="27703" class="Symbol">(</a><a id="27704" href="ualib.html#27704" class="Bound">f</a> <a id="27706" class="Symbol">:</a> <a id="27708" href="ualib.html#27676" class="Bound">X</a> <a id="27710" class="Symbol">→</a> <a id="27712" href="ualib.html#27687" class="Bound">Y</a><a id="27713" class="Symbol">)</a> <a id="27715" class="Symbol">(</a><a id="27716" href="ualib.html#27716" class="Bound">P</a> <a id="27718" class="Symbol">:</a> <a id="27720" href="ualib.html#25427" class="Function">Pred</a> <a id="27725" href="ualib.html#27687" class="Bound">Y</a> <a id="27727" href="Universes.html#260" class="Generalizable">𝓤</a><a id="27728" class="Symbol">)</a>
+ <a id="27731" class="Symbol">→</a>    <a id="27736" href="ualib.html#27569" class="Function Operator">Im</a> <a id="27739" href="ualib.html#27704" class="Bound">f</a> <a id="27741" href="ualib.html#27569" class="Function Operator">⊆</a> <a id="27743" href="ualib.html#27716" class="Bound">P</a> <a id="27745" class="Symbol">→</a>  <a id="27748" href="ualib.html#27676" class="Bound">X</a> <a id="27750" class="Symbol">→</a> <a id="27752" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="27754" href="ualib.html#27716" class="Bound">P</a>
+<a id="27756" href="ualib.html#27669" class="Function">img</a> <a id="27760" class="Symbol">{</a><a id="27761" class="Argument">Y</a> <a id="27763" class="Symbol">=</a> <a id="27765" href="ualib.html#27765" class="Bound">Y</a><a id="27766" class="Symbol">}</a> <a id="27768" href="ualib.html#27768" class="Bound">f</a> <a id="27770" href="ualib.html#27770" class="Bound">P</a> <a id="27772" href="ualib.html#27772" class="Bound">Imf⊆P</a> <a id="27778" class="Symbol">=</a> <a id="27780" class="Symbol">λ</a> <a id="27782" href="ualib.html#27782" class="Bound">x₁</a> <a id="27785" class="Symbol">→</a> <a id="27787" href="ualib.html#27768" class="Bound">f</a> <a id="27789" href="ualib.html#27782" class="Bound">x₁</a> <a id="27792" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="27794" href="ualib.html#27772" class="Bound">Imf⊆P</a> <a id="27800" href="ualib.html#27782" class="Bound">x₁</a>
+
+<a id="≡-elim-left"></a><a id="27804" href="ualib.html#27804" class="Function">≡-elim-left</a> <a id="27816" class="Symbol">:</a> <a id="27818" class="Symbol">{</a><a id="27819" href="ualib.html#27819" class="Bound">A₁</a> <a id="27822" href="ualib.html#27822" class="Bound">A₂</a> <a id="27825" class="Symbol">:</a> <a id="27827" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="27829" href="Universes.html#403" class="Function Operator">̇</a> <a id="27831" class="Symbol">}</a> <a id="27833" class="Symbol">{</a><a id="27834" href="ualib.html#27834" class="Bound">B₁</a> <a id="27837" href="ualib.html#27837" class="Bound">B₂</a> <a id="27840" class="Symbol">:</a> <a id="27842" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="27844" href="Universes.html#403" class="Function Operator">̇</a> <a id="27846" class="Symbol">}</a>
+ <a id="27849" class="Symbol">→</a>            <a id="27862" class="Symbol">(</a><a id="27863" href="ualib.html#27819" class="Bound">A₁</a> <a id="27866" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="27868" href="ualib.html#27834" class="Bound">B₁</a><a id="27870" class="Symbol">)</a> <a id="27872" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="27874" class="Symbol">(</a><a id="27875" href="ualib.html#27822" class="Bound">A₂</a> <a id="27878" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="27880" href="ualib.html#27837" class="Bound">B₂</a><a id="27882" class="Symbol">)</a>
+              <a id="27898" class="Comment">----------------------</a>
+ <a id="27922" class="Symbol">→</a>                   <a id="27942" href="ualib.html#27819" class="Bound">A₁</a> <a id="27945" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="27947" href="ualib.html#27822" class="Bound">A₂</a>
+<a id="27950" href="ualib.html#27804" class="Function">≡-elim-left</a> <a id="27962" href="ualib.html#27962" class="Bound">e</a> <a id="27964" class="Symbol">=</a> <a id="27966" href="MGS-MLTT.html#6613" class="Function">ap</a> <a id="27969" href="MGS-MLTT.html#2942" class="Function">pr₁</a> <a id="27973" href="ualib.html#27962" class="Bound">e</a>
+
+<a id="≡-elim-right"></a><a id="27976" href="ualib.html#27976" class="Function">≡-elim-right</a> <a id="27989" class="Symbol">:</a> <a id="27991" class="Symbol">{</a><a id="27992" href="ualib.html#27992" class="Bound">A₁</a> <a id="27995" href="ualib.html#27995" class="Bound">A₂</a> <a id="27998" class="Symbol">:</a> <a id="28000" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28002" href="Universes.html#403" class="Function Operator">̇</a> <a id="28004" class="Symbol">}{</a><a id="28006" href="ualib.html#28006" class="Bound">B₁</a> <a id="28009" href="ualib.html#28009" class="Bound">B₂</a> <a id="28012" class="Symbol">:</a> <a id="28014" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="28016" href="Universes.html#403" class="Function Operator">̇</a> <a id="28018" class="Symbol">}</a>
+ <a id="28021" class="Symbol">→</a>             <a id="28035" class="Symbol">(</a><a id="28036" href="ualib.html#27992" class="Bound">A₁</a> <a id="28039" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="28041" href="ualib.html#28006" class="Bound">B₁</a><a id="28043" class="Symbol">)</a> <a id="28045" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28047" class="Symbol">(</a><a id="28048" href="ualib.html#27995" class="Bound">A₂</a> <a id="28051" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="28053" href="ualib.html#28009" class="Bound">B₂</a><a id="28055" class="Symbol">)</a>
+              <a id="28071" class="Comment">-----------------------</a>
+ <a id="28096" class="Symbol">→</a>                    <a id="28117" href="ualib.html#28006" class="Bound">B₁</a> <a id="28120" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28122" href="ualib.html#28009" class="Bound">B₂</a>
+<a id="28125" href="ualib.html#27976" class="Function">≡-elim-right</a> <a id="28138" href="ualib.html#28138" class="Bound">e</a> <a id="28140" class="Symbol">=</a> <a id="28142" href="MGS-MLTT.html#6613" class="Function">ap</a> <a id="28145" href="MGS-MLTT.html#3001" class="Function">pr₂</a> <a id="28149" href="ualib.html#28138" class="Bound">e</a>
+
+<a id="≡-×-intro"></a><a id="28152" href="ualib.html#28152" class="Function">≡-×-intro</a> <a id="28162" class="Symbol">:</a> <a id="28164" class="Symbol">{</a><a id="28165" href="ualib.html#28165" class="Bound">A₁</a> <a id="28168" href="ualib.html#28168" class="Bound">A₂</a> <a id="28171" class="Symbol">:</a> <a id="28173" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28175" href="Universes.html#403" class="Function Operator">̇</a> <a id="28177" class="Symbol">}</a> <a id="28179" class="Symbol">{</a><a id="28180" href="ualib.html#28180" class="Bound">B₁</a> <a id="28183" href="ualib.html#28183" class="Bound">B₂</a> <a id="28186" class="Symbol">:</a> <a id="28188" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="28190" href="Universes.html#403" class="Function Operator">̇</a> <a id="28192" class="Symbol">}</a>
+ <a id="28195" class="Symbol">→</a>           <a id="28207" href="ualib.html#28165" class="Bound">A₁</a> <a id="28210" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28212" href="ualib.html#28168" class="Bound">A₂</a>  <a id="28216" class="Symbol">→</a>  <a id="28219" href="ualib.html#28180" class="Bound">B₁</a> <a id="28222" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28224" href="ualib.html#28183" class="Bound">B₂</a>
+          <a id="28237" class="Comment">------------------------</a>
+ <a id="28263" class="Symbol">→</a>          <a id="28274" class="Symbol">(</a><a id="28275" href="ualib.html#28165" class="Bound">A₁</a> <a id="28278" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="28280" href="ualib.html#28180" class="Bound">B₁</a><a id="28282" class="Symbol">)</a> <a id="28284" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28286" class="Symbol">(</a><a id="28287" href="ualib.html#28168" class="Bound">A₂</a> <a id="28290" href="ualib.html#19443" class="InductiveConstructor Operator">,</a> <a id="28292" href="ualib.html#28183" class="Bound">B₂</a><a id="28294" class="Symbol">)</a>
+<a id="28296" href="ualib.html#28152" class="Function">≡-×-intro</a> <a id="28306" class="Symbol">(</a><a id="28307" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="28312" class="Symbol">_</a> <a id="28314" class="Symbol">)</a> <a id="28316" class="Symbol">(</a><a id="28317" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="28322" class="Symbol">_</a> <a id="28324" class="Symbol">)</a> <a id="28326" class="Symbol">=</a> <a id="28328" class="Symbol">(</a><a id="28329" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="28334" class="Symbol">_</a> <a id="28336" class="Symbol">)</a>
+
+<a id="cong-app-pred"></a><a id="28339" href="ualib.html#28339" class="Function">cong-app-pred</a> <a id="28353" class="Symbol">:</a> <a id="28355" class="Symbol">∀{</a><a id="28357" href="ualib.html#28357" class="Bound">A</a> <a id="28359" class="Symbol">:</a> <a id="28361" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28363" href="Universes.html#403" class="Function Operator">̇</a> <a id="28365" class="Symbol">}{</a><a id="28367" href="ualib.html#28367" class="Bound">B₁</a> <a id="28370" href="ualib.html#28370" class="Bound">B₂</a> <a id="28373" class="Symbol">:</a> <a id="28375" href="ualib.html#25427" class="Function">Pred</a> <a id="28380" href="ualib.html#28357" class="Bound">A</a> <a id="28382" href="Universes.html#260" class="Generalizable">𝓤</a><a id="28383" class="Symbol">}</a>
+                <a id="28401" class="Symbol">(</a><a id="28402" href="ualib.html#28402" class="Bound">x</a> <a id="28404" class="Symbol">:</a> <a id="28406" href="ualib.html#28357" class="Bound">A</a><a id="28407" class="Symbol">)</a> <a id="28409" class="Symbol">→</a>  <a id="28412" href="ualib.html#28402" class="Bound">x</a> <a id="28414" href="ualib.html#26324" class="Function Operator">∈</a> <a id="28416" href="ualib.html#28367" class="Bound">B₁</a>  <a id="28420" class="Symbol">→</a>  <a id="28423" href="ualib.html#28367" class="Bound">B₁</a> <a id="28426" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28428" href="ualib.html#28370" class="Bound">B₂</a>
+               <a id="28446" class="Comment">------------------------------</a>
+ <a id="28478" class="Symbol">→</a>                         <a id="28504" href="ualib.html#28402" class="Bound">x</a> <a id="28506" href="ualib.html#26324" class="Function Operator">∈</a> <a id="28508" href="ualib.html#28370" class="Bound">B₂</a>
+<a id="28511" href="ualib.html#28339" class="Function">cong-app-pred</a> <a id="28525" href="ualib.html#28525" class="Bound">x</a> <a id="28527" href="ualib.html#28527" class="Bound">x∈B₁</a> <a id="28532" class="Symbol">(</a><a id="28533" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="28538" class="Symbol">_</a> <a id="28540" class="Symbol">)</a> <a id="28542" class="Symbol">=</a> <a id="28544" href="ualib.html#28527" class="Bound">x∈B₁</a>
+
+<a id="cong-pred"></a><a id="28550" href="ualib.html#28550" class="Function">cong-pred</a> <a id="28560" class="Symbol">:</a> <a id="28562" class="Symbol">{</a><a id="28563" href="ualib.html#28563" class="Bound">A</a> <a id="28565" class="Symbol">:</a> <a id="28567" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28569" href="Universes.html#403" class="Function Operator">̇</a> <a id="28571" class="Symbol">}{</a><a id="28573" href="ualib.html#28573" class="Bound">B</a> <a id="28575" class="Symbol">:</a> <a id="28577" href="ualib.html#25427" class="Function">Pred</a> <a id="28582" href="ualib.html#28563" class="Bound">A</a> <a id="28584" href="Universes.html#260" class="Generalizable">𝓤</a><a id="28585" class="Symbol">}</a>
+            <a id="28599" class="Symbol">(</a><a id="28600" href="ualib.html#28600" class="Bound">x</a> <a id="28602" href="ualib.html#28602" class="Bound">y</a> <a id="28604" class="Symbol">:</a> <a id="28606" href="ualib.html#28563" class="Bound">A</a><a id="28607" class="Symbol">)</a> <a id="28609" class="Symbol">→</a>  <a id="28612" href="ualib.html#28600" class="Bound">x</a> <a id="28614" href="ualib.html#26324" class="Function Operator">∈</a> <a id="28616" href="ualib.html#28573" class="Bound">B</a>  <a id="28619" class="Symbol">→</a>  <a id="28622" href="ualib.html#28600" class="Bound">x</a> <a id="28624" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28626" href="ualib.html#28602" class="Bound">y</a>
+            <a id="28640" class="Comment">----------------------------</a>
+ <a id="28670" class="Symbol">→</a>                       <a id="28694" href="ualib.html#28602" class="Bound">y</a> <a id="28696" href="ualib.html#26324" class="Function Operator">∈</a> <a id="28698" href="ualib.html#28573" class="Bound">B</a>
+<a id="28700" href="ualib.html#28550" class="Function">cong-pred</a> <a id="28710" href="ualib.html#28710" class="Bound">x</a> <a id="28712" class="DottedPattern Symbol">.</a><a id="28713" href="ualib.html#28710" class="DottedPattern Bound">x</a> <a id="28715" href="ualib.html#28715" class="Bound">x∈B</a> <a id="28719" class="Symbol">(</a><a id="28720" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="28725" class="Symbol">_</a> <a id="28727" class="Symbol">)</a> <a id="28729" class="Symbol">=</a> <a id="28731" href="ualib.html#28715" class="Bound">x∈B</a>
+
+
+<a id="28737" class="Keyword">data</a> <a id="Image_∋_"></a><a id="28742" href="ualib.html#28742" class="Datatype Operator">Image_∋_</a> <a id="28751" class="Symbol">{</a><a id="28752" href="ualib.html#28752" class="Bound">A</a> <a id="28754" class="Symbol">:</a> <a id="28756" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28758" href="Universes.html#403" class="Function Operator">̇</a> <a id="28760" class="Symbol">}{</a><a id="28762" href="ualib.html#28762" class="Bound">B</a> <a id="28764" class="Symbol">:</a> <a id="28766" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="28768" href="Universes.html#403" class="Function Operator">̇</a> <a id="28770" class="Symbol">}(</a><a id="28772" href="ualib.html#28772" class="Bound">f</a> <a id="28774" class="Symbol">:</a> <a id="28776" href="ualib.html#28752" class="Bound">A</a> <a id="28778" class="Symbol">→</a> <a id="28780" href="ualib.html#28762" class="Bound">B</a><a id="28781" class="Symbol">)</a> <a id="28783" class="Symbol">:</a> <a id="28785" href="ualib.html#28762" class="Bound">B</a> <a id="28787" class="Symbol">→</a> <a id="28789" href="ualib.html#28756" class="Bound">𝓤</a> <a id="28791" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="28793" href="ualib.html#28766" class="Bound">𝓦</a> <a id="28795" href="Universes.html#403" class="Function Operator">̇</a>
+  <a id="28799" class="Keyword">where</a>
+  <a id="Image_∋_.im"></a><a id="28807" href="ualib.html#28807" class="InductiveConstructor">im</a> <a id="28810" class="Symbol">:</a> <a id="28812" class="Symbol">(</a><a id="28813" href="ualib.html#28813" class="Bound">x</a> <a id="28815" class="Symbol">:</a> <a id="28817" href="ualib.html#28752" class="Bound">A</a><a id="28818" class="Symbol">)</a> <a id="28820" class="Symbol">→</a> <a id="28822" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="28828" href="ualib.html#28772" class="Bound">f</a> <a id="28830" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="28832" href="ualib.html#28772" class="Bound">f</a> <a id="28834" href="ualib.html#28813" class="Bound">x</a>
+  <a id="Image_∋_.eq"></a><a id="28838" href="ualib.html#28838" class="InductiveConstructor">eq</a> <a id="28841" class="Symbol">:</a> <a id="28843" class="Symbol">(</a><a id="28844" href="ualib.html#28844" class="Bound">b</a> <a id="28846" class="Symbol">:</a> <a id="28848" href="ualib.html#28762" class="Bound">B</a><a id="28849" class="Symbol">)</a> <a id="28851" class="Symbol">→</a> <a id="28853" class="Symbol">(</a><a id="28854" href="ualib.html#28854" class="Bound">a</a> <a id="28856" class="Symbol">:</a> <a id="28858" href="ualib.html#28752" class="Bound">A</a><a id="28859" class="Symbol">)</a> <a id="28861" class="Symbol">→</a> <a id="28863" href="ualib.html#28844" class="Bound">b</a> <a id="28865" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28867" href="ualib.html#28772" class="Bound">f</a> <a id="28869" href="ualib.html#28854" class="Bound">a</a> <a id="28871" class="Symbol">→</a> <a id="28873" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="28879" href="ualib.html#28772" class="Bound">f</a> <a id="28881" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="28883" href="ualib.html#28844" class="Bound">b</a>
+
+<a id="ImageIsImage"></a><a id="28886" href="ualib.html#28886" class="Function">ImageIsImage</a> <a id="28899" class="Symbol">:</a> <a id="28901" class="Symbol">{</a><a id="28902" href="ualib.html#28902" class="Bound">A</a> <a id="28904" class="Symbol">:</a> <a id="28906" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="28908" href="Universes.html#403" class="Function Operator">̇</a> <a id="28910" class="Symbol">}{</a><a id="28912" href="ualib.html#28912" class="Bound">B</a> <a id="28914" class="Symbol">:</a> <a id="28916" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="28918" href="Universes.html#403" class="Function Operator">̇</a> <a id="28920" class="Symbol">}</a>
+               <a id="28937" class="Symbol">(</a><a id="28938" href="ualib.html#28938" class="Bound">f</a> <a id="28940" class="Symbol">:</a> <a id="28942" href="ualib.html#28902" class="Bound">A</a> <a id="28944" class="Symbol">→</a> <a id="28946" href="ualib.html#28912" class="Bound">B</a><a id="28947" class="Symbol">)</a> <a id="28949" class="Symbol">(</a><a id="28950" href="ualib.html#28950" class="Bound">b</a> <a id="28952" class="Symbol">:</a> <a id="28954" href="ualib.html#28912" class="Bound">B</a><a id="28955" class="Symbol">)</a> <a id="28957" class="Symbol">(</a><a id="28958" href="ualib.html#28958" class="Bound">a</a> <a id="28960" class="Symbol">:</a> <a id="28962" href="ualib.html#28902" class="Bound">A</a><a id="28963" class="Symbol">)</a>
+ <a id="28966" class="Symbol">→</a>              <a id="28981" href="ualib.html#28950" class="Bound">b</a> <a id="28983" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="28985" href="ualib.html#28938" class="Bound">f</a> <a id="28987" href="ualib.html#28958" class="Bound">a</a>
+              <a id="29003" class="Comment">----------------------------</a>
+ <a id="29033" class="Symbol">→</a>              <a id="29048" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="29054" href="ualib.html#28938" class="Bound">f</a> <a id="29056" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="29058" href="ualib.html#28950" class="Bound">b</a>
+<a id="29060" href="ualib.html#28886" class="Function">ImageIsImage</a> <a id="29073" class="Symbol">{</a><a id="29074" class="Argument">A</a> <a id="29076" class="Symbol">=</a> <a id="29078" href="ualib.html#29078" class="Bound">A</a><a id="29079" class="Symbol">}{</a><a id="29081" class="Argument">B</a> <a id="29083" class="Symbol">=</a> <a id="29085" href="ualib.html#29085" class="Bound">B</a><a id="29086" class="Symbol">}</a> <a id="29088" href="ualib.html#29088" class="Bound">f</a> <a id="29090" href="ualib.html#29090" class="Bound">b</a> <a id="29092" href="ualib.html#29092" class="Bound">a</a> <a id="29094" href="ualib.html#29094" class="Bound">b≡fa</a> <a id="29099" class="Symbol">=</a> <a id="29101" href="ualib.html#28838" class="InductiveConstructor">eq</a> <a id="29104" href="ualib.html#29090" class="Bound">b</a> <a id="29106" href="ualib.html#29092" class="Bound">a</a> <a id="29108" href="ualib.html#29094" class="Bound">b≡fa</a>
+</pre>
+
+<p>N.B. the assertion <code class="language-plaintext highlighter-rouge">Image f ∋ y</code> must come with a proof, which is of the
+form <code class="language-plaintext highlighter-rouge">∃a f a = y</code>, so we have a witness. Thus, the inverse can be
+“computed” in the following way:</p>
+
+<pre class="Agda">
+<a id="Inv"></a><a id="29311" href="ualib.html#29311" class="Function">Inv</a> <a id="29315" class="Symbol">:</a> <a id="29317" class="Symbol">{</a><a id="29318" href="ualib.html#29318" class="Bound">A</a> <a id="29320" class="Symbol">:</a> <a id="29322" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="29324" href="Universes.html#403" class="Function Operator">̇</a> <a id="29326" class="Symbol">}{</a><a id="29328" href="ualib.html#29328" class="Bound">B</a> <a id="29330" class="Symbol">:</a> <a id="29332" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="29334" href="Universes.html#403" class="Function Operator">̇</a> <a id="29336" class="Symbol">}(</a><a id="29338" href="ualib.html#29338" class="Bound">f</a> <a id="29340" class="Symbol">:</a> <a id="29342" href="ualib.html#29318" class="Bound">A</a> <a id="29344" class="Symbol">→</a> <a id="29346" href="ualib.html#29328" class="Bound">B</a><a id="29347" class="Symbol">)(</a><a id="29349" href="ualib.html#29349" class="Bound">b</a> <a id="29351" class="Symbol">:</a> <a id="29353" href="ualib.html#29328" class="Bound">B</a><a id="29354" class="Symbol">)</a> <a id="29356" class="Symbol">→</a> <a id="29358" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="29364" href="ualib.html#29338" class="Bound">f</a> <a id="29366" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="29368" href="ualib.html#29349" class="Bound">b</a>  <a id="29371" class="Symbol">→</a>  <a id="29374" href="ualib.html#29318" class="Bound">A</a>
+<a id="29376" href="ualib.html#29311" class="Function">Inv</a> <a id="29380" href="ualib.html#29380" class="Bound">f</a> <a id="29382" class="DottedPattern Symbol">.(</a><a id="29384" href="ualib.html#29380" class="DottedPattern Bound">f</a> <a id="29386" href="ualib.html#29393" class="DottedPattern Bound">a</a><a id="29387" class="DottedPattern Symbol">)</a> <a id="29389" class="Symbol">(</a><a id="29390" href="ualib.html#28807" class="InductiveConstructor">im</a> <a id="29393" href="ualib.html#29393" class="Bound">a</a><a id="29394" class="Symbol">)</a> <a id="29396" class="Symbol">=</a> <a id="29398" href="ualib.html#29393" class="Bound">a</a>
+<a id="29400" href="ualib.html#29311" class="Function">Inv</a> <a id="29404" href="ualib.html#29404" class="Bound">f</a> <a id="29406" href="ualib.html#29406" class="Bound">b</a> <a id="29408" class="Symbol">(</a><a id="29409" href="ualib.html#28838" class="InductiveConstructor">eq</a> <a id="29412" href="ualib.html#29406" class="Bound">b</a> <a id="29414" href="ualib.html#29414" class="Bound">a</a> <a id="29416" href="ualib.html#29416" class="Bound">b≡fa</a><a id="29420" class="Symbol">)</a> <a id="29422" class="Symbol">=</a> <a id="29424" href="ualib.html#29414" class="Bound">a</a>
+</pre>
+
+<p>The special case for Set (i.e., <code class="language-plaintext highlighter-rouge">𝓤₀ ̇</code>) is</p>
+
+<pre class="Agda">
+<a id="inv"></a><a id="29495" href="ualib.html#29495" class="Function">inv</a> <a id="29499" class="Symbol">:</a> <a id="29501" class="Symbol">{</a><a id="29502" href="ualib.html#29502" class="Bound">A</a> <a id="29504" href="ualib.html#29504" class="Bound">B</a> <a id="29506" class="Symbol">:</a> <a id="29508" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="29511" href="Universes.html#403" class="Function Operator">̇</a> <a id="29513" class="Symbol">}(</a><a id="29515" href="ualib.html#29515" class="Bound">f</a> <a id="29517" class="Symbol">:</a> <a id="29519" href="ualib.html#29502" class="Bound">A</a> <a id="29521" class="Symbol">→</a> <a id="29523" href="ualib.html#29504" class="Bound">B</a><a id="29524" class="Symbol">)(</a><a id="29526" href="ualib.html#29526" class="Bound">b</a> <a id="29528" class="Symbol">:</a> <a id="29530" href="ualib.html#29504" class="Bound">B</a><a id="29531" class="Symbol">)</a> <a id="29533" class="Symbol">→</a> <a id="29535" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="29541" href="ualib.html#29515" class="Bound">f</a> <a id="29543" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="29545" href="ualib.html#29526" class="Bound">b</a> <a id="29547" class="Symbol">→</a> <a id="29549" href="ualib.html#29502" class="Bound">A</a>
+<a id="29551" href="ualib.html#29495" class="Function">inv</a> <a id="29555" class="Symbol">{</a><a id="29556" href="ualib.html#29556" class="Bound">A</a><a id="29557" class="Symbol">}</a> <a id="29559" class="Symbol">{</a><a id="29560" href="ualib.html#29560" class="Bound">B</a><a id="29561" class="Symbol">}</a> <a id="29563" class="Symbol">=</a> <a id="29565" href="ualib.html#29311" class="Function">Inv</a> <a id="29569" class="Symbol">{</a><a id="29570" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="29572" class="Symbol">}{</a><a id="29574" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="29576" class="Symbol">}{</a><a id="29578" href="ualib.html#29556" class="Bound">A</a><a id="29579" class="Symbol">}{</a><a id="29581" href="ualib.html#29560" class="Bound">B</a><a id="29582" class="Symbol">}</a>
+
+<a id="InvIsInv"></a><a id="29585" href="ualib.html#29585" class="Function">InvIsInv</a> <a id="29594" class="Symbol">:</a> <a id="29596" class="Symbol">{</a><a id="29597" href="ualib.html#29597" class="Bound">A</a> <a id="29599" class="Symbol">:</a> <a id="29601" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="29603" href="Universes.html#403" class="Function Operator">̇</a> <a id="29605" class="Symbol">}</a> <a id="29607" class="Symbol">{</a><a id="29608" href="ualib.html#29608" class="Bound">B</a> <a id="29610" class="Symbol">:</a> <a id="29612" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="29614" href="Universes.html#403" class="Function Operator">̇</a> <a id="29616" class="Symbol">}</a> <a id="29618" class="Symbol">(</a><a id="29619" href="ualib.html#29619" class="Bound">f</a> <a id="29621" class="Symbol">:</a> <a id="29623" href="ualib.html#29597" class="Bound">A</a> <a id="29625" class="Symbol">→</a> <a id="29627" href="ualib.html#29608" class="Bound">B</a><a id="29628" class="Symbol">)</a>
+           <a id="29641" class="Symbol">(</a><a id="29642" href="ualib.html#29642" class="Bound">b</a> <a id="29644" class="Symbol">:</a> <a id="29646" href="ualib.html#29608" class="Bound">B</a><a id="29647" class="Symbol">)</a> <a id="29649" class="Symbol">(</a><a id="29650" href="ualib.html#29650" class="Bound">b∈Imgf</a> <a id="29657" class="Symbol">:</a> <a id="29659" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="29665" href="ualib.html#29619" class="Bound">f</a> <a id="29667" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="29669" href="ualib.html#29642" class="Bound">b</a><a id="29670" class="Symbol">)</a>
+          <a id="29682" class="Comment">---------------------------------</a>
+ <a id="29717" class="Symbol">→</a>         <a id="29727" href="ualib.html#29619" class="Bound">f</a> <a id="29729" class="Symbol">(</a><a id="29730" href="ualib.html#29311" class="Function">Inv</a> <a id="29734" href="ualib.html#29619" class="Bound">f</a> <a id="29736" href="ualib.html#29642" class="Bound">b</a> <a id="29738" href="ualib.html#29650" class="Bound">b∈Imgf</a><a id="29744" class="Symbol">)</a> <a id="29746" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="29748" href="ualib.html#29642" class="Bound">b</a>
+<a id="29750" href="ualib.html#29585" class="Function">InvIsInv</a> <a id="29759" href="ualib.html#29759" class="Bound">f</a> <a id="29761" class="DottedPattern Symbol">.(</a><a id="29763" href="ualib.html#29759" class="DottedPattern Bound">f</a> <a id="29765" href="ualib.html#29772" class="DottedPattern Bound">a</a><a id="29766" class="DottedPattern Symbol">)</a> <a id="29768" class="Symbol">(</a><a id="29769" href="ualib.html#28807" class="InductiveConstructor">im</a> <a id="29772" href="ualib.html#29772" class="Bound">a</a><a id="29773" class="Symbol">)</a> <a id="29775" class="Symbol">=</a> <a id="29777" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="29782" class="Symbol">_</a>
+<a id="29784" href="ualib.html#29585" class="Function">InvIsInv</a> <a id="29793" href="ualib.html#29793" class="Bound">f</a> <a id="29795" href="ualib.html#29795" class="Bound">b</a> <a id="29797" class="Symbol">(</a><a id="29798" href="ualib.html#28838" class="InductiveConstructor">eq</a> <a id="29801" href="ualib.html#29795" class="Bound">b</a> <a id="29803" href="ualib.html#29803" class="Bound">a</a> <a id="29805" href="ualib.html#29805" class="Bound">b≡fa</a><a id="29809" class="Symbol">)</a> <a id="29811" class="Symbol">=</a> <a id="29813" href="ualib.html#29805" class="Bound">b≡fa</a> <a id="29818" href="MGS-MLTT.html#6125" class="Function Operator">⁻¹</a>
+</pre>
+
+<p>An epic (or surjective) function from 𝓤 ̇ to 𝓦 ̇ (and the special case for <code class="language-plaintext highlighter-rouge">𝓤₀ ̇</code>) is defined as follows.</p>
+
+<pre class="Agda">
+<a id="Epic"></a><a id="29953" href="ualib.html#29953" class="Function">Epic</a> <a id="29958" class="Symbol">:</a> <a id="29960" class="Symbol">{</a><a id="29961" href="ualib.html#29961" class="Bound">A</a> <a id="29963" class="Symbol">:</a> <a id="29965" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="29967" href="Universes.html#403" class="Function Operator">̇</a> <a id="29969" class="Symbol">}</a> <a id="29971" class="Symbol">{</a><a id="29972" href="ualib.html#29972" class="Bound">B</a> <a id="29974" class="Symbol">:</a> <a id="29976" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="29978" href="Universes.html#403" class="Function Operator">̇</a> <a id="29980" class="Symbol">}</a> <a id="29982" class="Symbol">(</a><a id="29983" href="ualib.html#29983" class="Bound">g</a> <a id="29985" class="Symbol">:</a> <a id="29987" href="ualib.html#29961" class="Bound">A</a> <a id="29989" class="Symbol">→</a> <a id="29991" href="ualib.html#29972" class="Bound">B</a><a id="29992" class="Symbol">)</a> <a id="29994" class="Symbol">→</a>  <a id="29997" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="29999" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="30001" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30003" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="30005" href="ualib.html#29953" class="Function">Epic</a> <a id="30010" href="ualib.html#30010" class="Bound">g</a> <a id="30012" class="Symbol">=</a> <a id="30014" class="Symbol">∀</a> <a id="30016" href="ualib.html#30016" class="Bound">y</a> <a id="30018" class="Symbol">→</a> <a id="30020" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="30026" href="ualib.html#30010" class="Bound">g</a> <a id="30028" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="30030" href="ualib.html#30016" class="Bound">y</a>
+
+<a id="epic"></a><a id="30033" href="ualib.html#30033" class="Function">epic</a> <a id="30038" class="Symbol">:</a> <a id="30040" class="Symbol">{</a><a id="30041" href="ualib.html#30041" class="Bound">A</a> <a id="30043" href="ualib.html#30043" class="Bound">B</a> <a id="30045" class="Symbol">:</a> <a id="30047" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="30050" href="Universes.html#403" class="Function Operator">̇</a> <a id="30052" class="Symbol">}</a> <a id="30054" class="Symbol">(</a><a id="30055" href="ualib.html#30055" class="Bound">g</a> <a id="30057" class="Symbol">:</a> <a id="30059" href="ualib.html#30041" class="Bound">A</a> <a id="30061" class="Symbol">→</a> <a id="30063" href="ualib.html#30043" class="Bound">B</a><a id="30064" class="Symbol">)</a> <a id="30066" class="Symbol">→</a> <a id="30068" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="30071" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="30073" href="ualib.html#30033" class="Function">epic</a> <a id="30078" class="Symbol">=</a> <a id="30080" href="ualib.html#29953" class="Function">Epic</a> <a id="30085" class="Symbol">{</a><a id="30086" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="30088" class="Symbol">}</a> <a id="30090" class="Symbol">{</a><a id="30091" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="30093" class="Symbol">}</a>
+</pre>
+
+<p>The (pseudo-)inverse of an epic function is</p>
+
+<pre class="Agda">
+<a id="EpicInv"></a><a id="30165" href="ualib.html#30165" class="Function">EpicInv</a> <a id="30173" class="Symbol">:</a> <a id="30175" class="Symbol">{</a><a id="30176" href="ualib.html#30176" class="Bound">A</a> <a id="30178" class="Symbol">:</a> <a id="30180" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="30182" href="Universes.html#403" class="Function Operator">̇</a> <a id="30184" class="Symbol">}</a> <a id="30186" class="Symbol">{</a><a id="30187" href="ualib.html#30187" class="Bound">B</a> <a id="30189" class="Symbol">:</a> <a id="30191" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30193" href="Universes.html#403" class="Function Operator">̇</a> <a id="30195" class="Symbol">}</a> <a id="30197" class="Symbol">(</a><a id="30198" href="ualib.html#30198" class="Bound">f</a> <a id="30200" class="Symbol">:</a> <a id="30202" href="ualib.html#30176" class="Bound">A</a> <a id="30204" class="Symbol">→</a> <a id="30206" href="ualib.html#30187" class="Bound">B</a><a id="30207" class="Symbol">)</a> <a id="30209" class="Symbol">→</a> <a id="30211" href="ualib.html#29953" class="Function">Epic</a> <a id="30216" href="ualib.html#30198" class="Bound">f</a> <a id="30218" class="Symbol">→</a> <a id="30220" href="ualib.html#30187" class="Bound">B</a> <a id="30222" class="Symbol">→</a> <a id="30224" href="ualib.html#30176" class="Bound">A</a>
+<a id="30226" href="ualib.html#30165" class="Function">EpicInv</a> <a id="30234" href="ualib.html#30234" class="Bound">f</a> <a id="30236" href="ualib.html#30236" class="Bound">fEpic</a> <a id="30242" href="ualib.html#30242" class="Bound">b</a> <a id="30244" class="Symbol">=</a> <a id="30246" href="ualib.html#29311" class="Function">Inv</a> <a id="30250" href="ualib.html#30234" class="Bound">f</a> <a id="30252" href="ualib.html#30242" class="Bound">b</a> <a id="30254" class="Symbol">(</a><a id="30255" href="ualib.html#30236" class="Bound">fEpic</a> <a id="30261" href="ualib.html#30242" class="Bound">b</a><a id="30262" class="Symbol">)</a>
+
+<a id="30265" class="Comment">-- The (psudo-)inverse of an epic is the right inverse.</a>
+<a id="EInvIsRInv"></a><a id="30321" href="ualib.html#30321" class="Function">EInvIsRInv</a> <a id="30332" class="Symbol">:</a> <a id="30334" href="MGS-FunExt-from-Univalence.html#393" class="Function">funext</a> <a id="30341" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30343" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30345" class="Symbol">→</a> <a id="30347" class="Symbol">{</a><a id="30348" href="ualib.html#30348" class="Bound">A</a> <a id="30350" class="Symbol">:</a> <a id="30352" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="30354" href="Universes.html#403" class="Function Operator">̇</a> <a id="30356" class="Symbol">}</a> <a id="30358" class="Symbol">{</a><a id="30359" href="ualib.html#30359" class="Bound">B</a> <a id="30361" class="Symbol">:</a> <a id="30363" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30365" href="Universes.html#403" class="Function Operator">̇</a> <a id="30367" class="Symbol">}</a>
+             <a id="30382" class="Symbol">(</a><a id="30383" href="ualib.html#30383" class="Bound">f</a> <a id="30385" class="Symbol">:</a> <a id="30387" href="ualib.html#30348" class="Bound">A</a> <a id="30389" class="Symbol">→</a> <a id="30391" href="ualib.html#30359" class="Bound">B</a><a id="30392" class="Symbol">)</a>  <a id="30395" class="Symbol">(</a><a id="30396" href="ualib.html#30396" class="Bound">fEpic</a> <a id="30402" class="Symbol">:</a> <a id="30404" href="ualib.html#29953" class="Function">Epic</a> <a id="30409" href="ualib.html#30383" class="Bound">f</a><a id="30410" class="Symbol">)</a>
+            <a id="30424" class="Comment">---------------------------------</a>
+ <a id="30459" class="Symbol">→</a>           <a id="30471" href="ualib.html#30383" class="Bound">f</a> <a id="30473" href="MGS-MLTT.html#3813" class="Function Operator">∘</a> <a id="30475" class="Symbol">(</a><a id="30476" href="ualib.html#30165" class="Function">EpicInv</a> <a id="30484" href="ualib.html#30383" class="Bound">f</a> <a id="30486" href="ualib.html#30396" class="Bound">fEpic</a><a id="30491" class="Symbol">)</a> <a id="30493" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="30495" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a> <a id="30498" href="ualib.html#30359" class="Bound">B</a>
+<a id="30500" href="ualib.html#30321" class="Function">EInvIsRInv</a> <a id="30511" href="ualib.html#30511" class="Bound">fe</a> <a id="30514" href="ualib.html#30514" class="Bound">f</a> <a id="30516" href="ualib.html#30516" class="Bound">fEpic</a> <a id="30522" class="Symbol">=</a> <a id="30524" href="ualib.html#30511" class="Bound">fe</a> <a id="30527" class="Symbol">(λ</a> <a id="30530" href="ualib.html#30530" class="Bound">x</a> <a id="30532" class="Symbol">→</a> <a id="30534" href="ualib.html#29585" class="Function">InvIsInv</a> <a id="30543" href="ualib.html#30514" class="Bound">f</a> <a id="30545" href="ualib.html#30530" class="Bound">x</a> <a id="30547" class="Symbol">(</a><a id="30548" href="ualib.html#30516" class="Bound">fEpic</a> <a id="30554" href="ualib.html#30530" class="Bound">x</a><a id="30555" class="Symbol">))</a>
+</pre>
+
+<p>Monics (or injective) functions are defined this way.</p>
+
+<pre class="Agda">
+<a id="monic"></a><a id="30638" href="ualib.html#30638" class="Function">monic</a> <a id="30644" class="Symbol">:</a> <a id="30646" class="Symbol">{</a><a id="30647" href="ualib.html#30647" class="Bound">A</a> <a id="30649" class="Symbol">:</a> <a id="30651" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="30653" href="Universes.html#403" class="Function Operator">̇</a> <a id="30655" class="Symbol">}</a> <a id="30657" class="Symbol">{</a><a id="30658" href="ualib.html#30658" class="Bound">B</a> <a id="30660" class="Symbol">:</a> <a id="30662" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30664" href="Universes.html#403" class="Function Operator">̇</a> <a id="30666" class="Symbol">}</a> <a id="30668" class="Symbol">(</a><a id="30669" href="ualib.html#30669" class="Bound">g</a> <a id="30671" class="Symbol">:</a> <a id="30673" href="ualib.html#30647" class="Bound">A</a> <a id="30675" class="Symbol">→</a> <a id="30677" href="ualib.html#30658" class="Bound">B</a><a id="30678" class="Symbol">)</a> <a id="30680" class="Symbol">→</a> <a id="30682" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="30684" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="30686" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30688" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="30690" href="ualib.html#30638" class="Function">monic</a> <a id="30696" href="ualib.html#30696" class="Bound">g</a> <a id="30698" class="Symbol">=</a> <a id="30700" class="Symbol">∀</a> <a id="30702" href="ualib.html#30702" class="Bound">a₁</a> <a id="30705" href="ualib.html#30705" class="Bound">a₂</a> <a id="30708" class="Symbol">→</a> <a id="30710" href="ualib.html#30696" class="Bound">g</a> <a id="30712" href="ualib.html#30702" class="Bound">a₁</a> <a id="30715" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="30717" href="ualib.html#30696" class="Bound">g</a> <a id="30719" href="ualib.html#30705" class="Bound">a₂</a> <a id="30722" class="Symbol">→</a> <a id="30724" href="ualib.html#30702" class="Bound">a₁</a> <a id="30727" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="30729" href="ualib.html#30705" class="Bound">a₂</a>
+<a id="monic₀"></a><a id="30732" href="ualib.html#30732" class="Function">monic₀</a> <a id="30739" class="Symbol">:</a> <a id="30741" class="Symbol">{</a><a id="30742" href="ualib.html#30742" class="Bound">A</a> <a id="30744" href="ualib.html#30744" class="Bound">B</a> <a id="30746" class="Symbol">:</a> <a id="30748" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="30751" href="Universes.html#403" class="Function Operator">̇</a> <a id="30753" class="Symbol">}</a> <a id="30755" class="Symbol">(</a><a id="30756" href="ualib.html#30756" class="Bound">g</a> <a id="30758" class="Symbol">:</a> <a id="30760" href="ualib.html#30742" class="Bound">A</a> <a id="30762" class="Symbol">→</a> <a id="30764" href="ualib.html#30744" class="Bound">B</a><a id="30765" class="Symbol">)</a> <a id="30767" class="Symbol">→</a> <a id="30769" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="30772" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="30774" href="ualib.html#30732" class="Function">monic₀</a> <a id="30781" class="Symbol">=</a> <a id="30783" href="ualib.html#30638" class="Function">monic</a> <a id="30789" class="Symbol">{</a><a id="30790" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="30792" class="Symbol">}{</a><a id="30794" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a><a id="30796" class="Symbol">}</a>
+
+<a id="30799" class="Comment">--The (pseudo-)inverse of a monic function</a>
+<a id="monic-inv"></a><a id="30842" href="ualib.html#30842" class="Function">monic-inv</a> <a id="30852" class="Symbol">:</a> <a id="30854" class="Symbol">{</a><a id="30855" href="ualib.html#30855" class="Bound">A</a> <a id="30857" class="Symbol">:</a> <a id="30859" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="30861" href="Universes.html#403" class="Function Operator">̇</a> <a id="30863" class="Symbol">}</a> <a id="30865" class="Symbol">{</a><a id="30866" href="ualib.html#30866" class="Bound">B</a> <a id="30868" class="Symbol">:</a> <a id="30870" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="30872" href="Universes.html#403" class="Function Operator">̇</a> <a id="30874" class="Symbol">}</a> <a id="30876" class="Symbol">(</a><a id="30877" href="ualib.html#30877" class="Bound">f</a> <a id="30879" class="Symbol">:</a> <a id="30881" href="ualib.html#30855" class="Bound">A</a> <a id="30883" class="Symbol">→</a> <a id="30885" href="ualib.html#30866" class="Bound">B</a><a id="30886" class="Symbol">)</a> <a id="30888" class="Symbol">→</a> <a id="30890" href="ualib.html#30638" class="Function">monic</a> <a id="30896" href="ualib.html#30877" class="Bound">f</a>
+ <a id="30899" class="Symbol">→</a>           <a id="30911" class="Symbol">(</a><a id="30912" href="ualib.html#30912" class="Bound">b</a> <a id="30914" class="Symbol">:</a> <a id="30916" href="ualib.html#30866" class="Bound">B</a><a id="30917" class="Symbol">)</a> <a id="30919" class="Symbol">→</a> <a id="30921" href="ualib.html#28742" class="Datatype Operator">Image</a> <a id="30927" href="ualib.html#30877" class="Bound">f</a> <a id="30929" href="ualib.html#28742" class="Datatype Operator">∋</a> <a id="30931" href="ualib.html#30912" class="Bound">b</a> <a id="30933" class="Symbol">→</a> <a id="30935" href="ualib.html#30855" class="Bound">A</a>
+<a id="30937" href="ualib.html#30842" class="Function">monic-inv</a> <a id="30947" href="ualib.html#30947" class="Bound">f</a> <a id="30949" href="ualib.html#30949" class="Bound">fmonic</a>  <a id="30957" class="Symbol">=</a> <a id="30959" class="Symbol">λ</a> <a id="30961" href="ualib.html#30961" class="Bound">b</a> <a id="30963" href="ualib.html#30963" class="Bound">Imf∋b</a> <a id="30969" class="Symbol">→</a> <a id="30971" href="ualib.html#29311" class="Function">Inv</a> <a id="30975" href="ualib.html#30947" class="Bound">f</a> <a id="30977" href="ualib.html#30961" class="Bound">b</a> <a id="30979" href="ualib.html#30963" class="Bound">Imf∋b</a>
+
+<a id="30986" class="Comment">--The (psudo-)inverse of a monic is the left inverse.</a>
+<a id="monic-inv-is-linv"></a><a id="31040" href="ualib.html#31040" class="Function">monic-inv-is-linv</a> <a id="31058" class="Symbol">:</a> <a id="31060" class="Symbol">{</a><a id="31061" href="ualib.html#31061" class="Bound">A</a> <a id="31063" class="Symbol">:</a> <a id="31065" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="31067" href="Universes.html#403" class="Function Operator">̇</a> <a id="31069" class="Symbol">}{</a><a id="31071" href="ualib.html#31071" class="Bound">B</a> <a id="31073" class="Symbol">:</a> <a id="31075" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="31077" href="Universes.html#403" class="Function Operator">̇</a> <a id="31079" class="Symbol">}</a>
+                    <a id="31101" class="Symbol">(</a><a id="31102" href="ualib.html#31102" class="Bound">f</a> <a id="31104" class="Symbol">:</a> <a id="31106" href="ualib.html#31061" class="Bound">A</a> <a id="31108" class="Symbol">→</a> <a id="31110" href="ualib.html#31071" class="Bound">B</a><a id="31111" class="Symbol">)</a> <a id="31113" class="Symbol">(</a><a id="31114" href="ualib.html#31114" class="Bound">fmonic</a> <a id="31121" class="Symbol">:</a> <a id="31123" href="ualib.html#30638" class="Function">monic</a> <a id="31129" href="ualib.html#31102" class="Bound">f</a><a id="31130" class="Symbol">)(</a><a id="31132" href="ualib.html#31132" class="Bound">x</a> <a id="31134" class="Symbol">:</a> <a id="31136" href="ualib.html#31061" class="Bound">A</a><a id="31137" class="Symbol">)</a>
+                   <a id="31158" class="Comment">----------------------------------------</a>
+  <a id="31201" class="Symbol">→</a>                 <a id="31219" class="Symbol">(</a><a id="31220" href="ualib.html#30842" class="Function">monic-inv</a> <a id="31230" href="ualib.html#31102" class="Bound">f</a> <a id="31232" href="ualib.html#31114" class="Bound">fmonic</a><a id="31238" class="Symbol">)</a> <a id="31240" class="Symbol">(</a><a id="31241" href="ualib.html#31102" class="Bound">f</a> <a id="31243" href="ualib.html#31132" class="Bound">x</a><a id="31244" class="Symbol">)</a> <a id="31246" class="Symbol">(</a><a id="31247" href="ualib.html#28807" class="InductiveConstructor">im</a> <a id="31250" href="ualib.html#31132" class="Bound">x</a><a id="31251" class="Symbol">)</a> <a id="31253" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="31255" href="ualib.html#31132" class="Bound">x</a>
+<a id="31257" href="ualib.html#31040" class="Function">monic-inv-is-linv</a> <a id="31275" href="ualib.html#31275" class="Bound">f</a> <a id="31277" href="ualib.html#31277" class="Bound">fmonic</a> <a id="31284" href="ualib.html#31284" class="Bound">x</a> <a id="31286" class="Symbol">=</a> <a id="31288" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="31293" class="Symbol">_</a>
+</pre>
+
+<p>Finally, we define bijective functions as follows.</p>
+
+<pre class="Agda">
+<a id="bijective"></a><a id="31372" href="ualib.html#31372" class="Function">bijective</a> <a id="31382" class="Symbol">:</a> <a id="31384" class="Symbol">{</a><a id="31385" href="ualib.html#31385" class="Bound">A</a> <a id="31387" href="ualib.html#31387" class="Bound">B</a> <a id="31389" class="Symbol">:</a> <a id="31391" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="31394" href="Universes.html#403" class="Function Operator">̇</a> <a id="31396" class="Symbol">}(</a><a id="31398" href="ualib.html#31398" class="Bound">g</a> <a id="31400" class="Symbol">:</a> <a id="31402" href="ualib.html#31385" class="Bound">A</a> <a id="31404" class="Symbol">→</a> <a id="31406" href="ualib.html#31387" class="Bound">B</a><a id="31407" class="Symbol">)</a> <a id="31409" class="Symbol">→</a> <a id="31411" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a> <a id="31414" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="31416" href="ualib.html#31372" class="Function">bijective</a> <a id="31426" href="ualib.html#31426" class="Bound">g</a> <a id="31428" class="Symbol">=</a> <a id="31430" href="ualib.html#30033" class="Function">epic</a> <a id="31435" href="ualib.html#31426" class="Bound">g</a> <a id="31437" href="MGS-MLTT.html#3515" class="Function Operator">×</a> <a id="31439" href="ualib.html#30638" class="Function">monic</a> <a id="31445" href="ualib.html#31426" class="Bound">g</a>
+
+<a id="Bijective"></a><a id="31448" href="ualib.html#31448" class="Function">Bijective</a> <a id="31458" class="Symbol">:</a> <a id="31460" class="Symbol">{</a><a id="31461" href="ualib.html#31461" class="Bound">A</a> <a id="31463" class="Symbol">:</a> <a id="31465" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="31467" href="Universes.html#403" class="Function Operator">̇</a> <a id="31469" class="Symbol">}{</a><a id="31471" href="ualib.html#31471" class="Bound">B</a> <a id="31473" class="Symbol">:</a> <a id="31475" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="31477" href="Universes.html#403" class="Function Operator">̇</a> <a id="31479" class="Symbol">}(</a><a id="31481" href="ualib.html#31481" class="Bound">g</a> <a id="31483" class="Symbol">:</a> <a id="31485" href="ualib.html#31461" class="Bound">A</a> <a id="31487" class="Symbol">→</a> <a id="31489" href="ualib.html#31471" class="Bound">B</a><a id="31490" class="Symbol">)</a> <a id="31492" class="Symbol">→</a> <a id="31494" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="31496" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="31498" href="Universes.html#264" class="Generalizable">𝓦</a> <a id="31500" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="31502" href="ualib.html#31448" class="Function">Bijective</a> <a id="31512" href="ualib.html#31512" class="Bound">g</a> <a id="31514" class="Symbol">=</a> <a id="31516" href="ualib.html#29953" class="Function">Epic</a> <a id="31521" href="ualib.html#31512" class="Bound">g</a> <a id="31523" href="MGS-MLTT.html#3515" class="Function Operator">×</a> <a id="31525" href="ualib.html#30638" class="Function">monic</a> <a id="31531" href="ualib.html#31512" class="Bound">g</a>
+</pre>
+
+<hr />
+
+<h3 id="more-extensionality">More extensionality</h3>
+
+<p>Here we collect miscellaneous definitions and proofs related to
+extensionality that will come in handy later.</p>
+
+<pre class="Agda">
+<a id="31768" class="Comment">--Ordinary function extensionality</a>
+<a id="extensionality"></a><a id="31803" href="ualib.html#31803" class="Function">extensionality</a> <a id="31818" class="Symbol">:</a> <a id="31820" class="Symbol">∀</a> <a id="31822" href="ualib.html#31822" class="Bound">𝓤</a> <a id="31824" href="ualib.html#31824" class="Bound">𝓦</a>  <a id="31827" class="Symbol">→</a> <a id="31829" href="ualib.html#31822" class="Bound">𝓤</a> <a id="31831" href="Agda.Primitive.html#606" class="Primitive Operator">⁺</a> <a id="31833" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="31835" href="ualib.html#31824" class="Bound">𝓦</a> <a id="31837" href="Agda.Primitive.html#606" class="Primitive Operator">⁺</a> <a id="31839" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="31841" href="ualib.html#31803" class="Function">extensionality</a> <a id="31856" href="ualib.html#31856" class="Bound">𝓤</a> <a id="31858" href="ualib.html#31858" class="Bound">𝓦</a> <a id="31860" class="Symbol">=</a> <a id="31862" class="Symbol">{</a><a id="31863" href="ualib.html#31863" class="Bound">A</a> <a id="31865" class="Symbol">:</a> <a id="31867" href="ualib.html#31856" class="Bound">𝓤</a> <a id="31869" href="Universes.html#403" class="Function Operator">̇</a> <a id="31871" class="Symbol">}</a> <a id="31873" class="Symbol">{</a><a id="31874" href="ualib.html#31874" class="Bound">B</a> <a id="31876" class="Symbol">:</a> <a id="31878" href="ualib.html#31858" class="Bound">𝓦</a> <a id="31880" href="Universes.html#403" class="Function Operator">̇</a> <a id="31882" class="Symbol">}</a> <a id="31884" class="Symbol">{</a><a id="31885" href="ualib.html#31885" class="Bound">f</a> <a id="31887" href="ualib.html#31887" class="Bound">g</a> <a id="31889" class="Symbol">:</a> <a id="31891" href="ualib.html#31863" class="Bound">A</a> <a id="31893" class="Symbol">→</a> <a id="31895" href="ualib.html#31874" class="Bound">B</a><a id="31896" class="Symbol">}</a>
+ <a id="31899" class="Symbol">→</a>                <a id="31916" href="ualib.html#31885" class="Bound">f</a> <a id="31918" href="MGS-MLTT.html#6747" class="Function Operator">∼</a> <a id="31920" href="ualib.html#31887" class="Bound">g</a>   <a id="31924" class="Symbol">→</a>   <a id="31928" href="ualib.html#31885" class="Bound">f</a> <a id="31930" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="31932" href="ualib.html#31887" class="Bound">g</a>
+
+<a id="31935" class="Comment">--Opposite of function extensionality</a>
+<a id="intensionality"></a><a id="31973" href="ualib.html#31973" class="Function">intensionality</a> <a id="31988" class="Symbol">:</a> <a id="31990" class="Symbol">∀</a> <a id="31992" class="Symbol">{</a><a id="31993" href="ualib.html#31993" class="Bound">𝓤</a> <a id="31995" href="ualib.html#31995" class="Bound">𝓦</a><a id="31996" class="Symbol">}</a> <a id="31998" class="Symbol">{</a><a id="31999" href="ualib.html#31999" class="Bound">A</a> <a id="32001" class="Symbol">:</a> <a id="32003" href="ualib.html#31993" class="Bound">𝓤</a> <a id="32005" href="Universes.html#403" class="Function Operator">̇</a> <a id="32007" class="Symbol">}</a> <a id="32009" class="Symbol">{</a><a id="32010" href="ualib.html#32010" class="Bound">B</a> <a id="32012" class="Symbol">:</a> <a id="32014" href="ualib.html#31995" class="Bound">𝓦</a> <a id="32016" href="Universes.html#403" class="Function Operator">̇</a> <a id="32018" class="Symbol">}</a> <a id="32020" class="Symbol">{</a><a id="32021" href="ualib.html#32021" class="Bound">f</a> <a id="32023" href="ualib.html#32023" class="Bound">g</a> <a id="32025" class="Symbol">:</a> <a id="32027" href="ualib.html#31999" class="Bound">A</a> <a id="32029" class="Symbol">→</a> <a id="32031" href="ualib.html#32010" class="Bound">B</a><a id="32032" class="Symbol">}</a>
+ <a id="32035" class="Symbol">→</a>                <a id="32052" href="ualib.html#32021" class="Bound">f</a> <a id="32054" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="32056" href="ualib.html#32023" class="Bound">g</a>  <a id="32059" class="Symbol">→</a>  <a id="32062" class="Symbol">(</a><a id="32063" href="ualib.html#32063" class="Bound">x</a> <a id="32065" class="Symbol">:</a> <a id="32067" href="ualib.html#31999" class="Bound">A</a><a id="32068" class="Symbol">)</a>
+                  <a id="32088" class="Comment">------------------</a>
+ <a id="32108" class="Symbol">→</a>                    <a id="32129" href="ualib.html#32021" class="Bound">f</a> <a id="32131" href="ualib.html#32063" class="Bound">x</a> <a id="32133" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="32135" href="ualib.html#32023" class="Bound">g</a> <a id="32137" href="ualib.html#32063" class="Bound">x</a>
+
+<a id="32140" href="ualib.html#31973" class="Function">intensionality</a>  <a id="32156" class="Symbol">(</a><a id="32157" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="32162" class="Symbol">_</a> <a id="32164" class="Symbol">)</a> <a id="32166" class="Symbol">_</a>  <a id="32169" class="Symbol">=</a> <a id="32171" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="32176" class="Symbol">_</a>
+
+<a id="32179" class="Comment">--Dependent intensionality</a>
+<a id="dep-intensionality"></a><a id="32206" href="ualib.html#32206" class="Function">dep-intensionality</a> <a id="32225" class="Symbol">:</a> <a id="32227" class="Symbol">∀</a> <a id="32229" class="Symbol">{</a><a id="32230" href="ualib.html#32230" class="Bound">𝓤</a> <a id="32232" href="ualib.html#32232" class="Bound">𝓦</a><a id="32233" class="Symbol">}{</a><a id="32235" href="ualib.html#32235" class="Bound">A</a> <a id="32237" class="Symbol">:</a> <a id="32239" href="ualib.html#32230" class="Bound">𝓤</a> <a id="32241" href="Universes.html#403" class="Function Operator">̇</a> <a id="32243" class="Symbol">}{</a><a id="32245" href="ualib.html#32245" class="Bound">B</a> <a id="32247" class="Symbol">:</a> <a id="32249" href="ualib.html#32235" class="Bound">A</a> <a id="32251" class="Symbol">→</a> <a id="32253" href="ualib.html#32232" class="Bound">𝓦</a> <a id="32255" href="Universes.html#403" class="Function Operator">̇</a> <a id="32257" class="Symbol">}</a>
+                     <a id="32280" class="Symbol">{</a><a id="32281" href="ualib.html#32281" class="Bound">f</a> <a id="32283" href="ualib.html#32283" class="Bound">g</a> <a id="32285" class="Symbol">:</a> <a id="32287" class="Symbol">∀(</a><a id="32289" href="ualib.html#32289" class="Bound">x</a> <a id="32291" class="Symbol">:</a> <a id="32293" href="ualib.html#32235" class="Bound">A</a><a id="32294" class="Symbol">)</a> <a id="32296" class="Symbol">→</a> <a id="32298" href="ualib.html#32245" class="Bound">B</a> <a id="32300" href="ualib.html#32289" class="Bound">x</a><a id="32301" class="Symbol">}</a>
+ <a id="32304" class="Symbol">→</a>                   <a id="32324" href="ualib.html#32281" class="Bound">f</a> <a id="32326" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="32328" href="ualib.html#32283" class="Bound">g</a>  <a id="32331" class="Symbol">→</a>  <a id="32334" class="Symbol">(</a><a id="32335" href="ualib.html#32335" class="Bound">x</a> <a id="32337" class="Symbol">:</a> <a id="32339" href="ualib.html#32235" class="Bound">A</a><a id="32340" class="Symbol">)</a>
+                    <a id="32362" class="Comment">------------------</a>
+ <a id="32382" class="Symbol">→</a>                    <a id="32403" href="ualib.html#32281" class="Bound">f</a> <a id="32405" href="ualib.html#32335" class="Bound">x</a> <a id="32407" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="32409" href="ualib.html#32283" class="Bound">g</a> <a id="32411" href="ualib.html#32335" class="Bound">x</a>
+
+<a id="32414" href="ualib.html#32206" class="Function">dep-intensionality</a> <a id="32433" class="Symbol">(</a><a id="32434" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="32439" class="Symbol">_</a> <a id="32441" class="Symbol">)</a> <a id="32443" class="Symbol">_</a> <a id="32445" class="Symbol">=</a> <a id="32447" href="ualib.html#19370" class="InductiveConstructor">refl</a> <a id="32452" class="Symbol">_</a>
+
+<a id="32455" class="Comment">--------------------------------------</a>
+<a id="32494" class="Comment">--Dependent function extensionality</a>
+<a id="dep-extensionality"></a><a id="32530" href="ualib.html#32530" class="Function">dep-extensionality</a> <a id="32549" class="Symbol">:</a> <a id="32551" class="Symbol">∀</a> <a id="32553" href="ualib.html#32553" class="Bound">𝓤</a> <a id="32555" href="ualib.html#32555" class="Bound">𝓦</a> <a id="32557" class="Symbol">→</a> <a id="32559" href="ualib.html#32553" class="Bound">𝓤</a> <a id="32561" href="Agda.Primitive.html#606" class="Primitive Operator">⁺</a> <a id="32563" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="32565" href="ualib.html#32555" class="Bound">𝓦</a> <a id="32567" href="Agda.Primitive.html#606" class="Primitive Operator">⁺</a> <a id="32569" href="Universes.html#403" class="Function Operator">̇</a>
+<a id="32571" href="ualib.html#32530" class="Function">dep-extensionality</a> <a id="32590" href="ualib.html#32590" class="Bound">𝓤</a> <a id="32592" href="ualib.html#32592" class="Bound">𝓦</a> <a id="32594" class="Symbol">=</a> <a id="32596" class="Symbol">{</a><a id="32597" href="ualib.html#32597" class="Bound">A</a> <a id="32599" class="Symbol">:</a> <a id="32601" href="ualib.html#32590" class="Bound">𝓤</a> <a id="32603" href="Universes.html#403" class="Function Operator">̇</a> <a id="32605" class="Symbol">}</a> <a id="32607" class="Symbol">{</a><a id="32608" href="ualib.html#32608" class="Bound">B</a> <a id="32610" class="Symbol">:</a> <a id="32612" href="ualib.html#32597" class="Bound">A</a> <a id="32614" class="Symbol">→</a> <a id="32616" href="ualib.html#32592" class="Bound">𝓦</a> <a id="32618" href="Universes.html#403" class="Function Operator">̇</a> <a id="32620" class="Symbol">}</a>
+  <a id="32624" class="Symbol">{</a><a id="32625" href="ualib.html#32625" class="Bound">f</a> <a id="32627" href="ualib.html#32627" class="Bound">g</a> <a id="32629" class="Symbol">:</a> <a id="32631" class="Symbol">∀(</a><a id="32633" href="ualib.html#32633" class="Bound">x</a> <a id="32635" class="Symbol">:</a> <a id="32637" href="ualib.html#32597" class="Bound">A</a><a id="32638" class="Symbol">)</a> <a id="32640" class="Symbol">→</a> <a id="32642" href="ualib.html#32608" class="Bound">B</a> <a id="32644" href="ualib.html#32633" class="Bound">x</a><a id="32645" class="Symbol">}</a> <a id="32647" class="Symbol">→</a>  <a id="32650" href="ualib.html#32625" class="Bound">f</a> <a id="32652" href="MGS-MLTT.html#6747" class="Function Operator">∼</a> <a id="32654" href="ualib.html#32627" class="Bound">g</a>  <a id="32657" class="Symbol">→</a>  <a id="32660" href="ualib.html#32625" class="Bound">f</a> <a id="32662" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="32664" href="ualib.html#32627" class="Bound">g</a>
+
+<a id="∀-extensionality"></a><a id="32667" href="ualib.html#32667" class="Function">∀-extensionality</a> <a id="32684" class="Symbol">:</a> <a id="32686" href="Agda.Primitive.html#787" class="Primitive">𝓤ω</a>
+<a id="32689" href="ualib.html#32667" class="Function">∀-extensionality</a> <a id="32706" class="Symbol">=</a> <a id="32708" class="Symbol">∀</a>  <a id="32711" class="Symbol">{</a><a id="32712" href="ualib.html#32712" class="Bound">𝓤</a> <a id="32714" href="ualib.html#32714" class="Bound">𝓥</a><a id="32715" class="Symbol">}</a> <a id="32717" class="Symbol">→</a> <a id="32719" href="ualib.html#31803" class="Function">extensionality</a> <a id="32734" href="ualib.html#32712" class="Bound">𝓤</a> <a id="32736" href="ualib.html#32714" class="Bound">𝓥</a>
+
+<a id="∀-dep-extensionality"></a><a id="32739" href="ualib.html#32739" class="Function">∀-dep-extensionality</a> <a id="32760" class="Symbol">:</a> <a id="32762" href="Agda.Primitive.html#787" class="Primitive">𝓤ω</a>
+<a id="32765" href="ualib.html#32739" class="Function">∀-dep-extensionality</a> <a id="32786" class="Symbol">=</a> <a id="32788" class="Symbol">∀</a> <a id="32790" class="Symbol">{</a><a id="32791" href="ualib.html#32791" class="Bound">𝓤</a> <a id="32793" href="ualib.html#32793" class="Bound">𝓥</a><a id="32794" class="Symbol">}</a> <a id="32796" class="Symbol">→</a> <a id="32798" href="ualib.html#32530" class="Function">dep-extensionality</a> <a id="32817" href="ualib.html#32791" class="Bound">𝓤</a> <a id="32819" href="ualib.html#32793" class="Bound">𝓥</a>
+
+<a id="extensionality-lemma"></a><a id="32822" href="ualib.html#32822" class="Function">extensionality-lemma</a> <a id="32843" class="Symbol">:</a> <a id="32845" class="Symbol">{</a><a id="32846" href="ualib.html#32846" class="Bound">I</a> <a id="32848" class="Symbol">:</a> <a id="32850" href="ualib.html#16659" class="Generalizable">𝓘</a> <a id="32852" href="Universes.html#403" class="Function Operator">̇</a> <a id="32854" class="Symbol">}{</a><a id="32856" href="ualib.html#32856" class="Bound">X</a> <a id="32858" class="Symbol">:</a> <a id="32860" href="Universes.html#260" class="Generalizable">𝓤</a> <a id="32862" href="Universes.html#403" class="Function Operator">̇</a> <a id="32864" class="Symbol">}{</a><a id="32866" href="ualib.html#32866" class="Bound">A</a> <a id="32868" class="Symbol">:</a> <a id="32870" href="ualib.html#32846" class="Bound">I</a> <a id="32872" class="Symbol">→</a> <a id="32874" href="Universes.html#262" class="Generalizable">𝓥</a> <a id="32876" href="Universes.html#403" class="Function Operator">̇</a> <a id="32878" class="Symbol">}</a>
+                       <a id="32903" class="Symbol">(</a><a id="32904" href="ualib.html#32904" class="Bound">p</a> <a id="32906" href="ualib.html#32906" class="Bound">q</a> <a id="32908" class="Symbol">:</a> <a id="32910" class="Symbol">(</a><a id="32911" href="ualib.html#32911" class="Bound">i</a> <a id="32913" class="Symbol">:</a> <a id="32915" href="ualib.html#32846" class="Bound">I</a><a id="32916" class="Symbol">)</a> <a id="32918" class="Symbol">→</a> <a id="32920" class="Symbol">(</a><a id="32921" href="ualib.html#32856" class="Bound">X</a> <a id="32923" class="Symbol">→</a> <a id="32925" href="ualib.html#32866" class="Bound">A</a> <a id="32927" href="ualib.html#32911" class="Bound">i</a><a id="32928" class="Symbol">)</a> <a id="32930" class="Symbol">→</a> <a id="32932" href="Universes.html#266" class="Generalizable">𝓣</a> <a id="32934" href="Universes.html#403" class="Function Operator">̇</a> <a id="32936" class="Symbol">)</a>
+                       <a id="32961" class="Symbol">(</a><a id="32962" href="ualib.html#32962" class="Bound">args</a> <a id="32967" class="Symbol">:</a> <a id="32969" href="ualib.html#32856" class="Bound">X</a> <a id="32971" class="Symbol">→</a> <a id="32973" class="Symbol">(</a><a id="32974" href="MGS-MLTT.html#3562" class="Function">Π</a> <a id="32976" href="ualib.html#32866" class="Bound">A</a><a id="32977" class="Symbol">))</a>
+ <a id="32981" class="Symbol">→</a>                     <a id="33003" href="ualib.html#32904" class="Bound">p</a> <a id="33005" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="33007" href="ualib.html#32906" class="Bound">q</a>
+   <a id="33012" class="Comment">-------------------------------------------------------------</a>
+ <a id="33075" class="Symbol">→</a> <a id="33077" class="Symbol">(λ</a> <a id="33080" href="ualib.html#33080" class="Bound">i</a> <a id="33082" class="Symbol">→</a> <a id="33084" class="Symbol">(</a><a id="33085" href="ualib.html#32904" class="Bound">p</a> <a id="33087" href="ualib.html#33080" class="Bound">i</a><a id="33088" class="Symbol">)(λ</a> <a id="33092" href="ualib.html#33092" class="Bound">x</a> <a id="33094" class="Symbol">→</a> <a id="33096" href="ualib.html#32962" class="Bound">args</a> <a id="33101" href="ualib.html#33092" class="Bound">x</a> <a id="33103" href="ualib.html#33080" class="Bound">i</a><a id="33104" class="Symbol">))</a> <a id="33107" href="ualib.html#19333" class="Datatype Operator">≡</a> <a id="33109" class="Symbol">(λ</a> <a id="33112" href="ualib.html#33112" class="Bound">i</a> <a id="33114" class="Symbol">→</a> <a id="33116" class="Symbol">(</a><a id="33117" href="ualib.html#32906" class="Bound">q</a> <a id="33119" href="ualib.html#33112" class="Bound">i</a><a id="33120" class="Symbol">)(λ</a> <a id="33124" href="ualib.html#33124" class="Bound">x</a> <a id="33126" class="Symbol">→</a> <a id="33128" href="ualib.html#32962" class="Bound">args</a> <a id="33133" href="ualib.html#33124" class="Bound">x</a> <a id="33135" href="ualib.html#33112" class="Bound">i</a><a id="33136" class="Symbol">))</a>
+
+<a id="33140" href="ualib.html#32822" class="Function">extensionality-lemma</a> <a id="33161" href="ualib.html#33161" class="Bound">p</a> <a id="33163" href="ualib.html#33163" class="Bound">q</a> <a id="33165" href="ualib.html#33165" class="Bound">args</a> <a id="33170" href="ualib.html#33170" class="Bound">pq</a> <a id="33173" class="Symbol">=</a> <a id="33175" href="MGS-MLTT.html#6613" class="Function">ap</a> <a id="33178" class="Symbol">(λ</a> <a id="33181" href="ualib.html#33181" class="Bound">-</a> <a id="33183" class="Symbol">→</a> <a id="33185" class="Symbol">λ</a> <a id="33187" href="ualib.html#33187" class="Bound">i</a> <a id="33189" class="Symbol">→</a> <a id="33191" class="Symbol">(</a><a id="33192" href="ualib.html#33181" class="Bound">-</a> <a id="33194" href="ualib.html#33187" class="Bound">i</a><a id="33195" class="Symbol">)</a> <a id="33197" class="Symbol">(λ</a> <a id="33200" href="ualib.html#33200" class="Bound">x</a> <a id="33202" class="Symbol">→</a> <a id="33204" href="ualib.html#33165" class="Bound">args</a> <a id="33209" href="ualib.html#33200" class="Bound">x</a> <a id="33211" href="ualib.html#33187" class="Bound">i</a><a id="33212" class="Symbol">))</a> <a id="33215" href="ualib.html#33170" class="Bound">pq</a>
+</pre>
+
+<hr />
+
+<h2 id="unicode-hints-1">Unicode Hints</h2>
+
+<p>Here is a table of some of the unicode characters used in the
+<a href="https://gitlab.com/ualib/ualib.gitlab.io">UALib</a>.</p>
+
+<p>+——–+———————-+
+| To get | Type                 |
++——–+———————-+
+| 𝓘, 𝓙   | <code class="language-plaintext highlighter-rouge">\MCI</code>, <code class="language-plaintext highlighter-rouge">\MCJ</code>       |
++——–+———————-+
+| 𝓤 ̇ |   | <code class="language-plaintext highlighter-rouge">\MCU \^.</code>           |
++——–+———————-+
+| 𝓤 ⁺    | <code class="language-plaintext highlighter-rouge">\MCU \^+</code>           |
++——–+———————-+
+| 𝓤₀     | &gt; <code class="language-plaintext highlighter-rouge">\MCU\_0</code>          |
++——–+———————-+
+| &gt; ⊔    | &gt; <code class="language-plaintext highlighter-rouge">\sqcup</code>           |
++——–+———————-+
+| 𝐴, 𝐵   | <code class="language-plaintext highlighter-rouge">\MiA</code>, <code class="language-plaintext highlighter-rouge">\MiB</code>       |
++——–+———————-+
+| 𝑨, 𝑩   | <code class="language-plaintext highlighter-rouge">\MIA</code>, <code class="language-plaintext highlighter-rouge">\MIB</code>       |
++——–+———————-+
+| 𝒜, ℬ   | <code class="language-plaintext highlighter-rouge">\McA</code>, <code class="language-plaintext highlighter-rouge">\McB</code>       |
++——–+———————-+
+| 𝓐, 𝓑   | <code class="language-plaintext highlighter-rouge">\MCA</code>, <code class="language-plaintext highlighter-rouge">\MCB</code>       |
++——–+———————-+
+| t ̇ 𝑨 | | <code class="language-plaintext highlighter-rouge">t \^. \MIA</code>         |
++——–+———————-+
+| 𝑓 ̂ 𝑨 | | <code class="language-plaintext highlighter-rouge">\Mif \^ \MIA</code>       |
++——–+———————-+
+| ≡      | <code class="language-plaintext highlighter-rouge">\equiv</code>             |
++——–+———————-+
+| &gt; 𝓇ℯ𝒻𝓁 | <code class="language-plaintext highlighter-rouge">\Mcr\Mce\Mcf\Mcl</code>   |
++——–+———————-+
+| ≡⟨ ⟩   | <code class="language-plaintext highlighter-rouge">\equiv\&lt; \&gt;</code>        |
++——–+———————-+
+| ∎, ■   | <code class="language-plaintext highlighter-rouge">\qed</code>, <code class="language-plaintext highlighter-rouge">\sq</code>        |
++——–+———————-+
+| Σ, Π   | <code class="language-plaintext highlighter-rouge">\Sigma</code>, <code class="language-plaintext highlighter-rouge">\Pi</code>      |
++——–+———————-+
+| ¬, ⁻¹  | &gt; <code class="language-plaintext highlighter-rouge">\neg</code>, <code class="language-plaintext highlighter-rouge">\^-\^1</code>   |
++——–+———————-+
+| ×      | <code class="language-plaintext highlighter-rouge">\times</code>             |
++——–+———————-+
+| 𝑖𝑑     | <code class="language-plaintext highlighter-rouge">\Mii\Mid</code>           |
++——–+———————-+
+| 𝓟      | <code class="language-plaintext highlighter-rouge">\MCP</code>               |
++——–+———————-+
+| ↪      | <code class="language-plaintext highlighter-rouge">\hookrightarrow</code>    |
++——–+———————-+
+| 𝟘, 𝟙   | <code class="language-plaintext highlighter-rouge">\b0</code>, <code class="language-plaintext highlighter-rouge">\b1</code>         |
++——–+———————-+
+| ⇔      | <code class="language-plaintext highlighter-rouge">\lr2</code>               |
++——–+———————-+
+| ∘, ●   | <code class="language-plaintext highlighter-rouge">\cdot</code>, <code class="language-plaintext highlighter-rouge">\cib</code>      |
++——–+———————-+
+| &gt; ×    | <code class="language-plaintext highlighter-rouge">\times</code>             |
++——–+———————-+
+| ∣_∣   | <code class="language-plaintext highlighter-rouge">\|_\|</code>              |
++——–+———————-+
+| ∥_∥   | <code class="language-plaintext highlighter-rouge">\||_\||</code>            |
++——–+———————-+
+| ∼, ≃   | <code class="language-plaintext highlighter-rouge">\~</code>, <code class="language-plaintext highlighter-rouge">\~-</code>          |
++——–+———————-+
+| ∈₀     | <code class="language-plaintext highlighter-rouge">\in\_0</code>             |
++——–+———————-+
+| ⊆₀     | <code class="language-plaintext highlighter-rouge">\subseteq\_0</code>       |
++——–+———————-+</p>
+
+<p>At the end of each chapter of this documentation we show how to produce in Emacs <a href="https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html">agda2-mode</a> some of the fancy unicode characters that we use in our code.</p>
+
+<p>We hope these hints are convenient for the reader, but they are not meant to be comprehensive.</p>
+
+<p>Instead use these</p>
+
+<p><strong>Emacs commands providing information about special characters/input methods:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">M-x describe-char</code> (or <code class="language-plaintext highlighter-rouge">M-m h d c</code>) with the cursor on the character of interest</li>
+  <li><code class="language-plaintext highlighter-rouge">M-x describe-input-method</code> (or <code class="language-plaintext highlighter-rouge">C-h I</code>)</li>
+</ul>
+
+
+    </div><!-- /.container -->
+  </body>
+</html>
