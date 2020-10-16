@@ -8,21 +8,19 @@
 {-# OPTIONS --without-K --exact-split #-}
 
 open import basic
-open import prelude using (global-dfunext; dfunext; Pred)
+open import congruences
+open import prelude using (global-dfunext; dfunext; funext; Pred)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
- {X : 𝓤 ̇ }
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {X : 𝓤 ̇}
+ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {gfe : global-dfunext}
- {dfe : dfunext 𝓤 𝓤} where
+ {dfe : dfunext 𝓤 𝓤}
+ {fevu : dfunext 𝓥 𝓤} where
 
-open import closure
- {𝑆 = 𝑆}
- {𝕏 = 𝕏}
- {gfe = gfe}
- {dfe = dfe}
+open import closure {𝑆 = 𝑆}{X = X}{𝒦 = 𝒦}{𝕏 = 𝕏}{gfe = gfe}{dfe = dfe}{fevu = fevu}
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -31,7 +29,6 @@ open import closure
 --Equalizers of homomorphisms
 𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 𝑆} (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
 𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
---cf. definition 𝓔 in the homomorphisms module
 
 𝑬𝑯-is-closed : funext 𝓥 𝓤
  →     {𝑓 : ∣ 𝑆 ∣ } {𝑨 𝑩 : Algebra 𝓤 𝑆}
@@ -47,82 +44,77 @@ open import closure
    ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
 
 -- Equalizer of homs is a subuniverse.
-𝑬𝑯-is-subuniverse : funext 𝓥 𝓤
- →  {𝑨 𝑩 : Algebra 𝓤 𝑆}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
-𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h =
- mksub (𝑬𝑯 {𝑨}{𝑩} g h)
-  λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 x
+𝑬𝑯-is-subuniverse : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+
+𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝑨}{𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 x
 
 HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
-           (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
- →         (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
-         ---------------------------------------------------
- →        (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg {𝑨 = 𝑨} X → ∣ g ∣ a ≡ ∣ h ∣ a)
+            (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+ →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
+            ---------------------------------------------
+ →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
 HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
+
 HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
-  ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )   ∎
+  ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
+ where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+
+-- Birkhoff's theorem: every variety is an equational class.
+birkhoff : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ Mod (Th VClo)
+          ---------------------------------------
+ →                      𝑨 ∈ VClo
+
+birkhoff 𝑨 ModThVCloA = γ
  where
-  induction-hypothesis =
-    λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+  ℋ : X ↠ 𝑨
+  ℋ = 𝕏 𝑨
 
-module birkhoff-theorem
- {𝓤 : Universe}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {X : 𝓤 ̇}
- {fevu : dfunext 𝓥 𝓤} where
+  h₀ : X → ∣ 𝑨 ∣
+  h₀ = fst ℋ
 
- open closure-definitions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
- open closure-identities {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
- open compatibility {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}{fevu = fevu}
+  h : hom 𝑻 𝑨
+  h = lift-hom{𝑨 = 𝑨} h₀
 
- -- Birkhoff's theorem: every variety is an equational class.
- birkhoff : -- (𝒦 : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺))
-            (𝑨 : Algebra 𝓤 𝑆)
-            ------------------------------------
-  →         𝑨 ∈ Mod (Th VClo) → 𝑨 ∈ VClo
- birkhoff 𝑨 A∈ModThV = 𝑨∈VClo
-  where
-   ℋ : X ↠ 𝑨
-   ℋ = 𝕏 𝑨
+  Ψ⊆ThVClo : Ψ ⊆ Th VClo
+  Ψ⊆ThVClo {p , q} pΨq =
+   (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th𝒦 p q pΨq)
 
-   h₀ : X → ∣ 𝑨 ∣
-   h₀ = fst ℋ
+  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
+  Ψ⊆A⊧ {p} {q} pΨq = ModThVCloA p q (Ψ⊆ThVClo {p , q} pΨq)
 
-   -- hE : Epic h₀
-   -- hE = snd ℋ
+  Ψ⊆Kerh : Ψ ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh {p , q} pΨq = hp≡hq
+   where
+    hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
+    hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
 
-   h : hom 𝑻 𝑨
-   h = lift-hom{𝑨 = 𝑨} h₀
+--       T--- p --->>T/ψ    ψ = ker p ⊆ ker h => ∃ ϕ: T/ψ → A
+--        \         .
+--         \       .
+--          h     ∃ϕ
+--           \   .
+--            \ .
+--             V
+--             𝑨
 
-   Ψ⊆ThVClo : Ψ ⊆ Th VClo
-   Ψ⊆ThVClo {p , q} pΨq =
-    (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th𝒦 p q pΨq)
+  --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
+  --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
+  -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+  𝑪 : Algebra 𝓤 𝑆
+  𝑪 = {!!}
 
-   Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
-   Ψ⊆A⊧ {p} {q} pΨq = A∈ModThV p q (Ψ⊆ThVClo {p , q} pΨq)
+  vcloC : 𝑪 ∈ VClo
+  vcloC = {!!}
 
-   Ψ⊆Kerh : Ψ ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-   Ψ⊆Kerh {p , q} pΨq = hp≡hq
-    where
-     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
-     hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
+  ϕ : Σ h ꞉ (hom 𝑪 𝑨) , Epic ∣ h ∣
+  ϕ = {!!}
 
-   --We need to find 𝑪 : Algebra 𝒰 𝑆 such that 𝑪 ∈ VClo and ∃ ϕ : hom 𝑪 𝑨 with ϕE : Epic ∣ ϕ ∣.
-   --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom 𝑪∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
-   -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
-   𝑪 : Algebra 𝓤 𝑆
-   𝑪 = {!!}
+  hic : HomImagesOf 𝑪
+  hic = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
 
-   ϕ : Σ h ꞉ (hom 𝑪 𝑨) , Epic ∣ h ∣
-   ϕ = {!!}
-
-   hic : HomImagesOf 𝑪
-   hic = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
-
-   𝑨∈VClo : 𝑨 ∈ VClo
-   𝑨∈VClo = vhom{𝑪} {!!} hic
-\end{code}
+  γ : 𝑨 ∈ VClo
+  γ = vhom{𝑪} vcloC hic

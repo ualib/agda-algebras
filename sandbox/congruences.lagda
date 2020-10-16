@@ -10,8 +10,7 @@ open import basic
 
 module congruences where
 
-open import prelude using (𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎;
- refl; _⁻¹; funext; ap; _∙_; 𝓇ℯ𝒻𝓁) public
+open import prelude using (𝓡; 𝓢; is-prop; 𝟙; _≡⟨_⟩_; _∎; refl; _⁻¹; funext; ap; _∙_; 𝓇ℯ𝒻𝓁) public
 
 REL : 𝓤 ̇ → 𝓥 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓝 ⁺) ̇
 REL A B 𝓝 = A → B → 𝓝 ̇
