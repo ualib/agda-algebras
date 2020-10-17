@@ -7,11 +7,11 @@
 
 open import basic
 open import congruences
+open import prelude using (global-dfunext)
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import prelude using (_∘_; _⊆_; EpicInv; cong-app;
- EInvIsRInv; Image_∋_) public
+open import prelude using (_∘_; _⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_) public
 
 --intensional preservation of operations
 op_interpreted-in_and_commutes-intensionally-with :
@@ -136,6 +136,65 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
    ϕ = λ c → g ( hInv c )
 
    ξ : (x : A) → ker-pred h (x , hInv (h x))
+   ξ x =  ( cong-app (EInvIsRInv fe h hEpic) ( h x ) )⁻¹
+
+   g≡ϕ∘h : g ≡ ϕ ∘ h
+   g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
+
+   ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
+    →  c x ≡ (h ∘ hInv)(c x)
+
+   ζ f c x = (cong-app (EInvIsRInv fe h hEpic) (c x))⁻¹
+
+   ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
+    →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
+
+   ι f c = ap (λ - → - ∘ c)(EInvIsRInv fe h hEpic)⁻¹
+
+   useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
+    → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
+
+   useker = λ f c
+    → Kh⊆Kg (cong-app
+             (EInvIsRInv fe h hEpic)
+             (h(FA f(hInv ∘ c)))
+            )
+
+   ϕIsHomCB : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → C)
+    →         ϕ (FC f a)  ≡  FB f (ϕ ∘ a)
+
+   ϕIsHomCB f c =
+    g (hInv (FC f c))                ≡⟨ i   ⟩
+    g (hInv (FC f (h ∘ (hInv ∘ c)))) ≡⟨ ii  ⟩
+    g (hInv (h (FA f (hInv ∘ c))))   ≡⟨ iii ⟩
+    g (FA f (hInv ∘ c))              ≡⟨ iv  ⟩
+    FB f (λ x → g (hInv (c x)))      ∎
+    where
+     i   = ap (g ∘ hInv) (ap (FC f) (ι f c))
+     ii  = ap (λ - → g (hInv -)) (hhom f (hInv ∘ c))⁻¹
+     iii = useker f c
+     iv  = ghom f (hInv ∘ c)
+
+HomFactor : global-dfunext
+ →          {𝑨 : Algebra 𝓤 𝑆}
+ →          {𝑩 : Algebra 𝓦 𝑆}
+ →          {𝑪 : Algebra 𝓧 𝑆}
+            (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
+ →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)
+ →          Epic ∣ h ∣
+           ---------------------------------------------
+ →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
+
+HomFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
+ (g , ghom) (h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+  where
+   hInv : C → A
+   hInv = λ c → (EpicInv h hEpic) c
+
+   ϕ : C → B
+   ϕ = λ c → g ( hInv c )
+
+   ξ : (x : A) → KER-pred h (x , hInv (h x))
    ξ x =  ( cong-app (EInvIsRInv fe h hEpic) ( h x ) )⁻¹
 
    g≡ϕ∘h : g ≡ ϕ ∘ h

@@ -31,7 +31,7 @@ KER-rel g x y = g x ≡ g y
 ker-rel : {A B : 𝓤 ̇ } → (A → B) → Rel A 𝓤
 ker-rel {𝓤} = KER-rel {𝓤} {𝓤}
 
-KER-pred : {A : 𝓤 ̇ }{B : 𝓦 ̇ } → (A → B) → Pred (A × A) 𝓦
+KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
 KER-pred g (x , y) = g x ≡ g y
 
 -- (in the special case 𝓦 ≡ 𝓤)

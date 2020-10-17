@@ -2450,34 +2450,27 @@ Finally, we prove
 \end{code}
 
 
-### Axiomatization of a class
+### Class Identities
 
-We now prove that a class 𝒦 of structures is axiomatized by Th(VClo(𝒦)), which is the set of equations satisfied by all members of the varietal closure of 𝒦.
+If 𝒦 is a class of structures, then it follows from `vclo-id1` that the set Th 𝒦 of identities modeled by all structures in 𝒦 is the same as the set Th VClo 𝒦 of identities modeled by all structures in VClo 𝒦.
 
-\begin{code}
- -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
- ThHSP-axiomatizes : (p q : ∣ 𝑻 ∣)
-        ---------------------------------------
-  →     𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo))
+-- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
+class-identities : (p q : ∣ 𝑻 ∣)
+       ---------------------------------------
+ →       𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo))
 
- ThHSP-axiomatizes p q =
-  (λ 𝒦⊧p≋q 𝑨∈VClo𝒦 → vclo-id1{p = p}{q = q} 𝒦⊧p≋q 𝑨∈VClo𝒦) ,
-  λ pq∈Th 𝑨∈𝒦 → pq∈Th (vbase 𝑨∈𝒦)
-\end{code}
-
+class-identities p q = (λ α VCloA → vclo-id1{p}{q} α VCloA) ,  λ Thpq KA → Thpq (vbase KA)
 
 ### The free algebra in Agda
 
 Recall that term algebra 𝑻(𝑋) is the absolutely free algebra in the class 𝓚(𝑆) of all 𝑆-structures. In this section, we
-formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in SP(𝒦) over 𝑋. Recall, this was defined above in free algebras as follows:
+formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in SP(𝒦) over 𝑋. Recall, this is defined as follows:
 
   𝔽(𝒦, 𝑋) := 𝑻(𝑋)/Ψ(𝒦, 𝑻(𝑋)).
 
-Thus, we must first formalize the congruence ψ(𝒦, 𝑻(𝑋)) which is defined by
+Thus, we must first formalize the congruence Ψ(𝒦, 𝑻(𝑋)) which is defined by
 
-  Ψ(𝒦, 𝑻(𝑋)) := ⋀ ψ(𝒦, 𝑻(𝑋)),
-
-where ψ(𝒦, 𝑻(𝑋)) := {θ ∈ Con 𝑻(𝑋) : 𝑨/θ ∈ S(𝒦)}.
+  Ψ(𝒦, 𝑻(𝑋)) := ⋀ ψ(𝒦, 𝑻(𝑋)) := ⋀ {θ ∈ Con 𝑻(𝑋) : 𝑨/θ ∈ S(𝒦)}.
 
 Strictly speaking, 𝑋 is not a subset of 𝔽(𝒦, 𝑋) so it doesn't make sense to say that "𝑋 generates 𝔽(𝒦, 𝑋)." But as long as 𝒦 contains a nontrivial algebra, we will have Ψ(𝒦, 𝑻(𝑋)) ∩ 𝑋² ≠ ∅, and we can identify 𝑋 with 𝑋/Ψ(𝒦, 𝑻(𝑋)) in 𝔽(𝒦, 𝑋).
 
@@ -2740,7 +2733,7 @@ Here's the partial proof:
 
    Ψ⊆ThVClo : Ψ ⊆ Th VClo
    Ψ⊆ThVClo {p , q} pΨq =
-    (lr-implication (ThHSP-axiomatizes p q)) (Ψ⊆Th𝒦 p q pΨq)
+    (lr-implication (class-identities p q)) (Ψ⊆Th𝒦 p q pΨq)
 
    Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
    Ψ⊆A⊧ {p} {q} pΨq = A∈ModThV p q (Ψ⊆ThVClo {p , q} pΨq)
