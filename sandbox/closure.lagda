@@ -207,12 +207,7 @@ hom-id-compatibility p q 𝑨 ϕ β = ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ
                                  ∣ ϕ ∣ q              ∎
 
 
-module _
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {𝒦₁ : Pred (Algebra W 𝑆) ( W ⁺ )}
- {𝒦' : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
- {𝒦+ : Pred (Algebra OVU+ 𝑆) (OVU+ ⁺)}
- {𝒦4 : Pred (Algebra (OVU+ ⁺ ⁺ ⁺) 𝑆) (OVU+ ⁺ ⁺ ⁺ ⁺)} where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
  --------------------------------------------------------------------------------
   --Identities for product closure
@@ -327,7 +322,7 @@ module _
     (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
     (q ̇ 𝑩) 𝒃                ∎
 
- vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → (VClo 𝒦₁ ⊧ p ≋ q) → (𝒦₁ ⊧ p ≋ q)
+ vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  vclo-id2 p KA = p (vbase KA)
 
 

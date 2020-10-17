@@ -13,14 +13,13 @@ open import prelude using (global-dfunext; dfunext; funext; Pred)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 𝓦 : Universe}
- {X : 𝓤 ̇}
+ {𝓦 : Universe}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤}
  {fevu : dfunext 𝓥 𝓤} where
 
-open import closure {𝑆 = 𝑆}{𝓤 = 𝓤}{𝓦 = 𝓦}{X = X}{𝕏 = 𝕏}{gfe = gfe}{dfe = dfe}{fevu = fevu}
+open import closure {𝑆 = 𝑆}{𝓦 = 𝓦}{𝕏 = 𝕏}{gfe = gfe}{dfe = dfe}{fevu = fevu}
 
 --Equalizers of functions
 𝑬 :  {A : 𝓤 ̇ }  {B : 𝓦 ̇ } →  (g h : A → B) → Pred A 𝓦
@@ -64,6 +63,7 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 module _
+ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  {𝒦₁ : Pred (Algebra W 𝑆) ( W ⁺ )}
  {𝒦' : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
@@ -75,16 +75,16 @@ module _
  ---------------------------
 
  𝑻img : _ ̇
- 𝑻img = Σ 𝑨 ꞉ (Algebra W 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓤}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦₁) × Epic ∣ ϕ ∣
+ 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
  -- SClo→𝑻img : (𝑨 : Algebra W 𝑆) → 𝑨 ∈ SClo 𝒦₁ → 𝑻img
  -- SClo→𝑻img 𝑨 SCloA = 𝑨 , (fst (𝑻hom-gen 𝑨)) , (SCloA , (snd (𝑻hom-gen 𝑨)))
 
- mkti : {𝑨 : Algebra W 𝑆} → 𝑨 ∈ SClo 𝒦₁ → 𝑻img
+ mkti : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ SClo 𝒦 → 𝑻img
  mkti {𝑨} SCloA = (𝑨 , fst thg , SCloA , snd thg)
   where
-   thg : Σ h ꞉ (hom (𝑻{𝓤}{X}) 𝑨), Epic ∣ h ∣
-   thg = 𝑻hom-gen{𝓤 = W} 𝑨
+   thg : Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑨), Epic ∣ h ∣
+   thg = 𝑻hom-gen 𝑨
 
  𝑻𝑨 : 𝑻img → Algebra _ 𝑆
  𝑻𝑨 ti = ∣ ti ∣
@@ -97,16 +97,16 @@ module _
 
  𝑻KER : _ ̇
  𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
-          ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦₁) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ {mkti SCloA} ∣
+          ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ {mkti SCloA} ∣
 
- Ψ : Pred (∣ 𝑻{𝓤}{X} ∣ × ∣ 𝑻 ∣) _
- Ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦₁)
+ Ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) _
+ Ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦)
                → ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (q ̇ 𝑻)
 
- ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ?
- ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦₁) → ∣ 𝑻ϕ {mkti SCloA} ∣ p ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ q
+ ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) {!!}
+ ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → ∣ 𝑻ϕ {mkti SCloA} ∣ p ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ q
 
- ψRel : Rel ∣ 𝑻 ∣ ?
+ ψRel : Rel ∣ 𝑻 ∣ {!!}
  ψRel p q = ψ (p , q)
 
  -- ψcompatible : compatible (𝑻{W ⁺}) ψRel
@@ -143,7 +143,7 @@ module _
  --More tools for Birkhoff's theorem
  --Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
 
- 𝑻i⊧ψ : {p q : ∣ 𝑻 ∣}{𝑪 : Algebra W 𝑆}{SCloC : 𝑪 ∈ SClo 𝒦₁}
+ 𝑻i⊧ψ : {p q : ∣ 𝑻 ∣}{𝑪 : Algebra 𝓤 𝑆}{SCloC : 𝑪 ∈ SClo 𝒦}
   →       (p , q) ∈ ψ
          ----------------------------------------------------------------
   →       ∣ 𝑻ϕ{ti = mkti SCloC} ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ 𝑻ϕ{ti = mkti SCloC} ∣ ((q ̇ 𝑻) ℊ)
@@ -163,7 +163,7 @@ module _
 
 
 
- Ψ⊆ThSClo : Ψ ⊆ (Th SClo 𝒦₁)
+ Ψ⊆ThSClo : Ψ ⊆ (Th (SClo 𝒦))
  Ψ⊆ThSClo {p , q} pΨq {𝑪} SCloC = γ
   where
    ti : 𝑻img
@@ -211,11 +211,12 @@ module _
 -- modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in VClo 𝒦.
 
 -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
-class-identities : {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}(p q : ∣ 𝑻 ∣)
-                   ----------------------------------------------------
- →                  𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo))
+class-identities : {𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ →                 (p q : ∣ 𝑻{𝓧}{X} ∣)
+                  ----------------------------------------------------------
+ →                 (_⊧_≋_ {𝓤}{𝓧}{X} 𝒦 p q)  ⇔  ((p , q) ∈ Th (VClo 𝒦))
 
-class-identities p q = (λ α VCloA → vclo-id1{p = p}{q = q} α VCloA) ,  λ Thpq KA → Thpq (vbase KA)
+class-identities {𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1{𝒦}{𝓧} p q α VCloA) ,  λ Thpq KA → Thpq (vbase KA)
 
 
 
