@@ -11,6 +11,7 @@ open import prelude using (global-dfunext)
 
 module subuniverses
  {𝑆 : Signature 𝓞 𝓥}
+ {𝓤 : Universe}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {fe : global-dfunext} where
 
@@ -18,6 +19,7 @@ open import homomorphisms {𝑆 = 𝑆}
 
 open import terms
  {𝑆 = 𝑆}
+ {𝓤 = 𝓤}
  {𝕏 = 𝕏}
  {gfe = fe} renaming (generator to ℊ)
 
