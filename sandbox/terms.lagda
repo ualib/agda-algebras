@@ -88,14 +88,14 @@ free-intensionally-unique fe {𝑨} g h p (node f args) =
 
 
 --lift agrees on X
-lift-agrees-on-X : {𝓤 : Universe}{X : 𝓤 ̇}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
+lift-agrees-on-X : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom{𝑨 = 𝑨} h₀ ∣ (generator x)
 
 lift-agrees-on-X h₀ x = 𝓇ℯ𝒻𝓁
 
 --Of course, the lift of a surjective map is surjective.
-lift-of-epic-is-epic : {𝓤 : Universe}{X : 𝓤 ̇}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)
+lift-of-epic-is-epic : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)
  →                     Epic h₀
                       ----------------------
  →                     Epic ∣ lift-hom{𝑨 = 𝑨} h₀ ∣
@@ -111,14 +111,14 @@ lift-of-epic-is-epic{X = X}{𝑨 = 𝑨} h₀ hE y = γ
   η : y ≡ ∣ lift-hom{𝑨 = 𝑨} h₀ ∣ (generator h₀⁻¹y)
   η =
    y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-   h₀ h₀⁻¹y                        ≡⟨ lift-agrees-on-X{𝑨 = 𝑨} h₀ h₀⁻¹y ⟩
+   h₀ h₀⁻¹y                        ≡⟨ lift-agrees-on-X{X = X}{𝑨 = 𝑨} h₀ h₀⁻¹y ⟩
    ∣ lift-hom{𝑨 = 𝑨} h₀ ∣ (generator h₀⁻¹y) ∎
 
   γ : Image ∣ lift-hom h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η
 
-𝑻hom-gen : {𝓤 : Universe}{X : 𝓤 ̇} (𝑪 : Algebra 𝓤 𝑆)
- →         Σ h ꞉ (hom 𝑻 𝑪), Epic ∣ h ∣
+𝑻hom-gen : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
+ →         Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑪), Epic ∣ h ∣
 𝑻hom-gen {X = X}𝑪 = h , lift-of-epic-is-epic h₀ hE
  where
   h₀ : X → ∣ 𝑪 ∣

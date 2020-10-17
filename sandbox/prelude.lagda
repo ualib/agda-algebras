@@ -15,6 +15,7 @@ open import Universes public
 variable
   𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
+
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
  refl to 𝓇ℯ𝒻𝓁) public
 
@@ -48,6 +49,7 @@ open import MGS-Unique-Existence using (∃!; -∃!) public
 
 open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
 -- using (subsingleton-truncations-exist) public
+
 
 ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
 ∣ x , y ∣ = x
