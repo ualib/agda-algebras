@@ -71,8 +71,8 @@ transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 [_]_ :  {A : 𝓤 ̇ } →  (a : A) → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
 [ a ] ≈ = Σ x ꞉ _ ,  ≈ a x
 
-_//_ :  (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
-A // ≈ = Σ C ꞉ _ ,   Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+_//_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+A // ≈ = Σ C ꞉ _ ̇ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
 
 ⌜_⌝ : {A : 𝓤 ̇}{≈ : Rel A 𝓡} → A // ≈  → A
 ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣
@@ -159,10 +159,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
   con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) _
   con A = λ θ → IsEquivalence θ × compatible A θ
 
-  record Congruence {𝓤 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  record Congruence {𝓤 𝓧 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓧 ⁺ ̇  where
     constructor mkcon
     field
-      ⟨_⟩ : Rel ∣ A ∣ 𝓤
+      ⟨_⟩ : Rel ∣ A ∣ 𝓧
       Compatible : compatible A ⟨_⟩
       IsEquiv : IsEquivalence ⟨_⟩
   open Congruence
@@ -172,11 +172,11 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
                 ( 𝟎-compatible fe {A} )
                 ( 𝟎-IsEquivalence )
 
-  _╱_ : (A : Algebra 𝓤 𝑆) → Congruence A
-         ---------------------------------
-   →     Algebra (𝓤 ⁺) 𝑆
+  _╱_ : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓧} A
+        ---------------------------------
+   →     Algebra (𝓤 ⁺ ⊔ 𝓧 ⁺) 𝑆
   A ╱ θ = (( ∣ A ∣ // ⟨ θ ⟩ ) , -- carrier
-            (λ f args        -- operations
+            (λ f args         -- operations
              → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
                ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
             )

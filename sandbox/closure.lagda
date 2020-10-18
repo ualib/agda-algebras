@@ -42,7 +42,7 @@ Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 
  →   Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
-Mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+Mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
@@ -207,123 +207,129 @@ hom-id-compatibility p q 𝑨 ϕ β = ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ
                                  ∣ ϕ ∣ q              ∎
 
 
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
+--------------------------------------------------------------------------------
+ --Identities for product closure
+pclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
+pclo-id1 p q α (pbase x) = α x
+pclo-id1 {𝓤}{𝓧}{X} p q α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
+ where
+  IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
+  IH = λ i → pclo-id1{𝓤}{𝓧}{X} p q α  ( 𝒜-P𝒦  i )
 
- --------------------------------------------------------------------------------
-  --Identities for product closure
- pclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (PClo 𝒦 ⊧ p ≋ q)
- pclo-id1 p q α (pbase x) = α x
- pclo-id1 {𝓤}{𝓧}{X} p q α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
-  where
-   IH : (i : I)  → (p ̇ 𝒜 i) ≡ (q ̇ 𝒜 i)
-   IH = λ i → pclo-id1{𝓤}{𝓧}{X} p q α  ( 𝒜-P𝒦  i )
+  γ : p ̇ (⨅ 𝒜) ≡ q ̇ (⨅ 𝒜)
+  γ = products-preserve-identities p q I 𝒜 IH
 
-   γ : p ̇ (⨅ 𝒜) ≡ q ̇ (⨅ 𝒜)
-   γ = products-preserve-identities p q I 𝒜 IH
+pclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           {p q : Term{𝓧}{X}} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
+pclo-id2 PCloKpq KA = PCloKpq (pbase KA)
 
- pclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
- pclo-id2 PCloKpq KA = PCloKpq (pbase KA)
+-----------------------------------------------------------------
+--Identities for subalgebra closure
+-- The singleton set.
+｛_｝ : {𝓤 : Universe} → Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+｛ 𝑨 ｝ 𝑩 = 𝑨 ≡ 𝑩
 
- -----------------------------------------------------------------
- --Identities for subalgebra closure
- -- The singleton set.
- ｛_｝ : {𝓤 : Universe} → Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- ｛ 𝑨 ｝ 𝑩 = 𝑨 ≡ 𝑩
-
- sclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
- sclo-id1 p q α (sbase KA) = α KA
- sclo-id1 {𝓤}{𝓧}{X} p q α (sub {𝑨 = 𝑨} SCloA sa) =
-  --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
-  subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
-   where
-    β : 𝑨 ⊧ p ≈ q
-    β = sclo-id1 {𝓤}{𝓧}{X}p q α SCloA
-
-    Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-    Apq (refl _) = β
-
-    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-    γ {𝑩} (inj₁ x) = α x
-    γ {𝑩} (inj₂ y) = Apq y
-
- sclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- sclo-id2 p KA = p (sbase KA)
-
- --------------------------------------------------------------------
- --Identities for hom image closure
- hclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
- hclo-id1 p q α (hbase KA) = α KA
- hclo-id1 {𝓤}{𝓧}{X} p q α (hhom{𝑨} HCloA (𝑩 , ϕ , (ϕhom , ϕsur))) = γ
+sclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
+sclo-id1 p q α (sbase KA) = α KA
+sclo-id1 {𝓤}{𝓧}{X}{𝒦} p q α (sub {𝑨 = 𝑨} SCloA sa) =
+ --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
+ subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
   where
    β : 𝑨 ⊧ p ≈ q
-   β = (hclo-id1{𝓤}{𝓧}{X} p q α) HCloA
+   β = sclo-id1 {𝓤}{𝓧}{X}p q α SCloA
 
-   preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-   preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur (𝒃 x)))
+   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
+   Apq (refl _) = β
 
-   ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
+   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+   γ {𝑩} (inj₁ x) = α x
+   γ {𝑩} (inj₂ y) = Apq y
 
-   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-   γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃              ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality β (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃               ∎
+sclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           {p q : Term{𝓧}{X}} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+sclo-id2 p KA = p (sbase KA)
 
- hclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- hclo-id2 p KA = p (hbase KA)
+--------------------------------------------------------------------
+--Identities for hom image closure
+hclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (HClo 𝒦 ⊧ p ≋ q)
+hclo-id1 p q α (hbase KA) = α KA
+hclo-id1 {𝓤}{𝓧}{X} p q α (hhom{𝑨} HCloA (𝑩 , ϕ , (ϕhom , ϕsur))) = γ
+ where
+  β : 𝑨 ⊧ p ≈ q
+  β = (hclo-id1{𝓤}{𝓧}{X} p q α) HCloA
 
- --------------------------------------------------------------------
- --Identities for HSP closure
- vclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
- vclo-id1 p q α (vbase KA) = α KA
- vclo-id1 {𝓤}{𝓧}{X}p q α (vprod{I = I}{𝒜 = 𝒜} VClo𝒜) = γ
-  where
-   IH : (i : I) → 𝒜 i ⊧ p ≈ q
-   IH i = vclo-id1{𝓤}{𝓧}{X} p q α (VClo𝒜 i)
+  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur (𝒃 x)))
 
-   γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-   γ = products-preserve-identities p q I 𝒜 IH
+  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
 
- vclo-id1{𝓤}{𝓧}{X} p q α ( vsub {𝑨 = 𝑨} VCloA sa ) =
-  subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
-   where
-    IH : 𝑨 ⊧ p ≈ q
-    IH = vclo-id1 {𝓤}{𝓧}{X}p q α VCloA
+  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+  γ = gfe λ 𝒃 →
+   (p ̇ 𝑩) 𝒃              ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+   ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality β (preim 𝒃)) ⟩
+   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+   (q ̇ 𝑩) 𝒃               ∎
 
-    Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-    Asinglepq (refl _) = IH
+hclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           {p q : Term{𝓧}{X}} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+hclo-id2 p KA = p (hbase KA)
 
-    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-    γ {𝑩} (inj₁ x) = α x
-    γ {𝑩} (inj₂ y) = Asinglepq y
+--------------------------------------------------------------------
+--Identities for HSP closure
+vclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (VClo 𝒦 ⊧ p ≋ q)
+vclo-id1 p q α (vbase KA) = α KA
+vclo-id1 {𝓤}{𝓧}{X} p q α (vprod{I = I}{𝒜 = 𝒜} VClo𝒜) = γ
+ where
+  IH : (i : I) → 𝒜 i ⊧ p ≈ q
+  IH i = vclo-id1{𝓤}{𝓧}{X} p q α (VClo𝒜 i)
 
+  γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
+  γ = products-preserve-identities p q I 𝒜 IH
 
- vclo-id1 {𝓤}{𝓧}{X} p q α (vhom{𝑨 = 𝑨} VCloA (𝑩 , ϕ , (ϕh , ϕE))) = γ
+vclo-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vsub {𝑨 = 𝑨} VCloA sa ) =
+ subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = vclo-id1 {𝓤}{𝓧}{X}p q α VCloA
 
-   preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
-   preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE (𝒃 x)))
+   Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
+   Asinglepq (refl _) = IH
 
-   ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
-   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
+   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+   γ {𝑩} (inj₁ x) = α x
+   γ {𝑩} (inj₂ y) = Asinglepq y
 
-   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-   γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃                ∎
 
- vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{p q : Term{𝓧}{X}} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- vclo-id2 p KA = p (vbase KA)
+vclo-id1 {𝓤}{𝓧}{X} p q α (vhom{𝑨 = 𝑨} VCloA (𝑩 , ϕ , (ϕh , ϕE))) = γ
+ where
+  IH : 𝑨 ⊧ p ≈ q
+  IH = vclo-id1 {𝓤}{𝓧}{X}p q α VCloA
+
+  preim : (𝒃 : X → ∣ 𝑩 ∣)(x : X) → ∣ 𝑨 ∣
+  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE (𝒃 x)))
+
+  ζ : (𝒃 : X → ∣ 𝑩 ∣) → ϕ ∘ (preim 𝒃) ≡ 𝒃
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
+
+  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+  γ = gfe λ 𝒃 →
+   (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+   ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
+   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+   (q ̇ 𝑩) 𝒃                ∎
+
+vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+           {p q : Term{𝓧}{X}} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+vclo-id2 p KA = p (vbase KA)
 
 
 

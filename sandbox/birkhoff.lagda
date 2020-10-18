@@ -62,138 +62,191 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
+---------------------------
+--The free algebra in Agda
+---------------------------
 
- ---------------------------
- --The free algebra in Agda
- ---------------------------
+𝑻img : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → _ ̇
+𝑻img {𝓠}{𝓧}{X}{𝒦} = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
- 𝑻img : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → _ ̇
- 𝑻img {𝓠}{𝒦} = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+mkti : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+       (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦 → 𝑻img
+mkti {𝓠}{𝓧}{X}{𝒦} 𝑨 SCloA = (𝑨 , fst thg , SCloA , snd thg)
+ where
+  thg : Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑨), Epic ∣ h ∣
+  thg = 𝑻hom-gen 𝑨
 
- mkti : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
-  →     𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦 → 𝑻img
- mkti {𝑨 = 𝑨} SCloA = (𝑨 , fst thg , SCloA , snd thg)
-  where
-   thg : Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑨), Epic ∣ h ∣
-   thg = 𝑻hom-gen 𝑨
+𝑻𝑨 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →   𝑻img{𝓠}{𝓧}{X}{𝒦} → Algebra _ 𝑆
+𝑻𝑨 ti = ∣ ti ∣
 
- 𝑻𝑨 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝑻img{𝓠}{𝒦} → Algebra _ 𝑆
- 𝑻𝑨 ti = ∣ ti ∣
+𝑻ϕ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+     (ti : 𝑻img{𝓠}{𝓧}{X}{𝒦}) → hom (𝑻{𝓧}{X}) (𝑻𝑨 ti)
+𝑻ϕ ti = fst (snd ti)
 
- 𝑻ϕ : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}(ti : 𝑻img{𝓠}{𝒦}) → hom (𝑻{𝓧}{X}) (𝑻𝑨 ti)
- 𝑻ϕ ti = fst (snd ti)
+𝑻ϕE : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+      (ti : 𝑻img{𝓠}{𝓧}{X}{𝒦}) → Epic ∣ 𝑻ϕ ti ∣
+𝑻ϕE ti = snd (snd ∥ ti ∥)
 
- 𝑻ϕE : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}(ti : 𝑻img{𝓠}{𝒦}) → Epic ∣ 𝑻ϕ ti ∣
- 𝑻ϕE ti = snd (snd ∥ ti ∥)
+𝑻KER : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → _ ̇
+𝑻KER {𝓠}{𝓧}{X}{𝒦} = Σ (p , q) ꞉ (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) ,
+         ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣
 
- 𝑻KER : _ ̇
- 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) ,
-          ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ (mkti SCloA) ∣
+Ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →  Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ⊔ 𝓧 ⁺)
+Ψ {𝓠}{𝓧}{X}{𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
+              → ∣ 𝑻ϕ{𝓠}{𝓧}{X}{𝒦} (mkti 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻)
 
- Ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
- Ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦)
-               → ∣ 𝑻ϕ (mkti SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti SCloA) ∣ ∘ (q ̇ 𝑻)
+ΨRel : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ⊔ 𝓧 ⁺)
+ΨRel {𝓠}{𝓧}{X}{𝒦} p q = Ψ{𝓠}{𝓧}{X}{𝒦} (p , q)
 
- ΨRel : Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
- ΨRel p q = Ψ (p , q)
+Ψcompatible : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ⊔ 𝓧 ⁺)} (𝑻{𝓧}{X}) (ΨRel{𝓠}{𝓧}{X}{𝒦})
+Ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
+ where
+  ti : 𝑻img
+  ti = mkti 𝑨 SCloA
 
- ψ : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)
- ψ {𝒦 = 𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓧 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓧} 𝒦) → ∣ 𝑻ϕ (mkti SCloA) ∣ p ≡ ∣ 𝑻ϕ (mkti SCloA) ∣ q
+  ϕ : hom 𝑻 𝑨
+  ϕ = 𝑻ϕ ti
 
- ψRel : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)
- ψRel {𝒦 = 𝒦} p q = ψ{𝒦} (p , q)
+  γ : ∣ ϕ ∣ ∘ (((f ̂ 𝑻) i) ̇ 𝑻) ≡ ∣ ϕ ∣ ∘ (((f ̂ 𝑻) j) ̇ 𝑻)
+  γ = {!!}
+  -- ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
+  --     (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
+  --     (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
+  --     ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
 
- ψcompatible : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → compatible (𝑻{𝓧}{X}) (ψRel{𝒦})
- ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
-  where
-   ti : 𝑻img
-   ti = mkti {𝑨 = 𝑨} SCloA
+ΨSym : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     symmetric (ΨRel{𝓠}{𝓧}{X}{𝒦})
+ΨSym p q pΨRelq 𝑪 ϕ = (pΨRelq 𝑪 ϕ)⁻¹
 
-   ϕ : hom 𝑻 𝑨
-   ϕ = 𝑻ϕ ti
+ΨTra : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     transitive (ΨRel{𝓠}{𝓧}{X}{𝒦})
+ΨTra p q r pΨq qΨr 𝑪 ϕ = (pΨq 𝑪 ϕ) ∙ (qΨr 𝑪 ϕ)
 
-   γ : ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻) j)
-   γ = ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
-       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
-       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
-       ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
+ΨIsEquivalence : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →               IsEquivalence (ΨRel{𝓠}{𝓧}{X}{𝒦})
+ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
 
- ψSym : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → symmetric (ψRel{𝒦})
- ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
+ΨCon : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧 = (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ⊔ 𝓧 ⁺)} (𝑻{𝓧}{X})
+ΨCon {𝓠}{𝓧}{X}{𝒦} = mkcon (ΨRel{𝓠}{𝓧}{X}{𝒦}) Ψcompatible ΨIsEquivalence
 
- ψTra : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → transitive (ψRel{𝒦})
- ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
-
- ψIsEquivalence : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → IsEquivalence (ψRel{𝒦})
- ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
-
- ψCon : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Congruence (𝑻{𝓧}{X})
- ψCon {𝒦 = 𝒦} = mkcon (ψRel{𝒦}) ψcompatible ψIsEquivalence
-
- 𝔽 : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Algebra ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓧 ⁺) ⁺)) 𝑆
- 𝔽 {𝒦} = 𝑻{𝓧}{X} ╱ (ψCon{𝒦})
-
-
- --More tools for Birkhoff's theorem
- --Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
-
- 𝑻i⊧ψ : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} (p q : ∣ (𝑻{𝓧}{X}) ∣)
-        (𝑪 : Algebra 𝓧 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓧} 𝒦)
-  →     (p , q) ∈ ψ
-       ----------------------------------------------------------------
-  →     ∣ 𝑻ϕ(mkti SCloC) ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ 𝑻ϕ(mkti SCloC) ∣ ((q ̇ 𝑻) ℊ)
-
- 𝑻i⊧ψ p q 𝑪 SCloC pψq = γ
-  where
-
-   ϕ : hom 𝑻 𝑪
-   ϕ = 𝑻ϕ(mkti SCloC)
-
-   pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-   pCq = pψq 𝑪 SCloC
-
-   γ : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
-   γ = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣(term-agree q))
+𝔽 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →   Algebra _ 𝑆
+𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻{𝓧}{X} ╱ (ΨCon{𝓠}{𝓧}{X}{𝒦})
 
 
+ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →  Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻{𝓧}{X} ∣) _
+ψ {𝓠}{𝓧}{X}{𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
+                              → ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ p ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ q
+
+ψRel : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
+ψRel {𝓠}{𝓧}{X}{𝒦} p q = ψ{𝓠}{𝓧}{X}{𝒦} (p , q)
 
 
- Ψ⊆ThSClo : Ψ ⊆ (Th (SClo 𝒦))
- Ψ⊆ThSClo {p , q} pΨq {𝑪} SCloC = γ
-  where
-   ti : 𝑻img
-   ti = mkti {𝑨 = 𝑪} SCloC -- SClo→𝑻img 
+ψcompatible : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →            compatible (𝑻{𝓧}{X}) (ψRel{𝓠}{𝓧}{X}{𝒦})
+ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
+ where
+  ti : 𝑻img
+  ti = mkti 𝑨 SCloA
 
-   ϕ : hom 𝑻 𝑪
-   ϕ = 𝑻ϕ ti
+  ϕ : hom 𝑻 𝑨
+  ϕ = 𝑻ϕ ti
 
-   ϕE : Epic ∣ ϕ ∣
-   ϕE = 𝑻ϕE ti
+  γ : ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻) j)
+  γ = ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
+      (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
+      (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
+      ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
 
-   ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
-   ϕsur 𝒄 x = ϕE (𝒄 x)
+ψSym : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     symmetric (ψRel{𝓠}{𝓧}{X}{𝒦})
+ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
-   pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 ∣
-   pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+ψTra : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →     transitive (ψRel{𝓠}{𝓧}{X}{𝒦})
+ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
-   ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
-   ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+ψIsEquivalence : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →               IsEquivalence (ψRel{𝓠}{𝓧}{X}{𝒦})
+ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
 
-   β : ∣ ϕ ∣ ∘ (p ̇ 𝑻) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻)
-   β = pΨq 𝑪 SCloC
+-- ψCon : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧} (𝑻{𝓧}{X})
+-- ψCon {𝓠}{𝓧}{X}{𝒦} = mkcon (ψRel{𝓠}{𝓧}{X}{𝒦}) ψcompatible ψIsEquivalence
 
-   γ : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
-   γ = gfe λ 𝒄 →
-    (p ̇ 𝑪) 𝒄                  ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
-    (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ (comm-hom-term gfe 𝑻 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
-    ∣ ϕ ∣ ((p ̇ 𝑻)(pre 𝒄))       ≡⟨ intensionality β (pre 𝒄) ⟩
-    ∣ ϕ ∣ ((q ̇ 𝑻)(pre 𝒄))       ≡⟨ comm-hom-term gfe 𝑻 𝑪 ϕ q (pre 𝒄) ⟩
-    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
-    (q ̇ 𝑪) 𝒄                   ∎
+-- 𝔽 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →   Algebra _ 𝑆
+-- 𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻{𝓧}{X} ╱ (ψCon{𝓠}{X}{𝒦})
 
- Ψ⊆Th𝒦 : (p q : ∣ 𝑻 ∣) → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
- Ψ⊆Th𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo{p , q} pΨq (sbase KA)
+
+--More tools for Birkhoff's theorem
+--Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
+
+𝑻i⊧ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+       (𝑪 : Algebra 𝓠 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓠} 𝒦)
+       (p q : ∣ (𝑻{𝓧}{X}) ∣)  →  (p , q) ∈ ψ
+      ----------------------------------------------------------------
+ →     ∣ 𝑻ϕ(mkti 𝑪 SCloC) ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ 𝑻ϕ(mkti 𝑪 SCloC) ∣ ((q ̇ 𝑻) ℊ)
+
+𝑻i⊧ψ 𝑪 SCloC p q pψq = γ
+ where
+
+  ϕ : hom 𝑻 𝑪
+  ϕ = 𝑻ϕ(mkti 𝑪 SCloC)
+
+  pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+  pCq = pψq 𝑪 SCloC
+
+  γ : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
+  γ = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣(term-agree q))
+
+
+
+
+Ψ⊆ThSClo : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →         Ψ{𝓠}{𝓧}{X}{𝒦} ⊆ (Th (SClo{𝓤 = 𝓠} 𝒦))
+Ψ⊆ThSClo {𝓠}{𝓧}{X}{𝒦} {p , q} pΨq {𝑪} SCloC = γ
+ where
+  ti : 𝑻img{𝓠 = 𝓠}
+  ti = mkti {𝓠 = 𝓠} 𝑪 SCloC -- SClo→𝑻img 
+
+  ϕ : hom (𝑻{𝓧}{X}) 𝑪
+  ϕ = 𝑻ϕ ti
+
+  ϕE : Epic ∣ ϕ ∣
+  ϕE = 𝑻ϕE ti
+
+  ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+  ϕsur 𝒄 x = ϕE (𝒄 x)
+
+  pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 ∣
+  pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+
+  ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
+  ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+
+  β : ∣ ϕ ∣ ∘ (p ̇ 𝑻) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻)
+  β = pΨq 𝑪 SCloC
+
+  γ : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+  γ = gfe λ 𝒄 →
+   (p ̇ 𝑪) 𝒄                  ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+   (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ (comm-hom-term gfe 𝑻 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
+   ∣ ϕ ∣ ((p ̇ 𝑻)(pre 𝒄))       ≡⟨ intensionality β (pre 𝒄) ⟩
+   ∣ ϕ ∣ ((q ̇ 𝑻)(pre 𝒄))       ≡⟨ comm-hom-term gfe 𝑻 𝑪 ϕ q (pre 𝒄) ⟩
+   (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+   (q ̇ 𝑪) 𝒄                   ∎
+
+Ψ⊆Th𝒦 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+         (p q : ∣ (𝑻{𝓧}{X}) ∣) → (p , q) ∈ Ψ → 𝒦 ⊧ p ≋ q
+Ψ⊆Th𝒦 {𝓠}{𝓧}{X}{𝒦} p q pΨq {𝑨} KA = Ψ⊆ThSClo{𝒦 = 𝒦} {p , q} pΨq (sbase KA)
 
 
 
@@ -207,90 +260,91 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(�
 -- modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in VClo 𝒦.
 
 -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
-class-identities : {𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →                 (p q : ∣ 𝑻{𝓧}{X} ∣)
+class-identities : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+                   (p q : ∣ 𝑻{𝓧}{X} ∣)
                   ----------------------------------------------------------
- →                 (_⊧_≋_ {𝓤}{𝓧}{X} 𝒦 p q)  ⇔  ((p , q) ∈ Th (VClo 𝒦))
+ →                 (_⊧_≋_ {𝓠}{𝓧}{X} 𝒦 p q)  ⇔  ((p , q) ∈ Th (VClo 𝒦))
 
-class-identities {𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1{𝒦}{𝓧} p q α VCloA) ,  λ Thpq KA → Thpq (vbase KA)
+class-identities {𝓠}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1{𝓠}{𝓧}{X}{𝒦} p q α VCloA) ,
+                                      (λ Thpq KA → Thpq (vbase KA))
 
 
 
 -- Birkhoff's theorem: every variety is an equational class.
--- birkhoff : {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
---            (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ Mod (Th (VClo{𝒦}))
---           --------------------------------------------
---  →                     𝑨 ∈ VClo{𝒦}
+birkhoff : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} -- 
+           (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ Mod{𝓠}{𝓧}{X} (Th{𝓠}{𝓧} (VClo{𝓠} 𝒦))
+          --------------------------------------------
+ →                     𝑨 ∈ VClo 𝒦
 
--- birkhoff {𝒦} 𝑨 ModThVCloA = γ
---  where
---   h₀ : X → ∣ 𝑨 ∣
---   h₀ = fst (𝕏 𝑨)
+birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = {!γ!}
+ where
+  h₀ : X → ∣ 𝑨 ∣
+  h₀ = fst (𝕏 𝑨)
 
---   h : hom 𝑻 𝑨
---   h = lift-hom{𝑨 = 𝑨} h₀
+  h : hom (𝑻{𝓧}{X}) 𝑨
+  h = lift-hom{𝑨 = 𝑨} h₀
 
---   Ψ⊆ThVClo : Ψ ⊆ Th VClo
---   Ψ⊆ThVClo {p , q} pΨq =
---    (lr-implication (class-identities p q)) (Ψ⊆Th𝒦 p q pΨq)
+  Ψ⊆ThVClo : Ψ{𝓠 = 𝓠}{𝒦 = 𝒦} ⊆ Th{𝓠}{𝓧} (VClo{𝓠} 𝒦)
+  Ψ⊆ThVClo {p , q} pΨq =
+   (lr-implication (class-identities p q)) (Ψ⊆Th𝒦{𝓠}{𝓧}{X}{𝒦} p q pΨq)
 
---   Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
---   Ψ⊆A⊧ {p} {q} pΨq = ModThVCloA p q (Ψ⊆ThVClo {p , q} pΨq)
+  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ → 𝑨 ⊧ p ≈ q
+  Ψ⊆A⊧ {p} {q} pΨq = ModThVCloA p q (Ψ⊆ThVClo {p , q} pΨq)
 
---   Ψ⊆Kerh : Ψ ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
---   Ψ⊆Kerh {p , q} pΨq = hp≡hq
---    where
---     hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
---     hp≡hq = hom-id-compatibility{𝒦} p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
+  Ψ⊆Kerh : Ψ ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh {p , q} pΨq = hp≡hq
+   where
+    hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
+    hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
 
---   gg : Σ g ꞉ hom (𝑻{𝓤}{X}) (𝔽{𝒦}) , Epic ∣ g ∣
---   gg = (lift-hom{𝑨 = 𝔽} g₀) , {!!} -- (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺)} g₀ g₀E)
+  gg : Σ g ꞉ hom (𝑻{𝓧}{X}) (𝔽{𝓠}{𝓧}{X}{𝒦}) , Epic ∣ g ∣
+  gg = (lift-hom{𝑨 = 𝔽} g₀) , {!!} -- (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺)} g₀ g₀E)
 
---    where
---     g₀ : X → ∣ 𝔽 ∣
---     g₀ = fst (𝕏 𝔽)
+   where
+    g₀ : X → ∣ 𝔽 ∣
+    g₀ = fst (𝕏 𝔽)
 
---     g₀E : Epic g₀
---     g₀E = snd (𝕏 𝔽)
+    g₀E : Epic g₀
+    g₀E = snd (𝕏 𝔽)
 
---   g : hom (𝑻{𝓤}{X}) (𝔽{𝒦})
---   g = fst gg
+  g : hom (𝑻{𝓧}{X}) (𝔽{𝒦 = 𝒦})
+  g = fst gg
 
---   gE : Epic ∣ g ∣
---   gE = snd gg
+  gE : Epic ∣ g ∣
+  gE = snd gg
 
---   -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
---   -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
---   --
---   --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
---   --    𝑻---- g --->>𝔽  (ker g = Ψ)
---   --     \         .
---   --      \       .
---   --       h     ∃ϕ     (want: Ψ ⊆ ker h)
---   --        \   .
---   --         \ .
---   --          V
---   --          𝑨
+  -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
+  -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
+  --
+  --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
+  --    𝑻---- g --->>𝔽  (ker g = Ψ)
+  --     \         .
+  --      \       .
+  --       h     ∃ϕ     (want: Ψ ⊆ ker h)
+  --        \   .
+  --         \ .
+  --          V
+  --          𝑨
 
---   -----------------------------------
---   kerg⊆kerh : KER-pred ∣ g ∣ ⊆ KER-pred ∣ h ∣
---   kerg⊆kerh = {!!}
+  -----------------------------------
+  kerg⊆kerh : KER-pred ∣ g ∣ ⊆ KER-pred ∣ h ∣
+  kerg⊆kerh = {!!}
 
---   ϕ' : Σ ϕ ꞉ (hom (𝔽{𝒦}) 𝑨) , ∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ g ∣
---   ϕ' = HomFactor gfe {𝑻{𝓤}{X}} {𝑨} {𝔽{𝒦}} h g kerg⊆kerh gE
+  ϕ' : Σ ϕ ꞉ (hom (𝔽{𝒦 = 𝒦}) 𝑨) , ∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ g ∣
+  ϕ' = HomFactor gfe {𝑻{𝓧}{X}} {𝑨} {𝔽{𝒦 = 𝒦}} h g kerg⊆kerh gE
 
---   --We need to find F : Algebra 𝒰 𝑆 such that F ∈ VClo and ∃ ϕ : hom F 𝑨 with ϕE : Epic ∣ ϕ ∣.
---   --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom F∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
---   -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+  --We need to find F : Algebra 𝒰 𝑆 such that F ∈ VClo and ∃ ϕ : hom F 𝑨 with ϕE : Epic ∣ ϕ ∣.
+  --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom F∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
+  -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
---   vcloF : (𝔽{𝒦}) ∈ VClo{𝒦}
---   vcloF = {!!}
+  vcloF : (𝔽{𝒦 = 𝒦}) ∈ VClo 𝒦
+  vcloF = {!!}
 
---   ϕ : Σ h ꞉ (hom (𝔽{𝒦}) 𝑨) , Epic ∣ h ∣
---   ϕ = {!∣ ϕ' ∣ , ?!}
+  ϕ : Σ h ꞉ (hom (𝔽{𝒦}) 𝑨) , Epic ∣ h ∣
+  ϕ = {!∣ ϕ' ∣ , ?!}
 
---   hiF : HomImagesOf (𝔽{𝒦})
---   hiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
+  hiF : HomImagesOf (𝔽{𝒦})
+  hiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
 
---   γ : 𝑨 ∈ VClo
---   γ = vhom{𝒦}{𝔽{𝒦}} vcloF hiF
+  γ : 𝑨 ∈ VClo
+  γ = vhom{𝒦}{𝔽{𝒦}} vcloF hiF
