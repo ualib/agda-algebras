@@ -68,52 +68,50 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(�
  --The free algebra in Agda
  ---------------------------
 
- 𝑻img : _ ̇
- 𝑻img = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+ 𝑻img : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → _ ̇
+ 𝑻img {𝓠}{𝒦} = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
 
- -- SClo→𝑻img : (𝑨 : Algebra W 𝑆) → 𝑨 ∈ SClo 𝒦₁ → 𝑻img
- -- SClo→𝑻img 𝑨 SCloA = 𝑨 , (fst (𝑻hom-gen 𝑨)) , (SCloA , (snd (𝑻hom-gen 𝑨)))
-
- mkti : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ SClo 𝒦 → 𝑻img
- mkti {𝑨} SCloA = (𝑨 , fst thg , SCloA , snd thg)
+ mkti : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
+  →     𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦 → 𝑻img
+ mkti {𝑨 = 𝑨} SCloA = (𝑨 , fst thg , SCloA , snd thg)
   where
    thg : Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑨), Epic ∣ h ∣
    thg = 𝑻hom-gen 𝑨
 
- 𝑻𝑨 : 𝑻img → Algebra _ 𝑆
+ 𝑻𝑨 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝑻img{𝓠}{𝒦} → Algebra _ 𝑆
  𝑻𝑨 ti = ∣ ti ∣
 
- 𝑻ϕ : {ti : 𝑻img} → hom (𝑻{𝓧}{X}) (𝑻𝑨 ti)
- 𝑻ϕ {ti} = fst (snd ti)
+ 𝑻ϕ : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}(ti : 𝑻img{𝓠}{𝒦}) → hom (𝑻{𝓧}{X}) (𝑻𝑨 ti)
+ 𝑻ϕ ti = fst (snd ti)
 
- 𝑻ϕE : {ti : 𝑻img} → Epic ∣ 𝑻ϕ {ti} ∣
- 𝑻ϕE {ti} = snd (snd ∥ ti ∥)
+ 𝑻ϕE : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}(ti : 𝑻img{𝓠}{𝒦}) → Epic ∣ 𝑻ϕ ti ∣
+ 𝑻ϕE ti = snd (snd ∥ ti ∥)
 
  𝑻KER : _ ̇
  𝑻KER = Σ (p , q) ꞉ (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) ,
-          ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ {mkti SCloA} ∣
+          ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ (mkti SCloA) ∣
 
  Ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
  Ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦)
-               → ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (q ̇ 𝑻)
+               → ∣ 𝑻ϕ (mkti SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti SCloA) ∣ ∘ (q ̇ 𝑻)
 
  ΨRel : Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
  ΨRel p q = Ψ (p , q)
 
- ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → ∣ 𝑻ϕ {mkti SCloA} ∣ p ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ q
+ ψ : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)
+ ψ {𝒦 = 𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓧 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓧} 𝒦) → ∣ 𝑻ϕ (mkti SCloA) ∣ p ≡ ∣ 𝑻ϕ (mkti SCloA) ∣ q
 
- ψRel : Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
- ψRel p q = ψ (p , q)
+ ψRel : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)
+ ψRel {𝒦 = 𝒦} p q = ψ{𝒦} (p , q)
 
- ψcompatible : compatible (𝑻{𝓧}{X}) ψRel
+ ψcompatible : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → compatible (𝑻{𝓧}{X}) (ψRel{𝒦})
  ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
   where
    ti : 𝑻img
    ti = mkti {𝑨 = 𝑨} SCloA
 
    ϕ : hom 𝑻 𝑨
-   ϕ = 𝑻ϕ {ti = ti}
+   ϕ = 𝑻ϕ ti
 
    γ : ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻) j)
    γ = ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
@@ -121,35 +119,36 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(�
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
        ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
 
- ψSym : symmetric ψRel
+ ψSym : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → symmetric (ψRel{𝒦})
  ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
- ψTra : transitive ψRel
+ ψTra : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → transitive (ψRel{𝒦})
  ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
- ψIsEquivalence : IsEquivalence ψRel
+ ψIsEquivalence : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → IsEquivalence (ψRel{𝒦})
  ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
 
- ψCon : Congruence (𝑻{𝓧}{X})
- ψCon = mkcon ψRel ψcompatible ψIsEquivalence
+ ψCon : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Congruence (𝑻{𝓧}{X})
+ ψCon {𝒦 = 𝒦} = mkcon (ψRel{𝒦}) ψcompatible ψIsEquivalence
 
- 𝔽 : Algebra ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺)) 𝑆
- 𝔽 = 𝑻{𝓤}{X} ╱ ψCon
+ 𝔽 : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} → Algebra ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓧 ⁺) ⁺)) 𝑆
+ 𝔽 {𝒦} = 𝑻{𝓧}{X} ╱ (ψCon{𝒦})
 
 
  --More tools for Birkhoff's theorem
  --Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
 
- 𝑻i⊧ψ : {p q : ∣ 𝑻 ∣}{𝑪 : Algebra 𝓤 𝑆}{SCloC : 𝑪 ∈ SClo 𝒦}
-  →       (p , q) ∈ ψ
-         ----------------------------------------------------------------
-  →       ∣ 𝑻ϕ{ti = mkti SCloC} ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ 𝑻ϕ{ti = mkti SCloC} ∣ ((q ̇ 𝑻) ℊ)
+ 𝑻i⊧ψ : {𝒦 : Pred (Algebra 𝓧 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)} (p q : ∣ (𝑻{𝓧}{X}) ∣)
+        (𝑪 : Algebra 𝓧 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓧} 𝒦)
+  →     (p , q) ∈ ψ
+       ----------------------------------------------------------------
+  →     ∣ 𝑻ϕ(mkti SCloC) ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ 𝑻ϕ(mkti SCloC) ∣ ((q ̇ 𝑻) ℊ)
 
- 𝑻i⊧ψ {p}{q}{𝑪}{SCloC} pψq = γ
+ 𝑻i⊧ψ p q 𝑪 SCloC pψq = γ
   where
 
    ϕ : hom 𝑻 𝑪
-   ϕ = 𝑻ϕ{ti = mkti SCloC}
+   ϕ = 𝑻ϕ(mkti SCloC)
 
    pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
    pCq = pψq 𝑪 SCloC
@@ -164,13 +163,13 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(�
  Ψ⊆ThSClo {p , q} pΨq {𝑪} SCloC = γ
   where
    ti : 𝑻img
-   ti = mkti {𝑪} SCloC -- SClo→𝑻img 
+   ti = mkti {𝑨 = 𝑪} SCloC -- SClo→𝑻img 
 
    ϕ : hom 𝑻 𝑪
-   ϕ = 𝑻ϕ{ti}
+   ϕ = 𝑻ϕ ti
 
    ϕE : Epic ∣ ϕ ∣
-   ϕE = 𝑻ϕE{ti}
+   ϕE = 𝑻ϕE ti
 
    ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
    ϕsur 𝒄 x = ϕE (𝒄 x)
