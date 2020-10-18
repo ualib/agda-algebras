@@ -62,13 +62,7 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
-module _
- {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- {𝒦₁ : Pred (Algebra W 𝑆) ( W ⁺ )}
- {𝒦' : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ )}
- {𝒦+ : Pred (Algebra OVU+ 𝑆) (OVU+ ⁺)}
- {𝒦4 : Pred (Algebra (OVU+ ⁺ ⁺ ⁺) 𝑆) (OVU+ ⁺ ⁺ ⁺ ⁺)} where
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
  ---------------------------
  --The free algebra in Agda
@@ -89,40 +83,43 @@ module _
  𝑻𝑨 : 𝑻img → Algebra _ 𝑆
  𝑻𝑨 ti = ∣ ti ∣
 
- 𝑻ϕ : {ti : 𝑻img} → hom 𝑻 (𝑻𝑨 ti)
+ 𝑻ϕ : {ti : 𝑻img} → hom (𝑻{𝓧}{X}) (𝑻𝑨 ti)
  𝑻ϕ {ti} = fst (snd ti)
 
  𝑻ϕE : {ti : 𝑻img} → Epic ∣ 𝑻ϕ {ti} ∣
  𝑻ϕE {ti} = snd (snd ∥ ti ∥)
 
  𝑻KER : _ ̇
- 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻 ∣ × ∣ 𝑻 ∣) ,
+ 𝑻KER = Σ (p , q) ꞉ (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) ,
           ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ {mkti SCloA} ∣
 
- Ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) _
+ Ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
  Ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦)
                → ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ ∘ (q ̇ 𝑻)
 
- ψ : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) {!!}
+ ΨRel : Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
+ ΨRel p q = Ψ (p , q)
+
+ ψ : Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻 ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
  ψ (p , q) = ∀ 𝑨 → (SCloA : 𝑨 ∈ SClo 𝒦) → ∣ 𝑻ϕ {mkti SCloA} ∣ p ≡ ∣ 𝑻ϕ {mkti SCloA} ∣ q
 
- ψRel : Rel ∣ 𝑻 ∣ {!!}
+ ψRel : Rel ∣ (𝑻{𝓧}{X}) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
  ψRel p q = ψ (p , q)
 
- -- ψcompatible : compatible (𝑻{W ⁺}) ψRel
- -- ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
- --  where
- --   ti : 𝑻img
- --   ti = mkti {𝑨 = 𝑨} SCloA
+ ψcompatible : compatible (𝑻{𝓧}{X}) ψRel
+ ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
+  where
+   ti : 𝑻img
+   ti = mkti {𝑨 = 𝑨} SCloA
 
- --   ϕ : hom 𝑻 𝑨
- --   ϕ = 𝑻ϕ {ti = ti}
+   ϕ : hom 𝑻 𝑨
+   ϕ = 𝑻ϕ {ti = ti}
 
- --   γ : ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻) j)
- --   γ = ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
- --       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
- --       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
- --       ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
+   γ : ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻) j)
+   γ = ∣ ϕ ∣ ((f ̂ 𝑻) i) ≡⟨ ∥ ϕ ∥ f i ⟩
+       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
+       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
+       ∣ ϕ ∣ ((f ̂ 𝑻) j) ∎
 
  ψSym : symmetric ψRel
  ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
@@ -133,11 +130,11 @@ module _
  ψIsEquivalence : IsEquivalence ψRel
  ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
 
- -- ψCon : Congruence (𝑻{𝓤}{X})
- -- ψCon = mkcon ψRel ψcompatible ψIsEquivalence
+ ψCon : Congruence (𝑻{𝓧}{X})
+ ψCon = mkcon ψRel ψcompatible ψIsEquivalence
 
- -- 𝔽 : Algebra ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺)) 𝑆
- -- 𝔽 = 𝑻{𝓤}{X} ╱ ψCon
+ 𝔽 : Algebra ((𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺)) 𝑆
+ 𝔽 = 𝑻{𝓤}{X} ╱ ψCon
 
 
  --More tools for Birkhoff's theorem

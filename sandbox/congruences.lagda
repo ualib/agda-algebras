@@ -87,6 +87,9 @@ is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 𝟎 : {A : 𝓤 ̇ } → 𝓤 ̇
 𝟎{𝓤} {A} = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
 
+𝟎-alg-rel : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓤 𝑆} → 𝓤 ̇
+𝟎-alg-rel {𝑨 = 𝑨} = Σ a ꞉ ∣ 𝑨 ∣ , Σ b ꞉ ∣ 𝑨 ∣ , a ≡ b
+
 𝟎-rel : {A : 𝓤 ̇ } → Rel A 𝓤
 𝟎-rel a b = a ≡ b
 
@@ -129,20 +132,18 @@ compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 module _ {𝑆 : Signature 𝓞 𝓥}  where
 
   -- relation compatible with an operation
-  compatible-op : {A : Algebra 𝓤 𝑆}
-   →              ∣ 𝑆 ∣ → Rel ∣ A ∣ 𝓤
-   →              𝓥 ⊔ 𝓤 ̇
-  compatible-op {𝓤} {A} f R = (lift-rel R) =[ f ̂ A ]⇒ R
+  compatible-op : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+  compatible-op {𝑨 = 𝑨} f R = (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
 
   --The given relation is compatible with all ops of an algebra.
-  compatible : (A : Algebra 𝓤 𝑆) → Rel ∣ A ∣ 𝓤 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ̇
-  compatible {𝓤} A R = ∀ f → compatible-op{𝓤}{A} f R
+  compatible : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+  compatible {𝓤 = 𝓤}{𝓦 = 𝓦} 𝑨 R = ∀ f → compatible-op{𝓤 = 𝓤}{𝓦 = 𝓦}{𝑨 = 𝑨} f R
 
   𝟎-compatible-op : funext 𝓥 𝓤
-   →                {A : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
-   →                compatible-op {𝓤}{A} f 𝟎-rel
-  𝟎-compatible-op fe {A = A} f ptws0  =
-   ap (f ̂ A) (fe (λ x → ptws0 x))
+   →                {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
+   →                compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
+  𝟎-compatible-op fe {𝑨 = 𝑨} f ptws0  =
+   ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
 
   𝟎-compatible : funext 𝓥 𝓤
    →             {A : Algebra 𝓤 𝑆}
