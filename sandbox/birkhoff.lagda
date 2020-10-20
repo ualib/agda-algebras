@@ -9,7 +9,7 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext; dfunext; funext; Pred)
+open import prelude using (global-dfunext; dfunext; funext; Pred; _↪_)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -136,15 +136,91 @@ mkti {𝓠}{𝓧}{X}{𝒦} 𝑨 SCloA = (𝑨 , fst thg , SCloA , snd thg)
 ΨCon {𝓠}{𝓧}{X}{𝒦} = mkcon (ΨRel{𝓠}{𝓧}{X}{𝒦}) Ψcompatible ΨIsEquivalence
 
 -- The (relatively) free algebra
-
 𝔽 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓠 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
 𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻{𝓧}{X} ╱ (ΨCon{𝓠}{𝓧}{X}{𝒦})
+
+-- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
+-- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
+-- Proof. 𝑻/ΨCon ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
+--        Therefore, 𝑻/ΨCon ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
+--        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦) = SP(𝒦).
+
+-- data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+--   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+--   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+AlgebrasInSClo𝒦 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
+AlgebrasInSClo𝒦 {𝓠}{𝒦} = SClo{𝓤 = 𝓠} 𝒦
+
+ΣSClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+ΣSClo {𝓠}{𝒦} = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+
+⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →       ΣSClo{𝓠}{𝒦}
+        ----------------
+ →       Algebra 𝓠 𝑆
+
+⨅SClo SS = ⨅ (fst ∥ SS ∥)
+
+
+PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
+PS⊆SP (pbase (sbase x)) = sbase (pbase x)
+PS⊆SP {𝓠} {𝒦} (pbase (sub x sa)) = γ
+ where
+  ζ : ∣ sa ∣ ∈ SClo 𝒦
+  ζ = sub x sa
+
+  ξ : 𝒦 ⊆ PClo 𝒦
+  ξ = pbase
+
+  γ : SClo (PClo 𝒦) ∣ sa ∣
+  γ = SClo-mono ξ (sub x sa)
+
+PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (λ args → proj args i)))} (prod x) = {!!}
+
+
+⨅Sclo∈SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+           (SS : ΣSClo{𝓠}{𝒦})
+          -------------------------------
+ →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
+
+⨅Sclo∈SP {𝓠}{𝒦} SS = γ
+ where
+  I : 𝓠 ̇
+  I = ∣ SS ∣
+  𝒜 : I → Algebra 𝓠 𝑆
+  𝒜 = fst ∥ SS ∥
+
+  h₀ : ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+  h₀ = snd ∥ SS ∥
+
+  h₁ : ((i : I) → 𝒜 i ∈ PClo (SClo 𝒦))
+  h₁ i = pbase (h₀ i)
+
+  P : Algebra 𝓠 𝑆
+  P = ⨅SClo SS
+
+  ζ : P ∈ PClo (SClo 𝒦)
+  ζ = prod{I = I}{𝒜 = 𝒜} h₁
+
+  γ : P ∈ SClo (PClo 𝒦)
+  γ = PS⊆SP ζ
+
+
+-- 𝔽embedding : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →            𝔽{𝓠}{𝓧}{X}{𝒦} ↪ ⨅ (SClo{𝓤 = 𝓠} 𝒦)
+-- 𝔽embedding = ?
+-- ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
+--               → ∣ 𝑻ϕ{𝓠}{𝓧}{X}{𝒦} (mkti 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻)
 
 𝔽∈SP𝒦 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →       Σ I ꞉ _ ̇ , Σ 𝒜 ꞉ (I → Algebra _ 𝑆) , Σ sa ꞉ (SubalgebrasOf (⨅ 𝒜)) ,
            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓠}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
 𝔽∈SP𝒦 = {!!}
+
+
+
 
 𝑻i⊧Ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
        (𝑪 : Algebra 𝓠 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓠} 𝒦)
@@ -345,6 +421,11 @@ birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = {!γ!}
 
 
 -- OLD STUFF
+-- ⨅SClo' : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- {I : 𝓠 ̇}(𝒜 : I → Algebra 𝓠 𝑆) → ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+-- →        Algebra 𝓠 𝑆
+-- ⨅SClo' 𝒜 h₀ = ⨅ 𝒜
+
 -- ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
 --  →  Pred (∣ 𝑻{𝓧}{X} ∣ × ∣ 𝑻{𝓧}{X} ∣) _
 -- ψ {𝓠}{𝓧}{X}{𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
@@ -411,4 +492,20 @@ birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = {!γ!}
 
 --   γ : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
 --   γ = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣(term-agree q))
+
+-- PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
+-- PS⊆SP {𝓠} {𝒦} {𝑨} (pbase {𝑨 = 𝑨} (sbase x)) = sbase (pbase x)
+-- PS⊆SP {𝓠} {𝒦} {.(fst sa)} (pbase {𝑨 = .(fst sa)} (sub x sa)) = PS⊆SP{𝓠}{𝒦} (pbase (sub x sa))
+-- PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (λ args → proj args i)))}
+--  (prod{𝒜 = 𝒜} PCloSCloA) = γ
+--   where
+--    SCloPCloA : ∀ i → 𝒜 i ∈ SClo (PClo 𝒦)
+--    SCloPCloA i = PS⊆SP (PCloSCloA i)
+
+--    ⨅𝒜∈PS : ⨅ 𝒜 ∈ PClo (SClo 𝒦)
+--    ⨅𝒜∈PS = prod PCloSCloA
+
+--    γ : SClo (PClo 𝒦) (⨅ 𝒜)
+--    γ = {!!}
 

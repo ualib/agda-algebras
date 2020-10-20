@@ -65,6 +65,21 @@ data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
+
+SClo𝒦 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} → 𝒦 ⊆ SClo 𝒦
+SClo𝒦 {𝓤}{𝒦} {𝑨} KA = sbase KA
+
+SClo-mono : {𝓤 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ →          𝒦₁ ⊆ 𝒦₂ → SClo 𝒦₁ ⊆ SClo 𝒦₂
+SClo-mono h₀ {𝑨} (sbase x) = sbase (h₀ x)
+SClo-mono h₀ {.(fst sa)} (sub x sa) = sub (SClo-mono h₀ x) sa
+
+SClo-idemp : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ →          (SClo (SClo 𝒦)) ⊆ (SClo 𝒦)
+SClo-idemp {𝓤} {𝒦} {𝑨} (sbase x) = x
+SClo-idemp {𝓤} {𝒦} {.(fst sa)} (sub x sa) = sub (SClo-idemp x) sa
+
+
 ----------------------------------------------------------------------
 -- Variety Closure
 -- Finally, we have a datatype that represents classes of algebras that are close under the taking of
