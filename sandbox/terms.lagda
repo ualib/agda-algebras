@@ -225,29 +225,44 @@ interp-prod2 fe {𝓤}{X} (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣)
    (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
    (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i))) ∎
 
--- Proof of 1. (homomorphisms commute with terms).
+-- Homomorphisms commute (extensionally) with terms.
 comm-hom-term : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} → funext 𝓥 𝓦
  →       (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
  →       (h : hom 𝑨 𝑩) (t : Term{𝓧}{X}) (a : X → ∣ 𝑨 ∣)
          --------------------------------------------
  →         ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
-comm-hom-term {𝓤}{𝓦}{𝓧}{X} fe 𝑨 𝑩 h (generator x) a = 𝓇ℯ𝒻𝓁
+comm-hom-term  fe 𝑨 𝑩 h (generator x) a = 𝓇ℯ𝒻𝓁
 
 comm-hom-term fe 𝑨 𝑩 h (node f args) a =
  ∣ h ∣((f ̂ 𝑨) λ i₁ → (args i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a ) ⟩
  (f ̂ 𝑩)(λ i₁ →  ∣ h ∣((args i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (args i₁) a))⟩
  (f ̂ 𝑩)(λ r → (args r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
 
--- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
-compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
-                  (𝑨 : Algebra 𝓤 𝑆)(t : Term{𝓤}{X})(θ : Con 𝑨)
-                 ------------------------------------------------
- →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
+-- Homomorphisms commute (intensionally) with terms.
+comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
+ →       (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+ →       (h : hom 𝑨 𝑩) (t : Term{𝓧}{X})
+         --------------------------------------------
+ →         ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a)
 
-compatible-term 𝑨 (generator x) θ p = p x
+comm-hom-term-intensional gfe 𝑨 𝑩 h (generator x) = 𝓇ℯ𝒻𝓁
 
-compatible-term 𝑨 (node f args) θ p = pr₂ ∥ θ ∥ f λ x → (compatible-term 𝑨 (args x) θ) p
+comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
+ where
+  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a))
+      ≡ (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
+  γ = (λ a → ∣ h ∣ ((f ̂ 𝑨)(λ i → (args i ̇ 𝑨) a)))  ≡⟨ gfe (λ a → ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a )) ⟩
+      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))  ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
+      (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣  ∎
+    where
+     IH : (a : X → ∣ 𝑨 ∣)(i : ∥ 𝑆 ∥ f)
+      →   (∣ h ∣ ∘ (args i ̇ 𝑨)) a ≡ ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
+     IH a i = intensionality (comm-hom-term-intensional gfe 𝑨 𝑩 h (args i)) a
+
+     ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
+           ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
+     ih = gfe λ a → gfe λ i → IH a i
 
 -- Proof of 1. ("intensional" version)
 comm-hom-term' : global-dfunext
@@ -279,6 +294,16 @@ comm-hom-term' gfe {X = X} 𝑨 𝑩 h (node f args) = γ
      ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
            ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
      ih = gfe λ a → gfe λ i → IH a i
+
+-- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
+compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
+                  (𝑨 : Algebra 𝓤 𝑆)(t : Term{𝓤}{X})(θ : Con 𝑨)
+                 ------------------------------------------------
+ →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
+
+compatible-term 𝑨 (generator x) θ p = p x
+
+compatible-term 𝑨 (node f args) θ p = pr₂ ∥ θ ∥ f λ x → (compatible-term 𝑨 (args x) θ) p
 
 compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
                    (𝑨 : Algebra 𝓤 𝑆)
