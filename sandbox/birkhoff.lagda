@@ -177,7 +177,17 @@ PS⊆SP {𝓠} {𝒦} (pbase (sub x sa)) = γ
   γ : SClo (PClo 𝒦) ∣ sa ∣
   γ = SClo-mono ξ (sub x sa)
 
-PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (λ args → proj args i)))} (prod x) = {!!}
+PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (λ args → proj args i)))}
+ (prod{𝒜 = 𝒜} PCloSCloA) = γ
+  where
+   SCloPCloA : ∀ i → 𝒜 i ∈ SClo (PClo 𝒦)
+   SCloPCloA i = PS⊆SP (PCloSCloA i)
+
+   ⨅𝒜∈PS : ⨅ 𝒜 ∈ PClo (SClo 𝒦)
+   ⨅𝒜∈PS = prod PCloSCloA
+
+   γ : SClo (PClo 𝒦) (⨅ 𝒜)
+   γ = {!!}
 
 
 ⨅Sclo∈SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}

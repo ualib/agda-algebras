@@ -66,20 +66,6 @@ data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
 
-SClo𝒦 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} → 𝒦 ⊆ SClo 𝒦
-SClo𝒦 {𝓤}{𝒦} {𝑨} KA = sbase KA
-
-SClo-mono : {𝓤 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →          𝒦₁ ⊆ 𝒦₂ → SClo 𝒦₁ ⊆ SClo 𝒦₂
-SClo-mono h₀ {𝑨} (sbase x) = sbase (h₀ x)
-SClo-mono h₀ {.(fst sa)} (sub x sa) = sub (SClo-mono h₀ x) sa
-
-SClo-idemp : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →          (SClo (SClo 𝒦)) ⊆ (SClo 𝒦)
-SClo-idemp {𝓤} {𝒦} {𝑨} (sbase x) = x
-SClo-idemp {𝓤} {𝒦} {.(fst sa)} (sub x sa) = sub (SClo-idemp x) sa
-
-
 ----------------------------------------------------------------------
 -- Variety Closure
 -- Finally, we have a datatype that represents classes of algebras that are close under the taking of
@@ -90,6 +76,45 @@ data VClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
  vprod : {I : 𝓤 ̇}{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
  vsub  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
  vhom  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+
+-----------------------------------------------------------------------------
+-- Closure operator (definition)
+
+_IsExpansive : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
+C IsExpansive = ∀ 𝒦 → 𝒦 ⊆ C 𝒦
+
+_IsMonotone : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
+C IsMonotone = ∀ 𝒦 𝒦' → 𝒦 ⊆ 𝒦' → C 𝒦 ⊆ C 𝒦'
+
+_IsIdempotent : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
+C IsIdempotent = ∀ 𝒦 → C (C 𝒦) ⊆ C 𝒦
+
+_IsClosure : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
+C IsClosure  = (C IsExpansive) × (C IsMonotone) × (C IsIdempotent)
+
+
+----------------------------------------------------------------------
+-- Example. SClo is a closure operator
+SCloIsClosure : {𝓤 : Universe} → SClo{𝓤} IsClosure
+SCloIsClosure {𝓤} = expa , mono , idem
+ where
+  expa : SClo IsExpansive
+  expa 𝒦 = sbase {𝒦 = 𝒦}
+
+  mono : SClo IsMonotone
+  mono 𝒦 𝒦' h₀ {𝑨} (sbase x) = sbase (h₀ x)
+  mono 𝒦 𝒦' h₀ {.(fst sa)} (sub x sa) = sub (mono 𝒦 𝒦' h₀ x) sa
+
+  idem : SClo IsIdempotent
+  idem 𝒦 {𝑨} (sbase x) = x
+  idem 𝒦 {.(fst sa)} (sub x sa) = sub (idem 𝒦 x) sa
+
+SClo-mono : {𝓤 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ →          𝒦₁ ⊆ 𝒦₂ → SClo 𝒦₁ ⊆ SClo 𝒦₂
+SClo-mono {𝓤} {𝒦₁}{𝒦₂} = ∣ snd SCloIsClosure ∣ 𝒦₁ 𝒦₂
+
+
 
 products-preserve-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
                                (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
