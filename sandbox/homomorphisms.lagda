@@ -12,7 +12,7 @@ open import prelude using (global-dfunext)
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
 open import prelude using (_∘_; _⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
- Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible;
+ Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible; 𝑖𝑑;
  equivs-are-embeddings; id; invertibles-are-equivs; dintensionality; is-subsingleton; fiber; monic;
  intensionality; hfunext) public
 
@@ -36,6 +36,9 @@ hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨
 𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
+id-is-hom : {𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
+id-is-hom = λ _ _ → refl _
+
 -- composition of homomorphisms 1
 HCompClosed : {𝓠 𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
@@ -53,12 +56,12 @@ HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
 -- composition of homomorphisms 2
 ∘-hom : {𝓠 𝓤 𝓦 : Universe}
         (𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
-        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
- →      is-homomorphism{𝓠}{𝓤} 𝑨 𝑩 f  →  is-homomorphism{𝓤}{𝓦} 𝑩 𝑪 g
+        {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣} {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}
+ →      is-homomorphism{𝓤}{𝓦} 𝑩 𝑪 g →  is-homomorphism{𝓠}{𝓤} 𝑨 𝑩 f
        --------------------------------------------------------------------
- →      is-homomorphism{𝓠}{𝓦} 𝑨 𝑪 (g ∘ f)
+ →          is-homomorphism{𝓠}{𝓦} 𝑨 𝑪 (g ∘ f)
 ∘-hom{𝓠}{𝓤}{𝓦} 𝑨 𝑩 𝑪 {f} {g} fhom ghom =
- ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
+ ∥ HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (f , fhom) ∥
 
 homFactor : funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)

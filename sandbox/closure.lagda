@@ -8,7 +8,7 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂; ∘-embedding)
+open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -111,6 +111,11 @@ SCloIsClosure {𝓤} = expa , mono , idem
 SClo-mono : {𝓤 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  →          𝒦₁ ⊆ 𝒦₂ → SClo 𝒦₁ ⊆ SClo 𝒦₂
 SClo-mono {𝓤} {𝒦₁}{𝒦₂} = ∣ snd SCloIsClosure ∣ 𝒦₁ 𝒦₂
+
+PClo-idem : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ →          PClo (PClo 𝒦) ⊆ PClo 𝒦
+PClo-idem {𝓤} {𝒦} (pbase x) = x
+PClo-idem {𝓤} {𝒦} (prod x) = prod (λ i → PClo-idem (x i))
 
 
 

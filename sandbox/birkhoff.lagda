@@ -146,143 +146,129 @@ LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
           ----------------------------------------------------
  →         ⨅ ℬ IsSubalgebraOfClass (PClo 𝒦)
 
-LemPS⊆SP {𝓠} hfe {𝒦}{I}{ℬ} ℬ≤𝒦 = γ
+LemPS⊆SP{𝓠}hfe{𝒦}{I}{ℬ}ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , (prod PClo𝒜) , (⨅≅ gfe ℬ≅SA)
  where
-  𝒜 : I → Algebra 𝓠 𝑆
-  𝒜 i = ∣ ℬ≤𝒦 i ∣
-
-  SA : I → Algebra 𝓠 𝑆
-  SA i = ∣ fst ∥ ℬ≤𝒦 i ∥ ∣
-
-  𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
-  𝒦𝒜 i = ∣ snd ∥ ℬ≤𝒦 i ∥ ∣
-  PClo𝒜 : ∀ i → 𝒜 i ∈ PClo 𝒦
-  PClo𝒜 i = pbase (𝒦𝒜 i)
-
-  SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
-  SA≤𝒜 i = snd ∣ ∥ ℬ≤𝒦 i ∥ ∣
-
-  ℬ≅SA : ∀ i → ℬ i ≅ SA i
-  ℬ≅SA i = ∥ snd ∥ ℬ≤𝒦 i ∥ ∥
-
-  ⨅ℬ≅⨅SA : ⨅ ℬ ≅ ⨅ SA
-  ⨅ℬ≅⨅SA = ⨅≅ gfe ℬ≅SA
-
-  h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-  h i = ∣ SA≤𝒜 i ∣
-  hem : ∀ i → is-embedding (h i)
-  hem i = fst ∥ SA≤𝒜 i ∥
-  hhm : ∀ i → is-homomorphism (SA i) (𝒜 i) (h i)
-  hhm i = snd ∥ SA≤𝒜 i ∥
-
-  ⨅SA≤⨅𝒜 : ⨅ SA IsSubalgebraOf ⨅ 𝒜
+  𝒜 = λ i → ∣ ℬ≤𝒦 i ∣                -- 𝒜 : I → Algebra 𝓠 𝑆
+  SA = λ i → ∣ fst ∥ ℬ≤𝒦 i ∥ ∣        -- SA : I → Algebra 𝓠 𝑆
+  𝒦𝒜 = λ i → ∣ snd ∥ ℬ≤𝒦 i ∥ ∣       -- 𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
+  PClo𝒜 = λ i → pbase (𝒦𝒜 i)        -- PClo𝒜 : ∀ i → 𝒜 i ∈ PClo 𝒦
+  SA≤𝒜 = λ i → snd ∣ ∥ ℬ≤𝒦 i ∥ ∣      -- SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
+  ℬ≅SA = λ i → ∥ snd ∥ ℬ≤𝒦 i ∥ ∥      -- ℬ≅SA : ∀ i → ℬ i ≅ SA i
+  h = λ i → ∣ SA≤𝒜 i ∣                 -- h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
+  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = i , ii , iii
    where
     i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
     i = λ x i → (h i) (x i)
     ii : is-embedding i
-    ii = embedding-lift hfe hfe {I}{SA}{𝒜} h hem
+    ii = embedding-lift hfe hfe{I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
     iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
-    iii = λ 𝑓 𝒂 → gfe λ i → (hhm i) 𝑓 (λ x → 𝒂 x i)
+    iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
 
-  PClo⨅A : ⨅ 𝒜 ∈ PClo 𝒦
-  PClo⨅A = prod{I = I}{𝒜 = 𝒜} PClo𝒜
+SClo→Subalgebra : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
+ →                𝑨 ∈ SClo 𝒦 →  𝑨 IsSubalgebraOfClass 𝒦
+SClo→Subalgebra {𝓠} {𝒦} {𝑨} (sbase x) =
+ 𝑨 , (𝑨 , refl-≤ 𝑨) , x ,
+   (((λ x → x) , id-is-hom) ,
+     (((λ x → x) , id-is-hom) , ((λ x₁ → refl _) , λ x₁ → refl _)))
+SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
+ where
+  IH : 𝑨 IsSubalgebraOfClass 𝒦
+  IH = SClo→Subalgebra x
 
-  γ : ⨅ ℬ IsSubalgebraOfClass (PClo 𝒦)
-  γ = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , PClo⨅A , ⨅ℬ≅⨅SA
+  𝑮 : Algebra 𝓠 𝑆
+  𝑮 = ∣ IH ∣
+  KG : 𝑮 ∈ 𝒦
+  KG = fst ∥ snd IH ∥
 
--- pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
--- prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ PClo 𝒦) → ⨅ 𝒜 ∈ PClo 𝒦
--- sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
--- sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+  SG' : SUBALGEBRA 𝑮
+  SG' = fst ∥ IH ∥
+
+  𝑨' : Algebra _ 𝑆
+  𝑨' = ∣ SG' ∣
+  𝑨'≤𝑮 : 𝑨' ≤ 𝑮
+  𝑨'≤𝑮 = ∥ SG' ∥
+
+  𝑨≅𝑨' : 𝑨 ≅ 𝑨'
+  𝑨≅𝑨' = snd ∥ (snd IH) ∥
+
+  𝑨≤𝑮 : 𝑨 ≤ 𝑮
+  𝑨≤𝑮 = iso-≤ 𝑨 𝑨' 𝑮 𝑨≅𝑨' 𝑨'≤𝑮
+  sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
+  sa≤𝑮 = trans-≤ ∣ sa ∣ 𝑨 𝑮 ∥ sa ∥ 𝑨≤𝑮
+  γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
+  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
+
+Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑩 : Algebra 𝓠 𝑆}
+ →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ SClo 𝒦
+Subalgebra→SClo {𝓠} {𝒦} {𝑩} (𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨} (sbase KA) (𝑩 , (iso-≤ 𝑩 ∣ sa ∣ 𝑨 B≅sa ∥ sa ∥))
+
+PS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
+
+PS⊆SP hfe (pbase (sbase x)) = sbase (pbase x)
+PS⊆SP hfe  (pbase (sub x sa)) = SClo-mono pbase (sub x sa)
+PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
+ (prod{I = I}{𝒜 = 𝒜} PSCloA) = γ -- lem1 PSCloA -- (works)
+  where
+   ζ : (i : I) → (𝒜 i) ∈ SClo (PClo 𝒦)
+   ζ i = PS⊆SP hfe (PSCloA i)
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (PClo 𝒦)
+   ξ i = SClo→Subalgebra (ζ i)
+
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo (PClo 𝒦))
+   η' = LemPS⊆SP {𝓠} hfe {PClo 𝒦}{I}{𝒜} ξ
+
+   η : ⨅ 𝒜 IsSubalgebraOfClass (PClo 𝒦)
+   η = mono-≤ (⨅ 𝒜) PClo-idem η'
+
+   γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
+   γ = Subalgebra→SClo η
+
+S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+       (𝑨 : Algebra 𝓠 𝑆)
+      ------------------------------------
+ →     𝑨 ∈ SClo 𝒦  →  𝑨 ∈ SClo (PClo 𝒦)
+
+S⊆SP 𝑨 (sbase x) = sbase (pbase x)
+S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
+
+SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+         (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
+         ------------------------------------------------
+ →        𝑭 ∈ SClo (PClo 𝒦)
+
+SPS⊆SP _ 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
+SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
+SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
+SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
+
 
 -- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
 -- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
 -- Proof. 𝑻/ΨCon ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
 --        Therefore, 𝑻/ΨCon ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
 --        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦).
---        By PS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
+--        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
 
-AlgebrasInSClo𝒦 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
-AlgebrasInSClo𝒦 {𝓠}{𝒦} = SClo{𝓤 = 𝓠} 𝒦
 
 ΣSClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
 ΣSClo {𝓠}{𝒦} = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
-
-
-S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-       (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ SClo 𝒦
-       ------------------------------------------------
- →       𝑨 ∈ SClo (PClo 𝒦)
-
-S⊆SP 𝑨 (sbase x) = sbase (pbase x)
-S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
-
-lem1 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{𝒜 : I → Algebra 𝓠 𝑆}
- →     ((i : I) → (𝒜 i) ∈ PClo (SClo 𝒦))
-       ----------------------------------
- →     (⨅ 𝒜)  ∈ SClo (PClo 𝒦)
-
-lem1 {𝓠}{𝒦}{I}{𝒜} SClo𝒜 = γ
- where
-  ζ : ⨅ 𝒜 ∈ PClo (SClo 𝒦)
-  ζ = prod SClo𝒜
-  γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
-  γ = {!!}
-
-
-SPS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-         (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
-         ------------------------------------------------
- →        𝑭 ∈ SClo (PClo 𝒦)
-
-SPS⊆SP {𝓠} {𝒦} 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
-SPS⊆SP {𝓠} {𝒦} .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
-SPS⊆SP {𝓠} {𝒦} .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f (λ 𝒂 → proj 𝒂 i))) (sbase (prod{I}{𝓐} x)) = lem1 x
-SPS⊆SP {𝓠} {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP _ x) sa
 
 ⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →       ΣSClo{𝓠}{𝒦} → Algebra 𝓠 𝑆
 
 ⨅SClo SS = ⨅ (fst ∥ SS ∥)
 
--- PS→SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---         (_ , 𝒜 , _) : ΣSClo{𝓠}{𝒦} →
---         {𝒜 : (I → Algebra 𝓠 𝑆)} , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+-- 𝔽≤⨅SClo : 𝔽 ≤ ⨅SClo
+-- 𝔽≤⨅SClo = ?
 
-PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
- →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
-
-PS⊆SP (pbase (sbase x)) = sbase (pbase x)
-PS⊆SP {𝓠} {𝒦} (pbase (sub x sa)) = γ
- where
-  ζ : ∣ sa ∣ ∈ SClo 𝒦
-  ζ = sub x sa
-
-  ξ : 𝒦 ⊆ PClo 𝒦
-  ξ = pbase
-
-  γ : SClo (PClo 𝒦) ∣ sa ∣
-  γ = SClo-mono ξ (sub x sa)
-
-PS⊆SP {𝓠}{𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
- (prod{𝒜 = 𝒜} PCloSCloA) = γ
-  where
-   SCloPCloA : ∀ i → 𝒜 i ∈ SClo (PClo 𝒦)
-   SCloPCloA i = PS⊆SP (PCloSCloA i)
-
-   ⨅𝒜∈PS : ⨅ 𝒜 ∈ PClo (SClo 𝒦)
-   ⨅𝒜∈PS = prod PCloSCloA
-
-   γ : SClo (PClo 𝒦) (⨅ 𝒜)
-   γ = {!!}
-
-⨅Sclo∈SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+⨅Sclo∈SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
            (SS : ΣSClo{𝓠}{𝒦})
            -----------------------------
  →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
 
-⨅Sclo∈SP {𝓠}{𝒦} SS = γ
+⨅Sclo∈SP {𝓠} hfe {𝒦} SS = γ
  where
   I : 𝓠 ̇
   I = ∣ SS ∣
@@ -302,14 +288,21 @@ PS⊆SP {𝓠}{𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i
   ζ = prod{I = I}{𝒜 = 𝒜} h₁
 
   γ : P ∈ SClo (PClo 𝒦)
-  γ = PS⊆SP ζ
+  γ = PS⊆SP hfe ζ
 
 
 -- 𝔽embedding : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →            𝔽{𝓠}{𝓧}{X}{𝒦} ↪ ⨅ (SClo{𝓤 = 𝓠} 𝒦)
+--  →            ∣ 𝔽{𝓠}{𝓧}{X}{𝒦} ∣ ↪ ⨅ (SClo{𝓤 = 𝓠} 𝒦)
 -- 𝔽embedding = ?
 -- ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
 --               → ∣ 𝑻ϕ{𝓠}{𝓧}{X}{𝒦} (mkti 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻)
+
+
+--        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦).
+--        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
+-- 𝔽≅SPS : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →       Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
+
 
 𝔽∈SP𝒦 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →       Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
@@ -397,7 +390,7 @@ birkhoff : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (
           --------------------------------------------
  →                     𝑨 ∈ VClo 𝒦
 
-birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = {!γ!}
+birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
  where
   F T : Algebra _ 𝑆
   F = 𝔽{𝓠}{𝓧}{X}{𝒦}

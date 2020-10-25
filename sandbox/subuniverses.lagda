@@ -26,9 +26,9 @@ open import terms
 open import Relation.Unary using (⋂)
 
 open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; univalence-gives-global-dfunext;
- 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton;
+ 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton; id-is-embedding;
  ∈-is-subsingleton; pr₁-embedding; rl-implication; inverse; embedding-gives-ap-is-equiv; is-set;_⇔_;
- transport; subset-extensionality'; equiv-to-subsingleton; powersets-are-sets'; _●_;
+ transport; subset-extensionality'; equiv-to-subsingleton; powersets-are-sets'; _●_; ∘-embedding;
  logically-equivalent-subsingletons-are-equivalent) public
 
 Subuniverses : (𝑨 : Algebra 𝓤 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
@@ -162,40 +162,9 @@ hom-image-is-sub {fe = fe}{𝑨 = 𝑨}{𝑩 = 𝑩} ϕ f b b∈Imf = eq ((f ̂ 
       (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar)  ≡⟨(∥ ϕ ∥ f ar)⁻¹ ⟩
       ∣ ϕ ∣((f ̂ 𝑨) ar)   ∎
 
-
--- subalgebras (new definition of subalgebra (includes the embedding))
--- _IsSubalgebraOf_ : {𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
--- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
-
--- SUBALGEBRA : {𝓠 : Universe} → Algebra 𝓠 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇
--- SUBALGEBRA 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
-
--- Subalgebra : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
--- Subalgebra = SUBALGEBRA {𝓤}
-
--- getSub : {𝓠 : Universe}{𝑨 : Algebra 𝓠 𝑆} → SUBALGEBRA{𝓠} 𝑨 → Algebra 𝓤 𝑆
--- getSub SA = ∣ SA ∣
-
--- -- subalgebras of classes
--- _IsSubalgebraOfClass_ : {𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
---  →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇
--- 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (SUBALGEBRA 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
-
--- SUBALGEBRAOFCLASS : {𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
--- SUBALGEBRAOFCLASS 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
-
--- SubalgebraOfClass : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
--- SubalgebraOfClass {𝓠} = SUBALGEBRAOFCLASS {𝓠}{𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺}
-
--- getSubOfClass : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) 𝓦} → SUBALGEBRAOFCLASS 𝒦 → Algebra 𝓤 𝑆
--- getSubOfClass SAC = ∣ SAC ∣
-
-
--- SUBALGEBRAOFCLASS' : {𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
--- SUBALGEBRAOFCLASS' {𝓠} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓠 𝑆) , (𝑨 ∈ 𝒦) × SUBALGEBRA{𝓠} 𝑨
-
-
-
+--------------------------------------------------------------------------------------------
+-- SUBALGEBRAS
+----------------
 _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
 
@@ -224,6 +193,40 @@ getSubOfClass SAC = ∣ SAC ∣
 
 SUBALGEBRAOFCLASS' : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
 SUBALGEBRAOFCLASS' {𝓤}{𝓠} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓠 𝑆) , (𝑨 ∈ 𝒦) × SUBALGEBRA{𝓤}{𝓠} 𝑨
+
+-- Sugar.
+_≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
+
+trans-≤ : {𝓦 𝓤 𝓠 : Universe}(𝑪 : Algebra 𝓦 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆)
+ →         𝑪 ≤ 𝑩   →    𝑩 ≤ 𝑨
+          ---------------------
+ →              𝑪 ≤ 𝑨
+trans-≤ 𝑪 𝑩 𝑨 CB BA =
+ ∣ BA ∣ ∘ ∣ CB ∣ , ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥) , ∘-hom 𝑪 𝑩 𝑨{∣ BA ∣}{∣ CB ∣} (snd ∥ BA ∥) (snd ∥ CB ∥)
+
+mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
+ →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+
+refl-≤ : {𝓠 : Universe}(𝑨 : Algebra 𝓠 𝑆) → 𝑨 ≤ 𝑨
+refl-≤ 𝑨 = 𝑖𝑑 ∣ 𝑨 ∣ , id-is-embedding , id-is-hom
+
+iso-≤ : {𝓦 𝓤 𝓠 : Universe}(𝑪 : Algebra 𝓦 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆)
+ →         𝑪 ≅ 𝑩   →    𝑩 ≤ 𝑨
+          ---------------------
+ →              𝑪 ≤ 𝑨
+iso-≤ 𝑪 𝑩 𝑨 C≅B B≤A = f , femb , fhom
+ where
+
+  f : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
+  f = ∣ B≤A ∣ ∘ (fst ∣ C≅B ∣)
+
+  femb : is-embedding f
+  femb = ∘-embedding (fst ∥ B≤A ∥) (iso→embedding C≅B)
+
+  fhom : is-homomorphism 𝑪 𝑨 f
+  fhom = ∘-hom 𝑪 𝑩 𝑨{∣ B≤A ∣}{fst ∣ C≅B ∣} (snd ∥ B≤A ∥) (snd ∣ C≅B ∣)
 
 ----------------------------------------------------------------------------------
 
