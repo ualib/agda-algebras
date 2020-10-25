@@ -8,7 +8,7 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂)
+open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂; ∘-embedding)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
@@ -63,7 +63,7 @@ data HClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
 -- Subalgebra Closure
 data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-  sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+  sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 
 
 ----------------------------------------------------------------------
@@ -72,7 +72,7 @@ data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
 data VClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ) where
  vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo 𝒦
  vprod : {I : 𝓤 ̇}{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
- vsub  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
+ vsub  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
  vhom  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
 
 
@@ -145,28 +145,49 @@ products-in-class-preserve-identities p q I 𝒜 α K𝒜 = γ
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 β
 
-subalgebras-preserve-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                                  {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+subalgebras-preserve-identities : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}
+                                  {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
                                   (p q : Term{𝓧}{X})
-                                  ((_ , _ , (𝑩 , _ , _)) : SubalgebrasOfClass' 𝒦)
+                                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
  →                                𝒦 ⊧ p ≋ q
                                   -------------
- →                                𝑩 ⊧ p ≈ q
+ →                                ∣ 𝑩 ∣ ⊧ p ≈ q
 
-subalgebras-preserve-identities {X = X}{𝒦 = 𝒦} p q (𝑨 , KA , (𝑩 , h , (hem , hhm))) Kpq = γ
+subalgebras-preserve-identities {𝓤}{𝓠}{𝓧}{X}{𝒦} p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
  where
+  𝑩' : Algebra 𝓤 𝑆
+  𝑩' = ∣ SA ∣
+
+  h' : hom 𝑩' 𝑨
+  h' = (∣ snd SA ∣ , snd ∥ snd SA ∥ )
+
+  f : hom 𝑩 𝑩'
+  f = ∣ BisSA ∣
+
+  h : hom 𝑩 𝑨
+  h = HCompClosed 𝑩 𝑩' 𝑨 f h'
+
+  hem : is-embedding ∣ h ∣
+  hem = ∘-embedding h'em fem
+   where
+    h'em : is-embedding ∣ h' ∣
+    h'em = fst ∥ snd SA ∥
+
+    fem : is-embedding ∣ f ∣
+    fem = iso→embedding BisSA
+
   β : 𝑨 ⊧ p ≈ q
   β = Kpq KA
 
-  ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
+  ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
   ξ b =
-   h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 (h , hhm) p b ⟩
-   (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality β (h ∘ b) ⟩
-   (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
-   h ((q ̇ 𝑩) b)  ∎
+   ∣ h ∣((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+   (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality β (∣ h ∣ ∘ b) ⟩
+   (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+   ∣ h ∣((q ̇ 𝑩) b)  ∎
 
-  hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
-  hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
+  hlc : {b b' : domain ∣ h ∣} → ∣ h ∣ b ≡ ∣ h ∣ b' → b ≡ b'
+  hlc hb≡hb' = (embeddings-are-lc ∣ h ∣ hem) hb≡hb'
 
   γ : 𝑩 ⊧ p ≈ q
   γ = gfe λ b → hlc (ξ b)
@@ -268,12 +289,13 @@ pclo-id2 PCloKpq KA = PCloKpq (pbase KA)
 ｛_｝ : {𝓤 : Universe} → Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 ｛ 𝑨 ｝ 𝑩 = 𝑨 ≡ 𝑩
 
+
 sclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
 sclo-id1 p q α (sbase KA) = α KA
 sclo-id1 {𝓤}{𝓧}{X}{𝒦} p q α (sub {𝑨 = 𝑨} SCloA sa) =
  --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
- subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
+ subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅ ∣ sa ∣) γ
   where
    β : 𝑨 ⊧ p ≈ q
    β = sclo-id1 {𝓤}{𝓧}{X}p q α SCloA
@@ -332,7 +354,7 @@ vclo-id1 {𝓤}{𝓧}{X} p q α (vprod{I = I}{𝒜 = 𝒜} VClo𝒜) = γ
   γ = products-preserve-identities p q I 𝒜 IH
 
 vclo-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vsub {𝑨 = 𝑨} VCloA sa ) =
- subalgebras-preserve-identities p q (𝑨 , inj₂ 𝓇ℯ𝒻𝓁 , sa) γ
+ subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅ ∣ sa ∣) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = vclo-id1 {𝓤}{𝓧}{X}p q α VCloA

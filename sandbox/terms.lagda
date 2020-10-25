@@ -18,8 +18,7 @@ module terms
 
 open import homomorphisms {𝑆 = 𝑆}
 
-open import prelude using
- (intensionality; pr₂; Inv; InvIsInv; eq; fst; snd) public
+open import prelude using (pr₂; Inv; InvIsInv; eq) public
 
 data Term {𝓤 : Universe}{X : 𝓤 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
   generator : X → Term{𝓤}{X}
@@ -62,30 +61,6 @@ free-unique {𝓤}{𝓦} {X} fe {𝑨 = 𝑨} g h p (node f args) =
    (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
    ∣ h ∣ (node f args)             ∎
    where γ = fe λ i → free-unique {𝓤}{𝓦} fe {𝑨} g h p (args i)
-
---1.b. that free-lift is (intensionally) a hom.
-lift-HOM : {𝓤 : Universe}{X : 𝓤 ̇}{𝑨 : Algebra 𝓤 𝑆}(h : X → ∣ 𝑨 ∣) →  HOM 𝑻 𝑨
-lift-HOM{𝑨 = 𝑨}  h = free-lift{𝑨 = 𝑨} h , 𝓇ℯ𝒻𝓁
-
---2. The lift to  (free → 𝑨)  is (intensionally) unique.
-free-intensionally-unique : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → funext 𝓥 𝓦
- →             {𝑨 : Algebra 𝓦 𝑆}(g h : HOM (𝑻{𝓤}{X}) 𝑨)
- →             (∣ g ∣ ∘ generator) ≡ (∣ h ∣ ∘ generator)
- →             (t : Term)
-              --------------------------------
- →              ∣ g ∣ t ≡ ∣ h ∣ t
-
-free-intensionally-unique fe g h p (generator x) =
- intensionality p x
-
-free-intensionally-unique fe {𝑨} g h p (node f args) =
- ∣ g ∣ (node f args)   ≡⟨ ap (λ - → - f args) ∥ g ∥ ⟩
- (f ̂ 𝑨)(∣ g ∣ ∘ args) ≡⟨ ap (_ ̂ 𝑨) γ ⟩
- (f ̂ 𝑨)(∣ h ∣ ∘ args) ≡⟨ (ap (λ - → - f args) ∥ h ∥ ) ⁻¹ ⟩
- ∣ h ∣ (node f args)  ∎
-  where
-   γ = fe λ i → free-intensionally-unique fe {𝑨} g h p (args i)
-
 
 --lift agrees on X
 lift-agrees-on-X : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}(h₀ : X → ∣ 𝑨 ∣)(x : X)
@@ -264,36 +239,6 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
            ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
      ih = gfe λ a → gfe λ i → IH a i
 
--- Proof of 1. ("intensional" version)
-comm-hom-term' : global-dfunext
- →              {𝓤 : Universe} {X : 𝓤 ̇}
-                (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
-                (h : HOM 𝑨 𝑩) (t : Term)
-               ---------------------------------------------
- →              ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a )
-
-comm-hom-term' gfe 𝑨 𝑩 h (generator x) = 𝓇ℯ𝒻𝓁
-
-comm-hom-term' gfe {X = X} 𝑨 𝑩 h (node f args) = γ
- where
-  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a))
-      ≡ (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
-  γ = ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a))
-        ≡⟨ ap (λ - → (λ a → - f (λ i → (args i ̇ 𝑨) a))) ∥ h ∥ ⟩
-      (λ a → (f ̂ 𝑩)(∣ h ∣ ∘ (λ i →  (args i ̇ 𝑨) a)))
-        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
-        ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
-    (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
-        ∎
-    where
-     IH : (a : X → ∣ 𝑨 ∣)(i : ∥ 𝑆 ∥ f)
-      →   (∣ h ∣ ∘ (args i ̇ 𝑨)) a ≡ ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
-     IH a i = intensionality (comm-hom-term' gfe 𝑨 𝑩 h (args i)) a
-
-     ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))
-           ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
-     ih = gfe λ a → gfe λ i → IH a i
 
 -- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
 compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}

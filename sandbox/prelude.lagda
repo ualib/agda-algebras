@@ -23,32 +23,26 @@ pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
-open import MGS-MLTT using (_∘_; domain; codomain; transport;
- _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚;
- _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
+open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; -- 𝕁;
+ Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
 
 open import MGS-Equivalences using (is-equiv; inverse; invertible) public
 
-open import MGS-Subsingleton-Theorems using (funext; global-hfunext;
- dfunext; is-singleton; is-subsingleton; is-prop; Univalence;
- global-dfunext; univalence-gives-global-dfunext; _●_; _≃_;
- logically-equivalent-subsingletons-are-equivalent; Π-is-subsingleton) public
+open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext; is-singleton;
+ is-subsingleton; is-prop; Univalence; global-dfunext; univalence-gives-global-dfunext; _●_;
+ _≃_; logically-equivalent-subsingletons-are-equivalent; Π-is-subsingleton) public
 
-open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_)
- using (𝓟; ∈-is-subsingleton; equiv-to-subsingleton;
- powersets-are-sets'; subset-extensionality'; propext) public
+open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_) using (𝓟; ∈-is-subsingleton;
+ equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext) public
 
-open import MGS-Embeddings using (is-embedding; pr₁-embedding;
- is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc;
- ×-is-subsingleton) --public
+open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding; is-embedding; pr₁-embedding;
+ is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton) public
 
 open import MGS-Solved-Exercises using (to-subtype-≡) public
 
--- open import MGS-Unique-Existence
 open import MGS-Unique-Existence using (∃!; -∃!) public
 
 open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
--- using (subsingleton-truncations-exist) public
 
 
 ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
@@ -227,6 +221,26 @@ bijective g = epic g × monic g
 Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(g : A → B) → 𝓤 ⊔ 𝓦 ̇
 Bijective g = Epic g × monic g
 
+-----------------------------------------------------------------------
+-- Embedding elimination (makes it easier to apply is-embedding)
+embedding-elim : {X : 𝓤 ̇ } {Y : 𝓥 ̇ }{f : X → Y}
+ →               is-embedding f
+ →               (x x' : X)
+ →               f x ≡ f x' → x ≡ x'
+embedding-elim {f = f} femb x x' fxfx' = γ
+ where
+  fibx : fiber f (f x)
+  fibx = x , 𝓇ℯ𝒻𝓁
+  fibx' : fiber f (f x)
+  fibx' = x' , ((fxfx') ⁻¹)
+  iss-fibffx : is-subsingleton (fiber f (f x))
+  iss-fibffx = femb (f x)
+  fibxfibx' : fibx ≡ fibx'
+  fibxfibx' = iss-fibffx fibx fibx'
+  γ : x ≡ x'
+  γ = ap pr₁ fibxfibx'
+
+
 -------------------------------------------------------
 --Function extensionality from univalence
 
@@ -236,12 +250,21 @@ extensionality 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
  →                f ∼ g   →   f ≡ g
 
 --Opposite of function extensionality
-intensionality : ∀ {𝓤 𝓦} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
+intensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
  →                f ≡ g  →  (x : A)
                   ------------------
  →                    f x ≡ g x
 
 intensionality  (refl _ ) _  = refl _
+
+--Dependent intensionality
+dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : (x : A) → B x}
+ →                f ≡ g  →  (x : A)
+                  ------------------
+ →                    f x ≡ g x
+
+dintensionality  (refl _ ) _  = refl _
+
 
 --Dependent intensionality
 dep-intensionality : ∀ {𝓤 𝓦}{A : 𝓤 ̇ }{B : A → 𝓦 ̇ }

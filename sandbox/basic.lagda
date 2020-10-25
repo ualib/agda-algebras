@@ -43,24 +43,21 @@ monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
 
- _̂_ : (f : ∣ 𝑆 ∣)
-  →   (𝑨 : Algebra 𝓤 𝑆)
-  →   (∥ 𝑆 ∥ f  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+
+ _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra 𝓤 𝑆) → (∥ 𝑆 ∥ f  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
  f ̂ 𝑨 = λ x → (∥ 𝑨 ∥ f) x
 
- ⨅ : {𝓤 : Universe}{I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra 𝓤 𝑆
- ⨅ {I = I} 𝒜 = ((i : I) → ∣ 𝒜 i ∣) ,
-                 λ  (f : ∣ 𝑆 ∣)
-                    (proj : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)
-                    (i : I)
-                  → (f ̂ 𝒜 i) λ {args → proj args i}
+ ⨅ : {𝓘 𝓤 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
+ ⨅ {𝓘}{𝓤}{I} 𝒜 =
+  ((i : I) → ∣ 𝒜 i ∣) , λ(f : ∣ 𝑆 ∣)(𝒂 : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)(i : I) → (f ̂ 𝒜 i) λ{x → 𝒂 x i}
 
+ ⊓ : {𝓤 : Universe}{I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra 𝓤 𝑆
+ ⊓ {𝓤} = ⨅ {𝓤}{𝓤}
 
- --Usually we want to assume that, given an algebra 𝑨, we can
- --always find a surjective map h₀ : X → ∣ 𝑨 ∣ from an arbitrary
- --collection X of "variables" onto the universe of 𝑨.
- --Here is the type we use when making this assumption.
+ {- Usually we want to assume that, given an algebra 𝑨, we can always find a surjective
+    map h₀ : X → ∣ 𝑨 ∣ from an arbitrary collection X of "variables" onto the universe of 𝑨.
+    Here is the type we use when making this assumption. -}
 
  _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h

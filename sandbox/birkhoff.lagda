@@ -9,7 +9,7 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext; dfunext; funext; Pred; _↪_)
+open import prelude using (global-dfunext; dfunext; funext; Pred; _↪_; inl; inr; ∘-embedding; id-is-embedding)
 
 module birkhoff
  {𝑆 : Signature 𝓞 𝓥}
@@ -140,31 +140,119 @@ mkti {𝓠}{𝓧}{X}{𝒦} 𝑨 SCloA = (𝑨 , fst thg , SCloA , snd thg)
  →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓠 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
 𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻{𝓧}{X} ╱ (ΨCon{𝓠}{𝓧}{X}{𝒦})
 
+LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
+ →         {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
+ →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
+          ----------------------------------------------------
+ →         ⨅ ℬ IsSubalgebraOfClass (PClo 𝒦)
+
+LemPS⊆SP {𝓠} hfe {𝒦}{I}{ℬ} ℬ≤𝒦 = γ
+ where
+  𝒜 : I → Algebra 𝓠 𝑆
+  𝒜 i = ∣ ℬ≤𝒦 i ∣
+
+  SA : I → Algebra 𝓠 𝑆
+  SA i = ∣ fst ∥ ℬ≤𝒦 i ∥ ∣
+
+  𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
+  𝒦𝒜 i = ∣ snd ∥ ℬ≤𝒦 i ∥ ∣
+  PClo𝒜 : ∀ i → 𝒜 i ∈ PClo 𝒦
+  PClo𝒜 i = pbase (𝒦𝒜 i)
+
+  SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
+  SA≤𝒜 i = snd ∣ ∥ ℬ≤𝒦 i ∥ ∣
+
+  ℬ≅SA : ∀ i → ℬ i ≅ SA i
+  ℬ≅SA i = ∥ snd ∥ ℬ≤𝒦 i ∥ ∥
+
+  ⨅ℬ≅⨅SA : ⨅ ℬ ≅ ⨅ SA
+  ⨅ℬ≅⨅SA = ⨅≅ gfe ℬ≅SA
+
+  h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
+  h i = ∣ SA≤𝒜 i ∣
+  hem : ∀ i → is-embedding (h i)
+  hem i = fst ∥ SA≤𝒜 i ∥
+  hhm : ∀ i → is-homomorphism (SA i) (𝒜 i) (h i)
+  hhm i = snd ∥ SA≤𝒜 i ∥
+
+  ⨅SA≤⨅𝒜 : ⨅ SA IsSubalgebraOf ⨅ 𝒜
+  ⨅SA≤⨅𝒜 = i , ii , iii
+   where
+    i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
+    i = λ x i → (h i) (x i)
+    ii : is-embedding i
+    ii = embedding-lift hfe hfe {I}{SA}{𝒜} h hem
+    iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
+    iii = λ 𝑓 𝒂 → gfe λ i → (hhm i) 𝑓 (λ x → 𝒂 x i)
+
+  PClo⨅A : ⨅ 𝒜 ∈ PClo 𝒦
+  PClo⨅A = prod{I = I}{𝒜 = 𝒜} PClo𝒜
+
+  γ : ⨅ ℬ IsSubalgebraOfClass (PClo 𝒦)
+  γ = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , PClo⨅A , ⨅ℬ≅⨅SA
+
+-- pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
+-- prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ PClo 𝒦) → ⨅ 𝒜 ∈ PClo 𝒦
+-- sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+-- sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+
 -- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
 -- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
 -- Proof. 𝑻/ΨCon ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
 --        Therefore, 𝑻/ΨCon ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
---        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦) = SP(𝒦).
+--        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦).
+--        By PS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
 
--- data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
---   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
---   sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SubalgebrasOf 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
 AlgebrasInSClo𝒦 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
 AlgebrasInSClo𝒦 {𝓠}{𝒦} = SClo{𝓤 = 𝓠} 𝒦
 
 ΣSClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
 ΣSClo {𝓠}{𝒦} = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
 
+
+S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+       (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ SClo 𝒦
+       ------------------------------------------------
+ →       𝑨 ∈ SClo (PClo 𝒦)
+
+S⊆SP 𝑨 (sbase x) = sbase (pbase x)
+S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
+
+lem1 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{𝒜 : I → Algebra 𝓠 𝑆}
+ →     ((i : I) → (𝒜 i) ∈ PClo (SClo 𝒦))
+       ----------------------------------
+ →     (⨅ 𝒜)  ∈ SClo (PClo 𝒦)
+
+lem1 {𝓠}{𝒦}{I}{𝒜} SClo𝒜 = γ
+ where
+  ζ : ⨅ 𝒜 ∈ PClo (SClo 𝒦)
+  ζ = prod SClo𝒜
+  γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
+  γ = {!!}
+
+
+SPS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+         (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
+         ------------------------------------------------
+ →        𝑭 ∈ SClo (PClo 𝒦)
+
+SPS⊆SP {𝓠} {𝒦} 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
+SPS⊆SP {𝓠} {𝒦} .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
+SPS⊆SP {𝓠} {𝒦} .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f (λ 𝒂 → proj 𝒂 i))) (sbase (prod{I}{𝓐} x)) = lem1 x
+SPS⊆SP {𝓠} {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP _ x) sa
+
 ⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
- →       ΣSClo{𝓠}{𝒦}
-        ----------------
- →       Algebra 𝓠 𝑆
+ →       ΣSClo{𝓠}{𝒦} → Algebra 𝓠 𝑆
 
 ⨅SClo SS = ⨅ (fst ∥ SS ∥)
 
+-- PS→SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--         (_ , 𝒜 , _) : ΣSClo{𝓠}{𝒦} →
+--         {𝒜 : (I → Algebra 𝓠 𝑆)} , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
 
 PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
+
 PS⊆SP (pbase (sbase x)) = sbase (pbase x)
 PS⊆SP {𝓠} {𝒦} (pbase (sub x sa)) = γ
  where
@@ -177,7 +265,7 @@ PS⊆SP {𝓠} {𝒦} (pbase (sub x sa)) = γ
   γ : SClo (PClo 𝒦) ∣ sa ∣
   γ = SClo-mono ξ (sub x sa)
 
-PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (λ args → proj args i)))}
+PS⊆SP {𝓠}{𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
  (prod{𝒜 = 𝒜} PCloSCloA) = γ
   where
    SCloPCloA : ∀ i → 𝒜 i ∈ SClo (PClo 𝒦)
@@ -189,10 +277,9 @@ PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (�
    γ : SClo (PClo 𝒦) (⨅ 𝒜)
    γ = {!!}
 
-
 ⨅Sclo∈SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
            (SS : ΣSClo{𝓠}{𝒦})
-          -------------------------------
+           -----------------------------
  →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
 
 ⨅Sclo∈SP {𝓠}{𝒦} SS = γ
@@ -225,7 +312,7 @@ PS⊆SP {𝓠} {𝒦} {.((∀ i → fst (_ i)) , (λ f proj i → snd (_ i) f (�
 --               → ∣ 𝑻ϕ{𝓠}{𝓧}{X}{𝒦} (mkti 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻) ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻)
 
 𝔽∈SP𝒦 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
- →       Σ I ꞉ _ ̇ , Σ 𝒜 ꞉ (I → Algebra _ 𝑆) , Σ sa ꞉ (SubalgebrasOf (⨅ 𝒜)) ,
+ →       Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓠}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
 𝔽∈SP𝒦 = {!!}
 
@@ -519,3 +606,95 @@ birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = {!γ!}
 --    γ : SClo (PClo 𝒦) (⨅ 𝒜)
 --    γ = {!!}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----=====================================================================
+----=====================================================================
+----=====================================================================
+----=====================================================================
+----=====================================================================
+-- _⊗_ : (𝑨₁ 𝑨₂ : Algebra 𝓤 𝑆) → Algebra (𝓤₀ ⊔ 𝓤) 𝑆
+-- 𝑨₁ ⊗ 𝑨₂ = ⨅ 𝒜
+--  where
+--   𝒜 : 𝟚 → Algebra 𝓤 𝑆
+--   𝒜 (inl x) = 𝑨₁
+--   𝒜 (inr x) = 𝑨₂
+
+-- lemma0 : {𝑨₁ 𝑨₂ : Algebra 𝓤 𝑆}(B1 : Subalgebra 𝑨₁)(B2 : Subalgebra 𝑨₂)
+--  →       (∣ B1 ∣ ⊗ ∣ B2 ∣) IsSubalgebraOf (𝑨₁ ⊗ 𝑨₂)
+-- lemma0 {𝑨₁}{𝑨₂}(𝑩₁ , k , kem , khom) (𝑩₂ , g , gem , ghom) = α , β , γ
+--  where
+--   𝑲 : hom (𝑩₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑩₂)
+--   𝑲 = Kmap , Khom
+--    where
+--     Kmap : ∣ 𝑩₁ ⊗ 𝑩₂ ∣ → ∣ 𝑨₁ ⊗ 𝑩₂ ∣
+--     Kmap bb (inl x) = k (bb (inl x))
+--     Kmap bb (inr x) = id (bb (inr x))
+
+--     ζ : ∀ x f 𝒃 → Kmap ((f ̂ (𝑩₁ ⊗ 𝑩₂)) 𝒃) x ≡ (f ̂ (𝑨₁ ⊗ 𝑩₂)) (λ x₁ → Kmap (𝒃 x₁)) x
+--     ζ (inl x) f 𝒃 = khom f (λ z → 𝒃 z (inl x))
+--     ζ (inr x) f 𝒃 = ∥ 𝒾𝒹 𝑩₂ ∥ f (λ z → 𝒃 z (inr x))
+
+--     Khom : is-homomorphism (𝑩₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑩₂) Kmap
+--     Khom f 𝒃 = gfe λ x → ζ x f 𝒃
+
+--   Kemb : is-embedding ∣ 𝑲 ∣
+--   Kemb ab bb bb' = {!!}
+
+--   𝑮 : hom (𝑨₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑨₂)
+--   𝑮 = Gmap , Ghom
+--    where
+--     Gmap : ∣ 𝑨₁ ⊗ 𝑩₂ ∣ → ∣ 𝑨₁ ⊗ 𝑨₂ ∣
+--     Gmap ab (inl x) = id (ab (inl x))
+--     Gmap ab (inr x) = g (ab (inr x))
+
+--     ζ : ∀ x f 𝒃 → Gmap ((f ̂ (𝑨₁ ⊗ 𝑩₂)) 𝒃) x ≡ (f ̂ (𝑨₁ ⊗ 𝑨₂)) (λ x₁ → Gmap (𝒃 x₁)) x
+--     ζ (inl x) f 𝒃 = ∥ 𝒾𝒹 𝑨₁ ∥ f (λ z → 𝒃 z (inl x))
+--     ζ (inr x) f 𝒃 = ghom f (λ z → 𝒃 z (inr x))
+
+--     Ghom : is-homomorphism (𝑨₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑨₂) Gmap
+--     Ghom f 𝒃 = gfe λ x → ζ x f 𝒃
+
+--   Gemb : is-embedding ∣ 𝑮 ∣
+--   Gemb = {!!}
+
+--   α : ∣ 𝑩₁ ⊗ 𝑩₂ ∣ → ∣ 𝑨₁ ⊗ 𝑨₂ ∣
+--   α = ∣ 𝑮 ∣ ∘ ∣ 𝑲 ∣
+
+--   β : is-embedding α
+--   β  = ∘-embedding Gemb Kemb
+
+--   γ : is-homomorphism (𝑩₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑨₂) α
+--   γ = ∘-hom (𝑩₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑩₂) (𝑨₁ ⊗ 𝑨₂) {∣ 𝑲 ∣} {∣ 𝑮 ∣} ∥ 𝑲 ∥ ∥ 𝑮 ∥
+
+
+
+-- lemma2 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--         {I : 𝓠 ̇}{𝒜 : I → Algebra 𝓠 𝑆}
+--  →      ((i : I) → (𝒜 i) ∈ SClo 𝒦)
+--  →      (⨅ 𝒜)  ∈ SClo (PClo 𝒦)
+-- lemma2 {𝓠}{𝒦}{I}{𝒜} SClo𝒜 = {!!}
+--  where
+  -- AK : I → Algebra 𝓠 𝑆
+  -- AK i = ∣ SClo𝒜 i ∣
+  -- γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
+  -- γ = {!!}

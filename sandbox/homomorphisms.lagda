@@ -11,90 +11,38 @@ open import prelude using (global-dfunext)
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import prelude using (_∘_; _⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_) public
+open import prelude using (_∘_; _⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
+ Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible;
+ equivs-are-embeddings; id; invertibles-are-equivs; dintensionality; is-subsingleton; fiber; monic;
+ intensionality; hfunext) public
 
---intensional preservation of operations
-op_interpreted-in_and_commutes-intensionally-with :
- (f : ∣ 𝑆 ∣) (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
- (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
+                    (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 
-op f interpreted-in A and B commutes-intensionally-with g =
- (λ a → g ((f ̂ A) a)) ≡ (λ a → (f ̂ B)(g ∘ a))
+compatible-op-map 𝑨 𝑩 𝑓 g = ∀ 𝒂 → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
+--(infered type  𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)
 
-all-ops-in_and_commute-partially-intensionally-with :
- (A : Algebra 𝓤 𝑆)(B : Algebra 𝓦 𝑆)
- (g : ∣ A ∣  → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+op_interpreted-in_and_commutes-with :
+   (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
+   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g = compatible-op-map 𝑨 𝑩 𝑓 g
 
-all-ops-in A and B commute-partially-intensionally-with g =
- ∀ (f : ∣ 𝑆 ∣ )
-  → op f interpreted-in A and B commutes-intensionally-with g
-
-intensional-hom : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
- →                (∣ A ∣ → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-intensional-hom A B g =
- all-ops-in A and B commute-partially-intensionally-with g
-
-Hom : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-Hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣) ,
-   all-ops-in A and B commute-partially-intensionally-with g
-
--- intensional with respect to both f and a)
-preserves-ops : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
- →              (∣ A ∣  → ∣ B ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-preserves-ops (A , 𝐹ᴬ)(B , 𝐹ᴮ) g =
- (λ (f : ∣ 𝑆 ∣ ) (a : ∥ 𝑆 ∥ f → A) → g (𝐹ᴬ f a))
-  ≡ (λ (f : ∣ 𝑆 ∣ ) (a : ∥ 𝑆 ∥ f → A )  → 𝐹ᴮ f (g ∘ a))
-
-all-ops-in_and_commute-intensionally-with :
- (A : Algebra 𝓤 𝑆)(B : Algebra 𝓦 𝑆)
- (g : ∣ A ∣  → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-all-ops-in A and B commute-intensionally-with g =
- preserves-ops A B g
-
---the type of (intensional) homomorphisms
-HOM : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-HOM A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣) ,
-           all-ops-in A and B commute-intensionally-with g
-
-op_interpreted-in_and_commutes-extensionally-with :
-   (f : ∣ 𝑆 ∣) (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
-   (g : ∣ A ∣  → ∣ B ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-op f interpreted-in A and B commutes-extensionally-with g =
- ∀( a : ∥ 𝑆 ∥ f → ∣ A ∣ ) → g ((f ̂ A) a) ≡ (f ̂ B) (g ∘ a)
-
-all-ops-in_and_commute-extensionally-with :
-     (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
- →   (∣ A ∣  → ∣ B ∣ ) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-all-ops-in A and B commute-extensionally-with g = ∀ (f : ∣ 𝑆 ∣)
-  → op f interpreted-in A and B commutes-extensionally-with g
-
-is-homomorphism : (A : Algebra 𝓤 𝑆) (B : Algebra 𝓦 𝑆)
- →                (∣ A ∣ → ∣ B ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-
-is-homomorphism A B g =
- all-ops-in A and B commute-extensionally-with g
+is-homomorphism : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
+is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
 
 hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
-hom A B = Σ g ꞉ (∣ A ∣ → ∣ B ∣ ) , is-homomorphism A B g
+hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
 
 𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
-HCompClosed : {A : Algebra 𝓤 𝑆} {B : Algebra 𝓦 𝑆}
-              {C : Algebra 𝓣 𝑆}
- →            hom A B  →  hom B C
+-- composition of homomorphisms 1
+HCompClosed : {𝓠 𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
+ →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
               --------------------
- →            hom A C
+ →                 hom 𝑨 𝑪
 
-HCompClosed {A = A , FA} {B = B , FB} {C = C , FC}
- (g , ghom) (h , hhom) = h ∘ g , γ
+HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
   where
    γ : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f  →  A) → (h ∘ g)(FA f a) ≡ FC f (h ∘ g ∘ a)
 
@@ -102,31 +50,23 @@ HCompClosed {A = A , FA} {B = B , FB} {C = C , FC}
           h (FB f (g ∘ a)) ≡⟨ hhom f ( g ∘ a ) ⟩
           FC f (h ∘ g ∘ a) ∎
 
---Alternative notation for hom composition
-module _ {A : Algebra 𝓤 𝑆}
-         {B : Algebra 𝓦 𝑆}
-         {C : Algebra 𝓣 𝑆} where
+-- composition of homomorphisms 2
+∘-hom : {𝓠 𝓤 𝓦 : Universe}
+        (𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
+        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+ →      is-homomorphism{𝓠}{𝓤} 𝑨 𝑩 f  →  is-homomorphism{𝓤}{𝓦} 𝑩 𝑪 g
+       --------------------------------------------------------------------
+ →      is-homomorphism{𝓠}{𝓦} 𝑨 𝑪 (g ∘ f)
+∘-hom{𝓠}{𝓤}{𝓦} 𝑨 𝑩 𝑪 {f} {g} fhom ghom =
+ ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
 
-  _>>>_ : hom A B  → hom B C → hom A C
-
-  (g , ghom) >>> (h , hhom) = h ∘ g , γ
-    where
-      γ :      (f : ∣ 𝑆 ∣ ) → (a : ∥ 𝑆 ∥ f → ∣ A ∣)
-           -------------------------------------------
-       →    (h ∘ g) (∥ A ∥ f a)  ≡  ∥ C ∥ f (h ∘ g ∘ a)
-
-      γ f a =
-       (h ∘ g) (∥ A ∥ f a) ≡⟨ ap (λ - → h -) (ghom f a) ⟩
-       h (∥ B ∥ f (g ∘ a)) ≡⟨ hhom f (g ∘ a) ⟩
-       ∥ C ∥ f (h ∘ g ∘ a) ∎
-
-homFactor : funext 𝓤 𝓤 → {A B C : Algebra 𝓤 𝑆}
-            (g : hom A B) (h : hom A C)
+homFactor : funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
+            (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
            ---------------------------------------------
- →           Σ ϕ ꞉ (hom C B) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
+ →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
+homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
  (g , ghom) (h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
    hInv : C → A
@@ -176,9 +116,7 @@ homFactor fe {A = A , FA}{B = B , FB}{C = C , FC}
      iv  = ghom f (hInv ∘ c)
 
 HomFactor : global-dfunext
- →          {𝑨 : Algebra 𝓤 𝑆}
- →          {𝑩 : Algebra 𝓦 𝑆}
- →          {𝑪 : Algebra 𝓧 𝑆}
+ →          {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}{𝑪 : Algebra 𝓧 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)
  →          Epic ∣ h ∣
@@ -235,14 +173,115 @@ HomFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      iv  = ghom f (hInv ∘ c)
 
 
+--(extensional versions)
 --Isomorphism
---For algebras, isomorphisms are simply homs with 0 kernel.
-
--- module _ {𝓤 : Universe} where
-
 _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) ,
-            (∣ f ∣ ∘ ∣ g ∣ ≡ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≡ ∣ 𝒾𝒹 𝑨 ∣)
+𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
+--Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x
+
+-- An algebra is (extensionally) isomorphic to itself
+id≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
+id≅ 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
+
+⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
+     {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+ →   ((i : I) → (𝒜 i) ≅ (ℬ i))
+     ---------------------------
+ →       ⨅ 𝒜 ≅ ⨅ ℬ
+
+⨅≅ gfe {𝓠}{𝓤}{𝓘}{I}{𝒜}{ℬ} AB = γ
+ where
+  F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣
+  F i = ∣ fst (AB i) ∣
+  Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ i) (F i)
+  Fhom i = ∥ fst (AB i) ∥
+
+  G : ∀ i → ∣ ℬ i ∣ → ∣ 𝒜 i ∣
+  G i = fst ∣ snd (AB i) ∣
+  Ghom : ∀ i → is-homomorphism (ℬ i) (𝒜 i) (G i)
+  Ghom i = snd ∣ snd (AB i) ∣
+
+  F∼G : ∀ i → (F i) ∘ (G i) ∼ (∣ 𝒾𝒹 (ℬ i) ∣)
+  F∼G i = fst ∥ snd (AB i) ∥
+
+  G∼F : ∀ i → (G i) ∘ (F i) ∼ (∣ 𝒾𝒹 (𝒜 i) ∣)
+  G∼F i = snd ∥ snd (AB i) ∥
+
+  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+  ϕ a i = F i (a i)
+
+  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒂 = gfe (λ i → (Fhom i) 𝑓 (λ x → 𝒂 x i))
+
+  ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
+  ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
+
+  ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
+  ψhom 𝑓 𝒃 = gfe (λ i → (Ghom i) 𝑓 (λ x → 𝒃 x i))
+
+  ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+  ϕ~ψ 𝒃 = gfe λ i → F∼G i (𝒃 i)
+
+  ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+  ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
+
+  γ : ⨅ 𝒜 ≅ ⨅ ℬ
+  γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+
+
+embedding-lift-nat : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
+ →                   {I : 𝓘 ̇}{A : I → 𝓠 ̇}{B : I → 𝓤 ̇}
+                     (h : Nat A B)
+ →                   ((i : I) → is-embedding (h i))
+                     -------------------------------
+ →                   is-embedding(NatΠ h)
+
+embedding-lift-nat hfiq hfiu h hem = NatΠ-is-embedding hfiq hfiu h hem
+
+embedding-lift-nat' : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
+ →                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+                      (h : Nat (fst ∘ 𝒜) (fst ∘ ℬ))
+ →                   ((i : I) → is-embedding (h i))
+                     -------------------------------
+ →                   is-embedding(NatΠ h)
+
+embedding-lift-nat' hfiq hfiu h hem = NatΠ-is-embedding hfiq hfiu h hem
+
+embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
+ →               {I : 𝓘 ̇} -- global-dfunext → {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}
+                 {𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+ →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣)
+ →               ((i : I) → is-embedding (h i))
+                 ----------------------------------------------------
+ →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
+embedding-lift {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem =
+ embedding-lift-nat' {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem
+
+
+--INTENSIONAL versions
+--Isomorphism
+_≅'_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+𝑨 ≅' 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ≡ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ≡ ∣ 𝒾𝒹 𝑨 ∣)
+-- An algebra is (intensionally) isomorphic to itself
+id≅' : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅' 𝑨
+id≅' 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , 𝓇ℯ𝒻𝓁 , 𝓇ℯ𝒻𝓁
+
+iso→embedding : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+ →              (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
+iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
+ where
+  f : hom 𝑨 𝑩
+  f = ∣ ϕ ∣
+  g : hom 𝑩 𝑨
+  g = ∣ snd ϕ ∣
+
+  finv : invertible ∣ f ∣
+  finv = ∣ g ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)
+
+  γ : is-embedding ∣ f ∣
+  γ = equivs-are-embeddings ∣ f ∣ (invertibles-are-equivs ∣ f ∣ finv)
+
+
 
 -- is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 𝑆} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
 -- is-algebra-iso {𝑨} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ 𝑨 ∣}
@@ -289,5 +328,8 @@ H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)
  →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
+
+all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
 
 \end{code}
