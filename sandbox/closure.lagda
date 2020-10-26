@@ -279,13 +279,13 @@ products-in-class-preserve-identities p q I 𝒜 α K𝒜 = γ
 
 subalgebras-preserve-identities : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}
                                   {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-                                  (p q : Term{𝓧}{X})
-                                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
+                                  (p q : Term)
+                                  (𝑩 : SubalgebraOfClass 𝒦)
  →                                𝒦 ⊧ p ≋ q
                                   -------------
  →                                ∣ 𝑩 ∣ ⊧ p ≈ q
 
-subalgebras-preserve-identities {𝓤}{𝓠}{𝓧}{X}{𝒦} p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
+subalgebras-preserve-identities {𝓤}{X = X} p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
  where
   𝑩' : Algebra 𝓤 𝑆
   𝑩' = ∣ SA ∣
@@ -328,46 +328,46 @@ subalgebras-preserve-identities {𝓤}{𝓠}{𝓧}{X}{𝒦} p q (𝑩 , 𝑨 , S
 -- ⇒ (the "only if" direction)
 identities-compatible-with-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                                   {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-                                  (p q : Term{𝓧}{X}) →  𝒦 ⊧ p ≋ q
+                                  (p q : Term) →  𝒦 ⊧ p ≋ q
                                  -----------------------------------------------------
- →                                ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻{𝓧}{X}) 𝑨)
-                                  →  ∣ h ∣ ∘ (p ̇ 𝑻{𝓧}{X}) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
+ →                                ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻 X) 𝑨)
+                                  →  ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
 
-identities-compatible-with-homs {𝓤 = 𝓤}{𝓧 = 𝓧} {X = X}p q α 𝑨 KA h = γ
-  where
-  β : ∀(𝒂 : X → ∣ 𝑻 ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
+identities-compatible-with-homs {X = X} p q α 𝑨 KA h = γ
+ where
+  β : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
   β 𝒂 = intensionality (α KA) (∣ h ∣ ∘ 𝒂)
 
-  ξ : ∀(𝒂 : X → ∣ 𝑻 ∣ ) → ∣ h ∣ ((p ̇ 𝑻) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻) 𝒂)
+  ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ h ∣ ((p ̇ 𝑻 X) 𝒂) ≡ ∣ h ∣ ((q ̇ 𝑻 X) 𝒂)
   ξ 𝒂 =
-   ∣ h ∣ ((p ̇ 𝑻) 𝒂)  ≡⟨ comm-hom-term{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺}{𝓦 = 𝓤} gfe (𝑻{𝓧}) 𝑨 h p 𝒂 ⟩
+   ∣ h ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 h p 𝒂 ⟩
    (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ β 𝒂 ⟩
-   (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term{𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺}{𝓦 = 𝓤} gfe 𝑻 𝑨 h q 𝒂)⁻¹ ⟩
-   ∣ h ∣ ((q ̇ 𝑻) 𝒂)  ∎
+   (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 h q 𝒂)⁻¹ ⟩
+   ∣ h ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
 
-  γ : ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻)
+  γ : ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
   γ = gfe ξ
 
 -- ⇐ (the "if" direction)
 homs-compatible-with-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                                   {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-                                  (p q : Term{𝓧}{X})
- →                                ( ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦) (h : hom 𝑻 𝑨)
-                                           → ∣ h ∣ ∘ (p ̇ 𝑻) ≡ ∣ h ∣ ∘ (q ̇ 𝑻) )
+                                  (p q : Term)
+ →                                ( ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦) (h : hom (𝑻 X) 𝑨)
+                                           → ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X) )
                                   ----------------------------------------------------
  →                                 𝒦 ⊧ p ≋ q
 
 homs-compatible-with-identities {X = X} p q β {𝑨} KA = γ
   where
-   h : (𝒂 : X → ∣ 𝑨 ∣) → hom 𝑻 𝑨
+   h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
    h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
 
    γ : 𝑨 ⊧ p ≈ q
    γ = gfe λ 𝒂 →
     (p ̇ 𝑨) 𝒂            ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨(comm-hom-term gfe 𝑻 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
-    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻)) ℊ  ≡⟨ ap (λ - → - ℊ) (β 𝑨 KA (h 𝒂)) ⟩
-    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻)) ℊ  ≡⟨ (comm-hom-term gfe 𝑻 𝑨 (h 𝒂) q ℊ) ⟩
+    (p ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) p ℊ)⁻¹ ⟩
+    (∣ h 𝒂 ∣ ∘ (p ̇ 𝑻 X)) ℊ  ≡⟨ ap (λ - → - ℊ) (β 𝑨 KA (h 𝒂)) ⟩
+    (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q ℊ) ⟩
     (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
     (q ̇ 𝑨) 𝒂             ∎
 
@@ -375,8 +375,8 @@ compatibility-of-identities-and-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                                        {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
                                        (p q : Term{𝓧}{X})
                  ----------------------------------------------------------------
- →                (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦)(hh : hom 𝑻 𝑨)
-                                           →   ∣ hh ∣ ∘ (p ̇ 𝑻) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻))
+ →                (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦)(hh : hom (𝑻 X) 𝑨)
+                                           →   ∣ hh ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻 X))
 
 compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
                                              homs-compatible-with-identities p q
@@ -385,16 +385,16 @@ compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
 --Compatibility of identities with interpretation of terms
 hom-id-compatibility : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                        (p q : Term{𝓧}{X})
-                       (𝑨 : Algebra 𝓤 𝑆)(ϕ : hom 𝑻 𝑨)
+                       (𝑨 : Algebra 𝓤 𝑆)(ϕ : hom (𝑻 X) 𝑨)
  →                      𝑨 ⊧ p ≈ q
                       ------------------
  →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
 
-hom-id-compatibility p q 𝑨 ϕ β = ∣ ϕ ∣ p              ≡⟨ ap ∣ ϕ ∣ (term-agree p) ⟩
-                                 ∣ ϕ ∣ ((p ̇ 𝑻) ℊ)    ≡⟨ (comm-hom-term gfe 𝑻 𝑨 ϕ p ℊ) ⟩
+hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap ∣ ϕ ∣ (term-agree p) ⟩
+                                 ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ) ⟩
                                  (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ ϕ ∣ ∘ ℊ)  ⟩
-                                 (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe 𝑻 𝑨 ϕ q ℊ)⁻¹ ⟩
-                                 ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)    ≡⟨ (ap ∣ ϕ ∣ (term-agree q))⁻¹ ⟩
+                                 (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
+                                 ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agree q))⁻¹ ⟩
                                  ∣ ϕ ∣ q              ∎
 
 

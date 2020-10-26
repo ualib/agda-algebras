@@ -27,28 +27,28 @@ data Term {𝓤 : Universe}{X : 𝓤 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
 open Term
 
 --The term algebra 𝑻(X).
-𝑻 : {𝓤 : Universe}{X : 𝓤 ̇} → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
-𝑻 {𝓤}{X} = Term{𝓤}{X} , node
+𝑻 : {𝓤 : Universe}(X : 𝓤 ̇) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
+𝑻 {𝓤} X = Term{𝓤}{X} , node
 
 term-op : {𝓤 : Universe}{X : 𝓤 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓤}{X} ) → Term
 term-op f args = node f args
 
 --1.a. Every map (X → 𝑨) lifts.
 free-lift : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}{𝑨 : Algebra 𝓦 𝑆} (h : X → ∣ 𝑨 ∣)
- →          ∣ (𝑻{𝓤}{X}) ∣ → ∣ 𝑨 ∣
+ →          ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 
 free-lift h (generator x) = h x
 free-lift {𝑨 = 𝑨} h (node f args) = (f ̂ 𝑨) λ i → free-lift{𝑨 = 𝑨} h (args i)
 
 --1.b. The lift is (extensionally) a hom
 lift-hom : {𝓤 𝓦 : Universe}{X : 𝓤 ̇}{𝑨 : Algebra 𝓦 𝑆}(h : X → ∣ 𝑨 ∣)
- →         hom (𝑻{𝓤}{X}) 𝑨
+ →         hom (𝑻 X) 𝑨
 
 lift-hom {𝑨 = 𝑨} h = free-lift{𝑨 = 𝑨} h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
 --2. The lift to (free → 𝑨) is (extensionally) unique.
 free-unique : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → funext 𝓥 𝓦
- →            {𝑨 : Algebra 𝓦 𝑆}(g h : hom (𝑻{𝓤}{X}) 𝑨)
+ →            {𝑨 : Algebra 𝓦 𝑆}(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
  →            (t : Term{𝓤}{X})
              ---------------------------
@@ -93,7 +93,7 @@ lift-of-epic-is-epic{X = X}{𝑨 = 𝑨} h₀ hE y = γ
   γ = eq y (generator h₀⁻¹y) η
 
 𝑻hom-gen : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
- →         Σ h ꞉ (hom (𝑻{𝓧}{X}) 𝑪), Epic ∣ h ∣
+ →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
 𝑻hom-gen {X = X}𝑪 = h , lift-of-epic-is-epic h₀ hE
  where
   h₀ : X → ∣ 𝑪 ∣
@@ -102,7 +102,7 @@ lift-of-epic-is-epic{X = X}{𝑨 = 𝑨} h₀ hE y = γ
   hE : Epic h₀
   hE = snd (𝕏 𝑪)
 
-  h : hom 𝑻 𝑪
+  h : hom (𝑻 X) 𝑪
   h = lift-hom{𝑨 = 𝑪} h₀
 
 
@@ -135,7 +135,7 @@ _̇_ : {𝓤 𝓦 : Universe}{X : 𝓤 ̇ } → Term{𝓤}{X}
 -- such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact in the following module:
 
 term-op-interp1 : {𝓤 : Universe}{X : 𝓤 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓤}{X})
- →                node f args ≡ (f ̂ 𝑻) args
+ →                node f args ≡ (f ̂ 𝑻 X) args
 
 term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
@@ -145,27 +145,27 @@ term-op-interp2 : {𝓤 : Universe}{X : 𝓤 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ �
 term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
 
 term-op-interp3 : {𝓤 : Universe}{X : 𝓤 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term{𝓤}{X}}
- →                a1 ≡ a2  →  node f a1 ≡ (f ̂ 𝑻) a2
+ →                a1 ≡ a2  →  node f a1 ≡ (f ̂ 𝑻 X) a2
 
 term-op-interp3 f {a1}{a2} a1a2 = (term-op-interp2 f a1a2) ∙ (term-op-interp1 f a2)
 
-term-gen : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻{𝓤}{X} ∣)
- →         Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
+term-gen : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻 X ∣)
+ →         Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
 
 term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
 term-gen (node f args) = node f (λ i → ∣ term-gen (args i) ∣) ,
                                 term-op-interp3 f (gfe λ i → ∥ term-gen (args i) ∥)
 
-tg : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻{𝓤}{X} ∣) → Σ 𝓅 ꞉ ∣ 𝑻 ∣ , p ≡ (𝓅 ̇ 𝑻) generator
+tg : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻 X ∣) → Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
 tg p = term-gen p
 
-term-gen-agree : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻{𝓤}{X} ∣)
- →               (p ̇ 𝑻) generator ≡ (∣ term-gen p ∣ ̇ 𝑻) generator
+term-gen-agree : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻 X ∣)
+ →               (p ̇ 𝑻 X) generator ≡ (∣ term-gen p ∣ ̇ 𝑻 X) generator
 term-gen-agree (generator x) = 𝓇ℯ𝒻𝓁
-term-gen-agree (node f args) = ap (f ̂ 𝑻) (gfe λ x → term-gen-agree (args x))
+term-gen-agree {X = X}(node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agree (args x))
 
-term-agree : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻{𝓤}{X} ∣)
- →            p ≡ (p ̇ 𝑻) generator
+term-agree : {𝓤 : Universe}{X : 𝓤 ̇}(p : ∣ 𝑻 X ∣)
+ →            p ≡ (p ̇ 𝑻 X) generator
 term-agree p = snd (term-gen p) ∙ (term-gen-agree p)⁻¹
 
 
