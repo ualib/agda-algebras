@@ -120,7 +120,7 @@ PClo-idem {𝓤} {𝒦} (prod x) = prod (λ i → PClo-idem (x i))
 
 ----------------------------------------------------------------------------------------------
 -- For a given algebra 𝑨, and class 𝒦 of algebras, we will find the following fact useful
--- (e.g., in the proof of Birkhoff's HSP theorem): 𝑨 ∈ SClo 𝒦  ⇔  𝑨 IsSubalgebraOfClass 𝒦
+-- (e.g., in proof of Birkhoff's HSP theorem):  𝑨 ∈ SClo 𝒦  ⇔  𝑨 IsSubalgebraOfClass 𝒦
 
 SClo→Subalgebra : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
  →                𝑨 ∈ SClo 𝒦 →  𝑨 IsSubalgebraOfClass 𝒦
@@ -134,31 +134,117 @@ SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
 
   𝑮 : Algebra 𝓠 𝑆
   𝑮 = ∣ IH ∣
-  KG : 𝑮 ∈ 𝒦
-  KG = fst ∥ snd IH ∥
 
-  SG' : SUBALGEBRA 𝑮
-  SG' = fst ∥ IH ∥
+  KG = fst ∥ snd IH ∥            -- KG : 𝑮 ∈ 𝒦
+  SG' = fst ∥ IH ∥               -- SG' : SUBALGEBRA 𝑮
+  𝑨' = ∣ SG' ∣                    -- 𝑨' : Algebra 𝓠 𝑆
+  𝑨'≤𝑮 = ∥ SG' ∥                 -- 𝑨'≤𝑮 : 𝑨' ≤ 𝑮
+  𝑨≅𝑨' = snd ∥ (snd IH) ∥        -- 𝑨≅𝑨' : 𝑨 ≅ 𝑨'
+  𝑨≤𝑮 = iso-≤ 𝑨 𝑨' 𝑮 𝑨≅𝑨' 𝑨'≤𝑮 -- 𝑨≤𝑮 : 𝑨 ≤ 𝑮
 
-  𝑨' : Algebra _ 𝑆
-  𝑨' = ∣ SG' ∣
-  𝑨'≤𝑮 : 𝑨' ≤ 𝑮
-  𝑨'≤𝑮 = ∥ SG' ∥
-
-  𝑨≅𝑨' : 𝑨 ≅ 𝑨'
-  𝑨≅𝑨' = snd ∥ (snd IH) ∥
-
-  𝑨≤𝑮 : 𝑨 ≤ 𝑮
-  𝑨≤𝑮 = iso-≤ 𝑨 𝑨' 𝑮 𝑨≅𝑨' 𝑨'≤𝑮
   sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
   sa≤𝑮 = trans-≤ ∣ sa ∣ 𝑨 𝑮 ∥ sa ∥ 𝑨≤𝑮
+
   γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
   γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
 
 Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑩 : Algebra 𝓠 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ SClo 𝒦
-Subalgebra→SClo {𝓠} {𝒦} {𝑩} (𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨} (sbase KA) (𝑩 , (iso-≤ 𝑩 ∣ sa ∣ 𝑨 B≅sa ∥ sa ∥))
+Subalgebra→SClo{𝓠}{𝒦}{𝑩}(𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨}(sbase KA)(𝑩 , (iso-≤ 𝑩 ∣ sa ∣ 𝑨 B≅sa ∥ sa ∥))
 
+----------------------------------------------------------------------------------------
+-- The (near) lattice of closures
+LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
+ →         {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
+ →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
+          ----------------------------------------------------
+ →         ⨅ ℬ IsSubalgebraOfClass (PClo 𝒦)
+
+LemPS⊆SP{𝓠}hfe{𝒦}{I}{ℬ}ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , (prod PClo𝒜) , (⨅≅ gfe ℬ≅SA)
+ where
+  𝒜 = λ i → ∣ ℬ≤𝒦 i ∣                -- 𝒜 : I → Algebra 𝓠 𝑆
+  SA = λ i → ∣ fst ∥ ℬ≤𝒦 i ∥ ∣        -- SA : I → Algebra 𝓠 𝑆
+  𝒦𝒜 = λ i → ∣ snd ∥ ℬ≤𝒦 i ∥ ∣       -- 𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
+  PClo𝒜 = λ i → pbase (𝒦𝒜 i)        -- PClo𝒜 : ∀ i → 𝒜 i ∈ PClo 𝒦
+  SA≤𝒜 = λ i → snd ∣ ∥ ℬ≤𝒦 i ∥ ∣      -- SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
+  ℬ≅SA = λ i → ∥ snd ∥ ℬ≤𝒦 i ∥ ∥      -- ℬ≅SA : ∀ i → ℬ i ≅ SA i
+  h = λ i → ∣ SA≤𝒜 i ∣                 -- h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
+  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
+  ⨅SA≤⨅𝒜 = i , ii , iii
+   where
+    i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
+    i = λ x i → (h i) (x i)
+    ii : is-embedding i
+    ii = embedding-lift hfe hfe{I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
+    iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
+    iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
+
+
+PS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
+
+PS⊆SP hfe (pbase (sbase x)) = sbase (pbase x)
+PS⊆SP hfe  (pbase (sub x sa)) = SClo-mono pbase (sub x sa)
+PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
+ (prod{I = I}{𝒜 = 𝒜} PSCloA) = γ -- lem1 PSCloA -- (works)
+  where
+   ζ : (i : I) → (𝒜 i) ∈ SClo (PClo 𝒦)
+   ζ i = PS⊆SP hfe (PSCloA i)
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (PClo 𝒦)
+   ξ i = SClo→Subalgebra (ζ i)
+
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo (PClo 𝒦))
+   η' = LemPS⊆SP {𝓠} hfe {PClo 𝒦}{I}{𝒜} ξ
+
+   η : ⨅ 𝒜 IsSubalgebraOfClass (PClo 𝒦)
+   η = mono-≤ (⨅ 𝒜) PClo-idem η'
+
+   γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
+   γ = Subalgebra→SClo η
+
+S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+       (𝑨 : Algebra 𝓠 𝑆)
+      ------------------------------------
+ →     𝑨 ∈ SClo 𝒦  →  𝑨 ∈ SClo (PClo 𝒦)
+
+S⊆SP 𝑨 (sbase x) = sbase (pbase x)
+S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
+
+SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+         (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
+         ------------------------------------------------
+ →        𝑭 ∈ SClo (PClo 𝒦)
+
+SPS⊆SP _ 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
+SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
+SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
+SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
+
+
+------------------------------------------------------------------------------------------------
+-- We also need a way to construct products of all the algebras in a given collection.
+-- More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras, we need to
+-- construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
+-- algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦.
+
+𝕀 : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ̇
+𝕀 {𝓤} 𝒦 = Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , ∀ i → 𝒜 i ∈ 𝒦
+
+𝕀→Alg : {𝓤 𝓣 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣}
+ →          𝕀{𝓤} 𝒦 → Algebra 𝓤 𝑆
+𝕀→Alg (_ , 𝒜 , _) = ⨅ 𝒜
+
+⨅Class : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → Algebra (𝓞 ⊔ 𝓥  ⊔ 𝓣 ⊔ 𝓤 ⁺) 𝑆
+⨅Class {𝓤}{𝓣} 𝒦 = ⨅ (𝕀→Alg{𝓤}{𝓣}{𝒦})
+
+--Example
+⨅SClo : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
+⨅SClo {𝓤} 𝒦 = ⨅Class (SClo 𝒦)
+
+
+------------------------------------------------------------------------------------------
+-- Compatibilities
+-- ---------------
 
 products-preserve-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
                                (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
