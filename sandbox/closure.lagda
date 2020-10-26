@@ -118,6 +118,47 @@ PClo-idem {𝓤} {𝒦} (pbase x) = x
 PClo-idem {𝓤} {𝒦} (prod x) = prod (λ i → PClo-idem (x i))
 
 
+----------------------------------------------------------------------------------------------
+-- For a given algebra 𝑨, and class 𝒦 of algebras, we will find the following fact useful
+-- (e.g., in the proof of Birkhoff's HSP theorem): 𝑨 ∈ SClo 𝒦  ⇔  𝑨 IsSubalgebraOfClass 𝒦
+
+SClo→Subalgebra : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
+ →                𝑨 ∈ SClo 𝒦 →  𝑨 IsSubalgebraOfClass 𝒦
+SClo→Subalgebra{𝓠}{𝒦}{𝑨}(sbase x) = 𝑨 , (𝑨 , refl-≤ 𝑨) , x , (((λ x → x) , id-is-hom) ,
+                                                                (((λ x → x) , id-is-hom) ,
+                                                                  ((λ x₁ → refl _) , λ x₁ → refl _)))
+SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
+ where
+  IH : 𝑨 IsSubalgebraOfClass 𝒦
+  IH = SClo→Subalgebra x
+
+  𝑮 : Algebra 𝓠 𝑆
+  𝑮 = ∣ IH ∣
+  KG : 𝑮 ∈ 𝒦
+  KG = fst ∥ snd IH ∥
+
+  SG' : SUBALGEBRA 𝑮
+  SG' = fst ∥ IH ∥
+
+  𝑨' : Algebra _ 𝑆
+  𝑨' = ∣ SG' ∣
+  𝑨'≤𝑮 : 𝑨' ≤ 𝑮
+  𝑨'≤𝑮 = ∥ SG' ∥
+
+  𝑨≅𝑨' : 𝑨 ≅ 𝑨'
+  𝑨≅𝑨' = snd ∥ (snd IH) ∥
+
+  𝑨≤𝑮 : 𝑨 ≤ 𝑮
+  𝑨≤𝑮 = iso-≤ 𝑨 𝑨' 𝑮 𝑨≅𝑨' 𝑨'≤𝑮
+  sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
+  sa≤𝑮 = trans-≤ ∣ sa ∣ 𝑨 𝑮 ∥ sa ∥ 𝑨≤𝑮
+  γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
+  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
+
+Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑩 : Algebra 𝓠 𝑆}
+ →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ SClo 𝒦
+Subalgebra→SClo {𝓠} {𝒦} {𝑩} (𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨} (sbase KA) (𝑩 , (iso-≤ 𝑩 ∣ sa ∣ 𝑨 B≅sa ∥ sa ∥))
+
 
 products-preserve-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
                                (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)

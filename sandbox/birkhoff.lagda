@@ -62,12 +62,32 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
+
 ---------------------------
 --The free algebra in Agda
 ---------------------------
 
-𝑻img : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → _ ̇
+𝑻img : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓧)⁺ ̇
 𝑻img {𝓠}{𝓧}{X}{𝒦} = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+
+𝑻imgPred : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →         Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ (𝓠 ⁺) ⊔ (𝓧 ⁺))
+𝑻imgPred {𝓠}{𝓧}{X}{𝒦} 𝑨 = Σ ϕ ꞉ hom (𝑻{𝓧}{X}) 𝑨 , (𝑨 ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+
+
+-- AllAlgebras : {𝓠 : Universe}{I : 𝓠 ̇}(I → Algebra 𝓠 𝑆) → _ ̇
+-- Allalgebras 
+-- 𝑻imgIndexed : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →  (𝑨 : Algebra _ 𝑆) → 
+
+-- ⨅𝑻img : {𝓠 𝓧 : Universe}{I : 𝓠 ̇}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → Algebra _ 𝑆
+-- ⨅𝑻img {𝓠}{𝓧}{I}{X}{𝒦} = ⨅ (
+Σ𝑻img : {𝓠 𝓧 : Universe}{I : 𝓠 ̇}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⁺) ⊔ (𝓧 ⁺) ̇
+Σ𝑻img {𝓠}{𝓧}{I}{X}{𝒦} = Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ∀ i → Σ ϕ ꞉ hom (𝑻{𝓧}{X})(𝒜 i) , ((𝒜 i) ∈ SClo 𝒦) × Epic ∣ ϕ ∣
+
+-- ⨅𝑻img : {𝓠 𝓧 : Universe}{I : 𝓠 ̇}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →       Σ𝑻img {𝓠}{𝓧}{I}{X}{𝒦} → Algebra 𝓠 𝑆
+-- ⨅𝑻img {𝓠}{𝓧}{I}{X}{𝒦} ti = ⨅ (∣ ti ∣)
 
 mkti : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
        (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦 → 𝑻img
@@ -140,6 +160,10 @@ mkti {𝓠}{𝓧}{X}{𝒦} 𝑨 SCloA = (𝑨 , fst thg , SCloA , snd thg)
  →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓠 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
 𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻{𝓧}{X} ╱ (ΨCon{𝓠}{𝓧}{X}{𝒦})
 
+-- 𝔽↪⨅𝑻img : {𝓠 𝓧 : Universe}{I : 𝓠 ̇}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →          Σ ϕ ꞉ hom (𝔽{𝓠}{𝓧}{X}{𝒦}) (⨅𝑻img{𝓠}{𝓧}{I}{X}{𝒦}) , is-embedding ∣ ϕ ∣
+-- 𝔽↪⨅𝑻img = ?
+
 LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
  →         {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
  →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
@@ -165,43 +189,6 @@ LemPS⊆SP{𝓠}hfe{𝒦}{I}{ℬ}ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅�
     iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
     iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
 
-SClo→Subalgebra : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑨 : Algebra 𝓠 𝑆}
- →                𝑨 ∈ SClo 𝒦 →  𝑨 IsSubalgebraOfClass 𝒦
-SClo→Subalgebra {𝓠} {𝒦} {𝑨} (sbase x) =
- 𝑨 , (𝑨 , refl-≤ 𝑨) , x ,
-   (((λ x → x) , id-is-hom) ,
-     (((λ x → x) , id-is-hom) , ((λ x₁ → refl _) , λ x₁ → refl _)))
-SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
- where
-  IH : 𝑨 IsSubalgebraOfClass 𝒦
-  IH = SClo→Subalgebra x
-
-  𝑮 : Algebra 𝓠 𝑆
-  𝑮 = ∣ IH ∣
-  KG : 𝑮 ∈ 𝒦
-  KG = fst ∥ snd IH ∥
-
-  SG' : SUBALGEBRA 𝑮
-  SG' = fst ∥ IH ∥
-
-  𝑨' : Algebra _ 𝑆
-  𝑨' = ∣ SG' ∣
-  𝑨'≤𝑮 : 𝑨' ≤ 𝑮
-  𝑨'≤𝑮 = ∥ SG' ∥
-
-  𝑨≅𝑨' : 𝑨 ≅ 𝑨'
-  𝑨≅𝑨' = snd ∥ (snd IH) ∥
-
-  𝑨≤𝑮 : 𝑨 ≤ 𝑮
-  𝑨≤𝑮 = iso-≤ 𝑨 𝑨' 𝑮 𝑨≅𝑨' 𝑨'≤𝑮
-  sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
-  sa≤𝑮 = trans-≤ ∣ sa ∣ 𝑨 𝑮 ∥ sa ∥ 𝑨≤𝑮
-  γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
-  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
-
-Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑩 : Algebra 𝓠 𝑆}
- →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ SClo 𝒦
-Subalgebra→SClo {𝓠} {𝒦} {𝑩} (𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨} (sbase KA) (𝑩 , (iso-≤ 𝑩 ∣ sa ∣ 𝑨 B≅sa ∥ sa ∥))
 
 PS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
@@ -243,41 +230,6 @@ SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
 SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
 SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 
-ΣSClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
-ΣSClo {𝓠}{𝒦} = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
-
-⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
- →       ΣSClo{𝓠}{𝒦} → Algebra 𝓠 𝑆
-
-⨅SClo SS = ⨅ (fst ∥ SS ∥)
-
-⨅Sclo∈SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-           (SS : ΣSClo{𝓠}{𝒦})
-           -----------------------------
- →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
-
-⨅Sclo∈SP {𝓠} hfe {𝒦} SS = γ
- where
-  I : 𝓠 ̇
-  I = ∣ SS ∣
-  𝒜 : I → Algebra 𝓠 𝑆
-  𝒜 = fst ∥ SS ∥
-
-  h₀ : ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
-  h₀ = snd ∥ SS ∥
-
-  h₁ : ((i : I) → 𝒜 i ∈ PClo (SClo 𝒦))
-  h₁ i = pbase (h₀ i)
-
-  P : Algebra 𝓠 𝑆
-  P = ⨅SClo SS
-
-  ζ : P ∈ PClo (SClo 𝒦)
-  ζ = prod{I = I}{𝒜 = 𝒜} h₁
-
-  γ : P ∈ SClo (PClo 𝒦)
-  γ = PS⊆SP hfe ζ
-
 
 -- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
 -- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
@@ -285,6 +237,25 @@ SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 --        Therefore, 𝑻/ΨCon ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
 --        This proves that 𝔽 is isomorphic to an algebra in SPS(𝒦).
 --        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
+
+-- Before implementing this, we need a way to construct products of all the algebras in a given collection.
+-- More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras of type Algebra 𝓤 𝑆, we need to
+-- construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all algebras in 𝒦,
+-- so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦. Here's how we do it.
+
+𝕀 : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ̇
+𝕀 {𝓤} 𝒦 = Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , ∀ i → 𝒜 i ∈ 𝒦
+
+𝕀→Alg : {𝓤 𝓣 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣}
+ →          𝕀{𝓤} 𝒦 → Algebra 𝓤 𝑆
+𝕀→Alg (_ , 𝒜 , _) = ⨅ 𝒜
+
+⨅Class : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → Algebra (𝓞 ⊔ 𝓥  ⊔ 𝓣 ⊔ 𝓤 ⁺) 𝑆
+⨅Class {𝓤}{𝓣} 𝒦 = ⨅ (𝕀→Alg{𝓤}{𝓣}{𝒦})
+
+--Example
+⨅SClo : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
+⨅SClo {𝓤} 𝒦 = ⨅Class (SClo 𝒦)
 
 
 -- 𝔽≤⨅SClo : 𝔽 ≤ ⨅SClo
@@ -300,6 +271,18 @@ SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 --        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
 -- 𝔽≅SPS : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
 --  →       Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
+
+
+𝔽≤⨅SClo : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ →       𝔽{𝓠}{𝓧}{X}{𝒦} IsSubalgebraOf (⨅SClo{𝓠} 𝒦)
+𝔽≤⨅SClo {𝓠}{𝓧}{X}{𝒦} = 𝔥 , (𝔥emb , 𝔥hom)
+ where
+  𝔥 : ∣ 𝔽{𝓠}{𝓧}{X}{𝒦} ∣ → ∣ ⨅SClo 𝒦 ∣
+  𝔥 = {!!}
+  𝔥emb : is-embedding 𝔥
+  𝔥emb = {!!}
+  𝔥hom : is-homomorphism 𝔽 (⨅SClo 𝒦) 𝔥
+  𝔥hom = {!!}
 
 
 𝔽≤SP : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
@@ -480,6 +463,41 @@ birkhoff {𝓠}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
 
 
 
+
+-- ΣSClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+-- ΣSClo {𝓠}{𝒦} = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+
+-- ⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--  →       ΣSClo{𝓠}{𝒦} → Algebra 𝓠 𝑆
+
+-- ⨅SClo SS = ⨅ (fst ∥ SS ∥)
+
+-- ⨅Sclo∈SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--            (SS : ΣSClo{𝓠}{𝒦})
+--            -----------------------------
+--  →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
+
+-- ⨅Sclo∈SP {𝓠} hfe {𝒦} SS = γ
+--  where
+--   I : 𝓠 ̇
+--   I = ∣ SS ∣
+--   𝒜 : I → Algebra 𝓠 𝑆
+--   𝒜 = fst ∥ SS ∥
+
+--   h₀ : ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
+--   h₀ = snd ∥ SS ∥
+
+--   h₁ : ((i : I) → 𝒜 i ∈ PClo (SClo 𝒦))
+--   h₁ i = pbase (h₀ i)
+
+--   P : Algebra 𝓠 𝑆
+--   P = ⨅SClo SS
+
+--   ζ : P ∈ PClo (SClo 𝒦)
+--   ζ = prod{I = I}{𝒜 = 𝒜} h₁
+
+--   γ : P ∈ SClo (PClo 𝒦)
+--   γ = PS⊆SP hfe ζ
 
 
 
