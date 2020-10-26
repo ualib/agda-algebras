@@ -100,12 +100,12 @@ mkti {𝓤}{𝓧}{X}{𝒦} 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
  ∀(𝑨 : Algebra 𝓤 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
  →  ∣ 𝑻ϕ X (SClo 𝒦) (mkti 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ X (SClo 𝒦) (mkti 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 
-ΨRel : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ΨRel : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
  →     Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
-ΨRel {𝓤}{𝓧}{X}{𝒦} p q = Ψ X 𝒦 (p , q)
+ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
 
 Ψcompatible : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)(ΨRel{𝓤}{𝓧}{X}{𝒦})
+ →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)(ΨRel X 𝒦)
 Ψcompatible {𝓤}{𝓧}{X}{𝒦} f {𝒕} {𝒔} 𝒕Ψ𝒔 𝑨 SCloA = γ
  where
   ϕ : hom (𝑻 X) 𝑨
@@ -126,25 +126,36 @@ mkti {𝓤}{𝓧}{X}{𝒦} 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
     iii = (gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒔 i ̇ 𝑻 X) 𝒂)))⁻¹
 
 ΨSym : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →     symmetric (ΨRel{𝓤}{𝓧}{X}{𝒦})
+ →     symmetric (ΨRel X 𝒦)
 ΨSym p q pΨRelq 𝑪 ϕ = (pΨRelq 𝑪 ϕ)⁻¹
 
 ΨTra : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →     transitive (ΨRel{𝓤}{𝓧}{X}{𝒦})
+ →     transitive (ΨRel X 𝒦)
 ΨTra p q r pΨq qΨr 𝑪 ϕ = (pΨq 𝑪 ϕ) ∙ (qΨr 𝑪 ϕ)
 
 ΨIsEquivalence : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →               IsEquivalence (ΨRel{𝓤}{𝓧}{X}{𝒦})
+ →               IsEquivalence (ΨRel X 𝒦)
 ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
 
-ΨCon : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)
-ΨCon {𝓤}{𝓧}{X}{𝒦} = mkcon (ΨRel{𝓤}{𝓧}{X}{𝒦}) Ψcompatible ΨIsEquivalence
+ΨCon : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
+ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) Ψcompatible ΨIsEquivalence
 
 -- The (relatively) free algebra
 𝔽 : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
  →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
-𝔽 {𝓤}{𝓧} X 𝒦 = 𝑻 X ╱ (ΨCon{𝓤}{𝓧}{X}{𝒦})
+𝔽 X 𝒦 = 𝑻 X ╱ (ΨCon X 𝒦)
+
+-- 𝔽universal : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+--               (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → epi (𝔽 X 𝒦) 𝑨
+-- 𝔽universal X 𝒦 𝑨 KA = {!!} , {!!}
+𝔽free-lift : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → 𝑨 ∈ 𝒦 → ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
+𝔽free-lift {𝓤}{𝓧} X 𝒦 𝑨 f KA = λ x → {!!}
+𝔽lift-hom : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+             (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → 𝑨 ∈ 𝒦 → epi (𝔽 X 𝒦) 𝑨
+𝔽lift-hom {𝓤}{𝓧} X 𝒦 𝑨 f KA = {!!}
+
 
 -- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
 -- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
@@ -158,7 +169,26 @@ mkti {𝓤}{𝓧}{X}{𝒦} 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 𝔽≤⨅SClo {𝓤}{𝓧}{X}{𝒦} = 𝔥 , (𝔥emb , 𝔥hom)
  where
   𝔥 : ∣ 𝔽 X 𝒦 ∣ → ∣ ⨅SClo 𝒦 ∣
-  𝔥 = {!!}
+  𝔥 x 𝑰 i = α
+   where
+    I : 𝓤 ̇
+    I = ∣ 𝑰 ∣
+
+    𝒜 : I → Algebra 𝓤 𝑆
+    𝒜 = fst ∥ 𝑰 ∥
+
+    SCloA : (i : I) → (𝒜 i) ∈ SClo 𝒦
+    SCloA j = snd ∥ 𝑰 ∥ j
+
+    Timg : ∀ i → 𝑻img X (SClo 𝒦)
+    Timg i = mkti (𝒜 i) (SCloA i)
+
+    ϕ : (i : I) → hom (𝑻 X) (𝑻𝑨 (Timg i))
+    ϕ i = 𝑻ϕ X (SClo 𝒦) (Timg i)
+
+    α : ∣ 𝒜 i ∣
+    α = ∣ ϕ i ∣ (fst ∥ x ∥)
+
   𝔥emb : is-embedding 𝔥
   𝔥emb = {!!}
   𝔥hom : is-homomorphism (𝔽 X 𝒦) (⨅SClo 𝒦) 𝔥
@@ -281,7 +311,7 @@ birkhoff {𝓤}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
     hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
 
   gg : Σ g ꞉ hom T F , Epic ∣ g ∣
-  gg = (lift-hom{𝑨 = F} g₀) , {!!} -- (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺)} g₀ g₀E)
+  gg = (lift-hom{𝑨 = F} g₀) , (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ (𝓤 ⊔ 𝓧) ⁺ ⁺)} g₀ g₀E)
 
    where
     g₀ : X → ∣ F ∣
@@ -308,10 +338,16 @@ birkhoff {𝓤}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
   --         \ .
   --          V
   --          𝑨
+  -- KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
+  -- KER-pred g (x , y) = g x ≡ g y
+  -- _⊆_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+  -- P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
-  -----------------------------------
   kerg⊆kerh : KER-pred ∣ g ∣ ⊆ KER-pred ∣ h ∣
-  kerg⊆kerh = {!!}
+  kerg⊆kerh {(x , y)} gx≡gy = kgoal
+   where
+    kgoal : ∣ h ∣ x ≡ ∣ h ∣ y
+    kgoal = {!!}
 
   -- ϕ' : Σ ϕ ꞉ (hom F 𝑨) , ∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ g ∣
   -- ϕ' = HomFactor gfe {T} {𝑨} {F} h g kerg⊆kerh gE

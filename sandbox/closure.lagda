@@ -154,6 +154,7 @@ Subalgebra→SClo{𝓠}{𝒦}{𝑩}(𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨
 
 ----------------------------------------------------------------------------------------
 -- The (near) lattice of closures
+
 LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
  →         {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
  →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
@@ -221,11 +222,10 @@ SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ
 SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 
 
-------------------------------------------------------------------------------------------------
--- We also need a way to construct products of all the algebras in a given collection.
--- More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras, we need to
--- construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
--- algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦.
+{-We also need a way to construct products of all the algebras in a given collection.
+  More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras, we need to
+  construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
+  algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦. -}
 
 𝕀 : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ̇
 𝕀 {𝓤} 𝒦 = Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , ∀ i → 𝒜 i ∈ 𝒦
