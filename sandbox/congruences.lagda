@@ -159,10 +159,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
   con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) _
   con A = λ θ → IsEquivalence θ × compatible A θ
 
-  record Congruence {𝓤 𝓧 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓧 ⁺ ̇  where
+  record Congruence {𝓠 𝓤 : Universe} (A : Algebra 𝓠 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇  where
     constructor mkcon
     field
-      ⟨_⟩ : Rel ∣ A ∣ 𝓧
+      ⟨_⟩ : Rel ∣ A ∣ 𝓤
       Compatible : compatible A ⟨_⟩
       IsEquiv : IsEquivalence ⟨_⟩
   open Congruence

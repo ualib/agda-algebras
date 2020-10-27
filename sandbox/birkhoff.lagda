@@ -97,8 +97,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 Ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
  →  ∣ 𝑻ϕ X (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ X (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 
-ΨRel : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
- →     Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
+ΨRel : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
 ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
 
 Ψcompatible : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
@@ -135,10 +134,8 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
 
 ΨCon : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
- →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
+ →     Congruence{𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
 ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) (Ψcompatible X 𝒦) ΨIsEquivalence
-
-
 
 
 -- Properties of Ψ ------------------------------------------------------------
@@ -270,15 +267,8 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
     h1h2 : ∣ 𝔥 ∣ (∣ fib1 ∣) ≡ ∣ 𝔥 ∣ (∣ fib2 ∣)
     h1h2 = (snd fib1) ∙ (snd fib2)⁻¹
 
--- KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
--- KER-pred g (x , y) = g x ≡ g y
--- Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
---  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
-
     -- Ψ⊆ker𝔥 : (Ψ X 𝒦)  ⊆  KER-pred{𝓦 = (𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤) ⁺)}{A = ∣ 𝔽 X 𝒦 ∣ }{B = ∣ ⨅SClo{𝓤 = 𝓤} 𝒦 ∣} ∣ 𝔥 ∣
     -- Ψ⊆ker𝔥 = ?
--- 𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺)
---(p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ X 𝒦 (mkti X 𝑨 KA) ∣
 
     γ : fib1 ≡ fib2
     γ = {!!}
@@ -301,8 +291,6 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
 --  →       Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
 --            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓤}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
 -- 𝔽∈SP𝒦 = ?
-
-
 
 
 -- Birkhoff's theorem: every variety is an equational class.
@@ -486,50 +474,6 @@ birkhoff {𝓤}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
 -- →        Algebra 𝓠 𝑆
 -- ⨅SClo' 𝒜 h₀ = ⨅ 𝒜
 
--- ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) _
--- ψ {𝓠}{𝓧}{X}{𝒦} (p , q) = ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
---                               → ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ p ≡ ∣ 𝑻ϕ (mkti 𝑨 SCloA) ∣ q
-
--- ψRel : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →     Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
--- ψRel {𝓠}{𝓧}{X}{𝒦} p q = ψ{𝓠}{𝓧}{X}{𝒦} (p , q)
-
--- ψcompatible : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →            compatible (𝑻 X) (ψRel{𝓠}{𝓧}{X}{𝒦})
--- ψcompatible f {i} {j} iψj 𝑨 SCloA = γ
---  where
---   ti : 𝑻img
---   ti = mkti 𝑨 SCloA
-
---   ϕ : hom (𝑻 X) 𝑨
---   ϕ = 𝑻ϕ ti
-
---   γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
---   γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
---       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
---       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
---       ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
-
--- ψSym : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →     symmetric (ψRel{𝓠}{𝓧}{X}{𝒦})
--- ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
-
--- ψTra : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →     transitive (ψRel{𝓠}{𝓧}{X}{𝒦})
--- ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
-
--- ψIsEquivalence : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →               IsEquivalence (ψRel{𝓠}{𝓧}{X}{𝒦})
--- ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
-
--- ψCon : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧} (𝑻 X)
--- ψCon {𝓠}{𝓧}{X}{𝒦} = mkcon (ψRel{𝓠}{𝓧}{X}{𝒦}) ψcompatible ψIsEquivalence
-
--- 𝔽 : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
---  →   Algebra _ 𝑆
--- 𝔽 {𝓠}{𝓧}{X}{𝒦} = 𝑻 X ╱ (ψCon{𝓠}{X}{𝒦})
 
 
 --More tools for Birkhoff's theorem
