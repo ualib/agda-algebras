@@ -12,16 +12,14 @@ open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂)
 
 module closure
  {𝑆 : Signature 𝓞 𝓥}
- {𝓦 : Universe}
- -- {X : 𝓤 ̇}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {𝕏 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {gfe : global-dfunext}
  {dfe : dfunext 𝓤 𝓤}
  {fevu : dfunext 𝓥 𝓤} where
 
 open import homomorphisms {𝑆 = 𝑆} public
-open import subuniverses {𝑆 = 𝑆}{𝓤 = 𝓤}{𝕏 = 𝕏}{fe = gfe} public
-open import terms {𝑆 = 𝑆}{𝓤 = 𝓤}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
+open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} public
+open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
 
 _⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term{𝓧}{X} → Term → 𝓤 ⊔ 𝓧 ̇
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
@@ -29,12 +27,6 @@ _⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term{�
 _⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
  →      Term{𝓧}{X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
-
--- OVU+ OVU++ W W+ : Universe
--- OVU+ = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
--- OVU++ = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺
--- W = OVU+ ⊔ 𝓦
--- W+ = OVU++ ⊔ 𝓦 ⁺
 
 ------------------------------------------------------------------------
 -- Equational theories and classes
@@ -45,7 +37,6 @@ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 Mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
 
 ----------------------------------------------------------------------------------
 --Closure under products
@@ -360,7 +351,7 @@ homs-compatible-with-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
 homs-compatible-with-identities {X = X} p q β {𝑨} KA = γ
   where
    h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-   h 𝒂 = lift-hom{𝑨 = 𝑨} 𝒂
+   h 𝒂 = lift-hom 𝑨 𝒂
 
    γ : 𝑨 ⊧ p ≈ q
    γ = gfe λ 𝒂 →

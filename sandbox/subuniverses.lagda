@@ -11,15 +11,13 @@ open import prelude using (global-dfunext)
 
 module subuniverses
  {𝑆 : Signature 𝓞 𝓥}
- {𝓤 : Universe}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ {𝕏 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {fe : global-dfunext} where
 
 open import homomorphisms {𝑆 = 𝑆}
 
 open import terms
  {𝑆 = 𝑆}
- {𝓤 = 𝓤}
  {𝕏 = 𝕏}
  {gfe = fe} renaming (generator to ℊ)
 
@@ -31,130 +29,118 @@ open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; univalence-gi
  transport; subset-extensionality'; equiv-to-subsingleton; powersets-are-sets'; _●_; ∘-embedding;
  logically-equivalent-subsingletons-are-equivalent) public
 
-Subuniverses : (𝑨 : Algebra 𝓤 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣)
-
+Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
 Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
 
-data _is-supalgebra-of_ {𝓤 : Universe}
- (𝑨 : Algebra 𝓤 𝑆) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-  mem : (B : Pred ∣ 𝑨 ∣ 𝓤) (F : (f : ∣ 𝑆 ∣)
-   →    Op (∥ 𝑆 ∥ f) (Σ B)) → ((f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → Σ B)
-   →    ∣ F f a ∣ ≡ (f ̂ 𝑨)(λ i → ∣ a i ∣))
-   →    𝑨 is-supalgebra-of (Σ B , F)
 
-_is-subalgebra-of_ : {𝓤 : Universe} → Algebra 𝓤 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-𝑩 is-subalgebra-of 𝑨 = 𝑨 is-supalgebra-of 𝑩
-
-_is-subalgebra-of-class_ : {𝓤 : Universe} (𝑩 : Algebra 𝓤 𝑆)
- →            Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-𝑩 is-subalgebra-of-class 𝒦 =
-   Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × (𝑩 is-subalgebra-of 𝑨)
-
-SubunivAlg : {𝑨 : Algebra 𝓤 𝑆} {B : Pred ∣ 𝑨 ∣ 𝓤}
+SubunivAlg : {𝓠 𝓤 : Universe} (𝑨 : Algebra 𝓠 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓤)
  →           B ∈ Subuniverses 𝑨
- →           Algebra 𝓤 𝑆
-SubunivAlg {𝑨 = 𝑨} {B = B} B∈SubA = Σ B , λ f x → (f ̂ 𝑨)(∣_∣ ∘ x) ,
+ →           Algebra (𝓠 ⊔ 𝓤) 𝑆
+SubunivAlg 𝑨 B B∈SubA = Σ B , λ f x → (f ̂ 𝑨)(∣_∣ ∘ x) ,
                                             B∈SubA f (∣_∣ ∘ x)(∥_∥ ∘ x)
 
-subuniv-to-subalg : {𝑨 : Algebra 𝓤 𝑆} {B : Pred ∣ 𝑨 ∣ 𝓤}
- →                  (B∈SubA : B ∈ Subuniverses 𝑨)
- →                  (SubunivAlg {𝑨 = 𝑨} {B = B} B∈SubA) is-subalgebra-of 𝑨
-subuniv-to-subalg {B = B} B∈SubA = mem B ∥ (SubunivAlg B∈SubA) ∥ λ f a → (refl _)
-
-record Subuniverse {𝑨 : Algebra 𝓤 𝑆} : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ where
+record Subuniverse {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆} : 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇ where
  constructor mksub
  field
    sset  : Pred ∣ 𝑨 ∣ 𝓤
    isSub : sset ∈ Subuniverses 𝑨
 
-data Sg (𝑨 : Algebra 𝓤 𝑆) (X : Pred ∣ 𝑨 ∣ 𝓣) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓣) where
+data Sg {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) (X : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤) where
  var : ∀ {v} → v ∈ X → v ∈ Sg 𝑨 X
  app : (f : ∣ 𝑆 ∣){a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣} → Im a ⊆ Sg 𝑨 X
        ---------------------------------------------
   →       (f ̂ 𝑨) a ∈ Sg 𝑨 X
 
-sgIsSub : {𝑨 : Algebra 𝓤 𝑆}{X : Pred ∣ 𝑨 ∣ 𝓤} → Sg 𝑨 X ∈ Subuniverses 𝑨
+sgIsSub : {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆}{X : Pred ∣ 𝑨 ∣ 𝓤} → Sg 𝑨 X ∈ Subuniverses 𝑨
 sgIsSub f a α = app f α
 
-sgIsSmallest : {𝑨 : Algebra 𝓤 𝑆}{X : Pred ∣ 𝑨 ∣ 𝓡} {Y : Pred ∣ 𝑨 ∣ 𝓢}
- →             Y ∈ Subuniverses 𝑨  →   X ⊆ Y
-              -------------------------------
+sgIsSmallest : {𝓠 𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓠 𝑆){X : Pred ∣ 𝑨 ∣ 𝓤}(Y : Pred ∣ 𝑨 ∣ 𝓦)
+ →             Y ∈ Subuniverses 𝑨  →  X ⊆ Y
+              ------------------------------
  →                     Sg 𝑨 X ⊆ Y
 
 -- By induction on x ∈ Sg X, show x ∈ Y
-sgIsSmallest _ X⊆Y (var v∈X) = X⊆Y v∈X
+sgIsSmallest _ _ _ X⊆Y (var v∈X) = X⊆Y v∈X
 
-sgIsSmallest {𝑨 = 𝑨}{Y = Y} YIsSub X⊆Y (app f {a} ima⊆SgX) = app∈Y
+sgIsSmallest 𝑨 Y YIsSub X⊆Y (app f {a} ima⊆SgX) = app∈Y
  where
   -- First, show the args are in Y
   ima⊆Y : Im a ⊆ Y
-  ima⊆Y i = sgIsSmallest YIsSub X⊆Y (ima⊆SgX i)
+  ima⊆Y i = sgIsSmallest 𝑨 Y YIsSub X⊆Y (ima⊆SgX i)
 
   --Since Y is a subuniverse of 𝑨, it contains the application
   app∈Y : (f ̂ 𝑨) a ∈ Y          --           of f to said args.
   app∈Y = YIsSub f a ima⊆Y
 
-sub-inter-is-sub : {𝑨 : Algebra 𝓤 𝑆}
-                   {I : 𝓘 ̇}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓣}
+sub-inter-is-sub : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)
+                   (I : 𝓤 ̇)(𝒜 : I → Pred ∣ 𝑨 ∣ 𝓤)
  →                 ((i : I) → 𝒜 i ∈ Subuniverses 𝑨)
                   -------------------------------------
  →                  ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
-sub-inter-is-sub {𝑨 = 𝑨} {I = I} {𝒜 = 𝒜} Ai-is-Sub f a ima⊆⋂A = α
+sub-inter-is-sub 𝑨 I 𝒜 Ai-is-Sub f a ima⊆⋂A = α
  where
   α : (f ̂ 𝑨) a ∈ ⋂ I 𝒜
   α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
 
-sub-term-closed : {X : 𝓤 ̇}{𝑨 : Algebra 𝓤 𝑆}{B : Pred ∣ 𝑨 ∣ 𝓤}
+sub-term-closed : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓠 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓤)
  →                B ∈ Subuniverses 𝑨
  →                (t : Term)(b : X → ∣ 𝑨 ∣)
  →                (∀ x → b x ∈ B)
                 ---------------------------
  →                ((t ̇ 𝑨) b) ∈ B
 
-sub-term-closed B≤A (ℊ x) b b∈B = b∈B x
+sub-term-closed _ _ B≤A (ℊ x) b b∈B = b∈B x
 
-sub-term-closed {𝑨 = 𝑨} {B = B} B≤A (node f t) b b∈B =
+sub-term-closed 𝑨 B B≤A (node f t) b b∈B =
    B≤A f (λ z → (t z ̇ 𝑨) b)
-          (λ x → sub-term-closed {𝑨 = 𝑨} {B = B} B≤A (t x) b b∈B)
+          (λ x → sub-term-closed 𝑨 B B≤A (t x) b b∈B)
 
-data TermImage (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤) where
+data TermImage {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤) where
  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
  app : (f : ∣ 𝑆 ∣) (t : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → (∀ i  →  t i ∈ TermImage 𝑨 Y)
       ---------------------------------------------------------------
-  →                (f ̂ 𝑨) t ∈ TermImage 𝑨 Y
+  →              (f ̂ 𝑨) t ∈ TermImage 𝑨 Y
 
 --1. TermImage is a subuniverse
-TermImageIsSub : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤}
- →               TermImage 𝑨 Y ∈ Subuniverses 𝑨
+TermImageIsSub : {𝓠 𝓤 : Universe}
+                 {𝑨 : Algebra 𝓠 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤}
+                 ------------------------------------
+ →                TermImage 𝑨 Y ∈ Subuniverses 𝑨
 
-TermImageIsSub = λ f a x → app f a x
+TermImageIsSub = app -- λ f a x → app f a x
 
 --2. Y ⊆ TermImageY
-Y⊆TermImageY : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤}
- →             Y ⊆ TermImage 𝑨 Y
+Y⊆TermImageY : {𝓠 𝓤 : Universe}
+               {𝑨 : Algebra 𝓠 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤}
+              ------------------------------------
+ →              Y ⊆ TermImage 𝑨 Y
 
 Y⊆TermImageY {a} a∈Y = var a∈Y
 
 -- 3. Sg^A(Y) is the smallest subuniverse containing Y
 --    Proof: see `sgIsSmallest`
 
-SgY⊆TermImageY : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤}
- →               Sg 𝑨 Y ⊆ TermImage 𝑨 Y
-SgY⊆TermImageY = sgIsSmallest TermImageIsSub Y⊆TermImageY
+SgY⊆TermImageY : {𝓠 𝓤 : Universe}
+                 (𝑨 : Algebra 𝓠 𝑆)  (Y : Pred ∣ 𝑨 ∣ 𝓤)
+                --------------------------------------
+ →                Sg 𝑨 Y ⊆ TermImage 𝑨 Y
+
+SgY⊆TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y⊆TermImageY
 
 
-hom-image-is-sub : {fe : funext 𝓥 𝓤} {𝑨 𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)
+hom-image-is-sub : {𝓠 𝓤 : Universe} → global-dfunext
+ →                 {𝑨 : Algebra 𝓠 𝑆} {𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)
                   -------------------------------------------------
- →                 (HomImage{𝑨 = 𝑨} 𝑩 ϕ) ∈ Subuniverses 𝑩
+ →                 (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
 
-hom-image-is-sub {fe = fe}{𝑨 = 𝑨}{𝑩 = 𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
+hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
  where
   ar : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
   ar = λ x → Inv ∣ ϕ ∣(b x)(b∈Imf x)
 
   ζ : ∣ ϕ ∣ ∘ ar ≡ b
-  ζ = fe (λ x → InvIsInv ∣ ϕ ∣(b x)(b∈Imf x))
+  ζ = gfe (λ x → InvIsInv ∣ ϕ ∣(b x)(b∈Imf x))
 
   γ : (f ̂ 𝑩) b ≡ ∣ ϕ ∣((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣(b x)(b∈Imf x)))
 

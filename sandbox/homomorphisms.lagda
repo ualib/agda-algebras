@@ -22,24 +22,24 @@ compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Alge
 compatible-op-map 𝑨 𝑩 𝑓 g = ∀ 𝒂 → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
 --(infered type  𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)
 
-op_interpreted-in_and_commutes-with :
-   (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
-   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+op_interpreted-in_and_commutes-with : {𝓠 𝓤 : Universe}
+   (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓠 𝑆) (𝑩 : Algebra 𝓤 𝑆)
+   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g = compatible-op-map 𝑨 𝑩 𝑓 g
 
 is-homomorphism : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
 
-hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
+hom : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
 
-epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓤 ⊔ 𝓦 ⊔ 𝓥 ⊔ 𝓞 ̇
+epi : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g × Epic g
 
-𝒾𝒹 :  (A : Algebra 𝓤 𝑆) → hom A A
+𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
-id-is-hom : {𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
+id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
 id-is-hom = λ _ _ → refl _
 
 -- composition of homomorphisms 1
@@ -63,10 +63,11 @@ HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
  →      is-homomorphism{𝓤}{𝓦} 𝑩 𝑪 g →  is-homomorphism{𝓠}{𝓤} 𝑨 𝑩 f
        --------------------------------------------------------------------
  →          is-homomorphism{𝓠}{𝓦} 𝑨 𝑪 (g ∘ f)
-∘-hom{𝓠}{𝓤}{𝓦} 𝑨 𝑩 𝑪 {f} {g} fhom ghom =
- ∥ HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (f , fhom) ∥
 
-homFactor : funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
+∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (f , fhom) ∥
+
+
+homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
            ---------------------------------------------
@@ -121,16 +122,14 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
-HomFactor : global-dfunext
- →          {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}{𝑪 : Algebra 𝓧 𝑆}
+HomFactor : {𝓠 𝓤 𝓦 : Universe} → global-dfunext
+ →          {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
- →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)
- →          Epic ∣ h ∣
-           ---------------------------------------------
+ →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)  →  Epic ∣ h ∣
+           ------------------------------------------------
  →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-HomFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
- (g , ghom) (h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
    hInv : C → A
    hInv = λ c → (EpicInv h hEpic) c
@@ -139,35 +138,34 @@ HomFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
    ϕ = λ c → g ( hInv c )
 
    ξ : (x : A) → KER-pred h (x , hInv (h x))
-   ξ x =  ( cong-app (EInvIsRInv fe h hEpic) ( h x ) )⁻¹
+   ξ x =  ( cong-app (EInvIsRInv gfe h hEpic) ( h x ) )⁻¹
 
    g≡ϕ∘h : g ≡ ϕ ∘ h
-   g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
+   g≡ϕ∘h = gfe  λ x → Kh⊆Kg (ξ x)
 
    ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
     →  c x ≡ (h ∘ hInv)(c x)
 
-   ζ f c x = (cong-app (EInvIsRInv fe h hEpic) (c x))⁻¹
+   ζ f c x = (cong-app (EInvIsRInv gfe h hEpic) (c x))⁻¹
 
    ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
     →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
 
-   ι f c = ap (λ - → - ∘ c)(EInvIsRInv fe h hEpic)⁻¹
+   ι f c = ap (λ - → - ∘ c)(EInvIsRInv gfe h hEpic)⁻¹
 
    useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
     → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
 
    useker = λ f c
     → Kh⊆Kg (cong-app
-             (EInvIsRInv fe h hEpic)
+             (EInvIsRInv gfe h hEpic)
              (h(FA f(hInv ∘ c)))
             )
 
-   ϕIsHomCB : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → C)
-    →         ϕ (FC f a)  ≡  FB f (ϕ ∘ a)
+   ϕIsHomCB : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → C) → ϕ (FC f a) ≡ FB f (ϕ ∘ a)
 
    ϕIsHomCB f c =
-    g (hInv (FC f c))                ≡⟨ i   ⟩
+    g (hInv (FC f c))               ≡⟨ i   ⟩
     g (hInv (FC f (h ∘ (hInv ∘ c)))) ≡⟨ ii  ⟩
     g (hInv (h (FA f (hInv ∘ c))))   ≡⟨ iii ⟩
     g (FA f (hInv ∘ c))              ≡⟨ iv  ⟩
@@ -301,7 +299,7 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 
 -- The following seems to be the most useful definition (for our
 -- purposes) of the class of homomomrphic images of an algebra.
-HomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓤 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ̇
+HomImage : {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆}(𝑩 : Algebra 𝓤 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓠 ⊔ 𝓤 ̇
 HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
 HomImagesOf : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ̇
