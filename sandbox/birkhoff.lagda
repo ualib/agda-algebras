@@ -138,98 +138,18 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
  →     Congruence{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓧 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
 ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) (Ψcompatible X 𝒦) ΨIsEquivalence
 
--- The (relatively) free algebra
-𝔽 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
- →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
-𝔽 X 𝒦 = 𝑻 X ╱ (ΨCon X 𝒦)
-
--- 𝔽universal : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
---               (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → epi (𝔽 X 𝒦) 𝑨
--- 𝔽universal X 𝒦 𝑨 KA = {!!} , {!!}
-𝔽free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → 𝑨 ∈ 𝒦 → Epic f → ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
-𝔽free-lift {𝓧}{𝓤} 𝑨 f _ _ (_ , x , _) = (free-lift{𝓧}{𝓤} 𝑨 f) x
-𝔽lift-hom : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
-             (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → 𝑨 ∈ 𝒦 → Epic f → epi (𝔽 X 𝒦) 𝑨
-𝔽lift-hom {𝓧}{𝓤} X 𝒦 𝑨 f KA fE = h , (hhm , hep)
- where
-  h : ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
-  h = 𝔽free-lift 𝑨 f KA fE
-
-  h₀ : hom (𝑻 X) 𝑨
-  h₀ = lift-hom 𝑨 f
-
-  θ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)
-  θ = Congruence.⟨ ΨCon X 𝒦 ⟩
-
-  hhm : is-homomorphism (𝔽 X 𝒦) 𝑨 h
-  hhm 𝑓 𝒂 = h ((𝑓 ̂ 𝔽 X 𝒦) 𝒂) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-           h (([ (𝑓 ̂ 𝑻 X) (λ i → ∣ ∥ 𝒂 i ∥ ∣ ) ] θ) , (𝑓 ̂ 𝑻 X) (λ i → ∣ ∥ 𝒂 i ∥ ∣ ) , 𝓇ℯ𝒻𝓁) ≡⟨ {!!} ⟩
-           ∣ h₀ ∣ ((𝑓 ̂ 𝑻 X) (λ i → ∣ ∥ 𝒂 i ∥ ∣ )) ≡⟨ ∥ h₀ ∥ 𝑓 (λ i → ∣ ∥ 𝒂 i ∥ ∣ ) ⟩
-           (𝑓 ̂ 𝑨) (∣ h₀ ∣ ∘ (λ i → ∣ ∥ 𝒂 i ∥ ∣ )) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-           (𝑓 ̂ 𝑨) (λ x → h (𝒂 x)) ∎
-
-  hep : Epic h
-  hep = {!lift-of-epic-is-epic{𝓤}{𝓧}{X}{𝑨} f fE!}
- -- where
- -- (𝔽free-lift X 𝒦 𝑨 f KA) , ({!!} , {!!})
---∥ lift-hom{𝓤 = 𝓧}{𝓦 = 𝓤}{𝑨 = 𝑨} f ∥
-
--- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
--- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
--- Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
---        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
---        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
---        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
-
-𝔽≤⨅SClo : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- →       𝔽 X 𝒦 IsSubalgebraOf (⨅SClo{𝓤} 𝒦)
-𝔽≤⨅SClo {𝓤}{𝓧}{X}{𝒦} = 𝔥 , (𝔥emb , 𝔥hom)
- where
-  𝔥 : ∣ 𝔽 X 𝒦 ∣ → ∣ ⨅SClo 𝒦 ∣
-  𝔥 x 𝑰 i = α
-   where
-    I : 𝓤 ̇
-    I = ∣ 𝑰 ∣
-
-    𝒜 : I → Algebra 𝓤 𝑆
-    𝒜 = fst ∥ 𝑰 ∥
-
-    SCloA : (i : I) → (𝒜 i) ∈ SClo 𝒦
-    SCloA j = snd ∥ 𝑰 ∥ j
-
-    Timg : ∀ i → 𝑻img X (SClo 𝒦)
-    Timg i = mkti X (𝒜 i) (SCloA i)
-
-    ϕ : (i : I) → hom (𝑻 X) (𝑻𝑨 (Timg i))
-    ϕ i = 𝑻ϕ X (SClo 𝒦) (Timg i)
-
-    α : ∣ 𝒜 i ∣
-    α = ∣ ϕ i ∣ (fst ∥ x ∥)
-
-  𝔥emb : is-embedding 𝔥
-  𝔥emb = {!!}
-  𝔥hom : is-homomorphism (𝔽 X 𝒦) (⨅SClo 𝒦) 𝔥
-  𝔥hom = {!!}
-
-
--- 𝔽≤SP : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
---  →       𝔽{𝓤}{𝓧}{X}{𝒦} IsSubalgebraOfClass SClo (PClo 𝒦)
--- 𝔽≤SP = {!!} , ({!!} , ({!!} , {!!}))
-
--- 𝔽∈SP𝒦 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
---  →       Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
---            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓤}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
--- 𝔽∈SP𝒦 = ?
 
 
 
+-- Properties of Ψ ------------------------------------------------------------
 
-𝑻i⊧Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+𝑻i⊧Ψ : {𝓧 𝓤 : Universe}
+       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓤} 𝒦)
        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ Ψ X 𝒦
-      ----------------------------------------------------------------
- →     ∣ 𝑻ϕ X (SClo 𝒦)(mkti X 𝑪 SCloC) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ X (SClo 𝒦)(mkti X 𝑪 SCloC) ∣ ∘ (q ̇ 𝑻 X)
+      --------------------------------------------------
+ →     ∣ 𝑻ϕ X (SClo 𝒦)(mkti X 𝑪 SCloC) ∣ ∘ (p ̇ 𝑻 X)
+         ≡ ∣ 𝑻ϕ X (SClo 𝒦)(mkti X 𝑪 SCloC) ∣ ∘ (q ̇ 𝑻 X)
 
 𝑻i⊧Ψ X 𝒦 𝑪 SCloC p q pΨq = pCq
  where
@@ -294,6 +214,94 @@ class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤
 
 class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VCloA) ,
                                       (λ Thpq KA → Thpq (vbase KA))
+
+
+
+
+-----------------------------------------------------------------------------------
+-- The (relatively) free algebra
+
+𝔽 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ →   Algebra (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺) 𝑆
+𝔽 X 𝒦 = 𝑻 X ╱ (ΨCon X 𝒦)
+
+𝔽free-lift : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
+𝔽free-lift {𝓧}{𝓠}{𝓤} 𝑨 f (_ , x , _) = (free-lift{𝓧}{𝓤} 𝑨 f) x
+
+𝔽lift-hom : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
+             (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → hom (𝔽 X 𝒦) 𝑨
+𝔽lift-hom {𝓧}{𝓠}{𝓤} X 𝒦 𝑨 f = h , hhm
+ where
+  h : ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
+  h = 𝔽free-lift 𝑨 f
+
+  h₀ : hom (𝑻 X) 𝑨
+  h₀ = lift-hom 𝑨 f
+
+  θ : Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓧)⁺)
+  θ = Congruence.⟨ ΨCon X 𝒦 ⟩
+
+  hhm : is-homomorphism (𝔽 X 𝒦) 𝑨 h
+  hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ∣ ∥ 𝒂 i ∥ ∣ )
+
+-- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
+-- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
+-- Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
+--        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
+--        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
+--        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
+-- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+-- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
+
+𝔽≤⨅SClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ →       𝔽 X 𝒦 IsSubalgebraOf (⨅SClo 𝒦)
+𝔽≤⨅SClo{𝓧}{𝓤} X 𝒦 = ∣ 𝔥 ∣ , (𝔥emb , ∥ 𝔥 ∥)
+ where
+  f : X → ∣ ⨅SClo 𝒦 ∣
+  f = ∣ 𝕏 (⨅SClo 𝒦) ∣
+
+  𝔥 : hom (𝔽 X 𝒦) (⨅SClo 𝒦)
+  𝔥 = 𝔽lift-hom X 𝒦 (⨅SClo 𝒦) f
+
+  𝔥emb : is-embedding ∣ 𝔥 ∣
+  𝔥emb 𝒂 fib1 fib2 = γ
+   where
+    h1h2 : ∣ 𝔥 ∣ (∣ fib1 ∣) ≡ ∣ 𝔥 ∣ (∣ fib2 ∣)
+    h1h2 = (snd fib1) ∙ (snd fib2)⁻¹
+
+-- KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
+-- KER-pred g (x , y) = g x ≡ g y
+-- Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+--  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+
+    -- Ψ⊆ker𝔥 : (Ψ X 𝒦)  ⊆  KER-pred{𝓦 = (𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤) ⁺)}{A = ∣ 𝔽 X 𝒦 ∣ }{B = ∣ ⨅SClo{𝓤 = 𝓤} 𝒦 ∣} ∣ 𝔥 ∣
+    -- Ψ⊆ker𝔥 = ?
+-- 𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺ ⊔ 𝓧 ⁺ ⁺)
+--(p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ X 𝒦 (mkti X 𝑨 KA) ∣
+
+    γ : fib1 ≡ fib2
+    γ = {!!}
+
+
+  -- 𝔥 : ∣ 𝔽 X 𝒦 ∣ → ∣ ⨅SClo 𝒦 ∣
+  -- 𝔥 x 𝑰 i = α
+  --  where
+  --   I = ∣ 𝑰 ∣                                 --   I : 𝓤 ̇
+  --   𝒜 = fst ∥ 𝑰 ∥                            --   𝒜 : I → Algebra 𝓤 𝑆
+  --   SCloA j = snd ∥ 𝑰 ∥ j                    --   SCloA : (i : I) → (𝒜 i) ∈ SClo 𝒦
+  --   Timg i = mkti X (𝒜 i) (SCloA i)         --   Timg : ∀ i → 𝑻img X (SClo 𝒦)
+  --   ϕ i = 𝑻ϕ X (SClo 𝒦) (Timg i)            --   ϕ : (i : I) → hom (𝑻 X) (𝑻𝑨 (Timg i))
+  --   α = ∣ ϕ i ∣ (fst ∥ x ∥)                     --   α : ∣ 𝒜 i ∣
+-- 𝔽≤SP : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+--  →       𝔽{𝓤}{𝓧}{X}{𝒦} IsSubalgebraOfClass SClo (PClo 𝒦)
+-- 𝔽≤SP = {!!} , ({!!} , ({!!} , {!!}))
+
+-- 𝔽∈SP𝒦 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+--  →       Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
+--            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓤}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
+-- 𝔽∈SP𝒦 = ?
+
 
 
 
