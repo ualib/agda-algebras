@@ -43,18 +43,21 @@ Mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 data PClo {𝓤 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
  pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo 𝒦
  prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ PClo 𝒦) → ⨅ 𝒜 ∈ PClo 𝒦
+ piso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ PClo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ PClo 𝒦
 
 --------------------------------------------------------------------------------------
 --Closure under hom images
 data HClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
  hbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ HClo 𝒦
  hhom : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ HClo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ HClo 𝒦
+ hiso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ HClo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ HClo 𝒦
 
 ----------------------------------------------------------------------
 -- Subalgebra Closure
 data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
-  sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
-  sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+ sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+ sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+ siso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ SClo 𝒦
 
 
 ----------------------------------------------------------------------
@@ -65,6 +68,7 @@ data VClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ �
  vprod : {I : 𝓤 ̇}{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ VClo 𝒦) → ⨅ 𝒜 ∈ VClo 𝒦
  vsub  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → (sa : Subalgebra 𝑨) → ∣ sa ∣ ∈ VClo 𝒦
  vhom  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+ viso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ VClo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ VClo 𝒦
 
 
 -----------------------------------------------------------------------------
@@ -92,12 +96,14 @@ SCloIsClosure {𝓤} = expa , mono , idem
   expa 𝒦 = sbase {𝒦 = 𝒦}
 
   mono : SClo IsMonotone
-  mono 𝒦 𝒦' h₀ {𝑨} (sbase x) = sbase (h₀ x)
-  mono 𝒦 𝒦' h₀ {.(fst sa)} (sub x sa) = sub (mono 𝒦 𝒦' h₀ x) sa
+  mono 𝒦 𝒦' h₀ (sbase x) = sbase (h₀ x)
+  mono 𝒦 𝒦' h₀ (sub x sa) = sub (mono 𝒦 𝒦' h₀ x) sa
+  mono 𝒦 𝒦' h₀ (siso x x₁) = siso (mono 𝒦 𝒦' h₀ x) x₁
 
   idem : SClo IsIdempotent
-  idem 𝒦 {𝑨} (sbase x) = x
+  idem 𝒦 (sbase x) = x
   idem 𝒦 {.(fst sa)} (sub x sa) = sub (idem 𝒦 x) sa
+  idem 𝒦 (siso x x₁) = siso (idem 𝒦 x) x₁
 
 SClo-mono : {𝓤 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  →          𝒦₁ ⊆ 𝒦₂ → SClo 𝒦₁ ⊆ SClo 𝒦₂
@@ -105,9 +111,14 @@ SClo-mono {𝓤} {𝒦₁}{𝒦₂} = ∣ snd SCloIsClosure ∣ 𝒦₁ 𝒦₂
 
 PClo-idem : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  →          PClo (PClo 𝒦) ⊆ PClo 𝒦
-PClo-idem {𝓤} {𝒦} (pbase x) = x
-PClo-idem {𝓤} {𝒦} (prod x) = prod (λ i → PClo-idem (x i))
+PClo-idem (pbase x) = x
+PClo-idem (prod x) = prod (λ i → PClo-idem (x i))
+PClo-idem (piso x x₁) = piso (PClo-idem x) x₁
+-- PClo-idem {𝓤} {𝒦} (pbase x) = x
+-- PClo-idem {𝓤} {𝒦} (prod x) = prod (λ i → PClo-idem (x i))
 
+PClo-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} → 𝒦 ⊆ PClo 𝒦
+PClo-expa KA = pbase KA
 
 ----------------------------------------------------------------------------------------------
 -- For a given algebra 𝑨, and class 𝒦 of algebras, we will find the following fact useful
@@ -138,6 +149,23 @@ SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
 
   γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
   γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
+SClo→Subalgebra {𝓠} {𝒦} {𝑨} (siso{𝑩} SCloB 𝑩≅𝑨) = γ
+ where
+  IH : 𝑩 IsSubalgebraOfClass 𝒦
+  IH = SClo→Subalgebra SCloB
+  𝔸 : Algebra _ 𝑆
+  𝔸 = ∣ IH ∣
+  SA : SUBALGEBRA 𝔸
+  SA = fst ∥ IH ∥
+  𝔸∈𝒦 : 𝔸 ∈ 𝒦
+  𝔸∈𝒦 = fst ∥ snd IH ∥
+  𝑩≅SA : 𝑩 ≅ ∣ SA ∣
+  𝑩≅SA = snd ∥ snd IH ∥
+  SA≤𝔸 : ∣ SA ∣ ≤ 𝔸
+  SA≤𝔸 = ∥ SA ∥
+  γ : 𝑨 IsSubalgebraOfClass 𝒦
+  γ = 𝔸 , SA , 𝔸∈𝒦 , trans-≅ 𝑨 𝑩 (∣ SA ∣) (sym-≅ 𝑩≅𝑨)  𝑩≅SA
+
 
 Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}{𝑩 : Algebra 𝓠 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ SClo 𝒦
@@ -171,12 +199,17 @@ LemPS⊆SP{𝓠}hfe{𝒦}{I}{ℬ}ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅�
     iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
     iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
 
-
 PS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
  →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
-
 PS⊆SP hfe (pbase (sbase x)) = sbase (pbase x)
 PS⊆SP hfe  (pbase (sub x sa)) = SClo-mono pbase (sub x sa)
+PS⊆SP {𝓠} hfe {𝒦}  (pbase (siso{𝑨}{𝑩} KA AB)) = sub α β
+ where
+  α : 𝑨 ∈ SClo (PClo 𝒦)
+  α = SClo-mono{𝓠}{𝒦}{PClo 𝒦} PClo-expa KA
+  β : SUBALGEBRA 𝑨
+  β = 𝑩 , iso-≤ 𝑩 𝑨 𝑨 (sym-≅ AB) (refl-≤ 𝑨)
+
 PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
  (prod{I = I}{𝒜 = 𝒜} PSCloA) = γ -- lem1 PSCloA -- (works)
   where
@@ -193,6 +226,8 @@ PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ �
 
    γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
    γ = Subalgebra→SClo η
+PS⊆SP hfe (piso x x₁) = siso (PS⊆SP hfe x) x₁
+
 
 S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
        (𝑨 : Algebra 𝓠 𝑆)
@@ -201,6 +236,9 @@ S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ �
 
 S⊆SP 𝑨 (sbase x) = sbase (pbase x)
 S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
+S⊆SP 𝑨 (siso x x₁) = {!!}
+
+
 
 SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
          (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
@@ -218,6 +256,43 @@ SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
   construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
   algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦. -}
 
+
+----------------------------------------------------------------------
+-- Subalgebra Closure
+-- data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+-- sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+-- sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+-- Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-- Π {𝓤} {𝓥} {X} A = (x : X) → A x
+-- -Π : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-- -Π X Y = Π Y
+-- syntax -Π A (λ x → b) = Π x ꞉ A , b
+-- Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
+-- Pred A 𝓥 = A → 𝓥 ̇
+ -- ⨅ : {𝓘 𝓤 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
+ -- ⨅ {𝓘}{𝓤}{I} 𝒜 =
+ --  ((i : I) → ∣ 𝒜 i ∣) , λ(f : ∣ 𝑆 ∣)(𝒂 : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)(i : I) → (f ̂ 𝒜 i) λ{x → 𝒂 x i}
+
+ClassUniverses : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → Pred (𝓠 ̇) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
+ClassUniverses 𝒦 A = Σ 𝑨 ꞉ Algebra _ 𝑆 , (𝑨 ∈ 𝒦) × (A ≡ ∣ 𝑨 ∣)
+
+ΠU : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+ΠU 𝒦 = Π (ClassUniverses 𝒦)
+
+------------------------------------------------------------------------------------
+-- Products of predicates and their meaning --
+ΠP : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+ΠP 𝒦 = Π 𝒦
+
+-- A proof p : Π 𝒦 is a proof that every algebra of type Algebra 𝓠 𝑆 belongs to 𝒦.
+ΠP-meaning : {𝓠 : Universe}(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
+ →            Π 𝒦  →  (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ 𝒦
+ΠP-meaning 𝒦 p 𝑨 = p 𝑨
+
+
+ΠSClo : {𝓠 : Universe} (𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)) → _ ̇
+ΠSClo 𝒦 = Π (SClo 𝒦)
+
 𝕀 : {𝓤 𝓣 : Universe} → Pred (Algebra 𝓤 𝑆) 𝓣 → 𝓞 ⊔ 𝓥 ⊔ 𝓣 ⊔ 𝓤 ⁺ ̇
 𝕀 {𝓤} 𝒦 = Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , ∀ i → 𝒜 i ∈ 𝒦
 
@@ -229,8 +304,8 @@ SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 ⨅Class {𝓤}{𝓣} 𝒦 = ⨅ (𝕀→Alg{𝓤}{𝓣}{𝒦})
 
 --Example
-⨅SClo : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆
-⨅SClo{𝓤} 𝒦 = ⨅Class{𝓤} (SClo 𝒦)
+⨅SClo : {𝓤 : Universe} → Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆) ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺) → Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺) 𝑆
+⨅SClo{𝓤} 𝒦 = ⨅Class{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}{𝓣 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺} (SClo 𝒦)
 
 
 ------------------------------------------------------------------------------------------

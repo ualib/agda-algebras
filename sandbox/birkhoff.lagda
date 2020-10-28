@@ -214,6 +214,15 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
 
 
 
+-----------------------------------------------------------------------------------
+-- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
+-- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
+-- Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
+--        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
+--        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
+--        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
+-- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+-- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
 
 -----------------------------------------------------------------------------------
 -- The (relatively) free algebra
@@ -225,6 +234,12 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
 𝔽free-lift : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
               (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔽 X 𝒦 ∣ → ∣ 𝑨 ∣
 𝔽free-lift {𝓧}{𝓠}{𝓤} 𝑨 f (_ , x , _) = (free-lift{𝓧}{𝓤} 𝑨 f) x
+
+𝔽free-lift-interpretation : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔽 X 𝒦 ∣)
+ →             (⌜ 𝒙 ⌝ ̇ 𝑨) f ≡ 𝔽free-lift 𝑨 f 𝒙
+𝔽free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
+
 
 𝔽lift-hom : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → hom (𝔽 X 𝒦) 𝑨
@@ -240,16 +255,12 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
   θ = Congruence.⟨ ΨCon X 𝒦 ⟩
 
   hhm : is-homomorphism (𝔽 X 𝒦) 𝑨 h
-  hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ∣ ∥ 𝒂 i ∥ ∣ )
+  hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
 
--- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
--- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
--- Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
---        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
---        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
---        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
--- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
--- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
+
+𝔽∈SPS : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ →       𝔽 X 𝒦 ∈ SClo (PClo (SClo 𝒦))
+𝔽∈SPS{𝓧}{𝓤} X 𝒦 = ?
 
 𝔽≤⨅SClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
  →       𝔽 X 𝒦 IsSubalgebraOf (⨅SClo 𝒦)
@@ -261,11 +272,28 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
   𝔥 : hom (𝔽 X 𝒦) (⨅SClo 𝒦)
   𝔥 = 𝔽lift-hom X 𝒦 (⨅SClo 𝒦) f
 
+-- Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+--  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+-- Ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
+--  →  ∣ 𝑻ϕ X (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ X (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
+
+-- ΨRel : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+-- ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
   𝔥emb : is-embedding ∣ 𝔥 ∣
   𝔥emb 𝒂 fib1 fib2 = γ
    where
     h1h2 : ∣ 𝔥 ∣ (∣ fib1 ∣) ≡ ∣ 𝔥 ∣ (∣ fib2 ∣)
     h1h2 = (snd fib1) ∙ (snd fib2)⁻¹
+
+    -- Notice that ∣ 𝔥 ∣ x ≡ ∣ 𝔥 ∣ y means that the pair (x, y) ∈ ∣ 𝔽 X 𝒦 ∣ satisfies the following:
+    -- For *every* 𝑨 ∈ SClo 𝒦, the equation  We should be able to prove (x , y) ∈ Ψ X 𝒦
+    -- 𝔥11 : ∀ x y → ∣ 𝔥 ∣ x ≡ ∣ 𝔥 ∣ y →  x ≡ y
+    -- 𝔥11 (pr₃ , pr₄) y hxhy = {!!}
+
+    𝔥e : ∀ x y → ∣ 𝔥 ∣ x ≡ ∣ 𝔥 ∣ y
+     →   (𝑨 : Algebra _ 𝑆)(h : X → ∣ 𝑨 ∣ ) → 𝑨 ∈ SClo 𝒦
+     →   (⌜ x ⌝ ̇ 𝑨) h ≡ (⌜ y ⌝ ̇ 𝑨) h
+    𝔥e x y hxhy 𝑨 h SCloA = {!!}
 
     -- Ψ⊆ker𝔥 : (Ψ X 𝒦)  ⊆  KER-pred{𝓦 = (𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤) ⁺)}{A = ∣ 𝔽 X 𝒦 ∣ }{B = ∣ ⨅SClo{𝓤 = 𝓤} 𝒦 ∣} ∣ 𝔥 ∣
     -- Ψ⊆ker𝔥 = ?

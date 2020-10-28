@@ -104,13 +104,20 @@ lift-of-epic-is-epic {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
   h : hom (𝑻 X) 𝑪
   h = lift-hom 𝑪 h₀
 
+-------------------------------------------------------------------------------------------
+-- Term Operations: interpretation of terms in algebras
 
-_̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X}
- →   (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
-
+_̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
-
 ((node f args) ̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
+-- A useful observation: intepretation of a term is the same as `free-lift` (modulo argument order)
+
+free-lift-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
+                           (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term{𝓧}{X})
+ →                         (p ̇ 𝑨) h ≡ free-lift 𝑨 h p
+
+free-lift-interpretation 𝑨 h (generator x) = 𝓇ℯ𝒻𝓁
+free-lift-interpretation 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interpretation 𝑨 h (args i))
 
 
 -- Want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?

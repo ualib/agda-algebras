@@ -69,6 +69,11 @@ cong-app : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ }
 
 cong-app (refl _) a = refl _
 
+
+
+------------------------------------------------------------------------------------------
+-- PREDICATES: sets, elements, subsets, set union, set intersection, etc.
+
 Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
 Pred A 𝓥 = A → 𝓥 ̇
 
@@ -119,6 +124,28 @@ img : {X : 𝓤 ̇ } {Y : 𝓤 ̇ }
       (f : X → Y) (P : Pred Y 𝓤)
  →    Im f ⊆ P →  X → Σ P
 img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
+
+
+--Products of predicates and their meanings --
+
+--The product `Π P` of a predicate `P : Pred X 𝓤` is inhabited iff  P x holds for all x : X.
+ΠP-meaning : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{P : Pred X 𝓤}
+ →            Π P  →  (x : X) → P x
+ΠP-meaning f x = f x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ≡-elim-left : {A₁ A₂ : 𝓤 ̇ } {B₁ B₂ : 𝓦 ̇ }
  →            (A₁ , B₁) ≡ (A₂ , B₂)
