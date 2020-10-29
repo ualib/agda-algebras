@@ -229,26 +229,41 @@ PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ �
 PS⊆SP hfe (piso x x₁) = siso (PS⊆SP hfe x) x₁
 
 
+-- data SClo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) where
+--  sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
+--  sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ SClo 𝒦
+--  siso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ SClo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ SClo 𝒦
 S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-       (𝑨 : Algebra 𝓠 𝑆)
       ------------------------------------
- →     𝑨 ∈ SClo 𝒦  →  𝑨 ∈ SClo (PClo 𝒦)
-
-S⊆SP 𝑨 (sbase x) = sbase (pbase x)
-S⊆SP .(fst sa) (sub{𝑨} x sa) = sub (S⊆SP 𝑨 x) sa
-S⊆SP 𝑨 (siso x x₁) = {!!}
-
-
+ →     SClo 𝒦  ⊆  SClo (PClo 𝒦)
+S⊆SP  = SClo-mono PClo-expa
 
 SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
-         (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
-         ------------------------------------------------
- →        𝑭 ∈ SClo (PClo 𝒦)
+        ----------------------------------------
+ →       SClo (PClo (SClo 𝒦)) ⊆ SClo (PClo 𝒦)
 
-SPS⊆SP _ 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
-SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
-SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
-SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
+SPS⊆SP hfe {𝒦} {𝑨} (sbase (pbase (sbase x))) = sbase (pbase x)
+SPS⊆SP hfe {𝒦} {.(fst sa)} (sbase (pbase (sub x sa))) = sub (S⊆SP x) sa
+SPS⊆SP hfe {𝒦} {𝑨} (sbase (pbase (siso x x₁))) = {!!}
+SPS⊆SP hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣ ) , (λ f 𝒂 i → ∥ 𝒜 i ∥ f (λ args → 𝒂 args i)))} (sbase (prod{I}{𝒜} x)) = PS⊆SP hfe (prod x)
+SPS⊆SP hfe {𝒦} {𝑨} (sbase (piso x x₁)) = {!!}
+SPS⊆SP hfe {𝒦} {.(Σ.pr₁ sa)} (sub x sa) = sub (SPS⊆SP hfe x) sa
+SPS⊆SP hfe {𝒦} {𝑨} (siso x x₁) = siso (SPS⊆SP hfe x) x₁
+-- SPS⊆SP _ 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
+-- SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
+-- SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
+-- SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
+
+
+-- SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--          (𝑭 : Algebra 𝓠 𝑆) → 𝑭 ∈ SClo (PClo (SClo 𝒦))
+--          ------------------------------------------------
+--  →        𝑭 ∈ SClo (PClo 𝒦)
+
+-- SPS⊆SP _ 𝑭 (sbase (pbase (sbase x))) = sbase (pbase x)
+-- SPS⊆SP _ .(fst sa) (sbase (pbase (sub{𝑨} x sa))) = sub (S⊆SP 𝑨 x) sa
+-- SPS⊆SP hfe .((∀ i → ∣ 𝓐 i ∣) , (λ f proj i → ∥ 𝓐 i ∥ f(λ 𝒂 → proj 𝒂 i)))(sbase(prod{I}{𝓐} x)) = PS⊆SP hfe (prod x)
+-- SPS⊆SP {𝓠} hfe {𝒦} .(fst sa) (sub x sa) = sub (SPS⊆SP hfe _ x) sa
 
 
 {-We also need a way to construct products of all the algebras in a given collection.
@@ -476,6 +491,8 @@ pclo-id1 {𝓤}{𝓧}{X} p q α (prod{I}{𝒜} 𝒜-P𝒦 ) = γ
 
   γ : p ̇ (⨅ 𝒜) ≡ q ̇ (⨅ 𝒜)
   γ = products-preserve-identities p q I 𝒜 IH
+pclo-id1 p q α (piso x x₁) = {!!}
+
 
 pclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            {p q : Term{𝓧}{X}} → ((PClo 𝒦) ⊧ p ≋ q ) → (𝒦 ⊧ p ≋ q)
@@ -490,7 +507,7 @@ pclo-id2 PCloKpq KA = PCloKpq (pbase KA)
 
 sclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (SClo 𝒦 ⊧ p ≋ q)
-sclo-id1 p q α (sbase KA) = α KA
+sclo-id1 p q α (sbase x) = α x
 sclo-id1 {𝓤}{𝓧}{X}{𝒦} p q α (sub {𝑨 = 𝑨} SCloA sa) =
  --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
  subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅ ∣ sa ∣) γ
@@ -504,6 +521,7 @@ sclo-id1 {𝓤}{𝓧}{X}{𝒦} p q α (sub {𝑨 = 𝑨} SCloA sa) =
    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Apq y
+sclo-id1 p q α (siso x x₁) = {!!}
 
 sclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            {p q : Term{𝓧}{X}} → (SClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
@@ -533,6 +551,7 @@ hclo-id1 {𝓤}{𝓧}{X} p q α (hhom{𝑨} HCloA (𝑩 , ϕ , (ϕhom , ϕsur)))
    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
    (q ̇ 𝑩) 𝒃               ∎
+hclo-id1 p q α (hiso x x₁) = {!!}
 
 hclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            {p q : Term{𝓧}{X}} → (HClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
@@ -584,6 +603,11 @@ vclo-id1 {𝓤}{𝓧}{X} p q α (vhom{𝑨 = 𝑨} VCloA (𝑩 , ϕ , (ϕh , ϕE
    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
    (q ̇ 𝑩) 𝒃                ∎
+
+vclo-id1 p q α (viso x x₁) = {!!}
+
+
+
 
 vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
            {p q : Term{𝓧}{X}} → (VClo 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
