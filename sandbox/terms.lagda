@@ -61,7 +61,6 @@ free-unique fe 𝑨 g h p (node f args) =
    ∣ h ∣ (node f args)             ∎
    where γ = fe λ i → free-unique fe 𝑨 g h p (args i)
 
---lift agrees on X
 lift-agrees-on-X : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator x)
@@ -206,7 +205,7 @@ interp-prod2 gfe {X} (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
 
 -- Homomorphisms commute (extensionally) with terms.
 comm-hom-term : {𝓤 𝓦 𝓧 : Universe} → funext 𝓥 𝓦
- →              {X : 𝓧 ̇} 
+ →              {X : 𝓧 ̇}
                 (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                 (t : Term{𝓧}{X}) (a : X → ∣ 𝑨 ∣)
                ------------------------------------------------------

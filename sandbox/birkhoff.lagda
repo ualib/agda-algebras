@@ -209,8 +209,7 @@ class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤
                   ----------------------------------------------------------
  →                 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
 
-class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VCloA) ,
-                                      (λ Thpq KA → Thpq (vbase KA))
+class-identities p q = (λ α VCloA → vclo-id1 p q α VCloA) , (λ Thpq KA → Thpq (vbase KA))
 
 
 
@@ -256,6 +255,187 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
 
   hhm : is-homomorphism (𝔽 X 𝒦) 𝑨 h
   hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
+
+𝔽lift-agrees-on-X : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
+                     (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
+                     ----------------------------------------
+ →                    h₀ x ≡ ( ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ Term.generator x ⟧ )
+
+𝔽lift-agrees-on-X _ _ _ h₀ x = 𝓇ℯ𝒻𝓁
+
+𝔽lift-of-epic-is-epic : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
+                         (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
+ →                        Epic h₀
+                         -----------------------
+ →                        Epic ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣
+
+𝔽lift-of-epic-is-epic {𝓧}{𝓠}{𝓤} X 𝒦 𝑨 h₀ hE y = γ
+ where
+  h₀pre : Image h₀ ∋ y
+  h₀pre = hE y
+
+  h₀⁻¹y : X
+  h₀⁻¹y = Inv h₀ y (hE y)
+
+  η : y ≡ ( ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ Term.generator (h₀⁻¹y) ⟧ )
+  η = y          ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+      h₀ h₀⁻¹y   ≡⟨ (𝔽lift-agrees-on-X) X 𝒦 𝑨 h₀ h₀⁻¹y ⟩
+      ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ (Term.generator h₀⁻¹y) ⟧ ∎
+
+  γ : Image ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣ ∋ y
+  γ = eq y (⟦ Term.generator h₀⁻¹y ⟧) η
+
+
+
+
+
+-- Birkhoff's theorem: every variety is an equational class.
+birkhoff : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+           {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+           (𝑨 : Algebra ((𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺) 𝑆)
+ →          𝑨 ∈ Mod (Th (VClo{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺} (𝑲 ((𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺))))
+           -------------------------------------------------------------------------------
+ →          𝑨 ∈ VClo (𝑲 ((𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺))
+
+birkhoff {𝓤}{𝓧}{X}{𝑲} 𝑨 ModThVCloA = γ
+ where
+  FU : Universe
+  FU = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺
+
+  𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+  𝒦 = 𝑲 𝓤
+
+  𝒦' : Pred (Algebra FU 𝑆) (𝓞 ⊔ 𝓥 ⊔ FU ⁺)
+  𝒦' = 𝑲 FU
+
+  F : Algebra FU 𝑆
+  F = 𝔽 X 𝒦
+
+  T : Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺) 𝑆
+  T = 𝑻 X
+
+  h₀ : X → ∣ 𝑨 ∣
+  h₀ = fst (𝕏 𝑨)
+
+  h₀E : Epic h₀
+  h₀E = snd (𝕏 𝑨)
+
+  h : hom T 𝑨
+  h = lift-hom 𝑨 h₀
+
+  hE : Epic ∣ h ∣
+  hE = lift-of-epic-is-epic 𝑨 h₀ h₀E
+
+  Ψ⊆ThVClo : Ψ X 𝒦' ⊆ Th{𝓤 = FU}{𝓧} (VClo{𝓤 = FU} 𝒦')
+  Ψ⊆ThVClo {p , q} pΨq =
+   (lr-implication (class-identities p q)) (Ψ⊆Th𝒦 X 𝒦' p q pΨq)
+
+  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ X 𝒦' → 𝑨 ⊧ p ≈ q
+  Ψ⊆A⊧ {p} {q} pΨq = ModThVCloA p q (Ψ⊆ThVClo {p , q} pΨq)
+
+  Ψ⊆Kerh : Ψ X 𝒦' ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
+  Ψ⊆Kerh {p , q} pΨq = hp≡hq
+   where
+    hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
+    hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
+
+  gg : Σ g ꞉ hom T F , Epic ∣ g ∣
+  gg = (lift-hom F g₀) , (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ (𝓤 ⊔ 𝓧) ⁺ ⁺)} F g₀ g₀E)
+
+   where
+    g₀ : X → ∣ F ∣
+    g₀ = fst (𝕏 F)
+
+    g₀E : Epic g₀
+    g₀E = snd (𝕏 F)
+
+  g : hom T F
+  g = fst gg
+
+  gE : Epic ∣ g ∣
+  gE = snd gg
+
+  τ : (𝑨 : Algebra FU 𝑆)(SCloA : SClo 𝒦' 𝑨) → hom (𝑻 X) 𝑨
+  τ 𝑨 SCloA = 𝑻ϕ X (SClo 𝒦') (mkti X 𝑨 SCloA)
+
+  kerg : (KER-pred{B = ∣ F ∣} ∣ g ∣) ⊆ Ψ X 𝒦'
+  kerg {(x , y)} gx≡gy 𝑩 SCloB = ξ
+   where
+    ξ : ∣ τ 𝑩 SCloB ∣ ∘ (x ̇ 𝑻 X) ≡ ∣ τ 𝑩 SCloB ∣ ∘ (y ̇ 𝑻 X)
+    ξ = {!!}
+
+  kerg⊆kerh : KER-pred ∣ g ∣ ⊆ KER-pred ∣ h ∣
+  kerg⊆kerh {x , y} gx≡gy = Ψ⊆Kerh {x , y}(kerg{x , y} gx≡gy)
+
+  -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
+  -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
+  --
+  --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
+  --    𝑻---- g --->>𝔽  (ker g = Ψ)
+  --     \         .
+  --      \       .
+  --       h     ∃ϕ     (want: Ψ ⊆ ker h)
+  --        \   .
+  --         \ .
+  --          V
+  --          𝑨
+  -- ϕ' : Σ ϕ ꞉ (hom F 𝑨) , ∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ g ∣
+  -- ϕ' = HomFactor {𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓤 = FU}{𝓦 = FU}
+  --                gfe {T} {𝑨} {F} h g kerg⊆kerh gE
+
+  --We need to find F : Algebra 𝒰 𝑆 such that F ∈ VClo and ∃ ϕ : hom F 𝑨 with ϕE : Epic ∣ ϕ ∣.
+  --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom F∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
+  -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
+
+  vcloF : F ∈ VClo{𝓤 = FU} 𝒦'
+  vcloF = {!!}
+
+-- 𝔽lift-of-epic-is-epic : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
+--                          (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
+--  →                        Epic h₀
+--                          -----------------------
+--  →                        Epic ∣ 𝔽lift-hom X 𝒦 𝑨 h₀ ∣
+  ϕ : Σ h ꞉ (hom F 𝑨) , Epic ∣ h ∣
+  ϕ = (𝔽lift-hom X 𝒦 𝑨 h₀) , 𝔽lift-of-epic-is-epic X 𝒦 𝑨 h₀ h₀E
+
+  hiF : HomImagesOf F
+  hiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
+
+  -- Finally, use 𝔽∈SP𝒦 to get an algebra 𝑩 ∈ VClo 𝒦 such that 𝔽 ≅ 𝑩.
+  -- Then ∃ hom h : hom 𝑩 𝔽, so we can simply compose ϕ ∘ h : hom 𝑩 𝑨,
+  -- which proves that 𝑨 ∈ VClo 𝒦, as desired.
+
+  γ : 𝑨 ∈ VClo 𝒦'
+  γ = vhom vcloF hiF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- 𝔽∈SPS : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
@@ -317,106 +497,6 @@ class-identities {𝓤}{𝓧}{X}{𝒦} p q = (λ α VCloA → vclo-id1 p q α VC
 --  →       Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
 --            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓤}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
 -- 𝔽∈SP𝒦 = ?
-
-
--- Birkhoff's theorem: every variety is an equational class.
-birkhoff : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-           (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ Mod (Th (VClo{𝓤} 𝒦))
-          --------------------------------------------
- →                     𝑨 ∈ VClo 𝒦
-
-birkhoff {𝓤}{𝓧}{X}{𝒦} 𝑨 ModThVCloA = γ
- where
-  F T : Algebra _ 𝑆
-  F = 𝔽 X 𝒦
-  T = 𝑻 X
-
-  h₀ : X → ∣ 𝑨 ∣
-  h₀ = fst (𝕏 𝑨)
-
-  h₀E : Epic h₀
-  h₀E = snd (𝕏 𝑨)
-
-  h : hom T 𝑨
-  h = lift-hom 𝑨 h₀
-
-  Ψ⊆ThVClo : Ψ X 𝒦 ⊆ Th{𝓤}{𝓧} (VClo{𝓤} 𝒦)
-  Ψ⊆ThVClo {p , q} pΨq =
-   (lr-implication (class-identities p q)) (Ψ⊆Th𝒦 X 𝒦 p q pΨq)
-
-  Ψ⊆A⊧ : ∀{p}{q} → (p , q) ∈ Ψ X 𝒦 → 𝑨 ⊧ p ≈ q
-  Ψ⊆A⊧ {p} {q} pΨq = ModThVCloA p q (Ψ⊆ThVClo {p , q} pΨq)
-
-  Ψ⊆Kerh : Ψ X 𝒦 ⊆ KER-pred{B = ∣ 𝑨 ∣} ∣ h ∣
-  Ψ⊆Kerh {p , q} pΨq = hp≡hq
-   where
-    hp≡hq : ∣ h ∣ p ≡ ∣ h ∣ q
-    hp≡hq = hom-id-compatibility p q 𝑨 h (Ψ⊆A⊧{p}{q} pΨq)
-
-  gg : Σ g ꞉ hom T F , Epic ∣ g ∣
-  gg = (lift-hom F g₀) , (lift-of-epic-is-epic{𝓤 = (𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ (𝓤 ⊔ 𝓧) ⁺ ⁺)} F g₀ g₀E)
-
-   where
-    g₀ : X → ∣ F ∣
-    g₀ = fst (𝕏 F)
-
-    g₀E : Epic g₀
-    g₀E = snd (𝕏 F)
-
-  g : hom T F
-  g = fst gg
-
-  gE : Epic ∣ g ∣
-  gE = snd gg
-
-  -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
-  -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
-  --
-  --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
-  --    𝑻---- g --->>𝔽  (ker g = Ψ)
-  --     \         .
-  --      \       .
-  --       h     ∃ϕ     (want: Ψ ⊆ ker h)
-  --        \   .
-  --         \ .
-  --          V
-  --          𝑨
-  -- KER-pred : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
-  -- KER-pred g (x , y) = g x ≡ g y
-  -- _⊆_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
-  -- P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
-
-  kerg⊆kerh : KER-pred ∣ g ∣ ⊆ KER-pred ∣ h ∣
-  kerg⊆kerh {(x , y)} gx≡gy = kgoal
-   where
-    kgoal : ∣ h ∣ x ≡ ∣ h ∣ y
-    kgoal = {!!}
-
-  -- ϕ' : Σ ϕ ꞉ (hom F 𝑨) , ∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ g ∣
-  -- ϕ' = HomFactor gfe {T} {𝑨} {F} h g kerg⊆kerh gE
-
-  --We need to find F : Algebra 𝒰 𝑆 such that F ∈ VClo and ∃ ϕ : hom F 𝑨 with ϕE : Epic ∣ ϕ ∣.
-  --Then we can prove 𝑨 ∈ VClo 𝒦 by vhom F∈VClo (𝑨 , ∣ ϕ ∣ , (∥ ϕ ∥ , ϕE))
-  -- since vhom : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ VClo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
-
-  -- vcloF : F ∈ VClo 𝒦
-  -- vcloF = {!!}
-
-
-  ϕ : Σ h ꞉ (hom F 𝑨) , Epic ∣ h ∣
-  ϕ = (𝔽lift-hom X 𝒦 𝑨 h₀) , {!!}
-
-  hiF : HomImagesOf F
-  hiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) )
-
-  -- Finally, use 𝔽∈SP𝒦 to get an algebra 𝑩 ∈ VClo 𝒦 such that 𝔽 ≅ 𝑩.
-  -- Then ∃ hom h : hom 𝑩 𝔽, so we can simply compose ϕ ∘ h : hom 𝑩 𝑨,
-  -- which proves that 𝑨 ∈ VClo 𝒦, as desired.
-
-  γ : 𝑨 ∈ VClo{𝓤} 𝒦
-  γ = {!!} -- vhom{𝓤 = 𝓤} {!!} {!!} -- vcloF hiF
-
-
 
 
 
