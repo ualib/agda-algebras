@@ -133,7 +133,8 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
 
   -- relation compatible with an operation
   compatible-op : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
-  compatible-op {𝑨 = 𝑨} f R = (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
+  compatible-op {𝑨 = 𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
+  -- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
 
   --The given relation is compatible with all ops of an algebra.
   compatible : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇

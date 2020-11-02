@@ -15,7 +15,6 @@ open import Universes public
 variable
   𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
-
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
  refl to 𝓇ℯ𝒻𝓁) public
 
