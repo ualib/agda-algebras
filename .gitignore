@@ -19,3 +19,12 @@ exclude
 *.vtc
 *.ptb
 *.tar.gz
+sandbox/scratch
+markdown
+test
+_site
+rst
+html
+MGS*.html
+css
+sphinx
