@@ -619,14 +619,6 @@ X↪𝔉 x = ⟦ Term.generator x ⟧
              ≡⟨ h'≡ϕ q ⟩ ∣ ϕ ∣ q ∎
 
 
---Example
--- ⨅SClo : {𝓤 : Universe} → Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆) ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺)  → Algebra ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺) 𝑆
--- ⨅SClo{𝓤} 𝒦 = ⨅Class{𝓤} (SClo 𝒦)
-
--- ⨅S≤PS : {𝓤 : Universe}{𝒦 : Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) 𝑆) ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺)}
---  →       Σ 𝑨 ꞉ Algebra _ 𝑆 , (𝑨 ∈ PClo{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} 𝒦) × ((⨅SClo{𝓤 = 𝓤} 𝒦) IsSubalgebraOf 𝑨)
--- ⨅S≤PS = {!!} , {!!}
-
 -- Birkhoff's theorem (ψ version): every variety is an equational class.
 birkhoff : {𝓤 : Universe} → hfunext ((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺)((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)⁺)
  →         {X : 𝓤 ̇} {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
