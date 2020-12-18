@@ -67,48 +67,48 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
 
 --Making this more general than the old code in that we only require 𝑨 ∈ 𝒦 instead
 --of 𝑨 ∈ SClo 𝒦, because we can simply apply 𝑻img with, e.g., 𝒦 = SClo 𝒦 if necessary.
-𝑻img : {𝓧 𝓤 : Universe}(X : 𝓧 ̇) → Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
+𝑻img : {𝓧 𝓤 : Universe}(X : 𝓧 ̇) → Pred (Algebra 𝓤 𝑆) (OV 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
 𝑻img X 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
-mkti : {𝓧 𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+mkti : {𝓧 𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
        (X : 𝓧 ̇)(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img X 𝒦
 mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
  where
   thg : Σ h ꞉ (hom (𝑻 X) 𝑨), Epic ∣ h ∣
   thg = 𝑻hom-gen 𝑨
 
-𝑻𝑨 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+𝑻𝑨 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →   𝑻img X 𝒦 → Algebra 𝓤 𝑆
 𝑻𝑨 ti = ∣ ti ∣
 
-𝑻ϕ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+𝑻ϕ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
      (ti : 𝑻img X 𝒦) → hom (𝑻 X) (𝑻𝑨 ti)
 𝑻ϕ 𝒦 ti = fst (snd ti)
 
-𝑻ϕE : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+𝑻ϕE : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
       (ti : 𝑻img X 𝒦) → Epic ∣ 𝑻ϕ 𝒦 ti ∣ -- X 𝒦
 𝑻ϕE ti = snd (snd ∥ ti ∥)
 
-𝑻KER : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
+𝑻KER : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
 𝑻KER X 𝒦 = Σ (p , q) ꞉ (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) , ∀ 𝑨 → (KA : 𝑨 ∈ 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ 𝒦 (mkti X 𝑨 KA) ∣
 
-Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
 Ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
  →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 
 ------------------------------------------------------------------
 -- Alternative development
-ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
- →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+ →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
 ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
  →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ p ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ q
 
-ψRel : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
- →     Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)
+ψRel : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
+ →     Rel ∣ (𝑻 X) ∣ (OV 𝓠)
 ψRel X 𝒦 p q = ψ X 𝒦 (p , q)
 
-ψcompatible : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
+ψcompatible : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
  →            compatible (𝑻 X) (ψRel X 𝒦)
 ψcompatible X 𝒦 f {i} {j} iψj 𝑨 SCloA = γ
  where
@@ -124,19 +124,19 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
       ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
-ψSym : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ψSym : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
  →     symmetric (ψRel X 𝒦)
 ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
-ψTra : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ψTra : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
  →     transitive (ψRel X 𝒦)
 ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
-ψIsEquivalence : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+ψIsEquivalence : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
  →               IsEquivalence (ψRel X 𝒦)
 ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
 
-ψCon : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
+ψCon : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
  →     Congruence (𝑻 X) -- {𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}
 ψCon X 𝒦 = mkcon (ψRel X (SClo 𝒦)) (ψcompatible X (SClo 𝒦)) ψIsEquivalence
 
@@ -144,7 +144,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 -- Properties of ψ ------------------------------------------------------------
 
 𝑻i⊧ψ : {𝓧 𝓤 : Universe}
-       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤} 𝒦)
        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ X 𝒦
       --------------------------------------------------
@@ -154,7 +154,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 𝑻i⊧ψ X 𝒦 𝑪 SCloC p q pψq = pψq 𝑪 SCloC
 
 
--- ψ⊆ThSClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+-- ψ⊆ThSClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
 --  →         ψ X 𝒦 ⊆ (Th (SClo 𝒦))
 -- ψ⊆ThSClo X 𝒦 {p , q} pψq {𝑪} SCloC = γ
 --  where
@@ -194,7 +194,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 --    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
 --    (q ̇ 𝑪) 𝒄                   ∎
 
--- ψ⊆Th𝒦 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+-- ψ⊆Th𝒦 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
 --          (p q : ∣ (𝑻 X) ∣) → (p , q) ∈ ψ X 𝒦 → 𝒦 ⊧ p ≋ q
 -- ψ⊆Th𝒦  X 𝒦 p q pψq {𝑨} KA = ψ⊆ThSClo X 𝒦 {p , q} pψq (sbase KA)
 
@@ -238,10 +238,10 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 -- Recall, `mkti X 𝑨 SCloA` has type `𝑻img X (SClo 𝒦)` and consists of a quadruple:
 -- (𝑨 , ϕ , SCloA , ϕE), where 𝑨 : Algebra _ 𝑆 , ϕ : hom (𝑻 X) 𝑨 , SCloA : 𝑨 ∈ SClo 𝒦 , ϕE : Epic ∣ ϕ ∣
 
-ΨRel : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+ΨRel : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
 ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
 
-Ψcompatible : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+Ψcompatible : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
  →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)(ΨRel X 𝒦)
 Ψcompatible X 𝒦 f {𝒕} {𝒔} 𝒕Ψ𝒔 𝑨 SCloA = γ
  where
@@ -262,19 +262,19 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
     ii = gfe (λ 𝒂 → ap (f ̂ 𝑨) (gfe λ i → ΨH 𝒂 i) )
     iii = (gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒔 i ̇ 𝑻 X) 𝒂)))⁻¹
 
-ΨSym : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ΨSym : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →     symmetric (ΨRel X 𝒦)
 ΨSym p q pΨRelq 𝑪 ϕ = (pΨRelq 𝑪 ϕ)⁻¹
 
-ΨTra : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ΨTra : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →     transitive (ΨRel X 𝒦)
 ΨTra p q r pΨq qΨr 𝑪 ϕ = (pΨq 𝑪 ϕ) ∙ (qΨr 𝑪 ϕ)
 
-ΨIsEquivalence : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ΨIsEquivalence : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →               IsEquivalence (ΨRel X 𝒦)
 ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
 
-ΨCon : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+ΨCon : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
  →     Congruence{𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
 ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) (Ψcompatible X 𝒦) ΨIsEquivalence
 
@@ -282,7 +282,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 -- Properties of Ψ ------------------------------------------------------------
 
 𝑻i⊧Ψ : {𝓧 𝓤 : Universe}
-       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓤} 𝒦)
        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ Ψ X 𝒦
       --------------------------------------------------
@@ -298,7 +298,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
   pCq = pΨq 𝑪 SCloC
 
 
-Ψ⊆ThSClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+Ψ⊆ThSClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
  →         Ψ X 𝒦 ⊆ (Th (SClo 𝒦))
 Ψ⊆ThSClo X 𝒦 {p , q} pΨq {𝑪} SCloC = γ
  where
@@ -332,7 +332,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
    (q ̇ 𝑪) 𝒄                   ∎
 
-Ψ⊆Th𝒦 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))
+Ψ⊆Th𝒦 : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
          (p q : ∣ (𝑻 X) ∣) → (p , q) ∈ Ψ X 𝒦 → 𝒦 ⊧ p ≋ q
 Ψ⊆Th𝒦  X 𝒦 p q pΨq {𝑨} KA = Ψ⊆ThSClo X 𝒦 {p , q} pΨq (sbase KA)
 
@@ -344,7 +344,7 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 -- modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in VClo 𝒦.
 
 -- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
-class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
                    (p q : ∣ 𝑻 X ∣)
                   ----------------------------------------------------------
  →                 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (VClo 𝒦))
@@ -487,7 +487,7 @@ X↪𝔽 x = ⟦ Term.generator x ⟧
               (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔉 X 𝒦 ∣ → ∣ 𝑨 ∣
 𝔉-free-lift {𝓧}{𝓠}{𝓤} 𝑨 f (_ , x , _) = (free-lift{𝓧}{𝓤} 𝑨 f) x
 
-𝔉-free-lift-interpretation : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+𝔉-free-lift-interpretation : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
               (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 X 𝒦 ∣)
  →             (⌜ 𝒙 ⌝ ̇ 𝑨) f ≡ 𝔉-free-lift 𝑨 f 𝒙
 𝔉-free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
@@ -587,6 +587,8 @@ FU 𝓤 = (OV 𝓤)⁺
          ( 𝑰 : (𝕀{FU 𝓤} (SClo{FU 𝓤} (𝑲 (FU 𝓤)))))
  →       (𝔉 X (𝑲 𝓤)) IsSubalgebraOf (I→Alg{FU 𝓤}{SClo{FU 𝓤} (𝑲 (FU 𝓤))} 𝑰)
 𝔉↪IAS {𝓤} hfe {X} 𝑲 𝑰 = Hmap , (Hemb , Hhom)
+     -- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+     -- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
  where
   I : (FU 𝓤) ̇
   I = ∣ 𝑰 ∣
@@ -628,15 +630,6 @@ FU 𝓤 = (OV 𝓤)⁺
   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
   h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
 
-  --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker ϕ => ∃ f : T/ψ → A
-  --    𝑻---- g --->>𝔽  (ker g = Ψ)
-  --     \         .
-  --      \       .
-  --       ϕ     f     (want: Ψ ⊆ ker h)
-  --        \   .
-  --         \ .
-  --          V
-  --          𝑨
   Hmap : ∣ 𝔉 X (𝑲 𝓤) ∣ → ∣ 𝑨 ∣
   Hmap = ∣ f ∣
 
@@ -649,6 +642,87 @@ FU 𝓤 = (OV 𝓤)⁺
   projFA : ∀ i → ∣ 𝔉 X (𝑲 𝓤) ∣ → ∣ 𝒜 i ∣
   projFA i = (pi i) ∘ Hmap
 
+  Hemb : is-embedding Hmap
+  Hemb = {!!}
+
+  Hhom : is-homomorphism (𝔉 X (𝑲 𝓤)) 𝑨 Hmap
+  Hhom = ∥ f ∥
+
+𝔉↪class-prod : {𝓤 : Universe}
+ →              hfunext (OV 𝓤) 𝓤
+ →              hfunext 𝓤 𝓤
+ →              {X : 𝓤 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+ →              (𝔉 X 𝒦) IsSubalgebraOf (class-product (sclo 𝒦))
+
+𝔉↪class-prod {𝓤} hfe hfep {X} 𝒦 = Hmap , (Hemb , Hhom)
+ where
+  I : (OV 𝓤) ̇ -- (FU 𝓤)
+  I = ℑ'{𝓤} (sclo 𝒦)
+
+  𝒜 : I → Algebra 𝓤 𝑆
+  𝒜 = ℑ→A' {𝓤} (sclo 𝒦)
+
+  ⨅𝒜 : Algebra (OV 𝓤) 𝑆
+  ⨅𝒜 = ⨅ 𝒜
+
+  SP𝒦 : Pred (Algebra (OV 𝓤) 𝑆) (OV (OV 𝓤))
+  SP𝒦 = sclo{OV 𝓤}(pclo{𝓤}{OV 𝓤} 𝒦)
+
+  SPA : ⨅𝒜 ∈ SP𝒦
+  SPA = class-prod-s-∈-sp{𝓤} hfe hfep {𝒦}
+
+  F : Algebra (FU 𝓤) 𝑆
+  F = 𝔉 X 𝒦
+
+  g : hom (𝑻 X) F
+  g = lift-hom F (X↪𝔉)
+
+  h₀ : X → ∣ ⨅𝒜 ∣
+  h₀ = fst (𝕏 ⨅𝒜)
+
+  f : hom F ⨅𝒜
+  f = 𝔉-lift-hom X 𝒦 ⨅𝒜 h₀
+
+  h ϕ : hom (𝑻 X) ⨅𝒜
+  h = HCompClosed (𝑻 X) F ⨅𝒜 g f
+  ϕ = 𝑻ϕ SP𝒦 (mkti X ⨅𝒜 SPA)
+
+  lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ Term.generator x ⟧
+  lift-agreement x = 𝔉-lift-agrees-on-X X 𝒦 ⨅𝒜 h₀ x
+
+  fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (Term.generator x) ≡ ∣ ϕ ∣ (Term.generator x)
+  fgx≡ϕ x = (lift-agreement x)⁻¹
+
+  h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+  h≡ϕ t = free-unique gfe ⨅𝒜 h ϕ fgx≡ϕ t
+
+  Hmap : ∣ 𝔉 X 𝒦 ∣ → ∣ ⨅𝒜 ∣
+  Hmap = ∣ f ∣
+
+  hom-gen : ∀ i → hom (𝔉 X 𝒦) (𝒜 i)
+  hom-gen i = 𝔉-lift-hom X 𝒦 (𝒜 i) ∣ 𝕏 (𝒜 i) ∣
+
+  pi : (i : I) → ∣ ⨅𝒜 ∣ → ∣ 𝒜 i ∣
+  pi i 𝒂 = 𝒂 i
+
+  projFA : ∀ i → ∣ 𝔉 X 𝒦 ∣ → ∣ 𝒜 i ∣
+  projFA i = (pi i) ∘ Hmap
+
+  Hemb : is-embedding Hmap
+  Hemb = {!!}
+
+  Hhom : is-homomorphism (𝔉 X 𝒦) ⨅𝒜 Hmap
+  Hhom = ∥ f ∥
+
+  --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker ϕ => ∃ f : T/ψ → A
+  --    𝑻---- g --->>𝔽  (ker g = Ψ)
+  --     \         .
+  --      \       .
+  --       ϕ     f     (want: Ψ ⊆ ker h)
+  --        \   .
+  --         \ .
+  --          V
+  --          𝑨
 -- ⟦_⟧ : {A : 𝓤 ̇} → A → {≈ : Rel A 𝓡} → A // ≈
 -- ⟦ a ⟧ {≈} = ([ a ] ≈) , a , 𝓇ℯ𝒻𝓁
 
@@ -672,31 +746,13 @@ FU 𝓤 = (OV 𝓤)⁺
   --   η : ∣ g ∣ p ≡ ∣ g ∣ q
   --   η = {!!}
 
-  Hemb : is-embedding Hmap
-  Hemb = {!!}
-
-  Hhom : is-homomorphism (𝔉 X (𝑲 𝓤)) 𝑨 Hmap
-  Hhom = ∥ f ∥
-
-
---    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
---    𝑻---- g --->>𝔽  (ker g = Ψ)
---     \         .
---      \       .
---       h     ∃ϕ     (want: Ψ ⊆ ker h)
---        \   .
---         \ .
---          V
---          𝑨
-
-
--- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
--- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
-
 -- 𝔉≤IAS : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --  →      Σ 𝑰 ꞉ (𝕀{(OV 𝓤)⁺} (SClo (𝑲 ((OV 𝓤)⁺)))) ,
 --              (𝔉 X (𝑲 𝓤)) IsSubalgebraOf (I→Alg{(OV 𝓤)⁺}{SClo (𝑲 ((OV 𝓤)⁺))} 𝑰)
 -- 𝔉≤IAS = {!!}
+
+
+
 
 𝔉∈SP : {𝓤 : Universe} → hfunext ((OV 𝓤)⁺)((OV 𝓤)⁺)
  →      {X : 𝓤 ̇}{𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
@@ -853,7 +909,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 -- Original development (with big Ψ)
 -- Birkhoff's theorem: every variety is an equational class.
 -- Birkhoff : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
---            {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+--            {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --            (𝑨 : Algebra ((𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺) 𝑆)
 --  →          𝑨 ∈ Mod (Th (VClo{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺} (𝑲 ((𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺))))
 --            -------------------------------------------------------------------------------
@@ -864,7 +920,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 --   FU : Universe
 --   FU = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)⁺
 
---   𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+--   𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
 --   𝒦 = 𝑲 𝓤
 
 --   𝒦' : Pred (Algebra FU 𝑆) (𝓞 ⊔ 𝓥 ⊔ FU ⁺)
@@ -976,12 +1032,12 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 
 
 
--- 𝔽∈SPS : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺))
---  →       Σ 𝑨 ꞉ (Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) 𝑆) , (𝑨 ∈ SClo (PClo (SClo 𝒦))) × (𝑨 ≅ 𝔽 X 𝒦)
+-- 𝔽∈SPS : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
+--  →       Σ 𝑨 ꞉ (Algebra (OV 𝓠) 𝑆) , (𝑨 ∈ SClo (PClo (SClo 𝒦))) × (𝑨 ≅ 𝔽 X 𝒦)
 -- 𝔽∈SPS{𝓧}{𝓠}{𝓤} X 𝒦 = {!⨅SClo{𝓠} 𝒦!} , {!!}
 
 -- 𝔽≤⨅SClo : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra (𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤)) 𝑆) (𝓞 ⊔ 𝓥 ⊔ (𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤))⁺))
---  -- →       𝔽{𝓧}{((𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺))} X 𝒦 IsSubalgebraOf (⨅SClo 𝒦)
+--  -- →       𝔽{𝓧}{((OV 𝓤))} X 𝒦 IsSubalgebraOf (⨅SClo 𝒦)
 --  →       𝔽 X 𝒦 IsSubalgebraOf (⨅SClo{𝓤 = ((𝓞 ⊔ 𝓥 ⊔ (𝓧 ⊔ 𝓤)))} 𝒦)
 -- 𝔽≤⨅SClo{𝓧}{𝓤} X 𝒦 = ∣ 𝔥 ∣ , (𝔥emb , ∥ 𝔥 ∥)
 --  where
@@ -1027,11 +1083,11 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
   --   Timg i = mkti X (𝒜 i) (SCloA i)         --   Timg : ∀ i → 𝑻img X (SClo 𝒦)
   --   ϕ i = 𝑻ϕ X (SClo 𝒦) (Timg i)            --   ϕ : (i : I) → hom (𝑻 X) (𝑻𝑨 (Timg i))
   --   α = ∣ ϕ i ∣ (fst ∥ x ∥)                     --   α : ∣ 𝒜 i ∣
--- 𝔽≤SP : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+-- 𝔽≤SP : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
 --  →       𝔽{𝓤}{𝓧}{X}{𝒦} IsSubalgebraOfClass SClo (PClo 𝒦)
 -- 𝔽≤SP = {!!} , ({!!} , ({!!} , {!!}))
 
--- 𝔽∈SP𝒦 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+-- 𝔽∈SP𝒦 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
 --  →       Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , Σ sa ꞉ (Subalgebra (⨅ 𝒜)) ,
 --            (∀ i → 𝒜 i ∈ 𝒦) × ((𝔽{𝓤}{𝓧}{X}{𝒦}) ≅ ∣ sa ∣)
 -- 𝔽∈SP𝒦 = ?
@@ -1042,15 +1098,15 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 
 
 
--- ΣSClo : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- ΣSClo : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 -- ΣSClo {𝓤}{𝒦} = Σ I ꞉ 𝓤 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓤 𝑆) , ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓤} 𝒦)
 
--- ⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- ⨅SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --  →       ΣSClo{𝓠}{𝒦} → Algebra 𝓠 𝑆
 
 -- ⨅SClo SS = ⨅ (fst ∥ SS ∥)
 
--- ⨅Sclo∈SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- ⨅Sclo∈SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --            (SS : ΣSClo{𝓠}{𝒦})
 --            -----------------------------
 --  →         (⨅SClo SS) ∈ (SClo (PClo 𝒦))
@@ -1079,7 +1135,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 
 
 
--- 𝔽embedding : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- 𝔽embedding : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --  →            ∣ 𝔽{𝓠}{𝓧}{X}{𝒦} ∣ ↪ ⨅ (SClo{𝓤 = 𝓠} 𝒦)
 -- 𝔽embedding = ?
 -- ∀ (𝑨 : Algebra 𝓠 𝑆) → (SCloA : 𝑨 ∈ SClo{𝓤 = 𝓠} 𝒦)
@@ -1117,7 +1173,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 
 
 -- OLD STUFF
--- ⨅SClo' : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- ⨅SClo' : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 -- {I : 𝓠 ̇}(𝒜 : I → Algebra 𝓠 𝑆) → ((i : I) → 𝒜 i ∈ SClo{𝓤 = 𝓠} 𝒦)
 -- →        Algebra 𝓠 𝑆
 -- ⨅SClo' 𝒜 h₀ = ⨅ 𝒜
@@ -1127,7 +1183,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 --More tools for Birkhoff's theorem
 --Here are some key facts/identities needed to complete the proof of Birkhoff's HSP theorem.
 
--- 𝑻i⊧ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- 𝑻i⊧ψ : {𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --        (𝑪 : Algebra 𝓠 𝑆)(SCloC : 𝑪 ∈ SClo{𝓤 = 𝓠} 𝒦)
 --        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ
 --       ----------------------------------------------------------------
@@ -1145,7 +1201,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 --   γ : ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)
 --   γ = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣(term-agree q))
 
--- PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- PS⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --  →      PClo (SClo 𝒦) ⊆ SClo (PClo 𝒦)
 -- PS⊆SP {𝓠} {𝒦} {𝑨} (pbase {𝑨 = 𝑨} (sbase x)) = sbase (pbase x)
 -- PS⊆SP {𝓠} {𝒦} {.(fst sa)} (pbase {𝑨 = .(fst sa)} (sub x sa)) = PS⊆SP{𝓠}{𝒦} (pbase (sub x sa))
@@ -1243,7 +1299,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
 
 
 
--- lemma2 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺)}
+-- lemma2 : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
 --         {I : 𝓠 ̇}{𝒜 : I → Algebra 𝓠 𝑆}
 --  →      ((i : I) → (𝒜 i) ∈ SClo 𝒦)
 --  →      (⨅ 𝒜)  ∈ SClo (PClo 𝒦)
@@ -1253,7 +1309,7 @@ birkhoff {𝓤} hfe {X}{𝑲} 𝑰 𝑨 ModThVCloA = γ
   -- AK i = ∣ SClo𝒜 i ∣
   -- γ : ⨅ 𝒜 ∈ SClo (PClo 𝒦)
   -- γ = {!!}
--- 𝑻imgPred : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+-- 𝑻imgPred : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
 --  →         Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ⊔ (𝓧 ⁺))
 -- 𝑻imgPred {𝓤}{𝓧}{X}{𝒦} 𝑨 = Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
