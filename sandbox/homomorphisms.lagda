@@ -236,6 +236,13 @@ trans-≅ 𝑨 𝑩 𝑪 ab bc = f , g , α , β
   β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
 
 
+--An algebra is isomorphic to its lift to a higher universe level
+lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
+lift-alg-≅ {𝓤}{𝓦}{𝑨} = ((λ x → lift x) , λ _ _ → 𝓇ℯ𝒻𝓁) ,
+                         ((λ x → Lift.lower x) , λ _ _ → 𝓇ℯ𝒻𝓁) ,
+                         (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
+
+
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
  →   ((i : I) → (𝒜 i) ≅ (ℬ i))

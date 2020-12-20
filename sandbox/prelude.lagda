@@ -43,7 +43,6 @@ open import MGS-Unique-Existence using (∃!; -∃!) public
 
 open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
 
-
 ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
 ∣ x , y ∣ = x
 fst (x , y) = x
