@@ -12,7 +12,7 @@ module basic where
 -- congruences, homomorphisms, terms, subuniverses, closure, birkhoff
 
 open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧; 𝓤ω; Σω; _⸲_; is-set;
-  _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_) public
+ _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_; _∘_; _≡_; 𝑖𝑑; 𝓻ℯ𝓯𝓵) public
 
 --The type of operations
 Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
@@ -142,6 +142,15 @@ lift-cod f = λ x → lift (f x)
 lift-fun : {𝓧 𝓨 𝓦 𝓩 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓧}{𝓦} X → Lift{𝓨}{𝓩} Y)
 lift-fun f = λ x → lift (f (lower x))
 \end{code}
+We will also need to know that lift and lower compose to the identity.
+\begin{code}
+lower∼lift : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lower{𝓧}{𝓦} ∘ lift ≡ 𝑖𝑑 X
+lower∼lift = 𝓻ℯ𝓯𝓵
+
+lift∼lower : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓧}{𝓦} X)
+lift∼lower = 𝓻ℯ𝓯𝓵
+\end{code}
+
 Now, getting more "domain-specific," we show how to lift algebraic operation types and then, finally, algebra types themselves.
 \begin{code}
 module _ {𝓞 𝓥 : Universe} {𝑆 : Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where

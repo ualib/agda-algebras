@@ -11,10 +11,10 @@ open import prelude using (global-dfunext)
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import prelude using (_∘_; _⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
- Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible; 𝑖𝑑;
+open import prelude using (_⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
+ Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible; -- 𝑖𝑑;
  equivs-are-embeddings; id; invertibles-are-equivs; dintensionality; is-subsingleton; fiber; monic;
- intensionality; hfunext) public
+ intensionality; hfunext; is-equiv) public
 
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
@@ -57,14 +57,23 @@ HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
           FC f (h ∘ g ∘ a) ∎
 
 -- composition of homomorphisms 2
-∘-hom : {𝓠 𝓤 𝓦 : Universe}
-        (𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
-        {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣} {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}
- →      is-homomorphism{𝓤}{𝓦} 𝑩 𝑪 g →  is-homomorphism{𝓠}{𝓤} 𝑨 𝑩 f
+∘-hom : {𝓧 𝓨 𝓩 : Universe}
+        (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+ →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
        --------------------------------------------------------------------
- →          is-homomorphism{𝓠}{𝓦} 𝑨 𝑪 (g ∘ f)
+ →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
 
-∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (f , fhom) ∥
+∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
+
+
+trans-hom : {𝓧 𝓨 𝓩 : Universe}
+        (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+        (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
+ →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
+       --------------------------------------------------------------------
+ →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
+trans-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 f g = ∘-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 {f}{g}
 
 
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
@@ -183,6 +192,23 @@ _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 �
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
 --Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x
 
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
+
+ map-≅ : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+ map-≅ ϕ = fst ∣ ϕ ∣
+
+ inv-map-≅ : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+ inv-map-≅ ϕ = ∣ fst ∥ ϕ ∥ ∣
+
+ map-≅-invertible : (ϕ : 𝑨 ≅ 𝑩) → invertible (map-≅ ϕ)
+ map-≅-invertible ϕ = (inv-map-≅ ϕ) , (∥ snd ∥ ϕ ∥ ∥ , ∣ snd ∥ ϕ ∥ ∣)
+
+ map-≅-is-equiv : (ϕ : 𝑨 ≅ 𝑩) → is-equiv (map-≅ ϕ)
+ map-≅-is-equiv ϕ = invertibles-are-equivs (map-≅ ϕ) (map-≅-invertible ϕ)
+
+ map-≅-is-embedding : (ϕ : 𝑨 ≅ 𝑩) → is-embedding (map-≅ ϕ)
+ map-≅-is-embedding ϕ = equivs-are-embeddings (map-≅ ϕ) (map-≅-is-equiv ϕ)
+
 -- An algebra is (extensionally) isomorphic to itself
 refl-≅ id≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
 id≅ 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
@@ -235,13 +261,38 @@ trans-≅ 𝑨 𝑩 𝑪 ab bc = f , g , α , β
   β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
   β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
 
+TRANS-≅ : {𝓠 𝓤 𝓦 : Universe}
+          {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
+ →         𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+          ----------------
+ →            𝑨 ≅ 𝑪
+TRANS-≅ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = trans-≅ 𝑨 𝑩 𝑪
 
 --An algebra is isomorphic to its lift to a higher universe level
 lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
-lift-alg-≅ {𝓤}{𝓦}{𝑨} = ((λ x → lift x) , λ _ _ → 𝓇ℯ𝒻𝓁) ,
-                         ((λ x → Lift.lower x) , λ _ _ → 𝓇ℯ𝒻𝓁) ,
+lift-alg-≅ {𝓤}{𝓦}{𝑨} = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) ,
+                         (Lift.lower , λ _ _ → 𝓇ℯ𝒻𝓁) ,
                          (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
 
+lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+ →             hom 𝑨 𝑩 → hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ Lift.lower , γ
+ where
+  lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 Lift.lower
+  lh = λ _ _ → 𝓇ℯ𝒻𝓁
+  lABh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑩 (f ∘ Lift.lower)
+  lABh = ∘-hom (lift-alg 𝑨 𝓩) 𝑨 𝑩 {Lift.lower}{f} lh fhom
+  Lh : is-homomorphism 𝑩 (lift-alg 𝑩 𝓦) lift
+  Lh = λ _ _ → 𝓇ℯ𝒻𝓁
+  γ : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) (lift ∘ (f ∘ Lift.lower))
+  γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦) {f ∘ Lift.lower}{lift} lABh Lh
+
+lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+ →               𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
+lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA≅A A≅B) lift-alg-≅
+ where
+  lA≅A : (lift-alg 𝑨 𝓩) ≅ 𝑨
+  lA≅A = sym-≅ lift-alg-≅
 
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}

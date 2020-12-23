@@ -24,10 +24,14 @@ open import terms
 open import Relation.Unary using (⋂)
 
 open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; univalence-gives-global-dfunext;
- 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Π-is-subsingleton;is-equiv; lr-implication; ×-is-subsingleton; id-is-embedding;
+ 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Π-is-subsingleton; lr-implication; ×-is-subsingleton; id-is-embedding;
  ∈-is-subsingleton; pr₁-embedding; rl-implication; inverse; embedding-gives-ap-is-equiv; is-set;_⇔_;
  transport; subset-extensionality'; equiv-to-subsingleton; powersets-are-sets'; _●_; ∘-embedding;
  logically-equivalent-subsingletons-are-equivalent) public
+
+-- useful alias
+OV : Universe → Universe
+OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
 Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
@@ -184,35 +188,73 @@ SUBALGEBRAOFCLASS' {𝓤}{𝓠} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓠 𝑆) , (𝑨 �
 _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
-trans-≤ : {𝓦 𝓤 𝓠 : Universe}(𝑪 : Algebra 𝓦 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆)
- →         𝑪 ≤ 𝑩   →    𝑩 ≤ 𝑨
+--Transitivity of IsSubalgebra (explicit args)
+TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ →         𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
           ---------------------
  →              𝑪 ≤ 𝑨
-trans-≤ 𝑪 𝑩 𝑨 CB BA =
- ∣ BA ∣ ∘ ∣ CB ∣ , ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥) , ∘-hom 𝑪 𝑩 𝑨{∣ BA ∣}{∣ CB ∣} (snd ∥ BA ∥) (snd ∥ CB ∥)
+TRANS-≤ 𝑨 𝑩 𝑪 BA CB =
+ ∣ BA ∣ ∘ ∣ CB ∣ , ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥) , ∘-hom 𝑪 𝑩 𝑨 {∣ CB ∣}{∣ BA ∣}(snd ∥ CB ∥) (snd ∥ BA ∥)
+
+--Transitivity of IsSubalgebra (implicit args)
+Trans-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
+
+--Transitivity of IsSubalgebra (implicit args)
+trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+ →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
+
+
+--Reflexivity of IsSubalgebra (explicit arg)
+REFL-≤ : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+REFL-≤ 𝑨 = 𝑖𝑑 ∣ 𝑨 ∣ , id-is-embedding , id-is-hom
+
+--Reflexivity of IsSubalgebra (implicit arg)
+refl-≤ : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+refl-≤ {𝑨 = 𝑨} = REFL-≤ 𝑨
+
+--Reflexivity of IsSubalgebra (explicit arg)
+ISO-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ →         𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
+          ---------------------
+ →              𝑪 ≤ 𝑨
+ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = h , hemb , hhom
+ where
+  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+  f = fst ∣ C≅B ∣
+  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  g = ∣ B≤A ∣
+  h : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
+  h = g ∘ f
+
+  hemb : is-embedding h
+  hemb = ∘-embedding (fst ∥ B≤A ∥) (iso→embedding C≅B)
+
+  hhom : is-homomorphism 𝑪 𝑨 h
+  hhom = ∘-hom 𝑪 𝑩 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∥ B≤A ∥)
+
+Iso-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →         𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
+
+iso-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →         𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+iso-≤ {𝑨 = 𝑨} {𝑩 = 𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
-refl-≤ : {𝓠 : Universe}(𝑨 : Algebra 𝓠 𝑆) → 𝑨 ≤ 𝑨
-refl-≤ 𝑨 = 𝑖𝑑 ∣ 𝑨 ∣ , id-is-embedding , id-is-hom
+lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {𝑩 : Algebra 𝓤 𝑆}
+ →           𝑩 IsSubalgebraOfClass 𝒦
+ →           (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+lift-alg-is-sub {𝓤}{𝒦}{𝑩} (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
-iso-≤ : {𝓦 𝓤 𝓠 : Universe}(𝑪 : Algebra 𝓦 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆)
- →         𝑪 ≅ 𝑩   →    𝑩 ≤ 𝑨
-          ---------------------
- →              𝑪 ≤ 𝑨
-iso-≤ 𝑪 𝑩 𝑨 C≅B B≤A = f , femb , fhom
- where
-
-  f : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
-  f = ∣ B≤A ∣ ∘ (fst ∣ C≅B ∣)
-
-  femb : is-embedding f
-  femb = ∘-embedding (fst ∥ B≤A ∥) (iso→embedding C≅B)
-
-  fhom : is-homomorphism 𝑪 𝑨 f
-  fhom = ∘-hom 𝑪 𝑩 𝑨{∣ B≤A ∣}{fst ∣ C≅B ∣} (snd ∥ B≤A ∥) (snd ∣ C≅B ∣)
+lift-alg-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+ →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝑨}{𝑩} B≤A = iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅) 
 
 ----------------------------------------------------------------------------------
 
