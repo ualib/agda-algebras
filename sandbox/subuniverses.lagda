@@ -205,6 +205,9 @@ Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
 trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
  →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
 trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
+transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+ →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ∣ B≤C ∣ ∘ ∣ A≤B ∣ , ∘-embedding (fst ∥ B≤C ∥) (fst ∥ A≤B ∥) , ∘-hom 𝑨 𝑩 𝑪 {∣ A≤B ∣}{∣ B≤C ∣}(snd ∥ A≤B ∥) (snd ∥ B≤C ∥)
 
 
 --Reflexivity of IsSubalgebra (explicit arg)
@@ -252,9 +255,124 @@ lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {
  →           (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 lift-alg-is-sub {𝓤}{𝒦}{𝑩} (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
-lift-alg-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+-- lift-alg-refl-lift-≤ : {𝓧 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆} → (lift-alg 𝑨 𝓩) ≤ 𝑨
+-- lift-alg-refl-lift-≤ = ?
+-- lift-alg-refl-≤-lift : {𝓧 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆} → 𝑨 ≤ (lift-alg 𝑨 𝓩)
+-- lift-alg-refl-≤-lift = ?
+
+lift-alg-lift-≤-lower : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
  →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
-lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝑨}{𝑩} B≤A = iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅) 
+lift-alg-lift-≤-lower {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
+
+lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+ →                𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
+lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
+ where
+  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+  lA = lift-alg 𝑨 𝓩
+
+  A≅lA : 𝑨 ≅ lA
+  A≅lA = lift-alg-≅
+
+  f : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  f = ∣ B≤A ∣
+
+  g : ∣ 𝑨 ∣ → ∣ lA ∣
+  g = map-≅ A≅lA
+
+  h : ∣ 𝑩 ∣ → ∣ lA ∣
+  h = g ∘ f
+
+  hemb : is-embedding h
+  hemb = ∘-embedding (map-≅-is-embedding A≅lA) (fst ∥ B≤A ∥)
+
+  hhom : is-homomorphism 𝑩 lA h
+  hhom = ∘-hom 𝑩 𝑨 lA {f}{g} (snd ∥ B≤A ∥) (snd ∣ A≅lA ∣)
+
+  γ : 𝑩 IsSubalgebraOf lift-alg 𝑨 𝓩
+  γ = h , hemb , hhom
+
+lift-alg-sub-lift : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
+ →                𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
+lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
+ where
+  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+
+  A≅lA : 𝑨 ≅ lA
+  A≅lA = lift-alg-≅
+
+  f : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
+  f = ∣ C≤A ∣
+
+  g : ∣ 𝑨 ∣ → ∣ lA ∣
+  g = map-≅ A≅lA
+
+  h : ∣ 𝑪 ∣ → ∣ lA ∣
+  h = g ∘ f
+
+  hemb : is-embedding h
+  hemb = ∘-embedding (map-≅-is-embedding A≅lA) (fst ∥ C≤A ∥)
+
+  hhom : is-homomorphism 𝑪 lA h
+  hhom = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
+
+  γ : 𝑪 IsSubalgebraOf lift-alg 𝑨 𝓦
+  γ = h , hemb , hhom
+
+lift-alg-lift-≤-lift : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+ →         𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+lift-alg-lift-≤-lift {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
+ transitivity-≤ lA {𝑩}{lB} (transitivity-≤ lA {𝑨}{𝑩} lA≤A A≤B) B≤lB
+ where
+  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+  lA = (lift-alg 𝑨 𝓩)
+  lB : Algebra (𝓨 ⊔ 𝓦) 𝑆
+  lB = (lift-alg 𝑩 𝓦)
+  lA≤A :  lA ≤ 𝑨
+  lA≤A = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
+  B≤lB : 𝑩 ≤ lB
+  B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+
+
+-- lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+--  →                𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
+-- lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
+
+
+-- transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+--  →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+-- trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+--  →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+-- trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
+
+
+-- h , hemb , hhom
+--  where
+--   g : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+--   g = ∣ A≤B ∣
+--   gemb : is-embedding g
+--   gemb = fst ∥ A≤B ∥
+--   ghom : is-homomorphism 𝑨 𝑩 g
+--   ghom = snd ∥ A≤B ∥
+
+--   hh : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+--   hh = lift-alg-hom 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 (g , ghom)
+
+--   h : ∣ lift-alg 𝑨 𝓩 ∣ → ∣ lift-alg 𝑩 𝓦 ∣
+--   h = ∣ hh ∣
+-- -- iso→embedding : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+-- --  →              (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
+
+-- -- ∘-embedding : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ }
+-- --               {f : X → Y} {g : Y → Z}
+-- --             → is-embedding g  → is-embedding f → is-embedding (g ∘ f)
+
+--   hemb : is-embedding h
+--   hemb = ∘-embedding {f = Lift.lower}{g = (lift ∘ g)} (∘-embedding {f = g}{g = lift} {!𝓇ℯ𝒻𝓁!} gemb) {!𝓇ℯ𝒻𝓁!}
+--   hhom : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) h
+--   hhom = ∥ hh ∥
+-- -- iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅) 
 
 ----------------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 --FILE: closure.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 4 Aug 2020
---UPDATE: 19 Sep 2020
+--UPDATE: 23 Dec 2020
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -108,30 +108,6 @@ data VClo {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)) : Pre
  vhom  : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ VClo{𝓤}{𝓦} 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ VClo 𝒦
  viso : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ VClo{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ VClo 𝒦
 
-----------------------------------------------------------------------------------
--- ALTERNATIVE DEFINITIONS
-data pclo {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
-  pbase : {I : 𝓦 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ∈ pclo 𝒦
-  prod : {I : 𝓦 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ pclo{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ pclo 𝒦
-  piso : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ pclo{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ pclo{𝓤}{𝓦} 𝒦
-
-data hclo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra 𝓤 𝑆) (OV 𝓤) where
- hbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ hclo 𝒦
- himg : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ hclo 𝒦 → ((𝑩 , _ ) : HomImagesOf 𝑨) → 𝑩 ∈ hclo 𝒦
- hiso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ hclo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ hclo 𝒦
-
-data sclo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra 𝓤 𝑆) (OV 𝓤) where
- sbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ sclo 𝒦
- sub : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ sclo 𝒦 → (sa : SUBALGEBRA 𝑨) → ∣ sa ∣ ∈ sclo 𝒦
- siso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ sclo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ sclo 𝒦
-
-data vclo {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra 𝓤 𝑆) (OV 𝓤) where
- vbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ vclo 𝒦
- vprod : {I : 𝓤 ̇}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → 𝒜 i ∈ vclo 𝒦) → ⨅ 𝒜 ∈ vclo 𝒦
- vsub  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ vclo 𝒦 → (sa : Subalgebra 𝑨) → ∣ sa ∣ ∈ vclo 𝒦
- vhom  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ vclo 𝒦 → ((𝑩 , _ , _) : HomImagesOf 𝑨) → 𝑩 ∈ vclo 𝒦
- viso : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ vclo 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ vclo 𝒦
-
 module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {𝑨 : Algebra 𝓤 𝑆} where
  pclo-base : 𝑨 ∈ 𝒦 → 𝑨 ∈ PClo{𝓤}{𝓤} 𝒦
  pclo-base KA = piso{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
@@ -145,33 +121,42 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {𝑨 : Al
  vclo-base : 𝑨 ∈ 𝒦 → 𝑨 ∈ VClo{𝓤}{𝓤} 𝒦
  vclo-base KA = viso{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (vbase KA) (sym-≅ lift-alg-≅)
 
-lift-alg-sub-lift : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
- →                𝑪 IsSubalgebraOf 𝑨 → 𝑪 IsSubalgebraOf (lift-alg 𝑨 𝓦)
-lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
+
+lift-alg-idemp : {𝓤 𝓦 𝓩 : Universe}{𝑨 : Algebra 𝓤 𝑆}
+ →           lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓩)
+lift-alg-idemp {𝓤} {𝓦} {𝓩} {𝑨} = TRANS-≅ (TRANS-≅ ζ lift-alg-≅) lift-alg-≅
  where
-  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
-  lA = lift-alg 𝑨 𝓦
+  ζ : lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ 𝑨
+  ζ = sym-≅ lift-alg-≅
 
-  A≅lA : 𝑨 ≅ lA
-  A≅lA = lift-alg-≅
+lift-alg-SClo : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
+ →                𝑩 ∈ SClo{𝓤}{𝓦} 𝒦 → (lift-alg 𝑩 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+lift-alg-SClo {𝓤} {𝓦} {𝓩} {𝒦} (sbase{𝑨} KA) = siso ξ (lift-alg-idemp{𝓤}{𝓦}{𝓩}{𝑨})
+ where
+  ξ : lift-alg 𝑨 (𝓦 ⊔ 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+  ξ = sbase{𝓤 = 𝓤}{𝓦 = (𝓦 ⊔ 𝓩)}{𝑨 = 𝑨} KA
 
-  f : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
-  f = ∣ C≤A ∣
+lift-alg-SClo {𝓤} {𝓦} {𝓩} {𝒦} {.(𝑩)} (sub{𝑨} SCloA (𝑩 , B≤A)) = sub (lift-alg-SClo SCloA) (lB , lB≤lA)
+ where
+  lB : Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓩) 𝑆
+  lB = lift-alg 𝑩 𝓩
 
-  g : ∣ 𝑨 ∣ → ∣ lA ∣
-  g = map-≅ A≅lA
+  lB≤lA : lB ≤ lift-alg 𝑨 𝓩
+  lB≤lA = lift-alg-lift-≤-lift 𝑩 {𝑨} B≤A
 
-  h : ∣ 𝑪 ∣ → ∣ lA ∣
-  h = g ∘ f
+lift-alg-SClo {𝓤} {𝓦} {𝓩} {𝒦} {𝑩} (siso{𝑨} SCloA A≅B) = siso (lift-alg-SClo SCloA) lA≅lB
+ where
+  lA≅lB : (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓩)
+  lA≅lB = lift-alg-iso (𝓤 ⊔ 𝓦) 𝓩 𝑨 𝑩 A≅B
 
-  hemb : is-embedding h
-  hemb = ∘-embedding (map-≅-is-embedding A≅lA) (fst ∥ C≤A ∥)
+-- lift-alg-PClo : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
+--  →                𝑩 ∈ PClo{𝓤}{𝓦} 𝒦 → (lift-alg 𝑩 𝓩) ∈ PClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+-- lift-alg-PClo {𝓤} {𝓦} {𝓩} {𝒦} x = ?
 
-  hhom : is-homomorphism 𝑪 lA h
-  hhom = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
 
-  γ : 𝑪 IsSubalgebraOf lift-alg 𝑨 𝓦
-  γ = h , hemb , hhom
+
+
+
 
 Subalgebra→SClo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{𝑪 : Algebra 𝓠 𝑆}
  →                𝑪 IsSubalgebraOfClass 𝒦 → 𝑪 ∈ SClo{𝓠}{𝓠} 𝒦
@@ -236,39 +221,8 @@ SP⊆V {𝓤} {𝒦} (siso x x₁) = viso (SP⊆V x) x₁
 
 
 -----------------------------------------------------------------------------
--- Closure operator (definition)
-
-_IsExpansive : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
-C IsExpansive = ∀ 𝒦 → 𝒦 ⊆ C 𝒦
-
-_IsMonotone : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
-C IsMonotone = ∀ 𝒦 𝒦' → 𝒦 ⊆ 𝒦' → C 𝒦 ⊆ C 𝒦'
-
-_IsIdempotent : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
-C IsIdempotent = ∀ 𝒦 → C (C 𝒦) ⊆ C 𝒦
-
-_IsClosure : {𝓤 𝓦 : Universe}{X : 𝓤 ̇} → (Pred X 𝓦 → Pred X 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
-C IsClosure  = (C IsExpansive) × (C IsMonotone) × (C IsIdempotent)
-
-
-----------------------------------------------------------------------
--- Example. SClo is a closure operator
--- SCloIsClosure : {𝓤 𝓦 : Universe} → _IsClosure{𝓤 = Algebra 𝓤 𝑆}{𝓦
--- SCloIsClosure {𝓤} = expa , mono , idem
---  where
---   expa : SClo IsExpansive
---   expa 𝒦 = sbase {𝒦 = 𝒦}
-
---   mono : SClo IsMonotone
---   mono 𝒦 𝒦' h₀ (sbase x) = sbase (h₀ x)
---   mono 𝒦 𝒦' h₀ (sub x sa) = sub (mono 𝒦 𝒦' h₀ x) sa
---   mono 𝒦 𝒦' h₀ (siso x x₁) = siso (mono 𝒦 𝒦' h₀ x) x₁
-
---   idem : SClo IsIdempotent
---   idem 𝒦 (sbase x) = x
---   idem 𝒦 {.(fst sa)} (sub x sa) = sub (idem 𝒦 x) sa
---   idem 𝒦 (siso x x₁) = siso (idem 𝒦 x) x₁
-
+--SClo is a closure operator
+--In particular, it's monotone.
 SClo-mono : {𝓤 𝓦 : Universe}{𝒦₁ 𝒦₂ : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →          𝒦₁ ⊆ 𝒦₂ → SClo{𝓤}{𝓦} 𝒦₁ ⊆ SClo{𝓤}{𝓦} 𝒦₂
 SClo-mono h₀ (sbase x) = sbase (h₀ x)
@@ -276,68 +230,52 @@ SClo-mono h₀ (sub x sa) = sub (SClo-mono h₀ x) sa
 SClo-mono h₀ (siso x x₁) = siso (SClo-mono h₀ x) x₁
 
 SClo-mono' : {𝓤 𝓦 : Universe}{𝒦₁ : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝒦₂ : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦))}
- →          ((𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦₁ → (lift-alg 𝑨 𝓦) ∈ 𝒦₂) → SClo{𝓤}{𝓦} 𝒦₁ ⊆ SClo{𝓤 ⊔ 𝓦}{𝓦} 𝒦₂
-SClo-mono' {𝓤}{𝓦}{𝒦₁}{𝒦₂} x = {!!}
-
-lift-alg-idemp : {𝓤 𝓦 𝓩 : Universe}{𝑨 : Algebra 𝓤 𝑆}
- →           lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓩)
-lift-alg-idemp {𝓤} {𝓦} {𝓩} {𝑨} = γ
+ →          ((𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦₁ → (lift-alg 𝑨 𝓦) ∈ 𝒦₂) → SClo{𝓤}{𝓦} 𝒦₁ ⊆ SClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} 𝒦₂
+SClo-mono' {𝓤} {𝓦} {𝒦₁} {𝒦₂} ant (sbase {𝑨} KA) = γ
  where
-  ζ : lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ 𝑨
-  ζ = sym-≅ lift-alg-≅
-  ξ : 𝑨 ≅ lift-alg 𝑨 𝓦
-  ξ = lift-alg-≅
-  η : lift-alg 𝑨 𝓦 ≅ lift-alg (lift-alg 𝑨 𝓦) 𝓩
-  η = lift-alg-≅
-  γ :  lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ lift-alg (lift-alg 𝑨 𝓦) 𝓩
-  γ = TRANS-≅ (TRANS-≅ ζ ξ) η
+  ξ : (lift-alg 𝑨 𝓦) ∈ 𝒦₂
+  ξ = ant 𝑨 KA
+  γ : (lift-alg 𝑨 𝓦) ∈ SClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} 𝒦₂
+  γ = sclo-base{𝓤 = (𝓤 ⊔ 𝓦)}{𝒦 = 𝒦₂}{𝑨 = (lift-alg 𝑨 𝓦)} ξ
+SClo-mono' {𝓤} {𝓦} {𝒦₁} {𝒦₂} ant (sub{𝑨} SAK1 (𝑩 , B≤A)) = γ
+ where
+  SAK2 : 𝑨 ∈ SClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} 𝒦₂
+  SAK2 = SClo-mono' ant SAK1
+  γ : 𝑩 ∈ SClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} 𝒦₂
+  γ = sub SAK2 (𝑩 , B≤A)
+SClo-mono' {𝓤} {𝓦} {𝒦₁} {𝒦₂} ant (siso x x₁) = siso (SClo-mono' ant x) x₁
+
 
 SClo-idemp : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →           SClo {𝓤 ⊔ 𝓦}{𝓩} (SClo{𝓤}{𝓦} 𝒦) ⊆ SClo {𝓤}{𝓦 ⊔ 𝓩} 𝒦
-SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase{lA} (sbase{𝑨} x)) = {!γ!}
+SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase{lA} (sbase{𝑨} x)) = γ
  where
-  ζ : (lift-alg (lift-alg 𝑨 𝓦) 𝓩) ≅ lift-alg 𝑨 (𝓦 ⊔ 𝓩)
-  ζ = {!!}
+  ζ : lift-alg 𝑨 (𝓦 ⊔ 𝓩) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓩)
+  ζ = lift-alg-idemp{𝑨 = 𝑨}
   ξ : lift-alg 𝑨 (𝓦 ⊔ 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
-  ξ = {!!} -- sbase{𝓤 = 𝓤}{𝓦 = (𝓦 ⊔ 𝓩)} x
+  ξ = sbase{𝓤 = 𝓤}{𝓦 = (𝓦 ⊔ 𝓩)} x
   γ : (lift-alg (lift-alg 𝑨 𝓦) 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
-  γ = {!!}
-SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase (sub x sa)) = {!!}
-SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase (siso x x₁)) = {!!}
-SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sub x sa) = {!!}
-SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (siso x x₁) = {!!}
--- SClo-idemp : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
---  →           SClo {𝓤 ⊔ 𝓦}{𝓩} (SClo{𝓤}{𝓦} 𝒦) ⊆ SClo {𝓤}{𝓦 ⊔ 𝓩} 𝒦
--- SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase{AW} x) = siso ξ ζ
---  where
---   ζ : lift-alg AW (𝓦 ⊔ 𝓩) ≅ (lift-alg (lift-alg AW 𝓦) 𝓩)
---   ζ = lift-alg-idemp{𝓤 = 𝓤 ⊔ 𝓦}{𝓦}{𝓩}{AW}
---   ξ : lift-alg AW (𝓦 ⊔ 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
---   ξ = ? -- sbase{𝓤 = (𝓤 ⊔ 𝓦)}{𝓦 = (𝓦 ⊔ 𝓩)} x
+  γ = siso ξ ζ
+SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase{𝑨 = 𝑩} (sub{𝑨 = 𝑨} SCloA x)) = sub SlA (lift-alg 𝑩 𝓩 , lB≤lA)
+ where
+  SlA : lift-alg 𝑨 𝓩 ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+  SlA = lift-alg-SClo SCloA
+  lB≤lA : lift-alg 𝑩 𝓩 ≤ lift-alg 𝑨 𝓩
+  lB≤lA = lift-alg-lift-≤-lift 𝑩 {𝑨} ∥ x ∥
 
--- SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase (sub {𝑨 = 𝑨} SCloA sa)) = γ
---  where
---   SA : Algebra (𝓤 ⊔ 𝓦) 𝑆
---   SA = ∣ sa ∣
---   SCloSA : SA ∈ SClo{𝓤}{𝓦} 𝒦
---   SCloSA = sub SCloA sa
---   lSA : Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓩) 𝑆
---   lSA = lift-alg ∣ sa ∣ 𝓩
---   SSA : lSA ∈ SClo{𝓤 ⊔ 𝓦}{𝓩} (SClo{𝓤}{𝓦} 𝒦)
---   SSA = sbase{𝑨 = SA} SCloSA
---   SA≤A : SA IsSubalgebraOf 𝑨
---   SA≤A = ∥ sa ∥
---   SA≅lSA : SA ≅ lSA
---   SA≅lSA = lift-alg-≅
---   lSA≤A : lSA IsSubalgebraOf 𝑨
---   lSA≤A = ISO-≤ 𝑨 SA lSA SA≤A (sym-≅ SA≅lSA)
---   lSA-SUB : SUBALGEBRA 𝑨
---   lSA-SUB = lSA , lSA≤A
---   γ : lSA ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
---   γ = {!sub{𝓤 = 𝓤}{𝓦 = (𝓦 ⊔ 𝓩)} SCloA lSA-SUB!}
--- SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase (siso x x₁)) = {!!}
--- SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sub x sa) = {!!}
--- SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (siso x x₁) = {!!}
+SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sbase{𝑩} (siso{𝑨} SCloA A≅B)) = siso (lift-alg-SClo SCloA) lA≅lB
+ where
+  lA≅lB : (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓩)
+  lA≅lB = lift-alg-iso (𝓤 ⊔ 𝓦) 𝓩 𝑨 𝑩 A≅B
+
+SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (sub {𝑨 = 𝑨} SCloA (𝑩 , B≤A)) = γ
+ where
+  SA : 𝑨 ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+  SA = SClo-idemp SCloA
+  γ : 𝑩 ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
+  γ = sub SA (𝑩 , B≤A)
+SClo-idemp {𝓤} {𝓦} {𝓩} {𝒦} (siso x x₁) = siso (SClo-idemp x) x₁
+
 
 PClo-idem : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →          PClo{𝓤}{𝓤} (PClo{𝓤}{𝓤} 𝒦) ⊆ PClo{𝓤}{𝓤} 𝒦
@@ -345,50 +283,30 @@ PClo-idem {𝓤} {𝒦} (pbase x) = piso x lift-alg-≅
 PClo-idem {𝓤} {𝒦} (prod{I}{𝒜} x) = prod{𝓤}{I = I}{𝒜 = 𝒜} λ i → PClo-idem{𝓤}{𝒦} (x i)
 PClo-idem (piso x x₁) = piso (PClo-idem x) x₁
 
-PClo-idem' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →          PClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓦} 𝒦) ⊆ PClo{𝓤}{𝓦} 𝒦
-PClo-idem' {𝓤}{𝓦} {𝒦} (pbase x) = piso x lift-alg-≅
-PClo-idem' {𝓤}{𝓦} {𝒦} (prod{I}{𝒜} x) = {!!}
+
+PClo-idem''' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+ →          PClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+PClo-idem''' {𝓤}{𝓦} {𝒦} (pbase x) = piso x lift-alg-≅
+PClo-idem''' {𝓤}{𝓦} {𝒦} (prod{I}{𝒜} x) = {!!}
  -- where
- --  PCloAi : (i : I) → lift-alg (𝒜 i) (𝓤 ⊔ 𝓦) ∈ PClo{𝓤}{𝓦} 𝒦
- --  PCloAi i = PClo-idem' (x i)
+ --  h₀ : (i : I) → lift-alg (𝒜 i) (𝓤 ⊔ 𝓦) ∈ PClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+ --  h₀ = x
+ --  l𝒜 : (i : I) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ --  l𝒜 i = lift-alg (𝒜 i) (𝓤 ⊔ 𝓦)
 
- --  γ : ⨅ 𝒜 ∈ PClo{𝓤}{𝓦} 𝒦
- --  γ = prod{I = I}{𝒜 = 𝒜} ? -- PCloAi
-  -- prod{I = I}{𝒜 = 𝒜} λ i → PClo-idem'{𝓤}{𝓦}{𝒦} (x i)
--- data PClo {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
---  pbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → (lift-alg 𝑨 𝓦) ∈ PClo 𝒦
---  prod : {I : 𝓦 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (lift-alg (𝒜 i) 𝓦) ∈ PClo{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ PClo 𝒦
---  piso : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ PClo{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ PClo 𝒦
+ --  ξ : (i : I) → (l𝒜 i) ∈ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+ --  ξ i = PClo-idem'''{𝓤}{𝓦}{𝒦} (x i)
 
-
-PClo-idem' (piso x x₁) = piso (PClo-idem' x) x₁
-  -- pci : (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
-  -- pci = {!!} -- PClo-idem'{𝓤}{𝓦 = (OV 𝓤)}
-
-PClo-idem'' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →          PClo{𝓤}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓤} 𝒦) ⊆ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
-PClo-idem'' {𝓤}{𝓦} {𝒦} (pbase x) = {!!} -- piso x lift-alg-≅
-PClo-idem'' {𝓤}{𝓦} {𝒦} (prod{I}{𝒜} x) = {!!} -- prod{I = I}{𝒜 = 𝒜} λ i → PClo-idem'{𝓤}{𝓦}{𝒦} (x i)
-PClo-idem'' {𝓤}{𝓦} {𝒦} (piso x x₁) = piso (PClo-idem''{𝓤}{𝓦} x) x₁
+ --  -- γ' : ⨅ 𝒜 ∈ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+ --  -- γ' = prod{𝓤 = 𝓤 ⊔ 𝓦}{𝓦 = 𝓤 ⊔ 𝓦}{I = I}{𝒜 = 𝒜} ξ
+ --  γ : ⨅ 𝒜 ∈ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+ --  γ = {!!} -- prod{𝓤 = 𝓤 ⊔ 𝓦}{𝓦 = 𝓤 ⊔ 𝓦}{I = I}{𝒜 = 𝒜} ξ
+-- prod{I = I}{𝒜 = 𝒜} λ i → PClo-idem'''{𝓤}{𝓦}{𝒦} (x i)
+PClo-idem''' {𝓤}{𝓦} {𝒦} (piso x x₁) = piso (PClo-idem'''{𝓤}{𝓦} x) x₁
 
 PClo-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → 𝒦 ⊆ PClo{𝓤}{𝓤} 𝒦
 PClo-expa KA = pclo-base KA
 
-
------------------------------------------------
--- Alternatives --
-pclo-idem : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →          pclo{𝓤}{𝓤} (pclo{𝓤}{𝓤} 𝒦) ⊆ pclo{𝓤}{𝓤} 𝒦
-pclo-idem (pbase x) = prod x
-pclo-idem (prod x) = prod (λ i → pclo-idem (x i))
-pclo-idem (piso x x₁) = piso (pclo-idem x) x₁
-
-pclo-idem' : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →          pclo{𝓤}{OV 𝓤} (pclo{𝓤}{𝓤} 𝒦) ⊆ pclo{𝓤}{OV 𝓤} 𝒦
-pclo-idem' (pbase{I}{𝒜} x) = prod x -- prod x
-pclo-idem' {𝓤}{𝒦} (prod{I}{𝒜} x) = prod{𝓤}{I = I}{𝒜 = 𝒜} (λ i → pclo-idem (x i))
-pclo-idem' (piso x x₁) = piso (pclo-idem' x) x₁
 
 
 ----------------------------------------------------------------------------------------------
@@ -419,7 +337,7 @@ SClo→Subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
   sa≤𝑮 = Trans-≤ 𝑮 ∣ sa ∣ 𝑨≤𝑮 ∥ sa ∥
 
   γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
-  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
+  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅))
 SClo→Subalgebra {𝓠} {𝒦} {𝑨} (siso{𝑩} SCloB 𝑩≅𝑨) = γ
  where
   IH : 𝑩 IsSubalgebraOfClass 𝒦
@@ -437,27 +355,56 @@ SClo→Subalgebra {𝓠} {𝒦} {𝑨} (siso{𝑩} SCloB 𝑩≅𝑨) = γ
   γ : 𝑨 IsSubalgebraOfClass 𝒦
   γ = 𝔸 , SA , 𝔸∈𝒦 , trans-≅ 𝑨 𝑩 (∣ SA ∣) (sym-≅ 𝑩≅𝑨)  𝑩≅SA
 
-SClo→Subalgebra' : {𝓠 𝓤 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{𝑩 : Algebra (𝓠 ⊔ 𝓤) 𝑆}
- →                𝑩 ∈ SClo{𝓠}{𝓤} 𝒦 →  𝑩 IsSubalgebraOfClass 𝒦
-SClo→Subalgebra'{𝓠}{𝓤}{𝒦}{𝑩} x = {!!}
 
-
-
-lift-alg-SClo : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
- →                𝑩 ∈ SClo{𝓤}{𝓦} 𝒦 → (lift-alg 𝑩 𝓩) ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
-lift-alg-SClo {𝓤}{𝓦}{𝓩}{𝒦}{𝑩} SCloB = γ
+SClo→Subalgebra' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
+ →                𝑩 ∈ SClo{𝓤}{𝓦} 𝒦 →  𝑩 IsSubalgebraOfClass 𝒦
+SClo→Subalgebra' {𝓤}{𝓦}{𝒦} (sbase{𝑨} KA) = 𝑨 , ((lift-alg 𝑨 𝓦) , lA≤A) , KA , refl-≅
  where
-  lB : Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓩) 𝑆
-  lB = lift-alg 𝑩 𝓩
-  SSlB : lB ∈ (SClo {𝓤 ⊔ 𝓦}{𝓩} (SClo{𝓤}{𝓦} 𝒦))
-  SSlB = sbase{𝓤 ⊔ 𝓦}{𝓩}{𝑨 = 𝑩} SCloB
-  SCmono : SClo {𝓤 ⊔ 𝓦}{𝓩} (SClo{𝓤}{𝓦} 𝒦) ⊆ SClo {𝓤}{𝓦 ⊔ 𝓩} 𝒦
-  SCmono = SClo-idemp
-  γ : lB ∈ SClo{𝓤}{𝓦 ⊔ 𝓩} 𝒦
-  γ = SCmono SSlB
+  lA≤A : (lift-alg 𝑨 𝓦) ≤ 𝑨
+  lA≤A = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
 
-----------------------------------------------------------------------------------------
--- The (near) lattice of closures
+SClo→Subalgebra' {𝓤} {𝓦} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
+ where
+  IH : 𝑨 IsSubalgebraOfClass 𝒦
+  IH = SClo→Subalgebra'{𝓤}{𝓦}{𝒦}{𝑨} x
+
+  𝑮 : Algebra 𝓤 𝑆
+  𝑮 = ∣ IH ∣
+
+  KG = fst ∥ snd IH ∥            -- KG : 𝑮 ∈ 𝒦
+  SG' = fst ∥ IH ∥               -- SG' : SUBALGEBRA 𝑮
+  𝑨' = ∣ SG' ∣                    -- 𝑨' : Algebra 𝓠 𝑆
+  𝑨'≤𝑮 = ∥ SG' ∥                 -- 𝑨'≤𝑮 : 𝑨' ≤ 𝑮
+  𝑨≅𝑨' = snd ∥ (snd IH) ∥        -- 𝑨≅𝑨' : 𝑨 ≅ 𝑨'
+  𝑨≤𝑮 : 𝑨 ≤ 𝑮
+  𝑨≤𝑮 = Iso-≤ 𝑮 𝑨 𝑨'≤𝑮 𝑨≅𝑨'
+
+  sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
+  sa≤𝑮 = Trans-≤ 𝑮 ∣ sa ∣ 𝑨≤𝑮 ∥ sa ∥
+
+  γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
+  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅))
+
+SClo→Subalgebra' {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} SCloA A≅B) = γ
+ where
+  IH : 𝑨 IsSubalgebraOfClass 𝒦
+  IH = SClo→Subalgebra' SCloA
+  𝔸 : Algebra 𝓤 𝑆
+  𝔸 = ∣ IH ∣
+  SA : SUBALGEBRA 𝔸
+  SA = fst ∥ IH ∥
+  𝔸∈𝒦 : 𝔸 ∈ 𝒦
+  𝔸∈𝒦 = fst ∥ snd IH ∥
+  A≅SA : 𝑨 ≅ ∣ SA ∣
+  A≅SA = snd ∥ snd IH ∥
+  SA≤𝔸 : ∣ SA ∣ ≤ 𝔸
+  SA≤𝔸 = ∥ SA ∥
+  γ : 𝑩 IsSubalgebraOfClass 𝒦
+  γ = 𝔸 , SA , 𝔸∈𝒦 , trans-≅ 𝑩 𝑨 (∣ SA ∣) (sym-≅ A≅B) A≅SA
+
+
+-- ----------------------------------------------------------------------------------------
+-- -- The (near) lattice of closures
 LemPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠
  →         {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
  →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
@@ -610,394 +557,120 @@ PS⊆SP {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ �
 PS⊆SP hfe (piso x x₁) = siso (PS⊆SP hfe x) x₁
 
 
-PS⊆SP' : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
+
+
+PS⊆SP''' : {𝓤 : Universe} → hfunext (OV 𝓤)(OV 𝓤)
  →       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →       PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦) ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
 
-PS⊆SP' {𝓤} hfe {𝒦} (pbase{𝑨} (sbase x)) = γ
+PS⊆SP''' {𝓤} hfe {𝒦} (pbase{𝑨} (sbase x)) = γ
  where
   ξ : 𝑨 ∈ PClo{𝓤}{OV 𝓤} 𝒦
   ξ = pbase x
   γ : (lift-alg 𝑨 (OV 𝓤)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
   γ = sbase ξ
-PS⊆SP' {𝓤} hfe {𝒦} (pbase (sub x sa)) = γ
- where
-  SCloSA : ∣ sa ∣ ∈ SClo{𝓤}{OV 𝓤} 𝒦
-  SCloSA = sub x sa
-  SCloSA' : (lift-alg ∣ sa ∣ (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} 𝒦
-  SCloSA' = lift-alg-SClo{𝓤}{OV 𝓤}{OV 𝓤}{𝒦}{∣ sa ∣} SCloSA
-  Smono : SClo{𝓤}{OV 𝓤} 𝒦 ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  Smono = SClo-mono'{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = (PClo{𝓤}{OV 𝓤} 𝒦)} (λ 𝑨 → pbase{𝓤}{OV 𝓤})
-  γ : SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦) (lift-alg ∣ sa ∣ (OV 𝓤))
-  γ = Smono SCloSA'
 
-PS⊆SP' {𝓤} hfe {𝒦} (pbase (siso{𝑨}{𝑩} SCloA AB)) = γ
- where
-  lB : Algebra (OV 𝓤) 𝑆
-  lB = lift-alg 𝑩 (OV 𝓤)
-  α : 𝑨 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  α = SClo-mono'{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = PClo 𝒦}(λ 𝑨 → pbase{𝓤 = 𝓤}{𝓦 = (OV 𝓤)}{𝑨 = 𝑨}) SCloA
-  BA : 𝑩 ≤ 𝑨
-  BA = Iso-≤ 𝑨 𝑩 refl-≤ (sym-≅ AB)
-  β : SUBALGEBRA 𝑨
-  β = 𝑩 , BA
-  ξ : 𝑩 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  ξ = sub α β
-  γ : (lift-alg 𝑩 (OV 𝓤)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  γ = lift-alg-SClo {OV 𝓤}{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑩} ξ
-
-PS⊆SP' {𝓤} hfe {𝒦} (prod{I = I}{𝒜 = 𝒜} pscloa) = γ
- where
-  τ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
-  τ i = pscloa i
-  ζ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  ζ i = PS⊆SP' hfe (τ i)
-  ξ : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
-  ξ i = SClo→Subalgebra'{OV 𝓤}{OV 𝓤} (ζ i)
-  η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦))
-  η' = LemPS⊆SP'{𝓘 = (OV 𝓤)} {𝓤 = (OV 𝓤)} hfe hfe {𝒦 = PClo{𝓤}{OV 𝓤} 𝒦}{I}{𝒜} ξ
-  pci : (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
-  pci = PClo-idem'{𝓤}{𝓦 = (OV 𝓤)}
-  η : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
-  η = mono-≤ (⨅ 𝒜) pci η'
-  γ : ⨅ 𝒜 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  γ = Subalgebra→SClo'{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η
-PS⊆SP' {𝓤} hfe (piso x x₁) = siso (PS⊆SP' hfe x) x₁
-
-PS⊆SP'' : {𝓤 : Universe} → hfunext (OV 𝓤) 𝓤 → hfunext (OV 𝓤) (OV 𝓤)
- →       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →       PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝒦) ⊆ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-PS⊆SP'' {𝓤} hfe hfe' {𝒦} (pbase{𝑨} (sbase x)) = γ
- where
-  ξ : 𝑨 ∈ PClo{𝓤}{𝓤} 𝒦
-  ξ = pbase x
-  γ : (lift-alg 𝑨 (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  γ = sbase ξ
-PS⊆SP'' {𝓤} hfe hfe' {𝒦} (pbase (sub x sa)) = γ
- where
-  SCloSA : ∣ sa ∣ ∈ SClo{𝓤}{𝓤} 𝒦
-  SCloSA = sub x sa
-  SCloSA' : (lift-alg ∣ sa ∣ (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} 𝒦
-  SCloSA' = lift-alg-SClo{𝓤}{𝓤}{OV 𝓤}{𝒦}{∣ sa ∣} SCloSA
-  Smono : SClo{𝓤}{OV 𝓤} 𝒦 ⊆ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  Smono = SClo-mono{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = (PClo{𝓤}{𝓤} 𝒦)} pclo-base
-  γ : SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦) (lift-alg ∣ sa ∣ (OV 𝓤))
-  γ = Smono SCloSA'
-
-PS⊆SP'' {𝓤} hfe hfe'{𝒦} (pbase (siso{𝑨}{𝑩} SCloA AB)) = γ
+-- PS⊆SP''' {𝓤} hfe {𝒦} (pbase {.(Σ.pr₁ sa)} (sub x sa)) = {!!}
+PS⊆SP''' {𝓤} hfe {𝒦} (pbase (sub x sa)) =
+ SClo-mono'{𝓤}{(OV 𝓤)}{𝒦}{PClo{𝓤}{OV 𝓤} 𝒦} (λ 𝑨 → pbase{𝑨 = 𝑨}) (siso (sub x sa) lift-alg-≅)
+PS⊆SP''' {𝓤} hfe {𝒦} (pbase (siso{𝑨}{𝑩} SCloA AB)) = siso α' (lift-alg-iso (OV 𝓤) (OV 𝓤) 𝑨 𝑩 AB)
  where
   lA lB : Algebra (OV 𝓤) 𝑆
   lA = lift-alg 𝑨 (OV 𝓤)
   lB = lift-alg 𝑩 (OV 𝓤)
-  α : 𝑨 ∈ SClo{𝓤}{𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  α = SClo-mono'{𝓤}{𝓤}{𝒦₁ = 𝒦}{𝒦₂ = PClo 𝒦}(λ 𝑨 → pbase{𝓤 = 𝓤}{𝓦 = 𝓤}{𝑨 = 𝑨}) SCloA
-  α' : lA ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  α' = lift-alg-SClo{𝓤}{𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{𝓤} 𝒦)}{𝑩 = 𝑨} α
-  lA≅lB : lA ≅ lB
-  lA≅lB = lift-alg-iso 𝓤 (OV 𝓤) 𝑨 𝑩 AB
-  γ : (lift-alg 𝑩 (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  γ = siso α' lA≅lB
+  α : 𝑨 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+  α = SClo-mono'{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = PClo 𝒦}(λ 𝑨 → pbase{𝓤 = 𝓤}{𝓦 = (OV 𝓤)}{𝑨 = 𝑨}) SCloA
+  α' : lA ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+  α' = lift-alg-SClo{OV 𝓤}{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑩 = 𝑨} α
 
-PS⊆SP'' {𝓤} hfe hfe' {𝒦} (prod{I = I}{𝒜 = 𝒜} pscloa) = {!!}
+PS⊆SP''' {𝓤} hfe  {𝒦} (prod{I = I}{𝒜 = 𝒜} x) = γ
  where
-  ζ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ SClo{𝓤}{OV 𝓤}(PClo{𝓤}{𝓤} (𝒦))
-  ζ i = PS⊆SP'' hfe hfe' (pscloa i)
-  ξ : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) IsSubalgebraOfClass (PClo{𝓤}{𝓤} 𝒦)
-  ξ i = SClo→Subalgebra'{𝓤}{OV 𝓤} (ζ i)
-  η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤}𝒦))
-  η' = LemPS⊆SP'{𝓘 = (OV 𝓤)} {𝓤 = 𝓤} hfe' hfe {𝒦 = PClo{𝓤}{𝓤} 𝒦}{I}{𝒜} ξ
-  pci : (PClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
-  pci = PClo-idem''{𝓤}{𝓦 = (OV 𝓤)}
+  ⨅A : Algebra (OV 𝓤) 𝑆
+  ⨅A = ⨅ 𝒜
+
+  ζ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ SClo{OV 𝓤}{OV 𝓤}(PClo{𝓤}{OV 𝓤} (𝒦))
+  ζ i = PS⊆SP''' hfe (x i)
+
+  ξ : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
+  ξ i = SClo→Subalgebra'{OV 𝓤}{OV 𝓤} (ζ i)
+
+  η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦))
+  η' = LemPS⊆SP'{𝓘 = (OV 𝓤)} {𝓤 = (OV 𝓤)} hfe hfe {𝒦 = PClo{𝓤}{OV 𝓤} 𝒦}{I}{𝒜} ξ
+
+  pci : (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
+  pci = PClo-idem'''{𝓤}{𝓦 = (OV 𝓤)}
+
   η : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
   η = mono-≤ (⨅ 𝒜) pci η'
-  γ' : ⨅ 𝒜 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
-  γ' = Subalgebra→SClo'{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η
-
-  γ : ⨅ 𝒜 ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
-  γ = {!!}
-
-PS⊆SP'' {𝓤} hfe hfe'(piso x x₁) = siso (PS⊆SP'' hfe hfe' x) x₁
-
-
-S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
-      ------------------------------------
- →     SClo{𝓠}{𝓠} 𝒦  ⊆  SClo (PClo 𝒦)
-S⊆SP  = SClo-mono PClo-expa
-
--- SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
---         ----------------------------------------
---  →       SClo{𝓠}{𝓠} (PClo{𝓠}{𝓠} (SClo{𝓠}{𝓠} 𝒦)) ⊆ SClo{𝓠}{𝓠} (PClo{𝓠}{𝓠} 𝒦)
-
--- SPS⊆SP {𝓠} hfe {𝒦} {.(Lift (Σ.pr₁ _) , (λ f x₁ → lift (Σ.pr₂ _ f (λ i → Lift.lower (x₁ i)))))} (sbase x) = {!γ!}
--- SPS⊆SP hfe {𝒦} {.(Σ.pr₁ sa)} (sub x sa) = {!!}
--- SPS⊆SP hfe {𝒦} {𝑨} (siso x x₁) = {!!}
--- (sbase (pbase (sbase x))) = sbase ? -- (pbase x)
--- SPS⊆SP {𝓠} hfe {𝒦} {.(fst sa)} (sbase (pbase (sub x sa))) = sub ? ? -- (S⊆SP x) sa
--- SPS⊆SP hfe {𝒦} {𝑨} (sbase (pbase (siso{𝑩} x x₁))) = siso {𝑨 = 𝑩}{𝑩 = 𝑨} (S⊆SP x) x₁
-
--- SPS⊆SP hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣ ) , (λ f 𝒂 i → ∥ 𝒜 i ∥ f (λ args → 𝒂 args i)))} (sbase (prod{I}{𝒜} x)) = PS⊆SP hfe (prod x)
--- SPS⊆SP hfe {𝒦} {𝑨} (sbase (piso{𝑩} x x₁)) = siso{𝑨 = 𝑩}{𝑩 = 𝑨} (PS⊆SP hfe x) x₁
--- SPS⊆SP hfe {𝒦} {.(Σ.pr₁ sa)} (sub x sa) = sub (SPS⊆SP hfe x) sa
--- SPS⊆SP hfe {𝒦} {𝑨} (siso x x₁) = siso (SPS⊆SP hfe x) x₁
-
----------------------------------------------------------------------------------------------------
--- Alternatives --
-
-sclo→subalgebra : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{𝑨 : Algebra 𝓠 𝑆}
- →                𝑨 ∈ sclo 𝒦 →  𝑨 IsSubalgebraOfClass 𝒦
-sclo→subalgebra {𝓠} {𝒦} {𝑨} (sbase x) = 𝑨 , (𝑨 , refl-≤) , x , (((λ x → x) , id-is-hom) ,
-                                                                (((λ x → x) , id-is-hom) ,
-                                                                  ((λ x₁ → refl _) , λ x₁ → refl _)))
-sclo→subalgebra {𝓠} {𝒦} {.(fst sa)} (sub{𝑨 = 𝑨} x sa) = γ
- where
-  IH : 𝑨 IsSubalgebraOfClass 𝒦
-  IH = sclo→subalgebra x
-
-  𝑮 : Algebra 𝓠 𝑆
-  𝑮 = ∣ IH ∣
-
-  KG = fst ∥ snd IH ∥            -- KG : 𝑮 ∈ 𝒦
-  SG' = fst ∥ IH ∥               -- SG' : SUBALGEBRA 𝑮
-  𝑨' = ∣ SG' ∣                    -- 𝑨' : Algebra 𝓠 𝑆
-  𝑨'≤𝑮 = ∥ SG' ∥                 -- 𝑨'≤𝑮 : 𝑨' ≤ 𝑮
-  𝑨≅𝑨' = snd ∥ (snd IH) ∥        -- 𝑨≅𝑨' : 𝑨 ≅ 𝑨'
-  𝑨≤𝑮 : 𝑨 ≤ 𝑮
-  𝑨≤𝑮 = Iso-≤ 𝑮 𝑨 𝑨'≤𝑮 𝑨≅𝑨'
-
-  sa≤𝑮 : ∣ sa ∣ ≤ 𝑮
-  sa≤𝑮 = Trans-≤ 𝑮 ∣ sa ∣ 𝑨≤𝑮 ∥ sa ∥
-
-  γ : ∣ sa ∣ IsSubalgebraOfClass 𝒦
-  γ = 𝑮 , ((∣ sa ∣ , sa≤𝑮) , (KG , id≅ ∣ sa ∣))
-sclo→subalgebra {𝓠} {𝒦} {𝑨} (siso{𝑩} SCloB 𝑩≅𝑨) = γ
- where
-  IH : 𝑩 IsSubalgebraOfClass 𝒦
-  IH = sclo→subalgebra SCloB
-  𝔸 : Algebra _ 𝑆
-  𝔸 = ∣ IH ∣
-  SA : SUBALGEBRA 𝔸
-  SA = fst ∥ IH ∥
-  𝔸∈𝒦 : 𝔸 ∈ 𝒦
-  𝔸∈𝒦 = fst ∥ snd IH ∥
-  𝑩≅SA : 𝑩 ≅ ∣ SA ∣
-  𝑩≅SA = snd ∥ snd IH ∥
-  SA≤𝔸 : ∣ SA ∣ ≤ 𝔸
-  SA≤𝔸 = ∥ SA ∥
-  γ : 𝑨 IsSubalgebraOfClass 𝒦
-  γ = 𝔸 , SA , 𝔸∈𝒦 , trans-≅ 𝑨 𝑩 (∣ SA ∣) (sym-≅ 𝑩≅𝑨)  𝑩≅SA
-
-subalgebra→sclo : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{𝑩 : Algebra 𝓠 𝑆}
- →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ sclo 𝒦
-subalgebra→sclo{𝓠}{𝒦}{𝑩}(𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨}(sbase KA)(𝑩 , (ISO-≤ 𝑨 ∣ sa ∣ 𝑩 ∥ sa ∥ B≅sa ))
-
-subalgebra→sclo' : {𝓠 : Universe}{𝒦 : Pred (Algebra (OV 𝓠) 𝑆) (OV (OV 𝓠))}{𝑩 : Algebra (OV 𝓠) 𝑆}
- →                𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ sclo{OV 𝓠} 𝒦
-subalgebra→sclo'{𝓠}{𝒦}{𝑩}(𝑨 , sa , (KA , B≅sa)) = sub{𝑨 = 𝑨}(sbase KA)(𝑩 , (ISO-≤ 𝑨 ∣ sa ∣ 𝑩 ∥ sa ∥ B≅sa ))
-
-
-lemps⊆sp : {𝓠 : Universe} → hfunext 𝓠 𝓠
- →         {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{I : 𝓠 ̇}{ℬ : I → Algebra 𝓠 𝑆}
- →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
-          ----------------------------------------------------
- →         ⨅ ℬ IsSubalgebraOfClass (pclo 𝒦)
-
-lemps⊆sp{𝓠}hfe{𝒦}{I}{ℬ}ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , pbase 𝒦𝒜 , (⨅≅ gfe ℬ≅SA)
- where
-  𝒜 = λ i → ∣ ℬ≤𝒦 i ∣                -- 𝒜 : I → Algebra 𝓠 𝑆
-  SA = λ i → ∣ fst ∥ ℬ≤𝒦 i ∥ ∣        -- SA : I → Algebra 𝓠 𝑆
-  𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
-  𝒦𝒜 = λ i → ∣ snd ∥ ℬ≤𝒦 i ∥ ∣
-  SA≤𝒜 = λ i → snd ∣ ∥ ℬ≤𝒦 i ∥ ∣      -- SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
-  ℬ≅SA = λ i → ∥ snd ∥ ℬ≤𝒦 i ∥ ∥      -- ℬ≅SA : ∀ i → ℬ i ≅ SA i
-  h = λ i → ∣ SA≤𝒜 i ∣                 -- h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
-  ⨅SA≤⨅𝒜 = i , ii , iii
-   where
-    i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
-    i = λ x i → (h i) (x i)
-    ii : is-embedding i
-    ii = embedding-lift hfe hfe{I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
-    iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
-    iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
-
-ps⊆sp : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →      pclo{𝓠}{𝓠} (sclo 𝒦) ⊆ sclo (pclo 𝒦)
-ps⊆sp {𝓠} hfe {𝒦} {pA}(pbase{I}{𝒜} scloKAi) = sub→sclo
- where
-  sclo→sub : (i : I) → 𝒜 i IsSubalgebraOfClass 𝒦
-  sclo→sub i = sclo→subalgebra (scloKAi i)
-
-  ⨅𝒜-is-sub-pcloK : ⨅ 𝒜 IsSubalgebraOfClass (pclo{𝓠}{𝓠} 𝒦)
-  ⨅𝒜-is-sub-pcloK = lemps⊆sp hfe sclo→sub
 
-  sub→sclo : ⨅ 𝒜 ∈ sclo (pclo 𝒦)
-  sub→sclo = subalgebra→sclo ⨅𝒜-is-sub-pcloK
+  γ : ⨅ 𝒜 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+  γ = Subalgebra→SClo'{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η
 
-ps⊆sp {𝓠} hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
- (prod{I = I}{𝒜 = 𝒜} pscloa) = γ -- lem1 PSCloA -- (works)
- where
-  ζ : (i : I) → (𝒜 i) ∈ sclo (pclo 𝒦)
-  ζ i = ps⊆sp hfe (pscloa i)
-
-  ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (pclo 𝒦)
-  ξ i = sclo→subalgebra (ζ i)
-
-  η' : ⨅ 𝒜 IsSubalgebraOfClass (pclo (pclo 𝒦))
-  η' = lemps⊆sp {𝓠} hfe {pclo 𝒦}{I}{𝒜} ξ
-
-  η : ⨅ 𝒜 IsSubalgebraOfClass (pclo 𝒦)
-  η = mono-≤ (⨅ 𝒜) pclo-idem η'
-
-  γ : ⨅ 𝒜 ∈ sclo (pclo 𝒦)
-  γ = subalgebra→sclo η
-
-
-ps⊆sp {𝓠} hfe {𝒦} (piso x x₁) = siso (ps⊆sp hfe x) x₁
-
-
------------------------------------------------------------------------------------
--- Alternatives --
-
-
-lemps⊆sp' : {𝓠 : Universe} → hfunext (OV 𝓠) 𝓠
- →         {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}{I : (OV 𝓠) ̇}{ℬ : I → Algebra 𝓠 𝑆}
- →         ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
-          ----------------------------------------------------
- →         ⨅ ℬ IsSubalgebraOfClass (pclo{𝓠}{OV 𝓠} 𝒦)
-
-lemps⊆sp' {𝓠} hfe {𝒦} {I} {ℬ} ℬ≤𝒦 = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , pbase 𝒦𝒜 , (⨅≅ gfe ℬ≅SA)
- where
-  𝒜 = λ i → ∣ ℬ≤𝒦 i ∣                -- 𝒜 : I → Algebra 𝓠 𝑆
-  SA = λ i → ∣ fst ∥ ℬ≤𝒦 i ∥ ∣        -- SA : I → Algebra 𝓠 𝑆
-  𝒦𝒜 : ∀ i → 𝒜 i ∈ 𝒦
-  𝒦𝒜 = λ i → ∣ snd ∥ ℬ≤𝒦 i ∥ ∣
-  SA≤𝒜 = λ i → snd ∣ ∥ ℬ≤𝒦 i ∥ ∣      -- SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
-  ℬ≅SA = λ i → ∥ snd ∥ ℬ≤𝒦 i ∥ ∥      -- ℬ≅SA : ∀ i → ℬ i ≅ SA i
-  h = λ i → ∣ SA≤𝒜 i ∣                 -- h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
-  ⨅SA≤⨅𝒜 = i , ii , iii
-   where
-    i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
-    i = λ x i → (h i) (x i)
-    ii : is-embedding i
-    ii = embedding-lift hfe hfe{I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
-    iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
-    iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
-
-ps⊆sp' : {𝓠 : Universe}
- →       hfunext (OV 𝓠) 𝓠 → hfunext 𝓠 𝓠
- →       {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →      pclo{𝓠}{OV 𝓠} (sclo 𝒦) ⊆ sclo{OV 𝓠} (pclo{𝓠}{OV 𝓠} 𝒦)
-ps⊆sp' {𝓠} hfe hfep {𝒦} {pA}(pbase{I}{𝒜} scloKAi) = sub→sclo
- where
-  sclo→sub : (i : I) → 𝒜 i IsSubalgebraOfClass 𝒦
-  sclo→sub i = sclo→subalgebra (scloKAi i)
-
-  ⨅𝒜-is-sub-pcloK : ⨅ 𝒜 IsSubalgebraOfClass (pclo{𝓠}{OV 𝓠} 𝒦)
-  ⨅𝒜-is-sub-pcloK = lemps⊆sp' hfe sclo→sub
-
-  sub→sclo : ⨅ 𝒜 ∈ sclo (pclo 𝒦)
-  sub→sclo = subalgebra→sclo ⨅𝒜-is-sub-pcloK
-
-ps⊆sp' {𝓠} hfe hfep {𝒦} {.((∀ (i : I) → ∣ 𝒜 i ∣) , (λ f proj i → ∥ 𝒜 i ∥ f (λ args → proj args i)))}
- (prod{I = I}{𝒜 = 𝒜} pscloa) = γ
- where
-  ζ : (i : I) → (𝒜 i) ∈ sclo (pclo{𝓠}{𝓠} 𝒦)
-  ζ i = ps⊆sp{𝓠} hfep {𝒦} (pscloa i)
-
-  ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (pclo 𝒦)
-  ξ i = sclo→subalgebra{𝓠} (ζ i)
-
-  η' : ⨅ 𝒜 IsSubalgebraOfClass (pclo{𝓠}{OV 𝓠} (pclo{𝓠}{𝓠}𝒦))
-  η' = lemps⊆sp' {𝓠} hfe {pclo 𝒦}{I}{𝒜} ξ
-
-  η : ⨅ 𝒜 IsSubalgebraOfClass (pclo 𝒦)
-  η = mono-≤ (⨅ 𝒜) pclo-idem' η'
-
-  γ : ⨅ 𝒜 ∈ sclo{OV 𝓠} (pclo{𝓠}{OV 𝓠} 𝒦)
-  γ = subalgebra→sclo'{𝓠} η
-ps⊆sp' {𝓠} hfe hfep {𝒦} (piso x x₁) = siso (ps⊆sp' hfe hfep x) x₁
-
-
-
-
-
-{-We also need a way to construct products of all the algebras in a given collection.
-  More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras, we need to
-  construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
-  algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦. -}
-
-
-
-------------------------------------------------------------------------------------
--- Products of predicates and their meaning --
-{-
-Recall:
-Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
-Π {𝓤} {𝓥} {X} A = (x : X) → A x
--Π : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--Π X Y = Π Y
-syntax -Π A (λ x → b) = Π x ꞉ A , b
-Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
-Pred A 𝓥 = A → 𝓥 ̇
-⨅ : {𝓘 𝓤 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
-⨅ {𝓘}{𝓤}{I} 𝒜 =((i : I) → ∣ 𝒜 i ∣) , λ(f : ∣ 𝑆 ∣)(𝒂 : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)(i : I) → (f ̂ 𝒜 i) λ{x → 𝒂 x i}
--}
-
-ClassUniverses : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → Pred (𝓠 ̇) (OV 𝓠)
-ClassUniverses 𝒦 A = Σ 𝑨 ꞉ Algebra _ 𝑆 , (𝑨 ∈ 𝒦) × (A ≡ ∣ 𝑨 ∣)
-
-ΠU : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
-ΠU 𝒦 = Π (ClassUniverses 𝒦)
-
-ΠP : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
-ΠP 𝒦 = Π 𝒦
-
--- A proof p : Π 𝒦 is a proof that every algebra of type Algebra 𝓠 𝑆 belongs to 𝒦.
-ΠP-meaning : {𝓠 : Universe}(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
- →            Π 𝒦  →  (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ 𝒦
-ΠP-meaning 𝒦 p 𝑨 = p 𝑨
-
-
-ΠSClo : {𝓠 : Universe} (𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)) → _ ̇
-ΠSClo{𝓠} 𝒦 = Π (SClo{𝓠}{𝓠} 𝒦)
-
--- 𝕀 : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (𝓠 ⁺) → (OV 𝓠) ̇
--- 𝕀 {𝓠} 𝒦 = Σ I ꞉ 𝓠 ̇ , Σ 𝒜 ꞉ (I → Algebra 𝓠 𝑆) , ∀ i → 𝒜 i ∈ 𝒦
-
--- I→Alg : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (𝓠 ⁺)}
---  →          𝕀{𝓠} 𝒦 → Algebra 𝓠 𝑆
--- I→Alg (_ , 𝒜 , _) = ⨅ 𝒜
-
--- IAS∈PS : {𝓤 : Universe} {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
---          (𝑰 : 𝕀{(OV 𝓤)⁺} (SClo (𝑲 ((OV 𝓤)⁺))))
---        ----------------------------------------
---  →     (I→Alg{(OV 𝓤)⁺}{SClo (𝑲 ((OV 𝓤)⁺))} 𝑰) ∈ PClo{(OV 𝓤)⁺}(SClo{(OV 𝓤)⁺}(𝑲 ((OV 𝓤)⁺)))
--- IAS∈PS {𝓤}{𝑲} 𝑰 = γ
---  where
---   I : (OV 𝓤) ⁺ ̇
---   I = ∣ 𝑰 ∣
-
---   𝒜 : I → Algebra ((OV 𝓤)⁺) 𝑆
---   𝒜 = fst ∥ 𝑰 ∥
-
---   KA : (i : I) → 𝒜 i ∈ SClo (𝑲 ((OV 𝓤)⁺))
---   KA = snd ∥ 𝑰 ∥
-
---   KAP : (i : I) → 𝒜 i ∈ PClo{(OV 𝓤)⁺} (SClo{(OV 𝓤)⁺} (𝑲 ((OV 𝓤)⁺)))
---   KAP i = pbase (KA i)
-
---   γ : (I→Alg{(OV 𝓤)⁺}{𝒦 = SClo (𝑲 ((OV 𝓤)⁺))} 𝑰) ∈ PClo{(OV 𝓤)⁺} (SClo{(OV 𝓤)⁺} (𝑲 ((OV 𝓤)⁺)))
---   γ = prod{I = I}{𝒜 = 𝒜} KAP
-
--- IAS∈SP : {𝓤 : Universe} → hfunext ((OV 𝓤)⁺) ((OV 𝓤)⁺)
---  →       {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
---          (𝑰 : 𝕀{(OV 𝓤)⁺} (SClo (𝑲 ((OV 𝓤)⁺))))
---          ------------------------------------------------------------
---  →       (I→Alg{(OV 𝓤)⁺}{SClo (𝑲 ((OV 𝓤)⁺))} 𝑰) ∈
---                 (SClo{(OV 𝓤)⁺} (PClo{(OV 𝓤)⁺} (𝑲 ((OV 𝓤)⁺))))
--- IAS∈SP {𝓤} hfe {𝑲} 𝑰 = PS⊆SP{(OV 𝓤)⁺} hfe (IAS∈PS{𝓤}{𝑲} 𝑰)
 
+PS⊆SP''' hfe (piso x x₁) = siso (PS⊆SP''' hfe x) x₁
+
+
+-- S⊆SP : {𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
+--       ------------------------------------
+--  →     SClo{𝓠}{𝓠} 𝒦  ⊆  SClo (PClo 𝒦)
+-- S⊆SP  = SClo-mono PClo-expa
+
+-- -- SPS⊆SP : {𝓠 : Universe} → hfunext 𝓠 𝓠 → {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
+-- --         ----------------------------------------
+-- --  →       SClo{𝓠}{𝓠} (PClo{𝓠}{𝓠} (SClo{𝓠}{𝓠} 𝒦)) ⊆ SClo{𝓠}{𝓠} (PClo{𝓠}{𝓠} 𝒦)
+
+-- -- SPS⊆SP {𝓠} hfe {𝒦} {.(Lift (Σ.pr₁ _) , (λ f x₁ → lift (Σ.pr₂ _ f (λ i → Lift.lower (x₁ i)))))} (sbase x) = {!γ!}
+-- -- SPS⊆SP hfe {𝒦} {.(Σ.pr₁ sa)} (sub x sa) = {!!}
+-- -- SPS⊆SP hfe {𝒦} {𝑨} (siso x x₁) = {!!}
+-- -- (sbase (pbase (sbase x))) = sbase ? -- (pbase x)
+-- -- SPS⊆SP {𝓠} hfe {𝒦} {.(fst sa)} (sbase (pbase (sub x sa))) = sub ? ? -- (S⊆SP x) sa
+-- -- SPS⊆SP hfe {𝒦} {𝑨} (sbase (pbase (siso{𝑩} x x₁))) = siso {𝑨 = 𝑩}{𝑩 = 𝑨} (S⊆SP x) x₁
+
+-- -- SPS⊆SP hfe {𝒦} {.((∀ i → ∣ 𝒜 i ∣ ) , (λ f 𝒂 i → ∥ 𝒜 i ∥ f (λ args → 𝒂 args i)))} (sbase (prod{I}{𝒜} x)) = PS⊆SP hfe (prod x)
+-- -- SPS⊆SP hfe {𝒦} {𝑨} (sbase (piso{𝑩} x x₁)) = siso{𝑨 = 𝑩}{𝑩 = 𝑨} (PS⊆SP hfe x) x₁
+-- -- SPS⊆SP hfe {𝒦} {.(Σ.pr₁ sa)} (sub x sa) = sub (SPS⊆SP hfe x) sa
+-- -- SPS⊆SP hfe {𝒦} {𝑨} (siso x x₁) = siso (SPS⊆SP hfe x) x₁
+
+
+-- {-We also need a way to construct products of all the algebras in a given collection.
+--   More precisely, if 𝒦 : Pred (Algebra 𝓤 𝑆) 𝓣 is a class of algebras, we need to
+--   construct an index set I and a function 𝒜 : I → Algebra 𝓤 𝑆, where 𝒜 runs through all
+--   algebras in 𝒦, so that we can construct the product ⨅ 𝒜 of all algebras in 𝒦. -}
+
+
+
+-- ------------------------------------------------------------------------------------
+-- -- Products of predicates and their meaning --
+-- {-
+-- Recall:
+-- Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-- Π {𝓤} {𝓥} {X} A = (x : X) → A x
+-- -Π : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-- -Π X Y = Π Y
+-- syntax -Π A (λ x → b) = Π x ꞉ A , b
+-- Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
+-- Pred A 𝓥 = A → 𝓥 ̇
+-- ⨅ : {𝓘 𝓤 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
+-- ⨅ {𝓘}{𝓤}{I} 𝒜 =((i : I) → ∣ 𝒜 i ∣) , λ(f : ∣ 𝑆 ∣)(𝒂 : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)(i : I) → (f ̂ 𝒜 i) λ{x → 𝒂 x i}
+-- -}
+
+-- ClassUniverses : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → Pred (𝓠 ̇) (OV 𝓠)
+-- ClassUniverses 𝒦 A = Σ 𝑨 ꞉ Algebra _ 𝑆 , (𝑨 ∈ 𝒦) × (A ≡ ∣ 𝑨 ∣)
+
+-- ΠU : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+-- ΠU 𝒦 = Π (ClassUniverses 𝒦)
+
+-- ΠP : {𝓠 : Universe} → Pred (Algebra 𝓠 𝑆) (OV 𝓠) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺ ̇
+-- ΠP 𝒦 = Π 𝒦
+
+-- -- A proof p : Π 𝒦 is a proof that every algebra of type Algebra 𝓠 𝑆 belongs to 𝒦.
+-- ΠP-meaning : {𝓠 : Universe}(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
+--  →            Π 𝒦  →  (𝑨 : Algebra 𝓠 𝑆) → 𝑨 ∈ 𝒦
+-- ΠP-meaning 𝒦 p 𝑨 = p 𝑨
+
+
+-- ΠSClo : {𝓠 : Universe} (𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)) → _ ̇
+-- ΠSClo{𝓠} 𝒦 = Π (SClo{𝓠}{𝓠} 𝒦)
 
 
 ℑ : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆) (OV 𝓤) → (OV 𝓤) ̇
@@ -1007,34 +680,8 @@ ClassUniverses 𝒦 A = Σ 𝑨 ꞉ Algebra _ 𝑆 , (𝑨 ∈ 𝒦) × (A ≡ �
  →    (i : ℑ 𝒦) → Algebra 𝓤 𝑆
 ℑ→A _ i = ∣ i ∣
 
--- Class-Product : {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra (OV 𝓤) 𝑆
--- Class-Product 𝒦 = ⨅ (ℑ→A 𝒦)
-
-class-product : {𝓠 : Universe}(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)) → Algebra (OV 𝓠) 𝑆
+class-product : {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra (OV 𝓤) 𝑆
 class-product 𝒦 = ⨅ (ℑ→A 𝒦)
-
-class-prod-s-∈-ps : {𝓠 : Universe}{𝑲 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →  class-product (sclo 𝑲) ∈ pclo{𝓠}{(OV 𝓠)} (sclo 𝑲)
-class-prod-s-∈-ps {𝓠}{𝑲} = γ
- where
-  I : (OV 𝓠) ̇
-  I = ℑ{𝓠} (sclo 𝑲)
-  𝒜 : I → Algebra 𝓠 𝑆
-  𝒜 = ℑ→A{𝓠} (sclo 𝑲)
-  ⨅𝒜 : Algebra (OV 𝓠) 𝑆
-  ⨅𝒜 = ⨅ 𝒜
-  KA : (i : I) → 𝒜 i ∈ (sclo 𝑲)
-  KA i = ∥ i ∥
-  γ : ⨅ 𝒜 ∈ pclo{𝓠}{OV 𝓠} (sclo 𝑲)
-  γ = pbase{I = I}{𝒜 = 𝒜} KA
-
-
-class-prod-s-∈-sp : {𝓠 : Universe}
- →                  hfunext (OV 𝓠) 𝓠 → hfunext 𝓠 𝓠
- →                  {𝑲 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
-                    --------------------------------------------------
- →                  class-product (sclo 𝑲) ∈ sclo (pclo 𝑲)
-class-prod-s-∈-sp {𝓠} hfe hfep {𝑲} = ps⊆sp' {𝓠} hfe hfep {𝑲} (class-prod-s-∈-ps{𝓠} {𝑲})
 
 class-product-S-∈-PS : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  →       class-product (SClo{𝓤}{𝓤} 𝒦) ∈ PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝒦)
@@ -1053,36 +700,73 @@ class-product-S-∈-PS {𝓤}{𝒦} = γ
   γ : ⨅ 𝒜 ∈ PClo{𝓤}{OV 𝓤} (SClo 𝒦)
   γ = prod{I = I}{𝒜 = 𝒜} lKA
 
-class-prod-S-∈-SP : {𝓤 : Universe} → hfunext (OV 𝓤) 𝓤 → hfunext (OV 𝓤) (OV 𝓤)
+
+class-product-S-∈-PS' : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+ →       class-product (SClo{𝓤}{𝓤} 𝒦) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+class-product-S-∈-PS' {𝓤}{𝒦} = γ
+ where
+  I : (OV 𝓤) ̇
+  I = ℑ{𝓤} (SClo{𝓤}{𝓤} 𝒦)
+  𝒜 : I → Algebra 𝓤 𝑆
+  𝒜 = ℑ→A{𝓤} (SClo 𝒦)
+  l𝒜 : I → Algebra (OV 𝓤) 𝑆
+  l𝒜 i = lift-alg (𝒜 i) (OV 𝓤)
+
+  SA : (i : I) → 𝒜 i ∈ (SClo{𝓤}{𝓤} 𝒦)
+  SA i = ∥ i ∥
+
+  SlA : (i : I) → l𝒜 i ∈ (SClo{𝓤}{OV 𝓤} 𝒦)
+  SlA i = lift-alg-SClo (SA i)
+  PSllA : (i : I) → lift-alg (l𝒜 i) (OV 𝓤) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+  PSllA i = pbase (SlA i)
+  γ' : ⨅ l𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+  γ' = prod{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)}{I = I}{𝒜 = l𝒜} PSllA
+
+  lid : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ≅ lift-alg (lift-alg (𝒜 i) (OV 𝓤)) (OV 𝓤)
+  lid i = lift-alg-idemp{𝓤}{OV 𝓤}{OV 𝓤}{𝒜 i}
+
+  PSlA : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+  PSlA i = piso (PSllA i) (sym-≅ (lid i))
+
+  lAi≅Ai : (i : I) → (lift-alg (𝒜 i) (OV 𝓤) ≅ 𝒜 i)
+  lAi≅Ai = λ i → (sym-≅ lift-alg-≅)
+
+  lA≅A : ⨅ l𝒜 ≅ ⨅ 𝒜
+  lA≅A = ⨅≅ gfe lAi≅Ai
+
+  γ : ⨅ 𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+  γ = piso γ' lA≅A
+
+
+class-prod-S-∈-SP' : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
  →                  {𝑲 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
                     --------------------------------------------------
- →                  class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝑲)
-class-prod-S-∈-SP {𝓤} hfe hfe' {𝑲} = γ
+ →                  (class-product (SClo{𝓤}{𝓤} 𝑲)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
+
+class-prod-S-∈-SP' {𝓤} hfe {𝑲} = γ
  where
-  ξ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝑲)
-  ξ = class-product-S-∈-PS {𝓤}{𝑲}
+  ξ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝑲)
+  ξ = class-product-S-∈-PS' {𝓤}{𝑲}
 
-  γ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝑲)
-  γ = PS⊆SP'' {𝓤} hfe hfe' ξ
--- class-product : {𝓠 : Universe}(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)) → Algebra (OV 𝓠) 𝑆
--- class-product 𝒦 = ⨅ (ℑ→A 𝒦)
-
--- PS⊆SP' : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤) → hfunext (OV 𝓤) 𝓤
---  →       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
---  →       PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦) ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+  γ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
+  γ = PS⊆SP''' {𝓤} hfe ξ
 
 
--- ias∈sp : {𝓤 : Universe} → hfunext ((OV 𝓤)⁺) ((OV 𝓤)⁺)
---  →       {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
---          (𝑰 : 𝕀{(OV 𝓤)⁺} (SClo (𝑲 ((OV 𝓤)⁺))))
---          ------------------------------------------------------------
---  →       (I→Alg{(OV 𝓤)⁺}{SClo (𝑲 ((OV 𝓤)⁺))} 𝑰) ∈
---                 (SClo{(OV 𝓤)⁺} (PClo{(OV 𝓤)⁺} (𝑲 ((OV 𝓤)⁺))))
--- ias∈sp {𝓤} hfe {𝑲} 𝑰 = PS⊆SP{(OV 𝓤)⁺} hfe (IAS∈PS{𝓤}{𝑲} 𝑰)
 
 
--- ⨅Class : {𝓤 : Universe} → Pred (Algebra (OV 𝓤) 𝑆) ((OV 𝓤)⁺) → Algebra ((OV 𝓤)⁺) 𝑆
--- ⨅Class {𝓤} 𝒦 = ⨅ (I→Alg{𝓠 = (OV 𝓤)}{𝒦})
+-- class-prod-S-∈-SP : {𝓤 : Universe} → hfunext (OV 𝓤) 𝓤 → hfunext (OV 𝓤) (OV 𝓤)
+--  →                  {𝑲 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--                     --------------------------------------------------
+--  →                  class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝑲)
+-- class-prod-S-∈-SP {𝓤} hfe hfe' {𝑲} = γ
+--  where
+--   ξ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝑲)
+--   ξ = class-product-S-∈-PS {𝓤}{𝑲}
+
+--   γ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝑲)
+--   γ = PS⊆SP'' {𝓤} hfe hfe' ξ
+
+
 
 
 ------------------------------------------------------------------------------------------
@@ -1250,15 +934,6 @@ hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap 
                                  ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
                                  ∣ ϕ ∣ q              ∎
 
--- ⊧-≅ : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
---       (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(p q : Term{𝓧}{X})
---  →    𝑨 ⊧ p ≈ q → 𝑨 ≅ 𝑩 → 𝑩 ⊧ p ≈ q
--- ⊧-≅ 𝑨 𝑩 p q Apq (fh , gh , f∼g , g∼f) = γ
-
--- lemma-⊧-≅ : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
---            (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
--- lemma-⊧-≅ {𝓠}{𝓤}{𝓧}{X}{𝑨}{𝑩} p q Apq AisoB = γ
-
 --------------------------------------------------------------------------------
  --Identities for product closure
 pclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
@@ -1299,7 +974,7 @@ sclo-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(O
 sclo-id1 p q α (sbase x) = lift-alg-⊧ _ p q (α x)
 sclo-id1 {𝓤}{𝓧}{X}{𝒦} p q α (sub {𝑨 = 𝑨} SCloA sa) =
  --Apply subalgebras-preserve-identities to the class 𝒦 ∪ ｛ 𝑨 ｝
- subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅ ∣ sa ∣) γ
+ subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅) γ
   where
    β : 𝑨 ⊧ p ≈ q
    β = sclo-id1 {𝓤}{𝓧}{X}p q α SCloA
@@ -1373,7 +1048,7 @@ vclo-id1 {𝓤}{𝓧}{X} p q α (vprod{I = I}{𝒜 = 𝒜} VClo𝒜) = γ
   γ = lift-products-preserve-ids p q I 𝒜 IH
 
 vclo-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vsub {𝑨 = 𝑨} VCloA sa ) =
- subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅ ∣ sa ∣) γ
+ subalgebras-preserve-identities p q (∣ sa ∣ , 𝑨 , sa , inj₂ 𝓇ℯ𝒻𝓁 , id≅) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = vclo-id1 {𝓤}{𝓧}{X}p q α VCloA
@@ -1419,68 +1094,166 @@ vclo-id2 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(O
 vclo-id2 p KA = p (vclo-base KA)
 
 
--- Ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) (OV 𝓤)
--- Ψ' (p , q) = ∀ ti → ∣ (𝑻ϕ ti) ∣ p ≡ ∣ (𝑻ϕ ti) ∣ q
 
 
--- 𝑻img⊧Ψ' : ∀ p q → (p , q) ∈ Ψ' → (ti : 𝑻img)
---         -----------------------------------------------
---  →       ∣ (𝑻ϕ ti) ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ (𝑻ϕ ti) ∣ ((q ̇ 𝑻) ℊ)
 
--- 𝑻img⊧Ψ' p q pΨq ti = γ
+
+-- -----------=====================================================================================
+
+-- -- PS⊆SP' : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
+-- --  →       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+-- --  →       PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦) ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+
+-- -- PS⊆SP' {𝓤} hfe {𝒦} (pbase{𝑨} (sbase x)) = γ
+-- --  where
+-- --   ξ : 𝑨 ∈ PClo{𝓤}{OV 𝓤} 𝒦
+-- --   ξ = pbase x
+-- --   γ : (lift-alg 𝑨 (OV 𝓤)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   γ = sbase ξ
+-- -- PS⊆SP' {𝓤} hfe {𝒦} (pbase (sub x sa)) = γ
+-- --  where
+-- --   SCloSA : ∣ sa ∣ ∈ SClo{𝓤}{OV 𝓤} 𝒦
+-- --   SCloSA = sub x sa
+-- --   SCloSA' : (lift-alg ∣ sa ∣ (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} 𝒦
+-- --   SCloSA' = lift-alg-SClo{𝓤}{OV 𝓤}{OV 𝓤}{𝒦}{∣ sa ∣} SCloSA
+-- --   Smono : SClo{𝓤}{OV 𝓤} 𝒦 ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   Smono = SClo-mono'{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = (PClo{𝓤}{OV 𝓤} 𝒦)} (λ 𝑨 → pbase{𝓤}{OV 𝓤})
+-- --   γ : SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦) (lift-alg ∣ sa ∣ (OV 𝓤))
+-- --   γ = Smono SCloSA'
+
+-- -- PS⊆SP' {𝓤} hfe {𝒦} (pbase (siso{𝑨}{𝑩} SCloA AB)) = γ
+-- --  where
+-- --   lB : Algebra (OV 𝓤) 𝑆
+-- --   lB = lift-alg 𝑩 (OV 𝓤)
+-- --   α : 𝑨 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   α = SClo-mono'{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = PClo 𝒦}(λ 𝑨 → pbase{𝓤 = 𝓤}{𝓦 = (OV 𝓤)}{𝑨 = 𝑨}) SCloA
+-- --   BA : 𝑩 ≤ 𝑨
+-- --   BA = Iso-≤ 𝑨 𝑩 refl-≤ (sym-≅ AB)
+-- --   β : SUBALGEBRA 𝑨
+-- --   β = 𝑩 , BA
+-- --   ξ : 𝑩 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   ξ = sub α β
+-- --   γ : (lift-alg 𝑩 (OV 𝓤)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   γ = lift-alg-SClo {OV 𝓤}{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑩} ξ
+
+-- -- PS⊆SP' {𝓤} hfe {𝒦} (prod{I = I}{𝒜 = 𝒜} pscloa) = γ
+-- --  where
+-- --   τ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+-- --   τ i = pscloa i
+-- --   ζ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   ζ i = PS⊆SP' hfe (τ i)
+-- --   ξ : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   ξ i = SClo→Subalgebra'{OV 𝓤}{OV 𝓤} (ζ i)
+-- --   η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦))
+-- --   η' = LemPS⊆SP'{𝓘 = (OV 𝓤)} {𝓤 = (OV 𝓤)} hfe hfe {𝒦 = PClo{𝓤}{OV 𝓤} 𝒦}{I}{𝒜} ξ
+-- --   pci : (PClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
+-- --   pci = PClo-idem'{𝓤}{𝓦 = (OV 𝓤)}
+-- --   η : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   η = mono-≤ (⨅ 𝒜) pci η'
+-- --   γ : ⨅ 𝒜 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- --   γ = Subalgebra→SClo'{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η
+-- -- PS⊆SP' {𝓤} hfe (piso x x₁) = siso (PS⊆SP' hfe x) x₁
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- PS⊆SP'' : {𝓤 : Universe} → hfunext (OV 𝓤) 𝓤 → hfunext (OV 𝓤) (OV 𝓤)
+--  →       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--  →       PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝒦) ⊆ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+-- -- →       PClo{𝓤}{OV 𝓤} (SClo{𝓤}{𝓤} 𝒦) ⊆ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+-- PS⊆SP'' {𝓤} hfe hfe' {𝒦} (pbase{𝑨} (sbase x)) = γ
 --  where
---   𝑪 : Algebra 𝓤 𝑆
---   𝑪 = ∣ ti ∣
-
---   ϕ : hom 𝑻 𝑪
---   ϕ = 𝑻ϕ ti
-
---   pCq : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
---   pCq = pΨq ti
-
---   γ : ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
---   γ = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pCq ∙ (ap ∣ ϕ ∣(term-agree q))
-
-
-
-
--- ψ'' : {𝑪 : Algebra 𝓤 𝑆}(ϕ : hom (𝑻{𝓤}{X}) 𝑪) → Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) _ -- (OV 𝓤)
--- ψ'' ϕ (p , q) = ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-
--- ψ' : Pred (∣ 𝑻 ∣ × ∣ 𝑻 ∣) (OV 𝓤)
--- ψ' (p , q) = ∀ (𝑪 : Algebra 𝓤 𝑆) (ϕ : hom (𝑻{𝓤}{X}) 𝑪) → ψ''{𝑪} ϕ (p , q)
-
--- ψ'Rel : Rel ∣ 𝑻 ∣ (OV 𝓤)
--- ψ'Rel p q = ψ' (p , q)
-
-
-
-
-
--- Ψ''⊧ : {𝑪 : Algebra 𝓤 𝑆}(ϕ : hom (𝑻{𝓤}{X}) 𝑪)
---  →     ∀ p q → (p , q) ∈ (ψ''{𝑪} ϕ)
---        ----------------------------------------
---  →     ∣ ϕ ∣ ((p ̇ 𝑻) ℊ) ≡ ∣ ϕ ∣ ((q ̇ 𝑻) ℊ)
-
--- Ψ''⊧ ϕ p q pΨq = (ap ∣ ϕ ∣(term-agree p))⁻¹ ∙ pΨq ∙ (ap ∣ ϕ ∣(term-agree q))
-
-
-
-
--- Class-Product-S-is-in-PS : {𝓤 : Universe} {𝑲 : (𝓠 : Universe) → Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
---          ----------------------------------------
---  →       (Class-Product (SClo (𝑲 𝓤))) ∈ PClo{(OV 𝓤)} (SClo{(OV 𝓤)} (𝑲 ((OV 𝓤))))
--- Class-Product-S-is-in-PS {𝓤}{𝑲} = γ
+--   ξ : 𝑨 ∈ PClo{𝓤}{𝓤} 𝒦
+--   ξ = pbase x
+--   γ : (lift-alg 𝑨 (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   γ = sbase ξ
+-- PS⊆SP'' {𝓤} hfe hfe' {𝒦} (pbase (sub x sa)) = γ
 --  where
---   𝒜 : ℑ (SClo (𝑲 (OV 𝓤))) → Algebra (OV 𝓤) 𝑆
---   𝒜 = ℑ→A (SClo (𝑲 (OV 𝓤)))
+--   SCloSA : ∣ sa ∣ ∈ SClo{𝓤}{𝓤} 𝒦
+--   SCloSA = sub x sa
+--   SCloSA' : (lift-alg ∣ sa ∣ (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} 𝒦
+--   SCloSA' = lift-alg-SClo{𝓤}{𝓤}{OV 𝓤}{𝒦}{∣ sa ∣} SCloSA
+--   Smono : SClo{𝓤}{OV 𝓤} 𝒦 ⊆ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   Smono = SClo-mono{𝓤}{OV 𝓤}{𝒦₁ = 𝒦}{𝒦₂ = (PClo{𝓤}{𝓤} 𝒦)} pclo-base
+--   γ : SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦) (lift-alg ∣ sa ∣ (OV 𝓤))
+--   γ = Smono SCloSA'
 
---   KA : (i : ℑ (SClo (𝑲 (OV 𝓤)))) → 𝒜 i ∈ SClo (𝑲 (OV 𝓤))
---   KA i = ∥ i ∥
+-- PS⊆SP'' {𝓤} hfe hfe'{𝒦} (pbase (siso{𝑨}{𝑩} SCloA AB)) = γ
+--  where
+--   lA lB : Algebra (OV 𝓤) 𝑆
+--   lA = lift-alg 𝑨 (OV 𝓤)
+--   lB = lift-alg 𝑩 (OV 𝓤)
+--   α : 𝑨 ∈ SClo{𝓤}{𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   α = SClo-mono'{𝓤}{𝓤}{𝒦₁ = 𝒦}{𝒦₂ = PClo 𝒦}(λ 𝑨 → pbase{𝓤 = 𝓤}{𝓦 = 𝓤}{𝑨 = 𝑨}) SCloA
+--   α' : lA ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   α' = lift-alg-SClo{𝓤}{𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{𝓤} 𝒦)}{𝑩 = 𝑨} α
+--   lA≅lB : lA ≅ lB
+--   lA≅lB = lift-alg-iso 𝓤 (OV 𝓤) 𝑨 𝑩 AB
+--   γ : (lift-alg 𝑩 (OV 𝓤)) ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   γ = siso α' lA≅lB
 
---   KAP : (i : ℑ (SClo (𝑲 (OV 𝓤)))) → 𝒜 i ∈ PClo (SClo (𝑲 (OV 𝓤)))
---   KAP i = pbase (KA i)
+-- PS⊆SP'' {𝓤} hfe hfe' {𝒦} (prod{I = I}{𝒜 = 𝒜} pscloa) = γ
+--  where
+--   ⨅A : Algebra (OV 𝓤) 𝑆
+--   ⨅A = ⨅ 𝒜
 
---   γ : (Class-Product (SClo (𝑲 𝓤))) ∈ PClo{(OV 𝓤)} (SClo{(OV 𝓤)} (𝑲 ((OV 𝓤))))
---   γ = {!prod{I = (ℑ (SClo (𝑲 (OV 𝓤))))} ? !} -- prod ? -- prod{I = ℑ (SClo (𝑲 (OV 𝓤)))}{𝒜 = 𝒜} KAP
---  --prod : {I : 𝓤 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → 𝒜 i ∈ PClo 𝒦) → ⨅ 𝒜 ∈ PClo 𝒦
+--   ζ : (i : I) → lift-alg (𝒜 i) (OV 𝓤) ∈ SClo{𝓤}{OV 𝓤}(PClo{𝓤}{𝓤} (𝒦))
+--   ζ i = PS⊆SP'' hfe hfe' (pscloa i)
+
+--   ξ : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) IsSubalgebraOfClass (PClo{𝓤}{𝓤} 𝒦)
+--   ξ i = SClo→Subalgebra'{𝓤}{OV 𝓤} (ζ i)
+
+--   η' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤}𝒦))
+--   η' = LemPS⊆SP'{𝓘 = (OV 𝓤)} {𝓤 = 𝓤} hfe' hfe {𝒦 = PClo{𝓤}{𝓤} 𝒦}{I}{𝒜} ξ
+
+--   pci : (PClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤}𝒦)) ⊆ PClo{𝓤}{OV 𝓤} 𝒦
+--   pci = PClo-idem''{𝓤}{𝓦 = (OV 𝓤)}
+
+--   η : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{OV 𝓤} 𝒦)
+--   η = mono-≤ (⨅ 𝒜) pci η'
+
+--   η'' : ⨅ 𝒜 IsSubalgebraOfClass (PClo{𝓤}{𝓤} 𝒦)
+--   η'' = {!!} -- mono-≤ (⨅ 𝒜) pci η'
+
+--   γ' : ⨅ 𝒜 ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝒦)
+--   γ' = Subalgebra→SClo'{OV 𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{OV 𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η
+-- -- Subalgebra→SClo' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}{𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
+-- --  →                𝑪 IsSubalgebraOfClass 𝒦 → 𝑪 ∈ SClo{𝓤}{𝓦} 𝒦
+--   γ : ⨅ 𝒜 ∈ SClo{𝓤}{OV 𝓤} (PClo{𝓤}{𝓤} 𝒦)
+--   γ = Subalgebra→SClo'{𝓤}{OV 𝓤}{𝒦 = (PClo{𝓤}{𝓤} 𝒦)}{𝑪 = ⨅ 𝒜} η''
+
+-- PS⊆SP'' {𝓤} hfe hfe'(piso x x₁) = siso (PS⊆SP'' hfe hfe' x) x₁
+
+
+
+-- PClo-idem' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → PClo{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓦} 𝒦) ⊆ PClo{𝓤}{𝓦} 𝒦
+-- PClo-idem' {𝓤}{𝓦} {𝒦} (pbase x) = piso x lift-alg-≅
+-- PClo-idem' {𝓤}{𝓦} {𝒦} (prod{I}{𝒜} x) = {!!}
+-- PClo-idem' (piso x x₁) = piso (PClo-idem' x) x₁
+
+
+-- PClo-idem'' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+--  →          PClo{𝓤}{𝓤 ⊔ 𝓦} (PClo{𝓤}{𝓤} 𝒦) ⊆ PClo{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+-- PClo-idem'' {𝓤}{𝓦} {𝒦} (pbase x) = {!!} -- piso x lift-alg-≅
+-- PClo-idem'' {𝓤}{𝓦} {𝒦} (prod{I}{𝒜} x) = {!!} -- prod{I = I}{𝒜 = 𝒜} λ i → PClo-idem'{𝓤}{𝓦}{𝒦} (x i)
+-- PClo-idem'' {𝓤}{𝓦} {𝒦} (piso x x₁) = piso (PClo-idem''{𝓤}{𝓦} x) x₁
+
