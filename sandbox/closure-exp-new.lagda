@@ -558,65 +558,138 @@ module _
 
  ps⊆sp (piso x x₁) = siso (ps⊆sp x) x₁
 
-ℑ : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆) (OV 𝓤) → (OV 𝓤) ̇
-ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
 
-ℑ→A : {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →    (i : ℑ 𝒦) → Algebra 𝓤 𝑆
-ℑ→A _ i = ∣ i ∣
+module _ {𝓤 𝓦 𝓘 : Universe} {𝒦₀ : Pred (Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓘) 𝑆)(OV (𝓤 ⊔ 𝓦 ⊔ 𝓘))} where
 
-class-product : {𝓤 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra (OV 𝓤) 𝑆
-class-product 𝒦 = ⨅ (ℑ→A 𝒦)
+--  uwi : Universe
+--  uwi = 𝓤 ⊔ 𝓦 ⊔ 𝓘
 
-class-product-S-∈-PS : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →       class-product (SClo{𝓤}{𝓤} 𝒦) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
-class-product-S-∈-PS {𝓤}{𝒦} = γ
- where
-  I : (OV 𝓤) ̇
-  I = ℑ{𝓤} (SClo{𝓤}{𝓤} 𝒦)
-  𝒜 : I → Algebra 𝓤 𝑆
-  𝒜 = ℑ→A{𝓤} (SClo 𝒦)
-  l𝒜 : I → Algebra (OV 𝓤) 𝑆
-  l𝒜 i = lift-alg (𝒜 i) (OV 𝓤)
+--  ℑ : (OV uwi) ̇
+--  ℑ = Σ 𝑨 ꞉ (Algebra uwi 𝑆) , 𝑨 ∈ 𝒦₀
 
-  SA : (i : I) → 𝒜 i ∈ (SClo{𝓤}{𝓤} 𝒦)
-  SA i = ∥ i ∥
+--  ℑ→A : (i : ℑ) → Algebra uwi 𝑆
+--  ℑ→A i = ∣ i ∣
 
-  SlA : (i : I) → l𝒜 i ∈ (SClo{𝓤}{OV 𝓤} 𝒦)
-  SlA i = lift-alg-SClo (SA i)
-  PSllA : (i : I) → lift-alg (l𝒜 i) (OV 𝓤) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
-  PSllA i = pbase (SlA i)
-  γ' : ⨅ l𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
-  γ' = prod{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)}{I = I}{𝒜 = l𝒜} PSllA
+--  class-product : Algebra (OV uwi) 𝑆
+--  class-product = ⨅ ℑ→A
 
-  lid : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ≅ lift-alg (lift-alg (𝒜 i) (OV 𝓤)) (OV 𝓤)
-  lid i = lift-alg-idemp{𝓤}{OV 𝓤}{OV 𝓤}{𝒜 i}
+ 
 
-  PSlA : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
-  PSlA i = piso (PSllA i) (sym-≅ (lid i))
+-- module _
+--  {𝓤 𝓦 𝓘 : Universe}
+--  {𝒦₀ : Pred (Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓘) 𝑆)(OV (𝓤 ⊔ 𝓦 ⊔ 𝓘))}
+--  {hfe : hfunext 𝓘 (𝓤 ⊔ 𝓦 ⊔ 𝓘)} where
 
-  lAi≅Ai : (i : I) → (lift-alg (𝒜 i) (OV 𝓤) ≅ 𝒜 i)
-  lAi≅Ai = λ i → (sym-≅ lift-alg-≅)
+ 𝓐 𝓤' 𝓦' 𝓘' 𝓐' : Universe
+ 𝓐 = 𝓤 ⊔ 𝓦 ⊔ 𝓘
+ -- NOTATION OV 𝓐 = 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) ⊔ (𝓦 ⁺) ⊔ (𝓘 ⁺)
+ 𝓤' = OV 𝓤
+ 𝓦' = OV 𝓦
+ 𝓘' = OV 𝓘
+ 𝓐' = (𝓤' ⊔ 𝓦' ⊔ 𝓘')
 
-  lA≅A : ⨅ l𝒜 ≅ ⨅ 𝒜
-  lA≅A = ⨅≅ gfe lAi≅Ai
+ cpK₀ : Algebra (OV 𝓐) 𝑆
+ cpK₀ = (⨅ (λ (i : (Σ 𝑨 ꞉ (Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓘) 𝑆) , 𝑨 ∈ 𝒦₀)) → ∣ i ∣))
 
-  γ : ⨅ 𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
-  γ = piso γ' lA≅A
+ cp : Pred (Algebra 𝓐 𝑆)(OV 𝓐) → Algebra (OV 𝓐) 𝑆
+ cp 𝒦 = (⨅ (λ (i : (Σ 𝑨 ꞉ (Algebra (𝓤 ⊔ 𝓦 ⊔ 𝓘) 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣))
+
+ 𝒦' : Pred (Algebra (OV 𝓐) 𝑆) (OV 𝓐)
+ 𝒦' = λ (𝑨' : Algebra 𝓐' 𝑆) → Σ 𝑨 ꞉ Algebra 𝓐 𝑆 , (𝑨 ∈ 𝒦₀) × ((lift-alg 𝑨 𝓐') ≅ 𝑨')
+ lift-class : Pred (Algebra 𝓐 𝑆)(OV 𝓐) → Pred (Algebra (OV 𝓐) 𝑆) (OV 𝓐)
+ lift-class 𝒦 = λ (𝑨' : Algebra 𝓐' 𝑆) → Σ 𝑨 ꞉ Algebra 𝓐 𝑆 , (𝑨 ∈ 𝒦) × ((lift-alg 𝑨 𝓐') ≅ 𝑨')
 
 
-class-prod-S-∈-SP : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
- →                  {𝑲 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                    --------------------------------------------------
- →                  (class-product (SClo{𝓤}{𝓤} 𝑲)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
+ -- 𝒦' : Pred (Algebra 𝓐' 𝑆) (OV 𝓐) -- (OV 𝓐')
+ -- 𝒦' = λ (𝑨' : Algebra 𝓐' 𝑆) → Σ 𝑨 ꞉ Algebra 𝓐 𝑆 , (𝑨 ∈ 𝒦₀) × ((lift-alg 𝑨 𝓐') ≅ 𝑨')
 
-class-prod-S-∈-SP {𝓤} hfe {𝑲} = γ
- where
-  ξ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝑲)
-  ξ = class-product-S-∈-PS {𝓤}{𝑲}
+ -- class-product-s-∈-ps :  ∈ pclo{𝓤}{𝓦}{𝓘} (sclo{𝓤}{𝓦}{𝓘} 𝒦₀)
+ -- class-product-s-∈-ps = {!!}
+ -- class-product-s-∈-ps :
+ --  (class-product{𝓤'}{𝓦'}{𝓘'}{𝒦}) ∈ pclo{𝓤}{𝓦}{𝓘} (sclo{𝓤}{𝓦}{𝓘} 𝒦₀)
+ -- class-product-s-∈-ps = {!!}
+--  where
+--   I : (OV 𝓤) ̇
+--   I = ℑ{𝓤} (SClo{𝓤}{𝓤} 𝒦)
+--   𝒜 : I → Algebra 𝓤 𝑆
+--   𝒜 = ℑ→A{𝓤} (SClo 𝒦)
+--   l𝒜 : I → Algebra (OV 𝓤) 𝑆
+--   l𝒜 i = lift-alg (𝒜 i) (OV 𝓤)
 
-  γ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
-  γ = {!!} -- ps⊆sp {𝓤} ? ξ
+--   SA : (i : I) → 𝒜 i ∈ (SClo{𝓤}{𝓤} 𝒦)
+--   SA i = ∥ i ∥
+
+--   SlA : (i : I) → l𝒜 i ∈ (SClo{𝓤}{OV 𝓤} 𝒦)
+--   SlA i = lift-alg-SClo (SA i)
+--   PSllA : (i : I) → lift-alg (l𝒜 i) (OV 𝓤) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+--   PSllA i = pbase (SlA i)
+--   γ' : ⨅ l𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+--   γ' = prod{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)}{I = I}{𝒜 = l𝒜} PSllA
+
+--   lid : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ≅ lift-alg (lift-alg (𝒜 i) (OV 𝓤)) (OV 𝓤)
+--   lid i = lift-alg-idemp{𝓤}{OV 𝓤}{OV 𝓤}{𝒜 i}
+
+--   PSlA : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+--   PSlA i = piso (PSllA i) (sym-≅ (lid i))
+
+--   lAi≅Ai : (i : I) → (lift-alg (𝒜 i) (OV 𝓤) ≅ 𝒜 i)
+--   lAi≅Ai = λ i → (sym-≅ lift-alg-≅)
+
+--   lA≅A : ⨅ l𝒜 ≅ ⨅ 𝒜
+--   lA≅A = ⨅≅ gfe lAi≅Ai
+
+--   γ : ⨅ 𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+--   γ = piso γ' lA≅A
+
+-- class-prod-S-∈-SP : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
+--  →                  {𝑲 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--                     --------------------------------------------------
+--  →                  (class-product (SClo{𝓤}{𝓤} 𝑲)) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
+
+-- class-prod-S-∈-SP {𝓤} hfe {𝑲} = γ
+--  where
+--   ξ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝑲)
+--   ξ = class-product-S-∈-PS {𝓤}{𝑲}
+
+--   γ : class-product (SClo{𝓤}{𝓤} 𝑲) ∈ SClo{OV 𝓤}{OV 𝓤} (PClo{𝓤}{OV 𝓤} 𝑲)
+--   γ = {!!} -- ps⊆sp {𝓤} ? ξ
+
+-- class-product-S-∈-PS : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--  →       class-product (SClo{𝓤}{𝓤} 𝒦) ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+-- class-product-S-∈-PS {𝓤}{𝒦} = γ
+--  where
+--   I : (OV 𝓤) ̇
+--   I = ℑ{𝓤} (SClo{𝓤}{𝓤} 𝒦)
+--   𝒜 : I → Algebra 𝓤 𝑆
+--   𝒜 = ℑ→A{𝓤} (SClo 𝒦)
+--   l𝒜 : I → Algebra (OV 𝓤) 𝑆
+--   l𝒜 i = lift-alg (𝒜 i) (OV 𝓤)
+
+--   SA : (i : I) → 𝒜 i ∈ (SClo{𝓤}{𝓤} 𝒦)
+--   SA i = ∥ i ∥
+
+--   SlA : (i : I) → l𝒜 i ∈ (SClo{𝓤}{OV 𝓤} 𝒦)
+--   SlA i = lift-alg-SClo (SA i)
+--   PSllA : (i : I) → lift-alg (l𝒜 i) (OV 𝓤) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+--   PSllA i = pbase (SlA i)
+--   γ' : ⨅ l𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+--   γ' = prod{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)}{I = I}{𝒜 = l𝒜} PSllA
+
+--   lid : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ≅ lift-alg (lift-alg (𝒜 i) (OV 𝓤)) (OV 𝓤)
+--   lid i = lift-alg-idemp{𝓤}{OV 𝓤}{OV 𝓤}{𝒜 i}
+
+--   PSlA : (i : I) → (lift-alg (𝒜 i) (OV 𝓤)) ∈ (PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦))
+--   PSlA i = piso (PSllA i) (sym-≅ (lid i))
+
+--   lAi≅Ai : (i : I) → (lift-alg (𝒜 i) (OV 𝓤) ≅ 𝒜 i)
+--   lAi≅Ai = λ i → (sym-≅ lift-alg-≅)
+
+--   lA≅A : ⨅ l𝒜 ≅ ⨅ 𝒜
+--   lA≅A = ⨅≅ gfe lAi≅Ai
+
+--   γ : ⨅ 𝒜 ∈ PClo{OV 𝓤}{OV 𝓤} (SClo{𝓤}{OV 𝓤} 𝒦)
+--   γ = piso γ' lA≅A
+
 
 
 
