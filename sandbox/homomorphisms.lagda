@@ -434,15 +434,15 @@ HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ �
 HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
                      (𝑩 is-hom-image-of-class 𝓚)
 
-H : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-H 𝓚 = HomImagesOfClass 𝓚
+-- H : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- H 𝓚 = HomImagesOfClass 𝓚
 
--- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
-H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
- →         (𝓤 : Universe) → Algebra 𝓤 𝑆
- →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+-- -- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
+-- H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
+--  →         (𝓤 : Universe) → Algebra 𝓤 𝑆
+--  →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
+-- H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
 
 all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
