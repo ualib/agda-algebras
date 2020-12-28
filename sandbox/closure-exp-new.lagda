@@ -278,7 +278,7 @@ S→subalgebra {𝓤} {𝒦} {𝑩} (siso{𝑨} sA A≅B) = γ
   γ : 𝑩 IsSubalgebraOfClass 𝒦
   γ = 𝔸 , SA , 𝔸∈𝒦 , B≅sa
 
-lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{hfe : hfunext 𝓤 𝓤}
+lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{hfe : hfunext 𝓦 𝓤}
  →        {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
  →        ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
           ----------------------------------------------------
@@ -313,12 +313,19 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
     i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
     i = λ x i → (h i) (x i)
     ii : is-embedding i
-    ii = {!!} -- embedding-lift{𝓠 = (𝓤 ⊔ 𝓦)}{𝓤 = (𝓤 ⊔ 𝓦)} hfe hfe {I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
+    ii = embedding-lift{𝓠 = 𝓤}{𝓤 = 𝓤}{𝓘 = 𝓦} hfe hfe {I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
     iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
     iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
   γ : ⨅ ℬ ≅ ⨅ SA
   γ = ⨅≅ gfe B≅SA
 
+-- embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
+--  →               {I : 𝓘 ̇} -- global-dfunext → {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}
+--                  {𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+--  →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣)
+--  →               ((i : I) → is-embedding (h i))
+--                  ----------------------------------------------------
+--  →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
 
 
 
@@ -559,10 +566,11 @@ module _ {𝓤 𝓦 𝓘 : Universe}{𝒦 : Pred (Algebra (𝓤 ⊔ 𝓦 ⊔ �
 
 
 
-PS⊆SP : {𝓤 𝓦 : Universe} {𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext 𝓤 𝓤}
- → (P{𝓤}{𝓦}(S{𝓤}{𝓤} 𝒦u)) ⊆ (S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
-PS⊆SP (pbase (sbase x)) = sbase (pbase x)
-PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe} (pbase (slift{𝑨} x)) = γ
+PS⊆SP : {𝓤 𝓦 : Universe} {𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+        (hfe : hfunext 𝓤 𝓤) (hfe' : hfunext 𝓦 𝓤)
+ →      (P{𝓤}{𝓦}(S{𝓤}{𝓤} 𝒦u)) ⊆ (S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
+PS⊆SP _ _ (pbase (sbase x)) = sbase (pbase x)
+PS⊆SP {𝓤}{𝓦}{𝒦u} _ _ (pbase (slift{𝑨} x)) = γ
  where
   spA : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦u)
   spA = S⊆SP{𝓤}{𝓤}{𝒦u} x
@@ -571,7 +579,7 @@ PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe} (pbase (slift{𝑨} x)) = γ
   γ : (lift-alg (lift-alg 𝑨 𝓤) 𝓦) ∈ S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u)
   γ = siso spA A≅llA
 
-PS⊆SP {𝓤}{𝓦}{𝒦u}(pbase{𝑩} (sub{𝑨} sA B≤A)) = sub spA lB≤A
+PS⊆SP {𝓤}{𝓦}{𝒦u} _ _ (pbase{𝑩} (sub{𝑨} sA B≤A)) = sub spA lB≤A
  where
   lB : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lB = lift-alg 𝑩 𝓦
@@ -580,25 +588,25 @@ PS⊆SP {𝓤}{𝓦}{𝒦u}(pbase{𝑩} (sub{𝑨} sA B≤A)) = sub spA lB≤A
   spA : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦u)
   spA = S-mono {𝒦 = 𝒦u}{𝒦' = (P{𝓤}{𝓤} 𝒦u)} P-expa sA
 
-PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP x) (TRANS-≅ A≅B lift-alg-≅)
-PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe}(plift{𝑨} x) = siso spA lift-alg-≅
+PS⊆SP _ _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP x) (TRANS-≅ A≅B lift-alg-≅)
+PS⊆SP {𝓤}{𝓦}{𝒦u} hfe  hfe' (plift{𝑨} x) = siso spA lift-alg-≅
  where
   spA : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦u)
-  spA = PS⊆SP{hfe = hfe} x
-PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe}(prod{I}{𝒜} x) = γ
+  spA = PS⊆SP hfe hfe x
+PS⊆SP {𝓤}{𝓦}{𝒦u} hfe hfe' (prod{I}{𝒜} x) = γ
  where
 
   ⨅A : Algebra (𝓤 ⊔ 𝓦) 𝑆
   ⨅A = ⨅ 𝒜
 
   ζ : (i : I) → 𝒜 i ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦u)
-  ζ i = PS⊆SP{hfe = hfe} (x i)
+  ζ i = PS⊆SP hfe hfe (x i)
 
   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦u)
   ξ i = S→subalgebra{𝒦 = (P{𝓤}{𝓤} 𝒦u)} (ζ i)
 
   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
-  η' = lemPS⊆SP{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+  η' = lemPS⊆SP{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{hfe'}{I = I}{ℬ = 𝒜} ξ
 
   pci : P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u) ⊆ P{𝓤}{𝓦} 𝒦u
   pci = P-idemp
@@ -609,10 +617,10 @@ PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe}(prod{I}{𝒜} x) = γ
   γ : ⨅ 𝒜 ∈ S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u)
   γ = {!subalgebra→S{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑪 = ⨅ 𝒜} η!}
 
-PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe} (piso{𝑨}{𝑩} psA A≅B) = siso{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑨 = 𝑨}{𝑩 = 𝑩} spA A≅B
+PS⊆SP {𝓤}{𝓦}{𝒦u} hfe hfe' (piso{𝑨}{𝑩} psA A≅B) = siso{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑨 = 𝑨}{𝑩 = 𝑩} spA A≅B
  where
   spA : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦u)
-  spA = PS⊆SP{𝓤 = 𝓤}{𝓦 = 𝓤}{𝒦u}{hfe} psA
+  spA = PS⊆SP{𝓤}{𝓤}{𝒦u} hfe hfe psA
  -- PS⊆SP (pbase{lA} (sbase{𝑨} x)) = sbase (pbase x)
  -- PS⊆SP (pbase (sub{𝑨} x (𝑩 , B≤A))) = {!!} -- sub (S⊆SP x) (𝑩 , B≤A) -- (pbase (sub x x₁)) = 
  -- PS⊆SP (pbase (siso x x₁)) = {!!}
@@ -652,7 +660,8 @@ PS⊆SP {𝓤}{𝓦}{𝒦u}{hfe} (piso{𝑨}{𝑩} psA A≅B) = siso{𝒦 = (P{�
 module _
  {𝓤 𝓦 : Universe}
  {𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- {hfe : hfunext 𝓤 𝓤} where
+ {hfe : hfunext 𝓤 𝓤}
+ {hfe' : hfunext (OV 𝓤) 𝓤} where
 
  ℑs : (OV 𝓤) ̇
  ℑs = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ (S{𝓤}{𝓤} 𝒦u)
@@ -684,7 +693,7 @@ module _
    psA i = piso (pslA i) (sym-≅ lift-alg-≅)
 
  class-prod-s-∈-sp : class-prod-s 𝒦u ∈ (S{𝓤}{OV 𝓤} (P{𝓤}{𝓤} 𝒦u))
- class-prod-s-∈-sp = PS⊆SP{𝓤 = 𝓤}{𝓦 = (OV 𝓤)}{𝒦u}{hfe} class-prod-s-∈-ps
+ class-prod-s-∈-sp = PS⊆SP{𝓤 = 𝓤}{𝓦 = (OV 𝓤)}{𝒦u} hfe hfe' class-prod-s-∈-ps
 
 
 
