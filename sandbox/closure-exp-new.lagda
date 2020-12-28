@@ -132,6 +132,13 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
   sub   : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
   siso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
 
+-- --Closure wrt S
+-- data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
+--   sbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
+--   slift : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ S{𝓤}{𝓦} 𝒦
+--   sub   : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
+--   siso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
+
 --Closure wrt P
 data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
   pbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
@@ -202,7 +209,6 @@ S⊆SP{𝓤}{𝓦}{𝒦} = S-mono{𝒦 = 𝒦}{𝒦' = (P{𝓤}{𝓤} 𝒦)} P-e
 
 
 
-
 -- For a given algebra 𝑨, and class 𝒦 of algebras, we will find the following fact useful
 -- (e.g., in proof of Birkhoff's HSP theorem):  𝑨 ∈ S 𝒦  ⇔  𝑨 IsSubalgebraOfClass 𝒦
 subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
@@ -220,9 +226,9 @@ subalgebra→S {𝓤}{𝓦}{𝒦}{𝑪} (𝑨 , ((𝑩 , B≤A) , KA , C≅B)) =
 
   sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
   sA = siso slAu (sym-≅ lift-alg-≅)
--- _is-subalgebra-of-class_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓦 𝑆)
---  →                      Pred (Algebra 𝓤 𝑆) (OV 𝓤) → (OV (𝓤 ⊔ 𝓦)) ̇
--- _is-subalgebra-of-class_ {𝓤}{𝓦} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (subalgebra{𝓤}{𝓦} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
+
+
+
 
 S→subalgebra : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
                {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦
@@ -319,13 +325,6 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
   γ : ⨅ ℬ ≅ ⨅ SA
   γ = ⨅≅ gfe B≅SA
 
--- embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
---  →               {I : 𝓘 ̇} -- global-dfunext → {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}
---                  {𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
---  →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣)
---  →               ((i : I) → is-embedding (h i))
---                  ----------------------------------------------------
---  →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
 
 
 
@@ -566,6 +565,55 @@ module _ {𝓤 𝓦 𝓘 : Universe}{𝒦 : Pred (Algebra (𝓤 ⊔ 𝓦 ⊔ �
 
 
 
+module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} where
+
+ subalgebra-of-class-idem : 𝑩 IsSubalgebraOfClass (P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦))
+  →                         𝑩 IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+ subalgebra-of-class-idem x = mono-≤ 𝑩 P-idemp x
+
+ subalgebra-of-class-drop : 𝑩 IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+  →                         𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+ subalgebra-of-class-drop (𝑨 , SA , x , B≅SA) = {!!}
+
+ subalgebra-of-class-idemdrop : 𝑩 IsSubalgebraOfClass (P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦))
+  →                             𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+ subalgebra-of-class-idemdrop = subalgebra-of-class-drop ∘ subalgebra-of-class-idem
+
+  -- η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
+  -- η' = lemPS⊆SP{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{hfe'}{I = I}{ℬ = 𝒜} ξ
+
+  -- η : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦u)
+  -- η = subalgebra-of-class-idemdrop η' -- mono-≤ (⨅ 𝒜) pci η'
+ -- (.(lift-alg 𝑨 𝓦) , SA , pbase{𝑨} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (.(lift-alg 𝑨 𝓦) , SA , plift{𝑨} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (.(⨅ 𝒜) , SA , prod{I}{𝒜} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (𝑨 , SA , piso x x₁ , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (.(lift-alg 𝑨 𝓦) , SA , pbase{𝑨} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (.(lift-alg 𝑨 𝓦) , SA , plift{𝑨} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (.(⨅ 𝒜) , SA , prod{I}{𝒜} x , B≅SA) = {!!}
+ -- subalgebra-of-class-idemdrop (𝑨 , SA , piso x x₁ , B≅SA) = {!!}
+
+
+
+
+  -- η' : ⨅ 𝒜 
+  -- η' = lemPS⊆SP{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{hfe'}{I = I}{ℬ = 𝒜} ξ
+
+  -- pci : P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u) ⊆ P{𝓤}{𝓦} 𝒦u
+  -- pci = P-idemp
+
+  -- η : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦u)
+  -- η = {!!} -- mono-≤ (⨅ 𝒜) pci η'
+
+
+PS⊆SP' : {𝓤 𝓦 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+        (hfe : hfunext 𝓤 𝓤) (hfe' : hfunext 𝓦 𝓤)
+ →      (P{𝓤}{𝓦}(S{𝓤}{𝓤} 𝒦)) ⊆ (S{𝓤 ⊔ 𝓦}{𝓦} (P{𝓤}{𝓦} 𝒦))
+PS⊆SP' {𝓤} {𝓦} {𝒦} hfe hfe' x = {!!}
+
+
+
+
 PS⊆SP : {𝓤 𝓦 : Universe} {𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
         (hfe : hfunext 𝓤 𝓤) (hfe' : hfunext 𝓦 𝓤)
  →      (P{𝓤}{𝓦}(S{𝓤}{𝓤} 𝒦u)) ⊆ (S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
@@ -608,14 +656,13 @@ PS⊆SP {𝓤}{𝓦}{𝒦u} hfe hfe' (prod{I}{𝒜} x) = γ
   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u))
   η' = lemPS⊆SP{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{hfe'}{I = I}{ℬ = 𝒜} ξ
 
-  pci : P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u) ⊆ P{𝓤}{𝓦} 𝒦u
-  pci = P-idemp
-
-  η : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦u)
-  η = mono-≤ (⨅ 𝒜) pci η'
+  η : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦u)
+  η = subalgebra-of-class-idemdrop η'
+  -- η : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦u)
+  -- η = mono-≤ (⨅ 𝒜) P-idemp η'
 
   γ : ⨅ 𝒜 ∈ S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦u)
-  γ = {!subalgebra→S{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑪 = ⨅ 𝒜} η!}
+  γ = subalgebra→S{𝓤}{𝓦}{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑪 = ⨅ 𝒜} η
 
 PS⊆SP {𝓤}{𝓦}{𝒦u} hfe hfe' (piso{𝑨}{𝑩} psA A≅B) = siso{𝒦 = (P{𝓤}{𝓤} 𝒦u)}{𝑨 = 𝑨}{𝑩 = 𝑩} spA A≅B
  where
