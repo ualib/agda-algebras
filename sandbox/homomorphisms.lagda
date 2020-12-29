@@ -194,20 +194,32 @@ _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 �
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
 
- map-≅ : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑨 ∣ → ∣ 𝑩 ∣
- map-≅ ϕ = fst ∣ ϕ ∣
+ ≅-hom : (ϕ : 𝑨 ≅ 𝑩) → hom 𝑨 𝑩
+ ≅-hom ϕ = ∣ ϕ ∣
 
- inv-map-≅ : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑩 ∣ → ∣ 𝑨 ∣
- inv-map-≅ ϕ = ∣ fst ∥ ϕ ∥ ∣
+ ≅-inv-hom : (ϕ : 𝑨 ≅ 𝑩) → hom 𝑩 𝑨
+ ≅-inv-hom ϕ = fst ∥ ϕ ∥
 
- map-≅-invertible : (ϕ : 𝑨 ≅ 𝑩) → invertible (map-≅ ϕ)
- map-≅-invertible ϕ = (inv-map-≅ ϕ) , (∥ snd ∥ ϕ ∥ ∥ , ∣ snd ∥ ϕ ∥ ∣)
+ ≅-map : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑨 ∣ → ∣ 𝑩 ∣
+ ≅-map ϕ = ∣ ≅-hom ϕ ∣
 
- map-≅-is-equiv : (ϕ : 𝑨 ≅ 𝑩) → is-equiv (map-≅ ϕ)
- map-≅-is-equiv ϕ = invertibles-are-equivs (map-≅ ϕ) (map-≅-invertible ϕ)
+ ≅-map-is-homomorphism : (ϕ : 𝑨 ≅ 𝑩) → is-homomorphism 𝑨 𝑩 (≅-map ϕ)
+ ≅-map-is-homomorphism ϕ = ∥ ≅-hom ϕ ∥
 
- map-≅-is-embedding : (ϕ : 𝑨 ≅ 𝑩) → is-embedding (map-≅ ϕ)
- map-≅-is-embedding ϕ = equivs-are-embeddings (map-≅ ϕ) (map-≅-is-equiv ϕ)
+ ≅-inv-map : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+ ≅-inv-map ϕ = ∣ ≅-inv-hom ϕ ∣
+
+ ≅-inv-map-is-homomorphism : (ϕ : 𝑨 ≅ 𝑩) → is-homomorphism 𝑩 𝑨 (≅-inv-map ϕ)
+ ≅-inv-map-is-homomorphism ϕ = ∥ ≅-inv-hom ϕ ∥
+
+ ≅-map-invertible : (ϕ : 𝑨 ≅ 𝑩) → invertible (≅-map ϕ)
+ ≅-map-invertible ϕ = (≅-inv-map ϕ) , (∥ snd ∥ ϕ ∥ ∥ , ∣ snd ∥ ϕ ∥ ∣)
+
+ ≅-map-is-equiv : (ϕ : 𝑨 ≅ 𝑩) → is-equiv (≅-map ϕ)
+ ≅-map-is-equiv ϕ = invertibles-are-equivs (≅-map ϕ) (≅-map-invertible ϕ)
+
+ ≅-map-is-embedding : (ϕ : 𝑨 ≅ 𝑩) → is-embedding (≅-map ϕ)
+ ≅-map-is-embedding ϕ = equivs-are-embeddings (≅-map ϕ) (≅-map-is-equiv ϕ)
 
 -- An algebra is (extensionally) isomorphic to itself
 REFL-≅ ID≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
@@ -271,6 +283,13 @@ TRANS-≅ : {𝓠 𝓤 𝓦 : Universe}
           ----------------
  →            𝑨 ≅ 𝑪
 TRANS-≅ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = trans-≅ 𝑨 𝑩 𝑪
+
+Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
+          (𝑨 : Algebra 𝓠 𝑆){𝑩 : Algebra 𝓤 𝑆}(𝑪 : Algebra 𝓦 𝑆)
+ →         𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+          ----------------
+ →            𝑨 ≅ 𝑪
+Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
 
 --An algebra is isomorphic to its lift to a higher universe level
 lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)

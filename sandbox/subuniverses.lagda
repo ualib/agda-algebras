@@ -217,6 +217,7 @@ transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : 
 transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ∣ B≤C ∣ ∘ ∣ A≤B ∣ , ∘-embedding (fst ∥ B≤C ∥) (fst ∥ A≤B ∥) , ∘-hom 𝑨 𝑩 𝑪 {∣ A≤B ∣}{∣ B≤C ∣}(snd ∥ A≤B ∥) (snd ∥ B≤C ∥)
 
 
+
 --Reflexivity of IsSubalgebra (explicit arg)
 REFL-≤ : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
 REFL-≤ 𝑨 = 𝑖𝑑 ∣ 𝑨 ∣ , id-is-embedding , id-is-hom
@@ -307,13 +308,13 @@ lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
   f = ∣ B≤A ∣
 
   g : ∣ 𝑨 ∣ → ∣ lA ∣
-  g = map-≅ A≅lA
+  g = ≅-map A≅lA
 
   h : ∣ 𝑩 ∣ → ∣ lA ∣
   h = g ∘ f
 
   hemb : is-embedding h
-  hemb = ∘-embedding (map-≅-is-embedding A≅lA) (fst ∥ B≤A ∥)
+  hemb = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ B≤A ∥)
 
   hhom : is-homomorphism 𝑩 lA h
   hhom = ∘-hom 𝑩 𝑨 lA {f}{g} (snd ∥ B≤A ∥) (snd ∣ A≅lA ∣)
@@ -335,13 +336,13 @@ lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
   f = ∣ C≤A ∣
 
   g : ∣ 𝑨 ∣ → ∣ lA ∣
-  g = map-≅ A≅lA
+  g = ≅-map A≅lA
 
   h : ∣ 𝑪 ∣ → ∣ lA ∣
   h = g ∘ f
 
   hemb : is-embedding h
-  hemb = ∘-embedding (map-≅-is-embedding A≅lA) (fst ∥ C≤A ∥)
+  hemb = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ C≤A ∥)
 
   hhom : is-homomorphism 𝑪 lA h
   hhom = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
@@ -362,6 +363,58 @@ lift-alg-lift-≤-lift {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
   lA≤A = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
   B≤lB : 𝑩 ≤ lB
   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+
+-- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+-- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
+
+-- SUBALGEBRA : {𝓤 𝓠 : Universe} → Algebra 𝓠 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇
+-- SUBALGEBRA {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+-- SUBALGEBRA-transport : {𝓦 𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+--  →         SUBALGEBRA{𝓦} 𝑨 → 𝑨 ≅ 𝑩 → SUBALGEBRA{𝓩} 𝑩
+-- SUBALGEBRA-transport {𝓦}{𝓧}{𝓨}{𝓩} 𝑨 𝑩 SA A≅B = γ
+--  where
+--   𝑨' : Algebra 𝓦 𝑆
+--   𝑨' = ∣ SA ∣
+
+--   A'≤A : 𝑨' ≤ 𝑨
+
+--   A'≤A = ∥ SA ∥
+
+
+--   𝑩' : Algebra 𝓩 𝑆
+--   𝑩' = {!!}
+
+--   B'≤B : 𝑩' ≤ 𝑩
+--   B'≤B = {!!}
+
+--   γ : SUBALGEBRA{𝓩} 𝑩
+--   γ = {!𝑩' , B'≤B!}
+
+
+
+-- SUBALGEBRA-transport : {𝓦 𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+--  →         SUBALGEBRA{𝓦} 𝑨 → 𝑨 ≅ 𝑩 → SUBALGEBRA{𝓩} 𝑩
+-- SUBALGEBRA-transport {𝓦}{𝓧}{𝓨}{𝓩} 𝑨 𝑩 SA A≅B = γ
+--  where
+--   𝑨' : Algebra 𝓦 𝑆
+--   𝑨' = ∣ SA ∣
+
+--   A'≤A : 𝑨' ≤ 𝑨
+
+--   A'≤A = ∥ SA ∥
+
+
+--   𝑩' : Algebra 𝓩 𝑆
+--   𝑩' = {!!}
+
+--   B'≤B : 𝑩' ≤ 𝑩
+--   B'≤B = {!!}
+
+--   γ : SUBALGEBRA{𝓩} 𝑩
+--   γ = {!𝑩' , B'≤B!}
+
+
+
 
 
 -- lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
