@@ -205,6 +205,36 @@ P-idemp' {𝓤} {𝓦} {𝒦} (plift x) = {!plift (P-idemp' x)!}
 P-idemp' {𝓤} {𝓦} {𝒦} (prod x) = {!prod (λ i → P-idemp' (x i))!}
 P-idemp' {𝓤} {𝓦} {𝒦} (piso x x₁) = {!piso (P-idemp' x) x₁!}
 
+lift-alg-P : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑨 : Algebra 𝓤 𝑆}
+
+ →                 𝑨 ∈ (P{𝓤}{𝓤} 𝒦)
+             ---------------------------------
+ →             lift-alg 𝑨 𝓦 ∈  P{𝓤}{𝓦} 𝒦
+
+lift-alg-P pA =  P-idemp (pbase pA)
+
+
+lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
+
+ →                𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+            ---------------------------------------------------
+ →           (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+
+lift-alg-subP {𝓤} {𝓦} {𝒦} {𝑩} (𝑨 , (𝑪 , C≤A) , pA , B≅C ) = γ
+ where
+  lA lB lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+  lB = lift-alg 𝑩 𝓦
+  lC = lift-alg 𝑪 𝓦
+
+  lC≤lA : lC ≤ lA
+  lC≤lA = lift-alg-lift-≤-lift 𝑪 {𝑨} C≤A
+  plA : lA ∈ P{𝓤}{𝓦} 𝒦
+  plA = lift-alg-P pA
+
+  γ : lB IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+  γ = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 𝑪 B≅C)
+
 
 --S is a closure operator -------------------------------------------
 --In particular, it's monotone.
@@ -214,14 +244,6 @@ S-mono ante (sbase x) = sbase (ante x)
 S-mono {𝓤}{𝓦}{𝒦}{𝒦'} ante (slift{𝑨} x) = slift{𝓤}{𝓦}{𝒦'} (S-mono{𝓤}{𝓤} ante x)
 S-mono {𝓤}{𝓦}{𝒦}{𝒦'} ante (sub{𝑨}{𝑩} sA B≤A) = sub (S-mono ante sA) B≤A
 S-mono {𝒦} {𝒦'} ante (siso x x₁) = siso (S-mono ante x) x₁
-
-S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦)
-S⊆SP{𝓤}{𝓦}{𝒦} = S-mono{𝒦 = 𝒦}{𝒦' = (P{𝓤}{𝓤} 𝒦)} P-expa
-
-S⊆SP'' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
-S⊆SP''{𝓤}{𝓦}{𝒦} = {!!} -- S-mono{𝒦 = 𝒦}{𝒦' = (P{𝓤}{𝓦} 𝒦)} P-expa
 
 subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
                {𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 IsSubalgebraOfClass 𝒦
@@ -292,6 +314,97 @@ S→subalgebra {𝓤} {𝒦} {𝑩} (siso{𝑨} sA A≅B) = γ
   B≅sa = TRANS-≅ (sym-≅ A≅B) A≅SA
   γ : 𝑩 IsSubalgebraOfClass 𝒦
   γ = 𝔸 , SA , 𝔸∈𝒦 , B≅sa
+
+
+S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+ →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦)
+S⊆SP{𝓤}{𝓦}{𝒦} = S-mono{𝒦 = 𝒦}{𝒦' = (P{𝓤}{𝓤} 𝒦)} P-expa
+
+
+S⊆SP' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+ →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+S⊆SP' {𝓤} {𝓦} {𝒦} {.(lift-alg 𝑨 𝓦)} (sbase{𝑨} x) = γ
+ where
+  lA llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+  llA = lift-alg lA (𝓤 ⊔ 𝓦)
+
+  spllA : llA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  spllA = sbase{𝓤 = (𝓤 ⊔ 𝓦)}{𝓦 = (𝓤 ⊔ 𝓦)} (pbase x)
+
+  γ : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  γ = siso spllA (sym-≅ lift-alg-≅)
+
+  -- splA : (lift-alg 𝑨 (𝓤 ⊔ 𝓦)) ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
+  -- splA = S⊆SP'{𝓤}{𝓤 ⊔ 𝓦}{𝒦u} slA
+
+S⊆SP' {𝓤} {𝓦} {𝒦} {.(lift-alg 𝑨 𝓦)} (slift{𝑨} x) = γ
+ where
+  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+
+  splAu : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+  splAu = S⊆SP{𝓤}{𝓤} x
+  Asc : 𝑨 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+  Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
+
+  lAsc : lA IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+  lAsc = lift-alg-subP Asc
+
+  γ : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  γ = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
+
+S⊆SP' {𝓤} {𝓦} {𝒦} {𝑩} (sub{𝑨} sA B≤A) = γ
+ where
+  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+
+  splAu : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+  splAu = S⊆SP{𝓤}{𝓤} sA
+  Asc : 𝑨 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+  Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
+
+  lAsc : lA IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+  lAsc = lift-alg-subP Asc
+
+  lAsp : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  lAsp = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
+
+  γ : 𝑩 ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  γ = sub{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} lAsp (lift-alg-sub-lift 𝑨 B≤A)
+
+S⊆SP' {𝓤} {𝓦} {𝒦} {𝑩} (siso{𝑨} sA A≅B) = γ
+ where
+  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
+
+  splAu : 𝑨 ∈ S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+  splAu = S⊆SP{𝓤}{𝓤} sA
+  Asc : 𝑨 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+  Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
+
+  lAsc : lA IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+  lAsc = lift-alg-subP Asc
+
+  lAsp : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  lAsp = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
+
+  lA≅B : lA ≅ 𝑩
+  lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
+  γ : 𝑩 ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
+  γ = siso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} lAsp lA≅B
+
+-- subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+--                {𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 IsSubalgebraOfClass 𝒦
+--              ----------------------------------------------------------
+--  →                  𝑪 ∈ S{𝓤}{𝓦} 𝒦
+-- S→subalgebra : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+--                {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦
+--               --------------------------------------------------
+--  →                𝑩 IsSubalgebraOfClass 𝒦
+
+
+
 
 
 lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{hfe : hfunext 𝓦 𝓤}
@@ -404,7 +517,7 @@ PS⊆SP' {𝓤} {𝓦} {𝒦u} _ (pbase (slift{𝑨} x)) = γ
   slA = slift x
 
   splA : (lift-alg 𝑨 (𝓤 ⊔ 𝓦)) ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
-  splA = S⊆SP''{𝓤}{𝓤 ⊔ 𝓦}{𝒦u} slA
+  splA = S⊆SP'{𝓤}{𝓤 ⊔ 𝓦}{𝒦u} slA
   γ : lift-alg (lift-alg 𝑨 (𝓤 ⊔ 𝓦)) (𝓤 ⊔ 𝓦) ∈ S{𝓤 ⊔ 𝓦}{(𝓤 ⊔ 𝓦)} (P{𝓤}{(𝓤 ⊔ 𝓦)} 𝒦u)
   γ = slift splA
 
@@ -416,13 +529,13 @@ PS⊆SP' {𝓤} {𝓦} {𝒦u} _ (pbase {𝑩} (sub{𝑨} sA B≤A)) = γ
   ζ : lB ≤ lA
   ζ = lift-alg-lift-≤-lift 𝑩{𝑨} B≤A
   spA : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
-  spA = S⊆SP''{𝓤}{𝓤 ⊔ 𝓦}{𝒦u} (slift sA)
+  spA = S⊆SP'{𝓤}{𝓤 ⊔ 𝓦}{𝒦u} (slift sA)
   γ' : (lift-alg 𝑩 (𝓤 ⊔ 𝓦)) ∈ (S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u))
   γ' = sub{𝓤 = (𝓤 ⊔ 𝓦)} spA ζ
   γ : lift-alg 𝑩 (𝓤 ⊔ 𝓦) ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
   γ = siso γ' refl-≅
 
-PS⊆SP' {𝓤} {𝓦} {𝒦u} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = γ -- siso (S⊆SP'' (slift x)) (TRANS-≅ ζ lift-alg-≅)
+PS⊆SP' {𝓤} {𝓦} {𝒦u} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = γ -- siso (S⊆SP' (slift x)) (TRANS-≅ ζ lift-alg-≅)
  where
   lA lB : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 (𝓤 ⊔ 𝓦)
@@ -434,21 +547,12 @@ PS⊆SP' {𝓤} {𝓦} {𝒦u} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = γ -- siso
   slA = slift x
 
   splA : lA ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
-  splA = S⊆SP'' slA
+  splA = S⊆SP' slA
 
   γ : (lift-alg 𝑩 (𝓤 ⊔ 𝓦)) ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
   γ = siso splA ζ
 
-PS⊆SP' {𝓤} {𝓦} {𝒦u} hfe (plift{𝑨} x) = {!!}
- -- where
- --  psA' : 𝑨 ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (S{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
- --  psA' = piso x refl-≅
-
- --  spA : 𝑨 ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
- --  spA = PS⊆SP'{𝓤}{𝓦}{𝒦u} hfe psA'
-
- --  γ : lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦u)
- --  γ = siso spA lift-alg-≅
+PS⊆SP' {𝓤} {𝓦} {𝒦u} hfe (plift{𝑨} x) = slift (PS⊆SP'{𝓤}{𝓦}{𝒦u} hfe x)
 
 PS⊆SP' {𝓤} {𝓦} {𝒦u} hfe (prod{I}{𝒜} x) = γ
  where
