@@ -148,9 +148,9 @@ data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
   viso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V{𝓤}{𝓦} 𝒦
 
 
-lift-alg-idemp : {𝓤 𝓦 𝓘 : Universe}{𝑨 : Algebra 𝓤 𝑆}
+lift-alg-assoc : {𝓤 𝓦 𝓘 : Universe}{𝑨 : Algebra 𝓤 𝑆}
  →           lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
-lift-alg-idemp {𝓤} {𝓦} {𝓘} {𝑨} = TRANS-≅ (TRANS-≅ ζ lift-alg-≅) lift-alg-≅
+lift-alg-assoc {𝓤} {𝓦} {𝓘} {𝑨} = TRANS-≅ (TRANS-≅ ζ lift-alg-≅) lift-alg-≅
  where
   ζ : lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
   ζ = sym-≅ lift-alg-≅
@@ -178,32 +178,112 @@ P-idemp {𝓤} {𝓦} {𝒦} (piso x x₁) = piso (P-idemp x) x₁
 
 P-idemp' : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
-P-idemp' {𝓤} {𝓦} {𝒦} (pbase {.(lift-alg 𝑨 (𝓤 ⊔ 𝓦))} (pbase{𝑨} x)) = γ
+P-idemp' {𝓤} {𝓦} {𝒦} (pbase {.(lift-alg 𝑨 (𝓤 ⊔ 𝓦))} (pbase{𝑨} x)) =
+ piso{𝓦 = (𝓤 ⊔ 𝓦)}{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = llA} (pbase{𝓤}{𝓤} x) lA≅llA
+  where
+   llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+   llA = lift-alg (lift-alg 𝑨 (𝓤 ⊔ 𝓦)) (𝓤 ⊔ 𝓦)
+
+   A≅llA : 𝑨 ≅ llA
+   A≅llA = Trans-≅ 𝑨 llA lift-alg-≅ (lift-alg-assoc{𝓤}{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝑨})
+
+   lA≅llA : (lift-alg 𝑨 𝓤) ≅ llA
+   lA≅llA = Trans-≅ (lift-alg 𝑨 𝓤) llA (sym-≅ (lift-alg-≅{𝓤}{𝓤}{𝑨})) A≅llA
+
+
+P-idemp' {𝓤} {𝓦} {𝒦} (pbase {.(lift-alg 𝑨 (𝓤 ⊔ 𝓦))} (plift{𝑨} x)) =
+ piso{𝓦 = (𝓤 ⊔ 𝓦)}{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = llA} (plift{𝓤}{𝓤} x) lA≅llA
+  where
+   llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+   llA = lift-alg (lift-alg 𝑨 (𝓤 ⊔ 𝓦)) (𝓤 ⊔ 𝓦)
+
+   A≅llA : 𝑨 ≅ llA
+   A≅llA = Trans-≅ 𝑨 llA lift-alg-≅ (lift-alg-assoc{𝓤}{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝑨})
+
+   lA≅llA : (lift-alg 𝑨 𝓤) ≅ llA
+   lA≅llA = Trans-≅ (lift-alg 𝑨 𝓤) llA (sym-≅ (lift-alg-≅{𝓤}{𝓤}{𝑨})) A≅llA
+
+P-idemp' {𝓤} {𝓦} {𝒦}
+ (pbase {.((∀ i → fst (𝒜 i)) , (λ f 𝒂 i → snd (𝒜 i) f (λ x₁ → 𝒂 x₁ i)))}
+  (prod{I}{𝒜} x)) = γ
+   where
+    l⨅A : Algebra (𝓤 ⊔ 𝓦) 𝑆
+    l⨅A = lift-alg (⨅ 𝒜) (𝓤 ⊔ 𝓦)
+
+    lA llA : I → Algebra (𝓤 ⊔ 𝓦) 𝑆
+    lA i = lift-alg (𝒜 i) (𝓤 ⊔ 𝓦)
+    llA i = lift-alg (lA i) (𝓤 ⊔ 𝓦)
+    plA : (i : I) → (lA i) ∈ (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+    plA i = plift (x i)
+    ppllA : (i : I) → (llA i) ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}(P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+    ppllA i = pbase{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} (plA i)
+
+    Aiso : (i : I) → (llA i) ≅ (𝒜 i)
+    Aiso i = Trans-≅ (llA i) (𝒜 i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
+
+    ⨅llA≅⨅A : ⨅ llA ≅ ⨅ 𝒜
+    ⨅llA≅⨅A = ⨅≅ gfe Aiso
+
+    ⨅llA≅l⨅A : ⨅ llA ≅ l⨅A
+    ⨅llA≅l⨅A = Trans-≅ (⨅ llA) l⨅A ⨅llA≅⨅A lift-alg-≅
+
+    pp⨅llA : (⨅ llA) ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+    pp⨅llA = prod ppllA
+
+    ppl⨅A : l⨅A ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+    ppl⨅A = piso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} pp⨅llA ⨅llA≅l⨅A
+
+    γ : l⨅A ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+    γ = P-idemp'{𝓦 = 𝓦} ppl⨅A
+
+P-idemp' {𝓤} {𝓦} {𝒦} (pbase {𝑩} (piso{𝑨} pA A≅B)) = γ
  where
-  lA : Algebra 𝓤 𝑆
-  lA = lift-alg 𝑨 𝓤
+  lA lB llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 (𝓤 ⊔ 𝓦)
+  llA = lift-alg lA (𝓤 ⊔ 𝓦)
+  lB = lift-alg 𝑩 (𝓤 ⊔ 𝓦)
 
-  puulA : lA ∈ P{𝓤}{𝓤} 𝒦
-  puulA = pbase{𝓤}{𝓤} x
+  plA : lA ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  plA = plift pA
 
+  ppllA : llA ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}(P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+  ppllA = pbase{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} plA
 
-  llA lAw : Algebra (𝓤 ⊔ 𝓦) 𝑆
-  lAw = lift-alg 𝑨 (𝓤 ⊔ 𝓦)
-  llA = lift-alg lAw (𝓤 ⊔ 𝓦)
+  llA≅A : llA ≅ 𝑨
+  llA≅A = Trans-≅ llA 𝑨 (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
 
-  lA≅llA : lA ≅ llA
-  lA≅llA = Trans-≅ lA llA (Trans-≅ lA lAw (sym-≅ (lift-alg-≅{𝓤}{𝓤}{𝑨})) (lift-alg-≅{𝓤}{𝓤 ⊔ 𝓦}{𝑨})) lift-alg-≅
+  llA≅lB : llA ≅ lB
+  llA≅lB = Trans-≅ llA lB llA≅A (Trans-≅ 𝑨 lB A≅B lift-alg-≅)
 
-  γ :  llA ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
-  γ = piso{𝓦 = (𝓤 ⊔ 𝓦)}{𝑨 = lA}{𝑩 = llA} puulA lA≅llA
+  pplB : lB ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}(P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+  pplB = piso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} ppllA llA≅lB
 
-P-idemp' {𝓤} {𝓦} {𝒦} (pbase {.(lift-alg 𝑨 (𝓤 ⊔ 𝓦))} (plift{𝑨} x)) = {!!}
-P-idemp' {𝓤} {𝓦} {𝒦} (pbase {.((∀ i → fst (𝒜 i)) , (λ f 𝒂 i → snd (𝒜 i) f (λ x₁ → 𝒂 x₁ i)))} (prod{I}{𝒜} x)) = {!!}
+  γ : lB ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  γ = P-idemp'{𝓦 = 𝓦} pplB
 
-P-idemp' {𝓤} {𝓦} {𝒦} (pbase {𝑨} (piso x x₁)) = {!!}
-P-idemp' {𝓤} {𝓦} {𝒦} (plift x) = {!plift (P-idemp' x)!}
-P-idemp' {𝓤} {𝓦} {𝒦} (prod x) = {!prod (λ i → P-idemp' (x i))!}
-P-idemp' {𝓤} {𝓦} {𝒦} (piso x x₁) = {!piso (P-idemp' x) x₁!}
+P-idemp' {𝓤} {𝓦} {𝒦} (plift{𝑨} x) = P-idemp'{𝓦 = 𝓦} (piso x lift-alg-≅)
+ -- where
+ --  plA : lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}(P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+ --  plA = piso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} x lift-alg-≅
+ --  γ : lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+ --  γ = P-idemp'{𝓦 = 𝓦} plA
+
+P-idemp' {𝓤} {𝓦} {𝒦} (prod{I}{𝒜} x) = γ  -- prod (λ i → P-idemp' (x i))
+ where
+
+  pA : (i : I) → 𝒜 i ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  pA i = P-idemp'{𝓦 = 𝓦} (x i)
+  γ : (⨅ 𝒜) ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  γ = {!!}
+
+P-idemp' {𝓤} {𝓦} {𝒦} (piso {𝑨} {𝑩} ppA A≅B) = γ
+ where
+  pA : 𝑨 ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  pA = P-idemp'{𝓦 = 𝓦} ppA
+  ppB : 𝑩 ∈ P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}(P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)
+  ppB = piso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{𝒦 = (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦)} ppA A≅B
+  γ : 𝑩 ∈ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+  γ = {!!} -- P-idemp' ppB
 
 lift-alg-P : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑨 : Algebra 𝓤 𝑆}
 
