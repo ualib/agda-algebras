@@ -350,9 +350,9 @@ lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
   γ : 𝑪 IsSubalgebraOf lift-alg 𝑨 𝓦
   γ = h , hemb , hhom
 
-lift-alg-lift-≤-lift : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+lift-alg-≤ lift-alg-lift-≤-lift : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
  →         𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
-lift-alg-lift-≤-lift {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
+lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
  transitivity-≤ lA {𝑩}{lB} (transitivity-≤ lA {𝑨}{𝑩} lA≤A A≤B) B≤lB
  where
   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
@@ -363,6 +363,9 @@ lift-alg-lift-≤-lift {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
   lA≤A = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
   B≤lB : 𝑩 ≤ lB
   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+
+lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
+
 
 -- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 -- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
