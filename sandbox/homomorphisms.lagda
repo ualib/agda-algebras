@@ -297,8 +297,13 @@ lift-alg-≅ {𝓤}{𝓦}{𝑨} = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) ,
                          (Lift.lower , λ _ _ → 𝓇ℯ𝒻𝓁) ,
                          (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
 
-lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
- →             hom 𝑨 𝑩 → hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}
+               (𝓩 : Universe){𝓦 : Universe}
+               (𝑨 : Algebra 𝓧 𝑆)
+               (𝑩 : Algebra 𝓨 𝑆)
+ →             hom 𝑨 𝑩
+              ------------------------------------
+ →             hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
 lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ Lift.lower , γ
  where
   lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 Lift.lower
@@ -453,35 +458,62 @@ HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ �
 HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
                      (𝑩 is-hom-image-of-class 𝓚)
 
--- H : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
--- H 𝓚 = HomImagesOfClass 𝓚
-
--- -- Here 𝓛𝓚 represents a (universe-indexed) collection of classes.
--- H-closed : (𝓛𝓚 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
---  →         (𝓤 : Universe) → Algebra 𝓤 𝑆
---  →          𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-
--- H-closed 𝓛𝓚 = λ 𝓤 𝑩 → _is-hom-image-of-class_ {𝓤 = 𝓤} 𝑩 (𝓛𝓚 𝓤) → 𝑩 ∈ (𝓛𝓚 𝓤)
-
 all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
 
+lift-function : (𝓧 : Universe){𝓨 : Universe}
+                (𝓩 : Universe){𝓦 : Universe}
+                (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
+ →               Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
+lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (Lift.lower la))
 
--- HomImagesOf : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ̇
--- HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+lift-of-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
+                       (𝓩 : Universe){𝓦 : Universe}
+                       (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
+ →                      Epic f → Epic (lift-function 𝓧 𝓩 {𝓦} A B f)
+lift-of-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} A B f fepic = {!!}
 
--- _is-hom-image-of_ : {𝓤 𝓦 : Universe} (𝑩 : Algebra 𝓦 𝑆)
---   →                (𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 
--- _is-hom-image-of_ {𝓤}{𝓦} 𝑩 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf{𝓤}{𝓦} 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
 
--- lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
---  →             hom 𝑨 𝑩 → hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
--- lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ Lift.lower , γ
+-- Epic g = ∀ y → Image g ∋ y
+-- Epic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) →  𝓤 ⊔ 𝓦 ̇
+-- Epic g = ∀ y → Image g ∋ y
 
--- lift-alg-hom-image : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
---  →             𝑩 is-hom-image-of 𝑨 → (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
--- lift-alg-hom-image = {!!}
+lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
+                       (𝓩 : Universe){𝓦 : Universe}
+                       (𝑨 : Algebra 𝓧 𝑆)
+                       (𝑩 : Algebra 𝓨 𝑆)
+                       (f : hom 𝑨 𝑩)  →  Epic ∣ f ∣
+                      ---------------------------------------
+ →                     Epic ∣ lift-alg-hom 𝓧 𝓩{𝓦} 𝑨 𝑩 f ∣
+
+lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepic = {!!}
+
+lift-alg-hom-image : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+ →             𝑩 is-hom-image-of 𝑨 → (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
+lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) = γ
+ where
+  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+  lA = lift-alg 𝑨 𝓩
+  lB lC : Algebra (𝓨 ⊔ 𝓦) 𝑆
+  lB = lift-alg 𝑩 𝓦
+  lC = lift-alg 𝑪 𝓦
+
+  lϕ : hom lA lC
+  lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
+
+  lϕepic : Epic ∣ lϕ ∣
+  lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
+
+  lCϕ : HomImagesOf {𝓧 ⊔ 𝓩}{𝓨 ⊔ 𝓦} lA
+  lCϕ = lC , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic
+
+  lC≅lB : lC ≅ lB
+  lC≅lB = lift-alg-iso 𝓨 𝓦 𝑪 𝑩 C≅B
+
+  γ : lB is-hom-image-of lA
+  γ = lCϕ , lC≅lB
+
 
 
 

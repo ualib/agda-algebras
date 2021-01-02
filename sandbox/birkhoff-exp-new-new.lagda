@@ -595,13 +595,6 @@ FU 𝓤 = (OV 𝓤)⁺
 
 
 
-lift-alg-hom-image : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
- →             𝑩 is-hom-image-of 𝑨 → (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
-lift-alg-hom-image = {!!}
-
-
-
-
 -------------------------------------------------------------------------------------
 -- NEW DEVELOPMENT OF BIRKHOFF BEGINS HERE --
 -------------------------------------------------------------------------------------

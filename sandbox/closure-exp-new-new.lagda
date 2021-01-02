@@ -261,6 +261,9 @@ lift-alg-subP {𝓤} {𝓦} {𝒦} {𝑩} (𝑨 , (𝑪 , C≤A) , pA , B≅C ) 
   γ : lB IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
   γ = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 𝑪 B≅C)
 
+
+
+
 -- lift-alg-V : {𝓤 𝓦 𝓧 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
 
 --  →                𝑩 ∈ V{𝓤}{𝓦} 𝒦
