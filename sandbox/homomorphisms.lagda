@@ -466,4 +466,31 @@ HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
 all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
 
+
+-- HomImagesOf : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ (𝓦 ⁺) ̇
+-- HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+
+-- _is-hom-image-of_ : {𝓤 𝓦 : Universe} (𝑩 : Algebra 𝓦 𝑆)
+--   →                (𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+
+-- _is-hom-image-of_ {𝓤}{𝓦} 𝑩 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf{𝓤}{𝓦} 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
+
+-- lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+--  →             hom 𝑨 𝑩 → hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+-- lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ Lift.lower , γ
+
+-- lift-alg-hom-image : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+--  →             𝑩 is-hom-image-of 𝑨 → (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
+-- lift-alg-hom-image = {!!}
+
+
+
+
+
+
+
+
 \end{code}
+
+
+
