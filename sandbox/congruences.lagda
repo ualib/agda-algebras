@@ -84,21 +84,24 @@ A // ≈ = Σ C ꞉ _ ̇ ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
 is-subsingleton-valued : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
 is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 
+--The identity relation.
 𝟎 : {A : 𝓤 ̇ } → 𝓤 ̇
 𝟎{𝓤} {A} = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
 
+--...on the domain of an algebra...
 𝟎-alg-rel : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓤 𝑆} → 𝓤 ̇
 𝟎-alg-rel {𝑨 = 𝑨} = Σ a ꞉ ∣ 𝑨 ∣ , Σ b ꞉ ∣ 𝑨 ∣ , a ≡ b
 
+--...as a binary relation...
 𝟎-rel : {A : 𝓤 ̇ } → Rel A 𝓤
 𝟎-rel a b = a ≡ b
 
+--...as a binary predicate...
 𝟎-pred : {A : 𝓤 ̇ } → Pred (A × A) 𝓤
 𝟎-pred (a , a') = a ≡ a'
 
---...as a binary predicate:
-𝟎'' : {A : 𝓤 ̇ } → 𝓤 ̇
-𝟎'' {𝓤} {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
+𝟎-pred' : {A : 𝓤 ̇ } → 𝓤 ̇
+𝟎-pred' {𝓤} {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
 𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
 𝟏 a b = 𝟙

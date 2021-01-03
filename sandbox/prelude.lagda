@@ -197,9 +197,6 @@ Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(b : B) → Image f ∋ b  →  A
 Inv f .(f a) (im a) = a
 Inv f b (eq b a b≡fa) = a
 
--- inv : {A B : 𝓤₀ ̇ }(f : A → B)(b : B) → image f → A
--- inv {A} {B} = Inv {𝓤₀}{𝓤₀}{A}{B}
-
 InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
            (b : B) (b∈Imgf : Image f ∋ b)
           ---------------------------------
@@ -214,37 +211,38 @@ epic : {A B : 𝓤₀ ̇ } (g : A → B) → 𝓤₀ ̇
 epic = Epic {𝓤₀} {𝓤₀}
 
 EpicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → Epic f → B → A
-EpicInv f fEpic b = Inv f b (fEpic b)
+EpicInv f fEpi b = Inv f b (fEpi b)
 
 -- The (psudo-)inverse of an epic is the right inverse.
-EInvIsRInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-             (f : A → B)  (fEpic : Epic f)
+EpicInvIsRightInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
+             (f : A → B)  (fEpi : Epic f)
             ---------------------------------
- →           f ∘ (EpicInv f fEpic) ≡ 𝑖𝑑 B
-EInvIsRInv fe f fEpic = fe (λ x → InvIsInv f x (fEpic x))
+ →           f ∘ (EpicInv f fEpi) ≡ 𝑖𝑑 B
+EpicInvIsRightInv fe f fEpi = fe (λ x → InvIsInv f x (fEpi x))
 
-monic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) → 𝓤 ⊔ 𝓦 ̇
-monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
-monic₀ : {A B : 𝓤₀ ̇ } (g : A → B) → 𝓤₀ ̇
-monic₀ = monic {𝓤₀}{𝓤₀}
+Monic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) → 𝓤 ⊔ 𝓦 ̇
+Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
+monic : {A B : 𝓤₀ ̇ } (g : A → B) → 𝓤₀ ̇
+monic = Monic {𝓤₀}{𝓤₀}
 
 --The (pseudo-)inverse of a monic function
-monic-inv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → monic f
+MonicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → Monic f
  →           (b : B) → Image f ∋ b → A
-monic-inv f fmonic  = λ b Imf∋b → Inv f b Imf∋b
+MonicInv f fmonic  = λ b Imf∋b → Inv f b Imf∋b
 
 --The (psudo-)inverse of a monic is the left inverse.
-monic-inv-is-linv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-                    (f : A → B) (fmonic : monic f)(x : A)
+MonicInvIsLeftInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
+                    (f : A → B) (fmonic : Monic f)(x : A)
                    ----------------------------------------
-  →                 (monic-inv f fmonic) (f x) (im x) ≡ x
-monic-inv-is-linv f fmonic x = refl _
+  →                 (MonicInv f fmonic) (f x) (im x) ≡ x
+MonicInvIsLeftInv f fmonic x = refl _
+
+Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(g : A → B) → 𝓤 ⊔ 𝓦 ̇
+Bijective g = Epic g × Monic g
 
 bijective : {A B : 𝓤₀ ̇ }(g : A → B) → 𝓤₀ ̇
 bijective g = epic g × monic g
 
-Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(g : A → B) → 𝓤 ⊔ 𝓦 ̇
-Bijective g = Epic g × monic g
 
 -----------------------------------------------------------------------
 -- Embedding elimination (makes it easier to apply is-embedding)

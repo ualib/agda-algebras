@@ -8,7 +8,7 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext; dfunext; im; _∪_; inj₁; inj₂; Π)
+open import prelude using (global-dfunext)
 
 module closure-exp-new-new
  {𝑆 : Signature 𝓞 𝓥}
@@ -18,6 +18,8 @@ module closure-exp-new-new
 open import homomorphisms {𝑆 = 𝑆} public
 open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} public
 open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
+
+open import prelude using (_∪_; inj₁; inj₂; domain; embeddings-are-lc) public
 
 -- BASIC DEFINITIONS --
 

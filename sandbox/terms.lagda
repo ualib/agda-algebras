@@ -17,8 +17,6 @@ module terms
 
 open import homomorphisms {𝑆 = 𝑆}
 
-open import prelude using (pr₂) public
-
 data Term {𝓧 : Universe}{X : 𝓧 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇  where
   generator : X → Term{𝓧}{X}
   node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X}) → Term
@@ -68,12 +66,12 @@ lift-agrees-on-X : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
 lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
 
 --Of course, the lift of a surjective map is surjective.
-lift-of-epic-is-epic : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
- →                     Epic h₀
-                      ----------------------
- →                     Epic ∣ lift-hom 𝑨 h₀ ∣
+lift-of-epi-is-epi : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
+ →                    Epic h₀
+                     ----------------------
+ →                    Epic ∣ lift-hom 𝑨 h₀ ∣
 
-lift-of-epic-is-epic {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
+lift-of-epi-is-epi {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
  where
   h₀pre : Image h₀ ∋ y
   h₀pre = hE y
@@ -83,8 +81,8 @@ lift-of-epic-is-epic {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
   η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
   η =
-   y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-   h₀ h₀⁻¹y                        ≡⟨ lift-agrees-on-X 𝑨 h₀ h₀⁻¹y ⟩
+   y                                 ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+   h₀ h₀⁻¹y                          ≡⟨ lift-agrees-on-X 𝑨 h₀ h₀⁻¹y ⟩
    ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y) ∎
 
   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
@@ -92,7 +90,7 @@ lift-of-epic-is-epic {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
 𝑻hom-gen : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
  →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
-𝑻hom-gen {𝓧}{𝓤}{X} 𝑪 = h , lift-of-epic-is-epic 𝑪 h₀ hE
+𝑻hom-gen {𝓧}{𝓤}{X} 𝑪 = h , lift-of-epi-is-epi 𝑪 h₀ hE
  where
   h₀ : X → ∣ 𝑪 ∣
   h₀ = fst (𝕏 𝑪)
@@ -268,7 +266,7 @@ compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
 
 compatible-term 𝑨 (generator x) θ p = p x
 
-compatible-term 𝑨 (node f args) θ p = pr₂ ∥ θ ∥ f λ x → (compatible-term 𝑨 (args x) θ) p
+compatible-term 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term 𝑨 (args x) θ) p
 
 compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
                    (𝑨 : Algebra 𝓤 𝑆)(t : Term{𝓤}{X}) (θ : Con 𝑨)
@@ -276,5 +274,5 @@ compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
  →                 compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
 compatible-term' 𝑨 (generator x) θ p = p x
-compatible-term' 𝑨 (node f args) θ p = pr₂ ∥ θ ∥ f λ x → (compatible-term' 𝑨 (args x) θ) p
+compatible-term' 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term' 𝑨 (args x) θ) p
 

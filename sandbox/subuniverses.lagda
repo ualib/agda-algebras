@@ -24,10 +24,10 @@ open import terms
 
 open import Relation.Unary using (⋂)
 
-open import prelude using (Im_⊆_; Univalence; embeddings-are-lc; univalence-gives-global-dfunext;
- 𝓟; _∈₀_; _⊆₀_; pr₁; domain; Π-is-subsingleton; lr-implication; ×-is-subsingleton; id-is-embedding;
- ∈-is-subsingleton; pr₁-embedding; rl-implication; inverse; embedding-gives-ap-is-equiv; is-set;_⇔_;
- transport; subset-extensionality'; equiv-to-subsingleton; powersets-are-sets'; _●_; ∘-embedding;
+open import prelude using (𝓟; _∈₀_; _⊆₀_; _●_; _⇔_; Univalence; is-set; powersets-are-sets';
+ univalence-gives-global-dfunext; Π-is-subsingleton; lr-implication; rl-implication; Im_⊆_;
+ subset-extensionality'; id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
+ ×-is-subsingleton; is-subsingleton; ∈-is-subsingleton; equiv-to-subsingleton; transport; inverse;
  logically-equivalent-subsingletons-are-equivalent) public
 
 -- useful alias

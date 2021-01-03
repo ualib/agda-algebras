@@ -11,8 +11,8 @@ module basic where
 -- modules that import basic:
 -- congruences, homomorphisms, terms, subuniverses, closure, birkhoff
 
-open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀;𝓥; 𝓦; 𝓣; 𝓧; 𝓤ω; Σω; _⸲_; is-set;
- _⁺; _̇;_⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_; _∘_; _≡_; 𝑖𝑑; 𝓻ℯ𝓯𝓵) public
+open import prelude using (Universe; 𝓘; 𝓞; 𝓤; 𝓤₀; 𝓥; 𝓦; 𝓧; _⸲_; is-set;
+ _⁺; _̇; _⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_; _∘_; _≡_; 𝑖𝑑; 𝓻ℯ𝓯𝓵) public
 
 --The type of operations
 Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇

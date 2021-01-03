@@ -12,10 +12,9 @@ open import prelude using (global-dfunext)
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import prelude using (_⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
- Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible; -- 𝑖𝑑;
- equivs-are-embeddings; id; invertibles-are-equivs; dintensionality; is-subsingleton; fiber; monic;
- intensionality; hfunext; is-equiv; Inv; eq; InvIsInv) public
+open import prelude using (_⊆_; _≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
+ Nat; NatΠ; NatΠ-is-embedding; is-embedding; fst; snd; invertible; hfunext;
+ equivs-are-embeddings; id; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
 
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
@@ -84,16 +83,16 @@ homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra
  →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
 homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
- (g , ghom) (h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+ (g , ghom) (h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
    hInv : C → A
-   hInv = λ c → (EpicInv h hEpic) c
+   hInv = λ c → (EpicInv h hEpi) c
 
    ϕ : C → B
    ϕ = λ c → g ( hInv c )
 
    ξ : (x : A) → ker-pred h (x , hInv (h x))
-   ξ x =  ( cong-app (EInvIsRInv fe h hEpic) ( h x ) )⁻¹
+   ξ x =  ( cong-app (EpicInvIsRightInv fe h hEpi) ( h x ) )⁻¹
 
    g≡ϕ∘h : g ≡ ϕ ∘ h
    g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
@@ -101,19 +100,19 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
    ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
     →  c x ≡ (h ∘ hInv)(c x)
 
-   ζ f c x = (cong-app (EInvIsRInv fe h hEpic) (c x))⁻¹
+   ζ f c x = (cong-app (EpicInvIsRightInv fe h hEpi) (c x))⁻¹
 
    ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
     →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
 
-   ι f c = ap (λ - → - ∘ c)(EInvIsRInv fe h hEpic)⁻¹
+   ι f c = ap (λ - → - ∘ c)(EpicInvIsRightInv fe h hEpi)⁻¹
 
    useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
     → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
 
    useker = λ f c
     → Kh⊆Kg (cong-app
-             (EInvIsRInv fe h hEpic)
+             (EpicInvIsRightInv fe h hEpi)
              (h(FA f(hInv ∘ c)))
             )
 
@@ -139,16 +138,16 @@ HomFactor : {𝓠 𝓤 𝓦 : Universe} → global-dfunext
            ------------------------------------------------
  →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpic = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
    hInv : C → A
-   hInv = λ c → (EpicInv h hEpic) c
+   hInv = λ c → (EpicInv h hEpi) c
 
    ϕ : C → B
    ϕ = λ c → g ( hInv c )
 
    ξ : (x : A) → KER-pred h (x , hInv (h x))
-   ξ x =  ( cong-app (EInvIsRInv gfe h hEpic) ( h x ) )⁻¹
+   ξ x =  ( cong-app (EpicInvIsRightInv gfe h hEpi) ( h x ) )⁻¹
 
    g≡ϕ∘h : g ≡ ϕ ∘ h
    g≡ϕ∘h = gfe  λ x → Kh⊆Kg (ξ x)
@@ -156,19 +155,19 @@ HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpic = (ϕ ,
    ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
     →  c x ≡ (h ∘ hInv)(c x)
 
-   ζ f c x = (cong-app (EInvIsRInv gfe h hEpic) (c x))⁻¹
+   ζ f c x = (cong-app (EpicInvIsRightInv gfe h hEpi) (c x))⁻¹
 
    ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
     →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
 
-   ι f c = ap (λ - → - ∘ c)(EInvIsRInv gfe h hEpic)⁻¹
+   ι f c = ap (λ - → - ∘ c)(EpicInvIsRightInv gfe h hEpi)⁻¹
 
    useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
     → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
 
    useker = λ f c
     → Kh⊆Kg (cong-app
-             (EInvIsRInv gfe h hEpic)
+             (EpicInvIsRightInv gfe h hEpi)
              (h(FA f(hInv ∘ c)))
             )
 
@@ -550,7 +549,7 @@ lift-function : (𝓧 : Universe){𝓨 : Universe}
  →               Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
 lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (lower la))
 
-lift-of-alg-epi-is-epi : (𝓧 : Universe){𝓨 : Universe}
+lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
                        (𝓩 : Universe){𝓦 : Universe}
                        (𝑨 : Algebra 𝓧 𝑆)
                        (𝑩 : Algebra 𝓨 𝑆)
@@ -558,7 +557,7 @@ lift-of-alg-epi-is-epi : (𝓧 : Universe){𝓨 : Universe}
                       ---------------------------------------
  →                     Epic ∣ lift-alg-hom 𝓧 𝓩{𝓦} 𝑨 𝑩 f ∣
 
-lift-of-alg-epi-is-epi 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
+lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
  where
   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
   lA = lift-alg 𝑨 𝓩
@@ -605,7 +604,7 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
   lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
 
   lϕepic : Epic ∣ lϕ ∣
-  lϕepic = lift-of-alg-epi-is-epi 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
+  lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
 
   lCϕ : HomImagesOf {𝓧 ⊔ 𝓩}{𝓨 ⊔ 𝓦} lA
   lCϕ = lC , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic
