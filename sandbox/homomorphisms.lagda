@@ -1,7 +1,8 @@
 \begin{code}
--- File: homomorphisms.agda
--- Author: William DeMeo and Siva Somayyajula
--- Date: 30 Jun 2020
+--File: homomorphisms.agda
+--Author: William DeMeo and Siva Somayyajula
+--Date: 30 Jun 2020
+--UPDATED: 3 Jan 2021
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -14,7 +15,7 @@ module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 open import prelude using (_⊆_; EpicInv; cong-app; EInvIsRInv; Image_∋_; embedding-elim; _≃_;
  Nat; NatΠ; NatΠ-is-embedding; embedding-criterion; _∼_; is-embedding; fst; snd; invertible; -- 𝑖𝑑;
  equivs-are-embeddings; id; invertibles-are-equivs; dintensionality; is-subsingleton; fiber; monic;
- intensionality; hfunext; is-equiv) public
+ intensionality; hfunext; is-equiv; Inv; eq; InvIsInv) public
 
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
@@ -186,8 +187,31 @@ HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpic = (ϕ ,
      iv  = ghom f (hInv ∘ c)
 
 
---(extensional versions)
---Isomorphism
+--Examples ------------------------------------------------------------
+--Equalizers of functions
+𝑬 : {𝓠 𝓤 : Universe}{A : 𝓠 ̇ }{B : 𝓤 ̇} → (g h : A → B) → Pred A 𝓤
+𝑬 g h x = g x ≡ h x
+
+--Equalizers of homomorphisms
+𝑬𝑯 : {𝑨 𝑩 : Algebra 𝓤 𝑆} (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓤
+𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+
+𝑬𝑯-is-closed : funext 𝓥 𝓤
+ →     {𝑓 : ∣ 𝑆 ∣ } {𝑨 𝑩 : Algebra 𝓤 𝑆}
+       (g h : hom 𝑨 𝑩)  (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
+ →     ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
+       --------------------------------------------------
+ →      ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
+
+𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 p =
+   (∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂))    ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
+   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
+------------------------------------------------------------------------
+
+
+--Isomorphism (extensional versions)
 _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
 --Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x
@@ -291,10 +315,13 @@ Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
  →            𝑨 ≅ 𝑪
 Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
 
+
+open Lift
+
 --An algebra is isomorphic to its lift to a higher universe level
 lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
 lift-alg-≅ {𝓤}{𝓦}{𝑨} = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) ,
-                         (Lift.lower , λ _ _ → 𝓇ℯ𝒻𝓁) ,
+                         (lower , λ _ _ → 𝓇ℯ𝒻𝓁) ,
                          (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
 
 lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}
@@ -304,16 +331,16 @@ lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}
  →             hom 𝑨 𝑩
               ------------------------------------
  →             hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
-lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ Lift.lower , γ
+lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
  where
-  lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 Lift.lower
+  lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 lower
   lh = λ _ _ → 𝓇ℯ𝒻𝓁
-  lABh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑩 (f ∘ Lift.lower)
-  lABh = ∘-hom (lift-alg 𝑨 𝓩) 𝑨 𝑩 {Lift.lower}{f} lh fhom
+  lABh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑩 (f ∘ lower)
+  lABh = ∘-hom (lift-alg 𝑨 𝓩) 𝑨 𝑩 {lower}{f} lh fhom
   Lh : is-homomorphism 𝑩 (lift-alg 𝑩 𝓦) lift
   Lh = λ _ _ → 𝓇ℯ𝒻𝓁
-  γ : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) (lift ∘ (f ∘ Lift.lower))
-  γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦) {f ∘ Lift.lower}{lift} lABh Lh
+  γ : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) (lift ∘ (f ∘ lower))
+  γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦) {f ∘ lower}{lift} lABh Lh
 
 lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
  →               𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
@@ -321,6 +348,7 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
  where
   lA≅A : (lift-alg 𝑨 𝓩) ≅ 𝑨
   lA≅A = sym-≅ lift-alg-≅
+
 
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
@@ -366,6 +394,56 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
 
   γ : ⨅ 𝒜 ≅ ⨅ ℬ
   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+
+
+--A nearly identical proof goes through for isomorphisms of lifted products.
+lift-alg-⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 𝓩 : Universe}
+     {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓘}{𝓩} I) → Algebra 𝓤 𝑆}
+ →   ((i : I) → (𝒜 i) ≅ (ℬ (lift i)))
+     ---------------------------
+ →       lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+
+lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
+ where
+  F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ (lift i) ∣
+  F i = ∣ fst (AB i) ∣
+  Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ (lift i)) (F i)
+  Fhom i = ∥ fst (AB i) ∥
+
+  G : ∀ i → ∣ ℬ (lift i) ∣ → ∣ 𝒜 i ∣
+  G i = fst ∣ snd (AB i) ∣
+  Ghom : ∀ i → is-homomorphism (ℬ (lift i)) (𝒜 i) (G i)
+  Ghom i = snd ∣ snd (AB i) ∣
+
+  F∼G : ∀ i → (F i) ∘ (G i) ∼ (∣ 𝒾𝒹 (ℬ (lift i)) ∣)
+  F∼G i = fst ∥ snd (AB i) ∥
+
+  G∼F : ∀ i → (G i) ∘ (F i) ∼ (∣ 𝒾𝒹 (𝒜 i) ∣)
+  G∼F i = snd ∥ snd (AB i) ∥
+
+  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+  ϕ a i = F (lower i) (a (lower i))
+
+  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒂 = gfe (λ i → (Fhom (lower i)) 𝑓 (λ x → 𝒂 x (lower i)))
+
+  ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
+  ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
+
+  ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
+  ψhom 𝑓 𝒃 = gfe (λ i → (Ghom i) 𝑓 (λ x → 𝒃 x (lift i)))
+
+  ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+  ϕ~ψ 𝒃 = gfe λ i → F∼G (lower i) (𝒃 i)
+
+  ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+  ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
+
+  A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
+  A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+
+  γ : lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+  γ = Trans-≅ (lift-alg (⨅ 𝒜) 𝓩) (⨅ ℬ) (sym-≅ lift-alg-≅) A≅B
 
 
 embedding-lift-nat : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
@@ -461,25 +539,18 @@ HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
 all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
 
+
+
+
+open Lift
+
 lift-function : (𝓧 : Universe){𝓨 : Universe}
                 (𝓩 : Universe){𝓦 : Universe}
                 (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
  →               Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
-lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (Lift.lower la))
+lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (lower la))
 
-lift-of-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
-                       (𝓩 : Universe){𝓦 : Universe}
-                       (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
- →                      Epic f → Epic (lift-function 𝓧 𝓩 {𝓦} A B f)
-lift-of-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} A B f fepic = {!!}
-
-
-
--- Epic g = ∀ y → Image g ∋ y
--- Epic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) →  𝓤 ⊔ 𝓦 ̇
--- Epic g = ∀ y → Image g ∋ y
-
-lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
+lift-of-alg-epi-is-epi : (𝓧 : Universe){𝓨 : Universe}
                        (𝓩 : Universe){𝓦 : Universe}
                        (𝑨 : Algebra 𝓧 𝑆)
                        (𝑩 : Algebra 𝓨 𝑆)
@@ -487,7 +558,38 @@ lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
                       ---------------------------------------
  →                     Epic ∣ lift-alg-hom 𝓧 𝓩{𝓦} 𝑨 𝑩 f ∣
 
-lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepic = {!!}
+lift-of-alg-epi-is-epi 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
+ where
+  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+  lA = lift-alg 𝑨 𝓩
+  lB : Algebra (𝓨 ⊔ 𝓦) 𝑆
+  lB = lift-alg 𝑩 𝓦
+
+  lf : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+  lf = lift-alg-hom 𝓧 𝓩 𝑨 𝑩 f
+
+  lE : (y : ∣ lB ∣ ) → Image ∣ lf ∣ ∋ y
+  lE y = ξ
+   where
+    b : ∣ 𝑩 ∣
+    b = lower y
+
+    ζ : Image ∣ f ∣ ∋ b
+    ζ = fepi b
+
+    a : ∣ 𝑨 ∣
+    a = Inv ∣ f ∣ b ζ
+
+    η : y ≡ ∣ lf ∣ (lift a)
+    η = y                                       ≡⟨ (intensionality lift∼lower) y ⟩
+        lift b                                  ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
+        lift (∣ f ∣ a)                           ≡⟨ (ap (λ - → lift (∣ f ∣ ( - a)))) (lower∼lift{𝓦 = 𝓦}) ⟩
+        lift (∣ f ∣ ((lower{𝓦 = 𝓦} ∘ lift) a)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+        ∣ lf ∣ (lift a)                          ∎
+    ξ : Image ∣ lf ∣ ∋ y
+    ξ = eq y (lift a) η
+
 
 lift-alg-hom-image : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
  →             𝑩 is-hom-image-of 𝑨 → (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
@@ -503,7 +605,7 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
   lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
 
   lϕepic : Epic ∣ lϕ ∣
-  lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
+  lϕepic = lift-of-alg-epi-is-epi 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
 
   lCϕ : HomImagesOf {𝓧 ⊔ 𝓩}{𝓨 ⊔ 𝓦} lA
   lCϕ = lC , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic
@@ -514,15 +616,4 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
   γ : lB is-hom-image-of lA
   γ = lCϕ , lC≅lB
 
-
-
-
-
-
-
-
-
 \end{code}
-
-
-

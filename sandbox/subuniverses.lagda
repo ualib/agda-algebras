@@ -1,7 +1,8 @@
 \begin{code}
--- FILE: subuniverses.agda
--- AUTHOR: William DeMeo and Siva Somayyajula
--- DATE: 30 Jun 2020
+--FILE: subuniverses.agda
+--AUTHOR: William DeMeo and Siva Somayyajula
+--DATE: 30 Jun 2020
+--UPDATED: 3 Jan 2021
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -170,6 +171,36 @@ Subalgebra {𝓤} = SUBALGEBRA {𝓤}{𝓤}
 getSub : {𝓤 𝓠 : Universe}{𝑨 : Algebra 𝓠 𝑆} → SUBALGEBRA{𝓤}{𝓠} 𝑨 → Algebra 𝓤 𝑆
 getSub SA = ∣ SA ∣
 
+
+
+--Examples---------------------------------------
+
+--Equalizer of homs is a subuniverse.
+𝑬𝑯-is-subuniverse : {𝓤 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+𝑬𝑯-is-subuniverse {𝓤} fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝓤}{𝑨}{𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 x
+
+--Homs are determined on generating sets
+HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
+            (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+ →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
+            ---------------------------------------------
+ →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
+
+HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
+
+HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
+  ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+  (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
+  (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
+  ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
+ where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+
+-------------------------------------------------
+
+
+
+
+
 _IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
  →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇
 _IsSubalgebraOfClass_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (SUBALGEBRA{𝓤} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
@@ -200,6 +231,7 @@ TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra
  →         𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
           ---------------------
  →              𝑪 ≤ 𝑨
+
 TRANS-≤ 𝑨 𝑩 𝑪 BA CB =
  ∣ BA ∣ ∘ ∣ CB ∣ , ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥) , ∘-hom 𝑪 𝑩 𝑨 {∣ CB ∣}{∣ BA ∣}(snd ∥ CB ∥) (snd ∥ BA ∥)
 
@@ -566,99 +598,5 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
   →                      (B ≡ C) ≃ (∣ B ∣ ≡ ∣ C ∣)
  subuniverse-equality' B C =
   (subuniverse-equality B C) ● (carrier-equiv B C)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- module _
---  {𝓤 : Universe}
---  {X : 𝓧 ̇ }
---  {UV : Univalence} where
-
---  _⊧_≈_ : {X : 𝓧 ̇ } → Algebra 𝓤 𝑆
---   →      Term{X = X} → Term → 𝓧 ⊔ 𝓤 ̇
-
---  𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-
---  _⊧_≋_ : Pred (Algebra 𝓤 𝑆) 𝓦
---   →      Term{X = X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
-
---  _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
-
---  gdfe : global-dfunext
---  gdfe = univalence-gives-global-dfunext UV
-
---  SubalgebrasOfClass : Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
---  SubalgebrasOfClass 𝒦 =
---   Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦) × Subalgebra{𝑨 = 𝑨} UV
-
---  data SClo (𝒦 : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)) : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⁺ ) where
---   sbase : {𝑨 :  Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → 𝑨 ∈ SClo 𝒦
---   sub : (SAK : SubalgebrasOfClass 𝒦) → (pr₁ ∥ (pr₂ SAK) ∥) ∈ SClo 𝒦
-
---  S-closed : (ℒ𝒦 : (𝓤 : Universe) → Pred (Algebra 𝓤 𝑆) (𝓤 ⁺))
---   →      (𝓤 : Universe) → (𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
---  S-closed ℒ𝒦 =
---   λ 𝓤 B → (B is-subalgebra-of-class (ℒ𝒦 𝓤)) → (B ∈ ℒ𝒦 𝓤)
-
---  subalgebras-preserve-identities : (𝒦 : Pred (Algebra 𝓤 𝑆) ( 𝓤 ⁺ ))(p q : Term{X = X})
---   →  (𝒦 ⊧ p ≋ q) → (SAK : SubalgebrasOfClass 𝒦)
---   →  (pr₁ ∥ (pr₂ SAK) ∥) ⊧ p ≈ q
---  subalgebras-preserve-identities 𝒦 p q 𝒦⊧p≋q SAK = γ
---   where
-
---   𝑨 : Algebra 𝓤 𝑆
---   𝑨 = ∣ SAK ∣
-
---   A∈𝒦 : 𝑨 ∈ 𝒦
---   A∈𝒦 = ∣ pr₂ SAK ∣
-
---   A⊧p≈q : 𝑨 ⊧ p ≈ q
---   A⊧p≈q = 𝒦⊧p≋q A∈𝒦
-
---   subalg : Subalgebra{𝑨 = 𝑨} UV
---   subalg = ∥ pr₂ SAK ∥
-
---   𝑩 : Algebra 𝓤 𝑆
---   𝑩 = pr₁ subalg
-
---   h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
---   h = ∣ pr₂ subalg ∣
-
---   hem : is-embedding h
---   hem = pr₁ ∥ pr₂ subalg ∥
-
---   hhm : is-homomorphism 𝑩 𝑨 h
---   hhm = pr₂ ∥ pr₂ subalg ∥
-
---   ξ : (b : X → ∣ 𝑩 ∣ ) → h ((p ̇ 𝑩) b) ≡ h ((q ̇ 𝑩) b)
---   ξ b =
---    h ((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gdfe 𝑩 𝑨 (h , hhm) p b ⟩
---    (p ̇ 𝑨)(h ∘ b) ≡⟨ intensionality A⊧p≈q (h ∘ b) ⟩
---    (q ̇ 𝑨)(h ∘ b) ≡⟨ (comm-hom-term gdfe 𝑩 𝑨 (h , hhm) q b)⁻¹ ⟩
---    h ((q ̇ 𝑩) b)  ∎
-
---   hlc : {b b' : domain h} → h b ≡ h b' → b ≡ b'
---   hlc hb≡hb' = (embeddings-are-lc h hem) hb≡hb'
-
---   γ : 𝑩 ⊧ p ≈ q
---   γ = gdfe λ b → hlc (ξ b)
 
 

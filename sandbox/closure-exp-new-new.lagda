@@ -2,7 +2,7 @@
 --FILE: closure.agda
 --AUTHOR: William DeMeo and Siva Somayyajula
 --DATE: 4 Aug 2020
---UPDATE: 23 Dec 2020
+--UPDATED: 3 Jan 2021
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -45,7 +45,6 @@ Mod X ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term{𝓧}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
 
 
 

@@ -17,7 +17,7 @@ module terms
 
 open import homomorphisms {𝑆 = 𝑆}
 
-open import prelude using (pr₂; Inv; InvIsInv; eq) public
+open import prelude using (pr₂) public
 
 data Term {𝓧 : Universe}{X : 𝓧 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇  where
   generator : X → Term{𝓧}{X}
