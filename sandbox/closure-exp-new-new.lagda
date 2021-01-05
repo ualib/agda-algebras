@@ -627,80 +627,47 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 --  SP⊆V (sub x sa) = vsub (SP⊆V x) sa
 --  SP⊆V (siso x x₁) = visou (SP⊆V x) x₁
 
---We now show how to construct the full product of all algebras in a class 𝒦--
+ -- We now prove that the product of all subalgebras of a class 𝒦 belongs to PS(𝒦).
+ -- (Recall the definitions of class products from the basic module.)
 
--- ℑ will serve as the index of the product
-ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(OV 𝓤) → (OV 𝓤) ̇
-ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
+module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
 
--- 𝔄 produces an algebra for each index (i : ℑ).
+ open class-product {𝓤 = 𝓤}{𝑆 = 𝑆}{𝒦 = 𝒦}
 
-𝔄 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → ℑ 𝒦 → Algebra 𝓤 𝑆
-𝔄{𝓤}{𝒦} = λ (i : (ℑ 𝒦)) → ∣ i ∣
+ class-prod-s-∈-ps : class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦))
 
--- So the product of all members of 𝒦 can be written simply as follows:
-class-product : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
-class-product {𝓤} 𝒦 = ⨅ ( 𝔄{𝓤}{𝒦} )
+ class-prod-s-∈-ps = pisou{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} ps⨅llA ⨅llA≅cpK
+  where
+   I : (OV 𝓤) ̇
+   I = ℑ (S{𝓤}{𝓤} 𝒦)
 
--- To see it more explicitly, here is the expansion of this indexed product.
-class-product' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
-class-product'{𝓤} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣
+   sA : (i : I) → (𝔄 i) ∈ (S{𝓤}{𝓤} 𝒦)
+   sA i = ∥ i ∥
 
--- For example, the product of all subalgebras of members of the class 𝒦 is
--- constructed as follows:
-ℑs : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → (OV 𝓤) ̇
-ℑs{𝓤}{𝒦} = ℑ (S{𝓤}{𝓤} 𝒦)
+   lA llA : I → Algebra (OV 𝓤) 𝑆
+   lA i =  lift-alg (𝔄 i) (OV 𝓤)
+   llA i = lift-alg (lA i) (OV 𝓤)
 
-𝔄s : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → ℑs{𝓤}{𝒦} → Algebra 𝓤 𝑆
-𝔄s {𝓤}{𝒦} = 𝔄 {𝒦 = (S{𝓤}{𝓤} 𝒦)}
+   slA : (i : I) → (lA i) ∈ (S{𝓤}{(OV 𝓤)} 𝒦)
+   slA i = siso (sA i) lift-alg-≅
 
--- or in a single step, as
-class-prod-s : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
-class-prod-s {𝓤} 𝒦 = ⨅ ( 𝔄{𝒦 = S{𝓤}{𝓤} 𝒦} )
+   psllA : (i : I) → (llA i) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{(OV 𝓤)} 𝒦))
+   psllA i = pbase{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} (slA i)
 
--- or, in a way that is probably easier to read,
-class-prod-s' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
-class-prod-s' {𝓤} 𝒦 = class-product ( S{𝓤}{𝓤} 𝒦 )
+   ps⨅llA : ⨅ llA ∈ P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦)
+   ps⨅llA = produ{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} psllA
 
--- We now prove that the product of all subalgebras of a class 𝒦 belongs to PS(𝒦).
-class-prod-s-∈-ps : {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
-                  -----------------------------------------------------------------
- →                  class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦))
+   llA≅A : (i : I) → (llA i) ≅ (𝔄 i)
+   llA≅A i = Trans-≅ (llA i) (𝔄 i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
 
-class-prod-s-∈-ps{𝓤}{𝒦} = pisou{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} ps⨅llA ⨅llA≅cpK
- where
-  I : (OV 𝓤) ̇
-  I = ℑ (S{𝓤}{𝓤} 𝒦)
+   ⨅llA≅cpK : ⨅ llA ≅ class-product (S{𝓤}{𝓤} 𝒦)
+   ⨅llA≅cpK = ⨅≅ gfe llA≅A
 
-  sA : (i : I) → (𝔄 i) ∈ (S{𝓤}{𝓤} 𝒦)
-  sA i = ∥ i ∥
+ -- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
+ class-prod-s-∈-sp : hfunext (OV 𝓤) (OV 𝓤)
+  →                  class-product (S{𝓤}{𝓤} 𝒦) ∈ (S{OV 𝓤}{OV 𝓤} (P{𝓤}{OV 𝓤} 𝒦))
 
-  lA llA : I → Algebra (OV 𝓤) 𝑆
-  lA i =  lift-alg (𝔄 i) (OV 𝓤)
-  llA i = lift-alg (lA i) (OV 𝓤)
-
-  slA : (i : I) → (lA i) ∈ (S{𝓤}{(OV 𝓤)} 𝒦)
-  slA i = siso (sA i) lift-alg-≅
-
-  psllA : (i : I) → (llA i) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{(OV 𝓤)} 𝒦))
-  psllA i = pbase{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} (slA i)
-
-  ps⨅llA : ⨅ llA ∈ P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦)
-  ps⨅llA = produ{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} psllA
-
-  llA≅A : (i : I) → (llA i) ≅ (𝔄 i)
-  llA≅A i = Trans-≅ (llA i) (𝔄 i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
-
-  ⨅llA≅cpK : ⨅ llA ≅ class-product (S{𝓤}{𝓤} 𝒦)
-  ⨅llA≅cpK = ⨅≅ gfe llA≅A
-
--- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
-class-prod-s-∈-sp : {𝓤 : Universe} → hfunext (OV 𝓤) (OV 𝓤)
- →                  {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
-                --------------------------------------------------------------
- →              class-product (S{𝓤}{𝓤} 𝒦) ∈ (S{OV 𝓤}{OV 𝓤} (P{𝓤}{OV 𝓤} 𝒦))
-
-class-prod-s-∈-sp{𝓤} hfe = PS⊆SP{hfe = hfe} (class-prod-s-∈-ps{𝓤})
+ class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} (class-prod-s-∈-ps)
 
 
 

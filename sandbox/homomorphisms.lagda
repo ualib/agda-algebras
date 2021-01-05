@@ -8,13 +8,15 @@
 
 open import basic
 open import congruences
-open import prelude using (global-dfunext)
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
+OV : Universe → Universe
+OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+
 open import prelude using (_⊆_; _≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
  Nat; NatΠ; NatΠ-is-embedding; is-embedding; fst; snd; invertible; hfunext;
- equivs-are-embeddings; id; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
+ equivs-are-embeddings; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
 
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
@@ -57,6 +59,13 @@ HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
           FC f (h ∘ g ∘ a) ∎
 
 -- composition of homomorphisms 2
+HomComp : {𝓠 𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓠 𝑆){𝑩 : Algebra 𝓤 𝑆}(𝑪 : Algebra 𝓦 𝑆)
+ →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
+              --------------------
+ →                 hom 𝑨 𝑪
+HomComp {𝓠}{𝓤}{𝓦} 𝑨 {𝑩} 𝑪 f g = HCompClosed {𝓠}{𝓤}{𝓦} 𝑨 𝑩 𝑪 f g
+
+-- composition of homomorphisms 3
 ∘-hom : {𝓧 𝓨 𝓩 : Universe}
         (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
@@ -65,6 +74,16 @@ HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
  →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
 
 ∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
+
+-- composition of homomorphisms 4
+∘-Hom : {𝓧 𝓨 𝓩 : Universe}
+        (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+ →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
+       --------------------------------------------------------------------
+ →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
+
+∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
 
 
 trans-hom : {𝓧 𝓨 𝓩 : Universe}
@@ -131,6 +150,7 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
+-- This is sometimes called the "first homomorphism theorem."
 HomFactor : {𝓠 𝓤 𝓦 : Universe} → global-dfunext
  →          {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
@@ -184,6 +204,41 @@ HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , 
      ii  = ap (λ - → g (hInv -)) (hhom f (hInv ∘ c))⁻¹
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
+
+
+-- homs of products
+⨅-hom : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
+       {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+ →     ((i : I) → hom (𝒜 i)(ℬ i))
+     ---------------------------
+ →       hom (⨅ 𝒜) (⨅ ℬ)
+
+⨅-hom gfe {𝓠}{𝓤}{𝓘}{I}{𝒜}{ℬ} homs = ϕ , ϕhom
+ where
+  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+  ϕ = λ x i → ∣ homs i ∣ (x i)
+
+  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒂 = gfe (λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i))
+
+-- the projection hom
+⨅-projection-hom : {𝓤 𝓘 : Universe}
+                   {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
+                   --------------------------------
+ →                  (i : I) → hom (⨅ 𝒜) (𝒜 i)
+
+⨅-projection-hom {𝓤}{𝓘}{I}{𝒜} i = ϕi , ϕihom
+ where
+  ϕi : ∣ ⨅ 𝒜 ∣ → ∣ 𝒜 i ∣
+  ϕi = λ x → x i
+
+  ϕihom : is-homomorphism (⨅ 𝒜) (𝒜 i) ϕi
+  ϕihom 𝑓 𝒂 = ϕi ((𝑓 ̂ ⨅ 𝒜) 𝒂) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+             ((𝑓 ̂ ⨅ 𝒜) 𝒂) i ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+             (𝑓 ̂ 𝒜 i) (λ x → 𝒂 x i) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+             (𝑓 ̂ 𝒜 i) (λ x → ϕi (𝒂 x)) ∎
+
+-- {!!} --  gfe (λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i))
 
 
 --Examples ------------------------------------------------------------

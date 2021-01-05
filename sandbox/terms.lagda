@@ -258,6 +258,8 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
      ih = gfe λ a → gfe λ i → IH a i
 
 
+open congruence-relations {𝑆 = 𝑆}
+
 -- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
 compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
                   (𝑨 : Algebra 𝓤 𝑆)(t : Term{𝓤}{X})(θ : Con 𝑨)

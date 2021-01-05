@@ -7,32 +7,26 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import congruences
 open import prelude using (global-dfunext)
 
 module subuniverses
  {𝑆 : Signature 𝓞 𝓥}
  {𝕏 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {fe : global-dfunext} where
+ {gfe : global-dfunext} where
 
-open import homomorphisms {𝑆 = 𝑆}
+open import congruences {gfe}
+open import homomorphisms {𝑆}
 
-open import terms
- {𝑆 = 𝑆}
- {𝕏 = 𝕏}
- {gfe = fe} renaming (generator to ℊ)
+open import terms {𝑆} {𝕏} {gfe} renaming (generator to ℊ)
 
 open import Relation.Unary using (⋂)
 
-open import prelude using (𝓟; _∈₀_; _⊆₀_; _●_; _⇔_; Univalence; is-set; powersets-are-sets';
+open import prelude using (𝓟; _∈₀_; _⊆₀_; _●_; Univalence; is-set; powersets-are-sets';
  univalence-gives-global-dfunext; Π-is-subsingleton; lr-implication; rl-implication; Im_⊆_;
  subset-extensionality'; id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
  ×-is-subsingleton; is-subsingleton; ∈-is-subsingleton; equiv-to-subsingleton; transport; inverse;
  logically-equivalent-subsingletons-are-equivalent) public
 
--- useful alias
-OV : Universe → Universe
-OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
 Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
@@ -156,6 +150,7 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
 --------------------------------------------------------------------------------------------
 -- SUBALGEBRAS
 ----------------
+
 _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
 
@@ -196,10 +191,6 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 -------------------------------------------------
-
-
-
-
 
 _IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
  →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇

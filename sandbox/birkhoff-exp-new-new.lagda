@@ -1,11 +1,11 @@
-\begin{code}
---FILE: birkhoff.agda
---AUTHOR: William DeMeo
---DATE: 30 Jun 2020
---UPDATED: 3 Jan 2021
+FILE: birkhoff.agda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATED: 5 Jan 2021
 
+\begin{code}
 -- {-# OPTIONS --without-K --exact-split --safe #-}
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
 
 open import basic
 open import congruences
@@ -20,84 +20,87 @@ open import closure-exp-new-new {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe}
 
 --------------------------------------------------------------------------------------------
 --The free algebra
+open relation-predicate-classes
+-- -- open congruence-relations-predicates
+open congruence-relations-predicates {𝑆 = 𝑆}
 
-𝑻img : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred (Algebra 𝓤 𝑆) (OV 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
-𝑻img X 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
-mkti : {𝓤 𝓧 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-       (X : 𝓧 ̇)(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img X 𝒦
-mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
- where
-  thg : Σ h ꞉ (hom (𝑻 X) 𝑨), Epic ∣ h ∣
-  thg = 𝑻hom-gen 𝑨
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
-𝑻𝑨 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →   𝑻img X 𝒦 → Algebra 𝓤 𝑆
-𝑻𝑨 ti = ∣ ti ∣
+ -- H (𝑻 X)  (hom images of 𝑻 X)
+ 𝑻img : Pred (Algebra 𝓤 𝑆) (OV 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
+ 𝑻img 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
-𝑻ϕ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-     (ti : 𝑻img X 𝒦) → hom (𝑻 X) (𝑻𝑨 ti)
-𝑻ϕ 𝒦 ti = fst (snd ti)
+ -- Every algebra is a hom image of 𝑻 X.
+ mkti : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(𝑨 : Algebra 𝓤 𝑆)
+  →     𝑨 ∈ 𝒦 → 𝑻img 𝒦
+ mkti 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
+  where
+   thg : Σ h ꞉ (hom (𝑻 X) 𝑨), Epic ∣ h ∣
+   thg = 𝑻hom-gen 𝑨
 
-𝑻ϕE : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-      (ti : 𝑻img X 𝒦) → Epic ∣ 𝑻ϕ 𝒦 ti ∣ -- X 𝒦
-𝑻ϕE ti = snd (snd ∥ ti ∥)
+ -- The algebra part of a hom image of 𝑻 X.
+ 𝑻𝑨 : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → 𝑻img 𝒦 → Algebra 𝓤 𝑆
+ 𝑻𝑨 ti = ∣ ti ∣
 
-𝑻KER : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
-𝑻KER X 𝒦 = Σ (p , q) ꞉ (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) , ∀ 𝑨 → (KA : 𝑨 ∈ 𝒦) → (p , q) ∈ KER-pred{B = ∣ 𝑨 ∣} ∣ 𝑻ϕ 𝒦 (mkti X 𝑨 KA) ∣
+ -- The hom part of a hom image of 𝑻 X.
+ 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))(ti : 𝑻img 𝒦)
+  →   hom (𝑻 X) (𝑻𝑨 ti)
+ 𝑻ϕ _ ti = fst (snd ti)
 
-Ψ : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+ -- The part of a hom image of 𝑻 X that proves the hom is an epi.
+ 𝑻ϕE : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))(ti : 𝑻img 𝒦)
+  →    Epic ∣ 𝑻ϕ 𝒦 ti ∣
+ 𝑻ϕE _ ti = snd (snd ∥ ti ∥)
 
+ -- The collection of identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
+ ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
+ ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
+                 →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti 𝑨 sA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑨 sA) ∣ q
+
+ Ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) ((OV 𝓤) ⊔ 𝓧)
+ Ψ 𝒦 (p , q) = (S{𝓤}{𝓤} 𝒦) ⊧ p ≋ q
+
+-- →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
+-- Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
 -- Ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
 --  →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 
-Ψ {𝓤} X 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (SCloA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
- →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
+ ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+  →     Rel ∣ (𝑻 X) ∣ (OV 𝓤)
+ ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
-------------------------------------------------------------------
--- Alternative development
-ψ : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
+ ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+  →            compatible (𝑻 X) (ψRel 𝒦)
+ ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
+  where
+   ti : 𝑻img (S{𝓤}{𝓤} 𝒦)
+   ti = mkti 𝑨 sA
 
-ψ {𝓤} X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
- →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ q
+   ϕ : hom (𝑻 X) 𝑨
+   ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) ti
 
-ψRel : {𝓧 𝓠 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠))
- →     Rel ∣ (𝑻 X) ∣ (OV 𝓠)
-ψRel X 𝒦 p q = ψ X 𝒦 (p , q)
+   γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
+   γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
+       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA)) ⟩
+       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
+       ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
-ψcompatible : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →            compatible (𝑻 X) (ψRel X 𝒦)
-ψcompatible{𝓤} X 𝒦 f {i} {j} iψj 𝑨 SCloA = γ
- where
-  ti : 𝑻img X (S{𝓤}{𝓤} 𝒦)
-  ti = mkti X 𝑨 SCloA
+ ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → reflexive (ψRel 𝒦)
+ ψRefl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁
 
-  ϕ : hom (𝑻 X) 𝑨
-  ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) ti
+ ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → symmetric (ψRel 𝒦)
+ ψSymm p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
-  γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
-  γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
-      (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 SCloA)) ⟩
-      (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
-      ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
+ ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → transitive (ψRel 𝒦)
+ ψTrans p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
-ψSym : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →     symmetric (ψRel X 𝒦)
-ψSym p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
+ ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → IsEquivalence (ψRel 𝒦)
+ ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
 
-ψTra : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →     transitive (ψRel X 𝒦)
-ψTra p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
-
-ψIsEquivalence : {𝓧 𝓠 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
- →               IsEquivalence (ψRel X 𝒦)
-ψIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ψSym ; trans = ψTra }
-
-ψCon : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →     Congruence (𝑻 X)
-ψCon{𝓤} X 𝒦 = mkcon (ψRel X (S{𝓤}{𝓤} 𝒦)) (ψcompatible X (S{𝓤}{𝓤} 𝒦)) ψIsEquivalence
+ ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Congruence (𝑻 X)
+ ψCon 𝒦 = mkcon (ψRel (S{𝓤}{𝓤} 𝒦)) (ψcompatible (S{𝓤}{𝓤} 𝒦)) ψIsEquivalence
 
 
 -- Properties of ψ ------------------------------------------------------------
@@ -105,132 +108,22 @@ mkti X 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
 𝑻i⊧ψ : {𝓤 𝓧 : Universe}
        (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
-       (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ X 𝒦
+       (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
       --------------------------------------------------
- →     ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti X 𝑪 SCloC) ∣ p
-         ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti X 𝑪 SCloC) ∣ q
+ →     ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑪 SCloC) ∣ p
+         ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑪 SCloC) ∣ q   -- 
 
 𝑻i⊧ψ X 𝒦 𝑪 SCloC p q pψq = pψq 𝑪 SCloC
-
 
 -- Recall, `mkti X 𝑨 SCloA` has type `𝑻img X (S{𝓤}{𝓤} 𝒦)` and consists of a quadruple:
 -- (𝑨 , ϕ , SCloA , ϕE), where 𝑨 : Algebra _ 𝑆 , ϕ : hom (𝑻 X) 𝑨 , SCloA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦 , ϕE : Epic ∣ ϕ ∣
 
-ΨRel : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
-ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
-
-Ψcompatible : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)(ΨRel X 𝒦)
-Ψcompatible{𝓤} X 𝒦 f {𝒕} {𝒔} 𝒕Ψ𝒔 𝑨 SCloA = γ
- where
-  ϕ : hom (𝑻 X) 𝑨
-  ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA)
-
-  ΨH : ∀ 𝒂 i → (∣ ϕ ∣ ∘ (𝒕 i ̇ 𝑻 X)) 𝒂 ≡ (∣ ϕ ∣ ∘ (𝒔 i ̇ 𝑻 X))𝒂
-  ΨH 𝒂 i = ap (λ - → - 𝒂)((𝒕Ψ𝒔 i) 𝑨 SCloA)
-
-  γ : ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒕 i ̇ 𝑻 X)𝒂)) ≡ ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒔 i ̇ 𝑻 X)𝒂))
-  γ =
-    ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒕 i ̇ 𝑻 X) 𝒂))  ≡⟨ i  ⟩
-    (λ 𝒂 → (f ̂ 𝑨)(λ i → ((∣ ϕ ∣ ∘ (𝒕 i ̇ 𝑻 X))𝒂))) ≡⟨ ii ⟩
-    (λ 𝒂 → (f ̂ 𝑨)(λ i → ((∣ ϕ ∣ ∘ (𝒔 i ̇ 𝑻 X))𝒂))) ≡⟨ iii ⟩
-    ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒔 i ̇ 𝑻 X)𝒂))   ∎
-   where
-    i = gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒕 i ̇ 𝑻 X) 𝒂))
-    ii = gfe (λ 𝒂 → ap (f ̂ 𝑨) (gfe λ i → ΨH 𝒂 i) )
-    iii = (gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒔 i ̇ 𝑻 X) 𝒂)))⁻¹
-
-ΨSym : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →     symmetric (ΨRel X 𝒦)
-ΨSym p q pΨRelq 𝑪 ϕ = (pΨRelq 𝑪 ϕ)⁻¹
-
-ΨTra : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →     transitive (ΨRel X 𝒦)
-ΨTra p q r pΨq qΨr 𝑪 ϕ = (pΨq 𝑪 ϕ) ∙ (qΨr 𝑪 ϕ)
-
-ΨIsEquivalence : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- →               IsEquivalence (ΨRel X 𝒦)
-ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
-
-ΨCon : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →     Congruence{𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
-ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) (Ψcompatible X 𝒦) ΨIsEquivalence
-
-
--- Properties of Ψ ------------------------------------------------------------
-
-𝑻i⊧Ψ : {𝓤 𝓧 : Universe}
-       (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-       (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
-       (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ Ψ X 𝒦
-      --------------------------------------------------
- →     ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC) ∣ ∘ (q ̇ 𝑻 X)
-
-𝑻i⊧Ψ{𝓤} X 𝒦 𝑪 SCloC p q pΨq = pCq
- where
-
-  ϕ : hom (𝑻 X) 𝑪
-  ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC)
-
-  pCq : ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
-  pCq = pΨq 𝑪 SCloC
-
-
-Ψ⊆ThSClo : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
- →         Ψ X 𝒦 ⊆ (Th (S{𝓤}{𝓤} 𝒦))
-Ψ⊆ThSClo{𝓤} X 𝒦 {p , q} pΨq {𝑪} SCloC = γ
- where
-  ti : 𝑻img X (S{𝓤}{𝓤} 𝒦)
-  ti = mkti X 𝑪 SCloC
-
-  ϕ : hom (𝑻 X) 𝑪
-  ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) ti
-
-  ϕE : Epic ∣ ϕ ∣
-  ϕE = 𝑻ϕE ti
-
-  ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
-  ϕsur 𝒄 x = ϕE (𝒄 x)
-
-  pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 X ∣
-  pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
-
-  ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
-  ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
-
-  β : ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
-  β = pΨq 𝑪 SCloC
-
-  γ : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
-  γ = gfe λ 𝒄 →
-   (p ̇ 𝑪) 𝒄                  ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
-   (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
-   ∣ ϕ ∣ ((p ̇ 𝑻 X)(pre 𝒄))       ≡⟨ intensionality β (pre 𝒄) ⟩
-   ∣ ϕ ∣ ((q ̇ 𝑻 X)(pre 𝒄))       ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (pre 𝒄) ⟩
-   (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
-   (q ̇ 𝑪) 𝒄                   ∎
-
-Ψ⊆Th𝒦 : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-         (p q : ∣ (𝑻 X) ∣) → (p , q) ∈ Ψ X 𝒦 → 𝒦 ⊧ p ≋ q
-Ψ⊆Th𝒦{𝓤}  X 𝒦 p q pΨq {𝑨} KA = γ
- where
-  ξ : (S 𝒦) ⊧ p ≋ q
-  ξ = Ψ⊆ThSClo X 𝒦 {p , q} pΨq
-
-  lApq : (lift-alg 𝑨 𝓤) ⊧ p ≈ q
-  lApq = ξ (sbase KA)
-
-  γ : 𝑨 ⊧ p ≈ q
-  γ = lower-alg-⊧ 𝑨 p q lApq
-
-
 ------------------
 --Class Identities
+--It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all
+--structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 
---It follows from `vclo-id1` that, if 𝒦 is a class of structures, the set of identities
--- modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in VClo 𝒦.
-
--- Th (VClo 𝒦) is precisely the set of identities modeled by 𝒦
+-- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
 class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
                    (p q : ∣ 𝑻 X ∣)
                   ----------------------------------------------------------
@@ -243,26 +136,37 @@ class-identities{𝓤}{𝓧}{X}{𝒦} p q = ⇒ , ⇐
 
   ⇐ : p , q ∈ Th (V 𝒦) → 𝒦 ⊧ p ≋ q
   ⇐ = λ Thpq {𝑨} KA → lower-alg-⊧ 𝑨 p q (Thpq (vbase KA))
+\end{code}
 
------------------------------------------------------------------------------------
--- Lemma 4.27. Let 𝒦 be a class of algebras, and ΨCon defined as above.
--- Then 𝔽 := 𝑻/ΨCon is isomorphic to an algebra in SP(𝒦).
--- Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨/θ : 𝑨/θ ∈ S(𝒦)}.
---        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
---        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
---        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
--- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
--- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
+Lemma 4.27. (Bergman) Let 𝒦 be a class of algebras, and ψCon defined as above.
+                      Then 𝔽 := 𝑻 / ψCon is isomorphic to an algebra in SP(𝒦).
+Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S(𝒦)}.
+       Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
+       Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
+       By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
 
------------------------------------------------------------------------------------
--- The (relatively) free algebra
+### The relatively free algebra
 
-𝔉 : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra ((OV (𝓧 ⊔ 𝓤))⁺) 𝑆
-𝔉 X 𝒦 = 𝑻 X ╱ (ψCon X 𝒦)
+We define it as follows.
+\begin{code}
+module _ {𝓤 𝓧 : Universe} where
 
+ 𝓕 : Universe -- the universe level of the relatively free algebra
+ 𝓕 = (𝓧 ⊔ (OV 𝓤))⁺
 
+ 𝔉 : (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra 𝓕 𝑆
+ 𝔉 X 𝒦 =  𝑻 X ╱ (ψCon 𝒦)
+\end{code}
+The domain, ∣ 𝔉 X 𝒦 ∣, is defined by
+
+```agda
+( ∣ 𝑻 X ∣ /ₚ ⟨ θ ⟩ ) = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ≈ )
+```
+
+which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-classs of 𝑻 X.
+\begin{code}
 𝔉-free-lift : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
-              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔉 X 𝒦 ∣ → ∣ 𝑨 ∣
+               (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔉 X 𝒦 ∣ → ∣ 𝑨 ∣
 𝔉-free-lift {𝓧}{𝓠}{𝓤} 𝑨 f (_ , x , _) = (free-lift{𝓧}{𝓤} 𝑨 f) x
 
 𝔉-free-lift-interpretation : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
@@ -284,90 +188,95 @@ class-identities{𝓤}{𝓧}{X}{𝒦} p q = ⇒ , ⇐
   hhm : is-homomorphism (𝔉 X 𝒦) 𝑨 h
   hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
 
-𝔉-lift-agrees-on-X : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
-                     (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
-                     ----------------------------------------
- →                    h₀ x ≡ ( ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ Term.generator x ⟧ )
 
-𝔉-lift-agrees-on-X _ _ _ h₀ x = 𝓇ℯ𝒻𝓁
+module _ {𝓤 𝓦 𝓧 : Universe} where
 
-𝔉-lift-of-epic-is-epic : {𝓧 𝓠 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓠 𝑆) _)
-                         (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
- →                        Epic h₀
-                         --------------------------------
- →                        Epic ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣
+ -- NOTATION: ℊ = Term.generator   (\Mcg gives ℊ)
 
-𝔉-lift-of-epic-is-epic {𝓧}{𝓠}{𝓤} X 𝒦 𝑨 h₀ hE y = γ
- where
-  h₀pre : Image h₀ ∋ y
-  h₀pre = hE y
+ 𝔉-lift-agrees-on-X : (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+                      (𝑨 : Algebra 𝓦 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
+                      ----------------------------------------
+  →                    h₀ x ≡ ( ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ ℊ x ⟧ )
 
-  h₀⁻¹y : X
-  h₀⁻¹y = Inv h₀ y (hE y)
+ 𝔉-lift-agrees-on-X _ _ _ h₀ x = 𝓇ℯ𝒻𝓁
 
-  η : y ≡ ( ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ Term.generator (h₀⁻¹y) ⟧ )
-  η = y          ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-      h₀ h₀⁻¹y   ≡⟨ (𝔉-lift-agrees-on-X) X 𝒦 𝑨 h₀ h₀⁻¹y ⟩
-      ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ (Term.generator h₀⁻¹y) ⟧ ∎
+ 𝔉-lift-of-epic-is-epic : (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+                          (𝑨 : Algebra 𝓦 𝑆)(h₀ : X → ∣ 𝑨 ∣)
+  →                        Epic h₀
+                          --------------------------------
+  →                        Epic ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣
 
-  γ : Image ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ∋ y
-  γ = eq y (⟦ Term.generator h₀⁻¹y ⟧) η
+ 𝔉-lift-of-epic-is-epic X 𝒦 𝑨 h₀ hE y = γ
+  where
+   h₀pre : Image h₀ ∋ y
+   h₀pre = hE y
+
+   h₀⁻¹y : X
+   h₀⁻¹y = Inv h₀ y (hE y)
+
+   η : y ≡ ( ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ ℊ (h₀⁻¹y) ⟧ )
+   η = y          ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+       h₀ h₀⁻¹y   ≡⟨ (𝔉-lift-agrees-on-X) X 𝒦 𝑨 h₀ h₀⁻¹y ⟩
+       ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ⟦ (ℊ h₀⁻¹y) ⟧ ∎
+
+   γ : Image ∣ 𝔉-lift-hom X 𝒦 𝑨 h₀ ∣ ∋ y
+   γ = eq y (⟦ ℊ h₀⁻¹y ⟧) η
 
 
-X↪𝔉 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → X → ∣ 𝔉 X 𝒦 ∣
-X↪𝔉 x = ⟦ Term.generator x ⟧
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+
+ X↪𝔉 : X → ∣ 𝔉 X 𝒦 ∣
+ X↪𝔉 x = ⟦ ℊ x ⟧
 
 
-ψlem : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))(p q : ∣ 𝑻 X ∣ )
- →     ∣ lift-hom (𝔉 X 𝒦) X↪𝔉 ∣ p ≡ ∣ lift-hom (𝔉 X 𝒦) X↪𝔉 ∣ q
-      ----------------------------------------------------------
- →                       (p , q) ∈ ψ X 𝒦
+ ψlem : (p q : ∣ 𝑻 X ∣ )
 
-ψlem X 𝒦 p q gpgq 𝑨 SCloA = γ
- where
-  g : hom (𝑻 X) (𝔉 X 𝒦)
-  g = lift-hom (𝔉 X 𝒦) (X↪𝔉)
+  →     ∣ lift-hom (𝔉 X 𝒦) X↪𝔉 ∣ p ≡ ∣ lift-hom (𝔉 X 𝒦) X↪𝔉 ∣ q
+       ----------------------------------------------------------
+  →                       (p , q) ∈ ψ 𝒦
 
-  h₀ : X → ∣ 𝑨 ∣
-  h₀ = fst (𝕏 𝑨)
+ ψlem p q gpgq 𝑨 SCloA = γ
+  where
+   g : hom (𝑻 X) (𝔉 X 𝒦)
+   g = lift-hom (𝔉 X 𝒦) (X↪𝔉)
 
-  f : hom (𝔉 X 𝒦) 𝑨
-  f = 𝔉-lift-hom X 𝒦 𝑨 h₀
+   h₀ : X → ∣ 𝑨 ∣
+   h₀ = fst (𝕏 𝑨)
 
-  -- Recall, two homs from 𝑻 X to 𝑨 that agree on X are equal.
-  h ϕ : hom (𝑻 X) 𝑨
-  h = HCompClosed (𝑻 X) (𝔉 X 𝒦) 𝑨 g f
-  ϕ = 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA)
+   f : hom (𝔉 X 𝒦) 𝑨
+   f = 𝔉-lift-hom X 𝒦 𝑨 h₀
 
-  lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ Term.generator x ⟧
-  lift-agreement x = 𝔉-lift-agrees-on-X X 𝒦 𝑨 h₀ x
+   -- Recall, two homs from 𝑻 X to 𝑨 that agree on X are equal.
+   h ϕ : hom (𝑻 X) 𝑨
+   h = HCompClosed (𝑻 X) (𝔉 X 𝒦) 𝑨 g f
+   ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 SCloA)
 
-  fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (Term.generator x) ≡ ∣ ϕ ∣ (Term.generator x)
-  fgx≡ϕ x = (lift-agreement x)⁻¹
+   lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+   lift-agreement x = 𝔉-lift-agrees-on-X X 𝒦 𝑨 h₀ x
 
-  h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-  h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+   fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+   fgx≡ϕ x = (lift-agreement x)⁻¹
 
-  γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-  γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
-             ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
-             ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
-             ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
+   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+   h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+
+   γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+   γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
+              ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
+              ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
+              ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
 
 -------------------------------------------------------------------
--- 𝔉 ∈ V
-FU : Universe → Universe
-FU 𝓤 = (OV 𝓤)⁺
 
--------------------------------------------------------------------------------------
--- NEW DEVELOPMENT OF BIRKHOFF BEGINS HERE --
--------------------------------------------------------------------------------------
-module _
+module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
  {𝓤 : Universe}
  {hfe : hfunext (OV 𝓤)(OV 𝓤)}
  {hfe+ : hfunext ((OV 𝓤)⁺)((OV 𝓤)⁺)}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
  {X : 𝓤 ̇} where
+
+ open class-product-inclusions {𝓤 = 𝓤}{𝒦 = 𝒦}
+ open class-product {𝓤 = 𝓤}{𝑆 = 𝑆}{𝒦 = 𝒦}
 
  -- alias for (OV 𝓤) := 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
  ovu ovu+ ovu++ : Universe
@@ -380,141 +289,96 @@ module _
  𝔽 = 𝔉{𝓤}{𝓤} X 𝒦
  𝕍 : Pred (Algebra ovu+ 𝑆) ovu++   -- 𝕍 is HSP(𝒦).
  𝕍 = V{𝓤}{ovu+} 𝒦
+
+ ℑs : ovu ̇
+ ℑs = ℑ (S{𝓤}{𝓤} 𝒦)
+
+ 𝔄s : ℑs → Algebra 𝓤 𝑆
+ 𝔄s = λ (i : ℑs) → ∣ i ∣
+
+ SK𝔄 : (i : ℑs) → (𝔄s i) ∈ S{𝓤}{𝓤} 𝒦
+ SK𝔄 = λ (i : ℑs) → ∥ i ∥
+
  ℭ : Algebra ovu 𝑆                 -- ℭ is the product of all subalgebras of 𝒦.
- ℭ = class-product ( S{𝓤}{𝓤} 𝒦 ) -- ⨅ ( 𝔄{𝓤}{𝒦} )
+ ℭ = ⨅ 𝔄s -- class-product ( S{𝓤}{𝓤} 𝒦 ) -- ⨅ ( 𝔄{𝓤}{S{𝓤}{𝓤} 𝒦} )
+
  SP𝒦 : Pred (Algebra (OV 𝓤) 𝑆) (OV (OV 𝓤)) -- SP𝒦 is the class of subalgebras of products of 𝒦.
  SP𝒦 = S{OV 𝓤}{OV 𝓤}(P{𝓤}{OV 𝓤} 𝒦)
 
  open Lift
 
- VlA : {𝑨 : Algebra ovu 𝑆}
-  →    𝑨 ∈ V{𝓤}{ovu} 𝒦 → lift-alg 𝑨 ovu+ ∈ V{𝓤}{ovu+} 𝒦
- VlA (vbase{𝑨} x) = γ
+ -- Next we prove the lift-alg-V-closure lemma, which helps us deal with annoying universe
+ -- level problems. It's a minor techinical issue, but the proof is quite long and tedious.
+
+ lift-alg-V-closure -- (alias)
+  VlA : {𝑨 : Algebra ovu 𝑆}
+   →     𝑨 ∈ V{𝓤}{ovu} 𝒦
+       ---------------------------------
+   →    lift-alg 𝑨 ovu+ ∈ V{𝓤}{ovu+} 𝒦
+
+ VlA (vbase{𝑨} x) = visow (vbase{𝓤}{𝓦 = ovu+} x) A≅B
   where
-   lA : Algebra ovu 𝑆
-   lA = lift-alg 𝑨 ovu
-   llA lA+ : Algebra ovu+ 𝑆
-   llA = lift-alg lA ovu+
-   lA+ = lift-alg 𝑨 ovu+
+   A≅B : lift-alg 𝑨 ovu+ ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
+   A≅B = lift-alg-associative 𝑨
 
-   ξ : lA+ ∈ V{𝓤}{ovu+} 𝒦
-   ξ = vbase{𝓤}{𝓦 = ovu+} x
-   lA+≅llA : lA+ ≅ llA
-   lA+≅llA = lift-alg-associative 𝑨
-   γ : llA ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow ξ lA+≅llA
- VlA (vlift{𝑨} x) = γ
+ VlA (vlift{𝑨} x) = visow (vlift{𝓤}{𝓦 = ovu+} x) A≅B
   where
-   lA : Algebra ovu 𝑆
-   lA = lift-alg 𝑨 ovu
-   llA lA+ : Algebra ovu+ 𝑆
-   llA = lift-alg lA ovu+
-   lA+ = lift-alg 𝑨 ovu+
+   A≅B : lift-alg 𝑨 ovu+ ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
+   A≅B = lift-alg-associative 𝑨
 
-   ξ : lA+ ∈ V{𝓤}{ovu+} 𝒦
-   ξ = vlift{𝓤}{𝓦 = ovu+} x
-
-   lA+≅llA : lA+ ≅ llA
-   lA+≅llA = lift-alg-associative 𝑨
-   γ : llA ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow ξ lA+≅llA
- VlA (vliftw{𝑨} x) = γ
+ VlA (vliftw{𝑨} x) = visow (VlA x) A≅B
   where
-   lA : Algebra ovu 𝑆
-   lA = lift-alg 𝑨 ovu
-   llA lA+ : Algebra ovu+ 𝑆
-   llA = lift-alg lA ovu+
-   lA+ = lift-alg 𝑨 ovu+
+   A≅B : (lift-alg 𝑨 ovu+) ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
+   A≅B = lift-alg-associative 𝑨
 
-   ξ : lA+ ∈ V{𝓤}{ovu+} 𝒦
-   ξ = VlA x
+ VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
 
-   lA+≅llA : lA+ ≅ llA
-   lA+≅llA = lift-alg-associative 𝑨
-   γ : llA ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow ξ lA+≅llA
-
- VlA (vhimg{𝑨}{𝑩} x hB) = γ
+ VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift x) lB≤lA
   where
-   lA lB : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-   lB = lift-alg 𝑩 ovu+
-
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = VlA x
-
-   hlB : lB is-hom-image-of lA
-   hlB = lift-alg-hom-image hB
-
-   γ : lB ∈ V{𝓤}{ovu+} 𝒦
-   γ = vhimg vlA hlB
-
- VlA (vssub{𝑨}{𝑩} x B≤A) = γ
-  where
-   lA lB : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-   lB = lift-alg 𝑩 ovu+
-
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = vlift x
-
-   lB≤lA : lB ≤ lA
+   lB≤lA : lift-alg 𝑩 ovu+ ≤ lift-alg 𝑨 ovu+
    lB≤lA = lift-alg-≤ 𝑩{𝑨} B≤A
 
-   γ : lB ∈ V{𝓤}{ovu+} 𝒦
-   γ = vssubw vlA lB≤lA
-
- VlA (vssubw{𝑨}{𝑩} x B≤A) = γ
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw vlA lB≤lA
   where
-   lA lB : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-   lB = lift-alg 𝑩 ovu+
-
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
+   vlA : (lift-alg 𝑨 ovu+) ∈ V{𝓤}{ovu+} 𝒦
    vlA = VlA x
 
-   lB≤lA : lB ≤ lA
+   lB≤lA : (lift-alg 𝑩 ovu+) ≤ (lift-alg 𝑨 ovu+)
    lB≤lA = lift-alg-≤ 𝑩{𝑨} B≤A
 
-   γ : lB ∈ V{𝓤}{ovu+} 𝒦
-   γ = vssubw vlA lB≤lA
-
- VlA (vprodu{I}{𝒜} x) = γ
+ VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   where
    𝑰 : ovu+ ̇
    𝑰 = Lift{ovu}{ovu+} I
+
    lA+ : Algebra ovu+ 𝑆
    lA+ = lift-alg (⨅ 𝒜) ovu+
+
    lA : 𝑰 → Algebra ovu+ 𝑆
    lA i = lift-alg (𝒜 (lower i)) ovu+
+
    vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ovu+} 𝒦
    vlA i = vlift (x (lower i))
 
-   v⨅lA : ⨅ lA ∈ V{𝓤}{ovu+} 𝒦
-   v⨅lA = vprodw vlA
-
    iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
    iso-components i = lift-alg-≅
 
    B≅A : lA+ ≅ ⨅ lA
    B≅A = lift-alg-⨅≅ gfe iso-components
 
-   γ : lA+ ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow v⨅lA (sym-≅ B≅A)
-
- VlA (vprodw{I}{𝒜} x) = γ
+ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   where
    𝑰 : ovu+ ̇
    𝑰 = Lift{ovu}{ovu+} I
+
    lA+ : Algebra ovu+ 𝑆
    lA+ = lift-alg (⨅ 𝒜) ovu+
+
    lA : 𝑰 → Algebra ovu+ 𝑆
    lA i = lift-alg (𝒜 (lower i)) ovu+
+
    vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ovu+} 𝒦
    vlA i = VlA (x (lower i))
-
-   v⨅lA : ⨅ lA ∈ V{𝓤}{ovu+} 𝒦
-   v⨅lA = vprodw vlA
 
    iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
    iso-components i = lift-alg-≅
@@ -522,23 +386,12 @@ module _
    B≅A : lA+ ≅ ⨅ lA
    B≅A = lift-alg-⨅≅ gfe iso-components
 
-   γ : lA+ ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow v⨅lA (sym-≅ B≅A)
-
- VlA (visou{𝑨}{𝑩} x A≅B) = γ
+ VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) lA≅lB
   where
-   lA lB : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-   lB = lift-alg 𝑩 ovu+
-
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = vlift x
-
-   lA≅lB : lA ≅ lB
+   lA≅lB : (lift-alg 𝑨 ovu+) ≅ (lift-alg 𝑩 ovu+)
    lA≅lB = lift-alg-iso 𝓤 ovu+ 𝑨 𝑩 A≅B
-   γ : lB ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow vlA lA≅lB
- VlA (visow{𝑨}{𝑩} x A≅B) = γ
+
+ VlA (visow{𝑨}{𝑩} x A≅B) = visow vlA lA≅lB
   where
    lA lB : Algebra ovu+ 𝑆
    lA = lift-alg 𝑨 ovu+
@@ -549,27 +402,20 @@ module _
 
    lA≅lB : lA ≅ lB
    lA≅lB = lift-alg-iso ovu ovu+ 𝑨 𝑩 A≅B
-   γ : lB ∈ V{𝓤}{ovu+} 𝒦
-   γ = visow vlA lA≅lB
+
+ lift-alg-V-closure = VlA -- (alias)
 
 
  SP⊆V' : S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦) ⊆ V{𝓤}{ovu+} 𝒦
+
  SP⊆V' (sbase{𝑨} x) = γ
   where
-   lA : Algebra ovu 𝑆
-   lA = lift-alg 𝑨 ovu
    llA lA+ : Algebra ovu+ 𝑆
    lA+ = lift-alg 𝑨 ovu+
-   llA = lift-alg lA ovu+
-
-   plA : lA ∈ S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
-   plA = sbase x
-
-   vlA : lA ∈ V{𝓤}{ovu} 𝒦
-   vlA = SP⊆V plA
+   llA = lift-alg (lift-alg 𝑨 ovu) ovu+
 
    vllA : llA ∈ V{𝓤}{ovu+} 𝒦
-   vllA = VlA vlA
+   vllA = lift-alg-V-closure (SP⊆V (sbase x))
 
    llA≅lA+ : llA ≅ lA+
    llA≅lA+ = sym-≅ (lift-alg-associative 𝑨)
@@ -577,40 +423,22 @@ module _
    γ : lA+ ∈ (V{𝓤}{ovu+} 𝒦)
    γ = visow vllA llA≅lA+
 
- SP⊆V' (slift{𝑨} x) = γ
+ SP⊆V' (slift{𝑨} x) = lift-alg-V-closure (SP⊆V x)
+
+ SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw vlA B≤lA
   where
    lA : Algebra ovu+ 𝑆
    lA = lift-alg 𝑨 ovu+
-   spA : 𝑨 ∈  S{ovu}{ovu} (P{𝓤}{ovu} 𝒦)
-   spA = x
-   splA : lA ∈ S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦)
-   splA = slift spA
-   vA : 𝑨 ∈ V{𝓤}{ovu} 𝒦
-   vA = SP⊆V x
-   γ : (lift-alg 𝑨 ovu+) ∈ V{𝓤}{ovu+} 𝒦
-   γ = VlA vA
- SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = γ
-  where
-   lA : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-
-   plA : 𝑨 ∈ S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
-   plA = spA
-
-   vA : 𝑨 ∈ V{𝓤}{ovu} 𝒦
-   vA = SP⊆V spA
 
    vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = VlA vA
+   vlA = lift-alg-V-closure (SP⊆V spA)
 
    B≤lA : 𝑩 ≤ lA
    B≤lA = (lift-alg-lower-≤-lift {ovu}{ovu+}{ovu+} 𝑨 {𝑩}) B≤A
 
-   γ : 𝑩 ∈ (V{𝓤}{ovu+} 𝒦)
-   γ = vssubw vlA B≤lA
-
  SP⊆V' (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V' spA) B≤A
- SP⊆V' (siso{𝑨}{𝑩} x A≅B) = γ
+
+ SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (lift-alg-V-closure vA) lA≅B
   where
    lA : Algebra ovu+ 𝑆
    lA = lift-alg 𝑨 ovu+
@@ -621,75 +449,226 @@ module _
    vA : 𝑨 ∈ V{𝓤}{ovu} 𝒦
    vA = SP⊆V x
 
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = VlA vA
-
    lA≅B : lA ≅ 𝑩
    lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
 
-   γ : 𝑩 ∈ (V{𝓤}{ovu+} 𝒦)
-   γ = visow vlA lA≅B
 
  --Now we come to what is perhaps the most challenging step in the formalization
  --of Birkhoff's HSP Theorem in Agda---proving that the relatively free algebra 𝔽
  --embeds in the product ℭ of all subalgebras of algebras in 𝒦.
- 𝔽≤ℭ : 𝔽 ≤ ℭ
- 𝔽≤ℭ = Hmap , (Hemb , Hhom)
+ 𝔽≤ℭ : 𝔽 ≤ ℭ                    -- 
+ 𝔽≤ℭ = ∣ f ∣ , (femb , ∥ f ∥)
   where
-   sk : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
-   sk = S{𝓤}{𝓤} 𝒦
-
-   I : (OV 𝓤) ̇
-   I = ℑ sk
-
-   SPA : ℭ ∈ SP𝒦
-   SPA = class-prod-s-∈-sp{𝓤} hfe {𝒦}
-
-   g : hom (𝑻 X) 𝔽
-   g = lift-hom 𝔽 (X↪𝔉)
-
    h₀ : X → ∣ ℭ ∣
    h₀ = fst (𝕏 ℭ)
 
    f : hom 𝔽 ℭ
    f = 𝔉-lift-hom X 𝒦 ℭ h₀
 
-   h ϕ : hom (𝑻 X) ℭ
-   h = HCompClosed (𝑻 X) 𝔽 ℭ g f
-   ϕ = 𝑻ϕ SP𝒦 (mkti X ℭ SPA)
+   femb : is-embedding ∣ f ∣  --------------------------
+   femb = γ
+    where
+     SPC : ℭ ∈ SP𝒦
+     SPC = class-prod-s-∈-sp hfe
 
-   lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ Term.generator x ⟧
-   lift-agreement x = 𝔉-lift-agrees-on-X X 𝒦 ℭ h₀ x
+     g : hom (𝑻 X) 𝔽
+     g = lift-hom 𝔽 (X↪𝔉)
 
-   fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (Term.generator x) ≡ ∣ ϕ ∣ (Term.generator x)
-   fgx≡ϕ x = (lift-agreement x)⁻¹
+     h ϕ : hom (𝑻 X) ℭ
+     h = HCompClosed (𝑻 X) 𝔽 ℭ g f
+     ϕ = lift-hom ℭ h₀ -- 𝑻ϕ SP𝒦 (mkti ℭ SPC)
 
-   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-   h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
+     lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+     lift-agreement x = 𝔉-lift-agrees-on-X X 𝒦 ℭ h₀ x
 
-   Hmap : ∣ 𝔽 ∣ → ∣ ℭ ∣
-   Hmap = ∣ f ∣
+     fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+     fgx≡ϕ x = (lift-agreement x)⁻¹
 
-   hom-gen : ∀ i → hom 𝔽((𝔄{𝓤}{sk}) i)
-   hom-gen i = 𝔉-lift-hom X 𝒦 (𝔄 i) ∣ 𝕏 (𝔄 i) ∣
+     h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+     h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
 
-   pi : (i : I) → ∣ ℭ ∣ → ∣ 𝔄 i ∣
-   pi i 𝒂 = 𝒂 i
+     kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔽 ∣} ∣ g ∣) ⊆ ψ 𝒦
+     kerg {p , q} gpq = ψlem p q gpq
 
-   projFA : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄 i ∣
-   projFA i = (pi i) ∘ Hmap
+     -- kerh⊆kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ h ∣) ⊆ (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔉 X 𝒦 ∣} ∣ g ∣)
+     -- kerh⊆kerg {p , q} hpq = {!!}
 
-   Hemb : is-embedding Hmap
-   Hemb = {!!}
+     pi : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
+     pi i 𝒂 = 𝒂 i
 
-   Hhom : is-homomorphism 𝔽 ℭ Hmap
-   Hhom = ∥ f ∥
+     pihom : (i : ℑs) → hom ℭ (𝔄s i)
+     pihom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
+
+     projFA : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- 𝔽 →  ℭ  → (𝔄s i)
+     projFA i = (pi i) ∘ ∣ f ∣
+
+     piϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+     piϕ i = ∣ pihom i ∣ ∘ ∣ ϕ ∣
+
+     Phi : ∀ i → hom (𝑻 X) (𝔄s i)
+     Phi i = HomComp (𝑻 X) (𝔄s i) ϕ (pihom i)
+
+     piϕ≡Phi : ∀ i p → (piϕ i) p ≡ ∣ Phi i ∣ p
+     piϕ≡Phi i p = 𝓇ℯ𝒻𝓁
+
+     -- kerf : (KER-pred{A = ∣ 𝔽 ∣}{B = ∣ ℭ ∣} ∣ f ∣) ⊆ ψ 𝒦
+     -- kerf {p , q} fpq = ?
+
+     kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ 𝒦
+     kerϕ {p , q} ϕpq 𝑨 sA = γ
+      where
+       SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
+       SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+       i : ℑs
+       i = (𝑨 , sA)
+       𝔄i : Algebra 𝓤 𝑆
+       𝔄i = 𝔄s i
+       sp𝔄i : 𝔄i ∈ SPu
+       sp𝔄i = S⊆SP{𝓤}{𝓤} sA
+
+       α₀ β₀ : X → ∣ 𝔄i ∣
+       α₀ = fst (𝕏 𝔄i)
+       β₀ = (pi i) ∘ h₀
+
+       α β : hom (𝑻 X) 𝔄i
+       α = lift-hom 𝔄i α₀
+       β = lift-hom 𝔄i β₀
+
+       Phii : hom (𝑻 X) 𝔄i
+       Phii = (Phi i)
+
+       lift-agree : (x : X) → ∣ β ∣ (ℊ x) ≡ ∣ pihom i ∣ ( ∣ ϕ ∣ (ℊ x))
+       lift-agree x = 𝓇ℯ𝒻𝓁
+
+       lift-agree' : (x : X) → ∣ α ∣ (ℊ x) ≡ ∣ β ∣ ( ℊ x)
+       lift-agree' x = {!!}
+
+       ϕpqi : (i : ℑs) → (∣ ϕ ∣ p) i ≡  ∣ ϕ ∣ q i
+       ϕpqi i = ap (λ - → - i) ϕpq
+
+       frl : ∣ ϕ ∣ p ≡ (p ̇ ℭ) (fst (𝕏 ℭ))
+       frl = (free-lift-interpretation ℭ (fst (𝕏 ℭ)) p)⁻¹
+
+       -- h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+       -- h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
+       piϕ-α-agree : ∀ p → (∣ Phi i ∣) p ≡ ∣ α ∣ p
+       piϕ-α-agree p = {!!}
+
+       γ : ∣ α ∣ p ≡ ∣ α ∣ q
+       γ = ∣ α ∣ p     ≡⟨ (piϕ-α-agree p)⁻¹  ⟩
+           (∣ ϕ ∣ p) i ≡⟨ ϕpqi i ⟩
+           (∣ ϕ ∣ q) i ≡⟨ piϕ-α-agree q ⟩
+           ∣ α ∣ q     ∎
+
+-- ϕ : ∣ 𝑻 X ∣ → ∣ ℭ ∣
+-- ϕ = ∣ 𝑻ϕ SP𝒦 (mkti ℭ SPC) ∣
+-- This is constructed as follows:
+--  1. start with a map from X to ∣ ℭ ∣ (which is always available by 𝕏)
+--
+--     ϕ₀ : X → ∣ ℭ ∣
+--     ϕ₀ = fst (𝕏 ℭ)
+--
+--  2. Then use lift-hom to get ϕ : hom (𝑻 X) ℭ
+--
+--     ϕ : hom (𝑻 X) ℭ
+--     ϕ = lift-hom ℭ h₀
+--
+
+-- pi ∘ h₀ : X → ∣ ℭ ∣ → ∣ 𝔄 i ∣
+
+
+-- 𝑻hom-gen : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
+--  →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
+-- 𝑻hom-gen {𝓧}{𝓤}{X} 𝑪 = h , lift-of-epi-is-epi 𝑪 h₀ hE
+--  where
+--   h₀ : X → ∣ 𝑪 ∣
+--   h₀ = fst (𝕏 𝑪)
+
+--   hE : Epic h₀
+--   hE = snd (𝕏 𝑪)
+
+--   h : hom (𝑻 X) 𝑪
+--   h = lift-hom 𝑪 h₀
+
+-- interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
+--  →            {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇}
+--               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
+--               --------------------------------------------------------
+--  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
+
+
+
+     --Want kerf ⊆ ψ 𝒦, as this should enable us to prove that f is an embedding.
+     --We have h = f ∘ g and kerg ≡ ψ 𝒦 we want ker h ⊆ ψ 𝒦
+     -- pϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+     -- pϕ i = (pi i) ∘ ϕ
+
+     -- kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ X 𝒦
+     -- kerϕ {p , q} ϕpq = λ 𝑨 SCloA →
+     --  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ p ≡⟨ ? ⟩
+      -- ∣ pϕ ∣ p  ≡⟨ ? ⟩ ∣ ϕ ∣ q   ≡⟨ ? ⟩  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ q ∎
+
+-- KER-pred : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
+-- KER-pred g (x , y) = g x ≡ g y
+
+
+     hom-gen : ∀ i → hom 𝔽(𝔄s i)
+     hom-gen i = 𝔉-lift-hom X 𝒦 (𝔄s i) ∣ 𝕏 (𝔄s i) ∣
+
+     -- h : hom T 𝑨
+     -- h = lift-hom 𝑨 h₀
+     -- hE : Epic ∣ h ∣
+     -- hE = lift-of-epi-is-epi 𝑨 h₀ h₀E
+
+     -- g₀ : X → ∣ 𝔽 ∣
+     -- g₀ = fst (𝕏 𝔽)
+
+     -- g₀E : Epic g₀
+     -- g₀E = snd (𝕏 𝔽)
+
+     -- gg : Σ g ꞉ hom T 𝔽 , Epic ∣ g ∣
+     -- gg = (lift-hom 𝔽 g₀) , (lift-of-epi-is-epi{𝓤}{(OV 𝓤)⁺} 𝔽 g₀ g₀E)
+
+     -- g' : hom (𝑻 X)(𝔉 X 𝒦)
+     -- g' = lift-hom (𝔉 X 𝒦) X↪𝔉
+
+     -- g : hom T 𝔽
+     -- g = fst gg
+
+     -- gE : Epic ∣ g ∣
+     -- gE = snd gg
+
+     -- τ : (𝑨 : Algebra ovu+ 𝑆)(SCloA : S{𝓤}{ovu+} 𝒦 𝑨) → hom (𝑻 X) 𝑨
+     -- τ 𝑨 SCloA = 𝑻ϕ (S{𝓤}{ovu+} 𝒦) (mkti X 𝑨 SCloA)
+
+     γ : is-embedding ∣ f ∣
+     γ = {!!}
+
+   -- kerg⊆kerh : KER-pred ∣ g' ∣ ⊆ KER-pred ∣ h ∣
+   -- kerg⊆kerh {x , y} gx≡gy = ψ⊆Kerh {x , y}(kerg{x , y} gx≡gy)
+
+   -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
+   -- it suffices to show that the kernel of h : 𝑻 → 𝑨 contains Ψ.
+   --
+   --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
+   --    𝑻---- g --->>𝔽  (ker g = Ψ)
+   --     \         .
+   --      \       .
+   --      ϕ≡h    ∃f     (want: Ψ ⊆ ker h... also want ker
+   --        \   .
+   --         \ .
+   --          V
+   --          ℭ
+
+
+
+
 
  𝔽∈SP : 𝔽 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
  𝔽∈SP = ssub spC 𝔽≤ℭ
   where
    spC : ℭ ∈ (S{ovu}{ovu} (P{𝓤}{ovu} 𝒦))
-   spC = (class-prod-s-∈-sp{𝓤} hfe {𝒦})
+   spC = (class-prod-s-∈-sp hfe)
 
  𝔽∈𝕍 : 𝔽 ∈ 𝕍
  𝔽∈𝕍 = SP⊆V' 𝔽∈SP
@@ -708,65 +687,16 @@ module _
    h₀E : Epic h₀
    h₀E = snd (𝕏 𝑨)
 
-   h : hom T 𝑨
-   h = lift-hom 𝑨 h₀
-
-   hE : Epic ∣ h ∣
-   hE = lift-of-epi-is-epi 𝑨 h₀ h₀E
-
-   g₀ : X → ∣ 𝔽 ∣
-   g₀ = fst (𝕏 𝔽)
-
-   g₀E : Epic g₀
-   g₀E = snd (𝕏 𝔽)
-
-   gg : Σ g ꞉ hom T 𝔽 , Epic ∣ g ∣
-   gg = (lift-hom 𝔽 g₀) , (lift-of-epi-is-epi{𝓤}{(OV 𝓤)⁺} 𝔽 g₀ g₀E)
-
-   g' : hom (𝑻 X)(𝔉 X 𝒦)
-   g' = lift-hom (𝔉 X 𝒦) X↪𝔉
-
-   g : hom T 𝔽
-   g = fst gg
-
-   gE : Epic ∣ g ∣
-   gE = snd gg
-
-   τ : (𝑨 : Algebra ovu+ 𝑆)(SCloA : S{𝓤}{ovu+} 𝒦 𝑨) → hom (𝑻 X) 𝑨
-   τ 𝑨 SCloA = 𝑻ϕ (S{𝓤}{ovu+} 𝒦) (mkti X 𝑨 SCloA)
-
-   kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔉 X 𝒦 ∣} ∣ g' ∣) ⊆ ψ X 𝒦
-   kerg {p , q} gpgq = ψlem X 𝒦 p q gpgq
-
-   -- kerg⊆kerh : KER-pred ∣ g' ∣ ⊆ KER-pred ∣ h ∣
-   -- kerg⊆kerh {x , y} gx≡gy = ψ⊆Kerh {x , y}(kerg{x , y} gx≡gy)
-
-   -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
-   -- it suffices to show that the kernel of the lift h : 𝑻 → 𝑨 contains Ψ.
-   --
-   --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
-   --    𝑻---- g --->>𝔽  (ker g = Ψ)
-   --     \         .
-   --      \       .
-   --       h     ∃ϕ     (want: Ψ ⊆ ker h)
-   --        \   .
-   --         \ .
-   --          V
-   --          𝑨
-
-   -- We that 𝔽 ∈ 𝕍 and ∃ ϕ : hom 𝔽 𝑨 with ϕE : Epic ∣ ϕ ∣,
-   -- so we can prove 𝑨 ∈ 𝕍 by `vhimg (𝔽∈ 𝕍 (𝑨 is-hom-image-of 𝔽)`
-   -- since the latter is the constructor of V that yields 𝑨 ∈ V 𝒦
+   -- We proved 𝔽 ∈ 𝕍 above.
+   -- Now we need ϕ : hom 𝔽 𝑨 with ϕE : Epic ∣ ϕ ∣, so we can prove
+   -- 𝑨 ∈ 𝕍 by `vhimg (𝔽∈ 𝕍 (𝑨 is-hom-image-of 𝔽)` since the latter
+   -- is the constructor of V that yields 𝑨 ∈ 𝕍 𝒦
 
    ϕ : Σ h ꞉ (hom 𝔽 𝑨) , Epic ∣ h ∣
    ϕ = (𝔉-lift-hom X 𝒦 𝑨 h₀) , 𝔉-lift-of-epic-is-epic X 𝒦 𝑨 h₀ h₀E
 
    AiF : 𝑨 is-hom-image-of 𝔽
    AiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) ) , refl-≅
-
-   -- Finally, use 𝔽∈SP𝒦 to get an algebra 𝑩 ∈ VClo 𝒦 such that 𝔽 ≅ 𝑩.
-   -- Then ∃ hom h : hom 𝑩 𝔽, so we can simply compose ϕ ∘ h : hom 𝑩 𝑨,
-   -- which proves that 𝑨 ∈ VClo 𝒦, as desired.
 
    γ : 𝑨 ∈ 𝕍
    γ = vhimg 𝔽∈𝕍 AiF
@@ -776,13 +706,18 @@ module _
 
 
 
+-- Lines of code
 
-
-
-
-
-
-
+--  340 prelude.lagda  
+--  168 basic.lagda
+--  184 congruences.lagda
+--  617 homomorphisms.lagda
+--  279 terms.lagda
+--  600 subuniverses.lagda
+-- 1072 closure.lagda
+--  740 birkhoff.lagda
+-- --------------------
+-- TOTAL: 340 + 168 + 184 + 617 + 279 + 600 + 1072 + 740 = 4,000
 
 
 
@@ -884,10 +819,10 @@ module _
 --   h = HCompClosed (𝑻 X) F 𝑨 g f
 --   ϕ = 𝑻ϕ SClo𝑲 (mkti X 𝑨 SPA)
 
---   lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ Term.generator x ⟧
+--   lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
 --   lift-agreement x = 𝔉-lift-agrees-on-X X (𝑲 𝓤) 𝑨 h₀ x
 
---   fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (Term.generator x) ≡ ∣ ϕ ∣ (Term.generator x)
+--   fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
 --   fgx≡ϕ x = (lift-agreement x)⁻¹
 
 --   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
@@ -979,3 +914,117 @@ module _
 
 
 
+-- Ψ : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+
+-- Ψ {𝓤} X 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (SCloA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
+--  →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
+
+
+
+-- ΨRel : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
+-- ΨRel X 𝒦 p q = Ψ X 𝒦 (p , q)
+
+-- Ψcompatible : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--  →            compatible{𝓤 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓦 = (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ⊔ 𝓧 ⁺)} (𝑻 X)(ΨRel X 𝒦)
+-- Ψcompatible{𝓤} X 𝒦 f {𝒕} {𝒔} 𝒕Ψ𝒔 𝑨 SCloA = γ
+--  where
+--   ϕ : hom (𝑻 X) 𝑨
+--   ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑨 SCloA)
+
+--   ΨH : ∀ 𝒂 i → (∣ ϕ ∣ ∘ (𝒕 i ̇ 𝑻 X)) 𝒂 ≡ (∣ ϕ ∣ ∘ (𝒔 i ̇ 𝑻 X))𝒂
+--   ΨH 𝒂 i = ap (λ - → - 𝒂)((𝒕Ψ𝒔 i) 𝑨 SCloA)
+
+--   γ : ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒕 i ̇ 𝑻 X)𝒂)) ≡ ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒔 i ̇ 𝑻 X)𝒂))
+--   γ =
+--     ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒕 i ̇ 𝑻 X) 𝒂))  ≡⟨ i  ⟩
+--     (λ 𝒂 → (f ̂ 𝑨)(λ i → ((∣ ϕ ∣ ∘ (𝒕 i ̇ 𝑻 X))𝒂))) ≡⟨ ii ⟩
+--     (λ 𝒂 → (f ̂ 𝑨)(λ i → ((∣ ϕ ∣ ∘ (𝒔 i ̇ 𝑻 X))𝒂))) ≡⟨ iii ⟩
+--     ∣ ϕ ∣ ∘ (λ 𝒂 → (f ̂ 𝑻 X)(λ i → (𝒔 i ̇ 𝑻 X)𝒂))   ∎
+--    where
+--     i = gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒕 i ̇ 𝑻 X) 𝒂))
+--     ii = gfe (λ 𝒂 → ap (f ̂ 𝑨) (gfe λ i → ΨH 𝒂 i) )
+--     iii = (gfe (λ 𝒂 → ∥ ϕ ∥ f (λ i → (𝒔 i ̇ 𝑻 X) 𝒂)))⁻¹
+
+-- ΨSym : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--  →     symmetric (ΨRel X 𝒦)
+-- ΨSym p q pΨRelq 𝑪 ϕ = (pΨRelq 𝑪 ϕ)⁻¹
+
+-- ΨTra : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--  →     transitive (ΨRel X 𝒦)
+-- ΨTra p q r pΨq qΨr 𝑪 ϕ = (pΨq 𝑪 ϕ) ∙ (qΨr 𝑪 ϕ)
+
+-- ΨIsEquivalence : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+--  →               IsEquivalence (ΨRel X 𝒦)
+-- ΨIsEquivalence = record { rfl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁 ; sym = ΨSym ; trans = ΨTra }
+
+-- ΨCon : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--  →     Congruence{𝓠 = (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺)}{𝓤 = (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)} (𝑻 X)
+-- ΨCon X 𝒦 = mkcon (ΨRel X 𝒦) (Ψcompatible X 𝒦) ΨIsEquivalence
+
+
+-- -- Properties of Ψ ------------------------------------------------------------
+
+-- 𝑻i⊧Ψ : {𝓤 𝓧 : Universe}
+--        (X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
+--        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ Ψ X 𝒦
+--       --------------------------------------------------
+--  →     ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC) ∣ ∘ (q ̇ 𝑻 X)
+
+-- 𝑻i⊧Ψ{𝓤} X 𝒦 𝑪 SCloC p q pΨq = pCq
+--  where
+
+--   ϕ : hom (𝑻 X) 𝑪
+--   ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti X 𝑪 SCloC)
+
+--   pCq : ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
+--   pCq = pΨq 𝑪 SCloC
+
+
+-- Ψ⊆ThSClo : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--  →         Ψ X 𝒦 ⊆ (Th (S{𝓤}{𝓤} 𝒦))
+-- Ψ⊆ThSClo{𝓤} X 𝒦 {p , q} pΨq {𝑪} SCloC = γ
+--  where
+--   ti : 𝑻img X (S{𝓤}{𝓤} 𝒦)
+--   ti = mkti X 𝑪 SCloC
+
+--   ϕ : hom (𝑻 X) 𝑪
+--   ϕ = 𝑻ϕ (S{𝓤}{𝓤} 𝒦) ti
+
+--   ϕE : Epic ∣ ϕ ∣
+--   ϕE = 𝑻ϕE ti
+
+--   ϕsur : (𝒄 : X → ∣ 𝑪 ∣ )(x : X) → Image ∣ ϕ ∣ ∋ (𝒄 x)
+--   ϕsur 𝒄 x = ϕE (𝒄 x)
+
+--   pre : (𝒄 : X → ∣ 𝑪 ∣)(x : X) → ∣ 𝑻 X ∣
+--   pre 𝒄 x = (Inv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x))
+
+--   ζ : (𝒄 : X → ∣ 𝑪 ∣) → ∣ ϕ ∣ ∘ (pre 𝒄) ≡ 𝒄
+--   ζ 𝒄 = gfe λ x → InvIsInv ∣ ϕ ∣ (𝒄 x) (ϕsur 𝒄 x)
+
+--   β : ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
+--   β = pΨq 𝑪 SCloC
+
+--   γ : (p ̇ 𝑪) ≡ (q ̇ 𝑪)
+--   γ = gfe λ 𝒄 →
+--    (p ̇ 𝑪) 𝒄                  ≡⟨ (ap (p ̇ 𝑪) (ζ 𝒄))⁻¹ ⟩
+--    (p ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑪 ϕ p (pre 𝒄))⁻¹ ⟩
+--    ∣ ϕ ∣ ((p ̇ 𝑻 X)(pre 𝒄))       ≡⟨ intensionality β (pre 𝒄) ⟩
+--    ∣ ϕ ∣ ((q ̇ 𝑻 X)(pre 𝒄))       ≡⟨ comm-hom-term gfe (𝑻 X) 𝑪 ϕ q (pre 𝒄) ⟩
+--    (q ̇ 𝑪)(∣ ϕ ∣ ∘ (pre 𝒄))     ≡⟨ ap (q ̇ 𝑪) (ζ 𝒄) ⟩
+--    (q ̇ 𝑪) 𝒄                   ∎
+
+-- Ψ⊆Th𝒦 : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+--          (p q : ∣ (𝑻 X) ∣) → (p , q) ∈ Ψ X 𝒦 → 𝒦 ⊧ p ≋ q
+-- Ψ⊆Th𝒦{𝓤}  X 𝒦 p q pΨq {𝑨} KA = γ
+--  where
+--   ξ : (S 𝒦) ⊧ p ≋ q
+--   ξ = Ψ⊆ThSClo X 𝒦 {p , q} pΨq
+
+--   lApq : (lift-alg 𝑨 𝓤) ⊧ p ≈ q
+--   lApq = ξ (sbase KA)
+
+--   γ : 𝑨 ⊧ p ≈ q
+--   γ = lower-alg-⊧ 𝑨 p q lApq
