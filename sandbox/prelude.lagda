@@ -43,6 +43,17 @@ open import MGS-Unique-Existence using (∃!; -∃!) public
 
 open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
 
+
+module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
+ ≡-rfl : (x : X) → x ≡ x
+ ≡-rfl x = refl _
+
+ ≡-sym : (x y : X) → x ≡ y → y ≡ x
+ ≡-sym x y (refl _) = refl _
+
+ ≡-trans : (x y z : X) → x ≡ y → y ≡ z → x ≡ z
+ ≡-trans x y z (refl _) (refl _) = refl _
+
 ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
 ∣ x , y ∣ = x
 fst (x , y) = x
@@ -75,6 +86,9 @@ cong-app (refl _) a = refl _
 Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
 Pred A 𝓥 = A → 𝓥 ̇
 
+Pred₀ : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
+Pred₀ A 𝓥 = Σ P ꞉ (A → 𝓥 ̇) , ∀ x → is-subsingleton (P x)
+
 infix 4 _∈_ _∉_
 _∈_ : {A : 𝓤 ̇ } → A → Pred A 𝓦 → 𝓦 ̇
 x ∈ P = P x
@@ -89,9 +103,27 @@ P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 _⊇_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
 P ⊇ Q = Q ⊆ P
 
+_=̇_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+P =̇ Q = (P ⊆ Q) × (Q ⊆ P)
 
 _∈∈_ : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A  →  B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
 _∈∈_ f S = (x : _) → f x ∈ S
+
+Pred-refl : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+ →          P ≡ Q → (a : A) → a ∈ P → a ∈ Q
+Pred-refl (refl _) _ = λ z → z
+
+Pred-≡ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+ →          P ≡ Q → P =̇ Q
+Pred-≡ (refl _) = (λ z → z) , λ z → z
+
+Pred-≡→⊆ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+ →          P ≡ Q → (P ⊆ Q)
+Pred-≡→⊆ (refl _) = (λ z → z)
+
+Pred-≡→⊇ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+ →          P ≡ Q → (P ⊇ Q)
+Pred-≡→⊇ (refl _) = (λ z → z)
 
 
 infixr 1 _⊎_

@@ -10,21 +10,18 @@ open import basic
 open import prelude using (global-dfunext)
 
 module subuniverses
- {𝑆 : Signature 𝓞 𝓥}
+ {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext}
  {𝕏 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {gfe : global-dfunext} where
-
-open import congruences {gfe}
-open import homomorphisms {𝑆}
-
-open import terms {𝑆} {𝕏} {gfe} renaming (generator to ℊ)
+ where
 
 open import Relation.Unary using (⋂)
 
-open import prelude using (𝓟; _∈₀_; _⊆₀_; _●_; Univalence; is-set; powersets-are-sets';
- univalence-gives-global-dfunext; Π-is-subsingleton; lr-implication; rl-implication; Im_⊆_;
- subset-extensionality'; id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
- ×-is-subsingleton; is-subsingleton; ∈-is-subsingleton; equiv-to-subsingleton; transport; inverse;
+open import congruences {𝑆 = 𝑆}{gfe}
+open import homomorphisms {𝑆 = 𝑆}{gfe}
+open import terms {𝑆 = 𝑆} {gfe} {𝕏} renaming (generator to ℊ)
+open import prelude using (_●_; lr-implication; rl-implication; Im_⊆_;
+ id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
+ ×-is-subsingleton; transport; inverse;
  logically-equivalent-subsingletons-are-equivalent) public
 
 
@@ -486,8 +483,8 @@ lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
 
 module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 
- gfe : global-dfunext
- gfe = univalence-gives-global-dfunext ua
+ -- gfe : global-dfunext
+ -- gfe = univalence-gives-global-dfunext ua
 
  op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
  op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣)
@@ -501,7 +498,7 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
  being-op-closed-is-subsingleton B = Π-is-subsingleton gfe
   (λ f → Π-is-subsingleton gfe
    (λ a → Π-is-subsingleton gfe
-    (λ _ → ∈-is-subsingleton B ((f ̂ 𝑨) a))))
+    (λ _ → ∈₀-is-subsingleton B ((f ̂ 𝑨) a))))
 
  pr₁-is-embedding : is-embedding ∣_∣
  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
@@ -555,8 +552,8 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
  membership-equiv-is-subsingleton B C =
   Π-is-subsingleton gfe
    (λ x → ×-is-subsingleton
-    (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ C ∣ x ))
-      (Π-is-subsingleton gfe (λ _ → ∈-is-subsingleton ∣ B ∣ x )))
+    (Π-is-subsingleton gfe (λ _ → ∈₀-is-subsingleton ∣ C ∣ x ))
+      (Π-is-subsingleton gfe (λ _ → ∈₀-is-subsingleton ∣ B ∣ x )))
 
  subuniverse-equality : (B C : subuniverse)
   →    (B ≡ C)  ≃  ((x : ∣ 𝑨 ∣)  → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣))

@@ -7,17 +7,17 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import congruences
 open import prelude using (global-dfunext)
 
 module closure-exp-new-new
- {𝑆 : Signature 𝓞 𝓥}
+ {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext}
  {𝕏 : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {gfe : global-dfunext} where
+ where
 
-open import homomorphisms {𝑆 = 𝑆} public
-open import subuniverses {𝑆 = 𝑆}{𝕏 = 𝕏}{fe = gfe} public
-open import terms {𝑆 = 𝑆}{𝕏 = 𝕏}{gfe = gfe} renaming (generator to ℊ) public
+open import congruences {𝑆 = 𝑆}{gfe}
+open import homomorphisms {𝑆 = 𝑆}{gfe}
+open import terms {𝑆 = 𝑆}{gfe}{𝕏} renaming (generator to ℊ)
+open import subuniverses {𝑆 = 𝑆}{gfe}{𝕏}
 
 open import prelude using (_∪_; inj₁; inj₂; domain; embeddings-are-lc) public
 
@@ -47,8 +47,6 @@ Mod X ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term{𝓧}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
-
-
 
 
 --Closure wrt H
@@ -1124,7 +1122,25 @@ V-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Vpq {𝑨} KA = γ
   γ = lower-alg-id-compatibility 𝑨 p q ξ
 
 
+------------------
+--Class Identities
+--It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all
+--structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 
+-- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
+class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+                   (p q : ∣ 𝑻 X ∣)
+                  ----------------------------------------------------------
+ →                 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (V 𝒦))
+
+class-identities{𝓤}{𝓧}{X}{𝒦} p q = ⇒ , ⇐
+ where
+  ⇒ : 𝒦 ⊧ p ≋ q → p , q ∈ Th (V 𝒦)
+  ⇒ = λ α VCloA → V-id1 p q α VCloA
+
+  ⇐ : p , q ∈ Th (V 𝒦) → 𝒦 ⊧ p ≋ q
+  ⇐ = λ Thpq {𝑨} KA → lower-alg-⊧ 𝑨 p q (Thpq (vbase KA))
+\end{code}
 
 
 

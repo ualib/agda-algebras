@@ -7,16 +7,18 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import congruences
+open import prelude using (global-dfunext)
 
-module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
+module homomorphisms {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
+
+open import congruences {𝑆 = 𝑆}{gfe}
+
+open import prelude using (_⊆_; _≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
+ Nat; NatΠ; NatΠ-is-embedding; is-embedding; invertible; hfunext; _=̇_; Monic;
+ equivs-are-embeddings; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
 
 OV : Universe → Universe
 OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-
-open import prelude using (_⊆_; _≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
- Nat; NatΠ; NatΠ-is-embedding; is-embedding; fst; snd; invertible; hfunext;
- equivs-are-embeddings; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
 
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
@@ -35,8 +37,137 @@ is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map �
 hom : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
 
-epi : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
+open congruence-predicates
+open relation-predicate-classes
+open Congruence
+
+module _ {𝓤 𝓦 : Universe} where
+
+ hom-kernel-is-compatible : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+  →                         compatible 𝑨 (KER-rel ∣ h ∣)
+
+ hom-kernel-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ
+  where
+   γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
+   γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂) ≡⟨ ∥ h ∥ f 𝒂 ⟩
+       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂) ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
+       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂') ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
+       ∣ h ∣ ((f ̂ 𝑨) 𝒂') ∎
+
+ hom-kernel-is-equivalence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+  →                          IsEquivalence (KER-rel ∣ h ∣)
+
+ hom-kernel-is-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
+
+ kercon -- (alias)
+  hom-kernel→congruence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+  →                      Congruence 𝑨
+
+ hom-kernel→congruence 𝑨 {𝑩} h = mkcon (KER-rel ∣ h ∣)
+                                        (hom-kernel-is-compatible 𝑨 {𝑩} h)
+                                         (hom-kernel-is-equivalence 𝑨 {𝑩} h)
+ kercon = hom-kernel→congruence -- (alias)
+
+ quotient-by-hom-kernel : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
+                          (h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+
+ quotient-by-hom-kernel 𝑨{𝑩} h = 𝑨 ╱ (hom-kernel→congruence 𝑨{𝑩} h)
+
+ -- NOTATION.
+ _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ 𝑨 [ 𝑩 ]/ker h = quotient-by-hom-kernel 𝑨 {𝑩} h
+
+epi : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g × Epic g
+
+epi-to-hom : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
+ →           epi 𝑨 𝑩 → hom 𝑨 𝑩
+epi-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+
+canonical-projection : {𝓤 𝓦 : Universe}
+                       (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)
+                      ----------------------------------------------
+ →                     epi 𝑨 (𝑨 ╱ θ)
+
+canonical-projection 𝑨 θ = cπ , cπ-is-hom , cπ-is-epic
+  where
+   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
+   cπ a = ⟦ a ⟧  -- ([ a ] (KER-rel ∣ h ∣)) , ?
+
+   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
+   cπ-is-hom 𝑓 𝒂 = γ
+    where
+     γ : cπ ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ (𝑨 ╱ θ)) (λ x → cπ (𝒂 x))
+     γ = cπ ((𝑓 ̂ 𝑨) 𝒂) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         ⟦ (𝑓 ̂ 𝑨) 𝒂 ⟧ ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         (𝑓 ̂ (𝑨 ╱ θ)) (λ x → ⟦ 𝒂 x ⟧) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         (𝑓 ̂ (𝑨 ╱ θ)) (λ x → cπ (𝒂 x)) ∎
+
+   cπ-is-epic : Epic cπ
+   cπ-is-epic (.(⟨ θ ⟩ a) , a , refl _) = Image_∋_.im a
+
+
+
+kernel-quotient-projection : {𝓤 𝓦 : Universe}
+                             (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
+                             (h : hom 𝑨 𝑩)
+                            -------------------------------
+ →                           epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
+
+kernel-quotient-projection 𝑨{𝑩} h = canonical-projection 𝑨 (kercon 𝑨{𝑩} h)
+
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}(ϕ : epi 𝑨 𝑩) where
+ ϕh : hom 𝑨 𝑩
+ ϕh = epi-to-hom 𝑨 {𝑩} ϕ
+
+ ϕE : Epic ∣ ϕ ∣
+ ϕE = snd ∥ ϕ ∥
+
+ θ : Congruence{𝓤}{𝓦} 𝑨
+ θ = kercon 𝑨{𝑩} ϕh
+
+ 𝑨/θ : Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ 𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕh
+
+ πᶜ : epi 𝑨 𝑨/θ
+ πᶜ = kernel-quotient-projection 𝑨{𝑩} ϕh
+
+ NoetherIsomorphism1 : Σ f ꞉ (epi 𝑨/θ 𝑩) , (∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πᶜ ∣) × is-embedding ∣ f ∣
+ NoetherIsomorphism1 = (fmap , fhom , fepic) , commuting , femb
+  where
+   fmap : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
+   fmap a = ∣ ϕ ∣ ⌜ a ⌝ --   fmap (.(⟨ θ ⟩ a) , a , refl _) = ∣ ϕ ∣ a
+
+   fhom : is-homomorphism 𝑨/θ 𝑩 fmap
+   fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+              ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕh ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
+               (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
+               (𝑓 ̂ 𝑩) (λ x → fmap (𝒂 x)) ∎
+
+   fepic : Epic fmap
+   fepic b = γ
+    where
+     a : ∣ 𝑨 ∣
+     a = EpicInv ∣ ϕ ∣ ϕE b
+
+     a/θ : ∣ 𝑨/θ ∣
+     a/θ = ⟦ a ⟧
+
+     bfa : b ≡ fmap a/θ
+     bfa = (cong-app (EpicInvIsRightInv gfe ∣ ϕ ∣ ϕE) b)⁻¹
+
+     γ : Image fmap ∋ b
+     γ = Image_∋_.eq b a/θ bfa
+
+
+   commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πᶜ ∣
+   commuting = 𝓇ℯ𝒻𝓁
+
+   femb : is-embedding fmap
+   femb = {!!}
+
+
+
 
 𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
@@ -150,15 +281,16 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
--- This is sometimes called the "first homomorphism theorem."
-HomFactor : {𝓠 𝓤 𝓦 : Universe} → global-dfunext
- →          {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
-            (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
- →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)  →  Epic ∣ h ∣
-           ------------------------------------------------
- →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
+ -- This is sometimes called the "second isomomorphism theorem."
+ HomFactor : {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
+             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
+  →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)  →  Epic ∣ h ∣
+            ------------------------------------------------
+  →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
+
+ HomFactor {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
    hInv : C → A
    hInv = λ c → (EpicInv h hEpi) c
@@ -204,6 +336,120 @@ HomFactor gfe {A , FA}{B , FB}{C , FC}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , 
      ii  = ap (λ - → g (hInv -)) (hhom f (hInv ∘ c))⁻¹
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
+
+--module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
+-- kernel-quotient : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+--                   (h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺)  𝑆
+
+-- kernel-quotient {𝓤}{𝓦}{𝑨} h = 𝑨 ╱ kerh
+--  where
+--   kerh : Congruence{𝓤}{𝓦} 𝑨
+--   kerh = mkcon (KER-rel ∣ h ∣) {!!} {!!}
+
+
+ -- canonical-projection : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓤 𝑆}
+ --                        (h : hom 𝑨 𝑩) →  {k : KER-pred ∣ h ∣}
+ --                      ------------------------------------------------
+ --  →                    Σ f ꞉ (hom 𝑪 𝑩) , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ g ∣) × Epic ∣ f ∣ × is-embedding ∣ f ∣
+ -- NoetherIsomorphism1 : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓤 𝑆}
+ --                        (h : hom 𝑨 𝑩) →  Epic ∣ h ∣ → {k : KER-pred ∣ h ∣}
+ --                      ------------------------------------------------
+ --  →                    Σ f ꞉ (hom 𝑪 𝑩) , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ g ∣) × Epic ∣ f ∣ × is-embedding ∣ f ∣
+   --
+   --    𝑨 ----- h --->> 𝑩
+   --     \            77
+   --      \          /
+   --       g        ∃f
+   --        \      /
+   --         \    /
+   --          V l/      ker g ⊆ ker h => ∃! f : 𝑪 → 𝑩
+   --           𝑪
+
+ -- NoetherIsomorphism1 {𝑨}{𝑩}{𝑪} h g hE gE Kg=̇Kh =
+ --  (f , fhom) , h≡fg , fE , femb
+ --  where
+ --   hInv : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+ --   hInv = λ b → (EpicInv ∣ h ∣ hE) b
+ --   gInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
+ --   gInv = λ c → (EpicInv ∣ g ∣ gE) c
+
+ --   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+ --   f = λ c → ∣ h ∣ (gInv c)
+
+ --   ξ : (x : ∣ 𝑨 ∣) → KER-pred ∣ g ∣ (x , gInv (∣ g ∣ x))
+ --   ξ x =  ( cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE) ( ∣ g ∣ x ) )⁻¹
+
+ --   Kh Kg : Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣ ) 𝓤
+ --   Kh = KER-pred ∣ h ∣
+ --   Kg = KER-pred ∣ g ∣
+ --   Kg⊆Kh : Kg ⊆ Kh
+ --   Kg⊆Kh = fst Kg=̇Kh
+ --   Kh⊆Kg : Kh ⊆ Kg
+ --   Kh⊆Kg = snd Kg=̇Kh
+
+ --   h≡fg : ∣ h ∣ ≡ f ∘ ∣ g ∣
+ --   h≡fg = gfe λ x → Kg⊆Kh (ξ x)
+ --   f≡hgi : f ≡ ∣ h ∣ ∘ gInv
+ --   f≡hgi = refl _
+
+ --   ζ : (𝑓 : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ 𝑓) → c x ≡ (∣ g ∣ ∘ gInv)(c x)
+
+ --   ζ _ c x = (cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE) (c x))⁻¹
+
+ --   ι : (𝑓 : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)
+ --    →  (λ x → c x) ≡ (λ x → ∣ g ∣ (gInv (c x)))
+
+ --   ι 𝑓 c = ap (λ - → - ∘ c)(EpicInvIsRightInv gfe ∣ g ∣ gE)⁻¹
+
+ --   useker : (𝑓 : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)
+ --    → ∣ h ∣ (gInv (∣ g ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c)))) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c))
+
+ --   useker 𝑓 c = Kg⊆Kh (cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE)
+ --                                   (∣ g ∣ ((𝑓 ̂ 𝑨)(gInv ∘ c))))
+
+ --   hgi-is-monic : Monic (∣ h ∣ gInv)
+ --   hgi-is-monic = ?
+
+ --   ghi∼f : (λ x → ∣ g ∣ (hInv (f x))) ∼ id
+ --   ghi∼f x = {!!}
+ --   -- ∣ g ∣ (hInv (f x)) ≡⟨ ap (λ - → ∣ g ∣ (hInv (- x))) f≡hgi ⟩
+ --   --          ∣ g ∣ (hInv (∣ h ∣ (gInv x))) ≡⟨ ap (λ - →  ∣ g ∣ ( - (gInv x))) (EpicInvIsRightInv gfe ∣ h ∣ hE) ⟩
+ --   --          ∣ g ∣ (gInv x) ≡⟨ {!!} ⟩
+ --   --           id x ∎
+
+ --   f∼ghi : (λ x → f (∣ g ∣ (hInv x))) ∼ id
+ --   f∼ghi x = f (∣ g ∣ (hInv x)) ≡⟨ (cong-app h≡fg (hInv x))⁻¹ ⟩
+ --             (∣ h ∣ (hInv x)) ≡⟨ cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) x ⟩
+ --             (𝑖𝑑 ∣ 𝑩 ∣) x  ∎
+
+
+ --   fE : Epic f
+ --   fE b = eq b (∣ g ∣ (hInv b)) η
+ --    where
+ --     η : b ≡ f (∣ g ∣ (hInv b))
+ --     η = b                   ≡⟨ (cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) b)⁻¹ ⟩
+ --         ∣ h ∣ (hInv b)       ≡⟨ cong-app h≡fg (hInv b) ⟩
+ --         (f ∘ ∣ g ∣) (hInv b)  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+ --         f (∣ g ∣ (hInv b)) ∎
+
+ --   fhom : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → (f ((𝑓 ̂ 𝑪) 𝒄)) ≡ ((𝑓 ̂ 𝑩) (f ∘ 𝒄))
+
+ --   fhom 𝑓 c =
+ --    ∣ h ∣ (gInv ((𝑓 ̂ 𝑪) c))                 ≡⟨ i   ⟩
+ --    ∣ h ∣ (gInv ((𝑓 ̂ 𝑪) (∣ g ∣ ∘ (gInv ∘ c)))) ≡⟨ ii  ⟩
+ --    ∣ h ∣ (gInv (∣ g ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c))))   ≡⟨ iii ⟩
+ --    ∣ h ∣ ((𝑓 ̂ 𝑨)(gInv ∘ c))                 ≡⟨ iv  ⟩
+ --    ((𝑓 ̂ 𝑩)(λ x → ∣ h ∣ (gInv (c x))))       ∎
+ --     where
+ --      i   = ap (∣ h ∣ ∘ gInv) (ap (𝑓 ̂ 𝑪) (ι 𝑓 c))
+ --      ii  = ap (λ - → ∣ h ∣ (gInv -)) (∥ g ∥ 𝑓 (gInv ∘ c))⁻¹
+ --      iii = useker 𝑓 c
+ --      iv  = ∥ h ∥ 𝑓 (gInv ∘ c)
+
+ --   finv : invertible f
+ --   finv = (∣ g ∣ ∘ hInv) , ghi∼f , f∼ghi
+ --   femb : is-embedding f
+ --   femb = equivs-are-embeddings f (invertibles-are-equivs f finv)
 
 
 -- homs of products

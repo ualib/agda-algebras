@@ -8,14 +8,13 @@
 
 open import basic
 open import prelude using (global-dfunext)
--- open import Relation.Unary using () -- Pred; _∈_; _⊆_)
 
-module congruences {gfe : global-dfunext} where
+module congruences {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
 
-open import prelude using (Univalence; is-prop; 𝟙; _≡⟨_⟩_; _∎; refl; _⁻¹; funext; ap; _≡_; _∙_;
- 𝓇ℯ𝒻𝓁; cong-app-pred; id; _⇔_; _∈₀_; _⊆₀_; 𝓟; ∈₀-is-subsingleton; equiv-to-subsingleton;
+open import prelude using (Univalence; is-prop; 𝟙; _≡⟨_⟩_; _∎; refl; _⁻¹; funext; ap; _∙_; Pred₀; ≡-sym; ≡-trans;
+ ≡-rfl; 𝓇ℯ𝒻𝓁; cong-app-pred; id; _⇔_; _∈₀_; _⊆₀_; 𝓟; ∈₀-is-subsingleton; is-subsingleton; equiv-to-subsingleton;
  powersets-are-sets'; subset-extensionality'; propext; Ω; Σ-is-subsingleton; Π-is-subsingleton;
- cong-app-𝓟; fst; ≡-elim-left) public
+ cong-app-𝓟; fst; snd; ≡-elim-left) public
 
 module _ {𝓤 𝓦 : Universe} where
 
@@ -30,6 +29,9 @@ module _ {𝓤 𝓦 : Universe} where
 
 Rel : {𝓤 : Universe} → 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
 Rel A 𝓝 = REL A A 𝓝
+
+Rel₀ : {𝓤 : Universe} → 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
+Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P x y)
 
 KER-rel : {𝓤 𝓦 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Rel A 𝓦
 KER-rel g x y = g x ≡ g y
@@ -105,33 +107,42 @@ module _ {𝓤 𝓡 : Universe} where
                          ; sym = λ x y x≡y → x≡y ⁻¹
                          ; trans = λ x y z x≡y y≡z → x≡y ∙ y≡z }
 
+≡-IsEquivalence : ∀{𝓤}{X : 𝓤 ̇} → IsEquivalence{𝓤}{𝓤}{X} _≡_
+≡-IsEquivalence = record { rfl = ≡-rfl ; sym = ≡-sym ; trans = ≡-trans }
 
 
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+
+ map-kernel-IsEquivalence : (f : A → B) → IsEquivalence (KER-rel f)
+ map-kernel-IsEquivalence f = record { rfl = λ x → 𝓇ℯ𝒻𝓁
+                                     ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
+                                     ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
 
 module relation-classes {𝓤 𝓡 : Universe} where
 
  -- relation class
- [_]ᵣ_ :  {A : 𝓤 ̇ } → A → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
- [ a ]ᵣ R = Σ x ꞉ _ , R a x
+ [_]_ :  {A : 𝓤 ̇ } → A → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ [ a ] R = Σ x ꞉ _ , R a x
 
  -- relation quotient
- _/ᵣ_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
- A /ᵣ ≈ = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ]ᵣ ≈ )
+ _/_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → (𝓤 ⊔ 𝓡) ⁺ ̇
+ A / R = Σ C ꞉ _ ,  Σ a ꞉ A ,  C ≡ ( [ a ] R )
 
  -- get relation class representative
- ⌜_⌝ᵣ : {A : 𝓤 ̇}{≈ : Rel A 𝓡} → A /ᵣ ≈  → A
- ⌜ 𝒂 ⌝ᵣ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
+ ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
+ ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
 
  -- intro rule for relation class with designated representative
- ⟦_⟧ᵣ : {A : 𝓤 ̇} → A → {≈ : Rel A 𝓡} → A /ᵣ ≈
- ⟦ a ⟧ᵣ {≈} = ([ a ]ᵣ ≈) , a , 𝓇ℯ𝒻𝓁
+ ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
+ ⟦ a ⟧ {R} = ([ a ] R) , a , 𝓇ℯ𝒻𝓁
 
  -- elimination rule for relation class representative
- /ᵣ-Refl : {A : 𝓤 ̇}{a a' : A}{_≈_ : Rel A 𝓡}
-  →   reflexive _≈_ → ⟦ a ⟧ᵣ{_≈_} ≡ ⟦ a' ⟧ᵣ → a ≈ a'
- /ᵣ-Refl rfl (refl _)  = rfl _
+ /-Refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+  →   reflexive R → ⟦ a ⟧{R} ≡ ⟦ a' ⟧ → R a a'
+ /-Refl rfl (refl _)  = rfl _
 
-
+-----------------------------------------------------------------------------------
+-- ON PREDICATES -------------------------------------------------------------------
 module relation-predicate-classes {𝓤 𝓡 : Universe} where
 
  -- relation class
@@ -144,100 +155,91 @@ module relation-predicate-classes {𝓤 𝓡 : Universe} where
  []-elim = id , id
 
  -- relation quotient (predicate version)
- _/ₚ_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → 𝓤 ⊔ (𝓡 ⁺) ̇
- A /ₚ ≈ = Σ C ꞉ Pred A 𝓡 ,  Σ a ꞉ A ,  C ≡ ( [ a ] ≈ )
+ _/_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → 𝓤 ⊔ (𝓡 ⁺) ̇
+ A / R = Σ C ꞉ Pred A 𝓡 ,  Σ a ꞉ A ,  C ≡ ( [ a ] R )
 
  -- For a reflexive relation, we have the following elimination rule.
- /ₚ-refl : {A : 𝓤 ̇}{a a' : A}{_≈_ : Rel A 𝓡}
-  →   reflexive _≈_ → [ a ] _≈_ ≡ [ a' ] _≈_ → a ≈ a'
- /ₚ-refl{A = A}{a}{a'}{_≈_} rfl x  = γ
+ /-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+  →   reflexive R → [ a ] R ≡ [ a' ] R → R a a'
+ /-refl{A = A}{a}{a'}{R} rfl x  = γ
   where
-   a'in : a' ∈ [ a' ] _≈_
+   a'in : a' ∈ [ a' ] R
    a'in = rfl a'
-   γ : a' ∈ [ a ] _≈_
+   γ : a' ∈ [ a ] R
    γ = cong-app-pred a' a'in (x ⁻¹)
 
- ⌜_⌝ : {A : 𝓤 ̇}{≈ : Rel A 𝓡} → A /ₚ ≈  → A
+ ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
  ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
 
  -- introduction rule for relation class with designated representative
- ⟦_⟧ : {A : 𝓤 ̇} → A → {≈ : Rel A 𝓡} → A /ₚ ≈
- ⟦ a ⟧ {≈} = ([ a ] ≈) , a , 𝓇ℯ𝒻𝓁
+ ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
+ ⟦ a ⟧ {R} = ([ a ] R) , a , 𝓇ℯ𝒻𝓁
 
  --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
  ⟦⟧-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
   →         R a x ⇔ (x ∈ [ a ] R)
  ⟦⟧-elim = id , id
 
- -- []-⟦⟧-agreement : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
- --  →                (⟦ a ⟧ {R} ≡ ⟦ a' ⟧ {R})  ⇔  ([ a ] R ≡ [ a' ] R)
- -- []-⟦⟧-agreement = {!!}
-
-
-
  open IsEquivalence
  -- elimination rule for relation class representative
- /ₚ-Refl : {A : 𝓤 ̇}{a a' : A}{_≈_ : Rel A 𝓡}
-  →   reflexive _≈_ → ⟦ a ⟧{_≈_} ≡ ⟦ a' ⟧ → a ≈ a'
- /ₚ-Refl rfl (refl _)  = rfl _
-
- -- []-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
- --  →        IsEquivalence R
- --  →        R a a' ⇔  ([ a ] R ≡ [ a' ] R)
- -- []-refl {A = A}{a}{a'}{R} eqR = lr , rl
- --  where
- --   lr : R a a' → [ a ] R ≡ [ a' ] R
- --   lr = λ x → gfe λ y →
- --         [ a ] R y ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- --         R a y ≡⟨ {!(sym eqR) a y !} ⟩
- --         R y a  ≡⟨ {!!} ⟩
- --         R y a' ≡⟨ {!!} ⟩
- --         R a' y ≡⟨ {!!} ⟩
- --         [ a' ] R y ∎
-
-
- --   rl : [ a ] R ≡ [ a' ] R → R a a'
- --   rl = {!!}
+ /-Refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+  →   reflexive R → ⟦ a ⟧{R} ≡ ⟦ a' ⟧ → R a a'
+ /-Refl rfl (refl _)  = rfl _
 
 
 module relation-powerset-classes {𝓤 : Universe} where
  -- Properties of binary relations as powersets --------------------------------------
 
  record SetRel (A : 𝓤 ̇) : 𝓤 ⁺ ̇ where
-   field
-     ⟨_⟩ : 𝓟(A × A)
-     isset : is-set A
+  constructor mksetrel
+  field
+    ⟨_⟩ : 𝓟(A × A)
+    isset : is-set A
 
  open SetRel
+
+ SetRel→Rel : {A : 𝓤 ̇}(R : SetRel A) → Rel A 𝓤
+ SetRel→Rel {A} R = λ a a' → ∣ ⟨ R ⟩  (a , a') ∣
+
+ Rel₀→𝓟² : {A : 𝓤 ̇}{R : Rel₀ A 𝓤} → 𝓟(A × A)
+ Rel₀→𝓟² {A}{R} (x , y) = ∣ R ∣ x y , ∥ R ∥ x y
+
+ Pred₀→𝓟² : {A : 𝓤 ̇}{P : Pred₀ (A × A) 𝓤} → 𝓟(A × A)
+ Pred₀→𝓟² {A}{P} aa = ∣ P ∣ aa , ∥ P ∥ aa
+
+ Rel₀→SetRel : {A : 𝓤 ̇}{R : Rel₀ A 𝓤} → is-set A → SetRel A
+ Rel₀→SetRel {A}{R} Aset = mksetrel (Rel₀→𝓟²{A}{R}) Aset
+
+ Pred₀→SetRel : {A : 𝓤 ̇}{P : Pred₀ (A × A) 𝓤} → is-set A → SetRel A
+ Pred₀→SetRel {A}{P} Aset = mksetrel (Pred₀→𝓟²{A}{P}) Aset
 
 
  module _ {A : 𝓤 ̇} where
 
   refl𝓟 : SetRel A → 𝓤 ̇
-  refl𝓟 θ = ∀ x → (x , x) ∈₀ ⟨ θ ⟩
+  refl𝓟 θ = ∀ x → (x , x) ∈₀ (⟨ θ ⟩)
 
   symm𝓟 : SetRel A → 𝓤 ̇
-  symm𝓟 θ = ∀ x y → (x , y) ∈₀ ⟨ θ ⟩  → (y , x) ∈₀ ⟨ θ ⟩
+  symm𝓟 θ = ∀ x y → (x , y) ∈₀ (⟨ θ ⟩)  → (y , x) ∈₀ (⟨ θ ⟩)
 
   trans𝓟 : SetRel A → 𝓤 ̇
-  trans𝓟 θ = ∀ x y z → (x , y) ∈₀ ⟨ θ ⟩ → (y , z) ∈₀ ⟨ θ ⟩ → (x , z) ∈₀ ⟨ θ ⟩
+  trans𝓟 θ = ∀ x y z → (x , y) ∈₀ (⟨ θ ⟩) → (y , z) ∈₀ (⟨ θ ⟩) → (x , z) ∈₀ (⟨ θ ⟩)
 
   is-subsingleton-valued-𝓟 : SetRel A → 𝓤 ̇
-  is-subsingleton-valued-𝓟 θ = ∀ x y → is-prop ((x , y) ∈₀ ⟨ θ ⟩)
+  is-subsingleton-valued-𝓟 θ = ∀ x y → is-prop ((x , y) ∈₀ (⟨ θ ⟩))
 
-
-  -- relation class
+  -- setrel class
   _/_ : A → (θ : SetRel A) → 𝓟 A
-  a / θ  = λ x → ((a , x) ∈₀ ⟨ θ ⟩) , (∈₀-is-subsingleton ⟨ θ ⟩ (a , x))
+  a / θ  = λ x → ((a , x) ∈₀ (⟨ θ ⟩)) , (∈₀-is-subsingleton (⟨ θ ⟩) (a , x))
 
-  --So, x ∈ [ a ]ₚ iff R a x, and the following elimination rule is a tautology.
+  --So, x ∈ [ a ] iff ⟨ R ⟩ a x; thus the following elimination rule is a tautology.
   /-elim : {a x : A}{θ : SetRel A}
-   →       (a , x) ∈₀ ⟨ θ ⟩ ⇔ (x ∈₀ (a / θ))
+   →       (a , x) ∈₀ (⟨ θ ⟩) ⇔ (x ∈₀ (a / θ))
   /-elim = id , id
 
   -- For a reflexive relation, we have the following elimination rule.
   /-refl : {a a' : A}{θ : SetRel A}
-   →       refl𝓟 θ → (a / θ) ≡ (a' / θ) → (a , a') ∈₀ ⟨ θ ⟩
+   →       refl𝓟 θ → (a / θ) ≡ (a' / θ) → (a , a') ∈₀ (⟨ θ ⟩)
   /-refl {a}{a'}{θ} rfl x  = γ
    where
     a'in : a' ∈₀ (a' / θ)
@@ -245,27 +247,33 @@ module relation-powerset-classes {𝓤 : Universe} where
     γ : a' ∈₀ (a / θ)
     γ = cong-app-𝓟 a' a'in (x ⁻¹)
 
- -- relation quotient (predicate version)
- _//_ : (A : 𝓤 ̇) → SetRel A → 𝓤 ⁺ ̇
- A // θ = Σ C ꞉ (𝓟 A) , Σ a ꞉ A , C ≡ (a / θ)
+ -- relation quotient (powerset version)
+ _/̇_ : (A : 𝓤 ̇) → SetRel A → 𝓤 ⁺ ̇        -- type /̇ with `/\^.`
+ A /̇ θ = Σ C ꞉ (𝓟 A) , Σ a ꞉ A , C ≡ (a / θ)
 
- ⌜_⌝ₚ : {A : 𝓤 ̇}{θ : SetRel A} → A // θ  → A
- ⌜ 𝒂 ⌝ₚ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
+ ⌜_⌝ : {A : 𝓤 ̇}{θ : SetRel A} → A /̇ θ  → A
+ ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
 
  -- introduction rule for relation class with designated representative
- ⟦_⟧ : {A : 𝓤 ̇} → A → (θ : SetRel A) → A // θ
- ⟦ a ⟧ θ = (a / θ) , a , 𝓇ℯ𝒻𝓁
+ ⟦_⟧ : {A : 𝓤 ̇} → A → {θ : SetRel A} → A /̇ θ
+ ⟦ a ⟧ {θ} = (a / θ) , a , 𝓇ℯ𝒻𝓁
 
  --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
  ⟦⟧-elim : {A : 𝓤 ̇ }{θ : SetRel A}{a x : A}
-  →         (a , x) ∈₀ ⟨ θ ⟩  ⇔  x ∈₀ (a / θ)
+  →         (a , x) ∈₀ (⟨ θ ⟩)  ⇔  x ∈₀ (a / θ)
  ⟦⟧-elim = id , id
 
  ⟦⟧→[]-agreement : {A : 𝓤 ̇}{θ : SetRel A}{x y : A}
-  →                (⟦ x ⟧ θ ≡ ⟦ y ⟧ θ)  →  ((x / θ) ≡ (y / θ))
+  →                (⟦ x ⟧ {θ} ≡ ⟦ y ⟧{θ})  →  ((x / θ) ≡ (y / θ))
  ⟦⟧→[]-agreement equ = ap fst equ
 
+ record SetRel-IsEquivalence {A : 𝓤 ̇ } (R : SetRel A) : 𝓤 ⁺ ̇ where
+  field
+    rfl  : refl𝓟 R
+    sym   : symm𝓟 R
+    trans : trans𝓟 R
 
+---------------------------------------------------
 
 _on_ : {𝓤 𝓥 𝓦 : Universe}
        {A : 𝓤 ̇ } {B : 𝓥 ̇ } {C : 𝓦 ̇ }
@@ -300,113 +308,140 @@ module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇ } {Z : 𝓤 ̇ } where
  compatible-fun : (f : (γ → Z) → Z)(R : Rel Z 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 
-module _ {𝑆 : Signature 𝓞 𝓥}  where
+-- relation compatible with an operation
+compatible-op : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+compatible-op {𝑨 = 𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
+-- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
 
-  -- relation compatible with an operation
-  compatible-op : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
-  compatible-op {𝑨 = 𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
-  -- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
+--The given relation is compatible with all ops of an algebra.
+compatible : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+compatible {𝓤 = 𝓤}{𝓦 = 𝓦} 𝑨 R = ∀ f → compatible-op{𝓤 = 𝓤}{𝓦 = 𝓦}{𝑨 = 𝑨} f R
 
-  --The given relation is compatible with all ops of an algebra.
-  compatible : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
-  compatible {𝓤 = 𝓤}{𝓦 = 𝓦} 𝑨 R = ∀ f → compatible-op{𝓤 = 𝓤}{𝓦 = 𝓦}{𝑨 = 𝑨} f R
+𝟎-compatible-op : funext 𝓥 𝓤
+ →                {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
+ →                compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
 
-  𝟎-compatible-op : funext 𝓥 𝓤
-   →                {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
-   →                compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
-  𝟎-compatible-op fe {𝑨 = 𝑨} f ptws0  =
-   ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
+𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
 
-  𝟎-compatible : funext 𝓥 𝓤
-   →             {A : Algebra 𝓤 𝑆}
-   →             compatible A 𝟎-rel
-  𝟎-compatible fe {A} =
-   λ f args → 𝟎-compatible-op fe {A} f args
+𝟎-compatible : funext 𝓥 𝓤
+ →             {A : Algebra 𝓤 𝑆}
+ →             compatible A 𝟎-rel
 
-module congruence-relations {𝑆 : Signature 𝓞 𝓥}  where
+𝟎-compatible fe {A} = λ f args → 𝟎-compatible-op fe {A} f args
 
-  open relation-classes
+Con : (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+Con {𝓤} A =
+  Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
 
-  Con : (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  Con {𝓤} A =
-   Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
+con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
+con A = λ θ → IsEquivalence θ × compatible A θ
 
-  con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
-  con A = λ θ → IsEquivalence θ × compatible A θ
+record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇  where
+ constructor mkcon
+ field
+  ⟨_⟩ : Rel ∣ A ∣ 𝓦
+  Compatible : compatible A ⟨_⟩
+  IsEquiv : IsEquivalence ⟨_⟩
 
-  record Congruence {𝓠 𝓤 : Universe} (A : Algebra 𝓠 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇  where
-    constructor mkcon
-    field
-      ⟨_⟩ : Rel ∣ A ∣ 𝓤
-      Compatible : compatible A ⟨_⟩
-      IsEquiv : IsEquivalence ⟨_⟩
-  open Congruence
+open Congruence
 
-  Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
-  Δ fe A = mkcon 𝟎-rel
-                ( 𝟎-compatible fe )
-                ( 𝟎-IsEquivalence )
+compatible-equivalence : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ̇
+compatible-equivalence {𝓤}{𝓦} {𝑨} R = compatible 𝑨 R × IsEquivalence R
 
-  _/̇_ : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓧} A  -- type /̇ with `/\^.`
-        ---------------------------------
-   →     Algebra (𝓤 ⁺ ⊔ 𝓧 ⁺) 𝑆
-  A /̇ θ = (( ∣ A ∣ /ᵣ ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
-            (λ f args         -- operations
-             → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ]ᵣ ⟨ θ ⟩) ,
-               ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
-            )
-          )
+Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
+Δ fe A = mkcon 𝟎-rel ( 𝟎-compatible fe ) ( 𝟎-IsEquivalence )
 
-  Zero/̇ : {𝓤 𝓧 : Universe}{A : Algebra 𝓤 𝑆} → (θ : Congruence{𝓤}{𝓧} A) → Rel (∣ A ∣ /ᵣ ⟨ θ ⟩) (𝓤 ⁺ ⊔ 𝓧 ⁺)
-  Zero/̇ θ = λ x x₁ → x ≡ x₁
+-----------------------------------------------------------------------------------
+module congruence-relations where
+ open relation-classes
 
-  /̇-refl : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓧} A}{a a' : ∣ A ∣}
-   →   ⟦ a ⟧ᵣ{⟨ θ ⟩} ≡ ⟦ a' ⟧ᵣ → ⟨ θ ⟩ a a'
-  /̇-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
+ _╱_ : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆) -- type ╱ᵣ as `\---` plus
+  →      Congruence{𝓤}{𝓧} A                -- C-f a number of times, then `\_r`
+        ------------------------
+  →      Algebra (𝓤 ⁺ ⊔ 𝓧 ⁺) 𝑆
 
+ A ╱ θ = (( ∣ A ∣ / ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
+           (λ f args         -- operations
+            → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+              ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+           )
+         )
 
-module congruence-relations-predicates {𝑆 : Signature 𝓞 𝓥}  where
+ Zero/ : {𝓤 𝓧 : Universe}{A : Algebra 𝓤 𝑆} → (θ : Congruence{𝓤}{𝓧} A) → Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⁺ ⊔ 𝓧 ⁺)
+ Zero/ θ = λ x x₁ → x ≡ x₁
 
-  open relation-predicate-classes
+ /-refl : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓧} A}{a a' : ∣ A ∣}
+  →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+ /-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
 
-  Con : (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-  Con {𝓤} A =
-   Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
+-----------------------------------------------------------------------------------
+module congruence-predicates where
+ open relation-predicate-classes
 
-  con : (A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
-  con A = λ θ → IsEquivalence θ × compatible A θ
+ _╱_ : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆) -- type ╱ with `\---` plus `C-f`
+  →      Congruence{𝓤}{𝓧} A               -- a number of times, then `\_p`
+        -----------------------
+  →     Algebra (𝓤 ⊔ 𝓧 ⁺) 𝑆
+ A ╱ θ = (( ∣ A ∣ / ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
+           (λ f args         -- operations
+            → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
+              ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+           )
+         )
 
-  record Congruence {𝓠 𝓤 : Universe} (A : Algebra 𝓠 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇  where
-    constructor mkcon
-    field
-      ⟨_⟩ : Rel ∣ A ∣ 𝓤
-      Compatible : compatible A ⟨_⟩
-      IsEquiv : IsEquivalence ⟨_⟩
-  open Congruence
+ Zero╱ : {𝓤 𝓧 : Universe}{A : Algebra 𝓤 𝑆} → (θ : Congruence{𝓤}{𝓧} A) → Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓧 ⁺)
+ Zero╱ θ = λ x x₁ → x ≡ x₁
 
-  Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
-  Δ fe A = mkcon 𝟎-rel
-                ( 𝟎-compatible fe )
-                ( 𝟎-IsEquivalence )
-
-  _╱_ : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓧} A  -- type ╱ with `\---` and then
-        ---------------------------------                          -- `C-f` a number of times
-   →     Algebra (𝓤 ⊔ 𝓧 ⁺) 𝑆
-  A ╱ θ = (( ∣ A ∣ /ₚ ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
-            (λ f args         -- operations
-             → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-               ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
-            )
-          )
-
-  Zero╱ : {𝓤 𝓧 : Universe}{A : Algebra 𝓤 𝑆} → (θ : Congruence{𝓤}{𝓧} A) → Rel (∣ A ∣ /ₚ ⟨ θ ⟩) (𝓤 ⊔ 𝓧 ⁺)
-  Zero╱ θ = λ x x₁ → x ≡ x₁
-
-  ╱-refl : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓧} A}{a a' : ∣ A ∣}
-   →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
-  ╱-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-refl : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓧} A}{a a' : ∣ A ∣}
+  →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+ ╱-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
 
 
+module congruence-relations-powersets where
+
+ open relation-powerset-classes
+ open SetRel
+
+ SetCon : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ SetCon {𝓤} 𝑨 = Σ θ ꞉ ( SetRel ∣ 𝑨 ∣ ) , SetRel-IsEquivalence θ × compatible{𝓤}{𝓤} 𝑨 (SetRel→Rel θ)
+
+ -- setcon : (A : Algebra 𝓤 𝑆) →  Pred (SetRel A) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
+ -- setcon A = λ θ → SetRel-IsEquivalence θ × compatible A (𝓟→Rel θ)
+
+ record SetCongruence {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
+  constructor mksetcon
+  field
+   ⟪_⟫ : SetRel ∣ 𝑨 ∣ -- 𝓟(∣ 𝑨 ∣ × ∣ 𝑨 ∣) --⟨_⟩ : Rel ∣ A ∣ 𝓤
+   Compatible : compatible 𝑨 (SetRel→Rel ⟪_⟫)
+   IsEquiv : SetRel-IsEquivalence ⟪_⟫
+
+ open SetCongruence
+
+ -- Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → SetCongruence A
+ -- Δ fe A = mksetcon 𝟎-rel
+ --               ( 𝟎-compatible fe )
+ --               ( 𝟎-IsEquivalence )
+
+
+ _╱_ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆)   -- type ╱ with `\---` plus `C-f`
+  →     SetCongruence 𝑨                 -- a number of times
+       ----------------------
+  →     Algebra (𝓤 ⁺) 𝑆
+
+ 𝑨 ╱ θ = (( ∣ 𝑨 ∣ /̇ ⟪ θ ⟫ ) , -- carrier (i.e. domain or universe))
+           (λ f args         -- operations
+            → (((f ̂ 𝑨)(λ i₁ → ∣ ∥ args i₁ ∥ ∣)) / ⟪ θ ⟫) , (f ̂ 𝑨) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
+           )
+
+
+ -- Zero╱ : {𝓤 : Universe}{A : Algebra 𝓤 𝑆} → (θ : SetCongruence{𝓤} A) → Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓧 ⁺)
+ -- Zero╱ θ = λ x x₁ → x ≡ x₁
+
+ ╱-refl : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆){θ : SetCongruence 𝑨}{a a' : ∣ 𝑨 ∣}
+  →   ⟦ a ⟧{⟪ θ ⟫} ≡ ⟦ a' ⟧{⟪ θ ⟫} → (a , a') ∈₀ ⟨ ⟪ θ ⟫ ⟩
+ ╱-refl _ {θ} (refl _)  = SetRel-IsEquivalence.rfl (IsEquiv θ) _
+
+ 
 \end{code}
 
 

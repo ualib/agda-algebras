@@ -7,15 +7,16 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
-open import congruences
 open import prelude using (global-dfunext)
 
 module terms
- {𝑆 : Signature 𝓞 𝓥}
+ {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} 
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {gfe : global-dfunext} where
+ where
 
-open import homomorphisms {𝑆 = 𝑆}
+open import congruences {𝑆 = 𝑆}{gfe}
+open import homomorphisms {𝑆 = 𝑆}{gfe}
+-- open import prelude using (is-singleton; fiber; is-center; ≡-×-intro)
 
 data Term {𝓧 : Universe}{X : 𝓧 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇  where
   generator : X → Term{𝓧}{X}
@@ -26,6 +27,65 @@ open Term
 --The term algebra 𝑻(X).
 𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺) 𝑆
 𝑻 {𝓧} X = Term{𝓧}{X} , node
+
+-- module _ {𝓧 : Universe}(X : 𝓧 ̇) where
+--  open Term renaming (generator to ℊ)
+
+--  genlem : (x y : X) → ℊ x ≡ ℊ y → x ≡ y
+--  genlem x y (refl _) = refl _
+
+--  geninv : invertible{𝓤 = 𝓧}{X = X} ℊ
+--  geninv = (T→X) , ({!!} , {!!})
+--   where
+--    T→X : Term → X
+--    T→X (ℊ x) = x
+--    T→X (node f args) = {!!}
+
+ -- genlem' : (x y : X) → is-set X → (ℊ x ≡ ℊ y) ≃ (x ≡ y)
+ -- genlem' x y Xset = (genlem x y) , γ -- (ℊ , Xset x y ((genlem x y) (ℊ)) ) , λ x₁ → {!!}
+ --  where
+ --   f : ℊ x ≡ ℊ y → x ≡ y
+ --   f = genlem x y
+
+ --   ζ : invertible f
+ --   ζ = (ap ℊ) , ((λ x₁ → {!!}) , {!!})
+ --   γ : is-equiv f
+ --   γ = invertibles-are-equivs f ζ
+ -- genlem' : is-equiv{X = X}{Y = Term{𝓧}{X}} ℊ
+ -- genlem' (ℊ x) = {!γ!}
+ --  where
+ --   xf : fiber ℊ (ℊ x)
+ --   xf = (x , ap ℊ (refl _))
+ --   xfc : is-center (fiber ℊ (ℊ x)) xf
+ --   xfc (y , gyx) = {!!}
+ --   γ : is-singleton (fiber ℊ (ℊ x))
+ --   γ =  xf , xfc
+ -- genlem' (node f args) = {!!}
+ -- genlem' (node f args) = {!!}
+ -- is-equiv : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
+ -- is-equiv f = (y : codomain f) → is-singleton (fiber f y)
+ -- fiber : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓥 ̇
+ -- fiber f y = Σ x ꞉ domain f , f x ≡ y
+ -- is-singleton : 𝓤 ̇ → 𝓤 ̇
+ -- is-singleton X = Σ c ꞉ X , is-center X c
+ -- is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
+ -- is-center X c = (x : X) → c ≡ x
+
+
+-- is-set : 𝓤 ̇ → 𝓤 ̇
+-- is-set X = (x y : X) → is-subsingleton (x ≡ y)
+
+ -- Xset→Tset : is-set X → is-set (Term{𝓧}{X})
+ -- Xset→Tset Xset (ℊ x) (ℊ y) p q = γ
+ --  where
+ --   p' q' : x ≡ y
+ --   p' = genlem x y p
+ --   q' = genlem x y q
+ --   pq' : p' ≡ q'
+ --   pq' = Xset x y p' q'
+ --   γ : p ≡ q
+ --   γ = {!pq'!}
+ -- Xset→Tset Xset (node f args) y p q = {!!}
 
 term-op : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X} ) → Term
 term-op f args = node f args
@@ -258,7 +318,7 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
      ih = gfe λ a → gfe λ i → IH a i
 
 
-open congruence-relations {𝑆 = 𝑆}
+open congruence-relations
 
 -- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
 compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
