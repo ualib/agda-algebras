@@ -13,9 +13,10 @@ module homomorphisms {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
 
 open import congruences {𝑆 = 𝑆}{gfe}
 
-open import prelude using (_⊆_; _≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
+open import prelude using (_≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvIsRightInv;
  Nat; NatΠ; NatΠ-is-embedding; is-embedding; invertible; hfunext; _=̇_; Monic;
- equivs-are-embeddings; invertibles-are-equivs; intensionality; is-equiv; Inv; eq; InvIsInv) public
+ invertibles-are-embeddings; monic-into-set-is-embedding; equivs-are-embeddings; invertibles-are-equivs;
+ intensionality; is-equiv; Inv; eq; InvIsInv) public
 
 OV : Universe → Universe
 OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
@@ -60,22 +61,23 @@ module _ {𝓤 𝓦 : Universe} where
  hom-kernel-is-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
 
  kercon -- (alias)
-  hom-kernel→congruence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+  hom-kernel-congruence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
   →                      Congruence 𝑨
 
- hom-kernel→congruence 𝑨 {𝑩} h = mkcon (KER-rel ∣ h ∣)
+ hom-kernel-congruence 𝑨 {𝑩} h = mkcon (KER-rel ∣ h ∣)
                                         (hom-kernel-is-compatible 𝑨 {𝑩} h)
                                          (hom-kernel-is-equivalence 𝑨 {𝑩} h)
- kercon = hom-kernel→congruence -- (alias)
+ kercon = hom-kernel-congruence -- (alias)
 
  quotient-by-hom-kernel : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
                           (h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- quotient-by-hom-kernel 𝑨{𝑩} h = 𝑨 ╱ (hom-kernel→congruence 𝑨{𝑩} h)
+ quotient-by-hom-kernel 𝑨{𝑩} h = 𝑨 ╱ (hom-kernel-congruence 𝑨{𝑩} h)
 
  -- NOTATION.
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
  𝑨 [ 𝑩 ]/ker h = quotient-by-hom-kernel 𝑨 {𝑩} h
+
 
 epi : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g × Epic g
@@ -86,8 +88,8 @@ epi-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 canonical-projection : {𝓤 𝓦 : Universe}
                        (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)
-                      ----------------------------------------------
- →                     epi 𝑨 (𝑨 ╱ θ)
+                     -----------------------------------------------
+  →                     epi 𝑨 (𝑨 ╱ θ)
 
 canonical-projection 𝑨 θ = cπ , cπ-is-hom , cπ-is-epic
   where
@@ -106,43 +108,47 @@ canonical-projection 𝑨 θ = cπ , cπ-is-hom , cπ-is-epic
    cπ-is-epic : Epic cπ
    cπ-is-epic (.(⟨ θ ⟩ a) , a , refl _) = Image_∋_.im a
 
+module _ {𝓤 𝓦 : Universe}{pe : propext 𝓦} where
+ πᵏ -- alias
+  kernel-quotient-projection : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
+                               (h : hom 𝑨 𝑩)
+                              -----------------------------------
+   →                             epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
+
+ kernel-quotient-projection 𝑨 {𝑩} h = canonical-projection 𝑨 (kercon 𝑨{𝑩} h)
+
+ πᵏ = kernel-quotient-projection
 
 
-kernel-quotient-projection : {𝓤 𝓦 : Universe}
-                             (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
-                             (h : hom 𝑨 𝑩)
-                            -------------------------------
- →                           epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
+ -- THE FIRST ISOMORPHISM THEOREM -------------------------------------------------------
 
-kernel-quotient-projection 𝑨{𝑩} h = canonical-projection 𝑨 (kercon 𝑨{𝑩} h)
+ NoetherIsomorphism1 : (𝑨 : Algebra 𝓤 𝑆)                 -- domain is 𝑨
+                       (𝑩 : Algebra 𝓦 𝑆)                -- codomain is 𝑩
+                       (ϕ : hom 𝑨 𝑩)                     -- ϕ is an epimorphism from 𝑨 onto 𝑩
+                       (ϕE : Epic ∣ ϕ ∣ )
+                -- extensionality assumptions:
+  →                                       (Bset : is-set ∣ 𝑩 ∣)
+  →                                       (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} ϕ ⟩ a x))
+  →                                       (∀ C → is-subsingleton (𝒜{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} ϕ ⟩} C))
+               ----------------------------------------------------------------------------------------
+  →              Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πᵏ 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}(ϕ : epi 𝑨 𝑩) where
- ϕh : hom 𝑨 𝑩
- ϕh = epi-to-hom 𝑨 {𝑩} ϕ
-
- ϕE : Epic ∣ ϕ ∣
- ϕE = snd ∥ ϕ ∥
-
- θ : Congruence{𝓤}{𝓦} 𝑨
- θ = kercon 𝑨{𝑩} ϕh
-
- 𝑨/θ : Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- 𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕh
-
- πᶜ : epi 𝑨 𝑨/θ
- πᶜ = kernel-quotient-projection 𝑨{𝑩} ϕh
-
- NoetherIsomorphism1 : Σ f ꞉ (epi 𝑨/θ 𝑩) , (∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πᶜ ∣) × is-embedding ∣ f ∣
- NoetherIsomorphism1 = (fmap , fhom , fepic) , commuting , femb
+ NoetherIsomorphism1 𝑨 𝑩 ϕ ϕE Bset ssR ssA = (fmap , fhom , fepic) , commuting , femb
   where
+   θ : Congruence{𝓤}{𝓦} 𝑨
+   θ = kercon 𝑨{𝑩} ϕ
+
+   𝑨/θ : Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+   𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕ
+
    fmap : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
    fmap a = ∣ ϕ ∣ ⌜ a ⌝ --   fmap (.(⟨ θ ⟩ a) , a , refl _) = ∣ ϕ ∣ a
 
    fhom : is-homomorphism 𝑨/θ 𝑩 fmap
    fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-              ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕh ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
-               (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
-               (𝑓 ̂ 𝑩) (λ x → fmap (𝒂 x)) ∎
+             ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
+              (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
+              (𝑓 ̂ 𝑩) (λ x → fmap (𝒂 x)) ∎
 
    fepic : Epic fmap
    fepic b = γ
@@ -160,13 +166,22 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
      γ = Image_∋_.eq b a/θ bfa
 
 
-   commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πᶜ ∣
+   commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πᵏ 𝑨 {𝑩} ϕ ∣
    commuting = 𝓇ℯ𝒻𝓁
 
+   fmon : Monic fmap
+   fmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) faa' = γ
+    where
+     aθa' : ⟨ θ ⟩ a a'
+     aθa' = faa'
+
+     γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
+     γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) aθa'
+
    femb : is-embedding fmap
-   femb = {!!}
+   femb = monic-into-set-is-embedding Bset fmap fmon
 
-
+------------------------------------------------------------------------------
 
 
 𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
