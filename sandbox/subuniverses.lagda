@@ -21,8 +21,7 @@ open import homomorphisms {𝑆 = 𝑆}{gfe}
 open import terms {𝑆 = 𝑆} {gfe} {𝕏} renaming (generator to ℊ)
 open import prelude using (_●_; lr-implication; rl-implication; Im_⊆_;
  id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
- ×-is-subsingleton; transport; inverse;
- logically-equivalent-subsingletons-are-equivalent) public
+ ×-is-subsingleton; inverse; logically-equivalent-subsingletons-are-equivalent) public
 
 
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)

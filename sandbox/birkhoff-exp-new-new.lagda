@@ -53,31 +53,31 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  𝑻ϕE _ ti = snd (snd ∥ ti ∥)
 
 
-module birkhoff-relations {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
- open relation-predicate-classes
+open relation-predicate-classes
  -- open relation-powerset-classes
-
- open congruence-relations
+open congruence-predicates
+ -- open congruence-relations
  -- open congruence-relations-powersets
 
  -- The collection of identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
- ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
+ψ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
+ψ {𝓤}{𝓧}{X} 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
                  →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti 𝑨 sA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑨 sA) ∣ q
 
- Ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) ((OV 𝓤) ⊔ 𝓧)
- Ψ 𝒦 (p , q) = (S{𝓤}{𝓤} 𝒦) ⊧ p ≋ q
-
+ -- Ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) ((OV 𝓤) ⊔ 𝓧)
+ -- Ψ 𝒦 (p , q) = (S{𝓤}{𝓤} 𝒦) ⊧ p ≋ q
 -- →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 -- Ψ : {𝓧 𝓤 : Universe}(X : 𝓧 ̇)(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
 --  →  Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺)
 -- Ψ X 𝒦 (p , q) = ∀(𝑨 : Algebra _ 𝑆) → (SCloA : 𝑨 ∈ SClo 𝒦)
 --  →  ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ 𝑻ϕ (SClo 𝒦) (mkti X 𝑨 SCloA) ∣ ∘ (q ̇ 𝑻 X)
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+ψRel : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
   →     Rel ∣ (𝑻 X) ∣ (OV 𝓤)
- ψRel 𝒦 p q = ψ 𝒦 (p , q)
+ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
+
+module birkhoff-relations {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
   →            compatible (𝑻 X) (ψRel 𝒦)
  ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
@@ -94,20 +94,20 @@ module birkhoff-relations {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
        ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
- ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → reflexive (ψRel 𝒦)
+ ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → reflexive (ψRel{𝓤}{𝓧}{X} 𝒦)
  ψRefl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁
 
- ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → symmetric (ψRel 𝒦)
+ ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → symmetric (ψRel{𝓤}{𝓧}{X} 𝒦)
  ψSymm p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
- ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → transitive (ψRel 𝒦)
+ ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → transitive (ψRel{𝓤}{𝓧}{X} 𝒦)
  ψTrans p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
  ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
 
  ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Congruence (𝑻 X)
- ψCon 𝒦 = mkcon (ψRel (S{𝓤}{𝓤} 𝒦)) (ψcompatible (S{𝓤}{𝓤} 𝒦)) ψIsEquivalence
+ ψCon 𝒦 = mkcon (ψRel 𝒦) (ψcompatible 𝒦) ψIsEquivalence
 
  -- Properties of ψ ------------------------------------------------------------
 
@@ -146,14 +146,18 @@ Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S(𝒦)}.
 We define it as follows.
 \begin{code}
 
+module the-relatively-free-algebra {𝓤 𝓧 : Universe} {X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+
+ open birkhoff-relations{𝓤}{𝓧}{X}
+
  𝓕 : Universe -- (universe level of the relatively free algebra)
  𝓕 = (𝓧 ⊔ (OV 𝓤))⁺
 
- 𝔉 : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra 𝓕 𝑆
- 𝔉 𝒦 =  𝑻 X ╱ (ψCon 𝒦)
+ 𝔉 : Algebra 𝓕 𝑆
+ 𝔉 =  𝑻 X ╱ (ψCon 𝒦)
 \end{code}
 
-The domain, ∣ 𝔉 X 𝒦 ∣, is defined by
+The domain, ∣ 𝔉 ∣, is defined by
 
 ```agda
 ( ∣ 𝑻 X ∣ /ₚ ⟨ θ ⟩ ) = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ≈ )
@@ -161,48 +165,46 @@ The domain, ∣ 𝔉 X 𝒦 ∣, is defined by
 
 which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-classs of 𝑻 X.
 \begin{code}
- 𝔉-free-lift : {𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                (𝑨 : Algebra 𝓦 𝑆)(f : X → ∣ 𝑨 ∣) → ∣ 𝔉 𝒦 ∣ → ∣ 𝑨 ∣
- 𝔉-free-lift {𝓦}𝑨 f (_ , x , _) = (free-lift{𝓧}{𝓦} 𝑨 f) x
+ 𝔉-free-lift : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
+               (h₀ : X → ∣ 𝑨 ∣)  →  ∣ 𝔉 ∣ → ∣ 𝑨 ∣
 
- 𝔉-free-lift-interpretation : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-              (𝑨 : Algebra 𝓤 𝑆)(f : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 𝒦 ∣)
-  →           (⌜ 𝒙 ⌝ ̇ 𝑨) f ≡ 𝔉-free-lift 𝑨 f 𝒙
+ 𝔉-free-lift {𝓦}𝑨 h₀ (_ , x , _) = (free-lift{𝓧}{𝓦} 𝑨 h₀) x
+
+ 𝔉-free-lift-interpretation : (𝑨 : Algebra 𝓤 𝑆)
+                              (h₀ : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 ∣)
+                             -------------------------------------
+  →                           (⌜ 𝒙 ⌝ ̇ 𝑨) h₀ ≡ 𝔉-free-lift 𝑨 h₀ 𝒙
+
  𝔉-free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
 
 
- 𝔉-lift-hom : {𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) _)
-              (𝑨 : Algebra 𝓦 𝑆)(f : X → ∣ 𝑨 ∣) → hom (𝔉 𝒦) 𝑨
- 𝔉-lift-hom 𝒦 𝑨 f = h , hhm
+ 𝔉-lift-hom : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
+               (h₀ : X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
+
+ 𝔉-lift-hom 𝑨 h₀ = f , fhom
   where
-   h : ∣ 𝔉 𝒦 ∣ → ∣ 𝑨 ∣
-   h = 𝔉-free-lift 𝑨 f
+   f : ∣ 𝔉 ∣ → ∣ 𝑨 ∣
+   f = 𝔉-free-lift 𝑨 h₀
 
-   h₀ : hom (𝑻 X) 𝑨
-   h₀ = lift-hom 𝑨 f
+   ϕ : hom (𝑻 X) 𝑨
+   ϕ = lift-hom 𝑨 h₀
 
-   hhm : is-homomorphism (𝔉 𝒦) 𝑨 h
-   hhm 𝑓 𝒂 = ∥ h₀ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
+   fhom : is-homomorphism 𝔉 𝑨 f
+   fhom 𝑓 𝒂 = ∥ ϕ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
 
+ 𝔉-lift-agrees-on-X : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
+                       (h₀ : X → ∣ 𝑨 ∣)(x : X)
+                     -----------------------------------------
+  →                    h₀ x ≡ ( ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ x ⟧ )
 
---module _ {𝓤 𝓦 𝓧 : Universe} where
+ 𝔉-lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
 
- -- NOTATION: ℊ = Term.generator   (\Mcg gives ℊ)
-
- 𝔉-lift-agrees-on-X : {𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-                      (𝑨 : Algebra 𝓦 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
-                      ----------------------------------------
-  →                    h₀ x ≡ ( ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣ ⟦ ℊ x ⟧ )
-
- 𝔉-lift-agrees-on-X _ _ h₀ x = 𝓇ℯ𝒻𝓁
-
- 𝔉-lift-of-epic-is-epic : {𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-                          (𝑨 : Algebra 𝓦 𝑆)(h₀ : X → ∣ 𝑨 ∣)
-  →                        Epic h₀
+ 𝔉-lift-of-epic-is-epic : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
+                           (h₀ : X → ∣ 𝑨 ∣)  →  Epic h₀
                           --------------------------------
-  →                        Epic ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣
+  →                        Epic ∣ 𝔉-lift-hom 𝑨 h₀ ∣
 
- 𝔉-lift-of-epic-is-epic 𝒦 𝑨 h₀ hE y = γ
+ 𝔉-lift-of-epic-is-epic 𝑨 h₀ hE y = γ
   where
    h₀pre : Image h₀ ∋ y
    h₀pre = hE y
@@ -210,49 +212,50 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
    h₀⁻¹y : X
    h₀⁻¹y = Inv h₀ y (hE y)
 
-   η : y ≡ ( ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣ ⟦ ℊ (h₀⁻¹y) ⟧ )
-   η = y          ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-       h₀ h₀⁻¹y   ≡⟨ (𝔉-lift-agrees-on-X) 𝒦 𝑨 h₀ h₀⁻¹y ⟩
-       ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣ ⟦ (ℊ h₀⁻¹y) ⟧ ∎
+   η : y ≡ ( ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ (h₀⁻¹y) ⟧ )
+   η = y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
+       h₀ h₀⁻¹y                         ≡⟨ (𝔉-lift-agrees-on-X) 𝑨 h₀ h₀⁻¹y ⟩
+       ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ (ℊ h₀⁻¹y) ⟧ ∎
 
-   γ : Image ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣ ∋ y
+   γ : Image ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ∋ y
    γ = eq y (⟦ ℊ h₀⁻¹y ⟧) η
 
 
- module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+ -- 𝔉 : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Algebra 𝓕 𝑆
+ -- 𝔉 𝒦 =  𝑻 X ╱ (ψCon 𝒦)
+ -- 𝔉-hom-unique : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)(f g : hom 𝔉
+ --                      ----------------------------------------
+ --  →                    h₀ x ≡ ( ∣ 𝔉-lift-hom 𝒦 𝑨 h₀ ∣ ⟦ ℊ x ⟧ )
 
-  X↪𝔉 : X → ∣ 𝔉 𝒦 ∣
-  X↪𝔉 x = ⟦ ℊ x ⟧
+ -- module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
 
+ X↪𝔉 : X → ∣ 𝔉 ∣
+ X↪𝔉 x = ⟦ ℊ x ⟧
 
-  ψlem : (p q : ∣ 𝑻 X ∣ )
-
-   →     ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ p ≡ ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ q
-        ----------------------------------------------------------
-   →                       (p , q) ∈ ψ 𝒦
-
-  ψlem p q gpgq 𝑨 SCloA = γ
+ ψlem : (p q : ∣ 𝑻 X ∣ )
+  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
+       ----------------------------------------------------------
+  →                       (p , q) ∈ ψ 𝒦
+ ψlem p q gpgq 𝑨 sA = γ
    where
-    g : hom (𝑻 X) (𝔉 𝒦)
-    g = lift-hom (𝔉 𝒦) (X↪𝔉)
+    g : hom (𝑻 X) 𝔉
+    g = lift-hom 𝔉 (X↪𝔉)
 
     h₀ : X → ∣ 𝑨 ∣
     h₀ = fst (𝕏 𝑨)
 
-    f : hom (𝔉 𝒦) 𝑨
-    f = 𝔉-lift-hom 𝒦 𝑨 h₀
+    f : hom 𝔉 𝑨
+    f = 𝔉-lift-hom 𝑨 h₀
 
-    -- Recall, two homs from 𝑻 X to 𝑨 that agree on X are equal.
     h ϕ : hom (𝑻 X) 𝑨
-    h = HCompClosed (𝑻 X) (𝔉 𝒦) 𝑨 g f
-    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 SCloA)
+    h = HomComp (𝑻 X) 𝑨 g f
+    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
 
+     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
     lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
-    lift-agreement x = 𝔉-lift-agrees-on-X 𝒦 𝑨 h₀ x
-
+    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
     fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
     fgx≡ϕ x = (lift-agreement x)⁻¹
-
     h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
     h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
 
@@ -263,51 +266,28 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
                ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
 
 
-
-
-
-
-
-
-module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
- {𝓤 : Universe}
- {hfe : hfunext (OV 𝓤)(OV 𝓤)}
- {hfe+ : hfunext ((OV 𝓤)⁺)((OV 𝓤)⁺)}
+module proof-of-birkhoff
  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- {X : 𝓤 ̇} where
+ {X : 𝓤 ̇}
+ -- extensionality assumptions:
+           {hfe : hfunext (OV 𝓤)(OV 𝓤)}
+           {pe : propext (OV 𝓤)}
+           {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
+           {ssA : ∀ C → is-subsingleton (𝒜{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
+ where
 
+ open relation-predicate-classes
+ open congruence-predicates
  open class-product-inclusions {𝓤 = 𝓤}{𝒦 = 𝒦}
  open class-product {𝓤 = 𝓤}{𝑆 = 𝑆}{𝒦 = 𝒦}
- open relation-predicate-classes -- open relation-powerset-classes
- open congruence-relations
- open birkhoff-relations {𝓤}{𝓤}{X}
+ open birkhoff-relations{𝓤}{𝓤}{X}
+ open the-relatively-free-algebra{𝓤}{𝓤}{X}{𝒦}
 
- -- alias for (OV 𝓤) := 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+ -- NOTATION.
  ovu ovu+ ovu++ : Universe
  ovu = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
  ovu+ = ovu ⁺
  ovu++ = ovu ⁺ ⁺
-
- -- NOTATION. For convenience, we define some new notation.
- 𝔽 : Algebra ovu+ 𝑆   -- 𝔽 is the relatively free algebra
- 𝔽 = 𝔉 𝒦
- 𝕍 : Pred (Algebra ovu+ 𝑆) ovu++   -- 𝕍 is HSP(𝒦).
- 𝕍 = V{𝓤}{ovu+} 𝒦
-
- ℑs : ovu ̇
- ℑs = ℑ (S{𝓤}{𝓤} 𝒦)
-
- 𝔄s : ℑs → Algebra 𝓤 𝑆
- 𝔄s = λ (i : ℑs) → ∣ i ∣
-
- SK𝔄 : (i : ℑs) → (𝔄s i) ∈ S{𝓤}{𝓤} 𝒦
- SK𝔄 = λ (i : ℑs) → ∥ i ∥
-
- ℭ : Algebra ovu 𝑆                 -- ℭ is the product of all subalgebras of 𝒦.
- ℭ = ⨅ 𝔄s -- class-product ( S{𝓤}{𝓤} 𝒦 ) -- ⨅ ( 𝔄{𝓤}{S{𝓤}{𝓤} 𝒦} )
-
- SP𝒦 : Pred (Algebra (OV 𝓤) 𝑆) (OV (OV 𝓤)) -- SP𝒦 is the class of subalgebras of products of 𝒦.
- SP𝒦 = S{OV 𝓤}{OV 𝓤}(P{𝓤}{OV 𝓤} 𝒦)
 
  open Lift
 
@@ -457,70 +437,125 @@ module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
    lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
 
 
+ open Congruence
  --Now we come to what is perhaps the most challenging step in the formalization
  --of Birkhoff's HSP Theorem in Agda---proving that the relatively free algebra 𝔽
- --embeds in the product ℭ of all subalgebras of algebras in 𝒦.
- 𝔽≤ℭ : 𝔽 ≤ ℭ
- 𝔽≤ℭ = ∣ f ∣ , (femb , ∥ f ∥)
+ --embeds in the product ℭ of all subalgebras of algebras in 𝒦. For this purpose,
+ --we first make some conveninent notations and definitions.
+
+ -- NOTATION.
+
+ -- 𝔽 is the relatively free algebra
+ 𝔽 : Algebra ovu+ 𝑆
+ 𝔽 = 𝔉 -- 𝒦
+
+ -- 𝕍 is HSP(𝒦)
+ 𝕍 : Pred (Algebra ovu+ 𝑆) ovu++
+ 𝕍 = V{𝓤}{ovu+} 𝒦
+
+ ℑs : ovu ̇
+ ℑs = ℑ (S{𝓤}{𝓤} 𝒦)
+
+ 𝔄s : ℑs → Algebra 𝓤 𝑆
+ 𝔄s = λ (i : ℑs) → ∣ i ∣
+
+ SK𝔄 : (i : ℑs) → (𝔄s i) ∈ S{𝓤}{𝓤} 𝒦
+ SK𝔄 = λ (i : ℑs) → ∥ i ∥
+
+ -- ℭ is the product of all subalgebras of 𝒦.
+ ℭ : Algebra ovu 𝑆
+ ℭ = ⨅ 𝔄s
+
+ 𝔥₀ : X → ∣ ℭ ∣
+ 𝔥₀ = fst (𝕏 ℭ)          --                             𝔄1
+                         --                            /
+ ϕ𝔠 : hom (𝑻 X) ℭ        --                           /
+ ϕ𝔠 = lift-hom ℭ 𝔥₀      --                          /
+                         --        𝑻 -----ϕ≡h--->> ℭ ---𝔄2
+ 𝔤 : hom (𝑻 X) 𝔽        --         \            77  \
+ 𝔤 = lift-hom 𝔽 (X↪𝔉)  --          \          /     \
+                          --          g        ∃f        𝔄3
+ 𝔣 : hom 𝔽 ℭ             --            \      /
+ 𝔣 = 𝔉-free-lift ℭ 𝔥₀ ,   --             \    /     (want: Ψ ⊆ ker h... also want 
+     λ 𝑓 𝒂 → ∥ ϕ𝔠 ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝)  --   V l/               ker  ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
+                           --            𝔽= 𝑻/ψ     (ker g = Ψ)
+
+ --Projection out of the product ℭ onto the specified factor of the product.
+ 𝔭 : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
+ 𝔭 i 𝒂 = 𝒂 i
+
+ 𝔭hom : (i : ℑs) → hom ℭ (𝔄s i)
+ 𝔭hom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
+
+ 𝔭𝔣 : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- the composition:
+ 𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣        --  𝔽  --∣ f𝔣 ∣-->   ℭ   --(pi i)-->   𝔄s i
+
+ 𝔭𝔣hom : (i : ℑs) → hom 𝔽 (𝔄s i)
+ 𝔭𝔣hom i = HomComp 𝔽 (𝔄s i) 𝔣 (𝔭hom i) 
+
+ 𝔭ϕ𝔠 : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+ 𝔭ϕ𝔠 i = ∣ 𝔭hom i ∣ ∘ ∣ ϕ𝔠 ∣
+
+ 𝔓 : ∀ i → hom (𝑻 X) (𝔄s i)
+ 𝔓 i = HomComp (𝑻 X) (𝔄s i) ϕ𝔠 (𝔭hom i)
+
+ 𝔭ϕ𝔠≡𝔓 : ∀ i p → (𝔭ϕ𝔠 i) p ≡ ∣ 𝔓 i ∣ p
+ 𝔭ϕ𝔠≡𝔓 i p = 𝓇ℯ𝒻𝓁
+
+ SP𝒦 : Pred (Algebra (OV 𝓤) 𝑆) (OV (OV 𝓤)) -- SP𝒦 is the class of subalgebras of products of 𝒦.
+ SP𝒦 = S{OV 𝓤}{OV 𝓤}(P{𝓤}{OV 𝓤} 𝒦)
+
+ 𝔽≤ℭ : is-set ∣ ℭ ∣ → 𝔽 ≤ ℭ
+ 𝔽≤ℭ Cset = ∣ 𝔣 ∣ , (emb𝔣 , ∥ 𝔣 ∥)
   where
-   h₀ : X → ∣ ℭ ∣
-   h₀ = fst (𝕏 ℭ)
+                           --                x ↦ ⟦ ℊ x ⟧
+   -- f : hom 𝔽 ℭ
+   -- f = 𝔉-lift-hom 𝒦 ℭ h₀
+   θ : Rel ∣ 𝑻 X ∣ (OV 𝓤)
+   θ = ψRel 𝒦
 
-   f : hom 𝔽 ℭ
-   f = 𝔉-lift-hom 𝒦 ℭ h₀
-
-   femb : is-embedding ∣ f ∣  --------------------------
-   femb = γ
+   mon𝔣 : Monic ∣ 𝔣 ∣
+   mon𝔣 (.(θ p) , p , refl _) (.(θ q) , q , refl _) fpq = γ
     where
-     SPC : ℭ ∈ SP𝒦
-     SPC = class-prod-s-∈-sp hfe
+     𝔤p : ∣ 𝔤 ∣ p ≡ ⟦ p ⟧
+     𝔤p = {!!}
+     𝔤q : ∣ 𝔤 ∣ q ≡ ⟦ q ⟧
+     𝔤q = {!!}
 
-     g : hom (𝑻 X) 𝔽
-     g = lift-hom 𝔽 (X↪𝔉)
-
-     h ϕ : hom (𝑻 X) ℭ
-     h = HCompClosed (𝑻 X) 𝔽 ℭ g f
-     ϕ = lift-hom ℭ h₀ -- 𝑻ϕ SP𝒦 (mkti ℭ SPC)
-
-     lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
-     lift-agreement x = 𝔉-lift-agrees-on-X 𝒦 ℭ h₀ x
-
-     fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-     fgx≡ϕ x = (lift-agreement x)⁻¹
-
-     h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-     h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
-
-     kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔽 ∣} ∣ g ∣) ⊆ ψ 𝒦
-     kerg {p , q} gpq = ψlem p q gpq
-
-     -- kerh⊆kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ h ∣) ⊆ (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔉 X 𝒦 ∣} ∣ g ∣)
-     -- kerh⊆kerg {p , q} hpq = {!!}
-
-     pi : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
-     pi i 𝒂 = 𝒂 i
-
-     pihom : (i : ℑs) → hom ℭ (𝔄s i)
-     pihom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
-
-     projFA : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- 𝔽 →  ℭ  → (𝔄s i)
-     projFA i = (pi i) ∘ ∣ f ∣
-
-     piϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
-     piϕ i = ∣ pihom i ∣ ∘ ∣ ϕ ∣
-
-     Phi : ∀ i → hom (𝑻 X) (𝔄s i)
-     Phi i = HomComp (𝑻 X) (𝔄s i) ϕ (pihom i)
-
-     piϕ≡Phi : ∀ i p → (piϕ i) p ≡ ∣ Phi i ∣ p
-     piϕ≡Phi i p = 𝓇ℯ𝒻𝓁
-
-     -- kerf : (KER-pred{A = ∣ 𝔽 ∣}{B = ∣ ℭ ∣} ∣ f ∣) ⊆ ψ 𝒦
-     -- kerf {p , q} fpq = ?
-
-     kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ 𝒦
-     kerϕ {p , q} ϕpq 𝑨 sA = γ
+     pθq : θ p q
+     pθq 𝑨 sA = γ'
       where
+       -- hᵢ₀ : X → ∣ 𝑨 ∣
+       -- hᵢ₀ = fst (𝕏 𝑨)
+       hi : X → ∣ 𝑨 ∣
+       hi = (𝔭 (𝑨 , sA)) ∘ fst(𝕏 ℭ)
+
+       f' : hom 𝔽 𝑨
+       f' = 𝔉-lift-hom 𝑨 hi -- hᵢ₀
+
+       h h' ϕ : hom (𝑻 X) 𝑨
+       h = HomComp (𝑻 X) 𝑨 𝔤 f'
+       h' = HomComp (𝑻 X) 𝑨 𝔤 (𝔭𝔣hom (𝑨 , sA))
+       ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+
+       --(homs from 𝑻 X to 𝑨 that agree on X are equal)
+       lift-agreement : (x : X) → hi x ≡ ∣ f' ∣ ⟦ ℊ x ⟧ -- hᵢ₀
+       lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 hi x -- hᵢ₀
+
+       lift-agreement' : (x : X) → hi x ≡ (𝔭𝔣 (𝑨 , sA)) ⟦ ℊ x ⟧ -- hᵢ₀
+       lift-agreement' x = {!!} -- 𝔉-lift-agrees-on-X 𝒦 𝑨 hᵢ₀ x
+
+       f'≡𝔭𝔣 : ∣ f' ∣ ≡ ∣ 𝔭𝔣hom (𝑨 , sA) ∣
+       f'≡𝔭𝔣 = {!!}
+
+       f'gx≡ϕ : (x : X) → (∣ f' ∣ ∘ ∣ 𝔤 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+       f'gx≡ϕ x = {!!} -- (lift-agreement x)⁻¹
+
+       h≡ϕ : ∀ t → (∣ f' ∣ ∘ ∣ 𝔤 ∣) t ≡ ∣ ϕ ∣ t
+       h≡ϕ t = free-unique gfe 𝑨 h ϕ f'gx≡ϕ t
+       -- gpgq : ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ p ≡ ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ q
+       -- gpgq = {!!}
+
        SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
        SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
        i : ℑs
@@ -530,135 +565,150 @@ module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
        sp𝔄i : 𝔄i ∈ SPu
        sp𝔄i = S⊆SP{𝓤}{𝓤} sA
 
-       α₀ β₀ : X → ∣ 𝔄i ∣
-       α₀ = fst (𝕏 𝔄i)
-       β₀ = (pi i) ∘ h₀
+       -- α₀ β₀ : X → ∣ 𝔄i ∣
+       -- α₀ = fst (𝕏 𝔄i)
+       -- β₀ = (pi i) ∘ h₀
+       -- α β : hom (𝑻 X) 𝔄i
+       -- α = lift-hom 𝔄i α₀
+       -- β = lift-hom 𝔄i β₀
+       -- Phii : hom (𝑻 X) 𝔄i
+       -- Phii = (Phi i)
+       -- lift-agree : (x : X) → ∣ β ∣ (ℊ x) ≡ ∣ pihom i ∣ ( ∣ ϕ ∣ (ℊ x))
+       -- lift-agree x = 𝓇ℯ𝒻𝓁
 
-       α β : hom (𝑻 X) 𝔄i
-       α = lift-hom 𝔄i α₀
-       β = lift-hom 𝔄i β₀
+       γ' : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+       γ' = ∣ ϕ ∣ p            ≡⟨ (h≡ϕ p)⁻¹ ⟩
+            (∣ f' ∣ ∘ ∣ 𝔤 ∣) p   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+            ∣ f' ∣ ( ∣ 𝔤 ∣ p )   ≡⟨ ap ∣ f' ∣ 𝔤p ⟩
+            ∣ f' ∣ ⟦ p ⟧        ≡⟨ {!fpq!} ⟩ -- fpq ⟩
+            ∣ f' ∣ ⟦ q ⟧        ≡⟨ (ap ∣ f' ∣ 𝔤q)⁻¹ ⟩
+            ∣ f' ∣ ( ∣ 𝔤 ∣ q )   ≡⟨ h≡ϕ q ⟩
+            ∣ ϕ ∣ q            ∎
 
-       Phii : hom (𝑻 X) 𝔄i
-       Phii = (Phi i)
+       -- γ' : ∣ 𝑻ϕ (S 𝒦) (mkti 𝑨 sA) ∣ a ≡ ∣ 𝑻ϕ (S 𝒦) (mkti 𝑨 sA) ∣ a'
+       -- γ' = {!!}
 
-       lift-agree : (x : X) → ∣ β ∣ (ℊ x) ≡ ∣ pihom i ∣ ( ∣ ϕ ∣ (ℊ x))
-       lift-agree x = 𝓇ℯ𝒻𝓁
+     γ : ( θ p , p , 𝓇ℯ𝒻𝓁) ≡ ( θ q , q , 𝓇ℯ𝒻𝓁)
+     γ = class-extensionality' pe gfe ssR ssA ψIsEquivalence pθq
 
-       lift-agree' : (x : X) → ∣ α ∣ (ℊ x) ≡ ∣ β ∣ ( ℊ x)
-       lift-agree' x = {!!}
+   emb𝔣 : is-embedding ∣ 𝔣 ∣
+   emb𝔣 = monic-into-set-is-embedding Cset ∣ 𝔣 ∣ mon𝔣
 
-       ϕpqi : (i : ℑs) → (∣ ϕ ∣ p) i ≡  ∣ ϕ ∣ q i
-       ϕpqi i = ap (λ - → - i) ϕpq
+--      pi : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
+--      pi i 𝒂 = 𝒂 i
 
-       frl : ∣ ϕ ∣ p ≡ (p ̇ ℭ) (fst (𝕏 ℭ))
-       frl = (free-lift-interpretation ℭ (fst (𝕏 ℭ)) p)⁻¹
+--      pihom : (i : ℑs) → hom ℭ (𝔄s i)
+--      pihom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
 
-       -- h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-       -- h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
-       piϕ-α-agree : ∀ p → (∣ Phi i ∣) p ≡ ∣ α ∣ p
-       piϕ-α-agree p = {!!}
+--      projFA : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- 𝔽 →  ℭ  → (𝔄s i)
+--      projFA i = (pi i) ∘ ∣ f ∣
 
-       γ : ∣ α ∣ p ≡ ∣ α ∣ q
-       γ = ∣ α ∣ p     ≡⟨ (piϕ-α-agree p)⁻¹  ⟩
-           (∣ ϕ ∣ p) i ≡⟨ ϕpqi i ⟩
-           (∣ ϕ ∣ q) i ≡⟨ piϕ-α-agree q ⟩
-           ∣ α ∣ q     ∎
+--      piϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+--      piϕ i = ∣ pihom i ∣ ∘ ∣ ϕ ∣
 
--- ϕ : ∣ 𝑻 X ∣ → ∣ ℭ ∣
--- ϕ = ∣ 𝑻ϕ SP𝒦 (mkti ℭ SPC) ∣
--- This is constructed as follows:
---  1. start with a map from X to ∣ ℭ ∣ (which is always available by 𝕏)
---
---     ϕ₀ : X → ∣ ℭ ∣
---     ϕ₀ = fst (𝕏 ℭ)
---
---  2. Then use lift-hom to get ϕ : hom (𝑻 X) ℭ
---
---     ϕ : hom (𝑻 X) ℭ
---     ϕ = lift-hom ℭ h₀
---
+--      Phi : ∀ i → hom (𝑻 X) (𝔄s i)
+--      Phi i = HomComp (𝑻 X) (𝔄s i) ϕ (pihom i)
 
--- pi ∘ h₀ : X → ∣ ℭ ∣ → ∣ 𝔄 i ∣
+--      piϕ≡Phi : ∀ i p → (piϕ i) p ≡ ∣ Phi i ∣ p
+--      piϕ≡Phi i p = 𝓇ℯ𝒻𝓁
 
-     --Want kerf ⊆ ψ 𝒦, as this should enable us to prove that f is an embedding.
-     --We have h = f ∘ g and kerg ≡ ψ 𝒦 we want ker h ⊆ ψ 𝒦
-     -- pϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
-     -- pϕ i = (pi i) ∘ ϕ
+--      -- kerf : (KER-pred{A = ∣ 𝔽 ∣}{B = ∣ ℭ ∣} ∣ f ∣) ⊆ ψ 𝒦
+--      -- kerf {p , q} fpq = ?
 
-     -- kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ X 𝒦
-     -- kerϕ {p , q} ϕpq = λ 𝑨 SCloA →
-     --  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ p ≡⟨ ? ⟩
-      -- ∣ pϕ ∣ p  ≡⟨ ? ⟩ ∣ ϕ ∣ q   ≡⟨ ? ⟩  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ q ∎
+--      kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ 𝒦
+--      kerϕ {p , q} ϕpq 𝑨 sA = γ
+--       where
+--        SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
+--        SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+--        i : ℑs
+--        i = (𝑨 , sA)
+--        𝔄i : Algebra 𝓤 𝑆
+--        𝔄i = 𝔄s i
+--        sp𝔄i : 𝔄i ∈ SPu
+--        sp𝔄i = S⊆SP{𝓤}{𝓤} sA
 
--- KER-pred : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
--- KER-pred g (x , y) = g x ≡ g y
+--        α₀ β₀ : X → ∣ 𝔄i ∣
+--        α₀ = fst (𝕏 𝔄i)
+--        β₀ = (pi i) ∘ h₀
+
+--        α β : hom (𝑻 X) 𝔄i
+--        α = lift-hom 𝔄i α₀
+--        β = lift-hom 𝔄i β₀
+
+--        Phii : hom (𝑻 X) 𝔄i
+--        Phii = (Phi i)
+
+--        lift-agree : (x : X) → ∣ β ∣ (ℊ x) ≡ ∣ pihom i ∣ ( ∣ ϕ ∣ (ℊ x))
+--        lift-agree x = 𝓇ℯ𝒻𝓁
+
+--        lift-agree' : (x : X) → ∣ α ∣ (ℊ x) ≡ ∣ β ∣ ( ℊ x)
+--        lift-agree' x = {!!}
+
+--        ϕpqi : (i : ℑs) → (∣ ϕ ∣ p) i ≡  ∣ ϕ ∣ q i
+--        ϕpqi i = ap (λ - → - i) ϕpq
+
+--        frl : ∣ ϕ ∣ p ≡ (p ̇ ℭ) (fst (𝕏 ℭ))
+--        frl = (free-lift-interpretation ℭ (fst (𝕏 ℭ)) p)⁻¹
+
+--        -- h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+--        -- h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
+--        piϕ-α-agree : ∀ p → (∣ Phi i ∣) p ≡ ∣ α ∣ p
+--        piϕ-α-agree p = {!!}
+
+--        γ : ∣ α ∣ p ≡ ∣ α ∣ q
+--        γ = ∣ α ∣ p     ≡⟨ (piϕ-α-agree p)⁻¹  ⟩
+--            (∣ ϕ ∣ p) i ≡⟨ ϕpqi i ⟩
+--            (∣ ϕ ∣ q) i ≡⟨ piϕ-α-agree q ⟩
+--            ∣ α ∣ q     ∎
+  -- ψlem : (p q : ∣ 𝑻 X ∣ )
+  --  →     ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ p ≡ ∣ lift-hom (𝔉 𝒦) X↪𝔉 ∣ q
+  --       ----------------------------------------------------------
+  --  →                       (p , q) ∈ ψ 𝒦
+  -- ψlem p q gpgq 𝑨 SCloA = γ
+  --  where
+  --   g : hom (𝑻 X) (𝔉 𝒦)
+  --   g = lift-hom (𝔉 𝒦) (X↪𝔉)
+
+  --   h₀ : X → ∣ 𝑨 ∣
+  --   h₀ = fst (𝕏 𝑨)
+
+  --   f : hom (𝔉 𝒦) 𝑨
+  --   f = 𝔉-lift-hom 𝒦 𝑨 h₀
+
+  --   h ϕ : hom (𝑻 X) 𝑨
+  --   h = HomComp (𝑻 X) 𝑨 g f
+  --   ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 SCloA)
+
+  --    --(homs from 𝑻 X to 𝑨 that agree on X are equal)
+  --   lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+  --   lift-agreement x = 𝔉-lift-agrees-on-X 𝒦 𝑨 h₀ x
+  --   fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+  --   fgx≡ϕ x = (lift-agreement x)⁻¹
+  --   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+  --   h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+
+  --   γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+  --   γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
+  --              ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
+  --              ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
+  --              ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
 
 
-     hom-gen : ∀ i → hom 𝔽(𝔄s i)
-     hom-gen i = 𝔉-lift-hom 𝒦 (𝔄s i) ∣ 𝕏 (𝔄s i) ∣
-
-     -- h : hom T 𝑨
-     -- h = lift-hom 𝑨 h₀
-     -- hE : Epic ∣ h ∣
-     -- hE = lift-of-epi-is-epi 𝑨 h₀ h₀E
-
-     -- g₀ : X → ∣ 𝔽 ∣
-     -- g₀ = fst (𝕏 𝔽)
-
-     -- g₀E : Epic g₀
-     -- g₀E = snd (𝕏 𝔽)
-
-     -- gg : Σ g ꞉ hom T 𝔽 , Epic ∣ g ∣
-     -- gg = (lift-hom 𝔽 g₀) , (lift-of-epi-is-epi{𝓤}{(OV 𝓤)⁺} 𝔽 g₀ g₀E)
-
-     -- g' : hom (𝑻 X)(𝔉 X 𝒦)
-     -- g' = lift-hom (𝔉 X 𝒦) X↪𝔉
-
-     -- g : hom T 𝔽
-     -- g = fst gg
-
-     -- gE : Epic ∣ g ∣
-     -- gE = snd gg
-
-     -- τ : (𝑨 : Algebra ovu+ 𝑆)(SCloA : S{𝓤}{ovu+} 𝒦 𝑨) → hom (𝑻 X) 𝑨
-     -- τ 𝑨 SCloA = 𝑻ϕ (S{𝓤}{ovu+} 𝒦) (mkti X 𝑨 SCloA)
-
-     γ : is-embedding ∣ f ∣
-     γ = {!!}
-
-   -- kerg⊆kerh : KER-pred ∣ g' ∣ ⊆ KER-pred ∣ h ∣
-   -- kerg⊆kerh {x , y} gx≡gy = ψ⊆Kerh {x , y}(kerg{x , y} gx≡gy)
-
-   -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
-   -- it suffices to show that the kernel of h : 𝑻 → 𝑨 contains Ψ.
-   --
-   --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
-   --    𝑻---- g --->>𝔽  (ker g = Ψ)
-   --     \         .
-   --      \       .
-   --      ϕ≡h    ∃f     (want: Ψ ⊆ ker h... also want ker
-   --        \   .
-   --         \ .
-   --          V
-   --          ℭ
 
 
-
-
-
- 𝔽∈SP : 𝔽 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
- 𝔽∈SP = ssub spC 𝔽≤ℭ
+ 𝔽∈SP : is-set ∣ ℭ ∣ → 𝔽 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
+ 𝔽∈SP Cset = ssub spC (𝔽≤ℭ Cset)
   where
    spC : ℭ ∈ (S{ovu}{ovu} (P{𝓤}{ovu} 𝒦))
    spC = (class-prod-s-∈-sp hfe)
 
- 𝔽∈𝕍 : 𝔽 ∈ 𝕍
- 𝔽∈𝕍 = SP⊆V' 𝔽∈SP
+ 𝔽∈𝕍 : is-set ∣ ℭ ∣ → 𝔽 ∈ 𝕍
+ 𝔽∈𝕍 Cset = SP⊆V' (𝔽∈SP Cset)
 
  -- Birkhoff's theorem: every variety is an equational class.
- birkhoff : Mod X (Th 𝕍) ⊆ 𝕍
+ birkhoff : is-set ∣ ℭ ∣ → Mod X (Th 𝕍) ⊆ 𝕍
 
- birkhoff {𝑨} MThVA = γ
+ birkhoff Cset {𝑨} MThVA = γ
   where
    T : Algebra (OV 𝓤) 𝑆
    T = 𝑻 X
@@ -675,13 +725,13 @@ module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
    -- is the constructor of V that yields 𝑨 ∈ 𝕍 𝒦
 
    ϕ : Σ h ꞉ (hom 𝔽 𝑨) , Epic ∣ h ∣
-   ϕ = (𝔉-lift-hom 𝒦 𝑨 h₀) , 𝔉-lift-of-epic-is-epic 𝒦 𝑨 h₀ h₀E
+   ϕ = (𝔉-lift-hom 𝑨 h₀) , 𝔉-lift-of-epic-is-epic 𝑨 h₀ h₀E
 
    AiF : 𝑨 is-hom-image-of 𝔽
    AiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) ) , refl-≅
 
    γ : 𝑨 ∈ 𝕍
-   γ = vhimg 𝔽∈𝕍 AiF
+   γ = vhimg (𝔽∈𝕍 Cset) AiF
 
 
 
@@ -1021,3 +1071,203 @@ module proof-of-birkhoff  -- PROOF OF BIRKHOFF --
 
 --   γ : 𝑨 ⊧ p ≈ q
 --   γ = lower-alg-⊧ 𝑨 p q lApq
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--     where
+--      SPC : ℭ ∈ SP𝒦
+--      SPC = class-prod-s-∈-sp hfe
+
+--      g : hom (𝑻 X) 𝔽
+--      g = lift-hom 𝔽 (X↪𝔉)
+
+--      h ϕ : hom (𝑻 X) ℭ
+--      h = HCompClosed (𝑻 X) 𝔽 ℭ g f
+--      ϕ = lift-hom ℭ h₀ -- 𝑻ϕ SP𝒦 (mkti ℭ SPC)
+
+--      lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+--      lift-agreement x = 𝔉-lift-agrees-on-X 𝒦 ℭ h₀ x
+
+--      fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+--      fgx≡ϕ x = (lift-agreement x)⁻¹
+
+--      h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+--      h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
+
+--      kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔽 ∣} ∣ g ∣) ⊆ ψ 𝒦
+--      kerg {p , q} gpq = ψlem p q gpq
+
+--      -- kerh⊆kerg : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ h ∣) ⊆ (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ 𝔉 X 𝒦 ∣} ∣ g ∣)
+--      -- kerh⊆kerg {p , q} hpq = {!!}
+
+--      pi : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
+--      pi i 𝒂 = 𝒂 i
+
+--      pihom : (i : ℑs) → hom ℭ (𝔄s i)
+--      pihom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
+
+--      projFA : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- 𝔽 →  ℭ  → (𝔄s i)
+--      projFA i = (pi i) ∘ ∣ f ∣
+
+--      piϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+--      piϕ i = ∣ pihom i ∣ ∘ ∣ ϕ ∣
+
+--      Phi : ∀ i → hom (𝑻 X) (𝔄s i)
+--      Phi i = HomComp (𝑻 X) (𝔄s i) ϕ (pihom i)
+
+--      piϕ≡Phi : ∀ i p → (piϕ i) p ≡ ∣ Phi i ∣ p
+--      piϕ≡Phi i p = 𝓇ℯ𝒻𝓁
+
+--      -- kerf : (KER-pred{A = ∣ 𝔽 ∣}{B = ∣ ℭ ∣} ∣ f ∣) ⊆ ψ 𝒦
+--      -- kerf {p , q} fpq = ?
+
+--      kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ 𝒦
+--      kerϕ {p , q} ϕpq 𝑨 sA = γ
+--       where
+--        SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
+--        SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
+--        i : ℑs
+--        i = (𝑨 , sA)
+--        𝔄i : Algebra 𝓤 𝑆
+--        𝔄i = 𝔄s i
+--        sp𝔄i : 𝔄i ∈ SPu
+--        sp𝔄i = S⊆SP{𝓤}{𝓤} sA
+
+--        α₀ β₀ : X → ∣ 𝔄i ∣
+--        α₀ = fst (𝕏 𝔄i)
+--        β₀ = (pi i) ∘ h₀
+
+--        α β : hom (𝑻 X) 𝔄i
+--        α = lift-hom 𝔄i α₀
+--        β = lift-hom 𝔄i β₀
+
+--        Phii : hom (𝑻 X) 𝔄i
+--        Phii = (Phi i)
+
+--        lift-agree : (x : X) → ∣ β ∣ (ℊ x) ≡ ∣ pihom i ∣ ( ∣ ϕ ∣ (ℊ x))
+--        lift-agree x = 𝓇ℯ𝒻𝓁
+
+--        lift-agree' : (x : X) → ∣ α ∣ (ℊ x) ≡ ∣ β ∣ ( ℊ x)
+--        lift-agree' x = {!!}
+
+--        ϕpqi : (i : ℑs) → (∣ ϕ ∣ p) i ≡  ∣ ϕ ∣ q i
+--        ϕpqi i = ap (λ - → - i) ϕpq
+
+--        frl : ∣ ϕ ∣ p ≡ (p ̇ ℭ) (fst (𝕏 ℭ))
+--        frl = (free-lift-interpretation ℭ (fst (𝕏 ℭ)) p)⁻¹
+
+--        -- h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+--        -- h≡ϕ t = free-unique gfe ℭ h ϕ fgx≡ϕ t
+--        piϕ-α-agree : ∀ p → (∣ Phi i ∣) p ≡ ∣ α ∣ p
+--        piϕ-α-agree p = {!!}
+
+--        γ : ∣ α ∣ p ≡ ∣ α ∣ q
+--        γ = ∣ α ∣ p     ≡⟨ (piϕ-α-agree p)⁻¹  ⟩
+--            (∣ ϕ ∣ p) i ≡⟨ ϕpqi i ⟩
+--            (∣ ϕ ∣ q) i ≡⟨ piϕ-α-agree q ⟩
+--            ∣ α ∣ q     ∎
+
+-- -- ϕ : ∣ 𝑻 X ∣ → ∣ ℭ ∣
+-- -- ϕ = ∣ 𝑻ϕ SP𝒦 (mkti ℭ SPC) ∣
+-- -- This is constructed as follows:
+-- --  1. start with a map from X to ∣ ℭ ∣ (which is always available by 𝕏)
+-- --
+-- --     ϕ₀ : X → ∣ ℭ ∣
+-- --     ϕ₀ = fst (𝕏 ℭ)
+-- --
+-- --  2. Then use lift-hom to get ϕ : hom (𝑻 X) ℭ
+-- --
+-- --     ϕ : hom (𝑻 X) ℭ
+-- --     ϕ = lift-hom ℭ h₀
+-- --
+
+-- -- pi ∘ h₀ : X → ∣ ℭ ∣ → ∣ 𝔄 i ∣
+
+--      --Want kerf ⊆ ψ 𝒦, as this should enable us to prove that f is an embedding.
+--      --We have h = f ∘ g and kerg ≡ ψ 𝒦 we want ker h ⊆ ψ 𝒦
+--      -- pϕ : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
+--      -- pϕ i = (pi i) ∘ ϕ
+
+--      -- kerϕ : (KER-pred{A = ∣ 𝑻 X ∣}{B = ∣ ℭ ∣} ∣ ϕ ∣) ⊆ ψ X 𝒦
+--      -- kerϕ {p , q} ϕpq = λ 𝑨 SCloA →
+--      --  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ p ≡⟨ ? ⟩
+--       -- ∣ pϕ ∣ p  ≡⟨ ? ⟩ ∣ ϕ ∣ q   ≡⟨ ? ⟩  ∣ 𝑻ϕ (S 𝒦) (mkti X 𝑨 SCloA) ∣ q ∎
+
+-- -- KER-pred : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred (A × A) 𝓦
+-- -- KER-pred g (x , y) = g x ≡ g y
+
+
+--      hom-gen : ∀ i → hom 𝔽(𝔄s i)
+--      hom-gen i = 𝔉-lift-hom 𝒦 (𝔄s i) ∣ 𝕏 (𝔄s i) ∣
+
+--      -- h : hom T 𝑨
+--      -- h = lift-hom 𝑨 h₀
+--      -- hE : Epic ∣ h ∣
+--      -- hE = lift-of-epi-is-epi 𝑨 h₀ h₀E
+
+--      -- g₀ : X → ∣ 𝔽 ∣
+--      -- g₀ = fst (𝕏 𝔽)
+
+--      -- g₀E : Epic g₀
+--      -- g₀E = snd (𝕏 𝔽)
+
+--      -- gg : Σ g ꞉ hom T 𝔽 , Epic ∣ g ∣
+--      -- gg = (lift-hom 𝔽 g₀) , (lift-of-epi-is-epi{𝓤}{(OV 𝓤)⁺} 𝔽 g₀ g₀E)
+
+--      -- g' : hom (𝑻 X)(𝔉 X 𝒦)
+--      -- g' = lift-hom (𝔉 X 𝒦) X↪𝔉
+
+--      -- g : hom T 𝔽
+--      -- g = fst gg
+
+--      -- gE : Epic ∣ g ∣
+--      -- gE = snd gg
+
+--      -- τ : (𝑨 : Algebra ovu+ 𝑆)(SCloA : S{𝓤}{ovu+} 𝒦 𝑨) → hom (𝑻 X) 𝑨
+--      -- τ 𝑨 SCloA = 𝑻ϕ (S{𝓤}{ovu+} 𝒦) (mkti X 𝑨 SCloA)
+
+--      γ : is-embedding ∣ f ∣
+--      γ = {!!}
+
+--    -- kerg⊆kerh : KER-pred ∣ g' ∣ ⊆ KER-pred ∣ h ∣
+--    -- kerg⊆kerh {x , y} gx≡gy = ψ⊆Kerh {x , y}(kerg{x , y} gx≡gy)
+
+--    -- N.B. Ψ is the kernel of 𝑻 → 𝔽(𝒦, 𝑻).  Therefore, to prove 𝑨 is a homomorphic image of 𝔽(𝒦, 𝑻),
+--    -- it suffices to show that the kernel of h : 𝑻 → 𝑨 contains Ψ.
+--    --
+--    --    𝑻---- g --->>𝑻/ψ    ψ = ker g ⊆ ker h => ∃ ϕ: T/ψ → A
+--    --    𝑻---- g --->>𝔽  (ker g = Ψ)
+--    --     \         .
+--    --      \       .
+--    --      ϕ≡h    ∃f     (want: Ψ ⊆ ker h... also want ker
+--    --        \   .
+--    --         \ .
+--    --          V
+--    --          ℭ
