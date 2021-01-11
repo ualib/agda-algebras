@@ -29,7 +29,7 @@ module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
  -- H (𝑻 X)  (hom images of 𝑻 X)
  𝑻img : Pred (Algebra 𝓤 𝑆) (OV 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
- 𝑻img 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
+ 𝑻img 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
  -- Every algebra is a hom image of 𝑻 X.
  mkti : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(𝑨 : Algebra 𝓤 𝑆)
@@ -57,11 +57,9 @@ module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
  ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
                  →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
---                 →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti 𝑨 sA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑨 sA) ∣ q
 
  ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (OV 𝓤)
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
-
 
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
   →            compatible (𝑻 X) (ψRel 𝒦)
@@ -97,31 +95,29 @@ module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  -- Properties of ψ ------------------------------------------------------------
 
  𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
-        (𝑪 : Algebra 𝓤 𝑆)(SCloC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
+        (𝑪 : Algebra 𝓤 𝑆) (sC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
         (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
        --------------------------------------------------
-  →     ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑪 SCloC) ∣ p
-         ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑪 SCloC) ∣ q
+  →     ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ p ≡ ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ q
 
- 𝑻i⊧ψ 𝒦 𝑪 SCloC p q pψq = pψq 𝑪 SCloC
-
+ 𝑻i⊧ψ 𝒦 𝑪 sC p q pψq = pψq 𝑪 sC
 \end{code}
 
-Recall, `mkti X 𝑨 SCloA` has type `𝑻img X (S{𝓤}{𝓤} 𝒦)` and consists of a quadruple:
+Recall, `mkti X 𝑨 sC` has type `𝑻img X (S 𝒦)` and consists of a quadruple:
 
 ```agda
-(𝑨 , ϕ , SCloA , ϕE),
+(𝑨 , ϕ , sA , ϕE),
 ```
 
 where
 
 ```agda
-𝑨 : Algebra _ 𝑆 , ϕ : hom (𝑻 X) 𝑨 , SCloA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦 , ϕE : Epic ∣ ϕ ∣
+𝑨 : Algebra 𝓤 𝑆 , ϕ : hom (𝑻 X) 𝑨 , sA : 𝑨 ∈ S 𝒦 , ϕE : Epic ∣ ϕ ∣
 ```
 
 Lemma 4.27. (Bergman) Let 𝒦 be a class of algebras, and ψCon defined as above.
                      Then 𝔽 := 𝑻 / ψCon is isomorphic to an algebra in SP(𝒦).
-Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S(𝒦)}.
+Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S 𝒦}.
        Therefore, 𝔽 ≅ 𝑩, where 𝑩 is a subalgebra of ⨅ 𝒜 ∈ PS(𝒦).
        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
@@ -131,10 +127,11 @@ Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S(𝒦)}.
 We define it as follows.
 \begin{code}
 
-
 open the-free-algebra
 
-module the-relatively-free-algebra {𝓤 𝓧 : Universe} {X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+module the-relatively-free-algebra
+ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+ {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
 
  𝓕 : Universe -- (universe level of the relatively free algebra)
  𝓕 = (𝓧 ⊔ (OV 𝓤))⁺
