@@ -56,7 +56,8 @@ module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  -- The collection of identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
  ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
-                 →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti 𝑨 sA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑨 sA) ∣ q
+                 →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
+--                 →  ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦) (mkti 𝑨 sA) ∣ p ≡ ∣ 𝑻ϕ (S{𝓤}{𝓤} 𝒦)(mkti 𝑨 sA) ∣ q
 
  ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (OV 𝓤)
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
@@ -469,9 +470,12 @@ module proof-of-birkhoff
  -- ℭ is the product of all subalgebras of 𝒦.
  ℭ : Algebra ovu 𝑆
  ℭ = ⨅ 𝔄s
-
+ -- elements of ℭ are mappings from ℑs to {𝔄s i : i ∈ ℑs}
  𝔥₀ : X → ∣ ℭ ∣
- 𝔥₀ = fst (𝕏 ℭ)          --                             𝔄1
+ 𝔥₀ x = λ i → (fst (𝕏 (𝔄s i))) x -- fst (𝕏 ℭ)
+
+ -- 𝔥₀ : X → ∣ ℭ ∣
+ -- 𝔥₀ = fst (𝕏 ℭ)          --                             𝔄1
                          --                            /
  ϕ𝔠 : hom (𝑻 X) ℭ        --                           /
  ϕ𝔠 = lift-hom ℭ 𝔥₀      --                          /
@@ -487,7 +491,7 @@ module proof-of-birkhoff
  𝔤-⟦⟧ : ∀ p → ∣ 𝔤 ∣ p ≡ ⟦ p ⟧
  𝔤-⟦⟧ p = π𝔉-X-defined 𝔤 (𝔉-lift-agrees-on-X 𝔉 X↪𝔉) p
 
- --Projection out of the product ℭ onto the specified factor of the product.
+ --Projection out of the product ℭ onto the specified (i-th) factor.
  𝔭 : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
  𝔭 i 𝒂 = 𝒂 i
 
@@ -495,11 +499,10 @@ module proof-of-birkhoff
  𝔭hom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
 
  𝔭𝔣 : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣  -- the composition:
- 𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣        --  𝔽  --∣ f𝔣 ∣-->   ℭ   --(pi i)-->   𝔄s i
+ 𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣        --  𝔽  --∣ 𝔣 ∣-->   ℭ   --(𝔭 i)-->   𝔄s i
 
  𝔭𝔣hom : (i : ℑs) → hom 𝔽 (𝔄s i)
- 𝔭𝔣hom i = HomComp 𝔽 (𝔄s i) 𝔣 (𝔭hom i) 
-
+ 𝔭𝔣hom i = HomComp 𝔽 (𝔄s i) 𝔣 (𝔭hom i)
 
  𝔭ϕ𝔠 : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
  𝔭ϕ𝔠 i = ∣ 𝔭hom i ∣ ∘ ∣ ϕ𝔠 ∣
@@ -510,15 +513,13 @@ module proof-of-birkhoff
  𝔭ϕ𝔠≡𝔓 : ∀ i p → (𝔭ϕ𝔠 i) p ≡ ∣ 𝔓 i ∣ p
  𝔭ϕ𝔠≡𝔓 i p = 𝓇ℯ𝒻𝓁
 
- SP𝒦 : Pred (Algebra (OV 𝓤) 𝑆) (OV (OV 𝓤)) -- SP𝒦 is the class of subalgebras of products of 𝒦.
- SP𝒦 = S{OV 𝓤}{OV 𝓤}(P{𝓤}{OV 𝓤} 𝒦)
+ -- SP𝒦 is the class of subalgebras of products of 𝒦.
+ SP𝒦 : Pred (Algebra (ovu) 𝑆) (OV (ovu))
+ SP𝒦 = S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
 
  𝔽≤ℭ : is-set ∣ ℭ ∣ → 𝔽 ≤ ℭ
  𝔽≤ℭ Cset = ∣ 𝔣 ∣ , (emb𝔣 , ∥ 𝔣 ∥)
   where
-                           --                x ↦ ⟦ ℊ x ⟧
-   -- f : hom 𝔽 ℭ
-   -- f = 𝔉-lift-hom 𝒦 ℭ h₀
    θ : Rel ∣ 𝑻 X ∣ (OV 𝓤)
    θ = ψRel 𝒦
 
@@ -538,48 +539,27 @@ module proof-of-birkhoff
               ∣ 𝔭hom (𝑨 , sA) ∣ ( ∣ 𝔣 ∣ ⟦ q ⟧ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
               ∣ 𝔭A ∣ ⟦ q ⟧ ∎
 
-       hi : X → ∣ 𝑨 ∣
-       hi =  (𝔭 (𝑨 , sA)) ∘ fst(𝕏 ℭ)
+       h₀ : X → ∣ 𝑨 ∣
+       h₀ =  (𝔭 (𝑨 , sA)) ∘ 𝔥₀
 
-       hᵢ₀ : X → ∣ 𝑨 ∣
-       hᵢ₀ = fst(𝕏 𝑨)
+       h ϕ : hom (𝑻 X) 𝑨
+       h = HomComp (𝑻 X) 𝑨 𝔤 𝔭A
 
-       f' : hom 𝔽 𝑨
-       f' = 𝔉-lift-hom 𝑨 hᵢ₀
-
-       h h' ϕ : hom (𝑻 X) 𝑨
-       h = HomComp (𝑻 X) 𝑨 𝔤 f'
-       h' = HomComp (𝑻 X) 𝑨 𝔤 𝔭A
-       ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+       ϕ = lift-hom 𝑨 h₀
 
        --(homs from 𝑻 X to 𝑨 that agree on X are equal)
-       lift-agreement' : (x : X) → hᵢ₀ x ≡ ∣ f' ∣ ⟦ ℊ x ⟧ -- hᵢ₀
-       lift-agreement' x = 𝔉-lift-agrees-on-X 𝑨 hᵢ₀ x -- hᵢ₀
-
-       lift-agreement : (x : X) → hi x ≡ ∣ 𝔭A ∣ ⟦ ℊ x ⟧ -- hᵢ₀
-       lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 hi x
+       lift-agreement : (x : X) → h₀ x ≡ ∣ 𝔭A ∣ ⟦ ℊ x ⟧ -- hᵢ₀
+       lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
 
        𝔣gx≡ϕ : (x : X) → (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
        𝔣gx≡ϕ x = (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) (ℊ x)         ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
                   ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ (ℊ x) )       ≡⟨ ap ∣ 𝔭A ∣ (𝔤-⟦⟧ (ℊ x)) ⟩
                   ∣ 𝔭A ∣ (⟦ ℊ x ⟧)            ≡⟨ (lift-agreement x)⁻¹ ⟩
-                   hi x                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-                  (𝔭 (𝑨 , sA)) ( ∣ 𝕏 ℭ ∣ x ) ≡⟨ {!!} ⟩
+                   h₀ x                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
                   ∣ ϕ ∣ (ℊ x) ∎
 
-       f'gx≡ϕ : (x : X) → (∣ f' ∣ ∘ ∣ 𝔤 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-       f'gx≡ϕ x = (lift-agreement' x)⁻¹
-
- -- 𝔭𝔣hom : (i : ℑs) → hom 𝔽 (𝔄s i)
- -- 𝔭𝔣hom i = HomComp 𝔽 (𝔄s i) 𝔣 (𝔭hom i)
-
- -- 𝔥₀ : X → ∣ ℭ ∣
- -- 𝔥₀ = fst (𝕏 ℭ)          --
- -- 𝔣 : hom 𝔽 ℭ             --
- -- 𝔣 = 𝔉-free-lift ℭ 𝔥₀ , λ 𝑓 𝒂 → ∥ ϕ𝔠 ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝)
-
        h≡ϕ' : ∀ t → (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) t ≡ ∣ ϕ ∣ t
-       h≡ϕ' t = free-unique gfe 𝑨 h' ϕ 𝔣gx≡ϕ t
+       h≡ϕ' t = free-unique gfe 𝑨 h ϕ 𝔣gx≡ϕ t
 
        SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
        SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
@@ -1181,16 +1161,3 @@ module proof-of-birkhoff
 --    --         \ .
 --    --          V
 --    --          ℭ
-
-
-
-
-
-
-
-
-
-
-
-
--       
