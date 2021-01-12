@@ -1,12 +1,34 @@
 # ualib.gitlab.io
 
+Agda [2.6.0](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html) is required. Consult Martin Escardo's [installation instructions](INSTALL.md) to help you set up Agda and Emacs.
+
+* The (literate) `*.lagda` files are used to generate the `html` pages with the script `./build`.
+
+* This also generates raw `.agda` files in the director `./raw-agda` using  `illiterator.hs`.
+
+* The program `agdatomd.hs` converts from `.lagda` to `.md` for use by the script `fastloop`.
+
+* This script is used for editing the notes in conjunction with `jekyll serve --watch --incremental` so that after an update it is only necessary to reload the page on the browser to view it.
+
+* The script `slowloop` serves the same purpose, but calls Agda instead of `agdatomd`, via the script `generatehtml`, so that we get syntax highlighting in the html pages. This can be very slow depending on which `lagda` file is changed. This means that after the first is reload, one is likely to see the Agda code without syntax highlighting.
+
+* It is possible to run `./slowloop`, `./fastloop` and `jekyll serve` in parallel, and we do this for editing these notes.
+
+* The loop scripts use `inotifywait` to detect `lagda` file changes and trigger the appropriate conversion actions.
+
+* The `install` action of the `makefile` allows to run an additional action for particular requirements of users or environments, in a file `additionally`, which is not distributed and is ignored by `git`. If this file doesn't exist, an empty executable file is created.
+
+
+## OLD STUFF
+
+
 As of 22 June 2019, **this is still a work in progress**.
 
 ## Introduction
 
-This repository contains the [documentation](https://ualib.gitlab.io/) for the [Agda Universal Algebra Library](https://gitlab.com/ualib/agda-ualib?nav_source=navbar), aka [agda-ualib](https://gitlab.com/ualib/agda-ualib?nav_source=navbar).
+This repository contains the source code, as well as files that generate [documentation](https://ualib.gitlab.io/), for the [Agda Universal Algebra Library](https://gitlab.com/ualib/agda-ualib?nav_source=navbar), aka [agda-ualib](https://gitlab.com/ualib/agda-ualib?nav_source=navbar).
 
-The docs are served at [ualib.org](https://ualib.gitlab.io/), and are built from [reStructuredText](http://docutils.sourceforge.net/rst.html) (rst) files using [Sphinx](http://www.sphinx-doc.org).
+The docs are served at [ualib.org](https://ualib.gitlab.io/), and may be built directly from the .lagda files or from the .rst [reStructuredText](http://docutils.sourceforge.net/rst.html) files using [Sphinx](http://www.sphinx-doc.org).
 
 -------------------------------------------
 

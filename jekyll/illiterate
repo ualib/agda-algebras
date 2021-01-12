@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ghc --make illiterator.hs
+
+main_dir=${HOME}/git/lab/ualib/ualib.gitlab.io
+main_html_dir=${HOME}/git/lab/ualib/ualib.gitlab.io/ualib/html
+app=ualib
+public_html_dir=${main_dir}/public_html
+src_dir=${main_dir}/${app}
+tt_dir=${HOME}/git/lab/ualib/TypeTopology/source
+
+cat ${src_dir}/ualib.lagda | ./illiterator > ${main_dir}/raw-agda/ualib.agda
+cat ${tt_dir}/Universes.lagda    | ./illiterator > ${main_dir}/raw-agda/Universes.agda

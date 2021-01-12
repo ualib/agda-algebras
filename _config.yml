@@ -2,6 +2,7 @@ name: William DeMeo
 markdown: kramdown
 exclude:
   - "makefile"
+  - ".gitlab-ci.yml"
   - "Gemfile"
   - "Gemfile.lock"
   - "*.agdai"
@@ -25,5 +26,5 @@ exclude:
   - "slowloop"
   - "test"
   - "html/"
-  - "agda/"
+  - "ualib/"
   - "vendor/"

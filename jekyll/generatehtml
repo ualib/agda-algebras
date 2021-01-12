@@ -1,0 +1,19 @@
+#!/bin/bash
+
+main_dir=${HOME}/git/lab/ualib/ualib.gitlab.io
+main_html_dir=${HOME}/git/lab/ualib/ualib.gitlab.io/ualib/html
+app=ualib
+public_html_dir=${main_dir}/public_html
+src_dir=${main_dir}/${app}
+tt_dir=${HOME}/git/lab/ualib/TypeTopology/source
+
+agda --html --html-highlight=code ${src_dir}/ualib.lagda
+
+cp html/ualib.tex    index.md
+#cp html/Universes.tex   Universes.md
+# mv html/ualib.tex    ualib.md
+# mv html/Universes.tex       Universes.md
+
+agda --html ${tt_dir}/Universes.lagda
+cp html/Universes.tex       Universes.md
+cp html/Agda.Primitive.html Agda.Primitive.html

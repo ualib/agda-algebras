@@ -1,9 +1,10 @@
 # agda 2.6.1, jekyll, ghc and google-chrome need to be installed in the system
 main_dir = ${HOME}/git/lab/ualib/ualib.gitlab.io
-main_html_dir = ${HOME}/git/lab/ualib/ualib.gitlab.io/html
+main_html_dir = ${HOME}/git/lab/ualib/ualib.gitlab.io/ualib/html
 app = ualib
+public_html_dir = ${main_dir}/public_html
+src_dir = ${main_dir}/${app}
 tt_dir = ${HOME}/git/lab/ualib/TypeTopology/source
-public_html_dir = ${HOME}/public_html
 
 
 install : _site/$(app).html pdf/all/$(app).pdf agda/$(app).agda additionally
@@ -23,11 +24,11 @@ additionally :
 	touch additionally
 	chmod +x additionally
 
-_site/$(app).html : $(app).lagda
+_site/$(app).html : $(src_dir)/$(app).lagda
 	$(info )
 	$(info This will take a couple of minutes...)
 	$(info )
-	time agda --html --html-highlight=code $(app).lagda
+	time agda --html --html-highlight=code $(src_dir)/$(app).lagda
 	cp $(main_html_dir)/$(app).tex $(main_dir)/index.md
 	mv $(main_html_dir)/$(app).tex $(main_dir)/$(app).md
 	mv $(main_html_dir)/Universes.tex $(main_dir)/Universes.html
@@ -65,10 +66,10 @@ pdf/all/$(app).pdf : _site/$(app).html
 	mkdir -p $(main_dir)/all
 	google-chrome --headless --print-to-pdf="$(main_dir)/pdf/all/$(app).pdf" $(main_dir)/_site/$(app).html
 
-agda/$(app).agda :  $(app).lagda
+agda/$(app).agda :  $(src_dir)/$(app).lagda
 	mkdir -p $(main_dir)/agda
 	ghc --make illiterator.hs
-	cat $(main_dir)/$(app).lagda | $(main_dir)/illiterator > $(main_dir)/agda/$(app).agda
+	cat $(src_dir)/$(app).lagda | $(main_dir)/illiterator > $(main_dir)/agda/$(app).agda
 
 clean :
 	rm -f *.o *.hi $(app).html index.html Universes.html Agda.Primitive.html
@@ -80,7 +81,7 @@ clean :
 	rm -f $(main_dir)/Agda.Primitive.Cubical.html $(main_dir)/Agda.Primitive.html
 	rm -f $(main_dir)/index.md $(main_dir)/$(app).md
 	rm -f $(main_dir)/Universes.md
-	touch $(main_dir)/$(app).lagda
+	touch $(src_dir)/$(app).lagda
 
 cleanmore :
 	rm -f *.agdai *.o *.hi $(app).html index.html Universes.html Agda.Primitive.html illiterator
