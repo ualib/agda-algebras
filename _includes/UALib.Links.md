@@ -195,6 +195,9 @@
 [Birkhoff.Theorem]: UALib.Birkhoff.Theorem.html
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
+
+[UALib.Prelude]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
+[UALib.Prelude module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
 [UALib.Prelude.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda
 [UALib.Prelude.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Equality.lagda
 [UALib.Prelude.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Inverses.lagda
