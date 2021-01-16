@@ -1,9 +1,21 @@
-\begin{code}
---FILE: closure.agda
---AUTHOR: William DeMeo and Siva Somayyajula
---DATE: 4 Aug 2020
---UPDATED: 3 Jan 2021
+---
+layout: default
+title : closure module (Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
 
+<!--
+FILE: closure.agda
+AUTHOR: William DeMeo
+DATE: 4 Aug 2020
+UPDATED: 3 Jan 2021
+-->
+
+## Closure operators
+
+### Options, imports
+\begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
@@ -20,18 +32,23 @@ open import terms {𝑆 = 𝑆}{gfe}{𝕏} renaming (generator to ℊ)
 open import subuniverses {𝑆 = 𝑆}{gfe}{𝕏}
 
 open import prelude using (_∪_; inj₁; inj₂; domain; embeddings-are-lc) public
+\end{code}
 
--- BASIC DEFINITIONS --
+### Basic definitions
 
--- Models and modeling
+#### Models and modeling
+\begin{code}
 _⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term{𝓧}{X} → Term → 𝓤 ⊔ 𝓧 ̇
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 _⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆) (OV 𝓤)
  →      Term{𝓧}{X} → Term → 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺ ̇
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+\end{code}
 
--- Equational theories and classes
+#### Equational theories and classes
+
+\begin{code}
 Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆) (OV 𝓤)
  →   Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
@@ -47,15 +64,26 @@ Mod X ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term{𝓧}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+\end{code}
 
+### H-closure
 
+We define what appears to be the most useful inductive type for representing classes of algebras that are closed under the taking of homomorphic images.
+
+\begin{code}
 --Closure wrt H
 data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) where
   hbase : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ H{𝓤}{𝓦} 𝒦
   hlift : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ H{𝓤}{𝓦} 𝒦
   hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H{𝓤}{𝓦} 𝒦
   hiso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H{𝓤}{𝓦} 𝒦
+\end{code}
 
+### S-closure
+
+Similarly, we have found the following to be the most useful inductive type for representing classes of algebras that are closed under the taking of subalgebras.
+
+\begin{code}
 --Closure wrt S
 data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
   sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S{𝓤}{𝓦} 𝒦
@@ -63,7 +91,13 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
   ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
   ssubw : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
   siso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
+\end{code}
 
+### P-closure
+
+The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of arbitrary products is the following.
+
+\begin{code}
 --Closure wrt P
 data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
   pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P{𝓤}{𝓦} 𝒦
@@ -73,7 +107,13 @@ data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred
   prodw  : {I : 𝓦 ̇ }{𝒜 : I → Algebra (𝓤 ⊔ 𝓦) 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P{𝓤}{𝓦} 𝒦
   pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P{𝓤}{𝓦} 𝒦
   pisow  : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P{𝓤}{𝓦} 𝒦
+\end{code}
 
+### V-closure
+
+Finally, we define an inductive type that represents varieties---classes of algebras closed under the taking of homomorphic images, subalgebras and products.
+
+\begin{code}
 data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) where
   vbase  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
   vlift  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ V{𝓤}{𝓦} 𝒦
@@ -85,11 +125,16 @@ data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
   vprodw : {I : 𝓦 ̇}{𝒜 : I → Algebra (𝓤 ⊔ 𝓦) 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V{𝓤}{𝓦} 𝒦
   visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V{𝓤}{𝓦} 𝒦
   visow  : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V{𝓤}{𝓦} 𝒦
+\end{code}
 
+### Closure properties
+
+The types defined above represent operators with useful closure properties. We now prove a handful of such properties since we will need them later.
+
+\begin{code}
 -- CLOSURE PROPERTIES --
 
--- P is a closure operator
--- In particular, it's expansive...
+-- P is a closure operator, in particular, it's expansive...
 P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →       𝒦 ⊆ P{𝓤}{𝓤} 𝒦
 P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
@@ -106,8 +151,6 @@ P-idemp (prodw x) = prodw (λ i → P-idemp (x i))
 P-idemp {𝓤} (pisou x x₁) = pisou (P-idemp{𝓤}{𝓤} x) x₁
 P-idemp (pisow x x₁) = pisow (P-idemp x) x₁
 
-
-
 module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
 
  -- An idempotence variant that handles universes more generally (we need this later)
@@ -122,37 +165,6 @@ module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
  P-idemp'  (pisou x x₁) = pisow (P-idemp' x) x₁
  P-idemp'  (pisow x x₁) = pisow (P-idemp'  x) x₁
 
--- Here's one more form of idempotence that we need in proof of Birkhoff.
--- (also reveals how annoying non-cummulative universes can be)
--- P-idemp'' : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
---  →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦 ⊔ 𝓩} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦 ⊔ 𝓩} 𝒦
-
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pbase{𝑨} x) = {!γ!}
---  where
---   γ : (lift-alg 𝑨 (𝓤 ⊔ 𝓦 ⊔ 𝓩)) ∈ P{𝓤}{𝓤 ⊔ 𝓦 ⊔ 𝓩} 𝒦
---   γ = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pliftu x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pliftw x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (produ x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (prodw x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pisou x x₁) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pisow x x₁) = {!!}
-
--- P-idemp'' : {𝓤 𝓦 𝓩 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
---  →        P{𝓤 ⊔ 𝓦}{𝓩} (P{𝓤}{𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦 ⊔ 𝓩} 𝒦
-
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pbase{𝑨} x) = {!γ!}
---  where
---   γ : (lift-alg 𝑨 𝓩) ∈ P{𝓤}{𝓤 ⊔ 𝓦 ⊔ 𝓩} 𝒦
---   γ = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pliftu x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pliftw x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (produ x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (prodw x) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pisou x x₁) = {!!}
--- P-idemp'' {𝓤} {𝓦} {𝓩} {𝒦} (pisow x x₁) = {!!}
-
-
 -- S is a closure operator
 
 -- In particular, it's monotone.
@@ -163,13 +175,14 @@ S-mono {𝓤}{𝓦}{𝒦}{𝒦'} ante (slift{𝑨} x) = slift{𝓤}{𝓦}{𝒦'}
 S-mono ante (ssub{𝑨}{𝑩} sA B≤A) = ssub (S-mono ante sA) B≤A
 S-mono ante (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono ante sA) B≤A
 S-mono ante (siso x x₁) = siso (S-mono ante x) x₁
+\end{code}
 
+### Properties of H, S, P, and ⊧
 
-
--- BASIC PROPERTIES --------------------------------------------------------------------------
+\begin{code}
 
 lemma-⊧-≅ : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
-           (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
+            (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
 lemma-⊧-≅ {𝓠}{𝓤}{𝓧}{X}{𝑨}{𝑩} p q Apq (f , g , f∼g , g∼f) = γ
  where
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
@@ -260,31 +273,6 @@ lift-alg-subP {𝓤} {𝓦} {𝒦} {𝑩} (𝑨 , (𝑪 , C≤A) , pA , B≅C ) 
   γ : lB IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
   γ = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 𝑪 B≅C)
 
-
-
-
--- lift-alg-V : {𝓤 𝓦 𝓧 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
-
---  →                𝑩 ∈ V{𝓤}{𝓦} 𝒦
---             ---------------------------------------------------
---  →          (lift-alg 𝑩 𝓧) ∈ (V{𝓤}{𝓦 ⊔ 𝓧} 𝒦)
-
--- lift-alg-V {𝓤} {𝓦} {𝓧} {𝒦} {𝑩} vB = {!!}
- -- where
- --  lA lB lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
- --  lA = lift-alg 𝑨 𝓦
- --  lB = lift-alg 𝑩 𝓦
- --  lC = lift-alg 𝑪 𝓦
-
- --  lC≤lA : lC ≤ lA
- --  lC≤lA = lift-alg-lift-≤-lift 𝑪 {𝑨} C≤A
- --  plA : lA ∈ P{𝓤}{𝓦} 𝒦
- --  plA = pliftu pA
-
- --  γ : lB IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
- --  γ = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 𝑪 B≅C)
-
-
 subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
                {𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 IsSubalgebraOfClass 𝒦
              ----------------------------------------------------------
@@ -369,7 +357,6 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
    B≅sa = TRANS-≅ (sym-≅ A≅B) A≅SA
    γ : 𝑩 IsSubalgebraOfClass 𝒦
    γ = 𝔸 , SA , 𝔸∈𝒦 , B≅sa
-
 
 S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
@@ -478,6 +465,15 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
     iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
   γ : ⨅ ℬ ≅ ⨅ SA
   γ = ⨅≅ gfe B≅SA
+
+\end{code}
+
+### PS(𝒦) ⊆ SP(𝒦)
+
+We are finally in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
+
+\begin{code}
+
 
 module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
 
@@ -599,35 +595,14 @@ SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
 SP⊆V{𝓤}{𝓦} {𝒦} (ssub{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V{𝓤}{𝓦} {𝒦} (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
+\end{code}
 
+### ⨅ S(𝒦) ∈ SP(𝒦)
 
--- module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where --  {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
+Above we proved PS(𝒦) ⊆ SP(𝒦).  It is slightly more painful to prove that the product of *all* algebras in the class S(𝒦) is a member of SP(𝒦). This is mainly due to the fact that it's not obvious (at least not to this coder) how one constructs the type of the product of all members of a class.  After a few false starts, we finally found a reasonable and useful construction that is relatively easy to work with.
 
---  -- Some inclusions needed in the proof of Birkhoff's HSP Theorem.
---  P⊆V : P{𝓤}{𝓤} 𝒦 ⊆ V{𝓤}{𝓤} 𝒦
---  P⊆V (pbase x) = vbase x
---  P⊆V (pliftu x) = vlift (P⊆V x)
---  P⊆V (pliftw x) = vlift (P⊆V x)
---  P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
---  P⊆V (prodw x) = vprodu (λ i → P⊆V (x i))
---  P⊆V (pisou x x₁) = visou (P⊆V x) x₁
---  P⊆V (pisow x x₁) = visou (P⊆V x) x₁
-
---  S⊆V : S{𝓤}{𝓤} 𝒦 ⊆ V{𝓤}{𝓤} 𝒦
---  S⊆V (sbase x) = vbase x
---  S⊆V (slift x) = vlift (S⊆V x)
---  S⊆V (sub x x₁) = vsub (S⊆V x) x₁
---  S⊆V (siso x x₁) = visou (S⊆V x) x₁
-
---  SP⊆V : S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦) ⊆ V{𝓤}{𝓤} 𝒦
---  SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisou PCloA lift-alg-≅)
---  SP⊆V (slift{𝑨} x) = vlift (SP⊆V x)
---  SP⊆V (sub x sa) = vsub (SP⊆V x) sa
---  SP⊆V (siso x x₁) = visou (SP⊆V x) x₁
-
- -- We now prove that the product of all subalgebras of a class 𝒦 belongs to PS(𝒦).
- -- (Recall the definitions of class products from the basic module.)
-
+\begin{code}
+-- The product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
 module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
 
  open class-product {𝓤 = 𝓤}{𝑆 = 𝑆}{𝒦 = 𝒦}
@@ -666,13 +641,13 @@ module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 �
   →                  class-product (S{𝓤}{𝓤} 𝒦) ∈ (S{OV 𝓤}{OV 𝓤} (P{𝓤}{OV 𝓤} 𝒦))
 
  class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} (class-prod-s-∈-ps)
+\end{code}
 
+### Identity preservation
 
+#### Products preserve identities
 
-------------------------------------------------------------------------------------------
--- Compatibilities
--- ---------------
-
+\begin{code}
 product-id-compatibility -- (alias)
  products-preserve-identities
   : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
@@ -721,7 +696,11 @@ products-in-class-preserve-identities p q I 𝒜 α K𝒜 = γ
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = products-preserve-identities p q I 𝒜 β
 class-product-id-compatibility = products-in-class-preserve-identities
+\end{code}
 
+#### Subalgebras preserve identities
+
+\begin{code}
 subalgebra-id-compatibility -- (alias)
  subalgebras-preserve-identities : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}
                                   {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
@@ -771,14 +750,17 @@ subalgebras-preserve-identities {𝓤}{X = X} p q (𝑩 , 𝑨 , SA , (KA , BisS
   γ = gfe λ b → hlc (ξ b)
 
 subalgebra-id-compatibility = subalgebras-preserve-identities
+\end{code}
 
+#### Homomorphisms preserve identities
 
+\begin{code}
 -- ⇒ (the "only if" direction)
 id-class-hom-compatibility -- (alias)
  identities-compatible-with-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                                   {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
                                   (p q : Term) →  𝒦 ⊧ p ≋ q
-                                 -----------------------------------------------------
+                                 --------------------------------------------------
  →                                ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻 X) 𝑨)
                                   →  ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
 
@@ -833,8 +815,11 @@ compatibility-of-identities-and-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
 compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
                                              homs-compatible-with-identities p q
 
----------------------------------------------------------------
---Compatibility of identities with interpretation of terms
+\end{code}
+
+#### Term operations preserve identities
+
+\begin{code}
 hom-id-compatibility : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                        (p q : Term{𝓧}{X})
                        (𝑨 : Algebra 𝓤 𝑆)(ϕ : hom (𝑻 X) 𝑨)
@@ -848,9 +833,9 @@ hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap 
                                  (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
                                  ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
                                  ∣ ϕ ∣ q              ∎
-
---------------------------------------------------------------------------------
- --Identities for product closure
+\end{code}
+### Properties of product closure
+\begin{code}
 P-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
            (p q : Term{𝓧}{X}) → (𝒦 ⊧ p ≋ q) → (P{𝓤}{𝓤} 𝒦 ⊧ p ≋ q)
 P-id1 p q α (pbase x) = lift-alg-⊧ _ p q (α x)
@@ -904,8 +889,11 @@ P-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} PKpq {𝑨} KA = γ
   ξ = PKpq plA
   γ : 𝑨 ⊧ p ≈ q
   γ = lower-alg-id-compatibility 𝑨 p q ξ
+\end{code}
 
+### Properties of subalgebra closure
 
+\begin{code}
 -----------------------------------------------------------------
 --Identities for subalgebra closure
 -- The singleton set.
@@ -967,9 +955,11 @@ S-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Spq {𝑨} KA = γ
   ξ = Spq plA
   γ : 𝑨 ⊧ p ≈ q
   γ = lower-alg-id-compatibility 𝑨 p q ξ
+\end{code}
 
+### Properties of homomorphic image closure
 
-
+\begin{code}
 --------------------------------------------------------------------
 --Identities for hom image closure
 H-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
@@ -1008,7 +998,6 @@ H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = γ
   γ : 𝑩 ⊧ p ≈ q
   γ = lemma-⊧-≅ p q ζ x₁
 
-
 H-id2 : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
            {p q : Term{𝓧}{X}} → (H{𝓤}{𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
 H-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Hpq {𝑨} KA = γ
@@ -1024,6 +1013,11 @@ H-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Hpq {𝑨} KA = γ
   γ : 𝑨 ⊧ p ≈ q
   γ = lower-alg-id-compatibility 𝑨 p q ξ
 
+\end{code}
+
+### Properties of varietal closure
+
+\begin{code}
 --------------------------------------------------------------------
 --Identities for HSP closure
 V-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
@@ -1121,12 +1115,13 @@ V-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Vpq {𝑨} KA = γ
   γ : 𝑨 ⊧ p ≈ q
   γ = lower-alg-id-compatibility 𝑨 p q ξ
 
+\end{code}
 
-------------------
---Class Identities
---It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all
---structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
+### Class identities
 
+It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
+
+\begin{code}
 -- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
 class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
                    (p q : ∣ 𝑻 X ∣)

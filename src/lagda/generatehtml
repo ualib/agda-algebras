@@ -1,0 +1,166 @@
+#!/bin/bash
+
+main_dir=${HOME}/git/lab/ualib/ualib.gitlab.io
+src_dir=${main_dir}/src/lagda
+md_dir=${main_dir}/markdown
+
+cd ${src_dir}
+
+agda --html --html-highlight=code ${src_dir}/UALib.lagda
+
+cp html/Empty-Type.tex ${md_dir}/Empty-Type.md
+cp html/Identity-Type.tex ${md_dir}/Identity-Type.md
+cp html/MGS-Basic-UF.tex ${md_dir}/MGS-Basic-UF.md
+cp html/MGS-Embeddings.tex ${md_dir}/MGS-Embeddings.md
+cp html/MGS-Equivalence-Induction.tex ${md_dir}/MGS-Equivalence-Induction.md
+cp html/MGS-Equivalences.tex ${md_dir}/MGS-Equivalences.md
+cp html/MGS-FunExt-from-Univalence.tex ${md_dir}/MGS-FunExt-from-Univalence.md
+cp html/MGS-HAE.tex ${md_dir}/MGS-HAE.md
+cp html/MGS-hlevels.tex ${md_dir}/MGS-hlevels.md
+cp html/MGS-MLTT.tex ${md_dir}/MGS-MLTT.md
+cp html/MGS-More-FunExt-Consequences.tex ${md_dir}/MGS-More-FunExt-Consequences.md
+cp html/MGS-Powerset.tex ${md_dir}/MGS-Powerset.md
+cp html/MGS-Retracts.tex ${md_dir}/MGS-Retracts.md
+cp html/MGS-Solved-Exercises.tex ${md_dir}/MGS-Solved-Exercises.md
+cp html/MGS-Subsingleton-Theorems.tex ${md_dir}/MGS-Subsingleton-Theorems.md
+cp html/MGS-Subsingleton-Truncation.tex ${md_dir}/MGS-Subsingleton-Truncation.md
+cp html/MGS-Unique-Existence.tex ${md_dir}/MGS-Unique-Existence.md
+cp html/MGS-Univalence.tex ${md_dir}/MGS-Univalence.md
+cp html/Natural-Numbers-Type.tex ${md_dir}/Natural-Numbers-Type.md
+cp html/Plus-Type.tex ${md_dir}/Plus-Type.md
+cp html/Sigma-Type.tex ${md_dir}/Sigma-Type.md
+cp html/UALib.Algebras.Algebras.tex ${md_dir}/UALib.Algebras.Algebras.md
+cp html/UALib.Algebras.Lifts.tex ${md_dir}/UALib.Algebras.Lifts.md
+cp html/UALib.Algebras.Products.tex ${md_dir}/UALib.Algebras.Products.md
+cp html/UALib.Algebras.Signatures.tex ${md_dir}/UALib.Algebras.Signatures.md
+cp html/UALib.Algebras.tex ${md_dir}/UALib.Algebras.md
+cp html/UALib.Birkhoff.FreeAlgebra.tex ${md_dir}/UALib.Birkhoff.FreeAlgebra.md
+cp html/UALib.Birkhoff.Lemmata.tex ${md_dir}/UALib.Birkhoff.Lemmata.md
+cp html/UALib.Birkhoff.tex ${md_dir}/UALib.Birkhoff.md
+cp html/UALib.Birkhoff.Theorem.tex ${md_dir}/UALib.Birkhoff.Theorem.md
+cp html/UALib.Homomorphisms.Basic.tex ${md_dir}/UALib.Homomorphisms.Basic.md
+cp html/UALib.Homomorphisms.HomomorphicImages.tex ${md_dir}/UALib.Homomorphisms.HomomorphicImages.md
+cp html/UALib.Homomorphisms.Isomorphisms.tex ${md_dir}/UALib.Homomorphisms.Isomorphisms.md
+cp html/UALib.Homomorphisms.Kernels.tex ${md_dir}/UALib.Homomorphisms.Kernels.md
+cp html/UALib.Homomorphisms.Noether.tex ${md_dir}/UALib.Homomorphisms.Noether.md
+cp html/UALib.Homomorphisms.Products.tex ${md_dir}/UALib.Homomorphisms.Products.md
+cp html/UALib.Homomorphisms.tex ${md_dir}/UALib.Homomorphisms.md
+cp html/UALib.Preface.tex ${md_dir}/UALib.Preface.md
+cp html/UALib.Prelude.Equality.tex ${md_dir}/UALib.Prelude.Equality.md
+cp html/UALib.Prelude.Extensionality.tex ${md_dir}/UALib.Prelude.Extensionality.md
+cp html/UALib.Prelude.Inverses.tex ${md_dir}/UALib.Prelude.Inverses.md
+cp html/UALib.Prelude.Preliminaries.tex ${md_dir}/UALib.Prelude.Preliminaries.md
+cp html/UALib.Prelude.tex ${md_dir}/UALib.Prelude.md
+cp html/UALib.Relations.Binary.tex ${md_dir}/UALib.Relations.Binary.md
+cp html/UALib.Relations.Congruences.tex ${md_dir}/UALib.Relations.Congruences.md
+cp html/UALib.Relations.Equivalences.tex ${md_dir}/UALib.Relations.Equivalences.md
+cp html/UALib.Relations.Quotients.tex ${md_dir}/UALib.Relations.Quotients.md
+cp html/UALib.Relations.tex ${md_dir}/UALib.Relations.md
+cp html/UALib.Relations.Unary.tex ${md_dir}/UALib.Relations.Unary.md
+cp html/UALib.Subalgebras.Generation.tex ${md_dir}/UALib.Subalgebras.Generation.md
+cp html/UALib.Subalgebras.Homomorphisms.tex ${md_dir}/UALib.Subalgebras.Homomorphisms.md
+cp html/UALib.Subalgebras.Properties.tex ${md_dir}/UALib.Subalgebras.Properties.md
+cp html/UALib.Subalgebras.Subalgebras.tex ${md_dir}/UALib.Subalgebras.Subalgebras.md
+cp html/UALib.Subalgebras.Subuniverses.tex ${md_dir}/UALib.Subalgebras.Subuniverses.md
+cp html/UALib.Subalgebras.tex ${md_dir}/UALib.Subalgebras.md
+cp html/UALib.Subalgebras.WWMD.tex ${md_dir}/UALib.Subalgebras.WWMD.md
+cp html/UALib.Terms.Basic.tex ${md_dir}/UALib.Terms.Basic.md
+cp html/UALib.Terms.Compatibility.tex ${md_dir}/UALib.Terms.Compatibility.md
+cp html/UALib.Terms.Free.tex ${md_dir}/UALib.Terms.Free.md
+cp html/UALib.Terms.Operations.tex ${md_dir}/UALib.Terms.Operations.md
+cp html/UALib.Terms.tex ${md_dir}/UALib.Terms.md
+cp html/UALib.tex ${md_dir}/index.md
+cp html/UALib.tex ${md_dir}/UALib.md
+cp html/UALib.Varieties.EquationalLogic.tex ${md_dir}/UALib.Varieties.EquationalLogic.md
+cp html/UALib.Varieties.ModelTheory.tex ${md_dir}/UALib.Varieties.ModelTheory.md
+cp html/UALib.Varieties.Preservation.tex ${md_dir}/UALib.Varieties.Preservation.md
+cp html/UALib.Varieties.tex ${md_dir}/UALib.Varieties.md
+cp html/UALib.Varieties.Varieties.tex ${md_dir}/UALib.Varieties.Varieties.md
+cp html/Unit-Type.tex ${md_dir}/Unit-Type.md
+cp html/universes.tex ${md_dir}/universes.md
+cp html/Universes.tex ${md_dir}/Universes.md
+
+# cp html/*.html ${main_dir}/html
+
+# cp html/Agda.Builtin.Bool.html ${md_dir}/
+# cp html/Agda.Builtin.Equality.html ${md_dir}/
+# cp html/Agda.Builtin.Sigma.html ${md_dir}/
+# cp html/Agda.Builtin.Strict.html ${md_dir}/
+# cp html/Agda.Builtin.Unit.html ${md_dir}/
+# cp html/Agda.css ${md_dir}/
+# cp html/Agda.Primitive.Cubical.html ${md_dir}/
+# cp html/Agda.Primitive.html ${md_dir}/
+# cp html/Data.Bool.Base.html ${md_dir}/
+# cp html/Data.Empty.html ${md_dir}/
+# cp html/Data.Empty.Irrelevant.html ${md_dir}/
+# cp html/Data.Maybe.Base.html ${md_dir}/
+# cp html/Data.Product.html ${md_dir}/
+# cp html/Data.Sum.Base.html ${md_dir}/
+# cp html/Data.Sum.html ${md_dir}/
+# cp html/Data.These.Base.html ${md_dir}/
+# cp html/Data.Unit.Base.html ${md_dir}/
+# cp html/Function.html ${md_dir}/
+# cp html/Level.html ${md_dir}/
+# cp html/Relation.Binary.Core.html ${md_dir}/
+# cp html/Relation.Binary.PropositionalEquality.Core.html ${md_dir}/
+# cp html/Relation.Nullary.html ${md_dir}/
+# cp html/Relation.Unary.html ${md_dir}/
+# cp html/Strict.html ${md_dir}/
+
+# cp html/*.html ${main_dir}/html
+
+# cp html/preface.tex         ${md_dir}/preface.md
+# cp html/prelude.tex         ${md_dir}/prelude.md
+# cp html/basic.tex           ${md_dir}/basic.md
+# cp html/congruences.tex     ${md_dir}/congruences.md
+# cp html/homomorphisms.tex   ${md_dir}/homomorphisms.md
+# cp html/terms.tex           ${md_dir}/terms.md
+# cp html/subuniverses.tex    ${md_dir}/subuniverses.md
+# cp html/closure.tex         ${md_dir}/closure.md
+# cp html/birkhoff.tex        ${md_dir}/birkhoff.md
+# cp html/universes.tex       ${md_dir}/universes.md
+
+
+# agda --html --html-highlight=code ${src_dir}/preface.lagda
+# agda --html --html-highlight=code ${src_dir}/universes.lagda
+# agda --html --html-highlight=code ${src_dir}/prelude.lagda
+# agda --html --html-highlight=code ${src_dir}/basic.lagda
+# agda --html --html-highlight=code ${src_dir}/congruences.lagda
+# agda --html --html-highlight=code ${src_dir}/homomorphisms.lagda
+# agda --html --html-highlight=code ${src_dir}/terms.lagda
+# agda --html --html-highlight=code ${src_dir}/subuniverses.lagda
+# agda --html --html-highlight=code ${src_dir}/closure.lagda
+# agda --html --html-highlight=code ${src_dir}/birkhoff.lagda
+
+# cp html/Empty-Type.tex ${md_dir}/Empty-Type.md
+# cp html/Identity-Type.tex ${md_dir}/Identity-Type.md
+# cp html/MGS-Basic-UF.tex ${md_dir}/MGS-Basic-UF.md
+# cp html/MGS-Embeddings.tex ${md_dir}/MGS-Embeddings.md
+# cp html/MGS-Equivalence-Induction.tex ${md_dir}/MGS-Equivalence-Induction.md
+# cp html/MGS-Equivalences.tex ${md_dir}/MGS-Equivalences.md
+# cp html/MGS-FunExt-from-Univalence.tex ${md_dir}/MGS-FunExt-from-Univalence.md
+# cp html/MGS-HAE.tex ${md_dir}/MGS-HAE.md
+# cp html/MGS-MLTT.tex ${md_dir}/MGS-MLTT.md
+# cp html/MGS-More-FunExt-Consequences.tex ${md_dir}/MGS-More-FunExt-Consequences.md
+# cp html/MGS-Powerset.tex ${md_dir}/MGS-Powerset.md
+# cp html/MGS-Retracts.tex ${md_dir}/MGS-Retracts.md
+# cp html/MGS-Solved-Exercises.tex ${md_dir}/MGS-Solved-Exercises.md
+# cp html/MGS-Subsingleton-Theorems.tex ${md_dir}/MGS-Subsingleton-Theorems.md
+# cp html/MGS-Subsingleton-Truncation.tex ${md_dir}/MGS-Subsingleton-Truncation.md
+# cp html/MGS-Unique-Existence.tex ${md_dir}/MGS-Unique-Existence.md
+# cp html/MGS-Univalence.tex ${md_dir}/MGS-Univalence.md
+# cp html/MGS-hlevels.tex ${md_dir}/MGS-hlevels.md
+# cp html/Natural-Numbers-Type.tex ${md_dir}/Natural-Numbers-Type.md
+# cp html/Plus-Type.tex ${md_dir}/Plus-Type.md
+# cp html/Prelude.tex ${md_dir}/Prelude.md
+# cp html/Prelude.Equality.tex ${md_dir}/Prelude.Equality.md
+# cp html/Prelude.Extensionality.tex ${md_dir}/Prelude.Extensionality.md
+# cp html/Prelude.Imports.tex ${md_dir}/Prelude.Imports.md
+# cp html/Prelude.Inverses.tex ${md_dir}/Prelude.Inverses.md
+# cp html/Prelude.Predicates.tex ${md_dir}/Prelude.Predicates.md
+# cp html/Prelude.README.tex ${md_dir}/Prelude.README.md
+# cp html/Prelude.References.tex ${md_dir}/Prelude.References.md
+# cp html/Sigma-Type.tex ${md_dir}/Sigma-Type.md
+# cp html/Unit-Type.tex ${md_dir}/Unit-Type.md
+# cp html/Universes.tex ${md_dir}/Universes.md
+# cp html/universes.tex ${md_dir}/universes.md

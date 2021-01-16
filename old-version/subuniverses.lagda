@@ -1,9 +1,21 @@
-\begin{code}
---FILE: subuniverses.agda
---AUTHOR: William DeMeo and Siva Somayyajula
---DATE: 30 Jun 2020
---UPDATED: 3 Jan 2021
+---
+layout: default
+title : subuniverses module (of the Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
 
+<!--
+FILE: subuniverses.agda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATED: 12 Jan 2021
+-->
+
+## Subalgebras
+
+### Options, imports
+\begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
@@ -22,11 +34,13 @@ open import terms {𝑆 = 𝑆} {gfe} {𝕏} renaming (generator to ℊ)
 open import prelude using (_●_; lr-implication; rl-implication; Im_⊆_;
  id-is-embedding; pr₁-embedding; embedding-gives-ap-is-equiv; ∘-embedding;
  ×-is-subsingleton; inverse; logically-equivalent-subsingletons-are-equivalent) public
+\end{code}
 
+### Subuniverses
 
+\begin{code}
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
 Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
-
 
 SubunivAlg : {𝓠 𝓤 : Universe} (𝑨 : Algebra 𝓠 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓤)
  →           B ∈ Subuniverses 𝑨
@@ -39,7 +53,11 @@ record Subuniverse {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆} : 𝓞 ⊔ �
  field
    sset  : Pred ∣ 𝑨 ∣ 𝓤
    isSub : sset ∈ Subuniverses 𝑨
+\end{code}
 
+### Subuniverse generation
+
+\begin{code}
 data Sg {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) (X : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤) where
  var : ∀ {v} → v ∈ X → v ∈ Sg 𝑨 X
  app : (f : ∣ 𝑆 ∣){a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣} → Im a ⊆ Sg 𝑨 X
@@ -66,7 +84,13 @@ sgIsSmallest 𝑨 Y YIsSub X⊆Y (app f {a} ima⊆SgX) = app∈Y
   --Since Y is a subuniverse of 𝑨, it contains the application
   app∈Y : (f ̂ 𝑨) a ∈ Y          --           of f to said args.
   app∈Y = YIsSub f a ima⊆Y
+\end{code}
 
+### Subuniverse properties
+
+#### Intersections of subuniverses are subuniverses
+
+\begin{code}
 sub-inter-is-sub : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)
                    (I : 𝓤 ̇)(𝒜 : I → Pred ∣ 𝑨 ∣ 𝓤)
  →                 ((i : I) → 𝒜 i ∈ Subuniverses 𝑨)
@@ -77,7 +101,11 @@ sub-inter-is-sub 𝑨 I 𝒜 Ai-is-Sub f a ima⊆⋂A = α
  where
   α : (f ̂ 𝑨) a ∈ ⋂ I 𝒜
   α i = Ai-is-Sub i f a λ j → ima⊆⋂A j i
+\end{code}
 
+#### Compatibility with term operations
+
+\begin{code}
 sub-term-closed : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓠 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓤)
  →                B ∈ Subuniverses 𝑨
  →                (t : Term)(b : X → ∣ 𝑨 ∣)
@@ -90,7 +118,11 @@ sub-term-closed _ _ B≤A (ℊ x) b b∈B = b∈B x
 sub-term-closed 𝑨 B B≤A (node f t) b b∈B =
    B≤A f (λ z → (t z ̇ 𝑨) b)
           (λ x → sub-term-closed 𝑨 B B≤A (t x) b b∈B)
+\end{code}
 
+### Term images
+
+\begin{code}
 data TermImage {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓤) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤) where
  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
  app : (f : ∣ 𝑆 ∣) (t : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → (∀ i  →  t i ∈ TermImage 𝑨 Y)
@@ -122,8 +154,11 @@ SgY⊆TermImageY : {𝓠 𝓤 : Universe}
  →                Sg 𝑨 Y ⊆ TermImage 𝑨 Y
 
 SgY⊆TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y⊆TermImageY
+\end{code}
 
+### Homomorphic images
 
+\begin{code}
 hom-image-is-sub : {𝓠 𝓤 : Universe} → global-dfunext
  →                 {𝑨 : Algebra 𝓠 𝑆} {𝑩 : Algebra 𝓤 𝑆} (ϕ : hom 𝑨 𝑩)
                   -------------------------------------------------
@@ -142,11 +177,11 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
   γ = (f ̂ 𝑩) b          ≡⟨ ap (f ̂ 𝑩)(ζ ⁻¹) ⟩
       (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar)  ≡⟨(∥ ϕ ∥ f ar)⁻¹ ⟩
       ∣ ϕ ∣((f ̂ 𝑨) ar)   ∎
+\end{code}
 
---------------------------------------------------------------------------------------------
--- SUBALGEBRAS
-----------------
+### Subalgebras
 
+\begin{code}
 _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
 
@@ -161,16 +196,20 @@ Subalgebra {𝓤} = SUBALGEBRA {𝓤}{𝓤}
 
 getSub : {𝓤 𝓠 : Universe}{𝑨 : Algebra 𝓠 𝑆} → SUBALGEBRA{𝓤}{𝓠} 𝑨 → Algebra 𝓤 𝑆
 getSub SA = ∣ SA ∣
+\end{code}
 
+#### Example
 
+The equalizer of two homomorphisms is a subuniverse.
 
---Examples---------------------------------------
-
---Equalizer of homs is a subuniverse.
+\begin{code}
 𝑬𝑯-is-subuniverse : {𝓤 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 𝑬𝑯-is-subuniverse {𝓤} fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝓤}{𝑨}{𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑓}{𝑨}{𝑩} g h 𝒂 x
+\end{code}
 
---Homs are determined on generating sets
+### Homomorphisms are determined on generating sets
+
+\begin{code}
 HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
@@ -185,9 +224,11 @@ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+\end{code}
 
--------------------------------------------------
+### Subalgebras of a class
 
+\begin{code}
 _IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
  →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇
 _IsSubalgebraOfClass_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (SUBALGEBRA{𝓤} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
@@ -205,14 +246,22 @@ SubalgebraOfClass {𝓤}{𝓠} = SUBALGEBRAOFCLASS {𝓤}{𝓠}{𝓞 ⊔ 𝓥 �
 getSubOfClass : {𝓤 𝓠 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) 𝓦} → SUBALGEBRAOFCLASS 𝒦 → Algebra 𝓤 𝑆
 getSubOfClass SAC = ∣ SAC ∣
 
-
 SUBALGEBRAOFCLASS' : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
 SUBALGEBRAOFCLASS' {𝓤}{𝓠} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓠 𝑆) , (𝑨 ∈ 𝒦) × SUBALGEBRA{𝓤}{𝓠} 𝑨
+\end{code}
 
--- Sugar.
+### Sugar
+
+We use the convenient ≤ notation for the subalgebra relation.
+
+\begin{code}
 _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
+\end{code}
 
+### Subalgebra toolbox
+
+\begin{code}
 --Transitivity of IsSubalgebra (explicit args)
 TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
  →         𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
@@ -234,8 +283,6 @@ trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
 transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
  →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
 transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ∣ B≤C ∣ ∘ ∣ A≤B ∣ , ∘-embedding (fst ∥ B≤C ∥) (fst ∥ A≤B ∥) , ∘-hom 𝑨 𝑩 𝑪 {∣ A≤B ∣}{∣ B≤C ∣}(snd ∥ A≤B ∥) (snd ∥ B≤C ∥)
-
-
 
 --Reflexivity of IsSubalgebra (explicit arg)
 REFL-≤ : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
@@ -303,11 +350,6 @@ lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {
  →           𝑩 IsSubalgebraOfClass 𝒦
  →           (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 lift-alg-is-sub {𝓤}{𝒦}{𝑩} (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
-
--- lift-alg-refl-lift-≤ : {𝓧 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆} → (lift-alg 𝑨 𝓩) ≤ 𝑨
--- lift-alg-refl-lift-≤ = ?
--- lift-alg-refl-≤-lift : {𝓧 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆} → 𝑨 ≤ (lift-alg 𝑨 𝓩)
--- lift-alg-refl-≤-lift = ?
 
 lift-alg-lift-≤-lower : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
  →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
@@ -384,102 +426,9 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
 
 lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
+\end{code}
 
-
--- _IsSubalgebraOf_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
--- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
-
--- SUBALGEBRA : {𝓤 𝓠 : Universe} → Algebra 𝓠 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ⁺ ̇
--- SUBALGEBRA {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
--- SUBALGEBRA-transport : {𝓦 𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
---  →         SUBALGEBRA{𝓦} 𝑨 → 𝑨 ≅ 𝑩 → SUBALGEBRA{𝓩} 𝑩
--- SUBALGEBRA-transport {𝓦}{𝓧}{𝓨}{𝓩} 𝑨 𝑩 SA A≅B = γ
---  where
---   𝑨' : Algebra 𝓦 𝑆
---   𝑨' = ∣ SA ∣
-
---   A'≤A : 𝑨' ≤ 𝑨
-
---   A'≤A = ∥ SA ∥
-
-
---   𝑩' : Algebra 𝓩 𝑆
---   𝑩' = {!!}
-
---   B'≤B : 𝑩' ≤ 𝑩
---   B'≤B = {!!}
-
---   γ : SUBALGEBRA{𝓩} 𝑩
---   γ = {!𝑩' , B'≤B!}
-
-
-
--- SUBALGEBRA-transport : {𝓦 𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
---  →         SUBALGEBRA{𝓦} 𝑨 → 𝑨 ≅ 𝑩 → SUBALGEBRA{𝓩} 𝑩
--- SUBALGEBRA-transport {𝓦}{𝓧}{𝓨}{𝓩} 𝑨 𝑩 SA A≅B = γ
---  where
---   𝑨' : Algebra 𝓦 𝑆
---   𝑨' = ∣ SA ∣
-
---   A'≤A : 𝑨' ≤ 𝑨
-
---   A'≤A = ∥ SA ∥
-
-
---   𝑩' : Algebra 𝓩 𝑆
---   𝑩' = {!!}
-
---   B'≤B : 𝑩' ≤ 𝑩
---   B'≤B = {!!}
-
---   γ : SUBALGEBRA{𝓩} 𝑩
---   γ = {!𝑩' , B'≤B!}
-
-
-
-
-
--- lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
---  →                𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
--- lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
-
-
--- transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
---  →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
--- trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
---  →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
--- trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
-
-
--- h , hemb , hhom
---  where
---   g : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
---   g = ∣ A≤B ∣
---   gemb : is-embedding g
---   gemb = fst ∥ A≤B ∥
---   ghom : is-homomorphism 𝑨 𝑩 g
---   ghom = snd ∥ A≤B ∥
-
---   hh : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
---   hh = lift-alg-hom 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 (g , ghom)
-
---   h : ∣ lift-alg 𝑨 𝓩 ∣ → ∣ lift-alg 𝑩 𝓦 ∣
---   h = ∣ hh ∣
--- -- iso→embedding : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
--- --  →              (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
-
--- -- ∘-embedding : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } {Z : 𝓦 ̇ }
--- --               {f : X → Y} {g : Y → Z}
--- --             → is-embedding g  → is-embedding f → is-embedding (g ∘ f)
-
---   hemb : is-embedding h
---   hemb = ∘-embedding {f = Lift.lower}{g = (lift ∘ g)} (∘-embedding {f = g}{g = lift} {!𝓇ℯ𝒻𝓁!} gemb) {!𝓇ℯ𝒻𝓁!}
---   hhom : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) h
---   hhom = ∥ hh ∥
--- -- iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅) 
-
-----------------------------------------------------------------------------------
-
+<!--
 module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 
  -- gfe : global-dfunext
@@ -586,4 +535,4 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
  subuniverse-equality' B C =
   (subuniverse-equality B C) ● (carrier-equiv B C)
 
-
+-->

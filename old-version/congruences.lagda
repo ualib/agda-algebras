@@ -1,9 +1,22 @@
-\begin{code}
--- FILE: congruences.agda
--- AUTHOR: William DeMeo and Siva Somayyajula
--- DATE: 30 Jun 2020
--- NOTE: This file used to be called relations.agda
+---
+layout: default
+title : congruences module (of the Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
 
+<!--
+FILE: congruences.lagda
+AUTHOR: William DeMeo and Siva Somayyajula
+DATE: 30 Jun 2020
+NOTE: This file used to be called relations.agda
+-->
+
+## Congruences in Agda (congruences.lagda)
+
+### Options, imports
+
+\begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
@@ -15,7 +28,11 @@ open import prelude using (Univalence; is-prop; 𝟙; _≡⟨_⟩_; _∎; refl; 
  ≡-rfl; 𝓇ℯ𝒻𝓁; cong-app-pred; id; _⇔_; _∈₀_; _⊆₀_; 𝓟; ∈₀-is-subsingleton; is-subsingleton; equiv-to-subsingleton;
  powersets-are-sets'; subset-extensionality'; propext; Ω; Σ-is-subsingleton; Π-is-subsingleton; _⊇_; _⊆_; _=̇_;
  Pred-=̇-≡; cong-app-𝓟; fst; snd; ≡-elim-left; to-Σ-≡; transport) public
+\end{code}
 
+### Binary relations, kernels
+
+\begin{code}
 module _ {𝓤 𝓡 : Universe} where
 
  REL : 𝓤 ̇ → 𝓡 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓡 ⊔ 𝓝 ⁺) ̇
@@ -35,8 +52,11 @@ Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P 
 
 KER-rel : {𝓤 𝓡 : Universe}{A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → Rel A 𝓡
 KER-rel g x y = g x ≡ g y
+\end{code}
 
--- Examples -----------------------------------------------------------
+#### Examples
+
+\begin{code}
 module _ {𝓤 : Universe} where
  ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
  ker = KER{𝓤}{𝓤}
@@ -68,11 +88,13 @@ module _ {𝓤 : Universe} where
 
  𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
  𝟏 a b = 𝟙
+\end{code}
 
+### Properties of binary relations
 
+\begin{code}
 module _ {𝓤 𝓡 : Universe} where
 
- -- Properties of binary relations --------------------------------------
  reflexive : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
  reflexive _≈_ = ∀ x → x ≈ x
 
@@ -84,9 +106,11 @@ module _ {𝓤 𝓡 : Universe} where
 
  is-subsingleton-valued : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
+\end{code}
 
+### Equivalence relations
 
- -- Equivalence Relations -----------------------------------------------
+\begin{code}
  record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
    field
      rfl  : reflexive _≈_
@@ -115,9 +139,11 @@ map-kernel-IsEquivalence {𝓤}{𝓦} f =
  record { rfl = λ x → 𝓇ℯ𝒻𝓁
         ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
         ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
+\end{code}
 
+### Classes and quotients
 
-
+\begin{code}
 module relation-predicate-classes {𝓤 𝓡 : Universe} where
 
  -- relation class
@@ -181,12 +207,13 @@ module relation-predicate-classes {𝓤 𝓡 : Universe} where
  /-=̇ : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →   IsEquivalence R → R a a' → ([ a ] R) =̇ ([ a' ] R)
  /-=̇ {A = A}{a}{a'}{R} Req Raa' = /-subset Req Raa' , /-supset Req Raa'
+\end{code}
 
+### Quotient extensionality
 
- -- CLASS EXTENSIONALITY PRINCIPLES ---------------------------------------------
- -- These give us a (subsingleton) identity type for congruence classes over sets
- -- (i.e., assuming proof irrelevance).
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are on sets, rather than arbitrary types.  For us, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.  In other words, a set is a type with *unique identity proofs*. As a general principle, this is sometimes referred to as "proof irrelevance"---two proofs of a single identity are equal.
 
+\begin{code}
  class-extensionality : propext 𝓡 → global-dfunext
   →       {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →       (∀ a x → is-subsingleton (R a x))
@@ -220,9 +247,11 @@ module relation-predicate-classes {𝓤 𝓡 : Universe} where
    γ : (⟦ a ⟧ {R}) ≡ (⟦ a' ⟧ {R})
    γ = to-subtype-⟦⟧ ssA CD
 
+\end{code}
 
--------------------------------------------------------------------
+#### sugar
 
+\begin{code}
 _on_ : {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓥 ̇}{C : 𝓦 ̇}
  →     (B → B → C) → (A → B) → (A → A → C)
 
@@ -243,8 +272,11 @@ _=[_]⇒_ : {𝓤 𝓥 𝓡 𝓢 : Universe}{A : 𝓤 ̇ } {B : 𝓥 ̇ }
 P =[ g ]⇒ Q = P ⇒ (Q on g)
 
 infixr 4 _=[_]⇒_
+\end{code}
 
+### Compatibility
 
+\begin{code}
 module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇ } {Z : 𝓤 ̇ } where
 
  lift-rel : Rel Z 𝓦 → (γ → Z) → (γ → Z) → 𝓥 ⊔ 𝓦 ̇
@@ -261,18 +293,22 @@ compatible-op {𝑨 = 𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  �
 --The given relation is compatible with all ops of an algebra.
 compatible : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
 compatible {𝓤 = 𝓤}{𝓦 = 𝓦} 𝑨 R = ∀ f → compatible-op{𝓤 = 𝓤}{𝓦 = 𝓦}{𝑨 = 𝑨} f R
+\end{code}
 
+#### Examples
 
--- Examples --
+\begin{code}
 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
  →                   compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
 𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
 
 𝟎-compatible : funext 𝓥 𝓤 → {A : Algebra 𝓤 𝑆} → compatible A 𝟎-rel
 𝟎-compatible fe {A} = λ f args → 𝟎-compatible-op fe {A} f args
+\end{code}
 
+### Congruences and quotient algebras
 
--- CONGRUENCES --
+\begin{code}
 Con : (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 Con {𝓤} A = Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
 
@@ -291,12 +327,11 @@ open Congruence
 compatible-equivalence : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ̇
 compatible-equivalence {𝓤}{𝓦} {𝑨} R = compatible 𝑨 R × IsEquivalence R
 
--- Example --
+-- Example
 Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
 Δ fe A = mkcon 𝟎-rel ( 𝟎-compatible fe ) ( 𝟎-IsEquivalence )
 
 
------------------------------------------------------------------------------------
 module congruence-predicates {𝓤 𝓡 : Universe} where
 
  open relation-predicate-classes {𝓤}{𝓡}
@@ -318,29 +353,15 @@ module congruence-predicates {𝓤 𝓡 : Universe} where
  ╱-refl : (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
   →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
  ╱-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
+\end{code}
 
+#### Dead code
 
+We're not using any of the code below, so we may remove it eventually.
 
+We currently use the relation-predicate-classes and congruence-predicates modules above.
 
-
-
-
-
-
-
-
-
-
-
-------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------
--- N.B. Not currently using any of the code below, so we'll probably remove it eventually.
--- Instead we now use the relation-predicate-classes and congruence-predicates modules above.
-
-
------------------------------------------------------------------------------------
+\begin{code}
 module relation-classes {𝓤 𝓡 : Universe} where
 
  -- relation class
@@ -365,7 +386,6 @@ module relation-classes {𝓤 𝓡 : Universe} where
  /-Refl rfl (refl _)  = rfl _
 
 
-
 module congruence-relations where
  open relation-classes
 
@@ -387,18 +407,6 @@ module congruence-relations where
  /-refl : {𝓤 𝓧 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓧} A}{a a' : ∣ A ∣}
   →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
  /-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 module relation-powerset-classes {𝓤 : Universe} where
@@ -487,8 +495,6 @@ module relation-powerset-classes {𝓤 : Universe} where
     sym   : symm𝓟 R
     trans : trans𝓟 R
 
-
-
 module congruence-relations-powersets where
 
  open relation-powerset-classes
@@ -496,9 +502,6 @@ module congruence-relations-powersets where
 
  SetCon : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
  SetCon {𝓤} 𝑨 = Σ θ ꞉ ( SetRel ∣ 𝑨 ∣ ) , SetRel-IsEquivalence θ × compatible{𝓤}{𝓤} 𝑨 (SetRel→Rel θ)
-
- -- setcon : (A : Algebra 𝓤 𝑆) →  Pred (SetRel A) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
- -- setcon A = λ θ → SetRel-IsEquivalence θ × compatible A (𝓟→Rel θ)
 
  record SetCongruence {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇  where
   constructor mksetcon
@@ -508,12 +511,6 @@ module congruence-relations-powersets where
    IsEquiv : SetRel-IsEquivalence ⟪_⟫
 
  open SetCongruence
-
- -- Δ : funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → SetCongruence A
- -- Δ fe A = mksetcon 𝟎-rel
- --               ( 𝟎-compatible fe )
- --               ( 𝟎-IsEquivalence )
-
 
  _╱_ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆)   -- type ╱ with `\---` plus `C-f`
   →     SetCongruence 𝑨                 -- a number of times
@@ -525,17 +522,8 @@ module congruence-relations-powersets where
             → (((f ̂ 𝑨)(λ i₁ → ∣ ∥ args i₁ ∥ ∣)) / ⟪ θ ⟫) , (f ̂ 𝑨) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
            )
 
-
- -- Zero╱ : {𝓤 : Universe}{A : Algebra 𝓤 𝑆} → (θ : SetCongruence{𝓤} A) → Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓧 ⁺)
- -- Zero╱ θ = λ x x₁ → x ≡ x₁
-
  ╱-refl : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆){θ : SetCongruence 𝑨}{a a' : ∣ 𝑨 ∣}
   →   ⟦ a ⟧{⟪ θ ⟫} ≡ ⟦ a' ⟧{⟪ θ ⟫} → (a , a') ∈₀ ⟨ ⟪ θ ⟫ ⟩
  ╱-refl _ {θ} (refl _)  = SetRel-IsEquivalence.rfl (IsEquiv θ) _
-
- 
-
--- module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓡}{C ꞉ Pred A 𝓡} where
---  open relation-classes
 \end{code}
 

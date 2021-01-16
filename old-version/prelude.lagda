@@ -1,15 +1,19 @@
 ---
 layout: default
-title : ualib (The Agda Universal Algebra Library)
+title : prelude module (Agda Universal Algebra Library)
 date : 2021-01-12
+author: William DeMeo
 ---
 
-<!-- FILE: prelude.agda -->
-<!-- AUTHOR: William DeMeo and Siva Somayyajula -->
-<!-- DATE: 30 Jun 2020 -->
-<!-- REF: Some parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE). -->
-<!-- SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/  -->
-<!-- Throughout, MHE = Martin Hötzel Escardo. -->
+<!--
+FILE: prelude.lagda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATED: 12 Jan 2021
+REF: Parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
+SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
+     Below, MHE = Martin Hötzel Escardo.
+-->
 
 ## Agda Preliminaries
 
@@ -22,7 +26,7 @@ This chapter describes the [prelude module][] of the [agda-ualib][]. The source 
 
 ----------------------------------------------------
 
-Options and imports
+### Options and imports
 --------------------
 
 All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries (e.g., the [Agda Standard Library][] or, in our case, MHE's [Type Topology][] library). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
@@ -41,19 +45,23 @@ This specifies Agda `OPTIONS` that we will use throughout the library.
 
   * `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
 
+Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must remove the `--safe` flag and insert the `--allow-unsolved-metas` flag, so we could use the following in such case:
+
+```agda
+{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
+```
 
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module ualib where
+module prelude where
 
-open import Universes public
+open import universes public
 
 variable
   𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓞 𝓠 𝓡 𝓢 𝓧 : Universe
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ;
- refl to 𝓇ℯ𝒻𝓁) public
+open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 
 pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
@@ -69,17 +77,17 @@ open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext; is
  _≃_; logically-equivalent-subsingletons-are-equivalent; Π-is-subsingleton; Σ-is-subsingleton) public
 
 open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
- using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds) public
+ using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω) public
 
-open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding; is-embedding; pr₁-embedding;
- is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton) public
+open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding; is-embedding; pr₁-embedding; ∘-embedding;
+ is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
 
 open import MGS-Solved-Exercises using (to-subtype-≡) public
 
 open import MGS-Unique-Existence using (∃!; -∃!) public
 
-open import MGS-Subsingleton-Truncation hiding (refl; _∈_; _⊆_) public
-
+open import MGS-Subsingleton-Truncation using (_∙_; to-Σ-≡; equivs-are-embeddings;
+ invertibles-are-equivs; fiber; ⊆-refl-consequence; hfunext) public
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x

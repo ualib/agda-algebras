@@ -1,7 +1,11 @@
-FILE: basic.agda
-AUTHOR: William DeMeo and Siva Somayyajula
-DATE: 30 Jun 2020
-UPDATE: 3 Jan 2021
+---
+layout: default
+title : basic module (Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
+
+## Algebras in Agda (basic.lagda)
 
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -9,8 +13,12 @@ UPDATE: 3 Jan 2021
 module basic where
 
 open import prelude using (Universe; 𝓞; 𝓥; 𝓘; 𝓤; 𝓤₀; 𝓦; 𝓧; _⸲_; is-set;
- _⁺; _̇; _⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_; _∘_; _≡_; 𝑖𝑑; 𝓻ℯ𝓯𝓵) public
+ _⁺; _̇; _⊔_; _,_; Σ; -Σ; ∣_∣; ∥_∥; 𝟘; 𝟚; _×_; Epic; Pred; _∈_; _∘_; _≡_; 𝑖𝑑; refl) public
+\end{code}
 
+### Types for Operations and Signatures
+
+\begin{code}
 --The type of operations
 Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
 Op I A = (I → A) → A
@@ -33,6 +41,7 @@ Recall, the definition of the type `Σ`.
 ```
 
 ### Sets (or 0-groupoids)
+
 Before defining the type of algebras, we need to explain what it means to be a set in univalent mathematics.  A type is defined to be a **set** if there is at most one way for any two of its elements to be equal.
 
 MHE defines this notion (e.g., in the MGS-Embeddings module) as follows:
@@ -55,6 +64,7 @@ The first type for representing algebras that we define will put the domain of a
 ∞-algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A)
 Algebra = ∞-algebra
 \end{code}
+
 The type of the `Algebra 𝓤 𝑆` type is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type is used so often in our library that in some modules (where the signature universe levels 𝓞 𝓥 are already in context) we will define the following shorthand for the universe level:
 
 ```agda
@@ -63,8 +73,8 @@ OV = λ 𝓤 → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 ```
 
 so we can now simply type `OV 𝓤` in place of the more laborious `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.
-\begin{code}
 
+\begin{code}
 data monoid-op : 𝓤₀ ̇ where
  e : monoid-op
  · : monoid-op
@@ -72,7 +82,6 @@ data monoid-op : 𝓤₀ ̇ where
 monoid-sig : Signature _ _
 monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 \end{code}
-
 
 ### Algebras as record types
 
@@ -145,7 +154,13 @@ module class-product {𝓤 : Universe} {𝑆 : Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 �
                             λ{x → 𝒂 x i}
                     }
 
+\end{code}
 
+### Arbitrary products
+
+Sometimes we want to take the product of all algebras in an arbitrary class.  It's not immediately obvious how to do this, but we have found the following approach serves our purposes sufficiently well.
+
+\begin{code}
  -- ℑ serves as the index of the product
  ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (ov 𝓤) ̇
  ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
@@ -163,10 +178,10 @@ module class-product {𝓤 : Universe} {𝑆 : Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 �
  class-product'{𝓤} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣
 
  class-product'' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → algebra (ov 𝓤) 𝑆
- class-product'' {𝓤} 𝒦 = ⨅''{ov 𝓤}{𝓤}{ℑ 𝒦} ( 𝔄{𝓤}{𝒦} ) --  ( 𝔄{𝓤}{𝒦} )
-
+ class-product'' {𝓤} 𝒦 = ⨅''{ov 𝓤}{𝓤}{ℑ 𝒦} ( 𝔄{𝓤}{𝒦} )
 \end{code}
---If KA : 𝑨 ∈ 𝒦, then (𝑨 , KA) ∈ ℑ 𝒦, and the projection of the product onto 𝑨 is
+
+Notice that, if `p : 𝑨 ∈ 𝒦`, then we can think of the pair `(𝑨 , p) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄{𝓤}{𝒦} )` onto the `(𝑨 , p)`-th component.
 
 ### Universe level errors
 
@@ -218,10 +233,10 @@ lift-fun f = λ x → lift (f (lower x))
 We will also need to know that lift and lower compose to the identity.
 \begin{code}
 lower∼lift : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lower{𝓧}{𝓦} ∘ lift ≡ 𝑖𝑑 X
-lower∼lift = 𝓻ℯ𝓯𝓵
+lower∼lift = refl _
 
 lift∼lower : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓧}{𝓦} X)
-lift∼lower = 𝓻ℯ𝓯𝓵
+lift∼lower = refl _
 \end{code}
 
 Now, getting more "domain-specific," we show how to lift algebraic operation types and then, finally, algebra types themselves.

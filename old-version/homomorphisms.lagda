@@ -1,9 +1,22 @@
-\begin{code}
---File: homomorphisms.agda
---Author: William DeMeo and Siva Somayyajula
---Date: 30 Jun 2020
---UPDATED: 3 Jan 2021
+---
+layout: default
+title : homomorphisms module (of the Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
 
+<!--
+FILE: homomorphisms.agda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATE: 12 Jan 2021
+-->
+
+## Homomorphisms
+
+### Options, imports
+
+\begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
@@ -20,7 +33,11 @@ open import prelude using (_≃_; _∼_; Image_∋_; cong-app; EpicInv; EpicInvI
 
 OV : Universe → Universe
 OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+\end{code}
 
+### Basic definitions
+
+\begin{code}
 compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 
@@ -37,7 +54,13 @@ is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map �
 
 hom : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
 hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
+\end{code}
 
+### Kernel congruences
+
+The kernel of a homomorphism is a congruence and conversely for every congruence θ, there exists a homomorphism with kernel θ.
+
+\begin{code}
 open congruence-predicates
 open relation-predicate-classes
 open Congruence
@@ -118,10 +141,11 @@ module _ {𝓤 𝓦 : Universe}{pe : propext 𝓦} where
  kernel-quotient-projection 𝑨 {𝑩} h = canonical-projection 𝑨 (kercon 𝑨{𝑩} h)
 
  πᵏ = kernel-quotient-projection
+\end{code}
 
+### The First Isomorphism Theorem
 
- -- THE FIRST ISOMORPHISM THEOREM -------------------------------------------------------
-
+\begin{code}
  NoetherIsomorphism1 : (𝑨 : Algebra 𝓤 𝑆)                 -- domain is 𝑨
                        (𝑩 : Algebra 𝓦 𝑆)                -- codomain is 𝑩
                        (ϕ : hom 𝑨 𝑩)                     -- ϕ is an epimorphism from 𝑨 onto 𝑩
@@ -181,15 +205,21 @@ module _ {𝓤 𝓦 : Universe}{pe : propext 𝓦} where
    femb : is-embedding fmap
    femb = monic-into-set-is-embedding Bset fmap fmon
 
-------------------------------------------------------------------------------
+\end{code}
 
+#### miscellany
 
+\begin{code}
 𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
 id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
 id-is-hom = λ _ _ → refl _
+\end{code}
 
+### Homomorphism composition
+
+\begin{code}
 -- composition of homomorphisms 1
 HCompClosed : {𝓠 𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
@@ -239,8 +269,11 @@ trans-hom : {𝓧 𝓨 𝓩 : Universe}
        --------------------------------------------------------------------
  →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
 trans-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 f g = ∘-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 {f}{g}
+\end{code}
 
+### Homomorphism decomposition
 
+\begin{code}
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
@@ -295,10 +328,12 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      ii  = ap (λ - → g (hInv -)) (hhom f (hInv ∘ c))⁻¹
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
+\end{code}
 
+### The Second Isomorphism Theorem
 
+\begin{code}
 module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
- -- This is sometimes called the "second isomomorphism theorem."
  HomFactor : {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
              (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
   →          (KER-pred ∣ h ∣) ⊆ (KER-pred ∣ g ∣)  →  Epic ∣ h ∣
@@ -352,122 +387,11 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
---module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
--- kernel-quotient : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
---                   (h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺)  𝑆
+\end{code}
 
--- kernel-quotient {𝓤}{𝓦}{𝑨} h = 𝑨 ╱ kerh
---  where
---   kerh : Congruence{𝓤}{𝓦} 𝑨
---   kerh = mkcon (KER-rel ∣ h ∣) {!!} {!!}
+### Homomorphisms of products
 
-
- -- canonical-projection : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓤 𝑆}
- --                        (h : hom 𝑨 𝑩) →  {k : KER-pred ∣ h ∣}
- --                      ------------------------------------------------
- --  →                    Σ f ꞉ (hom 𝑪 𝑩) , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ g ∣) × Epic ∣ f ∣ × is-embedding ∣ f ∣
- -- NoetherIsomorphism1 : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓤 𝑆}
- --                        (h : hom 𝑨 𝑩) →  Epic ∣ h ∣ → {k : KER-pred ∣ h ∣}
- --                      ------------------------------------------------
- --  →                    Σ f ꞉ (hom 𝑪 𝑩) , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ g ∣) × Epic ∣ f ∣ × is-embedding ∣ f ∣
-   --
-   --    𝑨 ----- h --->> 𝑩
-   --     \            77
-   --      \          /
-   --       g        ∃f
-   --        \      /
-   --         \    /
-   --          V l/      ker g ⊆ ker h => ∃! f : 𝑪 → 𝑩
-   --           𝑪
-
- -- NoetherIsomorphism1 {𝑨}{𝑩}{𝑪} h g hE gE Kg=̇Kh =
- --  (f , fhom) , h≡fg , fE , femb
- --  where
- --   hInv : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
- --   hInv = λ b → (EpicInv ∣ h ∣ hE) b
- --   gInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
- --   gInv = λ c → (EpicInv ∣ g ∣ gE) c
-
- --   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
- --   f = λ c → ∣ h ∣ (gInv c)
-
- --   ξ : (x : ∣ 𝑨 ∣) → KER-pred ∣ g ∣ (x , gInv (∣ g ∣ x))
- --   ξ x =  ( cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE) ( ∣ g ∣ x ) )⁻¹
-
- --   Kh Kg : Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣ ) 𝓤
- --   Kh = KER-pred ∣ h ∣
- --   Kg = KER-pred ∣ g ∣
- --   Kg⊆Kh : Kg ⊆ Kh
- --   Kg⊆Kh = fst Kg=̇Kh
- --   Kh⊆Kg : Kh ⊆ Kg
- --   Kh⊆Kg = snd Kg=̇Kh
-
- --   h≡fg : ∣ h ∣ ≡ f ∘ ∣ g ∣
- --   h≡fg = gfe λ x → Kg⊆Kh (ξ x)
- --   f≡hgi : f ≡ ∣ h ∣ ∘ gInv
- --   f≡hgi = refl _
-
- --   ζ : (𝑓 : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ 𝑓) → c x ≡ (∣ g ∣ ∘ gInv)(c x)
-
- --   ζ _ c x = (cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE) (c x))⁻¹
-
- --   ι : (𝑓 : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)
- --    →  (λ x → c x) ≡ (λ x → ∣ g ∣ (gInv (c x)))
-
- --   ι 𝑓 c = ap (λ - → - ∘ c)(EpicInvIsRightInv gfe ∣ g ∣ gE)⁻¹
-
- --   useker : (𝑓 : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)
- --    → ∣ h ∣ (gInv (∣ g ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c)))) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c))
-
- --   useker 𝑓 c = Kg⊆Kh (cong-app (EpicInvIsRightInv gfe ∣ g ∣ gE)
- --                                   (∣ g ∣ ((𝑓 ̂ 𝑨)(gInv ∘ c))))
-
- --   hgi-is-monic : Monic (∣ h ∣ gInv)
- --   hgi-is-monic = ?
-
- --   ghi∼f : (λ x → ∣ g ∣ (hInv (f x))) ∼ id
- --   ghi∼f x = {!!}
- --   -- ∣ g ∣ (hInv (f x)) ≡⟨ ap (λ - → ∣ g ∣ (hInv (- x))) f≡hgi ⟩
- --   --          ∣ g ∣ (hInv (∣ h ∣ (gInv x))) ≡⟨ ap (λ - →  ∣ g ∣ ( - (gInv x))) (EpicInvIsRightInv gfe ∣ h ∣ hE) ⟩
- --   --          ∣ g ∣ (gInv x) ≡⟨ {!!} ⟩
- --   --           id x ∎
-
- --   f∼ghi : (λ x → f (∣ g ∣ (hInv x))) ∼ id
- --   f∼ghi x = f (∣ g ∣ (hInv x)) ≡⟨ (cong-app h≡fg (hInv x))⁻¹ ⟩
- --             (∣ h ∣ (hInv x)) ≡⟨ cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) x ⟩
- --             (𝑖𝑑 ∣ 𝑩 ∣) x  ∎
-
-
- --   fE : Epic f
- --   fE b = eq b (∣ g ∣ (hInv b)) η
- --    where
- --     η : b ≡ f (∣ g ∣ (hInv b))
- --     η = b                   ≡⟨ (cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) b)⁻¹ ⟩
- --         ∣ h ∣ (hInv b)       ≡⟨ cong-app h≡fg (hInv b) ⟩
- --         (f ∘ ∣ g ∣) (hInv b)  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- --         f (∣ g ∣ (hInv b)) ∎
-
- --   fhom : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → (f ((𝑓 ̂ 𝑪) 𝒄)) ≡ ((𝑓 ̂ 𝑩) (f ∘ 𝒄))
-
- --   fhom 𝑓 c =
- --    ∣ h ∣ (gInv ((𝑓 ̂ 𝑪) c))                 ≡⟨ i   ⟩
- --    ∣ h ∣ (gInv ((𝑓 ̂ 𝑪) (∣ g ∣ ∘ (gInv ∘ c)))) ≡⟨ ii  ⟩
- --    ∣ h ∣ (gInv (∣ g ∣ ((𝑓 ̂ 𝑨) (gInv ∘ c))))   ≡⟨ iii ⟩
- --    ∣ h ∣ ((𝑓 ̂ 𝑨)(gInv ∘ c))                 ≡⟨ iv  ⟩
- --    ((𝑓 ̂ 𝑩)(λ x → ∣ h ∣ (gInv (c x))))       ∎
- --     where
- --      i   = ap (∣ h ∣ ∘ gInv) (ap (𝑓 ̂ 𝑪) (ι 𝑓 c))
- --      ii  = ap (λ - → ∣ h ∣ (gInv -)) (∥ g ∥ 𝑓 (gInv ∘ c))⁻¹
- --      iii = useker 𝑓 c
- --      iv  = ∥ h ∥ 𝑓 (gInv ∘ c)
-
- --   finv : invertible f
- --   finv = (∣ g ∣ ∘ hInv) , ghi∼f , f∼ghi
- --   femb : is-embedding f
- --   femb = equivs-are-embeddings f (invertibles-are-equivs f finv)
-
-
--- homs of products
+\begin{code}
 ⨅-hom : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
        {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
  →     ((i : I) → hom (𝒜 i)(ℬ i))
@@ -481,8 +405,11 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
   ϕhom 𝑓 𝒂 = gfe (λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i))
+\end{code}
 
--- the projection hom
+### Projection homomorphisms
+
+\begin{code}
 ⨅-projection-hom : {𝓤 𝓘 : Universe}
                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
                    --------------------------------
@@ -498,11 +425,11 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
              ((𝑓 ̂ ⨅ 𝒜) 𝒂) i ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
              (𝑓 ̂ 𝒜 i) (λ x → 𝒂 x i) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
              (𝑓 ̂ 𝒜 i) (λ x → ϕi (𝒂 x)) ∎
+\end{code}
 
--- {!!} --  gfe (λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i))
+### Examples
 
-
---Examples ------------------------------------------------------------
+\begin{code}
 --Equalizers of functions
 𝑬 : {𝓠 𝓤 : Universe}{A : 𝓠 ̇ }{B : 𝓤 ̇} → (g h : A → B) → Pred A 𝓤
 𝑬 g h x = g x ≡ h x
@@ -523,14 +450,22 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
    (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
    (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
    ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)    ∎
-------------------------------------------------------------------------
+\end{code}
 
+### Isomorphism
 
---Isomorphism (extensional versions)
+We implement an extensional version of the notion of isomorphism between algebraic structures as follows.
+
+\begin{code}
 _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
---Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x
+\end{code}
 
+Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x.
+
+#### Isomorphism toolbox
+
+\begin{code}
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
 
  ≅-hom : (ϕ : 𝑨 ≅ 𝑩) → hom 𝑨 𝑩
@@ -559,8 +494,13 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
  ≅-map-is-embedding : (ϕ : 𝑨 ≅ 𝑩) → is-embedding (≅-map ϕ)
  ≅-map-is-embedding ϕ = equivs-are-embeddings (≅-map ϕ) (≅-map-is-equiv ϕ)
+\end{code}
 
--- An algebra is (extensionally) isomorphic to itself
+### Properties of isomorphism
+
+#### Isomorphism is obviously an equivalence relation.
+
+\begin{code}
 REFL-≅ ID≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
 ID≅ 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
 REFL-≅ = ID≅
@@ -629,8 +569,11 @@ Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
           ----------------
  →            𝑨 ≅ 𝑪
 Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
+\end{code}
 
+#### Invariance under lift
 
+\begin{code}
 open Lift
 
 --An algebra is isomorphic to its lift to a higher universe level
@@ -663,8 +606,11 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
  where
   lA≅A : (lift-alg 𝑨 𝓩) ≅ 𝑨
   lA≅A = sym-≅ lift-alg-≅
+\end{code}
 
+#### Invariance under product
 
+\begin{code}
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
  →   ((i : I) → (𝒜 i) ≅ (ℬ i))
@@ -709,9 +655,11 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
 
   γ : ⨅ 𝒜 ≅ ⨅ ℬ
   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+\end{code}
 
+A nearly identical proof goes through for isomorphisms of lifted products.
 
---A nearly identical proof goes through for isomorphisms of lifted products.
+\begin{code}
 lift-alg-⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 𝓩 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓘}{𝓩} I) → Algebra 𝓤 𝑆}
  →   ((i : I) → (𝒜 i) ≅ (ℬ (lift i)))
@@ -759,8 +707,11 @@ lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
 
   γ : lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
   γ = Trans-≅ (lift-alg (⨅ 𝒜) 𝓩) (⨅ ℬ) (sym-≅ lift-alg-≅) A≅B
+\end{code}
 
+### Embedding tools
 
+\begin{code}
 embedding-lift-nat : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
  →                   {I : 𝓘 ̇}{A : I → 𝓠 ̇}{B : I → 𝓤 ̇}
                      (h : Nat A B)
@@ -788,9 +739,13 @@ embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext �
  →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
 embedding-lift {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem =
  embedding-lift-nat' {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem
+\end{code}
 
+### Isomorphism, intensionally
 
---INTENSIONAL versions
+This is not used so much, and this section may be absent from future releases of the library.
+
+\begin{code}
 --Isomorphism
 _≅'_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑨 ≅' 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ≡ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ≡ ∣ 𝒾𝒹 𝑨 ∣)
@@ -812,21 +767,13 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 
   γ : is-embedding ∣ f ∣
   γ = equivs-are-embeddings ∣ f ∣ (invertibles-are-equivs ∣ f ∣ finv)
+\end{code}
 
+### Homomorphic images
 
+We descibe here what seems to us the most useful definition of the class of homomomrphic images of an algebra.
 
--- is-algebra-iso : {𝑨 𝑩 : Algebra 𝓤 𝑆} (f : hom 𝑨 𝑩) → 𝓤 ⁺ ̇
--- is-algebra-iso {𝑨} f = ker ∣ f ∣ ≡ 𝟎 {A = ∣ 𝑨 ∣}
-
--- AlgebraIsos : (𝑨 𝑩 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
--- AlgebraIsos 𝑨 𝑩 = Σ f ꞉ (hom 𝑨 𝑩) , is-algebra-iso {𝑨}{𝑩} f
-
--- _≈_ : Rel (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
--- 𝑨 ≈ 𝑩 = is-singleton (AlgebraIsos 𝑨 𝑩)
-
-
--- The following seems to be the most useful definition (for our
--- purposes) of the class of homomomrphic images of an algebra.
+\begin{code}
 HomImage : {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆}(𝑩 : Algebra 𝓤 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓠 ⊔ 𝓤 ̇
 HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
@@ -837,7 +784,11 @@ _is-hom-image-of_ : {𝓤 𝓦 : Universe} (𝑩 : Algebra 𝓦 𝑆)
   →                (𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 
 _is-hom-image-of_ {𝓤}{𝓦} 𝑩 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf{𝓤}{𝓦} 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
+\end{code}
 
+#### Homomorphic images of a class
+
+\begin{code}
 _is-hom-image-of-class_ : {𝓤 : Universe}
   →                       Algebra 𝓤 𝑆
   →                       Pred (Algebra 𝓤 𝑆) (𝓤 ⁺)
@@ -853,10 +804,11 @@ HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) ,
 
 all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
+\end{code}
 
+### Lifting tools
 
-
-
+\begin{code}
 open Lift
 
 lift-function : (𝓧 : Universe){𝓨 : Universe}
@@ -930,5 +882,4 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
 
   γ : lB is-hom-image-of lA
   γ = lCϕ , lC≅lB
-
 \end{code}

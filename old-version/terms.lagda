@@ -1,9 +1,22 @@
-\begin{code}
---FILE: terms.agda
---AUTHOR: William DeMeo and Siva Somayyajula
---DATE: 30 Jun 2020
---UPDATE: 4 Aug 2020
+---
+layout: default
+title : terms module (of the Agda Universal Algebra Library)
+date : 2021-01-12
+author: William DeMeo
+---
 
+<!--
+FILE: terms.agda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATE: 12 Jan 2021
+-->
+
+## Terms
+
+### Options, imports
+
+\begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import basic
@@ -16,76 +29,24 @@ module terms
 
 open import congruences {𝑆 = 𝑆}{gfe}
 open import homomorphisms {𝑆 = 𝑆}{gfe}
--- open import prelude using (is-singleton; fiber; is-center; ≡-×-intro)
+\end{code}
 
+### The inductive type of terms
+
+\begin{code}
 data Term {𝓧 : Universe}{X : 𝓧 ̇} : 𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇  where
   generator : X → Term{𝓧}{X}
   node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X}) → Term
 
 open Term
+\end{code}
 
+### The (absolutely free) term algebra
+
+\begin{code}
 --The term algebra 𝑻(X).
 𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺) 𝑆
 𝑻 {𝓧} X = Term{𝓧}{X} , node
-
--- module _ {𝓧 : Universe}(X : 𝓧 ̇) where
---  open Term renaming (generator to ℊ)
-
---  genlem : (x y : X) → ℊ x ≡ ℊ y → x ≡ y
---  genlem x y (refl _) = refl _
-
---  geninv : invertible{𝓤 = 𝓧}{X = X} ℊ
---  geninv = (T→X) , ({!!} , {!!})
---   where
---    T→X : Term → X
---    T→X (ℊ x) = x
---    T→X (node f args) = {!!}
-
- -- genlem' : (x y : X) → is-set X → (ℊ x ≡ ℊ y) ≃ (x ≡ y)
- -- genlem' x y Xset = (genlem x y) , γ -- (ℊ , Xset x y ((genlem x y) (ℊ)) ) , λ x₁ → {!!}
- --  where
- --   f : ℊ x ≡ ℊ y → x ≡ y
- --   f = genlem x y
-
- --   ζ : invertible f
- --   ζ = (ap ℊ) , ((λ x₁ → {!!}) , {!!})
- --   γ : is-equiv f
- --   γ = invertibles-are-equivs f ζ
- -- genlem' : is-equiv{X = X}{Y = Term{𝓧}{X}} ℊ
- -- genlem' (ℊ x) = {!γ!}
- --  where
- --   xf : fiber ℊ (ℊ x)
- --   xf = (x , ap ℊ (refl _))
- --   xfc : is-center (fiber ℊ (ℊ x)) xf
- --   xfc (y , gyx) = {!!}
- --   γ : is-singleton (fiber ℊ (ℊ x))
- --   γ =  xf , xfc
- -- genlem' (node f args) = {!!}
- -- genlem' (node f args) = {!!}
- -- is-equiv : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
- -- is-equiv f = (y : codomain f) → is-singleton (fiber f y)
- -- fiber : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓥 ̇
- -- fiber f y = Σ x ꞉ domain f , f x ≡ y
- -- is-singleton : 𝓤 ̇ → 𝓤 ̇
- -- is-singleton X = Σ c ꞉ X , is-center X c
- -- is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
- -- is-center X c = (x : X) → c ≡ x
-
-
--- is-set : 𝓤 ̇ → 𝓤 ̇
--- is-set X = (x y : X) → is-subsingleton (x ≡ y)
-
- -- Xset→Tset : is-set X → is-set (Term{𝓧}{X})
- -- Xset→Tset Xset (ℊ x) (ℊ y) p q = γ
- --  where
- --   p' q' : x ≡ y
- --   p' = genlem x y p
- --   q' = genlem x y q
- --   pq' : p' ≡ q'
- --   pq' = Xset x y p' q'
- --   γ : p ≡ q
- --   γ = {!pq'!}
- -- Xset→Tset Xset (node f args) y p q = {!!}
 
 term-op : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X} ) → Term
 term-op f args = node f args
@@ -118,7 +79,11 @@ free-unique fe 𝑨 g h p (node f args) =
    (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
    ∣ h ∣ (node f args)             ∎
    where γ = fe λ i → free-unique fe 𝑨 g h p (args i)
+\end{code}
 
+### Lifting and imaging devices
+
+\begin{code}
 lift-agrees-on-X : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator x)
@@ -147,6 +112,11 @@ lift-of-epi-is-epi {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η
+\end{code}
+
+Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. The following shows how to get your hands on such homomorphisms.
+
+\begin{code}
 
 𝑻hom-gen : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
  →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
@@ -160,15 +130,20 @@ lift-of-epi-is-epi {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
   h : hom (𝑻 X) 𝑪
   h = lift-hom 𝑪 h₀
+\end{code}
 
--------------------------------------------------------------------------------------------
--- Term Operations: interpretation of terms in algebras
+### Term operations: interpreting terms in algebras
+
+\begin{code}
 
 _̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
 ((node f args) ̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
--- A useful observation: intepretation of a term is the same as `free-lift` (modulo argument order)
+\end{code}
 
+Observe that intepretation of a term is the same as `free-lift` (modulo argument order).
+
+\begin{code}
 free-lift-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
                            (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
  →                         (p ̇ 𝑨) h ≡ free-lift 𝑨 h p
@@ -180,29 +155,31 @@ lift-hom-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
  →                        (p ̇ 𝑨) h ≡ ∣ lift-hom 𝑨 h ∣ p
 
 lift-hom-interpretation = free-lift-interpretation
--- lift-hom-interpretation 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interpretation 𝑨 h (args i))
+\end{code}
+
+<!--
+Want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?
+By definition, it depends on the form of 𝑝 as follows:
+* if 𝑝 = (generator x), then
+     (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
+* if 𝑝 = (node f args), then
+     (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+Let h : hom 𝑻 𝑨. Then by comm-hom-term,
+∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕
+* if p = (generator x), then
+   ∣ h ∣ p ≡ ∣ h ∣ (generator x)
+          ≡ λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
+          ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+   ∣ h ∣ p ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
+          ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+* if p = (node f args), then
+   ∣ h ∣ p ≡ ∣ h ∣  (p ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+-->
+
+We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣ such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact as follows.
 
 
--- Want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?
--- By definition, it depends on the form of 𝑝 as follows:
--- * if 𝑝 = (generator x), then
---      (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
--- * if 𝑝 = (node f args), then
---      (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
--- Let h : hom 𝑻 𝑨. Then by comm-hom-term,
--- ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕
--- * if p = (generator x), then
---    ∣ h ∣ p ≡ ∣ h ∣ (generator x)
---           ≡ λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
---           ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
---    ∣ h ∣ p ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
---           ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
--- * if p = (node f args), then
---    ∣ h ∣ p ≡ ∣ h ∣  (p ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
-
--- We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣
--- such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact in the following module:
-
+\begin{code}
 term-op-interp1 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term)
  →                node f args ≡ (f ̂ 𝑻 X) args
 
@@ -236,12 +213,6 @@ term-equality' : {𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}(p q : 
  →              p ≡ q → (∀ 𝒂 → (p ̇ 𝑨) 𝒂 ≡ (q ̇ 𝑨) 𝒂)
 term-equality' p q (refl _) _ = refl _
 
--- term-equality'' : {𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}{ϕ : hom (𝑻 X) 𝑨}
---                   (p q : ∣ 𝑻 X ∣)
---  →                ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q → ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
--- term-equality'' p q ϕpq = gfe λ 𝒕 → {!!}
-
-
 term-gen-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
  →               (p ̇ 𝑻 X) generator ≡ (∣ term-gen p ∣ ̇ 𝑻 X) generator
 term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
@@ -250,7 +221,11 @@ term-gen-agreement {𝓧}{X}(node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-
 term-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
  →            p ≡ (p ̇ 𝑻 X) generator
 term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
+\end{code}
 
+### Term interpretation in product algebras
+
+\begin{code}
 interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
  →            {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇}
               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
@@ -279,7 +254,12 @@ interp-prod2 gfe {X} (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
    (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
    (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i))) ∎
 
--- Homomorphisms commute (extensionally) with terms.
+\end{code}
+
+### Homomorphisms commute with terms
+
+We can prove this extensionally...
+\begin{code}
 comm-hom-term : {𝓤 𝓦 𝓧 : Universe} → funext 𝓥 𝓦
  →              {X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)
                 (h : hom 𝑨 𝑩) (t : Term) (a : X → ∣ 𝑨 ∣)
@@ -292,8 +272,11 @@ comm-hom-term fe 𝑨 𝑩 h (node f args) a =
  ∣ h ∣((f ̂ 𝑨) λ i₁ → (args i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a ) ⟩
  (f ̂ 𝑩)(λ i₁ →  ∣ h ∣((args i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (args i₁) a))⟩
  (f ̂ 𝑩)(λ r → (args r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
+\end{code}
 
--- Homomorphisms commute (intensionally) with terms.
+...or intensionally.
+
+\begin{code}
 comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
  →       (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) (t : Term)
          ------------------------------------------------------------------
@@ -317,10 +300,15 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
            ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
      ih = gfe λ a → gfe λ i → IH a i
 
+\end{code}
 
+### Compatibility of terms and congruences
+
+If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b)).
+
+\begin{code}
 open congruence-relations
 
--- Proof of 2. (If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b))
 compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
                   (𝑨 : Algebra 𝓤 𝑆)(t : Term{𝓤}{X})(θ : Con 𝑨)
                  ------------------------------------------------
@@ -337,4 +325,4 @@ compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
 
 compatible-term' 𝑨 (generator x) θ p = p x
 compatible-term' 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term' 𝑨 (args x) θ) p
-
+\end{code}

@@ -1,8 +1,13 @@
 #!/bin/bash
 
-mkdir -p public_html
-mkdir -p public_html/ualib
-mkdir -p public_html/previous-version
+# After building, run jekyll serve --watch --incremental
+
+main_dir=${HOME}/git/lab/ualib/ualib.gitlab.io
+main_html_dir=${main_dir}/html
+public_html_dir=${main_dir}/public_html
+src_dir=${main_dir}/src/lagda
+tt_dir=${HOME}/git/lab/ualib/TypeTopology/source
+md_dir=${main_dir}/jekyll/markdown
 
 echo "running generatehtml"
 ./generatehtml
@@ -11,19 +16,23 @@ echo "running illiterate"
 ./illiterate
 
 echo "running jekyll build"
+cd markdown
 jekyll build
+cp _site/* ${main_dir}/_site/
 
-echo "stashing previous version"
+cd ../
+
+echo "NOT stashing previous version"
 # rm -rf public_html/previous-version/*
 # mv public_html/ualib/* public-html/previous-version/
 
-echo "copying new html files from _site to public_html/ualib"
-cp -a  _site/index.html       public_html/ualib/
-cp -a  _site/ualib.html       public_html/ualib/
-cp -a  _site/Universes.html      public_html/ualib/
-cp -a  _site/Agda.Primitive.html public_html/ualib/
-cp -a  _site/css                 public_html/ualib/
-cp -a  _site/LICENSE             public_html/ualib/
+# echo "copying new html files from _site to public_html/ualib"
+# cp -a  _site/index.html       public_html/ualib/
+# cp -a  _site/ualib.html       public_html/ualib/
+# cp -a  _site/Universes.html      public_html/ualib/
+# cp -a  _site/Agda.Primitive.html public_html/ualib/
+# cp -a  _site/css                 public_html/ualib/
+# cp -a  _site/LICENSE             public_html/ualib/
 
 echo "running generatepdf"
 ./generatepdf

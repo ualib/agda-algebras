@@ -1,0 +1,21 @@
+#!/bin/bash
+
+ghc --make agdatomd.hs
+
+generatemd () {
+    cat UALib.lagda | ./agdatomd > UALib.md
+    cp UALib.md index.md
+    cat Universes.lagda    | ./agdatomd > Universes.md
+    }
+
+generatemd
+
+inotifywait -e close_write,moved_to,create -m . |
+while read -r directory events filename; do
+    if [ "$filename" = "UALib.lagda" ] ||
+       [ "$filename" = "universes.lagda" ] ; then
+      date
+      generatemd
+      echo "done"
+  fi
+done
