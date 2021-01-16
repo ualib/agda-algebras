@@ -74,5 +74,8 @@ Some readers familiar with Birkhoff's theorem might worry that we haven't acheiv
 
 ----------------------------
 
+[← UALib.Birkhoff.Lemmata](UALib.Birkhoff.Lemmata.html)
+<span style="float:right;">[UALib.Birkhoff ↑)](UALib.Birkhoff.html)</span>
+
 {% include UALib.Links.md %}
 

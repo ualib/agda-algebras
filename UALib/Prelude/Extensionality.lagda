@@ -15,10 +15,6 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
      Below, MHE = Martin Hötzel Escardo.
 -->
 
-[← UALib.Prelude.Inverses](UALib.Prelude.Inverses.html)
-<span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>
-
---------------------------------------------
 
 ### <a id="extensionality">Extensionality</a>
 

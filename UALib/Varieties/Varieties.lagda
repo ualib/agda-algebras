@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Varieties ↑](UALib.Varieties.html)
-
 ### <a id="inductively-defined-closure-operators">Inductively Defined Closure Operators</a>
 
 This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
@@ -598,8 +596,10 @@ module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 �
 
 \end{code}
 
-
 ----------------------------
+
+[← UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html)
+<span style="float:right;">[UALib.Varieties.Preservation →](UALib.Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
 

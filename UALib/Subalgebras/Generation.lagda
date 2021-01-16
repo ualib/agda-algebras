@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="subuniverse-generation">Subuniverse generation</a>
 
 This section presents the [UALib.Subalgebras.Generation][] module of the [Agda Universal Algebra Library][].
@@ -57,3 +55,10 @@ sgIsSmallest 𝑨 Y YIsSub X⊆Y (app f {a} ima⊆SgX) = app∈Y
   app∈Y : (f ̂ 𝑨) a ∈ Y          --           of f to said args.
   app∈Y = YIsSub f a ima⊆Y
 \end{code}
+
+---------------------------------
+
+[← UALib.Subalgebras.Subuniverses](UALib.Subalgebras.Subuniverses.html)
+<span style="float:right;">[UALib.Subalgebras.Properties →](UALib.Subalgebras.Properties.html)</span>
+
+{% include UALib.Links.md %}

@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="subuniverse-lemmas">Subuniverse Lemmas</a>
 
 This section presents the [UALib.Subalgebras.Properties][]  module of the [Agda Universal Algebra Library][].
@@ -102,3 +100,9 @@ SgY⊆TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y�
 
 \end{code}
 
+---------------------------------
+
+[← UALib.Subalgebras.Generation](UALib.Subalgebras.Generation.html)
+<span style="float:right;">[UALib.Subalgebras.Homomorphisms →](UALib.Subalgebras.Homomorphisms.html)</span>
+
+{% include UALib.Links.md %}

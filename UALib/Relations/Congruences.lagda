@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Relations ↑](UALib.Relations.html)
-
 ### <a id="congruence-relation-types">Congruence Relation Types</a>
 
 This section presents the [UALib.Relations.Congruences][] module of the [Agda Universal Algebra Library][].
@@ -65,5 +63,8 @@ Zero╱ θ = λ x x₁ → x ≡ x₁
 
 
 --------------------------------------
+
+[← UALib.Relations.Quotients](UALib.Relations.Quotients.html)
+<span style="float:right;">[UALib.Homomorphisms →](UALib.Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

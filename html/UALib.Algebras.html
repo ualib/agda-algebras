@@ -8,65 +8,70 @@
       <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
   </head>
-      <body>
-          <style>
+  <body>
+      <style>
 
 
-           body, html{
-               margin: 60px auto;
-               width: 70%;
-               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
-               font-size: 1.2em;
-               line-height: 1.3em;
-           }
-              a {
-              text-decoration: none;
-              color: #5F38AD;
+       body, html{
+           margin: 60px auto;
+           width: 70%;
+           /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+           font-size: 1.2em;
+           line-height: 1.1em;
+       }
+       a {
+           text-decoration: none;
+           color: #5F38AD;
 
-              }
-              a:hover {
-              text-decoration: underline;
-              }
+       }
+       a:hover {
+           text-decoration: underline;
+       }
 
-              h1 {
-              font-size: 4em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
+       h1 {
+           font-size: 3em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
 
-              h2 {
-              font-size: 3em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h3 {
-              font-size: 2.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h4 {
-              font-size: 1.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              } */
-	        </style>
-          <div class="container">
-              <p><a href="UALib.html">Agda UALib ↑</a></p>
+       h2 {
+           font-size: 2.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h3 {
+           font-size: 2.0em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h4 {
+           font-size: 1.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+	    </style>
 
-<hr />
+      <div class="container">
+          <p><a href="UALib.html">Agda UALib ↑</a></p>
 
-<h2 id="algebras"><a id="algebras">Algebras</a></h2>
+          <hr />
+
+          <h2 id="algebras"><a id="algebras">Algebras</a></h2>
 
 <p>This chapter presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda">UALib.Algebras module</a> of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
 
 <pre class="Agda">
-<a id="346" class="Symbol">{-#</a> <a id="350" class="Keyword">OPTIONS</a> <a id="358" class="Pragma">--without-K</a> <a id="370" class="Pragma">--exact-split</a> <a id="384" class="Pragma">--safe</a> <a id="391" class="Symbol">#-}</a>
+<a id="278" class="Symbol">{-#</a> <a id="282" class="Keyword">OPTIONS</a> <a id="290" class="Pragma">--without-K</a> <a id="302" class="Pragma">--exact-split</a> <a id="316" class="Pragma">--safe</a> <a id="323" class="Symbol">#-}</a>
 </pre>
 
 <pre class="Agda">
 
-<a id="421" class="Keyword">module</a> <a id="428" href="UALib.Algebras.html" class="Module">UALib.Algebras</a> <a id="443" class="Keyword">where</a>
+<a id="353" class="Keyword">module</a> <a id="360" href="UALib.Algebras.html" class="Module">UALib.Algebras</a> <a id="375" class="Keyword">where</a>
 
-<a id="450" class="Keyword">open</a> <a id="455" class="Keyword">import</a> <a id="462" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="488" class="Keyword">public</a>
-<a id="495" class="Keyword">open</a> <a id="500" class="Keyword">import</a> <a id="507" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="531" class="Keyword">public</a>
-<a id="538" class="Keyword">open</a> <a id="543" class="Keyword">import</a> <a id="550" href="UALib.Algebras.Products.html" class="Module">UALib.Algebras.Products</a> <a id="574" class="Keyword">public</a>
-<a id="581" class="Keyword">open</a> <a id="586" class="Keyword">import</a> <a id="593" href="UALib.Algebras.Lifts.html" class="Module">UALib.Algebras.Lifts</a> <a id="614" class="Keyword">public</a>
+<a id="382" class="Keyword">open</a> <a id="387" class="Keyword">import</a> <a id="394" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="420" class="Keyword">public</a>
+<a id="427" class="Keyword">open</a> <a id="432" class="Keyword">import</a> <a id="439" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="463" class="Keyword">public</a>
+<a id="470" class="Keyword">open</a> <a id="475" class="Keyword">import</a> <a id="482" href="UALib.Algebras.Products.html" class="Module">UALib.Algebras.Products</a> <a id="506" class="Keyword">public</a>
+<a id="513" class="Keyword">open</a> <a id="518" class="Keyword">import</a> <a id="525" href="UALib.Algebras.Lifts.html" class="Module">UALib.Algebras.Lifts</a> <a id="546" class="Keyword">public</a>
 
 </pre>
 

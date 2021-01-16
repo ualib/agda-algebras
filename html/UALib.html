@@ -8,46 +8,55 @@
       <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
   </head>
-      <body>
-          <style>
+  <body>
+      <style>
 
 
-           body, html{
-               margin: 60px auto;
-               width: 70%;
-               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
-               font-size: 1.2em;
-               line-height: 1.3em;
-           }
-              a {
-              text-decoration: none;
-              color: #5F38AD;
+       body, html{
+           margin: 60px auto;
+           width: 70%;
+           /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+           font-size: 1.2em;
+           line-height: 1.1em;
+       }
+       a {
+           text-decoration: none;
+           color: #5F38AD;
 
-              }
-              a:hover {
-              text-decoration: underline;
-              }
+       }
+       a:hover {
+           text-decoration: underline;
+       }
 
-              h1 {
-              font-size: 4em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
+       h1 {
+           font-size: 3em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
 
-              h2 {
-              font-size: 3em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h3 {
-              font-size: 2.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h4 {
-              font-size: 1.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              } */
-	        </style>
-          <div class="container">
-              <!--
+       h2 {
+           font-size: 2.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h3 {
+           font-size: 2.0em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h4 {
+           font-size: 1.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+	    </style>
+
+      <div class="container">
+          <p><a href="UALib.html">Agda UALib ↑</a></p>
+
+          <hr />
+
+          <!--
 
 FILE      : UALib.lagda
 AUTHOR    : William DeMeo  <williamdemeo@gmail.com>
@@ -82,12 +91,12 @@ of citation.
 
 <hr />
 
-<p>14 Jan 2021 (version of 16 Jan 2021, 18:13)</p>
+<p>(version 2.01 of 16 Jan 2021, 20:16)</p>
 
-<p><strong>Author</strong>. [William DeMeo][]<br />
-<em>Affiliation</em>. [Department of Algebra][], [Charles University in Prague][]</p>
+<p><strong>Author</strong>. <a href="https://williamdemeo.gitlab.io/">William DeMeo</a><br />
+<em>Affiliation</em>. <a href="https://www.mff.cuni.cz/en/ka">Department of Algebra</a>, <a href="https://cuni.cz/UKEN-1.html">Charles University in Prague</a></p>
 
-<p><strong>Abstract</strong>. The [Agda Universal Algebra Library][] is a library of types and programs (or theorems and proofs) that formalizes, in Martin-Löf type theory, the foundations of universal algebra using the [Agda][] proof assistant language.</p>
+<p><strong>Abstract</strong>. The <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a> is a library of types and programs (or theorems and proofs) that formalizes, in Martin-Löf type theory, the foundations of universal algebra using the <a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a> proof assistant language.</p>
 
 <p>The goal is a library that is usable by research mathematicians who wish to formally verify their work by implementing and type-checking existing (“known”) results, and to aid in the discovery of new mathematics.</p>
 
@@ -101,19 +110,19 @@ of citation.
 
 <pre class="Agda">
 
-<a id="2529" class="Symbol">{-#</a> <a id="2533" class="Keyword">OPTIONS</a> <a id="2541" class="Pragma">--without-K</a> <a id="2553" class="Pragma">--exact-split</a> <a id="2567" class="Pragma">--safe</a> <a id="2574" class="Symbol">#-}</a>
+<a id="2522" class="Symbol">{-#</a> <a id="2526" class="Keyword">OPTIONS</a> <a id="2534" class="Pragma">--without-K</a> <a id="2546" class="Pragma">--exact-split</a> <a id="2560" class="Pragma">--safe</a> <a id="2567" class="Symbol">#-}</a>
 
-<a id="2579" class="Keyword">module</a> <a id="2586" href="UALib.html" class="Module">UALib</a> <a id="2592" class="Keyword">where</a>
+<a id="2572" class="Keyword">module</a> <a id="2579" href="UALib.html" class="Module">UALib</a> <a id="2585" class="Keyword">where</a>
 
-<a id="2599" class="Keyword">open</a> <a id="2604" class="Keyword">import</a> <a id="2611" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="2625" class="Keyword">open</a> <a id="2630" class="Keyword">import</a> <a id="2637" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="2651" class="Keyword">open</a> <a id="2656" class="Keyword">import</a> <a id="2663" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="2678" class="Keyword">open</a> <a id="2683" class="Keyword">import</a> <a id="2690" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="2706" class="Keyword">open</a> <a id="2711" class="Keyword">import</a> <a id="2718" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="2738" class="Keyword">open</a> <a id="2743" class="Keyword">import</a> <a id="2750" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="2762" class="Keyword">open</a> <a id="2767" class="Keyword">import</a> <a id="2774" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="2792" class="Keyword">open</a> <a id="2797" class="Keyword">import</a> <a id="2804" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="2820" class="Keyword">open</a> <a id="2825" class="Keyword">import</a> <a id="2832" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="2592" class="Keyword">open</a> <a id="2597" class="Keyword">import</a> <a id="2604" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="2618" class="Keyword">open</a> <a id="2623" class="Keyword">import</a> <a id="2630" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="2644" class="Keyword">open</a> <a id="2649" class="Keyword">import</a> <a id="2656" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="2671" class="Keyword">open</a> <a id="2676" class="Keyword">import</a> <a id="2683" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="2699" class="Keyword">open</a> <a id="2704" class="Keyword">import</a> <a id="2711" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="2731" class="Keyword">open</a> <a id="2736" class="Keyword">import</a> <a id="2743" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="2755" class="Keyword">open</a> <a id="2760" class="Keyword">import</a> <a id="2767" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="2785" class="Keyword">open</a> <a id="2790" class="Keyword">import</a> <a id="2797" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="2813" class="Keyword">open</a> <a id="2818" class="Keyword">import</a> <a id="2825" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 
@@ -197,17 +206,55 @@ of citation.
 
 <hr />
 
-<p>Suggest improvements by submitting a [new issue][] or [merge request][] to <a href="https://gitlab.com/ualib/ualib.gitlab.io/">gitlab.com/ualib/ualib.gitlab.io/</a>.</p>
+<p>Suggest improvements by submitting a <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/issues/new?issue%5Bassignee_id%5D=&amp;issue%5Bmilestone_id%5D=">new issue</a> or <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/merge_requests/new">merge request</a> to <a href="https://gitlab.com/ualib/ualib.gitlab.io/">gitlab.com/ualib/ualib.gitlab.io/</a>.</p>
 
 <p><sup>1</sup> Please <a href="mailto:williamdemeo@gmail.com">notify me</a> if you find any evidence that refutes this claim.</p>
-
-<div class="container">
-<span style="float:right;"><i>Updated 16 Jan 2021, 18:13</i></span>
-</div>
 
 <hr />
 
 <p><span style="float:right;"><a href="UALib.Preface.html">Next Module (UALib.Preface) →</a></span></p>
+
+<p>
+
+<div class="container">
+<span style="float:right;"><i>Updated 16 Jan 2021, 20:16</i></span>
+</div>
+</p>
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
 
 <!--
 - [Prelude](UALib.Prelude.html)

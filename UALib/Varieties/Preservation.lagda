@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Varieties ↑](UALib.Varieties.html)
-
 ### <a id="Equation preservation">Equation preservation</a>
 
 This section presents the [UALib.Varieties.Preservation][] module of the [Agda Universal Algebra Library][].
@@ -367,6 +365,9 @@ class-identities{𝓤}{𝓧}{X}{𝒦} p q = ⇒ , ⇐
 \end{code}
 
 ----------------------------
+
+[← UALib.Varieties.Varieties](UALib.Varieties.Varieties.html)
+<span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
 

@@ -13,10 +13,6 @@ UPDATED   : 14 Jan 2021
 COPYRIGHT : (c) 2021 William DeMeo
 -->
 
-[Agda UALib ↑](UALib.html)
-
-------------------------------------------------------------
-
 ## <a id="preface">Preface</a>
 
 \begin{code}[hide]

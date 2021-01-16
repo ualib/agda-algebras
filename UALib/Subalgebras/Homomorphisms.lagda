@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="homomorphisms-and-subuniverses">Homomorphisms and subuniverses</a>
 
 This section presents the [UALib.Subalgebras.Homomorphisms][]  module of the [Agda Universal Algebra Library][].
@@ -62,6 +60,7 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
 A homomorphism is uniquely determined by its action on generators.
 
 \begin{code}
+
 HomUnique : {𝓤 𝓦 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
@@ -76,5 +75,12 @@ HomUnique {𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂�
   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
  where induction-hypothesis = λ x → HomUnique{𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+
 \end{code}
 
+---------------------------------
+
+[← UALib.Subalgebras.Properties](UALib.Subalgebras.Properties.html)
+<span style="float:right;">[UALib.Subalgebras.Subalgebras →](UALib.Subalgebras.Subalgebras.html)</span>
+
+{% include UALib.Links.md %}

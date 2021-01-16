@@ -5,10 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[Agda UALib ↑](UALib.html)
-
---------------------------------------
-
 ## <a id="subalgebras">Subalgebras</a>
 
 This chapter presents the [UALib.Subalgebras][]  module of the [Agda Universal Algebra Library][].
@@ -34,6 +30,5 @@ open import UALib.Subalgebras.WWMD
 
 [← UALib.Terms](UALib.Terms.html)
 <span style="float:right;">[UALib.Varieties →](UALib.Varieties.html)</span>
-
 
 {% include UALib.Links.md %}

@@ -8,80 +8,81 @@
       <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
   </head>
-      <body>
-          <style>
+  <body>
+      <style>
 
 
-           body, html{
-               margin: 60px auto;
-               width: 70%;
-               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
-               font-size: 1.2em;
-               line-height: 1.3em;
-           }
-              a {
-              text-decoration: none;
-              color: #5F38AD;
+       body, html{
+           margin: 60px auto;
+           width: 70%;
+           /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+           font-size: 1.2em;
+           line-height: 1.1em;
+       }
+       a {
+           text-decoration: none;
+           color: #5F38AD;
 
-              }
-              a:hover {
-              text-decoration: underline;
-              }
+       }
+       a:hover {
+           text-decoration: underline;
+       }
 
-              h1 {
-              font-size: 4em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
+       h1 {
+           font-size: 3em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
 
-              h2 {
-              font-size: 3em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h3 {
-              font-size: 2.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h4 {
-              font-size: 1.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              } */
-	        </style>
-          <div class="container">
-              <hr />
+       h2 {
+           font-size: 2.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h3 {
+           font-size: 2.0em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h4 {
+           font-size: 1.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+	    </style>
 
-<h2 id="the-agda-universal-algebra-library"><a href="UALib.html">The Agda Universal Algebra Library</a></h2>
+      <div class="container">
+          <p><a href="UALib.html">Agda UALib ↑</a></p>
 
-<hr />
+          <hr />
 
-<p><a href="UALib.Algebras.html">UALib.Algebras ↑</a></p>
-
-<h3 id="operation-and-signature-types"><a id="operation-and-signature-types">Operation and Signature Types</a></h3>
+          <h3 id="operation-and-signature-types"><a id="operation-and-signature-types">Operation and Signature Types</a></h3>
 
 <p>This section presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda">UALib.Algebras.Signatures</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
 
 <pre class="Agda">
-<a id="553" class="Symbol">{-#</a> <a id="557" class="Keyword">OPTIONS</a> <a id="565" class="Pragma">--without-K</a> <a id="577" class="Pragma">--exact-split</a> <a id="591" class="Pragma">--safe</a> <a id="598" class="Symbol">#-}</a>
+<a id="337" class="Symbol">{-#</a> <a id="341" class="Keyword">OPTIONS</a> <a id="349" class="Pragma">--without-K</a> <a id="361" class="Pragma">--exact-split</a> <a id="375" class="Pragma">--safe</a> <a id="382" class="Symbol">#-}</a>
 
-<a id="603" class="Keyword">module</a> <a id="610" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="636" class="Keyword">where</a>
+<a id="387" class="Keyword">module</a> <a id="394" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="420" class="Keyword">where</a>
 
-<a id="643" class="Keyword">open</a> <a id="648" class="Keyword">import</a> <a id="655" href="UALib.Prelude.Extensionality.html" class="Module">UALib.Prelude.Extensionality</a> <a id="684" class="Keyword">public</a>
+<a id="427" class="Keyword">open</a> <a id="432" class="Keyword">import</a> <a id="439" href="UALib.Prelude.Extensionality.html" class="Module">UALib.Prelude.Extensionality</a> <a id="468" class="Keyword">public</a>
 
-<a id="692" class="Keyword">module</a> <a id="699" href="UALib.Algebras.Signatures.html#699" class="Module">_</a> <a id="701" class="Symbol">{</a><a id="702" href="UALib.Algebras.Signatures.html#702" class="Bound">𝓤</a> <a id="704" href="UALib.Algebras.Signatures.html#704" class="Bound">𝓥</a> <a id="706" class="Symbol">:</a> <a id="708" href="universes.html#551" class="Postulate">Universe</a><a id="716" class="Symbol">}</a> <a id="718" class="Keyword">where</a>
- <a id="725" class="Comment">--The type of operations</a>
- <a id="751" href="UALib.Algebras.Signatures.html#751" class="Function">Op</a> <a id="754" class="Symbol">:</a> <a id="756" href="UALib.Algebras.Signatures.html#704" class="Bound">𝓥</a> <a id="758" href="universes.html#758" class="Function Operator">̇</a> <a id="760" class="Symbol">→</a> <a id="762" href="UALib.Algebras.Signatures.html#702" class="Bound">𝓤</a> <a id="764" href="universes.html#758" class="Function Operator">̇</a> <a id="766" class="Symbol">→</a> <a id="768" href="UALib.Algebras.Signatures.html#702" class="Bound">𝓤</a> <a id="770" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="772" href="UALib.Algebras.Signatures.html#704" class="Bound">𝓥</a> <a id="774" href="universes.html#758" class="Function Operator">̇</a>
- <a id="777" href="UALib.Algebras.Signatures.html#751" class="Function">Op</a> <a id="780" href="UALib.Algebras.Signatures.html#780" class="Bound">I</a> <a id="782" href="UALib.Algebras.Signatures.html#782" class="Bound">A</a> <a id="784" class="Symbol">=</a> <a id="786" class="Symbol">(</a><a id="787" href="UALib.Algebras.Signatures.html#780" class="Bound">I</a> <a id="789" class="Symbol">→</a> <a id="791" href="UALib.Algebras.Signatures.html#782" class="Bound">A</a><a id="792" class="Symbol">)</a> <a id="794" class="Symbol">→</a> <a id="796" href="UALib.Algebras.Signatures.html#782" class="Bound">A</a>
+<a id="476" class="Keyword">module</a> <a id="483" href="UALib.Algebras.Signatures.html#483" class="Module">_</a> <a id="485" class="Symbol">{</a><a id="486" href="UALib.Algebras.Signatures.html#486" class="Bound">𝓤</a> <a id="488" href="UALib.Algebras.Signatures.html#488" class="Bound">𝓥</a> <a id="490" class="Symbol">:</a> <a id="492" href="universes.html#551" class="Postulate">Universe</a><a id="500" class="Symbol">}</a> <a id="502" class="Keyword">where</a>
+ <a id="509" class="Comment">--The type of operations</a>
+ <a id="535" href="UALib.Algebras.Signatures.html#535" class="Function">Op</a> <a id="538" class="Symbol">:</a> <a id="540" href="UALib.Algebras.Signatures.html#488" class="Bound">𝓥</a> <a id="542" href="universes.html#758" class="Function Operator">̇</a> <a id="544" class="Symbol">→</a> <a id="546" href="UALib.Algebras.Signatures.html#486" class="Bound">𝓤</a> <a id="548" href="universes.html#758" class="Function Operator">̇</a> <a id="550" class="Symbol">→</a> <a id="552" href="UALib.Algebras.Signatures.html#486" class="Bound">𝓤</a> <a id="554" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="556" href="UALib.Algebras.Signatures.html#488" class="Bound">𝓥</a> <a id="558" href="universes.html#758" class="Function Operator">̇</a>
+ <a id="561" href="UALib.Algebras.Signatures.html#535" class="Function">Op</a> <a id="564" href="UALib.Algebras.Signatures.html#564" class="Bound">I</a> <a id="566" href="UALib.Algebras.Signatures.html#566" class="Bound">A</a> <a id="568" class="Symbol">=</a> <a id="570" class="Symbol">(</a><a id="571" href="UALib.Algebras.Signatures.html#564" class="Bound">I</a> <a id="573" class="Symbol">→</a> <a id="575" href="UALib.Algebras.Signatures.html#566" class="Bound">A</a><a id="576" class="Symbol">)</a> <a id="578" class="Symbol">→</a> <a id="580" href="UALib.Algebras.Signatures.html#566" class="Bound">A</a>
 
- <a id="800" class="Comment">--Example. the projections</a>
- <a id="828" href="UALib.Algebras.Signatures.html#828" class="Function">π</a> <a id="830" class="Symbol">:</a> <a id="832" class="Symbol">{</a><a id="833" href="UALib.Algebras.Signatures.html#833" class="Bound">I</a> <a id="835" class="Symbol">:</a> <a id="837" href="UALib.Algebras.Signatures.html#704" class="Bound">𝓥</a> <a id="839" href="universes.html#758" class="Function Operator">̇</a> <a id="841" class="Symbol">}</a> <a id="843" class="Symbol">{</a><a id="844" href="UALib.Algebras.Signatures.html#844" class="Bound">A</a> <a id="846" class="Symbol">:</a> <a id="848" href="UALib.Algebras.Signatures.html#702" class="Bound">𝓤</a> <a id="850" href="universes.html#758" class="Function Operator">̇</a> <a id="852" class="Symbol">}</a> <a id="854" class="Symbol">→</a> <a id="856" href="UALib.Algebras.Signatures.html#833" class="Bound">I</a> <a id="858" class="Symbol">→</a> <a id="860" href="UALib.Algebras.Signatures.html#751" class="Function">Op</a> <a id="863" href="UALib.Algebras.Signatures.html#833" class="Bound">I</a> <a id="865" href="UALib.Algebras.Signatures.html#844" class="Bound">A</a>
- <a id="868" href="UALib.Algebras.Signatures.html#828" class="Function">π</a> <a id="870" href="UALib.Algebras.Signatures.html#870" class="Bound">i</a> <a id="872" href="UALib.Algebras.Signatures.html#872" class="Bound">x</a> <a id="874" class="Symbol">=</a> <a id="876" href="UALib.Algebras.Signatures.html#872" class="Bound">x</a> <a id="878" href="UALib.Algebras.Signatures.html#870" class="Bound">i</a>
+ <a id="584" class="Comment">--Example. the projections</a>
+ <a id="612" href="UALib.Algebras.Signatures.html#612" class="Function">π</a> <a id="614" class="Symbol">:</a> <a id="616" class="Symbol">{</a><a id="617" href="UALib.Algebras.Signatures.html#617" class="Bound">I</a> <a id="619" class="Symbol">:</a> <a id="621" href="UALib.Algebras.Signatures.html#488" class="Bound">𝓥</a> <a id="623" href="universes.html#758" class="Function Operator">̇</a> <a id="625" class="Symbol">}</a> <a id="627" class="Symbol">{</a><a id="628" href="UALib.Algebras.Signatures.html#628" class="Bound">A</a> <a id="630" class="Symbol">:</a> <a id="632" href="UALib.Algebras.Signatures.html#486" class="Bound">𝓤</a> <a id="634" href="universes.html#758" class="Function Operator">̇</a> <a id="636" class="Symbol">}</a> <a id="638" class="Symbol">→</a> <a id="640" href="UALib.Algebras.Signatures.html#617" class="Bound">I</a> <a id="642" class="Symbol">→</a> <a id="644" href="UALib.Algebras.Signatures.html#535" class="Function">Op</a> <a id="647" href="UALib.Algebras.Signatures.html#617" class="Bound">I</a> <a id="649" href="UALib.Algebras.Signatures.html#628" class="Bound">A</a>
+ <a id="652" href="UALib.Algebras.Signatures.html#612" class="Function">π</a> <a id="654" href="UALib.Algebras.Signatures.html#654" class="Bound">i</a> <a id="656" href="UALib.Algebras.Signatures.html#656" class="Bound">x</a> <a id="658" class="Symbol">=</a> <a id="660" href="UALib.Algebras.Signatures.html#656" class="Bound">x</a> <a id="662" href="UALib.Algebras.Signatures.html#654" class="Bound">i</a>
 
-<a id="881" class="Comment">-- module _</a>
-<a id="893" class="Comment">--  {𝓞  -- the universe in which operation symbols live</a>
-<a id="949" class="Comment">--   𝓥 -- the universe in which arities live</a>
-<a id="994" class="Comment">--   : Universe} where</a>
+<a id="665" class="Comment">-- module _</a>
+<a id="677" class="Comment">--  {𝓞  -- the universe in which operation symbols live</a>
+<a id="733" class="Comment">--   𝓥 -- the universe in which arities live</a>
+<a id="778" class="Comment">--   : Universe} where</a>
 
-<a id="Signature"></a><a id="1018" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="1028" class="Symbol">:</a> <a id="1030" class="Symbol">(</a><a id="1031" href="UALib.Algebras.Signatures.html#1031" class="Bound">𝓞</a> <a id="1033" href="UALib.Algebras.Signatures.html#1033" class="Bound">𝓥</a> <a id="1035" class="Symbol">:</a> <a id="1037" href="universes.html#551" class="Postulate">Universe</a><a id="1045" class="Symbol">)</a> <a id="1047" class="Symbol">→</a> <a id="1049" class="Symbol">(</a><a id="1050" href="UALib.Algebras.Signatures.html#1031" class="Bound">𝓞</a> <a id="1052" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="1054" href="UALib.Algebras.Signatures.html#1033" class="Bound">𝓥</a><a id="1055" class="Symbol">)</a> <a id="1057" href="universes.html#527" class="Primitive Operator">⁺</a> <a id="1059" href="universes.html#758" class="Function Operator">̇</a>
-<a id="1061" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="1071" href="UALib.Algebras.Signatures.html#1071" class="Bound">𝓞</a> <a id="1073" href="UALib.Algebras.Signatures.html#1073" class="Bound">𝓥</a> <a id="1075" class="Symbol">=</a> <a id="1077" href="MGS-MLTT.html#3074" class="Function">Σ</a> <a id="1079" href="UALib.Algebras.Signatures.html#1079" class="Bound">F</a> <a id="1081" href="MGS-MLTT.html#3074" class="Function">꞉</a> <a id="1083" href="UALib.Algebras.Signatures.html#1071" class="Bound">𝓞</a> <a id="1085" href="universes.html#758" class="Function Operator">̇</a> <a id="1087" href="MGS-MLTT.html#3074" class="Function">,</a> <a id="1089" class="Symbol">(</a> <a id="1091" href="UALib.Algebras.Signatures.html#1079" class="Bound">F</a> <a id="1093" class="Symbol">→</a> <a id="1095" href="UALib.Algebras.Signatures.html#1073" class="Bound">𝓥</a> <a id="1097" href="universes.html#758" class="Function Operator">̇</a> <a id="1099" class="Symbol">)</a>
+<a id="Signature"></a><a id="802" href="UALib.Algebras.Signatures.html#802" class="Function">Signature</a> <a id="812" class="Symbol">:</a> <a id="814" class="Symbol">(</a><a id="815" href="UALib.Algebras.Signatures.html#815" class="Bound">𝓞</a> <a id="817" href="UALib.Algebras.Signatures.html#817" class="Bound">𝓥</a> <a id="819" class="Symbol">:</a> <a id="821" href="universes.html#551" class="Postulate">Universe</a><a id="829" class="Symbol">)</a> <a id="831" class="Symbol">→</a> <a id="833" class="Symbol">(</a><a id="834" href="UALib.Algebras.Signatures.html#815" class="Bound">𝓞</a> <a id="836" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="838" href="UALib.Algebras.Signatures.html#817" class="Bound">𝓥</a><a id="839" class="Symbol">)</a> <a id="841" href="universes.html#527" class="Primitive Operator">⁺</a> <a id="843" href="universes.html#758" class="Function Operator">̇</a>
+<a id="845" href="UALib.Algebras.Signatures.html#802" class="Function">Signature</a> <a id="855" href="UALib.Algebras.Signatures.html#855" class="Bound">𝓞</a> <a id="857" href="UALib.Algebras.Signatures.html#857" class="Bound">𝓥</a> <a id="859" class="Symbol">=</a> <a id="861" href="MGS-MLTT.html#3074" class="Function">Σ</a> <a id="863" href="UALib.Algebras.Signatures.html#863" class="Bound">F</a> <a id="865" href="MGS-MLTT.html#3074" class="Function">꞉</a> <a id="867" href="UALib.Algebras.Signatures.html#855" class="Bound">𝓞</a> <a id="869" href="universes.html#758" class="Function Operator">̇</a> <a id="871" href="MGS-MLTT.html#3074" class="Function">,</a> <a id="873" class="Symbol">(</a> <a id="875" href="UALib.Algebras.Signatures.html#863" class="Bound">F</a> <a id="877" class="Symbol">→</a> <a id="879" href="UALib.Algebras.Signatures.html#857" class="Bound">𝓥</a> <a id="881" href="universes.html#758" class="Function Operator">̇</a> <a id="883" class="Symbol">)</a>
 </pre>
 
 <p>Recall, the definition of the type <code class="language-plaintext highlighter-rouge">Σ</code>.</p>

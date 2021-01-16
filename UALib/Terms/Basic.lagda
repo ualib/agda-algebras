@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Terms ↑](UALib.Terms.html)
-
 ### <a id="basic-definitions">Basic definitions</a>
 
 This section presents the [UALib.Terms.Basic][] module of the [Agda Universal Algebra Library][].
@@ -42,5 +40,8 @@ open Term
 \end{code}
 
 --------------------------------------
+
+[↑ UALib.Terms](UALib.Terms.html)
+<span style="float:right;">[UALib.Terms.Free →](UALib.Terms.Free.html)</span>
 
 {% include UALib.Links.md %}

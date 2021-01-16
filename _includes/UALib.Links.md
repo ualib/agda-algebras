@@ -200,6 +200,7 @@
 [UALib.Prelude.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Inverses.lagda
 [UALib.Prelude.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Extensionality.lagda
 
+[UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
 [UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
 [UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda
 [UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda
@@ -207,6 +208,7 @@
 [UALib.Algebras.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Lifts.lagda
 
 [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
+[UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
 [UALib.Relations.Unary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Unary.lagda
 [UALib.Relations.Binary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Binary.lagda
 [UALib.Relations.Equivalences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Equivalences.lagda
@@ -245,6 +247,7 @@
 [UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda
 [UALib.Subalgebras.WWMD]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/WWMD.lagda
 
+[UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
 [UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
 [Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
 [Varieties.ModelTheory]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/ModelTheory.lagda
@@ -252,6 +255,7 @@
 [Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda
 [Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda
 
+[UALib.Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [UALib.Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda

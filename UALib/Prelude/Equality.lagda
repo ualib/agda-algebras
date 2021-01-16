@@ -5,11 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[← UALib.Prelude.Preliminaries ](UALib.Prelude.Preliminaries.html)
-<span style="float:right;">[UALib.Prelude.Inverses →](UALib.Prelude.Inverses.html)</span>
-
-------------------------------------
-
 ### <a id="equality">Equality</a>
 
 This section describes the [UALib.Prelude.Equality][] module of the [Agda Universal Algebra Library][].

@@ -8,63 +8,70 @@
       <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
   </head>
-      <body>
-          <style>
+  <body>
+      <style>
 
 
-           body, html{
-               margin: 60px auto;
-               width: 70%;
-               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
-               font-size: 1.2em;
-               line-height: 1.3em;
-           }
-              a {
-              text-decoration: none;
-              color: #5F38AD;
+       body, html{
+           margin: 60px auto;
+           width: 70%;
+           /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+           font-size: 1.2em;
+           line-height: 1.1em;
+       }
+       a {
+           text-decoration: none;
+           color: #5F38AD;
 
-              }
-              a:hover {
-              text-decoration: underline;
-              }
+       }
+       a:hover {
+           text-decoration: underline;
+       }
 
-              h1 {
-              font-size: 4em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
+       h1 {
+           font-size: 3em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
 
-              h2 {
-              font-size: 3em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h3 {
-              font-size: 2.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              }
-              h4 {
-              font-size: 1.5em;
-              font-family:'Helvetica', 'Arial', 'Sans-Serif';
-              } */
-	        </style>
-          <div class="container">
-              <p><a href="UALib.html">Agda UALib ↑</a></p>
+       h2 {
+           font-size: 2.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h3 {
+           font-size: 2.0em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h4 {
+           font-size: 1.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+	    </style>
 
-<h2 id="terms-and-free-algebras"><a id="terms-and-free-algebras">Terms and Free Algebras</a></h2>
+      <div class="container">
+          <p><a href="UALib.html">Agda UALib ↑</a></p>
+
+          <hr />
+
+          <h2 id="terms-and-free-algebras"><a id="terms-and-free-algebras">Terms and Free Algebras</a></h2>
 
 <p>This chapter presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda">UALib.Terms</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
 
 <pre class="Agda">
-<a id="334" class="Symbol">{-#</a> <a id="338" class="Keyword">OPTIONS</a> <a id="346" class="Pragma">--without-K</a> <a id="358" class="Pragma">--exact-split</a> <a id="372" class="Pragma">--safe</a> <a id="379" class="Symbol">#-}</a>
+<a id="306" class="Symbol">{-#</a> <a id="310" class="Keyword">OPTIONS</a> <a id="318" class="Pragma">--without-K</a> <a id="330" class="Pragma">--exact-split</a> <a id="344" class="Pragma">--safe</a> <a id="351" class="Symbol">#-}</a>
 </pre>
 
 <pre class="Agda">
 
-<a id="409" class="Keyword">module</a> <a id="416" href="UALib.Terms.html" class="Module">UALib.Terms</a> <a id="428" class="Keyword">where</a>
+<a id="381" class="Keyword">module</a> <a id="388" href="UALib.Terms.html" class="Module">UALib.Terms</a> <a id="400" class="Keyword">where</a>
 
-<a id="435" class="Keyword">open</a> <a id="440" class="Keyword">import</a> <a id="447" href="UALib.Terms.Basic.html" class="Module">UALib.Terms.Basic</a>
-<a id="465" class="Keyword">open</a> <a id="470" class="Keyword">import</a> <a id="477" href="UALib.Terms.Free.html" class="Module">UALib.Terms.Free</a>
-<a id="494" class="Keyword">open</a> <a id="499" class="Keyword">import</a> <a id="506" href="UALib.Terms.Operations.html" class="Module">UALib.Terms.Operations</a>
-<a id="529" class="Keyword">open</a> <a id="534" class="Keyword">import</a> <a id="541" href="UALib.Terms.Compatibility.html" class="Module">UALib.Terms.Compatibility</a>
+<a id="407" class="Keyword">open</a> <a id="412" class="Keyword">import</a> <a id="419" href="UALib.Terms.Basic.html" class="Module">UALib.Terms.Basic</a>
+<a id="437" class="Keyword">open</a> <a id="442" class="Keyword">import</a> <a id="449" href="UALib.Terms.Free.html" class="Module">UALib.Terms.Free</a>
+<a id="466" class="Keyword">open</a> <a id="471" class="Keyword">import</a> <a id="478" href="UALib.Terms.Operations.html" class="Module">UALib.Terms.Operations</a>
+<a id="501" class="Keyword">open</a> <a id="506" class="Keyword">import</a> <a id="513" href="UALib.Terms.Compatibility.html" class="Module">UALib.Terms.Compatibility</a>
 
 </pre>
 
@@ -72,8 +79,6 @@
 
 <p><a href="UALib.Homomorphisms.html">← UALib.Homomorphisms</a>
 <span style="float:right;"><a href="UALib.Subalgebras.html">UALib.Subalgebras →</a></span></p>
-
-<hr />
 
 <!--
 [core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean

@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Varieties ↑](UALib.Varieties.html)
-
 ### <a id="equations-and-varieties">Equations and Varieties</a>
 
 This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
@@ -225,6 +223,9 @@ hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap 
 \end{code}
 
 ----------------------------
+
+[← UALib.Varieties.ModelTheory](UALib.Varieties.ModelTheory.html)
+<span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>
 
 {% include UALib.Links.md %}
 

@@ -5,14 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-<!--
-FILE: Kernels.lagda
-AUTHOR: William DeMeo
-DATE: 13 Jan 2021
--->
-
-[UALib.Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
 
 This section presents the [UALib.Homomorphisms.Kernel][] module of the [Agda Universal Algebra Library][].
@@ -114,5 +106,8 @@ kernel-quotient-projection 𝑨 {𝑩} h = canonical-projection 𝑨 (kercon �
 
 
 --------------------------------------
+
+[← UALib.Homomorphisms.Basic](UALib.Homomorphisms.Basic.html)
+<span style="float:right;">[UALib.Homomorphisms.Noether →](UALib.Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}

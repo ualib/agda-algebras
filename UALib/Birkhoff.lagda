@@ -5,10 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[Agda UALib ↑](UALib.html)
-
---------------------------------------
-
 ## <a id="birkhoffs-theorem">Birkhoff's Theorem</a>
 
 This chapter presents the [UALib.Birkhoff][] module of the [Agda Universal Algebra Library][].

@@ -34,20 +34,18 @@ of citation.
 
 -->
 
----------------------------------------------------------------------------------
-
 ## <a id="ualib">The Agda Universal Algebra Library</a>
 
 ---------------------------------------------------------------------------------
 
-14 Jan 2021 (version of {{ "now" | date: "%d %b %Y, %H:%M" }})
+(version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
-**Author**. [William DeMeo][]  
+**Author**. [William DeMeo][]
 *Affiliation*. [Department of Algebra][], [Charles University in Prague][]
 
 **Abstract**. The [Agda Universal Algebra Library][] is a library of types and programs (or theorems and proofs) that formalizes, in Martin-Löf type theory, the foundations of universal algebra using the [Agda][] proof assistant language.
 
-The goal is a library that is usable by research mathematicians who wish to formally verify their work by implementing and type-checking existing ("known") results, and to aid in the discovery of new mathematics.
+The goal is to have a library that can be used by research mathematicians to formally verify their work by implementing and type-checking existing theorems. A second, equally important goal is to offer a library that can help us and other mathematicians discover new theorems.
 
 The latest version of the library contains statements and proofs of many results from the foundations of general algebra and equational logic, and it is easily imported and used by others to support their own Agda projects.
 
@@ -139,14 +137,19 @@ Suggest improvements by submitting a [new issue][] or [merge request][] to [gitl
 
 <sup>1</sup> Please [notify me](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.
 
-<div class="container">
-<span style="float:right;"><i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i></span>
-</div>
-
------------------------------------------------
+--------------------------------------
 
 <span style="float:right;">[Next Module (UALib.Preface) →](UALib.Preface.html)</span>
 
+
+<p>
+
+<div class="container">
+<span style="float:right;"><i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i></span>
+</div>
+</p>
+
+{% include UALib.Links.md %}
 
 
 

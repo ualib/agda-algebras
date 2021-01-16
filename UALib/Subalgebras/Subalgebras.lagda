@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="subalgebra-types">Subalgebra Types</a>
 
 This section presents the [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][].
@@ -270,4 +268,12 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
 
 lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
+
 \end{code}
+
+---------------------------------
+
+[← UALib.Subalgebras.Homomorphisms](UALib.Subalgebras.Homomorphisms.html)
+<span style="float:right;">[UALib.Subalgebras.WWMD →](UALib.Subalgebras.WWMD.html)</span>
+
+{% include UALib.Links.md %}

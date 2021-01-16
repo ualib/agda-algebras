@@ -5,14 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-<!--
-FILE: HomomorphicImages.lagda
-AUTHOR: William DeMeo
-DATE: 14 Jan 2021
--->
-
-[UALib.Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="homomorphic-image-types">Homomorphic Image Types</a>
 
 This section describes the [UALib.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
@@ -149,5 +141,8 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
 \end{code}
 
 --------------------------------------
+
+[← UALib.Homomorphisms.Isomorphisms](UALib.Homomorphisms.Isomorphisms.html)
+<span style="float:right;">[UALib.Terms →](UALib.Terms.html)</span>
 
 {% include UALib.Links.md %}

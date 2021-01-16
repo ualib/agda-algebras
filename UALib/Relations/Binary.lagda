@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Relations ↑](UALib.Relations.html)
-
 ### <a id="binary-relation-and-kernel-types">Binary Relation and Kernel Types</a>
 
 This section presents the [UALib.Relations.Binary][] module of the [Agda Universal Algebra Library][].

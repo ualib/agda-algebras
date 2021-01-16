@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="homomorphisms-and-products">Homomorphisms and Products</a>
 
 This section describes the [UALib.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
@@ -59,5 +57,8 @@ open import UALib.Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
 \end{code}
 
 --------------------------------------
+
+[← UALib.homomorphisms.Noether](UALib.Homomorphisms.Noether.html)
+<span style="float:right;">[UALib.Homomorphisms.Isomorphisms →](UALib.Homomorphisms.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}

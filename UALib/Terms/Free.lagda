@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Terms ↑](UALib.Terms.html)
-
 ### <a id="the-term-algebra">The Term Algebra</a>
 
 This section presents the [UALib.Terms.Free][] module of the [Agda Universal Algebra Library][].
@@ -115,5 +113,8 @@ Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebr
 \end{code}
 
 --------------------------------------
+
+[← UALib.Terms.Basic](UALib.Terms.Basic.html)
+<span style="float:right;">[UALib.Terms.Operations →](UALib.Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}

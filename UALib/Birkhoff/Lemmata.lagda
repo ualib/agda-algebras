@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Birkhoff ↑](UALib.Birkhoff.html)
-
 ### <a id="hsp-lemmas">HSP Lemmas</a>
 
 This section presents the [UALib.Birkhoff.Lemmata][] module of the [Agda Universal Algebra Library][].
@@ -390,6 +388,9 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
 \end{code}
 
 ----------------------------
+
+[← UALib.Birkhoff.FreeAlgebra](UALib.Birkhoff.FreeAlgebra.html)
+<span style="float:right;">[UALib.Birkhoff.Theorem →](UALib.Birkhoff.Theorem.html)</span>
 
 {% include UALib.Links.md %}
 

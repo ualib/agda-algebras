@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Varieties ↑](UALib.Varieties.html)
-
 ### <a id="types-for-theories-and-models">Types for Theories and Models</a>
 
 This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][].
@@ -18,13 +16,14 @@ We define the binary "models" relation ⊧, with infix so that we may write, e.g
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+
 
 module UALib.Varieties.ModelTheory
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
+
 
 open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe}{𝕏} public
 
@@ -46,6 +45,7 @@ _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 #### Equational theories and classes
 
 \begin{code}
+
 Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆) (OV 𝓤)
  →   Pred (Term{𝓧}{X} × Term) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
@@ -61,6 +61,7 @@ Mod X ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 mod : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Term{𝓧}{X} × Term{𝓧}{X}) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⊔ 𝓤 ⁺)
  →    Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ⊔ 𝓤 ⁺)
 mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
+
 \end{code}
 
 
@@ -69,6 +70,7 @@ mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 The binary relation ⊧ would be of little use to us if it were not an algebraic invariant.
 
 \begin{code}
+
 ⊧-≅
  ⊧-transport : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
                  (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
@@ -85,6 +87,7 @@ The binary relation ⊧ would be of little use to us if it were not an algebraic
       (q ̇ 𝑩) x ∎
 
 ⊧-≅ = ⊧-transport -- (alias)
+
 \end{code}
 
 #### ⊧-lift compatibility
@@ -92,6 +95,7 @@ The binary relation ⊧ would be of little use to us if it were not an algebraic
 The ⊧ relation is also compatible with the lift operation.
 
 \begin{code}
+
 lift-alg-⊧ : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
        (𝑨 : Algebra 𝓤 𝑆)(p q : Term{𝓧}{X})
   →    𝑨 ⊧ p ≈ q → (lift-alg 𝑨 𝓦) ⊧ p ≈ q
@@ -104,9 +108,13 @@ lower-alg-⊧ {𝓤}{𝓦}{𝓧}{X} 𝑨 p q lApq = ⊧-≅ p q lApq (sym-≅ li
 
 lower-class : {𝓤 𝓦 : Universe} → Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) → Pred (Algebra 𝓤 𝑆)(OV (𝓤 ⊔ 𝓦))
 lower-class {𝓤}{𝓦}𝒦 = λ (𝑨 : Algebra 𝓤 𝑆) → lift-alg 𝑨 𝓦 ∈ 𝒦
+
 \end{code}
 
-----------------------------
+---------------------------------
+
+[↑ UALib.Varieties](UALib.Varieties.html)
+<span style="float:right;">[UALib.Varieties.EquationalLogic →](UALib.Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}
 

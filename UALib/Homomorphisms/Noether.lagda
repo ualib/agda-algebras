@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
 This chapter presents the [UALib.Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
@@ -271,5 +269,8 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
 \end{code}
 
 --------------------------------------
+
+[← UALib.Homomorphisms.Kernels](UALib.Homomorphisms.Kernels.html)
+<span style="float:right;">[UALib.Homomorphisms.Products →](UALib.Homomorphisms.Products.html)</span>
 
 {% include UALib.Links.md %}

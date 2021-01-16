@@ -5,9 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-
-[UALib ↑](UALib.html)
-
 ### <a id="term-operation-types">Term Operation Types</a>
 
 This section presents the [UALib.Terms.Operations][] module of the [Agda Universal Algebra Library][].
@@ -156,5 +153,8 @@ interp-prod2 gfe {X} (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
 \end{code}
 
 --------------------------------------
+
+[← UALib.Terms.Free](UALib.Terms.Free.html)
+<span style="float:right;">[UALib.Terms.Compatibility →](UALib.Terms.Compatibility.html)</span>
 
 {% include UALib.Links.md %}

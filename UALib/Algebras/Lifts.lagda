@@ -5,8 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
-
 ### <a id="agdas-universe-hierarchy">Agda's Universe Hierarchy</a>
 
 This section presents the [UALib.Algebras.Lifts][] module of the [Agda Universal Algebra Library][].

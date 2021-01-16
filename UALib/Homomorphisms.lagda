@@ -5,10 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[Agda UALib ↑](UALib.html)
-
------------------------------------------
-
 ## <a id="homomorphisms">Homomorphisms</a>
 
 This chapter presents the [UALib.Homomorphisms][] module of the [Agda Universal Algebra Library][].

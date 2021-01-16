@@ -5,9 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-
-[UALib.Terms ↑](UALib.Terms.html)
-
 ### <a id="term-compatibility-theorems">Term Compatibility Theorems</a>
 
 This section presents the [UALib.Terms.Compatibility][] module of the [Agda Universal Algebra Library][].
@@ -109,7 +106,7 @@ compatible-term' 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible
 
 --------------------------------------
 
-
-[Return to main Agda UALib module](UALib.html)
+[← UALib.Terms.Operations](UALib.Terms.Operations.html)
+<span style="float:right;">[UALib.Subalgebras →](UALib.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}

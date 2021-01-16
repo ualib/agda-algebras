@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Birkhoff ↑](UALib.Birkhoff.html)
-
 ### <a id="relatively-free-algebra-types">Relatively Free Algebra Types</a>
 
 This section presents the [UALib.Birkhoff.FreeAlgebra][] module of the [Agda Universal Algebra Library][].
@@ -277,6 +275,9 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
 \end{code}
 
 ----------------------------
+
+[↑ UALib.Birkhoff](UALib.Birkhoff.html)
+<span style="float:right;">[UALib.Birkhoff.Lemmata →](UALib.Birkhoff.Lemmata.html)</span>
 
 {% include UALib.Links.md %}
 

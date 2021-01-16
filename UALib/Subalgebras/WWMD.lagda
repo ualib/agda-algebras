@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="wwmd">WWMD</a>
 
 This section presents the [UALib.Subalgebras.WWMD][] module of the [Agda Universal Algebra Library][].
@@ -146,4 +144,12 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
  subuniverse-equality' B C =
   (subuniverse-equality B C) ● (carrier-equiv B C)
 
--->
+\end{code}
+
+---------------------------------
+
+[← UALib.Subalgebras.Subalgebras](UALib.Subalgebras.Subalgebras.html)
+<span style="float:right;">[UALib.Varieties →](UALib.Varieties.html)</span>
+
+{% include UALib.Links.md %}
+

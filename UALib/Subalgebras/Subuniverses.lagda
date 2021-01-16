@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Subalgebras ↑](UALib.Subalgebras.html)
-
 ### <a id="subuniverse-type">Subuniverse Type</a>
 
 This section presents the [UALib.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
@@ -47,3 +45,9 @@ record Subuniverse {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆} : 𝓞 ⊔ �
    isSub : sset ∈ Subuniverses 𝑨
 \end{code}
 
+-------------------------------
+
+[↑ UALib.Subalgebras](UALib.Subalgebras.html)
+<span style="float:right;">[UALib.Subalgebras.Generation →](UALib.Subalgebras.Generation.html)</span>
+
+{% include UALib.Links.md %}

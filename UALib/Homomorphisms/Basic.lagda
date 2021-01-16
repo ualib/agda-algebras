@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="basic-definitions">Basic Definitions</a>
 
 This section describes the [UALib.Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
@@ -74,5 +72,8 @@ id-is-hom = λ _ _ → refl _
 \end{code}
 
 --------------------------------------
+
+[↑ UALib.Homomorphisms](UALib.Homomorphisms.html)
+<span style="float:right;">[UALib.Homomorphisms.Kernels →](UALib.Homomorphisms.Kernels.html)</span>
 
 {% include UALib.Links.md %}

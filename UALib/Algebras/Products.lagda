@@ -5,8 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib.Algebras ↑](UALib.Algebras.html)
-
 ### <a id="product-algebra-types">Product Algebra Types</a>
 
 This section presents the [UALib.Algebras.Products][] module of the [Agda Universal Algebra Library][].

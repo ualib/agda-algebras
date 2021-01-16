@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Relations ↑](UALib.Relations.html)
-
 ### <a id="quotient-types">Quotient Types</a>
 
 This section presents the [UALib.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
@@ -164,5 +162,8 @@ module _ {𝓤 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 
 --------------------------------------
+
+[← UALib.Relations.Equivalences](UALib.Relations.Equivalences.html)
+<span style="float:right;">[UALib.Relations.Congruences →](UALib.Relations.Congruences.html)</span>
 
 {% include UALib.Links.md %}

@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[Homomorphisms ↑](UALib.Homomorphisms.html)
-
 ### <a id="isomorphisms-type">Isomorphism Type</a>
 
 This section describes the [UALib.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
@@ -358,5 +356,8 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 \end{code}
 
 --------------------------------------
+
+[← UALib.Homomorphisms.Products](UALib.Homomorphisms.Products.html)
+<span style="float:right;">[UALib.Algebras.HomomorphicImages →](UALib.Algebras.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

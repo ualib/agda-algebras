@@ -15,10 +15,6 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
      Below, MHE = Martin Hötzel Escardo.
 -->
 
-[Agda UALib ↑](UALib.html)
-
---------------------------------------
-
 ## <a id="prelude">Prelude</a>
 
 This chapter presents the [UALib.Prelude][] module of the [Agda Universal Algebra Library][].

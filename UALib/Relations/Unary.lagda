@@ -5,8 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib.Relations ↑](UALib.Relations.html)
-
 ### <a id="unary-relation-types">Unary Relation Types</a>
 
 This section presents the [UALib.Relations.Unary][] module of the [Agda Universal Algebra Library][].
@@ -155,5 +153,8 @@ module _ {𝓤 𝓦 : Universe} where
 
 
 --------------------------------------
+
+[↑ UALib.Relations](UALib.Relations.html)
+<span style="float:right;">[UALib.Relations.Binary →](UALib.Relations.Binary.html)</span>
 
 {% include UALib.Links.md %}

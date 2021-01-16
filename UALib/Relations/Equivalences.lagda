@@ -5,8 +5,6 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-[UALib.Relations ↑](UALib.Relations.html)
-
 ### <a id="equivalence-relation-types">Equivalence Relation Types</a>
 
 This section presents the [UALib.Relations.Equivalences][] module of the [Agda Universal Algebra Library][].
@@ -53,5 +51,8 @@ module _ {𝓤 : Universe} where
 
 
 --------------------------------------
+
+[← UALib.Relations.Binary](UALib.Relations.Binary.html)
+<span style="float:right;">[UALib.Relations.Equivalences →](UALib.Relations.Equivalences.html)</span>
 
 {% include UALib.Links.md %}

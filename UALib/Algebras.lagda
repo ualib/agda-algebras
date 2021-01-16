@@ -5,10 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[Agda UALib ↑](UALib.html)
-
---------------------------------------
-
 ## <a id="algebras">Algebras</a>
 
 This chapter presents the [UALib.Algebras module][] of the [Agda Universal Algebra Library][].
