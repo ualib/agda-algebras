@@ -1,5 +1,8 @@
 #!/bin/bash
 
+mv html/*.html .
+mv html/*.md .
+
 # rm -rf _site-prev
 # mkdir _site-prev
 # mv ./_site/* ./_site-prev/
@@ -88,4 +91,3 @@
 # mv html/universes.tex universes.md
 # mv html/Universes.tex Universes.md
 
-mv html/*.html .
