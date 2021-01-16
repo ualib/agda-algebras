@@ -40,7 +40,7 @@ of citation.
 
 (version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
-**Author**. [William DeMeo][]
+**Author**. [William DeMeo][]  
 *Affiliation*. [Department of Algebra][], [Charles University in Prague][]
 
 **Abstract**. The [Agda Universal Algebra Library][] is a library of types and programs (or theorems and proofs) that formalizes, in Martin-Löf type theory, the foundations of universal algebra using the [Agda][] proof assistant language.
