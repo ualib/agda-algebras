@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Algebras module (Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <p><a href="UALib.html">Agda UALib ↑</a></p>
+
+<hr />
+
+<h2 id="algebras"><a id="algebras">Algebras</a></h2>
+
+<p>This chapter presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda">UALib.Algebras module</a> of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<pre class="Agda">
+<a id="346" class="Symbol">{-#</a> <a id="350" class="Keyword">OPTIONS</a> <a id="358" class="Pragma">--without-K</a> <a id="370" class="Pragma">--exact-split</a> <a id="384" class="Pragma">--safe</a> <a id="391" class="Symbol">#-}</a>
+</pre>
+
+<pre class="Agda">
+
+<a id="421" class="Keyword">module</a> <a id="428" href="UALib.Algebras.html" class="Module">UALib.Algebras</a> <a id="443" class="Keyword">where</a>
+
+<a id="450" class="Keyword">open</a> <a id="455" class="Keyword">import</a> <a id="462" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="488" class="Keyword">public</a>
+<a id="495" class="Keyword">open</a> <a id="500" class="Keyword">import</a> <a id="507" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="531" class="Keyword">public</a>
+<a id="538" class="Keyword">open</a> <a id="543" class="Keyword">import</a> <a id="550" href="UALib.Algebras.Products.html" class="Module">UALib.Algebras.Products</a> <a id="574" class="Keyword">public</a>
+<a id="581" class="Keyword">open</a> <a id="586" class="Keyword">import</a> <a id="593" href="UALib.Algebras.Lifts.html" class="Module">UALib.Algebras.Lifts</a> <a id="614" class="Keyword">public</a>
+
+</pre>
+
+<hr />
+
+<p><a href="UALib.Prelude.html">← UALib.Prelude</a>
+<span style="float:right;"><a href="UALib.Relations.html">UALib.Relations →</a></span></p>
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>

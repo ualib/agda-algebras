@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Prelude module (Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <!--
+FILE: Prelude.lagda
+AUTHOR: William DeMeo
+DATE: 30 Jun 2020
+UPDATED: 14 Jan 2021
+REF: Parts of this module are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
+SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
+     Below, MHE = Martin Hötzel Escardo.
+-->
+
+<p><a href="UALib.html">Agda UALib ↑</a></p>
+
+<hr />
+
+<h2 id="prelude"><a id="prelude">Prelude</a></h2>
+
+<p>This chapter presents the [UALib.Prelude][] module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<p>The source code for this module comprises the (literate) <a href="https://wiki.portal.chalmers.se/agda/pmwiki.php">Agda</a> program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda">Prelude.lagda</a>, which resides in the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">git repository of the Agda UALib</a>.</p>
+
+<pre class="Agda">
+
+<a id="905" class="Symbol">{-#</a> <a id="909" class="Keyword">OPTIONS</a> <a id="917" class="Pragma">--without-K</a> <a id="929" class="Pragma">--exact-split</a> <a id="943" class="Pragma">--safe</a> <a id="950" class="Symbol">#-}</a>
+
+<a id="955" class="Keyword">module</a> <a id="962" href="UALib.Prelude.html" class="Module">UALib.Prelude</a> <a id="976" class="Keyword">where</a>
+
+<a id="983" class="Keyword">open</a> <a id="988" class="Keyword">import</a> <a id="995" href="UALib.Prelude.Preliminaries.html" class="Module">UALib.Prelude.Preliminaries</a> <a id="1023" class="Keyword">public</a>
+<a id="1030" class="Keyword">open</a> <a id="1035" class="Keyword">import</a> <a id="1042" href="UALib.Prelude.Equality.html" class="Module">UALib.Prelude.Equality</a> <a id="1065" class="Keyword">public</a>
+<a id="1072" class="Keyword">open</a> <a id="1077" class="Keyword">import</a> <a id="1084" href="UALib.Prelude.Inverses.html" class="Module">UALib.Prelude.Inverses</a> <a id="1107" class="Keyword">public</a>
+<a id="1114" class="Keyword">open</a> <a id="1119" class="Keyword">import</a> <a id="1126" href="UALib.Prelude.Extensionality.html" class="Module">UALib.Prelude.Extensionality</a> <a id="1155" class="Keyword">public</a>
+
+</pre>
+
+<hr />
+
+<p><a href="UALib.Preface.html">← UALib.Preface</a>
+<span style="float:right;"><a href="UALib.Algebras.html">UALib.Algebras →</a></span></p>
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>

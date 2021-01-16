@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Algebras.Products module (Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <p><a href="UALib.Algebras.html">UALib.Algebras ↑</a></p>
+
+<h3 id="product-algebra-types"><a id="product-algebra-types">Product Algebra Types</a></h3>
+
+<p>This section presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda">UALib.Algebras.Products</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<p>We define products of algebras for both the Sigma type representation (the one we use most often) and the record type representation.</p>
+
+<pre class="Agda">
+
+<a id="494" class="Symbol">{-#</a> <a id="498" class="Keyword">OPTIONS</a> <a id="506" class="Pragma">--without-K</a> <a id="518" class="Pragma">--exact-split</a> <a id="532" class="Pragma">--safe</a> <a id="539" class="Symbol">#-}</a>
+
+<a id="544" class="Keyword">module</a> <a id="551" href="UALib.Algebras.Products.html" class="Module">UALib.Algebras.Products</a> <a id="575" class="Keyword">where</a>
+
+
+<a id="583" class="Keyword">open</a> <a id="588" class="Keyword">import</a> <a id="595" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="619" class="Keyword">public</a>
+
+
+<a id="628" class="Keyword">module</a> <a id="635" href="UALib.Algebras.Products.html#635" class="Module">_</a> <a id="637" class="Symbol">{</a><a id="638" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="640" class="Symbol">:</a> <a id="642" href="universes.html#551" class="Postulate">Universe</a><a id="650" class="Symbol">}{</a><a id="652" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="654" class="Symbol">:</a> <a id="656" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="666" href="universes.html#613" class="Generalizable">𝓞</a> <a id="668" href="universes.html#617" class="Generalizable">𝓥</a><a id="669" class="Symbol">}</a>  <a id="672" class="Keyword">where</a>
+
+ <a id="680" class="Comment">-- product for algebras of sigma type</a>
+ <a id="719" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="721" class="Symbol">:</a> <a id="723" class="Symbol">{</a><a id="724" href="UALib.Algebras.Products.html#724" class="Bound">𝓘</a> <a id="726" class="Symbol">:</a> <a id="728" href="universes.html#551" class="Postulate">Universe</a><a id="736" class="Symbol">}{</a><a id="738" href="UALib.Algebras.Products.html#738" class="Bound">I</a> <a id="740" class="Symbol">:</a> <a id="742" href="UALib.Algebras.Products.html#724" class="Bound">𝓘</a> <a id="744" href="universes.html#758" class="Function Operator">̇</a> <a id="746" class="Symbol">}(</a><a id="748" href="UALib.Algebras.Products.html#748" class="Bound">𝒜</a> <a id="750" class="Symbol">:</a> <a id="752" href="UALib.Algebras.Products.html#738" class="Bound">I</a> <a id="754" class="Symbol">→</a> <a id="756" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="764" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="766" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="768" class="Symbol">)</a> <a id="770" class="Symbol">→</a> <a id="772" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="780" class="Symbol">(</a><a id="781" href="UALib.Algebras.Products.html#724" class="Bound">𝓘</a> <a id="783" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="785" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a><a id="786" class="Symbol">)</a> <a id="788" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a>
+ <a id="791" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="793" class="Symbol">{</a><a id="794" href="UALib.Algebras.Products.html#794" class="Bound">𝓘</a><a id="795" class="Symbol">}{</a><a id="797" href="UALib.Algebras.Products.html#797" class="Bound">I</a><a id="798" class="Symbol">}</a> <a id="800" href="UALib.Algebras.Products.html#800" class="Bound">𝒜</a> <a id="802" class="Symbol">=</a>
+  <a id="806" class="Symbol">((</a><a id="808" href="UALib.Algebras.Products.html#808" class="Bound">i</a> <a id="810" class="Symbol">:</a> <a id="812" href="UALib.Algebras.Products.html#797" class="Bound">I</a><a id="813" class="Symbol">)</a> <a id="815" class="Symbol">→</a> <a id="817" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="819" href="UALib.Algebras.Products.html#800" class="Bound">𝒜</a> <a id="821" href="UALib.Algebras.Products.html#808" class="Bound">i</a> <a id="823" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="824" class="Symbol">)</a> <a id="826" href="UALib.Prelude.Preliminaries.html#5718" class="InductiveConstructor Operator">,</a> <a id="828" class="Symbol">λ(</a><a id="830" href="UALib.Algebras.Products.html#830" class="Bound">f</a> <a id="832" class="Symbol">:</a> <a id="834" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="836" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="838" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="839" class="Symbol">)(</a><a id="841" href="UALib.Algebras.Products.html#841" class="Bound">𝒂</a> <a id="843" class="Symbol">:</a> <a id="845" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="847" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="849" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="851" href="UALib.Algebras.Products.html#830" class="Bound">f</a> <a id="853" class="Symbol">→</a> <a id="855" class="Symbol">(</a><a id="856" href="UALib.Algebras.Products.html#856" class="Bound">j</a> <a id="858" class="Symbol">:</a> <a id="860" href="UALib.Algebras.Products.html#797" class="Bound">I</a><a id="861" class="Symbol">)</a> <a id="863" class="Symbol">→</a> <a id="865" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="867" href="UALib.Algebras.Products.html#800" class="Bound">𝒜</a> <a id="869" href="UALib.Algebras.Products.html#856" class="Bound">j</a> <a id="871" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="872" class="Symbol">)(</a><a id="874" href="UALib.Algebras.Products.html#874" class="Bound">i</a> <a id="876" class="Symbol">:</a> <a id="878" href="UALib.Algebras.Products.html#797" class="Bound">I</a><a id="879" class="Symbol">)</a> <a id="881" class="Symbol">→</a> <a id="883" class="Symbol">(</a><a id="884" href="UALib.Algebras.Products.html#830" class="Bound">f</a> <a id="886" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="888" href="UALib.Algebras.Products.html#800" class="Bound">𝒜</a> <a id="890" href="UALib.Algebras.Products.html#874" class="Bound">i</a><a id="891" class="Symbol">)</a> <a id="893" class="Symbol">λ{</a><a id="895" href="UALib.Algebras.Products.html#895" class="Bound">x</a> <a id="897" class="Symbol">→</a> <a id="899" href="UALib.Algebras.Products.html#841" class="Bound">𝒂</a> <a id="901" href="UALib.Algebras.Products.html#895" class="Bound">x</a> <a id="903" href="UALib.Algebras.Products.html#874" class="Bound">i</a><a id="904" class="Symbol">}</a>
+
+ <a id="908" href="UALib.Algebras.Products.html#908" class="Function">⊓</a> <a id="910" class="Symbol">:</a> <a id="912" class="Symbol">{</a><a id="913" href="UALib.Algebras.Products.html#913" class="Bound">I</a> <a id="915" class="Symbol">:</a> <a id="917" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="919" href="universes.html#758" class="Function Operator">̇</a> <a id="921" class="Symbol">}(</a><a id="923" href="UALib.Algebras.Products.html#923" class="Bound">𝒜</a> <a id="925" class="Symbol">:</a> <a id="927" href="UALib.Algebras.Products.html#913" class="Bound">I</a> <a id="929" class="Symbol">→</a> <a id="931" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="939" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="941" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="943" class="Symbol">)</a> <a id="945" class="Symbol">→</a> <a id="947" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="955" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="957" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a>
+ <a id="960" href="UALib.Algebras.Products.html#908" class="Function">⊓</a> <a id="962" class="Symbol">=</a> <a id="964" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="966" class="Symbol">{</a><a id="967" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a><a id="968" class="Symbol">}</a>
+
+ <a id="972" class="Keyword">open</a> <a id="977" href="UALib.Algebras.Algebras.html#2442" class="Module">algebra</a>
+
+ <a id="987" class="Comment">-- product for algebras of record type</a>
+ <a id="1027" href="UALib.Algebras.Products.html#1027" class="Function">⨅&#39;</a> <a id="1030" class="Symbol">:</a> <a id="1032" class="Symbol">{</a><a id="1033" href="UALib.Algebras.Products.html#1033" class="Bound">𝓘</a> <a id="1035" class="Symbol">:</a> <a id="1037" href="universes.html#551" class="Postulate">Universe</a><a id="1045" class="Symbol">}{</a><a id="1047" href="UALib.Algebras.Products.html#1047" class="Bound">I</a> <a id="1049" class="Symbol">:</a> <a id="1051" href="UALib.Algebras.Products.html#1033" class="Bound">𝓘</a> <a id="1053" href="universes.html#758" class="Function Operator">̇</a> <a id="1055" class="Symbol">}(</a><a id="1057" href="UALib.Algebras.Products.html#1057" class="Bound">𝒜</a> <a id="1059" class="Symbol">:</a> <a id="1061" href="UALib.Algebras.Products.html#1047" class="Bound">I</a> <a id="1063" class="Symbol">→</a> <a id="1065" href="UALib.Algebras.Algebras.html#2442" class="Record">algebra</a> <a id="1073" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a> <a id="1075" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a><a id="1076" class="Symbol">)</a> <a id="1078" class="Symbol">→</a> <a id="1080" href="UALib.Algebras.Algebras.html#2442" class="Record">algebra</a> <a id="1088" class="Symbol">(</a><a id="1089" href="UALib.Algebras.Products.html#1033" class="Bound">𝓘</a> <a id="1091" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="1093" href="UALib.Algebras.Products.html#638" class="Bound">𝓤</a><a id="1094" class="Symbol">)</a> <a id="1096" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a>
+ <a id="1099" href="UALib.Algebras.Products.html#1027" class="Function">⨅&#39;</a> <a id="1102" class="Symbol">{</a><a id="1103" href="UALib.Algebras.Products.html#1103" class="Bound">𝓘</a><a id="1104" class="Symbol">}{</a><a id="1106" href="UALib.Algebras.Products.html#1106" class="Bound">I</a><a id="1107" class="Symbol">}</a> <a id="1109" href="UALib.Algebras.Products.html#1109" class="Bound">𝒜</a> <a id="1111" class="Symbol">=</a> <a id="1113" class="Keyword">record</a>
+                  <a id="1138" class="Symbol">{</a> <a id="1140" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a> <a id="1145" class="Symbol">=</a> <a id="1147" class="Symbol">(</a><a id="1148" href="UALib.Algebras.Products.html#1148" class="Bound">i</a> <a id="1150" class="Symbol">:</a> <a id="1152" href="UALib.Algebras.Products.html#1106" class="Bound">I</a><a id="1153" class="Symbol">)</a> <a id="1155" class="Symbol">→</a> <a id="1157" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a> <a id="1162" class="Symbol">(</a><a id="1163" href="UALib.Algebras.Products.html#1109" class="Bound">𝒜</a> <a id="1165" href="UALib.Algebras.Products.html#1148" class="Bound">i</a><a id="1166" class="Symbol">)</a>
+                  <a id="1186" class="Symbol">;</a> <a id="1188" href="UALib.Algebras.Algebras.html#2554" class="Field">op</a> <a id="1191" class="Symbol">=</a> <a id="1193" class="Symbol">λ(</a><a id="1195" href="UALib.Algebras.Products.html#1195" class="Bound">f</a> <a id="1197" class="Symbol">:</a> <a id="1199" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1201" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="1203" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="1204" class="Symbol">)</a>
+                          <a id="1232" class="Symbol">(</a><a id="1233" href="UALib.Algebras.Products.html#1233" class="Bound">𝒂</a> <a id="1235" class="Symbol">:</a> <a id="1237" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1239" href="UALib.Algebras.Products.html#652" class="Bound">𝑆</a> <a id="1241" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1243" href="UALib.Algebras.Products.html#1195" class="Bound">f</a> <a id="1245" class="Symbol">→</a> <a id="1247" class="Symbol">(</a><a id="1248" href="UALib.Algebras.Products.html#1248" class="Bound">j</a> <a id="1250" class="Symbol">:</a> <a id="1252" href="UALib.Algebras.Products.html#1106" class="Bound">I</a><a id="1253" class="Symbol">)</a> <a id="1255" class="Symbol">→</a> <a id="1257" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a><a id="1261" class="Symbol">(</a><a id="1262" href="UALib.Algebras.Products.html#1109" class="Bound">𝒜</a> <a id="1264" href="UALib.Algebras.Products.html#1248" class="Bound">j</a><a id="1265" class="Symbol">))</a>
+                          <a id="1294" class="Symbol">(</a><a id="1295" href="UALib.Algebras.Products.html#1295" class="Bound">i</a> <a id="1297" class="Symbol">:</a> <a id="1299" href="UALib.Algebras.Products.html#1106" class="Bound">I</a><a id="1300" class="Symbol">)</a> <a id="1302" class="Symbol">→</a> <a id="1304" class="Symbol">((</a><a id="1306" href="UALib.Algebras.Algebras.html#2554" class="Field">op</a> <a id="1309" class="Symbol">(</a><a id="1310" href="UALib.Algebras.Products.html#1109" class="Bound">𝒜</a> <a id="1312" href="UALib.Algebras.Products.html#1295" class="Bound">i</a><a id="1313" class="Symbol">))</a> <a id="1316" href="UALib.Algebras.Products.html#1195" class="Bound">f</a><a id="1317" class="Symbol">)</a>
+                          <a id="1345" class="Symbol">λ{</a><a id="1347" href="UALib.Algebras.Products.html#1347" class="Bound">x</a> <a id="1349" class="Symbol">→</a> <a id="1351" href="UALib.Algebras.Products.html#1233" class="Bound">𝒂</a> <a id="1353" href="UALib.Algebras.Products.html#1347" class="Bound">x</a> <a id="1355" href="UALib.Algebras.Products.html#1295" class="Bound">i</a><a id="1356" class="Symbol">}</a>
+                  <a id="1376" class="Symbol">}</a>
+
+
+</pre>
+
+<hr />
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Relations.Equivalences module (The Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <p><a href="UALib.Relations.html">UALib.Relations ↑</a></p>
+
+<h3 id="equivalence-relation-types"><a id="equivalence-relation-types">Equivalence Relation Types</a></h3>
+
+<p>This section presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Equivalences.lagda">UALib.Relations.Equivalences</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<pre class="Agda">
+
+<a id="385" class="Symbol">{-#</a> <a id="389" class="Keyword">OPTIONS</a> <a id="397" class="Pragma">--without-K</a> <a id="409" class="Pragma">--exact-split</a> <a id="423" class="Pragma">--safe</a> <a id="430" class="Symbol">#-}</a>
+
+<a id="435" class="Keyword">module</a> <a id="442" href="UALib.Relations.Equivalences.html" class="Module">UALib.Relations.Equivalences</a> <a id="471" class="Keyword">where</a>
+
+<a id="478" class="Keyword">open</a> <a id="483" class="Keyword">import</a> <a id="490" href="UALib.Relations.Binary.html" class="Module">UALib.Relations.Binary</a> <a id="513" class="Keyword">public</a>
+
+<a id="521" class="Keyword">module</a> <a id="528" href="UALib.Relations.Equivalences.html#528" class="Module">_</a> <a id="530" class="Symbol">{</a><a id="531" href="UALib.Relations.Equivalences.html#531" class="Bound">𝓤</a> <a id="533" href="UALib.Relations.Equivalences.html#533" class="Bound">𝓡</a> <a id="535" class="Symbol">:</a> <a id="537" href="universes.html#551" class="Postulate">Universe</a><a id="545" class="Symbol">}</a> <a id="547" class="Keyword">where</a>
+
+ <a id="555" class="Keyword">record</a> <a id="562" href="UALib.Relations.Equivalences.html#562" class="Record">IsEquivalence</a> <a id="576" class="Symbol">{</a><a id="577" href="UALib.Relations.Equivalences.html#577" class="Bound">A</a> <a id="579" class="Symbol">:</a> <a id="581" href="UALib.Relations.Equivalences.html#531" class="Bound">𝓤</a> <a id="583" href="universes.html#758" class="Function Operator">̇</a> <a id="585" class="Symbol">}</a> <a id="587" class="Symbol">(</a><a id="588" href="UALib.Relations.Equivalences.html#588" class="Bound Operator">_≈_</a> <a id="592" class="Symbol">:</a> <a id="594" href="UALib.Relations.Binary.html#1214" class="Function">Rel</a> <a id="598" href="UALib.Relations.Equivalences.html#577" class="Bound">A</a> <a id="600" href="UALib.Relations.Equivalences.html#533" class="Bound">𝓡</a><a id="601" class="Symbol">)</a> <a id="603" class="Symbol">:</a> <a id="605" href="UALib.Relations.Equivalences.html#531" class="Bound">𝓤</a> <a id="607" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="609" href="UALib.Relations.Equivalences.html#533" class="Bound">𝓡</a> <a id="611" href="universes.html#758" class="Function Operator">̇</a> <a id="613" class="Keyword">where</a>
+  <a id="621" class="Keyword">field</a>
+   <a id="630" href="UALib.Relations.Equivalences.html#630" class="Field">rfl</a>   <a id="636" class="Symbol">:</a> <a id="638" href="UALib.Relations.Binary.html#2328" class="Function">reflexive</a> <a id="648" href="UALib.Relations.Equivalences.html#588" class="Bound Operator">_≈_</a>
+   <a id="655" href="UALib.Relations.Equivalences.html#655" class="Field">sym</a>   <a id="661" class="Symbol">:</a> <a id="663" href="UALib.Relations.Binary.html#2416" class="Function">symmetric</a> <a id="673" href="UALib.Relations.Equivalences.html#588" class="Bound Operator">_≈_</a>
+   <a id="680" href="UALib.Relations.Equivalences.html#680" class="Field">trans</a> <a id="686" class="Symbol">:</a> <a id="688" href="UALib.Relations.Binary.html#2514" class="Function">transitive</a> <a id="699" href="UALib.Relations.Equivalences.html#588" class="Bound Operator">_≈_</a>
+
+ <a id="705" href="UALib.Relations.Equivalences.html#705" class="Function">is-equivalence-relation</a> <a id="729" class="Symbol">:</a> <a id="731" class="Symbol">{</a><a id="732" href="UALib.Relations.Equivalences.html#732" class="Bound">X</a> <a id="734" class="Symbol">:</a> <a id="736" href="UALib.Relations.Equivalences.html#531" class="Bound">𝓤</a> <a id="738" href="universes.html#758" class="Function Operator">̇</a> <a id="740" class="Symbol">}</a> <a id="742" class="Symbol">→</a> <a id="744" href="UALib.Relations.Binary.html#1214" class="Function">Rel</a> <a id="748" href="UALib.Relations.Equivalences.html#732" class="Bound">X</a> <a id="750" href="UALib.Relations.Equivalences.html#533" class="Bound">𝓡</a> <a id="752" class="Symbol">→</a> <a id="754" href="UALib.Relations.Equivalences.html#531" class="Bound">𝓤</a> <a id="756" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="758" href="UALib.Relations.Equivalences.html#533" class="Bound">𝓡</a> <a id="760" href="universes.html#758" class="Function Operator">̇</a>
+ <a id="763" href="UALib.Relations.Equivalences.html#705" class="Function">is-equivalence-relation</a> <a id="787" href="UALib.Relations.Equivalences.html#787" class="Bound Operator">_≈_</a> <a id="791" class="Symbol">=</a> <a id="793" href="UALib.Relations.Binary.html#2624" class="Function">is-subsingleton-valued</a> <a id="816" href="UALib.Relations.Equivalences.html#787" class="Bound Operator">_≈_</a>
+                               <a id="851" href="MGS-MLTT.html#3515" class="Function Operator">×</a> <a id="853" href="UALib.Relations.Binary.html#2328" class="Function">reflexive</a> <a id="863" href="UALib.Relations.Equivalences.html#787" class="Bound Operator">_≈_</a> <a id="867" href="MGS-MLTT.html#3515" class="Function Operator">×</a> <a id="869" href="UALib.Relations.Binary.html#2416" class="Function">symmetric</a> <a id="879" href="UALib.Relations.Equivalences.html#787" class="Bound Operator">_≈_</a> <a id="883" href="MGS-MLTT.html#3515" class="Function Operator">×</a> <a id="885" href="UALib.Relations.Binary.html#2514" class="Function">transitive</a> <a id="896" href="UALib.Relations.Equivalences.html#787" class="Bound Operator">_≈_</a>
+
+<a id="901" class="Keyword">module</a> <a id="908" href="UALib.Relations.Equivalences.html#908" class="Module">_</a> <a id="910" class="Symbol">{</a><a id="911" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a> <a id="913" class="Symbol">:</a> <a id="915" href="universes.html#551" class="Postulate">Universe</a><a id="923" class="Symbol">}</a> <a id="925" class="Keyword">where</a>
+
+ <a id="933" href="UALib.Relations.Equivalences.html#933" class="Function">𝟎-IsEquivalence</a> <a id="949" class="Symbol">:</a> <a id="951" class="Symbol">{</a><a id="952" href="UALib.Relations.Equivalences.html#952" class="Bound">A</a> <a id="954" class="Symbol">:</a> <a id="956" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a> <a id="958" href="universes.html#758" class="Function Operator">̇</a> <a id="960" class="Symbol">}</a> <a id="962" class="Symbol">→</a> <a id="964" href="UALib.Relations.Equivalences.html#562" class="Record">IsEquivalence</a><a id="977" class="Symbol">{</a><a id="978" class="Argument">𝓤</a> <a id="980" class="Symbol">=</a> <a id="982" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a><a id="983" class="Symbol">}{</a><a id="985" class="Argument">A</a> <a id="987" class="Symbol">=</a> <a id="989" href="UALib.Relations.Equivalences.html#952" class="Bound">A</a><a id="990" class="Symbol">}</a> <a id="992" href="UALib.Relations.Binary.html#1829" class="Function">𝟎-rel</a>
+ <a id="999" href="UALib.Relations.Equivalences.html#933" class="Function">𝟎-IsEquivalence</a> <a id="1015" class="Symbol">=</a> <a id="1017" class="Keyword">record</a> <a id="1024" class="Symbol">{</a> <a id="1026" href="UALib.Relations.Equivalences.html#630" class="Field">rfl</a> <a id="1030" class="Symbol">=</a> <a id="1032" class="Symbol">λ</a> <a id="1034" href="UALib.Relations.Equivalences.html#1034" class="Bound">x</a> <a id="1036" class="Symbol">→</a> <a id="1038" href="UALib.Prelude.Preliminaries.html#5645" class="InductiveConstructor">refl</a> <a id="1043" class="Symbol">_</a>
+                          <a id="1071" class="Symbol">;</a> <a id="1073" href="UALib.Relations.Equivalences.html#655" class="Field">sym</a> <a id="1077" class="Symbol">=</a> <a id="1079" class="Symbol">λ</a> <a id="1081" href="UALib.Relations.Equivalences.html#1081" class="Bound">x</a> <a id="1083" href="UALib.Relations.Equivalences.html#1083" class="Bound">y</a> <a id="1085" href="UALib.Relations.Equivalences.html#1085" class="Bound">x≡y</a> <a id="1089" class="Symbol">→</a> <a id="1091" href="UALib.Relations.Equivalences.html#1085" class="Bound">x≡y</a> <a id="1095" href="MGS-MLTT.html#6125" class="Function Operator">⁻¹</a>
+                          <a id="1124" class="Symbol">;</a> <a id="1126" href="UALib.Relations.Equivalences.html#680" class="Field">trans</a> <a id="1132" class="Symbol">=</a> <a id="1134" class="Symbol">λ</a> <a id="1136" href="UALib.Relations.Equivalences.html#1136" class="Bound">x</a> <a id="1138" href="UALib.Relations.Equivalences.html#1138" class="Bound">y</a> <a id="1140" href="UALib.Relations.Equivalences.html#1140" class="Bound">z</a> <a id="1142" href="UALib.Relations.Equivalences.html#1142" class="Bound">x≡y</a> <a id="1146" href="UALib.Relations.Equivalences.html#1146" class="Bound">y≡z</a> <a id="1150" class="Symbol">→</a> <a id="1152" href="UALib.Relations.Equivalences.html#1142" class="Bound">x≡y</a> <a id="1156" href="MGS-MLTT.html#5910" class="Function Operator">∙</a> <a id="1158" href="UALib.Relations.Equivalences.html#1146" class="Bound">y≡z</a> <a id="1162" class="Symbol">}</a>
+
+ <a id="1166" href="UALib.Relations.Equivalences.html#1166" class="Function">≡-IsEquivalence</a> <a id="1182" class="Symbol">:</a> <a id="1184" class="Symbol">{</a><a id="1185" href="UALib.Relations.Equivalences.html#1185" class="Bound">X</a> <a id="1187" class="Symbol">:</a> <a id="1189" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a> <a id="1191" href="universes.html#758" class="Function Operator">̇</a><a id="1192" class="Symbol">}</a> <a id="1194" class="Symbol">→</a> <a id="1196" href="UALib.Relations.Equivalences.html#562" class="Record">IsEquivalence</a><a id="1209" class="Symbol">{</a><a id="1210" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a><a id="1211" class="Symbol">}{</a><a id="1213" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a><a id="1214" class="Symbol">}{</a><a id="1216" href="UALib.Relations.Equivalences.html#1185" class="Bound">X</a><a id="1217" class="Symbol">}</a> <a id="1219" href="UALib.Prelude.Preliminaries.html#5609" class="Datatype Operator">_≡_</a>
+ <a id="1224" href="UALib.Relations.Equivalences.html#1166" class="Function">≡-IsEquivalence</a> <a id="1240" class="Symbol">=</a> <a id="1242" class="Keyword">record</a> <a id="1249" class="Symbol">{</a> <a id="1251" href="UALib.Relations.Equivalences.html#630" class="Field">rfl</a> <a id="1255" class="Symbol">=</a> <a id="1257" href="UALib.Prelude.Equality.html#1507" class="Function">≡-rfl</a> <a id="1263" class="Symbol">;</a> <a id="1265" href="UALib.Relations.Equivalences.html#655" class="Field">sym</a> <a id="1269" class="Symbol">=</a> <a id="1271" href="UALib.Prelude.Equality.html#1551" class="Function">≡-sym</a> <a id="1277" class="Symbol">;</a> <a id="1279" href="UALib.Relations.Equivalences.html#680" class="Field">trans</a> <a id="1285" class="Symbol">=</a> <a id="1287" href="UALib.Prelude.Equality.html#1616" class="Function">≡-trans</a> <a id="1295" class="Symbol">}</a>
+
+
+ <a id="1300" href="UALib.Relations.Equivalences.html#1300" class="Function">map-kernel-IsEquivalence</a> <a id="1325" class="Symbol">:</a> <a id="1327" class="Symbol">{</a><a id="1328" href="UALib.Relations.Equivalences.html#1328" class="Bound">𝓦</a> <a id="1330" class="Symbol">:</a> <a id="1332" href="universes.html#551" class="Postulate">Universe</a><a id="1340" class="Symbol">}{</a><a id="1342" href="UALib.Relations.Equivalences.html#1342" class="Bound">A</a> <a id="1344" class="Symbol">:</a> <a id="1346" href="UALib.Relations.Equivalences.html#911" class="Bound">𝓤</a> <a id="1348" href="universes.html#758" class="Function Operator">̇</a><a id="1349" class="Symbol">}{</a><a id="1351" href="UALib.Relations.Equivalences.html#1351" class="Bound">B</a> <a id="1353" class="Symbol">:</a> <a id="1355" href="UALib.Relations.Equivalences.html#1328" class="Bound">𝓦</a> <a id="1357" href="universes.html#758" class="Function Operator">̇</a><a id="1358" class="Symbol">}</a>
+                            <a id="1388" class="Symbol">(</a><a id="1389" href="UALib.Relations.Equivalences.html#1389" class="Bound">f</a> <a id="1391" class="Symbol">:</a> <a id="1393" href="UALib.Relations.Equivalences.html#1342" class="Bound">A</a> <a id="1395" class="Symbol">→</a> <a id="1397" href="UALib.Relations.Equivalences.html#1351" class="Bound">B</a><a id="1398" class="Symbol">)</a> <a id="1400" class="Symbol">→</a> <a id="1402" href="UALib.Relations.Equivalences.html#562" class="Record">IsEquivalence</a> <a id="1416" class="Symbol">(</a><a id="1417" href="UALib.Relations.Binary.html#1384" class="Function">KER-rel</a> <a id="1425" href="UALib.Relations.Equivalences.html#1389" class="Bound">f</a><a id="1426" class="Symbol">)</a>
+
+ <a id="1430" href="UALib.Relations.Equivalences.html#1300" class="Function">map-kernel-IsEquivalence</a> <a id="1455" class="Symbol">{</a><a id="1456" href="UALib.Relations.Equivalences.html#1456" class="Bound">𝓦</a><a id="1457" class="Symbol">}</a> <a id="1459" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1461" class="Symbol">=</a>
+  <a id="1465" class="Keyword">record</a> <a id="1472" class="Symbol">{</a> <a id="1474" href="UALib.Relations.Equivalences.html#630" class="Field">rfl</a> <a id="1478" class="Symbol">=</a> <a id="1480" class="Symbol">λ</a> <a id="1482" href="UALib.Relations.Equivalences.html#1482" class="Bound">x</a> <a id="1484" class="Symbol">→</a> <a id="1486" href="UALib.Prelude.Preliminaries.html#5623" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
+         <a id="1500" class="Symbol">;</a> <a id="1502" href="UALib.Relations.Equivalences.html#655" class="Field">sym</a> <a id="1506" class="Symbol">=</a> <a id="1508" class="Symbol">λ</a> <a id="1510" href="UALib.Relations.Equivalences.html#1510" class="Bound">x</a> <a id="1512" href="UALib.Relations.Equivalences.html#1512" class="Bound">y</a> <a id="1514" href="UALib.Relations.Equivalences.html#1514" class="Bound">x₁</a> <a id="1517" class="Symbol">→</a> <a id="1519" href="UALib.Prelude.Equality.html#1551" class="Function">≡-sym</a><a id="1524" class="Symbol">{</a><a id="1525" href="UALib.Relations.Equivalences.html#1456" class="Bound">𝓦</a><a id="1526" class="Symbol">}</a> <a id="1528" class="Symbol">(</a><a id="1529" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1531" href="UALib.Relations.Equivalences.html#1510" class="Bound">x</a><a id="1532" class="Symbol">)</a> <a id="1534" class="Symbol">(</a><a id="1535" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1537" href="UALib.Relations.Equivalences.html#1512" class="Bound">y</a><a id="1538" class="Symbol">)</a> <a id="1540" href="UALib.Relations.Equivalences.html#1514" class="Bound">x₁</a>
+         <a id="1552" class="Symbol">;</a> <a id="1554" href="UALib.Relations.Equivalences.html#680" class="Field">trans</a> <a id="1560" class="Symbol">=</a> <a id="1562" class="Symbol">λ</a> <a id="1564" href="UALib.Relations.Equivalences.html#1564" class="Bound">x</a> <a id="1566" href="UALib.Relations.Equivalences.html#1566" class="Bound">y</a> <a id="1568" href="UALib.Relations.Equivalences.html#1568" class="Bound">z</a> <a id="1570" href="UALib.Relations.Equivalences.html#1570" class="Bound">x₁</a> <a id="1573" href="UALib.Relations.Equivalences.html#1573" class="Bound">x₂</a> <a id="1576" class="Symbol">→</a> <a id="1578" href="UALib.Prelude.Equality.html#1616" class="Function">≡-trans</a> <a id="1586" class="Symbol">(</a><a id="1587" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1589" href="UALib.Relations.Equivalences.html#1564" class="Bound">x</a><a id="1590" class="Symbol">)</a> <a id="1592" class="Symbol">(</a><a id="1593" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1595" href="UALib.Relations.Equivalences.html#1566" class="Bound">y</a><a id="1596" class="Symbol">)</a> <a id="1598" class="Symbol">(</a><a id="1599" href="UALib.Relations.Equivalences.html#1459" class="Bound">f</a> <a id="1601" href="UALib.Relations.Equivalences.html#1568" class="Bound">z</a><a id="1602" class="Symbol">)</a> <a id="1604" href="UALib.Relations.Equivalences.html#1570" class="Bound">x₁</a> <a id="1607" href="UALib.Relations.Equivalences.html#1573" class="Bound">x₂</a> <a id="1610" class="Symbol">}</a>
+</pre>
+
+<hr />
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>

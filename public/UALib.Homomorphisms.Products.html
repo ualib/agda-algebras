@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Homomorphisms.Products module (The Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <p><a href="UALib.Homomorphisms.html">UALib.Homomorphisms ↑</a></p>
+
+<h3 id="homomorphisms-and-products"><a id="homomorphisms-and-products">Homomorphisms and Products</a></h3>
+
+<p>This section describes the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Products.lagda">UALib.Homomorphisms.Products</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<pre class="Agda">
+
+<a id="394" class="Symbol">{-#</a> <a id="398" class="Keyword">OPTIONS</a> <a id="406" class="Pragma">--without-K</a> <a id="418" class="Pragma">--exact-split</a> <a id="432" class="Pragma">--safe</a> <a id="439" class="Symbol">#-}</a>
+
+<a id="444" class="Keyword">open</a> <a id="449" class="Keyword">import</a> <a id="456" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="482" class="Keyword">using</a> <a id="488" class="Symbol">(</a><a id="489" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a><a id="498" class="Symbol">;</a> <a id="500" href="universes.html#613" class="Generalizable">𝓞</a><a id="501" class="Symbol">;</a> <a id="503" href="universes.html#617" class="Generalizable">𝓥</a><a id="504" class="Symbol">)</a>
+<a id="506" class="Keyword">open</a> <a id="511" class="Keyword">import</a> <a id="518" href="UALib.Prelude.Preliminaries.html" class="Module">UALib.Prelude.Preliminaries</a> <a id="546" class="Keyword">using</a> <a id="552" class="Symbol">(</a><a id="553" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a><a id="567" class="Symbol">)</a>
+
+
+<a id="571" class="Keyword">module</a> <a id="578" href="UALib.Homomorphisms.Products.html" class="Module">UALib.Homomorphisms.Products</a> <a id="607" class="Symbol">{</a><a id="608" href="UALib.Homomorphisms.Products.html#608" class="Bound">𝑆</a> <a id="610" class="Symbol">:</a> <a id="612" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="622" href="universes.html#613" class="Generalizable">𝓞</a> <a id="624" href="universes.html#617" class="Generalizable">𝓥</a><a id="625" class="Symbol">}{</a><a id="627" href="UALib.Homomorphisms.Products.html#627" class="Bound">gfe</a> <a id="631" class="Symbol">:</a> <a id="633" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a><a id="647" class="Symbol">}</a> <a id="649" class="Keyword">where</a>
+
+<a id="656" class="Keyword">open</a> <a id="661" class="Keyword">import</a> <a id="668" href="UALib.Homomorphisms.Noether.html" class="Module">UALib.Homomorphisms.Noether</a><a id="695" class="Symbol">{</a><a id="696" class="Argument">𝑆</a> <a id="698" class="Symbol">=</a> <a id="700" href="UALib.Homomorphisms.Products.html#608" class="Bound">𝑆</a><a id="701" class="Symbol">}{</a><a id="703" href="UALib.Homomorphisms.Products.html#627" class="Bound">gfe</a><a id="706" class="Symbol">}</a> <a id="708" class="Keyword">public</a>
+
+<a id="⨅-hom"></a><a id="716" href="UALib.Homomorphisms.Products.html#716" class="Function">⨅-hom</a> <a id="722" class="Symbol">:</a> <a id="724" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a> <a id="739" class="Symbol">→</a> <a id="741" class="Symbol">{</a><a id="742" href="UALib.Homomorphisms.Products.html#742" class="Bound">𝓠</a> <a id="744" href="UALib.Homomorphisms.Products.html#744" class="Bound">𝓤</a> <a id="746" href="UALib.Homomorphisms.Products.html#746" class="Bound">𝓘</a> <a id="748" class="Symbol">:</a> <a id="750" href="universes.html#551" class="Function">Universe</a><a id="758" class="Symbol">}</a>
+       <a id="767" class="Symbol">{</a><a id="768" href="UALib.Homomorphisms.Products.html#768" class="Bound">I</a> <a id="770" class="Symbol">:</a> <a id="772" href="UALib.Homomorphisms.Products.html#746" class="Bound">𝓘</a> <a id="774" href="universes.html#758" class="Function Operator">̇</a><a id="775" class="Symbol">}{</a><a id="777" href="UALib.Homomorphisms.Products.html#777" class="Bound">𝒜</a> <a id="779" class="Symbol">:</a> <a id="781" href="UALib.Homomorphisms.Products.html#768" class="Bound">I</a> <a id="783" class="Symbol">→</a> <a id="785" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="793" href="UALib.Homomorphisms.Products.html#742" class="Bound">𝓠</a> <a id="795" href="UALib.Homomorphisms.Products.html#608" class="Bound">𝑆</a><a id="796" class="Symbol">}{</a><a id="798" href="UALib.Homomorphisms.Products.html#798" class="Bound">ℬ</a> <a id="800" class="Symbol">:</a> <a id="802" href="UALib.Homomorphisms.Products.html#768" class="Bound">I</a> <a id="804" class="Symbol">→</a> <a id="806" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="814" href="UALib.Homomorphisms.Products.html#744" class="Bound">𝓤</a> <a id="816" href="UALib.Homomorphisms.Products.html#608" class="Bound">𝑆</a><a id="817" class="Symbol">}</a>
+ <a id="820" class="Symbol">→</a>     <a id="826" class="Symbol">((</a><a id="828" href="UALib.Homomorphisms.Products.html#828" class="Bound">i</a> <a id="830" class="Symbol">:</a> <a id="832" href="UALib.Homomorphisms.Products.html#768" class="Bound">I</a><a id="833" class="Symbol">)</a> <a id="835" class="Symbol">→</a> <a id="837" href="UALib.Homomorphisms.Basic.html#1293" class="Function">hom</a> <a id="841" class="Symbol">(</a><a id="842" href="UALib.Homomorphisms.Products.html#777" class="Bound">𝒜</a> <a id="844" href="UALib.Homomorphisms.Products.html#828" class="Bound">i</a><a id="845" class="Symbol">)(</a><a id="847" href="UALib.Homomorphisms.Products.html#798" class="Bound">ℬ</a> <a id="849" href="UALib.Homomorphisms.Products.html#828" class="Bound">i</a><a id="850" class="Symbol">))</a>
+     <a id="858" class="Comment">---------------------------</a>
+ <a id="887" class="Symbol">→</a>       <a id="895" href="UALib.Homomorphisms.Basic.html#1293" class="Function">hom</a> <a id="899" class="Symbol">(</a><a id="900" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="902" href="UALib.Homomorphisms.Products.html#777" class="Bound">𝒜</a><a id="903" class="Symbol">)</a> <a id="905" class="Symbol">(</a><a id="906" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="908" href="UALib.Homomorphisms.Products.html#798" class="Bound">ℬ</a><a id="909" class="Symbol">)</a>
+
+<a id="912" href="UALib.Homomorphisms.Products.html#716" class="Function">⨅-hom</a> <a id="918" href="UALib.Homomorphisms.Products.html#918" class="Bound">gfe</a> <a id="922" class="Symbol">{</a><a id="923" href="UALib.Homomorphisms.Products.html#923" class="Bound">𝓠</a><a id="924" class="Symbol">}{</a><a id="926" href="UALib.Homomorphisms.Products.html#926" class="Bound">𝓤</a><a id="927" class="Symbol">}{</a><a id="929" href="UALib.Homomorphisms.Products.html#929" class="Bound">𝓘</a><a id="930" class="Symbol">}{</a><a id="932" href="UALib.Homomorphisms.Products.html#932" class="Bound">I</a><a id="933" class="Symbol">}{</a><a id="935" href="UALib.Homomorphisms.Products.html#935" class="Bound">𝒜</a><a id="936" class="Symbol">}{</a><a id="938" href="UALib.Homomorphisms.Products.html#938" class="Bound">ℬ</a><a id="939" class="Symbol">}</a> <a id="941" href="UALib.Homomorphisms.Products.html#941" class="Bound">homs</a> <a id="946" class="Symbol">=</a> <a id="948" href="UALib.Homomorphisms.Products.html#966" class="Function">ϕ</a> <a id="950" href="UALib.Prelude.Preliminaries.html#5718" class="InductiveConstructor Operator">,</a> <a id="952" href="UALib.Homomorphisms.Products.html#1022" class="Function">ϕhom</a>
+ <a id="958" class="Keyword">where</a>
+  <a id="966" href="UALib.Homomorphisms.Products.html#966" class="Function">ϕ</a> <a id="968" class="Symbol">:</a> <a id="970" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="972" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="974" href="UALib.Homomorphisms.Products.html#935" class="Bound">𝒜</a> <a id="976" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="978" class="Symbol">→</a> <a id="980" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="982" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="984" href="UALib.Homomorphisms.Products.html#938" class="Bound">ℬ</a> <a id="986" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a>
+  <a id="990" href="UALib.Homomorphisms.Products.html#966" class="Function">ϕ</a> <a id="992" class="Symbol">=</a> <a id="994" class="Symbol">λ</a> <a id="996" href="UALib.Homomorphisms.Products.html#996" class="Bound">x</a> <a id="998" href="UALib.Homomorphisms.Products.html#998" class="Bound">i</a> <a id="1000" class="Symbol">→</a> <a id="1002" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1004" href="UALib.Homomorphisms.Products.html#941" class="Bound">homs</a> <a id="1009" href="UALib.Homomorphisms.Products.html#998" class="Bound">i</a> <a id="1011" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1013" class="Symbol">(</a><a id="1014" href="UALib.Homomorphisms.Products.html#996" class="Bound">x</a> <a id="1016" href="UALib.Homomorphisms.Products.html#998" class="Bound">i</a><a id="1017" class="Symbol">)</a>
+
+  <a id="1022" href="UALib.Homomorphisms.Products.html#1022" class="Function">ϕhom</a> <a id="1027" class="Symbol">:</a> <a id="1029" href="UALib.Homomorphisms.Basic.html#1121" class="Function">is-homomorphism</a> <a id="1045" class="Symbol">(</a><a id="1046" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1048" href="UALib.Homomorphisms.Products.html#935" class="Bound">𝒜</a><a id="1049" class="Symbol">)</a> <a id="1051" class="Symbol">(</a><a id="1052" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1054" href="UALib.Homomorphisms.Products.html#938" class="Bound">ℬ</a><a id="1055" class="Symbol">)</a> <a id="1057" href="UALib.Homomorphisms.Products.html#966" class="Function">ϕ</a>
+  <a id="1061" href="UALib.Homomorphisms.Products.html#1022" class="Function">ϕhom</a> <a id="1066" href="UALib.Homomorphisms.Products.html#1066" class="Bound">𝑓</a> <a id="1068" href="UALib.Homomorphisms.Products.html#1068" class="Bound">𝒂</a> <a id="1070" class="Symbol">=</a> <a id="1072" href="UALib.Homomorphisms.Products.html#918" class="Bound">gfe</a> <a id="1076" class="Symbol">(λ</a> <a id="1079" href="UALib.Homomorphisms.Products.html#1079" class="Bound">i</a> <a id="1081" class="Symbol">→</a> <a id="1083" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1085" href="UALib.Homomorphisms.Products.html#941" class="Bound">homs</a> <a id="1090" href="UALib.Homomorphisms.Products.html#1079" class="Bound">i</a> <a id="1092" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1094" href="UALib.Homomorphisms.Products.html#1066" class="Bound">𝑓</a> <a id="1096" class="Symbol">(λ</a> <a id="1099" href="UALib.Homomorphisms.Products.html#1099" class="Bound">x</a> <a id="1101" class="Symbol">→</a> <a id="1103" href="UALib.Homomorphisms.Products.html#1068" class="Bound">𝒂</a> <a id="1105" href="UALib.Homomorphisms.Products.html#1099" class="Bound">x</a> <a id="1107" href="UALib.Homomorphisms.Products.html#1079" class="Bound">i</a><a id="1108" class="Symbol">))</a>
+</pre>
+
+<h4 id="projection-homomorphisms">Projection homomorphisms</h4>
+
+<pre class="Agda">
+<a id="⨅-projection-hom"></a><a id="1167" href="UALib.Homomorphisms.Products.html#1167" class="Function">⨅-projection-hom</a> <a id="1184" class="Symbol">:</a> <a id="1186" class="Symbol">{</a><a id="1187" href="UALib.Homomorphisms.Products.html#1187" class="Bound">𝓤</a> <a id="1189" href="UALib.Homomorphisms.Products.html#1189" class="Bound">𝓘</a> <a id="1191" class="Symbol">:</a> <a id="1193" href="universes.html#551" class="Function">Universe</a><a id="1201" class="Symbol">}</a>
+                   <a id="1222" class="Symbol">{</a><a id="1223" href="UALib.Homomorphisms.Products.html#1223" class="Bound">I</a> <a id="1225" class="Symbol">:</a> <a id="1227" href="UALib.Homomorphisms.Products.html#1189" class="Bound">𝓘</a> <a id="1229" href="universes.html#758" class="Function Operator">̇</a><a id="1230" class="Symbol">}{</a><a id="1232" href="UALib.Homomorphisms.Products.html#1232" class="Bound">𝒜</a> <a id="1234" class="Symbol">:</a> <a id="1236" href="UALib.Homomorphisms.Products.html#1223" class="Bound">I</a> <a id="1238" class="Symbol">→</a> <a id="1240" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="1248" href="UALib.Homomorphisms.Products.html#1187" class="Bound">𝓤</a> <a id="1250" href="UALib.Homomorphisms.Products.html#608" class="Bound">𝑆</a><a id="1251" class="Symbol">}</a>
+                   <a id="1272" class="Comment">--------------------------------</a>
+ <a id="1306" class="Symbol">→</a>                  <a id="1325" class="Symbol">(</a><a id="1326" href="UALib.Homomorphisms.Products.html#1326" class="Bound">i</a> <a id="1328" class="Symbol">:</a> <a id="1330" href="UALib.Homomorphisms.Products.html#1223" class="Bound">I</a><a id="1331" class="Symbol">)</a> <a id="1333" class="Symbol">→</a> <a id="1335" href="UALib.Homomorphisms.Basic.html#1293" class="Function">hom</a> <a id="1339" class="Symbol">(</a><a id="1340" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1342" href="UALib.Homomorphisms.Products.html#1232" class="Bound">𝒜</a><a id="1343" class="Symbol">)</a> <a id="1345" class="Symbol">(</a><a id="1346" href="UALib.Homomorphisms.Products.html#1232" class="Bound">𝒜</a> <a id="1348" href="UALib.Homomorphisms.Products.html#1326" class="Bound">i</a><a id="1349" class="Symbol">)</a>
+
+<a id="1352" href="UALib.Homomorphisms.Products.html#1167" class="Function">⨅-projection-hom</a> <a id="1369" class="Symbol">{</a><a id="1370" href="UALib.Homomorphisms.Products.html#1370" class="Bound">𝓤</a><a id="1371" class="Symbol">}{</a><a id="1373" href="UALib.Homomorphisms.Products.html#1373" class="Bound">𝓘</a><a id="1374" class="Symbol">}{</a><a id="1376" href="UALib.Homomorphisms.Products.html#1376" class="Bound">I</a><a id="1377" class="Symbol">}{</a><a id="1379" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a><a id="1380" class="Symbol">}</a> <a id="1382" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a> <a id="1384" class="Symbol">=</a> <a id="1386" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a> <a id="1389" href="UALib.Prelude.Preliminaries.html#5718" class="InductiveConstructor Operator">,</a> <a id="1391" href="UALib.Homomorphisms.Products.html#1449" class="Function">ϕihom</a>
+ <a id="1398" class="Keyword">where</a>
+  <a id="1406" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a> <a id="1409" class="Symbol">:</a> <a id="1411" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1413" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1415" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a> <a id="1417" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1419" class="Symbol">→</a> <a id="1421" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1423" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a> <a id="1425" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a> <a id="1427" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a>
+  <a id="1431" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a> <a id="1434" class="Symbol">=</a> <a id="1436" class="Symbol">λ</a> <a id="1438" href="UALib.Homomorphisms.Products.html#1438" class="Bound">x</a> <a id="1440" class="Symbol">→</a> <a id="1442" href="UALib.Homomorphisms.Products.html#1438" class="Bound">x</a> <a id="1444" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a>
+
+  <a id="1449" href="UALib.Homomorphisms.Products.html#1449" class="Function">ϕihom</a> <a id="1455" class="Symbol">:</a> <a id="1457" href="UALib.Homomorphisms.Basic.html#1121" class="Function">is-homomorphism</a> <a id="1473" class="Symbol">(</a><a id="1474" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1476" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a><a id="1477" class="Symbol">)</a> <a id="1479" class="Symbol">(</a><a id="1480" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a> <a id="1482" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a><a id="1483" class="Symbol">)</a> <a id="1485" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a>
+  <a id="1490" href="UALib.Homomorphisms.Products.html#1449" class="Function">ϕihom</a> <a id="1496" href="UALib.Homomorphisms.Products.html#1496" class="Bound">𝑓</a> <a id="1498" href="UALib.Homomorphisms.Products.html#1498" class="Bound">𝒂</a> <a id="1500" class="Symbol">=</a> <a id="1502" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a> <a id="1505" class="Symbol">((</a><a id="1507" href="UALib.Homomorphisms.Products.html#1496" class="Bound">𝑓</a> <a id="1509" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="1511" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1513" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a><a id="1514" class="Symbol">)</a> <a id="1516" href="UALib.Homomorphisms.Products.html#1498" class="Bound">𝒂</a><a id="1517" class="Symbol">)</a> <a id="1519" href="MGS-MLTT.html#5997" class="Function Operator">≡⟨</a> <a id="1522" href="UALib.Prelude.Preliminaries.html#5623" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="1527" href="MGS-MLTT.html#5997" class="Function Operator">⟩</a>
+             <a id="1542" class="Symbol">((</a><a id="1544" href="UALib.Homomorphisms.Products.html#1496" class="Bound">𝑓</a> <a id="1546" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="1548" href="UALib.Algebras.Products.html#719" class="Function">⨅</a> <a id="1550" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a><a id="1551" class="Symbol">)</a> <a id="1553" href="UALib.Homomorphisms.Products.html#1498" class="Bound">𝒂</a><a id="1554" class="Symbol">)</a> <a id="1556" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a> <a id="1558" href="MGS-MLTT.html#5997" class="Function Operator">≡⟨</a> <a id="1561" href="UALib.Prelude.Preliminaries.html#5623" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="1566" href="MGS-MLTT.html#5997" class="Function Operator">⟩</a>
+             <a id="1581" class="Symbol">(</a><a id="1582" href="UALib.Homomorphisms.Products.html#1496" class="Bound">𝑓</a> <a id="1584" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="1586" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a> <a id="1588" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a><a id="1589" class="Symbol">)</a> <a id="1591" class="Symbol">(λ</a> <a id="1594" href="UALib.Homomorphisms.Products.html#1594" class="Bound">x</a> <a id="1596" class="Symbol">→</a> <a id="1598" href="UALib.Homomorphisms.Products.html#1498" class="Bound">𝒂</a> <a id="1600" href="UALib.Homomorphisms.Products.html#1594" class="Bound">x</a> <a id="1602" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a><a id="1603" class="Symbol">)</a> <a id="1605" href="MGS-MLTT.html#5997" class="Function Operator">≡⟨</a> <a id="1608" href="UALib.Prelude.Preliminaries.html#5623" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="1613" href="MGS-MLTT.html#5997" class="Function Operator">⟩</a>
+             <a id="1628" class="Symbol">(</a><a id="1629" href="UALib.Homomorphisms.Products.html#1496" class="Bound">𝑓</a> <a id="1631" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="1633" href="UALib.Homomorphisms.Products.html#1379" class="Bound">𝒜</a> <a id="1635" href="UALib.Homomorphisms.Products.html#1382" class="Bound">i</a><a id="1636" class="Symbol">)</a> <a id="1638" class="Symbol">(λ</a> <a id="1641" href="UALib.Homomorphisms.Products.html#1641" class="Bound">x</a> <a id="1643" class="Symbol">→</a> <a id="1645" href="UALib.Homomorphisms.Products.html#1406" class="Function">ϕi</a> <a id="1648" class="Symbol">(</a><a id="1649" href="UALib.Homomorphisms.Products.html#1498" class="Bound">𝒂</a> <a id="1651" href="UALib.Homomorphisms.Products.html#1641" class="Bound">x</a><a id="1652" class="Symbol">))</a> <a id="1655" href="MGS-MLTT.html#6079" class="Function Operator">∎</a>
+</pre>
+
+<hr />
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>

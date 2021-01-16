@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>UALib.Algebras.Algebras module (Agda Universal Algebra Library) </title>
+      <link rel="stylesheet" type="text/css" href="css/Agda.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+  </head>
+      <body>
+          <style>
+
+
+           body, html{
+               margin: 60px auto;
+               width: 70%;
+               /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+               font-size: 1.2em;
+               line-height: 1.3em;
+           }
+              a {
+              text-decoration: none;
+              color: #5F38AD;
+
+              }
+              a:hover {
+              text-decoration: underline;
+              }
+
+              h1 {
+              font-size: 4em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+
+              h2 {
+              font-size: 3em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h3 {
+              font-size: 2.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              }
+              h4 {
+              font-size: 1.5em;
+              font-family:'Helvetica', 'Arial', 'Sans-Serif';
+              } */
+	        </style>
+          <div class="container">
+              <p><a href="UALib.Algebras.html">UALib.Algebras ↑</a></p>
+
+<h3 id="algebra-types"><a id="algebra-types">Algebra Types</a></h3>
+
+<p>This section presents the <a href="https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda">UALib.Algebras.Algebras</a> module of the <a href="https://gitlab.com/ualib/ualib.gitlab.io/">Agda Universal Algebra Library</a>.</p>
+
+<pre class="Agda">
+
+<a id="341" class="Symbol">{-#</a> <a id="345" class="Keyword">OPTIONS</a> <a id="353" class="Pragma">--without-K</a> <a id="365" class="Pragma">--exact-split</a> <a id="379" class="Pragma">--safe</a> <a id="386" class="Symbol">#-}</a>
+
+<a id="391" class="Keyword">module</a> <a id="398" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="422" class="Keyword">where</a>
+
+<a id="429" class="Keyword">open</a> <a id="434" class="Keyword">import</a> <a id="441" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="467" class="Keyword">public</a>
+
+<a id="475" class="Keyword">open</a> <a id="480" class="Keyword">import</a> <a id="487" href="UALib.Prelude.Preliminaries.html" class="Module">UALib.Prelude.Preliminaries</a> <a id="515" class="Keyword">using</a> <a id="521" class="Symbol">(</a><a id="522" href="universes.html#504" class="Primitive">𝓤₀</a><a id="524" class="Symbol">;</a> <a id="526" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="527" class="Symbol">;</a> <a id="529" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="530" class="Symbol">)</a> <a id="532" class="Keyword">public</a>
+
+</pre>
+
+<h4 id="sets-0-groupoids">Sets (0-groupoids)</h4>
+
+<p>Before defining the type of algebras, we need to explain what it means to be a set in univalent mathematics.  A type is defined to be a <strong>set</strong> if there is at most one way for any two of its elements to be equal.</p>
+
+<p>MHE defines this notion (e.g., in the MGS-Embeddings module) as follows:</p>
+
+<pre><code class="language-agda">is-set : 𝓤 ̇ → 𝓤 ̇
+is-set X = (x y : X) → is-subsingleton (x ≡ y)
+</code></pre>
+
+<p>and explains, “at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom.”</p>
+
+<h4 id="the-main-algebra-type">The main Algebra type</h4>
+
+<p>The first type for representing algebras that we define will put the domain of an algebra in an arbitrary type.  We will call these “∞-algebras” because the universe need not be a set.  After that, we define the type of algebra that we typically think of when doing informal universal algebra, which we call “0-algebras” since their domains are sets.</p>
+
+<pre class="Agda">
+
+<a id="∞-algebra"></a><a id="1502" href="UALib.Algebras.Algebras.html#1502" class="Function">∞-algebra</a> <a id="Algebra"></a><a id="1512" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="1520" class="Symbol">:</a> <a id="1522" class="Symbol">(</a><a id="1523" href="UALib.Algebras.Algebras.html#1523" class="Bound">𝓤</a> <a id="1525" class="Symbol">:</a> <a id="1527" href="universes.html#551" class="Postulate">Universe</a><a id="1535" class="Symbol">)(</a><a id="1537" href="UALib.Algebras.Algebras.html#1537" class="Bound">𝑆</a> <a id="1539" class="Symbol">:</a> <a id="1541" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="1551" href="universes.html#613" class="Generalizable">𝓞</a> <a id="1553" href="universes.html#617" class="Generalizable">𝓥</a><a id="1554" class="Symbol">)</a> <a id="1556" class="Symbol">→</a>  <a id="1559" href="universes.html#613" class="Generalizable">𝓞</a> <a id="1561" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="1563" href="universes.html#617" class="Generalizable">𝓥</a> <a id="1565" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="1567" href="UALib.Algebras.Algebras.html#1523" class="Bound">𝓤</a> <a id="1569" href="universes.html#527" class="Primitive Operator">⁺</a> <a id="1571" href="universes.html#758" class="Function Operator">̇</a>
+
+<a id="1574" href="UALib.Algebras.Algebras.html#1502" class="Function">∞-algebra</a> <a id="1584" href="UALib.Algebras.Algebras.html#1584" class="Bound">𝓤</a>  <a id="1587" href="UALib.Algebras.Algebras.html#1587" class="Bound">𝑆</a> <a id="1589" class="Symbol">=</a> <a id="1591" href="MGS-MLTT.html#3074" class="Function">Σ</a> <a id="1593" href="UALib.Algebras.Algebras.html#1593" class="Bound">A</a> <a id="1595" href="MGS-MLTT.html#3074" class="Function">꞉</a> <a id="1597" href="UALib.Algebras.Algebras.html#1584" class="Bound">𝓤</a> <a id="1599" href="universes.html#758" class="Function Operator">̇</a> <a id="1601" href="MGS-MLTT.html#3074" class="Function">,</a> <a id="1603" class="Symbol">((</a><a id="1605" href="UALib.Algebras.Algebras.html#1605" class="Bound">f</a> <a id="1607" class="Symbol">:</a> <a id="1609" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="1611" href="UALib.Algebras.Algebras.html#1587" class="Bound">𝑆</a> <a id="1613" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="1614" class="Symbol">)</a> <a id="1616" class="Symbol">→</a> <a id="1618" href="UALib.Algebras.Signatures.html#751" class="Function">Op</a> <a id="1621" class="Symbol">(</a><a id="1622" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1624" href="UALib.Algebras.Algebras.html#1587" class="Bound">𝑆</a> <a id="1626" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="1628" href="UALib.Algebras.Algebras.html#1605" class="Bound">f</a><a id="1629" class="Symbol">)</a> <a id="1631" href="UALib.Algebras.Algebras.html#1593" class="Bound">A</a><a id="1632" class="Symbol">)</a>
+<a id="1634" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="1642" class="Symbol">=</a> <a id="1644" href="UALib.Algebras.Algebras.html#1502" class="Function">∞-algebra</a>
+
+</pre>
+
+<p>The type of the <code class="language-plaintext highlighter-rouge">Algebra 𝓤 𝑆</code> type is <code class="language-plaintext highlighter-rouge">𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇</code>. This type is used so often in our library that in some modules (where the signature universe levels 𝓞 𝓥 are already in context) we will define the following shorthand for the universe level:</p>
+
+<pre><code class="language-agda">OV : Universe → Universe
+OV = λ 𝓤 → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
+</code></pre>
+
+<p>so we can now simply type <code class="language-plaintext highlighter-rouge">OV 𝓤</code> in place of the more laborious <code class="language-plaintext highlighter-rouge">𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺</code>.</p>
+
+<pre class="Agda">
+
+<a id="2071" class="Keyword">data</a> <a id="monoid-op"></a><a id="2076" href="UALib.Algebras.Algebras.html#2076" class="Datatype">monoid-op</a> <a id="2086" class="Symbol">:</a> <a id="2088" href="universes.html#504" class="Primitive">𝓤₀</a> <a id="2091" href="universes.html#758" class="Function Operator">̇</a> <a id="2093" class="Keyword">where</a>
+ <a id="monoid-op.e"></a><a id="2100" href="UALib.Algebras.Algebras.html#2100" class="InductiveConstructor">e</a> <a id="2102" class="Symbol">:</a> <a id="2104" href="UALib.Algebras.Algebras.html#2076" class="Datatype">monoid-op</a>
+ <a id="monoid-op.·"></a><a id="2115" href="UALib.Algebras.Algebras.html#2115" class="InductiveConstructor">·</a> <a id="2117" class="Symbol">:</a> <a id="2119" href="UALib.Algebras.Algebras.html#2076" class="Datatype">monoid-op</a>
+
+<a id="monoid-sig"></a><a id="2130" href="UALib.Algebras.Algebras.html#2130" class="Function">monoid-sig</a> <a id="2141" class="Symbol">:</a> <a id="2143" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="2153" class="Symbol">_</a> <a id="2155" class="Symbol">_</a>
+<a id="2157" href="UALib.Algebras.Algebras.html#2130" class="Function">monoid-sig</a> <a id="2168" class="Symbol">=</a> <a id="2170" href="UALib.Algebras.Algebras.html#2076" class="Datatype">monoid-op</a> <a id="2180" href="UALib.Prelude.Preliminaries.html#5718" class="InductiveConstructor Operator">,</a> <a id="2182" class="Symbol">λ</a> <a id="2184" class="Symbol">{</a> <a id="2186" href="UALib.Algebras.Algebras.html#2100" class="InductiveConstructor">e</a> <a id="2188" class="Symbol">→</a> <a id="2190" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="2191" class="Symbol">;</a> <a id="2193" href="UALib.Algebras.Algebras.html#2115" class="InductiveConstructor">·</a> <a id="2195" class="Symbol">→</a> <a id="2197" href="MGS-MLTT.html#2482" class="Function">𝟚</a> <a id="2199" class="Symbol">}</a>
+
+</pre>
+
+<h4 id="algebras-as-record-types">Algebras as record types</h4>
+
+<p>Sometimes records are more convenient than sigma types. For such cases, we might prefer the following representation of the type of algebras.</p>
+
+<pre class="Agda">
+
+<a id="2402" class="Keyword">module</a> <a id="2409" href="UALib.Algebras.Algebras.html#2409" class="Module">_</a> <a id="2411" class="Symbol">{</a><a id="2412" href="UALib.Algebras.Algebras.html#2412" class="Bound">𝓞</a> <a id="2414" href="UALib.Algebras.Algebras.html#2414" class="Bound">𝓥</a> <a id="2416" class="Symbol">:</a> <a id="2418" href="universes.html#551" class="Postulate">Universe</a><a id="2426" class="Symbol">}</a> <a id="2428" class="Keyword">where</a>
+ <a id="2435" class="Keyword">record</a> <a id="2442" href="UALib.Algebras.Algebras.html#2442" class="Record">algebra</a> <a id="2450" class="Symbol">(</a><a id="2451" href="UALib.Algebras.Algebras.html#2451" class="Bound">𝓤</a> <a id="2453" class="Symbol">:</a> <a id="2455" href="universes.html#551" class="Postulate">Universe</a><a id="2463" class="Symbol">)</a> <a id="2465" class="Symbol">(</a><a id="2466" href="UALib.Algebras.Algebras.html#2466" class="Bound">𝑆</a> <a id="2468" class="Symbol">:</a> <a id="2470" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="2480" href="UALib.Algebras.Algebras.html#2412" class="Bound">𝓞</a> <a id="2482" href="UALib.Algebras.Algebras.html#2414" class="Bound">𝓥</a><a id="2483" class="Symbol">)</a> <a id="2485" class="Symbol">:</a> <a id="2487" class="Symbol">(</a><a id="2488" href="UALib.Algebras.Algebras.html#2412" class="Bound">𝓞</a> <a id="2490" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="2492" href="UALib.Algebras.Algebras.html#2414" class="Bound">𝓥</a> <a id="2494" href="Agda.Primitive.html#636" class="Primitive Operator">⊔</a> <a id="2496" href="UALib.Algebras.Algebras.html#2451" class="Bound">𝓤</a><a id="2497" class="Symbol">)</a> <a id="2499" href="universes.html#527" class="Primitive Operator">⁺</a> <a id="2501" href="universes.html#758" class="Function Operator">̇</a> <a id="2503" class="Keyword">where</a>
+  <a id="2511" class="Keyword">constructor</a> <a id="2523" href="UALib.Algebras.Algebras.html#2523" class="InductiveConstructor">mkalg</a>
+  <a id="2531" class="Keyword">field</a>
+   <a id="2540" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a> <a id="2545" class="Symbol">:</a> <a id="2547" href="UALib.Algebras.Algebras.html#2451" class="Bound">𝓤</a> <a id="2549" href="universes.html#758" class="Function Operator">̇</a>
+   <a id="2554" href="UALib.Algebras.Algebras.html#2554" class="Field">op</a> <a id="2557" class="Symbol">:</a> <a id="2559" class="Symbol">(</a><a id="2560" href="UALib.Algebras.Algebras.html#2560" class="Bound">f</a> <a id="2562" class="Symbol">:</a> <a id="2564" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="2566" href="UALib.Algebras.Algebras.html#2466" class="Bound">𝑆</a> <a id="2568" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="2569" class="Symbol">)</a> <a id="2571" class="Symbol">→</a> <a id="2573" class="Symbol">((</a><a id="2575" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="2577" href="UALib.Algebras.Algebras.html#2466" class="Bound">𝑆</a> <a id="2579" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="2581" href="UALib.Algebras.Algebras.html#2560" class="Bound">f</a><a id="2582" class="Symbol">)</a> <a id="2584" class="Symbol">→</a> <a id="2586" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a><a id="2590" class="Symbol">)</a> <a id="2592" class="Symbol">→</a> <a id="2594" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a>
+
+
+</pre>
+
+<p>(Recall, the type <code class="language-plaintext highlighter-rouge">Signature 𝓞 𝓥</code> is simply defined as the dependent pair type <code class="language-plaintext highlighter-rouge">Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)</code>.)</p>
+
+<p>Of course, we can go back and forth between the two representations of algebras, like so.</p>
+
+<pre class="Agda">
+
+<a id="2824" class="Keyword">module</a> <a id="2831" href="UALib.Algebras.Algebras.html#2831" class="Module">_</a> <a id="2833" class="Symbol">{</a><a id="2834" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="2836" href="UALib.Algebras.Algebras.html#2836" class="Bound">𝓞</a> <a id="2838" href="UALib.Algebras.Algebras.html#2838" class="Bound">𝓥</a> <a id="2840" class="Symbol">:</a> <a id="2842" href="universes.html#551" class="Postulate">Universe</a><a id="2850" class="Symbol">}</a> <a id="2852" class="Symbol">{</a><a id="2853" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a> <a id="2855" class="Symbol">:</a> <a id="2857" href="UALib.Algebras.Signatures.html#1018" class="Function">Signature</a> <a id="2867" href="UALib.Algebras.Algebras.html#2836" class="Bound">𝓞</a> <a id="2869" href="UALib.Algebras.Algebras.html#2838" class="Bound">𝓥</a><a id="2870" class="Symbol">}</a> <a id="2872" class="Keyword">where</a>
+
+ <a id="2880" class="Keyword">open</a> <a id="2885" href="UALib.Algebras.Algebras.html#2442" class="Module">algebra</a>
+
+ <a id="2895" href="UALib.Algebras.Algebras.html#2895" class="Function">algebra→Algebra</a> <a id="2911" class="Symbol">:</a> <a id="2913" href="UALib.Algebras.Algebras.html#2442" class="Record">algebra</a> <a id="2921" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="2923" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a> <a id="2925" class="Symbol">→</a> <a id="2927" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="2935" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="2937" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a>
+ <a id="2940" href="UALib.Algebras.Algebras.html#2895" class="Function">algebra→Algebra</a> <a id="2956" href="UALib.Algebras.Algebras.html#2956" class="Bound">𝑨</a> <a id="2958" class="Symbol">=</a> <a id="2960" class="Symbol">(</a><a id="2961" href="UALib.Algebras.Algebras.html#2540" class="Field">univ</a> <a id="2966" href="UALib.Algebras.Algebras.html#2956" class="Bound">𝑨</a> <a id="2968" href="UALib.Prelude.Preliminaries.html#5718" class="InductiveConstructor Operator">,</a> <a id="2970" href="UALib.Algebras.Algebras.html#2554" class="Field">op</a> <a id="2973" href="UALib.Algebras.Algebras.html#2956" class="Bound">𝑨</a><a id="2974" class="Symbol">)</a>
+
+ <a id="2978" href="UALib.Algebras.Algebras.html#2978" class="Function">Algebra→algebra</a> <a id="2994" class="Symbol">:</a> <a id="2996" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="3004" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="3006" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a> <a id="3008" class="Symbol">→</a> <a id="3010" href="UALib.Algebras.Algebras.html#2442" class="Record">algebra</a> <a id="3018" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="3020" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a>
+ <a id="3023" href="UALib.Algebras.Algebras.html#2978" class="Function">Algebra→algebra</a> <a id="3039" href="UALib.Algebras.Algebras.html#3039" class="Bound">𝑨</a> <a id="3041" class="Symbol">=</a> <a id="3043" href="UALib.Algebras.Algebras.html#2523" class="InductiveConstructor">mkalg</a> <a id="3049" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="3051" href="UALib.Algebras.Algebras.html#3039" class="Bound">𝑨</a> <a id="3053" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="3055" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="3057" href="UALib.Algebras.Algebras.html#3039" class="Bound">𝑨</a> <a id="3059" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a>
+
+</pre>
+
+<h4 id="operation-interpretation-syntax">Operation interpretation syntax</h4>
+
+<p>We conclude this module by defining a convenient shorthand for the interpretation of an operation symbol that we will use often.  It looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with.</p>
+
+<pre class="Agda">
+
+ <a id="3389" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">_̂_</a> <a id="3393" class="Symbol">:</a> <a id="3395" class="Symbol">(</a><a id="3396" href="UALib.Algebras.Algebras.html#3396" class="Bound">f</a> <a id="3398" class="Symbol">:</a> <a id="3400" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="3402" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a> <a id="3404" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="3405" class="Symbol">)(</a><a id="3407" href="UALib.Algebras.Algebras.html#3407" class="Bound">𝑨</a> <a id="3409" class="Symbol">:</a> <a id="3411" href="UALib.Algebras.Algebras.html#1512" class="Function">Algebra</a> <a id="3419" href="UALib.Algebras.Algebras.html#2834" class="Bound">𝓤</a> <a id="3421" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a><a id="3422" class="Symbol">)</a> <a id="3424" class="Symbol">→</a> <a id="3426" class="Symbol">(</a><a id="3427" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="3429" href="UALib.Algebras.Algebras.html#2853" class="Bound">𝑆</a> <a id="3431" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="3433" href="UALib.Algebras.Algebras.html#3396" class="Bound">f</a>  <a id="3436" class="Symbol">→</a>  <a id="3439" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="3441" href="UALib.Algebras.Algebras.html#3407" class="Bound">𝑨</a> <a id="3443" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a><a id="3444" class="Symbol">)</a> <a id="3446" class="Symbol">→</a> <a id="3448" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a> <a id="3450" href="UALib.Algebras.Algebras.html#3407" class="Bound">𝑨</a> <a id="3452" href="UALib.Prelude.Preliminaries.html#7604" class="Function Operator">∣</a>
+
+ <a id="3456" href="UALib.Algebras.Algebras.html#3456" class="Bound">f</a> <a id="3458" href="UALib.Algebras.Algebras.html#3389" class="Function Operator">̂</a> <a id="3460" href="UALib.Algebras.Algebras.html#3460" class="Bound">𝑨</a> <a id="3462" class="Symbol">=</a> <a id="3464" class="Symbol">λ</a> <a id="3466" href="UALib.Algebras.Algebras.html#3466" class="Bound">x</a> <a id="3468" class="Symbol">→</a> <a id="3470" class="Symbol">(</a><a id="3471" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="3473" href="UALib.Algebras.Algebras.html#3460" class="Bound">𝑨</a> <a id="3475" href="UALib.Prelude.Preliminaries.html#7682" class="Function Operator">∥</a> <a id="3477" href="UALib.Algebras.Algebras.html#3456" class="Bound">f</a><a id="3478" class="Symbol">)</a> <a id="3480" href="UALib.Algebras.Algebras.html#3466" class="Bound">x</a>
+
+</pre>
+
+<hr />
+
+<p><a href="UALib.html#detailed-contents">Back to Table of Contents ↑</a></p>
+
+<hr />
+
+<!--
+[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
+
+[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
+[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
+[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
+
+[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
+[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
+[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
+[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
+[lean_src]: https://github.com/leanprover/lean
+[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
+
+[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
+
+[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
+
+[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
+
+[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
+[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
+
+[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
+[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
+
+[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
+[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
+[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
+
+
+
+
+-->
+
+
+          </div><!-- /.container -->
+      </body>
+
+</html>
