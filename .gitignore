@@ -24,7 +24,6 @@ markdown
 test
 _site
 rst
-html
 MGS*.html
 css
 sphinx
@@ -32,7 +31,5 @@ ARCHIVE
 jekyll
 _site-prev
 _prev
-UALib.*.md
-UALib.*.html
 
 
