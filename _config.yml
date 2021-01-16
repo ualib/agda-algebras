@@ -28,3 +28,4 @@ exclude:
   - "html/"
   - "ualib/"
   - "vendor/"
+  - "ARCHIVE/"
