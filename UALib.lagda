@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: title-page
 title : The Agda Universal Algebra Library (UAlib)
 date : 2021-01-14
 author: William DeMeo
