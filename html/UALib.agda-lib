@@ -1,3 +1,0 @@
-name: ualib
-depend: typetopology standard-library
-include: . ./UALib
