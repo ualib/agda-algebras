@@ -5,7 +5,9 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="algebras">Algebras</a>
 
@@ -25,5 +27,10 @@ open import UALib.Algebras.Products public
 open import UALib.Algebras.Lifts public
 
 \end{code}
+
+-------------------------------------
+
+[← UALib.Prelude](UALib.Prelude.html)
+<span style="float:right;">[UALib.Relations →](UALib.Relations.html)</span>
 
 {% include UALib.Links.md %}

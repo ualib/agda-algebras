@@ -5,7 +5,9 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="equations-and-varieties">Equations and Varieties</a>
 
@@ -26,13 +28,10 @@ open import UALib.Varieties.Preservation
 
 \end{code}
 
-----------------------------
+--------------------------------------
+
+[← UALib.Subalgebras](UALib.Subalgebras.html)
+<span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
+
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-

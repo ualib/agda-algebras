@@ -13,13 +13,16 @@ UPDATED   : 14 Jan 2021
 COPYRIGHT : (c) 2021 William DeMeo
 -->
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
 
--------------------------------------------------------------
-
-# [The Agda Universal Algebra Library](UALib.html)
+------------------------------------------------------------
 
 ## <a id="preface">Preface</a>
+
+\begin{code}[hide]
+{-# OPTIONS --without-K --exact-split --safe #-}
+module UALib.Preface where
+\end{code}
 
 To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library][] ([gitlab/ualib][] ), a library for the [Agda][] proof assistant which contains statements and proofs of many foundational definitions and results from universal algebra. In particular, the library includes formal statements and proofs the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
 
@@ -56,7 +59,9 @@ While there are no strict prerequisites, we expect anyone with an interest in th
 
 Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the references mentioned in the references section to fill in gaps as needed.
 
-Finally, it is assumed that while reading these materials the reader is actively experimenting with Agda using [Emacs][] with its [agda2-mode][] extension installed.
+Finally, it is assumed that while reading these materials the reader is actively experimenting with Agda using [Emacs][] with its [agda2-mode][] extension installed. [Martin Escardo
+Agda [2.6.0](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html) is required. Consult Martin Escardo's [installation instructions](INSTALL.md) to help you set up Agda and Emacs.
+nstructions for setting up Agda and emacs 
 
 ### <a id="installation">Installation</a>
 
@@ -98,7 +103,7 @@ Regarding the mathematical results that are implemented in the [UAlib][], as wel
 
 Regarding the Agda source code in the [UALib][], this is mainly due to the authors with one major caveat:
 
-The [UALib][] has benefited enormously from the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology]_ Agda Library, both by [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe).  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
+The [UALib][] has benefited enormously from the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library, both by [Martin Hötzel Escardo][].  The first author is greatly indebted to Martin for teaching him about type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
 
 ### <a id="references">References</a>
 
@@ -113,11 +118,6 @@ The following Agda documentation and tutorials helped inform and improve the [UA
 * Norell and Chapman, [Dependently Typed Programming in Agda][]
 
 Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the (open source) [Agda Standard Library][] source code are also quite useful.
-
-\begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
-module UALib.Preface where
-\end{code}
 
 ----------------------------
 
@@ -134,9 +134,12 @@ This generates a set of markdown files that are then converted to html by jekyll
 [Issues][] or [merge requests][] contributing comments, bug fixes or other improvements are most welcomed.
 
 * Submit a new [issue][] or [feature request][].
-
 * Submit a new [merge request][].
 
------------------------------------
+-------------------------------------
+
+[← Table of Contents](UALib.html)
+<span style="float:right;">[UALib.Prelude →](UALib.Prelude.html)</span>
+
 
 {% include UALib.Links.md %}

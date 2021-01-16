@@ -5,7 +5,9 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="terms-and-free-algebras">Terms and Free Algebras</a>
 
@@ -26,7 +28,9 @@ open import UALib.Terms.Compatibility
 
 \end{code}
 
+-------------------------------------
 
---------------------------------------
+[← UALib.Homomorphisms](UALib.Homomorphisms.html)
+<span style="float:right;">[UALib.Subalgebras →](UALib.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}

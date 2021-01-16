@@ -14,11 +14,13 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
      Below, MHE = Martin Hötzel Escardo.
 -->
 
-[Prelude ↑](Prelude.html)
+[↑ UALib.Prelude](UALib.Prelude.html)
+
+------------------------------------------------------------
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This section describes the [UALib.Prelude.Preliminaries module][] of the [Agda Universal Algebra Library][] (UALib).
+This section describes the [UALib.Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
 
 **Notation**. Here are some acronyms that we use frequently.
 
@@ -167,7 +169,11 @@ and
 
 will be used frequently throughout the library.
 
-------------------------------------------------
+-------------------------------------
+
+[↑ UALib.Prelude](UALib.Prelude.html)
+<span style="float:right;">[UALib.Prelude.Equality →](UALib.Prelude.Equality.html)</span>
+
 
 {% include UALib.Links.md %}
 

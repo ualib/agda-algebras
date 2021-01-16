@@ -6,11 +6,14 @@ author: William DeMeo
 ---
 
 <!--
+
 FILE      : UALib.lagda
 AUTHOR    : William DeMeo  <williamdemeo@gmail.com>
 DATED     : 14 Jan 2021
 UPDATED   : 15 Jan 2021
 COPYRIGHT : (c) 2021 William DeMeo
+
+[The Agda Universal Algebra Library](UALib.html)
 
 LICENSE:
 
@@ -31,9 +34,11 @@ of citation.
 
 -->
 
-# <a id="ualib">Agda UALib</a>
+---------------------------------------------------------------------------------
 
-The Agda Universal Algebra Library
+## <a id="ualib">The Agda Universal Algebra Library</a>
+
+---------------------------------------------------------------------------------
 
 14 Jan 2021 (version of {{ "now" | date: "%d %b %Y, %H:%M" }})
 
@@ -50,7 +55,7 @@ To get an idea of the current scope of the library, note that it now includes a 
 
 --------------------------------
 
-## <a id="brief-contents"></a> Brief Contents
+### <a id="brief-contents"></a> Brief Contents
 
 \begin{code}
 
@@ -72,7 +77,7 @@ open import UALib.Birkhoff
 
 -------------------------------------------
 
-## <a id="contents"></a> Detailed Contents
+### <a id="detailed-contents"></a> Detailed Contents
 
 - [Preface](UALib.Preface.html)
 
@@ -134,12 +139,13 @@ Suggest improvements by submitting a [new issue][] or [merge request][] to [gitl
 
 <sup>1</sup> Please [notify me](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.
 
-<p><span style="float:right;"><i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i></span></p>
+<div class="container">
+<span style="float:right;"><i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i></span>
+</div>
 
-{% include UALib.Links.md %}
+-----------------------------------------------
 
-
-
+<span style="float:right;">[Next Module (UALib.Preface) →](UALib.Preface.html)</span>
 
 
 

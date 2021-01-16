@@ -5,11 +5,13 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="birkhoffs-theorem">Birkhoff's Theorem</a>
 
-This chapter presents the [UALib.Birkhoff module][] of the [Agda Universal Algebra Library][].
+This chapter presents the [UALib.Birkhoff][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -22,3 +24,11 @@ open import UALib.Birkhoff.Lemmata
 open import UALib.Birkhoff.Theorem
 
 \end{code}
+
+--------------------------------------
+
+[← UALib.Varieties](UALib.Varieties.html)
+<span style="float:right;">[Agda UALib TOC ↑](UALib.html)</span>
+
+
+{% include UALib.Links.md %}

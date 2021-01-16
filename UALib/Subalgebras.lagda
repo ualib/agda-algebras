@@ -5,7 +5,9 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="subalgebras">Subalgebras</a>
 
@@ -28,3 +30,10 @@ open import UALib.Subalgebras.WWMD
 
 \end{code}
 
+--------------------------------------
+
+[← UALib.Terms](UALib.Terms.html)
+<span style="float:right;">[UALib.Varieties →](UALib.Varieties.html)</span>
+
+
+{% include UALib.Links.md %}

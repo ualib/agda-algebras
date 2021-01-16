@@ -5,11 +5,14 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[Prelude ↑](Prelude.html)
+[← UALib.Prelude.Equality](UALib.Prelude.Equality.html)
+<span style="float:right;">[UALib.Prelude.Extensionality →](UALib.Prelude.Extensionality.html)</span>
+
+----------------------------------------
 
 ### <a id="inverses">Inverses</a>
 
-This section presents the [UALib.Prelude.Inverses module][] of the [Agda Universal Algebra Library][] (UALib).
+This section presents the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -151,3 +154,9 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
+-------------------------------------
+
+[← UALib.Prelude.Equality](UALib.Prelude.Equality.html)
+<span style="float:right;">[UALib.Prelude.Extensionality →](UALib.Prelude.Extensionality.html)</span>
+
+{% include UALib.Links.md %}

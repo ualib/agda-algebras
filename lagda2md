@@ -1,0 +1,91 @@
+#!/bin/bash
+
+rm -rf _site-prev
+mkdir _site-prev
+mv ./_site/* ./_site-prev/
+
+rm -rf _prev/
+mkdir _prev
+mv ./*.html ./*.md ./_prev/
+
+# rm -rf _html-prev
+# mkdir _html-prev
+# mv html/* ./_html-prev/
+
+agda --html --html-highlight=code UALib.lagda
+
+# agda --html ${src_dir}/UALib.lagda
+
+mv html/Empty-Type.tex Empty-Type.md
+mv html/Identity-Type.tex Identity-Type.md
+mv html/MGS-Basic-UF.tex MGS-Basic-UF.md
+mv html/MGS-Embeddings.tex MGS-Embeddings.md
+mv html/MGS-Equivalence-Induction.tex MGS-Equivalence-Induction.md
+mv html/MGS-Equivalences.tex MGS-Equivalences.md
+mv html/MGS-FunExt-from-Univalence.tex MGS-FunExt-from-Univalence.md
+mv html/MGS-HAE.tex MGS-HAE.md
+mv html/MGS-hlevels.tex MGS-hlevels.md
+mv html/MGS-MLTT.tex MGS-MLTT.md
+mv html/MGS-More-FunExt-Consequences.tex MGS-More-FunExt-Consequences.md
+mv html/MGS-Powerset.tex MGS-Powerset.md
+mv html/MGS-Retracts.tex MGS-Retracts.md
+mv html/MGS-Solved-Exercises.tex MGS-Solved-Exercises.md
+mv html/MGS-Subsingleton-Theorems.tex MGS-Subsingleton-Theorems.md
+mv html/MGS-Subsingleton-Truncation.tex MGS-Subsingleton-Truncation.md
+mv html/MGS-Unique-Existence.tex MGS-Unique-Existence.md
+mv html/MGS-Univalence.tex MGS-Univalence.md
+mv html/Natural-Numbers-Type.tex Natural-Numbers-Type.md
+mv html/Plus-Type.tex Plus-Type.md
+mv html/Sigma-Type.tex Sigma-Type.md
+mv html/UALib.Algebras.Algebras.tex UALib.Algebras.Algebras.md
+mv html/UALib.Algebras.Lifts.tex UALib.Algebras.Lifts.md
+mv html/UALib.Algebras.Products.tex UALib.Algebras.Products.md
+mv html/UALib.Algebras.Signatures.tex UALib.Algebras.Signatures.md
+mv html/UALib.Algebras.tex UALib.Algebras.md
+mv html/UALib.Birkhoff.FreeAlgebra.tex UALib.Birkhoff.FreeAlgebra.md
+mv html/UALib.Birkhoff.Lemmata.tex UALib.Birkhoff.Lemmata.md
+mv html/UALib.Birkhoff.tex UALib.Birkhoff.md
+mv html/UALib.Birkhoff.Theorem.tex UALib.Birkhoff.Theorem.md
+mv html/UALib.Homomorphisms.Basic.tex UALib.Homomorphisms.Basic.md
+mv html/UALib.Homomorphisms.HomomorphicImages.tex UALib.Homomorphisms.HomomorphicImages.md
+mv html/UALib.Homomorphisms.Isomorphisms.tex UALib.Homomorphisms.Isomorphisms.md
+mv html/UALib.Homomorphisms.Kernels.tex UALib.Homomorphisms.Kernels.md
+mv html/UALib.Homomorphisms.Noether.tex UALib.Homomorphisms.Noether.md
+mv html/UALib.Homomorphisms.Products.tex UALib.Homomorphisms.Products.md
+mv html/UALib.Homomorphisms.tex UALib.Homomorphisms.md
+mv html/UALib.Preface.tex UALib.Preface.md
+mv html/UALib.Prelude.Equality.tex UALib.Prelude.Equality.md
+mv html/UALib.Prelude.Extensionality.tex UALib.Prelude.Extensionality.md
+mv html/UALib.Prelude.Inverses.tex UALib.Prelude.Inverses.md
+mv html/UALib.Prelude.Preliminaries.tex UALib.Prelude.Preliminaries.md
+mv html/UALib.Prelude.tex UALib.Prelude.md
+mv html/UALib.Relations.Binary.tex UALib.Relations.Binary.md
+mv html/UALib.Relations.Congruences.tex UALib.Relations.Congruences.md
+mv html/UALib.Relations.Equivalences.tex UALib.Relations.Equivalences.md
+mv html/UALib.Relations.Quotients.tex UALib.Relations.Quotients.md
+mv html/UALib.Relations.tex UALib.Relations.md
+mv html/UALib.Relations.Unary.tex UALib.Relations.Unary.md
+mv html/UALib.Subalgebras.Generation.tex UALib.Subalgebras.Generation.md
+mv html/UALib.Subalgebras.Homomorphisms.tex UALib.Subalgebras.Homomorphisms.md
+mv html/UALib.Subalgebras.Properties.tex UALib.Subalgebras.Properties.md
+mv html/UALib.Subalgebras.Subalgebras.tex UALib.Subalgebras.Subalgebras.md
+mv html/UALib.Subalgebras.Subuniverses.tex UALib.Subalgebras.Subuniverses.md
+mv html/UALib.Subalgebras.tex UALib.Subalgebras.md
+mv html/UALib.Subalgebras.WWMD.tex UALib.Subalgebras.WWMD.md
+mv html/UALib.Terms.Basic.tex UALib.Terms.Basic.md
+mv html/UALib.Terms.Compatibility.tex UALib.Terms.Compatibility.md
+mv html/UALib.Terms.Free.tex UALib.Terms.Free.md
+mv html/UALib.Terms.Operations.tex UALib.Terms.Operations.md
+mv html/UALib.Terms.tex UALib.Terms.md
+cp html/UALib.tex index.md
+mv html/UALib.tex UALib.md
+mv html/UALib.Varieties.EquationalLogic.tex UALib.Varieties.EquationalLogic.md
+mv html/UALib.Varieties.ModelTheory.tex UALib.Varieties.ModelTheory.md
+mv html/UALib.Varieties.Preservation.tex UALib.Varieties.Preservation.md
+mv html/UALib.Varieties.tex UALib.Varieties.md
+mv html/UALib.Varieties.Varieties.tex UALib.Varieties.Varieties.md
+mv html/Unit-Type.tex Unit-Type.md
+mv html/universes.tex universes.md
+mv html/Universes.tex Universes.md
+
+mv html/*.html .

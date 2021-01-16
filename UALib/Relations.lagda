@@ -5,7 +5,9 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+--------------------------------------
 
 ## <a id="relations">Relations</a>
 
@@ -26,6 +28,9 @@ open import UALib.Relations.Congruences public
 
 \end{code}
 
---------------------------------------
+-------------------------------------
+
+[← UALib.Algebras](UALib.Algebras.html)
+<span style="float:right;">[UALib.Homomorphisms →](UALib.Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

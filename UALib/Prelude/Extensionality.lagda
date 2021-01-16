@@ -15,11 +15,14 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
      Below, MHE = Martin Hötzel Escardo.
 -->
 
-[Prelude ↑](Prelude.html)
+[← UALib.Prelude.Inverses](UALib.Prelude.Inverses.html)
+<span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>
+
+--------------------------------------------
 
 ### <a id="extensionality">Extensionality</a>
 
-This section describes the [UALib.Prelude.Extensionality module][] of the [Agda Universal Algebra Library][] (UALib).
+This section describes the [UALib.Prelude.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -157,3 +160,9 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
+-------------------------------------
+
+[← UALib.Prelude.Inverses](UALib.Prelude.Inverses.html)
+<span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>
+
+{% include UALib.Links.md %}

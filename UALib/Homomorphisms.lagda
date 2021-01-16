@@ -5,7 +5,9 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-[UALib ↑](UALib.html)
+[Agda UALib ↑](UALib.html)
+
+-----------------------------------------
 
 ## <a id="homomorphisms">Homomorphisms</a>
 
@@ -26,6 +28,9 @@ open import UALib.Homomorphisms.HomomorphicImages
 \end{code}
 
 --------------------------------------
+
+[← UALib.Relations](UALib.Relations.html)
+<span style="float:right;">[UALib.Terms →](UALib.Terms.html)</span>
 
 {% include UALib.Links.md %}
 

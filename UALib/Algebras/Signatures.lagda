@@ -5,6 +5,12 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
+------------------------------------------------------------
+
+## [The Agda Universal Algebra Library](UALib.html)
+
+----------------------------------------------------------
+
 [UALib.Algebras ↑](UALib.Algebras.html)
 
 ### <a id="operation-and-signature-types">Operation and Signature Types</a>
@@ -42,6 +48,10 @@ Recall, the definition of the type `Σ`.
 -Σ : {𝓤 𝓥 : Universe}(X : 𝓤 ̇)(Y : X → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
 -Σ X Y = Σ Y
 ```
+
+-------------------------------------
+
+[Back to Table of Contents ↑](UALib.html#detailed-contents)
 
 ------------------------------------------------
 

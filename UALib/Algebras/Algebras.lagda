@@ -115,6 +115,10 @@ We conclude this module by defining a convenient shorthand for the interpretatio
 
 \end{code}
 
-------------------------------------------------
+-------------------------------------
+
+[Back to Table of Contents ↑](UALib.html#detailed-contents)
+
+-------------------------------
 
 {% include UALib.Links.md %}
