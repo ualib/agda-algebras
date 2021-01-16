@@ -122,4 +122,7 @@ infixr 4 _=[_]⇒_
 
 --------------------------------------
 
+[← UALib.Relations.Unary](UALib.Relations.Unary.html)
+<span style="float:right;">[UALib.Relations.Equivalences →](UALib.Relations.Equivalences.html)</span>
+
 {% include UALib.Links.md %}

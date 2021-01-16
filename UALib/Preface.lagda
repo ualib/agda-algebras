@@ -117,7 +117,7 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 
 ----------------------------
 
-### <a id="about-this-document">About this document</a>
+### <a id="about-this-document">About this documentation</a>
 
 These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\\begin{code}...\\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
 

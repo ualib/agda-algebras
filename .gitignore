@@ -28,7 +28,11 @@ html
 MGS*.html
 css
 sphinx
-src/lagda/scratch
-./ARCHIVE
+ARCHIVE
+jekyll
+_site-prev
+_prev
+UALib.*.md
+UALib.*.html
 
 

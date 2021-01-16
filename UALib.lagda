@@ -142,12 +142,12 @@ Suggest improvements by submitting a [new issue][] or [merge request][] to [gitl
 <span style="float:right;">[Next Module (UALib.Preface) →](UALib.Preface.html)</span>
 
 
-<p>
-
 <div class="container">
-<span style="float:right;"><i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i></span>
-</div>
+<p>
+<i>Updated {{ "now" | date: "%d %b %Y, %H:%M" }}</i>
 </p>
+</div>
+
 
 {% include UALib.Links.md %}
 
