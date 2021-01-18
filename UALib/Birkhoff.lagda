@@ -25,8 +25,7 @@ open import UALib.Birkhoff.Theorem
 
 --------------------------------------
 
-[← UALib.Varieties](UALib.Varieties.html)
+[← UALib.Varieties.Preservation](UALib.Varieties.Preservation.html)
 <span style="float:right;">[UALib.Birkhoff.FreeAlgebra →](UALib.Birkhoff.FreeAlgebra.html)</span>
-
 
 {% include UALib.Links.md %}

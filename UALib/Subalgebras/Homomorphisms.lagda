@@ -61,7 +61,7 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
 
 #### <a id="uniqueness-property-for-homomorphisms">Uniqueness property for homomorphisms</a>
 
-A homomorphism is uniquely determined by its action on generators.
+Here we formalize the proof that homomorphisms are uniquely determined by their values on a generating set.
 
 \begin{code}
 

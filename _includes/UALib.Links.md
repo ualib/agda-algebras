@@ -18,7 +18,6 @@
 [Bill Lampe]: https://math.hawaii.edu/wordpress/people/william/
 [Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [Birkhoff HSP Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[Birkhoff's theorem][]
 
 [Category Theory in Context]: http://www.math.jhu.edu/~eriehl/context.pdf
 [categorytheory.gitlab.io]: https://categorytheory.gitlab.io

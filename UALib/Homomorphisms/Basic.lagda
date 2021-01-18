@@ -73,7 +73,11 @@ id-is-hom = λ _ _ → refl _
 
 \end{code}
 
-We conclude this module by defining the equalizer of two functions and the equalizer of two homomorphisms.
+------------------------------------------------------------------
+
+#### <a id="equalizers-in-agda">Equalizers in Agda</a>
+
+Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is the subset of `A` on which the values of the functions `g` and `h` agree.  We define the equalizer of functions and homomorphisms in Agda as follows.
 
 \begin{code}
 
