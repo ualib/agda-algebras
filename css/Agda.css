@@ -6,7 +6,7 @@
 }
 
 /* Aspects. */
-.Comment       { color: #98b9f2ff; font-style: italic}   /* } #008B00 ; */
+.Comment       { color: #008B00; font-style: italic}   /* } #008B00 ;#98b9f2ff; */
 .Keyword       { color: #6f9cebff } /* #ff858dff } */ /* ;#c191a1ff }  *//* #a4508bff }  */ /* ;#eac435ff } */ /* #f17105ff }  *//* ;#CD6600 } */
 .String        { color: #B22222 }
 .Number        { color: #A020F0 }
