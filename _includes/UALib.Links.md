@@ -15,6 +15,7 @@
 [Andrej Bauer]: http://www.andrej.com/index.html
 [Axioms and Computation]: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 
+[Bill Lampe]: https://math.hawaii.edu/wordpress/people/william/
 [Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [Birkhoff HSP Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 
@@ -55,6 +56,7 @@
 [inductive types]: https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 
+[JB Nation]: http://www.math.hawaii.edu/~jb/
 [Jeremy Avigad]: http://www.andrew.cmu.edu/user/avigad/
 
 [Lean]: https://leanprover.github.io/
