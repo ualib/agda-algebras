@@ -9,8 +9,6 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
 
-#### The closure opereators H, S, P, and V
-
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 * H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
@@ -51,7 +49,7 @@ open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe}{𝕏} public
 
 -----------------------------------
 
-#### <a id="the-homomorphic-image-type-h">The homomorphic image type H</a>
+#### <a id="homomorphic-closure">Homomorphism closure</a>
 
 We define the inductive type `H` to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
 
@@ -70,7 +68,7 @@ data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)) : Pred (
 
 --------------------------------
 
-#### <a id="subalgebra-closure-opereator">The subalgebra closure type S</a>
+#### <a id="subalgebra-closure">Subalgebra closure</a>
 
 The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type. 
 
@@ -90,7 +88,7 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
 
 -----------------------------------------
 
-#### <a id="p-closure">Closure under product</a>
+#### <a id="product-closure">Product closure</a>
 
 The most useful inductive type that we have found for representing classes of algebras closed under arbitrary products is the following. 
 
@@ -111,7 +109,7 @@ data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred
 
 -----------------------------------------------
 
-#### <a id="v-closure">V-closure</a>
+#### <a id="variety-closure">Varietal closure</a>
 
 A class 𝒦 of 𝑆-algebras is called a **variety** if it is closed under each of the closure operators H, S, and P introduced above; the corresponding closure operator is often denoted 𝕍, but we will typically denote it by `V`.
 
@@ -137,7 +135,7 @@ data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
 
 -------------------------------
 
-#### <a id=closure-properties>Closure properties</a>
+#### <a id="closure-properties">Closure properties</a>
 
 The types defined above represent operators with useful closure properties. We now prove a handful of such properties since we will need them later.
 
@@ -186,8 +184,6 @@ S-mono ante (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono ante sA) B≤A
 S-mono ante (siso x x₁) = siso (S-mono ante x) x₁
 
 \end{code}
-
-#### <a id="">Closure properties
 
 We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
 
@@ -517,7 +513,7 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
 
 \end{code}
 
-#### More class inclusion lemmas
+#### <a id="more-class-inclusions">More class inclusions</a>
 
 We conclude this module with three more inclusion relations that will have bit parts to play in our formal proof of Birkhoff's Theorem.
 
@@ -552,7 +548,7 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 \end{code}
 
 
-#### A type for the product of all algebras in a class
+#### <a id="products-of-classes">Products of classes</a>
 
 Above we proved PS(𝒦) ⊆ SP(𝒦).  It is slightly more painful to prove that the product of *all* algebras in the class S(𝒦) is a member of SP(𝒦). That is,
 
