@@ -43,13 +43,13 @@ of citation.
 **Author**. [William DeMeo][]  
 *Affiliation*. [Department of Algebra][], [Charles University in Prague][]
 
-**Abstract**. The [Agda Universal Algebra Library][] (UALib) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
-
-We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. The Agda UALib is (or wants to be when it grows up) a shamen who guides us in our quest to discover new theorems.
+**Abstract**. The [Agda Universal Algebra Library][] ([Agda UALib][]) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
 
 In the latest version of the library we have defined many new types for representing the important constructs and theorems that comprise part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files, with the `.lagda` extension, and they are grouped into modules so that they may be easily imported into other Agda programs.
 
 To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if K is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then K is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
+
+We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Moreover, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journies, helping us forge new paths, reach higher peaks, and authenticating what we believe we have found.
 
 --------------------------------
 
@@ -57,19 +57,19 @@ To give an idea of the current scope of the library, we note that it now include
 
 <pre class="Agda">
 
-<a id="2930" class="Symbol">{-#</a> <a id="2934" class="Keyword">OPTIONS</a> <a id="2942" class="Pragma">--without-K</a> <a id="2954" class="Pragma">--exact-split</a> <a id="2968" class="Pragma">--safe</a> <a id="2975" class="Symbol">#-}</a>
+<a id="3042" class="Symbol">{-#</a> <a id="3046" class="Keyword">OPTIONS</a> <a id="3054" class="Pragma">--without-K</a> <a id="3066" class="Pragma">--exact-split</a> <a id="3080" class="Pragma">--safe</a> <a id="3087" class="Symbol">#-}</a>
 
-<a id="2980" class="Keyword">module</a> <a id="2987" href="UALib.html" class="Module">UALib</a> <a id="2993" class="Keyword">where</a>
+<a id="3092" class="Keyword">module</a> <a id="3099" href="UALib.html" class="Module">UALib</a> <a id="3105" class="Keyword">where</a>
 
-<a id="3000" class="Keyword">open</a> <a id="3005" class="Keyword">import</a> <a id="3012" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="3026" class="Keyword">open</a> <a id="3031" class="Keyword">import</a> <a id="3038" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3052" class="Keyword">open</a> <a id="3057" class="Keyword">import</a> <a id="3064" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3079" class="Keyword">open</a> <a id="3084" class="Keyword">import</a> <a id="3091" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="3107" class="Keyword">open</a> <a id="3112" class="Keyword">import</a> <a id="3119" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="3139" class="Keyword">open</a> <a id="3144" class="Keyword">import</a> <a id="3151" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="3163" class="Keyword">open</a> <a id="3168" class="Keyword">import</a> <a id="3175" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="3193" class="Keyword">open</a> <a id="3198" class="Keyword">import</a> <a id="3205" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3221" class="Keyword">open</a> <a id="3226" class="Keyword">import</a> <a id="3233" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="3112" class="Keyword">open</a> <a id="3117" class="Keyword">import</a> <a id="3124" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="3138" class="Keyword">open</a> <a id="3143" class="Keyword">import</a> <a id="3150" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="3164" class="Keyword">open</a> <a id="3169" class="Keyword">import</a> <a id="3176" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="3191" class="Keyword">open</a> <a id="3196" class="Keyword">import</a> <a id="3203" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3219" class="Keyword">open</a> <a id="3224" class="Keyword">import</a> <a id="3231" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="3251" class="Keyword">open</a> <a id="3256" class="Keyword">import</a> <a id="3263" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="3275" class="Keyword">open</a> <a id="3280" class="Keyword">import</a> <a id="3287" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="3305" class="Keyword">open</a> <a id="3310" class="Keyword">import</a> <a id="3317" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="3333" class="Keyword">open</a> <a id="3338" class="Keyword">import</a> <a id="3345" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 

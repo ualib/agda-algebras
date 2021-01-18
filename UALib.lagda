@@ -43,13 +43,13 @@ of citation.
 **Author**. [William DeMeo][]  
 *Affiliation*. [Department of Algebra][], [Charles University in Prague][]
 
-**Abstract**. The [Agda Universal Algebra Library][] (UALib) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
-
-We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. The Agda UALib is (or wants to be when it grows up) a shamen who guides us in our quest to discover new theorems.
+**Abstract**. The [Agda Universal Algebra Library][] ([Agda UALib][]) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
 
 In the latest version of the library we have defined many new types for representing the important constructs and theorems that comprise part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files, with the `.lagda` extension, and they are grouped into modules so that they may be easily imported into other Agda programs.
 
 To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if K is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then K is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
+
+We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Moreover, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journies, helping us forge new paths, reach higher peaks, and authenticating what we believe we have found.
 
 --------------------------------
 
