@@ -15,11 +15,9 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 
 <!-- consequently, we expect that `V 𝒦 ≡ H (S (P 𝒦))` holds each class 𝒦 of algebras of a fixed signature. -->
 
-\begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
-\end{code}
-
 \begin{code}
+
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module UALib.Varieties where
 

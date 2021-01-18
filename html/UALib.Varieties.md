@@ -16,17 +16,15 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 <!-- consequently, we expect that `V 𝒦 ≡ H (S (P 𝒦))` holds each class 𝒦 of algebras of a fixed signature. -->
 
 <pre class="Agda">
-<a id="850" class="Symbol">{-#</a> <a id="854" class="Keyword">OPTIONS</a> <a id="862" class="Pragma">--without-K</a> <a id="874" class="Pragma">--exact-split</a> <a id="888" class="Pragma">--safe</a> <a id="895" class="Symbol">#-}</a>
-</pre>
 
-<pre class="Agda">
+<a id="845" class="Symbol">{-#</a> <a id="849" class="Keyword">OPTIONS</a> <a id="857" class="Pragma">--without-K</a> <a id="869" class="Pragma">--exact-split</a> <a id="883" class="Pragma">--safe</a> <a id="890" class="Symbol">#-}</a>
 
-<a id="925" class="Keyword">module</a> <a id="932" href="UALib.Varieties.html" class="Module">UALib.Varieties</a> <a id="948" class="Keyword">where</a>
+<a id="895" class="Keyword">module</a> <a id="902" href="UALib.Varieties.html" class="Module">UALib.Varieties</a> <a id="918" class="Keyword">where</a>
 
-<a id="955" class="Keyword">open</a> <a id="960" class="Keyword">import</a> <a id="967" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
-<a id="995" class="Keyword">open</a> <a id="1000" class="Keyword">import</a> <a id="1007" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
-<a id="1039" class="Keyword">open</a> <a id="1044" class="Keyword">import</a> <a id="1051" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
-<a id="1077" class="Keyword">open</a> <a id="1082" class="Keyword">import</a> <a id="1089" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
+<a id="925" class="Keyword">open</a> <a id="930" class="Keyword">import</a> <a id="937" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
+<a id="965" class="Keyword">open</a> <a id="970" class="Keyword">import</a> <a id="977" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
+<a id="1009" class="Keyword">open</a> <a id="1014" class="Keyword">import</a> <a id="1021" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
+<a id="1047" class="Keyword">open</a> <a id="1052" class="Keyword">import</a> <a id="1059" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
 
 </pre>
 

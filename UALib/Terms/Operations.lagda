@@ -131,7 +131,7 @@ term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 
 -----------------------------------
 
-#### <a id="interpretation-of-terms-in-product-algebras>Interpretation of terms in product algebras</a>
+#### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
 \begin{code}
 interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
