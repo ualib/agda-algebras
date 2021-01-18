@@ -9,7 +9,8 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.Lemmata][] module of the [Agda Universal Algebra Library][].
 
-Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.  **Warning**: not all of these are very interesting!
+Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.  
+**Warning**: not all of these are very interesting!
 
 \begin{code}
 

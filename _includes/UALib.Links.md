@@ -123,6 +123,7 @@
 [Type Topology]: https://github.com/martinescardo/TypeTopology
 
 [ualib]: https://gitlab.com/ualib/ualib.gitlab.io
+[UALib]: https://gitlab.com/ualib/ualib.gitlab.io
 [UAlib]: https://gitlab.com/ualib/ualib.gitlab.io
 [ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
 
