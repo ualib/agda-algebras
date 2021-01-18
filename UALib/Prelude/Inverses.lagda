@@ -41,7 +41,9 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-Note that the assertion `Image f ∋ y` must come with a proof, which is of the form `∃a f a = y`.  Thus, we always have a witness and the inverse can be *computed* by applying the function `Inv` (which we now define) to the function `f`.
+Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Thus, a proof that `b` belongs to the image of `f` (i.e., an inhabitant of `Image f ∋ b`), always has a witness `a : A`, and a proof that `b = f a`, so a (pseudo)inverse can actually be *computed*.
+
+For convenience, we define a pseudo-inverse function, which we call `Inv`, that takes `b : B` and `(a , p) : Image f ∋ b` and returns `a`.
 
 \begin{code}
 

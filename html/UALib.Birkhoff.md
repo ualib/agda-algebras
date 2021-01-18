@@ -28,5 +28,4 @@ Here we give a formal proof in [MLTT][] of Birkhoff's theorem which says that a 
 [← UALib.Varieties.Preservation](UALib.Varieties.Preservation.html)
 <span style="float:right;">[UALib.Birkhoff.FreeAlgebra →](UALib.Birkhoff.FreeAlgebra.html)</span>
 
-
 {% include UALib.Links.md %}
