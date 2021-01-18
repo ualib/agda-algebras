@@ -7,7 +7,7 @@
 
 /* Aspects. */
 .Comment       { color: #008B00; font-style: italic}   /*#72bda3ff }#5e8c61ff; #008B00 ;#98b9f2ff; #8B7500;#44af69ff*/
-.Keyword       { color: #6f9cebff } /* #ff858dff } */ /* ;#c191a1ff }  *//* #a4508bff }  */ /* ;#eac435ff } */ /* #f17105ff }  *//* ;#CD6600 } */
+.Keyword       { color: #EA9258 } /* #6f9cebff #ff858dff #c191a1ff #a4508bff #eac435ff #f17105ff #CD6600 */
 .String        { color: #B22222 }
 .Number        { color: #A020F0 }
 .Symbol        { color: #404040 }
@@ -16,12 +16,12 @@
 
 /* NameKinds. */
 .Bound                  { color: black   }
-.InductiveConstructor   { color: #aa6373ff; } /* ; } */
+.InductiveConstructor   { color: #aa6373ff }
 .CoinductiveConstructor { color: #8B7500 }
 .Datatype               { color: #0000CD }
 .Field                  { color: #EE1289 }
-.Function               { color: #2b50aaff } /* ;#918ef4ff } */ /* ;#2b50aaff }  */
-.Module                 { color: #A020F0 }  /* #306bacff } */ /* #593c8fff } */ /* ;#ff9fe5ff } */ /* ;#5f0a87ff }  */
+.Function               { color: #2b50aaff } /* #918ef4ff #2b50aaff  */
+.Module                 { color: #A020F0 }  /* #306bacff #593c8fff #ff9fe5ff #5f0a87ff  */
 .Postulate              { color: #0000CD }
 .Primitive              { color: #0000CD }
 .Record                 { color: #1a8fe3ff }
