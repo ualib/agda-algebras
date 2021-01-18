@@ -5,8 +5,6 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[UALib.Birkhoff ↑](UALib.Birkhoff.html)
-
 ### <a id="the-hsp-theorem-in-agda">The HSP Theorem in Agda</a>
 
 This section presents the [UALib.Birkhoff.Theorem][] module of the [Agda Universal Algebra Library][].
@@ -72,10 +70,10 @@ module Birkhoffs-Theorem
 
 Some readers familiar with Birkhoff's theorem might worry that we haven't acheived our goal because they may be used to seeing it presented as an "if and only if" assertion.  Those fears are quickly put to rest. Indeed, the converse of the result just proved is that every equational class is closed under HSP, but we already proved that, formally of course, in the closure module. Indeed, there it is proved that H, S, and P preserve identities.
 
-----------------------------
+--------------------------------------------
 
 [← UALib.Birkhoff.Lemmata](UALib.Birkhoff.Lemmata.html)
-<span style="float:right;">[UALib.Birkhoff ↑)](UALib.Birkhoff.html)</span>
+<span style="float:right;">[UALib.Birkhoff ↑](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
 

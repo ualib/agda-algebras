@@ -272,10 +272,9 @@
 
 [UALib.Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [UALib.Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda
-[Birkhoff.Lemmata]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Lemmata.lagda
-[Birkhoff.Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Theorem.lagda
+[UALib.Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda
+[UALib.Birkhoff.Lemmata]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Lemmata.lagda
+[UALib.Birkhoff.Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Theorem.lagda
 
 
 
