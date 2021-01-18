@@ -23,6 +23,7 @@
 [Charles University in Prague]: https://cuni.cz/UKEN-1.html
 [Clifford Bergman]: https://orion.math.iastate.edu/cbergman/
 [Cliff Bergman]: https://orion.math.iastate.edu/cbergman/
+[Bergman (2012)]: https://www.amazon.com/gp/product/1439851298/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1439851298&linkCode=as2&tag=typefunc-20&linkId=440725c9b1e60817d071c1167dff95fa
 [Coercions using Type Classes]: https://leanprover.github.io/theorem_proving_in_lean/type_classes.html#coercions-using-type-classes
 [Computer Aided Formal Reasoning]: http://www.cs.nott.ac.uk/~psztxa/g53cfr/
 [constructive mathematics]: https://ncatlab.org/nlab/show/constructive+mathematics
@@ -45,6 +46,7 @@
 [gitlab.com/ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
 
 [HoTT]: https://homotopytypetheory.org/
+[HoTT book]: https://homotopytypetheory.org/book/
 [HoTT-UF-in-Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html
 [HSP Theorem]: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
 
@@ -70,11 +72,16 @@
 
 [markdown]: https://daringfireball.net/projects/markdown/
 [Martin Escardo]: https://www.cs.bham.ac.uk/~mhe
+[Martin Escardo's installation hints]: https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md
 [Martin Hötzel Escardo]: https://www.cs.bham.ac.uk/~mhe
+[Martin Löf dependent type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
+[Martin Löf type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
 [master]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master
 [master branch]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master
 [Mathlib]: https://github.com/leanprover-community/mathlib/
 [Mathlib documentation]: https://leanprover-community.github.io/papers/mathlib-paper.pdf
+[McKenzie, McNulty, Taylor (2018)]: https://www.amazon.com/gp/product/1470442957/ref=as_li_qf_asin_il_tl?ie=UTF8&tag=typefunc-20&creative=9325&linkCode=as2&creativeASIN=1470442957&linkId=b3109d9c28ceb872df7d4b84b1cc4f29
+[MHE]: https://www.cs.bham.ac.uk/~mhe
 [Midlands Graduate School in the Foundations of Computing Science]: http://events.cs.bham.ac.uk/mgs2019/
 [Miklós Maróti]: http://www.math.u-szeged.hu/~mmaroti/
 [More on Implicit Arguments]: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
@@ -82,6 +89,9 @@
 [NuPRL]: http://www.nuprl.org/
 
 [OPLSS 2018]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
+
+[our version of MHE's instructions]: emacs/INSTALL_AGDA.md
+
 
 [Peter Mayr]: http://math.colorado.edu/~mayr/
 [Preface module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
@@ -113,9 +123,8 @@
 [UAlib]: https://gitlab.com/ualib/ualib.gitlab.io
 [ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
 
-
-
-[Univalent Foundations with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#additionalexercisessol
+[Course on Univalent Foundations]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
+[Univalent Foundations with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Univalent Foundations and Homotopy Type Theory]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 
 [Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda

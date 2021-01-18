@@ -38,7 +38,10 @@ open import UALib.Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
 
 #### Projection homomorphisms
 
+Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
+
 \begin{code}
+
 ⨅-projection-hom : {𝓤 𝓘 : Universe}
                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
                    --------------------------------
@@ -54,7 +57,10 @@ open import UALib.Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
              ((𝑓 ̂ ⨅ 𝒜) 𝒂) i ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
              (𝑓 ̂ 𝒜 i) (λ x → 𝒂 x i) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
              (𝑓 ̂ 𝒜 i) (λ x → ϕi (𝒂 x)) ∎
+
 \end{code}
+
+(Of course, we could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.)
 
 --------------------------------------
 

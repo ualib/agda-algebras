@@ -11,7 +11,7 @@ This section presents the [UALib.Relations.Binary][] module of the [Agda Univers
 
 In set theory, a binary relation on a set `A` is simply a subset of the product `A × A`.  As such, we could model these as predicates over the type `A × A`, or as relations of type `A → A → 𝓡 ̇` (for some universe 𝓡). We define these below.
 
-A generalization of the notion of binary relation is a *relation from* `A` *to* `B`, which we also define below.
+A generalization of the notion of binary relation is a *relation from* `A` *to* `B`, which we define first and treat binary relations on a single `A` as a special case.
 
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -25,20 +25,39 @@ module _ {𝓤 : Universe} where
  REL : {𝓡 : Universe} → 𝓤 ̇ → 𝓡 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓡 ⊔ 𝓝 ⁺) ̇
  REL A B 𝓝 = A → B → 𝓝 ̇
 
+\end{code}
+
+
+#### Kernels
+
+The kernel of a function can be defined in many ways. For example,
+
+\begin{code}
+
  KER : {𝓡 : Universe} {A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → 𝓤 ⊔ 𝓡 ̇
  KER {𝓡} {A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
+
+\end{code}
+
+or as a unary relation (predicate) over the Cartesian product,
+
+\begin{code}
 
  KER-pred : {𝓡 : Universe} {A : 𝓤 ̇}{B : 𝓡 ̇} → (A → B) → Pred (A × A) 𝓡
  KER-pred g (x , y) = g x ≡ g y
 
+\end{code}
+
+or as a relation from `A` to `B`,
+
+\begin{code}
+
  Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
  Rel A 𝓝 = REL A A 𝓝
 
- Rel₀ : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
- Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P x y)
-
  KER-rel : {𝓡 : Universe}{A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → Rel A 𝓡
  KER-rel g x y = g x ≡ g y
+
 \end{code}
 
 #### Examples
@@ -94,9 +113,32 @@ module _ {𝓤 : Universe} where
  is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 \end{code}
 
-#### Syntactic sugar
+#### Binary relation truncation
+
+[The section on Truncation](UALib.Preface.html#truncation) in the preface describes the concept of truncation for "proof-relevant" mathematics.
+
+Given a binary relation `P`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `P`-related.  This may be called "proof-irrelevance" since, if we have two proofs of `x P y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.  We enforce this strong assumption of truncation at the first level in the following definition using MHE's `is-subsingleton` type: we say that `(x , y)` belongs to `P` or `x` and `y` are `P`-related if and only if both P x y` and `is-subsingleton (P x y)`.
 
 \begin{code}
+
+ Rel₀ : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
+ Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P x y)
+
+\end{code}
+
+We will define a **set** to be a type `X` with the following property: for all `x y : X` there is at most one proof that `x ≡ y`.  In other words, `X` is a set if and only if it satisfies
+
+```agda
+∀ x y : X → is-subsingleton(x ≡ y)
+```
+
+#### <a id="implication">Implication</a>
+
+We denote and define implication as follows.
+
+\begin{code}
+
+-- (syntactic sugar)
 _on_ : {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓥 ̇}{C : 𝓦 ̇}
  →     (B → B → C) → (A → B) → (A → A → C)
 
@@ -110,6 +152,11 @@ P ⇒ Q = ∀ {i j} → P i j → Q i j
 
 infixr 4 _⇒_
 
+\end{code}
+
+Here is a more general version that we borrow from the standard library and translate into MHE/UALib notation.
+
+\begin{code}
 
 _=[_]⇒_ : {𝓤 𝓥 𝓡 𝓢 : Universe}{A : 𝓤 ̇ } {B : 𝓥 ̇ }
  →        Rel A 𝓡 → (A → B) → Rel B 𝓢 → 𝓤 ⊔ 𝓡 ⊔ 𝓢 ̇
@@ -117,6 +164,7 @@ _=[_]⇒_ : {𝓤 𝓥 𝓡 𝓢 : Universe}{A : 𝓤 ̇ } {B : 𝓥 ̇ }
 P =[ g ]⇒ Q = P ⇒ (Q on g)
 
 infixr 4 _=[_]⇒_
+
 \end{code}
 
 

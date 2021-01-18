@@ -31,7 +31,6 @@ exclude:
   - "ARCHIVE/"
   - "latex/"
   - "sphinx/"
-  - "emacs/"
   - "jekyll/"
   - "src/"
   - "_site-prev/"

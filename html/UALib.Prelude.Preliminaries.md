@@ -23,43 +23,49 @@ This section describes the [UALib.Prelude.Preliminaries][] module of the [Agda U
   * MHE = [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe/)
   * MLTT = [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory)
 
+---------------------------------
 
-#### Options
+#### <a id="options">Options</a>
 
+All Agda programs begin by setting some options and by importing from existing libraries (in our case, the [Agda Standard Library][] and the [Type Topology][] library by MHE). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
 
-All Agda programs begin by setting some options, which effect how Agda behaves, and by importing from existing libraries (in our case, the [Agda Standard Library][] and the [Type Topology][] library by MHE). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
-
-For example, we start each Agda source file in the library with the following line:
+For example, each Agda source code file in the UALib begins with the following line:
 
 <pre class="Agda">
-<a id="1244" class="Symbol">{-#</a> <a id="1248" class="Keyword">OPTIONS</a> <a id="1256" class="Pragma">--without-K</a> <a id="1268" class="Pragma">--exact-split</a> <a id="1282" class="Pragma">--safe</a> <a id="1289" class="Symbol">#-}</a>
+
+<a id="1267" class="Symbol">{-#</a> <a id="1271" class="Keyword">OPTIONS</a> <a id="1279" class="Pragma">--without-K</a> <a id="1291" class="Pragma">--exact-split</a> <a id="1305" class="Pragma">--safe</a> <a id="1312" class="Symbol">#-}</a>
+
 </pre>
 
-This specifies the Agda `OPTIONS` that we will use throughout the library.
+These options control certain foundational assumptions that Agda assumes when type-checking the program to verify its correctness.
 
-  * `without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference][] manual.
+* `without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference][] manual.
 
-  * `exact-split` makes Agda accept only those definitions that behave like so-called *judgmental* or *definitional* equalities.  MHE explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators;" see also the [Pattern matching and equality section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality) of the [Agda Tools][] documentation.
+* `exact-split` makes Agda accept only those definitions that behave like so-called *judgmental* or *definitional* equalities.  MHE explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators;" see also the [Pattern matching and equality section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality) of the [Agda Tools][] documentation.
 
-  * `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
+* `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
 
-Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must remove the `--safe` flag and insert the `--allow-unsolved-metas` flag, so we could use the following in such case:
+Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`; we would use the following `OPTIONS` line in such case:
 
 ```agda
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
 ```
 
-#### Modules
+but this is never done in publicly released versions of the UALib.
+
+---------------------------------
+
+#### <a id="modules">Modules</a>
 
 The `OPTIONS` line is usually followed by the start of a module.  For example, here's how we start the Preliminaries module here.
 
 <pre class="Agda">
 
-<a id="2969" class="Keyword">module</a> <a id="2976" href="UALib.Prelude.Preliminaries.html" class="Module">UALib.Prelude.Preliminaries</a> <a id="3004" class="Keyword">where</a>
+<a id="3164" class="Keyword">module</a> <a id="3171" href="UALib.Prelude.Preliminaries.html" class="Module">UALib.Prelude.Preliminaries</a> <a id="3199" class="Keyword">where</a>
 
 </pre>
 
-Sometimes we may wish to pass in some parameters that will be assumed throughout the module.  For instance, when working with algebras, we often consider algebras of a particular fixed signature, and this is something we could fix as a parameter.  We'll see some examples soon enough, but as a preview,
+Sometimes we may wish to pass in parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module.  We'll see many examples later, but as a preview,
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} where
@@ -87,85 +93,196 @@ a-function-outside-the-submodule : {A B : 𝓤 ̇} → A → B
 a-function-outside-the-submodule a = a
 ```
 
-Actually, for illustration purposes, we have here an example that Agda wouldn't normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope.
+Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. In the UAlib, however, we tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
 
-In the UAlib, however, we tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.  This is done as follows.
+----------------------------------
 
-<pre class="Agda">
-<a id="5095" class="Comment">-- open import universes public</a>
+#### <a id="imports-from-type-topology">Imports from Type Topology</a>
 
-<a id="5128" class="Comment">-- variable</a>
-<a id="5140" class="Comment">--   𝓘 𝓙 𝓚 𝓛 𝓜 𝓝 𝓠 𝓡 𝓢 𝓧 : Universe</a>
-</pre>
-
-#### Imports from Type Topology
-
-Throughout we use many of the nice tools that Martin Escardo has developed and made available in his [Type Topology][] repository of Agda code for Univalent Foundations.
+Throughout we use many of the nice tools that [Martin Escardo][] has developed and made available in the [Type Topology][] repository of Agda code for the "Univalent Foundations" of mathematics.
 
 We import these now.
 
 <pre class="Agda">
-<a id="5427" class="Keyword">open</a> <a id="5432" class="Keyword">import</a> <a id="5439" href="universes.html" class="Module">universes</a> <a id="5449" class="Keyword">public</a>
 
-<a id="5457" class="Keyword">open</a> <a id="5462" class="Keyword">import</a> <a id="5469" href="Identity-Type.html" class="Module">Identity-Type</a> <a id="5483" class="Keyword">renaming</a> <a id="5492" class="Symbol">(</a><a id="5493" href="Identity-Type.html#121" class="Datatype Operator">_≡_</a> <a id="5497" class="Symbol">to</a> <a id="5500" class="Keyword">infix</a> <a id="5506" class="Number">0</a> <a id="_≡_"></a><a id="5508" href="UALib.Prelude.Preliminaries.html#5508" class="Datatype Operator">_≡_</a> <a id="5512" class="Symbol">;</a> <a id="5514" href="Identity-Type.html#162" class="InductiveConstructor">refl</a> <a id="5519" class="Symbol">to</a> <a id="refl"></a><a id="5522" href="UALib.Prelude.Preliminaries.html#5522" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a><a id="5526" class="Symbol">)</a> <a id="5528" class="Keyword">public</a>
+<a id="5624" class="Keyword">open</a> <a id="5629" class="Keyword">import</a> <a id="5636" href="universes.html" class="Module">universes</a> <a id="5646" class="Keyword">public</a>
 
-<a id="5536" class="Keyword">pattern</a> <a id="refl"></a><a id="5544" href="UALib.Prelude.Preliminaries.html#5544" class="InductiveConstructor">refl</a> <a id="5549" href="UALib.Prelude.Preliminaries.html#5563" class="Bound">x</a> <a id="5551" class="Symbol">=</a> <a id="5553" href="UALib.Prelude.Preliminaries.html#5522" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="5558" class="Symbol">{</a>x <a id="5561" class="Symbol">=</a> <a id="5563" href="UALib.Prelude.Preliminaries.html#5563" class="Bound">x</a><a id="5564" class="Symbol">}</a>
+<a id="5654" class="Keyword">open</a> <a id="5659" class="Keyword">import</a> <a id="5666" href="Identity-Type.html" class="Module">Identity-Type</a> <a id="5680" class="Keyword">renaming</a> <a id="5689" class="Symbol">(</a><a id="5690" href="Identity-Type.html#121" class="Datatype Operator">_≡_</a> <a id="5694" class="Symbol">to</a> <a id="5697" class="Keyword">infix</a> <a id="5703" class="Number">0</a> <a id="_≡_"></a><a id="5705" href="UALib.Prelude.Preliminaries.html#5705" class="Datatype Operator">_≡_</a> <a id="5709" class="Symbol">;</a> <a id="5711" href="Identity-Type.html#162" class="InductiveConstructor">refl</a> <a id="5716" class="Symbol">to</a> <a id="refl"></a><a id="5719" href="UALib.Prelude.Preliminaries.html#5719" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a><a id="5723" class="Symbol">)</a> <a id="5725" class="Keyword">public</a>
 
-<a id="5567" class="Keyword">open</a> <a id="5572" class="Keyword">import</a> <a id="5579" href="Sigma-Type.html" class="Module">Sigma-Type</a> <a id="5590" class="Keyword">renaming</a> <a id="5599" class="Symbol">(</a><a id="5600" href="Sigma-Type.html#188" class="InductiveConstructor Operator">_,_</a> <a id="5604" class="Symbol">to</a> <a id="5607" class="Keyword">infixr</a> <a id="5614" class="Number">50</a> <a id="_,_"></a><a id="5617" href="UALib.Prelude.Preliminaries.html#5617" class="InductiveConstructor Operator">_,_</a><a id="5620" class="Symbol">)</a> <a id="5622" class="Keyword">public</a>
+<a id="5733" class="Keyword">pattern</a> <a id="refl"></a><a id="5741" href="UALib.Prelude.Preliminaries.html#5741" class="InductiveConstructor">refl</a> <a id="5746" href="UALib.Prelude.Preliminaries.html#5760" class="Bound">x</a> <a id="5748" class="Symbol">=</a> <a id="5750" href="UALib.Prelude.Preliminaries.html#5719" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a> <a id="5755" class="Symbol">{</a>x <a id="5758" class="Symbol">=</a> <a id="5760" href="UALib.Prelude.Preliminaries.html#5760" class="Bound">x</a><a id="5761" class="Symbol">}</a>
 
-<a id="5630" class="Keyword">open</a> <a id="5635" class="Keyword">import</a> <a id="5642" href="MGS-MLTT.html" class="Module">MGS-MLTT</a> <a id="5651" class="Keyword">using</a> <a id="5657" class="Symbol">(</a><a id="5658" href="MGS-MLTT.html#3813" class="Function Operator">_∘_</a><a id="5661" class="Symbol">;</a> <a id="5663" href="MGS-MLTT.html#3944" class="Function">domain</a><a id="5669" class="Symbol">;</a> <a id="5671" href="MGS-MLTT.html#4021" class="Function">codomain</a><a id="5679" class="Symbol">;</a> <a id="5681" href="MGS-MLTT.html#4946" class="Function">transport</a><a id="5690" class="Symbol">;</a> <a id="5692" href="MGS-MLTT.html#5997" class="Function Operator">_≡⟨_⟩_</a><a id="5698" class="Symbol">;</a> <a id="5700" href="MGS-MLTT.html#6079" class="Function Operator">_∎</a><a id="5702" class="Symbol">;</a> <a id="5704" href="MGS-MLTT.html#2942" class="Function">pr₁</a><a id="5707" class="Symbol">;</a> <a id="5709" href="MGS-MLTT.html#3001" class="Function">pr₂</a><a id="5712" class="Symbol">;</a> <a id="5714" href="MGS-MLTT.html#3074" class="Function">-Σ</a><a id="5716" class="Symbol">;</a> <a id="5718" class="Comment">-- 𝕁;</a>
- <a id="5725" href="MGS-MLTT.html#3562" class="Function">Π</a><a id="5726" class="Symbol">;</a> <a id="5728" href="MGS-MLTT.html#956" class="Function">¬</a><a id="5729" class="Symbol">;</a> <a id="5731" href="MGS-MLTT.html#3515" class="Function Operator">_×_</a><a id="5734" class="Symbol">;</a> <a id="5736" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a><a id="5738" class="Symbol">;</a> <a id="5740" href="MGS-MLTT.html#6747" class="Function Operator">_∼_</a><a id="5743" class="Symbol">;</a> <a id="5745" href="MGS-MLTT.html#2104" class="Datatype Operator">_+_</a><a id="5748" class="Symbol">;</a> <a id="5750" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="5751" class="Symbol">;</a> <a id="5753" href="MGS-MLTT.html#408" class="Function">𝟙</a><a id="5754" class="Symbol">;</a> <a id="5756" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="5757" class="Symbol">;</a> <a id="5759" href="MGS-MLTT.html#7080" class="Function Operator">_⇔_</a><a id="5762" class="Symbol">;</a> <a id="5764" href="MGS-MLTT.html#7133" class="Function">lr-implication</a><a id="5778" class="Symbol">;</a> <a id="5780" href="MGS-MLTT.html#7214" class="Function">rl-implication</a><a id="5794" class="Symbol">;</a> <a id="5796" href="MGS-MLTT.html#3744" class="Function">id</a><a id="5798" class="Symbol">;</a> <a id="5800" href="MGS-MLTT.html#6125" class="Function Operator">_⁻¹</a><a id="5803" class="Symbol">;</a> <a id="5805" href="MGS-MLTT.html#6613" class="Function">ap</a><a id="5807" class="Symbol">)</a> <a id="5809" class="Keyword">public</a>
+<a id="5764" class="Keyword">open</a> <a id="5769" class="Keyword">import</a> <a id="5776" href="Sigma-Type.html" class="Module">Sigma-Type</a> <a id="5787" class="Keyword">renaming</a> <a id="5796" class="Symbol">(</a><a id="5797" href="Sigma-Type.html#188" class="InductiveConstructor Operator">_,_</a> <a id="5801" class="Symbol">to</a> <a id="5804" class="Keyword">infixr</a> <a id="5811" class="Number">50</a> <a id="_,_"></a><a id="5814" href="UALib.Prelude.Preliminaries.html#5814" class="InductiveConstructor Operator">_,_</a><a id="5817" class="Symbol">)</a> <a id="5819" class="Keyword">public</a>
 
-<a id="5817" class="Keyword">open</a> <a id="5822" class="Keyword">import</a> <a id="5829" href="MGS-Equivalences.html" class="Module">MGS-Equivalences</a> <a id="5846" class="Keyword">using</a> <a id="5852" class="Symbol">(</a><a id="5853" href="MGS-Equivalences.html#868" class="Function">is-equiv</a><a id="5861" class="Symbol">;</a> <a id="5863" href="MGS-Equivalences.html#979" class="Function">inverse</a><a id="5870" class="Symbol">;</a> <a id="5872" href="MGS-Equivalences.html#370" class="Function">invertible</a><a id="5882" class="Symbol">)</a> <a id="5884" class="Keyword">public</a>
+<a id="5827" class="Keyword">open</a> <a id="5832" class="Keyword">import</a> <a id="5839" href="MGS-MLTT.html" class="Module">MGS-MLTT</a> <a id="5848" class="Keyword">using</a> <a id="5854" class="Symbol">(</a><a id="5855" href="MGS-MLTT.html#3813" class="Function Operator">_∘_</a><a id="5858" class="Symbol">;</a> <a id="5860" href="MGS-MLTT.html#3944" class="Function">domain</a><a id="5866" class="Symbol">;</a> <a id="5868" href="MGS-MLTT.html#4021" class="Function">codomain</a><a id="5876" class="Symbol">;</a> <a id="5878" href="MGS-MLTT.html#4946" class="Function">transport</a><a id="5887" class="Symbol">;</a> <a id="5889" href="MGS-MLTT.html#5997" class="Function Operator">_≡⟨_⟩_</a><a id="5895" class="Symbol">;</a> <a id="5897" href="MGS-MLTT.html#6079" class="Function Operator">_∎</a><a id="5899" class="Symbol">;</a> <a id="5901" href="MGS-MLTT.html#2942" class="Function">pr₁</a><a id="5904" class="Symbol">;</a> <a id="5906" href="MGS-MLTT.html#3001" class="Function">pr₂</a><a id="5909" class="Symbol">;</a> <a id="5911" href="MGS-MLTT.html#3074" class="Function">-Σ</a><a id="5913" class="Symbol">;</a> <a id="5915" class="Comment">-- 𝕁;</a>
+ <a id="5922" href="MGS-MLTT.html#3562" class="Function">Π</a><a id="5923" class="Symbol">;</a> <a id="5925" href="MGS-MLTT.html#956" class="Function">¬</a><a id="5926" class="Symbol">;</a> <a id="5928" href="MGS-MLTT.html#3515" class="Function Operator">_×_</a><a id="5931" class="Symbol">;</a> <a id="5933" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a><a id="5935" class="Symbol">;</a> <a id="5937" href="MGS-MLTT.html#6747" class="Function Operator">_∼_</a><a id="5940" class="Symbol">;</a> <a id="5942" href="MGS-MLTT.html#2104" class="Datatype Operator">_+_</a><a id="5945" class="Symbol">;</a> <a id="5947" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="5948" class="Symbol">;</a> <a id="5950" href="MGS-MLTT.html#408" class="Function">𝟙</a><a id="5951" class="Symbol">;</a> <a id="5953" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="5954" class="Symbol">;</a> <a id="5956" href="MGS-MLTT.html#7080" class="Function Operator">_⇔_</a><a id="5959" class="Symbol">;</a> <a id="5961" href="MGS-MLTT.html#7133" class="Function">lr-implication</a><a id="5975" class="Symbol">;</a> <a id="5977" href="MGS-MLTT.html#7214" class="Function">rl-implication</a><a id="5991" class="Symbol">;</a> <a id="5993" href="MGS-MLTT.html#3744" class="Function">id</a><a id="5995" class="Symbol">;</a> <a id="5997" href="MGS-MLTT.html#6125" class="Function Operator">_⁻¹</a><a id="6000" class="Symbol">;</a> <a id="6002" href="MGS-MLTT.html#6613" class="Function">ap</a><a id="6004" class="Symbol">)</a> <a id="6006" class="Keyword">public</a>
 
-<a id="5892" class="Keyword">open</a> <a id="5897" class="Keyword">import</a> <a id="5904" href="MGS-Subsingleton-Theorems.html" class="Module">MGS-Subsingleton-Theorems</a> <a id="5930" class="Keyword">using</a> <a id="5936" class="Symbol">(</a><a id="5937" href="MGS-FunExt-from-Univalence.html#393" class="Function">funext</a><a id="5943" class="Symbol">;</a> <a id="5945" href="MGS-Subsingleton-Theorems.html#3729" class="Function">global-hfunext</a><a id="5959" class="Symbol">;</a> <a id="5961" href="MGS-FunExt-from-Univalence.html#2039" class="Function">dfunext</a><a id="5968" class="Symbol">;</a> <a id="5970" href="MGS-Basic-UF.html#428" class="Function">is-singleton</a><a id="5982" class="Symbol">;</a>
- <a id="5985" href="MGS-Basic-UF.html#743" class="Function">is-subsingleton</a><a id="6000" class="Symbol">;</a> <a id="6002" href="MGS-Basic-UF.html#1827" class="Function">is-prop</a><a id="6009" class="Symbol">;</a> <a id="6011" href="MGS-Subsingleton-Theorems.html#2964" class="Function">Univalence</a><a id="6021" class="Symbol">;</a> <a id="6023" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a><a id="6037" class="Symbol">;</a> <a id="6039" href="MGS-Subsingleton-Theorems.html#3528" class="Function">univalence-gives-global-dfunext</a><a id="6070" class="Symbol">;</a> <a id="6072" href="MGS-Equivalences.html#6164" class="Function Operator">_●_</a><a id="6075" class="Symbol">;</a>
- <a id="6078" href="MGS-Equivalences.html#5035" class="Function Operator">_≃_</a><a id="6081" class="Symbol">;</a> <a id="6083" href="MGS-Solved-Exercises.html#5136" class="Function">logically-equivalent-subsingletons-are-equivalent</a><a id="6132" class="Symbol">;</a> <a id="6134" href="MGS-Subsingleton-Theorems.html#393" class="Function">Π-is-subsingleton</a><a id="6151" class="Symbol">;</a> <a id="6153" href="MGS-Solved-Exercises.html#6049" class="Function">Σ-is-subsingleton</a><a id="6170" class="Symbol">)</a> <a id="6172" class="Keyword">public</a>
+<a id="6014" class="Keyword">open</a> <a id="6019" class="Keyword">import</a> <a id="6026" href="MGS-Equivalences.html" class="Module">MGS-Equivalences</a> <a id="6043" class="Keyword">using</a> <a id="6049" class="Symbol">(</a><a id="6050" href="MGS-Equivalences.html#868" class="Function">is-equiv</a><a id="6058" class="Symbol">;</a> <a id="6060" href="MGS-Equivalences.html#979" class="Function">inverse</a><a id="6067" class="Symbol">;</a> <a id="6069" href="MGS-Equivalences.html#370" class="Function">invertible</a><a id="6079" class="Symbol">)</a> <a id="6081" class="Keyword">public</a>
 
-<a id="6180" class="Keyword">open</a> <a id="6185" class="Keyword">import</a> <a id="6192" href="MGS-Powerset.html" class="Module">MGS-Powerset</a> <a id="6205" class="Keyword">renaming</a> <a id="6214" class="Symbol">(</a><a id="6215" href="MGS-Powerset.html#4924" class="Function Operator">_∈_</a> <a id="6219" class="Symbol">to</a> <a id="_∈_"></a><a id="6222" href="UALib.Prelude.Preliminaries.html#6222" class="Function Operator">_∈₀_</a><a id="6226" class="Symbol">;</a> <a id="6228" href="MGS-Powerset.html#4976" class="Function Operator">_⊆_</a> <a id="6232" class="Symbol">to</a> <a id="_⊆_"></a><a id="6235" href="UALib.Prelude.Preliminaries.html#6235" class="Function Operator">_⊆₀_</a><a id="6239" class="Symbol">;</a> <a id="6241" href="MGS-Powerset.html#5040" class="Function">∈-is-subsingleton</a> <a id="6259" class="Symbol">to</a> <a id="∈-is-subsingleton"></a><a id="6262" href="UALib.Prelude.Preliminaries.html#6262" class="Function">∈₀-is-subsingleton</a><a id="6280" class="Symbol">)</a>
- <a id="6283" class="Keyword">using</a> <a id="6289" class="Symbol">(</a><a id="6290" href="MGS-Powerset.html#4551" class="Function">𝓟</a><a id="6291" class="Symbol">;</a> <a id="6293" href="MGS-Solved-Exercises.html#1652" class="Function">equiv-to-subsingleton</a><a id="6314" class="Symbol">;</a> <a id="6316" href="MGS-Powerset.html#4586" class="Function">powersets-are-sets&#39;</a><a id="6335" class="Symbol">;</a> <a id="6337" href="MGS-Powerset.html#6079" class="Function">subset-extensionality&#39;</a><a id="6359" class="Symbol">;</a> <a id="6361" href="MGS-Powerset.html#382" class="Function">propext</a><a id="6368" class="Symbol">;</a> <a id="6370" href="MGS-Powerset.html#2957" class="Function Operator">_holds</a><a id="6376" class="Symbol">;</a> <a id="6378" href="MGS-Powerset.html#2893" class="Function">Ω</a><a id="6379" class="Symbol">)</a> <a id="6381" class="Keyword">public</a>
+<a id="6089" class="Keyword">open</a> <a id="6094" class="Keyword">import</a> <a id="6101" href="MGS-Subsingleton-Theorems.html" class="Module">MGS-Subsingleton-Theorems</a> <a id="6127" class="Keyword">using</a> <a id="6133" class="Symbol">(</a><a id="6134" href="MGS-FunExt-from-Univalence.html#393" class="Function">funext</a><a id="6140" class="Symbol">;</a> <a id="6142" href="MGS-Subsingleton-Theorems.html#3729" class="Function">global-hfunext</a><a id="6156" class="Symbol">;</a> <a id="6158" href="MGS-FunExt-from-Univalence.html#2039" class="Function">dfunext</a><a id="6165" class="Symbol">;</a> <a id="6167" href="MGS-Basic-UF.html#428" class="Function">is-singleton</a><a id="6179" class="Symbol">;</a>
+ <a id="6182" href="MGS-Basic-UF.html#743" class="Function">is-subsingleton</a><a id="6197" class="Symbol">;</a> <a id="6199" href="MGS-Basic-UF.html#1827" class="Function">is-prop</a><a id="6206" class="Symbol">;</a> <a id="6208" href="MGS-Subsingleton-Theorems.html#2964" class="Function">Univalence</a><a id="6218" class="Symbol">;</a> <a id="6220" href="MGS-Subsingleton-Theorems.html#3468" class="Function">global-dfunext</a><a id="6234" class="Symbol">;</a> <a id="6236" href="MGS-Subsingleton-Theorems.html#3528" class="Function">univalence-gives-global-dfunext</a><a id="6267" class="Symbol">;</a> <a id="6269" href="MGS-Equivalences.html#6164" class="Function Operator">_●_</a><a id="6272" class="Symbol">;</a>
+ <a id="6275" href="MGS-Equivalences.html#5035" class="Function Operator">_≃_</a><a id="6278" class="Symbol">;</a> <a id="6280" href="MGS-Solved-Exercises.html#5136" class="Function">logically-equivalent-subsingletons-are-equivalent</a><a id="6329" class="Symbol">;</a> <a id="6331" href="MGS-Subsingleton-Theorems.html#393" class="Function">Π-is-subsingleton</a><a id="6348" class="Symbol">;</a> <a id="6350" href="MGS-Solved-Exercises.html#6049" class="Function">Σ-is-subsingleton</a><a id="6367" class="Symbol">)</a> <a id="6369" class="Keyword">public</a>
 
-<a id="6389" class="Keyword">open</a> <a id="6394" class="Keyword">import</a> <a id="6401" href="MGS-Embeddings.html" class="Module">MGS-Embeddings</a> <a id="6416" class="Keyword">using</a> <a id="6422" class="Symbol">(</a><a id="6423" href="MGS-Basic-UF.html#6463" class="Function">Nat</a><a id="6426" class="Symbol">;</a> <a id="6428" href="MGS-Embeddings.html#5408" class="Function">NatΠ</a><a id="6432" class="Symbol">;</a> <a id="6434" href="MGS-Embeddings.html#5502" class="Function">NatΠ-is-embedding</a><a id="6451" class="Symbol">;</a> <a id="6453" href="MGS-Embeddings.html#384" class="Function">is-embedding</a><a id="6465" class="Symbol">;</a> <a id="6467" href="MGS-Embeddings.html#1089" class="Function">pr₁-embedding</a><a id="6480" class="Symbol">;</a> <a id="6482" href="MGS-Embeddings.html#1742" class="Function">∘-embedding</a><a id="6493" class="Symbol">;</a>
- <a id="6496" href="MGS-Basic-UF.html#1929" class="Function">is-set</a><a id="6502" class="Symbol">;</a> <a id="6504" href="MGS-Embeddings.html#6370" class="Function Operator">_↪_</a><a id="6507" class="Symbol">;</a> <a id="6509" href="MGS-Embeddings.html#3808" class="Function">embedding-gives-ap-is-equiv</a><a id="6536" class="Symbol">;</a> <a id="6538" href="MGS-Embeddings.html#4830" class="Function">embeddings-are-lc</a><a id="6555" class="Symbol">;</a> <a id="6557" href="MGS-Solved-Exercises.html#6381" class="Function">×-is-subsingleton</a><a id="6574" class="Symbol">;</a> <a id="6576" href="MGS-Embeddings.html#1623" class="Function">id-is-embedding</a><a id="6591" class="Symbol">)</a> <a id="6593" class="Keyword">public</a>
+<a id="6377" class="Keyword">open</a> <a id="6382" class="Keyword">import</a> <a id="6389" href="MGS-Powerset.html" class="Module">MGS-Powerset</a> <a id="6402" class="Keyword">renaming</a> <a id="6411" class="Symbol">(</a><a id="6412" href="MGS-Powerset.html#4924" class="Function Operator">_∈_</a> <a id="6416" class="Symbol">to</a> <a id="_∈_"></a><a id="6419" href="UALib.Prelude.Preliminaries.html#6419" class="Function Operator">_∈₀_</a><a id="6423" class="Symbol">;</a> <a id="6425" href="MGS-Powerset.html#4976" class="Function Operator">_⊆_</a> <a id="6429" class="Symbol">to</a> <a id="_⊆_"></a><a id="6432" href="UALib.Prelude.Preliminaries.html#6432" class="Function Operator">_⊆₀_</a><a id="6436" class="Symbol">;</a> <a id="6438" href="MGS-Powerset.html#5040" class="Function">∈-is-subsingleton</a> <a id="6456" class="Symbol">to</a> <a id="∈-is-subsingleton"></a><a id="6459" href="UALib.Prelude.Preliminaries.html#6459" class="Function">∈₀-is-subsingleton</a><a id="6477" class="Symbol">)</a>
+ <a id="6480" class="Keyword">using</a> <a id="6486" class="Symbol">(</a><a id="6487" href="MGS-Powerset.html#4551" class="Function">𝓟</a><a id="6488" class="Symbol">;</a> <a id="6490" href="MGS-Solved-Exercises.html#1652" class="Function">equiv-to-subsingleton</a><a id="6511" class="Symbol">;</a> <a id="6513" href="MGS-Powerset.html#4586" class="Function">powersets-are-sets&#39;</a><a id="6532" class="Symbol">;</a> <a id="6534" href="MGS-Powerset.html#6079" class="Function">subset-extensionality&#39;</a><a id="6556" class="Symbol">;</a> <a id="6558" href="MGS-Powerset.html#382" class="Function">propext</a><a id="6565" class="Symbol">;</a> <a id="6567" href="MGS-Powerset.html#2957" class="Function Operator">_holds</a><a id="6573" class="Symbol">;</a> <a id="6575" href="MGS-Powerset.html#2893" class="Function">Ω</a><a id="6576" class="Symbol">)</a> <a id="6578" class="Keyword">public</a>
 
-<a id="6601" class="Keyword">open</a> <a id="6606" class="Keyword">import</a> <a id="6613" href="MGS-Solved-Exercises.html" class="Module">MGS-Solved-Exercises</a> <a id="6634" class="Keyword">using</a> <a id="6640" class="Symbol">(</a><a id="6641" href="MGS-Solved-Exercises.html#4076" class="Function">to-subtype-≡</a><a id="6653" class="Symbol">)</a> <a id="6655" class="Keyword">public</a>
+<a id="6586" class="Keyword">open</a> <a id="6591" class="Keyword">import</a> <a id="6598" href="MGS-Embeddings.html" class="Module">MGS-Embeddings</a> <a id="6613" class="Keyword">using</a> <a id="6619" class="Symbol">(</a><a id="6620" href="MGS-Basic-UF.html#6463" class="Function">Nat</a><a id="6623" class="Symbol">;</a> <a id="6625" href="MGS-Embeddings.html#5408" class="Function">NatΠ</a><a id="6629" class="Symbol">;</a> <a id="6631" href="MGS-Embeddings.html#5502" class="Function">NatΠ-is-embedding</a><a id="6648" class="Symbol">;</a> <a id="6650" href="MGS-Embeddings.html#384" class="Function">is-embedding</a><a id="6662" class="Symbol">;</a> <a id="6664" href="MGS-Embeddings.html#1089" class="Function">pr₁-embedding</a><a id="6677" class="Symbol">;</a> <a id="6679" href="MGS-Embeddings.html#1742" class="Function">∘-embedding</a><a id="6690" class="Symbol">;</a>
+ <a id="6693" href="MGS-Basic-UF.html#1929" class="Function">is-set</a><a id="6699" class="Symbol">;</a> <a id="6701" href="MGS-Embeddings.html#6370" class="Function Operator">_↪_</a><a id="6704" class="Symbol">;</a> <a id="6706" href="MGS-Embeddings.html#3808" class="Function">embedding-gives-ap-is-equiv</a><a id="6733" class="Symbol">;</a> <a id="6735" href="MGS-Embeddings.html#4830" class="Function">embeddings-are-lc</a><a id="6752" class="Symbol">;</a> <a id="6754" href="MGS-Solved-Exercises.html#6381" class="Function">×-is-subsingleton</a><a id="6771" class="Symbol">;</a> <a id="6773" href="MGS-Embeddings.html#1623" class="Function">id-is-embedding</a><a id="6788" class="Symbol">)</a> <a id="6790" class="Keyword">public</a>
 
-<a id="6663" class="Keyword">open</a> <a id="6668" class="Keyword">import</a> <a id="6675" href="MGS-Unique-Existence.html" class="Module">MGS-Unique-Existence</a> <a id="6696" class="Keyword">using</a> <a id="6702" class="Symbol">(</a><a id="6703" href="MGS-Unique-Existence.html#387" class="Function">∃!</a><a id="6705" class="Symbol">;</a> <a id="6707" href="MGS-Unique-Existence.html#453" class="Function">-∃!</a><a id="6710" class="Symbol">)</a> <a id="6712" class="Keyword">public</a>
+<a id="6798" class="Keyword">open</a> <a id="6803" class="Keyword">import</a> <a id="6810" href="MGS-Solved-Exercises.html" class="Module">MGS-Solved-Exercises</a> <a id="6831" class="Keyword">using</a> <a id="6837" class="Symbol">(</a><a id="6838" href="MGS-Solved-Exercises.html#4076" class="Function">to-subtype-≡</a><a id="6850" class="Symbol">)</a> <a id="6852" class="Keyword">public</a>
 
-<a id="6720" class="Keyword">open</a> <a id="6725" class="Keyword">import</a> <a id="6732" href="MGS-Subsingleton-Truncation.html" class="Module">MGS-Subsingleton-Truncation</a> <a id="6760" class="Keyword">using</a> <a id="6766" class="Symbol">(</a><a id="6767" href="MGS-MLTT.html#5910" class="Function Operator">_∙_</a><a id="6770" class="Symbol">;</a> <a id="6772" href="MGS-Basic-UF.html#7284" class="Function">to-Σ-≡</a><a id="6778" class="Symbol">;</a> <a id="6780" href="MGS-Embeddings.html#1410" class="Function">equivs-are-embeddings</a><a id="6801" class="Symbol">;</a>
- <a id="6804" href="MGS-Equivalences.html#2127" class="Function">invertibles-are-equivs</a><a id="6826" class="Symbol">;</a> <a id="6828" href="MGS-Equivalences.html#501" class="Function">fiber</a><a id="6833" class="Symbol">;</a> <a id="6835" href="MGS-Powerset.html#5497" class="Function">⊆-refl-consequence</a><a id="6853" class="Symbol">;</a> <a id="6855" href="MGS-FunExt-from-Univalence.html#2235" class="Function">hfunext</a><a id="6862" class="Symbol">)</a> <a id="6864" class="Keyword">public</a>
+<a id="6860" class="Keyword">open</a> <a id="6865" class="Keyword">import</a> <a id="6872" href="MGS-Unique-Existence.html" class="Module">MGS-Unique-Existence</a> <a id="6893" class="Keyword">using</a> <a id="6899" class="Symbol">(</a><a id="6900" href="MGS-Unique-Existence.html#387" class="Function">∃!</a><a id="6902" class="Symbol">;</a> <a id="6904" href="MGS-Unique-Existence.html#453" class="Function">-∃!</a><a id="6907" class="Symbol">)</a> <a id="6909" class="Keyword">public</a>
+
+<a id="6917" class="Keyword">open</a> <a id="6922" class="Keyword">import</a> <a id="6929" href="MGS-Subsingleton-Truncation.html" class="Module">MGS-Subsingleton-Truncation</a> <a id="6957" class="Keyword">using</a> <a id="6963" class="Symbol">(</a><a id="6964" href="MGS-MLTT.html#5910" class="Function Operator">_∙_</a><a id="6967" class="Symbol">;</a> <a id="6969" href="MGS-Basic-UF.html#7284" class="Function">to-Σ-≡</a><a id="6975" class="Symbol">;</a> <a id="6977" href="MGS-Embeddings.html#1410" class="Function">equivs-are-embeddings</a><a id="6998" class="Symbol">;</a>
+ <a id="7001" href="MGS-Equivalences.html#2127" class="Function">invertibles-are-equivs</a><a id="7023" class="Symbol">;</a> <a id="7025" href="MGS-Equivalences.html#501" class="Function">fiber</a><a id="7030" class="Symbol">;</a> <a id="7032" href="MGS-Powerset.html#5497" class="Function">⊆-refl-consequence</a><a id="7050" class="Symbol">;</a> <a id="7052" href="MGS-FunExt-from-Univalence.html#2235" class="Function">hfunext</a><a id="7059" class="Symbol">)</a> <a id="7061" class="Keyword">public</a>
+
 </pre>
 
-Notice that we have carefully specified which definitions and results we want to import from each of Escardo's modules.  This is not absolutely necessary, and we could have simply used, e.g., `open import MGS-MLTT public`, omitting the `using (_∘_; domain; ...; ap)`.  However, being specific here has advantages.  Besides helping us avoid naming conflicts, it makes clear exactly which parts of the Martin Escardo (and Martin-Löf!) type theory we are using.
+Notice that we carefully specify which definitions and results we want to import from each of Escardo's modules.  This is not absolutely necessary, and we could have simply used, e.g., `open import MGS-MLTT public`, omitting `using (_∘_; domain; ...; ap)`.  However, being specific here has advantages.  Besides helping us avoid naming conflicts, it makes explicit which components of the type theory we are using.
 
-To conclude this preliminary model, we define some syntactic sugar for the first and second projections of a pair.
+-------------------------
+
+#### <a id="agda-universes">Special notation for Agda universes</a>
+
+The first import in the list of `open import` directives above imports the `universes` module from MHE's [Type Topology][] library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
+
+[MHE][] has authored an outstanding set of notes called [Introduction to Univalent Foundations of Mathematics with Agda][]. We highly recommend these notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.
+
+Following MHE, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, etc.
+
+Also in the `Universes` module MHE defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`.
+
+The level `lzero` is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for `Set lzero` (which, incidentally, corresponds to `Sort 0` in the [Lean][] proof assistant language).<sup>1</sup>
+
+Thus, 𝓤 ̇ is simply an alias for `Set 𝓤`, and we have `Set 𝓤 : Set (lsuc 𝓤)`.
+
+Finally, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we (and MHE) denote by `𝓤₀ ⁺ ̇`.
+
+The following dictionary translates between standard Agda syntax and MHE/UALib notation.
+
+```agda
+Agda              MHE and UALib
+====              ==============
+Level             Universe
+lzero             𝓤₀
+𝓤 : Level         𝓤 : Universe
+Set lzero         𝓤₀ ̇
+Set 𝓤             𝓤 ̇
+lsuc lzero        𝓤₀ ⁺
+lsuc 𝓤            𝓤 ⁺
+Set (lsuc lzero)  𝓤₀ ⁺ ̇
+Set (lsuc 𝓤)      𝓤 ⁺ ̇
+Setω              𝓤ω
+```
+
+To justify the introduction of this somewhat nonstandard notation for universe levels, MHE points out that the Agda library uses `Level` for universes (so what we write as 𝓤 ̇ is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
+
+There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
+
+--------------------
+
+#### <a id="dependent-pair-type">Dependent pair type</a>
+
+Our preferred notations for the first and second projections of a product are `∣_∣` and `∥_∥`, respectively; however, we will sometimes use more standard alternatives, such as `pr₁` and `pr₂`, or `fst` and `snd`, for emphasis, readability, or compatibility with other libraries.
 
 <pre class="Agda">
-<a id="7472" class="Keyword">module</a> <a id="7479" href="UALib.Prelude.Preliminaries.html#7479" class="Module">_</a> <a id="7481" class="Symbol">{</a><a id="7482" href="UALib.Prelude.Preliminaries.html#7482" class="Bound">𝓤</a> <a id="7484" class="Symbol">:</a> <a id="7486" href="universes.html#551" class="Postulate">Universe</a><a id="7494" class="Symbol">}</a> <a id="7496" class="Keyword">where</a>
- <a id="7503" href="UALib.Prelude.Preliminaries.html#7503" class="Function Operator">∣_∣</a> <a id="7507" href="UALib.Prelude.Preliminaries.html#7507" class="Function">fst</a> <a id="7511" class="Symbol">:</a> <a id="7513" class="Symbol">{</a><a id="7514" href="UALib.Prelude.Preliminaries.html#7514" class="Bound">X</a> <a id="7516" class="Symbol">:</a> <a id="7518" href="UALib.Prelude.Preliminaries.html#7482" class="Bound">𝓤</a> <a id="7520" href="universes.html#758" class="Function Operator">̇</a> <a id="7522" class="Symbol">}{</a><a id="7524" href="UALib.Prelude.Preliminaries.html#7524" class="Bound">Y</a> <a id="7526" class="Symbol">:</a> <a id="7528" href="UALib.Prelude.Preliminaries.html#7514" class="Bound">X</a> <a id="7530" class="Symbol">→</a> <a id="7532" href="universes.html#617" class="Generalizable">𝓥</a> <a id="7534" href="universes.html#758" class="Function Operator">̇</a><a id="7535" class="Symbol">}</a> <a id="7537" class="Symbol">→</a> <a id="7539" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="7541" href="UALib.Prelude.Preliminaries.html#7524" class="Bound">Y</a> <a id="7543" class="Symbol">→</a> <a id="7545" href="UALib.Prelude.Preliminaries.html#7514" class="Bound">X</a>
- <a id="7548" href="UALib.Prelude.Preliminaries.html#7503" class="Function Operator">∣</a> <a id="7550" href="UALib.Prelude.Preliminaries.html#7550" class="Bound">x</a> <a id="7552" href="UALib.Prelude.Preliminaries.html#5617" class="InductiveConstructor Operator">,</a> <a id="7554" href="UALib.Prelude.Preliminaries.html#7554" class="Bound">y</a> <a id="7556" href="UALib.Prelude.Preliminaries.html#7503" class="Function Operator">∣</a> <a id="7558" class="Symbol">=</a> <a id="7560" href="UALib.Prelude.Preliminaries.html#7550" class="Bound">x</a>
- <a id="7563" href="UALib.Prelude.Preliminaries.html#7507" class="Function">fst</a> <a id="7567" class="Symbol">(</a><a id="7568" href="UALib.Prelude.Preliminaries.html#7568" class="Bound">x</a> <a id="7570" href="UALib.Prelude.Preliminaries.html#5617" class="InductiveConstructor Operator">,</a> <a id="7572" href="UALib.Prelude.Preliminaries.html#7572" class="Bound">y</a><a id="7573" class="Symbol">)</a> <a id="7575" class="Symbol">=</a> <a id="7577" href="UALib.Prelude.Preliminaries.html#7568" class="Bound">x</a>
 
- <a id="7581" href="UALib.Prelude.Preliminaries.html#7581" class="Function Operator">∥_∥</a> <a id="7585" href="UALib.Prelude.Preliminaries.html#7585" class="Function">snd</a> <a id="7589" class="Symbol">:</a> <a id="7591" class="Symbol">{</a><a id="7592" href="UALib.Prelude.Preliminaries.html#7592" class="Bound">X</a> <a id="7594" class="Symbol">:</a> <a id="7596" href="UALib.Prelude.Preliminaries.html#7482" class="Bound">𝓤</a> <a id="7598" href="universes.html#758" class="Function Operator">̇</a> <a id="7600" class="Symbol">}{</a><a id="7602" href="UALib.Prelude.Preliminaries.html#7602" class="Bound">Y</a> <a id="7604" class="Symbol">:</a> <a id="7606" href="UALib.Prelude.Preliminaries.html#7592" class="Bound">X</a> <a id="7608" class="Symbol">→</a> <a id="7610" href="universes.html#617" class="Generalizable">𝓥</a> <a id="7612" href="universes.html#758" class="Function Operator">̇</a> <a id="7614" class="Symbol">}</a> <a id="7616" class="Symbol">→</a> <a id="7618" class="Symbol">(</a><a id="7619" href="UALib.Prelude.Preliminaries.html#7619" class="Bound">z</a> <a id="7621" class="Symbol">:</a> <a id="7623" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="7625" href="UALib.Prelude.Preliminaries.html#7602" class="Bound">Y</a><a id="7626" class="Symbol">)</a> <a id="7628" class="Symbol">→</a> <a id="7630" href="UALib.Prelude.Preliminaries.html#7602" class="Bound">Y</a> <a id="7632" class="Symbol">(</a><a id="7633" href="MGS-MLTT.html#2942" class="Function">pr₁</a> <a id="7637" href="UALib.Prelude.Preliminaries.html#7619" class="Bound">z</a><a id="7638" class="Symbol">)</a>
- <a id="7641" href="UALib.Prelude.Preliminaries.html#7581" class="Function Operator">∥</a> <a id="7643" href="UALib.Prelude.Preliminaries.html#7643" class="Bound">x</a> <a id="7645" href="UALib.Prelude.Preliminaries.html#5617" class="InductiveConstructor Operator">,</a> <a id="7647" href="UALib.Prelude.Preliminaries.html#7647" class="Bound">y</a> <a id="7649" href="UALib.Prelude.Preliminaries.html#7581" class="Function Operator">∥</a> <a id="7651" class="Symbol">=</a> <a id="7653" href="UALib.Prelude.Preliminaries.html#7647" class="Bound">y</a>
- <a id="7656" href="UALib.Prelude.Preliminaries.html#7585" class="Function">snd</a> <a id="7660" class="Symbol">(</a><a id="7661" href="UALib.Prelude.Preliminaries.html#7661" class="Bound">x</a> <a id="7663" href="UALib.Prelude.Preliminaries.html#5617" class="InductiveConstructor Operator">,</a> <a id="7665" href="UALib.Prelude.Preliminaries.html#7665" class="Bound">y</a><a id="7666" class="Symbol">)</a> <a id="7668" class="Symbol">=</a> <a id="7670" href="UALib.Prelude.Preliminaries.html#7665" class="Bound">y</a>
+<a id="10257" class="Keyword">module</a> <a id="10264" href="UALib.Prelude.Preliminaries.html#10264" class="Module">_</a> <a id="10266" class="Symbol">{</a><a id="10267" href="UALib.Prelude.Preliminaries.html#10267" class="Bound">𝓤</a> <a id="10269" class="Symbol">:</a> <a id="10271" href="universes.html#551" class="Postulate">Universe</a><a id="10279" class="Symbol">}</a> <a id="10281" class="Keyword">where</a>
+ <a id="10288" href="UALib.Prelude.Preliminaries.html#10288" class="Function Operator">∣_∣</a> <a id="10292" href="UALib.Prelude.Preliminaries.html#10292" class="Function">fst</a> <a id="10296" class="Symbol">:</a> <a id="10298" class="Symbol">{</a><a id="10299" href="UALib.Prelude.Preliminaries.html#10299" class="Bound">X</a> <a id="10301" class="Symbol">:</a> <a id="10303" href="UALib.Prelude.Preliminaries.html#10267" class="Bound">𝓤</a> <a id="10305" href="universes.html#758" class="Function Operator">̇</a> <a id="10307" class="Symbol">}{</a><a id="10309" href="UALib.Prelude.Preliminaries.html#10309" class="Bound">Y</a> <a id="10311" class="Symbol">:</a> <a id="10313" href="UALib.Prelude.Preliminaries.html#10299" class="Bound">X</a> <a id="10315" class="Symbol">→</a> <a id="10317" href="universes.html#617" class="Generalizable">𝓥</a> <a id="10319" href="universes.html#758" class="Function Operator">̇</a><a id="10320" class="Symbol">}</a> <a id="10322" class="Symbol">→</a> <a id="10324" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="10326" href="UALib.Prelude.Preliminaries.html#10309" class="Bound">Y</a> <a id="10328" class="Symbol">→</a> <a id="10330" href="UALib.Prelude.Preliminaries.html#10299" class="Bound">X</a>
+ <a id="10333" href="UALib.Prelude.Preliminaries.html#10288" class="Function Operator">∣</a> <a id="10335" href="UALib.Prelude.Preliminaries.html#10335" class="Bound">x</a> <a id="10337" href="UALib.Prelude.Preliminaries.html#5814" class="InductiveConstructor Operator">,</a> <a id="10339" href="UALib.Prelude.Preliminaries.html#10339" class="Bound">y</a> <a id="10341" href="UALib.Prelude.Preliminaries.html#10288" class="Function Operator">∣</a> <a id="10343" class="Symbol">=</a> <a id="10345" href="UALib.Prelude.Preliminaries.html#10335" class="Bound">x</a>
+ <a id="10348" href="UALib.Prelude.Preliminaries.html#10292" class="Function">fst</a> <a id="10352" class="Symbol">(</a><a id="10353" href="UALib.Prelude.Preliminaries.html#10353" class="Bound">x</a> <a id="10355" href="UALib.Prelude.Preliminaries.html#5814" class="InductiveConstructor Operator">,</a> <a id="10357" href="UALib.Prelude.Preliminaries.html#10357" class="Bound">y</a><a id="10358" class="Symbol">)</a> <a id="10360" class="Symbol">=</a> <a id="10362" href="UALib.Prelude.Preliminaries.html#10353" class="Bound">x</a>
+
+ <a id="10366" href="UALib.Prelude.Preliminaries.html#10366" class="Function Operator">∥_∥</a> <a id="10370" href="UALib.Prelude.Preliminaries.html#10370" class="Function">snd</a> <a id="10374" class="Symbol">:</a> <a id="10376" class="Symbol">{</a><a id="10377" href="UALib.Prelude.Preliminaries.html#10377" class="Bound">X</a> <a id="10379" class="Symbol">:</a> <a id="10381" href="UALib.Prelude.Preliminaries.html#10267" class="Bound">𝓤</a> <a id="10383" href="universes.html#758" class="Function Operator">̇</a> <a id="10385" class="Symbol">}{</a><a id="10387" href="UALib.Prelude.Preliminaries.html#10387" class="Bound">Y</a> <a id="10389" class="Symbol">:</a> <a id="10391" href="UALib.Prelude.Preliminaries.html#10377" class="Bound">X</a> <a id="10393" class="Symbol">→</a> <a id="10395" href="universes.html#617" class="Generalizable">𝓥</a> <a id="10397" href="universes.html#758" class="Function Operator">̇</a> <a id="10399" class="Symbol">}</a> <a id="10401" class="Symbol">→</a> <a id="10403" class="Symbol">(</a><a id="10404" href="UALib.Prelude.Preliminaries.html#10404" class="Bound">z</a> <a id="10406" class="Symbol">:</a> <a id="10408" href="Sigma-Type.html#120" class="Record">Σ</a> <a id="10410" href="UALib.Prelude.Preliminaries.html#10387" class="Bound">Y</a><a id="10411" class="Symbol">)</a> <a id="10413" class="Symbol">→</a> <a id="10415" href="UALib.Prelude.Preliminaries.html#10387" class="Bound">Y</a> <a id="10417" class="Symbol">(</a><a id="10418" href="MGS-MLTT.html#2942" class="Function">pr₁</a> <a id="10422" href="UALib.Prelude.Preliminaries.html#10404" class="Bound">z</a><a id="10423" class="Symbol">)</a>
+ <a id="10426" href="UALib.Prelude.Preliminaries.html#10366" class="Function Operator">∥</a> <a id="10428" href="UALib.Prelude.Preliminaries.html#10428" class="Bound">x</a> <a id="10430" href="UALib.Prelude.Preliminaries.html#5814" class="InductiveConstructor Operator">,</a> <a id="10432" href="UALib.Prelude.Preliminaries.html#10432" class="Bound">y</a> <a id="10434" href="UALib.Prelude.Preliminaries.html#10366" class="Function Operator">∥</a> <a id="10436" class="Symbol">=</a> <a id="10438" href="UALib.Prelude.Preliminaries.html#10432" class="Bound">y</a>
+ <a id="10441" href="UALib.Prelude.Preliminaries.html#10370" class="Function">snd</a> <a id="10445" class="Symbol">(</a><a id="10446" href="UALib.Prelude.Preliminaries.html#10446" class="Bound">x</a> <a id="10448" href="UALib.Prelude.Preliminaries.html#5814" class="InductiveConstructor Operator">,</a> <a id="10450" href="UALib.Prelude.Preliminaries.html#10450" class="Bound">y</a><a id="10451" class="Symbol">)</a> <a id="10453" class="Symbol">=</a> <a id="10455" href="UALib.Prelude.Preliminaries.html#10450" class="Bound">y</a>
+
 </pre>
 
-Both of these alternative notations,
+For the dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`). The preferred notation is made available by making the index type explicit.
 
 ```agda
-fst (x , y) ≡ x, snd(x , y) ≡ y
+infixr -1 -Σ
+-Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-Σ X Y = Σ Y
+syntax -Σ X (λ x → y) = Σ x ꞉ X , y -- type `꞉` as `\:4`
 ```
 
-and
+<div class="admonition warning">
+
+The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
+
+</div>
+
+MHE explains Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`. This is called `Σ` induction or `Σ` elimination (or `uncurry`).
 
 ```agda
-∣ (x , y) ∣ = x, ∥ (x , y) ∥ = y
+Σ-induction : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
+ →            ((x : X)(y : Y x) → A (x , y))
+              -------------------------------
+ →            ((x , y) : Σ Y) → A (x , y)
+Σ-induction g (x , y) = g x y
+
+curry : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
+ →      (((x , y) : Σ Y ) → A (x , y))
+       ---------------------------------
+ →      ((x : X) (y : Y x) → A (x , y))
+curry f x y = f (x , y)
 ```
 
-will be used frequently throughout the library.
+The special case in which the type `Y` doesn't depend on `X` is the usual Cartesian product.
 
--------------------------------------
+```agda
+infixr 30 _×_
+_×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+X × Y = Σ x ꞉ X , Y
+```
+
+------------------
+
+#### <a id="dependent-function-type">Dependent function type</a>
+
+To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), MHE uses the same trick as the one used above for *Sigma types*.
+
+```agda
+Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+Π {𝓤} {𝓥} {X} A = (x : X) → A x
+
+-Π : {𝓤 𝓥 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-Π X Y = Π Y
+infixr -1 -Π
+syntax -Π A (λ x → b) = Π x ꞉ A , b
+```
+
+---------------------------------------------------
+
+#### <a id="truncation">Truncation</a>
+
+In general, we may have many inhabitants of a given type and, via the Curry-Howard correspondence, many proofs of a given proposition.  For instance, suppose we have a type `X` and an identity relation ≡ₓ on X. Then, given two inhabitants `a` and `b` of type `X`, we may ask whether `a ≡ₓ b`.
+
+Suppose `p` and `q` inhabit the identity type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write `p  q : a ≡ₓ b`.  Then we might wonder whether and in what sense are the two proofs `p` and `q` the "same."  We are asking about an identity type on the identity type ≡ₓ, and whether there is some inhabitant `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proof of `a ≡ₓ b` is unique.  (This property is sometimes called *uniqueness of identity proofs*.)
+
+Perhaps we have two proofs, say, `r s : p ≡ₓ₁ q`. Then of course we will ask whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof relevance*) is not useful or desirable.  At that point, say, at level `k`, we might assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation).
+
+We will see some examples of trunction later when we require it to complete some of the UALib modules leading up to the proof of Birkhoff's HSP Theorem.  Readers who want more details should refer to [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of MHE's notes, or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
+
+We take this opportunity to define *set* (or 0-*groupoid*) in type theory.  A type X : 𝓤 ̇ with an identity relation `≡ₓ` is called a **set** if for every pair `a b : X` of elements of type `X` there is at most one proof of `a ≡ₓ b`.
+
+This notion is formalized in the [Type Topology][] library as follows:<span class="footnote"><sup>2</sup></span>
+
+```agda
+is-set : 𝓤 ̇ → 𝓤 ̇
+is-set X = (x y : X) → is-subsingleton (x ≡ y)
+```
+
+----------------------------------------
+
+<span class="footnote"><sup>1</sup> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
+
+<p></p>
+
+<span class="footnote"><sup>2</sup>As [MHE][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
+
+
+-----------------------------
 
 [↑ UALib.Prelude](UALib.Prelude.html)
 <span style="float:right;">[UALib.Prelude.Equality →](UALib.Prelude.Equality.html)</span>

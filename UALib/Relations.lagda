@@ -26,7 +26,7 @@ open import UALib.Relations.Congruences public
 
 -------------------------------------
 
-[← UALib.Algebras](UALib.Algebras.html)
-<span style="float:right;">[UALib.Homomorphisms →](UALib.Homomorphisms.html)</span>
+[← UALib.Algebras.Lifts](UALib.Algebras.Lifts.html)
+<span style="float:right;">[UALib.Relations.Unary →](UALib.Relations.Unary.html)</span>
 
 {% include UALib.Links.md %}

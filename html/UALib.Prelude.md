@@ -37,6 +37,6 @@ The source code for this module comprises the (literate) [Agda][] program that w
 --------------------------------------
 
 [← UALib.Preface](UALib.Preface.html)
-<span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>
+<span style="float:right;">[UALib.Prelude.Preliminaries →](UALib.Prelude.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}

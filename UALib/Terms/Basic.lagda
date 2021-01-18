@@ -27,7 +27,11 @@ open import UALib.Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} hiding (Univ
 
 \end{code}
 
-#### The inductive type of terms
+-----------------------------------------------
+
+#### <a id="the-inductive-type-of-terms">The inductive type of terms</a>
+
+We define a type called `Term` which, not surprisingly, represents the type of terms. The type `X :  𝒰 ̇` represents an arbitrary collection of variable symbols.
 
 \begin{code}
 

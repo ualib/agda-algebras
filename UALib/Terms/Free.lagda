@@ -16,7 +16,6 @@ This section presents the [UALib.Terms.Free][] module of the [Agda Universal Alg
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Terms.Free
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
@@ -24,12 +23,28 @@ module UALib.Terms.Free
 
 open import UALib.Terms.Basic{𝑆 = 𝑆}{gfe}{𝕏} hiding (Algebra) public
 
---The term algebra 𝑻(X).
+\end{code}
+
+Terms can be viewed as acting on other terms and we can form an algebraic structure whose domain and basic operations are both the collection of term operations. We call this the **term algebra** and it by `𝑻 X`. In [Agda][] the term algebra is defined as simply as one would hope.
+
+\begin{code}
+
+--The term algebra 𝑻 X.
 𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺) 𝑆
 𝑻 {𝓧} X = Term{𝓧}{X} , node
 
-term-op : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X} ) → Term
-term-op f args = node f args
+\end{code}
+
+-------------------------------------------
+
+#### <a id="the-universal-property">The universal property</a>
+
+The Term algebra is *absolutely free*, or *universal*, for algebras in the signature 𝑆. That is, for every 𝑆-algebra 𝑨,
+
+1.  every map `h : 𝑋 → ∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to 𝑨, and
+2.  the induced homomorphism is unique.
+
+\begin{code}
 
 --1.a. Every map (X → 𝑨) lifts.
 free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)
@@ -59,18 +74,23 @@ free-unique fe 𝑨 g h p (node f args) =
    (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
    ∣ h ∣ (node f args)             ∎
    where γ = fe λ i → free-unique fe 𝑨 g h p (args i)
+
 \end{code}
 
-#### Lifting and imaging devices
+-------------------------------------------------
+
+#### <a id="lifting-and-imaging-tools">Lifting and imaging tools</a>
+
+Next we note the easy fact that the lift induced by `h₀` agrees with `h₀` on `X` and that the lift is surjective if `h₀` is.
 
 \begin{code}
+
 lift-agrees-on-X : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X)
         ----------------------------------------
  →       h₀ x ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator x)
 
 lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
 
---Of course, the lift of a surjective map is surjective.
 lift-of-epi-is-epi : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
  →                    Epic h₀
                      ----------------------
@@ -92,9 +112,10 @@ lift-of-epi-is-epi {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η
+
 \end{code}
 
-Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. The following shows how to get your hands on such homomorphisms.
+Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. The following function makes it easy to lay our hands on such homomorphisms when necessary.
 
 \begin{code}
 
@@ -110,6 +131,7 @@ Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebr
 
   h : hom (𝑻 X) 𝑪
   h = lift-hom 𝑪 h₀
+
 \end{code}
 
 --------------------------------------
@@ -118,3 +140,9 @@ Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebr
 <span style="float:right;">[UALib.Terms.Operations →](UALib.Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+<!-- term-op : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term{𝓧}{X} ) → Term
+term-op f args = node f args -->
+

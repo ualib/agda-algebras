@@ -1,5 +1,6 @@
 #!/bin/bash
 
+find . -type f -name "*.lagda" -exec touch {} +
 agda --html --html-highlight=code UALib.lagda
 
 mv html/Empty-Type.{tex,md}

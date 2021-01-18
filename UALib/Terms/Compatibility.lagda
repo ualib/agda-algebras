@@ -30,7 +30,9 @@ open import UALib.Terms.Operations{𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
-#### Homomorphisms commute with terms
+----------------------------------------------------------
+
+#### <a id="homomorphism compatibility">Homomorphism compatibility</a>
 
 We first prove an extensional version of this fact.
 
@@ -80,7 +82,9 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
 
 \end{code}
 
-#### Compatibility of terms and congruences
+--------------------------------------
+
+#### <a id="congruence-compatibility">Congruence compatibility</a>
 
 If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b)). The statement and proof of this obvious but important fact may be formalized in Agda as follows.
 
@@ -102,6 +106,7 @@ compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
 
 compatible-term' 𝑨 (generator x) θ p = p x
 compatible-term' 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term' 𝑨 (args x) θ) p
+
 \end{code}
 
 --------------------------------------

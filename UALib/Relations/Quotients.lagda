@@ -19,25 +19,66 @@ open import UALib.Prelude.Preliminaries using (_⇔_; id) public
 
 module _ {𝓤 𝓡 : Universe} where
 
- -- relation class
+\end{code}
+
+For a binary relation `R` on `A`, we denote a single R-class as `[ a ] R` (the class containing `a`). This notation is defined in UALib as follows.
+
+\begin{code}
+
+-- relation class
  [_] : {A : 𝓤 ̇ } → A → Rel A 𝓡 → Pred A 𝓡
  [ a ] R = λ x → R a x
 
- --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
+\end{code}
+
+So, `x ∈ [ a ] R` iff `R a x`, and the following elimination rule is a tautology.
+
+\begin{code}
+
  []-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
   →         R a x ⇔ (x ∈ [ a ] R)
  []-elim = id , id
 
- -- The type of R-classes
+\end{code}
+
+We define type of all classes of a relation `R` as follows.
+
+\begin{code}
+
  𝒞 : {A : 𝓤 ̇}{R : Rel A 𝓡} → Pred A 𝓡 → (𝓤 ⊔ 𝓡 ⁺) ̇
  𝒞 {A}{R} = λ (C : Pred A 𝓡) → Σ a ꞉ A , C ≡ ( [ a ] R)
+
+\end{code}
+
+There are a few ways we could define the quotient with respect to a relation. We have found the following to be the most convenient.
+
+\begin{code}
 
  -- relation quotient (predicate version)
  _/_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → 𝓤 ⊔ (𝓡 ⁺) ̇
  A / R = Σ C ꞉ Pred A 𝓡 ,  𝒞{A}{R} C
  -- old version:  A / R = Σ C ꞉ Pred A 𝓡 ,  Σ a ꞉ A ,  C ≡ ( [ a ] R )
 
- -- For a reflexive relation, we have the following elimination rule.
+\end{code}
+
+We then define the following introduction rule for a relation class with designated representative.
+
+\begin{code}
+
+ ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
+ ⟦ a ⟧ {R} = ([ a ] R) , a , 𝓇ℯ𝒻𝓁
+
+ --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
+ ⟦⟧-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
+  →         R a x ⇔ (x ∈ [ a ] R)
+ ⟦⟧-elim = id , id
+
+\end{code}
+
+If the relation is reflexive, then we have the following elimination rules.
+
+\begin{code}
+
  /-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →   reflexive R → [ a ] R ≡ [ a' ] R → R a a'
  /-refl{A = A}{a}{a'}{R} rfl x  = γ
@@ -54,19 +95,21 @@ module _ {𝓤 𝓡 : Universe} where
  ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
  ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
 
- -- introduction rule for relation class with designated representative
- ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
- ⟦ a ⟧ {R} = ([ a ] R) , a , 𝓇ℯ𝒻𝓁
+\end{code}
 
- --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
- ⟦⟧-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
-  →         R a x ⇔ (x ∈ [ a ] R)
- ⟦⟧-elim = id , id
+and an elimination rule for relation class representative, defined as follows.
 
- -- elimination rule for relation class representative
+\begin{code}
+
  /-Refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →   reflexive R → ⟦ a ⟧{R} ≡ ⟦ a' ⟧ → R a a'
  /-Refl rfl (refl _)  = rfl _
+
+\end{code}
+
+Later we will need the following additional quotient tools.
+
+\begin{code}
 
  open IsEquivalence{𝓤}{𝓡}
 
@@ -81,13 +124,17 @@ module _ {𝓤 𝓡 : Universe} where
  /-=̇ : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →   IsEquivalence R → R a a' → ([ a ] R) =̇ ([ a' ] R)
  /-=̇ {A = A}{a}{a'}{R} Req Raa' = /-subset Req Raa' , /-supset Req Raa'
+
 \end{code}
 
 #### Quotient extensionality
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are on sets, rather than arbitrary types.  For us, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.  In other words, a set is a type with *unique identity proofs*. As a general principle, this is sometimes referred to as "proof irrelevance"---two proofs of a single identity are equal.
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are on sets, rather than arbitrary types.  As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.
+
+(Recall, a type is called a **set** if it has *unique identity proofs*; as a general principle, this is sometimes referred to as "proof irrelevance" or "uniqueness of identity proofs"---two proofs of a single identity are the same.)
 
 \begin{code}
+
  class-extensionality : propext 𝓡 → global-dfunext
   →       {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
   →       (∀ a x → is-subsingleton (R a x))
@@ -125,7 +172,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 #### Compatibility
 
-The following definitions and lemmas are useful for asserting and proving facts about compatibility of relations and functions.
+The following definitions and lemmas are useful for asserting and proving facts about **compatibility** of relations and functions.
 
 \begin{code}
 module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇ } {Z : 𝓤 ̇ } where
@@ -150,6 +197,7 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 #### Examples
 
 \begin{code}
+
 module _ {𝓤 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
  𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)

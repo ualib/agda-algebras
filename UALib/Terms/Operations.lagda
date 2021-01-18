@@ -9,8 +9,6 @@ author: William DeMeo
 
 This section presents the [UALib.Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
-When we interpret a term in an algebra we call the result a *term operation*.  Since terms operations act on themselves by "composition," we can form an algebraic structure whose domain and basic operations are both the collection of term operations.  The UALib.Terms.Operations module mechanizes such structures in Martin-Löf type theory.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -25,9 +23,19 @@ module UALib.Terms.Operations
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
-
 open import UALib.Terms.Free{𝑆 = 𝑆}{gfe}{𝕏} public
 
+\end{code}
+
+When we interpret a term in an algebra we call the resulting function a **term operation**.  Given a term `𝑝 : Term` and an algebra 𝑨, we denote by `𝑝 ̇ 𝑨` the **interpretation** of 𝑝 in 𝑨.  This is defined inductively as follows:
+
+1. if 𝑝 is `x : X` (a variable) and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then define `(𝑝 ̇ 𝑨) 𝒂 = 𝒂 x`;
+2. if 𝑝 = 𝑓 𝒔, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol and `𝒔 : ∥ 𝑆 ∥ f → 𝑻 X` is an (`∥ 𝑆 ∥ f`)-tuple of terms and
+    `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = ((𝑓 𝒔) ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → ((𝒔 i) ̇ 𝑨) 𝒂``
+
+In the [Agda UALib][] term interpretation is defined as follows.
+
+\begin{code}
 
 _̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
@@ -37,6 +45,7 @@ _̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebr
 Observe that intepretation of a term is the same as `free-lift` (modulo argument order).
 
 \begin{code}
+
 free-lift-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
                            (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
  →                         (p ̇ 𝑨) h ≡ free-lift 𝑨 h p
@@ -48,6 +57,7 @@ lift-hom-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
  →                        (p ̇ 𝑨) h ≡ ∣ lift-hom 𝑨 h ∣ p
 
 lift-hom-interpretation = free-lift-interpretation
+
 \end{code}
 
 Here we want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?
@@ -119,7 +129,9 @@ term-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
 term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 \end{code}
 
-#### Interpretation of terms in product algebras
+-----------------------------------
+
+#### <a id="interpretation-of-terms-in-product-algebras>Interpretation of terms in product algebras</a>
 
 \begin{code}
 interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤

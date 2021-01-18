@@ -9,11 +9,8 @@ author: William DeMeo
 
 This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra Library][].
 
-\begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
-\end{code}
-
 \begin{code}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module UALib.Terms where
 
@@ -27,6 +24,6 @@ open import UALib.Terms.Compatibility
 -------------------------------------
 
 [← UALib.Homomorphisms](UALib.Homomorphisms.html)
-<span style="float:right;">[UALib.Subalgebras →](UALib.Subalgebras.html)</span>
+<span style="float:right;">[UALib.Terms.Basic →](UALib.Terms.Basic.html)</span>
 
 {% include UALib.Links.md %}

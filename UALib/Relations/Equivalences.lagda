@@ -9,6 +9,8 @@ author: William DeMeo
 
 This section presents the [UALib.Relations.Equivalences][] module of the [Agda Universal Algebra Library][].
 
+This is all pretty standard.  The notions of reflexivity, symmetry, and transitivity are defined as one would expect, so we need not dwell on them.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -29,16 +31,26 @@ module _ {𝓤 𝓡 : Universe} where
  is-equivalence-relation _≈_ = is-subsingleton-valued _≈_
                                × reflexive _≈_ × symmetric _≈_ × transitive _≈_
 
+\end{code}
+
+#### Examples
+
+The zero relation 𝟎 is equivalent to the identity relation `≡` and, of course, these are both equivalence relations. (In fact, we already proved reflexivity, symmetry, and transitivity of `≡` in the [UALib.Prelude.Equality][] module, so we simply apply the corresponding proofs where appropriate.)
+\begin{code}
+
 module _ {𝓤 : Universe} where
 
- 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤 = 𝓤}{A = A} 𝟎-rel
- 𝟎-IsEquivalence = record { rfl = λ x → refl _
-                          ; sym = λ x y x≡y → x≡y ⁻¹
-                          ; trans = λ x y z x≡y y≡z → x≡y ∙ y≡z }
+ 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤}{A = A} 𝟎-rel
+ 𝟎-IsEquivalence = record { rfl = ≡-rfl; sym = ≡-sym; trans = ≡-trans }
 
- ≡-IsEquivalence : {X : 𝓤 ̇} → IsEquivalence{𝓤}{𝓤}{X} _≡_
+ ≡-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence{𝓤}{A = A} _≡_
  ≡-IsEquivalence = record { rfl = ≡-rfl ; sym = ≡-sym ; trans = ≡-trans }
 
+\end{code}
+
+Finally, we should have at our disposal a proof of the fact that the kernel of a function is an equivalence relation.
+
+\begin{code}
 
  map-kernel-IsEquivalence : {𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
                             (f : A → B) → IsEquivalence (KER-rel f)
@@ -47,6 +59,7 @@ module _ {𝓤 : Universe} where
   record { rfl = λ x → 𝓇ℯ𝒻𝓁
          ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
          ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
+
 \end{code}
 
 

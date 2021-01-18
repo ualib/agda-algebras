@@ -5,13 +5,31 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="inductively-defined-closure-operators">Inductively Defined Closure Operators</a>
+### <a id="inductive-types-h-s-p-and-v">Inductive Types H, S, P, and V</a>
 
 This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
 
-A *variety* is a class of algebras (in the same signature) that is closed under the taking of homomorphic images (H), subalgebras (S), and arbitrary products (P).
+#### The closure opereators H, S, P, and V
 
-In this module we present the most useful inductive types that we have found in Martin-Löf type theory for representing classes of algebras that are closed under H, S, P, and V ≡ HSP.
+Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
+
+* H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
+* S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
+* P 𝒦 = algebras isomorphic to a product of members of 𝒦.
+
+A straight-forward verification confirms that H, S, and P are **closure operators** (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`).
+
+An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
+
+The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
+
+<!-- If C₁ and C₂ are closure operators on classes of structures, let us say that C₁ ≤ C₂ if for every class 𝒦 we have C₁(𝒦) ⊆ C₂(𝒦). -->
+
+A **variety** is a class 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (H), subalgebras (S), and arbitrary products (P).  That is, 𝒦 is a variety if and only if `H S P 𝒦 ⊆ 𝒦`.
+
+This module defines what we have found to be the most useful inductive types representing the closure operators H, S, and P. Separately, we define the inductive type `V` for simultaneously representing closure under `H`, `S`, and `P`.
+
+<!-- ; consequently, we expect `V 𝒦 ≡ H (S (P 𝒦))` to hold for each class 𝒦 of algebras of a fixed signature. classes of algebras that are closed under H, S, P, and V ≡ HSP. -->
 
 \begin{code}
 
@@ -31,7 +49,11 @@ open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
-#### H-closure
+-----------------------------------
+
+#### <a id="the-homomorphic-image-type-h">The homomorphic image type H</a>
+
+We define the inductive type `H` to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
 
 \begin{code}
 
@@ -44,9 +66,13 @@ data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)) : Pred (
 
 \end{code}
 
-#### S-closure
+<!-- We say that a class 𝒦 is **closed under** `H` (or `H`-*closed**) provided `H 𝒦 ⊆ 𝒦`. -->
 
-Similarly, we have found the following to be the most useful inductive type for representing classes of algebras that are closed under the taking of subalgebras.
+--------------------------------
+
+#### <a id="subalgebra-closure-opereator">The subalgebra closure type S</a>
+
+The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type. 
 
 \begin{code}
 
@@ -60,13 +86,16 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
 
 \end{code}
 
-#### P-closure
+<!-- A class 𝒦 is **closed under** `S` (or `S`-**closed**) provided `S 𝒦 ⊆ 𝒦`. -->
 
-The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of arbitrary products is the following.
+-----------------------------------------
+
+#### <a id="p-closure">Closure under product</a>
+
+The most useful inductive type that we have found for representing classes of algebras closed under arbitrary products is the following. 
 
 \begin{code}
 
---Closure wrt P
 data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
   pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P{𝓤}{𝓦} 𝒦
   pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ P{𝓤}{𝓦} 𝒦
@@ -78,9 +107,17 @@ data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred
 
 \end{code}
 
-#### V-closure
+<!-- A class 𝒦 is **closed under** `P` (or `P`-**closed**) provided `P 𝒦 ⊆ 𝒦`. -->
 
-Finally, we define an inductive type that represents varieties---classes of algebras closed under the taking of homomorphic images, subalgebras and products.
+-----------------------------------------------
+
+#### <a id="v-closure">V-closure</a>
+
+A class 𝒦 of 𝑆-algebras is called a **variety** if it is closed under each of the closure operators H, S, and P introduced above; the corresponding closure operator is often denoted 𝕍, but we will typically denote it by `V`.
+
+Thus, if 𝒦 is a class of 𝑆-algebras, then the **variety generated by** 𝒦 is denoted by `V 𝒦` and defined to be the smallest class that contains 𝒦 and is closed under `H`, `S`, and `P`.
+
+We now define `V` as an inductive type.
 
 \begin{code}
 
@@ -98,7 +135,9 @@ data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) : Pred 
 
 \end{code}
 
-#### Closure properties
+-------------------------------
+
+#### <a id=closure-properties>Closure properties</a>
 
 The types defined above represent operators with useful closure properties. We now prove a handful of such properties since we will need them later.
 
@@ -148,7 +187,7 @@ S-mono ante (siso x x₁) = siso (S-mono ante x) x₁
 
 \end{code}
 
-#### Some useful tools
+#### <a id="">Closure properties
 
 We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
 

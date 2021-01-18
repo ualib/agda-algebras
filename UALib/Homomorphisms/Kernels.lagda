@@ -7,11 +7,12 @@ author: William DeMeo
 
 ### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
 
-This section presents the [UALib.Homomorphisms.Kernel][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Homomorphisms.Kernels][] module of the [Agda Universal Algebra Library][].
 
 The kernel of a homomorphism is a congruence and conversely for every congruence θ, there exists a homomorphism with kernel θ.
 
 \begin{code}
+
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
@@ -30,16 +31,22 @@ module _ {𝓤 𝓦 : Universe} where
 
  hom-kernel-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ
   where
-   γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
-   γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂) ≡⟨ ∥ h ∥ f 𝒂 ⟩
-       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂) ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
-       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂') ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
-       ∣ h ∣ ((f ̂ 𝑨) 𝒂') ∎
+   γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)     ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
+   γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)     ≡⟨ ∥ h ∥ f 𝒂 ⟩
+       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)   ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
+       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂')  ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
+       ∣ h ∣ ((f ̂ 𝑨) 𝒂')    ∎
 
  hom-kernel-is-equivalence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
   →                          IsEquivalence (KER-rel ∣ h ∣)
 
  hom-kernel-is-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
+
+\end{code}
+
+It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel.  We call this function `hom-kernel-congruence`, but since we will use it often we also give it a short alias---`kercon`.
+
+\begin{code}
 
  kercon -- (alias)
   hom-kernel-congruence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)

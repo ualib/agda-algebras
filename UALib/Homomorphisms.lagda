@@ -25,8 +25,8 @@ open import UALib.Homomorphisms.HomomorphicImages
 
 --------------------------------------
 
-[← UALib.Relations](UALib.Relations.html)
-<span style="float:right;">[UALib.Terms →](UALib.Terms.html)</span>
+[← UALib.Relations.Congruences](UALib.Relations.Congruences.html)
+<span style="float:right;">[UALib.Homomorphisms.Basic →](UALib.Homomorphisms.Basic.html)</span>
 
 {% include UALib.Links.md %}
 

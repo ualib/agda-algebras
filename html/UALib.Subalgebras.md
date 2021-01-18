@@ -28,7 +28,7 @@ This chapter presents the [UALib.Subalgebras][]  module of the [Agda Universal A
 
 --------------------------------------
 
-[← UALib.Terms](UALib.Terms.html)
-<span style="float:right;">[UALib.Varieties →](UALib.Varieties.html)</span>
+[← UALib.Terms.Compatibility](UALib.Terms.Compatibility.html)
+<span style="float:right;">[UALib.Subalgebras.Subuniverses →](UALib.Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}

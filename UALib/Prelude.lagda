@@ -37,6 +37,6 @@ open import UALib.Prelude.Extensionality public
 --------------------------------------
 
 [← UALib.Preface](UALib.Preface.html)
-<span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>
+<span style="float:right;">[UALib.Prelude.Preliminaries →](UALib.Prelude.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}

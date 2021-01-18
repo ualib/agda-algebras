@@ -26,7 +26,7 @@ data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
   refl : {x : X} → x ≡ x
 ```
 
-We being the [Prelude.Equality module][] by proving that this `≡` relation is an equivalence relation.
+We being the [UALib.Prelude.Equality][] module] by formalizing the obvious proof that `≡` is an equivalence relation.
 
 \begin{code}
 
@@ -49,33 +49,43 @@ module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
  ≡-Trans : (x : X){y : X}(z : X) → x ≡ y → y ≡ z → x ≡ z
  ≡-Trans x {y} z (refl _) (refl _) = refl _
+
 \end{code}
 
+The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.
+
 #### Functions preserve refl
+
+A function is well defined only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`.
+
+MHE defines `ap` in the [Type Topolgy][] library so we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
 ap-cong : {𝓤 𝓦 : Universe}
-          {A : 𝓤 ̇ } {B : 𝓦 ̇ }
+          {A : 𝓤 ̇} {B : 𝓦 ̇}
           {f g : A → B} {a b : A}
- →         f ≡ g   →   a ≡ b
-         -----------------------
- →            f a ≡ g b
+ →        f ≡ g    →    a ≡ b
+          -----------------------
+ →             f a ≡ g b
 
 ap-cong (refl _) (refl _) = refl _
+
 \end{code}
 
-We will have many occasions to apply this fact, and we sometimes need a version that works for *dependent* function types, such as the following.
+We sometimes need a version of this that works for [dependent types][], such as the following (which we borrow from the `Relation/Binary/Core.agda` module of the [Agda Standard Library][], transcribed into MHE/UALib notation of course):
 
 \begin{code}
+
 cong-app : {𝓤 𝓦 : Universe}
-           {A : 𝓤 ̇ } {B : A → 𝓦 ̇ }
+           {A : 𝓤 ̇} {B : A → 𝓦 ̇}
            {f g : (a : A) → B a}
  →          f ≡ g   →   (a : A)
           -----------------------
  →              f a ≡ g a
 
 cong-app (refl _) a = refl _
+
 \end{code}
 
 #### ≡-intro and ≡-elim for nondependent pairs

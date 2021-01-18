@@ -43,7 +43,9 @@ sub-inter-is-sub 𝑨 I 𝒜 Ai-is-Sub f a ima⊆⋂A = α
 
 \end{code}
 
-#### Compatibility with term operations
+-------------------------------------------------------
+
+#### <a id="conservativity-of-term-operations">Conservativity of term operations</a>
 
 \begin{code}
 
@@ -62,7 +64,9 @@ sub-term-closed 𝑨 B B≤A (node f t) b b∈B =
 \end{code}
 
 
-#### Term images
+---------------------------------------------------
+
+#### <a id="term-images">Term images</a>
 
 \begin{code}
 

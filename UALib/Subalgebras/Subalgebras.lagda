@@ -46,7 +46,9 @@ getSub SA = ∣ SA ∣
 \end{code}
 
 
-#### Example
+-------------------------------------------
+
+#### <a id="example">Example</a>
 
 The equalizer of two homomorphisms is a subuniverse.
 
@@ -67,7 +69,9 @@ OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 So, hereinafter, we typically write `OV 𝓤` in place of the more cumbersome 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺.
 
-#### Subalgebras of a class
+---------------------------------------
+
+#### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
 \begin{code}
 _IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
@@ -100,8 +104,9 @@ _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 �
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 \end{code}
 
+-----------------------------------------------
 
-#### Subalgebra lemmata
+#### <a id="subalgebra-lemmata">Subalgebra lemmata</a>
 
 \begin{code}
 --Transitivity of IsSubalgebra (explicit args)

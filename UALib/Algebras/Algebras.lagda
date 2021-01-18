@@ -21,53 +21,38 @@ open import UALib.Prelude.Preliminaries using (𝓤₀; 𝟘; 𝟚) public
 
 \end{code}
 
-#### Sets (0-groupoids)
+-------------------------------
 
-Before defining the type of algebras, we need to explain what it means to be a set in univalent mathematics.  A type is defined to be a **set** if there is at most one way for any two of its elements to be equal.
+#### <a id="algebra-types">Algebra types</a>
 
-MHE defines this notion (e.g., in the MGS-Embeddings module) as follows:
-
-```agda
-is-set : 𝓤 ̇ → 𝓤 ̇
-is-set X = (x y : X) → is-subsingleton (x ≡ y)
-```
-
-and explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."
-
-#### The main Algebra type
-
-The first type for representing algebras that we define will put the domain of an algebra in an arbitrary type.  We will call these "∞-algebras" because the universe need not be a set.  After that, we define the type of algebra that we typically think of when doing informal universal algebra, which we call "0-algebras" since their domains are sets.
+For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe 𝓤, we define the type of **algebras in the signature** 𝑆 (or 𝑆-**algebras**) and with **domain** (or **carrier** or **universe**) `𝐴 : 𝓤 ̇` as follows
 
 \begin{code}
 
-∞-algebra Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+Algebra   -- alias
+ ∞-algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
 ∞-algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A)
 Algebra = ∞-algebra
 
 \end{code}
 
-The type of the `Algebra 𝓤 𝑆` type is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type is used so often in our library that in some modules (where the signature universe levels 𝓞 𝓥 are already in context) we will define the following shorthand for the universe level:
+We may refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` &nbsp;&nbsp; and need not be truncated at some level; in particular, `A` need to be a set. (See the [discussion of truncation and sets](UALib.Prelude.Preliminaries.html#truncation).)
+
+We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, we will only need to know that the domains of our algebras are sets in a few places in the UALib, so it seems preferable to work with general ∞-algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
+
+The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level.
 
 ```agda
 OV : Universe → Universe
 OV = λ 𝓤 → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
 ```
 
-so we can now simply type `OV 𝓤` in place of the more laborious `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.
+<!-- We can now write simply `Algebra 𝓤 𝑆 : OV 𝓤` in place of the laborious ``Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`. -->
 
-\begin{code}
+---------------------------------------
 
-data monoid-op : 𝓤₀ ̇ where
- e : monoid-op
- · : monoid-op
-
-monoid-sig : Signature _ _
-monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
-
-\end{code}
-
-#### Algebras as record types
+#### <a id="algebras-as-record-types">Algebras as record types</a>
 
 Sometimes records are more convenient than sigma types. For such cases, we might prefer the following representation of the type of algebras.
 
@@ -101,7 +86,9 @@ module _ {𝓤 𝓞 𝓥 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
-#### Operation interpretation syntax
+----------------------------------------
+
+#### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
 
 We conclude this module by defining a convenient shorthand for the interpretation of an operation symbol that we will use often.  It looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with.
 
@@ -115,8 +102,8 @@ We conclude this module by defining a convenient shorthand for the interpretatio
 
 -------------------------------------
 
-[Back to Table of Contents ↑](UALib.html#detailed-contents)
+[← UALib.Algebras.Signatures](UALib.Algebras.Signatures.html)
+<span style="float:right;">[UALib.Algebras.Products →](UALib.Algebras.Products.html)</span>
 
--------------------------------
 
 {% include UALib.Links.md %}

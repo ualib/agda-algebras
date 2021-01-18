@@ -16,12 +16,13 @@ This chapter presents the [UALib.Homomorphisms.Noether][] module of the [Agda Un
 open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import UALib.Prelude.Preliminaries using (global-dfunext)
 
-
 module UALib.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import UALib.Homomorphisms.Kernels{𝑆 = 𝑆}{gfe} hiding (global-dfunext) public
 
 \end{code}
+
+-------------------------------------------
 
 #### The First Isomorphism Theorem
 
@@ -41,6 +42,7 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
  →                               (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} ϕ ⟩} C))
          --------------------------------------------------------------------------------------
  →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πᵏ 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
+
 FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE {pe} Bset ssR ssA = (fmap , fhom , fepic) , commuting , femb
   where
    θ : Congruence 𝑨
@@ -93,7 +95,11 @@ FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE {pe} Bset ssR ssA = (fmap 
 
 **TODO**: Proof of uniqueness of `f` is missing.
 
+--------------------------------------------------------------
+
 #### Homomorphism composition
+
+The composition of homomorphisms is again a homomorphism.
 
 \begin{code}
 
@@ -148,9 +154,27 @@ trans-hom : {𝓧 𝓨 𝓩 : Universe}
        --------------------------------------------------------------------
  →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
 trans-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 f g = ∘-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 {f}{g}
+
 \end{code}
 
+----------------------------------------------------------
+
 #### Homomorphism decomposition
+
+If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `ϕ : hom 𝑪 𝑩` such that `g = ϕ ∘ h`, that is, such that the following diagram commutes;
+
+```
+𝑨---- h -->>𝑪
+ \         .
+  \       .
+   g     ∃ϕ
+    \   .
+     \ .
+      V
+      𝑩
+```
+
+This, or some variation of it, is sometimes referred to as the Second Isomorphism Theorem.  We formalize its statement and proof as follows. (Notice that the proof is constructive.)
 
 \begin{code}
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
@@ -209,9 +233,15 @@ homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
      iv  = ghom f (hInv ∘ c)
 \end{code}
 
-#### The Second Isomorphism Theorem
 
-\begin{code}
+--------------------------------------
+
+[← UALib.Homomorphisms.Kernels](UALib.Homomorphisms.Kernels.html)
+<span style="float:right;">[UALib.Homomorphisms.Products →](UALib.Homomorphisms.Products.html)</span>
+
+{% include UALib.Links.md %}
+
+<!--
 module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
  HomFactor : {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
              (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
@@ -266,11 +296,4 @@ module _ {𝓠 𝓤 𝓦 : Universe}{gfe : global-dfunext} where
      iii = useker f c
      iv  = ghom f (hInv ∘ c)
 
-\end{code}
-
---------------------------------------
-
-[← UALib.Homomorphisms.Kernels](UALib.Homomorphisms.Kernels.html)
-<span style="float:right;">[UALib.Homomorphisms.Products →](UALib.Homomorphisms.Products.html)</span>
-
-{% include UALib.Links.md %}
+-->

@@ -7,7 +7,7 @@ author: William DeMeo
 
 ## <a id="algebras">Algebras</a>
 
-This chapter presents the [UALib.Algebras module][] of the [Agda Universal Algebra Library][].
+This chapter presents the [UALib.Algebras][] module of the [Agda Universal Algebra Library][], which begins our [Agda][] formalization of the basic concepts and theorems of universal algebra. In this module we codify such notions as operation, signature, and algebraic structure.
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -27,6 +27,6 @@ open import UALib.Algebras.Lifts public
 -------------------------------------
 
 [← UALib.Prelude](UALib.Prelude.html)
-<span style="float:right;">[UALib.Relations →](UALib.Relations.html)</span>
+<span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

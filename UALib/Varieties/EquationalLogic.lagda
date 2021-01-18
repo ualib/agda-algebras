@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="equations-and-varieties">Equations and Varieties</a>
+### <a id="equational-logic-types">Equational Logic Types</a>
 
 This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
@@ -30,7 +30,11 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; domain; embeddings
 
 \end{code}
 
-#### Products preserve identities
+---------------------------------------------
+
+#### <a id="product-transport">Product transport</a>
+
+We prove that identities satisfied by all factors of a product are also satisfied by the product.
 
 \begin{code}
 product-id-compatibility -- (alias)
@@ -83,7 +87,11 @@ products-in-class-preserve-identities p q I 𝒜 α K𝒜 = γ
 class-product-id-compatibility = products-in-class-preserve-identities
 \end{code}
 
-#### Subalgebras preserve identities
+--------------------------------------------
+
+#### <a id="subalgebra-transport">Subalgebra transport</a>
+
+We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
 
@@ -139,9 +147,16 @@ S-⊧ = subalgebras-preserve-identities
 -- subalgebra-id-compatibility = subalgebras-preserve-identities
 \end{code}
 
-#### Homomorphisms preserve identities
+#### <a id="homomorphism-transport">Homomorphism transport</a>
+
+Recall that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
+
+$$𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, \; ∀ h : \mathrm{hom} (𝑻 X) 𝑨, \; h ∘ (𝑝 ̇ (𝑻 X)) = h ∘ (𝑞 ̇ (𝑻 X)).$$
+
+We now formalize this result in Agda and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
 
 \begin{code}
+
 -- ⇒ (the "only if" direction)
 id-class-hom-compatibility -- (alias)
  identities-compatible-with-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
@@ -204,9 +219,10 @@ compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
 
 \end{code}
 
-#### Term operations preserve identities
+Here's a simpler special case of the previous result that suffices when we're interested in just a single algebra, rather than a class of algebras.
 
 \begin{code}
+
 hom-id-compatibility : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                        (p q : Term{𝓧}{X})
                        (𝑨 : Algebra 𝓤 𝑆)(ϕ : hom (𝑻 X) 𝑨)
@@ -228,4 +244,6 @@ hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap 
 <span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>
 
 {% include UALib.Links.md %}
+
+<!-- #### Term operations preserve identities -->
 

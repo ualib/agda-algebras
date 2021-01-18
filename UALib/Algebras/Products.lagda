@@ -48,4 +48,7 @@ module _ {𝓤 : Universe}{𝑆 : Signature 𝓞 𝓥}  where
 
 -----------------------
 
+[← UALib.Algebras.Algebras](UALib.Algebras.Algebras.html)
+<span style="float:right;">[UALib.Algebras.Lifts →](UALib.Algebras.Lifts.html)</span>
+
 {% include UALib.Links.md %}

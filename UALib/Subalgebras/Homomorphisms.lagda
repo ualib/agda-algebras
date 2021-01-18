@@ -29,7 +29,9 @@ open import UALib.Subalgebras.Properties{𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
-#### Homomorphic images are subuniverses
+-----------------------------------
+
+#### <a id="homomorphic-images-are-subuniverses">Homomorphic images are subuniverses</a>
 
 The image of a homomorphism is a subuniverse of its codomain.
 
@@ -55,7 +57,9 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
       ∣ ϕ ∣((f ̂ 𝑨) ar)   ∎
 \end{code}
 
-#### Uniqueness property for homomorphisms
+-------------------------------------
+
+#### <a id="uniqueness-property-for-homomorphisms">Uniqueness property for homomorphisms</a>
 
 A homomorphism is uniquely determined by its action on generators.
 
