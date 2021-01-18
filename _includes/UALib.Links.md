@@ -76,8 +76,8 @@
 [Martin Escardo]: https://www.cs.bham.ac.uk/~mhe
 [Martin Escardo's installation hints]: https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md
 [Martin Hötzel Escardo]: https://www.cs.bham.ac.uk/~mhe
-[Martin Löf dependent type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
-[Martin Löf type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
+[Martin-Löf dependent type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
+[Martin-Löf type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
 [master]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master
 [master branch]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master
 [Mathlib]: https://github.com/leanprover-community/mathlib/

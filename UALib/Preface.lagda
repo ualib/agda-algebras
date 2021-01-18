@@ -138,13 +138,16 @@ This generates a set of markdown files that are then converted to html by jekyll
 bundle exec jekyll build
 ```
 
-In practice, we use the scripts [slow-agda2md][] (or [fast-agda2md][]) (to process the lagda files and put the resulting markdown output in the right place) and then invoke the command
+In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
 
 ```
+cp html/UALib.md index.md
+cp html/*.html html/*.md .
+bundle install --path vendor
 bundle exec jekyll serve --watch --incremental
 ```
 
-which serves the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
+This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
 
 <!--
 
