@@ -86,6 +86,7 @@
 [MHE]: https://www.cs.bham.ac.uk/~mhe
 [Midlands Graduate School in the Foundations of Computing Science]: http://events.cs.bham.ac.uk/mgs2019/
 [Miklós Maróti]: http://www.math.u-szeged.hu/~mmaroti/
+[MLTT]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
 [More on Implicit Arguments]: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
 
 [NuPRL]: http://www.nuprl.org/

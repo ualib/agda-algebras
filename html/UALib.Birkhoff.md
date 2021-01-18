@@ -9,15 +9,22 @@ author: William DeMeo
 
 This chapter presents the [UALib.Birkhoff][] module of the [Agda Universal Algebra Library][].
 
+Here we give a formal proof in [MLTT][] of Birkhoff's theorem &lt;birkhoffs theorem&gt;
+(%s &lt;birkhoffs theorem&gt;), which says that a variety is an
+equational class. In other terms, if a class 𝒦 of algebras is closed
+under the operators 𝑯, 𝑺, 𝑷, then 𝒦 is an equational class (i.e., 𝒦 is
+the class of algebras that model a particular set of identities). The
+sections below contain (literate) Agda code that formalizes each step of
+the (informal) proof we saw above in birkhoffs theorem.
 <pre class="Agda">
 
-<a id="292" class="Symbol">{-#</a> <a id="296" class="Keyword">OPTIONS</a> <a id="304" class="Pragma">--without-K</a> <a id="316" class="Pragma">--exact-split</a> <a id="330" class="Pragma">--safe</a> <a id="337" class="Symbol">#-}</a>
+<a id="783" class="Symbol">{-#</a> <a id="787" class="Keyword">OPTIONS</a> <a id="795" class="Pragma">--without-K</a> <a id="807" class="Pragma">--exact-split</a> <a id="821" class="Pragma">--safe</a> <a id="828" class="Symbol">#-}</a>
 
-<a id="342" class="Keyword">module</a> <a id="349" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a> <a id="364" class="Keyword">where</a>
+<a id="833" class="Keyword">module</a> <a id="840" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a> <a id="855" class="Keyword">where</a>
 
-<a id="371" class="Keyword">open</a> <a id="376" class="Keyword">import</a> <a id="383" href="UALib.Birkhoff.FreeAlgebra.html" class="Module">UALib.Birkhoff.FreeAlgebra</a>
-<a id="410" class="Keyword">open</a> <a id="415" class="Keyword">import</a> <a id="422" href="UALib.Birkhoff.Lemmata.html" class="Module">UALib.Birkhoff.Lemmata</a>
-<a id="445" class="Keyword">open</a> <a id="450" class="Keyword">import</a> <a id="457" href="UALib.Birkhoff.Theorem.html" class="Module">UALib.Birkhoff.Theorem</a>
+<a id="862" class="Keyword">open</a> <a id="867" class="Keyword">import</a> <a id="874" href="UALib.Birkhoff.FreeAlgebra.html" class="Module">UALib.Birkhoff.FreeAlgebra</a>
+<a id="901" class="Keyword">open</a> <a id="906" class="Keyword">import</a> <a id="913" href="UALib.Birkhoff.Lemmata.html" class="Module">UALib.Birkhoff.Lemmata</a>
+<a id="936" class="Keyword">open</a> <a id="941" class="Keyword">import</a> <a id="948" href="UALib.Birkhoff.Theorem.html" class="Module">UALib.Birkhoff.Theorem</a>
 
 </pre>
 

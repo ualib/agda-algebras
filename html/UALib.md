@@ -49,7 +49,7 @@ In the latest version of the library we have defined many new types for represen
 
 To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if K is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then K is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
 
-We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Moreover, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journies, helping us forge new paths, reach higher peaks, and authenticating what we believe we have found.
+We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Indeed, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to ever higher peaks, all the time verifying and authenticating what we think we found along the way.
 
 --------------------------------
 
@@ -57,19 +57,19 @@ We hope the library will be useful to research mathematicians and computer scien
 
 <pre class="Agda">
 
-<a id="3042" class="Symbol">{-#</a> <a id="3046" class="Keyword">OPTIONS</a> <a id="3054" class="Pragma">--without-K</a> <a id="3066" class="Pragma">--exact-split</a> <a id="3080" class="Pragma">--safe</a> <a id="3087" class="Symbol">#-}</a>
+<a id="3070" class="Symbol">{-#</a> <a id="3074" class="Keyword">OPTIONS</a> <a id="3082" class="Pragma">--without-K</a> <a id="3094" class="Pragma">--exact-split</a> <a id="3108" class="Pragma">--safe</a> <a id="3115" class="Symbol">#-}</a>
 
-<a id="3092" class="Keyword">module</a> <a id="3099" href="UALib.html" class="Module">UALib</a> <a id="3105" class="Keyword">where</a>
+<a id="3120" class="Keyword">module</a> <a id="3127" href="UALib.html" class="Module">UALib</a> <a id="3133" class="Keyword">where</a>
 
-<a id="3112" class="Keyword">open</a> <a id="3117" class="Keyword">import</a> <a id="3124" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="3138" class="Keyword">open</a> <a id="3143" class="Keyword">import</a> <a id="3150" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3164" class="Keyword">open</a> <a id="3169" class="Keyword">import</a> <a id="3176" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3191" class="Keyword">open</a> <a id="3196" class="Keyword">import</a> <a id="3203" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="3219" class="Keyword">open</a> <a id="3224" class="Keyword">import</a> <a id="3231" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="3251" class="Keyword">open</a> <a id="3256" class="Keyword">import</a> <a id="3263" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="3275" class="Keyword">open</a> <a id="3280" class="Keyword">import</a> <a id="3287" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="3305" class="Keyword">open</a> <a id="3310" class="Keyword">import</a> <a id="3317" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3333" class="Keyword">open</a> <a id="3338" class="Keyword">import</a> <a id="3345" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="3140" class="Keyword">open</a> <a id="3145" class="Keyword">import</a> <a id="3152" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="3166" class="Keyword">open</a> <a id="3171" class="Keyword">import</a> <a id="3178" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="3192" class="Keyword">open</a> <a id="3197" class="Keyword">import</a> <a id="3204" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="3219" class="Keyword">open</a> <a id="3224" class="Keyword">import</a> <a id="3231" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3247" class="Keyword">open</a> <a id="3252" class="Keyword">import</a> <a id="3259" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="3279" class="Keyword">open</a> <a id="3284" class="Keyword">import</a> <a id="3291" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="3303" class="Keyword">open</a> <a id="3308" class="Keyword">import</a> <a id="3315" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="3333" class="Keyword">open</a> <a id="3338" class="Keyword">import</a> <a id="3345" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="3361" class="Keyword">open</a> <a id="3366" class="Keyword">import</a> <a id="3373" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 
