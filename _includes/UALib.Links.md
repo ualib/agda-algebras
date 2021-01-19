@@ -265,11 +265,10 @@
 
 [UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
 [UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
-[Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
-[Varieties.ModelTheory]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/ModelTheory.lagda
-[Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda
-[Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda
-[Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda
+[UALib.Varieties.ModelTheory]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/ModelTheory.lagda
+[UALib.Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda
+[UALib.Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda
+[UALib.Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda
 
 [UALib.Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [UALib.Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
