@@ -9,7 +9,9 @@ author: William DeMeo
 
 This section describes the [UALib.Prelude.Equality][] module of the [Agda Universal Algebra Library][].
 
-#### refl
+-----------------------
+
+#### <a id="refl">refl</a>
 
 Perhaps the most important types in type theory are the equality types.
 
@@ -54,11 +56,13 @@ module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
 The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.
 
-#### Functions preserve refl
+------------------------------
+
+#### <a id="functions-preserve-refl">Functions preserve refl</a>
 
 A function is well defined only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`.
 
-MHE defines `ap` in the [Type Topolgy][] library so we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
+MHE defines `ap` in the [Type Topology][] library so we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
@@ -88,7 +92,9 @@ cong-app (refl _) a = refl _
 
 \end{code}
 
-#### ≡-intro and ≡-elim for nondependent pairs
+-----------------------------------
+
+#### <a id="≡-intro-and-≡-elim-for-nondependent-pairs">≡-intro and ≡-elim for nondependent pairs</a>
 
 We conclude the Equality module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
 

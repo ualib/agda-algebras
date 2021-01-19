@@ -22,7 +22,9 @@ open import UALib.Prelude.Preliminaries using (𝟘; 𝟚) public
 
 \end{code}
 
-#### Operation type
+-----------------------------------
+
+#### <a id="operation-type">Operation type</a>
 
 We define the type of **operations**, and give an example (the projections).
 
@@ -44,7 +46,9 @@ The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 �
 
 The last two lines of the code block above codify the `i`-th `I`-ary projection operation on `A`.
 
-#### Signature type
+-----------------------------------
+
+#### <a id="signature-type">Signature type</a>
 
 We define the signature of an algebraic structure in Agda like this.
 
@@ -67,7 +71,9 @@ For reference, we recall the definition of the Sigma type, `Σ`, which is
 -Σ X Y = Σ Y
 ```
 
-#### Example
+------------------------------------
+
+#### <a id="Example">Example</a>
 
 Here is how we might define the signature for monoids as a member of the type `Signature 𝓞 𝓥`.
 
@@ -88,7 +94,7 @@ As expected, the signature for a monoid consists of two operation symbols, `e` a
 
 -------------------------------------
 
-[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
+[← UALib.Algebras](UALib.Algebras.html)
 <span style="float:right;">[UALib.Algebras.Algebras →](UALib.Algebras.Algebras.html)</span>
 
 

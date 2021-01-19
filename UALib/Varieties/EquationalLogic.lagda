@@ -147,6 +147,8 @@ S-⊧ = subalgebras-preserve-identities
 -- subalgebra-id-compatibility = subalgebras-preserve-identities
 \end{code}
 
+------------------------------------------------------------
+
 #### <a id="homomorphism-transport">Homomorphism transport</a>
 
 Recall that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,

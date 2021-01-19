@@ -277,12 +277,11 @@ is-set X = (x y : X) → is-subsingleton (x ≡ y)
 
 <span class="footnote"><sup>1</sup> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
 
-<p></p>
+<br></br>
 
 <span class="footnote"><sup>2</sup>As [MHE][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
-
------------------------------
+<p></p>
 
 [↑ UALib.Prelude](UALib.Prelude.html)
 <span style="float:right;">[UALib.Prelude.Equality →](UALib.Prelude.Equality.html)</span>

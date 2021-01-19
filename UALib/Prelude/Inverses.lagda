@@ -66,7 +66,9 @@ Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
 
 \end{code}
 
-#### Surjective functions
+-------------------------------------
+
+#### <a id="surjective-functions">Surjective functions</a>
 
 An epic (or surjective) function from type `A : 𝓤 ̇` to type `B : 𝓦 ̇` is as an inhabitant of the `Epic` type, which we define as follows.
 
@@ -103,7 +105,9 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
 
 \end{code}
 
-#### Injective functions
+----------------------------------
+
+#### <a id="injective-functions">Injective functions</a>
 
 We say that a function `g : A → B` is monic (or injective) if we have a proof of `Monic g`, where
 
@@ -142,7 +146,9 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 \end{code}
 
-#### Bijective functions
+-----------------------------------------
+
+#### <a id="bijective-functions">Bijective functions</a>
 
 Finally, bijective functions are defined.
 
@@ -160,7 +166,9 @@ Finally, bijective functions are defined.
 
 \end{code}
 
-#### Neutral elements
+---------------------------------------
+
+#### <a id="neutral-elements">Neutral elements</a>
 
 The next three lemmas appeared in the `UF-Base` and `UF-Equiv` modules which were (at one time) part of Matin Escsardo's UF Agda repository.
 

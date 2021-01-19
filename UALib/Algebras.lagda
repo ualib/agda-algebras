@@ -26,7 +26,7 @@ open import UALib.Algebras.Lifts public
 
 -------------------------------------
 
-[← UALib.Prelude](UALib.Prelude.html)
+[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
 <span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

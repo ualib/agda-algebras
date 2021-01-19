@@ -24,17 +24,16 @@ This section describes the [UALib.Prelude.Extensionality][] module of the [Agda 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
 module UALib.Prelude.Extensionality where
-
 
 open import UALib.Prelude.Inverses public
 open import UALib.Prelude.Preliminaries using (_∼_; 𝓤ω; Π; Ω; 𝓟; ⊆-refl-consequence; _∈₀_; _⊆₀_; _holds) public
 
 \end{code}
 
+-------------------------------------------
 
-#### Function extensionality
+#### <a id="function-extensionality">Function extensionality</a>
 
 Extensional equality of functions, or function extensionality, means that any two point-wise equal functions are equal. As [MHE points out](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua), this is known to be not provable or disprovable in Martin-Löf type theory. It is an independent statement, which MHE abbreviates as `funext`.  Here is how this notion is given a type in the [Type Topology][] library
 
@@ -62,7 +61,9 @@ infix 0 _∼_
 
 In fact, if one assumes the [univalence axiom], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).
 
-#### Dependent function extensionality
+----------------------------------
+
+#### <a id="dependent-function-extensionality">Dependent function extensionality</a>
 
 Extensionality for dependent function types is defined as follows.
 
@@ -104,7 +105,9 @@ extensionality-lemma p q args p≡q =
 
 \end{code}
 
-#### Function intensionality
+------------------------------------------
+
+#### <a id="function-intensionality">Function intensionality</a>
 
 This is the opposite of function extensionality and is defined as follows.
 
@@ -139,8 +142,9 @@ dep-intensionality = dintensionality
 -- dep-intensionality (refl _ ) _ = refl _
 \end{code}
 
+---------------------------------------
 
-#### Some tools for powersets
+#### <a id="some-tools-for-powersets">Some tools for powersets</a>
 
 Powersets are defined in [Type Topology][] as predicates on sets.  Although this seems convenient and useful, we are not currently using powersets in the [Agda UALib][].  (We did use powersets in an earlier version, which is why the collection of tools in this section exists.)
 
