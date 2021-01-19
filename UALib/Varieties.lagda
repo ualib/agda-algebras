@@ -9,11 +9,9 @@ author: William DeMeo
 
 This chapter presents the [UALib.Varieties][] module of the [Agda Universal Algebra Library][].
 
-Here we define type for for theories and their models, and equational logic.
+Here we define types for theories and their models and for equational logic.
 
-A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators H, S, P that are composable.  Separately, we define an inductive type `V` to represent closure under `H`, `S`, and `P`.
-
-<!-- consequently, we expect that `V 𝒦 ≡ H (S (P 𝒦))` holds each class 𝒦 of algebras of a fixed signature. -->
+A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 \begin{code}
 

@@ -9,22 +9,20 @@ author: William DeMeo
 
 This chapter presents the [UALib.Varieties][] module of the [Agda Universal Algebra Library][].
 
-Here we define type for for theories and their models, and equational logic.
+Here we define types for theories and their models and for equational logic.
 
-A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators H, S, P that are composable.  Separately, we define an inductive type `V` to represent closure under `H`, `S`, and `P`.
-
-<!-- consequently, we expect that `V 𝒦 ≡ H (S (P 𝒦))` holds each class 𝒦 of algebras of a fixed signature. -->
+A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 <pre class="Agda">
 
-<a id="845" class="Symbol">{-#</a> <a id="849" class="Keyword">OPTIONS</a> <a id="857" class="Pragma">--without-K</a> <a id="869" class="Pragma">--exact-split</a> <a id="883" class="Pragma">--safe</a> <a id="890" class="Symbol">#-}</a>
+<a id="783" class="Symbol">{-#</a> <a id="787" class="Keyword">OPTIONS</a> <a id="795" class="Pragma">--without-K</a> <a id="807" class="Pragma">--exact-split</a> <a id="821" class="Pragma">--safe</a> <a id="828" class="Symbol">#-}</a>
 
-<a id="895" class="Keyword">module</a> <a id="902" href="UALib.Varieties.html" class="Module">UALib.Varieties</a> <a id="918" class="Keyword">where</a>
+<a id="833" class="Keyword">module</a> <a id="840" href="UALib.Varieties.html" class="Module">UALib.Varieties</a> <a id="856" class="Keyword">where</a>
 
-<a id="925" class="Keyword">open</a> <a id="930" class="Keyword">import</a> <a id="937" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
-<a id="965" class="Keyword">open</a> <a id="970" class="Keyword">import</a> <a id="977" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
-<a id="1009" class="Keyword">open</a> <a id="1014" class="Keyword">import</a> <a id="1021" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
-<a id="1047" class="Keyword">open</a> <a id="1052" class="Keyword">import</a> <a id="1059" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
+<a id="863" class="Keyword">open</a> <a id="868" class="Keyword">import</a> <a id="875" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
+<a id="903" class="Keyword">open</a> <a id="908" class="Keyword">import</a> <a id="915" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
+<a id="947" class="Keyword">open</a> <a id="952" class="Keyword">import</a> <a id="959" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
+<a id="985" class="Keyword">open</a> <a id="990" class="Keyword">import</a> <a id="997" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
 
 </pre>
 
