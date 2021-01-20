@@ -1,0 +1,112 @@
+#!/bin/bash
+
+agda --latex UALib/Algebras/Algebras.lagda
+agda --latex UALib/Algebras/Lifts.lagda
+agda --latex UALib/Algebras/Products.lagda
+agda --latex UALib/Algebras/Signatures.lagda
+agda --latex UALib/Birkhoff/FreeAlgebra.lagda
+agda --latex UALib/Birkhoff/Lemmata.lagda
+agda --latex UALib/Birkhoff/Theorem.lagda
+agda --latex UALib/Homomorphisms/HomomorphicImages.lagda
+agda --latex UALib/Homomorphisms/Isomorphisms.lagda
+agda --latex UALib/Homomorphisms/Kernels.lagda
+agda --latex UALib/Homomorphisms/Noether.lagda
+agda --latex UALib/Homomorphisms/Products.lagda
+agda --latex UALib/Prelude/Equality.lagda
+agda --latex UALib/Prelude/Extensionality.lagda
+agda --latex UALib/Prelude/Inverses.lagda
+agda --latex UALib/Prelude/Preliminaries.lagda
+agda --latex UALib/Relations/Binary.lagda
+agda --latex UALib/Relations/Congruences.lagda
+agda --latex UALib/Relations/Equivalences.lagda
+agda --latex UALib/Relations/Quotients.lagda
+agda --latex UALib/Relations/Unary.lagda
+agda --latex UALib/Subalgebras/Generation.lagda
+agda --latex UALib/Subalgebras/Homomorphisms.lagda
+agda --latex UALib/Subalgebras/Properties.lagda
+agda --latex UALib/Subalgebras/Subalgebras.lagda
+agda --latex UALib/Subalgebras/Subuniverses.lagda
+agda --latex UALib/Subalgebras/WWMD.lagda
+agda --latex UALib/Terms/Basic.lagda
+agda --latex UALib/Terms/Compatibility.lagda
+agda --latex UALib/Terms/Free.lagda
+agda --latex UALib/Terms/Operations.lagda
+agda --latex UALib/Varieties/EquationalLogic.lagda
+agda --latex UALib/Varieties/ModelTheory.lagda
+agda --latex UALib/Varieties/Preservation.lagda
+agda --latex UALib/Varieties/Varieties.lagda
+
+mv latex/UALib/Algebras/Algebras.{tex,md}
+mv latex/UALib/Algebras/Lifts.{tex,md}
+mv latex/UALib/Algebras/Products.{tex,md}
+mv latex/UALib/Algebras/Signatures.{tex,md}
+mv latex/UALib/Birkhoff/FreeAlgebra.{tex,md}
+mv latex/UALib/Birkhoff/Lemmata.{tex,md}
+mv latex/UALib/Birkhoff/Theorem.{tex,md}
+mv latex/UALib/Homomorphisms/Basic.{tex,md}
+mv latex/UALib/Homomorphisms/HomomorphicImages.{tex,md}
+mv latex/UALib/Homomorphisms/Isomorphisms.{tex,md}
+mv latex/UALib/Homomorphisms/Kernels.{tex,md}
+mv latex/UALib/Homomorphisms/Noether.{tex,md}
+mv latex/UALib/Homomorphisms/Products.{tex,md}
+mv latex/UALib/Prelude/Equality.{tex,md}
+mv latex/UALib/Prelude/Extensionality.{tex,md}
+mv latex/UALib/Prelude/Inverses.{tex,md}
+mv latex/UALib/Prelude/Preliminaries.{tex,md}
+mv latex/UALib/Relations/Binary.{tex,md}
+mv latex/UALib/Relations/Congruences.{tex,md}
+mv latex/UALib/Relations/Equivalences.{tex,md}
+mv latex/UALib/Relations/Quotients.{tex,md}
+mv latex/UALib/Relations/Unary.{tex,md}
+mv latex/UALib/Subalgebras/Generation.{tex,md}
+mv latex/UALib/Subalgebras/Homomorphisms.{tex,md}
+mv latex/UALib/Subalgebras/Properties.{tex,md}
+mv latex/UALib/Subalgebras/Subalgebras.{tex,md}
+mv latex/UALib/Subalgebras/Subuniverses.{tex,md}
+mv latex/UALib/Subalgebras/WWMD.{tex,md}
+mv latex/UALib/Terms/Basic.{tex,md}
+mv latex/UALib/Terms/Compatibility.{tex,md}
+mv latex/UALib/Terms/Free.{tex,md}
+mv latex/UALib/Terms/Operations.{tex,md}
+mv latex/UALib/Varieties/EquationalLogic.{tex,md}
+mv latex/UALib/Varieties/ModelTheory.{tex,md}
+mv latex/UALib/Varieties/Preservation.{tex,md}
+mv latex/UALib/Varieties/Varieties.{tex,md}
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Algebras.md -o latex/UALib/Algebras/Algebras.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Lifts.md -o latex/UALib/Algebras/Lifts.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Products.md -o latex/UALib/Algebras/Products.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Signatures.md -o latex/UALib/Algebras/Signatures.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/FreeAlgebra.md -o latex/UALib/Birkhoff/FreeAlgebra.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/Lemmata.md -o latex/UALib/Birkhoff/Lemmata.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/Theorem.md -o latex/UALib/Birkhoff/Theorem.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Basic.md -o latex/UALib/Homomorphisms/Basic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/HomomorphicImages.md -o latex/UALib/Homomorphisms/HomomorphicImages.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Isomorphisms.md -o latex/UALib/Homomorphisms/Isomorphisms.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Kernels.md -o latex/UALib/Homomorphisms/Kernels.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Noether.md -o latex/UALib/Homomorphisms/Noether.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Products.md -o latex/UALib/Homomorphisms/Products.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Prelude/Equality.md -o latex/UALib/Prelude/Equality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Prelude/Extensionality.md -o latex/UALib/Prelude/Extensionality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Prelude/Inverses.md -o latex/UALib/Prelude/Inverses.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Prelude/Preliminaries.md -o latex/UALib/Prelude/Preliminaries.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Binary.md -o latex/UALib/Relations/Binary.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Congruences.md -o latex/UALib/Relations/Congruences.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Equivalences.md -o latex/UALib/Relations/Equivalences.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Quotients.md -o latex/UALib/Relations/Quotients.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Unary.md -o latex/UALib/Relations/Unary.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Generation.md -o latex/UALib/Subalgebras/Generation.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Homomorphisms.md -o latex/UALib/Subalgebras/Homomorphisms.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Properties.md -o latex/UALib/Subalgebras/Properties.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Subalgebras.md -o latex/UALib/Subalgebras/Subalgebras.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Subuniverses.md -o latex/UALib/Subalgebras/Subuniverses.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/WWMD.md -o latex/UALib/Subalgebras/WWMD.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Basic.md -o latex/UALib/Terms/Basic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Compatibility.md -o latex/UALib/Terms/Compatibility.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Free.md -o latex/UALib/Terms/Free.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Operations.md -o latex/UALib/Terms/Operations.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/EquationalLogic.md -o latex/UALib/Varieties/EquationalLogic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/ModelTheory.md -o latex/UALib/Varieties/ModelTheory.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Preservation.md -o latex/UALib/Varieties/Preservation.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Varieties.md -o latex/UALib/Varieties/Varieties.tex
+

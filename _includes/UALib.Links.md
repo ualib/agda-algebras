@@ -124,7 +124,6 @@
 
 [ualib]: https://gitlab.com/ualib/ualib.gitlab.io
 [UALib]: https://gitlab.com/ualib/ualib.gitlab.io
-[UAlib]: https://gitlab.com/ualib/ualib.gitlab.io
 [ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
 
 [Course on Univalent Foundations]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes

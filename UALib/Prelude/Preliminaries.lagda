@@ -113,14 +113,16 @@ pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
-open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; -Σ; -- 𝕁;
- Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
+open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎;
+ pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_;
+ lr-implication; rl-implication; id; _⁻¹; ap) public
 
 open import MGS-Equivalences using (is-equiv; inverse; invertible) public
 
-open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext; is-singleton;
- is-subsingleton; is-prop; Univalence; global-dfunext; univalence-gives-global-dfunext; _●_;
- _≃_; logically-equivalent-subsingletons-are-equivalent; Π-is-subsingleton; Σ-is-subsingleton) public
+open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext;
+ is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
+ univalence-gives-global-dfunext; _●_; _≃_; Π-is-subsingleton; Σ-is-subsingleton;
+ logically-equivalent-subsingletons-are-equivalent) public
 
 open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
  using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω) public
