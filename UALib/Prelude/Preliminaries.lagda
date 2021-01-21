@@ -65,20 +65,13 @@ module UALib.Prelude.Preliminaries where
 
 \end{code}
 
-Sometimes we may wish to pass in parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module.  We'll see many examples later, but as a preview,
-
-```agda
-module _ {𝑆 : Signature 𝓞 𝓥} where
-```
-
-is how we often start an (anonymous) module in which the fixed signature 𝑆 will be assumed until the end of the module. (The module started with the line above would be anonymous because the underscore `_` appears instead of a module name.)
+Sometimes we may wish to pass in parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. For instance, we often start an (anonymous) module, in which the fixed signature 𝑆 will be assumed until the end of the module, with the line `module _ {𝑆 : Signature 𝓞 𝓥} where...` The module started with this line is anonymous because the underscore `_` appears instead of a module name.
 
 Agda determines where a model begins and ends by indentation.  This can take some getting used to, but after a short time it will seem quite natural.
 
 The main module of a file must have the same name as the file (without the trailing `.agda` or `.lagda`, of course).  The code inside the main module is not indented. Modules may be declared inside the main module and code inside these submodules must be indented to the same column.  As long as the code is indented, Agda considers it part of the submodule.  To exit the submodule, we return to nonindented code.  So, the general pattern is as follows:
 
 ```agda
-
 module main where
 
 a-function-in-the-main-module : {𝓤 : Universe}{A B : 𝓤 ̇} → A → B
@@ -114,28 +107,28 @@ pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
 open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎;
- pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_;
- lr-implication; rl-implication; id; _⁻¹; ap) public
+  pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_;
+  lr-implication; rl-implication; id; _⁻¹; ap) public
 
 open import MGS-Equivalences using (is-equiv; inverse; invertible) public
 
 open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext;
- is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
- univalence-gives-global-dfunext; _●_; _≃_; Π-is-subsingleton; Σ-is-subsingleton;
- logically-equivalent-subsingletons-are-equivalent) public
+  is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
+  univalence-gives-global-dfunext; _●_; _≃_; Π-is-subsingleton; Σ-is-subsingleton;
+  logically-equivalent-subsingletons-are-equivalent) public
 
 open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
- using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω) public
+  using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω) public
 
 open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding; is-embedding; pr₁-embedding; ∘-embedding;
- is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
+  is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
 
 open import MGS-Solved-Exercises using (to-subtype-≡) public
 
 open import MGS-Unique-Existence using (∃!; -∃!) public
 
 open import MGS-Subsingleton-Truncation using (_∙_; to-Σ-≡; equivs-are-embeddings;
- invertibles-are-equivs; fiber; ⊆-refl-consequence; hfunext) public
+  invertibles-are-equivs; fiber; ⊆-refl-consequence; hfunext) public
 
 \end{code}
 
@@ -145,9 +138,9 @@ Notice that we carefully specify which definitions and results we want to import
 
 #### <a id="agda-universes">Special notation for Agda universes</a>
 
-The first import in the list of `open import` directives above imports the `universes` module from MHE's [Type Topology][] library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
+The first import in the list of `open import` directives above imports the `universes` module from MHE's \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
 
-[MHE][] has authored an outstanding set of notes called [Introduction to Univalent Foundations of Mathematics with Agda][]. We highly recommend these notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.
+\mhe has authored an outstanding set of notes called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}. We highly recommend Martin's notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.
 
 Following MHE, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, etc.
 
@@ -189,13 +182,13 @@ Our preferred notations for the first and second projections of a product are `�
 \begin{code}
 
 module _ {𝓤 : Universe} where
- ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
- ∣ x , y ∣ = x
- fst (x , y) = x
+  ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+  ∣ x , y ∣ = x
+  fst (x , y) = x
 
- ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
- ∥ x , y ∥ = y
- snd (x , y) = y
+  ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+  ∥ x , y ∥ = y
+  snd (x , y) = y
 
 \end{code}
 
@@ -216,7 +209,7 @@ The symbol ꞉ is not the same as : despite how similar they may appear. The cor
 
 MHE explains Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`. This is called `Σ` induction or `Σ` elimination (or `uncurry`).
 
-```agda
+```
 Σ-induction : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
  →            ((x : X)(y : Y x) → A (x , y))
               -------------------------------
@@ -244,15 +237,17 @@ X × Y = Σ x ꞉ X , Y
 
 To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), MHE uses the same trick as the one used above for *Sigma types*.
 
-```agda
-Π : {X : 𝓤 ̇ } (A : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
-Π {𝓤} {𝓥} {X} A = (x : X) → A x
+\begin{code}
 
--Π : {𝓤 𝓥 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--Π X Y = Π Y
-infixr -1 -Π
-syntax -Π A (λ x → b) = Π x ꞉ A , b
-```
+Π' : {𝓤 𝓦 : Universe}{X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+Π' {𝓤} {𝓦} {X} A = (x : X) → A x
+
+-Π' : {𝓤 𝓦 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+-Π' X Y = Π' Y
+infixr -1 -Π'
+syntax -Π' A (λ x → b) = Π' x ꞉ A , b
+
+\end{code}
 
 ---------------------------------------------------
 

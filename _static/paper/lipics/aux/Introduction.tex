@@ -1,0 +1,42 @@
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
+The \agdaualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, but also provides powerful \emph{proof tactics} for proving things about the objects that inhabit these types.
+
+There have been a handful of other successful efforts to formalize parts of universal algebra in type theory, most notably
+\begin{itemize}
+  \item Capretta~\cite{Capretta:1999} (1999) formalized the basics of universal algebra in the Calculus of Inductive Constructions using the Coq proof assistant;
+    \item Spitters and van der Weegen~\cite{Spitters:2011} (2011) formalized the basics of universal algebra and some classical algebraic structures, also in the Calculus of Inductive Constructions using the Coq proof assistant, and promoted the use of type classes as a preferable alternative to setoids.
+ \item Gunther, et al~\cite{Gunther:2018} developed what seems to have been the most extensive library formalizing universal algebra to date, including the formalization of some equational logic; this project (like the \ualib) uses Martin-L\"of dependent type theory and the Agda proof assistant.
+\end{itemize}
+Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, fields, and modules.  However, the goals of these other projects do not seem to be a formal library of definitions, theorems, and proofs about \textit{general} (universal) algebra.
+
+Although the \ualib project was initiated relatively recently (by the author of this paper, with valuable contributions from Siva Somayyajula), the part of universal algebra and equational logic that we formalize already extends beyond the scope of prior efforts such as those mentioned above.  In particular, the \ualib includes the only formal, constructive, machine-checked proof of Birkhoff's variety theorem that we know of. We remark that, with the exception of~\cite{Carstrom:2008}, all other proofs of Birkhoff's theorem are informal and not known to be constructive.
+
+%% \subsection{Vision and Goals}\label{vision-and-goals}
+The seminal idea for this project was the observation that, on the one hand, a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them have easy proofs by structural induction, while, on the other hand, inductive types (of dependent type theory) make possible very precise formal representations of recursively defined objects, and often yield very short, elegant and constructive proofs of properties of such objects. An important feature of such proofs in type theory is that they are \textit{total functional programs} and, as such, they are computable and composable.  These observations suggest that much can be gained from implementing universal algebra in a language, like Martin-L\"of type theory, that supports dependent and inductive types.
+
+\subsection{Objectives}\label{objectives}
+The first goal of the project is to express the foundations of universal algebra constructively, in type theory, and to formally verify the foundations using the Agda proof assistant. Thus we aim to codify the edifice upon which our mathematical research stands, and demonstrate that advancements in our field can be expressed in type theory and formally verified in a way that we, and other working mathematicians, can easily understand and check the results. We hope the library inspires and encourages others to formalize and verify their own mathematics research so that we may more easily understand and verify their results.
+
+Our field is deep and broad, so codifying all of its foundations may seem like a daunting task and a risky investment of time and resources. However, we believe the subject is well served by a new, modern, \emph{constructive} presentation of its foundations.  Finally, the mere act of reinterpreting the foundations in an alternative system offers a fresh perspective, and this often leads to deeper insights and new discoveries.
+
+Indeed, we wish to emphasize that our ultimate objective is not merely to translate existing results into a new more modern and formal language. Rather, an important goal of the \ualib project is a system that is useful for conducting research in mathematics, and that is how we intend to use our library now that we have achieved our initial objective of implementing a substantial part of the foundations of universal algebra in \agda.
+
+In our own mathematics research, experience has taught us that a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, would be extremely valuable and powerful tool. Thus, we aim to build a library that serves as an indispensable part of our research tool kit.
+
+%% Finally, readers of this paper will benefit most from actively experimenting with Agda and the agda-ualib.
+
+%% \subsection{Installing the library}\label{installing-the-library}
+%% The main repository for the \agdaualib is \url{https://gitlab.com/ualib/ualib.gitlab.io}.
+
+%% There are installation instructions in the main README.md file in that repository, but really all one needs is a working Agda installation and a clone of the \agdaualib repository.
+\subsection{Contributions}
+\label{sec:contributions}
+Apart from the library itself, we describes the formal implementation and proof of a deep result in universal algebra, which was among the first major results of our subject---namely, Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}.  This theorem says that a \textit{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class.  More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of all algebras that satisfy some set of equations.
+
+The fact that we now have a proof of Birkhoff's Theorem in Agda is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because our proof is \emph{constructive}. Judging from the paper~\cite{Carlstrom:2008} by Carlstr\"om, for example, it is evidently a nontrivial matter to take a well-known informal proof of a theorem like Birkhoff's (as presented in, e.g.,~\cite{Bergman:2012}) and show that the informal proof can be formalized using only constructive logical assumptions---that is, without appealing to the \textit{Law of the Excluded Middle} and, therefore, without the \textit{Axiom of Choice}.
+
+%% Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book. Nonetheless, Professor Bergman's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
+
+%% On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from~\cite{Bergman:2012}, and present them as a list of results at the end of this section, and then later, in Section XX, we will formalize each of these results in Agda.
+
+%% Whenever we quote or paraphrase a result from~\cite{Bergman:2012}, we will include a citation that indicates where the corresponding result is found in the book.
