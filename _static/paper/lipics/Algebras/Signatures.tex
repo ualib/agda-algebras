@@ -1,3 +1,4 @@
+\newcommand\signatOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
 \ccpad
 \begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -36,10 +37,9 @@
 \AgdaFunction{𝟚}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \end{code}
-\ccpad
 
 \subsubsection{Operation type}\label{operation-type}
-We define the type of \textbf{operations}, and give an example (the projections).
+We define the type of \textbf{operations} and, as an example, the type of \textbf{projections}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -114,9 +114,7 @@ We define the type of \textbf{operations}, and give an example (the projections)
 \AgdaBound{i}\<%
 \end{code}
 \ccpad
-The type \texttt{Op} encodes the arity of an operation as an arbitrary type \ab I : \ab 𝓥 ̇, which gives us a very general way to represent an operation as a function type with domain \ab I → \ab A (the type of ``tuples'') and codomain \ab A.
-
-The last two lines of the code block above codify the \ab i-th \ab I-ary projection operation on \ab A.
+The type \AgdaFunction{Op} encodes the arity of an operation as an arbitrary type \ab I : \ab 𝓥 ̇, which gives us a very general way to represent an operation as a function type with domain \ab I → \ab A (the type of ``tuples'') and codomain \ab A. The last two lines of the code block above codify the \ab i-th \ab I-ary projection operation on \ab A.
 
 \subsubsection{Signature type}\label{signature-type}
 We define the signature of an algebraic structure in Agda like this.
@@ -151,12 +149,12 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Here 𝓞 is the universe level of operation symbol types, while 𝓥 is the universe level of arity types.
+Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types.
 
-In the \href{}{UALib.Prelude} module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if \texttt{𝑆\ :\ Signature\ 𝓞\ 𝓥} is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
+In the \ualibPrelude module we defined special syntax for the first and second projections---namely, \ai ∣ and \ai ∥, resp. Consequently, if \as{\{}\ab 𝑆 \as : \signatOV\as{\}} is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
 
 \subsubsection{Example}\label{example}
-Here is how we might define the signature for monoids as a member of the type \texttt{Signature\ 𝓞\ 𝓥}.
+Here is how we might define the signature for monoids as a member of the type \signatOV.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -193,7 +191,7 @@ Here is how we might define the signature for monoids as a member of the type \t
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Signature}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaPrimitive{𝓤₀}\<%
+\AgdaBound{𝓤₀}\<%
 \\
 %
 \>[1]\AgdaFunction{monoid-sig}\AgdaSpace{}%
@@ -213,4 +211,4 @@ Here is how we might define the signature for monoids as a member of the type \t
 \>[0]\<%
 \end{code}
 \ccpad
-As expected, the signature for a monoid consists of two operation symbols, \texttt{e} and \texttt{·}, and a function \texttt{λ\ \{\ e\ →\ 𝟘;\ ·\ →\ 𝟚\ \}} which maps \texttt{e} to the empty type 𝟘 (since \texttt{e} is the nullary identity) and maps \texttt{·} to the two element type 𝟚 (since \texttt{·} is binary).
+As expected, the signature for a monoid consists of two operation symbols, \aic e and \aic ·, and a function \as λ \as{\{} \AgdaInductiveConstructor{e} \as → \af 𝟘 \as ; \AgdaInductiveConstructor{·} \as → \af 𝟚 \as{\}} which maps \aic e to the empty type \af 𝟘 (since \aic e is the nullary identity) and maps \aic · to the two element type \af 𝟚 (since \aic · is binary).

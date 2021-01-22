@@ -100,6 +100,17 @@ We conclude this module by defining a convenient shorthand for the interpretatio
 
 \end{code}
 
+#### <a id="arbitrarily-many-variable-symbols">Arbitrarily many variable symbols</a>
+
+Finally, we will want to assume that we always have at our disposal an arbitrary collection \ab X of variable symbols such that, for every algebra \ab 𝑨, no matter the type of its domain, we have a surjective map \ab{h₀} \as : \ab X \as → \aiab{∣}{𝑨} from variables onto the domain of \ab 𝑨.
+
+\begin{code}
+
+ _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+ X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+
+\end{code}
+
 -------------------------------------
 
 [← UALib.Algebras.Signatures](UALib.Algebras.Signatures.html)

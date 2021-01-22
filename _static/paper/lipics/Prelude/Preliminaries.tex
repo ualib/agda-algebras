@@ -1,3 +1,4 @@
+
 \textbf{Notation}. Here are some acronyms that we use frequently.
 
 \begin{itemize}
@@ -7,42 +8,27 @@
 \end{itemize}
 
 \subsubsection{Options}\label{options}
-All Agda programs begin by setting some options and by importing from existing libraries (in our case, the \agdastdlib and the \TypeTopology library by \mhe). In particular,
-logical axioms and deduction rules can be specified according to what one wishes to assume.
+All Agda programs begin by setting some options and by importing from existing libraries (in our case, the \agdastdlib and the \TypeTopology library by \mhe). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
 
-For example, each Agda source code file in the UALib begins with the
-following line:
-
+For example, each Agda source code file in the UALib begins with the following line:
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
 \AgdaPragma{--exact-split}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-These options control certain foundational assumptions that Agda assumes
-when type-checking the program to verify its correctness.%
+\ccpad
+These options control certain foundational assumptions that Agda assumes when type-checking the program to verify its correctness.%
 \footnote{\emph{Useful Tip}. To type-check a file that imports another file when the latter still has some unmet proof obligations, one must replace the \AgdaPragma{--safe} flag with \AgdaPragma{--allow-unsolved-metas}; i.e., use
-\begin{code}%
-\>[0]\<%
-\\
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
 \AgdaPragma{--exact-split}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-\>[0]\<%
-\end{code}
-but this is never done in publicly released versions of the UALib.}
-
+\AgdaSymbol{\#-\}}, but this is never done in publicly released versions of the \ualib.}
 
 \begin{itemize}
 \item
@@ -60,93 +46,76 @@ but this is never done in publicly released versions of the UALib.}
 
 \subsubsection{Modules}\label{modules}
 
-The \texttt{OPTIONS} line is usually followed by the start of a module.
-For example, the Preliminaries module begins with the code shown in~\ref{code:module-preliminaries}.
-\ccpad
-\begin{code}[number=code:module-preliminaries]
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\end{code}
-\ccpad
+The \AgdaKeyword{OPTIONS} directive is followed by some imports or the start of a module.
+For example, the \Preliminaries module begins with \AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}\AgdaKeyword{where}.
 
-Sometimes we may wish to pass in parameters that will be assumed throughout the module. For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. We'll see many examples later, but as a preview,
-
-\ccpad
-\begin{code}
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-module} \OtherTok{_} \OtherTok{\{}\NormalTok{𝑆 }\OtherTok{:}\NormalTok{ Signature 𝓞 𝓥}\OtherTok{\}} \KeywordTok{where}
-\end{Highlighting}
-\end{Shaded}
-
-is how we often start an (anonymous) module in which the fixed signature 𝑆 will be assumed until the end of the module. (The module started with the line above would be anonymous because the underscore \texttt{\_} appears instead of a module name.)
-
-Agda determines where a model begins and ends by indentation. This can take some getting used to, but after a short time it will seem quite natural.
+Sometimes we want to pass in parameters that will be assumed throughout the module. For instance, when working with algebras we often assume they come from a particular fixed signature \AgdaBound{𝑆}, which we could fix as a parameter at the start of a module. We'll see many examples later, but here's an example:
+\AgdaKeyword{module}\AgdaSpace{}\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}.
 
 
 \subsubsection{Imports from Type Topology}\label{imports-from-type-topology}
-Throughout we use many of the nice tools that \href{}{Martin Escardo} has developed and made available in the \href{}{Type Topology} repository of Agda code for the ``Univalent Foundations'' of mathematics.
-
-We import these now.
-
-Notice that we carefully specify which definitions and results we want to import from each of Escardo's modules. This is not absolutely necessary, and we could have simply used, e.g., \texttt{open\sP{3}import\sP{3}MGS-MLTT\sP{3}public}, omitting \texttt{using\sP{3}(\_∘\_;\sP{3}domain;\sP{3}...;\sP{3}ap)}. However, being specific here has advantages. Besides helping us avoid naming conflicts, it makes explicit which components of the type theory we are using.
+Throughout we use many of the nice tools that \mhe has developed and made available in the \TypeTopology repository of Agda code for the ``Univalent Foundations'' of mathematics. We import these now.
+\ccpad
+\input{aux/imports.tex}
+\ccpad
+Notice that we carefully specify which definitions and theorems we want to import from each module. This is not absolutely necessary; we could have simply used, e.g., \AgdaKeyword{open}\AgdaSpace{}\AgdaKeyword{import}\AgdaSpace{}\AgdaModule{MGS-MLTT}\AgdaSpace{}\AgdaKeyword{public}, omitting \AgdaKeyword{using}\AgdaSpace{}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}\AgdaFunction{domain}\AgdaSymbol{;} ...; \AgdaSpace{}\AgdaFunction{ap}\AgdaSymbol{)}. However, being specific here has advantages. Besides helping us avoid naming conflicts, it makes explicit which components of the type theory we are using.
 
 \subsubsection{Special notation for Agda universes}
 \label{special-notation-for-agda-universes}
-The first import in the list of \texttt{open\sP{3}import} directives above imports the \texttt{universes} module from MHE's \href{}{Type Topology} library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
+The first import in the list of \AgdaKeyword{open}\AgdaSpace{}\AgdaKeyword{import} directives above imports the \universes module from Martin Escardo's \TypeTopology library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the \agdaualib.
 
-\mhe has made available an excellent set of notes from his course, \MGSnineteen. We highly recommend these notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.
+\mhe has made available an excellent set of notes from his course, \MGSnineteen. We highly recommend \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Martin's notes} to anyone who wants more details than we provide here about \MLTT and the Univalent Foundations/HoTT extensions thereof.
 
-Following MHE, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, etc.
+Following \mhe, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab 𝓩, etc. Also, in the \universes module \mhe defines the ̇ operator which maps a universe \ab 𝓤 (i.e., a level) to \Set \ab 𝓤, and the latter has type \Set(\lsuc \ab 𝓤). The level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀} ̇ is an alias for \Set \lzero (which, incidentally, corresponds to \texttt{Sort\sP{3}0} in the \href{https://leanprover.github.io/}{Lean} proof assistant language).\footnote{We won't discuss every line of the Universes.lagda file; instead we merely highlight the few lines of code from the Universes module that define the notational devices adopted throughout the UALib. For more details we refer readers to \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Martin Escardo's notes}.} Thus, \ab 𝓤 ̇ is simply an alias for \Set \ab 𝓤, and we have \Set \ab 𝓤 : \Set (\lsuc \ab 𝓤). Finally, \Set(\lsuc \lzero) is denoted by \Set \AgdaBound{𝓤₀} ⁺ which we (and \mhe) denote by \AgdaBound{𝓤₀} ⁺ ̇.
 
-Also in the \texttt{Universes} module MHE defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to \texttt{Set\sP{3}𝓤}, and the latter has type \texttt{Set\sP{3}(lsuc\sP{3}𝓤)}.
+Table~\ref{tab:dictionary} translates between standard \agda syntax and \mhe/\ualib notation.
 
-The level \texttt{lzero} is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for \texttt{Set\sP{3}lzero} (which, incidentally, corresponds to \texttt{Sort\sP{3}0} in the \href{}{Lean} proof assistant language).\footnote{We won't discuss every line of the \texttt{Universes.lagda} file; instead we merely highlight the few lines of code from the \texttt{Universes} module that define the notational devices adopted throughout the UALib. For more details we refer readers to \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes}{Martin Escardo's notes}.}
-
-Thus, 𝓤 ̇ is simply an alias for \texttt{Set\sP{3}𝓤}, and we have
-\texttt{Set\sP{3}𝓤\sP{3}:\sP{3}Set\sP{3}(lsuc\sP{3}𝓤)}.
-
-Finally, \texttt{Set~(lsuc~lzero)} is denoted by \texttt{Set\sP{3}𝓤₀\sP{3}⁺} which we (and MHE) denote by \texttt{𝓤₀~⁺~̇}.
-
-The following dictionary translates between standard Agda syntax and
-MHE/UALib notation.
-
+\begin{table}
 \begin{tabular}{r|l}
-Agda    &          MHE and UALib \\
+Standard \agda                        &          \mhe/\ualib \\
 \hline
-Level   &          Universe\\
-\lzero    &         𝓤₀\\
-𝓤 : Level   & 𝓤 : Universe\\
-\DataTypeTok{Set}\sP{3}lzero  &       𝓤₀ ̇\\
-\DataTypeTok{Set}\sP{3}𝓤   &          𝓤 ̇ \\
-\lsuc lzero    &    𝓤₀ ⁺\\
-\lsuc 𝓤        &    𝓤 ⁺\\
-\DataTypeTok{Set} \OtherTok{(} \lsuc lzero \OtherTok{)} \sP{3} & 𝓤₀ ⁺ ̇\\
-\DataTypeTok{Set} \OtherTok{(} \lsuc 𝓤 \OtherTok{)} \sP{3} &    𝓤 ⁺ ̇\\
-Setω     &         𝓤ω
+\AgdaKeyword{Level}          &   \AgdaFunction{Universe}\\
+\ab 𝓤 : \AgdaKeyword{Level}  & \ab 𝓤 : \AgdaFunction{Universe}\\
+\Set \ab 𝓤                  &       \ab 𝓤 ̇ \\
+\lsuc \ab 𝓤                   &    \ab 𝓤 ⁺\\
+\Set (\lsuc \ab 𝓤) &    \ab 𝓤 ⁺ ̇\\
+\lzero                       &         \AgdaBound{𝓤₀}\\
+\Set \lzero              &    \AgdaBound{𝓤₀}~~̇\\
+\lsuc \lzero                  &    \AgdaBound{𝓤₀}⁺\\
+\Set (\lsuc \lzero) & \AgdaBound{𝓤₀} ⁺ ̇\\
+\AgdaFunction{Setω}  &         \AgdaFunction{𝓤ω}
 \end{tabular}
+\caption{Special notation for universe levels}
+\label{tab:dictionary}
+\end{table}
 
-To justify the introduction of this somewhat nonstandard notation for universe levels, MHE points out that the Agda library uses \texttt{Level} for universes (so what we write as 𝓤 ̇ is written \texttt{Set\sP{3}𝓤} in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
+To justify the introduction of this somewhat nonstandard notation for universe levels, \mhe points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
 
-There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the \texttt{\_⊔\_} is an Agda primitive designed for precisely this purpose.
+There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, \ab 𝓤 ̇ and \ab 𝓥 ̇ . The universe (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇ denotes this least upper bound.\footnote{Actually, because \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇, we could omit parentheses here and simply write \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇.} Here \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels \ab 𝓤 and \ab 𝓥, where the \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} is an \agda primitive designed for precisely this purpose.
 
 \subsubsection{Dependent pair type}\label{dependent-pair-type}
 \textit{Dependent pair types} (or \textit{Sigma types}) are defined in the \typetopology library as a record, as follows:
 \ccpad
 \input{aux/sigmatype.tex}
 ~\ccpad
-We prefer the notation \texttt{Σ\sP{3}x\sP{3}꞉\sP{3}X\sP{3},\sP{3}y}, which is closer to the standard syntax appearing in the literature than Agda's default syntax (\texttt{Σ\sP{3}λ(x\sP{3}꞉\sP{3}X)\sP{3}→\sP{3}y}). \mhe makes the preferred notation available by making the index type explicit, as follows.
+We prefer the notation \AgdaRecord{Σ}\sP{3}\ab x\sP{3}꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}y, which is closer to the standard syntax appearing in the literature than Agda's default syntax (\AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab y). \mhe makes the preferred notation available by making the index type explicit, as follows.
 \ccpad
 \input{aux/sigmatypesyntax.tex}
 ~\ccpad
-\textbf{N.B.} The symbol ꞉ used here is not the same as the ordinary colon symbol, :, despite how similar they may appear. The symbol in the expression \texttt{Σ\sP{3}x\sP{3}꞉\sP{3}X\sP{3},\sP{3}y} above is obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.
+\textbf{N.B.} The symbol ꞉ used here is not the same as the ordinary colon symbol, :, despite how similar they may appear. The symbol in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab y above is obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.
 
-Our preferred notations for the first and second projections of a product are \texttt{∣\_∣} and \texttt{∥\_∥}, respectively; however, we will sometimes use more standard alternatives, such as \texttt{pr₁} and \texttt{pr₂}, or \texttt{fst} and \texttt{snd}, for emphasis, readability, or compatibility with other libraries.
+\newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
+\newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
+Our preferred notations for the first and second projections of a product are \FstUnder and \SndUnder, respectively; however, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these, to improve readability, or to avoid notation clashes with other modules.
 \ccpad
 \input{aux/projectionsyntax.tex}
-~\ccpad
 
 \subsubsection{Dependent function type}\label{dependent-function-type}
 
@@ -157,18 +126,17 @@ Our preferred notations for the first and second projections of a product are \t
 To make the syntax for \texttt{Π} conform to the standard notation for Pi types, \mhe uses the same trick as the one used above for Sigma types.
 \ccpad
 \input{aux/dependentfunctiontypesyntax.tex}
-~\ccpad
 
-\subsubsection{Truncation}\label{truncation}
-In general, we may have many inhabitants of a given type and, via the Curry-Howard correspondence, many proofs of a given proposition. For instance, suppose we have a type \texttt{X} and an identity relation ≡ₓ on X. Then, given two inhabitants \texttt{a} and \texttt{b} of type \texttt{X}, we may ask whether \texttt{a\sP{3}≡ₓ\sP{3}b}.
+\subsubsection{Truncation and sets}\label{truncation}
+In general, we may have many inhabitants of a given type and, via the Curry-Howard correspondence, many proofs of a given proposition. For instance, suppose we have a type \ab X and an identity relation \AgdaOperator{\AgdaDatatype{≡ₓ}} on \ab X. Then, given two inhabitants \ab a and \ab b of type \ab X, we may ask whether \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b.
 
-Suppose \texttt{p} and \texttt{q} inhabit the identity type \texttt{a\sP{3}≡ₓ\sP{3}b}; that is, \texttt{p} and \texttt{q} are proofs of \texttt{a\sP{3}≡ₓ\sP{3}b}, in which case we write \texttt{p\sP{3}\sP{3}q\sP{3}:\sP{3}a\sP{3}≡ₓ\sP{3}b}. Then we might wonder whether and in what sense are the two proofs \texttt{p} and \texttt{q} the ``same.'' We are asking about an identity type on the identity type ≡ₓ, and whether there is some inhabitant \texttt{r} of this type; i.e., whether there is a proof \texttt{r\sP{3}:\sP{3}p\sP{3}≡ₓ₁\sP{3}q} that the proof of \texttt{a\sP{3}≡ₓ\sP{3}b} is unique. (This property is sometimes called \emph{uniqueness of identity proofs}.)
+Suppose \ab p and \ab q inhabit the identity type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} b; that is, \ab p and \ab q are proofs of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, in which case we write \ab p\sP{3}\sP{3}\ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Then we might wonder whether and in what sense are the two proofs \ab p and \ab q the ``same.'' We are asking about an identity type on the identity type \AgdaOperator{\AgdaDatatype{≡ₓ}}, and whether there is some inhabitant \ab r of this type; i.e., whether there is a proof \ab r : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q that the proof of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b is unique. (This property is sometimes called \emph{uniqueness of identity proofs}.)
 
-Perhaps we have two proofs, say, \texttt{r\sP{3}s\sP{3}:\sP{3}p\sP{3}≡ₓ₁\sP{3}q}. Then of course we will ask whether \texttt{r\sP{3}≡ₓ₂\sP{3}s} has a proof! But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) is not useful or desirable. At that point, say, at level \texttt{k}, we might assume that there is at most one proof of any identity of the form \texttt{p\sP{3}≡ₓₖ\sP{3}q}. This is called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{truncation}.
+Perhaps we have two proofs, say, \ab r\sP{3}\sP{3} \ab s : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q. Then of course our next question will be whether \ab r \AgdaOperator{\AgdaDatatype{≡ₓ₂}} \ab s has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) is not useful or desirable. At that point, say, at level \ab k, we might assume that there is at most one proof of any identity of the form \ab p  \AgdaOperator{\AgdaDatatype{≡ₓₖ}} \ab q. This is called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation}{truncation}.
 
-We will see some examples of trunction later when we require it to complete some of the UALib modules leading up to the proof of Birkhoff's HSP Theorem. Readers who want more details should refer to \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section 34} and \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35} of MHE's notes, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume Brunerie, Truncations and truncated higher inductive types}, or Section 7.1 of the \hottbook.
+We will see some examples of trunction later when we require it to complete some of the \ualib modules leading up to the proof of Birkhoff's HSP Theorem. Readers who want more details should refer to \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section 34} and \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35} of MHE's notes, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume Brunerie, Truncations and truncated higher inductive types}, or Section 7.1 of the \hottbook.
 
-We take this opportunity to define \emph{set} (or 0-\emph{groupoid}) in type theory. A type X : 𝓤 ̇ with an identity relation \texttt{≡ₓ} is called a \textbf{set} if for every pair \texttt{a\sP{3}b\sP{3}:\sP{3}X} of elements of type \texttt{X} there is at most one proof of \texttt{a\sP{3}≡ₓ\sP{3}b}. This is formalized in the \href{}{Type Topology} library as follows:\footnote{As \mhe explains, ``at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom.''}
+We take this opportunity to say what it means in type theory to say that a type is a \emph{set}. A type \ab X : \ab 𝓤 ̇ with an identity relation \AgdaDatatype{≡ₓ} is called a \textbf{set} (or 0-\textbf{groupoid}) if for every pair \ab a \ab b : \ab X of elements of type \ab X there is at most one proof of \ab a \AgdaDatatype{≡ₓ} \ab b. This is formalized in the \TypeTopology library as follows:\footnote{As \mhe explains, ``at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom.''}
 \ccpad
 \begin{code}
 \>[0]\AgdaFunction{is-set}\AgdaSpace{}%
@@ -255,4 +223,24 @@ The special case in which the type \texttt{Y} doesn't depend on \texttt{X} is th
 \KeywordTok{infixr} \DecValTok{30} \OtherTok{_}\NormalTok{×}\OtherTok{_}
 \OtherTok{_}\NormalTok{×}\OtherTok{_} \OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{→}\NormalTok{ 𝓥 ̇ }\OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
 \NormalTok{X × Y }\OtherTok{=}\NormalTok{ Σ x ꞉ X , Y}
+
+
+
+
+
+\end{comment}
+
+\begin{comment}
+, but as a preview,
+\ccpad
+\begin{code}
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+module} \OtherTok{_} \OtherTok{\{}\NormalTok{𝑆 }\OtherTok{:}\NormalTok{ Signature 𝓞 𝓥}\OtherTok{\}} \KeywordTok{where}
+\end{Highlighting}
+\end{Shaded}
+
+is how we often start an (anonymous) module in which the fixed signature 𝑆 will be assumed until the end of the module. (The module started with the line above would be anonymous because the underscore \texttt{\_} appears instead of a module name.)
+
 \end{comment}

@@ -9,18 +9,23 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 \AgdaSymbol{\#-\}}\<%
 \\
 %
-\\
+\ccpad
+%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Inverses}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 %
-\\
+\ccpad
+%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Equality}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \\
+%
+\ccpad
+%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
@@ -46,7 +51,8 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 \AgdaKeyword{public}\<%
 \\
 %
-\\
+\ccpad
+%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -148,17 +154,17 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[17]\AgdaBound{b}\AgdaSpace{}%
+\>[15]\AgdaBound{b}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{a}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
-\>[15]\AgdaComment{----------------------------}\<%
+\>[15]\AgdaComment{-------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
-\>[17]\AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}%
+\>[15]\AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}%
 \AgdaBound{b}\<%
@@ -177,9 +183,9 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 \AgdaBound{b≡fa}\<%
 \end{code}
 \ccpad
-Note that an inhabitant of \texttt{Image\ f\ ∋\ b} is a dependent pair \texttt{(a\ ,\ p)}, where \texttt{a\ :\ A} and \texttt{p\ :\ b\ ≡\ f\ a} is a proof that \texttt{f} maps \texttt{a} to \texttt{b}. Thus, a proof that \texttt{b} belongs to the image of \texttt{f} (i.e., an inhabitant of \texttt{Image\ f\ ∋\ b}), always has a witness \texttt{a\ :\ A}, and a proof that \texttt{b\ =\ f\ a}, so a (pseudo)inverse can actually be \emph{computed}.
+Note that an inhabitant of \af{Image} \ab f \ad ∋ \ab b is a dependent pair (\ab a \ac \ab p), where \ab a \as : \ab A and \ab p \as : \ab b  \ad ≡ \ab f \ab a is a proof that \ab f maps \ab a to \ab b. Thus, a proof that \ab b belongs to the image of \ab f (i.e., an inhabitant of \af{Image} \ab f \ad ∋ \ab b), always has a witness \ab a \as : \ab A, and a proof that \ab b \ad{≡} \ab f \ab a, so a (pseudo)inverse can actually be \emph{computed}.
 
-For convenience, we define a pseudo-inverse function, which we call \texttt{Inv}, that takes \texttt{b\ :\ B} and \texttt{(a\ ,\ p)\ :\ Image\ f\ ∋\ b} and returns \texttt{a}.
+For convenience, we define a pseudo-inverse function, which we call \af{Inv}, that takes \ab b \as : \ab B and (\ab a \ac \ab p) \as : \af{Image} \ab f \ad ∋ \ab b and returns \ab a.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -230,8 +236,8 @@ For convenience, we define a pseudo-inverse function, which we call \texttt{Inv}
 \AgdaBound{a}\<%
 \end{code}
 \ccpad
-Of course, we can prove that \texttt{Inv\ f} is really the (right-) inverse of \texttt{f}.
-
+Of course, we can prove that \af{Inv} \ab f is really the (right-)inverse of \ab f.
+\ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{InvIsInv}%
@@ -301,14 +307,9 @@ Of course, we can prove that \texttt{Inv\ f} is really the (right-) inverse of \
 \end{code}
 
 \subsubsection{Surjective functions}\label{surjective-functions}
-
-An epic (or surjective) function from type \texttt{A\ :\ 𝓤\ ̇} to type
-\texttt{B\ :\ 𝓦\ ̇} is as an inhabitant of the \texttt{Epic} type, which
-we define as follows.
-
+An epic (or surjective) function from type \AgdaTyped{A}{𝓤 ̇} to type \AgdaTyped{B}{𝓦 ̇} is as an inhabitant of the \af{Epic} type, which we define as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -347,15 +348,10 @@ we define as follows.
 \\
 \>[0]\<%
 \end{code}
-
-We obtain the right-inverse (or pseudoinverse) of an epic function
-\texttt{f} by applying the function \texttt{EpicInv} (which we now
-define) to the function \texttt{f} along with a proof,
-\texttt{fE\ :\ Epic\ f}, that \texttt{f} is surjective.
-
+\ccpad
+We obtain the right-inverse (or pseudoinverse) of an epic function \af f by applying the function \af{EpicInv} (which we now define) to the function \af f along with a proof, \ab{fE} \as : \af{Epic} \ab f, that \af f is surjective.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{EpicInv}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -385,12 +381,10 @@ define) to the function \texttt{f} along with a proof,
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[14]\AgdaBound{B}\AgdaSpace{}%
+\>[11]\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{EpicInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -402,16 +396,11 @@ define) to the function \texttt{f} along with a proof,
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The function defined by \texttt{EpicInv\ f\ fE} is indeed the
-right-inverse of \texttt{f}.
-
+\ccpad
+The function defined by \af{EpicInv} \ab f \ab{fE} is indeed the right-inverse of \ab f.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -446,7 +435,7 @@ right-inverse of \texttt{f}.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[22]\AgdaBound{f}\AgdaSpace{}%
+\>[21]\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{EpicInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -455,8 +444,6 @@ right-inverse of \texttt{f}.
 \AgdaFunction{𝑖𝑑}\AgdaSpace{}%
 \AgdaBound{B}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
@@ -472,18 +459,12 @@ right-inverse of \texttt{f}.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
 \end{code}
 
 \subsubsection{Injective functions}\label{injective-functions}
-
-We say that a function \texttt{g\ :\ A\ →\ B} is monic (or injective) if
-we have a proof of \texttt{Monic\ g}, where
-
+We say that a function \AgdaTyped{g}{A → B} is monic (or injective) if we have a proof of \af{Monic} \ab g, where
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Monic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -524,17 +505,11 @@ we have a proof of \texttt{Monic\ g}, where
 \AgdaBound{a₁}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{a₂}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Again, we obtain a pseudoinverse. Here it is obtained by applying the
-function \texttt{MonicInv} to \texttt{g} and a proof that \texttt{g} is
-monic.
-
+\ccpad
+Again, we obtain a pseudoinverse. Here it is obtained by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaComment{--The (pseudo-)inverse of a monic function}\<%
 \\
@@ -593,16 +568,11 @@ monic.
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaBound{Imf∋b}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The function defined by \texttt{MonicInv\ f\ fM} is the left-inverse of
-\texttt{f}.
-
+\ccpad
+The function defined by \AgdaCatchallClause{MonicInv f fM} is the left-inverse of \ab f.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaComment{--The (psudo-)inverse of a monic is the left inverse.}\<%
 \\
@@ -657,17 +627,12 @@ The function defined by \texttt{MonicInv\ f\ fM} is the left-inverse of
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-\>[0]\<%
 \end{code}
 
 \subsubsection{Bijective functions}\label{bijective-functions}
-
 Finally, bijective functions are defined.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Bijective}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -731,12 +696,10 @@ Finally, bijective functions are defined.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[13]\AgdaBound{B}\AgdaSpace{}%
+\>[12]\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{Inverse}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -750,97 +713,83 @@ Finally, bijective functions are defined.
 \AgdaBound{fbi}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
+%% OMITTING NEUTRAL ELEMENTS
+% \input{aux/neutral-elements.tex}
 
-\subsubsection{Neutral elements}\label{neutral-elements}
-
-The next three lemmas appeared in the \texttt{UF-Base} and
-\texttt{UF-Equiv} modules which were (at one time) part of Matin
-Escsardo's UF Agda repository.
-
-\begin{code}%
-\>[0]\<%
-\\
-\>[0]\AgdaFunction{refl-left-neutral}\AgdaSpace{}%
+\subsubsection{Injective functions are set embeddings}\label{injective-functions-are-set-embeddings}
+This is the first point at which \href{UALib.Preface.html\#truncation}{truncation} comes into play. An
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#embeddings}{embedding} is defined in the \TypeTopology library as follows:
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{is-embedding}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{p}\<%
-\\
-\>[0]\AgdaFunction{refl-left-neutral}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{refl-right-neutral}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{is-embedding}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{codomain}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{fiber}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+where
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\<%
-\\
-\>[0]\AgdaFunction{refl-right-neutral}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{identifications-in-fibers}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[521I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\end{code}
+\ccpad
+and
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
@@ -852,144 +801,34 @@ Escsardo's UF Agda repository.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-\>[.][@{}l@{}]\<[521I]%
-\>[28]\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{x'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x'}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[28]\AgdaSymbol{(}\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{γ}\AgdaSpace{}%
+\>[0]\AgdaFunction{fiber}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x'}\AgdaSpace{}%
+\AgdaFunction{domain}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{γ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaBound{p'}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x'}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{p'}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{identifications-in-fibers}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaDottedPattern{\AgdaSymbol{.(}}\AgdaDottedPattern{\AgdaBound{f}}\AgdaSpace{}%
-\AgdaDottedPattern{\AgdaBound{x}}\AgdaDottedPattern{\AgdaSymbol{)}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
-\AgdaDottedPattern{\AgdaSymbol{.}}\AgdaDottedPattern{\AgdaBound{x}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaBound{p'}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{g}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaKeyword{where}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaFunction{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{p'}\<%
-\\
-%
-\>[2]\AgdaFunction{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{-}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{-}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{r}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaFunction{refl-left-neutral}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\<%
-\\
-\>[0]\<%
+\AgdaBound{y}\<%
 \end{code}
-
-\subsubsection{Injective functions are set
-embeddings}\label{injective-functions-are-set-embeddings}
-
-This is the first point at which
-\href{UALib.Preface.html\#truncation}{truncation} comes into play. An
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#embeddings}{embedding}
-is defined in the \href{}{Type Topology} library as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{is-embedding }\OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}} \OtherTok{\{}\NormalTok{Y }\OtherTok{:}\NormalTok{ 𝓥 ̇ }\OtherTok{\}} \OtherTok{→} \OtherTok{(}\NormalTok{X }\OtherTok{→}\NormalTok{ Y}\OtherTok{)} \OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{is-embedding f }\OtherTok{=} \OtherTok{(}\NormalTok{y }\OtherTok{:}\NormalTok{ codomain f}\OtherTok{)} \OtherTok{→}\NormalTok{ is-subsingleton }\OtherTok{(}\NormalTok{fiber f y}\OtherTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-where
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{is-subsingleton }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{→}\NormalTok{ 𝓤 ̇}
-\NormalTok{is-subsingleton X }\OtherTok{=} \OtherTok{(}\NormalTok{x y }\OtherTok{:}\NormalTok{ X}\OtherTok{)} \OtherTok{→}\NormalTok{ x ≡ y}
-\end{Highlighting}
-\end{Shaded}
-
-and
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fiber }\OtherTok{:} \OtherTok{\{}\NormalTok{X }\OtherTok{:}\NormalTok{ 𝓤 ̇ }\OtherTok{\}} \OtherTok{\{}\NormalTok{Y }\OtherTok{:}\NormalTok{ 𝓥 ̇ }\OtherTok{\}} \OtherTok{(}\NormalTok{f }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ Y}\OtherTok{)} \OtherTok{→}\NormalTok{ Y }\OtherTok{→}\NormalTok{ 𝓤 ⊔ 𝓥 ̇}
-\NormalTok{fiber f y }\OtherTok{=}\NormalTok{ Σ x ꞉ domain f , f x ≡ y}
-\end{Highlighting}
-\end{Shaded}
-
-This is a very nice, natural way to represent what we usually mean in
-mathematics by embedding. However, with this definition, an embedding
-does not correspond simply to an injective map. However, if we assume
-that the codomain \texttt{B} has unique identity proofs (i.e., is a
-set), then we can prove that a monic function into \texttt{B} is an
-embedding as follows:
-
+\ccpad
+This is a natural way to represent what we usually mean in mathematics by embedding. It does not correspond simply to an injective map. However, if we assume that the codomain type, \ab B, is a \emph{set} (i.e., has \emph{unique identity proofs}), then we can prove that a injective (i.e., \emph{monic}) function into \ab B is an embedding as follows:
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -999,9 +838,51 @@ embedding as follows:
 \AgdaKeyword{where}\<%
 \\
 %
+%% \>[1]\AgdaFunction{MonicInvIsLeftInv}%
+%% \>[371I]\AgdaSymbol{:}%
+%% \>[372I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}}\<%
+%% \\
+%% \>[.][@{}l@{}]\<[372I]%
+%% \>[21]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{A}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{fmonic}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Monic}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{A}\AgdaSymbol{)}\<%
+%% \\
+%% \>[371I][@{}l@{\AgdaIndent{0}}]%
+%% \>[20]\AgdaComment{----------------------------------------}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[3]\AgdaSymbol{→}%
+%% \>[21]\AgdaSymbol{(}\AgdaFunction{MonicInv}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{fmonic}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{im}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaBound{x}\<%
+%% \\
 \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{monic-into-set-is-embedding}\AgdaSpace{}%
+\>[1]\AgdaFunction{monic-into-set-is-embedding}
+\>[371I]\AgdaSymbol{:}%
+\>[372I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1016,7 +897,8 @@ embedding as follows:
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[31]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[372I]%
+\>[21]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1026,11 +908,11 @@ embedding as follows:
 \AgdaBound{f}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
-\>[29]\AgdaComment{---------------------------}\<%
+\>[21]\AgdaComment{---------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
-\>[32]\AgdaFunction{is-embedding}\AgdaSpace{}%
+\>[21]\AgdaFunction{is-embedding}\AgdaSpace{}%
 \AgdaBound{f}\<%
 \\
 %
@@ -1174,8 +1056,8 @@ Of course, invertible maps are embeddings.
 \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\>[371I]\AgdaSymbol{:}%
+\>[372I]\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -1192,7 +1074,8 @@ Of course, invertible maps are embeddings.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[18]\AgdaFunction{invertible}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[372I]%
+\>[21]\AgdaFunction{invertible}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-embedding}\AgdaSpace{}%
@@ -1222,8 +1105,8 @@ Finally, if we have a proof \texttt{p\ :\ is-embedding\ f} that the map \texttt{
 \\
 %
 \>[1]\AgdaFunction{embedding-elim}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\>[371I]\AgdaSymbol{:}%
+\>[372I]\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -1240,12 +1123,10 @@ Finally, if we have a proof \texttt{p\ :\ is-embedding\ f} that the map \texttt{
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[372I]%
 \>[18]\AgdaFunction{is-embedding}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[18]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{x'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\<%

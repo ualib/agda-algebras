@@ -1,18 +1,7 @@
-\subsubsection{Binary Relation and Kernel
-Types}\label{binary-relation-and-kernel-types}
+In set theory, a binary relation on a set \ab{A} is simply a subset of the product \ab A \af × \ab A. As such, we could model these as predicates over the type \ab A \af × \ab A, or as relations of type \ab A \as → \ab A \as → \ab 𝓡 \af ̇ (for some universe \ab 𝓡). We define these below.
 
-This section presents the {[}UALib.Relations.Binary{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-In set theory, a binary relation on a set \texttt{A} is simply a subset
-of the product \texttt{A\ ×\ A}. As such, we could model these as
-predicates over the type \texttt{A\ ×\ A}, or as relations of type
-\texttt{A\ →\ A\ →\ 𝓡\ ̇} (for some universe 𝓡). We define these below.
-
-A generalization of the notion of binary relation is a \emph{relation
-from} \texttt{A} \emph{to} \texttt{B}, which we define first and treat
-binary relations on a single \texttt{A} as a special case.
-
+A generalization of the notion of binary relation is a \emph{relation from} \ab{A} \emph{to} \ab{B}, which we define first and treat binary relations on a single \ab{A} as a special case.
+\ccpad
 \begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
@@ -82,17 +71,12 @@ binary relations on a single \texttt{A} as a special case.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓝}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Kernels}\label{kernels}
-
+\subsubsection{Kernels}\label{kernels}
 The kernel of a function can be defined in many ways. For example,
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{KER}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -140,15 +124,11 @@ The kernel of a function can be defined in many ways. For example,
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 or as a unary relation (predicate) over the Cartesian product,
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{KER-pred}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -185,15 +165,11 @@ or as a unary relation (predicate) over the Cartesian product,
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-\>[0]\<%
 \end{code}
-
-or as a relation from \texttt{A} to \texttt{B},
-
+\ccpad
+or as a relation from \ab{A} to \ab{B},
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -257,12 +233,9 @@ or as a relation from \texttt{A} to \texttt{B},
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Examples}\label{examples}
-
+\subsubsection{Examples}\label{examples}
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{ker}\AgdaSpace{}%
@@ -538,11 +511,8 @@ or as a relation from \texttt{A} to \texttt{B},
 \AgdaFunction{𝟙}\<%
 \end{code}
 
-\paragraph{Properties of binary
-relations}\label{properties-of-binary-relations}
-
+\subsubsection{Properties of binary relations}\label{properties-of-binary-relations}
 \begin{code}%
-%
 \>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
@@ -690,27 +660,10 @@ relations}\label{properties-of-binary-relations}
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 
-\paragraph{Binary relation truncation}\label{binary-relation-truncation}
-
-\href{UALib.Preface.html\#truncation}{The section on Truncation} in the
-preface describes the concept of truncation for ``proof-relevant''
-mathematics.
-
-Given a binary relation \texttt{P}, it may be necessary or desirable to
-assume that there is at most one way to prove that a given pair of
-elements is \texttt{P}-related. This may be called ``proof-irrelevance''
-since, if we have two proofs of \texttt{x\ P\ y}, then we can assume
-that the proofs are indistinguishable or that any distinctions are
-irrelevant. We enforce this strong assumption of truncation at the first
-level in the following definition using MHE's \texttt{is-subsingleton}
-type: we say that \texttt{(x\ ,\ y)} belongs to \texttt{P} or \texttt{x}
-and \texttt{y} are \texttt{P}-related if and only if both P x
-y\texttt{and}is-subsingleton (P x y)`.
-
+\subsubsection{Binary relation truncation}\label{binary-relation-truncation}
+Recall, in Section~\ref{truncation} we described the concept of truncation as it relates to ``proof-relevant'' mathematics.  Given a binary relation \af P, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is \af P-related\footnote{This is another example of ``proof-irrelevance''; indeed, proofs of \af P \ab x \ab y are indistinguishable, or rather any distinctions are irrelevant in the context of interest.} We use Escardo's \af{is-subsingleton} type to express this strong (truncation at level 1) assumption in the following definition: We say that (\ab x  \ac \ab y) belongs to \af P, or that \ab x and \ab y are \af P-related if and only if both \af P \ab x \ab y \emph{and} \af{is-subsingleton} (\af P \ab x \ab y) holds.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
-%
 \>[1]\AgdaFunction{Rel₀}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -749,22 +702,14 @@ y\texttt{and}is-subsingleton (P x y)`.
 \AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
+\ccpad
+As above we define a \textbf{set} to be a type \ab{X} with the following property: for all \ab x \ab y \as : \ab X there is at most one proof that \ab x \ad ≡ \ab y. In other words, \ab{X} is a set if and only if it satisfies the following:
+\ccpad
 
-We will define a \textbf{set} to be a type \texttt{X} with the following
-property: for all \texttt{x\ y\ :\ X} there is at most one proof that
-\texttt{x\ ≡\ y}. In other words, \texttt{X} is a set if and only if it
-satisfies
+\as ∀ \ab x \ab y \as : \ab X  \as → \af{is-subsingleton} ( \ab x \af ≡ \ab y )
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\OtherTok{∀}\NormalTok{ x y }\OtherTok{:}\NormalTok{ X }\OtherTok{→}\NormalTok{ is-subsingleton}\OtherTok{(}\NormalTok{x ≡ y}\OtherTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\paragraph{Implication}\label{implication}
+\subsubsection{Implication}\label{implication}
 
 We denote and define implication as follows.
 
@@ -890,16 +835,11 @@ We denote and define implication as follows.
 \>[0]\AgdaKeyword{infixr}\AgdaSpace{}%
 \AgdaNumber{4}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⇒\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Here is a more general version that we borrow from the standard library
-and translate into MHE/UALib notation.
-
+\ccpad
+Here is a more general version that we borrow from the standard library and translate into MHE/UALib notation.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}=[\AgdaUnderscore{}]⇒\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -962,10 +902,3 @@ and translate into MHE/UALib notation.
 \>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Relations.Unary.html}{← UALib.Relations.Unary}
-{\href{UALib.Relations.Equivalences.html}{UALib.Relations.Equivalences
-→}}
-
-\{\% include UALib.Links.md \%\}

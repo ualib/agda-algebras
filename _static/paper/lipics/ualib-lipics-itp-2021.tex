@@ -129,62 +129,75 @@ This section describes the \href{}{UALib.Prelude.Extensionality} module of the \
 
 %% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \subsection{Algebras}\label{sec:algebras}
-\subsection{Operation and Signature Types}\label{operation-and-signature-types}
+\subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
 This section presents the \href{}{UALib.Algebras.Signatures} module of the \agdaualib.
 \input{Algebras/Signatures.tex}
 
-\subsection{Algebras}\label{sec:algebras-1}
+\subsection{Algebras}\label{sec:algebras}
 This section presents the \href{}{UALib.Algebras.Algebras} module of the \agdaualib.
 \input{Algebras/Algebras.tex}
 
-\subsection{Products}
-\label{sec:products}
-%% \input{Algebras/Products.tex}
+\subsection{Product Algebra Types}\label{sec:product-algebra-types}
+This section presents the \href{}{UALib.Algebras.Products} module of the \agdaualib.
+\input{Algebras/Products.tex}
 
-%%
-%% Bibliography
-%%
-
-%% Please use bibtex, 
-
-\bibliography{ualib_refs}
-
-
-\end{document}
-\subsubsection{Lifts}
-\label{sec:lifts}
+\subsubsection{The Universe Hierarchy and Lifts}\label{sec:universe-hierarchy-and-lifts}
 \input{Algebras/Lifts.tex}
 
 %% Relations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Relations}
-\label{sec:relations}
-\subsubsection{Relations.Unary public
-\subsubsection{Relations.Binary public
-\subsubsection{Relations.Equivalences public
-\subsubsection{Relations.Quotients public
-\subsubsection{Relations.Congruences public
+%% \subsection{Relations}\label{sec:relations}
+\subsection{Predicates}\label{sec:predicates}
+This section presents the \ualibUnary module of the \agdaualib.
+\input{Relations/Unary.tex}
 
+\subsection{Binary Relation and Kernel Types}\label{binary-relation-and-kernel-types}
+This section presents the \ualibBinary module of the \agdaualib.
+\input{Relations/Binary.tex}
+
+\subsection{Equivalence Relations}\label{sec:equiv-relat}
+This section presents the \ualibEquivalences module of the \agdaualib.
+\input{Relations/Equivalences.tex}
+
+\subsection{Quotient Types}\label{sec:quotient-types}
+This section presents the \ualibQuotients module of the \agdaualib.
+\input{Relations/Quotients.tex}
+
+\subsection{Congruences Relations}\label{sec:congr-relat}
+This section presents the \ualibCongruences module of the \agdaualib.
+\input{Relations/Congruences.tex}
+
+%% Bibliography
+\bibliography{ualib_refs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Homomorphisms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Homomorphisms}
-\label{sec:homomorphisms}
-\subsubsection{Basic}
+\subsubsection{Homomorphism: basic definitions}
 \label{sec:basic}
 \input{Homomorphisms/Basic.tex}
-\subsubsection{Kernels}
+
+\subsection{Homomorphism Kernels}
 \label{sec:kernels}
 \input{Homomorphisms/Kernels.tex}
-\subsubsection{Noether}
+
+\subsubsection{Noether homomorphism Theorems}
 \label{sec:noether}
 \input{Homomorphisms/Noether.tex}
-\subsubsection{Products}
+
+\subsubsection{Homomorphisms and Products}
 \label{sec:products-1}
 \input{Homomorphisms/Products.tex}
+
 \subsubsection{Isomorphisms}
 \label{sec:isomorphisms}
 \input{Homomorphisms/Isomorphisms.tex}
-\subsubsection{HomomorphicImages}
+
+\subsubsection{Homomorphic Images}
 \label{sec:homomorphicimages}
 \input{Homomorphisms/HomomorphicImages.tex}
+
+
 
 %% Terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Terms}

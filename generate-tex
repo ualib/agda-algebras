@@ -7,6 +7,7 @@ agda --latex UALib/Algebras/Signatures.lagda
 agda --latex UALib/Birkhoff/FreeAlgebra.lagda
 agda --latex UALib/Birkhoff/Lemmata.lagda
 agda --latex UALib/Birkhoff/Theorem.lagda
+agda --latex UALib/Homomorphisms/Basic.lagda
 agda --latex UALib/Homomorphisms/HomomorphicImages.lagda
 agda --latex UALib/Homomorphisms/Isomorphisms.lagda
 agda --latex UALib/Homomorphisms/Kernels.lagda

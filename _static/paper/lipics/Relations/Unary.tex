@@ -1,39 +1,30 @@
-\subsubsection{Unary Relation Types}\label{unary-relation-types}
-
-This section presents the {[}UALib.Relations.Unary{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-We need a mechanism for implementing the notion of subsets in Agda. A
-typical one is called \texttt{Pred} (for predicate). More generally,
-\texttt{Pred\ A\ 𝓤} can be viewed as the type of a property that
-elements of type \texttt{A} might satisfy. We write
-\texttt{P\ :\ Pred\ A\ 𝓤} to represent the semantic concept of a
-collection of elements of type \texttt{A} that satisfy the property
-\texttt{P}.
-
+\newcommand{\ovu}{\ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇}
+We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab{A} might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab{A} that satisfy the property \ab{P}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
 \AgdaPragma{--exact-split}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
-\\
+%
+\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Relations.Unary}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\\
+%
+\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Lifts}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
+%
+\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -45,17 +36,11 @@ collection of elements of type \texttt{A} that satisfy the property
 \AgdaFunction{global-dfunext}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Here is the definition, which is similar to the one found in
-the\texttt{Relation/Unary.agda} file of the {[}Agda Standard
-Library{]}{[}{]}.
-
+\ccpad
+Here is the definition, which is similar to the one found in the\ab{Relation/Unary.agda} file of the \agdastdlib.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -90,24 +75,12 @@ Library{]}{[}{]}.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Unary relation truncation}\label{unary-relation-truncation}
-
-The section on
-\href{UALib.Prelude.Preliminaries.html\#truncation}{truncation} in the
-module {[}UALib.Prelude.Preliminaries{]}{[}{]} describes the concepts of
-\emph{truncation} and \emph{set} for ``proof-relevant'' mathematics.
-Sometimes we will want to assume that a type is a \emph{set}. Recall,
-this mean there is at most one proof that two elements are the same.
-Analogously for predicates, we may wish to assume that there is at most
-one proof that a given element satisfies the predicate.
-
+\subsubsection{Unary relation truncation}\label{unary-relation-truncation}
+Section~\ref{truncation} describes the concepts of \emph{truncation} and \emph{set} for ``proof-relevant'' mathematics. Sometimes we will want to assume ``proof-irrelevance'' and assume that certain types are sets. Recall, this mean there is at most one proof that two elements are the same. For predicates, analogously, we may wish to assume that there is at most one proof that a given element satisfies the predicate.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Pred₀}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -143,33 +116,16 @@ one proof that a given element satisfies the predicate.
 \AgdaFunction{is-subsingleton}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
+\ccpad
+Below we will often consider predicates over the class of all algebras of a particular type. We will define the type of algebras \af{Algebra} \ab 𝓤 \ab 𝑆 (for some universe level \ab 𝓤). Like all types, \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type which happens to be \ovu (see Section~\ref{sec:algebras}). Therefore, the type of \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆)\ab 𝓤 is \ovu as well.
 
-Below we will often consider predicates over the class of all algebras
-of a particular type. We will define the type of algebras
-\texttt{Algebra\ 𝓤\ 𝑆} (for some universe level 𝓤). Like all types,
-\texttt{Algebra\ 𝓤\ 𝑆} itself has a type which happens to be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-̇ (as we will see in the module
-\href{UALib.Algebras.Algebras.html}{UALib.Algebras}. Therefore, the type
-of \texttt{Pred\ (Algebra\ 𝓤\ 𝑆)\ 𝓤} will be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ as well.
+The inhabitants of the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓤 are maps of the form \ab 𝑨 \as → \ab 𝓤 \af ̇; given an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we have \af{Pred} \ab 𝑨 \ab 𝓤 \as = \ab 𝑨 \as → \ab 𝓤 \af ̇.
 
-The inhabitants of the type \texttt{Pred\ (Algebra\ 𝓤\ 𝑆)} 𝓤 are maps of
-the form \texttt{𝑨\ →\ 𝓤\ ̇}; given an algebra
-\texttt{𝑨\ :\ Algebra\ 𝓤\ 𝑆}, we have \texttt{Pred\ 𝑨\ 𝓤\ =\ 𝑨\ →\ 𝓤\ ̇}.
-
-\paragraph{The membership relation}\label{the-membership-relation}
-
-We introduce notation so that we may indicate that \texttt{x} ``belongs
-to'' or ``inhabits'' at type \texttt{P}, or that \texttt{x} ``has
-property'' \texttt{P}, by writing either \texttt{x\ ∈\ P} or
-\texttt{P\ x} (cf. \texttt{Relation/Unary.agda} in the {[}Agda Standard
-Library{]}{[}{]}).
-
+\subsubsection{The membership relation}\label{the-membership-relation}
+We introduce notation for denoting that \ab x ``belongs to'' or ``inhabits'' type \ab{P}, or that \ab x ``has property'' \ab{P}, by writing either \ab x \af ∈ \ab P or \ab P \ab x (cf. \texttt{Relation/Unary.agda} in the \agdastdlib.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -243,17 +199,11 @@ Library{]}{[}{]}).
 \AgdaNumber{4}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∉\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The ``subset'' relation is denoted, as usual, with the \texttt{⊆} symbol
-(cf. \texttt{Relation/Unary.agda} in the {[}Agda Standard
-Library{]}{[}{]}).
-
+\ccpad
+The ``subset'' relation is denoted, as usual, with the \af{⊆} symbol (cf. \texttt{Relation/Unary.agda} in the \agdastdlib.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -339,21 +289,12 @@ Library{]}{[}{]}).
 \AgdaNumber{4}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊇\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-In type theory everything is a type. As we have just seen, this includes
-subsets. Since the notion of equality for types is usually a nontrivial
-matter, it may be nontrivial to represent equality of subsets.
-Fortunately, it is straightforward to write down a type that represents
-what it means for two subsets to be the in informal (pencil-paper)
-mathematics. In the {[}Agda UALib{]}{[}{]} we denote this \textbf{subset
-equality} by =̇ and define it as follows.
-
+\ccpad
+In type theory everything is a type. As we have just seen, this includes subsets. Since the notion of equality for types is usually a nontrivial matter, it may be nontrivial to represent equality of subsets. Fortunately, it is straightforward to write down a type that represents what it means for two subsets to be the in informal (pencil-paper)
+mathematics. In the \agdaualib this \textit{subset equality} is denoted by =̇ and define as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}=̇\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -392,18 +333,12 @@ equality} by =̇ and define it as follows.
 \AgdaSymbol{(}\AgdaBound{Q}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaBound{P}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Predicates toolbox}\label{predicates-toolbox}
-
-Here is a small collection of tools that will come in handy later.
-Hopefully the meaning of each is self-explanatory.
-
+\subsubsection{Predicates toolbox}\label{predicates-toolbox}
+Here is a small collection of tools that will come in handy later. Hopefully the meaning of each is self-explanatory.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈∈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -956,19 +891,12 @@ Hopefully the meaning of each is self-explanatory.
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{Imf⊆P}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Predicate product and
-transport}\label{predicate-product-and-transport}
-
-The product \texttt{Π\ P} of a predicate \texttt{P\ :\ Pred\ X\ 𝓤} is
-inhabited iff P x holds for all x : X.
-
+\subsubsection{Predicate product and transport}\label{predicate-product-and-transport}
+The product \af Π \af P of a predicate \af P \as : \af{Pred} \ab X \ab 𝓤 is inhabited iff \af P \ab x holds for all \ab x \as : \ab X.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{ΠP-meaning}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -1001,12 +929,10 @@ inhabited iff P x holds for all x : X.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 The following is a pair of useful ``transport'' lemmas for predicates.
-
+\ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -1113,10 +1039,3 @@ The following is a pair of useful ``transport'' lemmas for predicates.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{x∈B}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Relations.html}{↑ UALib.Relations}
-{\href{UALib.Relations.Binary.html}{UALib.Relations.Binary →}}
-
-\{\% include UALib.Links.md \%\}

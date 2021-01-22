@@ -105,15 +105,6 @@ module _ {𝑆 : Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
 
 \end{code}
 
-Finally,  we will we want to make the blanket assumption throughout the library that we always have an arbitrary large collection `X` of variable symbols and, no matter in what type the domain of our algebra lies, we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from our arbitrary collection of variables onto the domain of 𝑨.
-
-\begin{code}
-
- _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
- X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
-
-\end{code}
-
 ---------------
 
 [← UALib.Algebras.Products](UALib.Algebras.Products.html)

@@ -1,16 +1,6 @@
-\subsubsection{Equivalence Relation
-Types}\label{equivalence-relation-types}
-
-This section presents the {[}UALib.Relations.Equivalences{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-This is all pretty standard. The notions of reflexivity, symmetry, and
-transitivity are defined as one would expect, so we need not dwell on
-them.
-
+This is all pretty standard. The notions of reflexivity, symmetry, and transitivity are defined as one would expect, so we need not dwell on them.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -121,21 +111,12 @@ them.
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaFunction{transitive}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Examples}\label{examples}
-
-The zero relation 𝟎 is equivalent to the identity relation \texttt{≡}
-and, of course, these are both equivalence relations. (In fact, we
-already proved reflexivity, symmetry, and transitivity of \texttt{≡} in
-the {[}UALib.Prelude.Equality{]}{[}{]} module, so we simply apply the
-corresponding proofs where appropriate.)
-
+\subsubsection{Examples}\label{examples}
+The zero relation 𝟎 is equivalent to the identity relation \texttt{≡} and, of course, these are both equivalence relations. (In fact, we already proved reflexivity, symmetry, and transitivity of \texttt{≡} in the {[}UALib.Prelude.Equality{]}{[}{]} module, so we simply apply the corresponding proofs where appropriate.)
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -207,13 +188,10 @@ corresponding proofs where appropriate.)
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{≡-trans}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Finally, we should have at our disposal a proof of the fact that the
-kernel of a function is an equivalence relation.
-
+\ccpad
+Finally, we should have at our disposal a proof of the fact that the kernel of a function is an equivalence relation.
+\cpad
 \begin{code}%
 \>[0]\<%
 \\
@@ -299,11 +277,3 @@ kernel of a function is an equivalence relation.
 \\
 \>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Relations.Binary.html}{← UALib.Relations.Binary}
-{\href{UALib.Relations.Equivalences.html}{UALib.Relations.Equivalences
-→}}
-
-\{\% include UALib.Links.md \%\}

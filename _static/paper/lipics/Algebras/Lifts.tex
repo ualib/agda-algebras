@@ -1,25 +1,21 @@
-\subsubsection{Agda's Universe
-Hierarchy}\label{agdas-universe-hierarchy}
-
-This section presents the {[}UALib.Algebras.Lifts{]}{[}{]} module of the
-{[}Agda Universal Algebra Library{]}{[}{]}.
-
+This section presents the \Lifts module of the \agdaualib.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
 \AgdaPragma{--exact-split}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
-\\
+%
+\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Lifts}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\\
+%
+\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -28,59 +24,35 @@ This section presents the {[}UALib.Algebras.Lifts{]}{[}{]} module of the
 \AgdaKeyword{public}\<%
 \end{code}
 
-\paragraph{The noncumulative
-hierarchy}\label{the-noncumulative-hierarchy}
+\subsubsection{The noncumulative hierarchy}\label{the-noncumulative-hierarchy}
+The hierarchy of universe levels in Agda is structured as \ab{𝓤₀} \as : \ab{𝓤₁}, \hskip3mm \ab{𝓤₁} \as : \ab{𝓤₂}, \hskip3mm \ab{𝓤₂} \as : \ab{𝓤₃}, \ldots{}. This means that \ab{𝓤₀} has type \ab{𝓤₁} \AgdaFunction{̇} and \ab{𝓤ₙ} has type \ab{𝓤ₙ₊₁} \AgdaFunction{̇} for each \ab n.
 
-The hierarchy of universe levels in Agda looks like this:
+It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂} and \ab{𝓤₀} \as : \ab{𝓤₃}, and so on. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, it is this author's experience that a noncummulative hierarchy can sometimes make for a nonfun proof assistant.
 
-𝓤₀ : 𝓤₁, ~ 𝓤₁ : 𝓤₂, ~ 𝓤₂ : 𝓤₃, \ldots{}
+Luckily, there are ways to subvert noncummulativity which, when used with care, do not introduce logically consistencies into the type theory. We describe some techniques we developed for this purpose that are specifically tailored for our domain of applications.
 
-This means that the type level of 𝓤₀ is 𝓤₁, and for each \texttt{n} The
-type level of 𝓤ₙ is 𝓤ₙ₊₁.
-
-It is important to note, however, this does \emph{not} imply that 𝓤₀ :
-𝓤₂ and 𝓤₀ : 𝓤₃, and so on. In other words, Agda's universe hierarchy is
-\textbf{noncummulative}. This makes it possible to treat universe levels
-more generally and precisely, which is nice. On the other hand (in this
-author's experience) a noncummulative hierarchy can sometimes make for a
-nonfun proof assistant.
-
-Luckily, there are ways to overcome this technical issue, and we
-describe some such techniques we developed specifically for our domain.
-
-\paragraph{Lifting and lowering}\label{lifting-and-lowering}
-
-Let us be more concrete about what is at issue here by giving an
-example. Agda will often complain with errors like the following:
-
-\begin{verbatim}
-Birkhoff.lagda:498,20-23
-(𝓤 ⁺) != (𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺)
-when checking that the expression SP𝒦 has type
-Pred (Σ (λ A → (f₁ : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f₁) A)) _𝓦_2346
-\end{verbatim}
-
-First of all, we must know how to interpret such errors. The one above
-means that Agda encountered a type at universe level \texttt{𝓤\ ⁺}, on
-line 498 (columns 20--23) of the file \texttt{Birkhoff.lagda} file, but
-was expecting a type at level \texttt{𝓞\ ⁺\ ⊔\ 𝓥\ ⁺\ ⊔\ 𝓤\ ⁺\ ⁺}
-instead.
-
-To make these situations easier to deal with, we developed some domain
-specific tools for the lifting and lowering of universe levels of our
-algebra types. (Later we do the same for other domain specific types
-like homomorphisms, subalgebras, products, etc). Of course, this must be
-done carefully to avoid making the type theory inconsistent. In
-particular, we cannot lower the level of a type unless it was previously
-lifted to a (higher than necessary) universe level.
-
-A general \texttt{Lift} record type, similar to the one found in the
-{[}Agda Standard Library{]}{[}{]} (in the \texttt{Level} module), is
-defined as follows.
-
-\begin{code}%
-\>[0]\<%
+\subsubsection{Lifting and lowering}\label{lifting-and-lowering}
+Let us be more concrete about what is at issue here by giving an example. Unless we are pedantic enough to worry about which universe level each of our types inhabits, then eventually we will encounter an error like the following:\\
 \\
+\AgdaError{Birkhoff.lagda:498,20-23}\\
+\AgdaError{(𝓤 ⁺)\ !=\ (𝓞 ⁺)\ ⊔\ (𝓥 ⁺)\ ⊔\ ((𝓤 ⁺) ⁺)}\\
+\AgdaError{when checking that the expression SP𝒦 has type}\\
+\AgdaError{Pred\ (Σ\ (λ\ A\ →\ (f₁\ :\ ∣ 𝑆 ∣)\ →\ Op (∥ 𝑆 ∥ f₁) A)) \au 𝓦 \au 2346}\\
+%% \AgdaError{Birkhoff.lagda:498,20-23}\\
+%% (\ab 𝓤 \af ⁺) \as{!=} (\ab 𝓞 \af ⁺) \af ⊔ (\ab 𝓥 \af ⁺) \af ⊔ ((\ab 𝓤 \af ⁺) \af ⁺)\\
+%% \AgdaError{when checking that the expression} \af{SP𝒦} \AgdaError{has type}\\
+%% \af{Pred} (\ad Σ (\as λ \ab A \as → (\ab{f₁} \as : \aiab{∣}{𝑆}) \as → \af Op (\aiab{∥}{𝑆} \ab{f₁}) \ab A)) \au\ab 𝓦\au \AgdaError{2346}\\
+\\
+Just to confirm we all know the meaning of such errors, let's translate the one above. This error means that \agda encountered a type at universe level \ab 𝓤 \af ⁺, on line 498 (in columns 20--23) of the file Birkhoff.lagda, but was expecting a type at level \ab 𝓞 \af ⁺ \af ⊔ \ab 𝓥 \af ⁺ \af ⊔ \ab 𝓤 \af ⁺ \af ⁺ instead.
+
+To make these situations easier to deal with, the \ualib offers some domain specific tools for the \emph{lifting} and \emph{lowering} of universe levels of the main types in the library. In particular, we have functions that will lift or lower the universes of algebra types, homomorphisms, subalgebras, and products.
+
+Of course, messing with the universe level of a type must be done carefully to avoid making the type theory inconsistent.  In particular, a necessary condition is that a type of a given universe level may not be converted to a type of lower universe level \emph{unless the given type was obtained from lifting another type to a higher-than-necessary universe level}.  If this is not clear, don't worry; just press on and soon enough there will be examples that make it clear.
+
+A general \af{Lift} record type, similar to the one found in the \agdastdlib (in the \af{Level} module), is
+defined as follows.
+\ccpad
+\begin{code}%
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Lift}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -110,15 +82,11 @@ defined as follows.
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 Next, we give various ways to lift function types.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lift-dom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -224,15 +192,11 @@ Next, we give various ways to lift function types.
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 We will also need to know that lift and lower compose to the identity.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -279,16 +243,11 @@ We will also need to know that lift and lower compose to the identity.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Now, getting more ``domain-specific,'' we show how to lift algebraic
-operation types and then, finally, algebra types themselves.
-
+\ccpad
+Now, to be more domain-specific, we show how to lift algebraic operation types and then, finally, how to lift algebra types.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
@@ -461,62 +420,4 @@ operation types and then, finally, algebra types themselves.
 \>[1]\AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-∞-algebra}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Finally, we will we want to make the blanket assumption throughout the
-library that we always have an arbitrary large collection \texttt{X} of
-variable symbols and, no matter in what type the domain of our algebra
-lies, we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from our
-arbitrary collection of variables onto the domain of 𝑨.
-
-\begin{code}%
-\>[0]\<%
-\\
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{Epic}\AgdaSpace{}%
-\AgdaBound{h}\<%
-\\
-\>[0]\<%
-\end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Algebras.Products.html}{← UALib.Algebras.Products}
-{\href{UALib.Relations.html}{UALib.Relations →}}
-
-\{\% include UALib.Links.md \%\}

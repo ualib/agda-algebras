@@ -1,13 +1,6 @@
-\subsubsection{Congruence Relation
-Types}\label{congruence-relation-types}
-
-This section presents the {[}UALib.Relations.Congruences{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-Notice that we begin the module by assuming a signature
-\texttt{𝑆\ :\ Signature\ 𝓞\ 𝓥} which is then present and available
-throughout the module.
-
+\newcommand\siOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
+Notice that module begins by assuming a signature \ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.
+\ccpad
 \begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
@@ -225,18 +218,12 @@ throughout the module.
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaBound{R}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Example}\label{example}
-
-We construct the \emph{trivial} (or ``diagonal'' or ``identity'')
-relation and prove it is a congruence as follows.
-
+\subsubsection{Example}\label{example}
+We construct the \emph{trivial} (or ``diagonal'' or ``identity'') relation and prove it is a congruence as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{Δ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -269,20 +256,12 @@ relation and prove it is a congruence as follows.
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Quotient algebras}\label{quotient-algebras}
-
-An important construction in universal algebra is the quotient of an
-algebra 𝑨 with respect to a congruence relation θ of 𝑨. This quotient is
-typically denote by 𝑨 / θ and Agda allows us to define and express
-quotients using the standard notation.
-
+\subsubsection{Quotient algebras}\label{quotient-algebras}
+An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denote by \ab 𝑨 \as / \ab θ and Agda allows us to define and express quotients using the standard notation.
+\\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -379,17 +358,12 @@ quotients using the standard notation.
 \\
 \>[.][@{}l@{}]\<[207I]%
 \>[8]\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Examples}\label{examples}
-
+\subsubsection{Examples}\label{examples}
 The zero element of a quotient can be expressed as follows.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{Zero╱}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -429,15 +403,11 @@ The zero element of a quotient can be expressed as follows.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 Finally, the following elimination rule is sometimes useful.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{╱-refl}\AgdaSpace{}%
 \AgdaSymbol{:\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
@@ -485,13 +455,5 @@ Finally, the following elimination rule is sometimes useful.
 \AgdaSymbol{(}\AgdaField{IsEquiv}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Relations.Quotients.html}{← UALib.Relations.Quotients}
-{\href{UALib.Homomorphisms.html}{UALib.Homomorphisms →}}
-
-\{\% include UALib.Links.md \%\}
