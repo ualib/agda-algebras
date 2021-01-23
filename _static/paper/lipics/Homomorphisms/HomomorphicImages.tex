@@ -1,9 +1,3 @@
-\subsubsection{Homomorphic Image Types}\label{homomorphic-image-types}
-
-This section describes the
-{[}UALib.Homomorphisms.HomomorphicImages{]}{[}{]} module of the {[}Agda
-Universal Algebra Library{]}{[}{]}.
-
 \begin{code}%
 \>[0]\<%
 \\
@@ -51,19 +45,12 @@ Universal Algebra Library{]}{[}{]}.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Images of a single algebra}\label{images-of-a-single-algebra}
-
-We begin with what seems to be (for our purposes at least) the most
-useful way to represent, in Martin-Löf type theory, the class of
-\textbf{homomomrphic images} of an algebra.
-
+\subsubsection{Images of a single algebra}\label{images-of-a-single-algebra}
+We begin with what seems to be (for our purposes at least) the most useful way to represent, in Martin-Löf type theory, the class of \textbf{homomomrphic images} of an algebra.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{HomImage}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -158,19 +145,12 @@ useful way to represent, in Martin-Löf type theory, the class of
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaBound{ϕ}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Images of a class of
-algebras}\label{images-of-a-class-of-algebras}
-
-Here are a few more definitions, derived from the one above, that will
-come in handy.
-
+\subsubsection{Images of a class of algebras}\label{images-of-a-class-of-algebras}
+Here are a few more definitions, derived from the one above, that will come in handy.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}is-hom-image-of\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -357,8 +337,7 @@ come in handy.
 \AgdaBound{g}\<%
 \end{code}
 
-\paragraph{Lifting tools}\label{lifting-tools}
-
+\subsubsection{Lifting tools}\label{lifting-tools}
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
@@ -960,11 +939,3 @@ come in handy.
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{lC≅lB}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Homomorphisms.Isomorphisms.html}{←
-UALib.Homomorphisms.Isomorphisms} {\href{UALib.Terms.html}{UALib.Terms
-→}}
-
-\{\% include UALib.Links.md \%\}

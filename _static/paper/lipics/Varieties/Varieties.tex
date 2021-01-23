@@ -1,49 +1,20 @@
-\subsubsection{Inductive Types H, S, P, and
-V}\label{inductive-types-h-s-p-and-v}
-
-This section presents the {[}UALib.Varieties.Varieties{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
-
+Fix a signature \ab 𝑆, let \ab 𝒦 be a class of \ab 𝑆-algebras, and define
 \begin{itemize}
-\tightlist
-\item
-  H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
-\item
-  S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
-\item
-  P 𝒦 = algebras isomorphic to a product of members of 𝒦.
+\item \ad H \ab 𝒦 \as = algebras isomorphic to a homomorphic image of a members of \ab 𝒦;
+\item \ad S \ab 𝒦 \as = algebras isomorphic to a subalgebra of a member of \ab 𝒦;
+\item \ad P \ab 𝒦 \as = algebras isomorphic to a product of members of \ab 𝒦.
 \end{itemize}
+A straight-forward verification confirms that \ad H, \ad S, and \ad P are \textbf{closure operators} (expansive, monotone, and idempotent). A class \ab 𝒦 of \ab 𝑆-algebras is said to be \emph{closed under the taking of homomorphic images} provided \ad H \ab 𝒦 \aof ⊆ \ab 𝒦. Similarly, \ab 𝒦 is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \ad S \ab 𝒦 \aof ⊆ \ab 𝒦 (resp., \ad P \ab 𝒦 \aof ⊆\ 𝒦).
 
-A straight-forward verification confirms that H, S, and P are
-\textbf{closure operators} (expansive, monotone, and idempotent). A
-class 𝒦 of 𝑆-algebras is said to be \emph{closed under the taking of
-homomorphic images} provided \texttt{H\ 𝒦\ ⊆\ 𝒦}. Similarly, 𝒦 is
-\emph{closed under the taking of subalgebras} (resp., \emph{arbitrary
-products}) provided \texttt{S\ 𝒦\ ⊆\ 𝒦} (resp., \texttt{P\ 𝒦\ ⊆\ 𝒦}).
+An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \ad H \ab 𝒦 (resp., \ad S \ab 𝒦; resp., \ad P \ab 𝒦) is closed under isomorphism.
 
-An algebra is a homomorphic image (resp., subalgebra; resp., product) of
-every algebra to which it is isomorphic. Thus, the class \texttt{H\ 𝒦}
-(resp., \texttt{S\ 𝒦}; resp., \texttt{P\ 𝒦}) is closed under
-isomorphism.
+The operators \ad H, \ad S, and \ad P can be composed with one another repeatedly, forming yet more closure operators.
 
-The operators H, S, and P can be composed with one another repeatedly,
-forming yet more closure operators.
+A \textbf{variety} is a class \ab 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (\ad H), subalgebras (\ad S), and arbitrary products (\ad P). That is, \ab 𝒦 is a variety if and only if \ad H \ad S \ad P \ab 𝒦 \aof ⊆ \ab 𝒦.
 
-A \textbf{variety} is a class 𝒦 of algebras in a fixed signature that is
-closed under the taking of homomorphic images (H), subalgebras (S), and
-arbitrary products (P). That is, 𝒦 is a variety if and only if
-\texttt{H\ S\ P\ 𝒦\ ⊆\ 𝒦}.
-
-This module defines what we have found to be the most useful inductive
-types representing the closure operators H, S, and P. Separately, we
-define the inductive type \texttt{V} for simultaneously representing
-closure under \texttt{H}, \texttt{S}, and \texttt{P}.
-
+This module defines what we have found to be the most useful inductive types representing the closure operators \ad H, \ad S, and \ad P. Separately, we define the inductive type \ab{V} for simultaneously representing closure under \ad H, \ad S, and \ad P.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -120,21 +91,12 @@ closure under \texttt{H}, \texttt{S}, and \texttt{P}.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphism closure}\label{homomorphism-closure}
-
-We define the inductive type \texttt{H} to represent classes of algebras
-that include all homomorphic images of algebras in the class; i.e.,
-classes that are closed under the taking of homomorphic images.
-
+\subsubsection{Homomorphism closure}\label{homomorphism-closure}
+We define the inductive type \ad H to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{--Closure wrt H}\<%
 \\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
@@ -256,21 +218,12 @@ classes that are closed under the taking of homomorphic images.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Subalgebra closure}\label{subalgebra-closure}
-
-The most useful inductive type that we have found for representing
-classes of algebras that are closed under the taking of subalgebras as
-an inductive type.
-
+\subsubsection{Subalgebra closure}\label{subalgebra-closure}
+The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{--Closure wrt S}\<%
 \\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
@@ -423,20 +376,12 @@ an inductive type.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Product closure}\label{product-closure}
-
-The most useful inductive type that we have found for representing
-classes of algebras closed under arbitrary products is the following.
-
+\subsubsection{Product closure}\label{product-closure}
+The most useful inductive type that we have found for representing classes of algebras closed under arbitrary products is the following.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{P}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -646,29 +591,16 @@ classes of algebras closed under arbitrary products is the following.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+\subsubsection{Varietal closure}\label{varietal-closure}
+A class \ab 𝒦 of \ab 𝑆-algebras is called a \textbf{variety} if it is closed under each of the closure operators \ad H, \ad S, and \ad P introduced above; the corresponding closure operator is often denoted 𝕍, but we will typically denote it by \ad V.
 
-\paragraph{Varietal closure}\label{varietal-closure}
+Thus, if \ab 𝒦 is a class of \ab 𝑆-algebras, then the \textbf{variety generated by} \ab 𝒦 is denoted by \ad V \ab 𝒦 and defined to be the smallest class that contains \ab 𝒦 and is closed under \ad H, \ad S, and \ad P.
 
-A class 𝒦 of 𝑆-algebras is called a \textbf{variety} if it is closed
-under each of the closure operators H, S, and P introduced above; the
-corresponding closure operator is often denoted 𝕍, but we will typically
-denote it by \texttt{V}.
-
-Thus, if 𝒦 is a class of 𝑆-algebras, then the \textbf{variety generated
-by} 𝒦 is denoted by \texttt{V\ 𝒦} and defined to be the smallest class
-that contains 𝒦 and is closed under \texttt{H}, \texttt{S}, and
-\texttt{P}.
-
-We now define \texttt{V} as an inductive type.
-
+We now define \ad V as an inductive type.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{V}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -953,21 +885,12 @@ We now define \texttt{V} as an inductive type.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Closure properties}\label{closure-properties}
-
-The types defined above represent operators with useful closure
-properties. We now prove a handful of such properties since we will need
-them later.
-
+\subsubsection{Closure properties}\label{closure-properties}
+The types defined above represent operators with useful closure properties. We now prove a handful of such properties since we will need them later.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{-- P is a closure operator, in particular, it's expansive...}\<%
 \\
 \>[0]\AgdaFunction{P-expa}\AgdaSpace{}%
@@ -1310,17 +1233,11 @@ them later.
 \AgdaBound{ante}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We sometimes want to go back and forth between our two representations
-of subalgebras of algebras in a class. The tools \texttt{subalgebra→S}
-and \texttt{S→subalgebra} are made for that purpose.
-
+\ccpad
+We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools \af{subalgebra→S} and \af{S→subalgebra} are designed for that purpose.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{subalgebra→S}%
 \>[948I]\AgdaSymbol{:}%
 \>[949I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -1901,18 +1818,11 @@ and \texttt{S→subalgebra} are made for that purpose.
 \AgdaSymbol{(}\AgdaFunction{sym-≅}\AgdaSpace{}%
 \AgdaBound{A≅B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{A≅SA}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Next we observe that lifting to a higher universe does not break the
-property of being a subalgebra of an algebra of a class. In other words,
-if we lift a subalgebra of an algebra in a class, the result is still a
-subalgebra of an algebra in the class.
-
+\ccpad
+Next we observe that lifting to a higher universe does not break the property of being a subalgebra of an algebra of a class. In other words, if we lift a subalgebra of an algebra in a class, the result is still a subalgebra of an algebra in the class.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lift-alg-subP}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -2064,16 +1974,11 @@ subalgebra of an algebra in the class.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The next lemma would be too obvoius to care about were it not for the
-fact that we'll need it later, so it too must be formalized.
-
+\ccpad
+The next lemma would be too obvoius to care about were it not for the fact that we'll need it later, so it too must be formalized.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{S⊆SP}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -2543,16 +2448,11 @@ fact that we'll need it later, so it too must be formalized.
 \AgdaSymbol{(}\AgdaFunction{sym-≅}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{A≅B}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We need to formalize one more lemma before arriving the short term
-objective of this section, which is the proof of the inclusion PS⊆SP.
-
+\ccpad
+We need to formalize one more lemma before arriving the short term objective of this section, which is the proof of the inclusion PS⊆SP.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lemPS⊆SP}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -2945,18 +2845,13 @@ objective of this section, which is the proof of the inclusion PS⊆SP.
 \AgdaFunction{⨅≅}\AgdaSpace{}%
 \AgdaBound{gfe}\AgdaSpace{}%
 \AgdaFunction{B≅SA}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{PS(𝒦) ⊆ SP(𝒦)}\label{psux1d4a6-spux1d4a6}
-
-Finally, we are in a position to prove that a product of subalgebras of
-algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
-
+\subsubsection{PS(𝒦) ⊆ SP(𝒦)}\label{psux1d4a6-spux1d4a6}
+Finally, we are in a position to prove that a product of subalgebras of algebras in a class \ab 𝒦 is a subalgebra of a product of algebras in \ab 𝒦.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -3029,7 +2924,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -3064,7 +2959,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
 %
@@ -3072,14 +2967,14 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \>[3]\AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -3122,7 +3017,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -3133,7 +3028,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaFunction{spA}\AgdaSpace{}%
 \AgdaFunction{ζ}\<%
 \\
@@ -3149,7 +3044,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaFunction{splA}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -3163,7 +3058,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
 %
@@ -3171,14 +3066,14 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \>[3]\AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -3221,7 +3116,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
 %
@@ -3229,14 +3124,14 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \>[3]\AgdaFunction{lB}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\<%
+\AgdaFunction{𝓾}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -3252,7 +3147,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg-iso}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{A≅B}\<%
@@ -3308,18 +3203,6 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \>[2]\AgdaKeyword{where}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{uw}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\<%
-\\
-%
-\>[3]\AgdaFunction{uw}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝓾}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
@@ -3329,7 +3212,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)}\<%
 \\
 %
@@ -3338,7 +3221,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{S→subalgebra}\AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{PS⊆SP}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -3352,8 +3235,8 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))}\<%
 \\
 %
@@ -3361,9 +3244,9 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lemPS⊆SP}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaArgument{I}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSymbol{\}\{}\AgdaArgument{ℬ}\AgdaSpace{}%
@@ -3379,9 +3262,9 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))}\<%
 \\
 %
@@ -3389,12 +3272,12 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{subalgebra→S}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaArgument{𝓦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaArgument{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))\}\{}\AgdaArgument{𝑪}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
@@ -3409,8 +3292,8 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)}\<%
 \\
 %
@@ -3418,13 +3301,13 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{S-mono}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))\}\{}\AgdaArgument{𝒦'}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{P-idemp'}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaFunction{η}\<%
@@ -3442,18 +3325,6 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \>[2]\AgdaKeyword{where}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{uw}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\<%
-\\
-%
-\>[3]\AgdaFunction{uw}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝓾}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
@@ -3463,7 +3334,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)}\<%
 \\
 %
@@ -3472,7 +3343,7 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{S→subalgebra}\AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{PS⊆SP}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -3486,8 +3357,8 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))}\<%
 \\
 %
@@ -3495,9 +3366,9 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lemPS⊆SP}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaArgument{I}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSymbol{\}\{}\AgdaArgument{ℬ}\AgdaSpace{}%
@@ -3513,9 +3384,9 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))}\<%
 \\
 %
@@ -3523,12 +3394,12 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{subalgebra→S}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaArgument{𝓦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaArgument{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))\}\{}\AgdaArgument{𝑪}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
@@ -3543,8 +3414,8 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)}\<%
 \\
 %
@@ -3552,13 +3423,13 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{S-mono}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{uw}\AgdaSymbol{)\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝓾}\AgdaSymbol{)\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{uw}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{𝓾}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{))\}\{}\AgdaArgument{𝒦'}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{uw}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦u}\AgdaSymbol{)\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{P-idemp'}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaFunction{η}\<%
@@ -3624,18 +3495,13 @@ algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{PS⊆SP}\AgdaSpace{}%
 \AgdaBound{pA}\<%
-\\
-\>[0]\<%
 \end{code}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\paragraph{More class inclusions}\label{more-class-inclusions}
-
-We conclude this module with three more inclusion relations that will
-have bit parts to play in our formal proof of Birkhoff's Theorem.
-
+\subsubsection{More class inclusions}\label{more-class-inclusions}
+We conclude this module with three more inclusion relations that will have bit parts to play in our formal proof of Birkhoff's Theorem.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{P⊆V}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -3868,34 +3734,18 @@ have bit parts to play in our formal proof of Birkhoff's Theorem.
 \AgdaSymbol{(}\AgdaFunction{SP⊆V}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Products of classes}\label{products-of-classes}
-
-Above we proved PS(𝒦) ⊆ SP(𝒦). It is slightly more painful to prove that
-the product of \emph{all} algebras in the class S(𝒦) is a member of
-SP(𝒦). That is,
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{⨅ S}\OtherTok{(}\NormalTok{𝒦}\OtherTok{)}\NormalTok{ ∈ SP}\OtherTok{(}\NormalTok{𝒦}\OtherTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-This is mainly due to the fact that it's not obvious (at least not to
-this author-coder) what should be the type of the product of all members
-of a class of algebras. After a few false starts, eventually the right
-type revealed itself. Of course, now that we have it in our hands, it
-seems rather obvious.
-
-We now describe the this type of product of all algebras in an arbitrary
-class 𝒦 of algebras of the same signature.
-
-\begin{code}%
-\>[0]\<%
+\subsubsection{Products of classes}\label{products-of-classes}
+Above we proved \ad{PS}(\ab 𝒦) \aof ⊆ \ad{SP}(\ab 𝒦). It is slightly more painful to prove that the product of \emph{all} algebras in the class \ad S(\ab 𝒦) is a member of \ad{SP}(\ab 𝒦). That is,\\
 \\
+\aof ⨅ \ad S (\ab 𝒦) \aof ∈ \ad{SP} (\ab 𝒦 )\\
+\\
+This is mainly due to the fact that it's not obvious (at least not to this author-coder) what should be the type of the product of all members of a class of algebras. After a few false starts, eventually the right type revealed itself. Of course, now that we have it in our hands, it seems rather obvious.
+
+We now describe the this type of product of all algebras in an arbitrary class \ab 𝒦 of algebras of the same signature.
+\ccpad
+\begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{class-product}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -4064,25 +3914,14 @@ class 𝒦 of algebras of the same signature.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-\>[0]\<%
 \end{code}
+\ccpad
+Notice that, if \ab{p\ :\ 𝑨\ ∈\ 𝒦}, then we can think of the pair \ab{(𝑨\ ,\ p)\ ∈\ ℑ\ 𝒦} as an index over the class, and so we can think of \ab{𝔄\ (𝑨\ ,\ p)} (which is obviously \ab{𝑨}) as the projection of the product \ab{⨅\ (\ 𝔄\{𝓤\}\{𝒦\}\ )} onto the \ab{(𝑨\ ,\ p)}-th component.
 
-Notice that, if \texttt{p\ :\ 𝑨\ ∈\ 𝒦}, then we can think of the pair
-\texttt{(𝑨\ ,\ p)\ ∈\ ℑ\ 𝒦} as an index over the class, and so we can
-think of \texttt{𝔄\ (𝑨\ ,\ p)} (which is obviously \texttt{𝑨}) as the
-projection of the product \texttt{⨅\ (\ 𝔄\{𝓤\}\{𝒦\}\ )} onto the
-\texttt{(𝑨\ ,\ p)}-th component.
-
-\paragraph{⨅ S(𝒦) ∈ SP(𝒦)}\label{sux1d4a6-spux1d4a6}
-
-Finally, we prove the result that plays a leading role in the formal
-proof of Birkhoff's Theorem---namely, that our newly defined class
-product ⨅ ( 𝔄\{𝓤\}\{𝒦\} ) belongs to SP(𝒦).
-
+\subsubsection{⨅ S(𝒦) ∈ SP(𝒦)}\label{sux1d4a6-spux1d4a6}
+Finally, we prove the result that plays a leading role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product \aof ⨅ (\ab 𝔄\as{\{}\ab 𝓤\as{\}}\as{\{}\ab 𝒦\as {\}} ) belongs to \ad{SP}(\ab 𝒦).
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{-- The product of all subalgebras of a class 𝒦 belongs to SP(𝒦).}\<%
 \\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -4384,15 +4223,4 @@ product ⨅ ( 𝔄\{𝓤\}\{𝒦\} ) belongs to SP(𝒦).
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{hfe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{class-prod-s-∈-ps}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Varieties.EquationalLogic.html}{←
-UALib.Varieties.EquationalLogic}
-{\href{UALib.Varieties.Preservation.html}{UALib.Varieties.Preservation
-→}}
-
-\{\% include UALib.Links.md \%\}

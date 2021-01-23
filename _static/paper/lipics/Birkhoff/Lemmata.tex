@@ -1,14 +1,7 @@
-\subsubsection{HSP Lemmas}\label{hsp-lemmas}
-This section presents the {[}UALib.Birkhoff.Lemmata{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-Here we establish some facts that will be needed in the proof of
-Birkhoff's HSP Theorem.\\
+Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.\\
 \textbf{Warning}: not all of these are very interesting!
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -39,7 +32,6 @@ Birkhoff's HSP Theorem.\\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Birkhoff.Lemmata}\<%
 \\
@@ -87,7 +79,6 @@ Birkhoff's HSP Theorem.\\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Birkhoff.FreeAlgebra}\AgdaSpace{}%
@@ -95,20 +86,12 @@ Birkhoff's HSP Theorem.\\
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Lemma 0: V is closed under
-lift}\label{lemma-0-v-is-closed-under-lift}
-
-We begin the proof of Birkhoff's HSP theorem by establishing a number of
-facts that we will eventually string together in the HSPTheorem module
-to complete the proof.
-
+\subsubsection{Lemma 0: V is closed under lift}\label{lemma-0-v-is-closed-under-lift}
+We begin with the first of a number of facts that later, in Section~\ref{sec:hsp-theorem}, we use to prove Birkhoff's HSP Theorem.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{the-free-algebra}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
@@ -215,17 +198,10 @@ to complete the proof.
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\<%
 \end{code}
-
-Next we prove the lift-alg-V-closure lemma, which says that if an
-algebra 𝑨 belongs to the variety 𝕍, then so does its lift. This
-dispenses with annoying universe level problems that arise later---a
-minor techinical issue, but the proof is long and tedious, not to
-mention uninteresting.
-
+\ccpad
+Next we prove the \af{lift-alg-V-closure} lemma, which says that if an algebra \ab 𝑨 belongs to the variety \af 𝕍, then so does its lift. This enables us to quickly dispense with any universe level problems that will inevitably arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
-%
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
 \\
@@ -847,13 +823,9 @@ mention uninteresting.
 \end{code}
 
 \subsubsection{Lamma 1: SP(𝒦) ⊆ V(𝒦)}\label{lamma-1-spux1d4a6-vux1d4a6}
-
-Next we formalize the obvious fact that SP(𝒦) ⊆ V(𝒦). Unfortunately, the
-formal proof is neither trivial nor interesting.
-
+Next we formalize the obvious fact that \ad S\ad P(\ab 𝒦) \af ⊆ \ad V(\ab 𝒦). Unfortunately, the formal proof is neither trivial nor interesting.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{SP⊆V'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1118,18 +1090,11 @@ formal proof is neither trivial nor interesting.
 \AgdaSymbol{(}\AgdaFunction{sym-≅}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{A≅B}\<%
-\\
-\>[0]\<%
 \end{code}
 
 \subsubsection{Lemma 2: 𝔽 ≤ ⨅ S(𝒦)}\label{lemma-2-ux1d53d-sux1d4a6}
-
-Now we come to a step in the Agda formalization of Birkhoff's theorem
-that turns out to be surprisingly nontrivial---namely, we need to prove
-that the relatively free algebra 𝔽 embeds in the product ℭ of all
-subalgebras of algebras in the given class 𝒦. To prepare for this, we
-arm ourselves with a small arsenal of notation.
-
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial---namely, we need to prove that the relatively free algebra \af 𝔽 embeds in the product \af ℭ of all subalgebras of algebras in the given class \ab 𝒦. To prepare for this, we arm ourselves with a small arsenal of notation.
+\ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
@@ -1631,15 +1596,10 @@ arm ourselves with a small arsenal of notation.
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \end{code}
 
-\paragraph{Lemma 3: 𝔽 ≤ ℭ}\label{lemma-3-ux1d53d-ux212d}
-
-Armed with these tools, we proceed to the proof that the free algebra 𝔽
-is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦.
-The hard part of the proof is showing that \texttt{𝔣\ :\ hom\ 𝔽\ ℭ} is a
-monomorphism. Let's dispense with that first.
-
+\subsubsection{Lemma 3: 𝔽 ≤ ℭ}\label{lemma-3-ux1d53d-ux212d}
+Armed with these tools, we proceed to the proof that the free algebra \af 𝔽 is a subalgebra of the product \af ℭ of all subalgebras of algebras in \ab 𝒦. The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔽\af ℭ is a monomorphism. Let's dispense with that first.
+\ccpad
 \begin{code}%
-%
 \>[1]\AgdaFunction{Ψ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
@@ -2217,13 +2177,10 @@ monomorphism. Let's dispense with that first.
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaFunction{ψIsEquivalence}\AgdaSpace{}%
 \AgdaFunction{pΨq}\<%
-\\
-\>[0]\<%
 \end{code}
-
-With that out of the way, the proof that 𝔽 is (isomorphic to) a
-subalgebra of ℭ is all but complete.
-
+\ccpad
+With that out of the way, the proof that \af 𝔽 is (isomorphic to) a subalgebra of \af ℭ is all but complete.
+\ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{𝔽≤ℭ}\AgdaSpace{}%
@@ -2273,12 +2230,9 @@ subalgebra of ℭ is all but complete.
 \AgdaFunction{mon𝔣}\<%
 \end{code}
 
-\paragraph{Lemma 4: 𝔽 ∈ V(𝒦)}\label{lemma-4-ux1d53d-vux1d4a6}
-
-Now, with this result in hand, along with what we proved
-earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ 𝕍---it is not hard to show
-that 𝔽 belongs to SP(𝒦), and hence to 𝕍.
-
+\subsubsection{Lemma 4: 𝔽 ∈ V(𝒦)}\label{lemma-4-ux1d53d-vux1d4a6}
+Now, with this result in hand, along with what we proved earlier---namely, \ad P\ad S(\ab 𝒦) \aof ⊆ \ad S\ad P(\ab 𝒦) \aof ⊆ \ad H\ad S\ad P(\ab 𝒦) \aof ≡ \af 𝕍---it is not hard to show that \af 𝔽 belongs to \ad S\ad P(\ab 𝒦), and hence to \af 𝕍.
+\ccpad
 \begin{code}%
 %
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
@@ -2353,8 +2307,4 @@ that 𝔽 belongs to SP(𝒦), and hence to 𝕍.
 \AgdaFunction{SP⊆V'}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{𝔽∈SP}\AgdaSpace{}%
 \AgdaBound{Cset}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\{\% include UALib.Links.md \%\}

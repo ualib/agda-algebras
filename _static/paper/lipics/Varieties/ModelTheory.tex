@@ -1,53 +1,17 @@
-\subsubsection{Types for Theories and
-Models}\label{types-for-theories-and-models}
+In his treatment of Birhoff's HSP theorem, Cliff Bergman (\cite[Section 4.4]{Bergman:2012} proclaims, ``Now, finally, we can formalize the idea we have been using since the first page of this text.'' He then defines \textbf{identities of terms} as follows (paraphrasing for notational consistency):
 
-This section presents the {[}UALib.Varieties.ModelTheory{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
+Let \ab 𝑆 be a signature. An \textbf{identity} or \textbf{equation} in \ab 𝑆 is an ordered pair of terms, written \ab 𝑝 \aof ≈ \ab 𝑞, from the term algebra \af 𝑻 \ab X. If \ab 𝑨 is an \ab 𝑆-algebra we say that \ab 𝑨 \textbf{satisfies} \ab 𝑝 \aof ≈ \ab 𝑞 if \ab 𝑝 \af ̇ \ab 𝑨 \aod ≡ \ab 𝑞 \aof ̇ \ab 𝑨. In this situation, we write \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 and say that \ab 𝑨 \textbf{models} the identity \ab 𝑝 \aof ≈ \ab q.
 
-In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start
-of Section 4.4 of {[}Bergman (2012){]}{[}{]}) proclaims, ``Now, finally,
-we can formalize the idea we have been using since the first page of
-this text.'' He then proceeds to define \textbf{identities of terms} as
-follows (paraphrasing for notational consistency):
+If \ab 𝒦 is a class of structures, all of the same signature, it is standard to write \ab 𝒦 \aof ⊧ \ab p \aof ≈ \ab q just in case all structures in the class \ab 𝒦 model the identity \ab p \aof ≈ \ab q. However, because a class of structures has a different type than a single structure, we will need to use a different notation, and we settle for \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q to denote this concept.
 
-Let 𝑆 be a signature. An \textbf{identity} or \textbf{equation} in 𝑆 is
-an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra
-\texttt{𝑻\ X}. If 𝑨 is an 𝑆-algebra we say that 𝑨 \textbf{satisfies} 𝑝 ≈
-𝑞 if \texttt{𝑝\ ̇\ 𝑨\ \ ≡\ \ 𝑞\ ̇\ 𝑨}. In this situation, we write
-\texttt{𝑨\ ⊧\ 𝑝\ ≈\ 𝑞} and say that 𝑨 \textbf{models} the identity
-\texttt{𝑝\ ≈\ q}.
+Thus, if \ab 𝒦 is a class of \ab 𝑆-algebras, we write \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≋ \ab 𝑞 if for every \ab 𝑨 \aof ∈ \ab 𝒦 we have \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.
 
-If 𝒦 is a class of structures, all of the same signature, it is standard
-to write \texttt{𝒦\ ⊧\ p\ ≈\ q} just in case all structures in the class
-𝒦 model the identity p ≈ q. However, because a class of structures has a
-different type than a single structure, we will need to use a different
-notation, and we settle for \texttt{𝒦\ ⊧\ p\ ≋\ q} to denote this
-concept.
-
-Thus, if 𝒦 is a class of 𝑆-algebras, we write \texttt{𝒦\ ⊧\ 𝑝\ ≋\ 𝑞} if
-for every \texttt{𝑨\ ∈\ 𝒦} we have \texttt{𝑨\ ⊧\ 𝑝\ ≈\ 𝑞}.
-
-In this module we formalize these notions by defining types that
-represent them. Before we attempt to do that, however, let us say a bit
-more precisely what the definition of \texttt{𝑨\ ⊧\ 𝑝\ ≈\ 𝑞} entails.
-When we write \texttt{𝑨\ ⊧\ 𝑝\ ≈\ 𝑞} and say that the identity
-\texttt{p\ ≈\ q} is satisfied in 𝑨, we mean that for each assignment
-function \texttt{𝒂\ :\ X\ →\ ∣\ 𝑨\ ∣}, assigning values in the domain of
-𝑨 to the variable symbols in \texttt{X}, we have
-\texttt{(𝑝\ ̇\ 𝑨)\ 𝒂\ ≡\ (𝑞\ ̇\ 𝑨)\ 𝒂}.
-
-\textbf{Notation}. To produce the symbols ≈ and ⊧ in Emacs
-\texttt{agda2-mode}, type
-\texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and
-\texttt{\textbackslash{}models} (resp.). As mentioned, to denote ``𝒦
-models 𝑝 ≈ 𝑞'' we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝
-≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation.
-The symbol ≋ is produced in Emacs \texttt{agda2-mode} with
-\texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
-
-\begin{code}%
-\>[0]\<%
+In this module we formalize these notions by defining types that represent them. Before we attempt to do that, however, let us say a bit more precisely what the definition of \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 entails. When we write \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 and say that the identity \ab p \aof ≈ \ab q is satisfied in \ab 𝑨, we mean that for each assignment function \ab 𝒂 \as : \ab X \as → \aiab{∣}{𝑨}, assigning values in the domain of 𝑨 to the variable symbols in \ab X, we have (\ab 𝑝 \aof ̇ \ab 𝑨) \ab 𝒂 \aof ≡ (\ab 𝑞 \aof ̇ \ab 𝑨) \ab 𝒂.\\
 \\
+\textbf{Notation}. To produce the symbols \aof ≈ and \aof ⊧ in Emacs \agdamode, type \texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}} and \texttt{\textbackslash{}models} (resp.). As mentioned, to denote ``𝒦 models 𝑝 ≈ 𝑞'' we will use \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≋ \ab 𝑞 instead of the more standard \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 because we distinguish it from \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 in our Agda implementation. The symbol \aof ≋ is produced in Emacs \agdamode with
+\texttt{\textbackslash{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}.
+\ccpad
+\begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -78,7 +42,6 @@ The symbol ≋ is produced in Emacs \texttt{agda2-mode} with
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Varieties.ModelTheory}\<%
 \\
@@ -117,27 +80,20 @@ The symbol ≋ is produced in Emacs \texttt{agda2-mode} with
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.Subalgebras}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+\subsubsection{The models relation}\label{the-models-relation}
 
-\paragraph{The models relation}\label{the-models-relation}
+We define the binary ``models'' relation \aof ⊧ relating algebras (or classes of algebras) to the identities that they satisfy.  Agda supports the definition of infix operations and relations, and we use this to define \aof ⊧ so that we may write, e.g., \ab 𝑨 \aof ⊧ \ab p \aof ≈ \ab q or \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q.
 
-We define the binary ``models'' relation ⊧, with infix so that we may
-write, e.g., \texttt{𝑨\ ⊧\ p\ ≈\ q} or \texttt{𝒦\ ⊧\ p\ ≋\ q}, relating
-algebras (or classes of algebras) to the identities that they satisfy.
-We also prove a coupld of useful facts about ⊧. More will be proved
-about ⊧ in the next module,
-\href{UALib.Varieties.EquationalLogic.html}{UALib.Varieties.EquationalLogic}.
+After \aof ⊧ is defined, we prove just a couple of useful facts about \aof ⊧. However, more is proved about the models relation in the next section (Section~\ref{sec:equational-logic-types}).
+%% \href{UALib.Varieties.EquationalLogic.html}{Varieties.EquationalLogic}.
 
 \begin{code}%
 \>[0]\<%
@@ -239,21 +195,12 @@ about ⊧ in the next module,
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
 \AgdaBound{q}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Equational theories and
-models}\label{equational-theories-and-models}
-
-The set of identities that hold for all algebras in a class 𝒦 is denoted
-by \texttt{Th\ 𝒦}, which we define as follows.
-
+\subsubsection{Equational theories and models}\label{equational-theories-and-models}
+The set of identities that hold for all algebras in a class 𝒦 is denoted by \af{Th} \ab 𝒦, which we define as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{Th}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -301,19 +248,11 @@ by \texttt{Th\ 𝒦}, which we define as follows.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≋}}\AgdaSpace{}%
 \AgdaBound{q}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The class of algebras that satisfy all identities in a given set ℰ is
-denoted by \texttt{Mod\ ℰ}. We given three nearly equivalent definitions
-for this below. The only distinction between these is whether the
-arguments are explicit (so must appear in the argument list) or implicit
-(so we may let Agda do its best to guess the argument).
-
+\ccpad
+The class of algebras that satisfy all identities in a given set \ab ℰ is denoted by \af{Mod} \ab ℰ. We given three nearly equivalent definitions for this below. The only distinction between these is whether the arguments are explicit (so must appear in the argument list) or implicit (so we may let Agda do its best to guess the argument).
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{MOD}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -514,21 +453,12 @@ arguments are explicit (so must appear in the argument list) or implicit
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
 \AgdaBound{q}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{⊧-≅ compatibility}\label{compatibility}
-
-The binary relation ⊧ would be practically useless if it were not an
-\emph{algebraic invariant} (i.e., invariant under isomorphism), and
-later we will need a formal proof of this property at hand.
-
+\subsubsection{⊧-≅ compatibility}\label{id-compatibility}
+The binary relation \aof ⊧ would be practically useless if it were not an \emph{algebraic invariant} (i.e., invariant under isomorphism), and later we will need a formal proof of this property at hand.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{⊧-≅}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -772,19 +702,11 @@ later we will need a formal proof of this property at hand.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⊧-transport}\AgdaSpace{}%
 \AgdaComment{-- (alias)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{⊧-lift compatibility}\label{lift-compatibility}
-
-The ⊧ relation is also compatible with the lift operation.
-
+\ccpad
+The \aof ⊧ relation is also compatible with the lift operation.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lift-alg-⊧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -929,14 +851,4 @@ The ⊧ relation is also compatible with the lift operation.
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Varieties.html}{↑ UALib.Varieties}
-{\href{UALib.Varieties.EquationalLogic.html}{UALib.Varieties.EquationalLogic
-→}}
-
-\{\% include UALib.Links.md \%\}

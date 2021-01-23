@@ -1,8 +1,3 @@
-\subsubsection{Term Operation Types}\label{term-operation-types}
-
-This section presents the {[}UALib.Terms.Operations{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-
 \begin{code}%
 \>[0]\<%
 \\
@@ -82,34 +77,22 @@ the {[}Agda Universal Algebra Library{]}{[}{]}.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
-
-When we interpret a term in an algebra we call the resulting function a
-\textbf{term operation}. Given a term \texttt{𝑝\ :\ Term} and an algebra
-𝑨, we denote by \texttt{𝑝\ ̇\ 𝑨} the \textbf{interpretation} of 𝑝 in 𝑨.
+\ccpad
+When we interpret a term in an algebra we call the resulting function a \textbf{term operation}. Given a term \ab 𝑝\ \as : \af{Term} and an algebra \ab 𝑨, we denote by \ab 𝑝 \af ̇ \ab 𝑨 the \textbf{interpretation} of \ab 𝑝 in \ab 𝑨.
 This is defined inductively as follows:
-
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  if 𝑝 is \texttt{x\ :\ X} (a variable) and if
-  \texttt{𝒂\ :\ X\ →\ ∣\ 𝑨\ ∣} is a tuple of elements of
-  \texttt{∣\ 𝑨\ ∣}, then define \texttt{(𝑝\ ̇\ 𝑨)\ 𝒂\ =\ 𝒂\ x};
+  if \ab 𝑝 is \ab x \as : \ab X (a variable) and if \ab 𝒂 \as : \ab X \as → \aiab{∣}{𝑨} is a tuple of elements of
+  \aiab{∣}{𝑨}, then define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝒂 = \ab 𝒂 \ab x;
 \item
-  if 𝑝 = 𝑓 𝒔, where \texttt{𝑓\ :\ ∣\ 𝑆\ ∣} is an operation symbol and
-  \texttt{𝒔\ :\ ∥\ 𝑆\ ∥\ f\ →\ 𝑻\ X} is an (\texttt{∥\ 𝑆\ ∥\ f})-tuple
-  of terms and \texttt{𝒂\ :\ X\ →\ ∣\ 𝑨\ ∣} is a tuple from \texttt{𝑨},
-  then we define `(𝑝 ̇ 𝑨) 𝒂 = ((𝑓 𝒔) ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → ((𝒔 i) ̇ 𝑨) 𝒂``
+  if \ab 𝑝 \as = \ab 𝑓 \ab 𝒔, where \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol and  \ab 𝒔 \as : \aiab{∥}{𝑆} \ab f \as → \af 𝑻 \ab X is an (\aiab{∥}{𝑆} \ab f)-tuple of terms and \ab 𝒂 \as : \ab X \as → \aiab{∣}{𝑨} is a tuple from \ab 𝑨, then define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝒂 = ((\ab 𝑓 \ab 𝒔) \af ̇ \ab 𝑨) \ab 𝒂 = (\ab 𝑓 \af ̂ \ab 𝑨) \as λ \ab i \as → ((\ab 𝒔 \ab i) \af ̇ \ab 𝑨) \ab 𝒂
 \end{enumerate}
-
-In the {[}Agda UALib{]}{[}{]} term interpretation is defined as follows.
-
+In the \agdaualib term interpretation is defined as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -167,13 +150,10 @@ In the {[}Agda UALib{]}{[}{]} term interpretation is defined as follows.
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒂}\<%
 \end{code}
-
-Observe that intepretation of a term is the same as \texttt{free-lift}
-(modulo argument order).
-
+\ccpad
+Observe that intepretation of a term is the same as \af{free-lift} (modulo argument order).
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{free-lift-interpretation}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[100I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -288,50 +268,32 @@ Observe that intepretation of a term is the same as \texttt{free-lift}
 \>[0]\AgdaFunction{lift-hom-interpretation}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{free-lift-interpretation}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Here we want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕\ldots{} but what
-is (𝑝 ̇ 𝑻(X)) 𝒕 ?
-
-By definition, it depends on the form of 𝑝 as follows:
-
+\ccpad
+Here we want (\ab 𝒕 \as : \ab X \as → \aiab{∣}{𝑻(X)}) \as → ((\ab p \af ̇ \af 𝑻(\ab X)) \ab 𝒕) \ad ≡ \ab p \ab 𝒕 …, but what is (\ab 𝑝 \af ̇ \af 𝑻(\ab X)) \ab 𝒕?  By definition, it depends on the form of \ab 𝑝 as follows:
 \begin{itemize}
 \item
-  if 𝑝 = (generator x), then (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
+  if \ab 𝑝 \as = (\aic{generator} \ab x), then (\ab 𝑝 \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = ((\aic{generator} \ab x) \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = \ab 𝒕 \ab x
 \item
-  if 𝑝 = (node f args), then (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂
-  𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+  if \ab 𝑝 \as = (\aic{node} \ab f \ab{args}), then (\ab 𝑝 \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = ((\aic{node} \ab f \ab{args}) \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = (\ab f \af ̂ \af 𝑻(\ab X)) \as λ \ab i \as → (\ab{args} \ab i \af ̇ \af 𝑻(\ab X)) \ab 𝒕.
 \end{itemize}
+Let \ab h \as : \af{hom} \af 𝑻 \ab 𝑨. Then by \af{comm-hom-term}, \aiab{∣}{h} (\ab p \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = (\ab p \af ̇ \ab 𝑨) \aiab{∣}{h} \af ∘ \ab 𝒕.
+\begin{itemize}
+\item
+  if \ab p \as = (\aic{generator} \ab x), then
+\end{itemize}
+\aiab{∣}{h} \ab p \ad ≡ \aiab{∣}{h} (\aic{generator} \ab x) \ad ≡ \as λ \ab 𝒕 \as → \ab 𝒕 \ab x) (where \ab 𝒕 \as : \ab X \as → \aiab{∣}{𝑻(X)}) \ad ≡ (\as λ \ab 𝒕 \as → (\aiab{∣}{h} \af ∘ \ab 𝒕) \ab x)
 
-Let h : hom 𝑻 𝑨. Then by comm-hom-term, ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣
-∘ 𝒕
+\aiab{∣}{h} \ab p \ad ≡ \aiab{∣}{h} (\as λ \ab 𝒕 \as → \ab 𝒕 \ab x) (where \ab 𝒕 \as : \ab X \as → \aiab{∣}{𝑻(X)}) \ad ≡ (\as λ \ab 𝒕 \as → (\aiab{∣}{h} \af ∘ \ab 𝒕) \ab x)
 
 \begin{itemize}
-\tightlist
-\item
-  if p = (generator x), then
+\item if \ab p \as = (\aic{node} \ab f \ab{args}), then
 \end{itemize}
 
-∣ h ∣ p ≡ ∣ h ∣ (generator x) ≡ λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ ) ≡
-(λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+\aiab{∣}{h} \ab p \ad ≡ \aiab{∣}{h} (\ab p \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = ((\aic{node} \ab f \ab{args}) \af ̇ \af 𝑻(\ab X)) \ab 𝒕 \as = (\ab f \af ̂ \af 𝑻(\ab X)) \as λ \ab i \as → (\ab{args} \ab i \af ̇ \af 𝑻(\ab X)) \ab 𝒕.
 
-∣ h ∣ p ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ ) ≡ (λ 𝒕 → (∣ h ∣ ∘
-𝒕) x)
-
-\begin{itemize}
-\tightlist
-\item
-  if p = (node f args), then
-\end{itemize}
-
-∣ h ∣ p ≡ ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i →
-(args i ̇ 𝑻(X)) 𝒕
-
-We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X →
-∣ 𝑻(X) ∣ such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact as follows.
-
+We claim that if \ab p \as : \aiab{∣}{𝑻(X)} then there exists \ab 𝓅 \as : \aiab{∣}{𝑻(X)} and \ab 𝒕 \as : \ab X \as → \aiab{∣}{𝑻(X)} such that \ab p \ad ≡ (\ab 𝓅 \af ̇ \af 𝑻(\ab X)) \ab 𝒕. We prove this fact as follows.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{term-op-interp1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -783,10 +745,7 @@ We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ an
 \AgdaBound{p}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Interpretation of terms in product
-algebras}\label{interpretation-of-terms-in-product-algebras}
+\subsubsection{Interpretation of terms in product algebras}\label{interpretation-of-terms-in-product-algebras}
 
 \begin{code}%
 \>[0]\AgdaFunction{interp-prod}\AgdaSpace{}%
@@ -1154,13 +1113,4 @@ algebras}\label{interpretation-of-terms-in-product-algebras}
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)))}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Terms.Free.html}{← UALib.Terms.Free}
-{\href{UALib.Terms.Compatibility.html}{UALib.Terms.Compatibility →}}
-
-\{\% include UALib.Links.md \%\}

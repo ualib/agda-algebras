@@ -1,8 +1,3 @@
-\subsubsection{Homomorphism Theorems}\label{homomorphism-theorems}
-
-This chapter presents the {[}UALib.Homomorphisms.Noether{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
 \begin{code}%
 \>[0]\<%
 \\
@@ -52,20 +47,12 @@ of the {[}Agda Universal Algebra Library{]}{[}{]}.
 \AgdaKeyword{hiding}\AgdaSpace{}%
 \AgdaSymbol{(}global-dfunext\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{The First Isomorphism
-Theorem}\label{the-first-isomorphism-theorem}
-
-Here is a version of the first isomorphism theorem.
-
+\subsubsection{The First Homomorphism Theorem}\label{the-first-isomorphism-theorem}
+Here is a version of the so-called \emph{First Homomorphism Theorem} (aka, the \emph{First Isomorphism Theorem}).
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Congruence}\<%
 \\
@@ -592,21 +579,14 @@ Here is a version of the first isomorphism theorem.
 \AgdaBound{Bset}\AgdaSpace{}%
 \AgdaFunction{fmap}\AgdaSpace{}%
 \AgdaFunction{fmon}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\textbf{TODO}: Proof of uniqueness of \texttt{f} is missing.
+%\textbf{TODO}: Proof of uniqueness of \texttt{f} is missing.
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphism composition}\label{homomorphism-composition}
-
+\subsubsection{Homomorphism composition}\label{homomorphism-composition}
 The composition of homomorphisms is again a homomorphism.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
@@ -1091,18 +1071,10 @@ The composition of homomorphisms is again a homomorphism.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{f}\AgdaSymbol{\}\{}\AgdaBound{g}\AgdaSymbol{\}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphism decomposition}\label{homomorphism-decomposition}
-
-If \texttt{g\ :\ hom\ 𝑨\ 𝑩}, \texttt{h\ :\ hom\ 𝑨\ 𝑪}, \texttt{h} is
-surjective, and \texttt{ker\ h\ ⊆\ ker\ g}, then there exists
-\texttt{ϕ\ :\ hom\ 𝑪\ 𝑩} such that \texttt{g\ =\ ϕ\ ∘\ h}, that is, such
-that the following diagram commutes;
+\subsubsection{Homomorphism decomposition}\label{homomorphism-decomposition}
+If \ab g \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab h \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab h is surjective, and \af{ker} \ab h \af{⊆} \af{ker} \ab g, then there exists \ab ϕ \as : \af{hom} \ab 𝑪 \ab 𝑩\as{\}} such that \ab g \as = \ab ϕ \af ∘ \ab h, that is, such that the following diagram commutes.
 
 \begin{verbatim}
 𝑨---- h -->>𝑪
@@ -1114,11 +1086,8 @@ that the following diagram commutes;
       V
       𝑩
 \end{verbatim}
-
-This, or some variation of it, is sometimes referred to as the Second
-Isomorphism Theorem. We formalize its statement and proof as follows.
-(Notice that the proof is constructive.)
-
+This, or some variation of it, is sometimes referred to as the \emph{Second Isomorphism Theorem}. We formalize its statement and proof as follows. (Notice that the proof is constructive.)
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{homFactor}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -1636,11 +1605,3 @@ Isomorphism Theorem. We formalize its statement and proof as follows.
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSymbol{)}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Homomorphisms.Kernels.html}{← UALib.Homomorphisms.Kernels}
-{\href{UALib.Homomorphisms.Products.html}{UALib.Homomorphisms.Products
-→}}
-
-\{\% include UALib.Links.md \%\}

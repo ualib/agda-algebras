@@ -1,15 +1,6 @@
-\subsubsection{Equational Logic Types}\label{equational-logic-types}
-
-This section presents the {[}UALib.Varieties.EquationalLogic{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-We establish some important features of the ``models'' relation, which
-demonstrate the nice relationships ⊧ has with the other protagonists of
-our story, H, S, and P.
-
+We establish some important features of the ``models'' relation, which demonstrate the nice relationships ⊧ has with the other protagonists of our story, H, S, and P.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -40,7 +31,6 @@ our story, H, S, and P.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Varieties.EquationalLogic}\<%
 \\
@@ -79,7 +69,6 @@ our story, H, S, and P.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Varieties.ModelTheory}\AgdaSpace{}%
@@ -96,33 +85,24 @@ our story, H, S, and P.
 \AgdaFunction{domain}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{embeddings-are-lc}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Product transport}\label{product-transport}
-
-We prove that identities satisfied by all factors of a product are also
-satisfied by the product.
-
+\subsubsection{Product transport}\label{product-transport}
+We prove that identities satisfied by all factors of a product are also satisfied by the product.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{product-id-compatibility}\AgdaSpace{}%
 \AgdaComment{-- (alias)}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{products-preserve-identities}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\>[1]\AgdaFunction{products-preserve-identities}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}%
+\>[63I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓧}%
-\>[63I]\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
@@ -155,7 +135,7 @@ satisfied by the product.
 \AgdaBound{q}\AgdaSymbol{)}\<%
 \\
 %
-\>[31]\AgdaComment{--------------------------------------------------}\<%
+\>[31]\AgdaComment{------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
@@ -294,7 +274,10 @@ satisfied by the product.
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
+\\
+\>[178I][@{}l@{\AgdaIndent{0}}]%
+\>[31]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
@@ -329,7 +312,7 @@ satisfied by the product.
 \AgdaBound{q}\AgdaSymbol{)}\<%
 \\
 %
-\>[31]\AgdaComment{--------------------------------------------------}\<%
+\>[31]\AgdaComment{-------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
@@ -452,11 +435,11 @@ satisfied by the product.
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 %
-\>[40]\AgdaComment{-----------------------------------------------------}\<%
+\>[40]\AgdaComment{-------------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
-\>[41]\AgdaFunction{⨅}\AgdaSpace{}%
+\>[40]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
@@ -529,18 +512,10 @@ satisfied by the product.
 \AgdaFunction{products-in-class-preserve-identities}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Subalgebra transport}\label{subalgebra-transport}
-
-We show that identities modeled by a class of algebras is also modeled
-by all subalgebras of the class. In other terms, every term equation
-\texttt{p\ ≈\ q} that is satisfied by all \texttt{𝑨\ ∈\ 𝒦} is also
-satisfied by every subalgebra of a member of 𝒦.
-
+\subsubsection{Subalgebra transport}\label{subalgebra-transport}
+We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class. In other terms, every term equation \ab p \aof ≈ \ab q that is satisfied by all \ab 𝑨 \aof ∈ \ab 𝒦 is also satisfied by every subalgebra of a member of \ab 𝒦.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{S-⊧}\AgdaSpace{}%
 \AgdaComment{-- (alias)}\<%
 \\
@@ -932,24 +907,15 @@ satisfied by every subalgebra of a member of 𝒦.
 \>[0]\AgdaComment{-- subalgebra-id-compatibility = subalgebras-preserve-identities}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphism transport}\label{homomorphism-transport}
-
-Recall that an identity is satisfied by all algebras in a class if and
-only if that identity is compatible with all homomorphisms from the term
-algebra \texttt{𝑻\ X} into algebras of the class. More precisely, if 𝓚
-is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
-
-\[𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, \; ∀ h : \mathrm{hom} (𝑻 X) 𝑨, \; h ∘ (𝑝 ̇ (𝑻 X)) = h ∘ (𝑞 ̇ (𝑻 X)).\]
-
-We now formalize this result in Agda and we prove that identities
-satisfied by all algberas in a class are also satsified by all
-homomorphic images of algebras in the class.
-
-\begin{code}%
-\>[0]\<%
+\subsubsection{Homomorphism transport}\label{homomorphism-transport}
+Recall that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra \af 𝑻 \ab X into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,\\
 \\
+\ab 𝒦 \aof ⊧ \ab p \aof ≈ \ab q \hskip3mm ⇔ \hskip3mm
+\as ∀ \ab 𝑨 \aof ∈ \ab 𝒦, \as ∀ \ab h \as : \af{hom} (\af 𝑻 \ab X) \ab 𝑨, \ab h \aof ∘ (\ab 𝑝 \aof ̇ (\af 𝑻 \ab X)) \as = \ab h \aof ∘ (\ab 𝑞 \aof ̇ (\af 𝑻 \ab X)).\\
+\\
+We now formalize this result in Agda and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
+\ccpad
+\begin{code}%
 \>[0]\AgdaComment{-- ⇒ (the "only if" direction)}\<%
 \\
 \>[0]\AgdaFunction{id-class-hom-compatibility}\AgdaSpace{}%
@@ -989,7 +955,7 @@ homomorphic images of algebras in the class.
 \AgdaBound{q}\<%
 \\
 \>[.][@{}l@{}]\<[589I]%
-\>[33]\AgdaComment{--------------------------------------------------}\<%
+\>[33]\AgdaComment{-------------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
@@ -1298,11 +1264,11 @@ homomorphic images of algebras in the class.
 \AgdaSymbol{)}\<%
 \\
 %
-\>[34]\AgdaComment{----------------------------------------------------}\<%
+\>[34]\AgdaComment{----------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
-\>[35]\AgdaBound{𝒦}\AgdaSpace{}%
+\>[34]\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≋}}\AgdaSpace{}%
@@ -1498,7 +1464,7 @@ homomorphic images of algebras in the class.
 \AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[17]\AgdaComment{----------------------------------------------------------------}\<%
+\>[17]\AgdaComment{-------------------------------------------------}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
@@ -1558,17 +1524,11 @@ homomorphic images of algebras in the class.
 \>[45]\AgdaFunction{homs-compatible-with-identities}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Here's a simpler special case of the previous result that suffices when
-we're interested in just a single algebra, rather than a class of
-algebras.
-
+\ccpad
+Here's a simpler special case of the previous result that suffices when we're interested in just a single algebra, rather than a class of algebras.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{hom-id-compatibility}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[1024I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -1599,7 +1559,7 @@ algebras.
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
-\>[24]\AgdaBound{𝑨}\AgdaSpace{}%
+\>[23]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
@@ -1729,10 +1689,3 @@ algebras.
 \AgdaBound{q}%
 \>[54]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Varieties.ModelTheory.html}{← UALib.Varieties.ModelTheory}
-{\href{UALib.Varieties.Varieties.html}{UALib.Varieties.Varieties →}}
-
-\{\% include UALib.Links.md \%\}

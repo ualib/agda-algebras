@@ -1,15 +1,6 @@
-\subsubsection{Term Compatibility
-Theorems}\label{term-compatibility-theorems}
-
-This section presents the {[}UALib.Terms.Compatibility{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-In this module, we prove that every term commutes with every
-homomorphism and is compatible with every congruence.
-
+Here we prove that every term commutes with every homomorphism and is compatible with every congruence.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -88,19 +79,13 @@ homomorphism and is compatible with every congruence.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphism compatibility}\label{homomorphism-compatibility}
+\subsubsection{Homomorphism compatibility}\label{homomorphism-compatibility}
 
 We first prove an extensional version of this fact.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{comm-hom-term}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -270,15 +255,11 @@ We first prove an extensional version of this fact.
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSymbol{))}%
 \>[43]\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 Here is an intensional version.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{comm-hom-term-intensional}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{global-dfunext}\AgdaSpace{}%
@@ -615,21 +596,12 @@ Here is an intensional version.
 \AgdaFunction{IH}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{i}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Congruence compatibility}\label{congruence-compatibility}
-
-If t : Term, θ : Con 𝑨, then a θ b → t(a) θ t(b)). The statement and
-proof of this obvious but important fact may be formalized in Agda as
-follows.
-
+\subsubsection{Congruence compatibility}\label{congruence-compatibility}
+If \ab t \as : \af{Term}, \ab θ \as : \af{Con} \ab 𝑨, then \ab a \ab θ \ab b \as → \ab t(\ab a) \ab θ \ab t(\ab b)). The statement and proof of this obvious but important fact may be formalized in Agda as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{compatible-term}%
 \>[452I]\AgdaSymbol{:}%
 \>[453I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -773,13 +745,5 @@ follows.
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Terms.Operations.html}{← UALib.Terms.Operations}
-{\href{UALib.Subalgebras.html}{UALib.Subalgebras →}}
-
-\{\% include UALib.Links.md \%\}

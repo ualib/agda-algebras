@@ -15,14 +15,14 @@ We being the \PreludeEquality module by formalizing the proof that \ad ≡ is an
 \AgdaSymbol{\#-\}}\<%
 \\
 %
-\\
+\ccpad
 %
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Equality}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 %
-\\
+\ccpad
 %
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
@@ -186,7 +186,7 @@ The only difference between \texttt{≡-trans} and \texttt{≡-Trans} is that th
 \subsubsection{Functions preserve refl}\label{functions-preserve-refl}
 A function is well defined only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs. If we have a function \ab f \as :\ab X\as →\ab Y, two elements \ab x \ab{x'} \as : \ab X of the domain, and an identity proof \ab p \as : \ab x \ad{≡} \ab{x'}, then we obtain a proof of \ab f \ab x \ad ≡ \ab f \ab{x'} by simply applying the \af{ap} function like so, \af{ap} \ab f \ab p \as : \ab f \ab x \ad ≡ \ab f \ab{x'}.
 
-\mhe defines \af{ap} in the \TypeTopology library so we needn't redefine it here. Instead, we define some variations of \af{ap} that are sometimes useful.
+\mhe defines \af{ap} in the \TypeTopology library so we needn't redefine it here. Instead, we define two variations of \af{ap} that are sometimes useful.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ap-cong}\AgdaSpace{}%
@@ -194,10 +194,8 @@ A function is well defined only if it maps equivalent elements to a single eleme
 \>[128I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[128I]%
-\>[10]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -206,7 +204,7 @@ A function is well defined only if it maps equivalent elements to a single eleme
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
 \\
-%
+\>[.][@{}l@{}]\<[128I]%
 \>[10]\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -250,8 +248,7 @@ A function is well defined only if it maps equivalent elements to a single eleme
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \end{code}
 \ccpad
-We sometimes need a version of this that works for dependent types, such as the following (which we borrow from the
-\texttt{Relation/Binary/Core.agda} module of the \agdastdlib, transcribed into MHE/UALib notation of course).
+We sometimes need a version of \af{ap-cong} that works for dependent types, such as the following (which we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib, transcribed into MHE/UALib notation of course).
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{cong-app}\AgdaSpace{}%
@@ -259,10 +256,7 @@ We sometimes need a version of this that works for dependent types, such as the 
 \>[164I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[164I]%
-\>[11]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -273,7 +267,7 @@ We sometimes need a version of this that works for dependent types, such as the 
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
 \\
-%
+\>[.][@{}l@{}]\<[164I]%
 \>[11]\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%

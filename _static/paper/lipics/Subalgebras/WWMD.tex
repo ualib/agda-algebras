@@ -1,29 +1,12 @@
-\subsubsection{WWMD}\label{wwmd}
+In his \TypeTopology library, Martin Escardo gives a nice formalization of the notion of subgroup and its properties. In this module we merely do for general algebras what Martin does for groups.
 
-This section presents the {[}UALib.Subalgebras.WWMD{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
+This is our first foray into univalent foundations, and our first chance to put Voevodsky's univalence axiom to work.
 
-In his Type Topology library, Martin Escardo gives a nice formalization
-of the notion of subgroup and its properties. In this module we merely
-do for algebras what Martin did for groups.
+The present module is called \AgdaModule{WWMD}.\footnote{For lack of a better alternative, we named this module with the acronym for ``What would Martin do?''} Evidently, as one sees from the lengthy import statement that starts with \AgdaKeyword{open} \AgdaKeyword{import} \AgdaModule{Prelude.Preliminaries}, we import many definitions and theorems from the \TypeTopology library here. Most of these will not be discussed. (See \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes} to learn about the imported modules.)
 
-This is our first foray into univalent foundations, and our first chance
-to put Voevodsky's univalence axiom to work.
-
-As one can see from the import statement that starts with
-\texttt{open\ import\ Prelude.Preliminaries}, there are many new
-definitions and theorems imported from Escardo's Type Topology library.
-Most of these will not be discussed here.
-
-This module can be safely skipped, or even left out of the Agda
-Universal Algebra Library, as it plays no role in other modules.
-
-Incidentally, the name of this module---WWMD (``What would Martin
-do?'')---seemed as good a choice as any other.
-
+The \AgdaModule{WWMD} module can be safely skipped. As of 22 Jan 2021, it plays no role in any of the other modules of the \agdaualib.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -54,7 +37,6 @@ do?'')---seemed as good a choice as any other.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.WWMD}\<%
 \\
@@ -93,7 +75,6 @@ do?'')---seemed as good a choice as any other.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.Homomorphisms}\AgdaSpace{}%
@@ -103,7 +84,6 @@ do?'')---seemed as good a choice as any other.
 \AgdaKeyword{public}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
@@ -791,7 +771,7 @@ do?'')---seemed as good a choice as any other.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[31]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[17]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -957,14 +937,4 @@ do?'')---seemed as good a choice as any other.
 \AgdaSymbol{(}\AgdaFunction{carrier-equiv}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Subalgebras.Subalgebras.html}{←
-UALib.Subalgebras.Subalgebras}
-{\href{UALib.Varieties.html}{UALib.Varieties →}}
-
-\{\% include UALib.Links.md \%\}

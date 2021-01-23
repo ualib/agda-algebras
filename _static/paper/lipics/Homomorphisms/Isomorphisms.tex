@@ -1,14 +1,6 @@
-\subsubsection{Isomorphism Type}\label{isomorphism-type}
-
-This section describes the {[}UALib.Homomorphisms.Isomorphisms{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-We implement (the extensional version of) the notion of isomorphism
-between algebraic structures.
-
+We implement (the extensional version of) the notion of isomorphism between algebraic structures.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -140,11 +132,11 @@ between algebraic structures.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \end{code}
 
-Recall, f \textasciitilde{} g means f and g are extensionally equal;
-i.e., ∀ x, f x ≡ g x.
+Recall, \ab f \AgdaFunction{∼} \ab g means \ab f and \ab g are extensionally equal; i.e., \as ∀ \ab x, \ab f \ab x \ad ≡ \ab g \ab x.
 
-\paragraph{Isomorphism toolbox}\label{isomorphism-toolbox}
-
+\subsubsection{Isomorphism toolbox}\label{isomorphism-toolbox}
+Here are some useful definitions and theorems for working with isomorphisms of algebraic structures.
+\ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -404,7 +396,7 @@ i.e., ∀ x, f x ≡ g x.
 \AgdaBound{ϕ}\AgdaSymbol{)}\<%
 \end{code}
 
-\paragraph{Isomorphism is an equivalence
+\subsubsection{Isomorphism is an equivalence
 relation}\label{isomorphism-is-an-equivalence-relation}
 
 \begin{code}%
@@ -1045,13 +1037,9 @@ relation}\label{isomorphism-is-an-equivalence-relation}
 \AgdaBound{𝑪}\<%
 \end{code}
 
-\paragraph{Lift is an algebraic
-invariant}\label{lift-is-an-algebraic-invariant}
-
-Fortunately, the lift operation preserves isomorphism (i.e., it's an
-``algebraic invariant''), which is why it's a workable solution to the
-``level hell'' problem we mentioned earlier.
-
+\subsubsection{Lift is an algebraic invariant}\label{lift-is-an-algebraic-invariant}
+Fortunately, the lift operation preserves isomorphism (i.e., it's an ``algebraic invariant''), which is why it's a workable solution to the ``level hell'' problem we mentioned earlier.
+\ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
@@ -1346,10 +1334,9 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an
 \AgdaFunction{lift-alg-≅}\<%
 \end{code}
 
-\paragraph{Lift associativity}\label{lift-associativity}
-
+\subsubsection{Lift associativity}\label{lift-associativity}
 The lift is also associative, up to isomorphism at least.
-
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lift-alg-assoc}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1443,9 +1430,7 @@ The lift is also associative, up to isomorphism at least.
 \AgdaFunction{lift-alg-assoc}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓘}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\<%
 \end{code}
 
-\paragraph{Products preserve
-isomorphisms}\label{products-preserve-isomorphisms}
-
+\subsubsection{Products preserve isomorphisms}\label{products-preserve-isomorphisms}
 \begin{code}%
 \>[0]\AgdaFunction{⨅≅}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -1875,10 +1860,9 @@ isomorphisms}\label{products-preserve-isomorphisms}
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{ψ\textasciitilde{}ϕ}\AgdaSymbol{)}\<%
 \end{code}
-
-A nearly identical proof goes through for isomorphisms of lifted
-products.
-
+\ccpad
+A nearly identical proof goes through for isomorphisms of lifted products.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lift-alg-⨅≅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2351,15 +2335,12 @@ products.
 \AgdaSymbol{(}\AgdaFunction{sym-≅}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{A≅B}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Embedding tools}\label{embedding-tools}
-
+\subsubsection{Embedding tools}\label{embedding-tools}
+Here are some useful tools for working with embeddings.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{embedding-lift-nat}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
@@ -2628,11 +2609,9 @@ products.
 \AgdaBound{hem}\<%
 \end{code}
 
-\paragraph{Isomorphism, intensionally}\label{isomorphism-intensionally}
-
-This is not used so much, and this section may be absent from future
-releases of the library.
-
+\subsubsection{Isomorphism, intensionally}\label{isomorphism-intensionally}
+This is not used so much, and this section may be absent from future releases of the library.
+\ccpad
 \begin{code}%
 \>[0]\AgdaComment{--Isomorphism}\<%
 \\
@@ -2857,11 +2836,3 @@ releases of the library.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{finv}\AgdaSymbol{)}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Homomorphisms.Products.html}{← UALib.Homomorphisms.Products}
-{\href{UALib.Algebras.HomomorphicImages.html}{UALib.Algebras.HomomorphicImages
-→}}
-
-\{\% include UALib.Links.md \%\}

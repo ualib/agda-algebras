@@ -1,14 +1,6 @@
-\subsubsection{Subalgebra Types}\label{subalgebra-types}
-
-This section presents the {[}UALib.Subalgebras.Subalgebras{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-Here we define a subalgebra of an algebra as well as the collection of
-all subalgebras of a given class of algebras.
-
+Here we define a \textit{subalgebra} of an algebra as well as the collection of all subalgebras of a given class of algebras.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -39,7 +31,6 @@ all subalgebras of a given class of algebras.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.Subalgebras}\<%
 \\
@@ -78,7 +69,6 @@ all subalgebras of a given class of algebras.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.Homomorphisms}\AgdaSpace{}%
@@ -275,12 +265,9 @@ all subalgebras of a given class of algebras.
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Example}\label{example}
-
+\subsubsection{Examples}\label{sec:examples}
 The equalizer of two homomorphisms is a subuniverse.
-
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{𝑬𝑯-is-subuniverse}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -348,13 +335,9 @@ The equalizer of two homomorphisms is a subuniverse.
 \AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-
-Observe that the type universe level 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ arises quite often
-throughout the ualib since it is the level of the type
-\texttt{Algebra\ 𝓤\ 𝑆} of an algebra in the signature 𝑆 and domain of
-type 𝓤 ̇. Let us define, once and for all, a simple notation for this
-universe level.
-
+\ccpad
+Observe that the type universe level \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ arises quite often throughout the ualib since it is the level of the type \af{Algebra} \ab 𝓤 \ab 𝑆 of an algebra in the signature \ab 𝑆 and domain of type \ab 𝓤 \af ̇. Let us define, once and for all, a simple notation for this universe level.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{OV}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -372,13 +355,10 @@ universe level.
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\<%
 \end{code}
+\ccpad
+To clean up and simplify the presentation, we will sometimes write \af{OV} \ab 𝓤 in place of \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺.
 
-So, hereinafter, we typically write \texttt{OV\ 𝓤} in place of the more
-cumbersome 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺.
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Subalgebras of a class}\label{subalgebras-of-a-class}
+\subsubsection{Subalgebras of a class}\label{subalgebras-of-a-class}
 
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOfClass\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -659,10 +639,10 @@ cumbersome 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺.
 \AgdaBound{𝑨}\<%
 \end{code}
 
-\subparagraph{Syntactic sugar}\label{syntactic-sugar}
+\paragraph{Syntactic sugar}\label{syntactic-sugar}
 
-We use the convenient ≤ notation for the subalgebra relation.
-
+We use the symbol ≤ to denote the subalgebra relation.
+\ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -697,9 +677,7 @@ We use the convenient ≤ notation for the subalgebra relation.
 \AgdaBound{𝑨}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Subalgebra lemmata}\label{subalgebra-lemmata}
+\subsubsection{Subalgebra lemmata}\label{subalgebra-lemmata}
 
 \begin{code}%
 \>[0]\AgdaComment{--Transitivity of IsSubalgebra (explicit args)}\<%
@@ -2170,14 +2148,4 @@ We use the convenient ≤ notation for the subalgebra relation.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaComment{-- (alias)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Subalgebras.Homomorphisms.html}{←
-UALib.Subalgebras.Homomorphisms}
-{\href{UALib.Subalgebras.WWMD.html}{UALib.Subalgebras.WWMD →}}
-
-\{\% include UALib.Links.md \%\}

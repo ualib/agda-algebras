@@ -151,10 +151,10 @@ We define the signature of an algebraic structure in Agda like this.
 \ccpad
 Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types.
 
-In the \ualibPrelude module we defined special syntax for the first and second projections---namely, \ai ∣ and \ai ∥, resp. Consequently, if \as{\{}\ab 𝑆 \as : \signatOV\as{\}} is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
+In the \ualibPrelude module we define special syntax for the first and second projections---namely, \ai ∣ and \ai ∥, resp (see Subsection~\ref{dependent-pair-type}). Consequently, if \as{\{}\ab 𝑆 \as : \signatOV\as{\}} is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
 
-\subsubsection{Example}\label{example}
-Here is how we might define the signature for monoids as a member of the type \signatOV.
+\subsubsection{Example}\label{ex:monoids}
+Here is how we might define the signature for \emph{monoids} as a member of the type \signatOV.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -211,4 +211,4 @@ Here is how we might define the signature for monoids as a member of the type \s
 \>[0]\<%
 \end{code}
 \ccpad
-As expected, the signature for a monoid consists of two operation symbols, \aic e and \aic ·, and a function \as λ \as{\{} \AgdaInductiveConstructor{e} \as → \af 𝟘 \as ; \AgdaInductiveConstructor{·} \as → \af 𝟚 \as{\}} which maps \aic e to the empty type \af 𝟘 (since \aic e is the nullary identity) and maps \aic · to the two element type \af 𝟚 (since \aic · is binary).
+As expected, the signature for a \emph{monoid} consists of two operation symbols, \aic e and \aic ·, and a function \as λ \as{\{} \AgdaInductiveConstructor{e} \as → \af 𝟘 \as ; \AgdaInductiveConstructor{·} \as → \af 𝟚 \as{\}} which maps \aic e to the empty type \af 𝟘 (since \aic e is the nullary identity) and maps \aic · to the two element type \af 𝟚 (since \aic · is binary).

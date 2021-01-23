@@ -232,11 +232,15 @@
 \setlength\headheight{3mm}
 \setlength\headsep   {10mm}
 \setlength\footskip{3mm}
-\setlength\textwidth{140mm}
+%% \setlength\textwidth{140mm}
 \setlength\textheight{222mm}
-\setlength\oddsidemargin{32mm}
-\setlength\evensidemargin{38mm}
-\setlength\marginparwidth{25mm}
+%% \setlength\oddsidemargin{32mm}
+%% \setlength\evensidemargin{38mm}
+%% \setlength\marginparwidth{25mm}
+\setlength\textwidth{145mm}
+\setlength\oddsidemargin{30mm}
+\setlength\evensidemargin{30mm}
+\setlength\marginparwidth{20mm}
 \setlength\topmargin{13mm}
 \setlength{\skip\footins}{2\baselineskip \@plus 4\p@ \@minus 2\p@}
 \def\@listi{\leftmargin\leftmargini

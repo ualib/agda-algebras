@@ -1,6 +1,8 @@
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
-%% \setmathfont{XITS Math}
 \usepackage{fontspec}
+%% \usepackage{mathabx}
+%% \usepackage{mathptmx}
+%% \usepackage{stmaryrd}
 \usepackage{unicode-math}
 \usepackage{comment}
 \setmainfont{XITS}
@@ -14,8 +16,10 @@ BoldItalicFont = *-BoldItalic,
 [    Extension = .otf,
       BoldFont = XITSMath-Bold,
 ]
-\usepackage{newunicodechar}
-\newunicodechar{λ}{\ensuremath{\mathnormal\lambda}}
+%% \usepackage{newunicodechar}
+%% \newunicodechar{λ}{\ensuremath{\mathnormal\lambda}}
+%% \newunicodechar{⋂}{\ensuremath{\mathnormal\bigcap}}
+%% \newunicodechar{⨅}{\ensuremath{\mathnormal\bigsqcap}}
 
 \usepackage[newwjd]{agda}
 \usepackage{wjd}
@@ -74,7 +78,7 @@ BoldItalicFont = *-BoldItalic,
 
 \acknowledgements{The author wishes to thank Hyeyoung Shin and Siva Somayyajula for their contributions to this project and Martin H\"otzel Escardo for creating the \TypeTopology library and teaching a course on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Univalent Foundations of Mathematics with Agda} at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}.}
 
-%\nolinenumbers %uncomment to disable line numbering
+\nolinenumbers %uncomment to disable line numbering
 
 \hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
@@ -101,14 +105,19 @@ BoldItalicFont = *-BoldItalic,
 \input{aux/abstract.tex}
 \end{abstract}
 
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\newpage
+
 \section{Introduction}\label{sec:introduction}
 \input{aux/Introduction.tex}
 
 
-\section{The UALib: an overview}
+\newpage
 
 %% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% \subsection{Prelude}\label{sec:prelude}
+\section{Prelude}\label{sec:prelude}
 
 \subsection{Preliminaries}\label{sec:preliminaries}
 This section describes the \href{}{UALib.Prelude.Preliminaries} module of the \agdaualib.
@@ -126,14 +135,16 @@ This section presents the \href{}{UALib.Prelude.Inverses} module of the \agdaual
 This section describes the \href{}{UALib.Prelude.Extensionality} module of the \agdaualib.
 \input{Prelude/Extensionality.tex}
 
+\newpage
 
 %% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% \subsection{Algebras}\label{sec:algebras}
+\section{Algebras}\label{sec:types-for-algebras}
+
 \subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
 This section presents the \href{}{UALib.Algebras.Signatures} module of the \agdaualib.
 \input{Algebras/Signatures.tex}
 
-\subsection{Algebras}\label{sec:algebras}
+\subsection{Algebra Types}\label{sec:algebras}
 This section presents the \href{}{UALib.Algebras.Algebras} module of the \agdaualib.
 \input{Algebras/Algebras.tex}
 
@@ -144,8 +155,17 @@ This section presents the \href{}{UALib.Algebras.Products} module of the \agdaua
 \subsubsection{The Universe Hierarchy and Lifts}\label{sec:universe-hierarchy-and-lifts}
 \input{Algebras/Lifts.tex}
 
+\newpage
+
+\begin{center}
+  (This page is almost entirely blank on purpose.)
+\end{center}
+
+\newpage
+
 %% Relations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% \subsection{Relations}\label{sec:relations}
+\section{Relations}\label{sec:relations}
+
 \subsection{Predicates}\label{sec:predicates}
 This section presents the \ualibUnary module of the \agdaualib.
 \input{Relations/Unary.tex}
@@ -154,7 +174,7 @@ This section presents the \ualibUnary module of the \agdaualib.
 This section presents the \ualibBinary module of the \agdaualib.
 \input{Relations/Binary.tex}
 
-\subsection{Equivalence Relations}\label{sec:equiv-relat}
+\subsection{Equivalence Relation Types}\label{sec:equiv-relat}
 This section presents the \ualibEquivalences module of the \agdaualib.
 \input{Relations/Equivalences.tex}
 
@@ -162,9 +182,144 @@ This section presents the \ualibEquivalences module of the \agdaualib.
 This section presents the \ualibQuotients module of the \agdaualib.
 \input{Relations/Quotients.tex}
 
-\subsection{Congruences Relations}\label{sec:congr-relat}
+\subsection{Congruences Relations Types}\label{sec:congr-relat}
 This section presents the \ualibCongruences module of the \agdaualib.
 \input{Relations/Congruences.tex}
+
+\newpage
+
+%% Homomorphisms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Homomorphisms}\label{sec:homomorphisms}
+
+\subsection{Basic Definitions}
+\label{sec:homs-basic-definitions}
+This section describes the \ualibHomBasic module of the \agdaualib.
+\input{Homomorphisms/Basic.tex}
+
+\subsection{Kernels of Homomorphisms}
+\label{sec:kernels}
+This section describes the \ualibKernels module of the \agdaualib.
+\input{Homomorphisms/Kernels.tex}
+
+\subsection{Homomorphism Theorems}
+\label{sec:noether}
+This section describes the \ualibNoether module of the \agdaualib.
+\input{Homomorphisms/Noether.tex}
+
+\subsection{Products and Homomorphisms}
+\label{sec:products-1}
+This section describes the \ualibHomProducts module of the \agdaualib.
+\input{Homomorphisms/Products.tex}
+
+\subsection{Isomorphism Type}
+\label{sec:isomorphisms}
+This section describes the \ualibIsomorphisms module of the \agdaualib.
+\input{Homomorphisms/Isomorphisms.tex}
+
+\subsection{Homomorphic Image Type}
+\label{sec:homomorphicimages}
+This section describes the \ualibHomImages module of the \agdaualib.
+\input{Homomorphisms/HomomorphicImages.tex}
+
+\newpage
+
+%% Terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terms}
+
+\subsection{Basic Definitions}
+\label{sec:terms-basic-definitions}
+This section describes the \ualibTermsBasic module of the \agdaualib.
+\input{Terms/Basic.tex}
+
+\subsection{The Term Algebra}
+\label{sec:the-term-algebra}
+This section describes the \ualibTermsFree module of the \agdaualib.
+\input{Terms/Free.tex}
+
+\subsection{Term Operations}
+\label{sec:term-operations}
+This section describes the \ualibTermsOperations module of the \agdaualib.
+\input{Terms/Operations.tex}
+
+\subsection{Compatibility of Terms}
+\label{sec:compatibility-of-terms}
+This section describes the \ualibTermsCompatibility module of the \agdaualib.
+\input{Terms/Compatibility.tex}
+
+\newpage
+
+%% Subalgebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subalgebras}\label{sec:subalgebras}
+
+\subsection{Subuniverse Type}\label{sec:subuniverse-type}
+This section describes the \ualibSubuniverses module of the \agdaualib.
+\input{Subalgebras/Subuniverses.tex}
+
+\subsection{Subuniverse Generation}\label{sec:subun-gener}
+This section describes the \ualibGeneration module of  the \agdaualib.
+\input{Subalgebras/Generation.tex}
+
+\subsection{Subuniverse Lemmas}\label{sec:subuniverse-lemmas}
+This section describes the \ualibProperties module of  the \agdaualib.
+\input{Subalgebras/Properties.tex}
+
+\subsection{Homomorphisms and Subuniverses}\label{homomorphisms-and-subuniverses}
+This section describes the \ualibHomsAndSubs module of  the \agdaualib.
+\input{Subalgebras/Homomorphisms.tex}
+
+\subsection{Subalgebra Types}\label{sec:subalgebra-types}
+This section describes the \ualibSubalgebras module of  the \agdaualib.
+\input{Subalgebras/Subalgebras.tex}
+
+\subsection{WWMD}\label{sec:wwmd}
+This section describes the \ualibWWMD module of  the \agdaualib.
+\input{Subalgebras/WWMD.tex}
+
+\newpage
+
+\begin{center}
+  (This page is almost entirely blank on purpose.)
+\end{center}
+
+\newpage
+
+%% Varieties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equations and Varieties}
+\label{sec:equations-and-varieties}
+
+\subsection{Types for Theories and Models}\label{sec:types-for-theories-and-models}
+This section presents the \ualibModelTheory module of  the \agdaualib.
+\input{Varieties/ModelTheory.tex}
+
+\subsection{Equational Logic Types}\label{sec:equational-logic-types}
+This section presents the \ualibEquationalLogic module of  the \agdaualib.
+\input{Varieties/EquationalLogic.tex}
+
+\subsection{Inductive Types H, S, P, V}\label{sec:inductive-types-h-s-p-v}
+This section presents the \ualibVarietiesVarieties module of the \agdaualib.
+\input{Varieties/Varieties.tex}
+
+\subsection{Equation Preservation Theorems}\label{sec:equation-preservation-theorems}
+This section presents the \ualibPreservation module of  the \agdaualib.
+\input{Varieties/Preservation.tex}
+
+\newpage
+
+%% HSP Theorem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Birkhoff's HSP Theorem}
+\label{sec:birkhoff}
+
+\subsection{The Relatively Free Algebra Type}\label{sec:relatively-free-algebra-type}
+This section presents the \ualibFreeAlgebra module of  the \agdaualib.
+\input{Birkhoff/FreeAlgebra.tex}
+
+\subsection{HSP Lemmas}\label{sec:hsp-lemmas}
+This section presents the \ualibLemmata of  the \agdaualib.
+\input{Birkhoff/Lemmata.tex}
+
+\subsection{The HSP Theorem}\label{sec:hsp-theorem}
+This section presents the \ualibTheorem module of  the \agdaualib.
+\input{Birkhoff/Theorem.tex}
 
 %% Bibliography
 \bibliography{ualib_refs}
@@ -172,74 +327,34 @@ This section presents the \ualibCongruences module of the \agdaualib.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Homomorphisms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Homomorphism: basic definitions}
-\label{sec:basic}
-\input{Homomorphisms/Basic.tex}
-
-\subsection{Homomorphism Kernels}
-\label{sec:kernels}
-\input{Homomorphisms/Kernels.tex}
-
-\subsubsection{Noether homomorphism Theorems}
-\label{sec:noether}
-\input{Homomorphisms/Noether.tex}
-
-\subsubsection{Homomorphisms and Products}
-\label{sec:products-1}
-\input{Homomorphisms/Products.tex}
-
-\subsubsection{Isomorphisms}
-\label{sec:isomorphisms}
-\input{Homomorphisms/Isomorphisms.tex}
-
-\subsubsection{Homomorphic Images}
-\label{sec:homomorphicimages}
-\input{Homomorphisms/HomomorphicImages.tex}
 
 
 
-%% Terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Terms}
-\label{sec:terms}
-\subsubsection{Basic}
-\label{sec:basic-1}
-\input{Terms/Basic.tex}
-\subsubsection{Free}
-\label{sec:free}
-\input{Terms/Free.tex}
-\subsubsection{Operations}
-\label{sec:operations}
-\input{Terms/Operations.tex}
-\subsubsection{Compatibility}
-\label{sec:compatibility}
-\input{Terms/Compatibility.tex}
-
-\subsection{Subalgebras}
-\label{sec:subalgebras}
-open import UALib.Subalgebras.Subuniverses
-open import UALib.Subalgebras.Generation
-open import UALib.Subalgebras.Properties
-open import UALib.Subalgebras.Homomorphisms
-open import UALib.Subalgebras.Subalgebras public
-open import UALib.Subalgebras.WWMD
-
-\subsection{Varieties}
-\label{sec:varieties}
-open import UALib.Varieties.ModelTheory
-open import UALib.Varieties.EquationalLogic
-open import UALib.Varieties.Varieties
-open import UALib.Varieties.Preservation
-
-\subsection{Birkhoff}
-\label{sec:birkhoff}
-open import UALib.Birkhoff.FreeAlgebra
-open import UALib.Birkhoff.Lemmata
-open import UALib.Birkhoff.Theorem
 
 
 
-\end{document}
+- [Birkhoff's Theorem](UALib.Birkhoff.html)
+  - [Relatively Free Algebra Types](UALib.Birkhoff.FreeAlgebra.html)
+  - [HSP Lemmata](UALib.Birkhoff.Lemmata.html)
+  - [HSP Theorem](UALib.Birkhoff.Theorem.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

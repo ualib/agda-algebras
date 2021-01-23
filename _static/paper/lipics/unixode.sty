@@ -96,9 +96,6 @@
 \newunicodechar{∫}{\ensuremath{\int}}
 \newunicodechar{∑}{\ensuremath{\Sigma}}
 \newunicodechar{∏}{\ensuremath{\prod}}
-\newunicodechar{⨅}{\ensuremath{\bigsqcap}}
-%% \newunicodechar{⨅}{\ensuremath{\Glb}}
-
 \newunicodechar{⊥}{\ensuremath{\perp}}
 \newunicodechar{∞}{\ensuremath{\infty}}
 \newunicodechar{∂}{\ensuremath{\partial}}
@@ -113,7 +110,7 @@
 
 \newunicodechar{√}{\ensuremath{\sqrt}}
 
-\newunicodechar{⁺}{\ensuremath{^{\footnotesize{+}}}}
+\newunicodechar{⁺}{\ensuremath{^+}}
 \newunicodechar{⬝}{\ensuremath{\cdot}}
 \newunicodechar{̇}{\ensuremath{^\centerdot}}
 \newunicodechar{̂}{\ensuremath{\,\hat{\phantom{i}}}}
@@ -123,6 +120,11 @@
 \newunicodechar{∘}{\ensuremath{\circ}}
 \newunicodechar{∗}{\ensuremath{\ast}}
 \newunicodechar{⋆}{\ensuremath{\star}}
+
+\newunicodechar{⋱}{\ensuremath{\ddots}}
+\newunicodechar{…}{\ensuremath{\ldots}}
+\newunicodechar{⋯}{\ensuremath{\cdots}}
+\newunicodechar{⋮}{\ensuremath{\vdots}}
 
 \newunicodechar{⁻}{\ensuremath{^{\textup{\kern1pt\rule{2pt}{0.3pt}\kern-1pt}}}}
 \newunicodechar{▸}{\ensuremath{\blacktriangleright}}
@@ -160,8 +162,10 @@
 
 \newunicodechar{∩}{\ensuremath{\cap}}
 \newunicodechar{∪}{\ensuremath{\cup}}
-\newunicodechar{⋂}{\ensuremath{\bigcap}}
+%% \newunicodechar{⋂}{\ensuremath{\bigcap}}
+\newunicodechar{⋂}{\ensuremath{\cap}}
 \newunicodechar{⋃}{\ensuremath{\bigcup}}
+\newunicodechar{⊎}{\ensuremath{\mathbin{\dot{\cup}}}}
 \newunicodechar{⊔}{\ensuremath{\sqcup}}
 \newunicodechar{⊓}{\ensuremath{\sqcap}}
 %% \newunicodechar{⨅}{\ensuremath{\bigsqcap}}
@@ -192,6 +196,10 @@
 \newunicodechar{⌞}{\ensuremath{\llcorner}}
 \newunicodechar{⌟}{\ensuremath{\lrcorner}}
 
+%% \newunicodechar{⨅}{\ensuremath{\bigsqcap}}
+%% \newunicodechar{⨅}{\ensuremath{\Glb}}
+\newunicodechar{｛}{\ensuremath{\bigl\{}}
+\newunicodechar{｝}{\ensuremath{\bigr\}}}
 \newunicodechar{⦃}{\ensuremath{\{\!|}}
 \newunicodechar{⦄}{\ensuremath{|\!\}}}
 \newunicodechar{∣}{\ensuremath{\mid}}
@@ -425,6 +433,7 @@
 \newunicodechar{𝓢}{{\ensuremath{\pmb{\mathscr{S}}}}}
 \newunicodechar{𝓣}{{\ensuremath{\pmb{\mathscr{T}}}}}
 \newunicodechar{𝓤}{{\ensuremath{\pmb{\mathscr{U}}}}}
+\newunicodechar{𝓾}{{\ensuremath{\pmb{\mathscr{u}}}}}
 \newunicodechar{𝓥}{{\ensuremath{\pmb{\mathscr{V}}}}}
 \newunicodechar{𝓦}{{\ensuremath{\pmb{\mathscr{W}}}}}
 \newunicodechar{𝓧}{{\ensuremath{\pmb{\mathscr{X}}}}}
@@ -500,7 +509,7 @@
 \newunicodechar{𝔉}{\ensuremath{\mathfrak{F}}}
 \newunicodechar{𝔊}{\ensuremath{\mathfrak{G}}}
 \newunicodechar{ℌ}{\ensuremath{\mathfrak{H}}}
-
+\newunicodechar{ℑ}{\ensuremath{\mathfrak{I}}}
 \newunicodechar{𝔍}{\ensuremath{\mathfrak{J}}}
 \newunicodechar{𝔎}{\ensuremath{\mathfrak{K}}}
 \newunicodechar{𝔏}{\ensuremath{\mathfrak{L}}}
@@ -518,6 +527,34 @@
 \newunicodechar{𝔛}{\ensuremath{\mathfrak{X}}}
 \newunicodechar{𝔜}{\ensuremath{\mathfrak{Y}}}
 \newunicodechar{ℨ}{\ensuremath{\mathfrak{Z}}}
+
+\newunicodechar{𝔞}{\ensuremath{\mathfrak{a}}}
+\newunicodechar{𝔟}{\ensuremath{\mathfrak{b}}}
+\newunicodechar{𝔠}{\ensuremath{\mathfrak{c}}}
+\newunicodechar{𝔡}{\ensuremath{\mathfrak{d}}}
+\newunicodechar{𝔢}{\ensuremath{\mathfrak{e}}}
+\newunicodechar{𝔣}{\ensuremath{\mathfrak{f}}}
+\newunicodechar{𝔤}{\ensuremath{\mathfrak{g}}}
+\newunicodechar{𝔥}{\ensuremath{\mathfrak{h}}}
+\newunicodechar{𝔦}{\ensuremath{\mathfrak{i}}}
+\newunicodechar{𝔧}{\ensuremath{\mathfrak{j}}}
+\newunicodechar{𝔨}{\ensuremath{\mathfrak{k}}}
+\newunicodechar{𝔩}{\ensuremath{\mathfrak{l}}}
+\newunicodechar{𝔪}{\ensuremath{\mathfrak{m}}}
+\newunicodechar{𝔫}{\ensuremath{\mathfrak{n}}}
+\newunicodechar{𝔬}{\ensuremath{\mathfrak{o}}}
+\newunicodechar{𝔭}{\ensuremath{\mathfrak{p}}}
+\newunicodechar{𝔮}{\ensuremath{\mathfrak{q}}}
+\newunicodechar{𝔯}{\ensuremath{\mathfrak{r}}}
+\newunicodechar{𝔰}{\ensuremath{\mathfrak{s}}}
+\newunicodechar{𝔱}{\ensuremath{\mathfrak{t}}}
+\newunicodechar{𝔲}{\ensuremath{\mathfrak{u}}}
+\newunicodechar{𝔳}{\ensuremath{\mathfrak{v}}}
+\newunicodechar{𝔴}{\ensuremath{\mathfrak{w}}}
+\newunicodechar{𝔵}{\ensuremath{\mathfrak{x}}}
+\newunicodechar{𝔶}{\ensuremath{\mathfrak{y}}}
+\newunicodechar{𝔷}{\ensuremath{\mathfrak{z}}}
+
 
 \newcommand\mathbbm[1]{\mathbb{#1}}
 \newunicodechar{𝟘}{\ensuremath{\mathbbm{0}}}

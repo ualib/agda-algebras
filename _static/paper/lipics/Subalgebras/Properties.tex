@@ -1,13 +1,6 @@
-\subsubsection{Subuniverse Lemmas}\label{subuniverse-lemmas}
-
-This section presents the {[}UALib.Subalgebras.Properties{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
 Here we formalize and prove a few basic properties of subuniverses.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -191,18 +184,11 @@ Here we formalize and prove a few basic properties of subuniverses.
 \AgdaBound{ima⊆⋂A}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{i}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Conservativity of term
-operations}\label{conservativity-of-term-operations}
+\subsubsection{Conservativity of term operations}\label{conservativity-of-term-operations}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{sub-term-closed}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -318,13 +304,9 @@ operations}\label{conservativity-of-term-operations}
 \AgdaBound{b∈B}\AgdaSymbol{)}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Term images}\label{term-images}
+\subsubsection{Term images}\label{term-images}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{TermImage}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
@@ -560,14 +542,4 @@ operations}\label{conservativity-of-term-operations}
 \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{TermImageIsSub}\AgdaSpace{}%
 \AgdaFunction{Y⊆TermImageY}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Subalgebras.Generation.html}{← UALib.Subalgebras.Generation}
-{\href{UALib.Subalgebras.Homomorphisms.html}{UALib.Subalgebras.Homomorphisms
-→}}
-
-\{\% include UALib.Links.md \%\}

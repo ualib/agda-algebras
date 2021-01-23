@@ -1,6 +1,4 @@
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -41,14 +39,10 @@
 \\
 \>[0]\<%
 \end{code}
-
-For a binary relation \texttt{R} on \texttt{A}, we denote a single
-R-class as \texttt{{[}\ a\ {]}\ R} (the class containing \texttt{a}).
-This notation is defined in UALib as follows.
-
+\ccpad
+For a binary relation \ab R on \ab A, we denote a single \ab R-class as \af [ \ab a \af ] \ab R (the class containing \ab a). This notation is defined in UALib as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{-- relation class}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -82,16 +76,11 @@ This notation is defined in UALib as follows.
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
-\\
-\>[0]\<%
 \end{code}
-
-So, \texttt{x\ ∈\ {[}\ a\ {]}\ R} iff \texttt{R\ a\ x}, and the
-following elimination rule is a tautology.
-
+\ccpad
+So, \ab x \af ∈ \af [ \ab a \af ] \ab R iff \ab R \ab a \ab x, and the following elimination rule is a tautology.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{[]-elim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -127,15 +116,11 @@ following elimination rule is a tautology.
 \AgdaFunction{id}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{id}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We define type of all classes of a relation \texttt{R} as follows.
-
+\ccpad
+We define type of all classes of a relation \ab R as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -181,16 +166,11 @@ We define type of all classes of a relation \texttt{R} as follows.
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-There are a few ways we could define the quotient with respect to a
-relation. We have found the following to be the most convenient.
-
+\ccpad
+There are a few ways we could define the quotient with respect to a relation. We have found the following to be the most convenient.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaComment{-- relation quotient (predicate version)}\<%
 \\
@@ -230,16 +210,11 @@ relation. We have found the following to be the most convenient.
 \\
 %
 \>[1]\AgdaComment{-- old version:  A / R = Σ C ꞉ Pred A 𝓡 ,  Σ a ꞉ A ,  C ≡ ( [ a ] R )}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We then define the following introduction rule for a relation class with
-designated representative.
-
+\ccpad
+We then define the following introduction rule for a relation class with designated representative.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -315,16 +290,11 @@ designated representative.
 \AgdaFunction{id}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{id}\<%
-\\
-\>[0]\<%
 \end{code}
-
-If the relation is reflexive, then we have the following elimination
-rules.
-
+\ccpad
+If the relation is reflexive, then we have the following elimination rules.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{/-refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -489,16 +459,11 @@ rules.
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}%
 \>[22]\AgdaComment{-- type ⌜ and ⌝ as `\textbackslash{}cul` and `\textbackslash{}cur`}\<%
-\\
-\>[0]\<%
 \end{code}
-
-and an elimination rule for relation class representative, defined as
-follows.
-
+\ccpad
+and an elimination rule for relation class representative, defined as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{/-Refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -539,15 +504,11 @@ follows.
 \>[22]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{rfl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 Later we will need the following additional quotient tools.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{IsEquivalence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\<%
@@ -715,27 +676,14 @@ Later we will need the following additional quotient tools.
 \AgdaFunction{/-supset}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSpace{}%
 \AgdaBound{Raa'}\<%
-\\
-\>[0]\<%
 \end{code}
 
 \subsubsection{Quotient extensionality}\label{quotient-extensionality}
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. For this we assume that our relations are on sets, rather than arbitrary types. As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.
 
-We need a (subsingleton) identity type for congruence classes over sets
-so that we can equate two classes even when they are presented using
-different representatives. For this we assume that our relations are on
-sets, rather than arbitrary types. As mentioned earlier, this is
-equivalent to assuming that there is at most one proof that two elements
-of a set are the same.
-
-(Recall, a type is called a \textbf{set} if it has \emph{unique identity
-proofs}; as a general principle, this is sometimes referred to as
-``proof irrelevance'' or ``uniqueness of identity proofs''---two proofs
-of a single identity are the same.)
-
+(Recall, a type is called a \textbf{set} if it has \emph{unique identity proofs}; as a general principle, this is sometimes referred to as ``proof irrelevance'' or ``uniqueness of identity proofs''---two proofs of a single identity are the same.)
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1030,15 +978,11 @@ of a single identity are the same.)
 \AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaFunction{CD}\<%
-\\
-\>[0]\<%
 \end{code}
 
 \subsubsection{Compatibility}\label{compatibility}
-
-The following definitions and lemmas are useful for asserting and
-proving facts about \textbf{compatibility} of relations and functions.
-
+The following definitions and lemmas are useful for asserting and proving facts about \textbf{compatibility} of relations and functions.
+\ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -1207,7 +1151,8 @@ proving facts about \textbf{compatibility} of relations and functions.
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{compatible}\AgdaSpace{}%
-\AgdaSymbol{:(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}{\AgdaSpace{}}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -1240,104 +1185,5 @@ proving facts about \textbf{compatibility} of relations and functions.
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}
-
-\subsubsection{Examples}\label{examples}
-
-\begin{code}%
-\>[0]\<%
-\\
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[22]\AgdaFunction{compatible-op}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{𝑨}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-\AgdaBound{fe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{ptws0}%
-\>[33]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{ptws0}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{compatible}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
-\AgdaBound{fe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{args}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
-\AgdaBound{fe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{args}\<%
-\end{code}
+çpad
+We'll see this definition of compatibility at work very soon when we define congruence relations in the next section.

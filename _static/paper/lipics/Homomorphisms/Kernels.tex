@@ -1,14 +1,6 @@
-\subsubsection{Kernels of Homomorphisms}\label{kernels-of-homomorphisms}
-
-This section presents the {[}UALib.Homomorphisms.Kernels{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-The kernel of a homomorphism is a congruence and conversely for every
-congruence θ, there exists a homomorphism with kernel θ.
-
+The kernel of a homomorphism is a congruence and conversely for every congruence \ab θ, there exists a homomorphism with kernel \ab θ.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -243,18 +235,11 @@ congruence θ, there exists a homomorphism with kernel θ.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-It is convenient to define a function that takes a homomorphism and
-constructs a congruence from its kernel. We call this function
-\texttt{hom-kernel-congruence}, but since we will use it often we also
-give it a short alias---\texttt{kercon}.
-
+\ccpad
+It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel. We call this function \af{hom-kernel-congruence}, but since we will use it often we also give it a short alias---\af{kercon}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{kercon}\AgdaSpace{}%
 \AgdaComment{-- (alias)}\<%
@@ -752,10 +737,3 @@ give it a short alias---\texttt{kercon}.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{kernel-quotient-projection}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Homomorphisms.Basic.html}{← UALib.Homomorphisms.Basic}
-{\href{UALib.Homomorphisms.Noether.html}{UALib.Homomorphisms.Noether →}}
-
-\{\% include UALib.Links.md \%\}

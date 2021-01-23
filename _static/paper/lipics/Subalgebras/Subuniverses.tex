@@ -1,14 +1,8 @@
-\subsubsection{Subuniverse Type}\label{subuniverse-type}
+We show how to represent in \agda \emph{subuniverses} of a given algebra or collection of algebras.
 
-This section presents the {[}UALib.Subalgebras.Subuniverses{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-We show how to represent in Agda subuniverses of a given algebra or a
-given collection of algebras.
-
+As usual, we start with the required options and imports.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -17,7 +11,6 @@ given collection of algebras.
 \AgdaSymbol{\#-\}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras}\AgdaSpace{}%
@@ -29,7 +22,6 @@ given collection of algebras.
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
@@ -38,8 +30,6 @@ given collection of algebras.
 \AgdaPostulate{Universe}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇}}\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -79,8 +69,6 @@ given collection of algebras.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Terms.Compatibility}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
@@ -88,8 +76,6 @@ given collection of algebras.
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{Subuniverses}\AgdaSpace{}%
@@ -259,11 +245,3 @@ given collection of algebras.
 \AgdaFunction{Subuniverses}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Subalgebras.html}{↑ UALib.Subalgebras}
-{\href{UALib.Subalgebras.Generation.html}{UALib.Subalgebras.Generation
-→}}
-
-\{\% include UALib.Links.md \%\}

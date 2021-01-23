@@ -1,8 +1,3 @@
-\subsubsection{The Term Algebra}\label{the-term-algebra}
-
-This section presents the {[}UALib.Terms.Free{]}{[}{]} module of the
-{[}Agda Universal Algebra Library{]}{[}{]}.
-
 \begin{code}%
 \>[0]\<%
 \\
@@ -80,19 +75,11 @@ This section presents the {[}UALib.Terms.Free{]}{[}{]} module of the
 \AgdaKeyword{hiding}\AgdaSpace{}%
 \AgdaSymbol{(}Algebra\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Terms can be viewed as acting on other terms and we can form an
-algebraic structure whose domain and basic operations are both the
-collection of term operations. We call this the \textbf{term algebra}
-and it by \texttt{𝑻\ X}. In {[}Agda{]}{[}{]} the term algebra is defined
-as simply as one would hope.
-
+\ccpad
+Terms can be viewed as acting on other terms and we can form an algebraic structure whose domain and basic operations are both the collection of term operations. We call this the \textbf{term algebra} and denote it by \af 𝑻 \ab X. In the \agda this algebra can be defined quite simply, as one would hope and expect.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{--The term algebra 𝑻 X.}\<%
 \\
 \>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
@@ -120,30 +107,19 @@ as simply as one would hope.
 \AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{node}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{The universal property}\label{the-universal-property}
-
-The Term algebra is \emph{absolutely free}, or \emph{universal}, for
-algebras in the signature 𝑆. That is, for every 𝑆-algebra 𝑨,
-
+\subsubsection{The universal property}\label{the-universal-property}
+The Term algebra is \textbf{absolutely free} (or ``universal'') \textbf{for} algebras in the signature \ab 𝑆. That is, for every \ab 𝑆-algebra \ab 𝑨,
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  every map \texttt{h\ :\ 𝑋\ →\ ∣\ 𝑨\ ∣} lifts to a homomorphism from
-  \texttt{𝑻\ X} to 𝑨, and
+  every map \ab h \as : \ab 𝑋 \as → \aiab{∣}{𝑨} lifts to a homomorphism from \af 𝑻 \ab X to \ab 𝑨, and
 \item
   the induced homomorphism is unique.
 \end{enumerate}
-
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{--1.a. Every map (X → 𝑨) lifts.}\<%
 \\
 \>[0]\AgdaFunction{free-lift}\AgdaSpace{}%
@@ -431,21 +407,12 @@ algebras in the signature 𝑆. That is, for every 𝑆-algebra 𝑨,
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{args}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Lifting and imaging tools}\label{lifting-and-imaging-tools}
-
-Next we note the easy fact that the lift induced by \texttt{h₀} agrees
-with \texttt{h₀} on \texttt{X} and that the lift is surjective if
-\texttt{h₀} is.
-
+\subsubsection{Lifting and imaging tools}\label{lifting-and-imaging-tools}
+Next we note the easy fact that the lift induced by \ab{h₀} agrees with \ab{h₀} on \ab X and that the lift is surjective if \ab{h₀} is.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{lift-agrees-on-X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -646,17 +613,11 @@ with \texttt{h₀} on \texttt{X} and that the lift is surjective if
 \AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
 \AgdaFunction{h₀⁻¹y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{η}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any
-algebra we like. The following function makes it easy to lay our hands
-on such homomorphisms when necessary.
-
+\ccpad
+Since it's absolutely free, \af 𝑻 \ab X is the domain of a homomorphism to any algebra we like. The following function makes it easy to lay our hands on such homomorphisms when necessary.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{𝑻hom-gen}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -747,13 +708,4 @@ on such homomorphisms when necessary.
 \AgdaFunction{lift-hom}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaFunction{h₀}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Terms.Basic.html}{← UALib.Terms.Basic}
-{\href{UALib.Terms.Operations.html}{UALib.Terms.Operations →}}
-
-\{\% include UALib.Links.md \%\}

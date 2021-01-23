@@ -1,8 +1,3 @@
-\subsubsection{Basic definitions}\label{basic-definitions}
-
-This section presents the {[}UALib.Terms.Basic{]}{[}{]} module of the
-{[}Agda Universal Algebra Library{]}{[}{]}.
-
 \begin{code}%
 \>[0]\<%
 \\
@@ -84,22 +79,12 @@ This section presents the {[}UALib.Terms.Basic{]}{[}{]} module of the
 \AgdaKeyword{hiding}\AgdaSpace{}%
 \AgdaSymbol{(}Universe\AgdaSymbol{;} \AgdaUnderscore{}̇\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{The inductive type of
-terms}\label{the-inductive-type-of-terms}
-
-We define a type called \texttt{Term} which, not surprisingly,
-represents the type of terms. The type \texttt{X\ :\ \ 𝒰\ ̇} represents
-an arbitrary collection of variable symbols.
-
+\subsubsection{The inductive type of terms}\label{the-inductive-type-of-terms}
+We define a type called \ad{Term} which represents the type of terms of a given signature. As usual, the type \ab X \as : \ab 𝒰 \af ̇ represents an arbitrary collection of variable symbols.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
@@ -147,13 +132,4 @@ an arbitrary collection of variable symbols.
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Term}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Terms.html}{↑ UALib.Terms}
-{\href{UALib.Terms.Free.html}{UALib.Terms.Free →}}
-
-\{\% include UALib.Links.md \%\}

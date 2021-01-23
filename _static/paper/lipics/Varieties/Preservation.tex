@@ -1,15 +1,6 @@
-\subsubsection{Equation preservation}\label{equation-preservation}
-
-This section presents the {[}UALib.Varieties.Preservation{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-In this module we show that identities are preserved by closure
-operators H, S, and P. This will establish the easy direction of
-Birkhoff's HSP Theorem.
-
+In this module we show that identities are preserved by closure operators \ad H, \ad S, and \ad P. This will establish the easy direction of Birkhoff's HSP Theorem.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -87,15 +78,11 @@ Birkhoff's HSP Theorem.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{H preserves identities}\label{h-preserves-identities}
+\subsubsection{H preserves identities}\label{h-preserves-identities}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{--H preserves identities}\<%
 \\
 \>[0]\AgdaFunction{H-id1}%
@@ -443,16 +430,11 @@ Birkhoff's HSP Theorem.
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The converse is almost too obvious to bother with. Nonetheless, we
-formalize it for completeness.
-
+\ccpad
+The converse is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{H-id2}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}%
@@ -568,15 +550,11 @@ formalize it for completeness.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaFunction{ξ}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{S preserves identities}\label{s-preserves-identities}
+\subsubsection{S preserves identities}\label{s-preserves-identities}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{S-id1}%
 \>[371I]\AgdaSymbol{:}%
 \>[372I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -923,13 +901,10 @@ formalize it for completeness.
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaFunction{ζ}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Again, the obvious converse is barely worth the bits needed to formalize
-it.
-
+\ccpad
+Again, the obvious converse is barely worth the bits needed to formalize it.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{S-id2}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1048,7 +1023,7 @@ it.
 \AgdaFunction{ξ}\<%
 \end{code}
 
-\paragraph{P preserves identities}\label{p-preserves-identities}
+\subsubsection{P preserves identities}\label{p-preserves-identities}
 
 \begin{code}%
 \>[0]\AgdaFunction{P-id1}%
@@ -1401,15 +1376,11 @@ it.
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{x}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 \ldots{}and conversely\ldots{}
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{P-id2}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[930I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -1536,15 +1507,11 @@ it.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaFunction{ξ}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{V preserves identities}\label{v-preserves-identities}
+\subsubsection{V preserves identities}\label{v-preserves-identities}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{-- V preserves identities}\<%
 \\
 %
@@ -2291,16 +2258,11 @@ it.
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{VA}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{A≅B}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Once again, and for the last time, completeness dictates that we
-formalize the coverse, however obvious it may be.
-
+\ccpad
+Once again, and for the last time, completeness dictates that we formalize the coverse, however obvious it may be.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{V-id2}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}%
@@ -2416,19 +2378,12 @@ formalize the coverse, however obvious it may be.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaFunction{ξ}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Class identities}\label{class-identities}
-
-It follows from \texttt{V-id1} that, if 𝒦 is a class of structures, the
-set of identities modeled by all structures in 𝒦 is the same as the set
-of identities modeled by all structures in V 𝒦.
-
+\subsubsection{Class identities}\label{class-identities}
+It follows from \af{V-id1} that, if \ab 𝒦 is a class of structures, the set of identities modeled by all structures in \ab 𝒦 is the same as the set of identities modeled by all structures in \ad V \ab 𝒦.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaComment{-- Th (V 𝒦) is precisely the set of identities modeled by 𝒦}\<%
 \\
 \>[0]\AgdaFunction{class-identities}%
@@ -2553,13 +2508,4 @@ of identities modeled by all structures in V 𝒦.
 \AgdaSymbol{(}\AgdaBound{Thpq}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{vbase}\AgdaSpace{}%
 \AgdaBound{KA}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Varieties.Varieties.html}{← UALib.Varieties.Varieties}
-{\href{UALib.Birkhoff.html}{UALib.Birkhoff →}}
-
-\{\% include UALib.Links.md \%\}

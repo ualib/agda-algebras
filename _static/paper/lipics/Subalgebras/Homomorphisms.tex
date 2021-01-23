@@ -1,15 +1,6 @@
-\subsubsection{Homomorphisms and
-subuniverses}\label{homomorphisms-and-subuniverses}
-
-This section presents the {[}UALib.Subalgebras.Homomorphisms{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-The interaction of homomorphisms and subuniverses is a basic cog in the
-universal algebra machine.
-
+Here we mechanize the interaction between homomorphisms and subuniverses---two central cogs of the universal algebra machine.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -37,8 +28,6 @@ universal algebra machine.
 \AgdaPostulate{Universe}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇}}\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -79,27 +68,18 @@ universal algebra machine.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Subalgebras.Properties}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Homomorphic images are
-subuniverses}\label{homomorphic-images-are-subuniverses}
-
+\subsubsection{Homomorphic images are subuniverses}\label{homomorphic-images-are-subuniverses}
 The image of a homomorphism is a subuniverse of its codomain.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{hom-image-is-sub}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -281,17 +261,10 @@ The image of a homomorphism is a subuniverse of its codomain.
 \>[26]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\paragraph{Uniqueness property for
-homomorphisms}\label{uniqueness-property-for-homomorphisms}
-
-Here we formalize the proof that homomorphisms are uniquely determined
-by their values on a generating set.
-
+\subsubsection{Uniqueness property for homomorphisms}\label{uniqueness-property-for-homomorphisms}
+Here we formalize the proof that homomorphisms are uniquely determined by their values on a generating set.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{HomUnique}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[176I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -491,14 +464,4 @@ by their values on a generating set.
 \AgdaBound{im𝒂⊆SgX}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\href{UALib.Subalgebras.Properties.html}{← UALib.Subalgebras.Properties}
-{\href{UALib.Subalgebras.Subalgebras.html}{UALib.Subalgebras.Subalgebras
-→}}
-
-\{\% include UALib.Links.md \%\}
