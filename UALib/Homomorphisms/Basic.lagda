@@ -22,9 +22,9 @@ open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
-The definition of homomorphism in the [Agda UALib][] is an *extensional* one. What this means will become clear once we have presented the definitions.
+The definition of homomorphism in the \agdaualib is an *extensional* one; that is, the homomorphism condition holds pointwise.  This will become clearer once we have the formal definitions in hand.  Generally speaking, though, we say that two functions \ab 𝑓 \ab 𝑔 \as : \ab X \as → \ab Y are extensionally equal iff they are pointwise equal, that is, for all \ab x \as : \ab X we have \ab 𝑓 \ab x \af ≡ \ab 𝑔 \ab x.
 
-First, we say what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function g : A → B.
+To define *homomorphism*, we first say what it means for an operation \ab 𝑓, interpreted in the algebras \ab 𝑨 and \ab 𝑩, to commute with a function \ab 𝑔 \as : \ab A \as → \ab B.
 
 \begin{code}
 
@@ -32,6 +32,7 @@ compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Alge
                     (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 
 compatible-op-map 𝑨 𝑩 𝑓 g = ∀ 𝒂 → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
+
 \end{code}
 
 Note the appearance of the shorthand `∀ 𝒂` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝒂` here must be a tuple on ∣ 𝑨 ∣ of "length" `∥ 𝑆 ∥ 𝑓` (the arity of 𝑓).
@@ -41,6 +42,7 @@ Note the appearance of the shorthand `∀ 𝒂` in the definition of `compatible
 op_interpreted-in_and_commutes-with : {𝓠 𝓤 : Universe}
   (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓠 𝑆) (𝑩 : Algebra 𝓤 𝑆)
   (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
+
 op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g = compatible-op-map 𝑨 𝑩 𝑓 g
 
 \end{code}
@@ -96,17 +98,17 @@ We will define subuniverses in the [UALib.Subalgebras.Subuniverses] module, but 
 \begin{code}
 
 𝑬𝑯-is-closed : {𝓤 𝓦 : Universe} → funext 𝓥 𝓦
- →              {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+  →             {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
                 (g h : hom 𝑨 𝑩) {𝑓 : ∣ 𝑆 ∣ } (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
- →              ((x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h))
-               --------------------------------------------------
- →               ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
+  →             ( (x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h) )
+               ---------------------------------------------------
+  →              ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
 𝑬𝑯-is-closed fe {𝑨}{𝑩} g h {𝑓} 𝒂 p =
-                  (∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)) ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                  (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
-                  (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
-                  ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
+                   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+                   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
+                   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+                   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
 
 \end{code}
 

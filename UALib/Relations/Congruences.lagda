@@ -42,8 +42,38 @@ compatible-equivalence {𝓤}{𝓦} {𝑨} R = compatible 𝑨 R × IsEquivalenc
 
 #### Example
 
-We construct the *trivial* (or "diagonal" or "identity") relation and prove it is a congruence as follows.
+We defined the \emph{trivial} (or ``diagonal'' or ``identity'' or ``zero'') relation \af{𝟎-rel} in Subsection~\ref{sec:binary-examples}.  We now demonstrate how one constructs the trivial congruence out of this relation.
 
+The relation `𝟎-rel` is actually equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of \ad ≡ in the \ualibEquality module, so we simply apply the corresponding proofs.
+
+\begin{code}
+
+module _ {𝓤 : Universe} where
+
+ 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤}{A = A} 𝟎-rel
+ 𝟎-IsEquivalence = record { rfl = ≡-rfl; sym = ≡-sym; trans = ≡-trans }
+
+ ≡-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence{𝓤}{A = A} _≡_
+ ≡-IsEquivalence = record { rfl = ≡-rfl ; sym = ≡-sym ; trans = ≡-trans }
+
+\end{code}
+
+Next we formally record another obvious fact---that `𝟎-rel` is compatible with all operations of all algebras.
+
+\begin{code}
+
+module _ {𝓤 : Universe} {𝑆 : Signature 𝓞 𝓥} where
+
+ 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
+   →               compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
+ 𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
+
+ 𝟎-compatible : funext 𝓥 𝓤 → {A : Algebra 𝓤 𝑆} → compatible A 𝟎-rel
+ 𝟎-compatible fe {A} = λ f args → 𝟎-compatible-op fe {A} f args
+
+\end{code}
+
+Finally, we have the ingredients need to construct the zero congruence.
 
 \begin{code}
 
@@ -77,7 +107,10 @@ The zero element of a quotient can be expressed as follows.
 
 \begin{code}
 
-Zero╱ : {𝓤 𝓡 : Universe}{A : Algebra 𝓤 𝑆} → (θ : Congruence{𝓤}{𝓡} A) → Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓡 ⁺)
+Zero╱ : {𝓤 𝓡 : Universe}{A : Algebra 𝓤 𝑆}
+        (θ : Congruence{𝓤}{𝓡} A)
+  →     Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓡 ⁺)
+
 Zero╱ θ = λ x x₁ → x ≡ x₁
 
 \end{code}
@@ -86,8 +119,10 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
-╱-refl :{𝓤 𝓡 : Universe} (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
- →   ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+╱-refl :{𝓤 𝓡 : Universe} (A : Algebra 𝓤 𝑆)
+        {θ : Congruence{𝓤}{𝓡} A} {a a' : ∣ A ∣}
+  →     ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+
 ╱-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}

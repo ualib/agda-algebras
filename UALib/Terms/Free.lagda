@@ -25,7 +25,7 @@ open import UALib.Terms.Basic{𝑆 = 𝑆}{gfe}{𝕏} hiding (Algebra) public
 
 \end{code}
 
-Terms can be viewed as acting on other terms and we can form an algebraic structure whose domain and basic operations are both the collection of term operations. We call this the **term algebra** and it by `𝑻 X`. In [Agda][] the term algebra is defined as simply as one would hope.
+Terms can be viewed as acting on other terms and we can form an algebraic structure whose domain and basic operations are both the collection of term operations. We call this the **term algebra** and denote it by `𝑻 X`. In [Agda][] the term algebra is defined as simply as one would hope.
 
 \begin{code}
 

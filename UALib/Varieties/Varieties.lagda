@@ -424,14 +424,14 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
  PS⊆SP (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP (pbase (slift{𝑨} x)) = slift splA
   where
-   splA : (lift-alg 𝑨 (𝓾)) ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   splA : (lift-alg 𝑨 𝓾) ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
    splA = S⊆SP{𝓤}{𝓾}{𝒦u} (slift x)
 
  PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso γ refl-≅
   where
-   lA lB : Algebra (𝓾) 𝑆
-   lA = lift-alg 𝑨 (𝓾)
-   lB = lift-alg 𝑩 (𝓾)
+   lA lB : Algebra 𝓾 𝑆
+   lA = lift-alg 𝑨 𝓾
+   lB = lift-alg 𝑩 𝓾
 
    ζ : lB ≤ lA
    ζ = lift-alg-lift-≤-lift 𝑩{𝑨} B≤A
@@ -439,14 +439,14 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
    spA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
    spA = S⊆SP{𝓤}{𝓾}{𝒦u} (slift sA)
 
-   γ : (lift-alg 𝑩 (𝓾)) ∈ (S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   γ = ssub{𝓤 = (𝓾)} spA ζ
+   γ : (lift-alg 𝑩 𝓾) ∈ (S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+   γ = ssub{𝓤 = 𝓾} spA ζ
 
- PS⊆SP (pbase {𝑩} (ssubw{𝑨} sA B≤A)) = ssub{𝓤 = (𝓾)} splA (lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP (pbase {𝑩} (ssubw{𝑨} sA B≤A)) = ssub{𝓤 = 𝓾} splA (lift-alg-≤ 𝑩{𝑨} B≤A)
   where
-   lA lB : Algebra (𝓾) 𝑆
-   lA = lift-alg 𝑨 (𝓾)
-   lB = lift-alg 𝑩 (𝓾)
+   lA lB : Algebra 𝓾 𝑆
+   lA = lift-alg 𝑨 𝓾
+   lB = lift-alg 𝑩 𝓾
 
    splA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
    splA = slift{𝓾}{𝓾} (S⊆SP sA)
@@ -454,12 +454,12 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
 
  PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso splA ζ
   where
-   lA lB : Algebra (𝓾) 𝑆
-   lA = lift-alg 𝑨 (𝓾)
-   lB = lift-alg 𝑩 (𝓾)
+   lA lB : Algebra 𝓾 𝑆
+   lA = lift-alg 𝑨 𝓾
+   lB = lift-alg 𝑩 𝓾
 
    ζ : lA ≅ lB
-   ζ = lift-alg-iso 𝓤 (𝓾) 𝑨 𝑩 A≅B
+   ζ = lift-alg-iso 𝓤 𝓾 𝑨 𝑩 A≅B
 
    splA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
    splA = S⊆SP (slift x)
@@ -469,37 +469,31 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
 
  PS⊆SP (produ{I}{𝒜} x) = γ
   where
-   uw : Universe
-   uw = 𝓾
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{𝓾} 𝒦u)
+   ξ i = S→subalgebra{𝒦 = (P{𝓤}{𝓾} 𝒦u)} (PS⊆SP (x i))
 
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{uw} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{uw} 𝒦u)} (PS⊆SP (x i))
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+   η' = lemPS⊆SP{𝓤 = (𝓾)}{𝓾}{𝒦 = (P{𝓤}{𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{uw}{uw} (P{𝓤}{uw} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (uw)}{uw}{𝒦 = (P{𝓤}{uw} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+   η = subalgebra→S{𝓤 = (𝓾)}{𝓦 = 𝓾}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
 
-   η : ⨅ 𝒜 ∈ S{uw}{uw} (P{uw}{uw} (P{𝓤}{uw} 𝒦u))
-   η = subalgebra→S{𝓤 = (uw)}{𝓦 = uw}{𝒦 = (P{uw}{uw} (P{𝓤}{uw} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
-
-   γ : ⨅ 𝒜 ∈ S{uw}{uw} (P{𝓤}{uw} 𝒦u)
-   γ = (S-mono{𝓤 = (uw)}{𝒦 = (P{uw}{uw} (P{𝓤}{uw} 𝒦u))}{𝒦' = (P{𝓤}{uw} 𝒦u)} (P-idemp')) η
+   γ : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   γ = (S-mono{𝓤 = (𝓾)}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝒦' = (P{𝓤}{𝓾} 𝒦u)} (P-idemp')) η
 
  PS⊆SP (prodw{I}{𝒜} x) = γ
   where
-   uw : Universe
-   uw = 𝓾
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{𝓾} 𝒦u)
+   ξ i = S→subalgebra{𝒦 = (P{𝓤}{𝓾} 𝒦u)} (PS⊆SP (x i))
 
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{uw} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{uw} 𝒦u)} (PS⊆SP (x i))
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+   η' = lemPS⊆SP{𝓤 = (𝓾)}{𝓾}{𝒦 = (P{𝓤}{𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{uw}{uw} (P{𝓤}{uw} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (uw)}{uw}{𝒦 = (P{𝓤}{uw} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+   η = subalgebra→S{𝓤 = (𝓾)}{𝓦 = 𝓾}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
 
-   η : ⨅ 𝒜 ∈ S{uw}{uw} (P{uw}{uw} (P{𝓤}{uw} 𝒦u))
-   η = subalgebra→S{𝓤 = (uw)}{𝓦 = uw}{𝒦 = (P{uw}{uw} (P{𝓤}{uw} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
-
-   γ : ⨅ 𝒜 ∈ S{uw}{uw} (P{𝓤}{uw} 𝒦u)
-   γ = (S-mono{𝓤 = (uw)}{𝒦 = (P{uw}{uw} (P{𝓤}{uw} 𝒦u))}{𝒦' = (P{𝓤}{uw} 𝒦u)} (P-idemp')) η
+   γ : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   γ = (S-mono{𝓤 = (𝓾)}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝒦' = (P{𝓤}{𝓾} 𝒦u)} (P-idemp')) η
 
  PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso{𝓾}{𝓾}{P{𝓤}{𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
   where

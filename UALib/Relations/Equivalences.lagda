@@ -33,32 +33,17 @@ module _ {𝓤 𝓡 : Universe} where
 
 \end{code}
 
-#### Examples
-
-The zero relation 𝟎 is equivalent to the identity relation `≡` and, of course, these are both equivalence relations. (In fact, we already proved reflexivity, symmetry, and transitivity of `≡` in the [UALib.Prelude.Equality][] module, so we simply apply the corresponding proofs where appropriate.)
-\begin{code}
-
-module _ {𝓤 : Universe} where
-
- 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤}{A = A} 𝟎-rel
- 𝟎-IsEquivalence = record { rfl = ≡-rfl; sym = ≡-sym; trans = ≡-trans }
-
- ≡-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence{𝓤}{A = A} _≡_
- ≡-IsEquivalence = record { rfl = ≡-rfl ; sym = ≡-sym ; trans = ≡-trans }
-
-\end{code}
-
-Finally, we should have at our disposal a proof of the fact that the kernel of a function is an equivalence relation.
+We should also have at our disposal a proof of the fact that the kernel of a function is an equivalence relation.
 
 \begin{code}
 
- map-kernel-IsEquivalence : {𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
-                            (f : A → B) → IsEquivalence (KER-rel f)
+map-kernel-IsEquivalence : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
+                            (f : A → B) → IsEquivalence (KER-rel{𝓤}{𝓦} f)
 
- map-kernel-IsEquivalence {𝓦} f =
-  record { rfl = λ x → 𝓇ℯ𝒻𝓁
-         ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
-         ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
+map-kernel-IsEquivalence {𝓤}{𝓦} f =
+ record { rfl = λ x → 𝓇ℯ𝒻𝓁
+        ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
+        ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
 
 \end{code}
 

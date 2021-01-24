@@ -194,21 +194,6 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
  compatible  𝑨 R = ∀ f → compatible-op{𝑨} f R
 \end{code}
 
-#### Examples
-
-\begin{code}
-
-module _ {𝓤 : Universe} {𝑆 : Signature 𝓞 𝓥} where
-
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
-  →                   compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
- 𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
-
- 𝟎-compatible : funext 𝓥 𝓤 → {A : Algebra 𝓤 𝑆} → compatible A 𝟎-rel
- 𝟎-compatible fe {A} = λ f args → 𝟎-compatible-op fe {A} f args
-\end{code}
-
-
 --------------------------------------
 
 [← UALib.Relations.Equivalences](UALib.Relations.Equivalences.html)
