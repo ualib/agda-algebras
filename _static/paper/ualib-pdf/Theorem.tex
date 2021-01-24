@@ -332,4 +332,10 @@ We now have all the pieces in place so that it is all but trivial to string toge
 \AgdaFunction{AiF}\<%
 \end{code}
 \ccpad
-Some readers might worry that we haven't acheived our goal because they may be used to seeing Birkhoff's Theorem presented as an ``if and only if'' assertion. Those fears are quickly put to rest by observing that the converse of the result just proved is that every equational class is closed under HSP, and we already proved that in the closure module. Indeed, there it is proved that \ad H, \ad S, \ad P, and \ad V preserve identities.
+Some readers might worry that we haven't quite acheived our goal because what we just proved (\href{https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487}{birkhoff}) is not an ``if and only if'' assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already established in the \href{UALib.Varieties.Preservation.html}{Equation Preservation} module. Indeed, there we proved the following identity preservation lemmas:
+\begin{itemize}
+\item \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964}{(H-id1)} 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
+\item \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592}{(S-id1)} 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
+\item \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111}{(P-id1)} 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
+\end{itemize}
+From these it follows that every equational class is a variety.

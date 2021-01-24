@@ -68,13 +68,13 @@ module Birkhoffs-Theorem
 
 \end{code}
 
-Some readers familiar with Birkhoff's theorem might worry that we haven't acheived our goal because they may be used to seeing it presented as an "if and only if" assertion.  Those fears are quickly put to rest by observing that the converse of the result just proved is that every equational class is closed under HSP, and we already proved thatin the [Equation Preservation](UALib.Varieties.Preservation.html) module. Indeed, there we proved the identity preservation lemmas,
+Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>) is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Equation Preservation](UALib.Varieties.Preservation.html) module. Indeed, there we proved the following identity preservation lemmas:
 
-* [H-id1](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
-* [S-id1](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
-* [P-id1](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111) 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
+* [(H-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
+* [(S-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
+* [(P-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111) 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
 
-from which it follows that every equational class is closed under H, S, and P.
+From these it follows that every equational class is a variety.
 
 --------------------------------------------
 

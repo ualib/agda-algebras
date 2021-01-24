@@ -9,32 +9,17 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][].
 
-Having set the stage for the entrance of Equational Logic, in~\cite[Section 4.4]{Bergman:2012}) Bergman proclaims,  ``Now, finally, we can formalize the idea we have been using since the first page of this text,'' and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
+In Section 4.4 of [Bergman (2012)][], having set the stage for the entrance of Equational Logic, Bergman proclaims,  ``Now, finally, we can formalize the idea we have been using since the first page of this text,'' and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
 
-Let 𝑆 be a signature. An **identity** (or **equation**) in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨. In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
+  Let 𝑆 be a signature. An **identity** (or **equation**) in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞,
+  from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.
+  In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of
+  algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Unicode Hints**. To produce the symbols ≈ and ⊧ in Emacs [agda2-mode][], type `\~~` and `\models (resp.). The symbol ≋ is produced in Emacs with `\~~~`.
-\\
 
-<!--
-
-In his treatment of Birhoff's HSP theorem, Cliff Bergman (at the start of Section 4.4 of [Bergman (2012)][]) proclaims, "Now, finally, we can formalize the idea we have been using since the first page of this text." He then proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
-
-  Let 𝑆 be a signature. An **identity** or **equation** in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the
-  term algebra `𝑻 X`. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 if `𝑝 ̇ 𝑨  ≡  𝑞 ̇ 𝑨`. In this
-  situation, we write `𝑨 ⊧ 𝑝 ≈ 𝑞` and say that 𝑨 **models** the identity `𝑝 ≈ q`.
-
-If 𝒦 is a class of structures, all of the same signature, it is standard to write `𝒦 ⊧ p ≈ q` just in case all structures in the class 𝒦 model the identity p ≈ q. However, because a class of structures has a different type than a single structure, we will need to use a different notation, and we settle for `𝒦 ⊧ p ≋ q` to denote this concept.
-
-Thus, if 𝒦 is a class of 𝑆-algebras, we write `𝒦 ⊧ 𝑝 ≋ 𝑞` if for every `𝑨 ∈ 𝒦` we have `𝑨 ⊧ 𝑝 ≈ 𝑞`.
-
- Finally, if ℰ is a set of equations, we write 𝒦 ⊧ ℰ if every member of 𝒦 satisfies every member of ℰ.
-
-In this module we formalize these notions by defining types that represent them. Before we attempt to do that, however, let us say a bit more precisely what the definition of `𝑨 ⊧ 𝑝 ≈ 𝑞` entails. When we write `𝑨 ⊧ 𝑝 ≈ 𝑞` and say that the identity `p ≈ q` is satisfied in 𝑨, we mean that for each assignment function `𝒂 : X → ∣ 𝑨 ∣`, assigning values in the domain of 𝑨 to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
-
-**Notation**. To produce the symbols ≈ and ⊧ in Emacs `agda2-mode`, type `\~~` and `\models` (resp.). As mentioned, to denote "𝒦 models 𝑝 ≈ 𝑞" we will use 𝒦 ⊧ 𝑝 ≋ 𝑞 instead of the more standard 𝒦 ⊧ 𝑝 ≈ 𝑞 because we distinguish it from 𝑨 ⊧ 𝑝 ≈ 𝑞 in our Agda implementation. The symbol ≋ is produced in Emacs `agda2-mode` with `\~~~`. -->
 
 \begin{code}
 
