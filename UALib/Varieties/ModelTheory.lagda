@@ -9,16 +9,14 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][].
 
-In Section 4.4 of [Bergman (2012)][], having set the stage for the entrance of Equational Logic, Bergman proclaims,  ``Now, finally, we can formalize the idea we have been using since the first page of this text,'' and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
+Having set the stage for the entrance of Equational Logic, in~\cite[Section 4.4]{Bergman:2012}) Bergman proclaims,  ``Now, finally, we can formalize the idea we have been using since the first page of this text,'' and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
 
-<pre class="Agda">
+Let 𝑆 be a signature. An **identity** (or **equation**) in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨. In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-Let <a class="Bound">𝑆</a> be a signature. An **identity** or **equation** in <a class="Bound">𝑆</a> is an ordered pair of terms, written <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">𝑞</a>, from the term algebra <a class="Function">𝑻</a> <a class="Bound">X</a>. If <a class="Bound">𝑨</a> is an <a class="Bound">𝑆</a>-algebra we say that <a class="Bound">𝑨 \textbf{satisfies} <a class="Bound">𝑝 <a class="Function">≈ <a class="Bound">𝑞 if <a class="Bound">𝑝</a> <a class="Function">̇</a> <a class="Bound">𝑨</a> <a class="Datatype">≡</a> <a class="Bound">𝑞</a> <a class="Function">̇</a> <a class="Bound">𝑨</a>. In this situation, we write <a class="Bound">𝑨</a> <a class="Function">⊧</a> <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">𝑞</a> and say that <a class="Bound">𝑨</a> **models** the identity <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">q</a>. If <a class="Bound">𝒦</a> is a class of algebras, all of the same signature, we write <a class="Bound">𝒦</a> <a class="Function">⊧</a> <a class="Bound">p</a> <a class="Function">≈</a> <a class="Bound">q</a> if, for every <a class="Bound">𝑨</a> <a class="Function">∈</a> <a class="Bound">𝒦</a>, <a class="Bound">𝑨</a> <a class="Function">⊧</a> <a class="Bound">𝑝</a><a class="Function">≈</a> <a class="Bound">𝑞</a>.
+**Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-**Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations <a class="Function">⊧ and <a class="Function">≈. As a reasonable alternative to what we would normally express informally as 𝒦 <a class="Function">⊧ <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">𝑞</a>, we have settled on <a class="Bound">𝒦</a> <a class="Function">⊧</a> <a class="Bound">p</a> <a class="Function">≋</a> <a class="Bound">q</a> to denote this relation.  To reiterate, if <a class="Bound">𝒦</a> is a class of <a class="Bound">𝑆</a>-algebras, we write <a class="Bound">𝒦</a> <a class="Function">⊧</a> <a class="Bound">𝑝</a> <a class="Function">≋</a> <a class="Bound">𝑞</a> if every <a class="Bound">𝑨</a> <a class="Function">∈</a> <a class="Bound">𝒦</a> satisfies <a class="Bound">𝑨</a> <a class="Function">⊧</a> <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">𝑞</a>.
-
-**Unicode Hints**. To produce the symbols <a class="Function">≈</a> and <a class="Function">⊧</a> in Emacs [agda2-mode][], type `\~~` and `\models (resp.). The symbol <a class="Function">≋</a> is produced in Emacs with `\~~~`.
-</pre>
+**Unicode Hints**. To produce the symbols ≈ and ⊧ in Emacs [agda2-mode][], type `\~~` and `\models (resp.). The symbol ≋ is produced in Emacs with `\~~~`.
+\\
 
 <!--
 
@@ -118,22 +116,13 @@ mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 #### <a id="computing-with-⊧">Computing with ⊧</a>
 
-<pre class="Agda">
-
-We have formally defined <a class="Bound">𝑨</a> <a class="Function">⊧</a> <a class="Bound">𝑝</a> <a class="Function">≈</a> <a class="Bound">𝑞</a>, which represents the assertion that <a class="Bound">p</a> <a class="Function">≈</a> <a class="Bound">q</a> holds when this identity is interpreted in the algebra <a class="Bound">𝑨</a>; syntactically, <a class="Bound">𝑝</a> <a class="Function">̇</a> <a class="Bound">𝑨</a> <a class="Function">≡</a> <a class="Bound">𝑞</a> <a class="Function">̇</a> <a class="Bound">𝑨</a>.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how one *uses* the definitions. We emphasize that we interpret the expression <a class="Bound">𝑝</a> <a class="Function">̇</a> <a class="Bound">𝑨</a> <a class="Function">≡</a> <a class="Bound">𝑞</a> <a class="Function">̇</a> <a class="Bound">𝑨</a> as an *extensional equality*, by which we mean that for each *assignment function* <a class="Bound">𝒂</a> <a class="Symbol">:</a> <a class="Bound">X</a> <a class="Symbol">→</a> ∣ <a class="Bound">𝑨</a> ∣---assigning values in the domain of <a class="Bound">𝑨</a> to the variable symbols in <a class="Bound">X</a>---we have (<a class="Bound">𝑝</a> <a class="Function">̇</a> <a class="Bound">𝑨</a>) <a class="Bound">𝒂</a> <a class="Function">≡</a> (<a class="Bound">𝑞</a> <a class="Function">̇</a> <a class="Bound">𝑨</a>) <a class="Bound">𝒂</a>.
-
-</pre>
-
+We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each \emph{assignment function} 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
 
 -------------------------------------
 
 #### <a id="⊧-≅ compatibility">⊧-≅ compatibility</a>
 
-<pre class="Agda">
-
-The binary relation <a class="Function">⊧</a> would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism), and this fact is proved by showing that a certain term operation identity---namely, <a class="Bound">p</a> <a class="Function">̇</a> <a class="Bound">𝑩</a> <a class="Datatype">≡</a> <a class="Bound">q</a> <a class="Function">̇</a> <a class="Bound">𝑩</a>---holds *extensionally*, in the sense of the paragraph above on [Computing with ⊧](UALib.Varieties.Modeltheory.html#computing-with-⊧).
-
-</pre>
+The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism), and this fact is proved by showing that a certain term operation identity---namely, p ̇ 𝑩 ≡ q ̇ 𝑩---holds *extensionally*, in the sense of the paragraph above on [Computing with ⊧](UALib.Varieties.Modeltheory.html#computing-with-⊧).
 
 \begin{code}
 
