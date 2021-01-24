@@ -1,0 +1,63 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bergman:2012}
+Clifford Bergman.
+\newblock {\em Universal {A}lgebra: fundamentals and selected topics}, volume
+  301 of {\em Pure and Applied Mathematics (Boca Raton)}.
+\newblock CRC Press, Boca Raton, FL, 2012.
+
+\bibitem{Birkhoff:1935}
+G~Birkhoff.
+\newblock On the structure of abstract algebras.
+\newblock {\em Proceedings of the Cambridge Philosophical Society},
+  31(4):433--454, Oct 1935.
+
+\bibitem{Capretta:1999}
+Venanzio Capretta.
+\newblock Universal algebra in type theory.
+\newblock In {\em Theorem proving in higher order logics ({N}ice, 1999)},
+  volume 1690 of {\em Lecture Notes in Comput. Sci.}, pages 131--148. Springer,
+  Berlin, 1999.
+\newblock URL: \url{http://dx.doi.org/10.1007/3-540-48256-3_10}, \href
+  {https://doi.org/10.1007/3-540-48256-3_10}
+  {\path{doi:10.1007/3-540-48256-3_10}}.
+
+\bibitem{Carlstrom:2008}
+Jesper Carlström.
+\newblock A constructive version of birkhoff's theorem.
+\newblock {\em Mathematical Logic Quarterly}, 54(1):27--34, 2008.
+\newblock URL:
+  \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/malq.200710023}, \href
+  {http://arxiv.org/abs/https://onlinelibrary.wiley.com/doi/pdf/10.1002/malq.200710023}
+  {\path{arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1002/malq.200710023}},
+  \href {https://doi.org/https://doi.org/10.1002/malq.200710023}
+  {\path{doi:https://doi.org/10.1002/malq.200710023}}.
+
+\bibitem{Gunther:2018}
+Emmanuel Gunther, Alejandro Gadea, and Miguel Pagano.
+\newblock Formalization of universal algebra in agda.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 338:147 --
+  166, 2018.
+\newblock The 12th Workshop on Logical and Semantic Frameworks, with
+  Applications (LSFA 2017).
+\newblock URL:
+  \url{http://www.sciencedirect.com/science/article/pii/S1571066118300768},
+  \href {https://doi.org/https://doi.org/10.1016/j.entcs.2018.10.010}
+  {\path{doi:https://doi.org/10.1016/j.entcs.2018.10.010}}.
+
+\bibitem{Norell:2009}
+Ulf Norell.
+\newblock Dependently typed programming in agda.
+\newblock In {\em Proceedings of the 6th International Conference on Advanced
+  Functional Programming}, AFP'08, pages 230--266, Berlin, Heidelberg, 2009.
+  Springer-Verlag.
+\newblock URL: \url{http://dl.acm.org/citation.cfm?id=1813347.1813352}.
+
+\bibitem{Spitters:2011}
+Bas Spitters and Eelis van~der Weegen.
+\newblock Type classes for mathematics in type theory.
+\newblock {\em CoRR}, abs/1102.1323, 2011.
+\newblock URL: \url{http://arxiv.org/abs/1102.1323}, \href
+  {http://arxiv.org/abs/1102.1323} {\path{arXiv:1102.1323}}.
+
+\end{thebibliography}
