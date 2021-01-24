@@ -9,17 +9,16 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][].
 
-In Section 4.4 of [Bergman (2012)][], having set the stage for the entrance of Equational Logic, Bergman proclaims,  ``Now, finally, we can formalize the idea we have been using since the first page of this text,'' and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
+In Section 4.4 of [Bergman (2012)][], having set the stage for the entrance of Equational Logic, Bergman proclaims,  "Now, finally, we can formalize the idea we have been using since the first page of this text," and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
 
   Let 𝑆 be a signature. An **identity** (or **equation**) in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞,
-  from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 \textbf{satisfies} 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.
+  from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.
   In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of
   algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-**Unicode Hints**. To produce the symbols ≈ and ⊧ in Emacs [agda2-mode][], type `\~~` and `\models (resp.). The symbol ≋ is produced in Emacs with `\~~~`.
-
+**Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
 
 \begin{code}
 
@@ -101,7 +100,7 @@ mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 #### <a id="computing-with-⊧">Computing with ⊧</a>
 
-We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each \emph{assignment function} 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
+We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each *assignment function* 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
 
 -------------------------------------
 
@@ -147,9 +146,6 @@ lower-alg-⊧ : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 �
                              (p q : Term{𝓧}{X})
  →                           lift-alg 𝑨 𝓦 ⊧ p ≈ q → 𝑨 ⊧ p ≈ q
 lower-alg-⊧ {𝓤}{𝓦}{𝓧}{X} 𝑨 p q lApq = ⊧-≅ p q lApq (sym-≅ lift-alg-≅)
-
--- lower-class : {𝓤 𝓦 : Universe} → Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) → Pred (Algebra 𝓤 𝑆)(OV (𝓤 ⊔ 𝓦))
--- lower-class {𝓤}{𝓦}𝒦 = λ (𝑨 : Algebra 𝓤 𝑆) → lift-alg 𝑨 𝓦 ∈ 𝒦
 
 \end{code}
 

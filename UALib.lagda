@@ -53,6 +53,11 @@ To give an idea of the current scope of the library, we note that it now include
 
 We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Indeed, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to ever higher peaks, all the time verifying and authenticating what we think we found along the way.
 
+**Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
+
+**Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
+
+
 --------------------------------
 
 ### <a id="brief-contents"></a> Brief Contents
