@@ -47,9 +47,7 @@ These options control certain foundational assumptions that Agda assumes when ty
 \subsubsection{Modules}\label{modules}
 
 The \AgdaKeyword{OPTIONS} directive is followed by some imports or the start of a module.
-For example, the \Preliminaries module begins with \AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}\AgdaKeyword{where}.
-
+%% For example, the \ualibPreliminaries module begins with \AgdaKeyword{module}\AgdaSpace{}\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}\AgdaKeyword{where}.
 Sometimes we want to pass in parameters that will be assumed throughout the module. For instance, when working with algebras we often assume they come from a particular fixed signature \AgdaBound{𝑆}, which we could fix as a parameter at the start of a module. We'll see many examples later, but here's an example:
 \AgdaKeyword{module}\AgdaSpace{}\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%

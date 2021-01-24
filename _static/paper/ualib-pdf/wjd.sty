@@ -41,24 +41,36 @@
 \newcommand\ufcourse{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}\xspace}
 \newcommand\MGSnineteen{\href{http://events.cs.bham.ac.uk/mgs2019/}{MGS 2019}\xspace}
 
+%% macros for module links %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\am[1]{\AgdaModule{#1}}
-\newcommand\PreludePreliminaries{\href{UALib.Prelude.Preliminaries.html}{\am{Prelude.Preliminaries}}\xspace}
-\newcommand\PreludeEquality{\href{UALib.Prelude.Equality.html}{\am{Prelude.Equality}}\xspace}
-\newcommand\Preliminaries{\href{UALib.Prelude.Preliminaries.html}{\am{Preliminaries}}\xspace}
-\newcommand\Lifts{\href{https://ualib.gitlab.io/UALib.Algebras.html}{\am{Algebras.Lifts}}\xspace}
-\newcommand\ualibPrelude{\href{https://ualib.gitlab.io/UALib.Prelude.html}{\am{UALib.Prelude}}\xspace}
-\newcommand\ualibUnary{\href{https://ualib.gitlab.io/UALib.Relations.Unary.html}{\am{UALib.Relations.Unary}}\xspace}
 \newcommand\universes{\href{https://ualib.gitlab.io/universes.html}{universes}\xspace}
 \newcommand\universeshtml{\href{https://ualib.gitlab.io/universes.html}{universes.html}\xspace}
+
 \newcommand\ualibPreface{\href{https://ualib.gitlab.io/UALib.Preface.html}{\am{UALib.Preface}}\xspace}
-\newcommand\ualibAlgebras{\href{https://ualib.gitlab.io/UALib.Algebras.html}{\am{UALib.Algebras}}\xspace}
-\newcommand\ualibLifts{\href{https://ualib.gitlab.io/UALib.Algebras.html}{\am{UALib.Algebras.Lifts}}\xspace}
-\newcommand\ualibBinary{\href{https://ualib.gitlab.io/UALib.Relations.Binary.html}{\am{UALib.Relations.Binary}}\xspace}
+
+% -- Prelude
+\newcommand\ualibPrelude{\href{https://ualib.gitlab.io/UALib.Prelude.html}{\am{UALib.Prelude}}\xspace}
+\newcommand\ualibPreliminaries{\href{https://ualib.gitlab.io/UALib.Prelude.Preliminaries.html}{\am{UALib.Prelude.Preliminaries}}\xspace}
 \newcommand\ualibEquality{\href{https://ualib.gitlab.io/UALib.Relations.Equality.html}{\am{UALib.Relations.Equality}}\xspace}
+\newcommand\ualibInverses{\href{UALib.Prelude.Inverses.html}{\am{UALib.Prelude.Inverses}}\xspace}
+\newcommand\ualibExtensionality{\href{UALib.Prelude.Extensionality.html}{\am{UALib.Prelude.Extensionality}}\xspace}
+
+% -- Algebras
+\newcommand\ualibAlgebras{\href{https://ualib.gitlab.io/UALib.Algebras.html}{\am{UALib.Algebras}}\xspace}
+\newcommand\ualibSignatures{\href{https://ualib.gitlab.io/UALib.Algebras.Signatures.html}{\am{UALib.Algebras.Signatures}}\xspace}
+\newcommand\ualibAlgAlgebras{\href{https://ualib.gitlab.io/UALib.Algebras.Algebras.html}{\am{UALib.Algebras.Algebras}}\xspace}
+\newcommand\ualibAlgProducts{\href{https://ualib.gitlab.io/UALib.Algebras.Products.html}{\am{UALib.Algebras.Products}}\xspace}
+\newcommand\ualibLifts{\href{https://ualib.gitlab.io/UALib.Algebras.html}{\am{UALib.Algebras.Lifts}}\xspace}
+
+% -- Relations
 \newcommand\ualibRelations{\href{https://ualib.gitlab.io/UALib.Relations.html}{\am{UALib.Relations}}\xspace}
-\newcommand\ualibQuotients{\href{https://ualib.gitlab.io/UALib.Relations.Quotients.html}{\am{UALib.Relations.Quotients}}\xspace}
+\newcommand\ualibUnary{\href{https://ualib.gitlab.io/UALib.Relations.Unary.html}{\am{UALib.Relations.Unary}}\xspace}
+\newcommand\ualibBinary{\href{https://ualib.gitlab.io/UALib.Relations.Binary.html}{\am{UALib.Relations.Binary}}\xspace}
 \newcommand\ualibEquivalences{\href{https://ualib.gitlab.io/UALib.Relations.Quotients.html}{\am{UALib.Relations.Equivalences}}\xspace}
+\newcommand\ualibQuotients{\href{https://ualib.gitlab.io/UALib.Relations.Quotients.html}{\am{UALib.Relations.Quotients}}\xspace}
 \newcommand\ualibCongruences{\href{https://ualib.gitlab.io/UALib.Relations.Quotients.html}{\am{UALib.Relations.Congruences}}\xspace}
+
+% -- Homomorphisms
 \newcommand\ualibHomomorphisms{\href{https://ualib.gitlab.io/UALib.Homomorphisms.html}{\am{UALib.Homomorphisms}}\xspace}
 \newcommand\ualibHomBasic{\href{https://ualib.gitlab.io/UALib.Homomorphisms.Basic.html}{\am{UALib.Homomorphisms.Basic}}\xspace}
 \newcommand\ualibKernels{\href{https://ualib.gitlab.io/UALib.Homomorphisms.Kernels.html}{\am{UALib.Homomorphisms.Kernels}}\xspace}
@@ -66,22 +78,32 @@
 \newcommand\ualibHomProducts{\href{https://ualib.gitlab.io/UALib.Homomorphisms.Products.html}{\am{UALib.Homomorphisms.Products}}\xspace}
 \newcommand\ualibIsomorphisms{\href{https://ualib.gitlab.io/UALib.Homomorphisms.Isomorphisms.html}{\am{UALib.Homomorphisms.Isomorphisms}}\xspace}
 \newcommand\ualibHomImages{\href{https://ualib.gitlab.io/UALib.Homomorphisms.HomomorphicImages.html}{\am{UALib.Homomorphisms.HomomorphicImages}}\xspace}
+
+% - Terms
 \newcommand\ualibTerms{\href{https://ualib.gitlab.io/UALib.Terms.html}{\am{UALib.Terms}}\xspace}
 \newcommand\ualibTermsBasic{\href{https://ualib.gitlab.io/UALib.Terms.Basic.html}{\am{UALib.Terms.Basic}}\xspace}
 \newcommand\ualibTermsFree {\href{https://ualib.gitlab.io/UALib.Terms.Free.html}{\am{UALib.Terms.Free}}\xspace}
 \newcommand\ualibTermsOperations {\href{https://ualib.gitlab.io/UALib.Terms.Operations.html}{\am{UALib.Terms.Operations}}\xspace}
 \newcommand\ualibTermsCompatibility {\href{https://ualib.gitlab.io/UALib.Terms.Compatibility.html}{\am{UALib.Terms.Compatibility}}\xspace}
+
+% -- Subalgebras
+\newcommand\ualibSubalgebras{\href{https://ualib.gitlab.io/UALib.Subalgebras.html}{\am{UALib.Subalgebras}}\xspace}
 \newcommand\ualibSubuniverses{\href{https://ualib.gitlab.io/UALib.Subalgebras.Subuniverses.html}{\am{UALib.Subalgebras.Subuniverses}}\xspace}
 \newcommand\ualibGeneration{\href{https://ualib.gitlab.io/UALib.Subalgebras.Generation.html}{\am{UALib.Subalgebras.Generation}}\xspace}
 \newcommand\ualibProperties{\href{https://ualib.gitlab.io/UALib.Subalgebras.Properties.html}{\am{UALib.Subalgebras.Properties}}\xspace}
 \newcommand\ualibHomsAndSubs{\href{https://ualib.gitlab.io/UALib.Subalgebras.Homomorphisms.html}{\am{UALib.Subalgebras.Homomorphisms}}\xspace}
-\newcommand\ualibSubalgebras{\href{https://ualib.gitlab.io/UALib.Subalgebras.Subalgebras.html}{\am{UALib.Subalgebras.Subalgebras}}\xspace}
+\newcommand\ualibSubSubalgebras{\href{https://ualib.gitlab.io/UALib.Subalgebras.Subalgebras.html}{\am{UALib.Subalgebras.Subalgebras}}\xspace}
 \newcommand\ualibWWMD{\href{https://ualib.gitlab.io/UALib.Subalgebras.WWMD.html}{\am{UALib.Subalgebras.WWMD}}\xspace}
+
+% -- Varieties
 \newcommand\ualibVarieties{\href{https://ualib.gitlab.io/UALib.Varieties.html}{\am{UALib.Varieties}}\xspace}
 \newcommand\ualibModelTheory{\href{https://ualib.gitlab.io/UALib.Varieties.ModelTheory.html}{\am{UALib.Varieties.ModelTheory}}\xspace}
 \newcommand\ualibEquationalLogic{\href{https://ualib.gitlab.io/UALib.Varieties.EquationalLogic.html}{\am{UALib.Varieties.EquationalLogic}}\xspace}
+\newcommand\ualibVarVarieties{\href{https://ualib.gitlab.io/UALib.Varieties.Varieties.html}{\am{UALib.Varieties.Varieties}}\xspace}
 \newcommand\ualibVarietiesVarieties{\href{https://ualib.gitlab.io/UALib.Varieties.Varieties.html}{\am{UALib.Varieties.Varieties}}\xspace}
 \newcommand\ualibPreservation{\href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html}{\am{UALib.Varieties.Preservation}}\xspace}
+
+% -- Birkhoff
 \newcommand\ualibBirkhoff{\href{https://ualib.gitlab.io/UALib.Birkhoff.html}{\am{UALib.Birkhoff}}\xspace}
 \newcommand\ualibFreeAlgebra{\href{https://ualib.gitlab.io/UALib.Birkhoff.FreeAlgebra.html}{\am{UALib.Birkhoff.FreeAlgebra}}\xspace}
 \newcommand\ualibLemmata{\href{https://ualib.gitlab.io/UALib.Birkhoff.Lemmata.html}{\am{UALib.Birkhoff.Lemmata}}\xspace}

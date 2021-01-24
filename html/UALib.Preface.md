@@ -94,17 +94,17 @@ git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 
 The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to [Clifford Bergman][], [Venanzio Capretta][], [Andrej Bauer][], [Ralph Freese][], [Bill Lampe][],[Miklós Maróti][], [Peter Mayr][] and [JB Nation][] for helpful discussions, instruction, advice, inspiration and encouragement that they have generously donated to the project.
+Thanks also to [Clifford Bergman][], [Venanzio Capretta][], [Andrej Bauer][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][] and [JB Nation][] for helpful discussions, instruction, advice, inspiration and encouragement.
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
 
 [William DeMeo][] developed the [Agda Universal Algebra Library][] and wrote the documentation.
 
-[Siva Somayyajula][] contributed code to early versions of the library.
+[Siva Somayyajula][] contributed to early versions of the library.
 
-Regarding the well known mathematical results that are implemented in the [UAlib][], as well as the presentation and informal statements of such results in the documentation, the author of these web pages makes no claims to originality.
+Most of the mathematical results that formalized in the [UAlib][] are already well known.
 
-Regarding the Agda source code in the [Agda UALib][], this is due to the author with one major caveat:  The [Agda UALib][] has benefited greatly from, and even depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martin Hötzel Escardo][].  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
+Regarding the Agda source code in the [Agda UALib][], this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martin Hötzel Escardo][].  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
 
 -------------------------------------------------------
 
