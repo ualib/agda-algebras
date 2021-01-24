@@ -43,7 +43,7 @@ of citation.
 **Author**. [William DeMeo][]  
 *Affiliation*. [Department of Algebra][], [Charles University in Prague][]
 
-**PDF documentation**. [ualib-and-birkhoff-24Jan2021.pdf](ualib-and-birkhoff-24Jan2021.pdf)
+**PDF documentation**. [ualib-24Jan2021.pdf](ualib-24Jan2021.pdf)
 
 **Abstract**. The [Agda Universal Algebra Library][] ([UALib][]) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
 
