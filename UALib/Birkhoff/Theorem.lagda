@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.Theorem][] module of the [Agda Universal Algebra Library][].
 
-We now have all the pieces in place so that it is all but trivial to string together these pieces to complete the proof of Birkhoff's celebrated HSP theorem asserting that every variety is defined by a set of identities (is an "equational class").
+It is now all but trivial to use what we have already proved and piece together a complete proof of Birkhoff's celebrated HSP theorem asserting that every variety is defined by a set of identities (is an "equational class").
 
 \begin{code}
 
