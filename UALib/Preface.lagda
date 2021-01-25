@@ -64,9 +64,9 @@ We will have much more to say about types and type theory as we progress. For no
 
 This document describes [UALib][] in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
 
-While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], and to a lesser extent category theory, as presented in [categorytheory.gitlab.io][] or [Riehl (2017)][].
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], or category theory, as presented in, say, [Riehl (2017)][] or [categorytheory.gitlab.io][].
 
-Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to the appendix and glossary, while simultaneously consulting one or more of the references mentioned in the references section to fill in gaps as needed.
+Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to one or more of the resources mentioned in the references section below to fill in gaps as needed.
 
 -------------------------------------------------------------
 
@@ -94,7 +94,7 @@ git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 
 The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to [Clifford Bergman][], [Venanzio Capretta][], [Andrej Bauer][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][] and [JB Nation][] for helpful discussions, instruction, advice, inspiration and encouragement.
+Thanks also to [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], and [JB Nation][] for helpful discussions, instruction, advice, inspiration and encouragement.
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
 

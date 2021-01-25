@@ -50,7 +50,7 @@
 [HoTT book]: https://homotopytypetheory.org/book/
 [HoTT-UF-in-Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html
 [HSP Theorem]: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
-
+[Hyeyoung Shin]: https://hyeyoungshin.github.io/
 [Implicit Arguments]: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 [Inductive Types in Lean]: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 [inductive types]: https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types
