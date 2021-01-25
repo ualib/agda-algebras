@@ -134,7 +134,7 @@ open import UALib.Birkhoff
   - [Equation Preservation Theorems](UALib.Varieties.Preservation.html)
 
 - [Birkhoff's Theorem](UALib.Birkhoff.html)
-  - [Relatively Free Algebra Types](UALib.Birkhoff.FreeAlgebra.html)
+  - [The Relatively Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
   - [HSP Lemmata](UALib.Birkhoff.Lemmata.html)
   - [HSP Theorem](UALib.Birkhoff.Theorem.html)
 

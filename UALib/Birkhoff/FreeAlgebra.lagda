@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="relatively-free-algebra-types">Relatively Free Algebra Types</a>
+### <a id="the-relatively-free-algebra">The Relatively Free Algebra</a>
 
 This section presents the [UALib.Birkhoff.FreeAlgebra][] module of the [Agda Universal Algebra Library][].
 
