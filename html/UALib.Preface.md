@@ -156,9 +156,13 @@ This causes jekyll to serve the web pages locally so we can inspect them by poin
 
 -----------------------------------
 
-### <a id="how-to-cite-the-agda-ualib">How to cite the Agda UALib</a>
+### License and citation information
 
-The [Agda UALib][] falls under the used in other work, it should be cited it using the following BibTeX data:
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">The Agda Universal Algebra Library</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">William DeMeo</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://gitlab.com/ualib/ualib.gitlab.io" rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
+
+#### <a id="how-to-cite-the-agda-ualib">How to cite the Agda UALib</a>
+
+If you use the Agda UALib or wish to refer to it or its documentation in a publication or on a web page, please use the following BibTeX data:
 
 ```bibtex
 @article{DeMeo:2021,

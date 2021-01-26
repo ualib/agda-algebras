@@ -14,10 +14,8 @@ It is now all but trivial to use what we have already proved and piece together 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
-
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
-
 
 module UALib.Birkhoff.Theorem
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
@@ -25,11 +23,8 @@ module UALib.Birkhoff.Theorem
  {𝓤 : Universe} {X : 𝓤 ̇}
  where
 
-
 open import UALib.Birkhoff.Lemmata {𝑆 = 𝑆}{gfe}{𝕏}{𝓤}{X} public
-
 open the-free-algebra {𝓤}{𝓤}{X}
-
 
 module Birkhoffs-Theorem
  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
