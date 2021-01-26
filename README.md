@@ -26,21 +26,22 @@ If you don't have Agda and agda2-mode installed, follow the [official installati
 
 ## Download the UALib
 
-[Clone](https://docs.gitlab.com/ee/gitlab-basics/command-line-commands.html) the repository to your local machine with a command like the following:
-
-``` sh
-git clone git@gitlab.com:ualib/ualib.gitlab.io.git
-cd ualib.gitlab.io
-```
-
-or, if you don't have your Gitlab account [configured with ssh keys](https://docs.gitlab.com/ee/ssh/),
+[Clone](https://docs.gitlab.com/ee/gitlab-basics/command-line-commands.html) the repository to your local machine using **ONE** of the following alternative commands:
 
 ``` sh
 git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 cd ualib.gitlab.io
 ```
 
-After installing agda and cloning the ualib.gitlab.io repository, you should be able to work with the Agda UALib source code contained in the .lagda files under the ualib.gitlab.io/UALib directory.
+**OR**, if you have a gitlab account and have configured [ssh keys](https://docs.gitlab.com/ee/ssh/),
+
+
+``` sh
+git clone git@gitlab.com:ualib/ualib.gitlab.io.git
+cd ualib.gitlab.io
+```
+
+After installing Agda and cloning the ualib.gitlab.io repository, you should be able to work with the Agda UALib source code contained in the .lagda files like UALib.lagda or any of it submodules in the ualib.gitlab.io/UALib directory.  For example, you could start by having a look at [UALib/Prelude/Preliminaries.lagda](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda).
 
 --------------------------------------------
 
