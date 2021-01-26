@@ -49,8 +49,6 @@ Other Emacs keybindings are described in the [emacs-mode.html#keybindings](https
 
 ## Generating the documentation
 
-(**To do** update this section with better, more complete instructions)
-
 The html documentation pages are generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\begin{code}...\end{code}` blocks, and some mathematical discussions outside those blocks.
 
 The html pages are generated automatically by Agda with the command
