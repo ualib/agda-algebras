@@ -13,24 +13,26 @@ But if you're still reading this, perhaps your masochistic tendencies have got t
 * [.emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.emacs) custom configuration file (loaded on startup of spacemacs)
 
 
-**Important** It is assumed you have already installed Agda 2.6.1 in the directory `~/ualib/` following the instructions in the [INSTALL_AGDA.md](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md) file.
+**Important**. It is assumed you have already installed Agda 2.6.1 in the directory `~/ualib/` following the instructions in the [INSTALL_AGDA.md](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md) file.
 
-**Important** The [.spacemacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.spacemacs) custom configuration file (loaded on startup of spacemacs) file should be place in your home directory.
+**Important**. The [.spacemacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.spacemacs) custom configuration file should be place in your home directory.
 
-**Important** To use the [.emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.emacs) file included in this repository, along with the start-up script [ualib-emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/ualib-emacs), place the [.emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.emacs) file in the directory `~/ualib/`.
+**Important**. To use the [.emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.emacs)  custom configuration file that's included in this repository and the start-up script [ualib-emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/ualib-emacs), do:
 
-**Important** The file [ualib-emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/ualib-emacs) should be placed in a directory that's in your `PATH` [environment variable](https://help.ubuntu.com/community/EnvironmentVariables) and made executable. E.g., in my case,
+* place [.emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/.emacs) in the directory `~/ualib/` that you created when you installed Agda, and 
 
-```
-chmod a+x ualib-emacs
-mv ualib-emacs ~/bin
-```
+* place [ualib-emacs](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/emacs/ualib-emacs) in a directory that's in your `PATH` [environment variable](https://help.ubuntu.com/community/EnvironmentVariables) and made executable. E.g., in my case,
 
-If the `~/bin` directory is not already in your `PATH`, then you could add it by
+  ```
+  chmod a+x ualib-emacs
+  mv ualib-emacs ~/bin
+  ```
 
-```
-export PATH=$HOME/bin:$PATH
-```
+  If the `~/bin` directory is not already in your `PATH`, then you could add it by
 
-To make the change permanent, see [how to add a directory to the path](https://askubuntu.com/questions/60218/how-to-add-a-directory-to-the-path) at AskUbuntu.
+  ```
+  export PATH=$HOME/bin:$PATH
+  ```
+
+  To make the change permanent, see [how to add a directory to the path](https://askubuntu.com/questions/60218/how-to-add-a-directory-to-the-path) at AskUbuntu.
 
