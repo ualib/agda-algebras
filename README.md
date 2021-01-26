@@ -1,8 +1,15 @@
 # ualib.gitlab.io
 
-This is the main repository for the Agda Universal Algebra Library (UALib), a library of Agda modules for universal algebra and related subjects, and the associated html and pdf documentation.
+(version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
-Below are instructions for getting the Agda UALib installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
+**Author**. [William DeMeo][]  
+*Affiliation*. [Department of Algebra][], [Charles University in Prague][]
+
+**PDF documentation**. [ualib-24Jan2021.pdf](ualib-24Jan2021.pdf)
+
+**Abstract**. The [Agda Universal Algebra Library][] ([UALib][]) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
+
+This is the main repository for the Agda UALib. Below are instructions for getting the UALib installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
 
 ...in any case, please [email me](mailto:williamdemeo@gmail.com) if you have trouble.
 
@@ -77,11 +84,21 @@ This causes jekyll to serve the web pages locally so we can inspect them by poin
 --------------------------------
 
 
-## Acknowledgements
+### Acknowledgements
 
 A great source of information and inspiration for the Agda UALib is [Marin Escardo's lecture notes on HoTT/UF in Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html).
 
 See also Martin's [HoTT/UF github repository](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes) and [Type Topology github repository](https://github.com/martinescardo/TypeTopology).
+
+The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
+
+Thanks also to [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, instruction, advice, inspiration and encouragement.
+
+#### <a id="attributions-and-citations">Attributions and citations</a>
+
+Most of the mathematical results that formalized in the [UAlib][] are already well known.
+
+Regarding the Agda source code in the [Agda UALib][], this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martin Hötzel Escardo][].  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
 
 -------------------------------
 
@@ -98,7 +115,9 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
  year          = {2021},
  eprint        = {2101.10166},
  archivePrefix = {arXiv},
- primaryClass  = {cs.LO}
- url           = {https://arxiv.org/abs/2101.10166}
+ primaryClass  = {cs.LO},
+ url           = {https://arxiv.org/abs/2101.10166},
+ note          = {source code: https://gitlab.com/ualib/ualib.gitlab.io}
+
 }
 ```
