@@ -1,0 +1,1624 @@
+\documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
+\usepackage{fontspec}
+%% \usepackage{mathabx}
+%% \usepackage{mathptmx}
+%% \usepackage{stmaryrd}
+\usepackage{unicode-math}
+\usepackage{comment}
+\setmainfont{XITS}
+[    Extension = .otf,
+   UprightFont = *-Regular,
+      BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+BoldItalicFont = *-BoldItalic,
+]
+\setmathfont{XITSMath-Regular}
+[    Extension = .otf,
+      BoldFont = XITSMath-Bold,
+]
+%% \usepackage{newunicodechar}
+%% \newunicodechar{λ}{\ensuremath{\mathnormal\lambda}}
+%% \newunicodechar{⋂}{\ensuremath{\mathnormal\bigcap}}
+%% \newunicodechar{⨅}{\ensuremath{\mathnormal\bigsqcap}}
+
+\usepackage[newwjd]{agda}
+\usepackage{wjd}
+\usepackage{unixode}
+
+%This is a template for producing LIPIcs articles. 
+%See lipics-v2021-authors-guidelines.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+%for section-numbered lemmas etc., use "numberwithinsect"
+%for enabling cleveref support, use "cleveref"
+%for enabling autoref support, use "autoref"
+%for anonymousing the authors (e.g. for double-blind review), add "anonymous"
+%for enabling thm-restate support, use "thm-restate"
+%for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
+%for producing a PDF according the PDF/A standard, add "pdfa"
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+%% \pdfmapfile{+fontawesome5.map}
+\bibliographystyle{plainurl}% the mandatory bibstyle
+
+\title{The Agda UALib and Birkhoff's Theorem\\ in Martin-L\"of Dependent Type Theory}
+
+\titlerunning{} %The Agda Universal Algebra Library} %TODO optional, please use if title is longer than one line
+
+\author{William DeMeo}
+       {Department of Algebra, Charles University in Prague \and \url{https://williamdemeo.gitlab.io}}
+       {williamdemeo@gmail.com}
+       {https://orcid.org/0000-0003-1832-5690}
+       {}
+
+\authorrunning{}
+%W.~J.~DeMeo}
+
+\usepackage{fancyhdr}
+\fancyfoot{}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[ER]{\sffamily\bfseries \leftmark}
+\fancyhead[OL]{\sffamily\bfseries The Agda Universal Algebra Library}
+\fancyhead[EL,OR]{\sffamily\bfseries \thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\Copyright{William J. DeMeo}
+
+\ccsdesc[500]{Theory of computation~Constructive mathematics}
+\ccsdesc[500]{Theory of computation~Type theory}
+\ccsdesc[500]{Theory of computation~Logic and verification}
+\ccsdesc[300]{Computing methodologies~Representation of mathematical objects}
+\ccsdesc[300]{Theory of computation~Type structures}
+%% \ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
+
+\keywords{Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda, Proof assistant}
+
+\category{} %optional, e.g. invited paper
+
+\relatedversion{hosted on arXiv}
+\relatedversiondetails[linktext={arxiv.org/pdf/2101.10166}]{Extended Version}{https://arxiv.org/pdf/2101.10166}
+
+%% \supplement{Source code at \ualibrepo}%
+\supplement{~\\ \textit{Documentation}: \ualibdotorg}%
+%% optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+%% \supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
+%% \supplementdetails[swhid={Software Heritage Identifier}]{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
+\supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
+
+\acknowledgements{The author wishes to thank Hyeyoung Shin and Siva Somayyajula for their contributions to this project and Martin H\"otzel Escardo for creating the \TypeTopology library and teaching a course on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Univalent Foundations of Mathematics with Agda} at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda language due to Catarina Coquand and Ulf Norell.}
+
+\nolinenumbers %uncomment to disable line numbering
+
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{}
+\EventNoEds{2}
+\EventLongTitle{}
+\EventShortTitle{}
+\EventAcronym{}
+\EventYear{2021}
+\EventDate{January 19, 2021}
+\EventLocation{}
+\EventLogo{}
+\SeriesVolume{0}
+\ArticleNo{0}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+%TODO mandatory: add short abstract of the document
+
+\begin{abstract}
+The Agda Universal Algebra Library (\ualib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in Martin-Löf dependent type theory using the \agda programming language and proof assistant. This paper describes the UALib and demonstrates how it makes Agda more accessible to working mathematicians (like ourselves) as a tool for formally verifying ``known'' results in general algebra and related fields, as well as for discovering new theorems in these areas.  The library already includes a substantial collection of definitions, theorems, and proofs from universal algebra and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about algebraic and relational structures.
+
+The first major milestone of the \ualib project is a complete proof of Birkhoff's HSP Theorem. To the best of our knowledge, this is the first time Birkhoff's Theorem has been formulated and proved in dependent type theory and verified with a proof assistant.
+
+In this paper we describe the UALib and the formal proof of Birkhoff's theorem, discussing some of the challenges we faced and how these hurdles were overcome. In so doing, we illustrate the effectiveness of dependent type theory, Agda, and the UALib for proving and verifying theorems in universal algebra.
+\end{abstract}
+
+%% \setcounter{tocdepth}{2}
+%% \tableofcontents
+
+\section{Introduction}\label{sec:introduction}
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
+The \agdaualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, but also provides powerful \emph{proof tactics} for proving things about the objects that inhabit these types.
+
+There have been a number of prior efforts to formalize parts of universal algebra in type theory, most notably
+\begin{itemize}
+  \item Capretta~\cite{Capretta:1999} (1999) formalized the basics of universal algebra in the Calculus of Inductive Constructions using the Coq proof assistant;
+    \item Spitters and van der Weegen~\cite{Spitters:2011} (2011) formalized the basics of universal algebra and some classical algebraic structures, also in the Calculus of Inductive Constructions using the Coq proof assistant, promoting the use of type classes as a preferable alternative to setoids;
+ \item Gunther, et al~\cite{Gunther:2018} developed what seems to be (prior to the \ualib) the most extensive library of formal universal algebra to date; in particular, this work includes a formalization of some basic equational logic; the project (like the \ualib) uses Martin-L\"of dependent type theory and the Agda proof assistant.
+\end{itemize}
+Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, fields, and modules.  However, the goals of this prior work seems to be a formal library of definitions, theorems, and proofs about specific classical algebraic structures, as opposed to the general theory of (universal) algebras.
+
+Although the \ualib project was initiated relatively recently (by the author of this paper, with valuable contributions by Hyeyoung Shin and Siva Somayyajula), the part of universal algebra and equational logic that we formalize here already extends well beyond the scope of the prior efforts mentioned above.  In particular, the \ualib now includes the only formal, constructive, machine-checked proof of Birkhoff's variety theorem that we know of. We remark that, with the exception of~\cite{Carlstrom:2008}, all other proofs of Birkhoff's theorem we have seen are informal and not known to be constructive.
+
+%% \subsection{Vision and Goals}\label{vision-and-goals}
+The seminal idea for this project was the observation that, on the one hand, a number of fundamental constructs in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of these recursively defined objects, and often yield very short, elegant and constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable and composable.  These observations suggest that there is much to be gained from implementing universal algebra in a language, such as Martin-L\"of type theory, that supports dependent and inductive types.
+
+\subsection{Objectives}\label{objectives}
+One goal of this project is to express the foundations of universal algebra constructively, in type theory, and to formally verify the foundations using the Agda proof assistant. Thus we aim to codify the edifice upon which our mathematical research stands, and demonstrate that advancements in our field can be expressed in type theory and formally verified in a way that we, and other working mathematicians, can easily understand and verify.  We hope our library inspires and encourages others to formalize and verify their own mathematical research so that we may more easily understand and verify their results.
+
+As our field is both deep and broad, an endeavor to codify all of its foundations may seem like a daunting and risky investment of time and resources.  However, we believe the subject is well served by a modern, \emph{constructive} presentation of its foundations. Indeed, the mere act of reinterpreting the foundations in an alternative system offers a fresh perspective, which we feel certain will lead us to deeper insights and new discoveries.
+
+We emphasize that our objective is not merely to translate existing results into a modern, formal language, but rather to provide a system that is useful for conducting research into new mathematics.  That is how we intend to use the library now that we have achieved our initial goal of implementing the foundations of the subject in Agda and succeeded in formalizing, as a proof-of-concept, the Birkhoff HSP theorem.
+
+Our own research experience has taught us that a proof assistant, equipped with specialized libraries for universal algebra and domain-specific tactics to automate proof idioms of our field, would be an extremely valuable and powerful tool.  Therefore, our goal is to construct a library that will serve as an indispensable part of the algebra researcher's tool kit.
+
+%% Finally, readers of this paper will benefit most from actively experimenting with Agda and the agda-ualib.
+
+%% \subsection{Installing the library}\label{installing-the-library}
+%% The main repository for the \agdaualib is \url{https://gitlab.com/ualib/ualib.gitlab.io}.
+
+%% There are installation instructions in the main README.md file in that repository, but really all one needs is a working Agda installation and a clone of the \agdaualib repository.
+\subsection{Contributions}
+\label{sec:contributions}
+Apart from the library itself, we describes the formal implementation and proof of a deep result in universal algebra, which was among the first major results of our subject---namely, Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}.  This theorem says that a \textit{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class.  More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of all algebras that satisfy a set of equations.
+
+The fact that we now have a proof of Birkhoff's Theorem in Agda is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because our proof is \emph{constructive}. Judging from the paper~\cite{Carlstrom:2008} of Carlstr\"om, it is clearly a nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's (as presented in, e.g.,~\cite{Bergman:2012}) and to show that it can be formalized using only constructive logical assumptions, without appealing to, say, the Law of the Excluded Middle, or the Axiom of Choice.
+
+%% Naturally, the proof relies on many defeinitions and results developed in earlier chapters of the book. Nonetheless, Professor Bergman's path to a proof of the HSP theorem is the most straightforward and efficient one we know, and we will follow his presentation quite closely.
+
+%% On the other hand, in order to get as directly as possible to a formal proof of the HSP Theorem, we will extract all the ingredients we need from~\cite{Bergman:2012}, and present them as a list of results at the end of this section, and then later, in Section XX, we will formalize each of these results in Agda.
+
+%% Whenever we quote or paraphrase a result from~\cite{Bergman:2012}, we will include a citation that indicates where the corresponding result is found in the book.
+
+
+%% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Prelude}\label{sec:prelude}
+
+\subsection{Preliminaries}\label{sec:preliminaries}
+This section describes some aspects of the \href{}{UALib.Prelude.Preliminaries} module of the \agdaualib. That module imports everything we will need from Martin Escardo's Type Topology library. Also many basic types are defined and some of their properties proved.  We do not go over the entire Preliminaries module, but instead focus on those aspects that might differ from standard Agda syntax or cause confusion in the sequel.
+
+\input{Preliminaries-short.tex}
+
+\subsection{Equality}\label{sec:equality}
+\input{Equality-short.tex}
+
+\subsection{Inverses}\label{sec:inverses}
+This section describes some of the more important definitions in the \ualibInverses module of the \agdaualib.
+\input{Inverses-short.tex}
+
+\subsection{Extensionality}\label{sec:extensionality}
+This section describes some of the extensionality principles defined in the \ualibExtensionality module of the \agdaualib that we will need later.
+\input{Extensionality-short.tex}
+
+%% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Algebras}\label{sec:types-for-algebras}
+
+\subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
+This section presents the \href{}{UALib.Algebras.Signatures} module of the \agdaualib.
+\input{Signatures-short.tex}
+
+\subsection{Algebra Types}\label{sec:algebras}
+This section presents the \href{}{UALib.Algebras.Algebras} module of the \agdaualib.
+\input{Algebras-short.tex}
+
+\subsection{Product Algebra Types}\label{sec:product-algebra-types}
+This section presents the \href{}{UALib.Algebras.Products} module of the \agdaualib.
+\input{Products-short.tex}
+
+\subsubsection{The Universe Hierarchy and Lifts}\label{sec:universe-hierarchy-and-lifts}
+\input{Lifts-short.tex}
+
+%% Bibliography
+\bibliography{ualib_refs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newpage
+
+\begin{center}
+  (This page is almost entirely blank on purpose.)
+\end{center}
+
+\newpage
+
+%% Relations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Relations}\label{sec:relations}
+
+\subsection{Predicates}\label{sec:predicates}
+This section presents the \ualibUnary module of the \agdaualib.
+\input{Relations/Unary.tex}
+
+\subsection{Binary Relation and Kernel Types}\label{binary-relation-and-kernel-types}
+This section presents the \ualibBinary module of the \agdaualib.
+\input{Relations/Binary.tex}
+
+\subsection{Equivalence Relation Types}\label{sec:equiv-relat}
+This section presents the \ualibEquivalences module of the \agdaualib.
+\input{Relations/Equivalences.tex}
+
+\subsection{Quotient Types}\label{sec:quotient-types}
+This section presents the \ualibQuotients module of the \agdaualib.
+\input{Relations/Quotients.tex}
+
+\subsection{Congruence Relation Types}\label{sec:congr-relat}
+This section presents the \ualibCongruences module of the \agdaualib.
+\input{Relations/Congruences.tex}
+
+\newpage
+
+%% Homomorphisms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Homomorphisms}\label{sec:homomorphisms}
+
+\subsection{Basic Definitions}
+\label{sec:homs-basic-definitions}
+This section describes the \ualibHomBasic module of the \agdaualib.
+\input{Homomorphisms/Basic.tex}
+
+\subsection{Kernels of Homomorphisms}
+\label{sec:kernels}
+This section describes the \ualibKernels module of the \agdaualib.
+\input{Homomorphisms/Kernels.tex}
+
+\subsection{Homomorphism Theorems}
+\label{sec:noether}
+This section describes the \ualibNoether module of the \agdaualib.
+\input{Homomorphisms/Noether.tex}
+
+\subsection{Products and Homomorphisms}
+\label{sec:products-1}
+This section describes the \ualibHomProducts module of the \agdaualib.
+\input{Homomorphisms/Products.tex}
+
+\subsection{Isomorphism Type}
+\label{sec:isomorphisms}
+This section describes the \ualibIsomorphisms module of the \agdaualib.
+\input{Homomorphisms/Isomorphisms.tex}
+
+\subsection{Homomorphic Image Type}
+\label{sec:homomorphicimages}
+This section describes the \ualibHomImages module of the \agdaualib.
+\input{Homomorphisms/HomomorphicImages.tex}
+
+\newpage
+
+%% Terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terms}
+
+\subsection{Basic Definitions}
+\label{sec:terms-basic-definitions}
+This section describes the \ualibTermsBasic module of the \agdaualib.
+\input{Terms/Basic.tex}
+
+\subsection{The Term Algebra}
+\label{sec:the-term-algebra}
+This section describes the \ualibTermsFree module of the \agdaualib.
+\input{Terms/Free.tex}
+
+\subsection{Term Operations}
+\label{sec:term-operations}
+This section describes the \ualibTermsOperations module of the \agdaualib.
+\input{Terms/Operations.tex}
+
+\subsection{Compatibility of Terms}
+\label{sec:compatibility-of-terms}
+This section describes the \ualibTermsCompatibility module of the \agdaualib.
+\input{Terms/Compatibility.tex}
+
+\newpage
+
+%% Subalgebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subalgebras}\label{sec:subalgebras}
+
+\subsection{Types for Subuniverses}\label{sec:subuniverse-type}
+This section describes the \ualibSubuniverses module of the \agdaualib.
+\input{Subalgebras/Subuniverses.tex}
+
+\subsection{Subuniverse Generation}\label{sec:subun-gener}
+This section describes the \ualibGeneration module of  the \agdaualib.
+\input{Subalgebras/Generation.tex}
+
+\subsection{Subuniverse Lemmas}\label{sec:subuniverse-lemmas}
+This section describes the \ualibProperties module of  the \agdaualib.
+\input{Subalgebras/Properties.tex}
+
+\subsection{Homomorphisms and Subuniverses}\label{homomorphisms-and-subuniverses}
+This section describes the \ualibHomsAndSubs module of  the \agdaualib.
+\input{Subalgebras/Homomorphisms.tex}
+
+\subsection{Types for Subalgebra}\label{sec:subalgebra-types}
+This section describes the \ualibSubalgebras module of  the \agdaualib.
+\input{Subalgebras/Subalgebras.tex}
+
+\subsection{WWMD}\label{sec:wwmd}
+This section describes the \ualibWWMD module of  the \agdaualib.
+\input{Subalgebras/WWMD.tex}
+
+\newpage
+
+\begin{center}
+  (This page is almost entirely blank on purpose.)
+\end{center}
+
+\newpage
+
+%% Varieties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equations and Varieties}
+\label{sec:equations-and-varieties}
+
+\subsection{Types for Theories and Models}\label{sec:types-for-theories-and-models}
+This section presents the \ualibModelTheory module of  the \agdaualib.
+\input{Varieties/ModelTheory.tex}
+
+\subsection{Equational Logic Types}\label{sec:equational-logic-types}
+This section presents the \ualibEquationalLogic module of  the \agdaualib.
+\input{Varieties/EquationalLogic.tex}
+
+\subsection{Inductive Types H, S, P, V}\label{sec:inductive-types-h-s-p-v}
+This section presents the \ualibVarietiesVarieties module of the \agdaualib.
+\input{Varieties/Varieties.tex}
+
+\subsection{Equation Preservation Theorems}\label{sec:equation-preservation-theorems}
+This section presents the \ualibPreservation module of  the \agdaualib.
+\input{Varieties/Preservation.tex}
+
+\newpage
+
+%% HSP Theorem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Birkhoff's HSP Theorem}
+\label{sec:birkhoff}
+
+\subsection{The Relatively Free Algebra}\label{sec:relatively-free-algebra-type}
+This section presents the \ualibFreeAlgebra module of  the \agdaualib.
+\input{Birkhoff/FreeAlgebra.tex}
+
+\subsection{HSP Lemmas}\label{sec:hsp-lemmas}
+This section presents the \ualibLemmata of  the \agdaualib.
+\input{Birkhoff/Lemmata.tex}
+
+\subsection{The HSP Theorem}\label{sec:hsp-theorem}
+This section presents the \ualibTheorem module of  the \agdaualib.
+\input{Birkhoff/Theorem.tex}
+
+
+
+
+
+- [Birkhoff's Theorem](UALib.Birkhoff.html)
+  - [Relatively Free Algebra Types](UALib.Birkhoff.FreeAlgebra.html)
+  - [HSP Lemmata](UALib.Birkhoff.Lemmata.html)
+  - [HSP Theorem](UALib.Birkhoff.Theorem.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Agda prelude}\label{agda-prelude}
+This section describes the \preludemodule of the \agdaualib. This full source code of the \preludemodule is available in the
+\href{anonymizedLink/agda-ualib.html}{git repository of the agda-ualib}.
+%\href{https://gitlab.com/ualib/ualib.gitlab.io}{git repository of the agda-ualib}.
+
+%% \textbf{Notation}. Here are some acronyms that we use frequently.
+%% \begin{itemize}
+%% \item MHE = \href{https://www.cs.bham.ac.uk/~mhe/}{Martin Hötzel Escardo}
+%% \item MLTT = \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{Martin-Löf Type Theory}
+%% \end{itemize}
+
+\subsection{Options and imports}\label{options-and-imports}
+All but the most trivial Agda programs begin by setting some options that effect how Agda behaves and importing from existing libraries (e.g., the \href{https://agda.github.io/agda-stdlib/}{Agda Standard Library} or, in our case, MHE's \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
+
+For example, here's the start of the first Agda source file in our library, which we call \texttt{prelude.lagda.rst}.
+\begin{code}
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaKeyword{OPTIONS}\AgdaSpace{}%
+\AgdaPragma{--without-K}\AgdaSpace{}%
+\AgdaPragma{--exact-split}\AgdaSpace{}%
+\AgdaPragma{--safe}\AgdaSpace{}%
+\AgdaSymbol{\#-\}}\<%
+\end{code}
+This specifies Agda \texttt{OPTIONS} that we will use throughout the library.
+\begin{itemize}
+\item \texttt{without-K} disables Streicher's K axiom; see also the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in the \href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language Reference} manual.
+  %% \href{https://ncatlab.org/nlab/show/axiom+K+\%28type+theory\%29}{Streicher's K axiom}
+\item \texttt{exact-split} makes Agda accept only those definitions that behave like so-called \emph{judgmental} or \emph{definitional} equalities.
+  %% Martin Escardo explains this by saying it ``makes sure that pattern   matching corresponds to Martin-Löf eliminators;'' see also the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#pattern-matching-and-equality}{Pattern matching and equality section} of the \href{https://agda.readthedocs.io/en/v2.6.1/tools/}{Agda Tools} documentation.
+\item \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#cmdoption-safe}{this section} of the \href{https://agda.readthedocs.io/en/v2.6.1/tools/}{Agda Tools} documentation and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html\#safe-agda}{Safe
+  Agda section} of the \href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language
+  Reference}.
+\end{itemize}
+
+\subsubsection{Universes}\label{universes}
+The first module of the \agdaualib, called \texttt{prelude}, begins with the Agda directive \texttt{module\ prelude\ where}, which is followed immediately by the import of the \texttt{Universes} module from Martin Escardo's \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library.
+
+\begin{code}
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{prelude}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Universes}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\end{code}
+Escardo's \texttt{Universes} module provides, among other things, an elegant notation for type universes that is adopted throughout the \agdaualib.\footnote{Martin Escardo has an outstanding set of notes on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html}{HoTT-UF-in-Agda} called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda} . We highly recommend these notes to anyone wanting more details than we provide here about Martin-Löf type theory and the Univalent Foundations/HoTT extensions thereof.}
+
+Following Escardo, the \agdaualib refers to universes using capitalized script letters, e.g., \ab{𝓤}, \ab{𝓥}, \ab{𝓦}, \ab{𝓣}.
+
+In the \universes module, Escardo defines the $^\cdot$ operator which maps a universe \ab 𝓤 (i.e., a level) to \texttt{Set}\ \ab 𝓤, and the latter has type \texttt{Set (lsuc}\ \ab 𝓤\texttt{)}.  The level \texttt{lzero} is renamed \ab{𝓤₀}, so \ab{𝓤₀}\ ̇ is an alias for \texttt{Set\ lzero}\ (which, incidentally, corresponds to \texttt{Sort\ 0} in \href{https://leanprover.github.io/}{Lean}). We won't describe the entire \texttt{Universes} module here, as it suffices to highlight the few key notational devices adopted throughout the \agdaualib.  In particular, \ab 𝓤 ̇ is simply an alias for \texttt{Set}\ \ab 𝓤, and the latter has type \texttt{Set\ (lsuc}\ \ab 𝓤\texttt{)}. Also, \texttt{Set\ (lsuc\ lzero)} is denoted by \texttt{Set}\ \ab 𝓤₀\ ⁺ which is denoted by \ab 𝓤₀\ ⁺\ ̇.
+%% The appendix below contains a dictionary for translating between standard Agda syntax and MHE/\href{https://gitlab.com/ualib/ualib.gitlab.io}{agda-ualib} notation.
+%% To justify the introduction of this somewhat nonstandard notation for universe levels, Escardo points out that the Agda library uses \texttt{Level} for universes (so what we write as 𝓤 ̇ is written \texttt{Set\ 𝓤} in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading. Furthermore, the standard notation places emphasis on levels rather than universes themselves.
+Finally, there are many occasions calling for a type that lives in the universe that is the least upper bound of two universe, say, \ab 𝓤~ ̇ and \ab 𝓥\ ̇. The universe \ab 𝓤~⊔~\ab 𝓥~ ̇ denotes this least upper bound. Here \ab 𝓤~⊔~\ab 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels \ab 𝓤 and \ab 𝓥; the symbol \texttt{\_⊔\_} denotes an Agda primitive designed for this purpose.
+
+\section{Algebras in Agda}
+We now describes the \basicmodule of the \agdaualib, which begins the Agda formalization of the basic concepts and theorems of universal algebra. In this module such notions as operation, signature, and algebraic structure are codified in the language of Martin-L\"of type theory.
+
+\subsection{Preliminaries}
+Like most Agda programs, this one begins with some Agda options specifying the foundational choices we wish to make, as explained above.  (We don't display the show the \AgdaKeyword{OPTIONS} directive here, since it is identical to the one shown above for the \preludemodule.  In fact, all modules in the \agdaualib being with the same \AgdaKeyword{OPTIONS} directive so we will not mention it again.)
+
+The \basicmodule begins by invoking Agda's module directive, and then importing some dependencies from the \preludemodule.
+%% \AgdaGeneralizable{𝓣}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaPrimitive{𝓤₀}\AgdaSymbol{;}
+%\AgdaGeneralizable{𝓘}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaPrimitive{𝓤ω}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaRecord{Σω}\AgdaSymbol{;}\AgdaSpace{}%
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{basic}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{prelude}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaPostulate{Universe}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}⸲\AgdaUnderscore{}}}\AgdaSymbol{;}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaPrimitive{\AgdaUnderscore{}⁺}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇}}\AgdaSymbol{;}\AgdaOperator{\AgdaPrimitive{\AgdaUnderscore{}⊔\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaRecord{Σ}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{-Σ}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{𝟘}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{𝟚}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSymbol{;}\AgdaSpace{}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{Pred}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\end{code}
+Notice that the import directive is marked \AgdaKeyword{public}, so items imported here will also be available to any modules that import the \basicmodule.
+
+\subsection{Operation type}
+The \agdaualib defines a type of \textbf{operations} as follows.
+
+\begin{code}%
+\>[0]\AgdaComment{--The type of operations}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\end{code}
+The type Op encodes the arity of an operation as an arbitrary type \ab 𝐼 : \ab 𝓥 ̇, yielding a completely general representation of an operation as a function type with domain \ab 𝐼 → \ab 𝐴 (heuristically, the type of ``tuples of length~|~\ab 𝐼~|'') and codomain \ab 𝐴. The last two lines of the code block above codify the 𝑖-th~|~\ab 𝐼~|-ary projection operation on \ab 𝐴. For example, the usual \emph{projection operations} could be defined as follows.
+\begin{code}%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--Example. the projections}\<%
+\\
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\<%
+\end{code}
+
+\subsection{Signature type}
+The \agdaualib defines the signature of an algebraic structure in Agda as follows:
+\begin{code}%
+\>[0]\AgdaComment{-- 𝓞: level at which operation symbol types live}\<%
+\\
+\>[0]\AgdaComment{-- 𝓥: level at which arity types live}\<%
+\\
+\>[0]\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{F}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}%
+\>[27]\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaBound{F}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\end{code}
+The \preludemodule of \agdaualib defines the syntax ∣\_∣ and ∥\_∥ for the first and second projections, resp.  Consequently, if 𝑆~:~\signatureOV is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols (which is often called 𝐹), and ∥~𝑆~∥ denotes the arity function (which is often called ρ). Thus, if  𝑓~:~∣~𝑆~∣ is an operation symbol in the signature 𝑆, then ∥~𝑆~∥~𝑓 is the arity of 𝑓.
+
+\subsection{Algebra type}
+We are now ready to describe the type of algebras in the signature 𝑆, also known as 𝑆-\textbf{algebras}.  Here is how this type is defined in the \agdaualib.
+\begin{code}%
+\>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[98I]\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)\{}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[98I]%
+\>[10]\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[33]\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSymbol{\}\{}\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}\<%
+\\
+\>[.][@{}l@{}]\<[98I]%
+\>[10]
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\end{code}
+Thus an 𝑆-algebra, with carrier type in \AgdaBound{𝓤}~̇, inhabits the type \algebraUS.  (Notice that we may leave off the implicits \AgdaBound{𝓞} and \AgdaBound{𝓥} if they can be inferred from the context.) To be clear,
+
+\begin{quote}
+\algebraUS \emph{is the type inhabited by all algebras of signature} \ab{𝑆} \emph{and carrier type} \ab 𝓤\ ̇, \emph{and this type of algebras has type} \ab 𝓞 ⊔ \ab 𝓥 ⊔  \ab 𝓤\ ⁺\ ̇.
+\end{quote}
+%\footnote{Recall, \ab 𝓞 ⊔ \ab 𝓥 ⊔  \ab 𝓤\ ⁺ denotes the smallest universe containing \ab 𝓞, \ab 𝓥, and the successor of \ab 𝓤.}
+Note that the type \algebraUS doesn't define what an algebra \emph{is}. It defines a type of algebras; certain algebras inhabit this type---namely, the algebras consisting of a universe (say, 𝐴) of type \ab 𝓤 ̇ , and a collection (𝑓 : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ 𝑓) 𝐴 of operations on 𝐴.
+
+The Algebra type could have been defined using the following alternative syntax:\\
+\\
+  Algebra 𝓤 (F , ρ) = Σ A ꞉ 𝓤 ̇ , ((𝑓 : F ) → Op (ρ 𝑓) A)\\
+\\
+Here 𝑆 = (F , ρ) is the signature, F the type of operation symbols, and ρ the arity function. Although this syntax type checks, and although it may seem more familiar to algebraists, we mention it here merely to demonstrate the flexibility of Agda; throughout the \agdaualib, 𝑓~:~∣~𝑆~∣ is used for an operation symbol of the signature 𝑆, and ∥~𝑆~∥~𝑓 for the arity of that symbol, as these tend to be more convenient for programming.
+
+\subsubsection{Example}
+A monoid signature has two operation symbols, \AgdaInductiveConstructor{e} and \AgdaInductiveConstructor{·}; the first is nullary and the second binary. Thus, the types are (𝟘 → A) → A and (𝟚 → A) → A), respectively.
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{𝓤₀}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaInductiveConstructor{e}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\<%
+\\
+%
+\>[1]\AgdaInductiveConstructor{·}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{monoid-sig}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaFunction{monoid-sig}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaDatatype{monoid-op}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaInductiveConstructor{e}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝟘}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaInductiveConstructor{·}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝟚}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\end{code}
+The types indicate that e is nullary (i.e., takes no arguments, equivalently, takes arguments of type 𝟘 → A), while · is binary (as indicated  by argument type 𝟚 → A).
+
+We will have more to say about the type of algebras later.  For now, we continue describing the key definitions and syntax used in the \agdaualib to represent the basic objects of universal algebra.
+
+\subsubsection{Syntactic sugar for operation interpretation}
+The \agdaualib defines some syntactic sugar that lets us replace ∥~𝑨~∥~𝑓 with the slightly more natural 𝑓 ̂ 𝑨. (The latter is a metaphor for \(f^\mathbf{A}\), which is the universally accepted way to denote an operation symbol 𝑓 interpreted in the algebra 𝑨.)
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}%
+\>[30]\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̂\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[6]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaSymbol{→}%
+\>[6]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}%
+\>[16]\AgdaSymbol{→}%
+\>[19]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{40}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̂\AgdaUnderscore{}}}\<%
+\end{code}
+Thus, 𝑓 ̂ 𝑨 denotes the interpretation of the basic operation symbol 𝑓 in the algebra 𝑨 (although the slightly different notation, 𝑡 ̇ 𝑨, will be used to represent the interpretation of a \emph{term} 𝑡 in the algebra 𝑨).
+
+\subsection{Products of algebras}
+The (indexed) product of a collection of algebras is also an algebra if we define such a product as follows:
+\begin{code}%
+%
+\>[1]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓘}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓘}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{=}%
+\>[8]\AgdaSymbol{((}\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}%
+\>[31]\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{i}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{infixr}\AgdaSpace{}%
+\AgdaNumber{-1}\AgdaSpace{}%
+\AgdaFunction{⨅}\<%
+\end{code}
+(In agda2-mode ⨅ is typed as \textbackslash Glb.)
+
+\subsection{Arbitrarily many variable symbols}
+
+Finally, since we typically want to assume that we have an arbitrarily large collection X of variable symbols at our disposal (so that, in particular, given an algebra 𝑨 we can always find a surjective map h₀ : X → ∣ 𝑨 ∣ from X to the universe of 𝑨), we define a type for use when making this assumption.
+
+\begin{code}%
+%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaBound{h}\<%
+\end{code}
+
+
+
+%% \input{prelude.tex}
+%% \input{basic.tex}
+\section{Congruences in Agda}\label{congruences-in-agda}
+This section describes the \congruencesmodule of the \agdaualib.
+%% , although we don't discuss parts of that module which duplicate functionality of the \href{https://agda.github.io/agda-stdlib/}{Agda standard library} (\texttt{Binary/Core.agda}).
+
+%% \subsection{Preliminaries}\label{preliminaries}
+%% \begin{code} \input{congruences/conprelim.tex} \end{code}
+
+\subsection{Binary relation type}\label{binary-relation-type}
+Heterogeneous binary relations.
+\begin{code}%
+\>[0]\AgdaFunction{REL}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{REL}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\end{code}
+
+Homogeneous binary relations.
+\begin{code}%
+\>[0]\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{REL}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓝}\<%
+\end{code}
+
+\subsubsection{Kernels}\label{kernels}
+The kernel of a function can be defined in many ways. For example,...
+
+%% \begin{code} \input{congruences/KER.tex} \end{code}
+%% or as a relation\ldots{}
+%% \begin{code} \input{congruences/KER-rel.tex} \end{code}
+%% or a binary predicate …
+%% \begin{code}\input{congruences/KER-pred.tex}\end{code}
+
+%% \subsubsection{Implication}\label{implication}
+%% We denote and define implication or containment (which could also be
+%% written \_⊆\_) as follows.
+%% \begin{code}\input{congruences/implication.tex}\end{code}
+%% Here is a more general version of implication.
+%% \begin{code}\input{congruences/generalImplication.tex}\end{code}
+
+\subsubsection{Properties of binary relations}\label{properties-of-binary-relations}
+Reflexivity of a binary relation (say, \texttt{≈}) on \texttt{X}, can be defined without an underlying equality as follows.
+\begin{code}
+\>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\end{code}
+Similarly, we have the usual notion of symmetric and transitive binary relation (though we won't reproduce their implementations here).
+%% \begin{code}\input{congruences/symmtrans.tex}\end{code}
+
+\subsubsection{Classes of a binary relation}
+For a binary relation ≈ on A, the \agdaualib denotes the ≈-class containing 𝑎 by {[} 𝑎 {]} ≈. Indeed,
+\begin{code}
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[8]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[22]\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaBound{≈}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaFunction{,}%
+\>[21]\AgdaBound{≈}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\end{code}
+The collection of all ≈-classes of 𝐴 is represented by 𝐴 // ≈, defined by....XX...
+%% \begin{code}\input{congruences/relationClasses.tex}\end{code}
+The ``trivial'' or ``diagonal'' or ``identity'' relation could be defined in many ways.  Here are two that are particularly easy to employ.
+\begin{code}
+\>[0]\AgdaFunction{𝟎}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{𝟎}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{b}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\<%
+\\
+\>[0]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{b}\<%
+\end{code}
+%% or, in various other guises,
+%% \begin{code}\input{congruences/trivialRelationPred.tex}\end{code}
+The ``universal'' or ``total'' or ``all'' relation is defined similarly.
+%% \begin{code}\input{congruences/universalRelation.tex}\end{code}
+
+\subsection{Types for equivalences}\label{types-for-equivalences}
+A useful representation of an equivalence relation in Agda is the one defined in \agdaualib as a record.
+\begin{code}\>[0]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\<%
+\\
+\>[10]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\\
+\>[10]\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{field}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{rfl}%
+\>[9]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+%
+\>[4]\AgdaField{sym}%
+\>[10]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{symmetric}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+%
+\>[4]\AgdaField{trans}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{transitive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\end{code}
+An alternative that is sometimes useful is
+\begin{code}\>[0]\AgdaFunction{is-equivalence-relation}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{is-equivalence-relation}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaFunction{symmetric}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaFunction{transitive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\end{code}
+
+As an example application of the first version, we can prove that the trivial relation, 𝟎, defined above is an equivalence relation.
+\begin{code}\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[10]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaFunction{𝟎-rel}\<%
+\\
+\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\>[740I]\AgdaKeyword{record}\<%
+\\
+\>[.][@{}l@{}]\<[740I]%
+\>[25]\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaField{rfl}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\\
+\>[.][@{}l@{}]\<[740I]%
+\>[25]\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaField{sym}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{x≡y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x≡y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+\\
+\>[.][@{}l@{}]\<[740I]%
+\>[25]\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaField{trans}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaBound{x≡y}\AgdaSpace{}%
+\AgdaBound{y≡z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x≡y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
+\AgdaBound{y≡z}\<%
+\\
+\>[.][@{}l@{}]\<[740I]%
+\>[25]\AgdaSymbol{\}}\<%
+\end{code}
+
+Two more definitions that will be important in some of the proofs appearing in later sections are that of a \textbf{lift} of a binary relation from pairs to pairs of tuples, and that of \textbf{compatibility} of a given function-relation pair. These are defined in the \agdaualib as follows:
+\begin{code}\>[0]\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaSymbol{:}
+\>[10]\AgdaSymbol{\{}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Z}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\<%
+\end{code}
+
+\begin{code}\>[0]\AgdaFunction{compatible-fun}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[806I]\AgdaSymbol{\{}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Z}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[806I]%
+\>[17]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)(}\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[17]\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{compatible-fun}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{R}%
+\>[20]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{=[}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]⇒}}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\end{code}
+
+
+\paragraph*{Minimum requirements}
+
+\begin{itemize}
+\item Use pdflatex and an up-to-date \LaTeX{} system.
+\item Use further \LaTeX{} packages and custom made macros carefully and only if required.
+\item Use the provided sectioning macros: \verb+\section+, \verb+\subsection+, \verb+\subsubsection+, \linebreak \verb+\paragraph+, \verb+\paragraph*+, and \verb+\subparagraph*+.
+\item Provide suitable graphics of at least 300dpi (preferably in PDF format).
+\item Use BibTeX and keep the standard style (\verb+plainurl+) for the bibliography.
+\item Please try to keep the warnings log as small as possible. Avoid overfull \verb+\hboxes+ and any kind of warnings/errors with the referenced BibTeX entries.
+\item Use a spellchecker to correct typos.
+\end{itemize}
+
+\paragraph*{Mandatory metadata macros}
+Please set the values of the metadata macros carefully since the information parsed from these macros will be passed to publication servers, catalogues and search engines.
+Avoid placing macros inside the metadata macros. The following metadata macros/environments are mandatory:
+\begin{itemize}
+\item \verb+\title+ and, in case of long titles, \verb+\titlerunning+.
+\item \verb+\author+, one for each author, even if two or more authors have the same affiliation.
+\item \verb+\authorrunning+ and \verb+\Copyright+ (concatenated author names)\\
+The \verb+\author+ macros and the \verb+\Copyright+ macro should contain full author names (especially with regard to the first name), while \verb+\authorrunning+ should contain abbreviated first names.
+\item \verb+\ccsdesc+ (ACM classification, see \url{https://www.acm.org/publications/class-2012}).
+\item \verb+\keywords+ (a comma-separated list of keywords).
+\item \verb+\relatedversion+ (if there is a related version, typically the ``full version''); please make sure to provide a persistent URL, e.\,g., at arXiv.
+\item \verb+\begin{abstract}...\end{abstract}+ .
+\end{itemize}
+
+\paragraph*{Please do not \ldots} %Do not override the \texttt{\seriesstyle}-defaults}
+Generally speaking, please do not override the \texttt{lipics-v2021}-style defaults. To be more specific, a short checklist also used by Dagstuhl Publishing during the final typesetting is given below.
+In case of \textbf{non-compliance} with these rules Dagstuhl Publishing will remove the corresponding parts of \LaTeX{} code and \textbf{replace it with the \texttt{lipics-v2021} defaults}. In serious cases, we may reject the LaTeX-source and expect the corresponding author to revise the relevant parts.
+\begin{itemize}
+\item Do not use a different main font. (For example, the \texttt{times} package is forbidden.)
+\item Do not alter the spacing of the \texttt{lipics-v2021.cls} style file.
+\item Do not use \verb+enumitem+ and \verb+paralist+. (The \texttt{enumerate} package is preloaded, so you can use
+ \verb+\begin{enumerate}[(a)]+ or the like.)
+\item Do not use ``self-made'' sectioning commands (e.\,g., \verb+\noindent{\bf My+ \verb+Paragraph}+).
+\item Do not hide large text blocks using comments or \verb+\iffalse+ $\ldots$ \verb+\fi+ constructions. 
+\item Do not use conditional structures to include/exclude content. Instead, please provide only the content that should be published -- in one file -- and nothing else.
+\item Do not wrap figures and tables with text. In particular, the package \texttt{wrapfig} is not supported.
+\item Do not change the bibliography style. In particular, do not use author-year citations. (The
+\texttt{natbib} package is not supported.)
+\end{itemize}
+
+\enlargethispage{\baselineskip}
+
+This is only a summary containing the most relevant details. Please read the complete document ``LIPIcs: Instructions for Authors and the \texttt{lipics-v2021} Class'' for all details and don't hesitate to contact Dagstuhl Publishing (\url{mailto:publishing@dagstuhl.de}) in case of questions or comments:
+\href{http://drops.dagstuhl.de/styles/lipics-v2021/lipics-v2021-authors/lipics-v2021-authors-guidelines.pdf}{\texttt{http://drops.dagstuhl.de/styles/lipics-v2021/\newline lipics-v2021-authors/lipics-v2021-authors-guidelines.pdf}}
+
+\section{Lorem ipsum dolor sit amet}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit \cite{DBLP:journals/cacm/Knuth74}. Praesent convallis orci arcu, eu mollis dolor. Aliquam eleifend suscipit lacinia. Maecenas quam mi, porta ut lacinia sed, convallis ac dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. Donec eget odio et magna ullamcorper vehicula ut vitae libero. Maecenas lectus nulla, auctor nec varius ac, ultricies et turpis. Pellentesque id ante erat. In hac habitasse platea dictumst. Curabitur a scelerisque odio. Pellentesque elit risus, posuere quis elementum at, pellentesque ut diam. Quisque aliquam libero id mi imperdiet quis convallis turpis eleifend. 
+
+\begin{lemma}[Lorem ipsum]
+\label{lemma:lorem}
+Vestibulum sodales dolor et dui cursus iaculis. Nullam ullamcorper purus vel turpis lobortis eu tempus lorem semper. Proin facilisis gravida rutrum. Etiam sed sollicitudin lorem. Proin pellentesque risus at elit hendrerit pharetra. Integer at turpis varius libero rhoncus fermentum vitae vitae metus.
+\end{lemma}
+
+\begin{proof}
+Cras purus lorem, pulvinar et fermentum sagittis, suscipit quis magna.
+
+
+\proofsubparagraph*{Just some paragraph within the proof.}
+Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+\begin{claim}
+content...
+\end{claim}
+\begin{claimproof}
+content...
+    \begin{enumerate}
+        \item abc abc abc \claimqedhere{}
+    \end{enumerate}
+\end{claimproof}
+
+\end{proof}
+
+\begin{corollary}[Curabitur pulvinar, \cite{DBLP:books/mk/GrayR93}]
+\label{lemma:curabitur}
+Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+\end{corollary}
+
+\begin{proposition}\label{prop1}
+This is a proposition
+\end{proposition}
+
+\autoref{prop1} and \cref{prop1} \ldots
+
+\subsection{Curabitur dictum felis id sapien}
+
+Curabitur dictum \cref{lemma:curabitur} felis id sapien \autoref{lemma:curabitur} mollis ut venenatis tortor feugiat. Curabitur sed velit diam. Integer aliquam, nunc ac egestas lacinia, nibh est vehicula nibh, ac auctor velit tellus non arcu. Vestibulum lacinia ipsum vitae nisi ultrices eget gravida turpis laoreet. Duis rutrum dapibus ornare. Nulla vehicula vulputate iaculis. Proin a consequat neque. Donec ut rutrum urna. Morbi scelerisque turpis sed elit sagittis eu scelerisque quam condimentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean nec faucibus leo. Cras ut nisl odio, non tincidunt lorem. Integer purus ligula, venenatis et convallis lacinia, scelerisque at erat. Fusce risus libero, convallis at fermentum in, dignissim sed sem. Ut dapibus orci vitae nisl viverra nec adipiscing tortor condimentum \cite{DBLP:journals/cacm/Dijkstra68a}. Donec non suscipit lorem. Nam sit amet enim vitae nisl accumsan pretium. 
+
+\begin{lstlisting}[caption={Useless code.},label=list:8-6,captionpos=t,float,abovecaptionskip=-\medskipamount]
+for i:=maxint to 0 do 
+begin 
+    j:=square(root(i));
+end;
+\end{lstlisting}
+
+\subsection{Proin ac fermentum augue}
+
+Proin ac fermentum augue. Nullam bibendum enim sollicitudin tellus egestas lacinia euismod orci mollis. Nulla facilisi. Vivamus volutpat venenatis sapien, vitae feugiat arcu fringilla ac. Mauris sapien tortor, sagittis eget auctor at, vulputate pharetra magna. Sed congue, dui nec vulputate convallis, sem nunc adipiscing dui, vel venenatis mauris sem in dui. Praesent a pretium quam. Mauris non mauris sit amet eros rutrum aliquam id ut sapien. Nulla aliquet fringilla sagittis. Pellentesque eu metus posuere nunc tincidunt dignissim in tempor dolor. Nulla cursus aliquet enim. Cras sapien risus, accumsan eu cursus ut, commodo vel velit. Praesent aliquet consectetur ligula, vitae iaculis ligula interdum vel. Integer faucibus faucibus felis. 
+
+\begin{itemize}
+\item Ut vitae diam augue. 
+\item Integer lacus ante, pellentesque sed sollicitudin et, pulvinar adipiscing sem. 
+\item Maecenas facilisis, leo quis tincidunt egestas, magna ipsum condimentum orci, vitae facilisis nibh turpis et elit. 
+\end{itemize}
+
+\begin{remark}
+content...
+\end{remark}
+
+\section{Pellentesque quis tortor}
+
+Nec urna malesuada sollicitudin. Nulla facilisi. Vivamus aliquam tempus ligula eget ornare. Praesent eget magna ut turpis mattis cursus. Aliquam vel condimentum orci. Nunc congue, libero in gravida convallis \cite{DBLP:conf/focs/HopcroftPV75}, orci nibh sodales quam, id egestas felis mi nec nisi. Suspendisse tincidunt, est ac vestibulum posuere, justo odio bibendum urna, rutrum bibendum dolor sem nec tellus. 
+
+\begin{lemma} [Quisque blandit tempus nunc]
+Sed interdum nisl pretium non. Mauris sodales consequat risus vel consectetur. Aliquam erat volutpat. Nunc sed sapien ligula. Proin faucibus sapien luctus nisl feugiat convallis faucibus elit cursus. Nunc vestibulum nunc ac massa pretium pharetra. Nulla facilisis turpis id augue venenatis blandit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+\end{lemma}
+
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+
+\section{Morbi eros magna}
+
+Morbi eros magna, vestibulum non posuere non, porta eu quam. Maecenas vitae orci risus, eget imperdiet mauris. Donec massa mauris, pellentesque vel lobortis eu, molestie ac turpis. Sed condimentum convallis dolor, a dignissim est ultrices eu. Donec consectetur volutpat eros, et ornare dui ultricies id. Vivamus eu augue eget dolor euismod ultrices et sit amet nisi. Vivamus malesuada leo ac leo ullamcorper tempor. Donec justo mi, tempor vitae aliquet non, faucibus eu lacus. Donec dictum gravida neque, non porta turpis imperdiet eget. Curabitur quis euismod ligula. 
+
+
+\appendix
+
+\section{Styles of lists, enumerations, and descriptions}\label{sec:itemStyles}
+
+List of different predefined enumeration styles:
+
+\begin{itemize}
+\item \verb|\begin{itemize}...\end{itemize}|
+\item \dots
+\item \dots
+%\item \dots
+\end{itemize}
+
+\begin{enumerate}
+\item \verb|\begin{enumerate}...\end{enumerate}|
+\item \dots
+\item \dots
+%\item \dots
+\end{enumerate}
+
+\begin{alphaenumerate}
+\item \verb|\begin{alphaenumerate}...\end{alphaenumerate}|
+\item \dots
+\item \dots
+%\item \dots
+\end{alphaenumerate}
+
+\begin{romanenumerate}
+\item \verb|\begin{romanenumerate}...\end{romanenumerate}|
+\item \dots
+\item \dots
+%\item \dots
+\end{romanenumerate}
+
+\begin{bracketenumerate}
+\item \verb|\begin{bracketenumerate}...\end{bracketenumerate}|
+\item \dots
+\item \dots
+%\item \dots
+\end{bracketenumerate}
+
+\begin{description}
+\item[Description 1] \verb|\begin{description} \item[Description 1]  ...\end{description}|
+\item[Description 2] Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\item[Description 3]  \dots
+%\item \dots
+\end{description}
+
+\cref{testenv-proposition} and \autoref{testenv-proposition} ...
+
+\section{Theorem-like environments}\label{sec:theorem-environments}
+
+List of different predefined enumeration styles:
+
+\begin{theorem}\label{testenv-theorem}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{theorem}
+
+\begin{lemma}\label{testenv-lemma}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{lemma}
+
+\begin{corollary}\label{testenv-corollary}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{corollary}
+
+\begin{proposition}\label{testenv-proposition}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{proposition}
+
+\begin{conjecture}\label{testenv-conjecture}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{conjecture}
+
+\begin{observation}\label{testenv-observation}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{observation}
+
+\begin{exercise}\label{testenv-exercise}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{exercise}
+
+\begin{definition}\label{testenv-definition}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{definition}
+
+\begin{example}\label{testenv-example}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{example}
+
+\begin{note}\label{testenv-note}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{note}
+
+\begin{note*}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{note*}
+
+\begin{remark}\label{testenv-remark}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{remark}
+
+\begin{remark*}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{remark*}
+
+\begin{claim}\label{testenv-claim}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{claim}
+
+\begin{claim*}\label{testenv-claim2}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{claim*}
+
+\begin{proof}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{proof}
+
+\begin{claimproof}
+Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
+\end{claimproof}

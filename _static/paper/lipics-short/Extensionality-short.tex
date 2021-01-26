@@ -1,0 +1,524 @@
+%% \ccpad
+%% \begin{code}%
+%% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+%% \AgdaKeyword{OPTIONS}\AgdaSpace{}%
+%% \AgdaPragma{--without-K}\AgdaSpace{}%
+%% \AgdaPragma{--exact-split}\AgdaSpace{}%
+%% \AgdaPragma{--safe}\AgdaSpace{}%
+%% \AgdaSymbol{\#-\}}\<%
+%% %
+%% \ccpad
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{UALib.Prelude.Extensionality}\AgdaSpace{}%
+%% \AgdaKeyword{where}\<%
+%% %
+%% \ccpad
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaKeyword{import}\AgdaSpace{}%
+%% \AgdaModule{UALib.Prelude.Inverses}\AgdaSpace{}%
+%% \AgdaKeyword{public}\<%
+%% \\
+%% %
+%% \ccpad
+%% %
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaKeyword{import}\AgdaSpace{}%
+%% \AgdaModule{UALib.Prelude.Preliminaries}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaKeyword{using}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∼\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaPrimitive{𝓤ω}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaFunction{Π}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaFunction{Ω}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaFunction{𝓟}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaFunction{⊆-refl-consequence}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈₀\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆₀\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}holds}}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaKeyword{public}\<%
+%% \end{code}
+
+\subsubsection{Function extensionality}\label{function-extensionality}
+Extensional equality of functions, or function extensionality, means
+that any two point-wise equal functions are equal. As
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{MHE
+points out}, this is known to be not provable or disprovable in
+Martin-Löf type theory. It is an independent statement, which MHE
+abbreviates as \texttt{funext}. Here is how this notion is given a type
+in the \href{}{Type Topology} library
+\ccpad
+\begin{code}
+  \>[0]\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{)}\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\<%
+\end{code}
+\ccpad
+%% For readability we occasionally use the following alias for the \texttt{funext} type.
+%% \ccpad
+%% \begin{code}%
+%% \>[0]\AgdaFunction{extensionality}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝓦}%
+%% \>[24]\AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\<%
+%% \\
+%% \>[0]\AgdaFunction{extensionality}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{A}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+%% \AgdaBound{g}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaBound{g}\<%
+%% \end{code}
+%% \ccpad
+Pointwise equality of functions is typically what one means in informal settings when one says that two functions are equal. In~\cite{MHE}, Escardo defines pointwise equality of (dependent) function in the \href{https://github.com/martinescardo/TypeTopology}{Type Topology} this way
+\ccpad
+\begin{code}
+  \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∼\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\end{code}
+\ccpad
+In fact, if one assumes the \href{}{univalence axiom}, then the \texttt{\_∼\_} relation is equivalent to equality of functions. See
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{Function extensionality from univalence}.
+
+\subsubsection{Dependent function extensionality}\label{dependent-function-extensionality}
+
+Extensionality for dependent function types is defined as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{dep-extensionality}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{dep-extensionality}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[28]\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+\AgdaBound{g}%
+\>[35]\AgdaSymbol{→}%
+\>[38]\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\<%
+\end{code}
+\ccpad
+Sometimes we need extensionality principles that work at all universe levels, and Agda is capable of expressing such principles, which belong to the special 𝓤ω type, as follows:
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{∀-extensionality}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{𝓤ω}\<%
+\\
+\>[0]\AgdaFunction{∀-extensionality}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[22]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{extensionality}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{∀-dep-extensionality}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{𝓤ω}\<%
+\\
+\>[0]\AgdaFunction{∀-dep-extensionality}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{dep-extensionality}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\<%
+\end{code}
+\ccpad
+More details about the 𝓤ω type are available at \href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{extensionality-lemma}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[119I]\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{𝓣}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[.][@{}l@{}]\<[119I]%
+\>[23]\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\<%
+\\
+%
+\>[23]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓣}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\\
+%
+\>[23]\AgdaSymbol{(}\AgdaBound{args}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{))}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[23]\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[23]\AgdaComment{-------------------------------------------------}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[23]\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{args}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{args}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{extensionality-lemma}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaBound{args}\AgdaSpace{}%
+\AgdaBound{p≡q}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{-}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{args}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{p≡q}\<%
+\end{code}
+
+\subsubsection{Function intensionality}\label{function-intensionality}
+This is the opposite of function extensionality and is defined as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{intensionality}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[200I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[1]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[200I]%
+\>[14]\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}%
+\>[25]\AgdaSymbol{→}%
+\>[28]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaComment{------------------}\<%
+\\
+%
+\>[1]\AgdaSymbol{→}%
+\>[14]\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{intensionality}%
+\>[16]\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\end{code}
+\ccpad
+Of course, the intensionality principle has an analogue for dependent function types.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{dep-intensionality}%
+\>[21]\AgdaComment{-- alias (we sometimes give multiple names to a function, like this)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{dintensionality}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[200I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{\}}\<%
+\\
+\>[1]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[200I]%
+\>[14]\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}%
+\>[25]\AgdaSymbol{→}%
+\>[28]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaComment{------------------}\<%
+\\
+%
+\>[1]\AgdaSymbol{→}%
+\>[14]\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{dintensionality}%
+\>[17]\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[30]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaFunction{dep-intensionality}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{dintensionality}\<%
+\end{code}
+
