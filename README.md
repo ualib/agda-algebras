@@ -48,11 +48,30 @@ After installing agda and cloning the ualib.gitlab.io repository, you should be 
 
 (**To do** update this section with better, more complete instructions)
 
+The html documentation pages are generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\begin{code}...\end{code}` blocks, and some mathematical discussions outside those blocks.
 
-The shell script `generate-md` type-checks all the `.lagda` and then generates markdown (`.md`) files in the html directory.
+The html pages are generated automatically by Agda with the command
 
-* This script is used for editing the notes in conjunction with `jekyll serve --watch --incremental` so that after an update it is only necessary to reload the page on the browser to view it.
+```
+agda --html --html-highlight=code UALib.lagda
+```
 
+This generates a set of markdown files that are then converted to html by jekyll with the command
+
+```shell
+bundle exec jekyll build
+```
+
+In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
+
+```
+cp html/UALib.md index.md
+cp html/*.html html/*.md .
+bundle install --path vendor
+bundle exec jekyll serve --watch --incremental
+```
+
+This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
 
 --------------------------------
 

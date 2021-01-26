@@ -76,16 +76,25 @@ It is assumed that the reader of this documentation is actively experimenting wi
 
 If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martin Escardo's installation instructions](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md) or [our modified version of MHE's instructions](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md).
 
-The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions on [the main README.md page](https://gitlab.com/ualib/ualib.gitlab.io) of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io), but really all that is required is [Agda][] (and [agda2-mode][] for [Emacs](https://www.gnu.org/software/emacs/)) installed and then clone the [ualib/ualib.gitlab.io][] repository with, e.g.,
+The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io), but a summary of what's required is
 
-```shell
-git clone git@gitlab.com:ualib/ualib.gitlab.io.git
-```
+* [Emacs](https://www.gnu.org/software/emacs/)) 
+* [Agda][] 2.6.1
+* [agda2-mode][] (for emacs)
+* A cloned copy of the [ualib/ualib.gitlab.io][] repository.
 
-OR
+Instructions for installing each of these are available in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io).
+
+If you already have `git` installed, a cloned copy of [ualib/ualib.gitlab.io][] is obtained using **ONE** of the following alternative commands:
 
 ```shell
 git clone https://gitlab.com/ualib/ualib.gitlab.io.git
+```
+
+**OR**, if you have a gitlab account with [ssh keys](https://docs.gitlab.com/ee/ssh/) configured, you could try
+
+```shell
+git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 ```
 
 -------------------------------------------------------
@@ -97,10 +106,6 @@ The author wishes to thank [Siva Somayyajula][], who contributed to this project
 Thanks also to [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, instruction, advice, inspiration and encouragement.
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
-
-[William DeMeo][] developed the [Agda Universal Algebra Library][] and wrote the documentation.
-
-[Siva Somayyajula][] contributed to early versions of the library.
 
 Most of the mathematical results that formalized in the [UAlib][] are already well known.
 
