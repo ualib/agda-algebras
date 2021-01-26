@@ -28,7 +28,9 @@ The docs are served at [ualib.org](https://ualib.gitlab.io/), and are automatica
 
 Agda [2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) is required. 
 
-If you don't have Agda and agda2-mode installed, follow the [official installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html) or [Martin Escardo's installation instructions](INSTALL_AGDA.md) to help you set up Agda and Emacs.
+If you don't have it, follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html) or [these instructions](INSTALL_AGDA.md) by Martin Escardo.
+
+Be sure you have [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php), [Emacs](https://www.gnu.org/software/emacs/) (or [Spacemacs](https://www.spacemacs.org/)), and [agda2-mode](https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html) for Emacs (Spacemacs) installed.
 
 -----------------------------
 
