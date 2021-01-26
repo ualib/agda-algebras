@@ -11,7 +11,7 @@ This file describes how to install Agda 2.6.1 and Emacs. Please follow the insta
 
 If you experience any issues, please take a look at the [Troubleshooting section](#Troubleshooting).
 
-------------------------------------------------
+---------------------------------------
 
 ## GNU/Linux
 
@@ -33,11 +33,13 @@ Start by installing `emacs`, `git`, `ghc`, `cabal-install`, `alex` and `happy` u
 ```bash
 sudo apt install emacs git ghc cabal-install alex happy
 ```
-
 Next, create a directory `ualib` for the Agda UALib in your home directory:
 ```bash
 mkdir ~/ualib
 ```
+
+If you want to try [spacemacs](https://www.spacemacs.org/), there are some config files in the [emacs directory](https://gitlab.com/ualib/ualib.gitlab.io/-/tree/master/emacs) along with some tips in the [emacs/README.md](emacs/README.md) file.
+
 
 #### Standard Agda installation
 This section describes the standard way to install Agda 2.6.1. If this does not work, then please try the instructions using Git.
@@ -186,8 +188,3 @@ Try adding
 ```
 to the file `~/ualib/.emacs`.
 
-----------------
-
-### <a id="spacemacs">Spacemacs</a>
-
-If you want to try [spacemacs](https://www.spacemacs.org/), I've put my config files in the emacs directory.  See the [README.md](emacs) file inside the emacs directory.
