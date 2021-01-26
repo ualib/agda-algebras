@@ -84,3 +84,21 @@ A great source of information and inspiration for the Agda UALib is [Marin Escar
 See also Martin's [HoTT/UF github repository](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes) and [Type Topology github repository](https://github.com/martinescardo/TypeTopology).
 
 -------------------------------
+
+## Citing the UALib
+
+If you use the Agda UALib or wish to refer to it or its documentation in a publication or on a web page, please use the following BibTeX data:
+
+```bibtex
+@article{DeMeo:2021,
+ author        = {William DeMeo},
+ title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and {B}irkhoff's {T}heorem in {M}artin-{L}\"of {D}ependent {T}ype {T}heory}, 
+ journal       = {CoRR},
+ volume        = {abs/2101.10166},
+ year          = {2021},
+ eprint        = {2101.10166},
+ archivePrefix = {arXiv},
+ primaryClass  = {cs.LO}
+ url           = {https://arxiv.org/abs/2101.10166}
+}
+```
