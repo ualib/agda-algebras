@@ -1,13 +1,13 @@
 # ualib.gitlab.io
 
-(version 2.01 of {{ "now" | date: "%d %b %Y" }})
+(version 2.01 of 25 Jan 2021)
 
-**Author**. [William DeMeo][]  
-*Affiliation*. [Department of Algebra][], [Charles University in Prague][]
+**Author**. [William DeMeo](https://williamdemeo.gitlab.io)
+*Affiliation*. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
 
 **PDF documentation**. [ualib-24Jan2021.pdf](ualib-24Jan2021.pdf)
 
-**Abstract**. The [Agda Universal Algebra Library][] ([UALib][]) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda][] proof assistant language.
+**Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
 This is the main repository for the Agda UALib. Below are instructions for getting the UALib installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
 
