@@ -90,15 +90,28 @@ A great source of information and inspiration for the Agda UALib is [Marin Escar
 
 See also Martin's [HoTT/UF github repository](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes) and [Type Topology github repository](https://github.com/martinescardo/TypeTopology).
 
-The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
+The author wishes to thank
+[Siva Somayyajula](http://www.cs.cmu.edu/~ssomayya/),
+who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, instruction, advice, inspiration and encouragement.
+Thanks also to 
+[Andrej Bauer](http://www.andrej.com/index.html), 
+[Clifford Bergman](https://orion.math.iastate.edu/cbergman/), 
+[Venanzio Capretta](https://www.duplavis.com/venanzio/), 
+[Martin Escardo](https://www.cs.bham.ac.uk/~mhe), 
+[Ralph Freese](https://math.hawaii.edu/~ralph/), 
+[Bill Lampe](https://math.hawaii.edu/wordpress/people/william/), 
+[Miklós Maróti](http://www.math.u-szeged.hu/~mmaroti/), 
+[Peter Mayr](http://math.colorado.edu/~mayr/), 
+[JB Nation](http://www.math.hawaii.edu/~jb/), and 
+[Hyeyoung Shin](https://hyeyoungshin.github.io/)
+for helpful discussions, instruction, advice, inspiration and encouragement.
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
 
-Most of the mathematical results that formalized in the [UAlib][] are already well known.
+Most of the mathematical results that formalized in the [UAlib](https://ualib.gitlab.io) are already well known.
 
-Regarding the Agda source code in the [Agda UALib][], this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martin Hötzel Escardo][].  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
+Regarding the Agda source code in the [Agda UALib](https://gitlab.com/ualib/ualib.gitlab.io/), this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html) and the [Type Topology](https://github.com/martinescardo/TypeTopology) Agda Library by [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe).  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science](http://events.cs.bham.ac.uk/mgs2019/) in Birmingham in 2019.
 
 -------------------------------
 
