@@ -30,7 +30,6 @@ If you don't have Agda and agda2-mode installed, follow the [official installati
 
 ``` sh
 git clone https://gitlab.com/ualib/ualib.gitlab.io.git
-cd ualib.gitlab.io
 ```
 
 **OR**, if you have a gitlab account and have configured [ssh keys](https://docs.gitlab.com/ee/ssh/),
@@ -38,10 +37,13 @@ cd ualib.gitlab.io
 
 ``` sh
 git clone git@gitlab.com:ualib/ualib.gitlab.io.git
-cd ualib.gitlab.io
 ```
 
-After installing Agda and cloning the ualib.gitlab.io repository, you should be able to work with the Agda UALib source code contained in the .lagda files like UALib.lagda or any of it submodules in the ualib.gitlab.io/UALib directory.  For example, you could start by having a look at [UALib/Prelude/Preliminaries.lagda](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda).
+This creates a directory on your local machine called `ualib.gitlab.io`. The UALib source code files reside in subdirectories of `ualib.gitlab.io/UALib` and have the `.lagda` extension.
+
+Having installed Agda and cloned the `ualib.gitlab.io` repository, you should now be able to work with the source code contained in the .lagda files, such as UALib.lagda or any of it submodules. For example, you might start by loading the file [UALib/Prelude/Preliminaries.lagda](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda) into Emacs and check that Agda can type-check that file using the command `C-c C-l`.
+
+Other Emacs keybindings are described in the [emacs-mode.html#keybindings]((https://agda.readthedocs.io/en/v2.6.1.1/tools/emacs-mode.html#keybindings) section of the [Agda docs](https://agda.readthedocs.io).
 
 --------------------------------------------
 
