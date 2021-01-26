@@ -59,7 +59,7 @@ Other Emacs keybindings are described in the [emacs-mode.html#keybindings](https
 
 ## Generating the documentation
 
-The html pages at [ualib.org](https://ualib.gitlab.io) were generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files in this repository.  These files contain formal, verified, mathematical theorems and proof appearing within `\begin{code}...\end{code}` blocks, as well as some mathematical discussions outside those blocks written in markdown.
+The html pages at [ualib.org](https://ualib.gitlab.io) were generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files in this repository.  These files contain formal, verified, mathematical theorems and proofs inside code environments (i.e., inside `\begin{code}...\end{code}` blocks)  as well as some mathematical discussions outside those blocks written in markdown.
 
 The html documentation is available at [ualib.org](https://ualib.gitlab.io), so there is usually no need for end-users to generate the documentation pages locally. However, if you want to fix something or help develop improved versions of the docs or code, you may want to update and render the documentation html pages on your local machine. In that case, the instructions in this section may be helpful.
 
