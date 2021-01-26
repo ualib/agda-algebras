@@ -158,20 +158,22 @@ This causes jekyll to serve the web pages locally so we can inspect them by poin
 
 ### <a id="how-to-cite-the-agda-ualib">How to cite the Agda UALib</a>
 
-If you use the [Agda UALib][], or wish to refer to it or its documentation in a publication or on a web page, please cite it using the following BibTeX data:
+The [Agda UALib][] falls under the used in other work, it should be cited it using the following BibTeX data:
 
 ```bibtex
 @article{DeMeo:2021,
-author        = {William DeMeo},
-title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and {B}irkhoff's {T}heorem in {M}artin-{L}\"of {D}ependent {T}ype {T}heory},
-journal       = {CoRR},
-volume        = {abs/2101.10166},
-year          = {2021},
-eprint        = {2101.10166},
-archivePrefix = {arXiv},
-primaryClass  = {cs.LO},
-url           = {https://arxiv.org/abs/2101.10166},
-note          = {source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{gitlab.com/ualib/ualib.gitlab.io}}
+ author        = {William DeMeo},
+ title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and
+                 {B}irkhoff's {T}heorem in {M}artin-{L}\"of
+                 {D}ependent {T}ype {T}heory},
+ journal       = {CoRR},
+ volume        = {abs/2101.10166},
+ year          = {2021},
+ eprint        = {2101.10166},
+ archivePrefix = {arXiv},
+ primaryClass  = {cs.LO},
+ url           = {https://arxiv.org/abs/2101.10166},
+ note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
 }
 ```
 

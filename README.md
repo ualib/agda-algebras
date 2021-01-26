@@ -109,7 +109,9 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
 ```bibtex
 @article{DeMeo:2021,
  author        = {William DeMeo},
- title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and {B}irkhoff's {T}heorem in {M}artin-{L}\"of {D}ependent {T}ype {T}heory}, 
+ title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and 
+                  {B}irkhoff's {T}heorem in {M}artin-{L}\"of 
+                  {D}ependent {T}ype {T}heory}, 
  journal       = {CoRR},
  volume        = {abs/2101.10166},
  year          = {2021},
@@ -117,7 +119,6 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
  url           = {https://arxiv.org/abs/2101.10166},
- note          = {source code: https://gitlab.com/ualib/ualib.gitlab.io}
-
+ note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
 }
 ```
