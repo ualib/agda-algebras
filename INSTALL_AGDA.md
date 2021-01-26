@@ -186,3 +186,8 @@ Try adding
 ```
 to the file `~/ualib/.emacs`.
 
+----------------
+
+### <a id="spacemacs">Spacemacs</a>
+
+If you want to try [spacemacs](https://www.spacemacs.org/), I've put my config files in the emacs directory.  See the [README.md](emacs/README.md) file inside the emacs directory.

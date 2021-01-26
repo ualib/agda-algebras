@@ -93,9 +93,6 @@
 
 [OPLSS 2018]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 
-[our version of MHE's instructions]: emacs/INSTALL_AGDA.md
-
-
 [Peter Mayr]: http://math.colorado.edu/~mayr/
 [Preface module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 [Prelude.lagda]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda

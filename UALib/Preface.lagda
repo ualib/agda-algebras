@@ -74,9 +74,9 @@ Some prior exposure to [type theory][] and Agda would be helpful, but even witho
 
 It is assumed that the reader of this documentation is actively experimenting with [Agda][] using [Emacs][] with the [agda2-mode][] extension installed.
 
-If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martin Escardo's installation instructions](INSTALL_AGDA.md) or [our version of MHE's instructions][].
+If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martin Escardo's installation instructions](INSTALL_AGDA.md) or [our slightly modified version of MHE's instructions](INSTALL_AGDA.md).
 
-The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the main README.md file in that repository, but really all you need to do is have Agda (and [agda2-mode][] for Emacs) installed and then clone the [ualib/ualib.gitlab.io][] repository with, e.g.,
+The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the main [README.md](README.md) file in that repository, but really all that is required is [Agda][] (and [agda2-mode][] for [Emacs](https://www.gnu.org/software/emacs/)) installed and then clone the [ualib/ualib.gitlab.io][] repository with, e.g.,
 
 ```shell
 git clone git@gitlab.com:ualib/ualib.gitlab.io.git
