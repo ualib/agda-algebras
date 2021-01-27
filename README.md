@@ -63,7 +63,9 @@ If you wish to contribute to this repository, the best way is to use the standar
 
 (Note that a "pull request" is called a "merge request" on the gitlab website and in gitlab documentation.)
 
-1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork) the ualib.gitlab.io repository which makes a copy of the repo in your own gitlab account that you now control, so, for example, you can commit and push changes to the source code in your forked copy of the repo.
+The following assumes you already have a [gitlab](https://gitlab.com/) account.
+
+1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork) the ualib.gitlab.io repository. This makes a complete copy of the repository in your own gitlab account that you now control, so, for example, you can commit and push changes to the source code in your forked copy of the repo.
 
 2. [Clone](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#clone-a-repository) your fork to make a copy of it on your local machine.
 
@@ -195,7 +197,7 @@ Thanks also to
 [Hyeyoung Shin](https://hyeyoungshin.github.io/)
 for helpful discussions, instruction, advice, inspiration and encouragement.
 
-### <a id="attributions-and-citations">Attributions and citations</a>
+### Attributions and citations
 
 Most of the mathematical results that formalized in the [UAlib](https://ualib.gitlab.io) are already well known.
 
