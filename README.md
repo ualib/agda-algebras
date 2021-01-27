@@ -55,9 +55,83 @@ Having installed Agda and cloned the `ualib.gitlab.io` repository, you should no
 
 Other Emacs keybindings are described in the [emacs-mode.html#keybindings](https://agda.readthedocs.io/en/v2.6.1.1/tools/emacs-mode.html#keybindings) section of the [Agda docs](https://agda.readthedocs.io).
 
---------------------------------------------
+--------------------------------------
 
-## Generating the documentation
+## Contributing to this repo
+
+If you wish to contribute to this repository, the best way is to use the standard [fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962) workflow.  This is described nicely on [this page](https://gist.github.com/Chaser324/ce0505fbed06b947d962), but below we list the five simple steps required.
+
+(Note that a "pull request" is called a "merge request" on the gitlab website and in gitlab documentation.)
+
+1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork) the ualib.gitlab.io repository which makes a copy of the repo in your own gitlab account that you now control, so, for example, you can commit and push changes to the source code in your forked copy of the repo.
+
+2. [Clone](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#clone-a-repository) your fork to make a copy of it on your local machine.
+
+3. Make some improvements to the source files or documentation in your local copy of the repository.
+
+4. [Commit](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#add-and-commit-local-changes) your changes to your local repository and then [Push](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#send-changes-to-gitlabcom) your changes to your remote fork residing in your gitlab account.
+
+5. [Submit a merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html) to alert the UALib team members that you would like your proposed changes to be reviewed and integrated into the official Agda UALib repository.
+
+
+### Keeping your fork up-to-date
+
+When improvements are made to the "upstream" ualib/ualib.gitlab.io repository, you will want to update your fork to incorporate these changes.
+
+Below is a list of the commands that accomplish this, but see [this page](https://help.github.com/en/articles/configuring-a-remote-for-a-fork) and [this page](https://help.github.com/articles/syncing-a-fork/) for more details.
+
+**New** Gitlab has a "mirroring" feature to keep your fork synced with the upstream repo. See [this page](https://docs.gitlab.com/ee/user/project/repository/repository_mirroring.html) for details.
+
+1. Change to the working directory of your local copy of the repository and specify the upstream repository.
+
+   ``` sh
+   cd $HOME/git/ualib.gitlab.io # (for example)
+   git remote add upstream git@gitlab.com:ualib/ualib.gitlab.io.git
+   ```
+
+2. Verify that it worked.
+
+   ``` sh
+   git remote -v
+   ```
+
+   The output should look something like this:
+
+   ``` sh
+   origin git@gitlab.com:your-user-name/ualib.gitlab.io.git (fetch)
+   origin git@github.com:your-user-name/ualib.gitlab.io.git (push)
+   upstream git@gitlab.com:ualib/ualib.gitlab.io.git (fetch)
+   upstream git@gitlab.com:ualib/ualib.gitlab.io.git (push)
+   ```
+
+   If the foregoing fails, try
+
+   ``` sh
+   git remote add upstream https://gitlab.com/ualib/ualib.gitlab.io.git
+   ```
+
+3. In the working directory of your local project, fetch the branches and their commits from the upstream repository and merge upstream/master into your local master branch.
+
+   ``` sh
+   git fetch upstream
+   git checkout master
+   git merge upstream/master
+   ```
+
+   This brings your fork's master branch into sync with the upstream repository, without losing your local changes.
+
+4. Finally, commit the changes and push to your remote fork.
+
+   ``` sh
+   git commit -m "merged changes from upstream"
+   git push origin master
+   ```
+
+Now when you now visit the Gitlab page of your personal fork of the repo, you should see a message like, "This branch is even with ualib:master."
+
+-------------------------------------
+
+### Generating the documentation
 
 The html pages at [ualib.org](https://ualib.gitlab.io) were generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files in this repository.  These files contain formal, verified, mathematical theorems and proofs inside code environments (i.e., inside `\begin{code}...\end{code}` blocks)  as well as some mathematical discussions outside those blocks written in markdown.
 
@@ -90,8 +164,15 @@ This causes jekyll to serve the web pages locally so we can inspect them by poin
 
 --------------------------------
 
+### Troubleshooting
 
-### Acknowledgements
+Please [email William](mailto:williamdemeo@gmail.com) if you have any questions or problems using the UALib.
+
+Comments, questions, or suggestions may also be submitted by creating a [new issue](https://gitlab.com/ualib/ualib.gitlab.io/issues/new).
+
+--------------------
+
+## Acknowledgements
 
 A great source of information and inspiration for the Agda UALib is [Marin Escardo's lecture notes on HoTT/UF in Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html).
 
@@ -114,7 +195,7 @@ Thanks also to
 [Hyeyoung Shin](https://hyeyoungshin.github.io/)
 for helpful discussions, instruction, advice, inspiration and encouragement.
 
-#### <a id="attributions-and-citations">Attributions and citations</a>
+### <a id="attributions-and-citations">Attributions and citations</a>
 
 Most of the mathematical results that formalized in the [UAlib](https://ualib.gitlab.io) are already well known.
 
