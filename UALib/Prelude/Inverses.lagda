@@ -8,22 +8,17 @@ author: William DeMeo
 ### <a id="inverses">Inverses</a>
 
 This section presents the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
-
 Here we define (the syntax of) a type for the (semantic concept of) **inverse image** of a function.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
 module UALib.Prelude.Inverses where
 
-
 open import UALib.Prelude.Equality public
-
 open import UALib.Prelude.Preliminaries using (_⁻¹; funext; _∘_; _∙_; 𝑖𝑑; fst; snd; is-set; is-embedding;
  transport; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs; fiber; 𝓇ℯ𝒻𝓁) public
-
 
 module _ {𝓤 𝓦 : Universe} where
 
@@ -33,10 +28,11 @@ module _ {𝓤 𝓦 : Universe} where
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
  ImageIsImage : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-               (f : A → B) (b : B) (a : A)
+                (f : A → B) (b : B) (a : A)
   →              b ≡ f a
-               ----------------------------
+                ---------------------------
   →              Image f ∋ b
+
  ImageIsImage {A}{B} f b a b≡fa = eq b a b≡fa
 
 \end{code}
@@ -49,7 +45,7 @@ For convenience, we define a pseudo-inverse function, which we call `Inv`, that 
 
  Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(b : B) → Image f ∋ b  →  A
  Inv f .(f a) (im a) = a
- Inv f b (eq b a b≡fa) = a
+ Inv f _ (eq _ a _) = a
 
 \end{code}
 
@@ -62,7 +58,7 @@ Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
            ---------------------------------
   →         f (Inv f b b∈Imgf) ≡ b
  InvIsInv f .(f a) (im a) = refl _
- InvIsInv f b (eq b a b≡fa) = b≡fa ⁻¹
+ InvIsInv f _ (eq _ _ p) = p ⁻¹
 
 \end{code}
 
@@ -154,15 +150,15 @@ Finally, bijective functions are defined.
 
 \begin{code}
 
- Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → 𝓤 ⊔ 𝓦 ̇
- Bijective f = Epic f × Monic f
+ -- Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → 𝓤 ⊔ 𝓦 ̇
+ -- Bijective f = Epic f × Monic f
 
- Inverse : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-            (f : A → B) → Bijective f
-            -------------------------
-  →          B → A
+ -- Inverse : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
+ --            (f : A → B) → Bijective f
+ --            -------------------------
+ --  →          B → A
 
- Inverse f fbi b = Inv f b (fst( fbi ) b)
+ -- Inverse f fbi b = Inv f b (fst( fbi ) b)
 
 \end{code}
 
@@ -258,22 +254,22 @@ Finally, if we have a proof `p : is-embedding f` that the map `f` is an embeddin
 \begin{code}
 
  -- Embedding elimination (makes it easier to apply is-embedding)
- embedding-elim : {X : 𝓤 ̇ } {Y : 𝓦 ̇ }{f : X → Y}
-  →               is-embedding f
-  →               (x x' : X)
-  →               f x ≡ f x' → x ≡ x'
- embedding-elim {f = f} femb x x' fxfx' = γ
-  where
-   fibx : fiber f (f x)
-   fibx = x , 𝓇ℯ𝒻𝓁
-   fibx' : fiber f (f x)
-   fibx' = x' , ((fxfx') ⁻¹)
-   iss-fibffx : is-subsingleton (fiber f (f x))
-   iss-fibffx = femb (f x)
-   fibxfibx' : fibx ≡ fibx'
-   fibxfibx' = iss-fibffx fibx fibx'
-   γ : x ≡ x'
-   γ = ap pr₁ fibxfibx'
+ -- embedding-elim : {X : 𝓤 ̇ } {Y : 𝓦 ̇ }{f : X → Y}
+ --  →               is-embedding f
+ --  →               (x x' : X)
+ --  →               f x ≡ f x' → x ≡ x'
+ -- embedding-elim {f = f} femb x x' fxfx' = γ
+ --  where
+ --   fibx : fiber f (f x)
+ --   fibx = x , 𝓇ℯ𝒻𝓁
+ --   fibx' : fiber f (f x)
+ --   fibx' = x' , ((fxfx') ⁻¹)
+ --   iss-fibffx : is-subsingleton (fiber f (f x))
+ --   iss-fibffx = femb (f x)
+ --   fibxfibx' : fibx ≡ fibx'
+ --   fibxfibx' = iss-fibffx fibx fibx'
+ --   γ : x ≡ x'
+ --   γ = ap pr₁ fibxfibx'
 
 \end{code}
 

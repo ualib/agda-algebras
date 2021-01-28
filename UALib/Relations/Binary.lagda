@@ -110,7 +110,7 @@ or as a relation from `A` to `B`,
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 
  is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
- is-subsingleton-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
+ is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 \end{code}
 
 #### Binary relation truncation

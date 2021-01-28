@@ -35,9 +35,9 @@ So, `x ∈ [ a ] R` iff `R a x`, and the following elimination rule is a tautolo
 
 \begin{code}
 
- []-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
-  →         R a x ⇔ (x ∈ [ a ] R)
- []-elim = id , id
+ -- []-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
+ --  →         R a x ⇔ (x ∈ [ a ] R)
+ -- []-elim = id , id
 
 \end{code}
 
@@ -69,9 +69,9 @@ We then define the following introduction rule for a relation class with designa
  ⟦ a ⟧ {R} = ([ a ] R) , a , 𝓇ℯ𝒻𝓁
 
  --So, x ∈ [ a ]ₚ R iff R a x, and the following elimination rule is a tautology.
- ⟦⟧-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
-  →         R a x ⇔ (x ∈ [ a ] R)
- ⟦⟧-elim = id , id
+ -- ⟦⟧-elim : {A : 𝓤 ̇ }{a x : A}{R : Rel A 𝓡}
+ --  →         R a x ⇔ (x ∈ [ a ] R)
+ -- ⟦⟧-elim = id , id
 
 \end{code}
 
@@ -79,18 +79,18 @@ If the relation is reflexive, then we have the following elimination rules.
 
 \begin{code}
 
- /-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
-  →   reflexive R → [ a ] R ≡ [ a' ] R → R a a'
- /-refl{A = A}{a}{a'}{R} rfl x  = γ
-  where
-   a'in : a' ∈ [ a' ] R
-   a'in = rfl a'
-   γ : a' ∈ [ a ] R
-   γ = cong-app-pred a' a'in (x ⁻¹)
+ -- /-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+ --  →   reflexive R → [ a ] R ≡ [ a' ] R → R a a'
+ -- /-refl{A = A}{a}{a'}{R} rfl x  = γ
+ --  where
+ --   a'in : a' ∈ [ a' ] R
+ --   a'in = rfl a'
+ --   γ : a' ∈ [ a ] R
+ --   γ = cong-app-pred a' a'in (x ⁻¹)
 
- /-refl' : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
-  →   transitive R → R a' a → ([ a ] R) ⊆ ([ a' ] R)
- /-refl'{A = A}{a}{a'}{R} trn Ra'a {x} aRx = trn a' a x Ra'a aRx
+ -- /-refl' : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+ --  →   transitive R → R a' a → ([ a ] R) ⊆ ([ a' ] R)
+ -- /-refl'{A = A}{a}{a'}{R} trn Ra'a {x} aRx = trn a' a x Ra'a aRx
 
  ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
  ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
@@ -101,9 +101,9 @@ and an elimination rule for relation class representative, defined as follows.
 
 \begin{code}
 
- /-Refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
-  →   reflexive R → ⟦ a ⟧{R} ≡ ⟦ a' ⟧ → R a a'
- /-Refl rfl (refl _)  = rfl _
+ -- /-Refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+ --  →   reflexive R → ⟦ a ⟧{R} ≡ ⟦ a' ⟧ → R a a'
+ -- /-Refl rfl (refl _)  = rfl _
 
 \end{code}
 
