@@ -91,7 +91,7 @@
 \supplement{~\\ \textit{Documentation}: \ualibdotorg}%
 \supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
 
-\acknowledgements{The author wishes to thank Hyeyoung Shin and Siva Somayyajula for their contributions to this project and \MartinEscardo for creating the \TypeTopology library and teaching a course on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Univalent Foundations of Mathematics with Agda} at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda language due to Catarina Coquand and Ulf Norell.}
+\acknowledgements{The author wishes to thank Hyeyoung Shin and Siva Somayyajula for their contributions to this project and \MartinEscardo for creating the \TypeTopology library and teaching a course on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Univalent Foundations of Mathematics with Agda} at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda 2 language by Ulf Norell.\footnote{Agda 2 is partially based on code from Agda 1 by Catarina Coquand and Makoto Takeyama, and from Agdalight by Ulf Norell and Andreas Abel.}}
 
 %\nolinenumbers %uncomment to disable line numbering
 
@@ -142,34 +142,20 @@ Some other projects aimed at formalizing mathematics generally, and algebra in p
 Although the \agdaualib project was initiated relatively recently (in 2018), the part of universal algebra and equational logic that it formalizes already extends beyond the scope of prior efforts.  In particular, the \ualib now includes the only formal, constructive, machine-checked proof of Birkhoff's variety theorem that we know of. We remark that, with the exception of~\cite{Carlstrom:2008}, all other proofs of Birkhoff's theorem we have seen are informal and not known to be constructive.
 
 %% \subsection{Vision and Goals}\label{vision-and-goals}
-The seminal idea for the \agdaualib project is the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable and composable.  These observations suggest that there is much to be gained from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
+The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable and composable.  These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
 
-\subsection{Objectives}\label{objectives}
-One goal of this project is to express the foundations of universal algebra constructively, and to formally verify the foundations using the Agda proof assistant. Thus we aim to codify the edifice upon which our mathematical research stands, and demonstrate that advancements in our field can be expressed in type theory and formally verified in a way that we, and other working mathematicians, can easily understand and verify.  We hope our library inspires and encourages others to formalize and verify their own mathematical research so that we may more easily understand and verify their results.
+Futhermore, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate proof idioms of a particular field, can be an extremely powerful and effective asset. We believe that such libraries, and the proof assistants they support, ought to become indispensable tools in the working mathematician's toolkit.
 
-As our field is both deep and broad, formalizing its foundations in type theory may seem like a daunting task.  Yet, it is our strong conviction that the subject is well served by a modern, constructive, machine-checked presentation of its foundations, and that the mere act of reinterpreting the foundations in the language of dependent type theory offers a fresh perspective and a deeper understanding, and sows the seeds of new discoveries.
-
-We emphasize that our objective is not merely to translate existing results into an alternative formal language, but rather to provide a system that is useful for conducting research and proving new theorems.  That is how we intend to use the library now that we have achieved our initial goal of formalizing the core foundations of the subject, including the celebrated Birkhoff HSP Theorem.
-
-Our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate proof idioms of a particular field, can be an extremely powerful and effective asset. We believe that such libraries, and the proof assistants they support, ought to become indispensable tools in the working mathematician's toolkit.
-
-%% Finally, readers of this paper will benefit most from actively experimenting with Agda and the agda-ualib.
-
-%% \subsection{Installing the library}\label{installing-the-library}
-%% The main repository for the \agdaualib is \url{https://gitlab.com/ualib/ualib.gitlab.io}.
-
-%% There are installation instructions in the main README.md file in that repository, but really all one needs is a working Agda installation and a clone of the \agdaualib repository.
 \subsection{Contributions}
 \label{sec:contributions}
-Apart from the library itself, we describes the formal implementation and proof of a deep result in universal algebra, which was among the first major results of our subject---namely, Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}.  This theorem says that a \textit{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class.  More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of all algebras that satisfy a set of equations.
+Apart from the library itself, we describes the formal implementation and proof of a deep result, Garrett Birkhoff's celebrated HSP Theorem~\cite{Birkhoff:1935}, which was among the first major results of universal algebra.  The theorem states that a \defn{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class.  More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of algebras satisfying a certain set of equations.
 
-The fact that we now have a proof of Birkhoff's Theorem in Agda is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because our proof is \emph{constructive}. Judging from the paper~\cite{Carlstrom:2008} of Carlstr\"om, it is clearly a nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's (as presented in, e.g.,~\cite{Bergman:2012}) and to show that it can be formalized using only constructive logical assumptions, without appealing to, say, the Law of the Excluded Middle, or the Axiom of Choice.
+The fact that we now have a formal proof of Birkhoff's Theorem in Agda is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because our proof is \emph{constructive}. As the paper~\cite{Carlstrom:2008} of Carlstr\"om makes clear, it is a highly nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's and to show that it can be formalized using only constructive logic and natural deduction, without appealing to, say, the Law of the Excluded Middle or the Axiom of Choice.
 
 %% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Prelude}\label{sec:prelude}
+\section{Preliminaries}\label{sec:preliminaries}
 
-\subsection{Preliminaries}\label{sec:preliminaries}
-This section describes some aspects of the \ualibPreliminaries module of the \agdaualib, which imports everything we need from Martin Escardo's \typetopology library, and defines many other basic types and proves some of their properties.  We will not describe the entire Preliminaries module here. Instead, we focus on those aspects that might differ from standard Agda syntax or cause confusion in the sequel.
+This section describes some of the more important parts of the \agdaualib module called \ualibPreliminaries, which imports everything we need from Martin Escardo's \typetopology library~\cite{MHE}, defines some other basic types and proves some of their properties.  We will not cover very much of the entire Preliminaries module here. Instead, we merely call attention to those aspects that might differ from standard Agda syntax or cause confusion in the sequel. For more details, see~\cite[\S2.1]{DeMeo:2021}.
 
 %%--BEGIN: \input{Preliminaries-short.tex}-----------------------------------------------
 
@@ -180,8 +166,10 @@ This section describes some aspects of the \ualibPreliminaries module of the \ag
 %% \item \mltt = \MLTT
 %% \end{itemize}
 
-\subsubsection{Options}\label{options}
-Agda programs typically begin by setting some options and by importing from existing libraries. For example, each Agda source code file in the \ualib begins with the following line:
+\subsection{Options and imports}\label{ssec:options-and-imports}
+Agda programs typically begin by setting some options and by importing from existing libraries.
+Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness.  
+Agda programs in the \ualib reside in \texttt{.lagda} files, and every one of them begins with the pragma
 \ccpad
 \begin{code}[number=code:options]
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -192,20 +180,22 @@ Agda programs typically begin by setting some options and by importing from exis
 \AgdaSymbol{\#-\}}\<%
 \end{code}
 \ccpad
-These options control certain foundational assumptions that Agda assumes when checking the program to verify its correctness.  The options set with the line above have the following effects.
+This has the following effects:
 \begin{enumerate}
 \item
-  \texttt{without-K} disables \axiomk; see also the in the \agdarefk in the \agdaref.
+  \texttt{without-K} disables \axiomk; see~\cite{agdaref-axiomk};
 \item
-  \texttt{exact-split} makes Agda accept only those definitions that behave like so-called \emph{judgmental} or \emph{definitional} equalities. Escardo explains that this ``makes sure that pattern matching corresponds to Martin-Löf eliminators;'' see also the \patternmatching of the \agdatools documentation.
+  \texttt{exact-split} makes Agda accept only definitions that are \emph{judgmental} or \emph{definitional} equalities. As \escardo explains, this ``makes sure that pattern matching corresponds to Martin-Löf eliminators;'' for more details see~\cite{agdatools-patternmatching};
 \item
-  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#cmdoption-safe}{this section} of the \agdatools documentation and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html\#safe-agda}{Safe Agda section} of the \agdaref.
+  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
 \end{enumerate}
-An \AgdaKeyword{OPTIONS} directive identical to the one in~(\ref{code:options}) above appears at the top of every \texttt{lagda} file of the \agdaualib. In the remainder of this document, we take assumptions 1--3 for granted without mentioning them explicitly.
+In the remainder of this paper, we take assumptions 1--3 for granted without mentioning them explicitly.
 
-\subsubsection{Imports from Type Topology}\label{imports-from-type-topology}
-We adopt to the notation of \MartinEscardo's \typetopology library~\cite{MHE} and refer to universes using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab 𝓩, etc. Also, in his \AgdaModule{Universes} module, Escardo defines the \af ̇ operator which maps a universe \ab 𝓤 (i.e., a level) to \Set \ab 𝓤, and the latter has type \Set(\lsuc \ab 𝓤). The level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀}\af ̇ is an alias for \Set \lzero.\footnote{For those familiar the \href{https://leanprover.github.io/}{Lean} proof assistant, our \Set \lzero is analogous to Lean's \texttt{Sort 0}.} Thus, \ab 𝓤 ̇ is simply an alias for \Set \ab 𝓤, and we have \Set \ab 𝓤 : \Set (\lsuc \ab 𝓤). %% Finally, \Set(\lsuc \lzero) is denoted by \Set \AgdaBound{𝓤₀} ⁺ which we (and \mhe) denote by \AgdaBound{𝓤₀}~⁺~̇.
-Table~\ref{tab:dictionary} translates between standard \agda syntax and \mhe/\ualib notation.
+%% \subsection{Imports from Type Topology}\label{imports-from-type-topology}
+The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab 𝓩, etc. Also defined in the \typetopology library are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇.
+%% The level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀}\af ̇ is an alias for \Set \lzero.\footnote{For those familiar the \href{https://leanprover.github.io/}{Lean} proof assistant, \AgdaBound{𝓤₀}\af ̇ (i.e., \Set \lzero) is analogous to Lean's \texttt{Sort 0}.}
+Table~\ref{tab:dictionary} translates between standard \agda syntax and \mhe/\ualib notation.\footnote{To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.}
+
 
 \begin{table}
 \begin{tabular}{r|l}
@@ -217,255 +207,24 @@ Standard \agda                        &          \mhe/\ualib \\
 \lsuc \ab 𝓤                   &    \ab 𝓤 ⁺\\
 \Set (\lsuc \ab 𝓤) &    \ab 𝓤 ⁺ ̇\\
 \lzero                       &         \AgdaBound{𝓤₀}\\
-%% \Set \lzero              &    \AgdaBound{𝓤₀}~~̇\\
-%% \lsuc \lzero                  &    \AgdaBound{𝓤₀}⁺\\
-%% \Set (\lsuc \lzero) & \AgdaBound{𝓤₀} ⁺ ̇\\
 \AgdaFunction{Setω}  &         \AgdaFunction{𝓤ω}
 \end{tabular}
 \caption{Special notation for universe levels}
 \label{tab:dictionary}
 \end{table}
 
-To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
+There will be many occasions calling for a the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥, and the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
 
-There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, \ab 𝓤 ̇ and \ab 𝓥 ̇ . The universe (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇ denotes this least upper bound.\footnote{Since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇, we could omit parentheses here and simply write \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇.} Here \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels \ab 𝓤 and \ab 𝓥, where the \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} is an \agda primitive designed for precisely this purpose.
+\subsection{Dependent pairs and projections}\label{ssec:dependent-pairs-and-projections}
+Given universes \ab 𝓤 and \ab 𝓥, a type \ab X \as : \ab 𝓤 \aof ̇, and a type family \ab Y \as : X \as → \ab 𝓥 \aof ̇, the \defn{Sigma type} (or \defn{dependent pair type}) is denoted by \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) and generalizes the Cartesian product \ab X \as × \ab Y by allowing the type \ab Y(\ab x) of the second argument of the ordered pair (\ab x\as , \ab y) to depend on the value \ab x of the first.  That is, \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) is inhabited by pairs (\ab x\as , \ab y) such that \ab x \as : \ab X and \ab y \as : \ab Y(\ab x).
 
-\subsubsection{Notation for dependent pairs}\label{sssec:dependent-pair-type}
-\textit{Dependent pair types} (or \textit{Sigma types}) are defined in the \typetopology library as a record, as follows:
-\ccpad
-\begin{code}
-\>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}%
-\>[52]\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{constructor}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\<%
-\\
-%
-\>[2]\AgdaKeyword{field}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaField{pr₁}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\<%
-\\
-%
-\>[3]\AgdaField{pr₂}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
-\AgdaField{pr₁}\<%
-\\
-%
-\>[0]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{50}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
-\end{code}
-\ccpad
-Agda's default syntax for the dependent pair type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax appearing in the literature. In~\cite{MHE}, Escardo makes the preferred notation available by making the index type explicit, as follows.\footnote{The symbol \as ꞉ in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}\as ꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab Y is not the ordinary colon (:); rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.}
-\ccpad
-\begin{code}
-\>[0]\AgdaFunction{-Σ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{-Σ}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\<%
-\\
-\>[0]\AgdaKeyword{syntax}\AgdaSpace{}%
-\AgdaFunction{-Σ}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{Y}\<%
-\end{code}%
-\ccpad
+Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax described in the preceding paragraph. Fortunately, this preferred notation is available in the \typetopology library (see~\cite[Σ types]{MHE}).\footnote{The symbol \as ꞉ in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}\as ꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab Y is not the ordinary colon (:); rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
 
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
-Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these.
-\ccpad
-\begin{code}%
-\>[1]\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{X}\<%
-\\
-%
-\>[1]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\>[1]\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\
-\>[1]\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\AgdaSpace{}%
-\AgdaFunction{snd}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{pr₁}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\\
-%
-\>[1]\AgdaFunction{snd}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\end{code}
-
-\subsubsection{Truncation and sets}\label{sssec:truncation}
-In general, we may have many inhabitants of a given type and, via the Curry-Howard correspondence, many proofs of a given proposition. For instance, suppose we have a type \ab X and an identity relation \AgdaOperator{\AgdaDatatype{≡ₓ}} on \ab X. Then, given two inhabitants \ab a and \ab b of type \ab X, we may ask whether \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b.
-
-Suppose \ab p and \ab q inhabit the identity type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} b; that is, \ab p and \ab q are proofs of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, in which case we write \ab p\sP{3}\sP{3}\ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Then we might wonder whether and in what sense are the two proofs \ab p and \ab q the ``same.'' We are asking about an identity type on the identity type \AgdaOperator{\AgdaDatatype{≡ₓ}}, and whether there is some inhabitant \ab r of this type; i.e., whether there is a proof \ab r : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q that the proof of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b is unique. (This property is sometimes called \emph{uniqueness of identity proofs}.)
-
-Perhaps we have two proofs, say, \ab r\sP{3}\sP{3} \ab s : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q. Then of course our next question will be whether \ab r \AgdaOperator{\AgdaDatatype{≡ₓ₂}} \ab s has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) is not useful or desirable. At that point, say, at level \ab k, we might assume that there is at most one proof of any identity of the form \ab p  \AgdaOperator{\AgdaDatatype{≡ₓₖ}} \ab q. This is called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation}{truncation}.
-
-We will see some examples of trunction later when we require it to complete some of the \ualib modules leading up to the proof of Birkhoff's HSP Theorem. Readers who want more details should refer to \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section 34} and \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35} of \escardo's notes~\cite{MHE}, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume Brunerie, Truncations and truncated higher inductive types}, or Section 7.1 of the \hottbook.
-
-We take this opportunity to say what it means in type theory to say that a type is a \emph{set}. A type \ab X~\as :~\ab 𝓤~\af ̇ with an identity relation \AgdaDatatype{≡ₓ} is called a \textbf{set} (or 0-\textbf{groupoid}) if for every pair \ab a \ab b \as : \ab X of elements of type \ab X there is at most one proof of \ab a \AgdaDatatype{≡ₓ} \ab b. This is formalized in the \TypeTopology library as follows:
-%% \footnote{As \mhe explains, ``at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom.''}
-\ccpad
-\begin{code}[number=code:is-set]
-\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
-\end{code}
-%%--END: \input{Preliminaries-short.tex}-----------------------------------------------
-
-
-
-
-
-
+Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (but see~\cite[\S2.1.5]{DeMeo:2021} for details).
 
 \subsection{Equality}\label{ssec:equality}
-
-%%--BEGIN: \input{Equality-short.tex}-----------------------------------------------
-
-%% \subsubsection{refl}\label{Equality.sssec:refl}
 Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
 %% full listing of the \texttt{Identity-Type} module.
 \ccpad
@@ -498,27 +257,208 @@ Perhaps the most important types in type theory are the equality types. The \emp
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
+
+\subsubsection{Truncation and h-sets}\label{sssec:truncation-and-hsets}
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard correspondence) many proofs of a given proposition. For instance, suppose we have a type \ab X and an identity relation \AgdaOperator{\AgdaDatatype{≡ₓ}} on \ab X so that, given two inhabitants of \ab X, say, \ab a\AgdaSpace{}\ab b \as : \ab X, we can form the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Suppose \ab p and \ab q inhabit the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b; that is, \ab p and \ab q are proofs of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, in which case we write \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Then we might wonder whether and in what sense are the two proofs \ab p and \ab q the ``same.'' We are asking about an identity type on the identity type \AgdaOperator{\AgdaDatatype{≡ₓ}}, and whether there is some inhabitant \ab r of this type; i.e., whether there is a proof \ab r : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q.  If such a proof exists for all \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, then we say that the proof of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b is \emph{unique}. As a property of the types \ab X and \aod{≡ₓ}, this is sometimes called \emph{uniqueness of identity proofs}.
+
+Perhaps we have two proofs, say, \ab r \ab s : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q. Then it is natural to wonder whether \ab r \AgdaOperator{\AgdaDatatype{≡ₓ₂}} \ab s has a proof!  However, we may decide that at some level the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) is not useful or interesting. At that point, say, at level \ab k, we might assume that there is at most one proof of any identity of the form \ab p  \AgdaOperator{\AgdaDatatype{≡ₓₖ}} \ab q. This is called \emph{truncation}.
+%% \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation}{truncation}.
+
+In \emph{homotopy type theory}~\cite{HoTT:2013}, a type \ab X with an identity relation \AgdaDatatype{≡ₓ} is called an \defn{h-set} (or \defn{0-groupoid} or \defn{set}) if for every pair \ab a \ab b \as : \ab X of elements of type \ab X there is at most one proof of \ab a \AgdaDatatype{≡ₓ} \ab b. This notion formalized in the \TypeTopology library as follows:
 \ccpad
+\begin{code}[number=code:is-set]
+\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{)}\<%
+\end{code}
+where
+\begin{code}
+\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\end{code}
+\ccpad
+We will see some examples of truncation and sets later, but the reader desiring more details should consult~\cite[\S34-35]{MHE} or~\cite[\S7.1]{HoTT:2013}.
 
-%% (MOST OF Equality-short.tex OMITTED)
-
-%%--BEGIN: \input{Equality-short.tex}-----------------------------------------------
+%%--END: \input{Preliminaries-short.tex}-----------------------------------------------
 
 
 
 
 
+\subsubsection{Function extensionality and intensionality}\label{sssec:function-extensionality-and-intensionality}
+Extensional equality of functions, or \emph{function extensionality}, is a principle that is often assumed in the \agdaualib. It asserts that two point-wise equal functions are equal,\footnote{This is known to be not provable or disprovable in Martin-Löf type theory. It is an independent statement.} and is defined in the \typetopology library in the following natural way:
+\ccpad
+\begin{code}
+  \>[0]\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{)}\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\<%
+\end{code}
+\ccpad
+where \ab f \af ∼ \ab g denotes pointwise equality, that is,
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}.
+
+Pointwise equality of functions is typically what one means in informal settings when one says that two functions are equal. Later we will need dependent and polymorphic notions of function extensionality, and these are defined in the \ualib and \typetopology libraries (see~\cite[\S2.4]{DeMeo:2021} and~\cite[\S17-18]{MHE}).
+
+\defn{Function intensionality} is the opposite of function extensionality and it comes in handy whenever we have a definitional equality and need a point-wise equality.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{intensionality}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[200I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[200I]%
+\>[14]
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}%
+\>[25]\AgdaSymbol{→}%
+\>[28]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaComment{----------------}\<%
+\\
+%
+\>[2]\AgdaSymbol{→}%
+\>[14]\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{intensionality}%
+\>[16]\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\end{code}
+\ccpad
+Of course, the intensionality principle has dependent and polymorphic analogues defined in the \agdaualib, but we omit the definitions. (See~\cite[\S2.4]{DeMeo:2021} for details).
 
 
-\subsection{Inverses, Epics and Monics}\label{sec:inverses}
-This section describes some of the more important definitions in the \ualibInverses module of the \agdaualib.
-%%
-%%
-%%-- BEGIN: \input{Inverses-short.tex}----------------------------------------------------
-%%
-In Subsection~\ref{sssec:inverse-image-type}, we define an inductive datatype that represents our semantic notion of the \textit{inverse image} of a function. In Subsections~\ref{sssec:epic-function-type} and~\ref{sssec:monic-function-type} we define types for \textit{epic} and \textit{monic} functions. Finally, in Subsections~\ref{sssec:monics-are-set-embeddings}, we examine the type of \textit{embeddings} (as defined by Escardo in~\cite{MHE}), and determine how this type relates to our definition of injective function type.
 
-\subsubsection{Inverse image type}\label{sssec:inverse-image-type}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Inverses, Epics and Monics}\label{ssec:inverses}
+This section describes some of the more important parts of the \ualibInverses module.
+In \S~\ref{ssec:inverse-image-type}, we define an inductive datatype that represents our semantic notion of the \defn{inverse image} of a function. In \S~\ref{ssec:epic-and-monic-function-types} we define types for \defn{epic} and \defn{monic} functions. Finally, in Subsections~\ref{ssec:monics-are-set-embeddings}, we consider the type of \defn{embeddings} (defined in~\cite[\S26]{MHE}), and determine how this type relates to our type of monic functions.
+
+\subsection{Inverse image type}\label{ssec:inverse-image-type}
 
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -710,7 +650,7 @@ We can formally prove that \af{Inv} \ab f is the right-inverse of \ab f, as foll
 \ccpad
 Here we give names to all the arguments for readability, but most of them could be replaced with underscores.
 
-\subsubsection{Epic functions}\label{sssec:epic-function-type}
+\subsection{Epic and monic function types}\label{ssec:epic-and-monic-function-types}
 Given universes \ab 𝓤, \ab 𝓦, types \AgdaTyped{A}{𝓤 ̇} and \AgdaTyped{B}{𝓦 ̇}, and \ab f \as : \ab A \as → \ab B, we say that \ab f is an \emph{epic} (or \emph{surjective}) \emph{function from} \ab A \emph{to} \ab B provided we can produce an element (or proof or witness) of type \af{Epic} \ab f, where
 \ccpad
 \begin{code}%
@@ -865,9 +805,9 @@ The function defined by \af{EpicInv} \ab f \ab{p} is indeed the right-inverse of
 \AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
+\ccpad
 
-\subsubsection{Monic function type}\label{sssec:monic-function-type}
-Given universes \ab 𝓤, \ab 𝓦, types \AgdaTyped{A}{𝓤 ̇} and \AgdaTyped{B}{𝓦 ̇}, and \ab f \as : \ab A \as → \ab B, we say that \ab f is a \textit{monic} (or \textit{injective}) \textit{function from} \ab A \textit{to} \ab B if we have a proof of \af{Monic} \ab f, where
+Similarly, we say that \ab f \as : \ab A \as → \ab B is a \defn{monic} (or \defn{injective}) function from \ab A to \ab B if we have a proof of \af{Monic} \ab f, where
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -911,132 +851,10 @@ Given universes \ab 𝓤, \ab 𝓦, types \AgdaTyped{A}{𝓤 ̇} and \AgdaTyped{
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{a₂}\<%
 \end{code}
-\ccpad
-We obtain the left-inverse by applying the function \af{MonicInv} to \ab f and a proof %% ,  \ab p \as : \af{Monic} \ab f,
-that \ab f is monic.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{MonicInv}%
-\>[338I]\AgdaSymbol{:}%
-\>[339I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[339I]%
-\>[12]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}%
-\>[25]\AgdaSymbol{→}%
-\>[28]\AgdaFunction{Monic}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-\>[338I][@{}l@{\AgdaIndent{0}}]%
-\>[11]\AgdaComment{---------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[12]\AgdaSymbol{(}\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[23]\AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}%
-\AgdaBound{b}%
-\>[36]\AgdaSymbol{→}%
-\>[39]\AgdaBound{A}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{MonicInv}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{Imf∋b}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Inv}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{Imf∋b}\<%
-\end{code}
-\ccpad
-The function defined by \af{MonicInv} \ab f \ab p is the \emph{left-inverse} of \ab f.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{MonicInvIsLeftInv}%
-\>[371I]\AgdaSymbol{:}%
-\>[372I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[372I]%
-\>[21]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fmonic}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Monic}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\<%
-\\
-\>[371I][@{}l@{\AgdaIndent{0}}]%
-\>[20]\AgdaComment{----------------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaSymbol{→}%
-\>[21]\AgdaSymbol{(}\AgdaFunction{MonicInv}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fmonic}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{im}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{MonicInvIsLeftInv}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fmonic}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\end{code}
+As one would hope and expect, the \emph{left-}inverse of a monic function is derived from a proof \ab p~\as :~\af{Monic}~\ab f in a similar way. (See \af{MonicInv} and \af{MonicInvIsLeftInv} in \cite[\S2.3]{DeMeo:2021} for details.)
 
-
-
-
-
-
-
-
-\subsubsection{Monics are set embeddings}\label{sssec:monics-are-set-embeddings}
-This is the first point at which \href{https://ualib.gitlab.io/UALib.Prelude.Preliminaries.html#truncation}{truncation} (\ref{sssec:truncation}) comes into play.  An
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#embeddings}{\textit{embedding}} is defined in the \TypeTopology library via the three functions \af{is-embedding}, \af{is-subsingleton}, and \af{fiber}.
+\subsection{Monic functions are set embeddings}\label{ssec:monics-are-set-embeddings}
+This is the first point at which truncation (\S\ref{sssec:truncation-and-hsets}) comes into play.  An \defn{embedding}, as defined in the \TypeTopology library~\cite[\S26]{MHE}, is a function with \emph{subsingleton fibers}. The meaning of this will be clear from the definition, which involves the three functions \af{is-embedding}, \af{is-subsingleton}, and \af{fiber}. The second of these was defined above (\S\ref{sssec:truncation-and-hsets}); the other two are defined as follows.
 \ccpad
 \begin{code}
 \>[0]\AgdaFunction{is-embedding}\AgdaSpace{}%
@@ -1073,28 +891,6 @@ This is the first point at which \href{https://ualib.gitlab.io/UALib.Prelude.Pre
 \AgdaSymbol{(}\AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
-\end{code}
-\scpad
-\begin{code}
-\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\<%
 \end{code}
 \scpad
 \begin{code}
@@ -1139,7 +935,7 @@ This is the first point at which \href{https://ualib.gitlab.io/UALib.Prelude.Pre
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-This is a natural way to represent what we usually mean in mathematics by embedding. It does not correspond simply to a monic function, and it is important to understand why not. Suppose \ab f~\as :~\ab X~\as →~\ab Y is a monic function from \ab X to \ab Y, so we have a proof \ab p \as : \af{Monic} \ab f.  To prove \ab f is an embedding we must show that for every \ab y~\as :~\ab Y we have
+This does not correspond simply to a monic function, and it is important to understand why not. Suppose \ab f~\as :~\ab X~\as →~\ab Y is a monic function from \ab X to \ab Y, so we have a proof \ab p \as : \af{Monic} \ab f.  To prove \ab f is an embedding we must show that for every \ab y~\as :~\ab Y we have
 \AgdaFunction{is-subsingleton}\AgdaSpace{}\AgdaSymbol{(}\AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}.  That is, for all \ab y \as : \ab Y, we must prove the following implication:
@@ -1161,7 +957,7 @@ One way we could resolve this is to assume that the codomain type, \ab B, is a \
 %% , then we can prove that a injective function into \ab B is an embedding.
 Recall the definition~(\ref{code:is-set}) of \af{is-set} from the \typetopology library.
 %% It is clear that this is precisely what we need.  That is, i
-If the codomain \ab B of the function \ab f \as : \ab A → \ab B is a set, and if \ab p and \ab q are two proofs of an equality of elements of type \ab B, then \ab p \aof ≡ \ab q, and we can use this to prove that a injective function into the set \ab B is an embedding. The following function proves this claim.
+If the codomain of \ab f \as : \ab A → \ab B is a set, and if \ab p and \ab q are two proofs of an equality in \ab B, then \ab p \aof ≡ \ab q, and we can use this to prove that a injective function into \ab B is an embedding.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -1196,142 +992,9 @@ If the codomain \ab B of the function \ab f \as : \ab A → \ab B is a set, and 
 %
 \>[2]\AgdaSymbol{→}%
 \>[21]\AgdaFunction{is-embedding}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{monic-into-set-is-embedding}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Bset}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fmon}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{fa≡b}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{a'}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{fa'≡b}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{γ}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{faa'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a'}\<%
-\\
-%
-\>[3]\AgdaFunction{faa'}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≡-Trans}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{fa≡b}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fa'≡b}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{aa'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{a'}\<%
-\\
-%
-\>[3]\AgdaFunction{aa'}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{fmon}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaFunction{faa'}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{𝒜}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[3]\AgdaFunction{𝒜}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{arg1}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{transport}\AgdaSpace{}%
-\AgdaFunction{𝒜}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{fa≡b}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{fa'≡b}\<%
-\\
-%
-\>[3]\AgdaFunction{arg1}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{aa'}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{Bset}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{transport}\AgdaSpace{}%
-\AgdaFunction{𝒜}\AgdaSpace{}%
-\AgdaFunction{aa'}\AgdaSpace{}%
-\AgdaBound{fa≡b}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{fa'≡b}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{fa≡b}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{fa'≡b}\<%
-\\
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
-\AgdaFunction{arg1}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
+We omit the formal proof for lack of space, but see~\cite[\S2.3.4]{DeMeo:2021}.
 %%-- END: \input{Inverses-short.tex}----------------------------------------------------
 
 
@@ -1341,171 +1004,6 @@ If the codomain \ab B of the function \ab f \as : \ab A → \ab B is a set, and 
 
 
 
-\subsection{Extensionality}\label{sec:extensionality}
-This section describes some of the extensionality principles defined in the \ualibExtensionality module of the \agdaualib that we will need later.
-
-\subsubsection{Function extensionality}\label{function-extensionality}
-Extensional equality of functions, or \emph{function extensionality}, means that any two point-wise equal functions are equal. This is known to be not provable or disprovable in Martin-Löf type theory. It is an independent statement.
-In~\cite{MHE}, \escardo defines pointwise equality of (dependent) function in the following natural way.
-\ccpad
-\begin{code}
-  \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∼\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\end{code}
-\ccpad
-Function extensionality is then defined as follows.
-\ccpad
-\begin{code}
-  \>[0]\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{)}\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\<%
-\end{code}
-\ccpad
-Pointwise equality of functions is typically what one means in informal settings when one says that two functions are equal. 
-
-Later we will need dependent and polymorphic notions of function extensionality, and definitions of these are given in the appendix.
-
-
-
-
-
-
-
-\subsubsection{Function intensionality}\label{function-intensionality}
-This is the opposite of function extensionality and it comes in handy whenever we have a definitional equality and need a point-wise equality.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{intensionality}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[200I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[200I]%
-\>[14]
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}%
-\>[25]\AgdaSymbol{→}%
-\>[28]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\<%
-\\
-%
-\>[14]\AgdaComment{----------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[14]\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{intensionality}%
-\>[16]\AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\end{code}
-\ccpad
-Of course, the intensionality principle has dependent and polymorphic analogues, but we omit the definitions, which can be found in the \href{https://ualib.gitlab.io/UALib.Prelude.Extensionality.html}{documentation for the \am{UALib.Prelude.Extensionality} module}.
 
 
 
@@ -1517,16 +1015,16 @@ Of course, the intensionality principle has dependent and polymorphic analogues,
 %% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algebras}\label{sec:types-for-algebras}
 
-\subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
-This section describes parts of the \ualibSignatures module of the \agdaualib.
+%% \subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
+%% This section describes parts of the \ualibSignatures module of the \agdaualib.
 %% --BEGIN: \input{Signatures-short.tex}-----------------------------
 \newcommand\signatOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
+%% \subsubsection{Operation type}\label{operation-type}
 
-\subsubsection{Operation type}\label{operation-type}
-We define the type of \textbf{operations} and, as an example, the type of \textbf{projections}.
+We define the type of \defn{operations} and, as an example, the type of \defn{projections}.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{Op}\AgdaSpace{}%
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -1540,7 +1038,7 @@ We define the type of \textbf{operations} and, as an example, the type of \textb
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{Op}\AgdaSpace{}%
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1550,8 +1048,7 @@ We define the type of \textbf{operations} and, as an example, the type of \textb
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
-
-\\[\AgdaEmptyExtraSkip]%
+\\
 \>[1]\AgdaFunction{π}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
@@ -1582,7 +1079,7 @@ We define the type of \textbf{operations} and, as an example, the type of \textb
 \ccpad
 The type \AgdaFunction{Op} encodes the arity of an operation as an arbitrary type \ab I : \ab 𝓥 ̇, which gives us a very general way to represent an operation as a function type with domain \ab I → \ab A (the type of ``tuples'') and codomain \ab A. The last two lines of the code block above codify the \ab i-th \ab I-ary projection operation on \ab A.
 
-\subsubsection{Signature type}\label{signature-type}
+\subsection{Signature type}\label{signature-type}
 We define the signature of an algebraic structure in Agda like this.
 \ccpad
 \begin{code}%
@@ -1615,9 +1112,7 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types.
-
-Recall (\S\ref{sssec:dependent-pair-type}), the first and second projections are denoted by \ai ∣ and \ai ∥, so if \ab 𝑆 \as : \signatOV is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
+Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types. Recall (\S\ref{ssec:dependent-pairs-and-projections}), we denote the first and second projections by \ai ∣ and \ai ∥, so if \ab 𝑆 is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
 
 For example,
 %% \subsubsection{Example}\label{Signatures.sssec:example}
@@ -1667,7 +1162,7 @@ here is the signature of \emph{monoids}, as a member of the type \signatOV.
 \AgdaSymbol{\}}\<%
 \end{code}
 \ccpad
-The signature of monoids has two operation symbols, \aic e and \aic ·, and a function \as λ \as{\{} \AgdaInductiveConstructor{e} \as → \af 𝟘 \as ; \AgdaInductiveConstructor{·} \as → \af 𝟚 \as{\}} which maps \aic e to the empty type \af 𝟘 (since \aic e is nullary), and \aic · to the 2-element type \af 𝟚 (since \aic · is binary).
+This signature has two operation symbols, \aic e and \aic ·, and a function \as λ \as{\{} \AgdaInductiveConstructor{e} \as → \af 𝟘 \as ; \AgdaInductiveConstructor{·} \as → \af 𝟚 \as{\}} which maps \aic e to the empty type \af 𝟘 (since \aic e is nullary), and \aic · to the 2-element type \af 𝟚 (since \aic · is binary).
 %% -- END: \input{Signatures-short.tex}-----------------------------
 
 
@@ -1676,8 +1171,8 @@ The signature of monoids has two operation symbols, \aic e and \aic ·, and a fu
 
 
 \newcommand\sigOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
-\subsubsection{Algebra type}\label{algebra-types-1}
-For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the type of \textbf{algebras in the signature} \ab 𝑆 (or \ab 𝑆-\textbf{algebras}) and with \textbf{domain} (or \textbf{carrier}) \ab 𝐴 \as : \ab 𝓤 \as ̇ as follows
+\subsection{Algebra type}\label{ssec:algebra-type}
+For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the type of \defn{algebras} in the signature \ab 𝑆 (or \ab 𝑆-\defn{algebras}) and with \defn{domain} (or \defn{carrier}) \ab 𝐴 \as : \ab 𝓤 \as ̇ as follows
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
@@ -1725,13 +1220,11 @@ For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the ty
 \AgdaBound{A}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-We may refer to an inhabitant of \af{Algebra} \ab 𝑆 \AgdaBound{𝓤} as an ``∞-algebra'' because its domain can be an arbitrary type, say, \ab A \as : \ab 𝓤 \af ̇ and need not be truncated at some level; in particular, \ab A need not be a \emph{set} (as defined in \S\ref{sssec:truncation}).
+We may refer to an inhabitant of \af{Algebra} \ab 𝑆 \AgdaBound{𝓤} as an ``∞-algebra'' because its domain can be an arbitrary type, say, \ab A \as : \ab 𝓤 \af ̇ and need not be truncated at some level; in particular, \ab A need not be a \emph{set} (as defined in \S\ref{sssec:truncation-and-hsets}).
 
-We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniquness of identity proofs} explicitly when and only when a proof relies on this assumption.
+We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniquness of identity proofs} explicitly where, and only where, a proof relies on this assumption.
 
-The type \ad{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇. This type appears so often in the \ualib that we will define the following shorthand for its universe level: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 = \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇.\footnote{The \agdaualib includes an alternative definition of the type of algebras using records, but we don't discuss these here since they are not needed in the sequel. We refer the interested reader to the \agdaualib web site where these alternatives are presented in the \href{https://ualib.gitlab.io/UALib.Algebras.Algebras.html}{UALib.Algebras.Algebras} module.}
-
-
+The type \ad{Algebra} \ab 𝓤 \ab 𝑆 has type \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇, and the latter appears so often in the \ualib that we will refer to it by using the following shorthand for its level: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 = \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺.\footnote{The \agdaualib includes an alternative definition of the type of algebras using records, but we don't discuss these here since they are not needed in the sequel. We refer the interested reader to~\cite{DeMeo:2021} and the html documentation available at \url{https://ualib.gitlab.io/UALib.Algebras.Algebras.html}.}
 
 
 
@@ -1740,7 +1233,8 @@ The type \ad{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af �
 
 
 
-\subsubsection{Operation interpretation syntax}\label{operation-interpretation-syntax}
+
+\subsection{Operation interpretation, variable symbols}\label{ssec:operation-interpretation-syntax}
 Next we define a convenient shorthand for the interpretation of an operation symbol. We use this often in the sequel.
 \ccpad
 \begin{code}%
@@ -1789,7 +1283,7 @@ Next we define a convenient shorthand for the interpretation of an operation sym
 \ccpad
 This is similar to the standard notation that one finds in the literature and seems much more natural to us than the double bar notation that we started with.
 
-\subsubsection{Arbitrarily many variable symbols}
+%% \subsection{Arbitrarily many variable symbols}
 Finally, we will want to assume that we always have at our disposal an arbitrary collection \ab X of variable symbols such that, for every algebra \ab 𝑨, no matter the type of its domain, we have a surjective map \ab{h₀} \as : \ab X \as → \aiab{∣}{𝑨} from variables onto the domain of \ab 𝑨.
 \ccpad
 \begin{code}%
@@ -1852,7 +1346,7 @@ Finally, we will want to assume that we always have at our disposal an arbitrary
 
 
 
-\subsubsection{Product algebra types}\label{sec:product-algebra-types}
+\subsection{Product algebra type}\label{ssec:product-algebra-type}
 This section describes some parts of the \ualibAlgProducts module of the \agdaualib.
 %% -- BEGIN: \input{Products-short.tex}
 We define products of algebras for the Sigma type representation defined above.
@@ -1951,36 +1445,15 @@ We define products of algebras for the Sigma type representation defined above.
 
 
 
-\subsection{The Universe Hierarchy and Lifts}\label{sec:universe-hierarchy-and-lifts}
-This section describes parts of the \ualibLifts module of the \agdaualib.
+\subsection{The lift of an algebra}\label{ssec:the-lift-of-an-algebra}
+%% This section describes parts of the \ualibLifts module of the \agdaualib.
 %% BEGIN: \input{Lifts-short.tex}
 
+The hierarchy of universe levels in Agda is structured as \ab{𝓤₀} \as : \ab{𝓤₁}, \hskip3mm \ab{𝓤₁} \as : \ab{𝓤₂}, \hskip3mm \ab{𝓤₂} \as : \ab{𝓤₃}, \ldots{}. This means that \ab{𝓤₀} has type \ab{𝓤₁} \AgdaFunction{̇} and \ab{𝓤ₙ} has type \ab{𝓤ₙ₊₁} \AgdaFunction{̇} for each \ab n.  It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂} and \ab{𝓤₀} \as : \ab{𝓤₃}, and so on. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, it is this author's experience that a noncummulative hierarchy can sometimes make for a nonfun proof assistant.  (See~\cite[\S3.3.3]{DeMeo:2021} for a discussion.)
 
+Luckily there are ways to circumvent noncummulativity without introducing logical inconsistencies into the type theory. We merely list here some domain specific tools that we developed for this purpose. (See~\cite[\S3.3.3]{DeMeo:2021} for more details).
 
-
-\subsubsection{The noncumulative hierarchy}\label{the-noncumulative-hierarchy}
-The hierarchy of universe levels in Agda is structured as \ab{𝓤₀} \as : \ab{𝓤₁}, \hskip3mm \ab{𝓤₁} \as : \ab{𝓤₂}, \hskip3mm \ab{𝓤₂} \as : \ab{𝓤₃}, \ldots{}. This means that \ab{𝓤₀} has type \ab{𝓤₁} \AgdaFunction{̇} and \ab{𝓤ₙ} has type \ab{𝓤ₙ₊₁} \AgdaFunction{̇} for each \ab n.
-
-It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂} and \ab{𝓤₀} \as : \ab{𝓤₃}, and so on. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, it is this author's experience that a noncummulative hierarchy can sometimes make for a nonfun proof assistant.
-
-Luckily, there are ways to subvert noncummulativity which, when used with care, do not introduce logically consistencies into the type theory. We describe some techniques we developed for this purpose that are specifically tailored for our domain of applications.
-
-\subsubsection{Lifting and lowering}\label{lifting-and-lowering}
-Let us be more concrete about what is at issue here by giving an example. Unless we are pedantic enough to worry about which universe level each of our types inhabits, then eventually we will encounter an error like the following:\\
-\\
-{\small
-\AgdaError{Birkhoff.lagda:498,20-23}\\
-\AgdaError{(𝓤 ⁺)\ !=\ (𝓞 ⁺)\ ⊔\ (𝓥 ⁺)\ ⊔\ ((𝓤 ⁺) ⁺)}\\
-\AgdaError{when checking that the expression SP𝒦 has type}\\
-\AgdaError{Pred\ (Σ\ (λ\ A\ →\ (f₁\ :\ ∣ 𝑆 ∣)\ →\ Op (∥ 𝑆 ∥ f₁) A)) \au 𝓦 \au 2346}}
-\\
-Let's translate the error above, just to confirm that we know what it means. Here, \agda has encountered a type at universe level \ab 𝓤 \af ⁺, on line 498 (in columns 20--23) of the file Birkhoff.lagda, but was expecting a type at level \ab 𝓞 \af ⁺ \af ⊔ \ab 𝓥 \af ⁺ \af ⊔ \ab 𝓤 \af ⁺ \af ⁺ instead.
-
-To make these situations easier to deal with, the \ualib offers some domain specific tools for the \emph{lifting} and \emph{lowering} of universe levels of the main types in the library. In particular, we have functions that will lift or lower the universes of algebra types, homomorphisms, subalgebras, and products.
-
-Of course, messing with the universe level of a type must be done carefully to avoid making the type theory inconsistent.  In particular, a necessary condition is that a type of a given universe level may not be converted to a type of lower universe level \emph{unless the given type was obtained from lifting another type to a higher-than-necessary universe level}.  If this is not clear, don't worry; just press on and soon enough there will be examples that make it clear.
-
-A general \af{Lift} record type, similar to the one found in the \agdastdlib (in the \af{Level} module), is
+A general \af{Lift} record type, similar to the one found in the \af{Level} module of the \agdastdlib, is
 defined as follows.
 \ccpad
 \begin{code}%
@@ -2015,117 +1488,7 @@ defined as follows.
 \AgdaModule{Lift}\<%
 \end{code}
 \ccpad
-Next, we give various ways to lift function types.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{lift-dom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{lift-dom}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{lift-cod}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓨}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{lift-cod}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{lift-fun}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓨}\AgdaSymbol{\}\{}\AgdaBound{𝓩}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{lift-fun}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\end{code}
-\ccpad
-We will also need to know that lift and lower compose to the identity.
+It is useful to know that \AgdaInductiveConstructor{lift} and \AgdaField{lower} compose to the identity.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
@@ -2149,56 +1512,13 @@ We will also need to know that lift and lower compose to the identity.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaField{lower}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
 \end{code}
 \ccpad
-Now, to be more domain-specific, we show how to lift algebraic operation types and then, finally, how to lift algebra types.
+Similarly, \AgdaInductiveConstructor{lift}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}\AgdaField{lower}\AgdaSpace{}\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}.
+More domain-specifically, here is how we lift types of algebraic operations and algebras.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{F}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaBound{F}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{lift-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -2249,59 +1569,7 @@ Now, to be more domain-specific, we show how to lift algebraic operation types a
 \AgdaBound{i}\AgdaSymbol{)))}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{algebra}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{lift-alg-record-type}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-alg-record-type}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{lift-op}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaField{op}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{lift-∞-algebra}\AgdaSpace{}%
 \AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2358,17 +1626,10 @@ Now, to be more domain-specific, we show how to lift algebraic operation types a
 
 
 
-
-
-
-
 %% Relations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Relations}\label{sec:relations}
 
 \subsection{Unary Relations (predicates)}\label{sec:predicates}
-This section describes some parts of the \ualibUnary module of the \agdaualib.
-%% BEGIN: \input{Relations/Unary.tex}
-
 \newcommand{\ovu}{\ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇}
 We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab{A} might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab{A} that satisfy the property \ab{P}.
 Here is the definition, which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
@@ -2400,84 +1661,9 @@ Here is the definition, which is similar to the one found in the \texttt{Relatio
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 \ccpad
-Below we will often consider predicates over the class of all algebras of a particular type. We will define the type of algebras \af{Algebra} \ab 𝓤 \ab 𝑆 (for some universe level \ab 𝓤). Like all types, \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type which happens to be \ovu (see Section~\ref{algebra-types-1}). Therefore, the type of \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆)\ab 𝓤 is \ovu as well.  By definition, the inhabitants of the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓤 are maps of the form \ab 𝑨 \as → \ab 𝓤 \af ̇.
-%% ; given an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we have \af{Pred} \ab 𝑨 \ab 𝓤 \as = \ab 𝑨 \as → \ab 𝓤 \af ̇.
+Below we will often consider predicates over the class of all algebras of a particular type. We will define the type of algebras \af{Algebra} \ab 𝓤 \ab 𝑆 (for some universe level \ab 𝓤). Like all types, \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type which happens to be \ovu (see Section~\ref{ssec:algebra-type}). Therefore, the type of \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆)\ab 𝓤 is \ovu as well.  By definition, the inhabitants of the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓤 are maps of the form \ab 𝑨 \as → \ab 𝓤 \af ̇.
 
-\subsubsection{The membership relation}\label{the-membership-relation}
-Notation for denoting that \ab x ``belongs to'' or ``inhabits'' type \ab{P}, or that \ab x ``has property'' \ab{P},is standard. We write either \ab x \af ∈ \ab P or \ab P \ab x (cf. \texttt{Relation/Unary.agda} in the \agdastdlib).
-Similarly, the ``subset'' relation is denoted, as usual, with the \af{⊆} symbol (cf. \texttt{Relation/Unary.agda} in the \agdastdlib). The relations \af ∈ and \af{⊆} are defined in the \agdaualib as follows.
-\ccpad
-\begin{code}%
-\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-\\
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓣}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓣}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓣}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
-\end{code}
-\ccpad
-In type theory everything is a type. As we have just seen, this includes subsets. Since the notion of equality for types is usually a nontrivial matter, it may be nontrivial to represent equality of subsets. Fortunately, it is straightforward to write down a type that represents what it means for two subsets to be equal in informal (pencil-paper) mathematics. In the \ualib we denote this \textit{subset equality} by =̇ and define as follows.
+In type theory everything is a type. As we have just seen, this includes subsets. Since the notion of equality for types is usually a nontrivial matter, it may be nontrivial to represent equality of subsets. Fortunately, it is straightforward to write down a type that represents what it means for two subsets to be equal in informal (pencil-paper) mathematics. In the \ualib we denote this \defn{subset equality} by =̇ and define as follows.\footnote{Our notation and definition representing the semantic concept ``\ab x belongs to \ab P,'' or ``\ab x has property \ab P,'' is standard. We write either \ab x \af ∈ \ab P or \ab P \ab x. Similarly, the ``subset'' relation is denoted, as usual, with the \af{⊆} symbol (cf.  in the \agdastdlib).  The relations \af ∈ and \af{⊆} are defined in the \agdaualib in a was similar to that found in the \texttt{Relation/Unary.agda} module of the \agdastdlib. (See~\cite[\S4.1.2]{DeMeo:2021}.)}
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}=̇\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -2530,8 +1716,8 @@ In type theory everything is a type. As we have just seen, this includes subsets
 
 
 
-\subsection{Binary Relations and Kernel Types}\label{binary-relation-and-kernel-types}
-This section highlights a few relevant parts of the \ualibBinary module of the \agdaualib.
+\subsection{Binary Relations}\label{binary-relations}
+%% This section highlights a few relevant parts of the \ualibBinary module of the \agdaualib.
 %%-- BEGIN: \input{Relations/Binary.tex}----------
 In set theory, a binary relation on a set \ab{A} is simply a subset of the product \ab A \af × \ab A. As such, we could model these as predicates over the type \ab A \af × \ab A, or as relations of type \ab A \as → \ab A \as → \ab 𝓡 \af ̇ (for some universe \ab 𝓡). A generalization of this notion is a binary relation is a \emph{relation from} \ab{A} \emph{to} \ab{B}, which we define first and treat binary relations on a single \ab{A} as a special case.
 \ccpad
@@ -2574,7 +1760,171 @@ In set theory, a binary relation on a set \ab{A} is simply a subset of the produ
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 
-\subsubsection{Kernels}\label{Binary.sssec:kernels}
+
+%% \subsubsection{Properties of binary relations}\label{sssec:properties-of-binary-relations}
+The notions of reflexivity, symmetry, and transitivity are defined as one would hope and expect, so we present them here without further explanation.
+\begin{code}%
+\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+\AgdaBound{z}\<%
+\end{code}
+
+\subsection{Relation truncation}\label{ssec:relation-truncation}
+Recall~\S\ref{sssec:truncation-and-hsets}, we described the concept of truncation as it relates to ``proof-relevant'' mathematics.  Given a binary relation \af P, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is \af P-related\footnote{This is another example of ``proof-irrelevance''; indeed, proofs of \af P \ab x \ab y are indistinguishable, or rather any distinctions are irrelevant in the context of interest.} We use the \af{is-subsingleton} type of the \typetopology library to express this strong assumption (of a \defn{0-truncated} type) in the following definition: We say that (\ab x \as , \ab y) belongs to \af P, or that \ab x and \ab y are \af P-related if and only if both \af P \ab x \ab y \emph{and} \af{is-subsingleton} (\af P \ab x \ab y) hold.
+\ccpad
+\begin{code}%
+\>[1]\AgdaFunction{Rel₀}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{Rel₀}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+Thus, a \defn{set}, as defined in \S\ref{sssec:truncation-and-hsets}, is a type \ab X along with an equality relation \af ≡ of type \af{Rel₀} \ab X \ab 𝓝, for some \ab 𝓝.
+%%-- END: \input{Relations/Binary.tex}----------
+
+
+\subsection{Kernels of functions}\label{ssec:kernels}
 The kernel of a function can be defined in many ways. For example,
 \ccpad
 \begin{code}%
@@ -2737,179 +2087,8 @@ or as a relation from \ab{A} to \ab{B},
 \end{code}
 
 
-
-\subsubsection{Properties of binary relations}\label{Binary.sssec:properties-of-binary-relations}
-The notions of reflexivity, symmetry, and transitivity are defined as one would hope and expect, so we present them here without further explanation.
-\begin{code}%
-\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-\AgdaBound{z}\<%
-\end{code}
-
-\subsubsection{Binary relation truncation}\label{sssec:binary-relation-truncation}
-Recall, in Section~\ref{sssec:truncation} we described the concept of truncation as it relates to ``proof-relevant'' mathematics.  Given a binary relation \af P, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is \af P-related\footnote{This is another example of ``proof-irrelevance''; indeed, proofs of \af P \ab x \ab y are indistinguishable, or rather any distinctions are irrelevant in the context of interest.} We use Escardo's \af{is-subsingleton} type to express this strong (truncation at level 1) assumption in the following definition: We say that (\ab x  \ac \ab y) belongs to \af P, or that \ab x and \ab y are \af P-related if and only if both \af P \ab x \ab y \emph{and} \af{is-subsingleton} (\af P \ab x \ab y) holds.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{Rel₀}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{Rel₀}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-Thus, a set \textit{set}, as defined in \S\ref{sssec:truncation-and-sets}, is a type \ab{X} with an equality relation \af ≡ : \af{Rel₀} \ab X \ab 𝓝, for some \ab 𝓝.
-%%-- END: \input{Relations/Binary.tex}----------
-
-
-
-
-
-
-
-
-\subsection{Equivalence Relation Types}\label{sec:equiv-relat}
-Here we describe part of the \ualibEquivalences module of the \agdaualib.
-We define an equivalence relation using a \AgdaKeyword{record} type, as follows:
+\subsection{Equivalence Relations}\label{sssec:equiv-relat}
+Types for equivalence relations are defined in the \ualibEquivalences module of the \agdaualib using a \AgdaKeyword{record} type, as follows:
 %% BEGIN: \input{Relations/Equivalences.tex}
 \ccpad
 \begin{code}%
@@ -2954,7 +2133,7 @@ We define an equivalence relation using a \AgdaKeyword{record} type, as follows:
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \end{code}
 
-\subsubsection{Examples}\label{Equivalences.sssec:examples}
+\subsection{Examples}\label{Equivalences.ssec:examples}
 The zero relation \af{𝟎-rel} is equivalent to the identity relation \aod ≡ and, of course, these are both equivalence relations. Indeed, we saw in \S\ref{ssec:equality} that \aod ≡ is reflexive, symmetric, and transitive, so we simply apply the corresponding proofs where appropriate.
 \ccpad
 \begin{code}%
@@ -3113,9 +2292,10 @@ Another obvious example of an equivalence relation is the kernel of a function.
 
 
 
-\subsection{Quotient Types}\label{ssec:quotient-types}
-Here we is section describes some key definitions and theorems from the \ualibQuotients module of the \agdaualib.
+\section{Quotient Type}\label{sec:quotient-type}
+Here we highlight some important parts of the \ualibQuotients module of the \agdaualib.
 %% -- BEGIN: \input{Relations/Quotients.tex}
+
 For a binary relation \ab R on \ab A, we denote a single \ab R-class by \af [ \ab a \af ] \ab R (this denotes the class containing \ab a). We denote the type of all classes of a relation \ab R on \ab A by \af 𝒞 \as{\{} \ab A \as{\}} \as{\{} \ab R \as{\}}.  These are defined as in the \ualib as follows.
 \ccpad
 \begin{code}%
@@ -3483,7 +2663,7 @@ Later we will need the following tools for handling quotients.
 
 
 
-\subsubsection{Quotient extensionality}\label{quotient-extensionality}
+\subsection{Quotient extensionality}\label{ssec:quotient-extensionality}
 We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. For this we assume that our relations are on sets, rather than arbitrary types. As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.
 \ccpad
 \begin{code}%
@@ -3778,7 +2958,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 
 
-\subsubsection{Compatibility}\label{compatibility}
+\subsection{Compatibility}\label{ssec:compatibility}
 The following definitions and lemmas are useful for asserting and proving facts about \textbf{compatibility} of relations and functions.
 \ccpad
 \begin{code}%
@@ -3989,10 +3169,10 @@ We'll see this definition of compatibility at work very soon when we define cong
 
 \newcommand\siOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
 
-\subsection{Congruence Relation Types}\label{sec:congr-relat}
-This section describes  parts of the \ualibCongruences module of the \agdaualib.
+\subsection{Congruence relations}\label{ssec:congr-relat}
+This \ualibCongruences module of the \agdaualib defines 
 %% -- BEGIN: \input{Relations/Congruences.tex}
-We first present three ways to represent a congruence relation of an algebra---first as a function, then as a predicate on relations, and finally as a record.
+three alternative representations of congruence relations of an algebra---first as a function, then as a predicate on binary relations, and finally as a record type.
 %% Notice that module begins by assuming a signature \ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.
 \ccpad
 \begin{code}%
@@ -4174,7 +3354,7 @@ We first present three ways to represent a congruence relation of an algebra---f
 \end{code}
 
 \subsubsection{Example}\label{Congruences.sssec:example}
-We defined the \emph{trivial} (or ``diagonal'' or ``identity'' or ``zero'') relation \af{𝟎-rel} in \S\ref{sssec:examples}, and we observed in \S\ref{Equivalences.sssec:examples} that \af{𝟎-rel} is equivalent to the identity relation \aod ≡ and that these are both equivalence relations. Therefore, in order to build a congruence of some algebra \ab 𝑨 out of the trivial relation, it remains to show that \af{𝟎-rel} is compatible with all operations of \ab 𝑨.  We do this now and then construct the corresponding congruence.
+In \S\ref{Equivalences.ssec:examples}, we defined the \emph{trivial} (or ``diagonal'' or ``identity'' or ``zero'') relation \af{𝟎-rel}  and observed that \af{𝟎-rel} is (equivalent to the identity relation \aod ≡ and) is an equivalence relations. Therefore, in order to build a congruence of some algebra \ab 𝑨 out of the trivial relation, it remains to show that \af{𝟎-rel} is compatible with all operations of \ab 𝑨.  We do this now and then construct the corresponding congruence.
 %% \af{𝟎-rel}
 \ccpad
 \begin{code}%
@@ -4306,7 +3486,7 @@ Now that we have the ingredients required to construct a congruence, we carry ou
 \AgdaSymbol{)}\<%
 \end{code}
 
-\subsubsection{Quotient algebras}\label{sssec:quotient-algebras}
+\subsection{Quotient algebras}\label{ssec:quotient-algebras}
 An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denote by \ab 𝑨 \as / \ab θ and Agda allows us to define and express quotients using the standard notation.
 \ccpad
 \begin{code}%
@@ -4408,7 +3588,7 @@ An important construction in universal algebra is the quotient of an algebra \ab
 \>[8]\AgdaSymbol{)}\<%
 \end{code}
 
-\subsubsection{Examples}\label{examples-zero-of-quotient}
+\subsubsection{Examples}\label{Quotients.sssec:examples}
 The zero element of a quotient can be expressed as follows.
 \ccpad
 \begin{code}%
@@ -4518,12 +3698,632 @@ Finally, the following elimination rule is sometimes useful.
 %% -- END: \input{Relations/Congruences.tex}
 
 
-\appendix 
 
-\section{Some Components of the Type Topology Library}
-Here we collect some of the components from the \typetopology library that we used above but did not have space to discuss.  They are collected here for the reader's convenience and to keep the paper somewhat self-contained.
 
-\input{aux/typetopology.tex}
+
+
+
+
+
+
+
+%% Varieties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equations and Varieties}\label{sec:equations-and-varieties}
+
+\subsection{Types for Theories and Models}\label{ssec:types-for-theories-and-models}
+The \ualibModelTheory module of  the \agdaualib defines types that represents \defn{identites} of terms in a given signature and what it means for a structure to satisfy, or \defn{model}, such identities.
+
+Let \ab 𝑆 be a signature. By an \defn{identity} or \defn{equation} in \ab 𝑆 we mean an ordered pair of terms, written \ab 𝑝 \aof ≈ \ab 𝑞, from the term algebra \af 𝑻 \ab X. If \ab 𝑨 is an \ab 𝑆-algebra we say that \ab 𝑨 \defn{satisfies} \ab 𝑝 \aof ≈ \ab 𝑞 provided \ab 𝑝 \af ̇ \ab 𝑨 \aod ≡ \ab 𝑞 \aof ̇ \ab 𝑨 holds. In this situation, we write \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 and say that \ab 𝑨 \defn{models} the identity \ab 𝑝 \aof ≈ \ab q. If \ab 𝒦 is a class of algebras, all of the same signature, we write \ab 𝒦 \aof ⊧ \ab p \aof ≈ \ab q if, for every \ab 𝑨 \aof ∈ \ab 𝒦, \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.
+
+\noindent \textbf{Notation}. In the \agdaualib, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \af ⊧ and \af ≈. As a reasonable alternative to what we would normally express informally as 𝒦 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞, we have settled on \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q to denote this relation.  To reiterate, if \ab 𝒦 is a class of \ab 𝑆-algebras, we write \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≋ \ab 𝑞 if every \ab 𝑨 \aof ∈ \ab 𝒦 satisfies \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.
+
+
+\subsubsection{The models relation}\label{the-models-relation}
+
+%% --BEGIN: \input{Varieties/ModelTheory.tex}
+The \ualibModelTheory module of the \agdaualib defines the binary ``models'' relation \aof ⊧ relating algebras (or classes of algebras) to the identities that they satisfy.  Agda supports the definition of infix operations and relations, and we use this to define \aof ⊧ so that we may write, e.g., \ab 𝑨 \aof ⊧ \ab p \aof ≈ \ab q or \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q.
+
+After \aof ⊧ is defined, a couple of useful facts about \aof ⊧ are proved. (More is proved about the models relation in \S\ref{sec:equational-logic-types}.)
+\ccpad
+\begin{code}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊧\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊧\AgdaUnderscore{}≋\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[8]\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊧\AgdaUnderscore{}≋\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+\end{code}
+
+
+
+\subsubsection{Equational theories and models}\label{equational-theories-and-models}
+The set of identities that hold for all algebras in a class 𝒦 is denoted by \af{Th} \ab 𝒦, which is defined in the \ualibModelTheory module of the \agdaualib as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{Th}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[5]\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Th}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≋}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+\end{code}
+\ccpad
+The class of algebras that satisfy all identities in a given set \ab ℰ is denoted by \af{Mod} \ab ℰ.  One of the definitions of this concept included in the \ualibModelTheory module is the following.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{Mod}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
+\\
+%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[6]\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Mod}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{ℰ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaBound{ℰ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+\end{code}
+
+
+
+\subsubsection{Computing with ⊧}\label{sssec:computing-with}
+We have formally defined \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞, which represents the assertion that \ab p \aof ≈ \ab q holds when this identity is interpreted in the algebra \ab 𝑨; syntactically, \ab 𝑝 \aof ̇ \ab 𝑨 \aof ≡ \ab 𝑞 \aof ̇ \ab 𝑨.  It should be emphasized that the expression \ab 𝑝 \aof ̇ \ab 𝑨 \aof ≡ \ab 𝑞 \aof ̇ \ab 𝑨 is interpreted computationally as an \emph{extensional equality}, by which we mean that for each \emph{assignment function} \ab 𝒂 \as : \ab X \as → \aiab{∣}{𝑨}, assigning values in the domain of \ab 𝑨 to the variable symbols in \ab X, we have (\ab 𝑝 \aof ̇ \ab 𝑨) \ab 𝒂 \aof ≡ (\ab 𝑞 \aof ̇ \ab 𝑨) \ab 𝒂.
+
+The binary relation \aof ⊧ would be practically useless if it were not an \emph{algebraic invariant} (invariant under isomorphism), and this fact is proved below (by showing that a certain term operation identity, \AgdaBound{p}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}, holds \emph{extensionally}, in the sense of the previous paragraph).
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{⊧-≅}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{⊧-transport}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[328I]\AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\<%
+\\
+\>[328I][@{}l@{\AgdaIndent{0}}]%
+\>[17]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≅}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+\\
+\>[0]\AgdaFunction{⊧-transport}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaBound{Apq}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{f∼g}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{g∼f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{γ}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{where}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{=}%
+\>[385I]\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[.][@{}l@{}]\<[385I]%
+\>[6]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{f∼g}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSymbol{)}%
+\>[81]\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{comm-hom-term}\AgdaSpace{}%
+\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{-}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)))}\AgdaSpace{}%
+\AgdaBound{Apq}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaFunction{comm-hom-term}\AgdaSpace{}%
+\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}%
+\>[34]\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{-}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f∼g}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[6]\AgdaSymbol{(}\AgdaBound{q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∎}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{⊧-≅}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{⊧-transport}\AgdaSpace{}%
+\AgdaComment{-- (alias)}\<%
+\end{code}
+\ccpad
+The \aof ⊧ relation is also compatible with the lift operation, a fact which we will need later.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{lift-alg-⊧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[7]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[7]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
+%% \\
+%% \>[0]\AgdaFunction{lift-alg-⊧}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{Apq}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{⊧-≅}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{Apq}\AgdaSpace{}%
+%% \AgdaFunction{lift-alg-≅}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaFunction{lower-alg-⊧}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaBound{𝓧}\AgdaSpace{}%
+%% \AgdaSymbol{:}%
+%% \>[568I]\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓧}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\<%
+%% \\
+%% \>[568I][@{}l@{\AgdaIndent{0}}]%
+%% \>[29]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{→}%
+%% \>[29]\AgdaFunction{lift-alg}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{𝓦}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+%% \AgdaBound{q}\<%
+%% \\
+%% \>[0]\AgdaFunction{lower-alg-⊧}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{lApq}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{⊧-≅}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{lApq}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{sym-≅}\AgdaSpace{}%
+%% \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\<%
+\end{code}
+%% -- END: \input{Varieties/ModelTheory.tex}
+The Agda proof of this is included \ualibModelTheory module (see~\cite[\S8.1.3]{DeMeo:2021}).
+
+\subsection{Equational Logic Types}\label{sec:equational-logic-types}
+This section presents the \ualibEquationalLogic module of  the \agdaualib.
+\input{Varieties/EquationalLogic.tex}
+
+%% \appendix 
+
+%% \section{Some Components of the Type Topology Library}
+%% Here we collect some of the components from the \typetopology library that we used above but did not have space to discuss.  They are collected here for the reader's convenience and to keep the paper somewhat self-contained.
+
+%% \input{aux/typetopology.tex}
 
 %% Bibliography
 \bibliography{ualib_refs}
@@ -4531,4 +4331,132 @@ Here we collect some of the components from the \typetopology library that we us
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Inductive Types H, S, P, V}\label{sec:inductive-types-h-s-p-v}
+This section presents the \ualibVarietiesVarieties module of the \agdaualib.
+\input{Varieties/Varieties.tex}
+
+\subsection{Equation Preservation Theorems}\label{sec:equation-preservation-theorems}
+This section presents the \ualibPreservation module of  the \agdaualib.
+\input{Varieties/Preservation.tex}
+
+
+
+
+
+
+%% Homomorphisms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Homomorphisms}\label{sec:homomorphisms}
+
+\subsection{Basic Definitions}
+\label{sec:homs-basic-definitions}
+This section describes the \ualibHomBasic module of the \agdaualib.
+\input{Homomorphisms/Basic.tex}
+
+\subsection{Kernels of Homomorphisms}
+\label{sec:kernels}
+This section describes the \ualibKernels module of the \agdaualib.
+\input{Homomorphisms/Kernels.tex}
+
+\subsection{Homomorphism Theorems}
+\label{sec:noether}
+This section describes the \ualibNoether module of the \agdaualib.
+\input{Homomorphisms/Noether.tex}
+
+\subsection{Products and Homomorphisms}
+\label{sec:products-1}
+This section describes the \ualibHomProducts module of the \agdaualib.
+\input{Homomorphisms/Products.tex}
+
+\subsection{Isomorphism Type}
+\label{sec:isomorphisms}
+This section describes the \ualibIsomorphisms module of the \agdaualib.
+\input{Homomorphisms/Isomorphisms.tex}
+
+\subsection{Homomorphic Image Type}
+\label{sec:homomorphicimages}
+This section describes the \ualibHomImages module of the \agdaualib.
+\input{Homomorphisms/HomomorphicImages.tex}
+
+\newpage
+
+%% Terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terms}
+
+\subsection{Basic Definitions}
+\label{sec:terms-basic-definitions}
+This section describes the \ualibTermsBasic module of the \agdaualib.
+\input{Terms/Basic.tex}
+
+\subsection{The Term Algebra}
+\label{sec:the-term-algebra}
+This section describes the \ualibTermsFree module of the \agdaualib.
+\input{Terms/Free.tex}
+
+\subsection{Term Operations}
+\label{sec:term-operations}
+This section describes the \ualibTermsOperations module of the \agdaualib.
+\input{Terms/Operations.tex}
+
+\subsection{Compatibility of Terms}
+\label{sec:compatibility-of-terms}
+This section describes the \ualibTermsCompatibility module of the \agdaualib.
+\input{Terms/Compatibility.tex}
+
+\newpage
+
+%% Subalgebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subalgebras}\label{sec:subalgebras}
+
+\subsection{Types for Subuniverses}\label{sec:subuniverse-type}
+This section describes the \ualibSubuniverses module of the \agdaualib.
+\input{Subalgebras/Subuniverses.tex}
+
+\subsection{Subuniverse Generation}\label{sec:subun-gener}
+This section describes the \ualibGeneration module of  the \agdaualib.
+\input{Subalgebras/Generation.tex}
+
+\subsection{Subuniverse Lemmas}\label{sec:subuniverse-lemmas}
+This section describes the \ualibProperties module of  the \agdaualib.
+\input{Subalgebras/Properties.tex}
+
+\subsection{Homomorphisms and Subuniverses}\label{homomorphisms-and-subuniverses}
+This section describes the \ualibHomsAndSubs module of  the \agdaualib.
+\input{Subalgebras/Homomorphisms.tex}
+
+\subsection{Types for Subalgebra}\label{sec:subalgebra-type}
+This section describes the \ualibSubalgebras module of  the \agdaualib.
+\input{Subalgebras/Subalgebras.tex}
+
+\subsection{WWMD}\label{sec:wwmd}
+This section describes the \ualibWWMD module of  the \agdaualib.
+\input{Subalgebras/WWMD.tex}
+
+\newpage
+
+\begin{center}
+  (This page is almost entirely blank on purpose.)
+\end{center}
+
+\newpage
+
+
+\newpage
+
+%% HSP Theorem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Birkhoff's HSP Theorem}
+\label{sec:birkhoff}
+
+\subsection{The Relatively Free Algebra}\label{sec:relatively-free-algebra-type}
+This section presents the \ualibFreeAlgebra module of  the \agdaualib.
+\input{Birkhoff/FreeAlgebra.tex}
+
+\subsection{HSP Lemmas}\label{sec:hsp-lemmas}
+This section presents the \ualibLemmata of  the \agdaualib.
+\input{Birkhoff/Lemmata.tex}
+
+\subsection{The HSP Theorem}\label{sec:hsp-theorem}
+This section presents the \ualibTheorem module of  the \agdaualib.
+\input{Birkhoff/Theorem.tex}
+
 
