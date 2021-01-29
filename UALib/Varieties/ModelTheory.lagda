@@ -98,58 +98,6 @@ mod ℰ = λ A → ∀ p q → (p , q) ∈ ℰ → A ⊧ p ≈ q
 
 ------------------------------------------
 
-#### <a id="computing-with-⊧">Computing with ⊧</a>
-
-We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each *assignment function* 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
-
--------------------------------------
-
-#### <a id="⊧-≅ compatibility">⊧-≅ compatibility</a>
-
-The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism), and this fact is proved by showing that a certain term operation identity---namely, p ̇ 𝑩 ≡ q ̇ 𝑩---holds *extensionally*, in the sense of the paragraph above on [Computing with ⊧](UALib.Varieties.Modeltheory.html#computing-with-⊧).
-
-\begin{code}
-
-⊧-≅
- ⊧-transport : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
-                 (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
-⊧-transport {𝓠}{𝓤}{𝓧}{X}{𝑨}{𝑩} p q Apq (f , g , f∼g , g∼f) = γ
- where
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ x →
-      (p ̇ 𝑩) x ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      (p ̇ 𝑩) (∣ 𝒾𝒹 𝑩 ∣ ∘ x) ≡⟨ ap (λ - → (p ̇ 𝑩) -) (gfe λ i → ((f∼g)(x i))⁻¹)  ⟩
-      (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-      ∣ f ∣ ((p ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
-      ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ comm-hom-term gfe 𝑨 𝑩 f q (∣ g ∣ ∘ x) ⟩
-      (q ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (λ - → (q ̇ 𝑩) -) (gfe λ i → (f∼g) (x i)) ⟩
-      (q ̇ 𝑩) x ∎
-
-⊧-≅ = ⊧-transport -- (alias)
-
-\end{code}
-
---------------------------------------
-
-#### <a id="⊧-lift-compatibility">⊧-lift compatibility</a>
-
-The ⊧ relation is also compatible with the lift operation.
-
-\begin{code}
-
-lift-alg-⊧ : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-       (𝑨 : Algebra 𝓤 𝑆)(p q : Term{𝓧}{X})
-  →    𝑨 ⊧ p ≈ q → (lift-alg 𝑨 𝓦) ⊧ p ≈ q
-lift-alg-⊧ 𝑨 p q Apq = ⊧-≅ p q Apq lift-alg-≅
-
-lower-alg-⊧ : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
-                             (p q : Term{𝓧}{X})
- →                           lift-alg 𝑨 𝓦 ⊧ p ≈ q → 𝑨 ⊧ p ≈ q
-lower-alg-⊧ {𝓤}{𝓦}{𝓧}{X} 𝑨 p q lApq = ⊧-≅ p q lApq (sym-≅ lift-alg-≅)
-
-\end{code}
-
----------------------------------
 
 [↑ UALib.Varieties](UALib.Varieties.html)
 <span style="float:right;">[UALib.Varieties.EquationalLogic →](UALib.Varieties.EquationalLogic.html)</span>

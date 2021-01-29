@@ -30,22 +30,72 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; domain; embeddings
 
 \end{code}
 
----------------------------------------------
+-------------------------------------
 
-#### <a id="product-transport">Product transport</a>
+#### <a id="computing-with-⊧">Computing with ⊧</a>
 
-We prove that identities satisfied by all factors of a product are also satisfied by the product.
+We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each *assignment function* 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
+
+---------------------------------
+
+#### <a id="algebraic-invariance-of-⊧I">Algebraic invariance of ⊧</a>
+
+The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
 \begin{code}
-product-id-compatibility -- (alias)
- products-preserve-identities
-  : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
-                               (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
- →                             ((i : I) → (𝒜 i) ⊧ p ≈ q)
-                               --------------------------------------------------
- →                             ⨅ 𝒜 ⊧ p ≈ q
 
-products-preserve-identities p q I 𝒜 𝒜pq = γ
+⊧-I-invariance : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
+                 (p q : Term{𝓧}{X}) → (𝑨 ⊧ p ≈ q) → (𝑨 ≅ 𝑩) → 𝑩 ⊧ p ≈ q
+⊧-I-invariance {𝓠}{𝓤}{𝓧}{X}{𝑨}{𝑩} p q Apq (f , g , f∼g , g∼f) = γ
+ where
+  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+  γ = gfe λ x →
+      (p ̇ 𝑩) x ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      (p ̇ 𝑩) (∣ 𝒾𝒹 𝑩 ∣ ∘ x) ≡⟨ ap (λ - → (p ̇ 𝑩) -) (gfe λ i → ((f∼g)(x i))⁻¹)  ⟩
+      (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
+      ∣ f ∣ ((p ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
+      ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ comm-hom-term gfe 𝑨 𝑩 f q (∣ g ∣ ∘ x) ⟩
+      (q ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (λ - → (q ̇ 𝑩) -) (gfe λ i → (f∼g) (x i)) ⟩
+      (q ̇ 𝑩) x ∎
+
+\end{code}
+
+As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡ q ̇ 𝑩 holds *extensionally*, that is, `∀ x, (p ̇ 𝑩) x ≡ (q ̇ 𝑩) x`.
+
+--------------------------------------
+
+#### <a id="Lift-invariance-of-⊧">Lift-invariance of ⊧</a>
+
+The ⊧ relation is also invariant under the algebraic lift and lower operations.
+
+\begin{code}
+
+⊧-lift-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
+       (𝑨 : Algebra 𝓤 𝑆)(p q : Term{𝓧}{X})
+  →    𝑨 ⊧ p ≈ q → (lift-alg 𝑨 𝓦) ⊧ p ≈ q
+⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
+
+⊧-lower-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
+                             (p q : Term{𝓧}{X})
+ →                           lift-alg 𝑨 𝓦 ⊧ p ≈ q → 𝑨 ⊧ p ≈ q
+⊧-lower-alg-invariance {𝓤}{𝓦}{𝓧}{X} 𝑨 p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
+
+\end{code}
+
+---------------------------------------------
+
+#### <a id="product-invariance-of-⊧">Product-invariance of ⊧</a>
+
+Identities satisfied by all factors of a product are also satisfied by the product.
+
+\begin{code}
+⊧-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+                 (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+ →               ((i : I) → (𝒜 i) ⊧ p ≈ q)
+                 --------------------------
+ →               ⨅ 𝒜 ⊧ p ≈ q
+
+⊧-P-invariance p q I 𝒜 𝒜pq = γ
   where
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
    γ = gfe λ a →
@@ -53,58 +103,51 @@ products-preserve-identities p q I 𝒜 𝒜pq = γ
     (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
     (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
     (q ̇ ⨅ 𝒜) a                           ∎
-product-id-compatibility = products-preserve-identities
 
-lift-product-id-compatibility -- (alias)
- lift-products-preserve-ids : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
-                               (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
- →                             ((i : I) → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)
-                               --------------------------------------------------
- →                             ⨅ 𝒜 ⊧ p ≈ q
+⊧-P-lift-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+                      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+ →                    ((i : I) → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)
+                      ---------------------------------------
+ →                    ⨅ 𝒜 ⊧ p ≈ q
 
-lift-products-preserve-ids {𝓤}{𝓦} p q I 𝒜 lApq = products-preserve-identities p q I 𝒜 Aipq
+⊧-P-lift-invariance {𝓤}{𝓦} p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
   where
    Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
-   Aipq i = ⊧-≅ p q (lApq i) (sym-≅ lift-alg-≅)
-lift-product-id-compatibility = lift-products-preserve-ids
+   Aipq i = ⊧-I-invariance p q (lApq i) (sym-≅ lift-alg-≅)
 
-class-product-id-compatibility -- (alias)
- products-in-class-preserve-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                                        {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                                        (p q : Term{𝓧}{X})
-                                        (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
- →                                      𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
-                                        -----------------------------------------------------
- →                                       ⨅ 𝒜 ⊧ p ≈ q
+⊧-class-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+                       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+                       (p q : Term{𝓧}{X})
+                       (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+ →                     𝒦 ⊧ p ≋ q  →  ((i : I) → 𝒜 i ∈ 𝒦)
+                       ----------------------------------
+ →                     ⨅ 𝒜 ⊧ p ≈ q
 
-products-in-class-preserve-identities p q I 𝒜 α K𝒜 = γ
+⊧-class-P-invariance p q I 𝒜 α K𝒜 = γ
   where
    β : ∀ i → (𝒜 i) ⊧ p ≈ q
    β i = α (K𝒜 i)
 
    γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
-   γ = products-preserve-identities p q I 𝒜 β
-class-product-id-compatibility = products-in-class-preserve-identities
+   γ = ⊧-P-invariance p q I 𝒜 β
 \end{code}
 
 --------------------------------------------
 
-#### <a id="subalgebra-transport">Subalgebra transport</a>
-
+#### <a id="subalgebra-invariance-of-⊧">Subalgebra invariance of ⊧</a>
 We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
 
-S-⊧ -- (alias)
- subalgebras-preserve-identities : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}
-                                  {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
-                                  (p q : Term{𝓧}{X})
-                                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
- →                                𝒦 ⊧ p ≋ q
-                                  -------------
- →                                ∣ 𝑩 ∣ ⊧ p ≈ q
+⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}
+                 {𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}
+                 (p q : Term{𝓧}{X})
+                 (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
+ →               𝒦 ⊧ p ≋ q
+                -----------------
+ →               ∣ 𝑩 ∣ ⊧ p ≈ q
 
-subalgebras-preserve-identities {𝓤}{X = X} p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
+⊧-S-invariance {𝓤}{X = X} p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
  where
   𝑩' : Algebra 𝓤 𝑆
   𝑩' = ∣ SA ∣
@@ -143,32 +186,29 @@ subalgebras-preserve-identities {𝓤}{X = X} p q (𝑩 , 𝑨 , SA , (KA , BisS
   γ : 𝑩 ⊧ p ≈ q
   γ = gfe λ b → hlc (ξ b)
 
-S-⊧ = subalgebras-preserve-identities
--- subalgebra-id-compatibility = subalgebras-preserve-identities
 \end{code}
 
 ------------------------------------------------------------
 
-#### <a id="homomorphism-transport">Homomorphism transport</a>
+#### <a id="homomorphism-invariance-of-⊧">Homomorphism-invariance of ⊧</a>
+
+We prove that a class models an identity if and only if all homomorphic images of algebras in the class model the same identity.
 
 Recall that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 
-$$𝒦 ⊧ p ≈ q \; ⇔ \; ∀ 𝑨 ∈ 𝒦, \; ∀ h : \mathrm{hom} (𝑻 X) 𝑨, \; h ∘ (𝑝 ̇ (𝑻 X)) = h ∘ (𝑞 ̇ (𝑻 X)).$$
-
-We now formalize this result in Agda and we prove that identities satisfied by all algberas in a class are also satsified by all homomorphic images of algebras in the class.
+𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ h : hom (𝑻 X) 𝑨,  h ∘ (𝑝 ̇ (𝑻 X)) = h ∘ (𝑞 ̇ (𝑻 X)).
 
 \begin{code}
 
 -- ⇒ (the "only if" direction)
-id-class-hom-compatibility -- (alias)
- identities-compatible-with-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                                  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                                  (p q : Term) →  𝒦 ⊧ p ≋ q
-                                 --------------------------------------------------
- →                                ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻 X) 𝑨)
-                                  →  ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
+⊧-class-H-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+                       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+                       (p q : Term) →  𝒦 ⊧ p ≋ q
+                       ------------------------------------
+ →                      ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(h : hom (𝑻 X) 𝑨)
+                           →     ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
 
-identities-compatible-with-homs {X = X} p q α 𝑨 KA h = γ
+⊧-class-H-invariance {X = X} p q α 𝑨 KA h = γ
  where
   β : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → (p ̇ 𝑨)(∣ h ∣ ∘ 𝒂) ≡ (q ̇ 𝑨)(∣ h ∣ ∘ 𝒂)
   β 𝒂 = intensionality (α KA) (∣ h ∣ ∘ 𝒂)
@@ -182,19 +222,17 @@ identities-compatible-with-homs {X = X} p q α 𝑨 KA h = γ
 
   γ : ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X)
   γ = gfe ξ
-id-class-hom-compatibility = identities-compatible-with-homs
 
 -- ⇐ (the "if" direction)
-class-hom-id-compatibility -- (alias)
- homs-compatible-with-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                                  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                                  (p q : Term)
- →                                ( ∀ (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦) (h : hom (𝑻 X) 𝑨)
-                                           → ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X) )
-                                  ----------------------------------------------------
- →                                 𝒦 ⊧ p ≋ q
+⊧-class-H-coinvariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+                         {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+                         (p q : Term)
+ →                       ( (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦) (h : hom (𝑻 X) 𝑨)
+                                    → ∣ h ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ h ∣ ∘ (q ̇ 𝑻 X) )
+                         ----------------------------------------------------
+ →                       𝒦 ⊧ p ≋ q
 
-homs-compatible-with-identities {X = X} p q β {𝑨} KA = γ
+⊧-class-H-coinvariance {X = X} p q β {𝑨} KA = γ
   where
    h : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
    h 𝒂 = lift-hom 𝑨 𝒂
@@ -207,37 +245,16 @@ homs-compatible-with-identities {X = X} p q β {𝑨} KA = γ
     (∣ h 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (h 𝒂) q ℊ) ⟩
     (q ̇ 𝑨)(∣ h 𝒂 ∣ ∘ ℊ)   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
     (q ̇ 𝑨) 𝒂             ∎
-class-hom-id-compatibility = homs-compatible-with-identities
 
-compatibility-of-identities-and-homs : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                                       {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
-                                       (p q : Term{𝓧}{X})
-                 ----------------------------------------------------------------
- →                (𝒦 ⊧ p ≋ q) ⇔ (∀(𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦)(hh : hom (𝑻 X) 𝑨)
-                                           →   ∣ hh ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻 X))
+⊧-class-H-compatibility : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+                    {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+                    (p q : Term{𝓧}{X})
+                    ----------------------------------------
+ →                  (𝒦 ⊧ p ≋ q) ⇔ ( (𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦)(hh : hom (𝑻 X) 𝑨)
+                                           →   ∣ hh ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ hh ∣ ∘ (q ̇ 𝑻 X) )
 
-compatibility-of-identities-and-homs p q = identities-compatible-with-homs p q ,
-                                             homs-compatible-with-identities p q
+⊧-class-H-compatibility p q = ⊧-class-H-invariance p q , ⊧-class-H-coinvariance p q
 
-\end{code}
-
-Here's a simpler special case of the previous result that suffices when we're interested in just a single algebra, rather than a class of algebras.
-
-\begin{code}
-
-hom-id-compatibility : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                       (p q : Term{𝓧}{X})
-                       (𝑨 : Algebra 𝓤 𝑆)(ϕ : hom (𝑻 X) 𝑨)
- →                      𝑨 ⊧ p ≈ q
-                      ------------------
- →                     ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-
-hom-id-compatibility {X = X} p q 𝑨 ϕ β = ∣ ϕ ∣ p            ≡⟨ ap ∣ ϕ ∣ (term-agreement p) ⟩
-                                 ∣ ϕ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ p ℊ) ⟩
-                                 (p ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ ϕ ∣ ∘ ℊ)  ⟩
-                                 (q ̇ 𝑨) (∣ ϕ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q ℊ)⁻¹ ⟩
-                                 ∣ ϕ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ ϕ ∣ (term-agreement q))⁻¹ ⟩
-                                 ∣ ϕ ∣ q              ∎
 \end{code}
 
 ----------------------------
