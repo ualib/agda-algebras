@@ -11,13 +11,13 @@ This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agd
 
 We prove closure properties, or "invariance," of the models relation defined in [UALib.Varieties.ModelTheory][] module .  Proofs are given of the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
 
-* [Algebraic invariance of ⊧](#algebraic-invariance-of-⊧). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
 
-* [Product invariance of ⊧](#product-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
+* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
 
-* [Subalgebra invariance of ⊧](#subalgebra-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
+* [Subalgebra invariance](#subalgebra-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
 
-* [Homomorphism invariance of ⊧](#homomorphism-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all homomorphic images (equivalently, all quotients) of algebras in the class;
+* [Homomorphism invariance](#homomorphism-invariance). Identities modeled by a class of algebras are also modeled by all homomorphic images (equivalently, all quotients) of algebras in the class;
 
 \begin{code}
 
@@ -46,7 +46,7 @@ We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion 
 
 ---------------------------------
 
-#### <a id="algebraic-invariance-of-⊧I">Algebraic invariance of ⊧</a>
+#### <a id="algebraic-invariance">Algebraic invariance</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
@@ -72,7 +72,7 @@ As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡
 
 --------------------------------------
 
-#### <a id="Lift-invariance-of-⊧">Lift-invariance of ⊧</a>
+#### <a id="Lift-invariance">Lift-invariance</a>
 
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
@@ -92,7 +92,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 ---------------------------------------------
 
-#### <a id="product-invariance-of-⊧">Product-invariance of ⊧</a>
+#### <a id="product-invariance">Product-invariance</a>
 
 Identities satisfied by all factors of a product are also satisfied by the product.
 
@@ -142,7 +142,7 @@ Identities satisfied by all factors of a product are also satisfied by the produ
 
 --------------------------------------------
 
-#### <a id="subalgebra-invariance-of-⊧">Subalgebra invariance of ⊧</a>
+#### <a id="subalgebra-invariance">Subalgebra invariance</a>
 We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
@@ -198,7 +198,7 @@ We show that identities modeled by a class of algebras is also modeled by all su
 
 ------------------------------------------------------------
 
-#### <a id="homomorphism-invariance-of-⊧">Homomorphism-invariance of ⊧</a>
+#### <a id="homomorphism-invariance">Homomorphism-invariance</a>
 
 Below we will prove that a class models an identity if and only if all homomorphic images of algebras in the class model the same identity.  But first we prove the slightly simpler special case involving just a single algebra, rather than a class of algebras.
 
