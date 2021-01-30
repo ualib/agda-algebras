@@ -9,7 +9,15 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
-We establish some important features of the "models" relation, which demonstrate the nice relationships ⊧ has with the other protagonists of our story, H, S, and P.
+We prove closure properties, or "invariance," of the models relation defined in [UALib.Varieties.ModelTheory][] module .  Proofs are given of the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+
+* [Algebraic invariance of ⊧](#algebraic-invariance-of-⊧). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+
+* [Product invariance of ⊧](#product-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
+
+* [Subalgebra invariance of ⊧](#subalgebra-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
+
+* [Homomorphism invariance of ⊧](#homomorphism-invariance-of-⊧). Identities modeled by a class of algebras are also modeled by all homomorphic images (equivalently, all quotients) of algebras in the class;
 
 \begin{code}
 
@@ -34,7 +42,7 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; domain; embeddings
 
 #### <a id="computing-with-⊧">Computing with ⊧</a>
 
-We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈ q holds when this identity is interpreted in the algebra 𝑨; syntactically, 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.  Hopefully we already grasp the semantic meaning of these strings of symbols, but our understanding is tenuous at best unless we have a handle on their computational meaning, since this tells us how we can *use* the definitions. So let us emphasize that we interpret the expression 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 as an *extensional equality*, by which we mean that for each *assignment function* 𝒂 : X → ∣ 𝑨 ∣---assigning values in the domain of 𝑨 to the variable symbols in X---we have (𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂.
+We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈  q holds when this identity is interpreted in the algebra  𝑨; syntactically,  𝑝 ̇  𝑨 ≡  𝑞 ̇  𝑨.  It should be emphasized that the expression  𝑝 ̇  𝑨 ≡  𝑞 ̇  𝑨 is interpreted computationally as an \emph{extensional equality}, by which we mean that for each *assignment function*  𝒂 :  X → ∣ 𝑨 ∣, assigning values in the domain of  𝑨 to the variable symbols in  X, we have (𝑝 ̇  𝑨)  𝒂 ≡ (𝑞 ̇  𝑨)  𝒂.
 
 ---------------------------------
 
@@ -192,7 +200,25 @@ We show that identities modeled by a class of algebras is also modeled by all su
 
 #### <a id="homomorphism-invariance-of-⊧">Homomorphism-invariance of ⊧</a>
 
-We prove that a class models an identity if and only if all homomorphic images of algebras in the class model the same identity.
+Below we will prove that a class models an identity if and only if all homomorphic images of algebras in the class model the same identity.  But first we prove the slightly simpler special case involving just a single algebra, rather than a class of algebras.
+
+\begin{code}
+
+⊧-H-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} (p q : Term{𝓧}{X})
+                 (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+ →               𝑨 ⊧ p ≈ q
+                 ------------------
+ →               ∣ φ ∣ p ≡ ∣ φ ∣ q
+
+⊧-H-invariance {X = X} p q 𝑨 φ β =
+  ∣ φ ∣ p              ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
+  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ )   ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ p ℊ ) ⟩
+  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ ) ≡⟨ intensionality β (∣ φ ∣ ∘ ℊ ) ⟩
+  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ ) ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q ℊ )⁻¹ ⟩
+  ∣ φ ∣ ((q ̇ 𝑻 X) ℊ ) ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
+  ∣ φ ∣ q              ∎
+
+\end{code}
 
 Recall that an identity is satisfied by all algebras in a class if and only if that identity is compatible with all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝓚 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
 
@@ -257,7 +283,7 @@ Recall that an identity is satisfied by all algebras in a class if and only if t
 
 \end{code}
 
-----------------------------
+-------------------------------------
 
 [← UALib.Varieties.ModelTheory](UALib.Varieties.ModelTheory.html)
 <span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>

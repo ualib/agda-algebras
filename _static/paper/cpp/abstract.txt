@@ -1,9 +1,0 @@
-Title: Formalizing Universal Algebra with Dependent and Inductive Types
-
-Authors: William DeMeo, Siva Somayyajula
-
-Keywords: universal algebra, formalization of mathematics, equational logic, type theory
-
-Abstract: We introduce our Agda Universal Algebra Library (agda-ualib), a project for the formalization of universal algebra in the Agda functional programming language. The primary aim of the project is to develop a usable library that makes Agda more accessible as a tool for producing new mathematics and for formally verifying "known" results. We have implemented a small collection of fundamental definitions and theorems from universal algebra in Agda, exhibiting the power of inductive and dependent types for this purpose.  To demonstrate the effectiveness of the library, we describe the first major milestone of the project---a formal proof of Birkhoff's HSP Theorem.
-
-Submitted: Apr 06, 15:26 GMT
