@@ -32,12 +32,17 @@
   \{-\# OPTIONS --without-K --exact-split --allow-unsolved-metas \#-\}}
 \newcommand\defn[1]{\textit{#1}}
 \newcommand\agdaualib{\href{https://ualib.gitlab.io}{Agda UALib}\xspace}
-\newcommand\ualibdocs{\href{https://ualib.gitlab.io}{UALib html docs}\xspace}
+\newcommand\ualibhtmldocs{\href{https://ualib.gitlab.io}{UALib html docs}\xspace}
+\newcommand\ualibdoc{\href{https://ualib.gitlab.io}{UALib documentation}\xspace}
 \newcommand\ualib{\href{https://ualib.gitlab.io}{UALib}\xspace}
-\newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{https://ualib.org}}\xspace}
+\newcommand\httpsualibdotorg{\href{https://ualib.gitlab.io}{\texttt{https://ualib.org}}\xspace}
+\newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{ualib.org}}\xspace}
+\newcommand\seedocfordetails{(See~\cite{DeMeo:2021} or \ualibdotorg for details.)\xspace}
+
 
 %% \newcommand\ualibdocs{\href{https://ualib.gitlab.io}{https://ualib.gitlab.io}\xspace}
-\newcommand\ualibrepo{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io}}\xspace}
+\newcommand\ualibrepo{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{https://gitlab.com/ualib}}\xspace}
+\newcommand\ualibsrc{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib}}\xspace}
 \newcommand\TypeTopology{\href{https://github.com/martinescardo/TypeTopology}{Type Topology}\xspace}
 \newcommand\typetopology{\href{https://github.com/martinescardo/TypeTopology}{Type Topology}\xspace}
 \newcommand\ufcourse{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}\xspace}
@@ -166,6 +171,7 @@
 \newcommand\aod[1]{\AgdaOperator{\AgdaDatatype{#1}}}
 \newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}}
 \newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
+\newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
 \newcommand\Mac{\ensuremath{\mathrel{\AgdaComma}}}
 \newcommand\Mas[1]{\ensuremath{\mathrel{\AgdaSymbol{#1}}}}
 \newcommand\Mad[1]{\ensuremath{\mathrel{\AgdaDatatype{#1}}}}
