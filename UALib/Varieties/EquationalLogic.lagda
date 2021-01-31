@@ -52,10 +52,10 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
-⊧-I-invariance : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
+⊧-I-invariance : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
                  (p q : Term{𝓧}{X})  →  𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
-⊧-I-invariance 𝑨 𝑩 p q Apq (f , g , f∼g , g∼f) = γ
+⊧-I-invariance {𝑨 = 𝑨}{𝑩 = 𝑩} p q Apq (f , g , f∼g , g∼f) = γ
  where
   γ : p ̇ 𝑩 ≡ q ̇ 𝑩
   γ = gfe λ x →
@@ -84,7 +84,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
                         -----------------------------------
  →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
-⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance _ _ p q Apq lift-alg-≅
+⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
 
 
 ⊧-lower-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
@@ -92,7 +92,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
                          -----------------------------------
  →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
 
-⊧-lower-alg-invariance 𝑨 p q lApq = ⊧-I-invariance _ _ p q lApq (sym-≅ lift-alg-≅)
+⊧-lower-alg-invariance 𝑨 p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
 
 \end{code}
 
@@ -103,12 +103,13 @@ We show that identities modeled by a class of algebras is also modeled by all su
 
 \begin{code}
 
-⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}(p q : Term{𝓧}{X})
+⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}(p q : Term)
                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
                  ----------------------------
  →               𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
-⊧-S-invariance X p q (𝑩 , 𝑨 , SA , (KA , BisSA)) Kpq = γ
+⊧-S-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq = gfe λ b →
+                                                              (embeddings-are-lc ∣ h ∣ hem)(ξ b)
  where
   h' : hom ∣ SA ∣ 𝑨
   h' = (∣ snd SA ∣ , snd ∥ snd SA ∥ )
@@ -120,17 +121,10 @@ We show that identities modeled by a class of algebras is also modeled by all su
   hem = ∘-embedding (fst ∥ snd SA ∥) (iso→embedding BisSA)
 
   ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-  ξ b =
-   ∣ h ∣((p ̇ 𝑩) b)  ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
-   (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq KA) (∣ h ∣ ∘ b) ⟩
-   (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
-   ∣ h ∣((q ̇ 𝑩) b)  ∎
-
-  hlc : {b b' : domain ∣ h ∣} → ∣ h ∣ b ≡ ∣ h ∣ b' → b ≡ b'
-  hlc hb≡hb' = (embeddings-are-lc ∣ h ∣ hem) hb≡hb'
-
-  γ : 𝑩 ⊧ p ≈ q
-  γ = gfe λ b → hlc (ξ b)
+  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq ka) (∣ h ∣ ∘ b) ⟩
+        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+        ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
 
@@ -148,13 +142,13 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 
 ⊧-P-invariance p q I 𝒜 𝒜pq = γ
-  where
-   γ : (p ̇ ⨅ 𝒜) ≡ (q ̇ ⨅ 𝒜)
-   γ = gfe λ a →
-    (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod gfe p 𝒜 a ⟩
-    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
-    (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
-    (q ̇ ⨅ 𝒜) a                           ∎
+ where
+  γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
+  γ = gfe λ a →
+   (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod gfe p 𝒜 a ⟩
+   (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
+   (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+   (q ̇ ⨅ 𝒜) a                           ∎
 
 
 ⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
@@ -185,7 +179,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 ⊧-P-lift-invariance {𝓤}{𝓦} p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
   where
    Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
-   Aipq i = ⊧-I-invariance _ _ p q (lApq i) (sym-≅ lift-alg-≅)
+   Aipq i = ⊧-I-invariance p q (lApq i) (sym-≅ lift-alg-≅)
 
 \end{code}
 

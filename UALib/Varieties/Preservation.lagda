@@ -48,7 +48,7 @@ H-id1 {𝓤} p q α (hlift{𝑨} x) = γ
   γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
   γ = ⊧-lift-alg-invariance _ p q β
 
-H-id1 p q α (hhimg{𝑨}{𝑪} HA ((𝑩 , ϕ , (ϕhom , ϕsur)) , B≅C)) = ⊧-I-invariance _ _ p q γ B≅C
+H-id1 p q α (hhimg{𝑨}{𝑪} HA ((𝑩 , ϕ , (ϕhom , ϕsur)) , B≅C)) = ⊧-I-invariance p q γ B≅C
  where
   β : 𝑨 ⊧ p ≈ q
   β = (H-id1 p q α) HA
@@ -68,7 +68,7 @@ H-id1 p q α (hhimg{𝑨}{𝑪} HA ((𝑩 , ϕ , (ϕhom , ϕsur)) , B≅C)) = �
    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
    (q ̇ 𝑩) 𝒃               ∎
 
-H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance _ _ p q (H-id1 p q α x) x₁
+H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x₁
 
 \end{code}
 
@@ -108,7 +108,7 @@ S-id1 _ p q α (sbase x) = ⊧-lift-alg-invariance _ p q (α x)
 S-id1 𝒦 p q α (slift x) = ⊧-lift-alg-invariance _ p q ((S-id1 𝒦 p q α) x)
 
 S-id1 𝒦 p q α (ssub{𝑨}{𝑩} sA B≤A) =
- ⊧-S-invariance _ p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)) γ
+ ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)) γ
   where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 𝒦 p q α sA
@@ -121,7 +121,7 @@ S-id1 𝒦 p q α (ssub{𝑨}{𝑩} sA B≤A) =
    γ {𝑩} (inj₂ y) = Apq y
 
 S-id1 𝒦 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
- ⊧-S-invariance _ p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 𝒦 p q α sA
@@ -138,7 +138,7 @@ S-id1 𝒦 p q α (siso{𝑨}{𝑩} x x₁) = γ
   ζ : 𝑨 ⊧ p ≈ q
   ζ = S-id1 𝒦 p q α x
   γ : 𝑩 ⊧ p ≈ q
-  γ = ⊧-I-invariance _ _ p q ζ x₁
+  γ = ⊧-I-invariance p q ζ x₁
 
 \end{code}
 
@@ -200,9 +200,9 @@ P-id1{𝓤} p q α (prodw{I}{𝒜} x) = γ
 P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = γ
  where
   γ : 𝑩 ⊧ p ≈ q
-  γ = ⊧-I-invariance _ _ p q (P-id1 p q α x) x₁
+  γ = ⊧-I-invariance p q (P-id1 p q α x) x₁
 
-P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invariance _ _ p q ζ x₁
+P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q ζ x₁
  where
   ζ : 𝑨 ⊧ p ≈ q
   ζ = P-id1 p q α x
@@ -257,7 +257,7 @@ V-id1 {𝓤} p q α (vliftw{𝑨} x) = γ
   γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
   γ = ⊧-lift-alg-invariance 𝑨 p q β
 
-V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance _ _ p q γ B≅C
+V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance p q γ B≅C
  where
   IH : 𝑨 ⊧ p ≈ q
   IH = V-id1 p q α VA
@@ -278,7 +278,7 @@ V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-
    (q ̇ 𝑩) 𝒃                ∎
 
 V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssub {𝑨}{𝑩} VA B≤A ) =
- ⊧-S-invariance _ p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 {𝓤}{𝓧}{X}p q α VA
@@ -291,7 +291,7 @@ V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssub {𝑨}{𝑩} VA B≤A ) =
    γ {𝑩} (inj₂ y) = Asinglepq y
 
 V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
- ⊧-S-invariance _ p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 {𝓤}{𝓧}{X}p q α VA
@@ -319,8 +319,8 @@ V-id1 {𝓤}{𝓧}{X} p q α (vprodw{I}{𝒜} V𝒜) = γ
   γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
   γ = ⊧-P-invariance p q I 𝒜 IH
 
-V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance _ _ p q (V-id1 p q α VA) A≅B
-V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance _ _ p q (V-id1 p q α VA) A≅B
+V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α VA) A≅B
+V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α VA) A≅B
 
 \end{code}
 
