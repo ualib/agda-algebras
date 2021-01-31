@@ -98,81 +98,6 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 ---------------------------------------------
 
-#### <a id="homomorphisc-invariance">Homomorphic invariance</a>
-
-If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism ϕ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
-
-\begin{code}
-
-⊧-H-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(p q : Term{𝓧}{X})
-                 (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
-                 -----------------------------
- →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
-
-⊧-H-invariance X p q 𝑨 φ β =
-  ∣ φ ∣ p             ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
-  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ p ℊ ) ⟩
-  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ φ ∣ ∘ ℊ ) ⟩
-  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q ℊ )⁻¹ ⟩
-  ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
-  ∣ φ ∣ q             ∎
-
-\end{code}
-
-More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝒦 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
-
-𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ ϕ : hom (𝑻 X) 𝑨,  ϕ ∘ (𝑝 ̇ (𝑻 X)) = ϕ ∘ (𝑞 ̇ (𝑻 X)).
-
-\begin{code}
-
--- ⇒ (the "only if" direction)
-⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term) → 𝒦 ⊧ p ≋ q
-                       ---------------------------------------------------------------------------------
- →                     ∀(𝑨 : Algebra 𝓤 𝑆)(KA : 𝒦 𝑨)(ϕ : hom (𝑻 X) 𝑨) → ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
-
-⊧-H-class-invariance X p q α 𝑨 ka ϕ = γ
- where
-  ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ ϕ ∣ ((p ̇ 𝑻 X) 𝒂) ≡ ∣ ϕ ∣ ((q ̇ 𝑻 X) 𝒂)
-
-  ξ 𝒂 = ∣ ϕ ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 ϕ p 𝒂 ⟩
-        (p ̇ 𝑨)(∣ ϕ ∣ ∘ 𝒂)   ≡⟨ intensionality (α ka) (∣ ϕ ∣ ∘ 𝒂) ⟩
-        (q ̇ 𝑨)(∣ ϕ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 ϕ q 𝒂)⁻¹ ⟩
-        ∣ ϕ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
-
-  γ : ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X)
-  γ = gfe ξ
-
--- ⇐ (the "if" direction)
-⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term)
- →                       ((𝑨 : Algebra 𝓤 𝑆)(KA : 𝑨 ∈ 𝒦)(ϕ : hom (𝑻 X) 𝑨)
-                           →           ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X))
-                         -------------------------------------------------
- →                       𝒦 ⊧ p ≋ q
-
-⊧-H-class-coinvariance X p q β {𝑨} KA = γ
-  where
-   ϕ : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-   ϕ 𝒂 = lift-hom 𝑨 𝒂
-
-   γ : 𝑨 ⊧ p ≈ q
-   γ = gfe λ 𝒂 →
-        (p ̇ 𝑨)(∣ ϕ 𝒂 ∣ ∘ ℊ)     ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (ϕ 𝒂) p ℊ)⁻¹ ⟩
-        (∣ ϕ 𝒂 ∣ ∘ (p ̇ 𝑻 X)) ℊ  ≡⟨ ap (λ - → - ℊ) (β 𝑨 KA (ϕ 𝒂)) ⟩
-        (∣ ϕ 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (ϕ 𝒂) q ℊ) ⟩
-        (q ̇ 𝑨)(∣ ϕ 𝒂 ∣ ∘ ℊ)     ∎
-
-
-⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(p q : Term)
-                    ----------------------------------------------------------------
- →                  𝒦 ⊧ p ≋ q ⇔ ((𝑨 : Algebra 𝓤 𝑆)(ka : 𝑨 ∈ 𝒦)(ϕ : hom (𝑻 X) 𝑨)
-                                             →   ∣ ϕ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ ϕ ∣ ∘ (q ̇ 𝑻 X))
-
-⊧-H-compatibility X p q = ⊧-H-class-invariance X p q , ⊧-H-class-coinvariance X p q
-
-\end{code}
-
--------------------------------------
-
 #### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
 We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
@@ -266,6 +191,82 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 
 --------------------------------------------
+
+#### <a id="homomorphisc-invariance">Homomorphic invariance</a>
+
+[Those mainly interested in the formal proof of Birkhoff's HSP theorem can skip this section; it is not needed there.]
+
+If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+
+\begin{code}
+
+⊧-H-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(p q : Term{𝓧}{X})
+                 (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+                 -----------------------------
+ →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
+
+⊧-H-invariance X p q 𝑨 φ β =
+  ∣ φ ∣ p              ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
+  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ p ℊ ) ⟩
+  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ φ ∣ ∘ ℊ ) ⟩
+  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q ℊ )⁻¹ ⟩
+  ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
+  ∣ φ ∣ q              ∎
+
+\end{code}
+
+More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝒦 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
+
+𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑝 ̇ (𝑻 X)) = φ ∘ (𝑞 ̇ (𝑻 X)).
+
+\begin{code}
+
+-- ⇒ (the "only if" direction)
+⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term)
+ →                     𝒦 ⊧ p ≋ q
+ →                     (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+                       ---------------------------------
+ →                     𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X)
+
+⊧-H-class-invariance X p q α 𝑨 φ ka = gfe ξ
+ where
+  ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂) ≡ ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)
+
+  ξ 𝒂 = ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 φ p 𝒂 ⟩
+        (p ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ intensionality (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
+        (q ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q 𝒂)⁻¹ ⟩
+        ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
+
+-- ⇐ (the "if" direction)
+⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term)
+ →                       ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+                            →  𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
+                         -------------------------------------------------
+ →                       𝒦 ⊧ p ≋ q
+
+⊧-H-class-coinvariance X p q β {𝑨} ka = γ
+  where
+   φ : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+   φ 𝒂 = lift-hom 𝑨 𝒂
+
+   γ : 𝑨 ⊧ p ≈ q
+   γ = gfe λ 𝒂 →
+        (p ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (φ 𝒂) p ℊ)⁻¹ ⟩
+        (∣ φ 𝒂 ∣ ∘ (p ̇ 𝑻 X)) ℊ  ≡⟨ ap (λ - → - ℊ) (β 𝑨 (φ 𝒂) ka) ⟩
+        (∣ φ 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (φ 𝒂) q ℊ) ⟩
+        (q ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
+
+
+⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(p q : Term)
+                    ----------------------------------------------------------------
+ →                  𝒦 ⊧ p ≋ q ⇔ ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+                                    →   𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
+
+⊧-H-compatibility X p q = ⊧-H-class-invariance X p q , ⊧-H-class-coinvariance X p q
+
+\end{code}
+
+-------------------------------------
 
 [← UALib.Varieties.ModelTheory](UALib.Varieties.ModelTheory.html)
 <span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>
