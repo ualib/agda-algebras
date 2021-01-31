@@ -52,14 +52,14 @@ module Birkhoffs-Theorem
    h₀E : Epic h₀
    h₀E = snd (𝕏 𝑨)
 
-   ϕ : Σ h ꞉ (hom 𝔽 𝑨) , Epic ∣ h ∣
+   ϕ : Σ h ꞉ (hom 𝔉 𝑨) , Epic ∣ h ∣
    ϕ = (𝔉-lift-hom 𝑨 h₀) , 𝔉-lift-of-epic-is-epic 𝑨 h₀ h₀E
 
-   AiF : 𝑨 is-hom-image-of 𝔽
+   AiF : 𝑨 is-hom-image-of 𝔉
    AiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) ) , refl-≅
 
    γ : 𝑨 ∈ 𝕍
-   γ = vhimg (𝔽∈𝕍 Cset) AiF
+   γ = vhimg (𝔉∈𝕍 Cset) AiF
 
 \end{code}
 

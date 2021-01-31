@@ -32,7 +32,7 @@ open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe}{𝕏} public
 \end{code}
 
 
-#### Lemma 0: V is closed under lift
+#### Lemma 1: V is closed under lift
 
 We begin the proof of Birkhoff's HSP theorem by establishing a number of facts that we will eventually string together in the HSPTheorem module to complete the proof.
 
@@ -161,7 +161,7 @@ Next we prove the lift-alg-V-closure lemma, which says that if an algebra 𝑨 b
 \end{code}
 
 
-### Lamma 1: SP(𝒦) ⊆ V(𝒦)
+### Lamma 2: SP(𝒦) ⊆ V(𝒦)
 
 Next we formalize the obvious fact that SP(𝒦) ⊆ V(𝒦). Unfortunately, the formal proof is neither trivial nor interesting.
 
@@ -215,20 +215,15 @@ Next we formalize the obvious fact that SP(𝒦) ⊆ V(𝒦). Unfortunately, the
 
 \end{code}
 
-### Lemma 2: 𝔽 ≤  ⨅ S(𝒦)
+### Lemma 3: 𝔉 ≤  ⨅ S(𝒦)  (=: ℭ)
 
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial---namely, we need to prove that the relatively free algebra 𝔽 embeds in the product ℭ of all subalgebras of algebras in the given class 𝒦.  To prepare for this, we arm ourselves with a small arsenal of notation.
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  To prepare for this, we arm ourselves with a small arsenal of notation.
 
 \begin{code}
  open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
 
  -- NOTATION.
-
- -- 𝔽 is the relatively free algebra
- 𝔽 : Algebra ovu+ 𝑆
- 𝔽 = 𝔉 -- 𝒦
-
  -- 𝕍 is HSP(𝒦)
  𝕍 : Pred (Algebra ovu+ 𝑆) ovu++
  𝕍 = V{𝓤}{ovu+} 𝒦
@@ -242,40 +237,39 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  SK𝔄 : (i : ℑs) → (𝔄s i) ∈ S{𝓤}{𝓤} 𝒦
  SK𝔄 = λ (i : ℑs) → ∥ i ∥
 
- -- ℭ is the product of all subalgebras of 𝒦.
+ -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra ovu 𝑆
  ℭ = ⨅ 𝔄s
- -- elements of ℭ are mappings from ℑs to {𝔄s i : i ∈ ℑs}
+ -- Elements of ℭ are mappings from ℑs to {𝔄s i : i ∈ ℑs}
+
  𝔥₀ : X → ∣ ℭ ∣
- 𝔥₀ x = λ i → (fst (𝕏 (𝔄s i))) x -- fst (𝕏 ℭ)
-                         --                             𝔄1
- ϕ𝔠 : hom (𝑻 X) ℭ        --                            77
- ϕ𝔠 = lift-hom ℭ 𝔥₀      --                           /
-                         --        𝑻 -----ϕ≡h --->>  ℭ -->> 𝔄2
- 𝔤 : hom (𝑻 X) 𝔽         --         \             77        ⋮
- 𝔤 = lift-hom 𝔽 (X↪𝔉)   --          \           /
-                         --          g         ∃f
- 𝔣 : hom 𝔽 ℭ             --           \       /
- 𝔣 = 𝔉-free-lift ℭ 𝔥₀ ,  --            \     /
-     λ 𝑓 𝒂 → ∥ ϕ𝔠 ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝) --  V  l/
-                          --           𝔽= 𝑻/ψ
+ 𝔥₀ x = λ i → (fst (𝕏 (𝔄s i))) x
+
+ ϕ𝔠 : hom (𝑻 X) ℭ
+ ϕ𝔠 = lift-hom ℭ 𝔥₀
+
+ 𝔤 : hom (𝑻 X) 𝔉
+ 𝔤 = lift-hom 𝔉 (X↪𝔉)
+
+ 𝔣 : hom 𝔉 ℭ
+ 𝔣 = 𝔉-free-lift ℭ 𝔥₀ , λ 𝑓 𝒂 → ∥ ϕ𝔠 ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝)
 
  𝔤-⟦⟧ : ∀ p → ∣ 𝔤 ∣ p ≡ ⟦ p ⟧
  𝔤-⟦⟧ p = π𝔉-X-defined 𝔤 (𝔉-lift-agrees-on-X 𝔉 X↪𝔉) p
 
- --Projection out of the product ℭ onto the specified (i-th) factor.
+ -- 𝔭 i is the projection out of the product ℭ onto the i-th factor.
  𝔭 : (i : ℑs) → ∣ ℭ ∣ → ∣ 𝔄s i ∣
  𝔭 i 𝒂 = 𝒂 i
 
  𝔭hom : (i : ℑs) → hom ℭ (𝔄s i)
  𝔭hom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
 
- -- the composition:  𝔽 --∣ 𝔣 ∣-->  ℭ --(𝔭 i)--> 𝔄s i
- 𝔭𝔣 : ∀ i → ∣ 𝔽 ∣ → ∣ 𝔄s i ∣
+ -- 𝔭𝔣 is the composition:  𝔉 --∣ 𝔣 ∣-->  ℭ --(𝔭 i)--> 𝔄s i
+ 𝔭𝔣 : ∀ i → ∣ 𝔉 ∣ → ∣ 𝔄s i ∣
  𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣
 
- 𝔭𝔣hom : (i : ℑs) → hom 𝔽 (𝔄s i)
- 𝔭𝔣hom i = HomComp 𝔽 (𝔄s i) 𝔣 (𝔭hom i)
+ 𝔭𝔣hom : (i : ℑs) → hom 𝔉 (𝔄s i)
+ 𝔭𝔣hom i = HomComp 𝔉 (𝔄s i) 𝔣 (𝔭hom i)
 
  𝔭ϕ𝔠 : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
  𝔭ϕ𝔠 i = ∣ 𝔭hom i ∣ ∘ ∣ ϕ𝔠 ∣
@@ -289,11 +283,21 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  -- The class of subalgebras of products of 𝒦.
  SP𝒦 : Pred (Algebra (ovu) 𝑆) (OV (ovu))
  SP𝒦 = S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
+ --
+ --                             𝔄1
+ --                            77
+ --                           /
+ --        𝑻 -----ϕ≡h --->>  ℭ -->> 𝔄2
+ --         \             77        ⋮
+ --          \           /
+ --           g         ∃f
+ --            \       /
+ --             \     /
+ --              V  l/
+ --             𝔉 = 𝑻/ψ
 \end{code}
 
-#### Lemma 3: 𝔽 ≤ ℭ
-
-Armed with these tools, we proceed to the proof that the free algebra 𝔽 is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦.  The hard part of the proof is showing that `𝔣 : hom 𝔽 ℭ` is a monomorphism. Let's dispense with that first.
+Armed with these tools, we proceed to the proof that the free algebra 𝔉 is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦.  The hard part of the proof is showing that `𝔣 : hom 𝔉 ℭ` is a monomorphism. Let's dispense with that first.
 
 \begin{code}
  Ψ : Rel ∣ 𝑻 X ∣ (OV 𝓤)
@@ -306,7 +310,7 @@ Armed with these tools, we proceed to the proof that the free algebra 𝔽 is a 
    pΨq : Ψ p q
    pΨq 𝑨 sA = γ'
     where
-     𝔭A : hom 𝔽 𝑨
+     𝔭A : hom 𝔉 𝑨
      𝔭A = 𝔭𝔣hom (𝑨 , sA)
 
      𝔣pq : ∣ 𝔭A ∣ ⟦ p ⟧ ≡ ∣ 𝔭A ∣ ⟦ q ⟧
@@ -360,31 +364,31 @@ Armed with these tools, we proceed to the proof that the free algebra 𝔽 is a 
 
 \end{code}
 
-With that out of the way, the proof that 𝔽 is (isomorphic to) a subalgebra of ℭ is all but complete.
+With that out of the way, the proof that 𝔉 is (isomorphic to) a subalgebra of ℭ is all but complete.
 
 \begin{code}
- 𝔽≤ℭ : is-set ∣ ℭ ∣ → 𝔽 ≤ ℭ
- 𝔽≤ℭ Cset = ∣ 𝔣 ∣ , (emb𝔣 , ∥ 𝔣 ∥)
+ 𝔉≤ℭ : is-set ∣ ℭ ∣ → 𝔉 ≤ ℭ
+ 𝔉≤ℭ Cset = ∣ 𝔣 ∣ , (emb𝔣 , ∥ 𝔣 ∥)
   where
    emb𝔣 : is-embedding ∣ 𝔣 ∣
    emb𝔣 = monic-into-set-is-embedding Cset ∣ 𝔣 ∣ mon𝔣
 \end{code}
 
-#### Lemma 4: 𝔽 ∈ V(𝒦)
+#### Lemma 4: 𝔉 ∈ V(𝒦)
 
-Now, with this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ 𝕍---it is not hard to show that 𝔽 belongs to SP(𝒦), and hence to 𝕍.
+Now, with this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ 𝕍---it is not hard to show that 𝔉 belongs to SP(𝒦), and hence to 𝕍.
 
 \begin{code}
  open class-product-inclusions {𝓤 = 𝓤}{𝒦 = 𝒦}
 
- 𝔽∈SP : is-set ∣ ℭ ∣ → 𝔽 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
- 𝔽∈SP Cset = ssub spC (𝔽≤ℭ Cset)
+ 𝔉∈SP : is-set ∣ ℭ ∣ → 𝔉 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
+ 𝔉∈SP Cset = ssub spC (𝔉≤ℭ Cset)
   where
    spC : ℭ ∈ (S{ovu}{ovu} (P{𝓤}{ovu} 𝒦))
    spC = (class-prod-s-∈-sp hfe)
 
- 𝔽∈𝕍 : is-set ∣ ℭ ∣ → 𝔽 ∈ 𝕍
- 𝔽∈𝕍 Cset = SP⊆V' (𝔽∈SP Cset)
+ 𝔉∈𝕍 : is-set ∣ ℭ ∣ → 𝔉 ∈ 𝕍
+ 𝔉∈𝕍 Cset = SP⊆V' (𝔉∈SP Cset)
 
 \end{code}
 
