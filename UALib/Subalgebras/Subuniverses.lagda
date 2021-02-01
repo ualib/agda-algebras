@@ -50,6 +50,7 @@ SubunivAlg 𝑨 B B∈SubA = Σ B , λ f x → (f ̂ 𝑨)(∣_∣ ∘ x) , B∈
 
 \end{code}
 
+-----------------------------------------
 
 #### <a id="subuniverses-as-records">Subuniverses as records</a>
 
