@@ -36,6 +36,9 @@ module UALib.Varieties.EquationalLogic
 open import UALib.Varieties.ModelTheory {𝑆 = 𝑆}{gfe}{𝕏} public
 open import UALib.Prelude.Preliminaries using (∘-embedding; domain; embeddings-are-lc) public
 
+ov : Universe → Universe
+ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+
 \end{code}
 
 -------------------------------------
@@ -103,7 +106,7 @@ We show that identities modeled by a class of algebras is also modeled by all su
 
 \begin{code}
 
-⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆) (OV 𝓠)}(p q : Term)
+⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term)
                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
                  ----------------------------
  →               𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
@@ -138,7 +141,7 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
 
 ⊧-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
                  (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
-                 -----------------------------------------
+                 -------------------------------------
  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 
 ⊧-P-invariance p q I 𝒜 𝒜pq = γ
@@ -151,10 +154,10 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
    (q ̇ ⨅ 𝒜) a                           ∎
 
 
-⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
                        (p q : Term{𝓧}{X})(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
  →                     (∀ i → 𝒜 i ∈ 𝒦)
-                      ---------------------------
+                       -------------------------
  →                     𝒦 ⊧ p ≋ q  →  ⨅ 𝒜 ⊧ p ≈ q
 
 ⊧-P-class-invariance p q I 𝒜 K𝒜 α = γ
@@ -196,7 +199,7 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
 ⊧-H-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(p q : Term{𝓧}{X})
                  (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
-                 -----------------------------
+                 ----------------------------
  →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
 ⊧-H-invariance X p q 𝑨 φ β =
@@ -216,10 +219,10 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 \begin{code}
 
 -- ⇒ (the "only if" direction)
-⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term)
+⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
  →                     𝒦 ⊧ p ≋ q
  →                     (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
-                       ---------------------------------
+                       ----------------------------------------
  →                     𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X)
 
 ⊧-H-class-invariance X p q α 𝑨 φ ka = gfe ξ
@@ -232,10 +235,10 @@ More generally, an identity is satisfied by all algebras in a class if and only 
         ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
 
 -- ⇐ (the "if" direction)
-⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}(p q : Term)
+⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
  →                       ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                             →  𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
-                         -------------------------------------------------
+                         ---------------------------------------
  →                       𝒦 ⊧ p ≋ q
 
 ⊧-H-class-coinvariance X p q β {𝑨} ka = γ
@@ -251,7 +254,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
         (q ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
 
 
-⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(p q : Term)
+⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
                     ----------------------------------------------------------------
  →                  𝒦 ⊧ p ≋ q ⇔ ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                                     →   𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))

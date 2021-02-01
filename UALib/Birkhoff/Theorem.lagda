@@ -27,13 +27,13 @@ open import UALib.Birkhoff.Lemmata {𝑆 = 𝑆}{gfe}{𝕏}{𝓤}{X} public
 open the-free-algebra {𝓤}{𝓤}{X}
 
 module Birkhoffs-Theorem
- {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+ {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾}
     -- extensionality assumptions
-    {hfe : hfunext (OV 𝓤)(OV 𝓤)}
-    {pe : propext (OV 𝓤)}
+    {hfe : hfunext 𝓸𝓿𝓾 𝓸𝓿𝓾}
+    {pe : propext 𝓸𝓿𝓾}
     -- truncation assumptions:
     {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
-    {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
+    {ssA : ∀ C → is-subsingleton (𝒞{𝓸𝓿𝓾}{𝓸𝓿𝓾}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
  where
 
  open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
@@ -44,14 +44,8 @@ module Birkhoffs-Theorem
 
  birkhoff Cset {𝑨} MThVA = γ
   where
-   h₀ : X → ∣ 𝑨 ∣
-   h₀ = fst (𝕏 𝑨)
-
-   h₀E : Epic h₀
-   h₀E = snd (𝕏 𝑨)
-
    ϕ : Σ h ꞉ (hom 𝔉 𝑨) , Epic ∣ h ∣
-   ϕ = (𝔉-lift-hom 𝑨 h₀) , 𝔉-lift-of-epic-is-epic 𝑨 h₀ h₀E
+   ϕ = (𝔉-lift-hom 𝑨 ∣ 𝕏 𝑨 ∣) , 𝔉-lift-of-epic-is-epic 𝑨 ∣ 𝕏 𝑨 ∣  ∥ 𝕏 𝑨 ∥
 
    AiF : 𝑨 is-hom-image-of 𝔉
    AiF = (𝑨 , ∣ fst ϕ ∣ , (∥ fst ϕ ∥ , snd ϕ) ) , refl-≅

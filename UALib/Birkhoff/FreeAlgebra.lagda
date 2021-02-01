@@ -53,6 +53,8 @@ In this subsection we define the relatively free algebra in Agda. Throughout thi
 
 module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
+ 𝓸𝓿𝓾 : Universe
+ 𝓸𝓿𝓾 = ov 𝓤
 \end{code}
 
 We begin by defining the collection `𝑻img` of homomorphic images of the term algebra.
@@ -60,7 +62,7 @@ We begin by defining the collection `𝑻img` of homomorphic images of the term 
 \begin{code}
 
  -- H (𝑻 X)  (hom images of 𝑻 X)
- 𝑻img : Pred (Algebra 𝓤 𝑆) (OV 𝓤) → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
+ 𝑻img : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
  𝑻img 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
 \end{code}
@@ -74,7 +76,7 @@ Next we define a function `mkti` that takes an arbitrary algebra 𝑨 and return
 \begin{code}
 
  -- Every algebra is a hom image of 𝑻 X.
- mkti : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}(𝑨 : Algebra 𝓤 𝑆)
+ mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆)
   →     𝑨 ∈ 𝒦 → 𝑻img 𝒦
  mkti 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
   where
@@ -88,7 +90,7 @@ Occasionally we want to extract the homomorphism ϕ from an inhabitant of `𝑻i
 \begin{code}
 
  -- The hom part of a hom image of 𝑻 X.
- 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))(ti : 𝑻img 𝒦)
+ 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)(ti : 𝑻img 𝒦)
   →   hom (𝑻 X) ∣ ti ∣
  𝑻ϕ _ ti = fst ∥ ti ∥
 
@@ -100,7 +102,7 @@ We start by letting ψ be the collection of all identities (p, q) satisfied by a
 
 \begin{code}
 
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (OV 𝓤)
+ ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓸𝓿𝓾
  ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
                  →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
 
@@ -110,7 +112,7 @@ We convert the predicate ψ into a relation by [Currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Rel ∣ (𝑻 X) ∣ (OV 𝓤)
+ ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ 𝓸𝓿𝓾
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
@@ -119,7 +121,7 @@ We will want to express `ψRel` as a congruence of the term algebra `𝑻 X`, so
 
 \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+ ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
   →            compatible (𝑻 X) (ψRel 𝒦)
  ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
   where
@@ -135,16 +137,16 @@ We will want to express `ψRel` as a congruence of the term algebra `𝑻 X`, so
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
        ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
- ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → reflexive (ψRel 𝒦)
+ ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
  ψRefl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁
 
- ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → symmetric (ψRel 𝒦)
+ ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
  ψSymm p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
 
- ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → transitive (ψRel 𝒦)
+ ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → transitive (ψRel 𝒦)
  ψTrans p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
 
- ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} → IsEquivalence (ψRel 𝒦)
+ ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
 
 \end{code}
@@ -153,7 +155,7 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) → Congruence (𝑻 X)
+ ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Congruence (𝑻 X)
  ψCon 𝒦 = mkcon (ψRel 𝒦) (ψcompatible 𝒦) ψIsEquivalence
 
 \end{code}
@@ -165,14 +167,15 @@ We have collected all the pieces necessary to express the collection of identiti
 We will denote the relatively free algebra by 𝔉 or 𝔽 and construct it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
 
 \begin{code}
-open the-free-algebra
 
 module the-relatively-free-algebra
  {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+
+ open the-free-algebra{𝓤 = 𝓤}{𝓧 = 𝓧}{X = X}
 
  𝓕 : Universe -- (universe level of the relatively free algebra)
- 𝓕 = (𝓧 ⊔ (OV 𝓤))⁺
+ 𝓕 = (𝓧 ⊔ 𝓸𝓿𝓾)⁺
 
  𝔉 : Algebra 𝓕 𝑆
  𝔉 =  𝑻 X ╱ (ψCon 𝒦)
@@ -244,7 +247,7 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
    γ = eq y (⟦ ℊ h₀⁻¹y ⟧) η
 
 
- 𝑻-canonical-projection : (θ : Congruence{OV 𝓧}{𝓤} (𝑻 X)) → epi (𝑻 X) ((𝑻 X) ╱ θ)
+ 𝑻-canonical-projection : (θ : Congruence{ov 𝓧}{𝓤} (𝑻 X)) → epi (𝑻 X) ((𝑻 X) ╱ θ)
  𝑻-canonical-projection θ = canonical-projection (𝑻 X) θ
 
  𝔉-canonical-projection : epi (𝑻 X) 𝔉
@@ -269,39 +272,39 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
  X↪𝔉 x = ⟦ ℊ x ⟧
 
 
- ψlem : (p q : ∣ 𝑻 X ∣ )
-  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
-       -----------------------------------------------
-  →                (p , q) ∈ ψ 𝒦
+ -- ψlem : (p q : ∣ 𝑻 X ∣ )
+ --  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
+ --       -----------------------------------------------
+ --  →                (p , q) ∈ ψ 𝒦
 
- ψlem p q gpgq 𝑨 sA = γ
-   where
-    g : hom (𝑻 X) 𝔉
-    g = lift-hom 𝔉 (X↪𝔉)
+ -- ψlem p q gpgq 𝑨 sA = γ
+ --   where
+ --    g : hom (𝑻 X) 𝔉
+ --    g = lift-hom 𝔉 (X↪𝔉)
 
-    h₀ : X → ∣ 𝑨 ∣
-    h₀ = fst (𝕏 𝑨)
+ --    h₀ : X → ∣ 𝑨 ∣
+ --    h₀ = fst (𝕏 𝑨)
 
-    f : hom 𝔉 𝑨
-    f = 𝔉-lift-hom 𝑨 h₀
+ --    f : hom 𝔉 𝑨
+ --    f = 𝔉-lift-hom 𝑨 h₀
 
-    h ϕ : hom (𝑻 X) 𝑨
-    h = HomComp (𝑻 X) 𝑨 g f
-    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+ --    h ϕ : hom (𝑻 X) 𝑨
+ --    h = HomComp (𝑻 X) 𝑨 g f
+ --    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
 
-     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
-    lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
-    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
-    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-    fgx≡ϕ x = (lift-agreement x)⁻¹
-    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-    h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+ --     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
+ --    lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+ --    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
+ --    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+ --    fgx≡ϕ x = (lift-agreement x)⁻¹
+ --    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+ --    h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
 
-    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-    γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
-               ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
-               ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
-               ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
+ --    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+ --    γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
+ --               ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
+ --               ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
+ --               ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
 
 \end{code}
 
@@ -325,7 +328,7 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
 
 \begin{code}
 
- 𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤))
+ 𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
         (𝑪 : Algebra 𝓤 𝑆) (sC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
         (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
        --------------------------------------------------
@@ -352,5 +355,3 @@ Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S 𝒦}.
 
 
 -->
-<!-- The free algebra in a variety, or *relatively free algebra* (relative to the variety), is the quotient of the term algebra modulo the congruence generated by the set of identities satisfied by all algebras in the variety.  -->
-

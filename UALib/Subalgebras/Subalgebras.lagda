@@ -5,11 +5,9 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="subalgebra-types">Subalgebra Types</a>
+### <a id="subalgebra-types">Subalgebras</a>
 
-This section presents the [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][].
-
-Here we define a subalgebra of an algebra as well as the collection of all subalgebras of a given class of algebras.
+The [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defins the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
 \begin{code}
 
@@ -18,81 +16,30 @@ Here we define a subalgebra of an algebra as well as the collection of all subal
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Subalgebras.Subalgebras
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
-
 open import UALib.Subalgebras.Homomorphisms {𝑆 = 𝑆}{gfe}{𝕏} public
 open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding)
 
+\end{code}
+
+---------------------------------
+
+#### <a id="subalgebra-type">Subalgebra type</a>
+
+Given algebras 𝑨 : Algebra 𝓦 𝑆 and 𝑩 : Algebra 𝓤 𝑆, we say that 𝑩 is a **subalgebra** of 𝑨, and we write 𝑩 IsSubalgebraOf 𝑨 just in case 𝑩 can be embedded in 𝑨; in other terms, there exists a map h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ from the universe of 𝑨 to the universe of 𝑩 such h is an embedding (i.e., is-embedding h holds) and h is a homomorphism from 𝑨 to 𝑩.
+
+\begin{code}
 
 _IsSubalgebraOf_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h 
+𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ (∣ 𝑩 ∣ → ∣ 𝑨 ∣) , is-embedding h × is-homomorphism 𝑩 𝑨 h
 
-SUBALGEBRA : {𝓤 𝓦 : Universe} → Algebra 𝓦 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-SUBALGEBRA {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+Subalgebra : {𝓤 𝓦 : Universe} → Algebra 𝓦 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+Subalgebra {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
-subalgebra : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-subalgebra {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
-
-Subalgebra : {𝓤 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-Subalgebra {𝓤} = SUBALGEBRA {𝓤}{𝓤}
-
-getSub : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓦 𝑆} → SUBALGEBRA{𝓤}{𝓦} 𝑨 → Algebra 𝓤 𝑆
-getSub SA = ∣ SA ∣
-\end{code}
-
-
--------------------------------------------
-
-#### <a id="example">Example</a>
-
-The equalizer of two homomorphisms is a subuniverse.
-
-\begin{code}
-𝑬𝑯-is-subuniverse : {𝓤 𝓦 : Universe} → funext 𝓥 𝓦 →
-                    {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
-                    (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
-
-𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑨}{𝑩} g h {𝑓} 𝒂 x
-\end{code}
-
-Observe that the type universe level 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ arises quite often throughout the ualib since it is the level of the type `Algebra 𝓤 𝑆` of an algebra in the signature 𝑆 and domain of type 𝓤 ̇.  Let us define, once and for all, a simple notation for this universe level.
-
-\begin{code}
-OV : Universe → Universe
-OV 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-\end{code}
-
-So, hereinafter, we typically write `OV 𝓤` in place of the more cumbersome 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺.
-
----------------------------------------
-
-#### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
-
-\begin{code}
-_IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
- →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇
-_IsSubalgebraOfClass_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (SUBALGEBRA{𝓤} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
-
-_is-subalgebra-of-class_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆)
- →                      Pred (Algebra 𝓤 𝑆) (OV 𝓤) → (OV (𝓤 ⊔ 𝓦)) ̇
-_is-subalgebra-of-class_ {𝓤}{𝓦} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (subalgebra{𝓤}{𝓦} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
-
-SUBALGEBRAOFCLASS : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
-SUBALGEBRAOFCLASS {𝓤} 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
-
-SubalgebraOfClass : {𝓤 𝓠 : Universe} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
-SubalgebraOfClass {𝓤}{𝓠} = SUBALGEBRAOFCLASS {𝓤}{𝓠}{𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺}
-
-getSubOfClass : {𝓤 𝓠 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓠 𝑆) 𝓦} → SUBALGEBRAOFCLASS 𝒦 → Algebra 𝓤 𝑆
-getSubOfClass SAC = ∣ SAC ∣
-
-SUBALGEBRAOFCLASS' : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
-SUBALGEBRAOFCLASS' {𝓤}{𝓠} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓠 𝑆) , (𝑨 ∈ 𝒦) × SUBALGEBRA{𝓤}{𝓠} 𝑨
 \end{code}
 
 ##### Syntactic sugar
@@ -106,9 +53,31 @@ _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 �
 
 -----------------------------------------------
 
-#### <a id="subalgebra-lemmata">Subalgebra lemmata</a>
+
+#### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
 \begin{code}
+
+_IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)
+ →                      Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓤 ⊔ 𝓠) ⁺ ̇
+_IsSubalgebraOfClass_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (Subalgebra{𝓤} 𝑨) , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ SA ∣)
+
+SUBALGEBRAOFCLASS : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
+SUBALGEBRAOFCLASS {𝓤} 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
+
+SubalgebraOfClass : {𝓤 𝓠 : Universe} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
+SubalgebraOfClass {𝓤}{𝓠} = SUBALGEBRAOFCLASS {𝓤}{𝓠}{𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺}
+
+\end{code}
+
+-----------------------------------------------
+
+#### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
+
+Here are a number of useful facts about subalgebras.  Many of them seem redundant, and they are to some extent.  However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments.  The aim is to make it as convenient as possible to apply the lemmas in different situations.  (We're in the UALib utility closet now, and elegance is not the priority.)
+
+\begin{code}
+
 --Transitivity of IsSubalgebra (explicit args)
 TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
  →         𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
@@ -177,6 +146,7 @@ TRANS-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = h , hemb , hhom
  where
   f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
   f = ∣ A≤B ∣
+
   g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣
   g = fst ∣ B≅C ∣
 
@@ -187,20 +157,20 @@ TRANS-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = h , hemb , hhom
   hemb = ∘-embedding (iso→embedding B≅C)(fst ∥ A≤B ∥)
 
   hhom : is-homomorphism 𝑨 𝑪 h
-  hhom = ∘-hom 𝑨 𝑩 𝑪 {f}{g} (snd ∥ A≤B ∥) (snd ∣ B≅C ∣) -- ISO-≤ 𝑨 𝑩 𝑪 A≤B B≅C
+  hhom = ∘-hom 𝑨 𝑩 𝑪 {f}{g} (snd ∥ A≤B ∥) (snd ∣ B≅C ∣)
 
 mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
-lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} {𝑩 : Algebra 𝓤 𝑆}
- →           𝑩 IsSubalgebraOfClass 𝒦
- →           (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}{𝑩 : Algebra 𝓤 𝑆}
+ →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 lift-alg-is-sub {𝓤}{𝒦}{𝑩} (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
 lift-alg-lift-≤-lower : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
-lift-alg-lift-≤-lower {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
+              →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+lift-alg-lift-≤-lower {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A =
+ iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
 
 lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
  →                𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
@@ -232,7 +202,7 @@ lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
 
 lift-alg-sub-lift : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
  →                𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
-lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
+lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = h , hemb , hhom
  where
   lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 𝓦
@@ -255,24 +225,21 @@ lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = γ
   hhom : is-homomorphism 𝑪 lA h
   hhom = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
 
-  γ : 𝑪 IsSubalgebraOf lift-alg 𝑨 𝓦
-  γ = h , hemb , hhom
 
-lift-alg-≤ lift-alg-lift-≤-lift : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →         𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+lift-alg-≤ : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+ →           𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+
 lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
- transitivity-≤ lA {𝑩}{lB} (transitivity-≤ lA {𝑨}{𝑩} lA≤A A≤B) B≤lB
- where
-  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-  lA = (lift-alg 𝑨 𝓩)
-  lB : Algebra (𝓨 ⊔ 𝓦) 𝑆
-  lB = (lift-alg 𝑩 𝓦)
-  lA≤A :  lA ≤ 𝑨
-  lA≤A = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
-  B≤lB : 𝑩 ≤ lB
-  B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+ transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
+  where
+   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+   lA = lift-alg 𝑨 𝓩
 
-lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
+   lAA : lA ≤ 𝑨
+   lAA = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
+
+   B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
+   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
 
 \end{code}
 
@@ -282,3 +249,4 @@ lift-alg-lift-≤-lift = lift-alg-≤ -- (alias)
 <span style="float:right;">[UALib.Subalgebras.WWMD →](UALib.Subalgebras.WWMD.html)</span>
 
 {% include UALib.Links.md %}
+

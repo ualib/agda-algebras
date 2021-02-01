@@ -133,7 +133,7 @@ Finally, our own research experience has taught us that a proof assistant and pr
 Apart from the library itself, we describes the formal implementation and proof of a deep result, Garrett Birkhoff's celebrated HSP theorem~\cite{Birkhoff:1935}, which was among the first major results of universal algebra.  The theorem states that a \defn{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class (defined by the set of identities satisfied by all its members).  %% More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of algebras satisfying a certain set of equations.
 The fact that we now have a formal proof of this is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because the proof is constructive. As the paper~\cite{Carlstrom:2008} of Carlstr\"om makes clear, it is a highly nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's and show that it can be formalized using only constructive logic and natural deduction, without appealing to, say, the Law of the Excluded Middle or the Axiom of Choice.
 
-Each of the sections that follow describes the most important or noteworthy components of the \ualib. We cover just enough to keep the paper self-contained.  Of course, space does not permit us to cover every definition and theorem required to present a complete formal proof of a theorem like Birkhoff's.  We remedy this in two ways. First, throughout the paper we include pointers to places in the documentation where the omitted material can be found.  Second, we include an appendix containing \agda background, discussion of the foundational assumptions of the \ualib, and definitions of the types of dependent type theory and how they are represented in \agda and the \ualib.  We hope this appendix is especially useful to readers who are not already proficient users of \agda.
+Each of the sections that follow describes the most important or noteworthy components of the \ualib. We cover just enough to keep the paper somewhat self-contained.  Of course, space does not permit us to cover every definition and theorem required to present a complete formal proof of a theorem like Birkhoff's.  We remedy this in two ways. First, throughout the paper we include pointers to places in the documentation where the omitted material can be found.  Second, we include an appendix containing \agda background, discussion of the foundational assumptions of the \ualib, and definitions of some important types of dependent type theory and how they are represented in \agda and in the \ualib.  We hope this appendix is especially useful to readers who are not already proficient users of \agda.
 
 
 
@@ -157,118 +157,10 @@ Finally, the official sources of information about the \agdaualib are
 
 
 
-%% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preliminaries}\label{sec:preliminaries}
-We begin by highlighting some of the key parts of \ualibPreliminaries of the \agdaualib. This module imports everything we need from Martin Escardo's \typetopology library~\cite{MHE}, defines some other basic types and proves some of their properties.  We do not cover the entire Preliminaries module here, but call attention to aspects that differ from standard Agda syntax. For more details, see~\cite[\S2]{DeMeo:2021}.
-
-\subsection{Options and imports}\label{ssec:options-and-imports}
-Agda programs typically begin by setting some options and by importing from existing libraries.
-Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness.  
-All Agda programs in the \ualib begin with the pragma
-\ccpad
-\begin{code}[number=code:options]
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\end{code}
-\ccpad
-This has the following effects:
-\begin{enumerate}
-\item
-  \texttt{without-K} disables \axiomk; see~\cite{agdaref-axiomk};
-\item
-  \texttt{exact-split} makes Agda accept only definitions that are \emph{judgmental} or \emph{definitional} equalities. As \escardo explains, this ``makes sure that pattern matching corresponds to Martin-Löf eliminators;'' for more details see~\cite{agdatools-patternmatching};
-\item
-  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
-\end{enumerate}
-Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
 
 
-The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇. Table~\ref{tab:dictionary} of the appendix translates between standard \agda syntax and \typetopology/\ualib notation.
-
-
-\subsection{Truncation and sets}\label{ssec:truncation-and-sets}
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard correspondence) many proofs of a given proposition. For instance, suppose we have a type \ab X and an identity relation \AgdaOperator{\AgdaDatatype{≡ₓ}} on \ab X so that, given two inhabitants of \ab X, say, \ab a\AgdaSpace{}\ab b \as : \ab X, we can form the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Suppose \ab p and \ab q inhabit the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b; that is, \ab p and \ab q are proofs of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, in which case we write \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Then we might wonder whether and in what sense are the two proofs \ab p and \ab q the ``same.'' We are asking about an identity type on the identity type \AgdaOperator{\AgdaDatatype{≡ₓ}}, and whether there is some inhabitant \ab r of this type; i.e., whether there is a proof \ab r : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q.  If such a proof exists for all \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, then we say that the proof of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b is \emph{unique}. As a property of the types \ab X and \aod{≡ₓ}, this is sometimes called \emph{uniqueness of identity proofs}.
-
-Perhaps we have two proofs, say, \ab r \ab s : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q. Then it is natural to wonder whether \ab r \AgdaOperator{\AgdaDatatype{≡ₓ₂}} \ab s has a proof!  However, we may decide that at some level the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) is not useful or interesting. At that point, say, at level \ab k, we might assume that there is at most one proof of any identity of the form \ab p  \AgdaOperator{\AgdaDatatype{≡ₓₖ}} \ab q. This is called \emph{truncation}.
-
-In \emph{homotopy type theory}~\cite{HoTT:2013}, a type \ab X with an identity relation \AgdaDatatype{≡ₓ} is called a \defn{set} (or \defn{0-groupoid} or \defn{h-set}) if for every pair \ab a \ab b \as : \ab X of elements of type \ab X there is at most one proof of \ab a \AgdaDatatype{≡ₓ} \ab b. This notion is formalized in the \TypeTopology library as follows:
-\ccpad
-\begin{code}[number=code:is-set]
-\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-set}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-where
-\ccpad
-\begin{code}[number=code:is-subsingleton]
-\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\end{code}
-\ccpad
-We will see some examples of truncation later, but readers may wish to consult~\cite[\S34-35]{MHE} or~\cite[\S7.1]{HoTT:2013} for more details.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algebras}\label{sec:types-for-algebras}
 
 \newcommand\signatOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
@@ -479,11 +371,6 @@ We could pause here to define the type of ``0-algebras,'' which are algebras who
 
 
 
-
-
-
-
-
 %% \subsection{Operation interpretation, variable symbols}\label{ssec:operation-interpretation-syntax}
 Next we define a convenient shorthand for the interpretation of an operation symbol. We use this often in the sequel.
 \ccpad
@@ -587,7 +474,7 @@ We assume that we always have at our disposal an arbitrary collection \ab X of v
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \subsection{Product algebra type}\label{ssec:product-algebra-type}
 %% This section describes some parts of the \ualibAlgProducts module of the \agdaualib.
 Finally, we define the type of \defn{product algebras} the obvious way.
@@ -673,89 +560,6 @@ Finally, we define the type of \defn{product algebras} the obvious way.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-\subsection{The lift of an algebra}\label{ssec:the-lift-of-an-algebra}
-%% This section describes parts of the \ualibLifts module of the \agdaualib.
-The hierarchy of universe levels in Agda is \emph{noncumulative} (\S\ref{ssec:agdas-universe-hierarchy}) and this can make certain proof verification (i.e., type-checking) tasks seem unnecessarily difficult. Luckily there are ways to circumvent noncumulativity without introducing logical inconsistencies into the type theory. We present here some domain specific tools that we developed for this purpose. (See~\cite[\S3.3]{DeMeo:2021} for more details).
-
-A general \af{Lift} record type, similar to the one found in the \af{Level} module of the \agdastdlib, is
-defined as follows.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}%
-\>[50]\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaKeyword{constructor}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\<%
-\\
-%
-\>[1]\AgdaKeyword{field}\AgdaSpace{}%
-\AgdaField{lower}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Lift}\<%
-\end{code}
-\ccpad
-It is useful to know that \AgdaInductiveConstructor{lift} and \AgdaField{lower} compose to the identity.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{lower}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
-\AgdaBound{X}\<%
-\\
-\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\end{code}
-\ccpad
-Similarly, \AgdaInductiveConstructor{lift}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}\AgdaField{lower}\AgdaSpace{}\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}.
-More domain-specifically, here is how we lift types of operations and algebras.
-\ccpad
-\begin{code}%
-  \input{aux/Lifts.tex}
-\end{code}
 
 
 
@@ -967,67 +771,7 @@ We then have the following introduction and elimination rules for a class with a
 We will need a subsingleton identity type for congruence classes over sets so that we can equate two classes, even when they are presented using different representatives. For this we assume that our relations are on sets, rather than arbitrary types. As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.  The following \emph{class extensionality principle} accomplishes this for us.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[200I]\AgdaFunction{propext}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[200I]%
-\>[14]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSymbol{\}}\<%
-\\
-\>[2]\AgdaSymbol{→}%
-\>[14]\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-\>[2]\AgdaSymbol{→}%
-\>[14]\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{))}\<%
-\\
-\>[2]\AgdaSymbol{→}%
-\>[14]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\\
-\>[14]\AgdaComment{---------------------------------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[14]\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\})}\<%
+\input{aux/class-extensionality.tex}
 \end{code}
 \ccpad
 We omit the proof. \seedocfordetails
@@ -1194,6 +938,186 @@ An important construction in universal algebra is the quotient of an algebra \ab
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Subalgebras, homomorphisms, and terms %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Homomorphisms, terms, and subalgebras}\label{sec:homom-terms-subalg}
+
+\subsection{Homomorphisms}\label{ssec:homomorphisms}
+%% This section describes parts of the \ualibHomBasic module of the \agdaualib.
+
+The definition of homomorphism we use is a standard, \emph{extensional} one; that is, the homomorphism condition holds pointwise. This will become clearer once we have the formal definitions in hand. Generally speaking, though, we say that two functions \ab 𝑓 \ab 𝑔 \as : \ab X \as → \ab Y are extensionally equal iff they are pointwise equal, that is, for all \ab x \as : \ab X we have \ab 𝑓 \ab x \af ≡ \ab 𝑔 \ab x.
+
+To define \emph{homomorphism}, we first say what it means for an operation \ab 𝑓, interpreted in the algebras \ab 𝑨 and \ab 𝑩, to commute with a function \ab 𝑔 \as : \ab A \as → \ab B.
+\ccpad
+\begin{code}
+\input{aux/hom1.tex}
+\end{code}
+\ccpad
+Note the appearance of the shorthand \as ∀ \ab 𝒂 in the definition of \af{compatible-op-map}. We can get away with this in place of \ab 𝒂 \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ since Agda is able to infer that the \ab 𝒂 here must be a tuple on \af ∣ \ab 𝑨 \af ∣ of ``length'' \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 (the arity of \ab 𝑓).
+
+Next we will define the type \af{hom} \ab 𝑨 \ab 𝑩 of \emph{homomorphisms} from \ab 𝑨 to \ab 𝑩 in terms of the property \af{is-homomorphism}.
+\ccpad
+\begin{code}%
+\input{aux/hom2.tex}
+\end{code}
+\ccpad
+
+We define an inductive datatype called \ad{Term} which, not surprisingly, represents the type of \defn{terms} in a given signature. Here the type \ab X \as :~\ab 𝓧 \af ̇ represents an arbitrary collection of variable symbols.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}%
+\>[51]\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
+\\
+%
+\>[2]\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{args}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\<%
+\end{code}
+
+
+
+
+
+
+
+\subsection{Terms}\label{ssec:terms}
+Terms can be viewed as acting on other terms and we can form an algebraic structure whose domain and basic operations are both the collection of term operations. We call this the \defn{term algebra} and denote it by \af 𝑻 \ab X.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+\>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{node}\<%
+\end{code}
+
+
+%% \subsection{The universal property}\label{ssec:the-universal-property}
+The term algebra is \defn{absolutely free}, or \defn{universal}, for algebras in the signature 𝑆. That is, for every 𝑆-algebra 𝑨, every map \ab h \as :~\ab 𝑋 \as → \af ∣ \ab 𝑨 \af ∣ lifts to a homomorphism from \af 𝑻 \ab X to \ab 𝑨, and the induced homomorphism is unique. This is proved by induction on the structure of terms, as follows.
+\ccpad
+\begin{code}%
+\input{aux/universal.tex}
+\end{code}
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Subalgebras}\label{ssec:subalgebras}
+Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~\af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨, and (in the \ualib) we write \af 𝑩 \af{IsSubalgebraOf} \ab 𝑨 just in case \ab 𝑩 can be embedded in \ab 𝑨; in other terms, there exists a map \ab h~\as :~\af ∣ \ab 𝑨 \af ∣ → \af ∣ 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩 such \ab h is an embedding (i.e., \af{is-embedding} \ab h holds) and \ab h is a homomorphism from \ab 𝑨 to \ab 𝑩.
+\ccpad
+\begin{code}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOf\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{IsSubalgebraOf}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{is-embedding}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaFunction{is-homomorphism}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h}\<
+\end{code}
+
+
+
 
 
 
@@ -1300,8 +1224,9 @@ Fix a signature \ab 𝑆, let \ab 𝒦 be a class of \ab 𝑆-algebras, and defi
 A straight-forward verification confirms that \af H, \af S, and \af P are \defn{closure operators} (expansive, monotone, and idempotent). A class \ab 𝒦 of \ab 𝑆-algebras is said to be \defn{closed under the taking of homomorphic images} provided \af H \ab 𝒦 \aof ⊆ \ab 𝒦. Similarly, \ab 𝒦 is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab 𝒦 \aof ⊆ \ab 𝒦 (resp., \af P \ab 𝒦 \aof ⊆ \ab 𝒦). An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab 𝒦 (resp., \af S \ab 𝒦; resp., \af P \ab 𝒦) is closed under isomorphism. The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators. A \defn{variety} is a class \ab 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (\af H), subalgebras (\af S), and arbitrary products (\af P). That is, \ab 𝒦 is a variety if and only if
 \af H \af S \af P \ab 𝒦 \aof ⊆ \ab 𝒦.
 
-We now introduce three new inductive types that represent the closure operators \af H, \af S, \af P. Separately, we define an inductive type \af V for simultaneously representing closure under \af H, \af S, and \af P. The definitions have been fine-tuned to strike a balance between faithfully representing the desired semantics and facilitating proof by induction.\\[5pt]
-\textbf{Notation}. Recall, if \ab 𝓤\AgdaSpace{}\as{:}~\af{Universe} and \ab 𝑆\AgdaSpace{}\as{:}~\af{Signature} \ab 𝓞 \ab 𝓥, then \af{Algebra} \ab 𝓤 \ab 𝑆 denotes the type of algebras with domains of type \ab 𝓤 \af ̇.  Of course, the type \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇.  The level of this type is frequently abbreviated in the sequel as follows: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 := \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺.
+We now introduce three new inductive types that represent the closure operators \af H, \af S, \af P. Separately, we define an inductive type \af V for simultaneously representing closure under \af H, \af S, and \af P. The definitions have been fine-tuned to strike a balance between faithfully representing the desired semantics and facilitating proof by induction.
+%% \\[5pt]
+%% \textbf{Notation}. Recall, if \ab 𝓤\AgdaSpace{}\as{:}~\af{Universe} and \ab 𝑆\AgdaSpace{}\as{:}~\af{Signature} \ab 𝓞 \ab 𝓥, then \af{Algebra} \ab 𝓤 \ab 𝑆 denotes the type of algebras with domains of type \ab 𝓤 \af ̇.  Of course, the type \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇.  The level of this type is frequently abbreviated in the sequel as follows: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 := \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺.
 
 We now define the inductive type \af H that we have found most useful for representing the fact that a class of algebras is closed under the taking of homomorphic images.
 \ccpad
@@ -1333,7 +1258,7 @@ Thus, if \ab 𝒦 is a class of \ab 𝑆-algebras, then the \defn{variety genera
 
 
 
-\subsection{Class products and inclusions}\label{ssec:class-products-and-inclusions}
+\subsection{Class products, PS ⊆ SP and ⨅ S ∈ SP}\label{ssec:class-products-and-inclusions}
 There are two main results we need to establish about the closure operators defined in the last section.  The first is the inclusion \ad P\ad S(\ab 𝒦) ⊆ \ad S\ad P(\ab 𝒦). The second requires that we construct the product of all subalgebras of algebras in an arbitrary class, and then show that this product belongs to \ad S\ad P(\ab 𝒦).  These are both nontrivial formalization tasks with rather lengthy proofs, which we omit.  However, the interested reader can view the complete proofs on the web page \href{https://ualib.gitlab.io/UALib.Varieties.Varieties.html}{ualib.gitlab.io/UALib.Varieties.Varieties.html} or by looking at the source code of the \ualibVarieties module at \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda}{gitlab.com/ualib}.
 
 Here is the formal statement of the first goal, along with the first few lines of proof.\footnote{For legibility we use \AgdaFunction{ov𝓾} as a shorthand for
@@ -1349,7 +1274,7 @@ Evidently, the proof is by induction on the form of an inhabitant of \ad P\ad S(
 
 More interesting, perhaps, is the second goal which is to formally implement the product of all subalgebras of algebras in a given class and then to show that this product belongs to \ad S\ad P(\ab 𝒦). We take that up in the next subsection.
 
-\subsubsection{The product of a class of algebras}\label{sssec:the-product-of-a-class-of-algebras}
+%% \subsubsection{The product of a class of algebras}\label{sssec:the-product-of-a-class-of-algebras}
 Here we formally state and prove that, given an arbitrary class \ab 𝒦 of algebras, the product of all algebras in the class \ad S(\ab 𝒦) belongs to \ad S\ad P(\ab 𝒦). This a nontrivial exercise. In fact, it is not even immediately obvious (at least not to this author) how one should express the product of an entire arbitrary class of algebras as a dependent type. However, after a number of failed attempts, the right type revealed itself. Now that we have it, it seems almost obvious.
 \ccpad
 \begin{code}%

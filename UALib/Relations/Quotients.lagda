@@ -152,13 +152,11 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
- class-extensionality' : propext 𝓡 → global-dfunext
-  →       {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
-  →       (∀ a x → is-subsingleton (R a x))
-  →       (∀ C → is-subsingleton (𝒞 C))
-  →       IsEquivalence R
-         ---------------------------------------
-  →        R a a' → (⟦ a ⟧ {R}) ≡ (⟦ a' ⟧ {R})
+ class-extensionality' : propext 𝓡 → global-dfunext → {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡}
+  →                      (∀ a x → is-subsingleton (R a x)) → (∀ C → is-subsingleton (𝒞 C))
+  →                      IsEquivalence R
+                         -----------------------------------
+  →                      R a a' → (⟦ a ⟧ {R}) ≡ (⟦ a' ⟧ {R})
 
  class-extensionality' pe gfe {A = A}{a}{a'}{R} ssR ssA Req Raa' = γ
   where

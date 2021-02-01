@@ -37,10 +37,8 @@ The image of a homomorphism is a subuniverse of its codomain.
 
 \begin{code}
 
-hom-image-is-sub : {𝓤 𝓦 : Universe} → global-dfunext
- →                 {𝑨 : Algebra 𝓤 𝑆} {𝑩 : Algebra 𝓦 𝑆} (ϕ : hom 𝑨 𝑩)
-                  -------------------------------------------------
- →                 (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
+hom-image-is-sub : {𝓤 𝓦 : Universe} → global-dfunext → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+                   (ϕ : hom 𝑨 𝑩)  →  (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
 
 hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
  where
@@ -51,10 +49,10 @@ hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ �
   ζ = gfe (λ x → InvIsInv ∣ ϕ ∣(b x)(b∈Imf x))
 
   γ : (f ̂ 𝑩) b ≡ ∣ ϕ ∣((f ̂ 𝑨)(λ x → Inv ∣ ϕ ∣(b x)(b∈Imf x)))
-
-  γ = (f ̂ 𝑩) b          ≡⟨ ap (f ̂ 𝑩)(ζ ⁻¹) ⟩
+  γ = (f ̂ 𝑩) b            ≡⟨ ap (f ̂ 𝑩)(ζ ⁻¹) ⟩
       (f ̂ 𝑩)(∣ ϕ ∣ ∘ ar)  ≡⟨(∥ ϕ ∥ f ar)⁻¹ ⟩
-      ∣ ϕ ∣((f ̂ 𝑨) ar)   ∎
+      ∣ ϕ ∣((f ̂ 𝑨) ar)    ∎
+
 \end{code}
 
 -------------------------------------
@@ -68,12 +66,12 @@ Here we formalize the proof that homomorphisms are uniquely determined by their 
 HomUnique : {𝓤 𝓦 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
-            ---------------------------------------------
+            --------------------------------------------
  →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
 HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
 
-HomUnique {𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 {𝒂} im𝒂⊆SgX) =
+HomUnique {𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 𝒂 im𝒂⊆SgX) =
   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩

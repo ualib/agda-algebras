@@ -56,8 +56,8 @@ We define the inductive type `H` to represent classes of algebras that include a
 \begin{code}
 
 --Closure wrt H
-data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) where
+data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
+ Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
   hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
   hhimg : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
@@ -76,8 +76,8 @@ The most useful inductive type that we have found for representing classes of al
 \begin{code}
 
 --Closure wrt S
-data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
+data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)) :
+ Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (ov(𝓤 ⊔ 𝓦)) where
   sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
   slift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
   ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
@@ -96,8 +96,7 @@ The most useful inductive type that we have found for representing classes of al
 
 \begin{code}
 
-data P {𝓤 𝓦 : Universe} (𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (OV (𝓤 ⊔ 𝓦)) where
+data P {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
   pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
   pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
   pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
@@ -122,8 +121,8 @@ We now define `V` as an inductive type.
 
 \begin{code}
 
-data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(OV (𝓤 ⊔ 𝓦)) where
+data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
+ Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
   vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
   vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
   vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
@@ -146,14 +145,12 @@ The types defined above represent operators with useful closure properties. We n
 \begin{code}
 
 -- P is a closure operator; in particular, it's expansive.
-P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →       𝒦 ⊆ P{𝓤}{𝓤} 𝒦
-
+P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ P{𝓤}{𝓤} 𝒦
 P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
 
 -- P is a closure operator; in particular, it's idempotent.
-P-idemp : {𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →         P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+P-idemp : {𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+ →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
 
 P-idemp (pbase x) = pliftw x
 P-idemp {𝓤}{𝓦} (pliftu x) = pliftw (P-idemp{𝓤}{𝓦} x)
@@ -164,7 +161,7 @@ P-idemp {𝓤}{𝓦} (pisou x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
 P-idemp {𝓤}{𝓦} (pisow x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
 
 -- S is a closure operator; in particular, it's monotone.
-S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →       𝒦 ⊆ 𝒦'  →  S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
 S-mono ante (sbase x) = sbase (ante x)
 S-mono {𝓤}{𝓦}{𝒦}{𝒦'} ante (slift{𝑨} x) = slift{𝓤}{𝓦}{𝒦'} (S-mono{𝓤}{𝓤} ante x)
@@ -178,10 +175,10 @@ We sometimes want to go back and forth between our two representations of subalg
 
 \begin{code}
 
-subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
                {𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 IsSubalgebraOfClass 𝒦
-             ----------------------------------------------------------
- →                  𝑪 ∈ S{𝓤}{𝓦} 𝒦
+               ---------------------------------------------------
+ →                           𝑪 ∈ S{𝓤}{𝓦} 𝒦
 
 subalgebra→S {𝓤}{𝓦}{𝒦}{𝑪} (𝑨 , ((𝑩 , B≤A) , KA , C≅B)) = ssub sA C≤A
  where
@@ -195,7 +192,7 @@ subalgebra→S {𝓤}{𝓦}{𝒦}{𝑪} (𝑨 , ((𝑩 , B≤A) , KA , C≅B)) =
   sA = siso slAu (sym-≅ lift-alg-≅)
 
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  S→subalgebra : {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
  S→subalgebra (sbase{𝑩} x) = 𝑩 , (𝑩 , refl-≤) , x , (sym-≅ lift-alg-≅)
@@ -204,7 +201,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
    BS : 𝑩 IsSubalgebraOfClass 𝒦
    BS = S→subalgebra x
 
-   SA : SUBALGEBRA ∣ BS ∣
+   SA : Subalgebra ∣ BS ∣
    SA = fst ∥ BS ∥
 
    KA : ∣ BS ∣ ∈ 𝒦
@@ -217,7 +214,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
   where
    AS : 𝑨 IsSubalgebraOfClass 𝒦
    AS = S→subalgebra sA
-   SA : SUBALGEBRA ∣ AS ∣
+   SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    B≤SA : 𝑩 ≤ ∣ SA ∣
    B≤SA = TRANS-≤-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
@@ -230,7 +227,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
   where
    AS : 𝑨 IsSubalgebraOfClass 𝒦
    AS = S→subalgebra sA
-   SA : SUBALGEBRA ∣ AS ∣
+   SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    B≤SA : 𝑩 ≤ ∣ SA ∣
    B≤SA = TRANS-≤-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
@@ -243,7 +240,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
   where
    AS : 𝑨 IsSubalgebraOfClass 𝒦
    AS = S→subalgebra sA
-   SA : SUBALGEBRA ∣ AS ∣
+   SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    A≅SA : 𝑨 ≅ ∣ SA ∣
    A≅SA = snd ∥ snd AS ∥
@@ -256,7 +253,7 @@ Next we observe that lifting to a higher universe does not break the property of
 
 \begin{code}
 
-lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
+lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
 
  →                𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
             ---------------------------------------------------
@@ -270,7 +267,7 @@ lift-alg-subP {𝓤} {𝓦} {𝒦} {𝑩} (𝑨 , (𝑪 , C≤A) , pA , B≅C ) 
   lC = lift-alg 𝑪 𝓦
 
   lC≤lA : lC ≤ lA
-  lC≤lA = lift-alg-lift-≤-lift 𝑪 {𝑨} C≤A
+  lC≤lA = lift-alg-≤ 𝑪 {𝑨} C≤A
   plA : lA ∈ P{𝓤}{𝓦} 𝒦
   plA = pliftu pA
 
@@ -283,7 +280,7 @@ The next lemma would be too obvoius to care about were it not for the fact that 
 
 \begin{code}
 
-S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
 
 S⊆SP {𝓤} {𝓦} {𝒦} {.(lift-alg 𝑨 𝓦)} (sbase{𝑨} x) =
@@ -355,7 +352,7 @@ We need to formalize one more lemma before arriving the short term objective of 
 
 \begin{code}
 
-lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{hfe : hfunext 𝓦 𝓤}
+lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{hfe : hfunext 𝓦 𝓤}
  →         {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
  →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
            -------------------------------------
@@ -408,16 +405,16 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfunext (ov 𝓤)(ov 𝓤)} where
 
  ov𝓾 : Universe
- ov𝓾 = OV 𝓤
+ ov𝓾 = ov 𝓤
 
  PS⊆SP : (P{ov𝓾}{ov𝓾} (S{𝓤}{ov𝓾} 𝒦)) ⊆ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
  PS⊆SP (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift x))
  PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) =
-  siso (ssub{𝓤 = ov𝓾} (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift sA)) (lift-alg-lift-≤-lift 𝑩{𝑨} B≤A)) refl-≅
+  siso (ssub{𝓤 = ov𝓾} (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
  PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub{𝓤 = ov𝓾}(slift{ov𝓾}{ov𝓾}(S⊆SP sA))(lift-alg-≤ 𝑩{𝑨} B≤A)
  PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B)
  PS⊆SP (pliftu x) = slift (PS⊆SP x)
@@ -462,8 +459,7 @@ We conclude this module with three more inclusion relations that will have bit p
 
 \begin{code}
 
-P⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →    P{𝓤}{𝓦} 𝒦 ⊆ V{𝓤}{𝓦} 𝒦
+P⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → P{𝓤}{𝓦} 𝒦 ⊆ V{𝓤}{𝓦} 𝒦
 P⊆V (pbase x) = vbase x
 P⊆V{𝓤} (pliftu x) = vlift (P⊆V{𝓤}{𝓤} x)
 P⊆V{𝓤}{𝓦} (pliftw x) = vliftw (P⊆V{𝓤}{𝓦} x)
@@ -472,7 +468,7 @@ P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
 P⊆V (pisou x x₁) = visou (P⊆V x) x₁
 P⊆V (pisow x x₁) = visow (P⊆V x) x₁
 
-SP⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+SP⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →    S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦) ⊆ V{𝓤}{𝓦} 𝒦
 SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA lift-alg-≅)
 SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
@@ -491,22 +487,22 @@ We now describe the this type of product of all algebras in an arbitrary class �
 
 \begin{code}
 
-module class-product {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
+module class-product {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  -- ℑ serves as an index for the class
- ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(OV 𝓤) → (OV 𝓤) ̇
+ ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (ov 𝓤) ̇
  ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
 
   -- 𝔄 produces an algebra for each index (i : ℑ).
- 𝔄 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} → ℑ 𝒦 → Algebra 𝓤 𝑆
+ 𝔄 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → ℑ 𝒦 → Algebra 𝓤 𝑆
  𝔄{𝓤}{𝒦} = λ (i : (ℑ 𝒦)) → ∣ i ∣
 
  -- The product of all members of 𝒦 can be written simply as follows:
- class-product : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
+ class-product : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
  class-product {𝓤} 𝒦 = ⨅ ( 𝔄{𝓤}{𝒦} )
 
  -- ...or, more explicitly, here is the expansion of this indexed product.
- class-product' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(OV 𝓤) → Algebra (OV 𝓤) 𝑆
+ class-product' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
  class-product'{𝓤} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣
 
 \end{code}
@@ -519,10 +515,10 @@ Finally, we prove the result that plays a leading role in the formal proof of Bi
 \begin{code}
 
 -- The product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
-module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
+module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
  𝓸𝓿𝓾 : Universe
- 𝓸𝓿𝓾 = OV 𝓤
+ 𝓸𝓿𝓾 = ov 𝓤
 
  class-prod-s-∈-ps : class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{𝓸𝓿𝓾}{𝓸𝓿𝓾} (S{𝓤}{𝓸𝓿𝓾} 𝒦))
  class-prod-s-∈-ps = pisou{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psPllA (⨅≅ gfe llA≅A)

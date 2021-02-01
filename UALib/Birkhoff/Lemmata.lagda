@@ -41,13 +41,13 @@ We begin the proof of Birkhoff's HSP theorem by establishing a number of facts t
 open the-free-algebra {𝓤}{𝓤}{X}
 
 module HSPLemmata
- {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
+ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
     -- extensionality assumptions:
-    {hfe : hfunext (OV 𝓤)(OV 𝓤)}
-    {pe : propext (OV 𝓤)}
+    {hfe : hfunext (ov 𝓤)(ov 𝓤)}
+    {pe : propext (ov 𝓤)}
     -- truncation assumptions:
     {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
-    {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
+    {ssA : ∀ C → is-subsingleton (𝒞{ov 𝓤}{ov 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
  where
 
  -- NOTATION.
@@ -241,7 +241,7 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  𝔭ϕ𝔠≡𝔓 i p = 𝓇ℯ𝒻𝓁
 
  -- The class of subalgebras of products of 𝒦.
- SP𝒦 : Pred (Algebra (ovu) 𝑆) (OV (ovu))
+ SP𝒦 : Pred (Algebra (ovu) 𝑆) (ov (ovu))
  SP𝒦 = S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
  --
  --                             𝔄1
@@ -260,7 +260,7 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
 Armed with these tools, we proceed to the proof that the free algebra 𝔉 is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦.  The hard part of the proof is showing that `𝔣 : hom 𝔉 ℭ` is a monomorphism. Let's dispense with that first.
 
 \begin{code}
- Ψ : Rel ∣ 𝑻 X ∣ (OV 𝓤)
+ Ψ : Rel ∣ 𝑻 X ∣ (ov 𝓤)
  Ψ = ψRel 𝒦
 
  mon𝔣 : Monic ∣ 𝔣 ∣
@@ -279,45 +279,25 @@ Armed with these tools, we proceed to the proof that the free algebra 𝔉 is a 
           ∣ 𝔭hom (𝑨 , sA) ∣ ( ∣ 𝔣 ∣ ⟦ q ⟧ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
           ∣ 𝔭A ∣ ⟦ q ⟧                     ∎
 
-     h₀ : X → ∣ 𝑨 ∣
-     h₀ =  (𝔭 (𝑨 , sA)) ∘ 𝔥₀
-
      h ϕ : hom (𝑻 X) 𝑨
      h = HomComp (𝑻 X) 𝑨 𝔤 𝔭A
-
-     ϕ = lift-hom 𝑨 h₀
-
-     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
-     lift-agreement : (x : X) → h₀ x ≡ ∣ 𝔭A ∣ ⟦ ℊ x ⟧
-     lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
+     ϕ = lift-hom 𝑨 ((𝔭 (𝑨 , sA)) ∘ 𝔥₀)
 
      𝔣gx≡ϕ : (x : X) → (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-     𝔣gx≡ϕ x = (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) (ℊ x)         ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-                ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ (ℊ x) )       ≡⟨ ap ∣ 𝔭A ∣ (𝔤-⟦⟧ (ℊ x)) ⟩
-                ∣ 𝔭A ∣ (⟦ ℊ x ⟧)            ≡⟨ (lift-agreement x)⁻¹ ⟩
-                 h₀ x                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-                ∣ ϕ ∣ (ℊ x) ∎
+     𝔣gx≡ϕ x = ∣ 𝔭A ∣ (∣ 𝔤 ∣ (ℊ x)) ≡⟨ ap ∣ 𝔭A ∣ (𝔤-⟦⟧ (ℊ x)) ⟩
+               ∣ 𝔭A ∣ (⟦ ℊ x ⟧)   ≡⟨(𝔉-lift-agrees-on-X 𝑨 ((𝔭 (𝑨 , sA)) ∘ 𝔥₀) x)⁻¹ ⟩
+               ∣ ϕ ∣ (ℊ x)        ∎
 
      h≡ϕ' : ∀ t → (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) t ≡ ∣ ϕ ∣ t
      h≡ϕ' t = free-unique gfe 𝑨 h ϕ 𝔣gx≡ϕ t
 
-     SPu : Pred (Algebra 𝓤 𝑆) (OV 𝓤)
-     SPu = S{𝓤}{𝓤} (P{𝓤}{𝓤} 𝒦)
-     i : ℑs
-     i = (𝑨 , sA)
-     𝔄i : Algebra 𝓤 𝑆
-     𝔄i = 𝔄s i
-     sp𝔄i : 𝔄i ∈ SPu
-     sp𝔄i = S⊆SP{𝓤}{𝓤} sA
-
      γ' : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-     γ' = ∣ ϕ ∣ p              ≡⟨ (h≡ϕ' p)⁻¹ ⟩
-          (∣ 𝔭A ∣ ∘ ∣ 𝔤 ∣) p   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-          ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ p )   ≡⟨ ap ∣ 𝔭A ∣ (𝔤-⟦⟧ p) ⟩
-          ∣ 𝔭A ∣ ⟦ p ⟧         ≡⟨ 𝔣pq ⟩
-          ∣ 𝔭A ∣ ⟦ q ⟧         ≡⟨ (ap ∣ 𝔭A ∣ (𝔤-⟦⟧ q))⁻¹ ⟩
-          ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ q )   ≡⟨ h≡ϕ' q ⟩
-          ∣ ϕ ∣ q              ∎
+     γ' = ∣ ϕ ∣ p            ≡⟨ (h≡ϕ' p)⁻¹ ⟩
+          ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ p ) ≡⟨ ap ∣ 𝔭A ∣ (𝔤-⟦⟧ p) ⟩
+          ∣ 𝔭A ∣ ⟦ p ⟧       ≡⟨ 𝔣pq ⟩
+          ∣ 𝔭A ∣ ⟦ q ⟧       ≡⟨ (ap ∣ 𝔭A ∣ (𝔤-⟦⟧ q))⁻¹ ⟩
+          ∣ 𝔭A ∣ ( ∣ 𝔤 ∣ q ) ≡⟨ h≡ϕ' q ⟩
+          ∣ ϕ ∣ q            ∎
 
    γ : ( Ψ p , p , 𝓇ℯ𝒻𝓁) ≡ ( Ψ q , q , 𝓇ℯ𝒻𝓁)
    γ = class-extensionality' pe gfe ssR ssA ψIsEquivalence pΨq
