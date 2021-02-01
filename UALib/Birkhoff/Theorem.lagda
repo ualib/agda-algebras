@@ -28,11 +28,12 @@ open the-free-algebra {𝓤}{𝓤}{X}
 
 module Birkhoffs-Theorem
  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- -- extensionality assumptions:
-           {hfe : hfunext (OV 𝓤)(OV 𝓤)}
-           {pe : propext (OV 𝓤)}
-           {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
-           {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
+    -- extensionality assumptions
+    {hfe : hfunext (OV 𝓤)(OV 𝓤)}
+    {pe : propext (OV 𝓤)}
+    -- truncation assumptions:
+    {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
+    {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
  where
 
  open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
@@ -43,9 +44,6 @@ module Birkhoffs-Theorem
 
  birkhoff Cset {𝑨} MThVA = γ
   where
-   T : Algebra (OV 𝓤) 𝑆
-   T = 𝑻 X
-
    h₀ : X → ∣ 𝑨 ∣
    h₀ = fst (𝕏 𝑨)
 

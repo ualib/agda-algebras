@@ -42,22 +42,22 @@ open the-free-algebra {𝓤}{𝓤}{X}
 
 module HSPLemmata
  {𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)}
- -- extensionality assumptions:
-           {hfe : hfunext (OV 𝓤)(OV 𝓤)}
-           {pe : propext (OV 𝓤)}
-           {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
-           {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
+    -- extensionality assumptions:
+    {hfe : hfunext (OV 𝓤)(OV 𝓤)}
+    {pe : propext (OV 𝓤)}
+    -- truncation assumptions:
+    {ssR : ∀ p q → is-subsingleton ((ψRel 𝒦) p q)}
+    {ssA : ∀ C → is-subsingleton (𝒞{OV 𝓤}{OV 𝓤}{∣ 𝑻 X ∣}{ψRel 𝒦} C)}
  where
 
-
  -- NOTATION.
- ovu ovu+ ovu++ : Universe
+ ovu ovu+ : Universe
  ovu = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
  ovu+ = ovu ⁺
- ovu++ = ovu ⁺ ⁺
+
 \end{code}
 
-Next we prove the lift-alg-V-closure lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift.  This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting.
+We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift.  This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting.
 
 \begin{code}
 
@@ -157,13 +157,12 @@ Next we prove the lift-alg-V-closure lemma, which says that if an algebra 𝑨 b
 
  lift-alg-V-closure = VlA -- (alias)
 
-
 \end{code}
 
 
 ### Lamma 2: SP(𝒦) ⊆ V(𝒦)
 
-Next we formalize the obvious fact that SP(𝒦) ⊆ V(𝒦). Unfortunately, the formal proof is neither trivial nor interesting.
+In the \ualibVarieties module, we proved that SP(𝒦) ⊆ V(𝒦) holds for certain universe levels.  We will need this inclusion to hold for specific universe levels that are not accommodated by the previously established inclusion.  Unfortunately, the formal proof is neither trivial nor interesting.
 
 \begin{code}
 
@@ -225,7 +224,7 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
 
  -- NOTATION.
  -- 𝕍 is HSP(𝒦)
- 𝕍 : Pred (Algebra ovu+ 𝑆) ovu++
+ 𝕍 : Pred (Algebra ovu+ 𝑆) (ovu+ ⁺)
  𝕍 = V{𝓤}{ovu+} 𝒦
 
  ℑs : ovu ̇

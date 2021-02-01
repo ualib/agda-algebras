@@ -145,40 +145,25 @@ The types defined above represent operators with useful closure properties. We n
 
 \begin{code}
 
--- P is a closure operator, in particular, it's expansive...
+-- P is a closure operator; in particular, it's expansive.
 P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →       𝒦 ⊆ P{𝓤}{𝓤} 𝒦
+
 P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
 
--- ...and idempotent...
-P-idemp : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →        P{𝓤}{𝓦} (P{𝓤}{𝓤} 𝒦) ⊆ P{𝓤}{𝓦} 𝒦
+-- P is a closure operator; in particular, it's idempotent.
+P-idemp : {𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
+ →         P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
 
-P-idemp (pbase x) = pliftu x
-P-idemp {𝓤} (pliftu x) = pliftu (P-idemp{𝓤}{𝓤} x)
-P-idemp (pliftw x) = pliftw (P-idemp x)
-P-idemp {𝓤} (produ x) = produ (λ i → P-idemp{𝓤}{𝓤} (x i))
-P-idemp (prodw x) = prodw (λ i → P-idemp (x i))
-P-idemp {𝓤} (pisou x x₁) = pisou (P-idemp{𝓤}{𝓤} x) x₁
-P-idemp (pisow x x₁) = pisow (P-idemp x) x₁
+P-idemp (pbase x) = pliftw x
+P-idemp {𝓤}{𝓦} (pliftu x) = pliftw (P-idemp{𝓤}{𝓦} x)
+P-idemp {𝓤}{𝓦} (pliftw x) = pliftw (P-idemp{𝓤}{𝓦} x)
+P-idemp {𝓤}{𝓦} (produ x) = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
+P-idemp {𝓤}{𝓦} (prodw x) = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
+P-idemp {𝓤}{𝓦} (pisou x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
+P-idemp {𝓤}{𝓦} (pisow x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
 
-module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
-
- -- An idempotence variant that handles universes more generally (we need this later)
- P-idemp' : --{𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
-          P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
-
- P-idemp' (pbase x) = pliftw x
- P-idemp'  (pliftu x) = pliftw (P-idemp' x)
- P-idemp'  (pliftw x) = pliftw (P-idemp' x)
- P-idemp'  (produ x) = prodw (λ i → P-idemp'  (x i))
- P-idemp'  (prodw x) = prodw (λ i → P-idemp'  (x i))
- P-idemp'  (pisou x x₁) = pisow (P-idemp' x) x₁
- P-idemp'  (pisow x x₁) = pisow (P-idemp'  x) x₁
-
--- S is a closure operator
-
--- In particular, it's monotone.
+-- S is a closure operator; in particular, it's monotone.
 S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →       𝒦 ⊆ 𝒦'  →  S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
 S-mono ante (sbase x) = sbase (ante x)
@@ -421,51 +406,51 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
 
- 𝓾 : Universe
- 𝓾 = OV 𝓤
+ ov𝓾 : Universe
+ ov𝓾 = OV 𝓤
 
- PS⊆SP : (P{𝓾}{𝓾} (S{𝓤}{𝓾} 𝒦u)) ⊆ (S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
+ PS⊆SP : (P{ov𝓾}{ov𝓾} (S{𝓤}{ov𝓾} 𝒦u)) ⊆ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
  PS⊆SP (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP (pbase (slift{𝑨} x)) = slift splA
   where
-   splA : (lift-alg 𝑨 𝓾) ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
-   splA = S⊆SP{𝓤}{𝓾}{𝒦u} (slift x)
+   splA : (lift-alg 𝑨 ov𝓾) ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
+   splA = S⊆SP{𝓤}{ov𝓾}{𝒦u} (slift x)
 
  PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso γ refl-≅
   where
-   lA lB : Algebra 𝓾 𝑆
-   lA = lift-alg 𝑨 𝓾
-   lB = lift-alg 𝑩 𝓾
+   lA lB : Algebra ov𝓾 𝑆
+   lA = lift-alg 𝑨 ov𝓾
+   lB = lift-alg 𝑩 ov𝓾
 
    ζ : lB ≤ lA
    ζ = lift-alg-lift-≤-lift 𝑩{𝑨} B≤A
 
-   spA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
-   spA = S⊆SP{𝓤}{𝓾}{𝒦u} (slift sA)
+   spA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
+   spA = S⊆SP{𝓤}{ov𝓾}{𝒦u} (slift sA)
 
-   γ : (lift-alg 𝑩 𝓾) ∈ (S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   γ = ssub{𝓤 = 𝓾} spA ζ
+   γ : (lift-alg 𝑩 ov𝓾) ∈ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+   γ = ssub{𝓤 = ov𝓾} spA ζ
 
- PS⊆SP (pbase {𝑩} (ssubw{𝑨} sA B≤A)) = ssub{𝓤 = 𝓾} splA (lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP (pbase {𝑩} (ssubw{𝑨} sA B≤A)) = ssub{𝓤 = ov𝓾} splA (lift-alg-≤ 𝑩{𝑨} B≤A)
   where
-   lA lB : Algebra 𝓾 𝑆
-   lA = lift-alg 𝑨 𝓾
-   lB = lift-alg 𝑩 𝓾
+   lA lB : Algebra ov𝓾 𝑆
+   lA = lift-alg 𝑨 ov𝓾
+   lB = lift-alg 𝑩 ov𝓾
 
-   splA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
-   splA = slift{𝓾}{𝓾} (S⊆SP sA)
+   splA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
+   splA = slift{ov𝓾}{ov𝓾} (S⊆SP sA)
 
 
  PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso splA ζ
   where
-   lA lB : Algebra 𝓾 𝑆
-   lA = lift-alg 𝑨 𝓾
-   lB = lift-alg 𝑩 𝓾
+   lA lB : Algebra ov𝓾 𝑆
+   lA = lift-alg 𝑨 ov𝓾
+   lB = lift-alg 𝑩 ov𝓾
 
    ζ : lA ≅ lB
-   ζ = lift-alg-iso 𝓤 𝓾 𝑨 𝑩 A≅B
+   ζ = lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B
 
-   splA : lA ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   splA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
    splA = S⊆SP (slift x)
 
  PS⊆SP (pliftu x) = slift (PS⊆SP x)
@@ -473,40 +458,40 @@ module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfu
 
  PS⊆SP (produ{I}{𝒜} x) = γ
   where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{𝓾} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{𝓾} 𝒦u)} (PS⊆SP (x i))
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦u)
+   ξ i = S→subalgebra{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)} (PS⊆SP (x i))
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (𝓾)}{𝓾}{𝒦 = (P{𝓤}{𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+   η' = lemPS⊆SP{𝓤 = (ov𝓾)}{ov𝓾}{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   η = subalgebra→S{𝓤 = (𝓾)}{𝓦 = 𝓾}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
+   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
 
-   γ : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
-   γ = (S-mono{𝓤 = (𝓾)}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝒦' = (P{𝓤}{𝓾} 𝒦u)} (P-idemp')) η
+   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
+   γ = (S-mono{𝓤 = (ov𝓾)}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝒦' = (P{𝓤}{ov𝓾} 𝒦u)} (P-idemp)) η
 
  PS⊆SP (prodw{I}{𝒜} x) = γ
   where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{𝓾} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{𝓾} 𝒦u)} (PS⊆SP (x i))
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦u)
+   ξ i = S→subalgebra{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)} (PS⊆SP (x i))
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (𝓾)}{𝓾}{𝒦 = (P{𝓤}{𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+   η' = lemPS⊆SP{𝓤 = (ov𝓾)}{ov𝓾}{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))
-   η = subalgebra→S{𝓤 = (𝓾)}{𝓦 = 𝓾}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
+   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
 
-   γ : ⨅ 𝒜 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
-   γ = (S-mono{𝓤 = (𝓾)}{𝒦 = (P{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u))}{𝒦' = (P{𝓤}{𝓾} 𝒦u)} (P-idemp')) η
+   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
+   γ = (S-mono{𝓤 = (ov𝓾)}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝒦' = (P{𝓤}{ov𝓾} 𝒦u)} (P-idemp)) η
 
- PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso{𝓾}{𝓾}{P{𝓤}{𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
+ PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
   where
-   spA : 𝑨 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   spA : 𝑨 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
    spA = PS⊆SP pA
 
- PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso{𝓾}{𝓾}{P{𝓤}{𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
+ PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
   where
-   spA : 𝑨 ∈ S{𝓾}{𝓾} (P{𝓤}{𝓾} 𝒦u)
+   spA : 𝑨 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
    spA = PS⊆SP pA
 
 \end{code}
@@ -526,14 +511,6 @@ P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
 P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
 P⊆V (pisou x x₁) = visou (P⊆V x) x₁
 P⊆V (pisow x x₁) = visow (P⊆V x) x₁
-
-S⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
- →    S{𝓤}{𝓦} 𝒦 ⊆ V{𝓤}{𝓦} 𝒦
-S⊆V (sbase x) = vbase x
-S⊆V (slift x) = vlift (S⊆V x)
-S⊆V (ssub x x₁) = vssub (S⊆V x) x₁
-S⊆V (ssubw x x₁) = vssubw (S⊆V x) x₁
-S⊆V (siso x x₁) = visou (S⊆V x) x₁
 
 SP⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}
  →    S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦) ⊆ V{𝓤}{𝓦} 𝒦
