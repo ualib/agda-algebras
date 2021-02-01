@@ -347,6 +347,8 @@ V-id2 {𝓤}{𝓦}{𝓧}{X} {𝒦} {p}{q} Vpq {𝑨} KA = γ
 
 #### Class identities
 
+[Those mainly interested in the formal proof of Birkhoff's HSP theorem can safely skip this section; it is not needed elsewhere.]
+
 It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 
 \begin{code}

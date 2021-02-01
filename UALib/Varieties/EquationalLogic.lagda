@@ -188,7 +188,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance</a>
 
-[Those mainly interested in the formal proof of Birkhoff's HSP theorem can skip this section; it is not needed there.]
+[Those mainly interested in the formal proof of Birkhoff's HSP theorem can safely skip this section; it is not needed elsewhere.]
 
 If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 

@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.Lemmata][] module of the [Agda Universal Algebra Library][].
 
-Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.  
+Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.
 **Warning**: not all of these are very interesting!
 
 \begin{code}
@@ -57,7 +57,7 @@ module HSPLemmata
 
 \end{code}
 
-We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift.  This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting.
+We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift.  This dispenses with annoying universe level problems that arise later---a minor techinical issue with an uninteresting proof.
 
 \begin{code}
 
@@ -68,36 +68,12 @@ We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belo
        ---------------------------------
    →    lift-alg 𝑨 ovu+ ∈ V{𝓤}{ovu+} 𝒦
 
- VlA (vbase{𝑨} x) = visow (vbase{𝓤}{𝓦 = ovu+} x) A≅B
-  where
-   A≅B : lift-alg 𝑨 ovu+ ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
-   A≅B = lift-alg-associative 𝑨
-
- VlA (vlift{𝑨} x) = visow (vlift{𝓤}{𝓦 = ovu+} x) A≅B
-  where
-   A≅B : lift-alg 𝑨 ovu+ ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
-   A≅B = lift-alg-associative 𝑨
-
- VlA (vliftw{𝑨} x) = visow (VlA x) A≅B
-  where
-   A≅B : (lift-alg 𝑨 ovu+) ≅ lift-alg (lift-alg 𝑨 ovu) ovu+
-   A≅B = lift-alg-associative 𝑨
-
+ VlA (vbase{𝑨} x) = visow (vbase{𝓤}{𝓦 = ovu+} x) (lift-alg-associative 𝑨)
+ VlA (vlift{𝑨} x) = visow (vlift{𝓤}{𝓦 = ovu+} x) (lift-alg-associative 𝑨)
+ VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
-
- VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift x) lB≤lA
-  where
-   lB≤lA : lift-alg 𝑩 ovu+ ≤ lift-alg 𝑨 ovu+
-   lB≤lA = lift-alg-≤ 𝑩{𝑨} B≤A
-
- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw vlA lB≤lA
-  where
-   vlA : (lift-alg 𝑨 ovu+) ∈ V{𝓤}{ovu+} 𝒦
-   vlA = VlA x
-
-   lB≤lA : (lift-alg 𝑩 ovu+) ≤ (lift-alg 𝑨 ovu+)
-   lB≤lA = lift-alg-≤ 𝑩{𝑨} B≤A
-
+ VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓤}{𝓦 = ovu+} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   where
    𝑰 : ovu+ ̇
@@ -138,31 +114,16 @@ We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belo
    B≅A : lA+ ≅ ⨅ lA
    B≅A = lift-alg-⨅≅ gfe iso-components
 
- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) lA≅lB
-  where
-   lA≅lB : (lift-alg 𝑨 ovu+) ≅ (lift-alg 𝑩 ovu+)
-   lA≅lB = lift-alg-iso 𝓤 ovu+ 𝑨 𝑩 A≅B
-
- VlA (visow{𝑨}{𝑩} x A≅B) = visow vlA lA≅lB
-  where
-   lA lB : Algebra ovu+ 𝑆
-   lA = lift-alg 𝑨 ovu+
-   lB = lift-alg 𝑩 ovu+
-
-   vlA : lA ∈ V{𝓤}{ovu+} 𝒦
-   vlA = VlA x
-
-   lA≅lB : lA ≅ lB
-   lA≅lB = lift-alg-iso ovu ovu+ 𝑨 𝑩 A≅B
+ VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 ovu+ 𝑨 𝑩 A≅B)
+ VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso ovu ovu+ 𝑨 𝑩 A≅B)
 
  lift-alg-V-closure = VlA -- (alias)
 
 \end{code}
 
-
 ### Lamma 2: SP(𝒦) ⊆ V(𝒦)
 
-In the \ualibVarieties module, we proved that SP(𝒦) ⊆ V(𝒦) holds for certain universe levels.  We will need this inclusion to hold for specific universe levels that are not accommodated by the previously established inclusion.  Unfortunately, the formal proof is neither trivial nor interesting.
+In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
 
 \begin{code}
 

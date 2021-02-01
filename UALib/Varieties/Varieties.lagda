@@ -356,13 +356,12 @@ We need to formalize one more lemma before arriving the short term objective of 
 \begin{code}
 
 lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)}{hfe : hfunext 𝓦 𝓤}
- →        {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
- →        ((i : I) → (ℬ i) IsSubalgebraOfClass 𝒦)
-          ----------------------------------------------------
+ →         {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
+ →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
+           -------------------------------------
  →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
- ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , (produ{𝓤}{𝓦}{I = I}{𝒜 = 𝒜} (λ i → P-expa (KA i)) ) , γ
+lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , ξ , γ
  where
   𝒜 : I → Algebra 𝓤 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -375,6 +374,7 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
 
   B≅SA : ∀ i → ℬ i ≅ SA i
   B≅SA = λ i → ∥ snd ∥ B≤K i ∥ ∥
+
   pA : ∀ i → lift-alg (𝒜 i) 𝓦 ∈ P{𝓤}{𝓦} 𝒦
   pA = λ i → pbase (KA i)
 
@@ -393,6 +393,10 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K =
     ii = embedding-lift{𝓠 = 𝓤}{𝓤 = 𝓤}{𝓘 = 𝓦} hfe hfe {I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
     iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
     iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
+
+  ξ : ⨅ 𝒜 ∈ P 𝒦
+  ξ = produ{𝓤}{𝓦}{I = I}{𝒜 = 𝒜} (λ i → P-expa (KA i))
+
   γ : ⨅ ℬ ≅ ⨅ SA
   γ = ⨅≅ gfe B≅SA
 
@@ -404,95 +408,51 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦u : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} {hfe : hfunext (OV 𝓤)(OV 𝓤)} where
 
  ov𝓾 : Universe
  ov𝓾 = OV 𝓤
 
- PS⊆SP : (P{ov𝓾}{ov𝓾} (S{𝓤}{ov𝓾} 𝒦u)) ⊆ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
+ PS⊆SP : (P{ov𝓾}{ov𝓾} (S{𝓤}{ov𝓾} 𝒦)) ⊆ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
  PS⊆SP (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP (pbase (slift{𝑨} x)) = slift splA
-  where
-   splA : (lift-alg 𝑨 ov𝓾) ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   splA = S⊆SP{𝓤}{ov𝓾}{𝒦u} (slift x)
-
- PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso γ refl-≅
-  where
-   lA lB : Algebra ov𝓾 𝑆
-   lA = lift-alg 𝑨 ov𝓾
-   lB = lift-alg 𝑩 ov𝓾
-
-   ζ : lB ≤ lA
-   ζ = lift-alg-lift-≤-lift 𝑩{𝑨} B≤A
-
-   spA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   spA = S⊆SP{𝓤}{ov𝓾}{𝒦u} (slift sA)
-
-   γ : (lift-alg 𝑩 ov𝓾) ∈ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
-   γ = ssub{𝓤 = ov𝓾} spA ζ
-
- PS⊆SP (pbase {𝑩} (ssubw{𝑨} sA B≤A)) = ssub{𝓤 = ov𝓾} splA (lift-alg-≤ 𝑩{𝑨} B≤A)
-  where
-   lA lB : Algebra ov𝓾 𝑆
-   lA = lift-alg 𝑨 ov𝓾
-   lB = lift-alg 𝑩 ov𝓾
-
-   splA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   splA = slift{ov𝓾}{ov𝓾} (S⊆SP sA)
-
-
- PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso splA ζ
-  where
-   lA lB : Algebra ov𝓾 𝑆
-   lA = lift-alg 𝑨 ov𝓾
-   lB = lift-alg 𝑩 ov𝓾
-
-   ζ : lA ≅ lB
-   ζ = lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B
-
-   splA : lA ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   splA = S⊆SP (slift x)
-
+ PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift x))
+ PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) =
+  siso (ssub{𝓤 = ov𝓾} (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift sA)) (lift-alg-lift-≤-lift 𝑩{𝑨} B≤A)) refl-≅
+ PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub{𝓤 = ov𝓾}(slift{ov𝓾}{ov𝓾}(S⊆SP sA))(lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B)
  PS⊆SP (pliftu x) = slift (PS⊆SP x)
  PS⊆SP (pliftw x) = slift (PS⊆SP x)
 
  PS⊆SP (produ{I}{𝒜} x) = γ
   where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)} (PS⊆SP (x i))
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦)
+   ξ i = S→subalgebra{𝒦 = (P 𝒦)} (PS⊆SP (x i))
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (ov𝓾)}{ov𝓾}{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
+   η' = lemPS⊆SP{𝓤 = ov𝓾}{ov𝓾}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
-   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
+   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
+   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P (P 𝒦))}{𝑪 = ⨅ 𝒜} η'
 
-   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   γ = (S-mono{𝓤 = (ov𝓾)}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝒦' = (P{𝓤}{ov𝓾} 𝒦u)} (P-idemp)) η
+   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦)
+   γ = (S-mono{𝓤 = ov𝓾}{𝒦 = (P (P 𝒦))}{𝒦' = (P 𝒦)} (P-idemp)) η
 
  PS⊆SP (prodw{I}{𝒜} x) = γ
   where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦u)
-   ξ i = S→subalgebra{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)} (PS⊆SP (x i))
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦)
+   ξ i = S→subalgebra{𝒦 = (P 𝒦)} (PS⊆SP (x i))
 
-   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
-   η' = lemPS⊆SP{𝓤 = (ov𝓾)}{ov𝓾}{𝒦 = (P{𝓤}{ov𝓾} 𝒦u)}{hfe}{I = I}{ℬ = 𝒜} ξ
+   η' : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
+   η' = lemPS⊆SP{𝓤 = ov𝓾}{ov𝓾}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
-   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))
-   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝑪 = ⨅ 𝒜} η'
+   η : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
+   η = subalgebra→S{𝓤 = (ov𝓾)}{𝓦 = ov𝓾}{𝒦 = (P (P 𝒦))}{𝑪 = ⨅ 𝒜} η'
 
-   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   γ = (S-mono{𝓤 = (ov𝓾)}{𝒦 = (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u))}{𝒦' = (P{𝓤}{ov𝓾} 𝒦u)} (P-idemp)) η
+   γ : ⨅ 𝒜 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦)
+   γ = (S-mono{𝓤 = ov𝓾}{𝒦 = (P (P 𝒦))}{𝒦' = (P 𝒦)} (P-idemp)) η
 
- PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
-  where
-   spA : 𝑨 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   spA = PS⊆SP pA
-
- PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦u}{𝑨}{𝑩} spA A≅B
-  where
-   spA : 𝑨 ∈ S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦u)
-   spA = PS⊆SP pA
+ PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦}{𝑨}{𝑩} (PS⊆SP pA) A≅B
+ PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso{ov𝓾}{ov𝓾}{P{𝓤}{ov𝓾} 𝒦}{𝑨}{𝑩} (PS⊆SP pA) A≅B
 
 \end{code}
 
@@ -525,13 +485,7 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 #### <a id="products-of-classes">Products of classes</a>
 
-Above we proved PS(𝒦) ⊆ SP(𝒦).  It is slightly more painful to prove that the product of *all* algebras in the class S(𝒦) is a member of SP(𝒦). That is,
-
-```agda
-⨅ S(𝒦) ∈ SP(𝒦)
-```
-
-This is mainly due to the fact that it's not obvious (at least not to this author-coder) what should be the type of the product of all members of a class of algebras.  After a few false starts, eventually the right type revealed itself.  Of course, now that we have it in our hands, it seems rather obvious.
+Above we proved PS(𝒦) ⊆ SP(𝒦).  It is slightly more painful to prove that the product of *all* algebras in the class S(𝒦) is a member of SP(𝒦). That is, ⨅ S(𝒦) ∈ SP(𝒦). This is mainly due to the fact that it's not obvious (at least not to this author-coder) what should be the type of the product of all members of a class of algebras.  After a few false starts, eventually the right type revealed itself.  Of course, now that we have it in our hands, it seems rather obvious.
 
 We now describe the this type of product of all algebras in an arbitrary class 𝒦 of algebras of the same signature.
 
@@ -539,7 +493,7 @@ We now describe the this type of product of all algebras in an arbitrary class �
 
 module class-product {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (OV 𝓤)} where
 
- -- ℑ serves as the index of the product
+ -- ℑ serves as an index for the class
  ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(OV 𝓤) → (OV 𝓤) ̇
  ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
 
@@ -566,43 +520,32 @@ Finally, we prove the result that plays a leading role in the formal proof of Bi
 
 -- The product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
 module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(OV 𝓤)} where
-
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
+ 𝓸𝓿𝓾 : Universe
+ 𝓸𝓿𝓾 = OV 𝓤
 
- class-prod-s-∈-ps : class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦))
-
- class-prod-s-∈-ps = pisou{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} ps⨅llA ⨅llA≅cpK
+ class-prod-s-∈-ps : class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{𝓸𝓿𝓾}{𝓸𝓿𝓾} (S{𝓤}{𝓸𝓿𝓾} 𝒦))
+ class-prod-s-∈-ps = pisou{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psPllA (⨅≅ gfe llA≅A)
   where
-   I : (OV 𝓤) ̇
-   I = ℑ (S{𝓤}{𝓤} 𝒦)
+   lA llA : ℑ (S{𝓤}{𝓤} 𝒦) → Algebra (𝓸𝓿𝓾) 𝑆
+   lA i =  lift-alg (𝔄 i) (𝓸𝓿𝓾)
+   llA i = lift-alg (lA i) (𝓸𝓿𝓾)
 
-   sA : (i : I) → (𝔄 i) ∈ (S{𝓤}{𝓤} 𝒦)
-   sA i = ∥ i ∥
+   slA : ∀ i → (lA i) ∈ S 𝒦
+   slA i = siso ∥ i ∥ lift-alg-≅
 
-   lA llA : I → Algebra (OV 𝓤) 𝑆
-   lA i =  lift-alg (𝔄 i) (OV 𝓤)
-   llA i = lift-alg (lA i) (OV 𝓤)
+   psllA : ∀ i → (llA i) ∈ P (S 𝒦)
+   psllA i = pbase{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} (slA i)
 
-   slA : (i : I) → (lA i) ∈ (S{𝓤}{(OV 𝓤)} 𝒦)
-   slA i = siso (sA i) lift-alg-≅
+   psPllA : ⨅ llA ∈ P (S 𝒦)
+   psPllA = produ{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psllA
 
-   psllA : (i : I) → (llA i) ∈ (P{OV 𝓤}{OV 𝓤} (S{𝓤}{(OV 𝓤)} 𝒦))
-   psllA i = pbase{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} (slA i)
-
-   ps⨅llA : ⨅ llA ∈ P{OV 𝓤}{OV 𝓤} (S{𝓤}{OV 𝓤} 𝒦)
-   ps⨅llA = produ{𝓤 = (OV 𝓤)}{𝓦 = (OV 𝓤)} psllA
-
-   llA≅A : (i : I) → (llA i) ≅ (𝔄 i)
+   llA≅A : ∀ i → (llA i) ≅ (𝔄 i)
    llA≅A i = Trans-≅ (llA i) (𝔄 i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
 
-   ⨅llA≅cpK : ⨅ llA ≅ class-product (S{𝓤}{𝓤} 𝒦)
-   ⨅llA≅cpK = ⨅≅ gfe llA≅A
-
  -- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
- class-prod-s-∈-sp : hfunext (OV 𝓤) (OV 𝓤)
-  →                  class-product (S{𝓤}{𝓤} 𝒦) ∈ (S{OV 𝓤}{OV 𝓤} (P{𝓤}{OV 𝓤} 𝒦))
-
- class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} (class-prod-s-∈-ps)
+ class-prod-s-∈-sp : hfunext(𝓸𝓿𝓾)(𝓸𝓿𝓾) → class-product (S 𝒦) ∈ S(P 𝒦)
+ class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
 
 \end{code}
 
