@@ -200,8 +200,8 @@
 
 [Birkhoff]: UALib.Birkhoff.html
 [Birkhoff.FreeAlgebra]: UALib.Birkhoff.FreeAlgebra.html
-[Birkhoff.Lemmata]: UALib.Birkhoff.Lemmata.html
-[Birkhoff.Theorem]: UALib.Birkhoff.Theorem.html
+[Birkhoff.HSPLemmas]: UALib.Birkhoff.HSPLemmas.html
+[Birkhoff.HSPTheorem]: UALib.Birkhoff.HSPTheorem.html
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 

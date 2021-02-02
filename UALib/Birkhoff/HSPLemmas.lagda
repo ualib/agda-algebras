@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Birkhoff.Lemmata (The Agda Universal Algebra Library)
-date : 2021-01-14
+title : UALib.Birkhoff.HSPLemmas (The Agda Universal Algebra Library)
+date : 2021-02-02
 author: William DeMeo
 ---
 
 ### <a id="hsp-lemmas">HSP Lemmas</a>
 
-This section presents the [UALib.Birkhoff.Lemmata][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Birkhoff.HSPLemmas][] module of the [Agda Universal Algebra Library][].
 
 Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.
 **Warning**: not all of these are very interesting!
@@ -20,7 +20,7 @@ open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
 
-module UALib.Birkhoff.Lemmata
+module UALib.Birkhoff.HSPLemmas
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
@@ -40,7 +40,7 @@ We begin the proof of Birkhoff's HSP theorem by establishing a number of facts t
 
 open the-free-algebra {𝓤}{𝓤}{X}
 
-module HSPLemmata
+module class-inclusions
  {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
     -- extensionality assumptions:
     {hfe : hfunext (ov 𝓤)(ov 𝓤)}

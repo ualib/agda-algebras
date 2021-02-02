@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Birkhoff.Theorem (The Agda Universal Algebra Library)
-date : 2021-01-14
+title : UALib.Birkhoff.HSPTheorem (The Agda Universal Algebra Library)
+date : 2021-02-02
 author: William DeMeo
 ---
 
 ### <a id="the-hsp-theorem-in-agda">The HSP Theorem in Agda</a>
 
-This section presents the [UALib.Birkhoff.Theorem][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].
 
 It is now all but trivial to use what we have already proved and piece together a complete proof of Birkhoff's celebrated HSP theorem asserting that every variety is defined by a set of identities (is an "equational class").
 
@@ -17,13 +17,13 @@ It is now all but trivial to use what we have already proved and piece together 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Birkhoff.Theorem
+module UALib.Birkhoff.HSPTheorem
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
  where
 
-open import UALib.Birkhoff.Lemmata {𝑆 = 𝑆}{gfe}{𝕏}{𝓤}{X} public
+open import UALib.Birkhoff.HSPLemmas {𝑆 = 𝑆}{gfe}{𝕏}{𝓤}{X} public
 open the-free-algebra {𝓤}{𝓤}{X}
 
 module Birkhoffs-Theorem
@@ -37,7 +37,7 @@ module Birkhoffs-Theorem
  where
 
  open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
- open  HSPLemmata {𝒦 = 𝒦}{hfe}{pe}{ssR}{ssA}
+ open  class-inclusions {𝒦 = 𝒦}{hfe}{pe}{ssR}{ssA}
 
  -- Birkhoff's theorem: every variety is an equational class.
  birkhoff : is-set ∣ ℭ ∣ → Mod X (Th 𝕍) ⊆ 𝕍
