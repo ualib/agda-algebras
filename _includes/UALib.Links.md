@@ -269,8 +269,8 @@
 [UALib.Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [UALib.Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 [UALib.Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda
-[UALib.Birkhoff.Lemmata]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Lemmata.lagda
-[UALib.Birkhoff.Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/Theorem.lagda
+[UALib.Birkhoff.HSPLemmas]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPLemmas.lagda
+[UALib.Birkhoff.HSPTheorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPTheorem.lagda
 
 
 
