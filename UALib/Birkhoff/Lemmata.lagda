@@ -177,7 +177,7 @@ In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦
 
 ### Lemma 3: 𝔉 ≤  ⨅ S(𝒦)  (=: ℭ)
 
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  To prepare for this, we arm ourselves with a small arsenal of notation.
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set. To prepare for the proof, we arm ourselves with a small arsenal of notation.
 
 \begin{code}
  open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
@@ -224,25 +224,6 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  𝔭hom : (i : ℑs) → hom ℭ (𝔄s i)
  𝔭hom = ⨅-projection-hom {I = ℑs}{𝒜 = 𝔄s}
 
- -- 𝔭𝔣 is the composition:  𝔉 --∣ 𝔣 ∣-->  ℭ --(𝔭 i)--> 𝔄s i
- 𝔭𝔣 : ∀ i → ∣ 𝔉 ∣ → ∣ 𝔄s i ∣
- 𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣
-
- 𝔭𝔣hom : (i : ℑs) → hom 𝔉 (𝔄s i)
- 𝔭𝔣hom i = HomComp 𝔉 (𝔄s i) 𝔣 (𝔭hom i)
-
- 𝔭ϕ𝔠 : ∀ i → ∣ 𝑻 X ∣ → ∣ 𝔄s i ∣
- 𝔭ϕ𝔠 i = ∣ 𝔭hom i ∣ ∘ ∣ ϕ𝔠 ∣
-
- 𝔓 : ∀ i → hom (𝑻 X) (𝔄s i)
- 𝔓 i = HomComp (𝑻 X) (𝔄s i) ϕ𝔠 (𝔭hom i)
-
- 𝔭ϕ𝔠≡𝔓 : ∀ i p → (𝔭ϕ𝔠 i) p ≡ ∣ 𝔓 i ∣ p
- 𝔭ϕ𝔠≡𝔓 i p = 𝓇ℯ𝒻𝓁
-
- -- The class of subalgebras of products of 𝒦.
- SP𝒦 : Pred (Algebra (ovu) 𝑆) (ov (ovu))
- SP𝒦 = S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
  --
  --                             𝔄1
  --                            77
@@ -255,6 +236,14 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  --             \     /
  --              V  l/
  --             𝔉 = 𝑻/ψ
+
+ -- 𝔭𝔣 is the composition:  𝔉 -- 𝔣 -->  ℭ -- 𝔭 i --> 𝔄s i
+ 𝔭𝔣 : ∀ i → ∣ 𝔉 ∣ → ∣ 𝔄s i ∣
+ 𝔭𝔣 i = (𝔭 i) ∘ ∣ 𝔣 ∣
+
+ 𝔭𝔣hom : (i : ℑs) → hom 𝔉 (𝔄s i)
+ 𝔭𝔣hom i = HomComp 𝔉 (𝔄s i) 𝔣 (𝔭hom i)
+
 \end{code}
 
 Armed with these tools, we proceed to the proof that the free algebra 𝔉 is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦.  The hard part of the proof is showing that `𝔣 : hom 𝔉 ℭ` is a monomorphism. Let's dispense with that first.
