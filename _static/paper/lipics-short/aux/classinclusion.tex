@@ -1,0 +1,259 @@
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}\AgdaFunction{ov𝓾}%
+%% \AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{hfunext}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaKeyword{where}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{))}\<%
+\\
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{sbase}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{sbase}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+%
+\>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{slift}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{slift}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{S⊆SP}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{slift}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\<%
+\\
+%
+\>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{sA}\AgdaSpace{}%
+\AgdaBound{B≤A}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}...\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaInductiveConstructor{siso}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{S⊆SP}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{slift}\AgdaSpace{}%
+%% \AgdaBound{sA}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{lift-alg-lift-≤-lift}\AgdaSpace{}%
+%% \AgdaBound{𝑩}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{B≤A}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaFunction{refl-≅}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}(}\AgdaInductiveConstructor{ssubw}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{sA}\AgdaSpace{}%
+%% \AgdaBound{B≤A}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}(}\AgdaInductiveConstructor{slift}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}(}\AgdaFunction{S⊆SP}\AgdaSpace{}%
+%% \AgdaBound{sA}\AgdaSymbol{))(}\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
+%% \AgdaBound{𝑩}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{B≤A}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{pbase}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{siso}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaBound{A≅B}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaInductiveConstructor{siso}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{S⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{slift}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{lift-alg-iso}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{𝑩}\AgdaSpace{}%
+%% \AgdaBound{A≅B}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{pliftu}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaInductiveConstructor{slift}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{pliftw}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaInductiveConstructor{slift}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaInductiveConstructor{produ}\AgdaSymbol{\{}\AgdaBound{I}\AgdaSymbol{\}\{}\AgdaBound{𝒜}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{γ}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaKeyword{where}\<%
+%% \\
+%% \>[2][@{}l@{\AgdaIndent{0}}]%
+%% \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{ξ}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{S→subalgebra}\AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{PS⊆SP}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{η'}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{⨅}\AgdaSpace{}%
+%% \AgdaBound{𝒜}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{η'}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{lemPS⊆SP}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaArgument{I}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{I}\AgdaSymbol{\}\{}\AgdaArgument{ℬ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{𝒜}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaFunction{ξ}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{η}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{⨅}\AgdaSpace{}%
+%% \AgdaBound{𝒜}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+%% \AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{))}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{η}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{subalgebra→S}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ov𝓾}\AgdaSymbol{)\}\{}\AgdaArgument{𝓦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{))\}\{}\AgdaArgument{𝑪}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{⨅}\AgdaSpace{}%
+%% \AgdaBound{𝒜}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaFunction{η'}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{γ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{⨅}\AgdaSpace{}%
+%% \AgdaBound{𝒜}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+%% \AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{γ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{S-mono}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{))\}\{}\AgdaArgument{𝒦'}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{P-idemp}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaFunction{η}\<%
