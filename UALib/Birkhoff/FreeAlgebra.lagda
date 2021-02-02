@@ -75,13 +75,8 @@ Next we define a function `mkti` that takes an arbitrary algebra 𝑨 and return
 
 \begin{code}
 
- -- Every algebra is a hom image of 𝑻 X.
- mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆)
-  →     𝑨 ∈ 𝒦 → 𝑻img 𝒦
- mkti 𝑨 KA = (𝑨 , fst thg , KA , snd thg)
-  where
-   thg : Σ h ꞉ (hom (𝑻 X) 𝑨), Epic ∣ h ∣
-   thg = 𝑻hom-gen 𝑨
+ mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
+ mkti 𝑨 KA = (𝑨 , ∣ 𝑻hom-gen 𝑨 ∣ , KA , ∥ 𝑻hom-gen 𝑨 ∥)
 
 \end{code}
 

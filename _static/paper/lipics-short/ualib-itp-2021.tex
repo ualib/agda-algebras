@@ -163,7 +163,6 @@ Finally, the official sources of information about the \agdaualib are
 %% Algebras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algebras}\label{sec:types-for-algebras}
 
-\newcommand\signatOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
 We define the type of \defn{operations} and, as an example, the type of \defn{projections}.
 \ccpad
 \begin{code}%
@@ -255,11 +254,8 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types. Recall (\S\ref{ssec:dependent-pairs-and-projections}), we denote the first and second projections by \ai ∣ and \ai ∥, so if \ab 𝑆 is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓 \as : \aiab{∣}{𝑆} is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓.
-
-For example,
-%% \subsubsection{Example}\label{Signatures.sssec:example}
-here is the signature of \emph{monoids}, as a member of the type \signatOV.
+Here \AgdaBound{𝓞} is the universe level of operation symbol types, while \AgdaBound{𝓥} is the universe level of arity types. We denote the first and second projections by \ai ∣ and \ai ∥ (\S\ref{ssec:dependent-pairs-and-projections}) so if \ab 𝑆 is a signature, then \aiab{∣}{𝑆} denotes the type of \defn{operation symbols}, and \aiab{∥}{𝑆} denotes the \defn{arity} function. If \ab 𝑓~\as :~\af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \aiab{∥}{𝑆} \ab 𝑓 is the arity of \ab 𝑓. For example, %% \subsubsection{Example}\label{Signatures.sssec:example}
+here is the signature of \emph{monoids}, as a member of the type \AgdaFunction{Signature} \AgdaBound{𝓞} \AgdaBound{𝓤₀}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -363,9 +359,7 @@ For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the ty
 \AgdaBound{A}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-We may refer to an inhabitant of \af{Algebra} \ab 𝑆 \AgdaBound{𝓤} as an ``∞-algebra'' because its domain can be an arbitrary type, say, \ab A \as : \ab 𝓤 \af ̇ and need not be truncated at some level; in particular, \ab A need not be a set (as defined in \S\ref{ssec:truncation-and-sets}).
-
-We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniquness of identity proofs} explicitly where, and only where, a proof relies on this assumption.
+We may refer to an inhabitant of \af{Algebra} \ab 𝑆 \AgdaBound{𝓤} as an ``∞-algebra'' because its domain can be an arbitrary type, say, \ab A \as : \ab 𝓤 \af ̇ and need not be truncated at some level (\S\ref{ssec:truncation-and-sets}). In particular, \ab A need not be a set (as defined in \S\ref{ssec:truncation-and-sets}).\footnote{We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniquness of identity proofs} explicitly where, and only where, a proof relies on this assumption.}
 
 
 
@@ -461,19 +455,7 @@ We assume that we always have at our disposal an arbitrary collection \ab X of v
 \AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaBound{h}\<%
 \end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
+\ccpad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \subsection{Product algebra type}\label{ssec:product-algebra-type}
 %% This section describes some parts of the \ualibAlgProducts module of the \agdaualib.
@@ -1065,7 +1047,171 @@ The term algebra is \defn{absolutely free}, or \defn{universal}, for algebras in
 
 
 \subsection{Subalgebras}\label{ssec:subalgebras}
-Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~\af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨, and (in the \ualib) we write \af 𝑩 \af{IsSubalgebraOf} \ab 𝑨 just in case \ab 𝑩 can be embedded in \ab 𝑨; in other terms, there exists a map \ab h~\as :~\af ∣ \ab 𝑨 \af ∣ → \af ∣ 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩 such \ab h is an embedding (i.e., \af{is-embedding} \ab h holds) and \ab h is a homomorphism from \ab 𝑨 to \ab 𝑩.
+
+\subsubsection{Subuniverses}
+The \ualibSubuniverses module defines, unsurprisingly, the \af{Subuniverses} type. Perhaps counterintuitively, we begin by defining the collection of all subuniverses of an algebra. Therefore, the type will be a predicate of predicates on the domain of the given algebra.
+\ccpad
+\begin{code}
+  \input{aux/subuniverses.tex}
+\end{code}
+\ccpad
+%% \subsubsection{Subuniverse generation}\label{sec:subuni-genera}
+An important concept in universal algebra is the subuniverse generated by a subset of the domain of an algebra.  We define the following inductive type to represent this concept.
+\ccpad
+\begin{code}
+  \input{aux/generation.tex}
+\end{code}
+\ccpad
+The proof that \af{Sg} \ab X is a subuniverse is as trivial as they come.
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{sgIsSub}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Sg}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaFunction{Subuniverses}\AgdaSpace{}%
+\AgdaBound{𝑨}\<%
+\\
+\>[0]\AgdaFunction{sgIsSub}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{app}\<%
+\end{code}
+\ccpad
+And the proof that \af{Sg} \ab X is the smallest subuniverse containing \ab X is not much harder and proceeds by induction on the shape of elements of \af{Sg} \ab X.
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}(}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓡}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[15]\AgdaBound{Y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaFunction{Subuniverses}\AgdaSpace{}%
+\AgdaBound{𝑨}%
+\>[35]\AgdaSymbol{→}%
+\>[38]\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaBound{Y}%
+\>[45]\AgdaSymbol{→}%
+\>[48]\AgdaDatatype{Sg}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaBound{Y}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{var}\AgdaSpace{}%
+\AgdaBound{v∈X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaBound{v∈X}\<%
+\\
+\>[0]\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{Y≤A}\AgdaSpace{}%
+\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{app}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{fa∈Y}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{where}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{IH}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{Im}}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaBound{Y}\<%
+\\
+%
+\>[2]\AgdaFunction{IH}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{Y≤A}\AgdaSpace{}%
+\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{fa∈Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaBound{Y}\<%
+\\
+%
+\>[2]\AgdaFunction{fa∈Y}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{Y≤A}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaFunction{IH}\<%
+\end{code}
+\ccpad
+Evidently, when the element of \af{Sg} \ab X is constructed as \aic{app} \ab f \ab 𝒂 \ab p, we may assume (the induction hypothesis) that the arguments \ab 𝒂 belong to \ab Y. Then the result of applying \ab f to \ab 𝒂 must also belong to \ab Y, since \ab Y is a subuniverse.
+
+
+\subsubsection{Subalgebra type}\label{sssec:subalgebra-type}
+Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~\af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨, and (in the \ualib) we write \af 𝑩 \af{IsSubalgebraOf} \ab 𝑨, just in case \ab 𝑩 can be embedded in \ab 𝑨; in other terms, there exists a map \ab h~\as :~\af ∣ \ab 𝑨 \af ∣ → \af ∣ 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩 such \ab h is an embedding (i.e., \af{is-embedding} \ab h holds) and \ab h is a homomorphism from \ab 𝑨 to \ab 𝑩.
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOf\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -1115,8 +1261,44 @@ Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\<
 \end{code}
-
-
+\ccpad
+Here is some convenient syntactic sugar for the subalgebra relation.
+\ccpad
+\begin{code}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{IsSubalgebraOf}}\AgdaSpace{}%
+\AgdaBound{𝑨}\<%
+\end{code}
+\ccpad
+We can now write \AgdaBound{𝑩} \AgdaOperator{\AgdaFunction{≤}} \AgdaBound{𝑨} to assert that 𝑩 is a subalgebra of 𝑨.
 
 
 
@@ -1126,12 +1308,10 @@ Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~
 %% Varieties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Equations and Varieties}\label{sec:equations-and-varieties}
 
+Let \ab 𝑆 be a signature. By an \defn{identity} or \defn{equation} in \ab 𝑆 we mean an ordered pair of terms, written \ab 𝑝 \aof ≈ \ab 𝑞, from the term algebra \af 𝑻 \ab X. If \ab 𝑨 is an \ab 𝑆-algebra we say that \ab 𝑨 \defn{satisfies} \ab 𝑝 \aof ≈ \ab 𝑞 provided \ab 𝑝 \af ̇ \ab 𝑨 \aod ≡ \ab 𝑞 \aof ̇ \ab 𝑨 holds. In this situation, we write \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 and say that \ab 𝑨 \defn{models} the identity \ab 𝑝 \aof ≈ \ab q. If \ab 𝒦 is a class of algebras, all of the same signature, we write \ab 𝒦 \aof ⊧ \ab p \aof ≈ \ab q if, for every \ab 𝑨 \aof ∈ \ab 𝒦, \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.\footnote{Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \af ⊧ and \af ≈. As a reasonable alternative to what we would normally express informally as 𝒦 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞, we have settled on \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q to denote this relation.  To reiterate, if \ab 𝒦 is a class of \ab 𝑆-algebras, we write \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≋ \ab 𝑞 if every \ab 𝑨 \aof ∈ \ab 𝒦 satisfies \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.}
+
 \subsection{Types for Theories and Models}\label{ssec:types-for-theories-and-models}
-The \agdaualib defines types that represents \defn{identites} of terms in a given signature and what it means for a structure to satisfy, or \defn{model}, such identities.
-
-Let \ab 𝑆 be a signature. By an \defn{identity} or \defn{equation} in \ab 𝑆 we mean an ordered pair of terms, written \ab 𝑝 \aof ≈ \ab 𝑞, from the term algebra \af 𝑻 \ab X. If \ab 𝑨 is an \ab 𝑆-algebra we say that \ab 𝑨 \defn{satisfies} \ab 𝑝 \aof ≈ \ab 𝑞 provided \ab 𝑝 \af ̇ \ab 𝑨 \aod ≡ \ab 𝑞 \aof ̇ \ab 𝑨 holds. In this situation, we write \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞 and say that \ab 𝑨 \defn{models} the identity \ab 𝑝 \aof ≈ \ab q. If \ab 𝒦 is a class of algebras, all of the same signature, we write \ab 𝒦 \aof ⊧ \ab p \aof ≈ \ab q if, for every \ab 𝑨 \aof ∈ \ab 𝒦, \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.
-
-\noindent \textbf{Notation}. In the \agdaualib, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \af ⊧ and \af ≈. As a reasonable alternative to what we would normally express informally as 𝒦 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞, we have settled on \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q to denote this relation.  To reiterate, if \ab 𝒦 is a class of \ab 𝑆-algebras, we write \ab 𝒦 \aof ⊧ \ab 𝑝 \aof ≋ \ab 𝑞 if every \ab 𝑨 \aof ∈ \ab 𝒦 satisfies \ab 𝑨 \aof ⊧ \ab 𝑝 \aof ≈ \ab 𝑞.
+%% We define types that represent \defn{identites} of terms in a given signature and what it means for a structure to satisfy, or \defn{model}, such identities.
 
 The binary ``models'' relation \aof ⊧ relating algebras (or classes of algebras) to the identities that they satisfy is defined in the \ualibModelTheory module.  Agda supports the definition of infix operations and relations, and we use this to define \aof ⊧ so that we may write, e.g., \ab 𝑨 \aof ⊧ \ab p \aof ≈ \ab q or \ab 𝒦 \aof ⊧ \ab p \aof ≋ \ab q.
 \ccpad
@@ -1210,7 +1390,7 @@ As usual, for the omitted proofs, we refer the reader to the \ualib and its docu
 
 
 \subsection{Inductive types for closure operators}\label{sec:inductive-types-h-s-p-v}
-This section presents the \ualibVarietiesVarieties module of the \agdaualib.
+%% This section presents the \ualibVarietiesVarieties module of the \agdaualib.
 
 Fix a signature \ab 𝑆, let \ab 𝒦 be a class of \ab 𝑆-algebras, and define
 \begin{itemize}
@@ -1221,26 +1401,26 @@ Fix a signature \ab 𝑆, let \ab 𝒦 be a class of \ab 𝑆-algebras, and defi
 \item
   \af P \ab 𝒦 = algebras isomorphic to a product of members of \ab 𝒦.
 \end{itemize}
-A straight-forward verification confirms that \af H, \af S, and \af P are \defn{closure operators} (expansive, monotone, and idempotent). A class \ab 𝒦 of \ab 𝑆-algebras is said to be \defn{closed under the taking of homomorphic images} provided \af H \ab 𝒦 \aof ⊆ \ab 𝒦. Similarly, \ab 𝒦 is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab 𝒦 \aof ⊆ \ab 𝒦 (resp., \af P \ab 𝒦 \aof ⊆ \ab 𝒦). An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab 𝒦 (resp., \af S \ab 𝒦; resp., \af P \ab 𝒦) is closed under isomorphism. The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators. A \defn{variety} is a class \ab 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (\af H), subalgebras (\af S), and arbitrary products (\af P). That is, \ab 𝒦 is a variety if and only if
+%% A straight-forward verification confirms that \af H, \af S, and \af P are \defn{closure operators} (expansive, monotone, and idempotent). A class \ab 𝒦 of \ab 𝑆-algebras is said to be \defn{closed under the taking of homomorphic images} provided \af H \ab 𝒦 \aof ⊆ \ab 𝒦. Similarly, \ab 𝒦 is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab 𝒦 \aof ⊆ \ab 𝒦 (resp., \af P \ab 𝒦 \aof ⊆ \ab 𝒦). An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab 𝒦 (resp., \af S \ab 𝒦; resp., \af P \ab 𝒦) is closed under isomorphism. The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators. 
+A \defn{variety} is a class \ab 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (\af H), subalgebras (\af S), and arbitrary products (\af P). That is, \ab 𝒦 is a variety if and only if
 \af H \af S \af P \ab 𝒦 \aof ⊆ \ab 𝒦.
 
-We now introduce three new inductive types that represent the closure operators \af H, \af S, \af P. Separately, we define an inductive type \af V for simultaneously representing closure under \af H, \af S, and \af P. The definitions have been fine-tuned to strike a balance between faithfully representing the desired semantics and facilitating proof by induction.
+The \ualibVarietiesVarieties module of the \agdaualib introduces three new inductive types that represent the closure operators \af H, \af S, \af P. Separately, an inductive type \af V is defined which represents closure under all three operators. These definitions have been fine-tuned to strike a balance between faithfully representing the desired semantics and facilitating proof by induction.
 %% \\[5pt]
 %% \textbf{Notation}. Recall, if \ab 𝓤\AgdaSpace{}\as{:}~\af{Universe} and \ab 𝑆\AgdaSpace{}\as{:}~\af{Signature} \ab 𝓞 \ab 𝓥, then \af{Algebra} \ab 𝓤 \ab 𝑆 denotes the type of algebras with domains of type \ab 𝓤 \af ̇.  Of course, the type \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇.  The level of this type is frequently abbreviated in the sequel as follows: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 := \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺.
-
-We now define the inductive type \af H that we have found most useful for representing the fact that a class of algebras is closed under the taking of homomorphic images.
+%% The inductive types that we have found most useful for representing the fact that a class of algebras is closed under the taking of homomorphic images is defined as follows.
 \ccpad
 \begin{code}%
   \input{aux/H.tex}
 \end{code}
-\ccpad
-The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type.
+%% \ccpad
+%% The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type.
 \ccpad
 \begin{code}%
   \input{aux/S.tex}
 \end{code}
-\ccpad
-We have found the following to be the most useful inductive type for representing classes of algebras closed under arbitrary products.
+%% \ccpad
+%% We have found the following to be the most useful inductive type for representing classes of algebras closed under arbitrary products.
 \ccpad
 \begin{code}%
   \input{aux/P.tex}
@@ -1272,36 +1452,129 @@ Here is the formal statement of the first goal, along with the first few lines o
 \ccpad
 Evidently, the proof is by induction on the form of an inhabitant of \ad P\ad S(\ab 𝒦), handling in turn each way such an inhabitant can be constructed. \seedocfordetails
 
-More interesting, perhaps, is the second goal which is to formally implement the product of all subalgebras of algebras in a given class and then to show that this product belongs to \ad S\ad P(\ab 𝒦). We take that up in the next subsection.
+%% More interesting, perhaps, is the second goal which is to formally implement the product of all subalgebras of algebras in a given class and then to show that this product belongs to \ad S\ad P(\ab 𝒦).
 
 %% \subsubsection{The product of a class of algebras}\label{sssec:the-product-of-a-class-of-algebras}
-Here we formally state and prove that, given an arbitrary class \ab 𝒦 of algebras, the product of all algebras in the class \ad S(\ab 𝒦) belongs to \ad S\ad P(\ab 𝒦). This a nontrivial exercise. In fact, it is not even immediately obvious (at least not to this author) how one should express the product of an entire arbitrary class of algebras as a dependent type. However, after a number of failed attempts, the right type revealed itself. Now that we have it, it seems almost obvious.
+Next we formally state and prove that, given an arbitrary class \ab 𝒦 of algebras, the product of all algebras in the class \ad S(\ab 𝒦) belongs to \ad S\ad P(\ab 𝒦).\footnote{This turned out to be a nontrivial exercise. In fact, it is not even immediately obvious (at least not to this author) how one should express the product of an entire arbitrary class of algebras as a dependent type. However, after a number of failed attempts, the right type revealed itself. Now that we have it, it seems almost obvious.}
+The type that serves to index the class (and the product of its members) is the following.
 \ccpad
 \begin{code}%
-  \input{aux/classproduct1.tex}
+\>[1]\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[23]\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaBound{𝒦}\<%  \input{aux/classproduct1.tex}
 \end{code}
 \ccpad
-The product of all members of 𝒦 is then represented by the following type.
+Taking the product over this index type \af ℑ requires a function like the following, which takes an index (i : ℑ) and returns the corresponding algebra. Here is such a function.
 \ccpad
 \begin{code}
-  \input{aux/classproduct2.tex}
+\>[1]\AgdaFunction{𝔄}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{𝔄}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\end{code}
+\ccpad
+Finally, the product of all members of 𝒦 is represented by the following type.
+\ccpad
+\begin{code}
+\>[1]\AgdaFunction{class-product}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{class-product}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{𝔄}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%  \input{aux/classproduct2.tex}
 \end{code}
 \ccpad
 If \ab p \as :~\ab 𝑨 \as ∈ \ab 𝒦 is a proof that \ab 𝑨 belongs to \ab 𝒦, then we can view the pair (\ab 𝑨, \ab p) \as ∈ \af ℑ\ \ab 𝒦 as an index over the class, and \af 𝔄(\ab 𝑨 , \ab p) as the result of projecting the product %% \af ⨅ \af 𝔄\as{\{}\ab 𝓤\as{\}\{}\ab 𝒦\as{\}} 
 onto the (\ab 𝑨, \ab p)-th component.
-
 %% \subsubsection{⨅ S(𝒦) ∈ SP(𝒦)}\label{sssec:classproduct-inclusion}
-Thus, the (informal) product \af ⨅ \ad S(\ab 𝒦) of all subalgebras of algebras in \ab 𝒦 is implemented (formally) in the \ualib as \af ⨅ \as (\af 𝔄\as{\{}\ab 𝓤\as{\}\{}\ad S\as{(}\ab 𝒦\as{)\})}, and our goal is to prove that \af ⨅ \as (\af 𝔄\as{\{}\ab 𝓤\as{\}\{}\ad S\as{(}\ab 𝒦\as{)\})} belongs to \ad S\ad P(\ab 𝒦).
-\ccpad
-\begin{code}%
-  \input{aux/classproduct-inclusion1.tex}
-\end{code}
-\ccpad
-Since PS⊆SP, it follows that the product of all subalgebras of algebras in the class \ab 𝒦 belongs to \ad S\ad P(\ab 𝒦).
-\ccpad
-\begin{code}
-  \input{aux/classproduct-inclusion2.tex}
-\end{code}
+Thus, the (informal) product \af ⨅ \ad S(\ab 𝒦) of all subalgebras of algebras in \ab 𝒦 is implemented (formally) in the \ualib as \af ⨅ \as (\af 𝔄\as{\{}\ab 𝓤\as{\}\{}\ad S\as{(}\ab 𝒦\as{)\})}, and our goal is to prove that this product %% \af ⨅ \as (\af 𝔄\as{\{}\ab 𝓤\as{\}\{}\ad S\as{(}\ab 𝒦\as{)\})} 
+belongs to \ad S\ad P(\ab 𝒦). This is done in the \ualib by first proving that the product belongs to \ad P\ad S(\ab 𝒦) (see the proof of \AgdaFunction{class-prod-s-∈-ps} in \ualibVarieties) and then applying the \AgdaFunction{PS⊆SP} lemma described above.
+
+%% \ccpad
+%% \begin{code}%
+%%   \input{aux/classproduct-inclusion1.tex}
+%% \end{code}
+%% \ccpad
+%% Since PS⊆SP, it follows that the product of all subalgebras of algebras in the class \ab 𝒦 belongs to \ad S\ad P(\ab 𝒦).
+%% \ccpad
+%% \begin{code}
+%%   \input{aux/classproduct-inclusion2.tex}
+%% \end{code}
 
 %% \subsection{Equation Preservation Theorems}\label{sec:equation-preservation-theorems}
 %% This section presents the \ualibPreservation module of  the \agdaualib.
@@ -1312,17 +1585,54 @@ Since PS⊆SP, it follows that the product of all subalgebras of algebras in the
 
 \subsection{Equation preservation}\label{equation-preservation}
 This section describes parts of the \ualibPreservation module of the \agdaualib, in which it is proved that identities are preserved by closure operators \ad H, \ad S, and \ad P. This will establish the easy direction of Birkhoff's HSP theorem.  We present only the formal statements, omitting proofs. \seedocfordetails
-
 %% \subsubsection{H preserves identities}\label{sssec:h-preserves-identities}
-The assertion that \ad H preserves identities is formalized in the \ualib as follows:
+For example, the assertion that \ad H preserves identities is stated formally as follows:
 \ccpad
 \begin{code}[number=code:H1]%
-  \input{aux/H1-short.tex}
+\>[0]\AgdaFunction{H-id1}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[50I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
+\\
+\>[.][@{}l@{}]\<[50I]%
+\>[8]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\})}\<%
+\\
+%
+\>[8]\AgdaComment{-----------------------}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[8]\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≋}}\AgdaSpace{}%
+\AgdaBound{q}%
+\>[19]\AgdaSymbol{→}%
+\>[22]\AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≋}}\AgdaSpace{}%
+\AgdaBound{q}\<%  \input{aux/H1-short.tex}
 \end{code}
+\ccpad
 \ccpad
 The proof is by induction and handles each of the four constructors of \ad H (\AgdaInductiveConstructor{hbase},
 \AgdaInductiveConstructor{hlift}, \AgdaInductiveConstructor{hhimg}, and \AgdaInductiveConstructor{hiso}) in turn. Of course, the \ualibPreservation module of the \ualib contains a complete proof of (\ref{code:H1}), which can be viewed in the source code or the html documentation.\footnote{\label{note1}See the source code file \href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda}{Preservation.lagda}, or the html documentation page\\ \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html}{ualib.gitlab.io/UALib.Varieties.Preservation.html}.}
-
 %% The converse is almost too obvious to bother with. Nonetheless, it is formalized as follows:
 %% \ccpad
 %% \begin{code}
@@ -1331,19 +1641,19 @@ The proof is by induction and handles each of the four constructors of \ad H (\A
 %% \ccpad
 %% \subsubsection{S preserves identities}\label{s-preserves-identities}
 %% \ccpad
-The facts that \ad S, \ad P, and \ad V preserve identities are presented in the \ualib in a similar way and, as usual, the full proofs are available in the \ualib source code and documentation.\cref{note1} We present the statements here without further discussion.
-\ccpad
-\begin{code}[number=code:S1]%
-  \input{aux/S1-short.tex}
-\end{code}
-\ccpad
-\begin{code}%
-  \input{aux/P1-short.tex}
-\end{code}
-\ccpad
-\begin{code}%
-  \input{aux/V1-short.tex}
-\end{code}
+The facts that \ad S, \ad P, and \ad V preserve identities are presented in the \ualib in a similar way (and named \af{S-id1}, \af{P-id1}, \af{V-id1}, respectively). As usual, the full proofs are available in the \ualib source code and documentation.\cref{note1}%%  We present the statements here without further discussion.
+%% \ccpad
+%% \begin{code}[number=code:S1]%
+%%   \input{aux/S1-short.tex}
+%% \end{code}
+%% \ccpad
+%% \begin{code}%
+%%   \input{aux/P1-short.tex}
+%% \end{code}
+%% \ccpad
+%% \begin{code}%
+%%   \input{aux/V1-short.tex}
+%% \end{code}
 %% Once again, and for the last time, completeness dictates that we formalize the converse, obvious though it may be.
 %% \ccpad
 %% \begin{code}%
@@ -1394,18 +1704,21 @@ It follows from \af{V-id1} that, if \ab 𝒦 is a class of structures, then the 
 
 %% HSP Theorem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Birkhoff's HSP Theorem}\label{sec:birkhoff}
-This section presents the \ualibBirkhoff module of  the \agdaualib. In \S\ref{ssec:relatively-free-algebra-type}, we present a formal representation of the \emph{relatively free algebra} in \ad S (\ad P \ab 𝒦) over \ab X, for a given class \ab 𝒦 of \ab 𝑆-algebras. In \S\ref{ssec:hsp-lemmata}, we state a number of lemmas needed in \S\ref{ssec:hsp-theorem} where, finally, we present the statement and proof of Birkhoff's HSP theorem.
+This section presents the \ualibBirkhoff module of  the \agdaualib. In \S\ref{ssec:free-algebra-type}, we present a formal representation of the \emph{free algebra} in \ad S (\ad P \ab 𝒦) over \ab X, for a given class \ab 𝒦 of \ab 𝑆-algebras. In \S\ref{ssec:hsp-lemmata}, we state a number of lemmas needed in \S\ref{ssec:hsp-theorem} where, finally, we present the statement and proof of Birkhoff's HSP theorem.
 
-\subsection{The Relatively Free Algebra}\label{ssec:relatively-free-algebra-type}
-In this section, we formalize, for a given class \ab 𝒦 of \ab 𝑆-algebras, the relatively free algebra in \ad S~(\ad P~\ab 𝒦) over \ab X.
+\subsection{The Free Algebra}\label{ssec:free-algebra-type}
+In this section, we formalize, for a given class \ab 𝒦 of \ab 𝑆-algebras, the (relatively) \defn{free algebra in} \ad S~(\ad P~\ab 𝒦) \defn{over} \ab X. Let \af Θ(\ab 𝒦, \ab 𝑨) := \{\ab θ \af ∈ \af{Con} \ab 𝑨 \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\} and \af ψ(\ab 𝒦, \ab 𝑨) := \af ⋂ \af Θ(\ab 𝒦, \ab𝑨).
+%% The free algebra is constructed by applying these definitions to the special case in which \ab 𝑨 is the term algebra \af 𝑻 \ab X of \ab 𝑆-terms over \ab X.  
+Since the term algebra \af 𝑻 \ab X is free for the class $𝒜𝓁ℊ(𝑆)$ of all \ab 𝑆-algebras, it follows that \af 𝑻 \ab X is free for every subclass \ab 𝒦 of $𝒜𝓁ℊ(𝑆)$. Although \af 𝑻 \ab X is not necessarily a member of \ab 𝒦, if we form the quotient 𝔉 \as := (\ab 𝑻 \ab X) \af / \af ψ(\ab 𝒦, \af 𝑻 \ab X), of \af 𝑻 \ab X modulo the congruence
 
-Let \af Θ(\ab 𝒦, \ab 𝑨) := \{\ab θ \af ∈ \af{Con} \ab 𝑨 \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\} and \af ψ(\ab 𝒦, \ab 𝑨) := \af ⋂ \af Θ(\ab 𝒦, \ab𝑨).
-The free algebra is constructed by applying these definitions to the special case in which \ab 𝑨 is the term algebra \af 𝑻 \ab X of \ab 𝑆-terms over \ab X.  Since \af 𝑻 \ab X is free for the class $𝒜𝓁ℊ(𝑆)$ of all \ab 𝑆-algebras, it follows that \af 𝑻 \ab X is free for every subclass \ab 𝒦 of $𝒜𝓁ℊ(𝑆)$. Although \af 𝑻 \ab X is not necessarily a member of \ab 𝒦, if we form the quotient of \af 𝑻 \ab X modulo the congruence \af ψ(\ab 𝒦, \af 𝑻 \ab X), which we denote and define by \af 𝔉 \as := (\ab 𝑻 \ab X) \af / \af ψ(\ab 𝒦, \af 𝑻 \ab X), then it should be clear that \af 𝔉 is a subdirect product of the algebras in \{(\af 𝑻 \ab X) \af / \ab θ\}, where \ab θ ranges over \af Θ(\ab 𝒦, \af 𝑻 \ab X), so \af 𝔉 belongs to \ad S (\ad P \ab 𝒦).
+\af ψ(\ab 𝒦, \af 𝑻 \ab 𝑋) := \af ⋂ \{\ab θ \af ∈ \af{Con} (\af 𝑻 \ab X) \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\}.\\
+then it should be clear that \af 𝔉 is a subdirect product of the algebras in \{(\af 𝑻 \ab X) \af / \ab θ\}, where \ab θ ranges over \{\ab θ \af ∈ \af{Con} (\af 𝑻 \ab X) \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\}
+The algebra \af 𝔉 so defined is called the \defn{free algebra over} \ab 𝒦 \defn{generated by} \ab X and (because of what we just observed) we may say that \af 𝔉 is free \emph{in} \ad S (\ad P \ab 𝒦).
 
-The algebra \af 𝔉 so defined is called the \defn{free algebra over} \ab 𝒦 \defn{generated by} \ab X and (because of what we just observed) we may say that \af 𝔉 is free \emph{in} \ad S (\ad P \ab 𝒦). To represent \af 𝔉 as a type in \agda, we must first formally represent the congruence \af ψ(\ab 𝒦, \af 𝑻 \ab 𝑋) which, recall, is defined as follows:\\
-
-\af ψ(\ab 𝒦, \af 𝑻 \ab 𝑋) := \af ⋂ \af Θ(\ab 𝒦, \af 𝑻 \ab X) := \af ⋂ \{\ab θ \af ∈ \af{Con} (\af 𝑻 \ab X) \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\}.\\
-\\
+To represent \af 𝔉 as a type in \agda, we must first formally represent the congruence \af ψ(\ab 𝒦, \af 𝑻 \ab 𝑋).
+%% which, recall, is defined as follows:\\
+%% \af ψ(\ab 𝒦, \af 𝑻 \ab 𝑋) := \af ⋂ \af Θ(\ab 𝒦, \af 𝑻 \ab X) := \af ⋂ \{\ab θ \af ∈ \af{Con} (\af 𝑻 \ab X) \as : \ab 𝑨 \af / \ab θ \af ∈ \ad S \ab 𝒦\}.\\
+%% \\
 We begin by defining the collection \af{𝑻img} of homomorphic images of the term algebra.
 \ccpad
 \begin{code}%
@@ -1456,7 +1769,7 @@ We begin by defining the collection \af{𝑻img} of homomorphic images of the te
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \end{code}
 \ccpad
-The Sigma type we use to define \af{𝑻img} is the type of algebras \ab 𝑨 such that there exists \ab ϕ \as : \af{hom} (\af 𝑻 \ab X) \ab 𝑨 such that \ab 𝑨 \af ∈ \ab 𝒦 and \ab ϕ is surjective. This is precisely the collection of all homomorphic images of \af 𝑻 \ab X, as desired. An inhabitant of type \af{𝑻img} is a quadruple, (\ab 𝑨, \ab ϕ, \ab{ka}, \ab{ϕE}), where \ab 𝑨 is an algebra, \ab ϕ \as : \af{hom} (\af 𝑻 \ab X) \ab 𝑨 is a homomorphism from \af 𝑻 \ab X to \ab 𝑨, \ab{ka} \as : \ab 𝑨 \af ∈ \ab 𝒦  is a proof that \ab 𝑨 belongs to \ab 𝒦, and \ab{ϕE} is a proof that the underlying map \aiab{∣}{ϕ} is epic.
+The inhabitants of this Sigma type represent algebras \ab 𝑨 \af ∈ \ab 𝒦 such that there exists a surjective homomorphism \ab ϕ \as : \af{hom} (\af 𝑻 \ab X) \ab 𝑨. Thus, \af{𝑻img} represents the collection of all homomorphic images of \af 𝑻 \ab X.\footnote{Technically, an inhabitant of type \af{𝑻img} is a quadruple, (\ab 𝑨, \ab ϕ, \ab{ka}, \ab p), where \ab 𝑨 is an algebra, \ab ϕ \as : \af{hom} (\af 𝑻 \ab X) \ab 𝑨 is a homomorphism from \af 𝑻 \ab X to \ab 𝑨, \ab{ka} \as : \ab 𝑨 \af ∈ \ab 𝒦  is a proof that \ab 𝑨 belongs to \ab 𝒦, and \ab p is a proof that the underlying map \aiab{∣}{ϕ} is epic.}
 
 Next we define a function \af{mkti} that takes an arbitrary algebra \ab 𝑨 and returns an inhabitant of \af{𝑻img} which is essentially a proof that \ab 𝑨 is a homomorphic image of \af 𝑻 \ab X.
 \ccpad
@@ -1624,300 +1937,301 @@ We convert the predicate \af ψ into a relation by \href{https://en.wikipedia.or
 \AgdaBound{q}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-We will want to express \af{ψRel} as a congruence of the term algebra \af 𝑻 \ab X, so we must prove that \af{ψRel} is compatible with the operations of \af 𝑻 \ab X (which are just the terms themselves) and that \af{ψRel} an equivalence relation.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{ψcompatible}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{compatible}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{ψcompatible}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{i}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{j}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{iψj}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{γ}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{ti}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{𝑻img}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[3]\AgdaFunction{ti}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{mkti}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{sA}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑨}\<%
-\\
-%
-\>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ti}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{j}\AgdaSymbol{)}\<%
-\\
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[305I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-\>[.][@{}l@{}]\<[305I]%
-\>[7]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{iψj}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[7]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{j}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[7]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ψRefl}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{ψRefl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ψSymm}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{ψSymm}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaBound{pψRelq}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{pψRelq}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ψTrans}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{ψTrans}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaBound{r}\AgdaSpace{}%
-\AgdaBound{pψq}\AgdaSpace{}%
-\AgdaBound{qψr}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{pψq}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{qψr}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ψIsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{ψIsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaSpace{}%
-\AgdaField{rfl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ψRefl}\AgdaSpace{}%
-\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaField{sym}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ψSymm}\AgdaSpace{}%
-\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaField{trans}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ψTrans}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\end{code}
-\ccpad
-We have collected all the pieces necessary to express the collection of identities satisfied by all (subalgebras of) algebras in the class as a congruence relation of the term algebra. We call this congruence \af{ψCon} and define it using the \af{Congruence} constructor \aic{mkcon}.
+The relation \af{ψRel} is an equivalence relation and is compatible with the operations of \af 𝑻 \ab X (which are just the terms themselves).  We omit the proofs, but see the \ualibFreeAlgebra module for details.  Therefore, we can construct from \af{ψRel} a congruence of the term algebra \af 𝑻 \ab X.
+%% \ccpad
+%% \begin{code}%
+%% \>[0][@{}l@{\AgdaIndent{1}}]%
+%% \>[1]\AgdaFunction{ψcompatible}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{compatible}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ψcompatible}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{i}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{j}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{iψj}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{sA}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{γ}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaKeyword{where}\<%
+%% \\
+%% \>[2][@{}l@{\AgdaIndent{0}}]%
+%% \>[3]\AgdaFunction{ti}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{𝑻img}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{ti}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{mkti}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{sA}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{hom}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{fst}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaFunction{ti}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[3]\AgdaFunction{γ}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{j}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[3]\AgdaFunction{γ}\AgdaSpace{}%
+%% \AgdaSymbol{=}%
+%% \>[305I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% \>[.][@{}l@{}]\<[305I]%
+%% \>[7]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaFunction{ap}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+%% \AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaBound{iψj}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaBound{sA}\AgdaSymbol{))}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[7]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+%% \AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+%% \AgdaBound{f}\AgdaSpace{}%
+%% \AgdaBound{j}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⟩}}\<%
+%% \\
+%% %
+%% \>[7]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{ϕ}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∎}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaFunction{ψRefl}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{reflexive}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ψRefl}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{λ}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaFunction{ψSymm}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{symmetric}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ψSymm}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{pψRelq}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{pψRelq}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaFunction{ψTrans}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{transitive}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ψTrans}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaBound{r}\AgdaSpace{}%
+%% \AgdaBound{pψq}\AgdaSpace{}%
+%% \AgdaBound{qψr}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{pψq}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaBound{qψr}\AgdaSpace{}%
+%% \AgdaBound{𝑪}\AgdaSpace{}%
+%% \AgdaBound{ϕ}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaFunction{ψIsEquivalence}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaRecord{IsEquivalence}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ψIsEquivalence}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaKeyword{record}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaSpace{}%
+%% \AgdaField{rfl}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ψRefl}\AgdaSpace{}%
+%% \AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaField{sym}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ψSymm}\AgdaSpace{}%
+%% \AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaField{trans}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ψTrans}\AgdaSpace{}%
+%% \AgdaSymbol{\}}\<%
+%% \end{code}
+%% \ccpad
+%% We have collected all the pieces necessary to 
+The inhabitants of this congruence relation are pairs of terms representing identities satisfied by all (subalgebras of) algebras in the class.  We call this \af{ψCon} and define it using the \af{Congruence} constructor \aic{mkcon} as follows.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1948,7 +2262,7 @@ We have collected all the pieces necessary to express the collection of identiti
 \AgdaFunction{ψIsEquivalence}\<%
 \end{code}
 \ccpad
-We now construct the relatively free algebra \af 𝔉 as the quotient \af 𝑻 \ab X \af ╱ (\af{ψCon} \ab 𝒦).
+The free algebra \af 𝔉 is then defined as the quotient \af 𝑻 \ab X \af ╱ (\af{ψCon} \ab 𝒦).
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝓕}\AgdaSpace{}%
@@ -2011,672 +2325,176 @@ The domain of \af 𝔉 is the collection \{ \af C \as : \as ∃ \ab p \af ∈ \a
 %%%%%%%%%%%%%%%%%%%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{HSP Lemmata}\label{ssec:hsp-lemmata}
 This section gives formal statements of five lemmata that we string together in \S\ref{ssec:hsp-theorem} to complete the proof of Birkhoff's theorem.
-%% \subsubsection{V is closed under lift}\label{sssec:v-is-closed-under-lift}
-This time, we include the module directive because we use it to make some extensionality and truncation assumptions that will persist until the end of the development.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{HSPLemmata}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[1]\AgdaComment{-- extensionality assumptions:}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[11]\AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hfunext}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[11]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{propext}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[11]\AgdaSymbol{\{}\AgdaBound{ssR}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[11]\AgdaSymbol{\{}\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSymbol{\{}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}\{}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[1]\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- NOTATION.}\<%
-\\
-%
-\>[1]\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaFunction{ovu+}\AgdaSpace{}%
-\AgdaFunction{ovu++}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\<%
-\\
-%
-\>[1]\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\<%
-\\
-%
-\>[1]\AgdaFunction{ovu+}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\<%
-\\
-%
-\>[1]\AgdaFunction{ovu++}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\<%
-\end{code}
-\ccpad
-The first hurdle is the \af{lift-alg-V-closure} lemma, which says that if an algebra \ab 𝑨 belongs to the variety 𝕍, then so does its lift. This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof (which we omit) is long and tedious, not to mention uninteresting.
-\ccpad
-\begin{code}%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Lift}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-alg-V-closure}\AgdaSpace{}%
-\AgdaComment{-- (alias)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaFunction{VlA}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaSymbol{→}%
-\>[9]\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-\>[3][@{}l@{\AgdaIndent{0}}]%
-\>[7]\AgdaComment{---------------------------------}\<%
-\\
-%
-\>[3]\AgdaSymbol{→}%
-\>[8]\AgdaFunction{lift-alg}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{ovu+}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\end{code}
-\ccpad
-%% \subsubsection{SP(𝒦) ⊆ V(𝒦)}\label{sssec:lemma-1}
-Next we formalize the obvious fact that \ad S\ad P(\ab 𝒦) \af ⊆ \ad V(\ab 𝒦). Unfortunately, the formal proof (which we omit) is neither trivial nor interesting.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{SP⊆V'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ovu}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\end{code}
-\ccpad
+%% This time, we include the module directive because we use it to make some extensionality and truncation assumptions that will persist until the end of the development.
+%% \ccpad
+%% \begin{code}%
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{HSPLemmata}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{-- extensionality assumptions:}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[11]\AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{hfunext}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[11]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{propext}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[11]\AgdaSymbol{\{}\AgdaBound{ssR}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[11]\AgdaSymbol{\{}\AgdaBound{ssA}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSymbol{\{}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{OV}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}\{}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaKeyword{where}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaComment{-- NOTATION.}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ovu}\AgdaSpace{}%
+%% \AgdaFunction{ovu+}\AgdaSpace{}%
+%% \AgdaFunction{ovu++}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ovu}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{𝓞}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+%% \AgdaBound{𝓥}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⁺}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ovu+}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ovu}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⁺}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{ovu++}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaFunction{ovu}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⁺}}\<%
+%% \end{code}
+%% \ccpad
+The first hurdle is the \af{lift-alg-V-closure} lemma, which says that if an algebra \ab 𝑨 belongs to the variety 𝕍, then so does its lift. This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting. \seedocfordetails
+%% \ccpad
+%% \begin{code}%
+%% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaModule{Lift}\<%
+%% \\
+%% %
+%% \>[1]\AgdaFunction{lift-alg-V-closure}\AgdaSpace{}%
+%% \AgdaComment{-- (alias)}\<%
+%% \\
+%% \>[1][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaFunction{VlA}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaFunction{ovu}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{\}}\<%
+%% \\
+%% \>[2][@{}l@{\AgdaIndent{0}}]%
+%% \>[3]\AgdaSymbol{→}%
+%% \>[9]\AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+%% \AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\<%
+%% \\
+%% \>[3][@{}l@{\AgdaIndent{0}}]%
+%% \>[7]\AgdaComment{---------------------------------}\<%
+%% \\
+%% %
+%% \>[3]\AgdaSymbol{→}%
+%% \>[8]\AgdaFunction{lift-alg}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaFunction{ovu+}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+%% \AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\<%
+%% \end{code}
+%% \ccpad
+%% %% \subsubsection{SP(𝒦) ⊆ V(𝒦)}\label{sssec:lemma-1}
+The next fact that must be formalized is the inclusion \ad S\ad P(\ab 𝒦) \af ⊆ \ad V(\ab 𝒦), which also suffers from the unfortunate defect of being boring, so we omit this one as well.
+%% \ccpad
+%% \begin{code}%
+%% \>[0][@{}l@{\AgdaIndent{1}}]%
+%% \>[1]\AgdaFunction{SP⊆V'}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ovu}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+%% \AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\<%
+%% \end{code}
+%% \ccpad
 %% \subsubsection{𝔉 ≤ ⨅ S(𝒦)}\label{sssec:lemma-2}
-After these first two results are formally verified (see \href{https://ualib.gitlab.io/UALib.Birkhoff.Lemmata.html}{UALib.Birkhoff.Lemmata.html} for the proofs), we arrive at a step in the formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must show that the relatively free algebra \af 𝔉 embeds in the product \af ℭ of all subalgebras of algebras in the given class \ab 𝒦.
+
+After the first two lemmas mentioned above are formally verified (see~\cite{DeMeo:2021} or \ualibdotorg for details), we arrive at a step in the formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must show that the relatively free algebra \af 𝔉 embeds in the product \af ℭ of all subalgebras of algebras in the given class \ab 𝒦.
 To prepare for this, we arm ourselves with a small arsenal of notation.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{the-relatively-free-algebra}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{𝓧}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{\}}\<%
-\\
-%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{class-product}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- NOTATION.}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- 𝔉 is the relatively free algebra}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaFunction{ovu+}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaComment{-- 𝒦}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- 𝕍 is HSP(𝒦)}\<%
-\\
-%
-\>[1]\AgdaFunction{𝕍}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaFunction{ovu+}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ovu++}\<%
-\\
-%
-\>[1]\AgdaFunction{𝕍}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu+}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ℑs}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{ℑs}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ℑ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{SK𝔄}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-%
-\>[1]\AgdaFunction{SK𝔄}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- ℭ is the product of all subalgebras of 𝒦.}\<%
-\\
-%
-\>[1]\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaFunction{ovu}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{⨅}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\<%
-\\
-%
-\>[1]\AgdaComment{-- elements of ℭ are mappings from ℑs to \{𝔄s i : i ∈ ℑs\}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔥₀}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔥₀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝕏}%
-\>[705I]\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)))}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaComment{-- fst (𝕏 ℭ)}\<%
-\\
-\>[705I][@{}l@{\AgdaIndent{0}}]%
-\>[25]\AgdaComment{--                             𝔄1}\<%
-\\
-%
-\>[1]\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ℭ}%
-\>[25]\AgdaComment{--                            77}\<%
-\\
-%
-\>[1]\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-hom}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaFunction{𝔥₀}%
-\>[25]\AgdaComment{--                           /}\<%
-\\
-%
-\>[25]\AgdaComment{--        𝑻 -----ϕ≡h --->>  ℭ -->> 𝔄2}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{𝔉}%
-\>[25]\AgdaComment{--         \textbackslash{}             77        ⋮}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-hom}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{X↪𝔉}\AgdaSymbol{)}%
-\>[24]\AgdaComment{--          \textbackslash{}           /}\<%
-\\
-\>[24][@{}l@{\AgdaIndent{0}}]%
-\>[25]\AgdaComment{--          g         ∃f}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaFunction{ℭ}%
-\>[25]\AgdaComment{--           \textbackslash{}       /}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[732I]\AgdaFunction{𝔉-free-lift}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaFunction{𝔥₀}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}%
-\>[25]\AgdaComment{--            \textbackslash{}     /}\<%
-\\
-\>[.][@{}l@{}]\<[732I]%
-\>[5]\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSymbol{(λ}%
-\>[744I]\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaComment{--  V  l/}\<%
-\\
-\>[744I][@{}l@{\AgdaIndent{0}}]%
-\>[26]\AgdaComment{--           𝔉= 𝑻/ψ}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔤-⟦⟧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔤-⟦⟧}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{π𝔉-X-defined}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔉-lift-agrees-on-X}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaFunction{X↪𝔉}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{--Projection out of the product ℭ onto the specified (i-th) factor.}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{i}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{⨅-projection-hom}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{I}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{\}\{}\AgdaArgument{𝒜}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSymbol{\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- the composition:  𝔉 --∣ 𝔣 ∣-->  ℭ --(𝔭 i)--> 𝔄s i}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭𝔣}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭𝔣}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭𝔣hom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭𝔣hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{HomComp}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{HomComp}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠≡𝔓}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠≡𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- The class of subalgebras of products of 𝒦.}\<%
-\\
-%
-\>[1]\AgdaFunction{SP𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ovu}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ovu}\AgdaSymbol{))}\<%
-\\
-%
-\>[1]\AgdaFunction{SP𝒦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ovu}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
+\input{aux/notation.tex}
 \end{code}
+
 \subsubsection{𝔉 ≤ ℭ}\label{sssec:lemma-3}
 Armed with these tools, we proceed to the proof that the free algebra \af 𝔉 is a subalgebra of the product ℭ of all subalgebras of algebras in 𝒦. 
-The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af ℭ is a monomorphism. Let's dispense with that first.
+The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af ℭ is a monomorphism. We omit most of the details, but here's the stub. %Let's dispense with that first.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Ψ}\AgdaSpace{}%
@@ -2686,7 +2504,7 @@ The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af 
 \AgdaFunction{𝑻}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{)}\<%
 \\
 %
@@ -2728,507 +2546,11 @@ The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af 
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{pΨq}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Ψ}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\<%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2] \AgdaComment{... details omitted ...}%
 \\
-%
-\>[3]\AgdaFunction{pΨq}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{γ'}\<%
-\\
-\>[3][@{}l@{\AgdaIndent{0}}]%
-\>[4]\AgdaKeyword{where}\<%
-\\
-\>[4][@{}l@{\AgdaIndent{0}}]%
-\>[5]\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaFunction{𝔉}\AgdaSpace{}%
-\AgdaBound{𝑨}\<%
-\\
-%
-\>[5]\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔭𝔣hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{𝔣pq}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\<%
-\\
-%
-\>[5]\AgdaFunction{𝔣pq}%
-\>[977I]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}%
-\>[43]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-\>[977I][@{}l@{\AgdaIndent{0}}]%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{-}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{-}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaBound{fpq}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔣}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}%
-\>[43]\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{h₀}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[5]\AgdaFunction{h₀}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[11]\AgdaSymbol{(}\AgdaFunction{𝔭}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaFunction{𝔥₀}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{h}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑨}\<%
-\\
-%
-\>[5]\AgdaFunction{h}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{HomComp}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-hom}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{h₀}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaComment{--(homs from 𝑻 X to 𝑨 that agree on X are equal)}\<%
-\\
-%
-\>[5]\AgdaFunction{lift-agreement}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{h₀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\<%
-\\
-%
-\>[5]\AgdaFunction{lift-agreement}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔉-lift-agrees-on-X}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{h₀}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{𝔣gx≡ϕ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-%
-\>[5]\AgdaFunction{𝔣gx≡ϕ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[1106I]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}%
-\>[46]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-\>[1106I][@{}l@{\AgdaIndent{0}}]%
-\>[16]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[45]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔤-⟦⟧}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[16]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{)}%
-\>[44]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-agreement}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-\>[16][@{}l@{\AgdaIndent{0}}]%
-\>[17]\AgdaFunction{h₀}\AgdaSpace{}%
-\AgdaBound{x}%
-\>[43]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[16]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{h≡ϕ'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{t}\<%
-\\
-%
-\>[5]\AgdaFunction{h≡ϕ'}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{free-unique}\AgdaSpace{}%
-\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{h}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaFunction{𝔣gx≡ϕ}\AgdaSpace{}%
-\AgdaBound{t}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{SPu}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)}\<%
-\\
-%
-\>[5]\AgdaFunction{SPu}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
-\\
-%
-\>[5]\AgdaFunction{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℑs}\<%
-\\
-%
-\>[5]\AgdaFunction{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sA}\AgdaSymbol{)}\<%
-\\
-%
-\>[5]\AgdaFunction{𝔄i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[5]\AgdaFunction{𝔄i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaFunction{i}\<%
-\\
-%
-\>[5]\AgdaFunction{sp𝔄i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{𝔄i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaFunction{SPu}\<%
-\\
-%
-\>[5]\AgdaFunction{sp𝔄i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{S⊆SP}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{sA}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[5]\AgdaFunction{γ'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{q}\<%
-\\
-%
-\>[5]\AgdaFunction{γ'}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[1219I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{h≡ϕ'}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-\>[.][@{}l@{}]\<[1219I]%
-\>[10]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔤-⟦⟧}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{𝔣pq}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔤-⟦⟧}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[31]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
-\AgdaFunction{h≡ϕ'}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟩}}\<%
-\\
-%
-\>[10]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{q}%
-\>[31]\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Ψ}\AgdaSpace{}%
@@ -3247,7 +2569,7 @@ The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af 
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSymbol{)}\<%
 \\
 %
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{class-extensionality'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
@@ -3258,7 +2580,7 @@ The hard part of the proof is showing that \af 𝔣 \as : \af{hom} \af 𝔉 \af 
 \AgdaFunction{pΨq}\<%
 \end{code}
 \ccpad
-With that out of the way, the proof that \af 𝔉 is (isomorphic to) a subalgebra of \af ℭ is all but complete.
+With the foregoing behind us, the proof that \af 𝔉 is (isomorphic to) a subalgebra of \af ℭ is all but complete.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -3310,7 +2632,7 @@ With that out of the way, the proof that \af 𝔉 is (isomorphic to) a subalgebr
 \end{code}
 
 \subsubsection{𝔉 ∈ V(𝒦)}\label{sssec:lemma-4}
-With the foregoing results in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ 𝕍---it is not hard to show that \af 𝔉 belongs to \ad S\ad P(\ab 𝒦), and hence to \ad V(𝒦).
+With the foregoing results in hand, along with what we proved earlier---namely, \ad P\ad S(\ab 𝒦) \af ⊆ \ad S\ad P(\ab 𝒦) \af ⊆ \ad H\ad S\ad P(\ab 𝒦) \af ≡ \ad V(\ab 𝒦)---it is not hard to show that \af 𝔉 belongs to \ad S\ad P(\ab 𝒦), and hence to \ad V(\ab 𝒦).
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝔉∈SP}\AgdaSpace{}%
