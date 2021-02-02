@@ -57,26 +57,26 @@ module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
  𝓸𝓿𝓾 = ov 𝓤
 \end{code}
 
-We begin by defining the collection `𝑻img` of homomorphic images of the term algebra.
+We begin by defining the collection `𝑻img` of homomorphic images of the term algebra that belong to a given class 𝒦.
 
 \begin{code}
 
  -- H (𝑻 X)  (hom images of 𝑻 X)
- 𝑻img : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾 → 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⊔ 𝓧)⁺ ̇
+ 𝑻img : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾 → 𝓸𝓿𝓾 ⊔ 𝓧 ⁺ ̇
  𝑻img 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ ϕ ꞉ hom (𝑻 X) 𝑨 , (𝑨 ∈ 𝒦) × Epic ∣ ϕ ∣
 
 \end{code}
 
-The Sigma type we use to define `𝑻img` is the type of algebras 𝑨 such that there exists `ϕ : hom (𝑻 X) 𝑨` such that 𝑨 ∈ 𝒦 and ϕ is surjective.  This is precisely the collection of all homomorphic images of `𝑻 X`, as desired.
+The Sigma type we use to define `𝑻img 𝒦` is the type of algebras 𝑨 ∈ 𝒦 such that there exists a surjective homomorphism `ϕ : hom (𝑻 X) 𝑨` from the term algebra to 𝑨.  This is precisely the collection of all homomorphic images of `𝑻 X` that belong to 𝒦, as desired.
 
-An inhabitant of type `𝑻img` is a quadruple, `(𝑨 , ϕ , ka, ϕE)`, where 𝑨 is an algebra, `ϕ : hom (𝑻 X) 𝑨` is a homomorphism from `𝑻 X` to 𝑨, `KA : 𝑨 ∈ 𝒦` is a proof that 𝑨 belongs to 𝒦, and `ϕE` is a proof that the underlying map ∣ ϕ ∣ is surjective.
+Of course, this is the class of *all* algebras in 𝒦, since the term algebra is absolutely free; nonetheless, we still want to have this representation of the algebras in 𝒦, as homomorphic images of `𝑻 X`, as inhabitants of the type `𝑻img 𝒦` carry this extra information.  Indeed, an inhabitant of `𝑻img` is a quadruple, `(𝑨 , ϕ , ka, p)`, where 𝑨 is an 𝑆-algebra, `ϕ : hom (𝑻 X) 𝑨` is a homomorphism from `𝑻 X` to 𝑨, `ka` is a proof that 𝑨 belongs to 𝒦, and `p` is a proof that the underlying map `∣ ϕ ∣` is epic.
 
-Next we define a function `mkti` that takes an arbitrary algebra 𝑨 and returns an inhabitant of `𝑻img` which is essentially a proof that 𝑨 is a homomorphic image of `𝑻 X`.
+Next we define a function `mkti` that takes an arbitrary algebra 𝑨 in 𝒦 and returns the corresponding quadruple in `𝑻img 𝒦`.
 
 \begin{code}
 
  mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
- mkti 𝑨 KA = (𝑨 , ∣ 𝑻hom-gen 𝑨 ∣ , KA , ∥ 𝑻hom-gen 𝑨 ∥)
+ mkti 𝑨 ka = (𝑨 , ∣ 𝑻hom-gen 𝑨 ∣ , ka , ∥ 𝑻hom-gen 𝑨 ∥)
 
 \end{code}
 
@@ -85,13 +85,12 @@ Occasionally we want to extract the homomorphism ϕ from an inhabitant of `𝑻i
 \begin{code}
 
  -- The hom part of a hom image of 𝑻 X.
- 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)(ti : 𝑻img 𝒦)
-  →   hom (𝑻 X) ∣ ti ∣
+ 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)(ti : 𝑻img 𝒦) → hom (𝑻 X) ∣ ti ∣
  𝑻ϕ _ ti = fst ∥ ti ∥
 
 \end{code}
 
-Finally, it is time to define the congruence relation modulo which `𝑻 X` will yield the relatively free algebra, 𝔉 𝒦 X.
+Finally, it is time to define the congruence relation modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X`.
 
 We start by letting ψ be the collection of all identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
 
@@ -176,32 +175,14 @@ module the-relatively-free-algebra
  𝔉 =  𝑻 X ╱ (ψCon 𝒦)
 \end{code}
 
-The domain, ∣ 𝔉 ∣, is defined by
-
-```agda
-( ∣ 𝑻 X ∣ ╱ ⟨ θ ⟩ ) = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ≈ )
-```
-
-which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-classs of 𝑻 X.
+The domain, ∣ 𝔉 ∣, is defined by `∣ 𝑻 X ∣ ╱ ⟨ θ ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ≈ )` which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] }` of θ-classs of `𝑻 X`.
 
 \begin{code}
 
- 𝔉-free-lift : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-               (h₀ : X → ∣ 𝑨 ∣)  →  ∣ 𝔉 ∣ → ∣ 𝑨 ∣
-
+ 𝔉-free-lift : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝔉 ∣ → ∣ 𝑨 ∣
  𝔉-free-lift {𝓦}𝑨 h₀ (_ , x , _) = (free-lift{𝓧}{𝓦} 𝑨 h₀) x
 
- 𝔉-free-lift-interpretation : (𝑨 : Algebra 𝓤 𝑆)
-                              (h₀ : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 ∣)
-                             -------------------------------------
-  →                           (⌜ 𝒙 ⌝ ̇ 𝑨) h₀ ≡ 𝔉-free-lift 𝑨 h₀ 𝒙
-
- 𝔉-free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
-
-
- 𝔉-lift-hom : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-               (h₀ : X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
-
+ 𝔉-lift-hom : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → (X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
  𝔉-lift-hom 𝑨 h₀ = f , fhom
   where
    f : ∣ 𝔉 ∣ → ∣ 𝑨 ∣
@@ -214,16 +195,17 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
    fhom 𝑓 𝒂 = ∥ ϕ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
 
  𝔉-lift-agrees-on-X : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-                       (h₀ : X → ∣ 𝑨 ∣)(x : X)
-                     -----------------------------------------
-  →                    h₀ x ≡ ( ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ x ⟧ )
+                      (h₀ : X → ∣ 𝑨 ∣)(x : X)
+                      -----------------------------------
+  →                   h₀ x ≡ (∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ x ⟧)
 
  𝔉-lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
 
+
  𝔉-lift-of-epic-is-epic : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-                           (h₀ : X → ∣ 𝑨 ∣)  →  Epic h₀
-                          --------------------------------
-  →                        Epic ∣ 𝔉-lift-hom 𝑨 h₀ ∣
+                          (h₀ : X → ∣ 𝑨 ∣) → Epic h₀
+                          ------------------------
+  →                       Epic ∣ 𝔉-lift-hom 𝑨 h₀ ∣
 
  𝔉-lift-of-epic-is-epic 𝑨 h₀ hE y = γ
   where
@@ -242,9 +224,6 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
    γ = eq y (⟦ ℊ h₀⁻¹y ⟧) η
 
 
- 𝑻-canonical-projection : (θ : Congruence{ov 𝓧}{𝓤} (𝑻 X)) → epi (𝑻 X) ((𝑻 X) ╱ θ)
- 𝑻-canonical-projection θ = canonical-projection (𝑻 X) θ
-
  𝔉-canonical-projection : epi (𝑻 X) 𝔉
  𝔉-canonical-projection = canonical-projection (𝑻 X) (ψCon 𝒦)
 
@@ -262,44 +241,77 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
    gπ𝔉-agree-on-X : ((x : X) → ∣ g ∣ (ℊ x) ≡ ∣ π𝔉 ∣ ( ℊ x ))
    gπ𝔉-agree-on-X x = gx x
 
-
  X↪𝔉 : X → ∣ 𝔉 ∣
  X↪𝔉 x = ⟦ ℊ x ⟧
 
+\end{code}
 
- -- ψlem : (p q : ∣ 𝑻 X ∣ )
- --  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
- --       -----------------------------------------------
- --  →                (p , q) ∈ ψ 𝒦
+-------------------------------
 
- -- ψlem p q gpgq 𝑨 sA = γ
- --   where
- --    g : hom (𝑻 X) 𝔉
- --    g = lift-hom 𝔉 (X↪𝔉)
+[The remainder is not needed for the proof of Birkhoff's theorem.]
 
- --    h₀ : X → ∣ 𝑨 ∣
- --    h₀ = fst (𝕏 𝑨)
 
- --    f : hom 𝔉 𝑨
- --    f = 𝔉-lift-hom 𝑨 h₀
+\begin{code}
 
- --    h ϕ : hom (𝑻 X) 𝑨
- --    h = HomComp (𝑻 X) 𝑨 g f
- --    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+ 𝔉-free-lift-interpretation : (𝑨 : Algebra 𝓤 𝑆)
+                              (h₀ : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 ∣)
+                             -------------------------------------
+  →                           (⌜ 𝒙 ⌝ ̇ 𝑨) h₀ ≡ 𝔉-free-lift 𝑨 h₀ 𝒙
 
- --     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
- --    lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
- --    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
- --    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
- --    fgx≡ϕ x = (lift-agreement x)⁻¹
- --    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
- --    h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+ 𝔉-free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
 
- --    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
- --    γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
- --               ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
- --               ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
- --               ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
+ 𝑻-canonical-projection : (θ : Congruence{ov 𝓧}{𝓤} (𝑻 X)) → epi (𝑻 X) ((𝑻 X) ╱ θ)
+ 𝑻-canonical-projection θ = canonical-projection (𝑻 X) θ
+
+\end{code}
+
+
+#### <a id="properties-of-psi">Properties of ψ</a>
+
+\begin{code}
+
+ ψlem : (p q : ∣ 𝑻 X ∣ )
+  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
+       -----------------------------------------------
+  →                (p , q) ∈ ψ 𝒦
+
+ ψlem p q gpgq 𝑨 sA = γ
+   where
+    g : hom (𝑻 X) 𝔉
+    g = lift-hom 𝔉 (X↪𝔉)
+
+    h₀ : X → ∣ 𝑨 ∣
+    h₀ = fst (𝕏 𝑨)
+
+    f : hom 𝔉 𝑨
+    f = 𝔉-lift-hom 𝑨 h₀
+
+    h ϕ : hom (𝑻 X) 𝑨
+    h = HomComp (𝑻 X) 𝑨 g f
+    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+
+     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
+    lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
+    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
+    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+    fgx≡ϕ x = (lift-agreement x)⁻¹
+    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
+    h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+
+    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+    γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
+               ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
+               ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
+               ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
+
+
+ 𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
+        (𝑪 : Algebra 𝓤 𝑆) (sC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
+        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
+       --------------------------------------------------
+  →     ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ p ≡ ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ q
+
+ 𝑻i⊧ψ 𝒦 𝑪 sC p q pψq = pψq 𝑪 sC
 
 \end{code}
 
@@ -316,22 +328,6 @@ which is the collection { C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] } of θ-clas
 
 
 <!--
-
-----------------------------------------
-
-#### <a id="properties-of-psi">Properties of ψ</a>
-
-\begin{code}
-
- 𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
-        (𝑪 : Algebra 𝓤 𝑆) (sC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
-        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
-       --------------------------------------------------
-  →     ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ p ≡ ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ q
-
- 𝑻i⊧ψ 𝒦 𝑪 sC p q pψq = pψq 𝑪 sC
-
-\end{code}
 
 Recall, `mkti X 𝑨 sC` has type `𝑻img X (S 𝒦)` and consists of a quadruple `(𝑨 , ϕ , sA , ϕE)`
 where
