@@ -666,11 +666,11 @@ pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf 
 pdfkeywords={\@keywords},
 pdfproducer={LaTeX with lipics-v2021.cls},
 pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle},
-pdfcopyright = { Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY 4.0},
+pdfcopyright = { Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0},
 pdflang={en},
 pdfmetalang={en},
 pdfpublisher={Schloss Dagstuhl -- Leibniz-Zentrum für Informatik, Dagstuhl Publishing, Germany},
-pdflicenseurl={https://creativecommons.org/licenses/by/4.0/},
+pdflicenseurl={https://creativecommons.org/licenses/by-sa/4.0/},
 pdfpubtype={LIPIcs},
 pdfvolumenum={\@SeriesVolume},
 pdfpagerange={\@ArticleNo:\thepage-\@ArticleNo:\theTotPages},
@@ -684,7 +684,7 @@ pdftitle={\@title},
 pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf \fi},
 pdfkeywords={\@keywords},
 pdfcreator={LaTeX with lipics-v2021.cls},
-pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY 4.0}
+pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0}
 }%
 \fi	%
 }
@@ -844,15 +844,15 @@ pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\au
 \newcommand*\Copyright[1]{%
   \def\@copyrightholder{#1}
   \def\@Copyright{%
-    \setbox\@tempboxa\hbox{\IfFileExists{cc-by.pdf}{\includegraphics[height=14\p@,clip]{cc-by}}{\includegraphics[height=14\p@, width=40pt]{example-image-plain}}}%
+    \setbox\@tempboxa\hbox{\IfFileExists{by-sa.png}{\includegraphics[height=14\p@,clip]{cc-by-sa}}{\includegraphics[height=14\p@, width=40pt]{example-image-plain}}}%
     \@rightskip\@flushglue \rightskip\@rightskip
     \hangindent\dimexpr\wd\@tempboxa+0.5em\relax
-    \href{https://creativecommons.org/licenses/by/4.0/}%
+    \href{https://creativecommons.org/licenses/by-sa/4.0/}%
          {\smash{\lower\baselineskip\hbox{\unhcopy\@tempboxa}}}\enskip
     \textcopyright\ %
     \ifx!#1!\textcolor{red}{Author: Please fill in the \string\Copyright\space macro}\else\ifx\authoranonymous\relax\textcolor{red}{Anonymous author(s)}\else#1\fi\fi
     ;\\%
-    licensed under Creative Commons License CC-BY 4.0\ifx!#1!\\\null\fi\par}}
+    licensed under Creative Commons License CC-BY-SA 4.0\ifx!#1!\\\null\fi\par}}
 \Copyright{\textcolor{red}{Author: Please provide a copyright holder}}
 \let\@copyrightholder\@empty
 \def\hideLIPIcs{\let\@hideLIPIcs\relax}
