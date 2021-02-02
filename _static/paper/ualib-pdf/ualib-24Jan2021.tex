@@ -1,23 +1,23 @@
-\documentclass[a4paper,UKenglish,greek,german,cleveref,autoref,thm-restate]{lipics-v2021}
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{lipics-v2021}
 \usepackage{fontspec}
-\usepackage{unicode-math}
+%% \usepackage{unicode-math}
 \usepackage{comment}
-\setmainfont{XITS}
-[    Extension = .otf,
-   UprightFont = *-Regular,
-      BoldFont = *-Bold,
-    ItalicFont = *-Italic,
-BoldItalicFont = *-BoldItalic,
-]
-\setmathfont{XITSMath-Regular}
-[    Extension = .otf,
-      BoldFont = XITSMath-Bold,
-]
+%% \setmainfont{XITS}
+%% [    Extension = .otf,
+%%    UprightFont = *-Regular,
+%%       BoldFont = *-Bold,
+%%     ItalicFont = *-Italic,
+%% BoldItalicFont = *-BoldItalic,
+%% ]
+%% \setmathfont{XITSMath-Regular}
+%% [    Extension = .otf,
+%%       BoldFont = XITSMath-Bold,
+%% ]
 
-\usepackage[newwjd]{agda}
+\usepackage[wjdsimple]{agda}
 \usepackage{wjd}
 \usepackage{unixode}
-\usepackage{hyperref}
+%% \usepackage{hyperref}
 %
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
@@ -154,19 +154,19 @@ This section presents the \ualibPrelude submodule of the \agdaualib.
 
 \subsection{Preliminaries}\label{sec:preliminaries}
 This subsection presents the \ualibPreliminaries submodule of the \agdaualib.
-\input{Preliminaries.tex}
+\input{Prelude/Preliminaries.tex}
 
 \subsection{Equality}\label{sec:equality}
 This subsection presents the \ualibEquality submodule of the \agdaualib.
-\input{Equality.tex}
+\input{Prelude/Equality.tex}
 
 \subsection{Inverses}\label{sec:inverses}
 This subsection presents the \ualibInverses submodule of the \agdaualib.
-\input{Inverses.tex}
+\input{Prelude/Inverses.tex}
 
 \subsection{Extensionality}\label{sec:extensionality}
 This subsection presents the \ualibExtensionality submodule of the \agdaualib.
-\input{Extensionality.tex}
+\input{Prelude/Extensionality.tex}
 
 \newpage
 
@@ -176,19 +176,19 @@ This section presents the \ualibAlgebras module of the \agdaualib.
 
 \subsection{Operation and Signature Types}\label{sec:operation-and-signature-types}
 This subsection presents the \ualibSignatures submodule of the \agdaualib.
-\input{Signatures.tex}
+\input{Algebras/Signatures.tex}
 
 \subsection{Algebra Types}\label{sec:algebras}
 This subsection presents the \ualibAlgAlgebras submodule of the \agdaualib.
-\input{Algebras.tex}
+\input{Algebras/Algebras.tex}
 
 \subsection{Product Algebra Types}\label{sec:product-algebra-types}
 This subsection presents the \ualibAlgProducts submodule of the \agdaualib.
-\input{Products.tex}
+\input{Algebras/Products.tex}
 
 \subsubsection{The Universe Hierarchy and Lifts}\label{sec:universe-hierarchy-and-lifts}
 This subsection presents the \ualibLifts submodule of the \agdaualib.
-\input{Lifts.tex}
+\input{Algebras/Lifts.tex}
 
 \newpage
 
@@ -204,23 +204,23 @@ This section presents the \ualibRelations module of the \agdaualib.
 
 \subsection{Predicates}\label{sec:predicates}
 This subsection presents the \ualibUnary submodule of the \agdaualib.
-\input{Unary.tex}
+\input{Relations/Unary.tex}
 
 \subsection{Binary Relation and Kernel Types}\label{binary-relation-and-kernel-types}
 This subsection presents the \ualibBinary submodule of the \agdaualib.
-\input{Binary.tex}
+\input{Relations/Binary.tex}
 
 \subsection{Equivalence Relation Types}\label{sec:equiv-relat}
 This subsection presents the \ualibEquivalences submodule of the \agdaualib.
-\input{Equivalences.tex}
+\input{Relations/Equivalences.tex}
 
 \subsection{Quotient Types}\label{sec:quotient-types}
 This subsection presents the \ualibQuotients submodule of the \agdaualib.
-\input{Quotients.tex}
+\input{Relations/Quotients.tex}
 
 \subsection{Congruence Relation Types}\label{sec:congr-relat}
 This subsection presents the \ualibCongruences submodule of the \agdaualib.
-\input{Congruences.tex}
+\input{Relations/Congruences.tex}
 
 \newpage
 
@@ -231,32 +231,32 @@ This section presents the \ualibHomomorphisms module of the \agdaualib.
 \subsection{Basic Definitions}
 \label{sec:homs-basic-definitions}
 This subsection describes the \ualibHomBasic submodule of the \agdaualib.
-\input{HomBasic.tex}
+\input{Homomorphisms/HomBasic.tex}
 
 \subsection{Kernels of Homomorphisms}
 \label{sec:kernels}
 This subsection describes the \ualibKernels submodule of the \agdaualib.
-\input{Kernels.tex}
+\input{Homomorphisms/Kernels.tex}
 
 \subsection{Homomorphism Theorems}
 \label{sec:noether}
 This subsection describes the \ualibNoether submodule of the \agdaualib.
-\input{Noether.tex}
+\input{Homomorphisms/Noether.tex}
 
 \subsection{Products and Homomorphisms}
 \label{sec:products-1}
 This subsection describes the \ualibHomProducts submodule of the \agdaualib.
-\input{HomProducts.tex}
+\input{Homomorphisms/HomProducts.tex}
 
 \subsection{Isomorphism Type}
 \label{sec:isomorphisms}
 This subsection describes the \ualibIsomorphisms submodule of the \agdaualib.
-\input{Isomorphisms.tex}
+\input{Homomorphisms/Isomorphisms.tex}
 
 \subsection{Homomorphic Image Type}
 \label{sec:homomorphicimages}
 This subsection describes the \ualibHomImages submodule of the \agdaualib.
-\input{HomomorphicImages.tex}
+\input{Homomorphisms/HomomorphicImages.tex}
 
 \newpage
 
@@ -267,22 +267,22 @@ This section presents the \ualibTerms module of the \agdaualib.
 \subsection{Basic Definitions}
 \label{sec:terms-basic-definitions}
 This subsection describes the \ualibTermsBasic submodule of the \agdaualib.
-\input{TermsBasic.tex}
+\input{Terms/TermsBasic.tex}
 
 \subsection{The Term Algebra}
 \label{sec:the-term-algebra}
 This subsection describes the \ualibTermsFree submodule of the \agdaualib.
-\input{Free.tex}
+\input{Terms/Free.tex}
 
 \subsection{Term Operations}
 \label{sec:term-operations}
 This subsection describes the \ualibTermsOperations submodule of the \agdaualib.
-\input{Operations.tex}
+\input{Terms/Operations.tex}
 
 \subsection{Compatibility of Terms}
 \label{sec:compatibility-of-terms}
 This subsection describes the \ualibTermsCompatibility submodule of the \agdaualib.
-\input{Compatibility.tex}
+\input{Terms/Compatibility.tex}
 
 \newpage
 
@@ -292,27 +292,27 @@ This section presents the \ualibSubalgebras module of the \agdaualib.
 
 \subsection{Types for Subuniverses}\label{sec:subuniverse-type}
 This subsection describes the \ualibSubuniverses submodule of the \agdaualib.
-\input{Subuniverses.tex}
+\input{Subalgebras/Subuniverses.tex}
 
 \subsection{Subuniverse Generation}\label{sec:subun-gener}
 This subsection describes the \ualibGeneration submodule of  the \agdaualib.
-\input{Generation.tex}
+\input{Subalgebras/Generation.tex}
 
 \subsection{Subuniverse Lemmas}\label{sec:subuniverse-lemmas}
 This subsection describes the \ualibProperties submodule of  the \agdaualib.
-\input{Properties.tex}
+\input{Subalgebras/Properties.tex}
 
 \subsection{Homomorphisms and Subuniverses}\label{homomorphisms-and-subuniverses}
 This subsection describes the \ualibHomsAndSubs submodule of  the \agdaualib.
-\input{Homomorphisms.tex}
+\input{Subalgebras/Homomorphisms.tex}
 
 \subsection{Types for Subalgebra}\label{sec:subalgebra-types}
 This subsection describes the \ualibSubSubalgebras submodule of  the \agdaualib.
-\input{Subalgebras.tex}
+\input{Subalgebras/Subalgebras.tex}
 
 \subsection{WWMD}\label{sec:wwmd}
 This subsection describes the \ualibWWMD submodule of  the \agdaualib.
-\input{WWMD.tex}
+\input{Subalgebras/WWMD.tex}
 
 \newpage
 
@@ -329,19 +329,19 @@ This section presents the \ualibVarieties module of the \agdaualib.
 
 \subsection{Types for Theories and Models}\label{sec:types-for-theories-and-models}
 This subsection presents the \ualibModelTheory submodule of  the \agdaualib.
-\input{ModelTheory.tex}
+\input{Varieties/ModelTheory.tex}
 
 \subsection{Equational Logic Types}\label{sec:equational-logic-types}
 This subsection presents the \ualibEquationalLogic submodule of  the \agdaualib.
-\input{EquationalLogic.tex}
+\input{Varieties/EquationalLogic.tex}
 
 \subsection{Inductive Types H, S, P, V}\label{sec:inductive-types-h-s-p-v}
 This subsection presents the \ualibVarVarieties submodule of the \agdaualib.
-\input{Varieties.tex}
+\input{Varieties/Varieties.tex}
 
 \subsection{Equation Preservation Theorems}\label{sec:equation-preservation-theorems}
 This subsection presents the \ualibPreservation submodule of the \agdaualib.
-\input{Preservation.tex}
+\input{Varieties/Preservation.tex}
 
 \newpage
 
@@ -352,15 +352,15 @@ This section presents the \ualibBirkhoff module of the \agdaualib.
 
 \subsection{The Relatively Free Algebra}\label{sec:relatively-free-algebra-type}
 This subsection presents the \ualibFreeAlgebra submodule of the \agdaualib.
-\input{FreeAlgebra.tex}
+\input{Birkhoff/FreeAlgebra.tex}
 
 \subsection{HSP Lemmas}\label{sec:hsp-lemmas}
 This subsection presents the \ualibLemmata submodule of the \agdaualib.
-\input{Lemmata.tex}
+\input{Birkhoff/Lemmata.tex}
 
 \subsection{The HSP Theorem}\label{sec:hsp-theorem}
 This subsection presents the \ualibTheorem submodule of the \agdaualib.
-\input{Theorem.tex}
+\input{Birkhoff/Theorem.tex}
 
 %% Bibliography
 \bibliography{ualib_refs}

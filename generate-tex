@@ -2,7 +2,6 @@
 
 echo "Checking UALib.Algebras.Algebras"
 agda --latex UALib/Algebras/Algebras.lagda
-
 echo "Checking UALib.Algebras.Lifts.lagda"
 agda --latex UALib/Algebras/Lifts.lagda
 echo "Checking UALib.Algebras.Products.lagda"
@@ -11,10 +10,10 @@ echo "Checking UALib.Algebras.Signatures.lagda"
 agda --latex UALib/Algebras/Signatures.lagda
 echo "Checking UALib.Birkhoff.FreeAlgebra.lagda"
 agda --latex UALib/Birkhoff/FreeAlgebra.lagda
-echo "Checking UALib.Birkhoff.Lemmata.lagda"
-agda --latex UALib/Birkhoff/Lemmata.lagda
-echo "Checking UALib.Birkhoff.Theorem.lagda"
-agda --latex UALib/Birkhoff/Theorem.lagda
+echo "Checking UALib.Birkhoff.HSPLemmas.lagda"
+agda --latex UALib/Birkhoff/HSPLemmas.lagda
+echo "Checking UALib.Birkhoff.HSPTheorem.lagda"
+agda --latex UALib/Birkhoff/HSPTheorem.lagda
 echo "Checking UALib.Homomorphisms.Basic.lagda"
 agda --latex UALib/Homomorphisms/Basic.lagda
 echo "Checking UALib.Homomorphisms.HomomorphicImages.lagda"
@@ -79,8 +78,8 @@ mv latex/UALib/Algebras/Lifts.{tex,md}
 mv latex/UALib/Algebras/Products.{tex,md}
 mv latex/UALib/Algebras/Signatures.{tex,md}
 mv latex/UALib/Birkhoff/FreeAlgebra.{tex,md}
-mv latex/UALib/Birkhoff/Lemmata.{tex,md}
-mv latex/UALib/Birkhoff/Theorem.{tex,md}
+mv latex/UALib/Birkhoff/HSPLemmas.{tex,md}
+mv latex/UALib/Birkhoff/HSPTheorem.{tex,md}
 mv latex/UALib/Homomorphisms/Basic.{tex,md}
 mv latex/UALib/Homomorphisms/HomomorphicImages.{tex,md}
 mv latex/UALib/Homomorphisms/Isomorphisms.{tex,md}
@@ -116,8 +115,8 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Lifts.md
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Products.md -o latex/UALib/Algebras/Products.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Signatures.md -o latex/UALib/Algebras/Signatures.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/FreeAlgebra.md -o latex/UALib/Birkhoff/FreeAlgebra.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/Lemmata.md -o latex/UALib/Birkhoff/Lemmata.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/Theorem.md -o latex/UALib/Birkhoff/Theorem.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/HSPLemmas.md -o latex/UALib/Birkhoff/HSPLemmas.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Birkhoff/HSPTheorem.md -o latex/UALib/Birkhoff/HSPTheorem.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Basic.md -o latex/UALib/Homomorphisms/Basic.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/HomomorphicImages.md -o latex/UALib/Homomorphisms/HomomorphicImages.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Isomorphisms.md -o latex/UALib/Homomorphisms/Isomorphisms.tex
@@ -147,4 +146,3 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Equatio
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/ModelTheory.md -o latex/UALib/Varieties/ModelTheory.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Preservation.md -o latex/UALib/Varieties/Preservation.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Varieties.md -o latex/UALib/Varieties/Varieties.tex
-

@@ -18,8 +18,8 @@ Here we give a formal proof in [MLTT][] of Birkhoff's theorem which says that a 
 module UALib.Birkhoff where
 
 open import UALib.Birkhoff.FreeAlgebra
-open import UALib.Birkhoff.Lemmata
-open import UALib.Birkhoff.Theorem
+open import UALib.Birkhoff.HSPLemmas
+open import UALib.Birkhoff.HSPTheorem
 
 \end{code}
 

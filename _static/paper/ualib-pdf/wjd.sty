@@ -18,6 +18,7 @@
 %% \\[\AgdaEmptyExtraSkip]%
 \newcommand\cpad{-6pt}
 \newcommand\ccpad{\\[-6pt]}
+\newcommand\scpad{\\[-14pt]}
 % ----------------------------------------------------------------------
 % Options
 %% \DeclareOption{bw}   {\newcommand{\AgdaColourScheme}{bw}}
@@ -31,11 +32,17 @@
   \{-\# OPTIONS --without-K --exact-split --allow-unsolved-metas \#-\}}
 \newcommand\defn[1]{\textbf{#1}}
 \newcommand\agdaualib{\href{https://ualib.gitlab.io}{Agda UALib}\xspace}
+\newcommand\ualibhtmldocs{\href{https://ualib.gitlab.io}{UALib html docs}\xspace}
+\newcommand\ualibdoc{\href{https://ualib.gitlab.io}{UALib documentation}\xspace}
 \newcommand\ualib{\href{https://ualib.gitlab.io}{UALib}\xspace}
-\newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{https://ualib.org}}\xspace}
+\newcommand\httpsualibdotorg{\href{https://ualib.gitlab.io}{\texttt{https://ualib.org}}\xspace}
+\newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{ualib.org}}\xspace}
+\newcommand\seedocfordetails{(See~\cite{DeMeo:2021} or \ualibdotorg for details.)\xspace}
+
 
 %% \newcommand\ualibdocs{\href{https://ualib.gitlab.io}{https://ualib.gitlab.io}\xspace}
-\newcommand\ualibrepo{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io}}\xspace}
+\newcommand\ualibrepo{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{https://gitlab.com/ualib}}\xspace}
+\newcommand\ualibsrc{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib}}\xspace}
 \newcommand\TypeTopology{\href{https://github.com/martinescardo/TypeTopology}{Type Topology}\xspace}
 \newcommand\typetopology{\href{https://github.com/martinescardo/TypeTopology}{Type Topology}\xspace}
 \newcommand\ufcourse{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}\xspace}
@@ -119,24 +126,21 @@
 \newcommand\subuniversesmodule{\ualibSubalgebras}
 \newcommand\closuremodule{\ualibVarieties}
 \newcommand\birkhoffmodule{\ualibBirkhoff}
-\newcommand\ab[1]{\AgdaBound{#1}}
-%% \newcommand\af[1]{\AgdaFunction{#1}}
-%% \newcommand{\alg}[1]{\ensuremath{\mathbf{#1}}}  % algebraic structures
-%% \newcommand{\var}[1]{\ensuremath{\mathscr{#1}}}  % algebraic structures
 
 \newcommand{\agda}{\href{https://wiki.portal.chalmers.se/agda/pmwiki.php}{Agda}\xspace}
 
-\newcommand{\MartinEscardo}{\href{https://www.cs.bham.ac.uk/~mhe/}{Martin Escardo}\xspace}
+\newcommand{\escardo}{\href{https://www.cs.bham.ac.uk/~mhe/}{Escard\'o}\xspace}
+\newcommand{\MartinEscardo}{\href{https://www.cs.bham.ac.uk/~mhe/}{Mart\'in Escard\'o}\xspace}
 \newcommand{\mhe}{\href{https://www.cs.bham.ac.uk/~mhe/}{MHE}\xspace}
-\newcommand{\MHE}{\href{https://www.cs.bham.ac.uk/~mhe/}{Martin Hötzel Escardo}\xspace}
+\newcommand{\MHE}{\href{https://www.cs.bham.ac.uk/~mhe/}{Mart\'in Hötzel Escard\'o}\xspace}
 \newcommand{\mltt}{\href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{MLTT}\xspace}
 \newcommand{\MLTT}{\href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{Martin-Löf Type Theory}\xspace}
 \newcommand{\AgdaStandardLibrary}{\href{https://agda.github.io/agda-stdlib/}{Agda Standard Library}\xspace}
 \newcommand{\agdastdlib}{\href{https://agda.github.io/agda-stdlib/}{Agda Standard Library}\xspace}
 \newcommand{\axiomk}{\href{https://ncatlab.org/nlab/show/axiom+K+\%28type+theory\%29}{Streicher's K axiom}\xspace}
-\newcommand{\agdarefk}{\href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K}\xspace}
+\newcommand{\agdarefk}{\href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{Axiom K}\xspace}
 \newcommand{\agdaref}{\href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language Reference}\xspace}
-\newcommand{\patternmatching}{\href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#pattern-matching-and-equality}{Pattern matching and equality section}\xspace}
+\newcommand{\patternmatching}{\href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}{Pattern matching and equality section}\xspace}
 \newcommand{\agdatools}{\href{https://agda.readthedocs.io/en/v2.6.1/tools/}{Agda Tools}\xspace}
 \newcommand{\agdamode}{\href{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html}{agda2-mode}\xspace}
 \newcommand{\agdatwomode}{\href{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html}{agda2-mode}\xspace}
@@ -153,6 +157,11 @@
 \newcommand{\AgdaComma}{\AgdaSpace{}\AgdaInductiveConstructor{,}\AgdaSpace{}}
 
 %% \newcommand\asp{\AgdaSpace{}}
+\newcommand\ab[1]{\AgdaBound{#1}}
+\newcommand\ag[1]{\AgdaGeneralizable{#1}}
+%% \newcommand\af[1]{\AgdaFunction{#1}}
+%% \newcommand{\alg}[1]{\ensuremath{\mathbf{#1}}}  % algebraic structures
+%% \newcommand{\var}[1]{\ensuremath{\mathscr{#1}}}  % algebraic structures
 \newcommand\ac{\AgdaComma}
 \newcommand\as[1]{\AgdaSymbol{#1}}
 \newcommand\au{\AgdaUnderscore}
@@ -163,6 +172,7 @@
 \newcommand\aod[1]{\AgdaOperator{\AgdaDatatype{#1}}}
 \newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}}
 \newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
+\newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
 \newcommand\Mac{\ensuremath{\mathrel{\AgdaComma}}}
 \newcommand\Mas[1]{\ensuremath{\mathrel{\AgdaSymbol{#1}}}}
 \newcommand\Mad[1]{\ensuremath{\mathrel{\AgdaDatatype{#1}}}}
