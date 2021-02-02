@@ -1,6 +1,6 @@
-\>[1]\AgdaComment{-- 𝕍 is HSP(𝒦)}\<%
-\\
-%
+%% \>[1]\AgdaComment{-- 𝕍 is HSP(𝒦)}\<%
+%% \\
+%% %
 \>[1]\AgdaFunction{𝕍}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
@@ -273,10 +273,48 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{𝔄s}\AgdaSymbol{\}}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- 𝔭𝔣 is the composition:  𝔉 --∣ 𝔣 ∣-->  ℭ --(𝔭 i)--> 𝔄s i}\<%
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% \>[1]\AgdaComment{--}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--                             𝔄1}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--                            77}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--                           /}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--        𝑻 -----ϕ≡h --->>  ℭ -->> 𝔄2}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--         \textbackslash{}             77        ⋮}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--          \textbackslash{}           /}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--           g         ∃f}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--            \textbackslash{}       /}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--             \textbackslash{}     /}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--              V  l/}\<%
+%% \\
+%% %
+%% \>[1]\AgdaComment{--             𝔉 = 𝑻/ψ}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+\>[1]\AgdaComment{-- 𝔭𝔣 is the composition:  𝔉 -- 𝔣 -->  ℭ -- 𝔭 i --> 𝔄s i}\<%
 \\
 %
 \>[1]\AgdaFunction{𝔭𝔣}\AgdaSpace{}%
@@ -329,108 +367,3 @@
 \AgdaFunction{𝔣}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{𝔭hom}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{HomComp}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔄s}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ϕ𝔠}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭hom}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠≡𝔓}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔭ϕ𝔠}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{p}\<%
-\\
-%
-\>[1]\AgdaFunction{𝔭ϕ𝔠≡𝔓}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{-- The class of subalgebras of products of 𝒦.}\<%
-\\
-%
-\>[1]\AgdaFunction{SP𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ovu}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ovu}\AgdaSymbol{))}\<%
-\\
-%
-\>[1]\AgdaFunction{SP𝒦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaFunction{ovu}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}(}\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaFunction{ovu}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\<%
