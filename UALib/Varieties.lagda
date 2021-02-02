@@ -29,6 +29,6 @@ open import UALib.Varieties.Preservation
 --------------------------------------
 
 [← UALib.Subalgebras](UALib.Subalgebras.html)
-<span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
+<span style="float:right;">[UALib.Varieties.ModelTheory →](UALib.Varieties.ModelTheory.html)</span>
 
 {% include UALib.Links.md %}

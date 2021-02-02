@@ -29,6 +29,6 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 --------------------------------------
 
 [← UALib.Subalgebras](UALib.Subalgebras.html)
-<span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
+<span style="float:right;">[UALib.Varieties.ModelTheory →](UALib.Varieties.ModelTheory.html)</span>
 
 {% include UALib.Links.md %}
