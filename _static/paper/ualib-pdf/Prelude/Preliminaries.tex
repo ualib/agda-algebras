@@ -1,4 +1,3 @@
-
 \noindent \textbf{Notation}. Here are some acronyms that we use frequently.
 
 \begin{itemize}
@@ -7,12 +6,12 @@
 \item \mltt = \MLTT
 \end{itemize}
 
-\subsubsection{Options}\label{options}
-All Agda programs begin by setting some options and by importing from existing libraries (in our case, the \agdastdlib and the \TypeTopology library by \mhe). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
-
-For example, each Agda source code file in the UALib begins with the following line:
+\subsubsection{Options and imports}\label{options-and-imports}
+Agda programs typically begin by setting some options and by importing from existing libraries.
+Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness.  
+All Agda programs in the \ualib begin with the pragma
 \ccpad
-\begin{code}%
+\begin{code}[number=code:options]
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--without-K}\AgdaSpace{}%
@@ -21,34 +20,41 @@ For example, each Agda source code file in the UALib begins with the following l
 \AgdaSymbol{\#-\}}\<%
 \end{code}
 \ccpad
-These options control certain foundational assumptions that Agda assumes when type-checking the program to verify its correctness.%
-\footnote{\emph{Useful Tip}. To type-check a file that imports another file when the latter still has some unmet proof obligations, one must replace the \AgdaPragma{--safe} flag with \AgdaPragma{--allow-unsolved-metas}; i.e., use
-\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}, but this is never done in publicly released versions of the \ualib.}
+This has the following effects:
+\begin{enumerate}
+\item
+  \texttt{without-K} disables \axiomk; see~\cite{agdaref-axiomk};
+\item
+  \texttt{exact-split} makes Agda accept only definitions that are \emph{judgmental} or \emph{definitional} equalities. As \escardo explains, this ``makes sure that pattern matching corresponds to Martin-Löf eliminators;'' for more details see~\cite{agdatools-patternmatching};
+\item
+  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
+\end{enumerate}
+Throughout the \ualib documentation assumptions 1--3 are taken for granted without mentioning them explicitly.
 
-\begin{itemize}
-\item
-  \texttt{without-K} disables \axiomk; see also the in the \agdarefk in the \agdaref.
-\item
-  \texttt{exact-split} makes Agda accept only those definitions that
-  behave like so-called \emph{judgmental} or \emph{definitional}
-  equalities. MHE explains this by saying it ``makes sure that pattern
-  matching corresponds to Martin-Löf eliminators;'' see also the
-  \patternmatching of the \agdatools documentation.
-\item
-  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html\#cmdoption-safe}{this section} of the \agdatools documentation and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html\#safe-agda}{Safe Agda section} of the \agdaref.
-\end{itemize}
+The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇. Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
+
+\begin{table}
+\begin{tabular}{r|l}
+Standard \agda                        &          \typetopology/\ualib \\
+\hline
+\AgdaKeyword{Level}          &   \AgdaFunction{Universe}\\
+\ab 𝓤 : \AgdaKeyword{Level}  & \ab 𝓤 : \AgdaFunction{Universe}\\
+\Set \ab 𝓤                  &       \ab 𝓤 ̇ \\
+\lsuc \ab 𝓤                   &    \ab 𝓤 ⁺\\
+\Set (\lsuc \ab 𝓤) &    \ab 𝓤 ⁺ ̇\\
+\lzero                       &         \AgdaBound{𝓤₀}\\
+\AgdaFunction{Setω}  &         \AgdaFunction{𝓤ω}
+\end{tabular}
+\caption{Special notation for universe levels}
+\label{tab:dictionary}
+\end{table}
+
+
 
 
 \subsubsection{Modules}\label{modules}
 
-The \AgdaKeyword{OPTIONS} directive is followed by some imports or the start of a module.
-%% For example, the \ualibPreliminaries module begins with \AgdaKeyword{module}\AgdaSpace{}\AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}\AgdaKeyword{where}.
-Sometimes we want to pass in parameters that will be assumed throughout the module. For instance, when working with algebras we often assume they come from a particular fixed signature \AgdaBound{𝑆}, which we could fix as a parameter at the start of a module. We'll see many examples later, but here's an example:
+The \AgdaKeyword{OPTIONS} pragma is followed by some imports or the start of a module. Sometimes we want to pass in parameters that will be assumed throughout the module. For instance, when working with algebras we often assume they come from a particular fixed signature \AgdaBound{𝑆}, which we could fix as a parameter at the start of a module. We'll see many examples later, but here's an example:
 \AgdaKeyword{module}\AgdaSpace{}\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -58,8 +64,11 @@ Sometimes we want to pass in parameters that will be assumed throughout the modu
 \AgdaKeyword{where}.
 
 
+
+
+
 \subsubsection{Imports from Type Topology}\label{imports-from-type-topology}
-Throughout we use many of the nice tools that \mhe has developed and made available in the \TypeTopology repository of Agda code for the ``Univalent Foundations'' of mathematics. We import these now.
+Throughout we use many of the nice tools that \escardo has developed and made available in the \TypeTopology repository of Agda code for the ``Univalent Foundations'' of mathematics. (See~\cite{MHE} for more details.) We import these as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%

@@ -6,7 +6,7 @@
 
 **Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
 
-**PDF documentation**. [ualib-24Jan2021.pdf](ualib-24Jan2021.pdf)
+**PDF documentation**. [ualib-2Feb2021.pdf](ualib-2Feb2021.pdf)
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
