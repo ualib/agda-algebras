@@ -1,16 +1,6 @@
 Here we define (the syntax of) a type for the (semantic concept of) \textbf{inverse image} of a function.
 \ccpad
 \begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\ccpad
-%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Prelude.Inverses}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -23,8 +13,6 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 \AgdaModule{UALib.Prelude.Equality}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \\
-%
-\ccpad
 %
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
@@ -53,7 +41,7 @@ Here we define (the syntax of) a type for the (semantic concept of) \textbf{inve
 %
 \ccpad
 %
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+gp\>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -345,8 +333,6 @@ An epic (or surjective) function from type \AgdaTyped{A}{𝓤 ̇} to type \AgdaT
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-\>[0]\<%
 \end{code}
 \ccpad
 We obtain the right-inverse (or pseudoinverse) of an epic function \af f by applying the function \af{EpicInv} (which we now define) to the function \af f along with a proof, \ab{fE} \as : \af{Epic} \ab f, that \af f is surjective.
@@ -679,24 +665,16 @@ Finally, bijective functions are defined.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
-\\
-\>[432I][@{}l@{\AgdaIndent{0}}]%
-\>[12]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Bijective}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-%
-\>[12]\AgdaComment{-------------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[12]\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
@@ -1091,15 +1069,11 @@ Of course, invertible maps are embeddings.
 \AgdaSymbol{(}\AgdaFunction{invertibles-are-equivs}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{fi}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Finally, if we have a proof \texttt{p\ :\ is-embedding\ f} that the map \texttt{f} is an embedding, here's a tool that makes it easier to apply \texttt{p}.
-
+\ccpad
+Finally, if we have a proof \ab p \as : \af{is-embedding} \ab f that the map \ab f is an embedding, here's a tool that makes it easier to apply \ab p.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaComment{-- Embedding elimination (makes it easier to apply is-embedding)}\<%
 \\

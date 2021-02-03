@@ -2,14 +2,6 @@
 Notice that module begins by assuming a signature \ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.
 \ccpad
 \begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Signatures}\AgdaSpace{}%
@@ -365,14 +357,12 @@ An important construction in universal algebra is the quotient of an algebra \ab
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaComment{-- type ╱ with `\textbackslash{}---`}\<%
+\AgdaBound{𝑆}\AgdaSymbol{)}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
 \>[8]\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{A}%
-\>[41]\AgdaComment{-- a number of times`}\<%
+\AgdaBound{A}
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaComment{-----------------------}\<%
@@ -385,6 +375,8 @@ An important construction in universal algebra is the quotient of an algebra \ab
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
+\\
+%
 \\
 \>[0]\AgdaBound{A}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%

@@ -15,19 +15,11 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 * S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
 * P 𝒦 = algebras isomorphic to a product of members of 𝒦.
 
-A straight-forward verification confirms that H, S, and P are **closure operators** (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`).
+A straight-forward verification confirms that H, S, and P are **closure operators** (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
 
 An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
 
-The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
-
-<!-- If C₁ and C₂ are closure operators on classes of structures, let us say that C₁ ≤ C₂ if for every class 𝒦 we have C₁(𝒦) ⊆ C₂(𝒦). -->
-
-A **variety** is a class 𝒦 of algebras in a fixed signature that is closed under the taking of homomorphic images (H), subalgebras (S), and arbitrary products (P).  That is, 𝒦 is a variety if and only if `H S P 𝒦 ⊆ 𝒦`.
-
-This module defines what we have found to be the most useful inductive types representing the closure operators H, S, and P. Separately, we define the inductive type `V` for simultaneously representing closure under `H`, `S`, and `P`.
-
-<!-- ; consequently, we expect `V 𝒦 ≡ H (S (P 𝒦))` to hold for each class 𝒦 of algebras of a fixed signature. classes of algebras that are closed under H, S, P, and V ≡ HSP. -->
+A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 \begin{code}
 

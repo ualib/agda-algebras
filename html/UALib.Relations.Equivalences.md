@@ -51,6 +51,6 @@ We should also have at our disposal a proof of the fact that the kernel of a fun
 --------------------------------------
 
 [← UALib.Relations.Binary](UALib.Relations.Binary.html)
-<span style="float:right;">[UALib.Relations.Equivalences →](UALib.Relations.Equivalences.html)</span>
+<span style="float:right;">[UALib.Relations.Quotients →](UALib.Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}

@@ -7,14 +7,9 @@ author: William DeMeo
 
 ### <a id="types-for-theories-and-models">Types for Theories and Models</a>
 
-This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][] where the binary ``models'' relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
-In Section 4.4 of [Bergman (2012)][], having set the stage for the entrance of Equational Logic, Bergman proclaims,  "Now, finally, we can formalize the idea we have been using since the first page of this text," and proceeds to define **identities of terms** as follows (paraphrasing for notational consistency):
-
-  Let 𝑆 be a signature. An **identity** (or **equation**) in 𝑆 is an ordered pair of terms, written 𝑝 ≈ 𝑞,
-  from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 if 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨.
-  In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of
-  algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
+Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
 **Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
@@ -62,7 +57,7 @@ _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 #### <a id="equational-theories-and-classes">Equational theories and models</a>
 
-The set of identities that hold for all algebras in a class 𝒦 is denoted by `Th 𝒦`, which we define as follows.
+Here we define a type `Th` such that, given a class 𝒦 of algebras, `Th 𝒦` represents the set of identities that hold for all algebras in 𝒦.
 
 \begin{code}
 

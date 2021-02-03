@@ -12,6 +12,17 @@
 \newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
 %% use like this: \sbullet A, or \sbullet[.75] A
 
+\RequirePackage[strict]{changepage}
+
+\newcommand\newsection{\checkoddpage
+  \ifoddpage
+  % do nothing
+  \else 
+  \begin{center}
+    (This page is almost entirely blank on purpose.)
+  \end{center}
+  \newpage
+  \fi}
 %% \RequirePackage{ifxetex, ifluatex, xifthen, xcolor, polytable, etoolbox, calc, environ, xparse, xkeyval}
 
 %% Culprit!

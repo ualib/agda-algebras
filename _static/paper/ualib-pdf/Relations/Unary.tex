@@ -2,16 +2,6 @@
 We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab{A} might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab{A} that satisfy the property \ab{P}.
 \ccpad
 \begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-%
-\ccpad
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Relations.Unary}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -23,8 +13,6 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Lifts}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-%
-\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%

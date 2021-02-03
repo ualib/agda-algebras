@@ -1,15 +1,5 @@
 \ccpad
 \begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-%
-\ccpad
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Algebras}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -21,8 +11,6 @@
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Algebras.Signatures}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
-%
-\ccpad
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -36,7 +24,7 @@
 \end{code}
 
 \newcommand\sigOV{\AgdaFunction{Signature}\AgdaSpace{}\AgdaBound{𝓞}\AgdaSpace{}\AgdaBound{𝓥}\xspace}
-\subsubsection{Algebra types}\label{algebra-types-1}
+\subsubsection{The Sigma type of Algebras}\label{algebra-types-1}
 For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the type of \textbf{algebras in the signature} \ab 𝑆 (or \ab 𝑆-\textbf{algebras}) and with \textbf{domain} (or \textbf{carrier}) \ab 𝐴 \as : \ab 𝓤 \as ̇ as follows
 \ccpad
 \begin{code}%
@@ -99,7 +87,7 @@ We take this opportunity to define the type of ``0-algebras'' which are algebras
 
 The type \ad{Algebra} \ab 𝓤 \ab 𝑆 itself has a type; it is \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇. This type appears so often in the \ualib that we will define the following shorthand for its universe level: \AgdaFunction{OV}\AgdaSpace{}\ab 𝓤 = \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓤 \af ⁺ \af ̇.
 
-\subsubsection{Algebras as record types}\label{algebras-as-record-types}
+\subsubsection{The record type of algebras}\label{algebras-as-record-types}
 Sometimes records are more convenient than sigma types. For such cases, we might prefer the following representation of the type of algebras.
 \ccpad
 \begin{code}%

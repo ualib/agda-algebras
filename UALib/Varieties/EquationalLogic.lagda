@@ -13,11 +13,9 @@ We prove closure properties, or "invariance," of the models relation defined in 
 
 * [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
 
+* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
+
 * [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
-
-* [Subalgebra invariance](#subalgebra-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
-
-* [Homomorphism invariance](#homomorphism-invariance). Identities modeled by a class of algebras are also modeled by all homomorphic images (equivalently, all quotients) of algebras in the class;
 
 \begin{code}
 

@@ -51,6 +51,6 @@ map-kernel-IsEquivalence {𝓤}{𝓦} f =
 --------------------------------------
 
 [← UALib.Relations.Binary](UALib.Relations.Binary.html)
-<span style="float:right;">[UALib.Relations.Equivalences →](UALib.Relations.Equivalences.html)</span>
+<span style="float:right;">[UALib.Relations.Quotients →](UALib.Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}
