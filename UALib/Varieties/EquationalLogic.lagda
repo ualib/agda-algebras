@@ -43,7 +43,7 @@ ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 #### <a id="computing-with-⊧">Computing with ⊧</a>
 
-We have formally defined 𝑨 ⊧ 𝑝 ≈ 𝑞, which represents the assertion that p ≈  q holds when this identity is interpreted in the algebra  𝑨; syntactically,  𝑝 ̇  𝑨 ≡  𝑞 ̇  𝑨.  It should be emphasized that the expression  𝑝 ̇  𝑨 ≡  𝑞 ̇  𝑨 is interpreted computationally as an \emph{extensional equality}, by which we mean that for each *assignment function*  𝒂 :  X → ∣ 𝑨 ∣, assigning values in the domain of  𝑨 to the variable symbols in  X, we have (𝑝 ̇  𝑨)  𝒂 ≡ (𝑞 ̇  𝑨)  𝒂.
+We have formally defined `𝑨 ⊧ 𝑝 ≈ 𝑞`, which represents the assertion that `p ≈ q` holds when this identity is interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
 
 ---------------------------------
 
