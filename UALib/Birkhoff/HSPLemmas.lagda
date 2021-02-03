@@ -115,7 +115,7 @@ The first hurdle is the `lift-alg-V-closure` lemma, which says that if an algebr
 
 \end{code}
 
-### <a id="sp-in-v">SP(𝒦) ⊆ V(𝒦)</a>
+#### <a id="sp-in-v">SP(𝒦) ⊆ V(𝒦)</a>
 
 In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.  This proof also suffers from the unfortunate defect of being boring.
 
@@ -169,7 +169,7 @@ In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦
 
 \end{code}
 
-### <a id="F-in-classproduct">𝔉 ≤  ⨅ S(𝒦)</a>
+#### <a id="F-in-classproduct">𝔉 ≤  ⨅ S(𝒦)</a>
 Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
 We begin by constructing ℭ, using the class-product types described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
@@ -304,7 +304,7 @@ With that out of the way, the proof that 𝔉 is (isomorphic to) a subalgebra of
    emb𝔣 = monic-into-set-is-embedding Cset ∣ 𝔣 ∣ mon𝔣
 \end{code}
 
-#### Lemma 4: 𝔉 ∈ V(𝒦)
+#### 𝔉 ∈ V(𝒦)
 
 Now, with this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ 𝕍---it is not hard to show that 𝔉 belongs to SP(𝒦), and hence to 𝕍.
 

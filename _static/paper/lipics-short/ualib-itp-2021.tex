@@ -100,8 +100,8 @@
 The Agda Universal Algebra Library (\ualib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in Martin-Löf-style dependent type theory using the \agda programming language and proof assistant. This paper describes the \ualib and demonstrates that Agda is accessible to working mathematicians (such as ourselves) as a tool for formally verifying nontrivial results in general algebra and related fields. The library includes a substantial collection of definitions, theorems, and proofs from universal algebra and equational logic and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about general algebraic and relational structures.
 
 The first major milestone of the \ualib project is a complete proof of Birkhoff's HSP theorem. To the best of our knowledge, this is the first time Birkhoff's theorem has been formulated and proved in dependent type theory and verified with a proof assistant.
-
-In this paper we describe the \agdaualib and the formal proof of Birkhoff's theorem, discussing some of the technically challenging parts of the proof. In so doing, we illustrate the effectiveness of dependent type theory, Agda, and the \ualib for formally verifying nontrivial theorems in universal algebra and equational logic.
+%
+%% In this paper we describe the \agdaualib and the formal proof of Birkhoff's theorem, discussing some of the technically challenging parts of the proof. In so doing, we illustrate the effectiveness of dependent type theory, Agda, and the \ualib for formally verifying nontrivial theorems in universal algebra and equational logic.
 \end{abstract}
 
 
@@ -111,6 +111,11 @@ In this paper we describe the \agdaualib and the formal proof of Birkhoff's theo
 
 
 
+
+
+
+\section{Agda Preliminaries}\label{sec:agda-preliminaries}
+\input{aux/AgdaPreliminaries.tex}
 
 
 
@@ -867,7 +872,7 @@ three alternative representations of congruence relations of an algebra---first 
 
 
 \subsection{Quotient algebras}\label{ssec:quotient-algebras}
-An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denote by \ab 𝑨 \as / \ab θ and Agda allows us to define and express quotients using this standard notation.
+An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denoted by \ab 𝑨 \as / \ab θ and Agda allows us to define and express quotients using this standard notation.
 \ccpad
 \begin{code}%
   \input{aux/Quotient-algebras.tex}
@@ -986,8 +991,7 @@ Terms can be viewed as acting on other terms and we can form an algebraic struct
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{node}\<%
 \end{code}
-
-
+\ccpad
 %% \subsection{The universal property}\label{ssec:the-universal-property}
 The term algebra is \defn{absolutely free}, or \defn{universal}, for algebras in the signature 𝑆. That is, for every 𝑆-algebra 𝑨, every map \ab h \as :~\ab 𝑋 \as → \af ∣ \ab 𝑨 \af ∣ lifts to a homomorphism from \af 𝑻 \ab X to \ab 𝑨, and the induced homomorphism is unique. This is proved by induction on the structure of terms, as follows.
 \ccpad
@@ -1170,7 +1174,7 @@ Evidently, when the element of \af{Sg} \ab X is constructed as \aic{app} \ab f \
 
 
 \subsubsection{Subalgebra type}\label{sssec:subalgebra-type}
-Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~\af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨, and (in the \ualib) we write \af 𝑩 \af{IsSubalgebraOf} \ab 𝑨, just in case \ab 𝑩 can be embedded in \ab 𝑨; in other terms, there exists a map \ab h~\as :~\af ∣ \ab 𝑨 \af ∣ → \af ∣ 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩 such \ab h is an embedding (i.e., \af{is-embedding} \ab h holds) and \ab h is a homomorphism from \ab 𝑨 to \ab 𝑩.
+Given algebras \ab 𝑨~\as :~\af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩~\as :~\af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨, and (in the \ualib) we write \af 𝑩 \af{IsSubalgebraOf} \ab 𝑨, just in case \ab 𝑩 can be embedded in \ab 𝑨; in other terms, there exists a map \ab h~\as :~\af ∣ \ab 𝑨 \af ∣ → \af ∣ 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩 such that \ab h is an embedding (i.e., \af{is-embedding} \ab h holds) and \ab h is a homomorphism from \ab 𝑨 to \ab 𝑩.
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOf\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -1796,7 +1800,7 @@ Next we define the congruence relation modulo which \af 𝑻 \ab X yields the re
 \end{code}
 \ccpad
 which we convert %% from a predicate \af ψ 
-into a relation by \href{https://en.wikipedia.org/wiki/Currying}{Currying},
+into a relation by \href{https://en.wikipedia.org/wiki/Currying}{currying},
 %% \ccpad
 %% \begin{code}%
 %% \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -2260,6 +2264,10 @@ With the foregoing results in hand, along with what we proved earlier---namely, 
 
 
 
+
+\section{Conclusions and future work}\label{sec:conclusions-and-future-work}
+
+As mentioned in \S~\ref{sec:introduction}, Carlstr\"om in~\cite{Carlstrom:2008} proved a constructive version of Birkhoff's theorem. We would like to know how the two new hypothesis that Carlstr\"om adds to the classical theorem in order to make it constructive compares with the assumptions we make in our Agda proof.
 
 
 

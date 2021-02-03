@@ -1,11 +1,10 @@
-\section{Agda Prerequisites}
+\section{Agda Prerequisites}\label{sec:agda-prerequisites}
 
 For the benefit of readers who are not proficient in Agda and/or type theory, we describe some of the most important types and features of Agda used in the \ualib.
 
 
 %% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \section{Preliminaries}\label{sec:preliminaries}
-We begin by highlighting some of the key parts of \ualibPreliminaries of the \agdaualib. This module imports everything we need from Martin Escardo's \typetopology library~\cite{MHE}, defines some other basic types and proves some of their properties.  We do not cover the entire Preliminaries module here, but call attention to aspects that differ from standard Agda syntax. For more details, see~\cite[\S2]{DeMeo:2021}.
 
 
 
@@ -24,20 +23,7 @@ All Agda programs in the \ualib begin with the pragma
 \AgdaSymbol{\#-\}}\<%
 \end{code}
 \ccpad
-This has the following effects:
-\begin{enumerate}
-\item
-  \texttt{without-K} disables \axiomk; see~\cite{agdaref-axiomk};
-\item
-  \texttt{exact-split} makes Agda accept only definitions that are \emph{judgmental} or \emph{definitional} equalities. As \escardo explains, this ``makes sure that pattern matching corresponds to Martin-Löf eliminators;'' for more details see~\cite{agdatools-patternmatching};
-\item
-  \texttt{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
-\end{enumerate}
-Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
-
-
-The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇. Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
-
+The effect that each of these options is described in~\S~\ref{ssec:options-and-imports}.
 
 
 
@@ -47,13 +33,12 @@ The \agdaualib adopts the notation of the \typetopology library. In particular, 
 
 
 \subsection{Agda's universe hierarchy}\label{ssec:agdas-universe-hierarchy}
-The hierarchy of universe levels in Agda is structured as \ab{𝓤₀} \as : \ab{𝓤₁}, \hskip3mm \ab{𝓤₁} \as : \ab{𝓤₂}, \hskip3mm \ab{𝓤₂} \as : \ab{𝓤₃}, \ldots{}. This means that \ab{𝓤₀} has type \ab{𝓤₁} \AgdaFunction{̇} and \ab{𝓤ₙ} has type \ab{𝓤ₙ₊₁} \AgdaFunction{̇} for each \ab n.  It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂} and \ab{𝓤₀} \as : \ab{𝓤₃}, and so on. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, it is this author's experience that a noncummulative hierarchy can sometimes make for a nonfun proof assistant.  (See~\cite[\S3.3]{DeMeo:2021} for a more detailed discussion.)
-
+The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇. Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
 
 %% This section describes parts of the \ualibLifts module of the \agdaualib.
-Because of the noncummulativity of Agda's universe level hierarchy, certain proof verification (i.e., type-checking) tasks may seem unnecessarily difficult. Luckily there are ways to circumvent noncummulativity without introducing logical inconsistencies into the type theory. We present here some domain specific tools that we developed for this purpose. (See~\cite[\S3.3]{DeMeo:2021} for more details).
+We present here some general and some domain-specific tools that we developed for dealing with the noncummulativity of universees in Agda. (See~\cite[\S3.3]{DeMeo:2021} for more details).
 
-A general \af{Lift} record type, similar to the one found in the \af{Level} module of the \agdastdlib, is
+First, a general \af{Lift} record type, similar to the one found in the \af{Level} module of the \agdastdlib, is
 defined as follows.
 \ccpad
 \begin{code}%
@@ -137,53 +122,53 @@ More domain-specifically, here is how we lift types of operations and algebras.
 
 
 
-\subsection{Dependent pairs and projections}\label{ssec:dependent-pairs-and-projections}
-Given universes \ab 𝓤 and \ab 𝓥, a type \ab X \as : \ab 𝓤 \aof ̇, and a type family \ab Y \as : X \as → \ab 𝓥 \aof ̇, the \defn{Sigma type} (or \defn{dependent pair type}) is denoted by \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) and generalizes the Cartesian product \ab X \as × \ab Y by allowing the type \ab Y(\ab x) of the second argument of the ordered pair (\ab x\as , \ab y) to depend on the value \ab x of the first.  That is, \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) is inhabited by pairs (\ab x\as , \ab y) such that \ab x \as : \ab X and \ab y \as : \ab Y(\ab x).
+%% \subsection{Dependent pairs and projections}\label{ssec:dependent-pairs-and-projections}
+%% Given universes \ab 𝓤 and \ab 𝓥, a type \ab X \as : \ab 𝓤 \aof ̇, and a type family \ab Y \as : X \as → \ab 𝓥 \aof ̇, the \defn{Sigma type} (or \defn{dependent pair type}) is denoted by \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) and generalizes the Cartesian product \ab X \as × \ab Y by allowing the type \ab Y(\ab x) of the second argument of the ordered pair (\ab x\as , \ab y) to depend on the value \ab x of the first.  That is, \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y(\ab x) is inhabited by pairs (\ab x\as , \ab y) such that \ab x \as : \ab X and \ab y \as : \ab Y(\ab x).
 
-Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax described in the preceding paragraph. Fortunately, this preferred notation is available in the \typetopology library (see~\cite[Σ types]{MHE}).\footnote{The symbol \as ꞉ in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}\as ꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab Y is not the ordinary colon (:); rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
+%% Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax described in the preceding paragraph. Fortunately, this preferred notation is available in the \typetopology library (see~\cite[Σ types]{MHE}).\footnote{The symbol \as ꞉ in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}\as ꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab Y is not the ordinary colon (:); rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
 
-\newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
-\newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
-Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (see~\cite{DeMeo:2021} for details).
-
-
+%% \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
+%% \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
+%% Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (see~\cite{DeMeo:2021} for details).
 
 
 
 
-\subsection{Equality}\label{ssec:equality}
-Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
-%% full listing of the \texttt{Identity-Type} module.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{data}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\end{code}
+
+
+%% \subsection{Equality}\label{ssec:equality}
+%% Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
+%% %% full listing of the \texttt{Identity-Type} module.
+%% \ccpad
+%% \begin{code}%
+%% \>[0]\AgdaKeyword{data}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaKeyword{where}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[2]\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{x}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+%% \AgdaBound{x}\<%
+%% \end{code}
 
 
 
@@ -1496,7 +1481,7 @@ Thus, a \defn{set}, as defined in \S\ref{ssec:truncation-and-sets}, is a type \a
 \subsection{Nonstandard notation and syntax}
 The notation we adopt is that of the \typetopology library of \MartinEscardo. Here we give a few more details and a table (Table~\ref{tab:dictionary}) which translates between standard \agda syntax and \typetopology/\ualib notation.
 
-Many occasions call for a the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
+Many occasions call for the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
 
 To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
 
