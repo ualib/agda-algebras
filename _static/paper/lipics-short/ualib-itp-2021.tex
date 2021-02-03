@@ -1941,7 +1941,7 @@ The first hurdle is the \af{lift-alg-V-closure} lemma, which says that if an alg
 The next fact that must be formalized is the inclusion \ad S\ad P(\ab 𝒦) \af ⊆ \ad V(\ab 𝒦), which also suffers from the unfortunate defect of being boring, so we omit this one as well.
 
 %% \subsubsection{𝔉 ↪ ℭ}\label{sssec:lemma-3}
-After these first two lemmas are formally verified (see~\cite{DeMeo:2021} or \ualibdotorg for proofs), we arrive at a step in the formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must show that the relatively free algebra \af 𝔉 embeds in the product \af ℭ of all subalgebras of algebras in the given class \ab 𝒦.  We begin by constructing \af ℭ, using the class-product types described in \S\ref{ssec:class-products-and-inclusions}. Observe that the elements of \af ℭ are maps from \af{ℑs} to \as{\{}\af{𝔄s} \ab i \as : \ab i \as ∈ \af{ℑs}\as{\}}.
+After these first two lemmas are formally verified (see~\cite{DeMeo:2021} or \ualibdotorg for proofs), we arrive at a step in the formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must show that the relatively free algebra \af 𝔉 embeds in the product \af ℭ of all subalgebras of algebras in the given class \ab 𝒦.  We begin by constructing \af ℭ, using the class-product types described in \S\ref{ssec:class-products-and-inclusions}.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{ℑs}\AgdaSpace{}%
@@ -1991,6 +1991,8 @@ After these first two lemmas are formally verified (see~\cite{DeMeo:2021} or \ua
 \AgdaFunction{𝔄s}\<%
 \end{code}
 \ccpad
+Observe that the elements of \af ℭ are maps from \af{ℑs} to \as{\{}\af{𝔄s} \ab i \as : \ab i \as ∈ \af{ℑs}\as{\}}.
+
 Next, we construct an embedding \af 𝔣 from \af 𝔉 into \af ℭ using a \ualib tool called \AgdaFunction{𝔉-free-lift}.
 \ccpad
 \begin{code}

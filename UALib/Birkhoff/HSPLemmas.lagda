@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.HSPLemmas][] module of the [Agda Universal Algebra Library][].
 
-Here we establish some facts that will be needed in the proof of Birkhoff's HSP Theorem.
+We begin the proof of Birkhoff's HSP theorem by establishing a number of facts that we will eventually string together in the HSPTheorem module to complete the proof.  
 **Warning**: not all of these are very interesting!
 
 \begin{code}
@@ -28,15 +28,6 @@ module UALib.Birkhoff.HSPLemmas
 
 
 open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe}{𝕏} public
-
-\end{code}
-
-
-#### Lemma 1: V is closed under lift
-
-We begin the proof of Birkhoff's HSP theorem by establishing a number of facts that we will eventually string together in the HSPTheorem module to complete the proof.
-
-\begin{code}
 
 open the-free-algebra {𝓤}{𝓤}{X}
 
@@ -57,7 +48,10 @@ module class-inclusions
 
 \end{code}
 
-We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift.  This dispenses with annoying universe level problems that arise later---a minor techinical issue with an uninteresting proof.
+
+#### <a id="V-is-closed-under-lift">V is closed under lift</a>
+
+The first hurdle is the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belongs to the variety 𝕍, then so does its lift. This dispenses with annoying universe level problems that arise later---a minor techinical issue with a tedious, uninteresting proof.
 
 \begin{code}
 
@@ -121,9 +115,9 @@ We prove the `lift-alg-V-closure` lemma, which says that if an algebra 𝑨 belo
 
 \end{code}
 
-### Lamma 2: SP(𝒦) ⊆ V(𝒦)
+### <a id="sp-in-v">SP(𝒦) ⊆ V(𝒦)</a>
 
-In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
+In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.  This proof also suffers from the unfortunate defect of being boring.
 
 \begin{code}
 
@@ -175,11 +169,13 @@ In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦
 
 \end{code}
 
-### Lemma 3: 𝔉 ≤  ⨅ S(𝒦)  (=: ℭ)
+### <a id="F-in-classproduct">𝔉 ≤  ⨅ S(𝒦)</a>
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set. To prepare for the proof, we arm ourselves with a small arsenal of notation.
+We begin by constructing ℭ, using the class-product types described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
 \begin{code}
+
  open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
 
@@ -200,7 +196,12 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
  -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra ovu 𝑆
  ℭ = ⨅ 𝔄s
- -- Elements of ℭ are mappings from ℑs to {𝔄s i : i ∈ ℑs}
+
+\end{code}
+
+Observe that the inhabitants of ℭ are maps from ℑs to {𝔄s i : i ∈ ℑs}.
+
+\begin{code}
 
  𝔥₀ : X → ∣ ℭ ∣
  𝔥₀ x = λ i → (fst (𝕏 (𝔄s i))) x
