@@ -314,7 +314,7 @@ The domain, ∣ 𝔉 ∣, is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = �
 <span class="footnote"><sup>1</sup>Since `X` is not a subset of 𝔉, technically it doesn't make sense to say "`X` generates 𝔉." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
 
 [↑ UALib.Birkhoff](UALib.Birkhoff.html)
-<span style="float:right;">[UALib.Birkhoff.Lemmata →](UALib.Birkhoff.Lemmata.html)</span>
+<span style="float:right;">[UALib.Birkhoff.HSPLemmas →](UALib.Birkhoff.HSPLemmas.html)</span>
 
 {% include UALib.Links.md %}
 

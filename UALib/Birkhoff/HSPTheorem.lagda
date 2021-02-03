@@ -65,7 +65,7 @@ From these it follows that every equational class is a variety.
 
 --------------------------------------------
 
-[← UALib.Birkhoff.Lemmata](UALib.Birkhoff.Lemmata.html)
+[← UALib.Birkhoff.HSPLemmas](UALib.Birkhoff.HSPLemmas.html)
 <span style="float:right;">[UALib.Birkhoff ↑](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}

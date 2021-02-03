@@ -325,7 +325,7 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
 ----------------------------
 
 [← UALib.Birkhoff.FreeAlgebra](UALib.Birkhoff.FreeAlgebra.html)
-<span style="float:right;">[UALib.Birkhoff.Theorem →](UALib.Birkhoff.Theorem.html)</span>
+<span style="float:right;">[UALib.Birkhoff.HSPTheorem →](UALib.Birkhoff.HSPTheorem.html)</span>
 
 {% include UALib.Links.md %}
 
