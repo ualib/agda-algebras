@@ -473,40 +473,60 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 #### <a id="products-of-classes">Products of classes</a>
 
-Above we proved PS(𝒦) ⊆ SP(𝒦).  It is slightly more painful to prove that the product of *all* algebras in the class S(𝒦) is a member of SP(𝒦). That is, ⨅ S(𝒦) ∈ SP(𝒦). This is mainly due to the fact that it's not obvious (at least not to this author-coder) what should be the type of the product of all members of a class of algebras.  After a few false starts, eventually the right type revealed itself.  Of course, now that we have it in our hands, it seems rather obvious.
-
-We now describe the this type of product of all algebras in an arbitrary class 𝒦 of algebras of the same signature.
+Next we formally state and prove that, given an arbitrary class 𝒦 of algebras, the product of all algebras in the class S(𝒦) belongs to SP(𝒦). That is, ⨅ S(𝒦) ∈ SP(𝒦 ). This turns out to be a nontrivial exercise. In fact, it is not immediately obvious (at least not to this author) how one expresses the product of an entire class of algebras as a dependent type. Nonetheless, after a number of failed attempts, the right type revealed itself. (Not surprisingly, now that we have it, it seems almost obvious.)
 
 \begin{code}
 
 module class-product {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- -- ℑ serves as an index for the class
+\end{code}
+
+First, we define the type that will serve to index the class (as well as the product of its members), as follows.
+
+\begin{code}
+
  ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (ov 𝓤) ̇
  ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
 
-  -- 𝔄 produces an algebra for each index (i : ℑ).
+\end{code}
+
+Taking the product over this index type ℑ requires a function like the following, which takes an index (i : ℑ) and returns the corresponding algebra.
+
+\begin{code}
+
  𝔄 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → ℑ 𝒦 → Algebra 𝓤 𝑆
  𝔄{𝓤}{𝒦} = λ (i : (ℑ 𝒦)) → ∣ i ∣
 
- -- The product of all members of 𝒦 can be written simply as follows:
+\end{code}
+
+Finally, the product of all members of 𝒦 is represented as follows.
+
+\begin{code}
+
  class-product : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
  class-product {𝓤} 𝒦 = ⨅ ( 𝔄{𝓤}{𝒦} )
 
- -- ...or, more explicitly, here is the expansion of this indexed product.
+\end{code}
+
+Alternatively, we could have defined the class product in a way that explicitly displays the index, like so.
+
+\begin{code}
+
  class-product' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
  class-product'{𝓤} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣
 
 \end{code}
 
-Notice that, if `p : 𝑨 ∈ 𝒦`, then we can think of the pair `(𝑨 , p) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄{𝓤}{𝒦} )` onto the `(𝑨 , p)`-th component.
+If `p : 𝑨 ∈ 𝒦`, then we can think of the pair `(𝑨 , p) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄{𝓤}{𝒦} )` onto the `(𝑨 , p)`-th component.
+
 
 #### ⨅ S(𝒦) ∈ SP(𝒦)
 Finally, we prove the result that plays a leading role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product ⨅ ( 𝔄{𝓤}{𝒦} ) belongs to SP(𝒦).
 
+As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 {𝓤}{S(𝒦)} ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma above.
+
 \begin{code}
 
--- The product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
 module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
  𝓸𝓿𝓾 : Universe
