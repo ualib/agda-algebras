@@ -13,7 +13,7 @@ Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetop
 
 To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
 
-Many occasions call for the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
+Many occasions call for the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the corresponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
 
 %% In addition to the notation described above, the level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀}\af ̇ is an alias for \Set \lzero. (For those familiar the \href{https://leanprover.github.io/}{Lean} proof assistant, \AgdaBound{𝓤₀}\af ̇ (i.e., \Set \lzero) is analogous to Lean's \texttt{Sort 0}.)
 

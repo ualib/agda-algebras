@@ -330,7 +330,7 @@ For a fixed signature \ab S \as : \sigOV and universe \ab 𝓤, we define the ty
 \ccpad
 One could call an inhabitant of \af{Algebra} \ab 𝑆 \AgdaBound{𝓤} as an ``∞-algebra'' because its domain can be an arbitrary type, say, \ab A \as : \ab 𝓤 \af ̇ and need not be \emph{truncated} at some level (\S\ref{ssec:truncation-and-sets}). In particular, \ab A need not be an \emph{h-set} (as defined in \S\ref{ssec:truncation-and-sets}).%
 %
-\footnote{We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniquness of identity proofs} explicitly where, and only where, a proof relies on this assumption.}
+\footnote{We could pause here to define the type of ``0-algebras,'' which are algebras whose domains are sets. This type is probably closer to what most of us think of when doing informal universal algebra. However, in the \ualib we have so far only needed to know that the domain of an algebra is a set in a handful of specific instances, so it seems preferable to work with general (∞-)algebras throughout the library and then assume \emph{uniqueness of identity proofs} explicitly where, and only where, a proof relies on this assumption.}
 
 Next we define a convenient shorthand for the interpretation of an operation symbol. We use this often in the sequel.
 \ccpad
@@ -1120,22 +1120,22 @@ and the proof that \af{Sg} \ab X is the smallest subuniverse containing \ab X is
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaBound{XinY}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{var}\AgdaSpace{}%
-\AgdaBound{v∈X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{Xv}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{X⊆Y}\AgdaSpace{}%
-\AgdaBound{v∈X}\<%
+\AgdaBound{XinY}\AgdaSpace{}%
+\AgdaBound{Xv}\<%
 \\
 \>[0]\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
-\AgdaBound{Y≤A}\AgdaSpace{}%
-\AgdaBound{X⊆Y}\AgdaSpace{}%
+\AgdaBound{YsubA}\AgdaSpace{}%
+\AgdaBound{XinY}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{app}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{SgXa}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{fa∈Y}\<%
 \\
@@ -1157,9 +1157,9 @@ and the proof that \af{Sg} \ab X is the smallest subuniverse containing \ab X is
 \AgdaFunction{sgIsSmallest}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
-\AgdaBound{Y≤A}\AgdaSpace{}%
-\AgdaBound{X⊆Y}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{YsubA}\AgdaSpace{}%
+\AgdaBound{XinY}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{SgXa}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
 \\
 %
@@ -1177,7 +1177,7 @@ and the proof that \af{Sg} \ab X is the smallest subuniverse containing \ab X is
 %
 \>[2]\AgdaFunction{fa∈Y}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{Y≤A}\AgdaSpace{}%
+\AgdaBound{YsubA}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaFunction{IH}\<%
@@ -1404,7 +1404,7 @@ The \ualibVarietiesVarieties module of the \agdaualib introduces three new induc
 \end{code}
 \ccpad
 %% Recall, a class \ab 𝒦 of \ab 𝑆-algebras is called a \defn{variety} if it is closed under each of the closure operators \ad H, \ad S, and \ad P. 
-The operator that corresponds to closure with respect to \ad H\ad S\ad P is often denoted by 𝕍; we represent it by the inductive type \ad V.\footnote{See the \ualibVarietiesVarieties module or the html documentation at \href{https://ualib.gitlab.io/UALib.Varieties.Varieties.html}{ualib.gitlab.io/UALib.Varieties.Varieties.html} for the definition.}
+The operator that corresponds to closure with respect to \ad H\ad S\ad P is often denoted by 𝕍; we represent it by the inductive type \ad V.\footnote{See the \ualibVarietiesVarieties module or the html documentation at\\ \href{https://ualib.gitlab.io/UALib.Varieties.Varieties.html}{ualib.gitlab.io/UALib.Varieties.Varieties.html} for the definition.}
 %% \ccpad
 %% \begin{code}%
 %%   \input{aux/V.tex}
@@ -1969,7 +1969,7 @@ This section presents the \ualibBirkhoff module of the \agdaualib; \S\ref{ssec:h
 \subsection{HSP Lemmas}\label{ssec:hsp-lemmas}
 This subsection gives formal statements of four lemmas that we will string together in \S\ref{ssec:hsp-theorem} to complete the proof of Birkhoff's theorem.
 
-The first hurdle is the \af{lift-alg-V-closure} lemma, which says that if an algebra \ab 𝑨 belongs to the variety 𝕍, then so does its lift. This dispenses with annoying universe level problems that arise later---a minor techinical issue, but the proof is long and tedious, not to mention uninteresting. \seedocfordetails
+The first hurdle is the \af{lift-alg-V-closure} lemma, which says that if an algebra \ab 𝑨 belongs to the variety 𝕍, then so does its lift. This dispenses with annoying universe level problems that arise later---a minor technical issue, but the proof is long and tedious, not to mention uninteresting. \seedocfordetails
 The next fact that must be formalized is the inclusion \ad S\ad P(\ab 𝒦) \af ⊆ \ad V(\ab 𝒦), which also suffers from the unfortunate defect of being boring, so we omit this one as well.
 
 %% \subsubsection{𝔉 ↪ ℭ}\label{sssec:lemma-3}
@@ -2293,7 +2293,7 @@ It is now all but trivial to use what we have already proved and piece together 
 \input{aux/birkhoff-theorem.tex}
 \end{code}
 \ccpad
-Some readers might worry that we haven't quite acheived our goal because what we just proved (birkhoff) is not an ``if and only if'' assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---is straightforward, as discussed in \S\ref{equation-preservation}. Indeed, in the \ualibPreservation module of the \ualib we provide proofs of
+Some readers might worry that we haven't quite achieved our goal because what we just proved (birkhoff) is not an ``if and only if'' assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---is straightforward, as discussed in \S\ref{equation-preservation}. Indeed, in the \ualibPreservation module of the \ualib we provide proofs of
 \begin{itemize}
 \item
   \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html\#964}{(H-id1)}
@@ -2316,7 +2316,7 @@ Now that we have accomplished our initial goal of formalizing Birkhoff's HSP the
 
 One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
 %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
-As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We should determine how the two new hypothesis required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
+As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We should determine how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
 compare with the assumptions we make in our Agda proof.
 
 Finally, as one of the goals of the \agdaualib project is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory, we welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.
@@ -2336,7 +2336,7 @@ Finally, as one of the goals of the \agdaualib project is to make computer forma
 
 
 %% Bibliography
-\bibliography{ualib_refs}
+\bibliography{../ualib_refs}
 
 
 
