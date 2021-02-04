@@ -42,7 +42,7 @@ module Birkhoffs-Theorem
  -- Birkhoff's theorem: every variety is an equational class.
  birkhoff : is-set ∣ ℭ ∣ → Mod X (Th 𝕍) ⊆ 𝕍
 
- birkhoff Cset {𝑨} MThVA = γ
+ birkhoff Cset {𝑨} α = γ
   where
    ϕ : Σ h ꞉ (hom 𝔉 𝑨) , Epic ∣ h ∣
    ϕ = (𝔉-lift-hom 𝑨 ∣ 𝕏 𝑨 ∣) , 𝔉-lift-of-epic-is-epic 𝑨 ∣ 𝕏 𝑨 ∣  ∥ 𝕏 𝑨 ∥

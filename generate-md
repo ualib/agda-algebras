@@ -74,7 +74,7 @@ mv html/Unit-Type.{tex,md}
 mv html/universes.{tex,md}
 mv html/Universes.{tex,md}
 
-paplay  /usr/share/sounds/ubuntu/stereo/desktop-login.ogg
+paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg
 # cp -a html/* .
 
 # bundle exec jekyll build
