@@ -56,14 +56,14 @@ By induction on the shape of elements of `Sg X`, we prove that `Sg X` is the sma
 sgIsSmallest : {𝓤 𝓦 𝓡 : Universe}(𝑨 : Algebra 𝓤 𝑆){X : Pred ∣ 𝑨 ∣ 𝓦}(Y : Pred ∣ 𝑨 ∣ 𝓡)
  →             Y ∈ Subuniverses 𝑨  →  X ⊆ Y  →  Sg 𝑨 X ⊆ Y
 
-sgIsSmallest _ _ _ X⊆Y (var v∈X) = X⊆Y v∈X
-sgIsSmallest 𝑨 Y Y≤A X⊆Y (app f 𝒂 Ima⊆SgX) = fa∈Y
+sgIsSmallest _ _ _ XinY (var Xv) = XinY Xv
+sgIsSmallest 𝑨 Y YsubA XinY (app f 𝒂 SgXa) = fa∈Y
  where
   IH : Im 𝒂 ⊆ Y
-  IH i = sgIsSmallest 𝑨 Y Y≤A X⊆Y (Ima⊆SgX i)
+  IH i = sgIsSmallest 𝑨 Y YsubA XinY (SgXa i)
 
   fa∈Y : (f ̂ 𝑨) 𝒂 ∈ Y
-  fa∈Y = Y≤A f 𝒂 IH
+  fa∈Y = YsubA f 𝒂 IH
 
 \end{code}
 

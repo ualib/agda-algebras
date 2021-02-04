@@ -3,38 +3,65 @@
 For the benefit of readers who are not proficient in Agda and/or type theory, we describe some of the most important types and features of Agda used in the \ualib.
 
 
+
+
+\subsection{Nonstandard notation and syntax}
+The notation we adopt is that of the \typetopology library of \MartinEscardo. Here we give a few more details and a table (Table~\ref{tab:dictionary}) which translates between standard \agda syntax and \typetopology/\ualib notation.
+
+Universe levels are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe level \ab 𝓤 to the universe \ab 𝓤 \af ̇ := \Set \ab 𝓤 and the level \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for the universe \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇.
+Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
+
+To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
+
+Many occasions call for the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
+
+%% In addition to the notation described above, the level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀}\af ̇ is an alias for \Set \lzero. (For those familiar the \href{https://leanprover.github.io/}{Lean} proof assistant, \AgdaBound{𝓤₀}\af ̇ (i.e., \Set \lzero) is analogous to Lean's \texttt{Sort 0}.)
+
+\begin{table}
+\begin{tabular}{r|l}
+Standard \agda                        &          \typetopology/\ualib \\
+\hline
+\AgdaKeyword{Level}          &   \AgdaFunction{Universe}\\
+\ab 𝓤 : \AgdaKeyword{Level}  & \ab 𝓤 : \AgdaFunction{Universe}\\
+\Set \ab 𝓤                  &       \ab 𝓤 ̇ \\
+\lsuc \ab 𝓤                   &    \ab 𝓤 ⁺\\
+\Set (\lsuc \ab 𝓤) &    \ab 𝓤 ⁺ ̇\\
+\lzero                       &         \AgdaBound{𝓤₀}\\
+\AgdaFunction{Setω}  &         \AgdaFunction{𝓤ω}
+\end{tabular}
+\caption{Special notation for universe levels}
+\label{tab:dictionary}
+\end{table}
+
+
 %% Prelude %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \section{Preliminaries}\label{sec:preliminaries}
 
 
 
 
-\subsection{Options and imports}\label{ssec:options-and-imports}
-Agda programs typically begin by setting some options and by importing from existing libraries.
-Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness.  
-All Agda programs in the \ualib begin with the pragma
-\ccpad
-\begin{code}[number=code:options]
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\end{code}
-\ccpad
-The effect that each of these options is described in~\S~\ref{ssec:options-and-imports}.
+%% \subsection{Options and imports}\label{ssec:options-and-imports}
+%% Agda programs typically begin by setting some options and by importing from existing libraries.
+%% Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness.  
+%% All Agda programs in the \ualib begin with the pragma
+%% \ccpad
+%% \begin{code}[number=code:options]
+%% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+%% \AgdaKeyword{OPTIONS}\AgdaSpace{}%
+%% \AgdaPragma{--without-K}\AgdaSpace{}%
+%% \AgdaPragma{--exact-split}\AgdaSpace{}%
+%% \AgdaPragma{--safe}\AgdaSpace{}%
+%% \AgdaSymbol{\#-\}}\<%
+%% \end{code}
+%% \ccpad
+%% The effect of each option is explained in~\S~\ref{ssec:options-and-imports}.
 
 
 
 
 
 
-
-
-\subsection{Agda's universe hierarchy}\label{ssec:agdas-universe-hierarchy}
-The \agdaualib adopts the notation of the \typetopology library. In particular, universes are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc. Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe \ab 𝓤 to \ab 𝓤 \af ̇ := \Set \ab 𝓤 and \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤 \af ̇ is simply an alias for \Set \ab 𝓤, and we have \ab 𝓤 \af ̇ \as : (\ab 𝓤 \af ⁺) \af ̇. Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
-
+\subsection{Tools for noncummulative universes}\label{ssec:tools-for-noncummulative-universes}
 %% This section describes parts of the \ualibLifts module of the \agdaualib.
 We present here some general and some domain-specific tools that we developed for dealing with the noncummulativity of universees in Agda. (See~\cite[\S3.3]{DeMeo:2021} for more details).
 
@@ -169,6 +196,49 @@ More domain-specifically, here is how we lift types of operations and algebras.
 %% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 %% \AgdaBound{x}\<%
 %% \end{code}
+
+
+
+
+
+
+
+\subsection{Equality}\label{ssec:equality}
+Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
+%% full listing of the \texttt{Identity-Type} module.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\end{code}
+
+
+
 
 
 
@@ -1474,32 +1544,4 @@ Thus, a \defn{set}, as defined in \S\ref{ssec:truncation-and-sets}, is a type \a
 
 
 
-
-
-
-
-\subsection{Nonstandard notation and syntax}
-The notation we adopt is that of the \typetopology library of \MartinEscardo. Here we give a few more details and a table (Table~\ref{tab:dictionary}) which translates between standard \agda syntax and \typetopology/\ualib notation.
-
-Many occasions call for the universe that is the least upper bound of two universes, say, \ab 𝓤  and \ab 𝓥. This is denoted by \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 in standard Agda syntax, and in our notation the correponding type is (\ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥) ̇, or, more simply, \ab 𝓤 \AgdaSymbol{⊔} \ab 𝓥 ̇ (since \AgdaUnderscore{}\AgdaSymbol{⊔}\AgdaUnderscore{} has higher precedence than \AgdaUnderscore{}̇).
-
-To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \AgdaKeyword{Level} for universes (so what we write as \ab 𝓤 ̇ is written \Set\sP{3}\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
-
-In addition to the notation described in \S\ref{ssec:options-and-imports} above, the level \lzero is renamed \AgdaBound{𝓤₀}, so \AgdaBound{𝓤₀}\af ̇ is an alias for \Set \lzero. (For those familiar the \href{https://leanprover.github.io/}{Lean} proof assistant, \AgdaBound{𝓤₀}\af ̇ (i.e., \Set \lzero) is analogous to Lean's \texttt{Sort 0}.)
-
-\begin{table}
-\begin{tabular}{r|l}
-Standard \agda                        &          \typetopology/\ualib \\
-\hline
-\AgdaKeyword{Level}          &   \AgdaFunction{Universe}\\
-\ab 𝓤 : \AgdaKeyword{Level}  & \ab 𝓤 : \AgdaFunction{Universe}\\
-\Set \ab 𝓤                  &       \ab 𝓤 ̇ \\
-\lsuc \ab 𝓤                   &    \ab 𝓤 ⁺\\
-\Set (\lsuc \ab 𝓤) &    \ab 𝓤 ⁺ ̇\\
-\lzero                       &         \AgdaBound{𝓤₀}\\
-\AgdaFunction{Setω}  &         \AgdaFunction{𝓤ω}
-\end{tabular}
-\caption{Special notation for universe levels}
-\label{tab:dictionary}
-\end{table}
 

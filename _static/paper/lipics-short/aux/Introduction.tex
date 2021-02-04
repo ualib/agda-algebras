@@ -1,7 +1,7 @@
 To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
-The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, but also provides powerful \emph{proof tactics} for proving things about the objects that inhabit these types.
+The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
 
-There have been a number of prior efforts to formalize parts of universal algebra in type theory, most notably
+There have been a number of efforts to formalize parts of universal algebra in type theory prior to ours, most notably
 \begin{itemize}
   \item Capretta~\cite{Capretta:1999} (1999) formalized the basics of universal algebra in the Calculus of Inductive Constructions using the Coq proof assistant;
     \item Spitters and van der Weegen~\cite{Spitters:2011} (2011) formalized the basics of universal algebra and some classical algebraic structures, also in the Calculus of Inductive Constructions using the Coq proof assistant, promoting the use of type classes as a preferable alternative to setoids;
@@ -19,17 +19,17 @@ Finally, our own research experience has taught us that a proof assistant and pr
 
 \subsection{Contributions and organization}
 \label{sec:contributions}
-TODO: revise this section when the paper is almost done.
 
 Apart from the library itself, we describe the formal implementation and proof of a deep result, Garrett Birkhoff's celebrated HSP theorem~\cite{Birkhoff:1935}, which was among the first major results of universal algebra.  The theorem states that a \defn{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class (defined by the set of identities satisfied by all its members).  %% More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of algebras satisfying a certain set of equations.
 The fact that we now have a formal proof of this is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because the proof is constructive. As the paper~\cite{Carlstrom:2008} of Carlstr\"om makes clear, it is a highly nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's and show that it can be formalized using only constructive logic and natural deduction, without appealing to, say, the Law of the Excluded Middle or the Axiom of Choice.
 
-Each of the sections that follow describes only what seem to us the most important or noteworthy components of the \ualib. Of course, space does not permit us to cover all aspects of the complete formal proof of a theorem like Birkhoff's.  We remedy this in two ways. First, throughout the paper we include pointers to places in the documentation where the omitted material can be found.  Second, we include an appendix containing \agda background, discussion of the foundational assumptions of the \ualib, and definitions of some important types of dependent type theory and how they are represented in \agda and in the \ualib.  We hope this appendix is especially useful to readers who are not already proficient users of \agda.
+Each of the sections that follow describes only what seem to us the most important or noteworthy components of the \ualib. Of course, space does not permit us to cover all aspects of the complete formal proof of a theorem like Birkhoff's.  We remedy this in two ways. First, throughout the paper we include pointers to places in the documentation where the omitted material can be found.  Second, we include an appendix describing special notation conventions and some of the more important types defined in the \ualib.
 
+The paper is structured as follows. Section~\ref{sec:agda-preliminaries} introduces Sigma types in Agda (for us, the the most important dependent type in the language) as well as Agda's universe hierarchy. Section~\ref{sec:types-for-algebras} introduces the \agdaualib by explaining how algebraic structures are represented in the library. Section~\ref{sec:quotient-types-and-quotient-algebras} describes the approach we take to quotient types and quotient algebra types. Section~\ref{sec:homom-terms-subalg} defines new types that represent \emph{homomorphisms}, \emph{terms}, and \emph{subalgebras}, and Section~\ref{sec:equations-and-varieties} does the same for \emph{equational theories} and \emph{models}. This is also where we present free algebras, both in the informal theory (\S\ref{ssec:the-free-algebra-in-theory}) and represented as types in Agda (\S\ref{ssec:the-free-algebra-in-agda}). Finally, Section~\ref{sec:birkhoff} presents Birkhoff's theorem, describing the structure of the proof, with pointers to places in the documentation and source code where one can find the complete formal proof. The final section of the paper includes a few remarks about current work and future directions.
 
-
-Finally, the following are links to the official sources of information about the \agdaualib, and these include complete proofs of every theorem we mention here.
+To conclude this introduction, we provide the following links to official sources of information about the \agdaualib.
 \begin{itemize}
   \item \href{https://ualib.gitlab.io}{\texttt{ualib.org}} (the web site) includes every line of code in the library, rendered as html and accompanied by documentation, and
   \item \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} (the source code) freely available and licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 \end{itemize}
+These sources include complete proofs of every theorem we mention here.

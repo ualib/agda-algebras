@@ -1,5 +1,3 @@
-It is now all but trivial to use what we have already proved and piece together a complete formal, type-theoretic proof of Birkhoff's celebrated HSP theorem asserting that every variety is defined by a set of identities (is an ``equational class'').
-\begin{code}%
 %% \>[0]\<%
 %% \\
 %% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -89,84 +87,84 @@ It is now all but trivial to use what we have already proved and piece together 
 %% \\
 %% %
 %% \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Birkhoffs-Theorem}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{\{}\AgdaBound{𝒦}%
-\>[58I]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[58I]%
-\>[4]\AgdaComment{-- extensionality assumptions}\<%
-\\
-%
-\>[4]\AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{hfunext}\AgdaSpace{}%
-\AgdaFunction{ov𝓾}\AgdaSpace{}%
-\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
-\\
-%
-\>[4]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{propext}\AgdaSpace{}%
-\AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
-\\
-%
-\>[4]\AgdaComment{-- truncation assumptions:}\<%
-\\
-%
-\>[4]\AgdaSymbol{\{}\AgdaBound{ssR}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[4]\AgdaSymbol{\{}\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}\{}\AgdaFunction{ψRel}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{)\}}\<%
-\\
-%
-\>[1]\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-%% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
-%% \AgdaModule{the-relatively-free-algebra}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\<%
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{Birkhoffs-Theorem}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝒦}%
+%% \>[58I]\AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% \>[.][@{}l@{}]\<[58I]%
+%% \>[4]\AgdaComment{-- extensionality assumptions}\<%
 %% \\
 %% %
-%% \>[1]\AgdaKeyword{open}%
-%% \>[7]\AgdaModule{HSPLemmata}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
-%% \AgdaSymbol{=}\AgdaSpace{}%
-%% \AgdaBound{𝒦}\AgdaSymbol{\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaBound{pe}\AgdaSymbol{\}\{}\AgdaBound{ssR}\AgdaSymbol{\}\{}\AgdaBound{ssA}\AgdaSymbol{\}}\<%
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{hfunext}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{propext}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaComment{-- truncation assumptions:}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{ssR}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{ssA}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}\{}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaKeyword{where}\<%
 %% \\
 %% %
 %% \\[\AgdaEmptyExtraSkip]%
 %% %
+%% %% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+%% %% \AgdaModule{the-relatively-free-algebra}\AgdaSpace{}%
+%% %% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\<%
+%% %% \\
+%% %% %
+%% %% \>[1]\AgdaKeyword{open}%
+%% %% \>[7]\AgdaModule{HSPLemmata}\AgdaSpace{}%
+%% %% \AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% %% \AgdaSymbol{=}\AgdaSpace{}%
+%% %% \AgdaBound{𝒦}\AgdaSymbol{\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaBound{pe}\AgdaSymbol{\}\{}\AgdaBound{ssR}\AgdaSymbol{\}\{}\AgdaBound{ssA}\AgdaSymbol{\}}\<%
+%% %% \\
+%% %% %
+%% %% \\[\AgdaEmptyExtraSkip]%
+%% %% %
 \>[1]\AgdaComment{-- Birkhoff's theorem: every variety is an equational class.}\<%
 \\
 %
@@ -185,12 +183,10 @@ It is now all but trivial to use what we have already proved and piece together 
 \AgdaFunction{𝕍}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{birkhoff}\AgdaSpace{}%
 \AgdaBound{Cset}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{MThVA}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{γ}\<%
 \\
@@ -279,18 +275,3 @@ It is now all but trivial to use what we have already proved and piece together 
 \AgdaSymbol{(}\AgdaFunction{𝔉∈𝕍}\AgdaSpace{}%
 \AgdaBound{Cset}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{AiF}\<%
-\end{code}
-\ccpad
-Some readers might worry that we haven't quite acheived our goal because what we just proved (birkhoff) is not an ``if and only if'' assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the \href{UALib.Varieties.Preservation.html}{Equation Preservation} module. Indeed, there we proved the following identity preservation lemmas:
-\begin{itemize}
-\item
-  \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html\#964}{(H-id1)}
-  \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q \as → \ad H \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q
-\item
-  \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html\#2592}{(S-id1)}
-  \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q \as → \ad S \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q
-\item
-  \href{https://ualib.gitlab.io/UALib.Varieties.Preservation.html\#4111}{(P-id1)}
-  \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q \as → \ad P \ab 𝒦 \af ⊧ \ab p \af ≋ \ab q
-\end{itemize}
-From these it follows that every equational class is a variety.
