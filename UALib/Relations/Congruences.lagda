@@ -12,6 +12,7 @@ This section presents the [UALib.Relations.Congruences][] module of the [Agda Un
 Notice that we begin the module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
 
 \begin{code}
+
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
@@ -20,11 +21,14 @@ module UALib.Relations.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 open import UALib.Relations.Quotients hiding (Signature; 𝓞; 𝓥) public
 
+\end{code}
+
+A congruence relation of an algebra can be represented in a number of different ways.  Here is a Sigma type and a record type, each of which can be used to represent congruence relations.
+
+\begin{code}
+
 Con : {𝓤 : Universe}(A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 Con {𝓤} A = Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
-
--- con : {𝓤 : Universe}(A : Algebra 𝓤 𝑆)  →  Pred (Rel ∣ A ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓤)
--- con A = λ θ → IsEquivalence θ × compatible A θ
 
 record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇  where
  constructor mkcon
@@ -35,16 +39,13 @@ record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥
 
 open Congruence
 
--- compatible-equivalence : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ̇
--- compatible-equivalence {𝓤}{𝓦} {𝑨} R = compatible 𝑨 R × IsEquivalence R
-
 \end{code}
 
 #### Example
 
-We defined the \emph{trivial} (or ``diagonal'' or ``identity'' or ``zero'') relation \af{𝟎-rel} in Subsection~\ref{sec:binary-examples}.  We now demonstrate how one constructs the trivial congruence out of this relation.
+We defined the zero relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> in the <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">Examples</a> section of the [UALib.Relations.Binary][] module.  We now demonstrate how one constructs the trivial congruence out of this relation.
 
-The relation `𝟎-rel` is actually equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of \ad ≡ in the \ualibEquality module, so we simply apply the corresponding proofs.
+The relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of ≡ in the [UALib.Prelude.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 

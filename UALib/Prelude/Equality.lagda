@@ -28,7 +28,7 @@ data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
   refl : {x : X} → x ≡ x
 ```
 
-We being the [UALib.Prelude.Equality][] module] by formalizing the obvious proof that `≡` is an equivalence relation.
+We being the [UALib.Prelude.Equality][] module by formalizing the obvious proof that `≡` is an equivalence relation.
 
 \begin{code}
 

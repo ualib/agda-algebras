@@ -60,7 +60,7 @@ or as a relation from `A` to `B`,
 
 \end{code}
 
-#### Examples
+#### <a id="binary-examples">Examples</a>
 
 \begin{code}
  ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
