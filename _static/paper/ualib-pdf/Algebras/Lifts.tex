@@ -17,7 +17,7 @@ The hierarchy of universe levels in Agda is structured as \ab{𝓤₀} \as : \ab
 
 It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂} and \ab{𝓤₀} \as : \ab{𝓤₃}, and so on. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, it is this author's experience that a noncummulative hierarchy can sometimes make for a nonfun proof assistant.
 
-Luckily, there are ways to subvert noncummulativity which, when used with care, do not introduce logically consistencies into the type theory. We describe some techniques we developed for this purpose that are specifically tailored for our domain of applications.
+Luckily, there are ways to subvert noncummulativity which, when used with care, do not introduce logical inconsistencies into the type theory. We describe some techniques we developed for this purpose that are specifically tailored for our domain of applications.
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
 Let us be more concrete about what is at issue here by giving an example. Unless we are pedantic enough to worry about which universe level each of our types inhabits, then eventually we will encounter an error like the following:\\

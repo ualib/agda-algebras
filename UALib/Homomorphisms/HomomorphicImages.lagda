@@ -32,7 +32,8 @@ HomImage : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 
 HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
 HomImagesOf : {𝓤 𝓦 : Universe} → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ,
+                                                  is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 \end{code}
 

@@ -43,7 +43,8 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
          --------------------------------------------------------------------------------------
  →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πᵏ 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
 
-FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE {pe} Bset ssR ssA = (fmap , fhom , fepic) , commuting , femb
+FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE {pe} Bset ssR ssA =
+ (fmap , fhom , fepic) , commuting , femb
   where
    θ : Congruence 𝑨
    θ = kercon 𝑨{𝑩} ϕ

@@ -26,7 +26,7 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 \AgdaKeyword{public}\<%
 \end{code}
 \ccpad
-Here is the definition, which is similar to the one found in the\ab{Relation/Unary.agda} file of the \agdastdlib.
+Here is the definition, which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -189,7 +189,7 @@ We introduce notation for denoting that \ab x ``belongs to'' or ``inhabits'' typ
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∉\AgdaUnderscore{}}}\<%
 \end{code}
 \ccpad
-The ``subset'' relation is denoted, as usual, with the \af{⊆} symbol (cf. \texttt{Relation/Unary.agda} in the \agdastdlib.
+The ``subset'' relation is denoted, as usual, with the \af{⊆} symbol (cf.~\texttt{Relation/Unary.agda} in the \agdastdlib).
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -894,14 +894,12 @@ The product \af Π \af P of a predicate \af P \as : \af{Pred} \ab X \ab 𝓤 is 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[14]\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{P}%
-\>[19]\AgdaSymbol{→}%
-\>[22]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%

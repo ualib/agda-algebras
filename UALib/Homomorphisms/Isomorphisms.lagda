@@ -325,19 +325,6 @@ embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext �
  →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
 embedding-lift {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem =
  embedding-lift-nat' {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem
-\end{code}
-
-#### Isomorphism, intensionally
-
-This is not used so much, and this section may be absent from future releases of the library.
-
-\begin{code}
---Isomorphism
-_≅'_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑨 ≅' 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ≡ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ≡ ∣ 𝒾𝒹 𝑨 ∣)
--- An algebra is (intensionally) isomorphic to itself
-id≅' : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅' 𝑨
-id≅' 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , 𝓇ℯ𝒻𝓁 , 𝓇ℯ𝒻𝓁
 
 iso→embedding : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
  →              (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
@@ -353,6 +340,7 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 
   γ : is-embedding ∣ f ∣
   γ = equivs-are-embeddings ∣ f ∣ (invertibles-are-equivs ∣ f ∣ finv)
+
 \end{code}
 
 --------------------------------------

@@ -172,8 +172,8 @@ We now define the type \af{hom} \ab 𝑨 \ab 𝑩 of \textbf{homomorphisms} from
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{is-homomorphism}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[50I]\AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -184,9 +184,12 @@ We now define the type \af{hom} \ab 𝑨 \ab 𝑩 of \textbf{homomorphisms} from
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[50I]%
+\>[18]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -260,8 +263,7 @@ We now define the type \af{hom} \ab 𝑨 \ab 𝑩 of \textbf{homomorphisms} from
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -270,9 +272,7 @@ We now define the type \af{hom} \ab 𝑨 \ab 𝑩 of \textbf{homomorphisms} from
 \end{code}
 
 \subsubsection{Examples}\label{examples}
-
-A simple example is the identity map, which is proved to be a
-homomorphism as follows.
+A simple example is the identity map, which is proved to be a homomorphism as follows.
 
 \begin{code}%
 \>[0]\<%

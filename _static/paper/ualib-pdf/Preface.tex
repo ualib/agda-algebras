@@ -20,23 +20,22 @@ In our own mathematics research, experience has taught us that a proof assistant
 \item documenting the resulting software libraries so they are accessible to other mathematicians.
 \end{itemize}
 
-\subsection*{Contributions and organization}
-Apart from the library itself, we describes the formal implementation and proof of a deep result, Garrett Birkhoff's celebrated HSP theorem~\cite{Birkhoff:1935}, which was among the first major results of universal algebra.  The theorem states that a \defn{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class (defined by the set of identities satisfied by all its members).
-The fact that we now have a formal proof of this is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because the proof is constructive. As the paper~\cite{Carlstrom:2008} of Carlstr\"om makes clear, it is a highly nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's and show that it can be formalized using only constructive logic and natural deduction, without appealing to, say, the Law of the Excluded Middle or the Axiom of Choice.
-
-Each of the sections that follow describes the most important or noteworthy components of the \ualib. We cover just enough to keep the paper somewhat self-contained.  Of course, space does not permit us to cover every definition and theorem required to present a complete formal proof of a theorem like Birkhoff's.  We remedy this in two ways. First, throughout the paper we include pointers to places in the documentation where the omitted material can be found.  Second, we include an appendix containing \agda background, discussion of the foundational assumptions of the \ualib, and definitions of some important types of dependent type theory and how they are represented in \agda and in the \ualib.  We hope this appendix is especially useful to readers who are not already proficient users of \agda.
-
 
 \subsection*{Prior art}
-There have been a number of prior efforts to formalize parts of universal algebra in type theory, most notably
+There have been a number of efforts to formalize parts of universal algebra in type theory prior to ours, most notably
 \begin{itemize}
   \item Capretta~\cite{Capretta:1999} (1999) formalized the basics of universal algebra in the Calculus of Inductive Constructions using the Coq proof assistant;
     \item Spitters and van der Weegen~\cite{Spitters:2011} (2011) formalized the basics of universal algebra and some classical algebraic structures, also in the Calculus of Inductive Constructions using the Coq proof assistant, promoting the use of type classes as a preferable alternative to setoids;
  \item Gunther, et al~\cite{Gunther:2018} (2018) developed what seems to be (prior to the \ualib) the most extensive library of formal universal algebra to date; in particular, this work includes a formalization of some basic equational logic; the project (like the \ualib) uses Martin-L\"of Type Theory and the Agda proof assistant.
 \end{itemize}
-Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, goals of this prior work seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras.
+Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \ualib extends beyond the scope of prior efforts, including those listed above. In particular, the \ualib now includes a proof of Birkhoff's variety theorem.  Most other proofs of this theorem that we know of are informal and nonconstructive.\footnote{After the completion of this work, the author learned about a constructive version of Birkhoff's theorem that was proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the standard, informal style of mathematical writing in the current literature, and as far as we know it was never implemented formally and type-checked with a proof assistant. Nonetheless, a comparison of the version of the theorem presented in~\cite{Carlstrom:2008} to the Agda proof we give here would be interesting.}
 
-Although the \agdaualib project was initiated relatively recently (in 2018), the part of universal algebra and equational logic that it formalizes extends beyond the scope of prior efforts.  In particular, the \ualib now includes the only formal, constructive, machine-checked proof of Birkhoff's variety theorem that we know of. We remark that, with the exception of~\cite{Carlstrom:2008}, all other proofs of Birkhoff's theorem we have seen are informal and not known to be constructive.
+
+\subsection*{Contributions and organization}
+\label{sec:contributions}
+
+Apart from the library itself, we describe the formal implementation and proof of a deep result, Garrett Birkhoff's celebrated HSP theorem~\cite{Birkhoff:1935}, which was among the first major results of universal algebra.  The theorem states that a \defn{variety} (a class of algebras closed under quotients, subalgebras, and products) is an equational class (defined by the set of identities satisfied by all its members).  %% More precisely, a class 𝒦 of algebras is closed under the taking of quotients, subalgebras, and arbitrary products if and only if 𝒦 is the class of algebras satisfying a certain set of equations.
+The fact that we now have a formal proof of this is noteworthy, not only because this is the first time the theorem has been proved in dependent type theory and verified with a proof assistant, but also because the proof is constructive. As the paper~\cite{Carlstrom:2008} of Carlstr\"om makes clear, it is a highly nontrivial exercise to take a well-known informal proof of a theorem like Birkhoff's and show that it can be formalized using only constructive logic and natural deduction, without appealing to, say, the Law of the Excluded Middle or the Axiom of Choice.
 
 
 \subsection*{Logical foundations}
@@ -48,7 +47,7 @@ We won't go into great detail here because there are already other very nice res
 We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: ``primitive'' \textbf{types} (𝟘, 𝟙, and ℕ, denoting the empty type, one-element type, and natural numbers), \textbf{type formers} (+, Π, Σ, Id, denoting binary sum, product, sum, and the identity type), and an infinite collection of \textbf{universes} (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like 𝓤, 𝓥, 𝓦, etc., typically from the latter half of the English alphabet).
 
 \subsection*{Intended audience}
-This document describes \agdaualib in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
+This document describes \agdaualib in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new theorems in universal algebra and model theory.
 
 While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say,~\cite{Bergman:2012}, or~\cite{McKenzie:1987}, or category theory, as presented in, say,~\cite{Riehl:2017} or \url{https://categorytheory.gitlab.io}.
 
@@ -61,9 +60,9 @@ modified version of Martin's instructions}.
 
 The main repository for the \agdaualib is gitlab.com/ualib/ualib.gitlab.io. There are more installation instructions in the \href{https://gitlab.com/ualib/ualib.gitlab.io/README.md}{README.md} file of the \href{https://gitlab.com/ualib/ualib.gitlab.io}{UALib repository}, but a summary of what's required is
 \begin{itemize}
-\item \href{https://www.gnu.org/software/emacs/}{Emacs}
-\item \agda 2.6.1
-\item \agdamode (for Emacs)
+\item GNU Emacs (\url{https://www.gnu.org/software/emacs/})
+\item Agda (version 2.6.1) (\url{https://wiki.portal.chalmers.se/agda/pmwiki.php})
+\item agda2-mode for Emacs (\url{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html})
 \item A copy (or ``clone'') of the \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} repository.
 \end{itemize}
 
@@ -71,7 +70,7 @@ Instructions for installing each of these are available in the \href{https://git
 
 \subsection*{Attributions and citations}
 
-Most of the mathematical results that formalized in the \ualib are well known. Regarding the Agda source code in the\agdaualib, this is mainly due to William DeMeo with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on \ufcourse and the \typetopology Agda Library by \escardo~\cite{MHE}. The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the Midlands Graduate School in the Foundations of Computing Science in Birmingham in 2019.
+Most of the mathematical results that formalized in the \ualib are well known. Regarding the Agda source code in the \agdaualib, this is mainly due to William DeMeo with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on \ufcourse and the \typetopology Agda Library by \escardo~\cite{MHE}. The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the Midlands Graduate School in the Foundations of Computing Science in Birmingham in 2019.
 
 The following Agda documentation and tutorials helped inform and improve the \ualib, especially the first one in the list.
 
