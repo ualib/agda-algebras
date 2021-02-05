@@ -30,7 +30,7 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding)
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras 𝑨 : Algebra 𝓦 𝑆 and 𝑩 : Algebra 𝓤 𝑆, we say that 𝑩 is a **subalgebra** of 𝑨, and we write 𝑩 IsSubalgebraOf 𝑨 just in case 𝑩 can be embedded in 𝑨; in other terms, there exists a map h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ from the universe of 𝑨 to the universe of 𝑩 such h is an embedding (i.e., is-embedding h holds) and h is a homomorphism from 𝑨 to 𝑩.
+Given algebras 𝑨 : Algebra 𝓦 𝑆 and 𝑩 : Algebra 𝓤 𝑆, we say that 𝑩 is a **subalgebra** of 𝑨, and we write 𝑩 IsSubalgebraOf 𝑨 just in case 𝑩 can be embedded in 𝑨; in other terms, there exists a map h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ from the universe of 𝑨 to the universe of 𝑩 such that h is an embedding (i.e., is-embedding h holds) and h is a homomorphism from 𝑨 to 𝑩.
 
 \begin{code}
 
@@ -80,39 +80,57 @@ Here are a number of useful facts about subalgebras.  Many of them seem redundan
 
 --Transitivity of IsSubalgebra (explicit args)
 TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- →         𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
-          ---------------------
- →              𝑪 ≤ 𝑨
+ →        𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
+          ------------------
+ →        𝑪 ≤ 𝑨
 
-TRANS-≤ 𝑨 𝑩 𝑪 BA CB =
- ∣ BA ∣ ∘ ∣ CB ∣ , ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥) , ∘-hom 𝑪 𝑩 𝑨 {∣ CB ∣}{∣ BA ∣}(snd ∥ CB ∥) (snd ∥ BA ∥)
+TRANS-≤ 𝑨 𝑩 𝑪 BA CB = ∣ BA ∣ ∘ ∣ CB ∣ , α , β
+ where
+  α : is-embedding (∣ BA ∣ ∘ ∣ CB ∣)
+  α = ∘-embedding (fst ∥ BA ∥) (fst ∥ CB ∥)
+
+  β : is-homomorphism 𝑪 𝑨 (∣ BA ∣ ∘ ∣ CB ∣)
+  β = ∘-hom 𝑪 𝑩 𝑨 {∣ CB ∣}{∣ BA ∣}(snd ∥ CB ∥) (snd ∥ BA ∥)
+
 
 --Transitivity of IsSubalgebra (implicit args)
 Trans-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+ →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+
 Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
+
 
 --Transitivity of IsSubalgebra (implicit args)
 trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
- →         𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+ →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+
 trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
+
+
 transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
- →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ∣ B≤C ∣ ∘ ∣ A≤B ∣ , ∘-embedding (fst ∥ B≤C ∥) (fst ∥ A≤B ∥) , ∘-hom 𝑨 𝑩 𝑪 {∣ A≤B ∣}{∣ B≤C ∣}(snd ∥ A≤B ∥) (snd ∥ B≤C ∥)
+ →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+
+transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ∣ B≤C ∣ ∘ ∣ A≤B ∣ ,
+                                  ∘-embedding (fst ∥ B≤C ∥) (fst ∥ A≤B ∥) ,
+                                  ∘-hom 𝑨 𝑩 𝑪 {∣ A≤B ∣}{∣ B≤C ∣}(snd ∥ A≤B ∥) (snd ∥ B≤C ∥)
+
 
 --Reflexivity of IsSubalgebra (explicit arg)
 REFL-≤ : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
 REFL-≤ 𝑨 = 𝑖𝑑 ∣ 𝑨 ∣ , id-is-embedding , id-is-hom
 
+
 --Reflexivity of IsSubalgebra (implicit arg)
 refl-≤ : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
 refl-≤ {𝑨 = 𝑨} = REFL-≤ 𝑨
 
+
 --Reflexivity of IsSubalgebra (explicit arg)
 ISO-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- →         𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
-          ---------------------
- →              𝑪 ≤ 𝑨
+ →      𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
+        -----------------
+ →      𝑪 ≤ 𝑨
+
 ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = h , hemb , hhom
  where
   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
@@ -128,28 +146,34 @@ ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = h , hemb , hhom
   hhom : is-homomorphism 𝑪 𝑨 h
   hhom = ∘-hom 𝑪 𝑩 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∥ B≤A ∥)
 
+
 Iso-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →         𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+ →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+
 Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
+
 iso-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →         𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+ →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+
 iso-≤ {𝑨 = 𝑨} {𝑩 = 𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
+
 trans-≤-≅ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →         𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
+ →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
+
 trans-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = ISO-≤ 𝑩 𝑨 𝑪 A≤B (sym-≅ B≅C)
 
+
 TRANS-≤-≅ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →         𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+
 TRANS-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = h , hemb , hhom
  where
   f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
   f = ∣ A≤B ∣
-
   g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣
   g = fst ∣ B≅C ∣
-
   h : ∣ 𝑨 ∣ → ∣ 𝑪 ∣
   h = g ∘ f
 
@@ -159,50 +183,52 @@ TRANS-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = h , hemb , hhom
   hhom : is-homomorphism 𝑨 𝑪 h
   hhom = ∘-hom 𝑨 𝑩 𝑪 {f}{g} (snd ∥ A≤B ∥) (snd ∣ B≅C ∣)
 
+
 mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+
 mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+
 
 lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}{𝑩 : Algebra 𝓤 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+
 lift-alg-is-sub {𝓤}{𝒦}{𝑩} (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
+
 lift-alg-lift-≤-lower : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
-              →         𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+ →                      𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+
 lift-alg-lift-≤-lower {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A =
  iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
 
+
 lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →                𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
-lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = γ
+ →                      𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
+
+lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = g ∘ f , α , β
  where
   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
   lA = lift-alg 𝑨 𝓩
-
   A≅lA : 𝑨 ≅ lA
   A≅lA = lift-alg-≅
 
   f : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
   f = ∣ B≤A ∣
-
   g : ∣ 𝑨 ∣ → ∣ lA ∣
   g = ≅-map A≅lA
 
-  h : ∣ 𝑩 ∣ → ∣ lA ∣
-  h = g ∘ f
+  α : is-embedding (g ∘ f)
+  α = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ B≤A ∥)
 
-  hemb : is-embedding h
-  hemb = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ B≤A ∥)
+  β : is-homomorphism 𝑩 lA (g ∘ f)
+  β = ∘-hom 𝑩 𝑨 lA {f}{g} (snd ∥ B≤A ∥) (snd ∣ A≅lA ∣)
 
-  hhom : is-homomorphism 𝑩 lA h
-  hhom = ∘-hom 𝑩 𝑨 lA {f}{g} (snd ∥ B≤A ∥) (snd ∣ A≅lA ∣)
-
-  γ : 𝑩 IsSubalgebraOf lift-alg 𝑨 𝓩
-  γ = h , hemb , hhom
 
 lift-alg-sub-lift : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
- →                𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
-lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = h , hemb , hhom
+ →                  𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
+
+lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = g ∘ f , α , β
  where
   lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 𝓦
@@ -216,14 +242,11 @@ lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = h , hemb , hhom
   g : ∣ 𝑨 ∣ → ∣ lA ∣
   g = ≅-map A≅lA
 
-  h : ∣ 𝑪 ∣ → ∣ lA ∣
-  h = g ∘ f
+  α : is-embedding (g ∘ f)
+  α = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ C≤A ∥)
 
-  hemb : is-embedding h
-  hemb = ∘-embedding (≅-map-is-embedding A≅lA) (fst ∥ C≤A ∥)
-
-  hhom : is-homomorphism 𝑪 lA h
-  hhom = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
+  β : is-homomorphism 𝑪 lA (g ∘ f)
+  β = ∘-hom 𝑪 𝑨 lA {f}{g} (snd ∥ C≤A ∥) (snd ∣ A≅lA ∣)
 
 
 lift-alg-≤ : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
