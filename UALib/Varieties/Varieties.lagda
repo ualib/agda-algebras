@@ -407,7 +407,8 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfun
  PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift x))
  PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) =
   siso (ssub{𝓤 = ov𝓾} (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
- PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub{𝓤 = ov𝓾}(slift{ov𝓾}{ov𝓾}(S⊆SP sA))(lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) =
+  ssub{𝓤 = ov𝓾}(slift{ov𝓾}{ov𝓾}(S⊆SP sA))(lift-alg-≤ 𝑩{𝑨} B≤A)
  PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B)
  PS⊆SP (pliftu x) = slift (PS⊆SP x)
  PS⊆SP (pliftw x) = slift (PS⊆SP x)

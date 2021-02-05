@@ -36,10 +36,10 @@ module UALib.Subalgebras.WWMD
 
 open import UALib.Subalgebras.Homomorphisms {𝑆 = 𝑆}{gfe}{𝕏} public
 
-open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; Univalence; Π-is-subsingleton;
- ∈₀-is-subsingleton; pr₁-embedding; embedding-gives-ap-is-equiv; equiv-to-subsingleton; powersets-are-sets';
- lr-implication; rl-implication; subset-extensionality'; inverse; ×-is-subsingleton; _≃_;
- logically-equivalent-subsingletons-are-equivalent; _●_)
+open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; Univalence;
+ Π-is-subsingleton; ∈₀-is-subsingleton; pr₁-embedding; embedding-gives-ap-is-equiv; _●_; _≃_;
+ equiv-to-subsingleton; powersets-are-sets'; lr-implication; rl-implication; inverse;
+ subset-extensionality'; ×-is-subsingleton; logically-equivalent-subsingletons-are-equivalent)
 
 module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 

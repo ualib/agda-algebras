@@ -346,8 +346,6 @@ This subsection presents the \ualibPreservation submodule of the \agdaualib.
 \label{sec:birkhoff}
 This section presents the \ualibBirkhoff module of the \agdaualib.
 
-\subsection{The Relatively Free Algebra}\label{ssec:relatively-free-algebra-type}
-This subsection presents the \ualibFreeAlgebra submodule of the \agdaualib.
 \input{Birkhoff/FreeAlgebra.tex}
 
 \subsection{HSP Lemmas}\label{ssec:hsp-lemmas}
@@ -357,6 +355,20 @@ This subsection presents the \ualibHSPLemmas submodule of the \agdaualib.
 \subsection{The HSP Theorem}\label{ssec:hsp-theorem}
 This subsection presents the \ualibHSPTheorem submodule of the \agdaualib.
 \input{Birkhoff/HSPTheorem.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}\label{sec:conclusion}
+
+Now that we have accomplished our initial goal of formalizing Birkhoff's HSP theorem in \agda, our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations about dependent type theory.
+
+One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
+%Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
+As mentioned in the preface, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We should determine how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
+compare with the assumptions we make in our Agda proof.
+
+Finally, as one of the goals of the \agdaualib project is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory, we welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.
+
+
 
 \newpage
 

@@ -36,7 +36,6 @@ This module defines what we have found to be the most useful inductive types rep
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{UALib.Varieties.Varieties}\<%
 \\
@@ -74,8 +73,6 @@ This module defines what we have found to be the most useful inductive types rep
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{UALib.Varieties.EquationalLogic}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
@@ -88,8 +85,6 @@ This module defines what we have found to be the most useful inductive types rep
 We define the inductive type \ad H to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
 \ccpad
 \begin{code}%
-\>[0]\AgdaComment{--Closure wrt H}\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{H}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -100,27 +95,28 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{:}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaInductiveConstructor{hbase}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -131,7 +127,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{H}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -140,7 +136,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -152,7 +148,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{H}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -162,9 +158,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -178,7 +172,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{H}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -191,9 +185,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -207,7 +199,7 @@ We define the inductive type \ad H to represent classes of algebras that include
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{H}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{H}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \end{code}
 
@@ -215,8 +207,6 @@ We define the inductive type \ad H to represent classes of algebras that include
 The most useful inductive type that we have found for representing classes of algebras that are closed under the taking of subalgebras as an inductive type.
 \ccpad
 \begin{code}%
-\>[0]\AgdaComment{--Closure wrt S}\<%
-\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{S}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -228,22 +218,23 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{:}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaInductiveConstructor{sbase}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -260,7 +251,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -281,7 +272,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -294,9 +285,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -310,7 +299,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -320,9 +309,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -336,7 +323,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -349,9 +336,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -365,7 +350,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{S}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{S}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \end{code}
 
@@ -378,14 +363,12 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
@@ -393,9 +376,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -417,7 +398,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -438,7 +419,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -463,7 +444,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -493,7 +474,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -508,9 +489,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
@@ -525,7 +504,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -538,9 +517,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -554,7 +531,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -564,9 +541,7 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -580,12 +555,12 @@ The most useful inductive type that we have found for representing classes of al
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{P}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \end{code}
 
 \subsubsection{Varietal closure}\label{varietal-closure}
-A class \ab 𝒦 of \ab 𝑆-algebras is called a \textbf{variety} if it is closed under each of the closure operators \ad H, \ad S, and \ad P introduced above; the corresponding closure operator is often denoted 𝕍, but we will typically denote it by \ad V.
+A class \ab 𝒦 of \ab 𝑆-algebras is called a \defn{variety} if it is closed under each of the closure operators \ad H, \ad S, and \ad P introduced above; the corresponding closure operator is often denoted 𝕍, but we will typically denote it by \ad V.
 
 Thus, if \ab 𝒦 is a class of \ab 𝑆-algebras, then the \textbf{variety generated by} \ab 𝒦 is denoted by \ad V \ab 𝒦 and defined to be the smallest class that contains \ab 𝒦 and is closed under \ad H, \ad S, and \ad P.
 
@@ -602,28 +577,28 @@ We now define \ad V as an inductive type.
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{:}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaInductiveConstructor{vbase}%
 \>[9]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -643,7 +618,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -655,7 +630,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -678,7 +653,7 @@ We now define \ad V as an inductive type.
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -688,9 +663,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -704,7 +677,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -713,13 +686,11 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -733,7 +704,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -743,9 +714,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -759,7 +728,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -788,7 +757,7 @@ We now define \ad V as an inductive type.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -802,9 +771,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
@@ -819,7 +786,7 @@ We now define \ad V as an inductive type.
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -832,9 +799,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -848,7 +813,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
@@ -858,9 +823,7 @@ We now define \ad V as an inductive type.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -874,7 +837,7 @@ We now define \ad V as an inductive type.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaDatatype{V}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaDatatype{V}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \end{code}
 
@@ -882,7 +845,7 @@ We now define \ad V as an inductive type.
 The types defined above represent operators with useful closure properties. We now prove a handful of such properties since we will need them later.
 \ccpad
 \begin{code}%
-\>[0]\AgdaComment{-- P is a closure operator, in particular, it's expansive...}\<%
+\>[0]\AgdaComment{-- P is a closure operator; in particular, it's expansive.}\<%
 \\
 \>[0]\AgdaFunction{P-expa}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -893,12 +856,10 @@ The types defined above represent operators with useful closure properties. We n
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[9]\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaDatatype{P}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
@@ -1028,22 +989,6 @@ The types defined above represent operators with useful closure properties. We n
 \AgdaSymbol{(}\AgdaFunction{P-idemp}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{x₁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1722,7 +1667,7 @@ Next we observe that lifting to a higher universe does not break the property of
 \begin{code}%
 \>[0]\AgdaFunction{lift-alg-subP}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[949I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
@@ -1730,14 +1675,16 @@ Next we observe that lifting to a higher universe does not break the property of
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{OV}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{)\}\{}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[949I]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
 \>[18]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
@@ -1745,11 +1692,11 @@ Next we observe that lifting to a higher universe does not break the property of
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[18]\AgdaComment{---------------------------------------------------}\<%
+\>[12]\AgdaComment{---------------------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
-\>[18]\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\>[13]\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
@@ -1823,7 +1770,7 @@ Next we observe that lifting to a higher universe does not break the property of
 %
 \>[2]\AgdaFunction{lC≤lA}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-alg-lift-≤-lift}\AgdaSpace{}%
+\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{C≤A}\<%
@@ -2857,8 +2804,10 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}(}\AgdaInductiveConstructor{ssubw}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{sA}\AgdaSpace{}%
 \AgdaBound{B≤A}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaInductiveConstructor{ssub}\AgdaSymbol{\{}\AgdaArgument{𝓤}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ov𝓾}\AgdaSymbol{\}(}\AgdaInductiveConstructor{slift}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}(}\AgdaFunction{S⊆SP}\AgdaSpace{}%
 \AgdaBound{sA}\AgdaSymbol{))(}\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
