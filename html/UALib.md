@@ -47,9 +47,9 @@ of citation.
 
 In the latest version of the library we have defined many new types for representing the important constructs and theorems that comprise part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files, with the `.lagda` extension, and they are grouped into modules so that they may be easily imported into other Agda programs.
 
-To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if K is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then K is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
+To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if 𝒦 is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
 
-We hope the library will be useful to research mathematicians and computer scientists who wish to verify their work by formalizing and type-checking the theorems they prove. Indeed, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to ever higher peaks, all the time verifying and authenticating what we think we found along the way.
+We hope the library will be useful to mathematicians and computer scientists who wish to formally develop their work in type theory and verify their results with a proof assistant. Indeed, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to higher peaks, all the time verifying and authenticating what we think we found along the way.
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
@@ -57,8 +57,7 @@ We hope the library will be useful to research mathematicians and computer scien
 
 **PDF documentation**. [ualib-6Feb2021-arXiv.pdf](ualib-6Feb2021-arXiv.pdf), [ualib-short-6Feb2021.pdf](ualib-short-6Feb2021.pdf)
 
-To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
-
+**Citing this work**. To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
 
 --------------------------------
 
@@ -66,19 +65,19 @@ To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-u
 
 <pre class="Agda">
 
-<a id="3640" class="Symbol">{-#</a> <a id="3644" class="Keyword">OPTIONS</a> <a id="3652" class="Pragma">--without-K</a> <a id="3664" class="Pragma">--exact-split</a> <a id="3678" class="Pragma">--safe</a> <a id="3685" class="Symbol">#-}</a>
+<a id="3663" class="Symbol">{-#</a> <a id="3667" class="Keyword">OPTIONS</a> <a id="3675" class="Pragma">--without-K</a> <a id="3687" class="Pragma">--exact-split</a> <a id="3701" class="Pragma">--safe</a> <a id="3708" class="Symbol">#-}</a>
 
-<a id="3690" class="Keyword">module</a> <a id="3697" href="UALib.html" class="Module">UALib</a> <a id="3703" class="Keyword">where</a>
+<a id="3713" class="Keyword">module</a> <a id="3720" href="UALib.html" class="Module">UALib</a> <a id="3726" class="Keyword">where</a>
 
-<a id="3710" class="Keyword">open</a> <a id="3715" class="Keyword">import</a> <a id="3722" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="3736" class="Keyword">open</a> <a id="3741" class="Keyword">import</a> <a id="3748" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3762" class="Keyword">open</a> <a id="3767" class="Keyword">import</a> <a id="3774" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3789" class="Keyword">open</a> <a id="3794" class="Keyword">import</a> <a id="3801" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="3817" class="Keyword">open</a> <a id="3822" class="Keyword">import</a> <a id="3829" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="3849" class="Keyword">open</a> <a id="3854" class="Keyword">import</a> <a id="3861" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="3873" class="Keyword">open</a> <a id="3878" class="Keyword">import</a> <a id="3885" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="3903" class="Keyword">open</a> <a id="3908" class="Keyword">import</a> <a id="3915" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3931" class="Keyword">open</a> <a id="3936" class="Keyword">import</a> <a id="3943" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="3733" class="Keyword">open</a> <a id="3738" class="Keyword">import</a> <a id="3745" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="3759" class="Keyword">open</a> <a id="3764" class="Keyword">import</a> <a id="3771" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="3785" class="Keyword">open</a> <a id="3790" class="Keyword">import</a> <a id="3797" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="3812" class="Keyword">open</a> <a id="3817" class="Keyword">import</a> <a id="3824" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3840" class="Keyword">open</a> <a id="3845" class="Keyword">import</a> <a id="3852" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="3872" class="Keyword">open</a> <a id="3877" class="Keyword">import</a> <a id="3884" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="3896" class="Keyword">open</a> <a id="3901" class="Keyword">import</a> <a id="3908" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="3926" class="Keyword">open</a> <a id="3931" class="Keyword">import</a> <a id="3938" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="3954" class="Keyword">open</a> <a id="3959" class="Keyword">import</a> <a id="3966" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 
@@ -145,7 +144,8 @@ To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-u
 #### License and citations
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-  <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+  <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />
+  <!-- <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /> -->
 </a>
 <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">
   The Agda Universal Algebra Library
@@ -159,11 +159,11 @@ is licensed under a
 </a>
 <br />
 <br />
-<img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='50' src="css/stereotypeb-avatar.png" />
-Based on a work at
+<a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>
+Based on the work at
 <a xmlns:dct="http://purl.org/dc/terms/" href="https://gitlab.com/ualib/ualib.gitlab.io" rel="dct:source">
-  https://gitlab.com/ualib/ualib.gitlab.io
-</a>.
+  https://gitlab.com/ualib/ualib.gitlab.io.
+</a>
 <br />
 <a href="https://ualib.gitlab.io/UALib.Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
 
