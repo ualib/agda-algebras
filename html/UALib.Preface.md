@@ -164,8 +164,7 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
 @article{DeMeo:2021,
  author        = {William DeMeo},
  title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and
-                 {B}irkhoff's {T}heorem in {M}artin-{L}\"of
-                 {D}ependent {T}ype {T}heory},
+                 {B}irkhoff's {T}heorem in {D}ependent {T}ype {T}heory},
  journal       = {CoRR},
  volume        = {abs/2101.10166},
  year          = {2021},
@@ -176,6 +175,8 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
  note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
 }
 ```
+
+See also: [dblp record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html), [dblp BibTeX record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html?view=bibtex).
 
 -------------------------------------
 

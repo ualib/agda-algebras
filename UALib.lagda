@@ -57,6 +57,8 @@ We hope the library will be useful to research mathematicians and computer scien
 
 **PDF documentation**. [ualib-6Feb2021-arXiv.pdf](ualib-6Feb2021-arXiv.pdf), [ualib-short-6Feb2021.pdf](ualib-short-6Feb2021.pdf)
 
+**Citing this work**. To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
+
 --------------------------------
 
 ### <a id="brief-contents"></a> Brief Contents

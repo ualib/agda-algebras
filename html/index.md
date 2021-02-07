@@ -57,25 +57,28 @@ We hope the library will be useful to research mathematicians and computer scien
 
 **PDF documentation**. [ualib-6Feb2021-arXiv.pdf](ualib-6Feb2021-arXiv.pdf), [ualib-short-6Feb2021.pdf](ualib-short-6Feb2021.pdf)
 
+To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
+
+
 --------------------------------
 
 ### <a id="brief-contents"></a> Brief Contents
 
 <pre class="Agda">
 
-<a id="3462" class="Symbol">{-#</a> <a id="3466" class="Keyword">OPTIONS</a> <a id="3474" class="Pragma">--without-K</a> <a id="3486" class="Pragma">--exact-split</a> <a id="3500" class="Pragma">--safe</a> <a id="3507" class="Symbol">#-}</a>
+<a id="3640" class="Symbol">{-#</a> <a id="3644" class="Keyword">OPTIONS</a> <a id="3652" class="Pragma">--without-K</a> <a id="3664" class="Pragma">--exact-split</a> <a id="3678" class="Pragma">--safe</a> <a id="3685" class="Symbol">#-}</a>
 
-<a id="3512" class="Keyword">module</a> <a id="3519" href="UALib.html" class="Module">UALib</a> <a id="3525" class="Keyword">where</a>
+<a id="3690" class="Keyword">module</a> <a id="3697" href="UALib.html" class="Module">UALib</a> <a id="3703" class="Keyword">where</a>
 
-<a id="3532" class="Keyword">open</a> <a id="3537" class="Keyword">import</a> <a id="3544" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="3558" class="Keyword">open</a> <a id="3563" class="Keyword">import</a> <a id="3570" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3584" class="Keyword">open</a> <a id="3589" class="Keyword">import</a> <a id="3596" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3611" class="Keyword">open</a> <a id="3616" class="Keyword">import</a> <a id="3623" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="3639" class="Keyword">open</a> <a id="3644" class="Keyword">import</a> <a id="3651" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="3671" class="Keyword">open</a> <a id="3676" class="Keyword">import</a> <a id="3683" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="3695" class="Keyword">open</a> <a id="3700" class="Keyword">import</a> <a id="3707" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="3725" class="Keyword">open</a> <a id="3730" class="Keyword">import</a> <a id="3737" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3753" class="Keyword">open</a> <a id="3758" class="Keyword">import</a> <a id="3765" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="3710" class="Keyword">open</a> <a id="3715" class="Keyword">import</a> <a id="3722" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="3736" class="Keyword">open</a> <a id="3741" class="Keyword">import</a> <a id="3748" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="3762" class="Keyword">open</a> <a id="3767" class="Keyword">import</a> <a id="3774" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="3789" class="Keyword">open</a> <a id="3794" class="Keyword">import</a> <a id="3801" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3817" class="Keyword">open</a> <a id="3822" class="Keyword">import</a> <a id="3829" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="3849" class="Keyword">open</a> <a id="3854" class="Keyword">import</a> <a id="3861" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="3873" class="Keyword">open</a> <a id="3878" class="Keyword">import</a> <a id="3885" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="3903" class="Keyword">open</a> <a id="3908" class="Keyword">import</a> <a id="3915" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="3931" class="Keyword">open</a> <a id="3936" class="Keyword">import</a> <a id="3943" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 
