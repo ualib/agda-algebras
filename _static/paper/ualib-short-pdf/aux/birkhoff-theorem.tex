@@ -1,0 +1,277 @@
+%% \>[0]\<%
+%% \\
+%% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+%% \AgdaKeyword{OPTIONS}\AgdaSpace{}%
+%% \AgdaPragma{--without-K}\AgdaSpace{}%
+%% \AgdaPragma{--exact-split}\AgdaSpace{}%
+%% \AgdaPragma{--safe}\AgdaSpace{}%
+%% \AgdaSymbol{\#-\}}\<%
+%% \\
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaKeyword{import}\AgdaSpace{}%
+%% \AgdaModule{UALib.Algebras}\AgdaSpace{}%
+%% \AgdaKeyword{using}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaGeneralizable{𝓥}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaFunction{Algebra}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
+%% \\
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaKeyword{import}\AgdaSpace{}%
+%% \AgdaModule{UALib.Prelude.Preliminaries}\AgdaSpace{}%
+%% \AgdaKeyword{using}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\AgdaSymbol{;}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇}}\AgdaSymbol{)}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{UALib.Birkhoff.Theorem}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Signature}\AgdaSpace{}%
+%% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+%% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{global-dfunext}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝕏}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝓧}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓧}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+%% \AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
+%% \AgdaBound{𝑨}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaKeyword{where}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaKeyword{import}\AgdaSpace{}%
+%% \AgdaModule{UALib.Birkhoff.Lemmata}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
+%% \AgdaSymbol{=}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}\{}\AgdaBound{𝕏}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaKeyword{public}\<%
+%% \\
+%% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+%% \AgdaModule{the-free-algebra}\AgdaSpace{}%
+%% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+%% \AgdaModule{Birkhoffs-Theorem}\<%
+%% \\
+%% \>[0][@{}l@{\AgdaIndent{0}}]%
+%% \>[1]\AgdaSymbol{\{}\AgdaBound{𝒦}%
+%% \>[58I]\AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{Pred}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+%% \AgdaBound{𝓤}\AgdaSpace{}%
+%% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% \>[.][@{}l@{}]\<[58I]%
+%% \>[4]\AgdaComment{-- extensionality assumptions}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{hfe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{hfunext}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaFunction{propext}\AgdaSpace{}%
+%% \AgdaFunction{ov𝓾}\AgdaSymbol{\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaComment{-- truncation assumptions:}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{ssR}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{((}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaBound{p}\AgdaSpace{}%
+%% \AgdaBound{q}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[4]\AgdaSymbol{\{}\AgdaBound{ssA}\AgdaSpace{}%
+%% \AgdaSymbol{:}\AgdaSpace{}%
+%% \AgdaSymbol{∀}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSpace{}%
+%% \AgdaSymbol{→}\AgdaSpace{}%
+%% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+%% \AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSymbol{\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaFunction{ov𝓾}\AgdaSymbol{\}\{}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+%% \AgdaFunction{𝑻}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}\{}\AgdaFunction{ψRel}\AgdaSpace{}%
+%% \AgdaBound{𝒦}\AgdaSymbol{\}}\AgdaSpace{}%
+%% \AgdaBound{C}\AgdaSymbol{)\}}\<%
+%% \\
+%% %
+%% \>[1]\AgdaKeyword{where}\<%
+%% \\
+%% %
+%% \\[\AgdaEmptyExtraSkip]%
+%% %
+%% %% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+%% %% \AgdaModule{the-relatively-free-algebra}\AgdaSpace{}%
+%% %% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSymbol{\}}\<%
+%% %% \\
+%% %% %
+%% %% \>[1]\AgdaKeyword{open}%
+%% %% \>[7]\AgdaModule{HSPLemmata}\AgdaSpace{}%
+%% %% \AgdaSymbol{\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+%% %% \AgdaSymbol{=}\AgdaSpace{}%
+%% %% \AgdaBound{𝒦}\AgdaSymbol{\}\{}\AgdaBound{hfe}\AgdaSymbol{\}\{}\AgdaBound{pe}\AgdaSymbol{\}\{}\AgdaBound{ssR}\AgdaSymbol{\}\{}\AgdaBound{ssA}\AgdaSymbol{\}}\<%
+%% %% \\
+%% %% %
+%% %% \\[\AgdaEmptyExtraSkip]%
+%% %% %
+\>[1]\AgdaComment{-- Birkhoff's theorem: every variety is an equational class.}\<%
+\\
+%
+\>[1]\AgdaFunction{birkhoff}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{is-set}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{ℭ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Mod}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Th}\AgdaSpace{}%
+\AgdaFunction{𝕍}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{𝕍}\<%
+\\
+%
+\>[1]\AgdaFunction{birkhoff}\AgdaSpace{}%
+\AgdaBound{Cset}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{γ}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{where}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaFunction{𝔉}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+%
+\>[3]\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝔉-lift-hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝕏}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{𝔉-lift-of-epic-is-epic}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝕏}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}%
+\>[66]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝕏}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[3]\AgdaFunction{AiF}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{is-hom-image-of}}\AgdaSpace{}%
+\AgdaFunction{𝔉}\<%
+\\
+%
+\>[3]\AgdaFunction{AiF}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{fst}\AgdaSpace{}%
+\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaFunction{fst}\AgdaSpace{}%
+\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{snd}\AgdaSpace{}%
+\AgdaFunction{ϕ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{refl-≅}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[3]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaFunction{𝕍}\<%
+\\
+%
+\>[3]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{vhimg}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝔉∈𝕍}\AgdaSpace{}%
+\AgdaBound{Cset}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{AiF}\<%
