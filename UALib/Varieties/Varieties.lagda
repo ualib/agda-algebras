@@ -128,6 +128,20 @@ data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
 
 \end{code}
 
+With the closure operator V representing closure under HSP, we formally represent what it means to be a variety of algebras as follows.
+
+\begin{code}
+
+is-variety : {𝓤 : Universe}(𝒱 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → ov 𝓤 ̇
+is-variety{𝓤} 𝒱 = V{𝓤}{𝓤} 𝒱 ⊆ 𝒱
+
+variety : (𝓤 : Universe) → (ov 𝓤)⁺ ̇
+variety 𝓤 = Σ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) , is-variety 𝒱
+
+\end{code}
+
+
+
 -------------------------------
 
 #### <a id="closure-properties">Closure properties</a>
