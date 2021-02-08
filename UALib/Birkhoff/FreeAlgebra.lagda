@@ -84,9 +84,7 @@ Occasionally we want to extract the homomorphism ϕ from an inhabitant of `𝑻i
 
 \end{code}
 
-Finally, it is time to define the congruence relation modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X`.
-
-We start by letting ψ be the collection of all identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
+We now construct the congruence relation `ψCon`, modulo which `𝑻 X` will yield the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`. We start by letting ψ be the collection of all identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
 
 \begin{code}
 
@@ -96,7 +94,7 @@ We start by letting ψ be the collection of all identities (p, q) satisfied by a
 
 \end{code}
 
-We convert the predicate ψ into a relation by [Currying](https://en.wikipedia.org/wiki/Currying).
+We convert the predicate ψ into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
 
 \begin{code}
 
@@ -105,19 +103,21 @@ We convert the predicate ψ into a relation by [Currying](https://en.wikipedia.o
 
 \end{code}
 
-We will want to express `ψRel` as a congruence of the term algebra `𝑻 X`, so we must prove that `ψRel` is compatible with the operations of `𝑻 X` (which are jsut the terms themselves) and that `ψRel` an equivalence relation.
+To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove that
+
+1. `ψRel` is compatible with the operations of `𝑻 X` (which are jsut the terms themselves) and
+2. `ψRel` it is an equivalence relation.
 
 \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
-  →            compatible (𝑻 X) (ψRel 𝒦)
+ ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
  ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
   where
    ti : 𝑻img (S{𝓤}{𝓤} 𝒦)
    ti = mkti 𝑨 sA
 
    ϕ : hom (𝑻 X) 𝑨
-   ϕ = fst ∥ ti ∥
+   ϕ = fst (snd ti)
 
    γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
    γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
@@ -139,7 +139,7 @@ We will want to express `ψRel` as a congruence of the term algebra `𝑻 X`, so
 
 \end{code}
 
-We have collected all the pieces necessary to express the collection of identities satisfied by all algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
+We have collected all the pieces necessary to express the collection of identities satisfied by all subalgebras of algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
 
 \begin{code}
 
@@ -152,7 +152,7 @@ We have collected all the pieces necessary to express the collection of identiti
 
 #### <a id="the-relatively-free-algebra">The relatively free algebra</a>
 
-We will denote the relatively free algebra by 𝔉 or 𝔽 and construct it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
+We will denote the relatively free algebra by 𝔉 and construct it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
 
 \begin{code}
 
@@ -169,7 +169,7 @@ module the-relatively-free-algebra
  𝔉 =  𝑻 X ╱ (ψCon 𝒦)
 \end{code}
 
-The domain, ∣ 𝔉 ∣, is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ≈ )` which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ] }` of `⟨ ψCon 𝒦 ⟩`-classs of `𝑻 X`.
+The domain ∣ 𝔉 ∣ is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )` which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ]⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classs of `𝑻 X`.
 
 \begin{code}
 
@@ -177,15 +177,15 @@ The domain, ∣ 𝔉 ∣, is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = �
  𝔉-free-lift {𝓦}𝑨 h₀ (_ , x , _) = (free-lift{𝓧}{𝓦} 𝑨 h₀) x
 
  𝔉-lift-hom : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → (X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
- 𝔉-lift-hom 𝑨 h₀ = f , fhom
+ 𝔉-lift-hom 𝑨 h₀ = h , fhom
   where
-   f : ∣ 𝔉 ∣ → ∣ 𝑨 ∣
-   f = 𝔉-free-lift 𝑨 h₀
+   h : ∣ 𝔉 ∣ → ∣ 𝑨 ∣
+   h = 𝔉-free-lift 𝑨 h₀
 
    ϕ : hom (𝑻 X) 𝑨
    ϕ = lift-hom 𝑨 h₀
 
-   fhom : is-homomorphism 𝔉 𝑨 f
+   fhom : is-homomorphism 𝔉 𝑨 h
    fhom 𝑓 𝒂 = ∥ ϕ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
 
  𝔉-lift-agrees-on-X : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
@@ -195,6 +195,8 @@ The domain, ∣ 𝔉 ∣, is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = �
 
  𝔉-lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
 
+ -- This can't be right because there are no constraints on 𝑨, so if the foregoing holds,
+ -- then 𝔉 is *absolutely* free, which is false.
 
  𝔉-lift-of-epic-is-epic : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
                           (h₀ : X → ∣ 𝑨 ∣) → Epic h₀
