@@ -16,15 +16,12 @@ In this module, we prove that every term commutes with every homomorphism and is
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
-
 
 module UALib.Terms.Compatibility
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
-
 
 open import UALib.Terms.Operations{𝑆 = 𝑆}{gfe}{𝕏} public
 
@@ -58,9 +55,9 @@ Here is an intensional version.
 \begin{code}
 
 comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
- →       (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) (t : Term)
-         ------------------------------------------------------------------
- →         ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a)
+ →                          (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)(t : Term)
+                            -----------------------------------------------------------
+ →                          ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a)
 
 comm-hom-term-intensional gfe 𝑨 𝑩 h (generator x) = 𝓇ℯ𝒻𝓁
 

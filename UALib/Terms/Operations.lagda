@@ -40,23 +40,19 @@ In the [Agda UALib][] term interpretation is defined as follows.
 _̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
 ((node f args) ̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
+
 \end{code}
 
-Observe that intepretation of a term is the same as `free-lift` (modulo argument order).
+It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order).
 
 \begin{code}
 
-free-lift-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
+free-lift-interp : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
                            (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
  →                         (p ̇ 𝑨) h ≡ free-lift 𝑨 h p
 
-free-lift-interpretation 𝑨 h (generator x) = 𝓇ℯ𝒻𝓁
-free-lift-interpretation 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interpretation 𝑨 h (args i))
-lift-hom-interpretation : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
-                          (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
- →                        (p ̇ 𝑨) h ≡ ∣ lift-hom 𝑨 h ∣ p
-
-lift-hom-interpretation = free-lift-interpretation
+free-lift-interp 𝑨 h (generator x) = 𝓇ℯ𝒻𝓁
+free-lift-interp 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interp 𝑨 h (args i))
 
 \end{code}
 
@@ -134,8 +130,26 @@ term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
 \begin{code}
-interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
- →            {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇}
+-- interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
+--  →            {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇}
+--               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
+--               --------------------------------------------------------
+--  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
+
+-- interp-prod _ (generator x₁) 𝒜 x = 𝓇ℯ𝒻𝓁
+
+-- interp-prod fe (node f t) 𝒜 x =
+--  let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
+--   (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)                             ≡⟨ ap (f ̂ ⨅ 𝒜)(fe IH) ⟩
+--   (f ̂ ⨅ 𝒜)(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁)(λ j₁ → x j₁ i₁)))     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+--   (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))   ∎
+
+-- \end{code}
+
+
+
+interp-prod : {𝓧 𝓤 𝓦 : Universe} → funext 𝓥 (𝓤 ⊔ 𝓦)
+ →            {X : 𝓧 ̇}(p : Term){I : 𝓦 ̇}
               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
               --------------------------------------------------------
  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
@@ -147,6 +161,9 @@ interp-prod fe (node f t) 𝒜 x =
   (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)                             ≡⟨ ap (f ̂ ⨅ 𝒜)(fe IH) ⟩
   (f ̂ ⨅ 𝒜)(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁)(λ j₁ → x j₁ i₁)))     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
   (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))   ∎
+
+
+
 
 interp-prod2 : {𝓤 𝓧 : Universe} → global-dfunext
  →             {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)

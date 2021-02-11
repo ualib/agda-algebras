@@ -112,12 +112,14 @@ extensionality-lemma p q args p≡q =
 This is the opposite of function extensionality and is defined as follows.
 
 \begin{code}
-intensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
+intens -- alias
+ intensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
  →                f ≡ g  →  (x : A)
                   ------------------
  →                    f x ≡ g x
 
 intensionality  (refl _ ) _  = refl _
+intens = intensionality
 \end{code}
 
 Of course, the intensionality principle has an analogue for dependent function types.

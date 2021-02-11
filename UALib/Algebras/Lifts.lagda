@@ -83,11 +83,15 @@ lift∼lower = refl _
 
 \end{code}
 
-Now, getting more "domain-specific," we show how to lift algebraic operation types and then, finally, algebra types themselves.
+Now, getting more "domain-specific," we show how to lift relation types, algebraic operation types, and algebra types.
 
 \begin{code}
 
-module _ {𝑆 : Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
+
+-- lift-rel {𝓤 𝓦 : Universe}
+--  → (𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇)
+--  → (𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇)
+module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
 
  lift-op : {𝓤 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇}
   →        ((I → A) → A) → (𝓦 : Universe)

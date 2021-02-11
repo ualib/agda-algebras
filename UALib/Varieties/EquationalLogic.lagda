@@ -32,10 +32,7 @@ module UALib.Varieties.EquationalLogic
 
 
 open import UALib.Varieties.ModelTheory {𝑆 = 𝑆}{gfe}{𝕏} public
-open import UALib.Prelude.Preliminaries using (∘-embedding; domain; embeddings-are-lc) public
-
-ov : Universe → Universe
-ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc) public
 
 \end{code}
 
@@ -100,16 +97,42 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 ---------------------------------------------
 
 #### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
-We show that identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+
+Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of 𝑨, which fact can be formalized as follows.
 
 \begin{code}
 
-⊧-S-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term)
+⊧-S-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+                 (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+ →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
+
+⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ hem) (ξ b)
+ where
+  h : hom 𝑩 𝑨
+  h = fst B≤A , snd ∥ B≤A ∥
+
+  hem : is-embedding ∣ h ∣
+  hem = fst ∥ B≤A ∥
+
+  ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
+  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality Apq (∣ h ∣ ∘ b) ⟩
+        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+        ∣ h ∣((q ̇ 𝑩) b)   ∎
+
+\end{code}
+
+
+Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+
+\begin{code}
+
+⊧-S-class-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term)
                  (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
                  ----------------------------
  →               𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
-⊧-S-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq = gfe λ b →
+⊧-S-class-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq = gfe λ b →
                                                               (embeddings-are-lc ∣ h ∣ hem)(ξ b)
  where
   h' : hom ∣ SA ∣ 𝑨
@@ -137,8 +160,23 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
 
 \begin{code}
 
-⊧-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
-                 (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+-- ⊧-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+--                  (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+--                  -------------------------------------
+--  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+
+-- ⊧-P-invariance p q I 𝒜 𝒜pq = γ
+--  where
+--   γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
+--   γ = gfe λ a →
+--    (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod gfe p 𝒜 a ⟩
+--    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
+--    (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+--    (q ̇ ⨅ 𝒜) a                           ∎
+
+-- !!REVISED DEFINITION!! Now `I` can have type 𝓦, which may be distinct from the type of `𝒜 i`.
+⊧-P-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+                 (I : 𝓦 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
                  -------------------------------------
  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 

@@ -22,7 +22,7 @@ open import UALib.Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
-#### Images of a single algebra
+#### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
 We begin with what seems to be (for our purposes at least) the most useful way to represent, in Martin-Löf type theory, the class of **homomomrphic images** of an algebra.
 
@@ -37,7 +37,7 @@ HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣
 
 \end{code}
 
-#### Images of a class of algebras
+#### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
 
 Here are a few more definitions, derived from the one above, that will come in handy.
 
@@ -61,7 +61,7 @@ all-ops-in_and_commute-with : {𝓤 𝓦 : Universe}
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
 \end{code}
 
-#### Lifting tools
+#### <a id="lifting-tools">Lifting tools</a>
 
 \begin{code}
 open Lift

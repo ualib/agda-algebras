@@ -18,7 +18,8 @@ open import universes using (𝓤₀)
 module UALib.Algebras.Signatures where
 
 open import UALib.Prelude.Extensionality public
-open import UALib.Prelude.Preliminaries using (𝟘; 𝟚) public
+
+open import UALib.Prelude.Preliminaries using (𝓞; 𝓥; 𝟘; 𝟚) public
 
 \end{code}
 
@@ -30,7 +31,7 @@ We define the type of **operations**, and give an example (the projections).
 
 \begin{code}
 
-module _ {𝓤 𝓥 : Universe} where
+module _ {𝓤 : Universe} where
 
  --The type of operations
  Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇

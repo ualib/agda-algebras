@@ -36,7 +36,7 @@ We being the [UALib.Prelude.Equality][] module by formalizing the obvious proof 
 
 module UALib.Prelude.Equality where
 
-open import UALib.Prelude.Preliminaries using (𝓞; 𝓥; Universe; _̇; _⊔_; _⁺; _≡_; refl; Σ; -Σ; _×_; _,_;
+open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl; Σ; -Σ; _×_; _,_;
  is-subsingleton; is-prop; ∣_∣; ∥_∥; 𝟙; pr₁; pr₂; ap) public
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where

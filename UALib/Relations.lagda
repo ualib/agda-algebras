@@ -16,11 +16,11 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 \begin{code}
 module UALib.Relations where
 
-open import UALib.Relations.Unary public
-open import UALib.Relations.Binary public
-open import UALib.Relations.Equivalences public
-open import UALib.Relations.Quotients public
-open import UALib.Relations.Congruences public
+open import UALib.Relations.Unary
+open import UALib.Relations.Binary
+open import UALib.Relations.Equivalences
+open import UALib.Relations.Quotients
+open import UALib.Relations.Congruences
 
 \end{code}
 

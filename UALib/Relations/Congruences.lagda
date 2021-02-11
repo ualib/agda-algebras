@@ -9,8 +9,6 @@ author: William DeMeo
 
 This section presents the [UALib.Relations.Congruences][] module of the [Agda Universal Algebra Library][].
 
-Notice that we begin the module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -19,7 +17,22 @@ open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
 
 module UALib.Relations.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
-open import UALib.Relations.Quotients hiding (Signature; 𝓞; 𝓥) public
+open import UALib.Relations.Quotients {𝑆 = 𝑆} public
+
+\end{code}
+
+#### <a id="notation">Notation</a>
+
+Before we define the type of congruences, we define some syntactic sugar that will be used from now on throughout the [UALib][]. The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level. 
+
+\begin{code}
+
+ov : Universe → Universe
+ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
+
+\end{code}
+
+We can now write, e.g., `Algebra 𝓤 𝑆 : ov 𝓤 ̇` in place of the laborious `Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`.
 
 \end{code}
 
@@ -27,10 +40,10 @@ A congruence relation of an algebra can be represented in a number of different 
 
 \begin{code}
 
-Con : {𝓤 : Universe}(A : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+Con : {𝓤 : Universe}(A : Algebra 𝓤 𝑆) → ov 𝓤 ̇
 Con {𝓤} A = Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
 
-record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇  where
+record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
  constructor mkcon
  field
   ⟨_⟩ : Rel ∣ A ∣ 𝓦
@@ -41,7 +54,7 @@ open Congruence
 
 \end{code}
 
-#### Example
+#### <a id="example">Example</a>
 
 We defined the zero relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> in the <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">Examples</a> section of the [UALib.Relations.Binary][] module.  We now demonstrate how one constructs the trivial congruence out of this relation.
 
@@ -63,10 +76,9 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-module _ {𝓤 : Universe} {𝑆 : Signature 𝓞 𝓥} where
+module _ {𝓤 : Universe} where
 
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣)
-   →               compatible-op {𝓤 = 𝓤}{𝑨 = 𝑨} f 𝟎-rel
+ 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣) → compatible-op {𝑨 = 𝑨}  f 𝟎-rel
  𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
 
  𝟎-compatible : funext 𝓥 𝓤 → {A : Algebra 𝓤 𝑆} → compatible A 𝟎-rel
@@ -83,7 +95,7 @@ Finally, we have the ingredients need to construct the zero congruence.
 
 \end{code}
 
-#### Quotient algebras
+#### <a id="quotient-algebras">Quotient algebras</a>
 
 An important construction in universal algebra is the quotient of an algebra 𝑨 with respect to a congruence relation θ of 𝑨.  This quotient is typically denote by 𝑨 / θ and Agda allows us to define and express quotients using the standard notation.
 
@@ -102,7 +114,7 @@ A ╱ θ = (( ∣ A ∣ / ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
 
 \end{code}
 
-#### Examples
+#### <a id="examples">Examples</a>
 
 The zero element of a quotient can be expressed as follows.
 

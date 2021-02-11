@@ -55,9 +55,9 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
 
-**PDF documentation**. [ualib-6Feb2021-arXiv.pdf](ualib-6Feb2021-arXiv.pdf), [ualib-short-6Feb2021.pdf](ualib-short-6Feb2021.pdf)
+**PDF documentation**. [ualib-long.pdf](ualib-long.pdf), [ualib-short.pdf](ualib-short.pdf)
 
-**Citing this work**. To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. To learn [how to cite the Agda UALib](UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
 
 --------------------------------
 
@@ -77,7 +77,7 @@ open import UALib.Homomorphisms
 open import UALib.Terms
 open import UALib.Subalgebras
 open import UALib.Varieties
-open import UALib.Birkhoff
+-- open import UALib.Birkhoff
 
 \end{code}
 

@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="algebra-types">Algebra Types</a>
 
-This section presents the [UALib.Algebras.Algebras] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -40,15 +40,6 @@ Algebra = ∞-algebra
 We may refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` &nbsp;&nbsp; and need not be truncated at some level; in particular, `A` need to be a set. (See the [discussion of truncation and sets](UALib.Prelude.Preliminaries.html#truncation).)
 
 We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, we will only need to know that the domains of our algebras are sets in a few places in the UALib, so it seems preferable to work with general ∞-algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
-
-The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level.
-
-```agda
-OV : Universe → Universe
-OV = λ 𝓤 → (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)
-```
-
-<!-- We can now write simply `Algebra 𝓤 𝑆 : OV 𝓤` in place of the laborious ``Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`. -->
 
 ---------------------------------------
 

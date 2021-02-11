@@ -26,7 +26,7 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding)
 
 \end{code}
 
----------------------------------
+
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
@@ -42,7 +42,9 @@ Subalgebra {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf �
 
 \end{code}
 
-##### Syntactic sugar
+
+
+##### <a id="syntactic-sugar">Syntactic sugar</a>
 
 We use the convenient ≤ notation for the subalgebra relation.
 
@@ -50,8 +52,6 @@ We use the convenient ≤ notation for the subalgebra relation.
 _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 \end{code}
-
------------------------------------------------
 
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
@@ -70,7 +70,7 @@ SubalgebraOfClass {𝓤}{𝓠} = SUBALGEBRAOFCLASS {𝓤}{𝓠}{𝓞 ⊔ 𝓥 �
 
 \end{code}
 
------------------------------------------------
+
 
 #### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
 

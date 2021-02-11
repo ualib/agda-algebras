@@ -16,9 +16,10 @@ Here we define (the syntax of) a type for the (semantic concept of) **inverse im
 
 module UALib.Prelude.Inverses where
 
-open import UALib.Prelude.Equality public
-open import UALib.Prelude.Preliminaries using (_⁻¹; funext; _∘_; _∙_; 𝑖𝑑; fst; snd; is-set; is-embedding;
- transport; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs; fiber; 𝓇ℯ𝒻𝓁) public
+open import UALib.Prelude.Equality hiding (is-subsingleton) public
+open import UALib.Prelude.Preliminaries using (_⁻¹; funext; _∘_; _∙_; 𝑖𝑑; fst; snd; is-set;
+ transport; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs;
+ 𝓇ℯ𝒻𝓁; domain; codomain) public
 
 module _ {𝓤 𝓦 : Universe} where
 
@@ -144,21 +145,25 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 -----------------------------------------
 
-#### <a id="bijective-functions">Bijective functions</a>
-
-Finally, bijective functions are defined.
+#### <a id="composition-laws">Composition laws</a>
 
 \begin{code}
 
- -- Bijective : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → 𝓤 ⊔ 𝓦 ̇
- -- Bijective f = Epic f × Monic f
+module _ {𝓧 𝓨 𝓩 : Universe} {fe : funext 𝓨 𝓨} where
 
- -- Inverse : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
- --            (f : A → B) → Bijective f
- --            -------------------------
- --  →          B → A
+ epic-factor : {A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}(β : A → B)(ξ : A → C)(ϕ : C → B)
+  →             β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
+ epic-factor {A}{B}{C} β ξ ϕ compId βe y = γ
+  where
+   βinv : B → A
+   βinv = EpicInv β βe
 
- -- Inverse f fbi b = Inv f b (fst( fbi ) b)
+   ζ : β (βinv y) ≡ y
+   ζ = ap (λ - → - y) (EpicInvIsRightInv fe β βe)
+   η : (ϕ ∘ ξ) (βinv y) ≡ y
+   η = (ap (λ - → - (βinv y)) (compId ⁻¹)) ∙ ζ
+   γ : Image ϕ ∋ y
+   γ = eq y (ξ (βinv y)) (η ⁻¹)
 
 \end{code}
 
@@ -170,13 +175,13 @@ The next three lemmas appeared in the `UF-Base` and `UF-Equiv` modules which wer
 
 \begin{code}
 
-refl-left-neutral : {𝓤 : Universe} {X : 𝓤 ̇ } {x y : X} (p : x ≡ y) → (refl _) ∙ p ≡ p
+refl-left-neutral : {𝓧 : Universe} {X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → (refl _) ∙ p ≡ p
 refl-left-neutral (refl _) = refl _
 
-refl-right-neutral : {𝓤 : Universe}{X : 𝓤 ̇ } {x y : X} (p : x ≡ y) → p ≡ p ∙ (refl _)
+refl-right-neutral : {𝓧 : Universe}{X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → p ≡ p ∙ (refl _)
 refl-right-neutral p = refl _
 
-identifications-in-fibers : {𝓤 : Universe} {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y)
+identifications-in-fibers : {𝓧 𝓨 : Universe} {X : 𝓧 ̇ } {Y : 𝓨 ̇ } (f : X → Y)
                             (y : Y) (x x' : X) (p : f x ≡ y) (p' : f x' ≡ y)
  →                          (Σ γ ꞉ x ≡ x' , ap f γ ∙ p' ≡ p) → (x , p) ≡ (x' , p')
 identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r) = g
@@ -188,54 +193,50 @@ identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r)
 
 #### Injective functions are set embeddings
 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows:
-
-```agda
-is-embedding : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } → (X → Y) → 𝓤 ⊔ 𝓥 ̇
-is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
-```
-
-where
-
-```agda
-is-subsingleton : 𝓤 ̇ → 𝓤 ̇
-is-subsingleton X = (x y : X) → x ≡ y
-```
-
-and
-
-```agda
-fiber : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓥 ̇
-fiber f y = Σ x ꞉ domain f , f x ≡ y
-```
-
-This is a very nice, natural way to represent what we usually mean in mathematics by embedding.  However, with this definition, an embedding does not correspond simply to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding as follows:
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>1</sup>
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module hidden where
 
- monic-into-set-is-embedding : {A : 𝓤 ̇}{B : 𝓦 ̇} → is-set B
-  →                            (f : A → B)  →  Monic f
-                             ---------------------------
-  →                             is-embedding f
+ is-subsingleton : {𝓧 : Universe} → 𝓧 ̇ → 𝓧 ̇
+ is-subsingleton X = (x y : X) → x ≡ y
 
- monic-into-set-is-embedding {A} Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
-  where
-   faa' : f a ≡ f a'
-   faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+ fiber : {𝓧 𝓨 : Universe}{X : 𝓧 ̇ }{Y : 𝓨 ̇ }(f : X → Y) → Y → 𝓧 ⊔ 𝓨 ̇
+ fiber f y = Σ x ꞉ domain f , f x ≡ y
 
-   aa' : a ≡ a'
-   aa' = fmon a a' faa'
+ is-embedding : {𝓧 𝓨 : Universe}{X : 𝓧 ̇ } {Y : 𝓨 ̇ } → (X → Y) → 𝓧 ⊔ 𝓨 ̇
+ is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
 
-   𝒜 : A → 𝓦 ̇
-   𝒜 a = f a ≡ b
+\end{code}
 
-   arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
-   arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
+This is a very nice, natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding as follows:
 
-   γ : a , fa≡b ≡ a' , fa'≡b
-   γ = to-Σ-≡ arg1
+\begin{code}
+
+open import UALib.Prelude.Preliminaries using (is-embedding; fiber)
+
+monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
+ →                            (f : A → B)  →  Monic f
+                              -----------------------
+ →                            is-embedding f
+
+monic-into-set-is-embedding Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
+ where
+  faa' : f a ≡ f a'
+  faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+
+  aa' : a ≡ a'
+  aa' = fmon a a' faa'
+
+  𝒜 : domain f → _ ̇
+  𝒜 a = f a ≡ b
+
+  arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
+  arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
+
+  γ : a , fa≡b ≡ a' , fa'≡b
+  γ = to-Σ-≡ arg1
 
 \end{code}
 
@@ -243,37 +244,36 @@ Of course, invertible maps are embeddings.
 
 \begin{code}
 
- invertibles-are-embeddings : {X : 𝓤 ̇ } {Y : 𝓦 ̇ }(f : X → Y)
-  →               invertible f → is-embedding f
- invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
+invertibles-are-embeddings : {𝓧 𝓨 : Universe}
+                             {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y)
+ →                           invertible f → is-embedding f
+
+invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
 
 \end{code}
 
-Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that makes it easier to apply `p`.
+Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that can make it easier to apply `p`.
 
 \begin{code}
 
- -- Embedding elimination (makes it easier to apply is-embedding)
- -- embedding-elim : {X : 𝓤 ̇ } {Y : 𝓦 ̇ }{f : X → Y}
- --  →               is-embedding f
- --  →               (x x' : X)
- --  →               f x ≡ f x' → x ≡ x'
- -- embedding-elim {f = f} femb x x' fxfx' = γ
- --  where
- --   fibx : fiber f (f x)
- --   fibx = x , 𝓇ℯ𝒻𝓁
- --   fibx' : fiber f (f x)
- --   fibx' = x' , ((fxfx') ⁻¹)
- --   iss-fibffx : is-subsingleton (fiber f (f x))
- --   iss-fibffx = femb (f x)
- --   fibxfibx' : fibx ≡ fibx'
- --   fibxfibx' = iss-fibffx fibx fibx'
- --   γ : x ≡ x'
- --   γ = ap pr₁ fibxfibx'
+embedding-elim : {𝓧 𝓨 : Universe}{X : 𝓧 ̇} {Y : 𝓨 ̇}
+                 (f : X → Y) → is-embedding f
+ →               ∀ x x' → f x ≡ f x' → x ≡ x'
+
+embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
+ where
+  fa : fiber f (f x)
+  fa = x , 𝓇ℯ𝒻𝓁
+
+  fb : fiber f (f x)
+  fb = x' , (fxfx' ⁻¹)
 
 \end{code}
 
 -------------------------------------
+
+<sup>1</sup> Whenever we wish to hide some code from the rest of the development, we will enclose it in a module called `hidden.` In this case, we don't want the code inside the `hidden` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we will import later.  As long as we don't invoke `open hidden`, the code inside the `hidden` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code).
+
 
 [← UALib.Prelude.Equality](UALib.Prelude.Equality.html)
 <span style="float:right;">[UALib.Prelude.Extensionality →](UALib.Prelude.Extensionality.html)</span>

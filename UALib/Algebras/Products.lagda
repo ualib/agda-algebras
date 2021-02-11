@@ -17,9 +17,7 @@ We define products of algebras for both the Sigma type representation (the one w
 
 module UALib.Algebras.Products where
 
-
 open import UALib.Algebras.Algebras public
-
 
 module _ {𝓤 : Universe}{𝑆 : Signature 𝓞 𝓥}  where
 

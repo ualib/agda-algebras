@@ -28,7 +28,7 @@ module _ {𝓤 : Universe} where
 \end{code}
 
 
-#### Kernels
+#### <a id="kernels">Kernels</a>
 
 The kernel of a function can be defined in many ways. For example,
 
@@ -60,7 +60,7 @@ or as a relation from `A` to `B`,
 
 \end{code}
 
-#### <a id="binary-examples">Examples</a>
+#### <a id="examples">Examples</a>
 
 \begin{code}
  ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
@@ -89,15 +89,18 @@ or as a relation from `A` to `B`,
 
  --...on the domain of an algebra...
 
- 𝟎-alg-rel : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓤 𝑆} → 𝓤 ̇
- 𝟎-alg-rel {𝑨 = 𝑨} = Σ a ꞉ ∣ 𝑨 ∣ , Σ b ꞉ ∣ 𝑨 ∣ , a ≡ b
+ -- 𝟎-alg-rel : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓤 𝑆} → 𝓤 ̇
+ -- 𝟎-alg-rel {𝑨 = 𝑨} = Σ a ꞉ ∣ 𝑨 ∣ , Σ b ꞉ ∣ 𝑨 ∣ , a ≡ b
 
  -- The total relation A × A
  𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
  𝟏 a b = 𝟙
 \end{code}
 
-#### Properties of binary relations
+
+
+
+#### <a id="properties-of-binary-relations">Properties of binary relations</a>
 
 \begin{code}
  reflexive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
@@ -113,7 +116,9 @@ or as a relation from `A` to `B`,
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 \end{code}
 
-#### Binary relation truncation
+
+
+#### <a id="binary-relation-truncation">Binary relation truncation</a>
 
 [The section on Truncation](UALib.Preface.html#truncation) in the preface describes the concept of truncation for "proof-relevant" mathematics.
 
@@ -139,14 +144,14 @@ We denote and define implication as follows.
 \begin{code}
 
 -- (syntactic sugar)
-_on_ : {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓥 ̇}{C : 𝓦 ̇}
+_on_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
  →     (B → B → C) → (A → B) → (A → A → C)
 
 _*_ on g = λ x y → g x * g y
 
 
-_⇒_ : {𝓤 𝓥 𝓦 𝓧 : Universe}{A : 𝓤 ̇ } {B : 𝓥 ̇ }
- →    REL A B 𝓦 → REL A B 𝓧 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓧 ̇
+_⇒_ : {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ }
+ →    REL A B 𝓨 → REL A B 𝓩 → 𝓦 ⊔ 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 
 P ⇒ Q = ∀ {i j} → P i j → Q i j
 
@@ -154,12 +159,12 @@ infixr 4 _⇒_
 
 \end{code}
 
-Here is a more general version that we borrow from the standard library and translate into MHE/UALib notation.
+We can combine `_on_` and _⇒_ to define a nice, general implication operation. This is borrowed from the [Agda Standard Library][]; we have merely translated into MHE/UALib notation.
 
 \begin{code}
 
-_=[_]⇒_ : {𝓤 𝓥 𝓡 𝓢 : Universe}{A : 𝓤 ̇ } {B : 𝓥 ̇ }
- →        Rel A 𝓡 → (A → B) → Rel B 𝓢 → 𝓤 ⊔ 𝓡 ⊔ 𝓢 ̇
+_=[_]⇒_ : {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ }
+ →        Rel A 𝓨 → (A → B) → Rel B 𝓩 → 𝓦 ⊔ 𝓨 ⊔ 𝓩 ̇
 
 P =[ g ]⇒ Q = P ⇒ (Q on g)
 

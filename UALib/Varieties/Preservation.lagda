@@ -18,12 +18,10 @@ In this module we show that identities are preserved by closure operators H, S, 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Varieties.Preservation
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
-
 
 open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe}{𝕏} public
 
@@ -109,7 +107,7 @@ S-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
 S-id1 _ p q α (sbase x) = ⊧-lift-alg-invariance _ p q (α x)
 S-id1 𝒦 p q α (slift x) = ⊧-lift-alg-invariance _ p q ((S-id1 𝒦 p q α) x)
 S-id1 𝒦 p q α (ssub{𝑨}{𝑩} sA B≤A) =
- ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)) γ
+ ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)) γ
   where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 𝒦 p q α sA
@@ -122,7 +120,7 @@ S-id1 𝒦 p q α (ssub{𝑨}{𝑩} sA B≤A) =
    γ {𝑩} (inj₂ y) = Apq y
 
 S-id1 𝒦 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
- ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 𝒦 p q α sA
@@ -231,21 +229,8 @@ V-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov �
  →      𝒦 ⊧ p ≋ q  →  V{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
 V-id1 p q α (vbase x) = ⊧-lift-alg-invariance _ p q (α x)
-
-V-id1 {𝓤} p q α (vlift{𝑨} x) = γ
- where
-  β : 𝑨 ⊧ p ≈ q
-  β = (V-id1 p q α) x
-  γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
-  γ = ⊧-lift-alg-invariance 𝑨 p q β
-
-V-id1 {𝓤} p q α (vliftw{𝑨} x) = γ
- where
-  β : 𝑨 ⊧ p ≈ q
-  β = (V-id1 p q α) x
-  γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
-  γ = ⊧-lift-alg-invariance 𝑨 p q β
-
+V-id1 {𝓤} p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
+V-id1 {𝓤} p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
 V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
  ⊧-I-invariance p q γ B≅C
   where
@@ -268,7 +253,7 @@ V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
     (q ̇ 𝑩) 𝒃                ∎
 
 V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssub {𝑨}{𝑩} VA B≤A ) =
- ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 {𝓤}{𝓧}{X}p q α VA
@@ -281,7 +266,7 @@ V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssub {𝑨}{𝑩} VA B≤A ) =
    γ {𝑩} (inj₂ y) = Asinglepq y
 
 V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
- ⊧-S-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
+ ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
   where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 {𝓤}{𝓧}{X}p q α VA
@@ -314,6 +299,79 @@ V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α V
 
 \end{code}
 
+\begin{code}
+
+
+
+V-id1' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+        (p q : Term{𝓧}{X})
+        ---------------------------------
+ →      𝒦 ⊧ p ≋ q  →  V{𝓤}{(ov 𝓤)⁺} 𝒦 ⊧ p ≋ q
+
+V-id1' p q α (vbase x) = ⊧-lift-alg-invariance _ p q (α x)
+-- V-id1' p q α (vlift x) = {!!}
+V-id1'  p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
+V-id1'  p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1' p q α) x)
+-- V-id1' p q α (vliftw x) = {!!}
+V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
+ ⊧-I-invariance p q γ B≅C
+  where
+   IH : 𝑨 ⊧ p ≈ q
+   IH = V-id1' p q α VA
+
+   preim : ∀ 𝒃 x → ∣ 𝑨 ∣
+   preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE (𝒃 x)))
+
+   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
+   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
+
+   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+   γ = gfe λ 𝒃 →
+    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
+    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+    (q ̇ 𝑩) 𝒃                ∎
+V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = γ
+ where
+  IH : 𝑨 ⊧ p ≈ q
+  IH = V-id1 p q α VA
+
+  γ : 𝑩 ⊧ p ≈ q
+  γ  = ⊧-S-invariance p q 𝑨 𝑩 IH B≤A
+
+V-id1'{𝓤}{𝓧}{X}{𝒦} p q α ( vssubw {𝑨}{𝑩} VA B≤A ) = γ
+ where
+  IH : 𝑨 ⊧ p ≈ q
+  IH = V-id1' p q α VA
+
+  γ : 𝑩 ⊧ p ≈ q
+  γ  = ⊧-S-invariance p q 𝑨 𝑩 IH B≤A
+
+V-id1' {𝓤}{𝓧}{X} p q α (vprodu{I}{𝒜} V𝒜) = γ
+ where
+  IH : (i : I) → 𝒜 i ⊧ p ≈ q
+  IH i = V-id1{𝓤}{𝓧}{X} p q α (V𝒜 i)
+
+  γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
+  γ = ⊧-P-invariance{𝓤} p q I 𝒜 IH
+
+V-id1' {𝓤}{𝓧}{X} p q α (vprodw{I}{𝒜} V𝒜) = γ
+ where
+  IH : (i : I) → 𝒜 i ⊧ p ≈ q
+  IH i = V-id1'{𝓤}{𝓧}{X} p q α (V𝒜 i)
+
+  γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
+  γ = ⊧-P-invariance p q I 𝒜 IH
+
+V-id1' {𝓤} p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invariance{𝓤 = (ov 𝓤)⁺}{𝑨 = 𝑨}
+                                                        p q (V-id1 p q α VA) A≅B
+
+V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1' p q α VA) A≅B
+
+\end{code}
+
 Once again, and for the last time, completeness dictates that we formalize the coverse, however obvious it may be.
 
 \begin{code}
@@ -326,13 +384,19 @@ V-id2 p q Vpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (Vpq (vbase KA))
 
 #### Class identities
 
-[Those mainly interested in the formal proof of Birkhoff's HSP theorem can safely skip this section; it is not needed elsewhere.]
-
 It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 
 \begin{code}
 
 -- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
+class-identities→ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+                    (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) (p q : ∣ 𝑻 X ∣)
+                    ----------------------------------------------
+ →                  𝒦 ⊧ p ≋ q  →  ((p , q) ∈ Th (V{𝓤}{(ov 𝓤)⁺} 𝒦))
+
+class-identities→ 𝒦 p q α VCloA = V-id1' p q α VCloA
+
+
 class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
                    (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) (p q : ∣ 𝑻 X ∣)
                    ----------------------------------------------

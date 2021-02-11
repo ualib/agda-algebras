@@ -30,7 +30,7 @@ Terms can be viewed as acting on other terms and we can form an algebraic struct
 \begin{code}
 
 --The term algebra 𝑻 X.
-𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺) 𝑆
+𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (ov 𝓧) 𝑆
 𝑻 {𝓧} X = Term{𝓧}{X} , node
 
 \end{code}
@@ -115,24 +115,7 @@ lift-of-epi-is-epi {𝓧}{𝓤}{X} 𝑨 h₀ hE y = γ
 
 \end{code}
 
-Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. The following function makes it easy to lay our hands on such homomorphisms when necessary.
-
-\begin{code}
-
-𝑻hom-gen : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} (𝑪 : Algebra 𝓤 𝑆)
- →         Σ h ꞉ (hom (𝑻 X) 𝑪), Epic ∣ h ∣
-𝑻hom-gen {𝓧}{𝓤}{X} 𝑪 = h , lift-of-epi-is-epi 𝑪 h₀ hE
- where
-  h₀ : X → ∣ 𝑪 ∣
-  h₀ = fst (𝕏 𝑪)
-
-  hE : Epic h₀
-  hE = snd (𝕏 𝑪)
-
-  h : hom (𝑻 X) 𝑪
-  h = lift-hom 𝑪 h₀
-
-\end{code}
+Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. And since we assume we always have the mapping 𝕏 from X onto any algebra, the homomorphism will be an epimorphism (using `lift-of-epi-is-epi`). (The `𝑻img` and `mkti` functions of the [UALib.Varieties.FreeAlgebra][] show how to construct such epimorphisms using the 𝕏, lift-hom, and lift-of-epi-is-epi functions.)
 
 --------------------------------------
 

@@ -30,7 +30,7 @@ _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 �
 
 Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x.
 
-#### Isomorphism toolbox
+#### <a id="isomorphism-toolbox">Isomorphism toolbox</a>
 
 \begin{code}
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
@@ -63,7 +63,9 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
  ≅-map-is-embedding ϕ = equivs-are-embeddings (≅-map ϕ) (≅-map-is-equiv ϕ)
 \end{code}
 
-#### Isomorphism is an equivalence relation
+
+
+#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 REFL-≅ ID≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
@@ -136,7 +138,9 @@ Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
 Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
 \end{code}
 
-#### Lift is an algebraic invariant
+
+
+#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an "algebraic invariant"), which is why it's a workable solution to the "level hell" problem we mentioned earlier.
 
@@ -175,7 +179,9 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
   lA≅A = sym-≅ lift-alg-≅
 \end{code}
 
-#### Lift associativity
+
+
+#### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -192,7 +198,7 @@ lift-alg-associative : {𝓤 𝓦 𝓘 : Universe}(𝑨 : Algebra 𝓤 𝑆)
 lift-alg-associative{𝓤}{𝓦}{𝓘} 𝑨 = lift-alg-assoc{𝓤}{𝓦}{𝓘}{𝑨}
 \end{code}
 
-#### Products preserve isomorphisms
+#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 \begin{code}
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
@@ -294,7 +300,7 @@ lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
 
 \end{code}
 
-#### Embedding tools
+#### <a id="embedding-tools">Embedding tools</a>
 
 \begin{code}
 

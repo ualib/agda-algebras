@@ -55,9 +55,9 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
 
-**PDF documentation**. [ualib-6Feb2021-arXiv.pdf](ualib-6Feb2021-arXiv.pdf), [ualib-short-6Feb2021.pdf](ualib-short-6Feb2021.pdf)
+**PDF documentation**. [ualib-long.pdf](ualib-long.pdf), [ualib-short.pdf](ualib-short.pdf)
 
-**Citing this work**. To learn [how to cite the Agda UALib]((UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. To learn [how to cite the Agda UALib](UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
 
 --------------------------------
 
@@ -65,19 +65,19 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <pre class="Agda">
 
-<a id="3663" class="Symbol">{-#</a> <a id="3667" class="Keyword">OPTIONS</a> <a id="3675" class="Pragma">--without-K</a> <a id="3687" class="Pragma">--exact-split</a> <a id="3701" class="Pragma">--safe</a> <a id="3708" class="Symbol">#-}</a>
+<a id="3624" class="Symbol">{-#</a> <a id="3628" class="Keyword">OPTIONS</a> <a id="3636" class="Pragma">--without-K</a> <a id="3648" class="Pragma">--exact-split</a> <a id="3662" class="Pragma">--safe</a> <a id="3669" class="Symbol">#-}</a>
 
-<a id="3713" class="Keyword">module</a> <a id="3720" href="UALib.html" class="Module">UALib</a> <a id="3726" class="Keyword">where</a>
+<a id="3674" class="Keyword">module</a> <a id="3681" href="UALib.html" class="Module">UALib</a> <a id="3687" class="Keyword">where</a>
 
-<a id="3733" class="Keyword">open</a> <a id="3738" class="Keyword">import</a> <a id="3745" href="UALib.Preface.html" class="Module">UALib.Preface</a>
-<a id="3759" class="Keyword">open</a> <a id="3764" class="Keyword">import</a> <a id="3771" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3785" class="Keyword">open</a> <a id="3790" class="Keyword">import</a> <a id="3797" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3812" class="Keyword">open</a> <a id="3817" class="Keyword">import</a> <a id="3824" href="UALib.Relations.html" class="Module">UALib.Relations</a>
-<a id="3840" class="Keyword">open</a> <a id="3845" class="Keyword">import</a> <a id="3852" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
-<a id="3872" class="Keyword">open</a> <a id="3877" class="Keyword">import</a> <a id="3884" href="UALib.Terms.html" class="Module">UALib.Terms</a>
-<a id="3896" class="Keyword">open</a> <a id="3901" class="Keyword">import</a> <a id="3908" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
-<a id="3926" class="Keyword">open</a> <a id="3931" class="Keyword">import</a> <a id="3938" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3954" class="Keyword">open</a> <a id="3959" class="Keyword">import</a> <a id="3966" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
+<a id="3694" class="Keyword">open</a> <a id="3699" class="Keyword">import</a> <a id="3706" href="UALib.Preface.html" class="Module">UALib.Preface</a>
+<a id="3720" class="Keyword">open</a> <a id="3725" class="Keyword">import</a> <a id="3732" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
+<a id="3746" class="Keyword">open</a> <a id="3751" class="Keyword">import</a> <a id="3758" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
+<a id="3773" class="Keyword">open</a> <a id="3778" class="Keyword">import</a> <a id="3785" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3801" class="Keyword">open</a> <a id="3806" class="Keyword">import</a> <a id="3813" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
+<a id="3833" class="Keyword">open</a> <a id="3838" class="Keyword">import</a> <a id="3845" href="UALib.Terms.html" class="Module">UALib.Terms</a>
+<a id="3857" class="Keyword">open</a> <a id="3862" class="Keyword">import</a> <a id="3869" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
+<a id="3887" class="Keyword">open</a> <a id="3892" class="Keyword">import</a> <a id="3899" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
+<a id="3915" class="Comment">-- open import UALib.Birkhoff</a>
 
 </pre>
 

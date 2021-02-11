@@ -24,7 +24,7 @@ open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
 
 The definition of homomorphism in the \agdaualib is an *extensional* one; that is, the homomorphism condition holds pointwise.  This will become clearer once we have the formal definitions in hand.  Generally speaking, though, we say that two functions \ab 𝑓 \ab 𝑔 \as : \ab X \as → \ab Y are extensionally equal iff they are pointwise equal, that is, for all \ab x \as : \ab X we have \ab 𝑓 \ab x \af ≡ \ab 𝑔 \ab x.
 
-To define *homomorphism*, we first say what it means for an operation \ab 𝑓, interpreted in the algebras \ab 𝑨 and \ab 𝑩, to commute with a function \ab 𝑔 \as : \ab A \as → \ab B.
+To define **homomorphism**, we first say what it means for an operation \ab 𝑓, interpreted in the algebras \ab 𝑨 and \ab 𝑩, to commute with a function \ab 𝑔 \as : \ab A \as → \ab B.
 
 \begin{code}
 
@@ -37,28 +37,53 @@ compatible-op-map 𝑨 𝑩 𝑓 g = ∀ 𝒂 → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (�
 
 Note the appearance of the shorthand `∀ 𝒂` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝒂` here must be a tuple on ∣ 𝑨 ∣ of "length" `∥ 𝑆 ∥ 𝑓` (the arity of 𝑓).
 
-\begin{code}
-
-op_interpreted-in_and_commutes-with : {𝓠 𝓤 : Universe}
-  (𝑓 : ∣ 𝑆 ∣) (𝑨 : Algebra 𝓠 𝑆) (𝑩 : Algebra 𝓤 𝑆)
-  (g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
-
-op 𝑓 interpreted-in 𝑨 and 𝑩 commutes-with g = compatible-op-map 𝑨 𝑩 𝑓 g
-
-\end{code}
-
 We now define the type `hom 𝑨 𝑩` of homomorphisms from 𝑨 to 𝑩 by first defining the property `is-homomorphism` as follows.
 
 \begin{code}
 
-is-homomorphism : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
- →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
-is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
+module _ {𝓤 𝓦 : Universe} where
 
-hom : {𝓠 𝓤 : Universe} → Algebra 𝓠 𝑆 → Algebra 𝓤 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤 ̇
-hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
+ is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+  →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
+
+ hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
 
 \end{code}
+
+Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) with the following types.
+
+\begin{code}
+
+ is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+  →               (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
+
+ mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ mon 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-monomorphism 𝑨 𝑩 g
+
+ is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+  →               (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Epic g
+
+ epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
+
+\end{code}
+
+Finally, it will be convenient to have functions that return the "hom reduct" of a mon or epi.
+
+\begin{code}
+
+ mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
+ mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+
+ epi-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → epi 𝑨 𝑩 → hom 𝑨 𝑩
+ epi-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+
+\end{code}
+
 
 ---------------------------------------------
 

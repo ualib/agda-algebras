@@ -28,12 +28,10 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Varieties.Varieties
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
-
 
 open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe}{𝕏} public
 
@@ -84,7 +82,7 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)) :
 
 #### <a id="product-closure">Product closure</a>
 
-The most useful inductive type that we have found for representing classes of algebras closed under arbitrary products is the following. 
+The most useful inductive type that we have found for representing classes of algebras closed under arbitrary products is the following.
 
 \begin{code}
 

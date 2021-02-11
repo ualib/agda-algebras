@@ -33,7 +33,6 @@ module UALib.Subalgebras.WWMD
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
-
 open import UALib.Subalgebras.Homomorphisms {𝑆 = 𝑆}{gfe}{𝕏} public
 
 open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; Univalence;
@@ -44,48 +43,54 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; U
 module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 
  op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
- op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣)
-  → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
+ op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
+
 
  subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
 
- being-op-closed-is-subsingleton : (B : 𝓟 ∣ 𝑨 ∣)
-  →           is-subsingleton (op-closed ( _∈₀ B ))
+
+ being-op-closed-is-subsingleton : (B : 𝓟 ∣ 𝑨 ∣) → is-subsingleton (op-closed ( _∈₀ B ))
+
  being-op-closed-is-subsingleton B = Π-is-subsingleton gfe
   (λ f → Π-is-subsingleton gfe
    (λ a → Π-is-subsingleton gfe
     (λ _ → ∈₀-is-subsingleton B ((f ̂ 𝑨) a))))
 
+
  pr₁-is-embedding : is-embedding ∣_∣
  pr₁-is-embedding = pr₁-embedding being-op-closed-is-subsingleton
 
- --so equality of subalgebras is equality of their underlying
- --subsets in the powerset:
+
+ --so equality of subalgebras is equality of their underlying subsets in the powerset:
  ap-pr₁ : (B C : subuniverse) → B ≡ C → ∣ B ∣ ≡ ∣ C ∣
  ap-pr₁ B C = ap ∣_∣
 
  ap-pr₁-is-equiv : (B C : subuniverse) → is-equiv (ap-pr₁ B C)
- ap-pr₁-is-equiv =
-  embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
+ ap-pr₁-is-equiv = embedding-gives-ap-is-equiv ∣_∣ pr₁-is-embedding
+
+
 
  subuniverse-is-a-set : is-set subuniverse
  subuniverse-is-a-set B C = equiv-to-subsingleton
-                           (ap-pr₁ B C , ap-pr₁-is-equiv B C)
-                           (powersets-are-sets' ua ∣ B ∣ ∣ C ∣)
+                            (ap-pr₁ B C , ap-pr₁-is-equiv B C)
+                            (powersets-are-sets' ua ∣ B ∣ ∣ C ∣)
+
 
  subuniverse-equality-gives-membership-equiv : (B C : subuniverse)
   →                                  B ≡ C
-                      -----------------------------------
+                      ----------------------------------------
   →                   ( x : ∣ 𝑨 ∣ ) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣)
  subuniverse-equality-gives-membership-equiv B C B≡C x =
   transport (λ - → x ∈₀ ∣ - ∣) B≡C ,
    transport (λ - → x ∈₀ ∣ - ∣ ) ( B≡C ⁻¹ )
 
+
  membership-equiv-gives-carrier-equality : (B C : subuniverse)
   →          ((x : ∣ 𝑨 ∣) →  x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
-            -----------------------------------------
+             --------------------------------------
   →                       ∣ B ∣ ≡ ∣ C ∣
+
  membership-equiv-gives-carrier-equality B C φ =
   subset-extensionality' ua α β
    where
@@ -94,6 +99,7 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
 
     β : ∣ C ∣ ⊆₀ ∣ B ∣
     β x = rl-implication (φ x)
+
 
  membership-equiv-gives-subuniverse-equality : (B C : subuniverse)
   →            (( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
@@ -104,16 +110,19 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
   (ap-pr₁-is-equiv B C)
      ∘ (membership-equiv-gives-carrier-equality B C)
 
+
  membership-equiv-is-subsingleton : (B C : subuniverse)
-  →    is-subsingleton (( x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+  →                                 is-subsingleton (( x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣)
+
  membership-equiv-is-subsingleton B C =
   Π-is-subsingleton gfe
    (λ x → ×-is-subsingleton
     (Π-is-subsingleton gfe (λ _ → ∈₀-is-subsingleton ∣ C ∣ x ))
       (Π-is-subsingleton gfe (λ _ → ∈₀-is-subsingleton ∣ B ∣ x )))
 
+
  subuniverse-equality : (B C : subuniverse)
-  →    (B ≡ C)  ≃  ((x : ∣ 𝑨 ∣)  → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣))
+  →                     (B ≡ C)  ≃  ((x : ∣ 𝑨 ∣) → (x ∈₀ ∣ B ∣) ⇔ (x ∈₀ ∣ C ∣))
 
  subuniverse-equality B C =
   logically-equivalent-subsingletons-are-equivalent _ _
@@ -122,15 +131,19 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
       (subuniverse-equality-gives-membership-equiv B C ,
         membership-equiv-gives-subuniverse-equality B C)
 
+
  carrier-equality-gives-membership-equiv : (B C : subuniverse)
-  →                            ∣ B ∣ ≡ ∣ C ∣
-                ----------------------------------------
-  →              ( ( x : ∣ 𝑨 ∣ ) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣ )
+  →                          ∣ B ∣ ≡ ∣ C ∣
+                 --------------------------------------
+  →              ((x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
+
  carrier-equality-gives-membership-equiv B C (refl _) x = id , id
+
 
  --so we have...
  carrier-equiv : (B C : subuniverse)
-  →   ((x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣) ≃ (∣ B ∣ ≡ ∣ C ∣)
+  →              ((x : ∣ 𝑨 ∣) → x ∈₀ ∣ B ∣ ⇔ x ∈₀ ∣ C ∣) ≃ (∣ B ∣ ≡ ∣ C ∣)
+
  carrier-equiv B C =
   logically-equivalent-subsingletons-are-equivalent _ _
    (membership-equiv-is-subsingleton B C)
@@ -139,10 +152,9 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
        carrier-equality-gives-membership-equiv B C)
 
  -- ...which yields an alternative subuniverse equality lemma.
- subuniverse-equality' : (B C : subuniverse)
-  →                      (B ≡ C) ≃ (∣ B ∣ ≡ ∣ C ∣)
- subuniverse-equality' B C =
-  (subuniverse-equality B C) ● (carrier-equiv B C)
+ subuniverse-equality' : (B C : subuniverse) → (B ≡ C) ≃ (∣ B ∣ ≡ ∣ C ∣)
+
+ subuniverse-equality' B C = (subuniverse-equality B C) ● (carrier-equiv B C)
 
 \end{code}
 

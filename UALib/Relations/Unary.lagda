@@ -20,7 +20,7 @@ module UALib.Relations.Unary where
 
 open import UALib.Algebras.Lifts public
 
-open import UALib.Prelude.Preliminaries using (¬; propext; global-dfunext ) public
+open import UALib.Prelude.Preliminaries using (¬; propext; global-dfunext; is-subsingleton) public
 
 \end{code}
 
@@ -30,8 +30,8 @@ Here is the definition, which is similar to the one found in the`Relation/Unary.
 
 module _ {𝓤 : Universe} where
 
- Pred : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
- Pred A 𝓥 = A → 𝓥 ̇
+ Pred : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Pred A 𝓦 = A → 𝓦 ̇
 
 \end{code}
 
@@ -41,8 +41,8 @@ The section on [truncation](UALib.Prelude.Preliminaries.html#truncation) in the 
 
 \begin{code}
 
- Pred₀ : 𝓤 ̇ → (𝓥 : Universe) → 𝓤 ⊔ 𝓥 ⁺ ̇
- Pred₀ A 𝓥 = Σ P ꞉ (A → 𝓥 ̇) , ∀ x → is-subsingleton (P x)
+ Pred₀ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Pred₀ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
 
 \end{code}
 
@@ -51,18 +51,18 @@ Below we will often consider predicates over the class of all algebras of a part
 
 The inhabitants of the type `Pred (Algebra 𝓤 𝑆)` 𝓤 are maps of the form `𝑨 → 𝓤 ̇`; given an algebra `𝑨 : Algebra 𝓤 𝑆`, we have `Pred 𝑨 𝓤 = 𝑨 → 𝓤 ̇`.
 
-#### The membership relation
+#### <a id="The membership relation">The membership relation</a>
 
 We introduce notation so that we may indicate that `x` "belongs to" or "inhabits" at type `P`, or that `x` "has property" `P`, by writing either `x ∈ P` or `P x` (cf. `Relation/Unary.agda` in the [Agda Standard Library][]).
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓧 𝓨 : Universe} where
 
- _∈_ : {A : 𝓤 ̇ } → A → Pred A 𝓦 → 𝓦 ̇
+ _∈_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
  x ∈ P = P x
 
- _∉_ : {A : 𝓤 ̇ } → A → Pred A 𝓦 → 𝓦 ̇
+ _∉_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
  x ∉ P = ¬ (x ∈ P)
 
  infix 4 _∈_ _∉_
@@ -73,10 +73,10 @@ The "subset" relation is denoted, as usual, with the `⊆` symbol (cf. `Relation
 
 \begin{code}
 
-_⊆_ : {𝓤 𝓦 𝓣 : Universe}{A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+_⊆_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
-_⊇_ : {𝓤 𝓦 𝓣 : Universe}{A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+_⊇_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 P ⊇ Q = Q ⊆ P
 
 infix 4 _⊆_ _⊇_
@@ -87,39 +87,41 @@ In type theory everything is a type. As we have just seen, this includes subsets
 
 \begin{code}
 
-_=̇_ : {𝓤 𝓦 𝓣 : Universe}{A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓣 → 𝓤 ⊔ 𝓦 ⊔ 𝓣 ̇
+_=̇_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 P =̇ Q = (P ⊆ Q) × (Q ⊆ P)
 
 \end{code}
 
-#### Predicates toolbox
+
+
+#### <a id="predicates-toolbox">Predicates toolbox</a>
 
 Here is a small collection of tools that will come in handy later.  Hopefully the meaning of each is self-explanatory.
 
 \begin{code}
 
-_∈∈_ : {𝓤 𝓦 𝓣 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A  →  B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
+_∈∈_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } → (A  →  B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
 _∈∈_ f S = (x : _) → f x ∈ S
 
-Pred-refl : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+Pred-refl : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (a : A) → a ∈ P → a ∈ Q
 Pred-refl (refl _) _ = λ z → z
 
-Pred-≡ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → P =̇ Q
 Pred-≡ (refl _) = (λ z → z) , λ z → z
 
-Pred-≡→⊆ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+Pred-≡→⊆ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊆ Q)
 Pred-≡→⊆ (refl _) = (λ z → z)
 
-Pred-≡→⊇ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦}
+Pred-≡→⊇ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊇ Q)
 Pred-≡→⊇ (refl _) = (λ z → z)
 
-Pred-=̇-≡ : {𝓤 𝓦 : Universe}
- →          propext 𝓦 → global-dfunext
- →          {A : 𝓤 ̇}{P Q : Pred A 𝓦}
+Pred-=̇-≡ : {𝓧 𝓨 : Universe}
+ →          propext 𝓨 → global-dfunext
+ →          {A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          ((x : A) → is-subsingleton (P x))
  →          ((x : A) → is-subsingleton (Q x))
  →          P =̇ Q → P ≡ Q
@@ -129,41 +131,43 @@ Pred-=̇-≡ pe gfe {A}{P}{Q} ssP ssQ (pq , qp) = gfe γ
   γ x = pe (ssP x) (ssQ x) pq qp
 
 -- Disjoint Union.
-data _⊎_ {𝓤 𝓦 : Universe}(A : 𝓤 ̇) (B : 𝓦 ̇) : 𝓤 ⊔ 𝓦 ̇ where
+data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
 infixr 1 _⊎_
 
 -- Union.
-_∪_ : {𝓤 𝓦 𝓣 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓣 → Pred A _
+_∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩 → Pred A _
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 infixr 1 _∪_
 
 -- The empty set.
-∅ : {𝓤 : Universe}{A : 𝓤 ̇} → Pred A 𝓤₀
+∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
 ∅ = λ _ → 𝟘
 
 -- Singletons.
-｛_｝ : {𝓤 : Universe}{A : 𝓤 ̇} → A → Pred A _
+｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
 
-Im_⊆_ : {𝓤 𝓦 𝓣 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → Pred B 𝓣 → 𝓤 ⊔ 𝓣 ̇
+Im_⊆_ : {𝓧 𝓨 𝓩 : Universe} {A : 𝓧 ̇ } {B : 𝓨 ̇ } → (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
 Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
 
-img : {𝓤 : Universe}{X : 𝓤 ̇ } {Y : 𝓤 ̇ }
-      (f : X → Y) (P : Pred Y 𝓤)
+img : {𝓧 : Universe}{X : 𝓧 ̇ } {Y : 𝓧 ̇ }
+      (f : X → Y) (P : Pred Y 𝓧)
  →    Im f ⊆ P →  X → Σ P
 img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
 \end{code}
 
-#### Predicate product and transport
 
-The product `Π P` of a predicate `P : Pred X 𝓤` is inhabited iff  P x holds for all x : X.
+
+#### <a id="predicate-product-and-transport">Predicate product and transport</a>
+
+The product `Π P` of a predicate `P : Pred X 𝓧` is inhabited iff  P x holds for all x : X.
 
 \begin{code}
 
-ΠP-meaning : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}{P : Pred X 𝓤}
+ΠP-meaning : {𝓧 𝓨 : Universe}{X : 𝓧 ̇}{P : Pred X 𝓨}
  →            Π P  →  (x : X) → P x
 ΠP-meaning f x = f x
 
@@ -172,19 +176,21 @@ The product `Π P` of a predicate `P : Pred X 𝓤` is inhabited iff  P x holds 
 The following is a pair of useful "transport" lemmas for predicates.
 
 \begin{code}
-module _ {𝓤 𝓦 : Universe} where
 
- cong-app-pred : {A : 𝓤 ̇ }{B₁ B₂ : Pred A 𝓦}
+module _ {𝓧 𝓨 : Universe} where
+
+ cong-app-pred : {A : 𝓧 ̇ }{B₁ B₂ : Pred A 𝓨}
                  (x : A) →  x ∈ B₁  →  B₁ ≡ B₂
                 ------------------------------
   →                         x ∈ B₂
  cong-app-pred x x∈B₁ (refl _ ) = x∈B₁
 
- cong-pred : {A : 𝓤 ̇ }{B : Pred A 𝓦}
+ cong-pred : {A : 𝓧 ̇ }{B : Pred A 𝓨}
              (x y : A) →  x ∈ B  →  x ≡ y
              ----------------------------
   →                       y ∈ B
  cong-pred x .x x∈B (refl _ ) = x∈B
+
 \end{code}
 
 
