@@ -5,7 +5,7 @@ date : 2021-02-02
 author: William DeMeo
 ---
 
-### <a id="hsp-lemmas">HSP Theorem</a>
+### <a id="hsp-theorem">HSP Theorem</a>
 
 This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
 
@@ -377,7 +377,7 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
 
 
 [← UALib.Birkhoff.FreeAlgebra](UALib.Birkhoff.FreeAlgebra.html)
-<span style="float:right;">[UALib.Birkhoff.HSPTheorem →](UALib.Birkhoff.HSPTheorem.html)</span>
+<span style="float:right;">[UALib.Birkhoff ↑](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
 

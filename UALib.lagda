@@ -38,7 +38,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(version 2.01 of {{ "now" | date: "%d %b %Y" }})
+(version 2.03 of {{ "now" | date: "%d %b %Y" }})
 
 **Author**. [William DeMeo][]  
 **Affiliation**. [Department of Algebra][], [Charles University in Prague][]
@@ -77,7 +77,7 @@ open import UALib.Homomorphisms
 open import UALib.Terms
 open import UALib.Subalgebras
 open import UALib.Varieties
--- open import UALib.Birkhoff
+open import UALib.Birkhoff
 
 \end{code}
 
@@ -136,7 +136,6 @@ open import UALib.Varieties
 
 - [Birkhoff's Theorem](UALib.Birkhoff.html)
   - [The Relatively Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
-  - [HSP Lemmata](UALib.Birkhoff.Lemmata.html)
   - [HSP Theorem](UALib.Birkhoff.Theorem.html)
 
 ---------------------------------------
@@ -158,14 +157,14 @@ is licensed under a
   Creative Commons Attribution-ShareAlike 4.0 International License.
 </a>
 <br />
+<a href="https://ualib.gitlab.io/UALib.Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
+<br />
 <br />
 <a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>
 Based on the work at
 <a xmlns:dct="http://purl.org/dc/terms/" href="https://gitlab.com/ualib/ualib.gitlab.io" rel="dct:source">
   https://gitlab.com/ualib/ualib.gitlab.io.
 </a>
-<br />
-<a href="https://ualib.gitlab.io/UALib.Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
 
 ---------------------------------
 

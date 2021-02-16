@@ -77,7 +77,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 <a id="3833" class="Keyword">open</a> <a id="3838" class="Keyword">import</a> <a id="3845" href="UALib.Terms.html" class="Module">UALib.Terms</a>
 <a id="3857" class="Keyword">open</a> <a id="3862" class="Keyword">import</a> <a id="3869" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
 <a id="3887" class="Keyword">open</a> <a id="3892" class="Keyword">import</a> <a id="3899" href="UALib.Varieties.html" class="Module">UALib.Varieties</a>
-<a id="3915" class="Comment">-- open import UALib.Birkhoff</a>
+<a id="3915" class="Keyword">open</a> <a id="3920" class="Keyword">import</a> <a id="3927" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a>
 
 </pre>
 
@@ -136,7 +136,6 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Birkhoff's Theorem](UALib.Birkhoff.html)
   - [The Relatively Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
-  - [HSP Lemmata](UALib.Birkhoff.Lemmata.html)
   - [HSP Theorem](UALib.Birkhoff.Theorem.html)
 
 ---------------------------------------

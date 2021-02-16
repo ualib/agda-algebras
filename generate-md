@@ -28,10 +28,9 @@ mv html/UALib.Algebras.Lifts.{tex,md}
 mv html/UALib.Algebras.Products.{tex,md}
 mv html/UALib.Algebras.Signatures.{tex,md}
 mv html/UALib.Algebras.{tex,md}
-# mv html/UALib.Birkhoff.FreeAlgebra.{tex,md}
-# mv html/UALib.Birkhoff.HSPLemmas.{tex,md}
-# mv html/UALib.Birkhoff.{tex,md}
-# mv html/UALib.Birkhoff.HSPTheorem.{tex,md}
+mv html/UALib.Birkhoff.FreeAlgebra.{tex,md}
+mv html/UALib.Birkhoff.{tex,md}
+mv html/UALib.Birkhoff.HSPTheorem.{tex,md}
 mv html/UALib.Homomorphisms.Basic.{tex,md}
 mv html/UALib.Homomorphisms.HomomorphicImages.{tex,md}
 mv html/UALib.Homomorphisms.Isomorphisms.{tex,md}

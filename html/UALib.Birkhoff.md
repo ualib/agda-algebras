@@ -18,8 +18,7 @@ Here we give a formal proof in [MLTT][] of Birkhoff's theorem which says that a 
 <a id="620" class="Keyword">module</a> <a id="627" href="UALib.Birkhoff.html" class="Module">UALib.Birkhoff</a> <a id="642" class="Keyword">where</a>
 
 <a id="649" class="Keyword">open</a> <a id="654" class="Keyword">import</a> <a id="661" href="UALib.Birkhoff.FreeAlgebra.html" class="Module">UALib.Birkhoff.FreeAlgebra</a>
-<a id="688" class="Keyword">open</a> <a id="693" class="Keyword">import</a> <a id="700" href="UALib.Birkhoff.HSPLemmas.html" class="Module">UALib.Birkhoff.HSPLemmas</a>
-<a id="725" class="Keyword">open</a> <a id="730" class="Keyword">import</a> <a id="737" href="UALib.Birkhoff.HSPTheorem.html" class="Module">UALib.Birkhoff.HSPTheorem</a>
+<a id="688" class="Keyword">open</a> <a id="693" class="Keyword">import</a> <a id="700" href="UALib.Birkhoff.HSPTheorem.html" class="Module">UALib.Birkhoff.HSPTheorem</a>
 
 </pre>
 
