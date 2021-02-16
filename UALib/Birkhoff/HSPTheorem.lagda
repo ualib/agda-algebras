@@ -257,8 +257,8 @@ KER-incl' {𝑨}{h} skA {p , q} x = (ker-incl-lem {p}{q} (ker-incl-lem' p q x)) 
    ∣ Ψ ∣ (node f args)          ∎
 
 
-ψlemma1' : ∀ p q → (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q → (p , q) ∈ ψ 𝒦
-ψlemma1' p q gpq 𝑨 sA h = γ
+ψlemma1 : ∀ p q → (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q → (p , q) ∈ ψ 𝒦
+ψlemma1 p q gpq 𝑨 sA h = γ
    where
     g : hom (𝑻 X) 𝔽
     g = lift-hom 𝔽 (X↪𝔽)
@@ -282,18 +282,35 @@ KER-incl' {𝑨}{h} skA {p , q} x = (ker-incl-lem {p}{q} (ker-incl-lem' p q x)) 
         ∣ f ∣ ( ∣ g ∣ q ) ≡⟨ h≡ϕ q ⟩
         ∣ ϕ ∣ q ∎
 
-ψlemma2' : KER-pred ∣ Ψ ∣ ⊆ ψ 𝒦
-ψlemma2' {p , q} hyp = ψlemma1' p q γ
+ψlemma2 : KER-pred ∣ Ψ ∣ ⊆ ψ 𝒦
+ψlemma2 {p , q} hyp = ψlemma1 p q γ
   where
    γ : ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ lift-hom 𝔽 X↪𝔽 ∣ q
    γ = (Ψ-is-lift-hom p) ∙ hyp ∙ (Ψ-is-lift-hom q)⁻¹
 
+ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
+ψlemma3 p q pψq {𝑨} kA = γ
+ where
+  skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+  skA = siso (sbase kA) (sym-≅ lift-alg-≅)
 
-class-models-kernel' : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝒦 ⊧ p ≋ q
-class-models-kernel'  p q hyp = ψlemma3 p q (ψlemma2' hyp)
+  γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+  γ = gfe λ h → (p ̇ 𝑨) h ≡⟨ free-lift-interp 𝑨 h p ⟩
+                (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
+                (free-lift 𝑨 h) q ≡⟨ (free-lift-interp 𝑨 h q)⁻¹  ⟩
+                (q ̇ 𝑨) h ∎
 
-kernel-in-theory' : KER-pred ∣ Ψ ∣ ⊆ Th (V 𝒦)
-kernel-in-theory' {p , q} pKq = (class-ids-⇒ p q (class-models-kernel' p q pKq))
+class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝒦 ⊧ p ≋ q
+class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
+
+kernel-in-theory : KER-pred ∣ Ψ ∣ ⊆ Th (V 𝒦)
+kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
+
+\end{code}
+
+Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔉.
+
+\begin{code}
 
 open Congruence
 free-quot-subalg-ℭ : is-set ∣ ℭ ∣
@@ -322,7 +339,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
    ϕE = lift-of-epi-is-epi 𝑨 (fst (𝕏 𝑨)) (snd (𝕏 𝑨))
 
    pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝑨 ⊧ p ≈ q
-   pqlem2 p q hyp = AinMTV p q (kernel-in-theory' hyp)
+   pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
 
    kerincl : KER-pred ∣ Ψ ∣ ⊆ KER-pred ∣ ϕ ∣
    kerincl {p , q} x = γ
@@ -370,6 +387,14 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
    γ : 𝑨 ∈ (V 𝒦)
    γ = vhimg 𝔽∈𝕍 AiF
 \end{code}
+
+Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>) is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Equation Preservation](UALib.Varieties.Preservation.html) module. Indeed, there we proved the following identity preservation lemmas:
+
+* [(H-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
+* [(S-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
+* [(P-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111) 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
+
+From these it follows that every equational class is a variety.
 
 ----------------------------
 

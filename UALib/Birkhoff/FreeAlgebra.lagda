@@ -80,15 +80,9 @@ We now construct the congruence relation `ψCon`, modulo which `𝑻 X` will yie
 
 \begin{code}
 
- -- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓸𝓿𝓾
- -- ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
- --                 →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ ov 𝓤)
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
- open Congruence
- ψ' : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) _ -- (𝓧 ⊔ ov 𝓤)
- ψ' 𝒦 (p , q) = ∀(θ : Congruence{𝓦 = 𝓤} (𝑻 X)) → ((𝑻 X) ╱ θ) IsSubalgebraOfClass 𝒦 → ⟨ θ ⟩ p q
 
 \end{code}
 
@@ -98,8 +92,6 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
  ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ (𝓧 ⊔ ov 𝓤)
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
- -- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ 𝓸𝓿𝓾
- -- ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
 
@@ -111,25 +103,19 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 \begin{code}
 
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
- -- ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
  ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA h = γ
   where
-   -- ti : 𝑻img (S{𝓤}{𝓤} 𝒦)
-   -- ti = mkti 𝑨 sA
-
    ϕ : hom (𝑻 X) 𝑨
-   -- ϕ = lift-hom 𝑨 (fst (𝕏 𝑨))
    ϕ = lift-hom 𝑨 h
 
    γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
    γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
-       --(f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA)) ⟩
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA h)) ⟩
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
        ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
  ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
- ψRefl = λ x 𝑪 ϕ h → 𝓇ℯ𝒻𝓁 -- h → 𝓇ℯ𝒻𝓁
+ ψRefl = λ x 𝑪 ϕ h → 𝓇ℯ𝒻𝓁
 
  ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
  ψSymm p q pψRelq 𝑪 ϕ h = (pψRelq 𝑪 ϕ h)⁻¹
@@ -174,206 +160,12 @@ module the-relatively-free-algebra
 
 The domain ∣ 𝔉 ∣ is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )` which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ]⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classs of `𝑻 X`.
 
-The canonical projection of 𝑻 X onto 𝔉 is the usual one, that is, a special case of the `canonical-epi` function defined in the `UALib.Homomorphisms.Kernels` module.
-
-\begin{code}
-
- π𝔉e -- (alias)
-  𝔉-canonical-epi : epi (𝑻 X) 𝔉
- 𝔉-canonical-epi = canonical-epi (𝑻 X) (ψCon 𝒦)
- π𝔉e = 𝔉-canonical-epi
-
- π𝔉 : hom (𝑻 X) 𝔉
- π𝔉 = epi-to-hom 𝔉 𝔉-canonical-epi
-
- π𝔉-is-epic : Epic ∣ π𝔉 ∣
- π𝔉-is-epic = snd ∥ π𝔉e ∥
-
- π𝔉-X-defined : (g : hom (𝑻 X) 𝔉) → ((x : X) → ∣ g ∣ (ℊ x) ≡ ⟦ ℊ x ⟧)
-  →             (t : ∣ 𝑻 X ∣ )  →  ∣ g ∣ t ≡ ⟦ t ⟧
-
- π𝔉-X-defined g gx t = free-unique gfe 𝔉 g π𝔉 gx t
-
- π𝔉-unique : (g : hom (𝑻 X) 𝔉) → ((x : X) → ∣ g ∣ (ℊ x) ≡ ⟦ ℊ x ⟧)
-  →          ∣ g ∣ ≡ λ t → ⟦ t ⟧
-
- π𝔉-unique g agreement-on-X = gfe λ x → free-unique gfe 𝔉 g π𝔉 agreement-on-X x
-
- X↪𝔉 : X → ∣ 𝔉 ∣
- X↪𝔉 x = ⟦ ℊ x ⟧
-
- π𝔉-is-lift-hom : ∀ p → ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ π𝔉 ∣ p
- π𝔉-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
- π𝔉-is-lift-hom (node f args) = let g = ∣ lift-hom 𝔉 X↪𝔉 ∣ in
-   g (node f args)               ≡⟨ ∥ lift-hom 𝔉 X↪𝔉 ∥ f args ⟩
-   (f ̂ 𝔉)(λ i → g (args i))      ≡⟨ ap (f ̂ 𝔉) (gfe (λ x → π𝔉-is-lift-hom (args x))) ⟩
-   (f ̂ 𝔉)(λ i → ∣ π𝔉 ∣ (args i)) ≡⟨ (∥ π𝔉 ∥ f args)⁻¹ ⟩
-   ∣ π𝔉 ∣ (node f args)          ∎
-
-\end{code}
-
-We now exploit the universal property of the free algebra to prove some facts about the canonical homomorphism `π𝔉 : 𝑻(X) 𝔉` that are cruicial ingredients in the proofs of many theorems in universal algebra, including Birkhoff's HSP theorem.
-
-Assume 𝑨 ∈ S 𝒦 is a subalgebra of an algebra in 𝒦, and suppose h : X → ∣ 𝑨 ∣ is any map.
-
-1. The universal property of 𝑻 X says that there exists a unique homomorphism from 𝑻 X to 𝑨 that extends h.
-
-2. The kernel of π𝔉 is contained in the kernel of `free-lift 𝑨 h`.
-
-3. If ϕ : hom (𝑻 X) 𝑨 is any homomorphism, then ∃! 𝔣 : hom 𝔉 𝑨 such that ∣ ϕ ∣ ≡ ∣ 𝔣 ∣ ∘ ∣ π𝔉 ∣ (see diagram below).
-
-4. Identities in the kernel of π𝔉 are modeled by the class 𝒦, hence by V 𝒦; consequently,
-
-5. Identities in the kernel of π𝔉 are in  Th 𝕍𝒦
-
-We already proved item 1 in the [UALib.Terms.Basic][] module, and the resulting homomorphism is given by `lift-hom 𝑨 h`.  Item 2 is proved as follows.
-
-\begin{code}
-
- open Congruence
-
- KER-incl : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → KER-pred ∣ π𝔉 ∣ ⊆ KER-pred (free-lift 𝑨 h)
- KER-incl {𝑨}{h} skA {p , q} x = γ
-  where
-   pψq : ⟨ ψCon 𝒦 ⟩ p q
-   pψq = ker-in-con (𝑻 X) (ψCon 𝒦) p q x
-
-   γ : KER-pred (free-lift 𝑨 h) (p , q)
-   γ = pψq 𝑨 skA (λ x → (free-lift 𝑨 h) (ℊ x))
-
-\end{code}
-
-Item 3 is proved using the `HomFactor` function to complete (the dotted side of) the triangle in the following diagram.
-
-```
-𝑻----- ϕ --->> 𝑨   (we use ϕ := lift-hom 𝑨 h, but this is wlog
- \           .7     since h is an arbitrary map from X to ∣ 𝑨 ∣ )
-  \         .
-   π𝔉     . ∃𝔣
-    \    .
-     \ .
-      V
-      𝔉
-```
-
-In the present case, the return type of `HomFactor` is `Σ 𝔣 ꞉ (hom 𝔉 𝑨) , ∣ ϕ ∣ ≡ ∣ 𝔣 ∣ ∘ ∣ π𝔉 ∣`, so we take the first coordinate of the result.
-
-\begin{code}
-
- 𝔉-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
- 𝔉-lift-hom 𝑨 skA h = fst (HomFactor gfe (𝑻 X) {𝑨}{𝔉} (lift-hom 𝑨 h) π𝔉 π𝔉-is-epic (KER-incl {𝑨}{h} skA))
-
-\end{code}
-
-To prove item 4, we need four preliminary lemmas. The first is trivial,
-
-\begin{code}
- 𝔉-lift-agrees-on-X : (𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤}𝒦)(h : X → ∣ 𝑨 ∣)
-  →                    ∀ x → h x ≡ (∣ 𝔉-lift-hom 𝑨 sA h ∣ ⟦ ℊ x ⟧)
- 𝔉-lift-agrees-on-X 𝑨 sA h x = 𝓇ℯ𝒻𝓁
-
-\end{code}
-
-The other lemmas we need to prove `(p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝒦 ⊧ p ≋ q` are less trivial.
-
-\begin{code}
-
- ψlemma1 : ∀ p q → ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q → (p , q) ∈ ψ 𝒦
- ψlemma1 p q gpq 𝑨 sA h = γ
-   where
-    g : hom (𝑻 X) 𝔉
-    g = lift-hom 𝔉 (X↪𝔉)
-
-    f : hom 𝔉 𝑨
-    f = 𝔉-lift-hom 𝑨 sA h
-
-    h' ϕ : hom (𝑻 X) 𝑨
-    h' = HomComp (𝑻 X) 𝑨 g f
-    ϕ = lift-hom 𝑨 h
-
-    --homs from 𝑻 X to 𝑨 that agree on X are equal
-    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-    fgx≡ϕ x = (𝔉-lift-agrees-on-X 𝑨 sA h x)⁻¹
-    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-    h≡ϕ t = free-unique gfe 𝑨 h' ϕ fgx≡ϕ t
-
-    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-    γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
-        ∣ f ∣ ( ∣ g ∣ p ) ≡⟨ ap ∣ f ∣ gpq ⟩
-        ∣ f ∣ ( ∣ g ∣ q ) ≡⟨ h≡ϕ q ⟩
-        ∣ ϕ ∣ q ∎
-
- ψlemma2 : KER-pred ∣ π𝔉 ∣ ⊆ ψ 𝒦
- ψlemma2 {p , q} hyp = ψlemma1 p q γ
-  where
-   γ : ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
-   γ = (π𝔉-is-lift-hom p) ∙ hyp ∙ (π𝔉-is-lift-hom q)⁻¹
-
- ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
- ψlemma3 p q pψq {𝑨} kA = γ
-  where
-   skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
-   skA = siso (sbase kA) (sym-≅ lift-alg-≅)
-
-   γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-   γ = gfe λ h → (p ̇ 𝑨) h ≡⟨ free-lift-interp 𝑨 h p ⟩
-                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp 𝑨 h q)⁻¹  ⟩
-                 (q ̇ 𝑨) h ∎
-\end{code}
-
-Now we have the tools to prove item 4 of the list above.
-
-\begin{code}
-
- class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝒦 ⊧ p ≋ q
- class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
-
-\end{code}
-
 Item 5 asserts that the identities in the kernel of π𝔉 are modeled by the variety 𝕍𝒦 generated by 𝒦; it is proved as follows.
 
 \begin{code}
 
  𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
  𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
-
- kernel-in-theory : KER-pred ∣ π𝔉 ∣ ⊆ Th 𝕍𝒦
- kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
-
-\end{code}
-
-Finally we come to the main theorem of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔉.
-
-\begin{code}
-
- 𝔉-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod X (Th 𝕍𝒦) → epi 𝔉 𝑨
- 𝔉-ModTh-epi 𝑨 AinMTV = γ
-  where
-   ϕ : hom (𝑻 X) 𝑨
-   ϕ = lift-hom 𝑨 (fst(𝕏 𝑨))
-
-   ϕE : Epic ∣ ϕ ∣
-   ϕE = lift-of-epi-is-epi 𝑨 (fst (𝕏 𝑨)) (snd (𝕏 𝑨))
-
-   pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝑨 ⊧ p ≈ q
-   pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
-
-   kerincl : KER-pred ∣ π𝔉 ∣ ⊆ KER-pred ∣ ϕ ∣
-   kerincl {p , q} x = γ
-    where
-     Apq : 𝑨 ⊧ p ≈ q
-     Apq = pqlem2 p q x
-     γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-     γ = ∣ ϕ ∣ p                    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-         free-lift 𝑨 (fst(𝕏 𝑨)) p ≡⟨ (free-lift-interp 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
-         (p ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ intens (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
-         (q ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ free-lift-interp 𝑨 (fst(𝕏 𝑨)) q ⟩
-         free-lift 𝑨 (fst(𝕏 𝑨)) q ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-         ∣ ϕ ∣ q                  ∎
-
-   γ : epi 𝔉 𝑨
-   γ = fst (HomFactorEpi gfe (𝑻 X){𝑨}{𝔉} ϕ ϕE π𝔉 π𝔉-is-epic kerincl)
 
 \end{code}
 
