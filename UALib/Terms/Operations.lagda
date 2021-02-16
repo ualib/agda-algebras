@@ -48,8 +48,8 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 \begin{code}
 
 free-lift-interp : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
-                           (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
- →                         (p ̇ 𝑨) h ≡ free-lift 𝑨 h p
+                   (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
+ →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
 
 free-lift-interp 𝑨 h (generator x) = 𝓇ℯ𝒻𝓁
 free-lift-interp 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interp 𝑨 h (args i))

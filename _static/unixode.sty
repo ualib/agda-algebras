@@ -2,9 +2,12 @@
 % (C) 2012-2013 Olivier Verdier <olivier.verdier@gmail.com>
 % Unixode Package
 % XeTeX Unicode character definitions
+%
+% MODIFICATIONS: williamdemeo@gmail.com
+% MODIFIED ON: 10 Feb 2021
 % ------------------------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{unixode}[2012/05/10]
+\ProvidesPackage{../../unixode}[2021/02/10]
 
 \RequirePackage{ifxetex}
 \RequirePackage{mathrsfs}
@@ -97,6 +100,30 @@
 \newunicodechar{∫}{\ensuremath{\int}}
 \newunicodechar{∑}{\ensuremath{\Sigma}}
 \newunicodechar{∏}{\ensuremath{\prod}}
+%% \newunicodechar{⨅}{\ensuremath{\Glb}}
+\newunicodechar{⨅}{\ensuremath{\bigsqcap}}
+\newunicodechar{⨆}{\ensuremath{\bigsqcup}}
+\newunicodechar{⊓}{\ensuremath{\sqcap}}
+\newunicodechar{⊔}{\ensuremath{\sqcup}}
+\newunicodechar{⋂}{\ensuremath{\bigcap}}
+\newunicodechar{⋃}{\ensuremath{\bigcup}}
+\newunicodechar{∩}{\ensuremath{\cap}}
+\newunicodechar{∪}{\ensuremath{\cup}}
+\newunicodechar{⊎}{\ensuremath{\mathbin{\dot{\cup}}}}
+\newunicodechar{⊂}{\ensuremath{\subseteq}}
+\newunicodechar{⊃}{\ensuremath{\supseteq}}
+\newunicodechar{⊆}{\ensuremath{\subseteq}}
+\newunicodechar{⊇}{\ensuremath{\supseteq}}
+\newunicodechar{⊈}{\ensuremath{\nsubseteq}}
+\newunicodechar{⊉}{\ensuremath{\nsupseteq}}
+\newunicodechar{⊄}{\ensuremath{\nsubseteq}}
+\newunicodechar{⊅}{\ensuremath{\nsupseteq}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{∋}{\ensuremath{\ni}}
+\newunicodechar{∉}{\ensuremath{\notin}}
+\newunicodechar{∌}{\ensuremath{\notni}}
+\newunicodechar{∅}{\ensuremath{\emptyset}}
+
 \newunicodechar{⊥}{\ensuremath{\perp}}
 \newunicodechar{∞}{\ensuremath{\infty}}
 \newunicodechar{∂}{\ensuremath{\partial}}
@@ -113,7 +140,7 @@
 
 \newunicodechar{⁺}{\ensuremath{^+}}
 \newunicodechar{⬝}{\ensuremath{\cdot}}
-\newunicodechar{̇}{\ensuremath{^\centerdot}}
+\newunicodechar{̇}{\ensuremath{\phantom{i}^\centerdot}}
 \newunicodechar{̂}{\ensuremath{\,\hat{\phantom{i}}}}
 %% \DeclareUnicodeCharacter{775}{\ensuremath{\mathrel{\phantom{i}^\centerdot}}} % _ ̇_
 %% \DeclareUnicodeCharacter{770}{\ensuremath{\mathrel{\hat{\phantom{x}}}}}   % _ ^_
@@ -161,30 +188,6 @@
 \newunicodechar{↿}{\ensuremath{\upharpoonleft}}
 \newunicodechar{↾}{\ensuremath{\upharpoonright}}
 
-\newunicodechar{∩}{\ensuremath{\cap}}
-\newunicodechar{∪}{\ensuremath{\cup}}
-\newunicodechar{⋂}{\ensuremath{\bigcap}}
-%% \newunicodechar{⋂}{\ensuremath{\cap}}
-\newunicodechar{⋃}{\ensuremath{\bigcup}}
-\newunicodechar{⊎}{\ensuremath{\mathbin{\dot{\cup}}}}
-\newunicodechar{⊔}{\ensuremath{\sqcup}}
-\newunicodechar{⊓}{\ensuremath{\sqcap}}
-%% \newunicodechar{⨅}{\ensuremath{\bigsqcap}}
-\newunicodechar{⨅}{\ensuremath{\bigsqcap}}
-\newunicodechar{⨆}{\ensuremath{\bigsqcup}}
-\newunicodechar{⊂}{\ensuremath{\subseteq}}
-\newunicodechar{⊆}{\ensuremath{\subseteq}}
-\newunicodechar{⊄}{\ensuremath{\nsubseteq}}
-\newunicodechar{⊈}{\ensuremath{\nsubseteq}}
-\newunicodechar{⊃}{\ensuremath{\supseteq}}
-\newunicodechar{⊇}{\ensuremath{\supseteq}}
-\newunicodechar{⊅}{\ensuremath{\nsupseteq}}
-\newunicodechar{⊉}{\ensuremath{\nsupseteq}}
-\newunicodechar{∈}{\ensuremath{\in}}
-\newunicodechar{∉}{\ensuremath{\notin}}
-\newunicodechar{∋}{\ensuremath{\ni}}
-\newunicodechar{∌}{\ensuremath{\notni}}
-\newunicodechar{∅}{\ensuremath{\emptyset}}
 
 \newunicodechar{╱}{\ensuremath{\diagup}}
 \newunicodechar{⧵}{\ensuremath{\setminus}}

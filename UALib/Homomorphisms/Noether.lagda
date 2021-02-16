@@ -83,11 +83,8 @@ FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA =
    fmon : Monic fmap
    fmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) faa' = γ
     where
-     aθa' : ⟨ θ ⟩ a a'
-     aθa' = faa'
-
      γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
-     γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) aθa'
+     γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
 
    femb : is-embedding fmap
    femb = monic-into-set-is-embedding Bset fmap fmon
@@ -95,6 +92,53 @@ FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA =
 \end{code}
 
 **TODO**: Proof of uniqueness of `f` is missing.
+
+If we don't assume the mapping ϕ is onto, and then we get the following version of the first homomorphism theorem.
+
+\begin{code}
+
+FirstHomomorphismTheorem : {𝓤 𝓦 : Universe}
+                           (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+                           (h : hom 𝑨 𝑩)
+                           --extensionality assumptions:
+ →                            propext 𝓦 → is-set ∣ 𝑩 ∣
+ →                            (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} h ⟩ a x))
+ →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} h ⟩} C))
+           ---------------------------------------------------------------------------
+ →         Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
+             (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑨 {𝑩} h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+
+
+FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
+ where
+  θ : Congruence 𝑨
+  θ = kercon 𝑨 {𝑩} h
+
+  𝑨/θ : Algebra _ 𝑆
+  𝑨/θ = 𝑨 [ 𝑩 ]/ker h
+
+  ϕ : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
+  ϕ a = ∣ h ∣ ⌜ a ⌝
+
+  ϕhom : is-homomorphism 𝑨/θ 𝑩 ϕ
+  ϕhom 𝑓 𝒂 =  ∣ h ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ )      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+             ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
+             (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
+
+  ϕmon : Monic ϕ
+  ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' = γ
+   where
+    γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
+    γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) ϕaa'
+
+  ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑨 {𝑩} h ∣
+  ϕcom = 𝓇ℯ𝒻𝓁
+
+  ϕemb : is-embedding ϕ
+  ϕemb = monic-into-set-is-embedding Bset ϕ ϕmon
+
+\end{code}
 
 --------------------------------------------------------------
 

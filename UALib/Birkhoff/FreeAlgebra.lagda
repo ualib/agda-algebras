@@ -49,11 +49,13 @@ We assume two ambient universes 𝓤 and 𝓧, as well as a type `X : 𝓧 ̇`. 
 
 module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
- 𝓸𝓿𝓾 : Universe
+ 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝓸𝓿𝓾++ : Universe
  𝓸𝓿𝓾 = ov 𝓤
+ 𝓸𝓿𝓾+ = 𝓸𝓿𝓾 ⁺
+ 𝓸𝓿𝓾++ = 𝓸𝓿𝓾 ⁺ ⁺
 \end{code}
 
-We begin by defining the collection `𝑻img` of homomorphic images of the term algebra that belong to a given class 𝒦.
+One could define the collection `𝑻img` of all homomorphic images of the term algebra that belong to a given class 𝒦 as follows.
 
 \begin{code}
 
@@ -65,22 +67,12 @@ We begin by defining the collection `𝑻img` of homomorphic images of the term 
 
 The inhabitants of this Sigma type represent algebras 𝑨 ∈ 𝒦 such that there exists a surjective homomorphism ϕ : hom (𝑻 X) 𝑨. Thus, 𝑻img represents the collection of all homomorphic images of 𝑻 X that belong to 𝒦.  Of course, this is the entire class 𝒦, since the term algebra is absolutely free. Nonetheless, this representation of 𝒦 is useful since it endows each element with extra information.  Indeed, each inhabitant of 𝑻img 𝒦 is a quadruple, (𝑨 , ϕ , ka, p), where 𝑨 is an 𝑆-algebra, ϕ is a homomorphism from 𝑻 X to 𝑨, ka is a proof that 𝑨 belongs to 𝒦, and p is a proof that the underlying map ∣ ϕ ∣ is epic.
 
-Next we define a function `mkti` that takes an arbitrary algebra 𝑨 in 𝒦 and returns the corresponding quadruple in `𝑻img 𝒦`.
+The next function, `mkti`, that takes an arbitrary algebra 𝑨 in 𝒦 and returns the corresponding quadruple in `𝑻img 𝒦`.
 
 \begin{code}
 
  mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
- mkti 𝑨 ka = (𝑨 , ∣ 𝑻hom-gen 𝑨 ∣ , ka , ∥ 𝑻hom-gen 𝑨 ∥)
-
-\end{code}
-
-Occasionally we want to extract the homomorphism ϕ from an inhabitant of `𝑻img`, so we define.
-
-\begin{code}
-
- -- The hom part of a hom image of 𝑻 X.
- 𝑻ϕ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)(ti : 𝑻img 𝒦) → hom (𝑻 X) ∣ ti ∣
- 𝑻ϕ _ ti = fst ∥ ti ∥
+ mkti 𝑨 ka = (𝑨 , lift-hom 𝑨 ∣ 𝕏 𝑨 ∣ , ka , lift-of-epi-is-epi 𝑨 ∣ 𝕏 𝑨 ∣ ∥ 𝕏 𝑨 ∥)
 
 \end{code}
 
@@ -88,9 +80,15 @@ We now construct the congruence relation `ψCon`, modulo which `𝑻 X` will yie
 
 \begin{code}
 
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓸𝓿𝓾
- ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆) → (sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
-                 →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
+ -- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓸𝓿𝓾
+ -- ψ  𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
+ --                 →  ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ p ≡ ∣ lift-hom 𝑨 (fst(𝕏 𝑨)) ∣ q
+ ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ ov 𝓤)
+ ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
+                 →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+ open Congruence
+ ψ' : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) _ -- (𝓧 ⊔ ov 𝓤)
+ ψ' 𝒦 (p , q) = ∀(θ : Congruence{𝓦 = 𝓤} (𝑻 X)) → ((𝑻 X) ╱ θ) IsSubalgebraOfClass 𝒦 → ⟨ θ ⟩ p q
 
 \end{code}
 
@@ -98,8 +96,10 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ 𝓸𝓿𝓾
+ ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ (𝓧 ⊔ ov 𝓤)
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
+ -- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ 𝓸𝓿𝓾
+ -- ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
 
@@ -111,28 +111,31 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 \begin{code}
 
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
- ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
+ -- ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA = γ
+ ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA h = γ
   where
-   ti : 𝑻img (S{𝓤}{𝓤} 𝒦)
-   ti = mkti 𝑨 sA
+   -- ti : 𝑻img (S{𝓤}{𝓤} 𝒦)
+   -- ti = mkti 𝑨 sA
 
    ϕ : hom (𝑻 X) 𝑨
-   ϕ = fst (snd ti)
+   -- ϕ = lift-hom 𝑨 (fst (𝕏 𝑨))
+   ϕ = lift-hom 𝑨 h
 
    γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
    γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
-       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA)) ⟩
+       --(f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA)) ⟩
+       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA h)) ⟩
        (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
        ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
 
  ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
- ψRefl = λ x 𝑪 ϕ → 𝓇ℯ𝒻𝓁
+ ψRefl = λ x 𝑪 ϕ h → 𝓇ℯ𝒻𝓁 -- h → 𝓇ℯ𝒻𝓁
 
  ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
- ψSymm p q pψRelq 𝑪 ϕ = (pψRelq 𝑪 ϕ)⁻¹
+ ψSymm p q pψRelq 𝑪 ϕ h = (pψRelq 𝑪 ϕ h)⁻¹
 
  ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → transitive (ψRel 𝒦)
- ψTrans p q r pψq qψr 𝑪 ϕ = (pψq 𝑪 ϕ) ∙ (qψr 𝑪 ϕ)
+ ψTrans p q r pψq qψr 𝑪 ϕ h = (pψq 𝑪 ϕ h) ∙ (qψr 𝑪 ϕ h)
 
  ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
@@ -157,8 +160,7 @@ We will denote the relatively free algebra by 𝔉 and construct it as the quoti
 \begin{code}
 
 module the-relatively-free-algebra
- {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
 
  open the-free-algebra{𝓤 = 𝓤}{𝓧 = 𝓧}{X = X}
 
@@ -167,147 +169,211 @@ module the-relatively-free-algebra
 
  𝔉 : Algebra 𝓕 𝑆
  𝔉 =  𝑻 X ╱ (ψCon 𝒦)
+
 \end{code}
 
 The domain ∣ 𝔉 ∣ is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )` which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ]⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classs of `𝑻 X`.
 
+The canonical projection of 𝑻 X onto 𝔉 is the usual one, that is, a special case of the `canonical-epi` function defined in the `UALib.Homomorphisms.Kernels` module.
+
 \begin{code}
 
- 𝔉-free-lift : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝔉 ∣ → ∣ 𝑨 ∣
- 𝔉-free-lift {𝓦}𝑨 h₀ (_ , x , _) = (free-lift{𝓧}{𝓦} 𝑨 h₀) x
-
- 𝔉-lift-hom : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆) → (X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
- 𝔉-lift-hom 𝑨 h₀ = h , fhom
-  where
-   h : ∣ 𝔉 ∣ → ∣ 𝑨 ∣
-   h = 𝔉-free-lift 𝑨 h₀
-
-   ϕ : hom (𝑻 X) 𝑨
-   ϕ = lift-hom 𝑨 h₀
-
-   fhom : is-homomorphism 𝔉 𝑨 h
-   fhom 𝑓 𝒂 = ∥ ϕ ∥ 𝑓 (λ i → ⌜ 𝒂 i ⌝  )
-
- 𝔉-lift-agrees-on-X : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-                      (h₀ : X → ∣ 𝑨 ∣)(x : X)
-                      -----------------------------------
-  →                   h₀ x ≡ (∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ x ⟧)
-
- 𝔉-lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
-
- -- This can't be right because there are no constraints on 𝑨, so if the foregoing holds,
- -- then 𝔉 is *absolutely* free, which is false.
-
- 𝔉-lift-of-epic-is-epic : {𝓦 : Universe}(𝑨 : Algebra 𝓦 𝑆)
-                          (h₀ : X → ∣ 𝑨 ∣) → Epic h₀
-                          ------------------------
-  →                       Epic ∣ 𝔉-lift-hom 𝑨 h₀ ∣
-
- 𝔉-lift-of-epic-is-epic 𝑨 h₀ hE y = γ
-  where
-   h₀pre : Image h₀ ∋ y
-   h₀pre = hE y
-
-   h₀⁻¹y : X
-   h₀⁻¹y = Inv h₀ y (hE y)
-
-   η : y ≡ ( ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ ℊ (h₀⁻¹y) ⟧ )
-   η = y                               ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-       h₀ h₀⁻¹y                         ≡⟨ (𝔉-lift-agrees-on-X) 𝑨 h₀ h₀⁻¹y ⟩
-       ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ⟦ (ℊ h₀⁻¹y) ⟧ ∎
-
-   γ : Image ∣ 𝔉-lift-hom 𝑨 h₀ ∣ ∋ y
-   γ = eq y (⟦ ℊ h₀⁻¹y ⟧) η
-
-
- 𝔉-canonical-projection : epi (𝑻 X) 𝔉
- 𝔉-canonical-projection = canonical-projection (𝑻 X) (ψCon 𝒦)
+ π𝔉e -- (alias)
+  𝔉-canonical-epi : epi (𝑻 X) 𝔉
+ 𝔉-canonical-epi = canonical-epi (𝑻 X) (ψCon 𝒦)
+ π𝔉e = 𝔉-canonical-epi
 
  π𝔉 : hom (𝑻 X) 𝔉
- π𝔉 = epi-to-hom (𝑻 X) {𝔉} 𝔉-canonical-projection
+ π𝔉 = epi-to-hom 𝔉 𝔉-canonical-epi
 
- π𝔉-X-defined : (g : hom (𝑻 X) 𝔉)
-  →              ((x : X) → ∣ g ∣ (ℊ x) ≡ ⟦ ℊ x ⟧)
-  →              (t : ∣ 𝑻 X ∣ )
-               ---------------------------------
-  →               ∣ g ∣ t ≡ ⟦ t ⟧
+ π𝔉-is-epic : Epic ∣ π𝔉 ∣
+ π𝔉-is-epic = snd ∥ π𝔉e ∥
 
- π𝔉-X-defined g gx t = free-unique gfe 𝔉 g π𝔉 gπ𝔉-agree-on-X t
-  where
-   gπ𝔉-agree-on-X : ((x : X) → ∣ g ∣ (ℊ x) ≡ ∣ π𝔉 ∣ ( ℊ x ))
-   gπ𝔉-agree-on-X x = gx x
+ π𝔉-X-defined : (g : hom (𝑻 X) 𝔉) → ((x : X) → ∣ g ∣ (ℊ x) ≡ ⟦ ℊ x ⟧)
+  →             (t : ∣ 𝑻 X ∣ )  →  ∣ g ∣ t ≡ ⟦ t ⟧
+
+ π𝔉-X-defined g gx t = free-unique gfe 𝔉 g π𝔉 gx t
+
+ π𝔉-unique : (g : hom (𝑻 X) 𝔉) → ((x : X) → ∣ g ∣ (ℊ x) ≡ ⟦ ℊ x ⟧)
+  →          ∣ g ∣ ≡ λ t → ⟦ t ⟧
+
+ π𝔉-unique g agreement-on-X = gfe λ x → free-unique gfe 𝔉 g π𝔉 agreement-on-X x
 
  X↪𝔉 : X → ∣ 𝔉 ∣
  X↪𝔉 x = ⟦ ℊ x ⟧
 
-\end{code}
-
--------------------------------
-
-[The remainder is not needed for the proof of Birkhoff's theorem.]
-
-
-\begin{code}
-
- 𝔉-free-lift-interpretation : (𝑨 : Algebra 𝓤 𝑆)
-                              (h₀ : X → ∣ 𝑨 ∣)(𝒙 : ∣ 𝔉 ∣)
-                             -------------------------------------
-  →                           (⌜ 𝒙 ⌝ ̇ 𝑨) h₀ ≡ 𝔉-free-lift 𝑨 h₀ 𝒙
-
- 𝔉-free-lift-interpretation 𝑨 f 𝒙 = free-lift-interpretation 𝑨 f ⌜ 𝒙 ⌝
-
- 𝑻-canonical-projection : (θ : Congruence{ov 𝓧}{𝓤} (𝑻 X)) → epi (𝑻 X) ((𝑻 X) ╱ θ)
- 𝑻-canonical-projection θ = canonical-projection (𝑻 X) θ
+ π𝔉-is-lift-hom : ∀ p → ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ π𝔉 ∣ p
+ π𝔉-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
+ π𝔉-is-lift-hom (node f args) = let g = ∣ lift-hom 𝔉 X↪𝔉 ∣ in
+   g (node f args)               ≡⟨ ∥ lift-hom 𝔉 X↪𝔉 ∥ f args ⟩
+   (f ̂ 𝔉)(λ i → g (args i))      ≡⟨ ap (f ̂ 𝔉) (gfe (λ x → π𝔉-is-lift-hom (args x))) ⟩
+   (f ̂ 𝔉)(λ i → ∣ π𝔉 ∣ (args i)) ≡⟨ (∥ π𝔉 ∥ f args)⁻¹ ⟩
+   ∣ π𝔉 ∣ (node f args)          ∎
 
 \end{code}
 
+We now exploit the universal property of the free algebra to prove some facts about the canonical homomorphism `π𝔉 : 𝑻(X) 𝔉` that are cruicial ingredients in the proofs of many theorems in universal algebra, including Birkhoff's HSP theorem.
 
-#### <a id="properties-of-psi">Properties of ψ</a>
+Assume 𝑨 ∈ S 𝒦 is a subalgebra of an algebra in 𝒦, and suppose h : X → ∣ 𝑨 ∣ is any map.
+
+1. The universal property of 𝑻 X says that there exists a unique homomorphism from 𝑻 X to 𝑨 that extends h.
+
+2. The kernel of π𝔉 is contained in the kernel of `free-lift 𝑨 h`.
+
+3. If ϕ : hom (𝑻 X) 𝑨 is any homomorphism, then ∃! 𝔣 : hom 𝔉 𝑨 such that ∣ ϕ ∣ ≡ ∣ 𝔣 ∣ ∘ ∣ π𝔉 ∣ (see diagram below).
+
+4. Identities in the kernel of π𝔉 are modeled by the class 𝒦, hence by V 𝒦; consequently,
+
+5. Identities in the kernel of π𝔉 are in  Th 𝕍𝒦
+
+We already proved item 1 in the [UALib.Terms.Basic][] module, and the resulting homomorphism is given by `lift-hom 𝑨 h`.  Item 2 is proved as follows.
 
 \begin{code}
 
- ψlem : (p q : ∣ 𝑻 X ∣ )
-  →     ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
-       -----------------------------------------------
-  →                (p , q) ∈ ψ 𝒦
+ open Congruence
 
- ψlem p q gpgq 𝑨 sA = γ
+ KER-incl : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → KER-pred ∣ π𝔉 ∣ ⊆ KER-pred (free-lift 𝑨 h)
+ KER-incl {𝑨}{h} skA {p , q} x = γ
+  where
+   pψq : ⟨ ψCon 𝒦 ⟩ p q
+   pψq = ker-in-con (𝑻 X) (ψCon 𝒦) p q x
+
+   γ : KER-pred (free-lift 𝑨 h) (p , q)
+   γ = pψq 𝑨 skA (λ x → (free-lift 𝑨 h) (ℊ x))
+
+\end{code}
+
+Item 3 is proved using the `HomFactor` function to complete (the dotted side of) the triangle in the following diagram.
+
+```
+𝑻----- ϕ --->> 𝑨   (we use ϕ := lift-hom 𝑨 h, but this is wlog
+ \           .7     since h is an arbitrary map from X to ∣ 𝑨 ∣ )
+  \         .
+   π𝔉     . ∃𝔣
+    \    .
+     \ .
+      V
+      𝔉
+```
+
+In the present case, the return type of `HomFactor` is `Σ 𝔣 ꞉ (hom 𝔉 𝑨) , ∣ ϕ ∣ ≡ ∣ 𝔣 ∣ ∘ ∣ π𝔉 ∣`, so we take the first coordinate of the result.
+
+\begin{code}
+
+ 𝔉-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔉 𝑨
+ 𝔉-lift-hom 𝑨 skA h = fst (HomFactor gfe (𝑻 X) {𝑨}{𝔉} (lift-hom 𝑨 h) π𝔉 π𝔉-is-epic (KER-incl {𝑨}{h} skA))
+
+\end{code}
+
+To prove item 4, we need four preliminary lemmas. The first is trivial,
+
+\begin{code}
+ 𝔉-lift-agrees-on-X : (𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤}𝒦)(h : X → ∣ 𝑨 ∣)
+  →                    ∀ x → h x ≡ (∣ 𝔉-lift-hom 𝑨 sA h ∣ ⟦ ℊ x ⟧)
+ 𝔉-lift-agrees-on-X 𝑨 sA h x = 𝓇ℯ𝒻𝓁
+
+\end{code}
+
+The other lemmas we need to prove `(p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝒦 ⊧ p ≋ q` are less trivial.
+
+\begin{code}
+
+ ψlemma1 : ∀ p q → ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q → (p , q) ∈ ψ 𝒦
+ ψlemma1 p q gpq 𝑨 sA h = γ
    where
     g : hom (𝑻 X) 𝔉
     g = lift-hom 𝔉 (X↪𝔉)
 
-    h₀ : X → ∣ 𝑨 ∣
-    h₀ = fst (𝕏 𝑨)
-
     f : hom 𝔉 𝑨
-    f = 𝔉-lift-hom 𝑨 h₀
+    f = 𝔉-lift-hom 𝑨 sA h
 
-    h ϕ : hom (𝑻 X) 𝑨
-    h = HomComp (𝑻 X) 𝑨 g f
-    ϕ = 𝑻ϕ (S 𝒦) (mkti 𝑨 sA)
+    h' ϕ : hom (𝑻 X) 𝑨
+    h' = HomComp (𝑻 X) 𝑨 g f
+    ϕ = lift-hom 𝑨 h
 
-     --(homs from 𝑻 X to 𝑨 that agree on X are equal)
-    lift-agreement : (x : X) → h₀ x ≡ ∣ f ∣ ⟦ ℊ x ⟧
-    lift-agreement x = 𝔉-lift-agrees-on-X 𝑨 h₀ x
+    --homs from 𝑻 X to 𝑨 that agree on X are equal
     fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-    fgx≡ϕ x = (lift-agreement x)⁻¹
+    fgx≡ϕ x = (𝔉-lift-agrees-on-X 𝑨 sA h x)⁻¹
     h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-    h≡ϕ t = free-unique gfe 𝑨 h ϕ fgx≡ϕ t
+    h≡ϕ t = free-unique gfe 𝑨 h' ϕ fgx≡ϕ t
 
     γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-    γ = ∣ ϕ ∣ p ≡⟨ (h≡ϕ p)⁻¹ ⟩ (∣ f ∣ ∘ ∣ g ∣) p
-               ≡⟨ 𝓇ℯ𝒻𝓁 ⟩ ∣ f ∣ ( ∣ g ∣ p )
-               ≡⟨ ap ∣ f ∣ gpgq ⟩ ∣ f ∣ ( ∣ g ∣ q )
-               ≡⟨ h≡ϕ q ⟩ ∣ ϕ ∣ q ∎
+    γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
+        ∣ f ∣ ( ∣ g ∣ p ) ≡⟨ ap ∣ f ∣ gpq ⟩
+        ∣ f ∣ ( ∣ g ∣ q ) ≡⟨ h≡ϕ q ⟩
+        ∣ ϕ ∣ q ∎
 
+ ψlemma2 : KER-pred ∣ π𝔉 ∣ ⊆ ψ 𝒦
+ ψlemma2 {p , q} hyp = ψlemma1 p q γ
+  where
+   γ : ∣ lift-hom 𝔉 X↪𝔉 ∣ p ≡ ∣ lift-hom 𝔉 X↪𝔉 ∣ q
+   γ = (π𝔉-is-lift-hom p) ∙ hyp ∙ (π𝔉-is-lift-hom q)⁻¹
 
- 𝑻i⊧ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾)
-        (𝑪 : Algebra 𝓤 𝑆) (sC : 𝑪 ∈ S{𝓤}{𝓤} 𝒦)
-        (p q : ∣ (𝑻 X) ∣)  →  (p , q) ∈ ψ 𝒦
-       --------------------------------------------------
-  →     ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ p ≡ ∣ 𝑻ϕ (S 𝒦)(mkti 𝑪 sC) ∣ q
+ ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
+ ψlemma3 p q pψq {𝑨} kA = γ
+  where
+   skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+   skA = siso (sbase kA) (sym-≅ lift-alg-≅)
 
- 𝑻i⊧ψ 𝒦 𝑪 sC p q pψq = pψq 𝑪 sC
+   γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+   γ = gfe λ h → (p ̇ 𝑨) h ≡⟨ free-lift-interp 𝑨 h p ⟩
+                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp 𝑨 h q)⁻¹  ⟩
+                 (q ̇ 𝑨) h ∎
+\end{code}
+
+Now we have the tools to prove item 4 of the list above.
+
+\begin{code}
+
+ class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝒦 ⊧ p ≋ q
+ class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
+
+\end{code}
+
+Item 5 asserts that the identities in the kernel of π𝔉 are modeled by the variety 𝕍𝒦 generated by 𝒦; it is proved as follows.
+
+\begin{code}
+
+ 𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
+ 𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
+
+ kernel-in-theory : KER-pred ∣ π𝔉 ∣ ⊆ Th 𝕍𝒦
+ kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
+
+\end{code}
+
+Finally we come to the main theorem of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔉.
+
+\begin{code}
+
+ 𝔉-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod X (Th 𝕍𝒦) → epi 𝔉 𝑨
+ 𝔉-ModTh-epi 𝑨 AinMTV = γ
+  where
+   ϕ : hom (𝑻 X) 𝑨
+   ϕ = lift-hom 𝑨 (fst(𝕏 𝑨))
+
+   ϕE : Epic ∣ ϕ ∣
+   ϕE = lift-of-epi-is-epi 𝑨 (fst (𝕏 𝑨)) (snd (𝕏 𝑨))
+
+   pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ π𝔉 ∣ → 𝑨 ⊧ p ≈ q
+   pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
+
+   kerincl : KER-pred ∣ π𝔉 ∣ ⊆ KER-pred ∣ ϕ ∣
+   kerincl {p , q} x = γ
+    where
+     Apq : 𝑨 ⊧ p ≈ q
+     Apq = pqlem2 p q x
+     γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+     γ = ∣ ϕ ∣ p                    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         free-lift 𝑨 (fst(𝕏 𝑨)) p ≡⟨ (free-lift-interp 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
+         (p ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ intens (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
+         (q ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ free-lift-interp 𝑨 (fst(𝕏 𝑨)) q ⟩
+         free-lift 𝑨 (fst(𝕏 𝑨)) q ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+         ∣ ϕ ∣ q                  ∎
+
+   γ : epi 𝔉 𝑨
+   γ = fst (HomFactorEpi gfe (𝑻 X){𝑨}{𝔉} ϕ ϕE π𝔉 π𝔉-is-epic kerincl)
 
 \end{code}
 
@@ -320,17 +386,7 @@ The domain ∣ 𝔉 ∣ is defined by `∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ 
 
 {% include UALib.Links.md %}
 
-
-
-
 <!--
-
-Recall, `mkti X 𝑨 sC` has type `𝑻img X (S 𝒦)` and consists of a quadruple `(𝑨 , ϕ , sA , ϕE)`
-where
-
-```agda
-𝑨 : Algebra 𝓤 𝑆 , ϕ : hom (𝑻 X) 𝑨 , sA : 𝑨 ∈ S 𝒦 , ϕE : Epic ∣ ϕ ∣
-```
 
 Lemma 4.27. (Bergman) Let 𝒦 be a class of algebras, and ψCon defined as above.
                      Then 𝔽 := 𝑻 / ψCon is isomorphic to an algebra in SP(𝒦).
@@ -340,5 +396,7 @@ Proof. 𝔽 ↪ ⨅ 𝒜, where 𝒜 = {𝑨 / θ : 𝑨 / θ ∈ S 𝒦}.
        Thus 𝔽 is isomorphic to an algebra in SPS(𝒦).
        By SPS⊆SP, 𝔽 is isomorphic to an algebra in SP(𝒦).
 
-
 -->
+
+
+

@@ -383,17 +383,17 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤
   SA≤𝒜 = λ i → snd ∣ ∥ B≤K i ∥ ∣
 
   h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-  h = λ i → ∣ SA≤𝒜 i ∣
+  h = λ i → fst ∣ SA≤𝒜 i ∣
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
-  ⨅SA≤⨅𝒜 = i , ii , iii
+  ⨅SA≤⨅𝒜 = (i , ii) , iii
    where
     i : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
     i = λ x i → (h i) (x i)
-    ii : is-embedding i
-    ii = embedding-lift{𝓠 = 𝓤}{𝓤 = 𝓤}{𝓘 = 𝓦} hfe hfe {I}{SA}{𝒜}h(λ i → fst ∥ SA≤𝒜 i ∥)
-    iii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
-    iii = λ 𝑓 𝒂 → gfe λ i → (snd ∥ SA≤𝒜 i ∥) 𝑓 (λ x → 𝒂 x i)
+    ii : is-homomorphism (⨅ SA) (⨅ 𝒜) i
+    ii = λ 𝑓 𝒂 → gfe λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+    iii : is-embedding i
+    iii = embedding-lift{𝓠 = 𝓤}{𝓤 = 𝓤}{𝓘 = 𝓦} hfe hfe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
   ξ : ⨅ 𝒜 ∈ P 𝒦
   ξ = produ{𝓤}{𝓦}{I = I}{𝒜 = 𝒜} (λ i → P-expa (KA i))
@@ -498,26 +498,27 @@ First, we define the type that will serve to index the class (as well as the pro
 
 \begin{code}
 
- ℑ : {𝓤 : Universe} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (ov 𝓤) ̇
- ℑ {𝓤} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦
+ ℑ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (𝓧 ⊔ ov 𝓤) ̇
+ ℑ {𝓤}{𝓧}{X} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)
 
 \end{code}
+
+Notice that the second component of the dependent pair is `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`.  In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`.  However, we realized that adding a mapping of type `X → ∣ 𝑨 ∣` is quite useful.  The reason for this will become clear later; for now, suffice it to say that a map X → ∣ 𝑨 ∣ may be viewed as a context, and we would like to keep the context completely general.  Adding the map to the index set defined above accomplishes this.
 
 Taking the product over this index type ℑ requires a function like the following, which takes an index (i : ℑ) and returns the corresponding algebra.
 
 \begin{code}
 
- 𝔄 : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → ℑ 𝒦 → Algebra 𝓤 𝑆
- 𝔄{𝓤}{𝒦} = λ (i : (ℑ 𝒦)) → ∣ i ∣
-
+ 𝔄 : {𝓤 : Universe}{𝓧 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → ℑ{𝓤}{𝓧}{X} 𝒦 → Algebra 𝓤 𝑆
+ 𝔄 𝒦 = λ (i : (ℑ 𝒦)) → ∣ i ∣
 \end{code}
 
 Finally, the product of all members of 𝒦 is represented as follows.
 
 \begin{code}
 
- class-product : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
- class-product {𝓤} 𝒦 = ⨅ ( 𝔄{𝓤}{𝒦} )
+ class-product : {𝓤 : Universe}{𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
+ class-product {𝓤}{𝓧}{X} 𝒦 = ⨅ ( 𝔄{𝓤}{𝓧}{X} 𝒦 )
 
 \end{code}
 
@@ -525,35 +526,36 @@ Alternatively, we could have defined the class product in a way that explicitly 
 
 \begin{code}
 
- class-product' : {𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
- class-product'{𝓤} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦)) → ∣ i ∣
+ -- class-product' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
+ -- class-product'{𝓤}{𝓧}{X} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
 
 \end{code}
 
-If `p : 𝑨 ∈ 𝒦`, then we can think of the pair `(𝑨 , p) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄{𝓤}{𝒦} )` onto the `(𝑨 , p)`-th component.
+If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the pair `(𝑨 , p , h) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄 𝒦 )` onto the `(𝑨 , p, h)`-th component.
 
 
 #### ⨅ S(𝒦) ∈ SP(𝒦)
-Finally, we prove the result that plays a leading role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product ⨅ ( 𝔄{𝓤}{𝒦} ) belongs to SP(𝒦).
 
-As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 {𝓤}{S(𝒦)} ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma above.
+Finally, we prove the result that plays an important role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product ⨅ ( 𝔄 𝒦 ) belongs to SP(𝒦).
+
+As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 S(𝒦) ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma above.
 
 \begin{code}
 
-module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module class-product-inclusions {𝓤 : Universe}{X : 𝓤 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
  𝓸𝓿𝓾 : Universe
  𝓸𝓿𝓾 = ov 𝓤
 
- class-prod-s-∈-ps : class-product (S{𝓤}{𝓤} 𝒦) ∈ (P{𝓸𝓿𝓾}{𝓸𝓿𝓾} (S{𝓤}{𝓸𝓿𝓾} 𝒦))
+ class-prod-s-∈-ps : class-product {𝓤}{𝓤}{X} (S{𝓤}{𝓤} 𝒦) ∈ (P{𝓸𝓿𝓾}{𝓸𝓿𝓾} (S{𝓤}{𝓸𝓿𝓾} 𝒦))
  class-prod-s-∈-ps = pisou{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psPllA (⨅≅ gfe llA≅A)
   where
    lA llA : ℑ (S{𝓤}{𝓤} 𝒦) → Algebra (𝓸𝓿𝓾) 𝑆
-   lA i =  lift-alg (𝔄 i) (𝓸𝓿𝓾)
+   lA i =  lift-alg (𝔄 (S{𝓤}{𝓤} 𝒦) i) (𝓸𝓿𝓾)
    llA i = lift-alg (lA i) (𝓸𝓿𝓾)
 
    slA : ∀ i → (lA i) ∈ S 𝒦
-   slA i = siso ∥ i ∥ lift-alg-≅
+   slA i = siso (fst ∥ i ∥) lift-alg-≅
 
    psllA : ∀ i → (llA i) ∈ P (S 𝒦)
    psllA i = pbase{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} (slA i)
@@ -561,11 +563,11 @@ module class-product-inclusions {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 �
    psPllA : ⨅ llA ∈ P (S 𝒦)
    psPllA = produ{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psllA
 
-   llA≅A : ∀ i → (llA i) ≅ (𝔄 i)
-   llA≅A i = Trans-≅ (llA i) (𝔄 i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
+   llA≅A : ∀ i → (llA i) ≅ (𝔄 (S{𝓤}{𝓤} 𝒦) i)
+   llA≅A i = Trans-≅ (llA i) (𝔄 (S{𝓤}{𝓤} 𝒦) i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
 
  -- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
- class-prod-s-∈-sp : hfunext(𝓸𝓿𝓾)(𝓸𝓿𝓾) → class-product (S 𝒦) ∈ S(P 𝒦)
+ class-prod-s-∈-sp : hfunext(ov 𝓤)(ov 𝓤) → class-product (S 𝒦) ∈ S(P 𝒦)
  class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
 
 \end{code}

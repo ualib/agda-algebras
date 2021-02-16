@@ -79,8 +79,8 @@ Finally, it will be convenient to have functions that return the "hom reduct" of
  mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
  mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
- epi-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → epi 𝑨 𝑩 → hom 𝑨 𝑩
- epi-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+ epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
+ epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 \end{code}
 

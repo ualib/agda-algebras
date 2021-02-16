@@ -75,7 +75,7 @@ canonical-epi : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) (θ : Congruenc
 canonical-epi 𝑨 θ = cπ , cπ-is-hom , cπ-is-epic
  where
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
-  cπ a = ⟦ a ⟧
+  cπ a = ⟦ a ⟧{⟨ θ ⟩}
 
   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
   cπ-is-hom _ _ = 𝓇ℯ𝒻𝓁
@@ -90,7 +90,7 @@ To obtain the homomorphism part (or "hom reduct") of the canonical epimorphism, 
 \begin{code}
 
 canonical-hom : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
-canonical-hom 𝑨 θ = epi-to-hom 𝑨 {𝑨 ╱ θ} (canonical-epi 𝑨 θ)
+canonical-hom 𝑨 θ = epi-to-hom (𝑨 ╱ θ) (canonical-epi 𝑨 θ)
 
 \end{code}
 
@@ -126,6 +126,7 @@ ker-in-con 𝑨 θ x y hyp = γ
   γ = ╱-refl 𝑨 {θ} cls
 
 \end{code}
+
 
 --------------------------------------
 

@@ -106,13 +106,10 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
                  (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
  →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
 
-⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ hem) (ξ b)
+⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
  where
   h : hom 𝑩 𝑨
-  h = fst B≤A , snd ∥ B≤A ∥
-
-  hem : is-embedding ∣ h ∣
-  hem = fst ∥ B≤A ∥
+  h = ∣ B≤A ∣
 
   ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
@@ -136,13 +133,13 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
                                                               (embeddings-are-lc ∣ h ∣ hem)(ξ b)
  where
   h' : hom ∣ SA ∣ 𝑨
-  h' = (∣ snd SA ∣ , snd ∥ snd SA ∥ )
+  h' = ∣ snd SA ∣
 
   h : hom 𝑩 𝑨
   h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
 
   hem : is-embedding ∣ h ∣
-  hem = ∘-embedding (fst ∥ snd SA ∥) (iso→embedding BisSA)
+  hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
 
   ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩

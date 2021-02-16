@@ -388,27 +388,25 @@ It follows from `V-id1` that, if 𝒦 is a class of structures, the set of ident
 
 \begin{code}
 
--- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
-class-identities→ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                    (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) (p q : ∣ 𝑻 X ∣)
-                    ----------------------------------------------
- →                  𝒦 ⊧ p ≋ q  →  ((p , q) ∈ Th (V{𝓤}{(ov 𝓤)⁺} 𝒦))
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} (p q : ∣ 𝑻 X ∣) where
 
-class-identities→ 𝒦 p q α VCloA = V-id1' p q α VCloA
+ 𝒱 : Pred (Algebra ((ov 𝓤)⁺) 𝑆) _
+ 𝒱 = V{𝓤}{(ov 𝓤)⁺} 𝒦
+
+ -- Th (V 𝒦) is precisely the set of identities modeled by 𝒦
+ class-ids-⇒ : 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝒱
+
+ class-ids-⇒ pKq VCloA = V-id1' p q pKq VCloA
 
 
-class-identities : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-                   (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) (p q : ∣ 𝑻 X ∣)
-                   ----------------------------------------------
- →                 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th (V 𝒦))
+ class-ids-⇐ : (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
 
-class-identities 𝒦 p q = ⇒ , ⇐
- where
-  ⇒ : 𝒦 ⊧ p ≋ q → p , q ∈ Th (V 𝒦)
-  ⇒ = λ α VCloA → V-id1 p q α VCloA
+ class-ids-⇐ Thpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (Thpq (vbase KA))
 
-  ⇐ : p , q ∈ Th (V 𝒦) → 𝒦 ⊧ p ≋ q
-  ⇐ = λ Thpq {𝑨} KA → ⊧-lower-alg-invariance 𝑨 p q (Thpq (vbase KA))
+
+ class-identities : 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th 𝒱)
+
+ class-identities = class-ids-⇒ , class-ids-⇐
 
 \end{code}
 
