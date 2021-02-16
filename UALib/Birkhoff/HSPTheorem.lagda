@@ -329,6 +329,9 @@ module _ (Cset : is-set ∣ ℭ ∣)
  𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
  𝔽≤ℭ = free-quot-subalg-ℭ Cset ssR ssC
 
+ 𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
+ 𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
+
  𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod X (Th 𝕍𝒦) → epi 𝔽 𝑨
  𝔽-ModTh-epi 𝑨 AinMTV = γ
   where
