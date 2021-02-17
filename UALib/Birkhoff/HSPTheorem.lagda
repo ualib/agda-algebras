@@ -11,6 +11,8 @@ This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Univ
 
 We begin the proof of Birkhoff's HSP theorem by establishing a number of facts that we will eventually string together in the HSPTheorem module to complete the proof.
 
+(Unlike in previous modules, we fix 𝓤, X, and 𝒦 at the start of the HSPTheorem module.)
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -22,22 +24,15 @@ open import UALib.Relations.Unary using (Pred)
 module UALib.Birkhoff.HSPTheorem
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- {𝓤 : Universe} {X : 𝓤 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ {𝓤 : Universe} {X : 𝓤 ̇}
+ {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  -- extensionality assumptions:
     {pe : propext 𝓤}
     {pe' : propext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
     {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
-
 open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe}{𝕏} hiding (Pred; _⊔_; _⁺; propext; hfunext) public
-
 open the-free-algebra {𝓤}{𝓤}{X}
-
-
--- NOTATION.
-ovu ovu+ : Universe
-ovu = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-ovu+ = ovu ⁺
 
 \end{code}
 
@@ -50,29 +45,29 @@ The first hurdle is the `lift-alg-V-closure` lemma, which says that if an algebr
 
 open Lift
 lift-alg-V-closure -- (alias)
- VlA : {𝑨 : Algebra ovu 𝑆}
-  →    𝑨 ∈ V{𝓤}{ovu} 𝒦
+ VlA : {𝑨 : Algebra 𝓸𝓿𝓾 𝑆}
+  →    𝑨 ∈ V{𝓤}{𝓸𝓿𝓾} 𝒦
        -------------------------------
-  →    lift-alg 𝑨 ovu+ ∈ V{𝓤}{ovu+} 𝒦
+  →    lift-alg 𝑨 𝓸𝓿𝓾+ ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
 
-VlA (vbase{𝑨} x) = visow (vbase{𝓤}{𝓦 = ovu+} x) (lift-alg-associative 𝑨)
-VlA (vlift{𝑨} x) = visow (vlift{𝓤}{𝓦 = ovu+} x) (lift-alg-associative 𝑨)
+VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
+VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
 VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
 VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
-VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓤}{𝓦 = ovu+} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = 𝓸𝓿𝓾+} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
 VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
 VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
  where
-  𝑰 : ovu+ ̇
-  𝑰 = Lift{ovu}{ovu+} I
+  𝑰 : 𝓸𝓿𝓾+ ̇
+  𝑰 = Lift{𝓸𝓿𝓾}{𝓸𝓿𝓾+} I
 
-  lA+ : Algebra ovu+ 𝑆
-  lA+ = lift-alg (⨅ 𝒜) ovu+
+  lA+ : Algebra 𝓸𝓿𝓾+ 𝑆
+  lA+ = lift-alg (⨅ 𝒜) 𝓸𝓿𝓾+
 
-  lA : 𝑰 → Algebra ovu+ 𝑆
-  lA i = lift-alg (𝒜 (lower i)) ovu+
+  lA : 𝑰 → Algebra 𝓸𝓿𝓾+ 𝑆
+  lA i = lift-alg (𝒜 (lower i)) 𝓸𝓿𝓾+
 
-  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ovu+} 𝒦
+  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
   vlA i = vlift (x (lower i))
 
   iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
@@ -83,16 +78,16 @@ VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
 
 VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
  where
-  𝑰 : ovu+ ̇
-  𝑰 = Lift{ovu}{ovu+} I
+  𝑰 : 𝓸𝓿𝓾+ ̇
+  𝑰 = Lift{𝓸𝓿𝓾}{𝓸𝓿𝓾+} I
 
-  lA+ : Algebra ovu+ 𝑆
-  lA+ = lift-alg (⨅ 𝒜) ovu+
+  lA+ : Algebra 𝓸𝓿𝓾+ 𝑆
+  lA+ = lift-alg (⨅ 𝒜) 𝓸𝓿𝓾+
 
-  lA : 𝑰 → Algebra ovu+ 𝑆
-  lA i = lift-alg (𝒜 (lower i)) ovu+
+  lA : 𝑰 → Algebra 𝓸𝓿𝓾+ 𝑆
+  lA i = lift-alg (𝒜 (lower i)) 𝓸𝓿𝓾+
 
-  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ovu+} 𝒦
+  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
   vlA i = VlA (x (lower i))
 
   iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
@@ -101,8 +96,8 @@ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   B≅A : lA+ ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
-VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 ovu+ 𝑨 𝑩 A≅B)
-VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso ovu ovu+ 𝑨 𝑩 A≅B)
+VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
+VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
 
 lift-alg-V-closure = VlA -- (alias)
 
@@ -114,21 +109,21 @@ In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦
 
 \begin{code}
 
-SP⊆V' : S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦) ⊆ V{𝓤}{ovu+} 𝒦
+SP⊆V' : S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦) ⊆ V{𝓤}{𝓸𝓿𝓾+} 𝒦
 
 SP⊆V' (sbase{𝑨} x) = γ
  where
-  llA lA+ : Algebra ovu+ 𝑆
-  lA+ = lift-alg 𝑨 ovu+
-  llA = lift-alg (lift-alg 𝑨 ovu) ovu+
+  llA lA+ : Algebra 𝓸𝓿𝓾+ 𝑆
+  lA+ = lift-alg 𝑨 𝓸𝓿𝓾+
+  llA = lift-alg (lift-alg 𝑨 𝓸𝓿𝓾) 𝓸𝓿𝓾+
 
-  vllA : llA ∈ V{𝓤}{ovu+} 𝒦
+  vllA : llA ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
   vllA = lift-alg-V-closure (SP⊆V (sbase x))
 
   llA≅lA+ : llA ≅ lA+
   llA≅lA+ = sym-≅ (lift-alg-associative 𝑨)
 
-  γ : lA+ ∈ (V{𝓤}{ovu+} 𝒦)
+  γ : lA+ ∈ (V{𝓤}{𝓸𝓿𝓾+} 𝒦)
   γ = visow vllA llA≅lA+
 
 SP⊆V' (slift{𝑨} x) = lift-alg-V-closure (SP⊆V x)
@@ -136,26 +131,26 @@ SP⊆V' (slift{𝑨} x) = lift-alg-V-closure (SP⊆V x)
 
 SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw vlA B≤lA
  where
-  lA : Algebra ovu+ 𝑆
-  lA = lift-alg 𝑨 ovu+
+  lA : Algebra 𝓸𝓿𝓾+ 𝑆
+  lA = lift-alg 𝑨 𝓸𝓿𝓾+
 
-  vlA : lA ∈ V{𝓤}{ovu+} 𝒦
+  vlA : lA ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
   vlA = lift-alg-V-closure (SP⊆V spA)
 
   B≤lA : 𝑩 ≤ lA
-  B≤lA = (lift-alg-lower-≤-lift {ovu+}{ovu}{ovu+} 𝑩 {𝑨}) B≤A
+  B≤lA = (lift-alg-lower-≤-lift {𝓸𝓿𝓾+}{𝓸𝓿𝓾}{𝓸𝓿𝓾+} 𝑩 {𝑨}) B≤A
 
 SP⊆V' (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V' spA) B≤A
 
 SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (lift-alg-V-closure vA) lA≅B
  where
-  lA : Algebra ovu+ 𝑆
-  lA = lift-alg 𝑨 ovu+
+  lA : Algebra 𝓸𝓿𝓾+ 𝑆
+  lA = lift-alg 𝑨 𝓸𝓿𝓾+
 
-  plA : 𝑨 ∈ S{ovu}{ovu}(P{𝓤}{ovu} 𝒦)
+  plA : 𝑨 ∈ S{𝓸𝓿𝓾}{𝓸𝓿𝓾}(P{𝓤}{𝓸𝓿𝓾} 𝒦)
   plA = x
 
-  vA : 𝑨 ∈ V{𝓤}{ovu} 𝒦
+  vA : 𝑨 ∈ V{𝓤}{𝓸𝓿𝓾} 𝒦
   vA = SP⊆V x
 
   lA≅B : lA ≅ 𝑩
@@ -174,7 +169,7 @@ open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
 -- open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
 
 -- NOTATION.
-ℑs : ovu ̇
+ℑs : 𝓸𝓿𝓾 ̇
 ℑs = ℑ{𝓤}{𝓤}{X} (S{𝓤}{𝓤} 𝒦)
 𝔄s : ℑs → Algebra 𝓤 𝑆
 𝔄s = λ (i : ℑs) → ∣ i ∣
@@ -186,7 +181,7 @@ SK𝔄 = λ (i : ℑs) → fst ∥ i ∥
 𝔄h = λ (i : ℑs) → snd ∥ i ∥
 
 -- ℭ is the product of all subalgebras of algebras in 𝒦.
-ℭ : Algebra ovu 𝑆
+ℭ : Algebra 𝓸𝓿𝓾 𝑆
 ℭ = ⨅ 𝔄s
 
 \end{code}
@@ -205,7 +200,7 @@ ker-incl-lem : {p q : ∣ 𝑻 X ∣} → (∀ i → (p , q) ∈ KER-pred ∣ T�
  →             (p , q) ∈ ψ 𝒦
 ker-incl-lem hyp 𝑨 sA h = hyp (𝑨 , (sA , h))
 
-𝔽 : Algebra ovu+ 𝑆
+𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
 𝔽 = (𝑻 X) [ ℭ ]/ker ΨTC
 
 Ψe : epi (𝑻 X) 𝔽
@@ -369,9 +364,7 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
 
 \begin{code}
 
- open class-product-inclusions {𝓤 = 𝓤}{X = X}{𝒦 = 𝒦}
-
- 𝔽∈SP : 𝔽 ∈ (S{ovu}{ovu+} (P{𝓤}{ovu} 𝒦))
+ 𝔽∈SP : 𝔽 ∈ (S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦))
  𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
  𝔽∈𝕍 : 𝔽 ∈ V 𝒦
@@ -389,6 +382,7 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
 
    γ : 𝑨 ∈ (V 𝒦)
    γ = vhimg 𝔽∈𝕍 AiF
+
 \end{code}
 
 Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>) is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Equation Preservation](UALib.Varieties.Preservation.html) module. Indeed, there we proved the following identity preservation lemmas:

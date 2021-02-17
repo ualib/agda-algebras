@@ -49,6 +49,7 @@ We assume two ambient universes 𝓤 and 𝓧, as well as a type `X : 𝓧 ̇`. 
 
 module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
+ -- NOTATION (universe aliases for convenience and readability).
  𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝓸𝓿𝓾++ : Universe
  𝓸𝓿𝓾 = ov 𝓤
  𝓸𝓿𝓾+ = 𝓸𝓿𝓾 ⁺
@@ -80,7 +81,7 @@ We now construct the congruence relation `ψCon`, modulo which `𝑻 X` will yie
 
 \begin{code}
 
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ ov 𝓤)
+ ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
@@ -90,7 +91,7 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ (𝓧 ⊔ ov 𝓤)
+ ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ (𝑻 X) ∣ (𝓧 ⊔ 𝓸𝓿𝓾)
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
@@ -151,7 +152,7 @@ module the-relatively-free-algebra
  open the-free-algebra{𝓤 = 𝓤}{𝓧 = 𝓧}{X = X}
 
  𝓕 : Universe -- (universe level of the relatively free algebra)
- 𝓕 = (𝓧 ⊔ 𝓸𝓿𝓾)⁺
+ 𝓕 = (𝓧 ⊔ ov 𝓤) ⁺
 
  𝔉 : Algebra 𝓕 𝑆
  𝔉 =  𝑻 X ╱ (ψCon 𝒦)

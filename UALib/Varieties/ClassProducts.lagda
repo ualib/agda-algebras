@@ -70,36 +70,35 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the pa
 
 Finally, we prove the result that plays an important role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product ⨅ ( 𝔄 𝒦 ) belongs to SP(𝒦).
 
-As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 S(𝒦) ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma above.
+As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 S(𝒦) ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma.
 
 \begin{code}
 
-module class-product-inclusions {𝓤 : Universe}{X : 𝓤 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
- 𝓸𝓿𝓾 : Universe
- 𝓸𝓿𝓾 = ov 𝓤
+class-prod-s-∈-ps : {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+ →                  class-product {𝓤}{𝓤}{X} (S 𝒦) ∈ (P{ov 𝓤}{ov 𝓤} (S 𝒦))
 
- class-prod-s-∈-ps : class-product {𝓤}{𝓤}{X} (S{𝓤}{𝓤} 𝒦) ∈ (P{𝓸𝓿𝓾}{𝓸𝓿𝓾} (S{𝓤}{𝓸𝓿𝓾} 𝒦))
- class-prod-s-∈-ps = pisou{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psPllA (⨅≅ gfe llA≅A)
-  where
-   lA llA : ℑ (S{𝓤}{𝓤} 𝒦) → Algebra (𝓸𝓿𝓾) 𝑆
-   lA i =  lift-alg (𝔄 (S{𝓤}{𝓤} 𝒦) i) (𝓸𝓿𝓾)
-   llA i = lift-alg (lA i) (𝓸𝓿𝓾)
+class-prod-s-∈-ps {𝓤}{X}{𝒦}  = pisou psPllA (⨅≅ gfe llA≅A)
+ where
+  lA llA : ℑ (S 𝒦) → Algebra (ov 𝓤) 𝑆
+  lA i =  lift-alg (𝔄 (S 𝒦) i) (ov 𝓤)
+  llA i = lift-alg (lA i) (ov 𝓤)
 
-   slA : ∀ i → (lA i) ∈ S 𝒦
-   slA i = siso (fst ∥ i ∥) lift-alg-≅
+  slA : ∀ i → (lA i) ∈ S 𝒦
+  slA i = siso (fst ∥ i ∥) lift-alg-≅
 
-   psllA : ∀ i → (llA i) ∈ P (S 𝒦)
-   psllA i = pbase{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} (slA i)
+  psllA : ∀ i → (llA i) ∈ P (S 𝒦)
+  psllA i = pbase (slA i)
 
-   psPllA : ⨅ llA ∈ P (S 𝒦)
-   psPllA = produ{𝓤 = (𝓸𝓿𝓾)}{𝓦 = (𝓸𝓿𝓾)} psllA
+  psPllA : ⨅ llA ∈ P (S 𝒦)
+  psPllA = produ psllA
 
-   llA≅A : ∀ i → (llA i) ≅ (𝔄 (S{𝓤}{𝓤} 𝒦) i)
-   llA≅A i = Trans-≅ (llA i) (𝔄 (S{𝓤}{𝓤} 𝒦) i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
+  llA≅A : ∀ i → (llA i) ≅ (𝔄 (S 𝒦) i)
+  llA≅A i = Trans-≅ (llA i) (𝔄 (S 𝒦) i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
 
- -- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
- class-prod-s-∈-sp : hfunext(ov 𝓤)(ov 𝓤) → class-product (S 𝒦) ∈ S(P 𝒦)
- class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
+-- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
+class-prod-s-∈-sp : {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → hfunext (ov 𝓤) (ov 𝓤)
+ →                  class-product{𝓤}{𝓤}{X} (S 𝒦) ∈ S(P 𝒦)
+class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
 
 \end{code}
 
