@@ -6,7 +6,7 @@ pages:
     - cp html/UALib.md index.md
     - cp html/*.html html/*.md .
     - bundle install --path vendor
-    - bundle exec jekyll build -d public
+    - bundle exec JEKYLL_ENV=production jekyll build -d public
   artifacts:
     paths:
     - public

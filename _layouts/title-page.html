@@ -6,9 +6,11 @@
       <link rel="stylesheet" type="text/css" href="css/Agda-wjd.css">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
       <link rel="preconnect" href="https://fonts.gstatic.com">
-      <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
       <img src='css/lambda.jpg' style='position:fixed; top:0; left:0; padding: 20px 0px 0px 20px;' width='100' height='' alt='' />
+      {% if jekyll.environment == 'production' %}
+      {% include analytics.html %}
+      {% endif %}
   </head>
   <body>
       <style>
