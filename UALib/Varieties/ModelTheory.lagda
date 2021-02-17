@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="types-for-theories-and-models">Types for Theories and Models</a>
 
-This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][] where the binary ``models'' relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
@@ -22,12 +22,10 @@ Agda supports the definition of infix operations and relations, and we use this 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Varieties.ModelTheory
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
-
 
 open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe}{𝕏} public
 
@@ -46,12 +44,14 @@ _⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term{�
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 
-_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤)
- →      Term{𝓧}{X} → Term → 𝓧 ⊔ (ov 𝓤) ̇
+_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term{𝓧}{X} → Term → 𝓧 ⊔ ov 𝓤 ̇
 
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
+
+#### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
+The expression `𝑨 ⊧ 𝑝 ≈ 𝑞` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
 
 -------------------------------------------
 
@@ -61,8 +61,7 @@ Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `T
 
 \begin{code}
 
-Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤)
- →   Pred (Term{𝓧}{X} × Term) (𝓧 ⊔ ov 𝓤)
+Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term{𝓧}{X} × Term)(𝓧 ⊔ ov 𝓤)
 
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
@@ -72,8 +71,7 @@ If ℰ denotes a set of identities, then the class of algebras satisfying all id
 
 \begin{code}
 
-Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred (Term{𝓧}{X} × Term) (𝓧 ⊔ ov 𝓤)
- →    Pred (Algebra 𝓤 𝑆) (ov (𝓧 ⊔ 𝓤))
+Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred(Term{𝓧}{X} × Term)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
 
 Mod X ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 

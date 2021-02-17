@@ -64,6 +64,7 @@ mv html/UALib.Terms.Operations.{tex,md}
 mv html/UALib.Terms.{tex,md}
 cp html/UALib.tex html/index.md
 mv html/UALib.{tex,md}
+mv html/UALib.Varieties.ClassProducts.{tex,md}
 mv html/UALib.Varieties.EquationalLogic.{tex,md}
 mv html/UALib.Varieties.ModelTheory.{tex,md}
 mv html/UALib.Varieties.Preservation.{tex,md}

@@ -24,12 +24,10 @@ We prove closure properties, or "invariance," of the models relation defined in 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Varieties.EquationalLogic
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
-
 
 open import UALib.Varieties.ModelTheory {𝑆 = 𝑆}{gfe}{𝕏} public
 open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc) public
@@ -37,12 +35,6 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc)
 \end{code}
 
 -------------------------------------
-
-#### <a id="computing-with-⊧">Computing with ⊧</a>
-
-We have formally defined `𝑨 ⊧ 𝑝 ≈ 𝑞`, which represents the assertion that `p ≈ q` holds when this identity is interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
-
----------------------------------
 
 #### <a id="algebraic-invariance">Algebraic invariance</a>
 
@@ -223,8 +215,6 @@ Another fact that will turn out to be useful is that a product of a collection o
 --------------------------------------------
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance</a>
-
-[Those mainly interested in the formal proof of Birkhoff's HSP theorem can safely skip this section; it is not needed elsewhere.]
 
 If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 

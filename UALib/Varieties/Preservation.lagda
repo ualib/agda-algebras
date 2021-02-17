@@ -23,12 +23,12 @@ module UALib.Varieties.Preservation
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
-open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Varieties.ClassProducts {𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
 
-#### H preserves identities
+#### <a id="h-preserves-identities">H preserves identities</a>
 
 \begin{code}
 
@@ -95,7 +95,8 @@ H-id2 {𝓤}{𝓦} 𝒦 p q Hpq {𝑨} KA = γ
 
 \end{code}
 
-#### S preserves identities
+
+#### <a id="s-preserves-identities">S preserves identities</a>
 
 \begin{code}
 
@@ -160,7 +161,8 @@ S-id2 {𝓤}{𝓦} 𝒦 p q Spq {𝑨} KA = γ
 
 \end{code}
 
-#### P preserves identities
+
+#### <a id="p-preserves-identities">P preserves identities</a>
 
 \begin{code}
 
@@ -219,7 +221,8 @@ P-id2  p q PKpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (PKpq (pbase KA))
 
 \end{code}
 
-#### V preserves identities
+
+#### <a id="v-preserves-identities">V preserves identities</a>
 
 \begin{code}
 
@@ -382,7 +385,7 @@ V-id2 p q Vpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (Vpq (vbase KA))
 
 \end{code}
 
-#### Class identities
+#### <a id=class-identities">Class identities</a>
 
 It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 
@@ -412,7 +415,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 
 ----------------------------
 
-[← UALib.Varieties.Varieties](UALib.Varieties.Varieties.html)
+[← UALib.Varieties.ClassProducts](UALib.Varieties.ClassProducts.html)
 <span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}

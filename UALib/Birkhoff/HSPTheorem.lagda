@@ -171,7 +171,7 @@ We begin by constructing ℭ, using the class-product types described in the sec
 \begin{code}
 
 open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
-open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
+-- open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
 
 -- NOTATION.
 ℑs : ovu ̇
