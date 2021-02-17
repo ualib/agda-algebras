@@ -58,8 +58,8 @@ Alternatively, we could have defined the class product in a way that explicitly 
 
 \begin{code}
 
- -- class-product' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (ov 𝓤) 𝑆
- -- class-product'{𝓤}{𝓧}{X} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
+class-product' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
+class-product'{𝓤}{𝓧}{X} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
 
 \end{code}
 
@@ -68,9 +68,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the pa
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
-Finally, we prove the result that plays an important role in the formal proof of Birkhoff's Theorem---namely, that our newly defined class product ⨅ ( 𝔄 𝒦 ) belongs to SP(𝒦).
-
-As we just saw, the (informal) product ⨅ S(𝒦) of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as ⨅ ( 𝔄 S(𝒦) ), and our goal is to prove that this product belongs to SP(𝒦). We can do this by first proving that the product belongs to PS(𝒦) (in `class-prod-s-∈-ps`) and then applying the PS⊆SP lemma.
+Finally, we prove the result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we just saw, the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
 
 \begin{code}
 
