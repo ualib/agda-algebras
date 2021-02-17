@@ -385,7 +385,7 @@ V-id2 p q Vpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (Vpq (vbase KA))
 
 \end{code}
 
-#### <a id=class-identities">Class identities</a>
+#### <a id="class-identities">Class identities</a>
 
 It follows from `V-id1` that, if 𝒦 is a class of structures, the set of identities modeled by all structures in 𝒦 is the same as the set of identities modeled by all structures in V 𝒦.
 

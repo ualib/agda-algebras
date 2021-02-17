@@ -454,7 +454,7 @@ We conclude this module with three more inclusion relations that will have bit p
 ----------------------------
 
 [← UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html)
-<span style="float:right;">[UALib.Varieties.Preservation →](UALib.Varieties.Preservation.html)</span>
+<span style="float:right;">[UALib.Varieties.ClassProducts →](UALib.Varieties.ClassProducts.html)</span>
 
 {% include UALib.Links.md %}
 

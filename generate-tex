@@ -62,6 +62,8 @@ echo "Checking UALib.Terms.Free.lagda"
 agda --latex UALib/Terms/Free.lagda
 echo "Checking UALib.Terms.Operations.lagda"
 agda --latex UALib/Terms/Operations.lagda
+echo "Checking UALib.Varieties.ClassProducts.lagda"
+agda --latex UALib/Varieties/ClassProducts.lagda
 echo "Checking UALib.Varieties.EquationalLogic.lagda"
 agda --latex UALib/Varieties/EquationalLogic.lagda
 echo "Checking UALib.Varieties.ModelTheory.lagda"
@@ -102,6 +104,7 @@ mv latex/UALib/Terms/Basic.{tex,md}
 mv latex/UALib/Terms/Compatibility.{tex,md}
 mv latex/UALib/Terms/Free.{tex,md}
 mv latex/UALib/Terms/Operations.{tex,md}
+mv latex/UALib/Varieties/ClassProducts.{tex,md}
 mv latex/UALib/Varieties/EquationalLogic.{tex,md}
 mv latex/UALib/Varieties/ModelTheory.{tex,md}
 mv latex/UALib/Varieties/Preservation.{tex,md}
@@ -138,6 +141,7 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Basic.md -o
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Compatibility.md -o latex/UALib/Terms/Compatibility.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Free.md -o latex/UALib/Terms/Free.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Operations.md -o latex/UALib/Terms/Operations.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/ClassProducts.md -o latex/UALib/Varieties/ClassProducts.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/EquationalLogic.md -o latex/UALib/Varieties/EquationalLogic.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/ModelTheory.md -o latex/UALib/Varieties/ModelTheory.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Preservation.md -o latex/UALib/Varieties/Preservation.tex

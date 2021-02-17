@@ -454,7 +454,7 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 ----------------------------
 
 [← UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html)
-<span style="float:right;">[UALib.Varieties.Preservation →](UALib.Varieties.Preservation.html)</span>
+<span style="float:right;">[UALib.Varieties.ClassProducts →](UALib.Varieties.ClassProducts.html)</span>
 
 {% include UALib.Links.md %}
 

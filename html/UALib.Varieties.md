@@ -22,7 +22,8 @@ Because a class of structures has a different type than a single structure, we m
 <a id="1317" class="Keyword">open</a> <a id="1322" class="Keyword">import</a> <a id="1329" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
 <a id="1357" class="Keyword">open</a> <a id="1362" class="Keyword">import</a> <a id="1369" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
 <a id="1401" class="Keyword">open</a> <a id="1406" class="Keyword">import</a> <a id="1413" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
-<a id="1439" class="Keyword">open</a> <a id="1444" class="Keyword">import</a> <a id="1451" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
+<a id="1439" class="Keyword">open</a> <a id="1444" class="Keyword">import</a> <a id="1451" href="UALib.Varieties.ClassProducts.html" class="Module">UALib.Varieties.ClassProducts</a>
+<a id="1481" class="Keyword">open</a> <a id="1486" class="Keyword">import</a> <a id="1493" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
 
 </pre>
 
