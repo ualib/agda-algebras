@@ -148,27 +148,28 @@ First, `P` is a closure operator.  This is proved by checking that `P` is *monot
 
 P-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ 𝒦' → P{𝓤}{𝓦} 𝒦 ⊆ P{𝓤}{𝓦} 𝒦'
 
-P-mono KK' (pbase x) = pbase (KK' x)
-P-mono KK' (pliftu x) = pliftu (P-mono KK' x)
-P-mono KK' (pliftw x) = pliftw (P-mono KK' x)
-P-mono KK' (produ x) = produ (λ i → P-mono KK' (x i))
-P-mono KK' (prodw x) = prodw (λ i → P-mono KK' (x i))
-P-mono KK' (pisou x x₁) = pisou (P-mono KK' x) x₁
-P-mono KK' (pisow x x₁) = pisow (P-mono KK' x) x₁
+P-mono kk' (pbase x)    = pbase (kk' x)
+P-mono kk' (pliftu x)   = pliftu (P-mono kk' x)
+P-mono kk' (pliftw x)   = pliftw (P-mono kk' x)
+P-mono kk' (produ x)    = produ (λ i → P-mono kk' (x i))
+P-mono kk' (prodw x)    = prodw (λ i → P-mono kk' (x i))
+P-mono kk' (pisou x x₁) = pisou (P-mono kk' x) x₁
+P-mono kk' (pisow x x₁) = pisow (P-mono kk' x) x₁
 
 
 P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ P{𝓤}{𝓤} 𝒦
+
 P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
 
 
 P-idemp : {𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
 
-P-idemp (pbase x) = pliftw x
-P-idemp {𝓤}{𝓦} (pliftu x) = pliftw (P-idemp{𝓤}{𝓦} x)
-P-idemp {𝓤}{𝓦} (pliftw x) = pliftw (P-idemp{𝓤}{𝓦} x)
-P-idemp {𝓤}{𝓦} (produ x) = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
-P-idemp {𝓤}{𝓦} (prodw x) = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
+P-idemp (pbase x)             = pliftw x
+P-idemp {𝓤}{𝓦} (pliftu x)   = pliftw (P-idemp{𝓤}{𝓦} x)
+P-idemp {𝓤}{𝓦} (pliftw x)   = pliftw (P-idemp{𝓤}{𝓦} x)
+P-idemp {𝓤}{𝓦} (produ x)    = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
+P-idemp {𝓤}{𝓦} (prodw x)    = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
 P-idemp {𝓤}{𝓦} (pisou x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
 P-idemp {𝓤}{𝓦} (pisow x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
 
@@ -178,13 +179,13 @@ Similarly, S is a closure operator.  The facts that S is idempotent and expansiv
 
 \begin{code}
 
-S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
- →       𝒦 ⊆ 𝒦'  →  S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
-S-mono ante (sbase x) = sbase (ante x)
-S-mono {𝓤}{𝓦}{𝒦}{𝒦'} ante (slift{𝑨} x) = slift{𝓤}{𝓦}{𝒦'} (S-mono{𝓤}{𝓤} ante x)
-S-mono ante (ssub{𝑨}{𝑩} sA B≤A) = ssub (S-mono ante sA) B≤A
-S-mono ante (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono ante sA) B≤A
-S-mono ante (siso x x₁) = siso (S-mono ante x) x₁
+S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ 𝒦' → S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
+
+S-mono kk' (sbase x)            = sbase (kk' x)
+S-mono kk' (slift{𝑨} x)         = slift (S-mono kk' x)
+S-mono kk' (ssub{𝑨}{𝑩} sA B≤A)  = ssub (S-mono kk' sA) B≤A
+S-mono kk' (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono kk' sA) B≤A
+S-mono kk' (siso x x₁)          = siso (S-mono kk' x) x₁
 
 \end{code}
 
