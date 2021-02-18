@@ -20,7 +20,6 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 <a id="424" class="Keyword">open</a> <a id="429" class="Keyword">import</a> <a id="436" href="UALib.Relations.Binary.html" class="Module">UALib.Relations.Binary</a>
 <a id="459" class="Keyword">open</a> <a id="464" class="Keyword">import</a> <a id="471" href="UALib.Relations.Equivalences.html" class="Module">UALib.Relations.Equivalences</a>
 <a id="500" class="Keyword">open</a> <a id="505" class="Keyword">import</a> <a id="512" href="UALib.Relations.Quotients.html" class="Module">UALib.Relations.Quotients</a>
-<a id="538" class="Keyword">open</a> <a id="543" class="Keyword">import</a> <a id="550" href="UALib.Relations.Congruences.html" class="Module">UALib.Relations.Congruences</a>
 
 </pre>
 

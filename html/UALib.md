@@ -71,8 +71,8 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <a id="3694" class="Keyword">open</a> <a id="3699" class="Keyword">import</a> <a id="3706" href="UALib.Preface.html" class="Module">UALib.Preface</a>
 <a id="3720" class="Keyword">open</a> <a id="3725" class="Keyword">import</a> <a id="3732" href="UALib.Prelude.html" class="Module">UALib.Prelude</a>
-<a id="3746" class="Keyword">open</a> <a id="3751" class="Keyword">import</a> <a id="3758" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
-<a id="3773" class="Keyword">open</a> <a id="3778" class="Keyword">import</a> <a id="3785" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3746" class="Keyword">open</a> <a id="3751" class="Keyword">import</a> <a id="3758" href="UALib.Relations.html" class="Module">UALib.Relations</a>
+<a id="3774" class="Keyword">open</a> <a id="3779" class="Keyword">import</a> <a id="3786" href="UALib.Algebras.html" class="Module">UALib.Algebras</a>
 <a id="3801" class="Keyword">open</a> <a id="3806" class="Keyword">import</a> <a id="3813" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a>
 <a id="3833" class="Keyword">open</a> <a id="3838" class="Keyword">import</a> <a id="3845" href="UALib.Terms.html" class="Module">UALib.Terms</a>
 <a id="3857" class="Keyword">open</a> <a id="3862" class="Keyword">import</a> <a id="3869" href="UALib.Subalgebras.html" class="Module">UALib.Subalgebras</a>
@@ -92,19 +92,19 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Equality](UALib.Prelude.Equality.html)
   - [Inverses](UALib.Prelude.Inverses.html)
   - [Extensionality](UALib.Prelude.Extensionality.html)
-
-- [Algebras](UALib.Algebras.html)
-  - [Operation and Signature Types](UALib.Algebras.Signatures.html)
-  - [Algebra Types](UALib.Algebras.Algebras.html)
-  - [Product Algebra Types](UALib.Algebras.Products.html)
-  - [Agda's Universe Hierarchy](UALib.Algebras.Lifts.html)
+  - [Agda's Universe Hierarchy](UALib.Prelude.Lifts.html)
 
 - [Relations](UALib.Relations.html)
   - [Unary Relation Types](UALib.Relations.Unary.html)
   - [Binary Relation and Kernel Types](UALib.Relations.Binary.html)
   - [Equivalence Relation Types](UALib.Relations.Equivalences.html)
   - [Quotient Types](UALib.Relations.Quotients.html)
-  - [Congruence Relation Types](UALib.Relations.Congruences.html)
+
+- [Algebras](UALib.Algebras.html)
+  - [Operation and Signature Types](UALib.Algebras.Signatures.html)
+  - [Algebra Types](UALib.Algebras.Algebras.html)
+  - [Product Algebra Types](UALib.Algebras.Products.html)
+  - [Congruence Relation Types](UALib.Algebras.Congruences.html)
 
 - [Homomorphisms](UALib.Homomorphisms.html)
   - [Basic definitions](UALib.Homomorphisms.Basic.html)

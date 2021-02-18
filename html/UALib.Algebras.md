@@ -20,13 +20,13 @@ This chapter presents the [UALib.Algebras][] module of the [Agda Universal Algeb
 <a id="567" class="Keyword">open</a> <a id="572" class="Keyword">import</a> <a id="579" href="UALib.Algebras.Signatures.html" class="Module">UALib.Algebras.Signatures</a> <a id="605" class="Keyword">public</a>
 <a id="612" class="Keyword">open</a> <a id="617" class="Keyword">import</a> <a id="624" href="UALib.Algebras.Algebras.html" class="Module">UALib.Algebras.Algebras</a> <a id="648" class="Keyword">public</a>
 <a id="655" class="Keyword">open</a> <a id="660" class="Keyword">import</a> <a id="667" href="UALib.Algebras.Products.html" class="Module">UALib.Algebras.Products</a> <a id="691" class="Keyword">public</a>
-<a id="698" class="Keyword">open</a> <a id="703" class="Keyword">import</a> <a id="710" href="UALib.Algebras.Lifts.html" class="Module">UALib.Algebras.Lifts</a> <a id="731" class="Keyword">public</a>
+<a id="698" class="Keyword">open</a> <a id="703" class="Keyword">import</a> <a id="710" href="UALib.Algebras.Congruences.html" class="Module">UALib.Algebras.Congruences</a>
 
 </pre>
 
 -------------------------------------
 
-[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
+[← UALib.Relations.](UALib.Prelude.Extensionality.html)
 <span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}
