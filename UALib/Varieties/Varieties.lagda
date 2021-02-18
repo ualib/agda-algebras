@@ -450,11 +450,45 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 \end{code}
 
 
+#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
+
+Finally, we prove the result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+
+\begin{code}
+
+class-prod-s-∈-ps : {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+ →                  class-product {𝓤}{𝓤}{X} (S 𝒦) ∈ (P{ov 𝓤}{ov 𝓤} (S 𝒦))
+
+class-prod-s-∈-ps {𝓤}{X}{𝒦}  = pisou psPllA (⨅≅ gfe llA≅A)
+ where
+  lA llA : ℑ (S 𝒦) → Algebra (ov 𝓤) 𝑆
+  lA i =  lift-alg (𝔄 (S 𝒦) i) (ov 𝓤)
+  llA i = lift-alg (lA i) (ov 𝓤)
+
+  slA : ∀ i → (lA i) ∈ S 𝒦
+  slA i = siso (fst ∥ i ∥) lift-alg-≅
+
+  psllA : ∀ i → (llA i) ∈ P (S 𝒦)
+  psllA i = pbase (slA i)
+
+  psPllA : ⨅ llA ∈ P (S 𝒦)
+  psPllA = produ psllA
+
+  llA≅A : ∀ i → (llA i) ≅ (𝔄 (S 𝒦) i)
+  llA≅A i = Trans-≅ (llA i) (𝔄 (S 𝒦) i) (sym-≅ lift-alg-≅) (sym-≅ lift-alg-≅)
+
+-- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
+class-prod-s-∈-sp : {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → hfunext (ov 𝓤) (ov 𝓤)
+ →                  class-product{𝓤}{𝓤}{X} (S 𝒦) ∈ S(P 𝒦)
+class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
+
+\end{code}
 
 ----------------------------
 
 [← UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html)
-<span style="float:right;">[UALib.Varieties.ClassProducts →](UALib.Varieties.ClassProducts.html)</span>
+<span style="float:right;">[UALib.Varieties.Preservation →](UALib.Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
+
 

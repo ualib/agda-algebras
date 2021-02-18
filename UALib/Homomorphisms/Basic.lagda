@@ -17,7 +17,7 @@ open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
 
 module UALib.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
-open import UALib.Relations.Congruences{𝑆 = 𝑆} public
+open import UALib.Algebras.Congruences{𝑆 = 𝑆} public
 open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
 
 \end{code}

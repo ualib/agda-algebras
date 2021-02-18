@@ -20,13 +20,13 @@ module UALib.Algebras where
 open import UALib.Algebras.Signatures public
 open import UALib.Algebras.Algebras public
 open import UALib.Algebras.Products public
-open import UALib.Algebras.Lifts public
+open import UALib.Algebras.Congruences
 
 \end{code}
 
 -------------------------------------
 
-[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
+[← UALib.Relations.](UALib.Prelude.Extensionality.html)
 <span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

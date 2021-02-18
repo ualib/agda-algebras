@@ -9,18 +9,13 @@ author: William DeMeo
 
 This section presents the [UALib.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
-Notice that we begin the module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
-
-**NOTATION**.  From now on, every module of the [UALib][] will assume universes 𝓞 and 𝓥, and a fixed signature type `𝑆 : Signature 𝓞 𝓥`.
-
 \begin{code}
+
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures
+module UALib.Relations.Quotients where
 
-module UALib.Relations.Quotients {𝑆 : Signature 𝓞 𝓥} where
-
-open import UALib.Relations.Equivalences hiding (𝓞; 𝓥) public
+open import UALib.Relations.Equivalences public
 open import UALib.Prelude.Preliminaries using (_⇔_; id) public
 
 \end{code}
@@ -175,7 +170,9 @@ class-extensionality' pe gfe {A = A}{a}{a'}{R} ssR ssA Req Raa' = γ
 
 \end{code}
 
-#### <a id="compatibility">Compatibility</a>
+
+
+#### <a id="compatibility-of-lifts-and-functions">Compatibility of lifts and functions</a>
 
 The following definitions and lemmas are useful for asserting and proving facts about **compatibility** of relations and functions.
 
@@ -188,15 +185,6 @@ module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇ } {Z : 𝓤 ̇ } where
  compatible-fun : (f : (γ → Z) → Z)(R : Rel Z 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 
--- relation compatible with an operation
-module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
- compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
- -- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
-
---The given relation is compatible with all ops of an algebra.
- compatible :(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible  𝑨 R = ∀ f → compatible-op{𝑨} f R
 \end{code}
 
 

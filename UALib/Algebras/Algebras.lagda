@@ -21,7 +21,6 @@ open import UALib.Prelude.Preliminaries using (𝓤₀; 𝟘; 𝟚) public
 
 \end{code}
 
--------------------------------
 
 #### <a id="algebra-types">Algebra types</a>
 
@@ -41,7 +40,8 @@ We may refer to an inhabitant of this type as a "∞-algebra" because its domain
 
 We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, we will only need to know that the domains of our algebras are sets in a few places in the UALib, so it seems preferable to work with general ∞-algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
 
----------------------------------------
+
+
 
 #### <a id="algebras-as-record-types">Algebras as record types</a>
 
@@ -77,7 +77,8 @@ module _ {𝓤 𝓞 𝓥 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
-----------------------------------------
+
+
 
 #### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
 
@@ -91,9 +92,12 @@ We conclude this module by defining a convenient shorthand for the interpretatio
 
 \end{code}
 
+
+
+
 #### <a id="arbitrarily-many-variable-symbols">Arbitrarily many variable symbols</a>
 
-Finally, we will want to assume that we always have at our disposal an arbitrary collection \ab X of variable symbols such that, for every algebra \ab 𝑨, no matter the type of its domain, we have a surjective map \ab{h₀} \as : \ab X \as → \aiab{∣}{𝑨} from variables onto the domain of \ab 𝑨.
+We sometimes want to assume that we have at our disposal an arbitrary collection X of variable symbols such that, for every algebra 𝑨, no matter the type of its domain, we have a surjective map h₀ : X → ∣ 𝑨 ∣ from variables onto the domain of 𝑨.  We may use the following definition to express this assumption when we need it.
 
 \begin{code}
 
@@ -102,7 +106,60 @@ X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
 \end{code}
 
--------------------------------------
+Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.
+
+module _ {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+
+Then fst(𝕏 𝑨) will denote the surjective map h₀ : X → ∣ 𝑨 ∣, and snd(𝕏 𝑨) will be a proof that h₀ is surjective.
+
+
+
+
+#### <a id="lifts-of-algebras">Lifts of algebras</a>
+
+Finaly, we provide domain-specific lifting tools for algebraic operation types and algebra types.
+\begin{code}
+
+
+module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
+
+ lift-op : {𝓤 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} → ((I → A) → A) → (𝓦 : Universe)
+  →        ((I → Lift{𝓤}{𝓦}A) → Lift{𝓤}{𝓦}A)
+
+ lift-op f 𝓦 = λ x → lift (f (λ i → Lift.lower (x i)))
+
+ open algebra
+
+ lift-alg-record-type : {𝓤 : Universe} → algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
+ lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → lift-op ((op 𝑨) f) 𝓦)
+
+ lift-∞-algebra lift-alg : {𝓤 : Universe} → Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ lift-∞-algebra 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (f : ∣ 𝑆 ∣) → lift-op (∥ 𝑨 ∥ f) 𝓦)
+ lift-alg = lift-∞-algebra
+
+\end{code}
+
+We use the function `lift-alg` to resolve errors that arrise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in [Prelude.Lifts][].)
+
+
+
+
+#### <a id="compatibility-of-lifts-and-operations">Compatibility of lifts and operations</a>
+
+The following definitions and lemmas are useful for asserting and proving facts about **compatibility** of relations and operations.
+
+\begin{code}
+
+module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
+ compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
+ -- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
+
+ --The given relation is compatible with all ops of an algebra.
+ compatible :(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible  𝑨 R = ∀ f → compatible-op{𝑨} f R
+
+\end{code}
 
 [← UALib.Algebras.Signatures](UALib.Algebras.Signatures.html)
 <span style="float:right;">[UALib.Algebras.Products →](UALib.Algebras.Products.html)</span>

@@ -20,7 +20,6 @@ open import UALib.Relations.Unary
 open import UALib.Relations.Binary
 open import UALib.Relations.Equivalences
 open import UALib.Relations.Quotients
-open import UALib.Relations.Congruences
 
 \end{code}
 

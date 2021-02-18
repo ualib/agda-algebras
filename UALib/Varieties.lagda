@@ -22,7 +22,6 @@ module UALib.Varieties where
 open import UALib.Varieties.ModelTheory
 open import UALib.Varieties.EquationalLogic
 open import UALib.Varieties.Varieties
-open import UALib.Varieties.ClassProducts
 open import UALib.Varieties.Preservation
 
 \end{code}

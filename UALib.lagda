@@ -71,8 +71,8 @@ module UALib where
 
 open import UALib.Preface
 open import UALib.Prelude
-open import UALib.Algebras
 open import UALib.Relations
+open import UALib.Algebras
 open import UALib.Homomorphisms
 open import UALib.Terms
 open import UALib.Subalgebras
@@ -92,19 +92,19 @@ open import UALib.Birkhoff
   - [Equality](UALib.Prelude.Equality.html)
   - [Inverses](UALib.Prelude.Inverses.html)
   - [Extensionality](UALib.Prelude.Extensionality.html)
-
-- [Algebras](UALib.Algebras.html)
-  - [Operation and Signature Types](UALib.Algebras.Signatures.html)
-  - [Algebra Types](UALib.Algebras.Algebras.html)
-  - [Product Algebra Types](UALib.Algebras.Products.html)
-  - [Agda's Universe Hierarchy](UALib.Algebras.Lifts.html)
+  - [Agda's Universe Hierarchy](UALib.Prelude.Lifts.html)
 
 - [Relations](UALib.Relations.html)
   - [Unary Relation Types](UALib.Relations.Unary.html)
   - [Binary Relation and Kernel Types](UALib.Relations.Binary.html)
   - [Equivalence Relation Types](UALib.Relations.Equivalences.html)
   - [Quotient Types](UALib.Relations.Quotients.html)
-  - [Congruence Relation Types](UALib.Relations.Congruences.html)
+
+- [Algebras](UALib.Algebras.html)
+  - [Operation and Signature Types](UALib.Algebras.Signatures.html)
+  - [Algebra Types](UALib.Algebras.Algebras.html)
+  - [Product Algebra Types](UALib.Algebras.Products.html)
+  - [Congruence Relation Types](UALib.Algebras.Congruences.html)
 
 - [Homomorphisms](UALib.Homomorphisms.html)
   - [Basic definitions](UALib.Homomorphisms.Basic.html)

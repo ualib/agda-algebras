@@ -1,21 +1,22 @@
 ---
 layout: default
-title : UALib.Algebras.Lifts module (Agda Universal Algebra Library)
-date : 2021-01-12
+title : UALib.Prelude.Lifts module (Agda Universal Algebra Library)
+date : 2021-02-18
 author: William DeMeo
 ---
 
 ### <a id="agdas-universe-hierarchy">Agda's Universe Hierarchy</a>
 
-This section presents the [UALib.Algebras.Lifts][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Prelude.Lifts][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Algebras.Lifts where
+module UALib.Prelude.Lifts where
 
-open import UALib.Algebras.Products public
+open import UALib.Prelude.Extensionality public
+
 \end{code}
 
 #### The noncumulative hierarchy
@@ -83,35 +84,10 @@ lift∼lower = refl _
 
 \end{code}
 
-Now, getting more "domain-specific," we show how to lift relation types, algebraic operation types, and algebra types.
-
-\begin{code}
-
-
--- lift-rel {𝓤 𝓦 : Universe}
---  → (𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇)
---  → (𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇)
-module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
-
- lift-op : {𝓤 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇}
-  →        ((I → A) → A) → (𝓦 : Universe)
-  →        ((I → Lift{𝓤}{𝓦}A) → Lift{𝓤}{𝓦}A)
- lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
-
- open algebra
-
- lift-alg-record-type : {𝓤 : Universe} → algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
- lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → lift-op ((op 𝑨) f) 𝓦)
-
- lift-∞-algebra lift-alg : {𝓤 : Universe} → Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
- lift-∞-algebra 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (f : ∣ 𝑆 ∣) → lift-op (∥ 𝑨 ∥ f) 𝓦)
- lift-alg = lift-∞-algebra
-
-\end{code}
 
 ---------------
 
-[← UALib.Algebras.Products](UALib.Algebras.Products.html)
+[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
 <span style="float:right;">[UALib.Relations →](UALib.Relations.html)</span>
 
 {% include UALib.Links.md %}

@@ -155,20 +155,19 @@
 [Prelude.Equality]: UALib.Prelude.Equality.html
 [Prelude.Inverses]: UALib.Prelude.Inverses.html
 [Prelude.Extensionality]: UALib.Prelude.Extensionality.html
-
-[Algebras]: UALib.Algebras.html
-[Algebras.Signatures]: UALib.Algebras.Signatures.html
-[Algebras.Algebras]: UALib.Algebras.Algebras.html
-[Algebras.Products]: UALib.Algebras.Products.html
-[Algebras.Lifts]: UALib.Algebras.Lifts.html
-
+[Prelude.Lifts]: UALib.Prelude.Lifts.html
 
 [Relations]: UALib.Relations.html
 [Relations.Unary]: UALib.Relations.Unary.html
 [Relations.Binary]: UALib.Relations.Binary.html
 [Relations.Equivalences]: UALib.Relations.Equivalences.html
 [Relations.Quotients]: UALib.Relations.Quotients.html
-[Relations.Congruences]: UALib.Relations.Congruences.html
+
+[Algebras]: UALib.Algebras.html
+[Algebras.Signatures]: UALib.Algebras.Signatures.html
+[Algebras.Algebras]: UALib.Algebras.Algebras.html
+[Algebras.Products]: UALib.Algebras.Products.html
+[Algebras.Congruences]: UALib.Algebras.Congruences.html
 
 [Homomorphisms]: UALib.Homomorphisms.html
 [Homomorphisms.Basic]: UALib.Homomorphisms.Basic.html
@@ -211,13 +210,13 @@
 [UALib.Prelude.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Equality.lagda
 [UALib.Prelude.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Inverses.lagda
 [UALib.Prelude.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Extensionality.lagda
+[UALib.Prelude.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Lifts.lagda
 
 [UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
 [UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
 [UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda
 [UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda
 [UALib.Algebras.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda
-[UALib.Algebras.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Lifts.lagda
 
 [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
 [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda

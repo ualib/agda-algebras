@@ -18,9 +18,9 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 
 module UALib.Relations.Unary where
 
-open import UALib.Algebras.Lifts public
+open import UALib.Prelude.Lifts public
 
-open import UALib.Prelude.Preliminaries using (¬; propext; global-dfunext; is-subsingleton) public
+open import UALib.Prelude.Preliminaries using (¬; propext; global-dfunext; is-subsingleton; 𝓤₀; 𝟘) public
 
 \end{code}
 

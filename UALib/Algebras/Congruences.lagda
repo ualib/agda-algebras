@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Relations.Congruences module (The Agda Universal Algebra Library)
+title : UALib.Algebras.Congruences module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
 
 ### <a id="congruence-relation-types">Congruence Relation Types</a>
 
-This section presents the [UALib.Relations.Congruences][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,24 +15,9 @@ This section presents the [UALib.Relations.Congruences][] module of the [Agda Un
 
 open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
 
-module UALib.Relations.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module UALib.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
-open import UALib.Relations.Quotients {𝑆 = 𝑆} public
-
-\end{code}
-
-#### <a id="notation">Notation</a>
-
-Before we define the type of congruences, we define some syntactic sugar that will be used from now on throughout the [UALib][]. The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level. 
-
-\begin{code}
-
-ov : Universe → Universe
-ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
-
-\end{code}
-
-We can now write, e.g., `Algebra 𝓤 𝑆 : ov 𝓤 ̇` in place of the laborious `Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`.
+open import UALib.Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
@@ -142,7 +127,7 @@ Finally, the following elimination rule is sometimes useful.
 
 --------------------------------------
 
-[← UALib.Relations.Quotients](UALib.Relations.Quotients.html)
+[← UALib.Algebras.Products](UALib.Algebras.Products.html)
 <span style="float:right;">[UALib.Homomorphisms →](UALib.Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

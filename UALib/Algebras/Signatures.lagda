@@ -17,7 +17,7 @@ open import universes using (𝓤₀)
 
 module UALib.Algebras.Signatures where
 
-open import UALib.Prelude.Extensionality public
+open import UALib.Relations.Quotients public
 
 open import UALib.Prelude.Preliminaries using (𝓞; 𝓥; 𝟘; 𝟚) public
 

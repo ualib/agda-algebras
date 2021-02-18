@@ -23,7 +23,7 @@ module UALib.Varieties.Preservation
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
-open import UALib.Varieties.ClassProducts {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
@@ -415,7 +415,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 
 ----------------------------
 
-[← UALib.Varieties.ClassProducts](UALib.Varieties.ClassProducts.html)
+[← UALib.Varieties.Varieties](UALib.Varieties.Varieties.html)
 <span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
