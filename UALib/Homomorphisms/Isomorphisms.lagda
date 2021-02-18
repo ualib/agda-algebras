@@ -82,9 +82,9 @@ sym-≅ h = fst ∥ h ∥ , fst h , ∥ snd ∥ h ∥ ∥ , ∣ snd ∥ h ∥ �
 
 trans-≅ : {𝓠 𝓤 𝓦 : Universe}
           (𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
- →         𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
-          ----------------
- →            𝑨 ≅ 𝑪
+ →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+          -------------
+ →        𝑨 ≅ 𝑪
 
 trans-≅ 𝑨 𝑩 𝑪 ab bc = f , g , α , β
  where
@@ -117,24 +117,23 @@ trans-≅ 𝑨 𝑩 𝑪 ab bc = f , g , α , β
   α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
   α x = (∣ f ∣ ∘ ∣ g ∣) x                   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
         ∣ f2 ∣ ( (∣ f1 ∣ ∘ ∣ g2 ∣) (∣ g1 ∣ x)) ≡⟨ ap ∣ f2 ∣ (f1∼g2 (∣ g1 ∣ x)) ⟩
-        ∣ f2 ∣ ( ∣ 𝒾𝒹 𝑩 ∣ (∣ g1 ∣ x))        ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
         (∣ f2 ∣ ∘ ∣ g1 ∣) x                  ≡⟨ f2∼g1 x ⟩
         ∣ 𝒾𝒹 𝑪 ∣ x                         ∎
   β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
   β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
 
-TRANS-≅ : {𝓠 𝓤 𝓦 : Universe}
-          {𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
- →         𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
-          ----------------
- →            𝑨 ≅ 𝑪
+TRANS-≅ : {𝓠 𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
+ →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+          -------------
+ →        𝑨 ≅ 𝑪
 TRANS-≅ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = trans-≅ 𝑨 𝑩 𝑪
 
 Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
-          (𝑨 : Algebra 𝓠 𝑆){𝑩 : Algebra 𝓤 𝑆}(𝑪 : Algebra 𝓦 𝑆)
- →         𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
-          ----------------
- →            𝑨 ≅ 𝑪
+          (𝑨 : Algebra 𝓠 𝑆) {𝑩 : Algebra 𝓤 𝑆}
+          (𝑪 : Algebra 𝓦 𝑆)
+ →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+          -------------
+ →        𝑨 ≅ 𝑪
 Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
 \end{code}
 
@@ -149,17 +148,14 @@ open Lift
 
 --An algebra is isomorphic to its lift to a higher universe level
 lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
-lift-alg-≅ = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) ,
-                         (lower , λ _ _ → 𝓇ℯ𝒻𝓁) ,
-                         (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
 
-lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}
-               (𝓩 : Universe){𝓦 : Universe}
-               (𝑨 : Algebra 𝓧 𝑆)
-               (𝑩 : Algebra 𝓨 𝑆)
- →             hom 𝑨 𝑩
-              ------------------------------------
- →             hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+lift-alg-≅ = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) , (lower , λ _ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
+
+lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}
+               (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+               -----------------------------------------------
+ →             hom 𝑨 𝑩  →  hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+
 lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
  where
   lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 lower
@@ -171,12 +167,14 @@ lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
   γ : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) (lift ∘ (f ∘ lower))
   γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦) {f ∘ lower}{lift} lABh Lh
 
-lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
- →               𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
-lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA≅A A≅B) lift-alg-≅
- where
-  lA≅A : (lift-alg 𝑨 𝓩) ≅ 𝑨
-  lA≅A = sym-≅ lift-alg-≅
+
+lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}
+               (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+               -----------------------------------------
+ →             𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
+
+lift-alg-iso 𝓧 𝓩 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ (sym-≅ lift-alg-≅) A≅B) lift-alg-≅
+
 \end{code}
 
 
@@ -186,8 +184,10 @@ lift-alg-iso 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ lA�
 The lift is also associative, up to isomorphism at least.
 
 \begin{code}
+
 lift-alg-assoc : {𝓤 𝓦 𝓘 : Universe}{𝑨 : Algebra 𝓤 𝑆}
- →           lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
+ →               lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
+
 lift-alg-assoc {𝓤} {𝓦} {𝓘} {𝑨} = TRANS-≅ (TRANS-≅ ζ lift-alg-≅) lift-alg-≅
  where
   ζ : lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
@@ -195,17 +195,20 @@ lift-alg-assoc {𝓤} {𝓦} {𝓘} {𝑨} = TRANS-≅ (TRANS-≅ ζ lift-alg-�
 
 lift-alg-associative : {𝓤 𝓦 𝓘 : Universe}(𝑨 : Algebra 𝓤 𝑆)
  →           lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
+
 lift-alg-associative{𝓤}{𝓦}{𝓘} 𝑨 = lift-alg-assoc{𝓤}{𝓦}{𝓘}{𝑨}
+
 \end{code}
 
 #### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 \begin{code}
+
 ⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 : Universe}
      {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
- →   ((i : I) → (𝒜 i) ≅ (ℬ i))
-     ---------------------------
- →       ⨅ 𝒜 ≅ ⨅ ℬ
+ →   (∀ i → (𝒜 i) ≅ (ℬ i))
+     ----------------------
+ →   ⨅ 𝒜 ≅ ⨅ ℬ
 
 ⨅≅ gfe {𝓠}{𝓤}{𝓘}{I}{𝒜}{ℬ} AB = γ
  where
@@ -245,16 +248,17 @@ lift-alg-associative{𝓤}{𝓦}{𝓘} 𝑨 = lift-alg-assoc{𝓤}{𝓦}{𝓘}{�
 
   γ : ⨅ 𝒜 ≅ ⨅ ℬ
   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+
 \end{code}
 
 A nearly identical proof goes through for isomorphisms of lifted products.
 
 \begin{code}
 lift-alg-⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 𝓩 : Universe}
-     {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓘}{𝓩} I) → Algebra 𝓤 𝑆}
- →   ((i : I) → (𝒜 i) ≅ (ℬ (lift i)))
-     ---------------------------
- →       lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+              {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓘}{𝓩} I) → Algebra 𝓤 𝑆}
+ →            (∀ i → (𝒜 i) ≅ (ℬ (lift i)))
+              ----------------------------
+ →            lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
 
 lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
  where
@@ -352,6 +356,6 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 --------------------------------------
 
 [← UALib.Homomorphisms.Products](UALib.Homomorphisms.Products.html)
-<span style="float:right;">[UALib.Algebras.HomomorphicImages →](UALib.Algebras.HomomorphicImages.html)</span>
+<span style="float:right;">[UALib.Homomorphisms.HomomorphicImages →](UALib.Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

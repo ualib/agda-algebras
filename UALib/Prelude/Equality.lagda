@@ -13,9 +13,9 @@ This section describes the [UALib.Prelude.Equality][] module of the [Agda Univer
 
 #### <a id="refl">refl</a>
 
-Perhaps the most important types in type theory are the equality types.
+The type which is often referred to as "reflexivity" or "refl" is a very basic and important type. It represents [definitional equality](https://ncatlab.org/nlab/show/equality#definitional_equality).
 
-The definitional equality we use is the standard one, which is often referred to as "reflexivity" or "refl". In our case, it is defined in the `Identity-Type` module of the [Type Topology][] library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.  Here is the full listing of the `Identity-Type` module.
+The `refl` type we use is the standard one, . In our case, it is defined in the `Identity-Type` module of the [Type Topology][] library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.  Here is the full listing of the `Identity-Type` module.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}

@@ -91,19 +91,20 @@ An important construction in universal algebra is the quotient of an algebra �
 
 \begin{code}
 
-_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆) -- type ╱ with \--- plus C-f a number of times
+_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆)
  →    Congruence{𝓤}{𝓡} A
       --------------------
  →    Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
 
-A ╱ θ = (( ∣ A ∣ / ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
-          (λ f args         -- operations
-           → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
-             ((f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) , refl _ )
-          )
-        )
+A ╱ θ = -- domain
+        ( ∣ A ∣ / ⟨ θ ⟩ ) ,
+
+        -- operations
+        λ f 𝒂 → ⟦ (f ̂ A) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧
 
 \end{code}
+
+**Unicode Hints**. Produce the ╱ symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.
 
 #### <a id="examples">Examples</a>
 
@@ -111,8 +112,7 @@ The zero element of a quotient can be expressed as follows.
 
 \begin{code}
 
-Zero╱ : {𝓤 𝓡 : Universe}{A : Algebra 𝓤 𝑆}
-        (θ : Congruence{𝓤}{𝓡} A)
+Zero╱ : {𝓤 𝓡 : Universe}{A : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} A)
   →     Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓡 ⁺)
 
 Zero╱ θ = λ x x₁ → x ≡ x₁
@@ -123,11 +123,10 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
-╱-refl :{𝓤 𝓡 : Universe} (A : Algebra 𝓤 𝑆)
-        {θ : Congruence{𝓤}{𝓡} A} {a a' : ∣ A ∣}
-  →     ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+╱-refl : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
+  →      ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
-╱-refl A {θ} (refl _)  = IsEquivalence.rfl (IsEquiv θ) _
+╱-refl A {θ} 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}
 

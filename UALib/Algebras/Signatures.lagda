@@ -47,7 +47,8 @@ The type `Op` encodes the arity of an operation as an arbitrary type `I : ğ“¥ Ì
 
 The last two lines of the code block above codify the `i`-th `I`-ary projection operation on `A`.
 
------------------------------------
+
+
 
 #### <a id="signature-type">Signature type</a>
 

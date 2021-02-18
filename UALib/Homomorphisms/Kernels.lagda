@@ -24,16 +24,17 @@ open import UALib.Homomorphisms.Basic{𝑆 = 𝑆} public
 
 open Congruence
 
-hom-kernel-is-compatible : {𝓤 𝓦 : Universe} → (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+hom-kernel-is-compatible : {𝓤 𝓦 : Universe}
+                           (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
  →                         compatible 𝑨 (KER-rel ∣ h ∣)
 
 hom-kernel-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ
  where
-  γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)     ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
-  γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)     ≡⟨ ∥ h ∥ f 𝒂 ⟩
-      (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)   ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
-      (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂')  ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
-      ∣ h ∣ ((f ̂ 𝑨) 𝒂')    ∎
+  γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
+  γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡⟨ ∥ h ∥ f 𝒂 ⟩
+      (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)  ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
+      (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂') ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
+      ∣ h ∣ ((f ̂ 𝑨) 𝒂')   ∎
 
 hom-kernel-is-equivalence : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
  →                          IsEquivalence (KER-rel ∣ h ∣)
@@ -98,15 +99,12 @@ We combine the foregoing to define a function that takes 𝑆-algebras 𝑨 and 
 
 \begin{code}
 
-πker -- alias
- kernel-quotient-projection : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
-                              (h : hom 𝑨 𝑩)
-                              ---------------------
- →                            epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
+πker : {𝓤 𝓦 : Universe}
+       (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
+       -------------------------------------------------
+ →     epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
 
-kernel-quotient-projection 𝑨 {𝑩} h = canonical-epi 𝑨 (kercon 𝑨{𝑩} h)
-
-πker = kernel-quotient-projection
+πker 𝑨 {𝑩} h = canonical-epi 𝑨 (kercon 𝑨{𝑩} h)
 
 \end{code}
 
@@ -115,15 +113,11 @@ The kernel of the canonical projection of 𝑨 onto 𝑨 / θ is equal to θ, bu
 
 \begin{code}
 
-ker-in-con : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) (θ : Congruence{𝓤}{𝓦} 𝑨)
- → ∀ x y → (⟨ (kercon 𝑨 {𝑨 ╱ θ} (canonical-hom{𝓤}{𝓦} 𝑨 θ)) ⟩ x y) → (⟨ θ ⟩ x y)
-ker-in-con 𝑨 θ x y hyp = γ
- where
-  cls : ⟦ x ⟧{⟨ θ ⟩} ≡ ⟦ y ⟧
-  cls = hyp
+ker-in-con : {𝓤 𝓦 : Universe}
+             (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣ )
+ →           ⟨ kercon 𝑨 {𝑨 ╱ θ} (canonical-hom 𝑨 θ) ⟩ x y  →  ⟨ θ ⟩ x y
 
-  γ : ⟨ θ ⟩ x y
-  γ = ╱-refl 𝑨 {θ} cls
+ker-in-con 𝑨 θ x y hyp = ╱-refl 𝑨 {θ} hyp
 
 \end{code}
 

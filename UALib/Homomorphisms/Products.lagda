@@ -68,7 +68,7 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 ⨅-projection-hom : {𝓤 𝓘 : Universe}
                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
                    --------------------------------
- →                  (i : I) → hom (⨅ 𝒜) (𝒜 i)
+ →                 (i : I) → hom (⨅ 𝒜) (𝒜 i)
 
 ⨅-projection-hom {𝓤}{𝓘}{I}{𝒜} i = ϕi , ϕihom
  where
@@ -76,10 +76,7 @@ Later we will need a proof of the fact that projecting out of a product algebra 
   ϕi = λ x → x i
 
   ϕihom : is-homomorphism (⨅ 𝒜) (𝒜 i) ϕi
-  ϕihom 𝑓 𝒂 = ϕi ((𝑓 ̂ ⨅ 𝒜) 𝒂) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-             ((𝑓 ̂ ⨅ 𝒜) 𝒂) i ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-             (𝑓 ̂ 𝒜 i) (λ x → 𝒂 x i) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-             (𝑓 ̂ 𝒜 i) (λ x → ϕi (𝒂 x)) ∎
+  ϕihom 𝑓 𝒂 = 𝓇ℯ𝒻𝓁
 
 \end{code}
 

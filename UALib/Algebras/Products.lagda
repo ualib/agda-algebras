@@ -53,7 +53,9 @@ open algebra
 
 #### <a id="notation">Notation</a>
 
-Before we define the type of congruences, we define some syntactic sugar that will be used from now on throughout the [UALib][]. The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level. 
+Before we define the type of congruences, we define some syntactic sugar that will be used from now on throughout the [UALib][].
+
+The type `Algebra 𝓤 𝑆` itself has a type; it is `(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇` &nbsp;. This type appears quite often throughout the [UALib][], so it is worthwhile to define the following shorthand for its universe level.
 
 \begin{code}
 
@@ -61,8 +63,6 @@ ov : Universe → Universe
 ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 \end{code}
-
-We can now write, e.g., `Algebra 𝓤 𝑆 : ov 𝓤 ̇` in place of the laborious `Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`.
 
 
 

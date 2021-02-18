@@ -23,7 +23,8 @@ open import UALib.Prelude.Preliminaries using (is-embedding) public
 
 \end{code}
 
--------------------------------------------
+
+
 
 #### <a id="the-first-isomorphism-theorem">The First Isomorphism Theorem</a>
 
@@ -40,54 +41,53 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
  →                            propext 𝓦 → is-set ∣ 𝑩 ∣
  →                            (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} ϕ ⟩ a x))
  →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} ϕ ⟩} C))
-           ---------------------------------------------------------------------------------
+           ------------------------------------------------------------------------------------
  →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
 
-FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA =
- (fmap , fhom , fepic) , commuting , femb
-  where
-   θ : Congruence 𝑨
-   θ = kercon 𝑨{𝑩} ϕ
+FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , commuting , femb
+ where
+  θ : Congruence 𝑨
+  θ = kercon 𝑨{𝑩} ϕ
 
-   𝑨/θ : Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
-   𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕ
+  𝑨/θ : Algebra _ 𝑆
+  𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕ
 
-   fmap : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
-   fmap a = ∣ ϕ ∣ ⌜ a ⌝
+  fmap : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
+  fmap a = ∣ ϕ ∣ ⌜ a ⌝
 
-   fhom : is-homomorphism 𝑨/θ 𝑩 fmap
-   fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-             ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
+  fhom : is-homomorphism 𝑨/θ 𝑩 fmap
+  fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+              ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
               (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
               (𝑓 ̂ 𝑩) (λ x → fmap (𝒂 x)) ∎
 
-   fepic : Epic fmap
-   fepic b = γ
-    where
-     a : ∣ 𝑨 ∣
-     a = EpicInv ∣ ϕ ∣ ϕE b
+  fepic : Epic fmap
+  fepic b = γ
+   where
+    a : ∣ 𝑨 ∣
+    a = EpicInv ∣ ϕ ∣ ϕE b
 
-     a/θ : ∣ 𝑨/θ ∣
-     a/θ = ⟦ a ⟧
+    a/θ : ∣ 𝑨/θ ∣
+    a/θ = ⟦ a ⟧
 
-     bfa : b ≡ fmap a/θ
-     bfa = (cong-app (EpicInvIsRightInv gfe ∣ ϕ ∣ ϕE) b)⁻¹
+    bfa : b ≡ fmap a/θ
+    bfa = (cong-app (EpicInvIsRightInv gfe ∣ ϕ ∣ ϕE) b)⁻¹
 
-     γ : Image fmap ∋ b
-     γ = Image_∋_.eq b a/θ bfa
+    γ : Image fmap ∋ b
+    γ = Image_∋_.eq b a/θ bfa
 
 
-   commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πker 𝑨 {𝑩} ϕ ∣
-   commuting = 𝓇ℯ𝒻𝓁
+  commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πker 𝑨 {𝑩} ϕ ∣
+  commuting = 𝓇ℯ𝒻𝓁
 
-   fmon : Monic fmap
-   fmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) faa' = γ
-    where
-     γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
-     γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
+  fmon : Monic fmap
+  fmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) faa' = γ
+   where
+    γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
+    γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
 
-   femb : is-embedding fmap
-   femb = monic-into-set-is-embedding Bset fmap fmon
+  femb : is-embedding fmap
+  femb = monic-into-set-is-embedding Bset fmap fmon
 
 \end{code}
 
@@ -104,9 +104,8 @@ FirstHomomorphismTheorem : {𝓤 𝓦 : Universe}
  →                            propext 𝓦 → is-set ∣ 𝑩 ∣
  →                            (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} h ⟩ a x))
  →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} h ⟩} C))
-           ---------------------------------------------------------------------------
- →         Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
-             (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑨 {𝑩} h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+    ---------------------------------------------------------------------------------------------
+ →  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑨 {𝑩} h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
 
 FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
@@ -140,21 +139,21 @@ FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕ
 
 \end{code}
 
---------------------------------------------------------------
+
 
 #### <a id="homomorphism-composition">Homomorphism composition</a>
 
-The composition of homomorphisms is again a homomorphism.
+The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
 
 \begin{code}
 
-module _ {𝓠 𝓤 𝓦 : Universe} where
+module _ {𝓧 𝓨 𝓩 : Universe} where
 
- -- composition of homomorphisms 1
- HCompClosed : (𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑪 : Algebra 𝓦 𝑆)
+
+ HCompClosed : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
   →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
                --------------------
-  →                 hom 𝑨 𝑪
+  →            hom 𝑨 𝑪
 
  HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
    where
@@ -164,41 +163,40 @@ module _ {𝓠 𝓤 𝓦 : Universe} where
              h (FB f (g ∘ a)) ≡⟨ hhom f ( g ∘ a ) ⟩
              FC f (h ∘ g ∘ a) ∎
 
- -- composition of homomorphisms 2
- HomComp : (𝑨 : Algebra 𝓠 𝑆){𝑩 : Algebra 𝓤 𝑆}(𝑪 : Algebra 𝓦 𝑆)
-  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
-               --------------------
-  →                 hom 𝑨 𝑪
+
+ HomComp : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →        hom 𝑨 𝑩  →  hom 𝑩 𝑪
+           --------------------
+  →        hom 𝑨 𝑪
+
  HomComp 𝑨 {𝑩} 𝑪 f g = HCompClosed 𝑨 𝑩 𝑪 f g
 
- -- composition of homomorphisms 3
-∘-hom : {𝓧 𝓨 𝓩 : Universe}
-        (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
- →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
-       --------------------------------------------------------------------
- →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
 
-∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
+ ∘-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →      is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
+         ----------------------------------------------
+  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
 
--- composition of homomorphisms 4
-∘-Hom : {𝓧 𝓨 𝓩 : Universe}
-        (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-        {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
- →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
-       --------------------------------------------------------------------
- →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
-
-∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
+ ∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
 
 
-trans-hom : {𝓧 𝓨 𝓩 : Universe}
-        (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-        (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
- →      is-homomorphism{𝓧}{𝓨} 𝑨 𝑩 f  →  is-homomorphism{𝓨}{𝓩} 𝑩 𝑪 g
-       --------------------------------------------------------------------
- →          is-homomorphism{𝓧}{𝓩} 𝑨 𝑪 (g ∘ f)
-trans-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 f g = ∘-hom {𝓧}{𝓨}{𝓩} 𝑨 𝑩 𝑪 {f}{g}
+ ∘-Hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →      is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
+         ------------------------------------------------
+  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
+
+ ∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
+
+
+ trans-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+             (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
+  →          is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
+             ------------------------------------------------
+  →          is-homomorphism 𝑨 𝑪 (g ∘ f)
+
+ trans-hom 𝑨 𝑩 𝑪 f g = ∘-hom 𝑨 𝑩 𝑪 {f}{g}
 
 \end{code}
 
@@ -316,9 +314,6 @@ HomFactor gfe 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
   βϕγ : ∣ β ∣ ≡ ϕ ∘ ∣ γ ∣
   βϕγ = gfe λ x → Kγβ (ξ x)
 
-  ζ : (f : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ f → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ f) → 𝒄 x ≡ (∣ γ ∣ ∘ γInv)(𝒄 x)
-  ζ f 𝒄 x = (cong-app (EpicInvIsRightInv gfe ∣ γ ∣ γE) (𝒄 x))⁻¹
-
   ι : (f : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ f → ∣ 𝑪 ∣) → (λ x → 𝒄 x) ≡ (λ x → ∣ γ ∣ (γInv (𝒄 x)))
   ι f 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv gfe ∣ γ ∣ γE)⁻¹
 
@@ -327,11 +322,11 @@ HomFactor gfe 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
 
   ϕIsHomCB : ∀ f 𝒄 → ϕ ((f ̂ 𝑪) 𝒄) ≡ ((f ̂ 𝑩)(ϕ ∘ 𝒄))
   ϕIsHomCB f 𝒄 =
-   ∣ β ∣ (γInv ((f ̂ 𝑪) 𝒄))              ≡⟨ i   ⟩
+   ∣ β ∣ (γInv ((f ̂ 𝑪) 𝒄))                   ≡⟨ i   ⟩
    ∣ β ∣ (γInv ((f ̂ 𝑪)(∣ γ ∣ ∘ (γInv ∘ 𝒄)))) ≡⟨ ii  ⟩
    ∣ β ∣ (γInv (∣ γ ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))))   ≡⟨ iii ⟩
-   ∣ β ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))              ≡⟨ iv  ⟩
-   ((f ̂ 𝑩)(λ x → ∣ β ∣ (γInv (𝒄 x))))    ∎
+   ∣ β ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))                  ≡⟨ iv  ⟩
+   ((f ̂ 𝑩)(λ x → ∣ β ∣ (γInv (𝒄 x))))        ∎
    where
     i   = ap (∣ β ∣ ∘ γInv) (ap (f ̂ 𝑪) (ι f 𝒄))
     ii  = ap (λ - → ∣ β ∣ (γInv -)) (∥ γ ∥ f (γInv ∘ 𝒄))⁻¹

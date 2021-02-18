@@ -74,7 +74,7 @@ For example, we could use such a type to prove that the equalizer of two homomor
                     {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
                     (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 
-𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-is-closed fe {𝑨}{𝑩} g h {𝑓} 𝒂 x
+𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed {𝑨 = 𝑨}{𝑩 = 𝑩}fe g h 𝑓 𝒂 x
 
 \end{code}
 

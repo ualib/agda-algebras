@@ -28,18 +28,15 @@ For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe 𝓤, we define 
 
 \begin{code}
 
-Algebra   -- alias
- ∞-algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-∞-algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A)
-Algebra = ∞-algebra
+Algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A)
 
 \end{code}
 
-We may refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` &nbsp;&nbsp; and need not be truncated at some level; in particular, `A` need to be a set. (See the [discussion of truncation and sets](UALib.Prelude.Preliminaries.html#truncation).)
+We could refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Prelude.Preliminaries.html#truncation](UALib.Prelude.Preliminaries.html#truncation).)
 
-We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, we will only need to know that the domains of our algebras are sets in a few places in the UALib, so it seems preferable to work with general ∞-algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
-
+We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of our algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
 
 
 
@@ -130,16 +127,15 @@ module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ �
 
  open algebra
 
+ lift-alg : {𝓤 : Universe} → Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (f : ∣ 𝑆 ∣) → lift-op (∥ 𝑨 ∥ f) 𝓦)
+
  lift-alg-record-type : {𝓤 : Universe} → algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
  lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → lift-op ((op 𝑨) f) 𝓦)
 
- lift-∞-algebra lift-alg : {𝓤 : Universe} → Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
- lift-∞-algebra 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (f : ∣ 𝑆 ∣) → lift-op (∥ 𝑨 ∥ f) 𝓦)
- lift-alg = lift-∞-algebra
-
 \end{code}
 
-We use the function `lift-alg` to resolve errors that arrise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in [Prelude.Lifts][].)
+We use the function `lift-alg` to resolve errors that arise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in [Prelude.Lifts][].)
 
 
 

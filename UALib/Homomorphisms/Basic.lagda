@@ -22,14 +22,13 @@ open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
-The definition of homomorphism in the \agdaualib is an *extensional* one; that is, the homomorphism condition holds pointwise.  This will become clearer once we have the formal definitions in hand.  Generally speaking, though, we say that two functions \ab 𝑓 \ab 𝑔 \as : \ab X \as → \ab Y are extensionally equal iff they are pointwise equal, that is, for all \ab x \as : \ab X we have \ab 𝑓 \ab x \af ≡ \ab 𝑔 \ab x.
+The definition of homomorphism in the \agdaualib is an *extensional* one; that is, the homomorphism condition holds pointwise.  This will become clearer once we have the formal definitions in hand.  Generally speaking, though, we say that two functions 𝑓 𝑔 : X → Y are extensionally equal iff they are pointwise equal, that is, for all x : X we have 𝑓 x ≡ 𝑔 x.
 
-To define **homomorphism**, we first say what it means for an operation \ab 𝑓, interpreted in the algebras \ab 𝑨 and \ab 𝑩, to commute with a function \ab 𝑔 \as : \ab A \as → \ab B.
+To define **homomorphism**, we first say what it means for an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩, to commute with a function 𝑔 : ∣ 𝑨 ∣ → ∣ 𝑩 ∣, from the domain of 𝑨 to the domain of 𝑩.
 
 \begin{code}
 
-compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)
-                    (𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑓 : ∣ 𝑆 ∣)(g : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
 
 compatible-op-map 𝑨 𝑩 𝑓 g = ∀ 𝒂 → g ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (g ∘ 𝒂)
 
@@ -43,8 +42,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from 𝑨 to 𝑩 by fir
 
 module _ {𝓤 𝓦 : Universe} where
 
- is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-  →                (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
 
  hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
@@ -56,15 +54,13 @@ Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimor
 
 \begin{code}
 
- is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-  →               (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
 
  mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  mon 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-monomorphism 𝑨 𝑩 g
 
- is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-  →               (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Epic g
 
  epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
@@ -85,7 +81,6 @@ Finally, it will be convenient to have functions that return the "hom reduct" of
 \end{code}
 
 
----------------------------------------------
 
 #### <a id="examples">Examples</a>
 
@@ -97,11 +92,12 @@ A simple example is the identity map, which is proved to be a homomorphism as fo
 𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
 id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
-id-is-hom = λ _ _ → refl _
+id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
 
 \end{code}
 
-------------------------------------------------------------------
+
+
 
 #### <a id="equalizers-in-agda">Equalizers in Agda</a>
 
@@ -109,13 +105,13 @@ Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is
 
 \begin{code}
 
---Equalizers of functions
-𝑬 : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}(g h : A → B) → Pred A 𝓦
-𝑬 g h x = g x ≡ h x
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
 
---Equalizers of homomorphisms
-𝑬𝑯 : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}(g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓦
-𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+ 𝑬 : (g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝑬 g h x = g x ≡ h x
+
+ 𝑬𝑯 : (g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝑬𝑯 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
 
 \end{code}
 
@@ -123,18 +119,16 @@ We will define subuniverses in the [UALib.Subalgebras.Subuniverses] module, but 
 
 \begin{code}
 
-𝑬𝑯-is-closed : {𝓤 𝓦 : Universe} → funext 𝓥 𝓦
-  →             {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
-                (g h : hom 𝑨 𝑩) {𝑓 : ∣ 𝑆 ∣ } (𝒂 : (∥ 𝑆 ∥ 𝑓) → ∣ 𝑨 ∣)
-  →             ( (x : ∥ 𝑆 ∥ 𝑓) → (𝒂 x) ∈ (𝑬𝑯 {𝑨 = 𝑨}{𝑩 = 𝑩} g h) )
-               ---------------------------------------------------
-  →              ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
+ 𝑬𝑯-closed : funext 𝓥 𝓦 →
+             (g h : hom 𝑨 𝑩) (𝑓 : ∣ 𝑆 ∣) (𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)
+   →         ( ∀ x → (𝒂 x) ∈ 𝑬𝑯 g h )
+             ---------------------------------
+   →         ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
-𝑬𝑯-is-closed fe {𝑨}{𝑩} g h {𝑓} 𝒂 p =
-                   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (_ ̂ 𝑩)(fe p) ⟩
-                   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
-                   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
+ 𝑬𝑯-closed fe g h 𝑓 𝒂 p = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+                          (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
+                          (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+                          ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
 
 \end{code}
 

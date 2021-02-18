@@ -22,6 +22,7 @@ open import UALib.Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
+
 #### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
 We begin with what seems to be (for our purposes at least) the most useful way to represent, in Martin-Löf type theory, the class of **homomomrphic images** of an algebra.
@@ -36,6 +37,9 @@ HomImagesOf {𝓤}{𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣
                                                   is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 \end{code}
+
+
+
 
 #### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
 
@@ -59,18 +63,22 @@ all-ops-in_and_commute-with : {𝓤 𝓦 : Universe}
  →                            (∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
+
 \end{code}
+
+
 
 #### <a id="lifting-tools">Lifting tools</a>
 
 \begin{code}
+
 open Lift
 
 lift-function : (𝓧 : Universe){𝓨 : Universe}
                 (𝓩 : Universe){𝓦 : Universe}
                 (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
-                -----------------------------------
- →               Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
+                ---------------------------------
+ →              Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
 
 lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (lower la))
 
@@ -79,7 +87,7 @@ lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
                            (𝓩 : Universe){𝓦 : Universe}
                            (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
                            (f : hom 𝑨 𝑩)  →  Epic ∣ f ∣
-                          ---------------------------------------
+                           ------------------------------------
  →                         Epic ∣ lift-alg-hom 𝓧 𝓩{𝓦} 𝑨 𝑩 f ∣
 
 lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
@@ -107,21 +115,20 @@ lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
     η : y ≡ ∣ lf ∣ (lift a)
     η = y                                       ≡⟨ (intensionality lift∼lower) y ⟩
         lift b                                  ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
-        lift (∣ f ∣ a)                           ≡⟨ (ap (λ - → lift (∣ f ∣ ( - a)))) (lower∼lift{𝓦 = 𝓦}) ⟩
-        lift (∣ f ∣ ((lower{𝓦 = 𝓦} ∘ lift) a)) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-        ∣ lf ∣ (lift a)                          ∎
+        lift (∣ f ∣ a)                          ≡⟨ (ap (λ - → lift (∣ f ∣ ( - a)))) (lower∼lift{𝓦 = 𝓦}) ⟩
+        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a)  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+        ∣ lf ∣ (lift a)                         ∎
     ξ : Image ∣ lf ∣ ∋ y
     ξ = eq y (lift a) η
 
 
 lift-alg-hom-image : {𝓧 𝓨 𝓩 𝓦 : Universe}
                      {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
- →                    𝑩 is-hom-image-of 𝑨
-                  ----------------------------------------------------
+ →                   𝑩 is-hom-image-of 𝑨
+                     -----------------------------------------------
  →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
 
-lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) = γ
+lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) = lCϕ , lC≅lB
  where
   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
   lA = lift-alg 𝑨 𝓩
@@ -141,8 +148,6 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
   lC≅lB : lC ≅ lB
   lC≅lB = lift-alg-iso 𝓨 𝓦 𝑪 𝑩 C≅B
 
-  γ : lB is-hom-image-of lA
-  γ = lCϕ , lC≅lB
 \end{code}
 
 --------------------------------------

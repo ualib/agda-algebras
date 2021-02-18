@@ -85,16 +85,13 @@ More details about the 𝓤ω type are available at [agda.readthedocs.io](https:
 
 \begin{code}
 
-extensionality-lemma : ∀ {𝓘 𝓤 𝓥 𝓣} →
-                       {I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
-                       (p q : (i : I) → (X → A i) → 𝓣 ̇ )
-                       (args : X → (Π A))
+extensionality-lemma : {𝓘 𝓤 𝓥 𝓣 : Universe}{I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
+                       (p q : (i : I) → (X → A i) → 𝓣 ̇ )(args : X → (Π A))
  →                     p ≡ q
-   -------------------------------------------------------------
- → (λ i → (p i)(λ x → args x i)) ≡ (λ i → (q i)(λ x → args x i))
+                       -------------------------------------------------------------
+ →                     (λ i → (p i)(λ x → args x i)) ≡ (λ i → (q i)(λ x → args x i))
 
-extensionality-lemma p q args p≡q =
- ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
+extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
 
 \end{code}
 
@@ -106,89 +103,33 @@ extensionality-lemma p q args p≡q =
 This is the opposite of function extensionality and is defined as follows.
 
 \begin{code}
+
 intens -- alias
  intensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
  →                f ≡ g  →  (x : A)
-                  ------------------
- →                    f x ≡ g x
+                  -----------------
+ →                f x ≡ g x
 
-intensionality  (refl _ ) _  = refl _
+intensionality 𝓇ℯ𝒻𝓁 _  = 𝓇ℯ𝒻𝓁
 intens = intensionality
+
 \end{code}
 
 Of course, the intensionality principle has an analogue for dependent function types.
 
 \begin{code}
 
-dep-intensionality   -- alias (we sometimes give multiple names to the same function like this)
- dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : (x : A) → B x}
+dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : (x : A) → B x}
  →                f ≡ g  →  (x : A)
                   ------------------
- →                    f x ≡ g x
+ →                f x ≡ g x
 
-dintensionality  (refl _ ) _  = refl _
-dep-intensionality = dintensionality
-
-\end{code}
-
-
-
-
-#### <a id="some-tools-for-powersets">Some tools for powersets</a>
-
-Powersets are defined in [Type Topology][] as predicates on sets.  Although this seems convenient and useful, we are not currently using powersets in the [Agda UALib][].  (We did use powersets in an earlier version, which is why the collection of tools in this section exists.)
-
-\begin{code}
-
-record Σω {X : 𝓤ω} (Y : X → 𝓤ω ) : 𝓤ω  where
-  constructor
-   _⸲_  -- notation: type \,3 for ⸲
-  field
-   π₁ : X
-   π₂ : Y π₁
-
-infixr 50 _⸲_
-
--Σω : (X : 𝓤ω) (Y : X → 𝓤ω ) → 𝓤ω
--Σω X Y = Σω Y
-
-syntax -Σω X (λ x → y) = Σω x ꞉ X ⸲ y
-
-_⨉_ : 𝓤ω → 𝓤ω → 𝓤ω
-X ⨉ Y = Σω x ꞉ X ⸲ Y
-
-KER-𝓟 : {𝓤 𝓦 : Universe}{A : 𝓤 ̇} {B : 𝓦 ̇} → is-set B → (f : A → B) → A → A → Ω 𝓦
-KER-𝓟 Bset f x y = (f x ≡ f y) , Bset (f x) (f y)
+dintensionality 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
-This says `(f x) ≡ (f y)` and `is-singleton (f x) ≡ (f y)`.
 
 
-\begin{code}
-
-ker-𝓟 : {𝓤 : Universe}{A B : 𝓤 ̇} → is-set B → (f : A → B) → A → 𝓟 A
-ker-𝓟 {𝓤} = KER-𝓟 {𝓤}{𝓤}
-
-module _ {𝓤 : Universe} where
-
- cong-app-𝓟 : ∀ { A : 𝓤 ̇ } { B C : 𝓟 A} (x : A)
-  →             x ∈₀ B   →   B ≡ C
-               -------------------------
-  →                    x ∈₀ C
-
- cong-app-𝓟 {A}{B}{C} x Bx B≡C = B⊆C x Bx
-  where
-   B⊆C : B ⊆₀ C
-   B⊆C = fst (⊆-refl-consequence B C B≡C)
-
- cong-𝓟 : {A : 𝓤 ̇ } {B : 𝓟 A} (x y : A)
-  →            x ∈₀ B   →   x ≡ y
-             -------------------------
-  →                   y ∈₀ B
- cong-𝓟 {A}{B} x y Bx xy  = transport (λ - → B - holds) xy Bx
-
-\end{code}
 
 -------------------------------------
 
