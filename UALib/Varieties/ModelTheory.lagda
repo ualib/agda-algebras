@@ -31,7 +31,7 @@ open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe}{𝕏} public
 
 \end{code}
 
----------------------------------------
+
 
 #### <a id="the-models-relation">The models relation</a>
 
@@ -53,7 +53,8 @@ _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 #### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
 The expression `𝑨 ⊧ 𝑝 ≈ 𝑞` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
 
--------------------------------------------
+
+
 
 #### <a id="equational-theories-and-classes">Equational theories and models</a>
 

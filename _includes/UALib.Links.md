@@ -217,6 +217,7 @@
 [UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda
 [UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda
 [UALib.Algebras.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda
+[UALib.Algebras.Congruences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Congruences.lagda
 
 [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
 [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
@@ -224,7 +225,6 @@
 [UALib.Relations.Binary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Binary.lagda
 [UALib.Relations.Equivalences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Equivalences.lagda
 [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda
-[UALib.Relations.Congruences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Congruences.lagda
 
 [UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
 [UALib.Homomorphisms.Kernels module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda

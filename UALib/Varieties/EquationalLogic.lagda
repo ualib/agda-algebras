@@ -34,7 +34,8 @@ open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc)
 
 \end{code}
 
--------------------------------------
+
+
 
 #### <a id="algebraic-invariance">Algebraic invariance</a>
 
@@ -61,7 +62,9 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡ q ̇ 𝑩 holds *extensionally*, that is, `∀ x, (p ̇ 𝑩) x ≡ (q ̇ 𝑩) x`.
 
---------------------------------------
+
+
+
 
 #### <a id="Lift-invariance">Lift-invariance</a>
 
@@ -71,7 +74,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 ⊧-lift-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
                         (𝑨 : Algebra 𝓤 𝑆)(p q : Term{𝓧}{X})
-                        -----------------------------------
+                        ------------------------------------
  →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
 ⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
@@ -86,7 +89,9 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 \end{code}
 
----------------------------------------------
+
+
+
 
 #### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
 
@@ -111,37 +116,39 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
 
 \end{code}
 
-
 Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
 
 ⊧-S-class-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term)
-                 (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
-                 ----------------------------
- →               𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
+                       (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
+ →                     𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
-⊧-S-class-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq = gfe λ b →
-                                                              (embeddings-are-lc ∣ h ∣ hem)(ξ b)
- where
-  h' : hom ∣ SA ∣ 𝑨
-  h' = ∣ snd SA ∣
+⊧-S-class-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq =
 
-  h : hom 𝑩 𝑨
-  h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
+ gfe λ b → (embeddings-are-lc ∣ h ∣ hem)(ξ b)
 
-  hem : is-embedding ∣ h ∣
-  hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
+  where
+   h' : hom ∣ SA ∣ 𝑨
+   h' = ∣ snd SA ∣
 
-  ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
-        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq ka) (∣ h ∣ ∘ b) ⟩
-        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
-        ∣ h ∣((q ̇ 𝑩) b)   ∎
+   h : hom 𝑩 𝑨
+   h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
+
+   hem : is-embedding ∣ h ∣
+   hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
+
+   ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
+   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq ka) (∣ h ∣ ∘ b) ⟩
+         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+         ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
 
-------------------------------------------------------------
+
+
+
 
 #### <a id="product-invariance">Product invariance</a>
 
@@ -149,21 +156,6 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
 
 \begin{code}
 
--- ⊧-P-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
---                  (I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
---                  -------------------------------------
---  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
-
--- ⊧-P-invariance p q I 𝒜 𝒜pq = γ
---  where
---   γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
---   γ = gfe λ a →
---    (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod gfe p 𝒜 a ⟩
---    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
---    (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
---    (q ̇ ⨅ 𝒜) a                           ∎
-
--- !!REVISED DEFINITION!! Now `I` can have type 𝓦, which may be distinct from the type of `𝒜 i`.
 ⊧-P-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
                  (I : 𝓦 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
                  -------------------------------------
@@ -182,7 +174,7 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
 ⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
                        (p q : Term{𝓧}{X})(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
  →                     (∀ i → 𝒜 i ∈ 𝒦)
-                       -------------------------
+                       --------------------------
  →                     𝒦 ⊧ p ≋ q  →  ⨅ 𝒜 ⊧ p ≈ q
 
 ⊧-P-class-invariance p q I 𝒜 K𝒜 α = γ
@@ -212,7 +204,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 \end{code}
 
 
---------------------------------------------
+
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance</a>
 
@@ -243,9 +235,8 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 -- ⇒ (the "only if" direction)
 ⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
- →                     𝒦 ⊧ p ≋ q
- →                     (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
-                       ----------------------------------------
+ →                     𝒦 ⊧ p ≋ q  →  (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
+                       -------------------------------------------------
  →                     𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X)
 
 ⊧-H-class-invariance X p q α 𝑨 φ ka = gfe ξ
@@ -261,7 +252,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 ⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
  →                       ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                             →  𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
-                         ---------------------------------------
+                         ---------------------------------------------------
  →                       𝒦 ⊧ p ≋ q
 
 ⊧-H-class-coinvariance X p q β {𝑨} ka = γ

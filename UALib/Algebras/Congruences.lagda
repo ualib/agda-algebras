@@ -86,10 +86,11 @@ An important construction in universal algebra is the quotient of an algebra �
 
 \begin{code}
 
-_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆) -- type ╱ with `\---` plus `C-f`
- →      Congruence{𝓤}{𝓡} A               -- a number of times, then `\_p`
-       -----------------------
- →     Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
+_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆) -- type ╱ with \--- plus C-f a number of times
+ →    Congruence{𝓤}{𝓡} A
+      --------------------
+ →    Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
+
 A ╱ θ = (( ∣ A ∣ / ⟨ θ ⟩ ) , -- carrier (i.e. domain or universe))
           (λ f args         -- operations
            → ([ (f ̂ A) (λ i₁ → ∣ ∥ args i₁ ∥ ∣) ] ⟨ θ ⟩) ,
