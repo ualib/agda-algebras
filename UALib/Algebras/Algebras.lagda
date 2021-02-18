@@ -153,13 +153,15 @@ The following definitions and lemmas are useful for asserting and proving facts 
 module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
  compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
- -- alternative notation: (lift-rel R) =[ f ̂ 𝑨 ]⇒ R
 
  --The given relation is compatible with all ops of an algebra.
  compatible :(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  compatible  𝑨 R = ∀ f → compatible-op{𝑨} f R
 
 \end{code}
+
+
+--------------------------------------
 
 [← UALib.Algebras.Signatures](UALib.Algebras.Signatures.html)
 <span style="float:right;">[UALib.Algebras.Products →](UALib.Algebras.Products.html)</span>

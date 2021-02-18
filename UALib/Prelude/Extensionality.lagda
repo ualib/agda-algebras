@@ -5,16 +5,6 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-<!--
-FILE: Extensionality.lagda
-AUTHOR: William DeMeo
-DATE: 30 Jun 2020
-UPDATED: 12 Jan 2021
-REF: Parts of this file are based on the HoTT/UF course notes by Martin Hötzel Escardo (MHE).
-SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
-     Below, MHE = Martin Hötzel Escardo.
--->
-
 
 ### <a id="extensionality">Extensionality</a>
 
@@ -31,7 +21,8 @@ open import UALib.Prelude.Preliminaries using (_∼_; 𝓤ω; Π; Ω; 𝓟; ⊆-
 
 \end{code}
 
--------------------------------------------
+
+
 
 #### <a id="function-extensionality">Function extensionality</a>
 
@@ -61,7 +52,9 @@ infix 0 _∼_
 
 In fact, if one assumes the [univalence axiom], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).
 
-----------------------------------
+
+
+
 
 #### <a id="dependent-function-extensionality">Dependent function extensionality</a>
 
@@ -105,7 +98,8 @@ extensionality-lemma p q args p≡q =
 
 \end{code}
 
-------------------------------------------
+
+
 
 #### <a id="function-intensionality">Function intensionality</a>
 
@@ -135,16 +129,10 @@ dep-intensionality   -- alias (we sometimes give multiple names to the same func
 dintensionality  (refl _ ) _  = refl _
 dep-intensionality = dintensionality
 
--- dep-intensionality : ∀ {𝓤 𝓦}{A : 𝓤 ̇ }{B : A → 𝓦 ̇ }
---                      {f g : ∀(x : A) → B x}
---  →                   f ≡ g  →  (x : A)
---                     ------------------
---  →                    f x ≡ g x
-
--- dep-intensionality (refl _ ) _ = refl _
 \end{code}
 
----------------------------------------
+
+
 
 #### <a id="some-tools-for-powersets">Some tools for powersets</a>
 

@@ -5,6 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
+
 ### <a id="product-algebra-types">Product Algebra Types</a>
 
 This section presents the [UALib.Algebras.Products][] module of the [Agda Universal Algebra Library][].
@@ -49,6 +50,7 @@ open algebra
 \end{code}
 
 
+
 #### <a id="notation">Notation</a>
 
 Before we define the type of congruences, we define some syntactic sugar that will be used from now on throughout the [UALib][]. The type `Algebra 𝓤 𝑆` itself has a type; it is `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`. This type appears so often in the UALib that we will define the following shorthand for its universe level. 
@@ -62,7 +64,6 @@ ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 We can now write, e.g., `Algebra 𝓤 𝑆 : ov 𝓤 ̇` in place of the laborious `Algebra 𝓤 𝑆 : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`.
 
-\end{code}
 
 
 #### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
@@ -118,6 +119,6 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the pa
 -----------------------
 
 [← UALib.Algebras.Algebras](UALib.Algebras.Algebras.html)
-<span style="float:right;">[UALib.Algebras.Lifts →](UALib.Algebras.Lifts.html)</span>
+<span style="float:right;">[UALib.Algebras.Congruences →](UALib.Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}

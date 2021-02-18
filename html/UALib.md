@@ -135,8 +135,8 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Equation Preservation Theorems](UALib.Varieties.Preservation.html)
 
 - [Birkhoff's Theorem](UALib.Birkhoff.html)
-  - [The Relatively Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
-  - [HSP Theorem](UALib.Birkhoff.Theorem.html)
+  - [The Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
+  - [HSP Theorem](UALib.Birkhoff.HSPTheorem.html)
 
 ---------------------------------------
 

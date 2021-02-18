@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section describes the [UALib.Prelude.Equality][] module of the [Agda Universal Algebra Library][].
 
------------------------
+
 
 #### <a id="refl">refl</a>
 
@@ -36,8 +36,8 @@ We being the [UALib.Prelude.Equality][] module by formalizing the obvious proof 
 
 module UALib.Prelude.Equality where
 
-open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl; Σ; -Σ; _×_; _,_;
- is-subsingleton; is-prop; ∣_∣; ∥_∥; 𝟙; pr₁; pr₂; ap) public
+open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl;
+ Σ; -Σ; _×_; _,_; pr₁; pr₂; ∣_∣; ∥_∥; fst; snd; is-subsingleton; is-prop; 𝟙; ap) public
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x
@@ -56,7 +56,8 @@ module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
 The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.
 
-------------------------------
+
+
 
 #### <a id="functions-preserve-refl">Functions preserve refl</a>
 
@@ -92,7 +93,8 @@ cong-app (refl _) a = refl _
 
 \end{code}
 
------------------------------------
+
+
 
 #### <a id="≡-intro-and-≡-elim-for-nondependent-pairs">≡-intro and ≡-elim for nondependent pairs</a>
 

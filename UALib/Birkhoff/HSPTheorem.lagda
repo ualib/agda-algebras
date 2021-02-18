@@ -103,6 +103,8 @@ lift-alg-V-closure = VlA -- (alias)
 
 \end{code}
 
+
+
 #### <a id="sp-in-v">SP(𝒦) ⊆ V(𝒦)</a>
 
 In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.  This proof also suffers from the unfortunate defect of being boring.
@@ -158,7 +160,9 @@ SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (lift-alg-V-closure vA) lA≅B
 
 \end{code}
 
-#### <a id="F-in-classproduct">𝔉 ≤  ⨅ S(𝒦)</a>
+
+
+#### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
 Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
 We begin by constructing ℭ, using the class-product types described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
@@ -196,9 +200,6 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 ΨTC : hom (𝑻 X) ℭ
 ΨTC = ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i))
 
-ker-incl-lem : {p q : ∣ 𝑻 X ∣} → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣)
- →             (p , q) ∈ ψ 𝒦
-ker-incl-lem hyp 𝑨 sA h = hyp (𝑨 , (sA , h))
 
 𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
 𝔽 = (𝑻 X) [ ℭ ]/ker ΨTC
@@ -209,39 +210,40 @@ ker-incl-lem hyp 𝑨 sA h = hyp (𝑨 , (sA , h))
 Ψ : hom (𝑻 X) 𝔽
 Ψ = epi-to-hom 𝔽 Ψe
 
-
-ker-incl-lem' : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣
- →             (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣)
-ker-incl-lem' p q hyp i =
- ∣ T𝔄 i ∣ p ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- (∣ ΨTC ∣ p) i ≡⟨ γ ⟩
- (∣ ΨTC ∣ q) i ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
- ∣ T𝔄 i ∣ q    ∎
-  where
-   H₀ : ∣ Ψ ∣ p ≡ ∣ Ψ ∣ q
-   H₀ = hyp
-   ξ : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
-   ξ = ker-in-con (𝑻 X) (kercon (𝑻 X) {ℭ} ΨTC) p q H₀
-   γ : ∣ ΨTC ∣ p i ≡ ∣ ΨTC ∣ q i
-   γ = ap (λ - → - i) ξ
-
-
 ΨE : Epic ∣ Ψ ∣
 ΨE = snd ∥ Ψe ∥
+
+\end{code}
+
+
+
+\begin{code}
+
+kernel-lemma1 : {p q : ∣ 𝑻 X ∣} → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣) → (p , q) ∈ ψ 𝒦
+kernel-lemma1 hyp 𝑨 sA h = hyp (𝑨 , (sA , h))
+
+
+kernel-lemma2 : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣)
+kernel-lemma2 p q hyp i = γ
+ where
+  H₀ : ∣ Ψ ∣ p ≡ ∣ Ψ ∣ q
+  H₀ = hyp
+  ξ : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
+  ξ = ker-in-con (𝑻 X) (kercon (𝑻 X) {ℭ} ΨTC) p q H₀
+  γ : ∣ ΨTC ∣ p i ≡ ∣ ΨTC ∣ q i
+  γ = ap (λ - → - i) ξ
+
+
+kernel-lemma3 : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → KER-pred ∣ Ψ ∣ ⊆ KER-pred (free-lift 𝑨 h)
+kernel-lemma3 {𝑨}{h} skA {p , q} x = (kernel-lemma1 {p}{q} (kernel-lemma2 p q x)) 𝑨 skA h
 
 X↪𝔽 : X → ∣ 𝔽 ∣
 X↪𝔽 x = ⟦ ℊ x ⟧
 
 
-KER-incl' : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → KER-pred ∣ Ψ ∣ ⊆ KER-pred (free-lift 𝑨 h)
-KER-incl' {𝑨}{h} skA {p , q} x = (ker-incl-lem {p}{q} (ker-incl-lem' p q x)) 𝑨 skA h
-
-
---KER-incl {𝑨}{h} skA {p , q} {!!} -- (ker-incl-lemma x)
-
-
 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-𝔽-lift-hom 𝑨 skA h = fst (HomFactor gfe (𝑻 X) {𝑨}{𝔽} (lift-hom 𝑨 h) Ψ ΨE (KER-incl' {𝑨}{h} skA))
+𝔽-lift-hom 𝑨 skA h = fst(HomFactor gfe (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (kernel-lemma3 {𝑨}{h} skA))
+
 
 Ψ-is-lift-hom : ∀ p → ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ Ψ ∣ p
 Ψ-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
@@ -277,33 +279,38 @@ KER-incl' {𝑨}{h} skA {p , q} x = (ker-incl-lem {p}{q} (ker-incl-lem' p q x)) 
         ∣ f ∣ ( ∣ g ∣ q ) ≡⟨ h≡ϕ q ⟩
         ∣ ϕ ∣ q ∎
 
+
 ψlemma2 : KER-pred ∣ Ψ ∣ ⊆ ψ 𝒦
 ψlemma2 {p , q} hyp = ψlemma1 p q γ
   where
    γ : ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ lift-hom 𝔽 X↪𝔽 ∣ q
    γ = (Ψ-is-lift-hom p) ∙ hyp ∙ (Ψ-is-lift-hom q)⁻¹
 
+
 ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
 ψlemma3 p q pψq {𝑨} kA = γ
  where
-  skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+  skA : 𝑨 ∈ S 𝒦
   skA = siso (sbase kA) (sym-≅ lift-alg-≅)
 
   γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-  γ = gfe λ h → (p ̇ 𝑨) h ≡⟨ free-lift-interp 𝑨 h p ⟩
+  γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp 𝑨 h p ⟩
                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp 𝑨 h q)⁻¹  ⟩
-                (q ̇ 𝑨) h ∎
+                (q ̇ 𝑨) h         ∎
+
 
 class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝒦 ⊧ p ≋ q
 class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
+
 kernel-in-theory : KER-pred ∣ Ψ ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
+
 \end{code}
 
-Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔉.
+Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.
 
 \begin{code}
 
@@ -358,7 +365,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
 
 \end{code}
 
-#### 𝔉 ∈ V(𝒦)
+#### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
 
 Now, with this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦---it is not hard to show that 𝔉 belongs to SP(𝒦), and hence to V 𝒦. (Recall, if 𝒦 denotes a class of 𝑆-algebras, then the variety generated 𝒦 is `V 𝒦`, which is equivalent to HSP 𝒦.)
 
@@ -370,22 +377,36 @@ Now, with this result in hand, along with what we proved earlier---namely, PS(�
  𝔽∈𝕍 : 𝔽 ∈ V 𝒦
  𝔽∈𝕍 = SP⊆V' 𝔽∈SP
 
- birkhoff : Mod X (Th (V 𝒦)) ⊆ (V 𝒦)
+\end{code}
+
+#### <a id="the-hsp-theorem"> The HSP Theorem</a>
+
+Now that we have all of the necessary ingredients, it is all but trivial to combine them to prove Birkhoff's HSP theorem.
+
+\begin{code}
+
+ birkhoff : Mod X (Th (V 𝒦)) ⊆ V 𝒦
 
  birkhoff {𝑨} α = γ
   where
-   ϕ : epi 𝔽 𝑨
-   ϕ = 𝔽-ModTh-epi 𝑨 α
-
-   AiF : 𝑨 is-hom-image-of 𝔽
-   AiF = (𝑨 , ϕ ) , refl-≅
-
    γ : 𝑨 ∈ (V 𝒦)
-   γ = vhimg 𝔽∈𝕍 AiF
+   γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 α ) , refl-≅)
 
 \end{code}
 
-Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>) is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Equation Preservation](UALib.Varieties.Preservation.html) module. Indeed, there we proved the following identity preservation lemmas:
+The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the fact that `Mod Th` is a closure operator. Nonetheless, completeness demands that we formalize this inclusion as well, however trivial the proof.
+
+\begin{code}
+
+ birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod X (Th (V 𝒦))
+
+ birkhoff' {𝑨} α p q pThq = pThq α
+
+\end{code}
+
+
+
+Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>)---that every variety is an equational class---is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Varieties.Preservation][] module. Indeed, there we proved the following identity preservation lemmas:
 
 * [(H-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
 * [(S-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q

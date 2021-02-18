@@ -63,7 +63,9 @@ Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
 
 \end{code}
 
--------------------------------------
+
+
+
 
 #### <a id="surjective-functions">Surjective functions</a>
 
@@ -102,7 +104,9 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
 
 \end{code}
 
-----------------------------------
+
+
+
 
 #### <a id="injective-functions">Injective functions</a>
 
@@ -143,7 +147,9 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 \end{code}
 
------------------------------------------
+
+
+
 
 #### <a id="composition-laws">Composition laws</a>
 
@@ -167,7 +173,9 @@ module _ {𝓧 𝓨 𝓩 : Universe} {fe : funext 𝓨 𝓨} where
 
 \end{code}
 
----------------------------------------
+
+
+
 
 #### <a id="neutral-elements">Neutral elements</a>
 
@@ -269,6 +277,7 @@ embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
   fb = x' , (fxfx' ⁻¹)
 
 \end{code}
+
 
 -------------------------------------
 

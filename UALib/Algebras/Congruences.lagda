@@ -39,6 +39,8 @@ open Congruence
 
 \end{code}
 
+
+
 #### <a id="example">Example</a>
 
 We defined the zero relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> in the <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">Examples</a> section of the [UALib.Relations.Binary][] module.  We now demonstrate how one constructs the trivial congruence out of this relation.
@@ -79,6 +81,9 @@ Finally, we have the ingredients need to construct the zero congruence.
 Δ fe A = mkcon 𝟎-rel ( 𝟎-compatible fe ) ( 𝟎-IsEquivalence )
 
 \end{code}
+
+
+
 
 #### <a id="quotient-algebras">Quotient algebras</a>
 

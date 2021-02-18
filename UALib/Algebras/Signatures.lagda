@@ -23,7 +23,7 @@ open import UALib.Prelude.Preliminaries using (𝓞; 𝓥; 𝟘; 𝟚) public
 
 \end{code}
 
------------------------------------
+
 
 #### <a id="operation-type">Operation type</a>
 
@@ -72,7 +72,7 @@ For reference, we recall the definition of the Sigma type, `Σ`, which is
 -Σ X Y = Σ Y
 ```
 
-------------------------------------
+
 
 #### <a id="Example">Example</a>
 

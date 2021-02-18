@@ -23,8 +23,6 @@ This section describes the [UALib.Prelude.Preliminaries][] module of the [Agda U
   * MHE = [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe/)
   * MLTT = [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory)
 
----------------------------------
-
 #### <a id="options">Options</a>
 
 All Agda programs begin by setting some options and by importing from existing libraries (in our case, the [Agda Standard Library][] and the [Type Topology][] library by MHE). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
@@ -53,7 +51,9 @@ Note that if we wish to type-check a file that imports another file that still h
 
 but this is never done in publicly released versions of the UALib.
 
----------------------------------
+
+
+
 
 #### <a id="modules">Modules</a>
 
@@ -88,7 +88,9 @@ a-function-outside-the-submodule a = a
 
 Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. In the UAlib, however, we tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
 
-----------------------------------
+
+
+
 
 #### <a id="imports-from-type-topology">Imports from Type Topology</a>
 
@@ -106,9 +108,8 @@ pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 
-open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎;
-  pr₁; pr₂; -Σ; 𝕁; Π; ¬; _×_; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_;
-  lr-implication; rl-implication; id; _⁻¹; ap) public
+open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; _×_; -Σ; Π;
+  ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
 
 open import MGS-Equivalences using (is-equiv; inverse; invertible) public
 
@@ -134,7 +135,9 @@ open import MGS-Subsingleton-Truncation using (_∙_; to-Σ-≡; equivs-are-embe
 
 Notice that we carefully specify which definitions and results we want to import from each of Escardo's modules.  This is not absolutely necessary, and we could have simply used, e.g., `open import MGS-MLTT public`, omitting `using (_∘_; domain; ...; ap)`.  However, being specific here has advantages.  Besides helping us avoid naming conflicts, it makes explicit which components of the type theory we are using.
 
--------------------------
+
+
+
 
 #### <a id="agda-universes">Special notation for Agda universes</a>
 
@@ -173,15 +176,50 @@ To justify the introduction of this somewhat nonstandard notation for universe l
 
 There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
 
---------------------
+
+
+
 
 #### <a id="dependent-pair-type">Dependent pair type</a>
 
-Our preferred notations for the first and second projections of a product are `∣_∣` and `∥_∥`, respectively; however, we will sometimes use more standard alternatives, such as `pr₁` and `pr₂`, or `fst` and `snd`, for emphasis, readability, or compatibility with other libraries.
+The **Sigma type** `Σ(x : A) , B x`, also known as the **dependent pair type**, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair to depend on the value `x` of the first.  Escardó defines this type in a stardard way (cf. the [Agda Standard Library][]) as a record type.
+
+
+```agda
+record Σ {𝓤 𝓥} {X : 𝓤 ̇ } (Y : X → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
+ constructor _,_
+ field
+  pr₁ : X
+  pr₂ : Y pr₁
+
+infixr 50 _,_
+```
+
+For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`).  Escardó makes this preferred notation available in his [TypeTopology][] library by making the index type explicit, as follows.
+
+```agda
+-Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+-Σ X Y = Σ Y
+
+syntax -Σ X (λ x → Y) = Σ x ꞉ X , Y
+```
+
+**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
+
+A special case of the Sigma type is the one in which the type `Y` doesn't depend on `X`. This is the usual Cartesian product, defined in Agda as follows.
+
+```agda
+_×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+X × Y = Σ x ꞉ X , Y
+```
+
+
+The definition of Σ (and thus, of ×) above comes equipped with first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, we will alternate between these and other standard alternatives, such as , or `fst` and `snd`, for emphasis or readability.  We define these alternative notations for projections out of pairs as follows.
 
 \begin{code}
 
 module _ {𝓤 : Universe} where
+
   ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
   ∣ x , y ∣ = x
   fst (x , y) = x
@@ -192,64 +230,29 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-For the dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`). The preferred notation is made available by making the index type explicit.
 
-```agda
-infixr -1 -Σ
--Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--Σ X Y = Σ Y
-syntax -Σ X (λ x → y) = Σ x ꞉ X , y -- type `꞉` as `\:4`
-```
 
-<div class="admonition warning">
-
-The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
-
-</div>
-
-MHE explains Sigma induction as follows: "To prove that `A z` holds for all `z : Σ Y`, for a given property `A`, we just prove that we have `A (x , y)` for all `x : X` and `y : Y x`. This is called `Σ` induction or `Σ` elimination (or `uncurry`).
-
-```
-Σ-induction : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
- →            ((x : X)(y : Y x) → A (x , y))
-              -------------------------------
- →            ((x , y) : Σ Y) → A (x , y)
-Σ-induction g (x , y) = g x y
-
-curry : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ }{A : Σ Y → 𝓦 ̇ }
- →      (((x , y) : Σ Y ) → A (x , y))
-       ---------------------------------
- →      ((x : X) (y : Y x) → A (x , y))
-curry f x y = f (x , y)
-```
-
-The special case in which the type `Y` doesn't depend on `X` is the usual Cartesian product.
-
-```agda
-infixr 30 _×_
-_×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
-X × Y = Σ x ꞉ X , Y
-```
-
-------------------
 
 #### <a id="dependent-function-type">Dependent function type</a>
 
 To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), MHE uses the same trick as the one used above for *Sigma types*.
 
-\begin{code}
+```agda
 
-Π' : {𝓤 𝓦 : Universe}{X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
-Π' {𝓤} {𝓦} {X} A = (x : X) → A x
+Π : {𝓤 𝓦 : Universe}{X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+Π {𝓤} {𝓦} {X} A = (x : X) → A x
 
--Π' : {𝓤 𝓦 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
--Π' X Y = Π' Y
-infixr -1 -Π'
-syntax -Π' A (λ x → b) = Π' x ꞉ A , b
+-Π : {𝓤 𝓦 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+-Π X Y = Π Y
 
-\end{code}
+infixr -1 -Π
+syntax -Π A (λ x → b) = Π x ꞉ A , b
+```
 
----------------------------------------------------
+
+**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Π x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
+
+
 
 #### <a id="truncation">Truncation</a>
 
