@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
-We show how to represent in Agda subuniverses of a given algebra or a given collection of algebras.
+We start by defining a type that represents the important concept of **subuniverse**. Suppose 𝑨 is an algebra.  A subset B ⊆ ∣ 𝑨 ∣ is said to be **closed under the operations of** 𝑨 if for each 𝑓 ∈ ∣ 𝑆 ∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs to B. If a subset B ⊆ 𝐴 is closed under the operations of 𝑨, then we call B a **subuniverse** of 𝑨.
 
 \begin{code}
 
@@ -22,6 +22,11 @@ module UALib.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-
 
 open import UALib.Terms.Compatibility{𝑆 = 𝑆}{gfe} public
 
+\end{code}
+
+We first show how to represent in [Agda][] the collection of subuniverses of an algebra A.  Since a subuniverse is viewed as a subset of the domain of A, we define it as a predicate on ∣ A ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ A ∣.
+
+\begin{code}
 
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
 Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
@@ -44,7 +49,7 @@ SubunivAlg 𝑨 B B∈SubA = Σ B , λ f x → (f ̂ 𝑨)(∣_∣ ∘ x) , B∈
 
 \end{code}
 
------------------------------------------
+
 
 #### <a id="subuniverses-as-records">Subuniverses as records</a>
 

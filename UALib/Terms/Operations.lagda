@@ -22,13 +22,13 @@ open import UALib.Terms.Basic{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
-When we interpret a term in an algebra we call the resulting function a **term operation**.  Given a term `𝑝 : Term` and an algebra 𝑨, we denote by `𝑝 ̇ 𝑨` the **interpretation** of 𝑝 in 𝑨.  This is defined inductively as follows:
+When we interpret a term in an algebra we call the resulting function a **term operation**.  Given a term `𝑝 : Term` and an algebra 𝑨, we denote by `𝑝 ̇ 𝑨` the **interpretation** of 𝑝 in 𝑨.  This is defined inductively as follows.
 
-1. if 𝑝 is `x : X` (a variable) and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then define `(𝑝 ̇ 𝑨) 𝒂 = 𝒂 x`;
-2. if 𝑝 = 𝑓 𝒔, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol and `𝒔 : ∥ 𝑆 ∥ f → 𝑻 X` is an (`∥ 𝑆 ∥ f`)-tuple of terms and
-    `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = ((𝑓 𝒔) ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → ((𝒔 i) ̇ 𝑨) 𝒂``
+1. If 𝑝 is `x : X` (a variable symbol) and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then define `(𝑝 ̇ 𝑨) 𝒂 = 𝒂 x`.
 
-In the [Agda UALib][] term interpretation is defined as follows.
+2. If 𝑝 = 𝑓 𝒔, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝒔 : ∥ 𝑆 ∥ f → 𝑻 X` is a tuple of terms, and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = ((𝑓 𝒔) ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → ((𝒔 i) ̇ 𝑨) 𝒂``
+
+Thus the interpretation of a term is defined in the [UALib][] as follows.
 
 \begin{code}
 
@@ -125,23 +125,6 @@ term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
 \begin{code}
--- interp-prod : {𝓧 𝓤 : Universe} → funext 𝓥 𝓤
---  →            {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇}
---               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
---               --------------------------------------------------------
---  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
-
--- interp-prod _ (generator x₁) 𝒜 x = 𝓇ℯ𝒻𝓁
-
--- interp-prod fe (node f t) 𝒜 x =
---  let IH = λ x₁ → interp-prod fe (t x₁) 𝒜 x in
---   (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)                             ≡⟨ ap (f ̂ ⨅ 𝒜)(fe IH) ⟩
---   (f ̂ ⨅ 𝒜)(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁)(λ j₁ → x j₁ i₁)))     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
---   (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))   ∎
-
--- \end{code}
-
-
 
 interp-prod : {𝓧 𝓤 𝓦 : Universe} → funext 𝓥 (𝓤 ⊔ 𝓦)
  →            {X : 𝓧 ̇}(p : Term X){I : 𝓦 ̇}

@@ -34,17 +34,15 @@ Let 𝐹₀ denote the set of nullary operation symbols of 𝑆. We define by in
 
 𝑇₀ := X ∪ 𝐹₀;
 
-𝑇ₙ₊₁ := 𝑇ₙ ∪ { 𝑓 s |  𝑓 : ∣ 𝑆 ∣ ,  s : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ },
+𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ
 
-and we define the collection of **terms in the signature** 𝑆 **over** X by 𝑇 X := ⋃<sub>{n < ω}</sub>𝑇ₙ.
+where 𝒯ₙ is the collection of all `𝑓 s` such that `𝑓 : ∣ 𝑆 ∣` and `s : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. We define the collection of **terms in the signature** 𝑆 **over** X by 𝑇 X := ⋃<sub>{n < ω}</sub>𝑇ₙ. By an 𝑆-**term** we mean a term in the signature 𝑆 over some collection of variable symbols.
 
-By an 𝑆-**term** we mean a term in the signature 𝑆 over some collection of variable symbols.
-
-The definition of 𝑇 X is recursive, indicating that the semantic notion of terms could be implemented in type theory as an inductive type. We confirm this by defining the following inductive type of terms.
+The definition of 𝑇 X is recursive, indicating that the semantic notion of terms could be represented in type theory by an inductive type. Indeed, such a representation is given by the following inductive type.
 
 \begin{code}
 
-data Term {𝓧 : Universe}(X : 𝓧 ̇) : ov 𝓧 ̇  where
+data Term {𝓧 : Universe}(X : 𝓧 ̇ ) : ov 𝓧 ̇  where
   generator : X → Term X
   node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X) → Term X
 
@@ -52,11 +50,11 @@ open Term
 
 \end{code}
 
-Here, the type `X : 𝓧 ̇` represents an arbitrary collection of variable symbols.
+Here, the type `X : 𝓧 ̇` &nbsp; represents an arbitrary collection of variable symbols.
 
 #### <a id="the-term-algebra">The term algebra</a>
 
-For a given signature 𝑆, if the type `Term X` is nonempty (equivalently, X or 𝑆 is nonempty; i.e., there exist inhabitants x : X or s : 𝑆), then we can define an algebraic structure, denoted 𝑻 X, called the **term algebra in the signature** 𝑆 **over** X.  Terms are viewed as acting on other terms, so the domain and the basic operations are the terms themselves.
+For a given signature 𝑆, if the type `Term X` is nonempty (equivalently, if X or 𝑆 is nonempty; i.e., if there exist inhabitants x : X or s : 𝑆), then we can define an algebraic structure, denoted 𝑻 X, called the **term algebra in the signature** 𝑆 **over** X.  Terms are viewed as acting on other terms, so both the domain and the collection of basic operations are the terms themselves.
 
 * For each operation symbol 𝑓 : ∣ 𝑆 ∣, denote by 𝑓 ̂ (𝑻 X) the operation on `Term X` which maps each tuple 𝒔 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 X ∣ to the formal term 𝑓 𝒔.
 
@@ -67,7 +65,7 @@ In [Agda][] the term algebra can be defined as simply as one would hope.
 \begin{code}
 
 --The term algebra 𝑻 X.
-𝑻 : {𝓧 : Universe}(X : 𝓧 ̇) → Algebra (ov 𝓧) 𝑆
+𝑻 : {𝓧 : Universe}(X : 𝓧 ̇ ) → Algebra (ov 𝓧) 𝑆
 𝑻 X = Term X , node
 
 \end{code}
@@ -81,28 +79,32 @@ The term algebra 𝑻 X is *absolutely free*, or *universal*, for algebras in th
 1.  every map `h : 𝑋 → ∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to 𝑨, and
 2.  the induced homomorphism is unique.
 
-We prove this in [Agda][] as follows.
+We now prove this in [Agda][], starting with the fact that every map from X to ∣ 𝑨 ∣ lifts to a map from ∣ 𝑻 X ∣ to ∣ 𝑨 ∣.
 
 \begin{code}
-
---1.a. Every map from X to ∣ 𝑨 ∣ lifts to a map from ∣ 𝑻 X ∣ to ∣ 𝑨 ∣.
 
 free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 
 free-lift _ h (generator x) = h x
 free-lift 𝑨 h (node f args) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (args i)
 
+\end{code}
 
---1.b. The lift is a homomorphism.
+Next, we verify that the lift is a homomorphism.
+
+\begin{code}
 
 lift-hom : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 
 lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
+\end{code}
 
---2. The resulting homomorphism is unique.
-free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} → funext 𝓥 𝓤
- →            (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
+Finally, we prove that the resulting homomorphism is unique.
+
+\begin{code}
+
+free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} → funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
  →            (t : Term X)
               ---------------
@@ -148,7 +150,7 @@ module _ {𝓧 𝓤 : Universe}{X : 𝓧 ̇} where
 \end{code}
 
 
-(The `𝑻img` and `mkti` functions of the [UALib.Varieties.FreeAlgebra][] show how to construct such epimorphisms using the 𝕏, lift-hom, and lift-of-epi-is-epi functions.)
+The `𝑻img` and `mkti` functions of the [UALib.Varieties.FreeAlgebra][] module show how to construct such epimorphisms using the 𝕏, lift-hom, and lift-of-epi-is-epi functions.
 
 
 

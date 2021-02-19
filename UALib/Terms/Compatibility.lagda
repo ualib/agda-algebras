@@ -9,8 +9,6 @@ author: William DeMeo
 
 This section presents the [UALib.Terms.Compatibility][] module of the [Agda Universal Algebra Library][].
 
-In this module, we prove that every term commutes with every homomorphism and is compatible with every congruence.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -24,11 +22,11 @@ open import UALib.Terms.Operations{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
-----------------------------------------------------------
+
 
 #### <a id="homomorphism compatibility">Homomorphism compatibility</a>
 
-We first prove an extensional version of this fact.
+Here we prove that every term commutes with every homomorphism.
 
 \begin{code}
 
@@ -78,7 +76,7 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
 
 #### <a id="congruence-compatibility">Congruence compatibility</a>
 
-If `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`. The statement and proof of this fact may be formalized in Agda as follows.
+Next we prove that every term is compatible with every congruence. That is, if `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`.
 
 \begin{code}
 
