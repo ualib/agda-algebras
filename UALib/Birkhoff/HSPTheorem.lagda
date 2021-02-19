@@ -13,6 +13,16 @@ We begin the proof of Birkhoff's HSP theorem by establishing a number of facts t
 
 (Unlike in previous modules, we fix 𝓤, X, and 𝒦 at the start of the HSPTheorem module.)
 
+To prove Birkhoff's theorem, we will prove that every algebra 𝑨 ∈ Mod X (Th (V 𝒦)) that models all equations in Th (V 𝒦) belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  To do this, we need an algebra 𝔽 with the following properties:
+
+1. 𝔽 ∈ V 𝒦 and
+
+2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
+
+In the initial version of the [Agda UALib][], we used the free algebra 𝔉, developed in the [UALib.Birkhoff.FreeAlgebra][] module, as the 𝔽 with properties 1 and 2 above.  However, we found a more direct path to the proof by using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
+
+Recall, `⨅-hom-co` was defined in the [UALib.Homomorphisms.Products][] module.  It takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is "natural" in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is simply the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -159,7 +169,7 @@ SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA vA) lA≅B
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra 𝔉 embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
 We begin by constructing ℭ, using the class-product types described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
@@ -195,9 +205,22 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 ΨTC : hom (𝑻 X) ℭ
 ΨTC = ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i))
 
+\end{code}
+
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra 𝔉, developed in the [UALib.Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra 𝔽, which we now define.
+
+\begin{code}
 
 𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
 𝔽 = (𝑻 X) [ ℭ ]/ker ΨTC
+
+\end{code}
+
+It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [UALib.Birkhoff.FreeAlgebra][] module.
+
+We now prove some basic lemmas about T𝔄, 𝔽, and their kernels that we need to complete the proof of Birkhoff's theorem.
+
+\begin{code}
 
 Ψe : epi (𝑻 X) 𝔽
 Ψe = πker (𝑻 X) {ℭ} ΨTC
