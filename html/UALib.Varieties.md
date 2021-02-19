@@ -19,16 +19,15 @@ Because a class of structures has a different type than a single structure, we m
 
 <a id="1287" class="Keyword">module</a> <a id="1294" href="UALib.Varieties.html" class="Module">UALib.Varieties</a> <a id="1310" class="Keyword">where</a>
 
-<a id="1317" class="Keyword">open</a> <a id="1322" class="Keyword">import</a> <a id="1329" href="UALib.Varieties.ModelTheory.html" class="Module">UALib.Varieties.ModelTheory</a>
-<a id="1357" class="Keyword">open</a> <a id="1362" class="Keyword">import</a> <a id="1369" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
-<a id="1401" class="Keyword">open</a> <a id="1406" class="Keyword">import</a> <a id="1413" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
-<a id="1439" class="Keyword">open</a> <a id="1444" class="Keyword">import</a> <a id="1451" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
+<a id="1317" class="Keyword">open</a> <a id="1322" class="Keyword">import</a> <a id="1329" href="UALib.Varieties.EquationalLogic.html" class="Module">UALib.Varieties.EquationalLogic</a>
+<a id="1361" class="Keyword">open</a> <a id="1366" class="Keyword">import</a> <a id="1373" href="UALib.Varieties.Varieties.html" class="Module">UALib.Varieties.Varieties</a>
+<a id="1399" class="Keyword">open</a> <a id="1404" class="Keyword">import</a> <a id="1411" href="UALib.Varieties.Preservation.html" class="Module">UALib.Varieties.Preservation</a>
 
 </pre>
 
 --------------------------------------
 
 [← UALib.Subalgebras](UALib.Subalgebras.html)
-<span style="float:right;">[UALib.Varieties.ModelTheory →](UALib.Varieties.ModelTheory.html)</span>
+<span style="float:right;">[UALib.Varieties.EquationalLogic →](UALib.Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}

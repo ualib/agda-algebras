@@ -31,6 +31,7 @@ The source code for this module comprises the (literate) [Agda][] program that w
 <a id="962" class="Keyword">open</a> <a id="967" class="Keyword">import</a> <a id="974" href="UALib.Prelude.Equality.html" class="Module">UALib.Prelude.Equality</a> <a id="997" class="Keyword">public</a>
 <a id="1004" class="Keyword">open</a> <a id="1009" class="Keyword">import</a> <a id="1016" href="UALib.Prelude.Inverses.html" class="Module">UALib.Prelude.Inverses</a> <a id="1039" class="Keyword">public</a>
 <a id="1046" class="Keyword">open</a> <a id="1051" class="Keyword">import</a> <a id="1058" href="UALib.Prelude.Extensionality.html" class="Module">UALib.Prelude.Extensionality</a> <a id="1087" class="Keyword">public</a>
+<a id="1094" class="Keyword">open</a> <a id="1099" class="Keyword">import</a> <a id="1106" href="UALib.Prelude.Lifts.html" class="Module">UALib.Prelude.Lifts</a> <a id="1126" class="Keyword">public</a>
 
 </pre>
 

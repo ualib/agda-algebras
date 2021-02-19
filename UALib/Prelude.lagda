@@ -31,6 +31,7 @@ open import UALib.Prelude.Preliminaries public
 open import UALib.Prelude.Equality public
 open import UALib.Prelude.Inverses public
 open import UALib.Prelude.Extensionality public
+open import UALib.Prelude.Lifts public
 
 \end{code}
 

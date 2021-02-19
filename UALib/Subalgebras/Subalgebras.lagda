@@ -255,7 +255,7 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
 
 ---------------------------------
 
-[← UALib.Subalgebras.Homomorphisms](UALib.Subalgebras.Homomorphisms.html)
+[← UALib.Subalgebras.Generation](UALib.Subalgebras.Generation.html)
 <span style="float:right;">[UALib.Subalgebras.WWMD →](UALib.Subalgebras.WWMD.html)</span>
 
 {% include UALib.Links.md %}

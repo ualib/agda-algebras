@@ -19,10 +19,8 @@ This chapter presents the [UALib.Subalgebras][]  module of the [Agda Universal A
 
 <a id="402" class="Keyword">open</a> <a id="407" class="Keyword">import</a> <a id="414" href="UALib.Subalgebras.Subuniverses.html" class="Module">UALib.Subalgebras.Subuniverses</a>
 <a id="445" class="Keyword">open</a> <a id="450" class="Keyword">import</a> <a id="457" href="UALib.Subalgebras.Generation.html" class="Module">UALib.Subalgebras.Generation</a>
-<a id="486" class="Keyword">open</a> <a id="491" class="Keyword">import</a> <a id="498" href="UALib.Subalgebras.Properties.html" class="Module">UALib.Subalgebras.Properties</a>
-<a id="527" class="Keyword">open</a> <a id="532" class="Keyword">import</a> <a id="539" href="UALib.Subalgebras.Homomorphisms.html" class="Module">UALib.Subalgebras.Homomorphisms</a>
-<a id="571" class="Keyword">open</a> <a id="576" class="Keyword">import</a> <a id="583" href="UALib.Subalgebras.Subalgebras.html" class="Module">UALib.Subalgebras.Subalgebras</a> <a id="613" class="Keyword">public</a>
-<a id="620" class="Keyword">open</a> <a id="625" class="Keyword">import</a> <a id="632" href="UALib.Subalgebras.WWMD.html" class="Module">UALib.Subalgebras.WWMD</a>
+<a id="486" class="Keyword">open</a> <a id="491" class="Keyword">import</a> <a id="498" href="UALib.Subalgebras.Subalgebras.html" class="Module">UALib.Subalgebras.Subalgebras</a> <a id="528" class="Keyword">public</a>
+<a id="535" class="Keyword">open</a> <a id="540" class="Keyword">import</a> <a id="547" href="UALib.Subalgebras.WWMD.html" class="Module">UALib.Subalgebras.WWMD</a>
 
 </pre>
 
