@@ -35,12 +35,9 @@ This section presents the [UALib.Birkhoff.FreeAlgebra][] module of the [Agda Uni
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Birkhoff.FreeAlgebra
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module UALib.Birkhoff.FreeAlgebra {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.Preservation {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Varieties.Preservation {𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -69,12 +66,12 @@ One could define the collection `𝑻img` of all homomorphic images of the term 
 
 The inhabitants of this Sigma type represent algebras 𝑨 ∈ 𝒦 such that there exists a surjective homomorphism ϕ : hom (𝑻 X) 𝑨. Thus, 𝑻img represents the collection of all homomorphic images of 𝑻 X that belong to 𝒦.  Of course, this is the entire class 𝒦, since the term algebra is absolutely free. Nonetheless, this representation of 𝒦 is useful since it endows each element with extra information.  Indeed, each inhabitant of 𝑻img 𝒦 is a quadruple, (𝑨 , ϕ , ka, p), where 𝑨 is an 𝑆-algebra, ϕ is a homomorphism from 𝑻 X to 𝑨, ka is a proof that 𝑨 belongs to 𝒦, and p is a proof that the underlying map ∣ ϕ ∣ is epic.
 
-The next function, `mkti`, that takes an arbitrary algebra 𝑨 in 𝒦 and returns the corresponding quadruple in `𝑻img 𝒦`.
+The next function, `mkti`, that takes an arbitrary algebra 𝑨 in 𝒦 and a mapping X → ∣ 𝑨 ∣ and returns the corresponding quadruple in `𝑻img 𝒦`.
 
 \begin{code}
 
- mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
- mkti 𝑨 ka = (𝑨 , lift-hom 𝑨 ∣ 𝕏 𝑨 ∣ , ka , lift-of-epi-is-epi 𝑨 ∣ 𝕏 𝑨 ∣ ∥ 𝕏 𝑨 ∥)
+ mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → Epic h → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
+ mkti 𝑨 h hE ka = (𝑨 , lift-hom 𝑨 h , ka , lift-of-epi-is-epi 𝑨 h hE)
 
 \end{code}
 

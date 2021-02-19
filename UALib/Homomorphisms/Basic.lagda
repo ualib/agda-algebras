@@ -82,6 +82,8 @@ Finally, it will be convenient to have functions that return the "hom reduct" of
 
 
 
+
+
 #### <a id="examples">Examples</a>
 
 A simple example is the identity map, which is proved to be a homomorphism as follows.

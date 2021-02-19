@@ -13,19 +13,15 @@ The [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Libr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
+open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Subalgebras.Subalgebras
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module UALib.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Homomorphisms {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Subalgebras.Generation {𝑆 = 𝑆}{gfe} public
 open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding)
 
 \end{code}
-
 
 
 #### <a id="subalgebra-type">Subalgebra type</a>

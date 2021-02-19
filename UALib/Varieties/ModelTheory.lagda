@@ -22,12 +22,9 @@ Agda supports the definition of infix operations and relations, and we use this 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Varieties.ModelTheory
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module UALib.Varieties.ModelTheory {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -39,12 +36,12 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
 \begin{code}
 
-_⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term{𝓧}{X} → Term → 𝓤 ⊔ 𝓧 ̇
+_⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term X → Term X → 𝓤 ⊔ 𝓧 ̇
 
 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 
-_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term{𝓧}{X} → Term → 𝓧 ⊔ ov 𝓤 ̇
+_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → 𝓧 ⊔ ov 𝓤 ̇
 
 _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
@@ -62,7 +59,7 @@ Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `T
 
 \begin{code}
 
-Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term{𝓧}{X} × Term)(𝓧 ⊔ ov 𝓤)
+Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
 
 Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
@@ -72,7 +69,7 @@ If ℰ denotes a set of identities, then the class of algebras satisfying all id
 
 \begin{code}
 
-Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred(Term{𝓧}{X} × Term)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
+Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
 
 Mod X ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 

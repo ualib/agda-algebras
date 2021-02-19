@@ -7,9 +7,8 @@ author: William DeMeo
 
 ### <a id="Equation preservation">Equation preservation</a>
 
-This section presents the [UALib.Varieties.Preservation][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
-In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
 \begin{code}
 
@@ -18,23 +17,22 @@ In this module we show that identities are preserved by closure operators H, S, 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Varieties.Preservation
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module UALib.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
 
+
 #### <a id="h-preserves-identities">H preserves identities</a>
+
+First we prove that the closure operator H is compatible with identities that hold in the given class.
 
 \begin{code}
 
---H preserves identities
 H-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X})
+        (p q : Term X)
         --------------------------------
  →      𝒦 ⊧ p ≋ q  →  H{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
@@ -71,13 +69,13 @@ H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x
 
 \end{code}
 
-The converse is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
+The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
 
 \begin{code}
 
 H-id2 : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term{𝓧}{X})
-        -------------------------------------------------
+        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term X)
+        --------------------------------------------------
  →      H{𝓤}{𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
 H-id2 {𝓤}{𝓦} 𝒦 p q Hpq {𝑨} KA = γ
@@ -101,7 +99,7 @@ H-id2 {𝓤}{𝓦} 𝒦 p q Hpq {𝑨} KA = γ
 \begin{code}
 
 S-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term{𝓧}{X})
+        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term X)
         -------------------------------------------------
  →      𝒦 ⊧ p ≋ q  →  S{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
@@ -142,7 +140,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 \begin{code}
 
 S-id2 : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term{𝓧}{X})
+        (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))(p q : Term X)
         ------------------------------------------------
  →      S{𝓤}{𝓦} 𝒦 ⊧ p ≋ q  →  𝒦 ⊧ p ≋ q
 
@@ -167,7 +165,7 @@ S-id2 {𝓤}{𝓦} 𝒦 p q Spq {𝑨} KA = γ
 \begin{code}
 
 P-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X})
+        (p q : Term X)
         ---------------------------------
  →      𝒦 ⊧ p ≋ q  →  P{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
@@ -213,7 +211,7 @@ P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q ζ x₁
 \begin{code}
 
 P-id2 : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X})
+        (p q : Term X)
         ---------------------------------
  →      P{𝓤}{𝓦} 𝒦 ⊧ p ≋ q  →  𝒦 ⊧ p ≋ q
 
@@ -227,7 +225,7 @@ P-id2  p q PKpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (PKpq (pbase KA))
 \begin{code}
 
 V-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X})
+        (p q : Term X)
         ---------------------------------
  →      𝒦 ⊧ p ≋ q  →  V{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
@@ -307,7 +305,7 @@ V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α V
 
 
 V-id1' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X})
+        (p q : Term X)
         ---------------------------------
  →      𝒦 ⊧ p ≋ q  →  V{𝓤}{(ov 𝓤)⁺} 𝒦 ⊧ p ≋ q
 
@@ -380,7 +378,7 @@ Once again, and for the last time, completeness dictates that we formalize the c
 \begin{code}
 
 V-id2 : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term{𝓧}{X}) → (V{𝓤}{𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+        (p q : Term X) → (V{𝓤}{𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
 V-id2 p q Vpq {𝑨} KA = ⊧-lower-alg-invariance 𝑨 p q (Vpq (vbase KA))
 
 \end{code}

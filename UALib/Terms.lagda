@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-## <a id="terms-and-free-algebras">Terms and Free Algebras</a>
+## <a id="terms">Terms</a>
 
 This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra Library][].
 
@@ -15,7 +15,6 @@ This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra 
 module UALib.Terms where
 
 open import UALib.Terms.Basic
-open import UALib.Terms.Free
 open import UALib.Terms.Operations
 open import UALib.Terms.Compatibility
 

@@ -19,8 +19,6 @@ module UALib.Subalgebras where
 
 open import UALib.Subalgebras.Subuniverses
 open import UALib.Subalgebras.Generation
-open import UALib.Subalgebras.Properties
-open import UALib.Subalgebras.Homomorphisms
 open import UALib.Subalgebras.Subalgebras public
 open import UALib.Subalgebras.WWMD
 

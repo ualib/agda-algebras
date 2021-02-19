@@ -9,6 +9,20 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
 
+\begin{code}
+
+{-# OPTIONS --without-K --exact-split --safe #-}
+
+open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
+open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+
+module UALib.Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+
+open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe} public
+
+\end{code}
+
+
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 * H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
@@ -21,23 +35,8 @@ An algebra is a homomorphic image (resp., subalgebra; resp., product) of every a
 
 A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
-\begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
-
-module UALib.Varieties.Varieties
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
-
-open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe}{𝕏} public
-
-\end{code}
-
------------------------------------
 
 #### <a id="homomorphic-closure">Homomorphic closure</a>
 
@@ -55,7 +54,7 @@ data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
 
 \end{code}
 
---------------------------------
+
 
 #### <a id="subalgebraic-closure">Subalgebraic closure</a>
 
@@ -74,7 +73,7 @@ data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)) :
 
 \end{code}
 
------------------------------------------
+
 
 #### <a id="product-closure">Product closure</a>
 
@@ -93,9 +92,7 @@ data P {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) : Pred (
 
 \end{code}
 
-<!-- A class 𝒦 is **closed under** `P` (or `P`-**closed**) provided `P 𝒦 ⊆ 𝒦`. -->
 
------------------------------------------------
 
 #### <a id="varietal-closure">Varietal closure</a>
 
@@ -136,7 +133,6 @@ variety 𝓤 = Σ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) , is-variety 𝒱
 
 
 
--------------------------------
 
 #### <a id="closure-properties">Closure properties</a>
 
@@ -380,6 +376,8 @@ lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤
 
 \end{code}
 
+
+
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
 
 Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
@@ -422,6 +420,8 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfun
 
 \end{code}
 
+
+
 #### <a id="more-class-inclusions">More class inclusions</a>
 
 We conclude this module with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
@@ -449,6 +449,7 @@ SP⊆V (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 \end{code}
+
 
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>

@@ -31,7 +31,7 @@ module UALib.Birkhoff.HSPTheorem
     {pe' : propext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
     {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
-open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe}{𝕏} hiding (Pred; _⊔_; _⁺; propext; hfunext) public
+open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; propext; hfunext) public
 open the-free-algebra {𝓤}{𝓤}{X}
 
 \end{code}
@@ -44,11 +44,10 @@ The first hurdle is the `lift-alg-V-closure` lemma, which says that if an algebr
 \begin{code}
 
 open Lift
-lift-alg-V-closure -- (alias)
- VlA : {𝑨 : Algebra 𝓸𝓿𝓾 𝑆}
-  →    𝑨 ∈ V{𝓤}{𝓸𝓿𝓾} 𝒦
-       -------------------------------
-  →    lift-alg 𝑨 𝓸𝓿𝓾+ ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
+VlA : {𝑨 : Algebra 𝓸𝓿𝓾 𝑆}
+ →     𝑨 ∈ V{𝓤}{𝓸𝓿𝓾} 𝒦
+       ---------------------------------
+ →     lift-alg 𝑨 𝓸𝓿𝓾+ ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
 
 VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
 VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
@@ -99,8 +98,6 @@ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
 VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
 VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
 
-lift-alg-V-closure = VlA -- (alias)
-
 \end{code}
 
 
@@ -120,7 +117,7 @@ SP⊆V' (sbase{𝑨} x) = γ
   llA = lift-alg (lift-alg 𝑨 𝓸𝓿𝓾) 𝓸𝓿𝓾+
 
   vllA : llA ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
-  vllA = lift-alg-V-closure (SP⊆V (sbase x))
+  vllA = VlA (SP⊆V (sbase x))
 
   llA≅lA+ : llA ≅ lA+
   llA≅lA+ = sym-≅ (lift-alg-associative 𝑨)
@@ -128,8 +125,7 @@ SP⊆V' (sbase{𝑨} x) = γ
   γ : lA+ ∈ (V{𝓤}{𝓸𝓿𝓾+} 𝒦)
   γ = visow vllA llA≅lA+
 
-SP⊆V' (slift{𝑨} x) = lift-alg-V-closure (SP⊆V x)
- -- ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
+SP⊆V' (slift{𝑨} x) = VlA (SP⊆V x)
 
 SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw vlA B≤lA
  where
@@ -137,14 +133,14 @@ SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw vlA B≤lA
   lA = lift-alg 𝑨 𝓸𝓿𝓾+
 
   vlA : lA ∈ V{𝓤}{𝓸𝓿𝓾+} 𝒦
-  vlA = lift-alg-V-closure (SP⊆V spA)
+  vlA = VlA (SP⊆V spA)
 
   B≤lA : 𝑩 ≤ lA
   B≤lA = (lift-alg-lower-≤-lift {𝓸𝓿𝓾+}{𝓸𝓿𝓾}{𝓸𝓿𝓾+} 𝑩 {𝑨}) B≤A
 
 SP⊆V' (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V' spA) B≤A
 
-SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (lift-alg-V-closure vA) lA≅B
+SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA vA) lA≅B
  where
   lA : Algebra 𝓸𝓿𝓾+ 𝑆
   lA = lift-alg 𝑨 𝓸𝓿𝓾+
@@ -170,7 +166,6 @@ We begin by constructing ℭ, using the class-product types described in the sec
 \begin{code}
 
 open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
--- open class-product {𝓤 = 𝓤}{𝒦 = 𝒦}
 
 -- NOTATION.
 ℑs : 𝓸𝓿𝓾 ̇
@@ -213,11 +208,6 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 ΨE : Epic ∣ Ψ ∣
 ΨE = snd ∥ Ψe ∥
 
-\end{code}
-
-
-
-\begin{code}
 
 kernel-lemma1 : {p q : ∣ 𝑻 X ∣} → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣) → (p , q) ∈ ψ 𝒦
 kernel-lemma1 hyp 𝑨 sA h = hyp (𝑨 , (sA , h))

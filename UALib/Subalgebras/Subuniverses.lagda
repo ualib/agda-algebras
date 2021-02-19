@@ -16,17 +16,11 @@ We show how to represent in Agda subuniverses of a given algebra or a given coll
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
+module UALib.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-module UALib.Subalgebras.Subuniverses
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
-
-
-open import UALib.Terms.Compatibility{𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Terms.Compatibility{𝑆 = 𝑆}{gfe} public
 
 
 Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)

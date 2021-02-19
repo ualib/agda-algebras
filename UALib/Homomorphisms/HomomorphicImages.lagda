@@ -25,7 +25,7 @@ open import UALib.Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 #### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
-We begin with what seems to be (for our purposes at least) the most useful way to represent, in Martin-Löf type theory, the class of **homomomrphic images** of an algebra.
+We begin with what seems to be (for our purposes at least) the most useful way to represent, in dependent type theory, the class of **homomomrphic images** of an algebra.
 
 \begin{code}
 
@@ -116,7 +116,7 @@ lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
     η = y                                       ≡⟨ (intensionality lift∼lower) y ⟩
         lift b                                  ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
         lift (∣ f ∣ a)                          ≡⟨ (ap (λ - → lift (∣ f ∣ ( - a)))) (lower∼lift{𝓦 = 𝓦}) ⟩
-        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a)  ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
         ∣ lf ∣ (lift a)                         ∎
     ξ : Image ∣ lf ∣ ∋ y
     ξ = eq y (lift a) η

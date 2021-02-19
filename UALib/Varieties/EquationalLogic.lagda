@@ -5,17 +5,15 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="equational-logic-types">Equational Logic Types</a>
+### <a id="model-theory-and-equational-logic-types">Model Theory and Equational Logic</a>
 
-This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
-We prove closure properties, or "invariance," of the models relation defined in [UALib.Varieties.ModelTheory][] module .  Proofs are given of the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
-* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+**Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
-
-* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
+**Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
 
 \begin{code}
 
@@ -24,27 +22,80 @@ We prove closure properties, or "invariance," of the models relation defined in 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Varieties.EquationalLogic
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module UALib.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.ModelTheory {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
 open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc) public
 
 \end{code}
 
 
+#### <a id="the-models-relation">The models relation</a>
+
+We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html).
+
+\begin{code}
+
+_⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term X → Term X → 𝓤 ⊔ 𝓧 ̇
+
+𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 
-#### <a id="algebraic-invariance">Algebraic invariance</a>
+_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → 𝓧 ⊔ ov 𝓤 ̇
+
+_⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+
+\end{code}
+
+#### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
+The expression `𝑨 ⊧ 𝑝 ≈ 𝑞` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
+
+
+
+
+#### <a id="equational-theories-and-classes">Equational theories and models</a>
+
+Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `Th 𝒦` represents the set of identities modeled by all members of 𝒦.
+
+\begin{code}
+
+Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
+
+Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+
+\end{code}
+
+If ℰ denotes a set of identities, then the class of algebras satisfying all identities in ℰ is represented by `Mod ℰ`, which we define in the following natural way.
+
+\begin{code}
+
+Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
+
+Mod X ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+
+\end{code}
+
+
+
+#### <a id="equational-logic-types">Equational Logic Types</a>
+
+Here we prove some closure and invariance properties of the models relation defined above.  Proofs are given of the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+
+* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+
+* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
+
+* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
+
+
+##### <a id="algebraic-invariance">Algebraic invariance</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
 \begin{code}
 
 ⊧-I-invariance : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
-                 (p q : Term{𝓧}{X})  →  𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+                 (p q : Term X)  →  𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
 ⊧-I-invariance {𝑨 = 𝑨}{𝑩 = 𝑩} p q Apq (f , g , f∼g , g∼f) = γ
  where
@@ -66,14 +117,14 @@ As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡
 
 
 
-#### <a id="Lift-invariance">Lift-invariance</a>
+##### <a id="Lift-invariance">Lift-invariance</a>
 
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
 \begin{code}
 
 ⊧-lift-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-                        (𝑨 : Algebra 𝓤 𝑆)(p q : Term{𝓧}{X})
+                        (𝑨 : Algebra 𝓤 𝑆)(p q : Term X)
                         ------------------------------------
  →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
@@ -81,7 +132,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 
 ⊧-lower-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
-                         (p q : Term{𝓧}{X})
+                         (p q : Term X)
                          -----------------------------------
  →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
 
@@ -93,13 +144,13 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 
 
-#### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
+##### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
 
 Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of 𝑨, which fact can be formalized as follows.
 
 \begin{code}
 
-⊧-S-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+⊧-S-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
                  (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
  →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
 
@@ -120,7 +171,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 \begin{code}
 
-⊧-S-class-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term)
+⊧-S-class-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term X)
                        (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
  →                     𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
@@ -150,15 +201,15 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 
 
-#### <a id="product-invariance">Product invariance</a>
+##### <a id="product-invariance">Product invariance</a>
 
 An identities satisfied by all algebras in a class are also satisfied by the product of algebras in that class.
 
 \begin{code}
 
-⊧-P-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+⊧-P-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
                  (I : 𝓦 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
-                 -------------------------------------
+                 --------------------------------------
  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 
 ⊧-P-invariance p q I 𝒜 𝒜pq = γ
@@ -172,7 +223,7 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
 
 
 ⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-                       (p q : Term{𝓧}{X})(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+                       (p q : Term X)(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
  →                     (∀ i → 𝒜 i ∈ 𝒦)
                        --------------------------
  →                     𝒦 ⊧ p ≋ q  →  ⨅ 𝒜 ⊧ p ≈ q
@@ -191,7 +242,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 \begin{code}
 
-⊧-P-lift-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term{𝓧}{X})
+⊧-P-lift-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
                       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
                       ----------------------------------------------------
  →                    (∀ i → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
@@ -206,15 +257,15 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 
 
-#### <a id="homomorphisc-invariance">Homomorphic invariance</a>
+##### <a id="homomorphisc-invariance">Homomorphic invariance</a>
 
 If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
 \begin{code}
 
-⊧-H-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(p q : Term{𝓧}{X})
+⊧-H-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(p q : Term X)
                  (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
-                 ----------------------------
+                 -----------------------------------
  →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
 ⊧-H-invariance X p q 𝑨 φ β =
@@ -234,7 +285,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 \begin{code}
 
 -- ⇒ (the "only if" direction)
-⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
+⊧-H-class-invariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
  →                     𝒦 ⊧ p ≋ q  →  (𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                        -------------------------------------------------
  →                     𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X)
@@ -249,7 +300,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
         ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
 
 -- ⇐ (the "if" direction)
-⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
+⊧-H-class-coinvariance : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
  →                       ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                             →  𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
                          ---------------------------------------------------
@@ -268,8 +319,8 @@ More generally, an identity is satisfied by all algebras in a class if and only 
         (q ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
 
 
-⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term)
-                    ----------------------------------------------------------------
+⊧-H-compatibility : {𝓤 𝓧 : Universe}(X : 𝓧 ̇){𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
+                    ------------------------------------------------------------------------
  →                  𝒦 ⊧ p ≋ q ⇔ ((𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                                     →   𝑨 ∈ 𝒦  →  ∣ φ ∣ ∘ (p ̇ 𝑻 X) ≡ ∣ φ ∣ ∘ (q ̇ 𝑻 X))
 
@@ -279,7 +330,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 -------------------------------------
 
-[← UALib.Varieties.ModelTheory](UALib.Varieties.ModelTheory.html)
+[↑ UALib.Varieties](UALib.Varieties.html)
 <span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>
 
 {% include UALib.Links.md %}

@@ -14,16 +14,11 @@ This section presents the [UALib.Terms.Operations][] module of the [Agda Univers
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
+module UALib.Terms.Operations {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-module UALib.Terms.Operations
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
-
-open import UALib.Terms.Free{𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Terms.Basic{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -37,7 +32,7 @@ In the [Agda UALib][] term interpretation is defined as follows.
 
 \begin{code}
 
-_̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term{𝓧}{X} → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+_̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term X → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 ((generator x) ̇ 𝑨) 𝒂 = 𝒂 x
 ((node f args) ̇ 𝑨) 𝒂 = (f ̂ 𝑨) λ i → (args i ̇ 𝑨) 𝒂
 
@@ -48,7 +43,7 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 \begin{code}
 
 free-lift-interp : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
-                   (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term)
+                   (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
  →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
 
 free-lift-interp 𝑨 h (generator x) = 𝓇ℯ𝒻𝓁
@@ -82,17 +77,17 @@ Let h : hom 𝑻 𝑨. Then by comm-hom-term, ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p
 We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣ such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact as follows.
 
 \begin{code}
-term-op-interp1 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term)
+term-op-interp1 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X)
  →                node f args ≡ (f ̂ 𝑻 X) args
 
 term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
-term-op-interp2 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term{𝓧}{X}}
+term-op-interp2 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X}
  →                a1 ≡ a2  →  node f a1 ≡ node f a2
 
 term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
 
-term-op-interp3 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term}
+term-op-interp3 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X}
  →                a1 ≡ a2  →  node f a1 ≡ (f ̂ 𝑻 X) a2
 
 term-op-interp3 f {a1}{a2} a1a2 = (term-op-interp2 f a1a2) ∙ (term-op-interp1 f a2)
@@ -149,7 +144,7 @@ term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 
 
 interp-prod : {𝓧 𝓤 𝓦 : Universe} → funext 𝓥 (𝓤 ⊔ 𝓦)
- →            {X : 𝓧 ̇}(p : Term){I : 𝓦 ̇}
+ →            {X : 𝓧 ̇}(p : Term X){I : 𝓦 ̇}
               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
               --------------------------------------------------------
  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
@@ -166,7 +161,7 @@ interp-prod fe (node f t) 𝒜 x =
 
 
 interp-prod2 : {𝓤 𝓧 : Universe} → global-dfunext
- →             {X : 𝓧 ̇}(p : Term){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
+ →             {X : 𝓧 ̇}(p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
                ----------------------------------------------------------------------
  →             (p ̇ ⨅ 𝒜) ≡ λ(args : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → args x i))
 

@@ -27,13 +27,9 @@ Incidentally, the name of this module---WWMD ("What would Martin do?")---seemed 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
+module UALib.Subalgebras.WWMD {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-module UALib.Subalgebras.WWMD
- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
-
-open import UALib.Subalgebras.Homomorphisms {𝑆 = 𝑆}{gfe}{𝕏} public
+open import UALib.Subalgebras.Subalgebras {𝑆 = 𝑆}{gfe} public
 
 open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; Univalence;
  Π-is-subsingleton; ∈₀-is-subsingleton; pr₁-embedding; embedding-gives-ap-is-equiv; _●_; _≃_;

@@ -19,7 +19,6 @@ Because a class of structures has a different type than a single structure, we m
 
 module UALib.Varieties where
 
-open import UALib.Varieties.ModelTheory
 open import UALib.Varieties.EquationalLogic
 open import UALib.Varieties.Varieties
 open import UALib.Varieties.Preservation
@@ -29,6 +28,6 @@ open import UALib.Varieties.Preservation
 --------------------------------------
 
 [← UALib.Subalgebras](UALib.Subalgebras.html)
-<span style="float:right;">[UALib.Varieties.ModelTheory →](UALib.Varieties.ModelTheory.html)</span>
+<span style="float:right;">[UALib.Varieties.EquationalLogic →](UALib.Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}
