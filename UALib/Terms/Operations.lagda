@@ -77,6 +77,7 @@ Let h : hom 𝑻 𝑨. Then by comm-hom-term, ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p
 We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣ such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact as follows.
 
 \begin{code}
+
 term-op-interp1 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X)
  →                node f args ≡ (f ̂ 𝑻 X) args
 
@@ -118,9 +119,10 @@ term-gen-agreement {𝓧}{X}(node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-
 term-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
  →            p ≡ (p ̇ 𝑻 X) generator
 term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
+
 \end{code}
 
------------------------------------
+
 
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
@@ -161,7 +163,7 @@ interp-prod2 gfe {X} (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
 
 --------------------------------------
 
-[← UALib.Terms.Free](UALib.Terms.Free.html)
+[← UALib.Terms.Basic](UALib.Terms.Basic.html)
 <span style="float:right;">[UALib.Terms.Compatibility →](UALib.Terms.Compatibility.html)</span>
 
 {% include UALib.Links.md %}
