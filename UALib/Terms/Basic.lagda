@@ -86,6 +86,7 @@ We now prove this in [Agda][], starting with the fact that every map from X to �
 free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 
 free-lift _ h (generator x) = h x
+
 free-lift 𝑨 h (node f args) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (args i)
 
 \end{code}
@@ -107,45 +108,42 @@ Finally, we prove that the resulting homomorphism is unique.
 free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇} → funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
  →            (t : Term X)
-              ---------------
+              --------------
  →            ∣ g ∣ t ≡ ∣ h ∣ t
 
 free-unique _ _ _ _ p (generator x) = p x
 
-free-unique fe 𝑨 g h p (node f args) = ∣ g ∣ (node f args)            ≡⟨ ∥ g ∥ f args ⟩
-                                       (f ̂ 𝑨)(λ i → ∣ g ∣ (args i))  ≡⟨ ap (_ ̂ 𝑨) γ ⟩
-                                       (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
-                                       ∣ h ∣ (node f args)             ∎
- where γ = fe λ i → free-unique fe 𝑨 g h p (args i)
+free-unique fe 𝑨 g h p (node f args) = γ where
+
+ α : (f ̂ 𝑨) (∣ g ∣ ∘ args) ≡ (f ̂ 𝑨) (∣ h ∣ ∘ args)
+ α = ap (_ ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (args i))
+
+ γ = ∣ g ∣ (node f args)           ≡⟨ ∥ g ∥ f args ⟩
+     (f ̂ 𝑨)(λ i → ∣ g ∣ (args i))  ≡⟨ α ⟩
+     (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
+     ∣ h ∣ (node f args)           ∎
 
 \end{code}
 
-Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. Moreover, if we are given a surjective mapping h from X onto an algebra 𝑨, then the homomorphism constructed with `lift-hom 𝑨 h` will be an epimorphism from 𝑻 X onto 𝑨.  We formalize this observation now, along with the trivial fact that the lift induced by `h₀` agrees with `h₀` on `X`.
+Since it's absolutely free, 𝑻 X is the domain of a homomorphism to any algebra we like. Moreover, if we are given a surjective mapping h from X onto an algebra 𝑨, then the homomorphism constructed with `lift-hom 𝑨 h` will be an epimorphism from 𝑻 X onto 𝑨.
 
 \begin{code}
 
-module _ {𝓧 𝓤 : Universe}{X : 𝓧 ̇} where
+lift-of-epi-is-epi : {𝓧 𝓤 : Universe}{X : 𝓧 ̇}
+                     (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
+                     -------------------------------
+ →                   Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
 
- lift-agrees-on-X : (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)(x : X) → h₀ x ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator x)
- lift-agrees-on-X _ h₀ x = 𝓇ℯ𝒻𝓁
+lift-of-epi-is-epi 𝑨 h₀ hE y = γ where
 
- lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣) → Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
- lift-of-epi-is-epi 𝑨 h₀ hE y = γ
-  where
-   h₀pre : Image h₀ ∋ y
-   h₀pre = hE y
+ h₀⁻¹y : domain h₀
+ h₀⁻¹y = Inv h₀ y (hE y)
 
-   h₀⁻¹y : X
-   h₀⁻¹y = Inv h₀ y (hE y)
+ η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
+ η = (InvIsInv h₀ y (hE y))⁻¹
 
-   η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
-   η =
-    y                                 ≡⟨ (InvIsInv h₀ y h₀pre)⁻¹ ⟩
-    h₀ h₀⁻¹y                          ≡⟨ lift-agrees-on-X 𝑨 h₀ h₀⁻¹y ⟩
-    ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y) ∎
-
-   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
-   γ = eq y (generator h₀⁻¹y) η
+ γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+ γ = eq y (generator h₀⁻¹y) η
 
 \end{code}
 

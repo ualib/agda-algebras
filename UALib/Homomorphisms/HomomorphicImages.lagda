@@ -90,36 +90,28 @@ lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
                            ------------------------------------
  →                         Epic ∣ lift-alg-hom 𝓧 𝓩{𝓦} 𝑨 𝑩 f ∣
 
-lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi = lE
+lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi y = eq y (lift a) η
  where
-  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-  lA = lift-alg 𝑨 𝓩
-  lB : Algebra (𝓨 ⊔ 𝓦) 𝑆
-  lB = lift-alg 𝑩 𝓦
-
   lf : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
   lf = lift-alg-hom 𝓧 𝓩 𝑨 𝑩 f
 
-  lE : (y : ∣ lB ∣ ) → Image ∣ lf ∣ ∋ y
-  lE y = ξ
-   where
-    b : ∣ 𝑩 ∣
-    b = lower y
+  b : ∣ 𝑩 ∣
+  b = lower y
 
-    ζ : Image ∣ f ∣ ∋ b
-    ζ = fepi b
+  ζ : Image ∣ f ∣ ∋ b
+  ζ = fepi b
 
-    a : ∣ 𝑨 ∣
-    a = Inv ∣ f ∣ b ζ
+  a : ∣ 𝑨 ∣
+  a = Inv ∣ f ∣ b ζ
 
-    η : y ≡ ∣ lf ∣ (lift a)
-    η = y                                       ≡⟨ (intensionality lift∼lower) y ⟩
-        lift b                                  ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
-        lift (∣ f ∣ a)                          ≡⟨ (ap (λ - → lift (∣ f ∣ ( - a)))) (lower∼lift{𝓦 = 𝓦}) ⟩
-        (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-        ∣ lf ∣ (lift a)                         ∎
-    ξ : Image ∣ lf ∣ ∋ y
-    ξ = eq y (lift a) η
+  β : lift (∣ f ∣ a) ≡ (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a)
+  β = ap (λ - → lift (∣ f ∣ ( - a))) (lower∼lift{𝓦 = 𝓦})
+
+  η : y ≡ ∣ lf ∣ (lift a)
+  η = y               ≡⟨ (intensionality lift∼lower) y ⟩
+      lift b          ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
+      lift (∣ f ∣ a)  ≡⟨ β ⟩
+      ∣ lf ∣ (lift a) ∎
 
 
 lift-alg-hom-image : {𝓧 𝓨 𝓩 𝓦 : Universe}
@@ -128,25 +120,14 @@ lift-alg-hom-image : {𝓧 𝓨 𝓩 𝓦 : Universe}
                      -----------------------------------------------
  →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
 
-lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) = lCϕ , lC≅lB
- where
-  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-  lA = lift-alg 𝑨 𝓩
-  lB lC : Algebra (𝓨 ⊔ 𝓦) 𝑆
-  lB = lift-alg 𝑩 𝓦
-  lC = lift-alg 𝑪 𝓦
+lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
+ (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso 𝓨 𝓦 𝑪 𝑩 C≅B
+  where
+   lϕ : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑪 𝓦)
+   lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
 
-  lϕ : hom lA lC
-  lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
-
-  lϕepic : Epic ∣ lϕ ∣
-  lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
-
-  lCϕ : HomImagesOf {𝓧 ⊔ 𝓩}{𝓨 ⊔ 𝓦} lA
-  lCϕ = lC , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic
-
-  lC≅lB : lC ≅ lB
-  lC≅lB = lift-alg-iso 𝓨 𝓦 𝑪 𝑩 C≅B
+   lϕepic : Epic ∣ lϕ ∣
+   lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
 
 \end{code}
 

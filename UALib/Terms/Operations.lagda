@@ -51,74 +51,65 @@ free-lift-interp 𝑨 h (node f args) = ap (f ̂ 𝑨) (gfe λ i → free-lift-i
 
 \end{code}
 
-Here we want (𝒕 : X → ∣ 𝑻(X) ∣) → ((p ̇ 𝑻(X)) 𝒕) ≡ p 𝒕... but what is (𝑝 ̇ 𝑻(X)) 𝒕 ?
+Here we want `∀ 𝒕 → (p ̇ 𝑻 X) 𝒕  ≡  p 𝒕  ...but what is `(𝑝 ̇ 𝑻 X) 𝒕`?
 
 By definition, it depends on the form of 𝑝 as follows:
 
-* if 𝑝 = (generator x), then (𝑝 ̇ 𝑻(X)) 𝒕 = ((generator x) ̇ 𝑻(X)) 𝒕 = 𝒕 x
+* if `𝑝 = generator x`, then `(𝑝 ̇ 𝑻 X) 𝒕 := ((generator x) ̇ 𝑻 X) 𝒕 ≡ 𝒕 x`
 
-* if 𝑝 = (node f args), then (𝑝 ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
+* if `𝑝 = node f args`, then `(𝑝 ̇ 𝑻 X) 𝒕 := ((node f args) ̇ 𝑻 X) 𝒕 = (f ̂ 𝑻 X) λ i → (args i ̇ 𝑻 X) 𝒕`
 
-Let h : hom 𝑻 𝑨. Then by comm-hom-term, ∣ h ∣ (p ̇ 𝑻(X)) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕
+Let `h : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ h ∣ (p ̇ 𝑻 X) 𝒕 = (p ̇ 𝑨) ∣ h ∣ ∘ 𝒕`.
 
-* if p = (generator x), then
+* if `p = generator x`, then
 
    ∣ h ∣ p ≡ ∣ h ∣ (generator x)
-          ≡ λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
-          ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+          ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x)  (where 𝒕 : X → ∣ 𝑻(X) ∣ )
+          ≡ λ 𝒕 → (∣ h ∣ ∘ 𝒕) x
 
-   ∣ h ∣ p ≡ ∣ h ∣ (λ 𝒕 → 𝒕 x) (where 𝒕 : X → ∣ 𝑻(X) ∣ )
-          ≡ (λ 𝒕 → (∣ h ∣ ∘ 𝒕) x)
+* if `p = node f args`, then
 
-* if p = (node f args), then
+   ∣ h ∣ p ≡ ∣ h ∣  (p ̇ 𝑻 X) 𝒕 = ((node f args) ̇ 𝑻 X) 𝒕 = (f ̂ 𝑻 X) λ i → (args i ̇ 𝑻 X) 𝒕
 
-   ∣ h ∣ p ≡ ∣ h ∣  (p ̇ 𝑻(X)) 𝒕 = ((node f args) ̇ 𝑻(X)) 𝒕 = (f ̂ 𝑻(X)) λ i → (args i ̇ 𝑻(X)) 𝒕
-
-We claim that if p : ∣ 𝑻(X) ∣ then there exists 𝓅 : ∣ 𝑻(X) ∣ and 𝒕 : X → ∣ 𝑻(X) ∣ such that p ≡ (𝓅 ̇ 𝑻(X)) 𝒕. We prove this fact as follows.
+We claim that if `p : ∣ 𝑻 X ∣` then there exists `𝓅 : ∣ 𝑻 X ∣` and `𝒕 : X → ∣ 𝑻 X ∣` such that `p ≡ (𝓅 ̇ 𝑻 X) 𝒕`. We prove this fact as follows.
 
 \begin{code}
 
-term-op-interp1 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X)
- →                node f args ≡ (f ̂ 𝑻 X) args
+module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 
-term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
+ term-op-interp1 : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X) → node f args ≡ (f ̂ 𝑻 X) args
 
-term-op-interp2 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X}
- →                a1 ≡ a2  →  node f a1 ≡ node f a2
+ term-op-interp1 = λ f args → 𝓇ℯ𝒻𝓁
 
-term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
+ term-op-interp2 : (f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X} → a1 ≡ a2  →  node f a1 ≡ node f a2
 
-term-op-interp3 : {𝓧 : Universe}{X : 𝓧 ̇}(f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X}
- →                a1 ≡ a2  →  node f a1 ≡ (f ̂ 𝑻 X) a2
+ term-op-interp2 f a1≡a2 = ap (node f) a1≡a2
 
-term-op-interp3 f {a1}{a2} a1a2 = (term-op-interp2 f a1a2) ∙ (term-op-interp1 f a2)
+ term-op-interp3 : (f : ∣ 𝑆 ∣){a1 a2 : ∥ 𝑆 ∥ f → Term X} → a1 ≡ a2 → node f a1 ≡ (f ̂ 𝑻 X) a2
 
-term-gen : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
- →         Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
+ term-op-interp3 f {a1}{a2} a1a2 = (term-op-interp2 f a1a2) ∙ (term-op-interp1 f a2)
 
-term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
-term-gen (node f args) = node f (λ i → ∣ term-gen (args i) ∣) ,
+ term-gen : (p : ∣ 𝑻 X ∣) → Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
+
+ term-gen (generator x) = (generator x) , 𝓇ℯ𝒻𝓁
+ term-gen (node f args) = node f (λ i → ∣ term-gen (args i) ∣) ,
                                 term-op-interp3 f (gfe λ i → ∥ term-gen (args i) ∥)
 
-tg : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣) → Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
-tg p = term-gen p
+ tg : (p : ∣ 𝑻 X ∣) → Σ 𝓅 ꞉ ∣ 𝑻 X ∣ , p ≡ (𝓅 ̇ 𝑻 X) generator
+ tg p = term-gen p
 
-term-equality : {𝓧 : Universe}{X : 𝓧 ̇}(p q : ∣ 𝑻 X ∣)
- →              p ≡ q → (∀ t → (p ̇ 𝑻 X) t ≡ (q ̇ 𝑻 X) t)
-term-equality p q (refl _) _ = refl _
+ term-equality : (p q : ∣ 𝑻 X ∣) → p ≡ q → (∀ t → (p ̇ 𝑻 X) t ≡ (q ̇ 𝑻 X) t)
+ term-equality p q (refl _) _ = refl _
 
-term-equality' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}(p q : ∣ 𝑻 X ∣)
- →              p ≡ q → (∀ 𝒂 → (p ̇ 𝑨) 𝒂 ≡ (q ̇ 𝑨) 𝒂)
-term-equality' p q (refl _) _ = refl _
+ term-equality' : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆}(p q : ∣ 𝑻 X ∣) → p ≡ q → (∀ 𝒂 → (p ̇ 𝑨) 𝒂 ≡ (q ̇ 𝑨) 𝒂)
+ term-equality' p q (refl _) _ = refl _
 
-term-gen-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
- →               (p ̇ 𝑻 X) generator ≡ (∣ term-gen p ∣ ̇ 𝑻 X) generator
-term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
-term-gen-agreement {𝓧}{X}(node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
+ term-gen-agreement : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) generator ≡ (∣ term-gen p ∣ ̇ 𝑻 X) generator
+ term-gen-agreement (generator x) = 𝓇ℯ𝒻𝓁
+ term-gen-agreement (node f args) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (args x))
 
-term-agreement : {𝓧 : Universe}{X : 𝓧 ̇}(p : ∣ 𝑻 X ∣)
- →            p ≡ (p ̇ 𝑻 X) generator
-term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
+ term-agreement : (p : ∣ 𝑻 X ∣) → p ≡ (p ̇ 𝑻 X) generator
+ term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
 
 \end{code}
 
@@ -141,8 +132,6 @@ interp-prod fe (node f t) 𝒜 x =
   (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)                             ≡⟨ ap (f ̂ ⨅ 𝒜)(fe IH) ⟩
   (f ̂ ⨅ 𝒜)(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁)(λ j₁ → x j₁ i₁)))     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
   (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))   ∎
-
-
 
 
 interp-prod2 : {𝓤 𝓧 : Universe} → global-dfunext
