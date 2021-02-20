@@ -15,11 +15,9 @@ This chapter presents the [UALib.Homomorphisms][] module of the [Agda Universal 
 <a id="356" class="Keyword">module</a> <a id="363" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a> <a id="383" class="Keyword">where</a>
 
 <a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="UALib.Homomorphisms.Basic.html" class="Module">UALib.Homomorphisms.Basic</a>
-<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="UALib.Homomorphisms.Kernels.html" class="Module">UALib.Homomorphisms.Kernels</a>
-<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="UALib.Homomorphisms.Noether.html" class="Module">UALib.Homomorphisms.Noether</a>
-<a id="508" class="Keyword">open</a> <a id="513" class="Keyword">import</a> <a id="520" href="UALib.Homomorphisms.Products.html" class="Module">UALib.Homomorphisms.Products</a>
-<a id="549" class="Keyword">open</a> <a id="554" class="Keyword">import</a> <a id="561" href="UALib.Homomorphisms.Isomorphisms.html" class="Module">UALib.Homomorphisms.Isomorphisms</a>
-<a id="594" class="Keyword">open</a> <a id="599" class="Keyword">import</a> <a id="606" href="UALib.Homomorphisms.HomomorphicImages.html" class="Module">UALib.Homomorphisms.HomomorphicImages</a>
+<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="UALib.Homomorphisms.Noether.html" class="Module">UALib.Homomorphisms.Noether</a>
+<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="UALib.Homomorphisms.Isomorphisms.html" class="Module">UALib.Homomorphisms.Isomorphisms</a>
+<a id="513" class="Keyword">open</a> <a id="518" class="Keyword">import</a> <a id="525" href="UALib.Homomorphisms.HomomorphicImages.html" class="Module">UALib.Homomorphisms.HomomorphicImages</a>
 
 </pre>
 

@@ -160,7 +160,6 @@
 [Relations]: UALib.Relations.html
 [Relations.Unary]: UALib.Relations.Unary.html
 [Relations.Binary]: UALib.Relations.Binary.html
-[Relations.Equivalences]: UALib.Relations.Equivalences.html
 [Relations.Quotients]: UALib.Relations.Quotients.html
 
 [Algebras]: UALib.Algebras.html
@@ -171,9 +170,7 @@
 
 [Homomorphisms]: UALib.Homomorphisms.html
 [Homomorphisms.Basic]: UALib.Homomorphisms.Basic.html
-[Homomorphisms.Kernels]: UALib.Homomorphisms.Kernels.html
 [Homomorphisms.Noether]: UALib.Homomorphisms.Noether.html
-[Homomorphisms.Products]: UALib.Homomorphisms.Products.html
 [Homomorphisms.Isomorphisms]: UALib.Homomorphisms.Isomorphisms.html
 [Homomorphisms.HomomorphicImages]: UALib.Homomorphisms.HomomorphicImages.html
 
@@ -222,22 +219,17 @@
 [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
 [UALib.Relations.Unary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Unary.lagda
 [UALib.Relations.Binary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Binary.lagda
-[UALib.Relations.Equivalences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Equivalences.lagda
 [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda
 
 [UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
-[UALib.Homomorphisms.Kernels module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
 [UALib.Homomorphisms.Noether module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda
-[UALib.Homomorphisms.Products module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Products.lagda
 [UALib.Homomorphisms.Isomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda
 [UALib.Homomorphisms.HomomorphicImages module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda
 
 [UALib.Homomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda
 [UALib.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda
 [UALib.Homomorphisms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
-[UALib.Homomorphisms.Kernels]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Kernels.lagda
 [UALib.Homomorphisms.Noether]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda
-[UALib.Homomorphisms.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Products.lagda
 [UALib.Homomorphisms.Isomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda
 [UALib.Homomorphisms.HomomorphicImages]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda
 

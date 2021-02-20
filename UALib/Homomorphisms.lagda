@@ -15,9 +15,7 @@ This chapter presents the [UALib.Homomorphisms][] module of the [Agda Universal 
 module UALib.Homomorphisms where
 
 open import UALib.Homomorphisms.Basic
-open import UALib.Homomorphisms.Kernels
 open import UALib.Homomorphisms.Noether
-open import UALib.Homomorphisms.Products
 open import UALib.Homomorphisms.Isomorphisms
 open import UALib.Homomorphisms.HomomorphicImages
 

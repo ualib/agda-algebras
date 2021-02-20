@@ -52,9 +52,7 @@ mv html/UALib.Algebras.Congruences.{tex,md}
 
 mv html/UALib.Homomorphisms.{tex,md}
 mv html/UALib.Homomorphisms.Basic.{tex,md}
-mv html/UALib.Homomorphisms.Kernels.{tex,md}
 mv html/UALib.Homomorphisms.Noether.{tex,md}
-mv html/UALib.Homomorphisms.Products.{tex,md}
 mv html/UALib.Homomorphisms.Isomorphisms.{tex,md}
 mv html/UALib.Homomorphisms.HomomorphicImages.{tex,md}
 

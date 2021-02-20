@@ -8,8 +8,7 @@ author: William DeMeo
 ### <a id="isomorphisms">Isomorphisms</a>
 
 This section describes the [UALib.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
-
-We implement (the extensional version of) the notion of isomorphism between algebraic structures.
+Here we formalize the informal notion of isomorphism between algebraic structures.
 
 \begin{code}
 
@@ -21,16 +20,28 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.Products{𝑆 = 𝑆}{gfe} public
+open import UALib.Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
 open import UALib.Prelude.Preliminaries using (is-equiv; hfunext; Nat; NatΠ; NatΠ-is-embedding) public
+
+\end{code}
+
+#### <a id="isomorphism-toolbox">Definition of isomorphism</a>
+
+Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
+
+\begin{code}
 
 _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
+
 \end{code}
 
-Recall, f ~ g means f and g are extensionally equal; i.e., ∀ x, f x ≡ g x.
+That is, two structures are **isomorphic** provided there are homomorphisms going back and forth between them which compose to the identity map.
+
 
 #### <a id="isomorphism-toolbox">Isomorphism toolbox</a>
+
+Here we collect some tools that will come in handy later on.  The reader is invited to skip over this section and return to it as needed.
 
 \begin{code}
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where

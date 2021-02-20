@@ -29,12 +29,8 @@ agda --latex UALib/Algebras/Congruences.lagda
 
 echo "Checking UALib.Homomorphisms.Basic.lagda"
 agda --latex UALib/Homomorphisms/Basic.lagda
-echo "Checking UALib.Homomorphisms.Kernels.lagda"
-agda --latex UALib/Homomorphisms/Kernels.lagda
 echo "Checking UALib.Homomorphisms.Noether.lagda"
 agda --latex UALib/Homomorphisms/Noether.lagda
-echo "Checking UALib.Homomorphisms.Products.lagda"
-agda --latex UALib/Homomorphisms/Products.lagda
 echo "Checking UALib.Homomorphisms.Isomorphisms.lagda"
 agda --latex UALib/Homomorphisms/Isomorphisms.lagda
 echo "Checking UALib.Homomorphisms.HomomorphicImages.lagda"
@@ -84,9 +80,7 @@ mv latex/UALib/Algebras/Products.{tex,md}
 mv latex/UALib/Algebras/Congruences.{tex,md}
 
 mv latex/UALib/Homomorphisms/Basic.{tex,md}
-mv latex/UALib/Homomorphisms/Kernels.{tex,md}
 mv latex/UALib/Homomorphisms/Noether.{tex,md}
-mv latex/UALib/Homomorphisms/Products.{tex,md}
 mv latex/UALib/Homomorphisms/Isomorphisms.{tex,md}
 mv latex/UALib/Homomorphisms/HomomorphicImages.{tex,md}
 
@@ -122,9 +116,7 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Products
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Congruences.md -o latex/UALib/Algebras/Congruences.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Basic.md -o latex/UALib/Homomorphisms/Basic.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Kernels.md -o latex/UALib/Homomorphisms/Kernels.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Noether.md -o latex/UALib/Homomorphisms/Noether.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Products.md -o latex/UALib/Homomorphisms/Products.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Isomorphisms.md -o latex/UALib/Homomorphisms/Isomorphisms.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/HomomorphicImages.md -o latex/UALib/Homomorphisms/HomomorphicImages.tex
 

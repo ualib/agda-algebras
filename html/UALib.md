@@ -107,9 +107,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Homomorphism Types](UALib.Homomorphisms.html)
   - [Basic definitions](UALib.Homomorphisms.Basic.html)
-  - [Kernels of Homomorphisms](UALib.Homomorphisms.Kernels.html)
   - [Homomorphism Theorems](UALib.Homomorphisms.Noether.html)
-  - [Homomorphisms and Products](UALib.Homomorphisms.Products.html)
   - [Isomorphisms](UALib.Homomorphisms.Isomorphisms.html)
   - [Homomorphic Images](UALib.Homomorphisms.HomomorphicImages.html)
 

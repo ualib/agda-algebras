@@ -18,7 +18,7 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.Kernels{𝑆 = 𝑆}{gfe} hiding (global-dfunext) public
+open import UALib.Homomorphisms.Basic{𝑆 = 𝑆}{gfe} hiding (global-dfunext) public
 open import UALib.Prelude.Preliminaries using (is-embedding) public
 
 \end{code}
@@ -363,10 +363,7 @@ HomFactorEpi gfe 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (s
 
 --------------------------------------
 
-[← UALib.Homomorphisms.Kernels](UALib.Homomorphisms.Kernels.html)
-<span style="float:right;">[UALib.Homomorphisms.Products →](UALib.Homomorphisms.Products.html)</span>
+[← UALib.Homomorphisms.Basic](UALib.Homomorphisms.Basic.html)
+<span style="float:right;">[UALib.Homomorphisms.Isomorphisms →](UALib.Homomorphisms.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}
-
-<!--
--->
