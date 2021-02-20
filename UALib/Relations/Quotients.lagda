@@ -50,12 +50,15 @@ module _ {𝓤 : Universe} where
 
 #### <a id="equivalence-classes">Equivalence classes</a>
 
-A binary relation is called a **preorder** if it is **reflexive** and **transitive**. An **equivalence relation** is a **symmetric** preorder.
+A binary relation is called a **preorder** if it is reflexive and transitive. An **equivalence relation** is a symmetric preorder.
 
 
 \begin{code}
 
 module _ {𝓤 𝓡 : Universe} where
+
+ is-preorder : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-preorder _≈_ = is-subsingleton-valued _≈_ × reflexive _≈_ × transitive _≈_
 
  record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
   field
@@ -64,8 +67,7 @@ module _ {𝓤 𝓡 : Universe} where
    trans : transitive _≈_
 
  is-equivalence-relation : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
- is-equivalence-relation _≈_ = is-subsingleton-valued _≈_
-                               × reflexive _≈_ × symmetric _≈_ × transitive _≈_
+ is-equivalence-relation _≈_ = is-preorder _≈_ × symmetric _≈_
 
 \end{code}
 
