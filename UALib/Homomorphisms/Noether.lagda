@@ -181,7 +181,9 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 \end{code}
 
-----------------------------------------------------------
+
+
+
 
 #### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 

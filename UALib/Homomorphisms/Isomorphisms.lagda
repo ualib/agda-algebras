@@ -366,7 +366,7 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 
 --------------------------------------
 
-[← UALib.Homomorphisms.Products](UALib.Homomorphisms.Products.html)
+[← UALib.Homomorphisms.Noether](UALib.Homomorphisms.Noether.html)
 <span style="float:right;">[UALib.Homomorphisms.HomomorphicImages →](UALib.Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

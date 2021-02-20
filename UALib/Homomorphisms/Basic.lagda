@@ -29,11 +29,11 @@ If 𝑨 and 𝑩 are algebraic structures in the signature 𝑆, then a **morphi
 
 Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
 
-To formalize the concept of homomorphism we first define a type representing the assertion that a function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣, from the domain of 𝑨 to the domain of 𝑩, *commutes* with an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩.  Pleasingly, expressing the defining equation of the previous paragraph in Agda requires no adulteration.
+To formalize the concept of homomorphism we first define a type representing the assertion that a function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣, from the domain of 𝑨 to the domain of 𝑩, *commutes* with an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda unadulterated.
 
 \begin{code}
 
-compatible-op-map : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(𝑩 : Algebra 𝓤 𝑆)(𝑓 : ∣ 𝑆 ∣)(h : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+compatible-op-map : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(𝑓 : ∣ 𝑆 ∣)(h : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 
 compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝒂 → h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)
 
