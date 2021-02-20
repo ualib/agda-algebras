@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-## <a id="terms">Terms</a>
+## <a id="types-for-terms">Types for Terms</a>
 
 This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra Library][].
 

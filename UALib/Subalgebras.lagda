@@ -5,22 +5,20 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-## <a id="subalgebras">Subalgebras</a>
+## <a id="subalgebra-types">Subalgebra Types</a>
 
 This chapter presents the [UALib.Subalgebras][]  module of the [Agda Universal Algebra Library][].
 
-\begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
-\end{code}
-
 \begin{code}
+
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module UALib.Subalgebras where
 
 open import UALib.Subalgebras.Subuniverses
 open import UALib.Subalgebras.Generation
 open import UALib.Subalgebras.Subalgebras public
-open import UALib.Subalgebras.WWMD
+open import UALib.Subalgebras.Univalent
 
 \end{code}
 

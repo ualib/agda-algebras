@@ -5,7 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-## <a id="homomorphisms">Homomorphisms</a>
+## <a id="homomorphism-types">Homomorphism Types</a>
 
 This chapter presents the [UALib.Homomorphisms][] module of the [Agda Universal Algebra Library][].
 

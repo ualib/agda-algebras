@@ -5,15 +5,13 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-## <a id="algebras">Algebras</a>
+## <a id="algebra-types">Algebra Types</a>
 
 This chapter presents the [UALib.Algebras][] module of the [Agda Universal Algebra Library][], which begins our [Agda][] formalization of the basic concepts and theorems of universal algebra. In this module we codify such notions as operation, signature, and algebraic structure.
 
-\begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
-\end{code}
-
 \begin{code}
+
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module UALib.Algebras where
 

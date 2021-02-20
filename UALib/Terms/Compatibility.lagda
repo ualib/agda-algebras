@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="term-compatibility-theorems">Term Compatibility Theorems</a>
+### <a id="term-compatibility">Term Compatibility</a>
 
 This section presents the [UALib.Terms.Compatibility][] module of the [Agda Universal Algebra Library][].
 

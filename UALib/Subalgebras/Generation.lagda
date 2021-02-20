@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="subuniverse-generation">Subuniverse generation</a>
+### <a id="subuniverse-generation">Subuniverse Generation</a>
 
 This section presents the [UALib.Subalgebras.Generation][] module of the [Agda Universal Algebra Library][].
 
@@ -16,9 +16,7 @@ This section presents the [UALib.Subalgebras.Generation][] module of the [Agda U
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-
 module UALib.Subalgebras.Generation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
-
 
 open import UALib.Subalgebras.Subuniverses{𝑆 = 𝑆}{gfe} public
 open import Relation.Unary using (⋂) public

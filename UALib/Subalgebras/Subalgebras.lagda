@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="subalgebra-types">Subalgebras</a>
+### <a id="subalgebras">Subalgebras</a>
 
 The [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defins the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
@@ -256,7 +256,7 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
 ---------------------------------
 
 [← UALib.Subalgebras.Generation](UALib.Subalgebras.Generation.html)
-<span style="float:right;">[UALib.Subalgebras.WWMD →](UALib.Subalgebras.WWMD.html)</span>
+<span style="float:right;">[UALib.Subalgebras.Univalent →](UALib.Subalgebras.Univalent.html)</span>
 
 {% include UALib.Links.md %}
 

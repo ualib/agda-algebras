@@ -94,11 +94,10 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Extensionality](UALib.Prelude.Extensionality.html)
   - [Agda's Universe Hierarchy](UALib.Prelude.Lifts.html)
 
-- [Relation Types](UALib.Relations.html)
+- [Relation and Quotient Types](UALib.Relations.html)
   - [Unary Relations](UALib.Relations.Unary.html)
-  - [Binary Relations and Kernels](UALib.Relations.Binary.html)
-  - [Equivalence Relations](UALib.Relations.Equivalences.html)
-  - [Quotients](UALib.Relations.Quotients.html)
+  - [Binary Relations](UALib.Relations.Binary.html)
+  - [Equivalence Relations and Quotients](UALib.Relations.Quotients.html)
 
 - [Algebra Types](UALib.Algebras.html)
   - [Operations and Signatures](UALib.Algebras.Signatures.html)
@@ -120,12 +119,10 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Term Compatibility](UALib.Terms.Compatibility.html)
 
 - [Subalgebra Types](UALib.Subalgebras.html)
-  - [Subuniverse Types](UALib.Subalgebras.Subuniverses.html)
-  - [Inductive Types for Subuniverse Generation](UALib.Subalgebras.Generation.html)
-  - [Subuniverse Lemmas](UALib.Subalgebras.Properties.html)
-  - [Subuniverses and Homomorphisms](UALib.Subalgebras.Homomorphisms.html)
-  - [Subalgebra Types](UALib.Subalgebras.Subalgebras)
-  - [WWMD](UALib.Subalgebras.WWMD.html)
+  - [Subuniverses](UALib.Subalgebras.Subuniverses.html)
+  - [Subuniverse Generation](UALib.Subalgebras.Generation.html)
+  - [Subalgebras](UALib.Subalgebras.Subalgebras)
+  - [Univalent Subalgebras](UALib.Subalgebras.Univalent.html)
 
 - [Types for Equations and Varieties](UALib.Varieties.html)
   - [Model Theory and Equational Logic](UALib.Varieties.EquationalLogic.html)

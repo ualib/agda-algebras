@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="isomorphisms-type">Isomorphism Type</a>
+### <a id="isomorphisms">Isomorphisms</a>
 
 This section describes the [UALib.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
 

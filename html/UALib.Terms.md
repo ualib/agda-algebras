@@ -5,18 +5,18 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-## <a id="terms">Terms</a>
+## <a id="types-for-terms">Types for Terms</a>
 
 This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra Library][].
 
 <pre class="Agda">
-<a id="264" class="Symbol">{-#</a> <a id="268" class="Keyword">OPTIONS</a> <a id="276" class="Pragma">--without-K</a> <a id="288" class="Pragma">--exact-split</a> <a id="302" class="Pragma">--safe</a> <a id="309" class="Symbol">#-}</a>
+<a id="284" class="Symbol">{-#</a> <a id="288" class="Keyword">OPTIONS</a> <a id="296" class="Pragma">--without-K</a> <a id="308" class="Pragma">--exact-split</a> <a id="322" class="Pragma">--safe</a> <a id="329" class="Symbol">#-}</a>
 
-<a id="314" class="Keyword">module</a> <a id="321" href="UALib.Terms.html" class="Module">UALib.Terms</a> <a id="333" class="Keyword">where</a>
+<a id="334" class="Keyword">module</a> <a id="341" href="UALib.Terms.html" class="Module">UALib.Terms</a> <a id="353" class="Keyword">where</a>
 
-<a id="340" class="Keyword">open</a> <a id="345" class="Keyword">import</a> <a id="352" href="UALib.Terms.Basic.html" class="Module">UALib.Terms.Basic</a>
-<a id="370" class="Keyword">open</a> <a id="375" class="Keyword">import</a> <a id="382" href="UALib.Terms.Operations.html" class="Module">UALib.Terms.Operations</a>
-<a id="405" class="Keyword">open</a> <a id="410" class="Keyword">import</a> <a id="417" href="UALib.Terms.Compatibility.html" class="Module">UALib.Terms.Compatibility</a>
+<a id="360" class="Keyword">open</a> <a id="365" class="Keyword">import</a> <a id="372" href="UALib.Terms.Basic.html" class="Module">UALib.Terms.Basic</a>
+<a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="UALib.Terms.Operations.html" class="Module">UALib.Terms.Operations</a>
+<a id="425" class="Keyword">open</a> <a id="430" class="Keyword">import</a> <a id="437" href="UALib.Terms.Compatibility.html" class="Module">UALib.Terms.Compatibility</a>
 
 </pre>
 

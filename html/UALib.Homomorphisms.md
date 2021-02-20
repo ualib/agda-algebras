@@ -5,21 +5,21 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-## <a id="homomorphisms">Homomorphisms</a>
+## <a id="homomorphism-types">Homomorphism Types</a>
 
 This chapter presents the [UALib.Homomorphisms][] module of the [Agda Universal Algebra Library][].
 
 <pre class="Agda">
-<a id="296" class="Symbol">{-#</a> <a id="300" class="Keyword">OPTIONS</a> <a id="308" class="Pragma">--without-K</a> <a id="320" class="Pragma">--exact-split</a> <a id="334" class="Pragma">--safe</a> <a id="341" class="Symbol">#-}</a>
+<a id="306" class="Symbol">{-#</a> <a id="310" class="Keyword">OPTIONS</a> <a id="318" class="Pragma">--without-K</a> <a id="330" class="Pragma">--exact-split</a> <a id="344" class="Pragma">--safe</a> <a id="351" class="Symbol">#-}</a>
 
-<a id="346" class="Keyword">module</a> <a id="353" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a> <a id="373" class="Keyword">where</a>
+<a id="356" class="Keyword">module</a> <a id="363" href="UALib.Homomorphisms.html" class="Module">UALib.Homomorphisms</a> <a id="383" class="Keyword">where</a>
 
-<a id="380" class="Keyword">open</a> <a id="385" class="Keyword">import</a> <a id="392" href="UALib.Homomorphisms.Basic.html" class="Module">UALib.Homomorphisms.Basic</a>
-<a id="418" class="Keyword">open</a> <a id="423" class="Keyword">import</a> <a id="430" href="UALib.Homomorphisms.Kernels.html" class="Module">UALib.Homomorphisms.Kernels</a>
-<a id="458" class="Keyword">open</a> <a id="463" class="Keyword">import</a> <a id="470" href="UALib.Homomorphisms.Noether.html" class="Module">UALib.Homomorphisms.Noether</a>
-<a id="498" class="Keyword">open</a> <a id="503" class="Keyword">import</a> <a id="510" href="UALib.Homomorphisms.Products.html" class="Module">UALib.Homomorphisms.Products</a>
-<a id="539" class="Keyword">open</a> <a id="544" class="Keyword">import</a> <a id="551" href="UALib.Homomorphisms.Isomorphisms.html" class="Module">UALib.Homomorphisms.Isomorphisms</a>
-<a id="584" class="Keyword">open</a> <a id="589" class="Keyword">import</a> <a id="596" href="UALib.Homomorphisms.HomomorphicImages.html" class="Module">UALib.Homomorphisms.HomomorphicImages</a>
+<a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="UALib.Homomorphisms.Basic.html" class="Module">UALib.Homomorphisms.Basic</a>
+<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="UALib.Homomorphisms.Kernels.html" class="Module">UALib.Homomorphisms.Kernels</a>
+<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="UALib.Homomorphisms.Noether.html" class="Module">UALib.Homomorphisms.Noether</a>
+<a id="508" class="Keyword">open</a> <a id="513" class="Keyword">import</a> <a id="520" href="UALib.Homomorphisms.Products.html" class="Module">UALib.Homomorphisms.Products</a>
+<a id="549" class="Keyword">open</a> <a id="554" class="Keyword">import</a> <a id="561" href="UALib.Homomorphisms.Isomorphisms.html" class="Module">UALib.Homomorphisms.Isomorphisms</a>
+<a id="594" class="Keyword">open</a> <a id="599" class="Keyword">import</a> <a id="606" href="UALib.Homomorphisms.HomomorphicImages.html" class="Module">UALib.Homomorphisms.HomomorphicImages</a>
 
 </pre>
 

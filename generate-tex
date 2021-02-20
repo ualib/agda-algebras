@@ -15,8 +15,6 @@ echo "Checking UALib.Relations.Unary.lagda"
 agda --latex UALib/Relations/Unary.lagda
 echo "Checking UALib.Relations.Binary.lagda"
 agda --latex UALib/Relations/Binary.lagda
-echo "Checking UALib.Relations.Equivalences.lagda"
-agda --latex UALib/Relations/Equivalences.lagda
 echo "Checking UALib.Relations.Quotients.lagda"
 agda --latex UALib/Relations/Quotients.lagda
 
@@ -55,8 +53,8 @@ echo "Checking UALib.Subalgebras.Generation.lagda"
 agda --latex UALib/Subalgebras/Generation.lagda
 echo "Checking UALib.Subalgebras.Subalgebras.lagda"
 agda --latex UALib/Subalgebras/Subalgebras.lagda
-echo "Checking UALib.Subalgebras.WWMD.lagda"
-agda --latex UALib/Subalgebras/WWMD.lagda
+echo "Checking UALib.Subalgebras.Univalent.lagda"
+agda --latex UALib/Subalgebras/Univalent.lagda
 
 echo "Checking UALib.Varieties.EquationalLogic.lagda"
 agda --latex UALib/Varieties/EquationalLogic.lagda
@@ -78,7 +76,6 @@ mv latex/UALib/Prelude/Lifts.{tex,md}
 
 mv latex/UALib/Relations/Unary.{tex,md}
 mv latex/UALib/Relations/Binary.{tex,md}
-mv latex/UALib/Relations/Equivalences.{tex,md}
 mv latex/UALib/Relations/Quotients.{tex,md}
 
 mv latex/UALib/Algebras/Signatures.{tex,md}
@@ -94,15 +91,13 @@ mv latex/UALib/Homomorphisms/Isomorphisms.{tex,md}
 mv latex/UALib/Homomorphisms/HomomorphicImages.{tex,md}
 
 mv latex/UALib/Terms/Basic.{tex,md}
-mv latex/UALib/Terms/Compatibility.{tex,md}
 mv latex/UALib/Terms/Operations.{tex,md}
+mv latex/UALib/Terms/Compatibility.{tex,md}
 
-mv latex/UALib/Subalgebras/Generation.{tex,md}
-mv latex/UALib/Subalgebras/Homomorphisms.{tex,md}
-mv latex/UALib/Subalgebras/Properties.{tex,md}
-mv latex/UALib/Subalgebras/Subalgebras.{tex,md}
 mv latex/UALib/Subalgebras/Subuniverses.{tex,md}
-mv latex/UALib/Subalgebras/WWMD.{tex,md}
+mv latex/UALib/Subalgebras/Generation.{tex,md}
+mv latex/UALib/Subalgebras/Subalgebras.{tex,md}
+mv latex/UALib/Subalgebras/Univalent.{tex,md}
 
 mv latex/UALib/Varieties/EquationalLogic.{tex,md}
 mv latex/UALib/Varieties/Varieties.{tex,md}
@@ -119,7 +114,6 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Prelude/Lifts.md 
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Unary.md -o latex/UALib/Relations/Unary.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Binary.md -o latex/UALib/Relations/Binary.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Equivalences.md -o latex/UALib/Relations/Equivalences.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Relations/Quotients.md -o latex/UALib/Relations/Quotients.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Algebras/Signatures.md -o latex/UALib/Algebras/Signatures.tex
@@ -141,7 +135,7 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Compatibili
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Subuniverses.md -o latex/UALib/Subalgebras/Subuniverses.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Generation.md -o latex/UALib/Subalgebras/Generation.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Subalgebras.md -o latex/UALib/Subalgebras/Subalgebras.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/WWMD.md -o latex/UALib/Subalgebras/WWMD.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Univalent.md -o latex/UALib/Subalgebras/Univalent.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/EquationalLogic.md -o latex/UALib/Varieties/EquationalLogic.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Varieties/Varieties.md -o latex/UALib/Varieties/Varieties.tex

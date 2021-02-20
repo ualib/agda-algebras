@@ -5,21 +5,20 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-## <a id="relations">Relations</a>
+## <a id="relation-and-quotient-types">Relation and Quotient Types</a>
 
 This chapter presents the [UALib.Relations][] module of the [Agda Universal Algebra Library][].
 
 <pre class="Agda">
-<a id="286" class="Symbol">{-#</a> <a id="290" class="Keyword">OPTIONS</a> <a id="298" class="Pragma">--without-K</a> <a id="310" class="Pragma">--exact-split</a> <a id="324" class="Pragma">--safe</a> <a id="331" class="Symbol">#-}</a>
+<a id="322" class="Symbol">{-#</a> <a id="326" class="Keyword">OPTIONS</a> <a id="334" class="Pragma">--without-K</a> <a id="346" class="Pragma">--exact-split</a> <a id="360" class="Pragma">--safe</a> <a id="367" class="Symbol">#-}</a>
 </pre>
 
 <pre class="Agda">
-<a id="360" class="Keyword">module</a> <a id="367" href="UALib.Relations.html" class="Module">UALib.Relations</a> <a id="383" class="Keyword">where</a>
+<a id="396" class="Keyword">module</a> <a id="403" href="UALib.Relations.html" class="Module">UALib.Relations</a> <a id="419" class="Keyword">where</a>
 
-<a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="UALib.Relations.Unary.html" class="Module">UALib.Relations.Unary</a>
-<a id="424" class="Keyword">open</a> <a id="429" class="Keyword">import</a> <a id="436" href="UALib.Relations.Binary.html" class="Module">UALib.Relations.Binary</a>
-<a id="459" class="Keyword">open</a> <a id="464" class="Keyword">import</a> <a id="471" href="UALib.Relations.Equivalences.html" class="Module">UALib.Relations.Equivalences</a>
-<a id="500" class="Keyword">open</a> <a id="505" class="Keyword">import</a> <a id="512" href="UALib.Relations.Quotients.html" class="Module">UALib.Relations.Quotients</a>
+<a id="426" class="Keyword">open</a> <a id="431" class="Keyword">import</a> <a id="438" href="UALib.Relations.Unary.html" class="Module">UALib.Relations.Unary</a>
+<a id="460" class="Keyword">open</a> <a id="465" class="Keyword">import</a> <a id="472" href="UALib.Relations.Binary.html" class="Module">UALib.Relations.Binary</a>
+<a id="495" class="Keyword">open</a> <a id="500" class="Keyword">import</a> <a id="507" href="UALib.Relations.Quotients.html" class="Module">UALib.Relations.Quotients</a>
 
 </pre>
 

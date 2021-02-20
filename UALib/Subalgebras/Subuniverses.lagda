@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="subuniverse-type">Subuniverse Type</a>
+### <a id="subuniverses">Subuniverses</a>
 
 This section presents the [UALib.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 

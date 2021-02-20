@@ -5,7 +5,7 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-### <a id="binary-relation-and-kernel-types">Binary Relation and Kernel Types</a>
+### <a id="binary-relations">Binary Relations</a>
 
 This section presents the [UALib.Relations.Binary][] module of the [Agda Universal Algebra Library][].
 
@@ -100,24 +100,6 @@ or as a relation from `A` to `B`,
 
 
 
-#### <a id="properties-of-binary-relations">Properties of binary relations</a>
-
-\begin{code}
- reflexive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
- reflexive _≈_ = ∀ x → x ≈ x
-
- symmetric : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
- symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
-
- transitive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
- transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
-
- is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
- is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
-\end{code}
-
-
-
 #### <a id="binary-relation-truncation">Binary relation truncation</a>
 
 [The section on Truncation](UALib.Preface.html#truncation) in the preface describes the concept of truncation for "proof-relevant" mathematics.
@@ -176,6 +158,6 @@ infixr 4 _=[_]⇒_
 --------------------------------------
 
 [← UALib.Relations.Unary](UALib.Relations.Unary.html)
-<span style="float:right;">[UALib.Relations.Equivalences →](UALib.Relations.Equivalences.html)</span>
+<span style="float:right;">[UALib.Relations.Quotients →](UALib.Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}

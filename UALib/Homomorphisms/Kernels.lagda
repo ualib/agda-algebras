@@ -66,6 +66,8 @@ kerquo 𝑨{𝑩} h = 𝑨 ╱ (kercon 𝑨{𝑩} h)
 _[_]/ker_ : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 𝑨 [ 𝑩 ]/ker h = kerquo 𝑨 {𝑩} h
 
+infix 60 _[_]/ker_
+
 \end{code}
 
 Given an algebra 𝑨 and a congruence θ, the canonical epimorphism from an algebra 𝑨 to 𝑨 ╱ θ is defined as follows.

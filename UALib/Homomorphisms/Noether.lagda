@@ -44,22 +44,18 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
            ------------------------------------------------------------------------------------
  →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
 
-FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , commuting , femb
+FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
  where
   θ : Congruence 𝑨
   θ = kercon 𝑨{𝑩} ϕ
 
-  𝑨/θ : Algebra _ 𝑆
-  𝑨/θ = 𝑨 [ 𝑩 ]/ker ϕ
+  fmap : ∣ 𝑨 [ 𝑩 ]/ker ϕ ∣ → ∣ 𝑩 ∣
+  fmap ⟦a⟧ = ∣ ϕ ∣ ⌜ ⟦a⟧ ⌝
 
-  fmap : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
-  fmap a = ∣ ϕ ∣ ⌜ a ⌝
-
-  fhom : is-homomorphism 𝑨/θ 𝑩 fmap
-  fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ ) ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-              ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
-              (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
-              (𝑓 ̂ 𝑩) (λ x → fmap (𝒂 x)) ∎
+  fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker ϕ) 𝑩 fmap
+  fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
+              (𝑓 ̂ 𝑩)(∣ ϕ ∣ ∘ (λ x → ⌜ 𝒂 x ⌝))  ≡⟨ ap (𝑓 ̂ 𝑩) (gfe λ _ → 𝓇ℯ𝒻𝓁) ⟩
+              (𝑓 ̂ 𝑩)(fmap ∘ 𝒂)                 ∎
 
   fepic : Epic fmap
   fepic b = γ
@@ -67,24 +63,15 @@ FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic)
     a : ∣ 𝑨 ∣
     a = EpicInv ∣ ϕ ∣ ϕE b
 
-    a/θ : ∣ 𝑨/θ ∣
-    a/θ = ⟦ a ⟧
-
-    bfa : b ≡ fmap a/θ
+    bfa : b ≡ fmap ⟦ a ⟧
     bfa = (cong-app (EpicInvIsRightInv gfe ∣ ϕ ∣ ϕE) b)⁻¹
 
     γ : Image fmap ∋ b
-    γ = Image_∋_.eq b a/θ bfa
-
-
-  commuting : ∣ ϕ ∣ ≡ fmap ∘ ∣ πker 𝑨 {𝑩} ϕ ∣
-  commuting = 𝓇ℯ𝒻𝓁
+    γ = Image_∋_.eq b ⟦ a ⟧ bfa
 
   fmon : Monic fmap
-  fmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) faa' = γ
-   where
-    γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
-    γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
+  fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
+   class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
 
   femb : is-embedding fmap
   femb = monic-into-set-is-embedding Bset fmap fmon
@@ -113,23 +100,17 @@ FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕ
   θ : Congruence 𝑨
   θ = kercon 𝑨 {𝑩} h
 
-  𝑨/θ : Algebra _ 𝑆
-  𝑨/θ = 𝑨 [ 𝑩 ]/ker h
-
-  ϕ : ∣ 𝑨/θ ∣ → ∣ 𝑩 ∣
+  ϕ : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
   ϕ a = ∣ h ∣ ⌜ a ⌝
 
-  ϕhom : is-homomorphism 𝑨/θ 𝑩 ϕ
-  ϕhom 𝑓 𝒂 =  ∣ h ∣ ( fst ∥ (𝑓 ̂ 𝑨/θ) 𝒂 ∥ )      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-             ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ (𝒂 x) ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ (𝒂 x) ⌝)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ (𝒂 x) ⌝)) ≡⟨ ap (λ - → (𝑓 ̂ 𝑩) -) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
+  ϕhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 ϕ
+  ϕhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
              (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
 
   ϕmon : Monic ϕ
-  ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' = γ
-   where
-    γ : (⟨ θ ⟩ a , a , 𝓇ℯ𝒻𝓁) ≡ (⟨ θ ⟩ a' , a' , 𝓇ℯ𝒻𝓁)
-    γ = class-extensionality' pe gfe ssR ssA (IsEquiv θ) ϕaa'
+  ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' =
+   class-extensionality' pe gfe ssR ssA (IsEquiv θ) ϕaa'
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑨 {𝑩} h ∣
   ϕcom = 𝓇ℯ𝒻𝓁

@@ -5,7 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-### <a id="operation-and-signature-types">Operation and Signature Types</a>
+### <a id="operations-and-signatures">Operations and Signatures</a>
 
 This section presents the [UALib.Algebras.Signatures][] module of the [Agda Universal Algebra Library][].
 

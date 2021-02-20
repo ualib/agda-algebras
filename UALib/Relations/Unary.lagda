@@ -5,7 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-### <a id="unary-relation-types">Unary Relation Types</a>
+### <a id="unary-relations">Unary Relations</a>
 
 This section presents the [UALib.Relations.Unary][] module of the [Agda Universal Algebra Library][].
 
@@ -51,7 +51,9 @@ Below we will often consider predicates over the class of all algebras of a part
 
 The inhabitants of the type `Pred (Algebra 𝓤 𝑆)` 𝓤 are maps of the form `𝑨 → 𝓤 ̇`; given an algebra `𝑨 : Algebra 𝓤 𝑆`, we have `Pred 𝑨 𝓤 = 𝑨 → 𝓤 ̇`.
 
-#### <a id="The membership relation">The membership relation</a>
+
+
+#### <a id="membership-and-inclusion-relations">Membership and inclusion relations</a>
 
 We introduce notation so that we may indicate that `x` "belongs to" or "inhabits" at type `P`, or that `x` "has property" `P`, by writing either `x ∈ P` or `P x` (cf. `Relation/Unary.agda` in the [Agda Standard Library][]).
 
@@ -90,6 +92,7 @@ In type theory everything is a type. As we have just seen, this includes subsets
 _=̇_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 P =̇ Q = (P ⊆ Q) × (Q ⊆ P)
 
+infix 4 _=̇_
 \end{code}
 
 
@@ -161,17 +164,7 @@ img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
 
 
-#### <a id="predicate-product-and-transport">Predicate product and transport</a>
-
-The product `Π P` of a predicate `P : Pred X 𝓧` is inhabited iff  P x holds for all x : X.
-
-\begin{code}
-
-ΠP-meaning : {𝓧 𝓨 : Universe}{X : 𝓧 ̇}{P : Pred X 𝓨}
- →            Π P  →  (x : X) → P x
-ΠP-meaning f x = f x
-
-\end{code}
+#### <a id="predicate-transport">Predicate transport</a>
 
 The following is a pair of useful "transport" lemmas for predicates.
 

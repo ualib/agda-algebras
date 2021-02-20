@@ -5,7 +5,7 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-### <a id="congruence-relation-types">Congruence Relation Types</a>
+### <a id="congruence-relations">Congruence Relations</a>
 
 This section presents the [UALib.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 

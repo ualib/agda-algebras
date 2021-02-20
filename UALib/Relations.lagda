@@ -5,7 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-## <a id="relations">Relations</a>
+## <a id="relation-and-quotient-types">Relation and Quotient Types</a>
 
 This chapter presents the [UALib.Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -18,7 +18,6 @@ module UALib.Relations where
 
 open import UALib.Relations.Unary
 open import UALib.Relations.Binary
-open import UALib.Relations.Equivalences
 open import UALib.Relations.Quotients
 
 \end{code}

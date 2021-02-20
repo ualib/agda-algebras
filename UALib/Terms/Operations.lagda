@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="term-operation-types">Term Operation Types</a>
+### <a id="term-operations">Term Operations</a>
 
 This section presents the [UALib.Terms.Operations][] module of the [Agda Universal Algebra Library][].
 

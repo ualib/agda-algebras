@@ -189,16 +189,16 @@
 [Subalgebras.Properties]: UALib.Subalgebras.Properties.html
 [Subalgebras.Homomorphisms]: UALib.Subalgebras.Homomorphisms.html
 [Subalgebras.Subalgebras]: UALib.Subalgebras.Subalgebras.html
-[Subalgebras.WWMD]: UALib.Subalgebras.WWMD.html
+[Subalgebras.Univalent]: UALib.Subalgebras.Univalent.html
 
 [Varieties]: UALib.Varieties.html
 [Varieties.EquationalLogic]: UALib.Varieties.EquationalLogic.html
 [Varieties.Varieties]: UALib.Varieties.Varieties.html
+[Varieties section]: UALib.Varieties.Varieties.html
 [Varieties.Preservation]: UALib.Varieties.Preservation.html
 
 [Birkhoff]: UALib.Birkhoff.html
 [Birkhoff.FreeAlgebra]: UALib.Birkhoff.FreeAlgebra.html
-[Birkhoff.HSPLemmas]: UALib.Birkhoff.HSPLemmas.html
 [Birkhoff.HSPTheorem]: UALib.Birkhoff.HSPTheorem.html
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
@@ -255,7 +255,7 @@
 [UALib.Subalgebras.Properties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Properties.lagda
 [UALib.Subalgebras.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Homomorphisms.lagda
 [UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda
-[UALib.Subalgebras.WWMD]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/WWMD.lagda
+[UALib.Subalgebras.Univalent]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Univalent.lagda
 
 [UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
 [UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda

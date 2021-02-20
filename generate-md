@@ -42,7 +42,6 @@ mv html/UALib.Prelude.Lifts.{tex,md}
 mv html/UALib.Relations.{tex,md}
 mv html/UALib.Relations.Unary.{tex,md}
 mv html/UALib.Relations.Binary.{tex,md}
-mv html/UALib.Relations.Equivalences.{tex,md}
 mv html/UALib.Relations.Quotients.{tex,md}
 
 mv html/UALib.Algebras.{tex,md}
@@ -68,7 +67,7 @@ mv html/UALib.Subalgebras.{tex,md}
 mv html/UALib.Subalgebras.Subuniverses.{tex,md}
 mv html/UALib.Subalgebras.Generation.{tex,md}
 mv html/UALib.Subalgebras.Subalgebras.{tex,md}
-mv html/UALib.Subalgebras.WWMD.{tex,md}
+mv html/UALib.Subalgebras.Univalent.{tex,md}
 
 mv html/UALib.Varieties.{tex,md}
 mv html/UALib.Varieties.EquationalLogic.{tex,md}

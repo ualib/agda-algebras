@@ -5,7 +5,7 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-### <a id="algebra-types">Algebra Types</a>
+### <a id="algebras">Algebras</a>
 
 This section presents the [UALib.Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
 

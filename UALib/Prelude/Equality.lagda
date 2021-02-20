@@ -9,27 +9,6 @@ author: William DeMeo
 
 This section describes the [UALib.Prelude.Equality][] module of the [Agda Universal Algebra Library][].
 
-
-
-#### <a id="refl">refl</a>
-
-The type which is often referred to as "reflexivity" or "refl" is a very basic and important type. It represents [definitional equality](https://ncatlab.org/nlab/show/equality#definitional_equality).
-
-The `refl` type we use is the standard one, . In our case, it is defined in the `Identity-Type` module of the [Type Topology][] library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.  Here is the full listing of the `Identity-Type` module.
-
-```agda
-{-# OPTIONS --without-K --exact-split --safe #-}
-
-module Identity-Type where
-
-open import Universes
-
-data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
-  refl : {x : X} → x ≡ x
-```
-
-We being the [UALib.Prelude.Equality][] module by formalizing the obvious proof that `≡` is an equivalence relation.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -38,6 +17,26 @@ module UALib.Prelude.Equality where
 
 open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl;
  Σ; -Σ; _×_; _,_; pr₁; pr₂; ∣_∣; ∥_∥; fst; snd; is-subsingleton; is-prop; 𝟙; ap) public
+
+\end{code}
+
+
+#### <a id="refl">refl</a>
+
+The type which is often referred to as "reflexivity" or "refl" is a very basic and important one. It represents [definitional equality](https://ncatlab.org/nlab/show/equality#definitional_equality).
+
+The `refl` type we use is a standard one. It is defined in the `Identity-Type` module of the [Type Topology][] library, which we imported in the [Prelude.Preliminaries][] module, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.
+
+In the present module, we make `refl` available by importing it from [Prelude.Preliminaries][], which in turn improts from the `Identity-Type` module.  The latter defines `refl` as the following inductive datatype.
+
+```
+data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
+ refl : {x : X} → x ≡ x
+```
+
+Let us now formalize the obvious fact that `≡` is an equivalence relation.
+
+\begin{code}
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x
@@ -54,25 +53,23 @@ module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
 \end{code}
 
-The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.
+(The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.)
 
-
+Since we use `refl _` so often, it is convenient to adopt the following shorthand.
 
 
 #### <a id="functions-preserve-refl">Functions preserve refl</a>
 
 A function is well defined only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`.
 
-MHE defines `ap` in the [Type Topology][] library so we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
+Escardó defines `ap` in his [Type Topology][] library, and we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
-ap-cong : {𝓤 𝓦 : Universe}
-          {A : 𝓤 ̇} {B : 𝓦 ̇}
-          {f g : A → B} {a b : A}
- →        f ≡ g    →    a ≡ b
-          -----------------------
- →             f a ≡ g b
+ap-cong : {𝓤 𝓦 : Universe}{A : 𝓤 ̇ }{B : 𝓦 ̇ }{f g : A → B} {a b : A}
+ →        f ≡ g  →  a ≡ b
+          ---------------
+ →        f a ≡ g b
 
 ap-cong (refl _) (refl _) = refl _
 

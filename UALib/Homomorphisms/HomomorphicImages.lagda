@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="homomorphic-image-types">Homomorphic Image Types</a>
+### <a id="homomorphic-images">Homomorphic Images</a>
 
 This section describes the [UALib.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 

@@ -19,9 +19,9 @@ To prove Birkhoff's theorem, we will prove that every algebra 𝑨 ∈ Mod X (Th
 
 2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
 
-In the initial version of the [Agda UALib][], we used the free algebra 𝔉, developed in the [UALib.Birkhoff.FreeAlgebra][] module, as the 𝔽 with properties 1 and 2 above.  However, we found a more direct path to the proof by using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
+In the initial version of the [Agda UALib][], we used the free algebra 𝔉, developed in the [Birkhoff.FreeAlgebra][] section, as the 𝔽 with properties 1 and 2 above.  However, we found a more direct path to the proof by using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
 
-Recall, `⨅-hom-co` was defined in the [UALib.Homomorphisms.Products][] module.  It takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is "natural" in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is simply the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
+Recall, `⨅-hom-co` was defined in the [Homomorphisms.Products][] module.  It takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is "natural" in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is simply the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
 
 \begin{code}
 
@@ -114,7 +114,7 @@ VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso 𝓸𝓿𝓾 𝓸�
 
 #### <a id="sp-in-v">SP(𝒦) ⊆ V(𝒦)</a>
 
-In the [UALib.Varieties.Varieties][] module, we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.  This proof also suffers from the unfortunate defect of being boring.
+In the [Varieties section][], we proved that `SP(𝒦) ⊆ V(𝒦)` holds with fairly general universe level parameters.  Unfortunately, this was not general enough for our purposes, so we prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.  This proof also suffers from the unfortunate defect of being boring.
 
 \begin{code}
 
@@ -207,7 +207,7 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
 \end{code}
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra 𝔉, developed in the [UALib.Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra 𝔽, which we now define.
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra 𝔉, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra 𝔽, which we now define.
 
 \begin{code}
 

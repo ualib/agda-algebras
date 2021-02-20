@@ -6,7 +6,7 @@ author: William DeMeo
 ---
 
 
-### <a id="product-algebra-types">Product Algebra Types</a>
+### <a id="product-algebras">Product Algebras</a>
 
 This section presents the [UALib.Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -68,36 +68,38 @@ ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 #### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
-Later we will formally state and prove that, given an arbitrary class 𝒦 of algebras, the product of all subalgebras of algebras in the class belongs to SP(𝒦) (subalgebras of products of algebras in 𝒦). That is, ⨅ S(𝒦) ∈ SP(𝒦 ). This turns out to be a nontrivial exercise. In fact, it is not immediately obvious (at least to this author) how one should express the product of an entire class of algebras as a dependent type. After a number of failed attempts, the right type revealed itself. We present this "class product" type here.
+Later we will formally state and prove that, given an arbitrary class 𝒦 of algebras, the product of all subalgebras of algebras in the class belongs to SP(𝒦) (subalgebras of products of algebras in 𝒦). That is, ⨅ S(𝒦) ∈ SP(𝒦 ). This turns out to be a nontrivial exercise. In fact, it is not immediately obvious (at least to this author) how one should express the product of an entire class of algebras as a dependent type. After a number of failed attempts, the right type revealed itself in the form of the `class-product` whose construction is the main goal of this section.
 
 First, we need a type that will serve to index the class, as well as the product of its members.
 
 \begin{code}
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
-ℑ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} →  Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (𝓧 ⊔ ov 𝓤) ̇
+ ℑ : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (𝓧 ⊔ ov 𝓤) ̇
 
-ℑ {𝓤}{𝓧}{X} 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)
+ ℑ 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)
 
 \end{code}
 
-Notice that the second component of this dependent pair type is `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`.  In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`.  However, we realized that adding a mapping of type `X → ∣ 𝑨 ∣` is quite useful.  The reason for this will become clear later; for now, suffice it to say that a map X → ∣ 𝑨 ∣ may be viewed as a context and we want to keep the context completely general.  Adding the map to the index set ℑ accomplishes this.
+Notice that the second component of this dependent pair type is `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`.  In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`.  However, we realized that adding a mapping of type `X → ∣ 𝑨 ∣` is quite useful.  The reason for this will become clear later; for now, suffice it to say that a map X → ∣ 𝑨 ∣ may be viewed as a context and we want to keep the context completely general.  Including this context map in the index type ℑ accomplishes this.
 
-Taking the product over the index type ℑ requires a function that takes an index (i : ℑ) and returns the corresponding algebra.
+Taking the product over the index type ℑ requires a function that takes an index `i : ℑ` and returns the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra 𝓤 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
 
 \begin{code}
 
-𝔄 : {𝓤 : Universe}{𝓧 : Universe}{X : 𝓧 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → ℑ{𝓤}{𝓧}{X} 𝒦 → Algebra 𝓤 𝑆
+ 𝔄 : (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → ℑ 𝒦 → Algebra 𝓤 𝑆
 
-𝔄 𝒦 = λ (i : (ℑ 𝒦)) → ∣ i ∣
+ 𝔄 𝒦 = λ (i : (ℑ 𝒦)) → ∣ i ∣
+
 \end{code}
 
-Finally, we represent the product of all members of 𝒦 as follows.
+Finally, we define `class-product` which represents the product of all members of 𝒦.
 
 \begin{code}
 
-class-product : {𝓤 : Universe}{𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
+ class-product : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
 
-class-product {𝓤}{𝓧}{X} 𝒦 = ⨅ ( 𝔄{𝓤}{𝓧}{X} 𝒦 )
+ class-product 𝒦 = ⨅ ( 𝔄 𝒦 )
 
 \end{code}
 
@@ -105,12 +107,13 @@ Alternatively, we could have defined the class product in a way that explicitly 
 
 \begin{code}
 
-class-product' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
-class-product'{𝓤}{𝓧}{X} 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
+ class-product' : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
+
+ class-product' 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
 
 \end{code}
 
-If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the pair `(𝑨 , p , h) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is obviously `𝑨`) as the projection of the product `⨅ ( 𝔄 𝒦 )` onto the `(𝑨 , p, h)`-th component.
+If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the triple `(𝑨 , p , h) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ ( 𝔄 𝒦 )` onto the `(𝑨 , p, h)`-th component.
 
 
 

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Subalgebras.WWMD module (The Agda Universal Algebra Library)
-date : 2021-01-14
+title : UALib.Subalgebras.Univalent module (The Agda Universal Algebra Library)
+date : 2021-02-20
 author: William DeMeo
 ---
 
-### <a id="wwmd">WWMD</a>
+### <a id="univalent-subalgebras">Univalent Subalgebras</a>
 
-This section presents the [UALib.Subalgebras.WWMD][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Subalgebras.Univalent][] module of the [Agda Universal Algebra Library][].
 
 In his Type Topology library, Martin Escardo gives a nice formalization of the notion of subgroup and its properties.  In this module we merely do for algebras what Martin did for groups.
 
@@ -18,7 +18,6 @@ As one can see from the import statement that starts with `open import Prelude.P
 
 This module can be safely skipped, or even left out of the Agda Universal Algebra Library, as it plays no role in other modules.
 
-Incidentally, the name of this module---WWMD ("What would Martin do?")---seemed as good a choice as any other.
 
 \begin{code}
 
@@ -27,7 +26,7 @@ Incidentally, the name of this module---WWMD ("What would Martin do?")---seemed 
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Subalgebras.WWMD {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module UALib.Subalgebras.Univalent {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import UALib.Subalgebras.Subalgebras {𝑆 = 𝑆}{gfe} public
 
