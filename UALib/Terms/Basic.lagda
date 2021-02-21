@@ -30,13 +30,13 @@ Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of va
 
 By a **word** in the language of `𝑆`, we mean a nonempty, finite sequence of members of `X ∪ ∣ 𝑆 ∣`. We denote the concatenation of such sequences by simple juxtaposition.
 
-Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction on `n` the sets `𝑇ₙ` of **words on** `X ∪ ∣ 𝑆 ∣` as follows (cf. [Bergman (2012)][] Def. 4.19):
+Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction on `n` the sets `𝑇ₙ` of **words** over `X ∪ ∣ 𝑆 ∣` as follows (cf. [Bergman (2012)][] Def. 4.19):
 
-`𝑇₀` := `X ∪ S₀` and `𝑇`<sub>n+1</sub> := `𝑇ₙ ∪ 𝒯ₙ`
+`𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where 𝒯ₙ is the collection of all `𝑓 𝑡` such that `𝑓 : ∣ 𝑆 ∣` and `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.) We define the collection of **terms in the signature** `𝑆` **over** `X` by `𝑇 X` := ⋃<sub>n</sub> `𝑇ₙ`. By an 𝑆-**term** we mean a term in the language of `𝑆`.
+where `𝒯ₙ` is the collection of all `𝑓 𝑡` such that `𝑓 : ∣ 𝑆 ∣` and `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.) We define the collection of **terms in the signature** `𝑆` **over** `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-**term** we mean a term in the language of `𝑆`.
 
-The definition of `𝑇 X` is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
+The definition of `Term X` is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
 
 \begin{code}
 
