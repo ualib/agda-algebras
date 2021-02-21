@@ -180,11 +180,11 @@ lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
 
 
 lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}
-               (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
+               (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
                -----------------------------------------
  →             𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
 
-lift-alg-iso 𝓧 𝓩 𝑨 𝑩 A≅B = TRANS-≅ (TRANS-≅ (sym-≅ lift-alg-≅) A≅B) lift-alg-≅
+lift-alg-iso 𝓧 𝓩 𝑨 A≅B = TRANS-≅ (TRANS-≅ (sym-≅ lift-alg-≅) A≅B) lift-alg-≅
 
 \end{code}
 

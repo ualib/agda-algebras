@@ -44,7 +44,6 @@ We define the inductive type `H` to represent classes of algebras that include a
 
 \begin{code}
 
---Closure wrt H
 data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
  Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
@@ -62,7 +61,6 @@ The most useful inductive type that we have found for representing the semantic 
 
 \begin{code}
 
---Closure wrt S
 data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)) :
  Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (ov(𝓤 ⊔ 𝓦)) where
   sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
@@ -189,21 +187,20 @@ We sometimes want to go back and forth between our two representations of subalg
 
 \begin{code}
 
-subalgebra→S : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
- →             𝑪 IsSubalgebraOfClass 𝒦
-               ------------------------
- →             𝑪 ∈ S{𝓤}{𝓦} 𝒦
+module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-subalgebra→S {𝓤}{𝓦}{𝒦}{𝑪} (𝑨 , ((𝑩 , B≤A) , KA , C≅B)) = ssub sA C≤A
- where
-  C≤A : 𝑪 ≤ 𝑨
-  C≤A = Iso-≤ 𝑨 𝑪 B≤A C≅B
+ subalgebra→S : {𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
 
-  slAu : lift-alg 𝑨 𝓤 ∈ S{𝓤}{𝓤} 𝒦
-  slAu = sbase KA
+ subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
+  where
+   B≤A : 𝑩 ≤ 𝑨
+   B≤A = Iso-≤ 𝑨 𝑩 C≤A B≅C
 
-  sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
-  sA = siso slAu (sym-≅ lift-alg-≅)
+   slAu : lift-alg 𝑨 𝓤 ∈ S{𝓤}{𝓤} 𝒦
+   slAu = sbase KA
+
+   sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+   sA = siso slAu (sym-≅ lift-alg-≅)
 
 
 module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
@@ -262,7 +259,7 @@ lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
                 -------------------------------------------------
  →              (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 𝑪 B≅C)
+lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 B≅C)
  where
   lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 𝓦
@@ -395,7 +392,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfun
  PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift x))
  PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
  PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
- PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 𝑩 A≅B)
+ PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 A≅B)
  PS⊆SP (pliftu x) = slift (PS⊆SP x)
  PS⊆SP (pliftw x) = slift (PS⊆SP x)
 

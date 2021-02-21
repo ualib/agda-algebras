@@ -105,8 +105,8 @@ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   B≅A : lA+ ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
-VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
-VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝑨 𝑩 A≅B)
+VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 𝓸𝓿𝓾+ 𝑨 A≅B)
+VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝑨 A≅B)
 
 \end{code}
 

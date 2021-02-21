@@ -121,7 +121,7 @@ lift-alg-hom-image : {𝓧 𝓨 𝓩 𝓦 : Universe}
  →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
 
 lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
- (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso 𝓨 𝓦 𝑪 𝑩 C≅B
+ (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso 𝓨 𝓦 𝑪 C≅B
   where
    lϕ : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑪 𝓦)
    lϕ = (lift-alg-hom 𝓧 𝓩 𝑨 𝑪) (ϕ , ϕhom)
