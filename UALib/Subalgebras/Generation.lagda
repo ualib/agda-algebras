@@ -97,9 +97,9 @@ sub-term-closed : {𝓧 𝓠 𝓤 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓠 �
  →                (B ∈ Subuniverses 𝑨) → (t : Term{𝓧} X)(b : X → ∣ 𝑨 ∣)
  →                (∀ x → b x ∈ B) → ((t ̇ 𝑨) b) ∈ B
 
-sub-term-closed 𝑨 B AB (Term.generator x) b b∈B = b∈B x
-sub-term-closed 𝑨 B AB (Term.node f args) b b∈B = AB f (λ z → (args z ̇ 𝑨) b)
-                                                    (λ x → sub-term-closed 𝑨 B AB (args x) b b∈B)
+sub-term-closed 𝑨 B AB (ℊ x) b b∈B = b∈B x
+sub-term-closed 𝑨 B AB (node f 𝒕) b b∈B = AB f (λ z → (𝒕 z ̇ 𝑨) b)
+                                                    (λ x → sub-term-closed 𝑨 B AB (𝒕 x) b b∈B)
 \end{code}
 
 Alternatively, we could express the preceeding fact using an inductive type.

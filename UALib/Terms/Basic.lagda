@@ -50,7 +50,9 @@ open Term
 
 \end{code}
 
-Here, the type `X` represents an arbitrary collection of variable symbols.
+**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Throughout this module the name of the first constructor of the `Term` type will remain `generator`. However, in all of the modules that follow this one, we will use the shorthand `ℊ` to denote the `generator` constructor.
+
+
 
 #### <a id="the-term-algebra">The term algebra</a>
 
@@ -148,7 +150,7 @@ lift-of-epi-is-epi 𝑨 h₀ hE y = γ where
 \end{code}
 
 
-The `𝑻img` and `mkti` functions of the [UALib.Varieties.FreeAlgebra][] module show how to construct such epimorphisms using the 𝕏, lift-hom, and lift-of-epi-is-epi functions.
+In the [Birkhoff.FreeAlgebra][] section the `lift-hom` and `lift-of-epi-is-epi` functions are used to construct such epimorphisms.
 
 
 

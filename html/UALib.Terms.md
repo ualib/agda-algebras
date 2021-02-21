@@ -16,7 +16,6 @@ This chapter presents the [UALib.Terms][] module of the [Agda Universal Algebra 
 
 <a id="360" class="Keyword">open</a> <a id="365" class="Keyword">import</a> <a id="372" href="UALib.Terms.Basic.html" class="Module">UALib.Terms.Basic</a>
 <a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="UALib.Terms.Operations.html" class="Module">UALib.Terms.Operations</a>
-<a id="425" class="Keyword">open</a> <a id="430" class="Keyword">import</a> <a id="437" href="UALib.Terms.Compatibility.html" class="Module">UALib.Terms.Compatibility</a>
 
 </pre>
 

@@ -59,9 +59,9 @@ H-id1 p q α (hhimg{𝑨}{𝑪} HA ((𝑩 , ϕ , (ϕhom , ϕsur)) , B≅C)) = �
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
   γ = gfe λ 𝒃 →
    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality β (preim 𝒃)) ⟩
-   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
    (q ̇ 𝑩) 𝒃               ∎
 
@@ -232,6 +232,7 @@ V-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov �
 V-id1 p q α (vbase x) = ⊧-lift-alg-invariance _ p q (α x)
 V-id1 {𝓤} p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
 V-id1 {𝓤} p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
+
 V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
  ⊧-I-invariance p q γ B≅C
   where
@@ -245,13 +246,12 @@ V-id1 p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
    ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
 
    γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-   γ = gfe λ 𝒃 →
-    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-    (q ̇ 𝑩) 𝒃                ∎
+   γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+                 (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+                 ϕ ((p ̇ 𝑨)(preim 𝒃))    ≡⟨ ap ϕ (intens IH (preim 𝒃)) ⟩
+                 ϕ ((q ̇ 𝑨)(preim 𝒃))    ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+                 (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+                 (q ̇ 𝑩) 𝒃               ∎
 
 V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssub {𝑨}{𝑩} VA B≤A ) =
  ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ
@@ -279,13 +279,10 @@ V-id1{𝓤}{𝓧}{X}{𝒦} p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Asinglepq y
 
-V-id1 {𝓤}{𝓧}{X} p q α (vprodu{I}{𝒜} V𝒜) = γ
+V-id1 {𝓤}{𝓧}{X} p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invariance p q I 𝒜 IH
  where
   IH : (i : I) → 𝒜 i ⊧ p ≈ q
-  IH i = V-id1{𝓤}{𝓧}{X} p q α (V𝒜 i)
-
-  γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
-  γ = ⊧-P-invariance p q I 𝒜 IH
+  IH i = V-id1 p q α (V𝒜 i)
 
 V-id1 {𝓤}{𝓧}{X} p q α (vprodw{I}{𝒜} V𝒜) = γ
  where
@@ -305,15 +302,13 @@ V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α V
 
 
 V-id1' : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term X)
-        ---------------------------------
- →      𝒦 ⊧ p ≋ q  →  V{𝓤}{(ov 𝓤)⁺} 𝒦 ⊧ p ≋ q
+         (p q : Term X)
+         ---------------------------------------
+ →       𝒦 ⊧ p ≋ q  →  V{𝓤}{ov 𝓤 ⁺} 𝒦 ⊧ p ≋ q
 
 V-id1' p q α (vbase x) = ⊧-lift-alg-invariance _ p q (α x)
--- V-id1' p q α (vlift x) = {!!}
 V-id1'  p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1 p q α) x)
 V-id1'  p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance 𝑨 p q ((V-id1' p q α) x)
--- V-id1' p q α (vliftw x) = {!!}
 V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
  ⊧-I-invariance p q γ B≅C
   where
@@ -329,9 +324,9 @@ V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) =
    γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
    γ = gfe λ 𝒃 →
     (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
     ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (intensionality IH (preim 𝒃)) ⟩
-    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term gfe 𝑨 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
     (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
     (q ̇ 𝑩) 𝒃                ∎
 V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = γ

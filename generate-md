@@ -59,7 +59,6 @@ mv html/UALib.Homomorphisms.HomomorphicImages.{tex,md}
 mv html/UALib.Terms.{tex,md}
 mv html/UALib.Terms.Basic.{tex,md}
 mv html/UALib.Terms.Operations.{tex,md}
-mv html/UALib.Terms.Compatibility.{tex,md}
 
 mv html/UALib.Subalgebras.{tex,md}
 mv html/UALib.Subalgebras.Subuniverses.{tex,md}

@@ -20,7 +20,7 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Terms.Compatibility{𝑆 = 𝑆}{gfe} public
+open import UALib.Terms.Operations{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 

@@ -16,7 +16,6 @@ module UALib.Terms where
 
 open import UALib.Terms.Basic
 open import UALib.Terms.Operations
-open import UALib.Terms.Compatibility
 
 \end{code}
 

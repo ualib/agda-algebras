@@ -331,7 +331,7 @@ open Congruence
 free-quot-subalg-ℭ : is-set ∣ ℭ ∣
  →                   (∀ p q → is-subsingleton (⟨ kercon ℭ ΨTC ⟩ p q))
  →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ ΨTC ⟩} C))
-                     -------------------------------------------------------------------
+                     -----------------------------------------------------------
  →                   ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
 
 free-quot-subalg-ℭ Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ ΨTC pe' Cset ssR ssC
@@ -417,15 +417,13 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \end{code}
 
-
-
-Some readers might worry that we haven't quite acheived our goal because what we just proved (<a href="https://ualib.gitlab.io/UALib.Birkhoff.Theorem.html#1487">birkhoff</a>)---that every variety is an equational class---is not an "if and only if" assertion. Those fears are quickly put to rest by noting that the converse---that every equational class is closed under HSP---was already proved in the [Varieties.Preservation][] module. Indeed, there we proved the following identity preservation lemmas:
+We have thus proved that every variety is an equational class.  Readers familiar with the classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might worry that we haven't completed the proof.  But recall that in the [Varieties.Preservation][] module we proved the following identity preservation lemmas:
 
 * [(H-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
 * [(S-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
 * [(P-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111) 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
 
-From these it follows that every equational class is a variety.
+From these it follows that every equational class is a variety. Thus, our formal proof of Birkhoff's theorem is complete.
 
 ----------------------------
 

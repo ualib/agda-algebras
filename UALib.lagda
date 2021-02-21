@@ -114,7 +114,6 @@ open import UALib.Birkhoff
 - [Types for Terms](UALib.Terms.html)
   - [Basic Definitions](UALib.Terms.Basic.html)
   - [Term Operations](UALib.Terms.Operations.html)
-  - [Term Compatibility](UALib.Terms.Compatibility.html)
 
 - [Subalgebra Types](UALib.Subalgebras.html)
   - [Subuniverses](UALib.Subalgebras.Subuniverses.html)

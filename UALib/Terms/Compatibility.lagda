@@ -36,12 +36,12 @@ comm-hom-term : {𝓤 𝓦 𝓧 : Universe} → funext 𝓥 𝓦
                 -----------------------------------------
  →              ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
-comm-hom-term _ 𝑨 𝑩 h (generator x) a = 𝓇ℯ𝒻𝓁
+comm-hom-term _ 𝑨 𝑩 h (ℊ x) a = 𝓇ℯ𝒻𝓁
 
-comm-hom-term fe 𝑨 𝑩 h (node f args) a =
- ∣ h ∣((f ̂ 𝑨) λ i₁ → (args i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a ) ⟩
- (f ̂ 𝑩)(λ i₁ →  ∣ h ∣((args i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (args i₁) a))⟩
- (f ̂ 𝑩)(λ r → (args r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
+comm-hom-term fe 𝑨 𝑩 h (node f 𝒕) a =
+ ∣ h ∣((f ̂ 𝑨) λ i₁ → (𝒕 i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ f ( λ r → (𝒕 r ̇ 𝑨) a ) ⟩
+ (f ̂ 𝑩)(λ i₁ →  ∣ h ∣((𝒕 i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(fe (λ i₁ → comm-hom-term fe 𝑨 𝑩 h (𝒕 i₁) a))⟩
+ (f ̂ 𝑩)(λ r → (𝒕 r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
 
 \end{code}
 
@@ -54,19 +54,19 @@ comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : �
                             -------------------------------------------------------------
  →                          ∣ h ∣ ∘ (t ̇ 𝑨) ≡ (t ̇ 𝑩) ∘ (λ a → ∣ h ∣ ∘ a)
 
-comm-hom-term-intensional gfe 𝑨 𝑩 h (generator x) = 𝓇ℯ𝒻𝓁
+comm-hom-term-intensional gfe 𝑨 𝑩 h (ℊ x) = 𝓇ℯ𝒻𝓁
 
-comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f args) = γ
+comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f 𝒕) = γ
  where
-  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (args i ̇ 𝑨) a)) ≡ (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
-  γ = (λ a → ∣ h ∣ ((f ̂ 𝑨)(λ i → (args i ̇ 𝑨) a)))     ≡⟨ gfe (λ a → ∥ h ∥ f ( λ r → (args r ̇ 𝑨) a )) ⟩
-      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((args i ̇ 𝑨) a)))     ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
-      (λ a → (f ̂ 𝑩)(λ i → (args i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣ ∎
+  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (𝒕 i ̇ 𝑨) a)) ≡ (λ a → (f ̂ 𝑩)(λ i → (𝒕 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
+  γ = (λ a → ∣ h ∣ ((f ̂ 𝑨)(λ i → (𝒕 i ̇ 𝑨) a)))     ≡⟨ gfe (λ a → ∥ h ∥ f ( λ r → (𝒕 r ̇ 𝑨) a )) ⟩
+      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((𝒕 i ̇ 𝑨) a)))     ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
+      (λ a → (f ̂ 𝑩)(λ i → (𝒕 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣ ∎
    where
-    IH : ∀ a i → (∣ h ∣ ∘ (args i ̇ 𝑨)) a ≡ ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
-    IH a i = intensionality (comm-hom-term-intensional gfe 𝑨 𝑩 h (args i)) a
+    IH : ∀ a i → (∣ h ∣ ∘ (𝒕 i ̇ 𝑨)) a ≡ ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
+    IH a i = intensionality (comm-hom-term-intensional gfe 𝑨 𝑩 h (𝒕 i)) a
 
-    ih : (λ a → (λ i → ∣ h ∣ ((args i ̇ 𝑨) a))) ≡ (λ a → (λ i → ((args i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
+    ih : (λ a → (λ i → ∣ h ∣ ((𝒕 i ̇ 𝑨) a))) ≡ (λ a → (λ i → ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
     ih = gfe λ a → gfe λ i → IH a i
 
 \end{code}
@@ -85,17 +85,17 @@ compatible-term : {𝓤 : Universe}{X : 𝓤 ̇}
                   -----------------------------------------
  →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
-compatible-term 𝑨 (generator x) θ p = p x
+compatible-term 𝑨 (ℊ x) θ p = p x
 
-compatible-term 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term 𝑨 (args x) θ) p
+compatible-term 𝑨 (node f 𝒕) θ p = snd ∥ θ ∥ f λ x → (compatible-term 𝑨 (𝒕 x) θ) p
 
 compatible-term' : {𝓤 : Universe} {X : 𝓤 ̇}
                    (𝑨 : Algebra 𝓤 𝑆)(t : Term X) (θ : Con 𝑨)
                    ------------------------------------------
  →                 compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
-compatible-term' 𝑨 (generator x) θ p = p x
-compatible-term' 𝑨 (node f args) θ p = snd ∥ θ ∥ f λ x → (compatible-term' 𝑨 (args x) θ) p
+compatible-term' 𝑨 (ℊ x) θ p = p x
+compatible-term' 𝑨 (node f 𝒕) θ p = snd ∥ θ ∥ f λ x → (compatible-term' 𝑨 (𝒕 x) θ) p
 
 \end{code}
 

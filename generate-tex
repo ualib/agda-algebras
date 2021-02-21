@@ -40,8 +40,6 @@ echo "Checking UALib.Terms.Basic.lagda"
 agda --latex UALib/Terms/Basic.lagda
 echo "Checking UALib.Terms.Operations.lagda"
 agda --latex UALib/Terms/Operations.lagda
-echo "Checking UALib.Terms.Compatibility.lagda"
-agda --latex UALib/Terms/Compatibility.lagda
 
 echo "Checking UALib.Subalgebras.Subuniverses.lagda"
 agda --latex UALib/Subalgebras/Subuniverses.lagda
@@ -86,7 +84,6 @@ mv latex/UALib/Homomorphisms/HomomorphicImages.{tex,md}
 
 mv latex/UALib/Terms/Basic.{tex,md}
 mv latex/UALib/Terms/Operations.{tex,md}
-mv latex/UALib/Terms/Compatibility.{tex,md}
 
 mv latex/UALib/Subalgebras/Subuniverses.{tex,md}
 mv latex/UALib/Subalgebras/Generation.{tex,md}
@@ -122,7 +119,6 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Homomorphisms/Hom
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Basic.md -o latex/UALib/Terms/Basic.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Operations.md -o latex/UALib/Terms/Operations.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Terms/Compatibility.md -o latex/UALib/Terms/Compatibility.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Subuniverses.md -o latex/UALib/Subalgebras/Subuniverses.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/UALib/Subalgebras/Generation.md -o latex/UALib/Subalgebras/Generation.tex

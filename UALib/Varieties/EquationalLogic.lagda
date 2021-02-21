@@ -11,6 +11,16 @@ This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agd
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
+We also prove some closure and invariance properties of ⊧.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+
+* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+
+* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
+
+* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
+
+
+
 **Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
@@ -24,7 +34,7 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
+open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
 open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc) public
 
 \end{code}
@@ -47,7 +57,7 @@ _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
-#### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
+##### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
 The expression `𝑨 ⊧ 𝑝 ≈ 𝑞` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
 
 
@@ -77,18 +87,8 @@ Mod X ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
 
 
-#### <a id="equational-logic-types">Equational Logic Types</a>
 
-Here we prove some closure and invariance properties of the models relation defined above.  Proofs are given of the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
-
-* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
-
-* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class;
-
-* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
-
-
-##### <a id="algebraic-invariance">Algebraic invariance</a>
+#### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
@@ -103,9 +103,9 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
   γ = gfe λ x →
       (p ̇ 𝑩) x ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
       (p ̇ 𝑩) (∣ 𝒾𝒹 𝑩 ∣ ∘ x) ≡⟨ ap (λ - → (p ̇ 𝑩) -) (gfe λ i → ((f∼g)(x i))⁻¹)  ⟩
-      (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x) ≡⟨ (comm-hom-term gfe 𝑨 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
+      (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x) ≡⟨ (comm-hom-term 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
       ∣ f ∣ ((p ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
-      ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ comm-hom-term gfe 𝑨 𝑩 f q (∣ g ∣ ∘ x) ⟩
+      ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ comm-hom-term 𝑩 f q (∣ g ∣ ∘ x) ⟩
       (q ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (λ - → (q ̇ 𝑩) -) (gfe λ i → (f∼g) (x i)) ⟩
       (q ̇ 𝑩) x ∎
 
@@ -160,9 +160,9 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
   h = ∣ B≤A ∣
 
   ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality Apq (∣ h ∣ ∘ b) ⟩
-        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
         ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
@@ -190,9 +190,9 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
    hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
 
    ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term gfe 𝑩 𝑨 h p b ⟩
+   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
          (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq ka) (∣ h ∣ ∘ b) ⟩
-         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term gfe 𝑩 𝑨 h q b)⁻¹ ⟩
+         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
          ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
@@ -216,9 +216,9 @@ An identities satisfied by all algebras in a class are also satisfied by the pro
  where
   γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
   γ = gfe λ a →
-   (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod gfe p 𝒜 a ⟩
+   (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod p 𝒜 a ⟩
    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
-   (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod gfe q 𝒜 a)⁻¹ ⟩
+   (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod q 𝒜 a)⁻¹ ⟩
    (q ̇ ⨅ 𝒜) a                           ∎
 
 
@@ -270,9 +270,9 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
 ⊧-H-invariance X p q 𝑨 φ β =
   ∣ φ ∣ p              ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
-  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ p ℊ ) ⟩
+  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term 𝑨 φ p ℊ ) ⟩
   (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ φ ∣ ∘ ℊ ) ⟩
-  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q ℊ )⁻¹ ⟩
+  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term 𝑨 φ q ℊ )⁻¹ ⟩
   ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
   ∣ φ ∣ q              ∎
 
@@ -294,9 +294,9 @@ More generally, an identity is satisfied by all algebras in a class if and only 
  where
   ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂) ≡ ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)
 
-  ξ 𝒂 = ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term gfe (𝑻 X) 𝑨 φ p 𝒂 ⟩
+  ξ 𝒂 = ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term 𝑨 φ p 𝒂 ⟩
         (p ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ intensionality (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
-        (q ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 φ q 𝒂)⁻¹ ⟩
+        (q ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term 𝑨 φ q 𝒂)⁻¹ ⟩
         ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
 
 -- ⇐ (the "if" direction)
@@ -313,9 +313,9 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
    γ : 𝑨 ⊧ p ≈ q
    γ = gfe λ 𝒂 →
-        (p ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ≡⟨(comm-hom-term gfe (𝑻 X) 𝑨 (φ 𝒂) p ℊ)⁻¹ ⟩
+        (p ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ≡⟨(comm-hom-term 𝑨 (φ 𝒂) p ℊ)⁻¹ ⟩
         (∣ φ 𝒂 ∣ ∘ (p ̇ 𝑻 X)) ℊ  ≡⟨ ap (λ - → - ℊ) (β 𝑨 (φ 𝒂) ka) ⟩
-        (∣ φ 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term gfe (𝑻 X) 𝑨 (φ 𝒂) q ℊ) ⟩
+        (∣ φ 𝒂 ∣ ∘ (q ̇ 𝑻 X)) ℊ  ≡⟨ (comm-hom-term 𝑨 (φ 𝒂) q ℊ) ⟩
         (q ̇ 𝑨)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
 
 

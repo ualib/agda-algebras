@@ -176,15 +176,11 @@
 
 [Terms]: UALib.Terms.html
 [Terms.Basic]: UALib.Terms.Basic.html
-[Terms.Free]: UALib.Terms.Free.html
 [Terms.Operations]: UALib.Terms.Operations.html
-[Terms.Compatibility]: UALib.Terms.Compatibility.html
 
 [Subalgebras]: UALib.Subalgebras.html
 [Subalgebras.Subuniverses]: UALib.Subalgebras.Subuniverses.html
 [Subalgebras.Generation]: UALib.Subalgebras.Generation.html
-[Subalgebras.Properties]: UALib.Subalgebras.Properties.html
-[Subalgebras.Homomorphisms]: UALib.Subalgebras.Homomorphisms.html
 [Subalgebras.Subalgebras]: UALib.Subalgebras.Subalgebras.html
 [Subalgebras.Univalent]: UALib.Subalgebras.Univalent.html
 
@@ -236,9 +232,7 @@
 [UALib.Terms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda
 [UALib.Terms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda
 [UALib.Terms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Basic.lagda
-[UALib.Terms.Free]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Free.lagda
 [UALib.Terms.Operations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Operations.lagda
-[UALib.Terms.Compatibility]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Compatibility.lagda
 
 [UALib.Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
 [UALib.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
