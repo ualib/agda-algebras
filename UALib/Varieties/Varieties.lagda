@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="inductive-types-h-s-p-and-v">Inductive Types H, S, P, and V</a>
+### <a id="the-inductive-types-h-s-p-v">The Inductive Types H, S, P, V</a>
 
 This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
 
@@ -447,39 +447,35 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfunext (ov 𝓤)(ov 𝓤)} where
+PS⊆SP : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(hfe : hfunext (ov 𝓤)(ov 𝓤))
+ →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
 
- ov𝓾 : Universe
- ov𝓾 = ov 𝓤
+PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
+PS⊆SP {𝓤}{𝒦} _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
+PS⊆SP _ (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
+PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
+PS⊆SP {𝓤} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 (ov 𝓤) 𝑨 A≅B)
+PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
+PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
- PS⊆SP : (P{ov𝓾}{ov𝓾} (S{𝓤}{ov𝓾} 𝒦)) ⊆ (S{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
+PS⊆SP {𝓤}{𝒦} hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ where
+  ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
+  ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
- PS⊆SP (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov𝓾}{𝒦} (slift x))
- PS⊆SP (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
- PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
- PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 ov𝓾 𝑨 A≅B)
- PS⊆SP (pliftu x) = slift (PS⊆SP x)
- PS⊆SP (pliftw x) = slift (PS⊆SP x)
+  η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
+  η = lemPS⊆SP{𝓤 = ov 𝓤}{ov 𝓤}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
- PS⊆SP (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
-  where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP (x i))
+PS⊆SP {𝓤}{𝒦} hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ where
+  ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
+  ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
-   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
-   η = lemPS⊆SP{𝓤 = ov𝓾}{ov𝓾}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
+  η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
+  η = lemPS⊆SP{𝓤 = ov 𝓤}{ov 𝓤}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
 
- PS⊆SP (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
-  where
-   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov𝓾} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP (x i))
-
-   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov𝓾}{ov𝓾} (P{𝓤}{ov𝓾} 𝒦))
-   η = lemPS⊆SP{𝓤 = ov𝓾}{ov𝓾}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
-
- PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
- PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
+PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
+PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
 
 \end{code}
 
@@ -487,7 +483,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} {hfe : hfun
 
 #### <a id="more-class-inclusions">More class inclusions</a>
 
-We conclude this module with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
+We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
 
 \begin{code}
 
@@ -503,7 +499,7 @@ P⊆V (pisow x x₁) = visow (P⊆V x) x₁
 
 
 SP⊆V : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
- →     S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦) ⊆ V{𝓤}{𝓦} 𝒦
+ →     S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦) ⊆ V 𝒦
 
 SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA lift-alg-≅)
 SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
@@ -518,7 +514,7 @@ We just prove that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general as
 \begin{code}
 
 SP⊆V' : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
- →      S{ov 𝓤}{ov 𝓤 ⁺} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V{𝓤}{ov 𝓤 ⁺} 𝒦
+ →      S{ov 𝓤}{ov 𝓤 ⁺} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V 𝒦
 
 SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (sym-≅ (lift-alg-associative 𝑨))
 SP⊆V' (slift x) = VlA (SP⊆V x)
@@ -530,18 +526,12 @@ SP⊆V' {𝓤}(ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
 
 SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
 
-SP⊆V' {𝓤}{𝒦}(siso{𝑨}{𝑩} x A≅B) = visow (VlA vA) (Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B)
+SP⊆V' {𝓤}{𝒦}(siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) γ
  where
-  lA : Algebra (ov 𝓤 ⁺) 𝑆
-  lA = lift-alg 𝑨 (ov 𝓤 ⁺)
-
-  vA : 𝑨 ∈ V 𝒦
-  vA = SP⊆V x
+  γ : lift-alg 𝑨 (ov 𝓤 ⁺) ≅ 𝑩
+  γ = Trans-≅ (lift-alg 𝑨 (ov 𝓤 ⁺)) 𝑩 (sym-≅ lift-alg-≅) A≅B
 
 \end{code}
-
-
-
 
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
@@ -574,7 +564,7 @@ class-prod-s-∈-ps {𝓤}{X}{𝒦}  = pisou psPllA (⨅≅ gfe llA≅A)
 -- So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
 class-prod-s-∈-sp : {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → hfunext (ov 𝓤) (ov 𝓤)
  →                  class-product{𝓤}{𝓤}{X} (S 𝒦) ∈ S(P 𝒦)
-class-prod-s-∈-sp hfe = PS⊆SP{hfe = hfe} class-prod-s-∈-ps
+class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
 
 \end{code}
 

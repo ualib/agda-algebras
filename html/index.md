@@ -123,7 +123,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Types for Equations and Varieties](UALib.Varieties.html)
   - [Model Theory and Equational Logic](UALib.Varieties.EquationalLogic.html)
-  - [Inductive Types H, S, P, V](UALib.Varieties.Varieties.html)
+  - [The Inductive Types H, S, P, V](UALib.Varieties.Varieties.html)
   - [Equation Preservation Theorems](UALib.Varieties.Preservation.html)
 
 - [The Free Algebra and Birkhoff's Theorem](UALib.Birkhoff.html)
