@@ -130,6 +130,70 @@ variety 𝓤 = Σ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) , is-variety 𝒱
 \end{code}
 
 
+#### <a id="V-is-closed-under-lift">V is closed under lift</a>
+
+As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
+
+\begin{code}
+
+open Lift
+VlA : {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+      {𝑨 : Algebra (ov 𝓤) 𝑆}
+ →    𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
+      ---------------------------------
+ →    lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+
+VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
+VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
+VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
+VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
+VlA {𝓤}(vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+VlA {𝓤}{𝒦}(vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
+ where
+  𝑰 : (ov 𝓤 ⁺) ̇
+  𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
+
+  lA+ : Algebra (ov 𝓤 ⁺) 𝑆
+  lA+ = lift-alg (⨅ 𝒜) (ov 𝓤 ⁺)
+
+  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
+  lA i = lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
+
+  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA i = vlift (x (lower i))
+
+  iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
+  iso-components i = lift-alg-≅
+
+  B≅A : lA+ ≅ ⨅ lA
+  B≅A = lift-alg-⨅≅ gfe iso-components
+
+VlA {𝓤}{𝒦}(vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
+ where
+  𝑰 : (ov 𝓤 ⁺) ̇
+  𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
+
+  lA+ : Algebra (ov 𝓤 ⁺) 𝑆
+  lA+ = lift-alg (⨅ 𝒜) (ov 𝓤 ⁺)
+
+  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
+  lA i = lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
+
+  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA i = VlA (x (lower i))
+
+  iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
+  iso-components i = lift-alg-≅
+
+  B≅A : lA+ ≅ ⨅ lA
+  B≅A = lift-alg-⨅≅ gfe iso-components
+
+VlA {𝓤}(visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 (ov 𝓤 ⁺) 𝑨 A≅B)
+VlA {𝓤}(visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso (ov 𝓤) (ov 𝓤 ⁺) 𝑨 A≅B)
+
+\end{code}
+
 
 
 #### <a id="closure-properties">Closure properties</a>
@@ -330,6 +394,8 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 
 
 \end{code}
 
+
+
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
@@ -447,11 +513,40 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 \end{code}
 
+We just prove that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
+
+\begin{code}
+
+SP⊆V' : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
+ →      S{ov 𝓤}{ov 𝓤 ⁺} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V{𝓤}{ov 𝓤 ⁺} 𝒦
+
+SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (sym-≅ (lift-alg-associative 𝑨))
+SP⊆V' (slift x) = VlA (SP⊆V x)
+
+SP⊆V' {𝓤}(ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
+ where
+  B≤lA : 𝑩 ≤ lift-alg 𝑨 (ov 𝓤 ⁺)
+  B≤lA = (lift-alg-lower-≤-lift 𝑩 {𝑨}) B≤A
+
+SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
+
+SP⊆V' {𝓤}{𝒦}(siso{𝑨}{𝑩} x A≅B) = visow (VlA vA) (Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B)
+ where
+  lA : Algebra (ov 𝓤 ⁺) 𝑆
+  lA = lift-alg 𝑨 (ov 𝓤 ⁺)
+
+  vA : 𝑨 ∈ V 𝒦
+  vA = SP⊆V x
+
+\end{code}
+
+
+
 
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
-Finally, we prove the result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
 
 \begin{code}
 
