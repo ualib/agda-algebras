@@ -19,7 +19,7 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 module UALib.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import UALib.Algebras.Congruences{𝑆 = 𝑆} public
-open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎; dfunext) public
+open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
@@ -155,8 +155,7 @@ module _ {𝓤 𝓦 : Universe} where
 
  homker-is-compatible : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (KER-rel ∣ h ∣)
 
- homker-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ
-  where
+ homker-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ where
    γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
    γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡⟨ ∥ h ∥ f 𝒂 ⟩
        (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)  ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
@@ -173,9 +172,9 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → Congruence 𝑨
+ kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Congruence 𝑨
 
- kercon 𝑨 {𝑩} h = mkcon (KER-rel ∣ h ∣)(homker-is-compatible 𝑨 {𝑩} h)(homker-is-equivalence 𝑨 {𝑩} h)
+ kercon {𝑨} 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-is-compatible 𝑨 {𝑩} h)(homker-is-equivalence 𝑨 {𝑩} h)
 
 \end{code}
 
@@ -185,7 +184,7 @@ From this congruence we construct the corresponding quotient.
 
  kerquo : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- kerquo 𝑨{𝑩} h = 𝑨 ╱ (kercon 𝑨{𝑩} h)
+ kerquo 𝑨{𝑩} h = 𝑨 ╱ (kercon 𝑩 h)
 
  -- NOTATION.
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
@@ -199,8 +198,8 @@ Given an algebra 𝑨 and a congruence θ, the canonical epimorphism from an alg
 
 \begin{code}
 
- canon-epi : (𝑨 : Algebra 𝓤 𝑆) (θ : Congruence{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- canon-epi 𝑨 θ = cπ , cπ-is-hom , cπ-is-epic
+ πepi : {𝑨 : Algebra 𝓤 𝑆} (θ : Congruence{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic
   where
    cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
    cπ a = ⟦ a ⟧{⟨ θ ⟩}
@@ -217,8 +216,8 @@ To obtain the homomorphism part (or "hom reduct") of the canonical epimorphism, 
 
 \begin{code}
 
- canon-hom : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- canon-hom 𝑨 θ = epi-to-hom (𝑨 ╱ θ) (canon-epi 𝑨 θ)
+ πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom {𝑨} θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
@@ -226,11 +225,9 @@ We combine the foregoing to define a function that takes 𝑆-algebras 𝑨 and 
 
 \begin{code}
 
- πker : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩)
-        -------------------------------------------------
-  →     epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
+ πker : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)  →  epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
 
- πker 𝑨 {𝑩} h = canon-epi 𝑨 (kercon 𝑨{𝑩} h)
+ πker {𝑨} 𝑩 h = πepi (kercon 𝑩 h)
 
 \end{code}
 
@@ -239,8 +236,8 @@ The kernel of the canonical projection of 𝑨 onto 𝑨 / θ is equal to θ, bu
 
 \begin{code}
 
-ker-in-con : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣ )
- →           ⟨ kercon 𝑨 {𝑨 ╱ θ} (canon-hom 𝑨 θ) ⟩ x y  →  ⟨ θ ⟩ x y
+ker-in-con : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
+ →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
 
 ker-in-con 𝑨 θ x y hyp = ╱-refl 𝑨 {θ} hyp
 
@@ -255,7 +252,7 @@ ker-in-con 𝑨 θ x y hyp = ╱-refl 𝑨 {θ} hyp
 ⨅-hom-co : {𝓠 𝓤 𝓘 : Universe} → dfunext 𝓘 𝓤
  →          (𝑨 : Algebra 𝓠 𝑆){I : 𝓘 ̇}{ℬ : I → Algebra 𝓤 𝑆}
  →          (∀ i → hom 𝑨 (ℬ i))
-            -------------------
+            --------------------
  →          hom 𝑨 (⨅ ℬ)
 
 ⨅-hom-co dfe 𝑨 {I}{ℬ} homs = ϕ , ϕhom

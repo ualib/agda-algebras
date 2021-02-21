@@ -18,7 +18,7 @@ open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.Basic{𝑆 = 𝑆}{gfe} hiding (global-dfunext) public
+open import UALib.Homomorphisms.Basic{𝑆 = 𝑆}{gfe = gfe} public
 open import UALib.Prelude.Preliminaries using (is-embedding) public
 
 \end{code}
@@ -39,15 +39,15 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
                           (ϕ : hom 𝑨 𝑩) (ϕE : Epic ∣ ϕ ∣ )
                            --extensionality assumptions:
  →                            propext 𝓦 → is-set ∣ 𝑩 ∣
- →                            (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} ϕ ⟩ a x))
- →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} ϕ ⟩} C))
+ →                            (∀ a x → is-subsingleton (⟨ kercon 𝑩 ϕ ⟩ a x))
+ →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 ϕ ⟩} C))
            ------------------------------------------------------------------------------------
- →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑨 {𝑩} ϕ ∣ ) × is-embedding ∣ f ∣
+ →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 ϕ ∣ ) × is-embedding ∣ f ∣
 
 FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
  where
   θ : Congruence 𝑨
-  θ = kercon 𝑨{𝑩} ϕ
+  θ = kercon 𝑩 ϕ
 
   fmap : ∣ 𝑨 [ 𝑩 ]/ker ϕ ∣ → ∣ 𝑩 ∣
   fmap ⟦a⟧ = ∣ ϕ ∣ ⌜ ⟦a⟧ ⌝
@@ -89,16 +89,16 @@ FirstHomomorphismTheorem : {𝓤 𝓦 : Universe}
                            (h : hom 𝑨 𝑩)
                            --extensionality assumptions:
  →                            propext 𝓦 → is-set ∣ 𝑩 ∣
- →                            (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} h ⟩ a x))
- →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} h ⟩} C))
+ →                            (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
+ →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
     ---------------------------------------------------------------------------------------------
- →  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑨 {𝑩} h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+ →  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
 
 FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
  where
   θ : Congruence 𝑨
-  θ = kercon 𝑨 {𝑩} h
+  θ = kercon 𝑩 h
 
   ϕ : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
   ϕ a = ∣ h ∣ ⌜ a ⌝
@@ -112,7 +112,7 @@ FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕ
   ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' =
    class-extensionality' pe gfe ssR ssA (IsEquiv θ) ϕaa'
 
-  ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑨 {𝑩} h ∣
+  ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
   ϕcom = 𝓇ℯ𝒻𝓁
 
   ϕemb : is-embedding ϕ
@@ -130,19 +130,18 @@ The composition of homomorphisms is again a homomorphism.  We formalize this in 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
-
  HCompClosed : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
   →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
                --------------------
   →            hom 𝑨 𝑪
 
- HCompClosed (A , FA) (B , FB) (C , FC) (g , ghom) (h , hhom) = h ∘ g , γ
+ HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (h , hhom) = h ∘ g , γ
    where
-    γ : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f  →  A) → (h ∘ g)(FA f a) ≡ FC f (h ∘ g ∘ a)
+    γ : (𝑓 : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
 
-    γ f a = (h ∘ g) (FA f a)  ≡⟨ ap h ( ghom f a ) ⟩
-             h (FB f (g ∘ a)) ≡⟨ hhom f ( g ∘ a ) ⟩
-             FC f (h ∘ g ∘ a) ∎
+    γ 𝑓 a = (h ∘ g) ((𝑓 ̂ 𝑨) a) ≡⟨ ap h ( ghom 𝑓 a ) ⟩
+            h ((𝑓 ̂ 𝑩) (g ∘ a)) ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
+            (𝑓 ̂ 𝑪) (h ∘ g ∘ a) ∎
 
 
  HomComp : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
@@ -183,8 +182,6 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 
 
-
-
 #### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 
 If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `ϕ : hom 𝑪 𝑩` such that `g = ϕ ∘ h`, that is, such that the following diagram commutes;
@@ -207,57 +204,44 @@ This, or some variation of it, is sometimes referred to as the Second Isomorphis
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
-           ---------------------------------------------
- →           Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
+            -------------------------------------------
+ →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
-homFactor fe {𝑨 = A , FA}{𝑩 = B , FB}{𝑪 = C , FC}
- (g , ghom) (h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+homFactor fe {𝑨}{𝑩}{𝑪} (g , ghom) (h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
   where
-   hInv : C → A
+   hInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
    hInv = λ c → (EpicInv h hEpi) c
 
-   ϕ : C → B
+   ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    ϕ = λ c → g ( hInv c )
 
-   ξ : (x : A) → ker-pred h (x , hInv (h x))
-   ξ x =  ( cong-app (EpicInvIsRightInv fe h hEpi) ( h x ) )⁻¹
+   ξ : ∀ x → ker-pred h (x , hInv (h x))
+   ξ x = (cong-app (EpicInvIsRightInv fe h hEpi) (h x))⁻¹
 
    g≡ϕ∘h : g ≡ ϕ ∘ h
    g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
 
-   ζ : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)(x : ∥ 𝑆 ∥ f)
-    →  c x ≡ (h ∘ hInv)(c x)
+   ζ : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ 𝑓) →  𝒄 x ≡ (h ∘ hInv)(𝒄 x)
+   ζ  𝑓 𝒄 x = (cong-app (EpicInvIsRightInv fe h hEpi) (𝒄 x))⁻¹
 
-   ζ f c x = (cong-app (EpicInvIsRightInv fe h hEpi) (c x))⁻¹
+   ι : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) →  𝒄 ≡ h ∘ (hInv ∘ 𝒄)
+   ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv fe h hEpi)⁻¹
 
-   ι : (f : ∣ 𝑆 ∣)(c : ∥ 𝑆 ∥ f → C)
-    →  (λ x → c x) ≡ (λ x → h (hInv (c x)))
+   useker : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → g(hInv (h((𝑓 ̂ 𝑨)(hInv ∘ 𝒄)))) ≡ g((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))
+   useker 𝑓 c = Kh⊆Kg (cong-app (EpicInvIsRightInv fe h hEpi) (h ((𝑓 ̂ 𝑨)(hInv ∘ c))))
 
-   ι f c = ap (λ - → - ∘ c)(EpicInvIsRightInv fe h hEpi)⁻¹
+   ϕIsHomCB : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → ϕ((𝑓 ̂ 𝑪) 𝒄) ≡ (𝑓 ̂ 𝑩)(ϕ ∘ 𝒄)
 
-   useker : (f : ∣ 𝑆 ∣)  (c : ∥ 𝑆 ∥ f → C)
-    → g (hInv (h (FA f (hInv ∘ c)))) ≡ g(FA f (hInv ∘ c))
-
-   useker = λ f c
-    → Kh⊆Kg (cong-app
-             (EpicInvIsRightInv fe h hEpi)
-             (h(FA f(hInv ∘ c)))
-            )
-
-   ϕIsHomCB : (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → C)
-    →         ϕ (FC f a)  ≡  FB f (ϕ ∘ a)
-
-   ϕIsHomCB f c =
-    g (hInv (FC f c))                ≡⟨ i   ⟩
-    g (hInv (FC f (h ∘ (hInv ∘ c)))) ≡⟨ ii  ⟩
-    g (hInv (h (FA f (hInv ∘ c))))   ≡⟨ iii ⟩
-    g (FA f (hInv ∘ c))              ≡⟨ iv  ⟩
-    FB f (λ x → g (hInv (c x)))      ∎
+   ϕIsHomCB 𝑓 𝒄 =  g (hInv ((𝑓 ̂ 𝑪) 𝒄))              ≡⟨ i   ⟩
+                  g (hInv ((𝑓 ̂ 𝑪)(h ∘ (hInv ∘ 𝒄)))) ≡⟨ ii  ⟩
+                  g (hInv (h ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))))   ≡⟨ iii ⟩
+                  g ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))              ≡⟨ iv  ⟩
+                  (𝑓 ̂ 𝑩)(λ x → g (hInv (𝒄 x)))      ∎
     where
-     i   = ap (g ∘ hInv) (ap (FC f) (ι f c))
-     ii  = ap (λ - → g (hInv -)) (hhom f (hInv ∘ c))⁻¹
-     iii = useker f c
-     iv  = ghom f (hInv ∘ c)
+     i   = ap (g ∘ hInv) (ap (𝑓 ̂ 𝑪) (ι 𝑓 𝒄))
+     ii  = ap (g ∘ hInv) (hhom 𝑓 (hInv ∘ 𝒄))⁻¹
+     iii = useker 𝑓 𝒄
+     iv  = ghom 𝑓 (hInv ∘ 𝒄)
 
 \end{code}
 
@@ -276,14 +260,13 @@ Here's a more general version.
 
 \begin{code}
 
-HomFactor : global-dfunext
- →          {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+HomFactor : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
             (β : hom 𝑨 𝑩) (γ : hom 𝑨 𝑪)
  →          Epic ∣ γ ∣ → (KER-pred ∣ γ ∣) ⊆ (KER-pred ∣ β ∣)
             --------------------------------------------
  →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ γ ∣
 
-HomFactor gfe 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
+HomFactor 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
  where
   γInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
   γInv = λ y → (EpicInv ∣ γ ∣ γE) y
@@ -297,24 +280,24 @@ HomFactor gfe 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
   βϕγ : ∣ β ∣ ≡ ϕ ∘ ∣ γ ∣
   βϕγ = gfe λ x → Kγβ (ξ x)
 
-  ι : (f : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ f → ∣ 𝑪 ∣) → (λ x → 𝒄 x) ≡ (λ x → ∣ γ ∣ (γInv (𝒄 x)))
-  ι f 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv gfe ∣ γ ∣ γE)⁻¹
+  ι : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → 𝒄 ≡  ∣ γ ∣ ∘ (γInv ∘ 𝒄)
+  ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv gfe ∣ γ ∣ γE)⁻¹
 
-  useker : ∀ f 𝒄 → ∣ β ∣ (γInv (∣ γ ∣ ((f ̂ 𝑨) (γInv ∘ 𝒄)))) ≡ ∣ β ∣((f ̂ 𝑨) (γInv ∘ 𝒄))
-  useker f 𝒄 = Kγβ (cong-app (EpicInvIsRightInv gfe ∣ γ ∣ γE)(∣ γ ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))))
+  useker : ∀ 𝑓 𝒄 → ∣ β ∣ (γInv (∣ γ ∣ ((𝑓 ̂ 𝑨) (γInv ∘ 𝒄)))) ≡ ∣ β ∣((𝑓 ̂ 𝑨) (γInv ∘ 𝒄))
+  useker 𝑓 𝒄 = Kγβ (cong-app (EpicInvIsRightInv gfe ∣ γ ∣ γE)(∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))
 
-  ϕIsHomCB : ∀ f 𝒄 → ϕ ((f ̂ 𝑪) 𝒄) ≡ ((f ̂ 𝑩)(ϕ ∘ 𝒄))
-  ϕIsHomCB f 𝒄 =
-   ∣ β ∣ (γInv ((f ̂ 𝑪) 𝒄))                   ≡⟨ i   ⟩
-   ∣ β ∣ (γInv ((f ̂ 𝑪)(∣ γ ∣ ∘ (γInv ∘ 𝒄)))) ≡⟨ ii  ⟩
-   ∣ β ∣ (γInv (∣ γ ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))))   ≡⟨ iii ⟩
-   ∣ β ∣ ((f ̂ 𝑨)(γInv ∘ 𝒄))                  ≡⟨ iv  ⟩
-   ((f ̂ 𝑩)(λ x → ∣ β ∣ (γInv (𝒄 x))))        ∎
+  ϕIsHomCB : ∀ 𝑓 𝒄 → ϕ ((𝑓 ̂ 𝑪) 𝒄) ≡ ((𝑓 ̂ 𝑩)(ϕ ∘ 𝒄))
+
+  ϕIsHomCB 𝑓 𝒄 = ∣ β ∣ (γInv ((𝑓 ̂ 𝑪) 𝒄))                  ≡⟨ i   ⟩
+                ∣ β ∣ (γInv ((𝑓 ̂ 𝑪)(∣ γ ∣ ∘ (γInv ∘ 𝒄)))) ≡⟨ ii  ⟩
+                ∣ β ∣ (γInv (∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))   ≡⟨ iii ⟩
+                ∣ β ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))                  ≡⟨ iv  ⟩
+                ((𝑓 ̂ 𝑩)(λ x → ∣ β ∣ (γInv (𝒄 x))))        ∎
    where
-    i   = ap (∣ β ∣ ∘ γInv) (ap (f ̂ 𝑪) (ι f 𝒄))
-    ii  = ap (λ - → ∣ β ∣ (γInv -)) (∥ γ ∥ f (γInv ∘ 𝒄))⁻¹
-    iii = useker f 𝒄
-    iv  = ∥ β ∥ f (γInv ∘ 𝒄)
+    i   = ap (∣ β ∣ ∘ γInv) (ap (𝑓 ̂ 𝑪) (ι 𝑓 𝒄))
+    ii  = ap (∣ β ∣ ∘ γInv) (∥ γ ∥ 𝑓 (γInv ∘ 𝒄))⁻¹
+    iii = useker 𝑓 𝒄
+    iv  = ∥ β ∥ 𝑓 (γInv ∘ 𝒄)
 
 \end{code}
 
@@ -333,18 +316,17 @@ If, in addition, both β and γ are epic, then so is ϕ.
 
 \begin{code}
 
-HomFactorEpi : global-dfunext
- →             {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+HomFactorEpi : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
                (β : hom 𝑨 𝑩) (βe : Epic ∣ β ∣)
                (ξ : hom 𝑨 𝑪) (ξe : Epic ∣ ξ ∣)
  →             (KER-pred ∣ ξ ∣) ⊆ (KER-pred ∣ β ∣)
                ----------------------------------
  →             Σ ϕ ꞉ (epi 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ ξ ∣
 
-HomFactorEpi gfe 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (snd ∣ ϕF ∣ , ϕE)) , ∥ ϕF ∥
+HomFactorEpi 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (snd ∣ ϕF ∣ , ϕE)) , ∥ ϕF ∥
  where
   ϕF : Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ ξ ∣
-  ϕF = HomFactor gfe 𝑨 {𝑩}{𝑪} β ξ ξe kerincl
+  ϕF = HomFactor  𝑨 {𝑩}{𝑪} β ξ ξe kerincl
 
   ξinv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
   ξinv = λ c → (EpicInv ∣ ξ ∣ ξe) c

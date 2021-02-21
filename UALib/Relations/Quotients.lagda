@@ -176,12 +176,12 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{R : Rel A 𝓡} where
 
- class-extensionality : propext 𝓡 → global-dfunext → {a a' : A}
+ class-extensionality : propext 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
   →                     (∀ a x → is-subsingleton (R a x)) → IsEquivalence R
                         ----------------------------------------------------
   →                     R a a'  →  [ a ] R  ≡  [ a' ] R
 
- class-extensionality pe gfe {a}{a'} ssR Req Raa' = Pred-=̇-≡ pe gfe (ssR a)(ssR a')(/-=̇ Req Raa')
+ class-extensionality pe fe {a}{a'} ssR Req Raa' = Pred-=̇-≡ pe fe (ssR a)(ssR a')(/-=̇ Req Raa')
 
 
  to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D} 
@@ -192,17 +192,17 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{R : Rel A 𝓡} where
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : propext 𝓡 → global-dfunext → {a a' : A}
+ class-extensionality' : propext 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
   →                      (∀ a x → is-subsingleton (R a x))
   →                      (∀ C → is-subsingleton (𝒞 C))
   →                      IsEquivalence R
                          -------------------------
   →                      R a a'  →  ⟦ a ⟧ ≡ ⟦ a' ⟧
 
- class-extensionality' pe gfe {a}{a'} ssR ssA Req Raa' = γ
+ class-extensionality' pe fe {a}{a'} ssR ssA Req Raa' = γ
   where
    CD : [ a ] R ≡ [ a' ] R
-   CD = class-extensionality pe gfe ssR Req Raa'
+   CD = class-extensionality pe fe ssR Req Raa'
 
    γ : ⟦ a ⟧ ≡ ⟦ a' ⟧
    γ = to-subtype-⟦⟧ ssA CD

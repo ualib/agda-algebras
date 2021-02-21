@@ -19,8 +19,8 @@ Agda supports the definition of infix operations and relations, and we use this 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+open import UALib.Algebras using (Signature; 𝓞; 𝓥)
+open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 

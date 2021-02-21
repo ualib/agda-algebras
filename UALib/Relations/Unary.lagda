@@ -20,7 +20,7 @@ module UALib.Relations.Unary where
 
 open import UALib.Prelude.Lifts public
 
-open import UALib.Prelude.Preliminaries using (¬; propext; global-dfunext; is-subsingleton; 𝓤₀; 𝟘) public
+open import UALib.Prelude.Preliminaries using (¬; propext; dfunext; is-subsingleton; 𝓤₀; 𝟘) public
 
 \end{code}
 
@@ -123,12 +123,12 @@ Pred-≡→⊇ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
 Pred-≡→⊇ (refl _) = (λ z → z)
 
 Pred-=̇-≡ : {𝓧 𝓨 : Universe}
- →          propext 𝓨 → global-dfunext
+ →          propext 𝓨 → dfunext 𝓧 (𝓨 ⁺)
  →          {A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          ((x : A) → is-subsingleton (P x))
  →          ((x : A) → is-subsingleton (Q x))
  →          P =̇ Q → P ≡ Q
-Pred-=̇-≡ pe gfe {A}{P}{Q} ssP ssQ (pq , qp) = gfe γ
+Pred-=̇-≡ pe fe {A}{P}{Q} ssP ssQ (pq , qp) = fe γ
  where
   γ : (x : A) → P x ≡ Q x
   γ x = pe (ssP x) (ssQ x) pq qp

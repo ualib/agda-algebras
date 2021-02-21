@@ -41,7 +41,7 @@ module UALib.Birkhoff.HSPTheorem
     {pe' : propext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
     {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
-open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; propext; hfunext) public
+open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; propext; hfunext; Algebra; _̇ ) public
 open the-free-algebra {𝓤}{𝓤}{X}
 
 \end{code}
@@ -223,7 +223,7 @@ We now prove some basic lemmas about T𝔄, 𝔽, and their kernels that we need
 \begin{code}
 
 Ψe : epi (𝑻 X) 𝔽
-Ψe = πker (𝑻 X) {ℭ} ΨTC
+Ψe = πker ℭ ΨTC
 
 Ψ : hom (𝑻 X) 𝔽
 Ψ = epi-to-hom 𝔽 Ψe
@@ -242,7 +242,7 @@ kernel-lemma2 p q hyp i = γ
   H₀ : ∣ Ψ ∣ p ≡ ∣ Ψ ∣ q
   H₀ = hyp
   ξ : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
-  ξ = ker-in-con (𝑻 X) (kercon (𝑻 X) {ℭ} ΨTC) p q H₀
+  ξ = ker-in-con (𝑻 X) (kercon ℭ ΨTC) p q H₀
   γ : ∣ ΨTC ∣ p i ≡ ∣ ΨTC ∣ q i
   γ = ap (λ - → - i) ξ
 
@@ -255,7 +255,7 @@ X↪𝔽 x = ⟦ ℊ x ⟧
 
 
 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-𝔽-lift-hom 𝑨 skA h = fst(HomFactor gfe (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (kernel-lemma3 {𝑨}{h} skA))
+𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (kernel-lemma3 {𝑨}{h} skA))
 
 
 Ψ-is-lift-hom : ∀ p → ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ Ψ ∣ p
@@ -329,8 +329,8 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 open Congruence
 free-quot-subalg-ℭ : is-set ∣ ℭ ∣
- →                   (∀ p q → is-subsingleton (⟨ kercon (𝑻 X){ℭ} ΨTC ⟩ p q))
- →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon (𝑻 X){ℭ} ΨTC ⟩} C))
+ →                   (∀ p q → is-subsingleton (⟨ kercon ℭ ΨTC ⟩ p q))
+ →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ ΨTC ⟩} C))
                      -------------------------------------------------------------------
  →                   ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
 
@@ -338,8 +338,8 @@ free-quot-subalg-ℭ Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ ΨTC pe' Cset
 
 
 module _ (Cset : is-set ∣ ℭ ∣)
-         (ssR : ∀ p q → is-subsingleton (⟨ kercon (𝑻 X){ℭ} (ΨTC) ⟩ p q))
-         (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon (𝑻 X){ℭ}  (ΨTC ) ⟩} C)) where
+         (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ ΨTC ⟩ p q))
+         (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ ΨTC ⟩} C)) where
 
  𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
  𝔽≤ℭ = free-quot-subalg-ℭ Cset ssR ssC
@@ -373,7 +373,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
          ∣ ϕ ∣ q                  ∎
 
    γ : epi 𝔽 𝑨
-   γ = fst (HomFactorEpi gfe (𝑻 X){𝑨}{𝔽} ϕ ϕE Ψ ΨE  kerincl)
+   γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} ϕ ϕE Ψ ΨE  kerincl)
 
 
 \end{code}

@@ -13,8 +13,8 @@ The [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Libr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+open import UALib.Algebras using (Signature; 𝓞; 𝓥)
+open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
@@ -50,14 +50,14 @@ open Congruence
 FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                     --extensionality assumptions:
  →                     propext 𝓦 → is-set ∣ 𝑩 ∣
- →                     (∀ a x → is-subsingleton (⟨ kercon 𝑨{𝑩} h ⟩ a x))
- →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑨{𝑩} h ⟩} C))
+ →                     (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
+ →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
                     -------------------------------------------------------------
  →                  (𝑨 [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
 FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
  where
-  FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑨 {𝑩} h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+  FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
   FirstHomThm = FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA
   ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
   ϕhom = ∣ FirstHomThm ∣
@@ -65,15 +65,15 @@ FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
   ϕemb = snd (snd (snd FirstHomThm))
 
 
-free-quot-subalg : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}{h : hom (𝑻 X) 𝑨}
+free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑨 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑨)
                     --extensionality assumptions:
  →                    propext 𝓤 → is-set ∣ 𝑨 ∣
- →                    (∀ p q → is-subsingleton (⟨ kercon (𝑻 X){𝑨} h ⟩ p q))
- →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon (𝑻 X){𝑨} h ⟩} C))
+ →                    (∀ p q → is-subsingleton (⟨ kercon 𝑨 h ⟩ p q))
+ →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑨 h ⟩} C))
                    -------------------------------------------------------------------
  →                 ((𝑻 X) [ 𝑨 ]/ker h) IsSubalgebraOf 𝑨
 
-free-quot-subalg {𝓤}{𝓧}{X}{𝑨}{h} pe Aset ssR ssA = FirstHomCorollary (𝑻 X) 𝑨 h pe Aset ssR ssA
+free-quot-subalg X 𝑨 h pe Aset ssR ssA = FirstHomCorollary (𝑻 X) 𝑨 h pe Aset ssR ssA
 
 \end{code}
 

@@ -32,8 +32,8 @@ This section presents the [UALib.Birkhoff.FreeAlgebra][] module of the [Agda Uni
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+open import UALib.Algebras using (Signature; 𝓞; 𝓥)
+open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Birkhoff.FreeAlgebra {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 

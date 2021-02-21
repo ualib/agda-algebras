@@ -15,8 +15,8 @@ We start by defining a type that represents the important concept of **subuniver
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+open import UALib.Algebras using (Signature; 𝓞; 𝓥)
+open import UALib.Prelude.Preliminaries using (global-dfunext)
 
 module UALib.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
