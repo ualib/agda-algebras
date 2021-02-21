@@ -34,7 +34,9 @@ Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by i
 
 `𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where `𝒯ₙ` is the collection of all `𝑓 𝑡` such that `𝑓 : ∣ 𝑆 ∣` and `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.) We define the collection of **terms in the signature** `𝑆` **over** `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-**term** we mean a term in the language of `𝑆`.
+where `𝒯ₙ` is the collection of all `𝑓 𝒕` such that `𝑓 : ∣ 𝑆 ∣` and `𝒕 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.)
+
+We define the collection of **terms** in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-**term** we mean a term in the language of `𝑆`.
 
 The definition of `Term X` is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
 
@@ -42,7 +44,7 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 data Term {𝓧 : Universe}(X : 𝓧 ̇ ) : ov 𝓧 ̇  where
   generator : X → Term X
-  node : (f : ∣ 𝑆 ∣)(args : ∥ 𝑆 ∥ f → Term X) → Term X
+  node : (f : ∣ 𝑆 ∣)(𝒕 : ∥ 𝑆 ∥ f → Term X) → Term X
 
 open Term
 
@@ -52,7 +54,7 @@ Here, the type `X` represents an arbitrary collection of variable symbols.
 
 #### <a id="the-term-algebra">The term algebra</a>
 
-For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if `X` or `∣ 𝑆 ∣` is nonempty), then we can define an algebraic structure, denoted by `𝑻 X` and called the **term algebra in the signature** `𝑆` **over** `X`.  Terms are viewed as acting on other terms, so both the domain and the collection of basic operations are the terms themselves.
+For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if `X` or `∣ 𝑆 ∣` is nonempty), then we can define an algebraic structure, denoted by `𝑻 X` and called the **term algebra in the signature** `𝑆` **over** `X`.  Terms are viewed as acting on other terms, so both the domain and basic operations of the algebra are the terms themselves.
 
 * For each operation symbol `𝑓 : ∣ 𝑆 ∣`, denote by `𝑓 ̂ (𝑻 X)` the operation on `Term X` which maps a tuple `𝑡 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 X ∣` to the formal term `𝑓 𝑡`.
 
@@ -85,7 +87,7 @@ free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆)(h : X
 
 free-lift _ h (generator x) = h x
 
-free-lift 𝑨 h (node f args) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (args i)
+free-lift 𝑨 h (node f 𝒕) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (𝒕 i)
 
 \end{code}
 
@@ -111,15 +113,15 @@ free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → funext 𝓥 𝓤 → (�
 
 free-unique _ _ _ _ p (generator x) = p x
 
-free-unique fe 𝑨 g h p (node f args) = γ where
+free-unique fe 𝑨 g h p (node f 𝒕) = γ where
 
- α : (f ̂ 𝑨) (∣ g ∣ ∘ args) ≡ (f ̂ 𝑨) (∣ h ∣ ∘ args)
- α = ap (_ ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (args i))
+ α : (f ̂ 𝑨) (∣ g ∣ ∘ 𝒕) ≡ (f ̂ 𝑨) (∣ h ∣ ∘ 𝒕)
+ α = ap (_ ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝒕 i))
 
- γ = ∣ g ∣ (node f args)           ≡⟨ ∥ g ∥ f args ⟩
-     (f ̂ 𝑨)(λ i → ∣ g ∣ (args i))  ≡⟨ α ⟩
-     (f ̂ 𝑨)(λ i → ∣ h ∣ (args i))  ≡⟨ (∥ h ∥ f args)⁻¹ ⟩
-     ∣ h ∣ (node f args)           ∎
+ γ = ∣ g ∣ (node f 𝒕)           ≡⟨ ∥ g ∥ f 𝒕 ⟩
+     (f ̂ 𝑨)(λ i → ∣ g ∣ (𝒕 i))  ≡⟨ α ⟩
+     (f ̂ 𝑨)(λ i → ∣ h ∣ (𝒕 i))  ≡⟨ (∥ h ∥ f 𝒕)⁻¹ ⟩
+     ∣ h ∣ (node f 𝒕)           ∎
 
 \end{code}
 
