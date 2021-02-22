@@ -9,19 +9,17 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
 
-We begin the proof of Birkhoff's HSP theorem by establishing a number of facts that we will eventually string together in the HSPTheorem module to complete the proof.
+To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in Th (V 𝒦)---belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.
 
-(Unlike in previous modules, we fix 𝓤, X, and 𝒦 at the start of the HSPTheorem module.)
-
-To prove Birkhoff's theorem, we will prove that every algebra 𝑨 ∈ Mod X (Th (V 𝒦)) that models all equations in Th (V 𝒦) belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  To do this, we need an algebra 𝔽 with the following properties:
+We accomplish our goal by constructing an algebra 𝔽 with the following properties:
 
 1. 𝔽 ∈ V 𝒦 and
 
 2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
 
-In the initial version of the [Agda UALib][], we used the free algebra 𝔉, developed in the [Birkhoff.FreeAlgebra][] section, as the 𝔽 with properties 1 and 2 above.  However, we found a more direct path to the proof by using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
+In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
 
-Recall, `⨅-hom-co` was defined in the [Homomorphisms.Products][] module.  It takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is "natural" in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is simply the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
+Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is natural in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
 
 \begin{code}
 
@@ -30,6 +28,12 @@ Recall, `⨅-hom-co` was defined in the [Homomorphisms.Products][] module.  It t
 open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
 open import UALib.Relations.Unary using (Pred)
+
+\end{code}
+
+Unlike previous modules, in this module we fix 𝓤, X, and 𝒦 in advance.
+
+\begin{code}
 
 module UALib.Birkhoff.HSPTheorem
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
@@ -86,6 +90,9 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
 \end{code}
 
+
+#### <a id="the-new-free-algebra">The new free algebra</a>
+
 As mentioned above, the initial version of the [Agda UALib][] used the free algebra 𝔉, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra 𝔽, which we now define.
 
 \begin{code}
@@ -96,8 +103,6 @@ As mentioned above, the initial version of the [Agda UALib][] used the free alge
 \end{code}
 
 It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [UALib.Birkhoff.FreeAlgebra][] module.
-
-We now prove some basic lemmas about T𝔄, 𝔽, and their kernels that we need to complete the proof of Birkhoff's theorem.
 
 \begin{code}
 
@@ -110,72 +115,88 @@ We now prove some basic lemmas about T𝔄, 𝔽, and their kernels that we need
 ΨE : Epic ∣ Ψ ∣
 ΨE = snd ∥ Ψe ∥
 
+\end{code}
 
-kernel-lemma1 : {p q : ∣ 𝑻 X ∣} → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣) → (p , q) ∈ ψ 𝒦
-kernel-lemma1 hyp 𝑨 sA h = hyp (𝑨 , (sA , h))
+We will need the following facts relating ΨTC, Ψ, and ψ.
 
+\begin{code}
 
-kernel-lemma2 : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → (∀ i → (p , q) ∈ KER-pred ∣ T𝔄 i ∣)
-kernel-lemma2 p q hyp i = γ
- where
-  H₀ : ∣ Ψ ∣ p ≡ ∣ Ψ ∣ q
-  H₀ = hyp
-  ξ : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
-  ξ = ker-in-con (𝑻 X) (kercon ℭ ΨTC) p q H₀
-  γ : ∣ ΨTC ∣ p i ≡ ∣ ΨTC ∣ q i
-  γ = ap (λ - → - i) ξ
+ψlemma0 : ∀ p q → (∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q) → (p , q) ∈ ψ 𝒦
+ψlemma0 p q pΨTCq 𝑨 sA h = ap (λ - → - (𝑨 , (sA , h))) pΨTCq
 
 
-kernel-lemma3 : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → KER-pred ∣ Ψ ∣ ⊆ KER-pred (free-lift 𝑨 h)
-kernel-lemma3 {𝑨}{h} skA {p , q} x = (kernel-lemma1 {p}{q} (kernel-lemma2 p q x)) 𝑨 skA h
+ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}
+ →           𝑨 ∈ S{𝓤}{𝓤} 𝒦
+             ---------------------------------------
+ →           KER-pred ∣ Ψ ∣ ⊆ KER-pred (free-lift 𝑨 h)
+
+ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
+
+  ν : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
+  ν = ker-in-con (𝑻 X) (kercon ℭ ΨTC) p q x
+
+  γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  γ = ((ψlemma0 p q) ν) 𝑨 skA h
+
+
+\end{code}
+
+We now use `ψlemma0-ap` to prove that, for every subalgebra `𝑨` of an algebra in `𝒦`, every map from `X` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝔽` to `𝑨`.
+
+\begin{code}
+
+𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
+𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (ψlemma0-ap skA))
+
+\end{code}
+
+
+#### <a id="k-models-psi">𝒦 models ψ</a>
+
+The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊧ p ≋ q`.
+
+\begin{code}
 
 X↪𝔽 : X → ∣ 𝔽 ∣
 X↪𝔽 x = ⟦ ℊ x ⟧
 
+𝔛 : hom (𝑻 X) 𝔽
+𝔛 = lift-hom 𝔽 X↪𝔽
 
-𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (kernel-lemma3 {𝑨}{h} skA))
-
-
-Ψ-is-lift-hom : ∀ p → ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ Ψ ∣ p
+Ψ-is-lift-hom : ∀ p → ∣ 𝔛 ∣ p ≡ ∣ Ψ ∣ p
 Ψ-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
-Ψ-is-lift-hom (node f args) = let g = ∣ lift-hom 𝔽 X↪𝔽 ∣ in
-   g (node f args)               ≡⟨ ∥ lift-hom 𝔽 X↪𝔽 ∥ f args ⟩
-   (f ̂ 𝔽)(λ i → g (args i))      ≡⟨ ap (f ̂ 𝔽) (gfe (λ x → Ψ-is-lift-hom (args x))) ⟩
-   (f ̂ 𝔽)(λ i → ∣ Ψ ∣ (args i)) ≡⟨ (∥ Ψ ∥ f args)⁻¹ ⟩
-   ∣ Ψ ∣ (node f args)          ∎
+Ψ-is-lift-hom (node 𝑓 𝒕) = ∣ 𝔛 ∣ (node 𝑓 𝒕)           ≡⟨ ∥ 𝔛 ∥ 𝑓 𝒕 ⟩
+                          (𝑓 ̂ 𝔽)(λ i → ∣ 𝔛 ∣(𝒕 i))  ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → Ψ-is-lift-hom(𝒕 x))) ⟩
+                          (𝑓 ̂ 𝔽)(λ i → ∣ Ψ ∣ (𝒕 i))  ≡⟨ (∥ Ψ ∥ 𝑓 𝒕)⁻¹ ⟩
+                          ∣ Ψ ∣ (node 𝑓 𝒕)           ∎
 
 
-ψlemma1 : ∀ p q → (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q → (p , q) ∈ ψ 𝒦
-ψlemma1 p q gpq 𝑨 sA h = γ
-   where
-    g : hom (𝑻 X) 𝔽
-    g = lift-hom 𝔽 (X↪𝔽)
+ψlemma1 : KER-pred ∣ 𝔛 ∣ ⊆ ψ 𝒦
+ψlemma1 {p , q} 𝔛pq 𝑨 sA h = γ
+ where
+  f : hom 𝔽 𝑨
+  f = 𝔽-lift-hom 𝑨 sA h
 
-    f : hom 𝔽 𝑨
-    f = 𝔽-lift-hom 𝑨 sA h
+  h' ϕ : hom (𝑻 X) 𝑨
+  h' = HomComp (𝑻 X) 𝑨 𝔛 f
+  ϕ = lift-hom 𝑨 h
 
-    h' ϕ : hom (𝑻 X) 𝑨
-    h' = HomComp (𝑻 X) 𝑨 g f
-    ϕ = lift-hom 𝑨 h
+  f𝔛≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔛 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+  f𝔛≡ϕ x = 𝓇ℯ𝒻𝓁
+  h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ 𝔛 ∣) t ≡ ∣ ϕ ∣ t
+  h≡ϕ t = free-unique gfe 𝑨 h' ϕ f𝔛≡ϕ t
 
-    --homs from 𝑻 X to 𝑨 that agree on X are equal
-    fgx≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ g ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-    fgx≡ϕ x = 𝓇ℯ𝒻𝓁
-    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ g ∣) t ≡ ∣ ϕ ∣ t
-    h≡ϕ t = free-unique gfe 𝑨 h' ϕ fgx≡ϕ t
-
-    γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-    γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
-        ∣ f ∣ ( ∣ g ∣ p ) ≡⟨ ap ∣ f ∣ gpq ⟩
-        ∣ f ∣ ( ∣ g ∣ q ) ≡⟨ h≡ϕ q ⟩
-        ∣ ϕ ∣ q ∎
+  γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
+  γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
+      ∣ f ∣ ( ∣ 𝔛 ∣ p ) ≡⟨ ap ∣ f ∣ 𝔛pq ⟩
+      ∣ f ∣ ( ∣ 𝔛 ∣ q ) ≡⟨ h≡ϕ q ⟩
+      ∣ ϕ ∣ q ∎
 
 
 ψlemma2 : KER-pred ∣ Ψ ∣ ⊆ ψ 𝒦
-ψlemma2 {p , q} hyp = ψlemma1 p q γ
+ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
   where
-   γ : ∣ lift-hom 𝔽 X↪𝔽 ∣ p ≡ ∣ lift-hom 𝔽 X↪𝔽 ∣ q
+   γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
    γ = (Ψ-is-lift-hom p) ∙ hyp ∙ (Ψ-is-lift-hom q)⁻¹
 
 
@@ -259,7 +280,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
 
 #### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
 
-Now, with this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦---it is not hard to show that 𝔉 belongs to SP(𝒦), and hence to V 𝒦. (Recall, if 𝒦 denotes a class of 𝑆-algebras, then the variety generated 𝒦 is `V 𝒦`, which is equivalent to HSP 𝒦.)
+With this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦---it is not hard to show that 𝔽 belongs to V 𝒦.
 
 \begin{code}
 
