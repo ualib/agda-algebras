@@ -141,7 +141,7 @@ We use the function `lift-alg` to resolve errors that arise when working in Agda
 
 
 
-#### <a id="compatibility-of-lifts-and-operations">Compatibility of lifts and operations</a>
+#### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
 
 The following definitions and lemmas are useful for asserting and proving facts about **compatibility** of relations and operations.
 

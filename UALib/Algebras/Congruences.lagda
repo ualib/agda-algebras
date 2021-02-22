@@ -119,7 +119,8 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
- ╱-refl : (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣} → ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+ ╱-refl : (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
+  →       ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
  ╱-refl A {θ} 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
 
