@@ -93,18 +93,12 @@ T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
 #### <a id="the-new-free-algebra">The new free algebra</a>
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra 𝔉, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra 𝔽, which we now define.
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉`, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `Ψe : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>2</sup>
 
 \begin{code}
 
 𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
 𝔽 = (𝑻 X) [ ℭ ]/ker ΨTC
-
-\end{code}
-
-It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [UALib.Birkhoff.FreeAlgebra][] module.
-
-\begin{code}
 
 Ψe : epi (𝑻 X) 𝔽
 Ψe = πker ℭ ΨTC
@@ -141,7 +135,7 @@ We will need the following facts relating ΨTC, Ψ, and ψ.
 
 \end{code}
 
-We now use `ψlemma0-ap` to prove that, for every subalgebra `𝑨` of an algebra in `𝒦`, every map from `X` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝔽` to `𝑨`.
+We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from `X` to a subalgebra `𝑨 ∈ S 𝒦` of `𝒦`, lifts to a homomorphism from `𝔽` to `𝑨`.
 
 \begin{code}
 
@@ -155,41 +149,55 @@ We now use `ψlemma0-ap` to prove that, for every subalgebra `𝑨` of an algebr
 
 The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊧ p ≋ q`.
 
+Next we define the lift of the natural embedding from `X` into 𝔽. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
+
 \begin{code}
 
 X↪𝔽 : X → ∣ 𝔽 ∣
 X↪𝔽 x = ⟦ ℊ x ⟧
 
-𝔛 : hom (𝑻 X) 𝔽
-𝔛 = lift-hom 𝔽 X↪𝔽
+𝔑 : hom (𝑻 X) 𝔽
+𝔑 = lift-hom 𝔽 X↪𝔽
 
-Ψ-is-lift-hom : ∀ p → ∣ 𝔛 ∣ p ≡ ∣ Ψ ∣ p
+\end{code}
+
+It turns out that the homomorphism so defined is equivalent to `Ψ`.
+
+\begin{code}
+
+Ψ-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ Ψ ∣ p
 Ψ-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
-Ψ-is-lift-hom (node 𝑓 𝒕) = ∣ 𝔛 ∣ (node 𝑓 𝒕)           ≡⟨ ∥ 𝔛 ∥ 𝑓 𝒕 ⟩
-                          (𝑓 ̂ 𝔽)(λ i → ∣ 𝔛 ∣(𝒕 i))  ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → Ψ-is-lift-hom(𝒕 x))) ⟩
+Ψ-is-lift-hom (node 𝑓 𝒕) = ∣ 𝔑 ∣ (node 𝑓 𝒕)           ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
+                          (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))  ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → Ψ-is-lift-hom(𝒕 x))) ⟩
                           (𝑓 ̂ 𝔽)(λ i → ∣ Ψ ∣ (𝒕 i))  ≡⟨ (∥ Ψ ∥ 𝑓 𝒕)⁻¹ ⟩
                           ∣ Ψ ∣ (node 𝑓 𝒕)           ∎
 
 
-ψlemma1 : KER-pred ∣ 𝔛 ∣ ⊆ ψ 𝒦
-ψlemma1 {p , q} 𝔛pq 𝑨 sA h = γ
+\end{code}
+
+We need a three more lemmas before we are ready to tackle our main goal.
+
+\begin{code}
+
+ψlemma1 : KER-pred ∣ 𝔑 ∣ ⊆ ψ 𝒦
+ψlemma1 {p , q} 𝔑pq 𝑨 sA h = γ
  where
   f : hom 𝔽 𝑨
   f = 𝔽-lift-hom 𝑨 sA h
 
   h' ϕ : hom (𝑻 X) 𝑨
-  h' = HomComp (𝑻 X) 𝑨 𝔛 f
+  h' = HomComp (𝑻 X) 𝑨 𝔑 f
   ϕ = lift-hom 𝑨 h
 
-  f𝔛≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔛 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-  f𝔛≡ϕ x = 𝓇ℯ𝒻𝓁
-  h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ 𝔛 ∣) t ≡ ∣ ϕ ∣ t
-  h≡ϕ t = free-unique gfe 𝑨 h' ϕ f𝔛≡ϕ t
+  f𝔑≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔑 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
+  f𝔑≡ϕ x = 𝓇ℯ𝒻𝓁
+  h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ ϕ ∣ t
+  h≡ϕ t = free-unique gfe 𝑨 h' ϕ f𝔑≡ϕ t
 
   γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
   γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
-      ∣ f ∣ ( ∣ 𝔛 ∣ p ) ≡⟨ ap ∣ f ∣ 𝔛pq ⟩
-      ∣ f ∣ ( ∣ 𝔛 ∣ q ) ≡⟨ h≡ϕ q ⟩
+      ∣ f ∣ ( ∣ 𝔑 ∣ p ) ≡⟨ ap ∣ f ∣ 𝔑pq ⟩
+      ∣ f ∣ ( ∣ 𝔑 ∣ q ) ≡⟨ h≡ϕ q ⟩
       ∣ ϕ ∣ q ∎
 
 
@@ -213,19 +221,26 @@ X↪𝔽 x = ⟦ ℊ x ⟧
                 (q ̇ 𝑨) h         ∎
 
 
+\end{code}
+
+With these results in hand, it is now trivial to prove the main theorem of this subsection.
+
+\begin{code}
+
 class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝒦 ⊧ p ≋ q
 class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
+\end{code}
+
+
+#### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
+
+Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
+
+\begin{code}
 
 kernel-in-theory : KER-pred ∣ Ψ ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
-
-
-\end{code}
-
-Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.
-
-\begin{code}
 
 open Congruence
 free-quot-subalg-ℭ : is-set ∣ ℭ ∣
@@ -328,6 +343,8 @@ From these it follows that every equational class is a variety. Thus, our formal
 ----------------------------
 
 <sup>1</sup> In the previous version of the [UALib][] this module was called HSPLemmas and the Birkhoff HSP theorem was in a separate module, while in the current version these are in the new HSPTheorem module.
+
+<sup>2</sup> It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [UALib.Birkhoff.FreeAlgebra][] module.
 
 
 [← UALib.Birkhoff.FreeAlgebra](UALib.Birkhoff.FreeAlgebra.html)
