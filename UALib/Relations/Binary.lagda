@@ -87,11 +87,6 @@ or as a relation from `A` to `B`,
  𝟎-pred' : {A : 𝓤 ̇ } → 𝓤 ̇
  𝟎-pred' {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
- --...on the domain of an algebra...
-
- -- 𝟎-alg-rel : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓤 𝑆} → 𝓤 ̇
- -- 𝟎-alg-rel {𝑨 = 𝑨} = Σ a ꞉ ∣ 𝑨 ∣ , Σ b ꞉ ∣ 𝑨 ∣ , a ≡ b
-
  -- The total relation A × A
  𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
  𝟏 a b = 𝟙

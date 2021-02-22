@@ -26,26 +26,30 @@ open import UALib.Algebras.Algebras hiding (𝓞; 𝓥) public
 
 \end{code}
 
-We define products of algebras for both the Sigma type representation (the one we use most often) and the record type representation.
+The product of 𝑆-algebras for the Sigma type representation is defined as follows.
 
 \begin{code}
 
--- product for algebras of sigma type
 ⨅ : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
-⨅ {𝓤}{𝓘}{I} 𝒜 =
- ((i : I) → ∣ 𝒜 i ∣) , λ(f : ∣ 𝑆 ∣)(𝒂 : ∥ 𝑆 ∥ f → (j : I) → ∣ 𝒜 j ∣)(i : I) → (f ̂ 𝒜 i) λ{x → 𝒂 x i}
+
+⨅ 𝒜 = (∀ i → ∣ 𝒜 i ∣) ,                -- domain of the product algebra
+
+       λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
+
+\end{code}
+
+Other modules of the [UALib][] will use the foregoing product type exclusively.  However, for completeness, we now demonstrate how one would construct product algebras when the factors are defined using records.
+
+\begin{code}
 
 open algebra
 
 -- product for algebras of record type
 ⨅' : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }(𝒜 : I → algebra 𝓤 𝑆) → algebra (𝓘 ⊔ 𝓤) 𝑆
-⨅' {𝓤}{𝓘}{I} 𝒜 = record
-                   { univ = (i : I) → univ (𝒜 i)
-                   ; op = λ(f : ∣ 𝑆 ∣)
-                           (𝒂 : ∥ 𝑆 ∥ f → (j : I) → univ(𝒜 j))
-                           (i : I) → ((op (𝒜 i)) f)
-                           λ{x → 𝒂 x i}
-                   }
+
+⨅' 𝒜 = record { univ = ∀ i → univ (𝒜 i)               -- domain
+               ; op = λ 𝑓 𝑎 i → (op (𝒜 i)) 𝑓 λ x → 𝑎 x i -- basic operations
+               }
 
 \end{code}
 

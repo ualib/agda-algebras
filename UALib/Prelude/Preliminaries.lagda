@@ -220,13 +220,13 @@ The definition of Σ (and thus, of ×) above comes equipped with first and secon
 
 module _ {𝓤 : Universe} where
 
-  ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
-  ∣ x , y ∣ = x
-  fst (x , y) = x
+ ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+ ∣ x , y ∣ = x
+ fst (x , y) = x
 
-  ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
-  ∥ x , y ∥ = y
-  snd (x , y) = y
+ ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+ ∥ x , y ∥ = y
+ snd (x , y) = y
 
 \end{code}
 

@@ -91,16 +91,11 @@ An important construction in universal algebra is the quotient of an algebra �
 
 \begin{code}
 
-_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆)
- →    Congruence{𝓤}{𝓡} A
-      --------------------
- →    Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
+_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓡} A → Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
 
-A ╱ θ = -- domain
-        ( ∣ A ∣ / ⟨ θ ⟩ ) ,
+A ╱ θ = ( ∣ A ∣ / ⟨ θ ⟩ ) ,  -- the domain
 
-        -- operations
-        λ f 𝒂 → ⟦ (f ̂ A) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧
+        λ f 𝒂 → ⟦ (f ̂ A) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations
 
 \end{code}
 
@@ -112,10 +107,11 @@ The zero element of a quotient can be expressed as follows.
 
 \begin{code}
 
-Zero╱ : {𝓤 𝓡 : Universe}{A : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} A)
-  →     Rel (∣ A ∣ / ⟨ θ ⟩) (𝓤 ⊔ 𝓡 ⁺)
+module _ {𝓤 𝓡 : Universe} where
 
-Zero╱ θ = λ x x₁ → x ≡ x₁
+ Zero╱ : {A : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} A) → Rel (∣ A ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓡 ⁺)
+
+ Zero╱ θ = λ x x₁ → x ≡ x₁
 
 \end{code}
 
@@ -123,10 +119,9 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
-╱-refl : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
-  →      ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+ ╱-refl : (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣} → ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
-╱-refl A {θ} 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-refl A {θ} 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}
 
