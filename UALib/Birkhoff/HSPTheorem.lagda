@@ -11,15 +11,17 @@ This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Univ
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in Th (V 𝒦)---belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.
 
+We will denote the product of all subalgebras of algebras in 𝒦 by ℭ. We use `homℭ` to denote the homomorphism from `𝑻 X` to `ℭ` defined by `homℭ := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (hom𝔄 i))`.
+
+Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra `𝑨`, a family `{ℬ : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is natural in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
+
 We accomplish our goal by constructing an algebra 𝔽 with the following properties:
 
 1. 𝔽 ∈ V 𝒦 and
 
 2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
 
-In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker ΨTC`, where ℭ is the product of all subalgebras of algebras in 𝒦 and ΨTC is the homomorphism from 𝑻 X to ℭ defined by ΨTC := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i)).
-
-Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra 𝑨, a family {ℬ : I → Algebra 𝓤 𝑆} of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is natural in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
+In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`, 
 
 \begin{code}
 
@@ -54,7 +56,9 @@ open the-free-algebra {𝓤}{𝓤}{X}
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
 Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
-We begin by constructing ℭ, using the class-product types described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
+We begin by constructing ℭ, using the techniques described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
+
+**Notation**. In this module, the type `ℑs` will index the collection of all subalgebras of algebras in the class 𝒦, and `𝔄s : ℑs → Algebra 𝓤 𝑆` will be a map from the index type to the subalgebras. 
 
 \begin{code}
 
@@ -82,52 +86,52 @@ Observe that the inhabitants of ℭ are maps from ℑs to {𝔄s i : i ∈ ℑs}
 
 \begin{code}
 
-T𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)
-T𝔄 i = lift-hom (𝔄s i) (𝔄h i)
+hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)
+hom𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
-ΨTC : hom (𝑻 X) ℭ
-ΨTC = ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (T𝔄 i))
+homℭ : hom (𝑻 X) ℭ
+homℭ = ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (hom𝔄 i))
 
 \end{code}
 
 
 #### <a id="the-new-free-algebra">The new free algebra</a>
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉`, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `Ψe : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>2</sup>
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉`, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>2</sup>
 
 \begin{code}
 
 𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
-𝔽 = (𝑻 X) [ ℭ ]/ker ΨTC
+𝔽 = (𝑻 X) [ ℭ ]/ker homℭ
 
-Ψe : epi (𝑻 X) 𝔽
-Ψe = πker ℭ ΨTC
+epi𝔽 : epi (𝑻 X) 𝔽
+epi𝔽 = πker ℭ homℭ
 
-Ψ : hom (𝑻 X) 𝔽
-Ψ = epi-to-hom 𝔽 Ψe
+hom𝔽 : hom (𝑻 X) 𝔽
+hom𝔽 = epi-to-hom 𝔽 epi𝔽
 
-ΨE : Epic ∣ Ψ ∣
-ΨE = snd ∥ Ψe ∥
+hom𝔽-is-epic : Epic ∣ hom𝔽 ∣
+hom𝔽-is-epic = snd ∥ epi𝔽 ∥
 
 \end{code}
 
-We will need the following facts relating ΨTC, Ψ, and ψ.
+We will need the following facts relating homℭ, hom𝔽, and ψ.
 
 \begin{code}
 
-ψlemma0 : ∀ p q → (∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q) → (p , q) ∈ ψ 𝒦
-ψlemma0 p q pΨTCq 𝑨 sA h = ap (λ - → - (𝑨 , (sA , h))) pΨTCq
+ψlemma0 : ∀ p q → (∣ homℭ ∣ p ≡ ∣ homℭ ∣ q) → (p , q) ∈ ψ 𝒦
+ψlemma0 p q phomℭq 𝑨 sA h = ap (λ - → - (𝑨 , (sA , h))) phomℭq
 
 
 ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}
  →           𝑨 ∈ S{𝓤}{𝓤} 𝒦
              ---------------------------------------
- →           KER-pred ∣ Ψ ∣ ⊆ KER-pred (free-lift 𝑨 h)
+ →           KER-pred ∣ hom𝔽 ∣ ⊆ KER-pred (free-lift 𝑨 h)
 
 ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
-  ν : ∣ ΨTC ∣ p ≡ ∣ ΨTC ∣ q
-  ν = ker-in-con (𝑻 X) (kercon ℭ ΨTC) p q x
+  ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
+  ν = ker-in-con (𝑻 X) (kercon ℭ homℭ) p q x
 
   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
   γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -140,7 +144,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) Ψ ΨE (ψlemma0-ap skA))
+𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) hom𝔽 hom𝔽-is-epic (ψlemma0-ap skA))
 
 \end{code}
 
@@ -161,16 +165,16 @@ X↪𝔽 x = ⟦ ℊ x ⟧
 
 \end{code}
 
-It turns out that the homomorphism so defined is equivalent to `Ψ`.
+It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
 
 \begin{code}
 
-Ψ-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ Ψ ∣ p
-Ψ-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
-Ψ-is-lift-hom (node 𝑓 𝒕) = ∣ 𝔑 ∣ (node 𝑓 𝒕)           ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-                          (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))  ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → Ψ-is-lift-hom(𝒕 x))) ⟩
-                          (𝑓 ̂ 𝔽)(λ i → ∣ Ψ ∣ (𝒕 i))  ≡⟨ (∥ Ψ ∥ 𝑓 𝒕)⁻¹ ⟩
-                          ∣ Ψ ∣ (node 𝑓 𝒕)           ∎
+hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
+hom𝔽-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
+hom𝔽-is-lift-hom (node 𝑓 𝒕) = ∣ 𝔑 ∣ (node 𝑓 𝒕)           ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
+                          (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))  ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
+                          (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
+                          ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
 
 
 \end{code}
@@ -201,11 +205,11 @@ We need a three more lemmas before we are ready to tackle our main goal.
       ∣ ϕ ∣ q ∎
 
 
-ψlemma2 : KER-pred ∣ Ψ ∣ ⊆ ψ 𝒦
+ψlemma2 : KER-pred ∣ hom𝔽 ∣ ⊆ ψ 𝒦
 ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
   where
    γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
-   γ = (Ψ-is-lift-hom p) ∙ hyp ∙ (Ψ-is-lift-hom q)⁻¹
+   γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
 
 
 ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
@@ -227,7 +231,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 \begin{code}
 
-class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝒦 ⊧ p ≋ q
+class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
 class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
 \end{code}
@@ -239,24 +243,24 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
-kernel-in-theory : KER-pred ∣ Ψ ∣ ⊆ Th (V 𝒦)
+kernel-in-theory : KER-pred ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
 open Congruence
 free-quot-subalg-ℭ : is-set ∣ ℭ ∣
- →                   (∀ p q → is-subsingleton (⟨ kercon ℭ ΨTC ⟩ p q))
- →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ ΨTC ⟩} C))
+ →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
+ →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
                      -----------------------------------------------------------
- →                   ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
+ →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
 
-free-quot-subalg-ℭ Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ ΨTC pe' Cset ssR ssC
+free-quot-subalg-ℭ Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ homℭ pe' Cset ssR ssC
 
 
 module _ (Cset : is-set ∣ ℭ ∣)
-         (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ ΨTC ⟩ p q))
-         (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ ΨTC ⟩} C)) where
+         (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
+         (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C)) where
 
- 𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker ΨTC) ≤ ℭ
+ 𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
  𝔽≤ℭ = free-quot-subalg-ℭ Cset ssR ssC
 
  𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
@@ -271,10 +275,10 @@ module _ (Cset : is-set ∣ ℭ ∣)
    ϕE : Epic ∣ ϕ ∣
    ϕE = lift-of-epi-is-epi 𝑨 (fst (𝕏 𝑨)) (snd (𝕏 𝑨))
 
-   pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ Ψ ∣ → 𝑨 ⊧ p ≈ q
+   pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
    pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
 
-   kerincl : KER-pred ∣ Ψ ∣ ⊆ KER-pred ∣ ϕ ∣
+   kerincl : KER-pred ∣ hom𝔽 ∣ ⊆ KER-pred ∣ ϕ ∣
    kerincl {p , q} x = γ
     where
      Apq : 𝑨 ⊧ p ≈ q
@@ -288,7 +292,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
          ∣ ϕ ∣ q                  ∎
 
    γ : epi 𝔽 𝑨
-   γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} ϕ ϕE Ψ ΨE  kerincl)
+   γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} ϕ ϕE hom𝔽 hom𝔽-is-epic  kerincl)
 
 
 \end{code}
