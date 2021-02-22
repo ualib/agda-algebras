@@ -249,34 +249,32 @@ ker-in-con 𝑨 θ x y hyp = ╱-refl 𝑨 {θ} hyp
 
 \begin{code}
 
-⨅-hom-co : {𝓠 𝓤 𝓘 : Universe} → dfunext 𝓘 𝓤
- →          (𝑨 : Algebra 𝓠 𝑆){I : 𝓘 ̇}{ℬ : I → Algebra 𝓤 𝑆}
+⨅-hom-co : {𝓠 𝓤 𝓘 : Universe}(𝑨 : Algebra 𝓠 𝑆){I : 𝓘 ̇}(ℬ : I → Algebra 𝓤 𝑆)
  →          (∀ i → hom 𝑨 (ℬ i))
             --------------------
  →          hom 𝑨 (⨅ ℬ)
 
-⨅-hom-co dfe 𝑨 {I}{ℬ} homs = ϕ , ϕhom
+⨅-hom-co 𝑨 {I} ℬ homs = ϕ , ϕhom
  where
   ϕ : ∣ 𝑨 ∣ → ∣ ⨅ ℬ ∣
   ϕ a = λ i → ∣ homs i ∣ a
 
   ϕhom : is-homomorphism 𝑨 (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒂 = dfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x)
+  ϕhom 𝑓 𝒂 = gfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x)
 
 
-⨅-hom : {𝓠 𝓤 𝓘 : Universe} → dfunext 𝓘 𝓤
- →       {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
+⨅-hom : {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}(𝒜 : I → Algebra 𝓠 𝑆)(ℬ : I → Algebra 𝓤 𝑆)
  →       ((i : I) → hom (𝒜 i)(ℬ i))
          ---------------------------
  →       hom (⨅ 𝒜) (⨅ ℬ)
 
-⨅-hom dfe {I}{𝒜}{ℬ} homs = ϕ , ϕhom
+⨅-hom 𝒜 ℬ homs = ϕ , ϕhom
  where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
   ϕ = λ x i → ∣ homs i ∣ (x i)
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒂 = dfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i)
+  ϕhom 𝑓 𝒂 = gfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i)
 
 \end{code}
 

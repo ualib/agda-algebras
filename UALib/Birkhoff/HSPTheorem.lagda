@@ -9,21 +9,21 @@ author: William DeMeo
 
 This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
 
-To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in Th (V 𝒦)---belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.
+To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
-We accomplish our goal by constructing an algebra 𝔽 with the following properties:
+We accomplish this goal by constructing an algebra `𝔽` with the following properties:
 
-1. 𝔽 ∈ V 𝒦 and
+1. `𝔽 ∈ V 𝒦` and
 
-2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
+2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
-In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`. 
+(In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.)
 
-Here, ℭ denotes the product of all subalgebras of algebras in 𝒦, and `homℭ` denotes the homomorphism from `𝑻 X` to `ℭ` defined by
+We denote by ℭ the product of all subalgebras of algebras in 𝒦, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows:
 
-`homℭ := ⨅-hom-co (𝑻 X) (λ i → (hom𝔄 i))`.
+`homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
 
-Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra `𝑨`, a family `{𝔄 : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom 𝑨 (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑨` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom 𝑨 (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑎 : ∣ 𝑨 ∣` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑎` of 𝑎 under the i-th homomorphism `hom𝔄 i`.
+Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 \begin{code}
 
@@ -35,7 +35,7 @@ open import UALib.Relations.Unary using (Pred)
 
 \end{code}
 
-Unlike previous modules, in this module we fix 𝓤, X, and 𝒦 in advance.
+Unlike previous modules, in this module we fix `𝓤`, `X`, and `𝒦` in advance. We also assume 𝕏, which supplies, for each algebra `𝑨`, a surjective map ∣ 𝕏 𝑨 ∣ from `X` onto 𝑨.
 
 \begin{code}
 
@@ -92,7 +92,7 @@ hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)
 hom𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
 homℭ : hom (𝑻 X) ℭ
-homℭ = ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (hom𝔄 i))
+homℭ = ⨅-hom-co (𝑻 X) 𝔄s hom𝔄
 
 \end{code}
 
