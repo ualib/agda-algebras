@@ -11,17 +11,19 @@ This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Univ
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in Th (V 𝒦)---belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.
 
-We will denote the product of all subalgebras of algebras in 𝒦 by ℭ. We use `homℭ` to denote the homomorphism from `𝑻 X` to `ℭ` defined by `homℭ := ⨅-hom-co gfe (𝑻 X) {ℑs}{𝔄s}(λ i → (hom𝔄 i))`.
-
-Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra `𝑨`, a family `{ℬ : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `ℋ : ∀ i → hom 𝑨 (ℬ i)` of homomorphisms and constructs the natural homomorphism ϕ from 𝑨 to the product ⨅ ℬ.  The homomorphism ϕ : hom 𝑨 (⨅ ℬ) is natural in the sense that the i-th component of the image of 𝑎 : ∣ 𝑨 ∣ under ϕ is the image ∣ ℋ i ∣ 𝑎 of 𝑎 under the i-th homomorphism ℋ i.
-
 We accomplish our goal by constructing an algebra 𝔽 with the following properties:
 
 1. 𝔽 ∈ V 𝒦 and
 
 2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
 
-In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`, 
+In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`. 
+
+Here, ℭ denotes the product of all subalgebras of algebras in 𝒦, and `homℭ` denotes the homomorphism from `𝑻 X` to `ℭ` defined by
+
+`homℭ := ⨅-hom-co (𝑻 X) (λ i → (hom𝔄 i))`.
+
+Recall, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes an 𝑆-algebra `𝑨`, a family `{𝔄 : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom 𝑨 (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑨` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom 𝑨 (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑎 : ∣ 𝑨 ∣` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑎` of 𝑎 under the i-th homomorphism `hom𝔄 i`.
 
 \begin{code}
 
