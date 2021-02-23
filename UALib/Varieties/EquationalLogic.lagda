@@ -161,7 +161,7 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
 
   ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
-        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality Apq (∣ h ∣ ∘ b) ⟩
+        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun Apq (∣ h ∣ ∘ b) ⟩
         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
         ∣ h ∣((q ̇ 𝑩) b)   ∎
 
@@ -191,7 +191,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
    ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
    ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
-         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ intensionality (Kpq ka) (∣ h ∣ ∘ b) ⟩
+         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun (Kpq ka) (∣ h ∣ ∘ b) ⟩
          (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
          ∣ h ∣((q ̇ 𝑩) b)   ∎
 
@@ -271,7 +271,7 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 ⊧-H-invariance X p q 𝑨 φ β =
   ∣ φ ∣ p              ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
   ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term 𝑨 φ p ℊ ) ⟩
-  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ intensionality β (∣ φ ∣ ∘ ℊ ) ⟩
+  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ extfun β (∣ φ ∣ ∘ ℊ ) ⟩
   (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term 𝑨 φ q ℊ )⁻¹ ⟩
   ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
   ∣ φ ∣ q              ∎
@@ -295,7 +295,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
   ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂) ≡ ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)
 
   ξ 𝒂 = ∣ φ ∣ ((p ̇ 𝑻 X) 𝒂)  ≡⟨ comm-hom-term 𝑨 φ p 𝒂 ⟩
-        (p ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ intensionality (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
+        (p ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ extfun (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
         (q ̇ 𝑨)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term 𝑨 φ q 𝒂)⁻¹ ⟩
         ∣ φ ∣ ((q ̇ 𝑻 X) 𝒂)  ∎
 

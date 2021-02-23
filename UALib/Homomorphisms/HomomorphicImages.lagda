@@ -108,7 +108,7 @@ lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi y = eq y (lift
   β = ap (λ - → lift (∣ f ∣ ( - a))) (lower∼lift{𝓦 = 𝓦})
 
   η : y ≡ ∣ lf ∣ (lift a)
-  η = y               ≡⟨ (intensionality lift∼lower) y ⟩
+  η = y               ≡⟨ (extfun lift∼lower) y ⟩
       lift b          ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
       lift (∣ f ∣ a)  ≡⟨ β ⟩
       ∣ lf ∣ (lift a) ∎

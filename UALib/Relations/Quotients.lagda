@@ -136,9 +136,9 @@ If the relation is reflexive, then we have the following elimination rules.
 
 \begin{code}
 
- /-refl : {A : 𝓤 ̇}{a a' : A}{R : Rel A 𝓡} → reflexive R → [ a ] R ≡ [ a' ] R → R a a'
+ /-refl : {A : 𝓤 ̇}(a a' : A){R : Rel A 𝓡} → reflexive R → [ a ] R ≡ [ a' ] R → R a a'
 
- /-refl{A}{a}{a'}{R} rfl x  = cong-app-pred a' (rfl a') (x ⁻¹)
+ /-refl a a' rfl x  = cong-app-pred a' (rfl a') (x ⁻¹)
 
 
  ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A

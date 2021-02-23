@@ -288,7 +288,7 @@ module _ (Cset : is-set ∣ ℭ ∣)
      γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
      γ = ∣ ϕ ∣ p                    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
          free-lift 𝑨 (fst(𝕏 𝑨)) p ≡⟨ (free-lift-interp 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
-         (p ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ intens (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
+         (p ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
          (q ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ free-lift-interp 𝑨 (fst(𝕏 𝑨)) q ⟩
          free-lift 𝑨 (fst(𝕏 𝑨)) q ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
          ∣ ϕ ∣ q                  ∎

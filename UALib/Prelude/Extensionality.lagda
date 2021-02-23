@@ -95,37 +95,35 @@ extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args
 
 \end{code}
 
-
-
-
-#### <a id="function-intensionality">Function intensionality</a>
-
-This is the opposite of function extensionality and is defined as follows.
+The next function type defines the converse of function extensionality.<sup>1</sup>
 
 \begin{code}
 
-intens -- alias
- intensionality : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
+extfun : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
 
-intensionality 𝓇ℯ𝒻𝓁 _  = 𝓇ℯ𝒻𝓁
-intens = intensionality
+extfun 𝓇ℯ𝒻𝓁 _  = 𝓇ℯ𝒻𝓁
 
 \end{code}
+
+Although the proof of `extfun` is trivial, we can sometimes clarify otherwise confusing proofs by invoking this function when we are given a definitional equality but we need a point-wise equality.
 
 Of course, the intensionality principle has an analogue for dependent function types.
 
 \begin{code}
 
-dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : Π B} → f ≡ g → f ∼ g
+dextfun : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : Π B} → f ≡ g → f ∼ g
 
-dintensionality 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
+dextfun 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
 
-
-
 -------------------------------------
+
+<sup>1</sup> Previous versions of the [UALib][] called this function `intensionality` and implied that it represented the concept of *function intensionality*, until we realized this isn't quite right and we changed the name to the less controvertial `extfun`.
+
+
+--------------------
 
 [← UALib.Prelude.Inverses](UALib.Prelude.Inverses.html)
 <span style="float:right;">[UALib.Algebras →](UALib.Algebras.html)</span>

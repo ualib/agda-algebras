@@ -194,8 +194,6 @@ module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 <!--
 Here is an intensional version.
 
-\begin{code}
-
 comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
  →                          (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)(t : Term X)
                             -------------------------------------------------------------
@@ -211,11 +209,9 @@ comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f 𝒕) = γ
       (λ a → (f ̂ 𝑩)(λ i → (𝒕 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣ ∎
    where
     IH : ∀ a i → (∣ h ∣ ∘ (𝒕 i ̇ 𝑨)) a ≡ ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
-    IH a i = intensionality (comm-hom-term-intensional gfe 𝑨 𝑩 h (𝒕 i)) a
+    IH a i = extfun (comm-hom-term-intensional gfe 𝑨 𝑩 h (𝒕 i)) a
 
     ih : (λ a → (λ i → ∣ h ∣ ((𝒕 i ̇ 𝑨) a))) ≡ (λ a → (λ i → ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
     ih = gfe λ a → gfe λ i → IH a i
-
-\end{code}
 
 -->
