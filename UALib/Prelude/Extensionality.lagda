@@ -105,10 +105,7 @@ This is the opposite of function extensionality and is defined as follows.
 \begin{code}
 
 intens -- alias
- intensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B}
- →                f ≡ g  →  (x : A)
-                  -----------------
- →                f x ≡ g x
+ intensionality : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
 
 intensionality 𝓇ℯ𝒻𝓁 _  = 𝓇ℯ𝒻𝓁
 intens = intensionality
@@ -119,10 +116,7 @@ Of course, the intensionality principle has an analogue for dependent function t
 
 \begin{code}
 
-dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : (x : A) → B x}
- →                f ≡ g  →  (x : A)
-                  ------------------
- →                f x ≡ g x
+dintensionality : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : Π B} → f ≡ g → f ∼ g
 
 dintensionality 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
