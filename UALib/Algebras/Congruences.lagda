@@ -21,7 +21,7 @@ open import UALib.Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
-A congruence relation of an algebra can be represented in a number of different ways.  Here is a Sigma type and a record type, each of which can be used to represent congruence relations.
+A **congruence relation** of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of 𝑨.  This concept can be represented in a number of different ways in type theory.  For example, we define both a Sigma type `Con` and a record type `Congruence`, each of which captures the informal notion of congruence, and each one is useful in certain contexts. (We will see examples later.)
 
 \begin{code}
 

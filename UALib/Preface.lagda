@@ -32,7 +32,7 @@ The idea for the [UALib][] project originated with the observation that, on the 
 
 The first goal of [UALib][] is to demonstrate that it is possible to express the foundations of universal algebra in type theory and to formalize (and formally verify) the foundations in the Agda programming language. We will formalize a substantial portion of the edifice on which our own mathematical research depends, and demonstrate that our research can also be expressed in type theory and formally implemented in such a way that we and other working mathematicians can understand and verify the results. The resulting library will also serve to educate our peers, and encourage and help them to formally verify their own mathematics research.
 
-Our field is deep and wide and codifying all of its foundations may seem like a daunting task and possibly risky investment of time and resources.  However, we believe our subject is well served by a new, modern, [constructive](https://ncatlab.org/nlab/show/constructive+mathematics) presentation of its foundations.  Our new presentation expresses the foundations of universal algebra in the language of type theory, and uses the Agda proof assistant to codify and formally verify everything.
+Our field is deep and wide and codifying all of its foundations may seem like a daunting task and a possibly risky investment of time and energy.  However, we believe our subject is well served by a new, modern, [constructive](https://ncatlab.org/nlab/show/constructive+mathematics) presentation of its foundations.  Our new presentation expresses the foundations of universal algebra in the language of type theory, and uses the Agda proof assistant to codify and formally verify everything.
 
 #### <a id="secondary-goals">Secondary Goals</a>
 
@@ -78,24 +78,63 @@ If you don't have [Agda][] and [agda2-mode][] installed, follow the directions o
 
 The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io), but a summary of what's required is
 
-* [Emacs](https://www.gnu.org/software/emacs/)) 
+* [Emacs](https://www.gnu.org/software/emacs/)
 * [Agda][] 2.6.1
 * [agda2-mode][] (for emacs)
 * A cloned copy of the [ualib/ualib.gitlab.io][] repository.
 
 Instructions for installing each of these are available in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io).
 
-If you already have `git` installed, a cloned copy of [ualib/ualib.gitlab.io][] is obtained using **ONE** of the following alternative commands:
+If you already have `git` installed, a cloned copy of [ualib/ualib.gitlab.io][] is obtained using **one** of the following alternative commands:
 
 ```shell
 git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 ```
 
-**OR**, if you have a gitlab account with [ssh keys](https://docs.gitlab.com/ee/ssh/) configured, you could try
+**or**, if you have a gitlab account with [ssh keys](https://docs.gitlab.com/ee/ssh/) configured, you could try
 
 ```shell
 git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 ```
+
+----------------------------
+
+### <a id="about-this-document">About this documentation</a>
+
+These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\begin{code}...\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
+
+```
+agda --html --html-highlight=code UALib.lagda
+```
+
+This generates a set of markdown files that are then converted to html by jekyll with the command
+
+```shell
+bundle exec jekyll build
+```
+
+In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
+
+```
+cp html/UALib.md index.md
+cp html/*.html html/*.md .
+bundle install --path vendor
+bundle exec jekyll serve --watch --incremental
+```
+
+This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
+
+LaTeX source files may be generated with a combination of `agda --latex` and `pandoc` commands. This can only be done one module at a time, but the script `generate-tex` is set up to process all modules in the library.  We typically run the commands
+
+```shell
+./generate-tex; ./generate-md
+```
+
+at the command line after each update of the library.  This type-checks all the modules, and generates html and latex documentation.
+
+**Warning!** Our `.lagda` source files make heavy use of unicode characters, both inside and outside code blocks. Therefore, the tex source files produced with the `agda --latex` command cannot be processed correctly with `pdflatex` (as far as we know). Instead, we use `xelatex` along with the `unixode` package. For examples, look in the subdirectories of the [_static/paper](https://gitlab.com/ualib/ualib.gitlab.io/-/tree/master/_static/paper) directory of the [ualib.gitlab.io](https://gitlab.com/ualib/ualib.gitlab.io`) repository.
+
+**XeLaTeX and arXiv**. xelatex has the major advantage of correctly processing and formatting unicode characters, but it has the major disadvantage of not being compatible with arXiv, and it seems there are no plans to support `xelatex` in the near future.  However, one can email the arXiv administrators and explain that `xelatex` is required to process the manuscript and (in my experience, at least) this will prompt a reply with permission to submit a precompiled pdf without the accompanying tex source code.
 
 -------------------------------------------------------
 
@@ -126,33 +165,6 @@ The following Agda documentation and tutorials helped inform and improve the [UA
 * Norell and Chapman, [Dependently Typed Programming in Agda][]
 
 Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the (open source) [Agda Standard Library][] source code are also quite useful.
-
-----------------------------
-
-### <a id="about-this-document">About this documentation</a>
-
-These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\\begin{code}...\\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
-
-```
-agda --html --html-highlight=code UALib.lagda
-```
-
-This generates a set of markdown files that are then converted to html by jekyll with the command
-
-```shell
-bundle exec jekyll build
-```
-
-In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
-
-```
-cp html/UALib.md index.md
-cp html/*.html html/*.md .
-bundle install --path vendor
-bundle exec jekyll serve --watch --incremental
-```
-
-This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
 
 -----------------------------------
 

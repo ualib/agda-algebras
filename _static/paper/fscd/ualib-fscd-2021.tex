@@ -460,7 +460,7 @@ This principle is stronger than necessary and we could get away with assuming on
 \section{Relation Types}\label{sec:relations}
 
 \subsection{Unary Relations}\label{unary-relations}
-This section describes certain key components of the \ualibUnary module..  For more details, see \url{https://ualib.gitlab.io/UALib.Relations.Unary.html}.
+This section describes certain key components of the \ualibUnary module.  For more details, see \url{https://ualib.gitlab.io/UALib.Relations.Unary.html}.
 
 The typical mechanism used to represent notion of subset in Agda is the type  \af{Pred} (for predicate), defined as follows. 
 \ccpad
@@ -2648,145 +2648,6 @@ We use the function \af{lift-alg} to resolve errors that arise when working in A
 
 
 
-\subsection{Lifting relations and operation compatibility}\label{ssec:compatibility}
-We say that a (unary) operation \ab f \as : \ab X \as → \ab X is \defn{compatible} with (or \defn{respects}, or \defn{preserves}) the binary relation \ab R on \ab X just in case \as ∀ \ab x, \ab y \as : X, we have \ab R \ab x \ab y \as →  \ab R (\ab f \ab x) (\ab f \ab y).  Now suppose \ab 𝓤, \ab 𝓥, and \ab 𝓦 are universes and assume the following typing judgments: \ab γ \as : \ab 𝓥\af ̇, \ab X \as : \ab 𝓤\af ̇. We lift the definition of compatibility from unary to \ab γ-ary operations in the following obvious way: for all \ab u \ab v \as : \ab γ \as → \ab X (\ab γ-tuples of \ab X), we say that the pair \ab u \ab v is \ab R-related, and we write \AgdaFunction{lift-rel}~\ab R~\ab u~\ab v provided \as ∀ \ab i \as : \ab γ, \ab R (\ab u \ab i) (\ab v \ab i). The function \af{lift-rel} is defined as follows.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-If \ab f \as : (\ab γ \as → \ab X) \as → \ab X is a \ab γ-ary operation on \ab X, we say that \ab f is \defn{compatible} with \ab R provided for all \ab u \ab v : \ab γ \as → \ab X, \af{lift-rel} \ab R \ab u \ab v implies \ab R (\ab f \ab u) (\ab f \ab v).
-\ccpad
-\begin{code}
-\>[1]\AgdaFunction{compatible-op}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{compatible-op}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀\{}\AgdaBound{𝒂}\AgdaSymbol{\}\{}\AgdaBound{𝒃}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-rel}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{𝒃}%
-\>[53]\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒃}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-Finally, to represent that all basic operations of an algebra are compatible with a given relation, we define
-\ccpad
-\begin{code}
-\>[1]\AgdaFunction{compatible}\AgdaSpace{}%
-\AgdaSymbol{:}{\AgdaSpace{}}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{compatible}%
-\>[13]\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{compatible-op}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\end{code}
-\ccpad
-We'll see this definition of compatibility at work very soon when we define congruence relations in the next section.
-
-
-
-
-
-
-
-
 
 
 
@@ -3007,12 +2868,147 @@ If \ab p \as : \ab 𝑨 \af ∈ \ab 𝒦 and \ab h \as : \ab X \as → \af ∣ \
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Congruence Relations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Congruence relations types}\label{sec:congr-relat-types}
+\section{Congruence relation types}\label{sec:congr-relat-types}
 
 This section describes parts of the \ualibCongruences module.
 For more details, see \url{https://ualib.gitlab.io/UALib.Algebras.Congruences.html}.
 
-A congruence relation of an algebra can be represented in a number of different ways. Here is a Sigma type and a record type, each of which can be used to represent congruence relations.
+\subsection{Lifting relations and operation compatibility}\label{ssec:compatibility}
+We say that a (unary) operation \ab f \as : \ab X \as → \ab X is \defn{compatible} with (or \defn{respects}, or \defn{preserves}) the binary relation \ab R on \ab X just in case \as ∀ \ab x, \ab y \as : X, we have \ab R \ab x \ab y \as →  \ab R (\ab f \ab x) (\ab f \ab y).
+
+Now suppose \ab 𝓤, \ab 𝓥, and \ab 𝓦 are universes and assume the following typing judgments: \ab γ \as : \ab 𝓥\af ̇, \ab X \as : \ab 𝓤\af ̇. We \defn{lift} the definition of compatibility from unary to \ab γ-ary operations in the following natural way:\footnote{The ``lift'' we describe here is not to be confused with the one we described earlier, e.g., in Section~\ref{lifting-algebra-types}.} for all \ab u \ab v \as : \ab γ \as → \ab X (\ab γ-tuples of \ab X), we say that the pair \ab u \ab v is \ab R-related, and we write \AgdaFunction{lift-rel}~\ab R~\ab u~\ab v provided \as ∀ \ab i \as : \ab γ, \ab R (\ab u \ab i) (\ab v \ab i). The function \af{lift-rel} is defined as follows.
+\ccpad
+\begin{code}%
+\>[1]\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+If \ab f \as : (\ab γ \as → \ab X) \as → \ab X is a \ab γ-ary operation on \ab X, we say that \ab f is \defn{compatible} with \ab R provided for all \ab u \ab v : \ab γ \as → \ab X, \af{lift-rel} \ab R \ab u \ab v implies \ab R (\ab f \ab u) (\ab f \ab v). We formalize this as follows.
+\ccpad
+\begin{code}
+\>[1]\AgdaFunction{compatible-op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{compatible-op}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀\{}\AgdaBound{𝒂}\AgdaSymbol{\}\{}\AgdaBound{𝒃}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{lift-rel}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝒃}%
+\>[53]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝒂}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝒃}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+Finally, to represent that all basic operations of an algebra are compatible with a given relation, we define
+\ccpad
+\begin{code}
+\>[1]\AgdaFunction{compatible}\AgdaSpace{}%
+\AgdaSymbol{:}{\AgdaSpace{}}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{compatible}%
+\>[13]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{compatible-op}\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\end{code}
+\ccpad
+We'll see this definition of compatibility at work very soon when we define congruence relations in the next subsection.
+
+\subsection{Congruences as dependent pairs and records}
+A \defn{congruence relation} of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of 𝑨.  This concept may be represented in type theory and formalized in Agda in a number of alternative ways.  For example, we define a Sigma type `Con` and a record type `Congruence` as shown below. Each definition captures the essence of the notion of congruence, and neither is more convenient than the other for all situations. (We will see examples later.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Con}\AgdaSpace{}%
@@ -3101,9 +3097,6 @@ A congruence relation of an algebra can be represented in a number of different 
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟨\AgdaUnderscore{}⟩}}\<%
 \end{code}
-
-
-\subsubsection{Examples}\label{examples}
 
 We defined the zero relation \af{𝟎-rel} above (\S~\ref{binary-relations}). We now demonstrate how one constructs the \textit{trivial congruence} out of this relation. The relation \af{𝟎-rel} is equivalent to the identity relation \af ≡ and these are obviously both equivalences (see the \ualibEquality module for proof of \AgdaFunction{𝟎-IsEquivalence}).  Another easily proved fact is that \af{𝟎-rel} is compatible with all operations of all algebras.
 \ccpad
@@ -3221,11 +3214,6 @@ Finally, we have the ingredients need to construct the zero congruence.
 \AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \end{code}
-
-
-
-
-
 
 
 
@@ -3406,10 +3394,10 @@ We are preparing two follow-up papers on more advanced aspects of the library. T
 
 We completed the first major milestone of this project in January 2021, which was the first formal, machine-checked proof of Birkhoff's HSP theorem.  Our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations or discoveries in dependent type theory or homotopy type theory.
 
-One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
-%Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
-As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
-compare with the assumptions we make in our Agda proof of this result.
+%% One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
+%% %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
+%% As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
+%% compare with the assumptions we make in our Agda proof of this result.
 
 Finally, as one of the goals of the \agdaualib project is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory, we welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.
 
