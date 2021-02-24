@@ -25,7 +25,7 @@ open import UALib.Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 #### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
-We begin with what seems to be (for our purposes at least) the most useful way to represent, in dependent type theory, the class of **homomomrphic images** of an algebra.
+We begin with what seems to be (for our purposes at least) the most useful way to represent, in dependent type theory, the class of **homomorphic images** of an algebra.
 
 \begin{code}
 
