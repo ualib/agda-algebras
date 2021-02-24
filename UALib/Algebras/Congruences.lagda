@@ -7,17 +7,17 @@ author: William DeMeo
 
 ### <a id="congruence-relations">Congruence Relations</a>
 
-This section presents the [UALib.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
+This section presents the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 
-module UALib.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
-open import UALib.Algebras.Products {𝑆 = 𝑆} public
+open import Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
@@ -45,7 +45,7 @@ open Congruence
 
 We defined the zero relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> in the <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">Examples</a> section of the [UALib.Relations.Binary][] module.  We now demonstrate how one constructs the trivial congruence out of this relation.
 
-The relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of ≡ in the [UALib.Prelude.Equality][] module, so we simply apply the corresponding proofs.
+The relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of ≡ in the [Prelude.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 
@@ -62,6 +62,8 @@ module _ {𝓤 : Universe} where
 Next we formally record another obvious fact---that `𝟎-rel` is compatible with all operations of all algebras.
 
 \begin{code}
+
+open import MGS-Subsingleton-Theorems using (funext)
 
 module _ {𝓤 : Universe} where
 
@@ -128,7 +130,7 @@ Finally, the following elimination rule is sometimes useful.
 
 --------------------------------------
 
-[← UALib.Algebras.Products](UALib.Algebras.Products.html)
-<span style="float:right;">[UALib.Homomorphisms →](UALib.Homomorphisms.html)</span>
+[← Algebras.Products](Algebras.Products.html)
+<span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

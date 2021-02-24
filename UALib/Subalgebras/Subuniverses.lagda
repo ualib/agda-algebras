@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Subalgebras.Subuniverses module (The Agda Universal Algebra Library)
+title : Subalgebras.Subuniverses module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="subuniverses">Subuniverses</a>
 
-This section presents the [UALib.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
+This section presents the [Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 We start by defining a type that represents the important concept of **subuniverse**. Suppose 𝑨 is an algebra.  A subset B ⊆ ∣ 𝑨 ∣ is said to be **closed under the operations of** 𝑨 if for each 𝑓 ∈ ∣ 𝑆 ∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs to B. If a subset B ⊆ 𝐴 is closed under the operations of 𝑨, then we call B a **subuniverse** of 𝑨.
 
@@ -15,12 +15,12 @@ We start by defining a type that represents the important concept of **subuniver
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Terms.Operations{𝑆 = 𝑆}{gfe} public
+open import Terms.Operations{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -69,17 +69,17 @@ For example, we could use such a type to prove that the equalizer of two homomor
 
 \begin{code}
 
-𝑬𝑯-is-subuniverse : {𝓤 𝓦 : Universe} → funext 𝓥 𝓦 →
-                    {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+𝑬𝑯-is-subuniverse : {𝓤 𝓦 : Universe}
+                    (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
                     (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 
-𝑬𝑯-is-subuniverse fe {𝑨} {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed {𝑨 = 𝑨}{𝑩 = 𝑩}fe g h 𝑓 𝒂 x
+𝑬𝑯-is-subuniverse 𝑨 {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed {𝑨 = 𝑨}{𝑩 = 𝑩} g h 𝑓 𝒂 x
 
 \end{code}
 
 -------------------------------
 
-[↑ UALib.Subalgebras](UALib.Subalgebras.html)
-<span style="float:right;">[UALib.Subalgebras.Generation →](UALib.Subalgebras.Generation.html)</span>
+[↑ Subalgebras](Subalgebras.html)
+<span style="float:right;">[Subalgebras.Generation →](Subalgebras.Generation.html)</span>
 
 {% include UALib.Links.md %}

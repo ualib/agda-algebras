@@ -16,8 +16,11 @@ COPYRIGHT : (c) 2021 William DeMeo
 ## <a id="preface">Preface</a>
 
 \begin{code}[hide]
+
 {-# OPTIONS --without-K --exact-split --safe #-}
-module UALib.Preface where
+
+module Preface where
+
 \end{code}
 
 To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library][] ([gitlab/ualib][] ), a library for the [Agda][] proof assistant which contains statements and proofs of many foundational definitions and results from universal algebra. In particular, the library includes formal statements and proofs the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
@@ -101,7 +104,7 @@ git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 
 ### <a id="about-this-document">About this documentation</a>
 
-These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\begin{code}...\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
+These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\\begin{code}...\\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
 
 ```
 agda --html --html-highlight=code UALib.lagda
@@ -113,7 +116,7 @@ This generates a set of markdown files that are then converted to html by jekyll
 bundle exec jekyll build
 ```
 
-In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
+In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then we use the script `jekyll-serve` to invoke the following commands.
 
 ```
 cp html/UALib.md index.md

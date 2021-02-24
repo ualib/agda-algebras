@@ -14,11 +14,12 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 \end{code}
 
 \begin{code}
-module UALib.Relations where
+module Relations where
 
-open import UALib.Relations.Unary
-open import UALib.Relations.Binary
-open import UALib.Relations.Quotients
+open import Relations.Unary
+open import Relations.Binary
+open import Relations.Quotients
+open import Relations.Truncation
 
 \end{code}
 

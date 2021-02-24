@@ -161,6 +161,7 @@
 [Relations.Unary]: UALib.Relations.Unary.html
 [Relations.Binary]: UALib.Relations.Binary.html
 [Relations.Quotients]: UALib.Relations.Quotients.html
+[Relations.Truncation]: UALib.Relations.Truncation.html
 
 [Algebras]: UALib.Algebras.html
 [Algebras.Signatures]: UALib.Algebras.Signatures.html
@@ -216,6 +217,7 @@
 [UALib.Relations.Unary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Unary.lagda
 [UALib.Relations.Binary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Binary.lagda
 [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda
+[UALib.Relations.Truncation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Truncation.lagda
 
 [UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
 [UALib.Homomorphisms.Noether module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda
@@ -254,7 +256,7 @@
 [UALib.Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda
 [UALib.Birkhoff.HSPLemmas]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPLemmas.lagda
 [UALib.Birkhoff.HSPTheorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPTheorem.lagda
-
+[univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom
 
 
 <!--

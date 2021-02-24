@@ -61,7 +61,7 @@ The `OPTIONS` line is usually followed by the start of a module.  For example, h
 
 \begin{code}
 
-module UALib.Prelude.Preliminaries where
+module Prelude.Preliminaries where
 
 \end{code}
 
@@ -96,40 +96,41 @@ Actually, for illustration purposes, the example we gave here is not one that Ag
 
 Throughout we use many of the nice tools that [Martin Escardo][] has developed and made available in the [Type Topology][] repository of Agda code for the "Univalent Foundations" of mathematics.
 
-We import these now.
+Here is a list of all the types we use.
+
+**Backward compatibility notice**: We are no longer adding the keyword `public` to the end of the import lines below.  This is to force us to (re)import these definitions and types where and when we need them.  This is sometimes a little bit inconvenient, but it makes the dependencies clearer, and since dependencies reveal the foundations upon which the library is built, it is important that we keep them in the foreground.
 
 \begin{code}
 
 open import universes public
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
+-- open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁)
+-- pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
-pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
+-- open import Sigma-Type renaming (_,_ to infixr 50 _,_)
 
-open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
+open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; -- _×_; pr₁; pr₂; -Σ; Π;
+   ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap)
 
-open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; _×_; -Σ; Π;
-  ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap) public
-
-open import MGS-Equivalences using (is-equiv; inverse; invertible) public
+open import MGS-Equivalences using (is-equiv; inverse; invertible)
 
 open import MGS-Subsingleton-Theorems using (funext; global-hfunext; dfunext;
-  is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
-  univalence-gives-global-dfunext; _●_; _≃_; Π-is-subsingleton; Σ-is-subsingleton;
-  logically-equivalent-subsingletons-are-equivalent) public
+ is-singleton; is-subsingleton; is-prop; Univalence; global-dfunext;
+ univalence-gives-global-dfunext; _●_; _≃_; Π-is-subsingleton; Σ-is-subsingleton;
+ logically-equivalent-subsingletons-are-equivalent)
 
 open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
-  using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω) public
+ using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω)
 
 open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding; is-embedding; pr₁-embedding; ∘-embedding;
-  is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
+ is-set; _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding)
 
-open import MGS-Solved-Exercises using (to-subtype-≡) public
+open import MGS-Solved-Exercises using (to-subtype-≡)
 
-open import MGS-Unique-Existence using (∃!; -∃!) public
+open import MGS-Unique-Existence using (∃!; -∃!)
 
 open import MGS-Subsingleton-Truncation using (_∙_; to-Σ-≡; equivs-are-embeddings;
-  invertibles-are-equivs; fiber; ⊆-refl-consequence; hfunext) public
+ invertibles-are-equivs; fiber; ⊆-refl-consequence; hfunext)
 
 \end{code}
 
@@ -182,39 +183,56 @@ There will be many occasions calling for a type living in the universe that is t
 
 #### <a id="dependent-pair-type">Dependent pair type</a>
 
-The **Sigma type** `Σ(x : A) , B x`, also known as the **dependent pair type**, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair to depend on the value `x` of the first.  Escardó defines this type in a stardard way (cf. the [Agda Standard Library][]) as a record type.
+Given universes 𝓤 and 𝓥, a type `X : 𝓤 ̇`, and a type family `Y : X → 𝓥 ̇`, the **Sigma type** (or **dependent pair type**), denoted by `Σ(x ꞉ X), Y x`, generalizes the Cartesian product `X × Y` by allowing the type `Y x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, `Σ(x ꞉ X), Y x` is inhabited by the pairs `(x , y)` such that `x : X` and `y : Y x`.
 
+In the [Type Topology][] library, the dependent pair type is defined in a stardard way (cf. the [Agda Standard Library][]) as a record type.
 
-```agda
-record Σ {𝓤 𝓥} {X : 𝓤 ̇ } (Y : X → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
- constructor _,_
- field
-  pr₁ : X
-  pr₂ : Y pr₁
+\begin{code}
 
-infixr 50 _,_
-```
+module hide-sigma where
 
-For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`).  Escardó makes this preferred notation available in his [TypeTopology][] library by making the index type explicit, as follows.
+ record Σ {𝓤 𝓥} {X : 𝓤 ̇ } (Y : X → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
+  constructor _,_
+  field
+   pr₁ : X
+   pr₂ : Y pr₁
 
-```agda
--Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
--Σ X Y = Σ Y
+ infixr 50 _,_
 
-syntax -Σ X (λ x → Y) = Σ x ꞉ X , Y
-```
+\end{code}
+
+For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`).  Escardó makes this preferred notation available in the [TypeTopology][] library by making the index type explicit, as follows.
+
+\begin{code}
+
+ -Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+ -Σ X Y = Σ Y
+
+ syntax -Σ X (λ x → Y) = Σ x ꞉ X , Y
+
+\end{code}
 
 **WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
 
 A special case of the Sigma type is the one in which the type `Y` doesn't depend on `X`. This is the usual Cartesian product, defined in Agda as follows.
 
-```agda
-_×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
-X × Y = Σ x ꞉ X , Y
-```
+\begin{code}
 
+ _×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+ X × Y = Σ x ꞉ X , Y
 
-The definition of Σ (and thus, of ×) above comes equipped with first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, we will alternate between these and other standard alternatives, such as , or `fst` and `snd`, for emphasis or readability.  We define these alternative notations for projections out of pairs as follows.
+\end{code}
+
+Now that we have repeated these definitions from the [Type Topology][] for illustration purposes, let us import the original definitions that we will use throughout the [UALib][].
+
+\begin{code}
+
+open import Sigma-Type renaming (_,_ to infixr 50 _,_)
+open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ)
+
+\end{code}
+
+The definition of Σ (and thus, of ×) is accompanied by first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, we will alternate between these and other standard alternatives, such as , or `fst` and `snd`, for emphasis or readability.  We define these alternative notations for projections out of pairs as follows.
 
 \begin{code}
 
@@ -237,47 +255,29 @@ module _ {𝓤 : Universe} where
 
 To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), MHE uses the same trick as the one used above for *Sigma types*.
 
-```agda
+\begin{code}
 
-Π : {𝓤 𝓦 : Universe}{X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
-Π {𝓤} {𝓦} {X} A = (x : X) → A x
+module hide-pi {𝓤 𝓦 : Universe} where
 
--Π : {𝓤 𝓦 : Universe}(X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
--Π X Y = Π Y
+ Π : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ Π {X} A = (x : X) → A x
 
-infixr -1 -Π
-syntax -Π A (λ x → b) = Π x ꞉ A , b
-```
+ -Π : (X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ -Π X Y = Π Y
 
+ infixr -1 -Π
+ syntax -Π A (λ x → b) = Π x ꞉ A , b
+
+\end{code}
 
 **WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Π x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
 
 
 
-#### <a id="truncation">Truncation</a>
-
-In general, we may have many inhabitants of a given type and, via the Curry-Howard correspondence, many proofs of a given proposition.  For instance, suppose we have a type `X` and an identity relation ≡ₓ on X. Then, given two inhabitants `a` and `b` of type `X`, we may ask whether `a ≡ₓ b`.
-
-Suppose `p` and `q` inhabit the identity type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write `p  q : a ≡ₓ b`.  Then we might wonder whether and in what sense are the two proofs `p` and `q` the "same."  We are asking about an identity type on the identity type ≡ₓ, and whether there is some inhabitant `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proof of `a ≡ₓ b` is unique.  (This property is sometimes called *uniqueness of identity proofs*.)
-
-Perhaps we have two proofs, say, `r s : p ≡ₓ₁ q`. Then of course we will ask whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof relevance*) is not useful or desirable.  At that point, say, at level `k`, we might assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation).
-
-We will see some examples of trunction later when we require it to complete some of the UALib modules leading up to the proof of Birkhoff's HSP Theorem.  Readers who want more details should refer to [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of MHE's notes, or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
-
-We take this opportunity to define *set* (or 0-*groupoid*) in type theory.  A type X : 𝓤 ̇ with an identity relation `≡ₓ` is called a **set** if for every pair `a b : X` of elements of type `X` there is at most one proof of `a ≡ₓ b`.
-
-This notion is formalized in the [Type Topology][] library as follows:<span class="footnote"><sup>2</sup></span>
-
-```agda
-is-set : 𝓤 ̇ → 𝓤 ̇
-is-set X = (x y : X) → is-subsingleton (x ≡ y)
-```
 
 ----------------------------------------
 
 <span class="footnote"><sup>1</sup> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
-
-<span class="footnote"><sup>2</sup>As [MHE][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 ----------------------------------------
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Birkhoff.FreeAlgebra (The Agda Universal Algebra Library)
+title : Birkhoff.FreeAlgebra (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
@@ -9,7 +9,7 @@ author: William DeMeo
 
 #### <a id="the-free-algebra-in-theory">The free algebra in theory</a>
 
-Recall, we proved in [the universal property](UALib.Terms.Free.html#the-universal-property) section of the [UALib.Terms.Free][] module that the term algebra `𝑻 X` is the absolutely free algebra in the class 𝒜𝓁ℊ(𝑆) of all 𝑆-structures. In this section, we formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in `S(P 𝒦)` over X.
+Recall, we proved in [the universal property](Terms.Free.html#the-universal-property) section of the [Terms.Free][] module that the term algebra `𝑻 X` is the absolutely free algebra in the class 𝒜𝓁ℊ(𝑆) of all 𝑆-structures. In this section, we formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in `S(P 𝒦)` over X.
 
 We use the next definition to take a free algebra *for* a class 𝒦 and produce the free algebra *in* 𝒦.
 
@@ -26,18 +26,18 @@ The 𝔉 that we have just defined is called the **free algebra over** 𝒦 **ge
 
 #### <a id="the-free-algebra-in-agda">The free algebra in Agda</a>
 
-This section presents the [UALib.Birkhoff.FreeAlgebra][] module of the [Agda Universal Algebra Library][].  Here we represent 𝔉 as a type in Agda by first constructing the congruence ψ(𝒦, 𝑻 𝑋) described above.
+This section presents the [Birkhoff.FreeAlgebra][] module of the [Agda Universal Algebra Library][].  Here we represent 𝔉 as a type in Agda by first constructing the congruence ψ(𝒦, 𝑻 𝑋) described above.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Birkhoff.FreeAlgebra {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Birkhoff.FreeAlgebra {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.Preservation {𝑆 = 𝑆}{gfe} public
+open import Varieties.Preservation {𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -165,8 +165,8 @@ which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ]⟨ ψCon �
 
 <span class="footnote"><sup>1</sup>Since `X` is not a subset of 𝔉, technically it doesn't make sense to say "`X` generates 𝔉." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
 
-[↑ UALib.Birkhoff](UALib.Birkhoff.html)
-<span style="float:right;">[UALib.Birkhoff.HSPTheorem →](UALib.Birkhoff.HSPTheorem.html)</span>
+[↑ Birkhoff](Birkhoff.html)
+<span style="float:right;">[Birkhoff.HSPTheorem →](Birkhoff.HSPTheorem.html)</span>
 
 {% include UALib.Links.md %}
 

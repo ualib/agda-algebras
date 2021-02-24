@@ -13,18 +13,18 @@ This chapter presents the [UALib.Algebras][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Algebras where
+module Algebras where
 
-open import UALib.Algebras.Signatures public
-open import UALib.Algebras.Algebras public
-open import UALib.Algebras.Products public
-open import UALib.Algebras.Congruences
+open import Algebras.Signatures public
+open import Algebras.Algebras public
+open import Algebras.Products public
+open import Algebras.Congruences
 
 \end{code}
 
 -------------------------------------
 
-[← UALib.Relations.](UALib.Prelude.Extensionality.html)
-<span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
+[← Relations.Truncation](Relations.Truncation.html)
+<span style="float:right;">[Algebras.Signatures →](Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

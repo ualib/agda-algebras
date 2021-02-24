@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Terms.Operations module (The Agda Universal Algebra Library)
+title : Terms.Operations module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="term-operations">Term Operations</a>
 
-This section presents the [UALib.Terms.Operations][] module of the [Agda Universal Algebra Library][].
+This section presents the [Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
 Here we define *term operations* which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.
 
@@ -15,12 +15,12 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Terms.Operations {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Terms.Operations {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Terms.Basic{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
+open import Terms.Basic{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
 
 \end{code}
 
@@ -184,8 +184,8 @@ module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 
 --------------------------------------
 
-[← UALib.Terms.Basic](UALib.Terms.Basic.html)
-<span style="float:right;">[UALib.Subalgebras →](UALib.Subalgebras.html)</span>
+[← Terms.Basic](Terms.Basic.html)
+<span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
 

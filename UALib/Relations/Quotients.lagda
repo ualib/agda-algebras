@@ -13,10 +13,10 @@ This section presents the [UALib.Relations.Quotients][] module of the [Agda Univ
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Relations.Quotients where
+module Relations.Quotients where
 
-open import UALib.Relations.Binary public
-open import UALib.Prelude.Preliminaries using (_⇔_; id) public
+open import Relations.Binary public
+-- open import UALib.Prelude.Preliminaries using (_⇔_; id) public
 
 \end{code}
 
@@ -40,6 +40,9 @@ module _ {𝓤 : Universe} where
 
  transitive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
+
+ open import MGS-Subsingleton-Theorems using (is-subsingleton)
+
 
  is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
@@ -166,49 +169,6 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
 \end{code}
 
-#### <a id="quotient-extensionality">Quotient extensionality</a>
-
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are on sets, rather than arbitrary types.  As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.
-
-(Recall, a type is called a **set** if it has *unique identity proofs*; as a general principle, this is sometimes referred to as "proof irrelevance" or "uniqueness of identity proofs"---two proofs of a single identity are the same.)
-
-\begin{code}
-
-module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{R : Rel A 𝓡} where
-
- class-extensionality : propext 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
-  →                     (∀ a x → is-subsingleton (R a x)) → IsEquivalence R
-                        ----------------------------------------------------
-  →                     R a a'  →  [ a ] R  ≡  [ a' ] R
-
- class-extensionality pe fe {a}{a'} ssR Req Raa' = Pred-=̇-≡ pe fe (ssR a)(ssR a')(/-=̇ Req Raa')
-
-
- to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D} 
-  →              (∀ C → is-subsingleton (𝒞{R = R} C))
-                 -------------------------------------
-  →              C ≡ D  →  (C , c) ≡ (D , d)
-
- to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
-
-
- class-extensionality' : propext 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
-  →                      (∀ a x → is-subsingleton (R a x))
-  →                      (∀ C → is-subsingleton (𝒞 C))
-  →                      IsEquivalence R
-                         -------------------------
-  →                      R a a'  →  ⟦ a ⟧ ≡ ⟦ a' ⟧
-
- class-extensionality' pe fe {a}{a'} ssR ssA Req Raa' = γ
-  where
-   CD : [ a ] R ≡ [ a' ] R
-   CD = class-extensionality pe fe ssR Req Raa'
-
-   γ : ⟦ a ⟧ ≡ ⟦ a' ⟧
-   γ = to-subtype-⟦⟧ ssA CD
-
-\end{code}
-
 
 #### <a id="compatibility-of-lifts-and-functions">Compatibility of lifts and functions</a>
 
@@ -230,8 +190,8 @@ module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇} {Z : 𝓤 ̇} where
 
 --------------------------------------
 
-[← UALib.Relations.Binary](UALib.Relations.Binary.html)
-<span style="float:right;">[UALib.Algebras.Signatures →](UALib.Algebras.Signatures.html)</span>
+[← Relations.Binary](Relations.Binary.html)
+<span style="float:right;">[Relations.Truncation →](Relations.Truncation.html)</span>
 
 {% include UALib.Links.md %}
 

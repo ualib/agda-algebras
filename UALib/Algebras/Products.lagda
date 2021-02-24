@@ -8,7 +8,7 @@ author: William DeMeo
 
 ### <a id="product-algebras">Product Algebras</a>
 
-This section presents the [UALib.Algebras.Products][] module of the [Agda Universal Algebra Library][].
+This section presents the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
 Notice that we begin this module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
 
@@ -18,11 +18,11 @@ Notice that we begin this module by assuming a signature `𝑆 : Signature 𝓞 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 
-module UALib.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
-open import UALib.Algebras.Algebras hiding (𝓞; 𝓥) public
+open import Algebras.Algebras hiding (𝓞; 𝓥) public
 
 \end{code}
 
@@ -123,7 +123,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the tr
 
 -----------------------
 
-[← UALib.Algebras.Algebras](UALib.Algebras.Algebras.html)
-<span style="float:right;">[UALib.Algebras.Congruences →](UALib.Algebras.Congruences.html)</span>
+[← Algebras.Algebras](Algebras.Algebras.html)
+<span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}

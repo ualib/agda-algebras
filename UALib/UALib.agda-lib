@@ -1,3 +1,3 @@
-name: agda-ualib
+name: UALib
 depend: typetopology standard-library
-include: .
+include: . UALib

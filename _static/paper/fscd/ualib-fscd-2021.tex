@@ -186,6 +186,12 @@ Every Agda program in the \ualib begins with the following pragma, which has the
 %% \end{enumerate}
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
 
+
+
+
+
+
+
 \subsection{Agda's universe hierarchy}\label{ssec:agdas-universe-hierarchy}
 The \agdaualib adopts the notation of Martin Escardo's \typetopology library~\cite{MHE}. In particular, \emph{universe levels}%
 \footnote{See \url{https://agda.readthedocs.io/en/v2.6.1.2/language/universe-levels.html}.}
@@ -193,7 +199,11 @@ are denoted by capitalized script letters from the second half of the alphabet, 
 %% Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
 
 The hierarchy of universes in Agda is structured as \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇, \hskip3mm
-\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc. This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Luckily, there are ways to circumvent noncummulativity without introducing logical inconsistencies into the type theory. \S\ref{ssec:tools-for-noncummulative-universes} describes some domain specific tools that we developed for this purpose. (See also~\cite[\S3.3]{DeMeo:2021} for more details).
+\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc. This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Luckily, there are ways to circumvent noncummulativity without introducing logical inconsistencies into the type theory. Section~\ref{lifting-algebra-types} describes some domain specific tools that we developed for this purpose.
+
+
+
+
 
 
 
@@ -206,6 +216,10 @@ Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
 Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (see~\cite{DeMeo:2021} for details).
+
+
+
+
 
 
 
@@ -3008,7 +3022,7 @@ Finally, to represent that all basic operations of an algebra are compatible wit
 We'll see this definition of compatibility at work very soon when we define congruence relations in the next subsection.
 
 \subsection{Congruences as dependent pairs and records}
-A \defn{congruence relation} of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of 𝑨.  This concept may be represented in type theory and formalized in Agda in a number of alternative ways.  For example, we define a Sigma type `Con` and a record type `Congruence` as shown below. Each definition captures the essence of the notion of congruence, and neither is more convenient than the other for all situations. (We will see examples later.)
+A \defn{congruence relation} of an algebra \ab 𝑨 is defined to be an equivalence relation that is compatible with the basic operations of \ab 𝑨.  This concept may be represented in type theory and formalized in \agda in a number of alternative ways.  For example, we define a Sigma type \af{Con} and a record type \af{Congruence} as shown below. Each definition captures the essence of the notion of congruence, and neither is more convenient than the other for all situations. (We will see examples later.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Con}\AgdaSpace{}%
@@ -3097,6 +3111,7 @@ A \defn{congruence relation} of an algebra `𝑨` is defined to be an equivalenc
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟨\AgdaUnderscore{}⟩}}\<%
 \end{code}
+\scpad
 
 We defined the zero relation \af{𝟎-rel} above (\S~\ref{binary-relations}). We now demonstrate how one constructs the \textit{trivial congruence} out of this relation. The relation \af{𝟎-rel} is equivalent to the identity relation \af ≡ and these are obviously both equivalences (see the \ualibEquality module for proof of \AgdaFunction{𝟎-IsEquivalence}).  Another easily proved fact is that \af{𝟎-rel} is compatible with all operations of all algebras.
 \ccpad

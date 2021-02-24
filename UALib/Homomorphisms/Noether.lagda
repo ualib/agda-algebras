@@ -1,25 +1,24 @@
 ---
 layout: default
-title : UALib.Homomorphisms.Noether module (The Agda Universal Algebra Library)
+title : Homomorphisms.Noether module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
 
 ### <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
-This chapter presents the [UALib.Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
+This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.Basic{𝑆 = 𝑆}{gfe = gfe} public
-open import UALib.Prelude.Preliminaries using (is-embedding) public
+open import Homomorphisms.Basic{𝑆 = 𝑆}{gfe = gfe} public
 
 \end{code}
 
@@ -33,6 +32,10 @@ Here is a version of the first isomorphism theorem.
 \begin{code}
 
 open Congruence
+
+open import MGS-Powerset using (propext)
+open import MGS-Embeddings using (is-set)
+open import MGS-Subsingleton-Theorems using (is-subsingleton)
 
 FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
                           (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
@@ -201,6 +204,9 @@ This, or some variation of it, is sometimes referred to as the Second Isomorphis
 
 \begin{code}
 
+
+open import MGS-Subsingleton-Theorems using (funext)
+
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
@@ -338,7 +344,7 @@ HomFactorEpi 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (snd �
   ϕ = λ c → ∣ β ∣ ( ξinv c )
 
   ϕE : Epic ϕ
-  ϕE = epic-factor {fe = gfe} ∣ β ∣ ∣ ξ ∣ ϕ ∥ ϕF ∥ βe
+  ϕE = epic-factor gfe ∣ β ∣ ∣ ξ ∣ ϕ ∥ ϕF ∥ βe
 
 \end{code}
 
@@ -347,7 +353,7 @@ HomFactorEpi 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (snd �
 
 --------------------------------------
 
-[← UALib.Homomorphisms.Basic](UALib.Homomorphisms.Basic.html)
-<span style="float:right;">[UALib.Homomorphisms.Isomorphisms →](UALib.Homomorphisms.Isomorphisms.html)</span>
+[← Homomorphisms.Basic](Homomorphisms.Basic.html)
+<span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}

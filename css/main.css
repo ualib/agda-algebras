@@ -41,3 +41,52 @@ ul.posts {
 ul.posts li {
     list-style: none;
 }
+
+fnote {
+  box-shadow: 0 0 0 2em #F4AAB9,
+              0 0 0 4em #66CCFF;
+  margin: 4em;
+  padding:1em;
+}
+
+.solid_box {
+  border: 1px black solid
+}
+.solid_box #title {
+  border: 1px black solid;
+  margin-left: 1em; 
+  padding: 0.2em 0.8em
+}
+
+.dotted_box {
+  border: #3c5a86 1px dotted;
+}
+.dotted_box #title {
+  position: relative;
+  top: -0.5em;
+  padding: 0.2em 0.8em
+  margin-left: 1em;
+  display: inline;
+  background-color: white;
+}
+.title_box #content {}
+
+/* usage:
+<div class="dotted_box" id="bill_to">
+  <div id="title">Bill To</div>
+  <div id="content">
+    Stuff goes here.<br> For example, a bill-to address
+  </div>
+</div>
+*/
+
+/* or just use fieldset:
+ <fieldset style="border: 1px black solid">
+
+      <legend style="border: 1px black solid;margin-left: 1em; padding: 0.2em 0.8em ">title</legend>
+
+      Text within the box <br />
+      Etc
+    </fieldset>
+
+*/

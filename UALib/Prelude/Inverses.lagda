@@ -14,14 +14,15 @@ Here we define (the syntax of) a type for the (semantic concept of) **inverse im
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Prelude.Inverses where
+module Prelude.Inverses where
 
-open import UALib.Prelude.Equality hiding (is-subsingleton) public
-open import UALib.Prelude.Preliminaries using (_⁻¹; funext; _∘_; _∙_; 𝑖𝑑; fst; snd; is-set;
- transport; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs;
- 𝓇ℯ𝒻𝓁; domain; codomain) public
+open import Prelude.Equality public 
+open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
+-- pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 module _ {𝓤 𝓦 : Universe} where
+
+ open import MGS-Subsingleton-Theorems using (funext)
 
  data Image_∋_ {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
@@ -53,6 +54,8 @@ For convenience, we define a pseudo-inverse function, which we call `Inv`, that 
 Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
 
 \begin{code}
+
+ open import MGS-MLTT using (_⁻¹) public
 
  InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
             (b : B) (b∈Imgf : Image f ∋ b)
@@ -94,6 +97,9 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
 The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
 
 \begin{code}
+
+ open import MGS-MLTT using (_∘_; 𝑖𝑑) public
+ open import MGS-Subsingleton-Theorems using (funext)
 
  EpicInvIsRightInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
                      (f : A → B)  (fE : Epic f)
@@ -155,11 +161,16 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe} {fe : funext 𝓨 𝓨} where
+module _ {𝓧 𝓨 𝓩 : Universe} where
 
- epic-factor : {A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}(β : A → B)(ξ : A → C)(ϕ : C → B)
-  →             β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
- epic-factor {A}{B}{C} β ξ ϕ compId βe y = γ
+ open import MGS-Subsingleton-Theorems using (funext)
+ open import MGS-Subsingleton-Truncation using (_∙_) public
+
+ epic-factor : funext 𝓨 𝓨 → {A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
+               (β : A → B)(ξ : A → C)(ϕ : C → B)
+  →            β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
+
+ epic-factor fe {A}{B}{C} β ξ ϕ compId βe y = γ
   where
    βinv : B → A
    βinv = EpicInv β βe
@@ -205,6 +216,8 @@ This is the first point at which [truncation](UALib.Preface.html#truncation) com
 
 \begin{code}
 
+open import MGS-MLTT using (domain; codomain) public
+
 module hidden where
 
  is-subsingleton : {𝓧 : Universe} → 𝓧 ̇ → 𝓧 ̇
@@ -222,7 +235,10 @@ This is a very nice, natural way to represent what we usually mean in mathematic
 
 \begin{code}
 
-open import UALib.Prelude.Preliminaries using (is-embedding; fiber)
+open import MGS-MLTT using (transport)
+open import MGS-Subsingleton-Truncation using (fiber) public
+open import MGS-Embeddings using (is-embedding; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
+open import MGS-Embeddings using (is-set)
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
  →                            (f : A → B)  →  Monic f
@@ -284,7 +300,7 @@ embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 <sup>1</sup> Whenever we wish to hide some code from the rest of the development, we will enclose it in a module called `hidden.` In this case, we don't want the code inside the `hidden` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we will import later.  As long as we don't invoke `open hidden`, the code inside the `hidden` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code).
 
 
-[← UALib.Prelude.Equality](UALib.Prelude.Equality.html)
-<span style="float:right;">[UALib.Prelude.Extensionality →](UALib.Prelude.Extensionality.html)</span>
+[← Prelude.Equality](Prelude.Equality.html)
+<span style="float:right;">[Prelude.Extensionality →](Prelude.Extensionality.html)</span>
 
 {% include UALib.Links.md %}

@@ -1,24 +1,26 @@
 ---
 layout: default
-title : UALib.Varieties.Varieties module (The Agda Universal Algebra Library)
+title : Varieties.Varieties module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="the-inductive-types-h-s-p-v">The Inductive Types H, S, P, V</a>
 
-This section presents the [UALib.Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
+This section presents the [Varieties.Varieties][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.EquationalLogic{𝑆 = 𝑆}{gfe} public
+module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+
+open import Varieties.EquationalLogic{𝑆 = 𝑆}{gfe} public
+open import MGS-Subsingleton-Theorems using (hfunext) -- public
 
 \end{code}
 
@@ -570,8 +572,8 @@ class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
 
 ----------------------------
 
-[← UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html)
-<span style="float:right;">[UALib.Varieties.Preservation →](UALib.Varieties.Preservation.html)</span>
+[← Varieties.EquationalLogic](Varieties.EquationalLogic.html)
+<span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
 

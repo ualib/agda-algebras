@@ -69,15 +69,15 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 module UALib where
 
-open import UALib.Preface
-open import UALib.Prelude
-open import UALib.Relations
-open import UALib.Algebras
-open import UALib.Homomorphisms
-open import UALib.Terms
-open import UALib.Subalgebras
-open import UALib.Varieties
-open import UALib.Birkhoff
+open import Preface
+open import Prelude
+open import Relations
+open import Algebras
+open import Homomorphisms
+open import Terms
+open import Subalgebras
+open import Varieties
+open import Birkhoff
 
 \end{code}
 

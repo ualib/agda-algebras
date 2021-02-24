@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Birkhoff.HSPTheorem (The Agda Universal Algebra Library)
+title : Birkhoff.HSPTheorem (The Agda Universal Algebra Library)
 date : 2021-02-02
 author: William DeMeo
 ---
 
 ### <a id="hsp-theorem">HSP Theorem</a>
 
-This section presents the [UALib.Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
+This section presents the [Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
@@ -23,15 +23,20 @@ We denote by ℭ the product of all subalgebras of algebras in 𝒦, and by `hom
 
 `homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
 
-Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](UALib.Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
-open import UALib.Relations.Unary using (Pred)
+open import Algebras.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
+open import universes
+open import Relations.Unary using (Pred)
+open import MGS-Powerset -- renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
+ using (propext; hfunext)
+
+-- open import Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
 
 \end{code}
 
@@ -39,7 +44,7 @@ Unlike previous modules, in this module we fix `𝓤`, `X`, and `𝒦` in advanc
 
 \begin{code}
 
-module UALib.Birkhoff.HSPTheorem
+module Birkhoff.HSPTheorem
  {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
@@ -49,8 +54,10 @@ module UALib.Birkhoff.HSPTheorem
     {pe' : propext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
     {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
-open import UALib.Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; propext; hfunext; Algebra; _̇ ) public
+open import Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; Algebra; _̇ ) public
 open the-free-algebra {𝓤}{𝓤}{X}
+open import MGS-Embeddings using (is-set) public
+open import MGS-Subsingleton-Theorems using (is-subsingleton) public
 
 \end{code}
 
@@ -58,7 +65,7 @@ open the-free-algebra {𝓤}{𝓤}{X}
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
 Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
 
-We begin by constructing ℭ, using the techniques described in the section on <a href="https://ualib.gitlab.io/UALib.Varieties.Varieties.html#products-of-classes">products of classes</a>.
+We begin by constructing ℭ, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
 **Notation**. In this module, the type `ℑs` will index the collection of all subalgebras of algebras in the class 𝒦, and `𝔄s : ℑs → Algebra 𝓤 𝑆` will be a map from the index type to the subalgebras. 
 
@@ -350,11 +357,11 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 <sup>1</sup> In the previous version of the [UALib][] this module was called HSPLemmas and the Birkhoff HSP theorem was in a separate module, while in the current version these are in the new HSPTheorem module.
 
-<sup>2</sup> It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [UALib.Birkhoff.FreeAlgebra][] module.
+<sup>2</sup> It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [Birkhoff.FreeAlgebra][] module.
 
 
-[← UALib.Birkhoff.FreeAlgebra](UALib.Birkhoff.FreeAlgebra.html)
-<span style="float:right;">[UALib.Birkhoff ↑](UALib.Birkhoff.html)</span>
+[← Birkhoff.FreeAlgebra](Birkhoff.FreeAlgebra.html)
+<span style="float:right;">[Birkhoff ↑](Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
 

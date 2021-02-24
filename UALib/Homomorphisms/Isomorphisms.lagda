@@ -1,27 +1,28 @@
 ---
 layout: default
-title : UALib.Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
+title : Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-This section describes the [UALib.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
+This section describes the [Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
 Here we formalize the informal notion of isomorphism between algebraic structures.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
+module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-module UALib.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
-
-open import UALib.Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
-open import UALib.Prelude.Preliminaries using (is-equiv; hfunext; Nat; NatΠ; NatΠ-is-embedding) public
+open import Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
+open import MGS-Subsingleton-Theorems using (is-equiv) public
+open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding) public
+open import MGS-MLTT using (_∼_) public
 
 \end{code}
 
@@ -30,6 +31,7 @@ open import UALib.Prelude.Preliminaries using (is-equiv; hfunext; Nat; NatΠ; Na
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
 
 \begin{code}
+
 
 _≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
@@ -319,6 +321,8 @@ lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
 
 \begin{code}
 
+open import MGS-Subsingleton-Truncation using (hfunext)
+
 embedding-lift-nat : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
  →                   {I : 𝓘 ̇}{A : I → 𝓠 ̇}{B : I → 𝓤 ̇}
                      (h : Nat A B)
@@ -366,7 +370,7 @@ iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
 
 --------------------------------------
 
-[← UALib.Homomorphisms.Noether](UALib.Homomorphisms.Noether.html)
-<span style="float:right;">[UALib.Homomorphisms.HomomorphicImages →](UALib.Homomorphisms.HomomorphicImages.html)</span>
+[← Homomorphisms.Noether](Homomorphisms.Noether.html)
+<span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

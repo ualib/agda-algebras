@@ -1,0 +1,81 @@
+#!/bin/bash
+
+agda --html --html-highlight=code UALib.lagda
+
+mv html/Empty-Type.{tex,md}
+mv html/Identity-Type.{tex,md}
+mv html/MGS-Basic-UF.{tex,md}
+mv html/MGS-Embeddings.{tex,md}
+mv html/MGS-Equivalence-Induction.{tex,md}
+mv html/MGS-Equivalences.{tex,md}
+mv html/MGS-FunExt-from-Univalence.{tex,md}
+mv html/MGS-HAE.{tex,md}
+mv html/MGS-hlevels.{tex,md}
+mv html/MGS-MLTT.{tex,md}
+mv html/MGS-More-FunExt-Consequences.{tex,md}
+mv html/MGS-Powerset.{tex,md}
+mv html/MGS-Retracts.{tex,md}
+mv html/MGS-Solved-Exercises.{tex,md}
+mv html/MGS-Subsingleton-Theorems.{tex,md}
+mv html/MGS-Subsingleton-Truncation.{tex,md}
+mv html/MGS-Unique-Existence.{tex,md}
+mv html/MGS-Univalence.{tex,md}
+mv html/Natural-Numbers-Type.{tex,md}
+mv html/Plus-Type.{tex,md}
+mv html/Sigma-Type.{tex,md}
+mv html/Unit-Type.{tex,md}
+mv html/universes.{tex,md}
+mv html/Universes.{tex,md}
+
+cp html/UALib.tex html/index.md
+mv html/UALib.{tex,md}
+
+mv html/Preface.{tex,md}
+
+mv html/Prelude.{tex,md}
+mv html/Prelude.Preliminaries.{tex,md}
+mv html/Prelude.Equality.{tex,md}
+mv html/Prelude.Inverses.{tex,md}
+mv html/Prelude.Extensionality.{tex,md}
+mv html/Prelude.Lifts.{tex,md}
+
+mv html/Relations.{tex,md}
+mv html/Relations.Unary.{tex,md}
+mv html/Relations.Binary.{tex,md}
+mv html/Relations.Quotients.{tex,md}
+mv html/Relations.Truncation.{tex,md}
+
+mv html/Algebras.{tex,md}
+mv html/Algebras.Signatures.{tex,md}
+mv html/Algebras.Algebras.{tex,md}
+mv html/Algebras.Products.{tex,md}
+mv html/Algebras.Congruences.{tex,md}
+
+mv html/Homomorphisms.{tex,md}
+mv html/Homomorphisms.Basic.{tex,md}
+mv html/Homomorphisms.Noether.{tex,md}
+mv html/Homomorphisms.Isomorphisms.{tex,md}
+mv html/Homomorphisms.HomomorphicImages.{tex,md}
+
+mv html/Terms.{tex,md}
+mv html/Terms.Basic.{tex,md}
+mv html/Terms.Operations.{tex,md}
+
+mv html/Subalgebras.{tex,md}
+mv html/Subalgebras.Subuniverses.{tex,md}
+mv html/Subalgebras.Generation.{tex,md}
+mv html/Subalgebras.Subalgebras.{tex,md}
+mv html/Subalgebras.Univalent.{tex,md}
+
+mv html/Varieties.{tex,md}
+mv html/Varieties.EquationalLogic.{tex,md}
+mv html/Varieties.Varieties.{tex,md}
+mv html/Varieties.Preservation.{tex,md}
+
+mv html/Birkhoff.{tex,md}
+mv html/Birkhoff.FreeAlgebra.{tex,md}
+mv html/Birkhoff.HSPTheorem.{tex,md}
+
+paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg
+
+# bundle exec jekyll build

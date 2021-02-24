@@ -3,8 +3,8 @@ image: ruby:2.6
 pages:
   stage: build
   script:
-    - cp html/UALib.md index.md
-    - cp html/*.html html/*.md .
+    - cp UALib/html/UALib.md index.md
+    - cp UALib/html/*.html UALib/html/*.md .
     - bundle install --path vendor
     - bundle exec jekyll build -d public
   artifacts:

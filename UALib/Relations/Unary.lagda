@@ -16,11 +16,11 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Relations.Unary where
+module Relations.Unary where
 
-open import UALib.Prelude.Lifts public
+open import Prelude.Lifts public
 
-open import UALib.Prelude.Preliminaries using (¬; propext; dfunext; is-subsingleton; 𝓤₀; 𝟘) public
+-- open import UALib.Prelude.Preliminaries using (¬; propext; dfunext; is-subsingleton; 𝓤₀; 𝟘) public
 
 \end{code}
 
@@ -35,16 +35,6 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-#### <a id="unary-relation-truncation">Unary relation truncation</a>
-
-The section on [truncation](UALib.Prelude.Preliminaries.html#truncation) in the module [UALib.Prelude.Preliminaries][] describes the concepts of *truncation* and *set* for "proof-relevant" mathematics. Sometimes we will want to assume that a type is a *set*. Recall, this mean there is at most one proof that two elements are the same.  Analogously for predicates, we may wish to assume that there is at most one proof that a given element satisfies the predicate.
-
-\begin{code}
-
- Pred₀ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
- Pred₀ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
-
-\end{code}
 
 
 Below we will often consider predicates over the class of all algebras of a particular type. We will define the type of algebras `Algebra 𝓤 𝑆` (for some universe level 𝓤). Like all types, `Algebra 𝓤 𝑆` itself has a type which happens to be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ (as we will see in the module [UALib.Algebras](UALib.Algebras.Algebras.html)). Therefore, the type of `Pred (Algebra 𝓤 𝑆) 𝓤` will be 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇ as well.
@@ -63,6 +53,8 @@ module _ {𝓧 𝓨 : Universe} where
 
  _∈_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
  x ∈ P = P x
+
+ open import MGS-MLTT using (¬) public
 
  _∉_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
  x ∉ P = ¬ (x ∈ P)
@@ -122,17 +114,6 @@ Pred-≡→⊇ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊇ Q)
 Pred-≡→⊇ (refl _) = (λ z → z)
 
-Pred-=̇-≡ : {𝓧 𝓨 : Universe}
- →          propext 𝓨 → dfunext 𝓧 (𝓨 ⁺)
- →          {A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          ((x : A) → is-subsingleton (P x))
- →          ((x : A) → is-subsingleton (Q x))
- →          P =̇ Q → P ≡ Q
-Pred-=̇-≡ pe fe {A}{P}{Q} ssP ssQ (pq , qp) = fe γ
- where
-  γ : (x : A) → P x ≡ Q x
-  γ x = pe (ssP x) (ssQ x) pq qp
-
 -- Disjoint Union.
 data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
  inj₁ : (x : A) → A ⊎ B
@@ -144,9 +125,13 @@ _∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 infixr 1 _∪_
 
+
+open import MGS-MLTT using (𝟘)
+
 -- The empty set.
 ∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
 ∅ = λ _ → 𝟘
+
 
 -- Singletons.
 ｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
@@ -189,7 +174,7 @@ module _ {𝓧 𝓨 : Universe} where
 
 --------------------------------------
 
-[↑ UALib.Relations](UALib.Relations.html)
-<span style="float:right;">[UALib.Relations.Binary →](UALib.Relations.Binary.html)</span>
+[↑ Relations](Relations.html)
+<span style="float:right;">[Relations.Binary →](Relations.Binary.html)</span>
 
 {% include UALib.Links.md %}

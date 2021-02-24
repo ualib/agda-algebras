@@ -13,10 +13,16 @@ This section describes the [UALib.Prelude.Equality][] module of the [Agda Univer
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Prelude.Equality where
+module Prelude.Equality where
 
-open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl;
- Σ; -Σ; _×_; _,_; pr₁; pr₂; ∣_∣; ∥_∥; fst; snd; is-subsingleton; is-prop; 𝟙; ap) public
+open import universes public
+
+open import Prelude.Preliminaries public
+open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
+open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ) public
+
+-- open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl;
+--  Σ; -Σ; _×_; _,_; pr₁; pr₂; ∣_∣; ∥_∥; fst; snd; is-subsingleton; is-prop; 𝟙; ap) public
 
 \end{code}
 
@@ -29,27 +35,36 @@ The `refl` type we use is a standard one. It is defined in the `Identity-Type` m
 
 In the present module, we make `refl` available by importing it from [Prelude.Preliminaries][], which in turn improts from the `Identity-Type` module.  The latter defines `refl` as the following inductive datatype.
 
-```
-data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
- refl : {x : X} → x ≡ x
-```
+\begin{code}
+
+module hide-refl {𝓤 : Universe} where
+
+ data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
+  refl : {x : X} → x ≡ x
+
+\end{code}
 
 Let us now formalize the obvious fact that `≡` is an equivalence relation.
 
+First we import the original definitions of `_≡_` and `refl` from the [Type Topology][] library. (The definition given above, inside the `hide-refl` module, was merely for illustration.)
+
 \begin{code}
+
+open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁)
+pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x
- ≡-rfl x = refl _
+ ≡-rfl x = 𝓇ℯ𝒻𝓁
 
  ≡-sym : (x y : X) → x ≡ y → y ≡ x
- ≡-sym x y (refl _) = refl _
+ ≡-sym x y 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
  ≡-trans : (x y z : X) → x ≡ y → y ≡ z → x ≡ z
- ≡-trans x y z (refl _) (refl _) = refl _
+ ≡-trans x y z 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
  ≡-Trans : (x : X){y : X}(z : X) → x ≡ y → y ≡ z → x ≡ z
- ≡-Trans x {y} z (refl _) (refl _) = refl _
+ ≡-Trans x {y} z 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -97,7 +112,12 @@ cong-app (refl _) a = refl _
 
 We conclude the Equality module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
 
+
+
 \begin{code}
+
+open import MGS-MLTT using (ap) public
+
 ≡-elim-left : {𝓤 𝓦 : Universe}
               {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇}
  →            (A₁ , B₁) ≡ (A₂ , B₂)
@@ -137,7 +157,7 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 -------------------------------------
 
-[← UALib.Prelude.Preliminaries ](UALib.Prelude.Preliminaries.html)
-<span style="float:right;">[UALib.Prelude.Inverses →](UALib.Prelude.Inverses.html)</span>
+[← Prelude.Preliminaries ](Prelude.Preliminaries.html)
+<span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>
 
 {% include UALib.Links.md %}

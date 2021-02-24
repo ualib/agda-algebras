@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Subalgebras.Univalent module (The Agda Universal Algebra Library)
+title : Subalgebras.Univalent module (The Agda Universal Algebra Library)
 date : 2021-02-20
 author: William DeMeo
 ---
 
 ### <a id="univalent-subalgebras">Univalent Subalgebras</a>
 
-This section presents the [UALib.Subalgebras.Univalent][] module of the [Agda Universal Algebra Library][].
+This section presents the [Subalgebras.Univalent][] module of the [Agda Universal Algebra Library][].
 
 In his Type Topology library, Martin Escardo gives a nice formalization of the notion of subgroup and its properties.  In this module we merely do for algebras what Martin did for groups.
 
@@ -23,20 +23,36 @@ This module can be safely skipped, or even left out of the Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Subalgebras.Univalent {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Univalent {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subalgebras {𝑆 = 𝑆}{gfe} public
+-- Public imports (inherited by modules importing this one)
+open import Subalgebras.Subalgebras {𝑆 = 𝑆}{gfe} public
+open import MGS-MLTT using (_⇔_; transport) public
 
-open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding; Univalence;
- Π-is-subsingleton; ∈₀-is-subsingleton; pr₁-embedding; embedding-gives-ap-is-equiv; _●_; _≃_;
- equiv-to-subsingleton; powersets-are-sets'; lr-implication; rl-implication; inverse;
- subset-extensionality'; ×-is-subsingleton; logically-equivalent-subsingletons-are-equivalent)
+-- Private imports (only visible in the current module)
+open import MGS-Subsingleton-Theorems using (Univalence)
+open import MGS-Subsingleton-Theorems using (is-subsingleton; Π-is-subsingleton)
+
+open import MGS-Embeddings using (is-set; embedding-gives-ap-is-equiv; pr₁-embedding; 
+ lr-implication; rl-implication; inverse; ×-is-subsingleton; _≃_; _●_;
+ logically-equivalent-subsingletons-are-equivalent; id)
+
+
+
 
 module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
 
+ open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
+  using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω)
+
+-- Nat; NatΠ; NatΠ-is-embedding; is-embedding; 
+--    _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
+ -- ; lr-implication; rl-implication; id; _⁻¹; ap) public
+ -- ∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; _×_; -Σ; Π;
+ --   ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; 
  op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
  op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
 
@@ -140,8 +156,8 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
 
 ---------------------------------
 
-[← UALib.Subalgebras.Subalgebras](UALib.Subalgebras.Subalgebras.html)
-<span style="float:right;">[UALib.Varieties →](UALib.Varieties.html)</span>
+[← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)
+<span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
 

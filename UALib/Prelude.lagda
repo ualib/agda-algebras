@@ -25,13 +25,13 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Prelude where
+module Prelude where
 
-open import UALib.Prelude.Preliminaries public
-open import UALib.Prelude.Equality public
-open import UALib.Prelude.Inverses public
-open import UALib.Prelude.Extensionality public
-open import UALib.Prelude.Lifts public
+open import Prelude.Preliminaries public
+open import Prelude.Equality public
+open import Prelude.Inverses public
+open import Prelude.Extensionality public
+open import Prelude.Lifts public
 
 \end{code}
 

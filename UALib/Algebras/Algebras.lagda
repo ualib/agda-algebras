@@ -13,11 +13,9 @@ This section presents the [UALib.Algebras.Algebras][] module of the [Agda Univer
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Algebras.Algebras where
+module Algebras.Algebras where
 
-open import UALib.Algebras.Signatures public
-
-open import UALib.Prelude.Preliminaries using (𝓤₀; 𝟘; 𝟚) public
+open import Algebras.Signatures public
 
 \end{code}
 
@@ -160,8 +158,8 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 --------------------------------------
 
-[← UALib.Algebras.Signatures](UALib.Algebras.Signatures.html)
-<span style="float:right;">[UALib.Algebras.Products →](UALib.Algebras.Products.html)</span>
+[← Algebras.Signatures](Algebras.Signatures.html)
+<span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
 
 
 {% include UALib.Links.md %}

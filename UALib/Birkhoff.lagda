@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Birkhoff module (Agda Universal Algebra Library)
+title : Birkhoff module (Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ## <a id="birkhoffs-theorem">Birkhoff's Theorem</a>
 
-This chapter presents the [UALib.Birkhoff][] module of the [Agda Universal Algebra Library][].
+This chapter presents the [Birkhoff][] module of the [Agda Universal Algebra Library][].
 
 Here we give a formal proof in [MLTT][] of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class 𝒦 of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
 
@@ -15,16 +15,16 @@ Here we give a formal proof in [MLTT][] of Birkhoff's theorem which says that a 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Birkhoff where
+module Birkhoff where
 
-open import UALib.Birkhoff.FreeAlgebra
-open import UALib.Birkhoff.HSPTheorem
+open import Birkhoff.FreeAlgebra
+open import Birkhoff.HSPTheorem
 
 \end{code}
 
 --------------------------------------
 
-[← UALib.Varieties.Preservation](UALib.Varieties.Preservation.html)
-<span style="float:right;">[UALib.Birkhoff.FreeAlgebra →](UALib.Birkhoff.FreeAlgebra.html)</span>
+[← Varieties.Preservation](Varieties.Preservation.html)
+<span style="float:right;">[Birkhoff.FreeAlgebra →](Birkhoff.FreeAlgebra.html)</span>
 
 {% include UALib.Links.md %}

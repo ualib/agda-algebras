@@ -1,25 +1,25 @@
 ---
 layout: default
-title : UALib.Homomorphisms.Basic module (The Agda Universal Algebra Library)
+title : Homomorphisms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
-This section describes the [UALib.Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
+This section describes the [Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Algebras.Congruences{𝑆 = 𝑆} public
-open import UALib.Prelude.Preliminaries using (_≡⟨_⟩_; _∎) public
+open import Algebras.Congruences{𝑆 = 𝑆} public
+open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
@@ -122,20 +122,19 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
 \end{code}
 
-We will define subuniverses in the [UALib.Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from 𝑨 to 𝑩 will turn out to be subuniverse of 𝑨.  Indeed, this is easily proved as follows.
+We will define subuniverses in the [Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from 𝑨 to 𝑩 will turn out to be subuniverse of 𝑨.  Indeed, this is easily proved as follows.
 
 \begin{code}
 
- 𝑬𝑯-closed : funext 𝓥 𝓦 →
-             (g h : hom 𝑨 𝑩) (𝑓 : ∣ 𝑆 ∣) (𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)
+ 𝑬𝑯-closed : (g h : hom 𝑨 𝑩) (𝑓 : ∣ 𝑆 ∣) (𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)
    →         ( ∀ x → (𝒂 x) ∈ 𝑬𝑯 g h )
              ---------------------------------
    →         ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
 
- 𝑬𝑯-closed fe g h 𝑓 𝒂 p = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                          (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
-                          (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
-                          ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
+ 𝑬𝑯-closed g h 𝑓 𝒂 p = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
+                       (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (𝑓 ̂ 𝑩)(gfe p) ⟩
+                       (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
+                       ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
 
 \end{code}
 
@@ -307,8 +306,8 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 --------------------------------------
 
-[↑ UALib.Homomorphisms](UALib.Homomorphisms.html)
-<span style="float:right;">[UALib.Homomorphisms.Noether →](UALib.Homomorphisms.Noether.html)</span>
+[↑ Homomorphisms](Homomorphisms.html)
+<span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}
 

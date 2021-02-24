@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Terms.Basic module (The Agda Universal Algebra Library)
+title : Terms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="basic-definitions">Basic definitions</a>
 
-This section presents the [UALib.Terms.Basic][] module of the [Agda Universal Algebra Library][].
+This section presents the [Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
 The theoretical background that begins each subsection below is based on Cliff Bergman's textbook [Bergman (2012)][], specifically, Section 4.3.  Apart from notation, our presentation is similar to Bergman's, but we will be more concise, omitting some details and all examples, in order to more quickly arrive at our objective, which is to use type theory to express the concepts and formalize them in the [Agda][] language.  We refer the reader to [Bergman (2012)][] for a more complete exposition of classical (informal) universal algebra.
 
@@ -15,12 +15,12 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Terms.Basic {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
+module Terms.Basic {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} public
+open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -107,6 +107,8 @@ Finally, we prove that the resulting homomorphism is unique.
 
 \begin{code}
 
+open import MGS-Subsingleton-Theorems using (funext)
+
 free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
  →            (t : Term X)
@@ -157,7 +159,7 @@ In the [Birkhoff.FreeAlgebra][] section the `lift-hom` and `lift-of-epi-is-epi` 
 
 --------------------------------------
 
-[↑ UALib.Terms](UALib.Terms.html)
-<span style="float:right;">[UALib.Terms.Operations →](UALib.Terms.Operations.html)</span>
+[↑ Terms](Terms.html)
+<span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}

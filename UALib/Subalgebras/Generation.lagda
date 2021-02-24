@@ -1,24 +1,24 @@
 ---
 layout: default
-title : UALib.Subalgebras.Generation module (The Agda Universal Algebra Library)
+title : Subalgebras.Generation module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="subuniverse-generation">Subuniverse Generation</a>
 
-This section presents the [UALib.Subalgebras.Generation][] module of the [Agda Universal Algebra Library][].
+This section presents the [Subalgebras.Generation][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Subalgebras.Generation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Generation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subuniverses{𝑆 = 𝑆}{gfe} public
+open import Subalgebras.Subuniverses{𝑆 = 𝑆}{gfe} public
 open import Relation.Unary using (⋂) public
 
 \end{code}
@@ -167,6 +167,8 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 
 \begin{code}
 
+open import MGS-Subsingleton-Theorems using (funext)
+
 HomUnique : {𝓤 𝓦 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
@@ -187,7 +189,7 @@ HomUnique {𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 𝒂 im𝒂⊆S
 
 ---------------------------------
 
-[← UALib.Subalgebras.Subuniverses](UALib.Subalgebras.Subuniverses.html)
-<span style="float:right;">[UALib.Subalgebras.Subalgebras →](UALib.Subalgebras.Subalgebras.html)</span>
+[← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
+<span style="float:right;">[Subalgebras.Subalgebras →](Subalgebras.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}

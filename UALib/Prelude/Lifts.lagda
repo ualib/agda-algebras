@@ -13,9 +13,9 @@ This section presents the [UALib.Prelude.Lifts][] module of the [Agda Universal 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Prelude.Lifts where
+module Prelude.Lifts where
 
-open import UALib.Prelude.Extensionality public
+open import Prelude.Extensionality public
 
 \end{code}
 
@@ -87,7 +87,7 @@ lift∼lower = refl _
 
 ---------------
 
-[← UALib.Prelude.Extensionality](UALib.Prelude.Extensionality.html)
-<span style="float:right;">[UALib.Relations →](UALib.Relations.html)</span>
+[← Prelude.Extensionality](Prelude.Extensionality.html)
+<span style="float:right;">[Relations →](Relations.html)</span>
 
 {% include UALib.Links.md %}

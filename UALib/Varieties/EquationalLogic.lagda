@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Varieties.EquationalLogic module (The Agda Universal Algebra Library)
+title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="model-theory-and-equational-logic-types">Model Theory and Equational Logic</a>
 
-This section presents the [UALib.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This section presents the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
@@ -29,20 +29,20 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
-open import UALib.Prelude.Preliminaries using (∘-embedding; embeddings-are-lc) public
+open import Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
+open import MGS-Embeddings using (embeddings-are-lc; _⇔_) public
 
 \end{code}
 
 
 #### <a id="the-models-relation">The models relation</a>
 
-We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [UALib.Varieties.EquationalLogic](UALib.Varieties.EquationalLogic.html).
+We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [Varieties.EquationalLogic](Varieties.EquationalLogic.html).
 
 \begin{code}
 
@@ -330,8 +330,8 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 -------------------------------------
 
-[↑ UALib.Varieties](UALib.Varieties.html)
-<span style="float:right;">[UALib.Varieties.Varieties →](UALib.Varieties.Varieties.html)</span>
+[↑ Varieties](Varieties.html)
+<span style="float:right;">[Varieties.Varieties →](Varieties.Varieties.html)</span>
 
 {% include UALib.Links.md %}
 

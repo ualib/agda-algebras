@@ -1,0 +1,137 @@
+#!/bin/bash
+
+echo "Checking UALib.Prelude.Preliminaries.lagda"
+agda --latex Prelude/Preliminaries.lagda
+echo "Checking UALib.Prelude.Equality.lagda"
+agda --latex Prelude/Equality.lagda
+echo "Checking UALib.Prelude.Inverses.lagda"
+agda --latex Prelude/Inverses.lagda
+echo "Checking UALib.Prelude.Extensionality.lagda"
+agda --latex Prelude/Extensionality.lagda
+echo "Checking UALib.Prelude.Lifts.lagda"
+agda --latex Prelude/Lifts.lagda
+
+echo "Checking UALib.Relations.Unary.lagda"
+agda --latex Relations/Unary.lagda
+echo "Checking UALib.Relations.Binary.lagda"
+agda --latex Relations/Binary.lagda
+echo "Checking UALib.Relations.Quotients.lagda"
+agda --latex Relations/Quotients.lagda
+echo "Checking UALib.Relations.Truncation.lagda"
+agda --latex Relations/Truncation.lagda
+
+echo "Checking UALib.Algebras.Signatures.lagda"
+agda --latex Algebras/Signatures.lagda
+echo "Checking UALib.Algebras.Algebras"
+agda --latex Algebras/Algebras.lagda
+echo "Checking UALib.Algebras.Products.lagda"
+agda --latex Algebras/Products.lagda
+echo "Checking UALib.Algebras.Congruences.lagda"
+agda --latex Algebras/Congruences.lagda
+
+echo "Checking UALib.Homomorphisms.Basic.lagda"
+agda --latex Homomorphisms/Basic.lagda
+echo "Checking UALib.Homomorphisms.Noether.lagda"
+agda --latex Homomorphisms/Noether.lagda
+echo "Checking UALib.Homomorphisms.Isomorphisms.lagda"
+agda --latex Homomorphisms/Isomorphisms.lagda
+echo "Checking UALib.Homomorphisms.HomomorphicImages.lagda"
+agda --latex Homomorphisms/HomomorphicImages.lagda
+
+echo "Checking UALib.Terms.Basic.lagda"
+agda --latex Terms/Basic.lagda
+echo "Checking UALib.Terms.Operations.lagda"
+agda --latex Terms/Operations.lagda
+
+echo "Checking UALib.Subalgebras.Subuniverses.lagda"
+agda --latex Subalgebras/Subuniverses.lagda
+echo "Checking UALib.Subalgebras.Generation.lagda"
+agda --latex Subalgebras/Generation.lagda
+echo "Checking UALib.Subalgebras.Subalgebras.lagda"
+agda --latex Subalgebras/Subalgebras.lagda
+echo "Checking UALib.Subalgebras.Univalent.lagda"
+agda --latex Subalgebras/Univalent.lagda
+
+echo "Checking UALib.Varieties.EquationalLogic.lagda"
+agda --latex Varieties/EquationalLogic.lagda
+echo "Checking UALib.Varieties.Varieties.lagda"
+agda --latex Varieties/Varieties.lagda
+echo "Checking UALib.Varieties.Preservation.lagda"
+agda --latex Varieties/Preservation.lagda
+
+echo "Checking UALib.Birkhoff.FreeAlgebra.lagda"
+agda --latex Birkhoff/FreeAlgebra.lagda
+echo "Checking UALib.Birkhoff.HSPTheorem.lagda"
+agda --latex Birkhoff/HSPTheorem.lagda
+
+mv latex/Prelude/Preliminaries.{tex,md}
+mv latex/Prelude/Equality.{tex,md}
+mv latex/Prelude/Inverses.{tex,md}
+mv latex/Prelude/Extensionality.{tex,md}
+mv latex/Prelude/Lifts.{tex,md}
+
+mv latex/Relations/Unary.{tex,md}
+mv latex/Relations/Binary.{tex,md}
+mv latex/Relations/Quotients.{tex,md}
+mv latex/Relations/Truncation.{tex,md}
+
+mv latex/Algebras/Signatures.{tex,md}
+mv latex/Algebras/Algebras.{tex,md}
+mv latex/Algebras/Products.{tex,md}
+mv latex/Algebras/Congruences.{tex,md}
+
+mv latex/Homomorphisms/Basic.{tex,md}
+mv latex/Homomorphisms/Noether.{tex,md}
+mv latex/Homomorphisms/Isomorphisms.{tex,md}
+mv latex/Homomorphisms/HomomorphicImages.{tex,md}
+
+mv latex/Terms/Basic.{tex,md}
+mv latex/Terms/Operations.{tex,md}
+
+mv latex/Subalgebras/Subuniverses.{tex,md}
+mv latex/Subalgebras/Generation.{tex,md}
+mv latex/Subalgebras/Subalgebras.{tex,md}
+mv latex/Subalgebras/Univalent.{tex,md}
+
+mv latex/Varieties/EquationalLogic.{tex,md}
+mv latex/Varieties/Varieties.{tex,md}
+mv latex/Varieties/Preservation.{tex,md}
+
+mv latex/Birkhoff/FreeAlgebra.{tex,md}
+mv latex/Birkhoff/HSPTheorem.{tex,md}
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Preliminaries.md -o latex/Prelude/Preliminaries.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Equality.md -o latex/Prelude/Equality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Inverses.md -o latex/Prelude/Inverses.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.md -o latex/Prelude/Extensionality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Unary.md -o latex/Relations/Unary.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Binary.md -o latex/Relations/Binary.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Quotients.md -o latex/Relations/Quotients.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Truncation.md -o latex/Relations/Truncation.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Signatures.md -o latex/Algebras/Signatures.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Algebras.md -o latex/Algebras/Algebras.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Products.md -o latex/Algebras/Products.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Congruences.md -o latex/Algebras/Congruences.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Basic.md -o latex/Homomorphisms/Basic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Noether.md -o latex/Homomorphisms/Noether.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Isomorphisms.md -o latex/Homomorphisms/Isomorphisms.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/HomomorphicImages.md -o latex/Homomorphisms/HomomorphicImages.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Basic.md -o latex/Terms/Basic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Operations.md -o latex/Terms/Operations.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subuniverses.md -o latex/Subalgebras/Subuniverses.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Generation.md -o latex/Subalgebras/Generation.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subalgebras.md -o latex/Subalgebras/Subalgebras.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Univalent.md -o latex/Subalgebras/Univalent.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/EquationalLogic.md -o latex/Varieties/EquationalLogic.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Varieties.md -o latex/Varieties/Varieties.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Preservation.md -o latex/Varieties/Preservation.tex
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Birkhoff/FreeAlgebra.md -o latex/Birkhoff/FreeAlgebra.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Birkhoff/HSPTheorem.md -o latex/Birkhoff/HSPTheorem.tex

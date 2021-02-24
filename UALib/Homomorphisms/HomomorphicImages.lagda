@@ -1,24 +1,24 @@
 ---
 layout: default
-title : UALib.Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)
+title : Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="homomorphic-images">Homomorphic Images</a>
 
-This section describes the [UALib.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
+This section describes the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
+open import Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -133,7 +133,7 @@ lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕ
 
 --------------------------------------
 
-[← UALib.Homomorphisms.Isomorphisms](UALib.Homomorphisms.Isomorphisms.html)
-<span style="float:right;">[UALib.Terms →](UALib.Terms.html)</span>
+[← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)
+<span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}

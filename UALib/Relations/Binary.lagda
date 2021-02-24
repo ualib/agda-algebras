@@ -14,11 +14,12 @@ In set theory, a binary relation on a set `A` is simply a subset of the product 
 A generalization of the notion of binary relation is a *relation from* `A` *to* `B`, which we define first and treat binary relations on a single `A` as a special case.
 
 \begin{code}
+
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UALib.Relations.Binary where
+module Relations.Binary where
 
-open import UALib.Relations.Unary public
+open import Relations.Unary public
 
 module _ {𝓤 : Universe} where
 
@@ -87,32 +88,15 @@ or as a relation from `A` to `B`,
  𝟎-pred' : {A : 𝓤 ̇ } → 𝓤 ̇
  𝟎-pred' {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
+
+ open import MGS-MLTT using (𝟙)
+
  -- The total relation A × A
  𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
  𝟏 a b = 𝟙
 \end{code}
 
 
-
-
-#### <a id="binary-relation-truncation">Binary relation truncation</a>
-
-[The section on Truncation](UALib.Preface.html#truncation) in the preface describes the concept of truncation for "proof-relevant" mathematics.
-
-Given a binary relation `P`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `P`-related.  This may be called "proof-irrelevance" since, if we have two proofs of `x P y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.  We enforce this strong assumption of truncation at the first level in the following definition using MHE's `is-subsingleton` type: we say that `(x , y)` belongs to `P` or `x` and `y` are `P`-related if and only if both P x y` and `is-subsingleton (P x y)`.
-
-\begin{code}
-
- Rel₀ : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
- Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P x y)
-
-\end{code}
-
-We will define a **set** to be a type `X` with the following property: for all `x y : X` there is at most one proof that `x ≡ y`.  In other words, `X` is a set if and only if it satisfies
-
-```agda
-∀ x y : X → is-subsingleton(x ≡ y)
-```
 
 #### <a id="implication">Implication</a>
 
@@ -152,7 +136,7 @@ infixr 4 _=[_]⇒_
 
 --------------------------------------
 
-[← UALib.Relations.Unary](UALib.Relations.Unary.html)
-<span style="float:right;">[UALib.Relations.Quotients →](UALib.Relations.Quotients.html)</span>
+[← Relations.Unary](Relations.Unary.html)
+<span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}

@@ -1,25 +1,25 @@
 ---
 layout: default
-title : UALib.Varieties.Preservation (The Agda Universal Algebra Library)
+title : Varieties.Preservation (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="Equation preservation">Equation preservation</a>
 
-This section presents the [UALib.Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
+This section presents the [Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Varieties.Varieties {𝑆 = 𝑆}{gfe} public
+open import Varieties.Varieties {𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
@@ -408,8 +408,8 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 
 ----------------------------
 
-[← UALib.Varieties.Varieties](UALib.Varieties.Varieties.html)
-<span style="float:right;">[UALib.Birkhoff →](UALib.Birkhoff.html)</span>
+[← Varieties.Varieties](Varieties.Varieties.html)
+<span style="float:right;">[Birkhoff →](Birkhoff.html)</span>
 
 {% include UALib.Links.md %}
 

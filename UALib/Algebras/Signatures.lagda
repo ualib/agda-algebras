@@ -15,11 +15,9 @@ This section presents the [UALib.Algebras.Signatures][] module of the [Agda Univ
 
 open import universes using (𝓤₀)
 
-module UALib.Algebras.Signatures where
+module Algebras.Signatures where
 
-open import UALib.Relations.Quotients public
-
-open import UALib.Prelude.Preliminaries using (𝓞; 𝓥; 𝟘; 𝟚) public
+open import Relations.Truncation public
 
 \end{code}
 
@@ -64,7 +62,7 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)
 
 Here 𝓞 is the universe level of operation symbol types, while 𝓥 is the universe level of arity types.
 
-In the [UALib.Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
+In the [Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
 For reference, we recall the definition of the Sigma type, `Σ`, which is
 
@@ -87,6 +85,8 @@ module _ {𝓞 : Universe} where
   e : monoid-op
   · : monoid-op
 
+ open import MGS-MLTT using (𝟘; 𝟚)
+
  monoid-sig : Signature 𝓞 𝓤₀
  monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
@@ -96,8 +96,8 @@ As expected, the signature for a monoid consists of two operation symbols, `e` a
 
 -------------------------------------
 
-[← UALib.Algebras](UALib.Algebras.html)
-<span style="float:right;">[UALib.Algebras.Algebras →](UALib.Algebras.Algebras.html)</span>
+[↑ Algebras](Algebras.html)
+<span style="float:right;">[Algebras.Algebras →](Algebras.Algebras.html)</span>
 
 
 {% include UALib.Links.md %}

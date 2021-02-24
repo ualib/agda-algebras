@@ -1,25 +1,25 @@
 ---
 layout: default
-title : UALib.Subalgebras.Subalgebras module (The Agda Universal Algebra Library)
+title : Subalgebras.Subalgebras module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="subalgebras">Subalgebras</a>
 
-The [UALib.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defins the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
+The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defins the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥)
-open import UALib.Prelude.Preliminaries using (global-dfunext)
+open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module UALib.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Generation {𝑆 = 𝑆}{gfe} public
-open import UALib.Prelude.Preliminaries using (∘-embedding; id-is-embedding)
+open import Subalgebras.Generation {𝑆 = 𝑆}{gfe} public
+open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 \end{code}
 
@@ -46,6 +46,9 @@ We take this opportunity to prove a useful lemma that requires the `IsSubalgebra
 \begin{code}
 
 open Congruence
+open import MGS-Powerset using (propext)
+open import MGS-Embeddings using (is-set)
+open import MGS-Subsingleton-Theorems using (is-subsingleton)
 
 FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                     --extensionality assumptions:
@@ -255,8 +258,8 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
 
 ---------------------------------
 
-[← UALib.Subalgebras.Generation](UALib.Subalgebras.Generation.html)
-<span style="float:right;">[UALib.Subalgebras.Univalent →](UALib.Subalgebras.Univalent.html)</span>
+[← Subalgebras.Generation](Subalgebras.Generation.html)
+<span style="float:right;">[Subalgebras.Univalent →](Subalgebras.Univalent.html)</span>
 
 {% include UALib.Links.md %}
 
