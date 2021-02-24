@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="hsp-theorem">HSP Theorem</a>
 
-This section presents the [Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>1</sup>
+This section presents the [Birkhoff.HSPTheorem][] module of the [Agda Universal Algebra Library][].<sup>[1](Birkhoff.HSPTheorem.html#fn1)</sup>
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
@@ -106,7 +106,7 @@ homℭ = ⨅-hom-co (𝑻 X) 𝔄s hom𝔄
 
 #### <a id="the-new-free-algebra">The new free algebra</a>
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉`, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>2</sup>
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉`, developed in the [Birkhoff.FreeAlgebra][] module.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>[2](Birkhoff.HSPTheorem.html#fn2)</sup>
 
 \begin{code}
 
@@ -355,9 +355,9 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 ----------------------------
 
-<sup>1</sup> In the previous version of the [UALib][] this module was called HSPLemmas and the Birkhoff HSP theorem was in a separate module, while in the current version these are in the new HSPTheorem module.
+<span class="footnote" id="fn1"><sup>1</sup> In the previous version of the [UALib][] this module was called HSPLemmas and the Birkhoff HSP theorem was in a separate module, while in the current version these are in the new HSPTheorem module.</span>
 
-<sup>2</sup> It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [Birkhoff.FreeAlgebra][] module.
+<span class="footnote" id="fn2"><sup>2</sup> It might be an instructive exercise to prove that 𝔽 is, in fact, isomorphic to the free algebra 𝔉 that we defined in the [Birkhoff.FreeAlgebra][] module.</span>
 
 
 [← Birkhoff.FreeAlgebra](Birkhoff.FreeAlgebra.html)
