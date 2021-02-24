@@ -338,7 +338,7 @@ lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA
 
 \end{code}
 
-The next lemma would be too obvoius to care about were it not for the fact that we'll need it later, so it too must be formalized.
+The next lemma would be too obvious to care about were it not for the fact that we'll need it later, so it too must be formalized.
 
 \begin{code}
 
