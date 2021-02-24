@@ -24,7 +24,6 @@ mv html/Natural-Numbers-Type.{tex,md}
 mv html/Plus-Type.{tex,md}
 mv html/Sigma-Type.{tex,md}
 mv html/Unit-Type.{tex,md}
-mv html/universes.{tex,md}
 mv html/Universes.{tex,md}
 
 cp html/UALib.tex html/index.md

@@ -15,8 +15,6 @@ This section describes the [UALib.Prelude.Equality][] module of the [Agda Univer
 
 module Prelude.Equality where
 
-open import universes public
-
 open import Prelude.Preliminaries public
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ) public

@@ -86,23 +86,42 @@ a-function-outside-the-submodule : {A B : 𝓤 ̇} → A → B
 a-function-outside-the-submodule a = a
 ```
 
-Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. In the UAlib, however, we tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
-
-
-
+Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. We tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
 
 
 #### <a id="imports-from-type-topology">Imports from Type Topology</a>
 
-Throughout we use many of the nice tools that [Martin Escardo][] has developed and made available in the [Type Topology][] repository of Agda code for the "Univalent Foundations" of mathematics.
+Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the "Univalent Foundations" of mathematics.
 
-Here is a list of all the types we use.
-
-**Backward compatibility notice**: We are no longer adding the keyword `public` to the end of the import lines below.  This is to force us to (re)import these definitions and types where and when we need them.  This is sometimes a little bit inconvenient, but it makes the dependencies clearer, and since dependencies reveal the foundations upon which the library is built, it is important that we keep them in the foreground.
 
 \begin{code}
 
-open import universes public
+open import Universes public
+
+\end{code}
+
+Escardó's Universe module includes a number of symbols used to denote universes. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
+
+\begin{code}
+
+variable
+ 𝓞 : Universe
+
+\end{code}
+
+Below is a list of all other types from Escardó's [Type Topology][] library that we will import in the [UALib][] at one place or another.
+
+<div class="color_box" id="mltt-ext">
+  <div id="title">Backward Compatibility Note</div>
+  <div id="content">The purpose of the import lines below are not actually to effect the stated imports. (In fact, we could comment all of them out and the entire [UALib][] will still type-check. The reason for including these import statements here is to give readers and users an overview of all the dependencies of the library.
+
+In fact, we purposely leave off the `public` keyword from the end of these import directives, so that we are forced to (re)import each item where and when we need it.  This may seem pedantic, and may turn out to be too inconvenient for users in the end, but it makes the dependencies clearer, and dependencies reveal the foundations upon which the library is built.  Since we are very interested in foundations(!), we try to keep all dependencies in the foreground, and resist the temptation to store them all in a single file that we never have to think about again.
+  </div>
+</div>
+
+(The first three import lines have to be commented out because we will actually redefine the given types for pedagogical purposes in the next couple of modules.)
+
+\begin{code}
 
 -- open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁)
 -- pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}

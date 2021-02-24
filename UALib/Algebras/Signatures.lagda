@@ -13,7 +13,7 @@ This section presents the [UALib.Algebras.Signatures][] module of the [Agda Univ
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import universes using (𝓤₀)
+open import Universes using (𝓤₀)
 
 module Algebras.Signatures where
 

@@ -31,7 +31,7 @@ Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#pr
 
 open import Algebras.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
-open import universes
+open import Universes
 open import Relations.Unary using (Pred)
 open import MGS-Powerset -- renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
  using (propext; hfunext)
