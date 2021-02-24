@@ -111,13 +111,13 @@ variable
 
 Below is a list of all other types from Escardó's [Type Topology][] library that we will import in the [UALib][] at one place or another.
 
-<div class="color_box" id="mltt-ext">
-  <div id="title">Backward Compatibility Note</div>
-  <div id="content">The purpose of the import lines below are not actually to effect the stated imports. (In fact, we could comment all of them out and the entire [UALib][] will still type-check. The reason for including these import statements here is to give readers and users an overview of all the dependencies of the library.
+<fieldset style="border: 1px #EA9258 dotted">
+ <legend style="border: 1px #5F38AD solid;margin-left: 1em; padding: 0.2em 0.8em ">Agda Note</legend>
 
-In fact, we purposely leave off the `public` keyword from the end of these import directives, so that we are forced to (re)import each item where and when we need it.  This may seem pedantic, and may turn out to be too inconvenient for users in the end, but it makes the dependencies clearer, and dependencies reveal the foundations upon which the library is built.  Since we are very interested in foundations(!), we try to keep all dependencies in the foreground, and resist the temptation to store them all in a single file that we never have to think about again.
-  </div>
-</div>
+ The purpose of the import lines below are not actually to effect the stated imports. (In fact, we could comment all of them out and the entire [UALib][] will still type-check. The reason for including these import statements here is to give readers and users an overview of all the dependencies of the library.
+
+ In fact, we purposely leave off the `public` keyword from the end of these import directives, so that we are forced to (re)import each item where and when we need it.  This may seem pedantic, and may turn out to be too inconvenient for users in the end, but it makes the dependencies clearer, and dependencies reveal the foundations upon which the library is built.  Since we are very interested in foundations(!), we try to keep all dependencies in the foreground, and resist the temptation to store them all in a single file that we never have to think about again.
+</fieldset>
 
 (The first three import lines have to be commented out because we will actually redefine the given types for pedagogical purposes in the next couple of modules.)
 
