@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Relations module (The Agda Universal Algebra Library)
+title : Relations module (The Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
@@ -25,7 +25,7 @@ open import Relations.Truncation
 
 -------------------------------------
 
-[← UALib.Algebras.Lifts](UALib.Algebras.Lifts.html)
-<span style="float:right;">[UALib.Relations.Unary →](UALib.Relations.Unary.html)</span>
+[← Algebras.Lifts](UALib.Algebras.Lifts.html)
+<span style="float:right;">[Relations.Unary →](Relations.Unary.html)</span>
 
 {% include UALib.Links.md %}

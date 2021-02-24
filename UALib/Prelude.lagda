@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Prelude module (Agda Universal Algebra Library)
+title : Prelude module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
@@ -17,7 +17,7 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 
 ## <a id="prelude">Prelude</a>
 
-This chapter presents the [UALib.Prelude][] module of the [Agda Universal Algebra Library][].
+This chapter presents the [Prelude][] module of the [Agda Universal Algebra Library][].
 
 The source code for this module comprises the (literate) [Agda][] program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file [Prelude.lagda][], which resides in the [git repository of the Agda UALib][].
 
@@ -37,7 +37,7 @@ open import Prelude.Lifts public
 
 --------------------------------------
 
-[← UALib.Preface](UALib.Preface.html)
-<span style="float:right;">[UALib.Prelude.Preliminaries →](UALib.Prelude.Preliminaries.html)</span>
+[← Preface](Preface.html)
+<span style="float:right;">[Prelude.Preliminaries →](Prelude.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}

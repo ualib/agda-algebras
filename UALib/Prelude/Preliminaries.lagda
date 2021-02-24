@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Prelude.Preliminaries module (The Agda Universal Algebra Library)
+title : Prelude.Preliminaries module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
@@ -16,7 +16,7 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This section describes the [UALib.Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
+This section describes the [Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
 
 **Notation**. Here are some acronyms that we use frequently.
 
@@ -281,8 +281,8 @@ module hide-pi {𝓤 𝓦 : Universe} where
 
 ----------------------------------------
 
-[↑ UALib.Prelude](UALib.Prelude.html)
-<span style="float:right;">[UALib.Prelude.Equality →](UALib.Prelude.Equality.html)</span>
+[↑ Prelude](Prelude.html)
+<span style="float:right;">[Prelude.Equality →](Prelude.Equality.html)</span>
 
 
 {% include UALib.Links.md %}

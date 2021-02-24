@@ -1,67 +1,67 @@
 #!/bin/bash
 
-echo "Checking UALib.Prelude.Preliminaries.lagda"
+echo "Checking Prelude.Preliminaries.lagda"
 agda --latex Prelude/Preliminaries.lagda
-echo "Checking UALib.Prelude.Equality.lagda"
+echo "Checking Prelude.Equality.lagda"
 agda --latex Prelude/Equality.lagda
-echo "Checking UALib.Prelude.Inverses.lagda"
+echo "Checking Prelude.Inverses.lagda"
 agda --latex Prelude/Inverses.lagda
-echo "Checking UALib.Prelude.Extensionality.lagda"
+echo "Checking Prelude.Extensionality.lagda"
 agda --latex Prelude/Extensionality.lagda
-echo "Checking UALib.Prelude.Lifts.lagda"
+echo "Checking Prelude.Lifts.lagda"
 agda --latex Prelude/Lifts.lagda
 
-echo "Checking UALib.Relations.Unary.lagda"
+echo "Checking Relations.Unary.lagda"
 agda --latex Relations/Unary.lagda
-echo "Checking UALib.Relations.Binary.lagda"
+echo "Checking Relations.Binary.lagda"
 agda --latex Relations/Binary.lagda
-echo "Checking UALib.Relations.Quotients.lagda"
+echo "Checking Relations.Quotients.lagda"
 agda --latex Relations/Quotients.lagda
-echo "Checking UALib.Relations.Truncation.lagda"
+echo "Checking Relations.Truncation.lagda"
 agda --latex Relations/Truncation.lagda
 
-echo "Checking UALib.Algebras.Signatures.lagda"
+echo "Checking Algebras.Signatures.lagda"
 agda --latex Algebras/Signatures.lagda
-echo "Checking UALib.Algebras.Algebras"
+echo "Checking Algebras.Algebras"
 agda --latex Algebras/Algebras.lagda
-echo "Checking UALib.Algebras.Products.lagda"
+echo "Checking Algebras.Products.lagda"
 agda --latex Algebras/Products.lagda
-echo "Checking UALib.Algebras.Congruences.lagda"
+echo "Checking Algebras.Congruences.lagda"
 agda --latex Algebras/Congruences.lagda
 
-echo "Checking UALib.Homomorphisms.Basic.lagda"
+echo "Checking Homomorphisms.Basic.lagda"
 agda --latex Homomorphisms/Basic.lagda
-echo "Checking UALib.Homomorphisms.Noether.lagda"
+echo "Checking Homomorphisms.Noether.lagda"
 agda --latex Homomorphisms/Noether.lagda
-echo "Checking UALib.Homomorphisms.Isomorphisms.lagda"
+echo "Checking Homomorphisms.Isomorphisms.lagda"
 agda --latex Homomorphisms/Isomorphisms.lagda
-echo "Checking UALib.Homomorphisms.HomomorphicImages.lagda"
+echo "Checking Homomorphisms.HomomorphicImages.lagda"
 agda --latex Homomorphisms/HomomorphicImages.lagda
 
-echo "Checking UALib.Terms.Basic.lagda"
+echo "Checking Terms.Basic.lagda"
 agda --latex Terms/Basic.lagda
-echo "Checking UALib.Terms.Operations.lagda"
+echo "Checking Terms.Operations.lagda"
 agda --latex Terms/Operations.lagda
 
-echo "Checking UALib.Subalgebras.Subuniverses.lagda"
+echo "Checking Subalgebras.Subuniverses.lagda"
 agda --latex Subalgebras/Subuniverses.lagda
-echo "Checking UALib.Subalgebras.Generation.lagda"
+echo "Checking Subalgebras.Generation.lagda"
 agda --latex Subalgebras/Generation.lagda
-echo "Checking UALib.Subalgebras.Subalgebras.lagda"
+echo "Checking Subalgebras.Subalgebras.lagda"
 agda --latex Subalgebras/Subalgebras.lagda
-echo "Checking UALib.Subalgebras.Univalent.lagda"
+echo "Checking Subalgebras.Univalent.lagda"
 agda --latex Subalgebras/Univalent.lagda
 
-echo "Checking UALib.Varieties.EquationalLogic.lagda"
+echo "Checking Varieties.EquationalLogic.lagda"
 agda --latex Varieties/EquationalLogic.lagda
-echo "Checking UALib.Varieties.Varieties.lagda"
+echo "Checking Varieties.Varieties.lagda"
 agda --latex Varieties/Varieties.lagda
-echo "Checking UALib.Varieties.Preservation.lagda"
+echo "Checking Varieties.Preservation.lagda"
 agda --latex Varieties/Preservation.lagda
 
-echo "Checking UALib.Birkhoff.FreeAlgebra.lagda"
+echo "Checking Birkhoff.FreeAlgebra.lagda"
 agda --latex Birkhoff/FreeAlgebra.lagda
-echo "Checking UALib.Birkhoff.HSPTheorem.lagda"
+echo "Checking Birkhoff.HSPTheorem.lagda"
 agda --latex Birkhoff/HSPTheorem.lagda
 
 mv latex/Prelude/Preliminaries.{tex,md}

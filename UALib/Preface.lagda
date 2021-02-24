@@ -116,24 +116,24 @@ This generates a set of markdown files that are then converted to html by jekyll
 bundle exec jekyll build
 ```
 
-In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then we use the script `jekyll-serve` to invoke the following commands.
+In practice, we use the script `UALib/generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then we use the script `jekyll-serve` to invoke the following commands.
 
 ```
-cp html/UALib.md index.md
-cp html/*.html html/*.md .
+cp UALib/html/UALib.md index.md
+cp UALib/html/*.html UALib/html/*.md .
 bundle install --path vendor
 bundle exec jekyll serve --watch --incremental
 ```
 
 This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
 
-LaTeX source files may be generated with a combination of `agda --latex` and `pandoc` commands. This can only be done one module at a time, but the script `generate-tex` is set up to process all modules in the library.  We typically run the commands
+LaTeX source files may be generated with a combination of `agda --latex` and `pandoc` commands. This can only be done one module at a time, but the script `generate-tex` is set up to process all modules in the library.  Typically, after each update of the library, we run the following at the command line from within the UALib subdirectory:
 
 ```shell
 ./generate-tex; ./generate-md
 ```
 
-at the command line after each update of the library.  This type-checks all the modules, and generates html and latex documentation.
+This type-checks all the modules, and generates html and latex documentation (in the `UALib/html` and `UALib/latex` subdirectories).
 
 **Warning!** Our `.lagda` source files make heavy use of unicode characters, both inside and outside code blocks. Therefore, the tex source files produced with the `agda --latex` command cannot be processed correctly with `pdflatex` (as far as we know). Instead, we use `xelatex` along with the `unixode` package. For examples, look in the subdirectories of the [_static/paper](https://gitlab.com/ualib/ualib.gitlab.io/-/tree/master/_static/paper) directory of the [ualib.gitlab.io](https://gitlab.com/ualib/ualib.gitlab.io`) repository.
 
@@ -204,7 +204,7 @@ Readers and users are encouraged to suggest improvements to the Agda UALib and/o
 -------------------------------------
 
 [← Table of Contents](UALib.html)
-<span style="float:right;">[UALib.Prelude →](UALib.Prelude.html)</span>
+<span style="float:right;">[Prelude →](Prelude.html)</span>
 
 
 {% include UALib.Links.md %}

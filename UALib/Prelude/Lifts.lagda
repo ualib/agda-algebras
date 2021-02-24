@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Prelude.Lifts module (Agda Universal Algebra Library)
+title : Prelude.Lifts module (Agda Universal Algebra Library)
 date : 2021-02-18
 author: William DeMeo
 ---

@@ -85,50 +85,50 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 ### <a id="detailed-contents"></a> Detailed Contents
 
-- [Preface](UALib.Preface.html)
+- [Preface](Preface.html)
 
-- [Prelude](UALib.Prelude.html)
-  - [Preliminaries](UALib.Prelude.Preliminaries.html)
-  - [Equality](UALib.Prelude.Equality.html)
-  - [Inverses](UALib.Prelude.Inverses.html)
-  - [Extensionality](UALib.Prelude.Extensionality.html)
-  - [Agda's Universe Hierarchy](UALib.Prelude.Lifts.html)
+- [Prelude](Prelude.html)
+  - [Preliminaries](Prelude.Preliminaries.html)
+  - [Equality](Prelude.Equality.html)
+  - [Inverses](Prelude.Inverses.html)
+  - [Extensionality](Prelude.Extensionality.html)
+  - [Agda's Universe Hierarchy](Prelude.Lifts.html)
 
-- [Relation and Quotient Types](UALib.Relations.html)
-  - [Unary Relations](UALib.Relations.Unary.html)
-  - [Binary Relations](UALib.Relations.Binary.html)
-  - [Equivalence Relations and Quotients](UALib.Relations.Quotients.html)
+- [Relation and Quotient Types](Relations.html)
+  - [Unary Relations](Relations.Unary.html)
+  - [Binary Relations](Relations.Binary.html)
+  - [Equivalence Relations and Quotients](Relations.Quotients.html)
 
-- [Algebra Types](UALib.Algebras.html)
-  - [Operations and Signatures](UALib.Algebras.Signatures.html)
-  - [Algebras](UALib.Algebras.Algebras.html)
-  - [Product Algebras](UALib.Algebras.Products.html)
-  - [Congruence Relations](UALib.Algebras.Congruences.html)
+- [Algebra Types](Algebras.html)
+  - [Operations and Signatures](Algebras.Signatures.html)
+  - [Algebras](Algebras.Algebras.html)
+  - [Product Algebras](Algebras.Products.html)
+  - [Congruence Relations](Algebras.Congruences.html)
 
-- [Homomorphism Types](UALib.Homomorphisms.html)
-  - [Basic definitions](UALib.Homomorphisms.Basic.html)
-  - [Homomorphism Theorems](UALib.Homomorphisms.Noether.html)
-  - [Isomorphisms](UALib.Homomorphisms.Isomorphisms.html)
-  - [Homomorphic Images](UALib.Homomorphisms.HomomorphicImages.html)
+- [Homomorphism Types](Homomorphisms.html)
+  - [Basic definitions](Homomorphisms.Basic.html)
+  - [Homomorphism Theorems](Homomorphisms.Noether.html)
+  - [Isomorphisms](Homomorphisms.Isomorphisms.html)
+  - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
 
-- [Types for Terms](UALib.Terms.html)
-  - [Basic Definitions](UALib.Terms.Basic.html)
-  - [Term Operations](UALib.Terms.Operations.html)
+- [Types for Terms](Terms.html)
+  - [Basic Definitions](Terms.Basic.html)
+  - [Term Operations](Terms.Operations.html)
 
-- [Subalgebra Types](UALib.Subalgebras.html)
-  - [Subuniverses](UALib.Subalgebras.Subuniverses.html)
-  - [Subuniverse Generation](UALib.Subalgebras.Generation.html)
-  - [Subalgebras](UALib.Subalgebras.Subalgebras)
-  - [Univalent Subalgebras](UALib.Subalgebras.Univalent.html)
+- [Subalgebra Types](Subalgebras.html)
+  - [Subuniverses](Subalgebras.Subuniverses.html)
+  - [Subuniverse Generation](Subalgebras.Generation.html)
+  - [Subalgebras](Subalgebras.Subalgebras)
+  - [Univalent Subalgebras](Subalgebras.Univalent.html)
 
-- [Types for Equations and Varieties](UALib.Varieties.html)
-  - [Model Theory and Equational Logic](UALib.Varieties.EquationalLogic.html)
-  - [The Inductive Types H, S, P, V](UALib.Varieties.Varieties.html)
-  - [Equation Preservation Theorems](UALib.Varieties.Preservation.html)
+- [Types for Equations and Varieties](Varieties.html)
+  - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
+  - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
+  - [Equation Preservation Theorems](Varieties.Preservation.html)
 
-- [The Free Algebra and Birkhoff's Theorem](UALib.Birkhoff.html)
-  - [The Free Algebra](UALib.Birkhoff.FreeAlgebra.html)
-  - [Birkhoff's Theorem](UALib.Birkhoff.HSPTheorem.html)
+- [The Free Algebra and Birkhoff's Theorem](Birkhoff.html)
+  - [The Free Algebra](Birkhoff.FreeAlgebra.html)
+  - [Birkhoff's Theorem](Birkhoff.HSPTheorem.html)
 
 ---------------------------------------
 
@@ -149,7 +149,7 @@ is licensed under a
   Creative Commons Attribution-ShareAlike 4.0 International License.
 </a>
 <br />
-<a href="https://ualib.gitlab.io/UALib.Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
+<a href="https://ualib.gitlab.io/Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
 <br />
 <br />
 <a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>
@@ -164,7 +164,7 @@ Based on the work at
 
 <p></p>
 
-<span style="float:right;">[Next Module (UALib.Preface) →](UALib.Preface.html)</span>
+<span style="float:right;">[Next Module (Preface) →](Preface.html)</span>
 
 
 <div class="container">

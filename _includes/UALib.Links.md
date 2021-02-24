@@ -148,52 +148,52 @@
 
 
 
-[Preface]: UALib.Preface.html
+[Preface]: Preface.html
 
-[Prelude]: UALib.Prelude.html
-[Prelude.Preliminaries]: UALib.Prelude.Preliminaries.html
-[Prelude.Equality]: UALib.Prelude.Equality.html
-[Prelude.Inverses]: UALib.Prelude.Inverses.html
-[Prelude.Extensionality]: UALib.Prelude.Extensionality.html
-[Prelude.Lifts]: UALib.Prelude.Lifts.html
+[Prelude]: Prelude.html
+[Prelude.Preliminaries]: Prelude.Preliminaries.html
+[Prelude.Equality]: Prelude.Equality.html
+[Prelude.Inverses]: Prelude.Inverses.html
+[Prelude.Extensionality]: Prelude.Extensionality.html
+[Prelude.Lifts]: Prelude.Lifts.html
 
-[Relations]: UALib.Relations.html
-[Relations.Unary]: UALib.Relations.Unary.html
-[Relations.Binary]: UALib.Relations.Binary.html
-[Relations.Quotients]: UALib.Relations.Quotients.html
-[Relations.Truncation]: UALib.Relations.Truncation.html
+[Relations]: Relations.html
+[Relations.Unary]: Relations.Unary.html
+[Relations.Binary]: Relations.Binary.html
+[Relations.Quotients]: Relations.Quotients.html
+[Relations.Truncation]: Relations.Truncation.html
 
-[Algebras]: UALib.Algebras.html
-[Algebras.Signatures]: UALib.Algebras.Signatures.html
-[Algebras.Algebras]: UALib.Algebras.Algebras.html
-[Algebras.Products]: UALib.Algebras.Products.html
-[Algebras.Congruences]: UALib.Algebras.Congruences.html
+[Algebras]: Algebras.html
+[Algebras.Signatures]: Algebras.Signatures.html
+[Algebras.Algebras]: Algebras.Algebras.html
+[Algebras.Products]: Algebras.Products.html
+[Algebras.Congruences]: Algebras.Congruences.html
 
-[Homomorphisms]: UALib.Homomorphisms.html
-[Homomorphisms.Basic]: UALib.Homomorphisms.Basic.html
-[Homomorphisms.Noether]: UALib.Homomorphisms.Noether.html
-[Homomorphisms.Isomorphisms]: UALib.Homomorphisms.Isomorphisms.html
-[Homomorphisms.HomomorphicImages]: UALib.Homomorphisms.HomomorphicImages.html
+[Homomorphisms]: Homomorphisms.html
+[Homomorphisms.Basic]: Homomorphisms.Basic.html
+[Homomorphisms.Noether]: Homomorphisms.Noether.html
+[Homomorphisms.Isomorphisms]: Homomorphisms.Isomorphisms.html
+[Homomorphisms.HomomorphicImages]: Homomorphisms.HomomorphicImages.html
 
-[Terms]: UALib.Terms.html
-[Terms.Basic]: UALib.Terms.Basic.html
-[Terms.Operations]: UALib.Terms.Operations.html
+[Terms]: Terms.html
+[Terms.Basic]: Terms.Basic.html
+[Terms.Operations]: Terms.Operations.html
 
-[Subalgebras]: UALib.Subalgebras.html
-[Subalgebras.Subuniverses]: UALib.Subalgebras.Subuniverses.html
-[Subalgebras.Generation]: UALib.Subalgebras.Generation.html
-[Subalgebras.Subalgebras]: UALib.Subalgebras.Subalgebras.html
-[Subalgebras.Univalent]: UALib.Subalgebras.Univalent.html
+[Subalgebras]: Subalgebras.html
+[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
+[Subalgebras.Generation]: Subalgebras.Generation.html
+[Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
+[Subalgebras.Univalent]: Subalgebras.Univalent.html
 
-[Varieties]: UALib.Varieties.html
-[Varieties.EquationalLogic]: UALib.Varieties.EquationalLogic.html
-[Varieties.Varieties]: UALib.Varieties.Varieties.html
-[Varieties section]: UALib.Varieties.Varieties.html
-[Varieties.Preservation]: UALib.Varieties.Preservation.html
+[Varieties]: Varieties.html
+[Varieties.EquationalLogic]: Varieties.EquationalLogic.html
+[Varieties.Varieties]: Varieties.Varieties.html
+[Varieties section]: Varieties.Varieties.html
+[Varieties.Preservation]: Varieties.Preservation.html
 
-[Birkhoff]: UALib.Birkhoff.html
-[Birkhoff.FreeAlgebra]: UALib.Birkhoff.FreeAlgebra.html
-[Birkhoff.HSPTheorem]: UALib.Birkhoff.HSPTheorem.html
+[Birkhoff]: Birkhoff.html
+[Birkhoff.FreeAlgebra]: Birkhoff.FreeAlgebra.html
+[Birkhoff.HSPTheorem]: Birkhoff.HSPTheorem.html
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 
