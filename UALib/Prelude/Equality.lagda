@@ -21,11 +21,7 @@ open import Prelude.Preliminaries public
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
 open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ) public
 
--- open import UALib.Prelude.Preliminaries using (Universe; _̇; _⊔_; _⁺; _≡_; refl;
---  Σ; -Σ; _×_; _,_; pr₁; pr₂; ∣_∣; ∥_∥; fst; snd; is-subsingleton; is-prop; 𝟙; ap) public
-
 \end{code}
-
 
 #### <a id="refl">refl</a>
 

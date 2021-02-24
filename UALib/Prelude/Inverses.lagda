@@ -16,13 +16,20 @@ Here we define (the syntax of) a type for the (semantic concept of) **inverse im
 
 module Prelude.Inverses where
 
+-- Public imports (inherited by modules importing this one)
 open import Prelude.Equality public 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
--- pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
+open import MGS-Subsingleton-Truncation using (_∙_) public
+open import MGS-MLTT using (_∘_; 𝑖𝑑; _⁻¹; domain; codomain; transport) public
+open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; 
+ invertibles-are-equivs) public
+
+-- Private imports (only visible in the current module)
+open import MGS-Subsingleton-Theorems using (funext)
+open import MGS-Embeddings using (is-set)
 
 module _ {𝓤 𝓦 : Universe} where
 
- open import MGS-Subsingleton-Theorems using (funext)
 
  data Image_∋_ {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
@@ -31,9 +38,9 @@ module _ {𝓤 𝓦 : Universe} where
 
  ImageIsImage : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
                 (f : A → B) (b : B) (a : A)
-  →              b ≡ f a
-                ---------------------------
-  →              Image f ∋ b
+  →             b ≡ f a
+                -----------
+  →             Image f ∋ b
 
  ImageIsImage {A}{B} f b a b≡fa = eq b a b≡fa
 
@@ -55,11 +62,9 @@ Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
 
 \begin{code}
 
- open import MGS-MLTT using (_⁻¹) public
-
  InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
             (b : B) (b∈Imgf : Image f ∋ b)
-           ---------------------------------
+            ------------------------------
   →         f (Inv f b b∈Imgf) ≡ b
  InvIsInv f .(f a) (im a) = refl _
  InvIsInv f _ (eq _ _ p) = p ⁻¹
@@ -87,8 +92,8 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
 
  EpicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
            (f : A → B) → Epic f
-           -------------------------
-  →           B → A
+           --------------------
+  →        B → A
 
  EpicInv f fE b = Inv f b (fE b)
 
@@ -98,13 +103,10 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
 
 \begin{code}
 
- open import MGS-MLTT using (_∘_; 𝑖𝑑) public
- open import MGS-Subsingleton-Theorems using (funext)
-
  EpicInvIsRightInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
                      (f : A → B)  (fE : Epic f)
-                     ----------------------------
-  →                   f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
+                     --------------------------
+  →                  f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
 
  EpicInvIsRightInv fe f fE = fe (λ x → InvIsInv f x (fE x))
 
@@ -130,10 +132,8 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function `
 \begin{code}
 
  --The (pseudo-)inverse of a monic function
- MonicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-            (f : A → B)  →  Monic f
-           -----------------------------
-  →         (b : B) →  Image f ∋ b  →  A
+ MonicInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → Monic f
+  →         (b : B) → Image f ∋ b → A
 
  MonicInv f _ = λ b Imf∋b → Inv f b Imf∋b
 
@@ -144,16 +144,12 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 \begin{code}
 
  --The (psudo-)inverse of a monic is the left inverse.
- MonicInvIsLeftInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-                     (f : A → B) (fmonic : Monic f)(x : A)
-                    ----------------------------------------
-   →                 (MonicInv f fmonic) (f x) (im x) ≡ x
+ MonicInvIsLeftInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(fmonic : Monic f)(x : A)
+   →                 (MonicInv f fmonic)(f x)(im x) ≡ x
 
  MonicInvIsLeftInv f fmonic x = refl _
 
 \end{code}
-
-
 
 
 
@@ -162,9 +158,6 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 \begin{code}
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
-
- open import MGS-Subsingleton-Theorems using (funext)
- open import MGS-Subsingleton-Truncation using (_∙_) public
 
  epic-factor : funext 𝓨 𝓨 → {A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
                (β : A → B)(ξ : A → C)(ϕ : C → B)
@@ -216,8 +209,6 @@ This is the first point at which [truncation](UALib.Preface.html#truncation) com
 
 \begin{code}
 
-open import MGS-MLTT using (domain; codomain) public
-
 module hidden where
 
  is-subsingleton : {𝓧 : Universe} → 𝓧 ̇ → 𝓧 ̇
@@ -235,10 +226,7 @@ This is a very nice, natural way to represent what we usually mean in mathematic
 
 \begin{code}
 
-open import MGS-MLTT using (transport)
-open import MGS-Subsingleton-Truncation using (fiber) public
-open import MGS-Embeddings using (is-embedding; to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
-open import MGS-Embeddings using (is-set)
+open import MGS-Embeddings using (is-embedding) public
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
  →                            (f : A → B)  →  Monic f
@@ -279,6 +267,8 @@ invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equiv
 Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that can make it easier to apply `p`.
 
 \begin{code}
+
+open import MGS-Subsingleton-Truncation using (fiber) public
 
 embedding-elim : {𝓧 𝓨 : Universe}{X : 𝓧 ̇} {Y : 𝓨 ̇}
                  (f : X → Y) → is-embedding f

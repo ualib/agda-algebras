@@ -20,12 +20,12 @@ This section describes the [Prelude.Preliminaries][] module of the [Agda Univers
 
 **Notation**. Here are some acronyms that we use frequently.
 
-  * MHE = [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe/)
-  * MLTT = [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory)
+  * [MHE][] = [Martin Hötzel Escardó](https://www.cs.bham.ac.uk/~mhe/)
+  * [MLTT][] = [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory)
 
 #### <a id="options">Options</a>
 
-All Agda programs begin by setting some options and by importing from existing libraries (in our case, the [Agda Standard Library][] and the [Type Topology][] library by MHE). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
+All Agda programs begin by setting some options and by importing from existing libraries (in our case, the [Type Topology][] library by [MHE][]). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
 
 For example, each Agda source code file in the UALib begins with the following line:
 
@@ -57,7 +57,7 @@ but this is never done in publicly released versions of the UALib.
 
 #### <a id="modules">Modules</a>
 
-The `OPTIONS` line is usually followed by the start of a module.  For example, here's how we start the Preliminaries module here.
+The `OPTIONS` line is usually followed by the start of a module.  For example, the [Prelude.Preliminaries][] module begins with the following line.
 
 \begin{code}
 
@@ -144,7 +144,7 @@ Notice that we carefully specify which definitions and results we want to import
 
 The first import in the list of `open import` directives above imports the `universes` module from MHE's \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
 
-\mhe has authored an outstanding set of notes called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}. We highly recommend Martin's notes to anyone wanting more details than we provide here about MLTT and the Univalent Foundations/HoTT extensions thereof.
+\mhe has authored an outstanding set of notes called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}. We highly recommend Martin's notes to anyone wanting more details than we provide here about [MLTT][] and the Univalent Foundations/HoTT extensions thereof.
 
 Following MHE, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, etc.
 

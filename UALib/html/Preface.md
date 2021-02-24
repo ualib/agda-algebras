@@ -50,7 +50,8 @@ To this end, our intermediate-term objectives include
 
 For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
 
---------------------------------------------
+
+
 
 ### <a id="Logical-foundations">Logical foundations</a>
 
@@ -61,7 +62,7 @@ We won't go into great detail here because there are already other very nice res
 We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: "primitive" **types** (𝟘, 𝟙, and ℕ, denoting the empty type, one-element type, and natural numbers), **type formers** (+, Π, Σ, Id, denoting binary sum, product, sum, and the identity type), and an infinite collection of **universes** (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like 𝓤, 𝓥, 𝓦, etc., typically from the latter half of the English alphabet).
 
 
-----------------------------------
+
 
 ### <a id="intended-audience">Intended audience</a>
 
@@ -71,7 +72,8 @@ While there are no strict prerequisites, we expect anyone with an interest in th
 
 Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to one or more of the resources mentioned in the references section below to fill in gaps as needed.
 
--------------------------------------------------------------
+
+
 
 ### <a id="installation">Installation</a>
 
@@ -100,7 +102,8 @@ git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 ```
 
-----------------------------
+
+
 
 ### <a id="about-this-document">About this documentation</a>
 
@@ -139,7 +142,8 @@ This type-checks all the modules, and generates html and latex documentation (in
 
 **XeLaTeX and arXiv**. xelatex has the major advantage of correctly processing and formatting unicode characters, but it has the major disadvantage of not being compatible with arXiv, and it seems there are no plans to support `xelatex` in the near future.  However, one can email the arXiv administrators and explain that `xelatex` is required to process the manuscript and (in my experience, at least) this will prompt a reply with permission to submit a precompiled pdf without the accompanying tex source code.
 
--------------------------------------------------------
+
+
 
 ### <a id="acknowledgments">Acknowledgments</a>
 
@@ -153,7 +157,8 @@ Most of the mathematical results that formalized in the [UAlib][] are already we
 
 Regarding the Agda source code in the [Agda UALib][], this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martin Hötzel Escardo][].  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
 
--------------------------------------------------------
+
+
 
 ### <a id="references">References</a>
 
@@ -169,7 +174,8 @@ The following Agda documentation and tutorials helped inform and improve the [UA
 
 Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the (open source) [Agda Standard Library][] source code are also quite useful.
 
------------------------------------
+
+
 
 ### <a id="how-to-cite-the-agda-ualib">How to cite the Agda UALib</a>
 
@@ -193,7 +199,6 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
 
 See also: [dblp record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html), [dblp BibTeX record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html?view=bibtex).
 
--------------------------------------
 
 ### <a id="contributions-welcomed">Contributions welcomed</a>
 Readers and users are encouraged to suggest improvements to the Agda UALib and/or its documentation by submitting a [new issue][] or [merge request][] to [gitlab.com/ualib/ualib.gitlab.io/](https://gitlab.com/ualib/ualib.gitlab.io/).
@@ -201,16 +206,12 @@ Readers and users are encouraged to suggest improvements to the Agda UALib and/o
 * Submit a new [issue][] or [feature request][].
 * Submit a new [merge request][].
 
--------------------------------------
+------------------------------------------------
 
-[← Table of Contents](UALib.html)
+[↑ Agda UALib](UALib.html)
 <span style="float:right;">[Prelude →](Prelude.html)</span>
 
 
 {% include UALib.Links.md %}
 
 
-<!--
-### Unicode hints
-At the end of each chapter of this documentation we show how to produce in Emacs agda2-mode_ some of the fancy unicode characters that we use in our code. For example, we might say "type ``\MCI`` to produce the symbol 𝓘".  We hope these occasional hints are convenient for the reader, but they are not meant to be comprehensive. Instead, information about unicode symbols is readily available in Emacs agda2-mode_; simply place the cursor on the character of interest and enter the command ``M-x describe-char``; alternatively, use the shortcut ``M-m h d c``. To see a full list of available characters, enter ``M-x describe-input-method`` (or ``C-h I``).
--->

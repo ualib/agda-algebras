@@ -42,7 +42,7 @@ ul.posts li {
     list-style: none;
 }
 
-fnote {
+.fnote {
   box-shadow: 0 0 0 2em #F4AAB9,
               0 0 0 4em #66CCFF;
   margin: 4em;

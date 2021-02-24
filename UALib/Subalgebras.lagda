@@ -17,7 +17,7 @@ module Subalgebras where
 
 open import Subalgebras.Subuniverses
 open import Subalgebras.Generation
-open import Subalgebras.Subalgebras public
+open import Subalgebras.Subalgebras
 open import Subalgebras.Univalent
 
 \end{code}

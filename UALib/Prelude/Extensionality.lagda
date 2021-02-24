@@ -57,19 +57,18 @@ module hide where
 \end{code}
 
 
-Extensional equality of functions, or *function extensionality*, means that any two point-wise equal functions are equal. In informal settings, pointwise equality is typically what one means when one asserts that two functions are "equal."<span class="footnote"><sup>1</sup></span> However, it is important to keep in mind the following
+Extensional equality of functions, or *function extensionality*, means that any two point-wise equal functions are equal. In informal settings, pointwise equality is typically what one means when one asserts that two functions are "equal."<a href="fn:ext1"><sup>1</sup></a> However, it is important to keep in mind the following
 
-<fieldset style="border: 1px black solid">
-<legend style="border: 1px black solid;margin-left: 1em; padding: 0.2em 0.8em ">Foundations Note</legend>
+<fieldset style="border: 1px #A020F0 solid">
+<legend style="border: 1px #A020F0 solid;margin-left: 0.2em; padding: 0.2em 0.2em ">Foundations Note</legend>
 As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martin Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
 </fieldset>
 
 
-<div><fnote>
+<div class="fnote" id="bill_to">
 <h4><a id="note-on-foundations-function-extensionality-is-independent-of-MLTT">Note on Foundations: function extensionality is independent of MLTT</a></h4>
 
 As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martin Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
-</fnote>
 </div>
 
 
@@ -127,7 +126,7 @@ extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args
 
 \end{code}
 
-The next function type defines the converse of function extensionality.<span class="footnote"><sup>2</sup></span>
+The next function type defines the converse of function extensionality.<a href="fn:ext2"><sup>2</sup></a>
 
 \begin{code}
 
@@ -154,9 +153,9 @@ An important conceptual distinction exists between type definitions similar in f
 
 -------------------------------------
 
-<span class="footnote"><sup>1</sup></span>f one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).
+<span class="footnote" id="fn:ext1"><sup>1</sup>f one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<span class="footnote"><sup>2</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`.</span> 
+<span class="footnote" id="fn:ext2"><sup>2</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`.</span> 
 
 
 --------------------
