@@ -60,15 +60,15 @@ module hide where
 Extensional equality of functions, or *function extensionality*, means that any two point-wise equal functions are equal. In informal settings, pointwise equality is typically what one means when one asserts that two functions are "equal."<sup>[1](Prelude.Extensionality.html#fn1)</sup> However, it is important to keep in mind the following
 
 <fieldset style="border: 1px #A020F0 solid">
-<legend style="border: 1px #A020F0 solid;margin-left: 0.2em; padding: 0.2em 0.2em ">Foundations Note</legend>
+<legend style="border: 1px #A020F0 solid;margin-left: 0.1em; padding: 0.2em 0.2em ">MLTT Foundations</legend>
 As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martin Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
 </fieldset>
 
 
-<div class="fnote" id="bill_to">
-<h4><a id="note-on-foundations-function-extensionality-is-independent-of-MLTT">Note on Foundations: function extensionality is independent of MLTT</a></h4>
-
-As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martin Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
+<div class="color_box" id="mltt-ext">
+  <div id="title">MLTT Foundations</div>
+  <div id="content">As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martin Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
+  </div>
 </div>
 
 
