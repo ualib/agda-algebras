@@ -35,12 +35,12 @@ Luckily, there are ways to overcome this technical issue, and we describe some s
 
 Let us be more concrete about what is at issue here by giving an example. Agda will often complain with errors like the following:
 
-```
-Birkhoff.lagda:498,20-23
-(𝓤 ⁺) != (𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺)
-when checking that the expression SP𝒦 has type
-Pred (Σ (λ A → (f₁ : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f₁) A)) _𝓦_2346
-```
+<samp>
+Birkhoff.lagda:498,20-23 <br>
+(𝓤 ⁺) != (𝓞 ⁺) ⊔ (𝓥 ⁺) ⊔ ((𝓤 ⁺) ⁺) <br>
+when checking that the expression SP𝒦 has type <br>
+Pred (Σ (λ A → (f₁ : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f₁) A)) _𝓦_2346 <br>
+</samp>
 
 First of all, we must know how to interpret such errors. The one above means that Agda encountered a type at universe level `𝓤 ⁺`, on line 498 (columns 20--23) of the file `Birkhoff.lagda` file, but was expecting a type at level `𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺` instead.
 

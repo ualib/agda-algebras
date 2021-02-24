@@ -42,7 +42,6 @@ test
 _site
 rst
 MGS*.html
-css
 sphinx
 ARCHIVE
 jekyll

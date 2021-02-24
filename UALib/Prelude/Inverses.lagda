@@ -205,7 +205,7 @@ identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r)
 
 #### Injective functions are set embeddings
 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>1</sup>
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup>
 
 \begin{code}
 
@@ -287,10 +287,16 @@ embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 
 -------------------------------------
 
-<sup>1</sup> Whenever we wish to hide some code from the rest of the development, we will enclose it in a module called `hidden.` In this case, we don't want the code inside the `hidden` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we will import later.  As long as we don't invoke `open hidden`, the code inside the `hidden` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code).
+<sup>1</sup><span class="footnote" id="fn1">Whenever we wish to hide some code from the rest of the development, we will enclose it in a module called `hidden.` In this case, we don't want the code inside the `hidden` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we will import later.  As long as we don't invoke `open hidden`, the code inside the `hidden` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code).</span>
 
+
+-----------------------------------
 
 [← Prelude.Equality](Prelude.Equality.html)
 <span style="float:right;">[Prelude.Extensionality →](Prelude.Extensionality.html)</span>
+
+
+
+
 
 {% include UALib.Links.md %}

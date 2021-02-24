@@ -77,7 +77,7 @@ Here is a version of the first isomorphism theorem.
    <a id="2342" href="Relations.Truncation.html#7958" class="Function">class-extensionality&#39;</a> <a id="2364" href="Homomorphisms.Noether.html#1611" class="Bound">pe</a> <a id="2367" href="Homomorphisms.Noether.html#535" class="Bound">gfe</a> <a id="2371" href="Homomorphisms.Noether.html#1619" class="Bound">ssR</a> <a id="2375" href="Homomorphisms.Noether.html#1623" class="Bound">ssA</a> <a id="2379" class="Symbol">(</a><a id="2380" href="Algebras.Congruences.html#1252" class="Field">IsEquiv</a> <a id="2388" href="Homomorphisms.Noether.html#1674" class="Function">θ</a><a id="2389" class="Symbol">)</a> <a id="2391" href="Homomorphisms.Noether.html#2332" class="Bound">faa&#39;</a>
 
   <a id="2399" href="Homomorphisms.Noether.html#2399" class="Function">femb</a> <a id="2404" class="Symbol">:</a> <a id="2406" href="MGS-Embeddings.html#384" class="Function">is-embedding</a> <a id="2419" href="Homomorphisms.Noether.html#1711" class="Function">fmap</a>
-  <a id="2426" href="Homomorphisms.Noether.html#2399" class="Function">femb</a> <a id="2431" class="Symbol">=</a> <a id="2433" href="Prelude.Inverses.html#6935" class="Function">monic-into-set-is-embedding</a> <a id="2461" href="Homomorphisms.Noether.html#1614" class="Bound">Bset</a> <a id="2466" href="Homomorphisms.Noether.html#1711" class="Function">fmap</a> <a id="2471" href="Homomorphisms.Noether.html#2257" class="Function">fmon</a>
+  <a id="2426" href="Homomorphisms.Noether.html#2399" class="Function">femb</a> <a id="2431" class="Symbol">=</a> <a id="2433" href="Prelude.Inverses.html#6963" class="Function">monic-into-set-is-embedding</a> <a id="2461" href="Homomorphisms.Noether.html#1614" class="Bound">Bset</a> <a id="2466" href="Homomorphisms.Noether.html#1711" class="Function">fmap</a> <a id="2471" href="Homomorphisms.Noether.html#2257" class="Function">fmon</a>
 
 </pre>
 
@@ -119,7 +119,7 @@ If we don't assume the mapping ϕ is onto, and then we get the following version
   <a id="3905" href="Homomorphisms.Noether.html#3871" class="Function">ϕcom</a> <a id="3910" class="Symbol">=</a> <a id="3912" href="Prelude.Inverses.html#634" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
 
   <a id="3920" href="Homomorphisms.Noether.html#3920" class="Function">ϕemb</a> <a id="3925" class="Symbol">:</a> <a id="3927" href="MGS-Embeddings.html#384" class="Function">is-embedding</a> <a id="3940" href="Homomorphisms.Noether.html#3420" class="Function">ϕ</a>
-  <a id="3944" href="Homomorphisms.Noether.html#3920" class="Function">ϕemb</a> <a id="3949" class="Symbol">=</a> <a id="3951" href="Prelude.Inverses.html#6935" class="Function">monic-into-set-is-embedding</a> <a id="3979" href="Homomorphisms.Noether.html#3327" class="Bound">Bset</a> <a id="3984" href="Homomorphisms.Noether.html#3420" class="Function">ϕ</a> <a id="3986" href="Homomorphisms.Noether.html#3728" class="Function">ϕmon</a>
+  <a id="3944" href="Homomorphisms.Noether.html#3920" class="Function">ϕemb</a> <a id="3949" class="Symbol">=</a> <a id="3951" href="Prelude.Inverses.html#6963" class="Function">monic-into-set-is-embedding</a> <a id="3979" href="Homomorphisms.Noether.html#3327" class="Bound">Bset</a> <a id="3984" href="Homomorphisms.Noether.html#3420" class="Function">ϕ</a> <a id="3986" href="Homomorphisms.Noether.html#3728" class="Function">ϕmon</a>
 
 </pre>
 
