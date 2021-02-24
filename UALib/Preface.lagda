@@ -166,7 +166,7 @@ The following Agda documentation and tutorials helped inform and improve the [UA
 
 * Escardo, [Introduction to Univalent Foundations of Mathematics with Agda][]
 * Wadler, [Programming Language Foundations in Agda][]
-* Altenkirk, [Computer Aided Formal Reasoning][]
+* Altenkirch, [Computer Aided Formal Reasoning][]
 * Bove and Dybjer, [Dependent Types at Work][]
 * Gunther, Gadea, Pagano, [Formalization of Universal Algebra in Agda][]
 * János, [Agda Tutorial][]
