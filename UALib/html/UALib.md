@@ -47,7 +47,7 @@ of citation.
 
 In the latest version of the library we have defined many new types for representing the important constructs and theorems that comprise part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files, with the `.lagda` extension, and they are grouped into modules so that they may be easily imported into other Agda programs.
 
-To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](UALib.Birkhoff.Theorem.html) which asserts that every variety is an equational class.  That is, if 𝒦 is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<span class="footnote"><sup>1</sup></span>
+To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](Birkhoff.HSPTheorem.html) which asserts that every variety is an equational class.  That is, if 𝒦 is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<sup>[1](UALib.html#fn1)</sup>
 
 We hope the library will be useful to mathematicians and computer scientists who wish to formally develop their work in type theory and verify their results with a proof assistant. Indeed, the [Agda UALib][] is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to higher peaks, all the time verifying and authenticating what we think we found along the way.
 
@@ -57,7 +57,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **PDF documentation**. [ualib-long.pdf](ualib-long.pdf), [ualib-short.pdf](ualib-short.pdf)
 
-**Citing this work**. To learn [how to cite the Agda UALib](UALib.Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](UALib.Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
 
 --------------------------------
 
@@ -65,19 +65,19 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <pre class="Agda">
 
-<a id="3624" class="Symbol">{-#</a> <a id="3628" class="Keyword">OPTIONS</a> <a id="3636" class="Pragma">--without-K</a> <a id="3648" class="Pragma">--exact-split</a> <a id="3662" class="Pragma">--safe</a> <a id="3669" class="Symbol">#-}</a>
+<a id="3597" class="Symbol">{-#</a> <a id="3601" class="Keyword">OPTIONS</a> <a id="3609" class="Pragma">--without-K</a> <a id="3621" class="Pragma">--exact-split</a> <a id="3635" class="Pragma">--safe</a> <a id="3642" class="Symbol">#-}</a>
 
-<a id="3674" class="Keyword">module</a> <a id="3681" href="UALib.html" class="Module">UALib</a> <a id="3687" class="Keyword">where</a>
+<a id="3647" class="Keyword">module</a> <a id="3654" href="UALib.html" class="Module">UALib</a> <a id="3660" class="Keyword">where</a>
 
-<a id="3694" class="Keyword">open</a> <a id="3699" class="Keyword">import</a> <a id="3706" href="Preface.html" class="Module">Preface</a>
-<a id="3714" class="Keyword">open</a> <a id="3719" class="Keyword">import</a> <a id="3726" href="Prelude.html" class="Module">Prelude</a>
-<a id="3734" class="Keyword">open</a> <a id="3739" class="Keyword">import</a> <a id="3746" href="Relations.html" class="Module">Relations</a>
-<a id="3756" class="Keyword">open</a> <a id="3761" class="Keyword">import</a> <a id="3768" href="Algebras.html" class="Module">Algebras</a>
-<a id="3777" class="Keyword">open</a> <a id="3782" class="Keyword">import</a> <a id="3789" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3803" class="Keyword">open</a> <a id="3808" class="Keyword">import</a> <a id="3815" href="Terms.html" class="Module">Terms</a>
-<a id="3821" class="Keyword">open</a> <a id="3826" class="Keyword">import</a> <a id="3833" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3845" class="Keyword">open</a> <a id="3850" class="Keyword">import</a> <a id="3857" href="Varieties.html" class="Module">Varieties</a>
-<a id="3867" class="Keyword">open</a> <a id="3872" class="Keyword">import</a> <a id="3879" href="Birkhoff.html" class="Module">Birkhoff</a>
+<a id="3667" class="Keyword">open</a> <a id="3672" class="Keyword">import</a> <a id="3679" href="Preface.html" class="Module">Preface</a>
+<a id="3687" class="Keyword">open</a> <a id="3692" class="Keyword">import</a> <a id="3699" href="Prelude.html" class="Module">Prelude</a>
+<a id="3707" class="Keyword">open</a> <a id="3712" class="Keyword">import</a> <a id="3719" href="Relations.html" class="Module">Relations</a>
+<a id="3729" class="Keyword">open</a> <a id="3734" class="Keyword">import</a> <a id="3741" href="Algebras.html" class="Module">Algebras</a>
+<a id="3750" class="Keyword">open</a> <a id="3755" class="Keyword">import</a> <a id="3762" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3776" class="Keyword">open</a> <a id="3781" class="Keyword">import</a> <a id="3788" href="Terms.html" class="Module">Terms</a>
+<a id="3794" class="Keyword">open</a> <a id="3799" class="Keyword">import</a> <a id="3806" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3818" class="Keyword">open</a> <a id="3823" class="Keyword">import</a> <a id="3830" href="Varieties.html" class="Module">Varieties</a>
+<a id="3840" class="Keyword">open</a> <a id="3845" class="Keyword">import</a> <a id="3852" href="Birkhoff.html" class="Module">Birkhoff</a>
 
 </pre>
 
@@ -160,7 +160,7 @@ Based on the work at
 
 ---------------------------------
 
-<span class="footnote"><sup>1</sup>[Contact the author](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.</span>
+<span class="footnote" id="fn1"><sup>1</sup>[Contact the author](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.</span>
 
 <p></p>
 
