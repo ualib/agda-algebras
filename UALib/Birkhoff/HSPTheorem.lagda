@@ -37,7 +37,6 @@ open import MGS-Powerset -- renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-
  using (propext; hfunext)
 
 -- open import Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
-
 \end{code}
 
 Unlike previous modules, in this module we fix `𝓤`, `X`, and `𝒦` in advance. We also assume 𝕏, which supplies, for each algebra `𝑨`, a surjective map ∣ 𝕏 𝑨 ∣ from `X` onto 𝑨.

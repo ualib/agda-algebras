@@ -25,7 +25,7 @@ open import Relations.Truncation
 
 -------------------------------------
 
-[← Algebras.Lifts](UALib.Algebras.Lifts.html)
+[← Prelude.Lifts](Prelude.Lifts.html)
 <span style="float:right;">[Relations.Unary →](Relations.Unary.html)</span>
 
 {% include UALib.Links.md %}
