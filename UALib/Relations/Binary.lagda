@@ -120,7 +120,7 @@ infixr 4 _⇒_
 
 \end{code}
 
-We can combine `_on_` and _⇒_ to define a nice, general implication operation. This is borrowed from the [Agda Standard Library][]; we have merely translated into MHE/UALib notation.
+We can combine `_on_` and _⇒_ to define a nice, general implication operation. This is borrowed from the [Agda Standard Library][]; we have merely translated into [Type Topology][]/[UALib][] notation.
 
 \begin{code}
 

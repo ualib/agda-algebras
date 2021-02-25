@@ -38,6 +38,7 @@
 [Emacs]: https://www.gnu.org/software/emacs/
 [emacs]: https://www.gnu.org/software/emacs/
 [Equality Section]: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
+[Escardó]: https://www.cs.bham.ac.uk/~mhe
 
 [Formalization of Universal Algebra in Agda]: http://www.sciencedirect.com/science/article/pii/S1571066118300768
 [function extensionality]: https://ncatlab.org/nlab/show/function+extensionality
@@ -74,7 +75,10 @@
 
 [markdown]: https://daringfireball.net/projects/markdown/
 [Martin Escardo]: https://www.cs.bham.ac.uk/~mhe
+[Martín Escardó]: https://www.cs.bham.ac.uk/~mhe
+[Martín Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Martin Escardo's installation hints]: https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md
+[Martín Hötzel Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Martin Hötzel Escardo]: https://www.cs.bham.ac.uk/~mhe
 [Martin-Löf dependent type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory
 [Martin-Löf type theory]: https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory

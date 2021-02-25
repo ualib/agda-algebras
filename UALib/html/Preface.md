@@ -57,7 +57,7 @@ For our own mathematics research, we believe a proof assistant equipped with spe
 
 The [Agda UALib][] is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) that is the same or very close to the type theory on which Martin Escardo's [Type Topology][] Agda library is based.  This is also the type theory that Escardo taught us in the short course [Introduction to Univalent Foundations of Mathematics with Agda][] at the [Midlands Graduate School in the Foundations of Computing Science][] at University of Birmingham in 2019.
 
-We won't go into great detail here because there are already other very nice resources available, such as the section [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#mlttinagda) of the lecture notes by MHE just mentioned, as well as the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
+We won't go into great detail here because there are already other very nice resources available, such as the section [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#mlttinagda) of the lecture notes by [Martín Escardó][] just mentioned, as well as the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
 
 We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: "primitive" **types** (𝟘, 𝟙, and ℕ, denoting the empty type, one-element type, and natural numbers), **type formers** (+, Π, Σ, Id, denoting binary sum, product, sum, and the identity type), and an infinite collection of **universes** (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like 𝓤, 𝓥, 𝓦, etc., typically from the latter half of the English alphabet).
 
@@ -79,7 +79,7 @@ Some prior exposure to [type theory][] and Agda would be helpful, but even witho
 
 It is assumed that the reader of this documentation is actively experimenting with [Agda][] using [Emacs][] with the [agda2-mode][] extension installed.
 
-If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martin Escardo's installation instructions](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md) or [our modified version of MHE's instructions](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md).
+If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martin Escardo's installation instructions](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md) or [our modified version of Escardó's instructions](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md).
 
 The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UALib repository](https://gitlab.com/ualib/ualib.gitlab.io), but a summary of what's required is
 

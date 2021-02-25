@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
-Here we discuss **truncation** and **h-sets** (which we just call **sets**).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as~\cite[\S34-35]{MHE} or~\cite[\S7.1]{HoTT:2013}, for example.
+Here we discuss **truncation** and **h-sets** (which we just call **sets**).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
 
 \begin{code}
 
@@ -49,16 +49,9 @@ Using the `is-subsingleton` function from the [TypeTopology][] library, the pair
 `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
 
-We will see some examples of trunction later when we require it to complete some of the UALib modules leading up to the proof of Noether's isomorphism theorems and Birkhoff's HSP theorem.  Readers who want more details should refer to [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of MHE's notes, or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
+#### <a id="predicate-truncation">Predicate truncation</a>
 
-We take this opportunity to define *set* (or 0-*groupoid*) in type theory.  A type X : 𝓤 ̇ with an identity relation `≡ₓ` is called a **set** if for every pair `a b : X` of elements of type `X` there is at most one proof of `a ≡ₓ b`.
-
-
-
-
-#### <a id="relation-truncation">Relation truncation</a>
-
-Above we learned the about the concepts of *truncation* and *set* of proof-relevant mathematics. Sometimes we will want to assume that a type is a *set*. Recall, this mean there is at most one proof that two elements are the same.Analogously for predicates, we may wish to assume that there is at most one proof that a given element satisfies the predicate.
+Above we learned the about the concepts of *truncation* and *set* of proof-relevant mathematics. Sometimes we will want to assume that a type is a *set*. Recall, this mean there is at most one proof that two elements are the same. Analogously, for predicates, we may wish to assume that there is at most one proof that a given element satisfies a given predicate.  We call a predicate *truncated* if it satisfies this condition.
 
 \begin{code}
 
@@ -70,47 +63,43 @@ Pred₀ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
 
 \end{code}
 
-
-#### <a id="binary-relation-truncation">Binary relation truncation</a>
-
-[The section on Truncation](UALib.Preface.html#truncation) in the preface describes the concept of truncation for "proof-relevant" mathematics.
-
-Given a binary relation `P`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `P`-related.  This may be called "proof-irrelevance" since, if we have two proofs of `x P y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.  We enforce this strong assumption of truncation at the first level in the following definition using MHE's `is-subsingleton` type: we say that `(x , y)` belongs to `P` or `x` and `y` are `P`-related if and only if both P x y` and `is-subsingleton (P x y)`.
+The next lemma reveals why sometimes want our predicates to be truncated.
 
 \begin{code}
 
-Rel₀ : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
-Rel₀ A 𝓝 = Σ P ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (P x y)
+Pred-=̇-≡ : {𝓧 𝓨 : Universe} → propext 𝓨 → dfunext 𝓧 (𝓨 ⁺)
+ →         {A : 𝓧 ̇}{P Q : Pred A 𝓨}
+ →         (∀ x → is-subsingleton (P x))
+ →         (∀ x → is-subsingleton (Q x))
+           -----------------------------
+ →         P =̇ Q → P ≡ Q
 
-\end{code}
-
-We will define a **set** to be a type `X` with the following property: for all `x y : X` there is at most one proof that `x ≡ y`.  In other words, `X` is a set if and only if it satisfies
-
-```agda
-∀ x y : X → is-subsingleton(x ≡ y)
-```
-
-\begin{code}
-
-Pred-=̇-≡ : {𝓧 𝓨 : Universe}
- →          propext 𝓨 → dfunext 𝓧 (𝓨 ⁺)
- →          {A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          ((x : A) → is-subsingleton (P x))
- →          ((x : A) → is-subsingleton (Q x))
- →          P =̇ Q → P ≡ Q
 Pred-=̇-≡ pe fe {A}{P}{Q} ssP ssQ (pq , qp) = fe γ
  where
-  γ : (x : A) → P x ≡ Q x
+  γ : ∀ x → P x ≡ Q x
   γ x = pe (ssP x) (ssQ x) pq qp
 
 \end{code}
 
+Thus, for truncated predicates, we can actually prove that `P ⊆ Q × Q ⊆ P → P ≡ Q`, which is a useful extensionality principle.
+
+
+#### <a id="Relation-truncation">Relation truncation</a>
+
+Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a *truncated binary relation*.  This is another example of proof-irrelevance since, if `R` is truncated and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.
+
+As above, we enforce this truncation assumption using the `is-subsingleton` type of the [Type Topology][] library.
+
+\begin{code}
+
+Rel₀ : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
+Rel₀ A 𝓝 = Σ R ꞉ (A → A → 𝓝 ̇) , ∀ x y → is-subsingleton (R x y)
+
+\end{code}
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are on sets, rather than arbitrary types.  As mentioned earlier, this is equivalent to assuming that there is at most one proof that two elements of a set are the same.
-
-(Recall, a type is called a **set** if it has *unique identity proofs*; as a general principle, this is sometimes referred to as "proof irrelevance" or "uniqueness of identity proofs"---two proofs of a single identity are the same.)
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are truncated.  We say the binary relation `R : A → A → 𝓡` is truncated if for all `x y : A` there is at most one proof of `R x y`.
 
 \begin{code}
 
@@ -156,7 +145,7 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{R : Rel A 𝓡} where
 
 -----------------------------------
 
-<span class="footnote"><sup>1</sup>As [MHE][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
+<span class="footnote"><sup>1</sup>As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 ----------------------------------------
 
