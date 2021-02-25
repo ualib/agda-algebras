@@ -232,9 +232,6 @@ GenPropExt' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
 
-
-\end{code}
-
 Here, `𝒂 : I → A` can be thought of as a "tuple" of inhabitants of `A`, where for any `i : I` the `i`-th component of the tuple is simply `𝒂 i`.
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
@@ -294,23 +291,12 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Propo₂ A 𝓡} where
 
 -----------------------------------
 
+
 <span class="footnote"><sup>1</sup> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 
 <span class="footnote"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
-----------------------------------------
 
-[← Relations.Quotients](Relations.Quotients.html)
-<span style="float:right;">[Algebras →](Algebras.html)</span>
-
-
-{% include UALib.Links.md %}
-
-
-
------------------------------------
-
-<span class="footnote"><sup>1</sup>As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 ----------------------------------------
 
@@ -319,4 +305,3 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Propo₂ A 𝓡} where
 
 
 {% include UALib.Links.md %}
-
