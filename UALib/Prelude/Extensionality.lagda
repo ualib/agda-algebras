@@ -115,7 +115,7 @@ extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args
 
 \end{code}
 
-The next function type defines the converse of function extensionality.<sup>[2](Prelude.Extensionality.html#fn2)</sup></a>
+The next function type defines the converse of function extensionality.<sup>[2](Prelude.Extensionality.html#fn2)</sup>
 
 \begin{code}
 
