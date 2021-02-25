@@ -100,38 +100,38 @@ mv latex/Varieties/Preservation.{tex,md}
 mv latex/Birkhoff/FreeAlgebra.{tex,md}
 mv latex/Birkhoff/HSPTheorem.{tex,md}
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Preliminaries.md -o latex/Prelude/Preliminaries.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Equality.md -o latex/Prelude/Equality.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Inverses.md -o latex/Prelude/Inverses.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.md -o latex/Prelude/Extensionality.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Prelude/Preliminaries.md -o latex/Prelude/Preliminaries.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Prelude/Equality.md -o latex/Prelude/Equality.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Prelude/Inverses.md -o latex/Prelude/Inverses.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.md -o latex/Prelude/Extensionality.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Unary.md -o latex/Relations/Unary.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Binary.md -o latex/Relations/Binary.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Quotients.md -o latex/Relations/Quotients.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Truncation.md -o latex/Relations/Truncation.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Relations/Unary.md -o latex/Relations/Unary.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Relations/Binary.md -o latex/Relations/Binary.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Relations/Quotients.md -o latex/Relations/Quotients.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Relations/Truncation.md -o latex/Relations/Truncation.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Signatures.md -o latex/Algebras/Signatures.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Algebras.md -o latex/Algebras/Algebras.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Products.md -o latex/Algebras/Products.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Algebras/Congruences.md -o latex/Algebras/Congruences.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Algebras/Signatures.md -o latex/Algebras/Signatures.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Algebras/Algebras.md -o latex/Algebras/Algebras.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Algebras/Products.md -o latex/Algebras/Products.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Algebras/Congruences.md -o latex/Algebras/Congruences.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Basic.md -o latex/Homomorphisms/Basic.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Noether.md -o latex/Homomorphisms/Noether.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/Isomorphisms.md -o latex/Homomorphisms/Isomorphisms.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Homomorphisms/HomomorphicImages.md -o latex/Homomorphisms/HomomorphicImages.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Homomorphisms/Basic.md -o latex/Homomorphisms/Basic.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Homomorphisms/Noether.md -o latex/Homomorphisms/Noether.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Homomorphisms/Isomorphisms.md -o latex/Homomorphisms/Isomorphisms.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Homomorphisms/HomomorphicImages.md -o latex/Homomorphisms/HomomorphicImages.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Basic.md -o latex/Terms/Basic.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Operations.md -o latex/Terms/Operations.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Terms/Basic.md -o latex/Terms/Basic.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Terms/Operations.md -o latex/Terms/Operations.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subuniverses.md -o latex/Subalgebras/Subuniverses.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Generation.md -o latex/Subalgebras/Generation.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subalgebras.md -o latex/Subalgebras/Subalgebras.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Univalent.md -o latex/Subalgebras/Univalent.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Subalgebras/Subuniverses.md -o latex/Subalgebras/Subuniverses.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Subalgebras/Generation.md -o latex/Subalgebras/Generation.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Subalgebras/Subalgebras.md -o latex/Subalgebras/Subalgebras.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Subalgebras/Univalent.md -o latex/Subalgebras/Univalent.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/EquationalLogic.md -o latex/Varieties/EquationalLogic.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Varieties.md -o latex/Varieties/Varieties.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Preservation.md -o latex/Varieties/Preservation.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Varieties/EquationalLogic.md -o latex/Varieties/EquationalLogic.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Varieties/Varieties.md -o latex/Varieties/Varieties.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Varieties/Preservation.md -o latex/Varieties/Preservation.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Birkhoff/FreeAlgebra.md -o latex/Birkhoff/FreeAlgebra.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Birkhoff/HSPTheorem.md -o latex/Birkhoff/HSPTheorem.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Birkhoff/FreeAlgebra.md -o latex/Birkhoff/FreeAlgebra.tex
+pandoc --pdf-engine=xelatex -f markdown -t latex latex/Birkhoff/HSPTheorem.md -o latex/Birkhoff/HSPTheorem.tex
