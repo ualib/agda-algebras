@@ -25,13 +25,23 @@ module _ {𝓤 : Universe} where
 
 #### <a id="typical-view-of-truncation">Typical view of truncation</a>
 
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q` inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write `p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent. We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant, say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same.  If such a proof exists for all `p q : a ≡ₓ b, then we say that the proof of `a ≡ₓ b` is *unique*. As a property of the types `X` and `≡ₓ`, this is sometimes called **uniqueness of identity proofs**.
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given 
+proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, 
+given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q`
+inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write 
+`p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` 
+the equivalent.
 
-Perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` and `q` are equivalent. Then of course we will ask whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
+We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant, 
+say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same. 
+If such a proof exists for all `p q : a ≡ₓ b, then the proof of `a ≡ₓ b` is unique; as a property of 
+the types `X` and `≡ₓ`, this is sometimes called **uniqueness of identity proofs**.
+
+Now, perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `X` with an identity relation `≡ₓ` is called a **set** (or **0-groupoid**) if for every pair `x y : X` there is at most one proof of `x ≡ₓ y`. In other words, the type `X`, along with it's equality type `≡ₓ`, form a *set* if for all `x y : X` there is at most one proof of `x ≡ₓ y`.
 
-This notion is formalized in the [TypeTopology][] library using the types `is-set` and `is-subsingleton`, which are defined as follows.<span class="footnote"><sup>1</sup></span>
+This notion is formalized in the [Type Topology][] library using the types `is-set` and `is-subsingleton`, which are defined as follows.<span class="footnote"><sup>1</sup></span>
 
 \begin{code}
 
@@ -51,11 +61,10 @@ Using the `is-subsingleton` function from the [TypeTopology][] library, the pair
 
 #### <a id="proposition-extensionality">Proposition extensionality</a>
 
-Above we learned the about the concepts of *truncation* and *set* of proof-relevant mathematics. Sometimes we will want to assume that a type `X` is a *set*, which means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates, we may wish to assume that there is at most one proof that a given element satisfies a given predicate.  If a (unary) predicate satisfies this condition, then we call it a (unary) **proposition**.
+Sometimes we will want to assume that a type `X` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates on `X`, we may wish to assume that there is at most one proof that an inhabitant of `X` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
 
 \begin{code}
 
--- open import MGS-Powerset using (propext)
 open import MGS-Subsingleton-Theorems using (dfunext; is-subsingleton)
 
 Pred₁ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
@@ -63,7 +72,7 @@ Pred₁ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
 
 \end{code}
 
-The principle of **proposition extensionality** asserts that logically equivalent propositions are equivalent.  In other terms, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
+The principle of **proposition extensionality** asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
 
 \begin{code}
 
@@ -72,14 +81,14 @@ prop-ext A 𝓦 = {P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q 
 
 \end{code}
 
-Recall, we defined the relation `_≐_` for predicates as follows: `P =̇ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `PropExt A 𝓦 {P}{Q}` holds, then it follows that `P ≡ Q`.
+Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `PropExt A 𝓦 {P}{Q}` holds, then it follows that `P ≡ Q`.
 
 \begin{code}
 
 prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe){P Q : Pred₁ A 𝓦}
  →         prop-ext A 𝓦
            -------------------
- →         ∣ P ∣ =̇ ∣ Q ∣ → P ≡ Q
+ →         ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
 prop-ext' A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 
@@ -184,7 +193,7 @@ If we assume `Propo-ext`, then we can prove that logically equivalent inhabitant
 GenPropExt' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦}
  →           GenPropExt I A 𝓦
              -------------------
- →           ∣ P ∣ =̇ ∣ Q ∣ → P ≡ Q
+ →           ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
 GenPropExt' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 

@@ -164,7 +164,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
  /-supset : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  ⊇  [ a' ] R
  /-supset {a}{a'} Req Raa' {x} Ra'x = (trans Req) a a' x Raa' Ra'x
 
- /-=̇ : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  =̇  [ a' ] R
+ /-=̇ : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  ≐  [ a' ] R
  /-=̇ Req Raa' = /-subset Req Raa' , /-supset Req Raa'
 
 \end{code}

@@ -81,10 +81,11 @@ In type theory everything is a type. As we have just seen, this includes subsets
 
 \begin{code}
 
-_=̇_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
-P =̇ Q = (P ⊆ Q) × (Q ⊆ P)
+_≐_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
-infix 4 _=̇_
+infix 4 _≐_  -- type ≐ as `\.=` in agda2-mode
+
 \end{code}
 
 
@@ -103,7 +104,7 @@ Pred-refl : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
 Pred-refl (refl _) _ = λ z → z
 
 Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          P ≡ Q → P =̇ Q
+ →          P ≡ Q → P ≐ Q
 Pred-≡ (refl _) = (λ z → z) , λ z → z
 
 Pred-≡→⊆ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
