@@ -141,6 +141,171 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{R : Rel A 𝓡} where
 \end{code}
 
 
+--------------------------------
+
+
+
+### Better treatment of Prop Extensionality
+
+**TODO** Revise and integrate the stuff below into the stuff above.
+
+
+#### <a id="unary-proposition-extensionality">Unary proposition extensionality</a>
+
+Above we learned the about the concepts of *truncation* and *set* of proof-relevant mathematics. Sometimes we will want to assume that a type `X` is a *set*, which means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates, we may wish to assume that there is at most one proof that a given element satisfies a given predicate.  If a (unary) predicate satisfies this condition, then we call it a (unary) **proposition**.
+
+\begin{code}
+
+open import MGS-Subsingleton-Theorems using (dfunext; is-subsingleton)
+
+Propo₁ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Propo₁ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
+
+\end{code}
+
+Proposition extensionality says that logically equivalent propositions are equivalent.  In other terms, if we have `P Q : Prop` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
+
+\begin{code}
+
+PropoExt : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+PropoExt A 𝓦 = {P Q : Propo₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+\end{code}
+
+If we assume `Propo-ext`, then we can prove that logically equivalent inhabitants of type `Propo₁` are equivalent.
+
+\begin{code}
+
+PropoExt' : (A : 𝓤 ̇)(𝓦 : Universe){P Q : Propo₁ A 𝓦}
+ →          PropoExt A 𝓦
+            -------------------
+ →          ∣ P ∣ =̇ ∣ Q ∣ → P ≡ Q
+
+PropoExt' A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+
+\end{code}
+
+
+#### <a id="binary-proposition-extensionality">Binary proposition extensionality</a>
+
+Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a **binary proposition**.<sup>[2](Relations.Truncation.html#fn1)</sup>
+
+As above, we use the `is-subsingleton` type of the [Type Topology][] library to impose this truncation assumption on a binary relation.
+
+\begin{code}
+
+Propo₂ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Propo₂ A 𝓦 = Σ R ꞉ (A → A → 𝓦 ̇) , ∀ x y → is-subsingleton (R x y)
+
+\end{code}
+
+
+
+
+#### <a id="general-proposition-extensionality">General proposition extensionality</a>
+
+
+If we generalize we can subsume the types defined in the last two subsections using a type that represents a predicate of arbitrary arity. To do this we use a trick that we also use later for handling operations of algebras of arbitrary arity.
+
+\begin{code}
+
+GenPred : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+GenPred I A 𝓦 = (I → A) → 𝓦 ̇
+
+GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+GenProp I A 𝓦 = Σ P ꞉ ((I → A) → 𝓦 ̇) , ∀ 𝒂 → is-subsingleton (P 𝒂)
+
+GenPropExt : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+GenPropExt I A 𝓦 = {P Q : GenProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+\end{code}
+If we assume `Propo-ext`, then we can prove that logically equivalent inhabitants of type `Propo₁` are equivalent.
+
+\begin{code}
+
+GenPropExt' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦}
+ →           GenPropExt I A 𝓦
+             -------------------
+ →           ∣ P ∣ =̇ ∣ Q ∣ → P ≡ Q
+
+GenPropExt' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+
+\end{code}
+
+
+\end{code}
+
+Here, `𝒂 : I → A` can be thought of as a "tuple" of inhabitants of `A`, where for any `i : I` the `i`-th component of the tuple is simply `𝒂 i`.
+
+#### <a id="quotient-extensionality">Quotient extensionality</a>
+
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  For this we assume that our relations are propositions.
+
+\begin{code}
+
+module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Propo₂ A 𝓡} where
+
+ class-extensionality'' : PropoExt A 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
+  →                     IsEquivalence ∣ 𝑹 ∣
+                        -------------------------------
+  →                     ∣ 𝑹 ∣ a a'  →  [ a ] ∣ 𝑹 ∣  ≡  [ a' ] ∣ 𝑹 ∣
+
+ class-extensionality'' pe dfe {a}{a'} Req Raa' = γ
+  where
+   P Q : Propo₁ A 𝓡
+   P = (λ x → ∣ 𝑹 ∣ a x) , (λ x → ∥ 𝑹 ∥ a x)
+   Q = (λ x → ∣ 𝑹 ∣ a' x) , (λ x → ∥ 𝑹 ∥ a' x)
+
+   α : [ a ] ∣ 𝑹 ∣ ⊆ [ a' ] ∣ 𝑹 ∣
+   α ax = fst (/-=̇ Req Raa') ax
+
+   β : [ a' ] ∣ 𝑹 ∣ ⊆ [ a ] ∣ 𝑹 ∣
+   β a'x = snd (/-=̇ Req Raa') a'x
+
+   γ : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
+   γ = ap fst (PropoExt' A 𝓡 {P}{Q} pe (α , β))
+
+ to-subtype-⟦⟧' : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D} 
+  →              (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
+                 -------------------------------------
+  →              C ≡ D  →  (C , c) ≡ (D , d)
+
+ to-subtype-⟦⟧' {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
+
+
+ class-extensionality''' : PropoExt A 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
+  →                      (∀ C → is-subsingleton (𝒞 C))
+  →                      IsEquivalence ∣ 𝑹 ∣
+                         -------------------------
+  →                      ∣ 𝑹 ∣ a a'  →  ⟦ a ⟧ ≡ ⟦ a' ⟧
+
+ class-extensionality''' pe fe {a}{a'} ssA Req Raa' = γ
+  where
+   CD : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
+   CD = class-extensionality'' pe fe Req Raa'
+
+   γ : ⟦ a ⟧ ≡ ⟦ a' ⟧
+   γ = to-subtype-⟦⟧' ssA CD
+
+\end{code}
+
+
+
+
+-----------------------------------
+
+<span class="footnote"><sup>1</sup> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
+
+
+<span class="footnote"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
+----------------------------------------
+
+[← Relations.Quotients](Relations.Quotients.html)
+<span style="float:right;">[Algebras →](Algebras.html)</span>
+
+
+{% include UALib.Links.md %}
+
 
 
 -----------------------------------
