@@ -33,7 +33,6 @@ Here is a version of the first isomorphism theorem.
 
 open Congruence
 
-open import MGS-Powerset using (propext)
 open import MGS-Embeddings using (is-set)
 open import MGS-Subsingleton-Theorems using (is-subsingleton)
 
@@ -41,16 +40,19 @@ FirstIsomorphismTheorem : {𝓤 𝓦 : Universe}
                           (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
                           (ϕ : hom 𝑨 𝑩) (ϕE : Epic ∣ ϕ ∣ )
                            --extensionality assumptions:
- →                            propext 𝓦 → is-set ∣ 𝑩 ∣
+ →                            prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
  →                            (∀ a x → is-subsingleton (⟨ kercon 𝑩 ϕ ⟩ a x))
  →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 ϕ ⟩} C))
            ------------------------------------------------------------------------------------
  →         Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) , ( ∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 ϕ ∣ ) × is-embedding ∣ f ∣
 
-FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
+FirstIsomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
  where
   θ : Congruence 𝑨
   θ = kercon 𝑩 ϕ
+
+  𝑹 : Pred₂ ∣ 𝑨 ∣ 𝓦
+  𝑹 = ⟨ kercon 𝑩 ϕ ⟩ , ssR
 
   fmap : ∣ 𝑨 [ 𝑩 ]/ker ϕ ∣ → ∣ 𝑩 ∣
   fmap ⟦a⟧ = ∣ ϕ ∣ ⌜ ⟦a⟧ ⌝
@@ -74,7 +76,7 @@ FirstIsomorphismTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic)
 
   fmon : Monic fmap
   fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
-   class-extensionality' pe gfe ssR ssA (IsEquiv θ) faa'
+   class-extensionality' {𝑹 = 𝑹} pe gfe ssA (IsEquiv θ) faa'
 
   femb : is-embedding fmap
   femb = monic-into-set-is-embedding Bset fmap fmon
@@ -91,20 +93,23 @@ FirstHomomorphismTheorem : {𝓤 𝓦 : Universe}
                            (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
                            (h : hom 𝑨 𝑩)
                            --extensionality assumptions:
- →                            propext 𝓦 → is-set ∣ 𝑩 ∣
+ →                            prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
  →                            (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
  →                            (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
     ---------------------------------------------------------------------------------------------
  →  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
 
-FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
+FirstHomomorphismTheorem {𝓤}{𝓦} 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
  where
   θ : Congruence 𝑨
   θ = kercon 𝑩 h
 
   ϕ : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
   ϕ a = ∣ h ∣ ⌜ a ⌝
+
+  𝑹 : Pred₂ ∣ 𝑨 ∣ 𝓦
+  𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR
 
   ϕhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 ϕ
   ϕhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
@@ -113,7 +118,7 @@ FirstHomomorphismTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕ
 
   ϕmon : Monic ϕ
   ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' =
-   class-extensionality' pe gfe ssR ssA (IsEquiv θ) ϕaa'
+   class-extensionality' {𝑹 = 𝑹} pe gfe ssA (IsEquiv θ) ϕaa'
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
   ϕcom = 𝓇ℯ𝒻𝓁

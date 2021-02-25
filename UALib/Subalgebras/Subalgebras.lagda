@@ -46,13 +46,13 @@ We take this opportunity to prove a useful lemma that requires the `IsSubalgebra
 \begin{code}
 
 open Congruence
-open import MGS-Powerset using (propext)
+--open import MGS-Powerset using (propext)
 open import MGS-Embeddings using (is-set)
 open import MGS-Subsingleton-Theorems using (is-subsingleton)
 
 FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                     --extensionality assumptions:
- →                     propext 𝓦 → is-set ∣ 𝑩 ∣
+ →                     prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
  →                     (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
  →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
                     -------------------------------------------------------------
@@ -70,7 +70,7 @@ FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
 
 free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑨 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑨)
                     --extensionality assumptions:
- →                    propext 𝓤 → is-set ∣ 𝑨 ∣
+ →                    prop-ext ∣ 𝑻 X ∣ 𝓤 → is-set ∣ 𝑨 ∣
  →                    (∀ p q → is-subsingleton (⟨ kercon 𝑨 h ⟩ p q))
  →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑨 h ⟩} C))
                    -------------------------------------------------------------------

@@ -33,8 +33,7 @@ open import Algebras.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 open import Universes
 open import Relations.Unary using (Pred)
-open import MGS-Powerset -- renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
- using (propext; hfunext)
+open import MGS-Powerset using (hfunext)
 
 -- open import Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
 \end{code}
@@ -48,9 +47,7 @@ module Birkhoff.HSPTheorem
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- -- extensionality assumptions:
-    {pe : propext 𝓤}
-    {pe' : propext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
+ -- extensionality assumption:
     {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
 open import Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; Algebra; _̇ ) public
@@ -255,21 +252,21 @@ kernel-in-theory : KER-pred ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
 open Congruence
-free-quot-subalg-ℭ : is-set ∣ ℭ ∣
+free-quot-subalg-ℭ : prop-ext (Term X) (ov 𝓤) → is-set ∣ ℭ ∣
  →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
  →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
                      -----------------------------------------------------------
  →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
 
-free-quot-subalg-ℭ Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ homℭ pe' Cset ssR ssC
+free-quot-subalg-ℭ pe Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ homℭ pe Cset ssR ssC
 
 
-module _ (Cset : is-set ∣ ℭ ∣)
+module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (Term X) (ov 𝓤))
          (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
          (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C)) where
 
  𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
- 𝔽≤ℭ = free-quot-subalg-ℭ Cset ssR ssC
+ 𝔽≤ℭ = free-quot-subalg-ℭ pe Cset ssR ssC
 
  𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
  𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
