@@ -59,12 +59,7 @@ module hide where
 
 Extensional equality of functions, or *function extensionality*, means that any two point-wise equal functions are equal. In informal settings, pointwise equality is typically what one means when one asserts that two functions are "equal."<sup>[1](Prelude.Extensionality.html#fn1)</sup> However, it is important to keep in mind the following
 
-<fieldset style="border: 1px #EA9258 dotted">
- <legend style="border: 1px #5F38AD solid;margin-left: 1em; padding: 0.2em 0.8em ">Foundations Note</legend>
-
- As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martín Escardó points out</a>, function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.
-</fieldset>
-
+As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martín Escardó points out</a>, *function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
 
 In the [Type Topology][] library, function extensionality is denoted by `funext` and defined as follows.
 
@@ -143,10 +138,9 @@ extdfun 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 Although the proofs of the `extfun` and `extdfun` lemmas are trivial, it can clarify an otherwise confusing argument to invoke such lemmas explicitly (e.g., when given a definitional equality where a point-wise equality is required).
 
-<fieldset style="border: 1px #EA9258 dotted">
- <legend style="border: 1px #5F38AD solid;margin-left: 1em; padding: 0.2em 0.8em ">Foundations Note</legend>
-An important conceptual distinction exists between type definitions similar in form to <code>funext</code> and those similar to <code>extfun</code>.  Notice that the codomain of the former is a generic type, namely, <code>(𝓤 ⊔ 𝓥) ⁺ ̇ </code>, while the codomain of the latter is the assertion <code>f ∼ g</code>.  Also, the defining equation of <code>funext</code> is an assertion, while the defining equation of <code>extdun</code> is a proof.  As such, <code>extfun</code> is a proof object; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, <code>funext</code> is a type that we may or may not wish to <i>assume</i>.  That is, we could assume we have a witness, say, <code>fe : funext 𝓤 𝓥</code> (that is, a proof) that point-wise equal functions are equivalent, but as noted in Foundations Box above, the existence of such a witness cannot be proved in Martin-Löf type theory.
-</fieldset>
+An important conceptual distinction exists between type definitions similar in form to `funext` and those similar to `extfun`.  Notice that the codomain of the former is a generic type, namely, `(𝓤 ⊔ 𝓥) ⁺ ̇ `, while the codomain of the latter is the assertion `f ∼ g`.  Also, the defining equation of `funext` is an assertion, while the defining equation of `extdun` is a proof.
+
+As such, `extfun` is a proof object; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, `funext` is a type that we may or may not wish to <i>assume</i>.  That is, we could assume we have a witness, say, `fe : funext 𝓤 𝓥` (that is, a proof) that point-wise equal functions are equivalent, but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
 -------------------------------------
 
