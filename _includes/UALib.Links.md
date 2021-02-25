@@ -12,6 +12,7 @@
 [agda-ualib]: https://gitlab.com/ualib/ualib.gitlab.io
 [Algebraic Effects and Handlers]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 [Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
+[Andreas Abel]: http://www.cse.chalmers.se/~abela/
 [Andrej Bauer]: http://www.andrej.com/index.html
 [Axioms and Computation]: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 

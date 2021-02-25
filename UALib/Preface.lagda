@@ -149,7 +149,8 @@ This type-checks all the modules, and generates html and latex documentation (in
 
 The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, instruction, advice, inspiration and encouragement.
+Thanks also to [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, corrections, advice, inspiration and encouragement.
+
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
 

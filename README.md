@@ -184,7 +184,8 @@ The author wishes to thank
 [Siva Somayyajula](http://www.cs.cmu.edu/~ssomayya/),
 who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to 
+Thanks also to
+[Andreas Abel](http://www.cse.chalmers.se/~abela/),
 [Andrej Bauer](http://www.andrej.com/index.html), 
 [Clifford Bergman](https://orion.math.iastate.edu/cbergman/), 
 [Venanzio Capretta](https://www.duplavis.com/venanzio/), 
@@ -192,10 +193,11 @@ Thanks also to
 [Ralph Freese](https://math.hawaii.edu/~ralph/), 
 [Bill Lampe](https://math.hawaii.edu/wordpress/people/william/), 
 [Miklós Maróti](http://www.math.u-szeged.hu/~mmaroti/), 
-[Peter Mayr](http://math.colorado.edu/~mayr/), 
 [JB Nation](http://www.math.hawaii.edu/~jb/), and 
 [Hyeyoung Shin](https://hyeyoungshin.github.io/)
-for helpful discussions, instruction, advice, inspiration and encouragement.
+for helpful discussions, corrections, advice, inspiration and encouragement.
+
+
 
 ### Attributions and citations
 
