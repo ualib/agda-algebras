@@ -182,6 +182,12 @@ GenPred I A 𝓦 = (I → A) → 𝓦 ̇
 GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
 GenProp I A 𝓦 = Σ P ꞉ ((I → A) → 𝓦 ̇) , ∀ 𝒂 → is-subsingleton (P 𝒂)
 
+\end{code}
+
+Here, `𝒂 : I → A` can be thought of as a "tuple" of inhabitants of `A`, where for any `i : I` the `i`-th component of the tuple is simply `𝒂 i`.
+
+\begin{code}
+
 GenPropExt : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 GenPropExt I A 𝓦 = {P Q : GenProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
@@ -198,8 +204,6 @@ GenPropExt' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦
 GenPropExt' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 
 \end{code}
-
-Here, `𝒂 : I → A` can be thought of as a "tuple" of inhabitants of `A`, where for any `i : I` the `i`-th component of the tuple is simply `𝒂 i`.
 
 
 -----------------------------------
