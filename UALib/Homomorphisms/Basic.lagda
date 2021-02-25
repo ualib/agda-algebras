@@ -9,6 +9,12 @@ author: William DeMeo
 
 This section describes the [Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
+If `𝑨` and `𝑩` are algebraic structures in the signature 𝑆, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:
+
+`h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
+
+Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -23,13 +29,7 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
-If 𝑨 and 𝑩 are algebraic structures in the signature 𝑆, then a **morphism** (or **homomorphism**) is a function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ from the domain of 𝑨 to the domain of 𝑩 that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in ∣ 𝑨 ∣, the following equality holds:
-
-`h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
-
-Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
-
-To formalize the concept of homomorphism we first define a type representing the assertion that a function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣, from the domain of 𝑨 to the domain of 𝑩, *commutes* with an operation 𝑓, interpreted in the algebras 𝑨 and 𝑩.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda unadulterated.
+To formalize the concept of homomorphism we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣`, from the domain of `𝑨` to the domain of `𝑩`, *commutes* with an operation 𝑓, interpreted in the algebras `𝑨` and `𝑩`.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
 
 \begin{code}
 
@@ -41,7 +41,7 @@ compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝒂 → h ((𝑓 ̂ 𝑨) 𝒂) ≡ (�
 
 Note the appearance of the shorthand `∀ 𝒂` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝒂` here must be a tuple on ∣ 𝑨 ∣ of "length" `∥ 𝑆 ∥ 𝑓` (the arity of 𝑓).
 
-We now define the type `hom 𝑨 𝑩` of homomorphisms from 𝑨 to 𝑩 by first defining the property `is-homomorphism` as follows.
+We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the property `is-homomorphism`.
 
 \begin{code}
 
@@ -55,9 +55,24 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
+A simple example is the identity map, which is proved to be a homomorphism as follows.
+
+\begin{code}
+
+𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
+𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
+
+id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
+id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
+
+\end{code}
+
+
 Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) with the following types.
 
 \begin{code}
+
+module _ {𝓤 𝓦 : Universe} where
 
  is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
@@ -73,7 +88,7 @@ Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimor
 
 \end{code}
 
-Finally, it will be convenient to have functions that return the "hom reduct" of a mon or epi.
+Finally, it will be convenient to have functions that return the *hom reduct* of an inhabitant of `mon` or `epi`.
 
 \begin{code}
 
@@ -82,24 +97,6 @@ Finally, it will be convenient to have functions that return the "hom reduct" of
 
  epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
  epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
-
-\end{code}
-
-
-
-
-
-#### <a id="examples">Examples</a>
-
-A simple example is the identity map, which is proved to be a homomorphism as follows.
-
-\begin{code}
-
-𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
-𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
-
-id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
-id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -122,7 +119,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
 \end{code}
 
-We will define subuniverses in the [Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from 𝑨 to 𝑩 will turn out to be subuniverse of 𝑨.  Indeed, this is easily proved as follows.
+We will define subuniverses in the [Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from `𝑨` to `𝑩` will turn out to be subuniverse of `𝑨`.  Indeed, this is easily proved as follows.
 
 \begin{code}
 
@@ -193,7 +190,7 @@ From this congruence we construct the corresponding quotient.
 
 \end{code}
 
-Given an algebra 𝑨 and a congruence θ, the canonical epimorphism from an algebra 𝑨 to 𝑨 ╱ θ is defined as follows.
+Given an algebra `𝑨` and a congruence `θ`, the canonical epimorphism from an algebra `𝑨` to `𝑨 ╱ θ` is defined as follows.
 
 \begin{code}
 
@@ -220,7 +217,7 @@ To obtain the homomorphism part (or "hom reduct") of the canonical epimorphism, 
 
 \end{code}
 
-We combine the foregoing to define a function that takes 𝑆-algebras 𝑨 and 𝑩, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from 𝑨 onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of 𝑨 modulo the kernel of h.)
+We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨` onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of `𝑨` modulo the kernel of `h`.)
 
 \begin{code}
 
@@ -231,14 +228,14 @@ We combine the foregoing to define a function that takes 𝑆-algebras 𝑨 and 
 \end{code}
 
 
-The kernel of the canonical projection of 𝑨 onto 𝑨 / θ is equal to θ, but since equality of inhabitants of certain types (like `Congruence` or `Rel`) can be a tricky business, we settle for proving the containment `𝑨 / θ ⊆ θ`. Of the two containments, this is the easier one to prove; luckily it is also the one we need later.
+The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `θ`, but since equality of inhabitants of certain types (like `Congruence` or `Rel`) can be a tricky business, we settle for proving the containment `𝑨 / θ ⊆ θ`. Of the two containments, this is the easier one to prove; luckily it is also the one we need later.
 
 \begin{code}
 
 ker-in-con : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
  →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
 
-ker-in-con 𝑨 θ x y hyp = ╱-refl 𝑨 {θ} hyp
+ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
 
 \end{code}
 
@@ -300,7 +297,7 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \end{code}
 
-(Of course, we could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.)
+Of course, we could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
 
 
 

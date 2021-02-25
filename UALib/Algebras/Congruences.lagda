@@ -43,9 +43,9 @@ open Congruence
 
 #### <a id="example">Example</a>
 
-We defined the zero relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> in the <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">Examples</a> section of the [UALib.Relations.Binary][] module.  We now demonstrate how one constructs the trivial congruence out of this relation.
+We defined the zero relation <a href="https://ualib.gitlab.io/Relations.Binary.html#1993">𝟎-rel</a> in the [Relations.Binary][] module, and we now demonstrate how to build the trivial congruence out of this relation.
 
-The relation <a href="https://ualib.gitlab.io/UALib.Relations.Binary.html#1995">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of ≡ in the [Prelude.Equality][] module, so we simply apply the corresponding proofs.
+The relation <a href="https://ualib.gitlab.io/Relations.Binary.html#1993">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Prelude.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 
@@ -53,9 +53,6 @@ module _ {𝓤 : Universe} where
 
  𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤}{A = A} 𝟎-rel
  𝟎-IsEquivalence = record { rfl = ≡-rfl; sym = ≡-sym; trans = ≡-trans }
-
- ≡-IsEquivalence : {A : 𝓤 ̇} → IsEquivalence{𝓤}{A = A} _≡_
- ≡-IsEquivalence = record { rfl = ≡-rfl ; sym = ≡-sym ; trans = ≡-trans }
 
 \end{code}
 
@@ -67,20 +64,20 @@ open import MGS-Subsingleton-Theorems using (funext)
 
 module _ {𝓤 : Universe} where
 
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (f : ∣ 𝑆 ∣) → compatible-op {𝑨 = 𝑨}  f 𝟎-rel
- 𝟎-compatible-op fe {𝑨} f ptws0  = ap (f ̂ 𝑨) (fe (λ x → ptws0 x))
+ 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-op {𝑨 = 𝑨} 𝑓 𝟎-rel
+ 𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
 
- 𝟎-compatible : funext 𝓥 𝓤 → {A : Algebra 𝓤 𝑆} → compatible A 𝟎-rel
- 𝟎-compatible fe {A} = λ f args → 𝟎-compatible-op fe {A} f args
+ 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎-rel
+ 𝟎-compatible fe {𝑨} = λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
 \end{code}
 
-Finally, we have the ingredients need to construct the zero congruence.
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
 
 \begin{code}
 
-Δ : {𝓤 : Universe} → funext 𝓥 𝓤 → (A : Algebra 𝓤 𝑆) → Congruence A
-Δ fe A = mkcon 𝟎-rel ( 𝟎-compatible fe ) ( 𝟎-IsEquivalence )
+Δ : {𝓤 : Universe} → funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
+Δ fe = mkcon 𝟎-rel (𝟎-compatible fe) 𝟎-IsEquivalence
 
 \end{code}
 
@@ -93,11 +90,11 @@ An important construction in universal algebra is the quotient of an algebra �
 
 \begin{code}
 
-_╱_ : {𝓤 𝓡 : Universe}(A : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓡} A → Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
+_╱_ : {𝓤 𝓡 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓡} 𝑨 → Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
 
-A ╱ θ = ( ∣ A ∣ / ⟨ θ ⟩ ) ,  -- the domain
+𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
 
-        λ f 𝒂 → ⟦ (f ̂ A) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations
+        λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -111,7 +108,7 @@ The zero element of a quotient can be expressed as follows.
 
 module _ {𝓤 𝓡 : Universe} where
 
- Zero╱ : {A : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} A) → Rel (∣ A ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓡 ⁺)
+ Zero╱ : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓡 ⁺)
 
  Zero╱ θ = λ x x₁ → x ≡ x₁
 
@@ -121,10 +118,10 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
- ╱-refl : (A : Algebra 𝓤 𝑆){θ : Congruence{𝓤}{𝓡} A}{a a' : ∣ A ∣}
+ ╱-refl : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} 𝑨){a a' : ∣ 𝑨 ∣}
   →       ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
- ╱-refl A {θ} 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-refl θ 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}
 
