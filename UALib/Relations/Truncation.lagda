@@ -39,7 +39,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` 
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `X` with an identity relation `≡ₓ` is called a **set** (or **0-groupoid**) if for every pair `x y : X` there is at most one proof of `x ≡ₓ y`. In other words, the type `X`, along with it's equality type `≡ₓ`, form a *set* if for all `x y : X` there is at most one proof of `x ≡ₓ y`.
 
-This notion is formalized in the [Type Topology][] library using the types `is-set` and `is-subsingleton`, which are defined as follows.<span class="footnote"><sup>1</sup></span>
+This notion is formalized in the [Type Topology][] library using the types `is-set` and `is-subsingleton`, which are defined as follows.<sup>[1]((Relations.Truncation.html#fn1)</sup>
 
 \begin{code}
 
@@ -109,7 +109,7 @@ Thus, for truncated predicates `P` and `Q`, if `PropExt` holds, then `P ⊆ Q ×
 
 #### <a id="binary-propositions">Binary propositions</a>
 
-Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a **binary proposition**.<sup>[2](Relations.Truncation.html#fn1)</sup>
+Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a **binary proposition**.<sup>[2](Relations.Truncation.html#fn2)</sup>
 
 As above, we use the `is-subsingleton` type of the [Type Topology][] library to impose this truncation assumption on a binary relation.
 
@@ -180,7 +180,7 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
 
 
-#### <a id="truncation-of-general-relations">Truncation of general relations</a>
+#### <a id="general-and-dependent-propositions">General and dependent propositions</a>
 
 
 We defined a type called `GenRel` in the [Relations.Binary][] module to represent relations of arbitrary arity. So, naturally, we define a type of *truncated general relations*, the inhabitants of which we will call **general propositions**.
@@ -237,10 +237,10 @@ dep-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp)
 
 -----------------------------------
 
-<span class="footnote"><sup>1</sup> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
+<span class="footnote" id="fn1"><sup>1</sup> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 
-<span class="footnote"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
+<span class="footnote" id="fn2"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
 
 
 ----------------------------------------
