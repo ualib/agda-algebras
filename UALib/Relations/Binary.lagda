@@ -5,7 +5,7 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-### <a id="relations-binary-and-higher">Relations Binary and Higher</a>
+### <a id="relations-binary-and-higher">Relations, Binary and Beyond</a>
 
 This section presents the [UALib.Relations.Binary][] module of the [Agda Universal Algebra Library][].
 
@@ -100,7 +100,7 @@ or as a relation from `A` to `B`,
 
 #### <a id="implication">Implication</a>
 
-We denote and define implication as follows.
+We denote and define implication for binary predicates (relations) as follows.
 
 \begin{code}
 
@@ -133,6 +133,30 @@ infixr 4 _=[_]⇒_
 
 \end{code}
 
+
+#### <a id="relations-of-arbitrary-arity>Relations of arbitrary arity</a>
+
+Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To do so, we use a function type, say, `I → A`, to represent the collection of tuples of potential inhabitants of a relation. (This is the same approach we will use later in the [Algebras.Signatures][] module) to represent operations of arbitrary arity in signatures of algebraic structures.)  Below we define the type `GenRel` to represents a predicate or relation of arbitrary arity of a single type `A`. We call `GenRel` the type of **general relations**.
+
+**Notation**. For consistency and readability, throughout the [UALib][] we treat two universe variables with special care.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing **arities** of relations or operations.
+
+\begin{code}
+
+GenRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+GenRel I A 𝓦 = (I → A) → 𝓦 ̇
+
+\end{code}
+
+While we're at it, why not use the full power of dependent types to define a completely general relation type?  That is, we could let the tuples inhabit a dependent function type, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `A i₁` to `A i₂` to `A i₃` to …  (This is just for intuition, of course, since the domain `I` need not be enumerable).
+
+\begin{code}
+
+DepRel : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+DepRel I A 𝓦 = Π A → 𝓦 ̇
+
+\end{code}
+
+We call `DepRel` the type of **dependent relations**.
 
 --------------------------------------
 

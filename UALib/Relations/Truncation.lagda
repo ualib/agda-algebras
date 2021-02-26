@@ -183,44 +183,56 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 #### <a id="truncation-of-general-relations">Truncation of general relations</a>
 
 
-Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To represent a relation of arbitrary arity, we use a function type such as `I → A` to represent tuples of potential inhabitants of the relation. (This is the same approach we will use later in the [Algebras.Signatures][] module) to represent operations of arbitrary arity in signatures of algebraic structures.)  Here is the definition of the type that represents a predicate (or relation) of arbitrary arity.
+We defined a type called `GenRel` in the [Relations.Binary][] module to represent relations of arbitrary arity. So, naturally, we define a type of *truncated general relations*, the inhabitants of which we will call **general propositions**.
 
 \begin{code}
 
-GenPred : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
-GenPred I A 𝓦 = (I → A) → 𝓦 ̇
+GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+GenProp I A 𝓦 = Σ P ꞉ (GenRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+
+gen-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+gen-prop-ext I A 𝓦 = {P Q : GenProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
-A function `𝑎 : I → A` can be viewed as a tuple of inhabitants of `A`, where for each `i : I` the `i`-th component of the tuple is `𝒂 i`.
-
-Again, we can define a truncated version of `GenPred`, the inhabitants of which we might call "general propositions."
+If we assume `gen-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then we can prove that logically equivalent general propositions of type `GenProp I A 𝓦` are equivalent.
 
 \begin{code}
 
-GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
-GenProp I A 𝓦 = Σ P ꞉ (GenPred I A 𝓦) , ∀ 𝒂 → is-subsingleton (P 𝒂)
+gen-prop-ext' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦}
+ →              gen-prop-ext I A 𝓦
+                -------------------
+ →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+
+gen-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 
 \end{code}
+
+While we're at it, we might as well take the abstraction one step further and define *truncated dependent relations*, which we'll call **dependent proposition**.
 
 \begin{code}
 
-GenPropExt : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-GenPropExt I A 𝓦 = {P Q : GenProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+DepProp : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+DepProp I A 𝓦 = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+
+dep-prop-ext : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+dep-prop-ext I A 𝓦 = {P Q : DepProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
-If we assume `Propo-ext`, then we can prove that logically equivalent inhabitants of type `Propo₁` are equivalent.
+
+Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier.
 
 \begin{code}
 
-GenPropExt' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦}
- →           GenPropExt I A 𝓦
-             -------------------
- →           ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+dep-prop-ext' : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe){P Q : DepProp I A 𝓦}
+ →              dep-prop-ext I A 𝓦
+                -------------------
+ →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
-GenPropExt' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+dep-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 
 \end{code}
+
 
 
 -----------------------------------

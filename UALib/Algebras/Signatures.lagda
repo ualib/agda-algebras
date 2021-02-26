@@ -60,7 +60,7 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)
 
 \end{code}
 
-Here 𝓞 is the universe level of operation symbol types, while 𝓥 is the universe level of arity types.
+As mentioned in the section on [Relations of arbitrary arity](Relations.Binary.html#relations-of-arbitrary-arity), 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
 
 In the [Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
