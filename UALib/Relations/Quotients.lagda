@@ -186,7 +186,16 @@ module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇} {Z : 𝓤 ̇} where
 
 \end{code}
 
+We used the slick implication notation in the definition of `compatible-fun`, but we could have defined it more explicitly, like so.
 
+\begin{code}
+
+ compatible-fun' : (f : (γ → Z) → Z)(R : Rel Z 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ compatible-fun' f R  = ∀ x y → (lift-rel R) x y → R (f x) (f y)
+
+\end{code}
+
+However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
 
 --------------------------------------
 

@@ -5,7 +5,7 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-### <a id="binary-relations">Binary Relations</a>
+### <a id="relations-binary-and-higher">Relations Binary and Higher</a>
 
 This section presents the [UALib.Relations.Binary][] module of the [Agda Universal Algebra Library][].
 
@@ -108,7 +108,7 @@ We denote and define implication as follows.
 _on_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
  →     (B → B → C) → (A → B) → (A → A → C)
 
-_*_ on g = λ x y → g x * g y
+R on g = λ x y → R (g x) (g y)
 
 
 _⇒_ : {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ }

@@ -98,6 +98,7 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Unary Relations](Relations.Unary.html)
   - [Binary Relations](Relations.Binary.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
+  - [Truncation, Sets, and Propositions](Relations.Truncation.html)
 
 - [Algebra Types](Algebras.html)
   - [Operations and Signatures](Algebras.Signatures.html)

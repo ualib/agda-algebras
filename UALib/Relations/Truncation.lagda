@@ -5,7 +5,7 @@ date : 2021-02-23
 author: William DeMeo
 ---
 
-### <a id="truncation">Truncation</a>
+### <a id="truncation">Truncation, Sets, and Propositions</a>
 
 This section presents the [UALib.Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
@@ -19,11 +19,9 @@ module Relations.Truncation where
 
 open import Relations.Quotients public
 
-module _ {𝓤 : Universe} where
-
 \end{code}
 
-#### <a id="typical-view-of-truncation">Typical view of truncation</a>
+#### <a id="typical-view-of-truncation">Truncation</a>
 
 In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given 
 proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, 
@@ -54,30 +52,42 @@ module hide-is-set {𝓤 : Universe} where
 
 \end{code}
 
-Using the `is-subsingleton` function from the [TypeTopology][] library, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies
+Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
-`∀ x y : X → is-subsingleton (x ≡ₓ y)`.
-
-
-#### <a id="proposition-extensionality">Proposition extensionality</a>
-
-Sometimes we will want to assume that a type `X` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates on `X`, we may wish to assume that there is at most one proof that an inhabitant of `X` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
+We make the `dfunext` and `is-subsingleton` types of the [Type Topology][] library available from now on with the following line.
 
 \begin{code}
 
 open import MGS-Subsingleton-Theorems using (dfunext; is-subsingleton)
 
-Pred₁ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-Pred₁ A 𝓦 = Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)
+\end{code}
+
+Note, this does not impose the assumption of function extensionality.  It merely makes the `dfunext` type available in case we want to use it to impose that assumption.
+
+
+#### <a id="propositions">Propositions</a>
+
+Sometimes we will want to assume that a type `X` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates on `X`, we may wish to assume that there is at most one proof that an inhabitant of `X` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
+
+\begin{code}
+
+module _ {𝓤 : Universe} where
+
+ Pred₁ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Pred₁ A 𝓦 = Σ P ꞉ (Pred A 𝓦) , ∀ x → is-subsingleton (P x)
 
 \end{code}
+
+Recall that `Pred A 𝓦` is simply the function type `A → 𝓦 ̇`, so `Pred₁` is by definition equal to
+
+`Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)`.
 
 The principle of **proposition extensionality** asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
 
 \begin{code}
 
-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-prop-ext A 𝓦 = {P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ prop-ext A 𝓦 = {P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -85,12 +95,12 @@ Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P
 
 \begin{code}
 
-prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe){P Q : Pred₁ A 𝓦}
- →         prop-ext A 𝓦
-           -------------------
- →         ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe){P Q : Pred₁ A 𝓦}
+  →         prop-ext A 𝓦
+            -------------------
+  →         ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
-prop-ext' A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+ prop-ext' A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
 
 \end{code}
 
@@ -105,13 +115,14 @@ As above, we use the `is-subsingleton` type of the [Type Topology][] library to 
 
 \begin{code}
 
-Pred₂ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-Pred₂ A 𝓦 = Σ R ꞉ (A → A → 𝓦 ̇) , ∀ x y → is-subsingleton (R x y)
+ Pred₂ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , ∀ x y → is-subsingleton (R x y)
 
 \end{code}
 
+To be clear, the type `Rel A 𝓦` is simply the function type `A → A → 𝓦 ̇`, so
 
-
+`Pred₂ A 𝓦 = Σ R ꞉ (A → A → 𝓦 ̇) , ∀ x y → is-subsingleton (R x y)`.
 
 
 
@@ -169,22 +180,28 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
 
 
-#### <a id="general-proposition-extensionality">General proposition extensionality</a>
+#### <a id="truncation-of-general-relations">Truncation of general relations</a>
 
 
-If we generalize we can subsume the types defined in the last two subsections using a type that represents a predicate of arbitrary arity. To do this we use a trick for handling higher artiy that we will use again later for handling operations of algebras of arbitrary arity.
+Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To represent a relation of arbitrary arity, we use a function type such as `I → A` to represent tuples of potential inhabitants of the relation. (This is the same approach we will use later in the [Algebras.Signatures][] module) to represent operations of arbitrary arity in signatures of algebraic structures.)  Here is the definition of the type that represents a predicate (or relation) of arbitrary arity.
 
 \begin{code}
 
 GenPred : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
 GenPred I A 𝓦 = (I → A) → 𝓦 ̇
 
-GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
-GenProp I A 𝓦 = Σ P ꞉ ((I → A) → 𝓦 ̇) , ∀ 𝒂 → is-subsingleton (P 𝒂)
-
 \end{code}
 
-Here, `𝒂 : I → A` can be thought of as a "tuple" of inhabitants of `A`, where for any `i : I` the `i`-th component of the tuple is simply `𝒂 i`.
+A function `𝑎 : I → A` can be viewed as a tuple of inhabitants of `A`, where for each `i : I` the `i`-th component of the tuple is `𝒂 i`.
+
+Again, we can define a truncated version of `GenPred`, the inhabitants of which we might call "general propositions."
+
+\begin{code}
+
+GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+GenProp I A 𝓦 = Σ P ꞉ (GenPred I A 𝓦) , ∀ 𝒂 → is-subsingleton (P 𝒂)
+
+\end{code}
 
 \begin{code}
 

@@ -25,14 +25,14 @@ A **congruence relation** of an algebra `𝑨` is defined to be an equivalence r
 
 \begin{code}
 
-Con : {𝓤 : Universe}(A : Algebra 𝓤 𝑆) → ov 𝓤 ̇
-Con {𝓤} A = Σ θ ꞉ ( Rel ∣ A ∣ 𝓤 ) , IsEquivalence θ × compatible A θ
+Con : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → ov 𝓤 ̇
+Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
-record Congruence {𝓤 𝓦 : Universe} (A : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
+record Congruence {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
  constructor mkcon
  field
-  ⟨_⟩ : Rel ∣ A ∣ 𝓦
-  Compatible : compatible A ⟨_⟩
+  ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓦
+  Compatible : compatible 𝑨 ⟨_⟩
   IsEquiv : IsEquivalence ⟨_⟩
 
 open Congruence
