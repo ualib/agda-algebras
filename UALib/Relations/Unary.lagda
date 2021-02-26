@@ -20,8 +20,6 @@ module Relations.Unary where
 
 open import Prelude.Lifts public
 
--- open import UALib.Prelude.Preliminaries using (¬; propext; dfunext; is-subsingleton; 𝓤₀; 𝟘) public
-
 \end{code}
 
 Here is the definition, which is similar to the one found in the`Relation/Unary.agda` file of the [Agda Standard Library][].

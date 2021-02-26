@@ -28,6 +28,7 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
+Given types `A` and `B`, a binary relation from `A` to `B` is not the same as a unary predicate over the type `A → B`.  The binary relation has type `A → (B → 𝓝 ̇)` whereas a unary predicate over `A → B` has type `(A → B) → 𝓝 ̇` .
 
 #### <a id="kernels">Kernels</a>
 
@@ -134,6 +135,34 @@ infixr 4 _=[_]⇒_
 \end{code}
 
 
+#### <a id="compatibility-with-binary-relations">Compatibility with binary relations</a>
+
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`.
+
+\begin{code}
+
+module _ {𝓤 𝓥 𝓦 : Universe} {I : 𝓥 ̇} {A : 𝓤 ̇} where
+
+ lift-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
+ lift-rel R f g = ∀ x → R (f x) (g x)
+
+ compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
+
+\end{code}
+
+We used the slick implication notation in the definition of `compatible-fun`, but we could have defined it more explicitly, like so.
+
+\begin{code}
+
+ compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ compatible-fun' f R  = ∀ x y → (lift-rel R) x y → R (f x) (f y)
+
+\end{code}
+
+However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
+
+
 #### <a id="relations-of-arbitrary-arity">Relations of arbitrary arity</a>
 
 Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To do so, we use a function type, say, `I → A`, to represent the collection of tuples of potential inhabitants of a relation. (This is the same approach we will use later in the [Algebras.Signatures][] module to represent operations of arbitrary arity in signatures of algebraic structures.)
@@ -159,6 +188,24 @@ DepRel I A 𝓦 = Π A → 𝓦 ̇
 \end{code}
 
 We call `DepRel` the type of **dependent relations**.
+
+
+#### <a id="compatibility-with-general-and-dependent-relations">Compatibility with general and dependent relations</a>
+
+Finally, we define types that are useful for asserting and proving facts about *compatibility* of functions with general and dependent relations.
+
+\begin{code}
+
+module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
+
+ lift-gen-rel : GenRel I A 𝓦 → (I → (J → A)) → 𝓥 ⊔ 𝓦 ̇
+ lift-gen-rel R xs = ∀ (j : J) → R (λ i → (xs i) j)
+
+ gen-compatible-fun : (ff : I → (J → A) → A)(R : GenRel I A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ gen-compatible-fun ff R  = ∀ (xs : I → (J → A)) → (lift-gen-rel R) xs → R (λ i → (ff i) (xs i))
+
+\end{code}
+
 
 --------------------------------------
 

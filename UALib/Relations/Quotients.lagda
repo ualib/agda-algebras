@@ -16,7 +16,6 @@ This section presents the [UALib.Relations.Quotients][] module of the [Agda Univ
 module Relations.Quotients where
 
 open import Relations.Binary public
--- open import UALib.Prelude.Preliminaries using (_⇔_; id) public
 
 \end{code}
 
@@ -169,33 +168,6 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
 \end{code}
 
-
-#### <a id="compatibility-of-lifts-and-functions">Compatibility of lifts and functions</a>
-
-Finally, we define some types that are useful for asserting and proving facts about *compatibility* of relations and functions.
-
-\begin{code}
-
-module _ {𝓤 𝓥 𝓦 : Universe} {γ : 𝓥 ̇} {Z : 𝓤 ̇} where
-
- lift-rel : Rel Z 𝓦 → (γ → Z) → (γ → Z) → 𝓥 ⊔ 𝓦 ̇
- lift-rel R f g = ∀ x → R (f x) (g x)
-
- compatible-fun : (f : (γ → Z) → Z)(R : Rel Z 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
-
-\end{code}
-
-We used the slick implication notation in the definition of `compatible-fun`, but we could have defined it more explicitly, like so.
-
-\begin{code}
-
- compatible-fun' : (f : (γ → Z) → Z)(R : Rel Z 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- compatible-fun' f R  = ∀ x y → (lift-rel R) x y → R (f x) (f y)
-
-\end{code}
-
-However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
 
 --------------------------------------
 
