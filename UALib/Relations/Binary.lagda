@@ -134,9 +134,11 @@ infixr 4 _=[_]⇒_
 \end{code}
 
 
-#### <a id="relations-of-arbitrary-arity>Relations of arbitrary arity</a>
+#### <a id="relations-of-arbitrary-arity">Relations of arbitrary arity</a>
 
-Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To do so, we use a function type, say, `I → A`, to represent the collection of tuples of potential inhabitants of a relation. (This is the same approach we will use later in the [Algebras.Signatures][] module) to represent operations of arbitrary arity in signatures of algebraic structures.)  Below we define the type `GenRel` to represents a predicate or relation of arbitrary arity of a single type `A`. We call `GenRel` the type of **general relations**.
+Generalizing, we could view the types `Pred` and `Rel` as special cases of a type that represents relations of arbitrary arity.  To do so, we use a function type, say, `I → A`, to represent the collection of tuples of potential inhabitants of a relation. (This is the same approach we will use later in the [Algebras.Signatures][] module to represent operations of arbitrary arity in signatures of algebraic structures.)
+
+In this subsection we define the type `GenRel` to represent a predicate or relation of arbitrary arity over a single type `A`. We call this the type of **general relations**.
 
 **Notation**. For consistency and readability, throughout the [UALib][] we treat two universe variables with special care.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing **arities** of relations or operations.
 
@@ -147,7 +149,7 @@ GenRel I A 𝓦 = (I → A) → 𝓦 ̇
 
 \end{code}
 
-While we're at it, why not use the full power of dependent types to define a completely general relation type?  That is, we could let the tuples inhabit a dependent function type, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `A i₁` to `A i₂` to `A i₃` to …  (This is just for intuition, of course, since the domain `I` need not be enumerable).
+While we're at it, why not exploit the power of dependent types to define a completely general relation type?  That is, we could let the tuples inhabit a dependent function type, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `A i₁` to `A i₂` to `A i₃` to …  (This is just for intuition, of course, since the domain `I` need not be enumerable).
 
 \begin{code}
 
