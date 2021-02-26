@@ -45,8 +45,6 @@ As explained above, a natural notion of function equality, sometimes called *poi
 
 \begin{code}
 
-open import MGS-MLTT using (Π) public
-
 module hide where
 
  _∼_ : {𝓤 𝓥 : Universe}{X : 𝓤 ̇ } {A : X → 𝓥 ̇ } → Π A → Π A → 𝓤 ⊔ 𝓥 ̇

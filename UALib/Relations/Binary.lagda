@@ -137,7 +137,7 @@ infixr 4 _=[_]⇒_
 
 #### <a id="compatibility-with-binary-relations">Compatibility with binary relations</a>
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`.
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`. N.B. This is not to be confused with the sort of (universe) lifting that we defined in the [Prelude.Lifts][] module.
 
 \begin{code}
 
@@ -199,12 +199,47 @@ Finally, we define types that are useful for asserting and proving facts about *
 module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
  lift-gen-rel : GenRel I A 𝓦 → (I → (J → A)) → 𝓥 ⊔ 𝓦 ̇
- lift-gen-rel R xs = ∀ (j : J) → R (λ i → (xs i) j)
+ lift-gen-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
- gen-compatible-fun : (ff : I → (J → A) → A)(R : GenRel I A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- gen-compatible-fun ff R  = ∀ (xs : I → (J → A)) → (lift-gen-rel R) xs → R (λ i → (ff i) (xs i))
+ gen-compatible-fun : (I → (J → A) → A) → GenRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ gen-compatible-fun 𝕗 R  = ∀ (𝕒 : I → (J → A)) → (lift-gen-rel R) 𝕒 → R (λ i → (𝕗 i) (𝕒 i))
 
 \end{code}
+
+For those who feel nauseous when looking at the syntax of the last two definitions, to say nothing of parsing it, we recommend focusing on the semantics of the expressions.  In fact, we should pause here to describe these semantics in detail, lest the more complicated definitions that follow induce the typical consequence of nausea.
+
+The function `lift-gen-rel` simply takes a general relation `R`---defined so as to indicate which "`I`-tuples" (of type `I → A`) belong to `R`---and lifts it to a relation `lift-gen-rel R`, which indicates which *collections* of `I`-tuples (or tuples of tuples) belong to `R`.
+
+To be more precise, think of `𝕒 : I → (J → A)` as an `I`-tuple of `J`-tuples of inhabitants of `A`. It helps to visualize such `J`-tuples as columns and imagine for simplicity that `J` is a finite set, say, `{1, 2, ..., J}`.  Now, picture a couple of these columns, say, the i-th and k-th, like so.
+
+```
+𝕒 i 1        𝕒 k 1
+𝕒 i 2        𝕒 k 2
+𝕒 i 3        𝕒 k 3
+  ⋮              ⋮
+𝕒 i J        𝕒 k J
+```
+
+Then the defining expression `∀ (j : J) → R (λ i → (𝕒 i) j)` of `lift-gen-rel R 𝕒` indicates whether each j-th row (1 ≤ j ≤ J) (which evidently is an `I`-tuple) belongs to the original relation `R`.
+
+Next, let's dissect the definition of `gen-compatible-fun`.  Here, `𝕗 : I → (J → A) → A` denotes an `I`-tuple of `J`-ary operations on `A`.  That is, for each `i : I`, the function `𝕗 i` takes a `J`-tuple `𝕒 i` and evaluates to some inhabitant `(𝕗 i) (𝕒 i)` of `A`.
+
+Finaly, study the types and note how they all align. For example, `𝕒 : I → (J → A)` is precisely the type on which the relation `lift-gen-rel R` is defined.
+
+With that under our belts, we can better hand the following defininition of the lift of a dependent relation, as well as the type that represents compatability of a tuple of opereations with a dependent relation.
+
+\begin{code}
+
+module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : I → 𝓤 ̇} where
+
+ lift-dep-rel : DepRel I A 𝓦 → ((i : I) → (J → (A i))) → 𝓥 ⊔ 𝓦 ̇
+ lift-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
+
+ dep-compatible-fun : ((i : I) → (J → (A i)) → (A i)) → DepRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible-fun 𝕗 R  = ∀ (𝕒 : (i : I) → (J → (A i))) → (lift-dep-rel R) 𝕒 → R (dapp 𝕗 𝕒)
+
+\end{code}
+
 
 
 --------------------------------------

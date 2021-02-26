@@ -287,6 +287,28 @@ module hide-pi {𝓤 𝓦 : Universe} where
 
 
 
+#### <a id="general-composition">General composition of functions</a>
+
+\begin{code}
+
+open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
+open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π) public
+
+
+module _ {𝓨 𝓩 : Universe}{I : 𝓥 ̇}{B : I → 𝓨 ̇}{C : I → 𝓩 ̇} where
+ -- {Y : 𝓨 ̇}{Z : 𝓩 ̇}
+ fork : Π B → Π C → Π (λ i → (B i) × (C i))
+ fork f a = λ i → (f i , a i)
+
+ eval : {Y : 𝓨 ̇}{Z : 𝓩 ̇} → ((Y → Z) × Y) → Z
+ eval (f , a) = f a
+ 
+module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
+
+ dapp : (∀ i → (J → (B i)) → (B i)) → (∀ i → (J → (B i))) → Π B
+ dapp f a = λ i → (f i) (a i)
+
+\end{code}
 
 ----------------------------------------
 
