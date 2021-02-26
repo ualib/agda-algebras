@@ -5,7 +5,7 @@ date : 2021-02-23
 author: William DeMeo
 ---
 
-### <a id="truncation">Truncation, Sets, and Propositions</a>
+### <a id="truncation">Truncation, Sets, Propositions</a>
 
 This section presents the [UALib.Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
@@ -208,7 +208,7 @@ gen-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
 
-While we're at it, we might as well take the abstraction one step further and define *truncated dependent relations*, which we'll call **dependent proposition**.
+While we're at it, we might as well take the abstraction one step further and define *truncated dependent relations*, which we'll call **dependent propositions**.
 
 \begin{code}
 
