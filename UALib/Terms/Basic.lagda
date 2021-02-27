@@ -22,6 +22,8 @@ module Terms.Basic {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
 
 open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} public
 
+open import MGS-Subsingleton-Theorems using (funext) public
+
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>
@@ -85,11 +87,13 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 \begin{code}
 
-free-lift : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
-free-lift _ h (generator x) = h x
+ free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 
-free-lift 𝑨 h (node f 𝒕) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (𝒕 i)
+ free-lift _ h (generator x) = h x
+
+ free-lift 𝑨 h (node f 𝒕) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (𝒕 i)
 
 \end{code}
 
@@ -97,9 +101,9 @@ Next, we verify that the lift so defined is a homomorphism.
 
 \begin{code}
 
-lift-hom : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+ lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
+ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -107,25 +111,22 @@ Finally, we prove that the resulting homomorphism is unique.
 
 \begin{code}
 
-open import MGS-Subsingleton-Theorems using (funext)
 
-free-unique : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
- →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
- →            (t : Term X)
-              --------------
- →            ∣ g ∣ t ≡ ∣ h ∣ t
+ free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
+  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
+  →            (t : Term X)
+               --------------
+  →            ∣ g ∣ t ≡ ∣ h ∣ t
 
-free-unique _ _ _ _ p (generator x) = p x
+ free-unique _ _ _ _ p (generator x) = p x
 
-free-unique fe 𝑨 g h p (node f 𝒕) = γ where
-
- α : (f ̂ 𝑨) (∣ g ∣ ∘ 𝒕) ≡ (f ̂ 𝑨) (∣ h ∣ ∘ 𝒕)
- α = ap (_ ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝒕 i))
-
- γ = ∣ g ∣ (node f 𝒕)           ≡⟨ ∥ g ∥ f 𝒕 ⟩
-     (f ̂ 𝑨)(λ i → ∣ g ∣ (𝒕 i))  ≡⟨ α ⟩
-     (f ̂ 𝑨)(λ i → ∣ h ∣ (𝒕 i))  ≡⟨ (∥ h ∥ f 𝒕)⁻¹ ⟩
-     ∣ h ∣ (node f 𝒕)           ∎
+ free-unique fe 𝑨 g h p (node 𝑓 𝒕) = ∣ g ∣ (node 𝑓 𝒕)            ≡⟨ ∥ g ∥ 𝑓 𝒕 ⟩
+                                     (𝑓 ̂ 𝑨)(λ i → ∣ g ∣ (𝒕 i))   ≡⟨ α ⟩
+                                     (𝑓 ̂ 𝑨)(λ i → ∣ h ∣ (𝒕 i))   ≡⟨ (∥ h ∥ 𝑓 𝒕)⁻¹ ⟩
+                                     ∣ h ∣ (node 𝑓 𝒕)            ∎
+  where
+  α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝒕) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝒕)
+  α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝒕 i))
 
 \end{code}
 
@@ -133,28 +134,25 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
 
 \begin{code}
 
-lift-of-epi-is-epi : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
-                     (𝑨 : Algebra 𝓤 𝑆)(h₀ : X → ∣ 𝑨 ∣)
-                     -------------------------------
- →                   Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
+ lift-of-epi-is-epi : {𝑨 : Algebra 𝓤 𝑆}{h₀ : X → ∣ 𝑨 ∣}
+                      ---------------------------------
+  →                   Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
 
-lift-of-epi-is-epi 𝑨 h₀ hE y = γ where
+ lift-of-epi-is-epi {𝑨}{h₀} hE y = γ
+  where
+  h₀⁻¹y : domain h₀
+  h₀⁻¹y = Inv h₀ y (hE y)
 
- h₀⁻¹y : domain h₀
- h₀⁻¹y = Inv h₀ y (hE y)
+  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
+  η = (InvIsInv h₀ y (hE y))⁻¹
 
- η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
- η = (InvIsInv h₀ y (hE y))⁻¹
-
- γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- γ = eq y (generator h₀⁻¹y) η
+  γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+  γ = eq y (generator h₀⁻¹y) η
 
 \end{code}
 
 
-In the [Birkhoff.FreeAlgebra][] section the `lift-hom` and `lift-of-epi-is-epi` functions are used to construct such epimorphisms.
-
-
+In the modules [Birkhoff.FreeAlgebra][] and [Birkhoff.HSPTheorem][] `lift-hom` and `lift-of-epi-is-epi` are used to construct such epimorphisms.
 
 
 --------------------------------------

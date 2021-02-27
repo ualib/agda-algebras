@@ -71,7 +71,7 @@ The next function, `mkti`, that takes an arbitrary algebra 𝑨 in 𝒦 and a ma
 \begin{code}
 
  mkti : {𝒦 : Pred (Algebra 𝓤 𝑆)𝓸𝓿𝓾}(𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → Epic h → 𝑨 ∈ 𝒦 → 𝑻img 𝒦
- mkti 𝑨 h hE ka = (𝑨 , lift-hom 𝑨 h , ka , lift-of-epi-is-epi 𝑨 h hE)
+ mkti 𝑨 h hE ka = (𝑨 , lift-hom 𝑨 h , ka , lift-of-epi-is-epi hE)
 
 \end{code}
 

@@ -30,17 +30,19 @@ When we interpret a term in an algebra we call the resulting function a **term o
 
 1. If `𝑝` is a variable symbol `x : X` and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `(𝑝 ̇ 𝑨) 𝒂 := 𝒂 x`.
 
-2. If `𝑝 = 𝑓 𝒕`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝒕 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = (𝑓 𝒕 ̇ 𝑨) 𝒂 := (𝑓 ̂ 𝑨) λ i → (𝒕 i ̇ 𝑨) 𝒂`.
+2. If `𝑝 = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = (𝑓 𝑡 ̇ 𝑨) 𝒂 := (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝒂`.
 
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the [UALib][] as follows.
 
 \begin{code}
 
-_̇_ : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ } → Term X → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
-((ℊ x) ̇ 𝑨) 𝒂 = 𝒂 x
+ _̇_ : Term X → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
-((node 𝑓 𝒕) ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → (𝒕 i ̇ 𝑨) 𝒂
+ (ℊ x ̇ 𝑨) 𝒂 = 𝒂 x
+
+ (node 𝑓 𝑡 ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝒂
 
 \end{code}
 
@@ -48,24 +50,23 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 
 \begin{code}
 
-free-lift-interp : {𝓧 𝓤 : Universe}{X : 𝓧 ̇ }
-                   (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
- →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
+ free-lift-interp : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
+  →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
 
-free-lift-interp 𝑨 h (ℊ x) = 𝓇ℯ𝒻𝓁
-free-lift-interp 𝑨 h (node f 𝒕) = ap (f ̂ 𝑨) (gfe λ i → free-lift-interp 𝑨 h (𝒕 i))
+ free-lift-interp 𝑨 h (ℊ x) = 𝓇ℯ𝒻𝓁
+ free-lift-interp 𝑨 h (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (gfe λ i → free-lift-interp 𝑨 h (𝑡 i))
 
 \end{code}
 
-What if the algebra 𝑨 in question happens to be `𝑻 X` itself?   Assume the map `h : X → ∣ 𝑻 X ∣` is the identity. We expect that `∀ 𝒔 → (p ̇ 𝑻 X) 𝒔  ≡  p 𝒔`. But what is `(𝑝 ̇ 𝑻 X) 𝒔` exactly?
+What if the algebra 𝑨 in question happens to be `𝑻 X` itself?   Assume the map `h : X → ∣ 𝑻 X ∣` is the identity. We expect that `∀ 𝑠 → (p ̇ 𝑻 X) 𝑠  ≡  p 𝑠`. But what is `(𝑝 ̇ 𝑻 X) 𝑠` exactly?
 
 By definition, it depends on the form of 𝑝 as follows:
 
-* if `𝑝 = ℊ x`, then `(𝑝 ̇ 𝑻 X) 𝒔 := (ℊ x ̇ 𝑻 X) 𝒔 ≡ 𝒔 x`
+* if `𝑝 = ℊ x`, then `(𝑝 ̇ 𝑻 X) 𝑠 := (ℊ x ̇ 𝑻 X) 𝑠 ≡ 𝑠 x`
 
-* if `𝑝 = node 𝑓 𝒕`, then `(𝑝 ̇ 𝑻 X) 𝒔 := (node 𝑓 𝒕 ̇ 𝑻 X) 𝒔 = (𝑓 ̂ 𝑻 X) λ i → (𝒕 i ̇ 𝑻 X) 𝒔`
+* if `𝑝 = node 𝑓 𝑡`, then `(𝑝 ̇ 𝑻 X) 𝑠 := (node 𝑓 𝑡 ̇ 𝑻 X) 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑡 i ̇ 𝑻 X) 𝑠`
 
-Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (p ̇ 𝑻 X) 𝒔 = (p ̇ 𝑨) ∣ ϕ ∣ ∘ 𝒔`.
+Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (p ̇ 𝑻 X) 𝑠 = (p ̇ 𝑨) ∣ ϕ ∣ ∘ 𝑠`.
 
 * if `p = ℊ x`, then
 
@@ -73,9 +74,9 @@ Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (
           ≡ ∣ ϕ ∣ (λ h → h x)  (where h : X → ∣ 𝑻(X) ∣ )
           ≡ λ h → (∣ ϕ ∣ ∘ h) x
 
-* if `p = node 𝑓 𝒕`, then
+* if `p = node 𝑓 𝑡`, then
 
-   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (p ̇ 𝑻 X) 𝒔 = (node 𝑓 𝒕 ̇ 𝑻 X) 𝒔 = (𝑓 ̂ 𝑻 X) λ i → (𝒕 i ̇ 𝑻 X) 𝒔
+   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (p ̇ 𝑻 X) 𝑠 = (node 𝑓 𝑡 ̇ 𝑻 X) 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑡 i ̇ 𝑻 X) 𝑠
 
 We claim that for all `p : Term X` there exists `q : Term X` and `h : X → ∣ 𝑻 X ∣` such that `p ≡ (q ̇ 𝑻 X) h`. We prove this fact as follows.
 
@@ -83,22 +84,22 @@ We claim that for all `p : Term X` there exists `q : Term X` and `h : X → ∣ 
 
 module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 
- term-interp : (𝑓 : ∣ 𝑆 ∣){𝒔 𝒕 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝒔 ≡ 𝒕 → node 𝑓 𝒔 ≡ (𝑓 ̂ 𝑻 X) 𝒕
- term-interp 𝑓 {𝒔}{𝒕} st = ap (node 𝑓) st
+ term-interp : (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+ term-interp 𝑓 {𝑠}{𝑡} st = ap (node 𝑓) st
 
 
  term-gen : (p : ∣ 𝑻 X ∣) → Σ q ꞉ ∣ 𝑻 X ∣ , p ≡ (q ̇ 𝑻 X) ℊ
 
  term-gen (ℊ x) = (ℊ x) , 𝓇ℯ𝒻𝓁
 
- term-gen (node 𝑓 𝒕) = node 𝑓 (λ i → ∣ term-gen (𝒕 i) ∣) , term-interp 𝑓 (gfe λ i → ∥ term-gen (𝒕 i) ∥)
+ term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) , term-interp 𝑓 (gfe λ i → ∥ term-gen (𝑡 i) ∥)
 
 
  term-gen-agreement : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) ℊ ≡ (∣ term-gen p ∣ ̇ 𝑻 X) ℊ
 
  term-gen-agreement (ℊ x) = 𝓇ℯ𝒻𝓁
 
- term-gen-agreement (node f 𝒕) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (𝒕 x))
+ term-gen-agreement (node f 𝑡) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (𝑡 x))
 
  term-agreement : (p : ∣ 𝑻 X ∣) → p ≡ (p ̇ 𝑻 X) ℊ
  term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
@@ -114,22 +115,22 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
  interp-prod : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
-               (𝒜 : I → Algebra 𝓤 𝑆)(x : X → ∀ i → ∣ (𝒜 i) ∣)
+               (𝒜 : I → Algebra 𝓤 𝑆)(𝒂 : X → ∀ i → ∣ (𝒜 i) ∣)
                ------------------------------------------------
-  →            (p ̇ (⨅ 𝒜)) x ≡ (λ i → (p ̇ 𝒜 i) (λ j → x j i))
+  →            (p ̇ (⨅ 𝒜)) 𝒂 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝒂 j i))
 
- interp-prod (ℊ x₁) 𝒜 x = 𝓇ℯ𝒻𝓁
+ interp-prod (ℊ x₁) 𝒜 𝒂 = 𝓇ℯ𝒻𝓁
 
- interp-prod (node f t) 𝒜 x =
-  let IH = λ x₁ → interp-prod (t x₁) 𝒜 x in
-   (f ̂ ⨅ 𝒜)(λ x₁ → (t x₁ ̇ ⨅ 𝒜) x)                             ≡⟨ ap (f ̂ ⨅ 𝒜)(gfe IH) ⟩
-   (f ̂ ⨅ 𝒜)(λ x₁ → (λ i₁ → (t x₁ ̇ 𝒜 i₁)(λ j₁ → x j₁ i₁)))     ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-   (λ i₁ → (f ̂ 𝒜 i₁) (λ x₁ → (t x₁ ̇ 𝒜 i₁) (λ j₁ → x j₁ i₁)))  ∎
+ interp-prod (node 𝑓 𝑡) 𝒜 𝒂 = let IH = λ x → interp-prod (𝑡 x) 𝒜 𝒂
+  in
+  (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝒂)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
+  (𝑓 ̂ ⨅ 𝒜)(λ x → (λ i → (𝑡 x ̇ 𝒜 i)(λ j → 𝒂 j i)))   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝑡 x ̇ 𝒜 i)(λ j → 𝒂 j i)))  ∎
 
 
  interp-prod2 : (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
                 --------------------------------------------------------------
-  →             (p ̇ ⨅ 𝒜) ≡ λ(𝒕 : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → 𝒕 x i))
+  →             (p ̇ ⨅ 𝒜) ≡ λ(𝑡 : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → 𝑡 x i))
 
  interp-prod2 (ℊ x₁) 𝒜 = 𝓇ℯ𝒻𝓁
 
@@ -159,10 +160,10 @@ comm-hom-term : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
 
 comm-hom-term  𝑩 h (ℊ x) a = 𝓇ℯ𝒻𝓁
 
-comm-hom-term {𝑨 = 𝑨} 𝑩 h (node 𝑓 𝒕) a =
- ∣ h ∣((𝑓 ̂ 𝑨) λ i₁ → (𝒕 i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ 𝑓 ( λ r → (𝒕 r ̇ 𝑨) a ) ⟩
- (𝑓 ̂ 𝑩)(λ i₁ →  ∣ h ∣((𝒕 i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(gfe (λ i₁ → comm-hom-term 𝑩 h (𝒕 i₁) a))⟩
- (𝑓 ̂ 𝑩)(λ r → (𝒕 r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
+comm-hom-term {𝑨 = 𝑨} 𝑩 h (node 𝑓 𝑡) a =
+ ∣ h ∣((𝑓 ̂ 𝑨) λ i₁ → (𝑡 i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ 𝑓 ( λ r → (𝑡 r ̇ 𝑨) a ) ⟩
+ (𝑓 ̂ 𝑩)(λ i₁ →  ∣ h ∣((𝑡 i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(gfe (λ i₁ → comm-hom-term 𝑩 h (𝑡 i₁) a))⟩
+ (𝑓 ̂ 𝑩)(λ r → (𝑡 r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
 
 \end{code}
 
@@ -179,7 +180,7 @@ module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 
  compatible-term 𝑨 (ℊ x) θ p = p x
 
- compatible-term 𝑨 (node 𝑓 𝒕) θ p = snd ∥ θ ∥ 𝑓 λ x → (compatible-term 𝑨 (𝒕 x) θ) p
+ compatible-term 𝑨 (node 𝑓 𝑡) θ p = snd ∥ θ ∥ 𝑓 λ x → (compatible-term 𝑨 (𝑡 x) θ) p
 
 \end{code}
 
@@ -193,7 +194,7 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun'
 
  compatible-term' 𝑨 (ℊ x) θ p = λ y z → z x
 
- compatible-term' 𝑨 (node 𝑓 𝒕) θ 𝑎 𝑎' p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' 𝑨 (𝒕 x) θ) 𝑎 𝑎') p
+ compatible-term' 𝑨 (node 𝑓 𝑡) θ 𝑎 𝑎' p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' 𝑨 (𝑡 x) θ) 𝑎 𝑎') p
 
 
 \end{code}
@@ -217,17 +218,17 @@ comm-hom-term-intensional : global-dfunext → {𝓤 𝓦 𝓧 : Universe}{X : �
 
 comm-hom-term-intensional gfe 𝑨 𝑩 h (ℊ x) = 𝓇ℯ𝒻𝓁
 
-comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f 𝒕) = γ
+comm-hom-term-intensional gfe {X = X} 𝑨 𝑩 h (node f 𝑡) = γ
  where
-  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (𝒕 i ̇ 𝑨) a)) ≡ (λ a → (f ̂ 𝑩)(λ i → (𝒕 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
-  γ = (λ a → ∣ h ∣ ((f ̂ 𝑨)(λ i → (𝒕 i ̇ 𝑨) a)))     ≡⟨ gfe (λ a → ∥ h ∥ f ( λ r → (𝒕 r ̇ 𝑨) a )) ⟩
-      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((𝒕 i ̇ 𝑨) a)))     ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
-      (λ a → (f ̂ 𝑩)(λ i → (𝒕 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣ ∎
+  γ : ∣ h ∣ ∘ (λ a → (f ̂ 𝑨) (λ i → (𝑡 i ̇ 𝑨) a)) ≡ (λ a → (f ̂ 𝑩)(λ i → (𝑡 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣
+  γ = (λ a → ∣ h ∣ ((f ̂ 𝑨)(λ i → (𝑡 i ̇ 𝑨) a)))     ≡⟨ gfe (λ a → ∥ h ∥ f ( λ r → (𝑡 r ̇ 𝑨) a )) ⟩
+      (λ a → (f ̂ 𝑩)(λ i → ∣ h ∣ ((𝑡 i ̇ 𝑨) a)))     ≡⟨ ap (λ - → (λ a → (f ̂ 𝑩)(- a))) ih ⟩
+      (λ a → (f ̂ 𝑩)(λ i → (𝑡 i ̇ 𝑩) a)) ∘ _∘_ ∣ h ∣ ∎
    where
-    IH : ∀ a i → (∣ h ∣ ∘ (𝒕 i ̇ 𝑨)) a ≡ ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
-    IH a i = extfun (comm-hom-term-intensional gfe 𝑨 𝑩 h (𝒕 i)) a
+    IH : ∀ a i → (∣ h ∣ ∘ (𝑡 i ̇ 𝑨)) a ≡ ((𝑡 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a
+    IH a i = extfun (comm-hom-term-intensional gfe 𝑨 𝑩 h (𝑡 i)) a
 
-    ih : (λ a → (λ i → ∣ h ∣ ((𝒕 i ̇ 𝑨) a))) ≡ (λ a → (λ i → ((𝒕 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
+    ih : (λ a → (λ i → ∣ h ∣ ((𝑡 i ̇ 𝑨) a))) ≡ (λ a → (λ i → ((𝑡 i ̇ 𝑩) ∘ _∘_ ∣ h ∣) a))
     ih = gfe λ a → gfe λ i → IH a i
 
 -->

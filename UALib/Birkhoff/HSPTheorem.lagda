@@ -251,7 +251,6 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 kernel-in-theory : KER-pred ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
-
 open Congruence
 
 free-quot-subalg-ℭ : prop-ext (Term X) (ov 𝓤) → is-set ∣ ℭ ∣
@@ -280,7 +279,7 @@ module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (Term X) (ov 𝓤))
    ϕ = lift-hom 𝑨 (fst(𝕏 𝑨))
 
    ϕE : Epic ∣ ϕ ∣
-   ϕE = lift-of-epi-is-epi 𝑨 (fst (𝕏 𝑨)) (snd (𝕏 𝑨))
+   ϕE = lift-of-epi-is-epi (snd (𝕏 𝑨))
 
    pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
    pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)

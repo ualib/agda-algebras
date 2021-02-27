@@ -167,8 +167,6 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 
 \begin{code}
 
-open import MGS-Subsingleton-Theorems using (funext)
-
 HomUnique : {𝓤 𝓦 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)

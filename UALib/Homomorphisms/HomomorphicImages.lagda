@@ -25,7 +25,7 @@ open import Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
 
 #### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
-We begin with what seems to be (for our purposes at least) the most useful way to represent, in dependent type theory, the class of **homomorphic images** of an algebra.
+We begin with what seems, for our purposes, the most useful way to represent the class of **homomorphic images** of an algebra in dependent type theory.
 
 \begin{code}
 
@@ -37,32 +37,33 @@ module _ {𝓤 𝓦 : Universe} where
  HomImagesOf : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
- all-ops-in_and_commute-with : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-  →                            (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+\end{code}
 
- all-ops-in 𝑨 and 𝑩 commute-with g = is-homomorphism 𝑨 𝑩 g
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra 𝓤 𝑆`, the type `HomImagesOf 𝑨` denotes the class of algebras `𝑩 : Algebra 𝓦 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
+
+Since we take the class of homomorphic images of an algebra to be closed under isomorphism, we consider `𝑩` to be a homomorphic image of `𝑨` if there exists an algebra `𝑪` which is a homomorphic image of `𝑨` and isomorphic to `𝑩`. The following type expresses this.
+
+\begin{code}
 
  _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- _is-hom-image-of_ 𝑩 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
+ 𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
 
 \end{code}
 
 
-
-
 #### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
 
-Here are a few more definitions, derived from the one above, that will come in handy.
+Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
 \begin{code}
 
 module _ {𝓤 : Universe} where
 
  _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- _is-hom-image-of-class_ 𝑩 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
+ 𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
 
  HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
- HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra _ 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
+ HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
 
 \end{code}
 
@@ -70,64 +71,76 @@ module _ {𝓤 : Universe} where
 
 #### <a id="lifting-tools">Lifting tools</a>
 
+Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem).
+
+The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
+
 \begin{code}
 
 open Lift
 
-lift-function : (𝓧 : Universe){𝓨 : Universe}
-                (𝓩 : Universe){𝓦 : Universe}
-                (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
-                ---------------------------------
- →              Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
+module _ {𝓧 𝓨 : Universe} where
 
-lift-function  𝓧 {𝓨} 𝓩 {𝓦} A B f = λ la → lift (f (lower la))
+ lift-of-alg-epic-is-epic : (𝓩 : Universe){𝓦 : Universe}
+                            {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
+                            -----------------------------------------------
+  →                         Epic ∣ h ∣  →  Epic ∣ lift-alg-hom 𝓩 𝓦 𝑩 h ∣
 
-
-lift-of-alg-epic-is-epic : (𝓧 : Universe){𝓨 : Universe}
-                           (𝓩 : Universe){𝓦 : Universe}
-                           (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
-                           (f : hom 𝑨 𝑩)  →  Epic ∣ f ∣
-                           ------------------------------------
- →                         Epic ∣ lift-alg-hom 𝓩 𝓦 𝑩 f ∣
-
-lift-of-alg-epic-is-epic 𝓧 {𝓨} 𝓩 {𝓦} 𝑨 𝑩 f fepi y = eq y (lift a) η
- where
-  lf : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
-  lf = lift-alg-hom 𝓩 𝓦 𝑩 f
+ lift-of-alg-epic-is-epic 𝓩 {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
+  where
+  lh : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
+  lh = lift-alg-hom 𝓩 𝓦 𝑩 h
 
   b : ∣ 𝑩 ∣
   b = lower y
 
-  ζ : Image ∣ f ∣ ∋ b
-  ζ = fepi b
+  ζ : Image ∣ h ∣ ∋ b
+  ζ = hepi b
 
   a : ∣ 𝑨 ∣
-  a = Inv ∣ f ∣ b ζ
+  a = Inv ∣ h ∣ b ζ
 
-  β : lift (∣ f ∣ a) ≡ (lift ∘ ∣ f ∣ ∘ lower{𝓦 = 𝓦}) (lift a)
-  β = ap (λ - → lift (∣ f ∣ ( - a))) (lower∼lift{𝓦 = 𝓦})
+  β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦 = 𝓦}) (lift a)
+  β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift{𝓦 = 𝓦})
 
-  η : y ≡ ∣ lf ∣ (lift a)
+  η : y ≡ ∣ lh ∣ (lift a)
   η = y               ≡⟨ (extfun lift∼lower) y ⟩
-      lift b          ≡⟨ ap lift (InvIsInv ∣ f ∣ (lower y) ζ)⁻¹ ⟩
-      lift (∣ f ∣ a)  ≡⟨ β ⟩
-      ∣ lf ∣ (lift a) ∎
+      lift b          ≡⟨ ap lift (InvIsInv ∣ h ∣ (lower y) ζ)⁻¹ ⟩
+      lift (∣ h ∣ a)  ≡⟨ β ⟩
+      ∣ lh ∣ (lift a) ∎
 
 
-lift-alg-hom-image : {𝓧 𝓨 𝓩 𝓦 : Universe}
-                     {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
- →                   𝑩 is-hom-image-of 𝑨
-                     -----------------------------------------------
- →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
+ lift-alg-hom-image : {𝓩 𝓦 : Universe}
+                      {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+  →                   𝑩 is-hom-image-of 𝑨
+                      -----------------------------------------------
+  →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
 
-lift-alg-hom-image {𝓧}{𝓨}{𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
- (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso C≅B
-  where
+ lift-alg-hom-image {𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
+  (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso C≅B
+   where
    lϕ : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑪 𝓦)
    lϕ = (lift-alg-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
 
    lϕepic : Epic ∣ lϕ ∣
-   lϕepic = lift-of-alg-epic-is-epic 𝓧 𝓩 𝑨 𝑪 (ϕ , ϕhom) ϕepic
+   lϕepic = lift-of-alg-epic-is-epic 𝓩 𝑪 (ϕ , ϕhom) ϕepic
+
+\end{code}
+
+------
+
+#### Deprecated functions
+
+The functions below will be removed from the future releases of the [UALib][] as they don't seem to be especially useful.
+
+\begin{code}
+
+lift-function : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}
+                (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
+                ---------------------------------
+ →              Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
+
+lift-function  A B f = λ la → lift (f (lower la))
 
 \end{code}
 
