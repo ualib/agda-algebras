@@ -152,18 +152,21 @@ We now prove two important facts about term operations.  The first of these, whi
 
 \begin{code}
 
-comm-hom-term : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-                {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
-                (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
-                -----------------------------------------
- →              ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
-comm-hom-term  𝑩 h (ℊ x) a = 𝓇ℯ𝒻𝓁
+ comm-hom-term : {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+                 (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
+                 -----------------------------------------
+  →              ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
 
-comm-hom-term {𝑨 = 𝑨} 𝑩 h (node 𝑓 𝑡) a =
- ∣ h ∣((𝑓 ̂ 𝑨) λ i₁ → (𝑡 i₁ ̇ 𝑨) a)    ≡⟨ ∥ h ∥ 𝑓 ( λ r → (𝑡 r ̇ 𝑨) a ) ⟩
- (𝑓 ̂ 𝑩)(λ i₁ →  ∣ h ∣((𝑡 i₁ ̇ 𝑨) a))  ≡⟨ ap (_ ̂ 𝑩)(gfe (λ i₁ → comm-hom-term 𝑩 h (𝑡 i₁) a))⟩
- (𝑓 ̂ 𝑩)(λ r → (𝑡 r ̇ 𝑩)(∣ h ∣ ∘ a))    ∎
+ comm-hom-term  𝑩 h (ℊ x) a = 𝓇ℯ𝒻𝓁
+
+ comm-hom-term {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨)λ i → (𝑡 i ̇ 𝑨) a)    ≡⟨ i  ⟩
+                                     (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣((𝑡 i ̇ 𝑨) a))  ≡⟨ ii ⟩
+                                     (𝑓 ̂ 𝑩)(λ r → (𝑡 r ̇ 𝑩)(∣ h ∣ ∘ a)) ∎
+  where
+  i  = ∥ h ∥ 𝑓(λ r → (𝑡 r ̇ 𝑨) a)
+  ii = ap (𝑓 ̂ 𝑩)(gfe (λ i → comm-hom-term 𝑩 h (𝑡 i) a))
 
 \end{code}
 
@@ -172,15 +175,16 @@ Next we prove that every term is compatible with every congruence relation. That
 \begin{code}
 
 open Congruence
+
 module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 
- compatible-term : (𝑨 : Algebra 𝓤 𝑆)(t : Term X)(θ : Con 𝑨)
+ compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
                    -----------------------------------------
   →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
- compatible-term 𝑨 (ℊ x) θ p = p x
+ compatible-term (ℊ x) θ p = p x
 
- compatible-term 𝑨 (node 𝑓 𝑡) θ p = snd ∥ θ ∥ 𝑓 λ x → (compatible-term 𝑨 (𝑡 x) θ) p
+ compatible-term (node 𝑓 𝑡) θ p = snd ∥ θ ∥ 𝑓 λ x → (compatible-term (𝑡 x) θ) p
 
 \end{code}
 
@@ -188,13 +192,13 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun'
 
 \begin{code}
 
- compatible-term' : (𝑨 : Algebra 𝓤 𝑆)(t : Term X)(θ : Con 𝑨)
+ compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
                    -----------------------------------------
   →                compatible-fun' (t ̇ 𝑨) ∣ θ ∣
 
- compatible-term' 𝑨 (ℊ x) θ p = λ y z → z x
+ compatible-term' (ℊ x) θ p = λ y z → z x
 
- compatible-term' 𝑨 (node 𝑓 𝑡) θ 𝑎 𝑎' p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' 𝑨 (𝑡 x) θ) 𝑎 𝑎') p
+ compatible-term' (node 𝑓 𝑡) θ 𝑎 𝑎' p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' (𝑡 x) θ) 𝑎 𝑎') p
 
 
 \end{code}
