@@ -30,11 +30,13 @@ Given algebras 𝑨 : Algebra 𝓦 𝑆 and 𝑩 : Algebra 𝓤 𝑆, we say tha
 
 \begin{code}
 
-_IsSubalgebraOf_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
+module _ {𝓤 𝓦 : Universe} where
 
-Subalgebra : {𝓤 𝓦 : Universe} → Algebra 𝓦 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
-Subalgebra {𝓤} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+ _IsSubalgebraOf_ : (𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
+
+ Subalgebra : Algebra 𝓦 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
+ Subalgebra 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -46,7 +48,6 @@ We take this opportunity to prove a useful lemma that requires the `IsSubalgebra
 \begin{code}
 
 open Congruence
---open import MGS-Powerset using (propext)
 open import MGS-Embeddings using (is-set)
 open import MGS-Subsingleton-Theorems using (is-subsingleton)
 

@@ -147,12 +147,14 @@ Next, subuniverses are closed under the action of term operations.
 
 \begin{code}
 
-sub-term-closed : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓦)
- →                (B ∈ Subuniverses 𝑨) → (t : Term X)(b : X → ∣ 𝑨 ∣)
- →                (∀ x → b x ∈ B) → ((t ̇ 𝑨) b) ∈ B
+module _ {𝓤 𝓦 : Universe} where
 
-sub-term-closed 𝑨 B AB (ℊ x) b b∈B = b∈B x
-sub-term-closed 𝑨 B AB (node f 𝒕) b b∈B = AB f (λ z → (𝒕 z ̇ 𝑨) b)
+ sub-term-closed : {𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓦)
+  →                (B ∈ Subuniverses 𝑨) → (t : Term X)(b : X → ∣ 𝑨 ∣)
+  →                (∀ x → b x ∈ B) → ((t ̇ 𝑨) b) ∈ B
+
+ sub-term-closed 𝑨 B AB (ℊ x) b b∈B = b∈B x
+ sub-term-closed 𝑨 B AB (node f 𝒕) b b∈B = AB f (λ z → (𝒕 z ̇ 𝑨) b)
                                                (λ x → sub-term-closed 𝑨 B AB (𝒕 x) b b∈B)
 \end{code}
 
@@ -160,9 +162,9 @@ Alternatively, we could express the preceeding fact using an inductive type.
 
 \begin{code}
 
-data TermImage {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦) where
- var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
- app : (f : ∣ 𝑆 ∣) (t : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → (∀ i → t i ∈ TermImage 𝑨 Y) → (f ̂ 𝑨) t ∈ TermImage 𝑨 Y
+ data TermImage (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦) where
+  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
+  app : ∀ 𝑓 𝑡 → (∀ i → 𝑡 i ∈ TermImage 𝑨 Y) → (𝑓 ̂ 𝑨) 𝑡 ∈ TermImage 𝑨 Y
 
 \end{code}
 
@@ -170,11 +172,11 @@ By what we proved above, it should come as no surprise that `TermImage 𝑨 Y` i
 
 \begin{code}
 
-TermImageIsSub : {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤} → TermImage 𝑨 Y ∈ Subuniverses 𝑨
-TermImageIsSub = app
+ TermImageIsSub : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓦} → TermImage 𝑨 Y ∈ Subuniverses 𝑨
+ TermImageIsSub = app
 
-Y⊆TermImageY : {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓤} → Y ⊆ TermImage 𝑨 Y
-Y⊆TermImageY {a} a∈Y = var a∈Y
+ Y⊆TermImageY : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓦} → Y ⊆ TermImage 𝑨 Y
+ Y⊆TermImageY {a} a∈Y = var a∈Y
 
 \end{code}
 
@@ -182,8 +184,8 @@ Since `Sg 𝑨 Y` is the smallest subuniverse containing Y, we obtain the follow
 
 \begin{code}
 
-SgY⊆TermImageY : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓤) → Sg 𝑨 Y ⊆ TermImage 𝑨 Y
-SgY⊆TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y⊆TermImageY
+ SgY⊆TermImageY : (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) → Sg 𝑨 Y ⊆ TermImage 𝑨 Y
+ SgY⊆TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y⊆TermImageY
 
 \end{code}
 
@@ -198,11 +200,11 @@ First, the image of a homomorphism is a subuniverse of its codomain.
 
 \begin{code}
 
-hom-image-is-sub : {𝓤 𝓦 : Universe} → global-dfunext → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
-                   (ϕ : hom 𝑨 𝑩)  →  (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
+ hom-image-is-sub : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+                    (ϕ : hom 𝑨 𝑩)  →  (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
 
-hom-image-is-sub gfe {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
- where
+ hom-image-is-sub {𝑨}{𝑩} ϕ f b b∈Imf = eq ((f ̂ 𝑩) b) ((f ̂ 𝑨) ar) γ
+  where
   ar : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣
   ar = λ x → Inv ∣ ϕ ∣(b x)(b∈Imf x)
 
@@ -221,20 +223,20 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 
 \begin{code}
 
-HomUnique : {𝓤 𝓦 : Universe} → funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
-            (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
- →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
-            --------------------------------------------
- →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
+ HomUnique : funext 𝓥 𝓤 → {𝑨 𝑩 : Algebra 𝓤 𝑆}
+             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+  →          (∀ (x : ∣ 𝑨 ∣)  →  x ∈ X  →  ∣ g ∣ x ≡ ∣ h ∣ x)
+             --------------------------------------------
+  →          (∀ (a : ∣ 𝑨 ∣) → a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
-HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
+ HomUnique _ _ _ _ gx≡hx a (var x) = (gx≡hx) a x
 
-HomUnique {𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 𝒂 im𝒂⊆SgX) =
+ HomUnique fe {𝑨}{𝑩} X g h gx≡hx a (app 𝑓 𝒂 im𝒂⊆SgX) =
   ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)     ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
   (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 )   ≡⟨ ap (𝑓 ̂ 𝑩)(fe induction-hypothesis) ⟩
   (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)    ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
   ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )    ∎
- where induction-hypothesis = λ x → HomUnique{𝓤}{𝓦} fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
+  where induction-hypothesis = λ x → HomUnique fe {𝑨}{𝑩} X g h gx≡hx (𝒂 x) ( im𝒂⊆SgX x )
 
 \end{code}
 
