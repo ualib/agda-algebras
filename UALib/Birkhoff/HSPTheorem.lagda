@@ -251,7 +251,9 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 kernel-in-theory : KER-pred ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
 kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
+
 open Congruence
+
 free-quot-subalg-ℭ : prop-ext (Term X) (ov 𝓤) → is-set ∣ ℭ ∣
  →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
  →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
