@@ -32,9 +32,9 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 
 \begin{code}
 
-
-_≅_ : {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) (𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , ((∣ f ∣ ∘ ∣ g ∣) ∼ ∣ 𝒾𝒹 𝑩 ∣) × ((∣ g ∣ ∘ ∣ f ∣) ∼ ∣ 𝒾𝒹 𝑨 ∣)
+_≅_ : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , (∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣)
+                                           × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣)
 
 \end{code}
 
@@ -46,6 +46,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 Here we collect some tools that will come in handy later on.  The reader is invited to skip over this section and return to it as needed.
 
 \begin{code}
+
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} where
 
  ≅-hom : (ϕ : 𝑨 ≅ 𝑩) → hom 𝑨 𝑩
@@ -63,8 +64,8 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
  ≅-inv-map : (ϕ : 𝑨 ≅ 𝑩) → ∣ 𝑩 ∣ → ∣ 𝑨 ∣
  ≅-inv-map ϕ = ∣ ≅-inv-hom ϕ ∣
 
- ≅-inv-map-is-homomorphism : (ϕ : 𝑨 ≅ 𝑩) → is-homomorphism 𝑩 𝑨 (≅-inv-map ϕ)
- ≅-inv-map-is-homomorphism ϕ = ∥ ≅-inv-hom ϕ ∥
+ ≅-inv-map-is-hom : (ϕ : 𝑨 ≅ 𝑩) → is-homomorphism 𝑩 𝑨 (≅-inv-map ϕ)
+ ≅-inv-map-is-hom ϕ = ∥ ≅-inv-hom ϕ ∥
 
  ≅-map-invertible : (ϕ : 𝑨 ≅ 𝑩) → invertible (≅-map ϕ)
  ≅-map-invertible ϕ = (≅-inv-map ϕ) , (∥ snd ∥ ϕ ∥ ∥ , ∣ snd ∥ ϕ ∥ ∣)
@@ -74,6 +75,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
  ≅-map-is-embedding : (ϕ : 𝑨 ≅ 𝑩) → is-embedding (≅-map ϕ)
  ≅-map-is-embedding ϕ = equivs-are-embeddings (≅-map ϕ) (≅-map-is-equiv ϕ)
+
 \end{code}
 
 
@@ -81,6 +83,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 #### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
+
 REFL-≅ ID≅ : {𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≅ 𝑨
 ID≅ 𝑨 = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
 REFL-≅ = ID≅
@@ -101,53 +104,62 @@ trans-≅ : {𝓠 𝓤 𝓦 : Universe}
 
 trans-≅ 𝑨 𝑩 𝑪 ab bc = f , g , α , β
  where
-  f1 : hom 𝑨 𝑩
-  f1 = ∣ ab ∣
-  f2 : hom 𝑩 𝑪
-  f2 = ∣ bc ∣
-  f : hom 𝑨 𝑪
-  f = HCompClosed 𝑨 𝑩 𝑪 f1 f2
+ f1 : hom 𝑨 𝑩
+ f1 = ∣ ab ∣
+ f2 : hom 𝑩 𝑪
+ f2 = ∣ bc ∣
+ f : hom 𝑨 𝑪
+ f = HCompClosed 𝑨 𝑩 𝑪 f1 f2
 
-  g1 : hom 𝑪 𝑩
-  g1 = fst ∥ bc ∥
-  g2 : hom 𝑩 𝑨
-  g2 = fst ∥ ab ∥
-  g : hom 𝑪 𝑨
-  g = HCompClosed 𝑪 𝑩 𝑨 g1 g2
+ g1 : hom 𝑪 𝑩
+ g1 = fst ∥ bc ∥
+ g2 : hom 𝑩 𝑨
+ g2 = fst ∥ ab ∥
+ g : hom 𝑪 𝑨
+ g = HCompClosed 𝑪 𝑩 𝑨 g1 g2
 
-  f1∼g2 : ∣ f1 ∣ ∘ ∣ g2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
-  f1∼g2 = ∣ snd ∥ ab ∥ ∣
+ f1∼g2 : ∣ f1 ∣ ∘ ∣ g2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
+ f1∼g2 = ∣ snd ∥ ab ∥ ∣
 
-  g2∼f1 : ∣ g2 ∣ ∘ ∣ f1 ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
-  g2∼f1 = ∥ snd ∥ ab ∥ ∥
+ g2∼f1 : ∣ g2 ∣ ∘ ∣ f1 ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
+ g2∼f1 = ∥ snd ∥ ab ∥ ∥
 
-  f2∼g1 : ∣ f2 ∣ ∘ ∣ g1 ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
-  f2∼g1 =  ∣ snd ∥ bc ∥ ∣
+ f2∼g1 : ∣ f2 ∣ ∘ ∣ g1 ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
+ f2∼g1 =  ∣ snd ∥ bc ∥ ∣
 
-  g1∼f2 : ∣ g1 ∣ ∘ ∣ f2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
-  g1∼f2 = ∥ snd ∥ bc ∥ ∥
+ g1∼f2 : ∣ g1 ∣ ∘ ∣ f2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
+ g1∼f2 = ∥ snd ∥ bc ∥ ∥
 
-  α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
-  α x = (∣ f ∣ ∘ ∣ g ∣) x                   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-        ∣ f2 ∣ ( (∣ f1 ∣ ∘ ∣ g2 ∣) (∣ g1 ∣ x)) ≡⟨ ap ∣ f2 ∣ (f1∼g2 (∣ g1 ∣ x)) ⟩
-        (∣ f2 ∣ ∘ ∣ g1 ∣) x                  ≡⟨ f2∼g1 x ⟩
-        ∣ 𝒾𝒹 𝑪 ∣ x                         ∎
-  β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
-  β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
+ α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
+ α x = (∣ f ∣ ∘ ∣ g ∣) x                   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+       ∣ f2 ∣((∣ f1 ∣ ∘ ∣ g2 ∣)(∣ g1 ∣ x)) ≡⟨ ap ∣ f2 ∣(f1∼g2(∣ g1 ∣ x))⟩
+       (∣ f2 ∣ ∘ ∣ g1 ∣) x                  ≡⟨ f2∼g1 x ⟩
+       ∣ 𝒾𝒹 𝑪 ∣ x                         ∎
 
-TRANS-≅ : {𝓠 𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}{𝑪 : Algebra 𝓦 𝑆}
- →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
-          -------------
- →        𝑨 ≅ 𝑪
-TRANS-≅ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = trans-≅ 𝑨 𝑩 𝑪
+ β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
+ β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
 
-Trans-≅ : {𝓠 𝓤 𝓦 : Universe}
-          (𝑨 : Algebra 𝓠 𝑆) {𝑩 : Algebra 𝓤 𝑆}
-          (𝑪 : Algebra 𝓦 𝑆)
- →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
-          -------------
- →        𝑨 ≅ 𝑪
-Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
+\end{code}
+
+To make `trans-≅` easier to apply in certain situations, we define a couple of alternatives where the only difference is which arguments are implicit.
+
+\begin{code}
+
+module _ {𝓧 𝓨 𝓩 : Universe} where
+
+ TRANS-≅ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+           -------------
+  →        𝑨 ≅ 𝑪
+
+ TRANS-≅ {𝑨}{𝑩}{𝑪} = trans-≅ 𝑨 𝑩 𝑪
+
+ Trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪
+           -------------
+  →        𝑨 ≅ 𝑪
+ Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
+
 \end{code}
 
 
@@ -157,36 +169,39 @@ Trans-≅ 𝑨 {𝑩} 𝑪 = trans-≅ 𝑨 𝑩 𝑪
 Fortunately, the lift operation preserves isomorphism (i.e., it's an "algebraic invariant"), which is why it's a workable solution to the "level hell" problem we mentioned earlier.
 
 \begin{code}
+
 open Lift
 
---An algebra is isomorphic to its lift to a higher universe level
 lift-alg-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
 
-lift-alg-≅ = (lift , λ _ _ → 𝓇ℯ𝒻𝓁) , (lower , λ _ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁) , (λ _ → 𝓇ℯ𝒻𝓁)
+lift-alg-≅ = (lift , λ _ _ → 𝓇ℯ𝒻𝓁), (lower , λ _ _ → 𝓇ℯ𝒻𝓁), (λ _ → 𝓇ℯ𝒻𝓁), (λ _ → 𝓇ℯ𝒻𝓁)
 
-lift-alg-hom : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}
-               (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)
-               -----------------------------------------------
+lift-alg-hom : {𝓧 : Universe}{𝓨 : Universe}(𝓩 : Universe)(𝓦 : Universe)
+               {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)
+               ----------------------------------------------
  →             hom 𝑨 𝑩  →  hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
 
-lift-alg-hom 𝓧 𝓩 {𝓦} 𝑨 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
+lift-alg-hom 𝓩 𝓦 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
  where
   lh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑨 lower
   lh = λ _ _ → 𝓇ℯ𝒻𝓁
+
   lABh : is-homomorphism (lift-alg 𝑨 𝓩) 𝑩 (f ∘ lower)
   lABh = ∘-hom (lift-alg 𝑨 𝓩) 𝑨 𝑩 {lower}{f} lh fhom
+
   Lh : is-homomorphism 𝑩 (lift-alg 𝑩 𝓦) lift
   Lh = λ _ _ → 𝓇ℯ𝒻𝓁
-  γ : is-homomorphism (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦) (lift ∘ (f ∘ lower))
-  γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦) {f ∘ lower}{lift} lABh Lh
+
+  γ : is-homomorphism(lift-alg 𝑨 𝓩)(lift-alg 𝑩 𝓦) (lift ∘ (f ∘ lower))
+  γ = ∘-hom (lift-alg 𝑨 𝓩) 𝑩 (lift-alg 𝑩 𝓦){f ∘ lower}{lift} lABh Lh
 
 
-lift-alg-iso : (𝓧 : Universe){𝓨 : Universe}(𝓩 : Universe){𝓦 : Universe}
-               (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+lift-alg-iso : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}
+               {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
                -----------------------------------------
  →             𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓩) ≅ (lift-alg 𝑩 𝓦)
 
-lift-alg-iso 𝓧 𝓩 𝑨 A≅B = TRANS-≅ (TRANS-≅ (sym-≅ lift-alg-≅) A≅B) lift-alg-≅
+lift-alg-iso A≅B = TRANS-≅ (TRANS-≅ (sym-≅ lift-alg-≅) A≅B) lift-alg-≅
 
 \end{code}
 

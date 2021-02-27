@@ -191,8 +191,8 @@ VlA {𝓤}{𝒦}(vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   B≅A : lA+ ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
-VlA {𝓤}(visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso 𝓤 (ov 𝓤 ⁺) 𝑨 A≅B)
-VlA {𝓤}(visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso (ov 𝓤) (ov 𝓤 ⁺) 𝑨 A≅B)
+VlA {𝓤}(visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso A≅B)
+VlA {𝓤}(visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso A≅B)
 
 \end{code}
 
@@ -325,7 +325,7 @@ lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
                 -------------------------------------------------
  →              (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (lift-alg-iso 𝓤 𝓦 𝑩 B≅C)
+lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (lift-alg-iso B≅C)
  where
   lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 𝓦
@@ -454,9 +454,9 @@ PS⊆SP : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(hfe : hfun
 
 PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
 PS⊆SP {𝓤}{𝒦} _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
-PS⊆SP _ (pbase {𝑩} (ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
+PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
 PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
-PS⊆SP {𝓤} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso 𝓤 (ov 𝓤) 𝑨 A≅B)
+PS⊆SP {𝓤} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
 PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
 PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
