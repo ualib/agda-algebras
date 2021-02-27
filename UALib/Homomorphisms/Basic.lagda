@@ -9,12 +9,6 @@ author: William DeMeo
 
 This section describes the [Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
-If `𝑨` and `𝑩` are algebraic structures in the signature `𝑆`, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:
-
-`h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
-
-Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -29,23 +23,32 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 
-To formalize the concept of homomorphism we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣`, from the domain of `𝑨` to the domain of `𝑩`, *commutes* with an operation 𝑓, interpreted in the algebras `𝑨` and `𝑩`.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
+#### <a id="homomorphisms">Homomorphisms</a>
 
-\begin{code}
+If `𝑨` and `𝑩` are algebraic structures in the signature `𝑆`, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:
 
-compatible-op-map : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(𝑓 : ∣ 𝑆 ∣)(h : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+`h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
 
-compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝒂 → h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)
+Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
 
-\end{code}
-
-Note the appearance of the shorthand `∀ 𝒂` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝒂` here must be a tuple on ∣ 𝑨 ∣ of "length" `∥ 𝑆 ∥ 𝑓` (the arity of 𝑓).
-
-We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the property `is-homomorphism`.
+To formalize this concept, we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣`, from the domain of `𝑨` to the domain of `𝑩`, *commutes* (or is *compatible*) with an operation 𝑓, interpreted in the algebras `𝑨` and `𝑩`.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
+
+ compatible-op-map : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+                     (𝑓 : ∣ 𝑆 ∣)(h : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+
+ compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
+
+\end{code}
+
+Note the appearance of the shorthand `∀ 𝑎` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝑎` here must be a tuple on `∣ 𝑨 ∣` of "length" `∥ 𝑆 ∥ 𝑓` (the arity of `𝑓`).
+
+We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the property `is-homomorphism`.
+
+\begin{code}
 
  is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
@@ -149,18 +152,21 @@ open Congruence
 
 module _ {𝓤 𝓦 : Universe} where
 
- homker-is-compatible : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (KER-rel ∣ h ∣)
+ homker-compatible : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+  →                     compatible 𝑨 (KER-rel ∣ h ∣)
 
- homker-is-compatible 𝑨 {𝑩} h f {𝒂}{𝒂'} Kerhab = γ where
+ homker-compatible {𝑨} 𝑩 h f {𝒂}{𝒂'} Kerhab = γ where
    γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
    γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡⟨ ∥ h ∥ f 𝒂 ⟩
        (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)  ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
        (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂') ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
        ∣ h ∣ ((f ̂ 𝑨) 𝒂')   ∎
 
- homker-is-equivalence : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → IsEquivalence (KER-rel ∣ h ∣)
 
- homker-is-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
+ homker-equivalence : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+  →                      IsEquivalence (KER-rel ∣ h ∣)
+
+ homker-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
 
 \end{code}
 
@@ -170,7 +176,7 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
  kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Congruence 𝑨
 
- kercon {𝑨} 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-is-compatible 𝑨 {𝑩} h)(homker-is-equivalence 𝑨 {𝑩} h)
+ kercon 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
 
 \end{code}
 
@@ -178,13 +184,13 @@ From this congruence we construct the corresponding quotient.
 
 \begin{code}
 
- kerquo : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ kerquo : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- kerquo 𝑨{𝑩} h = 𝑨 ╱ (kercon 𝑩 h)
+ kerquo {𝑨} 𝑩 h = 𝑨 ╱ (kercon 𝑩 h)
 
  -- NOTATION.
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- 𝑨 [ 𝑩 ]/ker h = kerquo 𝑨 {𝑩} h
+ 𝑨 [ 𝑩 ]/ker h = kerquo {𝑨} 𝑩 h
 
  infix 60 _[_]/ker_
 

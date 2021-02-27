@@ -54,9 +54,9 @@ module _ {𝓞 𝓥 : Universe} where
 
 \end{code}
 
-(Recall, the type `Signature 𝓞 𝓥` is simply defined as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`.)
+Recall, the type `Signature 𝓞 𝓥` was defined in the [Algebras.Signature][] module as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`.
 
-Of course, we can go back and forth between the two representations of algebras, like so.
+If for some reason we want to use both representations of algebras and move back and forth between them, this is easily accomplished with the following functions.
 
 \begin{code}
 
@@ -77,18 +77,18 @@ module _ {𝓤 𝓞 𝓥 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 #### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
 
-We conclude this module by defining a convenient shorthand for the interpretation of an operation symbol that we will use often.  It looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with.
+We now define a convenient shorthand for the interpretation of an operation symbol. This looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with, so we will use this new notation almost exclusively in the remaining modules of the [UALib][].
 
 \begin{code}
 
- _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra 𝓤 𝑆) → (∥ 𝑆 ∥ f  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+ _̂_ : (𝑓 : ∣ 𝑆 ∣)(𝑨 : Algebra 𝓤 𝑆) → (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
- f ̂ 𝑨 = λ x → (∥ 𝑨 ∥ f) x
+ 𝑓 ̂ 𝑨 = λ 𝑎 → (∥ 𝑨 ∥ 𝑓) 𝑎
 
  infix 40 _̂_
 \end{code}
 
-
+So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and if `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` is a tuple of the appropriate arity, then `(𝑓 ̂ 𝑨) 𝑎` denotes the operation `𝑓` interpreted in `𝑨` and evaluated at `𝑎`.
 
 
 #### <a id="arbitrarily-many-variable-symbols">Arbitrarily many variable symbols</a>
@@ -113,9 +113,9 @@ Then fst(𝕏 𝑨) will denote the surjective map h₀ : X → ∣ 𝑨 ∣, an
 
 #### <a id="lifts-of-algebras">Lifts of algebras</a>
 
-Finaly, we provide domain-specific lifting tools for algebraic operation types and algebra types.
-\begin{code}
+Here we define some domain-specific lifting tools for our operation and algebra types.
 
+\begin{code}
 
 module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
 
@@ -160,8 +160,6 @@ Recall the `compatible-fun` type was defined in [Relations.Binary][] module.
 
 
 
-
-
 #### <a id="compatibility-of-general-relations">Compatibility of general relations</a>
 
 Next we define a type that represents *compatibility of a general relation* with all operations of an algebra. We start by defining compatibility of a general relations with a single operation.
@@ -201,9 +199,9 @@ With `gen-compatible-op` in hand, it is a trivial matter to define a type that r
 
 <span class="footnote" id="fn1"><sup>1</sup> Previously we defined `compatible` using the helper function `compatible-op` before we realized that `compatible-fun` makes this helper function redundant. Here is the (now deprecated) definition.
 
-<t>compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇</t>
+`compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇`
 
-<t>compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)</t>
+`compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)`
 </span>
 
 <span class="footnote" id="fn2"><sup>2</sup> This voilates the "don't repeat yourself" (dry) principle of programming, but it might make it easier for readers to see what's going on. (In the [UALib][] we try to put transparency before elegance.)</span>
