@@ -96,7 +96,8 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Relation and Quotient Types](Relations.html)
   - [Unary Relations](Relations.Unary.html)
-  - [Relations, Binary and Beyond](Relations.Binary.html)
+  - [Binary Relations](Relations.Binary.html)
+  - [Relations of Arbitrary Arity](Relations.General.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
   - [Truncation, Sets, Propositions](Relations.Truncation.html)
 

@@ -15,7 +15,7 @@ This section presents the [UALib.Relations.Quotients][] module of the [Agda Univ
 
 module Relations.Quotients where
 
-open import Relations.Binary public
+open import Relations.General public
 
 \end{code}
 

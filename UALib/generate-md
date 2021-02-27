@@ -41,6 +41,7 @@ mv html/Prelude.Lifts.{tex,md}
 mv html/Relations.{tex,md}
 mv html/Relations.Unary.{tex,md}
 mv html/Relations.Binary.{tex,md}
+mv html/Relations.General.{tex,md}
 mv html/Relations.Quotients.{tex,md}
 mv html/Relations.Truncation.{tex,md}
 

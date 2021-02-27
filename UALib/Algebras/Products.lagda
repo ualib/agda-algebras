@@ -32,7 +32,7 @@ The product of 𝑆-algebras for the Sigma type representation is defined as fol
 
 ⨅ : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
 
-⨅ 𝒜 = (∀ i → ∣ 𝒜 i ∣) ,                -- domain of the product algebra
+⨅ 𝒜 = (∀ i → ∣ 𝒜 i ∣) ,               -- domain of the product algebra
 
        λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
 
@@ -47,7 +47,7 @@ open algebra
 -- product for algebras of record type
 ⨅' : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }(𝒜 : I → algebra 𝓤 𝑆) → algebra (𝓘 ⊔ 𝓤) 𝑆
 
-⨅' 𝒜 = record { univ = ∀ i → univ (𝒜 i)               -- domain
+⨅' 𝒜 = record { univ = ∀ i → univ (𝒜 i)                -- domain
                ; op = λ 𝑓 𝑎 i → (op (𝒜 i)) 𝑓 λ x → 𝑎 x i -- basic operations
                }
 
@@ -55,9 +55,7 @@ open algebra
 
 
 
-#### <a id="notation">Notation</a>
-
-Before proceeding, we define some convenient syntactic sugar. The type `Algebra 𝓤 𝑆` itself has a type; it is `(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺) ̇` &nbsp;. This type appears quite often throughout the [UALib][], so it is worthwhile to define the following shorthand for its universe level.
+**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra 𝓤 𝑆` has universe `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that it is worthwhile to define the following shorthand for their universes.
 
 \begin{code}
 
