@@ -97,7 +97,7 @@ open import Birkhoff
 - [Relation and Quotient Types](Relations.html)
   - [Unary Relations](Relations.Unary.html)
   - [Binary Relations](Relations.Binary.html)
-  - [Relations of Arbitrary Arity](Relations.General.html)
+  - [General Relations](Relations.General.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
   - [Truncation, Sets, Propositions](Relations.Truncation.html)
 

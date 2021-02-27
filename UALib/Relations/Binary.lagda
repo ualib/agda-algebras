@@ -5,7 +5,7 @@ date : 2021-01-13
 author: William DeMeo
 ---
 
-### <a id="relations-binary-and-higher">Relations, Binary and Beyond</a>
+### <a id="binary-relations">Binary Relations</a>
 
 This section presents the [UALib.Relations.Binary][] module of the [Agda Universal Algebra Library][].
 
@@ -141,7 +141,7 @@ infixr 4 _=[_]⇒_
 \end{code}
 
 
-#### <a id="compatibility-with-binary-relations">Compatibility with binary relations</a>
+#### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
 Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`. N.B. This is not to be confused with the sort of (universe) lifting that we defined in the [Prelude.Lifts][] module.
 

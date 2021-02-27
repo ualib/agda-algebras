@@ -11,6 +11,8 @@ This section presents the [UALib.Relations.Truncation][] module of the [Agda Uni
 
 Here we discuss **truncation** and **h-sets** (which we just call **sets**).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
 
+**Remark**. [Agda][] now has a built in type called [Prop](ttps://agda.readthedocs.io/en/v2.6.1.3/language/prop.html) which may provide some or all of what we develop in this module. However, we have never tried to use it, and it seems we can do without it.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
