@@ -139,9 +139,13 @@ We use the function `lift-alg` to resolve errors that arise when working in Agda
 
 
 
-#### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
+#### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Here is the definition.
+If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Recall, informally this means for every operation symbol `𝑓 : ∣ 𝑆 ∣` and all pairs `𝑎 𝑎' : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of tuples from the domain of 𝑨, the following implication holds:
+
+if `R (𝑎 i) (𝑎' i)` for all `i`, then  `R ((𝑓 ̂ 𝑨) 𝑎) ((𝑓 ̂ 𝑨) 𝑎')`.
+
+The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.<sup>[1](Algebras.Algebras.html#fn1)</sup>
 
 \begin{code}
 
@@ -152,13 +156,60 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
-Previously we defined `compatible` using the helper function `compatible-op` before we realized that `compatible-fun` makes this helper function redundant. Nonetheless, here is the (now deprecated) definition.
+Recall the `compatible-fun` type was defined in [Relations.Binary][] module.
 
-`compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇`
 
-`compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)`
+
+
+
+#### <a id="compatibility-of-general-relations">Compatibility of general relations</a>
+
+Next we define a type that represents *compatibility of a general relation* with all operations of an algebra. We start by defining compatibility of a general relations with a single operation.
+
+\begin{code}
+
+module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
+
+ gen-compatible-op : ∣ 𝑆 ∣ → GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ gen-compatible-op 𝑓 R = gen-compatible-fun (λ _ → (𝑓 ̂ 𝑨)) R
+
+\end{code}
+
+In case it helps the reader understand `gen-compatible-op`, we redefine it explicitly without the help of `gen-compatible-fun`.<sup>[2](Algebras.Algebras.html#fn2)</sup>
+
+\begin{code}
+
+ gen-compatible-op' : ∣ 𝑆 ∣ → GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ gen-compatible-op' 𝑓 R = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R (λ i → (𝑓 ̂ 𝑨) (𝕒 i))
+
+\end{code}
+
+where we have let Agda infer the type of `𝕒`, which is `(i : I) → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
+
+With `gen-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a general relation with an algebra*.
+
+\begin{code}
+
+ gen-compatible : GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ gen-compatible R = ∀ (𝑓 : ∣ 𝑆 ∣ ) → gen-compatible-op 𝑓 R
+
+\end{code}
+
+
 
 --------------------------------------
+
+<span class="footnote" id="fn1"><sup>1</sup> Previously we defined `compatible` using the helper function `compatible-op` before we realized that `compatible-fun` makes this helper function redundant. Here is the (now deprecated) definition.
+
+<t>compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇</t>
+
+<t>compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)</t>
+</span>
+
+<span class="footnote" id="fn2"><sup>2</sup> This voilates the "don't repeat yourself" (dry) principle of programming, but it might make it easier for readers to see what's going on. (In the [UALib][] we try to put transparency before elegance.)</span>
+
+-----------------------------------
+
 
 [← Algebras.Signatures](Algebras.Signatures.html)
 <span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
