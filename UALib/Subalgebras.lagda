@@ -16,7 +16,6 @@ This chapter presents the [Subalgebras][]  module of the [Agda Universal Algebra
 module Subalgebras where
 
 open import Subalgebras.Subuniverses
-open import Subalgebras.Generation
 open import Subalgebras.Subalgebras
 open import Subalgebras.Univalent
 

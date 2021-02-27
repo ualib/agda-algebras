@@ -45,8 +45,6 @@ agda --latex Terms/Operations.lagda
 
 echo "Checking Subalgebras.Subuniverses.lagda"
 agda --latex Subalgebras/Subuniverses.lagda
-echo "Checking Subalgebras.Generation.lagda"
-agda --latex Subalgebras/Generation.lagda
 echo "Checking Subalgebras.Subalgebras.lagda"
 agda --latex Subalgebras/Subalgebras.lagda
 echo "Checking Subalgebras.Univalent.lagda"
@@ -89,7 +87,6 @@ mv latex/Terms/Basic.{tex,md}
 mv latex/Terms/Operations.{tex,md}
 
 mv latex/Subalgebras/Subuniverses.{tex,md}
-mv latex/Subalgebras/Generation.{tex,md}
 mv latex/Subalgebras/Subalgebras.{tex,md}
 mv latex/Subalgebras/Univalent.{tex,md}
 
@@ -125,7 +122,6 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Basic.md -o latex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Terms/Operations.md -o latex/Terms/Operations.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subuniverses.md -o latex/Subalgebras/Subuniverses.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Generation.md -o latex/Subalgebras/Generation.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Subalgebras.md -o latex/Subalgebras/Subalgebras.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Subalgebras/Univalent.md -o latex/Subalgebras/Univalent.tex
 

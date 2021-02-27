@@ -186,7 +186,6 @@
 
 [Subalgebras]: Subalgebras.html
 [Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
-[Subalgebras.Generation]: Subalgebras.Generation.html
 [Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
 [Subalgebras.Univalent]: Subalgebras.Univalent.html
 
@@ -244,7 +243,6 @@
 [UALib.Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
 [UALib.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
 [UALib.Subalgebras.Subuniverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subuniverses.lagda
-[UALib.Subalgebras.Generation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Generation.lagda
 [UALib.Subalgebras.Properties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Properties.lagda
 [UALib.Subalgebras.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Homomorphisms.lagda
 [UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda

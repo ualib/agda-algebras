@@ -119,7 +119,6 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Subalgebra Types](Subalgebras.html)
   - [Subuniverses](Subalgebras.Subuniverses.html)
-  - [Subuniverse Generation](Subalgebras.Generation.html)
   - [Subalgebras](Subalgebras.Subalgebras)
   - [Univalent Subalgebras](Subalgebras.Univalent.html)
 

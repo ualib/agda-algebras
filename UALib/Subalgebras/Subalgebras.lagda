@@ -18,7 +18,7 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import Subalgebras.Generation {𝑆 = 𝑆}{gfe} public
+open import Subalgebras.Subuniverses {𝑆 = 𝑆}{gfe} public
 open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 \end{code}
@@ -258,7 +258,7 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
 
 ---------------------------------
 
-[← Subalgebras.Generation](Subalgebras.Generation.html)
+[← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Univalent →](Subalgebras.Univalent.html)</span>
 
 {% include UALib.Links.md %}

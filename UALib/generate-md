@@ -63,7 +63,6 @@ mv html/Terms.Operations.{tex,md}
 
 mv html/Subalgebras.{tex,md}
 mv html/Subalgebras.Subuniverses.{tex,md}
-mv html/Subalgebras.Generation.{tex,md}
 mv html/Subalgebras.Subalgebras.{tex,md}
 mv html/Subalgebras.Univalent.{tex,md}
 
