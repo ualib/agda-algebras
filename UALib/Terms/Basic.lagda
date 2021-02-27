@@ -114,7 +114,7 @@ Finally, we prove that the resulting homomorphism is unique.
 
  free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
   →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
-               -----------------------------------------------
+               -------------------------------------------------
   →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
  free-unique _ _ _ _ p (generator x) = p x

@@ -92,7 +92,8 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 
  term-gen (ℊ x) = (ℊ x) , 𝓇ℯ𝒻𝓁
 
- term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) , term-interp 𝑓 (gfe λ i → ∥ term-gen (𝑡 i) ∥)
+ term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) ,
+                      term-interp 𝑓 (gfe λ i → ∥ term-gen (𝑡 i) ∥)
 
 
  term-gen-agreement : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) ℊ ≡ (∣ term-gen p ∣ ̇ 𝑻 X) ℊ
@@ -115,8 +116,8 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
  interp-prod : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
-               (𝒜 : I → Algebra 𝓤 𝑆)(𝒂 : X → ∀ i → ∣ (𝒜 i) ∣)
-               ------------------------------------------------
+               (𝒜 : I → Algebra 𝓤 𝑆)(𝒂 : X → ∀ i → ∣ 𝒜 i ∣)
+               -----------------------------------------------
   →            (p ̇ (⨅ 𝒜)) 𝒂 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝒂 j i))
 
  interp-prod (ℊ x₁) 𝒜 𝒂 = 𝓇ℯ𝒻𝓁
@@ -135,11 +136,11 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
  interp-prod2 (ℊ x₁) 𝒜 = 𝓇ℯ𝒻𝓁
 
  interp-prod2 (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-   let IH = λ x → interp-prod (t x) 𝒜  in
-   let tA = λ z → t z ̇ ⨅ 𝒜 in
-    (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap (f ̂ ⨅ 𝒜)(gfe λ x → IH x tup) ⟩
-    (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-    (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i))) ∎
+  let IH = λ x → interp-prod (t x) 𝒜  in
+  let tA = λ z → t z ̇ ⨅ 𝒜 in
+  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(gfe λ x → IH x tup)⟩
+  (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i))) ∎
 
 \end{code}
 
@@ -193,8 +194,8 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun'
 \begin{code}
 
  compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
-                   -----------------------------------------
-  →                compatible-fun' (t ̇ 𝑨) ∣ θ ∣
+                    -----------------------------------------
+  →                 compatible-fun' (t ̇ 𝑨) ∣ θ ∣
 
  compatible-term' (ℊ x) θ p = λ y z → z x
 

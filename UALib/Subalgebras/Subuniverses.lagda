@@ -28,8 +28,10 @@ We first show how to represent in [Agda][] the collection of subuniverses of an 
 
 \begin{code}
 
-Subuniverses : {𝓠 𝓤 : Universe}(𝑨 : Algebra 𝓠 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓤) (𝓞 ⊔ 𝓥 ⊔ 𝓠 ⊔ 𝓤)
-Subuniverses 𝑨 B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
+module _ {𝓤 𝓦 : Universe} where
+
+ Subuniverses : (𝑨 : Algebra 𝓤 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓦)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ Subuniverses 𝑨 B = (𝑓 : ∣ 𝑆 ∣)(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → Im 𝑎 ⊆ B → (𝑓 ̂ 𝑨) 𝑎 ∈ B
 
 \end{code}
 
@@ -42,10 +44,10 @@ Here is how one could construct an algebra out of a subuniverse.
 
 \begin{code}
 
-SubunivAlg : {𝓠 𝓤 : Universe} (𝑨 : Algebra 𝓠 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓤)
- →           B ∈ Subuniverses 𝑨
- →           Algebra (𝓠 ⊔ 𝓤) 𝑆
-SubunivAlg 𝑨 B B∈SubA = Σ B , λ f x → (f ̂ 𝑨)(∣_∣ ∘ x) , B∈SubA f (∣_∣ ∘ x)(∥_∥ ∘ x)
+ SubunivAlg : (𝑨 : Algebra 𝓤 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓦)
+  →           B ∈ Subuniverses 𝑨 → Algebra (𝓤 ⊔ 𝓦) 𝑆
+
+ SubunivAlg 𝑨 B B∈SubA = Σ B , λ 𝑓 𝑏 → (𝑓 ̂ 𝑨)(fst ∘ 𝑏) , B∈SubA 𝑓 (fst ∘ 𝑏)(snd ∘ 𝑏)
 
 \end{code}
 
@@ -57,11 +59,11 @@ We could define the type of subuniverses as a record as follows.
 
 \begin{code}
 
-record Subuniverse {𝓠 𝓤 : Universe}{𝑨 : Algebra 𝓠 𝑆} : 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇ where
- constructor mksub
- field
-   sset  : Pred ∣ 𝑨 ∣ 𝓤
-   isSub : sset ∈ Subuniverses 𝑨
+ record Subuniverse {𝑨 : Algebra 𝓤 𝑆} : ov (𝓤 ⊔ 𝓦) ̇ where
+  constructor mksub
+  field
+    sset  : Pred ∣ 𝑨 ∣ 𝓦
+    isSub : sset ∈ Subuniverses 𝑨
 
 \end{code}
 
@@ -69,11 +71,10 @@ For example, we could use such a type to prove that the equalizer of two homomor
 
 \begin{code}
 
-𝑬𝑯-is-subuniverse : {𝓤 𝓦 : Universe}
-                    (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆}
-                    (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+ 𝑬𝑯-is-subuniverse : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
+                     (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 
-𝑬𝑯-is-subuniverse 𝑨 {𝑩} g h = mksub (𝑬𝑯 {𝑩 = 𝑩} g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed {𝑨 = 𝑨}{𝑩 = 𝑩} g h 𝑓 𝒂 x
+ 𝑬𝑯-is-subuniverse 𝑩 g h = mksub (𝑬𝑯 𝑩 g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed 𝑩 g h 𝑓 𝒂 x
 
 \end{code}
 
