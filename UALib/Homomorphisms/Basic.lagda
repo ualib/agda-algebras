@@ -153,7 +153,7 @@ open Congruence
 module _ {𝓤 𝓦 : Universe} where
 
  homker-compatible : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-  →                     compatible 𝑨 (KER-rel ∣ h ∣)
+  →                  compatible 𝑨 (KER-rel ∣ h ∣)
 
  homker-compatible {𝑨} 𝑩 h f {𝒂}{𝒂'} Kerhab = γ where
    γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
@@ -164,7 +164,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 
  homker-equivalence : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-  →                      IsEquivalence (KER-rel ∣ h ∣)
+  →                   IsEquivalence (KER-rel ∣ h ∣)
 
  homker-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
 
@@ -201,16 +201,16 @@ Given an algebra `𝑨` and a congruence `θ`, the canonical epimorphism from an
 \begin{code}
 
  πepi : {𝑨 : Algebra 𝓤 𝑆} (θ : Congruence{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic
-  where
-   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
-   cπ a = ⟦ a ⟧{⟨ θ ⟩}
+ πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
 
-   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
-   cπ-is-hom _ _ = 𝓇ℯ𝒻𝓁
+  cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
+  cπ a = ⟦ a ⟧{⟨ θ ⟩}
 
-   cπ-is-epic : Epic cπ
-   cπ-is-epic (.(⟨ θ ⟩ a) , a , refl _) = Image_∋_.im a
+  cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
+  cπ-is-hom _ _ = 𝓇ℯ𝒻𝓁
+
+  cπ-is-epic : Epic cπ
+  cπ-is-epic (.(⟨ θ ⟩ a) , a , refl _) = Image_∋_.im a
 
 \end{code}
 
@@ -252,9 +252,9 @@ ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
 \begin{code}
 
 ⨅-hom-co : {𝓠 𝓤 𝓘 : Universe}(𝑨 : Algebra 𝓠 𝑆){I : 𝓘 ̇}(ℬ : I → Algebra 𝓤 𝑆)
- →          (∀ i → hom 𝑨 (ℬ i))
-            --------------------
- →          hom 𝑨 (⨅ ℬ)
+ →         (∀ i → hom 𝑨 (ℬ i))
+           --------------------
+ →         hom 𝑨 (⨅ ℬ)
 
 ⨅-hom-co 𝑨 {I} ℬ homs = ϕ , ϕhom
  where
@@ -266,9 +266,9 @@ ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
 
 
 ⨅-hom : {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}(𝒜 : I → Algebra 𝓠 𝑆)(ℬ : I → Algebra 𝓤 𝑆)
- →       ((i : I) → hom (𝒜 i)(ℬ i))
-         ---------------------------
- →       hom (⨅ 𝒜) (⨅ ℬ)
+ →      ((i : I) → hom (𝒜 i)(ℬ i))
+        ---------------------------
+ →      hom (⨅ 𝒜) (⨅ ℬ)
 
 ⨅-hom 𝒜 ℬ homs = ϕ , ϕhom
  where
