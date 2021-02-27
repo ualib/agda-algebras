@@ -141,10 +141,10 @@ Before discussing general and dependent relations, we pause to define some types
 
 \begin{code}
 
-module _ {𝓤 𝓥 𝓦 : Universe} {I : 𝓥 ̇} {A : 𝓤 ̇} where
+module _ {𝓤 𝓥 𝓦 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} where
 
  lift-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
- lift-rel R f g = ∀ x → R (f x) (g x)
+ lift-rel R 𝑎 𝑎' = ∀ i → R (𝑎 i) (𝑎' i)
 
  compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
@@ -156,7 +156,7 @@ We used the slick implication notation in the definition of `compatible-fun`, bu
 \begin{code}
 
  compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- compatible-fun' f R  = ∀ x y → (lift-rel R) x y → R (f x) (f y)
+ compatible-fun' f R  = ∀ 𝑎 𝑎' → (lift-rel R) 𝑎 𝑎' → R (f 𝑎) (f 𝑎')
 
 \end{code}
 
@@ -202,31 +202,35 @@ module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
  lift-gen-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
  gen-compatible-fun : (I → (J → A) → A) → GenRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- gen-compatible-fun 𝕗 R  = ∀ (𝕒 : I → (J → A)) → (lift-gen-rel R) 𝕒 → R (λ i → (𝕗 i) (𝕒 i))
+ gen-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R (λ i → (𝕗 i) (𝕒 i))
 
 \end{code}
 
-For those who feel nauseous when looking at the syntax of the last two definitions, to say nothing of parsing it, we recommend focusing on the semantics of the expressions.  In fact, we should pause here to describe these semantics in detail, lest the more complicated definitions that follow induce the typical consequence of nausea.
+In the definition of `gen-compatible-fun`, we let Agda infer the type of `𝕒`, which is `I → (J → A)`.
 
-The function `lift-gen-rel` simply takes a general relation `R`---defined so as to indicate which "`I`-tuples" (of type `I → A`) belong to `R`---and lifts it to a relation `lift-gen-rel R`, which indicates which *collections* of `I`-tuples (or tuples of tuples) belong to `R`.
+If the syntax of the last two definitions makes you feel a bit nauseated, we recommend focusing on the semantics instead of the semantics.  In fact, we should probably pause here to discuss these semantics, lest the more complicated definitions below induce the typical consequence of nausea.
 
-To be more precise, think of `𝕒 : I → (J → A)` as an `I`-tuple of `J`-tuples of inhabitants of `A`. It helps to visualize such `J`-tuples as columns and imagine for simplicity that `J` is a finite set, say, `{1, 2, ..., J}`.  Now, picture a couple of these columns, say, the i-th and k-th, like so.
+First, internalize the fact that `𝕒 : I → (J → A)` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Once that's obvious, recall that a general relation `R` represents a certain collection of `I`-tuples. Specifically, if `x : I → A` is an `I`-tuple, then `R x` denotes the assertion that "`x` belongs to `R`" or "`x` satisfies `R`."
+
+Next consider the function `lift-gen-rel`.  For each general relation `R`, the type `lift-gen-rel R` represents a certain collection of `I`-tuples of `J`-tuples, namely, the `𝕒 : I → (J → A)` such that `lift-gen-rel R 𝕒` holds.
+
+It helps to visualize such `J`-tuples as columns and imagine for simplicity that `J` is a finite set, say, `{1, 2, ..., J}`.  Picture a couple of these columns, say, the i-th and k-th, like so.
 
 ```
-𝕒 i 1        𝕒 k 1
-𝕒 i 2        𝕒 k 2
-𝕒 i 3        𝕒 k 3
-  ⋮              ⋮
-𝕒 i J        𝕒 k J
+𝕒 i 1      𝕒 k 1
+𝕒 i 2      𝕒 k 2
+𝕒 i 3      𝕒 k 3    <-- (a row of I such columns forms an I-tuple)
+  ⋮          ⋮
+𝕒 i J      𝕒 k J
 ```
 
-Then the defining expression `∀ (j : J) → R (λ i → (𝕒 i) j)` of `lift-gen-rel R 𝕒` indicates whether each j-th row (1 ≤ j ≤ J) (which evidently is an `I`-tuple) belongs to the original relation `R`.
+Now `lift-gen-rel R 𝕒` is defined by `∀ j → R (λ i → (𝕒 i) j)` which represents the assertion that each row of the `I` columns shown above (which evidently is an `I`-tuple) belongs to the original relation `R`.
 
-Next, let's dissect the definition of `gen-compatible-fun`.  Here, `𝕗 : I → (J → A) → A` denotes an `I`-tuple of `J`-ary operations on `A`.  That is, for each `i : I`, the function `𝕗 i` takes a `J`-tuple `𝕒 i` and evaluates to some inhabitant `(𝕗 i) (𝕒 i)` of `A`.
+Next, let's dissect the definition of `gen-compatible-fun`.  Here, `𝕗 : I → (J → A) → A` denotes an `I`-tuple of `J`-ary operations on `A`.  That is, for each `i : I`, the function `𝕗 i` takes a `J`-tuple `𝕒 i : J → A` and evaluates to some `(𝕗 i) (𝕒 i) : A`.
 
-Finaly, study the types and note how they all align. For example, `𝕒 : I → (J → A)` is precisely the type on which the relation `lift-gen-rel R` is defined.
+Finally, digest all the types involved in these definitions and note how nicely they align (as they must if type-checking is to succeed!).  For example, `𝕒 : I → (J → A)` is precisely the type on which the relation `lift-gen-rel R` is defined.
 
-With that under our belts, we can better hand the following defininition of the lift of a dependent relation, as well as the type that represents compatability of a tuple of opereations with a dependent relation.
+Having made peace with lifts of general relations and what it means for them to be compatibile with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
 
 \begin{code}
 
@@ -236,10 +240,11 @@ module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : I → 𝓤 ̇} where
  lift-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
  dep-compatible-fun : ((i : I) → (J → (A i)) → (A i)) → DepRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- dep-compatible-fun 𝕗 R  = ∀ (𝕒 : (i : I) → (J → (A i))) → (lift-dep-rel R) 𝕒 → R (dapp 𝕗 𝕒)
+ dep-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-dep-rel R) 𝕒 → R (λ i → (𝕗 i)(𝕒 i))
 
 \end{code}
 
+In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`, which is `(i : I) → (J → (A i))`.
 
 
 --------------------------------------

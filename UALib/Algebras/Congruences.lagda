@@ -64,7 +64,7 @@ open import MGS-Subsingleton-Theorems using (funext)
 
 module _ {𝓤 : Universe} where
 
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-op {𝑨 = 𝑨} 𝑓 𝟎-rel
+ 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎-rel
  𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
 
  𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎-rel

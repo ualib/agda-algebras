@@ -297,8 +297,8 @@ open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π) public
 
 module _ {𝓨 𝓩 : Universe}{I : 𝓥 ̇}{B : I → 𝓨 ̇}{C : I → 𝓩 ̇} where
  -- {Y : 𝓨 ̇}{Z : 𝓩 ̇}
- fork : Π B → Π C → Π (λ i → (B i) × (C i))
- fork f a = λ i → (f i , a i)
+ zip : Π B → Π C → Π (λ i → (B i) × (C i))
+ zip f a = λ i → (f i , a i)
 
  eval : {Y : 𝓨 ̇}{Z : 𝓩 ̇} → ((Y → Z) × Y) → Z
  eval (f , a) = f a

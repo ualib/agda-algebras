@@ -141,20 +141,22 @@ We use the function `lift-alg` to resolve errors that arise when working in Agda
 
 #### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
 
-The following definitions and lemmas are useful for asserting and proving facts about **compatibility** of relations and operations.
+If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Here is the definition.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
- compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)
 
- --The given relation is compatible with all ops of an algebra.
- compatible :(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible  𝑨 R = ∀ f → compatible-op{𝑨} f R
+ compatible : (𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible  𝑨 R = ∀ 𝑓 → compatible-fun (𝑓 ̂ 𝑨) R
 
 \end{code}
 
+Previously we defined `compatible` using the helper function `compatible-op` before we realized that `compatible-fun` makes this helper function redundant. Nonetheless, here is the (now deprecated) definition.
+
+`compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇`
+
+`compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)`
 
 --------------------------------------
 
