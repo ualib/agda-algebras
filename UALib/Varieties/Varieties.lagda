@@ -524,7 +524,7 @@ SP⊆V' (slift x) = VlA (SP⊆V x)
 SP⊆V' {𝓤}(ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
  where
   B≤lA : 𝑩 ≤ lift-alg 𝑨 (ov 𝓤 ⁺)
-  B≤lA = (lift-alg-lower-≤-lift 𝑩 {𝑨}) B≤A
+  B≤lA = (lift-alg-≤-lift 𝑩 {𝑨}) B≤A
 
 SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
 

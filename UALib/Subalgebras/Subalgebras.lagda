@@ -127,38 +127,42 @@ Here are a number of useful facts about subalgebras.  Many of them seem redundan
 
 \begin{code}
 
---Transitivity of IsSubalgebra (explicit args)
-TRANS-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- →        𝑩 ≤ 𝑨   →    𝑪 ≤ 𝑩
-          ------------------
- →        𝑪 ≤ 𝑨
+module _ {𝓧 𝓨 𝓩 : Universe} where
 
-TRANS-≤ 𝑨 𝑩 𝑪 BA CB = (HomComp 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
+ --Transitivity of IsSubalgebra (explicit args)
+ TRANS-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+  →        𝑩 ≤ 𝑨  →  𝑪 ≤ 𝑩
+           ----------------
+  →        𝑪 ≤ 𝑨
 
---Transitivity of IsSubalgebra (implicit args)
-Trans-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
-
-Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
+ TRANS-≤ 𝑨 𝑩 𝑪 BA CB = (HomComp 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
 
 
---Transitivity of IsSubalgebra (implicit args)
-trans-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
- →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
+ --Transitivity of IsSubalgebra (implicit args)
+ Trans-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
 
-trans-≤ {𝑨 = 𝑨}{𝑩 = 𝑩}{𝑪 = 𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
+ Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
 
 
-transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
- →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ --Transitivity of IsSubalgebra (implicit args)
+ trans-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
 
-transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ϕ , ϕemb
- where
- ϕ : hom 𝑨 𝑪
- ϕ = (fst ∣ B≤C ∣) ∘ (fst ∣ A≤B ∣) , ∘-hom 𝑨 𝑩 𝑪 {fst ∣ A≤B ∣}{fst ∣ B≤C ∣}(snd ∣ A≤B ∣)(snd ∣ B≤C ∣)
+ trans-≤ {𝑨}{𝑩}{𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
 
- ϕemb : is-embedding ∣ ϕ ∣
- ϕemb = ∘-embedding (∥ B≤C ∥)(∥ A≤B ∥)
+
+ transitivity-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+
+ transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ϕ , ϕemb
+  where
+  ϕ : hom 𝑨 𝑪
+  ϕ = (fst ∣ B≤C ∣) ∘ (fst ∣ A≤B ∣) , 
+      ∘-hom 𝑨 𝑩 𝑪 {fst ∣ A≤B ∣}{fst ∣ B≤C ∣}(snd ∣ A≤B ∣)(snd ∣ B≤C ∣)
+
+  ϕemb : is-embedding ∣ ϕ ∣
+  ϕemb = ∘-embedding (∥ B≤C ∥)(∥ A≤B ∥)
 
 
 --Reflexivity of IsSubalgebra (explicit arg)
@@ -216,7 +220,8 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
  TRANS-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
 
- TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+ TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ,
+                         ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
 mono-≤ : {𝓤 𝓦 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
@@ -228,40 +233,42 @@ mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣
 lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
-lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
+lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) =
+ 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- lift-alg-lower-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ (lift-alg 𝑩 𝓩)
- lift-alg-lower-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
+ lift-alg-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ lift-alg 𝑩 𝓩
+ lift-alg-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
- lift-alg-lift-≤-lower : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
- lift-alg-lift-≤-lower 𝑨 {𝑩} B≤A = iso-≤ {𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
+ lift-alg-≤-lower : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
+ lift-alg-≤-lower 𝑨 {𝑩} B≤A = iso-≤{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩}(lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
 
- lift-alg-lower-≤-lift' : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
- lift-alg-lower-≤-lift' 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
+ lift-alg-≤-lift' : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ lift-alg 𝑨 𝓩
+ lift-alg-≤-lift' 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
 
 
 module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
- lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+ lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → lift-alg 𝑨 𝓩 ≤ lift-alg 𝑩 𝓦
 
- lift-alg-≤ 𝑨 {𝑩} A≤B = transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
-  where
-  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-  lA = lift-alg 𝑨 𝓩
+ lift-alg-≤ 𝑨 {𝑩} A≤B =
+  transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
+   where
+   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+   lA = lift-alg 𝑨 𝓩
 
-  lAA : lA ≤ 𝑨
-  lAA = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
+   lAA : lA ≤ 𝑨
+   lAA = lift-alg-≤-lower 𝑨 {𝑨} refl-≤
 
-  B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
-  B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+   B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
+   B≤lB = lift-alg-≤-lift 𝑩 {𝑩} refl-≤
 
 
 module _ {𝓤 𝓦 : Universe} where
 
- lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
+ lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ lift-alg 𝑨 𝓦
  lift-alg-sub-lift 𝑨 {𝑪} C≤A = TRANS-≤-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
 
 
