@@ -95,8 +95,8 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Agda's Universe Hierarchy](Prelude.Lifts.html)
 
 - [Relation and Quotient Types](Relations.html)
-  - [Small Relations](Relations.Small.html)
-  - [Big Relations](Relations.Big.html)
+  - [Discrete Relations](Relations.Discrete.html)
+  - [Continuous Relations](Relations.Continuous.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
   - [Truncation, Sets, Propositions](Relations.Truncation.html)
 

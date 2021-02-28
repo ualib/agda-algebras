@@ -163,8 +163,8 @@
 [Prelude.Lifts]: Prelude.Lifts.html
 
 [Relations]: Relations.html
-[Relations.Unary]: Relations.Unary.html
-[Relations.Binary]: Relations.Binary.html
+[Relations.Discrete]: Relations.Discrete.html
+[Relations.Continuous]: Relations.Continuous.html
 [Relations.Quotients]: Relations.Quotients.html
 [Relations.Truncation]: Relations.Truncation.html
 
@@ -218,8 +218,8 @@
 
 [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
 [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
-[UALib.Relations.Unary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Unary.lagda
-[UALib.Relations.Binary]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Binary.lagda
+[UALib.Relations.Discrete]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Discrete.lagda
+[UALib.Relations.Continuous]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Continuous.lagda
 [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda
 [UALib.Relations.Truncation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Truncation.lagda
 

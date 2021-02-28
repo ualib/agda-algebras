@@ -32,7 +32,7 @@ Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#pr
 open import Algebras.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 open import Universes
-open import Relations.Unary using (Pred)
+open import Relations.Discrete using (Pred)
 open import MGS-Powerset using (hfunext)
 
 -- open import Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)

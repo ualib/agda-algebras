@@ -5,21 +5,25 @@ date : 2021-02-28
 author: William DeMeo
 ---
 
-### <a id="big-relations">Big Relations</a>
+### <a id="big-relations">Continuous Relations</a>
 
-This section presents the [UALib.Relations.Big][] module of the [Agda Universal Algebra Library][].
+This section presents the [UALib.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → 𝓦 ̇` (for some universe 𝓦).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : 𝓥 ̇`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → 𝓦 ̇`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
-Below we will define `GenRel` to be the type `(I → A) → 𝓦 ̇` and we will call `GenRel` the type of **general relations**.  After that, we define a type that represents relations even more generally.  Specifically, if we are given types `A`, `B`, `C`, etc., we want to represent relations from A to B to C to ….  We define such **dependent relations** [below](Relations.General.html#dependent-relations).
+Below we will define `GenRel` to be the type `(I → A) → 𝓦 ̇` and we will call `GenRel` the type of **general relations**.  This generalizes the unary and binary relations we saw earlier in the sense that general relations can have arbitrarily large arities. However, relations of type `GenRel` are not completely general because they are defined over a single type.
+
+Just as `Rel A 𝓦` was the "single-sorted" special case of the "multisorted" `REL A B 𝓦` type, so too will `GenRel I A 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
+
+To be more concrete, given an arbitrary family `A : I → 𝓤 ̇ ` of types, we may have a relation from `A i` to `A i'` to `A i''` to ….  We will refer to such relations as **dependent relations** because in order to define a type to represent them, we absolutely need depedent types.  The `DepRel` type that we define [below](Relations.General.html#dependent-relations) captures this completely general notion of relation.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.Big where
+module Relations.Continuous where
 
-open import Relations.Small public
+open import Relations.Discrete public
 
 \end{code}
 
@@ -112,7 +116,7 @@ In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`,
 
 --------------------------------------
 
-[← Relations.Small](Relations.Small.html)
+[← Relations.Discrete](Relations.Discrete.html)
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}

@@ -16,10 +16,10 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 <pre class="Agda">
 <a id="390" class="Keyword">module</a> <a id="397" href="Relations.html" class="Module">Relations</a> <a id="407" class="Keyword">where</a>
 
-<a id="414" class="Keyword">open</a> <a id="419" class="Keyword">import</a> <a id="426" href="Relations.Small.html" class="Module">Relations.Small</a>
-<a id="442" class="Keyword">open</a> <a id="447" class="Keyword">import</a> <a id="454" href="Relations.Big.html" class="Module">Relations.Big</a>
-<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="Relations.Quotients.html" class="Module">Relations.Quotients</a>
-<a id="500" class="Keyword">open</a> <a id="505" class="Keyword">import</a> <a id="512" href="Relations.Truncation.html" class="Module">Relations.Truncation</a>
+<a id="414" class="Keyword">open</a> <a id="419" class="Keyword">import</a> <a id="426" href="Relations.Discrete.html" class="Module">Relations.Discrete</a>
+<a id="445" class="Keyword">open</a> <a id="450" class="Keyword">import</a> <a id="457" href="Relations.Continuous.html" class="Module">Relations.Continuous</a>
+<a id="478" class="Keyword">open</a> <a id="483" class="Keyword">import</a> <a id="490" href="Relations.Quotients.html" class="Module">Relations.Quotients</a>
+<a id="510" class="Keyword">open</a> <a id="515" class="Keyword">import</a> <a id="522" href="Relations.Truncation.html" class="Module">Relations.Truncation</a>
 
 </pre>
 

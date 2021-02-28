@@ -16,8 +16,8 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 \begin{code}
 module Relations where
 
-open import Relations.Small
-open import Relations.Big
+open import Relations.Discrete
+open import Relations.Continuous
 open import Relations.Quotients
 open import Relations.Truncation
 
