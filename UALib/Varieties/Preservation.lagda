@@ -30,42 +30,40 @@ open import Varieties.Varieties {𝑆 = 𝑆}{gfe} public
 First we prove that the closure operator H is compatible with identities that hold in the given class.
 
 \begin{code}
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-H-id1 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-        (p q : Term X)
-        --------------------------------
- →      𝒦 ⊧ p ≋ q  →  H{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
+ H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
-H-id1 p q α (hbase x) = ⊧-lift-alg-invariance _ p q (α x)
+ H-id1 p q α (hbase x) = ⊧-lift-alg-invariance _ p q (α x)
 
-H-id1 {𝓤} p q α (hlift{𝑨} x) = γ
- where
-  β : 𝑨 ⊧ p ≈ q
-  β = H-id1 p q α x
-  γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
-  γ = ⊧-lift-alg-invariance _ p q β
+ H-id1 p q α (hlift{𝑨} x) = γ
+  where
+   β : 𝑨 ⊧ p ≈ q
+   β = H-id1 p q α x
+   γ : lift-alg 𝑨 𝓤 ⊧ p ≈ q
+   γ = ⊧-lift-alg-invariance _ p q β
 
-H-id1 p q α (hhimg{𝑨}{𝑪} HA ((𝑩 , ϕ , (ϕhom , ϕsur)) , B≅C)) = ⊧-I-invariance p q γ B≅C
- where
-  β : 𝑨 ⊧ p ≈ q
-  β = (H-id1 p q α) HA
+ H-id1 p q α(hhimg{𝑨}{𝑪}HA((𝑩 , ϕ , (ϕhom , ϕsur)), B≅C)) = ⊧-I-invariance p q γ B≅C
+  where
+   β : 𝑨 ⊧ p ≈ q
+   β = (H-id1 p q α) HA
 
-  preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕsur (𝒃 x)))
+   preim : ∀ 𝒃 x → ∣ 𝑨 ∣
+   preim 𝒃 x = Inv ϕ (𝒃 x) (ϕsur (𝒃 x))
 
-  ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
+   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
+   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
 
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 →
-   (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-   (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-   ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
-   ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-   (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-   (q ̇ 𝑩) 𝒃               ∎
+   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
+   γ = gfe λ 𝒃 →
+    (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+    (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
+    ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
+    ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+    (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+    (q ̇ 𝑩) 𝒃               ∎
 
-H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x₁
+ H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x₁
 
 \end{code}
 
