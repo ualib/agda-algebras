@@ -127,20 +127,20 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓤 𝑆}  where
 
- ⊧-lift-alg-invariance : (𝑨 : Algebra 𝓤 𝑆) (p q : Term X)
+ ⊧-lift-alg-invariance : (p q : Term X)
                          -----------------------------------
   →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
- ⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
+ ⊧-lift-alg-invariance p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
 
 
- ⊧-lower-alg-invariance : (𝑨 : Algebra 𝓤 𝑆) (p q : Term X)
+ ⊧-lower-alg-invariance : (p q : Term X)
                           -----------------------------------
   →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
 
- ⊧-lower-alg-invariance 𝑨 p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
+ ⊧-lower-alg-invariance p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
 
 \end{code}
 
@@ -154,10 +154,10 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
 
 \begin{code}
 
- ⊧-S-invariance : (p q : Term X)(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+ ⊧-S-invariance : (p q : Term X)(𝑩 : Algebra 𝓦 𝑆)
   →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
 
- ⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
+ ⊧-S-invariance p q 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
   where
    h : hom 𝑩 𝑨
    h = ∣ B≤A ∣
@@ -173,6 +173,8 @@ Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of �
 Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
+
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}  where
 
  ⊧-S-class-invariance : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
                         (𝑩 : SubalgebraOfClass{𝓤}{𝓦} 𝒦)
