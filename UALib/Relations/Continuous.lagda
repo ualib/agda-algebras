@@ -15,7 +15,7 @@ Below we will define `GenRel` to be the type `(I → A) → 𝓦 ̇` and we will
 
 Just as `Rel A 𝓦` was the "single-sorted" special case of the "multisorted" `REL A B 𝓦` type, so too will `GenRel I A 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
 
-To be more concrete, given an arbitrary family `A : I → 𝓤 ̇ ` of types, we may have a relation from `A i` to `A i'` to `A i''` to ….  We will refer to such relations as **dependent relations** because in order to define a type to represent them, we absolutely need depedent types.  The `DepRel` type that we define [below](Relations.General.html#dependent-relations) captures this completely general notion of relation.
+To be more concrete, given an arbitrary family `A : I → 𝓤 ̇ ` of types, we may have a relation from `A i` to `A i'` to `A i''` to ….  We will refer to such relations as **dependent relations** because in order to define a type to represent them, we absolutely need depedent types.  The `DepRel` type that we define [below](Relations.Continuous.html#dependent-relations) captures this completely general notion of relation.
 
 \begin{code}
 
@@ -49,11 +49,11 @@ We now define types that are useful for asserting and proving facts about *compa
 
 module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
- lift-gen-rel : GenRel I A 𝓦 → (I → (J → A)) → 𝓥 ⊔ 𝓦 ̇
- lift-gen-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
+ lift-gen-rel : GenRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
+ lift-gen-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
 
  gen-compatible-fun : (I → (J → A) → A) → GenRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- gen-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R (λ i → (𝕗 i) (𝕒 i))
+ gen-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R λ i → (𝕗 i) (𝕒 i)
 
 \end{code}
 
@@ -103,15 +103,15 @@ Above we made peace with lifts of general relations and what it means for such r
 
 module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : I → 𝓤 ̇} where
 
- lift-dep-rel : DepRel I A 𝓦 → ((i : I) → (J → (A i))) → 𝓥 ⊔ 𝓦 ̇
+ lift-dep-rel : DepRel I A 𝓦 → (∀ i → J → A i) → 𝓥 ⊔ 𝓦 ̇
  lift-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
- dep-compatible-fun : ((i : I) → (J → (A i)) → (A i)) → DepRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- dep-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-dep-rel R) 𝕒 → R (λ i → (𝕗 i)(𝕒 i))
+ dep-compatible-fun : (∀ i → (J → A i) → A i) → DepRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-dep-rel R) 𝕒 → R λ i → (𝕗 i)(𝕒 i)
 
 \end{code}
 
-In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`, which is `(i : I) → (J → (A i))`.
+In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`, which is `(i : I) → J → A i`.
 
 
 --------------------------------------

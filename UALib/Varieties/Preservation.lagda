@@ -49,12 +49,12 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
 
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃              ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-                 (p ̇ 𝑩)(ϕ ∘ (preim 𝒃)) ≡⟨(comm-hom-term 𝑩 (ϕ , ϕhom) p (preim 𝒃))⁻¹ ⟩
-                 ϕ((p ̇ 𝑨)(preim 𝒃))    ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
-                 ϕ((q ̇ 𝑨)(preim 𝒃))    ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-                 (q ̇ 𝑩)(ϕ ∘ (preim 𝒃)) ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-                 (q ̇ 𝑩) 𝒃              ∎
+  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+                (p ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕhom) p(preim 𝒃))⁻¹ ⟩
+                ϕ((p ̇ 𝑨)(preim 𝒃))   ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
+                ϕ((q ̇ 𝑨)(preim 𝒃))   ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+                (q ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+                (q ̇ 𝑩) 𝒃             ∎
 
  H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x₁
 
@@ -183,12 +183,12 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
   ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
 
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃               ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-                (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-                ϕ ((p ̇ 𝑨)(preim 𝒃))    ≡⟨ ap ϕ (extfun IH (preim 𝒃)) ⟩
-                ϕ ((q ̇ 𝑨)(preim 𝒃))    ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-                (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-                (q ̇ 𝑩) 𝒃               ∎
+  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
+                (p ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕh) p(preim 𝒃))⁻¹ ⟩
+                ϕ ((p ̇ 𝑨)(preim 𝒃))  ≡⟨ ap ϕ (extfun IH (preim 𝒃)) ⟩
+                ϕ ((q ̇ 𝑨)(preim 𝒃))  ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+                (q ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
+                (q ̇ 𝑩) 𝒃             ∎
 
  V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) =
   ⊧-S-class-invariance p q ((𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅) ) γ

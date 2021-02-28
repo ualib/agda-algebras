@@ -11,10 +11,10 @@ agda --latex Prelude/Extensionality.lagda
 echo "Checking Prelude.Lifts.lagda"
 agda --latex Prelude/Lifts.lagda
 
-echo "Checking Relations.Small.lagda"
-agda --latex Relations/Small.lagda
-echo "Checking Relations.Big.lagda"
-agda --latex Relations/Big.lagda
+echo "Checking Relations.Discrete.lagda"
+agda --latex Relations/Discrete.lagda
+echo "Checking Relations.Continuous.lagda"
+agda --latex Relations/Continuous.lagda
 echo "Checking Relations.Quotients.lagda"
 agda --latex Relations/Quotients.lagda
 echo "Checking Relations.Truncation.lagda"
@@ -68,8 +68,8 @@ mv latex/Prelude/Inverses.{tex,md}
 mv latex/Prelude/Extensionality.{tex,md}
 mv latex/Prelude/Lifts.{tex,md}
 
-mv latex/Relations/Small.{tex,md}
-mv latex/Relations/Big.{tex,md}
+mv latex/Relations/Discrete.{tex,md}
+mv latex/Relations/Continuous.{tex,md}
 mv latex/Relations/Quotients.{tex,md}
 mv latex/Relations/Truncation.{tex,md}
 
@@ -103,8 +103,8 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Inverses.md -o 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.md -o latex/Prelude/Extensionality.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Small.md -o latex/Relations/Small.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Big.md -o latex/Relations/Big.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Discrete.md -o latex/Relations/Discrete.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Continous.md -o latex/Relations/Continuous.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Quotients.md -o latex/Relations/Quotients.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Truncation.md -o latex/Relations/Truncation.tex
 
