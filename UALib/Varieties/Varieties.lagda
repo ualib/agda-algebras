@@ -46,12 +46,12 @@ We define the inductive type `H` to represent classes of algebras that include a
 
 \begin{code}
 
-data H {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
-  hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
-  hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
-  hhimg : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
-  hiso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
+data H {𝓤 𝓦 : Universe}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦))
+ where
+ hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
+ hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ H 𝒦
+ hhimg : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
+ hiso  : {𝑨 : Algebra _ 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
 
 \end{code}
 
@@ -63,13 +63,13 @@ The most useful inductive type that we have found for representing the semantic 
 
 \begin{code}
 
-data S {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆) (ov(𝓤 ⊔ 𝓦)) where
-  sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
-  slift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
-  ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
-  ssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
-  siso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
+data S {𝓤 𝓦 : Universe}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algebra(𝓤 ⊔ 𝓦)𝑆)(ov(𝓤 ⊔ 𝓦))
+ where
+ sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
+ slift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ S 𝒦
+ ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
+ ssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
+ siso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
 \end{code}
 
@@ -81,14 +81,15 @@ The most useful inductive type that we have found for representing the semantic 
 
 \begin{code}
 
-data P {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
-  pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
-  pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
-  pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
-  produ  : {I : 𝓦 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
-  prodw  : {I : 𝓦 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
-  pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
-  pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+data P {𝓤 𝓦 : Universe}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algebra(𝓤 ⊔ 𝓦)𝑆)(ov(𝓤 ⊔ 𝓦))
+ where
+ pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
+ pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ P 𝒦
+ pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
+ produ  : {I : 𝓦 ̇ }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ prodw  : {I : 𝓦 ̇ }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+ pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 
 \end{code}
 
@@ -102,18 +103,18 @@ We now define `V` as an inductive type.
 
 \begin{code}
 
-data V {𝓤 𝓦 : Universe}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) :
- Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦)) where
-  vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
-  vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
-  vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
-  vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
-  vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
-  vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
-  vprodu : {I : 𝓦 ̇}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
-  vprodw : {I : 𝓦 ̇}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
-  visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
-  visow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+data V {𝓤 𝓦 : Universe}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algebra(𝓤 ⊔ 𝓦)𝑆)(ov(𝓤 ⊔ 𝓦))
+ where
+ vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
+ vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → lift-alg 𝑨 𝓦 ∈ V 𝒦
+ vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
+ vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
+ vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
+ vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
+ vprodu : {I : 𝓦 ̇}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+ vprodw : {I : 𝓦 ̇}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+ visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ visow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
 
@@ -139,20 +140,21 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 \begin{code}
 
 open Lift
-VlA : {𝓤 : Universe} {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
-      {𝑨 : Algebra (ov 𝓤) 𝑆}
- →    𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
-      ---------------------------------
- →    lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
-VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
-VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
-VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
-VlA {𝓤}(vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
-VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
-VlA {𝓤}{𝒦}(vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
- where
+ VlA : {𝑨 : Algebra (ov 𝓤) 𝑆}
+  →    𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
+       --------------------------------------
+  →    lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+
+ VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
+ VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
+ VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
+ VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
+ VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
+  where
   𝑰 : (ov 𝓤 ⁺) ̇
   𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
 
@@ -171,8 +173,8 @@ VlA {𝓤}{𝒦}(vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   B≅A : lA+ ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
-VlA {𝓤}{𝒦}(vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
- where
+ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
+  where
   𝑰 : (ov 𝓤 ⁺) ̇
   𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
 
@@ -191,8 +193,8 @@ VlA {𝓤}{𝒦}(vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   B≅A : lA+ ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
-VlA {𝓤}(visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso A≅B)
-VlA {𝓤}(visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso A≅B)
+ VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso A≅B)
+ VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (lift-alg-iso A≅B)
 
 \end{code}
 
@@ -206,7 +208,8 @@ First, `P` is a closure operator.  This is proved by checking that `P` is *monot
 
 \begin{code}
 
-P-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ 𝒦' → P{𝓤}{𝓦} 𝒦 ⊆ P{𝓤}{𝓦} 𝒦'
+P-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆)(ov 𝓤)}
+ →       𝒦 ⊆ 𝒦' → P{𝓤}{𝓦} 𝒦 ⊆ P{𝓤}{𝓦} 𝒦'
 
 P-mono kk' (pbase x)    = pbase (kk' x)
 P-mono kk' (pliftu x)   = pliftu (P-mono kk' x)
@@ -218,20 +221,21 @@ P-mono kk' (pisow x x₁) = pisow (P-mono kk' x) x₁
 
 
 P-expa : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ P{𝓤}{𝓤} 𝒦
-
 P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (sym-≅ lift-alg-≅)
 
 
-P-idemp : {𝓤 : Universe}{𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
- →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+module _ {𝓤 𝓦 : Universe} where
 
-P-idemp (pbase x)             = pliftw x
-P-idemp {𝓤}{𝓦} (pliftu x)   = pliftw (P-idemp{𝓤}{𝓦} x)
-P-idemp {𝓤}{𝓦} (pliftw x)   = pliftw (P-idemp{𝓤}{𝓦} x)
-P-idemp {𝓤}{𝓦} (produ x)    = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
-P-idemp {𝓤}{𝓦} (prodw x)    = prodw (λ i → P-idemp{𝓤}{𝓦} (x i))
-P-idemp {𝓤}{𝓦} (pisou x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
-P-idemp {𝓤}{𝓦} (pisow x x₁) = pisow (P-idemp{𝓤}{𝓦} x) x₁
+ P-idemp : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+  →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
+
+ P-idemp (pbase x)    = pliftw x
+ P-idemp (pliftu x)   = pliftw (P-idemp x)
+ P-idemp (pliftw x)   = pliftw (P-idemp x)
+ P-idemp (produ x)    = prodw (λ i → P-idemp (x i))
+ P-idemp (prodw x)    = prodw (λ i → P-idemp (x i))
+ P-idemp (pisou x x₁) = pisow (P-idemp x) x₁
+ P-idemp (pisow x x₁) = pisow (P-idemp x) x₁
 
 \end{code}
 
@@ -239,7 +243,8 @@ Similarly, S is a closure operator.  The facts that S is idempotent and expansiv
 
 \begin{code}
 
-S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ 𝒦' → S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
+S-mono : {𝓤 𝓦 : Universe}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
+ →       𝒦 ⊆ 𝒦' → S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
 
 S-mono kk' (sbase x)            = sbase (kk' x)
 S-mono kk' (slift{𝑨} x)         = slift (S-mono kk' x)
@@ -319,22 +324,24 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 Next we observe that lifting to a higher universe does not break the property of being a subalgebra of an algebra of a class.  In other words, if we lift a subalgebra of an algebra in a class, the result is still a subalgebra of an algebra in the class.
 
 \begin{code}
+module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-lift-alg-subP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
- →              𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
-                -------------------------------------------------
- →              (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
+ lift-alg-subP : {𝑩 : Algebra 𝓤 𝑆}
+  →              𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
+                 -------------------------------------------------
+  →              (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-lift-alg-subP {𝓤}{𝓦}{𝒦}{𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (lift-alg-iso B≅C)
- where
-  lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
-  lA = lift-alg 𝑨 𝓦
-  lC = lift-alg 𝑪 𝓦
+ lift-alg-subP {𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = 
+  lA , (lC , lC≤lA) , plA , (lift-alg-iso B≅C)
+   where
+   lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
+   lA = lift-alg 𝑨 𝓦
+   lC = lift-alg 𝑪 𝓦
 
-  lC≤lA : lC ≤ lA
-  lC≤lA = lift-alg-≤ 𝑪 {𝑨} C≤A
-  plA : lA ∈ P{𝓤}{𝓦} 𝒦
-  plA = pliftu pA
+   lC≤lA : lC ≤ lA
+   lC≤lA = lift-alg-≤ 𝑪 {𝑨} C≤A
+   plA : lA ∈ P 𝒦
+   plA = pliftu pA
 
 \end{code}
 
@@ -345,54 +352,55 @@ The next lemma would be too obvious to care about were it not for the fact that 
 S⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →     S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓦} 𝒦)
 
-S⊆SP {𝓤}{𝓦}{𝒦}{.(lift-alg 𝑨 𝓦)}(sbase{𝑨} x) = siso spllA (sym-≅ lift-alg-≅)
-  where
-   llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
-   llA = lift-alg (lift-alg 𝑨 𝓦) (𝓤 ⊔ 𝓦)
+S⊆SP {𝓤}{𝓦}{𝒦}{.(lift-alg 𝑨 𝓦)}(sbase{𝑨} x) = siso spllA(sym-≅ lift-alg-≅)
+ where
+ llA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+ llA = lift-alg (lift-alg 𝑨 𝓦) (𝓤 ⊔ 𝓦)
 
-   spllA : llA ∈ S (P 𝒦)
-   spllA = sbase{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (pbase x)
+ spllA : llA ∈ S (P 𝒦)
+ spllA = sbase{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (pbase x)
 
 S⊆SP {𝓤}{𝓦}{𝒦} {.(lift-alg 𝑨 𝓦)} (slift{𝑨} x) = subalgebra→S lAsc
+ where
+ splAu : 𝑨 ∈ S(P 𝒦)
+ splAu = S⊆SP{𝓤}{𝓤} x
+
+ Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
+ Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
+
+ lAsc : (lift-alg 𝑨 𝓦) IsSubalgebraOfClass (P 𝒦)
+ lAsc = lift-alg-subP Asc
+
+S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(ssub{𝑨} sA B≤A) =
+ ssub (subalgebra→S lAsc)(lift-alg-sub-lift 𝑨 B≤A)
   where
-   splAu : 𝑨 ∈ S(P 𝒦)
-   splAu = S⊆SP{𝓤}{𝓤} x
+  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+  lA = lift-alg 𝑨 𝓦
 
-   Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
-   Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
+  splAu : 𝑨 ∈ S (P 𝒦)
+  splAu = S⊆SP{𝓤}{𝓤} sA
 
-   lAsc : (lift-alg 𝑨 𝓦) IsSubalgebraOfClass (P 𝒦)
-   lAsc = lift-alg-subP Asc
+  Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
+  Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
 
-S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (lift-alg-sub-lift 𝑨 B≤A)
-  where
-   lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
-   lA = lift-alg 𝑨 𝓦
-
-   splAu : 𝑨 ∈ S (P 𝒦)
-   splAu = S⊆SP{𝓤}{𝓤} sA
-
-   Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
-   Asc = S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} splAu
-
-   lAsc : lA IsSubalgebraOfClass (P 𝒦)
-   lAsc = lift-alg-subP Asc
+  lAsc : lA IsSubalgebraOfClass (P 𝒦)
+  lAsc = lift-alg-subP Asc
 
 S⊆SP (ssubw{𝑨} sA B≤A) = ssubw (S⊆SP sA) B≤A
 
 S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} lAsp lA≅B
  where
-  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
-  lA = lift-alg 𝑨 𝓦
+ lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
+ lA = lift-alg 𝑨 𝓦
 
-  lAsc : lA IsSubalgebraOfClass (P 𝒦)
-  lAsc = lift-alg-subP (S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} (S⊆SP sA))
+ lAsc : lA IsSubalgebraOfClass (P 𝒦)
+ lAsc = lift-alg-subP (S→subalgebra{𝓤}{P{𝓤}{𝓤} 𝒦}{𝑨} (S⊆SP sA))
 
-  lAsp : lA ∈ S(P 𝒦)
-  lAsp = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
+ lAsp : lA ∈ S(P 𝒦)
+ lAsp = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
 
-  lA≅B : lA ≅ 𝑩
-  lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
+ lA≅B : lA ≅ 𝑩
+ lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
 
 \end{code}
 
@@ -402,41 +410,42 @@ We need to formalize one more lemma before arriving the main objective of this s
 
 \begin{code}
 
-lemPS⊆SP : {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{hfe : hfunext 𝓦 𝓤}
+lemPS⊆SP : {𝓤 𝓦 : Universe} → hfunext 𝓦 𝓤
+ →         {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →         {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
  →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
            -------------------------------------
  →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-lemPS⊆SP {𝓤}{𝓦}{𝒦}{hfe}{I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , ξ , (⨅≅ gfe B≅SA)
+lemPS⊆SP {𝓤}{𝓦} hfe {𝒦}{I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜 ) , ξ , (⨅≅ gfe B≅SA)
  where
-  𝒜 : I → Algebra 𝓤 𝑆
-  𝒜 = λ i → ∣ B≤K i ∣
+ 𝒜 : I → Algebra 𝓤 𝑆
+ 𝒜 = λ i → ∣ B≤K i ∣
 
-  SA : I → Algebra 𝓤 𝑆
-  SA = λ i → ∣ fst ∥ B≤K i ∥ ∣
+ SA : I → Algebra 𝓤 𝑆
+ SA = λ i → ∣ fst ∥ B≤K i ∥ ∣
 
-  B≅SA : ∀ i → ℬ i ≅ SA i
-  B≅SA = λ i → ∥ snd ∥ B≤K i ∥ ∥
+ B≅SA : ∀ i → ℬ i ≅ SA i
+ B≅SA = λ i → ∥ snd ∥ B≤K i ∥ ∥
 
-  SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
-  SA≤𝒜 = λ i → snd ∣ ∥ B≤K i ∥ ∣
+ SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
+ SA≤𝒜 = λ i → snd ∣ ∥ B≤K i ∥ ∣
 
-  h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-  h = λ i → fst ∣ SA≤𝒜 i ∣
+ h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
+ h = λ i → fst ∣ SA≤𝒜 i ∣
 
-  α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
-  α = λ x i → (h i) (x i)
-  β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
-  β = λ 𝑓 𝒂 → gfe λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
-  γ : is-embedding α
-  γ = embedding-lift hfe hfe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+ α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
+ α = λ x i → (h i) (x i)
+ β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
+ β = λ 𝑓 𝒂 → gfe λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+ γ : is-embedding α
+ γ = embedding-lift hfe hfe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
-  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
-  ⨅SA≤⨅𝒜 = (α , β) , γ
+ ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
+ ⨅SA≤⨅𝒜 = (α , β) , γ
 
-  ξ : ⨅ 𝒜 ∈ P 𝒦
-  ξ = produ (λ i → P-expa (∣ snd ∥ B≤K i ∥ ∣))
+ ξ : ⨅ 𝒜 ∈ P 𝒦
+ ξ = produ (λ i → P-expa (∣ snd ∥ B≤K i ∥ ∣))
 
 
 \end{code}
@@ -449,32 +458,33 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-PS⊆SP : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(hfe : hfunext (ov 𝓤)(ov 𝓤))
+PS⊆SP : {𝓤 : Universe} → hfunext (ov 𝓤)(ov 𝓤)
+ →      {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
  →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
 
 PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
-PS⊆SP {𝓤}{𝒦} _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
+PS⊆SP {𝓤} _ {𝒦} (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
 PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
 PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
 PS⊆SP {𝓤} _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
 PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
 PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
-PS⊆SP {𝓤}{𝒦} hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+PS⊆SP {𝓤} hfe {𝒦}(produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
  where
   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
   ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-  η = lemPS⊆SP{𝓤 = ov 𝓤}{ov 𝓤}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
+  η = lemPS⊆SP {ov 𝓤} {ov 𝓤} hfe {P 𝒦} {I} {𝒜} ξ
 
-PS⊆SP {𝓤}{𝒦} hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+PS⊆SP {𝓤} hfe {𝒦}(prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
  where
   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
   ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-  η = lemPS⊆SP{𝓤 = ov 𝓤}{ov 𝓤}{𝒦 = (P 𝒦)}{hfe}{I = I}{ℬ = 𝒜} ξ
+  η = lemPS⊆SP {ov 𝓤} {ov 𝓤} hfe {P 𝒦} {I} {𝒜} ξ
 
 PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
 PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B

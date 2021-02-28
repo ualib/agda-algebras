@@ -46,14 +46,16 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
 \begin{code}
 
-_⊧_≈_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Algebra 𝓤 𝑆 → Term X → Term X → 𝓤 ⊔ 𝓧 ̇
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
-𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
+ _⊧_≈_ : Algebra 𝓤 𝑆 → Term X → Term X → 𝓤 ⊔ 𝓧 ̇
+
+ 𝑨 ⊧ p ≈ q = (p ̇ 𝑨) ≡ (q ̇ 𝑨)
 
 
-_⊧_≋_ : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → 𝓧 ⊔ ov 𝓤 ̇
+ _⊧_≋_ : Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → 𝓧 ⊔ ov 𝓤 ̇
 
-_⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+ _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
@@ -69,9 +71,11 @@ Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `T
 
 \begin{code}
 
-Th : {𝓤 𝓧 : Universe}{X : 𝓧 ̇} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
-Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+ Th : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
+
+ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
 \end{code}
 
@@ -79,9 +83,9 @@ If ℰ denotes a set of identities, then the class of algebras satisfying all id
 
 \begin{code}
 
-Mod : {𝓤 𝓧 : Universe}(X : 𝓧 ̇) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
+ Mod : Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
 
-Mod X ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+ Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
@@ -94,20 +98,20 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
-⊧-I-invariance : {𝓠 𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝑨 : Algebra 𝓠 𝑆}{𝑩 : Algebra 𝓤 𝑆}
-                 (p q : Term X)  →  𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
-⊧-I-invariance {𝑨 = 𝑨}{𝑩 = 𝑩} p q Apq (f , g , f∼g , g∼f) = γ
- where
-  γ : p ̇ 𝑩 ≡ q ̇ 𝑩
-  γ = gfe λ x →
-      (p ̇ 𝑩) x ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-      (p ̇ 𝑩) (∣ 𝒾𝒹 𝑩 ∣ ∘ x) ≡⟨ ap (λ - → (p ̇ 𝑩) -) (gfe λ i → ((f∼g)(x i))⁻¹)  ⟩
-      (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x) ≡⟨ (comm-hom-term 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-      ∣ f ∣ ((p ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
-      ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x)) ≡⟨ comm-hom-term 𝑩 f q (∣ g ∣ ∘ x) ⟩
-      (q ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (λ - → (q ̇ 𝑩) -) (gfe λ i → (f∼g) (x i)) ⟩
-      (q ̇ 𝑩) x ∎
+ ⊧-I-invariance : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+                  (p q : Term X)  →  𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+
+ ⊧-I-invariance {𝑨}{𝑩} p q Apq (f , g , f∼g , g∼f) = gfe λ x →
+
+  (p ̇ 𝑩) x                      ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (p ̇ 𝑩) (∣ 𝒾𝒹 𝑩 ∣ ∘ x)         ≡⟨ ap (λ - → (p ̇ 𝑩) -) (gfe λ i → ((f∼g)(x i))⁻¹)  ⟩
+  (p ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
+  ∣ f ∣ ((p ̇ 𝑨) (∣ g ∣ ∘ x))    ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
+  ∣ f ∣ ((q ̇ 𝑨) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term 𝑩 f q (∣ g ∣ ∘ x) ⟩
+  (q ̇ 𝑩) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (λ - → (q ̇ 𝑩) -) (gfe λ i → (f∼g) (x i)) ⟩
+  (q ̇ 𝑩) x                      ∎
 
 \end{code}
 
@@ -117,26 +121,26 @@ As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡
 
 
 
-##### <a id="Lift-invariance">Lift-invariance</a>
+#### <a id="Lift-invariance">Lift-invariance of ⊧</a>
 
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
 \begin{code}
 
-⊧-lift-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}
-                        (𝑨 : Algebra 𝓤 𝑆)(p q : Term X)
-                        ------------------------------------
- →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
-⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
-
-
-⊧-lower-alg-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(𝑨 : Algebra 𝓤 𝑆)
-                         (p q : Term X)
+ ⊧-lift-alg-invariance : (𝑨 : Algebra 𝓤 𝑆) (p q : Term X)
                          -----------------------------------
- →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+  →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
-⊧-lower-alg-invariance 𝑨 p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
+ ⊧-lift-alg-invariance 𝑨 p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
+
+
+ ⊧-lower-alg-invariance : (𝑨 : Algebra 𝓤 𝑆) (p q : Term X)
+                          -----------------------------------
+  →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+
+ ⊧-lower-alg-invariance 𝑨 p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
 
 \end{code}
 
@@ -144,26 +148,25 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 
 
-##### <a id="subalgebraic-invariance">Subalgebraic invariance</a>
+#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 
 Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of 𝑨, which fact can be formalized as follows.
 
 \begin{code}
 
-⊧-S-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
-                 (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
- →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
+ ⊧-S-invariance : (p q : Term X)(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
+  →               𝑨 ⊧ p ≈ q → 𝑩 ≤ 𝑨 → 𝑩 ⊧ p ≈ q
 
-⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
- where
-  h : hom 𝑩 𝑨
-  h = ∣ B≤A ∣
+ ⊧-S-invariance p q 𝑨 𝑩 Apq B≤A = gfe λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
+  where
+   h : hom 𝑩 𝑨
+   h = ∣ B≤A ∣
 
-  ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-  ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
-        (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun Apq (∣ h ∣ ∘ b) ⟩
-        (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
-        ∣ h ∣((q ̇ 𝑩) b)   ∎
+   ξ : ∀ b → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
+   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
+         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun Apq (∣ h ∣ ∘ b) ⟩
+         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
+         ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
 
@@ -171,29 +174,29 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 \begin{code}
 
-⊧-S-class-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
-                       (𝑩 : SubalgebraOfClass{𝓤}{𝓦} 𝒦)
- →                     𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
+ ⊧-S-class-invariance : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
+                        (𝑩 : SubalgebraOfClass{𝓤}{𝓦} 𝒦)
+  →                     𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
-⊧-S-class-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq =
+ ⊧-S-class-invariance p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq =
 
- gfe λ b → (embeddings-are-lc ∣ h ∣ hem)(ξ b)
+  gfe λ b → (embeddings-are-lc ∣ h ∣ hem)(ξ b)
 
-  where
-   h' : hom ∣ SA ∣ 𝑨
-   h' = ∣ snd SA ∣
+   where
+    h' : hom ∣ SA ∣ 𝑨
+    h' = ∣ snd SA ∣
 
-   h : hom 𝑩 𝑨
-   h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
+    h : hom 𝑩 𝑨
+    h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
 
-   hem : is-embedding ∣ h ∣
-   hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
+    hem : is-embedding ∣ h ∣
+    hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
 
-   ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
-   ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
-         (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun (Kpq ka) (∣ h ∣ ∘ b) ⟩
-         (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
-         ∣ h ∣((q ̇ 𝑩) b)   ∎
+    ξ : (b : X → ∣ 𝑩 ∣ ) → ∣ h ∣ ((p ̇ 𝑩) b) ≡ ∣ h ∣ ((q ̇ 𝑩) b)
+    ξ b = ∣ h ∣((p ̇ 𝑩) b)   ≡⟨ comm-hom-term 𝑨 h p b ⟩
+          (p ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ extfun (Kpq ka) (∣ h ∣ ∘ b) ⟩
+          (q ̇ 𝑨)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term 𝑨 h q b)⁻¹ ⟩
+          ∣ h ∣((q ̇ 𝑩) b)   ∎
 
 \end{code}
 
@@ -201,40 +204,48 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 
 
-##### <a id="product-invariance">Product invariance</a>
+#### <a id="product-invariance">Product invariance of ⊧</a>
 
-An identities satisfied by all algebras in a class are also satisfied by the product of algebras in that class.
+An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
 \begin{code}
 
-⊧-P-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
-                 (I : 𝓦 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
-                 --------------------------------------
- →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
-⊧-P-invariance p q I 𝒜 𝒜pq = γ
- where
-  γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
-  γ = gfe λ a →
-   (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod p 𝒜 a ⟩
-   (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
-   (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod q 𝒜 a)⁻¹ ⟩
-   (q ̇ ⨅ 𝒜) a                           ∎
+ ⊧-P-invariance : (p q : Term X)
+                  (I : 𝓦 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+                  --------------------------------------
+  →               (∀ i → (𝒜 i) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 
-
-⊧-P-class-invariance : {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-                       (p q : Term X)(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
- →                     (∀ i → 𝒜 i ∈ 𝒦)
-                       --------------------------
- →                     𝒦 ⊧ p ≋ q  →  ⨅ 𝒜 ⊧ p ≈ q
-
-⊧-P-class-invariance p q I 𝒜 K𝒜 α = γ
+ ⊧-P-invariance p q I 𝒜 𝒜pq = γ
   where
-   β : ∀ i → (𝒜 i) ⊧ p ≈ q
-   β i = α (K𝒜 i)
+   γ : p ̇ ⨅ 𝒜  ≡  q ̇ ⨅ 𝒜
+   γ = gfe λ a →
+    (p ̇ ⨅ 𝒜) a                           ≡⟨ interp-prod p 𝒜 a ⟩
+    (λ i → ((p ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ gfe (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
+    (λ i → ((q ̇ (𝒜 i)) (λ x → (a x) i))) ≡⟨ (interp-prod q 𝒜 a)⁻¹ ⟩
+    (q ̇ ⨅ 𝒜) a                           ∎
 
-   γ : p ̇ ⨅ 𝒜 ≡ q ̇ ⨅ 𝒜
-   γ = ⊧-P-invariance p q I 𝒜 β
+\end{code}
+
+An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
+
+\begin{code}
+
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+
+ ⊧-P-class-invariance : (p q : Term X)(I : 𝓤 ̇)(𝒜 : I → Algebra 𝓤 𝑆)
+  →                     (∀ i → 𝒜 i ∈ 𝒦)
+                        --------------------------
+  →                     𝒦 ⊧ p ≋ q  →  ⨅ 𝒜 ⊧ p ≈ q
+
+ ⊧-P-class-invariance p q I 𝒜 K𝒜 α = γ
+   where
+    β : ∀ i → (𝒜 i) ⊧ p ≈ q
+    β i = α (K𝒜 i)
+
+    γ : p ̇ ⨅ 𝒜 ≡ q ̇ ⨅ 𝒜
+    γ = ⊧-P-invariance p q I 𝒜 β
 
 \end{code}
 
@@ -242,22 +253,23 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 \begin{code}
 
-⊧-P-lift-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}(p q : Term X)
-                      (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
-                      ----------------------------------------------------
- →                    (∀ i → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
-⊧-P-lift-invariance {𝓤}{𝓦} p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
-  where
-   Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
-   Aipq i = ⊧-I-invariance p q (lApq i) (sym-≅ lift-alg-≅)
+ ⊧-P-lift-invariance : (p q : Term X)
+                       (I : 𝓤 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
+                       ----------------------------------------------------
+  →                    (∀ i → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+
+ ⊧-P-lift-invariance p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
+   where
+    Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
+    Aipq i = ⊧-I-invariance p q (lApq i) (sym-≅ lift-alg-≅)
 
 \end{code}
 
 
 
-
-##### <a id="homomorphisc-invariance">Homomorphic invariance</a>
+#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
 If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
@@ -268,19 +280,18 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
                  -----------------------------------
  →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
-⊧-H-invariance X p q 𝑨 φ β =
-  ∣ φ ∣ p              ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
-  ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term 𝑨 φ p ℊ ) ⟩
-  (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ extfun β (∣ φ ∣ ∘ ℊ ) ⟩
-  (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term 𝑨 φ q ℊ )⁻¹ ⟩
-  ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
-  ∣ φ ∣ q              ∎
+⊧-H-invariance X p q 𝑨 φ β = ∣ φ ∣ p             ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
+                             ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term 𝑨 φ p ℊ ) ⟩
+                             (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ extfun β (∣ φ ∣ ∘ ℊ ) ⟩
+                             (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term 𝑨 φ q ℊ )⁻¹ ⟩
+                             ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨ (ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
+                             ∣ φ ∣ q             ∎
 
 \end{code}
 
-More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if 𝒦 is a class of 𝑆-algebras and 𝑝, 𝑞 terms in the language of 𝑆, then,
+More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algebras and `𝑝`, `𝑞` terms in the language of `𝑆`, then,
 
-𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑝 ̇ (𝑻 X)) = φ ∘ (𝑞 ̇ (𝑻 X)).
+`𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑝 ̇ (𝑻 X)) = φ ∘ (𝑞 ̇ (𝑻 X))`.
 
 \begin{code}
 

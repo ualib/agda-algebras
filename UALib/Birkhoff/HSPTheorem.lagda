@@ -270,7 +270,7 @@ module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (Term X) (ov 𝓤))
  𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
  𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
 
- 𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod X (Th 𝕍𝒦) → epi 𝔽 𝑨
+ 𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
  𝔽-ModTh-epi 𝑨 AinMTV = γ
   where
    ϕ : hom (𝑻 X) 𝑨
@@ -321,7 +321,7 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
 
 \begin{code}
 
- birkhoff : Mod X (Th (V 𝒦)) ⊆ V 𝒦
+ birkhoff : Mod (Th (V 𝒦)) ⊆ V 𝒦
 
  birkhoff {𝑨} α = γ
   where
@@ -334,7 +334,7 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \begin{code}
 
- birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod X (Th (V 𝒦))
+ birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod {X = X}(Th (V 𝒦))
 
  birkhoff' {𝑨} α p q pThq = pThq α
 

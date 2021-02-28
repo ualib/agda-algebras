@@ -361,7 +361,7 @@ V-id1' {𝓤}{𝓧}{X} p q α (vprodw{I}{𝒜} V𝒜) = γ
   γ : p ̇ (⨅ 𝒜)  ≡ q ̇ (⨅ 𝒜)
   γ = ⊧-P-invariance p q I 𝒜 IH
 
-V-id1' {𝓤} p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invariance{𝓤 = (ov 𝓤)⁺}{𝑨 = 𝑨}
+V-id1' {𝓤} p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invariance{𝓦 = (ov 𝓤)⁺}{𝑨 = 𝑨}
                                                         p q (V-id1 p q α VA) A≅B
 
 V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1' p q α VA) A≅B
