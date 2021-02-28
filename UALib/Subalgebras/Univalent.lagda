@@ -34,9 +34,9 @@ open import MGS-MLTT using (_⇔_) public
 
 -- Private imports (only visible in the current module)
 open import MGS-Subsingleton-Theorems using (Univalence)
-open import MGS-Subsingleton-Theorems using (is-subsingleton; Π-is-subsingleton)
+open import MGS-Subsingleton-Theorems using (Π-is-subsingleton)
 
-open import MGS-Embeddings using (is-set; embedding-gives-ap-is-equiv; pr₁-embedding; 
+open import MGS-Embeddings using (embedding-gives-ap-is-equiv; pr₁-embedding; 
  lr-implication; rl-implication; inverse; ×-is-subsingleton; _≃_; _●_;
  logically-equivalent-subsingletons-are-equivalent; id)
 

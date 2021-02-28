@@ -20,13 +20,15 @@ module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext
 
 open import Subalgebras.Subuniverses {𝑆 = 𝑆}{gfe} public
 open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
+open import MGS-Embeddings using (is-set) public
+open import MGS-Subsingleton-Theorems using (is-subsingleton) public
 
 \end{code}
 
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras 𝑨 : Algebra 𝓦 𝑆 and 𝑩 : Algebra 𝓤 𝑆, we say that 𝑩 is a **subalgebra** of 𝑨, and we write 𝑩 IsSubalgebraOf 𝑨 just in case 𝑩 can be embedded in 𝑨; in other terms, there exists a map h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ from the universe of 𝑨 to the universe of 𝑩 such that h is an embedding (i.e., is-embedding h holds) and h is a homomorphism from 𝑨 to 𝑩.
+Given algebras `𝑨 : Algebra 𝓦 𝑆` and `𝑩 : Algebra 𝓤 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the universe of `𝑨` to the universe of `𝑩` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
 
 \begin{code}
 
@@ -43,13 +45,11 @@ module _ {𝓤 𝓦 : Universe} where
 
 #### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
 
-We take this opportunity to prove a useful lemma that requires the `IsSubalgebraOf` function.  If 𝑨 is an 𝑆-algebra, and if `h : hom (𝑻 X) 𝑨` is a homomorphism from the term algebra to 𝑨, then the quotient 𝑻(X) ╱ (ker h) is (isomorphic to) a subalgebra of 𝑨.
+We take this opportunity to prove an important lemma using the `IsSubalgebraOf` type defined above.  If `𝑨` and `𝑩` is an 𝑆-algebra, and if `h : hom 𝑨 𝑩` is a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.  This is an easy corollary of the First Homomorphism Theorem proved in the [Homomorphisms.Noether][] module.
 
 \begin{code}
 
 open Congruence
-open import MGS-Embeddings using (is-set)
-open import MGS-Subsingleton-Theorems using (is-subsingleton)
 
 FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                     --extensionality assumptions:
@@ -61,23 +61,32 @@ FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alge
 
 FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
  where
-  FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ ) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
-  FirstHomThm = FirstHomTheorem 𝑨 𝑩 h pe Bset ssR ssA
-  ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
-  ϕhom = ∣ FirstHomThm ∣
-  ϕemb : is-embedding ∣ ϕhom ∣
-  ϕemb = snd (snd (snd FirstHomThm))
+ FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ )
+                                              × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
+ FirstHomThm = FirstHomTheorem 𝑨 𝑩 h pe Bset ssR ssA
 
-free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑨 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑨)
+ ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
+ ϕhom = ∣ FirstHomThm ∣
+
+ ϕemb : is-embedding ∣ ϕhom ∣
+ ϕemb = snd (snd (snd FirstHomThm))
+
+\end{code}
+
+In the special case we apply this to later (e.g., to prove Birkhoff's HSP theorem) the algebra `𝑨` is the term algebra `𝑻 X`. We record this special case here so that it's easier to apply later.
+
+\begin{code}
+
+free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
                     --extensionality assumptions:
- →                    prop-ext ∣ 𝑻 X ∣ 𝓤 → is-set ∣ 𝑨 ∣
- →                    (∀ p q → is-subsingleton (⟨ kercon 𝑨 h ⟩ p q))
- →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑨 h ⟩} C))
+ →                    prop-ext ∣ 𝑻 X ∣ 𝓤 → is-set ∣ 𝑩 ∣
+ →                    (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
+ →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
                    -------------------------------------------------------------------
- →                 ((𝑻 X) [ 𝑨 ]/ker h) IsSubalgebraOf 𝑨
+ →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
-free-quot-subalg X 𝑨 h pe Aset ssR ssA = FirstHomCorollary (𝑻 X) 𝑨 h pe Aset ssR ssA
+free-quot-subalg X 𝑩 h pe Bset ssR ssB = FirstHomCorollary (𝑻 X) 𝑩 h pe Bset ssR ssB
 
 \end{code}
 
@@ -159,53 +168,59 @@ refl-≤ : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
 refl-≤ {𝑨 = 𝑨} = REFL-≤ 𝑨
 
 
---Reflexivity of IsSubalgebra (explicit arg)
-ISO-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- →      𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
-        -----------------
- →      𝑪 ≤ 𝑨
+module _ {𝓧 𝓨 𝓩 : Universe} where
 
-ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = (g ∘ f , gfhom) , gfemb
- where
-  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  f = fst ∣ C≅B ∣
-  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-  g = fst ∣ B≤A ∣
+ --Reflexivity of IsSubalgebra (explicit arg)
+ ISO-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+  →      𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
+         -----------------
+  →      𝑪 ≤ 𝑨
 
-  gfemb : is-embedding (g ∘ f)
-  gfemb = ∘-embedding (∥ B≤A ∥) (iso→embedding C≅B)
+ ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = (g ∘ f , gfhom) , gfemb
+  where
+   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+   f = fst ∣ C≅B ∣
+   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+   g = fst ∣ B≤A ∣
 
-  gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-  gfhom = ∘-hom 𝑪 𝑩 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∣ B≤A ∣)
+   gfemb : is-embedding (g ∘ f)
+   gfemb = ∘-embedding (∥ B≤A ∥) (iso→embedding C≅B)
 
-
-Iso-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
-
-Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
+   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
+   gfhom = ∘-hom 𝑪 𝑩 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∣ B≤A ∣)
 
 
-iso-≤ : {𝓧 𝓨 𝓩 : Universe}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+ Iso-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
 
-iso-≤ {𝑨 = 𝑨} {𝑩 = 𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
-
-
-trans-≤-≅ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
-trans-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = ISO-≤ 𝑩 𝑨 𝑪 A≤B (sym-≅ B≅C)
+ Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 
-TRANS-≤-≅ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ iso-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
 
-TRANS-≤-≅ {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+ iso-≤ {𝑨}{𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 
-lift-alg-lower-≤-lift : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →                      𝑨 ≤ 𝑩 → 𝑨 ≤ (lift-alg 𝑩 𝓩)
-lift-alg-lower-≤-lift {𝓧}{𝓨}{𝓩}𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
+module _ {𝓧 𝓨 𝓩 : Universe} where
+
+ trans-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
+
+ trans-≤-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ISO-≤ 𝑩 𝑨 𝑪 A≤B (sym-≅ B≅C)
+
+
+ TRANS-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+
+ TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+
+
+module _ {𝓧 𝓨 𝓩 : Universe} where
+
+ lift-alg-lower-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
+  →                      𝑨 ≤ 𝑩 → 𝑨 ≤ (lift-alg 𝑩 𝓩)
+ lift-alg-lower-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
 
 mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
@@ -258,6 +273,8 @@ lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
 \end{code}
 
 ---------------------------------
+
+<span class="footnote" id="fn2"><sup>1</sup> A simpler alternative would be to proclaim `𝑩` a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. We should investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
 
 [← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Univalent →](Subalgebras.Univalent.html)</span>

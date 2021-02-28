@@ -52,8 +52,6 @@ module Birkhoff.HSPTheorem
 
 open import Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; Algebra; _̇ ) public
 open the-free-algebra {𝓤}{𝓤}{X}
-open import MGS-Embeddings using (is-set) public
-open import MGS-Subsingleton-Theorems using (is-subsingleton) public
 
 \end{code}
 
