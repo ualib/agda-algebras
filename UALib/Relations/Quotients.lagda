@@ -15,14 +15,14 @@ This section presents the [UALib.Relations.Quotients][] module of the [Agda Univ
 
 module Relations.Quotients where
 
-open import Relations.General public
+open import Relations.Big public
 
 \end{code}
 
 
 #### <a id="properties-of-binary-relations">Properties of binary relations</a>
 
-Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Binary][] we defined a type representing a binary relation on A.  In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
+Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Small][] we defined a type representing a binary relation on A.  In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
 
 \begin{code}
 
@@ -171,7 +171,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
 --------------------------------------
 
-[← Relations.Binary](Relations.Binary.html)
+[← Relations.Big](Relations.Big.html)
 <span style="float:right;">[Relations.Truncation →](Relations.Truncation.html)</span>
 
 {% include UALib.Links.md %}

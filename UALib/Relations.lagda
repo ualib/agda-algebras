@@ -16,8 +16,8 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 \begin{code}
 module Relations where
 
-open import Relations.Unary
-open import Relations.Binary
+open import Relations.Small
+open import Relations.Big
 open import Relations.Quotients
 open import Relations.Truncation
 
@@ -26,6 +26,6 @@ open import Relations.Truncation
 -------------------------------------
 
 [← Prelude.Lifts](Prelude.Lifts.html)
-<span style="float:right;">[Relations.Unary →](Relations.Unary.html)</span>
+<span style="float:right;">[Relations.Unary →](Relations.Small.html)</span>
 
 {% include UALib.Links.md %}
