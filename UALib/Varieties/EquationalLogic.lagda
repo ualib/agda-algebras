@@ -171,8 +171,8 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 \begin{code}
 
-⊧-S-class-invariance : {𝓤 𝓠 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓠 𝑆)(ov 𝓠)}(p q : Term X)
-                       (𝑩 : SubalgebraOfClass{𝓤}{𝓠} 𝒦)
+⊧-S-class-invariance : {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
+                       (𝑩 : SubalgebraOfClass{𝓤}{𝓦} 𝒦)
  →                     𝒦 ⊧ p ≋ q   →   ∣ 𝑩 ∣ ⊧ p ≈ q
 
 ⊧-S-class-invariance {X = X} p q (𝑩 , 𝑨 , SA , (ka , BisSA)) Kpq =

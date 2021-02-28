@@ -107,15 +107,17 @@ _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 �
 
 \begin{code}
 
-_IsSubalgebraOfClass_ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆) → Pred (Algebra 𝓠 𝑆) 𝓦 → _ ̇
-_IsSubalgebraOfClass_ {𝓤} 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra _ 𝑆) , Σ SA ꞉ (Subalgebra{𝓤} 𝑨) ,
-                                                              (𝑨 ∈ 𝒦)  × (𝑩 ≅ ∣ SA ∣)
+module _ {𝓤 𝓦 𝓩 : Universe} where
 
-SUBALGEBRAOFCLASS : {𝓤 𝓠 𝓦 : Universe} → Pred (Algebra 𝓠 𝑆) 𝓦 → _ ̇
-SUBALGEBRAOFCLASS {𝓤} 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
+ _IsSubalgebraOfClass_ : (𝑩 : Algebra 𝓦 𝑆) → Pred (Algebra 𝓤 𝑆) 𝓩 → ov 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+ _IsSubalgebraOfClass_ 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓤} 𝑨) ,
+                                                           (𝑨 ∈ 𝒦)  × (𝑩 ≅ ∣ SA ∣)
 
-SubalgebraOfClass : {𝓤 𝓠 : Universe} → Pred (Algebra 𝓠 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺) → 𝓞 ⊔ 𝓥 ⊔ (𝓠 ⊔ 𝓤) ⁺ ̇
-SubalgebraOfClass {𝓤}{𝓠} = SUBALGEBRAOFCLASS {𝓤}{𝓠}{𝓞 ⊔ 𝓥 ⊔ 𝓠 ⁺}
+ SUBALGEBRAOFCLASS : Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
+ SUBALGEBRAOFCLASS 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
+
+SubalgebraOfClass : {𝓤 𝓦 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → ov (𝓤 ⊔ 𝓦) ̇
+SubalgebraOfClass {𝓤}{𝓦} = SUBALGEBRAOFCLASS {𝓤}{𝓦}{𝓩 = ov 𝓤}
 
 \end{code}
 
@@ -152,10 +154,11 @@ transitivity-≤ : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : 
 
 transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ϕ , ϕemb
  where
-  ϕ : hom 𝑨 𝑪
-  ϕ = ((fst ∣ B≤C ∣) ∘ (fst ∣ A≤B ∣) , (∘-hom 𝑨 𝑩 𝑪 {fst ∣ A≤B ∣}{fst ∣ B≤C ∣}(snd ∣ A≤B ∣)(snd ∣ B≤C ∣)))
-  ϕemb : is-embedding ∣ ϕ ∣
-  ϕemb = ∘-embedding (∥ B≤C ∥)(∥ A≤B ∥)
+ ϕ : hom 𝑨 𝑪
+ ϕ = (fst ∣ B≤C ∣) ∘ (fst ∣ A≤B ∣) , ∘-hom 𝑨 𝑩 𝑪 {fst ∣ A≤B ∣}{fst ∣ B≤C ∣}(snd ∣ A≤B ∣)(snd ∣ B≤C ∣)
+
+ ϕemb : is-embedding ∣ ϕ ∣
+ ϕemb = ∘-embedding (∥ B≤C ∥)(∥ A≤B ∥)
 
 
 --Reflexivity of IsSubalgebra (explicit arg)
@@ -216,59 +219,51 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
  TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
-
- lift-alg-lower-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
-  →                      𝑨 ≤ 𝑩 → 𝑨 ≤ (lift-alg 𝑩 𝓩)
- lift-alg-lower-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
-
-
-mono-≤ : {𝓤 𝓠 𝓦 : Universe}(𝑩 : Algebra 𝓤 𝑆){𝒦 𝒦' : Pred (Algebra 𝓠 𝑆) 𝓦}
+mono-≤ : {𝓤 𝓦 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
 
-lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}{𝑩 : Algebra 𝓤 𝑆}
+lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
-lift-alg-is-sub {𝓤}{𝒦}{𝑩}(𝑨 , (sa , (KA , B≅sa))) =
- 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
+lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
 
 
-lift-alg-lift-≤-lower : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →                      𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+module _ {𝓧 𝓨 𝓩 : Universe} where
 
-lift-alg-lift-≤-lower {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A =
- iso-≤{𝓧}{𝓨}{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
+ lift-alg-lower-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ (lift-alg 𝑩 𝓩)
+ lift-alg-lower-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
+ lift-alg-lift-≤-lower : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → (lift-alg 𝑩 𝓩) ≤ 𝑨
+ lift-alg-lift-≤-lower 𝑨 {𝑩} B≤A = iso-≤ {𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩} (lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
 
-lift-alg-lower-≤-lift' : {𝓧 𝓨 𝓩 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →                      𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
-
-lift-alg-lower-≤-lift' {𝓧}{𝓨}{𝓩} 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
-
-
-lift-alg-sub-lift : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆}
- →                  𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
-
-lift-alg-sub-lift {𝓤}{𝓦} 𝑨 {𝑪} C≤A = TRANS-≤-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
+ lift-alg-lower-≤-lift' : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ (lift-alg 𝑨 𝓩)
+ lift-alg-lower-≤-lift' 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
 
 
-lift-alg-≤ : {𝓧 𝓨 𝓩 𝓦 : Universe}(𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}
- →           𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
-lift-alg-≤ {𝓧}{𝓨}{𝓩}{𝓦} 𝑨 {𝑩} A≤B =
- transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
+ lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → (lift-alg 𝑨 𝓩) ≤ (lift-alg 𝑩 𝓦)
+
+ lift-alg-≤ 𝑨 {𝑩} A≤B = transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
   where
-   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-   lA = lift-alg 𝑨 𝓩
+  lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
+  lA = lift-alg 𝑨 𝓩
 
-   lAA : lA ≤ 𝑨
-   lAA = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
+  lAA : lA ≤ 𝑨
+  lAA = lift-alg-lift-≤-lower 𝑨 {𝑨} refl-≤
 
-   B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
-   B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+  B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
+  B≤lB = lift-alg-lower-≤-lift 𝑩 {𝑩} refl-≤
+
+
+module _ {𝓤 𝓦 : Universe} where
+
+ lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ (lift-alg 𝑨 𝓦)
+ lift-alg-sub-lift 𝑨 {𝑪} C≤A = TRANS-≤-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
+
 
 \end{code}
 
