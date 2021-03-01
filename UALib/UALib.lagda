@@ -77,7 +77,6 @@ open import Homomorphisms
 open import Terms
 open import Subalgebras
 open import Varieties
-open import Birkhoff
 
 \end{code}
 
@@ -125,10 +124,7 @@ open import Birkhoff
   - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
   - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
   - [Equation Preservation Theorems](Varieties.Preservation.html)
-
-- [The Free Algebra and Birkhoff's Theorem](Birkhoff.html)
-  - [The Free Algebra](Birkhoff.FreeAlgebra.html)
-  - [Birkhoff's Theorem](Birkhoff.HSPTheorem.html)
+  - [Free Algebras and Birkhoff's Theorem](Varieties.FreeAlgebras.html)
 
 ---------------------------------------
 

@@ -69,10 +69,7 @@ mv html/Varieties.{tex,md}
 mv html/Varieties.EquationalLogic.{tex,md}
 mv html/Varieties.Varieties.{tex,md}
 mv html/Varieties.Preservation.{tex,md}
-
-mv html/Birkhoff.{tex,md}
-mv html/Birkhoff.FreeAlgebra.{tex,md}
-mv html/Birkhoff.HSPTheorem.{tex,md}
+mv html/Varieties.FreeAlgebras.{tex,md}
 
 paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg
 

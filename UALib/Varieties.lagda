@@ -22,6 +22,7 @@ module Varieties where
 open import Varieties.EquationalLogic
 open import Varieties.Varieties
 open import Varieties.Preservation
+open import Varieties.FreeAlgebras
 
 \end{code}
 

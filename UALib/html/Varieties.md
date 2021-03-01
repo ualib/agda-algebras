@@ -22,6 +22,7 @@ Because a class of structures has a different type than a single structure, we m
 <a id="1299" class="Keyword">open</a> <a id="1304" class="Keyword">import</a> <a id="1311" href="Varieties.EquationalLogic.html" class="Module">Varieties.EquationalLogic</a>
 <a id="1337" class="Keyword">open</a> <a id="1342" class="Keyword">import</a> <a id="1349" href="Varieties.Varieties.html" class="Module">Varieties.Varieties</a>
 <a id="1369" class="Keyword">open</a> <a id="1374" class="Keyword">import</a> <a id="1381" href="Varieties.Preservation.html" class="Module">Varieties.Preservation</a>
+<a id="1404" class="Keyword">open</a> <a id="1409" class="Keyword">import</a> <a id="1416" href="Varieties.FreeAlgebras.html" class="Module">Varieties.FreeAlgebras</a>
 
 </pre>
 

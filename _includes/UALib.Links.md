@@ -17,8 +17,6 @@
 [Axioms and Computation]: https://leanprover.github.io/theorem_proving_in_lean/axioms_and_computation.html#
 
 [Bill Lampe]: https://math.hawaii.edu/wordpress/people/william/
-[Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[Birkhoff HSP Theorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
 
 [Category Theory in Context]: http://www.math.jhu.edu/~eriehl/context.pdf
 [categorytheory.gitlab.io]: https://categorytheory.gitlab.io
@@ -194,10 +192,8 @@
 [Varieties.Varieties]: Varieties.Varieties.html
 [Varieties section]: Varieties.Varieties.html
 [Varieties.Preservation]: Varieties.Preservation.html
+[Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
 
-[Birkhoff]: Birkhoff.html
-[Birkhoff.FreeAlgebra]: Birkhoff.FreeAlgebra.html
-[Birkhoff.HSPTheorem]: Birkhoff.HSPTheorem.html
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 
@@ -253,12 +249,7 @@
 [UALib.Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda
 [UALib.Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda
 [UALib.Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda
-
-[UALib.Birkhoff]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[UALib.Birkhoff module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff.lagda
-[UALib.Birkhoff.FreeAlgebra]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/FreeAlgebra.lagda
-[UALib.Birkhoff.HSPLemmas]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPLemmas.lagda
-[UALib.Birkhoff.HSPTheorem]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Birkhoff/HSPTheorem.lagda
+[UALib.Varieties.FreeAlgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/FreeAlgebras.lagda
 [univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom
 
 
