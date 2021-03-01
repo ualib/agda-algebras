@@ -84,16 +84,17 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 \begin{code}
 
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
- ψcompatible 𝒦 f {i} {j} iψj 𝑨 sA h = γ
+ ψcompatible 𝒦 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
    ϕ : hom (𝑻 X) 𝑨
    ϕ = lift-hom 𝑨 h
 
-   γ : ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡ ∣ ϕ ∣ ((f ̂ 𝑻 X) j)
-   γ = ∣ ϕ ∣ ((f ̂ 𝑻 X) i) ≡⟨ ∥ ϕ ∥ f i ⟩
-       (f ̂ 𝑨) (∣ ϕ ∣ ∘ i) ≡⟨ ap (f ̂ 𝑨) (gfe λ x → ((iψj x) 𝑨 sA h)) ⟩
-       (f ̂ 𝑨) (∣ ϕ ∣ ∘ j) ≡⟨ (∥ ϕ ∥ f j)⁻¹ ⟩
-       ∣ ϕ ∣ ((f ̂ 𝑻 X) j) ∎
+   γ : ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) q)
+
+   γ = ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) p) ≡⟨ ∥ ϕ ∥ 𝑓 p ⟩
+       (𝑓 ̂ 𝑨) (∣ ϕ ∣ ∘ p) ≡⟨ ap(𝑓 ̂ 𝑨)(gfe λ x → (ψpq x) 𝑨 sA h) ⟩
+       (𝑓 ̂ 𝑨) (∣ ϕ ∣ ∘ q) ≡⟨ (∥ ϕ ∥ 𝑓 q)⁻¹ ⟩
+       ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) q) ∎
 
  ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
  ψRefl = λ _ _ _ _ → 𝓇ℯ𝒻𝓁
@@ -136,11 +137,31 @@ module the-relatively-free-algebra
 
 \end{code}
 
-The domain ∣ 𝔉 ∣ is
+The domain of `𝔉` is `∣ 𝔉 ∣ = ∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩`, which is equal to
 
-`∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩ = Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )`,
+`Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )`.
 
-which is the collection `{ C : ∃ p ∈ ∣ 𝑻 X ∣, C ≡ [ p ]⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of `𝑻 X`, as desired.
+This Sigma type denotes the set `{ C : ∃ p ∈ ∣ 𝑻 X ∣ , C ≡ [ p ] ⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of terms, as desired.
+
+We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓸𝓿𝓾)`.
+
+
+----------------------------
+
+
+
+
+
+<span class="footnote" id="fn1"><sup>1</sup>Since `X` is not a subset of `𝔉`, technically it doesn't make sense to say "`X` generates `𝔉`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
+
+[↑ Birkhoff](Birkhoff.html)
+<span style="float:right;">[Birkhoff.HSPTheorem →](Birkhoff.HSPTheorem.html)</span>
+
+{% include UALib.Links.md %}
+
+
+
+
 
 <!--
 
@@ -163,18 +184,20 @@ The next function, `mkti`, that takes an arbitrary algebra 𝑨 in 𝒦 and a ma
  mkti 𝑨 h hE ka = (𝑨 , lift-hom 𝑨 h , ka , lift-of-epi-is-epi hE)
 
 -->
-----------------------------
 
 
 
 
 
-<span class="footnote" id="fn1"><sup>1</sup>Since `X` is not a subset of `𝔉`, technically it doesn't make sense to say "`X` generates `𝔉`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
 
-[↑ Birkhoff](Birkhoff.html)
-<span style="float:right;">[Birkhoff.HSPTheorem →](Birkhoff.HSPTheorem.html)</span>
 
-{% include UALib.Links.md %}
+
+
+
+
+
+
+
 
 <!--
 
