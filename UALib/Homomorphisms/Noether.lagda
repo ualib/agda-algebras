@@ -23,81 +23,30 @@ open import Homomorphisms.Basic{𝑆 = 𝑆}{gfe = gfe} public
 \end{code}
 
 
+#### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
-
-#### <a id="the-first-isomorphism-theorem">The First Isomorphism Theorem</a>
-
-Here is a version of the first isomorphism theorem.
+Here is a version of the so-called *First Homomorphism theorem* (sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as "modern algebra").
 
 \begin{code}
 
 open Congruence
 
-module _ {𝓤 𝓦 : Universe} where
-
- FirstIsoTheorem : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-                   (ϕ : hom 𝑨 𝑩) (ϕE : Epic ∣ ϕ ∣ )
-                   --extensionality assumptions:
-  →                  prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
-  →                  (∀ a x → is-subsingleton (⟨ kercon 𝑩 ϕ ⟩ a x))
-  →                  (∀ C → is-subsingleton (𝒞 {A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 ϕ ⟩} C))
-                   ----------------------------------------------------------
-  →                Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) ,
-                          (∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 ϕ ∣) × is-embedding ∣ f ∣
-
- FirstIsoTheorem 𝑨 𝑩 ϕ ϕE pe Bset ssR ssA = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
-  where
-  θ : Congruence 𝑨
-  θ = kercon 𝑩 ϕ
-
-  𝑹 : Pred₂ ∣ 𝑨 ∣ 𝓦
-  𝑹 = ⟨ kercon 𝑩 ϕ ⟩ , ssR
-
-  fmap : ∣ 𝑨 [ 𝑩 ]/ker ϕ ∣ → ∣ 𝑩 ∣
-  fmap ⟦a⟧ = ∣ ϕ ∣ ⌜ ⟦a⟧ ⌝
-
-  fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker ϕ) 𝑩 fmap
-  fhom 𝑓 𝒂 =  ∣ ϕ ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ ϕ ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
-              (𝑓 ̂ 𝑩)(∣ ϕ ∣ ∘ (λ x → ⌜ 𝒂 x ⌝))  ≡⟨ ap (𝑓 ̂ 𝑩) (gfe λ _ → 𝓇ℯ𝒻𝓁) ⟩
-              (𝑓 ̂ 𝑩)(fmap ∘ 𝒂)                 ∎
-
-  fepic : Epic fmap
-  fepic b = γ where
-   a : ∣ 𝑨 ∣
-   a = EpicInv ∣ ϕ ∣ ϕE b
-
-   bfa : b ≡ fmap ⟦ a ⟧
-   bfa = (cong-app (EpicInvIsRightInv gfe ∣ ϕ ∣ ϕE) b)⁻¹
-
-   γ : Image fmap ∋ b
-   γ = Image_∋_.eq b ⟦ a ⟧ bfa
-
-  fmon : Monic fmap
-  fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
-   class-extensionality' {𝑹 = 𝑹} pe gfe ssA (IsEquiv θ) faa'
-
-  femb : is-embedding fmap
-  femb = monic-into-set-is-embedding Bset fmap fmon
-
-\end{code}
-
-**TODO**: Proof of uniqueness of `f` is missing.
-
-If we don't assume the mapping ϕ is onto, and then we get the following version of the first homomorphism theorem.
-
-\begin{code}
-
- FirstHomTheorem : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-                   --extensionality assumptions:
-  →                  prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
-  →                  (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
-  →                  (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
-                   -----------------------------------------------------------------
-  →                Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
-                         (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}{h : hom 𝑨 𝑩}
+         -- truncation assumptions --
+         {pe : prop-ext ∣ 𝑨 ∣ 𝓦}
+         {Bset : is-set ∣ 𝑩 ∣}
+         {ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x)}
+         {ssA : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C)}
+         where
 
 
- FirstHomTheorem 𝑨 𝑩 h pe Bset ssR ssA = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
+
+ FirstHomomorphismTheorem :
+
+  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
+       (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+
+ FirstHomomorphismTheorem = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
   where
   θ : Congruence 𝑨
   θ = kercon 𝑩 h
@@ -124,6 +73,84 @@ If we don't assume the mapping ϕ is onto, and then we get the following version
   ϕemb = monic-into-set-is-embedding Bset ϕ ϕmon
 
 \end{code}
+
+Next we prove that the homomorphism `ϕ`, whose existence we just proved, is unique.
+
+\begin{code}
+
+ NoetherUniqueness : (f g : hom (𝑨 [ 𝑩 ]/ker h) 𝑩)
+  →                  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
+  →                  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣
+                     ---------------------------------
+  →                  ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
+
+ NoetherUniqueness f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
+
+  let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
+
+   ∣ f ∣ θ   ≡⟨ cong-app(hfk ⁻¹)a ⟩  ∣ h ∣ a   ≡⟨ cong-app(hgk)a ⟩   ∣ g ∣ θ   ∎
+
+\end{code}
+
+
+If we assume the hypotheses of the First Homomorphism theorem and add the assumption that `h` is epic, then we get the so-called First Isomorphism theorem.
+
+\begin{code}
+
+ FirstIsomorphismTheorem :
+
+  Epic ∣ h ∣  →  Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) ,
+                        (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣) × is-embedding ∣ f ∣
+
+ FirstIsomorphismTheorem hE = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
+  where
+  θ : Congruence 𝑨
+  θ = kercon 𝑩 h
+
+  fmap : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
+  fmap ⟦a⟧ = ∣ h ∣ ⌜ ⟦a⟧ ⌝
+
+  fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 fmap
+  fhom 𝑓 𝒂 =  ∣ h ∣((𝑓 ̂ 𝑨) λ x → ⌜ 𝒂 x ⌝)   ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
+              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ λ x → ⌜ 𝒂 x ⌝) ≡⟨ ap(𝑓 ̂ 𝑩)(gfe λ _ → 𝓇ℯ𝒻𝓁)⟩
+              (𝑓 ̂ 𝑩) (fmap ∘ 𝒂)              ∎
+
+  fepic : Epic fmap
+  fepic b = γ where
+   a : ∣ 𝑨 ∣
+   a = EpicInv ∣ h ∣ hE b
+
+   bfa : b ≡ fmap ⟦ a ⟧
+   bfa = (cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) b)⁻¹
+
+   γ : Image fmap ∋ b
+   γ = Image_∋_.eq b ⟦ a ⟧ bfa
+
+  fmon : Monic fmap
+  fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
+   class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe gfe ssA (IsEquiv θ) faa'
+
+  femb : is-embedding fmap
+  femb = monic-into-set-is-embedding Bset fmap fmon
+
+\end{code}
+
+Uniqueness for the isomorphism theorem is proved in exactly the same way that the same was proved for the homomorphism theorem.
+
+\begin{code}
+
+ NoetherIsoUnique : (f g : epi (𝑨 [ 𝑩 ]/ker h) 𝑩) → ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
+  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣ → ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
+
+ NoetherIsoUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
+
+  let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
+
+   ∣ f ∣ θ   ≡⟨ cong-app(hfk ⁻¹)a ⟩  ∣ h ∣ a   ≡⟨ cong-app(hgk)a ⟩   ∣ g ∣ θ   ∎
+
+\end{code}
+
+
 
 
 

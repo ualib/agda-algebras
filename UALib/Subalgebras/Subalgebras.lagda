@@ -62,7 +62,7 @@ FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
  FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ )
                                               × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
- FirstHomThm = FirstHomTheorem 𝑨 𝑩 h pe Bset ssR ssA
+ FirstHomThm = FirstHomomorphismTheorem {𝑨 = 𝑨}{𝑩 = 𝑩}{h} {pe} {Bset}{ssR}{ssA}
 
  ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
  ϕhom = ∣ FirstHomThm ∣
