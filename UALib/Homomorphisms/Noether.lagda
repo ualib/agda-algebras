@@ -40,7 +40,7 @@ module _ {𝓤 𝓦 : Universe} where
                    --extensionality assumptions:
   →                  prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
   →                  (∀ a x → is-subsingleton (⟨ kercon 𝑩 ϕ ⟩ a x))
-  →                  (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 ϕ ⟩} C))
+  →                  (∀ C → is-subsingleton (𝒞 {A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 ϕ ⟩} C))
                    ----------------------------------------------------------
   →                Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker ϕ) 𝑩) ,
                           (∣ ϕ ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 ϕ ∣) × is-embedding ∣ f ∣

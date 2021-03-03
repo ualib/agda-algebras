@@ -141,9 +141,8 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 open Lift
 module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- VlA : {𝑨 : Algebra (ov 𝓤) 𝑆}
-  →    𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
-       --------------------------------------
+ VlA : {𝑨 : Algebra (ov 𝓤) 𝑆} → 𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
+       ------------------------------------------
   →    lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
 
  VlA (vbase{𝑨} x) = visow (vbase x) (lift-alg-associative 𝑨)
@@ -155,41 +154,35 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   where
   𝑰 : (ov 𝓤 ⁺) ̇
-  𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
-
-  lA+ : Algebra (ov 𝓤 ⁺) 𝑆
-  lA+ = lift-alg (⨅ 𝒜) (ov 𝓤 ⁺)
+  𝑰 = Lift I
 
   lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
   lA i = lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
 
-  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
   vlA i = vlift (x (lower i))
 
-  iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
+  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = lift-alg-≅
 
-  B≅A : lA+ ≅ ⨅ lA
+  B≅A : lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
  VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (sym-≅ B≅A)
   where
   𝑰 : (ov 𝓤 ⁺) ̇
-  𝑰 = Lift{ov 𝓤}{ov 𝓤 ⁺} I
-
-  lA+ : Algebra (ov 𝓤 ⁺) 𝑆
-  lA+ = lift-alg (⨅ 𝒜) (ov 𝓤 ⁺)
+  𝑰 = Lift I
 
   lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
   lA i = lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
 
-  vlA : (i : 𝑰) → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
   vlA i = VlA (x (lower i))
 
-  iso-components : (i : I) → 𝒜 i ≅ lA (lift i)
+  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = lift-alg-≅
 
-  B≅A : lA+ ≅ ⨅ lA
+  B≅A : lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
   B≅A = lift-alg-⨅≅ gfe iso-components
 
  VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (lift-alg-iso A≅B)

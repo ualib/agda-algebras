@@ -22,7 +22,8 @@ open import Prelude.Extensionality public
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 open import MGS-Subsingleton-Truncation using (_∙_) public
 open import MGS-MLTT using (_⁻¹; _∘_; 𝑖𝑑; domain; codomain) public
-open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
+open import MGS-Embeddings using (equivs-are-embeddings; invertible;
+ invertibles-are-equivs) public
 
 module _ {𝓤 𝓦 : Universe} where
 
@@ -32,38 +33,45 @@ module _ {𝓤 𝓦 : Universe} where
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
- ImageIsImage : {A : 𝓤 ̇ }{B : 𝓦 ̇ }
-                (f : A → B) (b : B) (a : A)
-  →             b ≡ f a
-                -----------
-  →             Image f ∋ b
+ ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B)(a : A)
+                ---------------------------------------------
+  →             b ≡ f a → Image f ∋ b
 
- ImageIsImage {A}{B} f b a b≡fa = eq b a b≡fa
+ ImageIsImage f b a b≡fa = eq b a b≡fa
 
 \end{code}
 
-Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Thus, a proof that `b` belongs to the image of `f` (i.e., an inhabitant of `Image f ∋ b`), always has a witness `a : A`, and a proof that `b = f a`, so a (pseudo)inverse can actually be *computed*.
-
-For convenience, we define a pseudo-inverse function, which we call `Inv`, that takes `b : B` and `(a , p) : Image f ∋ b` and returns `a`.
+The following restatement of the last lemma simply rearranges the arguments in case that makes it clearer.
 
 \begin{code}
 
- Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(b : B) → Image f ∋ b  →  A
- Inv f .(f a) (im a) = a
- Inv f _ (eq _ a _) = a
+ ImageIsImage' : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(a : A)(b : B)
+                  ---------------------------------------------
+  →               f a ≡ b  →  Image f ∋ b
+
+ ImageIsImage' f a b fab = eq b a (fab ⁻¹)
 
 \end{code}
 
-Of course, we can prove that `Inv f` is really the (right-) inverse of `f`.
+Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a witness-proof pair, `(a , p) : Image f ∋ b`, and returns `a`.
 
 \begin{code}
 
- InvIsInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B)
-            (b : B) (b∈Imgf : Image f ∋ b)
-            ------------------------------
-  →         f (Inv f b b∈Imgf) ≡ b
- InvIsInv f .(f a) (im a) = refl _
- InvIsInv f _ (eq _ _ p) = p ⁻¹
+ Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B){b : B} → Image f ∋ b  →  A
+ Inv f {.(f a)} (im a) = a
+ Inv f (eq _ a _) = a
+
+\end{code}
+
+We can prove that `Inv f` is the right-inverse of `f`, as follows.
+
+\begin{code}
+
+ InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(b∈Imgf : Image f ∋ b) → f(Inv f b∈Imgf) ≡ b
+
+ InvIsInv f {.(f a)} (im a) = refl _
+
+ InvIsInv f (eq _ _ p) = p ⁻¹
 
 \end{code}
 
@@ -91,7 +99,7 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
            --------------------
   →        B → A
 
- EpicInv f fE b = Inv f b (fE b)
+ EpicInv f fE b = Inv f (fE b)
 
 \end{code}
 
@@ -104,7 +112,7 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
                      --------------------------
   →                  f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
 
- EpicInvIsRightInv fe f fE = fe (λ x → InvIsInv f x (fE x))
+ EpicInvIsRightInv fe f fE = fe (λ x → InvIsInv f (fE x))
 
 \end{code}
 
@@ -131,7 +139,7 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function `
  MonicInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → Monic f
   →         (b : B) → Image f ∋ b → A
 
- MonicInv f _ = λ b Imf∋b → Inv f b Imf∋b
+ MonicInv f _ = λ b Imf∋b → Inv f Imf∋b
 
 \end{code}
 
@@ -179,7 +187,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 #### Injective functions are set embeddings
 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup> This requires the types from the `MGS-Equivalences` of the [Type Topology][] that we introduced in the last module ([Prelude.Extensionality][]).
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Prelude.Extensionality.html#alternative-extensionality-type), as follows.
 
 
 Finally, the type `is-embedding f` will denotes the assertion that `f` is a function all of whose fibers are subsingletons.
@@ -233,50 +241,11 @@ embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 
 -------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">Whenever we wish to hide some code from the rest of the development, we will enclose it in a module called `hidden.` In this case, we don't want the code inside the `hidden` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we will import later.  As long as we don't invoke `open hidden`, the code inside the `hidden` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code).</span>
-
-
------------------------------------
 
 [← Prelude.Extensionality](Prelude.Extensionality.html)
 <span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>
 
 
-
-
-
 {% include UALib.Links.md %}
 
 
-
-
-
-
-
-
-
-
-
-
-<!-- Unused stuff ------------
-
-#### <a id="neutral-elements">Neutral elements</a>
-
-The next three lemmas appeared in the `UF-Base` and `UF-Equiv` modules which were (at one time) part of Matin Escsardo's UF Agda repository.
-
-
-refl-left-neutral : {𝓧 : Universe} {X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → (refl _) ∙ p ≡ p
-refl-left-neutral (refl _) = refl _
-
-refl-right-neutral : {𝓧 : Universe}{X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → p ≡ p ∙ (refl _)
-refl-right-neutral p = refl _
-
-identifications-in-fibers : {𝓧 𝓨 : Universe} {X : 𝓧 ̇ } {Y : 𝓨 ̇ } (f : X → Y)
-                            (y : Y) (x x' : X) (p : f x ≡ y) (p' : f x' ≡ y)
- →                          (Σ γ ꞉ x ≡ x' , ap f γ ∙ p' ≡ p) → (x , p) ≡ (x' , p')
-identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r) = g
- where
-  g : x , 𝓇ℯ𝒻𝓁 ≡ x , p'
-  g = ap (λ - → (x , -)) (r ⁻¹ ∙ refl-left-neutral _)
-
--->

@@ -136,7 +136,7 @@ An important conceptual distinction exists between type definitions similar in f
 
 As such, `extfun` is a proof object; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, `funext` is a type that we may or may not wish to <i>assume</i>.  That is, we could assume we have a witness, say, `fe : funext 𝓤 𝓥` (that is, a proof) that point-wise equal functions are equivalent, but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
-#### <a id="ext-as-equivalence">Alternative extensionality type</a>
+#### <a id="alternative-extensionality-type">Alternative extensionality type</a>
 
 Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `extdfun` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but we exhibit them here for pedagogical reasons and to keep the presentation relatively self contained.)
 
@@ -157,7 +157,7 @@ module hide-tt-defs {𝓤 : Universe} where
 
 \end{code}
 
-Before proceeding, we import the original definitions of the last three types from the [Type Topology][] library.<sup>[4](Prelude.Extensionality.html#fn4)</sup>
+Before proceeding, we import the original definitions of the last three types from the [Type Topology][] library. (The [first footnote](Prelude.Equality.html#fn1) of the [Prelude.Equality][] module explains why sometimes we both define and import certain types.)
 
 \begin{code}
 
@@ -188,36 +188,29 @@ A function is called an **equivalence** if all of its fibers are singletons.
 
 \end{code}
 
-Now we are finally ready to define the type `hfunext` that gives an alternative means of postulating function extensionality.<sup>[5](Prelude.Extensionality.html#fn5)</sup>  We will precede its definition with a public import statement so that the three types just defined will be available throughout the remainder of the [UALib][].
+Now we are finally ready to define the type `hfunext` that gives an alternative means of postulating function extensionality.<sup>[4](Prelude.Extensionality.html#fn4)</sup>  We will precede its definition with a public import statement so that the types we described above, originally defined in the Type Topology][], will be available throughout the remainder of the [UALib][].
 
 \begin{code}
 
-open import MGS-Equivalences using (is-equiv; fiber) public
+open import MGS-Equivalences using (fiber; is-equiv) public
 
 module hide-hfunext where
 
  hfunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
  hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
-
-\end{code}
-
-\begin{code}
-
 open import MGS-FunExt-from-Univalence using (hfunext) public
 
 \end{code}
 
 ------------------------------------
 
-<span class="footnote" id="fn1"><sup>1</sup>If one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
+<sup>1</sup><span class="footnote" id="fn1"> If one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<span class="footnote" id="fn2"><sup>2</sup> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.
+<sup>2</sup> <span class="footnote" id="fn2"> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.</span>
 
-<span class="footnote" id="fn3"><sup>3</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`. Also, we later realized that a function called `happly`, which is nearly identical to `extdfun`, is defined in the `MGS-FunExt-from-Univalence` module of the [Type Topology][] library. We initiall proved this lemma with a simple invocation of `𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁`, but discovered that this proof leads to an `efunext` type that doesn't play well with other definitions in the [Type Topology][] library (e.g., `NatΠ-is-embedding`).</span>
+<sup>3</sup><span class="footnote" id="fn3"> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`. Also, we later realized that a function called `happly`, which is nearly identical to `extdfun`, is defined in the `MGS-FunExt-from-Univalence` module of the [Type Topology][] library. We initially proved this lemma with a simple invocation of `𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁`, but discovered that this proof leads to an `efunext` type that doesn't play well with other definitions in the [Type Topology][] library (e.g., `NatΠ-is-embedding`).</span>
 
-<span class="footnote" id="fn4"><sup>4</sup> You might be wondering at this point why we don't just use the definitions we just defined inside the "hidden" submodule.  We've decided that in order to both explain the type definitions in a clear, self-contained way, and give credit to their originator ([Martín Escardó][]) the best way to proceed is to redefine the types in a hidden submodule, and then import them from their original source.
-
-<span class="footnote" id="fn5"><sup>5</sup> We defined the type `hfunext` (by another name) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and to benefit anyone who might already be familiar with the [Type Topology][] library, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library.
+<sup>4</sup><span class="footnote" id="fn4">  In previous versions of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the [Type Topology][] library, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.
 
 --------------------
 

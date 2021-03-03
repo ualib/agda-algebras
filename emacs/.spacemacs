@@ -28,6 +28,9 @@
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ;; --------------------------------------------------------------------------------------------------------
+     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
+     ;; ---------------------------------------------------------------------------------------------------------
      javascript
      ruby
      html
@@ -41,9 +44,7 @@
      emacs-lisp
      git
      markdown
-     ;; --------------------------------------------------------------------------------------------------------
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
-     ;; ---------------------------------------------------------------------------------------------------------
+     unicode-fonts
      ;; org
      ;; (shell :variables  shell-default-height 30   shell-default-position 'bottom)
      spell-checking
@@ -265,15 +266,11 @@
   )
 
 (defun dotspacemacs/user-init ()
-  "Initialization function for user code. It is called immediately after `dotspacemacs/init', before layer configuration executes. This function is mostly 
-  useful for variables that need to be set before packages are loaded. If you are unsure, you should try in setting them in `dotspacemacs/user-config' first."
-  ;; I want to disable pasting with formatting on C/C++ buffers
-  (add-to-list 'spacemacs-indent-sensitive-modes 'c-mode)
-  (add-to-list 'spacemacs-indent-sensitive-modes 'c++-mode)
-  (add-to-list 'spacemacs-indent-sensitive-modes 'agda2-mode)
-  (add-to-list 'spacemacs-indent-sensitive-modes 'agda-mode)
-  (add-to-list 'custom-theme-directory "~/git/lab/wjd/utils/dotfiles-setup/emacs.d/lisp/")
-  (add-to-list 'custom-theme-load-path "~/git/lab/wjd/utils/dotfiles-setup/emacs.d/lisp/")
+;  (add-to-list 'custom-theme-directory '("~/git/lab/wjd/utils/dotfiles-setup/emacs.d/lisp/"))
+;  (add-to-list 'custom-theme-load-path '("~/git/lab/wjd/utils/dotfiles-setup/emacs.d/lisp/"))
+ '(package-selected-packages
+   (quote
+    (unfill mwim git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-ivy flyspell-correct diff-hl auto-dictionary latex-pretty-symbols zenburn-theme zenburn unicode-math-input unicode-input unicode-fonts unicode-escape org-journal markdown-mode magit latex-unicode-math-mode intero heroku-theme hc-zenburn-theme flatland-theme company-math)))
  )
 
 (defun dotspacemacs/user-config ()
@@ -313,9 +310,6 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(package-selected-packages
-   (quote
-    (unfill mwim git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-ivy flyspell-correct diff-hl auto-dictionary latex-pretty-symbols zenburn-theme zenburn unicode-math-input unicode-input unicode-fonts unicode-escape org-journal markdown-mode magit latex-unicode-math-mode intero heroku-theme hc-zenburn-theme flatland-theme company-math)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(scrollbars-visible-p nil)
  '(text-scale-mode-step 1.05)

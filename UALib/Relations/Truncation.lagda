@@ -67,7 +67,7 @@ Before proceeding with the topic of *propositions*, we pause to discharge one ob
 
 \begin{code}
 
-open import MGS-Embeddings using (is-set) public
+open import MGS-Embeddings using (is-set; to-Σ-≡) public
 open import MGS-MLTT using (transport) public
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B

@@ -476,7 +476,7 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
   birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod {X = X}(Th (V 𝒦))
 
-  birkhoff' {𝑨} α p q pThq = pThq α
+  birkhoff' α p q pThq = pThq α
 
 \end{code}
 

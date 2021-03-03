@@ -138,10 +138,10 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
  lift-of-epi-is-epi {𝑨}{h₀} hE y = γ
   where
   h₀⁻¹y : domain h₀
-  h₀⁻¹y = Inv h₀ y (hE y)
+  h₀⁻¹y = Inv h₀ (hE y)
 
   η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
-  η = (InvIsInv h₀ y (hE y))⁻¹
+  η = (InvIsInv h₀ (hE y))⁻¹
 
   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
   γ = eq y (generator h₀⁻¹y) η

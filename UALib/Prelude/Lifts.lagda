@@ -50,7 +50,7 @@ A general `Lift` record type, similar to the one found in the [Agda Standard Lib
 
 \begin{code}
 
-record Lift {𝓤 𝓦 : Universe} (X : 𝓤 ̇) : 𝓤 ⊔ 𝓦 ̇  where
+record Lift {𝓦 𝓤 : Universe} (X : 𝓤 ̇) : 𝓤 ⊔ 𝓦 ̇  where
  constructor lift
  field lower : X
 open Lift
@@ -61,13 +61,13 @@ Next, we give various ways to lift function types.
 
 \begin{code}
 
-lift-dom : {𝓧 𝓨 𝓦 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓧}{𝓦} X → Y)
+lift-dom : {𝓦 𝓧 𝓨 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Y)
 lift-dom f = λ x → (f (lower x))
 
-lift-cod : {𝓧 𝓨 𝓦 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓨}{𝓦} Y)
+lift-cod : {𝓦 𝓧 𝓨 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓦}{𝓨} Y)
 lift-cod f = λ x → lift (f x)
 
-lift-fun : {𝓧 𝓨 𝓦 𝓩 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓧}{𝓦} X → Lift{𝓨}{𝓩} Y)
+lift-fun : {𝓦 𝓩 𝓧 𝓨 : Universe}{X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Lift{𝓩}{𝓨} Y)
 lift-fun f = λ x → lift (f (lower x))
 
 \end{code}
@@ -76,10 +76,10 @@ We will also need to know that lift and lower compose to the identity.
 
 \begin{code}
 
-lower∼lift : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lower{𝓧}{𝓦} ∘ lift ≡ 𝑖𝑑 X
+lower∼lift : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lower{𝓦}{𝓧} ∘ lift ≡ 𝑖𝑑 X
 lower∼lift = refl _
 
-lift∼lower : {𝓧 𝓦 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓧}{𝓦} X)
+lift∼lower : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦}{𝓧} X)
 lift∼lower = refl _
 
 \end{code}

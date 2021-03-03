@@ -91,21 +91,18 @@ module _ {𝓧 𝓨 : Universe} where
   lh : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
   lh = lift-alg-hom 𝓩 𝓦 𝑩 h
 
-  b : ∣ 𝑩 ∣
-  b = lower y
-
-  ζ : Image ∣ h ∣ ∋ b
-  ζ = hepi b
+  ζ : Image ∣ h ∣ ∋ (lower y)
+  ζ = hepi (lower y)
 
   a : ∣ 𝑨 ∣
-  a = Inv ∣ h ∣ b ζ
+  a = Inv ∣ h ∣ ζ
 
-  β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦 = 𝓦}) (lift a)
-  β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift{𝓦 = 𝓦})
+  β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦}) (lift a)
+  β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift {𝓦} )
 
   η : y ≡ ∣ lh ∣ (lift a)
   η = y               ≡⟨ (extfun lift∼lower) y ⟩
-      lift b          ≡⟨ ap lift (InvIsInv ∣ h ∣ (lower y) ζ)⁻¹ ⟩
+      lift (lower y)  ≡⟨ ap lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
       lift (∣ h ∣ a)  ≡⟨ β ⟩
       ∣ lh ∣ (lift a) ∎
 
@@ -138,7 +135,7 @@ The functions below will be removed from the future releases of the [UALib][] as
 lift-function : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}
                 (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
                 ---------------------------------
- →              Lift{𝓧}{𝓩} A → Lift{𝓨}{𝓦} B
+ →              Lift{𝓩} A → Lift{𝓦} B
 
 lift-function  A B f = λ la → lift (f (lower la))
 

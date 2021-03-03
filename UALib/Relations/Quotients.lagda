@@ -107,7 +107,7 @@ We define type of all R-classes of the relation `R` as follows.
 \begin{code}
 
  𝒞 : {A : 𝓤 ̇}{R : Rel A 𝓡} → Pred A 𝓡 → (𝓤 ⊔ 𝓡 ⁺) ̇
- 𝒞 {A}{R} = λ (C : Pred A 𝓡 ) → Σ a ꞉ A , C ≡ ( [ a ] R)
+ 𝒞 {A} {R} C = Σ a ꞉ A , C ≡ ( [ a ] R)
 
 \end{code}
 
@@ -116,7 +116,7 @@ If `R` is an equivalence relation on `A`, then the **quotient** of `A` modulo `R
 \begin{code}
 
  _/_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → 𝓤 ⊔ (𝓡 ⁺) ̇
- A / R = Σ C ꞉ Pred A 𝓡 ,  𝒞{A}{R} C
+ A / R = Σ C ꞉ Pred A 𝓡 ,  𝒞 {R = R} C
 
  infix -1 _/_
 \end{code}

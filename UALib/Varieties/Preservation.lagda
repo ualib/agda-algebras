@@ -43,10 +43,10 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
   β = (H-id1 p q α) HA
 
   preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = Inv ϕ (𝒃 x) (ϕsur (𝒃 x))
+  preim 𝒃 x = Inv ϕ (ϕsur (𝒃 x))
 
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕsur (𝒃 x))
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕsur (𝒃 x))
 
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
   γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
@@ -177,10 +177,10 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
   IH = V-id1 p q α VA
 
   preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE (𝒃 x)))
+  preim 𝒃 x = (Inv ϕ (ϕE (𝒃 x)))
 
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕE (𝒃 x))
 
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
   γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
@@ -239,10 +239,10 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
   IH = V-id1' p q α VA
 
   preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv ϕ (𝒃 x) (ϕE (𝒃 x)))
+  preim 𝒃 x = (Inv ϕ (ϕE (𝒃 x)))
 
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = gfe λ x → InvIsInv ϕ (𝒃 x) (ϕE (𝒃 x))
+  ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕE (𝒃 x))
 
   γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
   γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃               ≡⟨(ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩

@@ -281,7 +281,7 @@ A nearly identical proof goes through for isomorphisms of lifted products.
 
 \begin{code}
 lift-alg-⨅≅ : global-dfunext → {𝓠 𝓤 𝓘 𝓩 : Universe}
-              {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓘}{𝓩} I) → Algebra 𝓤 𝑆}
+              {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓤 𝑆}
  →            (∀ i → (𝒜 i) ≅ (ℬ (lift i)))
               ----------------------------
  →            lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ

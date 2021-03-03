@@ -113,7 +113,7 @@ The purpose of the import lines below is not actually to effect the stated impor
 
 We leave off the `public` keyword from the end of these import directives on purpose so that we are forced to (re)import each item where and when we need it.  This may seem pedantic (and may turn out to be too inconvenient for users in the end) but it makes the dependencies clearer, and dependencies reveal the foundations upon which the library is built.  Since we are very interested in foundations(!), we try to keep all dependencies in the foreground, and resist the temptation to store them all in a single file that we never have to think about again.
 
-(The first three import lines have to be commented out because we will actually redefine the given types for pedagogical purposes in the next couple of modules.)
+The first three import lines have to be commented out because we will redefine the given types for pedagogical purposes in this module.
 
 \begin{code}
 

@@ -21,20 +21,24 @@ open import Prelude.Preliminaries public
 
 #### <a id="refl">refl</a>
 
-The type which is often referred to as "reflexivity" or "refl" is a very basic and important one. It represents [definitional equality](https://ncatlab.org/nlab/show/equality#definitional_equality).
+The type referred to as "reflexivity" or "refl" is a very basic but important one. It represents [definitional equality](https://ncatlab.org/nlab/show/equality#definitional_equality).
 
-The `refl` type we use is a standard one. It is defined in the `Identity-Type` module of the [Type Topology][] library, which we imported in the [Prelude.Preliminaries][] module, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.
+The `refl` type we use is a standard one. It is defined in the `Identity-Type` module of the [Type Topology][] library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.
 
-In the present module, we make `refl` available by importing it from [Prelude.Preliminaries][], which in turn improts from the `Identity-Type` module.  The latter defines `refl` as the following inductive datatype.
+We make `refl` available by importing it from the `Identity-Type` module.  However, we first repeat the definition here (inside a hidden submodule) for clarity.<sup>[1](Prelude.Equality.html#fn1)</sup>
 
 \begin{code}
 
 module hide-refl {𝓤 : Universe} where
 
- data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where
-  refl : {x : X} → x ≡ x
+ data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where refl : {x : X} → x ≡ x
 
+open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
+pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 \end{code}
+
+Thus, whenever we need to complete a proof by simply asserting that `x`, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke `refl x`, or (in the implicit case) `refl _` or even `𝓇ℯ𝒻𝓁`. (The `pattern` directive above is what makes last option available.)
+
 
 Let us now formalize the obvious fact that `≡` is an equivalence relation.
 
@@ -42,8 +46,6 @@ First we import the original definitions of `_≡_` and `refl` from the [Type To
 
 \begin{code}
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
-pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x
@@ -148,6 +150,11 @@ open import MGS-MLTT using (ap) public
 \end{code}
 
 -------------------------------------
+
+<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  In this case, we don't want the code inside the `hide-refl` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we import right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code). It may seem odd to both define `refl` ourselves only to immediately import the definition that we actually use. We do this in order to describe all or most of the types on which the [UALib][] depends, in a clear and self-contained way, while at the same time making sure that this cannot be misinterpreted as a claim to originality.</span>
+
+-------------------------------------
+
 
 [← Prelude.Preliminaries ](Prelude.Preliminaries.html)
 <span style="float:right;">[Prelude.Extensionality →](Prelude.Extensionality.html)</span>

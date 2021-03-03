@@ -119,7 +119,7 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
 
  lift-op : {𝓤 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} → ((I → A) → A) → (𝓦 : Universe)
-  →        ((I → Lift{𝓤}{𝓦}A) → Lift{𝓤}{𝓦}A)
+  →        ((I → Lift{𝓦} A) → Lift {𝓦} A)
 
  lift-op f 𝓦 = λ x → lift (f (λ i → Lift.lower (x i)))
 
