@@ -54,11 +54,37 @@ module hide-is-set {𝓤 : Universe} where
 
 Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
-Let's import the original definition of `is-set` from the [Type Topology][] library and make it public so it's available throughout the remainder of the [UALib][].
+\begin{code}
+
+\end{code}
+
+Before proceeding with the topic of *propositions*, we pause to discharge one obligation we left unfulfilled in the [Prelude.Inverses][] module.  Recall, we defined a type to represent embeddings and we remarked that an embedding is not simply an injective map.  However, if we assume that the codomain has unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. The statment and proof follows (after a public import of the `is-set` from the [Type Topology][] library).
 
 \begin{code}
 
 open import MGS-Embeddings using (is-set) public
+
+monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
+ →                            (f : A → B)  →  Monic f
+                              -----------------------
+ →                            is-embedding f
+
+monic-into-set-is-embedding Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
+ where
+ faa' : f a ≡ f a'
+ faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+
+ aa' : a ≡ a'
+ aa' = fmon a a' faa'
+
+ 𝒜 : domain f → _ ̇
+ 𝒜 a = f a ≡ b
+
+ arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
+ arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
+
+ γ : a , fa≡b ≡ a' , fa'≡b
+ γ = to-Σ-≡ arg1
 
 \end{code}
 

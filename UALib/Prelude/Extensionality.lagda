@@ -10,6 +10,17 @@ author: William DeMeo
 
 This section describes the [UALib.Prelude.Extensionality][] module of the [Agda Universal Algebra Library][].
 
+\begin{code}
+
+{-# OPTIONS --without-K --exact-split --safe #-}
+
+module Prelude.Extensionality where
+
+open import Prelude.Equality public
+
+\end{code}
+
+
 #### <a id="background-and-motivation">Background and motivation</a>
 
 This introduction is intended for novices.  If you're already familiar with function extensionality, you may want to skip to <a href="function-extensionality">the next subsection</a>.
@@ -26,18 +37,7 @@ What if we had started out this discussion with two functions f and g both of wh
 
 In each of the examples above, it is common to say that the two functions f and g are [extensionally equal](https://en.wikipedia.org/wiki/Extensionality), since they produce the same (external) output when given the same input, but f and g not [intensionally equal](https://en.wikipedia.org/wiki/Intension), since their (internal) definitions differ.
 
-In this module, we describe types (mostly imported from the [Type Topology][] library) that manifest this notion of *extensional equality of functions*, or *function extensionality*.
-
-\begin{code}
-
-{-# OPTIONS --without-K --exact-split --safe #-}
-
-module Prelude.Extensionality where
-
-open import Prelude.Inverses public
-
-\end{code}
-
+In this module, we describe types (many of which were already defined by Martín Escardó in his [Type Topology][] library) that manifest this notion of *extensional equality of functions*, or *function extensionality*.
 
 #### <a id="function-extensionality">Function extensionality</a>
 
@@ -59,7 +59,7 @@ Extensional equality of functions, or *function extensionality*, means that any 
 
 As <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Martín Escardó points out</a>, *function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
 
-In the [Type Topology][] library, function extensionality is denoted by `funext` and defined as follows.
+In the [Type Topology][] library, function extensionality is denoted by `funext` and defined as follows. (Again, we present it here inside the `hide-funext` submodule, but we will import Martín's original definitions below.)
 
 \begin{code}
 
@@ -68,13 +68,7 @@ In the [Type Topology][] library, function extensionality is denoted by `funext`
 
 \end{code}
 
-
-
-
-
-#### <a id="dependent-function-extensionality">Dependent function extensionality</a>
-
-Extensionality for dependent function types is defined as follows.
+Similarly, extensionality for *dependent* function types is defined as follows.
 
 \begin{code}
 
@@ -99,31 +93,21 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
 
 More details about the 𝓤ω type are available at [agda.readthedocs.io](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set).
 
-Let us make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].
+Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[2](Prelude.Extensionality.html#fn2)</sup>
 
 \begin{code}
 
-open import MGS-FunExt-from-Univalence using (funext; dfunext) public
+open import MGS-FunExt-from-Univalence using (_∼_; funext; dfunext) public
 
 \end{code}
+
 
 Note that this import directive does not impose any function extensionality assumptions.  It merely makes the types available in case we want to impose such assumptions.
 
 
-\begin{code}
-
-extensionality-lemma : {𝓘 𝓤 𝓥 𝓣 : Universe}{I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
-                       (p q : (i : I) → (X → A i) → 𝓣 ̇ )(args : X → (Π A))
- →                     p ≡ q
-                       -------------------------------------------------------------
- →                     (λ i → (p i)(λ x → args x i)) ≡ (λ i → (q i)(λ x → args x i))
-
-extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
-
-\end{code}
 
 
-The next function type defines the converse of function extensionality.<sup>[2](Prelude.Extensionality.html#fn2)</sup>
+The next function type defines the converse of function extensionality.<sup>[3](Prelude.Extensionality.html#fn3)</sup>
 
 \begin{code}
 
@@ -152,16 +136,70 @@ An important conceptual distinction exists between type definitions similar in f
 
 As such, `extfun` is a proof object; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, `funext` is a type that we may or may not wish to <i>assume</i>.  That is, we could assume we have a witness, say, `fe : funext 𝓤 𝓥` (that is, a proof) that point-wise equal functions are equivalent, but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
-Finally, an alternative way to express dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that `extdfun` is an equivalence (cf. `hfunext` in the [Type Topology][] library).
+#### <a id="ext-as-equivalence">Alternative extensionality type</a>
+
+Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `extdfun` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but we exhibit them here for pedagogical reasons and to keep the presentation relatively self contained.)
+
+First, a type is a **singleton** if it has exactly one inhabitant and a **subsingleton** if it has *at most* one inhabitant.  These are defined in the [Type Topology][] library as follow.
 
 \begin{code}
 
-efunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
-efunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
+module hide-tt-defs {𝓤 : Universe} where
+
+ is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
+ is-center X c = (x : X) → c ≡ x
+
+ is-singleton : 𝓤 ̇ → 𝓤 ̇
+ is-singleton X = Σ c ꞉ X , is-center X c
+
+ is-subsingleton : 𝓤 ̇ → 𝓤 ̇
+ is-subsingleton X = (x y : X) → x ≡ y
 
 \end{code}
 
-We defined the types above before realizing that the [Type Topology][] already has types that are equivalent to these. For consistency and to benefit anyone who might already be familiar with the [Type Topology][] library, we will import these functions from that library and refer to them by these names (instead of `extfun`, `extdfun`, or `efunext`).
+Before proceeding, we import the original definitions of the last three types from the [Type Topology][] library.<sup>[4](Prelude.Extensionality.html#fn4)</sup>
+
+\begin{code}
+
+open import MGS-Basic-UF using (is-center; is-singleton; is-subsingleton) public
+
+\end{code}
+
+
+Next, we show the definition of the type `is-equiv` which represents a function that is an equivalence in a sense that will soon become clear. The latter is defined using the concept of a [fiber](https://ncatlab.org/nlab/show/fiber) of a function.
+
+In the [Type Topology][] library, a `fiber` type is defined (as a Sigma type) with inhabitants representing inverse images of points in the codomain of the given function.
+
+\begin{code}
+
+module hide-tt-defs' {𝓤 𝓦 : Universe} where
+
+ fiber : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓦 ̇
+ fiber {X} f y = Σ x ꞉ X , f x ≡ y
+
+\end{code}
+
+A function is called an **equivalence** if all of its fibers are singletons.
+
+\begin{code}
+
+ is-equiv : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
+ is-equiv f = ∀ y → is-singleton (fiber f y)
+
+\end{code}
+
+Now we are finally ready to define the type `hfunext` that gives an alternative means of postulating function extensionality.<sup>[5](Prelude.Extensionality.html#fn5)</sup>  We will precede its definition with a public import statement so that the three types just defined will be available throughout the remainder of the [UALib][].
+
+\begin{code}
+
+open import MGS-Equivalences using (is-equiv; fiber) public
+
+module hide-hfunext where
+
+ hfunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
+ hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
+
+\end{code}
 
 \begin{code}
 
@@ -173,11 +211,32 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 <span class="footnote" id="fn1"><sup>1</sup>If one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<span class="footnote" id="fn2"><sup>2</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`. Also, we later realized that a function called `happly`, which is nearly identical to `extdfun`, is defined in the `MGS-FunExt-from-Univalence` module of the [Type Topology][] library. We initiall proved this lemma with a simple invocation of `𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁`, but discovered that this proof leads to an `efunext` type that doesn't play well with other definitions in the [Type Topology][] library (e.g., `NatΠ-is-embedding`).</span>
+<span class="footnote" id="fn2"><sup>2</sup> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.
+
+<span class="footnote" id="fn3"><sup>3</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`. Also, we later realized that a function called `happly`, which is nearly identical to `extdfun`, is defined in the `MGS-FunExt-from-Univalence` module of the [Type Topology][] library. We initiall proved this lemma with a simple invocation of `𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁`, but discovered that this proof leads to an `efunext` type that doesn't play well with other definitions in the [Type Topology][] library (e.g., `NatΠ-is-embedding`).</span>
+
+<span class="footnote" id="fn4"><sup>4</sup> You might be wondering at this point why we don't just use the definitions we just defined inside the "hidden" submodule.  We've decided that in order to both explain the type definitions in a clear, self-contained way, and give credit to their originator ([Martín Escardó][]) the best way to proceed is to redefine the types in a hidden submodule, and then import them from their original source.
+
+<span class="footnote" id="fn5"><sup>5</sup> We defined the type `hfunext` (by another name) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and to benefit anyone who might already be familiar with the [Type Topology][] library, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library.
 
 --------------------
 
-[← Prelude.Inverses](Prelude.Inverses.html)
-<span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>
+[← Prelude.Equality](Prelude.Equality.html)
+<span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+<!-- unused stuff
+
+
+extensionality-lemma : {𝓘 𝓤 𝓥 𝓣 : Universe}{I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }
+                       (p q : (i : I) → (X → A i) → 𝓣 ̇ )(args : X → (Π A))
+ →                     p ≡ q
+                       -------------------------------------------------------------
+ →                     (λ i → (p i)(λ x → args x i)) ≡ (λ i → (q i)(λ x → args x i))
+
+extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args x i)) p≡q
+
+-->

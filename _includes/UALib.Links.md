@@ -55,6 +55,7 @@
 [Inductive Types in Lean]: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 [inductive types]: https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
+[Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 
 [JB Nation]: http://www.math.hawaii.edu/~jb/
 [Jeremy Avigad]: http://www.andrew.cmu.edu/user/avigad/

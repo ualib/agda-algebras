@@ -17,7 +17,7 @@ Here we define (the syntax of) a type for the (semantic concept of) **inverse im
 module Prelude.Inverses where
 
 -- Public imports (inherited by modules importing this one)
-open import Prelude.Equality public 
+open import Prelude.Extensionality public 
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 open import MGS-Subsingleton-Truncation using (_∙_) public
@@ -25,8 +25,8 @@ open import MGS-MLTT using (_∘_; 𝑖𝑑; _⁻¹; domain; codomain; transport
 open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
 
 -- Private imports (only visible in the current module)
-open import MGS-Subsingleton-Theorems using (funext)
-open import MGS-Embeddings using (is-set)
+-- open import MGS-Subsingleton-Theorems using (funext)
+-- open import MGS-Embeddings using (is-set)
 
 module _ {𝓤 𝓦 : Universe} where
 
@@ -181,115 +181,28 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 
 
-#### <a id="neutral-elements">Neutral elements</a>
-
-The next three lemmas appeared in the `UF-Base` and `UF-Equiv` modules which were (at one time) part of Matin Escsardo's UF Agda repository.
-
-\begin{code}
-
-refl-left-neutral : {𝓧 : Universe} {X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → (refl _) ∙ p ≡ p
-refl-left-neutral (refl _) = refl _
-
-refl-right-neutral : {𝓧 : Universe}{X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → p ≡ p ∙ (refl _)
-refl-right-neutral p = refl _
-
-identifications-in-fibers : {𝓧 𝓨 : Universe} {X : 𝓧 ̇ } {Y : 𝓨 ̇ } (f : X → Y)
-                            (y : Y) (x x' : X) (p : f x ≡ y) (p' : f x' ≡ y)
- →                          (Σ γ ꞉ x ≡ x' , ap f γ ∙ p' ≡ p) → (x , p) ≡ (x' , p')
-identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r) = g
- where
-  g : x , 𝓇ℯ𝒻𝓁 ≡ x , p'
-  g = ap (λ - → (x , -)) (r ⁻¹ ∙ refl-left-neutral _)
-
-\end{code}
-
 #### Injective functions are set embeddings
 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup> This requires a few other definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions from the [Type Topology][] library when we need them, but we show these definitions here for pedagogical purposes.)
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup> This requires the types from the `MGS-Equivalences` of the [Type Topology][] that we introduced in the last module ([Prelude.Extensionality][]).
 
-First, a type is a **singleton** if it has exactly one inhabitant and a **subsingleton** if it has *at most* one inhabitant.  These are defined in the [Type Topology][] library as follow.
-
-\begin{code}
-
-module hide-tt-defs {𝓤 : Universe} where
-
- is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
- is-center X c = (x : X) → c ≡ x
-
- is-singleton : 𝓤 ̇ → 𝓤 ̇
- is-singleton X = Σ c ꞉ X , is-center X c
-
- is-subsingleton : 𝓤 ̇ → 𝓤 ̇
- is-subsingleton X = (x y : X) → x ≡ y
-
-\end{code}
-
-Before proceeding, we import the original definitions from the [Type Topology][] library.
-
-\begin{code}
-
-open import MGS-Basic-UF using (is-center; is-singleton; is-subsingleton) public
-
-\end{code}
-
-Next, a **fiber** of a function is defined as a Sigma type whose inhabitants represent inverse images of points in the codomain, and a function is called an **equivalence** if all of its fibers are singletons.
-
-\begin{code}
-
-module hide-tt-defs' {𝓤 𝓦 : Universe} where
-
- fiber : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓦 ̇
- fiber f y = Σ x ꞉ domain f , f x ≡ y
-
- is-equiv : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
- is-equiv f = (y : codomain f) → is-singleton (fiber f y)
-
-
-\end{code}
 
 Finally, the type `is-embedding f` will denotes the assertion that `f` is a function all of whose fibers are subsingletons.
 
 \begin{code}
+module hide-is-embedding {𝓤 𝓦 : Universe} where
 
  is-embedding : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
  is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
 
 \end{code}
 
-This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding as follows:
-
-\begin{code}
-
-open import MGS-Equivalences using (fiber; is-equiv) public
-open import MGS-Embeddings using (is-embedding) public
-
-monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
- →                            (f : A → B)  →  Monic f
-                              -----------------------
- →                            is-embedding f
-
-monic-into-set-is-embedding Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
- where
-  faa' : f a ≡ f a'
-  faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
-
-  aa' : a ≡ a'
-  aa' = fmon a a' faa'
-
-  𝒜 : domain f → _ ̇
-  𝒜 a = f a ≡ b
-
-  arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
-  arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
-
-  γ : a , fa≡b ≡ a' , fa'≡b
-  γ = to-Σ-≡ arg1
-
-\end{code}
+This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
 
 Of course, invertible maps are embeddings.
 
 \begin{code}
+
+open import MGS-Embeddings using (is-embedding) public
 
 invertibles-are-embeddings : {𝓧 𝓨 : Universe}
                              {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y)
@@ -329,11 +242,45 @@ embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 
 -----------------------------------
 
-[← Prelude.Equality](Prelude.Equality.html)
-<span style="float:right;">[Prelude.Extensionality →](Prelude.Extensionality.html)</span>
+[← Prelude.Extensionality](Prelude.Extensionality.html)
+<span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>
 
 
 
 
 
 {% include UALib.Links.md %}
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Unused stuff ------------
+
+#### <a id="neutral-elements">Neutral elements</a>
+
+The next three lemmas appeared in the `UF-Base` and `UF-Equiv` modules which were (at one time) part of Matin Escsardo's UF Agda repository.
+
+
+refl-left-neutral : {𝓧 : Universe} {X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → (refl _) ∙ p ≡ p
+refl-left-neutral (refl _) = refl _
+
+refl-right-neutral : {𝓧 : Universe}{X : 𝓧 ̇ } {x y : X} (p : x ≡ y) → p ≡ p ∙ (refl _)
+refl-right-neutral p = refl _
+
+identifications-in-fibers : {𝓧 𝓨 : Universe} {X : 𝓧 ̇ } {Y : 𝓨 ̇ } (f : X → Y)
+                            (y : Y) (x x' : X) (p : f x ≡ y) (p' : f x' ≡ y)
+ →                          (Σ γ ꞉ x ≡ x' , ap f γ ∙ p' ≡ p) → (x , p) ≡ (x' , p')
+identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r) = g
+ where
+  g : x , 𝓇ℯ𝒻𝓁 ≡ x , p'
+  g = ap (λ - → (x , -)) (r ⁻¹ ∙ refl-left-neutral _)
+
+-->

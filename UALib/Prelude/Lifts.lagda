@@ -15,7 +15,7 @@ This section presents the [UALib.Prelude.Lifts][] module of the [Agda Universal 
 
 module Prelude.Lifts where
 
-open import Prelude.Extensionality public
+open import Prelude.Inverses public
 
 \end{code}
 
@@ -87,7 +87,7 @@ lift∼lower = refl _
 
 ---------------
 
-[← Prelude.Extensionality](Prelude.Extensionality.html)
+[← Prelude.Inverses](Prelude.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>
 
 {% include UALib.Links.md %}

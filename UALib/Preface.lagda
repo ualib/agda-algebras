@@ -55,7 +55,7 @@ For our own mathematics research, we believe a proof assistant equipped with spe
 
 ### <a id="Logical-foundations">Logical foundations</a>
 
-The [Agda UALib][] is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) that is the same or very close to the type theory on which Martin Escardo's [Type Topology][] Agda library is based.  This is also the type theory that Escardo taught us in the short course [Introduction to Univalent Foundations of Mathematics with Agda][] at the [Midlands Graduate School in the Foundations of Computing Science][] at University of Birmingham in 2019.
+The [Agda UALib][] is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) that is the same or very close to the type theory on which [Martín Escardó][]'s [Type Topology][] Agda library is based.  This is also the type theory that Escardó taught us in a short course on [Univalent Foundations of Mathematics with Agda][] at the [Midlands Graduate School in the Foundations of Computing Science][] at University of Birmingham in 2019.
 
 We won't go into great detail here because there are already other very nice resources available, such as the section [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#mlttinagda) of the lecture notes by [Martín Escardó][] just mentioned, as well as the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
 
@@ -149,7 +149,7 @@ This type-checks all the modules, and generates html and latex documentation (in
 
 The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground.
 
-Thanks also to [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martin Escardo][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, corrections, advice, inspiration and encouragement.
+Thanks also to [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martín Escardó][], [Ralph Freese][], [Bill Lampe][], [Miklós Maróti][], [Peter Mayr][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, corrections, advice, inspiration and encouragement.
 
 
 #### <a id="attributions-and-citations">Attributions and citations</a>

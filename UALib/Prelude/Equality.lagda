@@ -42,7 +42,7 @@ First we import the original definitions of `_≡_` and `refl` from the [Type To
 
 \begin{code}
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁)
+open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
@@ -150,6 +150,6 @@ open import MGS-MLTT using (ap) public
 -------------------------------------
 
 [← Prelude.Preliminaries ](Prelude.Preliminaries.html)
-<span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>
+<span style="float:right;">[Prelude.Extensionality →](Prelude.Extensionality.html)</span>
 
 {% include UALib.Links.md %}
