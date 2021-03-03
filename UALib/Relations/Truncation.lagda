@@ -54,15 +54,21 @@ module hide-is-set {𝓤 : Universe} where
 
 Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
+A useful operation that we need is called **transport** (or "transport along an identity"). It is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows (see [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda)).
+
 \begin{code}
+
+ transport : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) {x y : X} → x ≡ y → A x → A y
+ transport A (refl x) = 𝑖𝑑 (A x)
 
 \end{code}
 
-Before proceeding with the topic of *propositions*, we pause to discharge one obligation we left unfulfilled in the [Prelude.Inverses][] module.  Recall, we defined a type to represent embeddings and we remarked that an embedding is not simply an injective map.  However, if we assume that the codomain has unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. The statment and proof follows (after a public import of the `is-set` from the [Type Topology][] library).
+Before proceeding with the topic of *propositions*, we pause to discharge one obligation we left unfulfilled in the [Prelude.Inverses][] module.  Recall, we defined a type to represent embeddings and we remarked that an embedding is not simply an injective map.  However, if we assume that the codomain has unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. The statment and proof follows (after a public import of the original `is-set` type from the [Type Topology][] library).
 
 \begin{code}
 
 open import MGS-Embeddings using (is-set) public
+open import MGS-MLTT using (transport) public
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
  →                            (f : A → B)  →  Monic f

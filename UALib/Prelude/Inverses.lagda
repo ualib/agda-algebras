@@ -21,12 +21,8 @@ open import Prelude.Extensionality public
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 open import MGS-Subsingleton-Truncation using (_∙_) public
-open import MGS-MLTT using (_∘_; 𝑖𝑑; _⁻¹; domain; codomain; transport) public
+open import MGS-MLTT using (_⁻¹; _∘_; 𝑖𝑑; domain; codomain) public
 open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
-
--- Private imports (only visible in the current module)
--- open import MGS-Subsingleton-Theorems using (funext)
--- open import MGS-Embeddings using (is-set)
 
 module _ {𝓤 𝓦 : Universe} where
 
