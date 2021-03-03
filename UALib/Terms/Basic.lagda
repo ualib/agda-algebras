@@ -22,8 +22,6 @@ module Terms.Basic {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
 
 open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} public
 
-open import MGS-Subsingleton-Theorems using (funext) public
-
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>

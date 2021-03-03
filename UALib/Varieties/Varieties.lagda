@@ -16,11 +16,10 @@ This section presents the [Varieties.Varieties][] module of the [Agda Universal 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import Varieties.EquationalLogic{𝑆 = 𝑆}{gfe} public
-open import MGS-Subsingleton-Theorems using (hfunext) -- public
+--open import MGS-Subsingleton-Theorems using (hfunext) -- public
 
 \end{code}
 
@@ -409,15 +408,14 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
-module _ {𝓤 𝓦 : Universe} {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 𝓦 : Universe}{fe : hfunext 𝓦 𝓤}{𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- lemPS⊆SP : hfunext 𝓦 𝓤
-  →         {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
+ lemPS⊆SP : {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
   →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
             -------------------------------------
   →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
- lemPS⊆SP hfe {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ gfe B≅SA)
+ lemPS⊆SP {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ gfe B≅SA)
   where
   𝒜 : I → Algebra 𝓤 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -439,7 +437,7 @@ module _ {𝓤 𝓦 : Universe} {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
   β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
   β = λ 𝑓 𝒂 → gfe λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
   γ : is-embedding α
-  γ = embedding-lift hfe hfe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+  γ = embedding-lift fe fe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -458,37 +456,36 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 : Universe}{fe : hfunext (ov 𝓤)(ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- PS⊆SP : hfunext (ov 𝓤)(ov 𝓤)
-  →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
+ PS⊆SP : P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
 
- PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
- PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
- PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
- PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
- PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
- PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
+ PS⊆SP (pbase (sbase x)) = sbase (pbase x)
+ PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
+ PS⊆SP (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) refl-≅
+ PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
+ PS⊆SP (pliftu x) = slift (PS⊆SP x)
+ PS⊆SP (pliftw x) = slift (PS⊆SP x)
 
- PS⊆SP hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+   ξ i = S→subalgebra (PS⊆SP (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {P 𝒦} hfe {I} {𝒜} ξ
+   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {fe} {P 𝒦} {I} {𝒜} ξ
 
- PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+   ξ i = S→subalgebra (PS⊆SP (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {P 𝒦} hfe {I} {𝒜} ξ
+   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {fe} {P 𝒦} {I} {𝒜} ξ
 
- PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
- PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
+ PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
+ PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
 
 \end{code}
 
@@ -583,7 +580,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 \begin{code}
 
  class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product{𝓤}{𝓤}{X}(S 𝒦) ∈ S(P 𝒦)
- class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
+ class-prod-s-∈-sp fe = PS⊆SP{fe = fe} class-prod-s-∈-ps
 
 \end{code}
 

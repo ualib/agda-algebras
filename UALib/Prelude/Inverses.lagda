@@ -18,11 +18,11 @@ module Prelude.Inverses where
 
 -- Public imports (inherited by modules importing this one)
 open import Prelude.Equality public 
+
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
 open import MGS-Subsingleton-Truncation using (_∙_) public
 open import MGS-MLTT using (_∘_; 𝑖𝑑; _⁻¹; domain; codomain; transport) public
-open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; 
- invertibles-are-equivs) public
+open import MGS-Embeddings using (to-Σ-≡; invertible; equivs-are-embeddings; invertibles-are-equivs) public
 
 -- Private imports (only visible in the current module)
 open import MGS-Subsingleton-Theorems using (funext)
@@ -205,27 +205,62 @@ identifications-in-fibers f .(f x) x .x 𝓇ℯ𝒻𝓁 p' (𝓇ℯ𝒻𝓁 , r)
 
 #### Injective functions are set embeddings
 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup>
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library as follows.<sup>[1](Prelude.Inverses.html#fn1</sup> This requires a few other definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions from the [Type Topology][] library when we need them, but we show these definitions here for pedagogical purposes.)
+
+First, a type is a **singleton** if it has exactly one inhabitant and a **subsingleton** if it has *at most* one inhabitant.  These are defined in the [Type Topology][] library as follow.
 
 \begin{code}
 
-module hidden where
+module hide-tt-defs {𝓤 : Universe} where
 
- is-subsingleton : {𝓧 : Universe} → 𝓧 ̇ → 𝓧 ̇
+ is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
+ is-center X c = (x : X) → c ≡ x
+
+ is-singleton : 𝓤 ̇ → 𝓤 ̇
+ is-singleton X = Σ c ꞉ X , is-center X c
+
+ is-subsingleton : 𝓤 ̇ → 𝓤 ̇
  is-subsingleton X = (x y : X) → x ≡ y
 
- fiber : {𝓧 𝓨 : Universe}{X : 𝓧 ̇ }{Y : 𝓨 ̇ }(f : X → Y) → Y → 𝓧 ⊔ 𝓨 ̇
+\end{code}
+
+Before proceeding, we import the original definitions from the [Type Topology][] library.
+
+\begin{code}
+
+open import MGS-Basic-UF using (is-center; is-singleton; is-subsingleton) public
+
+\end{code}
+
+Next, a **fiber** of a function is defined as a Sigma type whose inhabitants represent inverse images of points in the codomain, and a function is called an **equivalence** if all of its fibers are singletons.
+
+\begin{code}
+
+module hide-tt-defs' {𝓤 𝓦 : Universe} where
+
+ fiber : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓦 ̇
  fiber f y = Σ x ꞉ domain f , f x ≡ y
 
- is-embedding : {𝓧 𝓨 : Universe}{X : 𝓧 ̇ } {Y : 𝓨 ̇ } → (X → Y) → 𝓧 ⊔ 𝓨 ̇
+ is-equiv : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
+ is-equiv f = (y : codomain f) → is-singleton (fiber f y)
+
+
+\end{code}
+
+Finally, the type `is-embedding f` will denotes the assertion that `f` is a function all of whose fibers are subsingletons.
+
+\begin{code}
+
+ is-embedding : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
  is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
 
 \end{code}
 
-This is a very nice, natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding as follows:
+This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding as follows:
 
 \begin{code}
 
+open import MGS-Equivalences using (fiber; is-equiv) public
 open import MGS-Embeddings using (is-embedding) public
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
@@ -264,7 +299,9 @@ invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equiv
 
 \end{code}
 
-Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that can make it easier to apply `p`.
+Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that can make it easier to apply `p`.  We will use the `fiber` type of the [Type Topology][] library, which is defined as follows.
+
+
 
 \begin{code}
 

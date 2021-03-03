@@ -20,8 +20,6 @@ module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext
 
 open import Subalgebras.Subuniverses {𝑆 = 𝑆}{gfe} public
 open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
-open import MGS-Embeddings using (is-set) public
-open import MGS-Subsingleton-Theorems using (is-subsingleton) public
 
 \end{code}
 

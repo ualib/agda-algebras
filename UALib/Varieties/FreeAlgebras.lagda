@@ -21,7 +21,6 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import Varieties.Preservation {𝑆 = 𝑆}{gfe} public
-open import MGS-Powerset using (hfunext)
 
 \end{code}
 
@@ -66,7 +65,8 @@ We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields
 
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
-                →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+
+                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
 
@@ -177,22 +177,11 @@ We denote by ℭ the product of all subalgebras of algebras in 𝒦, and by `hom
 
 Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
-\begin{code}
-
--- {-# OPTIONS --without-K --exact-split --safe #-}
-
--- open import Algebras.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
--- open import MGS-Subsingleton-Theorems using (global-dfunext)
--- open import Universes
--- open import Relations.Discrete using (Pred)
--- open import MGS-Powerset using (hfunext)
-
--- open import Prelude.Preliminaries using (global-dfunext; Universe; _̇; _⊔_; _⁺; propext; hfunext)
-\end{code}
-
-Unlike previous modules, in this module we fix `𝓤`, `X`, and `𝒦` in advance. We also assume 𝕏, which supplies, for each algebra `𝑨`, a surjective map ∣ 𝕏 𝑨 ∣ from `X` onto 𝑨.
+In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume 𝕏, which supplies, for each algebra `𝑨`, a surjective map ∣ 𝕏 𝑨 ∣ from `X` onto 𝑨.
 
 \begin{code}
+
+--open import MGS-Powerset using (hfunext)
 
 module HSPTheorem
 -- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
@@ -200,7 +189,7 @@ module HSPTheorem
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  -- extensionality assumption:
-    {hfe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
+    {fe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
 -- open import Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; Algebra; _̇ ) public
  open the-free-algebra {𝓤}{𝓤}{X}
@@ -459,7 +448,7 @@ With this result in hand, along with what we proved earlier---namely, PS(𝒦) �
 \begin{code}
 
   𝔽∈SP : 𝔽 ∈ (S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦))
-  𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
+  𝔽∈SP = ssub (class-prod-s-∈-sp fe) 𝔽≤ℭ
 
   𝔽∈𝕍 : 𝔽 ∈ V 𝒦
   𝔽∈𝕍 = SP⊆V' 𝔽∈SP

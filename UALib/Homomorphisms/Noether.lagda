@@ -33,9 +33,6 @@ Here is a version of the first isomorphism theorem.
 
 open Congruence
 
-open import MGS-Embeddings using (is-set)
-open import MGS-Subsingleton-Theorems using (is-subsingleton)
-
 module _ {𝓤 𝓦 : Universe} where
 
  FirstIsoTheorem : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
@@ -208,9 +205,6 @@ If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ k
 This, or some variation of it, is sometimes referred to as the Second Isomorphism Theorem.  We formalize its statement and proof as follows. (Notice that the proof is constructive.)
 
 \begin{code}
-
-
-open import MGS-Subsingleton-Theorems using (funext)
 
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)

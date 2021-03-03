@@ -45,7 +45,7 @@ As explained above, a natural notion of function equality, sometimes called *poi
 
 \begin{code}
 
-module hide where
+module hide-funext where
 
  _∼_ : {𝓤 𝓥 : Universe}{X : 𝓤 ̇ } {A : X → 𝓥 ̇ } → Π A → Π A → 𝓤 ⊔ 𝓥 ̇
  f ∼ g = ∀ x → f x ≡ g x
@@ -97,8 +97,17 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
 
 \end{code}
 
-
 More details about the 𝓤ω type are available at [agda.readthedocs.io](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set).
+
+Let us make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].
+
+\begin{code}
+
+open import MGS-FunExt-from-Univalence using (funext; dfunext) public
+
+\end{code}
+
+Note that this import directive does not impose any function extensionality assumptions.  It merely makes the types available in case we want to impose such assumptions.
 
 
 \begin{code}
@@ -113,14 +122,17 @@ extensionality-lemma p q args p≡q = ap (λ - → λ i → (- i) (λ x → args
 
 \end{code}
 
+
 The next function type defines the converse of function extensionality.<sup>[2](Prelude.Extensionality.html#fn2)</sup>
 
 \begin{code}
 
-open import MGS-MLTT using (_∼_)
+open import MGS-MLTT using (_∼_) public
 
-extfun : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
-extfun 𝓇ℯ𝒻𝓁 _  = 𝓇ℯ𝒻𝓁
+module _ {𝓤 𝓦 : Universe} where
+
+ extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
+ extfun 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -128,8 +140,8 @@ Here is the analogue for dependent function types.
 
 \begin{code}
 
-extdfun : {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {f g : Π B} → f ≡ g → f ∼ g
-extdfun 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
+ extdfun : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }(f g : Π B) → f ≡ g → f ∼ g
+ extdfun _ _ 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -140,12 +152,28 @@ An important conceptual distinction exists between type definitions similar in f
 
 As such, `extfun` is a proof object; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, `funext` is a type that we may or may not wish to <i>assume</i>.  That is, we could assume we have a witness, say, `fe : funext 𝓤 𝓥` (that is, a proof) that point-wise equal functions are equivalent, but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
--------------------------------------
+Finally, an alternative way to express dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that `extdfun` is an equivalence (cf. `hfunext` in the [Type Topology][] library).
+
+\begin{code}
+
+efunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
+efunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
+
+\end{code}
+
+We defined the types above before realizing that the [Type Topology][] already has types that are equivalent to these. For consistency and to benefit anyone who might already be familiar with the [Type Topology][] library, we will import these functions from that library and refer to them by these names (instead of `extfun`, `extdfun`, or `efunext`).
+
+\begin{code}
+
+open import MGS-FunExt-from-Univalence using (hfunext) public
+
+\end{code}
+
+------------------------------------
 
 <span class="footnote" id="fn1"><sup>1</sup>If one assumes the [univalence axiom][], then the `_∼_` relation is equivalent to equality of functions.  See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<span class="footnote" id="fn2"><sup>2</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`.</span> 
-
+<span class="footnote" id="fn2"><sup>2</sup> In previous versions of the [UALib][] this function was called `intensionality`, indicating that it represented the concept of *function intensionality*, but we realized this isn't quite right and changed the name to the less controvertial `extfun`. Also, we later realized that a function called `happly`, which is nearly identical to `extdfun`, is defined in the `MGS-FunExt-from-Univalence` module of the [Type Topology][] library. We initiall proved this lemma with a simple invocation of `𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁`, but discovered that this proof leads to an `efunext` type that doesn't play well with other definitions in the [Type Topology][] library (e.g., `NatΠ-is-embedding`).</span>
 
 --------------------
 

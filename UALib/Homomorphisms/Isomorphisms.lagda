@@ -20,9 +20,7 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
-open import MGS-Subsingleton-Theorems using (is-equiv) public
 open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding) public
-open import MGS-MLTT using (_∼_) public
 
 \end{code}
 
@@ -336,50 +334,43 @@ lift-alg-⨅≅ gfe {𝓠}{𝓤}{𝓘}{𝓩}{I}{𝒜}{ℬ} AB = γ
 
 \begin{code}
 
-open import MGS-Subsingleton-Truncation using (hfunext)
+module _ {𝓘 𝓤 𝓦 : Universe} where
 
-embedding-lift-nat : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
- →                   {I : 𝓘 ̇}{A : I → 𝓠 ̇}{B : I → 𝓤 ̇}
-                     (h : Nat A B)
- →                   ((i : I) → is-embedding (h i))
-                     -------------------------------
- →                   is-embedding(NatΠ h)
+ embedding-lift-nat : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
+  →                   {I : 𝓘 ̇}{A : I → 𝓤 ̇}{B : I → 𝓦 ̇}
+                      (h : Nat A B) → (∀ i → is-embedding (h i))
+                      ------------------------------------------
+  →                   is-embedding(NatΠ h)
 
-embedding-lift-nat hfiq hfiu h hem = NatΠ-is-embedding hfiq hfiu h hem
+ embedding-lift-nat hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
 
-embedding-lift-nat' : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
- →                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
-                      (h : Nat (fst ∘ 𝒜) (fst ∘ ℬ))
- →                   ((i : I) → is-embedding (h i))
-                     -------------------------------
- →                   is-embedding(NatΠ h)
 
-embedding-lift-nat' hfiq hfiu h hem = NatΠ-is-embedding hfiq hfiu h hem
+ embedding-lift-nat' : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
+  →                    {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
+                       (h : Nat(fst ∘ 𝒜)(fst ∘ ℬ)) → (∀ i → is-embedding (h i))
+                       --------------------------------------------------------
+  →                    is-embedding(NatΠ h)
 
-embedding-lift : {𝓠 𝓤 𝓘 : Universe} → hfunext 𝓘 𝓠 → hfunext 𝓘 𝓤
- →               {I : 𝓘 ̇} -- global-dfunext → {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}
-                 {𝒜 : I → Algebra 𝓠 𝑆}{ℬ : I → Algebra 𝓤 𝑆}
- →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣)
- →               ((i : I) → is-embedding (h i))
-                 ----------------------------------------------------
- →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i) (x i))
-embedding-lift {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem =
- embedding-lift-nat' {𝓠} {𝓤} {𝓘} hfiq hfiu {I} {𝒜} {ℬ} h hem
+ embedding-lift-nat' hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
+
+
+ embedding-lift : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
+  →               {I : 𝓘 ̇} → {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
+  →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣) → (∀ i → is-embedding (h i))
+                  ----------------------------------------------------------
+  →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i)(x i))
+
+ embedding-lift hfiu hfiw {I}{𝒜}{ℬ} h hem = embedding-lift-nat' hfiu hfiw {I}{𝒜}{ℬ} h hem
+
 
 iso→embedding : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
  →              (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
-iso→embedding {𝓤}{𝓦}{𝑨}{𝑩} ϕ = γ
+
+iso→embedding ϕ = equivs-are-embeddings (fst ∣ ϕ ∣)
+                   (invertibles-are-equivs (fst ∣ ϕ ∣) finv)
  where
-  f : hom 𝑨 𝑩
-  f = ∣ ϕ ∣
-  g : hom 𝑩 𝑨
-  g = ∣ snd ϕ ∣
-
-  finv : invertible ∣ f ∣
-  finv = ∣ g ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)
-
-  γ : is-embedding ∣ f ∣
-  γ = equivs-are-embeddings ∣ f ∣ (invertibles-are-equivs ∣ f ∣ finv)
+ finv : invertible (fst ∣ ϕ ∣)
+ finv = ∣ fst ∥ ϕ ∥ ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)
 
 \end{code}
 

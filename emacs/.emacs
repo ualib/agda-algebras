@@ -35,14 +35,13 @@
        '(
        ("melpa-stable" . "http://stable.melpa.org/packages/")
        ("melpa"     . "http://melpa.milkbox.net/packages/")
-       ("marmalade" . "http://marmalade-repo.org/packages/")
+       ;("marmalade" . "http://marmalade-repo.org/packages/")
        ("gnu"       . "http://elpa.gnu.org/packages/")))
  (package-initialize)
 
 ;-- Magit ------------------------------------------------------------
  ; Install magit
-(unless (package-installed-p 'magit-status)
- (package-refresh-contents) (package-install 'scala-mode2))
+(unless (package-installed-p 'magit-status))
  ; If this fails, magit can also be installed after emacs starts as follows:
  ; `M-x package-refresh-contents` and `M-x package-install [Enter] magit`
 

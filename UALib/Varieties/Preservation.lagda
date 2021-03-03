@@ -300,7 +300,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 ----------------------------
 
 [← Varieties.Varieties](Varieties.Varieties.html)
-<span style="float:right;">[Birkhoff →](Birkhoff.html)</span>
+<span style="float:right;">[FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
 

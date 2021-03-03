@@ -25,29 +25,27 @@ open import Relations.Quotients public
 
 #### <a id="typical-view-of-truncation">Truncation</a>
 
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given 
-proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, 
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given
+proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that,
 given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q`
-inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write 
-`p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` 
+inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write
+`p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q`
 the equivalent.
 
-We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant, 
-say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same. 
-If such a proof exists for all `p q : a ≡ₓ b, then the proof of `a ≡ₓ b` is unique; as a property of 
+We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant,
+say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same.
+If such a proof exists for all `p q : a ≡ₓ b, then the proof of `a ≡ₓ b` is unique; as a property of
 the types `X` and `≡ₓ`, this is sometimes called **uniqueness of identity proofs**.
 
 Now, perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `X` with an identity relation `≡ₓ` is called a **set** (or **0-groupoid**) if for every pair `x y : X` there is at most one proof of `x ≡ₓ y`. In other words, the type `X`, along with it's equality type `≡ₓ`, form a *set* if for all `x y : X` there is at most one proof of `x ≡ₓ y`.
 
-This notion is formalized in the [Type Topology][] library using the types `is-set` and `is-subsingleton`, which are defined as follows.<sup>[1]((Relations.Truncation.html#fn1)</sup>
+This notion is formalized in the [Type Topology][] library using the types `is-set` which is defined using the `is-subsingleton` type that we saw earlier ([Prelude.Inverses][]) as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
 
 \begin{code}
 
 module hide-is-set {𝓤 : Universe} where
- is-subsingleton : 𝓤 ̇ → 𝓤 ̇
- is-subsingleton X = (x y : X) → x ≡ y
 
  is-set : 𝓤 ̇ → 𝓤 ̇
  is-set X = (x y : X) → is-subsingleton (x ≡ y)
@@ -56,15 +54,13 @@ module hide-is-set {𝓤 : Universe} where
 
 Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
-We make the `dfunext` and `is-subsingleton` types of the [Type Topology][] library available from now on with the following line.
+Let's import the original definition of `is-set` from the [Type Topology][] library and make it public so it's available throughout the remainder of the [UALib][].
 
 \begin{code}
 
-open import MGS-Subsingleton-Theorems using (dfunext; is-subsingleton)
+open import MGS-Embeddings using (is-set) public
 
 \end{code}
-
-Note, this does not impose the assumption of function extensionality.  It merely makes the `dfunext` type available in case we want to use it to impose that assumption.
 
 
 #### <a id="propositions">Propositions</a>

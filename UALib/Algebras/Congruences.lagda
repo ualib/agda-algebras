@@ -60,8 +60,6 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-open import MGS-Subsingleton-Theorems using (funext)
-
 module _ {𝓤 : Universe} where
 
  𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎-rel

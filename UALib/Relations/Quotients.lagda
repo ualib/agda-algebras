@@ -40,9 +40,6 @@ module _ {𝓤 : Universe} where
  transitive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 
- open import MGS-Subsingleton-Theorems using (is-subsingleton)
-
-
  is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 
