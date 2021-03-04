@@ -37,6 +37,8 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 --------------------------------------
 
+<p></p>
+
 [← Preface](Preface.html)
 <span style="float:right;">[Prelude.Preliminaries →](Prelude.Preliminaries.html)</span>
 

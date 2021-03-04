@@ -37,6 +37,8 @@ open import Prelude.Lifts public
 
 --------------------------------------
 
+<p></p>
+
 [← Preface](Preface.html)
 <span style="float:right;">[Prelude.Preliminaries →](Prelude.Preliminaries.html)</span>
 

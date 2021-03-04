@@ -250,6 +250,7 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 
 -------------------------------------
 
+<p></p>
 
 [← Prelude.Extensionality](Prelude.Extensionality.html)
 <span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>

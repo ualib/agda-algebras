@@ -154,6 +154,8 @@ Based on the work at
   https://gitlab.com/ualib/ualib.gitlab.io.
 </a>
 
+<p></p>
+
 ---------------------------------
 
 <span class="footnote" id="fn1"><sup>1</sup>[Contact the author](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.</span>

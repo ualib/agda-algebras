@@ -25,6 +25,8 @@ This chapter presents the [UALib.Relations][] module of the [Agda Universal Alge
 
 -------------------------------------
 
+<p></p>
+
 [← Prelude.Lifts](Prelude.Lifts.html)
 <span style="float:right;">[Relations.Unary →](Relations.Small.html)</span>
 

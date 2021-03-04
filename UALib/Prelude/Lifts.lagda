@@ -87,6 +87,8 @@ lift∼lower = refl _
 
 ---------------
 
+<p></p>
+
 [← Prelude.Inverses](Prelude.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>
 

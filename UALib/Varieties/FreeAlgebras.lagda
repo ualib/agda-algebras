@@ -496,9 +496,8 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 <span class="footnote" id="fn3"><sup>3</sup> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
 
--------------------
-
-
+<p></p>
+<p></p>
 
 
 [← Varieties.Preservation](Varieties.Preservation.html)

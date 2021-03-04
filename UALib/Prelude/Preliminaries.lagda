@@ -302,7 +302,7 @@ module _ {𝓨 𝓩 : Universe}{I : 𝓥 ̇}{B : I → 𝓨 ̇}{C : I → 𝓩 �
 
  eval : {Y : 𝓨 ̇}{Z : 𝓩 ̇} → ((Y → Z) × Y) → Z
  eval (f , a) = f a
- 
+
 module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 
  dapp : (∀ i → (J → (B i)) → (B i)) → (∀ i → (J → (B i))) → Π B
@@ -314,7 +314,8 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 
 <span class="footnote"><sup>1</sup> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
 
-----------------------------------------
+<p></p>
+<p></p>
 
 [↑ Prelude](Prelude.html)
 <span style="float:right;">[Prelude.Equality →](Prelude.Equality.html)</span>

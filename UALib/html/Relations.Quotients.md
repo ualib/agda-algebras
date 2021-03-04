@@ -168,6 +168,9 @@ Later we will need the following additional quotient tools.
 
 --------------------------------------
 
+<p></p>
+
+
 [← Relations.Continuous](Relations.Continuous.html)
 <span style="float:right;">[Relations.Truncation →](Relations.Truncation.html)</span>
 

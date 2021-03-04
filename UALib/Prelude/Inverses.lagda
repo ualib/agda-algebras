@@ -250,6 +250,7 @@ embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 
 -------------------------------------
 
+<p></p>
 
 [← Prelude.Extensionality](Prelude.Extensionality.html)
 <span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>

@@ -116,6 +116,8 @@ In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`,
 
 --------------------------------------
 
+<p></p>
+
 [← Relations.Discrete](Relations.Discrete.html)
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 

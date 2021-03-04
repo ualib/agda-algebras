@@ -212,7 +212,9 @@ Now we are finally ready to define the type `hfunext` that gives an alternative 
 
 <sup>4</sup><span class="footnote" id="fn4">  In previous versions of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the [Type Topology][] library, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.
 
---------------------
+<p></p>
+<p></p>
+
 
 [← Prelude.Equality](Prelude.Equality.html)
 <span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>

@@ -216,7 +216,8 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 
 
--------------------------------------
+<p></p>
+<p></p>
 
 
 [← Prelude.Preliminaries ](Prelude.Preliminaries.html)

@@ -153,6 +153,8 @@ In the modules [Birkhoff.FreeAlgebra][] and [Birkhoff.HSPTheorem][] `lift-hom` a
 
 --------------------------------------
 
+<p></p>
+
 [↑ Terms](Terms.html)
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
 

@@ -306,7 +306,8 @@ Applying the extensionality principle for dependent relations is no harder than 
 <span class="footnote" id="fn2"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
 
 
-----------------------------------------
+<p></p>
+<p></p>
 
 [← Relations.Quotients](Relations.Quotients.html)
 <span style="float:right;">[Algebras →](Algebras.html)</span>

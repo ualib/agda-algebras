@@ -87,6 +87,8 @@ We will also need to know that lift and lower compose to the identity.
 
 ---------------
 
+<p></p>
+
 [← Prelude.Inverses](Prelude.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>
 

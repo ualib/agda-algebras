@@ -379,9 +379,9 @@ If, in addition, both β and γ are epic, then so is ϕ.
 \end{code}
 
 
-
-
 --------------------------------------
+
+<p></p>
 
 [← Homomorphisms.Basic](Homomorphisms.Basic.html)
 <span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>
