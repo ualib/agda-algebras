@@ -63,7 +63,10 @@ A useful operation that we need is called **transport** (or "transport along an 
 
 \end{code}
 
-Before proceeding with the topic of *propositions*, we pause to discharge one obligation we left unfulfilled in the [Prelude.Inverses][] module.  Recall, we defined a type to represent embeddings and we remarked that an embedding is not simply an injective map.  However, if we assume that the codomain has unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. The statment and proof follows (after a public import of the original `is-set` type from the [Type Topology][] library).
+
+#### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
+
+Before moving on to define [propositions](Prelude.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Prelude.Inverses.html#embeddings) section of the [Prelude.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.
 
 \begin{code}
 
@@ -158,18 +161,18 @@ To be clear, the type `Rel A 𝓦` is simply the function type `A → A → 𝓦
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this.
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this. (Note that we don't require *function* extensionality here.)
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
+module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
- class-extensionality : prop-ext A 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
+ class-extensionality : prop-ext A 𝓡 → {a a' : A}
   →                     IsEquivalence ∣ 𝑹 ∣
-                        -------------------------------
-  →                     ∣ 𝑹 ∣ a a'  →  [ a ] ∣ 𝑹 ∣  ≡  [ a' ] ∣ 𝑹 ∣
+                        ------------------------------------------
+  →                     ∣ 𝑹 ∣ a a'  →  [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
 
- class-extensionality pe dfe {a}{a'} Req Raa' = γ
+ class-extensionality pe {a}{a'} Req Raa' = γ
   where
    P Q : Pred₁ A 𝓡
    P = (λ x → ∣ 𝑹 ∣ a x) , (λ x → ∥ 𝑹 ∥ a x)
@@ -184,24 +187,24 @@ module _ {𝓤 𝓡 : Universe} {A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
    γ : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
    γ = ap fst (prop-ext' A 𝓡 {P}{Q} pe (α , β))
 
- to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D} 
+ to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D}
   →              (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
-                 -------------------------------------
+                 -----------------------------------------
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : prop-ext A 𝓡 → dfunext 𝓤 (𝓡 ⁺) → {a a' : A}
+ class-extensionality' : prop-ext A 𝓡 → {a a' : A}
   →                      (∀ C → is-subsingleton (𝒞 C))
   →                      IsEquivalence ∣ 𝑹 ∣
                          -------------------------
   →                      ∣ 𝑹 ∣ a a'  →  ⟦ a ⟧ ≡ ⟦ a' ⟧
 
- class-extensionality' pe fe {a}{a'} ssA Req Raa' = γ
+ class-extensionality' pe {a}{a'} ssA Req Raa' = γ
   where
    CD : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
-   CD = class-extensionality pe fe Req Raa'
+   CD = class-extensionality pe Req Raa'
 
    γ : ⟦ a ⟧ ≡ ⟦ a' ⟧
    γ = to-subtype-⟦⟧ ssA CD

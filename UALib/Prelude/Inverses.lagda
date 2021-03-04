@@ -185,7 +185,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 
 
-#### Injective functions are set embeddings
+#### <a id="embeddings">Embeddings</a>
 
 This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Prelude.Extensionality.html#alternative-extensionality-type), as follows.
 

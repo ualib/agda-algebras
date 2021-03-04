@@ -64,7 +64,7 @@ module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
   ϕmon : Monic ϕ
   ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' =
-   class-extensionality' {𝑹 = 𝑹} pe gfe ssA (IsEquiv θ) ϕaa'
+   class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕaa'
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
   ϕcom = 𝓇ℯ𝒻𝓁
@@ -78,13 +78,13 @@ Next we prove that the homomorphism `ϕ`, whose existence we just proved, is uni
 
 \begin{code}
 
- NoetherUniqueness : (f g : hom (𝑨 [ 𝑩 ]/ker h) 𝑩)
-  →                  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
-  →                  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣
-                     ---------------------------------
-  →                  ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
+ NoetherHomUnique : (f g : hom (𝑨 [ 𝑩 ]/ker h) 𝑩)
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
+  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣
+                    ---------------------------------
+  →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherUniqueness f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
+ NoetherHomUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
 
   let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
 
@@ -92,6 +92,19 @@ Next we prove that the homomorphism `ϕ`, whose existence we just proved, is uni
 
 \end{code}
 
+If we postulate function extensionality, then we have
+
+\begin{code}
+
+ fe-NoetherHomUnique : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦 → (f g : hom (𝑨 [ 𝑩 ]/ker h) 𝑩)
+  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
+  →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣
+                       ----------------------------
+  →                    ∣ f ∣ ≡ ∣ g ∣
+
+ fe-NoetherHomUnique fe f g hfk hgk = fe (NoetherHomUnique f g hfk hgk)
+
+\end{code}
 
 If we assume the hypotheses of the First Homomorphism theorem and add the assumption that `h` is epic, then we get the so-called First Isomorphism theorem.
 
@@ -128,7 +141,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 
   fmon : Monic fmap
   fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
-   class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe gfe ssA (IsEquiv θ) faa'
+   class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe ssA (IsEquiv θ) faa'
 
   femb : is-embedding fmap
   femb = monic-into-set-is-embedding Bset fmap fmon
