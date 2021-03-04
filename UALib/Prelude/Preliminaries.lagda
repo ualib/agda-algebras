@@ -214,7 +214,7 @@ module hide-sigma where
 
 \end{code}
 
-For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing (and more standard in the literature) than Agda's default syntax (`Σ λ(x ꞉ X) → y`).  [Escardó][] makes this preferred notation available in the [TypeTopology][] library by making the index type explicit, as follows.
+For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing and more standard than Agda's default syntax, `Σ λ(x ꞉ X) → y`.  [Escardó][] makes this preferred notation available in the [Type Topology][] library by making the index type explicit, as follows.
 
 \begin{code}
 

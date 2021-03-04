@@ -50,18 +50,11 @@ module hide-is-set {𝓤 : Universe} where
  is-set : 𝓤 ̇ → 𝓤 ̇
  is-set X = (x y : X) → is-subsingleton (x ≡ y)
 
+open import MGS-Embeddings using (is-set; to-Σ-≡) public
+
 \end{code}
 
 Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
-
-A useful operation that we need is called **transport** (or "transport along an identity"). It is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows (see [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda)).
-
-\begin{code}
-
- transport : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) {x y : X} → x ≡ y → A x → A y
- transport A (refl x) = 𝑖𝑑 (A x)
-
-\end{code}
 
 
 #### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
@@ -69,9 +62,6 @@ A useful operation that we need is called **transport** (or "transport along an 
 Before moving on to define [propositions](Prelude.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Prelude.Inverses.html#embeddings) section of the [Prelude.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.
 
 \begin{code}
-
-open import MGS-Embeddings using (is-set; to-Σ-≡) public
-open import MGS-MLTT using (transport) public
 
 monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
  →                            (f : A → B)  →  Monic f
@@ -86,7 +76,7 @@ monic-into-set-is-embedding Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
  aa' : a ≡ a'
  aa' = fmon a a' faa'
 
- 𝒜 : domain f → _ ̇
+ 𝒜 : _ → _ ̇
  𝒜 a = f a ≡ b
 
  arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b

@@ -1,14 +1,14 @@
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
 [Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
-[Agda Language Reference]: https://agda.readthedocs.io/en/v2.6.1/language
+[Agda Language Reference]: https://agda.readthedocs.io/en/v2.6.1.3/language
 [Agda Standard Library]: https://agda.github.io/agda-stdlib/
-[Agda Tools]: https://agda.readthedocs.io/en/v2.6.1/tools/
+[Agda Tools]: https://agda.readthedocs.io/en/v2.6.1.3/tools/
 [Agda Tutorial]: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
 [Agda Universal Algebra Library]: https://gitlab.com/ualib/ualib.gitlab.io/
 [Agda UALib]: https://gitlab.com/ualib/ualib.gitlab.io/
-[Agda User's Manual]: https://agda.readthedocs.io/en/v2.6.1/
+[Agda User's Manual]: https://agda.readthedocs.io/en/v2.6.1.3/
 [Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
-[agda2-mode]: https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html
+[agda2-mode]: https://agda.readthedocs.io/en/v2.6.1.3/tools/emacs-mode.html
 [agda-ualib]: https://gitlab.com/ualib/ualib.gitlab.io
 [Algebraic Effects and Handlers]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 [Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda

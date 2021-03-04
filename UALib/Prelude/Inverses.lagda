@@ -8,7 +8,6 @@ author: William DeMeo
 ### <a id="inverses">Inverses</a>
 
 This section presents the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
-Here we define (the syntax of) a type for the (semantic concept of) **inverse image** of a function.
 
 \begin{code}
 
@@ -16,22 +15,24 @@ Here we define (the syntax of) a type for the (semantic concept of) **inverse im
 
 module Prelude.Inverses where
 
--- Public imports (inherited by modules importing this one)
-open import Prelude.Extensionality public 
+open import Prelude.Extensionality public
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
-open import MGS-Subsingleton-Truncation using (_∙_) public
-open import MGS-MLTT using (_⁻¹; _∘_; 𝑖𝑑; domain; codomain) public
-open import MGS-Embeddings using (equivs-are-embeddings; invertible;
- invertibles-are-equivs) public
+open import MGS-Embeddings
+ using (equivs-are-embeddings; invertible; invertibles-are-equivs) public
+
+\end{code}
+
+We begin by defining an inductive type that represents the semantic concept of **inverse image** of a function.
+
+\begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
-
 
  data Image_∋_ {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
+
 
  ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B)(a : A)
                 ---------------------------------------------
@@ -103,9 +104,21 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
 
 \end{code}
 
-The function defined by `EpicInv f fE` is indeed the right-inverse of `f`.
+The function defined by `EpicInv f fE` is indeed the right-inverse of `f`. To state this, we'll use the function composition operation, `∘`, which is already defined in the [Type Topology][] library as follows.
 
 \begin{code}
+
+module hide-∘ {𝓤 𝓦 : Universe} where
+
+ _∘_ : {X : 𝓤 ̇ } {Y : 𝓦 ̇}{Z : Y → 𝓦 ̇ }
+  →    Π Z → (f : X → Y) → (x : X) → Z (f x)
+
+ g ∘ f = λ x → g (f x)
+
+open import MGS-MLTT using (_∘_) public
+
+
+module _ {𝓤 𝓦 : Universe} where
 
  EpicInvIsRightInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
                      (f : A → B)  (fE : Epic f)
@@ -196,7 +209,7 @@ Finally, the type `is-embedding f` will denotes the assertion that `f` is a func
 module hide-is-embedding {𝓤 𝓦 : Universe} where
 
  is-embedding : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
- is-embedding f = (y : codomain f) → is-subsingleton (fiber f y)
+ is-embedding f = ∀ y → is-subsingleton (fiber f y)
 
 \end{code}
 

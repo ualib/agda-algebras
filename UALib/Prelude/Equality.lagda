@@ -34,6 +34,13 @@ module hide-refl {𝓤 : Universe} where
  data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where refl : {x : X} → x ≡ x
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
+
+\end{code}
+
+Since `refl _` is used so often, the following convenient shorthand is also provided in the [Type Topology][] library.
+
+\begin{code}
+
 pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 \end{code}
 
@@ -49,29 +56,87 @@ First we import the original definitions of `_≡_` and `refl` from the [Type To
 
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
  ≡-rfl : (x : X) → x ≡ x
- ≡-rfl x = 𝓇ℯ𝒻𝓁
+ ≡-rfl _ = 𝓇ℯ𝒻𝓁
 
  ≡-sym : (x y : X) → x ≡ y → y ≡ x
- ≡-sym x y 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-sym _ _ 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+
+ ≡-SYM : {x y : X} → x ≡ y → y ≡ x
+ ≡-SYM 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
  ≡-trans : (x y z : X) → x ≡ y → y ≡ z → x ≡ z
- ≡-trans x y z 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-trans _ _ _ 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
  ≡-Trans : (x : X){y : X}(z : X) → x ≡ y → y ≡ z → x ≡ z
- ≡-Trans x {y} z 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-Trans _ _ 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+
+ ≡-TRANS : {x y z : X} → x ≡ y → y ≡ z → x ≡ z
+ ≡-TRANS 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+\end{code}
+
+The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument. Similarly, we sometimes don't need any of the arguments explicitly; in such cases `≡-TRANS` is easier to apply.
+
+We use the symmetry of `_≡_` very often and we can sometimes improve the readability of a proof by employing some syntactic sugar.<sup>[2](Prelude.Equality.html#fn2)</sup>
+
+\begin{code}
+
+module hide-sym {𝓤 : Universe} where
+
+ _⁻¹ : {X : 𝓤 ̇ } → {x y : X} → x ≡ y → y ≡ x
+ p ⁻¹ = ≡-SYM p
+
+open import MGS-MLTT using (_⁻¹) public
 
 \end{code}
 
-(The only difference between `≡-trans` and `≡-Trans` is that the second argument to `≡-Trans` is implicit so we can omit it when applying `≡-Trans`.  This is sometimes convenient; after all, `≡-Trans` is used to prove that the first and last arguments are the same, and often we don't care about the middle argument.)
+So, if we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-SYM p` we can use the more elegant and intuitive `p ⁻¹` .
 
-Since we use `refl _` so often, it is convenient to adopt the following shorthand.
+Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.<sup>[2](Prelude.Equality.html#fn2)</sup>
 
+\begin{code}
+
+module hide-trans {𝓤 : Universe} where
+
+ _∙_ : {X : 𝓤 ̇ } {x y z : X} → x ≡ y → y ≡ z → x ≡ z
+ p ∙ q = ≡-TRANS p q
+
+open import MGS-MLTT using (_∙_) public
+
+\end{code}
 
 #### <a id="functions-preserve-refl">Functions preserve refl</a>
 
-A function is well defined only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`.
+A simple but useful operation that we will make heavy use of is sometimes called **transport** (or "transport along an identity"). It is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.<sup>[2](Prelude.Equality.html#fn2)</sup>
 
-Escardó defines `ap` in his [Type Topology][] library, and we needn't redefine it here. Instead, we define some variations of `ap` that are sometimes useful.
+\begin{code}
+
+module hide-transport {𝓤 𝓦 : Universe} where
+
+ 𝑖𝑑 : {𝓧 : Universe} (X : 𝓧 ̇ ) → X → X
+ 𝑖𝑑 X = λ x → x
+
+ transport : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) {x y : X} → x ≡ y → A x → A y
+ transport A (refl x) = 𝑖𝑑 (A x)
+
+open import MGS-MLTT using (𝑖𝑑; transport) public
+
+\end{code}
+
+As usual, we display `transport` in a hidden module and then imported the existing definition from [Type Topology][].<sup>[1](Preliminaries.Equality.html#fn1)</sup> See [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion of transport; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda).
+
+A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`. Escardó defines `ap` in the [Type Topology][] library as follows.
+
+\begin{code}
+
+module hide-ap  {𝓤 𝓦 : Universe} where
+ ap : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) {x x' : X} → x ≡ x' → f x ≡ f x'
+ ap f {x} {x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
+
+open import MGS-MLTT using (ap) public
+
+\end{code}
+
+We now define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
@@ -152,6 +217,11 @@ open import MGS-MLTT using (ap) public
 -------------------------------------
 
 <sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  In this case, we don't want the code inside the `hide-refl` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we import right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code). It may seem odd to both define `refl` ourselves only to immediately import the definition that we actually use. We do this in order to describe all or most of the types on which the [UALib][] depends, in a clear and self-contained way, while at the same time making sure that this cannot be misinterpreted as a claim to originality.</span>
+
+
+<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+
+
 
 -------------------------------------
 
