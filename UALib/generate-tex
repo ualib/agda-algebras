@@ -101,7 +101,7 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Discrete.md -o latex/Relations/Discrete.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Continous.md -o latex/Relations/Continuous.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Continuous.md -o latex/Relations/Continuous.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Quotients.md -o latex/Relations/Quotients.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Truncation.md -o latex/Relations/Truncation.tex
 

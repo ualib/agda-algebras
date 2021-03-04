@@ -95,9 +95,9 @@ DepRel I A 𝓦 = Π A → 𝓦 ̇
 
 We call `DepRel` the type of **dependent relations**.
 
-#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
+#### <a id="compatibility-with-dependent-relations">Compatibility with dependent relations</a>
 
-Above we made peace with lifts of general relations and what it means for such relations to be compatibile with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
+Above we made peace with lifts of general relations and what it means for such relations to be compatible with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
 
 \begin{code}
 
