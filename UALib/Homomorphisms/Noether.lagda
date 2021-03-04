@@ -70,7 +70,7 @@ module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
   ϕcom = 𝓇ℯ𝒻𝓁
 
   ϕemb : is-embedding ϕ
-  ϕemb = monic-into-set-is-embedding Bset ϕ ϕmon
+  ϕemb = monic-is-embedding|sets ϕ Bset ϕmon
 
 \end{code}
 
@@ -144,7 +144,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
    class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe ssA (IsEquiv θ) faa'
 
   femb : is-embedding fmap
-  femb = monic-into-set-is-embedding Bset fmap fmon
+  femb = monic-is-embedding|sets fmap Bset fmon
 
 \end{code}
 

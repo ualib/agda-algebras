@@ -50,40 +50,76 @@ module hide-is-set {𝓤 : Universe} where
  is-set : 𝓤 ̇ → 𝓤 ̇
  is-set X = (x y : X) → is-subsingleton (x ≡ y)
 
-open import MGS-Embeddings using (is-set; to-Σ-≡) public
+open import MGS-Embeddings using (is-set) public
 
 \end{code}
 
 Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
 
-
-#### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
-
-Before moving on to define [propositions](Prelude.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Prelude.Inverses.html#embeddings) section of the [Prelude.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.
+The function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which we will also import, is part of Escardó's characterization of equality in Sigma types described in [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality) of [Escardó's notes][]. It is defined as follows.
 
 \begin{code}
 
-monic-into-set-is-embedding : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇} → is-set B
- →                            (f : A → B)  →  Monic f
-                              -----------------------
- →                            is-embedding f
+module hide-to-Σ-≡ {𝓤 𝓦 : Universe} where
 
-monic-into-set-is-embedding Bset f fmon b (a , fa≡b) (a' , fa'≡b) = γ
- where
- faa' : f a ≡ f a'
- faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+ to-Σ-≡ : {X : 𝓤 ̇ } {A : X → 𝓦 ̇ } {σ τ : Σ A}
+  →       Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport A p ∥ σ ∥) ≡ ∥ τ ∥
+  →       σ ≡ τ
 
- aa' : a ≡ a'
- aa' = fmon a a' faa'
+ to-Σ-≡ (refl x , refl a) = refl (x , a)
 
- 𝒜 : _ → _ ̇
- 𝒜 a = f a ≡ b
+open import MGS-Embeddings using (to-Σ-≡) public
 
- arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
- arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
+\end{code}
 
- γ : a , fa≡b ≡ a' , fa'≡b
- γ = to-Σ-≡ arg1
+We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to prove that a monic function into a set is an embedding.
+
+
+#### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
+
+Before moving on to define [propositions](Prelude.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Prelude.Inverses.html#embeddings) section of the [Prelude.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.  To prepare for this, we define a type `_⟺_` with which to represent such equivalences.
+
+\begin{code}
+
+_⟺_ : {𝓤 𝓦 : Universe} → 𝓤 ̇ → 𝓦 ̇ → 𝓤 ⊔ 𝓦 ̇
+X ⟺ Y = (X → Y) × (Y → X)
+
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+
+ monic-is-embedding|sets : (f : A → B) → is-set B → Monic f
+                           --------------------------------
+  →                        is-embedding f
+
+ monic-is-embedding|sets f Bset fmon b (a , fa≡b) (a' , fa'≡b) = γ
+  where
+  faa' : f a ≡ f a'
+  faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+
+  aa' : a ≡ a'
+  aa' = fmon a a' faa'
+
+  𝒜 : _ → _ ̇
+  𝒜 a = f a ≡ b
+
+  arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
+  arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
+
+  γ : a , fa≡b ≡ a' , fa'≡b
+  γ = to-Σ-≡ arg1
+
+\end{code}
+
+In stating the previous result, we introduce a new convention to which we hope to adhere.  Whenever a result holds only for sets, we will add the special suffix `|sets`, which hopefully calls to mind the standard mathematical notation for the restriction of a function to a subset of its domain.
+
+Embeddings are always monic, so we conclude that when a function's codomain is a set, then that function is an embedding if and only if it is monic.
+
+\begin{code}
+
+ embedding-iff-monic|sets : (f : A → B) → is-set B
+                            -------------------------
+  →                         is-embedding f ⟺ Monic f
+
+ embedding-iff-monic|sets f Bset = (embedding-is-monic f), (monic-is-embedding|sets f Bset)
 
 \end{code}
 
@@ -214,7 +250,8 @@ GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 �
 GenProp I A 𝓦 = Σ P ꞉ (GenRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
 gen-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-gen-prop-ext I A 𝓦 = {P Q : GenProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+gen-prop-ext I A 𝓦 = {P Q : GenProp I A 𝓦 }
+ →                    ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -227,7 +264,7 @@ gen-prop-ext' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A �
                 -------------------
  →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
-gen-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+gen-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -238,8 +275,11 @@ While we're at it, we might as well take the abstraction one step further and de
 DepProp : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 DepProp I A 𝓦 = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
+
 dep-prop-ext : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-dep-prop-ext I A 𝓦 = {P Q : DepProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+dep-prop-ext I A 𝓦 = {P Q : DepProp I A 𝓦 }
+ →                    ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -247,12 +287,12 @@ Applying the extensionality principle for dependent relations is no harder than 
 
 \begin{code}
 
-dep-prop-ext' : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe){P Q : DepProp I A 𝓦}
- →              dep-prop-ext I A 𝓦
-                -------------------
+dep-prop-ext' : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe)
+                {P Q : DepProp I A 𝓦} → dep-prop-ext I A 𝓦
+                -------------------------------------------
  →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
-dep-prop-ext' I A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+dep-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 

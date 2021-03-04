@@ -129,6 +129,7 @@ A function is well defined if and only if it maps equivalent elements to a singl
 \begin{code}
 
 module hide-ap  {𝓤 𝓦 : Universe} where
+
  ap : {X : 𝓤 ̇ } {Y : 𝓥 ̇ } (f : X → Y) {x x' : X} → x ≡ x' → f x ≡ f x'
  ap f {x} {x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
 
@@ -140,12 +141,14 @@ We now define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
-ap-cong : {𝓤 𝓦 : Universe}{A : 𝓤 ̇ }{B : 𝓦 ̇ }{f g : A → B} {a b : A}
- →        f ≡ g  →  a ≡ b
-          ---------------
- →        f a ≡ g b
+module _ {𝓤 𝓦 : Universe} where
 
-ap-cong (refl _) (refl _) = refl _
+ ap-cong : {A : 𝓤 ̇ }{B : 𝓦 ̇ }{f g : A → B} {a b : A}
+  →        f ≡ g  →  a ≡ b
+           ---------------
+  →        f a ≡ g b
+
+ ap-cong 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -153,14 +156,12 @@ We sometimes need a version of this that works for [dependent types][], such as 
 
 \begin{code}
 
-cong-app : {𝓤 𝓦 : Universe}
-           {A : 𝓤 ̇} {B : A → 𝓦 ̇}
-           {f g : (a : A) → B a}
- →          f ≡ g   →   (a : A)
-          -----------------------
- →              f a ≡ g a
+ cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B}
+  →         f ≡ g   →   (a : A)
+            -------------------
+  →         f a ≡ g a
 
-cong-app (refl _) a = refl _
+ cong-app 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -172,46 +173,38 @@ cong-app (refl _) a = refl _
 We conclude the Equality module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
 
 
-
 \begin{code}
 
-open import MGS-MLTT using (ap) public
+ ≡-elim-left : {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇}
+  →            (A₁ , B₁) ≡ (A₂ , B₂)
+               ---------------------
+  →            A₁ ≡ A₂
 
-≡-elim-left : {𝓤 𝓦 : Universe}
-              {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇}
- →            (A₁ , B₁) ≡ (A₂ , B₂)
-              ----------------------
- →                   A₁ ≡ A₂
-
-≡-elim-left e = ap pr₁ e
+ ≡-elim-left e = ap pr₁ e
 
 
-≡-elim-right : {𝓤 𝓦 : Universe}
-               {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇}
- →             (A₁ , B₁) ≡ (A₂ , B₂)
-               -----------------------
- →                    B₁ ≡ B₂
+ ≡-elim-right : {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇}
+  →             (A₁ , B₁) ≡ (A₂ , B₂)
+                ---------------------
+  →             B₁ ≡ B₂
 
-≡-elim-right e = ap pr₂ e
-
-
-≡-×-intro : {𝓤 𝓦 : Universe}
-            {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇}
- →           A₁ ≡ A₂  →  B₁ ≡ B₂
-           ------------------------
- →          (A₁ , B₁) ≡ (A₂ , B₂)
-
-≡-×-intro (refl _ ) (refl _ ) = (refl _ )
+ ≡-elim-right e = ap pr₂ e
 
 
-≡-×-int : {𝓤 𝓦 : Universe}
-          {A : 𝓤 ̇} {B : 𝓦 ̇}
-          (a a' : A)(b b' : B)
- →         a ≡ a'  →  b ≡ b'
-          ------------------------
- →         (a , b) ≡ (a' , b')
+ ≡-×-intro : {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇}
+  →          A₁ ≡ A₂  →  B₁ ≡ B₂
+             ---------------------
+  →          (A₁ , B₁) ≡ (A₂ , B₂)
 
-≡-×-int a a' b b' (refl _ ) (refl _ ) = (refl _ )
+ ≡-×-intro 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+
+
+ ≡-×-int : {A : 𝓤 ̇}{B : 𝓦 ̇}{a a' : A}{b b' : B}
+  →        a ≡ a'  →  b ≡ b'
+           -------------------
+  →        (a , b) ≡ (a' , b')
+
+ ≡-×-int 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
 \end{code}
 
 -------------------------------------

@@ -135,7 +135,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 #### <a id="injective-functions">Injective functions</a>
 
-We say that a function `g : A → B` is monic (or injective) if we have a proof of `Monic g`, where
+We say that a function `g : A → B` is **monic** (or **injective** or **one-to-one**) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
 
 \begin{code}
 
@@ -211,6 +211,8 @@ module hide-is-embedding {𝓤 𝓦 : Universe} where
  is-embedding : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
  is-embedding f = ∀ y → is-subsingleton (fiber f y)
 
+open import MGS-Embeddings using (is-embedding) public
+
 \end{code}
 
 This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
@@ -218,8 +220,6 @@ This is a natural way to represent what we usually mean in mathematics by embedd
 Of course, invertible maps are embeddings.
 
 \begin{code}
-
-open import MGS-Embeddings using (is-embedding) public
 
 invertibles-are-embeddings : {𝓧 𝓨 : Universe}
                              {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y)
@@ -229,25 +229,21 @@ invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equiv
 
 \end{code}
 
-Finally, if we have a proof `p : is-embedding f` that the map `f` is an embedding, here's a tool that can make it easier to apply `p`.  We will use the `fiber` type of the [Type Topology][] library, which is defined as follows.
-
-
+Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an embedding we can construct a proof of `Monic f`.
 
 \begin{code}
 
-open import MGS-Subsingleton-Truncation using (fiber) public
 
-embedding-elim : {𝓧 𝓨 : Universe}{X : 𝓧 ̇} {Y : 𝓨 ̇}
-                 (f : X → Y) → is-embedding f
- →               ∀ x x' → f x ≡ f x' → x ≡ x'
+embedding-is-monic : {𝓧 𝓨 : Universe} {X : 𝓧 ̇}{Y : 𝓨 ̇}
+                     (f : X → Y) → is-embedding f → Monic f
 
-embedding-elim f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
+embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
  where
-  fa : fiber f (f x)
-  fa = x , 𝓇ℯ𝒻𝓁
+ fa : fiber f (f x)
+ fa = x , 𝓇ℯ𝒻𝓁
 
-  fb : fiber f (f x)
-  fb = x' , (fxfx' ⁻¹)
+ fb : fiber f (f x)
+ fb = x' , (fxfx' ⁻¹)
 
 \end{code}
 

@@ -77,6 +77,7 @@
 [Martin Escardo]: https://www.cs.bham.ac.uk/~mhe
 [Martín Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Martín Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
+[Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Martin Escardo's installation hints]: https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md
 [Martín Hötzel Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Martin Hötzel Escardo]: https://www.cs.bham.ac.uk/~mhe
