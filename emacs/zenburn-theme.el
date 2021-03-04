@@ -1,10 +1,12 @@
 ;;; zenburn-theme.el --- A low contrast color theme for Emacs.
 
-;; Copyright (C) 2011-2018 Bozhidar Batsov
+;; Copyright (C) 2011-2020 Bozhidar Batsov
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
-;; Version: 2.7-snapshot
+;; Package-Version: 20201121.1050
+;; Package-Commit: ea9b8f3aedc6640cb0d15d77f7bb5d98830abe97
+;; Version: 2.8.0-snapshot
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -204,7 +206,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(custom-group-tag ((t (:foreground ,zenburn-blue :weight bold :height 1.2))))
    `(custom-state ((t (:foreground ,zenburn-green+4))))
 ;;;;; display-fill-column-indicator
-     `(fill-column-indicator ((,class :foreground ,zenburn-bg-05 :weight semilight)))
+   `(fill-column-indicator ((,class :foreground ,zenburn-bg-05 :weight semilight)))
 ;;;;; eww
    '(eww-invalid-certificate ((t (:inherit error))))
    '(eww-valid-certificate   ((t (:inherit success))))
@@ -333,11 +335,11 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(agda2-highlight-datatype-face ((t (:foreground ,zenburn-blue))))
    `(agda2-highlight-function-face ((t (:foreground ,zenburn-blue))))
    `(agda2-highlight-module-face ((t (:foreground ,zenburn-blue-1))))
-   `(agda2-highlight-error-face ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
-   `(agda2-highlight-unsolved-meta-face ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
-   `(agda2-highlight-unsolved-constraint-face ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
-   `(agda2-highlight-termination-problem-face ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
-   `(agda2-highlight-incomplete-pattern-face ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
+   `(agda2-highlight-error-face ((t (:foreground ,zenburn-magenta))))
+   `(agda2-highlight-unsolved-meta-face ((t (:foreground ,zenburn-magenta))))
+   `(agda2-highlight-unsolved-constraint-face ((t (:foreground ,zenburn-magenta))))
+   `(agda2-highlight-termination-problem-face ((t (:foreground ,zenburn-magenta))))
+   `(agda2-highlight-incomplete-pattern-face  ((t (:foreground ,zenburn-magenta))))
    `(agda2-highlight-typechecks-face ((t (:background ,zenburn-red-4))))
 ;;;;; auto-complete
    `(ac-candidate-face ((t (:background ,zenburn-bg+3 :foreground ,zenburn-bg-2))))
@@ -558,6 +560,8 @@ Also bind `class' to ((class color) (min-colors 89))."
                                               :weight bold))))
    `(elfeed-search-tag-face ((t (:foreground ,zenburn-green))))
    `(elfeed-search-feed-face ((t (:foreground ,zenburn-cyan))))
+   `(elfeed-search-title-face ((t (:foreground ,zenburn-fg-05))))
+   `(elfeed-search-unread-title-face ((t (:foreground ,zenburn-fg :weight bold))))
 ;;;;; emacs-w3m
    `(w3m-anchor ((t (:foreground ,zenburn-yellow :underline t
                                  :weight bold))))
@@ -808,6 +812,12 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; helm-swoop
    `(helm-swoop-target-line-face ((t (:foreground ,zenburn-fg :background ,zenburn-bg+1))))
    `(helm-swoop-target-word-face ((t (:foreground ,zenburn-yellow :background ,zenburn-bg+2 :weight bold))))
+;;;;; highlight-numbers
+   `(highlight-numbers-number ((t (:foreground ,zenburn-blue))))
+;;;;; highlight-symbol
+   `(highlight-symbol-face ((t (:background ,zenburn-bg+2))))
+;;;;; highlight-thing
+   `(highlight-thing ((t (:background ,zenburn-bg+2))))
 ;;;;; hl-line-mode
    `(hl-line-face ((,class (:background ,zenburn-bg-05))
                    (t :weight bold)))
@@ -1163,6 +1173,24 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(neo-vc-conflict-face ((t (:foreground ,zenburn-red+1))))
    `(neo-vc-missing-face ((t (:foreground ,zenburn-red+1))))
    `(neo-vc-ignored-face ((t (:foreground ,zenburn-fg-1))))
+;;;;; notmuch
+   `(notmuch-crypto-decryption ((t (:foreground ,zenburn-bg :background ,zenburn-magenta))))
+   `(notmuch-crypto-part-header ((t (:foreground ,zenburn-blue+1))))
+   `(notmuch-crypto-signature-bad ((t (:foreground ,zenburn-bg :background ,zenburn-red))))
+   `(notmuch-crypto-signature-good ((t (:foreground ,zenburn-bg :background ,zenburn-green+1))))
+   `(notmuch-crypto-signature-good-key ((t (:foreground ,zenburn-bg :background ,zenburn-orange))))
+   `(notmuch-crypto-signature-unknown ((t (:foreground ,zenburn-bg :background ,zenburn-red))))
+   `(notmuch-hello-logo-background ((t (:background ,zenburn-bg+2))))
+   `(notmuch-message-summary-face ((t (:background ,zenburn-bg-08))))
+   `(notmuch-search-flagged-face ((t (:foreground ,zenburn-blue+1))))
+   `(notmuch-search-non-matching-authors ((t (:foreground ,zenburn-fg-1))))
+   `(notmuch-tag-added ((t (:underline ,zenburn-green+1))))
+   `(notmuch-tag-deleted ((t (:strike-through ,zenburn-red))))
+   `(notmuch-tag-face ((t (:foreground ,zenburn-green+1))))
+   `(notmuch-tag-flagged ((t (:foreground ,zenburn-blue+1))))
+   `(notmuch-tag-unread ((t (:foreground ,zenburn-red))))
+   `(notmuch-tree-match-author-face ((t (:foreground ,zenburn-green+1))))
+   `(notmuch-tree-match-tag-face ((t (:foreground ,zenburn-green+1))))
 ;;;;; org-mode
    `(org-agenda-date-today
      ((t (:foreground ,zenburn-fg+1 :slant italic :weight bold))) t)
@@ -1431,17 +1459,17 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; sx
    `(sx-custom-button
      ((t (:background ,zenburn-fg :foreground ,zenburn-bg-1
-          :box (:line-width 3 :style released-button) :height 0.9))))
+                      :box (:line-width 3 :style released-button) :height 0.9))))
    `(sx-question-list-answers
      ((t (:foreground ,zenburn-green+3
-          :height 1.0 :inherit sx-question-list-parent))))
+                      :height 1.0 :inherit sx-question-list-parent))))
    `(sx-question-mode-accepted
      ((t (:foreground ,zenburn-green+3
-          :height 1.3 :inherit sx-question-mode-title))))
+                      :height 1.3 :inherit sx-question-mode-title))))
    '(sx-question-mode-content-face ((t (:inherit highlight))))
    `(sx-question-mode-kbd-tag
      ((t (:box (:color ,zenburn-bg-1 :line-width 3 :style released-button)
-          :height 0.9 :weight semi-bold))))
+               :height 0.9 :weight semi-bold))))
 ;;;;; tabbar
    `(tabbar-button ((t (:foreground ,zenburn-fg
                                     :background ,zenburn-bg))))
