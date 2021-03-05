@@ -43,9 +43,9 @@ open Congruence
 
 #### <a id="example">Example</a>
 
-We defined the zero relation <a href="https://ualib.gitlab.io/Relations.Binary.html#1993">𝟎-rel</a> in the [Relations.Binary][] module, and we now demonstrate how to build the trivial congruence out of this relation.
+We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module, and we now demonstrate how to build the trivial congruence out of this relation.
 
-The relation <a href="https://ualib.gitlab.io/Relations.Binary.html#1993">𝟎-rel</a> is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Prelude.Equality][] module, so we simply apply the corresponding proofs.
+The relation `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Prelude.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 

@@ -32,7 +32,7 @@ Algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥
 
 \end{code}
 
-We could refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Prelude.Preliminaries.html#truncation](UALib.Prelude.Preliminaries.html#truncation).)
+We could refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Prelude.Preliminaries.html#truncation](Prelude.Preliminaries.html#truncation).)
 
 We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of our algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
 
@@ -92,7 +92,7 @@ So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and
 
 #### <a id="arbitrarily-many-variable-symbols">Arbitrarily many variable symbols</a>
 
-We sometimes want to assume that we have at our disposal an arbitrary collection X of variable symbols such that, for every algebra 𝑨, no matter the type of its domain, we have a surjective map h₀ : X → ∣ 𝑨 ∣ from variables onto the domain of 𝑨.  We may use the following definition to express this assumption when we need it.
+We sometimes want to assume that we have at our disposal an arbitrary collection `X` of variable symbols such that, for every algebra `𝑨`, no matter the type of its domain, we have a surjective map `h₀ : X → ∣ 𝑨 ∣` from variables onto the domain of `𝑨`.  We may use the following definition to express this assumption when we need it.
 
 \begin{code}
 
@@ -155,7 +155,7 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
-Recall the `compatible-fun` type was defined in [Relations.Binary][] module.
+Recall the `compatible-fun` type was defined in [Relations.Discrete][] module.
 
 
 

@@ -38,7 +38,6 @@
 \newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{ualib.org}}\xspace}
 \newcommand\seedocfordetails{(See~\cite{DeMeo:2021} or \ualibdotorg for details.)\xspace}
 
-
 %% \newcommand\ualibdocs{\href{https://ualib.gitlab.io}{https://ualib.gitlab.io}\xspace}
 \newcommand\ualibrepo{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{https://gitlab.com/ualib}}\xspace}
 \newcommand\ualibsrc{\href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib}}\xspace}
@@ -73,7 +72,7 @@
 \newcommand\ualibAlgebras   {\href{https://ualib.gitlab.io/Algebras.html}            {\am{Algebras}}\xspace}
 \newcommand\ualibSignatures {\href{https://ualib.gitlab.io/Algebras.Signatures.html} {\am{Algebras.Signatures}}\xspace}
 \newcommand\ualibAlgAlgebras{\href{https://ualib.gitlab.io/Algebras.Algebras.html}   {\am{Algebras.Algebras}}\xspace}
-\newcommand\ualibAlgProducts{\href{https://ualib.gitlab.io/Algebras.Products.html}   {\am{Algebras.Products}}\xspace}
+\newcommand\ualibProducts{\href{https://ualib.gitlab.io/Algebras.Products.html}   {\am{Algebras.Products}}\xspace}
 \newcommand\ualibCongruences{\href{https://ualib.gitlab.io/Algebras.Congruences.html}{\am{Algebras.Congruences}}\xspace}
 
 % -- Homomorphisms
@@ -122,7 +121,7 @@
 \newcommand\urlAlgebras   {\url{https://ualib.gitlab.io/Algebras.html}\xspace}
 \newcommand\urlSignatures {\url{https://ualib.gitlab.io/Algebras.Signatures.html}\xspace}
 \newcommand\urlAlgAlgebras{\url{https://ualib.gitlab.io/Algebras.Algebras.html}\xspace}
-\newcommand\urlAlgProducts{\url{https://ualib.gitlab.io/Algebras.Products.html}\xspace}
+\newcommand\urlProducts{\url{https://ualib.gitlab.io/Algebras.Products.html}\xspace}
 \newcommand\urlCongruences{\url{https://ualib.gitlab.io/Algebras.Congruences.html}\xspace}
 
 % -- Homomorphisms
@@ -177,6 +176,8 @@
 \newcommand{\axiomk}{\href{https://ncatlab.org/nlab/show/axiom+K+\%28type+theory\%29}{Streicher's K axiom}\xspace}
 \newcommand{\agdarefk}{\href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{Axiom K}\xspace}
 \newcommand{\agdaref}{\href{https://agda.readthedocs.io/en/v2.6.1/language}{Agda Language Reference}\xspace}
+\newcommand\agdartd{\href{https://agda.readthedocs.io/}{agda.readthedocs.io}}
+
 %% \newcommand{\patternmatching}{\href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}{Pattern matching and equality}\xspace}
 \newcommand{\agdatools}{\href{https://agda.readthedocs.io/en/v2.6.1/tools/}{Agda Tools}\xspace}
 \newcommand{\agdamode}{\href{https://agda.readthedocs.io/en/v2.6.0.1/tools/emacs-mode.html}{agda2-mode}\xspace}
@@ -200,13 +201,18 @@
 %% \newcommand{\alg}[1]{\ensuremath{\mathbf{#1}}}  % algebraic structures
 %% \newcommand{\var}[1]{\ensuremath{\mathscr{#1}}}  % algebraic structures
 \newcommand\ac{\AgdaComma}
+\newcommand\ak{\AgdaKeyword}
 \newcommand\as[1]{\AgdaSymbol{#1}}
 \newcommand\au{\AgdaUnderscore}
 \newcommand\aic[1]{\AgdaInductiveConstructor{#1}}
 \newcommand\af[1]{\AgdaFunction{#1}}
+\newcommand\afld[1]{\AgdaField{#1}}
+\newcommand\ar[1]{\AgdaRecord{#1}}
 \newcommand\aof[1]{\AgdaOperator{\AgdaFunction{#1}}}
 \newcommand\ad[1]{\AgdaDatatype{#1}}
 \newcommand\aod[1]{\AgdaOperator{\AgdaDatatype{#1}}}
+\newcommand\aop[1]{\AgdaOperator{\AgdaPrimitive{#1}}}
+\newcommand\ap[1]{\AgdaPostulate{#1}}
 \newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}}
 \newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
 \newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
@@ -216,6 +222,8 @@
 \newcommand\Maod[1]{\ensuremath{\mathrel{\AgdaOperator{\AgdaDatatype{#1}}}}}
 \newcommand\Maf[1]{\ensuremath{\mathrel{\AgdaFunction{#1}}}}
 \newcommand\Maof[1]{\ensuremath{\mathrel{\AgdaOperator{\AgdaFunction{#1}}}}}
+
+\newcommand\abt[2]{\ab{#1}~\as :~\ab{#2}}
 
 
 \newcommand\KeywordTok[1]{\AgdaKeyword{#1}}
@@ -237,3 +245,4 @@
   \ifthenelse{ \equal{#1}{→} }{\ensuremath{\rightarrow}}{
   \ifthenelse{ \equal{#1}{_} }{\AgdaUnderscore}{#1}}
 }
+\newcommand\deq{\ensuremath{\doteq}}

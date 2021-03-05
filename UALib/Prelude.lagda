@@ -27,11 +27,11 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 module Prelude where
 
-open import Prelude.Preliminaries public
-open import Prelude.Equality public
-open import Prelude.Inverses public
-open import Prelude.Extensionality public
-open import Prelude.Lifts public
+open import Prelude.Preliminaries
+open import Prelude.Equality
+open import Prelude.Extensionality
+open import Prelude.Inverses
+open import Prelude.Lifts
 
 \end{code}
 

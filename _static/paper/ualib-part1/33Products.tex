@@ -1,0 +1,391 @@
+We begin this module by assuming a signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.  Because of this, in contrast to our (highly abridged) descriptions of previous modules, we present the first few lines of the \ualibProducts module in full.  They are as follows.
+%This is done by placing the following line near the beginning of the module (after the \AgdaPragma{Options}
+% \textbf{NOTATION}. From now on, the remaining modules of the \ualib will assume universes 𝓞 and 𝓥, and a fixed signature type \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥.
+\ccpad
+\begin{code}%
+\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaKeyword{OPTIONS}\AgdaSpace{}%
+\AgdaPragma{--without-K}\AgdaSpace{}%
+\AgdaPragma{--exact-split}\AgdaSpace{}%
+\AgdaPragma{--safe}\AgdaSpace{}%
+\AgdaSymbol{\#-\}}\<%
+\\
+%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
+\\
+%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Algebras.Products}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Algebras.Algebras}\AgdaSpace{}%
+\AgdaKeyword{hiding}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\end{code}
+\ccpad
+Notice that we import the \af{Signature} type from the \ualibSignatures module first, before the \ak{module} line, so that we may use it to declare the signature \AgdaBound{𝑆} as a parameter of the \ualibProducts module.
+
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{Algebras.Products}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \end{code}
+
+The product of \ab 𝑆-algebras is defined as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}%
+\>[100I]\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{=}%
+\>[48I]\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}%
+\>[100I]\AgdaComment{-- domain of the product algebra}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[48I]\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}%
+\>[100I]\AgdaComment{-- basic operations of the product algebra}\<%
+\end{code}
+\ccpad
+% Other modules of the \ualib will use the foregoing product type exclusively. However, for completeness, we now demonstrate how one would construct product algebras when the factors are defined using records.
+% \ccpad
+% \begin{code}%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{algebra}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaComment{-- product for algebras of record type}\<%
+% \\
+% \>[0]\AgdaFunction{⨅'}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓘}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓘}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{algebra}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝓘}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{𝑆}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaFunction{⨅'}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaKeyword{record}%
+% \>[95I]\AgdaSymbol{\{}\AgdaSpace{}%
+% \AgdaField{univ}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{∀}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaField{univ}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{)}%
+% \>[55]\AgdaComment{-- domain}\<%
+% \\
+% \>[95I][@{}l@{\AgdaIndent{0}}]%
+% \>[15]\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaField{op}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{𝑎}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaField{op}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝑎}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaComment{-- basic operations}\<%
+% \\
+% %
+% \>[15]\AgdaSymbol{\}}\<%
+% \end{code}
+% \ccpad
+
+\subsubsection{Products of classes of algebras}\label{products-of-classes-of-algebras}
+
+An arbitrary class \ab 𝒦 of algebras is represented as a predicate over the type \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, for some universe \AgdaBound{𝓤} and signature \AgdaBound{𝑆}. That is, \ab 𝒦 \as : \AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaUnderscore.\footnote{%
+The underscore is merely a placeholder for the universe of the predicate type and doesn't concern us here.} Later we will formally state and prove that the product of all subalgebras of algebras in such a class belongs to \af{SP}(\ab 𝒦) (subalgebras of products of algebras in \ab 𝒦). That is, \af ⨅ \af S(\ab 𝒦) \af ∈ \af{SP}(\ab 𝒦). This turns out to be a nontrivial exercise. In fact, it is not even clear (at least not to this author) how one should express the product of an entire class of algebras as a dependent type. However, if one ponders this for a while, the right type will eventually reveal itself, and will then seem obvious.\footnote{%
+At least this was our experience, but readers are encouraged to try to come up with a type that represents the product of all members of an inhabitant of a predicate over \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, or even an arbitrary predicate.} The solution is the \af{class-product} type whose construction is the main goal of this section.
+
+First, we need a type that will serve to index the class, as well as the product of its members.\footnote{%
+\textbf{Notation}. Given a signature \ab{𝑆} \as : \af{Signature} \ab  𝓞 \ab 𝓥, the type \af{Algebra} \ab 𝓤 \ab 𝑆 has universe \ab{𝓞} \ap ⊔ \ab 𝓥 \ap ⊔ \ab 𝓤 \af ⁺ . In the \ualib, such universes abound, and \ab{𝓞} and \ab 𝓥 remain fixed throughout the library. So, for notational convenience, we define the following shorthand for universes of this form: 
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}}
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+Notice that the second component of this dependent pair type is (\ab{𝑨} \af ∈ \ab 𝒦) \af × (\ab X \as → \af ∣ \ab 𝑨 \af ∣). In previous versions of the \ualib this second component was simply \ab{𝑨} \af ∈ \ab 𝒦, until we realized that adding the type \ab{X} \as → \af ∣ \ab 𝑨 \af ∣ is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type \ab X \as → \af ∣ \ab 𝑨 \af ∣ may be viewed abstractly as an \emph{ambient context}, or more concretely, as an assignment of \emph{values} in \af ∣ \ab 𝑨 \af ∣ to \emph{variable symbols} in \ab X.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the ``context map'' inside the index type \af ℑ of the product turns out to be a convenient way to achieve this flexibility.
+
+Taking the product over the index type \af ℑ requires a function that maps an index \ab{i} \as : \af ℑ to the corresponding algebra. Each index \ab{i} \as : \af ℑ denotes a triple, say, (\ab{𝑨} , \ab p , \ab h), where\\[-4pt]
+
+\ab{𝑨} \as : \af{Algebra} \ab 𝓤 \ab 𝑆, ~ ~ \ab{p} \as : \ab 𝑨 \af ∈ \ab 𝒦, ~ ~ \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣,\\[4pt] so the function mapping an index to the corresponding algebra is simply the first projection.
+\ccpad
+\begin{code}%
+\>[1]\AgdaFunction{𝔄}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{𝔄}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ℑ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\end{code}
+\ccpad
+Finally, we define \af{class-product} which represents the product of all members of \ab 𝒦.
+\ccpad
+\begin{code}%
+\>[1]\AgdaFunction{class-product}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{class-product}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{𝔄}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+% Alternatively, we could have defined the class product in a way that
+% explicitly displays the index, like so.
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaFunction{class-product'}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Pred}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaFunction{ov}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaFunction{ov}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{𝑆}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{class-product'}\AgdaSpace{}%
+% \AgdaBound{𝒦}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{⨅}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
+% \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)))}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\<%
+% \end{code}
+% \ccpad
+If \ab{p} \as : \ab 𝑨 \af ∈ \ab 𝒦 and \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣, then we can think of the triple (\ab{𝑨} , \ab p , \ab h) \af ∈ \af ℑ \ab 𝒦 as an index over the class, and so we can think of \af 𝔄 (\ab 𝑨 , \ab p , \ab h) (which is simply \ab{𝑨}) as the projection of the product \af ⨅ ( \af 𝔄 \ab 𝒦 ) onto the (\ab 𝑨 , \ab p , \ab h)-th component.

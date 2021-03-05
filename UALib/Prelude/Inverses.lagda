@@ -199,11 +199,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 
 #### <a id="embeddings">Embeddings</a>
-
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Prelude.Extensionality.html#alternative-extensionality-type), as follows.
-
-
-Finally, the type `is-embedding f` will denotes the assertion that `f` is a function all of whose fibers are subsingletons.
+The type `is-embedding f` denotes the assertion that `f` is a function all of whose fibers are subsingletons.
 
 \begin{code}
 module hide-is-embedding {𝓤 𝓦 : Universe} where
@@ -259,3 +255,6 @@ embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
 {% include UALib.Links.md %}
 
 
+<!-- 
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Prelude.Extensionality.html#alternative-extensionality-type), as follows.
+-->

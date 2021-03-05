@@ -242,7 +242,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 #### <a id="general-and-dependent-propositions">General and dependent propositions</a>
 
 
-We defined a type called `GenRel` in the [Relations.Binary][] module to represent relations of arbitrary arity. So, naturally, we define a type of *truncated general relations*, the inhabitants of which we will call **general propositions**.
+We defined a type called `GenRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. So, naturally, we define a type of *truncated general relations*, the inhabitants of which we will call **general propositions**.
 
 \begin{code}
 
