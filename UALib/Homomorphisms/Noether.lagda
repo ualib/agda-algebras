@@ -32,8 +32,9 @@ Here is a version of the so-called *First Homomorphism theorem* (sometimes calle
 open Congruence
 
 module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}{h : hom 𝑨 𝑩}
+         -- extensionality assumptions --
+         {pe : prop-ext 𝓤 𝓦}
          -- truncation assumptions --
-         {pe : prop-ext ∣ 𝑨 ∣ 𝓦}
          {Bset : is-set ∣ 𝑩 ∣}
          {ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x)}
          {ssA : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C)}

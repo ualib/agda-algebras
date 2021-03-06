@@ -51,7 +51,7 @@ open Congruence
 
 FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                     --extensionality assumptions:
- →                     prop-ext ∣ 𝑨 ∣ 𝓦 → is-set ∣ 𝑩 ∣
+ →                     prop-ext 𝓤 𝓦 → is-set ∣ 𝑩 ∣
  →                     (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
  →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
                     -------------------------------------------------------------
@@ -77,10 +77,12 @@ In the special case we apply this to later (e.g., to prove Birkhoff's HSP theore
 \begin{code}
 
 free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
-                    --extensionality assumptions:
- →                    prop-ext ∣ 𝑻 X ∣ 𝓤 → is-set ∣ 𝑩 ∣
- →                    (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
- →                    (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
+                   --extensionality assumptions --
+ →                 prop-ext (ov 𝓧) 𝓤
+                   --truncation assumptions --
+ →                 is-set ∣ 𝑩 ∣
+ →                 (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
+ →                 (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
                    -------------------------------------------------------------------
  →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 

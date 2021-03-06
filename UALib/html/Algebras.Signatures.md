@@ -60,7 +60,7 @@ We define the signature of an algebraic structure in Agda like this.
 
 </pre>
 
-As mentioned in the section on [Relations of arbitrary arity](Relations.Binary.html#relations-of-arbitrary-arity), 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
+As mentioned in the [Relations.Continuous][] module, 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
 
 In the [Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
@@ -79,16 +79,16 @@ Here is how we might define the signature for monoids as a member of the type `S
 
 <pre class="Agda">
 
-<a id="2263" class="Keyword">module</a> <a id="2270" href="Algebras.Signatures.html#2270" class="Module">_</a> <a id="2272" class="Symbol">{</a><a id="2273" href="Algebras.Signatures.html#2273" class="Bound">𝓞</a> <a id="2275" class="Symbol">:</a> <a id="2277" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="2285" class="Symbol">}</a> <a id="2287" class="Keyword">where</a>
+<a id="2201" class="Keyword">module</a> <a id="2208" href="Algebras.Signatures.html#2208" class="Module">_</a> <a id="2210" class="Symbol">{</a><a id="2211" href="Algebras.Signatures.html#2211" class="Bound">𝓞</a> <a id="2213" class="Symbol">:</a> <a id="2215" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="2223" class="Symbol">}</a> <a id="2225" class="Keyword">where</a>
 
- <a id="2295" class="Keyword">data</a> <a id="2300" href="Algebras.Signatures.html#2300" class="Datatype">monoid-op</a> <a id="2310" class="Symbol">:</a> <a id="2312" href="Algebras.Signatures.html#2273" class="Bound">𝓞</a> <a id="2314" href="Universes.html#403" class="Function Operator">̇</a> <a id="2316" class="Keyword">where</a>
-  <a id="2324" href="Algebras.Signatures.html#2324" class="InductiveConstructor">e</a> <a id="2326" class="Symbol">:</a> <a id="2328" href="Algebras.Signatures.html#2300" class="Datatype">monoid-op</a>
-  <a id="2340" href="Algebras.Signatures.html#2340" class="InductiveConstructor">·</a> <a id="2342" class="Symbol">:</a> <a id="2344" href="Algebras.Signatures.html#2300" class="Datatype">monoid-op</a>
+ <a id="2233" class="Keyword">data</a> <a id="2238" href="Algebras.Signatures.html#2238" class="Datatype">monoid-op</a> <a id="2248" class="Symbol">:</a> <a id="2250" href="Algebras.Signatures.html#2211" class="Bound">𝓞</a> <a id="2252" href="Universes.html#403" class="Function Operator">̇</a> <a id="2254" class="Keyword">where</a>
+  <a id="2262" href="Algebras.Signatures.html#2262" class="InductiveConstructor">e</a> <a id="2264" class="Symbol">:</a> <a id="2266" href="Algebras.Signatures.html#2238" class="Datatype">monoid-op</a>
+  <a id="2278" href="Algebras.Signatures.html#2278" class="InductiveConstructor">·</a> <a id="2280" class="Symbol">:</a> <a id="2282" href="Algebras.Signatures.html#2238" class="Datatype">monoid-op</a>
 
- <a id="2356" class="Keyword">open</a> <a id="2361" class="Keyword">import</a> <a id="2368" href="MGS-MLTT.html" class="Module">MGS-MLTT</a> <a id="2377" class="Keyword">using</a> <a id="2383" class="Symbol">(</a><a id="2384" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="2385" class="Symbol">;</a> <a id="2387" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="2388" class="Symbol">)</a>
+ <a id="2294" class="Keyword">open</a> <a id="2299" class="Keyword">import</a> <a id="2306" href="MGS-MLTT.html" class="Module">MGS-MLTT</a> <a id="2315" class="Keyword">using</a> <a id="2321" class="Symbol">(</a><a id="2322" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="2323" class="Symbol">;</a> <a id="2325" href="MGS-MLTT.html#2482" class="Function">𝟚</a><a id="2326" class="Symbol">)</a>
 
- <a id="2392" href="Algebras.Signatures.html#2392" class="Function">monoid-sig</a> <a id="2403" class="Symbol">:</a> <a id="2405" href="Algebras.Signatures.html#1299" class="Function">Signature</a> <a id="2415" href="Algebras.Signatures.html#2273" class="Bound">𝓞</a> <a id="2417" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a>
- <a id="2421" href="Algebras.Signatures.html#2392" class="Function">monoid-sig</a> <a id="2432" class="Symbol">=</a> <a id="2434" href="Algebras.Signatures.html#2300" class="Datatype">monoid-op</a> <a id="2444" href="Prelude.Preliminaries.html#14518" class="InductiveConstructor Operator">,</a> <a id="2446" class="Symbol">λ</a> <a id="2448" class="Symbol">{</a> <a id="2450" href="Algebras.Signatures.html#2324" class="InductiveConstructor">e</a> <a id="2452" class="Symbol">→</a> <a id="2454" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="2455" class="Symbol">;</a> <a id="2457" href="Algebras.Signatures.html#2340" class="InductiveConstructor">·</a> <a id="2459" class="Symbol">→</a> <a id="2461" href="MGS-MLTT.html#2482" class="Function">𝟚</a> <a id="2463" class="Symbol">}</a>
+ <a id="2330" href="Algebras.Signatures.html#2330" class="Function">monoid-sig</a> <a id="2341" class="Symbol">:</a> <a id="2343" href="Algebras.Signatures.html#1299" class="Function">Signature</a> <a id="2353" href="Algebras.Signatures.html#2211" class="Bound">𝓞</a> <a id="2355" href="Agda.Primitive.html#590" class="Primitive">𝓤₀</a>
+ <a id="2359" href="Algebras.Signatures.html#2330" class="Function">monoid-sig</a> <a id="2370" class="Symbol">=</a> <a id="2372" href="Algebras.Signatures.html#2238" class="Datatype">monoid-op</a> <a id="2382" href="Prelude.Preliminaries.html#14518" class="InductiveConstructor Operator">,</a> <a id="2384" class="Symbol">λ</a> <a id="2386" class="Symbol">{</a> <a id="2388" href="Algebras.Signatures.html#2262" class="InductiveConstructor">e</a> <a id="2390" class="Symbol">→</a> <a id="2392" href="MGS-MLTT.html#712" class="Function">𝟘</a><a id="2393" class="Symbol">;</a> <a id="2395" href="Algebras.Signatures.html#2278" class="InductiveConstructor">·</a> <a id="2397" class="Symbol">→</a> <a id="2399" href="MGS-MLTT.html#2482" class="Function">𝟚</a> <a id="2401" class="Symbol">}</a>
 
 </pre>
 

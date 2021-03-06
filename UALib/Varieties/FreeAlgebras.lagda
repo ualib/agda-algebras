@@ -391,7 +391,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
  open Congruence
 
- free-quot-subalg-ℭ : prop-ext (Term X) (ov 𝓤) → is-set ∣ ℭ ∣
+ free-quot-subalg-ℭ : prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
   →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
   →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
                       -----------------------------------------------------------
@@ -400,7 +400,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
  free-quot-subalg-ℭ pe Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ homℭ pe Cset ssR ssC
 
 
- module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (Term X) (ov 𝓤))
+ module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (ov 𝓤) (ov 𝓤))
           (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
           (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C)) where
 

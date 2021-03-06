@@ -145,8 +145,8 @@ The principle of **proposition extensionality** asserts that logically equivalen
 
 \begin{code}
 
- prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
- prop-ext A 𝓦 = {P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+prop-ext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
+prop-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -154,12 +154,12 @@ Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P
 
 \begin{code}
 
- prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe){P Q : Pred₁ A 𝓦}
-  →         prop-ext A 𝓦
+prop-ext' : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred₁ A 𝓦}
+ →          prop-ext 𝓤 𝓦
             -------------------
-  →         ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ →          ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
- prop-ext' A 𝓦 pe hyp = pe (fst hyp) (snd hyp) 
+prop-ext' pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
 
@@ -174,8 +174,8 @@ As above, we use the `is-subsingleton` type of the [Type Topology][] library to 
 
 \begin{code}
 
- Pred₂ : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
- Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , ∀ x y → is-subsingleton (R x y)
+Pred₂ : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , ∀ x y → is-subsingleton (R x y)
 
 \end{code}
 
@@ -193,7 +193,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
- class-extensionality : prop-ext A 𝓡 → {a a' : A}
+ class-extensionality : prop-ext 𝓤 𝓡 → {a a' : A}
   →                     IsEquivalence ∣ 𝑹 ∣
                         ------------------------------------------
   →                     ∣ 𝑹 ∣ a a'  →  [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
@@ -210,8 +210,13 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
    β : [ a' ] ∣ 𝑹 ∣ ⊆ [ a ] ∣ 𝑹 ∣
    β a'x = snd (/-=̇ Req Raa') a'x
 
+   PQ : P ≡ Q
+   PQ = (prop-ext' pe (α , β))
+
    γ : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
-   γ = ap fst (prop-ext' A 𝓡 {P}{Q} pe (α , β))
+   γ = ap fst PQ
+
+
 
  to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D}
   →              (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
@@ -221,7 +226,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : prop-ext A 𝓡 → {a a' : A}
+ class-extensionality' : prop-ext 𝓤 𝓡 → {a a' : A}
   →                      (∀ C → is-subsingleton (𝒞 C))
   →                      IsEquivalence ∣ 𝑹 ∣
                          -------------------------
@@ -300,10 +305,10 @@ dep-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 -----------------------------------
 
-<span class="footnote" id="fn1"><sup>1</sup> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
+<sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
 
-<span class="footnote" id="fn2"><sup>2</sup> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
+<sup>2</sup><span class="footnote" id="fn2"> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
 
 
 <p></p>

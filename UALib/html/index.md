@@ -89,15 +89,15 @@ We hope the library will be useful to mathematicians and computer scientists who
 - [Prelude](Prelude.html)
   - [Preliminaries](Prelude.Preliminaries.html)
   - [Equality](Prelude.Equality.html)
+  - [Function Extensionality](Prelude.Extensionality.html)
   - [Inverses](Prelude.Inverses.html)
-  - [Extensionality](Prelude.Extensionality.html)
   - [Agda's Universe Hierarchy](Prelude.Lifts.html)
 
 - [Relation and Quotient Types](Relations.html)
   - [Discrete Relations](Relations.Discrete.html)
   - [Continuous Relations](Relations.Continuous.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
-  - [Truncation, Sets, Propositions](Relations.Truncation.html)
+  - [Truncation and Proposition Extensionality](Relations.Truncation.html)
 
 - [Algebra Types](Algebras.html)
   - [Operations and Signatures](Algebras.Signatures.html)

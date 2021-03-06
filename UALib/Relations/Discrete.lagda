@@ -76,16 +76,37 @@ infix 4 _⊆_ _⊇_
 
 \end{code}
 
-In type theory everything is a type. As we have just seen, this includes subsets.  Since the notion of equality for types is usually a nontrivial matter, it may be nontrivial to represent equality of subsets.  Fortunately, it is straightforward to write down a type that represents what it means for two subsets to be the in informal (pencil-paper) mathematics.  In the [Agda UALib][] we denote this **subset equality** by =̇ and define it as follows.
+#### <a id="the-extensionality-axiom">The axiom of extensionality</a>
+
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down the type that represents what we typically means in informal mathematics for two subsets to be equal. In the [UALib][] we denote this type by `≐` and define it as follows.<sup>[1](Relations.Discrete.html#fn1)</sup>
 
 \begin{code}
 
 _≐_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
 P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
-infix 4 _≐_  -- type ≐ as `\.=` in agda2-mode
+infix 4 _≐_
 
 \end{code}
+
+If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then of course both `P ⊆ Q` and `P ⊇ Q` hold, so `P ≐ Q` holds.
+
+\begin{code}
+
+Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨} → P ≡ Q → P ≐ Q
+Pred-≡ 𝓇ℯ𝒻𝓁 = (λ z → z) , (λ z → z)
+
+\end{code}
+
+The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the **axiom of extensionality**.
+
+\begin{code}
+
+ext-axiom : {𝓧 : Universe} → 𝓧 ̇ → (𝓨 : Universe) → 𝓧 ⊔ 𝓨 ⁺ ̇
+ext-axiom A 𝓨 = ∀ (P Q : Pred A 𝓨) → P ≐ Q → P ≡ Q
+\end{code}
+
+We treat this axiom in greater generally and detail in the [Relations.Truncation][] module.
 
 
 
@@ -101,10 +122,6 @@ _∈∈_ f S = (x : _) → f x ∈ S
 Pred-refl : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (a : A) → a ∈ P → a ∈ Q
 Pred-refl (refl _) _ = λ z → z
-
-Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          P ≡ Q → P ≐ Q
-Pred-≡ (refl _) = (λ z → z) , λ z → z
 
 Pred-≡→⊆ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊆ Q)
@@ -327,6 +344,8 @@ However, this is a rare case in which the more elegant syntax may result in simp
 
 
 --------------------------------------
+
+<sup>1</sup><span class="footnote" id="fn1"> In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`.</span>
 
 <p></p>
 
