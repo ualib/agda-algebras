@@ -1,60 +1,34 @@
 \documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,11pt]{lipics-v2021}
-%% The next 3 lines are recommended at: https://agda.readthedocs.io/en/v2.6.1.1/tools/generating-latex.html#known-pitfalls-and-issues
 \usepackage{fontspec}
-
-%% \defaultfontfeatures[\rmfamily]{}
-%% \setmainfont{Latin Modern Roman}%% \usepackage{mathabx}
-
 \crefformat{footnote}{#2\footnotemark[#1]#3}
-
 \usepackage{proof-dashed}
 \usepackage{comment}
-
 \usepackage[wjdsimple,links]{agda}
-%\usepackage[newwjd,links]{agda}
-%\usepackage[bw,links]{agda}
 \usepackage{wjd}
 \newif\ifnonbold % comment this line to restore bold universe symbols
 \usepackage{../../unixode}
 
-%This is a template for producing LIPIcs articles. 
-%See lipics-v2021-authors-guidelines.pdf for further information.
-%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
-%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
-%for section-numbered lemmas etc., use "numberwithinsect"
-%for enabling cleveref support, use "cleveref"
-%for enabling autoref support, use "autoref"
-%for anonymousing the authors (e.g. for double-blind review), add "anonymous"
-%for enabling thm-restate support, use "thm-restate"
-%for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
-%for producing a PDF according the PDF/A standard, add "pdfa"
-%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
-%% \pdfmapfile{+fontawesome5.map}
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
+
+%%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{The Agda Universal Algebra Library, Part 2:\\homomorphisms, terms, and subalgebras}
-\titlerunning{The Agda UALib, Part 2: homomorphisms, terms, and subalgebras}
+\titlerunning{The Agda UALib, Part 2: homomorphisms, terms, subalgebras}
+%%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \author{William DeMeo}
        {Department of Algebra, Charles University in Prague \and \url{https://williamdemeo.gitlab.io}}
        {williamdemeo@gmail.com}
        {https://orcid.org/0000-0003-1832-5690}
        {}
-
 \authorrunning{W.~J.~DeMeo}
+%%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage[yyyymmdd,hhmmss]{datetime}
 
-%% \usepackage{fancyhdr}
-%% \fancyfoot{}
-%% \pagestyle{fancy}
-%% \fancyhf{}
-%% \fancyhead[ER]{\sffamily\bfseries \leftmark}
-%% \fancyhead[OL]{\sffamily\bfseries The Agda Universal Algebra Library}
-%% \fancyhead[EL,OR]{\sffamily\bfseries \thepage}
-%% \renewcommand{\headrulewidth}{0pt}
-
-\Copyright{William J. DeMeo}
+\Copyright{2021 William J. DeMeo; this draft was compiled on \today\ at \currenttime}
 
 \ccsdesc[500]{Theory of computation~Constructive mathematics}
 \ccsdesc[500]{Theory of computation~Type theory}
@@ -67,8 +41,8 @@
 
 \category{} %optional, e.g. invited paper
 
-\relatedversion{hosted on arXiv}
-\relatedversiondetails[linktext={arxiv.org/pdf/2101.10166}]{Extended Version}{https://arxiv.org/pdf/2101.10166}
+\relatedversion{All parts hosted on arXiv}
+\relatedversiondetails[linktext={arxiv.org/pdf/2101.}]{Part 1}{https://arxiv.org/pdf/2101.}
 
 \supplement{~\\ \textit{Documentation}: \ualibdotorg}%
 \supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
@@ -100,7 +74,7 @@
 
 \begin{abstract}
 The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. 
- The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper we describe some of the most important foundational types and assumptions of the UALib, and we discuss some of the problems that arose when developing it, as well as our solutions to these problems.
+ The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper, we describe the the types and proofs of the UALib that concern homomorphisms, terms, and subalgebras.
 \end{abstract}
 
 \newpage
@@ -108,33 +82,12 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 \setcounter{tocdepth}{2}
 \tableofcontents
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
-The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
-
-\subsection{Contributions and organization}
-\label{sec:contributions}
-
-In this paper we limit ourselves to the presentation of the core foundational modules of the \ualib so that we have space to discuss some of the more interesting type theoretic and foundational issues that arose when developing the library and attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
-
-This is part 2 in a 3-paper series describing the \agdaualib, and this installment is structured as follows.
-%
-Section~\ref{sec:agda-preliminaries} introduces...
-
-Finally, Section~\ref{sec:types-for-algebras} describes...
-%
-The final section of the paper includes a few remarks about current work and future directions.
-
-To conclude this introduction, we provide the following links to official sources of information about the \agdaualib.
-\begin{itemize}
-  \item \href{https://ualib.gitlab.io}{\texttt{ualib.org}} (the web site) includes every line of code in the library, rendered as html and accompanied by documentation, and
-  \item \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} (the source code) freely available and licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
-\end{itemize}
-These sources include complete proofs of every theorem we mention here, and much more. Finally, we highly recommend the book by Bergman~\cite{Bergman:2012} for background in universal algebra, and the notes by \escardo~\cite{MHE} for background in type theory and Agda.
+\input{11Introduction.tex}
 
 \newcommand\firstsentence[2]{This section describes certain key components of the #1 module of the \agdaualib.\footnote{For more details, see #2.}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Homomorphism Types}\label{sec:homomorphism-types}
@@ -143,7 +96,7 @@ These sources include complete proofs of every theorem we mention here, and much
 \subsection{Basic definitions}\label{sec:basic-definitions}
 \firstsentence{\ualibHomBasic}{\urlHomBasic}
 
-\input{11Basic.tex}
+\input{21Basic.tex}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -176,96 +129,54 @@ These sources include complete proofs of every theorem we mention here, and much
 
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Homomorphism Theorems}\label{sec:homom-theor}
-\firstsentence{\ualibNoether}{\urlNoether}
-
-\input{12Noether.tex}
-
+\subsection{Homomorphism Theorems}\label{sec:homom-theor}\firstsentence{\ualibNoether}{\urlNoether}
+\input{22Noether.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Isomorphisms}
-\firstsentence{\ualibIsomorphisms}{\urlIsomorphisms}
-
-\input{13Isomorphisms.tex}
-
-
+\subsection{Isomorphisms}\label{sec:isomorphisms}\firstsentence{\ualibIsomorphisms}{\urlIsomorphisms}
+\input{23Isomorphisms.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Homomorphic Images}
-\firstsentence{\ualibHomomorphicImages}{\urlHomomorphicImages}
-
-\input{14HomomorphicImages.tex}
-
+\subsection{Homomorphic Images}\label{sec:hom-images}\firstsentence{\ualibHomomorphicImages}{\urlHomomorphicImages}
+\input{24HomomorphicImages.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Types for Terms}
+\section{Types for Terms}\label{sec:types-terms}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Basic Definitions}
-\firstsentence{\ualibTermsBasic}{\urlTermsBasic}
-
-\input{21Basic.tex}
-
-  
+\subsection{Basic Definitions}\label{sec:types-basic-defs}\firstsentence{\ualibTermsBasic}{\urlTermsBasic}
+\input{31Basic.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Term Operations}
-\firstsentence{\ualibOperations}{\urlOperations}
-
-\input{22Operations.tex}
-
+\subsection{Term Operations}\label{sec:term-operations}\firstsentence{\ualibOperations}{\urlOperations}
+\input{32Operations.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subalgebra Types}\label{sec:subalgebra-types}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
-\section{Subalgebra Types}
-  
+\subsection{Subuniverses}\label{sec:subuniverses}\firstsentence{\ualibSubuniverses}{\urlSubuniverses}
+\input{41Subuniverses.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%- [Subuniverses](Subalgebras.Subuniverses.html) 
-\subsection{Subuniverses}
-\firstsentence{\ualibSubuniverses}{\urlSubuniverses}
-
-\input{31Subuniverses.tex}
-
-  
+\subsection{Subalgebras}\label{sec:subalgebras}\firstsentence{\ualibSubalgebras}{\urlSubalgebras}
+\input{42Subalgebras.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%- [Subalgebras](Subalgebras.Subalgebras) 
-\subsection{Subalgebras}
-\firstsentence{\ualibSubalgebras}{\urlSubalgebras}
-
-\input{32Subalgebras.tex}
-
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-- [Univalent Subalgebras](Subalgebras.Univalent.html) 
-\subsection{Univalent Subalgebras}
-\firstsentence{\ualibUnivalent}{\urlUnivalent}
-
+\subsection{Univalent Subalgebras}\label{sec:univ-subalg}\firstsentence{\ualibUnivalent}{\urlUnivalent}
 \input{33Univalent.tex}
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Concluding Remarks}\label{sec:concluding-remarks}
+We've reached the end of Part 1 of our three-part series describing the \agdaualib.  Part 2 will cover homomorphism, terms, and subalgebras, and Part 3 will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
 
+% We completed the first major milestone of this project in January 2021, which was the first formal, machine-checked proof of Birkhoff's HSP theorem.  Our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations or discoveries in dependent type theory or homotopy type theory.
 
+%% One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
+%% %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
+%% As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
+%% compare with the assumptions we make in our Agda proof of this result.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We conclude by noting that one of our goals is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory. We welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.  Merge requests submitted to the UALib's main gitlab repository are especially welcomed.  Please visit the repository at \url{https://gitlab.com/ualib/ualib.gitlab.io/} and help us improve it.
 
 
 

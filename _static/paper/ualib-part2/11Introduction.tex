@@ -1,0 +1,25 @@
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
+The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
+
+\subsection{Contributions and organization}
+\label{sec:contributions}
+
+In this paper we limit ourselves to the presentation of the middle third of the \ualib, which includes types for representing homomorphisms, terms, and subalgebras. This limitation will allow us the space required to discuss some of the more interesting type theoretic and foundational issues that arise when developing a library of this kind and when attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
+
+This is Part 2 of a three-paper series describing the \agdaualib. Part 1~\cite{DeMeo:2021-1} covered relations, algebras, congruences, and quotients, and Part 3 will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
+
+The present paper is structured as follows.
+%
+Section~\ref{sec:agda-preliminaries} introduces...
+
+Finally, Section~\ref{sec:types-for-algebras} describes...
+%
+
+To conclude this introduction, we offer links to reference materials.  For the required background in Universal Algebra, we highly recommend the textbook by Cliff Bergman~\cite{Bergman:2012}.  For more information about \agdaualib, the following links are the best sources.
+\begin{itemize}
+  \item \href{https://ualib.gitlab.io}{\texttt{ualib.org}} (the web site) includes every line of code in the library, rendered as html and accompanied by documentation, and
+  \item \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} (the source code) freely available and licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
+\end{itemize}
+These first link to the offical \ualib html documentation includes complete proofs of every theorem we mention here, and much more, including the Agda modules covered in the first and third installments of this series of papers on the \ualib.
+
+Finally, we believe readers of this paper will get much more out of it if they download the software from \url{https://gitlab.com/ualib/ualib.gitlab.io/}, install the library, and try it out for themselves.
