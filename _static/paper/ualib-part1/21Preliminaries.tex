@@ -1,8 +1,16 @@
-For the benefit of readers who are not proficient in Agda or type theory, we briefly describe some of the most important types and features used in the \ualib.  Of necessity, the descriptions will be terse, but are usually accompanied by pointers to relevant sections of the appendix or the \href{https://ualib.gitlab.io}{html documentation}.
+We begin by highlighting some of the key parts of the module, which lists everything we need from Martin Escard\'o's \typetopology library~\cite{MHE}, defines some basic types, and proves some of their properties.  We do not cover the entire \ualibPreliminaries module here, but instead call attention to aspects that differ from standard Agda syntax.\footnote{For more details, see \urlPreliminaries.}
 
-We begin by highlighting some of the key parts of the \ualibPreliminaries module of the \ualib. This module imports everything we need from Martin Escard\'o's \typetopology library~\cite{MHE}, defines some basic types and proves some of their properties.  We do not cover the entire Preliminaries module here, but instead call attention to aspects that differ from standard Agda syntax. For more details, see~\cite[\S2]{DeMeo:2021}.
+\subsubsection{Logical foundations}\label{sec:logical-foundations}
+% For the benefit of readers who are not proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib, as well as the most important basic types and features that are used throughout the library.
 
-Agda programs typically begin by setting some options and by importing from existing libraries.
+The \agdaualib is based on a minimal version of \defn{Martin-Löf dependent type theory} (MLTT) that is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.\footnote{This is also the type theory that \escardo taught us in the short course \ufcourse at the Midlands Graduate School in the Foundations of Computing Science at University of Birmingham in 2019.} We won't go into great detail here because there are already other very nice resources available, such as the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by \escardo just mentioned, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, as well as ``The HoTT Book''~\cite{HoTT}.
+
+We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: ``primitive'' \defn{types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type), and an infinite collection of \defn{universes} (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like \ab 𝓤, \ab 𝓥, \ab 𝓦, etc., typically from the latter half of the English alphabet).
+
+\subsubsection{Specifying logical foundations in Agda}\label{sec:preliminaries}
+Finally we are ready discuss the first line of Agda code of any consequence in the \ualib. 
+
+An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
 Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness. 
 Every Agda program in the \ualib begins with the following pragma, which has the effects described below.
 \ccpad

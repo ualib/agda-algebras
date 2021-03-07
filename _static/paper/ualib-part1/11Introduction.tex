@@ -1,6 +1,14 @@
 To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
 The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
 
+\subsection{Motivation}\label{sec:motivation}
+%% \subsection{Vision and Goals}\label{vision-and-goals}
+The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
+%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
+
+Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
+
+
 \subsection{Prior art}\label{sec:prior-art}
 
 There have been a number of efforts to formalize parts of universal algebra in type theory prior to ours, most notably
@@ -12,11 +20,6 @@ There have been a number of efforts to formalize parts of universal algebra in t
 Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \ualib extends beyond the scope of prior efforts and. In particular, the library now includes a proof of Birkhoff's variety theorem.  Most other proofs of this theorem that we know of are informal and nonconstructive.\footnote{After the completion of this work, the author learned about a constructive version of Birkhoff's theorem that was proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the standard, informal style of mathematical writing in the current literature, and as far as we know it was never implemented formally and type-checked with a proof assistant. Nonetheless, a comparison of the version of the theorem presented in~\cite{Carlstrom:2008} to the Agda proof we give here would be interesting.}
  %% We remark briefly on this in~\S\ref{sec:conclusions-and-future-work}.}
 
-%% \subsection{Vision and Goals}\label{vision-and-goals}
-The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
-%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
-
-Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
 
 
 
@@ -33,7 +36,7 @@ Section~\ref{sec:equiv-relat-quot} covers standard types for equivalence relatio
 
 The third part of the paper is \S\ref{sec:algebra-types} which covers the basic domain-specific types offered by the \ualib. It is here that we finally get to see some types representing algebraic structures.  Specifically, we describe types for \emph{operations} and \emph{signatures} (\S\ref{sec:oper-sign}), \emph{general algebras} (\S\ref{sec:algebras}), and \emph{product algebras}, including types for representing \emph{products over arbitrary classes of algebraic structures} (\S\ref{sec:product-algebras}). Finally, we define types for congruence relations and quotient algebras in \SS\ref{congruences}--\ref{quotient-algebras}.
 
-To conclude this introduction, we offer links to reference materials.  For the required background in Universal Algebra, we highly recommend the textbook by Cliff Bergman~\cite{Bergman:2012}.  For more information about \agdaualib, the following links are the best sources.
+To conclude this introduction, we offer links to reference materials.  For the required background in universal algebra, we highly recommend the textbook by Cliff Bergman~\cite{Bergman:2012}.  For more information about \agdaualib, the following links are the best sources.
 \begin{itemize}
   \item \href{https://ualib.gitlab.io}{\texttt{ualib.org}} (the web site) includes every line of code in the library, rendered as html and accompanied by documentation, and
   \item \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} (the source code) freely available and licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.

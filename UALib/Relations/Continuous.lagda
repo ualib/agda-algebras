@@ -11,11 +11,13 @@ This section presents the [UALib.Relations.Continuous][] module of the [Agda Uni
 
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → 𝓦 ̇` (for some universe 𝓦).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : 𝓥 ̇`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → 𝓦 ̇`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
-Below we will define `GenRel` to be the type `(I → A) → 𝓦 ̇` and we will call `GenRel` the type of **general relations**.  This generalizes the unary and binary relations we saw earlier in the sense that general relations can have arbitrarily large arities. However, relations of type `GenRel` are not completely general because they are defined over a single type.
+Below we will define `ConRel` to be the type `(I → A) → 𝓦 ̇` and we will call `ConRel` the type of **continuous relations**.  This generalizes the discrete relations we defined in [Relations.Discrete] (unary, binary, ternary, etc.) since continuous relations can be of arbitrary arity.  They are not completely general, however, since they are defined over a single type---said another way, they are *single-sorted* relations---but we will remove this limitation as well when we define the type of *dependent continuous relations* at the end of this module.
 
-Just as `Rel A 𝓦` was the "single-sorted" special case of the "multisorted" `REL A B 𝓦` type, so too will `GenRel I A 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
+Just as `Rel A 𝓦` was the single-sorted special case of the multisorted `REL A B 𝓦` type, so too will `ConRel I A 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
 
-To be more concrete, given an arbitrary family `A : I → 𝓤 ̇ ` of types, we may have a relation from `A i` to `A i'` to `A i''` to ….  We will refer to such relations as **dependent relations** because in order to define a type to represent them, we absolutely need depedent types.  The `DepRel` type that we define [below](Relations.Continuous.html#dependent-relations) captures this completely general notion of relation.
+To be more concrete, given an arbitrary family `A : I → 𝓤 ̇ ` of types, we may have a relation from `A i` to `A j` to `A k` to … *ad infinitum*, where the collection represented by the ``indexing'' type \ab I might not even be enumerable.<sup>[1](Relations.Continuous.html#fn1)</sup>
+
+We will refer to such relations as **dependent continuous relations** (or *dependent relations* for short) because the definition of a type that represents them requires depedent types.  The `DepRel` type that we define [below](Relations.Continuous.html#dependent-relations) manifests this completely general notion of relation.
 
 \begin{code}
 
@@ -27,33 +29,33 @@ open import Relations.Discrete public
 
 \end{code}
 
-#### <a id="general-relations">General relations</a>
+#### <a id="continuous-relations">Continuous relations</a>
 
-In this subsection we define the type `GenRel` to represent a predicate or relation of arbitrary arity over a single type `A`. We call this the type of **general relations**.
+In this subsection we define the type `ConRel` to represent a predicate or relation of arbitrary arity over a single type `A`. We call this the type of **continuous relations**.
 
 **Notation**. For consistency and readability, throughout the [UALib][] we treat two universe variables with special care.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing *arities* of relations or operations.
 
 \begin{code}
 
-GenRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-GenRel I A 𝓦 = (I → A) → 𝓦 ̇
+ConRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ConRel I A 𝓦 = (I → A) → 𝓦 ̇
 
 \end{code}
 
 
-#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
+#### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a>
 
-We now define types that are useful for asserting and proving facts about *compatibility* of functions with general relations.
+We now define types that are useful for asserting and proving facts about *compatibility* of functions with continuous relations.
 
 \begin{code}
 
 module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
- lift-gen-rel : GenRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
- lift-gen-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
+ lift-con-rel : ConRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
+ lift-con-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
 
- gen-compatible-fun : (I → (J → A) → A) → GenRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- gen-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R λ i → (𝕗 i) (𝕒 i)
+ con-compatible-fun : (I → (J → A) → A) → ConRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ con-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-con-rel R) 𝕒 → R λ i → (𝕗 i) (𝕒 i)
 
 \end{code}
 
@@ -61,9 +63,9 @@ In the definition of `gen-compatible-fun`, we let Agda infer the type of `𝕒`,
 
 If the syntax of the last two definitions makes you feel a bit nauseated, we recommend focusing on the semantics instead of the semantics.  In fact, we should probably pause here to discuss these semantics, lest the more complicated definitions below induce the typical consequence of nausea.
 
-First, internalize the fact that `𝕒 : I → (J → A)` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Once that's obvious, recall that a general relation `R` represents a certain collection of `I`-tuples. Specifically, if `x : I → A` is an `I`-tuple, then `R x` denotes the assertion that "`x` belongs to `R`" or "`x` satisfies `R`."
+First, internalize the fact that `𝕒 : I → (J → A)` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Once that's obvious, recall that a continuous relation `R` represents a certain collection of `I`-tuples. Specifically, if `x : I → A` is an `I`-tuple, then `R x` denotes the assertion that "`x` belongs to `R`" or "`x` satisfies `R`."
 
-Next consider the function `lift-gen-rel`.  For each general relation `R`, the type `lift-gen-rel R` represents a certain collection of `I`-tuples of `J`-tuples, namely, the `𝕒 : I → (J → A)` such that `lift-gen-rel R 𝕒` holds.
+Next consider the function `lift-gen-rel`.  For each continuous relation `R`, the type `lift-gen-rel R` represents a certain collection of `I`-tuples of `J`-tuples, namely, the `𝕒 : I → (J → A)` such that `lift-gen-rel R 𝕒` holds.
 
 It helps to visualize such `J`-tuples as columns and imagine for simplicity that `J` is a finite set, say, `{1, 2, ..., J}`.  Picture a couple of these columns, say, the i-th and k-th, like so.
 
@@ -97,7 +99,7 @@ We call `DepRel` the type of **dependent relations**.
 
 #### <a id="compatibility-with-dependent-relations">Compatibility with dependent relations</a>
 
-Above we made peace with lifts of general relations and what it means for such relations to be compatible with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
+Above we made peace with lifts of continuous relations and what it means for such relations to be compatible with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
 
 \begin{code}
 
@@ -115,6 +117,9 @@ In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝕒`,
 
 
 --------------------------------------
+
+<sup>[1]</sup><span class="footnote" id="fn1"> Because the collection represented by the indexing type `I` might not even be enumerable, technically speaking, instead of `A i` to `A j` to `A k` to ..., we should have written something like `TO (i : I) , A i`.</span>
+
 
 <p></p>
 

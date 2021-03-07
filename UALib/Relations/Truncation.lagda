@@ -236,36 +236,36 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
 
 
-#### <a id="general-and-dependent-propositions">General and dependent propositions</a>
+#### <a id="continuous-propositions">Continuous propositions</a>
 
 
-We defined a type called `GenRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. So, naturally, we define a type of *truncated general relations*, the inhabitants of which we will call **general propositions**.
+We defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call **continuous propositions**.
 
 \begin{code}
 
-GenProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-GenProp I A 𝓦 = Σ P ꞉ (GenRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ConProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ConProp I A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
-gen-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-gen-prop-ext I A 𝓦 = {P Q : GenProp I A 𝓦 }
+con-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 }
  →                    ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
-If we assume `gen-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then we can prove that logically equivalent general propositions of type `GenProp I A 𝓦` are equivalent.
+If we assume `con-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then we can prove that logically equivalent continuous propositions of type `ConProp I A 𝓦` are equivalent.
 
 \begin{code}
 
-gen-prop-ext' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : GenProp I A 𝓦}
- →              gen-prop-ext I A 𝓦
+con-prop-ext' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : ConProp I A 𝓦}
+ →              con-prop-ext I A 𝓦
                 -------------------
  →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
-gen-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+con-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
-While we're at it, we might as well take the abstraction one step further and define *truncated dependent relations*, which we'll call **dependent propositions**.
+While we're at it, we might as well achieve full generality and define truncated types of **dependent continuous propositions**.
 
 \begin{code}
 
@@ -280,7 +280,7 @@ dep-prop-ext I A 𝓦 = {P Q : DepProp I A 𝓦 }
 
 \end{code}
 
-Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier.
+Applying the extensionality principle for dependent continuous relations is no harder than applying the special cases of this principle defined earlier.
 
 \begin{code}
 

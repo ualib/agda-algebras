@@ -1,4 +1,4 @@
-\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,11pt]{../lipics-v2021-wjd}
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{../lipics-v2021-wjd}
 %% The next 3 lines are recommended at: https://agda.readthedocs.io/en/v2.6.1.1/tools/generating-latex.html#known-pitfalls-and-issues
 \usepackage{fontspec}
 
@@ -54,40 +54,16 @@
 %% \fancyhead[EL,OR]{\sffamily\bfseries \thepage}
 %% \renewcommand{\headrulewidth}{0pt}
 
-\usepackage[yyyymmdd]{datetime}
-\newdateformat{mydate}{%
-\THEDAY\ \shortmonthname[\THEMONTH] \THEYEAR}
-\renewcommand{\dateseparator}{.}
 %\Copyright{2021 William J. DeMeo; this draft was compiled on \today\ at \currenttime}
 
-\usepackage{fancyhdr}
-\renewcommand{\headrulewidth}{0pt}
-%
-\fancypagestyle{plain}{%
-   \fancyhf{} 
-   \fancyfoot[L]{%
-     \vskip1mm
-     \protect{%
-       \begin{minipage}{0.1\textwidth}
-         \includegraphics[width=\textwidth]{../by-sa.png}
-       \end{minipage}
-       \begin{minipage}{0.85\textwidth}
-         \linespread{0.9}\selectfont
-         {\footnotesize This work and the Agda Universal Algebra Library by \href{https://williamdemeo.gitlab.io}{William DeMeo} is licensed under a \href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.}
-       \end{minipage}
-            \vskip2mm
-       \begin{minipage}{0.1\textwidth}
-         \includegraphics[height=20pt,clip]{../stereotypeb-avatar.png}\ \includegraphics[height=18pt,clip]{../lambda.jpg}
-       \end{minipage}
-       \begin{minipage}{0.8\textwidth}
-         {\footnotesize \textcopyright\ 2021 \href{https://williamdemeo.gitlab.io}{William DeMeo}. Based on work at \href{https://gitlab.com/ualib/ualib.gitlab.io}{https://gitlab.com/ualib/ualib.gitlab.io}.\\
-Compiled with \texttt{xelatex} on \mydate\today\ at \currenttime.
-}
-       \end{minipage}}
-   \renewcommand{\headrulewidth}{0pt}
-}}
+\copyrightfooter
 
-
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\fancyhf{}
+\fancyhead[ER]{\sffamily\bfseries \leftmark}
+\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: relations, algebras, congruences, quotients}
+\fancyhead[EL,OR]{\sffamily\bfseries \thepage}
 
 
 
@@ -158,30 +134,30 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 % - [Prelude](Prelude.html)
 \section{Agda Prelude}\label{sec:agda-prelude}
 
-\subsection{Universes and dependent types}\label{preliminaries}\firstsentence{\ualibPreliminaries}{\urlPreliminaries}
+\subsection{Preliminaries: logical foundations, universes, dependent types}\label{preliminaries}\firstsentence{\ualibPreliminaries}{\urlPreliminaries}
 \input{21Preliminaries.tex}
-\subsection{Equality}\label{equality}\firstsentence{\ualibEquality}{\urlEquality}
+\subsection{Equality: definitional equality and transport}\label{equality}\firstsentence{\ualibEquality}{\urlEquality}
 \input{22Equality.tex}
-\subsection{Function Extensionality}\label{function-extensionality}\firstsentence{\ualibExtensionality}{\urlExtensionality}
+\subsection{Extensionality: types for postulating function extensionality}\label{function-extensionality}\firstsentence{\ualibExtensionality}{\urlExtensionality}
 \input{23Extensionality.tex}
-\subsection{Inverses and Inverse Images of Functions}\label{sec:inverse-image-invers}\firstsentence{\ualibInverses}{\urlInverses}
+\subsection{Inverses: epics, monics, embeddings, inverse images}\label{sec:inverse-image-invers}\firstsentence{\ualibInverses}{\urlInverses}
 \input{24Inverses.tex}
-\subsection{Lifts to Higher Universes}\label{sec:lifts-altern-univ}\firstsentence{\ualibLifts}{\urlLifts}
+\subsection{Lifts: making peace with a noncumulative universe hierarchy}\label{sec:lifts-altern-univ}\firstsentence{\ualibLifts}{\urlLifts}
 \input{25Lifts.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Relation and Quotient Types}\label{sec:relat-quot-types}
+\section{Relations}\label{sec:relat-quot-types}
 This section presents some of the most important relation and quotient types that are defined in the \ualibRelations module of the \agdaualib.\footnote{For more details see \urlRelations.}
 
 In \S\ref{sec:discrete-relations} we cover \emph{unary} and \emph{binary relations}, which we refer to as ``discrete'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we take up in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
 
-\subsection{Discrete Relations}\label{sec:discrete-relations}\firstsentence{\ualibDiscrete}{\urlDiscrete}
+\subsection{Discrete: predicates, axiom of extensionality, compatibility}\label{sec:discrete-relations}\firstsentence{\ualibDiscrete}{\urlDiscrete}
 \input{31Discrete.tex}
-\subsection{Continuous Relations}\label{sec:continuous-relations}\firstsentence{\ualibContinuous}{\urlContinuous}
+\subsection{Continuous: arbitrary-sorted relations of arbitrary arity}\label{sec:continuous-relations}\firstsentence{\ualibContinuous}{\urlContinuous}
 \input{32Continuous.tex}
-\subsection{Equivalences and Quotients}\label{sec:equiv-relat-quot}\firstsentence{\ualibQuotients}{\urlQuotients}
+\subsection{Quotients: equivalences, class representatives, quotient types}\label{sec:equiv-relat-quot}\firstsentence{\ualibQuotients}{\urlQuotients}
 \input{33Quotients.tex}
-\subsection{Truncation, Sets, Propositions}\label{sec:trunc-sets-prop}\firstsentence{\ualibTruncation}{\urlTruncation}
+\subsection{Truncation: continuous propositions, quotient extensionality}\label{sec:trunc-sets-prop}\firstsentence{\ualibTruncation}{\urlTruncation}
 \input{34Truncation.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -308,14 +284,14 @@ We conclude by noting that one of our goals is to make computer formalization of
 
 \section{Truncation}\label{ssec:relation-truncation}
 
-In this section we discuss \emph{truncation} and \emph{sets} (or \emph{h-sets}). We first give a brief discussion of standard notions of trunction~(\S\ref{sec:standard-type-truncation}), and then we describe an alternative viewpoint that we have found useful for formalizing universal algebra in Agda~(\S\ref{binary-relation-truncation}). (Readers wishing to know more about standard notions of truncation and proof-relevant mathematics may consult~\cite[\S34-35]{MHE} or~\cite[\S7.1]{HoTT:2013}, for example.)
+In this section we discuss \emph{truncation} and \emph{sets} (or \emph{h-sets}). We first give a brief discussion of standard notions of trunction~(\S\ref{sec:standard-type-truncation}), and then we describe an alternative viewpoint that we have found useful for formalizing universal algebra in Agda~(\S\ref{binary-relation-truncation}). (Readers wishing to know more about standard notions of truncation and proof-relevant mathematics may consult~\cite[\S34-35]{MHE} or~\cite[\S7.1]{HoTT}, for example.)
 
 \subsection{A typical view of truncation}\label{sec:standard-type-truncation}
 In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type \ab X and an identity relation \AgdaOperator{\AgdaDatatype{≡ₓ}} on \ab X so that, given two inhabitants of \ab X, say, \ab a\AgdaSpace{}\ab b \as : \ab X, we can form the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Suppose \ab p and \ab q inhabit the type \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b; that is, \ab p and \ab q are proofs of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, in which case we write \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b. Then we might wonder whether and in what sense are the two proofs \ab p and \ab q the ``same.'' We are asking about an identity type on the identity type \AgdaOperator{\AgdaDatatype{≡ₓ}}, and whether there is some inhabitant \ab r of this type; i.e., whether there is a proof \ab r : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q.  If such a proof exists for all \ab p \ab q : \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b, then we say that the proof of \ab a \AgdaOperator{\AgdaDatatype{≡ₓ}} \ab b is \emph{unique}. As a property of the types \ab X and \aod{≡ₓ}, this is sometimes called \emph{uniqueness of identity proofs}.
 
 Perhaps we have two proofs, say, \ab r \ab s : \ab p \AgdaOperator{\AgdaDatatype{≡ₓ₁}} \ab q. Then it is natural to wonder whether \ab r~\AgdaOperator{\AgdaDatatype{≡ₓ₂}}~\ab s has a proof.  At some level, though, the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof relevance}) may be uninteresting or useless. At that point, say, at level \ab k, we would naturally assume that there is at most one proof of any identity of the form \ab p  \AgdaOperator{\AgdaDatatype{≡ₓₖ}} \ab q. This is called \emph{truncation}.
 
-In \emph{homotopy type theory}~\cite{HoTT:2013}, a type \ab X with an identity relation \AgdaDatatype{≡ₓ} is called a \defn{set} (or \defn{0-groupoid} or \defn{h-set}) if for every pair \ab a \ab b \as : \ab X of elements of type \ab X there is at most one proof of \ab a~\AgdaDatatype{≡ₓ}~\ab b.
+In \emph{homotopy type theory}~\cite{HoTT}, a type \ab X with an identity relation \AgdaDatatype{≡ₓ} is called a \defn{set} (or \defn{0-groupoid} or \defn{h-set}) if for every pair \ab a \ab b \as : \ab X of elements of type \ab X there is at most one proof of \ab a~\AgdaDatatype{≡ₓ}~\ab b.
 
 %% Briefly, we say that a type \ab X is a \textit{set} if it has the following property: for all \ab x \ab y \as : \ab X there is at most one proof of \ab x \af ≡ \ab y. In other terms, using the \af{is-subsingleton} function from Martin Escard\'o's \typetopology library, \ab{X} is a set if and only if it satisfies
 

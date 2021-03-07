@@ -539,9 +539,9 @@ The formal definition representing this notion of compatibility is easy to write
 \ccpad
 Recall the \af{compatible-fun} type was defined in \ualibDiscrete module.
 
-\subsubsection{Compatibility of general relations}\label{compatibility-of-general-relations}
+\subsubsection{Compatibility of continuous relations}\label{compatibility-of-continuous-relations}
 
-Next we define a type that represents \emph{compatibility of a general relation} with all operations of an algebra. We start by defining compatibility of a general relations with a single operation.
+Next we define a type that represents \emph{compatibility of a continuous relation} with all operations of an algebra. We start by defining compatibility of a continuous relations with a single operation.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -569,13 +569,13 @@ Next we define a type that represents \emph{compatibility of a general relation}
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{gen-compatible-op}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{GenRel}\AgdaSpace{}%
+\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -590,11 +590,11 @@ Next we define a type that represents \emph{compatibility of a general relation}
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{gen-compatible-op}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-op}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{gen-compatible-fun}\AgdaSpace{}%
+\AgdaFunction{con-compatible-fun}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -604,17 +604,17 @@ Next we define a type that represents \emph{compatibility of a general relation}
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-In case it helps the reader understand \af{gen-compatible-op}, we redefine it explicitly without the help of
-\af{gen-compatible-fun}. %\href{Algebras.Algebras.html\#fn2}{2}
+In case it helps the reader understand \af{con-compatible-op}, we redefine it explicitly without the help of
+\af{con-compatible-fun}. %\href{Algebras.Algebras.html\#fn2}{2}
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{gen-compatible-op'}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-op'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{GenRel}\AgdaSpace{}%
+\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -629,14 +629,14 @@ In case it helps the reader understand \af{gen-compatible-op}, we redefine it ex
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{gen-compatible-op'}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-op'}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝕒}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-gen-rel}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{lift-con-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝕒}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -653,12 +653,12 @@ In case it helps the reader understand \af{gen-compatible-op}, we redefine it ex
 \ccpad
 where we have let Agda infer the type of \ab{𝕒}, which is (\ab{i} \as : \ab I) \as → \af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣.
 
-With \af{gen-compatible-op} in hand, it is a trivial matter to define a type that represents \emph{compatibility of a general relation with an algebra}.
+With \af{con-compatible-op} in hand, it is a trivial matter to define a type that represents \emph{compatibility of a continuous relation with an algebra}.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{gen-compatible}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{GenRel}\AgdaSpace{}%
+\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -675,7 +675,7 @@ With \af{gen-compatible-op} in hand, it is a trivial matter to define a type tha
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{gen-compatible}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -686,7 +686,7 @@ With \af{gen-compatible-op} in hand, it is a trivial matter to define a type tha
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{gen-compatible-op}\AgdaSpace{}%
+\AgdaFunction{con-compatible-op}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}

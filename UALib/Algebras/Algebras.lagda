@@ -159,36 +159,36 @@ Recall the `compatible-fun` type was defined in [Relations.Discrete][] module.
 
 
 
-#### <a id="compatibility-of-general-relations">Compatibility of general relations</a>
+#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
-Next we define a type that represents *compatibility of a general relation* with all operations of an algebra. We start by defining compatibility of a general relations with a single operation.
+Next we define a type that represents *compatibility of a continuous relation* with all operations of an algebra. We start by defining compatibility of a continuous relations with a single operation.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
 
- gen-compatible-op : ∣ 𝑆 ∣ → GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- gen-compatible-op 𝑓 R = gen-compatible-fun (λ _ → (𝑓 ̂ 𝑨)) R
+ con-compatible-op : ∣ 𝑆 ∣ → ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ con-compatible-op 𝑓 R = con-compatible-fun (λ _ → (𝑓 ̂ 𝑨)) R
 
 \end{code}
 
-In case it helps the reader understand `gen-compatible-op`, we redefine it explicitly without the help of `gen-compatible-fun`.<sup>[2](Algebras.Algebras.html#fn2)</sup>
+In case it helps the reader understand `con-compatible-op`, we redefine it explicitly without the help of `con-compatible-fun`.<sup>[2](Algebras.Algebras.html#fn2)</sup>
 
 \begin{code}
 
- gen-compatible-op' : ∣ 𝑆 ∣ → GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- gen-compatible-op' 𝑓 R = ∀ 𝕒 → (lift-gen-rel R) 𝕒 → R (λ i → (𝑓 ̂ 𝑨) (𝕒 i))
+ con-compatible-op' : ∣ 𝑆 ∣ → ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ con-compatible-op' 𝑓 R = ∀ 𝕒 → (lift-con-rel R) 𝕒 → R (λ i → (𝑓 ̂ 𝑨) (𝕒 i))
 
 \end{code}
 
 where we have let Agda infer the type of `𝕒`, which is `(i : I) → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
 
-With `gen-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a general relation with an algebra*.
+With `con-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a continuous relation with an algebra*.
 
 \begin{code}
 
- gen-compatible : GenRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- gen-compatible R = ∀ (𝑓 : ∣ 𝑆 ∣ ) → gen-compatible-op 𝑓 R
+ con-compatible : ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ con-compatible R = ∀ (𝑓 : ∣ 𝑆 ∣ ) → con-compatible-op 𝑓 R
 
 \end{code}
 

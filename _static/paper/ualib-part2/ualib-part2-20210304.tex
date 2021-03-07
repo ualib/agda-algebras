@@ -1,10 +1,10 @@
-\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,11pt]{lipics-v2021}
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,11pt]{../lipics-v2021-wjd}
 \usepackage{fontspec}
 \crefformat{footnote}{#2\footnotemark[#1]#3}
-\usepackage{proof-dashed}
+\usepackage{../proof-dashed}
 \usepackage{comment}
-\usepackage[wjdsimple,links]{agda}
-\usepackage{wjd}
+\usepackage[wjdsimple,links]{../agda}
+\usepackage{../wjd}
 \newif\ifnonbold % comment this line to restore bold universe symbols
 \usepackage{../../unixode}
 
@@ -26,9 +26,18 @@
 \authorrunning{W.~J.~DeMeo}
 %%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[yyyymmdd,hhmmss]{datetime}
 
-\Copyright{2021 William J. DeMeo; this draft was compiled on \today\ at \currenttime}
+\copyrightfooter
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\fancyhf{}
+\fancyhead[ER]{\sffamily\bfseries \leftmark}
+\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: relations, algebras, congruences, quotients}
+\fancyhead[EL,OR]{\sffamily\bfseries \thepage}
+
+
+
 
 \ccsdesc[500]{Theory of computation~Constructive mathematics}
 \ccsdesc[500]{Theory of computation~Type theory}
@@ -91,13 +100,46 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Homomorphism Types}\label{sec:homomorphism-types}
+In this section we define types that represent some of the most important concepts from general (universal) algebra.  Note that the Agda modules we describe here, and in succeeding sections depend on and import the modules that were presented in Part 1 of this series of three papers describing the \agdaualib (see~\cite{DeMeo:2021-1}). 
+
+We begin in Subsection~\ref{sec:basic-definitions} with the basic definition of \emph{homomorphism}. In \S~\ref{sec:homom-theor} we formalize the statement and proof of the first fundamental theorem about homomorphisms, which is sometimes referred to as the \emph{First Isomorphism Theorem}. This is followed by \S~\ref{sec:isomorphisms}, in which we define the type of \emph{isomorphisms} between algebraic structures.  Finally, in \S~\ref{sec:hom-images}, we define types that manifest the notion of \emph{homomorphic image}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Basic definitions}\label{sec:basic-definitions}
-\firstsentence{\ualibHomBasic}{\urlHomBasic}
-
+\subsection{Basic definitions}\label{sec:basic-definitions}\firstsentence{\ualibHomBasic}{\urlHomBasic}
 \input{21Basic.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Homomorphism Theorems}\label{sec:homom-theor}\firstsentence{\ualibNoether}{\urlNoether}
+%\input{22Noether.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Isomorphisms}\label{sec:isomorphisms}\firstsentence{\ualibIsomorphisms}{\urlIsomorphisms}
+%\input{23Isomorphisms.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Homomorphic Images}\label{sec:hom-images}\firstsentence{\ualibHomomorphicImages}{\urlHomomorphicImages}
+%\input{24HomomorphicImages.tex}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Types for Terms}\label{sec:types-terms}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Basic Definitions}\label{sec:types-basic-defs}\firstsentence{\ualibTermsBasic}{\urlTermsBasic}
+%\input{31Basic.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Term Operations}\label{sec:term-operations}\firstsentence{\ualibOperations}{\urlOperations}
+%\input{32Operations.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subalgebra Types}\label{sec:subalgebra-types}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Subuniverses}\label{sec:subuniverses}\firstsentence{\ualibSubuniverses}{\urlSubuniverses}
+%\input{41Subuniverses.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Subalgebras}\label{sec:subalgebras}\firstsentence{\ualibSubalgebras}{\urlSubalgebras}
+%\input{42Subalgebras.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Univalent Subalgebras}\label{sec:univ-subalg}\firstsentence{\ualibUnivalent}{\urlUnivalent}
+%\input{33Univalent.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -127,41 +169,6 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 \end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Homomorphism Theorems}\label{sec:homom-theor}\firstsentence{\ualibNoether}{\urlNoether}
-\input{22Noether.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Isomorphisms}\label{sec:isomorphisms}\firstsentence{\ualibIsomorphisms}{\urlIsomorphisms}
-\input{23Isomorphisms.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Homomorphic Images}\label{sec:hom-images}\firstsentence{\ualibHomomorphicImages}{\urlHomomorphicImages}
-\input{24HomomorphicImages.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Types for Terms}\label{sec:types-terms}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Basic Definitions}\label{sec:types-basic-defs}\firstsentence{\ualibTermsBasic}{\urlTermsBasic}
-\input{31Basic.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Term Operations}\label{sec:term-operations}\firstsentence{\ualibOperations}{\urlOperations}
-\input{32Operations.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Subalgebra Types}\label{sec:subalgebra-types}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Subuniverses}\label{sec:subuniverses}\firstsentence{\ualibSubuniverses}{\urlSubuniverses}
-\input{41Subuniverses.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Subalgebras}\label{sec:subalgebras}\firstsentence{\ualibSubalgebras}{\urlSubalgebras}
-\input{42Subalgebras.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Univalent Subalgebras}\label{sec:univ-subalg}\firstsentence{\ualibUnivalent}{\urlUnivalent}
-\input{33Univalent.tex}
 
 
 

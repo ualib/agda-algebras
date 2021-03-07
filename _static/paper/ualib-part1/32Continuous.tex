@@ -2,20 +2,22 @@ In set theory, an \ab n-ary relation on a set \ab{A} is simply a subset of the \
 
 A more general and straightforward approach is to instead define an arity type \ab{I} \as : \ab 𝓥\af ̇ , and define the type representing \ab{I}-ary relations on \ab{A} as the function type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇. Then, if we are specifically interested in an \ab n-ary relation for some natural number \ab{n}, we could take \ab{I} to be a finite set (e.g., of type \ad{Fin} n).
 
-Below we will define \af{GenRel} to be the type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇ and we will call \af{GenRel} the type of \defn{general relations}. This generalizes the unary and binary relations we saw earlier in the sense that general relations can have arbitrarily large arities. However, relations of type \af{GenRel} are still not completely general because they are defined over a single type. Just as \af{Rel} \ab A \ab 𝓦 was the ``single-sorted'' special case of the ``multisorted'' binary relation type \af{REL} \ab A \ab B \ab 𝓦, so too will \af{GenRel} \ab I \ab A \ab 𝓦 be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
+Below we will define \af{ConRel} to be the type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇ and we will call \af{ConRel} the type of \defn{continuous relations}. This generalizes the discrete relations we defined in [Relations.Discrete] (unary, binary, ternary, etc.) since continuous relations can be of arbitrary arity.  Still, they are not completely general since they are defined over a single type---said another way, these are ``single-sorted'' relations---but we will remove this limitation as well when we define the type of *dependent continuous relations*.
+
+Just as \af{Rel} \ab A \ab 𝓦` was the single-sorted special case of the multisorted \af{REL} \ab A \ab B \ab 𝓦` type, so too will \af{ConRel} \ab I \ab A \ab 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
 
 To be more concrete, given an arbitrary family \ab{A} \as : \ab I \as → \ab 𝓤\af ̇ of types, we may have a relation from \ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$, \textit{ad infinitum}, where the collection represented by the ``indexing'' type \ab I might not even be enumerable.\footnote{Because the collection represented by the indexing type \ab I might not even be enumerable, technically speaking, instead of ``\ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$,'' we should have written something like ``$\mathsf{\af{TO}}$ (\abt{i}{I}) , \ab{A} \ab i.''}
 
-We will refer to such relations as \defn{dependent relations} because in order to define a type to represent them, we absolutely need depedent types. The \af{DepRel} type that we define below is the manifestation of a completely general notion of relation.
+We will refer to such relations as \defn{dependent continuous relations} (or \defn{dependent relations}) because the definition of a type that represents them requires dependent types. The \af{DepRel} type that we define below manifests this completely general notion of relation.
 
-\subsubsection{General relations}\label{general-relations}
+\subsubsection{Continuous relation types}\label{continuous-relation-types}
 
-We now define the type \ab{GenRel} that represents predicates (or relations) of arbitrary arity over a single type \ab{A}. We call this the type of \textbf{general relations}.\footnote{%
+We now define the type \ab{ConRel} that represents predicates (or relations) of arbitrary arity over a single type \ab{A}. We call this the type of \textbf{continuous relations}.\footnote{%
 For consistency and readability, throughout the \ualib we treat two universe variables with special care. The first of these is 𝓞 which shall be reserved for types that represent
 \emph{operation symbols} (see \ualibSignatures). The second is 𝓥 which we reserve for types representing \emph{arities} of relations or operations.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaFunction{GenRel}\AgdaSpace{}%
+\>[0]\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -35,7 +37,7 @@ For consistency and readability, throughout the \ualib we treat two universe var
 \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-\>[0]\AgdaFunction{GenRel}\AgdaSpace{}%
+\>[0]\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -48,8 +50,8 @@ For consistency and readability, throughout the \ualib we treat two universe var
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 
-% \subsubsection{Compatibility with general relations}\label{compatibility-with-general-relations}
-We now define types that are useful for asserting and proving facts about \emph{compatibility} of functions with general relations.
+% \subsubsection{Compatibility with continuous relations}\label{compatibility-with-continuous-relations}
+We now define types that are useful for asserting and proving facts about \emph{compatibility} of functions with continuous relations.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -73,9 +75,9 @@ We now define types that are useful for asserting and proving facts about \emph{
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{lift-gen-rel}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-con-rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{GenRel}\AgdaSpace{}%
+\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -92,7 +94,7 @@ We now define types that are useful for asserting and proving facts about \emph{
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{lift-gen-rel}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-con-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaBound{𝕒}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -112,7 +114,7 @@ We now define types that are useful for asserting and proving facts about \emph{
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{gen-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-fun}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -122,7 +124,7 @@ We now define types that are useful for asserting and proving facts about \emph{
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{GenRel}\AgdaSpace{}%
+\AgdaFunction{ConRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -135,14 +137,14 @@ We now define types that are useful for asserting and proving facts about \emph{
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{gen-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{con-compatible-fun}\AgdaSpace{}%
 \AgdaBound{𝕗}\AgdaSpace{}%
 \AgdaBound{R}%
 \>[25]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝕒}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-gen-rel}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{lift-con-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝕒}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -156,23 +158,23 @@ We now define types that are useful for asserting and proving facts about \emph{
 \AgdaBound{i}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-In the definition of \af{gen-compatible-fun}, we let Agda infer the type of \ab{𝕒}, which is \ab{I} \as → (\ab J \as → \ab A).
+In the definition of \af{con-compatible-fun}, we let Agda infer the type of \ab{𝕒}, which is \ab{I} \as → (\ab J \as → \ab A).
 
 \begin{comment}
 If the syntax of the last two definitions makes you feel a bit nauseated, we recommend focusing on the semantics instead of the semantics. In fact, we should probably pause here to discuss these semantics, lest the more complicated definitions below induce the typical consequence of nausea.
 
 First, internalize the fact that \ab{𝕒\ :\ I\ →\ (J\ →\ A)} denotes
 an \ab{I}-tuple of \ab{J}-tuples of inhabitants of \ab{A}.
-Once that's obvious, recall that a general relation \ab{R}
+Once that's obvious, recall that a continuous relation \ab{R}
 represents a certain collection of \ab{I}-tuples. Specifically, if
 \ab{x\ :\ I\ →\ A} is an \ab{I}-tuple, then \ab{R\ x}
 denotes the assertion that ``\ab{x} belongs to \ab{R}'' or
 ``\ab{x} satisfies \ab{R}.''
 
-Next consider the function \ab{lift-gen-rel}. For each general
-relation \ab{R}, the type \ab{lift-gen-rel\ R} represents a
+Next consider the function \ab{lift-con-rel}. For each continuous
+relation \ab{R}, the type \ab{lift-con-rel\ R} represents a
 certain collection of \ab{I}-tuples of \ab{J}-tuples, namely,
-the \ab{𝕒\ :\ I\ →\ (J\ →\ A)} such that \ab{lift-gen-rel\ R\ 𝕒}
+the \ab{𝕒\ :\ I\ →\ (J\ →\ A)} such that \ab{lift-con-rel\ R\ 𝕒}
 holds.
 
 It helps to visualize such \ab{J}-tuples as columns and imagine for
@@ -188,12 +190,12 @@ the i-th and k-th, like so.
 𝕒 i J      𝕒 k J
 \end{verbatim}
 
-Now \ab{lift-gen-rel\ R\ 𝕒} is defined by
+Now \ab{lift-con-rel\ R\ 𝕒} is defined by
 \ab{∀\ j\ →\ R\ (λ\ i\ →\ (𝕒\ i)\ j)} which represents the assertion
 that each row of the \ab{I} columns shown above (which evidently is
 an \ab{I}-tuple) belongs to the original relation \ab{R}.
 
-Next, let's dissect the definition of \ab{gen-compatible-fun}. Here,
+Next, let's dissect the definition of \ab{con-compatible-fun}. Here,
 \ab{𝕗\ :\ I\ →\ (J\ →\ A)\ →\ A} denotes an \ab{I}-tuple of
 \ab{J}-ary operations on \ab{A}. That is, for each
 \ab{i\ :\ I}, the function \ab{𝕗\ i} takes a \ab{J}-tuple
@@ -203,7 +205,7 @@ Next, let's dissect the definition of \ab{gen-compatible-fun}. Here,
 Finally, digest all the types involved in these definitions and note how
 nicely they align (as they must if type-checking is to succeed!). For
 example, \ab{𝕒\ :\ I\ →\ (J\ →\ A)} is precisely the type on which
-the relation \ab{lift-gen-rel\ R} is defined.
+the relation \ab{lift-con-rel\ R} is defined.
 \end{comment}
 
 \subsubsection{Dependent relations}\label{dependent-relations}
@@ -249,7 +251,7 @@ We call \af{DepRel} the type of \defn{dependent relations}.
 
 % \subsubsection{Compatibility with dependent relations}\label{compatibility-with-dependent-relations}
 
-Above we saw lifts of general relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
+Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
