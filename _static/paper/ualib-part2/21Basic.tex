@@ -54,41 +54,23 @@ Since this is the first module we introduce in the installment of our series of 
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∎}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
 \end{code}
-This is a lot to process, and we won't go through every line of code.  Instead we highlight some key points.
-
-\textbf{Notation}. As in~\cite{DeMeo:2021-1}, MLTT stands for Martin-L\"of Type Theory.
-
-First, the \AgdaKeyword{OPTIONS} \emph{pragma} sets some parameters that effect the type theoretic foundations that we assume.  These are discussed in~\cite[\S2.1]{DeMeo:2021-1}, but let us briefly review: \AgdaPragma{without-K} disables \axiomk~(\cite{agdaref-axiomk}); \AgdaPragma{exact-split} makes Agda accept only definitions that use \emph{definitional} equalities~(\cite{agdatools-patternmatching); \AgdaPragma{safe} ensures that nothing is postulated outright, so that every non-MLTT axiom has to be an explicit assumption)~(see \cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}).
-  --- (e.g., an argument to a function or module); see
+\ccpad
+This is a lot to process, and we won't discuss each line in detail.  Instead, it suffices to recall a couple of key points. First, the \AgdaKeyword{OPTIONS} \emph{pragma} sets some parameters that effect the type theoretic foundations that we assume.  These are discussed in~\cite[\S2.1]{DeMeo:2021-1}, but let us briefly review: \AgdaPragma{without-K} disables \axiomk~(\cite{agdaref-axiomk}); \AgdaPragma{exact-split} makes Agda accept only definitions that use \emph{definitional} equalities~(\cite{agdatools-patternmatching); \AgdaPragma{safe} ensures that nothing is postulated outright, so that every non-MLTT axiom has to be an explicit assumption (see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}).\footnote{\textbf{Notation}. As in~\cite{DeMeo:2021-1}, MLTT stands for Martin-L\"of Type Theory.}
 
 
 
-\paragraph{Homomorphisms}\label{homomorphisms}
+\subsubsection{Homomorphisms}\label{homomorphisms}
 
-If \texttt{𝑨} and \texttt{𝑩} are algebraic structures in the signature
-\texttt{𝑆}, then a \textbf{homomorphism} is a function
-\texttt{h\ :\ ∣\ 𝑨\ ∣\ →\ ∣\ 𝑩\ ∣} from the domain of \texttt{𝑨} to the
-domain of \texttt{𝑩} that is compatible (or commutes) with all of the
-basic operations of the signature; that is, for all
-\texttt{𝑓\ :\ ∣\ 𝑆\ ∣} and all tuples
-\texttt{𝒂\ :\ ∥\ 𝑆\ ∥\ 𝑓\ →\ ∣\ 𝑨\ ∣} with values in \texttt{∣\ 𝑨\ ∣},
-the following equality holds:
+If \ab{𝑨} and \ab{𝑩} are algebraic structures in the signature \ab{𝑆}, then a \defn{homomorphism} is a function
+\ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ from the domain of \ab{𝑨} to the domain of \ab{𝑩} that is \defn{compatible} (or \defn{commutes}) with all of the basic operations of the signature; that is, for all
+\ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ and all tuples \ab{𝒂} \as : \af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ with values in \af{∣} \ab 𝑨 \af{∣}, the following equality holds:\\[-4pt]
 
-\texttt{h\ ((𝑓\ ̂\ 𝑨)\ 𝒂)\ ≡\ (𝑓\ ̂\ 𝑩)\ (h\ ∘\ 𝒂)}.
+\ab{h} ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝒂) ≡ (\ab 𝑓 \af ̂ \ab 𝑩) (\ab h \af ∘ \ab 𝒂).\\[4pt]
+Recall, \ab{h} \af ∘ \ab 𝒂 is the tuple whose i-th component is \ab{h} (\ab 𝒂 \ab i).
 
-Recall, \texttt{h\ ∘\ 𝒂} is the tuple whose i-th component is
-\texttt{h\ (𝒂\ i)}.
-
-To formalize this concept, we first define a type representing the
-assertion that a function \texttt{h\ :\ ∣\ 𝑨\ ∣\ →\ ∣\ 𝑩\ ∣}, from the
-domain of \texttt{𝑨} to the domain of \texttt{𝑩}, \emph{commutes} (or is
-\emph{compatible}) with an operation 𝑓, interpreted in the algebras
-\texttt{𝑨} and \texttt{𝑩}. Pleasingly, the defining equation of the
-previous paragraph can be expressed in Agda without any adulteration.
-
+To formalize this concept, we first define a type representing the assertion that a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣, from the domain of \ab{𝑨} to the domain of \ab{𝑩}, \emph{commutes} (or is \emph{compatible}) with an operation \ab 𝑓, interpreted in the algebras \ab{𝑨} and \ab{𝑩}. Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -158,23 +140,15 @@ previous paragraph can be expressed in Agda without any adulteration.
 \AgdaSymbol{(}\AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{𝑎}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
+\ccpad
+Note the appearance of the shorthand \as ∀ \ab 𝑎 in the definition of \af{compatible-op-map}. We can get away with this in place of (\ab 𝑎 \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣) since Agda is able to infer that
+the \ab{𝑎} here must be a tuple on \af{∣} \ab 𝑨 \af ∣ of ``length'' \af{∥} \ab 𝑆 \af ∥ \ab 𝑓 (the arity of \ab{𝑓}).
 
-Note the appearance of the shorthand \texttt{∀\ 𝑎} in the definition of
-\texttt{compatible-op-map}. We can get away with this in place of
-\texttt{(𝑎\ :\ ∥\ 𝑆\ ∥\ 𝑓\ →\ ∣\ 𝑨\ ∣)} since Agda is able to infer that
-the \texttt{𝑎} here must be a tuple on \texttt{∣\ 𝑨\ ∣} of ``length''
-\texttt{∥\ 𝑆\ ∥\ 𝑓} (the arity of \texttt{𝑓}).
-
-We now define the type \texttt{hom\ 𝑨\ 𝑩} of homomorphisms from
-\texttt{𝑨} to \texttt{𝑩} by first defining the property
-\texttt{is-homomorphism}.
-
+We now define the type \af{hom} \ab 𝑨 \ab 𝑩 of homomorphisms from \ab{𝑨} to \ab{𝑩} by first defining the property
+\af{is-homomorphism}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -267,16 +241,11 @@ We now define the type \texttt{hom\ 𝑨\ 𝑩} of homomorphisms from
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\<%
-\\
-\>[0]\<%
 \end{code}
-
-A simple example is the identity map, which is proved to be a
-homomorphism as follows.
-
+\ccpad
+A simple example is the identity map, which is proved to be a homomorphism as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -333,17 +302,11 @@ homomorphism as follows.
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Similarly, we represent \textbf{monomorphisms} (injective homomorphisms)
-and \textbf{epimorphisms} (surjective homomorphisms) with the following
-types.
-
+\ccpad
+Similarly, we represent \defn{monomorphisms} (injective homomorphisms) and \defn{epimorphisms} (surjective homomorphisms) with the following types.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -529,16 +492,11 @@ types.
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Finally, it will be convenient to have functions that return the
-\emph{hom reduct} of an inhabitant of \texttt{mon} or \texttt{epi}.
-
+\ccpad
+Finally, it will be convenient to have functions that return the \emph{hom reduct} of an inhabitant of \af{mon} or \af{epi}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{mon-to-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -610,20 +568,13 @@ Finally, it will be convenient to have functions that return the
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Equalizers in Agda}\label{equalizers-in-agda}
+\subsubsection{Equalizers in Agda}\label{equalizers-in-agda}
 
-Recall, the equalizer of two functions (resp., homomorphisms)
-\texttt{g\ h\ :\ A\ →\ B} is the subset of \texttt{A} on which the
-values of the functions \texttt{g} and \texttt{h} agree. We define the
-equalizer of functions and homomorphisms in Agda as follows.
-
+Recall, the equalizer of two functions (resp., homomorphisms) \ab{g h} \as : \ab A \as → \ab B is the subset of \ab{A} on which the values of the functions \ab{g} and \ab{h} agree. We define the equalizer of functions and homomorphisms in Agda as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -712,18 +663,12 @@ equalizer of functions and homomorphisms in Agda as follows.
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{x}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We will define subuniverses in the {[}Subalgebras.Subuniverses{]}
-module, but we note here that the equalizer of homomorphisms from
-\texttt{𝑨} to \texttt{𝑩} will turn out to be subuniverse of \texttt{𝑨}.
+\ccpad
+We will define subuniverses in the \ualibSubuniverses module, but we note here that the equalizer of homomorphisms from \ab{𝑨} to \ab{𝑩} will turn out to be subuniverse of \ab{𝑨}.
 Indeed, this is easily proved as follows.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{𝑬𝑯-closed}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -854,21 +799,13 @@ Indeed, this is easily proved as follows.
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒂}\AgdaSymbol{)}%
 \>[45]\AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Kernels of Homomorphisms}\label{kernels-of-homomorphisms}
+\subsubsection{Kernels of Homomorphisms}\label{kernels-of-homomorphisms}
 
-The kernel of a homomorphism is a congruence relation and conversely for
-every congruence relation θ, there exists a homomorphism with kernel θ
-(namely, that canonical projection onto the quotient modulo θ).
-
+The \defn{kernel} of a homomorphism is a congruence relation and conversely for every congruence relation \ab θ, there exists a homomorphism with kernel \ab θ (namely, that canonical projection onto the quotient modulo \ab θ).
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Congruence}\<%
 \\
@@ -1054,17 +991,11 @@ every congruence relation θ, there exists a homomorphism with kernel θ
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-It is convenient to define a function that takes a homomorphism and
-constructs a congruence from its kernel. We call this function
-\texttt{kercon}.
-
+\ccpad
+It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel. We call this function \af{kercon}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{kercon}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1101,15 +1032,11 @@ constructs a congruence from its kernel. We call this function
 \AgdaBound{h}\AgdaSymbol{)(}\AgdaFunction{homker-equivalence}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
+\ccpad
 From this congruence we construct the corresponding quotient.
-
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{kerquo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1195,17 +1122,11 @@ From this congruence we construct the corresponding quotient.
 \>[1]\AgdaKeyword{infix}\AgdaSpace{}%
 \AgdaNumber{60}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}[\AgdaUnderscore{}]/ker\AgdaUnderscore{}}}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Given an algebra \texttt{𝑨} and a congruence \texttt{θ}, the canonical
-epimorphism from an algebra \texttt{𝑨} to \texttt{𝑨\ ╱\ θ} is defined as
-follows.
-
+\ccpad
+Given an algebra \ab{𝑨} and a congruence \ab{θ}, the canonical epimorphism from an algebra \ab{𝑨} to \ab{𝑨} \af ╱ \ab θ is defined as follows.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{πepi}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1303,16 +1224,11 @@ follows.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{Image\AgdaUnderscore{}∋\AgdaUnderscore{}.im}\AgdaSpace{}%
 \AgdaBound{a}\<%
-\\
-\>[0]\<%
 \end{code}
-
-To obtain the homomorphism part (or ``hom reduct'') of the canonical
-epimorphism, we apply \texttt{epi-to-hom}.
-
+\ccpad
+To obtain the homomorphism part (or ``hom reduct'') of the canonical epimorphism, we apply \af{epi-to-hom}.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{πhom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1342,20 +1258,11 @@ epimorphism, we apply \texttt{epi-to-hom}.
 \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{πepi}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-We combine the foregoing to define a function that takes 𝑆-algebras
-\texttt{𝑨} and \texttt{𝑩}, and a homomorphism \texttt{h\ :\ hom\ 𝑨\ 𝑩}
-and returns the canonical epimorphism from \texttt{𝑨} onto
-\texttt{𝑨\ {[}\ 𝑩\ {]}/ker\ h}. (Recall, the latter is the special
-notation we defined above for the quotient of \texttt{𝑨} modulo the
-kernel of \texttt{h}.)
-
+\ccpad
+We combine the foregoing to define a function that takes \ab 𝑆-algebras \ab{𝑨} and \ab{𝑩}, and a homomorphism \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑩 and returns the canonical epimorphism from \ab{𝑨} onto \ab{𝑨} \af{[} \ab 𝑩 \af{]/ker} \ab h. (Recall, the latter is the special notation we defined above for the quotient of \ab{𝑨} modulo the kernel of \ab{h}.)
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{πker}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1393,20 +1300,12 @@ kernel of \texttt{h}.)
 \AgdaSymbol{(}\AgdaFunction{kercon}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
-
-The kernel of the canonical projection of \texttt{𝑨} onto
-\texttt{𝑨\ /\ θ} is equal to \texttt{θ}, but since equality of
-inhabitants of certain types (like \texttt{Congruence} or \texttt{Rel})
-can be a tricky business, we settle for proving the containment
-\texttt{𝑨\ /\ θ\ ⊆\ θ}. Of the two containments, this is the easier one
-to prove; luckily it is also the one we need later.
-
+\ccpad
+The kernel of the canonical projection of \ab{𝑨} onto \ab{𝑨 / θ} is equal to \ab{θ}, but since equality of
+inhabitants of certain types (like \AgdaRecord{Congruence} or \ad{Rel}) can be a tricky business, we settle for proving the containment \ab{𝑨} \af / \ab θ \af ⊆ \ab θ. Of the two containments, this is the easier one to prove; luckily it is also the one we need later.
+\ccpad\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{ker-in-con}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -1457,15 +1356,11 @@ to prove; luckily it is also the one we need later.
 \AgdaFunction{╱-refl}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaBound{hyp}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Product homomorphisms}\label{product-homomorphisms}
+\subsubsection{Product homomorphisms}\label{product-homomorphisms}
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{⨅-hom-co}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓠}\AgdaSpace{}%
@@ -1700,18 +1595,13 @@ to prove; luckily it is also the one we need later.
 \AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Projection homomorphisms}\label{projection-homomorphisms}
+\subsubsection{Projection homomorphisms}\label{projection-homomorphisms}
 
-Later we will need a proof of the fact that projecting out of a product
-algebra onto one of its factors is a homomorphism.
-
+Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
+\ccpad
 \begin{code}%
-\>[0]\<%
-\\
 \>[0]\AgdaFunction{⨅-projection-hom}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[1138I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
