@@ -8,15 +8,15 @@ and the discussion would end there. In the science of computing, however, more a
 
 We can probably all agree that the functions \(f\) and \(g\) above, while not syntactically equal, do produce the same output when given the same input so it seems fine to think of the functions as the same, for all intents and purposes. But we should ask ourselves, at what point do we notice or care about the difference in the way functions are defined?
 
-What if we had started out this discussion with two functions \(f\) and \(g\) both of which take a list as input and produce as output a correctly sorted version of that list? Are the functions the same? What if \(f\) were defined using the \href{https://en.wikipedia.org/wiki/Merge_sort}{merge sort} algorithm, while \(g\) used \href{https://en.wikipedia.org/wiki/Quicksort}{quick sort}. I think most of us would now agree that \(f\) and \(g\) are not equal in this case.
+What if we had started out this discussion with two functions \(f\) and \(g\) both of which take a list as input and produce as output a correctly sorted version of that list? Are the functions the same? What if \(f\) was defined using the \href{https://en.wikipedia.org/wiki/Merge_sort}{merge sort} algorithm, while \(g\) used \href{https://en.wikipedia.org/wiki/Quicksort}{quick sort}? Probably most of us wouldn't think of \(f\) and \(g\) as the same function in that case.
 
-In the examples above, it is common to say that the two functions \(f\) and \(g\) are \href{https://en.wikipedia.org/wiki/Extensionality}{extensionally equal}, since they produce the same (external) output when given the same input, but they are not \href{https://en.wikipedia.org/wiki/Intension}{intensionally equal}, since their (internal) definitions differ.
+In the examples above, it is common to say that the two functions \(f\) and \(g\) are \href{https://en.wikipedia.org/wiki/Extensionality}{\defn{extensionally equal}}, since they produce the same (external) output when given the same input, but they are not \href{https://en.wikipedia.org/wiki/Intension}{\defn{intensionally equal}}, since their (internal) definitions differ.
 
-In this subsection, we describe types that manifest this idea of \emph{extensional equality of functions}, or \emph{function extensionality}. (Most of these are found in the \typetopology library, so the \ualib merely imports the definitions from there.)
+In this subsection, we describe types that manifest this idea of \emph{extensional equality of functions}, or \emph{function extensionality}. (Most of these types are already defined in the \typetopology library, so the \ualib merely imports the definitions from there.)
 
 \subsubsection{Definition of function extensionality}\label{sec:defin-funct-extens}
 
-As explained above, a natural notion of function equality, sometimes called \emph{point-wise equality}, is defined as follows: \(f\) and \(g\) are said to be \emph{pointwise equal} provided \(∀ x → f x ≡ g x\). Here is how this notion of equality is expressed as a type in the \typetopology library.
+As alluded to above, a natural notion of function equality, sometimes called \emph{point-wise equality}, is defined as follows: \(f\) and \(g\) are said to be \emph{pointwise equal} provided \(∀ x → f x ≡ g x\). Here is how this notion of equality is expressed as a type in the \typetopology library.
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∼\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -63,7 +63,7 @@ As explained above, a natural notion of function equality, sometimes called \emp
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-\defn{Function extensionality} is the assertion that point-wise equal functions are ``definitionally'' equal; that is, \(\forall\ f\ g\ (f ∼ g → f ≡ g)\). In the \typetopology library, the types that represent this notion are \af{funext} (for nondependent functions) and \af{dfunext} (for dependent functions). They are defined as follows.
+\defn{Function extensionality} is the assertion that point-wise equal functions are \defn{definitionally equal}; that is, \(\forall\ f\ g\ (f ∼ g → f ≡ g)\). In the \typetopology library, the types that represent this notion are \af{funext} (for nondependent functions) and \af{dfunext} (for dependent functions). They are defined as follows.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{funext}\AgdaSpace{}%
@@ -276,13 +276,13 @@ The next two types define the converse of function extensionality.\footnote{In p
 \end{code}
 \scpad
 
-Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions we have seen so far.  We do so by comparing the definitions of \af{funext} and \af{extfun}.  In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇). In the definition of \af{extfun}, the codomain is an assertion (namely, `f ∼ g`).  Also, the defining equation of `funext` is an assertion, while the defining equation of `extdun` is a proof.  As such, `extfun` is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, \af{funext} is a type, and we may or may not wish to assume we have a proof for this type. That is, we could postulate that function extensionality holds and assume we have a witness, say, \ab{fe} \as : \af{funext} \ab 𝓤 \ab 𝓥 (i.e., a proof that point-wise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
+Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions we have seen so far.  We do so by comparing the definitions of \af{funext} and \af{extfun}.  In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇). In the definition of \af{extfun}, the codomain is an assertion (namely, \ab f \af ∼ \ab g).  Also, the defining equation of \af{funext} is an assertion, while the defining equation of \af{extfun} is a proof.  As such, \af{extfun} is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are point-wise equal. In contrast, \af{funext} is a type, and we may or may not wish to assume we have a proof for this type. That is, we could postulate that function extensionality holds and assume we have a witness, say, \ab{fe} \as : \af{funext} \ab 𝓤 \ab 𝓥 (i.e., a proof that point-wise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
 \subsubsection{Alternative extensionality type}\label{alternative-extensionality-type}
 
 Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to \af{dfunext}, is to assert that \af{extdfun} is actually an \emph{equivalence}. This requires a few definitions from the \am{MGS-Equivalences} module of the \typetopology library, which we now describe.
 
-First, a type is a \defn{singleton} if it has \emph{exactly} one inhabitant and a \defn{subsingleton} if it has \emph{at most} one inhabitant. These properties are represented in the \typetopology library by the following type.
+First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn{subsingleton} if it has at most one inhabitant. These properties are represented in the \typetopology library by the following type.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-center}\AgdaSpace{}%
@@ -360,7 +360,7 @@ First, a type is a \defn{singleton} if it has \emph{exactly} one inhabitant and 
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-Next, we consider the type \af{is-equiv} which is used to assert that a function is an equivalence in a sense that we now describe. First we need the concept of a \href{https://ncatlab.org/nlab/show/fiber}{fiber} of a function. In the \typetopology library, \af{fiber} is defined as a Sigma type whose inhabitants represent inverse images of points in the codomain of the given function.
+Next, we consider the type \af{is-equiv} which is used to assert that a function is an equivalence in the sense that we now describe. First we need the concept of a \href{https://ncatlab.org/nlab/show/fiber}{fiber} of a function. In the \typetopology library, \af{fiber} is defined as a Sigma type whose inhabitants represent inverse images of points in the codomain of the given function.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{fiber}\AgdaSpace{}%
@@ -444,7 +444,7 @@ A function is called an \defn{equivalence} if all of its fibers are singletons.
 \end{code}
 \ccpad
 Now we are finally ready to define the type \af{hfunext} that gives an alternative means of postulating function
-extensionality.\footnote{In previous versions of the \ualib we defined the type \af{hfunext} (using another name for it) before realizing that an equivalent type was already defined in the \typetopology library.}
+extensionality.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{hfunext}\AgdaSpace{}%
