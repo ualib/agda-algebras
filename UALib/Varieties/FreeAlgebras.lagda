@@ -181,17 +181,13 @@ In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume 𝕏, which 
 
 \begin{code}
 
---open import MGS-Powerset using (hfunext)
-
 module HSPTheorem
--- {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext}
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
  -- extensionality assumption:
     {fe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
 
--- open import Birkhoff.FreeAlgebra {𝑆 = 𝑆}{gfe} hiding (Pred; _⊔_; _⁺; Algebra; _̇ ) public
  open the-free-algebra {𝓤}{𝓤}{X}
 
 \end{code}
