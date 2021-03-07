@@ -99,7 +99,7 @@ open import MGS-MLTT using (_∙_) public
 
 #### <a id="transport">Transport</a>
 
-Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[3](Prelude.Equality.html#fn3)</sup>.  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *subsitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.<sup>[2](Prelude.Equality.html#fn2)</sup>
+Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[3](Prelude.Equality.html#fn3)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *subsitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.
 
 \begin{code}
 
@@ -178,7 +178,7 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 -------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  In this case, we don't want the code inside the `hide-refl` module to conflict with the original definitions of these functions from Escardo's Type Topology library, which we import right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` model remains essentially hidden (for the purposes of resolving conflicts, though Agda *will* type-check the code). It may seem odd to both define `refl` ourselves only to immediately import the definition that we actually use. We do this in order to describe all or most of the types on which the [UALib][] depends, in a clear and self-contained way, while at the same time making sure that this cannot be misinterpreted as a claim to originality.</span>
+<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library, even though we import the latter right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` module remains essentially hidden (though Agda *will* type-check this code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in order to describe all or most of the types on which the [UALib][] depends, in a clear and self-contained way, while at the same time making sure that this is not misinterpreted as a claim to originality.</span>
 
 
 <sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
