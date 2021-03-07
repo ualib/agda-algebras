@@ -17,7 +17,7 @@ Let us be more concrete about what is at issue here by giving an example. Agda f
 \begin{verbatim}
   Algebras.lagda:498,20-23 𝓤 != 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ when checking that... has type...
 \end{verbatim}}}
-\noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Algebras.lagda}, but was expecting to find the universe \ab{𝓞} \aop ⊔ \ab 𝓥 \aop ⊔ \ab 𝓤 \af ⁺ instead.
+\noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Algebras.lagda}, but was expecting to find the universe \ab{𝓞} \aop ⊔ \ab 𝓥 \aop ⊔ \ab 𝓤\af ⁺ instead.
 
 To make these situations easier to deal with, we have developed some domain specific tools for the lifting and lowering of universe levels inhabited by algebra types. (Later we do the same for other domain specific types like homomorphisms, subalgebras, products, etc). This must be done carefully to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
 
@@ -158,7 +158,7 @@ Naturally, we can combine these and define a function that lifts both the domain
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦 \aof ̇.
+For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦\aof ̇.
 
 The point of a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we lower the universe of a type that hasn't already be lifted.  Fortunately, however, we can prove that \aic{lift} and \afld{lower} compose to the identity. Later, there will be some situations that require these facts, so we formalize them and their (trivial) proofs.
 \ccpad

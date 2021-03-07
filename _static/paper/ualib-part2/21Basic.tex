@@ -1,0 +1,657 @@
+\subsubsection{Basic definitions}\label{basic-definitions}
+
+This section presents the {[}Terms.Basic{]}{[}{]} module of the {[}Agda
+Universal Algebra Library{]}{[}{]}.
+
+The theoretical background that begins each subsection below is based on
+Cliff Bergman's textbook {[}Bergman (2012){]}{[}{]}, specifically,
+Section 4.3. Apart from notation, our presentation is similar to
+Bergman's, but we will be more concise, omitting some details and all
+examples, in order to more quickly arrive at our objective, which is to
+use type theory to express the concepts and formalize them in the
+{[}Agda{]}{[}{]} language. We refer the reader to {[}Bergman
+(2012){]}{[}{]} for a more complete exposition of classical (informal)
+universal algebra.
+\ccpad
+\begin{code}%
+\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaKeyword{OPTIONS}\AgdaSpace{}%
+\AgdaPragma{--without-K}\AgdaSpace{}%
+\AgdaPragma{--exact-split}\AgdaSpace{}%
+\AgdaPragma{--safe}\AgdaSpace{}%
+\AgdaSymbol{\#-\}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Terms.Basic}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Homomorphisms.HomomorphicImages}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\paragraph{The type of terms}\label{the-type-of-terms}
+
+Fix a signature \ab{𝑆} and let \ab{X} denote an arbitrary
+nonempty collection of variable symbols. Assume the symbols in
+\ab{X} are distinct from the operation symbols of \ab{𝑆}, that
+is \ab{X\ ∩\ ∣\ 𝑆\ ∣\ =\ ∅}.
+
+By a \defn{word} in the language of \ab{𝑆}, we mean a nonempty,
+finite sequence of members of \ab{X\ ∪\ ∣\ 𝑆\ ∣}. We denote the
+concatenation of such sequences by simple juxtaposition.
+
+Let \ab{S₀} denote the set of nullary operation symbols of
+\ab{𝑆}. We define by induction on \ab{n} the sets \texttt{𝑇ₙ} of
+\defn{words} over \ab{X\ ∪\ ∣\ 𝑆\ ∣} as follows (cf. {[}Bergman
+(2012){]}{[}{]} Def. 4.19):
+
+\texttt{𝑇₀\ :=\ X\ ∪\ S₀} and \texttt{𝑇ₙ₊₁\ :=\ 𝑇ₙ\ ∪\ 𝒯ₙ}
+
+where \texttt{𝒯ₙ} is the collection of all \ab{𝑓\ 𝒕} such that
+\ab{𝑓\ :\ ∣\ 𝑆\ ∣} and \ab{𝒕\ :\ ∥\ 𝑆\ ∥\ 𝑓\ →\ 𝑇ₙ}. (Recall,
+\texttt{∥\ 𝑆\ ∥\ 𝑓} is the arity of the operation symbol 𝑓.)
+
+We define the collection of \defn{terms} in the signature \ab{𝑆}
+over \ab{X} by \texttt{Term\ X\ :=\ ⋃ₙ\ 𝑇ₙ}. By an 𝑆-\defn{term}
+we mean a term in the language of \ab{𝑆}.
+
+The definition of \texttt{Term\ X} is recursive, indicating that an
+inductive type could be used to represent the semantic notion of terms
+in type theory. Indeed, such a representation is given by the following
+inductive type.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}%
+\>[45]\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{X}\<%
+\\
+%
+\>[2]\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{X}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Term}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\defn{Notation}. As usual, the type \ab{X} represents an arbitrary
+collection of variable symbols. Throughout this module the name of the
+first constructor of the \texttt{Term} type will remain
+\texttt{generator}. However, in all of the modules that follow this one,
+we will use the shorthand \ab{ℊ} to denote the \texttt{generator}
+constructor.
+
+\paragraph{The term algebra}\label{the-term-algebra}
+
+For a given signature \ab{𝑆}, if the type \texttt{Term\ X} is
+nonempty (equivalently, if \ab{X} or \texttt{∣\ 𝑆\ ∣} is nonempty),
+then we can define an algebraic structure, denoted by \texttt{𝑻\ X} and
+called the \defn{term algebra in the signature} \ab{𝑆}
+\defn{over} \ab{X}. Terms are viewed as acting on other terms, so
+both the domain and basic operations of the algebra are the terms
+themselves.
+
+\begin{itemize}
+\item
+  For each operation symbol \ab{𝑓\ :\ ∣\ 𝑆\ ∣}, denote by
+  \ab{𝑓\ ̂\ (𝑻\ X)} the operation on \texttt{Term\ X} which maps a
+  tuple \ab{𝑡\ :\ ∥\ 𝑆\ ∥\ 𝑓\ →\ ∣\ 𝑻\ X\ ∣} to the formal term
+  \ab{𝑓\ 𝑡}.
+\item
+  Define \texttt{𝑻\ X} to be the algebra with universe
+  \texttt{∣\ 𝑻\ X\ ∣\ :=\ Term\ X} and operations \ab{𝑓\ ̂\ (𝑻\ X)},
+  one for each symbol \ab{𝑓} in \texttt{∣\ 𝑆\ ∣}.
+\end{itemize}
+
+In {[}Agda{]}{[}{]} the term algebra can be defined as simply as one
+would hope.
+\ccpad
+\begin{code}%
+\>[0]\AgdaComment{--The term algebra 𝑻 X.}\<%
+\\
+\>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+\>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{node}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\paragraph{The universal property}\label{the-universal-property}
+
+The term algebra \texttt{𝑻\ X} is \emph{absolutely free}, or
+\emph{universal}, for algebras in the signature \ab{𝑆}. That is, for
+every 𝑆-algebra \ab{𝑨}, the following hold.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Every map \ab{h\ :\ 𝑋\ →\ ∣\ 𝑨\ ∣} lifts to a homomorphism from
+  \texttt{𝑻\ X} to \ab{𝑨}.
+\item
+  The induced homomorphism is unique.
+\end{enumerate}
+
+We now prove this in {[}Agda{]}{[}{]}, starting with the fact that every
+map from \ab{X} to \texttt{∣\ 𝑨\ ∣} lifts to a map from
+\texttt{∣\ 𝑻\ X\ ∣} to \texttt{∣\ 𝑨\ ∣} in a natural way, by induction
+on the structure of the term.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{free-lift}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{free-lift}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{free-lift}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{free-lift}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\<%
+\\
+\>[0]\<%
+\end{code}
+
+Next, we verify that the lift so defined is a homomorphism.
+\ccpad
+\begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaFunction{lift-hom}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑨}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{lift-hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{free-lift}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\\
+\>[0]\<%
+\end{code}
+
+Finally, we prove that the resulting homomorphism is unique.
+\ccpad
+\begin{code}%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaFunction{free-unique}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[15]\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\<%
+\\
+%
+\>[15]\AgdaComment{-------------------------------------------------}\<%
+\\
+%
+\>[2]\AgdaSymbol{→}%
+\>[15]\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{t}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[33]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{t}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{free-unique}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{free-unique}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}%
+\>[232I]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}%
+\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+\>[232I][@{}l@{\AgdaIndent{0}}]%
+\>[36]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}%
+\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaFunction{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[36]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}%
+\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟩}}\<%
+\\
+%
+\>[36]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}%
+\>[64]\AgdaOperator{\AgdaFunction{∎}}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{where}\<%
+\\
+%
+\>[2]\AgdaFunction{α}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{𝒕}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaFunction{α}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{free-unique}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\<%
+\\
+\>[0]\<%
+\end{code}
+
+Since it's absolutely free, the term algebra is the domain of a
+homomorphism to any algebra. Moreover, if we are given a surjective
+mapping \ab{h} from \ab{X} onto an algebra \ab{𝑨}, then the
+homomorphism constructed with \texttt{lift-hom\ 𝑨\ h} will be an
+epimorphism from \texttt{𝑻\ X} onto \ab{𝑨}.
+\ccpad
+\begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[312I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[312I]%
+\>[22]\AgdaComment{---------------------------------}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[22]\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Epic}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{lift-hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}\{}\AgdaBound{h₀}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{hE}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{γ}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{where}\<%
+\\
+%
+\>[2]\AgdaFunction{h₀⁻¹y}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Inv}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{hE}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{η}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{lift-hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaFunction{h₀⁻¹y}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaFunction{η}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{InvIsInv}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{hE}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{))}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{lift-hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{h₀}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\\
+%
+\>[2]\AgdaFunction{γ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{eq}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{generator}\AgdaSpace{}%
+\AgdaFunction{h₀⁻¹y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{η}\<%
+\\
+\>[0]\<%
+\end{code}
+
+In the modules {[}Birkhoff.FreeAlgebra{]}{[}{]} and
+{[}Birkhoff.HSPTheorem{]}{[}{]} \texttt{lift-hom} and
+\texttt{lift-of-epi-is-epi} are used to construct such epimorphisms.

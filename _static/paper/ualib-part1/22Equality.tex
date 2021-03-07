@@ -45,12 +45,11 @@ Since \af{refl\ \_} is used so often, the following convenient shorthand is also
 \AgdaBound{x}\AgdaSymbol{\}}\<%
 \end{code}
 \ccpad
-Thus, whenever we need to complete a proof by simply asserting that \ab{x}, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke \af{refl} \ab x, or (in the implicit case) \af{refl\ \_} or even \ab{𝓇ℯ𝒻𝓁}. (The \ab{pattern} directive above is what makes last option available.)
+Thus, whenever we need to complete a proof by simply asserting that \ab{x}, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke \af{refl} \ab x, or (in the implicit case) \af{refl\ \_} or even \aic{𝓇ℯ𝒻𝓁}. (The \ab{pattern} directive above is what makes last option available.)
 
-Let us now formalize the obvious fact that \ab{≡} is an equivalence relation. 
+Of course, \ab{≡} is an equivalence relation, and the formalization of this fact is trivial. In fact, we don't even need to prove reflexivity, since it is the defining property of \ad{≡}.
 \ccpad
 \begin{code}%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}%
 \>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -62,27 +61,10 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 \AgdaSymbol{\}}%
 \>[36]\AgdaKeyword{where}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{≡-rfl}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\>[1]\AgdaFunction{≡-rfl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
@@ -98,7 +80,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 \AgdaBound{x}\<%
 \\
 %
-\>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
@@ -108,7 +90,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≡-SYM}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
@@ -124,7 +106,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 \AgdaBound{x}\<%
 \\
 %
-\>[1]\AgdaFunction{≡-SYM}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
@@ -132,7 +114,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≡-trans}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-transitive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
@@ -153,7 +135,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 \AgdaBound{z}\<%
 \\
 %
-\>[1]\AgdaFunction{≡-trans}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-transitive}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -165,7 +147,7 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≡-TRANS}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-trans}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
@@ -186,16 +168,16 @@ Let us now formalize the obvious fact that \ab{≡} is an equivalence relation.
 \AgdaBound{z}\<%
 \\
 %
-\>[1]\AgdaFunction{≡-TRANS}\AgdaSpace{}%
+\>[1]\AgdaFunction{≡-trans}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
 \ccpad
-The only difference between \af{≡-trans} and \af{≡-TRANS} is that the arguments of \af{≡-TRANS} function are implicit so we can omit them when applying the function.
+The only difference between \af{≡-symmetric} and \af{≡-sym} (respectively, \af{≡-transitive} and \af{≡-trans}) is that the latter has fewer explicit arguments, which is sometimes convenient.
 
-We use the symmetry of \ab{\_≡\_} very often and we can sometimes improve the readability of a proof by employing some syntactic sugar.\footnote{%
+Many proofs make abundant use of the symmetry of \ad ≡, and the following syntactic sugar can improve the readability of such proofs.\footnote{%
 \textbf{Unicode Hints}. In \agdamode, one types \af{⁻¹} as \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1}, and \af{𝑖𝑑} as \texttt{\textbackslash{}Mii\textbackslash{}Mid}, and type \af{∙} as \texttt{\textbackslash{}.}. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
 \ccpad
 \begin{code}%
@@ -268,8 +250,9 @@ If we have a proof \ab{p} \as : \ab x \ad ≡ \ab y, and we need a proof of \ab{
 \AgdaBound{q}\<%
 \end{code}
 
-\subsubsection{Functions preserve refl}\label{functions-preserve-refl}
-A simple but useful operation that we will make heavy use of is sometimes called \textbf{transport} (or ``transport along an identity''). It is defined in the \texttt{MGS-MLTT} module of the \typetopology library as follows.
+\subsubsection{Transport}\label{transport}
+
+Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal iff for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{subsitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of the \typetopology library.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%

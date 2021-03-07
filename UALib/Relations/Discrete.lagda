@@ -89,6 +89,8 @@ infix 4 _≐_
 
 \end{code}
 
+Thus, a proof of `P ≐ Q` is a pair `(p , q)` where `p` is a proof of the first inclusion (that is, `p : P ⊆ Q`)  and `q` is a proof of the second.
+
 If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then of course both `P ⊆ Q` and `P ⊇ Q` hold, so `P ≐ Q` holds.
 
 \begin{code}

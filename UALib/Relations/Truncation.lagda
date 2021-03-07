@@ -25,16 +25,11 @@ open import Relations.Quotients public
 
 #### <a id="typical-view-of-truncation">Truncation</a>
 
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given
-proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that,
-given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q`
-inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write
-`p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q`
-the equivalent.
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q` inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write `p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent.
 
 We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant,
 say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same.
-If such a proof exists for all `p q : a ≡ₓ b, then the proof of `a ≡ₓ b` is unique; as a property of
+If such a proof exists for all `p q : a ≡ₓ b`, then the proof of `a ≡ₓ b` is unique; as a property of
 the types `X` and `≡ₓ`, this is sometimes called **uniqueness of identity proofs**.
 
 Now, perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
@@ -90,21 +85,18 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
                            --------------------------------
   →                        is-embedding f
 
- monic-is-embedding|sets f Bset fmon b (a , fa≡b) (a' , fa'≡b) = γ
+ monic-is-embedding|sets f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
   where
-  faa' : f a ≡ f a'
-  faa' = ≡-Trans (f a) (f a') fa≡b (fa'≡b ⁻¹)
+  fuv : f u ≡ f v
+  fuv = ≡-trans fu≡b (fv≡b ⁻¹)
 
-  aa' : a ≡ a'
-  aa' = fmon a a' faa'
+  uv : u ≡ v
+  uv = fmon u v fuv
 
-  𝒜 : _ → _ ̇
-  𝒜 a = f a ≡ b
+  arg1 : Σ p ꞉ (u ≡ v) , (transport (λ a → f a ≡ b) p fu≡b) ≡ fv≡b
+  arg1 = uv , Bset (f v) b (transport (λ a → f a ≡ b) uv fu≡b) fv≡b
 
-  arg1 : Σ p ꞉ (a ≡ a') , (transport 𝒜 p fa≡b) ≡ fa'≡b
-  arg1 = aa' , Bset (f a') b (transport 𝒜 aa' fa≡b) fa'≡b
-
-  γ : a , fa≡b ≡ a' , fa'≡b
+  γ : u , fu≡b ≡ v , fv≡b
   γ = to-Σ-≡ arg1
 
 \end{code}
@@ -163,7 +155,7 @@ prop-ext' pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
 
-Thus, for truncated predicates `P` and `Q`, if `PropExt` holds, then `P ⊆ Q × Q ⊆ P → P ≡ Q`, which is a useful extensionality principle.
+Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q) × (Q ⊆ P) → P ≡ Q`, which is a useful extensionality principle.
 
 
 #### <a id="binary-propositions">Binary propositions</a>
@@ -193,27 +185,27 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
- class-extensionality : prop-ext 𝓤 𝓡 → {a a' : A}
+ class-extensionality : prop-ext 𝓤 𝓡 → {u v : A}
   →                     IsEquivalence ∣ 𝑹 ∣
-                        ------------------------------------------
-  →                     ∣ 𝑹 ∣ a a'  →  [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
+                        --------------------------------------------
+  →                     ∣ 𝑹 ∣ u v  →  [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
 
- class-extensionality pe {a}{a'} Req Raa' = γ
+ class-extensionality pe {u}{v} Reqv Ruv = γ
   where
    P Q : Pred₁ A 𝓡
-   P = (λ x → ∣ 𝑹 ∣ a x) , (λ x → ∥ 𝑹 ∥ a x)
-   Q = (λ x → ∣ 𝑹 ∣ a' x) , (λ x → ∥ 𝑹 ∥ a' x)
+   P = (λ a → ∣ 𝑹 ∣ u a) , (λ a → ∥ 𝑹 ∥ u a)
+   Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
 
-   α : [ a ] ∣ 𝑹 ∣ ⊆ [ a' ] ∣ 𝑹 ∣
-   α ax = fst (/-=̇ Req Raa') ax
+   α : [ u ] ∣ 𝑹 ∣ ⊆ [ v ] ∣ 𝑹 ∣
+   α ua = fst (/-=̇ Reqv Ruv) ua
 
-   β : [ a' ] ∣ 𝑹 ∣ ⊆ [ a ] ∣ 𝑹 ∣
-   β a'x = snd (/-=̇ Req Raa') a'x
+   β : [ v ] ∣ 𝑹 ∣ ⊆ [ u ] ∣ 𝑹 ∣
+   β va = snd (/-=̇ Reqv Ruv) va
 
    PQ : P ≡ Q
    PQ = (prop-ext' pe (α , β))
 
-   γ : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
+   γ : [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
    γ = ap fst PQ
 
 
@@ -226,18 +218,18 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓡 → {a a' : A}
+ class-extensionality' : prop-ext 𝓤 𝓡 → {u v : A}
   →                      (∀ C → is-subsingleton (𝒞 C))
   →                      IsEquivalence ∣ 𝑹 ∣
                          -------------------------
-  →                      ∣ 𝑹 ∣ a a'  →  ⟦ a ⟧ ≡ ⟦ a' ⟧
+  →                      ∣ 𝑹 ∣ u v  →  ⟦ u ⟧ ≡ ⟦ v ⟧
 
- class-extensionality' pe {a}{a'} ssA Req Raa' = γ
+ class-extensionality' pe {u}{v} ssA Reqv Ruv = γ
   where
-   CD : [ a ] ∣ 𝑹 ∣ ≡ [ a' ] ∣ 𝑹 ∣
-   CD = class-extensionality pe Req Raa'
+   CD : [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
+   CD = class-extensionality pe Reqv Ruv
 
-   γ : ⟦ a ⟧ ≡ ⟦ a' ⟧
+   γ : ⟦ u ⟧ ≡ ⟦ v ⟧
    γ = to-subtype-⟦⟧ ssA CD
 
 \end{code}

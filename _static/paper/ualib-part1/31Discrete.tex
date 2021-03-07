@@ -1,3 +1,5 @@
+\subsubsection{Unary relations}
+
 We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab A might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab A that satisfy the property \ab P. Here is the definition (which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
 \ccpad
 \begin{code}%
@@ -28,20 +30,20 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 \ccpad
-If we are given a type \ab A \as : \ab 𝓤 \af ̇ , then we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we can view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
+If we are given a type \ab A \as : \ab 𝓤\af ̇ , then we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we can view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
 
 Below we will often consider predicates over the class of all algebras of a particular type. Soon we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of algebras (for some universe level \ab 𝓤),
 %% Like all types, \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type which (as we will soon see) happens to be \ab 𝓞 \as ⊔ \ab 𝓥 \as ⊔ \ab 𝓤 \af ⁺
 %% ̇ . %the module \href{UALib.Algebras.Algebras.html}{UALib.Algebras}).
 and the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓤  %will be \ab 𝓞 \as ⊔ \ab 𝓥 \as ⊔ \ab 𝓤 \af ⁺ ̇ as well.
-will be inhabited by maps of the form \ab 𝑨 \as → \ab 𝓤 \af ̇ ; more precisely, given an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we will consider the type \af{Pred} \ab 𝑨 \ab 𝓤 \as = \ab 𝑨 \as → \ab 𝓤 \af ̇ . We will use predicates over algebra types to specify subclasses of algebras with certain properties.
+will be inhabited by maps of the form \ab 𝑨 \as → \ab 𝓤\af ̇ ; more precisely, given an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we will consider the type \af{Pred} \ab 𝑨 \ab 𝓤 \as = \ab 𝑨 \as → \ab 𝓤\af ̇ . We will use predicates over algebra types to specify subclasses of algebras with certain properties.
 
 
 
 
 
 
-% \subsection{Membership and inclusion relations}\label{membership-and-inclusion-relations}
+\subsubsection{Membership and inclusion relations}\label{membership-and-inclusion-relations}
 
 Of course, the \ualib includes types that represent element-wise inclusion and subset containment. For example, given a predicate \af P, we may represent that  ``\ab x belongs to \af P'' or that ``\ab x has property \af{P},'' by writing either \ab x \af ∈ \af P or \af P \ab x.  The definition of \af ∈ is standard (cf.~\texttt{Relation/Unary.agda} in the \agdastdlib). Nonetheless, here it is.
 \ccpad
@@ -113,15 +115,21 @@ The \textit{subset} relation is denoted, as usual, with the \af{⊆} symbol and 
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaBound{Q}\<%
 \end{code}
+
+\subsubsection{The axiom of extensionality}\label{sec:axiom-ext}
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down a type that represents what we typically means in informal mathematics for two subsets to be (extensionally) equal, which is that they contain the same elements. In the \ualib we denote this type by \af{≐} and define it as follows.\footnote{%
+\textbf{Unicode Hint}. In \agdamode type \texttt{\textbackslash{}doteq} or \texttt{\textbackslash{}.=} to produce ≐}
 \ccpad
-The notion of equality of types is a nontrivial matter, and therefore so is the matter of equating subsets that are defined using predicate types.  Fortunately, it is straightforward to write down a type that represents what it means for two subsets to be the same in informal mathematics. In the \ualib we denote this \textit{subset equality} by \af{\(\doteq\)} and define it as follows.
-\ccpad
-\begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}\(\doteq\)\AgdaUnderscore{}}}\AgdaSpace{}%
+\begin{code}
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -137,11 +145,11 @@ The notion of equality of types is a nontrivial matter, and therefore so is the 
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓨}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓩}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 \>[0]\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\(\doteq\)}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
@@ -153,18 +161,109 @@ The notion of equality of types is a nontrivial matter, and therefore so is the 
 \AgdaBound{P}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Thus, a proof of \AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\(\doteq\)}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-is a pair (\ab p , \ab q) where \ab p \as : \AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaBound{Q} is a proof of the first inclusion and \ab q is a proof of \AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaBound{P}.
+A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p is a proof of the first inclusion (that is, \ab p~\as :~\ab P~\aof ⊆~\ab Q), and \ab q is a proof of the second.
 
+If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then of course both \ab P \aof ⊆ \ab Q and
+\ab Q \aof ⊆ \ab P will hold, so \ab P \aof ≐ \ab Q will also hold.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+\AgdaBound{Q}\<%
+\\
+\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. However, we can postulate it axiomatically if we wish. This is called the \defn{axiom of extensionality} and a type that represents it can be defined in \agda as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{Q}\<%
+\end{code}
+\ccpad
+We treat extensionality axioms in greater detail and generality in 
+% other modules; see \ualibExtensionality  and % \ualibTruncation 
+\S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
+
+
+
+
+
+
+
+
+
+
+\subsubsection{Binary Relations}\label{sec:binary-relations}
 
 In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model these as predicates over the product type \ab A \af × \ab A, or as relations of type
-\ab A \as → \ab A \as → \ab 𝓡 \af ̇  (for some universe \ab 𝓡). We define these below.
+\ab A \as → \ab A \as → \ab 𝓡\af ̇  (for some universe \ab 𝓡). We define these below.
 
 A generalization of the notion of binary relation is a \emph{relation from} \ab{A} \emph{to} \ab{B}, which we define first and treat binary relations on a single \ab{A} as a special case.
 \ccpad
@@ -615,7 +714,7 @@ We can combine \af{\_on\_} and \af{\_⇒\_} to define a nice, general implicatio
 \AgdaBound{g}\AgdaSymbol{)}\<%
 \end{code}
 
-\subsubsection{Compatibility of binary relations}\label{compatibility-of-binary-relations}
+\subsubsection{Compatibility of functions and binary relations}\label{compatibility-of-functions-and-binary-relations}
 
 Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. The first definition simply lifts a binary relation on \ab A to a binary relation on tuples of type \ab I \as → \ab A.\footnote{N.B. This \emph{relation} lifting is not to be confused with the sort of \emph{universe} lifting that we defined in the \ualibLifts module.}
 \ccpad

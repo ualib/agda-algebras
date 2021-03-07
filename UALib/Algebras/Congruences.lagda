@@ -49,10 +49,10 @@ The relation `𝟎-rel` is equivalent to the identity relation `≡` and these a
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+module _ {𝓤 : Universe}{A : 𝓤 ̇} where
 
- 𝟎-IsEquivalence : {A : 𝓤 ̇ } → IsEquivalence{𝓤}{A = A} 𝟎-rel
- 𝟎-IsEquivalence = record { rfl = ≡-rfl; sym = ≡-sym; trans = ≡-trans }
+ 𝟎-IsEquivalence : IsEquivalence{𝓤}{A = A} 𝟎-rel
+ 𝟎-IsEquivalence = record {rfl = refl; sym = ≡-symmetric; trans = ≡-transitive}
 
 \end{code}
 

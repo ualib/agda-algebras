@@ -1,15 +1,5 @@
-Here we discuss \defn{truncation} and \defn{h-sets} (which we just
-call \defn{sets}). We first give a brief discussion of standard
-notions of trunction, and then we describe a viewpoint which seems
-useful for formalizing mathematics in Agda. Readers wishing to learn
-more about truncation and proof-relevant mathematics should consult
-other sources, such as
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section
-34} and
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35}
-of Martín Escardó's notes~\cite{MHE}, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume
-Brunerie, Truncations and truncated higher inductive types}, or Section
-7.1 of the HoTT book~\cite{HoTT:2013}.
+Here we discuss \defn{truncation} and \defn{h-sets} (which we just call \defn{sets}). We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section
+34} and \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35} of Martín Escardó's notes~\cite{MHE}, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume Brunerie, Truncations and truncated higher inductive types}, or Section 7.1 of the HoTT book~\cite{HoTT:2013}.
 
 \textbf{Remark}. \agda now has a built in type called \href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{Prop} which may provide some or all of what we develop in this module. (See the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{Prop Section} of \agdartd.) However, we have never tried to use it, and it seems we can do without it.
 
@@ -113,7 +103,7 @@ We will also make use of the function \href{https://www.cs.bham.ac.uk/~mhe/HoTT-
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
+\>[0]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -448,27 +438,28 @@ as follows (cf.~the section
 \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#250227}{``Prop extensionality and the powerset''} of~\cite{MHE}).
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\>[0]\AgdaFunction{prop-ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-%
-\>[1]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\>[0]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred₁}\AgdaSpace{}%
@@ -607,18 +598,11 @@ binary relation.
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-To be clear, the type \af{Rel A 𝓦} is simply the function type
-\ab{A → A → 𝓦 ̇}, so
-
-\af{Pred₂ A 𝓦 = Σ R ꞉ (A → A → 𝓦 ̇) , ∀ x y → is-subsingleton (R x y)}.
+(Recall, \af{Rel A 𝓦} is simply the function type \ab{A → A → 𝓦 ̇}.)
 
 \subsubsection{Quotient extensionality}\label{quotient-extensionality}
 
-We need a (subsingleton) identity type for congruence classes over sets
-so that we can equate two classes even when they are presented using
-different representatives. Proposition extensionality is precisely what
-we need to accomplish this. (Note that we don't require \emph{function}
-extensionality here.)
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. (Notice that we don't require \emph{function extensionality} (\S\ref{function-extensionality}) here.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -642,42 +626,37 @@ extensionality here.)
 \>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[101I]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[101I]%
-\>[24]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
-%
-\>[24]\AgdaComment{------------------------------------------}\<%
-\\
-%
+\>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[101I]%
 \>[24]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}%
-\>[36]\AgdaSymbol{→}%
-\>[39]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}%
+\>[35]\AgdaSymbol{→}%
+\>[38]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
@@ -688,9 +667,9 @@ extensionality here.)
 %
 \>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSymbol{\}\{}\AgdaBound{a'}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Raa'}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{γ}\<%
 \\
@@ -709,43 +688,43 @@ extensionality here.)
 \>[3]\AgdaFunction{P}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSymbol{)}\<%
 \\
 %
 \>[3]\AgdaFunction{Q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -753,14 +732,14 @@ extensionality here.)
 \>[3]\AgdaFunction{α}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
@@ -768,13 +747,13 @@ extensionality here.)
 \\
 %
 \>[3]\AgdaFunction{α}\AgdaSpace{}%
-\AgdaBound{ax}\AgdaSpace{}%
+\AgdaBound{ua}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{/-\deq}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Raa'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ax}\<%
+\AgdaSymbol{(}\AgdaFunction{/-≐}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{ua}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -782,14 +761,14 @@ extensionality here.)
 \>[3]\AgdaFunction{β}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
@@ -797,13 +776,31 @@ extensionality here.)
 \\
 %
 \>[3]\AgdaFunction{β}\AgdaSpace{}%
-\AgdaBound{a'x}\AgdaSpace{}%
+\AgdaBound{va}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{snd}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{/-\deq}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Raa'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{a'x}\<%
+\AgdaSymbol{(}\AgdaFunction{/-≐}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{va}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[3]\AgdaFunction{PQ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaFunction{Q}\<%
+\\
+%
+\>[3]\AgdaFunction{PQ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{prop-ext'}\AgdaSpace{}%
+\AgdaBound{pe}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{β}\AgdaSymbol{))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -811,14 +808,14 @@ extensionality here.)
 \>[3]\AgdaFunction{γ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
@@ -829,18 +826,11 @@ extensionality here.)
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
 \AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaFunction{P}\AgdaSymbol{\}\{}\AgdaFunction{Q}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{α}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{β}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+\AgdaFunction{PQ}\<%
+\end{code}
+\ccpad
+\begin{code}
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[102I]\AgdaSymbol{\{}\AgdaBound{C}\AgdaSpace{}%
@@ -904,24 +894,22 @@ extensionality here.)
 \AgdaBound{CD}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{d}\AgdaSymbol{)}\<%
-\\
-\\
+\end{code}
+\ccpad
+\begin{code}
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[103I]%
-\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\>[102I]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[103I]%
-\>[25]\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton}\AgdaSpace{}%
@@ -929,29 +917,26 @@ extensionality here.)
 \AgdaBound{C}\AgdaSymbol{))}\<%
 \\
 %
+\>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[102I]%
 \>[25]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[25]\AgdaComment{---------------------------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[25]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}%
-\>[37]\AgdaSymbol{→}%
-\>[40]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}%
+\>[36]\AgdaSymbol{→}%
+\>[39]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\<%
 \\
 %
@@ -959,10 +944,10 @@ extensionality here.)
 %
 \>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSymbol{\}\{}\AgdaBound{a'}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Raa'}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{γ}\<%
 \\
@@ -973,14 +958,14 @@ extensionality here.)
 \>[3]\AgdaFunction{CD}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
@@ -991,8 +976,8 @@ extensionality here.)
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Raa'}\<%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1000,11 +985,11 @@ extensionality here.)
 \>[3]\AgdaFunction{γ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\<%
 \\
 %
@@ -1014,6 +999,14 @@ extensionality here.)
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaFunction{CD}\<%
 \end{code}
+
+
+
+
+
+
+
+
 
 \subsubsection{General and dependent propositions}\label{general-and-dependent-propositions}
 

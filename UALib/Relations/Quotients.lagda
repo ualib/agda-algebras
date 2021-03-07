@@ -79,8 +79,8 @@ map-kernel-IsEquivalence : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
 
 map-kernel-IsEquivalence {𝓤}{𝓦} f =
  record { rfl = λ x → 𝓇ℯ𝒻𝓁
-        ; sym = λ x y x₁ → ≡-sym{𝓦} (f x) (f y) x₁
-        ; trans = λ x y z x₁ x₂ → ≡-trans (f x) (f y) (f z) x₁ x₂ }
+        ; sym = λ x y x₁ → ≡-sym{𝓦} x₁
+        ; trans = λ x y z x₁ x₂ → ≡-trans x₁ x₂ }
 
 \end{code}
 

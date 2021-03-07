@@ -109,363 +109,82 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 \tableofcontents
 
 \section{Introduction}\label{sec:introduction}
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
-The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
-
-There have been a number of efforts to formalize parts of universal algebra in type theory prior to ours, most notably
-\begin{itemize}
-  \item Capretta~\cite{Capretta:1999} (1999) formalized the basics of universal algebra in the Calculus of Inductive Constructions using the Coq proof assistant;
-    \item Spitters and van der Weegen~\cite{Spitters:2011} (2011) formalized the basics of universal algebra and some classical algebraic structures, also in the Calculus of Inductive Constructions using the Coq proof assistant, promoting the use of type classes as a preferable alternative to setoids;
- \item Gunther, et al~\cite{Gunther:2018} (2018) developed what seems to be (prior to the \ualib) the most extensive library of formal universal algebra to date; in particular, this work includes a formalization of some basic equational logic; the project (like the \ualib) uses Martin-L\"of Type Theory and the Agda proof assistant.
-\end{itemize}
-Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \ualib extends beyond the scope of prior efforts and. In particular, the library now includes a proof of Birkhoff's variety theorem.  Most other proofs of this theorem that we know of are informal and nonconstructive.\footnote{After the completion of this work, the author learned about a constructive version of Birkhoff's theorem that was proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the standard, informal style of mathematical writing in the current literature, and as far as we know it was never implemented formally and type-checked with a proof assistant. Nonetheless, a comparison of the version of the theorem presented in~\cite{Carlstrom:2008} to the Agda proof we give here would be interesting.}
- %% We remark briefly on this in~\S\ref{sec:conclusions-and-future-work}.}
-
-%% \subsection{Vision and Goals}\label{vision-and-goals}
-The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
-%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
-
-Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate proof idioms of a particular field, can be an extremely powerful and effective asset. We believe that such libraries, and the proof assistants they support, will eventually become indispensable tools in the working mathematician's toolkit.
-
-
-
-\subsection{Contributions and organization}
-\label{sec:contributions}
-
-In this paper we limit ourselves to the presentation of the core foundational modules of the \ualib so that we have space to discuss some of the more interesting type theoretic and foundational issues that arose when developing the library and attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
-We are preparing two follow-up papers covering more advanced aspects of the library. The planned contents of these are mentioned in the conclusion of the paper.
-
-This paper is structured as follows.
-%
-Section~\ref{sec:agda-preliminaries} introduces Sigma types in Agda (for us, the most important dependent type in the language) as well as Agda's universe hierarchy and problems solved by ``lifting'' techniques.
-%
-Section~\ref{sec:relations} introduces the \agdaualib by explaining how predicates, binary relations, and function kernels are represented in the library. 
-%
-Section~\ref{ssec:relation-truncation} discusses the important topic of \emph{truncated types} and how truncation is employed in the \ualib.
-%
-Section~\ref{quotient-types} defines quotient types and introduces the concept of \emph{quotient extensionality}, which is necessary for determining when two quotient classes are equal.
-%
-Finally, Section~\ref{sec:types-for-algebras} describes the type we use to represent algebraic structures, product algebras, including arbitrary products of entire classes of algebraic structures.  We also define congruence relations and quotient algebras in this section.
-%
-%
-The final section of the paper includes a few remarks about current work and future directions.
-
-To conclude this introduction, we provide the following links to official sources of information about the \agdaualib.
-\begin{itemize}
-  \item \href{https://ualib.gitlab.io}{\texttt{ualib.org}} (the web site) includes every line of code in the library, rendered as html and accompanied by documentation, and
-  \item \href{https://gitlab.com/ualib/ualib.gitlab.io}{\texttt{gitlab.com/ualib/ualib.gitlab.io}} (the source code) freely available and licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
-\end{itemize}
-These sources include complete proofs of every theorem we mention here, and much more. Finally, we highly recommend the book by Bergman~\cite{Bergman:2012} for background in universal algebra, and the notes by \escardo~\cite{MHE} for background in type theory and Agda.
+\input{11Introduction.tex}
 
 \newcommand\firstsentence[2]{This section describes certain key components of the #1 module of the \agdaualib.\footnote{For more details, see #2.}}
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % - [Prelude](Prelude.html)
-\section{Agda Prelude}
+\section{Agda Prelude}\label{sec:agda-prelude}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Preliminaries](Prelude.Preliminaries.html)
-\subsection{Universes and dependent types}\label{preliminaries}
-\firstsentence{\ualibPreliminaries}{\urlPreliminaries}
-
-\input{11Preliminaries.tex}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% - [Equality](Prelude.Equality.html)
-\subsection{Equality}\label{equality}
-\firstsentence{\ualibEquality}{\urlEquality}
-
-\input{12Equality.tex}
-
+\subsection{Universes and dependent types}\label{preliminaries}\firstsentence{\ualibPreliminaries}{\urlPreliminaries}
+\input{21Preliminaries.tex}
+\subsection{Equality}\label{equality}\firstsentence{\ualibEquality}{\urlEquality}
+\input{22Equality.tex}
+\subsection{Function Extensionality}\label{function-extensionality}\firstsentence{\ualibExtensionality}{\urlExtensionality}
+\input{23Extensionality.tex}
+\subsection{Inverses and Inverse Images of Functions}\label{sec:inverse-image-invers}\firstsentence{\ualibInverses}{\urlInverses}
+\input{24Inverses.tex}
+\subsection{Lifts to Higher Universes}\label{sec:lifts-altern-univ}\firstsentence{\ualibLifts}{\urlLifts}
+\input{25Lifts.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Extensionality](Prelude.Extensionality.html)
-\subsection{Function Extensionality}\label{function-extensionality}
-\firstsentence{\ualibExtensionality}{\urlExtensionality}
-
-\input{13Extensionality.tex}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Inverses](Prelude.Inverses.html)
-\subsection{Inverses and Inverse Images of Functions}\label{sec:inverse-image-invers}
-\firstsentence{\ualibInverses}{\urlInverses}
-
-
-\input{14Inverses.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Agda's Universe Hierarchy](Prelude.Lifts.html)
-\subsection{Lifts to Higher Universes}\label{sec:lifts-altern-univ}
-\firstsentence{\ualibLifts}{\urlLifts}
-
-\input{15Lifts.tex}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% - [Relation and Quotient Types](Relations.html)
 \section{Relation and Quotient Types}\label{sec:relat-quot-types}
-
 This section presents some of the most important relation and quotient types that are defined in the \ualibRelations module of the \agdaualib.\footnote{For more details see \urlRelations.}
 
 In \S\ref{sec:discrete-relations} we cover \emph{unary} and \emph{binary relations}, which we refer to as ``discrete'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we take up in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
 
+\subsection{Discrete Relations}\label{sec:discrete-relations}\firstsentence{\ualibDiscrete}{\urlDiscrete}
+\input{31Discrete.tex}
+\subsection{Continuous Relations}\label{sec:continuous-relations}\firstsentence{\ualibContinuous}{\urlContinuous}
+\input{32Continuous.tex}
+\subsection{Equivalences and Quotients}\label{sec:equiv-relat-quot}\firstsentence{\ualibQuotients}{\urlQuotients}
+\input{33Quotients.tex}
+\subsection{Truncation, Sets, Propositions}\label{sec:trunc-sets-prop}\firstsentence{\ualibTruncation}{\urlTruncation}
+\input{34Truncation.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Discrete Relations](Relations.Discrete.html)
-\subsection{Discrete Relations}\label{sec:discrete-relations}
-\firstsentence{\ualibDiscrete}{\urlDiscrete}
-
-\input{21Discrete.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Continuous Relations](Relations.Continuous.html)
-\subsection{Continuous Relations}\label{sec:continuous-relations}
-\firstsentence{\ualibContinuous}{\urlContinuous}
-
-\input{22Continuous.tex}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Equivalence Relations and Quotients](Relations.Quotients.html)
-\subsection{Equivalences and Quotients}\label{sec:equiv-relat-quot}
-\firstsentence{\ualibQuotients}{\urlQuotients}
-
-\input{23Quotients.tex}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Truncation, Sets, Propositions](Relations.Truncation.html)
-\subsection{Truncation, Sets, Propositions}\label{sec:trunc-sets-prop}
-\firstsentence{\ualibTruncation}{\urlTruncation}
-
-\input{24Truncation.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% - [Algebra Types](Algebras.html)
 \section{Algebra Types}\label{sec:algebra-types}
-A standard way to define algebraic structures in type theory is using record types.  However, we feel the dependent pair (or Sigma) type (\S\ref{ssec:dependent-pairs}) is more natural, as it corresponds semantically to the existential quantifier of logic. Therefore, many of the important types of the \ualib are defined as Sigma types. In this section, we use function types and Sigma types to define the types of \emph{operations} (\S\ref{sec:operation-type}), \emph{signatures} (\S\ref{signature-type}), \emph{algebras} (\S\ref{ssec:algebra-type}), and \emph{product algebras} (\S\ref{product-algebra-type}).
+A standard way to define algebraic structures in type theory is using record types.  However, we feel the dependent pair (or Sigma) type (\S\ref{ssec:dependent-pairs}) is more natural, as it corresponds semantically to the existential quantifier of logic. Therefore, many of the important types of the \ualib are defined as Sigma types. In this section, we use function types and Sigma types to define the types of \emph{operations} and \emph{signatures} (\S\ref{sec:oper-sign}), \emph{algebras} (\S\ref{sec:algebras}), and \emph{product algebras} (\S\ref{sec:product-algebras}), \emph{congruence relations}\ref{congruences}, and \emph{quotient algebras}\ref{quotient-algebras}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Operations and Signatures](Algebras.Signatures.html)
-\subsection{Operations and Signatures}\label{sec:oper-sign}
-\firstsentence{\ualibSignatures}{\urlSignatures}
-
-\input{31Signatures.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Algebras](Algebras.Algebras.html)
-\subsection{Algebras}
-\firstsentence{\ualibAlgAlgebras}{\urlAlgAlgebras}
-
-\input{32Algebras.tex}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Product Algebras](Algebras.Products.html)
-\subsection{Product Algebras}
-\firstsentence{\ualibProducts}{\urlProducts}
-
-\input{33Products.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Congruence Relations](Algebras.Congruences.html)
-\subsection{Congruence Relations}
-\firstsentence{\ualibCongruences}{\urlCongruences}
-
-\input{34Congruences.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   - [Congruence Relations](Algebras.Congruences.html)
+\subsection{Operations and Signatures}\label{sec:oper-sign}\firstsentence{\ualibSignatures}{\urlSignatures}
+\input{41Signatures.tex}
+\subsection{Algebras}\label{sec:algebras}\firstsentence{\ualibAlgAlgebras}{\urlAlgAlgebras}
+\input{42Algebras.tex}
+\subsection{Product Algebras}\label{sec:product-algebras}\firstsentence{\ualibProducts}{\urlProducts}
+\input{43Products.tex}
+\subsection{Congruence Relations}\label{congruences}\firstsentence{\ualibCongruences}{\urlCongruences}
+\input{44Congruences.tex}
 \subsection{Quotient Algebras}\label{quotient-algebras}
-%\firstsentence{\ualibCongruences}{\urlCongruences}
-An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denote by \ab 𝑨 \af / \ab θ and Agda allows us to define and express quotients using the standard notation.\footnote{%
-\textbf{Unicode Hints}. Produce the ╱ symbol in \agdamode by typing \texttt{\textbackslash{}-\/-\/-} and then \texttt{C-f} a number of times.}
-\ccpad
-\begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[228I]\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{/}}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}%
-\>[48]\AgdaComment{-- the domain of the quotient algebra}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[.][@{}l@{}]\<[228I]%
-\>[8]\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}%
-\>[49]\AgdaComment{-- the basic operations of the quotient algebra}\<%
-\end{code}
-
-\subsubsection{Examples}\label{cong-examples}
-
-The zero element of a quotient can be expressed as follows.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{/}}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{)(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{x₁}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x₁}\<%
-\end{code}
-\ccpad
-Finally, the following elimination rule is sometimes useful.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{╱-refl}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[10]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{\{}\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{⟩}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{╱-refl}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{IsEquivalence.rfl}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{IsEquiv}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
-\end{code}
-
+\input{45QuotientAlgebras.tex}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Concluding Remarks}\label{sec:concluding-remarks}
+We've reached the end of Part 1 of our three-part series describing the \agdaualib.  Part 2 will cover homomorphism, terms, and subalgebras, and Part 3 will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
+
+% We completed the first major milestone of this project in January 2021, which was the first formal, machine-checked proof of Birkhoff's HSP theorem.  Our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations or discoveries in dependent type theory or homotopy type theory.
+
+%% One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
+%% %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
+%% As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
+%% compare with the assumptions we make in our Agda proof of this result.
+
+We conclude by noting that one of our goals is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory. We welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.  Merge requests submitted to the UALib's main gitlab repository are especially welcomed.  Please visit the repository at \url{https://gitlab.com/ualib/ualib.gitlab.io/} and help us improve it.
+
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -3000,22 +2719,6 @@ As a simple first example, here is how the zero element of a quotient is defined
 \AgdaBound{x₁}\<%
 \end{code}
 
-
-
-
-
-\section{Present and future work}\label{sec:conclusions-and-future-work}
-
-We are preparing two follow-up papers on more advanced aspects of the library. The first will cover homomorphism, terms, and subalgebras, and the second will cover free algebras, equational logic, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
-
-We completed the first major milestone of this project in January 2021, which was the first formal, machine-checked proof of Birkhoff's HSP theorem.  Our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations or discoveries in dependent type theory or homotopy type theory.
-
-%% One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
-%% %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
-%% As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
-%% compare with the assumptions we make in our Agda proof of this result.
-
-Finally, as one of the goals of the \agdaualib project is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory, we welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.
 
 
 
