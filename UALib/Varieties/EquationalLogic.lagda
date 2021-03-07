@@ -55,7 +55,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
  _⊧_≋_ : Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → 𝓧 ⊔ ov 𝓤 ̇
 
- _⊧_≋_ 𝒦 p q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+ 𝒦 ⊧ p ≋ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
