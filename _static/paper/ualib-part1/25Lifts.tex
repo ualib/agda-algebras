@@ -19,7 +19,7 @@ Let us be more concrete about what is at issue here by giving an example. Agda f
 \end{verbatim}}}
 \noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Algebras.lagda}, but was expecting to find the universe \ab{𝓞} \aop ⊔ \ab 𝓥 \aop ⊔ \ab 𝓤\af ⁺ instead.
 
-To make these situations easier to deal with, we have developed some domain specific tools for the lifting and lowering of universe levels inhabited by algebra types. (Later we do the same for other domain specific types like homomorphisms, subalgebras, products, etc). This must be done carefully to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
+To make these situations easier to deal with, we have developed some domain specific tools for the lifting and lowering of universe levels inhabited by some of the key algebraic types of the \ualib.  These tools must be applied with some care to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
 
 A general \af{Lift} record type, similar to the one found in the \am{Level} module of the \agdastdlib, is defined as follows.
 \ccpad
@@ -54,113 +54,113 @@ A general \af{Lift} record type, similar to the one found in the \am{Level} modu
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
 \end{code}
-\ccpad
-Using the \af{Lift} type, we define two functions that lift the domain (respectively, codomain) type of a function to a higher universe.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{lift-dom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-dom}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{lift-cod}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-cod}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-Naturally, we can combine these and define a function that lifts both the domain and codomain type.
-\ccpad
-\begin{code}
-\>[1]\AgdaFunction{lift-fun}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓩}\AgdaSymbol{\}\{}\AgdaBound{𝓨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-fun}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
-\end{code}
-\ccpad
-For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦\aof ̇.
+\scpad
+% Using the \af{Lift} type, we define two functions that lift the domain (respectively, codomain) type of a function to a higher universe.
+% \ccpad
+% \begin{code}%
+% \>[1]\AgdaFunction{lift-dom}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{lift-dom}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{))}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{lift-cod}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓨}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{lift-cod}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaInductiveConstructor{lift}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{)}\<%
+% \end{code}
+% \ccpad
+% Naturally, we can combine these and define a function that lifts both the domain and codomain type.
+% \ccpad
+% \begin{code}
+% \>[1]\AgdaFunction{lift-fun}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓩}\AgdaSymbol{\}\{}\AgdaBound{𝓨}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaBound{Y}\AgdaSymbol{)}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{lift-fun}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaInductiveConstructor{lift}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{))}\<%
+% \end{code}
+% \ccpad
+% For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦\aof ̇.
 
-The point of a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we lower the universe of a type that hasn't already be lifted.  Fortunately, however, we can prove that \aic{lift} and \afld{lower} compose to the identity. Later, there will be some situations that require these facts, so we formalize them and their (trivial) proofs.
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of \afld{lower} is immediately followed by an application of \aic{lift}, then the result is the identity transformation. Later, there will be some situations that require this fact, as well as its brother, so we formalize these related and their trivial proofs.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
@@ -182,8 +182,7 @@ The point of a ramified hierarchy of universes is to avoid Russell's paradox, an
 \\
 \>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -207,8 +206,7 @@ The point of a ramified hierarchy of universes is to avoid Russell's paradox, an
 \\
 \>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
 
 

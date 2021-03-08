@@ -44,7 +44,7 @@ Pred (Σ (λ A → (f₁ : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f₁) A)) _𝓦_23
 
 First of all, we must know how to interpret such errors. The one above means that Agda encountered a type at universe level `𝓤 ⁺`, on line 498 (columns 20--23) of the file `Birkhoff.lagda`, but was expecting a type at level `𝓞 ⁺ ⊔ 𝓥 ⁺ ⊔ 𝓤 ⁺ ⁺` instead.
 
-To make these situations easier to deal with, we developed some domain specific tools for the lifting and lowering of universe levels of our algebra types. (Later we do the same for other domain specific types like homomorphisms, subalgebras, products, etc).  Of course, this must be done carefully to avoid making the type theory inconsistent.  In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
+To make these situations easier to deal with, we have developed some domain specific tools for the lifting and lowering of universe levels inhabited by some of the key algebraic types of the [UALib][].  These tools must be applied with some care to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
 
 A general `Lift` record type, similar to the one found in the `Level` module of the [Agda Standard Library][], is defined as follows.
 
@@ -57,37 +57,37 @@ open Lift
 
 \end{code}
 
-Next, we give various ways to lift function types.
 
 \begin{code}
 
-module _ {𝓦 𝓧 𝓨 : Universe} where
+-- Next, we give various ways to lift function types.
+-- module _ {𝓦 𝓧 𝓨 : Universe} where
 
- lift-dom : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Y)
- lift-dom f = λ x → (f (lower x))
+--  lift-dom : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Y)
+--  lift-dom f = λ x → (f (lower x))
 
- lift-cod : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓦}{𝓨} Y)
- lift-cod f = λ x → lift (f x)
+--  lift-cod : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓦}{𝓨} Y)
+--  lift-cod f = λ x → lift (f x)
 
 
-module _ {𝓦 𝓩 𝓧 𝓨 : Universe} where
+-- module _ {𝓦 𝓩 𝓧 𝓨 : Universe} where
 
- lift-fun : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Lift{𝓩}{𝓨} Y)
- lift-fun f = λ x → lift (f (lower x))
+--  lift-fun : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Lift{𝓩}{𝓨} Y)
+--  lift-fun f = λ x → lift (f (lower x))
+
+-- For example, `lift-dom` takes a function `f` defined on the domain `X : 𝓧 ̇` and returns a function defined on the domain `Lift{𝓦}{𝓧} X : 𝓧 ⊔ 𝓦 ̇`, whose type lives in the universe `𝓧 ⊔ 𝓦`.
 
 \end{code}
 
-For example, `lift-dom` takes a function `f` defined on the domain `X : 𝓧 ̇` and returns a function defined on the domain `Lift{𝓦}{𝓧} X : 𝓧 ⊔ 𝓦 ̇`, whose type lives in the universe `𝓧 ⊔ 𝓦`.
-
-The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that `lift` and `lower` compose to the identity. Later, there will be some situations that require these facts, so we formalize them and their (trivial) proofs.
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of `lower` is immediately followed by an application of `lift`, then the result is the identity transformation. Later, there will be some situations that require this fact, as well as its brother, so we formalize these related and their trivial proofs.
 
 \begin{code}
 
-lower∼lift : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lower{𝓦}{𝓧} ∘ lift ≡ 𝑖𝑑 X
-lower∼lift = 𝓇ℯ𝒻𝓁
-
 lift∼lower : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦}{𝓧} X)
 lift∼lower = 𝓇ℯ𝒻𝓁
+
+lower∼lift : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lower{𝓦}{𝓧} ∘ lift ≡ 𝑖𝑑 X
+lower∼lift = 𝓇ℯ𝒻𝓁
 
 \end{code}
 

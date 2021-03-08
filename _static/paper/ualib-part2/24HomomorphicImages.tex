@@ -1,56 +1,4 @@
-\subsubsection{Homomorphic Images}\label{homomorphic-images}
-
-This section describes the {[}Homomorphisms.HomomorphicImages{]}{[}{]}
-module of the {[}Agda Universal Algebra Library{]}{[}{]}.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.HomomorphicImages}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.Isomorphisms}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\end{code}
-\ccpad
-\paragraph{Images of a single algebra}\label{images-of-a-single-algebra}
+\subsubsection{Images of a single algebra}\label{images-of-a-single-algebra}
 
 We begin with what seems, for our purposes, the most useful way to
 represent the class of \defn{homomorphic images} of an algebra in
@@ -214,7 +162,7 @@ expresses this.
 \AgdaBound{𝑩}\<%
 \end{code}
 \ccpad
-\paragraph{Images of a class of
+\subsubsection{Images of a class of
 algebras}\label{images-of-a-class-of-algebras}
 
 Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that
@@ -309,7 +257,7 @@ homomorphic images.
 \AgdaBound{𝓚}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-\paragraph{Lifting tools}\label{lifting-tools}
+\subsubsection{Lifting tools}\label{lifting-tools}
 
 Here are some tools that have been useful (e.g., in the road to the
 proof of Birkhoff's HSP theorem).
@@ -671,67 +619,8 @@ epimorphism is an epimorphism.
 \AgdaBound{ϕhom}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{ϕepic}\<%
 \end{code}
-\ccpad
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-\paragraph{Deprecated functions}\label{deprecated-functions}
 
-The functions below will be removed from the future releases of the
-{[}UALib{]}{[}{]} as they don't seem to be especially useful.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{lift-function}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[439I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\<%
-\\
-\>[.][@{}l@{}]\<[439I]%
-\>[16]\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}\<%
-\\
-%
-\>[16]\AgdaComment{---------------------------------}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[16]\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓩}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{B}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{lift-function}%
-\>[15]\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{la}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
-\AgdaBound{la}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
-\end{code}
+%%% Local Variables:
+%%% TeX-master: "ualib-part2-20210304.tex"
+%%% End:

@@ -1,71 +1,65 @@
-\subsubsection{Isomorphisms}\label{isomorphisms}
+Here we formalize the notion of \emph{isomorphism} between algebraic structures.
+% \ccpad
+% \begin{code}%
+% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+% \AgdaKeyword{OPTIONS}\AgdaSpace{}%
+% \AgdaPragma{--without-K}\AgdaSpace{}%
+% \AgdaPragma{--exact-split}\AgdaSpace{}%
+% \AgdaPragma{--safe}\AgdaSpace{}%
+% \AgdaSymbol{\#-\}}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{Algebras.Signatures}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
+% \\
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{Homomorphisms.Isomorphisms}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{Homomorphisms.Noether}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
+% \\
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-Embeddings}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Nat}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaFunction{NatΠ}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaFunction{NatΠ-is-embedding}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
+% \end{code}
 
-This section describes the {[}Homomorphisms.Isomorphisms{]}{[}{]} module
-of the {[}Agda Universal Algebra Library{]}{[}{]}. Here we formalize the
-informal notion of isomorphism between algebraic structures.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.Isomorphisms}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.Noether}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Embeddings}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Nat}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{NatΠ}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{NatΠ-is-embedding}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\end{code}
-\ccpad
-\paragraph{Definition of isomorphism}\label{definition-of-isomorphism}
+\subsubsection{Definition of isomorphism}\label{definition-of-isomorphism}
 
-Recall, \ab{f\ \textasciitilde{}\ g} means f and g are
-\emph{extensionally} (or pointwise) equal; i.e.,
-\texttt{∀\ x,\ f\ x\ ≡\ g\ x}. We use this notion of equality of
-functions in the following definition of \defn{isomorphism}.
+Recall, \ab{f} \af ~ \ab g means \ab f and \ab g are   %\textasciitilde{}
+\emph{extensionally} (or \emph{point-wise}) \emph{equal}; i.e., \as ∀ \ab x, \ab f \ab x \aod ≡ \ab g \ab x. We use this notion of equality of functions in the following definition of \defn{isomorphism}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≅\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -139,14 +133,10 @@ functions in the following definition of \defn{isomorphism}.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-That is, two structures are \defn{isomorphic} provided there are
-homomorphisms going back and forth between them which compose to the
-identity map.
+That is, two structures are \defn{isomorphic} provided there are homomorphisms going back and forth between them which compose to the identity map.
 
-\paragraph{Isomorphism toolbox}\label{isomorphism-toolbox}
-
-Here we collect some tools that will come in handy later on. The reader
-is invited to skip over this section and return to it as needed.
+\subsubsection{Isomorphism toolbox}\label{isomorphism-toolbox}
+Here we collect some tools that will come in handy later on. The reader is invited to skip over this section and return to it as needed.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -406,10 +396,9 @@ is invited to skip over this section and return to it as needed.
 \AgdaSymbol{(}\AgdaFunction{≅-map-is-equiv}\AgdaSpace{}%
 \AgdaBound{ϕ}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
-\paragraph{Isomorphism is an equivalence
-relation}\label{isomorphism-is-an-equivalence-relation}
-\ccpad
+
+\subsubsection{Isomorphism is an equivalence relation}\label{isomorphism-is-an-equivalence-relation}
+
 \begin{code}%
 \>[0]\AgdaFunction{REFL-≅}\AgdaSpace{}%
 \AgdaFunction{ID≅}\AgdaSpace{}%
@@ -915,9 +904,7 @@ relation}\label{isomorphism-is-an-equivalence-relation}
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-To make \texttt{trans-≅} easier to apply in certain situations, we
-define a couple of alternatives where the only difference is which
-arguments are implicit.
+To make \af{trans-≅} easier to apply in certain situations, we define a couple of alternatives where the only difference is which arguments are implicit.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -1027,13 +1014,10 @@ arguments are implicit.
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝑪}\<%
 \end{code}
-\ccpad
-\paragraph{Lift is an algebraic
-invariant}\label{lift-is-an-algebraic-invariant}
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an
-``algebraic invariant''), which is why it's a workable solution to the
-``level hell'' problem we mentioned earlier.
+\subsubsection{Lift is an algebraic invariant}\label{lift-is-an-algebraic-invariant}
+
+Fortunately, the lift operation preserves isomorphism (i.e., it's an ``algebraic invariant''), which is why it is workable as a solution to the technical problems that arise from the noncumulativity of the universe hierarchy~(\cite[2.1]{DeMeo:2021-1}).
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -1304,8 +1288,8 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an
 \AgdaBound{A≅B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\<%
 \end{code}
-\ccpad
-\paragraph{Lift associativity}\label{lift-associativity}
+
+\subsubsection{Lift associativity}\label{lift-associativity}
 
 The lift is also associative, up to isomorphism at least.
 \ccpad
@@ -1405,10 +1389,9 @@ The lift is also associative, up to isomorphism at least.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{lift-alg-assoc}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓘}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\<%
 \end{code}
-\ccpad
-\paragraph{Products preserve
-isomorphisms}\label{products-preserve-isomorphisms}
-\ccpad
+
+\subsubsection{Products preserve isomorphisms}\label{products-preserve-isomorphisms}
+
 \begin{code}%
 \>[0]\AgdaFunction{⨅≅}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -1838,9 +1821,8 @@ isomorphisms}\label{products-preserve-isomorphisms}
 \AgdaFunction{ψ\textasciitilde{}ϕ}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-A nearly identical proof goes through for isomorphisms of lifted
-products.
-
+A nearly identical proof goes through for isomorphisms of lifted products.
+\ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lift-alg-⨅≅}\AgdaSpace{}%
 \AgdaSymbol{:}%
@@ -2313,9 +2295,9 @@ products.
 \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{A≅B}\<%
 \end{code}
-\ccpad
-\paragraph{Embedding tools}\label{embedding-tools}
-\ccpad
+
+\subsubsection{Embedding tools}\label{embedding-tools}
+
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -2648,6 +2630,4 @@ products.
 \AgdaFunction{snd}\AgdaSpace{}%
 \AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}

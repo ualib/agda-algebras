@@ -40,10 +40,22 @@ module _ {𝓤 : Universe} where
  transitive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 
+\end{code}
+
+The [Type Topology][] library also defines the following uniqueness-of-proofs property that a binary relation may or may not posess. It asserts that there can be at most one proof that a given pair belongs to the relation.
+
+\begin{code}
+
+module hide-is-subsingleton-valued {𝓤 : Universe} where
+
  is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 
+open import MGS-Quotient using (is-subsingleton-valued) public
+
 \end{code}
+
+Thus, if `R : Rel A 𝓡`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
 
 
 

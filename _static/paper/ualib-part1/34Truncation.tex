@@ -545,17 +545,13 @@ Thus, for truncated predicates \ab{P} and \ab{Q}, if \af{PropExt} holds, then \a
 
 \subsubsection{Binary propositions}\label{binary-propositions}
 
-Given a binary relation \ab{R}, it may be necessary or desirable to
-assume that there is at most one way to prove that a given pair of
-elements is \ab{R}-related. If this is true of \ab{R}, then we
-call \ab{R} a \defn{binary
+Given a binary relation \ab{R}, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is \ab{R}-related. If this is true of \ab{R}, then we call \ab{R} a \defn{binary
 proposition}.\footnote{%
 This is another example of \emph{proof-irrelevance} since, if \ab{R} is a binary proposition and we
 have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.}
 
-As above, we use the \af{is-subsingleton} type of the {[}Type
-Topology{]}{[}{]} library to impose this truncation assumption on a
-binary relation.
+As above, we use the \af{is-subsingleton} type of the \typetopology library to impose this truncation assumption on a binary relation.\footnote{%
+Using the definition \AgdaFunction{is-subsingleton-valued} from \S~\ref{properties-of-binary-relations}, we could have defined \af{Pred₂} by \af{Σ} \ab{R} \af ꞉ (\af{Rel} \ab{A} \ab{𝓦}) , \af{is-subsingleton-valued} \ab{R}, but this seems less transparent than our explicit definition.}
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%

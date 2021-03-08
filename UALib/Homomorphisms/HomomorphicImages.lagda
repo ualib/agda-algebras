@@ -124,23 +124,6 @@ module _ {𝓧 𝓨 : Universe} where
 
 \end{code}
 
-------
-
-#### Deprecated functions
-
-The functions below will be removed from the future releases of the [UALib][] as they don't seem to be especially useful.
-
-\begin{code}
-
-lift-function : {𝓧 : Universe}{𝓨 : Universe}{𝓩 : Universe}{𝓦 : Universe}
-                (A : 𝓧 ̇)(B : 𝓨 ̇) → (f : A → B)
-                ---------------------------------
- →              Lift{𝓩} A → Lift{𝓦} B
-
-lift-function  A B f = λ la → lift (f (lower la))
-
-\end{code}
-
 --------------------------------------
 
 [← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)

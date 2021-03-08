@@ -166,10 +166,46 @@ In \ualibDiscrete we defined types for representing and reasoning about binary r
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{z}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{Rel}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaBound{𝓡}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓡}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{is-subsingleton-valued}%
+% \>[25]\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{∀}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+The \typetopology library also defines the following \defn{uniqueness-of-proofs} property that a binary relation may or may not possess.
+\ccpad
+\begin{code}%
 \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
@@ -202,6 +238,21 @@ In \ualibDiscrete we defined types for representing and reasoning about binary r
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
+\ccpad
+Thus, if \af R \as : \af{Rel} \ab A \ab 𝓡, then \AgdaFunction{is-subsingleton-valued} \ab R is the assertion that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsubsection{Equivalence classes}\label{equivalence-classes}
 

@@ -1,64 +1,6 @@
-\subsubsection{Homomorphism Theorems}\label{homomorphism-theorems}
+\subsubsection{The First Homomorphism Theorem}\label{the-first-homomorphism-theorem}
 
-This chapter presents the {[}Homomorphisms.Noether{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.Noether}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Homomorphisms.Basic}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaArgument{gfe}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\end{code}
-\ccpad
-\paragraph{The First Homomorphism
-Theorem}\label{the-first-homomorphism-theorem}
-
-Here is a version of the so-called \emph{First Homomorphism theorem}
-(sometimes called Noether's First Homomorphism theorem, after Emmy
-Noether who was among the first proponents of the abstract approach to
-algebra that we now refer to as ``modern algebra'').
+Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as ``modern algebra''.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -87,16 +29,17 @@ algebra that we now refer to as ``modern algebra'').
 \AgdaBound{𝑩}\AgdaSymbol{\}}\<%
 \\
 \>[.][@{}l@{}]\<[33I]%
-\>[9]\AgdaComment{-- truncation assumptions --}\<%
+\>[9]\AgdaComment{-- extensionality assumptions --}\<%
 \\
 %
 \>[9]\AgdaSymbol{\{}\AgdaBound{pe}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{\}}\<%
+\\
+%
+\>[9]\AgdaComment{-- truncation assumptions --}\<%
 \\
 %
 \>[9]\AgdaSymbol{\{}\AgdaBound{Bset}\AgdaSpace{}%
@@ -442,8 +385,7 @@ algebra that we now refer to as ``modern algebra'').
 \AgdaFunction{ϕmon}\<%
 \end{code}
 \ccpad
-Next we prove that the homomorphism \texttt{ϕ}, whose existence we just
-proved, is unique.
+Next we prove that the homomorphism \ab{ϕ}, whose existence we just proved, is unique.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -660,9 +602,7 @@ If we postulate function extensionality, then we have
 \AgdaBound{hgk}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-If we assume the hypotheses of the First Homomorphism theorem and add
-the assumption that \ab{h} is epic, then we get the so-called First
-Isomorphism theorem.
+If we assume the hypotheses of the First Homomorphism theorem and add the assumption that \ab{h} is epic, then we get the so-called First Isomorphism theorem.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -985,8 +925,7 @@ Isomorphism theorem.
 \AgdaFunction{fmon}\<%
 \end{code}
 \ccpad
-Uniqueness for the isomorphism theorem is proved in exactly the same way
-that the same was proved for the homomorphism theorem.
+Uniqueness for the isomorphism theorem is proved in exactly the same way that the same was proved for the homomorphism theorem.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1108,11 +1047,10 @@ that the same was proved for the homomorphism theorem.
 \AgdaBound{θ}%
 \>[79]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
-\ccpad
-\paragraph{Homomorphism composition}\label{homomorphism-composition}
 
-The composition of homomorphisms is again a homomorphism. We formalize
-this in a number of alternative ways.
+\subsubsection{Homomorphism composition}\label{homomorphism-composition}
+
+The composition of homomorphisms is again a homomorphism. We formalize this in a number of alternative ways.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -1582,13 +1520,10 @@ this in a number of alternative ways.
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{f}\AgdaSymbol{\}\{}\AgdaBound{g}\AgdaSymbol{\}}\<%
 \end{code}
-\ccpad
-\paragraph{Homomorphism decomposition}\label{homomorphism-decomposition}
 
-If \ab{g\ :\ hom\ 𝑨\ 𝑩}, \ab{h\ :\ hom\ 𝑨\ 𝑪}, \ab{h} is
-surjective, and \texttt{ker\ h\ ⊆\ ker\ g}, then there exists
-\ab{ϕ\ :\ hom\ 𝑪\ 𝑩} such that \ab{g\ =\ ϕ\ ∘\ h}, that is, such
-that the following diagram commutes;
+\subsubsection{Homomorphism decomposition}\label{homomorphism-decomposition}
+
+If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab{h} is surjective, and \af{ker} \ab h \af ⊆ \af{ker} \ab g, then there exists \ab{ϕ} \as : \af{hom} \ab 𝑪 \ab 𝑩 such that \ab{g} \as = \ab ϕ \af ∘ \ab h, that is, such that the following diagram commutes;
 
 \begin{verbatim}
 𝑨---- h -->>𝑪
@@ -1601,9 +1536,7 @@ that the following diagram commutes;
       𝑩
 \end{verbatim}
 
-This, or some variation of it, is sometimes referred to as the Second
-Isomorphism Theorem. We formalize its statement and proof as follows.
-(Notice that the proof is constructive.)
+This, or some variation of it, is sometimes referred to as the \defn{Second Isomorphism Theorem}. We formalize its statement and proof as follows. (Notice that the proof is constructive.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{homFactor}\AgdaSpace{}%
@@ -2070,17 +2003,6 @@ Isomorphism Theorem. We formalize its statement and proof as follows.
 \end{code}
 \ccpad
 Here's a more general version.
-
-\begin{verbatim}
-𝑨 --- γ ->> 𝑪
- \         .
-  \       .
-   β     ∃ϕ
-    \   .
-     \ .
-      V
-      𝑩
-\end{verbatim}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -2563,7 +2485,7 @@ Here's a more general version.
 \AgdaBound{𝒄}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-If, in addition, both β and γ are epic, then so is ϕ.
+If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -2812,6 +2734,4 @@ If, in addition, both β and γ are epic, then so is ϕ.
 \AgdaFunction{ϕF}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{βe}\<%
-\\
-\>[0]\<%
 \end{code}
