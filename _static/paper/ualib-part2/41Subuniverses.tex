@@ -1,73 +1,6 @@
-\subsubsection{Subuniverses}\label{subuniverses}
+We start by defining a type that represents the important concept of \defn{subuniverse}. Suppose \ab 𝑨 is an algebra. A subset \ab B \af ⊆ \af ∣ \ab 𝑨 \af ∣ is said to be \defn{closed under the operations of} \ab 𝑨 if for each \ab 𝑓 ∈ \af ∣ \ab 𝑆 \af ∣ and all tuples \ab 𝑏 \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \ab 𝐵 the element (\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑏 belongs to \ab B. If a subset \ab B \af ⊆ \ab 𝐴 is closed under the operations of \ab 𝑨, then we call \ab B a \defn{subuniverse} of \ab 𝑨.
 
-This section presents the {[}Subalgebras.Subuniverses{]}{[}{]} module of
-the {[}Agda Universal Algebra Library{]}{[}{]}.
-
-We start by defining a type that represents the important concept of
-\defn{subuniverse}. Suppose 𝑨 is an algebra. A subset B ⊆ ∣ 𝑨 ∣ is
-said to be \defn{closed under the operations of} 𝑨 if for each 𝑓 ∈ ∣ 𝑆
-∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs to B. If a
-subset B ⊆ 𝐴 is closed under the operations of 𝑨, then we call B a
-\defn{subuniverse} of 𝑨.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Subalgebras.Subuniverses}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Terms.Operations}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Relation.Unary}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{⋂}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\end{code}
-\ccpad
-We first show how to represent in {[}Agda{]}{[}{]} the collection of
-subuniverses of an algebra A. Since a subuniverse is viewed as a subset
-of the domain of A, we define it as a predicate on ∣ A ∣. Thus, the
-collection of subuniverses is a predicate on predicates on ∣ A ∣.
+We first show how to represent in \agda the collection of subuniverses of an algebra \ab 𝑨.  Since a subuniverse is viewed as a subset of the domain of \ab 𝑨, we define it as a predicate on \af ∣ \ab 𝑨 \af ∣.  Thus, the collection of subuniverses is a predicate on predicates on \af ∣ \ab 𝑨 \af ∣.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -138,7 +71,6 @@ collection of subuniverses is a predicate on predicates on ∣ A ∣.
 Here's one way to construct an algebra out of a subuniverse.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{SubunivAlg}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -191,8 +123,8 @@ Here's one way to construct an algebra out of a subuniverse.
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{𝑏}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
-\paragraph{Subuniverses as records}\label{subuniverses-as-records}
+
+\subsubsection{Subuniverses as records}\label{subuniverses-as-records}
 
 We could define the type of subuniverses as a record as follows.
 \ccpad
@@ -238,8 +170,7 @@ We could define the type of subuniverses as a record as follows.
 \AgdaBound{𝑨}\<%
 \end{code}
 \ccpad
-For example, we could use such a type to prove that the equalizer of two
-homomorphisms is a subuniverse.
+For example, we could use such a type to prove that the equalizer of two homomorphisms is a subuniverse.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -294,21 +225,14 @@ homomorphisms is a subuniverse.
 \AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-\ccpad
-\paragraph{Subuniverse Generation}\label{subuniverse-generation}
 
-If \texttt{𝑨} is an algebra and \texttt{X\ ⊆\ ∣\ 𝑨\ ∣} a subset of the
-universe of \texttt{𝑨}, then the \defn{subuniverse of} \texttt{𝑨}
-\defn{generated by} \texttt{X} is typically denoted by
-\texttt{Sg}\texttt{𝑨}\texttt{(X)} and defined to be the smallest
-subuniverse of \texttt{𝑨} containing \texttt{X}. Equivalently,
+\subsubsection{Subuniverse Generation}\label{subuniverse-generation}
 
-\texttt{Sg}\texttt{𝑨}\texttt{(X)} = \texttt{⋂} \{ \texttt{U} :
-\texttt{U} is a subuniverse of \texttt{𝑨} and \texttt{B\ ⊆\ U} \}.
+If \ab 𝑨 is an algebra and \ab X \af ⊆ \af ∣ \ab 𝑨 \af ∣ a subset of the universe of \ab 𝑨, then the \defn{subuniverse of} \ab 𝑨 \defn{generated by} \ab X is typically denoted in the literature by \ad{Sg}$^{\ab 𝑨}$ (\ab X) and defined to be the smallest subuniverse of \ab 𝑨 containing \ab X. Equivalently,\\[-4pt]
 
-We now define an inductive type \texttt{Sg} that represents the
-subuniverse generated by a given subset elements from the domain of an
-algebra.
+\ad{Sg}$^{\ab 𝑨}$ (\ab X) = \af{⋂} \as{\{}\ab U \as : \ab U is a subuniverse of \ab 𝑨 and \ab B \af ⊆ \ab U\as{\}}.\\[-4pt]
+
+We now define an inductive type \ad{Sg} that represents the subuniverse generated by a given subset elements from the domain of an algebra.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -390,14 +314,9 @@ algebra.
 \AgdaBound{X}\<%
 \end{code}
 \ccpad
-Recall, in type theory we represent subsets as predicates, which is why
-\texttt{X\ ⊆\ ∣\ 𝑨\ ∣} is represented by the type
-\texttt{X\ :\ Pred\ ∣\ 𝑨\ ∣\ 𝓦} in the definition of \texttt{Sg}.
+Recall, we represent subsets as predicates. This is why, in the definition of \ad{Sg}, the subset \ab X of the domain of \ab 𝑨 inhabits the type \af{Pred} \af ∣ \ab 𝑨 \af ∣ 𝓦.
 
-For any subset \texttt{X} of the domain \texttt{∣\ 𝑨\ ∣} of an algebra
-\texttt{𝑨}, the type \texttt{Sg\ X} does indeed represent a subuniverse
-of \texttt{𝑨}, and proving this using the inductive type \texttt{Sg} is
-trivial.
+For any subset \ab X of the domain \af ∣ \ab 𝑨 \af ∣ of an algebra \ab 𝑨, the type \ad{Sg} \ab X does indeed represent a subuniverse of \ab 𝑨, and proving this using the inductive type \ad{Sg} is trivial.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -438,8 +357,7 @@ trivial.
 \AgdaInductiveConstructor{app}\<%
 \end{code}
 \ccpad
-Next we prove by structural induction that \texttt{Sg\ X} is the
-smallest subuniverse of \texttt{𝑨} containing \texttt{X}.
+Next we prove by structural induction that \ad{Sg} \ab X is the smallest subuniverse of \ab 𝑨 containing \ab X.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -555,33 +473,15 @@ smallest subuniverse of \texttt{𝑨} containing \texttt{X}.
 \AgdaFunction{IH}\<%
 \end{code}
 \ccpad
-When the element of \texttt{Sg\ X} is constructed as
-\texttt{app\ 𝑓\ 𝑎\ SgXa}, we may assume (the induction hypothesis) that
-the arguments in the tuple \texttt{𝑎} belong to \texttt{Y}. Then the
-result of applying \texttt{𝑓} to \texttt{𝑎} also belongs to \texttt{Y}
-since \texttt{Y} is a subuniverse.
+When the inhabitant of \ad{Sg} \ab X is constructed as \aic{app} \ab 𝑓 \ab 𝑎 \ab{SgXa}, we may assume (the induction hypothesis) that the arguments in the tuple \ab 𝑎 belong to \ab Y. Then the result of applying \ab 𝑓 to \ab 𝑎 also belongs to \ab Y since \ab Y is a subuniverse.
 
-\paragraph{Subuniverse Lemmas}\label{subuniverse-lemmas}
-
-Here we formalize a few basic properties of subuniverses. First, the
-intersection of subuniverses is again a subuniverse.
+\subsubsection{Subuniverse Lemmas}\label{subuniverse-lemmas}
+Here we formalize a few basic properties of subuniverses. First, the intersection of subuniverses is again a subuniverse.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓘}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{sub-intersection}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[0]\AgdaFunction{sub-intersection}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[101I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -600,6 +500,7 @@ intersection of subuniverses is again a subuniverse.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[101I]%
 \>[20]\AgdaSymbol{((}\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
@@ -611,7 +512,7 @@ intersection of subuniverses is again a subuniverse.
 \AgdaBound{𝑨}\AgdaSymbol{)}\<%
 \\
 %
-\>[20]\AgdaComment{--------------------------------}\<%
+\>[20]\AgdaComment{-----------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -649,20 +550,9 @@ intersection of subuniverses is again a subuniverse.
 Next, subuniverses are closed under the action of term operations.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{sub-term-closed}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[102I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -681,6 +571,7 @@ Next, subuniverses are closed under the action of term operations.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[102I]%
 \>[19]\AgdaSymbol{(}\AgdaBound{B}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{Subuniverses}\AgdaSpace{}%
@@ -847,8 +738,7 @@ type representing images of terms.
 \AgdaBound{Y}\<%
 \end{code}
 \ccpad
-By what we proved above, it should come as no surprise that
-\texttt{TermImage\ 𝑨\ Y} is a subuniverse of 𝑨 that contains Y.
+By what we proved above, it should come as no surprise that \af{TermImage} \ab 𝑨 \ab Y is a subuniverse of \ab 𝑨 that contains \ab Y.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -910,8 +800,7 @@ By what we proved above, it should come as no surprise that
 \AgdaBound{a∈Y}\<%
 \end{code}
 \ccpad
-Since \texttt{Sg\ 𝑨\ Y} is the smallest subuniverse containing Y, we
-obtain the following inclusion.
+Since \ad{Sg} \ab 𝑨 \ab Y is the smallest subuniverse containing \ab Y, we obtain the following inclusion.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -950,14 +839,10 @@ obtain the following inclusion.
 \AgdaFunction{TermImageIsSub}\AgdaSpace{}%
 \AgdaFunction{Y⊆TermImageY}\<%
 \end{code}
-\ccpad
-\paragraph{Homomorphic images are
-subuniverses}\label{homomorphic-images-are-subuniverses}
 
-Now that we have developed the machinery of subuniverse generation, we
-can prove two basic facts that play an important role in many theorems
-about algebraic structures. First, the image of a homomorphism is a
-subuniverse of its codomain.
+\subsubsection{Homomorphic images are subuniverses}\label{homomorphic-images-are-subuniverses}
+
+Now that we have developed the machinery of subuniverse generation, we can prove two basic facts that play an important role in many theorems about algebraic structures. First, the image of a homomorphism is a subuniverse of its codomain.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1123,8 +1008,7 @@ subuniverse of its codomain.
 \>[27]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
 \ccpad
-Next we prove the important fact that homomorphisms are uniquely
-determined by their values on a generating set.
+Next we prove the important fact that homomorphisms are uniquely determined by their values on a generating set.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1326,6 +1210,4 @@ determined by their values on a generating set.
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{SgIma}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-\>[0]\<%
 \end{code}

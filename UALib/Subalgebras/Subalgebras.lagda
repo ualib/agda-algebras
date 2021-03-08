@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="subalgebras">Subalgebras</a>
 
-The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defins the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
+The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defines the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
 \begin{code}
 

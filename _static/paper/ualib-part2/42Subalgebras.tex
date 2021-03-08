@@ -1,76 +1,9 @@
-\subsubsection{Subalgebras}\label{subalgebras}
+Here we define the \af{Subalgebra} type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
-The {[}Subalgebras.Subalgebras{]}{[}{]} module of the {[}Agda Universal
-Algebra Library{]}{[}{]} defins the \texttt{Subalgebra} type,
-representing the subalgebra of a given algebra, as well as the
-collection of all subalgebras of a given class of algebras.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Subalgebras.Subalgebras}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Subalgebras.Subuniverses}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Embeddings}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{∘-embedding}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{id-is-embedding}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\end{code}
-\ccpad
-\paragraph{Subalgebra type}\label{subalgebra-type}
+\subsubsection{Subalgebra type}\label{subalgebra-type}
 
-Given algebras \texttt{𝑨\ :\ Algebra\ 𝓦\ 𝑆} and
-\texttt{𝑩\ :\ Algebra\ 𝓤\ 𝑆}, we say that \texttt{𝑩} is a
-\defn{subalgebra} of \texttt{𝑨} just in case \texttt{𝑩} can be
-\emph{homomorphically embedded} in \texttt{𝑨}; in other terms, there
-exists a map \texttt{h\ :\ ∣\ 𝑨\ ∣\ →\ ∣\ 𝑩\ ∣} from the universe of
-\texttt{𝑨} to the universe of \texttt{𝑩} such that \texttt{h} is both a
-homomorphism and an
-embedding.\href{Subalgebras.Subalgebras.html\#fn1}{1}
+Given algebras \ab 𝑨 \as : \af{Algebra} \ab 𝓦 \ab 𝑆 and \ab 𝑩 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨 just in case \ab 𝑩 can be \emph{homomorphically embedded} in \ab 𝑨; in other terms, there exists a map \ab h \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ from the universe of \ab 𝑨 to the universe of \ab 𝑩} such that \ab h} is both a homomorphism and an embedding.\footnote{%
+A simpler alternative would be to proclaim \ab 𝑩 a subalgebra of \ab 𝑨 iff there is an \emph{injective} homomorphism from \ab 𝐵 into \ab 𝑨. We should investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type \af{IsSubalgebraOf}.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -156,17 +89,10 @@ embedding.\href{Subalgebras.Subalgebras.html\#fn1}{1}
 \AgdaOperator{\AgdaFunction{IsSubalgebraOf}}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
 \end{code}
-\ccpad
-\paragraph{Consequences of First Homomorphism
-Theorem}\label{consequences-of-first-homomorphism-theorem}
 
-We take this opportunity to prove an important lemma using the
-\texttt{IsSubalgebraOf} type defined above. If \texttt{𝑨} and \texttt{𝑩}
-is an 𝑆-algebra, and if \texttt{h\ :\ hom\ 𝑨\ 𝑩} is a homomorphism from
-\texttt{𝑨} to \texttt{𝑩}, then the quotient \texttt{𝑨\ ╱\ ker\ h} is
-(isomorphic to) a subalgebra of \texttt{𝑩}. This is an easy corollary of
-the First Homomorphism Theorem proved in the
-{[}Homomorphisms.Noether{]}{[}{]} module.
+\subsubsection{Consequences of First Homomorphism Theorem}\label{consequences-of-first-homomorphism-theorem}
+
+We take this opportunity to prove an important lemma using the \af{IsSubalgebraOf} type defined above. If \ab 𝑨 and \ab 𝑩 is an \ab 𝑆-algebra, and if \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 is a homomorphism from \ab 𝑨 to \ab 𝑩, then the quotient \ab 𝑨 \af ╱ \af{ker} \ab h is (isomorphic to) a subalgebra of \ab 𝑩. This is an easy corollary of the First Homomorphism Theorem proved in the \ualibNoether.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -199,9 +125,7 @@ the First Homomorphism Theorem proved in the
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
 \>[23]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-set}\AgdaSpace{}%
@@ -286,7 +210,7 @@ the First Homomorphism Theorem proved in the
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaFunction{,}%
-\>[181I]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[179I]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -301,7 +225,7 @@ the First Homomorphism Theorem proved in the
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[181I][@{}l@{\AgdaIndent{0}}]%
+\>[179I][@{}l@{\AgdaIndent{0}}]%
 \>[46]\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaFunction{Monic}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -366,14 +290,12 @@ the First Homomorphism Theorem proved in the
 \AgdaFunction{FirstHomThm}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-In the special case we apply this to later (e.g., to prove Birkhoff's
-HSP theorem) the algebra \texttt{𝑨} is the term algebra \texttt{𝑻\ X}.
-We record this special case here so that it's easier to apply later.
+In the special case we apply this to later (e.g., to prove Birkhoff's HSP theorem) the algebra \ab 𝑨 is the term algebra \af{𝑻} \ab X. We record this special case here so that it's easier to apply later.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{free-quot-subalg}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[236I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\>[234I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{X}\AgdaSpace{}%
@@ -390,26 +312,29 @@ We record this special case here so that it's easier to apply later.
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSymbol{)}\<%
 \\
-\>[236I][@{}l@{\AgdaIndent{0}}]%
-\>[20]\AgdaComment{--extensionality assumptions:}\<%
+\>[.][@{}l@{}]\<[234I]%
+\>[19]\AgdaComment{--extensionality assumptions --}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
-\>[22]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{𝑻}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-set}\AgdaSpace{}%
+\>[19]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝓤}\<%
+\\
+%
+\>[19]\AgdaComment{--truncation assumptions --}\<%
+\\
+%
+\>[1]\AgdaSymbol{→}%
+\>[19]\AgdaFunction{is-set}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
-\>[22]\AgdaSymbol{(∀}\AgdaSpace{}%
+\>[19]\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -424,7 +349,7 @@ We record this special case here so that it's easier to apply later.
 \\
 %
 \>[1]\AgdaSymbol{→}%
-\>[22]\AgdaSymbol{(∀}\AgdaSpace{}%
+\>[19]\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton}\AgdaSpace{}%
@@ -440,7 +365,7 @@ We record this special case here so that it's easier to apply later.
 \AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{))}\<%
 \\
-\>[1][@{}l@{\AgdaIndent{0}}]%
+%
 \>[19]\AgdaComment{-------------------------------------------------------------------}\<%
 \\
 %
@@ -475,11 +400,11 @@ We record this special case here so that it's easier to apply later.
 \AgdaBound{ssR}\AgdaSpace{}%
 \AgdaBound{ssB}\<%
 \end{code}
+
+\paragraph{Syntactic sugar}\label{syntactic-sugar}
+
+We use the convenient \af{≤} notation for the subalgebra relation.
 \ccpad
-\subparagraph{Syntactic sugar}\label{syntactic-sugar}
-
-We use the convenient ≤ notation for the subalgebra relation.
-
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -514,8 +439,8 @@ We use the convenient ≤ notation for the subalgebra relation.
 \AgdaBound{𝑨}\<%
 \end{code}
 
-\paragraph{Subalgebras of a class}\label{subalgebras-of-a-class}
-\ccpad
+\subsubsection{Subalgebras of a class}\label{subalgebras-of-a-class}
+
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -566,11 +491,11 @@ We use the convenient ≤ notation for the subalgebra relation.
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{SA}\AgdaSpace{}%
 \AgdaFunction{꞉}%
-\>[379I]\AgdaSymbol{(}\AgdaFunction{Subalgebra}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\>[373I]\AgdaSymbol{(}\AgdaFunction{Subalgebra}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{,}\<%
 \\
-\>[379I][@{}l@{\AgdaIndent{0}}]%
+\>[373I][@{}l@{\AgdaIndent{0}}]%
 \>[59]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{)}%
@@ -644,16 +569,13 @@ We use the convenient ≤ notation for the subalgebra relation.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSymbol{\}}\<%
+\\
+\>[0]\<%
 \end{code}
-\ccpad
-\paragraph{Subalgebra lemmas}\label{subalgebra-lemmas}
 
-Here are a number of useful facts about subalgebras. Many of them seem
-redundant, and they are to some extent. However, each one differs
-slightly from the next, if only with respect to the explicitness or
-implicitness of their arguments. The aim is to make it as convenient as
-possible to apply the lemmas in different situations. (We're in the
-UALib utility closet now, and elegance is not the priority.)
+\subsubsection{Subalgebra lemmas}\label{subalgebra-lemmas}
+
+Here are a number of useful facts about subalgebras. Many of them seem redundant, and they are to some extent. However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments. The aim is to make it as convenient as possible to apply the lemmas in different situations. (We're stocking the \ualib utility closet now; elegance is not the priority.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -895,7 +817,7 @@ UALib utility closet now, and elegance is not the priority.)
 %
 \>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[588I]\AgdaSymbol{(}\AgdaFunction{fst}\AgdaSpace{}%
+\>[582I]\AgdaSymbol{(}\AgdaFunction{fst}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{B≤C}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
@@ -906,7 +828,7 @@ UALib utility closet now, and elegance is not the priority.)
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\<%
 \\
-\>[.][@{}l@{}]\<[588I]%
+\>[.][@{}l@{}]\<[582I]%
 \>[6]\AgdaFunction{∘-hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
@@ -1370,7 +1292,7 @@ UALib utility closet now, and elegance is not the priority.)
 \AgdaBound{A≤B}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[901I]\AgdaSymbol{(}\AgdaFunction{HomComp}\AgdaSpace{}%
+\>[895I]\AgdaSymbol{(}\AgdaFunction{HomComp}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -1381,7 +1303,7 @@ UALib utility closet now, and elegance is not the priority.)
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\<%
 \\
-\>[.][@{}l@{}]\<[901I]%
+\>[.][@{}l@{}]\<[895I]%
 \>[25]\AgdaFunction{∘-embedding}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{iso→embedding}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
@@ -1821,17 +1743,4 @@ UALib utility closet now, and elegance is not the priority.)
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{C≤A}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\<%
 \end{code}
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\protect\hypertarget{fn2}{}{1 A simpler alternative would be to proclaim
-\texttt{𝑩} a subalgebra of \texttt{𝑨} iff there is a \emph{monic}
-homomorphism from \texttt{𝐵} into \texttt{𝑨}. We should investigate the
-consequences of taking that path instead of the stricter embedding
-requirement we chose for the definition of the type
-\texttt{IsSubalgebraOf}.}

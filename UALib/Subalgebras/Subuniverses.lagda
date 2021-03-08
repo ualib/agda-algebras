@@ -25,7 +25,7 @@ open import Relation.Unary using (⋂) public
 
 \end{code}
 
-We first show how to represent in [Agda][] the collection of subuniverses of an algebra A.  Since a subuniverse is viewed as a subset of the domain of A, we define it as a predicate on ∣ A ∣.  Thus, the collection of subuniverses is a predicate on predicates on ∣ A ∣.
+We first show how to represent in [Agda][] the collection of subuniverses of an algebra `𝑨`.  Since a subuniverse is viewed as a subset of the domain of `𝑨`, we define it as a predicate on `∣ 𝑨 ∣`.  Thus, the collection of subuniverses is a predicate on predicates on `∣ 𝑨 ∣`.
 
 \begin{code}
 
@@ -65,10 +65,9 @@ For example, we could use such a type to prove that the equalizer of two homomor
 
 \begin{code}
 
- 𝑬𝑯-is-subuniverse : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
-                     (g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
+ 𝐸hom-is-subuniverse : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩) → Subuniverse {𝑨 = 𝑨}
 
- 𝑬𝑯-is-subuniverse 𝑩 g h = mksub (𝑬𝑯 𝑩 g h) λ 𝑓 𝒂 x → 𝑬𝑯-closed 𝑩 g h 𝑓 𝒂 x
+ 𝐸hom-is-subuniverse 𝑩 g h = mksub (𝐸hom 𝑩 g h) λ 𝑓 a x → 𝐸hom-closed 𝑩 g h 𝑓 a x
 
 \end{code}
 

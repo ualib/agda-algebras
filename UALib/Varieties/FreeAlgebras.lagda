@@ -222,7 +222,7 @@ We begin by constructing ℭ, using the techniques described in the section on <
 
 \end{code}
 
-Observe that the inhabitants of ℭ are maps from ℑs to {𝔄s i : i ∈ ℑs}.
+Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ ℑs}`.
 
 \begin{code}
 
@@ -230,7 +230,7 @@ Observe that the inhabitants of ℭ are maps from ℑs to {𝔄s i : i ∈ ℑs}
  hom𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co (𝑻 X) 𝔄s hom𝔄
+ homℭ = ⨅-hom-co 𝔄s hom𝔄
 
 \end{code}
 

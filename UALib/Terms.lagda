@@ -8,7 +8,7 @@ author: William DeMeo
 ## <a id="types-for-terms">Types for Terms</a>
 
 This chapter presents the [Terms][] module of the [Agda Universal Algebra Library][].
-
+∣ 𝑨 ∣
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 

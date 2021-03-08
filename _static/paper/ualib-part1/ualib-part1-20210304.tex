@@ -67,24 +67,23 @@
 
 
 
-\ccsdesc[500]{Theory of computation~Constructive mathematics}
-\ccsdesc[500]{Theory of computation~Type theory}
 \ccsdesc[500]{Theory of computation~Logic and verification}
-\ccsdesc[300]{Computing methodologies~Representation of mathematical objects}
+\ccsdesc[500]{Computing methodologies~Representation of mathematical objects}
+\ccsdesc[300]{Theory of computation~Type theory}
 \ccsdesc[300]{Theory of computation~Type structures}
+\ccsdesc[300]{Theory of computation~Constructive mathematics}
 
 
 \keywords{Universal algebra, Equational logic, Model theory, Dependent type theory, Formalization of mathematics, Agda, Proof assistant, Constructive mathematics}
 
 \category{} %optional, e.g. invited paper
 
-\relatedversion{hosted on arXiv}
-\relatedversiondetails[linktext={arxiv.org/pdf/2101.10166}]{Extended Version}{https://arxiv.org/pdf/2101.10166}
+% \relatedversion{hosted on arXiv}
+% \relatedversiondetails[linktext={arxiv.org/pdf/2101.10166}]{Extended Version}{https://arxiv.org/pdf/2101.10166}
 
 \supplement{~\\ \textit{Documentation}: \ualibdotorg}%
 \supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
 
-\acknowledgements{The author wishes to thank Cliff Bergman, Hyeyoung Shin, and Siva Somayyajula for supporting and contributing to this project, and \MartinEscardo for creating the \TypeTopology library and teaching a course on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Univalent Foundations of Mathematics with Agda} at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda 2 language by Ulf Norell.\footnote{Agda 2 is partially based on code from Agda 1 by Catarina Coquand and Makoto Takeyama, and from Agdalight by Ulf Norell and Andreas Abel.}}
 
 \nolinenumbers %uncomment to disable line numbering
 
@@ -114,12 +113,31 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
  The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper we describe some of the most important foundational types and assumptions of the UALib, and we discuss some of the problems that arose when developing it, as well as our solutions to these problems.
 \end{abstract}
 
+\section*{Acknowledgements and Attributions}
+
+The author wishes to thank Cliff Bergman, Hyeyoung Shin, and Siva Somayyajula for supporting and contributing to this project, and \MartinEscardo for creating the \TypeTopology library and teaching us about it at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda 2 language by Ulf Norell.\footnote{Agda 2 is partially based on code from Agda 1 by Catarina Coquand and Makoto Takeyama, and from Agdalight by Ulf Norell and Andreas Abel.}
+
+Most of the mathematical results formalized in this paper have well known \emph{informal} proofs; thus, although the results presented here are old, our formalization of them is new.  The Agda source code described in this paper is mainly due to the author with one caveat: the \ualib depends upon the \typetopology library by \escardo~\cite{MHE}. 
+
+The following \agda documentation informed our development of the \ualib, especially the first one. Readers seeking more information about type theory and Agda will find it here.
+
+\begin{itemize}
+\item \textit{\ufcourse}, \escardo~\cite{MHE}
+\item \href{http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf}{\it Dependent Types at Work}, Bove and Dybjer~\cite{Bove:2009}
+\item \href{http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf}{\it Dependently Typed Programming in Agda}, Norell and Chapman~\cite{Norell:2008}
+\item \href{http://www.sciencedirect.com/science/article/pii/S1571066118300768}{\it Formalization of Universal Algebra in Agda}, Gunther, Gadea, Pagano~\cite{Gunther:2018}
+\item \href{https://plfa.github.io/}{\it Programming Languages Foundations in Agda}~\cite{Wadler:2020}
+\end{itemize}
+
+
+
+
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%  TOC  %%%%%%%%%%%%%%%%%%%%%%
 
 \setcounter{tocdepth}{2}
 \tableofcontents
 
-\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introduction}\label{sec:introduction}
 \input{11Introduction.tex}

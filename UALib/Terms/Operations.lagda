@@ -68,11 +68,9 @@ By definition, it depends on the form of 𝑝 as follows:
 
 Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (p ̇ 𝑻 X) 𝑠 = (p ̇ 𝑨) ∣ ϕ ∣ ∘ 𝑠`.
 
-* if `p = ℊ x`, then
+* if `p = ℊ x` (and `𝑡 : X → ∣ 𝑻 X ∣`), then
 
-   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x)
-          ≡ ∣ ϕ ∣ (λ h → h x)  (where h : X → ∣ 𝑻(X) ∣ )
-          ≡ λ h → (∣ ϕ ∣ ∘ h) x
+  `∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ 𝑡 → h 𝑡) ≡ λ 𝑡 → (∣ ϕ ∣ ∘ 𝑡) x`
 
 * if `p = node 𝑓 𝑡`, then
 

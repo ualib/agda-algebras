@@ -114,11 +114,11 @@ Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- 𝑬 : {𝑩 : Algebra 𝓦 𝑆}(g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
- 𝑬 g h x = g x ≡ h x
+ 𝐸 : {𝑩 : Algebra 𝓦 𝑆}(g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸 g h x = g x ≡ h x
 
- 𝑬𝑯 : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓦
- 𝑬𝑯 𝑩 g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+ 𝐸hom : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸hom _ g h x = ∣ g ∣ x ≡ ∣ h ∣ x
 
 \end{code}
 
@@ -126,19 +126,19 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
 
 \begin{code}
 
- 𝑬𝑯-closed : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
-             (𝑓 : ∣ 𝑆 ∣) (𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → (∀ x → (𝒂 x) ∈ 𝑬𝑯 𝑩 g h)
-             -----------------------------------------------------
-   →         ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)
+ 𝐸hom-closed : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
+  →            ∀ 𝑓 a → (∀ x → a x ∈ 𝐸hom 𝑩 g h)
+               -----------------------------------------
+  →            ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
 
- 𝑬𝑯-closed 𝑩 g h 𝑓 𝒂 p = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                         (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂)  ≡⟨ ap (𝑓 ̂ 𝑩)(gfe p) ⟩
-                         (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ (∥ h ∥ 𝑓 𝒂)⁻¹ ⟩
-                         ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)   ∎
+ 𝐸hom-closed 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
+                           (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(gfe p) ⟩
+                           (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
+                           ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
 
 \end{code}
 
-
+The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`
 
 
 #### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
@@ -155,12 +155,13 @@ module _ {𝓤 𝓦 : Universe} where
  homker-compatible : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
   →                  compatible 𝑨 (KER-rel ∣ h ∣)
 
- homker-compatible {𝑨} 𝑩 h f {𝒂}{𝒂'} Kerhab = γ where
-   γ : ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡ ∣ h ∣ ((f ̂ 𝑨) 𝒂')
-   γ = ∣ h ∣ ((f ̂ 𝑨) 𝒂)    ≡⟨ ∥ h ∥ f 𝒂 ⟩
-       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂)  ≡⟨ ap (λ - → (f ̂ 𝑩) -) (gfe λ x → Kerhab x) ⟩
-       (f ̂ 𝑩) (∣ h ∣ ∘ 𝒂') ≡⟨ (∥ h ∥ f 𝒂')⁻¹ ⟩
-       ∣ h ∣ ((f ̂ 𝑨) 𝒂')   ∎
+ homker-compatible {𝑨} 𝑩 h f {u}{v} Kerhab = γ
+  where
+  γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
+  γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
+      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ ap (f ̂ 𝑩)(gfe λ x → Kerhab x) ⟩
+      (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+      ∣ h ∣ ((f ̂ 𝑨) v)  ∎
 
 
  homker-equivalence : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
@@ -175,7 +176,6 @@ It is convenient to define a function that takes a homomorphism and constructs a
 \begin{code}
 
  kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Congruence 𝑨
-
  kercon 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
 
 \end{code}
@@ -185,7 +185,6 @@ From this congruence we construct the corresponding quotient.
 \begin{code}
 
  kerquo : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
-
  kerquo {𝑨} 𝑩 h = 𝑨 ╱ (kercon 𝑩 h)
 
  -- NOTATION.
@@ -196,7 +195,7 @@ From this congruence we construct the corresponding quotient.
 
 \end{code}
 
-Given an algebra `𝑨` and a congruence `θ`, the canonical epimorphism from an algebra `𝑨` to `𝑨 ╱ θ` is defined as follows.
+Given an algebra `𝑨` and a congruence `θ`, the canonical epimorphism from `𝑨` onto `𝑨 ╱ θ` is defined as follows.
 
 \begin{code}
 
@@ -228,7 +227,6 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 \begin{code}
 
  πker : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)  →  epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
-
  πker {𝑨} 𝑩 h = πepi (kercon 𝑩 h)
 
 \end{code}
@@ -238,10 +236,12 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 \begin{code}
 
-ker-in-con : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
- →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
+module _ {𝓤 𝓦 : Universe} where
 
-ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
+ ker-in-con : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
+  →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
+
+ ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
 
 \end{code}
 
@@ -251,32 +251,30 @@ ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
 
 \begin{code}
 
-⨅-hom-co : {𝓠 𝓤 𝓘 : Universe}(𝑨 : Algebra 𝓠 𝑆){I : 𝓘 ̇}(ℬ : I → Algebra 𝓤 𝑆)
- →         (∀ i → hom 𝑨 (ℬ i))
-           --------------------
- →         hom 𝑨 (⨅ ℬ)
+module _ {𝓤 𝓘 𝓦 : Universe} where
 
-⨅-hom-co 𝑨 {I} ℬ homs = ϕ , ϕhom
- where
-  ϕ : ∣ 𝑨 ∣ → ∣ ⨅ ℬ ∣
-  ϕ a = λ i → ∣ homs i ∣ a
+ ⨅-hom-co : {𝑨 : Algebra 𝓤 𝑆}{I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆)
+  →         (∀ i → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
 
-  ϕhom : is-homomorphism 𝑨 (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒂 = gfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x)
+ ⨅-hom-co ℬ hs = ϕ , ϕhom
+  where
+  ϕ : _ → ∣ ⨅ ℬ ∣
+  ϕ a = λ i → ∣ hs i ∣ a
+
+  ϕhom : is-homomorphism _ (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒶 = gfe λ i → ∥ hs i ∥ 𝑓 (λ x → 𝒶 x)
 
 
-⨅-hom : {𝓠 𝓤 𝓘 : Universe}{I : 𝓘 ̇}(𝒜 : I → Algebra 𝓠 𝑆)(ℬ : I → Algebra 𝓤 𝑆)
- →      ((i : I) → hom (𝒜 i)(ℬ i))
-        ---------------------------
- →      hom (⨅ 𝒜) (⨅ ℬ)
+ ⨅-hom : {I : 𝓘 ̇}(𝒜 : I → Algebra 𝓤 𝑆)(ℬ : I → Algebra 𝓦 𝑆)
+  →      (∀ i → hom (𝒜 i)(ℬ i)) → hom (⨅ 𝒜) (⨅ ℬ)
 
-⨅-hom 𝒜 ℬ homs = ϕ , ϕhom
- where
+ ⨅-hom 𝒜 ℬ hs = ϕ , ϕhom
+  where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-  ϕ = λ x i → ∣ homs i ∣ (x i)
+  ϕ = λ x i → ∣ hs i ∣ (x i)
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒂 = gfe λ i → ∥ homs i ∥ 𝑓 (λ x → 𝒂 x i)
+  ϕhom 𝑓 𝒶 = gfe λ i → ∥ hs i ∥ 𝑓 (λ x → 𝒶 x i)
 
 \end{code}
 
@@ -288,17 +286,16 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
-⨅-projection-hom : {𝓤 𝓘 : Universe}
-                   {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}
-                   --------------------------------
- →                 (i : I) → hom (⨅ 𝒜) (𝒜 i)
+module _ {𝓘 𝓦 : Universe} where
 
-⨅-projection-hom {𝓤}{𝓘}{I}{𝒜} i = ϕi , ϕihom
- where
-  ϕi : ∣ ⨅ 𝒜 ∣ → ∣ 𝒜 i ∣
+ ⨅-projection-hom : {I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) → (i : I) → hom (⨅ ℬ) (ℬ i)
+
+ ⨅-projection-hom ℬ i = ϕi , ϕihom
+  where
+  ϕi : ∣ ⨅ ℬ ∣ → ∣ ℬ i ∣
   ϕi = λ x → x i
 
-  ϕihom : is-homomorphism (⨅ 𝒜) (𝒜 i) ϕi
+  ϕihom : is-homomorphism (⨅ ℬ) (ℬ i) ϕi
   ϕihom 𝑓 𝒂 = 𝓇ℯ𝒻𝓁
 
 \end{code}

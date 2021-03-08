@@ -1,8 +1,6 @@
 \subsubsection{Images of a single algebra}\label{images-of-a-single-algebra}
 
-We begin with what seems, for our purposes, the most useful way to
-represent the class of \defn{homomorphic images} of an algebra in
-dependent type theory.
+We begin with what seems, for our purposes, the most useful way to represent the class of \defn{homomorphic images} of an algebra in dependent type theory.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -106,19 +104,10 @@ dependent type theory.
 \AgdaBound{ϕ}\<%
 \end{code}
 \ccpad
-These types should be self-explanatory, but just to be sure, let's
-describe the Sigma type appearing in the second definition. Given an
-\ab{𝑆}-algebra \ab{𝑨\ :\ Algebra\ 𝓤\ 𝑆}, the type
-\texttt{HomImagesOf\ 𝑨} denotes the class of algebras
-\ab{𝑩\ :\ Algebra\ 𝓦\ 𝑆} with a map
-\ab{φ\ :\ ∣\ 𝑨\ ∣\ →\ ∣\ 𝑩\ ∣} such that \ab{φ} is a surjective
-homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨} \as : \af{Algebra} \ab 𝓤 \ab 𝑆, the type
+\af{HomImagesOf} \ab 𝑨 denotes the class of algebras \ab{𝑩} \as : \af{Algebra} \ab 𝓦 \ab 𝑆 with a map \ab{φ} \as : \af{∣} \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ such that \ab{φ} is a surjective homomorphism.
 
-Since we take the class of homomorphic images of an algebra to be closed
-under isomorphism, we consider \ab{𝑩} to be a homomorphic image of
-\ab{𝑨} if there exists an algebra \ab{𝑪} which is a homomorphic
-image of \ab{𝑨} and isomorphic to \ab{𝑩}. The following type
-expresses this.
+Since we take the class of homomorphic images of an algebra to be closed under isomorphism, we consider \ab{𝑩} to be a homomorphic image of \ab{𝑨} if there exists an algebra \ab{𝑪} which is a homomorphic image of \ab{𝑨} and isomorphic to \ab{𝑩}. The following type expresses this.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -162,13 +151,9 @@ expresses this.
 \AgdaBound{𝑩}\<%
 \end{code}
 \ccpad
-\subsubsection{Images of a class of
-algebras}\label{images-of-a-class-of-algebras}
+\subsubsection{Images of a class of algebras}\label{images-of-a-class-of-algebras}
 
-Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that
-expresses the assertion that a given algebra is a homomorphic image of
-some algebra in the class, as well as a type that represents all such
-homomorphic images.
+Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that expresses the assertion that a given algebra is a \emph{homomorphic image} of some algebra in the class, as well as a type that represents all such homomorphic images.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -259,11 +244,9 @@ homomorphic images.
 \ccpad
 \subsubsection{Lifting tools}\label{lifting-tools}
 
-Here are some tools that have been useful (e.g., in the road to the
-proof of Birkhoff's HSP theorem).
+Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem).
 
-The first states and proves the simple fact that the lift of an
-epimorphism is an epimorphism.
+The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%

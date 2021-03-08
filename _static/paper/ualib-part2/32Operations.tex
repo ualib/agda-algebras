@@ -1,86 +1,15 @@
-\subsubsection{Term Operations}\label{term-operations}
+Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.\footnote{\textbf{Notation}. At the start of the \ualibOperations module, for notational convenience we rename the \aic{generator} constructor of the \ad{Term} type, so that from now on we can use \aic{ℊ} in place of \aic{generator}.}
 
-This section presents the \ualibOperations module of the \agdaualib.
-
-Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.
-\ccpad
-\begin{code}%
-\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-\AgdaKeyword{OPTIONS}\AgdaSpace{}%
-\AgdaPragma{--without-K}\AgdaSpace{}%
-\AgdaPragma{--exact-split}\AgdaSpace{}%
-\AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Terms.Operations}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Terms.Basic}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{renaming}\AgdaSpace{}%
-\AgdaSymbol{(}generator \AgdaSymbol{to} ℊ\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\\
-\>[0]\<%
-\end{code}
-
-\textbf{Notation}. In the line above, we renamed for notational
-convenience the \texttt{generator} constructor of the \texttt{Term}
-type, so from now on we use \ab{ℊ} in place of \texttt{generator}.
-
-When we interpret a term in an algebra we call the resulting function a
-\defn{term operation}. Given a term \ab{𝑝} and an algebra
-\ab{𝑨}, we denote by \ab{𝑝\ ̇\ 𝑨} the \defn{interpretation} of
-\ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
+When we interpret a term in an algebra we call the resulting function a \defn{term operation}. Given a term \ab{𝑝} and an algebra \ab{𝑨}, we denote by \ab{𝑝} \af ̇ \ab 𝑨 the \defn{interpretation} of \ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
+% \def\labelenumi{\arabic{enumi}.}
 \item
-  If \ab{𝑝} is a variable symbol \ab{x\ :\ X} and if
-  \ab{𝒂\ :\ X\ →\ ∣\ 𝑨\ ∣} is a tuple of elements of
-  \texttt{∣\ 𝑨\ ∣}, then \ab{(𝑝\ ̇\ 𝑨)\ 𝒂\ :=\ 𝒂\ x}.
-\item
-  If \ab{𝑝\ =\ 𝑓\ 𝑡}, where \ab{𝑓\ :\ ∣\ 𝑆\ ∣} is an operation
-  symbol, if \ab{𝑡\ :\ ∥\ 𝑆\ ∥\ 𝑓\ →\ 𝑻\ X} is a tuple of terms, and
-  if \ab{𝒂\ :\ X\ →\ ∣\ 𝑨\ ∣} is a tuple from \ab{𝑨}, then we
-  define
-  \ab{(𝑝\ ̇\ 𝑨)\ 𝒂\ =\ (𝑓\ 𝑡\ ̇\ 𝑨)\ 𝒂\ :=\ (𝑓\ ̂\ 𝑨)\ λ\ i\ →\ (𝑡\ i\ ̇\ 𝑨)\ 𝒂}.
+  If \ab{𝑝} is a variable symbol \abt{x}{X} and if \ab{𝒂} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of elements of \af{∣} \ab 𝑨 \af ∣, then (\ab{𝑝} \af ̇ \ab 𝑨) \ab 𝒂 := \ab 𝒂 \ab x.
+\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡, where \ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol, if \ab{𝑡} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X is a tuple of terms, and  if \ab{𝒂} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝒂 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝒂 := (\ab 𝑓 \af ̂ \ab 𝑨) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝒂.
 \end{enumerate}
 
-Thus the interpretation of a term is defined by induction on the
-structure of the term, and the definition is formally implemented in the
-{[}UALib{]}{[}{]} as follows.
+Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the \ualib as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -152,12 +81,9 @@ structure of the term, and the definition is formally implemented in the
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒂}\<%
-\\
-\>[0]\<%
 \end{code}
-
-It turns out that the intepretation of a term is the same as the
-\texttt{free-lift} (modulo argument order).
+\ccpad
+It turns out that the intepretation of a term is the same as the \af{free-lift} (modulo argument order).
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -222,50 +148,28 @@ It turns out that the intepretation of a term is the same as the
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
 \end{code}
+\scpad
 
-What if the algebra 𝑨 in question happens to be \texttt{𝑻\ X} itself?
-Assume the map \ab{h\ :\ X\ →\ ∣\ 𝑻\ X\ ∣} is the identity. We
-expect that \texttt{∀\ 𝑠\ →\ (p\ ̇\ 𝑻\ X)\ 𝑠\ \ ≡\ \ p\ 𝑠}. But what is
-\texttt{(𝑝\ ̇\ 𝑻\ X)\ 𝑠} exactly?
-
-By definition, it depends on the form of 𝑝 as follows:
+What if the algebra \ab 𝑨 in question happens to be \af{𝑻} \ab X itself? Assume the map \ab{h} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ is the identity. We expect that \as ∀ \ab 𝑠 \as → (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡  \ab p \ab 𝑠. But what is (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 exactly? By definition, it depends on the form of \ab 𝑝 as follows:
 
 \begin{itemize}
+\item   if \ab{𝑝} \aod ≡ \aic ℊ \ab x, then (\ab{𝑝} ̇ \af 𝑻 \ab X) \ab 𝑠 := (\aic ℊ \ab x \af ̇ \af 𝑻 X) 𝑠 \aod ≡ \ab 𝑠 \ab x;
 \item
-  if \ab{𝑝\ =\ ℊ\ x}, then
-  \texttt{(𝑝\ ̇\ 𝑻\ X)\ 𝑠\ :=\ (ℊ\ x\ ̇\ 𝑻\ X)\ 𝑠\ ≡\ 𝑠\ x}
-\item
-  if \texttt{𝑝\ =\ node\ 𝑓\ 𝑡}, then
-  \texttt{(𝑝\ ̇\ 𝑻\ X)\ 𝑠\ :=\ (node\ 𝑓\ 𝑡\ ̇\ 𝑻\ X)\ 𝑠\ =\ (𝑓\ ̂\ 𝑻\ X)\ λ\ i\ →\ (𝑡\ i\ ̇\ 𝑻\ X)\ 𝑠}
+  if \ab 𝑝 = \aic{node} \ab 𝑓 \ab 𝑡, then
+  (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 := (\aic{node} \ab 𝑓 \ab 𝑡 \af ̇ \af 𝑻 \ab X) \ab 𝑠  \aod  ≡ (\ab 𝑓 \af ̂ \af 𝑻 \ab X) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \af 𝑻 \ab X) \ab 𝑠.
 \end{itemize}
 
-Now, assume \ab{ϕ\ :\ hom\ 𝑻\ 𝑨}. Then by \texttt{comm-hom-term}, we
-have \texttt{∣\ ϕ\ ∣\ (p\ ̇\ 𝑻\ X)\ 𝑠\ =\ (p\ ̇\ 𝑨)\ ∣\ ϕ\ ∣\ ∘\ 𝑠}.
+Now, assume \ab ϕ \as : \af{hom} \af 𝑻 \ab 𝑨. Then by \af{comm-hom-term}, we have \af{∣} \ab ϕ \af ∣ (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡ (\ab p \af ̇ \ab 𝑨) \af ∣ \ab ϕ \af ∣ \af ∘ \ab 𝑠.
 
 \begin{itemize}
-\tightlist
-\item
-  if \ab{p\ =\ ℊ\ x}, then
+\item if \ab p \aod ≡ \aic ℊ \ab x (and \ab 𝑡 \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣), then\\[4pt]
+\af ∣ \ab ϕ \af ∣ \ab p := \af ∣ \ab ϕ \af ∣ (\aic ℊ \ab x) \aod ≡ \af ∣ \ab ϕ \af ∣ (\as λ \ab 𝑡 \as → \ab 𝑡 \ab x) \aod ≡ \as λ \ab 𝑡 \as → (\af ∣ \ab ϕ \af ∣ \af ∘ \ab 𝑡) \ab x;
+\item if \ab{p} \aod ≡ \aic{node} \ab 𝑓 \ab 𝑡, then\\[4pt]
+\af ∣ \ab ϕ \af ∣ p := \af ∣ \ab ϕ \af ∣ (\ab p ̇ \af 𝑻 \ab X) \ab 𝑠 = (\aic{node} \ab 𝑓 \ab 𝑡 \af ̇ \af 𝑻 X) \ab 𝑠  (\ab 𝑓 \af ̂ \af 𝑻 \ab X) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \af 𝑻 \ab X) \ab 𝑠.
 \end{itemize}
 
-∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ h → h x) (where h : X → ∣ 𝑻(X) ∣ ) ≡ λ
-h → (∣ ϕ ∣ ∘ h) x
-
-\begin{itemize}
-\tightlist
-\item
-  if \ab{p\ =\ node\ 𝑓\ 𝑡}, then
-\end{itemize}
-
-∣ ϕ ∣ p ≡ ∣ ϕ ∣ (p ̇ 𝑻 X) 𝑠 = (node 𝑓 𝑡 ̇ 𝑻 X) 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑡 i ̇ 𝑻
-X) 𝑠
-
-We claim that for all \ab{p\ :\ Term\ X} there exists
-\ab{q\ :\ Term\ X} and \ab{h\ :\ X\ →\ ∣\ 𝑻\ X\ ∣} such that
-\ab{p\ ≡\ (q\ ̇\ 𝑻\ X)\ h}. We prove this fact as follows.
+We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad{Term} \ab X and \ab{𝑡} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ such that \ab{p} \aod ≡ (\ab q \af ̇ \af 𝑻 \ab X) \ab 𝑡. We prove this fact as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -487,13 +391,10 @@ We claim that for all \ab{p\ :\ Term\ X} there exists
 \AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{term-gen-agreement}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Interpretation of terms in product
-algebras}\label{interpretation-of-terms-in-product-algebras}
-\ccpad
+\subsubsection{Interpretation of terms in product algebras}\label{interpretation-of-terms-in-product-algebras}
+
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -850,15 +751,11 @@ algebras}\label{interpretation-of-terms-in-product-algebras}
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)))}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∎}}\<%
-\\
-\>[0]\<%
 \end{code}
 
-\paragraph{Compatibility of terms}\label{compatibility-of-terms}
+\subsubsection{Compatibility of terms}\label{compatibility-of-terms}
 
-We now prove two important facts about term operations. The first of
-these, which is used very often in the sequel, asserts that every term
-commutes with every homomorphism.
+We now prove two important facts about term operations. The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -1036,13 +933,9 @@ commutes with every homomorphism.
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSymbol{))}\<%
-\\
-\>[0]\<%
 \end{code}
-
-Next we prove that every term is compatible with every congruence
-relation. That is, if \ab{t\ :\ Term\ X} and \ab{θ\ :\ Con\ 𝑨},
-then \ab{a\ θ\ b\ →\ t(a)\ θ\ t(b)}.
+\ccpad
+Next we prove that every term is compatible with every congruence relation. That is, if \ab{t} \as : \ad{Term} \ab X and \ab{θ} \as : \af{Con} \ab 𝑨, then \ab{a} \ab θ \ab b \as → \ab t(\ab a) \ab θ \ab t(\ab b).
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -1125,12 +1018,9 @@ then \ab{a\ θ\ b\ →\ t(a)\ θ\ t(b)}.
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\<%
-\\
-\>[0]\<%
 \end{code}
-
-For the sake of comparison, here is the analogous theorem using
-\texttt{compatible-fun\textquotesingle{}}.
+\ccpad
+For the sake of comparison, here is the analogous theorem using \af{compatible-fun\textquotesingle{}}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1204,8 +1094,4 @@ For the sake of comparison, here is the analogous theorem using
 \AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{𝑎'}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\<%
 \end{code}
