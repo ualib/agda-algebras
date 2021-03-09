@@ -62,8 +62,8 @@ A simple example is the identity map, which is proved to be a homomorphism as fo
 
 \begin{code}
 
-𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
-𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
+𝒾𝒹 : {𝓤 : Universe}{A : Algebra 𝓤 𝑆} → hom A A
+𝒾𝒹 = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
 id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
 id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
@@ -249,6 +249,9 @@ module _ {𝓤 𝓦 : Universe} where
 
 #### <a id="product-homomorphisms">Product homomorphisms</a>
 
+Suppose we have an algebra `𝑨`, an (index) type `I : 𝓘 ̇`, and a family of algebras `ℬ : I → Algebra 𝓦 𝑆`, and
+suppose for each `i : I` we have a homomorphism `hs i : hom 𝑨 (ℬ i)`.  We associate with these data a natural homomorphism from `𝑨` to the product `⨅ ℬ`, as follows.
+
 \begin{code}
 
 module _ {𝓤 𝓘 𝓦 : Universe} where
@@ -264,6 +267,11 @@ module _ {𝓤 𝓘 𝓦 : Universe} where
   ϕhom : is-homomorphism _ (⨅ ℬ) ϕ
   ϕhom 𝑓 𝒶 = gfe λ i → ∥ hs i ∥ 𝑓 (λ x → 𝒶 x)
 
+\end{code}
+
+This generalizes easily to the case in which the domain is also a product of a family of algebras.  That is, given families `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆`, and assuming `∀ i` there exists a homomorphism `hom (𝒜 i) (ℬ i)`, we construct the corresponding homomorphism from `⨅ 𝒜` to `⨅ ℬ` as follows.
+
+\begin{code}
 
  ⨅-hom : {I : 𝓘 ̇}(𝒜 : I → Algebra 𝓤 𝑆)(ℬ : I → Algebra 𝓦 𝑆)
   →      (∀ i → hom (𝒜 i)(ℬ i)) → hom (⨅ 𝒜) (⨅ ℬ)
@@ -296,7 +304,7 @@ module _ {𝓘 𝓦 : Universe} where
   ϕi = λ x → x i
 
   ϕihom : is-homomorphism (⨅ ℬ) (ℬ i) ϕi
-  ϕihom 𝑓 𝒂 = 𝓇ℯ𝒻𝓁
+  ϕihom _ _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 

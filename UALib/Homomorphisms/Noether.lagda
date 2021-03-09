@@ -64,7 +64,7 @@ module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
              (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
 
   ϕmon : Monic ϕ
-  ϕmon (.(⟨ θ ⟩ a) , a , refl _) (.(⟨ θ ⟩ a') , a' , refl _) ϕaa' =
+  ϕmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) ϕaa' =
    class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕaa'
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣

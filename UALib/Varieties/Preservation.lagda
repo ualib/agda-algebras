@@ -81,7 +81,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
  S-id1 p q α (slift x) = ⊧-lift-alg-invariance p q ((S-id1 p q α) x)
 
  S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , refl-≅)
    where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
@@ -94,7 +94,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
    γ {𝑩} (inj₂ y) = Apq y
 
  S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , refl-≅)
    where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
@@ -191,7 +191,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                 (q ̇ 𝑩) 𝒃             ∎
 
  V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , refl-≅)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -204,7 +204,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ {𝑩} (inj₂ y) = Asinglepq y
 
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , id≅)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , refl-≅)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA

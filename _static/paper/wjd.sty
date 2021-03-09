@@ -12,6 +12,7 @@
 \THEDAY\ \shortmonthname[\THEMONTH] \THEYEAR}
 \renewcommand{\dateseparator}{.}
 
+\RequirePackage{relsize}
 \RequirePackage{fancyhdr}
 \RequirePackage{xspace,graphicx}
 \newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
@@ -36,11 +37,11 @@
 \providecommand{\PreprocessorTok}[1]{%
   \{-\# OPTIONS --without-K --exact-split --allow-unsolved-metas \#-\}}
 \newcommand\defn[1]{\textit{#1}}
-\newcommand\agdaualib{\href{https://ualib.gitlab.io}{Agda UALib}\xspace}
+\newcommand\agdaualib{\href{https://ualib.gitlab.io}{\relsize{-1}AgdaUALib}\xspace}
 \newcommand\ualibhtmldocs{\href{https://ualib.gitlab.io}{UALib html docs}\xspace}
 \newcommand\ualibdoc{\href{https://ualib.gitlab.io}{UALib documentation}\xspace}
-\newcommand\ualib{\href{https://ualib.gitlab.io}{UALib}\xspace}
-\newcommand\httpsualibdotorg{\href{https://ualib.gitlab.io}{\texttt{https://ualib.org}}\xspace}
+\newcommand\ualib{\href{https://ualib.gitlab.io}{\relsize{-1}UALib}\xspace}
+\newcommand\httpsualibdotorg{\url{https://ualib.gitlab.io}\xspace}
 \newcommand\ualibdotorg{\href{https://ualib.gitlab.io}{\texttt{ualib.org}}\xspace}
 \newcommand\seedocfordetails{(See~\cite{DeMeo:2021} or \ualibdotorg for details.)\xspace}
 

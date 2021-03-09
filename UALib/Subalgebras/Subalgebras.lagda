@@ -234,7 +234,7 @@ lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{�
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
 lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) =
- 𝑨 , sa , KA , trans-≅ _ _ _ (sym-≅ lift-alg-≅) B≅sa
+ 𝑨 , sa , KA , trans-≅ (sym-≅ lift-alg-≅) B≅sa
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where

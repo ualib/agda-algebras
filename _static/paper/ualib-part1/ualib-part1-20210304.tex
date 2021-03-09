@@ -81,8 +81,8 @@ Part 1: Foundations\\
 
 \category{} %optional, e.g. invited paper
 
-% \relatedversion{hosted on arXiv}
-% \relatedversiondetails[linktext={arxiv.org/pdf/2101.10166}]{Extended Version}{https://arxiv.org/pdf/2101.10166}
+\relatedversion{hosted on arXiv}
+\relatedversiondetails[linktext={http://arxiv.org/a/demeo\_w\_1}]{Part 2, Part 3}{http://arxiv.org/a/demeo_w_1}
 
 \supplement{~\\ \textit{Documentation}: \ualibdotorg}%
 \supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
@@ -90,7 +90,7 @@ Part 1: Foundations\\
 
 \nolinenumbers %uncomment to disable line numbering
 
-%\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \EventEditors{}
@@ -112,25 +112,11 @@ Part 1: Foundations\\
 
 
 \begin{abstract}
-The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. The UALib includes a substantial collection of definitions, theorems, and proofs from general algebra and equational logic, including many examples that exhibit the power of inductive and dependent types for representing and reasoning about relations, algebraic structures, and equational theories. In this paper we describe several important aspects of the logical foundations on which the library is built. We also discuss (though sometimes only briefly) all of the types defined in the first 13 modules of the library, with special attention given to those details that seem most interesting or challenging from a type theory or mathematical foundations perspective.
+The Agda Universal Algebra Library (\ualib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. The \ualib includes a substantial collection of definitions, theorems, and proofs from general algebra and equational logic, including many examples that exhibit the power of inductive and dependent types for representing and reasoning about relations, algebraic structures, and equational theories. In this paper we describe several important aspects of the logical foundations on which the library is built. We also discuss (though sometimes only briefly) all of the types defined in the first 13 modules of the library, with special attention given to those details that seem most interesting or challenging from a type theory or mathematical foundations perspective.
 \end{abstract}
 
-\section*{Acknowledgements and Attributions}
-
-The author wishes to thank Cliff Bergman, Hyeyoung Shin, and Siva Somayyajula for supporting and contributing to this project, and \MartinEscardo for creating the \TypeTopology library and teaching us about it at the \href{http://events.cs.bham.ac.uk/mgs2019/}{2019 Midlands Graduate School in Computing Science}. Of course, this work would not exist in its current form without the Agda 2 language by Ulf Norell.\footnote{Agda 2 is partially based on code from Agda 1 by Catarina Coquand and Makoto Takeyama, and from Agdalight by Ulf Norell and Andreas Abel.}
-
-Most of the mathematical results formalized in this paper have well known \emph{informal} proofs; thus, although the results presented here are old, our formalization of them is new.  The Agda source code described in this paper is mainly due to the author with one caveat: the \ualib depends upon the \typetopology library by \escardo~\cite{MHE}. 
-
-The following \agda documentation informed our development of the \ualib, especially the first one. Readers seeking more information about type theory and Agda will find it here.
-
-\begin{itemize}
-\item \textit{\ufcourse}, \escardo~\cite{MHE}
-\item \href{http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf}{\it Dependent Types at Work}, Bove and Dybjer~\cite{Bove:2009}
-\item \href{http://www.cse.chalmers.se/~ulfn/papers/afp08/tutorial.pdf}{\it Dependently Typed Programming in Agda}, Norell and Chapman~\cite{Norell:2008}
-\item \href{http://www.sciencedirect.com/science/article/pii/S1571066118300768}{\it Formalization of Universal Algebra in Agda}, Gunther, Gadea, Pagano~\cite{Gunther:2018}
-\item \href{https://plfa.github.io/}{\it Programming Languages Foundations in Agda}~\cite{Wadler:2020}
-\end{itemize}
-
+\section*{Attributions and Acknowledgements}
+\input{../acknowledgements.tex}
 
 
 

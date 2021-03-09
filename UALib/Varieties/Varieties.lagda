@@ -271,7 +271,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  S→subalgebra : {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
 
  S→subalgebra (sbase{𝑩} x) = 𝑩 , (𝑩 , refl-≤) , x , (sym-≅ lift-alg-≅)
- S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , TRANS-≅ (sym-≅ lift-alg-≅) B≅SA
+ S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , trans-≅ (sym-≅ lift-alg-≅) B≅SA
   where
    BS : 𝑩 IsSubalgebraOfClass 𝒦
    BS = S→subalgebra x
@@ -302,7 +302,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    B≤AS : 𝑩 ≤ ∣ AS ∣
    B≤AS = transitivity-≤ 𝑩{∣ SA ∣}{∣ AS ∣} B≤SA ∥ SA ∥
 
- S→subalgebra {𝑩} (siso{𝑨} sA A≅B) = ∣ AS ∣ , SA ,  ∣ snd ∥ AS ∥ ∣ , (TRANS-≅ (sym-≅ A≅B) A≅SA)
+ S→subalgebra {𝑩} (siso{𝑨} sA A≅B) = ∣ AS ∣ , SA ,  ∣ snd ∥ AS ∥ ∣ , (trans-≅ (sym-≅ A≅B) A≅SA)
   where
    AS : 𝑨 IsSubalgebraOfClass 𝒦
    AS = S→subalgebra sA
@@ -392,7 +392,7 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 
  lAsp = subalgebra→S{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦}{P{𝓤}{𝓦} 𝒦}{lA} lAsc
 
  lA≅B : lA ≅ 𝑩
- lA≅B = Trans-≅ lA 𝑩 (sym-≅ lift-alg-≅) A≅B
+ lA≅B = trans-≅ (sym-≅ lift-alg-≅) A≅B
 
 \end{code}
 
@@ -533,7 +533,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) γ
   where
    γ : lift-alg 𝑨 (ov 𝓤 ⁺) ≅ 𝑩
-   γ = Trans-≅ (lift-alg 𝑨 (ov 𝓤 ⁺)) 𝑩 (sym-≅ lift-alg-≅) A≅B
+   γ = trans-≅ (sym-≅ lift-alg-≅) A≅B
 
 \end{code}
 
@@ -564,7 +564,7 @@ module _ {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)
   psPllA = produ psllA
 
   llA≅A : ∀ i → (llA i) ≅ (𝔄 (S 𝒦) i)
-  llA≅A i = Trans-≅ (llA i)(𝔄 (S 𝒦) i)(sym-≅ lift-alg-≅)(sym-≅ lift-alg-≅)
+  llA≅A i = trans-≅ (sym-≅ lift-alg-≅)(sym-≅ lift-alg-≅)
 
 \end{code}
 

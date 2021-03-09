@@ -265,7 +265,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 
  ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}
   →           𝑨 ∈ S{𝓤}{𝓤} 𝒦
-              ---------------------------------------
+              --------------------------------------------------
   →           KER-pred ∣ hom𝔽 ∣ ⊆ KER-pred (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where

@@ -144,7 +144,7 @@ If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will
 
 if `R (𝑎 i) (𝑎' i)` for all `i`, then  `R ((𝑓 ̂ 𝑨) 𝑎) ((𝑓 ̂ 𝑨) 𝑎')`.
 
-The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.<sup>[1](Algebras.Algebras.html#fn1)</sup>
+The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.
 
 \begin{code}
 
@@ -172,7 +172,7 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra �
 
 \end{code}
 
-In case it helps the reader understand `con-compatible-op`, we redefine it explicitly without the help of `con-compatible-fun`.<sup>[2](Algebras.Algebras.html#fn2)</sup>
+In case it helps the reader understand `con-compatible-op`, we redefine it explicitly without the help of `con-compatible-fun`.
 
 \begin{code}
 
@@ -195,17 +195,6 @@ With `con-compatible-op` in hand, it is a trivial matter to define a type that r
 
 
 --------------------------------------
-
-<span class="footnote" id="fn1"><sup>1</sup> Previously we defined `compatible` using the helper function `compatible-op` before we realized that `compatible-fun` makes this helper function redundant. Here is the (now deprecated) definition.
-
-`compatible-op : {𝑨 : Algebra 𝓤 𝑆} → ∣ 𝑆 ∣ → Rel ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇`
-
-`compatible-op {𝑨} f R = ∀{𝒂}{𝒃} → (lift-rel R) 𝒂 𝒃  → R ((f ̂ 𝑨) 𝒂) ((f ̂ 𝑨) 𝒃)`
-</span>
-
-<span class="footnote" id="fn2"><sup>2</sup> This voilates the "don't repeat yourself" (dry) principle of programming, but it might make it easier for readers to see what's going on. (In the [UALib][] we try to put transparency before elegance.)</span>
-
------------------------------------
 
 
 [← Algebras.Signatures](Algebras.Signatures.html)
