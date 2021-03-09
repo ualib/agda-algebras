@@ -138,7 +138,7 @@ module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}  where
                           -----------------------------------
   →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
 
- ⊧-lower-alg-invariance p q lApq = ⊧-I-invariance p q lApq (sym-≅ lift-alg-≅)
+ ⊧-lower-alg-invariance p q lApq = ⊧-I-invariance p q lApq (≅-sym lift-alg-≅)
 
 \end{code}
 
@@ -189,7 +189,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
     h' = ∣ snd SA ∣
 
     h : hom 𝑩 𝑨
-    h = HCompClosed 𝑩 (∣ SA ∣) 𝑨 (∣ BisSA ∣) h'
+    h = ∘-hom 𝑩 𝑨 (∣ BisSA ∣) h'
 
     hem : is-embedding ∣ h ∣
     hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
@@ -261,7 +261,7 @@ Another fact that will turn out to be useful is that a product of a collection o
  ⊧-P-lift-invariance p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
    where
     Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
-    Aipq i = ⊧-I-invariance p q (lApq i) (sym-≅ lift-alg-≅)
+    Aipq i = ⊧-I-invariance p q (lApq i) (≅-sym lift-alg-≅)
 
 \end{code}
 

@@ -58,17 +58,45 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \end{code}
 
-A simple example is the identity map, which is proved to be a homomorphism as follows.
+#### Examples
+
+Here are a few very special examples of homomorphisms. In each case, the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
+
+The most obvious example is the identity map.
 
 \begin{code}
 
-𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
-𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
+module _ {𝓤 : Universe} where
 
-id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
-id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
+ id-is-hom : {𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
+ id-is-hom _ _ = 𝓇ℯ𝒻𝓁
+
+ 𝒾𝒹 : (A : Algebra 𝓤 𝑆) → hom A A
+ 𝒾𝒹 _ = (λ x → x) , id-is-hom
 
 \end{code}
+
+Next, perhaps less obvious, are the two compositions of the lift and lower maps defined in the [Prelude.Lifts][] module.
+
+\begin{code}
+
+ open Lift
+
+ lift-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism 𝑨 (lift-alg 𝑨 𝓦) lift
+ lift-is-hom _ _ = 𝓇ℯ𝒻𝓁
+
+ 𝓁𝒾𝒻𝓉 : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → hom 𝑨 (lift-alg 𝑨 𝓦)
+ 𝓁𝒾𝒻𝓉 = (lift , lift-is-hom)
+
+ lower-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism (lift-alg 𝑨 𝓦) 𝑨 lower
+ lower-is-hom _ _ = 𝓇ℯ𝒻𝓁
+
+ 𝓁ℴ𝓌ℯ𝓇 : (𝑨 : Algebra 𝓤 𝑆){𝓦 : Universe} → hom (lift-alg 𝑨 𝓦) 𝑨
+ 𝓁ℴ𝓌ℯ𝓇 𝑨 = (lower , lower-is-hom{𝑨})
+
+\end{code}
+
+
 
 
 Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) with the following types.

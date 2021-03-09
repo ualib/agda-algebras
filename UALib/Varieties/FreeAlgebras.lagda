@@ -331,7 +331,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    f = 𝔽-lift-hom 𝑨 sA h
 
    h' ϕ : hom (𝑻 X) 𝑨
-   h' = HomComp (𝑻 X) 𝑨 𝔑 f
+   h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
    ϕ = lift-hom 𝑨 h
 
    f𝔑≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔑 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
@@ -357,7 +357,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
  ψlemma3 p q pψq {𝑨} kA = γ
   where
    skA : 𝑨 ∈ S 𝒦
-   skA = siso (sbase kA) (sym-≅ lift-alg-≅)
+   skA = siso (sbase kA) (≅-sym lift-alg-≅)
 
    γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
    γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp 𝑨 h p ⟩
@@ -463,7 +463,7 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
   birkhoff {𝑨} α = γ
    where
     γ : 𝑨 ∈ (V 𝒦)
-    γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 α ) , refl-≅)
+    γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 α ) , ≅-refl)
 
 \end{code}
 

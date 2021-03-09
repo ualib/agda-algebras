@@ -148,7 +148,7 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
 \end{code}
 
 
-In the modules [Birkhoff.FreeAlgebra][] and [Birkhoff.HSPTheorem][] `lift-hom` and `lift-of-epi-is-epi` are used to construct such epimorphisms.
+In the [Varieties][] module `lift-hom` and `lift-of-epi-is-epi` are used to construct such epimorphisms.
 
 
 --------------------------------------

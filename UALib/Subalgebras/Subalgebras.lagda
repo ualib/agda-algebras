@@ -127,86 +127,71 @@ Here are a number of useful facts about subalgebras.  Many of them seem redundan
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+≤-reflexive : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , id-is-hom) , id-is-embedding
 
- --Transitivity of IsSubalgebra (explicit args)
- TRANS-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-  →        𝑩 ≤ 𝑨  →  𝑪 ≤ 𝑩
-           ----------------
-  →        𝑪 ≤ 𝑨
-
- TRANS-≤ 𝑨 𝑩 𝑪 BA CB = (HomComp 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
-
-
- --Transitivity of IsSubalgebra (implicit args)
- Trans-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
-
- Trans-≤ 𝑨 {𝑩} 𝑪 = TRANS-≤ 𝑨 𝑩 𝑪
-
-
- --Transitivity of IsSubalgebra (implicit args)
- trans-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
-  →        𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑩 → 𝑪 ≤ 𝑨
-
- trans-≤ {𝑨}{𝑩}{𝑪} = TRANS-≤ 𝑨 𝑩 𝑪
-
-
- transitivity-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
-  →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-
- transitivity-≤ 𝑨 {𝑩}{𝑪} A≤B B≤C = ϕ , ϕemb
-  where
-  ϕ : hom 𝑨 𝑪
-  ϕ = (fst ∣ B≤C ∣) ∘ (fst ∣ A≤B ∣) , 
-      ∘-hom 𝑨 𝑩 𝑪 {fst ∣ A≤B ∣}{fst ∣ B≤C ∣}(snd ∣ A≤B ∣)(snd ∣ B≤C ∣)
-
-  ϕemb : is-embedding ∣ ϕ ∣
-  ϕemb = ∘-embedding (∥ B≤C ∥)(∥ A≤B ∥)
-
-
---Reflexivity of IsSubalgebra (explicit arg)
-REFL-≤ : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
-REFL-≤ 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , id-is-hom) , id-is-embedding
-
-
---Reflexivity of IsSubalgebra (implicit arg)
-refl-≤ : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
-refl-≤ {𝑨 = 𝑨} = REFL-≤ 𝑨
+≤-refl : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+≤-refl {𝓤}{𝑨} = ≤-reflexive 𝑨
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- --Reflexivity of IsSubalgebra (explicit arg)
- ISO-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-  →      𝑩 ≤ 𝑨   →   𝑪 ≅ 𝑩
-         -----------------
-  →      𝑪 ≤ 𝑨
+ ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = (g ∘ f , gfhom) , gfemb
+ ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
+
+ ≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →        𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+
+ ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
+
+
+module _ {𝓧 𝓨 𝓩 : Universe} where
+
+ ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+
+ ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
   where
    f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   f = fst ∣ C≅B ∣
+   f = fst ∣ CB ∣
    g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-   g = fst ∣ B≤A ∣
+   g = fst ∣ BA ∣
 
    gfemb : is-embedding (g ∘ f)
-   gfemb = ∘-embedding (∥ B≤A ∥) (iso→embedding C≅B)
+   gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
 
    gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-   gfhom = ∘-hom 𝑪 𝑩 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∣ B≤A ∣)
+   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
+ 
+ -- ISO-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ --  →      𝑩 ≤ 𝑨 →  𝑪 ≅ 𝑩  →  𝑪 ≤ 𝑨
+
+ -- ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = (g ∘ f , gfhom) , gfemb
+ --  where
+ --   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+ --   f = fst ∣ C≅B ∣
+ --   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+ --   g = fst ∣ B≤A ∣
+
+ --   gfemb : is-embedding (g ∘ f)
+ --   gfemb = ∘-embedding (∥ B≤A ∥) (iso→embedding C≅B)
+
+ --   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
+ --   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∣ B≤A ∣)
 
 
- Iso-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+ -- Iso-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ --  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
 
- Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
+ -- Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 
- iso-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
+ -- iso-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ --  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
 
- iso-≤ {𝑨}{𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
+ -- iso-≤ {𝑨}{𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
@@ -214,13 +199,13 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
  trans-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
- trans-≤-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ISO-≤ 𝑩 𝑨 𝑪 A≤B (sym-≅ B≅C)
+ trans-≤-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
 
 
  TRANS-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
 
- TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (HomComp 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ,
+ TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ,
                          ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
@@ -234,7 +219,7 @@ lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{�
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
 lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) =
- 𝑨 , sa , KA , trans-≅ (sym-≅ lift-alg-≅) B≅sa
+ 𝑨 , sa , KA , ≅-trans (≅-sym lift-alg-≅) B≅sa
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
@@ -243,7 +228,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
  lift-alg-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
  lift-alg-≤-lower : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
- lift-alg-≤-lower 𝑨 {𝑩} B≤A = iso-≤{𝓩 = (𝓨 ⊔ 𝓩)}{𝑨}{𝑩}(lift-alg 𝑩 𝓩) B≤A (sym-≅ lift-alg-≅)
+ lift-alg-≤-lower 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym lift-alg-≅) B≤A
 
  lift-alg-≤-lift' : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ lift-alg 𝑨 𝓩
  lift-alg-≤-lift' 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
@@ -253,17 +238,14 @@ module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
  lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → lift-alg 𝑨 𝓩 ≤ lift-alg 𝑩 𝓦
 
- lift-alg-≤ 𝑨 {𝑩} A≤B =
-  transitivity-≤ lA {𝑩}{lift-alg 𝑩 𝓦} (transitivity-≤ lA {𝑨}{𝑩} lAA A≤B) B≤lB
+ lift-alg-≤ 𝑨 {𝑩} A≤B = ≤-trans (lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
    where
-   lA : Algebra (𝓧 ⊔ 𝓩) 𝑆
-   lA = lift-alg 𝑨 𝓩
 
-   lAA : lA ≤ 𝑨
-   lAA = lift-alg-≤-lower 𝑨 {𝑨} refl-≤
+   lAA : (lift-alg 𝑨 𝓩) ≤ 𝑨
+   lAA = lift-alg-≤-lower 𝑨 {𝑨} ≤-refl
 
    B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
-   B≤lB = lift-alg-≤-lift 𝑩 {𝑩} refl-≤
+   B≤lB = lift-alg-≤-lift 𝑩 {𝑩} ≤-refl
 
 
 module _ {𝓤 𝓦 : Universe} where

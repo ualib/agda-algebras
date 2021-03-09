@@ -61,7 +61,7 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 
 \begin{code}
 
-lift∼lower : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦}{𝓧} X)
+lift∼lower : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} X)
 lift∼lower = 𝓇ℯ𝒻𝓁
 
 lower∼lift : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lower{𝓦}{𝓧} ∘ lift ≡ 𝑖𝑑 X

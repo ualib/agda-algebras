@@ -149,7 +149,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 
 \end{code}
 
-Uniqueness for the isomorphism theorem is proved in exactly the same way that the same was proved for the homomorphism theorem.
+The argument used above to prove `NoetherHomUnique` can also be used to prove uniqueness of the epimorphism `f` found in the isomorphism theorem.
 
 \begin{code}
 
@@ -176,53 +176,55 @@ The composition of homomorphisms is again a homomorphism.  We formalize this in 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- HCompClosed : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
-               --------------------
-  →            hom 𝑨 𝑪
+ -- HCompClosed : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ --  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
+ --               --------------------
+ --  →            hom 𝑨 𝑪
 
- HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (h , hhom) = h ∘ g , γ where
+ -- HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (h , hhom) = h ∘ g , γ where
 
-  γ : (𝑓 : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
+ --  γ : (𝑓 : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
+
+ --  γ 𝑓 a = (h ∘ g) ((𝑓 ̂ 𝑨) a) ≡⟨ ap h ( ghom 𝑓 a ) ⟩
+ --          h ((𝑓 ̂ 𝑩) (g ∘ a)) ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
+ --          (𝑓 ̂ 𝑪) (h ∘ g ∘ a) ∎
+
+ ∘-hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →       hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
+
+ ∘-hom 𝑨 {𝑩} 𝑪 (g , ghom) (h , hhom) = h ∘ g , γ where
+
+  γ : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
 
   γ 𝑓 a = (h ∘ g) ((𝑓 ̂ 𝑨) a) ≡⟨ ap h ( ghom 𝑓 a ) ⟩
           h ((𝑓 ̂ 𝑩) (g ∘ a)) ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
           (𝑓 ̂ 𝑪) (h ∘ g ∘ a) ∎
 
 
- HomComp : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →        hom 𝑨 𝑩  →  hom 𝑩 𝑪
-           --------------------
-  →        hom 𝑨 𝑪
+ ∘-is-hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+            {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →         is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
+  →         is-homomorphism 𝑨 𝑪 (g ∘ f)
 
- HomComp 𝑨 {𝑩} 𝑪 f g = HCompClosed 𝑨 𝑩 𝑪 f g
-
-
- ∘-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →      is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
-         ----------------------------------------------
-  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
-
- ∘-hom 𝑨 𝑩 𝑪 {f} {g} fhom ghom = ∥ HCompClosed 𝑨 𝑩 𝑪 (f , fhom) (g , ghom) ∥
+ ∘-is-hom 𝑨 𝑪 {f} {g} fhom ghom = ∥ ∘-hom 𝑨 𝑪 (f , fhom) (g , ghom) ∥
 
 
- ∘-Hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →      is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
-         ------------------------------------------------
-  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
+ -- ∘-Hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ --         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+ --  →      is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
+ --         ------------------------------------------------
+ --  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
 
- ∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
+ -- ∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
 
 
- trans-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-             (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
-  →          is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
-             ------------------------------------------------
-  →          is-homomorphism 𝑨 𝑪 (g ∘ f)
+ -- trans-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ --             (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
+ --  →          is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
+ --             ------------------------------------------------
+ --  →          is-homomorphism 𝑨 𝑪 (g ∘ f)
 
- trans-hom 𝑨 𝑩 𝑪 f g = ∘-hom 𝑨 𝑩 𝑪 {f}{g}
+ -- trans-hom 𝑨 𝑩 𝑪 f g = ∘-hom 𝑨 𝑩 𝑪 {f}{g}
 
 \end{code}
 
