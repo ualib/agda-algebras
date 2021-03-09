@@ -44,7 +44,7 @@ Since `refl _` is used so often, the following convenient shorthand is also prov
 pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
 \end{code}
 
-Thus, whenever we need to complete a proof by simply asserting that `x`, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke `refl x`, or (in the implicit case) `refl _` or even `𝓇ℯ𝒻𝓁`. (The `pattern` directive above is what makes last option available.)
+Thus, whenever we need to complete a proof by simply asserting that `x`, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke `refl x`, or (in the implicit case) `refl _` or even `𝓇ℯ𝒻𝓁`. (The `pattern` directive above is what makes the last option available.)
 
 
 Let us now formalize the obvious fact that `≡` is an equivalence relation.  We don't have to prove reflexivity, because that is the defining property of `≡`.
@@ -99,7 +99,7 @@ open import MGS-MLTT using (_∙_) public
 
 #### <a id="transport">Transport</a>
 
-Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[3](Prelude.Equality.html#fn3)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *subsitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.
+Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[3](Prelude.Equality.html#fn3)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.
 
 \begin{code}
 

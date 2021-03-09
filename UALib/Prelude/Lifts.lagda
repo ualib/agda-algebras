@@ -57,29 +57,7 @@ open Lift
 
 \end{code}
 
-
-\begin{code}
-
--- Next, we give various ways to lift function types.
--- module _ {𝓦 𝓧 𝓨 : Universe} where
-
---  lift-dom : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Y)
---  lift-dom f = λ x → (f (lower x))
-
---  lift-cod : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓦}{𝓨} Y)
---  lift-cod f = λ x → lift (f x)
-
-
--- module _ {𝓦 𝓩 𝓧 𝓨 : Universe} where
-
---  lift-fun : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Lift{𝓩}{𝓨} Y)
---  lift-fun f = λ x → lift (f (lower x))
-
--- For example, `lift-dom` takes a function `f` defined on the domain `X : 𝓧 ̇` and returns a function defined on the domain `Lift{𝓦}{𝓧} X : 𝓧 ⊔ 𝓦 ̇`, whose type lives in the universe `𝓧 ⊔ 𝓦`.
-
-\end{code}
-
-The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of `lower` is immediately followed by an application of `lift`, then the result is the identity transformation. Later, there will be some situations that require this fact, as well as its brother, so we formalize these related and their trivial proofs.
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of `lower` is immediately followed by an application of `lift`, then the result is the identity transformation. Similarly, `lift` followed by `lower` is the identity.
 
 \begin{code}
 
@@ -91,6 +69,7 @@ lower∼lift = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
+Evidently, the proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
 
 ---------------
 

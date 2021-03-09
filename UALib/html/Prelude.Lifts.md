@@ -57,40 +57,19 @@ A general `Lift` record type, similar to the one found in the `Level` module of 
 
 </pre>
 
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of `lower` is immediately followed by an application of `lift`, then the result is the identity transformation. Similarly, `lift` followed by `lower` is the identity.
 
 <pre class="Agda">
 
-<a id="2796" class="Comment">-- Next, we give various ways to lift function types.</a>
-<a id="2850" class="Comment">-- module _ {𝓦 𝓧 𝓨 : Universe} where</a>
+<a id="lift∼lower"></a><a id="3196" href="Prelude.Lifts.html#3196" class="Function">lift∼lower</a> <a id="3207" class="Symbol">:</a> <a id="3209" class="Symbol">{</a><a id="3210" href="Prelude.Lifts.html#3210" class="Bound">𝓦</a> <a id="3212" href="Prelude.Lifts.html#3212" class="Bound">𝓧</a> <a id="3214" class="Symbol">:</a> <a id="3216" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="3224" class="Symbol">}{</a><a id="3226" href="Prelude.Lifts.html#3226" class="Bound">X</a> <a id="3228" class="Symbol">:</a> <a id="3230" href="Prelude.Lifts.html#3212" class="Bound">𝓧</a> <a id="3232" href="Universes.html#403" class="Function Operator">̇</a><a id="3233" class="Symbol">}</a> <a id="3235" class="Symbol">→</a> <a id="3237" href="Prelude.Lifts.html#2736" class="InductiveConstructor">lift</a> <a id="3242" href="MGS-MLTT.html#3813" class="Function Operator">∘</a> <a id="3244" href="Prelude.Lifts.html#2748" class="Field">lower</a> <a id="3250" href="Prelude.Equality.html#1231" class="Datatype Operator">≡</a> <a id="3252" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a> <a id="3255" class="Symbol">(</a><a id="3256" href="Prelude.Lifts.html#2674" class="Record">Lift</a><a id="3260" class="Symbol">{</a><a id="3261" href="Prelude.Lifts.html#3210" class="Bound">𝓦</a><a id="3262" class="Symbol">}{</a><a id="3264" href="Prelude.Lifts.html#3212" class="Bound">𝓧</a><a id="3265" class="Symbol">}</a> <a id="3267" href="Prelude.Lifts.html#3226" class="Bound">X</a><a id="3268" class="Symbol">)</a>
+<a id="3270" href="Prelude.Lifts.html#3196" class="Function">lift∼lower</a> <a id="3281" class="Symbol">=</a> <a id="3283" href="Prelude.Equality.html#1245" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
 
-<a id="2888" class="Comment">--  lift-dom : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Y)</a>
-<a id="2953" class="Comment">--  lift-dom f = λ x → (f (lower x))</a>
-
-<a id="2991" class="Comment">--  lift-cod : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (X → Lift{𝓦}{𝓨} Y)</a>
-<a id="3056" class="Comment">--  lift-cod f = λ x → lift (f x)</a>
-
-
-<a id="3092" class="Comment">-- module _ {𝓦 𝓩 𝓧 𝓨 : Universe} where</a>
-
-<a id="3132" class="Comment">--  lift-fun : {X : 𝓧 ̇}{Y : 𝓨 ̇} → (X → Y) → (Lift{𝓦}{𝓧} X → Lift{𝓩}{𝓨} Y)</a>
-<a id="3208" class="Comment">--  lift-fun f = λ x → lift (f (lower x))</a>
-
-<a id="3251" class="Comment">-- For example, `lift-dom` takes a function `f` defined on the domain `X : 𝓧 ̇` and returns a function defined on the domain `Lift{𝓦}{𝓧} X : 𝓧 ⊔ 𝓦 ̇`, whose type lives in the universe `𝓧 ⊔ 𝓦`.</a>
+<a id="lower∼lift"></a><a id="3289" href="Prelude.Lifts.html#3289" class="Function">lower∼lift</a> <a id="3300" class="Symbol">:</a> <a id="3302" class="Symbol">{</a><a id="3303" href="Prelude.Lifts.html#3303" class="Bound">𝓦</a> <a id="3305" href="Prelude.Lifts.html#3305" class="Bound">𝓧</a> <a id="3307" class="Symbol">:</a> <a id="3309" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="3317" class="Symbol">}{</a><a id="3319" href="Prelude.Lifts.html#3319" class="Bound">X</a> <a id="3321" class="Symbol">:</a> <a id="3323" href="Prelude.Lifts.html#3305" class="Bound">𝓧</a> <a id="3325" href="Universes.html#403" class="Function Operator">̇</a><a id="3326" class="Symbol">}</a> <a id="3328" class="Symbol">→</a> <a id="3330" href="Prelude.Lifts.html#2748" class="Field">lower</a><a id="3335" class="Symbol">{</a><a id="3336" href="Prelude.Lifts.html#3303" class="Bound">𝓦</a><a id="3337" class="Symbol">}{</a><a id="3339" href="Prelude.Lifts.html#3305" class="Bound">𝓧</a><a id="3340" class="Symbol">}</a> <a id="3342" href="MGS-MLTT.html#3813" class="Function Operator">∘</a> <a id="3344" href="Prelude.Lifts.html#2736" class="InductiveConstructor">lift</a> <a id="3349" href="Prelude.Equality.html#1231" class="Datatype Operator">≡</a> <a id="3351" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a> <a id="3354" href="Prelude.Lifts.html#3319" class="Bound">X</a>
+<a id="3356" href="Prelude.Lifts.html#3289" class="Function">lower∼lift</a> <a id="3367" class="Symbol">=</a> <a id="3369" href="Prelude.Equality.html#1245" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
 
 </pre>
 
-The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of `lower` is immediately followed by an application of `lift`, then the result is the identity transformation. Later, there will be some situations that require this fact, as well as its brother, so we formalize these related and their trivial proofs.
-
-<pre class="Agda">
-
-<a id="lift∼lower"></a><a id="3958" href="Prelude.Lifts.html#3958" class="Function">lift∼lower</a> <a id="3969" class="Symbol">:</a> <a id="3971" class="Symbol">{</a><a id="3972" href="Prelude.Lifts.html#3972" class="Bound">𝓦</a> <a id="3974" href="Prelude.Lifts.html#3974" class="Bound">𝓧</a> <a id="3976" class="Symbol">:</a> <a id="3978" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="3986" class="Symbol">}{</a><a id="3988" href="Prelude.Lifts.html#3988" class="Bound">X</a> <a id="3990" class="Symbol">:</a> <a id="3992" href="Prelude.Lifts.html#3974" class="Bound">𝓧</a> <a id="3994" href="Universes.html#403" class="Function Operator">̇</a><a id="3995" class="Symbol">}</a> <a id="3997" class="Symbol">→</a> <a id="3999" href="Prelude.Lifts.html#2736" class="InductiveConstructor">lift</a> <a id="4004" href="MGS-MLTT.html#3813" class="Function Operator">∘</a> <a id="4006" href="Prelude.Lifts.html#2748" class="Field">lower</a> <a id="4012" href="Prelude.Equality.html#1231" class="Datatype Operator">≡</a> <a id="4014" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a> <a id="4017" class="Symbol">(</a><a id="4018" href="Prelude.Lifts.html#2674" class="Record">Lift</a><a id="4022" class="Symbol">{</a><a id="4023" href="Prelude.Lifts.html#3972" class="Bound">𝓦</a><a id="4024" class="Symbol">}{</a><a id="4026" href="Prelude.Lifts.html#3974" class="Bound">𝓧</a><a id="4027" class="Symbol">}</a> <a id="4029" href="Prelude.Lifts.html#3988" class="Bound">X</a><a id="4030" class="Symbol">)</a>
-<a id="4032" href="Prelude.Lifts.html#3958" class="Function">lift∼lower</a> <a id="4043" class="Symbol">=</a> <a id="4045" href="Prelude.Equality.html#1245" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
-
-<a id="lower∼lift"></a><a id="4051" href="Prelude.Lifts.html#4051" class="Function">lower∼lift</a> <a id="4062" class="Symbol">:</a> <a id="4064" class="Symbol">{</a><a id="4065" href="Prelude.Lifts.html#4065" class="Bound">𝓦</a> <a id="4067" href="Prelude.Lifts.html#4067" class="Bound">𝓧</a> <a id="4069" class="Symbol">:</a> <a id="4071" href="Agda.Primitive.html#423" class="Postulate">Universe</a><a id="4079" class="Symbol">}{</a><a id="4081" href="Prelude.Lifts.html#4081" class="Bound">X</a> <a id="4083" class="Symbol">:</a> <a id="4085" href="Prelude.Lifts.html#4067" class="Bound">𝓧</a> <a id="4087" href="Universes.html#403" class="Function Operator">̇</a><a id="4088" class="Symbol">}</a> <a id="4090" class="Symbol">→</a> <a id="4092" href="Prelude.Lifts.html#2748" class="Field">lower</a><a id="4097" class="Symbol">{</a><a id="4098" href="Prelude.Lifts.html#4065" class="Bound">𝓦</a><a id="4099" class="Symbol">}{</a><a id="4101" href="Prelude.Lifts.html#4067" class="Bound">𝓧</a><a id="4102" class="Symbol">}</a> <a id="4104" href="MGS-MLTT.html#3813" class="Function Operator">∘</a> <a id="4106" href="Prelude.Lifts.html#2736" class="InductiveConstructor">lift</a> <a id="4111" href="Prelude.Equality.html#1231" class="Datatype Operator">≡</a> <a id="4113" href="MGS-MLTT.html#3778" class="Function">𝑖𝑑</a> <a id="4116" href="Prelude.Lifts.html#4081" class="Bound">X</a>
-<a id="4118" href="Prelude.Lifts.html#4051" class="Function">lower∼lift</a> <a id="4129" class="Symbol">=</a> <a id="4131" href="Prelude.Equality.html#1245" class="InductiveConstructor">𝓇ℯ𝒻𝓁</a>
-
-</pre>
-
+Evidently, the proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
 
 ---------------
 

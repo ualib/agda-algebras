@@ -31,8 +31,8 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 \begin{code}
 
 _≅_ : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , (∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 ∣)
-                                           × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 ∣)
+𝑨 ≅ 𝑩 =  Σ f ꞉ (hom 𝑨 𝑩) , Σ g ꞉ (hom 𝑩 𝑨) , (∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣)
+                                           × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣)
 
 \end{code}
 
@@ -83,7 +83,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 \begin{code}
 
 refl-≅ : {𝓤 : Universe} {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ 𝑨
-refl-≅  = 𝒾𝒹 , 𝒾𝒹 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
+refl-≅ {𝓤}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
 
 sym-≅ : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
@@ -110,25 +110,25 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
   g : hom 𝑪 𝑨
   g = HCompClosed 𝑪 𝑩 𝑨 g1 g2
 
-  f1∼g2 : ∣ f1 ∣ ∘ ∣ g2 ∣ ∼ ∣ 𝒾𝒹 ∣
+  f1∼g2 : ∣ f1 ∣ ∘ ∣ g2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
   f1∼g2 = ∣ snd ∥ ab ∥ ∣
 
-  g2∼f1 : ∣ g2 ∣ ∘ ∣ f1 ∣ ∼ ∣ 𝒾𝒹 ∣
+  g2∼f1 : ∣ g2 ∣ ∘ ∣ f1 ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
   g2∼f1 = ∥ snd ∥ ab ∥ ∥
 
-  f2∼g1 : ∣ f2 ∣ ∘ ∣ g1 ∣ ∼ ∣ 𝒾𝒹 ∣
+  f2∼g1 : ∣ f2 ∣ ∘ ∣ g1 ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
   f2∼g1 =  ∣ snd ∥ bc ∥ ∣
 
-  g1∼f2 : ∣ g1 ∣ ∘ ∣ f2 ∣ ∼ ∣ 𝒾𝒹 ∣
+  g1∼f2 : ∣ g1 ∣ ∘ ∣ f2 ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣
   g1∼f2 = ∥ snd ∥ bc ∥ ∥
 
-  α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 ∣
+  α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
   α x = (∣ f ∣ ∘ ∣ g ∣) x                   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
         ∣ f2 ∣((∣ f1 ∣ ∘ ∣ g2 ∣)(∣ g1 ∣ x)) ≡⟨ ap ∣ f2 ∣(f1∼g2(∣ g1 ∣ x))⟩
         (∣ f2 ∣ ∘ ∣ g1 ∣) x                  ≡⟨ f2∼g1 x ⟩
-        ∣ 𝒾𝒹 ∣ x                         ∎
+        ∣ 𝒾𝒹 𝑪 ∣ x                         ∎
 
-  β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 ∣
+  β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
   β x = (ap ∣ g2 ∣ (g1∼f2 (∣ f1 ∣ x))) ∙ g2∼f1 x
 
 \end{code}
@@ -188,7 +188,10 @@ The lift is also associative, up to isomorphism at least.
 module _ {𝓘 𝓤 𝓦 : Universe} where
 
  lift-alg-assoc : {𝑨 : Algebra 𝓤 𝑆} → lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
- lift-alg-assoc = trans-≅ (trans-≅ (sym-≅ lift-alg-≅) lift-alg-≅) lift-alg-≅
+ lift-alg-assoc {𝑨} = trans-≅ (trans-≅ γ lift-alg-≅) lift-alg-≅
+  where
+  γ : lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
+  γ = sym-≅ lift-alg-≅
 
  lift-alg-associative : (𝑨 : Algebra 𝓤 𝑆) → lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
  lift-alg-associative 𝑨 = lift-alg-assoc {𝑨}
@@ -206,42 +209,44 @@ module _ {𝓘 𝓤 𝓦 : Universe} where
 
  ⨅≅ gfe {I}{𝒜}{ℬ} AB = γ
   where
-   F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣
-   F i = ∣ fst (AB i) ∣
-   Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ i) (F i)
-   Fhom i = ∥ fst (AB i) ∥
+  F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣
+  F i = ∣ fst (AB i) ∣
 
-   G : ∀ i → ∣ ℬ i ∣ → ∣ 𝒜 i ∣
-   G i = fst ∣ snd (AB i) ∣
-   Ghom : ∀ i → is-homomorphism (ℬ i) (𝒜 i) (G i)
-   Ghom i = snd ∣ snd (AB i) ∣
+  Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ i) (F i)
+  Fhom i = ∥ fst (AB i) ∥
 
-   F∼G : ∀ i → (F i) ∘ (G i) ∼ (∣ 𝒾𝒹 ∣)
-   F∼G i = fst ∥ snd (AB i) ∥
+  G : ∀ i → ∣ ℬ i ∣ → ∣ 𝒜 i ∣
+  G i = fst ∣ snd (AB i) ∣
 
-   G∼F : ∀ i → (G i) ∘ (F i) ∼ (∣ 𝒾𝒹 ∣)
-   G∼F i = snd ∥ snd (AB i) ∥
+  Ghom : ∀ i → is-homomorphism (ℬ i) (𝒜 i) (G i)
+  Ghom i = snd ∣ snd (AB i) ∣
 
-   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-   ϕ a i = F i (a i)
+  F∼G : ∀ i → (F i) ∘ (G i) ∼ (∣ 𝒾𝒹 (ℬ i) ∣)
+  F∼G i = fst ∥ snd (AB i) ∥
 
-   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 𝒂 = gfe (λ i → (Fhom i) 𝑓 (λ x → 𝒂 x i))
+  G∼F : ∀ i → (G i) ∘ (F i) ∼ (∣ 𝒾𝒹 (𝒜 i) ∣)
+  G∼F i = snd ∥ snd (AB i) ∥
 
-   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
+  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+  ϕ a i = F i (a i)
 
-   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = gfe (λ i → (Ghom i) 𝑓 (λ x → 𝒃 x i))
+  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒂 = gfe (λ i → (Fhom i) 𝑓 (λ x → 𝒂 x i))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 ∣
-   ϕ~ψ 𝒃 = gfe λ i → F∼G i (𝒃 i)
+  ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
+  ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 ∣
-   ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
+  ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
+  ψhom 𝑓 𝒃 = gfe (λ i → (Ghom i) 𝑓 (λ x → 𝒃 x i))
 
-   γ : ⨅ 𝒜 ≅ ⨅ ℬ
-   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+  ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+  ϕ~ψ 𝒃 = gfe λ i → F∼G i (𝒃 i)
+
+  ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+  ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
+
+  γ : ⨅ 𝒜 ≅ ⨅ ℬ
+  γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
 \end{code}
 
@@ -260,45 +265,45 @@ module _ {𝓘 𝓤 𝓦 𝓩 : Universe} where
 
  lift-alg-⨅≅ gfe {I}{𝒜}{ℬ} AB = γ
   where
-   F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ (lift i) ∣
-   F i = ∣ fst (AB i) ∣
-   Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ (lift i)) (F i)
-   Fhom i = ∥ fst (AB i) ∥
+  F : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ (lift i) ∣
+  F i = ∣ fst (AB i) ∣
+  Fhom : ∀ i → is-homomorphism (𝒜 i) (ℬ (lift i)) (F i)
+  Fhom i = ∥ fst (AB i) ∥
 
-   G : ∀ i → ∣ ℬ (lift i) ∣ → ∣ 𝒜 i ∣
-   G i = fst ∣ snd (AB i) ∣
-   Ghom : ∀ i → is-homomorphism (ℬ (lift i)) (𝒜 i) (G i)
-   Ghom i = snd ∣ snd (AB i) ∣
+  G : ∀ i → ∣ ℬ (lift i) ∣ → ∣ 𝒜 i ∣
+  G i = fst ∣ snd (AB i) ∣
+  Ghom : ∀ i → is-homomorphism (ℬ (lift i)) (𝒜 i) (G i)
+  Ghom i = snd ∣ snd (AB i) ∣
 
-   F∼G : ∀ i → (F i) ∘ (G i) ∼ ∣ 𝒾𝒹 ∣
-   F∼G i = fst ∥ snd (AB i) ∥
+  F∼G : ∀ i → (F i) ∘ (G i) ∼ (∣ 𝒾𝒹 (ℬ (lift i)) ∣)
+  F∼G i = fst ∥ snd (AB i) ∥
 
-   G∼F : ∀ i → (G i) ∘ (F i) ∼ ∣ 𝒾𝒹 ∣
-   G∼F i = snd ∥ snd (AB i) ∥
+  G∼F : ∀ i → (G i) ∘ (F i) ∼ (∣ 𝒾𝒹 (𝒜 i) ∣)
+  G∼F i = snd ∥ snd (AB i) ∥
 
-   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-   ϕ a i = F (lower i) (a (lower i))
+  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+  ϕ a i = F (lower i) (a (lower i))
 
-   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 𝒂 = gfe λ i → (Fhom (lower i)) 𝑓 (λ x → 𝒂 x (lower i))
+  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒂 = gfe (λ i → (Fhom (lower i)) 𝑓 (λ x → 𝒂 x (lower i)))
 
-   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
+  ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
+  ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
 
-   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = gfe λ i → (Ghom i) 𝑓 (λ x → 𝒃 x (lift i))
+  ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
+  ψhom 𝑓 𝒃 = gfe (λ i → (Ghom i) 𝑓 (λ x → 𝒃 x (lift i)))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 ∣
-   ϕ~ψ 𝒃 = gfe λ i → F∼G (lower i) (𝒃 i)
+  ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+  ϕ~ψ 𝒃 = gfe λ i → F∼G (lower i) (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹  ∣
-   ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
+  ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+  ψ~ϕ 𝒂 = gfe λ i → G∼F i (𝒂 i)
 
-   A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
-   A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+  A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
+  A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
-   γ : lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
-   γ = trans-≅ (sym-≅ lift-alg-≅) A≅B
+  γ : lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+  γ = trans-≅ (sym-≅ lift-alg-≅) A≅B
 
 \end{code}
 
@@ -312,7 +317,7 @@ module _ {𝓘 𝓤 𝓦 : Universe} where
   →                   {I : 𝓘 ̇}{A : I → 𝓤 ̇}{B : I → 𝓦 ̇}
                       (h : Nat A B) → (∀ i → is-embedding (h i))
                       ------------------------------------------
-  →                   is-embedding (NatΠ h)
+  →                   is-embedding(NatΠ h)
 
  embedding-lift-nat hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
 

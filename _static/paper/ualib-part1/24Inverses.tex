@@ -114,7 +114,7 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{b≡fa}\<%
 \end{code}
 \ccpad
-Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a dependent pair (\ab a , \ab p), where \ab a \as : \ab A and \ab p \as : \ab b \ad ≡ \ab f \ab a is a proof that \ab f maps \ab a to \ab b. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a ``witness'' \ab a \as : \ab A, we can actually \emph{compute} a \emph{pseudoinverse} of \ab f. For convenience, we define this inverse function, which we call \af{Inv}, and which takes an arbitrary \ab b \as : \ab B and a witness-proof pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
+Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab p), where \abt{a}{A}, and \ab p is a proof that \ab f maps \ab a to \ab b; that is, \ab p \as : \ab b \ad ≡ \ab f \ab a. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a ``witness'' \abt{a}{A}, we can actually \emph{compute} a \emph{pseudoinverse} of \ab f. This function takes an arbitrary \ab b \as : \ab B and a (\textit{witness}, \textit{proof})-pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -164,7 +164,7 @@ Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a dependent pair (\
 \AgdaBound{a}\<%
 \end{code}
 \ccpad
-We can prove that \af{Inv} \ab f is the right-inverse of \ab f, as follows.
+We can prove that \af{Inv} \ab f is the \emph{right-inverse} of \ab f, as follows. % (where \ab q is the (\textit{witness}, \textit{proof})-pair).
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -182,7 +182,7 @@ We can prove that \af{Inv} \ab f is the right-inverse of \ab f, as follows.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)\{}\AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{\}(}\AgdaBound{b∈Imgf}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{\}(}\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{Image}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -191,7 +191,7 @@ We can prove that \af{Inv} \ab f is the right-inverse of \ab f, as follows.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSymbol{(}\AgdaFunction{Inv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{b∈Imgf}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{b}\<%
 \\
@@ -217,6 +217,10 @@ We can prove that \af{Inv} \ab f is the right-inverse of \ab f, as follows.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁻¹}}\<%
 \end{code}
+
+
+
+
 
 \subsubsection{Surjective functions}\label{surjective-functions}
 

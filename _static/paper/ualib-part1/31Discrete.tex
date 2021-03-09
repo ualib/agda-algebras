@@ -117,7 +117,7 @@ The \textit{subset} relation is denoted, as usual, with the \af{⊆} symbol and 
 \end{code}
 
 \subsubsection{The axiom of extensionality}\label{sec:axiom-ext}
-In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down a type that represents what we typically means in informal mathematics for two subsets to be (extensionally) equal, which is that they contain the same elements. In the \ualib we denote this type by \af{≐} and define it as follows.\footnote{%
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down a type that represents what it typically means in informal mathematics to say that two subsets are (extensionally) equal---namely, they contain the same elements. In the \ualib we denote this type by \af{≐} and define it as follows.\footnote{%
 \textbf{Unicode Hint}. In \agdamode type \texttt{\textbackslash{}doteq} or \texttt{\textbackslash{}.=} to produce ≐}
 \ccpad
 \begin{code}
@@ -247,7 +247,7 @@ The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. Howev
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-We treat extensionality axioms in greater detail and generality in 
+We treat extensionality in greater detail and generality in 
 % other modules; see \ualibExtensionality  and % \ualibTruncation 
 \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
 

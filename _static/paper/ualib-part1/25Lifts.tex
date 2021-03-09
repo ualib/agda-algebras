@@ -8,7 +8,7 @@ It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \
 
 Luckily, there are ways to overcome this technical issue. We describe general lifting and lowering functions below, and then later, in \S\ref{lifts-of-algebras},
  % \href{https://ualib.gitlab.io/Algebras.Algebras.html\#lifts-of-algebras}{Lifts
-we'll see the domain-specific analogs of these tools which turn out to have some nice properties that make them very effective for resolving universe level problems when working with algebra datatypes.
+we'll see the domain-specific analogs of these tools which turn out to have some nice properties that make them very effective for resolving universe level problems when working with algebra types.
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
 
@@ -160,7 +160,7 @@ A general \af{Lift} record type, similar to the one found in the \am{Level} modu
 % \ccpad
 % For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦\aof ̇.
 
-The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of \afld{lower} is immediately followed by an application of \aic{lift}, then the result is the identity transformation. Later, there will be some situations that require this fact, as well as its brother, so we formalize these related and their trivial proofs.
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of \afld{lower} is immediately followed by an application of \aic{lift}, then the result is the identity transformation. Similarly, \aic{lift} followed by \afld{lower} is the identity.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
@@ -208,7 +208,8 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
-
+\ccpad
+Evidently, the proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
 
 %%% Local Variables:
 %%% mode: latex

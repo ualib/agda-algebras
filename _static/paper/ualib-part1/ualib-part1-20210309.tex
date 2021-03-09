@@ -1,4 +1,4 @@
-\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{../lipics-v2021-wjd}
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,12pt]{../lipics-v2021-wjd}
 %% The next 3 lines are recommended at: https://agda.readthedocs.io/en/v2.6.1.1/tools/generating-latex.html#known-pitfalls-and-issues
 \usepackage{fontspec}
 
@@ -35,7 +35,7 @@
 \title{THE AGDA UNIVERSAL ALGEBRA LIBRARY\\
 Part 1: Foundations\\
 {\large Equality, extensionality, truncation, and dependent types for relations and algebras} }% and quotients}
-\titlerunning{The Agda UALib, Part 1: foundations, relations, algebras}
+%\titlerunning{The Agda UALib, Part 1: foundations, relations, algebras}
 
 
 \author{William DeMeo}
@@ -65,7 +65,7 @@ Part 1: Foundations\\
 \fancyhf{}
 \fancyhead[ER]{\sffamily\bfseries \leftmark}
 % \fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: relations, algebras, congruences, quotients}
-\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1}
+\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: foundations}
 \fancyhead[EL,OR]{\sffamily\bfseries \thepage}
 
 
@@ -115,10 +115,8 @@ Part 1: Foundations\\
 The Agda Universal Algebra Library (\ualib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. The \ualib includes a substantial collection of definitions, theorems, and proofs from general algebra and equational logic, including many examples that exhibit the power of inductive and dependent types for representing and reasoning about relations, algebraic structures, and equational theories. In this paper we describe several important aspects of the logical foundations on which the library is built. We also discuss (though sometimes only briefly) all of the types defined in the first 13 modules of the library, with special attention given to those details that seem most interesting or challenging from a type theory or mathematical foundations perspective.
 \end{abstract}
 
-\section*{Attributions and Acknowledgements}
+\section*{Acknowledgements}
 \input{../acknowledgements.tex}
-
-
 
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%  TOC  %%%%%%%%%%%%%%%%%%%%%%
 
@@ -195,7 +193,6 @@ We've reached the end of Part 1 of our three-part series describing the \agdaual
 %% compare with the assumptions we make in our Agda proof of this result.
 
 We conclude by noting that one of our goals is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory. We welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.  Merge requests submitted to the UALib's main gitlab repository are especially welcomed.  Please visit the repository at \url{https://gitlab.com/ualib/ualib.gitlab.io/} and help us improve it.
-
 
 
 

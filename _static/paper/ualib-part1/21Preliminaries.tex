@@ -3,12 +3,12 @@ We begin by highlighting some of the key parts of the module, which lists everyt
 \subsubsection{Logical foundations}\label{sec:logical-foundations}
 % For the benefit of readers who are not proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib, as well as the most important basic types and features that are used throughout the library.
 
-The \agdaualib is based on a minimal version of \defn{Martin-Löf dependent type theory} (MLTT) that is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.\footnote{This is also the type theory that \escardo taught us in the short course \ufcourse at the Midlands Graduate School in the Foundations of Computing Science at University of Birmingham in 2019.} We won't go into great detail here because there are already other very nice resources available, such as the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by \escardo just mentioned, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, as well as ``The HoTT Book''~\cite{HoTT}.
+The \agdaualib is based on a minimal version of \defn{Martin-Löf dependent type theory} (MLTT) that is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.\footnote{This is also the type theory that \escardo taught us in the short course \ufcourse at the Midlands Graduate School in the Foundations of Computing Science at University of Birmingham in 2019.} We won't go into great detail here because there are already other very nice resources available, such as the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by \escardo just mentioned, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, as well as the HoTT Book~\cite{HoTT}.
 
-We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: ``primitive'' \defn{types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type), and an infinite collection of \defn{universes} (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like \ab 𝓤, \ab 𝓥, \ab 𝓦, etc., typically from the latter half of the English alphabet).
+We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handful of objects that are assumed at the jumping-off point for MLTT: ``primitive'' \defn{types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type), and an infinite collection of \defn{universes} (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like \ab 𝓤, \ab 𝓥, \ab 𝓦, etc., typically from the latter half of the English alphabet).
 
 \subsubsection{Specifying logical foundations in Agda}\label{sec:preliminaries}
-Finally we are ready discuss the first line of Agda code of any consequence in the \ualib. 
+Finally we are ready to discuss the first line of Agda code of any consequence in the \ualib. 
 
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
 Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness. 
@@ -25,9 +25,9 @@ Every Agda program in the \ualib begins with the following pragma, which has the
 \\[-20pt]
 %% \begin{enumerate}
 \begin{itemize}
-\item \AgdaPragma{without-K} disables \axiomk; see~\cite{agdaref-axiomk};
-\item \AgdaPragma{exact-split} makes Agda accept only definitions that are \emph{judgmental} or \emph{definitional} equalities; see~\cite{agdatools-patternmatching};
-\item \AgdaPragma{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
+\item \AgdaPragma{--without-K} disables \axiomk; see~\cite{agdaref-axiomk};
+\item \AgdaPragma{--exact-split} makes Agda accept only definitions that are \emph{judgmental} equalities; see~\cite{agdatools-patternmatching};
+\item \AgdaPragma{--safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
 \end{itemize}
 %% \end{enumerate}
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.

@@ -54,7 +54,7 @@ The following restatement of the last lemma simply rearranges the arguments in c
 
 \end{code}
 
-Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a witness-proof pair, `(a , p) : Image f ∋ b`, and returns `a`.
+Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
 
 \begin{code}
 
@@ -64,11 +64,11 @@ Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where 
 
 \end{code}
 
-We can prove that `Inv f` is the right-inverse of `f`, as follows.
+We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 \begin{code}
 
- InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(b∈Imgf : Image f ∋ b) → f(Inv f b∈Imgf) ≡ b
+ InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
 
  InvIsInv f {.(f a)} (im a) = refl _
 

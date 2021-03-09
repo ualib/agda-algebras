@@ -68,8 +68,9 @@ Recall, \ab{h} \af ∘ \ab 𝑎 is the tuple whose i-th component is \ab{h} (\ab
 \ab{h} ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎) ≡ (\ab 𝑓 \af ̂ \ab 𝑩) (\ab h \af ∘ \ab 𝑎).\\[4pt]
 
 To formalize this concept, we first define a type representing the assertion that a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣, from the domain of \ab{𝑨} to the domain of \ab{𝑩}, \emph{commutes} (or is \emph{compatible}) with an operation \ab 𝑓, interpreted in the algebras \ab{𝑨} and \ab{𝑩}. Pleasingly, the defining equation of the previous paragraph can be expressed in Agda unadulterated.\footnote{%
-The line \AgdaKeyword{module} \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-  \AgdaBound{𝓦}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}\AgdaKeyword{where} begins an anonymous module.  The purpose is simply to move the assumed universes out of the way so they don't obfuscate the definitions. In descriptions of the \ualib such as the present paper, we usually omit such module declarations when their absence won't cause confusion.}
+Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \AgdaBound{𝓤}\AgdaSpace{}%
+  \AgdaBound{𝓦}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaFunction{Universe})
+out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%

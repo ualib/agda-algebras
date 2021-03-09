@@ -62,8 +62,8 @@ A simple example is the identity map, which is proved to be a homomorphism as fo
 
 \begin{code}
 
-𝒾𝒹 : {𝓤 : Universe}{A : Algebra 𝓤 𝑆} → hom A A
-𝒾𝒹 = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
+𝒾𝒹 : {𝓤 : Universe} (A : Algebra 𝓤 𝑆) → hom A A
+𝒾𝒹 _ = (λ x → x) , λ _ _ → 𝓇ℯ𝒻𝓁
 
 id-is-hom : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
 id-is-hom = λ _ _ → 𝓇ℯ𝒻𝓁
@@ -304,7 +304,7 @@ module _ {𝓘 𝓦 : Universe} where
   ϕi = λ x → x i
 
   ϕihom : is-homomorphism (⨅ ℬ) (ℬ i) ϕi
-  ϕihom _ _ = 𝓇ℯ𝒻𝓁
+  ϕihom 𝑓 𝒂 = 𝓇ℯ𝒻𝓁
 
 \end{code}
 

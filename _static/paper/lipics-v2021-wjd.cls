@@ -171,7 +171,7 @@
 \DeclareOption{landscape}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
 \DeclareOption{10pt}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
 % \DeclareOption{11pt}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
-\DeclareOption{12pt}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
+% \DeclareOption{12pt}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
 \DeclareOption{oneside}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
 \DeclareOption{twoside}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
 \DeclareOption{titlepage}{\@latexerr{\lipics@opterrshort}{\lipics@opterrlong}}
