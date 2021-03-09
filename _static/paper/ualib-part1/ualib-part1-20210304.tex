@@ -32,8 +32,10 @@
 %% \pdfmapfile{+fontawesome5.map}
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
-\title{The Agda Universal Algebra Library, Part 1:\\relations, algebras, congruences, and quotients}
-\titlerunning{The Agda UALib, Part 1: relations, algebras, congruences, quotients}
+\title{THE AGDA UNIVERSAL ALGEBRA LIBRARY\\
+Part 1: Foundations\\
+{\large Equality, extensionality, truncation, and dependent types for relations and algebras} }% and quotients}
+\titlerunning{The Agda UALib, Part 1: foundations, relations, algebras}
 
 
 \author{William DeMeo}
@@ -62,7 +64,8 @@
 \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 \fancyhf{}
 \fancyhead[ER]{\sffamily\bfseries \leftmark}
-\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: relations, algebras, congruences, quotients}
+% \fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1: relations, algebras, congruences, quotients}
+\fancyhead[OL]{\sffamily\bfseries The Agda UALib, Part 1}
 \fancyhead[EL,OR]{\sffamily\bfseries \thepage}
 
 
@@ -70,8 +73,8 @@
 \ccsdesc[500]{Theory of computation~Logic and verification}
 \ccsdesc[500]{Computing methodologies~Representation of mathematical objects}
 \ccsdesc[300]{Theory of computation~Type theory}
-\ccsdesc[300]{Theory of computation~Type structures}
-\ccsdesc[300]{Theory of computation~Constructive mathematics}
+% \ccsdesc[300]{Theory of computation~Type structures}
+% \ccsdesc[300]{Theory of computation~Constructive mathematics}
 
 
 \keywords{Universal algebra, Equational logic, Model theory, Dependent type theory, Formalization of mathematics, Agda, Proof assistant, Constructive mathematics}
@@ -109,8 +112,7 @@
 
 
 \begin{abstract}
-The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. 
- The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper we describe some of the most important foundational types and assumptions of the UALib, and we discuss some of the problems that arose when developing it, as well as our solutions to these problems.
+The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. The UALib includes a substantial collection of definitions, theorems, and proofs from general algebra and equational logic, including many examples that exhibit the power of inductive and dependent types for representing and reasoning about relations, algebraic structures, and equational theories. In this paper we describe several important aspects of the logical foundations on which the library is built. We also discuss (though sometimes only briefly) all of the types defined in the first 13 modules of the library, with special attention given to those details that seem most interesting or challenging from a type theory or mathematical foundations perspective.
 \end{abstract}
 
 \section*{Acknowledgements and Attributions}
@@ -166,7 +168,7 @@ The following \agda documentation informed our development of the \ualib, especi
 \input{25Lifts.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Relations}\label{sec:relat-quot-types}
+\section{Relation Types}\label{sec:relat-quot-types}
 This section presents some of the most important relation and quotient types that are defined in the \ualibRelations module of the \agdaualib.\footnote{For more details see \urlRelations.}
 
 In \S\ref{sec:discrete-relations} we cover \emph{unary} and \emph{binary relations}, which we refer to as ``discrete'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we take up in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
@@ -184,16 +186,14 @@ In \S\ref{sec:discrete-relations} we cover \emph{unary} and \emph{binary relatio
 \section{Algebra Types}\label{sec:algebra-types}
 A standard way to define algebraic structures in type theory is using record types.  However, we feel the dependent pair (or Sigma) type (\S\ref{ssec:dependent-pairs}) is more natural, as it corresponds semantically to the existential quantifier of logic. Therefore, many of the important types of the \ualib are defined as Sigma types. In this section, we use function types and Sigma types to define the types of \emph{operations} and \emph{signatures} (\S\ref{sec:oper-sign}), \emph{algebras} (\S\ref{sec:algebras}), and \emph{product algebras} (\S\ref{sec:product-algebras}), \emph{congruence relations}\ref{congruences}, and \emph{quotient algebras}\ref{quotient-algebras}.
 
-\subsection{Operations and Signatures}\label{sec:oper-sign}\firstsentence{\ualibSignatures}{\urlSignatures}
+\subsection{Signatures: types for operations and signatures}\label{sec:oper-sign}\firstsentence{\ualibSignatures}{\urlSignatures}
 \input{41Signatures.tex}
-\subsection{Algebras}\label{sec:algebras}\firstsentence{\ualibAlgAlgebras}{\urlAlgAlgebras}
+\subsection{Algebras: types for algebras, operation interpretation, and compatibility}\label{sec:algebras}\firstsentence{\ualibAlgAlgebras}{\urlAlgAlgebras}
 \input{42Algebras.tex}
-\subsection{Product Algebras}\label{sec:product-algebras}\firstsentence{\ualibProducts}{\urlProducts}
+\subsection{Products: types for products over arbitrary classes of algebras}\label{sec:product-algebras}\firstsentence{\ualibProducts}{\urlProducts}
 \input{43Products.tex}
-\subsection{Congruence Relations}\label{congruences}\firstsentence{\ualibCongruences}{\urlCongruences}
+\subsection{Congruences: types for congruences and quotient algebras}\label{congruences}\firstsentence{\ualibCongruences}{\urlCongruences}
 \input{44Congruences.tex}
-\subsection{Quotient Algebras}\label{quotient-algebras}
-\input{45QuotientAlgebras.tex}
 
 
 

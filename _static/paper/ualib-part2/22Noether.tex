@@ -1,6 +1,6 @@
 \subsubsection{The First Homomorphism Theorem}\label{the-first-homomorphism-theorem}
 
-Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as ``modern algebra''.
+Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as ``modern algebra.''
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -90,8 +90,6 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{FirstHomomorphismTheorem}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
@@ -109,10 +107,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaFunction{,}\<%
-\\
-\>[91I][@{}l@{\AgdaIndent{0}}]%
-\>[7]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -234,7 +229,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 %
 \>[2]\AgdaFunction{ϕhom}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}%
+\AgdaBound{a}%
 \>[184I]\AgdaSymbol{=}%
 \>[14]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
@@ -247,7 +242,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
@@ -260,7 +255,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}%
 \>[76]\AgdaOperator{\AgdaFunction{⟩}}\<%
@@ -277,7 +272,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
@@ -300,7 +295,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ϕ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}%
 \>[49]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
@@ -321,8 +316,8 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}%
+\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDottedPattern{\AgdaSymbol{.(}}\AgdaDottedPattern{\AgdaOperator{\AgdaField{⟨}}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaFunction{θ}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaOperator{\AgdaField{⟩}}}\AgdaSpace{}%
@@ -330,8 +325,8 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a'}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}%
+\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{ϕaa'}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
@@ -391,7 +386,7 @@ Next we prove that the homomorphism \ab{ϕ}, whose existence we just proved, is 
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{NoetherHomUnique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\>[234I]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
@@ -404,6 +399,7 @@ Next we prove that the homomorphism \ab{ϕ}, whose existence we just proved, is 
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[234I]%
 \>[20]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -416,11 +412,9 @@ Next we prove that the homomorphism \ab{ϕ}, whose existence we just proved, is 
 \AgdaFunction{πker}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[20]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -435,7 +429,7 @@ Next we prove that the homomorphism \ab{ϕ}, whose existence we just proved, is 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[20]\AgdaComment{---------------------------------}\<%
+\>[20]\AgdaComment{--------------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -521,7 +515,7 @@ If we postulate function extensionality, then we have
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{fe-NoetherHomUnique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
+\>[123I]\AgdaFunction{funext}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -541,6 +535,7 @@ If we postulate function extensionality, then we have
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[123I]%
 \>[23]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -553,11 +548,9 @@ If we postulate function extensionality, then we have
 \AgdaFunction{πker}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[23]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -572,7 +565,7 @@ If we postulate function extensionality, then we have
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[23]\AgdaComment{----------------------------}\<%
+\>[23]\AgdaComment{---------------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -602,7 +595,7 @@ If we postulate function extensionality, then we have
 \AgdaBound{hgk}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-If we assume the hypotheses of the First Homomorphism theorem and add the assumption that \ab{h} is epic, then we get the so-called First Isomorphism theorem.
+Assuming the hypotheses of the First Homomorphism theorem, if we add the assumption that \ab{h} is epic, then we get the so-called \defn{First Isomorphism theorem}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -615,22 +608,20 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 \>[2]\AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}%
-\>[14]\AgdaSymbol{→}%
-\>[17]\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaFunction{꞉}%
-\>[448I]\AgdaSymbol{(}\AgdaFunction{epi}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{epi}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\<%
-\\
-\>[448I][@{}l@{\AgdaIndent{0}}]%
-\>[24]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -726,7 +717,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 %
 \>[2]\AgdaFunction{fhom}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{=}%
 \>[14]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
@@ -737,7 +728,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}%
 \>[45]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
@@ -749,7 +740,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}%
 \>[73]\AgdaOperator{\AgdaFunction{⟩}}\<%
@@ -765,7 +756,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
@@ -783,7 +774,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 \AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{fmap}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSymbol{)}%
+\AgdaBound{a}\AgdaSymbol{)}%
 \>[46]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
 %
@@ -931,7 +922,7 @@ Uniqueness for the isomorphism theorem is proved in exactly the same way that th
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{NoetherIsoUnique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\>[334I]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{epi}\AgdaSpace{}%
@@ -958,6 +949,7 @@ Uniqueness for the isomorphism theorem is proved in exactly the same way that th
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[334I]%
 \>[20]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -1048,26 +1040,14 @@ Uniqueness for the isomorphism theorem is proved in exactly the same way that th
 \>[79]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
 
-\subsubsection{Homomorphism composition}\label{homomorphism-composition}
+\subsubsection{Composition of homomorphisms}\label{homomorphism-composition}
 
-The composition of homomorphisms is again a homomorphism. We formalize this in a number of alternative ways.
+If we compose homomorphisms the result is again a homomorphism. We can formalize this in type theory and \agda in a number of alternative ways.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{HCompClosed}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[444I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
@@ -1083,20 +1063,16 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[444I]%
 \>[15]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}%
 \>[24]\AgdaSymbol{→}%
 \>[27]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaBound{𝑪}\<%
-\\
-%
-\>[15]\AgdaComment{--------------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[15]\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{𝑪}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑪}\<%
 \\
@@ -1216,7 +1192,7 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 %
 \>[1]\AgdaFunction{HomComp}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[331I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
@@ -1228,24 +1204,20 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\<%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[331I]%
 \>[11]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}%
 \>[20]\AgdaSymbol{→}%
 \>[23]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaBound{𝑪}\<%
-\\
-%
-\>[11]\AgdaComment{--------------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[11]\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{𝑪}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑪}\<%
 \\
@@ -1320,7 +1292,7 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 \AgdaBound{g}\<%
 \\
 %
-\>[9]\AgdaComment{----------------------------------------------}\<%
+\>[9]\AgdaComment{----------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -1410,7 +1382,7 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 \AgdaBound{g}\<%
 \\
 %
-\>[9]\AgdaComment{------------------------------------------------}\<%
+\>[9]\AgdaComment{----------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -1493,7 +1465,7 @@ The composition of homomorphisms is again a homomorphism. We formalize this in a
 \AgdaBound{g}\<%
 \\
 %
-\>[13]\AgdaComment{------------------------------------------------}\<%
+\>[13]\AgdaComment{------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -1587,7 +1559,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[12]\AgdaComment{-------------------------------------------}\<%
+\>[12]\AgdaComment{-------------------------------------------------------}\<%
 \\
 %
 \>[1]\AgdaSymbol{→}%
@@ -2005,18 +1977,6 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 Here's a more general version.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{HomFactor}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[1407I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -2063,7 +2023,7 @@ Here's a more general version.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \\
 %
-\>[13]\AgdaComment{--------------------------------------------}\<%
+\>[13]\AgdaComment{-----------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
