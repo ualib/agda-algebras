@@ -1,12 +1,11 @@
 # ualib.gitlab.io
 
-(version 2.01 of 25 Jan 2021)
-
 **Author**. [William DeMeo](https://williamdemeo.gitlab.io)
 
 **Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
 
-**PDF documentation**. [ualib-2Feb2021.pdf](ualib-2Feb2021.pdf)
+**PDF documentation**. [ualib-part1.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part1.pdf)  
+ualib-part2.pdf, ualib-part3.pdf (coming soon!)
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
@@ -26,7 +25,7 @@ The docs are served at [ualib.org](https://ualib.gitlab.io/), and are automatica
 
 ## Install Agda
 
-Agda [2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) is required. 
+Agda ([version 2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) or greater) is required. 
 
 If you don't have it, follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html) or [these instructions](INSTALL_AGDA.md) by Martin Escardo.
 
@@ -57,13 +56,13 @@ Other Emacs keybindings are described in the [emacs-mode.html#keybindings](https
 
 --------------------------------------
 
-## Contributing to this repo
+## Contributing to this repository
 
 If you wish to contribute to this repository, the best way is to use the standard [fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962) workflow.  This is described nicely on [this page](https://gist.github.com/Chaser324/ce0505fbed06b947d962), but below we list the five simple steps required.
 
-(Note that a "pull request" is called a "merge request" on the gitlab website and in gitlab documentation.)
+(A "pull request" is also known as a "merge request" on gitlab and its documentation.)
 
-The following assumes you already have a [gitlab](https://gitlab.com/) account.
+The following assumes you already have a [gitlab](https://gitlab.com/) or [github](https://github.com) account.  If you don't, sign up for one.  It's free. The instructions below are for gitlab, but they should work for github as well.
 
 1. [Fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork) the ualib.gitlab.io repository. This makes a complete copy of the repository in your own gitlab account that you now control, so, for example, you can commit and push changes to the source code in your forked copy of the repo.
 
@@ -133,7 +132,7 @@ Now when you now visit the Gitlab page of your personal fork of the repo, you sh
 
 -------------------------------------
 
-### Generating the documentation
+## Generating the documentation
 
 The html pages at [ualib.org](https://ualib.gitlab.io) were generated from the [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files in this repository.  These files contain formal, verified, mathematical theorems and proofs inside code environments (i.e., inside `\begin{code}...\end{code}` blocks)  as well as some mathematical discussions outside those blocks written in markdown.
 
@@ -153,7 +152,7 @@ This generates a set of markdown files that are then converted to html by jekyll
 bundle exec jekyll build
 ```
 
-In practice, we use the script `generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
+In practice, we use the script `generate-md`, *inside the UALib directory*, to process the `.lagda` files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
 
 ```
 cp html/UALib.md index.md
@@ -162,11 +161,11 @@ bundle install --path vendor
 bundle exec jekyll serve --watch --incremental
 ```
 
-This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
+This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to the local server at [http://127.0.0.1:4000](http://127.0.0.1:4000).
 
 --------------------------------
 
-### Troubleshooting
+## Troubleshooting
 
 Please [email William](mailto:williamdemeo@gmail.com) if you have any questions or problems using the UALib.
 
@@ -207,11 +206,11 @@ Regarding the Agda source code in the [Agda UALib](https://gitlab.com/ualib/uali
 
 -------------------------------
 
-### License and citation information
+## License and citation information
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">The Agda Universal Algebra Library</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">William DeMeo</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://gitlab.com/ualib/ualib.gitlab.io" rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 
-#### Citing the Agda UALib
+### Citing the Agda UALib
 
 If you use the Agda UALib or wish to refer to it or its documentation in a publication or on a web page, please use the following BibTeX data:
 
