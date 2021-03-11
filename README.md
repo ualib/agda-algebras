@@ -7,7 +7,7 @@
 **PDF documentation**. [ualib-part1.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part1.pdf)  
 ualib-part2.pdf, ualib-part3.pdf (coming soon!)
 
-**Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in Martin-Löf type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
+**Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
 This is the main repository for the Agda UALib. Below are instructions for getting the UALib installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
 
@@ -218,8 +218,7 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
 @article{DeMeo:2021,
  author        = {William DeMeo},
  title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and 
-                  {B}irkhoff's {T}heorem in {M}artin-{L}\"of 
-                  {D}ependent {T}ype {T}heory}, 
+                  {B}irkhoff's {T}heorem in {D}ependent {T}ype {T}heory}, 
  journal       = {CoRR},
  volume        = {abs/2101.10166},
  year          = {2021},
@@ -227,7 +226,9 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
  url           = {https://arxiv.org/abs/2101.10166},
- note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
+ note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}},
+ biburl        = {https://dblp.org/rec/journals/corr/abs-2101-10166.bib},
+ bibsource     = {dblp computer science bibliography, https://dblp.org}
 }
 ```
 
