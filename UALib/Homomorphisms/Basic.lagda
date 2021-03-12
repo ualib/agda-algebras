@@ -224,8 +224,11 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UALib][] is `𝑨 [ 𝑩 ]/ker h`.
 
+
+
 #### <a id="natural-projection">The canonical projection</a>
-Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ that is constructed, and proved epimorphic, as follows.
+
+Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
 \begin{code}
 
@@ -239,7 +242,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical proje
   cπ-is-hom _ _ = 𝓇ℯ𝒻𝓁
 
   cπ-is-epic : Epic cπ
-  cπ-is-epic (.(⟨ θ ⟩ a) , a , refl _) = Image_∋_.im a
+  cπ-is-epic (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) = Image_∋_.im a
 
 \end{code}
 
