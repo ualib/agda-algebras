@@ -182,11 +182,11 @@ In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume 𝕏, which 
 \begin{code}
 
 module HSPTheorem
+
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆) (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)}
- -- extensionality assumption:
-    {fe : hfunext (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺)} where
+ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
+ where
 
  open the-free-algebra {𝓤}{𝓤}{X}
 
@@ -388,21 +388,29 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
  open Congruence
 
- free-quot-subalg-ℭ : prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
+ free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
   →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
   →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
                       -----------------------------------------------------------
   →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
 
- free-quot-subalg-ℭ pe Cset ssR ssC = FirstHomCorollary (𝑻 X) ℭ homℭ pe Cset ssR ssC
+ free-quot-subalg-ℭ fe pe Cset ssR ssC = FirstHomCorollary fe pe (𝑻 X) ℭ homℭ Cset ssR ssC
 
 
- module _ (Cset : is-set ∣ ℭ ∣)(pe : prop-ext (ov 𝓤) (ov 𝓤))
-          (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-          (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C)) where
+ module _ -- extensionality assumptions:
+             (fe : dfunext 𝓥 (ov 𝓤))
+             (hfe : hfunext (ov 𝓤)(ov 𝓤))
+             (pe : prop-ext (ov 𝓤)(ov 𝓤))
+
+          -- truncation assumptions:
+             (Cset : is-set ∣ ℭ ∣)
+             (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
+             (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
+
+  where
 
   𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
-  𝔽≤ℭ = free-quot-subalg-ℭ pe Cset ssR ssC
+  𝔽≤ℭ = free-quot-subalg-ℭ fe pe Cset ssR ssC
 
   𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
   𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
@@ -445,7 +453,7 @@ With this result in hand, along with what we proved earlier---namely, PS(𝒦) �
 \begin{code}
 
   𝔽∈SP : 𝔽 ∈ (S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦))
-  𝔽∈SP = ssub (class-prod-s-∈-sp fe) 𝔽≤ℭ
+  𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
   𝔽∈𝕍 : 𝔽 ∈ V 𝒦
   𝔽∈𝕍 = SP⊆V' 𝔽∈SP
@@ -472,7 +480,6 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 \begin{code}
 
   birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod {X = X}(Th (V 𝒦))
-
   birkhoff' α p q pThq = pThq α
 
 \end{code}

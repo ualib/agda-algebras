@@ -49,20 +49,25 @@ We take this opportunity to prove an important lemma using the `IsSubalgebraOf` 
 
 open Congruence
 
-FirstHomCorollary : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-                    --extensionality assumptions:
- →                     prop-ext 𝓤 𝓦 → is-set ∣ 𝑩 ∣
+FirstHomCorollary : {𝓤 𝓦 : Universe}
+                    -- extensionality assumptions --
+ →                     dfunext 𝓥 𝓦 → prop-ext 𝓤 𝓦
+
+ →                  (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+
+                    -- truncation assumptions --
+ →                     is-set ∣ 𝑩 ∣
  →                     (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
  →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
                     -------------------------------------------------------------
  →                  (𝑨 [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
-FirstHomCorollary 𝑨 𝑩 h pe Bset ssR ssA = ϕhom , ϕemb
+FirstHomCorollary fe pe 𝑨 𝑩 h Bset ssR ssA = ϕhom , ϕemb
  where
  FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ )
                                               × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
- FirstHomThm = FirstHomomorphismTheorem {𝑨 = 𝑨}{𝑩 = 𝑩}{h} {pe} {Bset}{ssR}{ssA}
+ FirstHomThm = FirstHomomorphismTheorem fe pe 𝑨 𝑩 h Bset ssR ssA
 
  ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
  ϕhom = ∣ FirstHomThm ∣
@@ -76,17 +81,20 @@ In the special case we apply this to later (e.g., to prove Birkhoff's HSP theore
 
 \begin{code}
 
-free-quot-subalg : {𝓤 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
+free-quot-subalg : {𝓤 𝓧 : Universe}
                    --extensionality assumptions --
- →                 prop-ext (ov 𝓧) 𝓤
+ →                 dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
+
+ →                 (X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
+
                    --truncation assumptions --
  →                 is-set ∣ 𝑩 ∣
  →                 (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
  →                 (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
-                   -------------------------------------------------------------------
+                   ---------------------------------------------------------------
  →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
-free-quot-subalg X 𝑩 h pe Bset ssR ssB = FirstHomCorollary (𝑻 X) 𝑩 h pe Bset ssR ssB
+free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 𝑩 h Bset ssR ssB
 
 \end{code}
 

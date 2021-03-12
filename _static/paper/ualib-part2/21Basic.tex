@@ -1282,8 +1282,7 @@ Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{Image\AgdaUnderscore{}∋\AgdaUnderscore{}.im}\AgdaSpace{}%
 \AgdaBound{a}\<%
@@ -1420,8 +1419,7 @@ to prove; luckily it is also the one we need later.
 \end{code}
 
 \subsubsection{Product homomorphisms}\label{product-homomorphisms}
-Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type \abt{I}{𝓘}\af ̇, and a family \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆 of algebras. (We sometimes refer to the inhabitants of \ab I as ``indices,'' and call \ab ℬ an \emph{indexed family of algebras}.) If for each index \abt{i}{I} there is a homomorphism \ab{hs} \ab i~\as :~\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaBound{𝑨}~(\AgdaBound{ℬ}~\AgdaBound{i}), then we can construct from these data a natural homomorphism from \AgdaBound{𝑨} to the product \AgdaFunction{⨅}\AgdaSpace{}\AgdaBound{ℬ}.
+Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type \abt{I}{𝓘}\af ̇, and a family \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆 of algebras. We sometimes refer to the inhabitants of \ab I as \defn{indices}, and call \ab ℬ an \emph{indexed family of algebras}. If in addition we have a family \ab 𝒽 \as : (\ab i \as : \ab I) \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) of homomorphisms, then we can construct a homomorphism from \ab 𝑨 to the product \af ⨅ \ab ℬ in the natural way.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{⨅-hom-co}\AgdaSpace{}%
@@ -1445,15 +1443,17 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
 \>[.][@{}l@{}]\<[222I]%
-\>[12]\AgdaSymbol{(∀}\AgdaSpace{}%
+\>[12]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}%
+\>[35]\AgdaSymbol{→}%
+\>[38]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSymbol{)}\<%
@@ -1462,8 +1462,9 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{⨅-hom-co}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ϕ}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1475,7 +1476,9 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 %
 \>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
@@ -1490,7 +1493,7 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{a}\<%
@@ -1501,7 +1504,7 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \>[2]\AgdaFunction{ϕhom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{ϕ}\<%
@@ -1516,18 +1519,19 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒶}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
+\AgdaBound{𝒶}\<%
 \end{code}
 \ccpad
-This generalizes easily to the case in which the domain is also a product of a family of algebras.  That is, given families \ab 𝒜 \as : \ab I \as → \af{Algebra} \ab 𝓤 \ab 𝑆 and \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆, and assuming \as ∀ \ab i there exists a homomorphism \af{hom} (\ab 𝒜 \ab i) (\ab ℬ \ab i), we construct the corresponding homomorphism from \af ⨅ \ab 𝒜 to \af ⨅ \ab ℬ as follows.
+The family \ab 𝒽 of homomorphisms inhabits the dependent type \af Π \ab i \af ꞉ \ab I , \af{hom} \ab 𝑨 (\ab ℬ \ab i).  The syntax we use to represent this type is available to us because of the way \af{-Π} is defined in the \typetopology library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However, we could equally well have used one of the following alternatives, which may be closer to ``standard Agda'' syntax:\\[-5pt]
+
+ \af Π \as λ \ab i \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) \hskip2mm or \hskip2mm (\ab i \as : \ab I) \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) \hskip2mm or \hskip2mm \as ∀ \ab i → \af{hom} \ab 𝑨 (\ab ℬ \ab i).\\[-4pt]
+
+The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras.  That is, if we are given \ab 𝒜 \as : \ab I \as → \af{Algebra} \ab 𝓤 \ab 𝑆 and \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆 (two families of \ab 𝑆-algebras), and \AgdaBound{𝒽} \as : \AgdaFunction{Π} \ab i \af ꞉ \ab I \af ,
+\af{hom} (\AgdaBound{𝒜} \ab i) (\ab ℬ \ab i) (a family of homomorphisms), then we can construct a homomorphism from \af ⨅ \ab 𝒜 to \af ⨅ \ab ℬ in the following natural way.
 \ccpad
 \begin{code}
 \>[1]\AgdaFunction{⨅-hom}\AgdaSpace{}%
@@ -1552,18 +1556,19 @@ This generalizes easily to the case in which the domain is also a product of a f
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
 \>[.][@{}l@{}]\<[223I]%
-\>[9]\AgdaSymbol{(∀}\AgdaSpace{}%
+\>[9]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)(}\AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}%
+\>[35]\AgdaSymbol{→}%
+\>[38]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSymbol{)(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSymbol{)}\<%
 \\
 %
@@ -1572,7 +1577,7 @@ This generalizes easily to the case in which the domain is also a product of a f
 \>[1]\AgdaFunction{⨅-hom}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ϕ}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1602,7 +1607,7 @@ This generalizes easily to the case in which the domain is also a product of a f
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -1630,7 +1635,7 @@ This generalizes easily to the case in which the domain is also a product of a f
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{hs}\AgdaSpace{}%
+\AgdaBound{𝒽}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%

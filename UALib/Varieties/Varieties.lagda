@@ -449,36 +449,39 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{fe : hfunext (ov 𝓤)(ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- PS⊆SP : P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
+ PS⊆SP : -- extensionality assumption:
+            hfunext (ov 𝓤)(ov 𝓤)
 
- PS⊆SP (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
- PS⊆SP (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) ≅-refl
- PS⊆SP (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
- PS⊆SP (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
- PS⊆SP (pliftu x) = slift (PS⊆SP x)
- PS⊆SP (pliftw x) = slift (PS⊆SP x)
+  →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
 
- PS⊆SP (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
+ PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
+ PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) ≅-refl
+ PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
+ PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
+ PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
+
+ PS⊆SP hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP (x i))
+   ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {fe} {P 𝒦} {I} {𝒜} ξ
+   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {hfe} {P 𝒦} {I} {𝒜} ξ
 
- PS⊆SP (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP (x i))
+   ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {fe} {P 𝒦} {I} {𝒜} ξ
+   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {hfe} {P 𝒦} {I} {𝒜} ξ
 
- PS⊆SP (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
- PS⊆SP (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
+ PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
+ PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
 
 \end{code}
 
@@ -573,7 +576,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 \begin{code}
 
  class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product{𝓤}{𝓤}{X}(S 𝒦) ∈ S(P 𝒦)
- class-prod-s-∈-sp fe = PS⊆SP{fe = fe} class-prod-s-∈-ps
+ class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
 
 \end{code}
 

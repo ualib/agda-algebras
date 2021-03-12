@@ -18,28 +18,32 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import Homomorphisms.Basic{𝑆 = 𝑆}{gfe = gfe} public
+open import Homomorphisms.Basic{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 
 
 #### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
-Here is a version of the so-called *First Homomorphism theorem* (sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as "modern algebra").
+Here is a version of the so-called *First Homomorphism theorem* (sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as "modern algebra").<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
 
 \begin{code}
 
 open Congruence
 
-module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}{h : hom 𝑨 𝑩}
+module _ {𝓤 𝓦 : Universe}
          -- extensionality assumptions --
-         {pe : prop-ext 𝓤 𝓦}
-         -- truncation assumptions --
-         {Bset : is-set ∣ 𝑩 ∣}
-         {ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x)}
-         {ssA : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C)}
-         where
+            (fe : dfunext 𝓥 𝓦)
+            (pe : prop-ext 𝓤 𝓦)
 
+         (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+
+         -- truncation assumptions --
+            (Bset : is-set ∣ 𝑩 ∣)
+            (ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
+            (ssA : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
+
+ where
 
 
  FirstHomomorphismTheorem :
@@ -60,12 +64,12 @@ module _ {𝓤 𝓦 : Universe} {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 �
 
   ϕhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 ϕ
   ϕhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (gfe λ x → 𝓇ℯ𝒻𝓁) ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (fe λ x → 𝓇ℯ𝒻𝓁) ⟩
              (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
 
   ϕmon : Monic ϕ
-  ϕmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) ϕaa' =
-   class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕaa'
+  ϕmon (.(⟨ θ ⟩ u) , u , refl _) (.(⟨ θ ⟩ v) , v , refl _) ϕuv =
+   class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕuv
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
   ϕcom = 𝓇ℯ𝒻𝓁
@@ -93,7 +97,7 @@ Next we prove that the homomorphism `ϕ`, whose existence we just proved, is uni
 
 \end{code}
 
-If we postulate function extensionality, then we have
+If we postulate function extensionality, then we obtain the following variation of the last result.<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
 
 \begin{code}
 
@@ -113,10 +117,10 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 
  FirstIsomorphismTheorem :
 
-  Epic ∣ h ∣  →  Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) ,
+  dfunext 𝓦 𝓦 → Epic ∣ h ∣  →  Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) ,
                         (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣) × is-embedding ∣ f ∣
 
- FirstIsomorphismTheorem hE = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
+ FirstIsomorphismTheorem fev hE = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
   where
   θ : Congruence 𝑨
   θ = kercon 𝑩 h
@@ -126,7 +130,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 
   fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 fmap
   fhom 𝑓 𝒂 =  ∣ h ∣((𝑓 ̂ 𝑨) λ x → ⌜ 𝒂 x ⌝)   ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
-              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ λ x → ⌜ 𝒂 x ⌝) ≡⟨ ap(𝑓 ̂ 𝑩)(gfe λ _ → 𝓇ℯ𝒻𝓁)⟩
+              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ λ x → ⌜ 𝒂 x ⌝) ≡⟨ ap(𝑓 ̂ 𝑩)(fe λ _ → 𝓇ℯ𝒻𝓁)⟩
               (𝑓 ̂ 𝑩) (fmap ∘ 𝒂)              ∎
 
   fepic : Epic fmap
@@ -135,14 +139,14 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
    a = EpicInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟦ a ⟧
-   bfa = (cong-app (EpicInvIsRightInv gfe ∣ h ∣ hE) b)⁻¹
+   bfa = (cong-app (EpicInvIsRightInv fev ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
    γ = Image_∋_.eq b ⟦ a ⟧ bfa
 
   fmon : Monic fmap
-  fmon (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ a') , a' , 𝓇ℯ𝒻𝓁) faa' =
-   class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe ssA (IsEquiv θ) faa'
+  fmon (.(⟨ θ ⟩ u) , u , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ v) , v , 𝓇ℯ𝒻𝓁) fuv =
+   class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe ssA (IsEquiv θ) fuv
 
   femb : is-embedding fmap
   femb = monic-is-embedding|sets fmap Bset fmon
@@ -160,7 +164,7 @@ The argument used above to prove `NoetherHomUnique` can also be used to prove un
 
   let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
 
-   ∣ f ∣ θ   ≡⟨ cong-app(hfk ⁻¹)a ⟩  ∣ h ∣ a   ≡⟨ cong-app(hgk)a ⟩   ∣ g ∣ θ   ∎
+   ∣ f ∣ θ  ≡⟨ cong-app (hfk ⁻¹) a ⟩  ∣ h ∣ a  ≡⟨ cong-app (hgk) a ⟩  ∣ g ∣ θ  ∎
 
 \end{code}
 
@@ -175,19 +179,6 @@ The composition of homomorphisms is again a homomorphism.  We formalize this in 
 \begin{code}
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
-
- -- HCompClosed : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- --  →            hom 𝑨 𝑩  →  hom 𝑩 𝑪
- --               --------------------
- --  →            hom 𝑨 𝑪
-
- -- HCompClosed 𝑨 𝑩 𝑪 (g , ghom) (h , hhom) = h ∘ g , γ where
-
- --  γ : (𝑓 : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
-
- --  γ 𝑓 a = (h ∘ g) ((𝑓 ̂ 𝑨) a) ≡⟨ ap h ( ghom 𝑓 a ) ⟩
- --          h ((𝑓 ̂ 𝑩) (g ∘ a)) ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
- --          (𝑓 ̂ 𝑪) (h ∘ g ∘ a) ∎
 
  ∘-hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →       hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
@@ -207,24 +198,6 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
   →         is-homomorphism 𝑨 𝑪 (g ∘ f)
 
  ∘-is-hom 𝑨 𝑪 {f} {g} fhom ghom = ∥ ∘-hom 𝑨 𝑪 (f , fhom) (g , ghom) ∥
-
-
- -- ∘-Hom : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- --         {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣} {g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
- --  →      is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
- --         ------------------------------------------------
- --  →      is-homomorphism 𝑨 𝑪 (g ∘ f)
-
- -- ∘-Hom 𝑨 {𝑩} 𝑪 {f} {g} = ∘-hom 𝑨 𝑩 𝑪 {f} {g}
-
-
- -- trans-hom : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- --             (f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ )(g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣ )
- --  →          is-homomorphism 𝑨 𝑩 f  →  is-homomorphism 𝑩 𝑪 g
- --             ------------------------------------------------
- --  →          is-homomorphism 𝑨 𝑪 (g ∘ f)
-
- -- trans-hom 𝑨 𝑩 𝑪 f g = ∘-hom 𝑨 𝑩 𝑪 {f}{g}
 
 \end{code}
 
@@ -383,6 +356,8 @@ If, in addition, both β and γ are epic, then so is ϕ.
 
 
 --------------------------------------
+
+<sup>1</sup><span class="footnote" id="fn1">Note that we already assumed *global* function extensionality in this module, so we could just appeal to that in this case.  However, we make a local function extensionality assumption explicit here merely to highlight where and how the principle is applied.</span>
 
 <p></p>
 
