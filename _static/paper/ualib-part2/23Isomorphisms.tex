@@ -1,60 +1,9 @@
+% -*- TeX-master: "ualib-part2.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End: 
 Here we formalize the notion of \emph{isomorphism} between algebraic structures.
-% \ccpad
-% \begin{code}%
-% \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
-% \AgdaKeyword{OPTIONS}\AgdaSpace{}%
-% \AgdaPragma{--without-K}\AgdaSpace{}%
-% \AgdaPragma{--exact-split}\AgdaSpace{}%
-% \AgdaPragma{--safe}\AgdaSpace{}%
-% \AgdaSymbol{\#-\}}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaKeyword{import}\AgdaSpace{}%
-% \AgdaModule{Algebras.Signatures}\AgdaSpace{}%
-% \AgdaKeyword{using}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{Signature}\AgdaSymbol{;}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓞}\AgdaSymbol{;}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓥}\AgdaSymbol{)}\<%
-% \\
-% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaKeyword{import}\AgdaSpace{}%
-% \AgdaModule{MGS-Subsingleton-Theorems}\AgdaSpace{}%
-% \AgdaKeyword{using}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{global-dfunext}\AgdaSymbol{)}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{Homomorphisms.Isomorphisms}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Signature}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{global-dfunext}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaKeyword{import}\AgdaSpace{}%
-% \AgdaModule{Homomorphisms.Noether}\AgdaSymbol{\{}\AgdaArgument{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSymbol{\}\{}\AgdaBound{gfe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{public}\<%
-% \\
-% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaKeyword{import}\AgdaSpace{}%
-% \AgdaModule{MGS-Embeddings}\AgdaSpace{}%
-% \AgdaKeyword{using}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{Nat}\AgdaSymbol{;}\AgdaSpace{}%
-% \AgdaFunction{NatΠ}\AgdaSymbol{;}\AgdaSpace{}%
-% \AgdaFunction{NatΠ-is-embedding}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaKeyword{public}\<%
-% \end{code}
 
 \subsubsection{Definition of isomorphism}\label{definition-of-isomorphism}
 

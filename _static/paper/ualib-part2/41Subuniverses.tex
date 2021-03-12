@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part2.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End: 
 We start by defining a type that represents the important concept of \defn{subuniverse}. Suppose \ab 𝑨 is an algebra. A subset \ab B \af ⊆ \af ∣ \ab 𝑨 \af ∣ is said to be \defn{closed under the operations of} \ab 𝑨 if for each \ab 𝑓 ∈ \af ∣ \ab 𝑆 \af ∣ and all tuples \ab 𝑏 \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \ab 𝐵 the element (\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑏 belongs to \ab B. If a subset \ab B \af ⊆ \ab 𝐴 is closed under the operations of \ab 𝑨, then we call \ab B a \defn{subuniverse} of \ab 𝑨.
 
 We first show how to represent in \agda the collection of subuniverses of an algebra \ab 𝑨.  Since a subuniverse is viewed as a subset of the domain of \ab 𝑨, we define it as a predicate on \af ∣ \ab 𝑨 \af ∣.  Thus, the collection of subuniverses is a predicate on predicates on \af ∣ \ab 𝑨 \af ∣.

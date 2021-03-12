@@ -25,11 +25,9 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 #### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are algebraic structures in the signature `𝑆`, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:
+If `𝑨` and `𝑩` are algebraic structures in the signature `𝑆`, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
 
 `h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
-
-Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
 
 To formalize this concept, we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣`, from the domain of `𝑨` to the domain of `𝑩`, *commutes* (or is *compatible*) with an operation 𝑓, interpreted in the algebras `𝑨` and `𝑩`.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
 
@@ -76,7 +74,7 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-Next, perhaps less obvious, are the two compositions of the lift and lower maps defined in the [Prelude.Lifts][] module.
+Next, `lift` and `lower`, defined in the [Prelude.Lifts][] module, are (the maps of) homomorphisms.  Again, the proofs are trivial.
 
 \begin{code}
 
@@ -99,7 +97,9 @@ Next, perhaps less obvious, are the two compositions of the lift and lower maps 
 
 
 
-Similarly, we represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) with the following types.
+#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+
+We represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) by the following types.
 
 \begin{code}
 
@@ -119,7 +119,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-Finally, it will be convenient to have functions that return the *hom reduct* of an inhabitant of `mon` or `epi`.
+It will be convenient to have a function that takes an inhabitant of `mon` (or `epi`) and extracts the homomorphism part, or *hom reduct* (that is, the pair consisting of the map and a proof that the map is a homomorphism).
 
 \begin{code}
 
@@ -208,14 +208,13 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \end{code}
 
-From this congruence we construct the corresponding quotient.
+With this congruence we construct the corresponding quotient, along with some syntactic sugar to denote it.
 
 \begin{code}
 
  kerquo : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
  kerquo {𝑨} 𝑩 h = 𝑨 ╱ (kercon 𝑩 h)
 
- -- NOTATION.
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
  𝑨 [ 𝑩 ]/ker h = kerquo {𝑨} 𝑩 h
 
@@ -223,7 +222,10 @@ From this congruence we construct the corresponding quotient.
 
 \end{code}
 
-Given an algebra `𝑨` and a congruence `θ`, the canonical epimorphism from `𝑨` onto `𝑨 ╱ θ` is defined as follows.
+Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UALib][] is `𝑨 [ 𝑩 ]/ker h`.
+
+#### <a id="natural-projection">The canonical projection</a>
+Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ that is constructed, and proved epimorphic, as follows.
 
 \begin{code}
 
@@ -341,6 +343,15 @@ Of course, we could prove a more general result involving projections onto multi
 
 
 --------------------------------------
+
+<sup>[1]</sup><span class="footnote" id="fn1">
+Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
+
+Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
+
+<br>
+
+<br>
 
 [↑ Homomorphisms](Homomorphisms.html)
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
