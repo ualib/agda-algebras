@@ -1,0 +1,11 @@
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% TeX-parse-self: t
+%%% TeX-auto-save: t
+%%% TeX-master: "ualib-part2"
+%%% End: 
+
+The mathematical results described in this paper have well known \emph{informal} proofs. Our main contribution is the formalization, mechanization, and verification of the statements and proofs of these results in dependent type theory using Agda.
+
+Unless explicitly stated otherwise, the Agda source code described in this paper is due to the author, with the following caveat: the \ualib depends on the \typetopology library of \MartinEscardo~\cite{MHE}.  Each dependency is carefully accounted for and mentioned in this paper. For the sake of completeness and clarity, and to keep the paper mostly self-contained, we repeat some definitions from the \typetopology library, but in each instance we cite the original source.\footnote{In the \ualib, such instances occur only inside hidden modules that are never actually used, followed immediately by a statement that imports the code in question from its original source.}

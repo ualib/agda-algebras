@@ -633,81 +633,94 @@
 \ifx\usehyperxmp\relax%
   \RequirePackage[pdfa,unicode]{hyperref}%
 \else%
-  \RequirePackage[unicode]{hyperref}%
+  \RequirePackage{xcolor}%
+  % \usepackage[unicode,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}%
+  % \definecolor{lnkcol}{HTML}{5F38AD}
+  % \definecolor{lnkcol}{HTML}{42029F}
+  % \definecolor{lnkcol}{HTML}{46017C}
+  % \definecolor{lnkcol}{HTML}{000000}
+% \definecolor{lnkcol}{HTML}{022B8E}
+% \definecolor{lnkcol}{HTML}{020FB4}
+% \definecolor{lnkcol}{HTML}{03019A}
+% \definecolor{lnkcol}{HTML}{01019A}
+\definecolor{lnkcol}{HTML}{010183}
+  \RequirePackage[unicode,colorlinks=true,urlcolor=lnkcol,linkcolor=lnkcol,citecolor=lnkcol]{hyperref}%
 \fi%
 \let\C\relax%
 \let\G\relax%
 \let\F\relax%
 \let\U\relax%
-\pdfstringdefDisableCommands{%
-	\let\thanks\@gobble%
-	\let\footnote\@gobble%
-	\def\footnotemark{}%
-	\def\cs#1{\textbackslash #1}%
-	\let\normalfont\@empty%
-	\let\scshape\@empty%
-	\def\and{and }%
-	\def\,{ }%
-	\def\textrightarrow{ -> }%
-	\let\mathsf\@empty%
-}%
-\hypersetup{
-	breaklinks=true,
-	pdfencoding=unicode,
-	bookmarksnumbered,
-	pdfborder={0 0 0},
-	pdfauthor={ }
-}%
-\AtBeginDocument{
-\ifx\usehyperxmp\relax
-\hypersetup{
-pdftitle={\@title},
-pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf \fi},
-pdfkeywords={\@keywords},
-pdfproducer={LaTeX with lipics-v2021.cls},
-pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle},
-pdfcopyright = { Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0},
-pdflang={en},
-pdfmetalang={en},
-pdfpublisher={Schloss Dagstuhl -- Leibniz-Zentrum für Informatik, Dagstuhl Publishing, Germany},
-pdflicenseurl={https://creativecommons.org/licenses/by-sa/4.0/},
-pdfpubtype={LIPIcs},
-pdfvolumenum={\@SeriesVolume},
-pdfpagerange={\@ArticleNo:\thepage-\@ArticleNo:\theTotPages},
-pdfdoi={\@lipicsdoi},
-pdfapart=3,
-pdfaconformance=B
-}
-\else%
-\hypersetup{
-pdftitle={\@title},
-pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf \fi},
-pdfkeywords={\@keywords},
-pdfcreator={LaTeX with lipics-v2021.cls},
-pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0}
-}%
-\fi	%
-}
-\ifx\usehyperxmp\relax
-\pdfobjcompresslevel=0
-\pdfinclusioncopyfonts=1
-\IfFileExists{colorprofiles.tex}{
-\RequirePackage{colorprofiles}%
-\IfFileExists{sRGB.icc}{
-\immediate\pdfobj stream attr{/N 3} file{sRGB.icc}
-\pdfcatalog{%
-/OutputIntents [
-<<
-/Type /OutputIntent
-/S /GTS_PDFA1
-/DestOutputProfile \the\pdflastobj\space 0 R
-/OutputConditionIdentifier (sRGB)
-/Info (sRGB)
->>
-]
-}}{}
-}{\ClassWarning{Package colorprofiles not installed}{Please install package colorprofiles}}
-\fi
+% \pdfstringdefDisableCommands{%
+% 	\let\thanks\@gobble%
+% 	\let\footnote\@gobble%
+% 	\def\footnotemark{}%
+% 	\def\cs#1{\textbackslash #1}%
+% 	\let\normalfont\@empty%
+% 	\let\scshape\@empty%
+% 	\def\and{and }%
+% 	\def\,{ }%
+% 	\def\textrightarrow{ -> }%
+% 	\let\mathsf\@empty%
+% }%
+% \hypersetup{
+% 	breaklinks=true,
+% 	pdfencoding=unicode,
+% 	bookmarksnumbered,
+% 	pdfborder={0 0 0},
+% 	pdfauthor={ }
+% }%
+% \AtBeginDocument{
+% \ifx\usehyperxmp\relax
+% \hypersetup{
+% pdftitle={},
+% % pdftitle={\@titlerunning},
+% pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf \fi},
+% pdfkeywords={\@keywords},
+% pdfproducer={LaTeX with lipics-v2021.cls},
+% pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle},
+% pdfcopyright = { Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0},
+% pdflang={en},
+% pdfmetalang={en},
+% pdfpublisher={Schloss Dagstuhl -- Leibniz-Zentrum für Informatik, Dagstuhl Publishing, Germany},
+% pdflicenseurl={https://creativecommons.org/licenses/by-sa/4.0/},
+% pdfpubtype={LIPIcs},
+% pdfvolumenum={\@SeriesVolume},
+% pdfpagerange={\@ArticleNo:\thepage-\@ArticleNo:\theTotPages},
+% pdfdoi={\@lipicsdoi},
+% pdfapart=3,
+% pdfaconformance=B
+% }
+% \else%
+% \hypersetup{
+% pdftitle={},
+% % pdftitle={\@titlerunning},
+% pdfauthor={\ifx\authoranonymous\relax Anonymous author(s) \else \@authorsforpdf \fi},
+% pdfkeywords={\@keywords},
+% pdfcreator={LaTeX with lipics-v2021.cls},
+% pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\authoranonymous\relax Anonymous author(s) \else \@copyrightholder; \fi licensed under Creative Commons License CC-BY-SA 4.0}
+% }%
+% \fi	%
+% }
+% \ifx\usehyperxmp\relax
+% \pdfobjcompresslevel=0
+% \pdfinclusioncopyfonts=1
+% \IfFileExists{colorprofiles.tex}{
+% \RequirePackage{colorprofiles}%
+% \IfFileExists{sRGB.icc}{
+% \immediate\pdfobj stream attr{/N 3} file{sRGB.icc}
+% \pdfcatalog{%
+% /OutputIntents [
+% <<
+% /Type /OutputIntent
+% /S /GTS_PDFA1
+% /DestOutputProfile \the\pdflastobj\space 0 R
+% /OutputConditionIdentifier (sRGB)
+% /Info (sRGB)
+% >>
+% ]
+% }}{}
+% }{\ClassWarning{Package colorprofiles not installed}{Please install package colorprofiles}}
+% \fi
 \RequirePackage[labelsep=space,singlelinecheck=false,%
   font={up,small},labelfont={sf,bf},%
   listof=false]{caption}%"listof" instead of "list" for backward compatibility
