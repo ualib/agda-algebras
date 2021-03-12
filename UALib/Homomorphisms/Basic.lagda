@@ -19,7 +19,7 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} public
-open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
+open import MGS-MLTT using (_≡⟨_⟩_; _∎; -Π) public
 
 \end{code}
 
@@ -140,7 +140,7 @@ Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} {fe : dfunext 𝓥 𝓦} where
 
  𝐸 : {𝑩 : Algebra 𝓦 𝑆}(g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
  𝐸 g h x = g x ≡ h x
@@ -160,7 +160,7 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
   →            ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
 
  𝐸hom-closed 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
-                           (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(gfe p) ⟩
+                           (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
                            (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
                            ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
 
@@ -282,39 +282,46 @@ module _ {𝓤 𝓦 : Universe} where
 
 #### <a id="product-homomorphisms">Product homomorphisms</a>
 
-Suppose we have an algebra `𝑨`, a type `I : 𝓘 ̇`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  (We sometimes refer to the inhabitants of `I` as "indices", and call `ℬ` an *indexed family of algebras*.)  If for each index `i : I` there is a homomorphism `ϕ i : hom 𝑨 (ℬ i)`, then we can construct from these data a natural homomorphism from `𝑨` to the product `⨅ ℬ`.
+Suppose we have an algebra `𝑨`, a type `I : 𝓘 ̇`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
+
+If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
 \begin{code}
 
-module _ {𝓤 𝓘 𝓦 : Universe} where
+module _ {𝓤 𝓘 𝓦 : Universe} {fe : dfunext 𝓘 𝓦} where
 
  ⨅-hom-co : {𝑨 : Algebra 𝓤 𝑆}{I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆)
-  →         (∀ i → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+  →         Π i ꞉ I , hom 𝑨 (ℬ i)  →  hom 𝑨 (⨅ ℬ)
 
- ⨅-hom-co ℬ hs = ϕ , ϕhom
+ ⨅-hom-co {𝑨} ℬ 𝒽 = ϕ , ϕhom
   where
-  ϕ : _ → ∣ ⨅ ℬ ∣
-  ϕ a = λ i → ∣ hs i ∣ a
+  ϕ : ∣ 𝑨 ∣ → ∣ ⨅ ℬ ∣
+  ϕ a = λ i → ∣ 𝒽 i ∣ a
 
-  ϕhom : is-homomorphism _ (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒶 = gfe λ i → ∥ hs i ∥ 𝑓 (λ x → 𝒶 x)
+  ϕhom : is-homomorphism 𝑨 (⨅ ℬ) ϕ
+  ϕhom 𝑓 𝒶 = fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶
 
 \end{code}
 
-This generalizes easily to the case in which the domain is also a product of a family of algebras.  That is, given families `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆`, and assuming `∀ i` there exists a homomorphism `hom (𝒜 i) (ℬ i)`, we construct the corresponding homomorphism from `⨅ 𝒜` to `⨅ ℬ` as follows.
+The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.  The syntax we use to represent this type is available to us because of the way `-Π` is defined in the \typetopology library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However,
+we could equally well have used one of the following alternatives, which may be closer to "standard Agda" syntax:
+
+`Π λ i → hom 𝑨 (ℬ i)` ~ ~ or ~ ~ `(i : I) → hom 𝑨 (ℬ i)` ~ ~ or ~ ~ `∀ i → hom 𝑨 (ℬ i)`.
+
+The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras. That is, if we are given `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆` (two families of `𝑆`-algebras), and `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 \begin{code}
 
  ⨅-hom : {I : 𝓘 ̇}(𝒜 : I → Algebra 𝓤 𝑆)(ℬ : I → Algebra 𝓦 𝑆)
-  →      (∀ i → hom (𝒜 i)(ℬ i)) → hom (⨅ 𝒜) (⨅ ℬ)
+  →      Π i ꞉ I , hom (𝒜 i)(ℬ i)  →  hom (⨅ 𝒜)(⨅ ℬ)
 
- ⨅-hom 𝒜 ℬ hs = ϕ , ϕhom
+ ⨅-hom 𝒜 ℬ 𝒽 = ϕ , ϕhom
   where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-  ϕ = λ x i → ∣ hs i ∣ (x i)
+  ϕ = λ x i → ∣ 𝒽 i ∣ (x i)
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒶 = gfe λ i → ∥ hs i ∥ 𝑓 (λ x → 𝒶 x i)
+  ϕhom 𝑓 𝒶 = fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i)
 
 \end{code}
 
@@ -328,15 +335,15 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 module _ {𝓘 𝓦 : Universe} where
 
- ⨅-projection-hom : {I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) → (i : I) → hom (⨅ ℬ) (ℬ i)
+ ⨅-projection-hom : {I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) → Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
 
- ⨅-projection-hom ℬ i = ϕi , ϕihom
+ ⨅-projection-hom ℬ = λ i → 𝒽 i , 𝒽hom i
   where
-  ϕi : ∣ ⨅ ℬ ∣ → ∣ ℬ i ∣
-  ϕi = λ x → x i
+  𝒽 : ∀ i → ∣ ⨅ ℬ ∣ → ∣ ℬ i ∣
+  𝒽 i = λ x → x i
 
-  ϕihom : is-homomorphism (⨅ ℬ) (ℬ i) ϕi
-  ϕihom 𝑓 𝒂 = 𝓇ℯ𝒻𝓁
+  𝒽hom : ∀ i → is-homomorphism (⨅ ℬ) (ℬ i) (𝒽 i)
+  𝒽hom _ _ _ = 𝓇ℯ𝒻𝓁
 
 \end{code}
 
@@ -346,12 +353,11 @@ Of course, we could prove a more general result involving projections onto multi
 
 --------------------------------------
 
-<sup>[1]</sup><span class="footnote" id="fn1">
-Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.
+<sup>1</sup><span class="footnote" id="fn1">
+Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
-Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
+<span class="footnote">Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
 
-<br>
 
 <br>
 

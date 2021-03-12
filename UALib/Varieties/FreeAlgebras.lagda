@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
-First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class 𝒦 of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
+First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
 
 \begin{code}
 
@@ -182,7 +182,6 @@ In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume 𝕏, which 
 \begin{code}
 
 module HSPTheorem
-
  {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
@@ -230,7 +229,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
  hom𝔄 i = lift-hom (𝔄s i) (𝔄h i)
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co 𝔄s hom𝔄
+ homℭ = ⨅-hom-co {fe = gfe} 𝔄s hom𝔄
 
 \end{code}
 
