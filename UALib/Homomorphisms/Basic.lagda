@@ -60,9 +60,9 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 #### Examples
 
-Here are a few very special examples of homomorphisms. In each case, the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
+Let's look at a few examples of homomorphisms. We begin with some very special cases in which the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
 
-The most obvious example is the identity map.
+The most obvious example of a homomorphism is the identity map, which is proved to be a homomorphism as follows.
 
 \begin{code}
 
