@@ -279,8 +279,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 #### <a id="product-homomorphisms">Product homomorphisms</a>
 
-Suppose we have an algebra `𝑨`, an (index) type `I : 𝓘 ̇`, and a family of algebras `ℬ : I → Algebra 𝓦 𝑆`, and
-suppose for each `i : I` we have a homomorphism `hs i : hom 𝑨 (ℬ i)`.  We associate with these data a natural homomorphism from `𝑨` to the product `⨅ ℬ`, as follows.
+Suppose we have an algebra `𝑨`, a type `I : 𝓘 ̇`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  (We sometimes refer to the inhabitants of `I` as "indices", and call `ℬ` an *indexed family of algebras*.)  If for each index `i : I` there is a homomorphism `ϕ i : hom 𝑨 (ℬ i)`, then we can construct from these data a natural homomorphism from `𝑨` to the product `⨅ ℬ`.
 
 \begin{code}
 

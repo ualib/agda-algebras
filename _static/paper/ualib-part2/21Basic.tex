@@ -1420,21 +1420,8 @@ to prove; luckily it is also the one we need later.
 \end{code}
 
 \subsubsection{Product homomorphisms}\label{product-homomorphisms}
-Suppose we have an algebra
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆},
-an (index) type \abt{I}{𝓘}\af ̇ , and a family of algebras \AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}, and
-for each \abt{i}{I} we have a homomorphism \ab{hs} \ab i~\as :~\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaBound{𝑨}~(\AgdaBound{ℬ}~\AgdaBound{i}).  We associate with these data a natural homomorphism from \AgdaBound{𝑨} to the product \AgdaFunction{⨅}\AgdaSpace{}\AgdaBound{ℬ}.
+Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type \abt{I}{𝓘}\af ̇, and a family \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆 of algebras. (We sometimes refer to the inhabitants of \ab I as ``indices,'' and call \ab ℬ an \emph{indexed family of algebras}.) If for each index \abt{i}{I} there is a homomorphism \ab{hs} \ab i~\as :~\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{𝑨}~(\AgdaBound{ℬ}~\AgdaBound{i}), then we can construct from these data a natural homomorphism from \AgdaBound{𝑨} to the product \AgdaFunction{⨅}\AgdaSpace{}\AgdaBound{ℬ}.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{⨅-hom-co}\AgdaSpace{}%
