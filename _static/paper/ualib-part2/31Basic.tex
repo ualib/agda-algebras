@@ -3,23 +3,39 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End: 
-The theoretical background that begins each subsection below is based on~\cite[\S4.3]{Bergman:2012}, that is, Section 4.3 of Cliff Bergman's excellent textbook on universal algebra. Apart from notation, our presentation is similar to Bergman's, but we will be more concise, omitting some details and all examples, in order to more quickly arrive at our objective, which is to use type theory to express the concepts and formalize them in the \agda language. We refer the reader to~\cite{Bergman:2012} for a more complete exposition of classical (informal) universal algebra.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The theoretical background that begins each subsection below is based on Section
+4.3 of Cliff Bergman's excellent textbook on universal
+algebra,~\cite[\S4.3]{Bergman:2012}. Apart from notation, our presentation is
+similar to Bergman's, but we will try to be concise, omitting some details and
+examples, in order to more quickly arrive at our objective, which is to use
+type theory to express the concepts and formalize them in the \agda language. We
+refer the reader to~\cite{Bergman:2012} for a more complete exposition of
+classical (informal) universal algebra. 
 
 \subsubsection{The type of terms}\label{the-type-of-terms}
 
-Fix a signature \ab{𝑆} and let \ab{X} denote an arbitrary nonempty collection of variable symbols. Assume the symbols in \ab{X} are distinct from the operation symbols of \ab{𝑆}, that is \ab{X} \af ∩ \af ∣ \ab 𝑆 \af ∣ \as = ∅.
+Fix a signature \ab{𝑆} and let \ab{X} denote an arbitrary nonempty collection of
+variable symbols. Assume the symbols in \ab{X} are distinct from the operation
+symbols of \ab{𝑆}, that is \ab{X}~\af ∩~\af ∣~\ab 𝑆~\af ∣~\as =~∅. 
+By a \defn{word} in the language of \ab{𝑆}, we mean a nonempty, finite sequence
+of members of \ab{X}~\af ∪~\af ∣~\ab 𝑆~\af ∣. We denote the concatenation of
+such sequences by simple juxtaposition. Let \ab{S₀} denote the set of nullary
+operation symbols of \ab{𝑆}. We define by induction on \ab{n} the sets \ab{𝑇ₙ}
+of \defn{words} over \ab{X}~\af ∪~\af ∣~\ab 𝑆~\af ∣ as follows
+(cf.~\cite[Def.~4.19]{Bergman:2012}):\\[-4pt]  
 
-By a \defn{word} in the language of \ab{𝑆}, we mean a nonempty, finite sequence of members of \ab{X} \af ∪ \af ∣ \ab 𝑆 \af ∣. We denote the concatenation of such sequences by simple juxtaposition.
+\ab{𝑇₀} :=~\ab X~\af ∪~\ab{S₀} and \ab{𝑇ₙ₊₁} :=~\ab{𝑇ₙ}~\af ∪~\ab{𝒯ₙ},\\[6pt]
+where \ab{𝒯ₙ} is the collection of all \ab 𝑓~\ab 𝑡 such that \ab{𝑓}~\as :~\af
+∣~\ab 𝑆~\af ∣ and \ab{𝑡}~\as :~\af ∥~\ab 𝑆~\af ∥~\ab 𝑓~\as →~\ab{𝑇ₙ}. (Recall,
+\af{∥}~\ab 𝑆~\af ∥~\ab 𝑓 denotes the arity of the operation symbol \ab 𝑓.) 
 
-Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction on \ab{n} the sets \ab{𝑇ₙ} of \defn{words} over \ab{X} \af ∪ \af ∣ \ab 𝑆 \af ∣ as follows (cf.~\cite[Def. 4.19]{Bergman:2012}:\\[-4pt]
-
-\ab{𝑇₀} := \ab X \af ∪ \ab{S₀} and \ab{𝑇ₙ₊₁} := \ab{𝑇ₙ} \af ∪ \ab{𝒯ₙ}
-
-where \ab{𝒯ₙ} is the collection of all \ab 𝑓 \ab 𝒕 such that \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ and \ab{𝒕} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \ab{𝑇ₙ}. (Recall, \af{∥} \ab 𝑆 \af ∥ \ab 𝑓 is the arity of the operation symbol \ab 𝑓.)
-
-We define the collection of \defn{terms} in the signature \ab{𝑆} over \ab{X} by \ad{Term X := ⋃ₙ 𝑇ₙ}. By an 𝑆-\defn{term} we mean a term in the language of \ab{𝑆}.
-
-The definition of \ad{Term} \ab X is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
+We define the collection of \defn{terms} in the signature \ab{𝑆} over \ab{X} by
+\ad{Term}~\ab X~:=~\af{⋃ₙ}~\ab 𝑇ₙ. By an 𝑆-\defn{term} we mean a term in the language of
+\ab{𝑆}. Since the definition of \ad{Term}~\ab X is recursive, it would seem that
+an inductive type could be used to represent the semantic notion of terms in
+type theory. Indeed, the \defn{inductive type of terms} in the \ualib is
+one such representation; it is defined as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
@@ -52,7 +68,7 @@ The definition of \ad{Term} \ab X is recursive, indicating that an inductive typ
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
@@ -66,19 +82,35 @@ The definition of \ad{Term} \ab X is recursive, indicating that an inductive typ
 \AgdaBound{X}\<%
 \end{code}
 \ccpad
-\textbf{Notation}. As usual, the type \ab{X} represents an arbitrary collection of variable symbols. Throughout this module the name of the first constructor of the \ad{Term} type will remain \aic{generator}. However, in all of the modules that follow this one, we will use the shorthand \aic{ℊ} to denote the \aic{generator}
-constructor.
+\textbf{Notation}. As usual, the type \ab{X} represents an arbitrary collection
+of variable symbols. Recall, \af{ov} \ab 𝓧 \af ̇ is our shorthand notation for
+the universe \ab 𝓞 \af ⊔ \ab 𝓥 \af ⊔ \ab 𝓧 \af ⁺ \af ̇.   Throughout this module
+the name of the first constructor of the \ad{Term} type will remain
+\aic{generator}. However, in all of the modules that follow this one, we will
+use the shorthand \aic{ℊ} to denote the \aic{generator} constructor. 
+
 
 \subsubsection{The term algebra}\label{the-term-algebra}
 
-For a given signature \ab{𝑆}, if the type \ad{Term} \ab X is nonempty (equivalently, if \ab{X} or \af{∣} \ab 𝑆 \af{∣} is nonempty), then we can define an algebraic structure, denoted by \af{𝑻} \ab X and called the \defn{term algebra in the signature} \ab{𝑆} \defn{over} \ab{X}. Terms are viewed as acting on other terms, so both the domain and basic operations of the algebra are the terms themselves.
+For a given signature \ab{𝑆}, if the type \ad{Term}~\ab X is nonempty
+(equivalently, if \ab{X} or \af{∣}~\ab 𝑆~\af{∣} is nonempty), then we can define
+an algebraic structure, denoted by \af{𝑻}~\ab X, called the \defn{term algebra
+  in the signature} \ab{𝑆} \defn{over} \ab{X}. Since terms take other terms
+as arguments they do double-duty, serving as both the elements of the domain and the basic
+operations of the algebra.
 
 \begin{itemize}
-\item For each operation symbol \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣, denote by   \ab{𝑓} \af ̂ (\af 𝑻 \ab X) the operation on \ad{Term} \ab X which maps a  tuple \ab{𝑡} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \af 𝑻 \ab X \af ∣ to the formal term \ab 𝑓 \ab 𝑡.
-\item Define \af{𝑻} \ab X to be the algebra with universe \af{∣} \af 𝑻 \ab X \af ∣ := \ad{Term} \ab X and operations \ab{𝑓} \af ̂ (\af 𝑻 \ab X), one for each symbol \ab{𝑓} in \af{∣} \ab 𝑆 \af{∣}.
+\item For each operation symbol \ab{𝑓}~\as :~\af ∣~\ab 𝑆~\af ∣, denote by
+  \ab{𝑓}~\af ̂ (\af 𝑻~\ab X) the operation on \ad{Term}~\ab X which maps each tuple
+  \ab{𝑡}~\as :~\af ∥~\ab 𝑆~\af ∥~\ab 𝑓~\as →~\af ∣~\af 𝑻~\ab X~\af ∣ of terms to the
+  formal term \ab 𝑓~\ab 𝑡. 
+\item Define \af{𝑻}~\ab X to be the algebra with universe \af{∣}~\af 𝑻~\ab X~\af
+  ∣ := \ad{Term}~\ab X and operations \ab{𝑓}~\af ̂ (\af 𝑻~\ab X), one for each
+  symbol \ab{𝑓} in \af{∣}~\ab 𝑆~\af{∣}. 
 \end{itemize}
 
-In \agda the term algebra can be defined as simply as one would hope.  Here it is.
+In \agda the term algebra can be defined as simply as one would hope.  Here is
+the definition one finds in the \ualibTermsBasic module of the \ualib.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
@@ -107,16 +139,20 @@ In \agda the term algebra can be defined as simply as one would hope.  Here it i
 
 \subsubsection{The universal property}\label{the-universal-property}
 
-The term algebra \af{𝑻} \ab X is \defn{absolutely free} (or \defn{universal} or \defn{initial}) for algebras in the signature \ab{𝑆}. That is, for every 𝑆-algebra \ab{𝑨}, the following hold.
+The term algebra \af{𝑻}~\ab X is \defn{absolutely free} (or \defn{universal} or
+\defn{initial}) for algebras in the signature \ab{𝑆}. That is, for every
+𝑆-algebra \ab{𝑨}, the following hold. 
 
 \begin{enumerate}
 % \def\labelenumi{\arabic{enumi}.}
 % \tightlist
-\item Every map \ab{h} \as : \ab 𝑋 \as → \af ∣ \ab 𝑨 \af ∣ lifts to a homomorphism from  \af{𝑻} \ab X to \ab{𝑨}.
-\item The induced homomorphism is unique.
+\item Every function from \ab 𝑋 to ∣~\ab 𝑨~\af ∣ lifts to a homomorphism from \af{𝑻}~\ab X to \ab{𝑨}.
+\item The homomorphism that exists by item 1 is unique.
 \end{enumerate}
 
-We now prove this in \agda, starting with the fact that every map from \ab{X} to \af{∣} \ab 𝑨 \af{∣} lifts to a map from \af{∣} \af 𝑻 \ab X \af{∣} to \af{∣} \ab 𝑨 \af{∣} in a natural way, by induction on the structure of the term.
+We now prove this in \agda, starting with the fact that every map from \ab{X} to
+\af{∣}~\ab 𝑨~\af{∣} lifts to a map from \af{∣}~\af 𝑻~\ab X~\af{∣} to \af{∣}~\ab
+𝑨~\af{∣} in a natural way, by induction on the structure of a given term. 
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{free-lift}\AgdaSpace{}%
@@ -162,22 +198,33 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
+(\AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{free-lift}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\<%
+\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-Next, we verify that the lift so defined is a homomorphism.
+Naturally, at the base step of the induction, when the term has the form \aic{generator}~\ab
+x, the free lift of \ab h agrees with \ab h.  For the inductive step, when the given term has the form \aic{node}
+\ab f \ab 𝑡, then the free lift is defined as follows: for each \ab i,
+assume (the induction hypothesis) that we know how to evaluate the lift at each subterm \ab 𝑡 \ab i, and
+define it at the full term by simply applying 
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+to the lift of to the subterms.
+
+The free lift so defined is a homomorphism by construction. Indeed, here is the formal
+statement and (trivial) proof of this fact.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{lift-hom}\AgdaSpace{}%
@@ -215,18 +262,21 @@ Next, we verify that the lift so defined is a homomorphism.
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
-\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
 \ccpad
-Finally, we prove that the resulting homomorphism is unique.
+Finally, we prove that the free lift homomorphism is unique.  This requires
+\af{funext}~\ab 𝓥~\ab 𝓤 (that is, \emph{function extensionality} at universe levels
+\ab 𝓥 and \ab 𝓤) which we postulate by making it part of the premise in the
+following function type definition.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{free-unique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
+\>[1111I]\AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -244,6 +294,7 @@ Finally, we prove that the resulting homomorphism is unique.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\AgdaTab{1111}%
 \>[15]\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -306,20 +357,20 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}%
+\AgdaBound{𝑡}\AgdaSymbol{)}%
 \>[232I]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}%
+\AgdaBound{𝑡}\AgdaSymbol{)}%
 \>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
 \>[232I][@{}l@{\AgdaIndent{0}}]%
@@ -331,7 +382,7 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}%
 \>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaFunction{α}\AgdaSpace{}%
@@ -346,14 +397,14 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}%
 \>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
 %
@@ -362,7 +413,7 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}%
+\AgdaBound{𝑡}\AgdaSymbol{)}%
 \>[64]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
@@ -378,7 +429,7 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
@@ -387,7 +438,7 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{𝒕}\AgdaSymbol{)}\<%
+\AgdaBound{𝑡}\AgdaSymbol{)}\<%
 \\
 %
 \>[2]\AgdaFunction{α}\AgdaSpace{}%
@@ -406,11 +457,11 @@ Finally, we prove that the resulting homomorphism is unique.
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒕}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-Since it's absolutely free, the term algebra is the domain of a homomorphism to any algebra. Moreover, if we are given a surjective mapping \ab{h} from \ab{X} onto an algebra \ab{𝑨}, then the homomorphism constructed with \af{lift-hom} \ab 𝑨 \ab h will be an epimorphism from \af{𝑻} \ab X onto \ab{𝑨}.
+Since it's absolutely free, the term algebra is the domain of a homomorphism to any algebra. Moreover, if we are given a surjective mapping \ab{h} from \ab{X} onto an algebra \ab{𝑨}, then the homomorphism constructed with \af{lift-hom}~\ab 𝑨~\ab h will be an epimorphism from \af{𝑻}~\ab X onto \ab{𝑨}.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
@@ -509,5 +560,5 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
 \AgdaFunction{h₀⁻¹y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{η}\<%
 \end{code}
-
+\ccpad
 In the \ualibVarieties module we'll use \af{lift-hom} and \af{lift-of-epi-is-epi} to construct such epimorphisms.

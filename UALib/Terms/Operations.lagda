@@ -28,9 +28,9 @@ open import Terms.Basic{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
 
 When we interpret a term in an algebra we call the resulting function a **term operation**.  Given a term `𝑝` and an algebra `𝑨`, we denote by `𝑝 ̇ 𝑨` the **interpretation** of `𝑝` in `𝑨`.  This is defined inductively as follows.
 
-1. If `𝑝` is a variable symbol `x : X` and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `(𝑝 ̇ 𝑨) 𝒂 := 𝒂 x`.
+1. If `𝑝` is a variable symbol `x : X` and if `𝑎 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `(𝑝 ̇ 𝑨) 𝑎 := 𝑎 x`.
 
-2. If `𝑝 = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝒂 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝒂 = (𝑓 𝑡 ̇ 𝑨) 𝒂 := (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝒂`.
+2. If `𝑝 = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝑎 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝑎 = (𝑓 𝑡 ̇ 𝑨) 𝑎 := (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝑎`.
 
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the [UALib][] as follows.
 
@@ -40,9 +40,9 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
  _̇_ : Term X → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
- (ℊ x ̇ 𝑨) 𝒂 = 𝒂 x
+ (ℊ x ̇ 𝑨) 𝑎 = 𝑎 x
 
- (node 𝑓 𝑡 ̇ 𝑨) 𝒂 = (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝒂
+ (node 𝑓 𝑡 ̇ 𝑨) 𝑎 = (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝑎
 
 \end{code}
 
@@ -114,17 +114,17 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
  interp-prod : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
-               (𝒜 : I → Algebra 𝓤 𝑆)(𝒂 : X → ∀ i → ∣ 𝒜 i ∣)
+               (𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
                -----------------------------------------------
-  →            (p ̇ (⨅ 𝒜)) 𝒂 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝒂 j i))
+  →            (p ̇ (⨅ 𝒜)) 𝑎 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝑎 j i))
 
- interp-prod (ℊ x₁) 𝒜 𝒂 = 𝓇ℯ𝒻𝓁
+ interp-prod (ℊ x₁) 𝒜 𝑎 = 𝓇ℯ𝒻𝓁
 
- interp-prod (node 𝑓 𝑡) 𝒜 𝒂 = let IH = λ x → interp-prod (𝑡 x) 𝒜 𝒂
+ interp-prod (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod (𝑡 x) 𝒜 𝑎
   in
-  (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝒂)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
-  (𝑓 ̂ ⨅ 𝒜)(λ x → (λ i → (𝑡 x ̇ 𝒜 i)(λ j → 𝒂 j i)))   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-  (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝑡 x ̇ 𝒜 i)(λ j → 𝒂 j i)))  ∎
+  (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝑎)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
+  (𝑓 ̂ ⨅ 𝒜)(λ x → (λ i → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+  (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))  ∎
 
 
  interp-prod2 : (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)

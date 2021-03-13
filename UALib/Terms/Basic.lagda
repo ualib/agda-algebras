@@ -34,7 +34,7 @@ Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by i
 
 `𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where `𝒯ₙ` is the collection of all `𝑓 𝒕` such that `𝑓 : ∣ 𝑆 ∣` and `𝒕 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.)
+where `𝒯ₙ` is the collection of all `𝑓 𝑡` such that `𝑓 : ∣ 𝑆 ∣` and `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ 𝑓` is the arity of the operation symbol 𝑓.)
 
 We define the collection of **terms** in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-**term** we mean a term in the language of `𝑆`.
 
@@ -44,13 +44,13 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 data Term {𝓧 : Universe}(X : 𝓧 ̇ ) : ov 𝓧 ̇  where
   generator : X → Term X
-  node : (f : ∣ 𝑆 ∣)(𝒕 : ∥ 𝑆 ∥ f → Term X) → Term X
+  node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
 
 open Term
 
 \end{code}
 
-**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Throughout this module the name of the first constructor of the `Term` type will remain `generator`. However, in all of the modules that follow this one, we will use the shorthand `ℊ` to denote the `generator` constructor.
+**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov 𝓧 ̇` is our shorthand notation for the universe `𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇`.  Throughout this module the name of the first constructor of the `Term` type will remain `generator`. However, in all of the modules that follow this one, we will use the shorthand `ℊ` to denote the `generator` constructor.
 
 
 
@@ -91,39 +91,41 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
  free-lift _ h (generator x) = h x
 
- free-lift 𝑨 h (node f 𝒕) = (f ̂ 𝑨) λ i → free-lift 𝑨 h (𝒕 i)
+ free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
 \end{code}
 
-Next, we verify that the lift so defined is a homomorphism.
+Naturally, at the base step of the induction, when the term has the form `generator x`, the free lift of `h` agrees with `h`.  For the inductive step, when the given term has the form `node f 𝑡`, then the free lift is defined as follows: for each `i`, assume (the induction hypothesis) that we know how to evaluate the lift at each subterm `𝑡 i`, and
+define it at the full term by simply applying `f ̂ 𝑨` to the lift of to the subterms.
+
+The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
 \begin{code}
 
  lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 
- lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (_ ̂ 𝑨) 𝓇ℯ𝒻𝓁
+ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) 𝓇ℯ𝒻𝓁
 
 \end{code}
 
-Finally, we prove that the resulting homomorphism is unique.
+Finally, we prove that the free lift homomorphism is unique.  This requires `funext 𝓥 𝓤` (that is, *function extensionality* at universe levels `𝓥` and `𝓤`) which we postulate by making it part of the premise in the following function type definition.
 
 \begin{code}
 
-
  free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
   →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
-               -------------------------------------------------
+               ----------------------------------------------------
   →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
  free-unique _ _ _ _ p (generator x) = p x
 
- free-unique fe 𝑨 g h p (node 𝑓 𝒕) = ∣ g ∣ (node 𝑓 𝒕)            ≡⟨ ∥ g ∥ 𝑓 𝒕 ⟩
-                                    (𝑓 ̂ 𝑨)(λ i → ∣ g ∣ (𝒕 i))   ≡⟨ α ⟩
-                                    (𝑓 ̂ 𝑨)(λ i → ∣ h ∣ (𝒕 i))   ≡⟨ (∥ h ∥ 𝑓 𝒕)⁻¹ ⟩
-                                    ∣ h ∣ (node 𝑓 𝒕)            ∎
+ free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
+                                    (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ α ⟩
+                                    (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
+                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
   where
-  α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝒕) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝒕)
-  α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝒕 i))
+  α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
+  α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
