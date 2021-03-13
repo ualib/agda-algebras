@@ -25,7 +25,7 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎; -Π) public
 
 #### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are algebraic structures in the signature `𝑆`, then a **homomorphism** is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` with values in `∣ 𝑨 ∣`, the following equality holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
+If `𝑨` and `𝑩` are `𝑆`-algebras, then a **homomorphism** is a function `ℎ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
 
 `h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
 
@@ -49,7 +49,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 \begin{code}
 
  is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- is-homomorphism 𝑨 𝑩 g = ∀ (𝑓 : ∣ 𝑆 ∣) → compatible-op-map 𝑨 𝑩 𝑓 g
+ is-homomorphism 𝑨 𝑩 g = ∀ 𝑓  →  compatible-op-map 𝑨 𝑩 𝑓 g
 
  hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
@@ -306,7 +306,7 @@ module _ {𝓤 𝓘 𝓦 : Universe} {fe : dfunext 𝓘 𝓦} where
 The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.  The syntax we use to represent this type is available to us because of the way `-Π` is defined in the \typetopology library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However,
 we could equally well have used one of the following alternatives, which may be closer to "standard Agda" syntax:
 
-`Π λ i → hom 𝑨 (ℬ i)` ~ ~ or ~ ~ `(i : I) → hom 𝑨 (ℬ i)` ~ ~ or ~ ~ `∀ i → hom 𝑨 (ℬ i)`.
+`Π λ i → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `(i : I) → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `∀ i → hom 𝑨 (ℬ i)`.
 
 The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras. That is, if we are given `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆` (two families of `𝑆`-algebras), and `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 

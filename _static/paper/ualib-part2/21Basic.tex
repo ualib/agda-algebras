@@ -60,7 +60,7 @@ Since this is the first module we introduce in the installment of our series of 
 \AgdaKeyword{public}\<%
 \end{code}
 \ccpad
-The \AgdaKeyword{OPTIONS} \emph{pragma} sets some parameters that effect the type theoretic foundations that we assume.  These are discussed in~\cite[\S2.1]{DeMeo:2021-1}, but let's briefly review: \AgdaPragma{--without-K} disables \axiomk~(\cite{agdaref-axiomk}); \AgdaPragma{--exact-split} makes Agda accept only definitions that use \emph{definitional} equalities~(\cite{agdatools-patternmatching}); \AgdaPragma{--safe} ensures that nothing is postulated outright, so that every non-MLTT axiom has to be an explicit assumption (see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}).\footnote{As in~\cite{DeMeo:2021-1}, MLTT stands for Martin-L\"of Type Theory.}
+The \AgdaKeyword{OPTIONS} \emph{pragma} sets some parameters that effect the type theoretic foundations that we assume.  These are discussed in~\cite[\S2.1]{DeMeo:2021-1}, but let's briefly review: \AgdaPragma{--without-K} disables \axiomk (see~\cite{agdaref-axiomk}); \AgdaPragma{--exact-split} makes Agda accept only definitions that use \emph{definitional} equalities (see~\cite{agdatools-patternmatching}); \AgdaPragma{--safe} ensures that nothing is postulated outright, so that every non-MLTT axiom has to be an explicit assumption (see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}).\footnote{As in~\cite{DeMeo:2021-1}, MLTT stands for Martin-L\"of Type Theory.}
 
 
 
@@ -79,9 +79,9 @@ The \AgdaKeyword{OPTIONS} \emph{pragma} sets some parameters that effect the typ
 
 \subsubsection{Homomorphisms}\label{homomorphisms}
 
-If \ab{𝑨} and \ab{𝑩} are \ab{𝑆}-algebras, then a \defn{homomorphism} is a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ from the domain of \ab{𝑨} to the domain of \ab{𝑩} that is \defn{compatible} (or \defn{commutes}) with all of the basic operations of the signature; that is, for all
-\ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ and all tuples \ab{𝑎} \as : \af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ with values in \af{∣} \ab 𝑨 \af{∣}, the following equality holds:\footnote{%
-Recall, \ab{h} \af ∘ \ab 𝑎 is the tuple whose i-th component is \ab{h} (\ab 𝑎 \ab i).}\\[-4pt]
+If \ab{𝑨} and \ab{𝑩} are \ab{𝑆}-algebras, then a \defn{homomorphism} is a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ from the domain of \ab{𝑨} to the domain of \ab{𝑩} that is \defn{compatible} (or \defn{commutes}) with all of the basic operations of the signature; that is, for all operation symbols
+\ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ and all tuples \ab{𝑎} \as : \af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣, the following equality holds:\footnote{%
+Recall, \ab{h} \af ∘ \ab 𝑎 is the tuple whose \ab i-th component is \ab{h} (\ab 𝑎 \ab i).}\\[-4pt]
 
 \ab{h} ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎) ≡ (\ab 𝑓 \af ̂ \ab 𝑩) (\ab h \af ∘ \ab 𝑎).\\[4pt]
 Instead of ``homomorphism,'' we sometimes use the nickname ``hom'' to refer to such a map.
@@ -207,13 +207,9 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{compatible-op-map}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaSpace{}\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSpace{}\AgdaFunction{compatible-op-map}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
@@ -1665,10 +1661,11 @@ Later we will need a proof of the fact that the natural projection out of a prod
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSymbol{)}\AgdaSpace{}%
@@ -1680,18 +1677,25 @@ Later we will need a proof of the fact that the natural projection out of a prod
 %
 \>[1]\AgdaFunction{⨅-projection-hom}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ϕi}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{𝒽}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕihom}\<%
+\AgdaFunction{𝒽hom}\AgdaSpace{}%
+\AgdaBound{i}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕi}\AgdaSpace{}%
+\>[2]\AgdaFunction{𝒽}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSpace{}%
@@ -1703,7 +1707,8 @@ Later we will need a proof of the fact that the natural projection out of a prod
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕi}\AgdaSpace{}%
+\>[2]\AgdaFunction{𝒽}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
@@ -1714,19 +1719,24 @@ Later we will need a proof of the fact that the natural projection out of a prod
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕihom}\AgdaSpace{}%
+\>[2]\AgdaFunction{𝒽hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{ℬ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{ℬ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ϕi}\<%
+\AgdaSymbol{(}\AgdaFunction{𝒽}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕihom}\AgdaSpace{}%
-\AgdaUnderscore{}\AgdaSpace{}%
-\AgdaUnderscore{}\AgdaSpace{}%
+\>[2]\AgdaFunction{𝒽hom}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}

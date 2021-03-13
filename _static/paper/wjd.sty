@@ -250,6 +250,10 @@
 \newcommand\Set{\AgdaFunction{Set}\xspace}
 \usepackage{ifthen}
 
+
+
+\newcommand\AgdaTab[1]{\>[.][@{}l@{}]\<[#1I]}
+
 % Insert extra space before some tokens.
 \DeclareRobustCommand{\OtherTok}[1]{%
   \ifthenelse{ \equal{#1}{→} }{\ensuremath{\rightarrow}}{

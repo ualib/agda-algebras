@@ -3,22 +3,11 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End: 
-\subsubsection{Images of a single algebra}\label{images-of-a-single-algebra}
+% \subsubsection{Images of a single algebra}\label{images-of-a-single-algebra}
 
 We begin with what seems, for our purposes, the most useful way to represent the class of \defn{homomorphic images} of an algebra in dependent type theory.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{HomImage}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -109,13 +98,11 @@ We begin with what seems, for our purposes, the most useful way to represent the
 \AgdaBound{ϕ}\<%
 \end{code}
 \ccpad
-These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨} \as : \af{Algebra} \ab 𝓤 \ab 𝑆, the type
-\af{HomImagesOf} \ab 𝑨 denotes the class of algebras \ab{𝑩} \as : \af{Algebra} \ab 𝓦 \ab 𝑆 with a map \ab{φ} \as : \af{∣} \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ such that \ab{φ} is a surjective homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨}, the type \af{HomImagesOf} \ab 𝑨 denotes the class of algebras \ab{𝑩} \as : \af{Algebra} \ab 𝓦 \ab 𝑆 with a map \ab{φ} \as : \af{∣} \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ such that \ab{φ} is a epimorphism.
 
-Since we take the class of homomorphic images of an algebra to be closed under isomorphism, we consider \ab{𝑩} to be a homomorphic image of \ab{𝑨} if there exists an algebra \ab{𝑪} which is a homomorphic image of \ab{𝑨} and isomorphic to \ab{𝑩}. The following type expresses this.
+The standard (informal) notion of the class of homomorphic images of an algebra assumes closure under isomorphism. Thus, we consider \ab{𝑩} to be a homomorphic image of \ab{𝑨} if (and only if) there exists an algebra \ab{𝑪} which is a homomorphic image of \ab{𝑨} and isomorphic to \ab{𝑩}.  In the \ualib we expresses this notion with the following type.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}is-hom-image-of\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
@@ -128,14 +115,10 @@ Since we take the class of homomorphic images of an algebra to be closed under i
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -161,16 +144,6 @@ Since we take the class of homomorphic images of an algebra to be closed under i
 Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that expresses the assertion that a given algebra is a \emph{homomorphic image} of some algebra in the class, as well as a type that represents all such homomorphic images.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}is-hom-image-of-class\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
@@ -183,12 +156,8 @@ Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that expresses the
 \AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -223,12 +192,8 @@ Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that expresses the
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -250,35 +215,18 @@ Given a class \ab{𝒦} of \ab{𝑆}-algebras, we need a type that expresses the
 \subsubsection{Lifting tools}\label{lifting-tools}
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem).
-
 The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Lift}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{lift-of-alg-epic-is-epic}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[220I]\AgdaSymbol{(}\AgdaBound{𝓩}\AgdaSpace{}%
+\>[208I]\AgdaSymbol{(}\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{)\{}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[220I]%
+\>[.][@{}l@{}]\<[208I]%
 \>[28]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
@@ -446,14 +394,14 @@ The first states and proves the simple fact that the lift of an epimorphism is a
 %
 \>[2]\AgdaFunction{η}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[336I]\AgdaBound{y}%
+\>[324I]\AgdaBound{y}%
 \>[22]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{extfun}\AgdaSpace{}%
 \AgdaFunction{lift∼lower}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
-\>[.][@{}l@{}]\<[336I]%
+\>[.][@{}l@{}]\<[324I]%
 \>[6]\AgdaInductiveConstructor{lift}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{lower}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}%
@@ -492,12 +440,12 @@ The first states and proves the simple fact that the lift of an epimorphism is a
 %
 \>[1]\AgdaFunction{lift-alg-hom-image}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[363I]\AgdaSymbol{\{}\AgdaBound{𝓩}\AgdaSpace{}%
+\>[351I]\AgdaSymbol{\{}\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[363I]%
+\>[.][@{}l@{}]\<[351I]%
 \>[22]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%

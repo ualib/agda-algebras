@@ -45,7 +45,7 @@ Since we take the class of homomorphic images of an algebra to be closed under i
 
 \begin{code}
 
- _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → ov 𝓦 ⊔ 𝓤 ̇
  𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
 
 \end{code}
@@ -59,10 +59,10 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
 module _ {𝓤 : Universe} where
 
- _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → ov 𝓤 ̇
  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
 
- HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+ HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → ov 𝓤 ̇
  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
 
 \end{code}

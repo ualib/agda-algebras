@@ -144,14 +144,15 @@ module _ {𝓘 𝓤 𝓦 : Universe} where
 
 #### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
+Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
+
 \begin{code}
 
-module _ {𝓘 𝓤 𝓦 : Universe} where
+module _ {𝓘 𝓤 𝓦 : Universe} {I : 𝓘 ̇} where
 
- ⨅≅ : {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
-  →   (∀ i → 𝒜 i ≅ ℬ i)  →  ⨅ 𝒜 ≅ ⨅ ℬ
+ ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
 
- ⨅≅ {I}{𝒜}{ℬ} AB = γ
+ ⨅≅ {𝒜}{ℬ} AB = γ
   where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
   ϕ a i = ∣ fst (AB i) ∣ (a i)
@@ -176,17 +177,17 @@ module _ {𝓘 𝓤 𝓦 : Universe} where
 
 \end{code}
 
-A nearly identical proof goes through for isomorphisms of lifted products.
 
+A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
 
 \begin{code}
 
-module _ {𝓘 𝓤 𝓦 𝓩 : Universe} where
+module _ {𝓘 𝓤 𝓦 𝓩 : Universe} {I : 𝓘 ̇} where
 
- lift-alg-⨅≅ : {I : 𝓘 ̇}{𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓦 𝑆}
+ lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓦 𝑆}
   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
 
- lift-alg-⨅≅ {I}{𝒜}{ℬ} AB = γ
+ lift-alg-⨅≅ {𝒜}{ℬ} AB = γ
   where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
   ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
@@ -214,7 +215,14 @@ module _ {𝓘 𝓤 𝓦 𝓩 : Universe} where
 
 \end{code}
 
+
+
+
+
+
 #### <a id="embedding-tools">Embedding tools</a>
+
+Finally, we prove some useful facts about embeddings that occasionally come in handy.
 
 \begin{code}
 
@@ -260,6 +268,8 @@ iso→embedding ϕ = equivs-are-embeddings (fst ∣ ϕ ∣)
 
 --------------------------------------
 
+
+<br>
 
 [← Homomorphisms.Noether](Homomorphisms.Noether.html)
 <span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>

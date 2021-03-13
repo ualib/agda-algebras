@@ -7,7 +7,7 @@ The theoretical background that begins each subsection below is based on~\cite[\
 
 \subsubsection{The type of terms}\label{the-type-of-terms}
 
-Fix a signature \ab{𝑆} and let \ab{X} denote an arbitrary nonempty collection of variable symbols. Assume the symbols in \ab{X} are distinct from the operation symbols of \ab{𝑆}, that is \ab{X} \af ∩ \af ∣ \ab 𝑆 \af ∣ \as = \aic ∅.
+Fix a signature \ab{𝑆} and let \ab{X} denote an arbitrary nonempty collection of variable symbols. Assume the symbols in \ab{X} are distinct from the operation symbols of \ab{𝑆}, that is \ab{X} \af ∩ \af ∣ \ab 𝑆 \af ∣ \as = ∅.
 
 By a \defn{word} in the language of \ab{𝑆}, we mean a nonempty, finite sequence of members of \ab{X} \af ∪ \af ∣ \ab 𝑆 \af ∣. We denote the concatenation of such sequences by simple juxtaposition.
 
@@ -64,11 +64,6 @@ The definition of \ad{Term} \ab X is recursive, indicating that an inductive typ
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Term}\<%
 \end{code}
 \ccpad
 \textbf{Notation}. As usual, the type \ab{X} represents an arbitrary collection of variable symbols. Throughout this module the name of the first constructor of the \ad{Term} type will remain \aic{generator}. However, in all of the modules that follow this one, we will use the shorthand \aic{ℊ} to denote the \aic{generator}
@@ -109,7 +104,7 @@ In \agda the term algebra can be defined as simply as one would hope.  Here it i
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{node}\<%
 \end{code}
-\ccpad
+
 \subsubsection{The universal property}\label{the-universal-property}
 
 The term algebra \af{𝑻} \ab X is \defn{absolutely free} (or \defn{universal} or \defn{initial}) for algebras in the signature \ab{𝑆}. That is, for every 𝑆-algebra \ab{𝑨}, the following hold.
@@ -122,23 +117,8 @@ The term algebra \af{𝑻} \ab X is \defn{absolutely free} (or \defn{universal} 
 \end{enumerate}
 
 We now prove this in \agda, starting with the fact that every map from \ab{X} to \af{∣} \ab 𝑨 \af{∣} lifts to a map from \af{∣} \af 𝑻 \ab X \af{∣} to \af{∣} \ab 𝑨 \af{∣} in a natural way, by induction on the structure of the term.
-
+\ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{free-lift}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -200,7 +180,6 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 Next, we verify that the lift so defined is a homomorphism.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{lift-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -245,9 +224,6 @@ Next, we verify that the lift so defined is a homomorphism.
 Finally, we prove that the resulting homomorphism is unique.
 \ccpad
 \begin{code}%
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{free-unique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{funext}\AgdaSpace{}%
@@ -437,7 +413,6 @@ Finally, we prove that the resulting homomorphism is unique.
 Since it's absolutely free, the term algebra is the domain of a homomorphism to any algebra. Moreover, if we are given a surjective mapping \ab{h} from \ab{X} onto an algebra \ab{𝑨}, then the homomorphism constructed with \af{lift-hom} \ab 𝑨 \ab h will be an epimorphism from \af{𝑻} \ab X onto \ab{𝑨}.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[312I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -534,3 +509,5 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
 \AgdaFunction{h₀⁻¹y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{η}\<%
 \end{code}
+
+In the \ualibVarieties module we'll use \af{lift-hom} and \af{lift-of-epi-is-epi} to construct such epimorphisms.
