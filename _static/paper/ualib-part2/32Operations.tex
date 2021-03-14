@@ -6,32 +6,34 @@
 Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.\footnote{\textbf{Notation}. At the start of the \ualibOperations module, for notational convenience we rename the \aic{generator} constructor of the \ad{Term} type, so that from now on we can use \aic{ℊ} in place of \aic{generator}.}
 
 When we interpret a term in an algebra we call the resulting function a \defn{term operation}. Given a term \ab{𝑝} and an algebra \ab{𝑨}, we denote by \ab{𝑝} \af ̇ \ab 𝑨 the \defn{interpretation} of \ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
-
 \begin{enumerate}
 % \def\labelenumi{\arabic{enumi}.}
 \item
-  If \ab{𝑝} is a variable symbol \abt{x}{X} and if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of elements of \af{∣} \ab 𝑨 \af ∣, then (\ab{𝑝} \af ̇ \ab 𝑨) \ab 𝑎 := \ab 𝑎 \ab x.
-\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡, where \ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol, if \ab{𝑡} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X is a tuple of terms, and  if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝑎 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝑎 := (\ab 𝑓 \af ̂ \ab 𝑨) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝑎.
+ If \ab{𝑝} = \ab x (a variable symbol) and \ab{𝑎} \as : \ab X \as → \af ∣
+ \ab 𝑨 \af ∣ a tuple of elements from the domain of \ab 𝑨, then (\ab{𝑝} \af ̇ \ab
+ 𝑨) \ab 𝑎 := \ab 𝑎 \ab x. 
+\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡 (where \ab 𝑓 % \as : \af ∣ \ab 𝑆 \af ∣ 
+ is an operation symbol and \ab{𝑡} %\as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X 
+ is a tuple of terms) and if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝑎 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝑎 := (\ab 𝑓 \af ̂ \ab 𝑨) (\as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝑎).
 \end{enumerate}
-
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the \ualib as follows.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓧}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}̇\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
@@ -88,7 +90,8 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaBound{𝑎}\<%
 \end{code}
 \ccpad
-It turns out that the intepretation of a term is the same as the \af{free-lift} (modulo argument order).
+It turns out that the intepretation of a term is the same as the \af{free-lift}
+(modulo argument order and assuming function extensionality).
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -156,7 +159,7 @@ It turns out that the intepretation of a term is the same as the \af{free-lift} 
 \end{code}
 \scpad
 
-What if the algebra \ab 𝑨 in question happens to be \af{𝑻} \ab X itself? Assume the map \ab{h} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ is the identity. We expect that \as ∀ \ab 𝑠 \as → (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡  \ab p \ab 𝑠. But what is (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 exactly? By definition, it depends on the form of \ab 𝑝 as follows:
+What if the algebra \ab 𝑨 happens to be \af{𝑻} \ab X itself? Assume the map \ab{h} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ is the identity. We expect that \as ∀ \ab 𝑠 \as → (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡  \ab p \ab 𝑠. But what is (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 exactly? By definition, it depends on the form of \ab 𝑝 as follows:
 
 \begin{itemize}
 \item   if \ab{𝑝} \aod ≡ \aic ℊ \ab x, then (\ab{𝑝} ̇ \af 𝑻 \ab X) \ab 𝑠 := (\aic ℊ \ab x \af ̇ \af 𝑻 X) 𝑠 \aod ≡ \ab 𝑠 \ab x;
@@ -174,7 +177,7 @@ Now, assume \ab ϕ \as : \af{hom} \af 𝑻 \ab 𝑨. Then by \af{comm-hom-term},
 \af ∣ \ab ϕ \af ∣ p := \af ∣ \ab ϕ \af ∣ (\ab p ̇ \af 𝑻 \ab X) \ab 𝑠 = (\aic{node} \ab 𝑓 \ab 𝑡 \af ̇ \af 𝑻 X) \ab 𝑠  (\ab 𝑓 \af ̂ \af 𝑻 \ab X) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \af 𝑻 \ab X) \ab 𝑠.
 \end{itemize}
 
-We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad{Term} \ab X and \ab{𝑡} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ such that \ab{p} \aod ≡ (\ab q \af ̇ \af 𝑻 \ab X) \ab 𝑡. We prove this fact as follows.
+We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{Term} \ab X and \ab{𝑡} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ such that \ab{p} \aod ≡ (\ab q \af ̇ \af 𝑻 \ab X) \ab 𝑡. We prove this fact as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%

@@ -85,7 +85,7 @@ Part 2: Structure\\[-5pt]
     pdftoolbar=true,        % show Acrobat’s toolbar?
     pdfmenubar=true,        % show Acrobat’s menu?
     pdffitwindow=false,     % window fit to page when opened
-    pdfstartview={FitW},    % fits the width of the page to the window
+    %pdfstartview={FitW},    % fits the width of the page to the window
     pdftitle={The Agda UALib, Part 2: Structure},    % title
     pdfauthor={William DeMeo},     % author
     pdfsubject={The Agda Universal Algebra Library},   % subject of the document
@@ -110,14 +110,71 @@ Part 2: Structure\\[-5pt]
 \maketitle
 
 
-\input{1Frontmatter}
+\begin{abstract}
+The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. 
+ The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper, we describe the the types and proofs of the UALib that concern homomorphisms, terms, and subalgebras.
+\end{abstract}
+
+\section*{Acknowledgements and Attributions}
+\input{../acknowledgements}
+
+\newpage
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}\label{sec:introduction}
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
+The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
+
+
+
+
+\subsection{Motivation}\label{sec:motivation}
+%% \subsection{Vision and Goals}\label{vision-and-goals}
+The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
+%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
+
+Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
+
+
+
+
+\subsection{Attributions and Contributions}\label{sec:contributions}
+\input{../attributions}
+
+
+
+
+\subsection{Organization of the paper}\label{sec:organization}
+
+In this paper we limit ourselves to the presentation of the middle third of the \ualib, which includes types for representing homomorphisms, terms, and subalgebras. This limitation will allow us the space required to discuss some of the more interesting type theoretic and foundational issues that arise when developing a library of this kind and when attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
+
+This is the second installment of a three-part series of papers describing the \agdaualib. The first part is~\cite{DeMeo:2021-1} which covers relations, algebras, congruences, and quotients. The third part will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
+
+The present paper is divided into three main parts (\S\ref{sec:homomorphism-types}, \S\ref{sec:types-terms}, \S\ref{sec:subalgebra-types}).  The first of these introduces types representing \emph{homomorphisms} from one algebra to another, and presents a formal statement and proof of the first fundamental theorem about homomorphisms, known as the \emph{First Isomorphism Theorem}, as well as a version of the so-called \emph{Second Isomorphism Theorem}. This is followed by dependent type definitions for representing \emph{isomorphisms} and \emph{homomorphic images} of algebraic structures.
+
+In Section~\ref{sec:types-terms} we define inductive types to represent \emph{terms} and the \emph{term algebra} in a given signature. We prove the \emph{universal property} of the term algebra which is the fact that term algebra is \emph{free} (or \emph{initial}) in the class of all algebras in the given signature.  We define types that denote the interpretation of a term in an algebra type, called a \emph{term operation}, including the interpretation of terms in \emph{arbitrary products} of algebras (\S\ref{interpretation-of-terms-in-product-algebras}). We conclude \S~\ref{sec:types-terms} with a subsection on the compatibility of terms with basic operations and congruence relations.
+
+Section~\ref{sec:subalgebra-types} presents inductive and dependent types for representing subuniverses and subalgebras of a given algebra. Here we define an inductive type that represents the \emph{subuniverse generated by} \ab X, for a given predicate \ab X \as : \af{Pred} \af ∣ \ab 𝑨 \af ∣ \AgdaUnderscore,\footnote{As we learned in~\cite{DeMeo:2021-1}, such \ab X represents a subset of the domain of the algebra \ab 𝑨.} and we use this type to formalize a few basic subuniverse lemmas.  We also define types that pertain to arbitrary classes of algebras. In particular, in Subsection~\ref{sec:subalgebras} on subalgebras, we define a type that represents the assertion that a given algebra is a subalgebra of some member of a class of algebras.  Finally, the appendix~\S\ref{sec:univ-subalg} includes our generalization of Martin Escardo's use of \emph{univalence} for modeling subgroups.
+
+\newcommand\otherparta{\textit{Part 1: equality, extensionality, truncation, and dependent types for relations and algebras}~\cite{DeMeo:2021-1}.}
+\newcommand\otherpartb{\textit{Part 3: free algebras, equational classes, and Birkhoff's theorem}~\cite{DeMeo:2021-3}.}
+
+\subsection{Resources}
+We conclude this introduction with some pointers to helpful reference materials.
+\input{../resources}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\firstsentence[2]{The complete source code of this module is
-  available online and describe
-  #1 module of the
-  \agdaualib.\footnote{For more details, see #2.}}
+%\newcommand\firstsentence[2]{This section presents the #1/#2 module of the \agdaualib, slightly abridged. The full module is presented as the html page served at \ualibhtml{#1){#2} and the complete literate Agda source code file is available at module \ualibsrcfile{#1}{#2}.}
+\newcommand\firstsentence[2]{This section presents the \UALhtml{#1}{#2} module
+  of the \agdaualib, slightly abridged.\footnote{For unabridged documentation see
+    \ualibhtmlurl{#1}{#2}; for the source code see \ualibsrcfile{#1}{#2}.}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \include{2Homomorphisms}

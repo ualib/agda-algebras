@@ -273,17 +273,17 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
 \begin{code}
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{fe : dfunext 𝓥 (ov 𝓧)} where
 
  ⊧-H-invariance : (p q : Term X)(𝑨 : Algebra 𝓤 𝑆)(φ : hom (𝑻 X) 𝑨)
                   -------------------------------------------------
   →               𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
- ⊧-H-invariance p q 𝑨 φ β = ∣ φ ∣ p             ≡⟨ ap ∣ φ ∣ (term-agreement p) ⟩
+ ⊧-H-invariance p q 𝑨 φ β = ∣ φ ∣ p             ≡⟨ ap ∣ φ ∣ (term-agreement {fe = fe} p) ⟩
                             ∣ φ ∣ ((p ̇ 𝑻 X) ℊ)  ≡⟨ (comm-hom-term 𝑨 φ p ℊ ) ⟩
                             (p ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ extfun β (∣ φ ∣ ∘ ℊ ) ⟩
                             (q ̇ 𝑨) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term 𝑨 φ q ℊ )⁻¹ ⟩
-                            ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨(ap ∣ φ ∣ (term-agreement q))⁻¹ ⟩
+                            ∣ φ ∣ ((q ̇ 𝑻 X) ℊ)  ≡⟨(ap ∣ φ ∣ (term-agreement {fe = fe} q))⁻¹ ⟩
                             ∣ φ ∣ q             ∎
 
 \end{code}

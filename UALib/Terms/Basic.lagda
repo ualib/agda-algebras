@@ -132,9 +132,9 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \end{code}
 
-Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : 𝓧 ̇` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`."
+Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : 𝓧 ̇` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `generator x` is equal to the original function evaluated at `x`.
 
-If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` is an \emph{epimorphisms}, as we now prove.
+If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
 
 \begin{code}
 
@@ -153,7 +153,8 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
   γ = eq y (generator h₀⁻¹y) η
 
 \end{code}
-Will see `lift-hom` and `lift-of-epi-is-epi` in action later when the [Varieties][] module (described in~\cite{DeMeo:2021-3}) calls for such epimorphisms.
+
+The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Varieties][] module).
 
 
 --------------------------------------

@@ -359,9 +359,9 @@ We need a three more lemmas before we are ready to tackle our main goal.
    skA = siso (sbase kA) (≅-sym lift-alg-≅)
 
    γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-   γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp 𝑨 h p ⟩
+   γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp 𝑨 h q)⁻¹  ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp gfe 𝑨 h q)⁻¹  ⟩
                  (q ̇ 𝑨) h         ∎
 
 \end{code}
@@ -433,11 +433,11 @@ Finally we come to one of the main theorems of this module; it asserts that ever
       Apq = pqlem2 p q x
       γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
       γ = ∣ ϕ ∣ p                    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-          free-lift 𝑨 (fst(𝕏 𝑨)) p ≡⟨ (free-lift-interp 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
-          (p ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
-          (q ̇ 𝑨) (fst(𝕏 𝑨))       ≡⟨ free-lift-interp 𝑨 (fst(𝕏 𝑨)) q ⟩
-          free-lift 𝑨 (fst(𝕏 𝑨)) q ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
-          ∣ ϕ ∣ q                  ∎
+          free-lift 𝑨 (fst(𝕏 𝑨)) p   ≡⟨ (free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
+          (p ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
+          (q ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) q ⟩
+          free-lift 𝑨 (fst(𝕏 𝑨)) q   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+          ∣ ϕ ∣ q                    ∎
 
     γ : epi 𝔽 𝑨
     γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} ϕ ϕE hom𝔽 hom𝔽-is-epic  kerincl)

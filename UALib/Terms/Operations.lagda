@@ -30,7 +30,7 @@ When we interpret a term in an algebra we call the resulting function a **term o
 
 1. If `𝑝` is a variable symbol `x : X` and if `𝑎 : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `(𝑝 ̇ 𝑨) 𝑎 := 𝑎 x`.
 
-2. If `𝑝 = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝑎 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝑎 = (𝑓 𝑡 ̇ 𝑨) 𝑎 := (𝑓 ̂ 𝑨) λ i → (𝑡 i ̇ 𝑨) 𝑎`.
+2. If `𝑝 = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `𝑎 : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `(𝑝 ̇ 𝑨) 𝑎 = (𝑓 𝑡 ̇ 𝑨) 𝑎 := (𝑓 ̂ 𝑨) (λ i → (𝑡 i ̇ 𝑨) 𝑎)`.
 
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the [UALib][] as follows.
 
@@ -46,19 +46,19 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
 \end{code}
 
-It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order).
+It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order and assuming function extensionality).
 
 \begin{code}
 
- free-lift-interp : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
+ free-lift-interp : dfunext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
   →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
 
- free-lift-interp 𝑨 h (ℊ x) = 𝓇ℯ𝒻𝓁
- free-lift-interp 𝑨 h (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (gfe λ i → free-lift-interp 𝑨 h (𝑡 i))
+ free-lift-interp _ 𝑨 h (ℊ x) = 𝓇ℯ𝒻𝓁
+ free-lift-interp fe 𝑨 h (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (fe λ i → free-lift-interp fe 𝑨 h (𝑡 i))
 
 \end{code}
 
-What if the algebra 𝑨 in question happens to be `𝑻 X` itself?   Assume the map `h : X → ∣ 𝑻 X ∣` is the identity. We expect that `∀ 𝑠 → (p ̇ 𝑻 X) 𝑠  ≡  p 𝑠`. But what is `(𝑝 ̇ 𝑻 X) 𝑠` exactly?
+What if the algebra 𝑨 happens to be `𝑻 X` itself?   Assume the map `h : X → ∣ 𝑻 X ∣` is the identity. We expect that `∀ 𝑠 → (p ̇ 𝑻 X) 𝑠  ≡  p 𝑠`. But what is `(𝑝 ̇ 𝑻 X) 𝑠` exactly?
 
 By definition, it depends on the form of 𝑝 as follows:
 
@@ -76,29 +76,23 @@ Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (
 
    ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (p ̇ 𝑻 X) 𝑠 = (node 𝑓 𝑡 ̇ 𝑻 X) 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑡 i ̇ 𝑻 X) 𝑠
 
-We claim that for all `p : Term X` there exists `q : Term X` and `h : X → ∣ 𝑻 X ∣` such that `p ≡ (q ̇ 𝑻 X) h`. We prove this fact as follows.
+We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → ∣ 𝑻 X ∣` such that `p ≡ (q ̇ 𝑻 X) 𝔱`. We prove this fact as follows.
 
 \begin{code}
 
-module _ {𝓧 : Universe}{X : 𝓧 ̇} where
+term-interp : {𝓧 : Universe}{X : 𝓧 ̇} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+term-interp 𝑓 {𝑠}{𝑡} st = ap (node 𝑓) st
 
- term-interp : (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
- term-interp 𝑓 {𝑠}{𝑡} st = ap (node 𝑓) st
-
+module _ {𝓧 : Universe}{X : 𝓧 ̇}{fe : dfunext 𝓥 (ov 𝓧)} where
 
  term-gen : (p : ∣ 𝑻 X ∣) → Σ q ꞉ ∣ 𝑻 X ∣ , p ≡ (q ̇ 𝑻 X) ℊ
-
  term-gen (ℊ x) = (ℊ x) , 𝓇ℯ𝒻𝓁
-
- term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) ,
-                      term-interp 𝑓 (gfe λ i → ∥ term-gen (𝑡 i) ∥)
+ term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen (𝑡 i) ∥)
 
 
  term-gen-agreement : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) ℊ ≡ (∣ term-gen p ∣ ̇ 𝑻 X) ℊ
-
  term-gen-agreement (ℊ x) = 𝓇ℯ𝒻𝓁
-
- term-gen-agreement (node f 𝑡) = ap (f ̂ 𝑻 X) (gfe λ x → term-gen-agreement (𝑡 x))
+ term-gen-agreement (node f 𝑡) = ap (f ̂ 𝑻 X) (fe λ x → term-gen-agreement (𝑡 x))
 
  term-agreement : (p : ∣ 𝑻 X ∣) → p ≡ (p ̇ 𝑻 X) ℊ
  term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
@@ -108,6 +102,8 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇} where
 
 
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
+
+Note that while in the previous section it sufficed to postulate a local version of function extensionality, here we are using the global version (`global-dfunext`), though we are not sure whether this is necessary or we could remove it with some effort.<sup>[1](Terms.Operations.html#fn1)</sup>
 
 \begin{code}
 
@@ -203,6 +199,11 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun'
 \end{code}
 
 --------------------------------------
+
+<sup>1</sup><span class="footnote" id="fn1">We plan to resolve this before the next major release of the \agdaualib.</span>
+
+<br>
+<br>
 
 [← Terms.Basic](Terms.Basic.html)
 <span style="float:right;">[Subalgebras →](Subalgebras.html)</span>

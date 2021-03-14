@@ -243,8 +243,6 @@ statement and (trivial) proof of this fact.
 \AgdaBound{𝑨}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{lift-hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
@@ -307,7 +305,7 @@ following function type definition.
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \\
 %
-\>[15]\AgdaComment{-------------------------------------------------}\<%
+\>[15]\AgdaComment{---------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -361,7 +359,7 @@ following function type definition.
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSymbol{)}%
-\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\>[55]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
@@ -372,30 +370,24 @@ following function type definition.
 \>[232I][@{}l@{\AgdaIndent{0}}]%
 \>[36]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)(λ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{))}%
-\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}%
+\>[56]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaFunction{α}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
 %
 \>[36]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)(λ}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{))}%
-\>[65]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}%
+\>[56]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
@@ -410,7 +402,7 @@ following function type definition.
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSymbol{)}%
-\>[64]\AgdaOperator{\AgdaFunction{∎}}\<%
+\>[55]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -463,11 +455,13 @@ postulate a type \ab X \as : \ab 𝓧 \af ̇ (representing an arbitrary collecti
 variable symbols) such that for each \ab 𝑆-algebra \ab 𝑨 there is a map from \ab
 X to the domain of \ab 𝑨, then it follows that for every \ab 𝑆-algebra \ab 𝑨
 there is a homomorphism from \af 𝑻 \ab X to \af ∣ \ab 𝑨 \af ∣ that ``agrees with
-the original map on \ab X.''
+the original map on \ab X,'' by which we mean that for all \abt{x}{X} the lift
+evaluated at \aic{generator} \ab x is equal to the original function evaluated
+at \ab x.
 
 If we further assume that each of the mappings from \ab X to \af ∣ \ab 𝑨 \af ∣ is
 \emph{surjective}, then the homomorphisms constructed with \af{free-lift} and
-\af{lift-hom} is an \emph{epimorphisms}, as we now prove.
+\af{lift-hom} are \emph{epimorphisms}, as we now prove.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
@@ -485,7 +479,7 @@ If we further assume that each of the mappings from \ab X to \af ∣ \ab 𝑨 \a
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\<%
 \\
 \>[.][@{}l@{}]\<[312I]%
-\>[22]\AgdaComment{---------------------------------}\<%
+\>[22]\AgdaComment{-------------------------------------------}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
@@ -567,5 +561,6 @@ If we further assume that each of the mappings from \ab X to \af ∣ \ab 𝑨 \a
 \AgdaFunction{η}\<%
 \end{code}
 \ccpad
-Will see \af{lift-hom} and \af{lift-of-epi-is-epi} in action later when the
-\ualibVarieties module (described in~\cite{DeMeo:2021-3}) calls for such epimorphisms.
+% (described in~\cite{DeMeo:2021-3})
+The \af{lift-hom} and \af{lift-of-epi-is-epi} types will be called to action
+when such epimorphisms are needed later (e.g., in the \ualibVarieties module).
