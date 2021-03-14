@@ -62,11 +62,10 @@ For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if
 
 * Define `𝑻 X` to be the algebra with universe `∣ 𝑻 X ∣ := Term X` and operations `𝑓 ̂ (𝑻 X)`, one for each symbol `𝑓` in `∣ 𝑆 ∣`.
 
-In [Agda][] the term algebra can be defined as simply as one would hope.
+In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \begin{code}
 
---The term algebra 𝑻 X.
 𝑻 : {𝓧 : Universe}(X : 𝓧 ̇ ) → Algebra (ov 𝓧) 𝑆
 𝑻 X = Term X , node
 
@@ -76,12 +75,12 @@ In [Agda][] the term algebra can be defined as simply as one would hope.
 
 #### <a id="the-universal-property">The universal property</a>
 
-The term algebra `𝑻 X` is *absolutely free*, or *universal*, for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
+The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
-1.  Every map `h : 𝑋 → ∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
-2.  The induced homomorphism is unique.
+1. Every function from `𝑋` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
+2. The homomorphism that exists by item 1 is unique.
 
-We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the term.
+We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the given term.
 
 \begin{code}
 
@@ -95,8 +94,12 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
 \end{code}
 
-Naturally, at the base step of the induction, when the term has the form `generator x`, the free lift of `h` agrees with `h`.  For the inductive step, when the given term has the form `node f 𝑡`, then the free lift is defined as follows: for each `i`, assume (the induction hypothesis) that we know how to evaluate the lift at each subterm `𝑡 i`, and
-define it at the full term by simply applying `f ̂ 𝑨` to the lift of to the subterms.
+Naturally, at the base step of the induction, when the term has the form `generator`
+x, the free lift of `h` agrees with `h`.  For the inductive step, when the
+given term has the form `node f 𝑡`, the free lift is defined as
+follows: Assuming (the induction hypothesis) that we know the image of each
+subterm `𝑡 i` under the free lift of `h`, define the free lift at the
+full term by applying `f ̂ 𝑨` to the images of the subterms.
 
 The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
@@ -108,7 +111,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 \end{code}
 
-Finally, we prove that the free lift homomorphism is unique.  This requires `funext 𝓥 𝓤` (that is, *function extensionality* at universe levels `𝓥` and `𝓤`) which we postulate by making it part of the premise in the following function type definition.
+Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 𝓤` (i.e., *function extensionality* at universe levels `𝓥` and `𝓤`) which we postulate by making it part of the premise in the following function type definition.
 
 \begin{code}
 
@@ -129,7 +132,9 @@ Finally, we prove that the free lift homomorphism is unique.  This requires `fun
 
 \end{code}
 
-Since it's absolutely free, the term algebra is the domain of a homomorphism to any algebra. Moreover, if we are given a surjective mapping `h` from `X` onto an algebra `𝑨`, then the homomorphism constructed with `lift-hom 𝑨 h` will be an epimorphism from `𝑻 X` onto `𝑨`.
+Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : 𝓧 ̇` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`."
+
+If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` is an \emph{epimorphisms}, as we now prove.
 
 \begin{code}
 
@@ -148,9 +153,7 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
   γ = eq y (generator h₀⁻¹y) η
 
 \end{code}
-
-
-In the [Varieties][] module `lift-hom` and `lift-of-epi-is-epi` are used to construct such epimorphisms.
+Will see `lift-hom` and `lift-of-epi-is-epi` in action later when the [Varieties][] module (described in~\cite{DeMeo:2021-3}) calls for such epimorphisms.
 
 
 --------------------------------------

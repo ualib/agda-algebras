@@ -109,8 +109,7 @@ operations of the algebra.
   symbol \ab{𝑓} in \af{∣}~\ab 𝑆~\af{∣}. 
 \end{itemize}
 
-In \agda the term algebra can be defined as simply as one would hope.  Here is
-the definition one finds in the \ualibTermsBasic module of the \ualib.
+In \agda the term algebra can be defined as simply as one could hope.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{𝑻}\AgdaSpace{}%
@@ -214,14 +213,11 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \end{code}
 \ccpad
 Naturally, at the base step of the induction, when the term has the form \aic{generator}~\ab
-x, the free lift of \ab h agrees with \ab h.  For the inductive step, when the given term has the form \aic{node}
-\ab f \ab 𝑡, then the free lift is defined as follows: for each \ab i,
-assume (the induction hypothesis) that we know how to evaluate the lift at each subterm \ab 𝑡 \ab i, and
-define it at the full term by simply applying 
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-to the lift of to the subterms.
+x, the free lift of \ab h agrees with \ab h.  For the inductive step, when the
+given term has the form \aic{node} \ab f \ab 𝑡, the free lift is defined as
+follows: Assuming (the induction hypothesis) that we know the image of each
+subterm \ab 𝑡 \ab i under the free lift of \ab h, define the free lift at the
+full term by applying \ab f~\af ̂~\ab 𝑨 to the images of the subterms.
 
 The free lift so defined is a homomorphism by construction. Indeed, here is the formal
 statement and (trivial) proof of this fact.
@@ -268,8 +264,8 @@ statement and (trivial) proof of this fact.
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
 \ccpad
-Finally, we prove that the free lift homomorphism is unique.  This requires
-\af{funext}~\ab 𝓥~\ab 𝓤 (that is, \emph{function extensionality} at universe levels
+Finally, we prove that the homomorphism is unique.  This requires
+\af{funext}~\ab 𝓥~\ab 𝓤 (i.e., \emph{function extensionality} at universe levels
 \ab 𝓥 and \ab 𝓤) which we postulate by making it part of the premise in the
 following function type definition.
 \ccpad
@@ -461,7 +457,17 @@ following function type definition.
 \AgdaBound{i}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-Since it's absolutely free, the term algebra is the domain of a homomorphism to any algebra. Moreover, if we are given a surjective mapping \ab{h} from \ab{X} onto an algebra \ab{𝑨}, then the homomorphism constructed with \af{lift-hom}~\ab 𝑨~\ab h will be an epimorphism from \af{𝑻}~\ab X onto \ab{𝑨}.
+%Let us pause briefly to account for what we have proved so far about the term algebra.
+Let's account for what we have proved thus far about the term algebra.  If we
+postulate a type \ab X \as : \ab 𝓧 \af ̇ (representing an arbitrary collection of
+variable symbols) such that for each \ab 𝑆-algebra \ab 𝑨 there is a map from \ab
+X to the domain of \ab 𝑨, then it follows that for every \ab 𝑆-algebra \ab 𝑨
+there is a homomorphism from \af 𝑻 \ab X to \af ∣ \ab 𝑨 \af ∣ that ``agrees with
+the original map on \ab X.''
+
+If we further assume that each of the mappings from \ab X to \af ∣ \ab 𝑨 \af ∣ is
+\emph{surjective}, then the homomorphisms constructed with \af{free-lift} and
+\af{lift-hom} is an \emph{epimorphisms}, as we now prove.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{lift-of-epi-is-epi}\AgdaSpace{}%
@@ -561,4 +567,5 @@ Since it's absolutely free, the term algebra is the domain of a homomorphism to 
 \AgdaFunction{η}\<%
 \end{code}
 \ccpad
-In the \ualibVarieties module we'll use \af{lift-hom} and \af{lift-of-epi-is-epi} to construct such epimorphisms.
+Will see \af{lift-hom} and \af{lift-of-epi-is-epi} in action later when the
+\ualibVarieties module (described in~\cite{DeMeo:2021-3}) calls for such epimorphisms.

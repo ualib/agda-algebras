@@ -10,8 +10,8 @@ When we interpret a term in an algebra we call the resulting function a \defn{te
 \begin{enumerate}
 % \def\labelenumi{\arabic{enumi}.}
 \item
-  If \ab{𝑝} is a variable symbol \abt{x}{X} and if \ab{𝒂} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of elements of \af{∣} \ab 𝑨 \af ∣, then (\ab{𝑝} \af ̇ \ab 𝑨) \ab 𝒂 := \ab 𝒂 \ab x.
-\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡, where \ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol, if \ab{𝑡} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X is a tuple of terms, and  if \ab{𝒂} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝒂 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝒂 := (\ab 𝑓 \af ̂ \ab 𝑨) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝒂.
+  If \ab{𝑝} is a variable symbol \abt{x}{X} and if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of elements of \af{∣} \ab 𝑨 \af ∣, then (\ab{𝑝} \af ̇ \ab 𝑨) \ab 𝑎 := \ab 𝑎 \ab x.
+\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡, where \ab 𝑓 \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol, if \ab{𝑡} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X is a tuple of terms, and  if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝑎 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝑎 := (\ab 𝑓 \af ̂ \ab 𝑨) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝑎.
 \end{enumerate}
 
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the \ualib as follows.
@@ -60,9 +60,9 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \\
 %
@@ -73,7 +73,7 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
@@ -85,7 +85,7 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\<%
+\AgdaBound{𝑎}\<%
 \end{code}
 \ccpad
 It turns out that the intepretation of a term is the same as the \af{free-lift} (modulo argument order).
@@ -435,7 +435,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -456,7 +456,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
@@ -468,7 +468,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}\<%
 \\
@@ -479,7 +479,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x₁}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
@@ -491,7 +491,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaKeyword{let}\AgdaSpace{}%
 \AgdaBound{IH}\AgdaSpace{}%
@@ -503,7 +503,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝒂}\<%
+\AgdaBound{𝑎}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{in}\<%
@@ -520,7 +520,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSymbol{)}%
+\AgdaBound{𝑎}\AgdaSymbol{)}%
 \>[54]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
@@ -547,7 +547,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaBound{i}\AgdaSymbol{)(λ}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)))}%
 \>[54]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
@@ -572,7 +572,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exists \ab{q} \as : \ad
 \AgdaBound{i}\AgdaSymbol{)(λ}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)))}%
 \>[54]\AgdaOperator{\AgdaFunction{∎}}\<%
