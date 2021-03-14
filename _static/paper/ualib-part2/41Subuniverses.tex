@@ -8,17 +8,17 @@ We start by defining a type that represents the important concept of \defn{subun
 We first show how to represent in \agda the collection of subuniverses of an algebra \ab 𝑨.  Since a subuniverse is viewed as a subset of the domain of \ab 𝑨, we define it as a predicate on \af ∣ \ab 𝑨 \af ∣.  Thus, the collection of subuniverses is a predicate on predicates on \af ∣ \ab 𝑨 \af ∣.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{Subuniverses}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -73,7 +73,7 @@ We first show how to represent in \agda the collection of subuniverses of an alg
 \AgdaBound{B}\<%
 \end{code}
 \ccpad
-Here's one way to construct an algebra out of a subuniverse.
+An algebra can be constructed out of a subuniverse in the following natural way.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{SubunivAlg}\AgdaSpace{}%
@@ -131,7 +131,7 @@ Here's one way to construct an algebra out of a subuniverse.
 
 \subsubsection{Subuniverses as records}\label{subuniverses-as-records}
 
-We could define the type of subuniverses as a record as follows.
+Next we define a type to represent a single subuniverse of an algebra. If \AgdaBound{𝑨} is the algebra in question, then the subuniverse will be a subset of (i.e., predicate over) the domain  `∣ 𝑨 ∣` that belongs to \af{Subuniverses} \AgdaBound{𝑨}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -175,13 +175,17 @@ We could define the type of subuniverses as a record as follows.
 \AgdaBound{𝑨}\<%
 \end{code}
 \ccpad
-For example, we could use such a type to prove that the equalizer of two homomorphisms is a subuniverse.
+As an example application, here is a formal proof that the equalizer of two homomorphisms with domain \AgdaBound{𝑨} is a subuniverse of \AgdaBound{𝑨}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{𝑬𝑯-is-subuniverse}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[160I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[1]\AgdaFunction{𝐸hom-is-subuniverse}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\>[1260I]\AgdaFunction{dfunext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -189,17 +193,17 @@ For example, we could use such a type to prove that the equalizer of two homomor
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\<%
-\\
-\>[.][@{}l@{}]\<[160I]%
-\>[21]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Subuniverse}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[1260I]%
+\>[23]\AgdaRecord{Subuniverse}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{𝑨}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{\}}\<%
@@ -207,37 +211,96 @@ For example, we could use such a type to prove that the equalizer of two homomor
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{𝑬𝑯-is-subuniverse}\AgdaSpace{}%
+\>[1]\AgdaFunction{𝐸hom-is-subuniverse}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaInductiveConstructor{mksub}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝐸hom}\AgdaSymbol{\{}\AgdaArgument{fe}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{mksub}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝑬𝑯}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{𝑬𝑯-closed}\AgdaSpace{}%
+\AgdaFunction{𝐸hom-closed}\AgdaSymbol{\{}\AgdaArgument{fe}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
 
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaFunction{𝑬𝑯-is-subuniverse}\AgdaSpace{}%
+% \AgdaSymbol{:}%
+% \>[160I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{)}\<%
+% \\
+% \>[.][@{}l@{}]\<[160I]%
+% \>[21]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{h}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{hom}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{Subuniverse}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaArgument{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSymbol{\}}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{𝑬𝑯-is-subuniverse}\AgdaSpace{}%
+% \AgdaBound{𝑩}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{h}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaInductiveConstructor{mksub}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{𝑬𝑯}\AgdaSpace{}%
+% \AgdaBound{𝑩}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{𝒂}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{𝑬𝑯-closed}\AgdaSpace{}%
+% \AgdaBound{𝑩}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{h}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{𝒂}\AgdaSpace{}%
+% \AgdaBound{x}\<%
+% \end{code}
+
 \subsubsection{Subuniverse Generation}\label{subuniverse-generation}
 
-If \ab 𝑨 is an algebra and \ab X \af ⊆ \af ∣ \ab 𝑨 \af ∣ a subset of the universe of \ab 𝑨, then the \defn{subuniverse of} \ab 𝑨 \defn{generated by} \ab X is typically denoted in the literature by \ad{Sg}$^{\ab 𝑨}$ (\ab X) and defined to be the smallest subuniverse of \ab 𝑨 containing \ab X. Equivalently,\\[-4pt]
+If \ab 𝑨 is an algebra and \ab X \af ⊆ \af ∣ \ab 𝑨 \af ∣ a subset of the domain of \ab 𝑨, then the \defn{subuniverse of} \ab 𝑨 \defn{generated by} \ab X is typically denoted by \ad{Sg}$^{\ab 𝑨}$ (\ab X) and defined to be the smallest subuniverse of \ab 𝑨 containing \ab X. Equivalently,\\[-4pt]
 
-\ad{Sg}$^{\ab 𝑨}$ (\ab X) = \af{⋂} \as{\{}\ab U \as : \ab U is a subuniverse of \ab 𝑨 and \ab B \af ⊆ \ab U\as{\}}.\\[-4pt]
-
-We now define an inductive type \ad{Sg} that represents the subuniverse generated by a given subset elements from the domain of an algebra.
+\ad{Sg}$^{\ab 𝑨}$ (\ab X) = \af{⋂} \as{\{}\ab U \as : \ab U is a subuniverse of \ab 𝑨 and \ab B \af ⊆ \ab U\as{\}}.\\[4pt]
+We define an inductive type, denoted by \ad{Sg}, that represents the subuniverse generated by a given subset of the domain of a given algebra, as follows.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -319,21 +382,20 @@ We now define an inductive type \ad{Sg} that represents the subuniverse generate
 \AgdaBound{X}\<%
 \end{code}
 \ccpad
-Recall, we represent subsets as predicates. This is why, in the definition of \ad{Sg}, the subset \ab X of the domain of \ab 𝑨 inhabits the type \af{Pred} \af ∣ \ab 𝑨 \af ∣ 𝓦.
-
-For any subset \ab X of the domain \af ∣ \ab 𝑨 \af ∣ of an algebra \ab 𝑨, the type \ad{Sg} \ab X does indeed represent a subuniverse of \ab 𝑨, and proving this using the inductive type \ad{Sg} is trivial.
+% Recall, we represent subsets as predicates. This is why, in the definition of \ad{Sg}, the subset \ab X of the domain of \ab 𝑨 inhabits the type \af{Pred} \af ∣ \ab 𝑨 \af ∣ 𝓦.
+Given an arbitrary \ab 𝑆-algebra \AgdaBound{𝑨} and subset \ab X of \af ∣ \ab 𝑨 \af ∣, the type \ad{Sg}~\ab X does indeed represent a subuniverse of \ab 𝑨; proving this with the inductive type \ad{Sg} is trivial, as we see here.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{sgIsSub}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -368,7 +430,7 @@ Next we prove by structural induction that \ad{Sg} \ab X is the smallest subuniv
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{sgIsSmallest}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
+\>[111I]\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -390,6 +452,7 @@ Next we prove by structural induction that \ad{Sg} \ab X is the smallest subuniv
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[111I]%
 \>[16]\AgdaBound{Y}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{Subuniverses}\AgdaSpace{}%
@@ -506,22 +569,17 @@ Here we formalize a few basic properties of subuniverses. First, the intersectio
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
 \>[.][@{}l@{}]\<[101I]%
-\>[20]\AgdaSymbol{((}\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\>[20]\AgdaSymbol{(}\af Π \AgdaBound{i}\AgdaSpace{}%
+\af{꞉}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{Subuniverses}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\<%
-\\
-%
-\>[20]\AgdaComment{-----------------------------------------}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[20]\AgdaFunction{⋂}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{⋂}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
@@ -532,27 +590,37 @@ Here we formalize a few basic properties of subuniverses. First, the intersectio
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{sub-intersection}\AgdaSpace{}%
-\AgdaBound{AiSub}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑎}\AgdaSpace{}%
-\AgdaBound{⋂AIma}\AgdaSpace{}%
+\AgdaBound{β}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{AiSub}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{⋂AIma}\AgdaSpace{}%
+\AgdaBound{β}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \end{code}
 \ccpad
-Next, subuniverses are closed under the action of term operations.
+In the proof above, we assume the following typing judgments:\\
+\begin{tabular}{rl}
+\ab α \as :& \as ∀ \ab i \as → \ab 𝒜 \ab i \af ∈ \af{Subuniverses} \ab 𝑨\\
+\ab 𝑓 \as :& \af ∣ \ab 𝑆 \af ∣\\
+\ab 𝑎 \as :& \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣\\
+\ab β \as :& \af{Im} \ab 𝑎 \af ⊆ \af ⋂ \ab I \ab 𝒜
+\end{tabular}
+
+\noindent and we must prove (\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎 \af ∈ \af ⋂ \ab I \ab 𝒜. In this case, Agda will fill in the proof term \as λ \ab i \as → \ab α \ab i \ab 𝑓 \ab 𝑎 \as (λ \ab x \as → \ab β \ab x \ab i) automatically with the command \texttt{C-c} \texttt{C-a} in \agdamode.
+
+Next we formalize the proof that subuniverses are closed under the action of term operations.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{sub-term-closed}\AgdaSpace{}%
@@ -611,35 +679,35 @@ Next, subuniverses are closed under the action of term operations.
 \AgdaBound{B}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{sub-term-closed}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{AB}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{b∈B}\AgdaSpace{}%
+\AgdaBound{Bb}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{b∈B}\AgdaSpace{}%
+\AgdaBound{Bb}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{sub-term-closed}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{AB}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{b∈B}\AgdaSpace{}%
+\AgdaBound{β}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaBound{AB}\AgdaSpace{}%
+\>[2]\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{z}\AgdaSpace{}%
@@ -655,15 +723,23 @@ Next, subuniverses are closed under the action of term operations.
 \AgdaFunction{sub-term-closed}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{AB}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{b∈B}\<%
+\AgdaBound{β}\<%
 \end{code}
 \ccpad
-Alternatively, we could express the preceeding fact using an inductive
-type representing images of terms.
+In the induction step of the foregoing proof, the typing judgments of the premise are these:\\[4pt]
+\begin{tabular}{rlrlrl}
+\ab 𝑨   :& \af{Algebra} \ab 𝓤 \ab 𝑆 & \ab B \as : & \af{Pred} \af ∣ \ab 𝑨 \af ∣ \ab 𝓦  & \ab α \as : & \ab B \af ∈ \af{Subuniverses} \ab 𝑨 \\
+\ab 𝑓 \as : &  \af ∣ \ab 𝑆 \af ∣  & \ab 𝑡 \as : & \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af{Term} \ab X &&\\
+\ab b  \as : & \ab X \as → \af ∣ \ab 𝑨 \af ∣   & \ab β \as : & \as ∀ \ab x \as → \ab b \ab x \af ∈ \ab B &&\\[4pt]
+\end{tabular}
+
+\noindent This is another instance in which Agda will fill in the correct proof term if we invoke the command \texttt{C-c} \texttt{C-a} in \agdamode.
+
+Alternatively, we could express the preceding fact using an inductive type representing images of terms.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -722,17 +798,22 @@ type representing images of terms.
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[17]\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{TermImage}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}%
+\>[54]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
@@ -743,7 +824,7 @@ type representing images of terms.
 \AgdaBound{Y}\<%
 \end{code}
 \ccpad
-By what we proved above, it should come as no surprise that \af{TermImage} \ab 𝑨 \ab Y is a subuniverse of \ab 𝑨 that contains \ab Y.
+By what we proved above, it should come as no surprise that \af{TermImage} \ab 𝑨 \ab Y is a subuniverse of \ab 𝑨 that contains \ab Y. Indeed, the proof is trivial.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -776,7 +857,7 @@ By what we proved above, it should come as no surprise that \af{TermImage} \ab �
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{Y⊆TermImageY}\AgdaSpace{}%
+\>[1]\AgdaFunction{Y-onlyif-TermImageY}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -797,19 +878,19 @@ By what we proved above, it should come as no surprise that \af{TermImage} \ab �
 \AgdaBound{Y}\<%
 \\
 %
-\>[1]\AgdaFunction{Y⊆TermImageY}\AgdaSpace{}%
+\>[1]\AgdaFunction{Y-onlyif-TermImageY}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{a}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{a∈Y}\AgdaSpace{}%
+\AgdaBound{Ya}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{var}\AgdaSpace{}%
-\AgdaBound{a∈Y}\<%
+\AgdaBound{Ya}\<%
 \end{code}
 \ccpad
 Since \ad{Sg} \ab 𝑨 \ab Y is the smallest subuniverse containing \ab Y, we obtain the following inclusion.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{SgY⊆TermImageY}\AgdaSpace{}%
+\>[1]\AgdaFunction{SgY-onlyif-TermImageY}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -832,17 +913,17 @@ Since \ad{Sg} \ab 𝑨 \ab Y is the smallest subuniverse containing \ab Y, we ob
 \AgdaBound{Y}\<%
 \\
 %
-\>[1]\AgdaFunction{SgY⊆TermImageY}\AgdaSpace{}%
+\>[1]\AgdaFunction{SgY-onlyif-TermImageY}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{sgIsSmallest}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝑨}%
 \AgdaSymbol{(}\AgdaDatatype{TermImage}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{TermImageIsSub}\AgdaSpace{}%
-\AgdaFunction{Y⊆TermImageY}\<%
+\AgdaFunction{Y-onlyif-TermImageY}\<%
 \end{code}
 
 \subsubsection{Homomorphic images are subuniverses}\label{homomorphic-images-are-subuniverses}
@@ -995,7 +1076,7 @@ Now that we have developed the machinery of subuniverse generation, we can prove
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaFunction{ar}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\>[27]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
@@ -1019,7 +1100,7 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{hom-unique}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[770I]\AgdaFunction{funext}\AgdaSpace{}%
+\>[781I]\AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1033,7 +1114,7 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[770I]%
+\>[.][@{}l@{}]\<[781I]%
 \>[14]\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
@@ -1050,18 +1131,18 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[14]\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\>[14]\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}%
-\>[30]\AgdaSymbol{→}%
-\>[33]\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaBound{X}%
-\>[40]\AgdaSymbol{→}%
-\>[43]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
@@ -1072,18 +1153,18 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \\
 %
-\>[14]\AgdaComment{--------------------------------------------}\<%
+\>[14]\AgdaComment{-------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
-\>[14]\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\>[14]\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaDatatype{Sg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -1107,12 +1188,12 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaBound{gx≡hx}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{var}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{gx≡hx}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \\
@@ -1125,12 +1206,12 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaBound{gx≡hx}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
+\AgdaBound{fa}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{app}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒂}\AgdaSpace{}%
-\AgdaBound{SgIma}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{β}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
@@ -1140,13 +1221,13 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSymbol{)}%
+\AgdaBound{𝑎}\AgdaSymbol{)}%
 \>[24]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
 %
@@ -1156,7 +1237,7 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{)}%
 \>[24]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
@@ -1173,14 +1254,14 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSymbol{)}%
+\AgdaBound{𝑎}\AgdaSymbol{)}%
 \>[24]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
@@ -1191,7 +1272,7 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaSymbol{)}%
 \>[24]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
@@ -1210,12 +1291,25 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaBound{gx≡hx}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒂}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑎}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{SgIma}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{β}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
+\ccpad
+In the induction step of the foregoing proof, the typing judgments of the premise are these:\\[4pt]
+\begin{tabular}{rlrlrl}
+  \ab{fe}  :& \af{funext} \ab 𝓥 \ab 𝓦 & \ab 𝑨   :& \af{Algebra} \ab 𝓤 \ab 𝑆 & \ab 𝑩   :& \af{Algebra} \ab 𝓦 \ab 𝑆\\
+  \ab X   :& \af{Pred} \af ∣ \ab 𝑨 \af ∣ \ab 𝓤 &  \ab g \ab h  :& \af{hom} \ab 𝑨 \ab 𝑩 & \ab α   :&  \af Π \ab x \af ꞉ \af ∣ \ab 𝑨 \af ∣ , (\ab x \af ∈ \ab X \as → \af ∣ \ab g \af ∣ \ab x \aod ≡ \af ∣ \ab h \af ∣ \ab x)\\
+  \ab{fa}  :& \af ∣ \ab 𝑨 \af ∣ & \ab 𝑓   :& ∣ \ab 𝑆 ∣ & \ab 𝑎   :&  \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ \\
+\ab β   :& \af{Im} \ab 𝑎 \af ⊆ \af{Sg} \ab 𝑨 \ab X & &&&\\[4pt]
+\end{tabular}
+
+\noindent where \ab{fa} = (\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎. Under these assumptions, we prove \af ∣ \ab g \af ∣ ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎) \aod ≡ \af ∣ \ab h \af ∣ ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎).
+
+
+
 
 %%% Local Variables:
 %%% TeX-master: "ualib-part2.tex"

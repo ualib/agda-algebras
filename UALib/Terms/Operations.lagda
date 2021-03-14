@@ -58,9 +58,7 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 
 \end{code}
 
-What if the algebra 𝑨 happens to be `𝑻 X` itself?   Assume the map `h : X → ∣ 𝑻 X ∣` is the identity. We expect that `∀ 𝑠 → (p ̇ 𝑻 X) 𝑠  ≡  p 𝑠`. But what is `(𝑝 ̇ 𝑻 X) 𝑠` exactly?
-
-By definition, it depends on the form of 𝑝 as follows:
+If the algebra 𝑨 happens to be `𝑻 X`, then we expect that `∀ 𝑠` we have `(p ̇ 𝑻 X) 𝑠  ≡  p 𝑠`. But what is `(𝑝 ̇ 𝑻 X) 𝑠` exactly? By definition, it depends on the form of 𝑝 as follows:
 
 * if `𝑝 = ℊ x`, then `(𝑝 ̇ 𝑻 X) 𝑠 := (ℊ x ̇ 𝑻 X) 𝑠 ≡ 𝑠 x`
 
@@ -80,7 +78,9 @@ We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → �
 
 \begin{code}
 
-term-interp : {𝓧 : Universe}{X : 𝓧 ̇} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+term-interp : {𝓧 : Universe}{X : 𝓧 ̇} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
+ →            𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+
 term-interp 𝑓 {𝑠}{𝑡} st = ap (node 𝑓) st
 
 module _ {𝓧 : Universe}{X : 𝓧 ̇}{fe : dfunext 𝓥 (ov 𝓧)} where
@@ -165,7 +165,7 @@ module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
 \end{code}
 
-Next we prove that every term is compatible with every congruence relation. That is, if `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`.
+To conclude this module, we prove that every term is compatible with every congruence relation. That is, if `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`.
 
 \begin{code}
 

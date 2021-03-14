@@ -5,16 +5,16 @@
 %%% End: 
 Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.\footnote{\textbf{Notation}. At the start of the \ualibOperations module, for notational convenience we rename the \aic{generator} constructor of the \ad{Term} type, so that from now on we can use \aic{ℊ} in place of \aic{generator}.}
 
-When we interpret a term in an algebra we call the resulting function a \defn{term operation}. Given a term \ab{𝑝} and an algebra \ab{𝑨}, we denote by \ab{𝑝} \af ̇ \ab 𝑨 the \defn{interpretation} of \ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
+When we interpret a term in an algebra we call the resulting function a \defn{term operation}. Given a term \ab{𝑝} and an algebra \ab{𝑨}, we denote by \ab{𝑝}~\af ̇~\ab 𝑨 the \defn{interpretation} of \ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
 \begin{enumerate}
 % \def\labelenumi{\arabic{enumi}.}
 \item
- If \ab{𝑝} = \ab x (a variable symbol) and \ab{𝑎} \as : \ab X \as → \af ∣
- \ab 𝑨 \af ∣ a tuple of elements from the domain of \ab 𝑨, then (\ab{𝑝} \af ̇ \ab
- 𝑨) \ab 𝑎 := \ab 𝑎 \ab x. 
-\item  If \ab{𝑝} = \ab 𝑓 \ab 𝑡 (where \ab 𝑓 % \as : \af ∣ \ab 𝑆 \af ∣ 
+ If \ab{𝑝} = \ab x (a variable symbol) and \ab{𝑎}~\as :~\ab X~\as →~\af ∣
+~\ab 𝑨~\af ∣ a tuple of elements from the domain of \ab 𝑨, then (\ab{𝑝}~\af ̇~\ab
+ 𝑨)~\ab 𝑎 :=~\ab 𝑎~\ab x. 
+\item  If \ab{𝑝} =~\ab 𝑓~\ab 𝑡 (where \ab 𝑓 % \as : \af ∣ \ab 𝑆 \af ∣ 
  is an operation symbol and \ab{𝑡} %\as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af 𝑻 \ab X 
- is a tuple of terms) and if \ab{𝑎} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝 \af ̇ \ab 𝑨) \ab 𝑎 = (\ab 𝑓 \ab 𝑡 \af ̇ \ab 𝑨) \ab 𝑎 := (\ab 𝑓 \af ̂ \ab 𝑨) (\as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \ab 𝑨) \ab 𝑎).
+ is a tuple of terms) and if \ab{𝑎}~\as :~\ab X~\as →~\af ∣~\ab 𝑨~\af ∣ is a tuple from \ab{𝑨}, then we define (\ab 𝑝~\af ̇~\ab 𝑨)~\ab 𝑎 = (\ab 𝑓~\ab 𝑡~\af ̇~\ab 𝑨)~\ab 𝑎 := (\ab 𝑓~\af ̂~\ab 𝑨) (\as λ~\ab i~\as → (\ab 𝑡~\ab i~\af ̇~\ab 𝑨)~\ab 𝑎).
 \end{enumerate}
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the \ualib as follows.
 \ccpad
@@ -56,8 +56,8 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -68,8 +68,8 @@ Thus the interpretation of a term is defined by induction on the structure of th
 \AgdaBound{x}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSpace{}%
@@ -96,7 +96,11 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{free-lift-interp}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[234I]\AgdaFunction{dfunext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
@@ -114,7 +118,8 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[20]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[234I]%
+\>[12]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
@@ -125,9 +130,10 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \AgdaBound{p}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{free-lift-interp}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
@@ -137,6 +143,7 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \\
 %
 \>[1]\AgdaFunction{free-lift-interp}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
@@ -147,11 +154,12 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{free-lift-interp}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
@@ -159,42 +167,37 @@ It turns out that the intepretation of a term is the same as the \af{free-lift}
 \end{code}
 \scpad
 
-What if the algebra \ab 𝑨 happens to be \af{𝑻} \ab X itself? Assume the map \ab{h} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ is the identity. We expect that \as ∀ \ab 𝑠 \as → (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡  \ab p \ab 𝑠. But what is (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 exactly? By definition, it depends on the form of \ab 𝑝 as follows:
-
+If the algebra \ab 𝑨 happens to be \af{𝑻}~\ab X, then we expect that \as ∀~\ab 𝑠
+we have (\ab p~\af ̇~\af 𝑻~\ab X)~\ab 𝑠 \aod ≡ \ab p~\ab 𝑠.  But what is (\ab 𝑝~\af
+̇~\af 𝑻~\ab X)~\ab 𝑠 exactly? By definition, it depends on the form of \ab 𝑝 as
+follows:\\[-4pt]
 \begin{itemize}
-\item   if \ab{𝑝} \aod ≡ \aic ℊ \ab x, then (\ab{𝑝} ̇ \af 𝑻 \ab X) \ab 𝑠 := (\aic ℊ \ab x \af ̇ \af 𝑻 X) 𝑠 \aod ≡ \ab 𝑠 \ab x;
+\item   if \ab{𝑝}~\aod ≡~\aic ℊ~\ab x, then (\ab{𝑝} ̇~\af 𝑻~\ab X)~\ab 𝑠 := (\aic ℊ~\ab x~\af ̇~\af 𝑻 X) 𝑠~\aod ≡ \ab 𝑠~\ab x;
 \item
-  if \ab 𝑝 = \aic{node} \ab 𝑓 \ab 𝑡, then
-  (\ab 𝑝 \af ̇ \af 𝑻 \ab X) \ab 𝑠 := (\aic{node} \ab 𝑓 \ab 𝑡 \af ̇ \af 𝑻 \ab X) \ab 𝑠  \aod  ≡ (\ab 𝑓 \af ̂ \af 𝑻 \ab X) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \af 𝑻 \ab X) \ab 𝑠.
+  if \ab 𝑝 = \aic{node}~\ab 𝑓~\ab 𝑡, then
+  (\ab 𝑝~\af ̇~\af 𝑻~\ab X)~\ab 𝑠 := (\aic{node}~\ab 𝑓~\ab 𝑡~\af ̇~\af 𝑻~\ab X)~\ab 𝑠 \aod  ≡ (\ab 𝑓~\af ̂~\af 𝑻~\ab X)~\as λ~\ab i~\as → (\ab 𝑡~\ab i~\af ̇~\af 𝑻~\ab X)~\ab 𝑠.
 \end{itemize}
 
-Now, assume \ab ϕ \as : \af{hom} \af 𝑻 \ab 𝑨. Then by \af{comm-hom-term}, we have \af{∣} \ab ϕ \af ∣ (\ab p \af ̇ \af 𝑻 \ab X) \ab 𝑠 \aod ≡ (\ab p \af ̇ \ab 𝑨) \af ∣ \ab ϕ \af ∣ \af ∘ \ab 𝑠.
-
+Now, assume \ab ϕ~\as :~\af{hom}~\af 𝑻~\ab 𝑨. Then by \af{comm-hom-term}, we
+have \af{∣}~\ab ϕ~\af ∣ (\ab p~\af ̇~\af 𝑻~\ab X)~\ab 𝑠 \aod ≡ (\ab p~\af ̇~\ab
+𝑨)~\af ∣~\ab ϕ~\af ∣~\af ∘~\ab 𝑠.\\[-4pt]
 \begin{itemize}
-\item if \ab p \aod ≡ \aic ℊ \ab x (and \ab 𝑡 \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣), then\\[4pt]
-\af ∣ \ab ϕ \af ∣ \ab p := \af ∣ \ab ϕ \af ∣ (\aic ℊ \ab x) \aod ≡ \af ∣ \ab ϕ \af ∣ (\as λ \ab 𝑡 \as → \ab 𝑡 \ab x) \aod ≡ \as λ \ab 𝑡 \as → (\af ∣ \ab ϕ \af ∣ \af ∘ \ab 𝑡) \ab x;
-\item if \ab{p} \aod ≡ \aic{node} \ab 𝑓 \ab 𝑡, then\\[4pt]
-\af ∣ \ab ϕ \af ∣ p := \af ∣ \ab ϕ \af ∣ (\ab p ̇ \af 𝑻 \ab X) \ab 𝑠 = (\aic{node} \ab 𝑓 \ab 𝑡 \af ̇ \af 𝑻 X) \ab 𝑠  (\ab 𝑓 \af ̂ \af 𝑻 \ab X) \as λ \ab i \as → (\ab 𝑡 \ab i \af ̇ \af 𝑻 \ab X) \ab 𝑠.
+\item if \ab p~\aod ≡ \aic ℊ~\ab x (and \ab 𝑡~\as :~\ab X~\as →~\af ∣~\af 𝑻~\ab X~\af ∣), then\\[4pt]
+\af ∣~\ab ϕ~\af ∣~\ab p := \af ∣~\ab ϕ~\af ∣ (\aic ℊ~\ab x) \aod ≡ \af ∣~\ab ϕ~\af ∣ (\as λ~\ab 𝑡~\as →~\ab 𝑡~\ab x) \aod ≡ \as λ~\ab 𝑡~\as → (\af ∣~\ab ϕ~\af ∣~\af ∘~\ab 𝑡)~\ab x;
+\item if \ab{p} \aod ≡ \aic{node}~\ab 𝑓~\ab 𝑡, then\\[4pt]
+\af ∣~\ab ϕ~\af ∣ p := \af ∣~\ab ϕ~\af ∣ (\ab p ̇~\af 𝑻~\ab X)~\ab 𝑠 = (\aic{node}~\ab 𝑓~\ab 𝑡~\af ̇~\af 𝑻 X)~\ab 𝑠  (\ab 𝑓~\af ̂~\af 𝑻~\ab X)~\as λ~\ab i~\as → (\ab 𝑡~\ab i~\af ̇~\af 𝑻~\ab X)~\ab 𝑠.
 \end{itemize}
-
-We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{Term} \ab X and \ab{𝑡} \as : \ab X \as → \af ∣ \af 𝑻 \ab X \af ∣ such that \ab{p} \aod ≡ (\ab q \af ̇ \af 𝑻 \ab X) \ab 𝑡. We prove this fact as follows.
+We claim that for all \ab{p}~\as :~\ad{Term}~\ab X there exist \ab{q}~\as :~\ad{Term}~\ab X and \ab{𝑡}~\as :~\ab X~\as →~\af ∣~\af 𝑻~\ab X~\af ∣ such that \ab{p} \aod ≡ (\ab q~\af ̇~\af 𝑻~\ab X)~\ab 𝑡. We prove this fact as follows.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\>[0]\AgdaFunction{term-interp}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\>[1431I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{term-interp}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -208,9 +211,12 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝑠}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{\}}%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[1431I]%
+\>[15]\AgdaBound{𝑠}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{𝑡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -224,8 +230,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑡}\<%
 \\
-%
-\>[1]\AgdaFunction{term-interp}\AgdaSpace{}%
+\>[0]\AgdaFunction{term-interp}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑠}\AgdaSymbol{\}\{}\AgdaBound{𝑡}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{st}\AgdaSpace{}%
@@ -234,12 +239,27 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{st}\<%
+\end{code}
+\scpad
+\begin{code}
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{dfunext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{term-gen}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
@@ -266,8 +286,6 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaInductiveConstructor{ℊ}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{term-gen}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
@@ -278,43 +296,39 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{term-gen}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝑡}\AgdaSymbol{)}%
-\>[210I]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{node}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaBound{𝑓}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{term-gen}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\<%
-\\
-\>[210I][@{}l@{\AgdaIndent{0}}]%
-\>[22]\AgdaFunction{term-interp}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{term-interp}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaFunction{term-gen}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{term-gen-agreement}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
@@ -340,16 +354,12 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaInductiveConstructor{ℊ}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{term-gen-agreement}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{term-gen-agreement}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
@@ -361,7 +371,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaFunction{𝑻}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -371,7 +381,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
+% %
 \>[1]\AgdaFunction{term-agreement}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
@@ -402,26 +412,18 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \end{code}
 
 \subsubsection{Interpretation of terms in product algebras}\label{interpretation-of-terms-in-product-algebras}
-
+Note that while in the previous section it sufficed to postulate a local version
+of function extensionality, in the present section we will assume the full global version
+(\af{global-dfunext}) is in force. (We are not sure whether this is necessary or if,
+with some effort, we could get a more moderate invocation of function
+extensionality to work here.)\footnote{%
+We plan to resolve this, and if possible improve upon our treatment of function extensionality, before the next major release of the \agdaualib.}
+\ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{interp-prod}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[308I]\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\>[325I]\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -431,7 +433,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[308I]%
+\>[.][@{}l@{}]\<[325I]%
 \>[15]\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
@@ -476,8 +478,8 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{i}\AgdaSymbol{))}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{interp-prod}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x₁}\AgdaSymbol{)}\AgdaSpace{}%
@@ -584,10 +586,10 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
-%
+% %
 \>[1]\AgdaFunction{interp-prod2}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[432I]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\>[449I]\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)\{}\AgdaBound{I}\AgdaSpace{}%
@@ -602,7 +604,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[432I]%
+\>[.][@{}l@{}]\<[449I]%
 \>[16]\AgdaComment{--------------------------------------------------------------}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
@@ -645,8 +647,8 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{interp-prod2}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -702,7 +704,7 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 \AgdaBound{tA}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSpace{}%
 \AgdaBound{tup}\AgdaSymbol{)}%
-\>[53]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
+\>[54]\AgdaOperator{\AgdaFunction{≡⟨}}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
@@ -766,21 +768,6 @@ We claim that for all \ab{p} \as : \ad{Term} \ab X there exist \ab{q} \as : \ad{
 We now prove two important facts about term operations. The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{comm-hom-term}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[580I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -847,8 +834,8 @@ We now prove two important facts about term operations. The first of these, whic
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{comm-hom-term}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
@@ -943,27 +930,27 @@ We now prove two important facts about term operations. The first of these, whic
 \AgdaBound{a}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-Next we prove that every term is compatible with every congruence relation. That is, if \ab{t} \as : \ad{Term} \ab X and \ab{θ} \as : \af{Con} \ab 𝑨, then \ab{a} \ab θ \ab b \as → \ab t(\ab a) \ab θ \ab t(\ab b).
+To conclude the \ualibTerms module, we prove that every term is compatible with every congruence relation. That is, if \ab{t}~\as :~\ad{Term}~\ab X and \ab{θ}~\as :~\af{Con}~\ab 𝑨, then \ab{a}~\ab θ~\ab b~\as →~\ab t(\ab a)~\ab θ~\ab t(\ab b).
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Congruence}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{compatible-term}\AgdaSpace{}%
 \AgdaSymbol{:}%
 \>[707I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -1004,8 +991,8 @@ Next we prove that every term is compatible with every congruence relation. That
 \AgdaBound{x}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{compatible-term}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
@@ -1027,83 +1014,79 @@ Next we prove that every term is compatible with every congruence relation. That
 \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\<%
 \end{code}
-\ccpad
-For the sake of comparison, here is the analogous theorem using \af{compatible-fun\textquotesingle{}}.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[751I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{t}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{Term}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)(}\AgdaBound{θ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Con}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\<%
-\\
-\>[.][@{}l@{}]\<[751I]%
-\>[20]\AgdaComment{-----------------------------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[20]\AgdaFunction{compatible-fun'}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaBound{𝑎}\AgdaSpace{}%
-\AgdaBound{𝑎'}\AgdaSpace{}%
-\AgdaBound{p}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{snd}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaFunction{compatible-term'}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑎}\AgdaSpace{}%
-\AgdaBound{𝑎'}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{p}\<%
-\end{code}
-
-%%% Local Variables:
-%%% TeX-master: "ualib-part2.tex"
-%%% End:
+% \ccpad
+% For the sake of comparison, here is the analogous theorem using \af{compatible-fun\textquotesingle{}}.
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
+% \AgdaSymbol{:}%
+% \>[751I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{t}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaDatatype{Term}\AgdaSpace{}%
+% \AgdaBound{X}\AgdaSymbol{)(}\AgdaBound{θ}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Con}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSymbol{)}\<%
+% \\
+% \>[.][@{}l@{}]\<[751I]%
+% \>[20]\AgdaComment{-----------------------------------------}\<%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]\AgdaSymbol{→}%
+% \>[20]\AgdaFunction{compatible-fun'}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{t}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{θ}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{θ}\AgdaSpace{}%
+% \AgdaBound{p}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaBound{z}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{z}\AgdaSpace{}%
+% \AgdaBound{x}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{compatible-term'}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{𝑡}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{θ}\AgdaSpace{}%
+% \AgdaBound{𝑎}\AgdaSpace{}%
+% \AgdaBound{𝑎'}\AgdaSpace{}%
+% \AgdaBound{p}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{snd}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+% \AgdaBound{θ}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{((}\AgdaFunction{compatible-term'}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝑡}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{𝑎}\AgdaSpace{}%
+% \AgdaBound{𝑎'}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{p}\<%
+% \end{code}

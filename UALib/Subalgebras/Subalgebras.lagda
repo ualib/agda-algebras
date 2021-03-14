@@ -26,7 +26,7 @@ open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras `𝑨 : Algebra 𝓦 𝑆` and `𝑩 : Algebra 𝓤 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the universe of `𝑨` to the universe of `𝑩` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
+Given algebras `𝑨 : Algebra 𝓦 𝑆` and `𝑩 : Algebra 𝓤 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` from the universe of `𝑩` to the universe of `𝐴` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
 
 \begin{code}
 
