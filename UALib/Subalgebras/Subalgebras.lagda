@@ -26,7 +26,7 @@ open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` from the universe of `𝑩` to the universe of `𝐴` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
+Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; that is, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` that is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
 
 \begin{code}
 
@@ -104,7 +104,7 @@ free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 
 
 \begin{code}
 
-_≤_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+_≤_ : {𝓦 𝓤 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
@@ -120,20 +120,19 @@ Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebra
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓩 : Universe} where
+module _ {𝓦 𝓤 𝓩 : Universe} where
 
  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓦} 𝑨) ,
-                                                           (𝑨 ∈ 𝒦)  × (𝑩 ≅ ∣ SA ∣)
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , Σ sa ꞉ Subalgebra{𝓦} 𝑨 , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣)
 
 \end{code}
 
-Using this definition, we can express the collection of all subalgebras of algebras in a class by the type `SubalgebraOfClass`, defined as follows.
+Using this type, we express the collection of all subalgebras of algebras in a class by the type `SubalgebraOfClass`, which we now define.
 
 \begin{code}
 
 SubalgebraOfClass : {𝓦 𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → ov (𝓤 ⊔ 𝓦) ̇
-SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
+SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
 
@@ -153,7 +152,7 @@ Here are a number of useful facts about subalgebras.  Many of them seem redundan
 ≤-refl {𝓤}{𝑨} = ≤-reflexive 𝑨
 
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+module _ {𝓩 𝓨 𝓧 : Universe} where
 
  ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
   →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
@@ -166,7 +165,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
  ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+module _ {𝓩 𝓨 𝓧 : Universe} where
 
  ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
   →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
@@ -200,7 +199,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
                          ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
-mono-≤ : {𝓤 𝓦 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+mono-≤ : {𝓦 𝓤 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥

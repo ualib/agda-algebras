@@ -7,13 +7,16 @@ Here we define the \af{Subalgebra} type, representing the subalgebra of a given 
 
 \subsubsection{Subalgebra type}\label{subalgebra-type}
 
-Given algebras \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆 and \ab 𝑩 \as : \af{Algebra} \ab 𝓦 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨 just in case \ab 𝑩 can be \emph{homomorphically embedded} in \ab 𝑨; i.e., there exists a map \ab h \as : \af ∣ \ab 𝑩 \af ∣ \as → \af ∣ \ab 𝑨 \af ∣ such that \ab h is both a homomorphism and an embedding.\footnote{%
+Given algebras \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆 and \ab 𝑩 \as : \af{Algebra} \ab 𝓦 \ab 𝑆, we say that \ab 𝑩 is a \defn{subalgebra} of \ab 𝑨 just in case \ab 𝑩 can be \emph{homomorphically embedded} in \ab 𝑨; i.e., there exists a map \ab h \as : \af ∣ \ab 𝑩 \af ∣ \as → \af ∣ \ab 𝑨 \af ∣ that is both a homomorphism and an embedding.\footnote{%
 An alternative which could end up being simpler and easier to work with would be to proclaim \ab 𝑩 a subalgebra of \ab 𝑨 iff there is an \emph{injective} homomorphism from \ab 𝐵 into \ab 𝑨.  In preparation for the next major release of the \ualib, we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type \af{IsSubalgebraOf}.}
 \ccpad
 \begin{code}%
-\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOf\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOf\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -32,8 +35,7 @@ An alternative which could end up being simpler and easier to work with would be
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-%
-\>[1]\AgdaBound{𝑩}\AgdaSpace{}%
+\>[0]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOf}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -51,9 +53,13 @@ An alternative which could end up being simpler and easier to work with would be
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Subalgebra}\AgdaSpace{}%
+\>[0]\AgdaFunction{Subalgebra}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
@@ -64,8 +70,8 @@ An alternative which could end up being simpler and easier to work with would be
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-%
-\>[1]\AgdaFunction{Subalgebra}\AgdaSpace{}%
+\>[0]\AgdaFunction{Subalgebra}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
@@ -79,12 +85,12 @@ An alternative which could end up being simpler and easier to work with would be
 \AgdaOperator{\AgdaFunction{IsSubalgebraOf}}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
 \end{code}
-
-Note the order of the arguments.  The universe \ab 𝓦 comes first because in certain situations we have to explicitly specify this universe, whereas we can almost always leave the universe \ab 𝓤 implicit. (See, for example, the definition of \af{IsSubalgebraOfClass} below.)
+\ccpad
+Note the order of the arguments.  The universe \ab 𝓦 comes first because in certain situations we have to explicitly specify this universe, whereas we can almost always leave the universe \ab 𝓤 implicit. See, for example, the definition of \af{IsSubalgebraOfClass} below (\S\ref{subalgebras-of-a-class}).
 
 \subsubsection{Consequences of First Homomorphism Theorem}\label{consequences-of-first-homomorphism-theorem}
 
-We take this opportunity to prove an important lemma that makes use of the \af{IsSubalgebraOf} type defined above. It is the following: If \ab 𝑨 and \ab 𝑩 are \ab 𝑆-algebras and \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 a homomorphism from \ab 𝑨 to \ab 𝑩, then the quotient \ab 𝑨 \af ╱ \af{ker} \ab h is (isomorphic to) a subalgebra of \ab 𝑩. This is an easy corollary of the First Homomorphism Theorem proved in the \ualibNoether module.
+We take this opportunity to prove an important lemma that makes use of the \af{IsSubalgebraOf} type defined above; it is the following: If \ab 𝑨 and \ab 𝑩 are \ab 𝑆-algebras and \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 a homomorphism from \ab 𝑨 to \ab 𝑩, then the quotient \ab 𝑨 \af ╱ \af{ker} \ab h is (isomorphic to) a subalgebra of \ab 𝑩. This is an easy corollary of the First Homomorphism Theorem proved in the \ualibNoether module.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{FirstHomCorollary}\AgdaSpace{}%
@@ -429,8 +435,8 @@ One special case to which we will apply this is where the algebra \ab 𝑨 is th
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -477,11 +483,9 @@ Suppose \ab 𝒦 \as : \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓩 denot
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}IsSubalgebraOfClass\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
@@ -505,68 +509,38 @@ Suppose \ab 𝒦 \as : \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓩 denot
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{SA}\AgdaSpace{}%
+\AgdaBound{sa}\AgdaSpace{}%
 \AgdaFunction{꞉}%
-\>[379I]\AgdaSymbol{(}\AgdaFunction{Subalgebra}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\<%
-\\
-\>[379I][@{}l@{\AgdaIndent{0}}]%
-\>[59]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[380I]\AgdaFunction{Subalgebra}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaFunction{,}\<%
+% \\
+% \>[380I][@{}l@{\AgdaIndent{0}}]%
+% \>[59]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{)}%
 \>[68]\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≅}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{SA}\AgdaSpace{}%
+\AgdaBound{sa}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{SUBALGEBRAOFCLASS}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{ov}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{SUBALGEBRAOFCLASS}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+\ccpad
+Using this type, we express the collection of all subalgebras of algebras in a class by the type \af{SubalgebraOfClass}, which we now define.
+\ccpad
+\begin{code}%
 \>[0]\AgdaFunction{SubalgebraOfClass}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -583,14 +557,25 @@ Suppose \ab 𝒦 \as : \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓩 denot
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 \>[0]\AgdaFunction{SubalgebraOfClass}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{SUBALGEBRAOFCLASS}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaArgument{𝓩}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ov}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{\}}\<%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
+\AgdaBound{𝒦}\<%
 \end{code}
+
+
+
+
+
 
 \subsubsection{Subalgebra lemmas}\label{subalgebra-lemmas}
 
