@@ -98,13 +98,13 @@ free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 
 
 \end{code}
 
-
-
 **Notation**. For convenience, we define the following shorthand for the subalgebra relation.
 
 \begin{code}
+
 _≤_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
+
 \end{code}
 
 From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
@@ -171,34 +171,6 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
    gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
    gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
- 
- -- ISO-≤ : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- --  →      𝑩 ≤ 𝑨 →  𝑪 ≅ 𝑩  →  𝑪 ≤ 𝑨
-
- -- ISO-≤ 𝑨 𝑩 𝑪 B≤A C≅B = (g ∘ f , gfhom) , gfemb
- --  where
- --   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
- --   f = fst ∣ C≅B ∣
- --   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
- --   g = fst ∣ B≤A ∣
-
- --   gfemb : is-embedding (g ∘ f)
- --   gfemb = ∘-embedding (∥ B≤A ∥) (iso→embedding C≅B)
-
- --   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
- --   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ C≅B ∣) (snd ∣ B≤A ∣)
-
-
- -- Iso-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- --  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
-
- -- Iso-≤ 𝑨 {𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
-
-
- -- iso-≤ : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- --  →      𝑩 ≤ 𝑨 → 𝑪 ≅ 𝑩 → 𝑪 ≤ 𝑨
-
- -- iso-≤ {𝑨}{𝑩} 𝑪 = ISO-≤ 𝑨 𝑩 𝑪
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
