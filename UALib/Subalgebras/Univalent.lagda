@@ -36,7 +36,7 @@ open import MGS-MLTT using (_⇔_) public
 open import MGS-Subsingleton-Theorems using (Univalence)
 open import MGS-Subsingleton-Theorems using (Π-is-subsingleton)
 
-open import MGS-Embeddings using (embedding-gives-ap-is-equiv; pr₁-embedding; 
+open import MGS-Embeddings using (embedding-gives-ap-is-equiv; pr₁-embedding;
  lr-implication; rl-implication; inverse; ×-is-subsingleton; _≃_; _●_;
  logically-equivalent-subsingletons-are-equivalent; id)
 
@@ -48,11 +48,6 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
  open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
   using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω)
 
--- Nat; NatΠ; NatΠ-is-embedding; is-embedding; 
---    _↪_; embedding-gives-ap-is-equiv; embeddings-are-lc; ×-is-subsingleton; id-is-embedding) public
- -- ; lr-implication; rl-implication; id; _⁻¹; ap) public
- -- ∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; pr₁; pr₂; _×_; -Σ; Π;
- --   ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; 
  op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
  op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
 

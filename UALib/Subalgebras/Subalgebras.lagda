@@ -30,15 +30,17 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+_IsSubalgebraOf_ : {𝓦 𝓤 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
 
- _IsSubalgebraOf_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
-
- Subalgebra : Algebra 𝓤 𝑆 → ov 𝓦 ⊔ 𝓤 ̇
- Subalgebra 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+Subalgebra : {𝓦 𝓤 : Universe} → Algebra 𝓤 𝑆 → ov 𝓦 ⊔ 𝓤 ̇
+Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
+
+Note the order of the arguments.  The universe `𝓦` comes first because in certain situations we must explicitly specify this universe, whereas we can almost always leave the universe `𝓤` implicit. (See, for example, the definition of `_IsSubalgebraOfClass_` below.)
+
+
 
 
 #### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
@@ -112,21 +114,31 @@ From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is 
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
+One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `𝓤`, we represent classes of `𝑆`-algebras with domains of type `𝓤 ̇` as predicates over the `Algebra 𝓤 𝑆` type. In the syntax of the [UALib][], such predicates inhabit the type `Pred (Algebra 𝓤 𝑆) 𝓩`, for some universe 𝓩.
+
+Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebras and `𝑩 : Algebra 𝓦 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
+
 \begin{code}
 
 module _ {𝓤 𝓦 𝓩 : Universe} where
 
- _IsSubalgebraOfClass_ : (𝑩 : Algebra 𝓦 𝑆) → Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓤}{𝓦} 𝑨) ,
+ _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓦} 𝑨) ,
                                                            (𝑨 ∈ 𝒦)  × (𝑩 ≅ ∣ SA ∣)
 
- SUBALGEBRAOFCLASS : Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
- SUBALGEBRAOFCLASS 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
+\end{code}
 
-SubalgebraOfClass : {𝓤 𝓦 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → ov (𝓤 ⊔ 𝓦) ̇
-SubalgebraOfClass {𝓤}{𝓦} = SUBALGEBRAOFCLASS {𝓤}{𝓦}{𝓩 = ov 𝓤}
+Using this definition, we can express the collection of all subalgebras of algebras in a class by the type `SubalgebraOfClass`, defined as follows.
+
+\begin{code}
+
+SubalgebraOfClass : {𝓦 𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → ov (𝓤 ⊔ 𝓦) ̇
+SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
+
+
+
 
 #### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
 

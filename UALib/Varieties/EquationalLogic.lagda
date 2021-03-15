@@ -178,7 +178,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
   →  𝒦 ⊧ p ≋ q
      -------------------------------------------------
-  →  (𝑩 : SubalgebraOfClass{𝓤}{𝓦} 𝒦)  →  ∣ 𝑩 ∣ ⊧ p ≈ q
+  →  (𝑩 : SubalgebraOfClass{𝓦} 𝒦)  →  ∣ 𝑩 ∣ ⊧ p ≈ q
 
  ⊧-S-class-invariance p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) =
 
