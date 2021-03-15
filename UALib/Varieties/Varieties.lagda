@@ -149,8 +149,8 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
  VlA (vlift{𝑨} x) = visow (vlift x) (lift-alg-associative 𝑨)
  VlA (vliftw{𝑨} x) = visow (VlA x) (lift-alg-associative 𝑨)
  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (lift-alg-hom-image hB)
- VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (lift-alg-≤ 𝑩{𝑨} B≤A)
- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤ 𝑩{𝑨} B≤A)
+ VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (lift-alg-≤-lift 𝑨 B≤A)
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (lift-alg-≤-lift 𝑨 B≤A)
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where
   𝑰 : (ov 𝓤 ⁺) ̇
@@ -287,7 +287,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = TRANS-≤-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
+   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
    B≤AS : 𝑩 ≤ ∣ AS ∣
    B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
 
@@ -298,7 +298,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = TRANS-≤-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
+   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
    B≤AS : 𝑩 ≤ ∣ AS ∣
    B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
 
@@ -323,7 +323,7 @@ module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
                  -------------------------------------------------
   →              (lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
- lift-alg-subP {𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) = 
+ lift-alg-subP {𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) =
   lA , (lC , lC≤lA) , plA , (lift-alg-iso B≅C)
    where
    lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
@@ -331,7 +331,7 @@ module _ {𝓤 𝓦 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    lC = lift-alg 𝑪 𝓦
 
    lC≤lA : lC ≤ lA
-   lC≤lA = lift-alg-≤ 𝑪 {𝑨} C≤A
+   lC≤lA = lift-alg-≤-lift 𝑨 C≤A
    plA : lA ∈ P 𝒦
    plA = pliftu pA
 
@@ -364,7 +364,7 @@ S⊆SP {𝓤}{𝓦}{𝒦} {.(lift-alg 𝑨 𝓦)} (slift{𝑨} x) = subalgebra�
  lAsc = lift-alg-subP Asc
 
 S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(ssub{𝑨} sA B≤A) =
- ssub (subalgebra→S lAsc)(lift-alg-sub-lift 𝑨 B≤A)
+ ssub (subalgebra→S lAsc)( ≤-lift-alg 𝑨 B≤A )
   where
   lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
   lA = lift-alg 𝑨 𝓦
@@ -458,9 +458,9 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
- PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤ 𝑩{𝑨} B≤A)) ≅-refl
- PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA)) (lift-alg-≤ 𝑩{𝑨} B≤A)
- PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) (lift-alg-iso A≅B)
+ PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(lift-alg-≤-lift 𝑨 B≤A)) ≅-refl
+ PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA))(lift-alg-≤-lift 𝑨 B≤A)
+ PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) ( lift-alg-iso A≅B )
  PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
  PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
@@ -529,7 +529,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
    B≤lA : 𝑩 ≤ lift-alg 𝑨 (ov 𝓤 ⁺)
-   B≤lA = (lift-alg-≤-lift 𝑩 {𝑨}) B≤A
+   B≤lA = ≤-lift-alg 𝑨 B≤A
 
  SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
 

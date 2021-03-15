@@ -104,7 +104,7 @@ free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 
 
 \begin{code}
 
-_≤_ : {𝓦 𝓤 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+_≤_ : {𝓦 𝓤 : Universe} → Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
@@ -141,7 +141,9 @@ SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebr
 
 #### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
 
-Here are a number of useful facts about subalgebras.  Many of them seem redundant, and they are to some extent.  However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments.  The aim is to make it as convenient as possible to apply the lemmas in different situations.  (We're in the UALib utility closet now, and elegance is not the priority.)
+We conclude this module by proving a number of useful facts about subalgebras. Some of the formal statements below may appear to be redundant, and indeed they are to some extent. However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments.  The aim is to make it as convenient as possible to apply the lemmas in different situations.  (We're in the [UALib][] utility closet now; elegance is not the priority.)
+
+First we show that the subalgebra relation is a *preorder*; i.e., it is a reflexive, transitive binary relation.<sup>[2](Subalgebras.Subalgebras.html#fn2)</sup>
 
 \begin{code}
 
@@ -172,37 +174,36 @@ module _ {𝓩 𝓨 𝓧 : Universe} where
 
  ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
   where
-   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   f = fst ∣ CB ∣
-   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-   g = fst ∣ BA ∣
+  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+  f = fst ∣ CB ∣
+  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  g = fst ∣ BA ∣
 
-   gfemb : is-embedding (g ∘ f)
-   gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
+  gfemb : is-embedding (g ∘ f)
+  gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
 
-   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
+  gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
+  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- trans-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ ≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
- trans-≤-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
+ ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
 
 
- TRANS-≤-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ ≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
 
- TRANS-≤-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ,
-                         ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+ ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
-mono-≤ : {𝓦 𝓤 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+≤-mono : {𝓦 𝓤 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
-mono-≤ 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
 
 lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
@@ -214,41 +215,44 @@ lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) =
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- lift-alg-≤-lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ lift-alg 𝑩 𝓩
- lift-alg-≤-lift 𝑨 {𝑩} A≤B = TRANS-≤-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
+ -- ≤-lift-alg : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ lift-alg 𝑩 𝓩
+ -- ≤-lift-alg 𝑨 {𝑩} A≤B = ≤-TRANS-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
- lift-alg-≤-lower : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
- lift-alg-≤-lower 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym lift-alg-≅) B≤A
+ lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
+ lift-alg-≤ 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym lift-alg-≅) B≤A
 
- lift-alg-≤-lift' : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ lift-alg 𝑨 𝓩
- lift-alg-≤-lift' 𝑨 {𝑩} B≤A = TRANS-≤-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
+ ≤-lift-alg : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ lift-alg 𝑨 𝓩
+ ≤-lift-alg 𝑨 {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
 
 
 module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
- lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → lift-alg 𝑨 𝓩 ≤ lift-alg 𝑩 𝓦
+ lift-alg-≤-lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → lift-alg 𝑨 𝓩 ≤ lift-alg 𝑩 𝓦
 
- lift-alg-≤ 𝑨 {𝑩} A≤B = ≤-trans (lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
+ lift-alg-≤-lift {𝑨} 𝑩 A≤B = ≤-trans (lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
    where
 
    lAA : (lift-alg 𝑨 𝓩) ≤ 𝑨
-   lAA = lift-alg-≤-lower 𝑨 {𝑨} ≤-refl
+   lAA = lift-alg-≤ 𝑨 {𝑨} ≤-refl
 
    B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
-   B≤lB = lift-alg-≤-lift 𝑩 {𝑩} ≤-refl
+   B≤lB = ≤-lift-alg 𝑩 {𝑩} ≤-refl
 
 
-module _ {𝓤 𝓦 : Universe} where
+-- module _ {𝓤 𝓦 : Universe} where
 
- lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ lift-alg 𝑨 𝓦
- lift-alg-sub-lift 𝑨 {𝑪} C≤A = TRANS-≤-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
+--  lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ lift-alg 𝑨 𝓦
+--  lift-alg-sub-lift 𝑨 {𝑪} C≤A = ≤-TRANS-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
 
 
 \end{code}
 
+
 ---------------------------------
 
-<span class="footnote" id="fn2"><sup>1</sup> An alternative which could end up being simpler and easier to work with would be to proclaim that `𝑩` is a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. In preparation for the next major release of the \ualib, we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
+<sup>1</sup> <span class="footnote" id="fn1">An alternative which could end up being simpler and easier to work with would be to proclaim that `𝑩` is a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. In preparation for the next major release of the \ualib, we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
+
+<sup>2</sup> <span class="footnote" id="fn2"> Recall, in the [Relations.Quotients][] module, we defined *preorder* for binary relation types. Here, however, we will content ourselves with merely proving reflexivity and transitivity of the subalgebra relation `_≤_`, without worry about first defining it as an inhabitant of an honest-to-goodness binary relation type, of the sort introduced in the [Relations.Discrete][] module. Perhaps we will address this matter in a future release of the [UALib][].</span>
 
 <br>
 <br>
