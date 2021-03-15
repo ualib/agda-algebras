@@ -26,24 +26,24 @@ open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras `𝑨 : Algebra 𝓦 𝑆` and `𝑩 : Algebra 𝓤 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` from the universe of `𝑩` to the universe of `𝐴` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
+Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; in other terms, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` from the universe of `𝑩` to the universe of `𝐴` such that `h` is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
 
- _IsSubalgebraOf_ : (𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓦 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ _IsSubalgebraOf_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
 
- Subalgebra : Algebra 𝓦 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤 ⁺ ̇
- Subalgebra 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+ Subalgebra : Algebra 𝓤 𝑆 → ov 𝓦 ⊔ 𝓤 ̇
+ Subalgebra 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
 
 #### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
 
-We take this opportunity to prove an important lemma using the `IsSubalgebraOf` type defined above.  If `𝑨` and `𝑩` is an 𝑆-algebra, and if `h : hom 𝑨 𝑩` is a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.  This is an easy corollary of the First Homomorphism Theorem proved in the [Homomorphisms.Noether][] module.
+We take this opportunity to prove an important lemma that makes use of the `IsSubalgebraOf` type defined above.  It is the following: If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.  This is an easy corollary of the First Homomorphism Theorem proved in the [Homomorphisms.Noether][] module.
 
 \begin{code}
 
@@ -77,7 +77,7 @@ FirstHomCorollary fe pe 𝑨 𝑩 h Bset ssR ssA = ϕhom , ϕemb
 
 \end{code}
 
-In the special case we apply this to later (e.g., to prove Birkhoff's HSP theorem) the algebra `𝑨` is the term algebra `𝑻 X`. We record this special case here so that it's easier to apply later.
+One special case to which we will apply this is where the algebra `𝑨` is the term algebra `𝑻 X`. We formalize this special case here so that it's readily available when we need it later.
 
 \begin{code}
 
@@ -100,15 +100,14 @@ free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 
 
 
 
-
-##### <a id="syntactic-sugar">Syntactic sugar</a>
-
-We use the convenient ≤ notation for the subalgebra relation.
+**Notation**. For convenience, we define the following shorthand for the subalgebra relation.
 
 \begin{code}
-_≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓠 ̇
+_≤_ : {𝓤 𝓦 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 \end{code}
+
+From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
@@ -117,8 +116,8 @@ _≤_ : {𝓤 𝓠 : Universe}(𝑩 : Algebra 𝓤 𝑆)(𝑨 : Algebra 𝓠 �
 
 module _ {𝓤 𝓦 𝓩 : Universe} where
 
- _IsSubalgebraOfClass_ : (𝑩 : Algebra 𝓦 𝑆) → Pred (Algebra 𝓤 𝑆) 𝓩 → ov 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
- _IsSubalgebraOfClass_ 𝑩 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓤} 𝑨) ,
+ _IsSubalgebraOfClass_ : (𝑩 : Algebra 𝓦 𝑆) → Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , Σ SA ꞉ (Subalgebra{𝓤}{𝓦} 𝑨) ,
                                                            (𝑨 ∈ 𝒦)  × (𝑩 ≅ ∣ SA ∣)
 
  SUBALGEBRAOFCLASS : Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
@@ -266,7 +265,10 @@ module _ {𝓤 𝓦 : Universe} where
 
 ---------------------------------
 
-<span class="footnote" id="fn2"><sup>1</sup> A simpler alternative would be to proclaim `𝑩` a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. We should investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
+<span class="footnote" id="fn2"><sup>1</sup> An alternative which could end up being simpler and easier to work with would be to proclaim that `𝑩` is a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. In preparation for the next major release of the \ualib, we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
+
+<br>
+<br>
 
 [← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Univalent →](Subalgebras.Univalent.html)</span>
