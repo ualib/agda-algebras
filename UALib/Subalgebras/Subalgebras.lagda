@@ -85,14 +85,14 @@ One special case to which we will apply this is where the algebra `𝑨` is the 
 
 free-quot-subalg : {𝓤 𝓧 : Universe}
                    --extensionality assumptions --
- →                 dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
+ →                   dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
 
  →                 (X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
 
                    --truncation assumptions --
- →                 is-set ∣ 𝑩 ∣
- →                 (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
- →                 (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
+ →                   is-set ∣ 𝑩 ∣
+ →                   (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
+ →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
                    ---------------------------------------------------------------
  →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
@@ -166,6 +166,11 @@ module _ {𝓩 𝓨 𝓧 : Universe} where
 
  ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
+\end{code}
+
+Next we prove that if two algebras are isomorphic and one of them is a subalgebra of `𝑨`, then so is the other.
+
+\begin{code}
 
 module _ {𝓩 𝓨 𝓧 : Universe} where
 
@@ -209,14 +214,10 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
  →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
-lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) =
- 𝑨 , sa , KA , ≅-trans (≅-sym lift-alg-≅) B≅sa
+lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym lift-alg-≅) B≅sa
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
-
- -- ≤-lift-alg : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑨 ≤ 𝑩 → 𝑨 ≤ lift-alg 𝑩 𝓩
- -- ≤-lift-alg 𝑨 {𝑩} A≤B = ≤-TRANS-≅ 𝑨 {𝑩} (lift-alg 𝑩 𝓩) A≤B lift-alg-≅
 
  lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
  lift-alg-≤ 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym lift-alg-≅) B≤A
@@ -237,13 +238,6 @@ module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
    B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
    B≤lB = ≤-lift-alg 𝑩 {𝑩} ≤-refl
-
-
--- module _ {𝓤 𝓦 : Universe} where
-
---  lift-alg-sub-lift : (𝑨 : Algebra 𝓤 𝑆){𝑪 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑪 ≤ 𝑨 → 𝑪 ≤ lift-alg 𝑨 𝓦
---  lift-alg-sub-lift 𝑨 {𝑪} C≤A = ≤-TRANS-≅ 𝑪 {𝑨} (lift-alg 𝑨 𝓦) C≤A lift-alg-≅
-
 
 \end{code}
 

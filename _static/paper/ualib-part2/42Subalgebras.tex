@@ -666,8 +666,8 @@ First we show that the subalgebra relation is a \emph{preorder}. Recall, this me
 \AgdaBound{𝑨}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[0]\AgdaFunction{≤-transitivity}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
@@ -727,8 +727,8 @@ First we show that the subalgebra relation is a \emph{preorder}. Recall, this me
 \AgdaBound{𝑨}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[0]\AgdaFunction{≤-trans}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}\{}\AgdaBound{𝑪}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -739,7 +739,7 @@ First we show that the subalgebra relation is a \emph{preorder}. Recall, this me
 \AgdaBound{𝑪}\<%
 \end{code}
 \ccpad
-Next we prove that if two algebras are isomorphic and one is a subalgebra, then so is the other.
+Next we prove that if two algebras are isomorphic and one of them is a subalgebra of \ab 𝑨, then so is the other.
 \ccpad
 \begin{code}
 \>[0]\AgdaFunction{≤-iso}\AgdaSpace{}%
@@ -774,8 +774,8 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝑨}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[0]\AgdaFunction{≤-iso}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -880,11 +880,13 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{BA}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \end{code}
-\scpad
+\ccpad
+The following variations on this theme are sometimes useful.
+\ccpad
 \begin{code}
-\>[1]\AgdaFunction{trans-≤-≅}\AgdaSpace{}%
+\>[1]\AgdaFunction{≤-trans-≅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[333I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
@@ -900,6 +902,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\AgdaTab{333}%
 \>[13]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
@@ -913,9 +916,9 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝑩}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{trans-≤-≅}\AgdaSpace{}%
+% \\[\AgdaEmptyExtraSkip]%
+% %
+\>[1]\AgdaFunction{≤-trans-≅}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -926,14 +929,13 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{≅-sym}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{A≤B}\AgdaSpace{}%
-\AgdaComment{-- 𝑨 𝑪 A≤B (sym-≅ B≅C)}\<%
+\AgdaBound{A≤B}\<%
 \end{code}
 \scpad
 \begin{code}
-\>[1]\AgdaFunction{TRANS-≤-≅}\AgdaSpace{}%
+\>[1]\AgdaFunction{≤-TRANS-≅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[444I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
@@ -949,6 +951,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
+\AgdaTab{444}%
 \>[13]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
@@ -962,15 +965,16 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝑪}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{TRANS-≤-≅}\AgdaSpace{}%
+% \\[\AgdaEmptyExtraSkip]%
+% %
+\>[1]\AgdaFunction{≤-TRANS-≅}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaBound{A≤B}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[717I]\AgdaSymbol{(}\AgdaFunction{∘-hom}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}
+\>[555I]\AgdaFunction{∘-hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -981,18 +985,20 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\<%
 \\
-\>[.][@{}l@{}]\<[717I]%
-\>[25]\AgdaFunction{∘-embedding}\AgdaSpace{}%
+\AgdaTab{555}%
+\>[14]\AgdaFunction{∘-embedding}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{iso→embedding}\AgdaSpace{}%
 \AgdaBound{B≅C}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{A≤B}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSymbol{)}\<%
 \end{code}
-\scpad
+\ccpad
+Next we prove a monotonicity property of \af ≤.
+\ccpad
 \begin{code}
-\>[0]\AgdaFunction{mono-≤}\AgdaSpace{}%
+\>[0]\AgdaFunction{≤-mono}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\>[777I]\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1011,6 +1017,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
+\AgdaTab{777}%
 \>[9]\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaBound{𝒦'}\AgdaSpace{}%
@@ -1024,8 +1031,8 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝒦'}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{mono-≤}\AgdaSpace{}%
+% \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{≤-mono}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{KK'}\AgdaSpace{}%
 \AgdaBound{KB}\AgdaSpace{}%
@@ -1055,10 +1062,12 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
 \ccpad
+Later we will require a number of facts having to do with the relationship between the subalgebra relation and the lifting of algebras to higher universe levels.  Here are the tools we need.
+\ccpad
 \begin{code}
 \>[0]\AgdaFunction{lift-alg-is-sub}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\>[888I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1074,6 +1083,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaSymbol{→}%
+\AgdaTab{888}%
 \>[18]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsSubalgebraOfClass}}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
@@ -1085,7 +1095,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝒦}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
+% \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{lift-alg-is-sub}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1094,10 +1104,8 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaSymbol{(}\AgdaBound{KA}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{B≅sa}\AgdaSymbol{)))}\AgdaSpace{}%
-\AgdaSymbol{=}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{sa}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1110,46 +1118,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \end{code}
 \scpad
 \begin{code}
-\>[1]\AgdaFunction{lift-alg-≤-lift}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)\{}\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
-\AgdaFunction{lift-alg}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaBound{𝓩}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-alg-≤-lift}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{A≤B}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{TRANS-≤-≅}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{A≤B}\AgdaSpace{}%
-\AgdaFunction{lift-alg-≅}\<%
-\end{code}
-\scpad
-\begin{code}
-\>[1]\AgdaFunction{lift-alg-≤-lower}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1172,7 +1141,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝑨}\<%
 \\
 %
-\>[1]\AgdaFunction{lift-alg-≤-lower}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{B≤A}\AgdaSpace{}%
@@ -1182,10 +1151,11 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaSymbol{(}\AgdaFunction{≅-sym}\AgdaSpace{}%
 \AgdaFunction{lift-alg-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{B≤A}\<%
-\end{code}
-\ccpad
-\begin{code}
-\>[1]\AgdaFunction{lift-alg-≤-lift'}\AgdaSpace{}%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{≤-lift-alg}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1208,12 +1178,12 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \AgdaBound{𝓩}\<%
 \\
 %
-\>[1]\AgdaFunction{lift-alg-≤-lift'}\AgdaSpace{}%
+\>[1]\AgdaFunction{≤-lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{B≤A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{TRANS-≤-≅}\AgdaSpace{}%
+\AgdaFunction{≤-TRANS-≅}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
@@ -1224,17 +1194,17 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 \end{code}
 \scpad
 \begin{code}
-\>[1]\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-alg-≤-lift}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)\{}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
@@ -1251,9 +1221,9 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
+\>[1]\AgdaFunction{lift-alg-≤-lift}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{A≤B}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{≤-trans}\AgdaSpace{}%
@@ -1283,7 +1253,7 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 %
 \>[3]\AgdaFunction{lAA}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-alg-≤-lower}\AgdaSpace{}%
+\AgdaFunction{lift-alg-≤}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaFunction{≤-refl}\<%
@@ -1302,49 +1272,8 @@ Next we prove that if two algebras are isomorphic and one is a subalgebra, then 
 %
 \>[3]\AgdaFunction{B≤lB}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{lift-alg-≤-lift}\AgdaSpace{}%
+\AgdaFunction{≤-lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaFunction{≤-refl}\<%
-\end{code}
-\scpad
-\begin{code}
-\>[1]\AgdaFunction{lift-alg-sub-lift}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)\{}\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
-\AgdaFunction{lift-alg}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝓦}\<%
-\\
-%
-\>[1]\AgdaFunction{lift-alg-sub-lift}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑪}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{C≤A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{TRANS-≤-≅}\AgdaSpace{}%
-\AgdaBound{𝑪}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{C≤A}\AgdaSpace{}%
-\AgdaFunction{lift-alg-≅}\<%
 \end{code}
