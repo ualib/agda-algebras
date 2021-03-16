@@ -36,7 +36,7 @@ To formalize this concept, we first define a type representing the assertion tha
 module _ {𝓤 𝓦 : Universe} where
 
  compatible-op-map : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-                     (𝑓 : ∣ 𝑆 ∣)(h : ∣ 𝑨 ∣  → ∣ 𝑩 ∣) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+  →                  ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
 
  compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
 
@@ -145,7 +145,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} {fe : dfunext 𝓥 �
  𝐸 : {𝑩 : Algebra 𝓦 𝑆}(g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
  𝐸 g h x = g x ≡ h x
 
- 𝐸hom : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸hom : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ 𝓦
  𝐸hom _ g h x = ∣ g ∣ x ≡ ∣ h ∣ x
 
 \end{code}
@@ -155,8 +155,8 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
 \begin{code}
 
  𝐸hom-closed : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
-  →            ∀ 𝑓 a → (∀ x → a x ∈ 𝐸hom 𝑩 g h)
-               -----------------------------------------
+  →            ∀ 𝑓 a  →  Π x ꞉ ∥ 𝑆 ∥ 𝑓 , (a x ∈ 𝐸hom 𝑩 g h)
+               ----------------------------------------------
   →            ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
 
  𝐸hom-closed 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
@@ -178,12 +178,10 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 open Congruence
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- homker-compatible : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-  →                  compatible 𝑨 (KER-rel ∣ h ∣)
-
- homker-compatible {𝑨} 𝑩 h f {u}{v} Kerhab = γ
+ homker-compatible : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (KER-rel ∣ h ∣)
+ homker-compatible 𝑩 h f {u}{v} Kerhab = γ
   where
   γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
   γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
@@ -192,10 +190,8 @@ module _ {𝓤 𝓦 : Universe} where
       ∣ h ∣ ((f ̂ 𝑨) v)  ∎
 
 
- homker-equivalence : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-  →                   IsEquivalence (KER-rel ∣ h ∣)
-
- homker-equivalence 𝑨 h = map-kernel-IsEquivalence ∣ h ∣
+ homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (KER-rel ∣ h ∣)
+ homker-equivalence 𝑩 h = map-kernel-IsEquivalence ∣ h ∣
 
 \end{code}
 
@@ -203,7 +199,7 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Congruence 𝑨
+ kercon : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
  kercon 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
 
 \end{code}
@@ -212,11 +208,13 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
+module _ {𝓤 𝓦 : Universe} where
+
  kerquo : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
  kerquo {𝑨} 𝑩 h = 𝑨 ╱ (kercon 𝑩 h)
 
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- 𝑨 [ 𝑩 ]/ker h = kerquo {𝑨} 𝑩 h
+ 𝑨 [ 𝑩 ]/ker h = kerquo 𝑩 h
 
  infix 60 _[_]/ker_
 

@@ -55,7 +55,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
 
-**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), ualib-part2.pdf (coming soon)
+**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), [ualib-part2.pdf](ualib-part2.pdf) (ualib-part3.pdf coming soon)
 
 **Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
 
@@ -65,18 +65,18 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <pre class="Agda">
 
-<a id="3594" class="Symbol">{-#</a> <a id="3598" class="Keyword">OPTIONS</a> <a id="3606" class="Pragma">--without-K</a> <a id="3618" class="Pragma">--exact-split</a> <a id="3632" class="Pragma">--safe</a> <a id="3639" class="Symbol">#-}</a>
+<a id="3629" class="Symbol">{-#</a> <a id="3633" class="Keyword">OPTIONS</a> <a id="3641" class="Pragma">--without-K</a> <a id="3653" class="Pragma">--exact-split</a> <a id="3667" class="Pragma">--safe</a> <a id="3674" class="Symbol">#-}</a>
 
-<a id="3644" class="Keyword">module</a> <a id="3651" href="UALib.html" class="Module">UALib</a> <a id="3657" class="Keyword">where</a>
+<a id="3679" class="Keyword">module</a> <a id="3686" href="UALib.html" class="Module">UALib</a> <a id="3692" class="Keyword">where</a>
 
-<a id="3664" class="Keyword">open</a> <a id="3669" class="Keyword">import</a> <a id="3676" href="Preface.html" class="Module">Preface</a>
-<a id="3684" class="Keyword">open</a> <a id="3689" class="Keyword">import</a> <a id="3696" href="Prelude.html" class="Module">Prelude</a>
-<a id="3704" class="Keyword">open</a> <a id="3709" class="Keyword">import</a> <a id="3716" href="Relations.html" class="Module">Relations</a>
-<a id="3726" class="Keyword">open</a> <a id="3731" class="Keyword">import</a> <a id="3738" href="Algebras.html" class="Module">Algebras</a>
-<a id="3747" class="Keyword">open</a> <a id="3752" class="Keyword">import</a> <a id="3759" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3773" class="Keyword">open</a> <a id="3778" class="Keyword">import</a> <a id="3785" href="Terms.html" class="Module">Terms</a>
-<a id="3791" class="Keyword">open</a> <a id="3796" class="Keyword">import</a> <a id="3803" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3815" class="Keyword">open</a> <a id="3820" class="Keyword">import</a> <a id="3827" href="Varieties.html" class="Module">Varieties</a>
+<a id="3699" class="Keyword">open</a> <a id="3704" class="Keyword">import</a> <a id="3711" href="Preface.html" class="Module">Preface</a>
+<a id="3719" class="Keyword">open</a> <a id="3724" class="Keyword">import</a> <a id="3731" href="Prelude.html" class="Module">Prelude</a>
+<a id="3739" class="Keyword">open</a> <a id="3744" class="Keyword">import</a> <a id="3751" href="Relations.html" class="Module">Relations</a>
+<a id="3761" class="Keyword">open</a> <a id="3766" class="Keyword">import</a> <a id="3773" href="Algebras.html" class="Module">Algebras</a>
+<a id="3782" class="Keyword">open</a> <a id="3787" class="Keyword">import</a> <a id="3794" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3808" class="Keyword">open</a> <a id="3813" class="Keyword">import</a> <a id="3820" href="Terms.html" class="Module">Terms</a>
+<a id="3826" class="Keyword">open</a> <a id="3831" class="Keyword">import</a> <a id="3838" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3850" class="Keyword">open</a> <a id="3855" class="Keyword">import</a> <a id="3862" href="Varieties.html" class="Module">Varieties</a>
 
 </pre>
 

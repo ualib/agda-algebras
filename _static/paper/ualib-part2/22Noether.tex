@@ -1286,19 +1286,30 @@ included in the \ualib are the following.
 
 \subsubsection{Homomorphism decomposition}\label{homomorphism-decomposition}
 
-If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab{h} is surjective, and \af{ker} \ab h \af ⊆ \af{ker} \ab g, then there exists \ab{ϕ} \as : \af{hom} \ab 𝑪 \ab 𝑩 such that \ab{g} \as = \ab ϕ \af ∘ \ab h, that is, such that the following diagram commutes;
+If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab{h} is surjective, and \af{ker} \ab h \af ⊆ \af{ker} \ab g, then there exists \ab{ϕ} \as : \af{hom} \ab 𝑪 \ab 𝑩 such that \ab{g} \as = \ab ϕ \af ∘ \ab h, that is, such that the following diagram commutes.\\
 
-\begin{verbatim}
-𝑨---- h -->>𝑪
- \         .
-  \       .
-   g     ∃ϕ
-    \   .
-     \ .
-      V
-      𝑩
-\end{verbatim}
+\begin{tikzpicture} %\draw[gray] (0,4.5) node {{\tt TikzRepresentableFunctor3}};
+  % \drawgrid{-2}{2}{-1}{4}
+\tikzset{node distance=2cm, scale=1}
+    \node (A) at (-1,2) {\ab 𝑨};
+    \node (A') at (1,2) {\ab 𝑪};
+    \node (B) at (0,0) {\ab 𝑩};
+    \path[->>] (A) edge node [fill=white] {\ab h} (A');
 
+    \path[->] (A) edge node [fill=white] {\ab g} (B);
+    \path[dotted,->] (A') edge node [fill=white] {\as ∃\ab ϕ} (B);
+    % \draw[|->,bend left] (-.37,1.1) to node [above] {$\mathcal C(\mathrm{inr} f, B)$} (.37,1.1);
+  \end{tikzpicture}\\
+% \begin{verbatim}
+% 𝑨---- h -->>𝑪
+%  \         .
+%   \       .
+%    g     ∃ϕ
+%     \   .
+%      \ .
+%       V
+%       𝑩
+% \end{verbatim}
 This, or some variation of it, is sometimes referred to as the \defn{Second Isomorphism Theorem}. We formalize its statement and proof as follows. (Notice that the proof is constructive.)
 \ccpad
 \begin{code}%

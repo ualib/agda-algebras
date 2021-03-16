@@ -55,7 +55,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
 
-**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), ualib-part2.pdf (coming soon)
+**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), [ualib-part2.pdf](ualib-part2.pdf) (ualib-part3.pdf coming soon)
 
 **Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
 

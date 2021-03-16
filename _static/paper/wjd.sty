@@ -302,3 +302,8 @@ Compiled with \texttt{xelatex} on \mydate\today\ at \currenttime.
    \renewcommand{\headrulewidth}{0pt}
 }}
 }
+
+\newcommand\drawgrid[4]{%
+\foreach \i in {#1,...,#2} {\draw [thin,dotted,gray] (\i,#3) -- (\i,#4)  node [below] at (\i,#3) {$\i$};}%
+\foreach \i in {#3,...,#4} {\draw [thin,dotted,gray] (#1,\i) -- (#2,\i) node [left] at (#1,\i) {$\i$};}%
+}

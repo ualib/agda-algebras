@@ -4,8 +4,8 @@
 
 **Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
 
-**PDF documentation**. [ualib-part1.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part1.pdf)  
-ualib-part2.pdf, ualib-part3.pdf (coming soon!)
+**PDF documentation**. [ualib-part1.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part1.pdf), [ualib-part2.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part2.pdf)   
+(ualib-part3.pdf coming soon!)
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
