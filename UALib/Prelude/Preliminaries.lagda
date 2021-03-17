@@ -310,7 +310,7 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 \end{code}
 
 ----------------------------------------
-
+𝓇ℯ𝒻𝓁
 <sup>1</sup><span class="footnote" id="fn1"> Generally speaking, we have made a concerted effort to avoid duplicating types that were already defined in libraries that came before ours.  However, it is very likely that our library overlaps to some extent with other libraries with which we are as yet unfamiliar.</span>
 
 <sup>2</sup><span class="footnote" id="fn2"> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
