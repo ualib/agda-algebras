@@ -132,7 +132,7 @@ module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} 
                                            -------------------------------
   →                                        (∀ x → x ∈₀ ∣ B ∣  ⇔  x ∈₀ ∣ C ∣)
 
- carrier-equality-gives-membership-equiv B C (refl _) x = id , id
+ carrier-equality-gives-membership-equiv B C refl x = id , id
 
 
  --so we have...

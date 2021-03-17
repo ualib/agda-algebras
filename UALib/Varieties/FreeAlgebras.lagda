@@ -100,7 +100,7 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
        ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) q) ∎
 
  ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
- ψRefl = λ _ _ _ _ → 𝓇ℯ𝒻𝓁
+ ψRefl = λ _ _ _ _ → refl
 
  ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
  ψSymm _ _ pψRelq 𝑪 ϕ h = (pψRelq 𝑪 ϕ h)⁻¹
@@ -309,7 +309,7 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
 \begin{code}
 
  hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
- hom𝔽-is-lift-hom (ℊ x) = 𝓇ℯ𝒻𝓁
+ hom𝔽-is-lift-hom (ℊ x) = refl
  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
   (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
@@ -334,7 +334,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    ϕ = lift-hom 𝑨 h
 
    f𝔑≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔑 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-   f𝔑≡ϕ x = 𝓇ℯ𝒻𝓁
+   f𝔑≡ϕ x = refl
    h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ ϕ ∣ t
    h≡ϕ t = free-unique gfe 𝑨 h' ϕ f𝔑≡ϕ t
 
@@ -432,11 +432,11 @@ Finally we come to one of the main theorems of this module; it asserts that ever
       Apq : 𝑨 ⊧ p ≈ q
       Apq = pqlem2 p q x
       γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-      γ = ∣ ϕ ∣ p                    ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+      γ = ∣ ϕ ∣ p                    ≡⟨ refl ⟩
           free-lift 𝑨 (fst(𝕏 𝑨)) p   ≡⟨ (free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
           (p ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
           (q ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) q ⟩
-          free-lift 𝑨 (fst(𝕏 𝑨)) q   ≡⟨ 𝓇ℯ𝒻𝓁 ⟩
+          free-lift 𝑨 (fst(𝕏 𝑨)) q   ≡⟨ refl ⟩
           ∣ ϕ ∣ q                    ∎
 
     γ : epi 𝔽 𝑨

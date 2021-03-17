@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 \subsubsection{Unary relations}
 
 We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab A might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab A that satisfy the property \ab P. Here is the definition (which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
@@ -247,9 +252,7 @@ The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. Howev
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-We treat extensionality in greater detail and generality in 
-% other modules; see \ualibExtensionality  and % \ualibTruncation 
-\S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
+We treat extensionality in greater detail and generality in \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
 
 
 
@@ -716,7 +719,7 @@ We can combine \af{\_on\_} and \af{\_⇒\_} to define a nice, general implicatio
 
 \subsubsection{Compatibility of functions and binary relations}\label{compatibility-of-functions-and-binary-relations}
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. The first definition simply lifts a binary relation on \ab A to a binary relation on tuples of type \ab I \as → \ab A.\footnote{N.B. This \emph{relation} lifting is not to be confused with the sort of \emph{universe} lifting that we defined in the \ualibLifts module.}
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. The first definition simply lifts a binary relation on \ab A to a binary relation on tuples of type \ab I \as → \ab A.\footnote{N.B. This \emph{relation} lifting is not to be confused with the sort of \emph{universe} lifting that we defined in the \ualibhtml{Prelude.Lifts} module.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -854,9 +857,4 @@ We used the slick implication notation in the definition of \af{compatible-fun},
 \AgdaBound{𝑎'}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, \af{compatible-term} in the \ualibOperations module.)
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "ualib-part1-20210304.tex"
-%%% End:
+However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, \af{compatible-term} in the \ualibhtml{Terms.Operations} module.)

@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 Here we discuss \defn{truncation} and \defn{h-sets} (which we just call \defn{sets}). We first give a brief discussion of standard notions of truncation, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{Section
 34} and \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#resizing}{35} of Martín Escardó's notes~\cite{MHE}, or \href{https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/}{Guillaume Brunerie, Truncations and truncated higher inductive types}, or Section 7.1 of the HoTT book~\cite{HoTT}.\footnote{\textbf{Remark}. \agda now has a built in type called \href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{Prop} which may provide some or all of what we develop in this module. (See the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{Prop Section} of \agdartd.) However, we don't use it anywhere in the \ualib; it seems we get along just fine without it.}
 
@@ -119,7 +124,7 @@ We will use \af{is-embedding}, \af{is-set}, and \af{to-Σ-≡} in the next subse
 
 \subsubsection{Injective functions are set embeddings}\label{injective-functions-are-set-embeddings}
 Before moving on to define propositions, we discharge an obligation mentioned but left unfulfilled in the
-\href{https://ualib.gitlab.io/Prelude.Inverses.html\#embeddings}{embeddings} section of the \ualibInverses module. Recall, we described and imported the \af{is-embedding} type, and we remarked that an embedding is not simply a monic function. However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. On the other hand, embeddings are always monic, so we will end up with an equivalence. To prepare for this, we define a type
+\href{https://ualib.gitlab.io/Prelude.Inverses.html\#embeddings}{embeddings} section of the \ualibhtml{Prelude}{Inverses} module. Recall, we described and imported the \af{is-embedding} type, and we remarked that an embedding is not simply a monic function. However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding. On the other hand, embeddings are always monic, so we will end up with an equivalence. To prepare for this, we define a type
 \af{\_⟺\_} with which to represent such equivalences.
 \ccpad
 \begin{code}%
@@ -1005,7 +1010,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 \subsubsection{Continuous proposition types}\label{sec:cont-prop-types}
 
-We defined a type called \af{ConRel} in the \ualibContinuous module to represent relations of arbitrary arity. Naturally, we define a type of \emph{truncated continuous relations}, the inhabitants of which we will call \defn{continuous propositions}.
+We defined a type called \af{ConRel} in the \ualibhtml{Relations}{Continuous} module to represent relations of arbitrary arity. Naturally, we define a type of \emph{truncated continuous relations}, the inhabitants of which we will call \defn{continuous propositions}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ConProp}\AgdaSpace{}%
@@ -1343,8 +1348,3 @@ earlier.
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
-
-
-%%% Local Variables:
-%%% TeX-master: "ualib-part1-20210304"
-%%% End:

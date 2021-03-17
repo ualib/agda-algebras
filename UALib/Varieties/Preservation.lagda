@@ -81,26 +81,26 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
  S-id1 p q α (slift x) = ⊧-lift-alg-invariance p q ((S-id1 p q α) x)
 
  S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , ≅-refl)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
 
    Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq (refl _) = β
+   Apq refl = β
 
    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Apq y
 
  S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , ≅-refl)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
 
    Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq (refl _) = β
+   Apq refl = β
 
    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
    γ {𝑩} (inj₁ x) = α x
@@ -191,26 +191,26 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                 (q ̇ 𝑩) 𝒃             ∎
 
  V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , ≅-refl)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
 
    Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Asinglepq (refl _) = IH
+   Asinglepq refl = IH
 
    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Asinglepq y
 
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ 𝓇ℯ𝒻𝓁 , ≅-refl)
+  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
 
    Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Asinglepq (refl _) = IH
+   Asinglepq refl = IH
 
    γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
    γ {𝑩} (inj₁ x) = α x

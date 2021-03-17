@@ -90,7 +90,7 @@ map-kernel-IsEquivalence : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
                             (f : A → B) → IsEquivalence (KER-rel{𝓤}{𝓦} f)
 
 map-kernel-IsEquivalence {𝓤}{𝓦} f =
- record { rfl = λ x → 𝓇ℯ𝒻𝓁
+ record { rfl = λ x → refl
         ; sym = λ x y x₁ → ≡-sym{𝓦} x₁
         ; trans = λ x y z x₁ x₂ → ≡-trans x₁ x₂ }
 
@@ -138,7 +138,7 @@ We define the following introduction rule for an R-class with a designated repre
 \begin{code}
 
  ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
- ⟦ a ⟧ {R} = [ a ] R , a , 𝓇ℯ𝒻𝓁
+ ⟦ a ⟧ {R} = [ a ] R , a , refl
 
  infix 60 ⟦_⟧
 \end{code}

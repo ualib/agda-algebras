@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 \subsubsection{Operation type}\label{operation-type}
 
 We begin by defining the type of \defn{operations}, and give an example (the projections).
@@ -110,10 +115,9 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-As mentioned in the section on \href{Relations.Continuous.html\#relations-of-arbitrary-arity}{Relations of
-arbitrary arity} in the \ualibContinuous module, 𝓞 will always denote the universe of \emph{operation symbol} types, while 𝓥 is the universe of \emph{arity} types.
+As mentioned in the section on \href{Relations.Continuous.html\#relations-of-arbitrary-arity}{Relations of arbitrary arity} in the \ualibhtml{Relations.Continuous} module, 𝓞 will always denote the universe of \emph{operation symbol} types, while 𝓥 is the universe of \emph{arity} types.
 
-In the \ualibPrelude module we defined special syntax for the first and second projections---namely, \af ∣\au\af ∣ and \af{∥}\au\af{∥}, respectively. Consequently, if \as{\{}\ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥\as{\}} is a signature, then \af ∣~\ab 𝑆~\af ∣ denotes the set of operation symbols, and \af{∥}~\ab 𝑆~\af{∥} denotes the arity function. If \ab 𝑓 \as : \af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \af{∥}~\ab 𝑆~\af{∥} \ab 𝑓 is the arity of \ab 𝑓.
+In the \ualibhtml{Prelude} module we defined special syntax for the first and second projections---namely, \af ∣\au\af ∣ and \af{∥}\au\af{∥}, respectively. Consequently, if \as{\{}\ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥\as{\}} is a signature, then \af ∣~\ab 𝑆~\af ∣ denotes the set of operation symbols, and \af{∥}~\ab 𝑆~\af{∥} denotes the arity function. If \ab 𝑓 \as : \af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \af{∥}~\ab 𝑆~\af{∥} \ab 𝑓 is the arity of \ab 𝑓.
 
 % For reference, we recall the definition of the Sigma type, \af{Σ}, which is
 

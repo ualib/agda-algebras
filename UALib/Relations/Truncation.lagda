@@ -61,7 +61,7 @@ module hide-to-Σ-≡ {𝓤 𝓦 : Universe} where
   →       Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport A p ∥ σ ∥) ≡ ∥ τ ∥
   →       σ ≡ τ
 
- to-Σ-≡ (refl x , refl a) = refl (x , a)
+ to-Σ-≡ (refl {x = x} , refl {x = a}) = refl {x = (x , a)}
 
 open import MGS-Embeddings using (to-Σ-≡) public
 

@@ -67,7 +67,7 @@ The most obvious example of a homomorphism is the identity map, which is proved 
 module _ {𝓤 : Universe} where
 
  id-is-hom : {𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
- id-is-hom _ _ = 𝓇ℯ𝒻𝓁
+ id-is-hom _ _ = refl
 
  𝒾𝒹 : (A : Algebra 𝓤 𝑆) → hom A A
  𝒾𝒹 _ = (λ x → x) , id-is-hom
@@ -81,13 +81,13 @@ Next, `lift` and `lower`, defined in the [Prelude.Lifts][] module, are (the maps
  open Lift
 
  lift-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism 𝑨 (lift-alg 𝑨 𝓦) lift
- lift-is-hom _ _ = 𝓇ℯ𝒻𝓁
+ lift-is-hom _ _ = refl
 
  𝓁𝒾𝒻𝓉 : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → hom 𝑨 (lift-alg 𝑨 𝓦)
  𝓁𝒾𝒻𝓉 = (lift , lift-is-hom)
 
  lower-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism (lift-alg 𝑨 𝓦) 𝑨 lower
- lower-is-hom _ _ = 𝓇ℯ𝒻𝓁
+ lower-is-hom _ _ = refl
 
  𝓁ℴ𝓌ℯ𝓇 : (𝑨 : Algebra 𝓤 𝑆){𝓦 : Universe} → hom (lift-alg 𝑨 𝓦) 𝑨
  𝓁ℴ𝓌ℯ𝓇 𝑨 = (lower , lower-is-hom{𝑨})
@@ -237,10 +237,10 @@ Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical proje
   cπ a = ⟦ a ⟧{⟨ θ ⟩}
 
   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
-  cπ-is-hom _ _ = 𝓇ℯ𝒻𝓁
+  cπ-is-hom _ _ = refl
 
   cπ-is-epic : Epic cπ
-  cπ-is-epic (.(⟨ θ ⟩ a) , a , 𝓇ℯ𝒻𝓁) = Image_∋_.im a
+  cπ-is-epic (.(⟨ θ ⟩ a) , a , refl) = Image_∋_.im a
 
 \end{code}
 
@@ -341,7 +341,7 @@ module _ {𝓘 𝓦 : Universe} where
   𝒽 i = λ x → x i
 
   𝒽hom : ∀ i → is-homomorphism (⨅ ℬ) (ℬ i) (𝒽 i)
-  𝒽hom _ _ _ = 𝓇ℯ𝒻𝓁
+  𝒽hom _ _ _ = refl
 
 \end{code}
 

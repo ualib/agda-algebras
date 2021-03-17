@@ -324,7 +324,7 @@ The most obvious example of a homomorphism is the identity map, which is proved 
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \end{code}
 \ccpad
-Next, \aic{lift} and \afld{lower}, defined in the \ualibLifts module, are (the maps of) homomorphisms. Again, the proof is trivial in each case.
+Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} module~(see \cite[\S2.5]{DeMeo:2021-1}),\footnote{or \ualiburl{Prelude.Lifts}.} are (the maps of) homomorphisms. Again, the proof is trivial in each case.
 \ccpad
 \begin{code}
 \>[1]\AgdaFunction{lift-is-hom}\AgdaSpace{}%
@@ -769,7 +769,7 @@ Recall, the equalizer of two functions (resp., homomorphisms) \ab{g h} \as : \ab
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-We will define subuniverses in the \ualibSubuniverses module, but we note here that the equalizer of homomorphisms from \ab{𝑨} to \ab{𝑩} will turn out to be subuniverse of \ab{𝑨}. Indeed, this is easily proved as follows.
+We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but we note here that the equalizer of homomorphisms from \ab{𝑨} to \ab{𝑩} will turn out to be subuniverse of \ab{𝑨}. Indeed, this is easily proved as follows.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝐸hom-closed}\AgdaSpace{}%

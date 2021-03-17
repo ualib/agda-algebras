@@ -96,7 +96,7 @@ If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then of course both `
 \begin{code}
 
 Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨} → P ≡ Q → P ≐ Q
-Pred-≡ 𝓇ℯ𝒻𝓁 = (λ z → z) , (λ z → z)
+Pred-≡ refl = (λ z → z) , (λ z → z)
 
 \end{code}
 
@@ -123,15 +123,15 @@ _∈∈_ f S = (x : _) → f x ∈ S
 
 Pred-refl : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (a : A) → a ∈ P → a ∈ Q
-Pred-refl (refl _) _ = λ z → z
+Pred-refl refl _ = λ z → z
 
 Pred-≡→⊆ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊆ Q)
-Pred-≡→⊆ (refl _) = (λ z → z)
+Pred-≡→⊆ refl = (λ z → z)
 
 Pred-≡→⊇ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
  →          P ≡ Q → (P ⊇ Q)
-Pred-≡→⊇ (refl _) = (λ z → z)
+Pred-≡→⊇ refl = (λ z → z)
 
 -- Disjoint Union.
 data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
@@ -180,13 +180,13 @@ module _ {𝓧 𝓨 : Universe} where
                  (x : A) →  x ∈ B₁  →  B₁ ≡ B₂
                 ------------------------------
   →                         x ∈ B₂
- cong-app-pred x x∈B₁ (refl _ ) = x∈B₁
+ cong-app-pred x x∈B₁ refl = x∈B₁
 
  cong-pred : {A : 𝓧 ̇ }{B : Pred A 𝓨}
              (x y : A) →  x ∈ B  →  x ≡ y
              ----------------------------
   →                       y ∈ B
- cong-pred x .x x∈B (refl _ ) = x∈B
+ cong-pred x .x x∈B refl = x∈B
 
 \end{code}
 

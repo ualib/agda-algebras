@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 A \defn{congruence relation} of an algebra \ab{𝑨} is defined to be an equivalence relation that is compatible with the basic operations of \ab 𝑨. This concept can be represented in a number of different ways in type
 theory. For example, we define both a Sigma type \af{Con} and a record type \af{Congruence}, each of which captures the informal notion of congruence, and each one is useful in certain contexts. (We will see examples later.)
 \ccpad
@@ -95,9 +100,9 @@ theory. For example, we define both a Sigma type \af{Con} and a record type \af{
 \end{code}
 
 \subsubsection{Example}\label{cong-example}
-We defined the zero relation \af{𝟎-rel} in the \ualibDiscrete module, and we now demonstrate how to build the trivial congruence out of this relation.
+We defined the zero relation \af{𝟎-rel} in the \ualibhtml{Relations.Discrete} module, and we now demonstrate how to build the trivial congruence out of this relation.
 
-The relation \af{𝟎-rel} is equivalent to the identity relation \ad{≡} and these are obviously both equivalences. In fact, we already proved this of \ad{≡} in the \ualibEquality module, so we simply apply the corresponding proofs.
+The relation \af{𝟎-rel} is equivalent to the identity relation \ad{≡} and these are obviously both equivalences. In fact, we already proved this of \ad{≡} in the \ualibhtml{Prelude.Equality} module, so we simply apply the corresponding proofs.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%

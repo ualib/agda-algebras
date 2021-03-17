@@ -1,4 +1,9 @@
-We begin by highlighting some of the key parts of the module, which lists everything we need from Martin Escard\'o's \typetopology library~\cite{MHE}, defines some basic types, and proves some of their properties.  We do not cover the entire \ualibPreliminaries module here, but instead call attention to aspects that differ from standard Agda syntax.\footnote{For more details, see \urlPreliminaries.}
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
+We begin by highlighting some of the key parts of the module, which lists everything we need from Martin Escard\'o's \typetopology library~\cite{MHE}, defines some basic types, and proves some of their properties.  We do not cover the entire \ualibhtml{Prelude.Preliminaries} module here, but instead call attention to aspects that differ from standard Agda syntax.\footnote{For more details, see \ualiburl{Prelude.Preliminaries}.}
 
 \subsubsection{Logical foundations}\label{sec:logical-foundations}
 % For the benefit of readers who are not proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib, as well as the most important basic types and features that are used throughout the library.
@@ -58,8 +63,3 @@ Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
 Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (see~\cite{DeMeo:2021} for details).
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "ualib-part1-20210304.tex"
-%%% End:

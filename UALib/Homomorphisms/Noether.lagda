@@ -64,15 +64,15 @@ module _ {𝓤 𝓦 : Universe}
 
   ϕhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 ϕ
   ϕhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (fe λ x → 𝓇ℯ𝒻𝓁) ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (fe λ x → refl) ⟩
              (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
 
   ϕmon : Monic ϕ
-  ϕmon (.(⟨ θ ⟩ u) , u , refl _) (.(⟨ θ ⟩ v) , v , refl _) ϕuv =
+  ϕmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) ϕuv =
    class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕuv
 
   ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
-  ϕcom = 𝓇ℯ𝒻𝓁
+  ϕcom = refl
 
   ϕemb : is-embedding ϕ
   ϕemb = monic-is-embedding|sets ϕ Bset ϕmon
@@ -89,9 +89,9 @@ Next we prove that the homomorphism `ϕ`, whose existence we just proved, is uni
                     ---------------------------------
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
+ NoetherHomUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , refl) =
 
-  let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
+  let θ = (⟨ kercon 𝑩 h ⟩ a , a , refl) in
 
    ∣ f ∣ θ   ≡⟨ cong-app(hfk ⁻¹)a ⟩  ∣ h ∣ a   ≡⟨ cong-app(hgk)a ⟩   ∣ g ∣ θ   ∎
 
@@ -120,7 +120,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
   dfunext 𝓦 𝓦 → Epic ∣ h ∣  →  Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) ,
                         (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣) × is-embedding ∣ f ∣
 
- FirstIsomorphismTheorem fev hE = (fmap , fhom , fepic) , 𝓇ℯ𝒻𝓁 , femb
+ FirstIsomorphismTheorem fev hE = (fmap , fhom , fepic) , refl , femb
   where
   θ : Congruence 𝑨
   θ = kercon 𝑩 h
@@ -130,7 +130,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
 
   fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 fmap
   fhom 𝑓 𝒂 =  ∣ h ∣((𝑓 ̂ 𝑨) λ x → ⌜ 𝒂 x ⌝)   ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
-              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ λ x → ⌜ 𝒂 x ⌝) ≡⟨ ap(𝑓 ̂ 𝑩)(fe λ _ → 𝓇ℯ𝒻𝓁)⟩
+              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ λ x → ⌜ 𝒂 x ⌝) ≡⟨ ap(𝑓 ̂ 𝑩)(fe λ _ → refl)⟩
               (𝑓 ̂ 𝑩) (fmap ∘ 𝒂)              ∎
 
   fepic : Epic fmap
@@ -145,7 +145,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
    γ = Image_∋_.eq b ⟦ a ⟧ bfa
 
   fmon : Monic fmap
-  fmon (.(⟨ θ ⟩ u) , u , 𝓇ℯ𝒻𝓁) (.(⟨ θ ⟩ v) , v , 𝓇ℯ𝒻𝓁) fuv =
+  fmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) fuv =
    class-extensionality' {𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR} pe ssA (IsEquiv θ) fuv
 
   femb : is-embedding fmap
@@ -160,9 +160,9 @@ The argument used above to prove `NoetherHomUnique` can also be used to prove un
  NoetherIsoUnique : (f g : epi (𝑨 [ 𝑩 ]/ker h) 𝑩) → ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
   →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣ → ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherIsoUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , 𝓇ℯ𝒻𝓁) =
+ NoetherIsoUnique f g hfk hgk (.(⟨ kercon 𝑩 h ⟩ a) , a , refl) =
 
-  let θ = (⟨ kercon 𝑩 h ⟩ a , a , 𝓇ℯ𝒻𝓁) in
+  let θ = (⟨ kercon 𝑩 h ⟩ a , a , refl) in
 
    ∣ f ∣ θ  ≡⟨ cong-app (hfk ⁻¹) a ⟩  ∣ h ∣ a  ≡⟨ cong-app (hgk) a ⟩  ∣ g ∣ θ  ∎
 

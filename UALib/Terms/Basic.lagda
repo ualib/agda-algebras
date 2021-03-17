@@ -107,7 +107,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
  lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 
- lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) 𝓇ℯ𝒻𝓁
+ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) refl
 
 \end{code}
 

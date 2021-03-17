@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
 %% full listing of the \texttt{Identity-Type} module.
 \ccpad
@@ -324,7 +329,7 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-See~\cite{MHE} for a discussion of transport.\footnote{cf.~the \href{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}{HoTT-Agda definition of transport} at \url{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}.}
+See~\cite{MHE} for a discussion of transport.\footnote{cf.~transport in \href{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}{HoTT-Agda}: \url{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}.}
 
 A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs. If we have a function \ab{f} \as : \ab X \as → \as Y, two elements \ab{x} \ab{x'} \as : \ab X of the domain, and an identity proof \ab{p} \as : \ab x \ad ≡ \ab{x'}, then we obtain a proof of \ab{f} \ab x \ad ≡ \af f \ab{x'} by simply applying the \af{ap} function like so, \af{ap} \ab f \ab p \as : \ab f \ab x \ad ≡ \ab f \ab{x'}. Escardó defines \ab{ap} in the \typetopology library as follows.
 \ccpad
@@ -483,7 +488,7 @@ We sometimes need a version of this that works for \textit{dependent types}, suc
 
 \subsubsection{≡-intro and ≡-elim for nondependent pairs}\label{intro-and-elim-for-nondependent-pairs}
 
-We conclude our presentation of the \ualibEquality module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
+We conclude our presentation of the \ualibhtml{Prelude.Equality} module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{≡-elim-left}\AgdaSpace{}%
@@ -703,9 +708,3 @@ We conclude our presentation of the \ualibEquality module with some occasionally
 % \AgdaSymbol{=}\AgdaSpace{}%
 % \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 % \end{code}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "ualib-part1-20210304.tex"
-%%% End:

@@ -1,6 +1,9 @@
-We begin this module by assuming a signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.  Because of this, in contrast to our (highly abridged) descriptions of previous modules, we present the first few lines of the \ualibProducts module in full.  They are as follows.
-%This is done by placing the following line near the beginning of the module (after the \AgdaPragma{Options}
-% \textbf{NOTATION}. From now on, the remaining modules of the \ualib will assume universes 𝓞 and 𝓥, and a fixed signature type \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥.
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
+We begin this module by assuming a signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.  Because of this, in contrast to our (highly abridged) descriptions of previous modules, we present the first few lines of the \ualibhtml{Algebras.Products} module in full.  They are as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -39,7 +42,7 @@ We begin this module by assuming a signature \ab{𝑆} \as : \af{Signature} \ab 
 \AgdaKeyword{public}\<%
 \end{code}
 \ccpad
-Notice that we import the \af{Signature} type from the \ualibSignatures module first, before the \ak{module} line, so that we may use it to declare the signature \AgdaBound{𝑆} as a parameter of the \ualibProducts module.
+Notice that we import the \af{Signature} type from the \ualibhtml{Algebras.Signatures} module first, before the \ak{module} line, so that we may use it to declare the signature \AgdaBound{𝑆} as a parameter of the \ualibhtml{Algebras.Products} module.
 
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 % \AgdaModule{Algebras.Products}\AgdaSpace{}%

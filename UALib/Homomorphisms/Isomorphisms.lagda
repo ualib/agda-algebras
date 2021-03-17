@@ -45,7 +45,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 \begin{code}
 
 ≅-refl : {𝓤 : Universe} {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ 𝑨
-≅-refl {𝓤}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → 𝓇ℯ𝒻𝓁) , (λ a → 𝓇ℯ𝒻𝓁)
+≅-refl {𝓤}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → refl) , (λ a → refl)
 
 ≅-sym : {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
@@ -100,10 +100,10 @@ module _ {𝓤 𝓦 : Universe} where
  lift-alg-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
   where
   lABh : is-homomorphism (lift-alg 𝑨 𝓧) 𝑩 (f ∘ lower)
-  lABh = ∘-is-hom (lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → 𝓇ℯ𝒻𝓁) fhom
+  lABh = ∘-is-hom (lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → refl) fhom
 
   γ : is-homomorphism(lift-alg 𝑨 𝓧)(lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
-  γ = ∘-is-hom (lift-alg 𝑨 𝓧) (lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → 𝓇ℯ𝒻𝓁
+  γ = ∘-is-hom (lift-alg 𝑨 𝓧) (lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
 
 
 module _ {𝓤 𝓦 : Universe} where

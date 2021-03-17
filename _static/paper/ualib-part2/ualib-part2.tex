@@ -113,13 +113,8 @@ Part 2: Structure\\[-5pt]
 
 \begin{abstract}
 The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. 
- The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper, we describe the the types and proofs of the UALib that concern homomorphisms, terms, and subalgebras.
+ The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper, we describe the types and proofs of the UALib that concern homomorphisms, terms, and subalgebras.
 \end{abstract}
-
-% \section*{Acknowledgements and Attributions}
-% \input{../acknowledgements}
-
-% \newpage
 
 \setcounter{tocdepth}{2}
 \tableofcontents
@@ -134,9 +129,7 @@ The \ualib is written in \agda~\cite{Norell:2009}, a programming language and pr
 
 
 \subsection{Motivation}\label{sec:motivation}
-%% \subsection{Vision and Goals}\label{vision-and-goals}
 The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
-%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
 
 Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
 
@@ -173,9 +166,9 @@ We conclude this introduction with some pointers to helpful reference materials.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\newcommand\firstsentence[2]{This section presents the #1/#2 module of the \agdaualib, slightly abridged. The full module is presented as the html page served at \ualibhtml{#1){#2} and the complete literate Agda source code file is available at module \ualibsrcfile{#1}{#2}.}
-\newcommand\firstsentence[2]{This section presents the \UALhtml{#1}{#2} module
-  of the \agdaualib, slightly abridged.\footnote{For unabridged docs see
-    \ualibhtmlurl{#1}{#2}; for source code see \ualibsrcfile{#1}{#2}.}}
+% \newcommand\firstsentence[2]{This section presents the \UALhtml{#1}{#2} module
+%   of the \agdaualib, slightly abridged.\footnote{For unabridged docs see
+%     \ualibhtmlurl{#1}{#2}; for source code see \ualibsrcfile{#1}{#2}.}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

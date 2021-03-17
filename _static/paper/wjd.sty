@@ -56,132 +56,21 @@
 \newcommand\ufcourse{\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}\xspace}
 \newcommand\MGSnineteen{\href{http://events.cs.bham.ac.uk/mgs2019/}{MGS 2019}\xspace}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% macros for module links %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\am[1]{\AgdaModule{#1}}
-\newcommand\universes{\href{https://ualib.gitlab.io/universes.html}{universes}\xspace}
-\newcommand\universeshtml{\href{https://ualib.gitlab.io/universes.html}{universes.html}\xspace}
-
-\newcommand\ualibPreface{\href{https://ualib.gitlab.io/Preface.html}{\am{Preface}}\xspace}
-
-% -- Prelude
-\newcommand\ualibPrelude       {\href{https://ualib.gitlab.io/Prelude.html}               {\am{Prelude}}\xspace}
-\newcommand\ualibPreliminaries {\href{https://ualib.gitlab.io/Prelude.Preliminaries.html} {\am{Prelude.Preliminaries}}\xspace}
-\newcommand\ualibEquality      {\href{https://ualib.gitlab.io/Prelude.Equality.html}      {\am{Prelude.Equality}}\xspace}
-\newcommand\ualibInverses      {\href{https://ualib.gitlab.io/Prelude.Inverses.html}      {\am{Prelude.Inverses}}\xspace}
-\newcommand\ualibExtensionality{\href{https://ualib.gitlab.io/Prelude.Extensionality.html}{\am{Prelude.Extensionality}}\xspace}
-\newcommand\ualibLifts         {\href{https://ualib.gitlab.io/Prelude.Lifts.html}         {\am{Prelude.Lifts}}\xspace}
-
-% -- Relations
-\newcommand\ualibRelations {\href{https://ualib.gitlab.io/Relations.html}           {\am{Relations}}\xspace}
-\newcommand\ualibDiscrete  {\href{https://ualib.gitlab.io/Relations.Discrete.html}  {\am{Relations.Discrete}}\xspace}
-\newcommand\ualibContinuous{\href{https://ualib.gitlab.io/Relations.Continuous.html}{\am{Relations.Continuous}}\xspace}
-\newcommand\ualibQuotients {\href{https://ualib.gitlab.io/Relations.Quotients.html} {\am{Relations.Quotients}}\xspace}
-\newcommand\ualibTruncation{\href{https://ualib.gitlab.io/Relations.Truncation.html}{\am{Relations.Truncation}}\xspace}
-
-% \newcommand\ualibhtml[1]{\href{https://ualib.gitlab.io/#1.html}{\am{#1}}\xspace}
 \newcommand\ualibhtml[1]{\href{https://ualib.gitlab.io/#1.html}{\am{#1}}\xspace}
-\newcommand\UALhtml[2]{\href{https://ualib.gitlab.io/#1.#2.html}{\am{#1.#2}}\xspace}
-\newcommand\ualibhtmlurl[2]{\url{https://ualib.gitlab.io/#1.#2.html}\xspace}
+\newcommand\ualiburl[1]{\url{https://ualib.gitlab.io/#1.html}\xspace}
+\newcommand\ualibsrcmod[2]{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1.lagda}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1.lagda}}}
 \newcommand\ualibsrcfile[2]{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1/#2.lagda}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1/#2.lagda}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 % -- Algebras
 \newcommand\gitAlgebras{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda}{\texttt{Algebras.lagda}}}
-
-\newcommand\ualibAlgebras{\ualibhtml{Algebras}}
-\newcommand\ualibSignatures {\ualibhtml{Algebras.Signatures}}
-\newcommand\ualibAlgAlgebras{\ualibhtml{Algebras.Algebras}}
-\newcommand\ualibProducts{\ualibhtml{Algebras.Products}}
-\newcommand\ualibCongruences{\ualibhtml{Algebras.Congruences}}
-
-% -- Homomorphisms
-\newcommand\ualibHomomorphisms{\ualibhtml{Homomorphisms}}
-\newcommand\ualibHomBasic         {\ualibhtml{Homomorphisms.Basic}}
-\newcommand\ualibNoether          {\ualibhtml{Homomorphisms.Noether}}
-\newcommand\ualibIsomorphisms     {\ualibhtml{Homomorphisms.Isomorphisms}}
-\newcommand\ualibHomomorphicImages{\ualibhtml{Homomorphisms.HomomorphicImages}}
-
-% - Terms
-\newcommand\ualibTerms      {\ualibhtml{Terms}}
-\newcommand\ualibTermsBasic {\ualibhtml{Terms.Basic}}
-\newcommand\ualibOperations {\ualibhtml{Terms.Operations}}
-
-% -- Subalgebras
-\newcommand\ualibSubalgebras    {\ualibhtml{Subalgebras}}
-\newcommand\ualibSubuniverses   {\ualibhtml{Subalgebras.Subuniverses}}
-\newcommand\ualibSubSubalgebras {\ualibhtml{Subalgebras.Subalgebras}}
-\newcommand\ualibUnivalent      {\ualibhtml{Subalgebras.Univalent}}
-
-% -- Varieties
-\newcommand\ualibVarieties      {\ualibhtml{Varieties}}
-\newcommand\ualibEquationalLogic{\ualibhtml{Varieties.EquationalLogic}}
-\newcommand\ualibVarVarieties   {\ualibhtml{Varieties.Varieties}}
-\newcommand\ualibPreservation   {\ualibhtml{Varieties.Preservation}}
-\newcommand\ualibFreeAlgebras   {\ualibhtml{Varieties.FreeAlgebras}}
-
-
-%% visible URLS
-
-\newcommand\urlPrelude       {\url{https://ualib.gitlab.io/Prelude.html}\xspace}
-\newcommand\urlPreliminaries {\url{https://ualib.gitlab.io/Prelude.Preliminaries.html}\xspace}
-\newcommand\urlEquality      {\url{https://ualib.gitlab.io/Prelude.Equality.html}\xspace}
-\newcommand\urlInverses      {\url{https://ualib.gitlab.io/Prelude.Inverses.html}\xspace}
-\newcommand\urlExtensionality{\url{https://ualib.gitlab.io/Prelude.Extensionality.html}\xspace}
-\newcommand\urlLifts         {\url{https://ualib.gitlab.io/Prelude.Lifts.html}\xspace}
-
-% -- Relations
-\newcommand\urlRelations   {\url{https://ualib.gitlab.io/Relations.html}\xspace}
-\newcommand\urlDiscrete    {\url{https://ualib.gitlab.io/Relations.Discrete.html}\xspace}
-\newcommand\urlContinuous  {\url{https://ualib.gitlab.io/Relations.Continuous.html}\xspace}
-\newcommand\urlQuotients   {\url{https://ualib.gitlab.io/Relations.Quotients.html}\xspace}
-\newcommand\urlTruncation  {\url{https://ualib.gitlab.io/Relations.Truncation.html}\xspace}
-
-% -- Algebras
-\newcommand\urlAlgebras   {\url{https://ualib.gitlab.io/Algebras.html}\xspace}
-\newcommand\urlSignatures {\url{https://ualib.gitlab.io/Algebras.Signatures.html}\xspace}
-\newcommand\urlAlgAlgebras{\url{https://ualib.gitlab.io/Algebras.Algebras.html}\xspace}
-\newcommand\urlProducts{\url{https://ualib.gitlab.io/Algebras.Products.html}\xspace}
-\newcommand\urlCongruences{\url{https://ualib.gitlab.io/Algebras.Congruences.html}\xspace}
-
-% -- Homomorphisms
-\newcommand\urlHomomorphisms    {\url{https://ualib.gitlab.io/Homomorphisms.html}\xspace}
-\newcommand\urlHomBasic         {\url{https://ualib.gitlab.io/Homomorphisms.Basic.html}\xspace}
-\newcommand\urlNoether          {\url{https://ualib.gitlab.io/Homomorphisms.Noether.html}\xspace}
-\newcommand\urlIsomorphisms     {\url{https://ualib.gitlab.io/Homomorphisms.Isomorphisms.html}\xspace}
-\newcommand\urlHomomorphicImages{\url{https://ualib.gitlab.io/Homomorphisms.HomomorphicImages.html}\xspace}
-
-% - Terms
-\newcommand\urlTerms           {\url{https://ualib.gitlab.io/Terms.html}\xspace}
-\newcommand\urlTermsBasic      {\url{https://ualib.gitlab.io/Terms.Basic.html}\xspace}
-\newcommand\urlOperations {\url{https://ualib.gitlab.io/Terms.Operations.html}\xspace}
-
-% -- Subalgebras
-\newcommand\urlSubalgebras    {\url{https://ualib.gitlab.io/Subalgebras.html}\xspace}
-\newcommand\urlSubuniverses   {\url{https://ualib.gitlab.io/Subalgebras.Subuniverses.html}\xspace}
-\newcommand\urlSubSubalgebras {\url{https://ualib.gitlab.io/Subalgebras.Subalgebras.html}\xspace}
-\newcommand\urlUnivalent      {\url{https://ualib.gitlab.io/Subalgebras.Univalent.html}\xspace}
-
-% -- Varieties
-\newcommand\urlVarieties      {\url{https://ualib.gitlab.io/Varieties.html}\xspace}
-\newcommand\urlEquationalLogic{\url{https://ualib.gitlab.io/Varieties.EquationalLogic.html}\xspace}
-\newcommand\urlVarVarieties   {\url{https://ualib.gitlab.io/Varieties.Varieties.html}\xspace}
-\newcommand\urlPreservation   {\url{https://ualib.gitlab.io/Varieties.Preservation.html}\xspace}
-\newcommand\urlFreeAlgebras   {\url{https://ualib.gitlab.io/Varieties.FreeAlgebras.html}\xspace}
-
-
-
-
-
-%% %% for backward compatibility with old module names:
-\newcommand\preludemodule{\ualibPrelude}
-\newcommand\basicmodule{\ualibAlgebras}
-\newcommand\congruencesmodule{\ualibRelations}
-\newcommand\homomorphismsmodule{\ualibHomomorphisms}
-\newcommand\termsmodule{\ualibTerms}
-\newcommand\subuniversesmodule{\ualibSubalgebras}
-\newcommand\closuremodule{\ualibVarieties}
-\newcommand\birkhoffmodule{\ualibBirkhoff}
 
 \newcommand{\agda}{\href{https://wiki.portal.chalmers.se/agda/pmwiki.php}{Agda}\xspace}
 
@@ -214,12 +103,8 @@
 \newcommand{\AgdaTyped}[2]{\AgdaBound{#1}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{#2}\xspace}
 \newcommand{\AgdaComma}{\AgdaSpace{}\AgdaInductiveConstructor{,}\AgdaSpace{}}
 
-%% \newcommand\asp{\AgdaSpace{}}
 \newcommand\ab[1]{\AgdaBound{#1}}
 \newcommand\ag[1]{\AgdaGeneralizable{#1}}
-%% \newcommand\af[1]{\AgdaFunction{#1}}
-%% \newcommand{\alg}[1]{\ensuremath{\mathbf{#1}}}  % algebraic structures
-%% \newcommand{\var}[1]{\ensuremath{\mathscr{#1}}}  % algebraic structures
 \newcommand\ac{\AgdaComma}
 \newcommand\ak{\AgdaKeyword}
 \newcommand\as[1]{\AgdaSymbol{#1}}
@@ -248,12 +133,9 @@
 
 \newcommand\KeywordTok[1]{\AgdaKeyword{#1}}
 \newcommand\OtherTok[1]{\AgdaSymbol{#1}}
-%% \newcommand\NormalTok[1]{\AgdaSymbol{#1}}
 \newcommand\DataTypeTok[1]{\AgdaDatatype{#1}}
-%% \newcommand\lzero{\AgdaKeyword{lzero}\AgdaSpace{}}
 \newcommand\lzero{\AgdaKeyword{lzero}\xspace}
 \newcommand\lsuc{\AgdaKeyword{lsuc}\xspace}
-%% \newcommand\lsuc{\AgdaKeyword{lsuc}\AgdaSpace{}}
 \newcommand\NormalTok[1]{\AgdaCatchallClause{#1}}
 \newcommand\CommentTok[1]{\AgdaComment{#1}}
 \newcommand\DecValTok[1]{\AgdaNumber{#1}}
@@ -307,3 +189,10 @@ Compiled with \texttt{xelatex} on \mydate\today\ at \currenttime.
 \foreach \i in {#1,...,#2} {\draw [thin,dotted,gray] (\i,#3) -- (\i,#4)  node [below] at (\i,#3) {$\i$};}%
 \foreach \i in {#3,...,#4} {\draw [thin,dotted,gray] (#1,\i) -- (#2,\i) node [left] at (#1,\i) {$\i$};}%
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \newcommand\firstsentencemod[1]{This section presents the \ualibhtml{#1} module of the \agdaualib, slightly abridged.\footnote{For unabridged docs and source code see \ualiburl{#1} and\\\ualibsrcmod{#1}.}}
+\newcommand\firstsentence[2]{This section presents the \ualibhtml{#1.#2} module of the \agdaualib, slightly abridged.\footnote{For unabridged docs and source code see \ualiburl{#1.#2} and\\\ualibsrcfile{#1}{#2}.}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\newcommand\id[2]{\ab #1~\af ≈~\ab #2}

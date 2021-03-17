@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 \subsubsection{The Algebra type}\label{algebra-types}
 
 For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and universe \ab 𝓤, we define the type of \defn{algebras in the signature} \ab 𝑆 (or \ab 𝑆-\defn{algebras}) and with \defn{domain} (or \defn{carrier} or \defn{universe}) \abt{𝐴}{𝓤} as follows.
@@ -473,7 +478,7 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaBound{𝓦}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-We use the function \af{lift-alg} to resolve errors that arise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in \ualibLifts.)
+We use the function \af{lift-alg} to resolve errors that arise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in \ualibhtml{Prelude.Lifts}.)
 
 \subsubsection{Compatibility of binary relations}\label{compatibility-of-binary-relations}
 
@@ -537,7 +542,7 @@ The formal definition representing this notion of compatibility is easy to write
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-Recall the \af{compatible-fun} type was defined in \ualibDiscrete module.
+Recall the \af{compatible-fun} type was defined in \ualibhtml{Relations.Discrete} module.
 
 \subsubsection{Compatibility of continuous relations}\label{compatibility-of-continuous-relations}
 

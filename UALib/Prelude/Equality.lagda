@@ -33,19 +33,11 @@ module hide-refl {𝓤 : Universe} where
 
  data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where refl : {x : X} → x ≡ x
 
-open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁) public
+open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
 \end{code}
 
-Since `refl _` is used so often, the following convenient shorthand is also provided in the [Type Topology][] library.
-
-\begin{code}
-
-pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
-\end{code}
-
-Thus, whenever we need to complete a proof by simply asserting that `x`, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke `refl x`, or (in the implicit case) `refl _` or even `𝓇ℯ𝒻𝓁`. (The `pattern` directive above is what makes the last option available.)
-
+Thus, whenever we need to complete a proof by simply asserting that `x` is definitionally equal to itself, we can invoke `refl`.  If we need to make `x` explicit, we use `refl {x = x}`.
 
 Let us now formalize the obvious fact that `≡` is an equivalence relation.  We don't have to prove reflexivity, because that is the defining property of `≡`.
 
@@ -54,16 +46,16 @@ Let us now formalize the obvious fact that `≡` is an equivalence relation.  We
 module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
  ≡-symmetric : (x y : X) → x ≡ y → y ≡ x
- ≡-symmetric _ _ 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-symmetric _ _ refl = refl
 
  ≡-sym : {x y : X} → x ≡ y → y ≡ x
- ≡-sym 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-sym refl = refl
 
  ≡-transitive : (x y z : X) → x ≡ y → y ≡ z → x ≡ z
- ≡-transitive _ _ _ 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-transitive _ _ _ refl refl = refl
 
  ≡-trans : {x y z : X} → x ≡ y → y ≡ z → x ≡ z
- ≡-trans 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-trans refl refl = refl
 
 \end{code}
 
@@ -109,7 +101,7 @@ module hide-transport {𝓤 𝓦 : Universe} where
  𝑖𝑑 X = λ x → x
 
  transport : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) {x y : X} → x ≡ y → A x → A y
- transport A (refl x) = 𝑖𝑑 (A x)
+ transport A (refl {x = x}) = 𝑖𝑑 (A x)
 
 open import MGS-MLTT using (𝑖𝑑; transport) public
 
@@ -124,7 +116,7 @@ A function is well defined if and only if it maps equivalent elements to a singl
 module hide-ap  {𝓤 : Universe} where
 
  ap : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){x x' : X} → x ≡ x' → f x ≡ f x'
- ap f {x}{x'} p = transport (λ - → f x ≡ f -) p (refl (f x))
+ ap f {x}{x'} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
 
 open import MGS-MLTT using (ap) public
 
@@ -137,7 +129,7 @@ We now define some variations of `ap` that are sometimes useful.
 module _ {𝓤 𝓦 : Universe} where
 
  ap-cong : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B}{a b : A} → f ≡ g → a ≡ b → f a ≡ g b
- ap-cong 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ap-cong refl refl = refl
 
 \end{code}
 
@@ -146,7 +138,7 @@ We sometimes need a version of this that works for [dependent types][], such as 
 \begin{code}
 
  cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ a → f a ≡ g a
- cong-app 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
+ cong-app refl _ = refl
 
 \end{code}
 
@@ -169,11 +161,11 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 
  ≡-×-intro : {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇} → A₁ ≡ A₂ → B₁ ≡ B₂ → (A₁ , B₁) ≡ (A₂ , B₂)
- ≡-×-intro 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-×-intro refl refl = refl
 
 
  ≡-×-int : {A : 𝓤 ̇}{B : 𝓦 ̇}{a x : A}{b y : B} → a ≡ x → b ≡ y → (a , b) ≡ (x , y)
- ≡-×-int 𝓇ℯ𝒻𝓁 𝓇ℯ𝒻𝓁 = 𝓇ℯ𝒻𝓁
+ ≡-×-int refl refl = refl
 \end{code}
 
 -------------------------------------

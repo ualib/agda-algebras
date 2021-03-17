@@ -52,7 +52,7 @@ The relation `𝟎-rel` is equivalent to the identity relation `≡` and these a
 module _ {𝓤 : Universe}{A : 𝓤 ̇} where
 
  𝟎-IsEquivalence : IsEquivalence{𝓤}{A = A} 𝟎-rel
- 𝟎-IsEquivalence = record {rfl = refl; sym = ≡-symmetric; trans = ≡-transitive}
+ 𝟎-IsEquivalence = record {rfl = λ x → refl{x = x}; sym = ≡-symmetric; trans = ≡-transitive}
 
 \end{code}
 
@@ -119,7 +119,7 @@ Finally, the following elimination rule is sometimes useful.
  ╱-refl : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} 𝑨){a a' : ∣ 𝑨 ∣}
   →       ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
- ╱-refl θ 𝓇ℯ𝒻𝓁 = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-refl θ refl = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}
 

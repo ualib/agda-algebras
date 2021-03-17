@@ -113,14 +113,13 @@ The purpose of the import lines below is not actually to effect the stated impor
 
 We leave off the `public` keyword from the end of these import directives on purpose so that we are forced to (re)import each item where and when we need it.  This may seem pedantic (and may turn out to be too inconvenient for users in the end) but it makes the dependencies clearer, and dependencies reveal the foundations upon which the library is built.  Since we are very interested in foundations(!), we try to keep all dependencies in the foreground, and resist the temptation to store them all in a single file that we never have to think about again.
 
-The first three import lines have to be commented out because we will redefine the given types for pedagogical purposes in this module.
+The first line must be commented out because we define the given type ourselves for pedagogical purposes, though we will eventually import the original definition from the [Type Topology][] library.<sup>[1](Prelude.Preliminaries.html#fn1)</sup>
 
 \begin{code}
 
--- open import Identity-Type renaming (_≡_ to infix 0 _≡_ ; refl to 𝓇ℯ𝒻𝓁)
--- pattern refl x = 𝓇ℯ𝒻𝓁 {x = x}
-
 -- open import Sigma-Type renaming (_,_ to infixr 50 _,_)
+
+open import Identity-Type renaming (_≡_ to infix 0 _≡_)
 
 open import MGS-MLTT using (_∘_; domain; codomain; transport; _≡⟨_⟩_; _∎; -- _×_; pr₁; pr₂; -Σ; Π;
    ¬; 𝑖𝑑; _∼_; _+_; 𝟘; 𝟙; 𝟚; _⇔_; lr-implication; rl-implication; id; _⁻¹; ap)
@@ -155,7 +154,7 @@ Notice that we carefully specify which definitions and results we want to import
 
 #### <a id="agda-universes">Special notation for Agda universes</a>
 
-The first import in the list of `open import` directives above imports the `universes` module from [Escardó][]'s \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
+The first import in the list of `open import` directives above imports the `universes` module from [Martín Escardó][]'s \href{https://github.com/martinescardo/TypeTopology}{Type Topology} library. This provides, among other things, an elegant notation for type universes that we have fully adopted and we use it throughout the Agda UALib.
 
 [Escardó][] has an outstanding set of notes called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}. We highly recommend Martín's notes to anyone wanting more details than we provide here about [MLTT][] and the Univalent Foundations/HoTT extensions thereof.
 
@@ -163,7 +162,7 @@ Following [Escardó][], we refer to universes using capitalized script letters f
 
 Also in the `Universes` module [Escardó][] defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`.
 
-The level `lzero` is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for `Set lzero` (which, incidentally, corresponds to `Sort 0` in the [Lean][] proof assistant language).<sup>1</sup>
+The level `lzero` is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for `Set lzero` (which, incidentally, corresponds to `Sort 0` in the [Lean][] proof assistant language).<sup>[2](Prelude.Preliminaries.html#fn2)</sup>
 
 Thus, 𝓤 ̇ is simply an alias for `Set 𝓤`, and we have `Set 𝓤 : Set (lsuc 𝓤)`.
 
@@ -312,10 +311,12 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 
 ----------------------------------------
 
-<span class="footnote"><sup>1</sup> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
+<sup>1</sup><span class="footnote" id="fn1"> Generally speaking, we have made a concerted effort to avoid duplicating types that were already defined in libraries that came before ours.  However, it is very likely that our library overlaps to some extent with other libraries with which we are as yet unfamiliar.</span>
 
-<p></p>
-<p></p>
+<sup>2</sup><span class="footnote" id="fn2"> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
+
+<br>
+<br>
 
 [↑ Prelude](Prelude.html)
 <span style="float:right;">[Prelude.Equality →](Prelude.Equality.html)</span>

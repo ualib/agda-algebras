@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 \subsubsection{The noncumulative universe hierarchy}\label{the-noncumulative-hierarchy}
 
 The hierarchy of universe levels in Agda looks like this:\\[-4pt]
@@ -7,7 +12,6 @@ This means that the type level of \ab{𝓤₀} is \ab{𝓤₁}\AgdaOperator{\Agd
 It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} and \ab{𝓤₀} \as : \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}}, and so on. In other words, Agda's universe hierarchy is \defn{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand (in this author's experience) a noncummulative hierarchy can sometimes make for a nonfun proof assistant.
 
 Luckily, there are ways to overcome this technical issue. We describe general lifting and lowering functions below, and then later, in \S\ref{lifts-of-algebras},
- % \href{https://ualib.gitlab.io/Algebras.Algebras.html\#lifts-of-algebras}{Lifts
 we'll see the domain-specific analogs of these tools which turn out to have some nice properties that make them very effective for resolving universe level problems when working with algebra types.
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
@@ -210,8 +214,3 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 \end{code}
 \ccpad
 Evidently, the proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "ualib-part1-20210304.tex"
-%%% End:

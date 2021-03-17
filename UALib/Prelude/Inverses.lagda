@@ -70,7 +70,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
  InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
 
- InvIsInv f {.(f a)} (im a) = refl _
+ InvIsInv f {.(f a)} (im a) = refl
 
  InvIsInv f (eq _ _ p) = p ⁻¹
 
@@ -164,7 +164,7 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
  MonicInvIsLeftInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(fmonic : Monic f)(x : A)
    →                 (MonicInv f fmonic)(f x)(im x) ≡ x
 
- MonicInvIsLeftInv f fmonic x = refl _
+ MonicInvIsLeftInv f fmonic x = refl
 
 \end{code}
 
@@ -236,7 +236,7 @@ embedding-is-monic : {𝓧 𝓨 : Universe} {X : 𝓧 ̇}{Y : 𝓨 ̇}
 embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
  where
  fa : fiber f (f x)
- fa = x , 𝓇ℯ𝒻𝓁
+ fa = x , refl
 
  fb : fiber f (f x)
  fb = x' , (fxfx' ⁻¹)

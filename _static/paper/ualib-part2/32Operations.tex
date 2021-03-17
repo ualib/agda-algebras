@@ -3,7 +3,7 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End: 
-Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.\footnote{\textbf{Notation}. At the start of the \ualibOperations module, for notational convenience we rename the \aic{generator} constructor of the \ad{Term} type, so that from now on we can use \aic{ℊ} in place of \aic{generator}.}
+Here we define \defn{term operations} which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.\footnote{\textbf{Notation}. At the start of the \ualibhtml{Terms}{Operations} module, for notational convenience we rename the \aic{generator} constructor of the \ad{Term} type, so that from now on we can use \aic{ℊ} in place of \aic{generator}.}
 
 When we interpret a term in an algebra we call the resulting function a \defn{term operation}. Given a term \ab{𝑝} and an algebra \ab{𝑨}, we denote by \ab{𝑝}~\af ̇~\ab 𝑨 the \defn{interpretation} of \ab{𝑝} in \ab{𝑨}. This is defined inductively as follows.
 \begin{enumerate}
@@ -930,7 +930,7 @@ We now prove two important facts about term operations. The first of these, whic
 \AgdaBound{a}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-To conclude the \ualibTerms module, we prove that every term is compatible with every congruence relation. That is, if \ab{t}~\as :~\ad{Term}~\ab X and \ab{θ}~\as :~\af{Con}~\ab 𝑨, then \ab{a}~\ab θ~\ab b~\as →~\ab t(\ab a)~\ab θ~\ab t(\ab b).
+To conclude the \ualibhtml{Terms} module, we prove that every term is compatible with every congruence relation. That is, if \ab{t}~\as :~\ad{Term}~\ab X and \ab{θ}~\as :~\af{Con}~\ab 𝑨, then \ab{a}~\ab θ~\ab b~\as →~\ab t(\ab a)~\ab θ~\ab t(\ab b).
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%

@@ -113,7 +113,7 @@ open import MGS-MLTT using (_∼_) public
 module _ {𝓤 𝓦 : Universe} where
 
  extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
- extfun 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
+ extfun refl _ = refl
 
 \end{code}
 
@@ -122,7 +122,7 @@ Here is the analogue for dependent function types (cf. `cong-app` in [Prelude.eq
 \begin{code}
 
  extdfun : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }(f g : Π B) → f ≡ g → f ∼ g
- extdfun _ _ 𝓇ℯ𝒻𝓁 _ = 𝓇ℯ𝒻𝓁
+ extdfun _ _ refl _ = refl
 
 \end{code}
 

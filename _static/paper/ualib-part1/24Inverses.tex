@@ -1,3 +1,8 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
 We begin by defining an inductive type that represents the semantic concept of \defn{inverse image} of a function.
 \ccpad
 \begin{code}%
@@ -811,7 +816,7 @@ The type \af{is-embedding} \ab f denotes the assertion that \ab f is a function 
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibTruncation module and take up the topic of sets.
+This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibhtml{Relations.Truncation} module and take up the topic of sets.
 
 It should be clear that embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f that \ab f is an embedding we can construct a proof of \af{Monic} \ab f. We verify this as follows.
 \ccpad
@@ -942,8 +947,3 @@ Finally, one way to show that a function is an embedding is to first prove it is
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{fi}\AgdaSymbol{)}\<%
 \end{code}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "ualib-part1-20210304.tex"
-%%% End:

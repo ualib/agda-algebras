@@ -90,7 +90,7 @@ Note the order of the arguments.  The universe \ab 𝓦 comes first because in c
 
 \subsubsection{Consequences of First Homomorphism Theorem}\label{consequences-of-first-homomorphism-theorem}
 
-We take this opportunity to prove an important lemma that makes use of the \af{IsSubalgebraOf} type defined above; it is the following: If \ab 𝑨 and \ab 𝑩 are \ab 𝑆-algebras and \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 a homomorphism from \ab 𝑨 to \ab 𝑩, then the quotient \ab 𝑨 \af ╱ \af{ker} \ab h is (isomorphic to) a subalgebra of \ab 𝑩. This is an easy corollary of the First Homomorphism Theorem proved in the \ualibNoether module.
+We take this opportunity to prove an important lemma that makes use of the \af{IsSubalgebraOf} type defined above; it is the following: If \ab 𝑨 and \ab 𝑩 are \ab 𝑆-algebras and \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 a homomorphism from \ab 𝑨 to \ab 𝑩, then the quotient \ab 𝑨 \af ╱ \af{ker} \ab h is (isomorphic to) a subalgebra of \ab 𝑩. This is an easy corollary of the First Homomorphism Theorem proved in the \ualibhtml{Homomorphisms.Noether} module.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{FirstHomCorollary}\AgdaSpace{}%
@@ -581,7 +581,8 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 We conclude this module by proving a number of useful facts about subalgebras. Some of the formal statements below may appear to be redundant, and indeed they are to some extent. However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments. The aim is to make it as convenient as possible to apply the lemmas in different situations. (We're stocking the \ualib utility closet now; elegance is not the priority.)
 
-First we show that the subalgebra relation is a \emph{preorder}. Recall, this means it is reflexive and transitive.\footnote{In the \ualibQuotients module, we defined \emph{preorder} for binary relation types. Here, however, we will content ourselves with merely proving reflexivity and transitivity of the subalgebra relation \af{≤}, without worry about first defining it as an inhabitant of an honest-to-goodness binary relation type, of the sort introduced in the \ualibDiscrete module. Perhaps we will address this matter in a future release of the \ualib.}
+First we show that the subalgebra relation is a \emph{preorder}. Recall, this
+means it is reflexive and transitive.\footnote{In~\cite{DeMeo:2021-1}, in the \ualibhtml{Relations.Quotients} module, we defined \emph{preorder} for binary relation types. Here, however, we will content ourselves with merely proving reflexivity and transitivity of the subalgebra relation \af{≤}, without worry about first defining it as an inhabitant of an honest-to-goodness binary relation type, of the sort introduced in the \ualibhtml{Relations.Discrete} module. Perhaps we will address this matter in a future release of the \ualib.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{≤-reflexive}\AgdaSpace{}%
