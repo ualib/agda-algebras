@@ -1,0 +1,231 @@
+% -*- TeX-master: "ualib-part3.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,12pt]{../lipics-v2021-wjd}
+\usepackage{amsmath}
+\usepackage{fontspec}
+\crefformat{footnote}{#2\footnotemark[#1]#3}
+\usepackage{../proof-dashed}
+\usepackage{comment}
+\usepackage[wjdsimple,links]{../agda}
+\usepackage{../wjd}
+\newif\ifnonbold % comment this line to restore bold universe symbols
+\usepackage{../../unixode}
+
+\bibliographystyle{plainurl}% the mandatory bibstyle
+
+\usepackage{tikz}
+
+
+%%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{The Agda Universal Algebra Library\\%
+Part 3: Identity\\[-5pt]
+{\large Equational Classes, Free Algebras, and Birkhoff's Theorem}}
+
+\titlerunning{The Agda Universal Algebra Library, Part 3: Identity}
+%%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{William DeMeo}
+       {Department of Algebra, Charles University in Prague \and \url{https://williamdemeo.gitlab.io}}
+       {williamdemeo@gmail.com}{https://orcid.org/0000-0003-1832-5690}{}
+
+\copyrightfooter
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\fancyhf{}
+\fancyhead[ER]{\sffamily\bfseries \leftmark}
+\fancyhead[OL]{\sffamily\bfseries Agda UALib, Part 3: Identity}
+\fancyhead[EL,OR]{\sffamily\bfseries \thepage}
+
+\ccsdesc[500]{Theory of computation~Logic and verification}
+\ccsdesc[300]{Computing methodologies~Representation of mathematical objects}
+\ccsdesc[300]{Theory of computation~Type theory}
+% \ccsdesc[500]{Theory of computation~Constructive mathematics}
+% \ccsdesc[300]{Theory of computation~Type structures}
+
+\keywords{Agda, constructive mathematics, dependent types, equational logic, extensionality, formalization of mathematics, model theory, type theory, universal algebra}
+
+% \category{} %optional, e.g. invited paper
+
+\relatedversion{hosted on arXiv}
+\relatedversiondetails[linktext={http://arxiv.org/a/demeo\_w\_1}]{Part 1, Part 2}{http://arxiv.org/a/demeo_w_1}
+
+\supplement{~\\ \textit{Documentation}: \ualibdotorg}%
+\supplementdetails{Software}{https://gitlab.com/ualib/ualib.gitlab.io.git}
+
+\nolinenumbers %uncomment to disable line numbering
+
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{}
+\EventNoEds{2}
+\EventLongTitle{}
+\EventShortTitle{}
+\EventAcronym{}
+\EventYear{2021}
+\EventDate{Feb 16, 2021}
+\EventLocation{}
+\EventLogo{}
+\SeriesVolume{0}
+\ArticleNo{0}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+    pdfencoding=unicode,
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    %pdfstartview={FitW},    % fits the width of the page to the window
+    pdftitle={The Agda UALib, Part 3: Identity},    % title
+    pdfauthor={William DeMeo},     % author
+    pdfsubject={The Agda Universal Algebra Library},   % subject of the document
+    pdfcreator={XeLaTeX with hyperref},
+    pdfproducer={},  % producer of the document
+    pdfkeywords={Universal algebra} {Equational logic} {Martin-Löf Type Theory} {Birkhoff’s HSP Theorem} {Formalization of mathematics} {Agda} {Proof assistant},
+    pdfnewwindow=true,      % links in new window
+    % colorlinks=false,       % false: boxed links; true: colored links
+    % linkcolor=blue,          % color of internal links
+    % citecolor=green,        % color of links to bibliography
+    % filecolor=magenta,      % color of file links
+    % urlcolor=cyan           % color of external links
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% \includeonly{4Subalgebras}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{abstract}
+The Agda Universal Algebra Library (UALib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. 
+ The UALib includes a substantial collection of definitions, theorems, and proofs from universal algebra, equational logic, and model theory, and as such provides many examples that exhibit the power of inductive and dependent types for representing and reasoning about mathematical structures and equational theories. In this paper, we describe the the types and proofs of the UALib that concern classes of algebraic structures, equational logic, and free algebras. We also present a complete formal, machine-checked proof of Birkhoff's celebrated HSP Theorem in dependent type theory. To the best of our knowledge, ours is the first formal, type theoretic presentation of the HSP theorem, and the first computer-verified proof of the theorem.\end{abstract}
+
+% \section*{Acknowledgements and Attributions}
+% \input{../acknowledgements}
+
+% \newpage
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}\label{sec:introduction}
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
+The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
+
+
+
+
+\subsection{Motivation}\label{sec:motivation}
+%% \subsection{Vision and Goals}\label{vision-and-goals}
+The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
+%% These observations suggested that there would be much to gain from implementing universal algebra in a language, such as Martin-L\"of type theory, that features dependent and inductive types.
+
+Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
+
+
+
+
+\subsection{Attributions and Contributions}\label{sec:contributions}
+\input{../attributions}
+
+
+
+
+\subsection{Organization of the paper}\label{sec:organization}
+
+In this paper we limit ourselves to the presentation of the \ualibVarieties module of \ualib, which includes types for representing free algebras and equational classes of algebraic structures (i.e., varieties). We also define a type that represents the statement of Birkhoff's HSP theorem, and we construct an inhabitant of this type, that is, a proof of the theorem. Limiting the focus of the paper gives us space to discuss some of the more interesting type theoretic and foundational issues that arise when developing a library of this kind and when attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
+
+This is the third installment of a three-part series of papers describing the \agdaualib. The first part is~\cite{DeMeo:2021-1} which describes types in the \ualib representing the following concepts: equality, extensionality, truncation, relations, algebras, congruences, and quotients. The second part,~\cite{DeMeo:2021-2}, does the same for homomorphisms, terms, and subalgebras.
+
+
+The main body of the present paper is divided into four parts 
+
+% \section{Models and Theories}\label{sec:model-theory-equat}
+
+% \section{Varieties}\label{sec:varieties}
+
+% \section{Equation Preservation}\label{sec:preservation}
+
+% \section{Free Algebras and Birkhoff's Theorem}\label{sec:freealgebras}
+
+
+% (\S\ref{sec:homomorphism-types}, \S\ref{sec:types-terms}, \S\ref{sec:subalgebra-types}).  The first of these introduces types representing \emph{homomorphisms} from one algebra to another, and presents a formal statement and proof of the first fundamental theorem about homomorphisms, known as the \emph{First Isomorphism Theorem}, as well as a version of the so-called \emph{Second Isomorphism Theorem}. This is followed by dependent type definitions for representing \emph{isomorphisms} and \emph{homomorphic images} of algebraic structures.
+
+% In Section~\ref{sec:types-terms} we define inductive types to represent \emph{terms} and the \emph{term algebra} in a given signature. We prove the \emph{universal property} of the term algebra which is the fact that term algebra is \emph{free} (or \emph{initial}) in the class of all algebras in the given signature.  We define types that denote the interpretation of a term in an algebra type, called a \emph{term operation}, including the interpretation of terms in \emph{arbitrary products} of algebras (\S\ref{interpretation-of-terms-in-product-algebras}). We conclude \S~\ref{sec:types-terms} with a subsection on the compatibility of terms with basic operations and congruence relations.
+
+% Section~\ref{sec:subalgebra-types} presents inductive and dependent types for representing subuniverses and subalgebras of a given algebra. Here we define an inductive type that represents the \emph{subuniverse generated by} \ab X, for a given predicate \ab X \as : \af{Pred} \af ∣ \ab 𝑨 \af ∣ \AgdaUnderscore,\footnote{As we learned in~\cite{DeMeo:2021-1}, such \ab X represents a subset of the domain of the algebra \ab 𝑨.} and we use this type to formalize a few basic subuniverse lemmas.  We also define types that pertain to arbitrary classes of algebras. In particular, in Subsection~\ref{sec:subalgebras} on subalgebras, we define a type that represents the assertion that a given algebra is a subalgebra of some member of a class of algebras.
+% % Finally, the appendix~\S\ref{sec:univ-subalg} includes our generalization of Martin Escardo's use of \emph{univalence} for modeling subgroups.
+
+\newcommand\otherparta{\textit{Part 1: equality, extensionality, truncation, and dependent types for relations and algebras}~\cite{DeMeo:2021-1}.}
+\newcommand\otherpartb{\textit{Part 2: homomorphisms, terms, subalgebras}~\cite{DeMeo:2021-2}.}
+
+
+
+
+\subsection{Resources}
+We conclude this introduction with some pointers to helpful reference materials.
+\input{../resources}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input{2EquationalLogic}
+
+\input{3Varieties}
+
+% \input{4Preservation}
+
+% \input{5FreeAlgebras}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{5Conclusion}
+
+
+\bibliography{../../ualib_refs}
+
+% \appendix \section{Univalent Subalgebras}\label{sec:univ-subalg}\firstsentence{Subalgebras}{Univalent}\input{A1Univalent.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
