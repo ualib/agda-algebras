@@ -13,11 +13,8 @@ The \agdaualib is based on a minimal version of \defn{Martin-Löf dependent typ
 We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handful of objects that are assumed at the jumping-off point for MLTT: ``primitive'' \defn{types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type), and an infinite collection of \defn{universes} (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like \ab 𝓤, \ab 𝓥, \ab 𝓦, etc., typically from the latter half of the English alphabet).
 
 \subsubsection{Specifying logical foundations in Agda}\label{sec:preliminaries}
-Finally we are ready to discuss the first line of Agda code of any consequence in the \ualib. 
-
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
-Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying which logical foundations should be assumed when the program is type-checked to verify its correctness. 
-Every Agda program in the \ualib begins with the following pragma, which has the effects described below.
+Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in the \ualib begins with the following line.
 \ccpad
 \begin{code}[number=code:options]
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -27,8 +24,8 @@ Every Agda program in the \ualib begins with the following pragma, which has the
 \AgdaPragma{--safe}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
 \end{code}
-\\[-20pt]
-%% \begin{enumerate}
+\ccpad
+These options control certain foundational assumptions that Agda makes when type-checking the program to verify its correctness.
 \begin{itemize}
 \item \AgdaPragma{--without-K} disables \axiomk; see~\cite{agdaref-axiomk};
 \item \AgdaPragma{--exact-split} makes Agda accept only definitions that are \emph{judgmental} equalities; see~\cite{agdatools-patternmatching};
@@ -36,6 +33,33 @@ Every Agda program in the \ualib begins with the following pragma, which has the
 \end{itemize}
 %% \end{enumerate}
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
+
+
+\subsubsection{Agda Modules}
+The \ak{OPTIONS} pragma is usually followed by the start of a module.  For example, the \ualibhtml{Prelude.Preliminaries} module begins with the following line.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Prelude.Preliminaries}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+\ccpad
+Sometimes we want to declare parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. Thus, we might start an \defn{anonymous submodule} of the main module with a line like\footnote{The \af{Signature} type will be defined in Section~\ref{sec:oper-sign}.}
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaUnderscore\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+\ccpad
+Such a module is called \emph{anonymous} because an underscore appears in place of a module name. Agda determines where a submodule ends by indentation.  This can take some getting used to, but after a short time it will feel very natural. The main module of a file must have the same name as the file, without the \texttt{.agda} or \texttt{.lagda} file extension.  The code inside the main module is not indented. Submodules are declared inside the main module and code inside these submodules must be indented to a fixed column.  As long as the code is indented, Agda considers it part of the submodule.  A submodule is exited as soon as nonindented code appears.
+
+
 
 
 
@@ -55,7 +79,7 @@ The hierarchy of universes in Agda is structured as \ab{𝓤}\af ̇ \as : \ab �
 
 
 
-\subsubsection{Dependent pairs}\label{ssec:dependent-pairs}
+\subsubsection{Sigma and Pi types}\label{ssec:dependent-pairs}
 Given universes \ab 𝓤 and \ab 𝓥, a type \ab X \as : \ab 𝓤\aof ̇, and a type family \ab Y \as : X \as → \ab 𝓥\aof ̇, the \defn{Sigma type} (or \defn{dependent pair type}), denoted by \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y \ab x, generalizes the Cartesian product \ab X~\as ×~\ab Y by allowing the type \ab Y \ab x of the second argument of the ordered pair (\ab x\as , \ab y) to depend on the value \ab x of the first.  That is, \AgdaRecord{Σ}(\ab x \as ꞉ \ab X)\as ,\ab Y \ab x is inhabited by the pairs (\ab x\as , \ab y) such that \ab x \as : \ab X and \ab y \as : \ab Y \ab x.
 
 Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax described in the preceding paragraph. Fortunately, this preferred notation is available in the \typetopology library (see~\cite[Σ types]{MHE}).\footnote{The symbol \as ꞉ in the expression \AgdaRecord{Σ}\sP{3}\ab x\sP{3}\as ꞉\sP{3}\ab X\sP{3}\AgdaComma\sP{3}\ab Y is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
@@ -63,3 +87,4 @@ Agda's default syntax for a Sigma type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
 Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them (see~\cite{DeMeo:2021} for details).
+

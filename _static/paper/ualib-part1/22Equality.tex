@@ -4,10 +4,8 @@
 %%% TeX-engine: 'xetex
 %%% End:
 The type referred to as "reflexivity" or "refl" is a very basic but important
-type in MLTT. It represents \defn{definitional equality}. (For definition and discussion, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.)
-The refl type we use is a standard one. It is defined in the \am{Identity-Type}
-module of the \typetopology library, but (apart from slightly different syntax)
-it is equivalent to the identity type used in most other Agda libraries.
+type in MLTT. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
+The refl type we use is a standard one. It is defined in the \am{Identity-Type} module of the \typetopology library, but (apart from slightly different syntax) it is equivalent to the identity type used in most other Agda libraries.
 
 We make refl available by importing it from the \am{Identity-Type} module. However, we first repeat the definition here (inside a hidden submodule) for clarity.\footnote{To hide code from the rest of the development, we enclose it
   in a named module.  For example, the code inside the \af{hide-refl} module will not conflict with the original definitions from the \typetopology library, even though we import the latter right after presenting the definition.  As long as we don't invoke \ak{open} \af{hide-refl}, the code inside the \af{hide-refl} module remains essentially hidden (though Agda \emph{will} type-check the code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the \ualib depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.}
@@ -67,24 +65,24 @@ We make refl available by importing it from the \am{Identity-Type} module. Howev
 
 Thus, whenever we need to complete a proof by simply asserting that \ab{x}is definitionally equal to itself, we invoke \aic{refl}. If we need to make \ab x explicit, we use \aic{refl}~\{\ab x~=~\ab x\}.
 
-Of course, \ad{≡} is an equivalence relation, and the formalization of this fact is trivial. In fact, we don't even need to prove reflexivity, since it is the defining property of \ad{≡}.  Here are the trivial proofs of symmetry and transitivity of \ad{≡}.\footnote{%
-Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \ab 𝓤 \as : \AgdaPostulate{Universe} and \ab X \as : \ab 𝓤\aof ̇) out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
+Of course \ad{≡} is an equivalence relation and the formal proof of this is trivial. We don't need to prove reflexivity since it is the defining property of \ad{≡}.  Here are the (trivial) proofs of symmetry and transitivity of \ad{≡}.% \footnote{%
+% Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \ab 𝓤 \as : \AgdaPostulate{Universe} and \ab X \as : \ab 𝓤\aof ̇) out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}%
-\>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}%
-\>[36]\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}%
+% \>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}%
+% \>[36]\AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -104,9 +102,9 @@ Here we put the definition inside an \emph{anonymous module}, which starts with 
 \>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -128,9 +126,9 @@ Here we put the definition inside an \emph{anonymous module}, which starts with 
 \\
 %
 \>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -160,10 +158,10 @@ Here we put the definition inside an \emph{anonymous module}, which starts with 
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -190,10 +188,10 @@ Here we put the definition inside an \emph{anonymous module}, which starts with 
 \\
 %
 \>[1]\AgdaFunction{≡-trans}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
 The only difference between \af{≡-symmetric} and \af{≡-sym} (respectively, \af{≡-transitive} and \af{≡-trans}) is that the latter has fewer explicit arguments, which is sometimes convenient.
@@ -453,10 +451,10 @@ Here are some variations of \af{ap} that are sometimes useful.
 \\
 %
 \>[0]\AgdaFunction{ap-cong}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
 We sometimes need a version of this that works for \textit{dependent types}, such as the following (which we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib, transcribed into our notation of course).
@@ -499,10 +497,10 @@ We sometimes need a version of this that works for \textit{dependent types}, suc
 \\
 %
 \>[0]\AgdaFunction{cong-app}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 
 \subsubsection{≡-intro and ≡-elim for nondependent pairs}\label{intro-and-elim-for-nondependent-pairs}
@@ -624,10 +622,10 @@ We conclude our presentation of the \ualibhtml{Prelude.Equality} module with som
 \\
 %
 \>[0]\AgdaFunction{≡-×-intro}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 \scpad
 \begin{code}
@@ -670,10 +668,10 @@ We conclude our presentation of the \ualibhtml{Prelude.Equality} module with som
 \\
 %
 \>[1]\AgdaFunction{≡-×-int}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 
 % \begin{code}%
@@ -722,8 +720,8 @@ We conclude our presentation of the \ualibhtml{Prelude.Equality} module with som
 % \\[\AgdaEmptyExtraSkip]%
 % %
 % \>[0]\AgdaFunction{≡-×-int}\AgdaSpace{}%
-% \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-% \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
+% \AgdaInductiveConstructor{refl}\AgdaSpace{}%
+% \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 % \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+% \AgdaInductiveConstructor{refl}\<%
 % \end{code}

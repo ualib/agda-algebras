@@ -13,19 +13,20 @@ REF: Parts of this file are based on the HoTT/UF course notes by Martín Hötzel
 SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 -->
 
-### <a id="preliminaries">Preliminaries</a>
+This is the [Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
 
-This section describes the [Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
+### <a id="logical-foundations">Logical foundations</a>
 
-**Notation**. Here is an acronym that we use frequently.
+For the benefit of readers who are not proficient in Agda or type theory, we briefly describe some of the type theoretic foundations of the [Agda UALib][], as well as the most important basic types and features that are used throughout the library.
 
-  * [MLTT][] = [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory)
+The [UALib][] is based on a minimal version of [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) (MLTT) which is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.  We won't go into great detail here because there are already other very nice resources available, such as the section on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda) of the lecture notes by Escardó just mentioned, the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), and the [HoTT Book][].
+
+We begin by recalling the handful of objects that are assumed at the jumping-off point for MLTT: "primitive" types (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type), and an infinite collection of *universes* (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like `𝓤`, `𝓥`, `𝓦`, etc., typically from the latter half of the English alphabet, following Escardó's convention).
 
 #### <a id="options">Options</a>
 
-An Agda program typically begins by setting some options and by importing from existing libraries (in our case, the [Type Topology][] library by [Martín Escardó][]). In particular, logical axioms and deduction rules can be specified according to what one wishes to assume.
-
-For example, each Agda source code file in the UALib begins with the following line:
+An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
+Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in the [UALib][] begins with the following line.
 
 \begin{code}
 
@@ -33,7 +34,7 @@ For example, each Agda source code file in the UALib begins with the following l
 
 \end{code}
 
-These options control certain foundational assumptions that Agda assumes when type-checking the program to verify its correctness.
+These options control certain foundational assumptions that Agda makes when type-checking the program to verify its correctness.
 
 * `--without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference][] manual.
 
@@ -55,7 +56,7 @@ but this is never done in publicly released versions of the UALib.
 
 #### <a id="modules">Modules</a>
 
-The `OPTIONS` line is usually followed by the start of a module.  For example, the [Prelude.Preliminaries][] module begins with the following line.
+The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Prelude.Preliminaries][] module begins with the following line.
 
 \begin{code}
 
@@ -63,9 +64,7 @@ module Prelude.Preliminaries where
 
 \end{code}
 
-Sometimes we may wish to pass in parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. For instance, we often start an (anonymous) module, in which the fixed signature 𝑆 will be assumed until the end of the module, with the line `module _ {𝑆 : Signature 𝓞 𝓥} where...` The module started with this line is anonymous because the underscore `_` appears instead of a module name.
-
-Agda determines where a model begins and ends by indentation.  This can take some getting used to, but after a short time it will seem quite natural.
+Sometimes we want to declare parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. Thus we might start an *anonymous submodule* of the main module with a line like `module _ {𝑆 : Signature 𝓞 𝓥} where`.  Such a module is called *anonymous* because an underscore `_` appears in place of a module name. Agda determines where the submodule ends by indentation.  This can take some getting used to, but after a short time it will feel very natural.
 
 The main module of a file must have the same name as the file (without the trailing `.agda` or `.lagda`, of course).  The code inside the main module is not indented. Modules may be declared inside the main module and code inside these submodules must be indented to the same column.  As long as the code is indented, Agda considers it part of the submodule.  To exit the submodule, we return to nonindented code.  So, the general pattern is as follows:
 
@@ -244,7 +243,7 @@ open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ)
 
 \end{code}
 
-The definition of Σ (and thus, of ×) is accompanied by first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, we will alternate between these and other standard alternatives, such as , or `fst` and `snd`, for emphasis or readability.  We define these alternative notations for projections out of pairs as follows.
+The definition of Σ (and thus, of ×) is accompanied by first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, we will alternate between these and other standard alternatives, such as , or `fst` and `snd`, for emphasis or readability.  We define these alternative notations for projections out of pairs as follows.<sup>[3](Prelude.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -314,6 +313,10 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 <sup>1</sup><span class="footnote" id="fn1"> Generally speaking, we have made a concerted effort to avoid duplicating types that were already defined in libraries that came before ours.  However, it is very likely that our library overlaps to some extent with other libraries with which we are as yet unfamiliar.</span>
 
 <sup>2</sup><span class="footnote" id="fn2"> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
+
+<sup>3</sup><span class="footnote" id="fn3"> Here we put the definition inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `𝓤 : Universe`)---out of the way so they don't obfuscate the definitions inside the module.</span>
+
+
 
 <br>
 <br>
