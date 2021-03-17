@@ -49,12 +49,24 @@ of univalent mathematics, but not yet needing the univalence axiom.''}
 \ccpad
 Thus, the pair (\ab{X} , \ad{≡ₓ}) forms a set iff it satisfies \as{∀} \ab x \abt{y}{X} \as → \af{is-subsingleton} (\ab x \aod{≡ₓ} \ab y).
 
-We will also make use of the function \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality}{\af{to-Σ-≡}}, which is part of Escardó's characterization of equality in Sigma types~(\cite{MHE}). It is defined as follows.
-\ccpad
+The function
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality}{to-Σ-≡},
+which we also import, is part of Escardó's characterization of equality in Sigma types~(\cite{MHE}). It is defined as follows.
 \begin{code}%
-\>[0]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[875I]\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{hide-to-Σ-≡}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -72,10 +84,9 @@ We will also make use of the function \href{https://www.cs.bham.ac.uk/~mhe/HoTT-
 \AgdaRecord{Σ}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{\}}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[875I]%
-\>[16]\AgdaFunction{Σ}\AgdaSpace{}%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\>[10]\AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -98,28 +109,41 @@ We will also make use of the function \href{https://www.cs.bham.ac.uk/~mhe/HoTT-
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \\
 %
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[16]\AgdaBound{σ}\AgdaSpace{}%
+\>[2]\AgdaSymbol{→}%
+\>[10]\AgdaBound{σ}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{τ}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[0]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
+\>[1]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSymbol{\})}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
+\AgdaBound{a}\AgdaSymbol{)\}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{MGS-Embeddings}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{to-Σ-≡}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
 \end{code}
-\ccpad
 We will use \af{is-embedding}, \af{is-set}, and \af{to-Σ-≡} in the next subsection to prove that a monic function into a set is an embedding.
 
 \subsubsection{Injective functions are set embeddings}\label{injective-functions-are-set-embeddings}

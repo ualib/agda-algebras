@@ -39,7 +39,7 @@ open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
 Thus, whenever we need to complete a proof by simply asserting that `x` is definitionally equal to itself, we can invoke `refl`.  If we need to make `x` explicit, we use `refl {x = x}`.
 
-Let us now formalize the obvious fact that `≡` is an equivalence relation.  We don't have to prove reflexivity, because that is the defining property of `≡`.
+Of course, `≡` is an equivalence relation, and the formalization of this fact is trivial. In fact, we don't even need to prove reflexivity, since it is the defining property of `≡`.  Here are the trivial proofs of symmetry and transitivity of `≡`.<sup>[2](Prelude.Equality.html#fn2)</sup>
 
 \begin{code}
 
@@ -61,7 +61,7 @@ module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
 
 The only difference between `≡-symmetric` and `≡-sym` (respectively, `≡-transitive` and `≡-trans`) is that the latter has fewer explicit arguments, which is sometimes convenient.
 
-Many proofs make abundant use of the symmetry of `_≡_`, and the following syntactic sugar can often improve the readability of such proofs.<sup>[2](Prelude.Equality.html#fn2)</sup>
+Many proofs make abundant use of the symmetry of `_≡_`, and the following syntactic sugar can often improve the readability of such proofs.<sup>[3](Prelude.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -76,7 +76,7 @@ open import MGS-MLTT using (_⁻¹) public
 
 So, if we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` .
 
-Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.<sup>[2](Prelude.Equality.html#fn2)</sup>
+Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.<sup>[3](Prelude.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -91,7 +91,7 @@ open import MGS-MLTT using (_∙_) public
 
 #### <a id="transport">Transport</a>
 
-Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[3](Prelude.Equality.html#fn3)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.
+Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[4](Prelude.Equality.html#fn4)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.
 
 \begin{code}
 
@@ -170,12 +170,13 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 -------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library, even though we import the latter right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` module remains essentially hidden (though Agda *will* type-check this code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in order to describe all or most of the types on which the [UALib][] depends, in a clear and self-contained way, while at the same time making sure that this is not misinterpreted as a claim to originality.</span>
+<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library, even though we import the latter right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` module remains essentially hidden (though Agda *will* type-check this code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the [UALib][] depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.</span>
 
+<sup>2</sup><span class="footnote" id="fn2"> Here we put the definition inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the "parameters" of the module, e.g., `𝓤 : Universe` and `X : 𝓤 ̇` out of the way so they don't obfuscate the definitions inside the module.</span>
 
-<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+<sup>3</sup><span class="footnote" id="fn3"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
 
-<sup>3</sup><span class="footnote" id="fn3"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170).
+<sup>4</sup><span class="footnote" id="fn4"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170).
 
 <p></p>
 <p></p>

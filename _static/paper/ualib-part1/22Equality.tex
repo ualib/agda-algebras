@@ -3,15 +3,29 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-Perhaps the most important types in type theory are the equality types. The \emph{definitional equality} we use is a standard one and is often referred to as ``reflexivity'' or ``refl''.  In our case, it is defined in the Identity-Type module of the \TypeTopology library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries. Here is the definition.
-%% full listing of the \texttt{Identity-Type} module.
+The type referred to as "reflexivity" or "refl" is a very basic but important
+type in MLTT. It represents \defn{definitional equality}. (For definition and discussion, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.)
+The refl type we use is a standard one. It is defined in the \am{Identity-Type}
+module of the \typetopology library, but (apart from slightly different syntax)
+it is equivalent to the identity type used in most other Agda libraries.
+
+We make refl available by importing it from the \am{Identity-Type} module. However, we first repeat the definition here (inside a hidden submodule) for clarity.\footnote{To hide code from the rest of the development, we enclose it
+  in a named module.  For example, the code inside the \af{hide-refl} module will not conflict with the original definitions from the \typetopology library, even though we import the latter right after presenting the definition.  As long as we don't invoke \ak{open} \af{hide-refl}, the code inside the \af{hide-refl} module remains essentially hidden (though Agda \emph{will} type-check the code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the \ualib depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{data}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{hide-refl}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -24,10 +38,8 @@ Perhaps the most important types in type theory are the equality types. The \emp
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaKeyword{where}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -36,21 +48,24 @@ Perhaps the most important types in type theory are the equality types. The \emp
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{x}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Identity-Type}\AgdaSpace{}%
+\AgdaKeyword{renaming}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{to}\AgdaSpace{}%
+\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{0}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\\
+\>[0]\<%
 \end{code}
-\ccpad
-Since \af{refl\ \_} is used so often, the following convenient shorthand is also provided in the \typetopology library.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{pattern}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSpace{}%
-\AgdaSymbol{\{}x \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{\}}\<%
-\end{code}
-\ccpad
-Thus, whenever we need to complete a proof by simply asserting that \ab{x}, or the (possibly implicit) thing in question, is definitionally equal to itself, we can invoke \af{refl} \ab x, or (in the implicit case) \af{refl\ \_} or even \aic{𝓇ℯ𝒻𝓁}. (The \ab{pattern} directive above is what makes the latter option available.)
+
+Thus, whenever we need to complete a proof by simply asserting that \ab{x}is definitionally equal to itself, we invoke \aic{refl}. If we need to make \ab x explicit, we use \aic{refl}~\{\ab x~=~\ab x\}.
 
 Of course, \ad{≡} is an equivalence relation, and the formalization of this fact is trivial. In fact, we don't even need to prove reflexivity, since it is the defining property of \ad{≡}.  Here are the trivial proofs of symmetry and transitivity of \ad{≡}.\footnote{%
 Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \ab 𝓤 \as : \AgdaPostulate{Universe} and \ab X \as : \ab 𝓤\aof ̇) out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
@@ -322,7 +337,9 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 \>[1]\AgdaFunction{transport}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{\})}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{𝑖𝑑}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
@@ -384,8 +401,10 @@ A function is well defined if and only if it maps equivalent elements to a singl
 \AgdaBound{-}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{))}\<%
+\AgdaBound{x}\AgdaSymbol{)\})}\<%
 \end{code}
 \ccpad
 Here are some variations of \af{ap} that are sometimes useful.
