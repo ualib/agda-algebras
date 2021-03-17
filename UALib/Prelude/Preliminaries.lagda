@@ -19,7 +19,7 @@ This is the [Prelude.Preliminaries][] module of the [Agda Universal Algebra Libr
 
 For the benefit of readers who are not proficient in Agda or type theory, we briefly describe some of the type theoretic foundations of the [Agda UALib][], as well as the most important basic types and features that are used throughout the library.
 
-The [UALib][] is based on a minimal version of [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) (MLTT) which is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.  We won't go into great detail here because there are already other very nice resources available, such as the section on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda) of the lecture notes by Escardó just mentioned, the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), and the [HoTT Book][].
+The [UALib][] is based on a minimal version of [Martin-Löf Type Theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) (MLTT) which is the same or very close to the type theory on which Martin Escardo's [Type Topology][] Agda library is based.  We won't go into great detail here because there are already other very nice resources available, such as the section on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda) of the lecture notes by Escardó just mentioned, the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), and the [HoTT Book][].
 
 We begin by recalling the handful of objects that are assumed at the jumping-off point for MLTT: "primitive" types (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type), and an infinite collection of *universes* (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like `𝓤`, `𝓥`, `𝓦`, etc., typically from the latter half of the English alphabet, following Escardó's convention).
 
@@ -42,15 +42,7 @@ These options control certain foundational assumptions that Agda makes when type
 
 * `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
 
-Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`; we would use the following `OPTIONS` line in such case:
-
-```agda
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
-```
-
-but this is never done in publicly released versions of the UALib.
-
-
+Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [UALib][].
 
 
 
@@ -66,30 +58,10 @@ module Prelude.Preliminaries where
 
 Sometimes we want to declare parameters that will be assumed throughout the module.  For instance, when working with algebras, we often assume they come from a particular fixed signature, and this signature is something we could fix as a parameter at the start of a module. Thus we might start an *anonymous submodule* of the main module with a line like `module _ {𝑆 : Signature 𝓞 𝓥} where`.  Such a module is called *anonymous* because an underscore `_` appears in place of a module name. Agda determines where the submodule ends by indentation.  This can take some getting used to, but after a short time it will feel very natural.
 
-The main module of a file must have the same name as the file (without the trailing `.agda` or `.lagda`, of course).  The code inside the main module is not indented. Modules may be declared inside the main module and code inside these submodules must be indented to the same column.  As long as the code is indented, Agda considers it part of the submodule.  To exit the submodule, we return to nonindented code.  So, the general pattern is as follows:
-
-```agda
-module main where
-
-a-function-in-the-main-module : {𝓤 : Universe}{A B : 𝓤 ̇} → A → B
-a-function-in-the-main-module = λ a → a
-
-module _ {𝓤 : Universe} where
-
- a-function-inside-an-anonymous-submodule : {A B : 𝓤 ̇} → A → B
- a-function-inside-an-anonymous-submodule = λ a → a
-
-a-function-outside-the-submodule : {A B : 𝓤 ̇} → A → B
-a-function-outside-the-submodule a = a
-```
-
-Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. We tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
-
 
 #### <a id="imports-from-type-topology">Imports from Type Topology</a>
 
-Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the "Univalent Foundations" of mathematics.
-
+Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the *Univalent Foundations* of mathematics.  The first of these is the `Universes` module which we import now.
 
 \begin{code}
 
@@ -97,7 +69,9 @@ open import Universes public
 
 \end{code}
 
-Escardó's Universe module includes a number of symbols used to denote universes. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
+Since we used the `public` directive, the `Universes` module will be available to all modules that import [Prelude.Preliminaries][].
+
+Escardó's `Universe` module includes a number of symbols used to denote universes. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
 
 \begin{code}
 
@@ -327,3 +301,26 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 
 {% include UALib.Links.md %}
 
+
+
+<!--
+
+The main module of a file must have the same name as the file (without the trailing `.agda` or `.lagda`, of course).  The code inside the main module is not indented. Modules may be declared inside the main module and code inside these submodules must be indented to the same column.  As long as the code is indented, Agda considers it part of the submodule.  To exit the submodule, we return to nonindented code.  So, the general pattern is as follows:
+
+```agda
+module main where
+
+a-function-in-the-main-module : {𝓤 : Universe}{A B : 𝓤 ̇} → A → B
+a-function-in-the-main-module = λ a → a
+
+module _ {𝓤 : Universe} where
+
+ a-function-inside-an-anonymous-submodule : {A B : 𝓤 ̇} → A → B
+ a-function-inside-an-anonymous-submodule = λ a → a
+
+a-function-outside-the-submodule : {A B : 𝓤 ̇} → A → B
+a-function-outside-the-submodule a = a
+```
+
+Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. We tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
+-->

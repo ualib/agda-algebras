@@ -1,8 +1,3 @@
----
-layout: default
-title : Plus-Type module
----
-
 <pre class="Agda">
 
 <a id="15" class="Symbol">{-#</a> <a id="19" class="Keyword">OPTIONS</a> <a id="27" class="Pragma">--without-K</a> <a id="39" class="Pragma">--exact-split</a> <a id="53" class="Pragma">--safe</a> <a id="60" class="Symbol">#-}</a>

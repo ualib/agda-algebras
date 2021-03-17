@@ -65,27 +65,23 @@ Many proofs make abundant use of the symmetry of `_≡_`, and the following synt
 
 \begin{code}
 
-module hide-sym {𝓤 : Universe} where
+module hide-sym-trans {𝓤 : Universe} where
 
  _⁻¹ : {X : 𝓤 ̇ } → {x y : X} → x ≡ y → y ≡ x
  p ⁻¹ = ≡-sym p
 
-open import MGS-MLTT using (_⁻¹) public
-
 \end{code}
 
-So, if we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` .
+If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` .
 
 Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.<sup>[2](Prelude.Equality.html#fn2)</sup>
 
 \begin{code}
 
-module hide-trans-dot {𝓤 : Universe} where
-
  _∙_ : {X : 𝓤 ̇ } {x y z : X} → x ≡ y → y ≡ z → x ≡ z
  p ∙ q = ≡-trans p q
 
-open import MGS-MLTT using (_∙_) public
+open import MGS-MLTT using (_⁻¹; _∙_) public
 
 \end{code}
 
@@ -109,7 +105,7 @@ open import MGS-MLTT using (𝑖𝑑; transport) public
 
 As usual, we display `transport` in a hidden module and then imported the existing definition from [Type Topology][].<sup>[1](Preliminaries.Equality.html#fn1)</sup> See [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion of transport; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda).
 
-A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `x x' : X` of the domain, and an identity proof `p : x ≡ x'`, then we obtain a proof of `f x ≡ f x'` by simply applying the `ap` function like so, `ap f p : f x ≡ f x'`. Escardó defines `ap` in the [Type Topology][] library as follows.
+A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `a b : X` of the domain, and an identity proof `p : a ≡ b`, then we obtain a proof of `f a ≡ f b` by simply applying the `ap` function like so, `ap f p : f a ≡ f b`. Escardó defines `ap` in the [Type Topology][] library as follows.
 
 \begin{code}
 
