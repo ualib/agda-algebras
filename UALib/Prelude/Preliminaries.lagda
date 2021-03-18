@@ -168,34 +168,6 @@ A special case of the Sigma type is the one in which the type `Y` doesn't depend
 
 \end{code}
 
-Now that we have repeated these definitions from the [Type Topology][] for illustration purposes, let us import the original definitions that we will use throughout the [UALib][].
-
-\begin{code}
-
-open import Sigma-Type renaming (_,_ to infixr 50 _,_)
-open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ)
-
-\end{code}
-
-The definition of Σ (and thus, of ×) is accompanied by first and second projection functions, `pr₁` and `pr₂`.  Sometimes we prefer to use `∣_∣` and `∥_∥` for these projections, respectively. However, for emphasis or readability we alternate between these and the standard alternatives `fst` and `snd`.  We define these alternative notations for projections out of pairs as follows.
-
-\begin{code}
-
-module _ {𝓤 : Universe} where
-
- ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
- ∣ x , y ∣ = x
- fst (x , y) = x
-
- ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
- ∥ x , y ∥ = y
- snd (x , y) = y
-
-\end{code}
-
-Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `𝓤 : Universe`)---out of the way so they don't obfuscate the definitions inside the module.
-
-
 
 #### <a id="dependent-function-type">Pi types (dependent functions)</a>
 Given universes `𝓤` and `𝓥`, a type `X : 𝓤 ̇`, and a type family `Y : X → 𝓥 ̇`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. The dependent function type is defined in the [Type Topology][] in a standard way, but for the reader's benefit we repeat the definition here (inside a hidden module).<sup>[4](Prelude.Preliminaries.html#fn4)</sup>
@@ -218,29 +190,35 @@ module hide-pi {𝓤 𝓦 : Universe} where
 To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), [Escardó][] uses the same trick as the one used above for *Sigma types*.
 
 
-
-#### <a id="general-composition">General composition of functions</a>
+Now that we have studied these important types, defined in the [Type Topology][] library and repeated here for illustration purposes, let us import the original definitions with the `public` directive so that they are available to all modules importing [Prelude.Preliminaries][].
 
 \begin{code}
 
 open import Sigma-Type renaming (_,_ to infixr 50 _,_) public
-open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π) public
-
-
-module _ {𝓨 𝓩 : Universe}{I : 𝓥 ̇}{B : I → 𝓨 ̇}{C : I → 𝓩 ̇} where
- -- {Y : 𝓨 ̇}{Z : 𝓩 ̇}
- zip : Π B → Π C → Π (λ i → (B i) × (C i))
- zip f a = λ i → (f i , a i)
-
- eval : {Y : 𝓨 ̇}{Z : 𝓩 ̇} → ((Y → Z) × Y) → Z
- eval (f , a) = f a
-
-module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
-
- dapp : (∀ i → (J → (B i)) → (B i)) → (∀ i → (J → (B i))) → Π B
- dapp f a = λ i → (f i) (a i)
+open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π; -Π) public
 
 \end{code}
+
+##### Notation for the first and second projections
+
+The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣\_∣` and `∥\_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `pr₁` and `fst` for the first projection, `pr₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
+
+\begin{code}
+
+module _ {𝓤 : Universe} where
+
+ ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+ ∣ x , y ∣ = x
+ fst (x , y) = x
+
+ ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+ ∥ x , y ∥ = y
+ snd (x , y) = y
+
+\end{code}
+
+Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `𝓤 : Universe`)---out of the way so they don't obfuscate the definitions inside the module.
+
 
 ----------------------------------------
 
@@ -248,7 +226,7 @@ module _ {𝓨 : Universe}{I J : 𝓥 ̇}{B : I → 𝓨 ̇} where
 
 <sup>2</sup><span class="footnote" id="fn2"> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
 
-<sup>3</sup><span class="footnote" id="fn3">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library, even though we import the latter right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` module remains essentially hidden (though Agda *will* type-check this code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the [UALib][] depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.</span>
+<sup>3</sup><span class="footnote" id="fn3">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library as long as we don't invoke `open hide-refl`. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do so in order to exhibit all of the types on which the [UALib][] depends while ensuring that this is not misinterpreted as a claim to originality.</span>
 
 <sup>4</sup><span class="footnote" id="fn4">**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Π x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].</sup>
 

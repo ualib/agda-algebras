@@ -171,13 +171,13 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 (In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.)
 
-We denote by ℭ the product of all subalgebras of algebras in 𝒦, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows:
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows:
 
 `homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
 
-Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of 𝑆-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
-In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume 𝕏, which supplies, for each algebra `𝑨`, a surjective map ∣ 𝕏 𝑨 ∣ from `X` onto 𝑨.
+In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume `𝕏`, which supplies, for each algebra `𝑨`, a surjective map `∣ 𝕏 𝑨 ∣` from `X` onto `𝑨`.
 
 \begin{code}
 
@@ -193,11 +193,11 @@ module HSPTheorem
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that ℭ be a set.
+Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.
 
-We begin by constructing ℭ, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
+We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
-**Notation**. In this module, the type `ℑs` will index the collection of all subalgebras of algebras in the class 𝒦, and `𝔄s : ℑs → Algebra 𝓤 𝑆` will be a map from the index type to the subalgebras. 
+**Notation**. In this module, the type `ℑs` will index the collection of all subalgebras of algebras in the class `𝒦`, and `𝔄s : ℑs → Algebra 𝓤 𝑆` will be a map from the index type to the subalgebras. 
 
 \begin{code}
 
@@ -447,7 +447,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 #### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
 
-With this result in hand, along with what we proved earlier---namely, PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦---it is not hard to show that 𝔽 belongs to V 𝒦.
+With this result in hand, along with what we proved earlier---namely, `PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦`---it is not hard to show that `𝔽` belongs to `V 𝒦`.
 
 \begin{code}
 

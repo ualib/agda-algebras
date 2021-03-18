@@ -4,22 +4,22 @@
 %%% TeX-engine: 'xetex
 %%% End:
 The type referred to as ``reflexivity'' or ``refl'' is a very basic but important
-type in \mltt. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
+type in \mltt. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see\\\url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
 The refl type we use is a standard one and is defined in the \am{Identity-Type} module of the \typetopology library. Apart from superficial syntactic differences it is equivalent to the identity type used in other Agda libraries.
 
-We make refl available by importing it from the \am{Identity-Type} module. However, we first repeat the definition here (inside a hidden submodule) for clarity.
+In the \ualib we make refl available by importing it from the \am{Identity-Type} module, but we repeat the definition here for easy reference.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{hide-refl}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{hide-refl}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -45,21 +45,21 @@ We make refl available by importing it from the \am{Identity-Type} module. Howev
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{x}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Identity-Type}\AgdaSpace{}%
-\AgdaKeyword{renaming}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{to}\AgdaSpace{}%
-\AgdaKeyword{infix}\AgdaSpace{}%
-\AgdaNumber{0}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
-\\
-\>[0]\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{Identity-Type}\AgdaSpace{}%
+% \AgdaKeyword{renaming}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSpace{}%
+% \AgdaSymbol{to}\AgdaSpace{}%
+% \AgdaKeyword{infix}\AgdaSpace{}%
+% \AgdaNumber{0}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
+% \\
+% \>[0]\<%
 \end{code}
 
 Thus, whenever we need to complete a proof by simply asserting that \ab{x}is definitionally equal to itself, we invoke \aic{refl}. If we need to make \ab x explicit, we use \aic{refl}~\{\ab x~=~\ab x\}.
@@ -199,16 +199,16 @@ Many proofs make abundant use of the symmetry of \ad ≡, and the following synt
 \textbf{Unicode Hints}. In \agdamode, one types \af{⁻¹} as \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1}, and \af{𝑖𝑑} as \texttt{\textbackslash{}Mii\textbackslash{}Mid}, and type \af{∙} as \texttt{\textbackslash{}.}. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
 \ccpad
 \begin{code}
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{hide-sym-trans}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{hide-sym-trans}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⁻¹}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
@@ -274,21 +274,21 @@ If we have a proof \ab p \as : \ab x \aod ≡ \ab y, and we need a proof of \ab 
 \AgdaFunction{≡-trans}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-MLTT}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⁻¹}}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∙\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-MLTT}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⁻¹}}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∙\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
 \end{code}
 
 \subsubsection{Transport}\label{transport}
 
-Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal iff for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{substitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of the \typetopology library.
+Alonzo Church characterized equality by declaring two things equal if and only if no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal if and only if for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{substitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of the \typetopology library, as follows.\footnote{We can't show every line of code from the \ualib in this paper, and we have chosen to omit the lines indicating that our redundant definitions of some functions (e.g., \af{transport} and \af{ap}) occur inside named (``hidden'') modules before the original definitions are then imported from the \typetopology library. As suggested above, we do this in order to facilitate presentation of the \ualib library in a clear and reasonably self-contained way, without claiming credit for type definitions that are not our own.}
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -366,16 +366,16 @@ See~\cite{MHE} for a discussion of transport.\footnote{cf.~transport in \href{ht
 A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs. If we have a function \ab{f} \as : \ab X \as → \as Y, two elements \ab{x} \ab{x'} \as : \ab X of the domain, and an identity proof \ab{p} \as : \ab x \ad ≡ \ab{x'}, then we obtain a proof of \ab{f} \ab x \ad ≡ \af f \ab{x'} by simply applying the \af{ap} function like so, \af{ap} \ab f \ab p \as : \ab f \ab x \ad ≡ \ab f \ab{x'}. Escardó defines \ab{ap} in the \typetopology library as follows.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{hide-ap}%
-\>[16]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{hide-ap}%
+% \>[16]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{ap}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
@@ -424,15 +424,15 @@ A function is well defined if and only if it maps equivalent elements to a singl
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSymbol{\})}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-MLTT}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ap}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-MLTT}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{ap}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
 \end{code}
 \ccpad
 Here are some variations of \af{ap} that are sometimes useful.

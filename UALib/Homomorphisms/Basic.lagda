@@ -19,7 +19,7 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} public
-open import MGS-MLTT using (_≡⟨_⟩_; _∎; -Π) public
+open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 \end{code}
 

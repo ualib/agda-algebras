@@ -139,7 +139,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
    a = EpicInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟦ a ⟧
-   bfa = (cong-app (EpicInvIsRightInv fev ∣ h ∣ hE) b)⁻¹
+   bfa = (cong-app (EpicInvIsRightInv {fe = fev} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
    γ = Image_∋_.eq b ⟦ a ⟧ bfa
@@ -237,19 +237,20 @@ homFactor fe{𝑨}{𝑩}{𝑪}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomC
  ϕ = λ c → g ( hInv c )
 
  ξ : ∀ x → ker-pred h (x , hInv (h x))
- ξ x = (cong-app (EpicInvIsRightInv fe h hEpi) (h x))⁻¹
+ ξ x = (cong-app (EpicInvIsRightInv {fe = fe} h hEpi) (h x))⁻¹
 
  g≡ϕ∘h : g ≡ ϕ ∘ h
  g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
 
  ζ : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ 𝑓) →  𝒄 x ≡ (h ∘ hInv)(𝒄 x)
- ζ  𝑓 𝒄 x = (cong-app (EpicInvIsRightInv fe h hEpi) (𝒄 x))⁻¹
+ ζ  𝑓 𝒄 x = (cong-app (EpicInvIsRightInv {fe = fe} h hEpi) (𝒄 x))⁻¹
 
  ι : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) →  𝒄 ≡ h ∘ (hInv ∘ 𝒄)
- ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv fe h hEpi)⁻¹
+ ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv {fe = fe} h hEpi)⁻¹
 
  useker : ∀ 𝑓 𝒄 → g(hInv (h((𝑓 ̂ 𝑨)(hInv ∘ 𝒄)))) ≡ g((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))
- useker 𝑓 c = Kh⊆Kg (cong-app(EpicInvIsRightInv fe h hEpi)(h ((𝑓 ̂ 𝑨)(hInv ∘ c))))
+ useker 𝑓 c = Kh⊆Kg (cong-app (EpicInvIsRightInv{fe = fe} h hEpi)
+                              (h ((𝑓 ̂ 𝑨)(hInv ∘ c))) )
 
  ϕIsHomCB : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → ϕ((𝑓 ̂ 𝑪) 𝒄) ≡ (𝑓 ̂ 𝑩)(ϕ ∘ 𝒄)
 
@@ -298,16 +299,17 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
   ϕ = λ y → ∣ β ∣ ( γInv y )
 
   ξ : (x : ∣ 𝑨 ∣) → KER-pred ∣ γ ∣ (x , γInv (∣ γ ∣ x))
-  ξ x =  ( cong-app (EpicInvIsRightInv gfe ∣ γ ∣ γE) ( ∣ γ ∣ x ) )⁻¹
+  ξ x =  ( cong-app (EpicInvIsRightInv{fe = gfe} ∣ γ ∣ γE) ( ∣ γ ∣ x ) )⁻¹
 
   βϕγ : ∣ β ∣ ≡ ϕ ∘ ∣ γ ∣
   βϕγ = gfe λ x → Kγβ (ξ x)
 
   ι : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → 𝒄 ≡  ∣ γ ∣ ∘ (γInv ∘ 𝒄)
-  ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄)(EpicInvIsRightInv gfe ∣ γ ∣ γE)⁻¹
+  ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄) (EpicInvIsRightInv{fe = gfe} ∣ γ ∣ γE)⁻¹
 
   useker : ∀ 𝑓 𝒄 → ∣ β ∣ (γInv (∣ γ ∣ ((𝑓 ̂ 𝑨) (γInv ∘ 𝒄)))) ≡ ∣ β ∣((𝑓 ̂ 𝑨) (γInv ∘ 𝒄))
-  useker 𝑓 𝒄 = Kγβ (cong-app (EpicInvIsRightInv gfe ∣ γ ∣ γE)(∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))
+  useker 𝑓 𝒄 = Kγβ (cong-app (EpicInvIsRightInv {fe = gfe} ∣ γ ∣ γE)
+                             (∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))
 
   ϕIsHomCB : ∀ 𝑓 𝒄 → ϕ ((𝑓 ̂ 𝑪) 𝒄) ≡ ((𝑓 ̂ 𝑩)(ϕ ∘ 𝒄))
 

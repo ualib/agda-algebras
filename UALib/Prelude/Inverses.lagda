@@ -34,10 +34,7 @@ module _ {𝓤 𝓦 : Universe} where
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
 
- ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B)(a : A)
-                ---------------------------------------------
-  →             b ≡ f a → Image f ∋ b
-
+ ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B)(a : A) → b ≡ f a → Image f ∋ b
  ImageIsImage f b a b≡fa = eq b a b≡fa
 
 \end{code}
@@ -46,10 +43,7 @@ The following restatement of the last lemma simply rearranges the arguments in c
 
 \begin{code}
 
- ImageIsImage' : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(a : A)(b : B)
-                  ---------------------------------------------
-  →               f a ≡ b  →  Image f ∋ b
-
+ ImageIsImage' : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(a : A)(b : B) → f a ≡ b → Image f ∋ b
  ImageIsImage' f a b fab = eq b a (fab ⁻¹)
 
 \end{code}
@@ -69,9 +63,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 \begin{code}
 
  InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
-
  InvIsInv f {.(f a)} (im a) = refl
-
  InvIsInv f (eq _ _ p) = p ⁻¹
 
 \end{code}
@@ -95,11 +87,7 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
 
 \begin{code}
 
- EpicInv : {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-           (f : A → B) → Epic f
-           --------------------
-  →        B → A
-
+ EpicInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) → Epic f → B → A
  EpicInv f fE b = Inv f (fE b)
 
 \end{code}
@@ -108,24 +96,18 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`. To st
 
 \begin{code}
 
-module hide-∘ {𝓤 𝓦 : Universe} where
+module hide-∘ {𝓤 𝓦 : Universe}{X : 𝓤 ̇}{Y : 𝓦 ̇} where
 
- _∘_ : {X : 𝓤 ̇ } {Y : 𝓦 ̇}{Z : Y → 𝓦 ̇ }
-  →    Π Z → (f : X → Y) → (x : X) → Z (f x)
-
+ _∘_ : {Z : Y → 𝓦 ̇ } → Π Z → (f : X → Y) → (x : X) → Z (f x)
  g ∘ f = λ x → g (f x)
 
 open import MGS-MLTT using (_∘_) public
 
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- EpicInvIsRightInv : funext 𝓦 𝓦 → {A : 𝓤 ̇ } {B : 𝓦 ̇ }
-                     (f : A → B)  (fE : Epic f)
-                     --------------------------
-  →                  f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
-
- EpicInvIsRightInv fe f fE = fe (λ x → InvIsInv f (fE x))
+ EpicInvIsRightInv : (f : A → B)(fE : Epic f) → f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
+ EpicInvIsRightInv f fE = fe (λ x → InvIsInv f (fE x))
 
 \end{code}
 
@@ -139,7 +121,9 @@ We say that a function `g : A → B` is **monic** (or **injective** or **one-to-
 
 \begin{code}
 
- Monic : {A : 𝓤 ̇ } {B : 𝓦 ̇ }(g : A → B) → 𝓤 ⊔ 𝓦 ̇
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+
+ Monic : (g : A → B) → 𝓤 ⊔ 𝓦 ̇
  Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
 
 \end{code}
@@ -148,10 +132,7 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function `
 
 \begin{code}
 
- --The (pseudo-)inverse of a monic function
- MonicInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) → Monic f
-  →         (b : B) → Image f ∋ b → A
-
+ MonicInv : (f : A → B) → Monic f → (b : B) → Image f ∋ b → A
  MonicInv f _ = λ b Imf∋b → Inv f Imf∋b
 
 \end{code}
@@ -160,11 +141,9 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 \begin{code}
 
- --The (psudo-)inverse of a monic is the left inverse.
- MonicInvIsLeftInv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B)(fmonic : Monic f)(x : A)
-   →                 (MonicInv f fmonic)(f x)(im x) ≡ x
-
- MonicInvIsLeftInv f fmonic x = refl
+ MonicInvIsLeftInv : {f : A → B}{fM : Monic f}{x : A}
+   →                 (MonicInv f fM)(f x)(im x) ≡ x
+ MonicInvIsLeftInv = refl
 
 \end{code}
 
@@ -186,9 +165,11 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
    βinv = EpicInv β βe
 
    ζ : β (βinv y) ≡ y
-   ζ = ap (λ - → - y) (EpicInvIsRightInv fe β βe)
+   ζ = cong-app (EpicInvIsRightInv {fe = fe} β βe) y
+
    η : (ϕ ∘ ξ) (βinv y) ≡ y
-   η = (ap (λ - → - (βinv y)) (compId ⁻¹)) ∙ ζ
+   η = (cong-app (compId ⁻¹)(βinv y)) ∙ ζ
+
    γ : Image ϕ ∋ y
    γ = eq y (ξ (βinv y)) (η ⁻¹)
 

@@ -84,7 +84,7 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
  global-funext = ∀  {𝓤 𝓥} → funext 𝓤 𝓥
 
  global-dfunext : 𝓤ω
- global-dfunext = ∀ {𝓤 𝓥} → funext 𝓤 𝓥
+ global-dfunext = ∀ {𝓤 𝓥} → dfunext 𝓤 𝓥
 
 \end{code}
 
@@ -95,6 +95,7 @@ Before moving on to the next section, let us pause to make a public import of th
 \begin{code}
 
 open import MGS-FunExt-from-Univalence using (_∼_; funext; dfunext) public
+open import MGS-Subsingleton-Theorems using (global-dfunext) public
 
 \end{code}
 
@@ -197,7 +198,7 @@ module hide-hfunext where
 
  hfunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
  hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
-open import MGS-FunExt-from-Univalence using (hfunext) public
+open import MGS-Subsingleton-Truncation using (hfunext) public
 
 \end{code}
 

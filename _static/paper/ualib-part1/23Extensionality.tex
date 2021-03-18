@@ -164,12 +164,12 @@ As alluded to above, a natural notion of function equality, sometimes called \em
 In informal settings, this so-called ``pointwise equality of functions'' is typically what one means when one
 asserts that two functions are ``equal.''\footnote{%
 If one assumes the \emph{univalence axiom} of Homotopy Type Theory, then the \af{\_∼\_} relation is equivalent to equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of Escard\'o's notes~\cite{MHE}.}
-However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}~(\cite{MHE}).
+However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}.~\cite{MHE}
 
 \subsubsection{Global function extensionality}\label{sec:glob-funct-extens}
 
 An assumption that we adopt throughout much of the current version of the \ualib is a \emph{global function extensionality principle}. This asserts that function extensionality holds at all universe levels. Agda is capable of expressing types representing global principles as the language has a special universe level for such types.
-Following Escardó, we denote this universe by 𝓤ω (which is just an alias for Agda's \ad{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
+Following Escardó, we denote this universe by \AgdaPrimitive{𝓤ω} (which is just an alias for Agda's \ad{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
 \href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.}
 The types \af{global-funext} and \af{global-dfunext} are defined in the \typetopology library as follows.
 \ccpad
@@ -209,7 +209,7 @@ The types \af{global-funext} and \af{global-dfunext} are defined in the \typetop
 \end{code}
 \ccpad
 The next two types define the converse of function extensionality.\footnote{In previous versions of the
-\ualib this function was called \af{intensionality}, indicating that it represented the concept of \emph{function intensionality}, but we realized this isn't quite right and changed the name to the less controvertial \af{extfun}.  Also, we later realized that a function called \af{happly}, which is nearly identical to \af{extdfun}, was already defined in the \am{MGS-FunExt-from-Univalence} module of the \typetopology library.}
+\ualib this function was called \af{intensionality}, indicating that it represented the concept of \emph{function intensionality}, but we realized this isn't quite right and changed the name to the less controvertial \af{extfun}. Later we realized that a function called \af{happly}, which is nearly identical to \af{extdfun}, is already defined in the \am{MGS-FunExt-from-Univalence} module of the \typetopology library.}
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{extfun}\AgdaSpace{}%
