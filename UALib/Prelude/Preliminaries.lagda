@@ -67,7 +67,7 @@ The main module of a file must have the same name as the file, without the `.agd
 
 
 
-#### <a id="Universes">Universes</a>
+#### <a id="agda-universes">Agda Universes</a>
 
 For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the [Agda documentation](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html).
 
@@ -190,9 +190,9 @@ open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π; -Π) public
 
 \end{code}
 
-##### Notation for the first and second projections
+#### <a id="projection notation">Projection notation</a>
 
-The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣\_∣` and `∥\_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `pr₁` and `fst` for the first projection, `pr₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
+The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `pr₁` and `fst` for the first projection, `pr₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
 
 \begin{code}
 

@@ -382,7 +382,7 @@ We use the \ak{public} directive so that the types are available to all modules 
 
 \paragraph*{Notation for the first and second projections}
 
-The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \af{pr₂} representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by \af{∣\_∣} and \af{∥\_∥}, respectively. However, for emphasis or readability we alternate between these and the following standard notations: \af{pr₁} and \af{fst} for the first projection, \af{pr₂} and \af{snd} for the second.  We define these alternative notations for projections as follows.
+The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \af{pr₂} representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by \af{∣\_∣} and \af{∥\_∥}, respectively. However, for emphasis or readability we alternate between these and the following standard notations: \af{pr₁} and \af{fst} for the first projection, \af{pr₂} and \af{snd} for the second.  We define these alternative notations for projections as follows.\footnote{We put these definitions inside an \defn{anonymous module}, which starts with the \ak{module} keyword followed by an underscore (instead of a module name). The purpose is to move some of the postulated typing judgments---the ``parameters'' of the module (e.g., \ab 𝓤 \as : \AgdaPostulate{Universe})---out of the way so they don't obfuscate the definitions inside the module. N.B. In library documentation like the present paper we often omit such module directives, while the collection of html pages at \ualibdotorg---most current and comprehensive documentation of the \ualib---omits nothing.}
 % \footnote{We have made a concerted effort to avoid duplicating types that are already provided elsewhere, such as the \typetopology library.  We occasionally repeat the definitions of such types for pedagogical purposes, but we always import and work with the original definitions in order to make the sources known and to credit the original authors.}
 \ccpad
 \begin{code}%
@@ -477,4 +477,3 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-Note that we put the definitions above inside an \defn{anonymous module}, which starts with the \ak{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the ``parameters'' of the module (e.g., \ab 𝓤 \as : \AgdaPostulate{Universe})---out of the way so they don't obfuscate the definitions inside the module.

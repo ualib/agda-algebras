@@ -72,7 +72,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 
 
-#### <a id="surjective-functions">Surjective functions</a>
+#### <a id="epics"">Epics (surjective functions)</a>
 
 An epic (or surjective) function from type `A : 𝓤 ̇` to type `B : 𝓦 ̇` is as an inhabitant of the `Epic` type, which we define as follows.
 
@@ -115,9 +115,9 @@ module _ {𝓤 𝓦 : Universe}{fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇}
 
 
 
-#### <a id="injective-functions">Injective functions</a>
+#### <a id="monics">Monics (injective functions)</a>
 
-We say that a function `g : A → B` is **monic** (or **injective** or **one-to-one**) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
+We say that a function `g : A → B` is *monic* (or *injective* or *one-to-one*) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
 
 \begin{code}
 
@@ -194,33 +194,29 @@ open import MGS-Embeddings using (is-embedding) public
 
 This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
 
-Of course, invertible maps are embeddings.
+Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 
 \begin{code}
 
-invertibles-are-embeddings : {𝓧 𝓨 : Universe}
-                             {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y)
- →                           invertible f → is-embedding f
+module _ {𝓧 𝓨 : Universe} where
 
-invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
+ invertibles-are-embeddings : {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y) → invertible f → is-embedding f
+ invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
 
 \end{code}
 
-Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an embedding we can construct a proof of `Monic f`.
+Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an embedding we can construct a proof of `Monic f`.  We confirm this as follows.
 
 \begin{code}
 
+ embedding-is-monic : {X : 𝓧 ̇}{Y : 𝓨 ̇}(f : X → Y) → is-embedding f → Monic f
+ embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
+  where
+  fa : fiber f (f x)
+  fa = x , refl
 
-embedding-is-monic : {𝓧 𝓨 : Universe} {X : 𝓧 ̇}{Y : 𝓨 ̇}
-                     (f : X → Y) → is-embedding f → Monic f
-
-embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
- where
- fa : fiber f (f x)
- fa = x , refl
-
- fb : fiber f (f x)
- fb = x' , (fxfx' ⁻¹)
+  fb : fiber f (f x)
+  fb = x' , (fxfx' ⁻¹)
 
 \end{code}
 

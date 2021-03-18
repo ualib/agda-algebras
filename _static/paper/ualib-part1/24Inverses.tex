@@ -87,14 +87,16 @@ Next we verify that the type just defined is what we expect.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\<%
-\\
-\>[.][@{}l@{}]\<[72I]%
-\>[16]\AgdaComment{---------------------------------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[16]\AgdaBound{b}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+% \\
+% \>[.][@{}l@{}]\<[72I]%
+% \>[16]\AgdaComment{---------------------------------------------}\<%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]
+\AgdaSymbol{→}\AgdaSpace{}%
+% \>[16]
+\AgdaBound{b}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
@@ -105,8 +107,8 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{b}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{ImageIsImage}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
@@ -402,56 +404,113 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 % \\
 % %
 % \\[\AgdaEmptyExtraSkip]%
+% \begin{code}
+% \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
+% \AgdaSymbol{:}%
+% \>[327I]\AgdaFunction{funext}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\<%
+% \\
+% \>[.][@{}l@{}]\<[327I]%
+% \>[21]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{B}\AgdaSymbol{)}%
+% \>[34]\AgdaSymbol{(}\AgdaBound{fepi}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Epic}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSymbol{)}\<%
+% \\
+% %
+% \>[21]\AgdaComment{--------------------------}\<%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]\AgdaSymbol{→}%
+% \>[21]\AgdaBound{f}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{EpicInv}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{fepi}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaFunction{𝑖𝑑}\AgdaSpace{}%
+% \AgdaBound{B}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
+% \AgdaBound{fe}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{fepi}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{fe}\AgdaSpace{}%
+% \AgdaSymbol{(λ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{InvIsInv}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{fepi}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{))}\<%
+% \end{code}
+%
 \begin{code}
-\>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[327I]\AgdaFunction{funext}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
 \\
-\>[.][@{}l@{}]\<[327I]%
-\>[21]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}%
-\>[34]\AgdaSymbol{(}\AgdaBound{fepi}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Epic}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSymbol{)}\<%
-\\
-%
-\>[21]\AgdaComment{--------------------------}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[21]\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{EpicInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fepi}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{fE}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaFunction{𝑖𝑑}\AgdaSpace{}%
 \AgdaBound{B}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
-\AgdaBound{fe}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fepi}\AgdaSpace{}%
+\AgdaBound{fE}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -459,28 +518,39 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{InvIsInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fepi}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
 
+
+
+
+
 \subsubsection{Monics (injective functions)}\label{injective-functions}
 
-We say that a function \ab g \as : \ab A \as → \ab B is \textbf{monic} (or \textbf{injective} or \textbf{one-to-one}) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the \af{Monic} type, which we now define.
+We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective} or \defn{one-to-one}) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the \af{Monic} type, which we now define.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{Monic}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{Monic}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -510,20 +580,12 @@ We say that a function \ab g \as : \ab A \as → \ab B is \textbf{monic} (or \te
 \AgdaBound{a₂}\<%
 \end{code}
 \ccpad
-Again, we obtain a pseudoinverse. Here it is obtained by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
+We obtain the (left-)inverse by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -531,12 +593,7 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function \
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Monic}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-% \<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
 \AgdaSymbol{→}\AgdaSpace{}%
-% \>[12]
 \AgdaSymbol{(}\AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
@@ -562,36 +619,30 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function \
 \AgdaBound{Imf∋b}\<%
 \end{code}
 \ccpad
-The function defined by \af{MonicInv} \ab f \ab{fM} is the left-inverse of \ab f.
+The function defined by \af{MonicInv} \ab f \ab{fM} is a (left-)pseudo-inverse
+of \ab f, and the proof is trivial.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInvIsLeftInv}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[100I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)(}\AgdaBound{fmonic}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{\}\{}\AgdaBound{fM}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Monic}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{\}\{}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[100I]%
-\>[21]\AgdaSymbol{(}\AgdaFunction{MonicInv}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[3]
+\AgdaSymbol{→}\AgdaSpace{}%
+% \>[21]
+\AgdaSymbol{(}\AgdaFunction{MonicInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fmonic}\AgdaSymbol{)(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{fM}\AgdaSymbol{)(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)(}\AgdaInductiveConstructor{im}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -599,9 +650,6 @@ The function defined by \af{MonicInv} \ab f \ab{fM} is the left-inverse of \ab f
 \\
 %
 \>[1]\AgdaFunction{MonicInvIsLeftInv}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fmonic}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
@@ -777,7 +825,7 @@ The function defined by \af{MonicInv} \ab f \ab{fM} is the left-inverse of \ab f
 % is defined in the \typetopology library, using the \af{is-subsingleton} type \href{Prelude.Extensionality.html\#alternative-extensionality-type}{described earlier}, as follows.
 
 % Finally, t
-The type \af{is-embedding} \ab f denotes the assertion that \ab f is a function all of whose fibers are subsingletons.
+The type \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-embedding}\AgdaSpace{}%
@@ -817,7 +865,52 @@ The type \af{is-embedding} \ab f denotes the assertion that \ab f is a function 
 \ccpad
 This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibhtml{Relations.Truncation} module and take up the topic of sets.
 
-It should be clear that embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f that \ab f is an embedding we can construct a proof of \af{Monic} \ab f. We verify this as follows.
+Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[621I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSymbol{)}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[.][@{}l@{}]\<[621I]%
+\>[29]\AgdaFunction{invertible}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{is-embedding}\AgdaSpace{}%
+\AgdaBound{f}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{fi}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{equivs-are-embeddings}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{invertibles-are-equivs}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{fi}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+Finally, it should be clear that embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f that \ab f is an embedding we can construct a proof of \af{Monic} \ab f. We confirm this as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{embedding-is-monic}\AgdaSpace{}%
@@ -902,47 +995,3 @@ It should be clear that embeddings are monic; from a proof \ab p \as : \af{is-em
 \end{code}
 \scpad
 
-Finally, one way to show that a function is an embedding is to first prove it is invertible and then invoke the following theorem.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[621I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[621I]%
-\>[29]\AgdaFunction{invertible}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-embedding}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fi}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{equivs-are-embeddings}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{invertibles-are-equivs}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fi}\AgdaSymbol{)}\<%
-\end{code}

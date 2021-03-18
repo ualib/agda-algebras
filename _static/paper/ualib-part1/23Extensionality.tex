@@ -203,7 +203,7 @@ The types \af{global-funext} and \af{global-dfunext} are defined in the \typetop
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaFunction{dfunext}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓥}\<%
 \end{code}
@@ -281,7 +281,11 @@ The next two types define the converse of function extensionality.\footnote{In p
 \end{code}
 \scpad
 
-Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions we have seen so far.  We do so by comparing the definitions of \af{funext} and \af{extfun}.  In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇). In the definition of \af{extfun}, the codomain is an assertion (namely, \ab f \af ∼ \ab g).  Also, the defining equation of \af{funext} is an assertion, while the defining equation of \af{extfun} is a proof.  As such, \af{extfun} is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{funext} is a type, and we may or may not wish to assume we have a proof for this type. That is, we could postulate that function extensionality holds and assume we have a witness, say, \ab{fe} \as : \af{funext} \ab 𝓤 \ab 𝓥 (i.e., a proof that pointwise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
+Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two flavors of type definition.  We do so by comparing the definitions of \af{funext} and \af{extfun}.
+
+In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇), and the right-hand side of the defining equation of \af{funext} is an assertion (which may or may not hold). In the definition of \af{extfun}, the codomain is an assertion (namely, \ab f \af ∼ \ab g), and the right-hand side of the defining equation is a proof of this assertion.
+
+As such, \af{extfun} is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{funext} is a type, and we may or may not wish to assume we have a proof for this type. That is, we could postulate that function extensionality holds and assume we have a witness, say, \ab{fe}~\as :~\af{funext}~\ab 𝓤~\ab 𝓥 (i.e., a proof that pointwise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
 \subsubsection{Alternative extensionality type}\label{alternative-extensionality-type}
 
@@ -448,8 +452,7 @@ A function is called an \defn{equivalence} if all of its fibers are singletons.
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Now we are finally ready to define the type \af{hfunext} that gives an alternative means of postulating function
-extensionality.
+We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{hfunext}\AgdaSpace{}%
