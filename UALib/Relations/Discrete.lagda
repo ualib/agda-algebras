@@ -48,14 +48,14 @@ We introduce notation so that we may indicate that `x` "belongs to" or "inhabits
 
 \begin{code}
 
-module _ {𝓧 𝓨 : Universe} where
+module _ {𝓧 𝓨 : Universe} {A : 𝓧 ̇ } where
 
- _∈_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
+ _∈_ : A → Pred A 𝓨 → 𝓨 ̇
  x ∈ P = P x
 
  open import MGS-MLTT using (¬) public
 
- _∉_ : {A : 𝓧 ̇ } → A → Pred A 𝓨 → 𝓨 ̇
+ _∉_ : A → Pred A 𝓨 → 𝓨 ̇
  x ∉ P = ¬ (x ∈ P)
 
  infix 4 _∈_ _∉_
@@ -66,13 +66,20 @@ The "subset" relation is denoted, as usual, with the `⊆` symbol (cf. `Relation
 
 \begin{code}
 
-_⊆_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
-P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
+module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
-_⊇_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
-P ⊇ Q = Q ⊆ P
+ _⊆_ : Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
-infix 4 _⊆_ _⊇_
+ infix 4 _⊆_
+
+
+module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
+
+ _⊇_ : Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ P ⊇ Q = Q ⊆ P
+
+ infix 4 _⊇_
 
 \end{code}
 
@@ -82,10 +89,12 @@ In type theory everything is represented as a type and, as we have just seen, th
 
 \begin{code}
 
-_≐_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } → Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
-P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
+module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
-infix 4 _≐_
+ _≐_ : Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
+
+ infix 4 _≐_
 
 \end{code}
 
@@ -95,8 +104,10 @@ If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then of course both `
 
 \begin{code}
 
-Pred-≡ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨} → P ≡ Q → P ≐ Q
-Pred-≡ refl = (λ z → z) , (λ z → z)
+module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
+
+ Pred-≡ : {P Q : Pred A 𝓨} → P ≡ Q → P ≐ Q
+ Pred-≡ refl = (λ z → z) , (λ z → z)
 
 \end{code}
 
@@ -104,8 +115,11 @@ The converse is not provable in [MLTT][]. However, we can define its type and po
 
 \begin{code}
 
-ext-axiom : {𝓧 : Universe} → 𝓧 ̇ → (𝓨 : Universe) → 𝓧 ⊔ 𝓨 ⁺ ̇
-ext-axiom A 𝓨 = ∀ (P Q : Pred A 𝓨) → P ≐ Q → P ≡ Q
+module _ {𝓧 : Universe} where
+
+ ext-axiom : 𝓧 ̇ → (𝓨 : Universe) → 𝓧 ⊔ 𝓨 ⁺ ̇
+ ext-axiom A 𝓨 = ∀ (P Q : Pred A 𝓨) → P ≐ Q → P ≡ Q
+
 \end{code}
 
 We treat this axiom in greater generally and detail in the [Relations.Truncation][] module.
@@ -287,11 +301,9 @@ module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
 
 #### <a id="implication">Implication</a>
 
-We denote and define implication for binary predicates (relations) as follows.
+We denote and define implication for binary predicates (relations) as follows. (These are borrowed from the [Agda Standard Library][]; we have merely translated them into [Type Topology][]/[UALib][] notation.)
 
 \begin{code}
-
--- (syntactic sugar)
 
 module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇} where
 
@@ -308,7 +320,7 @@ module _ {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ } where
 
 \end{code}
 
-We can combine `_on_` and _⇒_ to define a nice, general implication operation. This is borrowed from the [Agda Standard Library][]; we have merely translated into [Type Topology][]/[UALib][] notation.
+The `_on_` and `_⇒_` types combine to give a nice, general implication operation.
 
 \begin{code}
 
