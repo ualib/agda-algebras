@@ -3,12 +3,11 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-The type referred to as "reflexivity" or "refl" is a very basic but important
-type in MLTT. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
-The refl type we use is a standard one. It is defined in the \am{Identity-Type} module of the \typetopology library, but (apart from slightly different syntax) it is equivalent to the identity type used in most other Agda libraries.
+The type referred to as ``reflexivity'' or ``refl'' is a very basic but important
+type in \mltt. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see \url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
+The refl type we use is a standard one and is defined in the \am{Identity-Type} module of the \typetopology library. Apart from superficial syntactic differences it is equivalent to the identity type used in other Agda libraries.
 
-We make refl available by importing it from the \am{Identity-Type} module. However, we first repeat the definition here (inside a hidden submodule) for clarity.\footnote{To hide code from the rest of the development, we enclose it
-  in a named module.  For example, the code inside the \af{hide-refl} module will not conflict with the original definitions from the \typetopology library, even though we import the latter right after presenting the definition.  As long as we don't invoke \ak{open} \af{hide-refl}, the code inside the \af{hide-refl} module remains essentially hidden (though Agda \emph{will} type-check the code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the \ualib depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.}
+We make refl available by importing it from the \am{Identity-Type} module. However, we first repeat the definition here (inside a hidden submodule) for clarity.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%

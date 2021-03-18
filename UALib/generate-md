@@ -71,6 +71,8 @@ mv html/Varieties.Varieties.{tex,md}
 mv html/Varieties.Preservation.{tex,md}
 mv html/Varieties.FreeAlgebras.{tex,md}
 
+mv html/Appendix.Imports.{tex,md}
+
 paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg
 
 # bundle exec jekyll build

@@ -254,6 +254,9 @@
 [UALib.Varieties.FreeAlgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/FreeAlgebras.lagda
 [univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom
 
+[Appendix]: Appendix.html
+[Appendix.Imports]: Appendix.Imports.html
+
 
 <!--
 [core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean

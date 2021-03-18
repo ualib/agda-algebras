@@ -25,7 +25,7 @@ The type referred to as "reflexivity" or "refl" is a very basic but important on
 
 The `refl` type we use is a standard one. It is defined in the `Identity-Type` module of the [Type Topology][] library, but apart from syntax it is equivalent to the identity type used in most other Agda libraries.
 
-We make `refl` available by importing it from the `Identity-Type` module.  However, we first repeat the definition here (inside a hidden submodule) for clarity.<sup>[1](Prelude.Equality.html#fn1)</sup>
+We make `refl` available by importing it from the `Identity-Type` module.  However, we first repeat the definition here (inside a hidden submodule) for clarity. (See [the remark about hidden modules](Prelude.Equality.html#fn3) in the [third footnote](Prelude.Preliminaries.html#fn3).html#fn1) of the [Prelude.Preliminaries][] module.)
 
 \begin{code}
 
@@ -166,11 +166,10 @@ We conclude the Equality module with some occasionally useful introduction and e
 
 -------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library, even though we import the latter right after repeating their definitions.  As long as we don't invoke `open hide-refl`, the code inside the `hide-refl` module remains essentially hidden (though Agda *will* type-check this code). It may seem odd to both define things in the hidden module only to immediately import the definition that we actually use, but we do this in an attempt to exhibit all of the types on which the [UALib][] depends, in a clear and self-contained way, while also ensuring that this cannot be misinterpreted as a claim to originality.</span>
 
-<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+<sup>1</sup><span class="footnote" id="fn1"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
 
-<sup>3</sup><span class="footnote" id="fn3"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170).
+<sup>2</sup><span class="footnote" id="fn2"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170).
 
 <p></p>
 <p></p>

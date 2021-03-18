@@ -77,6 +77,7 @@ open import Homomorphisms
 open import Terms
 open import Subalgebras
 open import Varieties
+open import Appendix
 
 \end{code}
 
@@ -84,47 +85,50 @@ open import Varieties
 
 ### <a id="detailed-contents"></a> Detailed Contents
 
-- [Preface](Preface.html)
+- [Preface][]
 
-- [Prelude](Prelude.html)
+- [Prelude][]
   - [Preliminaries](Prelude.Preliminaries.html)
   - [Equality](Prelude.Equality.html)
   - [Function Extensionality](Prelude.Extensionality.html)
   - [Inverses](Prelude.Inverses.html)
   - [Agda's Universe Hierarchy](Prelude.Lifts.html)
 
-- [Relation and Quotient Types](Relations.html)
+- [Relations][]
   - [Discrete Relations](Relations.Discrete.html)
   - [Continuous Relations](Relations.Continuous.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
   - [Truncation and Proposition Extensionality](Relations.Truncation.html)
 
-- [Algebra Types](Algebras.html)
+- [Algebras][]
   - [Operations and Signatures](Algebras.Signatures.html)
   - [Algebras](Algebras.Algebras.html)
   - [Product Algebras](Algebras.Products.html)
   - [Congruence Relations](Algebras.Congruences.html)
 
-- [Homomorphism Types](Homomorphisms.html)
+- [Homomorphisms][]
   - [Basic definitions](Homomorphisms.Basic.html)
   - [Homomorphism Theorems](Homomorphisms.Noether.html)
   - [Isomorphisms](Homomorphisms.Isomorphisms.html)
   - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
 
-- [Types for Terms](Terms.html)
+- [Terms][]
   - [Basic Definitions](Terms.Basic.html)
   - [Term Operations](Terms.Operations.html)
 
-- [Subalgebra Types](Subalgebras.html)
+- [Subalgebras][]
   - [Subuniverses](Subalgebras.Subuniverses.html)
   - [Subalgebras](Subalgebras.Subalgebras)
   - [Univalent Subalgebras](Subalgebras.Univalent.html)
 
-- [Types for Equations and Varieties](Varieties.html)
+- [Varieties][]
   - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
   - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
   - [Equation Preservation Theorems](Varieties.Preservation.html)
   - [Free Algebras and Birkhoff's Theorem](Varieties.FreeAlgebras.html)
+
+- [Appendix][]
+  - [Imports](Appendix.Imports.html)
 
 ---------------------------------------
 
