@@ -28,6 +28,6 @@ open import Relations.Truncation
 <p></p>
 
 [← Prelude.Lifts](Prelude.Lifts.html)
-<span style="float:right;">[Relations.Unary →](Relations.Small.html)</span>
+<span style="float:right;">[Relations.Unary →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

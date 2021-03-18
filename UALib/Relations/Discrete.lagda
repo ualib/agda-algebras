@@ -117,27 +117,34 @@ We treat this axiom in greater generally and detail in the [Relations.Truncation
 Here is a small collection of tools that will come in handy later.  Hopefully the meaning of each is self-explanatory.
 
 \begin{code}
+module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } where
 
-_∈∈_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } → (A  →  B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
-_∈∈_ f S = (x : _) → f x ∈ S
+ Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
+ Im_⊆_ f S = ∀ x → f x ∈ S
 
-Pred-refl : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          P ≡ Q → (a : A) → a ∈ P → a ∈ Q
-Pred-refl refl _ = λ z → z
 
-Pred-≡→⊆ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          P ≡ Q → (P ⊆ Q)
-Pred-≡→⊆ refl = (λ z → z)
+img : {𝓧 : Universe}{X Y : 𝓧 ̇ }(f : X → Y)(P : Pred Y 𝓧) → Im f ⊆ P → X → Σ P
+img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
-Pred-≡→⊇ : {𝓧 𝓨 : Universe}{A : 𝓧 ̇}{P Q : Pred A 𝓨}
- →          P ≡ Q → (P ⊇ Q)
-Pred-≡→⊇ refl = (λ z → z)
+
+module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
+
+ Pred-refl : {P Q : Pred A 𝓨} → P ≡ Q → (a : A) → a ∈ P → a ∈ Q
+ Pred-refl refl _ = λ z → z
+
+ Pred-≡→⊆ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊆ Q)
+ Pred-≡→⊆ refl = (λ z → z)
+
+ Pred-≡→⊇ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊇ Q)
+ Pred-≡→⊇ refl = (λ z → z)
+
 
 -- Disjoint Union.
 data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
 infixr 1 _⊎_
+
 
 -- Union.
 _∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩 → Pred A _
@@ -151,18 +158,9 @@ open import MGS-MLTT using (𝟘)
 ∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
 ∅ = λ _ → 𝟘
 
-
 -- Singletons.
 ｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
-
-Im_⊆_ : {𝓧 𝓨 𝓩 : Universe} {A : 𝓧 ̇ } {B : 𝓨 ̇ } → (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
-Im_⊆_ {A = A} f S = (x : A) → f x ∈ S
-
-img : {𝓧 : Universe}{X : 𝓧 ̇ } {Y : 𝓧 ̇ }
-      (f : X → Y) (P : Pred Y 𝓧)
- →    Im f ⊆ P →  X → Σ P
-img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
 
 \end{code}
 
@@ -202,9 +200,9 @@ A generalization of the notion of binary relation is a *relation from* `A` *to* 
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+module _ {𝓤 𝓡 : Universe} where
 
- REL : {𝓡 : Universe} → 𝓤 ̇ → 𝓡 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓡 ⊔ 𝓝 ⁺) ̇
+ REL : 𝓤 ̇ → 𝓡 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓡 ⊔ 𝓝 ⁺) ̇
  REL A B 𝓝 = A → B → 𝓝 ̇
 
 \end{code}
@@ -217,8 +215,8 @@ The kernel of a function can be defined in many ways. For example,
 
 \begin{code}
 
- KER : {𝓡 : Universe} {A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → 𝓤 ⊔ 𝓡 ̇
- KER {𝓡} {A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
+ KER : {A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → 𝓤 ⊔ 𝓡 ̇
+ KER {A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
 
 \end{code}
 
@@ -226,7 +224,7 @@ or as a unary relation (predicate) over the Cartesian product,
 
 \begin{code}
 
- KER-pred : {𝓡 : Universe} {A : 𝓤 ̇}{B : 𝓡 ̇} → (A → B) → Pred (A × A) 𝓡
+ KER-pred : {A : 𝓤 ̇}{B : 𝓡 ̇} → (A → B) → Pred (A × A) 𝓡
  KER-pred g (x , y) = g x ≡ g y
 
 \end{code}
@@ -234,6 +232,8 @@ or as a unary relation (predicate) over the Cartesian product,
 or as a relation from `A` to `B`,
 
 \begin{code}
+
+module _ {𝓤 : Universe} where
 
  Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
  Rel A 𝓝 = REL A A 𝓝
@@ -246,35 +246,40 @@ or as a relation from `A` to `B`,
 #### <a id="examples">Examples</a>
 
 \begin{code}
- ker : {A B : 𝓤 ̇ } → (A → B) → 𝓤 ̇
+
+module _ {𝓤 : Universe}{A B : 𝓤 ̇ } where
+
+ ker : (A → B) → 𝓤 ̇
  ker = KER{𝓤}
 
- ker-rel : {A B : 𝓤 ̇ } → (A → B) → Rel A 𝓤
+ ker-rel : (A → B) → Rel A 𝓤
  ker-rel = KER-rel {𝓤}
 
- ker-pred : {A B : 𝓤 ̇ } → (A → B) → Pred (A × A) 𝓤
+ ker-pred : (A → B) → Pred (A × A) 𝓤
  ker-pred = KER-pred {𝓤}
 
+module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
+
  --The identity relation.
- 𝟎 : {A : 𝓤 ̇ } → 𝓤 ̇
- 𝟎 {A} = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
+ 𝟎 : 𝓤 ̇
+ 𝟎 = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
 
  --...as a binary relation...
- 𝟎-rel : {A : 𝓤 ̇ } → Rel A 𝓤
+ 𝟎-rel : Rel A 𝓤
  𝟎-rel a b = a ≡ b
 
  --...as a binary predicate...
- 𝟎-pred : {A : 𝓤 ̇ } → Pred (A × A) 𝓤
+ 𝟎-pred : Pred (A × A) 𝓤
  𝟎-pred (a , a') = a ≡ a'
 
- 𝟎-pred' : {A : 𝓤 ̇ } → 𝓤 ̇
- 𝟎-pred' {A} = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
+ 𝟎-pred' : 𝓤 ̇
+ 𝟎-pred' = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
 
 
  open import MGS-MLTT using (𝟙)
 
  -- The total relation A × A
- 𝟏 : {A : 𝓤 ̇ } → Rel A 𝓤₀
+ 𝟏 : Rel A 𝓤₀
  𝟏 a b = 𝟙
 \end{code}
 
@@ -287,18 +292,19 @@ We denote and define implication for binary predicates (relations) as follows.
 \begin{code}
 
 -- (syntactic sugar)
-_on_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
- →     (B → B → C) → (A → B) → (A → A → C)
 
-R on g = λ x y → R (g x) (g y)
+module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇} where
+
+ _on_ : (B → B → C) → (A → B) → (A → A → C)
+ R on g = λ x y → R (g x) (g y)
 
 
-_⇒_ : {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ }
- →    REL A B 𝓨 → REL A B 𝓩 → 𝓦 ⊔ 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+module _ {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ } where
 
-P ⇒ Q = ∀ {i j} → P i j → Q i j
+ _⇒_ : REL A B 𝓨 → REL A B 𝓩 → 𝓦 ⊔ 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ P ⇒ Q = ∀ {i j} → P i j → Q i j
 
-infixr 4 _⇒_
+ infixr 4 _⇒_
 
 \end{code}
 
@@ -306,12 +312,12 @@ We can combine `_on_` and _⇒_ to define a nice, general implication operation.
 
 \begin{code}
 
-_=[_]⇒_ : {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ }
- →        Rel A 𝓨 → (A → B) → Rel B 𝓩 → 𝓦 ⊔ 𝓨 ⊔ 𝓩 ̇
+module _ {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ } where
 
-P =[ g ]⇒ Q = P ⇒ (Q on g)
+ _=[_]⇒_ : Rel A 𝓨 → (A → B) → Rel B 𝓩 → 𝓦 ⊔ 𝓨 ⊔ 𝓩 ̇
+ P =[ g ]⇒ Q = P ⇒ (Q on g)
 
-infixr 4 _=[_]⇒_
+ infixr 4 _=[_]⇒_
 
 \end{code}
 
@@ -325,7 +331,7 @@ Before discussing general and dependent relations, we pause to define some types
 module _ {𝓤 𝓥 𝓦 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} where
 
  lift-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
- lift-rel R 𝑎 𝑎' = ∀ i → R (𝑎 i) (𝑎' i)
+ lift-rel R u v = ∀ i → R (u i) (v i)
 
  compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
@@ -337,7 +343,7 @@ We used the slick implication notation in the definition of `compatible-fun`, bu
 \begin{code}
 
  compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- compatible-fun' f R  = ∀ 𝑎 𝑎' → (lift-rel R) 𝑎 𝑎' → R (f 𝑎) (f 𝑎')
+ compatible-fun' f R  = ∀ u v → (lift-rel R) u v → R (f u) (f v)
 
 \end{code}
 

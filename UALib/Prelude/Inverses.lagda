@@ -210,13 +210,13 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 \begin{code}
 
  embedding-is-monic : {X : 𝓧 ̇}{Y : 𝓨 ̇}(f : X → Y) → is-embedding f → Monic f
- embedding-is-monic f femb x x' fxfx' = ap pr₁ ((femb (f x)) fa fb)
+ embedding-is-monic f femb a b fafb = ap pr₁ ((femb (f a)) fa fb)
   where
-  fa : fiber f (f x)
-  fa = x , refl
+  fa : fiber f (f a)
+  fa = a , refl
 
-  fb : fiber f (f x)
-  fb = x' , (fxfx' ⁻¹)
+  fb : fiber f (f a)
+  fb = b , (fafb ⁻¹)
 
 \end{code}
 
