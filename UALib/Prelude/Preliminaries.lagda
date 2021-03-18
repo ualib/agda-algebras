@@ -27,7 +27,7 @@ We begin by noting that only a very small collection of objects is assumed at th
 Like Escardó's, our universe variables are typically upper-case caligraphic letters from the latter half of the English alphabet (e.g., `𝓤`, `𝓥`, `𝓦`, etc.).
 
 
-##### Specifying logical foundations in Agda
+#### <a id="specifying-logical-foundations">Specifying logical foundations in Agda</a>
 
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
 Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in the [UALib][] begins with the following line.
@@ -50,7 +50,8 @@ Note that if we wish to type-check a file that imports another file that still h
 
 
 
-##### <a id="agda-modules">Agda Modules</a>
+#### <a id="agda-modules">Agda Modules</a>
+
 The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Prelude.Preliminaries][] module begins with the following line.
 
 \begin{code}
@@ -66,9 +67,11 @@ The main module of a file must have the same name as the file, without the `.agd
 
 
 
-##### <a id="agda-universes">Agda's universes hierarchy</a>
+#### <a id="Universes">Universes</a>
 
--- Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the *Univalent Foundations* of mathematics.<sup>[1](Prelude.Preliminaries.html#fn1)</sup>  The first of these is the `Universes` module which we import now.<sup>[2](Prelude.Preliminaries.html#fn2)</sup>
+For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the [Agda documentation](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html).
+
+Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the *Univalent Foundations* of mathematics.<sup>[1](Prelude.Preliminaries.html#fn1)</sup>  The first of these is the `Universes` module which we import here.<sup>[2](Prelude.Preliminaries.html#fn2)</sup>
 
 \begin{code}
 
@@ -78,7 +81,7 @@ open import Universes public
 
 Since we used the `public` directive, the `Universes` module will be available to all modules that import [Prelude.Preliminaries][].
 
-The `Universes` module includes a number of symbols used to denote universes. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
+The `Universes` module includes a number of symbols used to denote *universes* in Agda. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
 
 \begin{code}
 
@@ -119,10 +122,6 @@ Setω              𝓤ω
 To justify the introduction of this somewhat nonstandard notation for universe levels, [Escardó][] points out that the Agda library uses `Level` for universes (so what we write as 𝓤 ̇ is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
 
 There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
-
-
-#### <a id="dependent-types">Dependent types</a>
-
 
 
 #### <a id="dependent-pair-type">Sigma types (dependent pairs)</a>
