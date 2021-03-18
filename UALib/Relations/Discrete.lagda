@@ -225,7 +225,7 @@ Given types `A` and `B`, a binary relation from `A` to `B` is not the same as a 
 
 #### <a id="kernels">Kernels</a>
 
-The kernel of a function can be defined in many ways. For example,
+The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f x = f y}`. This can be represented in type theory and Agda in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel as a Sigma type,
 
 \begin{code}
 
