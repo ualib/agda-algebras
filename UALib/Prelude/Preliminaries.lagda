@@ -79,28 +79,20 @@ open import Universes public
 
 \end{code}
 
-Since we used the `public` directive, the `Universes` module will be available to all modules that import [Prelude.Preliminaries][].
+Since we use the `public` directive, the `Universes` module will be available to all modules that import the present module ([Prelude.Preliminaries][]).
 
-The `Universes` module includes a number of symbols used to denote *universes* in Agda. We add one more to the list that we will use to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
+The `Universes` module includes a number of symbols used to denote *universes* in Agda.
+In particular, Following [Escardó][], we refer to universes using capitalized script letters from near the end of the alphabet, e.g., `𝓤`, `𝓥`, `𝓦`, `𝓧`, `𝓨`, `𝓩`, etc. To this list we add one more that we use later to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
 
 \begin{code}
 
-variable
- 𝓞 : Universe
+variable 𝓞 : Universe
 
 \end{code}
 
-The `Universes` module also provides an elegant notation for type universes, and we adopt this notation throughout the Agda UALib.
+The `Universes` module also provides elegant notation for the few primitive operations on universes that Agda supports. Specifically, the ` ̇` operator maps a universe level `𝓤` to the type `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`.
 
-Following [Escardó][], we refer to universes using capitalized script letters from near the end of the alphabet, e.g., 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, etc.
-
-Also in the `Universes` module [Escardó][] defines the ̇ operator which maps a universe 𝓤 (i.e., a level) to `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`.
-
-The level `lzero` is renamed 𝓤₀, so 𝓤₀ ̇ is an alias for `Set lzero` (which, incidentally, corresponds to `Sort 0` in the [Lean][] proof assistant language).
-
-Thus, 𝓤 ̇ is simply an alias for `Set 𝓤`, and we have `Set 𝓤 : Set (lsuc 𝓤)`.
-
-Finally, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we (and [Escardó][]) denote by `𝓤₀ ⁺ ̇`.
+The primitive Agda level `lzero` is renamed `𝓤₀`, so `𝓤₀ ̇` is an alias for `Set lzero`. Thus, `𝓤 ̇` is simply an alias for `Set 𝓤`, and we have the typing judgment `Set 𝓤 : Set (lsuc 𝓤)`. Finally, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we (and [Escardó][]) denote by `𝓤₀ ⁺ ̇`.
 
 The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.
 
@@ -119,9 +111,9 @@ Set (lsuc 𝓤)      𝓤 ⁺ ̇
 Setω              𝓤ω
 ```
 
-To justify the introduction of this somewhat nonstandard notation for universe levels, [Escardó][] points out that the Agda library uses `Level` for universes (so what we write as 𝓤 ̇ is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in 𝓤 ̇ need not be sets, so the standard Agda notation can be misleading.
+To justify the introduction of this somewhat nonstandard notation for universe levels, [Escardó][] points out that the Agda library uses `Level` for universes (so what we write as `𝓤 ̇` is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in `𝓤 ̇` need not be sets, so the standard Agda notation can be misleading.
 
-There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, 𝓤 ̇ and 𝓥 ̇ . The universe 𝓤 ⊔ 𝓥 ̇ denotes this least upper bound. Here 𝓤 ⊔ 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels 𝓤 and 𝓥, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
+There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, `𝓤 ̇` and `𝓥 ̇` . The universe `𝓤 ⊔ 𝓥 ̇` denotes this least upper bound. Here `𝓤 ⊔ 𝓥̇ ` is used to denote the universe level corresponding to the least upper bound of the levels `𝓤` and `𝓥`, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
 
 
 #### <a id="dependent-pair-type">Sigma types (dependent pairs)</a>

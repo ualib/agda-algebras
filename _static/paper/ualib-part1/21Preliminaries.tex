@@ -37,7 +37,7 @@ These options control certain foundational assumptions that Agda makes when type
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
 
 
-\paragraph*{Agda Modules}
+\subsubsection{Agda Modules}\label{sec:agda-modules}
 The \ak{OPTIONS} pragma is usually followed by the start of a module.  For example, the \ualibhtml{Prelude.Preliminaries} module begins with the following line.
 \ccpad
 \begin{code}%
@@ -63,24 +63,63 @@ Such a module is called \emph{anonymous} because an underscore appears in place 
 
 
 
+\subsubsection{Agda Universes}\label{universes}
 
-\paragraph*{Agda's universe hierarchy}\label{ssec:agdas-universe-hierarchy}
-The \agdaualib adopts the notation of Martin Escardo's \typetopology library~\cite{MHE}. In particular, \emph{universe levels}%
-\footnote{See \url{https://agda.readthedocs.io/en/v2.6.1.2/language/universe-levels.html}.}
-are denoted by capitalized script letters from the second half of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc.  Also defined in \typetopology are the operators~\af ̇~and~\af ⁺. These map a universe level \ab 𝓤 to the universe \ab 𝓤\af ̇ := \Set \ab 𝓤 and the level \ab 𝓤 \af ⁺ \aod := \lsuc \ab 𝓤, respectively.  Thus, \ab 𝓤\af ̇ is simply an alias for the universe \Set \ab 𝓤, and we have \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ̇.
-%% Table~\ref{tab:dictionary} translates between standard \agda syntax and \typetopology/\ualib notation.
+For the very small amount of background we require about the notion of \emph{type universe} (or \emph{level}), we refer the reader to the brief \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{section
+on universe-levels} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{Agda
+documentation}.\footnote{See \url{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}.}
 
-To justify the introduction of this somewhat nonstandard notation for universe levels, \escardo points out that the Agda library uses \ak{Level} for universes (so what we write as \ab 𝓤\af ̇ is written \ak{Set}~\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤\af ̇ need not be sets, so the standard Agda notation can be a bit confusing, especially to new users.
+Throughout the \agdaualib we use many of the nice tools that Martín Escardó has developed and made available in the \typetopology
+repository of Agda code for the \emph{Univalent Foundations} of mathematics.\footnote{%
+Escardó has written an outstanding set of notes called
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}, which we highly recommend to anyone looking for more details than we provide
+here about \mltt and Univalent Foundations/HoTT in Agda.~\cite{MHE}.}
+The first of these is the \am{Universes} module which we import as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Universes}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
+\end{code}
+\ccpad
+Since we use the \ak{public} directive, the \am{Universes} module will be available to all modules that import
+the present module (\ualibhtml{Prelude.Preliminaries}).
 
+The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab𝓩, etc. To this list we add one more that we will use later to denote the universe level of operation symbol types (defined in the \ualibhtml{Algebras.Signatures} module).
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{variable}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\<%
+\end{code}
+\ccpad
+The \am{Universes} module also provides elegant notation for the few primitive operations on universes that Agda supports. Specifically, the \af ̇ operator maps a universe level \ab 𝓤 to the type \ad{Set}~\ab 𝓤, and the latter has type \apt{Set}~(\apr{lsuc}~\ab 𝓤). The Agda level \apr{lzero} is renamed \apr{𝓤₀}, so \apr{𝓤₀}\af ̇ is an alias for \apr{Set}~\apr{lzero}. Thus, \ab 𝓤\af ̇ is simply an alias for \apr{Set}~\ab 𝓤, and we have \apr{Set}~\ab 𝓤~\as :~\apr{Set}~(\apr{lsuc}~\ab 𝓤). Finally, \apr{Set}~(\apr{lsuc}~\apr{lzero}) is equivalent to \apr{Set}~\apr{𝓤₀}\af ⁺, which we (and Escardó) denote by \apr{𝓤₀}\af ⁺\af ̇.
 
-The hierarchy of universes in Agda is structured as \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇, \hskip3mm
-\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc. This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Luckily, there are ways to circumvent noncummulativity without introducing logical inconsistencies into the type theory. Section~\ref{lifts-of-algebras} describes some domain-specific tools that we developed for this purpose.
+% The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.
 
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \NormalTok{Agda              Type Topology/UALib}
+% \NormalTok{====              ===================}
+% \NormalTok{Level             Universe}
+% \NormalTok{lzero             𝓤₀}
+% \NormalTok{𝓤 }\OtherTok{:}\NormalTok{ Level         𝓤 }\OtherTok{:}\NormalTok{ Universe}
+% \DataTypeTok{Set}\NormalTok{ lzero         𝓤₀ ̇}
+% \DataTypeTok{Set}\NormalTok{ 𝓤             𝓤 ̇}
+% \NormalTok{lsuc lzero        𝓤₀ ⁺}
+% \NormalTok{lsuc 𝓤            𝓤 ⁺}
+% \DataTypeTok{Set} \OtherTok{(}\NormalTok{lsuc lzero}\OtherTok{)}\NormalTok{  𝓤₀ ⁺ ̇}
+% \DataTypeTok{Set} \OtherTok{(}\NormalTok{lsuc 𝓤}\OtherTok{)}\NormalTok{      𝓤 ⁺ ̇}
+% \NormalTok{Setω              𝓤ω}
+% \end{Highlighting}
+% \end{Shaded}
 
+To justify the introduction of this somewhat nonstandard notation for universe levels, Escardó points out that the Agda library uses \apr{Level} for universes (so what we write as \ab 𝓤\af ̇ is written \apr{Set}~\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤\af ̇ need not be sets, so the standard Agda notation can be
+a bit confusing, especially to newcomers.
 
-
-
-
+There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, \ab 𝓤\af ̇ and \ab 𝓥\af ̇. The universe \ab 𝓤~\apr ⊔~\ab 𝓥\af ̇ denotes this least upper bound. Here \ab 𝓤~\apr ⊔~\ab 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels \ab 𝓤 and \ab 𝓥, where the \apr{\AgdaUnderscore{}⊔\AgdaUnderscore{}} is an Agda primitive designed for precisely this purpose.
 
 
 \subsubsection{Dependent types}\label{sec:dependent-types}
@@ -341,7 +380,7 @@ Once we have studied the types, defined in the \typetopology library and repeate
 We use the \ak{public} directive so that the types are available to all modules that import the present module.
 % the \ualibhtml{Prelude.Preliminaries} module.
 
-\paragraph{Notation for the first and second projections}
+\paragraph*{Notation for the first and second projections}
 
 The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \af{pr₂} representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by \af{∣\_∣} and \af{∥\_∥}, respectively. However, for emphasis or readability we alternate between these and the following standard notations: \af{pr₁} and \af{fst} for the first projection, \af{pr₂} and \af{snd} for the second.  We define these alternative notations for projections as follows.
 % \footnote{We have made a concerted effort to avoid duplicating types that are already provided elsewhere, such as the \typetopology library.  We occasionally repeat the definitions of such types for pedagogical purposes, but we always import and work with the original definitions in order to make the sources known and to credit the original authors.}

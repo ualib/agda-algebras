@@ -3,27 +3,32 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\subsubsection{The noncumulative universe hierarchy}\label{the-noncumulative-hierarchy}
+\subsubsection{Agda's universe hierarchy}\label{agdas-universe-hierarchy}
 
-The hierarchy of universe levels in Agda looks like this:\\[-4pt]
+% The hierarchy of universe levels in Agda looks like this:\\[-4pt]
 
-\ab{𝓤₀} \as : \ab{𝓤₁}\AgdaOperator{\AgdaFunction{̇}} , ~ ~ \ab{𝓤₁} \as : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} , ~ ~ \ab{𝓤₂} \as : \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}} , \ldots{}\\[4pt]
-This means that the type level of \ab{𝓤₀} is \ab{𝓤₁}\AgdaOperator{\AgdaFunction{̇}}, and for each \ab n the type level of \ab{𝓤ₙ} is \ab{𝓤ₙ₊₁}\AgdaOperator{\AgdaFunction{̇}}.
-It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} and \ab{𝓤₀} \as : \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}}, and so on. In other words, Agda's universe hierarchy is \defn{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand (in this author's experience) a noncummulative hierarchy can sometimes make for a nonfun proof assistant.
+% \ab{𝓤₀} \as : \ab{𝓤₁}\AgdaOperator{\AgdaFunction{̇}} , ~ ~ \ab{𝓤₁} \as : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} , ~ ~ \ab{𝓤₂} \as : \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}} , \ldots{}\\[4pt]
+% This means that the type level of \ab{𝓤₀} is \ab{𝓤₁}\AgdaOperator{\AgdaFunction{̇}}, and for each \ab n the type level of \ab{𝓤ₙ} is \ab{𝓤ₙ₊₁}\AgdaOperator{\AgdaFunction{̇}}.
+% It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as
+% : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} and \ab{𝓤₀} \as :
+% \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}}, and so on. 
+% In As mentioned above (\S~\ref{ssec:agdas-universe-hierarchy}), Agda's universe hierarchy is \defn{noncummulative}.
 
-Luckily, there are ways to overcome this technical issue. We describe general lifting and lowering functions below, and then later, in \S\ref{lifts-of-algebras},
-we'll see the domain-specific analogs of these tools which turn out to have some nice properties that make them very effective for resolving universe level problems when working with algebra types.
+The hierarchy of universes in Agda is structured as follows: \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇, \hskip3mm
+\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc. This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Specifically, in certain situations, the noncummulativity makes it unduly difficult to convince Agda that a program or proof is correct. 
+
+Presently (in \S\ref{lifting-and-lowering}) we will describe general lifting and lowering functions that help us overcome this technical issue. Later (in \S\ref{lifts-of-algebras}) we provide some domain-specific analogs of these tools. We will prove some nice properties that make these effective mechanisms for resolving universe level problems when working with algebra types.
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
-
-Let us be more concrete about what is at issue here by giving an example. Agda frequently encounters errors during the type-checking process and responds by printing an error message. Often the message has the following form.
+Let us be more concrete about what is at issue here by considering a typical example. Agda frequently encounters errors during the type-checking process and responds by printing an error message. Often the message has the following form.
 {\color{red}{\small
 \begin{verbatim}
-  Algebras.lagda:498,20-23 𝓤 != 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ when checking that... has type...
+  Birkhoff.lagda:498,20-23
+  𝓤 != 𝓞 ⊔ 𝓥 ⊔ (𝓤 ⁺) when checking that... has type...
 \end{verbatim}}}
-\noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Algebras.lagda}, but was expecting to find the universe \ab{𝓞} \aop ⊔ \ab 𝓥 \aop ⊔ \ab 𝓤\af ⁺ instead.
+\noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Birkhoff.lagda}, but was expecting to find the universe \ab{𝓞}~\aop ⊔~\ab 𝓥~\aop ⊔~(\ab 𝓤\af ⁺) instead.
 
-To make these situations easier to deal with, we have developed some domain specific tools for the lifting and lowering of universe levels inhabited by some of the key algebraic types of the \ualib.  These tools must be applied with some care to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
+There are some general ``lifting and lowering'' tools that make these situations easier to deal with. These must be applied with some care to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
 
 A general \af{Lift} record type, similar to the one found in the \am{Level} module of the \agdastdlib, is defined as follows.
 \ccpad

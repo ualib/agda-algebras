@@ -3,6 +3,7 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
+\subsubsection{Definitional equality}\label{sec:defin-equal}
 The type referred to as ``reflexivity'' or ``refl'' is a very basic but important
 type in \mltt. It represents \defn{definitional equality}.\footnote{For the definition and a discussion of definitional equality, see\\\url{https://ncatlab.org/nlab/show/equality\#definitional\_equality}.}
 The refl type we use is a standard one and is defined in the \am{Identity-Type} module of the \typetopology library. Apart from superficial syntactic differences it is equivalent to the identity type used in other Agda libraries.
@@ -61,7 +62,7 @@ In the \ualib we make refl available by importing it from the \am{Identity-Type}
 % \\
 % \>[0]\<%
 \end{code}
-
+\ccpad
 Thus, whenever we need to complete a proof by simply asserting that \ab{x}is definitionally equal to itself, we invoke \aic{refl}. If we need to make \ab x explicit, we use \aic{refl}~\{\ab x~=~\ab x\}.
 
 Of course \ad{≡} is an equivalence relation and the formal proof of this is trivial. We don't need to prove reflexivity since it is the defining property of \ad{≡}.  Here are the (trivial) proofs of symmetry and transitivity of \ad{≡}.% \footnote{%
@@ -193,7 +194,7 @@ Of course \ad{≡} is an equivalence relation and the formal proof of this is tr
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
-The only difference between \af{≡-symmetric} and \af{≡-sym} (respectively, \af{≡-transitive} and \af{≡-trans}) is that the latter has fewer explicit arguments, which is sometimes convenient.
+The only difference between \af{≡-symmetric} and \af{≡-sym} (resp., \af{≡-transitive} and \af{≡-trans}) is that \af{≡-sym} (resp., \af{≡-trans}) has fewer explicit arguments, which is sometimes convenient.
 
 Many proofs make abundant use of the symmetry of \ad ≡, and the following syntactic sugar can improve the readability of such proofs.\footnote{%
 \textbf{Unicode Hints}. In \agdamode, one types \af{⁻¹} as \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1}, and \af{𝑖𝑑} as \texttt{\textbackslash{}Mii\textbackslash{}Mid}, and type \af{∙} as \texttt{\textbackslash{}.}. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
@@ -238,7 +239,7 @@ Many proofs make abundant use of the symmetry of \ad ≡, and the following synt
 \AgdaBound{p}\<%
 \end{code}
 \ccpad
-If we have a proof \ab p \as : \ab x \aod ≡ \ab y, and we need a proof of \ab y \aod ≡ \ab x, then instead of \af{≡-sym} \ab p we can use the more intuitive \ab p \af{⁻¹}. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
+If we have a proof \ab p \as :~\ab x \aod ≡ \ab y, and we need a proof of \ab y \aod ≡ \ab x, then instead of \af{≡-sym} \ab p we can use the more intuitive \ab p \af{⁻¹}. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∙\AgdaUnderscore{}}}\AgdaSpace{}%
