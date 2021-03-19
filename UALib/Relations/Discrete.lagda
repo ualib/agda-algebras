@@ -116,25 +116,30 @@ We treat other notions of extensionality in the [Relations.Truncation][] module.
 
 #### <a id="predicates-toolbox">Predicates toolbox</a>
 
-Here is a small collection of tools that will come in handy later. The first is a type that's useful for asserting
- that the image of a function (the first argument) is contained in a predicate (the second argument).
+Here is a small collection of tools that will come in handy later. The first provides convenient notation for asserting that the image of a function (the first argument) is contained in a predicate (the second argument).
 
 \begin{code}
 
 module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } where
 
  Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
- Im_⊆_ f S = ∀ x → f x ∈ S
+ Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
 
-Naturally, we have a type that represents *disjoint union* and, as a special case, *union*.
+The following inductive type represents *disjoint union*.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
 
 data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
+
+\end{code}
+
+And this can be used to represent *union*, as follows.
+
+\begin{code}
 
 _∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩 → Pred A _
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
@@ -143,37 +148,24 @@ infixr 1 _⊎_ _∪_
 
 \end{code}
 
-The empty set is naturally represented by the empty type, `𝟘`; the latter is defined in the `MGS-MLTT` module of the [Type Topology][] library.
+The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Relations.Discrete#fn2), [4](Relations.Discrete#fn4)</sup>
 
 \begin{code}
 
-open import MGS-MLTT using (𝟘)
+open import Empty-Type using (𝟘)
 
 ∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
-∅ = λ _ → 𝟘
+∅ _ = 𝟘
 
 \end{code}
 
-A natural way to represent a singleton set is by the following type.
+
+Before closing our little predicates toolbox, let's insert a type that provides a natural way to represent *singletons*.
 
 \begin{code}
 
 ｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
-
-\end{code}
-
-Finally, here is a pair of useful transport lemmas for predicates.
-
-\begin{code}
-
-module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇ } where
-
- cong-app-pred : {B₁ B₂ : Pred A 𝓨}(x : A) → x ∈ B₁ → B₁ ≡ B₂ → x ∈ B₂
- cong-app-pred x B₁x refl = B₁x
-
- cong-pred : {B : Pred A 𝓨}(x y : A) → x ∈ B → x ≡ y → y ∈ B
- cong-pred x .x Bx refl = Bx
 
 \end{code}
 
@@ -232,7 +224,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{B : 𝓡 ̇} where
 \end{code}
 
 
-Similarly, the *identity relation* (which is equivalent to the kernel of an injective function) can be represented as an inhabitant of any one four types.
+Similarly, the *identity relation* (which is equivalent to the kernel of an injective function) can be represented using any one of the following four types.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
 
@@ -252,11 +244,11 @@ module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
 
 \end{code}
 
-The *total relation*, which in set theory is the set `𝑨 × 𝑨`, could be represented as an inhabitant of a relation type, as follows.
+The *total relation* over `A`, which in set theory is the full Cartesian product `A × A`, could be represented using the one-element type from the `Unit-Type` module of [Type Topology][], as follows.
 
 \begin{code}
 
- open import MGS-MLTT using (𝟙)
+ open import Unit-Type using (𝟙)
 
  𝟏 : Rel A 𝓤₀
  𝟏 a b = 𝟙
@@ -332,9 +324,12 @@ However, this is a rare case in which the more elegant syntax may result in simp
 
 <sup>1</sup><span class="footnote" id="fn1">cf. `Relation/Unary.agda` in the [Agda Standard Library][].</span>
 
-<sup>2</sup><span class="footnote" id="fn2">In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`.</span>
+<sup>2</sup><span class="footnote" id="fn2">**Unicode Hints**. In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`; type `\u+` or `\uplus` to produce `⊎`; type `\b0` to produce `𝟘`; type `\B0` to produce `𝟎`.</span>
 
 <sup>3</sup><span class="footnote" id="fn3">Agda also has a `postulate` mechanism that we could use, but this would require omitting the `--safe` pragma from the `OPTIONS` directive at the start of the module.</span>
+
+<sup>4</sup><span class="footnote" id="fn5">The empty type is defined in the `Empty-Type` module of [Type Topology][] as an inductive type with no constructors: `data 𝟘 {𝓤} : 𝓤 ̇ where -- (empty body)`</span>
+
 
 <p></p>
 
@@ -373,6 +368,18 @@ module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
 --  Pred-≡→⊆ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊆ Q)
 --  Pred-≡→⊆ refl = (λ z → z)
+
+
+We close the predicates toolbox with the following pair of useful transport lemmas.
+
+
+module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇ } where
+
+ cong-app-pred : {B₁ B₂ : Pred A 𝓨}(x : A) → x ∈ B₁ → B₁ ≡ B₂ → x ∈ B₂
+ cong-app-pred x B₁x refl = B₁x
+
+ cong-pred : {B : Pred A 𝓨}(x y : A) → x ∈ B → x ≡ y → y ∈ B
+ cong-pred x .x Bx refl = Bx
 
 
 

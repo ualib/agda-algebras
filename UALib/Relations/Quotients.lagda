@@ -143,14 +143,9 @@ We define the following introduction rule for an R-class with a designated repre
  infix 60 ⟦_⟧
 \end{code}
 
-If the relation is reflexive, then we have the following elimination rules.
+We also have the following elimination rule.
 
 \begin{code}
-
- /-refl : {A : 𝓤 ̇}(a a' : A){R : Rel A 𝓡} → reflexive R → [ a ] R ≡ [ a' ] R → R a a'
-
- /-refl a a' rfl x  = cong-app-pred a' (rfl a') (x ⁻¹)
-
 
  ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
 
@@ -189,3 +184,13 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
 {% include UALib.Links.md %}
 
+
+
+<!-- unused stuff
+
+ -- /-refl : {A : 𝓤 ̇}(a a' : A){R : Rel A 𝓡} → reflexive R → [ a ] R ≡ [ a' ] R → R a a'
+
+ -- /-refl a a' rfl x  = cong-app-pred a' (rfl a') (x ⁻¹)
+
+
+-->
