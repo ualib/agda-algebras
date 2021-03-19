@@ -166,17 +166,18 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
  open IsEquivalence{𝓤}{𝓡}
 
- /-subset : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  ⊆  [ a' ] R
- /-subset {a}{a'} Req Raa' {x} Rax = (trans Req) a' a x (sym Req a a' Raa') Rax
+ /-subset : {x y : A}{R : Rel A 𝓡} → IsEquivalence R → R x y →  [ x ] R  ⊆  [ y ] R
+ /-subset {x}{y} Req Rxy {z} Rxz = (trans Req) y x z (sym Req x y Rxy) Rxz
 
- /-supset : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  ⊇  [ a' ] R
- /-supset {a}{a'} Req Raa' {x} Ra'x = (trans Req) a a' x Raa' Ra'x
+ /-supset : {x y : A}{R : Rel A 𝓡} → IsEquivalence R → R x y →  [ y ] R ⊆ [ x ] R
+ /-supset {x}{y} Req Rxy {z} Ryz = (trans Req) x y z Rxy Ryz
 
- /-=̇ : {a a' : A}{R : Rel A 𝓡} → IsEquivalence R → R a a' →  [ a ] R  ≐  [ a' ] R
- /-=̇ Req Raa' = /-subset Req Raa' , /-supset Req Raa'
+ /-=̇ : {x y : A}{R : Rel A 𝓡} → IsEquivalence R → R x y →  [ x ] R  ≐  [ y ] R
+ /-=̇ Req Rxy = /-subset Req Rxy , /-supset Req Rxy
 
 \end{code}
 
+(An example application of `/-=̇` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
 
 --------------------------------------
 

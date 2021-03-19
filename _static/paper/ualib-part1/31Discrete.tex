@@ -3,9 +3,16 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
+Here we present the submodules of the \agdaualib's \ualibhtml{Relations} module. In \S\ref{sec:discrete-relations} we cover \emph{unary} and \emph{binary relations}, which we refer to as ``discrete relations'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we introduce in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+
+
+
+
 \subsubsection{Unary relations}
 
-We need a mechanism for implementing the notion of subsets in Agda. A typical one is called \af{Pred} (for predicate). More generally, \af{Pred} \ab A \ab 𝓤 can be viewed as the type of a property that elements of type \ab A might satisfy. We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab A that satisfy the property \ab P. Here is the definition (which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
+In set theory, given two sets \ab A and \ab B, we say that \ab A is a \defn{subset} of \ab B, and we write \ab A \af ⊆ \ab B, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab A~\as →~\ab x~\af ∈~\ab B). We need a mechanism for representing this notion in Agda. of A typical approach is to use a \emph{predicate} type, denoted by \af{Pred}.
+
+Given a universe \ab 𝓤 and a type \ab A, the type \af{Pred} \ab A \ab 𝓤 can be viewed as representing a property that elements of type \ab A may or may not satisfy.  We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab A that satisfy the property \ab P. Here is the definition (which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -35,14 +42,8 @@ We need a mechanism for implementing the notion of subsets in Agda. A typical on
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 \ccpad
-If we are given a type \ab A \as : \ab 𝓤\af ̇ , then we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we can view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
-
-Below we will often consider predicates over the class of all algebras of a particular type. Soon we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of algebras (for some universe level \ab 𝓤),
-%% Like all types, \af{Algebra} \ab 𝓤 \ab 𝑆 itself has a type which (as we will soon see) happens to be \ab 𝓞 \as ⊔ \ab 𝓥 \as ⊔ \ab 𝓤 \af ⁺
-%% ̇ . %the module \href{UALib.Algebras.Algebras.html}{UALib.Algebras}).
-and the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓤  %will be \ab 𝓞 \as ⊔ \ab 𝓥 \as ⊔ \ab 𝓤 \af ⁺ ̇ as well.
-will be inhabited by maps of the form \ab 𝑨 \as → \ab 𝓤\af ̇ ; more precisely, given an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, we will consider the type \af{Pred} \ab 𝑨 \ab 𝓤 \as = \ab 𝑨 \as → \ab 𝓤\af ̇ . We will use predicates over algebra types to specify subclasses of algebras with certain properties.
-
+% To reiterate, given a type \ab A \as : \ab 𝓤\af ̇, we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
+Below we consider predicates over the class of all algebras of a particular type. Soon (in the \ualibhtml{Algebras.Algebras} module) we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of \ab 𝑆-algebras with domain type \ab 𝓤\af ̇, and the type \af{Pred}(\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓦 (whose inhabitants are maps of type \af{Algebra}~\ab 𝓤~\ab 𝑆~\as →~\ab 𝓦\af ̇) will be used to represent subclasses of \ab 𝑆-algebras with certain properties.
 
 
 
@@ -541,9 +542,6 @@ The \textit{identity relation}, which is the kernel of an injective function, co
 \end{code}
 
 The \defn{total relation}, which in set theory is the set \ab 𝑨~\af ×~\ab 𝑨, could be represented as the following relation type.
-
-\begin{code}
-
 
 
 \subsubsection{The implication relation}\label{implication}
