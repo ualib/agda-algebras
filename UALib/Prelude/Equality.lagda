@@ -31,7 +31,7 @@ We make `refl` available by importing it from the `Identity-Type` module.  Howev
 
 module hide-refl {𝓤 : Universe} where
 
- data _≡_ {𝓤} {X : 𝓤 ̇ } : X → X → 𝓤 ̇ where refl : {x : X} → x ≡ x
+ data _≡_ {𝓤} {A : 𝓤 ̇ } : A → A → 𝓤 ̇ where refl : {x : A} → x ≡ x
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
@@ -43,18 +43,18 @@ Of course `≡` is an equivalence relation and the formal proof of this fact is 
 
 \begin{code}
 
-module _  {𝓤 : Universe}{X : 𝓤 ̇ }  where
+module _  {𝓤 : Universe}{A : 𝓤 ̇ }  where
 
- ≡-symmetric : (x y : X) → x ≡ y → y ≡ x
+ ≡-symmetric : (x y : A) → x ≡ y → y ≡ x
  ≡-symmetric _ _ refl = refl
 
- ≡-sym : {x y : X} → x ≡ y → y ≡ x
+ ≡-sym : {x y : A} → x ≡ y → y ≡ x
  ≡-sym refl = refl
 
- ≡-transitive : (x y z : X) → x ≡ y → y ≡ z → x ≡ z
+ ≡-transitive : (x y z : A) → x ≡ y → y ≡ z → x ≡ z
  ≡-transitive _ _ _ refl refl = refl
 
- ≡-trans : {x y z : X} → x ≡ y → y ≡ z → x ≡ z
+ ≡-trans : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
  ≡-trans refl refl = refl
 
 \end{code}
@@ -65,9 +65,9 @@ Many proofs make abundant use of the symmetry of `_≡_`, and the following synt
 
 \begin{code}
 
-module hide-sym-trans {𝓤 : Universe} where
+module hide-sym-trans {𝓤 : Universe} {A : 𝓤 ̇ } where
 
- _⁻¹ : {X : 𝓤 ̇ } → {x y : X} → x ≡ y → y ≡ x
+ _⁻¹ : {x y : A} → x ≡ y → y ≡ x
  p ⁻¹ = ≡-sym p
 
 \end{code}
@@ -78,7 +78,7 @@ Similarly, the following syntactic sugar makes abundant appeals to transitivity 
 
 \begin{code}
 
- _∙_ : {X : 𝓤 ̇ } {x y z : X} → x ≡ y → y ≡ z → x ≡ z
+ _∙_ : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
  p ∙ q = ≡-trans p q
 
 \end{code}
@@ -102,8 +102,8 @@ module hide-transport {𝓤 𝓦 : Universe} where
  𝑖𝑑 : {𝓧 : Universe} (X : 𝓧 ̇ ) → X → X
  𝑖𝑑 X = λ x → x
 
- transport : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) {x y : X} → x ≡ y → A x → A y
- transport A (refl {x = x}) = 𝑖𝑑 (A x)
+ transport : {A : 𝓤 ̇ } (B : A → 𝓦 ̇ ) {x y : A} → x ≡ y → B x → B y
+ transport B (refl {x = x}) = 𝑖𝑑 (B x)
 
 open import MGS-MLTT using (𝑖𝑑; transport) public
 
@@ -115,10 +115,10 @@ A function is well defined if and only if it maps equivalent elements to a singl
 
 \begin{code}
 
-module hide-ap  {𝓤 : Universe} where
+module hide-ap  {𝓤 : Universe}{A : 𝓤 ̇}{B : 𝓥 ̇} where
 
- ap : {X : 𝓤 ̇}{Y : 𝓥 ̇}(f : X → Y){a b : X} → a ≡ b → f a ≡ f b
- ap f {a} p = transport (λ - → f a ≡ f -) p (refl {x = f a})
+ ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
+ ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
 
 open import MGS-MLTT using (ap) public
 
@@ -128,9 +128,9 @@ We now define some variations of `ap` that are sometimes useful.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
 
- ap-cong : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B}{a b : A} → f ≡ g → a ≡ b → f a ≡ g b
+ ap-cong : {B : 𝓦 ̇}{f g : A → B}{a b : A} → f ≡ g → a ≡ b → f a ≡ g b
  ap-cong refl refl = refl
 
 \end{code}
@@ -139,7 +139,7 @@ We sometimes need a version of this that works for [dependent types][], such as 
 
 \begin{code}
 
- cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ a → f a ≡ g a
+ cong-app : {B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
  cong-app refl _ = refl
 
 \end{code}

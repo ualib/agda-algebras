@@ -118,7 +118,7 @@ There will be many occasions calling for a type living in the universe that is t
 
 #### <a id="dependent-pair-type">Sigma types (dependent pairs)</a>
 
-Given universes 𝓤 and 𝓥, a type `X : 𝓤 ̇`, and a type family `Y : X → 𝓥 ̇`, the **Sigma type** (or **dependent pair type**), denoted by `Σ(x ꞉ X), Y x`, generalizes the Cartesian product `X × Y` by allowing the type `Y x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ(x ꞉ X), Y x` is a pair `(x , y)` such that `x : X` and `y : Y x`.
+Given universes 𝓤 and 𝓥, a type `A : 𝓤 ̇`, and a type family `B : A → 𝓥 ̇`, the *Sigma type* (or *dependent pair type*), denoted by `Σ(x ꞉ A), B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ(x ꞉ A), B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
 
 The [Type Topology][] library contains a standard definition of the dependent product.
 For pedagogical purposes we repeat this definition here, inside a *hidden module* so that it doesn't conflict with the original definition that we import later.<sup>[3](Prelude.Equality.html#fn3)</sup>
@@ -127,35 +127,35 @@ For pedagogical purposes we repeat this definition here, inside a *hidden module
 
 module hide-sigma where
 
- record Σ {𝓤 𝓥} {X : 𝓤 ̇ } (Y : X → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
+ record Σ {𝓤 𝓥} {A : 𝓤 ̇ } (B : A → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
   constructor _,_
   field
-   pr₁ : X
-   pr₂ : Y pr₁
+   pr₁ : A
+   pr₂ : B pr₁
 
  infixr 50 _,_
 
 \end{code}
 
-For this dependent pair type, we prefer the notation `Σ x ꞉ X , y`, which is more pleasing and more standard than Agda's default syntax, `Σ λ(x ꞉ X) → y`.  [Escardó][] makes this preferred notation available in the [Type Topology][] library by making the index type explicit, as follows.
+For this dependent pair type, we prefer the notation `Σ x ꞉ A , B`, which is more pleasing and more standard than Agda's default syntax, `Σ A (λ x → B)`.  [Escardó][] makes this preferred notation available in the [Type Topology][] library by making the index type explicit, as follows.
 
 \begin{code}
 
- -Σ : {𝓤 𝓥 : Universe} (X : 𝓤 ̇ ) (Y : X → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
- -Σ X Y = Σ Y
+ -Σ : {𝓤 𝓥 : Universe} (A : 𝓤 ̇ ) (B : A → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+ -Σ A B = Σ B
 
- syntax -Σ X (λ x → Y) = Σ x ꞉ X , Y
+ syntax -Σ A (λ x → B) = Σ x ꞉ A , B
 
 \end{code}
 
-**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].
+**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Σ x ꞉ A , B` above is obtained by typing `\:4` in [agda2-mode][].
 
-A special case of the Sigma type is the one in which the type `Y` doesn't depend on `X`. This is the usual Cartesian product, defined in Agda as follows.
+A special case of the Sigma type is the one in which the type `B` doesn't depend on `A`. This is the usual Cartesian product, defined in Agda as follows.
 
 \begin{code}
 
  _×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
- X × Y = Σ x ꞉ X , Y
+ A × B = Σ x ꞉ A , B
 
 \end{code}
 
@@ -167,14 +167,14 @@ Given universes `𝓤` and `𝓥`, a type `X : 𝓤 ̇`, and a type family `Y : 
 
 module hide-pi {𝓤 𝓦 : Universe} where
 
- Π : {X : 𝓤 ̇ } (A : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
- Π {X} A = (x : X) → A x
+ Π : {A : 𝓤 ̇ } (B : A → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ Π {A} B = (x : A) → B x
 
- -Π : (X : 𝓤 ̇ )(Y : X → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
- -Π X Y = Π Y
+ -Π : (A : 𝓤 ̇ )(B : A → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ -Π A B = Π B
 
  infixr -1 -Π
- syntax -Π A (λ x → b) = Π x ꞉ A , b
+ syntax -Π A (λ x → B) = Π x ꞉ A , B
 
 \end{code}
 
@@ -198,11 +198,11 @@ The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr�
 
 module _ {𝓤 : Universe} where
 
- ∣_∣ fst : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇} → Σ Y → X
+ ∣_∣ fst : {A : 𝓤 ̇ }{B : A → 𝓥 ̇} → Σ B → A
  ∣ x , y ∣ = x
  fst (x , y) = x
 
- ∥_∥ snd : {X : 𝓤 ̇ }{Y : X → 𝓥 ̇ } → (z : Σ Y) → Y (pr₁ z)
+ ∥_∥ snd : {A : 𝓤 ̇ }{B : A → 𝓥 ̇ } → (z : Σ B) → B (pr₁ z)
  ∥ x , y ∥ = y
  snd (x , y) = y
 
@@ -219,7 +219,7 @@ Here we put the definitions inside an *anonymous module*, which starts with the 
 
 <sup>3</sup><span class="footnote" id="fn3">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library as long as we don't invoke `open hide-refl`. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do so in order to exhibit all of the types on which the [UALib][] depends while ensuring that this is not misinterpreted as a claim to originality.</span>
 
-<sup>4</sup><span class="footnote" id="fn4">**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Π x ꞉ X , y` above is obtained by typing `\:4` in [agda2-mode][].</sup>
+<sup>4</sup><span class="footnote" id="fn4">**WARNING!** The symbol ꞉ is not the same as : despite how similar they may appear. The correct colon in the expression `Π x ꞉ A , B` above is obtained by typing `\:4` in [agda2-mode][].</sup>
 
 
 <br>

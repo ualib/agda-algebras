@@ -25,16 +25,16 @@ open import Relations.Quotients public
 
 #### <a id="typical-view-of-truncation">Truncation</a>
 
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `X` and an identity relation `_≡ₓ_` on `X` so that, given two inhabitants of `X`, say, `a b : X`, we can form the type `a ≡ₓ b`. Suppose `p` and `q` inhabit the type `a ≡ₓ b`; that is, `p` and `q` are proofs of `a ≡ₓ b`, in which case we write `p q : a ≡ₓ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent.
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `A` and an identity relation `_≡₀_` on `A` so that, given two inhabitants of `A`, say, `a b : A`, we can form the type `a ≡₀ b`. Suppose `p` and `q` inhabit the type `a ≡₀ b`; that is, `p` and `q` are proofs of `a ≡₀ b`, in which case we write `p q : a ≡₀ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent.
 
-We are asking about an identity type on the identity type `≡ₓ`, and whether there is some inhabitant,
-say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡ₓ b` are the same.
-If such a proof exists for all `p q : a ≡ₓ b`, then the proof of `a ≡ₓ b` is unique; as a property of
-the types `X` and `≡ₓ`, this is sometimes called **uniqueness of identity proofs**.
+We are asking about an identity type on the identity type `≡₀`, and whether there is some inhabitant,
+say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡₀ b` are the same.
+If such a proof exists for all `p q : a ≡₀ b`, then the proof of `a ≡₀ b` is unique; as a property of
+the types `A` and `≡₀`, this is sometimes called **uniqueness of identity proofs**.
 
-Now, perhaps we have two proofs, say, `r s : p ≡ₓ₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡ₓ₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₓₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
+Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
 
-In [homotopy type theory](https://homotopytypetheory.org), a type `X` with an identity relation `≡ₓ` is called a **set** (or **0-groupoid**) if for every pair `x y : X` there is at most one proof of `x ≡ₓ y`. In other words, the type `X`, along with it's equality type `≡ₓ`, form a *set* if for all `x y : X` there is at most one proof of `x ≡ₓ y`.
+In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a **set** (or **0-groupoid**) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
 This notion is formalized in the [Type Topology][] library using the types `is-set` which is defined using the `is-subsingleton` type that we saw earlier ([Prelude.Inverses][]) as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
 
@@ -43,13 +43,13 @@ This notion is formalized in the [Type Topology][] library using the types `is-s
 module hide-is-set {𝓤 : Universe} where
 
  is-set : 𝓤 ̇ → 𝓤 ̇
- is-set X = (x y : X) → is-subsingleton (x ≡ y)
+ is-set A = (x y : A) → is-subsingleton (x ≡ y)
 
 open import MGS-Embeddings using (is-set) public
 
 \end{code}
 
-Thus, the pair `(X , ≡ₓ)` forms a set if and only if it satisfies `∀ x y : X → is-subsingleton (x ≡ₓ y)`.
+Thus, the pair `(A , ≡₀)` forms a set if and only if it satisfies `∀ x y : A → is-subsingleton (x ≡₀ y)`.
 
 The function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which we will also import, is part of Escardó's characterization of equality in Sigma types described in [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality) of [Escardó's notes][]. It is defined as follows.
 
@@ -57,8 +57,8 @@ The function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-
 
 module hide-to-Σ-≡ {𝓤 𝓦 : Universe} where
 
- to-Σ-≡ : {X : 𝓤 ̇ } {A : X → 𝓦 ̇ } {σ τ : Σ A}
-  →       Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport A p ∥ σ ∥) ≡ ∥ τ ∥
+ to-Σ-≡ : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {σ τ : Σ B}
+  →       Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport B p ∥ σ ∥) ≡ ∥ τ ∥
   →       σ ≡ τ
 
  to-Σ-≡ (refl {x = x} , refl {x = a}) = refl {x = (x , a)}
@@ -77,7 +77,7 @@ Before moving on to define [propositions](Prelude.Truncation.html#propositions),
 \begin{code}
 
 _⟺_ : {𝓤 𝓦 : Universe} → 𝓤 ̇ → 𝓦 ̇ → 𝓤 ⊔ 𝓦 ̇
-X ⟺ Y = (X → Y) × (Y → X)
+A ⟺ B = (A → B) × (B → A)
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
@@ -118,7 +118,7 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 #### <a id="propositions">Propositions</a>
 
-Sometimes we will want to assume that a type `X` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `X` are the same.  Analogously, for predicates on `X`, we may wish to assume that there is at most one proof that an inhabitant of `X` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
+Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
 
 \begin{code}
 

@@ -137,7 +137,7 @@ There will be many occasions calling for a type living in the universe that is t
 
 \paragraph*{Sigma types (dependent pairs)} %\label{ssec:dependent-pairs}
 
-Given universes \ab 𝓤 and \ab 𝓥, a type \ab{X} \as : \ab 𝓤\af ̇, and a type family \ab{Y}~\as :~\ab X~\as →~\ab 𝓥\af ̇, the \defn{Sigma type} (aka \defn{dependent pair type}, aka \defn{dependent product type}) is denoted by \ar{Σ}(\ab x~\af ꞉~\ab X),~\ab Y~\ab x and generalizes the Cartesian product \ab{X} \af × \ab Y by allowing the type \ab{Y x} of the second argument of the ordered pair (\ab x \af , \ab y) to depend on the value \ab{x} of the first. That is, an inhabitant of the type \ar{Σ}(\ab x~\af ꞉~\ab X),~\ab Y~\ab x is a pair (\ab{x}~\af ,~\ab y) such that \abt{x}{X} and \abt{y}{Y x}.
+Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Sigma type} (or \defn{dependent pair type}, or \defn{dependent product type}) is denoted by \ar{Σ}~\abt{x}{A}~,~\ab B~\ab x and generalizes the Cartesian product \ab A~\af ×~\ab B by allowing the type \ab{B x} of the second argument of the ordered pair (\ab x \af , \ab y) to depend on the value \ab{x} of the first. That is, an inhabitant of the type \ar{Σ}~\abt{x}{A}~,~\ab B~\ab x is a pair (\ab{x}~\af ,~\ab y) such that \abt{x}{A} and \abt{y}{B x}.
 
 The dependent product type is defined in the \typetopology in a standard way. For pedagogical purposes we repeat the definition here.\footnote{In the \ualib we put such redundant definitions inside ``hidden'' modules so that they doesn't conflict with the original definitions which we import and use. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do this in order to exhibit all of the types on which the \ualib depends while ensuring that this cannot be misinterpreted as a claim to originality.}
 \ccpad
@@ -146,14 +146,14 @@ The dependent product type is defined in the \typetopology in a standard way. Fo
 \AgdaRecord{Σ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -175,16 +175,16 @@ The dependent product type is defined in the \typetopology in a standard way. Fo
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[3]\AgdaField{pr₁}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\<%
+\AgdaBound{A}\<%
 \\
 %
 \>[3]\AgdaField{pr₂}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaField{pr₁}\<%
 \end{code}
 \ccpad
-Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab X)\sP{3}\as →\sP{3}\ab Y, but we prefer the notation \AgdaRecord{Σ}~\ab x~꞉~\ab X~,~\ab Y, which is closer to the standard syntax described in the preceding paragraph. Fortunately, the \typetopology library makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
+Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab A)\sP{3}\as →\sP{3}\ab B, but we prefer the notation \AgdaRecord{Σ}~\abt{x}{A}~,~\ab B, which is closer to the standard syntax described in the preceding paragraph. Fortunately, the \typetopology library makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{-Σ}\AgdaSpace{}%
@@ -193,14 +193,14 @@ Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab 
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -213,34 +213,34 @@ Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab 
 \\
 %
 \>[1]\AgdaFunction{-Σ}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\<%
+\AgdaBound{B}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaKeyword{syntax}\AgdaSpace{}%
 \AgdaFunction{-Σ}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{Y}\<%
+\AgdaBound{B}\<%
 \end{code}
 \scpad
-% \textbf{WARNING!} The symbol \af ꞉ is not the same as \as : despite how similar they may look. The correct colon in the expression \ar{Σ}~\ab x~\af ꞉~\ab X~\af ,~\ab y, above is obtained by typing \texttt{\textbackslash{}:4} in \agdamode.
+% \textbf{WARNING!} The symbol \af ꞉ is not the same as \as : despite how similar they may look. The correct colon in the expression \ar{Σ}~\ab x~\af ꞉~\ab A~\af ,~\ab y, above is obtained by typing \texttt{\textbackslash{}:4} in \agdamode.
 
-A special case of the Sigma type is the one in which the type \ab{Y} doesn't depend on \ab{X}. This is the usual Cartesian product, defined in Agda as follows.
+A special case of the Sigma type is the one in which the type \ab{B} doesn't depend on \ab{A}. This is the usual Cartesian product, defined in Agda as follows.
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -257,16 +257,16 @@ A special case of the Sigma type is the one in which the type \ab{Y} doesn't dep
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaBound{X}\AgdaSpace{}%
+\>[1]\AgdaBound{A}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{Y}\<%
+\AgdaBound{B}\<%
 \end{code}
 
 
@@ -274,19 +274,19 @@ A special case of the Sigma type is the one in which the type \ab{Y} doesn't dep
 
 
 \paragraph*{Pi types (dependent functions)} %\label{ssec:dependent-functions}
-Given universes \ab 𝓤 and \ab 𝓥, a type \ab{X} \as : \ab 𝓤\af ̇, and a type family \ab{Y}~\as :~\ab X~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (aka \defn{dependent function type}) is denoted by \ar Π(\ab x~\af :~\ab X),~\ab Y~\ab x and generalizes the function type \ab X~\as →~\ab Y by letting the type \ab Y~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in the \typetopology in a standard way.  For the reader's benefit, however, we repeat the definition here.  (In the \ualib this definition is included in a named or ``hidden'' module.)
+Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (or \defn{dependent function type}) is denoted by \ar Π~\abt{x}{A} ,~\ab B~\ab x and generalizes the function type \ab A~\as →~\ab B by letting the type \ab B~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in the \typetopology in a standard way.  For the reader's benefit, however, we repeat the definition here.  (In the \ualib this definition is included in a named or ``hidden'' module.)
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -299,12 +299,12 @@ Given universes \ab 𝓤 and \ab 𝓥, a type \ab{X} \as : \ab 𝓤\af ̇, and a
 \\
 %
 \>[1]\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{x}\<%
@@ -315,13 +315,13 @@ To make the syntax for \af{Π} conform to the standard notation for Pi types, \e
 \begin{code}
 \>[1]\AgdaFunction{-Π}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{)(}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{)(}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -334,11 +334,11 @@ To make the syntax for \af{Π} conform to the standard notation for Pi types, \e
 \\
 %
 \>[1]\AgdaFunction{-Π}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{Y}\<%
+\AgdaBound{B}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -399,21 +399,21 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \>[1]\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSpace{}%
 \AgdaFunction{fst}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{X}\<%
+\AgdaBound{A}\<%
 \\
 %
 \>[1]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -438,13 +438,13 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \>[1]\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\AgdaSpace{}%
 \AgdaFunction{snd}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -453,9 +453,9 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \AgdaSymbol{(}\AgdaBound{z}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{pr₁}\AgdaSpace{}%
 \AgdaBound{z}\AgdaSymbol{)}\<%
 \\

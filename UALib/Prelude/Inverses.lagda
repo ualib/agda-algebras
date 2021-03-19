@@ -96,9 +96,9 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`. To st
 
 \begin{code}
 
-module hide-∘ {𝓤 𝓦 : Universe}{X : 𝓤 ̇}{Y : 𝓦 ̇} where
+module hide-∘ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- _∘_ : {Z : Y → 𝓦 ̇ } → Π Z → (f : X → Y) → (x : X) → Z (f x)
+ _∘_ : {C : B → 𝓦 ̇ } → Π C → (f : A → B) → (x : A) → C (f x)
  g ∘ f = λ x → g (f x)
 
 open import MGS-MLTT using (_∘_) public
@@ -183,10 +183,10 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 The type `is-embedding f` denotes the assertion that `f` is a function all of whose fibers are subsingletons.
 
 \begin{code}
-module hide-is-embedding {𝓤 𝓦 : Universe} where
+module hide-is-embedding {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
- is-embedding : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
- is-embedding f = ∀ y → is-subsingleton (fiber f y)
+ is-embedding : (A → B) → 𝓤 ⊔ 𝓦 ̇
+ is-embedding f = ∀ b → is-subsingleton (fiber f b)
 
 open import MGS-Embeddings using (is-embedding) public
 
@@ -198,9 +198,9 @@ Finding a proof that a function is an embedding isn't always easy, but one path 
 
 \begin{code}
 
-module _ {𝓧 𝓨 : Universe} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} {B : 𝓦 ̇} where
 
- invertibles-are-embeddings : {X : 𝓧 ̇} {Y : 𝓨 ̇} (f : X → Y) → invertible f → is-embedding f
+ invertibles-are-embeddings : (f : A → B) → invertible f → is-embedding f
  invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
 
 \end{code}
@@ -209,14 +209,14 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 
 \begin{code}
 
- embedding-is-monic : {X : 𝓧 ̇}{Y : 𝓨 ̇}(f : X → Y) → is-embedding f → Monic f
- embedding-is-monic f femb a b fafb = ap pr₁ ((femb (f a)) fa fb)
+ embedding-is-monic : (f : A → B) → is-embedding f → Monic f
+ embedding-is-monic f femb x y fxfy = ap pr₁ ((femb (f x)) fx fy)
   where
-  fa : fiber f (f a)
-  fa = a , refl
+  fx : fiber f (f x)
+  fx = x , refl
 
-  fb : fiber f (f a)
-  fb = b , (fafb ⁻¹)
+  fy : fiber f (f x)
+  fy = y , (fxfy ⁻¹)
 
 \end{code}
 

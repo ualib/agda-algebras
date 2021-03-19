@@ -28,16 +28,16 @@ Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Dis
 
 module _ {𝓤 : Universe} where
 
- reflexive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ reflexive : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  reflexive _≈_ = ∀ x → x ≈ x
 
- symmetric : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ symmetric : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
 
- antisymmetric : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ antisymmetric : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  antisymmetric _≈_ = ∀ x y → x ≈ y → y ≈ x → x ≡ y
 
- transitive : {𝓡 : Universe}{X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ transitive : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 
 \end{code}
@@ -68,7 +68,7 @@ A binary relation is called a **preorder** if it is reflexive and transitive. An
 
 module _ {𝓤 𝓡 : Universe} where
 
- is-preorder : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-preorder : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-preorder _≈_ = is-subsingleton-valued _≈_ × reflexive _≈_ × transitive _≈_
 
  record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
@@ -77,7 +77,7 @@ module _ {𝓤 𝓡 : Universe} where
    sym   : symmetric _≈_
    trans : transitive _≈_
 
- is-equivalence-relation : {X : 𝓤 ̇ } → Rel X 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-equivalence-relation : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-equivalence-relation _≈_ = is-preorder _≈_ × symmetric _≈_
 
 \end{code}

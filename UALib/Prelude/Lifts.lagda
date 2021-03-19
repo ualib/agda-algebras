@@ -48,9 +48,9 @@ A general `Lift` record type, similar to the one found in the `Level` module of 
 
 \begin{code}
 
-record Lift {𝓦 𝓤 : Universe} (X : 𝓤 ̇) : 𝓤 ⊔ 𝓦 ̇  where
+record Lift {𝓦 𝓤 : Universe} (A : 𝓤 ̇) : 𝓤 ⊔ 𝓦 ̇  where
  constructor lift
- field lower : X
+ field lower : A
 open Lift
 
 \end{code}
@@ -59,10 +59,10 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 
 \begin{code}
 
-lift∼lower : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} X)
+lift∼lower : {𝓦 𝓤 : Universe}{A : 𝓤 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} A)
 lift∼lower = refl
 
-lower∼lift : {𝓦 𝓧 : Universe}{X : 𝓧 ̇} → lower{𝓦}{𝓧} ∘ lift ≡ 𝑖𝑑 X
+lower∼lift : {𝓦 𝓤 : Universe}{A : 𝓤 ̇} → lower{𝓦}{𝓤} ∘ lift ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}

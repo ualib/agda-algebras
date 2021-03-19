@@ -24,9 +24,9 @@ open import Prelude.Equality public
 
 This introduction is intended for novices.  If you're already familiar with function extensionality, you may want to skip to <a href="function-extensionality">the next subsection</a>.
 
-What does it mean to say that two functions `f g : X → Y` are equal?
+What does it mean to say that two functions `f g : A → B` are equal?
 
-Suppose f and g are defined on X = ℤ (the integers) as follows: f x := x + 2 and g x := ((2 * x) - 8)/2 + 6.  Would you say that f and g are equal?
+Suppose f and g are defined on A = ℤ (the integers) as follows: f x := x + 2 and g x := ((2 * x) - 8)/2 + 6.  Would you say that f and g are equal?
 
 If you know a little bit of basic algebra, then you probably can't resist the urge to reduce g to the form x + 2 and proclaim that f and g are, indeed, equal.  And you would be right, at least in middle school, and the discussion would end there.  In the science of computing, however, more attention is paid to equality, and with good reason.
 
@@ -46,14 +46,14 @@ The natural notion of function equality, which is often called *point-wise equal
 
 module hide-funext where
 
- _∼_ : {𝓤 𝓥 : Universe}{X : 𝓤 ̇ } {A : X → 𝓥 ̇ } → Π A → Π A → 𝓤 ⊔ 𝓥 ̇
+ _∼_ : {𝓤 𝓥 : Universe}{A : 𝓤 ̇ } {B : A → 𝓥 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓥 ̇
  f ∼ g = ∀ x → f x ≡ g x
 
  infix 0 _∼_
 
 \end{code}
 
-**Function extensionality** is the assertion that point-wise equal functions are "definitionally" equal; that is, for all functions `f` and `g`, we have `f ∼ g → f ≡ g`. In the [Type Topology][] library, the type that represents this is `funext`, which is defined as follows. (Again, we present it here inside the `hide-funext` submodule, but we will import Martín's original definitions below.)
+*Function extensionality* is the assertion that point-wise equal functions are "definitionally" equal; that is, for all functions `f` and `g`, we have `f ∼ g → f ≡ g`. In the [Type Topology][] library, the type that represents this is `funext`, which is defined as follows. (Again, we present it here inside the `hide-funext` submodule, but we will import Martín's original definitions below.)
 
 \begin{code}
 
@@ -142,14 +142,14 @@ First, a type is a *singleton* if it has exactly one inhabitant and a *subsingle
 
 module hide-tt-defs {𝓤 : Universe} where
 
- is-center : (X : 𝓤 ̇ ) → X → 𝓤 ̇
- is-center X c = (x : X) → c ≡ x
+ is-center : (A : 𝓤 ̇ ) → A → 𝓤 ̇
+ is-center A c = (x : A) → c ≡ x
 
  is-singleton : 𝓤 ̇ → 𝓤 ̇
- is-singleton X = Σ c ꞉ X , is-center X c
+ is-singleton A = Σ c ꞉ A , is-center A c
 
  is-subsingleton : 𝓤 ̇ → 𝓤 ̇
- is-subsingleton X = (x y : X) → x ≡ y
+ is-subsingleton A = (x y : A) → x ≡ y
 
 \end{code}
 
@@ -168,8 +168,8 @@ Next, we consider the type `is-equiv` which is used to assert that a function is
 
 module hide-tt-defs' {𝓤 𝓦 : Universe} where
 
- fiber : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } (f : X → Y) → Y → 𝓤 ⊔ 𝓦 ̇
- fiber {X} f y = Σ x ꞉ X , f x ≡ y
+ fiber : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → B → 𝓤 ⊔ 𝓦 ̇
+ fiber {A} f y = Σ x ꞉ A , f x ≡ y
 
 \end{code}
 
@@ -177,7 +177,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \begin{code}
 
- is-equiv : {X : 𝓤 ̇ } {Y : 𝓦 ̇ } → (X → Y) → 𝓤 ⊔ 𝓦 ̇
+ is-equiv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → 𝓤 ⊔ 𝓦 ̇
  is-equiv f = ∀ y → is-singleton (fiber f y)
 
 \end{code}
