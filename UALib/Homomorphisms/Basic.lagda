@@ -180,7 +180,7 @@ open Congruence
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- homker-compatible : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (KER-rel ∣ h ∣)
+ homker-compatible : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
  homker-compatible 𝑩 h f {u}{v} Kerhab = γ
   where
   γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
@@ -190,7 +190,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
       ∣ h ∣ ((f ̂ 𝑨) v)  ∎
 
 
- homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (KER-rel ∣ h ∣)
+ homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (ker ∣ h ∣)
  homker-equivalence 𝑩 h = map-kernel-IsEquivalence ∣ h ∣
 
 \end{code}
@@ -200,7 +200,7 @@ It is convenient to define a function that takes a homomorphism and constructs a
 \begin{code}
 
  kercon : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
- kercon 𝑩 h = mkcon (KER-rel ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
+ kercon 𝑩 h = mkcon (ker ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
 
 \end{code}
 

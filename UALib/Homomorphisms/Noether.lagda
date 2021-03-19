@@ -224,7 +224,7 @@ This, or some variation of it, is sometimes referred to as the Second Isomorphis
 
 homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra 𝓤 𝑆}
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
- →          ker-pred ∣ h ∣ ⊆ ker-pred ∣ g ∣  →   Epic ∣ h ∣
+ →          kernel ∣ h ∣ ⊆ kernel ∣ g ∣  →   Epic ∣ h ∣
             -------------------------------------------
  →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
 
@@ -236,7 +236,7 @@ homFactor fe{𝑨}{𝑩}{𝑪}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomC
  ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
  ϕ = λ c → g ( hInv c )
 
- ξ : ∀ x → ker-pred h (x , hInv (h x))
+ ξ : ∀ x → kernel h (x , hInv (h x))
  ξ x = (cong-app (EpicInvIsRightInv {fe = fe} h hEpi) (h x))⁻¹
 
  g≡ϕ∘h : g ≡ ϕ ∘ h
@@ -286,7 +286,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
  HomFactor : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
              (β : hom 𝑨 𝑩) (γ : hom 𝑨 𝑪)
-  →          Epic ∣ γ ∣ → (KER-pred ∣ γ ∣) ⊆ (KER-pred ∣ β ∣)
+  →          Epic ∣ γ ∣ → (kernel ∣ γ ∣) ⊆ (kernel ∣ β ∣)
              --------------------------------------------
   →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ γ ∣
 
@@ -298,7 +298,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
   ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
   ϕ = λ y → ∣ β ∣ ( γInv y )
 
-  ξ : (x : ∣ 𝑨 ∣) → KER-pred ∣ γ ∣ (x , γInv (∣ γ ∣ x))
+  ξ : (x : ∣ 𝑨 ∣) → kernel ∣ γ ∣ (x , γInv (∣ γ ∣ x))
   ξ x =  ( cong-app (EpicInvIsRightInv{fe = gfe} ∣ γ ∣ γE) ( ∣ γ ∣ x ) )⁻¹
 
   βϕγ : ∣ β ∣ ≡ ϕ ∘ ∣ γ ∣
@@ -333,7 +333,7 @@ If, in addition, both β and γ are epic, then so is ϕ.
  HomFactorEpi : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
                 (β : hom 𝑨 𝑩) (βe : Epic ∣ β ∣)
                 (ξ : hom 𝑨 𝑪) (ξe : Epic ∣ ξ ∣)
-  →             (KER-pred ∣ ξ ∣) ⊆ (KER-pred ∣ β ∣)
+  →             (kernel ∣ ξ ∣) ⊆ (kernel ∣ β ∣)
                 ----------------------------------
   →             Σ ϕ ꞉ (epi 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ ξ ∣
 

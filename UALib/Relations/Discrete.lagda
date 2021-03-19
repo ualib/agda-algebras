@@ -111,7 +111,7 @@ module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
 
 \end{code}
 
-The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the **axiom of extensionality**.
+The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the *axiom of extensionality*.
 
 \begin{code}
 
@@ -208,7 +208,7 @@ module _ {𝓧 𝓨 : Universe} where
 
 #### <a id="binary-relations">Binary Relations</a>
 
-In set theory, a binary relation on a set `A` is simply a subset of the product `A × A`.  As such, we could model these as predicates over the type `A × A`, or as relations of type `A → A → 𝓡 ̇` (for some universe 𝓡). We define these below.
+In set theory, a binary relation on a set `A` is simply a subset of the product `A × A`.  As such, we could model such a relation as a (unary) predicate over the type `A × A`, or as a relation of type `A → A → 𝓡 ̇` (for some universe 𝓡). Note, however, this is not the same as a unary predicate over the function type `A → A` since the latter has type  `(A → A) → 𝓡 ̇`, while a binary relation should have type `A → (A → 𝓡 ̇)`.
 
 A generalization of the notion of binary relation is a *relation from* `A` *to* `B`, which we define first and treat binary relations on a single `A` as a special case.
 
@@ -221,29 +221,7 @@ module _ {𝓤 𝓡 : Universe} where
 
 \end{code}
 
-Given types `A` and `B`, a binary relation from `A` to `B` is not the same as a unary predicate over the type `A → B`.  The binary relation has type `A → (B → 𝓝 ̇)` whereas a unary predicate over `A → B` has type `(A → B) → 𝓝 ̇` .
-
-#### <a id="kernels">Kernels</a>
-
-The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f x = f y}`. This can be represented in type theory and Agda in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel as a Sigma type,
-
-\begin{code}
-
- KER : {A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → 𝓤 ⊔ 𝓡 ̇
- KER {A} g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
-
-\end{code}
-
-or as a unary relation (predicate) over the Cartesian product,
-
-\begin{code}
-
- KER-pred : {A : 𝓤 ̇}{B : 𝓡 ̇} → (A → B) → Pred (A × A) 𝓡
- KER-pred g (x , y) = g x ≡ g y
-
-\end{code}
-
-or as a relation from `A` to `B`,
+In the special case, where `𝓤 ≡ 𝓡` and `A ≡ B`, we have
 
 \begin{code}
 
@@ -252,47 +230,59 @@ module _ {𝓤 : Universe} where
  Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
  Rel A 𝓝 = REL A A 𝓝
 
- KER-rel : {𝓡 : Universe}{A : 𝓤 ̇ } {B : 𝓡 ̇ } → (A → B) → Rel A 𝓡
- KER-rel g x y = g x ≡ g y
-
 \end{code}
 
-#### <a id="examples">Examples</a>
+
+#### <a id="kernels">Kernels</a>
+
+The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f x = f y}`. This can be represented in type theory and Agda in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel to be an inhabitant of a (binary) relation type, a (unary) predicate type, a (curried) Sigma type, or an (uncurried) Sigma type.
+
 
 \begin{code}
 
-module _ {𝓤 : Universe}{A B : 𝓤 ̇ } where
+module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{B : 𝓡 ̇} where
 
- ker : (A → B) → 𝓤 ̇
- ker = KER{𝓤}
+ ker : (A → B) → Rel A 𝓡
+ ker g x y = g x ≡ g y
 
- ker-rel : (A → B) → Rel A 𝓤
- ker-rel = KER-rel {𝓤}
+ kernel : (A → B) → Pred (A × A) 𝓡
+ kernel g (x , y) = g x ≡ g y
 
- ker-pred : (A → B) → Pred (A × A) 𝓤
- ker-pred = KER-pred {𝓤}
+ ker-sigma : (A → B) → 𝓤 ⊔ 𝓡 ̇
+ ker-sigma g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
+
+ ker-sigma' : (A → B) → 𝓤 ⊔ 𝓡 ̇
+ ker-sigma' g = Σ (x , y) ꞉ (A × A) , g x ≡ g y
+
+\end{code}
+
+
+Similarly, the *identity relation* (which is equivalent to the kernel of an injective function) can be represented as an inhabitant of any one four types.
+
+\begin{code}
 
 module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
 
- --The identity relation.
- 𝟎 : 𝓤 ̇
- 𝟎 = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
+ 𝟎 : Rel A 𝓤
+ 𝟎 a b = a ≡ b
 
- --...as a binary relation...
- 𝟎-rel : Rel A 𝓤
- 𝟎-rel a b = a ≡ b
-
- --...as a binary predicate...
  𝟎-pred : Pred (A × A) 𝓤
  𝟎-pred (a , a') = a ≡ a'
 
- 𝟎-pred' : 𝓤 ̇
- 𝟎-pred' = Σ p ꞉ (A × A) , ∣ p ∣ ≡ ∥ p ∥
+ 𝟎-sigma : 𝓤 ̇
+ 𝟎-sigma = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
 
+ 𝟎-sigma' : 𝓤 ̇
+ 𝟎-sigma' = Σ (x , y) ꞉ (A × A) , x ≡ y
+
+\end{code}
+
+The *total relation*, which in set theory is the set `𝑨 × 𝑨`, could be represented as an inhabitant of a relation type, as follows.
+
+\begin{code}
 
  open import MGS-MLTT using (𝟙)
 
- -- The total relation A × A
  𝟏 : Rel A 𝓤₀
  𝟏 a b = 𝟙
 \end{code}

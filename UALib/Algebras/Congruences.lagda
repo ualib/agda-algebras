@@ -51,7 +51,7 @@ The relation `𝟎-rel` is equivalent to the identity relation `≡` and these a
 
 module _ {𝓤 : Universe}{A : 𝓤 ̇} where
 
- 𝟎-IsEquivalence : IsEquivalence{𝓤}{A = A} 𝟎-rel
+ 𝟎-IsEquivalence : IsEquivalence{𝓤}{A = A} 𝟎
  𝟎-IsEquivalence = record {rfl = λ x → refl{x = x}; sym = ≡-symmetric; trans = ≡-transitive}
 
 \end{code}
@@ -62,10 +62,10 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 module _ {𝓤 : Universe} where
 
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎-rel
+ 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎
  𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
 
- 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎-rel
+ 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
  𝟎-compatible fe {𝑨} = λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
 \end{code}
@@ -75,7 +75,7 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 \begin{code}
 
 Δ : {𝓤 : Universe} → funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
-Δ fe = mkcon 𝟎-rel (𝟎-compatible fe) 𝟎-IsEquivalence
+Δ fe = mkcon 𝟎 (𝟎-compatible fe) 𝟎-IsEquivalence
 
 \end{code}
 

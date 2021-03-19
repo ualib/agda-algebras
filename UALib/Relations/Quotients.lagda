@@ -87,7 +87,7 @@ An easy first example of an equivalence relation is the kernel of any function.
 \begin{code}
 
 map-kernel-IsEquivalence : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
-                            (f : A → B) → IsEquivalence (KER-rel{𝓤}{𝓦} f)
+                            (f : A → B) → IsEquivalence (ker{𝓤}{𝓦} f)
 
 map-kernel-IsEquivalence {𝓤}{𝓦} f =
  record { rfl = λ x → refl

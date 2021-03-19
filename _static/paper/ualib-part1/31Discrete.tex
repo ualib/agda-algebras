@@ -263,10 +263,10 @@ We treat extensionality in greater detail and generality in \S\ref{function-exte
 
 
 
-
 \subsubsection{Binary Relations}\label{sec:binary-relations}
 
-In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model such a relation as a predicates over the product type \ab A \af × \ab A, or as an inhabitant of the function type \ab A \as → \ab A \as → \ab 𝓡\af ̇ (for some universe \ab 𝓡).\footnote{Note that a binary relation from \ab A to \ab B is not simply a unary predicate over the type \ab A~\as →~\ab B.  The binary relation has type \ab A~\as →~(\ab B~\as →~\ab 𝓝\af ̇) whereas a unary predicate over \ab A~\as →~\ab B has type (\ab A~\as →~\ab B)~\as →~\ab 𝓝\af ̇.}
+In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model such a relation as a (unary) predicate over the product type \ab A \af × \ab A, or as an inhabitant of the function type \ab A \as → \ab A \as → \ab 𝓡\af ̇ (for some universe \ab 𝓡).  Note, however, this is not the same as a unary predicate over the function type \ab A \as → \ab A since the latter has type  (\ab A~\as →~\ab A)~\as →~\ab 𝓡\af ̇, while a binary relation should have type \ab A~\as →~(\ab A~\as →~\ab 𝓡\af ̇). 
+% \footnote{Note that a binary relation from \ab A to \ab B is not simply a unary predicate over the type \ab A~\as →~\ab B.  The binary relation has type \ab A~\as →~(\ab B~\as →~\ab 𝓝\af ̇) whereas a unary predicate over \ab A~\as →~\ab B has type (\ab A~\as →~\ab B)~\as →~\ab 𝓝\af ̇.}
 
 A generalization of the notion of binary relation is a \emph{relation from} \ab{A} \emph{to} \ab{B}, which we define first and treat binary relations on a single \ab{A} as a special case.
 \ccpad
@@ -332,9 +332,9 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓝}\<%
 \end{code}
-\scpad
 
-The \defn{kernel} of \ab f \as : \ab A \AgdaSymbol{→} \ab B is defined informally by \{(\ab x , \ab y) ∈ \ab A × \ab A : \ab f \ab x = \ab f \ab y\}. This can be represented in type theory and Agda in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel as a Sigma type,
+\paragraph*{The kernel of a function}
+The \defn{kernel} of \ab f \as : \ab A \AgdaSymbol{→} \ab B is defined informally by \{(\ab x , \ab y) ∈ \ab A × \ab A : \ab f \ab x = \ab f \ab y\}. This can be represented in type theory in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel as a Sigma type,
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{KER}\AgdaSpace{}%
@@ -381,7 +381,7 @@ The \defn{kernel} of \ab f \as : \ab A \AgdaSymbol{→} \ab B is defined informa
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-or as a unary relation (predicate) over the Cartesian product \ab A × \ab A,
+or as a unary predicate over the Cartesian product \ab A × \ab A,
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{KER-pred}\AgdaSpace{}%
@@ -454,42 +454,43 @@ or as a relation from \ab{A} to \ab{A},
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\<%
 \end{code}
-\ccpad
-For example, the \textit{identity relation} (the kernel of an injective function) could be represented as a Sigma type (omitted), or a relation, or a predicate.
+\scpad
+
+The \textit{identity relation}, which is the kernel of an injective function, could be represented as a Sigma type, or a relation, or a predicate, as follows.
 \ccpad
 \begin{code}%
-%% \>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-%% \AgdaSymbol{:}\AgdaSpace{}%
-%% \AgdaBound{𝓤}%
-%% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-%% \AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaSymbol{→}\AgdaSpace{}%
-%% \AgdaBound{𝓤}%
-%% \AgdaOperator{\AgdaFunction{̇}}\<%
-%% \\
-%% %
-%% \>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
-%% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-%% \AgdaSymbol{=}\AgdaSpace{}%
-%% \AgdaFunction{Σ}\AgdaSpace{}%
-%% \AgdaBound{a}\AgdaSpace{}%
-%% \AgdaFunction{꞉}\AgdaSpace{}%
-%% \AgdaBound{A}\AgdaSpace{}%
-%% \AgdaFunction{,}\AgdaSpace{}%
-%% \AgdaFunction{Σ}\AgdaSpace{}%
-%% \AgdaBound{b}\AgdaSpace{}%
-%% \AgdaFunction{꞉}\AgdaSpace{}%
-%% \AgdaBound{A}\AgdaSpace{}%
-%% \AgdaFunction{,}\AgdaSpace{}%
-%% \AgdaBound{a}\AgdaSpace{}%
-%% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-%% \AgdaBound{b}\<%
-%% \\
-%% %
-%% \\[\AgdaEmptyExtraSkip]%
-%% %
+\>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{b}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaFunction{𝟎-rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
@@ -538,6 +539,12 @@ For example, the \textit{identity relation} (the kernel of an injective function
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{a'}\<%
 \end{code}
+
+The \defn{total relation}, which in set theory is the set \ab 𝑨~\af ×~\ab 𝑨, could be represented as the following relation type.
+
+\begin{code}
+
+
 
 \subsubsection{The implication relation}\label{implication}
 

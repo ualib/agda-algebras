@@ -265,7 +265,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}
   →           𝑨 ∈ S{𝓤}{𝓤} 𝒦
               --------------------------------------------------
-  →           KER-pred ∣ hom𝔽 ∣ ⊆ KER-pred (free-lift 𝑨 h)
+  →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
@@ -323,7 +323,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
 
 \begin{code}
 
- ψlemma1 : KER-pred ∣ 𝔑 ∣ ⊆ ψ 𝒦
+ ψlemma1 : kernel ∣ 𝔑 ∣ ⊆ ψ 𝒦
  ψlemma1 {p , q} 𝔑pq 𝑨 sA h = γ
   where
    f : hom 𝔽 𝑨
@@ -345,7 +345,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
        ∣ ϕ ∣ q ∎
 
 
- ψlemma2 : KER-pred ∣ hom𝔽 ∣ ⊆ ψ 𝒦
+ ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
  ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
    where
     γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
@@ -370,7 +370,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 \begin{code}
 
- class-models-kernel : ∀ p q → (p , q) ∈ KER-pred ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
+ class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
  class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
 \end{code}
@@ -382,7 +382,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- kernel-in-theory : KER-pred ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
+ kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
  kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
  open Congruence
@@ -397,14 +397,14 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 
  module _ -- extensionality assumptions:
-             (fe : dfunext 𝓥 (ov 𝓤))
-             (hfe : hfunext (ov 𝓤)(ov 𝓤))
-             (pe : prop-ext (ov 𝓤)(ov 𝓤))
+          (fe : dfunext 𝓥 (ov 𝓤))
+          (hfe : hfunext (ov 𝓤)(ov 𝓤))
+          (pe : prop-ext (ov 𝓤)(ov 𝓤))
 
           -- truncation assumptions:
-             (Cset : is-set ∣ ℭ ∣)
-             (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-             (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
+          (Cset : is-set ∣ ℭ ∣)
+          (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
+          (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
 
   where
 
@@ -423,10 +423,10 @@ Finally we come to one of the main theorems of this module; it asserts that ever
     ϕE : Epic ∣ ϕ ∣
     ϕE = lift-of-epi-is-epi (snd (𝕏 𝑨))
 
-    pqlem2 : ∀ p q → (p , q) ∈ KER-pred ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
+    pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
     pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
 
-    kerincl : KER-pred ∣ hom𝔽 ∣ ⊆ KER-pred ∣ ϕ ∣
+    kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ ϕ ∣
     kerincl {p , q} x = γ
      where
       Apq : 𝑨 ⊧ p ≈ q
