@@ -10,9 +10,9 @@ Here we present the submodules of the \agdaualib's \ualibhtml{Relations} module.
 
 \subsubsection{Unary relations}
 
-In set theory, given two sets \ab A and \ab B, we say that \ab A is a \defn{subset} of \ab B, and we write \ab A \af ⊆ \ab B, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab A~\as →~\ab x~\af ∈~\ab B). We need a mechanism for representing this notion in Agda. of A typical approach is to use a \emph{predicate} type, denoted by \af{Pred}.
+In set theory, given two sets \ab A and \ab P, we say that \ab P is a \defn{subset} of \ab A, and we write \ab P \af ⊆ \ab A, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab P~\as →~\ab x~\af ∈~\ab A). We need a mechanism for representing this notion in Agda. A typical approach is to use a \emph{predicate} type, denoted by \af{Pred}.
 
-Given a universe \ab 𝓤 and a type \ab A, the type \af{Pred} \ab A \ab 𝓤 can be viewed as representing a property that elements of type \ab A may or may not satisfy.  We write \ab P \as : \af{Pred} \ab A \ab 𝓤 to represent the semantic concept of a collection of elements of type \ab A that satisfy the property \ab P. Here is the definition (which is similar to the one found in the \texttt{Relation/Unary.agda} file of the \agdastdlib.
+Given two universes \ab 𝓤 \ab 𝓦 and a type \ab A~\as :~\ab 𝓤\af ̇, the type \af{Pred}~\ab A~\ab 𝓦 represents \emph{properties} that inhabitants of \ab A may or may not satisfy.  We write \ab P~\as :~\af{Pred}~\ab A~\ab 𝓤 to represent the semantic concept of the collection of inhabitants of \ab A that satisfy (or belong to) \ab P. Here is the definition.\footnote{\label{relunary}cf.~\texttt{Relation/Unary.agda} in the \agdastdlib.}
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -43,7 +43,7 @@ Given a universe \ab 𝓤 and a type \ab A, the type \af{Pred} \ab A \ab 𝓤 ca
 \end{code}
 \ccpad
 % To reiterate, given a type \ab A \as : \ab 𝓤\af ̇, we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
-Below we consider predicates over the class of all algebras of a particular type. Soon (in the \ualibhtml{Algebras.Algebras} module) we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of \ab 𝑆-algebras with domain type \ab 𝓤\af ̇, and the type \af{Pred}(\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓦 (whose inhabitants are maps of type \af{Algebra}~\ab 𝓤~\ab 𝑆~\as →~\ab 𝓦\af ̇) will be used to represent subclasses of \ab 𝑆-algebras with certain properties.
+Later we consider predicates over the class of algebras in a given signature. In the \ualibhtml{Algebras} module we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of \ab 𝑆-algebras with domain type \ab 𝓤\af ̇, and the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓦 will represent classes of \ab 𝑆-algebras with certain properties.
 
 
 
@@ -51,7 +51,7 @@ Below we consider predicates over the class of all algebras of a particular type
 
 \subsubsection{Membership and inclusion relations}\label{membership-and-inclusion-relations}
 
-Of course, the \ualib includes types that represent element-wise inclusion and subset containment. For example, given a predicate \af P, we may represent that  ``\ab x belongs to \af P'' or that ``\ab x has property \af{P},'' by writing either \ab x \af ∈ \af P or \af P \ab x.  The definition of \af ∈ is standard (cf.~\texttt{Relation/Unary.agda} in the \agdastdlib). Nonetheless, here it is.
+Like the \agdastdlib, the \ualib includes types that represent the \emph{element inclusion} and \emph{subset inclusion} relations from set theory. For example, given a predicate \af P, we may represent that  ``\ab x belongs to \af P'' or that ``\ab x has property \af{P},'' by writing either \ab x \af ∈ \af P or \af P \ab x.  The definition of \af ∈ is standard. Nonetheless, here it is.\cref{relunary}
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -80,7 +80,7 @@ Of course, the \ualib includes types that represent element-wise inclusion and s
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-The \textit{subset} relation is denoted, as usual, with the \af{⊆} symbol and is defined as follows.
+The \textit{subset} relation is denoted, as usual, with the \af{⊆} symbol and is defined as follows.\cref{relunary}
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -167,10 +167,7 @@ In type theory everything is represented as a type and, as we have just seen, th
 \AgdaBound{P}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p is a proof of the first inclusion (that is, \ab p~\as :~\ab P~\aof ⊆~\ab Q), and \ab q is a proof of the second.
-
-If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then of course both \ab P \aof ⊆ \ab Q and
-\ab Q \aof ⊆ \ab P will hold, so \ab P \aof ≐ \ab Q will also hold.
+A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p~\as :~\ab P~\aof ⊆~\ab Q and \ab q :~\ab Q~\aof ⊆~\ab P are proofs of the first and second inclusions, respectively. If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then both \ab P~\aof ⊆~\ab Q and \ab Q~\aof ⊆~\ab P hold, so \ab P \aof ≐ \ab Q also holds, as we now confirm.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
@@ -211,7 +208,7 @@ If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then o
 \AgdaBound{z}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. However, we can postulate it axiomatically if we wish. This is called the \defn{axiom of extensionality} and a type that represents it can be defined in \agda as follows.
+The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. However, we can postulate it axiomatically if we wish. This is called the \defn{axiom of extensionality} and a type that represents this axiom is the following.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
@@ -254,7 +251,9 @@ The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. Howev
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-We treat extensionality in greater detail and generality in \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
+Note that the type \af{ext-axiom} does not itself postulate the axiom of extensionality.  It merely defines the axiom.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.\footnote{Agda also has a \ak{postulate} mechanism that we could use, but this would require omitting the \AgdaPragma{--safe} pragma from the \ak{OPTIONS} directive at the start of the module.}
+
+We treat other notions of extensionality in \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
 
 
 

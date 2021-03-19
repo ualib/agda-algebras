@@ -21,9 +21,10 @@ open import Prelude.Lifts public
 
 #### <a id="unary-relations">Unary relations</a>
 
-In set theory, given two sets `A` and `B`, we say that `A` is a *subset* of `B`, and we write `A ⊆ B`, just in case `∀ x (x ∈ A → x ∈ B)`. We need a mechanism for representing this notion in Agda. of A typical approach is to use a *predicate* type, denoted by `Pred`.
+In set theory, given two sets `A` and `P`, we say that `P` is a *subset* of `A`, and we write `P ⊆ A`, just in case `∀ x (x ∈ P → x ∈ A)`. We need a mechanism for representing this notion in Agda. A typical approach is to use a *predicate* type, denoted by `Pred`.
 
-Given a universe `𝓤` and a type `A`, the type `Pred A 𝓤` can be viewed as representing a property that elements of type `A` may or may not satisfy.  We write `P : Pred A 𝓤` to represent the semantic concept of a collection of elements of type `A` that satisfy the property `P`. Here is the definition (which is similar to the one found in the `Relation/Unary.agda` file of the [Agda Standard Library][]).
+Given two universes `𝓤 𝓦` and a type `A : 𝓤 ̇`, the type `Pred A 𝓦` represents *properties* that inhabitants of type `A` may or may not satisfy.  We write `P : Pred A 𝓤` to represent the semantic concept of the collection of inhabitants of `A` that satisfy (or belong to) `P`. Here is the definition.<sup>[1](Relations.Discrete.html#fn1)</sup>
+(which is similar to the one found in the `Relation/Unary.agda` file of the [Agda Standard Library][]).
 
 \begin{code}
 
@@ -34,12 +35,12 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-Below we will often consider predicates over the class of all algebras of a particular type.  Soon (in the [Algebras.Algebras][] module) we will define the type `Algebra 𝓤 𝑆` of `𝑆`-algebras with domain type `𝓤 ̇`. The type `Pred (Algebra 𝓤 𝑆) 𝓤`, inhabited by maps of type `𝑨 → 𝓤 ̇`, will be used to represent subclasses of `𝑆`-algebras with certain properties.
+Later we consider predicates over the class of algebras in a given signature.  In the [Algebras][] module we will define the type `Algebra 𝓤 𝑆` of `𝑆`-algebras with domain type `𝓤 ̇`, and the type `Pred (Algebra 𝓤 𝑆) 𝓤`, will represent classes of `𝑆`-algebras with certain properties.
 
 
 #### <a id="membership-and-inclusion-relations">Membership and inclusion relations</a>
 
-We introduce notation so that we may indicate that `x` "belongs to" or "inhabits" at type `P`, or that `x` "has property" `P`, by writing either `x ∈ P` or `P x` (cf. `Relation/Unary.agda` in the [Agda Standard Library][]).
+Like the [Agda Standard Library][], the [UALib][] includes types that represent the *element inclusion* and *subset inclusion* relations from set theory. For example, given a predicate `P`, we may represent that  "`x` belongs to `P`" or that "`x` has property `P`," by writing either `x ∈ P` or `P x`.  The definition of `∈` is standard. Nonetheless, here it is.<sup>[1]</sup>
 
 \begin{code}
 
@@ -66,7 +67,7 @@ module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
 #### <a id="the-extensionality-axiom">The axiom of extensionality</a>
 
-In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down the type that represents what we typically means in informal mathematics for two subsets to be equal. In the [UALib][] we denote this type by `≐` and define it as follows.<sup>[1](Relations.Discrete.html#fn1)</sup>
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down the type that represents what we typically means in informal mathematics for two subsets to be equal. In the [UALib][] we denote this type by `≐` and define it as follows.<sup>[2](Relations.Discrete.html#fn2)</sup>
 
 \begin{code}
 
@@ -79,9 +80,7 @@ module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
 \end{code}
 
-Thus, a proof of `P ≐ Q` is a pair `(p , q)` where `p` is a proof of the first inclusion (that is, `p : P ⊆ Q`)  and `q` is a proof of the second.
-
-If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then of course both `P ⊆ Q` and `P ⊇ Q` hold, so `P ≐ Q` holds.
+Thus, a proof of `P ≐ Q` is a pair `(p , q)` where where `p : P ⊆ Q` and `q : Q ⊆ P` are proofs of the first and second inclusions, respectively. If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then both `P ⊆ Q` and `Q ⊆ P` hold, so `P ≐ Q` also holds, as we now confirm.
 
 \begin{code}
 
@@ -92,7 +91,7 @@ module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
 
 \end{code}
 
-The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the *axiom of extensionality*.
+The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the *axiom of extensionality* and a type that represents this axiom is the following.
 
 \begin{code}
 
@@ -103,64 +102,68 @@ module _ {𝓧 : Universe} where
 
 \end{code}
 
-We treat this axiom in greater generally and detail in the [Relations.Truncation][] module.
+Note that the type `ext-axiom` does not itself postulate the axiom of extensionality.  It merely defines the axiom.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.<sup>[3](Relations.Discrete#fn3)</sup>
+
+\begin{code}
+
+module ext-axiom-postulated {𝓧 𝓨 : Universe}{A : 𝓧 ̇} {ea : ext-axiom A 𝓨} where
+
+\end{code}
+
+We treat other notions of extensionality in the [Relations.Truncation][] module.
 
 
 
 #### <a id="predicates-toolbox">Predicates toolbox</a>
 
-Here is a small collection of tools that will come in handy later.  Hopefully the meaning of each is self-explanatory.
+Here is a small collection of tools that will come in handy later. The first is a type that's useful for asserting
+ that the image of a function (the first argument) is contained in a predicate (the second argument).
 
 \begin{code}
+
 module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } where
 
  Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
  Im_⊆_ f S = ∀ x → f x ∈ S
 
+\end{code}
 
-img : {𝓧 : Universe}{X Y : 𝓧 ̇ }(f : X → Y)(P : Pred Y 𝓧) → Im f ⊆ P → X → Σ P
-img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
+Naturally, we have a type that represents *disjoint union* and, as a special case, *union*.
 
+\begin{code}
 
-module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
-
- Pred-refl : {P Q : Pred A 𝓨} → P ≡ Q → (a : A) → a ∈ P → a ∈ Q
- Pred-refl refl _ = λ z → z
-
- Pred-≡→⊆ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊆ Q)
- Pred-≡→⊆ refl = (λ z → z)
-
-
--- Disjoint Union.
 data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
-infixr 1 _⊎_
 
-
--- Union.
 _∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩 → Pred A _
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
-infixr 1 _∪_
 
+infixr 1 _⊎_ _∪_
+
+\end{code}
+
+The empty set is naturally represented by the empty type, `𝟘`; the latter is defined in the `MGS-MLTT` module of the [Type Topology][] library.
+
+\begin{code}
 
 open import MGS-MLTT using (𝟘)
 
--- The empty set.
 ∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
 ∅ = λ _ → 𝟘
 
--- Singletons.
+\end{code}
+
+A natural way to represent a singleton set is by the following type.
+
+\begin{code}
+
 ｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
 
 \end{code}
 
-
-
-#### <a id="predicate-transport">Predicate transport</a>
-
-The following is a pair of useful transport lemmas for predicates.
+Finally, here is a pair of useful transport lemmas for predicates.
 
 \begin{code}
 
@@ -327,7 +330,11 @@ However, this is a rare case in which the more elegant syntax may result in simp
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`.</span>
+<sup>1</sup><span class="footnote" id="fn1">cf. `Relation/Unary.agda` in the [Agda Standard Library][].</span>
+
+<sup>2</sup><span class="footnote" id="fn2">In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`.</span>
+
+<sup>3</sup><span class="footnote" id="fn3">Agda also has a `postulate` mechanism that we could use, but this would require omitting the `--safe` pragma from the `OPTIONS` directive at the start of the module.</span>
 
 <p></p>
 
@@ -353,6 +360,19 @@ module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
 
  Pred-≡→⊇ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊇ Q)
  Pred-≡→⊇ refl = (λ z → z)
+
+
+-- img : {𝓧 : Universe}{X Y : 𝓧 ̇ }(f : X → Y)(P : Pred Y 𝓧) → Im f ⊆ P → X → Σ P
+-- img {Y = Y} f P Imf⊆P = λ x₁ → f x₁ , Imf⊆P x₁
+
+
+-- module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
+
+--  Pred-refl : {P Q : Pred A 𝓨} → P ≡ Q → (a : A) → a ∈ P → a ∈ Q
+--  Pred-refl refl _ = λ z → z
+
+--  Pred-≡→⊆ : {P Q : Pred A 𝓨} → P ≡ Q → (P ⊆ Q)
+--  Pred-≡→⊆ refl = (λ z → z)
 
 
 
