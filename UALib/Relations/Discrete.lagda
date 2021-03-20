@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="unary-relations">Discrete Relations</a>
 
-This section presents the [UALib.Relations.Discrete][] module of the [Agda Universal Algebra Library][], which covers *unary* and *binary relations*.  We refer to these as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* we introduce in the next module ([Relations.Continuous][]). We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+This is the [UALib.Relations.Discrete][] module of the [Agda Universal Algebra Library][].  Here we cover *unary* and *binary relations*.  We refer to these as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* we introduce in the next module ([Relations.Continuous][]). We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
 
 \begin{code}
 

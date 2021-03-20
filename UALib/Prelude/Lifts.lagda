@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="agdas-universe-hierarchy">Agda's Universe Hierarchy</a>
 
-This section presents the [UALib.Prelude.Lifts][] module of the [Agda Universal Algebra Library][].
+This is the [UALib.Prelude.Lifts][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 

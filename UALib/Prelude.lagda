@@ -17,7 +17,7 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 
 ## <a id="prelude">Prelude</a>
 
-This section presents the [Prelude][] module of the [Agda Universal Algebra Library][].
+This is the [Prelude][] module of the [Agda Universal Algebra Library][].
 
 The source code for this module comprises the (literate) [Agda][] program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file [Prelude.lagda][], which resides in the [git repository of the Agda UALib][].
 

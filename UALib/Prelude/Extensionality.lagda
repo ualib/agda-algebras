@@ -8,7 +8,7 @@ author: William DeMeo
 
 ### <a id="extensionality">Function Extensionality</a>
 
-This section describes the [UALib.Prelude.Extensionality][] module of the [Agda Universal Algebra Library][].
+This is the [UALib.Prelude.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 

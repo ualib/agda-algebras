@@ -3,6 +3,8 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
+
+\subsubsection{Motivation}\label{sec:motivation-1}
 In set theory, an \ab n-ary relation on a set \ab{A} is simply a subset of the \ab n-fold product \ab{A} \ad × \ab A \ad × \as ⋯ \ad × \ab A. As such, we could model these as predicates over the type \ab{A} \ad × \as ⋯ \ad × \ab A, or as relations of type \ab{A} \as → \ab A \as → \as ⋯ \as → \ab A \as → \ab 𝓦\af ̇ (for some universe \ab 𝓦). To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an \ab n-fold arrow \as →.
 
 A more general and straightforward approach is to instead define an arity type \ab{I} \as : \ab 𝓥\af ̇ , and define the type representing \ab{I}-ary relations on \ab{A} as the function type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇. Then, if we are specifically interested in an \ab n-ary relation for some natural number \ab{n}, we could take \ab{I} to be a finite set (e.g., of type \ad{Fin} n).

@@ -7,7 +7,7 @@ author: William DeMeo
 
 ## <a id="relation-and-quotient-types">Relation and Quotient Types</a>
 
-This chapter presents the [UALib.Relations][] module of the [Agda Universal Algebra Library][].
+This is the [UALib.Relations][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -28,6 +28,6 @@ open import Relations.Truncation
 <p></p>
 
 [← Prelude.Lifts](Prelude.Lifts.html)
-<span style="float:right;">[Relations.Unary →](Relations.Discrete.html)</span>
+<span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

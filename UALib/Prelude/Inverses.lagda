@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="inverses">Inverses</a>
 
-This section presents the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
+This is the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
