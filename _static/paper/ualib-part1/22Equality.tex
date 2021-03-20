@@ -453,59 +453,7 @@ A function is well-defined if and only if it maps equivalent elements to a singl
 \ccpad
 This establishes that our definitional equality satisfies the substitution rule (subst).
 
-Here are some variations of \af{ap} that are sometimes useful.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{ap-cong}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[100I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSymbol{\}}\<%
-% \\
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaSymbol{→}%
-% \>[.][@{}l@{}]\<[100I]%
-% \>[11]\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{b}\<%
-\\
-%
-\>[0]\AgdaFunction{ap-cong}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\end{code}
-\ccpad
-We sometimes need a version of this that works for \textit{dependent types}, such as the following (which we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib, transcribed into our notation of course).
+Here's a useful variation of \af{ap} that we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib (transcribed into TypeTopology/UALib notation of course).
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{cong-app}\AgdaSpace{}%

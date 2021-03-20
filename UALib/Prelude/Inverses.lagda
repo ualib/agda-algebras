@@ -34,7 +34,9 @@ module _ {𝓤 𝓦 : Universe} where
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
 
- ImageIsImage : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(b : B)(a : A) → b ≡ f a → Image f ∋ b
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+
+ ImageIsImage : (f : A → B)(b : B)(a : A) → b ≡ f a → Image f ∋ b
  ImageIsImage f b a b≡fa = eq b a b≡fa
 
 \end{code}
@@ -43,7 +45,7 @@ The following restatement of the last lemma simply rearranges the arguments in c
 
 \begin{code}
 
- ImageIsImage' : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B)(a : A)(b : B) → f a ≡ b → Image f ∋ b
+ ImageIsImage' : (f : A → B)(a : A)(b : B) → f a ≡ b → Image f ∋ b
  ImageIsImage' f a b fab = eq b a (fab ⁻¹)
 
 \end{code}
@@ -52,7 +54,7 @@ Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where 
 
 \begin{code}
 
- Inv : {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B){b : B} → Image f ∋ b  →  A
+ Inv : (f : A → B){b : B} → Image f ∋ b  →  A
  Inv f {.(f a)} (im a) = a
  Inv f (eq _ a _) = a
 
@@ -62,7 +64,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 \begin{code}
 
- InvIsInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
+ InvIsInv : (f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
  InvIsInv f {.(f a)} (im a) = refl
  InvIsInv f (eq _ _ p) = p ⁻¹
 
@@ -78,7 +80,7 @@ An epic (or surjective) function from type `A : 𝓤 ̇` to type `B : 𝓦 ̇` i
 
 \begin{code}
 
- Epic : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (g : A → B) →  𝓤 ⊔ 𝓦 ̇
+ Epic : (g : A → B) →  𝓤 ⊔ 𝓦 ̇
  Epic g = ∀ y → Image g ∋ y
 
 \end{code}
@@ -87,7 +89,7 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
 
 \begin{code}
 
- EpicInv : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) → Epic f → B → A
+ EpicInv : (f : A → B) → Epic f → B → A
  EpicInv f fE b = Inv f (fE b)
 
 \end{code}
@@ -180,7 +182,8 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 
 #### <a id="embeddings">Embeddings</a>
-The type `is-embedding f` denotes the assertion that `f` is a function all of whose fibers are subsingletons.
+
+The `is-embedding` type is defined in the [Type Topology][] library in the following way.
 
 \begin{code}
 module hide-is-embedding {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } where
@@ -192,13 +195,13 @@ open import MGS-Embeddings using (is-embedding) public
 
 \end{code}
 
-This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
+Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
 
 Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} {B : 𝓦 ̇} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  invertibles-are-embeddings : (f : A → B) → invertible f → is-embedding f
  invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)

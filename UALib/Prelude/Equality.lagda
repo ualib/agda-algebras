@@ -31,12 +31,20 @@ We will make this precise below, but first let us quote from a primary source. P
 
 To be sure we understand what this means, let `:=` denote the relation with respect to which `x` is related to `y` (denoted `x := y`) if and only if `y` *is the definition of* `x`.  Then the definitional equality relation `≡` is the reflexive, symmetric, transitive, substitutive closure of `:=`. By *subsitutive closure* we mean closure under the following *substitution rule*.
 
+<!--
 \begin{prooftree}
 \AxiomC{`\{A : 𝓤 ̇\}\{B : A → 𝓦 ̇\}\{x y : A\}`}
 \AxiomC{`x ≡ y`}
 \Rightlabel{(subst)}
 \BinaryInfC{`B x ≡ B y`}
 \end{prooftree}
+-->
+
+```agda
+    {A : 𝓤 ̇} {B : A → 𝓦 ̇} {x y : A}   x ≡ y
+    ------------------------------------------
+                B x ≡ B y
+```
 
 The datatype we use to represent definitional equality is imported from the Identity-Type module of the [Type Topology][] library, but apart from superficial syntactic differences, it is equivalent to the identity type used in all other Agda libraries we know of.  We repeat the definition here for easy reference.
 
@@ -74,11 +82,7 @@ module _  {𝓤 : Universe}{A : 𝓤 ̇ }  where
 
 The only difference between `≡-symmetric` and `≡-sym` (respectively, `≡-transitive` and `≡-trans`) is that the latter has fewer explicit arguments, which is sometimes convenient.
 
-We prove that `≡` obeys the substitution rule (subst) in the next subsection (see the definition of `ap` below), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.\footnote{%
-\textbf{Unicode Hints} (\agdamode): \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1} ↝ \af{⁻¹}; \texttt{\textbackslash{}Mii\textbackslash{}Mid} ↝ \af{𝑖𝑑}; \texttt{\textbackslash{}.}↝ \af{∙}. In general, for information about a character, place the cursor on the character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
-
-
-Many proofs make abundant use of the symmetry of `_≡_`, and the following syntactic sugar can often improve the readability of such proofs.<sup>[3](Prelude.Equality.html#fn3)</sup>
+We prove that `≡` obeys the substitution rule (subst) in the next subsection (see the definition of `ap` below), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.<sup>[3](Prelude.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -89,9 +93,7 @@ module hide-sym-trans {𝓤 : Universe} {A : 𝓤 ̇ } where
 
 \end{code}
 
-If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` .
-
-Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
+If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` . Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
 
 \begin{code}
 
@@ -114,7 +116,7 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 
 \begin{code}
 
-module hide-transport {𝓤 𝓦 : Universe} where
+module hide-id-transport {𝓤 𝓦 : Universe} where
 
  𝑖𝑑 : {𝓧 : Universe} (X : 𝓧 ̇ ) → X → X
  𝑖𝑑 X = λ x → x
@@ -126,13 +128,13 @@ open import MGS-MLTT using (𝑖𝑑; transport) public
 
 \end{code}
 
-As usual, we display `transport` in a hidden module and then imported the existing definition from [Type Topology][]. 
+As usual, we display definitions of existing types (here, `𝑖𝑑` and `transport`) in a hidden module and then imported their original definition from [Type Topology][].
 
 A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `a b : X` of the domain, and an identity proof `p : a ≡ b`, then we obtain a proof of `f a ≡ f b` by simply applying the `ap` function like so, `ap f p : f a ≡ f b`. Escardó defines `ap` in the [Type Topology][] library as follows.
 
 \begin{code}
 
-module hide-ap  {𝓤 : Universe}{A : 𝓤 ̇}{B : 𝓥 ̇} where
+module hide-ap  {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
  ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
@@ -141,25 +143,17 @@ open import MGS-MLTT using (ap) public
 
 \end{code}
 
-We now define some variations of `ap` that are sometimes useful.
+Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.agda` module of the [Agda Standard Library][] (transcribed into TypeTopology/UALib notation of course).
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
+module _ {𝓤 𝓦 : Universe} where
 
- ap-cong : {B : 𝓦 ̇}{f g : A → B}{a b : A} → f ≡ g → a ≡ b → f a ≡ g b
- ap-cong refl refl = refl
-
-\end{code}
-
-We sometimes need a version of this that works for [dependent types][], such as the following (which we borrow from the `Relation/Binary/Core.agda` module of the [Agda Standard Library][], transcribed into MHE/UALib notation of course):
-
-\begin{code}
-
- cong-app : {B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
+ cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
  cong-app refl _ = refl
 
 \end{code}
+
 
 
 
@@ -171,7 +165,9 @@ We sometimes need a version of this that works for [dependent types][], such as 
 
 <sup>2</sup><span class="footnote" id="fn2"> The *definiendum* is the left-hand side of a defining equation, the *definiens* is the right-hand side. For readers who have never generated an equivalence relation: the *reflexive closure* of `R ⊆ A × A `is the union of `R` and all pairs of the form `(a , a)`; the *symmetric closure* is the union of R and its inverse `\{(y , x) : (x , y) ∈ R\}`; we leave it to the reader to come up with the correct definition of transitive closure.
 
-<sup>3</sup><span class="footnote" id="fn3"> **Unicode Hints**. In [agda2-mode][] type `⁻¹` as `\^-\^1`, type `𝑖𝑑` as `\Mii\Mid`, and type `∙` as `\.`. In general, to get information about a given unicode character (e.g., how to type it) place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+<sup>3</sup><span class="footnote" id="fn3"> **Unicode Hints** ([agda2-mode][]). `\^-\^1 ↝ ⁻¹`; `\Mii\Mid ↝ 𝑖𝑑`; `\. ↝ ∙`. In general, for information about a character, place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+
+
 
 <sup>4</sup><span class="footnote" id="fn4"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170). See also [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion of transport; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda).<span>
 

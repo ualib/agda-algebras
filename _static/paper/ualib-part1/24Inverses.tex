@@ -3,7 +3,7 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-We begin by defining an inductive type that represents the semantic concept of \defn{inverse image} of a function.
+We begin by defining an inductive type that represents the \defn{inverse image} of a function.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -826,25 +826,14 @@ of \ab f, and the proof is trivial.
 % is defined in the \typetopology library, using the \af{is-subsingleton} type \href{Prelude.Extensionality.html\#alternative-extensionality-type}{described earlier}, as follows.
 
 % Finally, t
-The type \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons.
+The \af{is-embedding} type is defined in the \typetopology library in the following way.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-embedding}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -856,34 +845,26 @@ The type \af{is-embedding} \ab f asserts that \ab f is a function all of whose f
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\<%
+\AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibhtml{Relations.Truncation} module and take up the topic of sets.
+Thus, \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons. This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibhtml{Relations.Truncation} module and take up the topic of sets.
 
 Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{invertibles-are-embeddings}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{invertible}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -908,17 +889,11 @@ Finally, embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f 
 \begin{code}%
 \>[1]\AgdaFunction{embedding-is-monic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-embedding}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -930,52 +905,52 @@ Finally, embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f 
 \>[1]\AgdaFunction{embedding-is-monic}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{femb}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{fafb}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{fxfy}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
 \AgdaFunction{pr₁}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{femb}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaFunction{fa}\AgdaSpace{}%
-\AgdaFunction{fb}\AgdaSymbol{)}\<%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaFunction{fx}\AgdaSpace{}%
+\AgdaFunction{fy}\AgdaSymbol{)}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaFunction{fa}\AgdaSpace{}%
+\>[2]\AgdaFunction{fx}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
+\AgdaBound{x}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{fa}\AgdaSpace{}%
+\>[2]\AgdaFunction{fx}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{fb}\AgdaSpace{}%
+\>[2]\AgdaFunction{fy}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
+\AgdaBound{x}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{fb}\AgdaSpace{}%
+\>[2]\AgdaFunction{fy}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fafb}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fxfy}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁻¹}}\AgdaSymbol{)}\<%
 \end{code}
 
