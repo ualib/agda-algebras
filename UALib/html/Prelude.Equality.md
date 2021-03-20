@@ -162,16 +162,16 @@ Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.
 
 -------------------------------------
 
-#### <a id="equality-fn">Notes</a>
 
-<span class="footnote">
-<ol>
-<li id="fn1"> Per Martin-Löf, *An intuitionistic theory of types: predicative part*, Logic Colloquium '73 (Bristol, 1973), 73--118, Studies in Logic and the Foundations of Mathematics, Vol. 80, 1975.</li>
-<li id="fn:def"> The *definiendum* is the left-hand side of a defining equation, the *definiens* is the right-hand side. For readers who have never generated an equivalence relation: the *reflexive closure* of `R ⊆ A × A `is the union of `R` and all pairs of the form `(a , a)`; the *symmetric closure* is the union of `R` and its inverse `{(y , x) : (x , y) ∈ R}`; we leave it to the reader to come up with the correct definition of transitive closure.</li>
-<li id="fn:unicode"> **Unicode Hints** ([agda2-mode][]). `\^-\^1 ↝ ⁻¹`; `\Mii\Mid ↝ 𝑖𝑑`; `\. ↝ ∙`. In general, for information about a character, place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</li>
-<li id="fn:church"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170). See also [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion of transport; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda).</li>
-</ol>
-</span>
+<sup>1</sup><span class="footnote" id="fn1"> Per Martin-Löf, *An intuitionistic theory of types: predicative part*, Logic Colloquium '73 (Bristol, 1973), 73--118, Studies in Logic and the Foundations of Mathematics, Vol. 80, 1975.</span>
+
+<sup>2</sup><span class="footnote" id="fn2"> The *definiendum* is the left-hand side of a defining equation, the *definiens* is the right-hand side. For readers who have never generated an equivalence relation: the *reflexive closure* of `R ⊆ A × A `is the union of `R` and all pairs of the form `(a , a)`; the *symmetric closure* is the union of `R` and its inverse `{(y , x) : (x , y) ∈ R}`; we leave it to the reader to come up with the correct definition of transitive closure.</span>
+
+<sup>3</sup><span class="footnote" id="fn3"> **Unicode Hints** ([agda2-mode][]). `\^-\^1 ↝ ⁻¹`; `\Mii\Mid ↝ 𝑖𝑑`; `\. ↝ ∙`. In general, for information about a character, place the cursor over that character and type `M-x describe-char` (or `M-x h d c`).</span>
+
+
+
+<sup>4</sup><span class="footnote" id="fn4"> Alonzo Church, "A Formulation of the Simple Theory of Types," *Journal of Symbolic Logic*, (2)5:56--68, 1940 [JSOR link](http://www.jstor.org/stable/2266170). See also [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#70309) of Escardó's [HoTT/UF in Agda notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html) for a discussion of transport; cf. [HoTT-Agda's definition](https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda).</span>
 
 <br>
 <br>
@@ -182,25 +182,3 @@ Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.
 {% include UALib.Links.md %}
 
 
-<!-- NO LONGER USED
-
-#### <a id="≡-intro-and-≡-elim-for-nondependent-pairs">≡-intro and ≡-elim for nondependent pairs</a>
-
-We conclude the Equality module with some occasionally useful introduction and elimination rules for the equality relation on (nondependent) pair types.
-
- ≡-elim-left : {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇} → (A₁ , B₁) ≡ (A₂ , B₂) → A₁ ≡ A₂
- ≡-elim-left e = ap fst e
-
-
- ≡-elim-right : {A₁ A₂ : 𝓤 ̇}{B₁ B₂ : 𝓦 ̇} → (A₁ , B₁) ≡ (A₂ , B₂) → B₁ ≡ B₂
- ≡-elim-right e = ap snd e
-
-
- ≡-×-intro : {A₁ A₂ : 𝓤 ̇} {B₁ B₂ : 𝓦 ̇} → A₁ ≡ A₂ → B₁ ≡ B₂ → (A₁ , B₁) ≡ (A₂ , B₂)
- ≡-×-intro refl refl = refl
-
-
- ≡-×-int : {A : 𝓤 ̇}{B : 𝓦 ̇}{a x : A}{b y : B} → a ≡ x → b ≡ y → (a , b) ≡ (x , y)
- ≡-×-int refl refl = refl
-
--->

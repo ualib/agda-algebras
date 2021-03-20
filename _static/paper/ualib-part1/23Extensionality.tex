@@ -29,24 +29,24 @@ As alluded to above, a natural notion of function equality, sometimes called \em
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -208,8 +208,7 @@ The types \af{global-funext} and \af{global-dfunext} are defined in the \typetop
 \AgdaBound{𝓥}\<%
 \end{code}
 \ccpad
-The next two types define the converse of function extensionality.\footnote{In previous versions of the
-\ualib this function was called \af{intensionality}, indicating that it represented the concept of \emph{function intensionality}, but we realized this isn't quite right and changed the name to the less controvertial \af{extfun}. Later we realized that a function called \af{happly}, which is nearly identical to \af{extdfun}, is already defined in the \am{MGS-FunExt-from-Univalence} module of the \typetopology library.}
+The next two types define the converse of function extensionality.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{extfun}\AgdaSpace{}%
@@ -283,9 +282,7 @@ The next two types define the converse of function extensionality.\footnote{In p
 
 Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two flavors of type definition.  We do so by comparing the definitions of \af{funext} and \af{extfun}.
 
-In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇), and the right-hand side of the defining equation of \af{funext} is an assertion (which may or may not hold). In the definition of \af{extfun}, the codomain is an assertion (namely, \ab f \af ∼ \ab g), and the right-hand side of the defining equation is a proof of this assertion.
-
-As such, \af{extfun} is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{funext} is a type, and we may or may not wish to assume we have a proof for this type. That is, we could postulate that function extensionality holds and assume we have a witness, say, \ab{fe}~\as :~\af{funext}~\ab 𝓤~\ab 𝓥 (i.e., a proof that pointwise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
+In the definition of \af{funext}, the codomain is a generic type (namely, (\ab 𝓤 \ap ⊔ \ab 𝓥)\af ⁺\af ̇), and the right-hand side of the defining equation of \af{funext} is an assertion (which may or may not hold). In the definition of \af{extfun}, the codomain is an assertion (namely, \ab f \af ∼ \ab g), and the right-hand side of the defining equation is a proof of this assertion. As such, \af{extfun} is a \defn{proof object}; it proves (inhabits the type that represents) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{funext} is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, \ab{fe}~\as :~\af{funext}~\ab 𝓤~\ab 𝓥 (i.e., a proof that pointwise equal functions are equal), but as noted above the existence of such a witness cannot be proved in Martin-Löf type theory.
 
 \subsubsection{Alternative extensionality type}\label{alternative-extensionality-type}
 
@@ -296,25 +293,25 @@ First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn
 \begin{code}%
 \>[1]\AgdaFunction{is-center}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
 \>[1]\AgdaFunction{is-center}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -332,15 +329,15 @@ First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn
 \\
 %
 \>[1]\AgdaFunction{is-singleton}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{is-center}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{c}\<%
 \end{code}
 \scpad
@@ -355,12 +352,12 @@ First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn
 \\
 %
 \>[1]\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
