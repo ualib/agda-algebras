@@ -22,7 +22,7 @@ open import MGS-Embeddings
 
 \end{code}
 
-We begin by defining an inductive type that represents the semantic concept of **inverse image** of a function.
+We begin by defining an inductive type that represents the semantic concept of *inverse image* of a function.
 
 \begin{code}
 
@@ -147,17 +147,15 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 
 
-#### <a id="composition-laws">Composition laws</a>
+##### <a id="composition-law">A composition law for epics</a>
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+module _ {𝓧 𝓨 𝓩 : Universe}{fe : funext 𝓨 𝓨}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇} where
 
- epic-factor : funext 𝓨 𝓨 → {A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇}
-               (β : A → B)(ξ : A → C)(ϕ : C → B)
-  →            β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
+ epic-factor : (β : A → B)(ξ : A → C)(ϕ : C → B) → β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
 
- epic-factor fe {A}{B}{C} β ξ ϕ compId βe y = γ
+ epic-factor β ξ ϕ compId βe y = γ
   where
    βinv : B → A
    βinv = EpicInv β βe
@@ -182,7 +180,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 The `is-embedding` type is defined in the [Type Topology][] library in the following way.
 
 \begin{code}
-module hide-is-embedding {𝓤 𝓦 : Universe} {A : 𝓤 ̇ } {B : 𝓦 ̇ } where
+module hide-is-embedding {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  is-embedding : (A → B) → 𝓤 ⊔ 𝓦 ̇
  is-embedding f = ∀ b → is-subsingleton (fiber f b)

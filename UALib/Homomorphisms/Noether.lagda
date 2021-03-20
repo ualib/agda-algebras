@@ -352,7 +352,7 @@ If, in addition, both β and γ are epic, then so is ϕ.
   ϕ = λ c → ∣ β ∣ ( ξinv c )
 
   ϕE : Epic ϕ
-  ϕE = epic-factor gfe ∣ β ∣ ∣ ξ ∣ ϕ ∥ ϕF ∥ βe
+  ϕE = epic-factor {fe = gfe} ∣ β ∣ ∣ ξ ∣ ϕ ∥ ϕF ∥ βe
 
 \end{code}
 
