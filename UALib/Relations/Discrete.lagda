@@ -7,7 +7,7 @@ author: William DeMeo
 
 ### <a id="unary-relations">Discrete Relations</a>
 
-This is the [UALib.Relations.Discrete][] module of the [Agda Universal Algebra Library][].  Here we cover *unary* and *binary relations*.  We refer to these as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* we introduce in the next module ([Relations.Continuous][]). We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -18,6 +18,9 @@ module Relations.Discrete where
 open import Prelude.Lifts public
 
 \end{code}
+
+In this module we define types that represent *unary* and *binary relations*.  We refer to these as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* we introduce in the next module ([Relations.Continuous][]). We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+
 
 #### <a id="unary-relations">Unary relations</a>
 
@@ -258,7 +261,7 @@ The *total relation* over `A`, which in set theory is the full Cartesian product
 
 #### <a id="implication">Implication</a>
 
-We denote and define implication for binary predicates (relations) as follows. (These are borrowed from the [Agda Standard Library][]; we have merely translated them into [Type Topology][]/[UALib][] notation.)
+We define the following types representing *implication* for binary relations. (These are borrowed from the [Agda Standard Library][]; we merely translate them into [Type Topology][]/[UALib][] notation.)
 
 \begin{code}
 
