@@ -35,22 +35,18 @@ module _ {𝓤 𝓦 : Universe} where
 
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+\end{code}
+
+Next we verify that the type just defined is what we expect.
+
+\begin{code}
 
  ImageIsImage : (f : A → B)(b : B)(a : A) → b ≡ f a → Image f ∋ b
  ImageIsImage f b a b≡fa = eq b a b≡fa
 
 \end{code}
 
-The following restatement of the last lemma simply rearranges the arguments in case that makes it clearer.
-
-\begin{code}
-
- ImageIsImage' : (f : A → B)(a : A)(b : B) → f a ≡ b → Image f ∋ b
- ImageIsImage' f a b fab = eq b a (fab ⁻¹)
-
-\end{code}
-
-Note that an inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
+An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
 
 \begin{code}
 
@@ -74,7 +70,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 
 
-#### <a id="epics"">Epics (surjective functions)</a>
+#### <a id="epics">Epics (surjective functions)</a>
 
 An epic (or surjective) function from type `A : 𝓤 ̇` to type `B : 𝓦 ̇` is as an inhabitant of the `Epic` type, which we define as follows.
 

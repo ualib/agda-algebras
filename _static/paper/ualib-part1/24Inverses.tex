@@ -72,14 +72,8 @@ Next we verify that the type just defined is what we expect.
 \ccpad
 \begin{code}
 \>[1]\AgdaFunction{ImageIsImage}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[72I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -88,14 +82,7 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{B}\AgdaSymbol{)(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-% \\
-% \>[.][@{}l@{}]\<[72I]%
-% \>[16]\AgdaComment{---------------------------------------------}\<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
 \AgdaSymbol{→}\AgdaSpace{}%
-% \>[16]
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -107,8 +94,6 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{b}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
-% %
 \>[1]\AgdaFunction{ImageIsImage}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
@@ -121,21 +106,12 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{b≡fa}\<%
 \end{code}
 \ccpad
-Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab p), where \abt{a}{A}, and \ab p is a proof that \ab f maps \ab a to \ab b; that is, \ab p \as : \ab b \ad ≡ \ab f \ab a. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a ``witness'' \abt{a}{A}, we can actually \emph{compute} a \emph{pseudoinverse} of \ab f. This function takes an arbitrary \ab b \as : \ab B and a (\textit{witness}, \textit{proof})-pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
+An inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab p), where \abt{a}{A}, and \ab p is a proof that \ab f maps \ab a to \ab b; that is, \ab p \as : \ab b \ad ≡ \ab f \ab a. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a ``witness'' \abt{a}{A}, we can actually \emph{compute} a \emph{pseudoinverse} of \ab f. This function takes an arbitrary \ab b \as : \ab B and a (\textit{witness}, \textit{proof})-pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Inv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -147,8 +123,8 @@ Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{∋}}\AgdaSpace{}%
 \AgdaBound{b}%
-\>[61]\AgdaSymbol{→}%
-\>[64]\AgdaBound{A}\<%
+\>[41]\AgdaSymbol{→}%
+\>[44]\AgdaBound{A}\<%
 \\
 %
 \>[1]\AgdaFunction{Inv}\AgdaSpace{}%
@@ -174,16 +150,9 @@ Note that an inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab
 We can prove that \af{Inv} \ab f is the \emph{right-inverse} of \ab f, as follows. % (where \ab q is the (\textit{witness}, \textit{proof})-pair).
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{InvIsInv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -233,26 +202,15 @@ We can prove that \af{Inv} \ab f is the \emph{right-inverse} of \ab f, as follow
 An \defn{epic} (or \defn{surjective}) function from type \ab A \as : \ab 𝓤\af ̇ to type \ab B \as : \ab 𝓦\af ̇ is as an inhabitant of the \af{Epic} type, which we define as follows.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[45]\AgdaBound{𝓤}\AgdaSpace{}%
+\>[23]\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
@@ -270,26 +228,11 @@ An \defn{epic} (or \defn{surjective}) function from type \ab A \as : \ab 𝓤\af
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-We obtain the right-inverse (or pseudoinverse) of an epic function \ab f by applying the function \af{EpicInv} (which we now define) to the function \ab f along with a proof, \ab{fepi} \as : \af{Epic} \ab f, that \ab f is surjective.
+We obtain the right-inverse of an epic function \ab f by applying the function \af{EpicInv} (which we now define) to the function \ab f along with a proof, \ab{fepi} \as : \af{Epic} \ab f, that \ab f is surjective.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{EpicInv}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[242I]\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-% \<%
-% \\
-% \>[.][@{}l@{}]\<[242I]%
-% \>[11]
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -298,15 +241,7 @@ We obtain the right-inverse (or pseudoinverse) of an epic function \ab f by appl
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-% \<%
-% \\
-% %
-% \>[11]\AgdaComment{--------------------}\<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
-\AgdaSymbol{→}\AgdaSpace{}%%
-% \>[11]
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
@@ -314,12 +249,12 @@ We obtain the right-inverse (or pseudoinverse) of an epic function \ab f by appl
 %
 \>[1]\AgdaFunction{EpicInv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{fepi}\AgdaSpace{}%
+\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Inv}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{fepi}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
@@ -328,42 +263,28 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{Z}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-% \<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
 \AgdaSymbol{→}\AgdaSpace{}%
-%
-% \>[7]
 \AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Z}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \\
@@ -465,6 +386,8 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 % \AgdaBound{x}\AgdaSymbol{))}\<%
 % \end{code}
 %
+We can now express the assertion that \af{EpicInv} \ab f does, indeed, give the right-inverse of \ab f.  Note that the proof requires function extensionality.
+\ccpad
 \begin{code}
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -521,15 +444,14 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 \AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
-
-
-
+\ccpad
+Here we break with our convention of hiding anonymous module declarations because we wish to emphasize that function extensionality is required and provide an example showing how one postulates this principle.
 
 
 \subsubsection{Monics (injective functions)}\label{injective-functions}
 
-We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it doesn't map distinct elements to a common point. The \af{Monic} type, which we now define, manifests this property. (To reduce reader strain, we omit some easily inferred typing judgments like \ab{A} \as{:} \ab{𝓤}\af ̇ and \ab{B} 
-\as{:} \ab{𝓦}\af ̇.)
+We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it does not map distinct elements to a common point. The \af{Monic} type, which we now define, manifests this property.  As above, we usually omit easily inferred typing judgments like \ab{A} \as{:} \ab{𝓤}\af ̇ and \ab{B} 
+\as{:} \ab{𝓦}\af ̇.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -581,7 +503,7 @@ We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn
 \AgdaBound{a₂}\<%
 \end{code}
 \ccpad
-We obtain the (left-)inverse by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
+We obtain the left-inverse by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInv}\AgdaSpace{}%

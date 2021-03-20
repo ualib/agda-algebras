@@ -39,7 +39,7 @@ A general \af{Lift} record type, similar to the one found in the \am{Level} modu
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
@@ -58,12 +58,68 @@ A general \af{Lift} record type, similar to the one found in the \am{Level} modu
 \>[1]\AgdaKeyword{field}\AgdaSpace{}%
 \AgdaField{lower}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\<%
+\AgdaBound{A}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Lift}\<%
 \end{code}
 \scpad
+
+The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of \afld{lower} is immediately followed by an application of \aic{lift}, then the result is the identity transformation. Similarly, \aic{lift} followed by \afld{lower} is the identity.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{lift}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaField{lower}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaField{lower}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaInductiveConstructor{lift}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\<%
+\end{code}
+\ccpad
+The proofs are trivial. Nonetheless we'll find a few holes that these observations can fill.
+
+
+
+
+
 % Using the \af{Lift} type, we define two functions that lift the domain (respectively, codomain) type of a function to a higher universe.
 % \ccpad
 % \begin{code}%
@@ -168,54 +224,3 @@ A general \af{Lift} record type, similar to the one found in the \am{Level} modu
 % \end{code}
 % \ccpad
 % For example, \af{lift-dom} takes a function \ab f defined on the domain \AgdaBound{X}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{𝓧}\AgdaSpace{}\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{} and returns a function defined on the domain \ar{Lift}\as{\{}\ab 𝓦\as{\}}\as{\{}\ab 𝓧\as{\}} \ab X \as : \ab 𝓧 \aop ⊔ \ab 𝓦\aof ̇.
-
-The point of having a ramified hierarchy of universes is to avoid Russell's paradox, and this would be subverted if we were to lower the universe of a type that wasn't previously lifted.  However, we can prove that if an application of \afld{lower} is immediately followed by an application of \aic{lift}, then the result is the identity transformation. Similarly, \aic{lift} followed by \afld{lower} is the identity.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaField{lower}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{lift∼lower}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{lower}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{𝓧}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
-\AgdaInductiveConstructor{lift}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
-\AgdaBound{X}\<%
-\\
-\>[0]\AgdaFunction{lower∼lift}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\end{code}
-\ccpad
-The proofs are trivial. Nonetheless we'll find a few holes that these observations can fill.

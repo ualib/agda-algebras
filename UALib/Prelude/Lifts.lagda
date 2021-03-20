@@ -67,7 +67,7 @@ lower∼lift = refl
 
 \end{code}
 
-Evidently, the proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
+The proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
 
 ---------------
 

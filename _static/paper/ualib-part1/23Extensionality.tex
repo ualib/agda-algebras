@@ -161,9 +161,9 @@ As alluded to above, a natural notion of function equality, sometimes called \em
 \AgdaBound{g}\<%
 \end{code}
 \ccpad
-In informal settings, this so-called ``pointwise equality of functions'' is typically what one means when one
-asserts that two functions are ``equal.''\footnote{%
-If one assumes the \emph{univalence axiom} of Homotopy Type Theory, then the \af{\_∼\_} relation is equivalent to equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of Escard\'o's notes~\cite{MHE}.}
+In informal settings, this so-called \emph{point-wise equality of functions} is typically what one means when one
+asserts that two functions are ``equal.'' Moreover, if one assumes the \emph{univalence axiom} of Homotopy Type Theory, then point-wise equality of functions is equivalent to definitional equality of functions. (See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of Escard\'o's notes~\cite{MHE}.)
+
 However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}.~\cite{MHE}
 
 \subsubsection{Global function extensionality}\label{sec:glob-funct-extens}
@@ -286,9 +286,7 @@ In the definition of \af{funext}, the codomain is a generic type (namely, (\ab �
 
 \subsubsection{Alternative extensionality type}\label{alternative-extensionality-type}
 
-Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to \af{dfunext}, is to assert that \af{extdfun} is actually an \emph{equivalence}. This requires a few definitions from the \am{MGS-Equivalences} module of the \typetopology library, which we now describe.
-
-First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn{subsingleton} if it has at most one inhabitant. These properties are represented in the \typetopology library by the following type.
+Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to \af{dfunext}, is to assert that \af{extdfun} is actually an \emph{equivalence} in a sense that we now describe. This requires a few definitions from the \am{MGS-Equivalences} module of the \typetopology library. First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn{subsingleton} if it has at most one inhabitant. These properties are represented in the \typetopology library by the following type.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-center}\AgdaSpace{}%
@@ -369,23 +367,23 @@ Next, we consider the type \af{is-equiv} which is used to assert that a function
 \begin{code}%
 \>[1]\AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -394,14 +392,14 @@ Next, we consider the type \af{is-equiv} which is used to assert that a function
 \\
 %
 \>[1]\AgdaFunction{fiber}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
@@ -414,20 +412,20 @@ A function is called an \defn{equivalence} if all of its fibers are singletons.
 \begin{code}%
 \>[1]\AgdaFunction{is-equiv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -487,4 +485,3 @@ We are finally ready to fulfill our promise of a type that provides an alternati
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSymbol{)}\<%
 \end{code}
-
