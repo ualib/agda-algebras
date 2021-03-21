@@ -146,12 +146,10 @@ Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P
 
 \begin{code}
 
-prop-ext' : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred₁ A 𝓦}
- →          prop-ext 𝓤 𝓦
-            -------------------
- →          ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+module _ {𝓤 𝓦 : Universe} where
 
-prop-ext' pe hyp = pe (fst hyp) (snd hyp)
+ prop-ext' : prop-ext 𝓤 𝓦 → {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ prop-ext' pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
 
@@ -183,16 +181,16 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
 
- class-extensionality : prop-ext 𝓤 𝓡 → {u v : A}
+ class-extensionality : prop-ext 𝓤 𝓦 → {u v : A}
   →                     IsEquivalence ∣ 𝑹 ∣
                         --------------------------------------------
   →                     ∣ 𝑹 ∣ u v  →  [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
 
  class-extensionality pe {u}{v} Reqv Ruv = γ
   where
-   P Q : Pred₁ A 𝓡
+   P Q : Pred₁ A 𝓦
    P = (λ a → ∣ 𝑹 ∣ u a) , (λ a → ∥ 𝑹 ∥ u a)
    Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
 
@@ -210,7 +208,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
 
 
 
- to-subtype-⟦⟧ : {C D : Pred A 𝓡}{c : 𝒞 C}{d : 𝒞 D}
+ to-subtype-⟦⟧ : {C D : Pred A 𝓦}{c : 𝒞 C}{d : 𝒞 D}
   →              (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
                  -----------------------------------------
   →              C ≡ D  →  (C , c) ≡ (D , d)
@@ -218,7 +216,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
  to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓡 → {u v : A}
+ class-extensionality' : prop-ext 𝓤 𝓦 → {u v : A}
   →                      (∀ C → is-subsingleton (𝒞 C))
   →                      IsEquivalence ∣ 𝑹 ∣
                          -------------------------
@@ -233,7 +231,7 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
    γ = to-subtype-⟦⟧ ssA CD
 
 \end{code}
-
+₀
 
 
 #### <a id="continuous-propositions">Continuous propositions</a>

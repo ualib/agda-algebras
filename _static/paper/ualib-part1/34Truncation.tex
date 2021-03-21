@@ -9,19 +9,19 @@ Here we discuss \defn{truncation} and \defn{h-sets} (which we just call \defn{se
 \subsubsection{Background and motivation\protect\footnotemark}\label{truncation}
 \footnotetext{The remarks in this subsection serve to introduce novices to the basic notion of truncation.  Readers already familiar with this notion may wish to skip to the next subsection.}
 
-In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type \ab{X} and an identity relation \aod{\_≡ₓ\_} on \ab{X} so that, given two inhabitants of \ab{X}, say, \ab{a} \ab b \as : \ab X, we can form the type \ab{a} \aod{≡ₓ} \ab b. Suppose \ab{p} and \ab{q} inhabit the type \ab{a} \aod{≡ₓ} \ab b; that is, \ab{p} and \ab{q} are proofs of \ab{a} \aod{≡ₓ} \ab b, in which case we write \ab{p} \ab q \as : \ab a \aod{≡ₓ} \ab b. We might then wonder whether and in
+In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type \ab{X} and an identity relation \aod{\_≡₀\_} on \ab{X} so that, given two inhabitants of \ab{X}, say, \ab{a} \ab b \as : \ab X, we can form the type \ab{a} \aod{≡₀} \ab b. Suppose \ab{p} and \ab{q} inhabit the type \ab{a} \aod{≡₀} \ab b; that is, \ab{p} and \ab{q} are proofs of \ab{a} \aod{≡₀} \ab b, in which case we write \ab{p} \ab q \as : \ab a \aod{≡₀} \ab b. We might then wonder whether and in
 what sense are the two proofs \ab{p} and \ab{q} the equivalent.
 
-We are asking about an identity type on the identity type \aod{≡ₓ}, and whether there is some inhabitant, say, \ab{r} of this type; i.e., whether there is a proof \ab{r} \as : \ab p \aod{≡ₓ₁} \ab q that the proofs of \ab{a} \aod{≡ₓ} \ab{b} are the same. If such a proof exists for all \ab{p} \ab q \as : \ab{a} \aod{≡ₓ} \ab b, then the proof of \ab a \aod{≡ₓ} \ab b is unique; as a property of the types \ab{X} and \ad{≡ₓ}, this is sometimes called \defn{uniqueness of identity proofs}.
+We are asking about an identity type on the identity type \aod{≡₀}, and whether there is some inhabitant, say, \ab{r} of this type; i.e., whether there is a proof \ab{r} \as : \ab p \aod{≡₁} \ab q that the proofs of \ab{a} \aod{≡₀} \ab{b} are the same. If such a proof exists for all \ab{p} \ab q \as : \ab{a} \aod{≡₀} \ab b, then the proof of \ab a \aod{≡₀} \ab b is unique; as a property of the types \ab{X} and \ad{≡₀}, this is sometimes called \defn{uniqueness of identity proofs}.
 
-Now, perhaps we have two proofs, say, \ab{r} \ab s \as : \ab p \aod{≡ₓ₁} \ab q that the proofs \ab{p} and \ab{q} are equivalent. Then of course we wonder whether \ab{r} \aod{≡ₓ₂} \ab s has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof-relevance}) is not useful or desirable. At that point, say, at level \ab{k}, we would be naturally inclined to assume that there is at most one proof of any identity of the form \ab{p} \aod{≡ₓₖ} \ab q. This is called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{truncation} (at level \ab{k}) (see, e.g., the Truncation section of Escard\'o's notes~\cite{MHE}).
+Now, perhaps we have two proofs, say, \ab{r} \ab s \as : \ab p \aod{≡₁} \ab q that the proofs \ab{p} and \ab{q} are equivalent. Then of course we wonder whether \ab{r} \aod{≡₂} \ab s has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called \emph{proof-relevance}) is not useful or desirable. At that point, say, at level \ab{k}, we would be naturally inclined to assume that there is at most one proof of any identity of the form \ab{p} \aod{≡ₖ} \ab q. This is called \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#truncation}{truncation} (at level \ab{k}) (see, e.g., the Truncation section of Escard\'o's notes~\cite{MHE}).
 
 \subsubsection{Sets}\label{sec:sets}
-In \href{https://homotopytypetheory.org}{homotopy type theory}, a type \ab{X} with an identity relation \ad{≡ₓ} is called a \defn{set} (or \defn{0-groupoid}) if for every pair \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡ₓ} \ab y. In other words, the type \ab{X}, along with it's equality type \ad{≡ₓ}, form a \emph{set} if for all \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡ₓ} \ab y.
+In \href{https://homotopytypetheory.org}{homotopy type theory}, a type \ab{X} with an identity relation \ad{≡₀} is called a \defn{set} (or \defn{0-groupoid}) if for every pair \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡₀} \ab y. In other words, the type \ab{X}, along with it's equality type \ad{≡ₓ}, form a \emph{set} if for all \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡₀} \ab y.
 
-This notion is formalized in the \typetopology library using the types \af{is-set} which is defined using the \af{is-subsingleton} type that we saw earlier (\S\ref{sec:inverse-image-invers}) as follows.\footnote{%
-As Escardó explains, ``at this point, with the definition of these notions, we are entering the realm
-of univalent mathematics, but not yet needing the univalence axiom.''}
+This notion is formalized in the \typetopology library using the types \af{is-set} which is defined using the \af{is-subsingleton} type that we saw earlier (\S\ref{sec:inverse-image-invers}) as follows.% \footnote{%
+% As Escardó explains, ``at this point, with the definition of these notions, we are entering the realm
+% of univalent mathematics, but not yet needing the univalence axiom.''}
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-set}\AgdaSpace{}%
@@ -47,33 +47,34 @@ of univalent mathematics, but not yet needing the univalence axiom.''}
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Thus, the pair (\ab{X} , \ad{≡ₓ}) forms a set iff it satisfies \as{∀} \ab x \abt{y}{X} \as → \af{is-subsingleton} (\ab x \aod{≡ₓ} \ab y).
+Thus, the pair (\ab{X} , \ad{≡₀}) forms a set iff it satisfies \as{∀} \ab x \abt{y}{X} \as → \af{is-subsingleton} (\ab x \aod{≡₀} \ab y).
 
 The function
 \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality}{to-Σ-≡},
 which we also import, is part of Escardó's characterization of equality in Sigma types~(\cite{MHE}). It is defined as follows.
+\ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{hide-to-Σ-≡}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{hide-to-Σ-≡}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -82,7 +83,7 @@ which we also import, is part of Escardó's characterization of equality in Sigm
 \AgdaBound{τ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\<%
+\AgdaBound{B}\AgdaSymbol{\}}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
@@ -98,7 +99,7 @@ which we also import, is part of Escardó's characterization of equality in Sigm
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{transport}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
@@ -134,16 +135,17 @@ which we also import, is part of Escardó's characterization of equality in Sigm
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSymbol{)\}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Embeddings}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{to-Σ-≡}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-Embeddings}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{to-Σ-≡}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
 \end{code}
+\ccpad
 We will use \af{is-embedding}, \af{is-set}, and \af{to-Σ-≡} in the next subsection to prove that a monic function into a set is an embedding.
 
 \subsubsection{Injective functions are set embeddings}\label{injective-functions-are-set-embeddings}
