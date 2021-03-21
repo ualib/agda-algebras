@@ -22,21 +22,21 @@ open import Prelude.Equality public
 
 #### <a id="background-and-motivation">Background and motivation</a>
 
-This introduction is intended for novices.  If you're already familiar with function extensionality, you may want to skip to <a href="function-extensionality">the next subsection</a>.
+This introduction is intended for novices.  Those already familiar with function extensionality may wish to skip to <a href="function-extensionality">the next subsection</a>.
 
 What does it mean to say that two functions `f g : A → B` are equal?
 
-Suppose f and g are defined on A = ℤ (the integers) as follows: f x := x + 2 and g x := ((2 * x) - 8)/2 + 6.  Would you say that f and g are equal?
+Suppose `f` and `g` are defined on `A = ℤ` (the integers) as follows: `f x := x + 2` and `g x := ((2 * x) - 8)/2 + 6`.  Should we call `f` and `g` equal? Are they the "same" function?  What does that even mean?
 
-If you know a little bit of basic algebra, then you probably can't resist the urge to reduce g to the form x + 2 and proclaim that f and g are, indeed, equal.  And you would be right, at least in middle school, and the discussion would end there.  In the science of computing, however, more attention is paid to equality, and with good reason.
+It's hard to resist the urge to reduce `g` to `x + 2` and proclaim that `f` and `g` are equal. Indeed, this is often an acceptable answer and the discussion normally ends there.  In the science of computing, however, more attention is paid to equality, and with good reason.
 
-We can probably all agree that the functions f and g above, while not syntactically equal, do produce the same output when given the same input so it seems fine to think of the functions as the same, for all intents and purposes. But we should ask ourselves, at what point do we notice or care about the difference in the way functions are defined?
+We can probably all agree that the functions `f` and `g` above, while not syntactically equal, do produce the same output when given the same input so it seems fine to think of the functions as the same, for all intents and purposes. But we should ask ourselves at what point do we notice or care about the difference in the way functions are defined?
 
-What if we had started out this discussion with two functions f and g both of which take a list as input and produce as output a correctly sorted version of that list?  Are the functions the same?  What if f were defined using the [merge sort](https://en.wikipedia.org/wiki/Merge_sort) algorithm, while g used [quick sort](https://en.wikipedia.org/wiki/Quicksort).  I think most of us would then agree that such f and g are not equal.
+What if we had started out this discussion with two functions, `f` and `g`, both of which take a list as argument and produce as output a correctly sorted version of the input list?  Suppose `f` is defined using the [merge sort](https://en.wikipedia.org/wiki/Merge_sort) algorithm, while `g` uses [quick sort](https://en.wikipedia.org/wiki/Quicksort).  Probably few of us would call `f` and `g` the "same" in this case.
 
-In each of the examples above, it is common to say that the two functions f and g are [extensionally equal](https://en.wikipedia.org/wiki/Extensionality), since they produce the same (external) output when given the same input, but f and g not [intensionally equal](https://en.wikipedia.org/wiki/Intension), since their (internal) definitions differ.
+In the examples above, it is common to say that the two functions are [extensionally equal](https://en.wikipedia.org/wiki/Extensionality), since they produce the same *external* output when given the same input, but they are not [intensionally equal](https://en.wikipedia.org/wiki/Intension), since their *internal* definitions differ.
 
-In this module, we describe types (many of which were already defined by Martín Escardó in his [Type Topology][] library) that manifest this notion of *extensional equality of functions*, or *function extensionality*.
+In this module, we describe types that manifest this notion of *extensional equality of functions*, or *function extensionality*.<sup>[1](Prelude.Extensionality.html#fn1)</sup>
 
 #### <a id="definition-of-function-extensionality">Definition of function extensionality</a>
 
@@ -44,18 +44,22 @@ The natural notion of function equality, which is often called *point-wise equal
 
 \begin{code}
 
-module hide-funext where
+module hide-∼ {𝓤 𝓦 : Universe} where
 
- _∼_ : {𝓤 𝓥 : Universe}{A : 𝓤 ̇ } {B : A → 𝓥 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓥 ̇
+ _∼_ : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓦 ̇
  f ∼ g = ∀ x → f x ≡ g x
 
  infix 0 _∼_
+
+open import MGS-FunExt-from-Univalence using (_∼_) public
 
 \end{code}
 
 *Function extensionality* is the assertion that point-wise equal functions are "definitionally" equal; that is, for all functions `f` and `g`, we have `f ∼ g → f ≡ g`. In the [Type Topology][] library, the type that represents this is `funext`, which is defined as follows. (Again, we present it here inside the `hide-funext` submodule, but we will import Martín's original definitions below.)
 
 \begin{code}
+
+module hide-funext where
 
  funext : ∀ 𝓤 𝓦  → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
  funext 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B} → f ∼ g → f ≡ g
@@ -71,8 +75,7 @@ Similarly, extensionality for *dependent* function types is defined as follows.
 
 \end{code}
 
-In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal." Moreover, if one assumes the [univalence axiom][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).
-
+In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[2](Prelude.Extensionality.html#fn2)</sup>
 However, it is important to keep in mind the following fact (see <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Escardó's notes</a>):
 
 *Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
@@ -95,11 +98,11 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
 
 \end{code}
 
-Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[2](Prelude.Extensionality.html#fn2)</sup>
+Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[3](Prelude.Extensionality.html#fn3)</sup>
 
 \begin{code}
 
-open import MGS-FunExt-from-Univalence using (_∼_; funext; dfunext) public
+open import MGS-FunExt-from-Univalence using (funext; dfunext) public
 open import MGS-Subsingleton-Theorems using (global-dfunext) public
 
 \end{code}
@@ -185,7 +188,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \end{code}
 
-We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.<sup>[3](Prelude.Extensionality.html#fn3)</sup>
+We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.<sup>[4](Prelude.Extensionality.html#fn4)</sup>
 
 \begin{code}
 
@@ -193,7 +196,7 @@ open import MGS-Equivalences using (fiber; is-equiv) public
 
 module hide-hfunext where
 
- hfunext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦)⁺ ̇
+ hfunext :  ∀ 𝓤 𝓦 → (𝓤 ⊔ 𝓦)⁺ ̇
  hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
 open import MGS-Subsingleton-Truncation using (hfunext) public
 
@@ -201,13 +204,16 @@ open import MGS-Subsingleton-Truncation using (hfunext) public
 
 ------------------------------------
 
-<sup>2</sup> <span class="footnote" id="fn2"> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.</span>
+<sup>1</sup> <span class="footnote" id="fn1"> Most of these types are already defined by in the [Type Topology][] library, so the [UALib][] imports the definitions from there; as usual, we redefine some of these types, inside hidden modules, for the purpose of explication.</span>
 
-<sup>3</sup><span class="footnote" id="fn3">  In earlier version of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the latter, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.</span>
+<sup>2</sup> <span class="footnote" id="fn2"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<p></p>
-<p></p>
+<sup>3</sup> <span class="footnote" id="fn3"> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.</span>
 
+<sup>4</sup><span class="footnote" id="fn4">  In earlier version of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the latter, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.</span>
+
+<br>
+<br>
 
 [← Prelude.Equality](Prelude.Equality.html)
 <span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>

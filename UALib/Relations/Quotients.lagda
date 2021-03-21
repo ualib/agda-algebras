@@ -26,29 +26,29 @@ Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Dis
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+module _ {𝓤 : Universe}{A : 𝓤 ̇ }{𝓡 : Universe} where
 
- reflexive : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ reflexive : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  reflexive _≈_ = ∀ x → x ≈ x
 
- symmetric : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ symmetric : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
 
- antisymmetric : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ antisymmetric : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  antisymmetric _≈_ = ∀ x y → x ≈ y → y ≈ x → x ≡ y
 
- transitive : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ transitive : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
 
 \end{code}
 
-The [Type Topology][] library also defines the following uniqueness-of-proofs property that a binary relation may or may not posess. It asserts that there can be at most one proof that a given pair belongs to the relation.
+The [Type Topology][] library defines the following *uniqueness-of-proofs* principle for binary relations.
 
 \begin{code}
 
-module hide-is-subsingleton-valued {𝓤 : Universe} where
+module hide-is-subsingleton-valued {𝓤 𝓡 : Universe}{A : 𝓤 ̇ } where
 
- is-subsingleton-valued : {𝓡 : Universe}{A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-subsingleton-valued : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 
 open import MGS-Quotient using (is-subsingleton-valued) public
@@ -57,6 +57,7 @@ open import MGS-Quotient using (is-subsingleton-valued) public
 
 Thus, if `R : Rel A 𝓡`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
 
+In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the \agdaualib to represent uniqueness-of-proofs principles for relations of arbitrary arity over arbitrary types.
 
 
 #### <a id="equivalence-classes">Equivalence classes</a>
@@ -66,19 +67,19 @@ A binary relation is called a **preorder** if it is reflexive and transitive. An
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe} where
+module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇ } where
 
- is-preorder : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-preorder : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
  is-preorder _≈_ = is-subsingleton-valued _≈_ × reflexive _≈_ × transitive _≈_
 
- record IsEquivalence {A : 𝓤 ̇ } (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
+ record IsEquivalence (_≈_ : Rel A 𝓡) : 𝓤 ⊔ 𝓡 ̇ where
   field
    rfl   : reflexive _≈_
    sym   : symmetric _≈_
    trans : transitive _≈_
 
- is-equivalence-relation : {A : 𝓤 ̇ } → Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
- is-equivalence-relation _≈_ = is-preorder _≈_ × symmetric _≈_
+ is-equivalence : Rel A 𝓡 → 𝓤 ⊔ 𝓡 ̇
+ is-equivalence _≈_ = is-preorder _≈_ × symmetric _≈_
 
 \end{code}
 
@@ -86,13 +87,12 @@ An easy first example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
-map-kernel-IsEquivalence : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}
-                            (f : A → B) → IsEquivalence (ker{𝓤}{𝓦} f)
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
-map-kernel-IsEquivalence {𝓤}{𝓦} f =
- record { rfl = λ x → refl
-        ; sym = λ x y x₁ → ≡-sym{𝓦} x₁
-        ; trans = λ x y z x₁ x₂ → ≡-trans x₁ x₂ }
+ map-kernel-IsEquivalence : (f : A → B) → IsEquivalence (ker{𝓤}{𝓦} f)
+ map-kernel-IsEquivalence f = record { rfl = λ x → refl
+                                     ; sym = λ x y x₁ → ≡-sym{𝓦} x₁
+                                     ; trans = λ x y z x₁ x₂ → ≡-trans x₁ x₂ }
 
 \end{code}
 
@@ -104,9 +104,10 @@ map-kernel-IsEquivalence {𝓤}{𝓦} f =
 If R is an equivalence relation on A, then for each `𝑎 : A`, there is an **equivalence class** containing 𝑎, which we denote and define by [ 𝑎 ] R := all `𝑏 : A` such that R 𝑎 𝑏. We often refer to [ 𝑎 ] R as the *R-class containing* 𝑎.
 
 \begin{code}
-module _ {𝓤 𝓡 : Universe} where
 
- [_]_ : {A : 𝓤 ̇ } → A → Rel A 𝓡 → Pred A 𝓡
+module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇ } where
+
+ [_]_ : A → Rel A 𝓡 → Pred A 𝓡
  [ 𝑎 ] R = λ x → R 𝑎 x
 
  infix 60 [_]_
@@ -118,14 +119,16 @@ We define type of all R-classes of the relation `R` as follows.
 
 \begin{code}
 
- 𝒞 : {A : 𝓤 ̇}{R : Rel A 𝓡} → Pred A 𝓡 → (𝓤 ⊔ 𝓡 ⁺) ̇
- 𝒞 {A} {R} C = Σ a ꞉ A , C ≡ ( [ a ] R)
+ 𝒞 : {R : Rel A 𝓡} → Pred A 𝓡 → (𝓤 ⊔ 𝓡 ⁺) ̇
+ 𝒞  {R} C = Σ a ꞉ A , C ≡ ( [ a ] R)
 
 \end{code}
 
 If `R` is an equivalence relation on `A`, then the **quotient** of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all equivalence classes of `R`. There are a few ways we could define the quotient with respect to a relation, but we find the following to be the most useful.
 
 \begin{code}
+
+module _ {𝓤 𝓡 : Universe} where
 
  _/_ : (A : 𝓤 ̇ ) → Rel A 𝓡 → 𝓤 ⊔ (𝓡 ⁺) ̇
  A / R = Σ C ꞉ Pred A 𝓡 ,  𝒞 {R = R} C
@@ -137,7 +140,9 @@ We define the following introduction rule for an R-class with a designated repre
 
 \begin{code}
 
- ⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓡} → A / R
+module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
+
+ ⟦_⟧ : A → {R : Rel A 𝓡} → A / R
  ⟦ a ⟧ {R} = [ a ] R , a , refl
 
  infix 60 ⟦_⟧
@@ -147,7 +152,7 @@ We also have the following elimination rule.
 
 \begin{code}
 
- ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓡} → A / R  → A
+ ⌜_⌝ : {R : Rel A 𝓡} → A / R  → A
 
  ⌜ 𝒂 ⌝ = ∣ ∥ 𝒂 ∥ ∣    -- type ⌜ and ⌝ as `\cul` and `\cur`
 
@@ -156,8 +161,6 @@ We also have the following elimination rule.
 Later we will need the following additional quotient tools.
 
 \begin{code}
-
-module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇} where
 
  open IsEquivalence{𝓤}{𝓡}
 

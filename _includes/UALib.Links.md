@@ -46,6 +46,7 @@
 [gitlab/ualib]: https://gitlab.com/ualib/ualib.gitlab.io/
 [gitlab.com/ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
 
+[Homotopy Type Theory]: https://homotopytypetheory.org/
 [HoTT]: https://homotopytypetheory.org/
 [HoTT book]: https://homotopytypetheory.org/book/
 [HoTT-UF-in-Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html

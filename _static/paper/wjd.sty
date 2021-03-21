@@ -199,4 +199,8 @@ Compiled with \texttt{xelatex} on \mydate\today\ at \currenttime.
 \newcommand\firstsentence[2]{This section presents the \ualibhtml{#1.#2} module of the \agdaualib, slightly abridged.\footnote{For unabridged docs and source code see \ualiburl{#1.#2} and\\\ualibsrcfile{#1}{#2}.}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+\newcommand\context[1]{\begin{quote}\textit{Unless otherwise indicated, the prevailing context of this section is given by}\\[4pt] \ak{module} \AgdaUnderscore{} #1 \ak{where}\end{quote}}
+
+\newcommand\contextfn[2]{\footnotetext{\label{#1}\textit{Unless otherwise indicated, the prevailing context of this section is given by}\\ \ak{module} \AgdaUnderscore{} #2 \ak{where}}}
+
 \newcommand\id[2]{\ab #1~\af ≈~\ab #2}

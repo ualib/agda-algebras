@@ -79,24 +79,15 @@ The datatype used in the \ualib to represent definitional equality is imported f
 \ccpad
 Whenever we need to complete a proof by simply asserting that \ab{x} is \defn{definitionally equal} to itself, we invoke \aic{refl}. If we need to make explicit the implicit argument \ab x, then we use \aic{refl}~\{\ab x~=~\ab x\}.
 
-Of course \ad{≡} is an equivalence relation and the formal proof of this is trivial. We don't need to prove reflexivity since it is the defining property of \ad{≡}.  Here are the (trivial) proofs of symmetry and transitivity of \ad{≡}.
-% Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \ab 𝓤 \as : \AgdaPostulate{Universe} and \ab A \as : \ab 𝓤\aof ̇) out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
+\paragraph*{Assumed module contexts}
+Before proceeding, a word about a special convention we adopt in the sequel is in order. To reduce reader strain, we will often omit easily inferred typing judgments which would normally appear in the list of parameters of a module or at the start of a type definition.  However, when we adopt this convention in a particular section, we will make an announcement like the following (which applies to the present section):
+
+\context{\{\ab{𝓤}~\as :~\ap{Universe}\} \{\ab{A}~\as :~\ab 𝓤\af ̇\}}
+
+\paragraph*{Definitional equality is an equivalence}
+The relation \ad{≡} just defined is naturally an equivalence relation, and the formal proof of this fact is trivial. Indeed, we don't need to prove reflexivity, since that is the defining property of \ad{≡}, and the proofs of symmetry and transitivity are also immediate.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}%
-% \>[10]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}%
-% \>[36]\AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -208,8 +199,6 @@ Of course \ad{≡} is an equivalence relation and the formal proof of this is tr
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
-(To reduce reader strain, we omit easily inferred typing judgments---in this case, \ab{𝓤}~\as :~\AgdaPostulate{Universe} and \ab{A}~\as :~\ab 𝓤\af ̇---which would normally be parameters in the module context or in the type definition itself; this will be a common practice in this paper.)
-
 The only difference between \af{≡-symmetric} and \af{≡-sym} (resp., \af{≡-transitive} and \af{≡-trans}) is that \af{≡-sym} (resp., \af{≡-trans}) has fewer explicit arguments, which is sometimes convenient.
 
 We prove that \ad ≡ obeys the substitution rule (subst) in the next section (see \af{ap}~\S\ref{transport}), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of \ad ≡ in proofs.\footnote{%
@@ -310,12 +299,12 @@ Alonzo Church characterized equality by declaring two things equal if and only i
 \begin{code}%
 \>[1]\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -393,13 +382,13 @@ A function is well-defined if and only if it maps equivalent elements to a singl
 % \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{ap}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓥}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%

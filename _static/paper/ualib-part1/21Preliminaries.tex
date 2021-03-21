@@ -63,7 +63,7 @@ Such a module is called \emph{anonymous} because an underscore appears in place 
 
 
 
-\subsubsection{Agda Universes}\label{universes}
+\subsubsection{Universes in Agda}\label{universes}
 
 For the very small amount of background we require about the notion of \emph{type universe} (or \emph{level}), we refer the reader to the brief \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{section
 on universe-levels} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{Agda
@@ -363,7 +363,8 @@ Once we have studied the types, defined in the \typetopology library and repeate
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Sigma-Type}\AgdaSpace{}\<%
+\AgdaModule{Sigma-Type}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
@@ -374,10 +375,11 @@ Once we have studied the types, defined in the \typetopology library and repeate
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{-Σ}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{-Π}\AgdaSymbol{)}\<%
+\AgdaFunction{-Π}\AgdaSymbol{)}\AgdaSpace{}
+\AgdaKeyword{public}\<%
 \end{code}
-\ccpad
-We use the \ak{public} directive so that the types are available to all modules that import the present module.
+%\ccpad
+%We use the  directive so that the types are available to all modules that import the present module.
 % the \ualibhtml{Prelude.Preliminaries} module.
 
 \paragraph*{Notation for the first and second projections}

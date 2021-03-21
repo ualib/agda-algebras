@@ -26,15 +26,13 @@ We begin by defining an inductive type that represents the semantic concept of *
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇ }{B : 𝓦 ̇ } where
 
- data Image_∋_ {A : 𝓤 ̇ }{B : 𝓦 ̇ }(f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
+ data Image_∋_ (f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
-
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 \end{code}
 
 Next we verify that the type just defined is what we expect.
@@ -72,12 +70,12 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 #### <a id="epics">Epics (surjective functions)</a>
 
-An epic (or surjective) function from type `A : 𝓤 ̇` to type `B : 𝓦 ̇` is as an inhabitant of the `Epic` type, which we define as follows.
+An epic (or surjective) function from `A` to `B` is as an inhabitant of the `Epic` type, which we now define.
 
 \begin{code}
 
- Epic : (g : A → B) →  𝓤 ⊔ 𝓦 ̇
- Epic g = ∀ y → Image g ∋ y
+ Epic : (A → B) →  𝓤 ⊔ 𝓦 ̇
+ Epic f = ∀ y → Image f ∋ y
 
 \end{code}
 
@@ -109,20 +107,44 @@ module _ {𝓤 𝓦 : Universe}{fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇}
 
 \end{code}
 
+We can also prove the following composition law for epics.
+
+\begin{code}
+
+ epic-factor : {𝓩 : Universe}{C : 𝓩 ̇}(f : A → B)(g : A → C)(h : C → B)
+  →            f ≡ h ∘ g → Epic f → Epic h
+
+ epic-factor f g h compId fe y = γ
+  where
+   finv : B → A
+   finv = EpicInv f fe
+
+   ζ : f (finv y) ≡ y
+   ζ = cong-app (EpicInvIsRightInv f fe) y
+
+   η : (h ∘ g) (finv y) ≡ y
+   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
+
+   γ : Image h ∋ y
+   γ = eq y (g (finv y)) (η ⁻¹)
+
+\end{code}
+
+
 
 
 
 
 #### <a id="monics">Monics (injective functions)</a>
 
-We say that a function `g : A → B` is *monic* (or *injective* or *one-to-one*) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
+We say that a function `f : A → B` is *monic* (or *injective* or *one-to-one*) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- Monic : (g : A → B) → 𝓤 ⊔ 𝓦 ̇
- Monic g = ∀ a₁ a₂ → g a₁ ≡ g a₂ → a₁ ≡ a₂
+ Monic : (f : A → B) → 𝓤 ⊔ 𝓦 ̇
+ Monic f = ∀ x y → f x ≡ f y → x ≡ y
 
 \end{code}
 
@@ -131,7 +153,7 @@ Again, we obtain a pseudoinverse. Here it is obtained by applying the function `
 \begin{code}
 
  MonicInv : (f : A → B) → Monic f → (b : B) → Image f ∋ b → A
- MonicInv f _ = λ b Imf∋b → Inv f Imf∋b
+ MonicInv f _ = λ b imfb → Inv f imfb
 
 \end{code}
 
@@ -139,35 +161,8 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 
 \begin{code}
 
- MonicInvIsLeftInv : {f : A → B}{fM : Monic f}{x : A}
-   →                 (MonicInv f fM)(f x)(im x) ≡ x
+ MonicInvIsLeftInv : {f : A → B}{fM : Monic f}{x : A} → (MonicInv f fM)(f x)(im x) ≡ x
  MonicInvIsLeftInv = refl
-
-\end{code}
-
-
-
-##### <a id="composition-law">A composition law for epics</a>
-
-\begin{code}
-
-module _ {𝓧 𝓨 𝓩 : Universe}{fe : funext 𝓨 𝓨}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇} where
-
- epic-factor : (β : A → B)(ξ : A → C)(ϕ : C → B) → β ≡ ϕ ∘ ξ →  Epic β → Epic ϕ
-
- epic-factor β ξ ϕ compId βe y = γ
-  where
-   βinv : B → A
-   βinv = EpicInv β βe
-
-   ζ : β (βinv y) ≡ y
-   ζ = cong-app (EpicInvIsRightInv {fe = fe} β βe) y
-
-   η : (ϕ ∘ ξ) (βinv y) ≡ y
-   η = (cong-app (compId ⁻¹)(βinv y)) ∙ ζ
-
-   γ : Image ϕ ∋ y
-   γ = eq y (ξ (βinv y)) (η ⁻¹)
 
 \end{code}
 

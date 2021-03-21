@@ -5,32 +5,17 @@
 %%% End:
 \subsubsection{Properties of binary relations}\label{properties-of-binary-relations}
 
-Let \ab{𝓤} \as : \ap{Universe} be a universe and \ab{A} \as : \ab 𝓤\af ̇  a type.
-In \ualibhtml{Relations}{Discrete} we defined types for representing and reasoning about binary relations on \ab A. In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
+\noindent \textit{Unless otherwise indicated, the prevailing context in this section is as follows:}\\[4pt] \ak{module} \AgdaUnderscore{} \{\ab{𝓤}~\ab 𝓡~\as :~\ap{Universe}\} \{\ab{A}~\as :~\ab 𝓤\af ̇\} \ak{where}
+
+\medskip
+
+In the \ualibhtml{Relations.Discrete} module we defined types for representing and reasoning about binary relations on \ab A. In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -54,16 +39,8 @@ In \ualibhtml{Relations}{Discrete} we defined types for representing and reasoni
 %
 \>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -92,16 +69,8 @@ In \ualibhtml{Relations}{Discrete} we defined types for representing and reasoni
 %
 \>[1]\AgdaFunction{antisymmetric}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -134,16 +103,8 @@ In \ualibhtml{Relations}{Discrete} we defined types for representing and reasoni
 %
 \>[1]\AgdaFunction{transitive}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓡}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -171,44 +132,9 @@ In \ualibhtml{Relations}{Discrete} we defined types for representing and reasoni
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{z}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-% \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓡}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaFunction{Rel}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSpace{}%
-% \AgdaBound{𝓡}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-% \AgdaBound{𝓡}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\<%
-% \\
-% %
-% \>[1]\AgdaFunction{is-subsingleton-valued}%
-% \>[25]\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaSymbol{∀}\AgdaSpace{}%
-% \AgdaBound{x}\AgdaSpace{}%
-% \AgdaBound{y}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-% \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
-% \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-The \typetopology library also defines the following \defn{uniqueness-of-proofs} property that a binary relation may or may not possess.
+The \typetopology library defines a \defn{uniqueness-of-proofs} principle for binary relations.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
@@ -244,8 +170,7 @@ The \typetopology library also defines the following \defn{uniqueness-of-proofs}
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Thus, if \af R \as : \af{Rel} \ab A \ab 𝓡, then \AgdaFunction{is-subsingleton-valued} \ab R is the assertion that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y.
-
+Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓡, then \AgdaFunction{is-subsingleton-valued} \ab R asserts that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y. In the section on \emph{Truncation} below (\S~\ref{sec:trunc-sets-prop}) we introduce a number of similar but more general types used in the \agdaualib to represent uniqueness-of-proofs principles for relations of arbitrary arity over arbitrary types.
 
 
 

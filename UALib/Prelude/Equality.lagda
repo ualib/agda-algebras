@@ -120,8 +120,8 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 
 module hide-id-transport {𝓤 𝓦 : Universe} where
 
- 𝑖𝑑 : {𝓧 : Universe} (X : 𝓧 ̇ ) → X → X
- 𝑖𝑑 X = λ x → x
+ 𝑖𝑑 : {𝓤 : Universe} (A : 𝓤 ̇ ) → A → A
+ 𝑖𝑑 A = λ x → x
 
  transport : {A : 𝓤 ̇ } (B : A → 𝓦 ̇ ) {x y : A} → x ≡ y → B x → B y
  transport B (refl {x = x}) = 𝑖𝑑 (B x)
@@ -136,9 +136,9 @@ A function is well defined if and only if it maps equivalent elements to a singl
 
 \begin{code}
 
-module hide-ap  {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module hide-ap  {𝓤 𝓦 : Universe} where
 
- ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
+ ap : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
  ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
 
 open import MGS-MLTT using (ap) public

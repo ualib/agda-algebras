@@ -21,7 +21,7 @@ open import Prelude.Inverses public
 
 #### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
-The hierarchy of universes in Agda is structured as follows:
+The hierarchy of universes in Agda is structured as follows:<sup>[1](Prelude.Lifts.html#fn1)</sup>
 
 ```agda
 𝓤 ̇ : 𝓤 ⁺ ̇,   𝓤 ⁺ ̇ : 𝓤 ⁺ ⁺ ̇,  etc.
@@ -70,6 +70,9 @@ lower∼lift = refl
 The proofs are trivial. Nonetheless, we'll find a few holes that these observations can fill.
 
 ---------------
+
+<sup>1</sup><span class="footnote" id="fn1">Recall, from the [Prelude.Preliminaries][] module, the special notation we use to denote Agda's *levels* and *universes*.</span>
+
 
 <p></p>
 

@@ -31,10 +31,8 @@ Given two universes `𝓤 𝓦` and a type `A : 𝓤 ̇`, the type `Pred A 𝓦`
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
-
- Pred : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
- Pred A 𝓦 = A → 𝓦 ̇
+Pred : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Pred A 𝓦 = A → 𝓦 ̇
 
 \end{code}
 
@@ -47,10 +45,8 @@ Like the [Agda Standard Library][], the [UALib][] includes types that represent 
 
 \begin{code}
 
-module _ {𝓧 𝓨 : Universe} {A : 𝓧 ̇ } where
-
- _∈_ : A → Pred A 𝓨 → 𝓨 ̇
- x ∈ P = P x
+_∈_ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
+x ∈ P = P x
 
 \end{code}
 
@@ -58,9 +54,9 @@ The "subset" relation is denoted, as usual, with the `⊆` symbol (cf. `Relation
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
+module _ {𝓤 𝓦 𝓩 : Universe} {A : 𝓤 ̇ } where
 
- _⊆_ : Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ _⊆_ : Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
  P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
  infix 4 _⊆_
@@ -74,9 +70,9 @@ In type theory everything is represented as a type and, as we have just seen, th
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } where
+module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇ } where
 
- _≐_ : Pred A 𝓨 → Pred A 𝓩 → 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ _≐_ : Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
  P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
  infix 4 _≐_
@@ -87,10 +83,8 @@ Thus, a proof of `P ≐ Q` is a pair `(p , q)` where where `p : P ⊆ Q` and `q 
 
 \begin{code}
 
-module _ {𝓧 𝓨 : Universe}{A : 𝓧 ̇} where
-
- Pred-≡ : {P Q : Pred A 𝓨} → P ≡ Q → P ≐ Q
- Pred-≡ refl = (λ z → z) , (λ z → z)
+Pred-≡ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦} → P ≡ Q → P ≐ Q
+Pred-≡ refl = (λ z → z) , (λ z → z)
 
 \end{code}
 
@@ -98,10 +92,8 @@ The converse is not provable in [MLTT][]. However, we can define its type and po
 
 \begin{code}
 
-module _ {𝓧 : Universe} where
-
- ext-axiom : 𝓧 ̇ → (𝓨 : Universe) → 𝓧 ⊔ 𝓨 ⁺ ̇
- ext-axiom A 𝓨 = ∀ (P Q : Pred A 𝓨) → P ≐ Q → P ≡ Q
+ext-axiom : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) →  𝓤 ⊔ 𝓦 ⁺ ̇
+ext-axiom A 𝓦 = ∀ (P Q : Pred A 𝓦) → P ≐ Q → P ≡ Q
 
 \end{code}
 
@@ -109,7 +101,7 @@ Note that the type `ext-axiom` does not itself postulate the axiom of extensiona
 
 \begin{code}
 
-module ext-axiom-postulated {𝓧 𝓨 : Universe}{A : 𝓧 ̇} {ea : ext-axiom A 𝓨} where
+module ext-axiom-postulated {𝓤 𝓦 : Universe}{A : 𝓤 ̇} {ea : ext-axiom A 𝓦} where
 
 \end{code}
 
@@ -119,22 +111,11 @@ We treat other notions of extensionality in the [Relations.Truncation][] module.
 
 #### <a id="predicates-toolbox">Predicates toolbox</a>
 
-Here is a small collection of tools that will come in handy later. The first provides convenient notation for asserting that the image of a function (the first argument) is contained in a predicate (the second argument).
+Here is a small collection of tools that will come in handy later. The first is an inductive type representing *disjoint union*.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇ } {B : 𝓨 ̇ } where
-
- Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓧 ⊔ 𝓩 ̇
- Im f ⊆ S = ∀ x → f x ∈ S
-
-\end{code}
-
-The following inductive type represents *disjoint union*.<sup>[2](Relations.Discrete#fn2)</sup>
-
-\begin{code}
-
-data _⊎_ {𝓧 𝓨 : Universe}(A : 𝓧 ̇) (B : 𝓨 ̇) : 𝓧 ⊔ 𝓨 ̇ where
+data _⊎_ {𝓤 𝓦 : Universe}(A : 𝓤 ̇) (B : 𝓦 ̇) : 𝓤 ⊔ 𝓦 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
 
@@ -144,12 +125,24 @@ And this can be used to represent *union*, as follows.
 
 \begin{code}
 
-_∪_ : {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇} → Pred A 𝓨 → Pred A 𝓩 → Pred A _
+_∪_ : {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A _
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 
 infixr 1 _⊎_ _∪_
 
 \end{code}
+
+Next we define convenient notation for asserting that the image of a function (the first argument) is contained in a predicate (the second argument).
+
+\begin{code}
+
+module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} {B : 𝓦 ̇} where
+
+ Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓤 ⊔ 𝓩 ̇
+ Im f ⊆ S = ∀ x → f x ∈ S
+
+\end{code}
+
 
 The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Relations.Discrete#fn2), [4](Relations.Discrete#fn4)</sup>
 
@@ -157,7 +150,7 @@ The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Re
 
 open import Empty-Type using (𝟘)
 
-∅ : {𝓧 : Universe}{A : 𝓧 ̇} → Pred A 𝓤₀
+∅ : {𝓤 : Universe}{A : 𝓤 ̇} → Pred A 𝓤₀
 ∅ _ = 𝟘
 
 \end{code}
@@ -167,7 +160,7 @@ Before closing our little predicates toolbox, let's insert a type that provides 
 
 \begin{code}
 
-｛_｝ : {𝓧 : Universe}{A : 𝓧 ̇} → A → Pred A _
+｛_｝ : {𝓤 : Universe}{A : 𝓤 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
 
 \end{code}
@@ -178,27 +171,27 @@ Before closing our little predicates toolbox, let's insert a type that provides 
 
 #### <a id="binary-relations">Binary Relations</a>
 
-In set theory, a binary relation on a set `A` is simply a subset of the product `A × A`.  As such, we could model such a relation as a (unary) predicate over the type `A × A`, or as a relation of type `A → A → 𝓡 ̇` (for some universe 𝓡). Note, however, this is not the same as a unary predicate over the function type `A → A` since the latter has type  `(A → A) → 𝓡 ̇`, while a binary relation should have type `A → (A → 𝓡 ̇)`.
+In set theory, a binary relation on a set `A` is simply a subset of the product `A × A`.  As such, we could model such a relation as a (unary) predicate over the type `A × A`, or as a relation of type `A → A → 𝓦 ̇` (for some universe 𝓦). Note, however, this is not the same as a unary predicate over the function type `A → A` since the latter has type  `(A → A) → 𝓦 ̇`, while a binary relation should have type `A → (A → 𝓦 ̇)`.
 
 A generalization of the notion of binary relation is a *relation from* `A` *to* `B`, which we define first and treat binary relations on a single `A` as a special case.
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe} where
+module _ {𝓤 𝓦 : Universe} where
 
- REL : 𝓤 ̇ → 𝓡 ̇ → (𝓝 : Universe) → (𝓤 ⊔ 𝓡 ⊔ 𝓝 ⁺) ̇
- REL A B 𝓝 = A → B → 𝓝 ̇
+ REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → (𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺) ̇
+ REL A B 𝓩 = A → B → 𝓩 ̇
 
 \end{code}
 
-In the special case, where `𝓤 ≡ 𝓡` and `A ≡ B`, we have
+In the special case, where `𝓦 ≡ 𝓤` and `B ≡ A`, we have
 
 \begin{code}
 
 module _ {𝓤 : Universe} where
 
- Rel : 𝓤 ̇ → (𝓝 : Universe) → 𝓤 ⊔ 𝓝 ⁺ ̇
- Rel A 𝓝 = REL A A 𝓝
+ Rel : 𝓤 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓩 ⁺ ̇
+ Rel A 𝓩 = REL A A 𝓩
 
 \end{code}
 
@@ -210,18 +203,18 @@ The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f 
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{B : 𝓡 ̇} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- ker : (A → B) → Rel A 𝓡
+ ker : (A → B) → Rel A 𝓦
  ker g x y = g x ≡ g y
 
- kernel : (A → B) → Pred (A × A) 𝓡
+ kernel : (A → B) → Pred (A × A) 𝓦
  kernel g (x , y) = g x ≡ g y
 
- ker-sigma : (A → B) → 𝓤 ⊔ 𝓡 ̇
+ ker-sigma : (A → B) → 𝓤 ⊔ 𝓦 ̇
  ker-sigma g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
 
- ker-sigma' : (A → B) → 𝓤 ⊔ 𝓡 ̇
+ ker-sigma' : (A → B) → 𝓤 ⊔ 𝓦 ̇
  ker-sigma' g = Σ (x , y) ꞉ (A × A) , g x ≡ g y
 
 \end{code}
@@ -265,15 +258,15 @@ We define the following types representing *implication* for binary relations. (
 
 \begin{code}
 
-module _ {𝓧 𝓨 𝓩 : Universe}{A : 𝓧 ̇}{B : 𝓨 ̇}{C : 𝓩 ̇} where
+module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{C : 𝓩 ̇} where
 
  _on_ : (B → B → C) → (A → B) → (A → A → C)
  R on g = λ x y → R (g x) (g y)
 
 
-module _ {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ } where
+module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
- _⇒_ : REL A B 𝓨 → REL A B 𝓩 → 𝓦 ⊔ 𝓧 ⊔ 𝓨 ⊔ 𝓩 ̇
+ _⇒_ : REL A B 𝓧 → REL A B 𝓨 → 𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨 ̇
  P ⇒ Q = ∀ {i j} → P i j → Q i j
 
  infixr 4 _⇒_
@@ -284,9 +277,9 @@ The `_on_` and `_⇒_` types combine to give a nice, general implication operati
 
 \begin{code}
 
-module _ {𝓦 𝓧 𝓨 𝓩 : Universe}{A : 𝓦 ̇ } {B : 𝓧 ̇ } where
+module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
- _=[_]⇒_ : Rel A 𝓨 → (A → B) → Rel B 𝓩 → 𝓦 ⊔ 𝓨 ⊔ 𝓩 ̇
+ _=[_]⇒_ : Rel A 𝓧 → (A → B) → Rel B 𝓨 → 𝓤 ⊔ 𝓧 ⊔ 𝓨 ̇
  P =[ g ]⇒ Q = P ⇒ (Q on g)
 
  infixr 4 _=[_]⇒_
@@ -300,12 +293,12 @@ Before discussing general and dependent relations, we pause to define some types
 
 \begin{code}
 
-module _ {𝓤 𝓥 𝓦 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} where
+module _ {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{I : 𝓥 ̇} where
 
  lift-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
  lift-rel R u v = ∀ i → R (u i) (v i)
 
- compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
 
 \end{code}
@@ -314,7 +307,7 @@ We used the slick implication notation in the definition of `compatible-fun`, bu
 
 \begin{code}
 
- compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  compatible-fun' f R  = ∀ u v → (lift-rel R) u v → R (f u) (f v)
 
 \end{code}
