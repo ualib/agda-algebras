@@ -125,7 +125,7 @@ And this can be used to represent *union*, as follows.
 
 \begin{code}
 
-_∪_ : {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A _
+_∪_ : {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 
 infixr 1 _⊎_ _∪_
