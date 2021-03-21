@@ -194,15 +194,16 @@ open import MGS-MLTT using (pr₁; pr₂; _×_; -Σ; Π; -Π) public
 
 The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `pr₁` and `fst` for the first projection, `pr₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
 
+
 \begin{code}
 
-module _ {𝓤 : Universe} where
+module _ {𝓤 : Universe}{A : 𝓤 ̇ }{B : A → 𝓥 ̇} where
 
- ∣_∣ fst : {A : 𝓤 ̇ }{B : A → 𝓥 ̇} → Σ B → A
+ ∣_∣ fst : Σ B → A
  ∣ x , y ∣ = x
  fst (x , y) = x
 
- ∥_∥ snd : {A : 𝓤 ̇ }{B : A → 𝓥 ̇ } → (z : Σ B) → B (pr₁ z)
+ ∥_∥ snd : (z : Σ B) → B (pr₁ z)
  ∥ x , y ∥ = y
  snd (x , y) = y
 
@@ -210,6 +211,7 @@ module _ {𝓤 : Universe} where
 
 Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `𝓤 : Universe`)---out of the way so they don't obfuscate the definitions inside the module.
 
+Also note that multiple inhabitants of a single type (e.g., \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and \AgdaFunction{fst}) may be declared on the same line.
 
 ----------------------------------------
 

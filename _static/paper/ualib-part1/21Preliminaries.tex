@@ -382,9 +382,9 @@ Once we have studied the types, defined in the \typetopology library and repeate
 %We use the  directive so that the types are available to all modules that import the present module.
 % the \ualibhtml{Prelude.Preliminaries} module.
 
-\paragraph*{Notation for the first and second projections}
+\paragraph*{Projection notation}
 
-The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \af{pr₂} representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by \af{∣\_∣} and \af{∥\_∥}, respectively. However, for emphasis or readability we alternate between these and the following standard notations: \af{pr₁} and \af{fst} for the first projection, \af{pr₂} and \af{snd} for the second.  We define these alternative notations for projections as follows.\footnote{We put these definitions inside an \defn{anonymous module}, which starts with the \ak{module} keyword followed by an underscore (instead of a module name). The purpose is to move some of the postulated typing judgments---the ``parameters'' of the module (e.g., \ab 𝓤 \as : \AgdaPostulate{Universe})---out of the way so they don't obfuscate the definitions inside the module. N.B. In library documentation like the present paper we often omit such module directives, while the collection of html pages at \ualibdotorg---most current and comprehensive documentation of the \ualib---omits nothing.}
+The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \af{pr₂} representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by \af{∣\_∣} and \af{∥\_∥}, respectively. However, for emphasis or readability we alternate between these and the following standard notations: \af{pr₁} and \af{fst} for the first projection, \af{pr₂} and \af{snd} for the second.  We define these alternative notations for projections as follows.
 % \footnote{We have made a concerted effort to avoid duplicating types that are already provided elsewhere, such as the \typetopology library.  We occasionally repeat the definitions of such types for pedagogical purposes, but we always import and work with the original definitions in order to make the sources known and to credit the original authors.}
 \ccpad
 \begin{code}%
@@ -392,16 +392,7 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -411,7 +402,14 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\AgdaSpace{}%
+\AgdaFunction{fst}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -440,18 +438,6 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \>[1]\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\AgdaSpace{}%
 \AgdaFunction{snd}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{z}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Σ}\AgdaSpace{}%
@@ -479,3 +465,8 @@ The definition of \ar Σ (and thus \af ×) includes the fields  \af{pr₁} and \
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
+\textbf{Remarks}.
+\begin{itemize}
+\item We place these definitions (of \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}, \AgdaFunction{fst}, \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}} and \AgdaFunction{snd}) inside an \defn{anonymous module}, which is a module that begins with the \ak{module} keyword followed by an underscore character (instead of a module name). The purpose is to move some of the postulated typing judgments---the ``parameters'' of the module (e.g., \ab 𝓤 \as : \AgdaPostulate{Universe})---out of the way so they don't obfuscate the definitions inside the module.  In library documentation, such as the present paper, we often omit such module directives. In contrast, the collection of html pages at \ualibdotorg, which is the most current and comprehensive documentation of the \ualib, omits nothing.
+\item As the four definitions above make clear, multiple inhabitants of a single type (e.g., \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and \AgdaFunction{fst}) may be declared on the same line.
+\end{itemize}

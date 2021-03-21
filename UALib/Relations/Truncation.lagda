@@ -197,10 +197,10 @@ module _ {𝓤 𝓡 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓡} where
    Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
 
    α : [ u ] ∣ 𝑹 ∣ ⊆ [ v ] ∣ 𝑹 ∣
-   α ua = fst (/-=̇ Reqv Ruv) ua
+   α ua = fst (/-≐ Reqv Ruv) ua
 
    β : [ v ] ∣ 𝑹 ∣ ⊆ [ u ] ∣ 𝑹 ∣
-   β va = snd (/-=̇ Reqv Ruv) va
+   β va = snd (/-≐ Reqv Ruv) va
 
    PQ : P ≡ Q
    PQ = (prop-ext' pe (α , β))

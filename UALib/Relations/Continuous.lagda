@@ -34,7 +34,7 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 We now define the type `ConRel` which represents predicates of arbitrary arity over a single type `A`. We call this the type of *continuous relations*.
 
-**Notation**. For consistency and readability, throughout the [UALib][] we treat two universe variables with special care.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing *arities* of relations or operations.
+**Notation**. For consistency and readability, throughout the [UALib][] we reserve two universe variables for special purposes.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing *arities* of relations or operations.
 
 \begin{code}
 
@@ -50,7 +50,7 @@ We now define types that are useful for asserting and proving facts about *compa
 
 \begin{code}
 
-module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : 𝓤 ̇} where
+module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
  lift-con-rel : ConRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
  lift-con-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
@@ -87,12 +87,12 @@ Finally, digest all the types involved in these definitions and note how nicely 
 
 #### <a id="dependent-relations">Dependent relations</a>
 
-In this section we exploit the power of dependent types to define a completely general relation type.  Specifically, we let the tuples inhabit a dependent function type, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `A i` to `A j` to `A k` to ….
+In this section we exploit the power of dependent types to define a completely general relation type.  Specifically, we let the tuples inhabit a dependent function type `𝒜 : I → 𝓤 ̇`, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `𝒜 i` to `𝒜 j` to `𝒜 k` to ….
 
 \begin{code}
 
-DepRel : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-DepRel I A 𝓦 = Π A → 𝓦 ̇
+DepRel : (I : 𝓥 ̇) → (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
 
 \end{code}
 
@@ -104,17 +104,17 @@ Above we made peace with lifts of continuous relations and what it means for suc
 
 \begin{code}
 
-module _ {𝓤 𝓥 𝓦 : Universe} {I J : 𝓥 ̇} {A : I → 𝓤 ̇} where
+module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 
- lift-dep-rel : DepRel I A 𝓦 → (∀ i → J → A i) → 𝓥 ⊔ 𝓦 ̇
+ lift-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → J → 𝒜 i) → 𝓥 ⊔ 𝓦 ̇
  lift-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
- dep-compatible-fun : (∀ i → (J → A i) → A i) → DepRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible-fun : (∀ i → (J → 𝒜 i) → 𝒜 i) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  dep-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-dep-rel R) 𝕒 → R λ i → (𝕗 i)(𝕒 i)
 
 \end{code}
 
-(In the definition of `dep-compatible-fun`, we let Agda infer the type `(i : I) → J → A i` of `𝕒`.)
+(In the definition of `dep-compatible-fun`, we let Agda infer the type `(i : I) → J → 𝒜 i` of `𝕒`.)
 
 
 --------------------------------------

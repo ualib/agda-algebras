@@ -3,24 +3,20 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-
 \subsubsection{Motivation}\label{sec:motivation-1}
 In set theory, an \ab n-ary relation on a set \ab{A} is simply a subset of the \ab n-fold product \ab{A} \ad × \ab A \ad × \as ⋯ \ad × \ab A. As such, we could model these as predicates over the type \ab{A} \ad × \as ⋯ \ad × \ab A, or as relations of type \ab{A} \as → \ab A \as → \as ⋯ \as → \ab A \as → \ab 𝓦\af ̇ (for some universe \ab 𝓦). To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an \ab n-fold arrow.
 
-A more general and straightforward approach is to instead define an arity type \ab{I} \as : \ab 𝓥\af ̇ , and define the type representing \ab{I}-ary relations on \ab{A} as the function type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇. Then, if we are specifically interested in an \ab n-ary relation for some natural number \ab{n}, we could take \ab{I} to be a finite set (e.g., of type \ad{Fin} n).
+An easier and more general approach is to instead define an arity type \ab{I} \as : \ab 𝓥\af ̇ , and define the type representing \ab{I}-ary relations on \ab{A} as the function type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇. Then, if we are specifically interested in an \ab n-ary relation for some natural number \ab{n}, we could take \ab{I} to be a finite set (e.g., of type \ad{Fin} n).
 
-Below we will define \af{ConRel} to be the type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇ and we will call \af{ConRel} the type of \defn{continuous relations}. This generalizes the discrete relations we defined in [Relations.Discrete] (unary, binary, ternary, etc.) since continuous relations can be of arbitrary arity.  Still, they are not completely general since they are defined over a single type---said another way, these are ``single-sorted'' relations---but we will remove this limitation as well when we define the type of \emph{dependent continuous relations}.
+Below we will define \af{ConRel} to be the type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇ and we will call \af{ConRel} the type of \defn{continuous relations}. This generalizes the discrete relations we defined in \ualibhtml{Relations.Discrete} (unary, binary, etc.) since continuous relations can be of arbitrary arity.  Still, they are not completely general since they are defined over a single type---said another way, these are ``single-sorted'' relations---but we will remove this limitation as well when we define the type of \emph{dependent continuous relations}.
 
-Just as \af{Rel} \ab A \ab 𝓦 was the single-sorted special case of the multisorted \af{REL} \ab A \ab B \ab 𝓦 type, so too will \af{ConRel} \ab I \ab A \ab 𝓦 be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
-
-To be more concrete, given an arbitrary family \ab{A} \as : \ab I \as → \ab 𝓤\af ̇ of types, we may have a relation from \ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$, where the collection represented by the ``indexing'' type \ab I might not even be enumerable.\footnote{Because the collection represented by the indexing type \ab I might not even be enumerable, technically speaking, instead of ``\ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$,'' we should have written something like ``$\mathsf{\af{TO}}$ (\abt{i}{I}) , \ab{A} \ab i.''}
-
+Just as \af{Rel} \ab A \ab 𝓦 was the single-sorted special case of the multisorted \af{REL} \ab A \ab B \ab 𝓦 type, so too will \af{ConRel} \ab I \ab A \ab 𝓦 be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types. To be more concrete, given an arbitrary family \ab{A} \as : \ab I \as → \ab 𝓤\af ̇ of types, we may have a relation from \ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$, where the collection represented by the ``indexing'' type \ab I might not even be enumerable.\footnote{Because the collection represented by the indexing type \ab I might not even be enumerable, technically speaking, instead of ``\ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$,'' we should have written something like ``$\mathsf{\af{TO}}$ (\abt{i}{I}) , \ab{A} \ab i.''}
 We will refer to such relations as \defn{dependent continuous relations} (or \defn{dependent relations}) because the definition of a type that represents them requires dependent types. The \af{DepRel} type that we define below manifests this completely general notion of relation.
 
 \subsubsection{Continuous relation types}\label{continuous-relation-types}
 
-We now define the type \ab{ConRel} which represents predicates of arbitrary arity over a single type \ab{A}. We call this the type of \textbf{continuous relations}.\footnote{%
-For consistency and readability, throughout the \ualib we treat two universe variables with special care. The first of these is 𝓞 which shall be reserved for types that represent \emph{operation symbols} (see \ualibhtml{Algebras.Signatures}). The second is 𝓥 which we reserve for types representing \emph{arities} of relations or operations.}
+We now define the type \af{ConRel} which represents predicates of arbitrary arity over a single type \ab{A}. We call this the type of \textbf{continuous relations}.\footnote{%
+For consistency and readability, throughout the \ualib we reserve two universe variables for special purposes. The first of these is 𝓞 which shall be reserved for types that represent \emph{operation symbols} (see \ualibhtml{Algebras.Signatures}). The second is 𝓥 which we reserve for types representing \emph{arities} of relations or operations.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ConRel}\AgdaSpace{}%
@@ -60,27 +56,27 @@ For consistency and readability, throughout the \ualib we treat two universe var
 We now define types that are useful for asserting and proving facts about \emph{compatibility} of functions with continuous relations.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{J}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaBound{J}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{lift-con-rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{ConRel}\AgdaSpace{}%

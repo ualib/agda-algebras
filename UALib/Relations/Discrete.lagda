@@ -179,7 +179,7 @@ A generalization of the notion of binary relation is a *relation from* `A` *to* 
 
 module _ {𝓤 𝓦 : Universe} where
 
- REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → (𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺) ̇
+ REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺ ̇
  REL A B 𝓩 = A → B → 𝓩 ̇
 
 \end{code}
@@ -227,13 +227,13 @@ Similarly, the *identity relation* (which is equivalent to the kernel of an inje
 module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
 
  𝟎 : Rel A 𝓤
- 𝟎 a b = a ≡ b
+ 𝟎 x y = x ≡ y
 
  𝟎-pred : Pred (A × A) 𝓤
- 𝟎-pred (a , a') = a ≡ a'
+ 𝟎-pred (x , y) = x ≡ y
 
  𝟎-sigma : 𝓤 ̇
- 𝟎-sigma = Σ a ꞉ A , Σ b ꞉ A , a ≡ b
+ 𝟎-sigma = Σ x ꞉ A , Σ y ꞉ A , x ≡ y
 
  𝟎-sigma' : 𝓤 ̇
  𝟎-sigma' = Σ (x , y) ꞉ (A × A) , x ≡ y

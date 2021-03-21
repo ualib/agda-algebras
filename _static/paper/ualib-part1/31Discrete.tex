@@ -3,25 +3,6 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\context{\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}}
-
-
-\noindent Here we present the submodules of the \agdaualib's \ualibhtml{Relations} module. In \S\ref{sec:discrete-relations} we define types that represent \emph{unary} and \emph{binary relations}, which we refer to as ``discrete relations'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we introduce in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
-
-
-
-
 \subsubsection{Unary relations}
 
 In set theory, given two sets \ab A and \ab P, we say that \ab P is a \defn{subset} of \ab A, and we write \ab P \af ⊆ \ab A, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab P~\as →~\ab x~\af ∈~\ab A). We need a mechanism for representing this notion in Agda. A typical approach is to use a \emph{predicate} type, denoted by \af{Pred}.
@@ -461,8 +442,8 @@ Before closing our little predicates toolbox, let's add to it a type that provid
 
 
 \subsubsection{Binary Relations}\label{sec:binary-relations}
-In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model such a relation as a (unary) predicate over the product type \ab A \af × \ab A, or as an inhabitant of the function type \ab A \as → \ab A \as → \ab 𝓡\af ̇ (for some universe \ab 𝓡).  Note, however, this is not the same as a unary predicate over the function type \ab A \as → \ab A since the latter has type  (\ab A~\as →~\ab A)~\as →~\ab 𝓡\af ̇, while a binary relation should have type \ab A~\as →~(\ab A~\as →~\ab 𝓡\af ̇). 
-% \footnote{Note that a binary relation from \ab A to \ab B is not simply a unary predicate over the type \ab A~\as →~\ab B.  The binary relation has type \ab A~\as →~(\ab B~\as →~\ab 𝓝\af ̇) whereas a unary predicate over \ab A~\as →~\ab B has type (\ab A~\as →~\ab B)~\as →~\ab 𝓝\af ̇.}
+In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model such a relation as a (unary) predicate over the product type \ab A \af × \ab A, or as an inhabitant of the function type \ab A \as → \ab A \as → \ab 𝓦\af ̇ (for some universe \ab 𝓦).  Note, however, this is not the same as a unary predicate over the function type \ab A \as → \ab A since the latter has type  (\ab A~\as →~\ab A)~\as →~\ab 𝓦\af ̇, while a binary relation should have type \ab A~\as →~(\ab A~\as →~\ab 𝓦\af ̇). 
+% \footnote{Note that a binary relation from \ab A to \ab B is not simply a unary predicate over the type \ab A~\as →~\ab B.  The binary relation has type \ab A~\as →~(\ab B~\as →~\ab 𝓩\af ̇) whereas a unary predicate over \ab A~\as →~\ab B has type (\ab A~\as →~\ab B)~\as →~\ab 𝓩\af ̇.}
 
 A generalization of the notion of binary relation is a \emph{relation from} \ab{A} \emph{to} \ab{B}, which we define first and treat binary relations on a single \ab{A} as a special case.
 \ccpad
@@ -472,18 +453,18 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \AgdaBound{𝓤}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓡}%
+\AgdaBound{𝓦}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSymbol{)}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
@@ -491,13 +472,13 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \>[1]\AgdaFunction{REL}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓝}%
+\AgdaBound{𝓩}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -508,25 +489,25 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \AgdaBound{𝓤}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⁺}}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
 \>[1]\AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓝}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{REL}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓝}\<%
+\AgdaBound{𝓩}\<%
 \end{code}
 
 \paragraph*{The kernel of a function}
@@ -541,7 +522,7 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\<%
+\AgdaBound{𝓦}\<%
 \\
 %
 \>[1]\AgdaFunction{ker}\AgdaSpace{}%
@@ -568,7 +549,7 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝓡}\<%
+\AgdaBound{𝓦}\<%
 \\
 %
 \>[1]\AgdaFunction{kernel}\AgdaSpace{}%
@@ -594,7 +575,7 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -628,7 +609,7 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -662,12 +643,12 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 \\
 %
 \>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\<%
+\AgdaBound{y}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -682,13 +663,13 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 \\
 %
 \>[1]\AgdaFunction{𝟎-pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{a'}\<%
+\AgdaBound{y}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -702,18 +683,18 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 \>[1]\AgdaFunction{𝟎-sigma}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{b}\<%
+\AgdaBound{y}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -752,15 +733,15 @@ The one-element type is defined in \typetopology's \am{Unit-Type} module as an i
 \AgdaDatatype{𝟙}.}
 \ccpad
 \begin{code}%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Unit-Type}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝟙}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{Unit-Type}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{𝟙}\AgdaSymbol{)}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{𝟏}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
@@ -834,56 +815,32 @@ We define the following types representing \defn{implication} for binary relatio
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-% \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⇒\AgdaUnderscore{}}}\AgdaSpace{}%
+\end{code}
+\scpad
+\begin{code}
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⇒\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-% \>[101I]\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaBound{𝓧}\AgdaSpace{}%
-% \AgdaBound{𝓨}\AgdaSpace{}%
-% \AgdaBound{𝓩}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓧}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\<%
-% \\
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]
-% \AgdaSymbol{→}%
-% \>[.][@{}l@{}]\<[101I]%
-% \>[6]
+\AgdaFunction{REL}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{REL}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaBound{𝓨}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{REL}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaBound{P}\AgdaSpace{}%
+\>[1]\AgdaBound{P}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⇒}}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -903,31 +860,11 @@ We define the following types representing \defn{implication} for binary relatio
 These combine to give a nice, general implication operation (also borrowed from the \agdastdlib).
 \ccpad
 \begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}=[\AgdaUnderscore{}]⇒\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}=[\AgdaUnderscore{}]⇒\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-% \>[102I]\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaBound{𝓧}\AgdaSpace{}%
-% \AgdaBound{𝓨}\AgdaSpace{}%
-% \AgdaBound{𝓩}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓧}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\<%
-% \\
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaSymbol{→}%
-% \>[.][@{}l@{}]\<[102I]%
-% \>[10]
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓨}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -935,18 +872,17 @@ These combine to give a nice, general implication operation (also borrowed from 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
+\AgdaBound{𝓨}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓨}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaBound{P}\AgdaSpace{}%
+\>[1]\AgdaBound{P}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{=[}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]⇒}}\AgdaSpace{}%
@@ -961,7 +897,7 @@ These combine to give a nice, general implication operation (also borrowed from 
 
 \paragraph*{Compatibility of functions and binary relations}%\label{compatibility-of-functions-and-binary-relations}
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. The first definition simply lifts a binary relation on \ab A to a binary relation on tuples of type \ab I \as → \ab A.\footnote{N.B. This \emph{relation} lifting is not to be confused with the sort of \emph{universe} lifting that we defined in the \ualibhtml{Prelude.Lifts} module.}
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. The first definition simply lifts a binary relation on \ab A to a binary relation on tuples of type \ab I \as → \ab A.\footnote{N.B. This \emph{relation} lifting is not to be confused with the sort of \emph{universe} lifting that we defined in the \ualibhtml{Prelude.Lifts} module. Also, observe that we silently added the type \ab I~\as :~\ab 𝓥\af ̇, representing \emph{relation arity}, to the context; we will have more to say about relation arities in the next section (\S\ref{sec:continuous-relations}).}
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -970,12 +906,12 @@ Before discussing general and dependent relations, we pause to define some types
 % \AgdaBound{𝓥}\AgdaSpace{}%
 % \AgdaBound{𝓦}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
 % \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
 % \AgdaKeyword{where}\<%
 % \\
@@ -1004,24 +940,21 @@ Before discussing general and dependent relations, we pause to define some types
 %
 \>[1]\AgdaFunction{lift-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{u}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{v}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
-\end{code}
-\scpad
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-\begin{code}
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaFunction{compatible-fun}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
@@ -1036,9 +969,9 @@ Before discussing general and dependent relations, we pause to define some types
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
@@ -1055,51 +988,3 @@ Before discussing general and dependent relations, we pause to define some types
 \AgdaOperator{\AgdaFunction{]⇒}}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}
-% \ccpad
-% We used the slick implication notation in the definition of \af{compatible-fun}, but we could have defined it more explicitly, like so.
-% \ccpad
-% \begin{code}%
-% \>[0][@{}l@{\AgdaIndent{1}}]%
-% \>[1]\AgdaFunction{compatible-fun'}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSymbol{)(}\AgdaBound{R}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Rel}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\<%
-% \\
-% %
-% \>[1]\AgdaFunction{compatible-fun'}\AgdaSpace{}%
-% \AgdaBound{f}\AgdaSpace{}%
-% \AgdaBound{R}%
-% \>[22]\AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaSymbol{∀}\AgdaSpace{}%
-% \AgdaBound{x}\AgdaSpace{}%
-% \AgdaBound{y}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{lift-rel}\AgdaSpace{}%
-% \AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaBound{x}\AgdaSpace{}%
-% \AgdaBound{y}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaBound{R}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-% \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-% \AgdaBound{y}\AgdaSymbol{)}\<%
-% \end{code}
-% \ccpad
-% However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, \af{compatible-term} in the \ualibhtml{Terms.Operations} module.)

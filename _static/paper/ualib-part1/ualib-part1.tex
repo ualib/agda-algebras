@@ -110,27 +110,52 @@ The Agda Universal Algebra Library (\ualib) is a library of types and programs (
 \input{22Equality}
 
 \subsection{Extensionality: types for postulating function extensionality}\label{function-extensionality}\firstsentence{Prelude}{Extensionality}
+\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}}
 \input{23Extensionality}
 
 \subsection{Inverses: epics, monics, embeddings, inverse images}\label{sec:inverse-image-invers}\firstsentence{Prelude}{Inverses}
+\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}}
 \input{24Inverses}
 
 \subsection{Lifts: making peace with a noncumulative universe hierarchy}\label{sec:lifts-altern-univ}
 \firstsentence{Prelude}{Lifts}
 \input{25Lifts}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Relation Types}\label{sec:relat-quot-types}
-\subsection{Discrete: predicates, axiom of extensionality, compatibility}\label{sec:discrete-relations}
+\subsection{Discrete relations: predicates, axiom of extensionality, compatibility}\label{sec:discrete-relations}
 \firstsentence{Relations}{Discrete}
+\context{%
+\{\ab 𝓤 \ab 𝓦 \ab 𝓧 \ab 𝓨 \ab 𝓩 \as : \AgdaPostulate{Universe}\}%
+\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
+\{\ab B \as : \ab 𝓦\AgdaOperator{\AgdaFunction{̇}}\}%
+\{\ab C \as : \ab 𝓩\AgdaOperator{\AgdaFunction{̇}}\}%
+}
+Here we present the submodules of the \agdaualib's \ualibhtml{Relations} module. In \S\ref{sec:discrete-relations} we define types that represent \emph{unary} and \emph{binary relations}, which we refer to as ``discrete relations'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we introduce in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+
 \input{31Discrete}
 
-\subsection{Continuous: arbitrary-sorted relations of arbitrary arity}\label{sec:continuous-relations}
-\firstsentence{Relations}{Continuous}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Continuous relations: arbitrary-sorted relations of arbitrary arity}\label{sec:continuous-relations}\firstsentence{Relations}{Continuous}
+\context{%
+\{\ab 𝓤 \ab 𝓥 \ab 𝓦 \as : \AgdaPostulate{Universe}\}%
+\{\ab I \ab J \as : \ab 𝓥\AgdaOperator{\AgdaFunction{̇}}\}%
+\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
+}
 \input{32Continuous}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Quotients: equivalences, class representatives, quotient types}\label{sec:equiv-relat-quot}
 \firstsentence{Relations}{Quotients}
+\context{%
+\{\ab 𝓤 𝓦 \as : \AgdaPostulate{Universe}\}%
+\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
+}
 \input{33Quotients}
 
 \subsection{Truncation: continuous propositions, quotient extensionality}\label{sec:trunc-sets-prop}
