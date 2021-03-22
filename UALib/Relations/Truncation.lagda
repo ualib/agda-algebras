@@ -225,26 +225,25 @@ This section presents the `continuous-propositions` submodule of the [Relations.
 Recall, we defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
-module continuous-propositions where
+module continuous-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
 
  open import Relations.Continuous using (ConRel; DepRel)
 
- ConProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- ConProp I A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ ConProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ ConProp A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
- con-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ con-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ con-prop-ext A 𝓦 = {P Q : ConProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
-If we assume `con-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then we can prove that logically equivalent continuous propositions of type `ConProp I A 𝓦` are equivalent.
+To see the point of this, suppose `con-prop-ext  I A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ConProp I A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
 
 \begin{code}
 
- module _ {𝓤 : Universe}(I : 𝓥 ̇)(𝓦 : Universe) where
-
-  con-prop-ext' : (A : 𝓤 ̇) → con-prop-ext I A 𝓦 → {P Q : ConProp I A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
-  con-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ con-prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe) → con-prop-ext A 𝓦
+  →              {P Q : ConProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ con-prop-ext' A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -252,12 +251,12 @@ While we're at it, we might as well achieve full generality and define truncated
 
 \begin{code}
 
-  DepProp : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-  DepProp A = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ DepProp A 𝓦 = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
 
-  dep-prop-ext : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-  dep-prop-ext A = {P Q : DepProp A} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ dep-prop-ext A 𝓦 = {P Q : DepProp A 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -265,8 +264,9 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 \begin{code}
 
-  dep-prop-ext' : (A : I → 𝓤 ̇) → dep-prop-ext A → {P Q : DepProp A} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
-  dep-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ dep-prop-ext' : (A : I → 𝓤 ̇)(𝓦 : Universe) → dep-prop-ext A 𝓦
+  →              {P Q : DepProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ dep-prop-ext' A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -274,7 +274,7 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 -----------------------------------
 
-<sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
+<sup>*</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections demand a higher degree of sophistication and/or effort from the user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
 <sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
