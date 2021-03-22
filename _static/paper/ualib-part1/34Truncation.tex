@@ -405,16 +405,12 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 \AgdaBound{Bset}\AgdaSymbol{)}\<%
 \end{code}
 
+\newcommand\proptype{\href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{\af{Prop}}\xspace}
+
 \subsubsection{Propositions}\label{propositions}
 
-Sometimes we will want to assume that a type \ab{X} is a \emph{set}.
-As we just learned, this means there is at most one proof that two
-inhabitants of \ab{X} are the same. Analogously, for predicates on
-\ab{X}, we may wish to assume that there is at most one proof that
-an inhabitant of \ab{X} satisfies the given predicate. If a unary
-predicate satisfies this condition, then we call it a (unary)
-\defn{proposition}. We now define a type that captures this concept. (Recall, \af{Pred A 𝓦} is the function type
-\ab{A → 𝓦 ̇}.)
+Sometimes we will want to assume that a type \ab{A} is a \emph{set}. As we just learned, this means there is at most one proof that two inhabitants of \ab{A} are the same. Analogously, for predicates on \ab{A}, we may wish to assume that there is at most one proof that an inhabitant of \ab{X} satisfies the given predicate. If a unary predicate satisfies this condition, then we call it a \defn{unary proposition}. We now define a type that captures this concept.\footnote{Recall that \af{Pred A 𝓦} is simply the function type \ab{A → 𝓦 ̇}, so \af{Pred₁} is definitionally equal to \af Σ~\ab P~\af ꞉~(\ab A~\as →~\ab 𝓦\af ̇)~\af ,~\as ∀~\ab x~\as →~\af{is-subsingleton}~(\ab P~\ab x).
+}$^, $\footnote{\agda now has a type called \proptype, though we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal \mltt foundation and build up the types we need ourselves. For details about \proptype, consult the official documentation at \url{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}.}
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -462,9 +458,8 @@ predicate satisfies this condition, then we call it a (unary)
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
 \scpad
-% , so \af{Pred₁} is by definition equal to
 
-% \af{Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)}.
+% , so \af{Pred₁} is by definition equal to \af{Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)}.
 
 The principle of \defn{proposition extensionality} asserts that logically equivalent propositions are equivalent. That is, if we have \ab{P Q} \as : \af{Pred₁} and \af{∣} \ab P \af{∣} \af ⊆ \af ∣ \ab Q \af ∣ and
 \af{∣} \ab Q \af ∣ \af ⊆ \af ∣ \ab P \af ∣, then \ab{P} \aod ≡ \ab Q. This is formalized
@@ -521,31 +516,43 @@ as follows.\footnote{cf.~\cite{MHE}, specifically the section on \href{https://w
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{≐} \ab Q \as = (\ab P \af ⊆ \ab Q) \af × (\ab Q \af ⊆ \ab P). Therefore, if we assume \af{prop-ext} \ab 𝓦 holds, then it follows that \ab{P} \aod ≡ \ab Q.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[100I]\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{≐} \ab Q \as = (\ab P \af ⊆ \ab Q) \af × (\ab Q \af ⊆ \ab P). Therefore, if we postulate \af{prop-ext} \ab 𝓤 \ab 𝓦 and \ab{P} \af{≐} \ab Q, then \ab{P} \aod ≡ \ab Q obviously follows. Nonetheless, let us record this corollary here, assuming the context includes \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}.
+\ccpad
+\begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{prop-ext'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)\{}\AgdaBound{P}\AgdaSpace{}%
+\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred₁}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[100I]%
-\>[12]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
@@ -558,11 +565,7 @@ Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{�
 \AgdaBound{Q}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[0]\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\>[1]\AgdaFunction{prop-ext'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -572,20 +575,22 @@ Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{�
 \AgdaSymbol{(}\AgdaFunction{snd}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
-Thus, for truncated predicates \ab{P} and \ab{Q}, if \af{prop-ext} holds, then \ab{P} \af ⊆ \ab Q \ad × \ab Q \af ⊆ \ab P \as → \ab P \aod ≡ \ab Q, which is a useful extensionality principle.
+\scpad
+% Thus, for truncated predicates \ab{P} and \ab{Q}, if \af{prop-ext} holds, then \ab{P} \af ⊆ \ab Q \ad × \ab Q \af ⊆ \ab P \as → \ab P \aod ≡ \ab Q, which is a useful extensionality principle.
 
-\subsubsection{Binary propositions}\label{binary-propositions}
+% \subsubsection{Binary propositions}\label{binary-propositions}
 
-Given a binary relation \ab{R}, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is \ab{R}-related. If this is true of \ab{R}, then we call \ab{R} a \defn{binary
-proposition}. As above, we use the \af{is-subsingleton} type of the \typetopology library to impose this truncation assumption on a binary relation.\footnote{%
+The foregoing easily generalizes to binary relations.  If \ab{R} is a binary relation such that there is at most one way to prove that a given pair of elements is \ab{R}-related, then we call \ab{R} a \defn{binary proposition}. As above, we use \typetopology's \af{is-subsingleton} type to impose this truncation assumption on a binary relation.\footnote{Recall that \af{Rel A 𝓦} is simply the function type \ab{A → A → 𝓦 ̇}, so \af{Pred₂} is definitionally equal to \af Σ~\ab R~\af ꞉~(\ab A~\as →~\ab A~\as →~\ab 𝓦\af ̇)~\af ,~\as ∀~\ab x~\ab y~\as →~\af{is-subsingleton}~(\ab R~\ab x~\ab y).}$^, $\footnote{%
 This is another example of \emph{proof-irrelevance}. Indeed, if \ab{R} is a binary proposition and we
 have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant. Note also that we could have used the definition \AgdaFunction{is-subsingleton-valued} from \S~\ref{properties-of-binary-relations} above to define \af{Pred₂} by \af{Σ} \ab{R} \af ꞉ (\af{Rel} \ab{A} \ab{𝓦}) , \af{is-subsingleton-valued} \ab{R}, but this seems less transparent than our explicit definition.}
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{Pred₂}\AgdaSpace{}%
+\>[0]\AgdaFunction{Pred₂}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -599,8 +604,7 @@ have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are in
 \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-%
-\>[1]\AgdaFunction{Pred₂}\AgdaSpace{}%
+\>[0]\AgdaFunction{Pred₂}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -620,18 +624,16 @@ have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are in
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
-(Recall, \af{Rel A 𝓦} is simply the function type \ab{A → A → 𝓦 ̇}.)
 
 \subsubsection{Quotient extensionality}\label{quotient-extensionality}
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. (Notice that we don't require \emph{function extensionality} (\S\ref{function-extensionality}) here.)
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. We now define a type called \af{class-extensionality'} that will play a crucial role later (e.g., in the formal proof of Birkhoff's HSP theorem).\footnote{Previous proofs of the \af{class-extensionality'} theorem required \emph{function extensionality} (\S\ref{function-extensionality}); however, as the proof given here makes clear, this is unnecessary.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -640,7 +642,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred₂}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 %
@@ -648,23 +650,25 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[101I]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\>[429I]\AgdaFunction{prop-ext}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\<%
+% \\
+% \>[24]\AgdaComment{--------------------------------------------------------------}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[101I]%
+\>[.][@{}l@{}]\<[429I]%
 \>[24]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -686,29 +690,29 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{Ruv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{γ}\<%
+\AgdaFunction{ap}\AgdaSpace{}%
+\AgdaFunction{fst}\AgdaSpace{}%
+\AgdaFunction{PQ}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{P}\AgdaSpace{}%
+\>[2]\AgdaFunction{P}\AgdaSpace{}%
 \AgdaFunction{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred₁}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\<%
+\AgdaBound{𝓦}\<%
 \\
 %
-\>[3]\AgdaFunction{P}\AgdaSpace{}%
+\>[2]\AgdaFunction{P}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
@@ -729,7 +733,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{a}\AgdaSymbol{)}\<%
 \\
 %
-\>[3]\AgdaFunction{Q}\AgdaSpace{}%
+\>[2]\AgdaFunction{Q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
@@ -752,7 +756,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[3]\AgdaFunction{α}\AgdaSpace{}%
+\>[2]\AgdaFunction{α}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{u}\AgdaSpace{}%
@@ -769,7 +773,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[3]\AgdaFunction{α}\AgdaSpace{}%
+\>[2]\AgdaFunction{α}\AgdaSpace{}%
 \AgdaBound{ua}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{fst}\AgdaSpace{}%
@@ -779,9 +783,9 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{ua}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{β}\AgdaSpace{}%
+% \\[\AgdaEmptyExtraSkip]%
+% %
+\>[2]\AgdaFunction{β}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{v}\AgdaSpace{}%
@@ -798,7 +802,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[3]\AgdaFunction{β}\AgdaSpace{}%
+\>[2]\AgdaFunction{β}\AgdaSpace{}%
 \AgdaBound{va}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{snd}\AgdaSpace{}%
@@ -810,69 +814,27 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[3]\AgdaFunction{PQ}\AgdaSpace{}%
+\>[2]\AgdaFunction{PQ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{P}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaFunction{Q}\<%
 \\
 %
-\>[3]\AgdaFunction{PQ}\AgdaSpace{}%
+\>[2]\AgdaFunction{PQ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{prop-ext'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{α}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{β}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaFunction{PQ}\<%
 \end{code}
-\ccpad
+\scpad
 \begin{code}
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[102I]\AgdaSymbol{\{}\AgdaBound{C}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[102I]%
-\>[17]\AgdaSymbol{(∀}\AgdaSpace{}%
+\>[400I]\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton}\AgdaSpace{}%
@@ -883,13 +845,32 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{))}\<%
 \\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\AgdaTab{400}%
+\>[17]\AgdaSymbol{\{}\AgdaBound{C}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{𝒞}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{𝒞}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSymbol{\}}\<%
+\\
 %
+% \>[17]\AgdaComment{-----------------------------------------}\<%
+% \\
+% %
 \>[2]\AgdaSymbol{→}%
 \>[17]\AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
+\AgdaBound{D}%
+\>[24]\AgdaSymbol{→}%
+\>[27]\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -898,13 +879,11 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{d}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{D}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{D}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{CD}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{to-Σ-≡}\AgdaSpace{}%
@@ -918,19 +897,14 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{d}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
+\scpad
 \begin{code}
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[102I]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
+\>[401I]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
@@ -939,16 +913,25 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{))}\<%
 \\
-%
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[102I]%
+\AgdaTab{401}%
 \>[25]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{\}}\<%
+\\
+%
+% \>[25]\AgdaComment{--------------------------------}\<%
+% \\
+% %
+\>[2]\AgdaSymbol{→}%
+\>[25]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{u}\AgdaSpace{}%
@@ -963,64 +946,87 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaOperator{\AgdaFunction{⟧}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaBound{Reqv}\AgdaSpace{}%
 \AgdaBound{Ruv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{γ}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaFunction{CD}\AgdaSpace{}%
+\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
+\AgdaBound{ssA}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{class-extensionality}\AgdaSpace{}%
+\AgdaBound{pe}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+We could have presented the last theorem so that the consequent is a Pi type, as follows.
+\ccpad
+\begin{code}%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\>[402I]\AgdaFunction{prop-ext}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑹}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
-%
-\>[3]\AgdaFunction{CD}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{class-extensionality}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{Reqv}\AgdaSpace{}%
-\AgdaBound{Ruv}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\AgdaTab{402}%
+\>[25]\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑹}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\<%
+\AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{)}\<%
 \\
 %
-\>[3]\AgdaFunction{γ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
+% \\[\AgdaEmptyExtraSkip]%
+% %
+\>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
+\AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
-\AgdaFunction{CD}\<%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaBound{Ruv}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{class-extensionality'}\AgdaSpace{}%
+\AgdaBound{pe}\AgdaSpace{}%
+\AgdaBound{ssA}\AgdaSpace{}%
+\AgdaBound{Reqv}\AgdaSpace{}%
+\AgdaBound{Ruv}\<%
 \end{code}
 
 
@@ -1029,11 +1035,10 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 
 
+\subsubsection{Continuous proposition types\protect\footnotemark}\label{sec:cont-prop-types}
+\footnotetext{In the remainder of this section we introduce new types that are a more abstract and general than the ones we've seen so far.  Therefore, the new few sections may require a more concerted effort, and possibly a higher degree of sophistication, from the reader.  We feel the types here are interesting in and of themselves, and they certainly belong in the \agdaualib, but no other modules of library depend on such general types \emph{so far}, so the reader may safely skip to the next section without fear of feeling lost at some later point in the development.}
 
-
-\subsubsection{Continuous proposition types}\label{sec:cont-prop-types}
-
-We defined a type called \af{ConRel} in the \ualibhtml{Relations}{Continuous} module to represent relations of arbitrary arity. Naturally, we define a type of \emph{truncated continuous relations}, the inhabitants of which we will call \defn{continuous propositions}.
+We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} module to represent relations of arbitrary arity. Naturally, we introduce a new type of \emph{truncated continuous relations}, the inhabitants of which we call \defn{continuous propositions}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ConProp}\AgdaSpace{}%
@@ -1132,7 +1137,7 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations}{Continuous} mo
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-The point of this is that if we assume \af{con-prop-ext} \ab I \ab A \ab 𝓦 holds for some \ab{I}, \ab{A} and \ab{𝓦}, then we can prove that logically equivalent continuous propositions of type \af{ConProp} \ab I \ab A \ab 𝓦 are equivalent.
+To see the point of this, suppose \af{con-prop-ext} \ab I \ab A \ab 𝓦 holds for some \ab{I}, \ab{A} and \ab{𝓦}. Then logically equivalent continuous propositions of type \af{ConProp} \ab I \ab A \ab 𝓦 will be equivalent.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%

@@ -11,8 +11,6 @@ This section presents the [UALib.Relations.Truncation][] module of the [Agda Uni
 
 Here we discuss *truncation* and *h-sets* (which we just call *sets*).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
 
-**Remark**. [Agda][] now has a built in type called [Prop](ttps://agda.readthedocs.io/en/v2.6.1.3/language/prop.html) which may provide some or all of what we develop in this module. However, we have never tried to use it, and it seems we can do without it.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -113,7 +111,7 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 #### <a id="propositions">Propositions</a>
 
-Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) *proposition*.  We now define a type that captures this concept.
+Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) *proposition*.  We now define a type that captures this concept.<sup>[3](Relations.Truncation.html#fn3)</sup>
 
 \begin{code}
 
@@ -124,9 +122,7 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-Recall that `Pred A 𝓦` is simply the function type `A → 𝓦 ̇`, so `Pred₁` is by definition equal to
-
-`Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)`.
+Recall that `Pred A 𝓦` is simply the function type `A → 𝓦 ̇` , so `Pred₁` is definitionally equal to `Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)`.
 
 The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
 
@@ -151,9 +147,7 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
 Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q) × (Q ⊆ P) → P ≡ Q`, which is a useful extensionality principle.
 
 
-#### <a id="binary-propositions">Binary propositions</a>
-
-Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a *binary proposition*. As above, we use the `is-subsingleton` type of the [Type Topology][] library to impose this truncation assumption on a binary relation.<sup>[3](Relations.Truncation.html#fn3)</sup>
+The foregoing easily generalizes to binary relations.  If `R` is a binary relation such that there is at most one way to prove that a given pair of elements is `R`-related, then we call `R` a *binary proposition*. As above, we use [Type Topology][]'s `is-subsingleton` type to impose this truncation assumption on a binary relation.<sup>[4](Relations.Truncation.html#fn4)</sup>
 
 \begin{code}
 
@@ -170,64 +164,65 @@ To be clear, the type `Rel A 𝓦` is simply the function type `A → A → 𝓦
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this.
-
-Note that we don't require *function* extensionality here.
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this. We now define a type called `class-extensionality` that will play a crucial role later (e.g., in the formal proof of Birkhoff's HSP theorem).<sup>[5](Relations.Truncation.html#fn5)</sup>
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
 
- class-extensionality : prop-ext 𝓤 𝓦 → {u v : A}
-  →                     IsEquivalence ∣ 𝑹 ∣
-                        --------------------------------------------
+ class-extensionality : prop-ext 𝓤 𝓦 → IsEquivalence ∣ 𝑹 ∣ → {u v : A}
   →                     ∣ 𝑹 ∣ u v  →  [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
 
- class-extensionality pe {u}{v} Reqv Ruv = γ
-  where
-   P Q : Pred₁ A 𝓦
-   P = (λ a → ∣ 𝑹 ∣ u a) , (λ a → ∥ 𝑹 ∥ u a)
-   Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
+ class-extensionality pe Reqv {u}{v} Ruv = ap fst PQ where
+  P Q : Pred₁ A 𝓦
+  P = (λ a → ∣ 𝑹 ∣ u a) , (λ a → ∥ 𝑹 ∥ u a)
+  Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
 
-   α : [ u ] ∣ 𝑹 ∣ ⊆ [ v ] ∣ 𝑹 ∣
-   α ua = fst (/-≐ Reqv Ruv) ua
+  α : [ u ] ∣ 𝑹 ∣ ⊆ [ v ] ∣ 𝑹 ∣
+  α ua = fst (/-≐ Reqv Ruv) ua
 
-   β : [ v ] ∣ 𝑹 ∣ ⊆ [ u ] ∣ 𝑹 ∣
-   β va = snd (/-≐ Reqv Ruv) va
+  β : [ v ] ∣ 𝑹 ∣ ⊆ [ u ] ∣ 𝑹 ∣
+  β va = snd (/-≐ Reqv Ruv) va
 
-   PQ : P ≡ Q
-   PQ = (prop-ext' pe (α , β))
-
-   γ : [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
-   γ = ap fst PQ
+  PQ : P ≡ Q
+  PQ = (prop-ext' pe (α , β))
 
 
-
- to-subtype-⟦⟧ : {C D : Pred A 𝓦}{c : 𝒞 C}{d : 𝒞 D}
-  →              (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
-                 -----------------------------------------
+ to-subtype-⟦⟧ : (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
+  →              {C D : Pred A 𝓦}{c : 𝒞 C}{d : 𝒞 D}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟦⟧ {D = D}{c}{d} ssA CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
+ to-subtype-⟦⟧ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → {u v : A}
-  →                      (∀ C → is-subsingleton (𝒞 C))
-  →                      IsEquivalence ∣ 𝑹 ∣
-                         -------------------------
+ class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 C))
+  →                      IsEquivalence ∣ 𝑹 ∣ → {u v : A}
   →                      ∣ 𝑹 ∣ u v  →  ⟦ u ⟧ ≡ ⟦ v ⟧
 
- class-extensionality' pe {u}{v} ssA Reqv Ruv = γ
-  where
-   CD : [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
-   CD = class-extensionality pe Reqv Ruv
-
-   γ : ⟦ u ⟧ ≡ ⟦ v ⟧
-   γ = to-subtype-⟦⟧ ssA CD
+ class-extensionality' pe ssA Reqv Ruv = to-subtype-⟦⟧ ssA (class-extensionality pe Reqv Ruv)
 
 \end{code}
-₀
 
+We could equally well have presented the last theorem so that the consequent is a Pi type, as follows.
+
+\begin{code}
+
+ class-extensionality'' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 C)) → IsEquivalence ∣ 𝑹 ∣
+  →                      Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
+
+ class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
+
+\end{code}
+
+
+
+--------------------------------
+
+#### <a id="optional-offramp">Optional Offramp</a>
+
+In the remainder of this module we introduce new types that are a more abstract and general than the ones we've seen so far.  Therefore, the new few sections may require a more concerted effort, and possibly a higher degree of sophistication, from the reader.  We feel the types here are interesting in and of themselves, and they certainly belong in the [Agda UALib][], but no other modules of library depend on such general types *so far*, so the reader may safely skip over the remaining subsections of this module without fear of feeling lost at some later point in the development.
+
+------------------------------
 
 #### <a id="continuous-propositions">Continuous propositions</a>
 
@@ -240,8 +235,7 @@ ConProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 �
 ConProp I A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
 con-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 }
- →                    ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -249,12 +243,10 @@ If we assume `con-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then w
 
 \begin{code}
 
-con-prop-ext' : (I : 𝓥 ̇)(A : 𝓤 ̇)(𝓦 : Universe){P Q : ConProp I A 𝓦}
- →              con-prop-ext I A 𝓦
-                -------------------
- →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+module _ {𝓤 : Universe}(I : 𝓥 ̇)(𝓦 : Universe) where
 
-con-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ con-prop-ext' : (A : 𝓤 ̇) → con-prop-ext I A 𝓦 → {P Q : ConProp I A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ con-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -262,14 +254,12 @@ While we're at it, we might as well achieve full generality and define truncated
 
 \begin{code}
 
-DepProp : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-DepProp I A 𝓦 = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ DepProp : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ DepProp A = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
 
-dep-prop-ext : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-
-dep-prop-ext I A 𝓦 = {P Q : DepProp I A 𝓦 }
- →                    ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ dep-prop-ext : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ dep-prop-ext A = {P Q : DepProp A} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -277,12 +267,8 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 \begin{code}
 
-dep-prop-ext' : (I : 𝓥 ̇)(A : I → 𝓤 ̇)(𝓦 : Universe)
-                {P Q : DepProp I A 𝓦} → dep-prop-ext I A 𝓦
-                -------------------------------------------
- →              ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
-
-dep-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ dep-prop-ext' : (A : I → 𝓤 ̇) → dep-prop-ext A → {P Q : DepProp A} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ dep-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -294,8 +280,13 @@ dep-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 <sup>2</sup><span class="footnote" id="fn2"> See [https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality](www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality).</span>
 
-<sup>3</sup><span class="footnote" id="fn3"> This is another example of proof-irrelevance. Indeed, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant. Note also that we could have used the definition of `is-subsingleton-valued` from [the section on properties of binary relations](Relations.Truncation.html#properties-of-binary-relations) to define `Pred₂` by `Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R`, but this seems less transparent than our explicit definition.
+<sup>3</sup><span class="footnote" id="fn3"> [Agda][] now has a type called [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), but we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal MLTT foundation and build up the types we need ourselves. For details about [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), consult the official documentation at [agda.readthedocs.io/en/v2.6.1.3/language/prop.html](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html)</span>
+
+<sup>4</sup><span class="footnote" id="fn4"> This is another example of proof-irrelevance. Indeed, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant. Note also that we could have used the definition of `is-subsingleton-valued` from [the section on properties of binary relations](Relations.Truncation.html#properties-of-binary-relations) to define `Pred₂` by `Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R`, but this seems less transparent than our explicit definition.
 </span>
+
+
+<sup>5</sup><span class="footnote" id="fn5"> Previous proofs of the `class-extensionality` theorems required *function extensionality*; however, as the proof given here makes clear, this is unnecessary.</span>
 
 <br>
 <br>
