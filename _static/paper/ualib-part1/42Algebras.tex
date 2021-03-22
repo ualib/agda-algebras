@@ -17,8 +17,8 @@ For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and unive
 \AgdaFunction{Signature}\AgdaSpace{}%
 \AgdaGeneralizable{𝓞}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[47]\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -29,126 +29,104 @@ For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and unive
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}%
-\>[11]\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{=}%
+\>[29I]\AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{,}%
+\>[50]\AgdaComment{-- the domain}\<%
+\\
+\>[.][@{}l@{}]\<[29I]%
+\>[14]\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{Op}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\<%
+\AgdaBound{A}%
+\>[50]\AgdaComment{-- the basic operations}\<%
 \end{code}
 \ccpad
-We could refer to an inhabitant of this type as a ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level; in particular, \ab{A} need not be a \emph{set}. (See the discussion in~\S\ref{sec:sets}.)
+To be precise, we might call an inhabitant of this type a ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level. (In particular, \ab{A} need not be a \emph{set}; see the discussion of sets in~\S\ref{sec:sets}.) We could then take this opportunity to define the type of ``0-algebras'' (algebras whose domains are sets), which may be closer to what most of us think of when doing informal universal algebra. However, we have found that we only need to assume the domains of our algebras are sets in a few places in the \ualib, so it seems preferable to work with general (∞-)algebras throughout and then assume \emph{uniqueness of identity proofs} explicitly and only where needed.
 
-We might take this opportunity to define the type of ``0-algebras'' (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra. However, below we will only need to know that the domains of our algebras are sets in a few places in the \ualib, so it seems preferable to work with
-general (∞-)algebras throughout and then assume uniqueness of identity proofs explicitly and only where needed.
+\subsubsection{Algebras as record types}\label{algebras-as-record-types}
 
-% \subsubsection{Algebras as record types}\label{algebras-as-record-types}
-
-% Sometimes records are more convenient than sigma types. For such cases,
-% we might prefer the following representation of the type of algebras.
-% \ccpad
-% \begin{code}%
+Some people find record types more natural and convenient than Sigma types, and might prefer the following representation of algebras.
+\begin{code}%
+\>[0]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{algebra}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Signature}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{constructor}\AgdaSpace{}%
+\AgdaInductiveConstructor{mkalg}\<%
+\\
+%
+\>[1]\AgdaKeyword{field}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaField{univ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[2]\AgdaField{op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaField{univ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaField{univ}\<%
+\end{code}
+\ccpad
+If for some reason we want to use both representations of algebras and
+move back and forth between them, this is easily accomplished with the
+following functions.
+\ccpad
+\begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 % \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaKeyword{record}\AgdaSpace{}%
-% \AgdaRecord{algebra}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Signature}\AgdaSpace{}%
-% \AgdaBound{𝓞}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]\AgdaKeyword{constructor}\AgdaSpace{}%
-% \AgdaInductiveConstructor{mkalg}\<%
-% \\
-% %
-% \>[2]\AgdaKeyword{field}\<%
-% \\
-% \>[2][@{}l@{\AgdaIndent{0}}]%
-% \>[3]\AgdaField{univ}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\<%
-% \\
-% %
-% \>[3]\AgdaField{op}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-% \AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaField{univ}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaField{univ}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0]\<%
-% \end{code}
-
-% Recall, the type \af{Signature 𝓞 𝓥} was defined in the
-% {[}Algebras.Signature{]}{[}{]} module as the dependent pair type
-% \af{Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)}.
-
-% If for some reason we want to use both representations of algebras and
-% move back and forth between them, this is easily accomplished with the
-% following functions.
-% \ccpad
-% \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓞}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 % \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaFunction{Signature}\AgdaSpace{}%
-% \AgdaBound{𝓞}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
 % \AgdaKeyword{where}\<%
 % \\
 % %
@@ -160,52 +138,53 @@ general (∞-)algebras throughout and then assume uniqueness of identity proofs 
 % %
 % \\[\AgdaEmptyExtraSkip]%
 % %
-% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaRecord{algebra}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaFunction{Algebra}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\<%
-% \\
-% %
-% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-% \AgdaField{op}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSymbol{)}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Algebra}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaRecord{algebra}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\<%
-% \\
-% %
-% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∥}}\<%
-% \end{code}
-% \ccpad
+\>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaField{op}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\<%
+\\
+%
+\>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\<%
+\end{code}
+\ccpad
+In developing the more advanced modules of the \agdaualib, we have used the Sigma type representation of algebras exclusively, though we occasionally use record types to represent other basic objects (e.g., congruences, subalgebras).
 
 \subsubsection{Operation interpretation syntax}\label{operation-interpretation-syntax}
 
@@ -254,21 +233,17 @@ We now define a convenient shorthand for the interpretation of an operation symb
 \AgdaBound{𝑎}\<%
 \end{code}
 \ccpad
-So, if \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol in the signature \ab{𝑆}, and if \ab{𝑎} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of the appropriate arity, then (\ab{𝑓} \af ̂ \ab 𝑨) \ab 𝑎 denotes the operation \ab{𝑓} interpreted in \ab{𝑨} and evaluated at \ab{𝑎}.
+Thus, if \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol in the signature \ab{𝑆} and if \ab{𝑎} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of the same arity, then (\ab{𝑓} \af ̂ \ab 𝑨) \ab 𝑎 denotes the operation \ab{𝑓} interpreted in \ab{𝑨} and evaluated at \ab{𝑎}.
 
 \subsubsection{Arbitrarily many variable symbols}\label{arbitrarily-many-variable-symbols}
 
 We sometimes want to assume that we have at our disposal an arbitrary collection \ab X of variable symbols such that, for every algebra \ab 𝑨, no matter the type of its domain, we have a surjective map \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ from variables onto the domain of \ab 𝑨. We may use the following definition to express this assumption when we need it.
 \ccpad
 \begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↠\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -276,15 +251,16 @@ We sometimes want to assume that we have at our disposal an arbitrary collection
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-\>[0]\AgdaBound{X}\AgdaSpace{}%
+%
+\>[1]\AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -301,43 +277,60 @@ We sometimes want to assume that we have at our disposal an arbitrary collection
 \AgdaBound{h}\<%
 \end{code}
 \ccpad
-Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.\\[-10pt]
-
-\ak{module} \AgdaUnderscore \ \as{\{}\ab 𝕏 \as : \as{\{}\ab{𝓤 𝓧} \as : \ab{Universe}\as{\}\{}\abt{X}{𝓧}\as{\}}(\ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆) \as → \ab X \af ↠ \ab 𝑨\as{\}} \ak{where}\\[4pt]
-Then \af{fst}(\af 𝕏 \ab 𝑨) will denote the surjective map \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣, and \af{snd}(\af 𝕏 \ab 𝑨) will be a proof that \ab{h} is surjective.
-
-\subsubsection{Lifts of algebras}\label{lifts-of-algebras}
-
-Here we define some domain-specific lifting tools for our operation and algebra types.
+Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}%
+\>[187I]\AgdaSymbol{\{}\AgdaBound{𝓧}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓧}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
+\>[.][@{}l@{}]\<[187I]%
+\>[9]\AgdaSymbol{\{}\AgdaBound{𝕏}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{↠}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+\ccpad
+Then \af{fst}(\af 𝕏 \ab 𝑨) will denote the surjective map from \ab X onto ∣ \ab 𝑨 \af ∣, and \af{snd}(\af 𝕏 \ab 𝑨) will be a proof that the map is surjective.
+
+
+
+
+
+
+
+
+\subsubsection{Lifts of algebras}\label{lifts-of-algebras}
+
+Recall the discussion in \S\ref{sec:lifts-altern-univ} of the difficulties one encounters when working with a noncummulative universe hierarchy. There we made a promise to provide some domain-specific lifting and lowering methods. Here we fulfill this promise by supplying a couple of bespoke tools designed to work with our operation and algebra types.
+\ccpad
+\begin{code}%
 \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{Lift}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{lift-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
@@ -346,11 +339,9 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[11]\AgdaSymbol{((}\AgdaBound{I}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{Lift}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
@@ -359,8 +350,6 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{lift-op}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -374,27 +363,28 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{Lift.lower}\AgdaSpace{}%
+\AgdaField{lower}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{algebra}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}%
+% \>[30]\AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{lift-alg}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
@@ -402,7 +392,7 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
@@ -433,14 +423,16 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{algebra}\<%
+% \\
+%
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{lift-alg-record-type}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
@@ -448,7 +440,7 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
@@ -476,7 +468,13 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaBound{𝓦}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-We use the function \af{lift-alg} to resolve errors that arise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in \ualibhtml{Prelude.Lifts}.)
+Our experience has shown \af{lift-alg} to be a perfectly adequate tool for resolving any universe level unification errors that arise when working with the \af{Algebra} type in Agda. We will see some examples of its effectiveness later.
+% 's noncummulative hierarchy of type universes.
+
+
+
+
+
 
 \subsubsection{Compatibility of binary relations}\label{compatibility-of-binary-relations}
 
@@ -486,43 +484,28 @@ if \ab{R} (\ab 𝑎 \ab i) (\ab{𝑎\textquotesingle{}} \ab i) for all \ab{i}, t
 The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{compatible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
