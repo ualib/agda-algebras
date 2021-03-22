@@ -26,8 +26,10 @@ For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we defin
 
 \begin{code}
 
-Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-Algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A
+Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+
+Algebra 𝓤 𝑆 = Σ A ꞉ 𝓤 ̇ ,                      -- the domain
+              Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}
 
@@ -90,18 +92,23 @@ So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and
 
 #### <a id="arbitrarily-many-variable-symbols">Arbitrarily many variable symbols</a>
 
-We sometimes want to assume that we have at our disposal an arbitrary collection `X` of variable symbols such that, for every algebra `𝑨`, no matter the type of its domain, we have a surjective map `h₀ : X → ∣ 𝑨 ∣` from variables onto the domain of `𝑨`.  We may use the following definition to express this assumption when we need it.
+We sometimes want to assume that we have at our disposal an arbitrary collection `X` of variable symbols such that, for every algebra `𝑨`, no matter the type of its domain, we have a surjective map of type `X → ∣ 𝑨 ∣`, from variable symbols onto the domain of `𝑨`.  We may use the following definition to express this assumption when we need it.
 
 \begin{code}
 
- _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+ _↠_ : {𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
 \end{code}
 
 Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.
 
-module _ {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+\begin{code}
+
+module _ {𝓧 : Universe}{X : 𝓧 ̇}{𝑆 : Signature 𝓞 𝓥}
+         {𝕏 : (𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨} where
+
+\end{code}
 
 Then fst(𝕏 𝑨) will denote the surjective map h₀ : X → ∣ 𝑨 ∣, and snd(𝕏 𝑨) will be a proof that h₀ is surjective.
 
@@ -114,12 +121,15 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 
 \begin{code}
 
+
+module _ {I : 𝓥 ̇}{A : 𝓤 ̇} where
+
  open Lift
 
- lift-op : {I : 𝓥 ̇}{A : 𝓤 ̇} → ((I → A) → A) → (𝓦 : Universe)
-  →        ((I → Lift{𝓦} A) → Lift {𝓦} A)
-
+ lift-op : ((I → A) → A) → (𝓦 : Universe) → ((I → Lift{𝓦} A) → Lift {𝓦} A)
  lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
+
+module _ {𝑆 : Signature 𝓞 𝓥}  where
 
  open algebra
 
