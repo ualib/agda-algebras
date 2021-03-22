@@ -9,7 +9,7 @@ author: William DeMeo
 
 This section presents the [UALib.Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
-Here we discuss **truncation** and **h-sets** (which we just call **sets**).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
+Here we discuss *truncation* and *h-sets* (which we just call *sets*).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
 
 **Remark**. [Agda][] now has a built in type called [Prop](ttps://agda.readthedocs.io/en/v2.6.1.3/language/prop.html) which may provide some or all of what we develop in this module. However, we have never tried to use it, and it seems we can do without it.
 
@@ -30,11 +30,11 @@ In general, we may have many inhabitants of a given type, hence (via Curry-Howar
 We are asking about an identity type on the identity type `≡₀`, and whether there is some inhabitant,
 say, `r` of this type; i.e., whether there is a proof `r : p ≡ₓ₁ q` that the proofs of `a ≡₀ b` are the same.
 If such a proof exists for all `p q : a ≡₀ b`, then the proof of `a ≡₀ b` is unique; as a property of
-the types `A` and `≡₀`, this is sometimes called **uniqueness of identity proofs**.
+the types `A` and `≡₀`, this is sometimes called *uniqueness of identity proofs*.
 
 Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
 
-In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a **set** (or **0-groupoid**) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
+In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
 This notion is formalized in the [Type Topology][] library using the types `is-set` which is defined using the `is-subsingleton` type that we saw earlier ([Prelude.Inverses][]) as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
 
@@ -51,7 +51,7 @@ open import MGS-Embeddings using (is-set) public
 
 Thus, the pair `(A , ≡₀)` forms a set if and only if it satisfies `∀ x y : A → is-subsingleton (x ≡₀ y)`.
 
-The function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which we will also import, is part of Escardó's characterization of equality in Sigma types described in [this section](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality) of [Escardó's notes][]. It is defined as follows.
+We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which is part of Escardó's characterization of *equality in Sigma types*.<sup>[2](Relations.Truncation.html#fn2)</sup> It is defined as follows.
 
 \begin{code}
 
@@ -81,9 +81,7 @@ A ⟺ B = (A → B) × (B → A)
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- monic-is-embedding|sets : (f : A → B) → is-set B → Monic f
-                           --------------------------------
-  →                        is-embedding f
+ monic-is-embedding|sets : (f : A → B) → is-set B → Monic f → is-embedding f
 
  monic-is-embedding|sets f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
   where
@@ -101,16 +99,13 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
 \end{code}
 
-In stating the previous result, we introduce a new convention to which we hope to adhere.  Whenever a result holds only for sets, we will add the special suffix `|sets`, which hopefully calls to mind the standard mathematical notation for the restriction of a function to a subset of its domain.
+In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a set, then we add to the name of the theorem the suffix `|sets`, which calls to mind the standard mathematical notation for the restriction of a function to a subset of its domain.
 
 Embeddings are always monic, so we conclude that when a function's codomain is a set, then that function is an embedding if and only if it is monic.
 
 \begin{code}
 
- embedding-iff-monic|sets : (f : A → B) → is-set B
-                            -------------------------
-  →                         is-embedding f ⟺ Monic f
-
+ embedding-iff-monic|sets : (f : A → B) → is-set B → is-embedding f ⟺ Monic f
  embedding-iff-monic|sets f Bset = (embedding-is-monic f), (monic-is-embedding|sets f Bset)
 
 \end{code}
@@ -118,7 +113,7 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 #### <a id="propositions">Propositions</a>
 
-Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) **proposition**.  We now define a type that captures this concept.
+Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) *proposition*.  We now define a type that captures this concept.
 
 \begin{code}
 
@@ -133,7 +128,7 @@ Recall that `Pred A 𝓦` is simply the function type `A → 𝓦 ̇`, so `Pred�
 
 `Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)`.
 
-The principle of **proposition extensionality** asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
+The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
 
 \begin{code}
 
@@ -142,13 +137,13 @@ prop-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ 
 
 \end{code}
 
-Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `PropExt A 𝓦 {P}{Q}` holds, then it follows that `P ≡ Q`.
+Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `prop-ext 𝓤 𝓦` holds, then we have `∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → P ≡ Q`.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
 
- prop-ext' : prop-ext 𝓤 𝓦 → {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ prop-ext' : prop-ext 𝓤 𝓦 → {P Q : Pred₁ A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
  prop-ext' pe hyp = pe (fst hyp) (snd hyp)
 
 \end{code}
@@ -158,9 +153,7 @@ Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q)
 
 #### <a id="binary-propositions">Binary propositions</a>
 
-Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a **binary proposition**.<sup>[2](Relations.Truncation.html#fn2)</sup>
-
-As above, we use the `is-subsingleton` type of the [Type Topology][] library to impose this truncation assumption on a binary relation.
+Given a binary relation `R`, it may be necessary or desirable to assume that there is at most one way to prove that a given pair of elements is `R`-related.  If this is true of `R`, then we call `R` a *binary proposition*. As above, we use the `is-subsingleton` type of the [Type Topology][] library to impose this truncation assumption on a binary relation.<sup>[3](Relations.Truncation.html#fn3)</sup>
 
 \begin{code}
 
@@ -177,7 +170,9 @@ To be clear, the type `Rel A 𝓦` is simply the function type `A → A → 𝓦
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this. (Note that we don't require *function* extensionality here.)
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this.
+
+Note that we don't require *function* extensionality here.
 
 \begin{code}
 
@@ -237,7 +232,7 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
 #### <a id="continuous-propositions">Continuous propositions</a>
 
 
-We defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call **continuous propositions**.
+We defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
 
@@ -263,7 +258,7 @@ con-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
-While we're at it, we might as well achieve full generality and define truncated types of **dependent continuous propositions**.
+While we're at it, we might as well achieve full generality and define truncated types of *dependent continuous propositions*.
 
 \begin{code}
 
@@ -297,12 +292,13 @@ dep-prop-ext' I A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 <sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
+<sup>2</sup><span class="footnote" id="fn2"> See [https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality](www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality).</span>
 
-<sup>2</sup><span class="footnote" id="fn2"> This is another example of proof-irrelevance since, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.</span>
+<sup>3</sup><span class="footnote" id="fn3"> This is another example of proof-irrelevance. Indeed, if `R` is a binary proposition and we have two proofs of `R x y`, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant. Note also that we could have used the definition of `is-subsingleton-valued` from [the section on properties of binary relations](Relations.Truncation.html#properties-of-binary-relations) to define `Pred₂` by `Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R`, but this seems less transparent than our explicit definition.
+</span>
 
-
-<p></p>
-<p></p>
+<br>
+<br>
 
 [← Relations.Quotients](Relations.Quotients.html)
 <span style="float:right;">[Algebras →](Algebras.html)</span>
