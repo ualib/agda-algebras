@@ -25,27 +25,24 @@ open import Relations.Truncation public
 
 #### <a id="operation-type">Operation type</a>
 
-We define the type of **operations**, and give an example (the projections).
+We define the type of *operations*, as follows.
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
-
- --The type of operations
- Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
- Op I A = (I → A) → A
-
- --Example. the projections
- π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
- π i x = x i
+--The type of operations
+Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+Op I A = (I → A) → A
 
 \end{code}
 
-The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`.
+The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
 
-The last two lines of the code block above codify the `i`-th `I`-ary projection operation on `A`.
+\begin{code}
 
+π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+π i x = x i
 
+\end{code}
 
 
 #### <a id="signature-type">Signature type</a>
@@ -64,31 +61,22 @@ As mentioned in the [Relations.Continuous][] module, 𝓞 will always denote the
 
 In the [Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
-For reference, we recall the definition of the Sigma type, `Σ`, which is
-
-```agda
--Σ : {𝓤 𝓥 : Universe}(X : 𝓤 ̇)(Y : X → 𝓥 ̇) → 𝓤 ⊔ 𝓥 ̇
--Σ X Y = Σ Y
-```
-
 
 
 #### <a id="Example">Example</a>
 
-Here is how we might define the signature for monoids as a member of the type `Signature 𝓞 𝓥`.
+Here is how we could define the signature for monoids as a member of the type `Signature 𝓞 𝓥`.
 
 \begin{code}
 
-module _ {𝓞 : Universe} where
+data monoid-op {𝓞 : Universe} : 𝓞 ̇ where
+ e : monoid-op
+ · : monoid-op
 
- data monoid-op : 𝓞 ̇ where
-  e : monoid-op
-  · : monoid-op
+open import MGS-MLTT using (𝟘; 𝟚)
 
- open import MGS-MLTT using (𝟘; 𝟚)
-
- monoid-sig : Signature 𝓞 𝓤₀
- monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+monoid-sig : Signature 𝓞 𝓤₀
+monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
 
 \end{code}
 

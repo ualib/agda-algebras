@@ -5,7 +5,7 @@
 %%% End:
 \subsubsection{Operation type}\label{operation-type}
 
-We begin by defining the type of \defn{operations}, and give an example (the projections).
+We begin by defining the type of \defn{operations}, as follows.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -44,23 +44,21 @@ We begin by defining the type of \defn{operations}, and give an example (the pro
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaComment{--Example. the projections}\<%
-\\
-%
-\>[1]\AgdaFunction{π}\AgdaSpace{}%
+\end{code}
+\ccpad
+The type \af{Op} encodes the arity of an operation as an arbitrary type \abt{I}{𝓥}, which gives us a very general way to represent an operation as a function type with domain \ab I \as → \ab A (the type of ``tuples'') and codomain \ab{A}. For example, the \ab{I}-\defn{ary projection operations} on \ab{A} can be codified as inhabitants of the type \af{Op} \ab I \af A in the following way.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -70,16 +68,13 @@ We begin by defining the type of \defn{operations}, and give an example (the pro
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
-%
-\>[1]\AgdaFunction{π}\AgdaSpace{}%
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \end{code}
-\ccpad
-The type \af{Op} encodes the arity of an operation as an arbitrary type \abt{I}{𝓥}, which gives us a very general way to represent an operation as a function type with domain \ab I \as → \ab A (the type of ``tuples'') and codomain \ab{A}. The last two lines of the code block above codify the \ab{i}-th \ab{I}-ary projection operation on \ab{A}.
 
 \subsubsection{Signature type}\label{signature-type}
 
@@ -130,7 +125,7 @@ In the \ualibhtml{Prelude} module we defined special syntax for the first and se
 
 \paragraph{Example}\label{example}
 
-Here is how we might define the signature for monoids as a member of the type \af{Signature} \ab 𝓞 \ab 𝓥.
+Here is how we could define the signature for monoids as an inhabitant of the type \af{Signature} \ab 𝓞 \ab 𝓥.
 \ccpad
 \begin{code}%
 \>[1]\AgdaKeyword{data}\AgdaSpace{}%
