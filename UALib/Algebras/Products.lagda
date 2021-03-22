@@ -30,13 +30,16 @@ The product of 𝑆-algebras for the Sigma type representation is defined as fol
 
 \begin{code}
 
-⨅ : {𝓤 𝓘 : Universe}{I : 𝓘 ̇ }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
+module _ {𝓤 𝓘 : Universe}{I : 𝓘 ̇ } where
 
-⨅ 𝒜 = (∀ i → ∣ 𝒜 i ∣) ,               -- domain of the product algebra
+ ⨅ : (𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
 
-       λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
+ ⨅ 𝒜 = (Π i ꞉ I , ∣ 𝒜 i ∣) ,               -- domain of the product algebra
+        λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
 
 \end{code}
+
+(Alternative acceptable notation for the domain of the product is `∀ i → ∣ 𝒜 i ∣`.)
 
 Other modules of the [UALib][] will use the foregoing product type exclusively.  However, for completeness, we now demonstrate how one would construct product algebras when the factors are defined using records.
 

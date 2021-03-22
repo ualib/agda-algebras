@@ -208,7 +208,7 @@ We could equally well have presented the last theorem so that the consequent is 
 \begin{code}
 
  class-extensionality'' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 C)) → IsEquivalence ∣ 𝑹 ∣
-  →                      Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
+  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
 
  class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
 

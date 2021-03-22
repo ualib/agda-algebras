@@ -8,15 +8,15 @@
 We begin by defining the type of \defn{operations}, and give an example (the projections).
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaComment{--The type of operations}\<%
 \\
@@ -115,9 +115,9 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-As mentioned in the section on \href{Relations.Continuous.html\#relations-of-arbitrary-arity}{Relations of arbitrary arity} in the \ualibhtml{Relations.Continuous} module, 𝓞 will always denote the universe of \emph{operation symbol} types, while 𝓥 is the universe of \emph{arity} types.
+As mentioned in \S\ref{sec:continuous-relations}, in the \ualib the symbol 𝓞 always denotes the universe of \emph{operation symbol} types, while 𝓥 is always the universe of \emph{arity} types.
 
-In the \ualibhtml{Prelude} module we defined special syntax for the first and second projections---namely, \af ∣\au\af ∣ and \af{∥}\au\af{∥}, respectively. Consequently, if \as{\{}\ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥\as{\}} is a signature, then \af ∣~\ab 𝑆~\af ∣ denotes the set of operation symbols, and \af{∥}~\ab 𝑆~\af{∥} denotes the arity function. If \ab 𝑓 \as : \af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \af{∥}~\ab 𝑆~\af{∥} \ab 𝑓 is the arity of \ab 𝑓.
+In the \ualibhtml{Prelude} module we defined special syntax for the first and second projections---namely, \af ∣\au\af ∣ and \af{∥}\au\af{∥}, respectively. Consequently, if \ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥 is a signature, then \af ∣~\ab 𝑆~\af ∣ denotes the set of operation symbols, and \af{∥}~\ab 𝑆~\af{∥} denotes the arity function. If \ab 𝑓 \as : \af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \af{∥}~\ab 𝑆~\af{∥} \ab 𝑓 is the arity of \ab 𝑓.
 
 % For reference, we recall the definition of the Sigma type, \af{Σ}, which is
 

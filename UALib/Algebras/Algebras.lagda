@@ -22,19 +22,18 @@ open import Algebras.Signatures public
 
 #### <a id="algebra-types">Algebra types</a>
 
-For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe 𝓤, we define the type of **algebras in the signature** 𝑆 (or 𝑆-**algebras**) and with **domain** (or **carrier** or **universe**) `𝐴 : 𝓤 ̇` as follows
+For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier* or *universe*) `𝐴 : 𝓤 ̇` as follows
 
 \begin{code}
 
 Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) →  𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
-
-Algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , ((f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A)
+Algebra 𝓤  𝑆 = Σ A ꞉ 𝓤 ̇ , Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A
 
 \end{code}
 
-We could refer to an inhabitant of this type as a "∞-algebra" because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Prelude.Preliminaries.html#truncation](Prelude.Preliminaries.html#truncation).)
+We could refer to an inhabitant of this type as a ∞-*algebra* because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Prelude.Preliminaries.html#truncation](Prelude.Preliminaries.html#truncation).)
 
-We might take this opportunity to define the type of "0-algebras" (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of our algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
+We might take this opportunity to define the type of 0-*algebras* (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of our algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
 
 
 
@@ -44,12 +43,11 @@ Sometimes records are more convenient than sigma types. For such cases, we might
 
 \begin{code}
 
-module _ {𝓞 𝓥 : Universe} where
- record algebra (𝓤 : Universe) (𝑆 : Signature 𝓞 𝓥) : (𝓞 ⊔ 𝓥 ⊔ 𝓤) ⁺ ̇ where
-  constructor mkalg
-  field
-   univ : 𝓤 ̇
-   op : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → univ) → univ
+record algebra (𝓤 : Universe) (𝑆 : Signature 𝓞 𝓥) : (𝓞 ⊔ 𝓥 ⊔ 𝓤) ⁺ ̇ where
+ constructor mkalg
+ field
+  univ : 𝓤 ̇
+  op : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → univ) → univ
 
 
 \end{code}
@@ -60,7 +58,7 @@ If for some reason we want to use both representations of algebras and move back
 
 \begin{code}
 
-module _ {𝓤 𝓞 𝓥 : Universe} {𝑆 : Signature 𝓞 𝓥} where
+module _ {𝑆 : Signature 𝓞 𝓥} where
 
  open algebra
 
@@ -96,8 +94,8 @@ We sometimes want to assume that we have at our disposal an arbitrary collection
 
 \begin{code}
 
-_↠_ : {𝑆 : Signature 𝓞 𝓥}{𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
-X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+ _↠_ : {𝓤 𝓧 : Universe} → 𝓧 ̇ → Algebra 𝓤 𝑆 → 𝓧 ⊔ 𝓤 ̇
+ X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
 \end{code}
 
@@ -116,19 +114,19 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 
 \begin{code}
 
-module _ {𝓞 𝓥 : Universe}{𝑆 : Signature 𝓞 𝓥} where -- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)} where
+ open Lift
 
- lift-op : {𝓤 : Universe}{I : 𝓥 ̇}{A : 𝓤 ̇} → ((I → A) → A) → (𝓦 : Universe)
+ lift-op : {I : 𝓥 ̇}{A : 𝓤 ̇} → ((I → A) → A) → (𝓦 : Universe)
   →        ((I → Lift{𝓦} A) → Lift {𝓦} A)
 
- lift-op f 𝓦 = λ x → lift (f (λ i → Lift.lower (x i)))
+ lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
 
  open algebra
 
- lift-alg : {𝓤 : Universe} → Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
  lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → lift-op (𝑓 ̂ 𝑨) 𝓦)
 
- lift-alg-record-type : {𝓤 : Universe} → algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
+ lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
  lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → lift-op ((op 𝑨) f) 𝓦)
 
 \end{code}
@@ -147,8 +145,6 @@ if `R (𝑎 i) (𝑎' i)` for all `i`, then  `R ((𝑓 ̂ 𝑨) 𝑎) ((𝑓 ̂ 
 The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.
 
 \begin{code}
-
-module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
  compatible : (𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  compatible  𝑨 R = ∀ 𝑓 → compatible-fun (𝑓 ̂ 𝑨) R
@@ -172,7 +168,7 @@ Next we define a type that represents *compatibility of a continuous relation* w
 
 \begin{code}
 
-module continuous-compatibility {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
+module continuous-compatibility {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
 
  open import Relations.Continuous using (ConRel; lift-con-rel; con-compatible-fun)
 
@@ -198,7 +194,7 @@ With `con-compatible-op` in hand, it is a trivial matter to define a type that r
 \begin{code}
 
  con-compatible : ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- con-compatible R = ∀ (𝑓 : ∣ 𝑆 ∣ ) → con-compatible-op 𝑓 R
+ con-compatible R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , con-compatible-op 𝑓 R
 
 \end{code}
 

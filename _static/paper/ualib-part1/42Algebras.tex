@@ -301,10 +301,9 @@ We sometimes want to assume that we have at our disposal an arbitrary collection
 \AgdaBound{h}\<%
 \end{code}
 \ccpad
-Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.\\[-4pt]
+Now we can assert, in a specific module, the existence of the surjective map described above by including the following line in that module's declaration, like so.\\[-10pt]
 
-\ak{module} \AgdaUnderscore \ \as{\{}\ab 𝕏 \as : \as{\{}\ab{𝓤 𝓧} \as : \ab{Universe}\as{\}\{}\abt{X}{𝓧}\as{\}}(\ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆) \as → \ab X \af ↠ \ab 𝑨\as{\}} \ak{where}\\[-4pt]
-
+\ak{module} \AgdaUnderscore \ \as{\{}\ab 𝕏 \as : \as{\{}\ab{𝓤 𝓧} \as : \ab{Universe}\as{\}\{}\abt{X}{𝓧}\as{\}}(\ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆) \as → \ab X \af ↠ \ab 𝑨\as{\}} \ak{where}\\[4pt]
 Then \af{fst}(\af 𝕏 \ab 𝑨) will denote the surjective map \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣, and \af{snd}(\af 𝕏 \ab 𝑨) will be a proof that \ab{h} is surjective.
 
 \subsubsection{Lifts of algebras}\label{lifts-of-algebras}
@@ -322,8 +321,7 @@ Here we define some domain-specific lifting tools for our operation and algebra 
 \AgdaFunction{Signature}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\AgdaSpace{}%
-\AgdaComment{-- Σ F ꞉ 𝓞 ̇ , ( F → 𝓥 ̇)\} where}\<%
+\AgdaKeyword{where}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
