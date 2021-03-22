@@ -241,7 +241,7 @@ module continuous-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
 
 \end{code}
 
-To see the point of this, suppose `con-prop-ext  I A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ConProp I A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
+To see the point of this, suppose `con-prop-ext A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ConProp A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
 
 \begin{code}
 

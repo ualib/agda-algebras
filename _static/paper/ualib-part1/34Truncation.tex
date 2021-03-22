@@ -1035,10 +1035,10 @@ We could have presented the last theorem so that the consequent is a Pi type, as
 
 
 
-\subsubsection{Continuous propositions*}\label{sec:cont-prop-types}
-In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement the types we defined in the module \ualibhtml{Relations.Continuous}.  We should point out however that \emph{so far} no other modules of the library depend on the types defined here. Therefore, the reader may safely skip to Section~\ref{sec:algebra-types} without fear that this might cause them to become lost at some future point in the development.
+\subsubsection{Continuous propositions*\protect\cref{starred}}\label{sec:cont-prop-types}
+In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement the types we defined in the module \ualibhtml{Relations.Continuous}.  We should point out however that (so far) no other modules of the library depend on the types defined here. Therefore, the reader may safely skip to Section~\ref{sec:algebra-types} without fear that this will lead to confusion at some point later on.
 
-We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} module to represent relations of arbitrary arity. Naturally, we introduce a new type of \emph{truncated continuous relations}, the inhabitants of which we call \defn{continuous propositions}.
+We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} module to represent relations of arbitrary arity. Here we introduce a new type of \emph{truncated continuous relations}, the inhabitants of which we call \defn{continuous propositions}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -1054,6 +1054,27 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{uv}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSpace{}%
+\>[25]\AgdaComment{-- (merely a convenient shorthand)}\<%
+\\
+%
+\>[1]\AgdaFunction{uv}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Relations.Continuous}\AgdaSpace{}%
@@ -1073,12 +1094,8 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{uv}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -1113,12 +1130,8 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{uv}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -1153,36 +1166,34 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{Q}\<%
-% \\
-% \>[0]\<%
 \end{code}
 \ccpad
 % \textbf{Remarks}. Here the context includes \{\ab 𝓤~\as :~\ap{Universe}\} and \{\ab I~\as :~\ab 𝓥\af ̇\}. As these types are new and have not yet seen much use elsewhere in the library, we place them in a named module so we can more easily detect if and when they become useful used. Finally, we use a convenient type alias in this section, namely, \af{uv}~\ab 𝓦 := \ab 𝓤~\apr ⊔~\ab 𝓥~\apr ⊔~\ab 𝓦\af ⁺.
-
-
-To see the point of the types just defined, suppose \af{con-prop-ext} \ab I \ab A \ab 𝓦 holds. Then we can prove that logically equivalent continuous propositions of type \af{ConProp} \ab I \ab A \ab 𝓦 are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
+To see the point of the types just defined, suppose \af{con-prop-ext} \ab A \ab 𝓦 holds. Then we can prove that logically equivalent continuous propositions of type \af{ConProp} \ab A \ab 𝓦 are equivalent. In other words, under the stated hypotheses, we obtain an extensionality lemma for continuous propositions.
 \ccpad
 \begin{code}%
 % \>[0]\<%
 % \\
-% \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{con-prop-ext}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
 \AgdaSymbol{→}\AgdaSpace{}%
-% \>[17]
 \AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1203,17 +1214,15 @@ To see the point of the types just defined, suppose \af{con-prop-ext} \ab I \ab 
 \AgdaBound{Q}\<%
 \\
 %
-\>[1]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
-% \AgdaBound{A}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
+\>[2]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{pe}%
-\>[32]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[29]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}%
-\>[41]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\>[38]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
@@ -1221,8 +1230,6 @@ To see the point of the types just defined, suppose \af{con-prop-ext} \ab I \ab 
 While we're at it, we might as well take the abstraction one step further and define \emph{truncated dependent relations}, which we'll call \defn{dependent propositions}.
 \ccpad
 \begin{code}%
-% \>[0]\<%
-% \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{DepProp}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1235,12 +1242,8 @@ While we're at it, we might as well take the abstraction one step further and de
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{uv}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -1266,8 +1269,6 @@ While we're at it, we might as well take the abstraction one step further and de
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{dep-prop-ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
@@ -1279,12 +1280,8 @@ While we're at it, we might as well take the abstraction one step further and de
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{uv}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -1320,37 +1317,39 @@ While we're at it, we might as well take the abstraction one step further and de
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier. (Here the context includes 
-\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)} and \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}\AgdaPostulate{Universe}\AgdaSymbol{)}.)
-\ccpad
-\begin{code}%
-% \>[0]\<%
-% \\
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier.%  (Here the context includes 
 % \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaBound{I}\AgdaSpace{}%
 % \AgdaSymbol{→}\AgdaSpace{}%
 % \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)} and \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}\AgdaPostulate{Universe}\AgdaSymbol{)}.)
+\ccpad
+\begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{dep-prop-ext}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝓦}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[17]\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{DepProp}\AgdaSpace{}%
@@ -1370,17 +1369,17 @@ Applying the extensionality principle for dependent relations is no harder than 
 \AgdaBound{Q}\<%
 \\
 %
-\>[1]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{pe}%
-\>[32]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[29]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}%
-\>[41]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\>[38]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
+% \\
+% \>[0]\<%
 \end{code}
