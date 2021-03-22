@@ -225,14 +225,18 @@ This section presents the `continuous-propositions` submodule of the [Relations.
 Recall, we defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
+
 module continuous-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
+
+ uv : Universe → Universe
+ uv 𝓦 = 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺
 
  open import Relations.Continuous using (ConRel; DepRel)
 
- ConProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ ConProp : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
  ConProp A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
- con-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ con-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
  con-prop-ext A 𝓦 = {P Q : ConProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
@@ -241,9 +245,10 @@ To see the point of this, suppose `con-prop-ext  I A 𝓦` holds. Then we can pr
 
 \begin{code}
 
- con-prop-ext' : (A : 𝓤 ̇)(𝓦 : Universe) → con-prop-ext A 𝓦
-  →              {P Q : ConProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
- con-prop-ext' A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ module _ (A : 𝓤 ̇)(𝓦 : Universe) where
+
+  con-prop-ext' : con-prop-ext A 𝓦 → {P Q : ConProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+  con-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -251,12 +256,11 @@ While we're at it, we might as well achieve full generality and define truncated
 
 \begin{code}
 
- DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- DepProp A 𝓦 = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → uv 𝓦 ̇
+ DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
-
- dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- dep-prop-ext A 𝓦 = {P Q : DepProp A 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → uv 𝓦 ̇
+ dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -264,9 +268,10 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 \begin{code}
 
- dep-prop-ext' : (A : I → 𝓤 ̇)(𝓦 : Universe) → dep-prop-ext A 𝓦
-  →              {P Q : DepProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
- dep-prop-ext' A 𝓦 pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ module _ (𝒜 : I → 𝓤 ̇)(𝓦 : Universe) where
+
+  dep-prop-ext' : dep-prop-ext 𝒜 𝓦 → {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+  dep-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
