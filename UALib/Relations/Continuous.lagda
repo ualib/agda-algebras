@@ -5,9 +5,9 @@ date : 2021-02-28
 author: William DeMeo
 ---
 
-### <a id="big-relations">Continuous Relations</a>
+### <a id="continuous-relations">Continuous Relations*</a>
 
-This is the [UALib.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
+This is the [UALib.Relations.Continuous][] module of the [Agda Universal Algebra Library][].<sup>[*](Relations.Continuous.html#fn0)</sup>
 
 \begin{code}
 
@@ -118,6 +118,8 @@ module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 
 
 --------------------------------------
+
+<sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
 <sup>[1]</sup><span class="footnote" id="fn1"> Because the collection represented by the indexing type `I` might not even be enumerable, technically speaking, instead of `A i` to `A j` to `A k` to ..., we should have written something like `TO (i : I) , A i`.</span>
 

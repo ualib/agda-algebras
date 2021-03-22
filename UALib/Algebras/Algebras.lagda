@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Algebras.Algebras module (Agda Universal Algebra Library)
+title : Algebras.Algebras module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
 
 ### <a id="algebras">Algebras</a>
 
-This section presents the [UALib.Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
+This section presents the [Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -155,17 +155,27 @@ module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
-Recall the `compatible-fun` type was defined in [Relations.Discrete][] module.
+Recall, the `compatible-fun` type was defined in [Relations.Discrete][] module.
 
 
 
-#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
+---------------------------------------
+
+
+
+#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations*</a>
+
+This section presents the `continuous-compatibility` submodule of the [Algebras.Algebras][] module.<sup>[*](Algebras.Algebras.html#fn0)</sup>
+
 
 Next we define a type that represents *compatibility of a continuous relation* with all operations of an algebra. We start by defining compatibility of a continuous relations with a single operation.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
+module continuous-compatibility {𝓤 𝓦 : Universe} {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
+
+ open import Relations.Continuous using (ConRel; lift-con-rel; con-compatible-fun)
+
 
  con-compatible-op : ∣ 𝑆 ∣ → ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  con-compatible-op 𝑓 R = con-compatible-fun (λ _ → (𝑓 ̂ 𝑨)) R
@@ -195,6 +205,8 @@ With `con-compatible-op` in hand, it is a trivial matter to define a type that r
 
 
 --------------------------------------
+
+<sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
 
 [← Algebras.Signatures](Algebras.Signatures.html)

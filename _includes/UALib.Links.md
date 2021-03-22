@@ -197,7 +197,6 @@
 [Varieties.Preservation]: Varieties.Preservation.html
 [Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
 
-
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 
 [UALib.Prelude]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda

@@ -215,27 +215,25 @@ We could equally well have presented the last theorem so that the consequent is 
 \end{code}
 
 
+----------------------------
 
---------------------------------
+#### <a id="continuous-propositions">Continuous propositions*</a>
 
-#### <a id="optional-offramp">Optional Offramp</a>
-
-In the remainder of this module we introduce new types that are a more abstract and general than the ones we've seen so far.  Therefore, the new few sections may require a more concerted effort, and possibly a higher degree of sophistication, from the reader.  We feel the types here are interesting in and of themselves, and they certainly belong in the [Agda UALib][], but no other modules of library depend on such general types *so far*, so the reader may safely skip over the remaining subsections of this module without fear of feeling lost at some later point in the development.
-
-------------------------------
-
-#### <a id="continuous-propositions">Continuous propositions</a>
+This section presents the `continuous-propositions` submodule of the [Relations.Truncation][] module.<sup>[*](Relations.Truncation.html#fn0)</sup>
 
 
-We defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
+Recall, we defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
+module continuous-propositions where
 
-ConProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-ConProp I A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ open import Relations.Continuous using (ConRel; DepRel)
 
-con-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ ConProp : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ ConProp I A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+
+ con-prop-ext : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+ con-prop-ext I A 𝓦 = {P Q : ConProp I A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -243,10 +241,10 @@ If we assume `con-prop-ext  I A 𝓦` holds for some `I`, `A` and `𝓦`, then w
 
 \begin{code}
 
-module _ {𝓤 : Universe}(I : 𝓥 ̇)(𝓦 : Universe) where
+ module _ {𝓤 : Universe}(I : 𝓥 ̇)(𝓦 : Universe) where
 
- con-prop-ext' : (A : 𝓤 ̇) → con-prop-ext I A 𝓦 → {P Q : ConProp I A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
- con-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+  con-prop-ext' : (A : 𝓤 ̇) → con-prop-ext I A 𝓦 → {P Q : ConProp I A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+  con-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -254,12 +252,12 @@ While we're at it, we might as well achieve full generality and define truncated
 
 \begin{code}
 
- DepProp : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- DepProp A = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+  DepProp : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+  DepProp A = Σ P ꞉ (DepRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
 
- dep-prop-ext : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- dep-prop-ext A = {P Q : DepProp A} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+  dep-prop-ext : (A : I → 𝓤 ̇) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+  dep-prop-ext A = {P Q : DepProp A} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
@@ -267,14 +265,16 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 \begin{code}
 
- dep-prop-ext' : (A : I → 𝓤 ̇) → dep-prop-ext A → {P Q : DepProp A} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
- dep-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+  dep-prop-ext' : (A : I → 𝓤 ̇) → dep-prop-ext A → {P Q : DepProp A} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+  dep-prop-ext' A pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
 
 
 -----------------------------------
+
+<sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
 <sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
