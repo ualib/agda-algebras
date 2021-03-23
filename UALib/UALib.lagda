@@ -77,7 +77,6 @@ open import Homomorphisms
 open import Terms
 open import Subalgebras
 open import Varieties
-open import Appendix
 
 \end{code}
 
@@ -126,9 +125,6 @@ open import Appendix
   - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
   - [Equation Preservation Theorems](Varieties.Preservation.html)
   - [Free Algebras and Birkhoff's Theorem](Varieties.FreeAlgebras.html)
-
-- [Appendix][]
-  - [Imports](Appendix.Imports.html)
 
 ---------------------------------------
 

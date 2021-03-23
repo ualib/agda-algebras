@@ -77,7 +77,7 @@ An arbitrary class `𝒦` of algebras is represented as a predicate over the typ
 
 Later we will formally state and prove that, given an arbitrary class `𝒦` of algebras, the product of all subalgebras of algebras in the class belongs to the class  `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise. In fact, it is not even immediately clear (at least not to this author) how to merely express the product of an entire class of algebras as a dependent type. (We urge you, dear *UALiber*, to take a moment and try it before moving on.)
 
-After some concentratation, meditation, and a few failed attempts, eventually the right type reveals itself and, as is often the case, the thing we sought seems almost obvious once we lay our hands on it.<sup>[1](Algebras.Products.html#fn1)</sup>
+After some concentratation, meditation, and a few failed attempts, eventually the right type reveals itself and, as is often the case, the thing we sought seems almost obvious once we lay our hands on it.<sup>[2](Algebras.Products.html#fn2)</sup>
 
 The solution we propose in the \agdaualib is the \af{class-product'} type whose construction is the main goal of this section.
 
@@ -134,7 +134,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the tr
 
 <sup>1</sup><span class="footnote" id="fn1"> The underscore is merely a placeholder for the universe of the predicate type and needn't concern us here.</span>
 
-<sup>1</sup><span class="footnote" id="fn1"> This was our own experience, but readers are encouraged to try to derive for themselves a type that represents the product of all things satisfying a given predicate (e.g., over a type like \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, or over an arbitrary type). It is a good exercise.</span>
+<sup>2</sup><span class="footnote" id="fn2"> This was our own experience, but readers are encouraged to try to derive for themselves a type that represents the product of all things satisfying a given predicate (e.g., over a type like \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, or over an arbitrary type). It is a good exercise.</span>
 
 <br>
 <br>

@@ -77,7 +77,6 @@ We hope the library will be useful to mathematicians and computer scientists who
 <a id="3808" class="Keyword">open</a> <a id="3813" class="Keyword">import</a> <a id="3820" href="Terms.html" class="Module">Terms</a>
 <a id="3826" class="Keyword">open</a> <a id="3831" class="Keyword">import</a> <a id="3838" href="Subalgebras.html" class="Module">Subalgebras</a>
 <a id="3850" class="Keyword">open</a> <a id="3855" class="Keyword">import</a> <a id="3862" href="Varieties.html" class="Module">Varieties</a>
-<a id="3872" class="Keyword">open</a> <a id="3877" class="Keyword">import</a> <a id="3884" href="Appendix.html" class="Module">Appendix</a>
 
 </pre>
 
@@ -126,9 +125,6 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
   - [Equation Preservation Theorems](Varieties.Preservation.html)
   - [Free Algebras and Birkhoff's Theorem](Varieties.FreeAlgebras.html)
-
-- [Appendix][]
-  - [Imports](Appendix.Imports.html)
 
 ---------------------------------------
 
