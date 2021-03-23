@@ -67,6 +67,8 @@ Part 1: Foundation\\[-5pt]
 \ArticleNo{0}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% \includeonly{4Algebras} %1Introduction,2Prelude,3Relations,4Algebras,5Conclusion}
+
 \begin{document}
 
 \maketitle
@@ -76,130 +78,25 @@ Part 1: Foundation\\[-5pt]
 The Agda Universal Algebra Library (\ualib) is a library of types and programs (theorems and proofs) we developed to formalize the foundations of universal algebra in dependent type theory using the Agda programming language and proof assistant. The \ualib includes a substantial collection of definitions, theorems, and proofs from general algebra and equational logic, including many examples that exhibit the power of inductive and dependent types for representing and reasoning about relations, algebraic structures, and equational theories. In this paper we describe several important aspects of the logical foundations on which the library is built. We also discuss (though sometimes only briefly) all of the types defined in the first 13 modules of the library, with special attention given to those details that seem most interesting or challenging from a type theory or mathematical foundations perspective.
 \end{abstract}
 
-\section*{Acknowledgements}
-\input{../acknowledgements.tex}
+\input{0Acknowledgements}
 
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%  TOC  %%%%%%%%%%%%%%%%%%%%%%
 
 \setcounter{tocdepth}{2}
 \tableofcontents
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Introduction}\label{sec:introduction}
-\input{11Introduction}
-
-% \newcommand\firstsentence[2]{This section describes certain key components of the #1 module of the \agdaualib.\footnote{For more details, see #2.}}
 
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% - [Prelude](Prelude.html)
-\section{Agda Prelude}\label{sec:agda-prelude}
-
-\subsection{Preliminaries: logical foundations, universes, dependent types}\label{preliminaries}
-\firstsentence{Prelude}{Preliminaries}
-\input{21Preliminaries}
-
-\subsection{Equality: definitional equality and transport}\label{equality}
-\firstsentence{Prelude}{Equality}
-\input{22Equality}
-
-\subsection{Extensionality: types for postulating function extensionality}\label{function-extensionality}\firstsentence{Prelude}{Extensionality}
-\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}}
-\input{23Extensionality}
-
-\subsection{Inverses: epics, monics, embeddings, inverse images}\label{sec:inverse-image-invers}\firstsentence{Prelude}{Inverses}
-\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}}
-\input{24Inverses}
-
-\subsection{Lifts: making peace with a noncumulative universe hierarchy}\label{sec:lifts-altern-univ}
-\firstsentence{Prelude}{Lifts}
-\input{25Lifts}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Relation Types}\label{sec:relat-quot-types}
-\subsection{Discrete relations: predicates, axiom of extensionality, compatibility}\label{sec:discrete-relations}
-\firstsentence{Relations}{Discrete}
-\context{%
-\{\ab 𝓤 \ab 𝓦 \ab 𝓧 \ab 𝓨 \ab 𝓩 \as : \AgdaPostulate{Universe}\}%
-\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
-\{\ab B \as : \ab 𝓦\AgdaOperator{\AgdaFunction{̇}}\}%
-\{\ab C \as : \ab 𝓩\AgdaOperator{\AgdaFunction{̇}}\}%
-}
-Here we present the submodules of the \agdaualib's \ualibhtml{Relations} module. In \S\ref{sec:discrete-relations} we define types that represent \emph{unary} and \emph{binary relations}, which we refer to as ``discrete relations'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we introduce in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
-
-\input{31Discrete}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Continuous relations: arbitrary-sorted relations of arbitrary arity*\protect\footnotemark}\label{sec:continuous-relations}\footnotetext{\label{starred}%
-Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones defined in other sections. Moreover, the types defined in starred sections are used in only a few other places in the \agdaualib, so they may be safely skimmed or even skipped.}
-\firstsentencefull{Relations}{Continuous}
-\context{%
-\{\ab 𝓤 \ab 𝓥 \ab 𝓦 \as : \AgdaPostulate{Universe}\}%
-\{\ab I \ab J \as : \ab 𝓥\AgdaOperator{\AgdaFunction{̇}}\}%
-\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
-}
-\input{32Continuous}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Quotients: equivalences, class representatives, quotient types}\label{sec:equiv-relat-quot}
-\firstsentence{Relations}{Quotients}
-\context{%
-\{\ab 𝓤 𝓦 \as : \AgdaPostulate{Universe}\}%
-\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}%
-}
-\input{33Quotients}
-
-\subsection{Truncation: continuous propositions, quotient extensionality}\label{sec:trunc-sets-prop}
-\firstsentence{Relations}{Truncation}
-\input{34Truncation}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Algebra Types}\label{sec:algebra-types}
-A standard way to define algebraic structures in type theory is using record types.  However, we feel the dependent pair (or Sigma) type (\S\ref{sec:dependent-types}) is more natural, as it corresponds semantically to the existential quantifier of logic. Therefore, many of the important types of the \ualib are defined as Sigma types. In this section, we use function types and Sigma types to define the types of \emph{operations} and \emph{signatures} (\S\ref{sec:oper-sign}), \emph{algebras} (\S\ref{sec:algebras}), and \emph{product algebras} (\S\ref{sec:product-algebras}), \emph{congruence relations}\ref{congruences}, and \emph{quotient algebras}\ref{quotient-algebras}.
-
-\subsection{Signatures: types for operations and signatures}\label{sec:oper-sign}
-\firstsentence{Algebras}{Signatures}
-\input{41Signatures}
-
-\subsection{Algebras: types for algebras, operation interpretation, and compatibility}\label{sec:algebras}
-\firstsentence{Algebras}{Algebras}
-\input{42Algebras}
-
-\subsection{Products: types for products over arbitrary classes of algebras}\label{sec:product-algebras}
-\firstsentence{Algebras}{Products}
-\input{43Products}
-
-\subsection{Congruences: types for congruences and quotient algebras}\label{congruences}
-\firstsentence{Algebras}{Congruences}
-\input{44Congruences}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Concluding Remarks}\label{sec:concluding-remarks}
-We've reached the end of Part 1 of our three-part series describing the \agdaualib.  Part 2 will cover homomorphism, terms, and subalgebras, and Part 3 will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
-
-% We completed the first major milestone of this project in January 2021, which was the first formal, machine-checked proof of Birkhoff's HSP theorem.  Our next goal is to support current mathematical research by formalizing some recently proved theorems. For example, we intend to formalize theorems about the computational complexity of decidable properties of algebraic structures. Part of this effort will naturally involve further work on the library itself, and may lead to new observations or discoveries in dependent type theory or homotopy type theory.
-
-%% One natural question is whether there are any objects of our research that cannot be represented constructively in type theory. % and, if so, whether these have suitable constructive substitutes.
-%% %Along these lines, %% we should revisit and perhaps refine our proof of Birkhoff's theorem. A
-%% As mentioned in \S~\ref{sec:contributions}, a constructive version of Birkhoff's theorem was presented by Carlstr\"om in~\cite{Carlstrom:2008}. We would like to know, for example, how the two new hypotheses required by Carlstr\"om %% adds to the classical theorem in order to make it constructive 
-%% compare with the assumptions we make in our Agda proof of this result.
-
-We conclude by noting that one of our goals is to make computer formalization of mathematics more accessible to mathematicians working in universal algebra and model theory. We welcome feedback from the community and are happy to field questions about the \ualib, how it is installed, and how it can be used to prove theorems that are not yet part of the library.  Merge requests submitted to the UALib's main gitlab repository are especially welcomed.  Please visit the repository at \url{https://gitlab.com/ualib/ualib.gitlab.io/} and help us improve it.
-
-
+\input{1Introduction}
+\input{2Prelude}
+\input{3Relations}
+\input{4Algebras}
+\input{5Conclusion}
+% \include{1Introduction}
+% \include{2Prelude}
+% \include{3Relations}
+% \include{4Algebras}
+% \include{5Conclusion}
 
 
 

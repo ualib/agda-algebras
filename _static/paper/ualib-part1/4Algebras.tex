@@ -1,0 +1,23 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
+\section{Algebra Types}\label{sec:algebra-types}
+A standard way to define algebraic structures in type theory is using record types.  However, we feel the dependent pair (or Sigma) type (\S\ref{sec:dependent-types}) is more natural, as it corresponds semantically to the existential quantifier of logic. Therefore, many of the important types of the \ualib are defined as Sigma types. In this section, we use function types and Sigma types to define the types of \emph{operations} and \emph{signatures} (\S\ref{sec:oper-sign}), \emph{algebras} (\S\ref{sec:algebras}), and \emph{product algebras} (\S\ref{sec:product-algebras}), \emph{congruence relations}\ref{congruences}, and \emph{quotient algebras}\ref{quotient-algebras}.
+
+\subsection{Signatures: types for operations \& signatures}\label{sec:oper-sign}
+\firstsentence{Algebras}{Signatures}
+\input{41Signatures}
+
+\subsection{Algebras: types for algebras, operation interpretation \& compatibility}\label{sec:algebras}
+\firstsentence{Algebras}{Algebras}
+\input{42Algebras}
+
+\subsection{Products: types for products over arbitrary classes}\label{sec:product-algebras}
+\firstsentence{Algebras}{Products}
+\input{43Products}
+
+\subsection{Congruences: types for congruences \& quotient algebras}\label{congruences}
+\firstsentence{Algebras}{Congruences}
+\input{44Congruences}

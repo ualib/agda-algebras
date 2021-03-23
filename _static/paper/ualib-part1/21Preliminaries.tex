@@ -86,15 +86,20 @@ The first of these is the \am{Universes} module which we import as follows.
 Since we use the \ak{public} directive, the \am{Universes} module will be available to all modules that import
 the present module (\ualibhtml{Prelude.Preliminaries}).
 
-The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we refer to universes using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab𝓩, etc. To this list we add one more that we will use later to denote the universe level of operation symbol types (defined in the \ualibhtml{Algebras.Signatures} module).
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{variable}\AgdaSpace{}%
+The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we refer to universe levels using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab𝓩, etc. To this list we add one more, as follows: \AgdaKeyword{variable}\AgdaSpace{}%
 \AgdaGeneralizable{𝓞}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\<%
-\end{code}
-\ccpad
+\AgdaPostulate{Universe}.
+In the \ualib, the symbol \AgdaGeneralizable{𝓞} is special; it is reserved for denoting the universe level of operation symbol types defined later (in the \ualibhtml{Algebras.Signatures} module).
+% \ccpad
+% \begin{code}%
+% \>[0]\AgdaKeyword{variable}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\<%
+% \end{code}
+% \ccpad
+
 The \am{Universes} module also provides elegant notation for the few primitive operations on universes that Agda supports. Specifically, the \af ̇ operator maps a universe level \ab 𝓤 to the type \ad{Set}~\ab 𝓤, and the latter has type \apt{Set}~(\apr{lsuc}~\ab 𝓤). The Agda level \apr{lzero} is renamed \apr{𝓤₀}, so \apr{𝓤₀}\af ̇ is an alias for \apr{Set}~\apr{lzero}. Thus, \ab 𝓤\af ̇ is simply an alias for \apr{Set}~\ab 𝓤, and we have \apr{Set}~\ab 𝓤~\as :~\apr{Set}~(\apr{lsuc}~\ab 𝓤). Finally, \apr{Set}~(\apr{lsuc}~\apr{lzero}) is equivalent to \apr{Set}~\apr{𝓤₀}\af ⁺, which we (and Escardó) denote by \apr{𝓤₀}\af ⁺\af ̇.
 
 % The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.

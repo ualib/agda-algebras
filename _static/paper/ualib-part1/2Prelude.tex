@@ -1,0 +1,26 @@
+% -*- TeX-master: "ualib-part1.tex" -*-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-engine: 'xetex
+%%% End:
+\section{Agda Prelude}\label{sec:agda-prelude}
+
+\subsection{Preliminaries: logical foundations, universes, dependent types}\label{preliminaries}
+\firstsentence{Prelude}{Preliminaries}
+\input{21Preliminaries}
+
+\subsection{Equality: definitional equality and transport}\label{equality}
+\firstsentence{Prelude}{Equality}
+\input{22Equality}
+
+\subsection{Extensionality: types for postulating function extensionality}\label{function-extensionality}\firstsentence{Prelude}{Extensionality}
+\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}}
+\input{23Extensionality}
+
+\subsection{Inverses: epics, monics, embeddings, inverse images}\label{sec:inverse-image-invers}\firstsentence{Prelude}{Inverses}
+\context{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}}
+\input{24Inverses}
+
+\subsection{Lifts: making peace with a noncumulative universe hierarchy}\label{sec:lifts-altern-univ}
+\firstsentence{Prelude}{Lifts}
+\input{25Lifts}
