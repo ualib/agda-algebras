@@ -65,8 +65,10 @@ We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields
 
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
-
                   →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+
+ -- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
+ -- ψ 𝒦 (p , q) = Π 𝔸 ꞉ (ℑ (S{𝓤}{𝓤} 𝒦)) ,  (free-lift ∣ 𝔸 ∣ (snd ∥ 𝔸 ∥)) p ≡ (free-lift ∣ 𝔸 ∣ (snd ∥ 𝔸 ∥)) q
 
 \end{code}
 
@@ -182,12 +184,14 @@ In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume `𝕏`, whic
 \begin{code}
 
 module HSPTheorem
- {𝕏 : {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
+ {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
  open the-free-algebra {𝓤}{𝓤}{X}
+ open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
+ open class-products {𝓤}{𝓤}{X}
 
 \end{code}
 
@@ -201,11 +205,9 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 
 \begin{code}
 
- open the-relatively-free-algebra {𝓤 = 𝓤}{𝓧 = 𝓤}{X = X} {𝒦 = 𝒦}
-
  -- NOTATION.
  ℑs : 𝓸𝓿𝓾 ̇
- ℑs = ℑ{𝓤}{𝓤}{X} (S{𝓤}{𝓤} 𝒦)
+ ℑs = ℑ (S{𝓤}{𝓤} 𝒦)
  𝔄s : ℑs → Algebra 𝓤 𝑆
  𝔄s = λ (i : ℑs) → ∣ i ∣
 
@@ -259,12 +261,9 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 \begin{code}
 
  ψlemma0 : ∀ p q → (∣ homℭ ∣ p ≡ ∣ homℭ ∣ q) → (p , q) ∈ ψ 𝒦
- ψlemma0 p q phomℭq 𝑨 sA h = ap (λ - → - (𝑨 , (sA , h))) phomℭq
+ ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
 
-
- ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}
-  →           𝑨 ∈ S{𝓤}{𝓤} 𝒦
-              --------------------------------------------------
+ ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦
   →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where

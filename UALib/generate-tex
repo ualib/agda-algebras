@@ -59,8 +59,8 @@ agda --latex Varieties/Preservation.lagda
 echo "Checking Varieties.FreeAlgebras.lagda"
 agda --latex Varieties/FreeAlgebras.lagda
 
-echo "Checking Appendix.Imports.lagda"
-agda --latex Appendix/Imports.lagda
+# echo "Checking Appendix.Imports.lagda"
+# agda --latex Appendix/Imports.lagda
 
 
 
@@ -97,7 +97,7 @@ mv latex/Varieties/Varieties.{tex,md}
 mv latex/Varieties/Preservation.{tex,md}
 mv latex/Varieties/FreeAlgebras.{tex,md}
 
-mv latex/Appendix/Imports.{tex,md}
+# mv latex/Appendix/Imports.{tex,md}
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Preliminaries.md -o latex/Prelude/Preliminaries.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Equality.md -o latex/Prelude/Equality.tex
@@ -132,4 +132,4 @@ pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Varieties.md 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/Preservation.md -o latex/Varieties/Preservation.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Varieties/FreeAlgebras.md -o latex/Varieties/FreeAlgebras.tex
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Appendix/Imports.md -o latex/Appendix/Imports.tex
+# pandoc --latex-engine=xelatex -f markdown -t latex latex/Appendix/Imports.md -o latex/Appendix/Imports.tex

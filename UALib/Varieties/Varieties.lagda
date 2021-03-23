@@ -548,9 +548,9 @@ Finally, we prove a result that plays an important role, e.g., in the formal pro
 \begin{code}
 
 module _ {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+ open class-products {𝓤}{𝓤}{X}
 
- class-prod-s-∈-ps : class-product{𝓤}{𝓤}{X}(S 𝒦) ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
-
+ class-prod-s-∈-ps : class-product (S 𝒦) ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
  class-prod-s-∈-ps = pisou psPllA (⨅≅ llA≅A)
   where
   lA llA : ℑ (S 𝒦) → Algebra (ov 𝓤) 𝑆
@@ -575,7 +575,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 
 \begin{code}
 
- class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product{𝓤}{𝓤}{X}(S 𝒦) ∈ S(P 𝒦)
+ class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product(S 𝒦) ∈ S(P 𝒦)
  class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
 
 \end{code}

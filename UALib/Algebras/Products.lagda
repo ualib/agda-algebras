@@ -87,7 +87,7 @@ First, we need a type that will serve to index the class, as well as the product
 
 \begin{code}
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
+module class-products {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
  ℑ : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → (𝓧 ⊔ ov 𝓤) ̇
  ℑ 𝒦 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)
@@ -115,15 +115,6 @@ Finally, we define `class-product` which represents the product of all members o
 
 \end{code}
 
-Alternatively, we could have defined the class product in a way that explicitly displays the index, like so.
-
-\begin{code}
-
- class-product' : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
- class-product' 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
-
-\end{code}
-
 If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the triple `(𝑨 , p , h) ∈ ℑ 𝒦` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ ( 𝔄 𝒦 )` onto the `(𝑨 , p, h)`-th component.
 
 
@@ -143,3 +134,13 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, then we can think of the tr
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}
+
+<!--
+
+Alternatively, we could have defined the class product in a way that explicitly displays the index, like so.
+
+ class-product' : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Algebra (𝓧 ⊔ ov 𝓤) 𝑆
+ class-product' 𝒦 = ⨅ λ (i : (Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣))) → ∣ i ∣
+
+-->
+
