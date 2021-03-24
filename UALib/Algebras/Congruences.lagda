@@ -21,7 +21,7 @@ open import Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
-A **congruence relation** of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of 𝑨.  This concept can be represented in a number of different ways in type theory.  For example, we define both a Sigma type `Con` and a record type `Congruence`, each of which captures the informal notion of congruence, and each one is useful in certain contexts. (We will see examples later.)
+A **congruence relation** of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of different ways, not only in type theory, but also in the informal presentation.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, a compatible equivalence relation can be represented as an inhabitant of a certain Sigma type (which we denote by `Con`) or a record type (which we denote by `Congruence`).
 
 \begin{code}
 
@@ -38,6 +38,8 @@ record Congruence {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 �
 open Congruence
 
 \end{code}
+
+Each of these options captures the informal notion of congruence, and each one is useful in certain contexts.
 
 
 
@@ -80,7 +82,7 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 #### <a id="quotient-algebras">Quotient algebras</a>
 
-An important construction in universal algebra is the quotient of an algebra 𝑨 with respect to a congruence relation θ of 𝑨.  This quotient is typically denote by 𝑨 / θ and Agda allows us to define and express quotients using the standard notation.
+In many areas of abstract mathematics (including universal algebra) the quotient of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays a central role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
 
@@ -121,6 +123,11 @@ Finally, the following elimination rule is sometimes useful.
 \end{code}
 
 --------------------------------------
+
+<sup>1</sup><span class="footnote" id="fn1"> **Unicode Hints**. Produce the `╱` symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.
+
+<br>
+<br>
 
 [← Algebras.Products](Algebras.Products.html)
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>

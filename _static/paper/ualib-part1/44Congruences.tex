@@ -3,8 +3,8 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-A \defn{congruence relation} of an algebra \ab{𝑨} is defined to be an equivalence relation that is compatible with the basic operations of \ab 𝑨. This concept can be represented in a number of different ways in type
-theory. For example, we define both a Sigma type \af{Con} and a record type \af{Congruence}, each of which captures the informal notion of congruence, and each one is useful in certain contexts. (We will see examples later.)
+A \defn{congruence relation} of an algebra \ab{𝑨} is defined to be an equivalence relation that is compatible with the basic operations of \ab 𝑨. This concept can be represented in a number of alternative ways, not only in type
+theory, but also in the informal presentation.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of \ab 𝑨 and a subalgebra of the square of \ab 𝑨.  Formally, a compatible equivalence relation can be represented as an inhabitant of a certain Sigma type (which we denote by `Con`) or a certain record type (which we denote by `Congruence`).
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Con}\AgdaSpace{}%
@@ -92,82 +92,57 @@ theory. For example, we define both a Sigma type \af{Con} and a record type \af{
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟨\AgdaUnderscore{}⟩}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Congruence}\<%
 \end{code}
 
 \subsubsection{Example}\label{cong-example}
-We defined the zero relation \af{𝟎-rel} in the \ualibhtml{Relations.Discrete} module, and we now demonstrate how to build the trivial congruence out of this relation.
-
-The relation \af{𝟎-rel} is equivalent to the identity relation \ad{≡} and these are obviously both equivalences. In fact, we already proved this of \ad{≡} in the \ualibhtml{Prelude.Equality} module, so we simply apply the corresponding proofs.
+We defined the zero relation \af{𝟎-rel} in the \ualibhtml{Relations.Discrete} module, and we now demonstrate how to build the trivial congruence out of it.  The relation \af{𝟎-rel} is equivalent to the identity relation \ad{≡} and these are obviously both equivalences. In fact, we already proved this of \ad{≡} in the \ualibhtml{Prelude.Equality} module, so we simply apply the corresponding proofs.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaArgument{A}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[31]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
+\AgdaFunction{𝟎}\<%
 \\
-%
-\>[1]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-IsEquivalence}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaKeyword{record}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaSpace{}%
-\AgdaField{rfl}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaField{rfl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≡-rfl}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{\};}\AgdaSpace{}%
 \AgdaField{sym}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≡-sym}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{≡-symmetric}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{trans}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≡-trans}\AgdaSpace{}%
-\AgdaSymbol{\}}\<%
+\AgdaFunction{≡-transitive}\AgdaSymbol{\}}\<%
 \end{code}
 \ccpad
 Next we formally record another obvious fact---namely, that \af{𝟎-rel} is compatible with all operations of all algebras.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -179,15 +154,14 @@ Next we formally record another obvious fact---namely, that \af{𝟎-rel} is com
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
+\AgdaFunction{𝟎}\<%
 \\
-%
-\>[1]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-compatible-op}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{ptws0}%
-\>[33]\AgdaSymbol{=}\AgdaSpace{}%
+\>[32]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ap}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
@@ -201,25 +175,23 @@ Next we formally record another obvious fact---namely, that \af{𝟎-rel} is com
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{compatible}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\<%
+\AgdaFunction{𝟎}\<%
 \\
-%
-\>[1]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
+\>[0]\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -237,69 +209,73 @@ Next we formally record another obvious fact---namely, that \af{𝟎-rel} is com
 Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{Δ}\AgdaSpace{}%
+\>[0]\AgdaFunction{Δ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{funext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{Congruence}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
 \\
-\>[1]\AgdaFunction{Δ}\AgdaSpace{}%
+\>[0]\AgdaFunction{Δ}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{mkcon}\AgdaSpace{}%
-\AgdaFunction{𝟎-rel}\AgdaSpace{}%
+\AgdaFunction{𝟎}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{𝟎-compatible}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{𝟎-IsEquivalence}\<%
 \end{code}
 
 \subsubsection{Quotient Algebras}\label{quotient-algebras}
-An important construction in universal algebra is the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨. This quotient is typically denote by \ab 𝑨 \af / \ab θ and Agda allows us to define and express quotients using the standard notation.\footnote{%
+In many areas of abstract mathematics, and especially in universal algebra, the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨 plays a central role. This quotient is typically denoted by \ab 𝑨 \af / \ab θ and Agda allows us to define and express quotients using this standard notation.\footnote{%
 \textbf{Unicode Hints}. Produce the ╱ symbol in \agdamode by typing \texttt{\textbackslash{}-\/-\/-} and then \texttt{C-f} a number of times.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaBound{𝑨}\AgdaSpace{}%
+%
+\>[1]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[228I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[219I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -309,12 +285,12 @@ An important construction in universal algebra is the quotient of an algebra \ab
 \AgdaOperator{\AgdaField{⟩}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}%
-\>[49]\AgdaComment{-- the domain of the quotient algebra}\<%
+\>[50]\AgdaComment{-- the domain of the quotient algebra}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
-\>[.][@{}l@{}]\<[228I]%
-\>[8]\AgdaSymbol{λ}\AgdaSpace{}%
+\\[\AgdaEmptyExtraSkip]%
+\>[.][@{}l@{}]\<[219I]%
+\>[9]\AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -332,7 +308,7 @@ An important construction in universal algebra is the quotient of an algebra \ab
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}%
-\>[49]\AgdaComment{-- the basic operations of the quotient algebra}\<%
+\>[50]\AgdaComment{-- the basic operations of the quotient algebra}\<%
 \end{code}
 
 \subsubsection{Examples}\label{cong-examples}
@@ -340,16 +316,6 @@ An important construction in universal algebra is the quotient of an algebra \ab
 The zero element of a quotient can be expressed as follows.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓡}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -359,7 +325,7 @@ The zero element of a quotient can be expressed as follows.
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
@@ -371,11 +337,11 @@ The zero element of a quotient can be expressed as follows.
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{)(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓡}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
@@ -389,10 +355,10 @@ The zero element of a quotient can be expressed as follows.
 \AgdaBound{x₁}\<%
 \end{code}
 \ccpad
-Finally, the following elimination rule is sometimes useful.
+Finally, the following \defn{elimination rule} is sometimes useful.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{╱-refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -401,7 +367,7 @@ Finally, the following elimination rule is sometimes useful.
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓡}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)\{}\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{a'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%

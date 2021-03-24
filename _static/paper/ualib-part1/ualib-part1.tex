@@ -4,14 +4,37 @@
 %%% TeX-engine: 'xetex
 %%% End:
 \documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,12pt]{../lipics-v2021-wjd}
-\usepackage{fontspec}
-\crefformat{footnote}{#2\footnotemark[#1]#3}
-\usepackage{../proof-dashed}
-\usepackage{comment}
-\usepackage[wjdsimple,links]{../agda}
 \usepackage{../wjd}
-\newif\ifnonbold % comment this line to restore bold universe symbols
+\usepackage{fontspec}
+\usepackage{comment}
+\usepackage{../proof-dashed}
 \usepackage{../../unixode}
+\usepackage[wjdsimple,links]{../agda}
+\usepackage{hyperref}
+
+\hypersetup{
+%     bookmarks=true,         % show bookmarks bar?
+%     unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+%     pdftoolbar=true,        % show Acrobat’s toolbar?
+%     pdfmenubar=true,        % show Acrobat’s menu?
+%     pdffitwindow=false,     % window fit to page when opened
+% %    pdfstartview={FitW},    % fits the width of the page to the window
+    pdftitle={Agda UALib, Part 1: Foundation},    % title
+    pdfauthor={William DeMeo},     % author
+    pdfsubject={Agda Universal Algebra Library},   % subject of the document
+%     pdfcreator={XeLaTeX with hyperref},
+%     pdfproducer={},  % producer of the document
+%     pdfkeywords={Universal algebra} {Equational logic} {Martin-Löf Type Theory} {Birkhoff’s HSP Theorem} {Formalization of mathematics} {Agda} {Proof assistant},
+%     pdfnewwindow=true,      % links in new window
+%     colorlinks=true,       % false: boxed links; true: colored links
+%     linkcolor=red,          % color of internal links
+%     citecolor=green,        % color of links to bibliography
+%     filecolor=magenta,      % color of file links
+%     urlcolor=cyan           % color of external links
+}
+\newif\ifnonbold % comment this line to restore bold universe symbols
+
+\crefformat{footnote}{#2\footnotemark[#1]#3}
 
 %%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{The Agda Universal Algebra Library\\%
@@ -67,7 +90,7 @@ Part 1: Foundation\\[-5pt]
 \ArticleNo{0}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\includeonly{4Algebras} %1Introduction,2Prelude,3Relations,4Algebras,5Conclusion}
+% \includeonly{4Algebras} %1Introduction,2Prelude,3Relations,4Algebras,5Conclusion}
 
 \begin{document}
 
@@ -87,16 +110,16 @@ The Agda Universal Algebra Library (\ualib) is a library of types and programs (
 
 
 
-% \input{1Introduction}
-% \input{2Prelude}
-% \input{3Relations}
-% \input{4Algebras}
-% \input{5Conclusion}
-\include{1Introduction}
-\include{2Prelude}
-\include{3Relations}
-\include{4Algebras}
-\include{5Conclusion}
+\input{1Introduction}
+\input{2Prelude}
+\input{3Relations}
+\input{4Algebras}
+\input{5Conclusion}
+% \include{1Introduction}
+% \include{2Prelude}
+% \include{3Relations}
+% \include{4Algebras}
+% \include{5Conclusion}
 
 
 
