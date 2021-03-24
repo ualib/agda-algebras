@@ -49,10 +49,8 @@ The relation `𝟎-rel` is equivalent to the identity relation `≡` and these a
 
 \begin{code}
 
-module _ {𝓤 : Universe}{A : 𝓤 ̇} where
-
- 𝟎-IsEquivalence : IsEquivalence{𝓤}{A = A} 𝟎
- 𝟎-IsEquivalence = record {rfl = λ x → refl{x = x}; sym = ≡-symmetric; trans = ≡-transitive}
+𝟎-IsEquivalence : {A : 𝓤 ̇} →  IsEquivalence {A = A} 𝟎
+𝟎-IsEquivalence = record {rfl = λ x → refl{x = x}; sym = ≡-symmetric; trans = ≡-transitive}
 
 \end{code}
 
@@ -60,13 +58,11 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎
+𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
 
- 𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎
- 𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
-
- 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
- 𝟎-compatible fe {𝑨} = λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
+𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
+𝟎-compatible fe {𝑨} = λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
 \end{code}
 
@@ -74,7 +70,7 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 \begin{code}
 
-Δ : {𝓤 : Universe} → funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
+Δ : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
 Δ fe = mkcon 𝟎 (𝟎-compatible fe) 𝟎-IsEquivalence
 
 \end{code}
@@ -88,11 +84,13 @@ An important construction in universal algebra is the quotient of an algebra �
 
 \begin{code}
 
-_╱_ : {𝓤 𝓡 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓡} 𝑨 → Algebra (𝓤 ⊔ 𝓡 ⁺) 𝑆
+module _ {𝓤 𝓦 : Universe} where
 
-𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
+ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
-        λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
+ 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
+
+         λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -104,9 +102,8 @@ The zero element of a quotient can be expressed as follows.
 
 \begin{code}
 
-module _ {𝓤 𝓡 : Universe} where
 
- Zero╱ : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓡 ⁺)
+ Zero╱ : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
 
  Zero╱ θ = λ x x₁ → x ≡ x₁
 
@@ -116,7 +113,7 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
- ╱-refl : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓡} 𝑨){a a' : ∣ 𝑨 ∣}
+ ╱-refl : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨){a a' : ∣ 𝑨 ∣}
   →       ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
 
  ╱-refl θ refl = IsEquivalence.rfl (IsEquiv θ) _

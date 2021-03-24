@@ -191,7 +191,7 @@ module HSPTheorem
 
  open the-free-algebra {𝓤}{𝓤}{X}
  open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
- open class-products {𝓤}{𝓤}{X}
+ open class-products-with-maps {𝓤}{X} 𝒦
 
 \end{code}
 
@@ -201,25 +201,18 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that turns
 
 We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
-**Notation**. In this module, the type `ℑs` will index the collection of all subalgebras of algebras in the class `𝒦`, and `𝔄s : ℑs → Algebra 𝓤 𝑆` will be a map from the index type to the subalgebras. 
-
 \begin{code}
 
  -- NOTATION.
- ℑs : 𝓸𝓿𝓾 ̇
- ℑs = ℑ (S{𝓤}{𝓤} 𝒦)
- 𝔄s : ℑs → Algebra 𝓤 𝑆
- 𝔄s = λ (i : ℑs) → ∣ i ∣
+ SK𝔄 : (i : ℑ) → (𝔄 i) ∈ S{𝓤}{𝓤} 𝒦
+ SK𝔄 = λ (i : ℑ) → fst ∥ i ∥
 
- SK𝔄 : (i : ℑs) → (𝔄s i) ∈ S{𝓤}{𝓤} 𝒦
- SK𝔄 = λ (i : ℑs) → fst ∥ i ∥
-
- 𝔄h : (i : ℑs) → X → ∣ 𝔄s i ∣
- 𝔄h = λ (i : ℑs) → snd ∥ i ∥
+ 𝔄h : (i : ℑ) → X → ∣ 𝔄 i ∣
+ 𝔄h = λ (i : ℑ) → snd ∥ i ∥
 
  -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra 𝓸𝓿𝓾 𝑆
- ℭ = ⨅ 𝔄s
+ ℭ = ⨅ 𝔄
 
 \end{code}
 
@@ -227,11 +220,11 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
 
 \begin{code}
 
- hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)
- hom𝔄 i = lift-hom (𝔄s i) (𝔄h i)
+ hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)
+ hom𝔄 i = lift-hom (𝔄 i) (𝔄h i)
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co {fe = gfe} 𝔄s hom𝔄
+ homℭ = ⨅-hom-co {fe = gfe} 𝔄 hom𝔄
 
 \end{code}
 
