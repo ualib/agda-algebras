@@ -119,7 +119,7 @@ As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡
 
 
 
-#### <a id="Lift-invariance">Lift-invariance of ⊧</a>
+#### <a id="lift-invariance">Lift-invariance of ⊧</a>
 
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
@@ -127,18 +127,18 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇}  where
 
- ⊧-lift-alg-invariance : {𝑨 : Algebra 𝓤 𝑆} (p q : Term X)
+ ⊧-Lift-invariance : {𝑨 : Algebra 𝓤 𝑆} (p q : Term X)
                          -----------------------------------
-  →                      𝑨 ⊧ p ≈ q  →  lift-alg 𝑨 𝓦 ⊧ p ≈ q
+  →                      𝑨 ⊧ p ≈ q  →  Lift-alg 𝑨 𝓦 ⊧ p ≈ q
 
- ⊧-lift-alg-invariance p q Apq = ⊧-I-invariance p q Apq lift-alg-≅
+ ⊧-Lift-invariance p q Apq = ⊧-I-invariance p q Apq Lift-≅
 
 
- ⊧-lower-alg-invariance : {𝑨 : Algebra 𝓤 𝑆} (p q : Term X)
+ ⊧-lower-invariance : {𝑨 : Algebra 𝓤 𝑆} (p q : Term X)
                           -----------------------------------
-  →                       lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+  →                       Lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
 
- ⊧-lower-alg-invariance p q lApq = ⊧-I-invariance p q lApq (≅-sym lift-alg-≅)
+ ⊧-lower-invariance p q lApq = ⊧-I-invariance p q lApq (≅-sym Lift-≅)
 
 \end{code}
 
@@ -256,12 +256,12 @@ Another fact that will turn out to be useful is that a product of a collection o
  ⊧-P-lift-invariance : (p q : Term X)
                        (I : 𝓦 ̇ ) (𝒜 : I → Algebra 𝓤 𝑆)
                        ----------------------------------------------------
-  →                    (∀ i → (lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+  →                    (∀ i → (Lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
 
  ⊧-P-lift-invariance p q I 𝒜 lApq = ⊧-P-invariance p q I 𝒜 Aipq
    where
     Aipq : (i : I) → (𝒜 i) ⊧ p ≈ q
-    Aipq i = ⊧-I-invariance p q (lApq i) (≅-sym lift-alg-≅)
+    Aipq i = ⊧-I-invariance p q (lApq i) (≅-sym Lift-≅)
 
 \end{code}
 

@@ -34,8 +34,8 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- H-id1 p q α (hbase x) = ⊧-lift-alg-invariance p q (α x)
- H-id1 p q α (hlift{𝑨} x) = ⊧-lift-alg-invariance p q (H-id1 p q α x)
+ H-id1 p q α (hbase x) = ⊧-Lift-invariance p q (α x)
+ H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invariance p q (H-id1 p q α x)
 
  H-id1 p q α (hhimg{𝑨}HA((𝑩 , ϕ , (ϕhom , ϕsur)), B≅C)) = ⊧-I-invariance p q γ B≅C
   where
@@ -66,7 +66,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  H-id2 : ∀ {𝓦} → (p q : Term X) → H{𝓤}{𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- H-id2 p q Hpq KA = ⊧-lower-alg-invariance p q (Hpq (hbase KA))
+ H-id2 p q Hpq KA = ⊧-lower-invariance p q (Hpq (hbase KA))
 
 \end{code}
 
@@ -77,8 +77,8 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  S-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → S{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- S-id1 p q α (sbase x) = ⊧-lift-alg-invariance p q (α x)
- S-id1 p q α (slift x) = ⊧-lift-alg-invariance p q ((S-id1 p q α) x)
+ S-id1 p q α (sbase x) = ⊧-Lift-invariance p q (α x)
+ S-id1 p q α (slift x) = ⊧-Lift-invariance p q ((S-id1 p q α) x)
 
  S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
   ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
@@ -116,7 +116,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
  S-id2 : ∀{𝓦}(p q : Term X) → S{𝓤}{𝓦}𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- S-id2 p q Spq {𝑨} KA = ⊧-lower-alg-invariance p q (Spq (sbase KA))
+ S-id2 p q Spq {𝑨} KA = ⊧-lower-invariance p q (Spq (sbase KA))
 
 \end{code}
 
@@ -129,19 +129,19 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  P-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → P{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- P-id1 p q α (pbase x) = ⊧-lift-alg-invariance p q (α x)
- P-id1 p q α (pliftu x) = ⊧-lift-alg-invariance p q ((P-id1 p q α) x)
- P-id1 p q α (pliftw x) = ⊧-lift-alg-invariance p q ((P-id1 p q α) x)
+ P-id1 p q α (pbase x) = ⊧-Lift-invariance p q (α x)
+ P-id1 p q α (pliftu x) = ⊧-Lift-invariance p q ((P-id1 p q α) x)
+ P-id1 p q α (pliftw x) = ⊧-Lift-invariance p q ((P-id1 p q α) x)
 
  P-id1 p q α (produ{I}{𝒜} x) = ⊧-P-lift-invariance p q I 𝒜 IH
   where
-  IH : ∀ i → (p ̇ lift-alg (𝒜 i) 𝓤) ≡ (q ̇ lift-alg (𝒜 i) 𝓤)
-  IH i = ⊧-lift-alg-invariance p q ((P-id1 p q α) (x i))
+  IH : ∀ i → (p ̇ Lift-alg (𝒜 i) 𝓤) ≡ (q ̇ Lift-alg (𝒜 i) 𝓤)
+  IH i = ⊧-Lift-invariance p q ((P-id1 p q α) (x i))
 
  P-id1 p q α (prodw{I}{𝒜} x) = ⊧-P-lift-invariance p q I 𝒜 IH
   where
-  IH : ∀ i → (p ̇ lift-alg (𝒜 i) 𝓤) ≡ (q ̇ lift-alg (𝒜 i) 𝓤)
-  IH i = ⊧-lift-alg-invariance p q ((P-id1 p q α) (x i))
+  IH : ∀ i → (p ̇ Lift-alg (𝒜 i) 𝓤) ≡ (q ̇ Lift-alg (𝒜 i) 𝓤)
+  IH i = ⊧-Lift-invariance p q ((P-id1 p q α) (x i))
 
  P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (P-id1 p q α x) x₁
  P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (P-id1 p q α x) x₁
@@ -154,7 +154,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  P-id2 : ∀ {𝓦}(p q : Term X) → P{𝓤}{𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- P-id2 p q PKpq KA = ⊧-lower-alg-invariance p q (PKpq (pbase KA))
+ P-id2 p q PKpq KA = ⊧-lower-invariance p q (PKpq (pbase KA))
 
 \end{code}
 
@@ -167,9 +167,9 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
  V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- V-id1 p q α (vbase x) = ⊧-lift-alg-invariance p q (α x)
- V-id1 p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance p q ((V-id1 p q α) x)
- V-id1 p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance p q ((V-id1 p q α) x)
+ V-id1 p q α (vbase x) = ⊧-Lift-invariance p q (α x)
+ V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
+ V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
 
  V-id1 p q α (vhimg{𝑨}VA((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance p q γ B≅C
   where
@@ -229,9 +229,9 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  V-id1' : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓤}{ov 𝓤 ⁺} 𝒦 ⊧ p ≋ q
 
- V-id1' p q α (vbase x) = ⊧-lift-alg-invariance p q (α x)
- V-id1' p q α (vlift{𝑨} x) = ⊧-lift-alg-invariance p q ((V-id1 p q α) x)
- V-id1' p q α (vliftw{𝑨} x) = ⊧-lift-alg-invariance p q ((V-id1' p q α) x)
+ V-id1' p q α (vbase x) = ⊧-Lift-invariance p q (α x)
+ V-id1' p q α (vlift{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
+ V-id1' p q α (vliftw{𝑨} x) = ⊧-Lift-invariance p q ((V-id1' p q α) x)
 
  V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance p q γ B≅C
   where
@@ -266,7 +266,7 @@ Once again, and for the last time, completeness dictates that we formalize the c
 \begin{code}
 
  V-id2 : ∀ {𝓦}(p q : Term X) → (V{𝓤}{𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- V-id2 p q Vpq {𝑨} KA = ⊧-lower-alg-invariance p q (Vpq (vbase KA))
+ V-id2 p q Vpq {𝑨} KA = ⊧-lower-invariance p q (Vpq (vbase KA))
 
 \end{code}
 
@@ -288,7 +288,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 
  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
 
- class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-alg-invariance p q (Thpq (vbase KA))
+ class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invariance p q (Thpq (vbase KA))
 
 
  class-identities : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th 𝒱)

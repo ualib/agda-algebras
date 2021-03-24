@@ -222,7 +222,7 @@ We could equally well have presented the last theorem so that the consequent is 
 This section presents the `continuous-propositions` submodule of the [Relations.Truncation][] module.<sup>[*](Relations.Truncation.html#fn0)</sup>
 
 
-Recall, we defined a type called `ConRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
+Recall, we defined a type called `ContRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
 
@@ -231,24 +231,24 @@ module continuous-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
  uv : Universe → Universe
  uv 𝓦 = 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺
 
- open import Relations.Continuous using (ConRel; DepRel)
+ open import Relations.Continuous using (ContRel; DepRel)
 
- ConProp : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
- ConProp A 𝓦 = Σ P ꞉ (ConRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ ContProp : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
+ ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
- con-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
- con-prop-ext A 𝓦 = {P Q : ConProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
+ cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 
-To see the point of this, suppose `con-prop-ext A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ConProp A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
+To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ContProp A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
 
 \begin{code}
 
  module _ (A : 𝓤 ̇)(𝓦 : Universe) where
 
-  con-prop-ext' : con-prop-ext A 𝓦 → {P Q : ConProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
-  con-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+  cont-prop-ext' : cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+  cont-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 

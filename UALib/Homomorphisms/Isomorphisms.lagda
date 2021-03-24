@@ -90,30 +90,30 @@ open Lift
 
 module _ {𝓤 𝓦 : Universe} where
 
- lift-alg-≅ : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (lift-alg 𝑨 𝓦)
- lift-alg-≅ {𝑨} = 𝓁𝒾𝒻𝓉 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , extfun lift∼lower , extfun (lower∼lift{𝓦})
+ Lift-≅ : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 𝓦)
+ Lift-≅ {𝑨} = 𝓁𝒾𝒻𝓉 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , extfun lift∼lower , extfun (lower∼lift{𝓦})
 
 
- lift-alg-hom : (𝓧 : Universe)(𝓨 : Universe){𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
-  →             hom 𝑨 𝑩  →  hom (lift-alg 𝑨 𝓧) (lift-alg 𝑩 𝓨)
+ Lift-hom : (𝓧 : Universe)(𝓨 : Universe){𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
+  →             hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨)
 
- lift-alg-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
+ Lift-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
   where
-  lABh : is-homomorphism (lift-alg 𝑨 𝓧) 𝑩 (f ∘ lower)
-  lABh = ∘-is-hom (lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → refl) fhom
+  lABh : is-homomorphism (Lift-alg 𝑨 𝓧) 𝑩 (f ∘ lower)
+  lABh = ∘-is-hom (Lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → refl) fhom
 
-  γ : is-homomorphism(lift-alg 𝑨 𝓧)(lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
-  γ = ∘-is-hom (lift-alg 𝑨 𝓧) (lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
+  γ : is-homomorphism(Lift-alg 𝑨 𝓧)(Lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
+  γ = ∘-is-hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
 
 
 module _ {𝓤 𝓦 : Universe} where
 
- lift-alg-iso : {𝑨 : Algebra 𝓤 𝑆}{𝓧 : Universe}
+ Lift-alg-iso : {𝑨 : Algebra 𝓤 𝑆}{𝓧 : Universe}
                 {𝑩 : Algebra 𝓦 𝑆}{𝓨 : Universe}
                 -----------------------------------------
-  →             𝑨 ≅ 𝑩 → (lift-alg 𝑨 𝓧) ≅ (lift-alg 𝑩 𝓨)
+  →             𝑨 ≅ 𝑩 → (Lift-alg 𝑨 𝓧) ≅ (Lift-alg 𝑩 𝓨)
 
- lift-alg-iso A≅B = ≅-trans (≅-trans (≅-sym lift-alg-≅) A≅B) lift-alg-≅
+ Lift-alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅) A≅B) Lift-≅
 
 \end{code}
 
@@ -128,14 +128,14 @@ The lift is also associative, up to isomorphism at least.
 
 module _ {𝓘 𝓤 𝓦 : Universe} where
 
- lift-alg-assoc : {𝑨 : Algebra 𝓤 𝑆} → lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
- lift-alg-assoc {𝑨} = ≅-trans (≅-trans γ lift-alg-≅) lift-alg-≅
+ Lift-alg-assoc : {𝑨 : Algebra 𝓤 𝑆} → Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 𝓦) 𝓘)
+ Lift-alg-assoc {𝑨} = ≅-trans (≅-trans γ Lift-≅) Lift-≅
   where
-  γ : lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
-  γ = ≅-sym lift-alg-≅
+  γ : Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
+  γ = ≅-sym Lift-≅
 
- lift-alg-associative : (𝑨 : Algebra 𝓤 𝑆) → lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (lift-alg (lift-alg 𝑨 𝓦) 𝓘)
- lift-alg-associative 𝑨 = lift-alg-assoc {𝑨}
+ Lift-alg-associative : (𝑨 : Algebra 𝓤 𝑆) → Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 𝓦) 𝓘)
+ Lift-alg-associative 𝑨 = Lift-alg-assoc {𝑨}
 
 \end{code}
 
@@ -184,10 +184,10 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 module _ {𝓘 𝓤 𝓦 𝓩 : Universe} {I : 𝓘 ̇} where
 
- lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓦 𝑆}
-  →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+ Lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓦 𝑆}
+  →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
 
- lift-alg-⨅≅ {𝒜}{ℬ} AB = γ
+ Lift-alg-⨅≅ {𝒜}{ℬ} AB = γ
   where
   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
   ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
@@ -210,8 +210,8 @@ module _ {𝓘 𝓤 𝓦 𝓩 : Universe} {I : 𝓘 ̇} where
   A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
   A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
-  γ : lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
-  γ = ≅-trans (≅-sym lift-alg-≅) A≅B
+  γ : Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+  γ = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
 

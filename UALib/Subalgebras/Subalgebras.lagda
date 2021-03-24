@@ -210,34 +210,40 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
+\end{code}
 
-lift-alg-is-sub : {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆}
- →                𝑩 IsSubalgebraOfClass 𝒦 → (lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
 
-lift-alg-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym lift-alg-≅) B≅sa
+#### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
+
+
+\begin{code}
+
+module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
+
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+ Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
 module _ {𝓧 𝓨 𝓩 : Universe} where
 
- lift-alg-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → lift-alg 𝑩 𝓩 ≤ 𝑨
- lift-alg-≤ 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym lift-alg-≅) B≤A
+ Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
+ Lift-≤ 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
- ≤-lift-alg : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ lift-alg 𝑨 𝓩
- ≤-lift-alg 𝑨 {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (lift-alg 𝑨 𝓩) B≤A lift-alg-≅
+ ≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
+ ≤-Lift 𝑨 {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
 
 
 module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
 
- lift-alg-≤-lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → lift-alg 𝑨 𝓩 ≤ lift-alg 𝑩 𝓦
-
- lift-alg-≤-lift {𝑨} 𝑩 A≤B = ≤-trans (lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
+ Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
+ Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
    where
 
-   lAA : (lift-alg 𝑨 𝓩) ≤ 𝑨
-   lAA = lift-alg-≤ 𝑨 {𝑨} ≤-refl
+   lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
+   lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
-   B≤lB : 𝑩 ≤ lift-alg 𝑩 𝓦
-   B≤lB = ≤-lift-alg 𝑩 {𝑩} ≤-refl
+   B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
+   B≤lB = ≤-Lift 𝑩 {𝑩} ≤-refl
 
 \end{code}
 

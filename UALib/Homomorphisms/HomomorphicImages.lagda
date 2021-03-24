@@ -84,12 +84,12 @@ module _ {𝓧 𝓨 : Universe} where
  lift-of-alg-epic-is-epic : (𝓩 : Universe){𝓦 : Universe}
                             {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
                             -----------------------------------------------
-  →                         Epic ∣ h ∣  →  Epic ∣ lift-alg-hom 𝓩 𝓦 𝑩 h ∣
+  →                         Epic ∣ h ∣  →  Epic ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
 
  lift-of-alg-epic-is-epic 𝓩 {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
   where
-  lh : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑩 𝓦)
-  lh = lift-alg-hom 𝓩 𝓦 𝑩 h
+  lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
+  lh = Lift-hom 𝓩 𝓦 𝑩 h
 
   ζ : Image ∣ h ∣ ∋ (lower y)
   ζ = hepi (lower y)
@@ -107,17 +107,17 @@ module _ {𝓧 𝓨 : Universe} where
       ∣ lh ∣ (lift a) ∎
 
 
- lift-alg-hom-image : {𝓩 𝓦 : Universe}
+ Lift-alg-hom-image : {𝓩 𝓦 : Universe}
                       {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
   →                   𝑩 is-hom-image-of 𝑨
                       -----------------------------------------------
-  →                   (lift-alg 𝑩 𝓦) is-hom-image-of (lift-alg 𝑨 𝓩)
+  →                   (Lift-alg 𝑩 𝓦) is-hom-image-of (Lift-alg 𝑨 𝓩)
 
- lift-alg-hom-image {𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
-  (lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , lift-alg-iso C≅B
+ Lift-alg-hom-image {𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
+  (Lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , Lift-alg-iso C≅B
    where
-   lϕ : hom (lift-alg 𝑨 𝓩) (lift-alg 𝑪 𝓦)
-   lϕ = (lift-alg-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
+   lϕ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑪 𝓦)
+   lϕ = (Lift-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
 
    lϕepic : Epic ∣ lϕ ∣
    lϕepic = lift-of-alg-epic-is-epic 𝓩 𝑪 (ϕ , ϕhom) ϕepic

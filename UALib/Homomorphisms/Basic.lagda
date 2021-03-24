@@ -56,7 +56,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \end{code}
 
-#### Examples
+#### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
 
 Let's look at a few examples of homomorphisms. We begin with some very special cases in which the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
 
@@ -80,16 +80,16 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
  open Lift
 
- lift-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism 𝑨 (lift-alg 𝑨 𝓦) lift
- lift-is-hom _ _ = refl
+ Lift-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism 𝑨 (Lift-alg 𝑨 𝓦) lift
+ Lift-is-hom _ _ = refl
 
- 𝓁𝒾𝒻𝓉 : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → hom 𝑨 (lift-alg 𝑨 𝓦)
- 𝓁𝒾𝒻𝓉 = (lift , lift-is-hom)
+ 𝓁𝒾𝒻𝓉 : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → hom 𝑨 (Lift-alg 𝑨 𝓦)
+ 𝓁𝒾𝒻𝓉 = (lift , Lift-is-hom)
 
- lower-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism (lift-alg 𝑨 𝓦) 𝑨 lower
+ lower-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism (Lift-alg 𝑨 𝓦) 𝑨 lower
  lower-is-hom _ _ = refl
 
- 𝓁ℴ𝓌ℯ𝓇 : (𝑨 : Algebra 𝓤 𝑆){𝓦 : Universe} → hom (lift-alg 𝑨 𝓦) 𝑨
+ 𝓁ℴ𝓌ℯ𝓇 : (𝑨 : Algebra 𝓤 𝑆){𝓦 : Universe} → hom (Lift-alg 𝑨 𝓦) 𝑨
  𝓁ℴ𝓌ℯ𝓇 𝑨 = (lower , lower-is-hom{𝑨})
 
 \end{code}

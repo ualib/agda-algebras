@@ -348,7 +348,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
  ψlemma3 p q pψq {𝑨} kA = γ
   where
    skA : 𝑨 ∈ S 𝒦
-   skA = siso (sbase kA) (≅-sym lift-alg-≅)
+   skA = siso (sbase kA) (≅-sym Lift-≅)
 
    γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
    γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp gfe 𝑨 h p ⟩

@@ -50,6 +50,9 @@ open Term
 
 \end{code}
 
+This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`).
+
+
 **Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov 𝓧 ̇` is our shorthand notation for the universe `𝓞 ⊔ 𝓥 ⊔ 𝓧 ⁺ ̇`.  Throughout this module the name of the first constructor of the `Term` type will remain `generator`. However, in all of the modules that follow this one, we will use the shorthand `ℊ` to denote the `generator` constructor.
 
 

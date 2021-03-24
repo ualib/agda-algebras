@@ -6,7 +6,6 @@ author: William DeMeo
 ---
 
 ### <a id="congruence-relations">Congruence Relations</a>
-
 This section presents the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
@@ -21,7 +20,7 @@ open import Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
-A **congruence relation** of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of different ways, not only in type theory, but also in the informal presentation.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, a compatible equivalence relation can be represented as an inhabitant of a certain Sigma type (which we denote by `Con`) or a record type (which we denote by `Congruence`).
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of different ways, not only in type theory, but also in the informal presentation.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, a compatible equivalence relation can be represented as an inhabitant of a certain Sigma type (which we denote by `Con`) or a record type (which we denote by `Congruence`).
 
 \begin{code}
 
@@ -44,7 +43,6 @@ Each of these options captures the informal notion of congruence, and each one i
 
 
 #### <a id="example">Example</a>
-
 We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module, and we now demonstrate how to build the trivial congruence out of this relation.
 
 The relation `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
@@ -81,7 +79,6 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 
 #### <a id="quotient-algebras">Quotient algebras</a>
-
 In many areas of abstract mathematics (including universal algebra) the quotient of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays a central role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
@@ -96,10 +93,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-**Unicode Hints**. Produce the ╱ symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.
-
 #### <a id="examples">Examples</a>
-
 The zero element of a quotient can be expressed as follows.
 
 \begin{code}
@@ -124,7 +118,9 @@ Finally, the following elimination rule is sometimes useful.
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> **Unicode Hints**. Produce the `╱` symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.
+<sup>1</sup><span class="footnote" id="fn1"> **Unicode Hints**. Produce the `╱` symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.</span>
+
+
 
 <br>
 <br>

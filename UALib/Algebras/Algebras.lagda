@@ -115,9 +115,9 @@ Then fst(𝕏 𝑨) will denote the surjective map h₀ : X → ∣ 𝑨 ∣, an
 
 
 
-#### <a id="lifts-of-algebras">Lifts of algebras</a>
+#### <a id="lifts-of-algebras">Level lifting algebra types</a>
 
-Here we define some domain-specific lifting tools for our operation and algebra types.
+Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level-lifting-and-lowering), we described the difficulties one may encounter when working with a noncumulative universe hierarchy. We made a promise to provide some domain-specific level lifting and level lowering methods. Here we fulfill this promise by supplying a couple of bespoke tools designed specifically for our operation and algebra types.
 
 \begin{code}
 
@@ -126,24 +126,27 @@ module _ {I : 𝓥 ̇}{A : 𝓤 ̇} where
 
  open Lift
 
- lift-op : ((I → A) → A) → (𝓦 : Universe) → ((I → Lift{𝓦} A) → Lift {𝓦} A)
- lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
+ Lift-op : ((I → A) → A) → (𝓦 : Universe) → ((I → Lift{𝓦} A) → Lift {𝓦} A)
+ Lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
 
  open algebra
 
- lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
- lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → lift-op (𝑓 ̂ 𝑨) 𝓦)
+ Lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ Lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
 
- lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
- lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → lift-op ((op 𝑨) f) 𝓦)
+ Lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
+ Lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
 
 \end{code}
 
-We use the function `lift-alg` to resolve errors that arise when working in Agda's noncummulative hierarchy of type universes. (See the discussion in [Overture.Lifts][].)
+What makes the types just defined useful for resolving type level errors is the nice properties they possess. Specifically, we will prove each of the following properties at various places in the [UALib][].
 
-
++ [`Lift` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Homomorphisms.Basic][])
++ [`Lift` is an "algebraic invariant"](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
++ [`Lift` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Subalgebras.Subalgebras][])
++ [`Lift` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
 
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
@@ -180,11 +183,11 @@ Next we define a type that represents *compatibility of a continuous relation* w
 
 module continuous-compatibility {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
 
- open import Relations.Continuous using (ConRel; lift-con-rel; con-compatible-fun)
+ open import Relations.Continuous using (ContRel; eval-cont-rel; cont-compatible-fun)
 
 
- con-compatible-op : ∣ 𝑆 ∣ → ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- con-compatible-op 𝑓 R = con-compatible-fun (λ _ → (𝑓 ̂ 𝑨)) R
+ cont-compatible-op : ∣ 𝑆 ∣ → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible-op 𝑓 R = cont-compatible-fun (𝑓 ̂ 𝑨) R
 
 \end{code}
 
@@ -192,19 +195,17 @@ In case it helps the reader understand `con-compatible-op`, we redefine it expli
 
 \begin{code}
 
- con-compatible-op' : ∣ 𝑆 ∣ → ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- con-compatible-op' 𝑓 R = ∀ 𝕒 → (lift-con-rel R) 𝕒 → R (λ i → (𝑓 ̂ 𝑨) (𝕒 i))
+ cont-compatible-op' : ∣ 𝑆 ∣ → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible-op' 𝑓 R = Π 𝒂 ꞉ (I → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) , (eval-cont-rel R 𝒂 → R λ i → (𝑓 ̂ 𝑨)(𝒂 i))
 
 \end{code}
 
-where we have let Agda infer the type of `𝕒`, which is `(i : I) → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
-
-With `con-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a continuous relation with an algebra*.
+With `cont-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a continuous relation with an algebra*.
 
 \begin{code}
 
- con-compatible : ConRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- con-compatible R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , con-compatible-op 𝑓 R
+ cont-compatible : ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op 𝑓 R
 
 \end{code}
 

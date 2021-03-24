@@ -62,7 +62,7 @@ Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that
 In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the \agdaualib to represent uniqueness-of-proofs principles for relations of arbitrary arity over arbitrary types.
 
 
-#### <a id="equivalence-classes">Equivalence classes</a>
+#### <a id="equivalence-classes">Equivalence relations</a>
 
 A binary relation is called a **preorder** if it is reflexive and transitive. An **equivalence relation** is a symmetric preorder.
 
@@ -101,9 +101,9 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
 
 
-#### <a id="equivalence-classes">Equivalence classes</a>
+#### <a id="equivalence-classes">Equivalence classes (blocks)</a>
 
-If R is an equivalence relation on A, then for each `𝑎 : A`, there is an **equivalence class** containing 𝑎, which we denote and define by [ 𝑎 ] R := all `𝑏 : A` such that R 𝑎 𝑏.
+If R is an equivalence relation on A, then for each `𝑎 : A`, there is an **equivalence class** or **block** containing 𝑎, which we denote and define by [ 𝑎 ] R := all `𝑏 : A` such that R 𝑎 𝑏.
 
 \begin{code}
 

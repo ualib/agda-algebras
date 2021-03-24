@@ -5,16 +5,16 @@ date : 2021-02-20
 author: William DeMeo
 ---
 
-### <a id="univalent-subalgebras">Univalent Subalgebras</a>
+### <a id="univalent-subalgebras">Univalent Subalgebras*</a>
 
 This section presents the [Subalgebras.Univalent][] module of the [Agda Universal Algebra Library][].
 
-In his Type Topology library, Martin Escardo gives a nice formalization of the notion of subgroup and its properties.  In this module we merely do for algebras what Martin did for groups.
+In his Type Topology library, Martín Escardó gives a nice formalization of the notion of subgroup and its properties.  In this module we merely do for algebras what Martin did for groups.
 
 
 This is our first foray into univalent foundations, and our first chance to put Voevodsky's univalence axiom to work.
 
-As one can see from the import statement that starts with `open import Overture.Preliminaries`, there are many new definitions and theorems imported from Escardo's Type Topology library.  Most of these will not be discussed here.
+As one can see from the import statement that starts with `open import Overture.Preliminaries`, there are many new definitions and theorems imported from Escardó's [Type Topology][] library.  Most of these will not be discussed here.
 
 This module can be safely skipped, or even left out of the Agda Universal Algebra Library, as it plays no role in other modules.
 

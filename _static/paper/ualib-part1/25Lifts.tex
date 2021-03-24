@@ -12,15 +12,15 @@
 % It is important to note, however, this does \emph{not} imply that \ab{𝓤₀} \as
 % : \ab{𝓤₂}\AgdaOperator{\AgdaFunction{̇}} and \ab{𝓤₀} \as :
 % \ab{𝓤₃}\AgdaOperator{\AgdaFunction{̇}}, and so on. 
-% In As mentioned above (\S~\ref{ssec:agdas-universe-hierarchy}), Agda's universe hierarchy is \defn{noncummulative}.
+% In As mentioned above (\S~\ref{ssec:agdas-universe-hierarchy}), Agda's universe hierarchy is \defn{noncumulative}.
 
 The hierarchy of universes in Agda is structured as follows: \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇,
 \ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc.\footnote{Recall, from the \ualibhtml{Overture.Preliminaries} module~(\S\ref{universes}), the special notation we use to denote Agda's \textit{levels} and \textit{universes}.}
-This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Specifically, in certain situations, the noncummulativity makes it unduly difficult to convince Agda that a program or proof is correct. 
-
-In the next subsection (\S\ref{lifting-and-lowering}) we describe general lifting and lowering functions that help us overcome this technical issue. Later (in \S\ref{lifts-of-algebras}) we provide some domain-specific analogs of these tools. We will prove some nice properties that make these effective mechanisms for resolving universe level problems when working with algebra types.
+This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncumulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncumulative hierarchy can sometimes make for a nonfun proof assistant. Specifically, in certain situations, the noncumulativity can make it unduly difficult to convince Agda that a program or proof is correct. 
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
+Here we describe general lifting and lowering functions that help us overcome the technical issue described in the previous subsection. In Section~\ref{lifts-of-algebras} we will define a couple of domain-specific analogs of these tools.  Later, in the  modules presented in~\cite{DeMeo:2021-2,DeMeo:2021-3}, we prove various properties that make these effective mechanisms for resolving universe level problems when working with algebra types.
+
 Let us be more concrete about what is at issue here by considering a typical example. Agda frequently encounters errors during the type-checking process and responds by printing an error message. Often the message has the following form.
 {\color{red}{\small
 \begin{verbatim}
@@ -29,9 +29,8 @@ Let us be more concrete about what is at issue here by considering a typical exa
 \end{verbatim}}}
 \noindent This error message means that Agda encountered the universe \ab{𝓤} on line 498 (columns 20--23) of the file \af{Birkhoff.lagda}, but was expecting to find the universe \ab{𝓞}~\aop ⊔~\ab 𝓥~\aop ⊔~\ab 𝓤\af ⁺ instead.
 
-There are some general ``lifting and lowering'' tools that make these situations easier to deal with. These must be applied with some care to avoid making the type theory inconsistent. In particular, we cannot lower the level of a type unless it was previously lifted to a (higher than necessary) universe level.
 
-A general \af{Lift} record type, similar to the one found in the \am{Level} module of the \agdastdlib, is defined as follows.
+The general \AgdaRecord{Lift} record type that we now describe makes these situations easier to deal with. It takes a type inhabiting some universe and embeds it into a higher universe and, apart from syntax and notation, it is equivalent to the \AgdaRecord{Lift} type one finds in the \am{Level} module of the \agdastdlib.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
