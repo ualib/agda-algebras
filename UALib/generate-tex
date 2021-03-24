@@ -1,15 +1,15 @@
 #!/bin/bash
 
-echo "Checking Prelude.Preliminaries.lagda"
-agda --latex Prelude/Preliminaries.lagda
-echo "Checking Prelude.Equality.lagda"
-agda --latex Prelude/Equality.lagda
-echo "Checking Prelude.Inverses.lagda"
-agda --latex Prelude/Inverses.lagda
-echo "Checking Prelude.Extensionality.lagda"
-agda --latex Prelude/Extensionality.lagda
-echo "Checking Prelude.Lifts.lagda"
-agda --latex Prelude/Lifts.lagda
+echo "Checking Overture.Preliminaries.lagda"
+agda --latex Overture/Preliminaries.lagda
+echo "Checking Overture.Equality.lagda"
+agda --latex Overture/Equality.lagda
+echo "Checking Overture.Inverses.lagda"
+agda --latex Overture/Inverses.lagda
+echo "Checking Overture.Extensionality.lagda"
+agda --latex Overture/Extensionality.lagda
+echo "Checking Overture.Lifts.lagda"
+agda --latex Overture/Lifts.lagda
 
 echo "Checking Relations.Discrete.lagda"
 agda --latex Relations/Discrete.lagda
@@ -64,11 +64,11 @@ agda --latex Varieties/FreeAlgebras.lagda
 
 
 
-mv latex/Prelude/Preliminaries.{tex,md}
-mv latex/Prelude/Equality.{tex,md}
-mv latex/Prelude/Inverses.{tex,md}
-mv latex/Prelude/Extensionality.{tex,md}
-mv latex/Prelude/Lifts.{tex,md}
+mv latex/Overture/Preliminaries.{tex,md}
+mv latex/Overture/Equality.{tex,md}
+mv latex/Overture/Inverses.{tex,md}
+mv latex/Overture/Extensionality.{tex,md}
+mv latex/Overture/Lifts.{tex,md}
 
 mv latex/Relations/Discrete.{tex,md}
 mv latex/Relations/Continuous.{tex,md}
@@ -99,11 +99,11 @@ mv latex/Varieties/FreeAlgebras.{tex,md}
 
 # mv latex/Appendix/Imports.{tex,md}
 
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Preliminaries.md -o latex/Prelude/Preliminaries.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Equality.md -o latex/Prelude/Equality.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Inverses.md -o latex/Prelude/Inverses.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Extensionality.md -o latex/Prelude/Extensionality.tex
-pandoc --latex-engine=xelatex -f markdown -t latex latex/Prelude/Lifts.md -o latex/Prelude/Lifts.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Preliminaries.md -o latex/Overture/Preliminaries.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Equality.md -o latex/Overture/Equality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Inverses.md -o latex/Overture/Inverses.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Extensionality.md -o latex/Overture/Extensionality.tex
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Lifts.md -o latex/Overture/Lifts.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Discrete.md -o latex/Relations/Discrete.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Relations/Continuous.md -o latex/Relations/Continuous.tex

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Algebras module (Agda Universal Algebra Library)
+title : Algebras module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
 
 ## <a id="algebra-types">Algebra Types</a>
 
-This chapter presents the [UALib.Algebras][] module of the [Agda Universal Algebra Library][], which begins our [Agda][] formalization of the basic concepts and theorems of universal algebra. In this module we codify such notions as operation, signature, and algebraic structure.
+This chapter presents the [Algebras][] module of the [Agda Universal Algebra Library][], which begins our [Agda][] formalization of the basic definitions and theorems of universal algebra. In this module we define types that codify the notions of operation, signature, algebra, product of algebras, congruence relation, and quotient algebra, and prove many of their basic properties.
 
 \begin{code}
 

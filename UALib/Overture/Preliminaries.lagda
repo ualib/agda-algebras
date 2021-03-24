@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Prelude.Preliminaries module (The Agda Universal Algebra Library)
+title : Overture.Preliminaries module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
@@ -15,7 +15,7 @@ SEE: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This is the [Prelude.Preliminaries][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Preliminaries][] module of the [Agda Universal Algebra Library][].
 
 #### <a id="logical-foundations">Logical foundations</a>
 
@@ -52,11 +52,11 @@ Note that if we wish to type-check a file that imports another file that still h
 
 #### <a id="agda-modules">Agda Modules</a>
 
-The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Prelude.Preliminaries][] module begins with the following line.
+The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line.
 
 \begin{code}
 
-module Prelude.Preliminaries where
+module Overture.Preliminaries where
 
 \end{code}
 
@@ -71,7 +71,7 @@ The main module of a file must have the same name as the file, without the `.agd
 
 For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the [Agda documentation](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html).
 
-Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the *Univalent Foundations* of mathematics.<sup>[1](Prelude.Preliminaries.html#fn1)</sup>  The first of these is the `Universes` module which we import here.<sup>[2](Prelude.Preliminaries.html#fn2)</sup>
+Throughout we use many of the nice tools that [Martín Escardó][] has developed and made available in the [Type Topology][] repository of Agda code for the *Univalent Foundations* of mathematics.<sup>[1](Overture.Preliminaries.html#fn1)</sup>  The first of these is the `Universes` module which we import here.<sup>[2](Overture.Preliminaries.html#fn2)</sup>
 
 \begin{code}
 
@@ -79,7 +79,7 @@ open import Universes public
 
 \end{code}
 
-Since we use the `public` directive, the `Universes` module will be available to all modules that import the present module ([Prelude.Preliminaries][]).
+Since we use the `public` directive, the `Universes` module will be available to all modules that import the present module ([Overture.Preliminaries][]).
 
 The `Universes` module includes a number of symbols used to denote *universes* in Agda.
 In particular, Following [Escardó][], we refer to universes using capitalized script letters from near the end of the alphabet, e.g., `𝓤`, `𝓥`, `𝓦`, `𝓧`, `𝓨`, `𝓩`, etc. To this list we add one more that we use later to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
@@ -121,7 +121,7 @@ There will be many occasions calling for a type living in the universe that is t
 Given universes 𝓤 and 𝓥, a type `A : 𝓤 ̇`, and a type family `B : A → 𝓥 ̇`, the *Sigma type* (or *dependent pair type*), denoted by `Σ(x ꞉ A), B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ(x ꞉ A), B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
 
 The [Type Topology][] library contains a standard definition of the dependent product.
-For pedagogical purposes we repeat this definition here, inside a *hidden module* so that it doesn't conflict with the original definition that we import later.<sup>[3](Prelude.Equality.html#fn3)</sup>
+For pedagogical purposes we repeat this definition here, inside a *hidden module* so that it doesn't conflict with the original definition that we import later.<sup>[3](Overture.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -161,7 +161,7 @@ A special case of the Sigma type is the one in which the type `B` doesn't depend
 
 
 #### <a id="dependent-function-type">Pi types (dependent functions)</a>
-Given universes `𝓤` and `𝓥`, a type `X : 𝓤 ̇`, and a type family `Y : X → 𝓥 ̇`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. The dependent function type is defined in the [Type Topology][] in a standard way, but for the reader's benefit we repeat the definition here (inside a hidden module).<sup>[4](Prelude.Preliminaries.html#fn4)</sup>
+Given universes `𝓤` and `𝓥`, a type `X : 𝓤 ̇`, and a type family `Y : X → 𝓥 ̇`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. The dependent function type is defined in the [Type Topology][] in a standard way, but for the reader's benefit we repeat the definition here (inside a hidden module).<sup>[4](Overture.Preliminaries.html#fn4)</sup>
 
 \begin{code}
 
@@ -181,7 +181,7 @@ module hide-pi {𝓤 𝓦 : Universe} where
 To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), [Escardó][] uses the same trick as the one used above for *Sigma types*.
 
 
-Now that we have studied these important types, defined in the [Type Topology][] library and repeated here for illustration purposes, let us import the original definitions with the `public` directive so that they are available to all modules importing [Prelude.Preliminaries][].
+Now that we have studied these important types, defined in the [Type Topology][] library and repeated here for illustration purposes, let us import the original definitions with the `public` directive so that they are available to all modules importing [Overture.Preliminaries][].
 
 \begin{code}
 
@@ -226,8 +226,8 @@ Also note that multiple inhabitants of a single type (e.g., \AgdaOperator{\AgdaF
 <br>
 <br>
 
-[↑ Prelude](Prelude.html)
-<span style="float:right;">[Prelude.Equality →](Prelude.Equality.html)</span>
+[↑ Overture](Overture.html)
+<span style="float:right;">[Overture.Equality →](Overture.Equality.html)</span>
 
 
 {% include UALib.Links.md %}

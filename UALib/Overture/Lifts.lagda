@@ -1,27 +1,27 @@
 ---
 layout: default
-title : Prelude.Lifts module (Agda Universal Algebra Library)
+title : Overture.Lifts module (Agda Universal Algebra Library)
 date : 2021-02-18
 author: William DeMeo
 ---
 
 ### <a id="agdas-universe-hierarchy">Agda's Universe Hierarchy</a>
 
-This is the [UALib.Prelude.Lifts][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Lifts][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Prelude.Lifts where
+module Overture.Lifts where
 
-open import Prelude.Inverses public
+open import Overture.Inverses public
 
 \end{code}
 
 #### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
-The hierarchy of universes in Agda is structured as follows:<sup>[1](Prelude.Lifts.html#fn1)</sup>
+The hierarchy of universes in Agda is structured as follows:<sup>[1](Overture.Lifts.html#fn1)</sup>
 
 ```agda
 𝓤 ̇ : 𝓤 ⁺ ̇,   𝓤 ⁺ ̇ : 𝓤 ⁺ ⁺ ̇,  etc.
@@ -71,12 +71,12 @@ The proofs are trivial. Nonetheless, we'll find a few holes that these observati
 
 ---------------
 
-<sup>1</sup><span class="footnote" id="fn1">Recall, from the [Prelude.Preliminaries][] module, the special notation we use to denote Agda's *levels* and *universes*.</span>
+<sup>1</sup><span class="footnote" id="fn1">Recall, from the [Overture.Preliminaries][] module, the special notation we use to denote Agda's *levels* and *universes*.</span>
 
 
 <p></p>
 
-[← Prelude.Inverses](Prelude.Inverses.html)
+[← Overture.Inverses](Overture.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>
 
 {% include UALib.Links.md %}

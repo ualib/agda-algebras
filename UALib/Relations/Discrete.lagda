@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Relations.Discrete module (The Agda Universal Algebra Library)
+title : Relations.Discrete module (The Agda Universal Algebra Library)
 date : 2021-02-28
 author: William DeMeo
 ---
@@ -15,7 +15,7 @@ This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library
 
 module Relations.Discrete where
 
-open import Prelude.Lifts public
+open import Overture.Lifts public
 
 \end{code}
 
@@ -289,7 +289,7 @@ module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`. N.B. This is not to be confused with the sort of (universe) lifting that we defined in the [Prelude.Lifts][] module.
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`. N.B. This is not to be confused with the sort of (universe) lifting that we defined in the [Overture.Lifts][] module.
 
 \begin{code}
 

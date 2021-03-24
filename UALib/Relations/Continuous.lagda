@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Relations.Big module (The Agda Universal Algebra Library)
+title : Relations.Big module (The Agda Universal Algebra Library)
 date : 2021-02-28
 author: William DeMeo
 ---
 
 ### <a id="continuous-relations">Continuous Relations*</a>
 
-This is the [UALib.Relations.Continuous][] module of the [Agda Universal Algebra Library][].<sup>[*](Relations.Continuous.html#fn0)</sup>
+This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].<sup>[*](Relations.Continuous.html#fn0)</sup>
 
 \begin{code}
 

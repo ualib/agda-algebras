@@ -70,7 +70,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 module UALib where
 
 open import Preface
-open import Prelude
+open import Overture
 open import Relations
 open import Algebras
 open import Homomorphisms
@@ -86,12 +86,12 @@ open import Varieties
 
 - [Preface][]
 
-- [Prelude][]
-  - [Preliminaries](Prelude.Preliminaries.html)
-  - [Equality](Prelude.Equality.html)
-  - [Function Extensionality](Prelude.Extensionality.html)
-  - [Inverses](Prelude.Inverses.html)
-  - [Agda's Universe Hierarchy](Prelude.Lifts.html)
+- [Overture][]
+  - [Preliminaries](Overture.Preliminaries.html)
+  - [Equality](Overture.Equality.html)
+  - [Function Extensionality](Overture.Extensionality.html)
+  - [Inverses](Overture.Inverses.html)
+  - [Agda's Universe Hierarchy](Overture.Lifts.html)
 
 - [Relations][]
   - [Discrete Relations](Relations.Discrete.html)

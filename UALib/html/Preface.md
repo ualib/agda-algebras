@@ -210,7 +210,7 @@ Readers and users are encouraged to suggest improvements to the Agda UALib and/o
 ------------------------------------------------
 
 [↑ Agda UALib](UALib.html)
-<span style="float:right;">[Prelude →](Prelude.html)</span>
+<span style="float:right;">[Overture →](Overture.html)</span>
 
 
 {% include UALib.Links.md %}

@@ -1,21 +1,21 @@
 ---
 layout: default
-title : UALib.Prelude.Inverses module (Agda Universal Algebra Library)
+title : Overture.Inverses module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
 
 ### <a id="inverses">Inverses</a>
 
-This is the [UALib.Prelude.Inverses][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Inverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Prelude.Inverses where
+module Overture.Inverses where
 
-open import Prelude.Extensionality public
+open import Overture.Extensionality public
 
 open import MGS-Embeddings
  using (equivs-are-embeddings; invertible; invertibles-are-equivs) public
@@ -217,13 +217,13 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 
 <p></p>
 
-[← Prelude.Extensionality](Prelude.Extensionality.html)
-<span style="float:right;">[Prelude.Lifts →](Prelude.Lifts.html)</span>
+[← Overture.Extensionality](Overture.Extensionality.html)
+<span style="float:right;">[Overture.Lifts →](Overture.Lifts.html)</span>
 
 
 {% include UALib.Links.md %}
 
 
 <!-- 
-This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Prelude.Extensionality.html#alternative-extensionality-type), as follows.
+This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Overture.Extensionality.html#alternative-extensionality-type), as follows.
 -->

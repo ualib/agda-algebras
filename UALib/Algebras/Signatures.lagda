@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Algebras.Signatures module (Agda Universal Algebra Library)
+title : Algebras.Signatures module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
 
 ### <a id="operations-and-signatures">Operations and Signatures</a>
 
-This section presents the [UALib.Algebras.Signatures][] module of the [Agda Universal Algebra Library][].
+This section presents the [Algebras.Signatures][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -59,7 +59,7 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)
 
 As mentioned in the [Relations.Continuous][] module, 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
 
-In the [Prelude][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
+In the [Overture][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
 
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : UALib.Prelude.Extensionality module (Agda Universal Algebra Library)
+title : Overture.Extensionality module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
@@ -8,15 +8,15 @@ author: William DeMeo
 
 ### <a id="extensionality">Function Extensionality</a>
 
-This is the [UALib.Prelude.Extensionality][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Prelude.Extensionality where
+module Overture.Extensionality where
 
-open import Prelude.Equality public
+open import Overture.Equality public
 
 \end{code}
 
@@ -36,7 +36,7 @@ What if we had started out this discussion with two functions, `f` and `g`, both
 
 In the examples above, it is common to say that the two functions are [extensionally equal](https://en.wikipedia.org/wiki/Extensionality), since they produce the same *external* output when given the same input, but they are not [intensionally equal](https://en.wikipedia.org/wiki/Intension), since their *internal* definitions differ.
 
-In this module, we describe types that manifest this notion of *extensional equality of functions*, or *function extensionality*.<sup>[1](Prelude.Extensionality.html#fn1)</sup>
+In this module, we describe types that manifest this notion of *extensional equality of functions*, or *function extensionality*.<sup>[1](Overture.Extensionality.html#fn1)</sup>
 
 #### <a id="definition-of-function-extensionality">Definition of function extensionality</a>
 
@@ -75,7 +75,7 @@ Similarly, extensionality for *dependent* function types is defined as follows.
 
 \end{code}
 
-In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[2](Prelude.Extensionality.html#fn2)</sup>
+In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[2](Overture.Extensionality.html#fn2)</sup>
 However, it is important to keep in mind the following fact (see <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Escardó's notes</a>):
 
 *Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
@@ -98,7 +98,7 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
 
 \end{code}
 
-Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[3](Prelude.Extensionality.html#fn3)</sup>
+Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[3](Overture.Extensionality.html#fn3)</sup>
 
 \begin{code}
 
@@ -126,7 +126,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-Here is the analogue for dependent function types (cf. `cong-app` in [Prelude.equality][]).
+Here is the analogue for dependent function types (cf. `cong-app` in [Overture.equality][]).
 
 \begin{code}
 
@@ -159,7 +159,7 @@ module hide-tt-defs {𝓤 : Universe} where
 
 \end{code}
 
-Before proceeding, we import the original definitions of the last three types from the [Type Topology][] library. (The [first footnote](Prelude.Equality.html#fn1) of the [Prelude.Equality][] module explains why sometimes we both define and import certain types.)
+Before proceeding, we import the original definitions of the last three types from the [Type Topology][] library. (The [first footnote](Overture.Equality.html#fn1) of the [Overture.Equality][] module explains why sometimes we both define and import certain types.)
 
 \begin{code}
 
@@ -188,7 +188,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \end{code}
 
-We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.<sup>[4](Prelude.Extensionality.html#fn4)</sup>
+We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.<sup>[4](Overture.Extensionality.html#fn4)</sup>
 
 \begin{code}
 
@@ -215,8 +215,8 @@ open import MGS-Subsingleton-Truncation using (hfunext) public
 <br>
 <br>
 
-[← Prelude.Equality](Prelude.Equality.html)
-<span style="float:right;">[Prelude.Inverses →](Prelude.Inverses.html)</span>
+[← Overture.Equality](Overture.Equality.html)
+<span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>
 
 {% include UALib.Links.md %}
 

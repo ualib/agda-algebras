@@ -70,13 +70,13 @@ We hope the library will be useful to mathematicians and computer scientists who
 <a id="3679" class="Keyword">module</a> <a id="3686" href="UALib.html" class="Module">UALib</a> <a id="3692" class="Keyword">where</a>
 
 <a id="3699" class="Keyword">open</a> <a id="3704" class="Keyword">import</a> <a id="3711" href="Preface.html" class="Module">Preface</a>
-<a id="3719" class="Keyword">open</a> <a id="3724" class="Keyword">import</a> <a id="3731" href="Prelude.html" class="Module">Prelude</a>
-<a id="3739" class="Keyword">open</a> <a id="3744" class="Keyword">import</a> <a id="3751" href="Relations.html" class="Module">Relations</a>
-<a id="3761" class="Keyword">open</a> <a id="3766" class="Keyword">import</a> <a id="3773" href="Algebras.html" class="Module">Algebras</a>
-<a id="3782" class="Keyword">open</a> <a id="3787" class="Keyword">import</a> <a id="3794" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3808" class="Keyword">open</a> <a id="3813" class="Keyword">import</a> <a id="3820" href="Terms.html" class="Module">Terms</a>
-<a id="3826" class="Keyword">open</a> <a id="3831" class="Keyword">import</a> <a id="3838" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3850" class="Keyword">open</a> <a id="3855" class="Keyword">import</a> <a id="3862" href="Varieties.html" class="Module">Varieties</a>
+<a id="3719" class="Keyword">open</a> <a id="3724" class="Keyword">import</a> <a id="3731" href="Overture.html" class="Module">Overture</a>
+<a id="3740" class="Keyword">open</a> <a id="3745" class="Keyword">import</a> <a id="3752" href="Relations.html" class="Module">Relations</a>
+<a id="3762" class="Keyword">open</a> <a id="3767" class="Keyword">import</a> <a id="3774" href="Algebras.html" class="Module">Algebras</a>
+<a id="3783" class="Keyword">open</a> <a id="3788" class="Keyword">import</a> <a id="3795" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3809" class="Keyword">open</a> <a id="3814" class="Keyword">import</a> <a id="3821" href="Terms.html" class="Module">Terms</a>
+<a id="3827" class="Keyword">open</a> <a id="3832" class="Keyword">import</a> <a id="3839" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3851" class="Keyword">open</a> <a id="3856" class="Keyword">import</a> <a id="3863" href="Varieties.html" class="Module">Varieties</a>
 
 </pre>
 
@@ -86,12 +86,12 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 - [Preface][]
 
-- [Prelude][]
-  - [Preliminaries](Prelude.Preliminaries.html)
-  - [Equality](Prelude.Equality.html)
-  - [Function Extensionality](Prelude.Extensionality.html)
-  - [Inverses](Prelude.Inverses.html)
-  - [Agda's Universe Hierarchy](Prelude.Lifts.html)
+- [Overture][]
+  - [Preliminaries](Overture.Preliminaries.html)
+  - [Equality](Overture.Equality.html)
+  - [Function Extensionality](Overture.Extensionality.html)
+  - [Inverses](Overture.Inverses.html)
+  - [Agda's Universe Hierarchy](Overture.Lifts.html)
 
 - [Relations][]
   - [Discrete Relations](Relations.Discrete.html)

@@ -101,8 +101,8 @@
 
 [Peter Mayr]: http://math.colorado.edu/~mayr/
 [Preface module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
-[Prelude.lagda]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
-[Prelude module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
+[Overture.lagda]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
+[Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
 [Programming Languages Foundations in Agda]: https://plfa.github.io/
 [Programming Language Foundations in Agda]: https://plfa.github.io/
 [proof assistant]: https://en.wikipedia.org/wiki/Proof_assistant
@@ -156,12 +156,12 @@
 
 [Preface]: Preface.html
 
-[Prelude]: Prelude.html
-[Prelude.Preliminaries]: Prelude.Preliminaries.html
-[Prelude.Equality]: Prelude.Equality.html
-[Prelude.Inverses]: Prelude.Inverses.html
-[Prelude.Extensionality]: Prelude.Extensionality.html
-[Prelude.Lifts]: Prelude.Lifts.html
+[Overture]: Overture.html
+[Overture.Preliminaries]: Overture.Preliminaries.html
+[Overture.Equality]: Overture.Equality.html
+[Overture.Inverses]: Overture.Inverses.html
+[Overture.Extensionality]: Overture.Extensionality.html
+[Overture.Lifts]: Overture.Lifts.html
 
 [Relations]: Relations.html
 [Relations.Discrete]: Relations.Discrete.html
@@ -199,13 +199,13 @@
 
 [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
 
-[UALib.Prelude]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
-[UALib.Prelude module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude.lagda
-[UALib.Prelude.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda
-[UALib.Prelude.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Equality.lagda
-[UALib.Prelude.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Inverses.lagda
-[UALib.Prelude.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Extensionality.lagda
-[UALib.Prelude.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Lifts.lagda
+[UALib.Overture]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
+[UALib.Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
+[UALib.Overture.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Preliminaries.lagda
+[UALib.Overture.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Equality.lagda
+[UALib.Overture.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Inverses.lagda
+[UALib.Overture.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Extensionality.lagda
+[UALib.Overture.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Lifts.lagda
 
 [UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
 [UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda

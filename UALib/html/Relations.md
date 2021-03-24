@@ -27,7 +27,7 @@ This is the [UALib.Relations][] module of the [Agda Universal Algebra Library][]
 
 <p></p>
 
-[← Prelude.Lifts](Prelude.Lifts.html)
+[← Overture.Lifts](Overture.Lifts.html)
 <span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

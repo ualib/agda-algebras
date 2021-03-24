@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Varieties.ModelTheory module (The Agda Universal Algebra Library)
+title : Varieties.ModelTheory module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
 
 ### <a id="types-for-theories-and-models">Types for Theories and Models</a>
 
-This section presents the [UALib.Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This section presents the [Varieties.ModelTheory][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
 
@@ -19,12 +19,12 @@ Agda supports the definition of infix operations and relations, and we use this 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import UALib.Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
-open import UALib.Prelude.Preliminaries using (global-dfunext; Universe; _̇)
+open import Algebras using (Signature; 𝓞; 𝓥; Algebra; _↠_)
+open import Overture.Preliminaries using (global-dfunext; Universe; _̇)
 
-module UALib.Varieties.ModelTheory {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Varieties.ModelTheory {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
-open import UALib.Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
+open import Subalgebras.Subalgebras{𝑆 = 𝑆}{gfe} public
 
 \end{code}
 

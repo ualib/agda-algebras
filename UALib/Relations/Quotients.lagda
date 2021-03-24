@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Relations.Quotients module (The Agda Universal Algebra Library)
+title : Relations.Quotients module (The Agda Universal Algebra Library)
 date : 2021-01-13
 author: William DeMeo
 ---
 
 ### <a id="equivalence-relations-and-quotients">Equivalence Relations and Quotients</a>
 
-This section presents the [UALib.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
+This section presents the [Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
