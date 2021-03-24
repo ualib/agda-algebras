@@ -38,11 +38,11 @@ Throughout this paper we take assumptions 1--3 for granted without mentioning th
 
 
 \subsubsection{Agda Modules}\label{sec:agda-modules}
-The \ak{OPTIONS} pragma is usually followed by the start of a module.  For example, the \ualibhtml{Prelude.Preliminaries} module begins with the following line.
+The \ak{OPTIONS} pragma is usually followed by the start of a module.  For example, the \ualibhtml{Overture.Preliminaries} module begins with the following line.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Prelude.Preliminaries}\AgdaSpace{}%
+\AgdaModule{Overture.Preliminaries}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \end{code}
 \ccpad
@@ -84,7 +84,7 @@ The first of these is the \am{Universes} module which we import as follows.
 \end{code}
 \ccpad
 Since we use the \ak{public} directive, the \am{Universes} module will be available to all modules that import
-the present module (\ualibhtml{Prelude.Preliminaries}).
+the present module (\ualibhtml{Overture.Preliminaries}).
 
 The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we refer to universe levels using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab𝓩, etc. To this list we add one more, as follows: \AgdaKeyword{variable}\AgdaSpace{}%
 \AgdaGeneralizable{𝓞}\AgdaSpace{}%
@@ -131,7 +131,7 @@ There will be many occasions calling for a type living in the universe that is t
 
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}
-% Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them.\footnote{For details see~\cite{DeMeo:2021} or \ualiburl{Prelude.Preliminaries}.}
+% Convenient notations for the first and second projections out of a product are \FstUnder and \SndUnder, respectively. However, to improve readability or to avoid notation clashes with other modules, we sometimes use more standard alternatives, such as \AgdaFunction{pr₁} and \AgdaFunction{pr₂}, or \AgdaFunction{fst} and \AgdaFunction{snd}, or some combination of these. The definitions are standard so we omit them.\footnote{For details see~\cite{DeMeo:2021} or \ualiburl{Overture.Preliminaries}.}
 
 
 
@@ -385,7 +385,7 @@ Once we have studied the types, defined in the \typetopology library and repeate
 \end{code}
 %\ccpad
 %We use the  directive so that the types are available to all modules that import the present module.
-% the \ualibhtml{Prelude.Preliminaries} module.
+% the \ualibhtml{Overture.Preliminaries} module.
 
 \paragraph*{Projection notation}
 

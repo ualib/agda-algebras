@@ -15,7 +15,7 @@
 % In As mentioned above (\S~\ref{ssec:agdas-universe-hierarchy}), Agda's universe hierarchy is \defn{noncummulative}.
 
 The hierarchy of universes in Agda is structured as follows: \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇,
-\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc.\footnote{Recall, from the \ualibhtml{Prelude.Preliminaries} module~(\S\ref{universes}), the special notation we use to denote Agda's \textit{levels} and \textit{universes}.}
+\ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc.\footnote{Recall, from the \ualibhtml{Overture.Preliminaries} module~(\S\ref{universes}), the special notation we use to denote Agda's \textit{levels} and \textit{universes}.}
 This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncummulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncummulative hierarchy can sometimes make for a nonfun proof assistant. Specifically, in certain situations, the noncummulativity makes it unduly difficult to convince Agda that a program or proof is correct. 
 
 In the next subsection (\S\ref{lifting-and-lowering}) we describe general lifting and lowering functions that help us overcome this technical issue. Later (in \S\ref{lifts-of-algebras}) we provide some domain-specific analogs of these tools. We will prove some nice properties that make these effective mechanisms for resolving universe level problems when working with algebra types.

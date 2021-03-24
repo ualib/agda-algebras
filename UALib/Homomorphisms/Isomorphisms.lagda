@@ -82,7 +82,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 #### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Prelude.Lifts][].
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
 \begin{code}
 

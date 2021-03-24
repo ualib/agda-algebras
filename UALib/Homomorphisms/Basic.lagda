@@ -74,7 +74,7 @@ module _ {𝓤 : Universe} where
 
 \end{code}
 
-Next, `lift` and `lower`, defined in the [Prelude.Lifts][] module, are (the maps of) homomorphisms.  Again, the proofs are trivial.
+Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the maps of) homomorphisms.  Again, the proofs are trivial.
 
 \begin{code}
 

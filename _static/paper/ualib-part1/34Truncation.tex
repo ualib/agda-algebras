@@ -154,7 +154,7 @@ We will use \af{is-embedding}, \af{is-set}, and \af{to-Σ-≡} in the next subse
 
 \subsubsection{Injective functions are set embeddings}\label{injective-functions-are-set-embeddings}
 Before moving on to define propositions, we discharge an obligation mentioned but left unfulfilled in the
-\href{https://ualib.gitlab.io/Prelude.Inverses.html\#embeddings}{embeddings} section of the \ualibhtml{Prelude.Inverses} module. Recall, we described and imported the \af{is-embedding} type, and we remarked that an embedding is not simply a monic function. However, if we assume that the codomain is truncated so as to have unique identity proofs, then we can prove that every monic function into that codomain will be an embedding. On the other hand, embeddings are always monic, so we will end up with an equivalence. To prepare for this, we define a type
+\href{https://ualib.gitlab.io/Overture.Inverses.html\#embeddings}{embeddings} section of the \ualibhtml{Overture.Inverses} module. Recall, we described and imported the \af{is-embedding} type, and we remarked that an embedding is not simply a monic function. However, if we assume that the codomain is truncated so as to have unique identity proofs, then we can prove that every monic function into that codomain will be an embedding. On the other hand, embeddings are always monic, so we will end up with an equivalence. To prepare for this, we define a type
 \af{\_⟺\_} with which to represent such equivalences. Assume the context contains the following typing judgments: \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
