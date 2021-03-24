@@ -81,8 +81,7 @@ open import Universes public
 
 Since we use the `public` directive, the `Universes` module will be available to all modules that import the present module ([Overture.Preliminaries][]).
 
-The `Universes` module includes a number of symbols used to denote *universes* in Agda.
-In particular, Following [Escardó][], we refer to universes using capitalized script letters from near the end of the alphabet, e.g., `𝓤`, `𝓥`, `𝓦`, `𝓧`, `𝓨`, `𝓩`, etc. To this list we add one more that we use later to denote the universe level of operation symbol types (defined in the [Algebras.Signatures][] module).
+The `Universes` module includes a number of symbols that we use to denote *universes* in Agda. Following [Escardó][], we denote universes by capital script letters from the latter half of the English alphabet, e.g., `𝓝`, `𝓞`, …, `𝓧`, `𝓨`, `𝓩`, etc. Some of these are already defined in the [Type Topology][] library, but for those that are not, we use deine them with a line like the following.
 
 \begin{code}
 

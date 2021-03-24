@@ -86,11 +86,11 @@ The first of these is the \am{Universes} module which we import as follows.
 Since we use the \ak{public} directive, the \am{Universes} module will be available to all modules that import
 the present module (\ualibhtml{Overture.Preliminaries}).
 
-The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we refer to universe levels using capitalized script letters from near the end of the alphabet, e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab𝓩, etc. To this list we add one more, as follows: \AgdaKeyword{variable}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}.
-In the \ualib, the symbol \AgdaGeneralizable{𝓞} is special; it is reserved for denoting the universe level of operation symbol types defined later (in the \ualibhtml{Algebras.Signatures} module).
+The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we denote universes by capital script letters from he second half of the English alphabet, e.g., \ab 𝓝, \ab 𝓞, …, \ab 𝓧`, \ab 𝓨`, \ab𝓩`.% \\ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab 𝓩, etc. To this list we add one more, as follows: \AgdaKeyword{variable}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}.
+% In the \ualib, the symbol \AgdaGeneralizable{𝓞} is special; it is reserved for denoting the universe level of operation symbol types defined later (in the \ualibhtml{Algebras.Signatures} module).
 % \ccpad
 % \begin{code}%
 % \>[0]\AgdaKeyword{variable}\AgdaSpace{}%
@@ -124,7 +124,7 @@ The \am{Universes} module also provides elegant notation for the few primitive o
 To justify the introduction of this somewhat nonstandard notation for universe levels, Escardó points out that the Agda library uses \apr{Level} for universes (so what we write as \ab 𝓤\af ̇ is written \apr{Set}~\ab 𝓤 in standard Agda), but in univalent mathematics the types in \ab 𝓤\af ̇ need not be sets, so the standard Agda notation can be
 a bit confusing, especially to newcomers.
 
-There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, \ab 𝓤\af ̇ and \ab 𝓥\af ̇. The universe \ab 𝓤~\apr ⊔~\ab 𝓥\af ̇ denotes this least upper bound. Here \ab 𝓤~\apr ⊔~\ab 𝓥 is used to denote the universe level corresponding to the least upper bound of the levels \ab 𝓤 and \ab 𝓥, where the \apr{\AgdaUnderscore{}⊔\AgdaUnderscore{}} is an Agda primitive designed for precisely this purpose.
+There will be many occasions calling for a type living in a universe at the level that is the least upper bound of two universe levels, say, \ab 𝓤 and \ab 𝓥. The universe level \ab 𝓤~\apr ⊔~\ab 𝓥\af denotes this least upper bound. Here \apr ⊔ is an Agda primitive designed for precisely this purpose.
 
 
 \subsubsection{Dependent types}\label{sec:dependent-types}
