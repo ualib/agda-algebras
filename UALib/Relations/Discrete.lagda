@@ -27,7 +27,6 @@ In this module we define types that represent *unary* and *binary relations*.  W
 In set theory, given two sets `A` and `P`, we say that `P` is a *subset* of `A`, and we write `P ⊆ A`, just in case `∀ x (x ∈ P → x ∈ A)`. We need a mechanism for representing this notion in Agda. A typical approach is to use a *predicate* type, denoted by `Pred`.
 
 Given two universes `𝓤 𝓦` and a type `A : 𝓤 ̇`, the type `Pred A 𝓦` represents *properties* that inhabitants of type `A` may or may not satisfy.  We write `P : Pred A 𝓤` to represent the semantic concept of the collection of inhabitants of `A` that satisfy (or belong to) `P`. Here is the definition.<sup>[1](Relations.Discrete.html#fn1)</sup>
-(which is similar to the one found in the `Relation/Unary.agda` file of the [Agda Standard Library][]).
 
 \begin{code}
 
@@ -41,7 +40,7 @@ Later we consider predicates over the class of algebras in a given signature.  I
 
 #### <a id="membership-and-inclusion-relations">Membership and inclusion relations</a>
 
-Like the [Agda Standard Library][], the [UALib][] includes types that represent the *element inclusion* and *subset inclusion* relations from set theory. For example, given a predicate `P`, we may represent that  "`x` belongs to `P`" or that "`x` has property `P`," by writing either `x ∈ P` or `P x`.  The definition of `∈` is standard. Nonetheless, here it is.<sup>[1]</sup>
+Like the [Agda Standard Library][], the [UALib][] includes types that represent the *element inclusion* and *subset inclusion* relations from set theory. For example, given a predicate `P`, we may represent that  "`x` belongs to `P`" or that "`x` has property `P`," by writing either `x ∈ P` or `P x`.  The definition of `∈` is standard. Nonetheless, here it is.<sup>[1](Relations.Discrete.html#fn1)</sup>
 
 \begin{code}
 
@@ -50,7 +49,7 @@ x ∈ P = P x
 
 \end{code}
 
-The "subset" relation is denoted, as usual, with the `⊆` symbol (cf. `Relation/Unary.agda` in the [Agda Standard Library][]).
+The "subset" relation is denoted, as usual, with the `⊆` symbol.<sup>[1](Relations.Discrete.html#fn1)</sup>
 
 \begin{code}
 
@@ -289,17 +288,17 @@ module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. The first definition simply lifts a binary relation on `A` to a binary relation on tuples of type `I → A`. N.B. This is not to be confused with the sort of (universe) lifting that we defined in the [Overture.Lifts][] module.
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. Initially we called the first function `lift-rel` because it "lifts" a binary relation on `A` to a binary relation on tuples of type `I → A`.  However, we renamed it `eval-rel` to avoid confusion with the universe level `Lift` type that defined in the [Overture.Lifts][] module, or with `free-lift` ([Terms.Basic][]) which "lifts" a map defined on generators to a map on the thing being generated.
 
 \begin{code}
 
 module _ {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{I : 𝓥 ̇} where
 
- lift-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
- lift-rel R u v = ∀ i → R (u i) (v i)
+ eval-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
+ eval-rel R u v = ∀ i → R (u i) (v i)
 
  compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-fun f R  = (lift-rel R) =[ f ]⇒ R
+ compatible-fun f R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
 
@@ -308,7 +307,7 @@ We used the slick implication notation in the definition of `compatible-fun`, bu
 \begin{code}
 
  compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-fun' f R  = ∀ u v → (lift-rel R) u v → R (f u) (f v)
+ compatible-fun' f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}
 
@@ -318,9 +317,9 @@ However, this is a rare case in which the more elegant syntax may result in simp
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">cf. `Relation/Unary.agda` in the [Agda Standard Library][].</span>
+<sup>1</sup><span class="footnote" id="fn1"> cf. `Relation/Unary.agda` in the [Agda Standard Library][].</span>
 
-<sup>2</sup><span class="footnote" id="fn2">**Unicode Hints**. In [agda2-mode][] type `\doteq` or `\.=` to produce `≐`; type `\u+` or `\uplus` to produce `⊎`; type `\b0` to produce `𝟘`; type `\B0` to produce `𝟎`.</span>
+<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints** ([agda2-mode][]) `\.=` ↝ `≐`, `\u+` ↝ `⊎`, `\b0` ↝ `𝟘`, `\B0` ↝ `𝟎`.</span>
 
 <sup>3</sup><span class="footnote" id="fn3">Agda also has a `postulate` mechanism that we could use, but this would require omitting the `--safe` pragma from the `OPTIONS` directive at the start of the module.</span>
 
