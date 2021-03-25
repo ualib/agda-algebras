@@ -71,27 +71,34 @@ The type just defined is the one that will be used throughout the [UALib][] when
 
 #### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
-An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra 𝓤 𝑆`, for some universe level `𝓤` and signature `𝑆`. That is, `𝒦 : Pred (Algebra 𝓤 𝑆) \_`.<sup>[1](Algebras.Products.html#fn1)</sup>
+An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra 𝓤 𝑆`, for some universe level `𝓤` and signature `𝑆`. That is, `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦`, for some type `𝓦`. Later we will formally state and prove that the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise.
 
-Later we will formally state and prove that, given an arbitrary class `𝒦` of algebras, the product of all subalgebras of algebras in the class belongs to the class  `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise. In fact, it is not immediately clear (to this author, at least) how to even express the product of an entire class of algebras as a dependent type. However, with a sufficient amount of mindful meditation, the right type reveals itself.<sup>[2](Algebras.Products.html#fn2)</sup>
+To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is definitely *not* what we want.  To see why, recall that `Pred (Algebra 𝓤 𝑆) 𝓦`, is just an alias for the function type \af{Algebra}~\ab 𝓤~\ab 𝑆~\as →~\ab 𝓦\af ̇. We interpret the latter semantically by taking \ab 𝒦~\ab 𝑨 to be the assertion that \ab 𝒦~\ab 𝑨 belongs to \ab 𝒦~\ab 𝑨, denoted \ab 𝑨 ∈ \ab 𝒦. Therefore, by definition, we have
 
-The solution is the \af{class-product} type whose construction is the main goal of this section. To begin, we need a type that will serve to index the class, as well as the product of its members.
+`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨`<br>
+&nbsp; &nbsp; &nbsp; `= Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦`.
+
+Semantically, this is the assertion that *every algebra of type* `Algebra 𝓤 𝑆` *belongs to* `𝒦`, and this bears little resemblance to the product of algebras that we seek.
+
+What we need is a type that serves to index the class `𝒦`, and a function `𝔄` that maps an index to the inhabitant of `𝒦` at that index. But `𝒦` is a predicate (of type `(Algebra 𝓤 𝑆) → 𝓦 ̇`) and the type `Algebra 𝓤 𝑆` seems rather nebulous in that there is no natural indexing class with which to "enumerate" all inhabitants of `Algebra 𝓤 𝑆` belonging to `𝒦`.<sup>[1](Algebras.Product.html#fn1)</sup>
+
+The solution is to essentially take `𝒦` itself to be the indexing type, at least heuristically that is how one can view the type `ℑ` that we now define.<sup>[2](Algebras.Product.html#fn2)</sup>
 
 <pre class="Agda">
 
-<a id="3422" class="Keyword">module</a> <a id="class-products"></a><a id="3429" href="Algebras.Products.html#3429" class="Module">class-products</a> <a id="3444" class="Symbol">{</a><a id="3445" href="Algebras.Products.html#3445" class="Bound">𝓤</a> <a id="3447" class="Symbol">:</a> <a id="3449" href="Universes.html#205" class="Postulate">Universe</a><a id="3457" class="Symbol">}</a> <a id="3459" class="Symbol">(</a><a id="3460" href="Algebras.Products.html#3460" class="Bound">𝒦</a> <a id="3462" class="Symbol">:</a> <a id="3464" href="Relations.Discrete.html#1534" class="Function">Pred</a> <a id="3469" class="Symbol">(</a><a id="3470" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="3478" href="Algebras.Products.html#3445" class="Bound">𝓤</a> <a id="3480" href="Algebras.Products.html#714" class="Bound">𝑆</a><a id="3481" class="Symbol">)(</a><a id="3483" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="3486" href="Algebras.Products.html#3445" class="Bound">𝓤</a><a id="3487" class="Symbol">))</a> <a id="3490" class="Keyword">where</a>
+<a id="4215" class="Keyword">module</a> <a id="class-products"></a><a id="4222" href="Algebras.Products.html#4222" class="Module">class-products</a> <a id="4237" class="Symbol">{</a><a id="4238" href="Algebras.Products.html#4238" class="Bound">𝓤</a> <a id="4240" class="Symbol">:</a> <a id="4242" href="Universes.html#205" class="Postulate">Universe</a><a id="4250" class="Symbol">}</a> <a id="4252" class="Symbol">(</a><a id="4253" href="Algebras.Products.html#4253" class="Bound">𝒦</a> <a id="4255" class="Symbol">:</a> <a id="4257" href="Relations.Discrete.html#1534" class="Function">Pred</a> <a id="4262" class="Symbol">(</a><a id="4263" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="4271" href="Algebras.Products.html#4238" class="Bound">𝓤</a> <a id="4273" href="Algebras.Products.html#714" class="Bound">𝑆</a><a id="4274" class="Symbol">)(</a><a id="4276" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="4279" href="Algebras.Products.html#4238" class="Bound">𝓤</a><a id="4280" class="Symbol">))</a> <a id="4283" class="Keyword">where</a>
 
- <a id="class-products.ℑ"></a><a id="3498" href="Algebras.Products.html#3498" class="Function">ℑ</a> <a id="3500" class="Symbol">:</a> <a id="3502" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="3505" href="Algebras.Products.html#3445" class="Bound">𝓤</a> <a id="3507" href="Universes.html#403" class="Function Operator">̇</a>
- <a id="3510" href="Algebras.Products.html#3498" class="Function">ℑ</a> <a id="3512" class="Symbol">=</a> <a id="3514" href="MGS-MLTT.html#3074" class="Function">Σ</a> <a id="3516" href="Algebras.Products.html#3516" class="Bound">𝑨</a> <a id="3518" href="MGS-MLTT.html#3074" class="Function">꞉</a> <a id="3520" class="Symbol">(</a><a id="3521" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="3529" href="Algebras.Products.html#3445" class="Bound">𝓤</a> <a id="3531" href="Algebras.Products.html#714" class="Bound">𝑆</a><a id="3532" class="Symbol">)</a> <a id="3534" href="MGS-MLTT.html#3074" class="Function">,</a> <a id="3536" class="Symbol">(</a><a id="3537" href="Algebras.Products.html#3516" class="Bound">𝑨</a> <a id="3539" href="Relations.Discrete.html#2419" class="Function Operator">∈</a> <a id="3541" href="Algebras.Products.html#3460" class="Bound">𝒦</a><a id="3542" class="Symbol">)</a>
+ <a id="class-products.ℑ"></a><a id="4291" href="Algebras.Products.html#4291" class="Function">ℑ</a> <a id="4293" class="Symbol">:</a> <a id="4295" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="4298" href="Algebras.Products.html#4238" class="Bound">𝓤</a> <a id="4300" href="Universes.html#403" class="Function Operator">̇</a>
+ <a id="4303" href="Algebras.Products.html#4291" class="Function">ℑ</a> <a id="4305" class="Symbol">=</a> <a id="4307" href="MGS-MLTT.html#3074" class="Function">Σ</a> <a id="4309" href="Algebras.Products.html#4309" class="Bound">𝑨</a> <a id="4311" href="MGS-MLTT.html#3074" class="Function">꞉</a> <a id="4313" class="Symbol">(</a><a id="4314" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="4322" href="Algebras.Products.html#4238" class="Bound">𝓤</a> <a id="4324" href="Algebras.Products.html#714" class="Bound">𝑆</a><a id="4325" class="Symbol">)</a> <a id="4327" href="MGS-MLTT.html#3074" class="Function">,</a> <a id="4329" class="Symbol">(</a><a id="4330" href="Algebras.Products.html#4309" class="Bound">𝑨</a> <a id="4332" href="Relations.Discrete.html#2419" class="Function Operator">∈</a> <a id="4334" href="Algebras.Products.html#4253" class="Bound">𝒦</a><a id="4335" class="Symbol">)</a>
 
 </pre>
 
-Taking the product over the index type ℑ requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a pair, `(𝑨 , p)`, where `𝑨` is an algebra and `p` is a proof that `𝑨` belongs to `𝒦`, so the function mapping an index to the corresponding algebra is simply the first projection.
+Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a pair, `(𝑨 , p)`, where `𝑨` is an algebra and `p` is a proof that `𝑨` belongs to `𝒦`, so the function mapping an index to the corresponding algebra is simply the first projection.
 
 <pre class="Agda">
 
- <a id="class-products.𝔄"></a><a id="3889" href="Algebras.Products.html#3889" class="Function">𝔄</a> <a id="3891" class="Symbol">:</a> <a id="3893" href="Algebras.Products.html#3498" class="Function">ℑ</a> <a id="3895" class="Symbol">→</a> <a id="3897" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="3905" href="Algebras.Products.html#3445" class="Bound">𝓤</a> <a id="3907" href="Algebras.Products.html#714" class="Bound">𝑆</a>
- <a id="3910" href="Algebras.Products.html#3889" class="Function">𝔄</a> <a id="3912" class="Symbol">=</a> <a id="3914" class="Symbol">λ</a> <a id="3916" class="Symbol">(</a><a id="3917" href="Algebras.Products.html#3917" class="Bound">i</a> <a id="3919" class="Symbol">:</a> <a id="3921" href="Algebras.Products.html#3498" class="Function">ℑ</a><a id="3922" class="Symbol">)</a> <a id="3924" class="Symbol">→</a> <a id="3926" href="Overture.Preliminaries.html#12400" class="Function Operator">∣</a> <a id="3928" href="Algebras.Products.html#3917" class="Bound">i</a> <a id="3930" href="Overture.Preliminaries.html#12400" class="Function Operator">∣</a>
+ <a id="class-products.𝔄"></a><a id="4684" href="Algebras.Products.html#4684" class="Function">𝔄</a> <a id="4686" class="Symbol">:</a> <a id="4688" href="Algebras.Products.html#4291" class="Function">ℑ</a> <a id="4690" class="Symbol">→</a> <a id="4692" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="4700" href="Algebras.Products.html#4238" class="Bound">𝓤</a> <a id="4702" href="Algebras.Products.html#714" class="Bound">𝑆</a>
+ <a id="4705" href="Algebras.Products.html#4684" class="Function">𝔄</a> <a id="4707" class="Symbol">=</a> <a id="4709" class="Symbol">λ</a> <a id="4711" class="Symbol">(</a><a id="4712" href="Algebras.Products.html#4712" class="Bound">i</a> <a id="4714" class="Symbol">:</a> <a id="4716" href="Algebras.Products.html#4291" class="Function">ℑ</a><a id="4717" class="Symbol">)</a> <a id="4719" class="Symbol">→</a> <a id="4721" href="Overture.Preliminaries.html#12400" class="Function Operator">∣</a> <a id="4723" href="Algebras.Products.html#4712" class="Bound">i</a> <a id="4725" href="Overture.Preliminaries.html#12400" class="Function Operator">∣</a>
 
 </pre>
 
@@ -99,8 +106,8 @@ Finally, we define `class-product` which represents the product of all members o
 
 <pre class="Agda">
 
- <a id="class-products.class-product"></a><a id="4046" href="Algebras.Products.html#4046" class="Function">class-product</a> <a id="4060" class="Symbol">:</a> <a id="4062" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="4070" class="Symbol">(</a><a id="4071" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="4074" href="Algebras.Products.html#3445" class="Bound">𝓤</a><a id="4075" class="Symbol">)</a> <a id="4077" href="Algebras.Products.html#714" class="Bound">𝑆</a>
- <a id="4080" href="Algebras.Products.html#4046" class="Function">class-product</a> <a id="4094" class="Symbol">=</a> <a id="4096" href="Algebras.Products.html#1173" class="Function">⨅</a> <a id="4098" href="Algebras.Products.html#3889" class="Function">𝔄</a>
+ <a id="class-products.class-product"></a><a id="4841" href="Algebras.Products.html#4841" class="Function">class-product</a> <a id="4855" class="Symbol">:</a> <a id="4857" href="Algebras.Algebras.html#674" class="Function">Algebra</a> <a id="4865" class="Symbol">(</a><a id="4866" href="Algebras.Products.html#2276" class="Function">ov</a> <a id="4869" href="Algebras.Products.html#4238" class="Bound">𝓤</a><a id="4870" class="Symbol">)</a> <a id="4872" href="Algebras.Products.html#714" class="Bound">𝑆</a>
+ <a id="4875" href="Algebras.Products.html#4841" class="Function">class-product</a> <a id="4889" class="Symbol">=</a> <a id="4891" href="Algebras.Products.html#1173" class="Function">⨅</a> <a id="4893" href="Algebras.Products.html#4684" class="Function">𝔄</a>
 
 </pre>
 
@@ -110,12 +117,9 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 -----------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> The underscore is merely a placeholder for the universe of the predicate type and needn't concern us here.</span>
+<sup>1</sup><span class="footnote" id="fn1"> If you haven't already seen this before, give it some thought and see if the correct type comes to you organically.</span>
 
-<sup>2</sup><span class="footnote" id="fn2"> Readers are encouraged to derive for themselves a type that represents the product of all algebras satisfying a given predicate. It is a good exercise. (*Hint*. The answer is not `Π 𝒦`. Although the latter is a valid type, it represnts not the product of algebras in `𝒦`, but rather the assertion that every algebra of type `Algebra 𝓤 𝑆` belongs to `𝒦`.)</span>
-
-<br>
-<br>
+<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. Some of our types are denoted with with Gothic ("mathfrak") symbols. To produce them in [agda2-mode][], type `\Mf` followed by a letter. For example, `\MfI` ↝ `ℑ`.</span>
 
 [← Algebras.Algebras](Algebras.Algebras.html)
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>

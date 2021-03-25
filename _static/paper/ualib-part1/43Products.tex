@@ -212,6 +212,19 @@ The type just defined is the one we use whenever the product of an indexed colle
 % \\
 % \>[10]\AgdaSymbol{\}}\<%
 \end{code}
+\ccpad
+\textbf{Notation}. Given a signature \ab 𝑆 : \af{Signature} \ab 𝓞 \ab 𝓥 the type \af{Algebra} \ab 𝓤 \ab 𝑆 has universe 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that it is worthwhile to define the following shorthand for their universes.
+
+Before going further, let us agree on another convenient notational convention, which is used in many of the later modules of the \ualib. Given a signature \ab{𝑆}~\as :~\af{Signature}~\ab 𝓞~\ab 𝓥, the type \af{Algebra}~\ab 𝓤~\ab 𝑆 has universe level \ab{𝓞}~\ap ⊔~\ab 𝓥~\ap ⊔~\ab 𝓤~\af ⁺, and the \ab{𝓞} \ap ⊔ \ab 𝓥 part remains fixed since \ab{𝓞} and \ab 𝓥 always denote the universe levels of operation and arity types, respectively. Such levels occur so often in the \ualib that we define the following shorthand for it: \AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaSymbol{:=}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}.
+
 
 \subsubsection{Products of classes of algebras}\label{products-of-classes-of-algebras}
 % \context{\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -222,28 +235,22 @@ The type just defined is the one we use whenever the product of an indexed colle
 % \AgdaBound{𝓧}\AgdaSpace{}%
 % \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}}
 
-An arbitrary class \ab 𝒦 of algebras is represented as a predicate over the type \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, for some universe \AgdaBound{𝓤} and signature \AgdaBound{𝑆}.
-%  That is, \ab 𝒦 \as : \AgdaFunction{Pred}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{Algebra}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-% \AgdaUnderscore.\footnote{%
-% The underscore is merely a placeholder for the universe of the predicate type and needn't concern us here.} 
-Later we will formally state and prove that the product of all subalgebras of algebras in such a class belongs to the class \af{SP}(\ab 𝒦) of subalgebras of products of algebras in \ab 𝒦. That is, \af ⨅ \af S(\ab 𝒦) \af ∈ \af{SP}(\ab 𝒦). This turns out to be a nontrivial exercise. In fact, it is not immediately clear (to this author, at least) how to even express the product of an entire class of algebras as a dependent type. However, with a sufficient amount of mindful meditation, the right type reveals itself.\footnote{%
-Readers are encouraged to derive for themselves a type that represents the product of algebras satisfying a predicate. It is a good exercise. (\textit{Hint}. The answer is not \ad Π \ab 𝒦. Although the latter is a valid type, it represents not the product of algebras in \ab 𝒦, but rather the assertion that every algebra of type \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆} belongs to \ab 𝒦.)}
+An arbitrary class \ab 𝒦 of algebras is represented as a predicate over the type \AgdaFunction{Algebra}\AgdaSpace{}\AgdaBound{𝓤}\AgdaSpace{}\AgdaBound{𝑆}, for some universe level \AgdaBound{𝓤} and signature \AgdaBound{𝑆}.
+That is, \ab 𝒦~\as :~\af{Pred}(\af{Algebra}~\ab 𝓤~\ab 𝑆)~𝓦 for some 𝓦.
+Later we will formally state and prove that the product of all subalgebras of algebras in \ab 𝒦  belongs to the class \af{SP}(\ab 𝒦) of subalgebras of products of algebras in \ab 𝒦. That is, \af ⨅ \af S(\ab 𝒦) \af ∈ \af{SP}(\ab 𝒦). This turns out to be a nontrivial exercise.
 
-The solution is the \af{class-product} type whose construction is the main goal of this section. To begin, let us establish a notational convention that is used in many of the later modules of the \ualib. Given a signature \ab{𝑆} \as : \af{Signature} \ab  𝓞 \ab 𝓥, the type \af{Algebra} \ab 𝓤 \ab 𝑆 has universe level \ab{𝓞} \ap ⊔ \ab 𝓥 \ap ⊔ \ab 𝓤 \af ⁺. Such levels occur very frequently and the \ab{𝓞} \ap ⊔ \ab 𝓥 part remains fixed since \ab{𝓞} and \ab 𝓥 always denote the levels of operation and arity types, respectively. Thus, we define the following shorthand: \AgdaFunction{ov}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:=}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}.
+To begin, we need to define types that represent products over arbitrary (nonindexed) families such as \ab 𝒦 or \af S(\ab 𝒦). Observe that \ad Π~\ab 𝒦 is definitely \emph{not} what we want.  To see why, recall that \af{Pred}(\ab{Algebra}~\ab 𝓤~\ab 𝑆)~\ab 𝓦` is just an alias for the function type \af{Algebra}~\ab 𝓤~\ab 𝑆~\as →~\ab 𝓦\af ̇. We interpret the latter semantically by taking \ab 𝒦~\ab 𝑨 to be the assertion that \ab 𝒦~\ab 𝑨 belongs to \ab 𝒦~\ab 𝑨, denoted \ab 𝑨 ∈ \ab 𝒦. Therefore, by definition, we have
+\begin{align*}
+\ad Π~\ab 𝒦 &= \ad Π~\ab 𝑨~\af ꞉~(\af{Algebra}~\ab 𝓤~\ab 𝑆)~,~\ab 𝒦 𝑨\\
+             &= \ad Π~\ab 𝑨~\af ꞉~(\af{Algebra}~\ab 𝓤~\ab 𝑆)~,~\ab 𝑨~\af ∈~\ab 𝒦.
+\end{align*}
+Semantically, this is the assertion that every algebra of type \af{Algebra} \ab 𝓤 \ab 𝑆 belongs to \ab 𝒦, and this bears little resemblance to the product of algebras that we seek.
 
-% We now proceed to develop types that will represent products of classes of algebras. First
-Next, we define the type \AgdaFunction{ℑ} that will serve as the \defn{index} for the class \ab 𝒦 and the product of all its members.
+What we need is a type that serves to index the class \ab 𝒦, and a function \af 𝔄 that maps an index to the inhabitant of \ab 𝒦 at that index. But \ab 𝒦 is a predicate (of type (\af{Algebra}~\ab 𝓤~\ab 𝑆)~\as →~\ab 𝓦\af ̇) and the type \af{Algebra}~\ab 𝓤~\ab 𝑆 seems rather nebulous in that there is no natural indexing class with which to "enumerate" all inhabitants of \af{Algebra}~\ab 𝓤~\ab 𝑆 that belong to \ab 𝒦.\footnote{%
+If you haven't already seen this before, do yourself a favor and give it some thought; see if the correct type comes to you organically.}
+
+
+The solution is to essentially take `𝒦` itself to be the indexing type; at least heuristically that is how one can view the type `ℑ` that we now define.\footnote{\textbf{Unicode Hints}. Some of our types are denoted with with Gothic (``mathfrak'') symbols. To produce them in \agdamode, type \texttt{\textbackslash{}Mf} followed by a letter. For example, \texttt{\textbackslash{}MfI} ↝ \af ℑ.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
