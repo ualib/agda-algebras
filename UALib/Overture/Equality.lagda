@@ -33,14 +33,6 @@ In [An Intuitionistic Theory of Types: Predicative Part](https://www.sciencedire
 
 To be sure we understand what this means, let `:=` denote the relation with respect to which `x` is related to `y` (denoted `x := y`) if and only if `y` *is the definition of* `x`.  Then the definitional equality relation `≡` is the reflexive, symmetric, transitive, substitutive closure of `:=`. By *subsitutive closure* we mean closure under the following *substitution rule*.
 
-<!--
-\begin{prooftree}
-\AxiomC{`\{A : 𝓤 ̇\}\{B : A → 𝓦 ̇\}\{x y : A\}`}
-\AxiomC{`x ≡ y`}
-\Rightlabel{(subst)}
-\BinaryInfC{`B x ≡ B y`}
-\end{prooftree}
--->
 
 ```agda
     {A : 𝓤 ̇} {B : A → 𝓦 ̇} {x y : A}   x ≡ y
@@ -52,9 +44,9 @@ The datatype we use to represent definitional equality is imported from the Iden
 
 \begin{code}
 
-module hide-refl {𝓤 : Universe} where
+module hide-refl where
 
- data _≡_ {𝓤} {A : 𝓤 ̇ } : A → A → 𝓤 ̇ where refl : {x : A} → x ≡ x
+ data _≡_ {A : 𝓤 ̇} : A → A → 𝓤 ̇ where refl : {x : A} → x ≡ x
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
@@ -66,19 +58,17 @@ Of course `≡` is an equivalence relation and the formal proof of this fact is 
 
 \begin{code}
 
-module _  {𝓤 : Universe}{A : 𝓤 ̇ }  where
+≡-symmetric : {A : 𝓤 ̇}(x y : A) → x ≡ y → y ≡ x
+≡-symmetric _ _ refl = refl
 
- ≡-symmetric : (x y : A) → x ≡ y → y ≡ x
- ≡-symmetric _ _ refl = refl
+≡-sym : {A : 𝓤 ̇}{x y : A} → x ≡ y → y ≡ x
+≡-sym refl = refl
 
- ≡-sym : {x y : A} → x ≡ y → y ≡ x
- ≡-sym refl = refl
+≡-transitive : {A : 𝓤 ̇}(x y z : A) → x ≡ y → y ≡ z → x ≡ z
+≡-transitive _ _ _ refl refl = refl
 
- ≡-transitive : (x y z : A) → x ≡ y → y ≡ z → x ≡ z
- ≡-transitive _ _ _ refl refl = refl
-
- ≡-trans : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
- ≡-trans refl refl = refl
+≡-trans : {A : 𝓤 ̇}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+≡-trans refl refl = refl
 
 \end{code}
 
@@ -88,7 +78,7 @@ We prove that `≡` obeys the substitution rule (subst) in the next subsection (
 
 \begin{code}
 
-module hide-sym-trans {𝓤 : Universe} {A : 𝓤 ̇ } where
+module hide-sym-trans {A : 𝓤 ̇} where
 
  _⁻¹ : {x y : A} → x ≡ y → y ≡ x
  p ⁻¹ = ≡-sym p
@@ -118,12 +108,12 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 
 \begin{code}
 
-module hide-id-transport {𝓤 𝓦 : Universe} where
+module hide-id-transport where
 
- 𝑖𝑑 : {𝓤 : Universe} (A : 𝓤 ̇ ) → A → A
+ 𝑖𝑑 : (A : 𝓤 ̇ ) → A → A
  𝑖𝑑 A = λ x → x
 
- transport : {A : 𝓤 ̇ } (B : A → 𝓦 ̇ ) {x y : A} → x ≡ y → B x → B y
+ transport : {A : 𝓤 ̇}(B : A → 𝓦 ̇){x y : A} → x ≡ y → B x → B y
  transport B (refl {x = x}) = 𝑖𝑑 (B x)
 
 open import MGS-MLTT using (𝑖𝑑; transport) public
@@ -136,9 +126,9 @@ A function is well defined if and only if it maps equivalent elements to a singl
 
 \begin{code}
 
-module hide-ap  {𝓤 𝓦 : Universe} where
+module hide-ap {A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- ap : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B){x y : A} → x ≡ y → f x ≡ f y
+ ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
  ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
 
 open import MGS-MLTT using (ap) public
@@ -149,10 +139,8 @@ Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
-
- cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
- cong-app refl _ = refl
+cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
+cong-app refl _ = refl
 
 \end{code}
 

@@ -44,7 +44,7 @@ The natural notion of function equality, which is often called *point-wise equal
 
 \begin{code}
 
-module hide-∼ {𝓤 𝓦 : Universe} where
+module hide-∼ where
 
  _∼_ : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓦 ̇
  f ∼ g = ∀ x → f x ≡ g x
@@ -119,10 +119,8 @@ The next two types define the converse of function extensionality.
 
 open import MGS-MLTT using (_∼_) public
 
-module _ {𝓤 𝓦 : Universe} where
-
- extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
- extfun refl _ = refl
+extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
+extfun refl _ = refl
 
 \end{code}
 
@@ -130,8 +128,8 @@ Here is the analogue for dependent function types (cf. `cong-app` in [Overture.e
 
 \begin{code}
 
- extdfun : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }(f g : Π B) → f ≡ g → f ∼ g
- extdfun _ _ refl _ = refl
+extdfun : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }(f g : Π B) → f ≡ g → f ∼ g
+extdfun _ _ refl _ = refl
 
 \end{code}
 

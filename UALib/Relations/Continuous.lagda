@@ -60,16 +60,6 @@ module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
 \end{code}
 
-<!-- 
-
- -- eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
- -- eval-cont-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
-
- -- cont-compatible-fun : (I → (J → A) → A) → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- -- cont-compatible-fun 𝕗 R  = ∀ 𝕒 → (eval-cont-rel R) 𝕒 → R λ i → (𝕗 i) (𝕒 i)
-
-In the definition of `cont-compatible-fun`, we let Agda infer the type of `𝒂`, which is `I → (J → A)`. -->
-
 If the syntax of the last two definitions makes you feel a bit nauseated, we recommend focusing on the semantics. In fact, we should probably pause here to discuss these semantics, lest the even more complicated definitions below induce the typical consequence of nausea.
 
 First, internalize the fact that `𝒂 : I → J → A` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Once that's obvious, then recall that a continuous relation `R` represents a certain collection of `I`-tuples. Specifically, if `x : I → A` is an `I`-tuple, then `R x` denotes the assertion that "`x` belongs to `R`" or "`x` satisfies `R`."

@@ -26,7 +26,7 @@ We begin by defining an inductive type that represents the semantic concept of *
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇ }{B : 𝓦 ̇ } where
+module _ {A : 𝓤 ̇ }{B : 𝓦 ̇ } where
 
  data Image_∋_ (f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
   where
@@ -92,15 +92,15 @@ The function defined by `EpicInv f fE` is indeed the right-inverse of `f`. To st
 
 \begin{code}
 
-module hide-∘ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module hide-∘ {A : 𝓤 ̇}{B : 𝓦 ̇}{C : B → 𝓦 ̇ } where
 
- _∘_ : {C : B → 𝓦 ̇ } → Π C → (f : A → B) → (x : A) → C (f x)
+ _∘_ : Π C → (f : A → B) → (x : A) → C (f x)
  g ∘ f = λ x → g (f x)
 
 open import MGS-MLTT using (_∘_) public
 
 
-module _ {𝓤 𝓦 : Universe}{fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  EpicInvIsRightInv : (f : A → B)(fE : Epic f) → f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
  EpicInvIsRightInv f fE = fe (λ x → InvIsInv f (fE x))
@@ -111,7 +111,7 @@ We can also prove the following composition law for epics.
 
 \begin{code}
 
- epic-factor : {𝓩 : Universe}{C : 𝓩 ̇}(f : A → B)(g : A → C)(h : C → B)
+ epic-factor : {C : 𝓩 ̇}(f : A → B)(g : A → C)(h : C → B)
   →            f ≡ h ∘ g → Epic f → Epic h
 
  epic-factor f g h compId fe y = γ
@@ -141,7 +141,7 @@ We say that a function `f : A → B` is *monic* (or *injective* or *one-to-one*)
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  Monic : (f : A → B) → 𝓤 ⊔ 𝓦 ̇
  Monic f = ∀ x y → f x ≡ f y → x ≡ y
@@ -175,7 +175,7 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 The `is-embedding` type is defined in the [Type Topology][] library in the following way.
 
 \begin{code}
-module hide-is-embedding {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module hide-is-embedding{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  is-embedding : (A → B) → 𝓤 ⊔ 𝓦 ̇
  is-embedding f = ∀ b → is-subsingleton (fiber f b)
@@ -190,7 +190,7 @@ Finding a proof that a function is an embedding isn't always easy, but one path 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  invertibles-are-embeddings : (f : A → B) → invertible f → is-embedding f
  invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)

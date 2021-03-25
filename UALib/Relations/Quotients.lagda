@@ -192,12 +192,3 @@ Later we will need the following tools for working with the quotient types defin
 {% include UALib.Links.md %}
 
 
-
-<!-- unused stuff
-
- -- /-refl : {A : 𝓤 ̇}(a a' : A){R : Rel A 𝓡} → reflexive R → [ a ] R ≡ [ a' ] R → R a a'
-
- -- /-refl a a' rfl x  = cong-app-pred a' (rfl a') (x ⁻¹)
-
-
--->

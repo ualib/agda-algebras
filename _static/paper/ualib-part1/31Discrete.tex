@@ -183,7 +183,7 @@ A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p~\as :~\ab P~\
 \AgdaBound{z}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. However, we can postulate it axiomatically if we wish. This is called the \defn{axiom of extensionality} and a type that represents this axiom is the following.
+The converse is not provable in \mltt. However, we can postulate that it holds as an axiom if we wish.  This is called the \defn{axiom of extensionality} and a type that represents it is the following.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
@@ -226,7 +226,7 @@ The converse of \af{Pred-≡} is not provable in Martin-L\"of Type Theory. Howev
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-Note that the type \af{ext-axiom} does not itself postulate the axiom of extensionality.  It merely defines the axiom.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.\footnote{Agda also has a \ak{postulate} mechanism that we could use, but this would require omitting the \AgdaPragma{--safe} pragma from the \ak{OPTIONS} directive at the start of the module.}
+Note that \af{ext-axiom} does not itself postulate the axiom of extensionality; it merely says what it is.  If we want to postulate the axiom, we must assume we have an inhabitant (or ``witness'') of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.\footnote{Agda also has a \ak{postulate} mechanism that we could use, but this would require omitting the \AgdaPragma{--safe} pragma from the \ak{OPTIONS} directive at the start of the module.}
 \ccpad
 \begin{code}
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -246,7 +246,7 @@ Note that the type \af{ext-axiom} does not itself postulate the axiom of extensi
 \AgdaKeyword{where}\<%
 \end{code}
 \ccpad
-We treat other notions of extensionality in \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
+Other notions of extensionality come up often in the \ualib; see, for example, \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
 
 \paragraph*{Predicates toolbox}
 Here is a small collection of tools that will come in handy later. The first is an inductive type that represents \defn{disjoint union}.\cref{uhints}
@@ -411,7 +411,7 @@ The empty type is defined in \typetopology's \am{Empty-Type} module as an induct
 \AgdaDatatype{𝟘}\<%
 \end{code}
 \ccpad
-Before closing our little predicates toolbox, let's add to it a type that provides a natural way to represent \defn{singletons}.
+Before closing our little predicates toolbox, let's add to it a type that provides a natural way to encode \defn{singletons}.
 \ccpad
 \begin{code}
 \>[0]\AgdaOperator{\AgdaFunction{｛\AgdaUnderscore{}｝}}\AgdaSpace{}%
@@ -460,12 +460,12 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSymbol{)}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %

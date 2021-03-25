@@ -85,7 +85,7 @@ The `Universes` module includes a number of symbols that we use to denote *unive
 
 \begin{code}
 
-variable 𝓞 : Universe
+variable 𝓞 𝓩 : Universe
 
 \end{code}
 

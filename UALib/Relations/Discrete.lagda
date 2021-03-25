@@ -30,7 +30,7 @@ Given two universes `𝓤 𝓦` and a type `A : 𝓤 ̇`, the type `Pred A 𝓦`
 
 \begin{code}
 
-Pred : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Pred : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
 Pred A 𝓦 = A → 𝓦 ̇
 
 \end{code}
@@ -44,7 +44,7 @@ Like the [Agda Standard Library][], the [UALib][] includes types that represent 
 
 \begin{code}
 
-_∈_ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
+_∈_ : {A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
 x ∈ P = P x
 
 \end{code}
@@ -53,12 +53,10 @@ The "subset" relation is denoted, as usual, with the `⊆` symbol.<sup>[1](Relat
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓩 : Universe} {A : 𝓤 ̇ } where
+_⊆_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
- _⊆_ : Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
- P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
-
- infix 4 _⊆_
+infix 4 _⊆_
 
 
 \end{code}
@@ -69,12 +67,10 @@ In type theory everything is represented as a type and, as we have just seen, th
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇ } where
+_≐_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
- _≐_ : Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
- P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
-
- infix 4 _≐_
+infix 4 _≐_
 
 \end{code}
 
@@ -82,29 +78,29 @@ Thus, a proof of `P ≐ Q` is a pair `(p , q)` where where `p : P ⊆ Q` and `q 
 
 \begin{code}
 
-Pred-≡ : {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{P Q : Pred A 𝓦} → P ≡ Q → P ≐ Q
+Pred-≡ : {A : 𝓤 ̇}{P Q : Pred A 𝓦} → P ≡ Q → P ≐ Q
 Pred-≡ refl = (λ z → z) , (λ z → z)
 
 \end{code}
 
-The converse is not provable in [MLTT][]. However, we can define its type and postulate that it holds axiomatically, if we wish.  This is called the *axiom of extensionality* and a type that represents this axiom is the following.
+The converse is not provable in [MLTT][]. However, we can postulate that it holds as an axiom if we wish.  This is called the *axiom of extensionality* and a type that represents it is the following.
 
 \begin{code}
 
-ext-axiom : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) →  𝓤 ⊔ 𝓦 ⁺ ̇
+ext-axiom : 𝓤 ̇ → (𝓦 : Universe) →  𝓤 ⊔ 𝓦 ⁺ ̇
 ext-axiom A 𝓦 = ∀ (P Q : Pred A 𝓦) → P ≐ Q → P ≡ Q
 
 \end{code}
 
-Note that the type `ext-axiom` does not itself postulate the axiom of extensionality.  It merely defines the axiom.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.<sup>[3](Relations.Discrete#fn3)</sup>
+Note that the type `ext-axiom` does not itself postulate the axiom of extensionality.  It merely says what it is.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.<sup>[3](Relations.Discrete#fn3)</sup>
 
 \begin{code}
 
-module ext-axiom-postulated {𝓤 𝓦 : Universe}{A : 𝓤 ̇} {ea : ext-axiom A 𝓦} where
+module ext-axiom-postulated {A : 𝓤 ̇} {ea : ext-axiom A 𝓦} where
 
 \end{code}
 
-We treat other notions of extensionality in the [Relations.Truncation][] module.
+Other notions of extensionality come up often in the [UALib][]; see, for example, [Overture.extensionality][] or [Relations.Truncation][].
 
 
 
@@ -113,8 +109,9 @@ We treat other notions of extensionality in the [Relations.Truncation][] module.
 Here is a small collection of tools that will come in handy later. The first is an inductive type representing *disjoint union*.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
+infixr 1 _⊎_ _∪_
 
-data _⊎_ {𝓤 𝓦 : Universe}(A : 𝓤 ̇) (B : 𝓦 ̇) : 𝓤 ⊔ 𝓦 ̇ where
+data _⊎_ (A : 𝓤 ̇) (B : 𝓦 ̇) : 𝓤 ⊔ 𝓦 ̇ where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
 
@@ -124,10 +121,9 @@ And this can be used to represent *union*, as follows.
 
 \begin{code}
 
-_∪_ : {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
+_∪_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 
-infixr 1 _⊎_ _∪_
 
 \end{code}
 
@@ -135,10 +131,8 @@ Next we define convenient notation for asserting that the image of a function (t
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇} {B : 𝓦 ̇} where
-
- Im_⊆_ : (A → B) → Pred B 𝓩 → 𝓤 ⊔ 𝓩 ̇
- Im f ⊆ S = ∀ x → f x ∈ S
+Im_⊆_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred B 𝓩 → 𝓤 ⊔ 𝓩 ̇
+Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
 
@@ -149,17 +143,17 @@ The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Re
 
 open import Empty-Type using (𝟘)
 
-∅ : {𝓤 : Universe}{A : 𝓤 ̇} → Pred A 𝓤₀
+∅ : {A : 𝓤 ̇} → Pred A 𝓤₀
 ∅ _ = 𝟘
 
 \end{code}
 
 
-Before closing our little predicates toolbox, let's insert a type that provides a natural way to represent *singletons*.
+Before closing our little predicates toolbox, let's insert a type that provides a natural way to encode *singletons*.
 
 \begin{code}
 
-｛_｝ : {𝓤 : Universe}{A : 𝓤 ̇} → A → Pred A _
+｛_｝ : {A : 𝓤 ̇} → A → Pred A _
 ｛ x ｝ = x ≡_
 
 \end{code}
@@ -176,10 +170,8 @@ A generalization of the notion of binary relation is a *relation from* `A` *to* 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
-
- REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺ ̇
- REL A B 𝓩 = A → B → 𝓩 ̇
+REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺ ̇
+REL A B 𝓩 = A → B → 𝓩 ̇
 
 \end{code}
 
@@ -187,10 +179,8 @@ In the special case, where `𝓦 ≡ 𝓤` and `B ≡ A`, we have
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
-
- Rel : 𝓤 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓩 ⁺ ̇
- Rel A 𝓩 = REL A A 𝓩
+Rel : 𝓤 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓩 ⁺ ̇
+Rel A 𝓩 = REL A A 𝓩
 
 \end{code}
 
