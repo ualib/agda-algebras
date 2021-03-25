@@ -334,17 +334,5 @@ Finally, we represent the product of all members of the class \ab 𝒦 by the fo
 \AgdaFunction{𝔄}\<%
 \end{code}
 \ccpad
-Observe that the application \af 𝔄 (\ab 𝑨 , \ab p) of \af 𝔄 to the pair (\ab 𝑨 , \ab p) (the result of which is simply the algebra \ab{𝑨}) may be viewed as the \defn{projection of the product} \af ⨅~\af 𝔄 onto the ``(\ab 𝑨 , \ab p)-th component'' of the product.
+Observe that the application \af 𝔄 (\ab 𝑨 , \ab p) of \af 𝔄 to the pair (\ab 𝑨 , \ab p) (the result of which is simply the algebra \ab{𝑨}) may be viewed as the \defn{projection} of the product \af ⨅~\af 𝔄 onto the ``(\ab 𝑨 , \ab p)-th component'' of the product.
 
-% If \ab{p} \as : \ab 𝑨 \af ∈ \ab 𝒦 and \ab{h} \as 
-% : \ab X \as → \af ∣ \ab 𝑨 \af ∣, then we can think of the triple (\ab{𝑨} , \ab p , \ab h) \af ∈ \af ℑ \ab 𝒦 as an index over the class, and so we can think of \af 𝔄 (\ab 𝑨 , \ab p , \ab h) (which is simply \ab{𝑨}) as the projection of the product \af ⨅ ( \af 𝔄 \ab 𝒦 ) onto the (\ab 𝑨 , \ab p , \ab h)-th component.
-
-
-
-% Each inhabitant \ab{i} \as : \af ℑ denotes a pair of the form (\ab{𝑨} , \ab p , \ab h), where \ab{𝑨} \as : \af{Algebra} \ab 𝓤 \ab 𝑆, \ab{p}~\as :~\ab 𝑨~\af ∈~\ab 𝒦, and \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣.
-% % Thus, if \ab{p} \as : \ab 𝑨 \af ∈ \ab 𝒦 and \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣, then the triple (\ab{𝑨} , \ab p , \ab h) inhabits the type \af ℑ \ab 𝒦, and w
-% We view such a triple as an \emph{index} identifying a particular member, \ab{𝑨}, of the class \ab 𝒦, along with proof of membership \ab p, and a \defn{context map} \ab h.
-
-% % The second component of this Sigma type is (\ab{𝑨} \af ∈ \ab 𝒦) \af × (\ab X \as → \af ∣ \ab 𝑨 \af ∣). 
-% In previous versions of the \ualib this second component of the Sigma type defining \af ℑ was simply \ab{𝑨} \af ∈ \ab 𝒦, and did not include \ab X \as → \af ∣ \ab 𝑨 \af ∣. However, we realized that adding the latter is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type \ab X \as → \af ∣ \ab 𝑨 \af ∣ may be viewed abstractly as an \emph{ambient context}, or more concretely, as an assignment of \emph{values} in \af ∣ \ab 𝑨 \af ∣ to \emph{variable symbols} in \ab X.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, we do want to lay our hands on whatever context is ultimately assumed.  Including the ``context map'' inside the index type \af ℑ of the product turns out to be a convenient way to achieve this flexibility.
-% Taking the product over the index type \af ℑ requires a function that maps an index \ab{i} \as : \af ℑ to the corresponding algebra.  the function mapping an index to the corresponding algebra is simply the first projection.

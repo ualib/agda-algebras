@@ -94,7 +94,6 @@ theory, but also in the informal presentation.  Informally, a relation is a cong
 \AgdaOperator{\AgdaField{⟨\AgdaUnderscore{}⟩}}\<%
 \end{code}
 
-\subsubsection{Example}\label{cong-example}
 We defined the zero relation \af{𝟎-rel} in the \ualibhtml{Relations.Discrete} module, and we now demonstrate how to build the trivial congruence out of it.  The relation \af{𝟎-rel} is equivalent to the identity relation \ad{≡} and these are obviously both equivalences. In fact, we already proved this of \ad{≡} in the \ualibhtml{Overture.Equality} module, so we simply apply the corresponding proofs.
 \ccpad
 \begin{code}%
@@ -206,7 +205,7 @@ Next we formally record another obvious fact---namely, that \af{𝟎-rel} is com
 \AgdaBound{args}\<%
 \end{code}
 \ccpad
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of \af{⟦𝟎⟧}~\ab 𝑨~\af ╱~\ab θ below.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Δ}\AgdaSpace{}%
@@ -233,6 +232,7 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 \AgdaBound{fe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{𝟎-IsEquivalence}\<%
 \end{code}
+
 
 \subsubsection{Quotient Algebras}\label{quotient-algebras}
 In many areas of abstract mathematics, and especially in universal algebra, the quotient of an algebra \ab 𝑨 with respect to a congruence relation \ab θ of \ab 𝑨 plays a central role. This quotient is typically denoted by \ab 𝑨 \af / \ab θ and Agda allows us to define and express quotients using this standard notation.\footnote{%
@@ -310,20 +310,19 @@ In many areas of abstract mathematics, and especially in universal algebra, the 
 \AgdaOperator{\AgdaFunction{⟧}}%
 \>[50]\AgdaComment{-- the basic operations of the quotient algebra}\<%
 \end{code}
-
-\subsubsection{Examples}\label{cong-examples}
-
-The zero element of a quotient can be expressed as follows.
+\ccpad
+\textbf{Example}.
+If we adopt the notation \af{[𝟎]} \ab 𝑨~\af ╱~\ab θ for the zero (or identity) relation on the quotient algebra \ab 𝑨~\af ╱~\ab θ, then we would define this relation as follows.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaOperator{\AgdaFunction{[𝟎]\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
@@ -341,9 +340,9 @@ The zero element of a quotient can be expressed as follows.
 \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Zero╱}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{[𝟎]}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
@@ -355,48 +354,93 @@ The zero element of a quotient can be expressed as follows.
 \AgdaBound{x₁}\<%
 \end{code}
 \ccpad
-Finally, the following \defn{elimination rule} is sometimes useful.
+We easily obtain from this the zero congruence relation of \ab 𝑨~\af ╱~\ab θ (which we denote by \af{⟦𝟎⟧}~\ab 𝑨~\af ╱~\ab θ using the \af Δ function defined above.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{╱-refl}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaOperator{\AgdaFunction{⟦𝟎⟧\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)\{}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{funext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{))\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
+\AgdaBound{θ}\AgdaSymbol{)}\<%
+\\
+%
+\>[1]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦𝟎⟧}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
+\AgdaBound{θ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{fe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Δ}\AgdaSpace{}%
+\AgdaBound{fe}\<%
+\end{code}
+\ccpad
+
+Finally, the following \defn{elimination rule} is sometimes useful.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{╱-≡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{θ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)\{}\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[10]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{\{}\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{a'}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟩}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{a'}\<%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaBound{v}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{╱-refl}\AgdaSpace{}%
+\>[1]\AgdaFunction{╱-≡}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%

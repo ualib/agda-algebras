@@ -288,30 +288,38 @@ module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations. Initially we called the first function `lift-rel` because it "lifts" a binary relation on `A` to a binary relation on tuples of type `I → A`.  However, we renamed it `eval-rel` to avoid confusion with the universe level `Lift` type that defined in the [Overture.Lifts][] module, or with `free-lift` ([Terms.Basic][]) which "lifts" a map defined on generators to a map on the thing being generated.
+Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations.
+
+First, let us review the informal definition of compatibility. Suppose `A` and `I` are types and let `𝑓 : (I → A) → A` and `R : Rel A 𝓦` be an `I`-ary operation and a binary relation on `A`, respectively. We say `𝑓` and `R` are *compatible* and we write `𝑓 |: R` just in case `∀ u v : I → A`,
+
+&nbsp;&nbsp; `Π i ꞉ I , R (u i) (v i)` &nbsp; `→` &nbsp; `R (f u) (f v)`.<sup>[6](Relations.Discrete#fn6)</sup>
+
+Here is how we implement this in the [UALib][].
 
 \begin{code}
 
 module _ {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{I : 𝓥 ̇} where
 
- eval-rel : Rel A 𝓦 → (I → A) → (I → A) → 𝓥 ⊔ 𝓦 ̇
- eval-rel R u v = ∀ i → R (u i) (v i)
+ eval-rel : Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
+ eval-rel R u v = Π i ꞉ I , R (u i) (v i)
 
- compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-fun f R  = (eval-rel R) =[ f ]⇒ R
+ _|:_ : ((I → A) → A) → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
 
-We used the slick implication notation in the definition of `compatible-fun`, but we could have defined it more explicitly, like so.
+The function `eval-rel` "lifts" a binary relation to the corresponding `I`-ary relation.<sup>[5](Relations.Discrete#fn5)</sup>
+
+In case it helps the reader, we note that instead of using the slick implication notation, we could have defined the `|:` relation more explicitly, like so.
 
 \begin{code}
 
- compatible-fun' : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-fun' f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+ compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}
 
-However, this is a rare case in which the more elegant syntax may result in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
+However, this is a rare case in which the more elegant syntax used to define `|:` sometimes results in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
 
 
 
@@ -323,10 +331,14 @@ However, this is a rare case in which the more elegant syntax may result in simp
 
 <sup>3</sup><span class="footnote" id="fn3">Agda also has a `postulate` mechanism that we could use, but this would require omitting the `--safe` pragma from the `OPTIONS` directive at the start of the module.</span>
 
-<sup>4</sup><span class="footnote" id="fn5">The empty type is defined in the `Empty-Type` module of [Type Topology][] as an inductive type with no constructors: `data 𝟘 {𝓤} : 𝓤 ̇ where -- (empty body)`</span>
+<sup>4</sup><span class="footnote" id="fn4">The empty type is defined in the `Empty-Type` module of [Type Topology][] as an inductive type with no constructors: `data 𝟘 {𝓤} : 𝓤 ̇ where -- (empty body)`</span>
 
+<sup>5</sup><span class="footnote" id="fn5">Initially we called the first function `lift-rel` because it "lifts" a binary relation on `A` to a binary relation on tuples of type `I → A`.  However, we renamed it `eval-rel` to avoid confusion with the universe level `Lift` type defined in the [Overture.Lifts][] module, or with `free-lift` ([Terms.Basic][]) which "lifts" a map defined on generators to a map on the thing being generated.</span>
 
-<p></p>
+<sup>6</sup><span class="footnote" id="fn6"> The symbol `|:` we use to denote the compatibility relation comes from Cliff Bergman's universal algebra textbook [Bergman (2012)][].
+
+<br>
+<br>
 
 [↑ Relations](Relations.html)
 <span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>

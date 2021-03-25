@@ -58,15 +58,15 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → compatible-fun (𝑓 ̂ 𝑨) 𝟎
-𝟎-compatible-op fe {𝑨} 𝑓 ptws0  = ap (𝑓 ̂ 𝑨) (fe (λ x → ptws0 x))
+𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
+𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = ap (𝑓 ̂ 𝑨) (fe ptws0)
 
 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
 𝟎-compatible fe {𝑨} = λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
 
 \end{code}
 
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟦𝟎⟧ 𝑨 ╱ θ` below.)
 
 \begin{code}
 
@@ -74,8 +74,6 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 Δ fe = mkcon 𝟎 (𝟎-compatible fe) 𝟎-IsEquivalence
 
 \end{code}
-
-
 
 
 #### <a id="quotient-algebras">Quotient algebras</a>
@@ -93,26 +91,34 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-#### <a id="examples">Examples</a>
-The zero element of a quotient can be expressed as follows.
+**Example**. If we adopt the notation `[𝟎] 𝑨 ╱ θ` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
 
 \begin{code}
 
 
- Zero╱ : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
-
- Zero╱ θ = λ x x₁ → x ≡ x₁
+ [𝟎]_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
+ [𝟎] 𝑨 ╱ θ = λ x x₁ → x ≡ x₁
 
 \end{code}
+
+We easily obtain from this the zero congruence relation of `𝑨 ╱ θ` (which we denote by `⟦𝟎⟧ 𝑨 ╱ θ`) using the `Δ` function defined above.
+
+\begin{code}
+
+ ⟦𝟎⟧_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ (𝓦 ⁺))} → Congruence (𝑨 ╱ θ)
+ (⟦𝟎⟧ 𝑨 ╱ θ) {fe} = Δ fe
+
+\end{code}
+
 
 Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
- ╱-refl : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨){a a' : ∣ 𝑨 ∣}
-  →       ⟦ a ⟧{⟨ θ ⟩} ≡ ⟦ a' ⟧ → ⟨ θ ⟩ a a'
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- ╱-refl θ refl = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-≡ : (θ : Congruence{𝓤}{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟦ u ⟧{⟨ θ ⟩} ≡ ⟦ v ⟧ → ⟨ θ ⟩ u v
+ ╱-≡ θ refl = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}
 

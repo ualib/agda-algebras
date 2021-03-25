@@ -272,7 +272,7 @@ module _ {𝓤 𝓦 : Universe} where
  ker-in-con : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
   →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
 
- ker-in-con 𝑨 θ x y hyp = ╱-refl θ hyp
+ ker-in-con 𝑨 θ x y hyp = ╱-≡ θ hyp
 
 \end{code}
 

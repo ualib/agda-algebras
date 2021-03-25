@@ -165,7 +165,7 @@ module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
 \end{code}
 
-To conclude this module, we prove that every term is compatible with every congruence relation. That is, if `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`.
+To conclude this module, we prove that every term is compatible with every congruence relation. That is, if `t : Term X` and `θ : Con 𝑨`, then `a θ b → t(a) θ t(b)`. (Recall, the compatibility relation `|:` was defined in [Relations.Discrete][].)
 
 \begin{code}
 
@@ -173,27 +173,28 @@ open Congruence
 
 module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 
+ _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+        -----------------------------------------
+  →     (t ̇ 𝑨) |: ∣ θ ∣
+
+ ((ℊ x) ∣: θ) p = p x
+
+ ((node 𝑓 𝑡) ∣: θ) p = snd ∥ θ ∥ 𝑓 λ x → ((𝑡 x) ∣: θ) p
+
+
+\end{code}
+
+For the sake of comparison, here is the analogous theorem using `compatible-fun`.
+
+\begin{code}
+
  compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
                    -----------------------------------------
   →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
- compatible-term (ℊ x) θ p = p x
+ compatible-term (ℊ x) θ p = λ y z → z x
 
- compatible-term (node 𝑓 𝑡) θ p = snd ∥ θ ∥ 𝑓 λ x → (compatible-term (𝑡 x) θ) p
-
-\end{code}
-
-For the sake of comparison, here is the analogous theorem using `compatible-fun'`.
-
-\begin{code}
-
- compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
-                    -----------------------------------------
-  →                 compatible-fun' (t ̇ 𝑨) ∣ θ ∣
-
- compatible-term' (ℊ x) θ p = λ y z → z x
-
- compatible-term' (node 𝑓 𝑡) θ 𝑎 𝑎' p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' (𝑡 x) θ) 𝑎 𝑎') p
+ compatible-term (node 𝑓 𝑡) θ u v p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term (𝑡 x) θ) u v) p
 
 
 \end{code}

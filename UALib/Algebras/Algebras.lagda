@@ -151,16 +151,16 @@ What makes the types just defined useful for resolving type level errors is the 
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Recall, informally this means for every operation symbol `𝑓 : ∣ 𝑆 ∣` and all pairs `𝑎 𝑎' : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of tuples from the domain of 𝑨, the following implication holds:
+If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Recall (from [Relations.Discrete][]) that informally this means for every operation symbol `𝑓 : ∣ 𝑆 ∣` and all pairs `u v : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of tuples from the domain of 𝑨, the following implication holds:
 
-if `R (𝑎 i) (𝑎' i)` for all `i`, then  `R ((𝑓 ̂ 𝑨) 𝑎) ((𝑓 ̂ 𝑨) 𝑎')`.
+&nbsp;&nbsp; `Π i ꞉ I , R (u i) (u i)` &nbsp;&nbsp;  `→`  &nbsp;&nbsp; `R ((𝑓 ̂ 𝑨) 𝑎) ((𝑓 ̂ 𝑨) 𝑎')`.
 
-The formal definition representing this notion of compatibility is easy to write down since we already have a type that does all the work.
+In other terms, `∀ 𝑓 → (𝑓 ̂ 𝑨) |: R`. The formal definition of this notion of compatibility is immediate since all the work is done by the relation `|:` (which we already defined in [Relations.Discrete][]).
 
 \begin{code}
 
  compatible : (𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible  𝑨 R = ∀ 𝑓 → compatible-fun (𝑓 ̂ 𝑨) R
+ compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
 \end{code}
 
@@ -215,6 +215,8 @@ With `cont-compatible-op` in hand, it is a trivial matter to define a type that 
 
 <sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
+<br>
+<br>
 
 [← Algebras.Signatures](Algebras.Signatures.html)
 <span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>

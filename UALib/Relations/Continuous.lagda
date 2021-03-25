@@ -22,7 +22,7 @@ open import Relations.Discrete public
 #### <a id="motivation">Motivation</a>
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → 𝓦 ̇` (for some universe 𝓦).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : 𝓥 ̇`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → 𝓦 ̇`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
-Below we will define `ContRel` to be the type `(I → A) → 𝓦 ̇` and we will call `ContRel` the type of *continuous relations*.  This generalizes the discrete relations we defined in [Relations.Discrete] (unary, binary, ternary, etc.) since continuous relations can be of arbitrary arity.  They are not completely general, however, since they are defined over a single type---said another way, they are *single-sorted* relations---but we will remove this limitation as well when we define the type of *dependent continuous relations* at the end of this module.
+Below we will define `ContRel` to be the type `(I → A) → 𝓦 ̇` and we will call `ContRel` the type of *continuous relations*.  This generalizes the discrete relations we defined in [Relations.Discrete] (unary, binary, etc.) since continuous relations can be of arbitrary arity.  They are not completely general, however, since they are defined over a single type. Said another way, they are *single-sorted* relations. We will remove this limitation when we define the type of *dependent continuous relations* at the end of this module.
 
 Just as `Rel A 𝓦` was the single-sorted special case of the multisorted `REL A B 𝓦` type, so too will `ContRel I A 𝓦` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
 
@@ -44,9 +44,9 @@ ContRel I A 𝓦 = (I → A) → 𝓦 ̇
 \end{code}
 
 
-#### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a>
+<!-- #### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a> -->
 
-We now define types that are useful for asserting and proving facts about *compatibility* of functions with continuous relations.  The first is an *evaluation* function which  an `I`-ary relation to an `I → J`-ary relation. The lifted relation will tuples of members of the original relation.
+Next we present types that are useful for asserting and proving facts about *compatibility* of functions with continuous relations.  The first is an *evaluation* function which "lifts" an `I`-ary relation to an `I → J`-ary relation. The lifted relation will relate a collection of `I` `J`-tuples when their "`I`-slices" (or "rows") belong to the original relation.
 
 \begin{code}
 
@@ -58,15 +58,17 @@ module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
  cont-compatible-fun : ((J → A) → A) → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  cont-compatible-fun 𝑓 R  = Π 𝒂 ꞉ (I → J → A) , (eval-cont-rel R 𝒂 → R λ i → (𝑓 (𝒂 i)))
 
+\end{code}
+
+<!-- 
+
  -- eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
  -- eval-cont-rel R 𝕒 = ∀ (j : J) → R λ i → (𝕒 i) j
 
  -- cont-compatible-fun : (I → (J → A) → A) → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  -- cont-compatible-fun 𝕗 R  = ∀ 𝕒 → (eval-cont-rel R) 𝕒 → R λ i → (𝕗 i) (𝕒 i)
 
-\end{code}
-
-<!-- In the definition of `cont-compatible-fun`, we let Agda infer the type of `𝒂`, which is `I → (J → A)`. -->
+In the definition of `cont-compatible-fun`, we let Agda infer the type of `𝒂`, which is `I → (J → A)`. -->
 
 If the syntax of the last two definitions makes you feel a bit nauseated, we recommend focusing on the semantics. In fact, we should probably pause here to discuss these semantics, lest the even more complicated definitions below induce the typical consequence of nausea.
 
