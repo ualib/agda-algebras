@@ -3,16 +3,22 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-This module defines (or imports) the most basic and important types of \defn{Martin-Löf dependent type theory} (MLTT).  Although this is standard, we take this opportunity to highlight aspects of the \ualib syntax that may differ from that of ``standard Agda.''
-% Although we don't discuss all of the types on which the library depends here, Appendix Section~\ref{sec:imports-from-type} provides a comprehensive list of the components from \MartinEscardo's \typetopology library~\cite{MHE} that are imported at one place or another in the \ualib.
+Here we define or import the basic types of \defn{Martin-Löf type theory} (\mltt).  Although this is standard stuff, we take this opportunity to highlight aspects of the \ualib syntax that may differ from that of ``standard Agda.''
 
 \subsubsection{Logical foundations}\label{sec:logical-foundations}
-% Mainly for the benefit of readers who are not yet proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib, including the most important basic types and features that are used throughout the library. 
-The \ualib is based on a minimal version of \mltt that is the same or very close to the type theory on which \MartinEscardo's \TypeTopology Agda library is based.
-% This is also the type theory that \escardo taught us in the short course \ufcourse at the Midlands Graduate School in the Foundations of Computing Science at University of Birmingham in 2019.}
-We won't go into great detail here because there are already other very nice resources available, such as the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by \escardo just mentioned, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, as well as the HoTT Book~\cite{HoTT}.
+% Mainly for the benefit of readers who are not yet proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib. 
+The \agdaualib is based on a type theory that is the same or very close to the one on which on which Martín Escardó's \typetopology Agda library is based. We don't discuss \mltt in great detail here because there are already nice and freely available resources covering the theory. (See, for example, the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by Escard\'o~\cite{MHE}, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, or the HoTT Book~\cite{HoTT}.)
 
-We begin by noting that only a very small collection of objects is assumed at the jumping-off point for MLTT. We have the \defn{primitive types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), the \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type), and an infinite collection of \defn{type universes} (types of types) and universe variables to denote them.  Like Escard\'o's, our universe variables are typically upper-case caligraphic letters from the latter half of the English alphabet (e.g., \ab 𝓤, \ab 𝓥, \ab 𝓦, etc.).
+The objects and assumptions that form the foundation of \mltt are few.  There are the \defn{primitive types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), the \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type). Each of these type formers is defined by a \defn{type forming rule} which specifies how that type is constructed. Lastly, we have an infinite collection of \defn{type universes} (types of types) and \defn{universe variables} to denote them. Following Escardó, we denote universes in the \ualib by upper-case calligraphic letters from the second half of the English alphabet; to be precise, these are \ab 𝓞, \ab 𝓠, \ab 𝓡, …, \ab 𝓧, \ab 𝓨, \ab 𝓩.\footnote{We avoid using \ab 𝓟 as a universe variable because in the \typetopology library \ab 𝓟 denotes a powerset type.}
+
+That's all. There are no further axioms or logical deduction (proof derivation) rules needed for the foundation of \mltt that we take as the starting point of the \agdaualib. The logical semantics come from the \href{https://ncatlab.org/nlab/show/propositions+as+types}{propositions-as-types correspondence}~\cite{nlab:propositions_as_types}: propositions and predicates are represented by types and the inhabitants of these types are the proofs of the propositions and predicates. As such, proofs are constructed using the type forming rules. In other words, the type forming rules \emph{are} the proof derivation rules.
+
+To this foundation, we add certain \textit{extensionality principles} when and were we need them.  These will be developed as we progress.  However, classical axioms such as the \href{https://ncatlab.org/nlab/show/axiom+of+choice}{\textit{Axiom of Choice}} or the \href{https://ncatlab.org/nlab/show/excluded+middle}{\textit{Law of the Excluded Middle}} are not needed and are not assumed anywhere in the library.  In that sense, all theorems and proofs in the \ualib are \href{https://ncatlab.org/nlab/show/constructive+mathematics}{\textit{constructive}} (as defined, e.g., in~\cite{nlab:constructive_mathematics}).
+
+A few specific instances (e.g., the proof of the Noether isomorphism theorems and Birkhoff's HSP theorem) require certain \textit{truncation} assumptions. In such cases, the theory is not \href{https://ncatlab.org/nlab/show/predicative+mathematics}{\textit{predicative}} (as defined, e.g., in~\cite{nlab:predicative_mathematics}). These instances are always clearly identified.
+
+
+
 
 \paragraph*{Specifying logical foundations in Agda}
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
@@ -31,7 +37,7 @@ These options control certain foundational assumptions that Agda makes when type
 \begin{itemize}
 \item \AgdaPragma{--without-K} disables \axiomk; see~\cite{agdaref-axiomk};
 \item \AgdaPragma{--exact-split} makes Agda accept only definitions that are \emph{judgmental} equalities; see~\cite{agdatools-patternmatching};
-\item \AgdaPragma{--safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
+\item \AgdaPragma{--safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
 \end{itemize}
 %% \end{enumerate}
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
@@ -84,23 +90,20 @@ The first of these is the \am{Universes} module which we import as follows.
 \end{code}
 \ccpad
 Since we use the \ak{public} directive, the \am{Universes} module will be available to all modules that import
-the present module (\ualibhtml{Overture.Preliminaries}).
+the present module (\ualibhtml{Overture.Preliminaries}). This module declares symbols used to denote universes. As mentioned, we adopt Escardó's convention of denoting universes by capital calligraphic letters, and most of the ones we use are already declared in \am{Universes}; those that are not are declared as follows.
+\ccpad
+\begin{code}%
+\>[0]\AgdaKeyword{variable}\AgdaSpace{}%
+\AgdaGeneralizable{𝓞}\AgdaSpace{}%
+\AgdaGeneralizable{𝓧}\AgdaSpace{}%
+\AgdaGeneralizable{𝓨}\AgdaSpace{}%
+\AgdaGeneralizable{𝓩}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\<%
+\end{code}
+\scpad
 
-The \am{Universes} module includes a number of symbols used to denote universes in Agda. In particular, following Escardó, we denote universes by capital script letters from he second half of the English alphabet, e.g., \ab 𝓝, \ab 𝓞, …, \ab 𝓧`, \ab 𝓨`, \ab𝓩`.% \\ab 𝓤, \ab 𝓥, \ab 𝓦, \ab 𝓧, \ab 𝓨, \ab 𝓩, etc. To this list we add one more, as follows: \AgdaKeyword{variable}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}.
-% In the \ualib, the symbol \AgdaGeneralizable{𝓞} is special; it is reserved for denoting the universe level of operation symbol types defined later (in the \ualibhtml{Algebras.Signatures} module).
-% \ccpad
-% \begin{code}%
-% \>[0]\AgdaKeyword{variable}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\<%
-% \end{code}
-% \ccpad
-
-The \am{Universes} module also provides elegant notation for the few primitive operations on universes that Agda supports. Specifically, the \af ̇ operator maps a universe level \ab 𝓤 to the type \ad{Set}~\ab 𝓤, and the latter has type \apt{Set}~(\apr{lsuc}~\ab 𝓤). The Agda level \apr{lzero} is renamed \apr{𝓤₀}, so \apr{𝓤₀}\af ̇ is an alias for \apr{Set}~\apr{lzero}. Thus, \ab 𝓤\af ̇ is simply an alias for \apr{Set}~\ab 𝓤, and we have \apr{Set}~\ab 𝓤~\as :~\apr{Set}~(\apr{lsuc}~\ab 𝓤). Finally, \apr{Set}~(\apr{lsuc}~\apr{lzero}) is equivalent to \apr{Set}~\apr{𝓤₀}\af ⁺, which we (and Escardó) denote by \apr{𝓤₀}\af ⁺\af ̇.
+The \am{Universes} module also provides alternative syntax for the primitive operations on universes that Agda supports. Specifically, the \af ̇ operator maps a universe level \ab 𝓤 to the type \ad{Set}~\ab 𝓤, and the latter has type \apt{Set}~(\apr{lsuc}~\ab 𝓤). The Agda level \apr{lzero} is renamed \apr{𝓤₀}, so \apr{𝓤₀}\af ̇ is an alias for \apr{Set}~\apr{lzero}. Thus, \ab 𝓤\af ̇ is simply an alias for \apr{Set}~\ab 𝓤, and we have \apr{Set}~\ab 𝓤~\as :~\apr{Set}~(\apr{lsuc}~\ab 𝓤). Finally, \apr{Set}~(\apr{lsuc}~\apr{lzero}) is equivalent to \apr{Set}~\apr{𝓤₀}\af ⁺, which we (and Escardó) denote by \apr{𝓤₀}\af ⁺\af ̇.
 
 % The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.
 

@@ -27,12 +27,12 @@ A *congruence relation* of an algebra `𝑨` is defined to be an equivalence rel
 Con : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → ov 𝓤 ̇
 Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
-record Congruence {𝓤 𝓦 : Universe} (𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
+record Congruence {𝓦 𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
  constructor mkcon
  field
   ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓦
-  Compatible : compatible 𝑨 ⟨_⟩
   IsEquiv : IsEquivalence ⟨_⟩
+  Compatible : compatible 𝑨 ⟨_⟩
 
 open Congruence
 
@@ -66,12 +66,12 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \end{code}
 
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟦𝟎⟧ 𝑨 ╱ θ` below.)
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟦𝟎⟧[ 𝑨 ╱ θ ]` below.)
 
 \begin{code}
 
 Δ : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
-Δ fe = mkcon 𝟎 (𝟎-compatible fe) 𝟎-IsEquivalence
+Δ fe = mkcon 𝟎 𝟎-IsEquivalence (𝟎-compatible fe)
 
 \end{code}
 
@@ -81,23 +81,21 @@ In many areas of abstract mathematics (including universal algebra) the quotient
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+_╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓤}{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
 
- 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
-
-         λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
+        λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
 
 \end{code}
 
-**Example**. If we adopt the notation `[𝟎] 𝑨 ╱ θ` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
+**Example**. If we adopt the notation `𝟎[ 𝑨 ╱ θ ]` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
 
 \begin{code}
 
 
- [𝟎]_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
- [𝟎] 𝑨 ╱ θ = λ x x₁ → x ≡ x₁
+𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
+𝟎[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
 \end{code}
 
@@ -105,8 +103,8 @@ We easily obtain from this the zero congruence relation of `𝑨 ╱ θ` (which 
 
 \begin{code}
 
- ⟦𝟎⟧_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ (𝓦 ⁺))} → Congruence (𝑨 ╱ θ)
- (⟦𝟎⟧ 𝑨 ╱ θ) {fe} = Δ fe
+⟦𝟎⟧_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
+(⟦𝟎⟧ 𝑨 ╱ θ) {fe} = Δ fe
 
 \end{code}
 
@@ -115,9 +113,9 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+module _ {𝑨 : Algebra 𝓤 𝑆} where
 
- ╱-≡ : (θ : Congruence{𝓤}{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟦ u ⟧{⟨ θ ⟩} ≡ ⟦ v ⟧ → ⟨ θ ⟩ u v
+ ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟦ u ⟧{⟨ θ ⟩} ≡ ⟦ v ⟧ → ⟨ θ ⟩ u v
  ╱-≡ θ refl = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}

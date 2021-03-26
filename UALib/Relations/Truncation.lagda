@@ -188,29 +188,18 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟦⟧ : (∀ C → is-subsingleton (𝒞{R = ∣ 𝑹 ∣} C))
-  →              {C D : Pred A 𝓦}{c : 𝒞 C}{d : 𝒞 D}
+ to-subtype-⟦⟧ : (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
+  →              {C D : Pred A 𝓦}{c : 𝒞 ∣ 𝑹 ∣ C}{d : 𝒞 ∣ 𝑹 ∣ D}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟦⟧ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport 𝒞 CD c) d)
+ to-subtype-⟦⟧ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 ∣ 𝑹 ∣)  CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 C))
+ class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
   →                      IsEquivalence ∣ 𝑹 ∣ → {u v : A}
   →                      ∣ 𝑹 ∣ u v  →  ⟦ u ⟧ ≡ ⟦ v ⟧
 
  class-extensionality' pe ssA Reqv Ruv = to-subtype-⟦⟧ ssA (class-extensionality pe Reqv Ruv)
-
-\end{code}
-
-We could equally well have presented the last theorem so that the consequent is a Pi type, as follows.
-
-\begin{code}
-
- class-extensionality'' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 C)) → IsEquivalence ∣ 𝑹 ∣
-  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
-
- class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
 
 \end{code}
 
@@ -226,17 +215,14 @@ Recall, we defined a type called `ContRel` in the [Relations.Continuous][] modul
 
 \begin{code}
 
-module continuous-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
-
- uv : Universe → Universe
- uv 𝓦 = 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺
+module continuous-propositions {I : 𝓥 ̇} where
 
  open import Relations.Continuous using (ContRel; DepRel)
 
- ContProp : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
+ ContProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
- cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → uv 𝓦 ̇
+ cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
@@ -256,10 +242,10 @@ While we're at it, we might as well achieve full generality and define truncated
 
 \begin{code}
 
- DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → uv 𝓦 ̇
+ DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
 
- dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → uv 𝓦 ̇
+ dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
@@ -301,3 +287,17 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 
 {% include UALib.Links.md %}
+
+
+<!-- UNUSED
+
+Equivalently, using Pi types, as follows.
+
+
+ class-extensionality'' : prop-ext 𝓤 𝓦
+  →                       (Π C ꞉ _ , is-subsingleton (𝒞 ∣ 𝑹 ∣ C)) → IsEquivalence ∣ 𝑹 ∣
+  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
+
+ class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
+
+-->

@@ -41,7 +41,7 @@ module _ {𝓤 𝓦 : Universe}
          -- truncation assumptions --
             (Bset : is-set ∣ 𝑩 ∣)
             (ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
-            (ssA : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
+            (ssA : ∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
 
  where
 

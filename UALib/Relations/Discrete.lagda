@@ -192,7 +192,7 @@ The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
 
  ker : (A → B) → Rel A 𝓦
  ker g x y = g x ≡ g y
@@ -213,7 +213,7 @@ Similarly, the *identity relation* (which is equivalent to the kernel of an inje
 
 \begin{code}
 
-module _ {𝓤 : Universe}{A : 𝓤 ̇ } where
+module _ {A : 𝓤 ̇ } where
 
  𝟎 : Rel A 𝓤
  𝟎 x y = x ≡ y
@@ -247,18 +247,13 @@ We define the following types representing *implication* for binary relations. (
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓩 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇}{C : 𝓩 ̇} where
+_on_ : {A : 𝓤 ̇}{B : 𝓦 ̇}{C : 𝓩 ̇} → (B → B → C) → (A → B) → (A → A → C)
+R on g = λ x y → R (g x) (g y)
 
- _on_ : (B → B → C) → (A → B) → (A → A → C)
- R on g = λ x y → R (g x) (g y)
+_⇒_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → REL A B 𝓧 → REL A B 𝓨 → 𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨 ̇
+P ⇒ Q = ∀ {i j} → P i j → Q i j
 
-
-module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
-
- _⇒_ : REL A B 𝓧 → REL A B 𝓨 → 𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨 ̇
- P ⇒ Q = ∀ {i j} → P i j → Q i j
-
- infixr 4 _⇒_
+infixr 4 _⇒_
 
 \end{code}
 
@@ -266,12 +261,10 @@ The `_on_` and `_⇒_` types combine to give a nice, general implication operati
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓧 𝓨 : Universe}{A : 𝓤 ̇ } {B : 𝓦 ̇ } where
+_=[_]⇒_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → Rel A 𝓧 → (A → B) → Rel B 𝓨 → 𝓤 ⊔ 𝓧 ⊔ 𝓨 ̇
+P =[ g ]⇒ Q = P ⇒ (Q on g)
 
- _=[_]⇒_ : Rel A 𝓧 → (A → B) → Rel B 𝓨 → 𝓤 ⊔ 𝓧 ⊔ 𝓨 ̇
- P =[ g ]⇒ Q = P ⇒ (Q on g)
-
- infixr 4 _=[_]⇒_
+infixr 4 _=[_]⇒_
 
 \end{code}
 
@@ -288,13 +281,11 @@ Here is how we implement this in the [UALib][].
 
 \begin{code}
 
-module _ {𝓤 𝓥 𝓦 : Universe}{A : 𝓤 ̇}{I : 𝓥 ̇} where
+eval-rel : {A : 𝓤 ̇}{I : 𝓥 ̇} → Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
+eval-rel R u v = Π i ꞉ _ , R (u i) (v i)
 
- eval-rel : Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
- eval-rel R u v = Π i ꞉ I , R (u i) (v i)
-
- _|:_ : ((I → A) → A) → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- f |: R  = (eval-rel R) =[ f ]⇒ R
+_|:_ : {A : 𝓤 ̇}{I : 𝓥 ̇} → ((I → A) → A) → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
 
@@ -304,8 +295,8 @@ In case it helps the reader, we note that instead of using the slick implication
 
 \begin{code}
 
- compatible-fun : (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+compatible-fun : {A : 𝓤 ̇}{I : 𝓥 ̇} → (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}
 

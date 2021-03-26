@@ -200,7 +200,7 @@ It is convenient to define a function that takes a homomorphism and constructs a
 \begin{code}
 
  kercon : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
- kercon 𝑩 h = mkcon (ker ∣ h ∣)(homker-compatible 𝑩 h)(homker-equivalence 𝑩 h)
+ kercon 𝑩 h = mkcon (ker ∣ h ∣)(homker-equivalence 𝑩 h)(homker-compatible 𝑩 h)
 
 \end{code}
 
@@ -230,7 +230,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical proje
 
 \begin{code}
 
- πepi : {𝑨 : Algebra 𝓤 𝑆} (θ : Congruence{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi : {𝑨 : Algebra 𝓤 𝑆} (θ : Congruence{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
@@ -248,7 +248,7 @@ To obtain the homomorphism part (or "hom reduct") of the canonical epimorphism, 
 
 \begin{code}
 
- πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
  πhom {𝑨} θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
@@ -269,7 +269,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 module _ {𝓤 𝓦 : Universe} where
 
- ker-in-con : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓤}{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
+ ker-in-con : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
   →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
 
  ker-in-con 𝑨 θ x y hyp = ╱-≡ θ hyp

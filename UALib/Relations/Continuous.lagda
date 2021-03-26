@@ -98,21 +98,21 @@ We call `DepRel` the type of *dependent relations*.
 
 #### <a id="compatibility-with-dependent-relations">Compatibility with dependent relations</a>
 
-Above we made peace with lifts of continuous relations and what it means for such relations to be compatible with functions, we conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
+Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
 
 \begin{code}
 
 module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 
- lift-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → J → 𝒜 i) → 𝓥 ⊔ 𝓦 ̇
- lift-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
+ eval-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → J → 𝒜 i) → 𝓥 ⊔ 𝓦 ̇
+ eval-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
 
  dep-compatible-fun : (∀ i → (J → 𝒜 i) → 𝒜 i) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- dep-compatible-fun 𝕗 R  = ∀ 𝕒 → (lift-dep-rel R) 𝕒 → R λ i → (𝕗 i)(𝕒 i)
+ dep-compatible-fun 𝑓 R  = ∀ 𝒂 → (eval-dep-rel R) 𝒂 → R λ i → (𝑓 i)(𝒂 i)
 
 \end{code}
 
-(In the definition of `dep-compatible-fun`, we let Agda infer the type `(i : I) → J → 𝒜 i` of `𝕒`.)
+In the definition of `dep-compatible-fun`, we let Agda infer the type `(i : I) → J → 𝒜 i` of `𝒂`.
 
 
 --------------------------------------
@@ -121,8 +121,8 @@ module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 
 <sup>[1]</sup><span class="footnote" id="fn1"> Because the collection represented by the indexing type `I` might not even be enumerable, technically speaking, instead of `A i` to `A j` to `A k` to ..., we should have written something like `TO (i : I) , A i`.</span>
 
-
-<p></p>
+<br>
+<br>
 
 [← Relations.Discrete](Relations.Discrete.html)
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>

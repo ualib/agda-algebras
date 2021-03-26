@@ -239,16 +239,6 @@ In many areas of abstract mathematics, and especially in universal algebra, the 
 \textbf{Unicode Hints}. Produce the ╱ symbol in \agdamode by typing \texttt{\textbackslash{}-\/-\/-} and then \texttt{C-f} a number of times.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -354,13 +344,13 @@ If we adopt the notation \af{[𝟎]} \ab 𝑨~\af ╱~\ab θ for the zero (or id
 \AgdaBound{x₁}\<%
 \end{code}
 \ccpad
-We easily obtain from this the zero congruence relation of \ab 𝑨~\af ╱~\ab θ (which we denote by \af{⟦𝟎⟧}~\ab 𝑨~\af ╱~\ab θ using the \af Δ function defined above.
+We obtain from this the zero congruence relation of \ab 𝑨~\af ╱~\ab θ, which we denote by \af{⟦𝟎⟧}~\ab 𝑨~\af ╱~\ab θ, by applying the \af Δ function defined above.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{⟦𝟎⟧\AgdaUnderscore{}╱\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[111I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -374,9 +364,12 @@ We easily obtain from this the zero congruence relation of \ab 𝑨~\af ╱~\ab 
 \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{))\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{))\}}%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaSymbol{→}%
+\AgdaTab{111}%
+\>[12]\AgdaRecord{Congruence}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{╱}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSymbol{)}\<%
@@ -392,16 +385,12 @@ We easily obtain from this the zero congruence relation of \ab 𝑨~\af ╱~\ab 
 \AgdaBound{fe}\<%
 \end{code}
 \ccpad
-
 Finally, the following \defn{elimination rule} is sometimes useful.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%

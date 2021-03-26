@@ -120,7 +120,7 @@ We have collected all the pieces necessary to express the collection of identiti
 \begin{code}
 
  ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Congruence (𝑻 X)
- ψCon 𝒦 = mkcon (ψRel 𝒦) (ψcompatible 𝒦) ψIsEquivalence
+ ψCon 𝒦 = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦)
 
 \end{code}
 
@@ -381,7 +381,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
   →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-  →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
+  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon ℭ homℭ ⟩ C))
                       -----------------------------------------------------------
   →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
 
@@ -396,7 +396,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
           -- truncation assumptions:
           (Cset : is-set ∣ ℭ ∣)
           (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-          (ssC : ∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon ℭ homℭ ⟩} C))
+          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon ℭ homℭ ⟩ C))
 
   where
 

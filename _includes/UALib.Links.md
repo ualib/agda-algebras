@@ -38,6 +38,7 @@
 [emacs]: https://www.gnu.org/software/emacs/
 [Equality Section]: https://leanprover.github.io/logic_and_proof/first_order_logic.html?highlight=equality#equality
 [Escardó]: https://www.cs.bham.ac.uk/~mhe
+[Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 
 [Formalization of Universal Algebra in Agda]: http://www.sciencedirect.com/science/article/pii/S1571066118300768
 [function extensionality]: https://ncatlab.org/nlab/show/function+extensionality
@@ -78,7 +79,6 @@
 [Martin Escardo]: https://www.cs.bham.ac.uk/~mhe
 [Martín Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Martín Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
-[Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Martin Escardo's installation hints]: https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md
 [Martín Hötzel Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Martin Hötzel Escardo]: https://www.cs.bham.ac.uk/~mhe
@@ -96,6 +96,9 @@
 [More on Implicit Arguments]: https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html?highlight=implicit#more-on-implicit-arguments
 
 [NuPRL]: http://www.nuprl.org/
+[ncatlab]: https://ncatlab.org
+[ncatlab.org]: https://ncatlab.org
+[nlab]: https://ncatlab.org
 
 [OPLSS 2018]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 

@@ -51,17 +51,16 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 open Congruence
 
-FirstHomCorollary : {𝓤 𝓦 : Universe}
-                    -- extensionality assumptions --
- →                     dfunext 𝓥 𝓦 → prop-ext 𝓤 𝓦
+FirstHomCorollary : -- extensionality assumptions --
+                    dfunext 𝓥 𝓦 → prop-ext 𝓤 𝓦
 
  →                  (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
 
                     -- truncation assumptions --
- →                     is-set ∣ 𝑩 ∣
- →                     (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
- →                     (∀ C → is-subsingleton (𝒞{A = ∣ 𝑨 ∣}{⟨ kercon 𝑩 h ⟩} C))
-                    -------------------------------------------------------------
+ →                  is-set ∣ 𝑩 ∣
+ →                  (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
+ →                  (∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
+                    ----------------------------------------------------
  →                  (𝑨 [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
 FirstHomCorollary fe pe 𝑨 𝑩 h Bset ssR ssA = ϕhom , ϕemb
@@ -83,17 +82,16 @@ One special case to which we will apply this is where the algebra `𝑨` is the 
 
 \begin{code}
 
-free-quot-subalg : {𝓤 𝓧 : Universe}
-                   --extensionality assumptions --
- →                   dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
+free-quot-subalg : --extensionality assumptions --
+                   dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
 
  →                 (X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
 
                    --truncation assumptions --
- →                   is-set ∣ 𝑩 ∣
- →                   (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
- →                   (∀ C → is-subsingleton (𝒞{A = ∣ 𝑻 X ∣}{⟨ kercon 𝑩 h ⟩} C))
-                   ---------------------------------------------------------------
+ →                 is-set ∣ 𝑩 ∣
+ →                 (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
+ →                 (∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
+                   -----------------------------------------------
  →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
 
 free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 𝑩 h Bset ssR ssB
@@ -147,24 +145,20 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 
 \begin{code}
 
-≤-reflexive : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
 ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , id-is-hom) , id-is-embedding
 
-≤-refl : {𝓤 : Universe}{𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
-≤-refl {𝓤}{𝑨} = ≤-reflexive 𝑨
+≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
 
 
-module _ {𝓩 𝓨 𝓧 : Universe} where
+≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
 
- ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
-
- ≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
-  →        𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-
- ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
+≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
 \end{code}
 
@@ -172,13 +166,11 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
-module _ {𝓩 𝓨 𝓧 : Universe} where
+≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+ →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
-  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-
- ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
-  where
+≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
+ where
   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
   f = fst ∣ CB ∣
   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
@@ -191,21 +183,19 @@ module _ {𝓩 𝓨 𝓧 : Universe} where
   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
 
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
- ≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
- ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
+≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
 
 
- ≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
 
- ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
 
 
-≤-mono : {𝓦 𝓤 𝓩 : Universe}(𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
@@ -218,19 +208,17 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
 
  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
-module _ {𝓧 𝓨 𝓩 : Universe} where
+Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Universe} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
+Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
- Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
- Lift-≤ 𝑨 {𝑩} B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
-
- ≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
- ≤-Lift 𝑨 {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
+≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Universe}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
+≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
 
 
 module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
@@ -243,7 +231,7 @@ module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
    lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
    B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
-   B≤lB = ≤-Lift 𝑩 {𝑩} ≤-refl
+   B≤lB = ≤-Lift 𝑩 ≤-refl
 
 \end{code}
 
