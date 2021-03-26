@@ -133,7 +133,7 @@ prop-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ 
 
 \end{code}
 
-Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `prop-ext 𝓤 𝓦` holds, then we have `∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → P ≡ Q`.
+Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `prop-ext 𝓤 𝓦` holds, then we have `∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → P ≐ Q → P ≡ Q`.
 
 \begin{code}
 
