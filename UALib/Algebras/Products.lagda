@@ -28,7 +28,7 @@ open import Algebras.Algebras hiding (𝓞; 𝓥) public
 
 We must import the `Signature` type from the [Algebras.Signatures][] module first, before the `module` line, so that we may use it to declare the signature `𝑆` as a parameter of the [Algebras.Products][] module.
 
-In the [UALib][] a \defn{product of} \ab 𝑆-\defn{algebras} is represented by the following type.
+In the [UALib][] a *product of* 𝑆-*algebras* is represented by the following type.
 
 \begin{code}
 
@@ -73,7 +73,7 @@ ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra 𝓤 𝑆`, for some universe level `𝓤` and signature `𝑆`. That is, `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦`, for some type `𝓦`. Later we will formally state and prove that the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise.
 
-To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is definitely *not* what we want.  To see why, recall that `Pred (Algebra 𝓤 𝑆) 𝓦`, is just an alias for the function type \af{Algebra}~\ab 𝓤~\ab 𝑆~\as →~\ab 𝓦\af ̇. We interpret the latter semantically by taking \ab 𝒦~\ab 𝑨 to be the assertion that \ab 𝒦~\ab 𝑨 belongs to \ab 𝒦~\ab 𝑨, denoted \ab 𝑨 ∈ \ab 𝒦. Therefore, by definition, we have
+To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is definitely *not* what we want.  To see why, recall that `Pred (Algebra 𝓤 𝑆) 𝓦`, is just an alias for the function type `Algebra 𝓤 𝑆 → 𝓦 ̇`. We interpret the latter semantically by taking `𝒦 𝑨` (and `𝑨 ∈ 𝒦`) to denote the assertion that `𝒦 𝑨` belongs to `𝒦`. Therefore, by definition, we have
 
 `Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨`<br>
 &nbsp; &nbsp; &nbsp; `= Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦`.

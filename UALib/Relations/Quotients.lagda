@@ -57,7 +57,7 @@ open import MGS-Quotient using (is-subsingleton-valued) public
 
 Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
 
-In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the \agdaualib to represent uniqueness-of-proofs principles for relations of arbitrary arity over arbitrary types.
+In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the [Agda UALib][] to represent *uniqueness-of-proofs principles* for relations of arbitrary arity over arbitrary types.
 
 
 #### <a id="equivalence-classes">Equivalence relations</a>

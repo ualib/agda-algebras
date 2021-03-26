@@ -201,7 +201,7 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun`
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">We plan to resolve this before the next major release of the \agdaualib.</span>
+<sup>1</sup><span class="footnote" id="fn1">We plan to resolve this before the next major release of the [Agda UALib][].</span>
 
 <br>
 <br>

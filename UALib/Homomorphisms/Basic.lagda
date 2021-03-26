@@ -301,7 +301,7 @@ module _ {𝓤 𝓘 𝓦 : Universe} {fe : dfunext 𝓘 𝓦} where
 
 \end{code}
 
-The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.  The syntax we use to represent this type is available to us because of the way `-Π` is defined in the \typetopology library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However,
+The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.  The syntax we use to represent this type is available to us because of the way `-Π` is defined in the [Type Topology][] library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However,
 we could equally well have used one of the following alternatives, which may be closer to "standard Agda" syntax:
 
 `Π λ i → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `(i : I) → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `∀ i → hom 𝑨 (ℬ i)`.
