@@ -5,9 +5,9 @@ date : 2021-01-12
 author: William DeMeo
 ---
 
-### <a id="algebras">Algebras</a>
+\section{Algebras}\label{algebras}
 
-This section presents the [Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
+This section presents the \href{Algebras.Algebras.html}{Algebras.Algebras} module of the \href{https://gitlab.com/ualib/ualib.gitlab.io/}{Agda Universal Algebra Library}.
 
 \begin{code}
 
@@ -20,9 +20,9 @@ open import Algebras.Signatures public
 \end{code}
 
 
-#### <a id="algebra-types">Algebra types</a>
+\subsection{Algebra types}\label{algebra-types}
 
-For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier* or *universe*) `𝐴 : 𝓤 ̇` as follows
+For a fixed signature \AgdaBound{𝑆} : \AgdaFunction{Signature} 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier* or *universe*) `𝐴 : 𝓤 ̇` as follows
 
 \begin{code}
 
