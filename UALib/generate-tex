@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Checking UALib.lagda"
+agda --latex UALib.lagda
+
 echo "Checking Overture.Preliminaries.lagda"
 agda --latex Overture/Preliminaries.lagda
 echo "Checking Overture.Equality.lagda"
@@ -64,6 +67,8 @@ agda --latex Varieties/FreeAlgebras.lagda
 
 
 
+mv latex/UALib.{tex,md}
+
 mv latex/Overture/Preliminaries.{tex,md}
 mv latex/Overture/Equality.{tex,md}
 mv latex/Overture/Inverses.{tex,md}
@@ -98,6 +103,8 @@ mv latex/Varieties/Preservation.{tex,md}
 mv latex/Varieties/FreeAlgebras.{tex,md}
 
 # mv latex/Appendix/Imports.{tex,md}
+
+pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Preliminaries.md -o latex/Overture/Preliminaries.tex
 
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Preliminaries.md -o latex/Overture/Preliminaries.tex
 pandoc --latex-engine=xelatex -f markdown -t latex latex/Overture/Equality.md -o latex/Overture/Equality.tex
