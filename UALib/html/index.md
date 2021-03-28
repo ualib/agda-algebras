@@ -93,34 +93,34 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Inverses](Overture.Inverses.html)
   - [Agda's Universe Hierarchy](Overture.Lifts.html)
 
-- [Relation and Quotient Types][]
+- [Relation and Quotient Types](Relations.html)
   - [Discrete Relations](Relations.Discrete.html)
   - [Continuous Relations](Relations.Continuous.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
   - [Truncation and Proposition Extensionality](Relations.Truncation.html)
 
-- [Algebra Types][]
+- [Algebra Types](Algebras.html)
   - [Operations and Signatures](Algebras.Signatures.html)
   - [Algebras](Algebras.Algebras.html)
   - [Product Algebras](Algebras.Products.html)
   - [Congruence Relations](Algebras.Congruences.html)
 
-- [Homomorphism Types][]
+- [Homomorphism Types](Homomorphism.html)
   - [Basic definitions](Homomorphisms.Basic.html)
   - [Homomorphism Theorems](Homomorphisms.Noether.html)
   - [Isomorphisms](Homomorphisms.Isomorphisms.html)
   - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
 
-- [Types for Terms][]
+- [Types for Terms](Terms.html)
   - [Basic Definitions](Terms.Basic.html)
   - [Term Operations](Terms.Operations.html)
 
-- [Subalgebra Types][]
+- [Subalgebra Types](Subalgebras.html)
   - [Subuniverses](Subalgebras.Subuniverses.html)
   - [Subalgebras](Subalgebras.Subalgebras)
   - [Univalent Subalgebras](Subalgebras.Univalent.html)
 
-- [Equations and Varieties][]
+- [Equations and Varieties](Varieties.html)
   - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
   - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
   - [Equation Preservation Theorems](Varieties.Preservation.html)
