@@ -2,7 +2,7 @@ TOP = ..
 
 include $(TOP)/mk/paths.mk
 
-default: UALib
+default: index
 
 AGDA = agda --html --html-highlight=code
 
@@ -68,7 +68,8 @@ NAMES=Empty-Type \
 MODULE_NAMES := Preface Overture Relations Algebras Homomorphisms Terms Subalgebras Varieties
 
 
-UALib: $(HTML_DIR)/UALib.md
+index : $(HTML_DIR)/UALib.md
+	cp $< $(HTML_DIR)/index.md
 
 $(HTML_DIR)/UALib.md: $(HTML_DIR)/UALib.tex
 	cp $< $@
