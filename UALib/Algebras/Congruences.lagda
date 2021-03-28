@@ -24,10 +24,10 @@ A *congruence relation* of an algebra `𝑨` is defined to be an equivalence rel
 
 \begin{code}
 
-Con : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → ov 𝓤 ̇
+Con : (𝑨 : Algebra 𝓤 𝑆) → ov 𝓤 ̇
 Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
 
-record Congruence {𝓦 𝓤 : Universe} (𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
+record Congruence {𝓦 𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
  constructor mkcon
  field
   ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓦
@@ -38,8 +38,21 @@ open Congruence
 
 \end{code}
 
-Each of these options captures the informal notion of congruence, and each one is useful in certain contexts.
+Each of these two options captures the informal notion of congruence. In fact, they are equivalent and the bi-implication is easily verified as follows.
 
+\begin{code}
+
+module _ {𝑨 : Algebra 𝓤 𝑆} where
+
+ Con→Congruence : Con 𝑨 → Congruence{𝓤} 𝑨
+ Con→Congruence θ = mkcon ∣ θ ∣ (fst ∥ θ ∥) (snd ∥ θ ∥)
+
+ open Congruence
+
+ Congruence→Con : Congruence{𝓤} 𝑨 →  Con 𝑨
+ Congruence→Con θ = ⟨ θ ⟩ , IsEquiv θ , Compatible θ
+
+\end{code}
 
 
 #### <a id="example">Example</a>
@@ -80,6 +93,8 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 In many areas of abstract mathematics (including universal algebra) the quotient of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays a central role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
+
+open Congruence
 
 _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 

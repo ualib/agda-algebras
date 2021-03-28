@@ -22,26 +22,26 @@ open import Algebras.Signatures public
 
 #### <a id="algebra-types">Algebra types</a>
 
-For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier* or *universe*) `𝐴 : 𝓤 ̇` as follows
+Recall, the type `Signature 𝓞 𝓥` was defined in the [Algebras.Signatures][] module as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`. For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier*) `𝐴 : 𝓤 ̇` &nbsp as follows.<sup>[1](Algebras.Algebras.html#fn1)</sup>
 
 \begin{code}
 
 Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
 
-Algebra 𝓤 𝑆 = Σ A ꞉ 𝓤 ̇ ,                      -- the domain
+Algebra 𝓤 𝑆 = Σ A ꞉ 𝓤 ̇ ,                     -- the domain
               Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}
 
-We could refer to an inhabitant of this type as a ∞-*algebra* because its domain can be an arbitrary type, say, `A : 𝓤 ̇` and need not be truncated at some level; in particular, `A` need to be a set. (See the [Overture.Preliminaries.html#truncation](Overture.Preliminaries.html#truncation).)
+We might refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See the [Relations.Truncation][] module.)
 
-We might take this opportunity to define the type of 0-*algebras* (algebras whose domains are sets), which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of our algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then assume uniquness of identity proofs explicitly and only where needed.
+We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of certain algebras are sets in a few places in the [UALib][], so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate [uniquness of identity proofs](Relations.Truncation.html#uniqueness-of-identity-proofs) when and only when necessary.
 
 
 
 #### <a id="algebras-as-record-types">Algebras as record types</a>
 
-Sometimes records are more convenient than sigma types. For such cases, we might prefer the following representation of the type of algebras.
+Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
 
 \begin{code}
 
@@ -54,9 +54,7 @@ record algebra (𝓤 : Universe) (𝑆 : Signature 𝓞 𝓥) : (𝓞 ⊔ 𝓥 �
 
 \end{code}
 
-Recall, the type `Signature 𝓞 𝓥` was defined in the [Algebras.Signature][] module as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`.
-
-If for some reason we want to use both representations of algebras and move back and forth between them, this is easily accomplished with the following functions.
+This representation of algebras as inhabitants of a record type is equivalent to the representation using Sigma types in the sense that a bi-implication between the two representations is obvious.
 
 \begin{code}
 
@@ -71,8 +69,6 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
  Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
 
 \end{code}
-
-
 
 
 #### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
@@ -214,6 +210,8 @@ With `cont-compatible-op` in hand, it is a trivial matter to define a type that 
 --------------------------------------
 
 <sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
+
+<sup>[1]</sup><span class="footnote" id="fn1"> In classical universal algebra, the domain of an algebra `𝑨` is usualled called the "universe" of `𝑨`.  We avoid this terminology and reserve universe for use in defining the type hierarchy. (See the [Agda Universes](Overture.Preliminaries.html#agda-universes)</a> section of the [Overture.Preliminaries][] module.</span>
 
 <br>
 <br>

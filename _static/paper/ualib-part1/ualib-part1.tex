@@ -34,6 +34,12 @@
 }
 \newif\ifnonbold % comment this line to restore bold universe symbols
 
+% \usepackage[x11names, rgb]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{snakes,arrows,shapes}
+\usepackage{amsmath}
+
+
 \crefformat{footnote}{#2\footnotemark[#1]#3}
 
 %%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,13 +138,21 @@ The Agda Universal Algebra Library (\ualib) is a library of types and programs (
 
 \bibliography{../../ualib_refs}
 
+\appendix
 
+\newpage
 
-
-% \appendix
 
 % \input{5Appendix}
 
+\section{Dependency Graph}
+
+~\hskip-1.5cm\includegraphics[scale=0.65]{ualib-graph-top.png}
+
+\newpage
+
+~\hskip-2.5cm\includegraphics[scale=0.55]{ualib-graph-bot.png}
+% \input{../ualib-depgraph}
 
 %% \section{Some Components of the Type Topology Library}
 %% Here we collect some of the components from the \typetopology library that we used above but did not have space to discuss.  They are collected here for the reader's convenience and to keep the paper somewhat self-contained.
