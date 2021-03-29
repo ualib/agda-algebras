@@ -25,7 +25,7 @@ open import Relations.Truncation public
 
 #### <a id="operation-type">Operation type</a>
 
-We define the type of *operations*, as follows.
+We define the type of *operations* as follows.
 
 \begin{code}
 
