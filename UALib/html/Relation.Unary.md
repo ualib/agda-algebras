@@ -1,4 +1,8 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Unary relations</a>
@@ -288,3 +292,4 @@
 
 <a id="_\\_"></a><a id="6071" href="Relation.Unary.html#6071" class="Function Operator">_\\_</a> <a id="6076" class="Symbol">:</a> <a id="6078" href="Relation.Unary.html#1039" class="Function">Pred</a> <a id="6083" class="Symbol">(</a><a id="6084" href="Relation.Unary.html#594" class="Generalizable">A</a> <a id="6086" href="Data.Product.html#1162" class="Function Operator">×</a> <a id="6088" href="Relation.Unary.html#622" class="Generalizable">C</a><a id="6089" class="Symbol">)</a> <a id="6091" href="Relation.Unary.html#576" class="Generalizable">ℓ₁</a> <a id="6094" class="Symbol">→</a> <a id="6096" href="Relation.Unary.html#1039" class="Function">Pred</a> <a id="6101" class="Symbol">(</a><a id="6102" href="Relation.Unary.html#594" class="Generalizable">A</a> <a id="6104" href="Data.Product.html#1162" class="Function Operator">×</a> <a id="6106" href="Relation.Unary.html#608" class="Generalizable">B</a><a id="6107" class="Symbol">)</a> <a id="6109" href="Relation.Unary.html#579" class="Generalizable">ℓ₂</a> <a id="6112" class="Symbol">→</a> <a id="6114" href="Relation.Unary.html#1039" class="Function">Pred</a> <a id="6119" class="Symbol">(</a><a id="6120" href="Relation.Unary.html#608" class="Generalizable">B</a> <a id="6122" href="Data.Product.html#1162" class="Function Operator">×</a> <a id="6124" href="Relation.Unary.html#622" class="Generalizable">C</a><a id="6125" class="Symbol">)</a> <a id="6127" class="Symbol">_</a>
 <a id="6129" href="Relation.Unary.html#6129" class="Bound">P</a> <a id="6131" href="Relation.Unary.html#6071" class="Function Operator">\\</a> <a id="6134" href="Relation.Unary.html#6134" class="Bound">Q</a> <a id="6136" class="Symbol">=</a> <a id="6138" class="Symbol">(</a><a id="6139" href="Relation.Unary.html#6129" class="Bound">P</a> <a id="6141" href="Relation.Unary.html#5748" class="Function Operator">~</a> <a id="6143" href="Relation.Unary.html#5951" class="Function Operator">//</a> <a id="6146" href="Relation.Unary.html#6134" class="Bound">Q</a> <a id="6148" href="Relation.Unary.html#5748" class="Function Operator">~</a><a id="6149" class="Symbol">)</a> <a id="6151" href="Relation.Unary.html#5748" class="Function Operator">~</a>
+</pre>

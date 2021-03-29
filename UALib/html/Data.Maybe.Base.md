@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- The Maybe type and some operations</a>
@@ -131,3 +136,4 @@
 
 <a id="thatM"></a><a id="3125" href="Data.Maybe.Base.html#3125" class="Function">thatM</a> <a id="3131" class="Symbol">:</a> <a id="3133" href="Data.Maybe.Base.html#795" class="Datatype">Maybe</a> <a id="3139" href="Data.Maybe.Base.html#663" class="Generalizable">A</a> <a id="3141" class="Symbol">→</a> <a id="3143" href="Data.Maybe.Base.html#677" class="Generalizable">B</a> <a id="3145" class="Symbol">→</a> <a id="3147" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="3153" href="Data.Maybe.Base.html#663" class="Generalizable">A</a> <a id="3155" href="Data.Maybe.Base.html#677" class="Generalizable">B</a>
 <a id="3157" href="Data.Maybe.Base.html#3125" class="Function">thatM</a> <a id="3163" class="Symbol">=</a> <a id="3165" href="Data.Maybe.Base.html#1494" class="Function">maybe′</a> <a id="3172" href="Data.These.Base.html#637" class="InductiveConstructor">these</a> <a id="3178" href="Data.These.Base.html#609" class="InductiveConstructor">that</a>
+</pre>

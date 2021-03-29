@@ -1,4 +1,10 @@
-<a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--without-K</a> <a id="25" class="Pragma">--safe</a> <a id="32" class="Pragma">--no-sized-types</a> <a id="49" class="Pragma">--no-guardedness</a>
+---
+layout: default
+title : Agda.Builtin.Sigma module
+---
+
+<pre class="Agda">
+    <a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--without-K</a> <a id="25" class="Pragma">--safe</a> <a id="32" class="Pragma">--no-sized-types</a> <a id="49" class="Pragma">--no-guardedness</a>
             <a id="78" class="Pragma">--no-subtyping</a> <a id="93" class="Symbol">#-}</a>
 
 <a id="98" class="Keyword">module</a> <a id="105" href="Agda.Builtin.Sigma.html" class="Module">Agda.Builtin.Sigma</a> <a id="124" class="Keyword">where</a>
@@ -16,3 +22,4 @@
 <a id="292" class="Keyword">infixr</a> <a id="299" class="Number">4</a> <a id="301" href="Agda.Builtin.Sigma.html#236" class="InductiveConstructor Operator">_,_</a>
 
 <a id="306" class="Symbol">{-#</a> <a id="310" class="Keyword">BUILTIN</a> <a id="318" class="Keyword">SIGMA</a> <a id="324" href="Agda.Builtin.Sigma.html#166" class="Record">Σ</a> <a id="326" class="Symbol">#-}</a>
+</pre>

@@ -1,4 +1,8 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Operations on nullary relations (like negation and decidability)</a>
@@ -37,3 +41,4 @@
 
 <a id="Irrelevant"></a><a id="925" href="Relation.Nullary.html#925" class="Function">Irrelevant</a> <a id="936" class="Symbol">:</a> <a id="938" class="Symbol">∀</a> <a id="940" class="Symbol">{</a><a id="941" href="Relation.Nullary.html#941" class="Bound">p</a><a id="942" class="Symbol">}</a> <a id="944" class="Symbol">→</a> <a id="946" class="PrimitiveType">Set</a> <a id="950" href="Relation.Nullary.html#941" class="Bound">p</a> <a id="952" class="Symbol">→</a> <a id="954" class="PrimitiveType">Set</a> <a id="958" href="Relation.Nullary.html#941" class="Bound">p</a>
 <a id="960" href="Relation.Nullary.html#925" class="Function">Irrelevant</a> <a id="971" href="Relation.Nullary.html#971" class="Bound">P</a> <a id="973" class="Symbol">=</a> <a id="975" class="Symbol">∀</a> <a id="977" class="Symbol">(</a><a id="978" href="Relation.Nullary.html#978" class="Bound">p₁</a> <a id="981" href="Relation.Nullary.html#981" class="Bound">p₂</a> <a id="984" class="Symbol">:</a> <a id="986" href="Relation.Nullary.html#971" class="Bound">P</a><a id="987" class="Symbol">)</a> <a id="989" class="Symbol">→</a> <a id="991" href="Relation.Nullary.html#978" class="Bound">p₁</a> <a id="994" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">≡</a> <a id="996" href="Relation.Nullary.html#981" class="Bound">p₂</a>
+</pre>

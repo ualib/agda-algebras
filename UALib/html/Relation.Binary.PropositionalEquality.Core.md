@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Propositional equality</a>
@@ -113,3 +118,4 @@
 
   <a id="≡-Reasoning._∎"></a><a id="2892" href="Relation.Binary.PropositionalEquality.Core.html#2892" class="Function Operator">_∎</a> <a id="2895" class="Symbol">:</a> <a id="2897" class="Symbol">∀</a> <a id="2899" class="Symbol">(</a><a id="2900" href="Relation.Binary.PropositionalEquality.Core.html#2900" class="Bound">x</a> <a id="2902" class="Symbol">:</a> <a id="2904" href="Relation.Binary.PropositionalEquality.Core.html#2512" class="Bound">A</a><a id="2905" class="Symbol">)</a> <a id="2907" class="Symbol">→</a> <a id="2909" href="Relation.Binary.PropositionalEquality.Core.html#2900" class="Bound">x</a> <a id="2911" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">≡</a> <a id="2913" href="Relation.Binary.PropositionalEquality.Core.html#2900" class="Bound">x</a>
   <a id="2917" href="Relation.Binary.PropositionalEquality.Core.html#2892" class="Function Operator">_∎</a> <a id="2920" class="Symbol">_</a> <a id="2922" class="Symbol">=</a> <a id="2924" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a>
+</pre>

@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Simple combinators working solely on and with functions</a>
@@ -185,3 +190,4 @@
 
 <a id="typeOf"></a><a id="4519" href="Function.html#4519" class="Function">typeOf</a> <a id="4526" class="Symbol">:</a> <a id="4528" class="Symbol">{</a><a id="4529" href="Function.html#4529" class="Bound">A</a> <a id="4531" class="Symbol">:</a> <a id="4533" class="PrimitiveType">Set</a> <a id="4537" href="Function.html#359" class="Generalizable">a</a><a id="4538" class="Symbol">}</a> <a id="4540" class="Symbol">→</a> <a id="4542" href="Function.html#4529" class="Bound">A</a> <a id="4544" class="Symbol">→</a> <a id="4546" class="PrimitiveType">Set</a> <a id="4550" href="Function.html#359" class="Generalizable">a</a>
 <a id="4552" href="Function.html#4519" class="Function">typeOf</a> <a id="4559" class="Symbol">{</a><a id="4560" class="Argument">A</a> <a id="4562" class="Symbol">=</a> <a id="4564" href="Function.html#4564" class="Bound">A</a><a id="4565" class="Symbol">}</a> <a id="4567" class="Symbol">_</a> <a id="4569" class="Symbol">=</a> <a id="4571" href="Function.html#4564" class="Bound">A</a>
+</pre>

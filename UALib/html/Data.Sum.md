@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Sums (disjoint unions)</a>
@@ -47,3 +52,4 @@
   <a id="1158" href="Data.Sum.html#1158" class="Function">from-inj₂</a> <a id="1168" class="Symbol">:</a> <a id="1170" class="Symbol">(</a><a id="1171" href="Data.Sum.html#1171" class="Bound">x</a> <a id="1173" class="Symbol">:</a> <a id="1175" href="Data.Sum.html#697" class="Bound">A</a> <a id="1177" href="Data.Sum.Base.html#612" class="Datatype Operator">⊎</a> <a id="1179" href="Data.Sum.html#709" class="Bound">B</a><a id="1180" class="Symbol">)</a> <a id="1182" class="Symbol">→</a> <a id="1184" href="Data.Sum.html#1072" class="Function">From-inj₂</a> <a id="1194" href="Data.Sum.html#1171" class="Bound">x</a>
   <a id="1198" href="Data.Sum.html#1158" class="Function">from-inj₂</a> <a id="1208" class="Symbol">(</a><a id="1209" href="Data.Sum.Base.html#662" class="InductiveConstructor">inj₁</a> <a id="1214" class="Symbol">_)</a> <a id="1217" class="Symbol">=</a> <a id="1219" class="Symbol">_</a>
   <a id="1223" href="Data.Sum.html#1158" class="Function">from-inj₂</a> <a id="1233" class="Symbol">(</a><a id="1234" href="Data.Sum.Base.html#687" class="InductiveConstructor">inj₂</a> <a id="1239" href="Data.Sum.html#1239" class="Bound">x</a><a id="1240" class="Symbol">)</a> <a id="1242" class="Symbol">=</a> <a id="1244" href="Data.Sum.html#1239" class="Bound">x</a>
+</pre>

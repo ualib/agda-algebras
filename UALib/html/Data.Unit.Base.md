@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- The unit type and the total relation on unit</a>
@@ -20,3 +25,4 @@
 <a id="588" class="Comment">-- An ordering relation over the unit type</a>
 
 <a id="632" class="Keyword">record</a> <a id="_≤_"></a><a id="639" href="Data.Unit.Base.html#639" class="Record Operator">_≤_</a> <a id="643" class="Symbol">(</a><a id="644" href="Data.Unit.Base.html#644" class="Bound">x</a> <a id="646" href="Data.Unit.Base.html#646" class="Bound">y</a> <a id="648" class="Symbol">:</a> <a id="650" href="Agda.Builtin.Unit.html#164" class="Record">⊤</a><a id="651" class="Symbol">)</a> <a id="653" class="Symbol">:</a> <a id="655" class="PrimitiveType">Set</a> <a id="659" class="Keyword">where</a>
+</pre>

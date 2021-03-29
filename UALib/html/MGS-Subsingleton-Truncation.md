@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 This is ported from the Midlands Graduate School 2019 lecture notes
 
  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html

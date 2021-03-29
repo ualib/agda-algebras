@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- An either-or-both data type, basic type and operations</a>
@@ -78,3 +83,4 @@
 
 <a id="align"></a><a id="2189" href="Data.These.Base.html#2189" class="Function">align</a> <a id="2195" class="Symbol">:</a> <a id="2197" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="2203" href="Data.These.Base.html#437" class="Generalizable">A</a> <a id="2205" href="Data.These.Base.html#451" class="Generalizable">B</a> <a id="2207" class="Symbol">→</a> <a id="2209" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="2215" href="Data.These.Base.html#465" class="Generalizable">C</a> <a id="2217" href="Data.These.Base.html#479" class="Generalizable">D</a> <a id="2219" class="Symbol">→</a> <a id="2221" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="2227" class="Symbol">(</a><a id="2228" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="2234" href="Data.These.Base.html#437" class="Generalizable">A</a> <a id="2236" href="Data.These.Base.html#465" class="Generalizable">C</a><a id="2237" class="Symbol">)</a> <a id="2239" class="Symbol">(</a><a id="2240" href="Data.These.Base.html#523" class="Datatype">These</a> <a id="2246" href="Data.These.Base.html#451" class="Generalizable">B</a> <a id="2248" href="Data.These.Base.html#479" class="Generalizable">D</a><a id="2249" class="Symbol">)</a>
 <a id="2251" href="Data.These.Base.html#2189" class="Function">align</a> <a id="2257" class="Symbol">=</a> <a id="2259" href="Data.These.Base.html#1462" class="Function">alignWith</a> <a id="2269" href="Function.html#708" class="Function">id</a> <a id="2272" href="Function.html#708" class="Function">id</a>
+</pre>

@@ -1,3 +1,10 @@
+---
+layout: default
+title : Agda.Primitive module
+---
+
+<pre class="Agda">
+
 <a id="1" class="Comment">-- The Agda primitives (preloaded).</a>
 
 <a id="38" class="Symbol">{-#</a> <a id="42" class="Keyword">OPTIONS</a> <a id="50" class="Pragma">--without-K</a> <a id="62" class="Pragma">--no-subtyping</a> <a id="77" class="Symbol">#-}</a>
@@ -31,3 +38,4 @@
 <a id="733" class="Symbol">{-#</a> <a id="737" class="Keyword">BUILTIN</a> <a id="745" class="Keyword">LEVELMAX</a>  <a id="755" href="Agda.Primitive.html#636" class="Primitive Operator">_⊔_</a>   <a id="761" class="Symbol">#-}</a>
 
 <a id="766" class="Symbol">{-#</a> <a id="770" class="Keyword">BUILTIN</a> <a id="778" class="Keyword">SETOMEGA</a> <a id="Setω"></a><a id="787" href="Agda.Primitive.html#787" class="Primitive">Setω</a> <a id="792" class="Symbol">#-}</a>
+</pre>

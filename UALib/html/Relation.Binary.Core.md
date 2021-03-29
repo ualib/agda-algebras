@@ -1,4 +1,10 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Properties of binary relations</a>
@@ -273,3 +279,4 @@
 <a id="7462" class="String">&quot;Warning: Conn was deprecated in v1.1.
 Please use Connex instead.&quot;</a>
 <a id="7529" class="Symbol">#-}</a>
+</pre>

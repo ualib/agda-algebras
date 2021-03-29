@@ -1,4 +1,10 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+title : Data.Bool.Base module
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- The type for booleans and some operations</a>
@@ -73,3 +79,4 @@
 <a id="1495" href="Data.Bool.Base.html#1480" class="Function">T</a> <a id="1497" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="1503" class="Symbol">=</a> <a id="1505" href="Agda.Builtin.Unit.html#164" class="Record">⊤</a>
 <a id="1507" href="Data.Bool.Base.html#1480" class="Function">T</a> <a id="1509" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="1515" class="Symbol">=</a> <a id="1517" href="Data.Empty.html#279" class="Datatype">⊥</a>
 
+</pre>

@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Products</a>
@@ -157,3 +162,4 @@
 
 <a id="_-,-_"></a><a id="4058" href="Data.Product.html#4058" class="Function Operator">_-,-_</a> <a id="4064" class="Symbol">:</a> <a id="4066" class="Symbol">(</a><a id="4067" href="Data.Product.html#413" class="Generalizable">A</a> <a id="4069" class="Symbol">→</a> <a id="4071" href="Data.Product.html#427" class="Generalizable">B</a> <a id="4073" class="Symbol">→</a> <a id="4075" href="Data.Product.html#441" class="Generalizable">C</a><a id="4076" class="Symbol">)</a> <a id="4078" class="Symbol">→</a> <a id="4080" class="Symbol">(</a><a id="4081" href="Data.Product.html#413" class="Generalizable">A</a> <a id="4083" class="Symbol">→</a> <a id="4085" href="Data.Product.html#427" class="Generalizable">B</a> <a id="4087" class="Symbol">→</a> <a id="4089" href="Data.Product.html#455" class="Generalizable">D</a><a id="4090" class="Symbol">)</a> <a id="4092" class="Symbol">→</a> <a id="4094" class="Symbol">(</a><a id="4095" href="Data.Product.html#413" class="Generalizable">A</a> <a id="4097" class="Symbol">→</a> <a id="4099" href="Data.Product.html#427" class="Generalizable">B</a> <a id="4101" class="Symbol">→</a> <a id="4103" href="Data.Product.html#441" class="Generalizable">C</a> <a id="4105" href="Data.Product.html#1162" class="Function Operator">×</a> <a id="4107" href="Data.Product.html#455" class="Generalizable">D</a><a id="4108" class="Symbol">)</a>
 <a id="4110" href="Data.Product.html#4110" class="Bound">f</a> <a id="4112" href="Data.Product.html#4058" class="Function Operator">-,-</a> <a id="4116" href="Data.Product.html#4116" class="Bound">g</a> <a id="4118" class="Symbol">=</a> <a id="4120" href="Data.Product.html#4110" class="Bound">f</a> <a id="4122" href="Function.html#4171" class="Function Operator">-[</a> <a id="4125" href="Agda.Builtin.Sigma.html#236" class="InductiveConstructor Operator">_,_</a> <a id="4129" href="Function.html#4171" class="Function Operator">]-</a> <a id="4132" href="Data.Product.html#4116" class="Bound">g</a>
+</pre>

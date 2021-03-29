@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Universe levels</a>
@@ -26,3 +31,4 @@
 
 <a id="0ℓ"></a><a id="512" href="Level.html#512" class="Function">0ℓ</a> <a id="515" class="Symbol">:</a> <a id="517" href="Agda.Primitive.html#423" class="Postulate">Level</a>
 <a id="523" href="Level.html#512" class="Function">0ℓ</a> <a id="526" class="Symbol">=</a> <a id="528" href="Level.html#360" class="Primitive">zero</a>
+</pre>

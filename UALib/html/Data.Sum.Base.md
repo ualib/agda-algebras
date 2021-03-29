@@ -1,4 +1,9 @@
-<a id="1" class="Comment">------------------------------------------------------------------------</a>
+---
+layout: default
+---
+
+<pre class="Agda">
+    <a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Sums (disjoint unions)</a>
@@ -67,3 +72,4 @@
 <a id="toDec"></a><a id="1492" href="Data.Sum.Base.html#1492" class="Function">toDec</a> <a id="1498" class="Symbol">:</a> <a id="1500" href="Data.Sum.Base.html#452" class="Generalizable">A</a> <a id="1502" href="Data.Sum.Base.html#612" class="Datatype Operator">⊎</a> <a id="1504" href="Relation.Nullary.html#535" class="Function Operator">¬</a> <a id="1506" href="Data.Sum.Base.html#452" class="Generalizable">A</a> <a id="1508" class="Symbol">→</a> <a id="1510" href="Relation.Nullary.html#605" class="Datatype">Dec</a> <a id="1514" href="Data.Sum.Base.html#452" class="Generalizable">A</a>
 <a id="1516" href="Data.Sum.Base.html#1492" class="Function">toDec</a> <a id="1522" class="Symbol">(</a><a id="1523" href="Data.Sum.Base.html#662" class="InductiveConstructor">inj₁</a> <a id="1528" href="Data.Sum.Base.html#1528" class="Bound">p</a><a id="1529" class="Symbol">)</a>  <a id="1532" class="Symbol">=</a> <a id="1534" href="Relation.Nullary.html#641" class="InductiveConstructor">yes</a> <a id="1538" href="Data.Sum.Base.html#1528" class="Bound">p</a>
 <a id="1540" href="Data.Sum.Base.html#1492" class="Function">toDec</a> <a id="1546" class="Symbol">(</a><a id="1547" href="Data.Sum.Base.html#687" class="InductiveConstructor">inj₂</a> <a id="1552" href="Data.Sum.Base.html#1552" class="Bound">¬p</a><a id="1554" class="Symbol">)</a> <a id="1556" class="Symbol">=</a> <a id="1558" href="Relation.Nullary.html#668" class="InductiveConstructor">no</a> <a id="1561" href="Data.Sum.Base.html#1552" class="Bound">¬p</a>
+</pre>
