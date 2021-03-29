@@ -1,3 +1,10 @@
+---
+layout: default
+title : MGS-Quotient module
+date : 2021-02-25
+author: Martin Escardo
+---
+
 This is ported from the Midlands Graduate School 2019 lecture notes
 
  https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html

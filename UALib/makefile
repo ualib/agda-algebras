@@ -2,34 +2,36 @@ TOP = ..
 
 include $(TOP)/mk/paths.mk
 
-default: index
+default: UALib
 
 AGDA = agda --html --html-highlight=code
 
-NAMES=Empty-Type \
-      Identity-Type \
-      MGS-Basic-UF \
-      MGS-Embeddings \
-      MGS-Equivalence-Induction \
-      MGS-Equivalences \
-      MGS-FunExt-from-Univalence \
-      MGS-HAE \
-      MGS-hlevels \
-      MGS-MLTT \
-      MGS-More-FunExt-Consequences \
-      MGS-Powerset \
-      MGS-Retracts \
-      MGS-Solved-Exercises \
-      MGS-Subsingleton-Theorems \
-      MGS-Subsingleton-Truncation \
-      MGS-Unique-Existence \
-      MGS-Univalence \
-      Natural-Numbers-Type \
-      Plus-Type \
-      Sigma-Type \
-      Unit-Type \
-      Universes \
-      UALib \
+
+MGS=Empty-Type \
+    Identity-Type \
+    MGS-Basic-UF \
+    MGS-Embeddings \
+    MGS-Equivalence-Induction \
+    MGS-Equivalences \
+    MGS-FunExt-from-Univalence \
+    MGS-HAE \
+    MGS-hlevels \
+    MGS-MLTT \
+    MGS-More-FunExt-Consequences \
+    MGS-Powerset \
+    MGS-Retracts \
+    MGS-Solved-Exercises \
+    MGS-Subsingleton-Theorems \
+    MGS-Subsingleton-Truncation \
+    MGS-Unique-Existence \
+    MGS-Univalence \
+    Natural-Numbers-Type \
+    Plus-Type \
+    Sigma-Type \
+    Unit-Type \
+    Universes
+
+UALIB=UALib \
       Preface \
       Overture \
       Overture.Preliminaries \
@@ -68,12 +70,11 @@ NAMES=Empty-Type \
 MODULE_NAMES := Preface Overture Relations Algebras Homomorphisms Terms Subalgebras Varieties
 
 
-index : $(HTML_DIR)/UALib.md
-	cp $< $(HTML_DIR)/index.md
+UALib : $(HTML_DIR)/UALib.md
 
 $(HTML_DIR)/UALib.md: $(HTML_DIR)/UALib.tex
 	cp $< $@
-	for f in $(NAMES); do cp $(HTML_DIR)/$$f.tex $(HTML_DIR)/$$f.md; done
+	for f in $(UALIB); do cp $(HTML_DIR)/$$f.tex $(HTML_DIR)/$$f.md; done
 
 $(HTML_DIR)/UALib.tex: UALib.lagda $(MODULE_NAMES)
 	$(AGDA) UALib.lagda

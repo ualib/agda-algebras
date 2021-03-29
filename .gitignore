@@ -15,6 +15,7 @@ _static/paper/lipics-short/Subalgebras
 _static/paper/lipics-short/Terms
 _static/paper/lipics-short/Varieties
 _static/archive
+UALib/html/*.tex
 UALib/Appendix
 UALib/Appendix.lagda
 latex
