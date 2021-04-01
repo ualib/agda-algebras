@@ -91,24 +91,24 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
  ψcompatible 𝒦 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
-   ϕ : hom (𝑻 X) 𝑨
-   ϕ = lift-hom 𝑨 h
+   φ : hom (𝑻 X) 𝑨
+   φ = lift-hom 𝑨 h
 
-   γ : ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) q)
+   γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
-   γ = ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) p) ≡⟨ ∥ ϕ ∥ 𝑓 p ⟩
-       (𝑓 ̂ 𝑨) (∣ ϕ ∣ ∘ p) ≡⟨ ap(𝑓 ̂ 𝑨)(gfe λ x → (ψpq x) 𝑨 sA h) ⟩
-       (𝑓 ̂ 𝑨) (∣ ϕ ∣ ∘ q) ≡⟨ (∥ ϕ ∥ 𝑓 q)⁻¹ ⟩
-       ∣ ϕ ∣ ((𝑓 ̂ 𝑻 X) q) ∎
+   γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
+       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(gfe λ x → (ψpq x) 𝑨 sA h) ⟩
+       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
+       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
  ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
  ψRefl = λ _ _ _ _ → refl
 
  ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
- ψSymm _ _ pψRelq 𝑪 ϕ h = (pψRelq 𝑪 ϕ h)⁻¹
+ ψSymm _ _ pψRelq 𝑪 φ h = (pψRelq 𝑪 φ h)⁻¹
 
  ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → transitive (ψRel 𝒦)
- ψTrans _ _ _ pψq qψr 𝑪 ϕ h = (pψq 𝑪 ϕ h) ∙ (qψr 𝑪 ϕ h)
+ ψTrans _ _ _ pψq qψr 𝑪 φ h = (pψq 𝑪 φ h) ∙ (qψr 𝑪 φ h)
 
  ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
@@ -130,7 +130,8 @@ Finally, we are ready to define the type representing the relatively free algebr
 \begin{code}
 
 module the-relatively-free-algebra
- {𝓤 𝓧 : Universe} {X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+       {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
+       {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
 
  open the-free-algebra{𝓤}{𝓧}{X}
 
@@ -165,13 +166,11 @@ This section presents a formal proof of the Birkhoff HSP theorem.<sup>[2](Variet
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
-We accomplish this goal by constructing an algebra `𝔽` with the following properties:
+We accomplish this goal by constructing an algebra `𝔽` with the following properties:<sup>[3](Varieties.FreeAlgebras.html#fn3)</sup>
 
 1. `𝔽 ∈ V 𝒦` and
 
 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
-
-(In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed in the [Birkhoff.FreeAlgebra][] section played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.)
 
 We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows:
 
@@ -181,11 +180,7 @@ Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#pr
 
 \begin{code}
 
-module HSPTheorem
- {𝓤 : Universe} {X : 𝓤 ̇}
- {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
- -- {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
- where
+module HSPTheorem {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
 
  open the-free-algebra {𝓤}{𝓤}{X}
  open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
@@ -229,7 +224,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
 
 #### <a id="the-new-free-algebra">The new free algebra</a>
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>[3](Varieties.FreeAlgebras.html#fn3)</sup>
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>[4](Varieties.FreeAlgebras.html#fn4)</sup>
 
 \begin{code}
 
@@ -319,20 +314,21 @@ We need a three more lemmas before we are ready to tackle our main goal.
    f : hom 𝔽 𝑨
    f = 𝔽-lift-hom 𝑨 sA h
 
-   h' ϕ : hom (𝑻 X) 𝑨
+   h' φ : hom (𝑻 X) 𝑨
    h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
-   ϕ = lift-hom 𝑨 h
+   φ = lift-hom 𝑨 h
 
-   f𝔑≡ϕ : (x : X) → (∣ f ∣ ∘ ∣ 𝔑 ∣) (ℊ x) ≡ ∣ ϕ ∣ (ℊ x)
-   f𝔑≡ϕ x = refl
-   h≡ϕ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ ϕ ∣ t
-   h≡ϕ t = free-unique gfe 𝑨 h' ϕ f𝔑≡ϕ t
+   f𝔑≡φ : ∀ x → (∣ f ∣ ∘ ∣ 𝔑 ∣)(ℊ x) ≡ ∣ φ ∣(ℊ x)
+   f𝔑≡φ x = refl
 
-   γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-   γ = ∣ ϕ ∣ p         ≡⟨ (h≡ϕ p)⁻¹ ⟩
-       ∣ f ∣ ( ∣ 𝔑 ∣ p ) ≡⟨ ap ∣ f ∣ 𝔑pq ⟩
-       ∣ f ∣ ( ∣ 𝔑 ∣ q ) ≡⟨ h≡ϕ q ⟩
-       ∣ ϕ ∣ q ∎
+   h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
+   h≡φ t = free-unique gfe 𝑨 h' φ f𝔑≡φ t
+
+   γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
+   γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ ap ∣ f ∣ 𝔑pq ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
+       ∣ φ ∣ q             ∎
 
 
  ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
@@ -349,10 +345,10 @@ We need a three more lemmas before we are ready to tackle our main goal.
    skA = siso (sbase kA) (≅-sym Lift-≅)
 
    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = gfe λ h → (𝑨 ⟦ p ⟧) h         ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
+   γ = gfe λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
                  (free-lift 𝑨 h) q ≡⟨ (free-lift-interp gfe 𝑨 h q)⁻¹  ⟩
-                 (𝑨 ⟦ q ⟧) h         ∎
+                 (𝑨 ⟦ q ⟧) h       ∎
 
 \end{code}
 
@@ -380,7 +376,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
   →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
   →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon ℭ homℭ ⟩ C))
-                      -----------------------------------------------------------
+                      --------------------------------------------------------
   →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
 
  free-quot-subalg-ℭ fe pe Cset ssR ssC = FirstHomCorollary fe pe (𝑻 X) ℭ homℭ Cset ssR ssC
@@ -419,30 +415,30 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
   𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
   𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
    where
-    ϕ : hom (𝑻 X) 𝑨
-    ϕ = lift-hom 𝑨 η
+    φ : hom (𝑻 X) 𝑨
+    φ = lift-hom 𝑨 η
 
-    ϕE : Epic ∣ ϕ ∣
-    ϕE = lift-of-epi-is-epi ηE
+    φE : Epic ∣ φ ∣
+    φE = lift-of-epi-is-epi ηE
 
     pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
     pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
 
-    kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ ϕ ∣
+    kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
     kerincl {p , q} x = γ
      where
       Apq : 𝑨 ⊧ p ≈ q
       Apq = pqlem2 p q x
-      γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
-      γ = ∣ ϕ ∣ p                    ≡⟨ refl ⟩
+      γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
+      γ = ∣ φ ∣ p                    ≡⟨ refl ⟩
           free-lift 𝑨 η p   ≡⟨ (free-lift-interp gfe 𝑨 η p)⁻¹ ⟩
           (𝑨 ⟦ p ⟧) η          ≡⟨ extfun (pqlem2 p q x) η  ⟩
           (𝑨 ⟦ q ⟧) η          ≡⟨ free-lift-interp gfe 𝑨 η q ⟩
           free-lift 𝑨 η q   ≡⟨ refl ⟩
-          ∣ ϕ ∣ q                    ∎
+          ∣ φ ∣ q                    ∎
 
     γ : epi 𝔽 𝑨
-    γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} ϕ ϕE hom𝔽 hom𝔽-is-epic  kerincl)
+    γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} φ φE hom𝔽 hom𝔽-is-epic  kerincl)
 
 
 \end{code}
@@ -495,14 +491,16 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 ----------------------------
 
-<span class="footnote" id="fn1"><sup>1</sup>Since `X` is not a subset of `𝔉`, technically it doesn't make sense to say "`X` generates `𝔉`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
+<sup>1</sup><span class="footnote" id="fn1"> Since `X` is not a subset of `𝔉`, technically it doesn't make sense to say "`X` generates `𝔉`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
 
-<span class="footnote" id="fn2"><sup>1</sup> In the previous version of the [UALib][] this section was part of a module called HSPTheorem module.</span>
+<sup>2</sup><span class="footnote" id="fn2"> In the previous version of the [UALib][] this section was part of a module called HSPTheorem module.</span>
 
-<span class="footnote" id="fn3"><sup>3</sup> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
+<sup>3</sup><span class="footnote" id="fn3"> In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed above played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.</span>
 
-<p></p>
-<p></p>
+<sup>4</sup><span class="footnote" id="fn4"> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
+
+<br>
+<br>
 
 
 [← Varieties.Preservation](Varieties.Preservation.html)
