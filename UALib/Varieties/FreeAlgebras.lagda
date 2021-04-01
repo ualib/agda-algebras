@@ -179,14 +179,12 @@ We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by 
 
 Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
-In this module we fix `𝓤`, `X`, and `𝒦` in advance and assume `𝕏`, which supplies, for each algebra `𝑨`, a surjective map `∣ 𝕏 𝑨 ∣` from `X` onto `𝑨`.
-
 \begin{code}
 
 module HSPTheorem
  {𝓤 : Universe} {X : 𝓤 ̇}
  {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}
- {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
+ -- {𝕏 : {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → X ↠ 𝑨}
  where
 
  open the-free-algebra {𝓤}{𝓤}{X}
@@ -406,14 +404,26 @@ Finally we come to one of the main theorems of this module; it asserts that ever
   𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
   𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
 
-  𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
-  𝔽-ModTh-epi 𝑨 AinMTV = γ
+
+\end{code}
+
+The last piece we need to prove that every model of `Th 𝕍𝒦` is a homomorphic image of `𝔽` is a crucial assumption that is taken for granted throughout informal universal algebra---namely, that our collection `X` of variable symbols is arbitrarily large and that we have an *environment* which interprets the variable symbols in every algebra under consideration. In other terms, an environment provides, for every algebra `𝑨`, a surjective mapping `η : X → ∣ 𝑨 ∣` from `X` onto the domain of `𝑨`.
+
+We do *not* assert that for an arbitrary type `X` such surjective maps exist.  Indeed, our `X` must is quite special to have this property.  Later, we will construct such an `X`, but for now we simply postulate its existence. Note that this assumption that an environment exists is only required in the proof of the theorem `𝔽-ModTh-epi`.
+
+\begin{code}
+
+  _↠_ : 𝓤 ̇ → Algebra 𝓸𝓿𝓾+ 𝑆 → 𝓸𝓿𝓾+ ̇
+  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+
+  𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
    where
     ϕ : hom (𝑻 X) 𝑨
-    ϕ = lift-hom 𝑨 (fst(𝕏 𝑨))
+    ϕ = lift-hom 𝑨 η
 
     ϕE : Epic ∣ ϕ ∣
-    ϕE = lift-of-epi-is-epi (snd (𝕏 𝑨))
+    ϕE = lift-of-epi-is-epi ηE
 
     pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
     pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
@@ -425,10 +435,10 @@ Finally we come to one of the main theorems of this module; it asserts that ever
       Apq = pqlem2 p q x
       γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
       γ = ∣ ϕ ∣ p                    ≡⟨ refl ⟩
-          free-lift 𝑨 (fst(𝕏 𝑨)) p   ≡⟨ (free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
-          (𝑨 ⟦ p ⟧) (fst(𝕏 𝑨))          ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
-          (𝑨 ⟦ q ⟧) (fst(𝕏 𝑨))          ≡⟨ free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) q ⟩
-          free-lift 𝑨 (fst(𝕏 𝑨)) q   ≡⟨ refl ⟩
+          free-lift 𝑨 η p   ≡⟨ (free-lift-interp gfe 𝑨 η p)⁻¹ ⟩
+          (𝑨 ⟦ p ⟧) η          ≡⟨ extfun (pqlem2 p q x) η  ⟩
+          (𝑨 ⟦ q ⟧) η          ≡⟨ free-lift-interp gfe 𝑨 η q ⟩
+          free-lift 𝑨 η q   ≡⟨ refl ⟩
           ∣ ϕ ∣ q                    ∎
 
     γ : epi 𝔽 𝑨
@@ -453,16 +463,16 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 #### <a id="the-hsp-theorem"> The HSP Theorem</a>
 
-Now that we have all of the necessary ingredients, it is all but trivial to combine them to prove Birkhoff's HSP theorem.
+Now that we have all of the necessary ingredients, it is all but trivial to combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists, which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
 
 \begin{code}
 
-  birkhoff : Mod (Th (V 𝒦)) ⊆ V 𝒦
+  birkhoff : (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
 
-  birkhoff {𝑨} α = γ
+  birkhoff 𝕏 {𝑨} α = γ
    where
     γ : 𝑨 ∈ (V 𝒦)
-    γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 α ) , ≅-refl)
+    γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
 
 \end{code}
 
