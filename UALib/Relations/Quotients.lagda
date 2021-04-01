@@ -131,10 +131,10 @@ The next type is used to represent an `R`-class with a designated representative
 
 \begin{code}
 
-⟦_⟧ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
-⟦ a ⟧ {R} = [ a ] R , a , refl
+⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
+⟪ a ⟫ {R} = [ a ] R , a , refl
 
-infix 60 ⟦_⟧
+infix 60 ⟪_⟫
 
 \end{code}
 

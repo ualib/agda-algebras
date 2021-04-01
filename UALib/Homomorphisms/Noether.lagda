@@ -126,7 +126,7 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
   θ = kercon 𝑩 h
 
   fmap : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
-  fmap ⟦a⟧ = ∣ h ∣ ⌜ ⟦a⟧ ⌝
+  fmap ⟪a⟧ = ∣ h ∣ ⌜ ⟪a⟧ ⌝
 
   fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 fmap
   fhom 𝑓 𝒂 =  ∣ h ∣((𝑓 ̂ 𝑨) λ x → ⌜ 𝒂 x ⌝)   ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
@@ -138,11 +138,11 @@ If we assume the hypotheses of the First Homomorphism theorem and add the assump
    a : ∣ 𝑨 ∣
    a = EpicInv ∣ h ∣ hE b
 
-   bfa : b ≡ fmap ⟦ a ⟧
+   bfa : b ≡ fmap ⟪ a ⟫
    bfa = (cong-app (EpicInvIsRightInv {fe = fev} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
-   γ = Image_∋_.eq b ⟦ a ⟧ bfa
+   γ = Image_∋_.eq b ⟪ a ⟫ bfa
 
   fmon : Monic fmap
   fmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) fuv =

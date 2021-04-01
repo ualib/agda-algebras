@@ -289,7 +289,7 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
 \begin{code}
 
  X↪𝔽 : X → ∣ 𝔽 ∣
- X↪𝔽 x = ⟦ ℊ x ⟧
+ X↪𝔽 x = ⟪ ℊ x ⟫
 
  𝔑 : hom (𝑻 X) 𝔽
  𝔑 = lift-hom 𝔽 X↪𝔽
@@ -350,11 +350,11 @@ We need a three more lemmas before we are ready to tackle our main goal.
    skA : 𝑨 ∈ S 𝒦
    skA = siso (sbase kA) (≅-sym Lift-≅)
 
-   γ : (p ̇ 𝑨) ≡ (q ̇ 𝑨)
-   γ = gfe λ h → (p ̇ 𝑨) h         ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
+   γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
+   γ = gfe λ h → (𝑨 ⟦ p ⟧) h         ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
                  (free-lift 𝑨 h) q ≡⟨ (free-lift-interp gfe 𝑨 h q)⁻¹  ⟩
-                 (q ̇ 𝑨) h         ∎
+                 (𝑨 ⟦ q ⟧) h         ∎
 
 \end{code}
 
@@ -426,8 +426,8 @@ Finally we come to one of the main theorems of this module; it asserts that ever
       γ : ∣ ϕ ∣ p ≡ ∣ ϕ ∣ q
       γ = ∣ ϕ ∣ p                    ≡⟨ refl ⟩
           free-lift 𝑨 (fst(𝕏 𝑨)) p   ≡⟨ (free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) p)⁻¹ ⟩
-          (p ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
-          (q ̇ 𝑨) (fst(𝕏 𝑨))          ≡⟨ free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) q ⟩
+          (𝑨 ⟦ p ⟧) (fst(𝕏 𝑨))          ≡⟨ extfun (pqlem2 p q x) (fst(𝕏 𝑨))  ⟩
+          (𝑨 ⟦ q ⟧) (fst(𝕏 𝑨))          ≡⟨ free-lift-interp gfe 𝑨 (fst(𝕏 𝑨)) q ⟩
           free-lift 𝑨 (fst(𝕏 𝑨)) q   ≡⟨ refl ⟩
           ∣ ϕ ∣ q                    ∎
 

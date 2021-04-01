@@ -234,7 +234,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical proje
  πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
-  cπ a = ⟦ a ⟧{⟨ θ ⟩}
+  cπ a = ⟪ a ⟫{⟨ θ ⟩}
 
   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
   cπ-is-hom _ _ = refl
@@ -378,7 +378,7 @@ con-in-ker 𝑨 θ x y hyp = γ
   κ : Congruence 𝑨
   κ = kercon 𝑨 {𝑨 ╱ θ} h
 
-  γ : ⟦ x ⟧ {⟨ θ ⟩}≡ ⟦ y ⟧{⟨ θ ⟩}
+  γ : ⟪ x ⟧ {⟨ θ ⟩}≡ ⟪ y ⟫{⟨ θ ⟩}
   γ = {!!}
 -->
 

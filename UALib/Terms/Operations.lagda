@@ -36,7 +36,19 @@ Thus the interpretation of a term is defined by induction on the structure of th
 
 \begin{code}
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ }  where
+
+ -- new notation
+
+ _⟦_⟧ : (𝑨 : Algebra 𝓤 𝑆) → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+
+ 𝑨 ⟦ ℊ x ⟧ = λ η → η x
+
+ 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
+
+
+
+ -- old notation:
 
  _̇_ : Term X → (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
@@ -50,11 +62,18 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 
 \begin{code}
 
- free-lift-interp : dfunext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
+ free-lift-interp : dfunext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(η : X → ∣ 𝑨 ∣)(p : Term X)
+  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
+
+ free-lift-interp _ 𝑨 η (ℊ x) = refl
+ free-lift-interp fe 𝑨 η (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (fe λ i → free-lift-interp fe 𝑨 η (𝑡 i))
+
+ -- old version
+ free-lift-interp' : dfunext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣)(p : Term X)
   →                 (p ̇ 𝑨) h ≡ (free-lift 𝑨 h) p
 
- free-lift-interp _ 𝑨 h (ℊ x) = refl
- free-lift-interp fe 𝑨 h (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (fe λ i → free-lift-interp fe 𝑨 h (𝑡 i))
+ free-lift-interp' _ 𝑨 h (ℊ x) = refl
+ free-lift-interp' fe 𝑨 h (node 𝑓 𝑡) = ap (𝑓 ̂ 𝑨) (fe λ i → free-lift-interp' fe 𝑨 h (𝑡 i))
 
 \end{code}
 
@@ -85,17 +104,31 @@ term-interp 𝑓 {𝑠}{𝑡} st = ap (node 𝑓) st
 
 module _ {𝓧 : Universe}{X : 𝓧 ̇}{fe : dfunext 𝓥 (ov 𝓧)} where
 
- term-gen : (p : ∣ 𝑻 X ∣) → Σ q ꞉ ∣ 𝑻 X ∣ , p ≡ (q ̇ 𝑻 X) ℊ
+ term-gen : (p : ∣ 𝑻 X ∣) → Σ q ꞉ ∣ 𝑻 X ∣ , p ≡ (𝑻 X ⟦ q ⟧) ℊ
  term-gen (ℊ x) = (ℊ x) , refl
  term-gen (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen (𝑡 i) ∥)
 
 
- term-gen-agreement : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) ℊ ≡ (∣ term-gen p ∣ ̇ 𝑻 X) ℊ
+ term-gen-agreement : (p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen p ∣ ⟧) ℊ
  term-gen-agreement (ℊ x) = refl
  term-gen-agreement (node f 𝑡) = ap (f ̂ 𝑻 X) (fe λ x → term-gen-agreement (𝑡 x))
 
- term-agreement : (p : ∣ 𝑻 X ∣) → p ≡ (p ̇ 𝑻 X) ℊ
+ term-agreement : (p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
  term-agreement p = snd (term-gen p) ∙ (term-gen-agreement p)⁻¹
+
+ -- old version:
+ term-gen' : (p : ∣ 𝑻 X ∣) → Σ q ꞉ ∣ 𝑻 X ∣ , p ≡ (q ̇ 𝑻 X) ℊ
+ term-gen' (ℊ x) = (ℊ x) , refl
+ term-gen' (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen' (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen' (𝑡 i) ∥)
+
+
+ term-gen-agreement' : (p : ∣ 𝑻 X ∣) → (p ̇ 𝑻 X) ℊ ≡ (∣ term-gen' p ∣ ̇ 𝑻 X) ℊ
+ term-gen-agreement' (ℊ x) = refl
+ term-gen-agreement' (node f 𝑡) = ap (f ̂ 𝑻 X) (fe λ x → term-gen-agreement' (𝑡 x))
+
+ term-agreement' : (p : ∣ 𝑻 X ∣) → p ≡ (p ̇ 𝑻 X) ℊ
+ term-agreement' p = snd (term-gen' p) ∙ (term-gen-agreement' p)⁻¹
+
 
 \end{code}
 
@@ -107,30 +140,56 @@ Note that while in the previous section it sufficed to postulate a local version
 
 \begin{code}
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
+module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇ }{I : 𝓦 ̇} where
 
- interp-prod : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
-               (𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
-               -----------------------------------------------
-  →            (p ̇ (⨅ 𝒜)) 𝑎 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝑎 j i))
+ interp-prod : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+  →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
 
  interp-prod (ℊ x₁) 𝒜 𝑎 = refl
 
  interp-prod (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod (𝑡 x) 𝒜 𝑎
+  in
+  (𝑓 ̂ ⨅ 𝒜) (λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) 𝑎)                     ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
+  (𝑓 ̂ ⨅ 𝒜)(λ x → λ i →  (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i)   ≡⟨ refl ⟩
+  (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i))  ∎
+
+ -- inferred type: 𝑡 : X → ∣ ⨅ 𝒜 ∣
+ interp-prod2 : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
+  →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 → (λ i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i))
+
+ interp-prod2 (ℊ x₁) 𝒜 = refl
+
+ interp-prod2 (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  let IH = λ x → interp-prod (t x) 𝒜  in
+  let tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧ in
+  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(gfe λ x → IH x tup)⟩
+  (f ̂ ⨅ 𝒜)(λ s → λ j → (𝒜 j ⟦ t s ⟧) (λ ℓ → tup ℓ j))   ≡⟨ refl ⟩
+  (λ i → (f ̂ 𝒜 i)(λ s →  (𝒜 i ⟦ t s ⟧) (λ ℓ → tup ℓ i))) ∎
+
+module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
+
+ interp-prod' : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
+               (𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+               -----------------------------------------------
+  →            (p ̇ (⨅ 𝒜)) 𝑎 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝑎 j i))
+
+ interp-prod' (ℊ x₁) 𝒜 𝑎 = refl
+
+ interp-prod' (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod' (𝑡 x) 𝒜 𝑎
   in
   (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝑎)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
   (𝑓 ̂ ⨅ 𝒜)(λ x → (λ i → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))   ≡⟨ refl ⟩
   (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))  ∎
 
 
- interp-prod2 : (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
+ interp-prod2' : (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
                 --------------------------------------------------------------
   →             (p ̇ ⨅ 𝒜) ≡ λ(𝑡 : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → 𝑡 x i))
 
- interp-prod2 (ℊ x₁) 𝒜 = refl
+ interp-prod2' (ℊ x₁) 𝒜 = refl
 
- interp-prod2 (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  let IH = λ x → interp-prod (t x) 𝒜  in
+ interp-prod2' (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  let IH = λ x → interp-prod' (t x) 𝒜  in
   let tA = λ z → t z ̇ ⨅ 𝒜 in
   (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(gfe λ x → IH x tup)⟩
   (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))   ≡⟨ refl ⟩
@@ -152,16 +211,30 @@ module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
  comm-hom-term : {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
                  (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
                  -----------------------------------------
-  →              ∣ h ∣ ((t ̇ 𝑨) a) ≡ (t ̇ 𝑩) (∣ h ∣ ∘ a)
+  →              ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
  comm-hom-term  𝑩 h (ℊ x) a = refl
 
- comm-hom-term {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨)λ i → (𝑡 i ̇ 𝑨) a)    ≡⟨ i  ⟩
-                                     (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣((𝑡 i ̇ 𝑨) a))  ≡⟨ ii ⟩
-                                     (𝑓 ̂ 𝑩)(λ r → (𝑡 r ̇ 𝑩)(∣ h ∣ ∘ a)) ∎
+ comm-hom-term {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
+                                     (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
+                                     (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
   where
-  i  = ∥ h ∥ 𝑓(λ r → (𝑡 r ̇ 𝑨) a)
+  i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
   ii = ap (𝑓 ̂ 𝑩)(gfe (λ i → comm-hom-term 𝑩 h (𝑡 i) a))
+
+ comm-hom-term' : {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+                 (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
+                 -----------------------------------------
+  →              ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
+
+ comm-hom-term'  𝑩 h (ℊ x) a = refl
+
+ comm-hom-term' {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣ ((𝑓 ̂ 𝑨)λ i → (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
+                                     (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
+                                     (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
+  where
+  i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
+  ii = ap (𝑓 ̂ 𝑩)(gfe (λ i → comm-hom-term' 𝑩 h (𝑡 i) a))
 
 \end{code}
 
@@ -175,11 +248,19 @@ module _ {𝓤 : Universe}{X : 𝓤 ̇} where
 
  _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
         -----------------------------------------
-  →     (t ̇ 𝑨) |: ∣ θ ∣
+  →     (𝑨 ⟦ t ⟧) |: ∣ θ ∣
 
  ((ℊ x) ∣: θ) p = p x
 
  ((node 𝑓 𝑡) ∣: θ) p = snd ∥ θ ∥ 𝑓 λ x → ((𝑡 x) ∣: θ) p
+
+ -- _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+ --        -----------------------------------------
+ --  →     (t ̇ 𝑨) |: ∣ θ ∣
+
+ -- ((ℊ x) ∣: θ) p = p x
+
+ -- ((node 𝑓 𝑡) ∣: θ) p = snd ∥ θ ∥ 𝑓 λ x → ((𝑡 x) ∣: θ) p
 
 
 \end{code}
@@ -190,11 +271,19 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun`
 
  compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
                    -----------------------------------------
-  →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
+  →                compatible-fun (𝑨 ⟦ t ⟧) ∣ θ ∣
 
  compatible-term (ℊ x) θ p = λ y z → z x
 
  compatible-term (node 𝑓 𝑡) θ u v p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term (𝑡 x) θ) u v) p
+
+ compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+                   -----------------------------------------
+  →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
+
+ compatible-term' (ℊ x) θ p = λ y z → z x
+
+ compatible-term' (node 𝑓 𝑡) θ u v p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' (𝑡 x) θ) u v) p
 
 
 \end{code}

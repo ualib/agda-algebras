@@ -79,7 +79,7 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \end{code}
 
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟦𝟎⟧[ 𝑨 ╱ θ ]` below.)
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟪𝟎⟫[ 𝑨 ╱ θ ]` below.)
 
 \begin{code}
 
@@ -100,7 +100,7 @@ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 �
 
 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
 
-        λ 𝑓 𝒂 → ⟦ (𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣) ⟧  -- the basic operations of the quotient algebra
+        λ 𝑓 𝒂 → ⟪(𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣)⟫  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -114,12 +114,12 @@ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 �
 
 \end{code}
 
-We easily obtain from this the zero congruence relation of `𝑨 ╱ θ` (which we denote by `⟦𝟎⟧ 𝑨 ╱ θ`) using the `Δ` function defined above.
+We easily obtain from this the zero congruence relation of `𝑨 ╱ θ` (which we denote by `⟪𝟎⟫ 𝑨 ╱ θ`) using the `Δ` function defined above.
 
 \begin{code}
 
-⟦𝟎⟧_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
-(⟦𝟎⟧ 𝑨 ╱ θ) {fe} = Δ fe
+⟪𝟎⟫_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
+(⟪𝟎⟫ 𝑨 ╱ θ) {fe} = Δ fe
 
 \end{code}
 
@@ -130,7 +130,7 @@ Finally, the following elimination rule is sometimes useful.
 
 module _ {𝑨 : Algebra 𝓤 𝑆} where
 
- ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟦ u ⟧{⟨ θ ⟩} ≡ ⟦ v ⟧ → ⟨ θ ⟩ u v
+ ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫{⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
  ╱-≡ θ refl = IsEquivalence.rfl (IsEquiv θ) _
 
 \end{code}

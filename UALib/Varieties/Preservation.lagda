@@ -34,10 +34,10 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- H-id1 p q α (hbase x) = ⊧-Lift-invariance p q (α x)
- H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invariance p q (H-id1 p q α x)
+ H-id1 p q α (hbase x) = ⊧-Lift-invar p q (α x)
+ H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invar p q (H-id1 p q α x)
 
- H-id1 p q α (hhimg{𝑨}HA((𝑩 , ϕ , (ϕhom , ϕsur)), B≅C)) = ⊧-I-invariance p q γ B≅C
+ H-id1 p q α (hhimg{𝑨}{𝑪} HA((𝑩 , ϕ , (ϕhom , ϕsur)), B≅C)) = ⊧-I-invar p q 𝑪 γ B≅C
   where
   β : 𝑨 ⊧ p ≈ q
   β = (H-id1 p q α) HA
@@ -48,15 +48,15 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
   ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕsur (𝒃 x))
 
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-                (p ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕhom) p(preim 𝒃))⁻¹ ⟩
-                ϕ((p ̇ 𝑨)(preim 𝒃))   ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
-                ϕ((q ̇ 𝑨)(preim 𝒃))   ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
-                (q ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-                (q ̇ 𝑩) 𝒃             ∎
+  γ : 𝑩 ⟦ p ⟧  ≡ 𝑩 ⟦ q ⟧
+  γ = gfe λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃             ≡⟨ (ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
+                (𝑩 ⟦ p ⟧)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕhom) p(preim 𝒃))⁻¹ ⟩
+                ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))   ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
+                ϕ((𝑨 ⟦ q ⟧)(preim 𝒃))   ≡⟨ comm-hom-term 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
+                (𝑩 ⟦ q ⟧)(ϕ ∘(preim 𝒃)) ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
+                (𝑩 ⟦ q ⟧) 𝒃             ∎
 
- H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (H-id1 p q α x) x₁
+ H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invar p q 𝑩 (H-id1 p q α x) x₁
 
 \end{code}
 
@@ -66,7 +66,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  H-id2 : ∀ {𝓦} → (p q : Term X) → H{𝓤}{𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- H-id2 p q Hpq KA = ⊧-lower-invariance p q (Hpq (hbase KA))
+ H-id2 p q Hpq KA = ⊧-lower-invar p q (Hpq (hbase KA))
 
 \end{code}
 
@@ -77,11 +77,11 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  S-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → S{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- S-id1 p q α (sbase x) = ⊧-Lift-invariance p q (α x)
- S-id1 p q α (slift x) = ⊧-Lift-invariance p q ((S-id1 p q α) x)
+ S-id1 p q α (sbase x) = ⊧-Lift-invar p q (α x)
+ S-id1 p q α (slift x) = ⊧-Lift-invar p q ((S-id1 p q α) x)
 
  S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  ⊧-S-class-invar p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
@@ -94,7 +94,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
    γ {𝑩} (inj₂ y) = Apq y
 
  S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  ⊧-S-class-invar p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
@@ -106,7 +106,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Apq y
 
- S-id1 p q α (siso{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (S-id1 p q α x) x₁
+ S-id1 p q α (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar p q 𝑩 (S-id1 p q α x) x₁
 
 \end{code}
 
@@ -116,7 +116,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
  S-id2 : ∀{𝓦}(p q : Term X) → S{𝓤}{𝓦}𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- S-id2 p q Spq {𝑨} KA = ⊧-lower-invariance p q (Spq (sbase KA))
+ S-id2 p q Spq {𝑨} KA = ⊧-lower-invar p q (Spq (sbase KA))
 
 \end{code}
 
@@ -129,22 +129,22 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  P-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → P{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- P-id1 p q α (pbase x) = ⊧-Lift-invariance p q (α x)
- P-id1 p q α (pliftu x) = ⊧-Lift-invariance p q ((P-id1 p q α) x)
- P-id1 p q α (pliftw x) = ⊧-Lift-invariance p q ((P-id1 p q α) x)
+ P-id1 p q α (pbase x) = ⊧-Lift-invar p q (α x)
+ P-id1 p q α (pliftu x) = ⊧-Lift-invar p q ((P-id1 p q α) x)
+ P-id1 p q α (pliftw x) = ⊧-Lift-invar p q ((P-id1 p q α) x)
 
- P-id1 p q α (produ{I}{𝒜} x) = ⊧-P-lift-invariance p q I 𝒜 IH
+ P-id1 p q α (produ{I}{𝒜} x) = ⊧-P-lift-invar I 𝒜 p q IH
   where
-  IH : ∀ i → (p ̇ Lift-alg (𝒜 i) 𝓤) ≡ (q ̇ Lift-alg (𝒜 i) 𝓤)
-  IH i = ⊧-Lift-invariance p q ((P-id1 p q α) (x i))
+  IH : ∀ i → (Lift-alg (𝒜 i) 𝓤) ⟦ p ⟧ ≡ (Lift-alg (𝒜 i) 𝓤) ⟦ q ⟧
+  IH i = ⊧-Lift-invar p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (prodw{I}{𝒜} x) = ⊧-P-lift-invariance p q I 𝒜 IH
+ P-id1 p q α (prodw{I}{𝒜} x) = ⊧-P-lift-invar I 𝒜 p q IH
   where
-  IH : ∀ i → (p ̇ Lift-alg (𝒜 i) 𝓤) ≡ (q ̇ Lift-alg (𝒜 i) 𝓤)
-  IH i = ⊧-Lift-invariance p q ((P-id1 p q α) (x i))
+  IH : ∀ i → Lift-alg (𝒜 i) 𝓤 ⟦ p ⟧ ≡ Lift-alg (𝒜 i) 𝓤 ⟦ q ⟧
+  IH i = ⊧-Lift-invar p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (P-id1 p q α x) x₁
- P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invariance p q (P-id1 p q α x) x₁
+ P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invar p q 𝑩 (P-id1 p q α x) x₁
+ P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invar p q 𝑩 (P-id1 p q α x) x₁
 
 \end{code}
 
@@ -154,7 +154,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  P-id2 : ∀ {𝓦}(p q : Term X) → P{𝓤}{𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- P-id2 p q PKpq KA = ⊧-lower-invariance p q (PKpq (pbase KA))
+ P-id2 p q PKpq KA = ⊧-lower-invar p q (PKpq (pbase KA))
 
 \end{code}
 
@@ -167,11 +167,11 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
  V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓤}{𝓤} 𝒦 ⊧ p ≋ q
 
- V-id1 p q α (vbase x) = ⊧-Lift-invariance p q (α x)
- V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
- V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
+ V-id1 p q α (vbase x) = ⊧-Lift-invar p q (α x)
+ V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invar p q ((V-id1 p q α) x)
+ V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invar p q ((V-id1 p q α) x)
 
- V-id1 p q α (vhimg{𝑨}VA((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance p q γ B≅C
+ V-id1 p q α (vhimg{𝑨}{𝑪}VA((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invar p q 𝑪 γ B≅C
   where
   IH : 𝑨 ⊧ p ≈ q
   IH = V-id1 p q α VA
@@ -182,16 +182,16 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
   ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕE (𝒃 x))
 
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃             ≡⟨ (ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-                (p ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕh) p(preim 𝒃))⁻¹ ⟩
-                ϕ ((p ̇ 𝑨)(preim 𝒃))  ≡⟨ ap ϕ (extfun IH (preim 𝒃)) ⟩
-                ϕ ((q ̇ 𝑨)(preim 𝒃))  ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
-                (q ̇ 𝑩)(ϕ ∘(preim 𝒃)) ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃) ⟩
-                (q ̇ 𝑩) 𝒃             ∎
+  γ : (𝑩 ⟦ p ⟧) ≡ (𝑩 ⟦ q ⟧)
+  γ = gfe λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃             ≡⟨ (ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
+                (𝑩 ⟦ p ⟧)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term 𝑩(ϕ , ϕh) p(preim 𝒃))⁻¹ ⟩
+                ϕ ((𝑨 ⟦ p ⟧)(preim 𝒃))  ≡⟨ ap ϕ (extfun IH (preim 𝒃)) ⟩
+                ϕ ((𝑨 ⟦ q ⟧)(preim 𝒃))  ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
+                (𝑩 ⟦ q ⟧)(ϕ ∘(preim 𝒃)) ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
+                (𝑩 ⟦ q ⟧) 𝒃             ∎
 
  V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  ⊧-S-class-invar p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -204,7 +204,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ {𝑩} (inj₂ y) = Asinglepq y
 
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
-  ⊧-S-class-invariance p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  ⊧-S-class-invar p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -216,10 +216,10 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Asinglepq y
 
- V-id1 p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invariance p q I 𝒜 λ i → V-id1 p q α (V𝒜 i)
- V-id1 p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invariance p q I 𝒜 λ i → V-id1 p q α (V𝒜 i)
- V-id1 p q α (visou VA A≅B) = ⊧-I-invariance p q (V-id1 p q α VA) A≅B
- V-id1 p q α (visow VA A≅B) = ⊧-I-invariance p q (V-id1 p q α VA) A≅B
+ V-id1 p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar I 𝒜 p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1 p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar I 𝒜 p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar p q 𝑩 (V-id1 p q α VA) A≅B
+ V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar p q 𝑩 (V-id1 p q α VA) A≅B
 
 \end{code}
 
@@ -229,11 +229,11 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
 
  V-id1' : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓤}{ov 𝓤 ⁺} 𝒦 ⊧ p ≋ q
 
- V-id1' p q α (vbase x) = ⊧-Lift-invariance p q (α x)
- V-id1' p q α (vlift{𝑨} x) = ⊧-Lift-invariance p q ((V-id1 p q α) x)
- V-id1' p q α (vliftw{𝑨} x) = ⊧-Lift-invariance p q ((V-id1' p q α) x)
+ V-id1' p q α (vbase x) = ⊧-Lift-invar p q (α x)
+ V-id1' p q α (vlift{𝑨} x) = ⊧-Lift-invar p q ((V-id1 p q α) x)
+ V-id1' p q α (vliftw{𝑨} x) = ⊧-Lift-invar p q ((V-id1' p q α) x)
 
- V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invariance p q γ B≅C
+ V-id1' p q α (vhimg{𝑨}{𝑪} VA ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invar p q 𝑪 γ B≅C
   where
   IH : 𝑨 ⊧ p ≈ q
   IH = V-id1' p q α VA
@@ -244,20 +244,20 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
   ζ : ∀ 𝒃 → ϕ ∘ (preim 𝒃) ≡ 𝒃
   ζ 𝒃 = gfe λ x → InvIsInv ϕ (ϕE (𝒃 x))
 
-  γ : (p ̇ 𝑩) ≡ (q ̇ 𝑩)
-  γ = gfe λ 𝒃 → (p ̇ 𝑩) 𝒃               ≡⟨(ap (p ̇ 𝑩) (ζ 𝒃))⁻¹ ⟩
-                (p ̇ 𝑩) (ϕ ∘ (preim 𝒃)) ≡⟨(comm-hom-term 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-                ϕ((p ̇ 𝑨)(preim 𝒃))     ≡⟨ ap ϕ (extfun IH (preim 𝒃))⟩
-                ϕ((q ̇ 𝑨)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃)⟩
-                (q ̇ 𝑩)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (q ̇ 𝑩) (ζ 𝒃)⟩
-                (q ̇ 𝑩) 𝒃                ∎
+  γ : 𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧
+  γ = gfe λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃               ≡⟨(ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
+                (𝑩 ⟦ p ⟧) (ϕ ∘ (preim 𝒃)) ≡⟨(comm-hom-term 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
+                ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))     ≡⟨ ap ϕ (extfun IH (preim 𝒃))⟩
+                ϕ((𝑨 ⟦ q ⟧)(preim 𝒃))     ≡⟨ comm-hom-term 𝑩 (ϕ , ϕh) q (preim 𝒃)⟩
+                (𝑩 ⟦ q ⟧)(ϕ ∘ (preim 𝒃))   ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃)⟩
+                (𝑩 ⟦ q ⟧) 𝒃                ∎
 
- V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invariance p q 𝑩 (V-id1 p q α VA) B≤A
- V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invariance p q 𝑩 (V-id1' p q α VA) B≤A
- V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invariance p q I 𝒜 λ i → V-id1 p q α (V𝒜 i)
- V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invariance p q I 𝒜 λ i → V-id1' p q α (V𝒜 i)
- V-id1' p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1 p q α VA) A≅B
- V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invariance p q (V-id1' p q α VA) A≅B
+ V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invar p q 𝑩 (V-id1 p q α VA) B≤A
+ V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar p q 𝑩 (V-id1' p q α VA) B≤A
+ V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar I 𝒜 p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar I 𝒜 p q λ i → V-id1' p q α (V𝒜 i)
+ V-id1' p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invar p q 𝑩 (V-id1 p q α VA) A≅B
+ V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar p q 𝑩 (V-id1' p q α VA) A≅B
 
 \end{code}
 
@@ -266,7 +266,7 @@ Once again, and for the last time, completeness dictates that we formalize the c
 \begin{code}
 
  V-id2 : ∀ {𝓦}(p q : Term X) → (V{𝓤}{𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- V-id2 p q Vpq {𝑨} KA = ⊧-lower-invariance p q (Vpq (vbase KA))
+ V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar p q (Vpq (vbase KA))
 
 \end{code}
 
@@ -288,7 +288,7 @@ module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov
 
  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
 
- class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invariance p q (Thpq (vbase KA))
+ class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar p q (Thpq (vbase KA))
 
 
  class-identities : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th 𝒱)

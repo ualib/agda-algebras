@@ -188,18 +188,18 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟦⟧ : (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
+ to-subtype-⟪⟫ : (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
   →              {C D : Pred A 𝓦}{c : 𝒞 ∣ 𝑹 ∣ C}{d : 𝒞 ∣ 𝑹 ∣ D}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟦⟧ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 ∣ 𝑹 ∣)  CD c) d)
+ to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 ∣ 𝑹 ∣)  CD c) d)
 
 
  class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
   →                      IsEquivalence ∣ 𝑹 ∣ → {u v : A}
-  →                      ∣ 𝑹 ∣ u v  →  ⟦ u ⟧ ≡ ⟦ v ⟧
+  →                      ∣ 𝑹 ∣ u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
- class-extensionality' pe ssA Reqv Ruv = to-subtype-⟦⟧ ssA (class-extensionality pe Reqv Ruv)
+ class-extensionality' pe ssA Reqv Ruv = to-subtype-⟪⟫ ssA (class-extensionality pe Reqv Ruv)
 
 \end{code}
 
@@ -296,7 +296,7 @@ Equivalently, using Pi types, as follows.
 
  class-extensionality'' : prop-ext 𝓤 𝓦
   →                       (Π C ꞉ _ , is-subsingleton (𝒞 ∣ 𝑹 ∣ C)) → IsEquivalence ∣ 𝑹 ∣
-  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟦ u ⟧ ≡ ⟦ v ⟧)
+  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟪ u ⟫ ≡ ⟪ v ⟫)
 
  class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
 
