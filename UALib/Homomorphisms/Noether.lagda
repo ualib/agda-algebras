@@ -112,11 +112,7 @@ If we postulate function extensionality, then we obtain the following variation 
 \begin{code}
 
  fe-NoetherHomUnique : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦 → (f g : hom (𝑨 [ 𝑩 ]/ker h) 𝑩)
-  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣
-  →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣
-                       ----------------------------
-  →                    ∣ f ∣ ≡ ∣ g ∣
-
+  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h ∣ → ∣ f ∣ ≡ ∣ g ∣
  fe-NoetherHomUnique fe f g hfk hgk = fe (NoetherHomUnique f g hfk hgk)
 
 \end{code}
@@ -125,10 +121,9 @@ If we assume the hypotheses of the first homomorphism theorem and add the assump
 
 \begin{code}
 
- FirstIsomorphismTheorem :
+ FirstIsomorphismTheorem : dfunext 𝓦 𝓦 → Epic ∣ h ∣
 
-  dfunext 𝓦 𝓦 → Epic ∣ h ∣  →  Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) ,
-                        (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣) × is-embedding ∣ f ∣
+  →    Σ f ꞉ (epi (𝑨 [ 𝑩 ]/ker h) 𝑩) , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h ∣) × is-embedding ∣ f ∣
 
  FirstIsomorphismTheorem fev hE = (fmap , fhom , fepic) , refl , femb
   where
@@ -136,7 +131,7 @@ If we assume the hypotheses of the first homomorphism theorem and add the assump
   θ = kercon 𝑩 h
 
   fmap : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
-  fmap ⟪a⟧ = ∣ h ∣ ⌜ ⟪a⟧ ⌝
+  fmap ⟪a⟫ = ∣ h ∣ ⌜ ⟪a⟫ ⌝
 
   fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 fmap
   fhom 𝑓 𝒂 =  ∣ h ∣((𝑓 ̂ 𝑨) λ x → ⌜ 𝒂 x ⌝)   ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
