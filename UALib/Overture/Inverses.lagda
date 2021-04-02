@@ -35,7 +35,7 @@ module _ {A : 𝓤 ̇ }{B : 𝓦 ̇ } where
 
 \end{code}
 
-Next we verify that the type just defined is what we expect.
+Next we verify that the type behaves as we expect.
 
 \begin{code}
 
@@ -44,7 +44,7 @@ Next we verify that the type just defined is what we expect.
 
 \end{code}
 
-An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a "witness" `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
+An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a witness `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
 
 \begin{code}
 
@@ -79,7 +79,7 @@ An epic (or surjective) function from `A` to `B` is as an inhabitant of the `Epi
 
 \end{code}
 
-We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applying the function `EpicInv` (which we now define) to the function `f` along with a proof, `fE : Epic f`, that `f` is surjective.
+With the next definition, we can represent the *right-inverse* of an epic function.
 
 \begin{code}
 
@@ -87,8 +87,7 @@ We obtain the right-inverse (or pseudoinverse) of an epic function `f` by applyi
  EpicInv f fE b = Inv f (fE b)
 
 \end{code}
-
-The function defined by `EpicInv f fE` is indeed the right-inverse of `f`. To state this, we'll use the function composition operation, `∘`, which is already defined in the [Type Topology][] library as follows.
+The right-inverse of `f` is obtained by applying `EpicInv` to `f` and a proof of `Epic f`. To see that this does indeed give the right-inverse we prove the `EpicInvIsRightInv` lemma below. This requires function composition, denoted `∘` and defined in the [Type Topology][] library.
 
 \begin{code}
 
@@ -99,6 +98,11 @@ module hide-∘ {A : 𝓤 ̇}{B : 𝓦 ̇}{C : B → 𝓦 ̇ } where
 
 open import MGS-MLTT using (_∘_) public
 
+\end{code}
+
+Note that the next proof requires function extensionality, which we postulate in the module declaration.
+
+\begin{code}
 
 module _ {fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
@@ -137,7 +141,7 @@ We can also prove the following composition law for epics.
 
 #### <a id="monics">Monics (injective functions)</a>
 
-We say that a function `f : A → B` is *monic* (or *injective* or *one-to-one*) if it doesn't map distinct elements to a common point. This property is formalized quite naturally using the `Monic` type, which we now define.
+We say that a function `f : A → B` is *monic* (or *injective*) if it does not map distinct elements to a common point. This following type manifests this property.
 
 \begin{code}
 
@@ -184,7 +188,7 @@ open import MGS-Embeddings using (is-embedding) public
 
 \end{code}
 
-Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. This is a natural way to represent what we usually mean in mathematics by embedding.  Observe that an embedding does not simply correspond to an injective map.  However, if we assume that the codomain `B` has unique identity proofs (i.e., is a set), then we can prove that a monic function into `B` is an embedding. We will do so in the [Relations.Truncation][] module when we take up the topic of sets in some detail.
+Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. Observe that an embedding so defined is not simply an injective map. However, if we assume that the codomain `B` has *unique identity proofs* (UIP), then we can prove that a monic function into `B` is an embedding.  We will do exactly that in the [Relations.Truncation][] module when we take up the topic of *sets* and the UIP.
 
 Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 

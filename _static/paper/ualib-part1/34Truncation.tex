@@ -120,9 +120,9 @@ which is part of Escardó's characterization of \emph{equality in Sigma types}.\
 \AgdaBound{τ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \\
-\>[.][@{}l@{}]\<[111I]%
-\>[10]\AgdaComment{--------------------------------------------------------------}\<%
-\\
+% \>[.][@{}l@{}]\<[111I]%
+% \>[10]\AgdaComment{--------------------------------------------------------------}\<%
+% \\
 \>[2]\AgdaSymbol{→}%
 \>[10]\AgdaBound{σ}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -832,7 +832,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \scpad
 \begin{code}
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
+\>[1]\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \>[400I]\AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
@@ -881,7 +881,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 % \\[\AgdaEmptyExtraSkip]%
 % %
-\>[1]\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
+\>[1]\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{D}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{CD}\AgdaSpace{}%
@@ -937,13 +937,13 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{u}\AgdaSpace{}%
 \AgdaBound{v}%
 \>[36]\AgdaSymbol{→}%
-\>[39]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\>[39]\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
 \AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟫}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
 \AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\<%
+\AgdaOperator{\AgdaFunction{⟫}}\<%
 \\
 %
 % \\[\AgdaEmptyExtraSkip]%
@@ -954,80 +954,80 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaBound{Reqv}\AgdaSpace{}%
 \AgdaBound{Ruv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{to-subtype-⟦⟧}\AgdaSpace{}%
+\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{class-extensionality}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{Reqv}\AgdaSpace{}%
 \AgdaBound{Ruv}\AgdaSymbol{)}\<%
 \end{code}
-\ccpad
-We could have presented the last theorem so that the consequent is a Pi type, as follows.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\>[402I]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\AgdaTab{402}%
-\>[25]\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑹}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{)}\<%
-\\
-%
-% \\[\AgdaEmptyExtraSkip]%
+% \ccpad
+% We could have presented the last theorem so that the consequent is a Pi type, as follows.
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \>[402I]\AgdaFunction{prop-ext}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(∀}\AgdaSpace{}%
+% \AgdaBound{C}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{is-subsingleton}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{𝒞}\AgdaSpace{}%
+% \AgdaBound{C}\AgdaSymbol{))}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{IsEquivalence}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑹}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\<%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]\AgdaSymbol{→}%
+% \AgdaTab{402}%
+% \>[25]\AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{u}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{v}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑹}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{u}\AgdaSpace{}%
+% \AgdaBound{v}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
+% \AgdaBound{u}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⟫}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
+% \AgdaBound{v}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⟫}}\AgdaSymbol{)}\<%
+% \\
 % %
-\>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaBound{Reqv}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{class-extensionality'}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaBound{Reqv}\AgdaSpace{}%
-\AgdaBound{Ruv}\<%
-\end{code}
+% % \\[\AgdaEmptyExtraSkip]%
+% % %
+% \>[1]\AgdaFunction{class-extensionality''}\AgdaSpace{}%
+% \AgdaBound{pe}\AgdaSpace{}%
+% \AgdaBound{ssA}\AgdaSpace{}%
+% \AgdaBound{Reqv}\AgdaSpace{}%
+% \AgdaBound{u}\AgdaSpace{}%
+% \AgdaBound{v}\AgdaSpace{}%
+% \AgdaBound{Ruv}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{class-extensionality'}\AgdaSpace{}%
+% \AgdaBound{pe}\AgdaSpace{}%
+% \AgdaBound{ssA}\AgdaSpace{}%
+% \AgdaBound{Reqv}\AgdaSpace{}%
+% \AgdaBound{Ruv}\<%
+% \end{code}
 
 
 
@@ -1038,7 +1038,7 @@ We could have presented the last theorem so that the consequent is a Pi type, as
 \subsubsection{Continuous propositions*\protect\cref{starred}}\label{sec:cont-prop-types}
 In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement the types we defined in the module \ualibhtml{Relations.Continuous}.  We should point out however that (so far) no other modules of the library depend on the types defined here. Therefore, the reader may safely skip to Section~\ref{sec:algebra-types} without fear that this will lead to confusion at some point later on.
 
-We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} module to represent relations of arbitrary arity. Here we introduce a new type of \emph{truncated continuous relations}, the inhabitants of which we call \defn{continuous propositions}.
+We defined a type called \af{ContRel} in the \ualibhtml{Relations.Continuous} module to represent relations of arbitrary arity. Here we introduce a new type of \emph{truncated continuous relations}, the inhabitants of which we call \defn{continuous propositions}.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -1079,13 +1079,13 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Relations.Continuous}\AgdaSpace{}%
 \AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ConRel}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ContRel}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{DepRel}\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{ConProp}\AgdaSpace{}%
+\>[1]\AgdaFunction{ContProp}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -1099,14 +1099,14 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{ConProp}\AgdaSpace{}%
+\>[1]\AgdaFunction{ContProp}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ConRel}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ContRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
@@ -1121,7 +1121,7 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{con-prop-ext}\AgdaSpace{}%
+\>[1]\AgdaFunction{cont-prop-ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
@@ -1135,14 +1135,14 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{con-prop-ext}\AgdaSpace{}%
+\>[1]\AgdaFunction{cont-prop-ext}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ConProp}\AgdaSpace{}%
+\AgdaFunction{ContProp}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{\}}\AgdaSpace{}%
@@ -1169,7 +1169,7 @@ We defined a type called \af{ConRel} in the \ualibhtml{Relations.Continuous} mod
 \end{code}
 \ccpad
 % \textbf{Remarks}. Here the context includes \{\ab 𝓤~\as :~\ap{Universe}\} and \{\ab I~\as :~\ab 𝓥\af ̇\}. As these types are new and have not yet seen much use elsewhere in the library, we place them in a named module so we can more easily detect if and when they become useful used. Finally, we use a convenient type alias in this section, namely, \af{uv}~\ab 𝓦 := \ab 𝓤~\apr ⊔~\ab 𝓥~\apr ⊔~\ab 𝓦\af ⁺.
-To see the point of the types just defined, suppose \af{con-prop-ext} \ab A \ab 𝓦 holds. Then we can prove that logically equivalent continuous propositions of type \af{ConProp} \ab A \ab 𝓦 are equivalent. In other words, under the stated hypotheses, we obtain the following  extensionality lemma for continuous propositions.
+To see the point of the types just defined, suppose \af{cont-prop-ext} \ab A \ab 𝓦 holds. Then we can prove that logically equivalent continuous propositions of type \af{ContProp} \ab A \ab 𝓦 are equivalent. In other words, under the stated hypotheses, we obtain the following  extensionality lemma for continuous propositions.
 \ccpad
 \begin{code}%
 % \>[0]\<%
@@ -1188,16 +1188,16 @@ To see the point of the types just defined, suppose \af{con-prop-ext} \ab A \ab 
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
+\>[2]\AgdaFunction{cont-prop-ext'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{con-prop-ext}\AgdaSpace{}%
+\AgdaFunction{cont-prop-ext}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{Q}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ConProp}\AgdaSpace{}%
+\AgdaFunction{ContProp}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1214,7 +1214,7 @@ To see the point of the types just defined, suppose \af{con-prop-ext} \ab A \ab 
 \AgdaBound{Q}\<%
 \\
 %
-\>[2]\AgdaFunction{con-prop-ext'}\AgdaSpace{}%
+\>[2]\AgdaFunction{cont-prop-ext'}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%

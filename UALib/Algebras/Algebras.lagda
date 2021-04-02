@@ -114,10 +114,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}  where
 
 \end{code}
 
-What makes the types just defined useful for resolving type level errors is the nice properties they possess. Specifically, we will prove each of the following properties at various places in the [UALib][].
+What makes the types just defined useful for resolving type level errors is the nice properties they possess.  Indeed, the [UALib][] contains formal proofs of the following facts.
 
 + [`Lift` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Homomorphisms.Basic][])
-+ [`Lift` is an "algebraic invariant"](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
++ [`Lift` is an algebraic invariant](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
 + [`Lift` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Subalgebras.Subalgebras][])
 + [`Lift` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
 

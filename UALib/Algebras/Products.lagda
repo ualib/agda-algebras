@@ -8,7 +8,7 @@ author: William DeMeo
 
 ### <a id="product-algebras">Product Algebras</a>
 
-This section presents the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
 Notice that we begin this module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
 
@@ -58,7 +58,7 @@ The type just defined is the one that will be used throughout the [UALib][] when
 
 
 
-**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra 𝓤 𝑆` has universe `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that it is worthwhile to define the following shorthand for their universes.
+**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra 𝓤 𝑆` has universe `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that we define the following shorthand for their universes.
 
 \begin{code}
 
@@ -75,8 +75,7 @@ An arbitrary class `𝒦` of algebras is represented as a predicate over the typ
 
 To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is definitely *not* what we want.  To see why, recall that `Pred (Algebra 𝓤 𝑆) 𝓦`, is just an alias for the function type `Algebra 𝓤 𝑆 → 𝓦 ̇`. We interpret the latter semantically by taking `𝒦 𝑨` (and `𝑨 ∈ 𝒦`) to denote the assertion that `𝒦 𝑨` belongs to `𝒦`. Therefore, by definition, we have
 
-`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨`<br>
-&nbsp; &nbsp; &nbsp; `= Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦`.
+`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨` &nbsp; &nbsp; `=` &nbsp; &nbsp; `Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦`.
 
 Semantically, this is the assertion that *every algebra of type* `Algebra 𝓤 𝑆` *belongs to* `𝒦`, and this bears little resemblance to the product of algebras that we seek.
 

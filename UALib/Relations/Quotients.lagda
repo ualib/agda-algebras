@@ -97,7 +97,7 @@ map-kernel-IsEquivalence f = record { rfl = λ x → refl ;
 
 #### <a id="equivalence-classes">Equivalence classes (blocks)</a>
 
-If R is an equivalence relation on A, then for each `𝑎 : A`, there is an **equivalence class** or **block** containing 𝑎, which we denote and define by [ 𝑎 ] R := all `𝑏 : A` such that R 𝑎 𝑏.
+If R is an equivalence relation on A, then for each `𝑎 : A`, there is an *equivalence class* (or *equivalence block*) containing 𝑎, which we denote and define by [ 𝑎 ] R := all `𝑏 : A` such that R 𝑎 𝑏.
 
 \begin{code}
 
@@ -108,7 +108,7 @@ infix 60 [_]_
 
 \end{code}
 
-Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to [ 𝑎 ] R as the *R-class containing* 𝑎, and we represent the collection of all such `R`-classes by the following type.
+Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to [ 𝑎 ] R as the *R-block containing* 𝑎, and we represent the collection of all such `R`-blocks by the following type.
 
 \begin{code}
 
@@ -117,7 +117,7 @@ Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to [ �
 
 \end{code}
 
-If `R` is an equivalence relation on `A`, then the **quotient** of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all equivalence classes of `R`. There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
+If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all `R`-blocks.  There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
 
 \begin{code}
 
@@ -127,12 +127,12 @@ A / R = Σ C ꞉ Pred A _ ,  𝒞 R C
 infix -1 _/_
 \end{code}
 
-The next type is used to represent an `R`-class with a designated representative.
+We use the following type to represent an `R`-block with a designated representative.
 
 \begin{code}
 
 ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
-⟪ a ⟫ {R} = [ a ] R , a , refl
+⟪ a ⟫ {R} = ([ a ] R , a , refl)
 
 infix 60 ⟪_⟫
 

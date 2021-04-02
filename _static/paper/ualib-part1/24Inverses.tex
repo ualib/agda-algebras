@@ -65,7 +65,7 @@
 \AgdaBound{b}\<%
 \end{code}
 \ccpad
-Next we verify that the type just defined is what we expect.
+Next we verify that the type behaves as we expect.
 \ccpad
 \begin{code}
 \>[1]\AgdaFunction{ImageIsImage}\AgdaSpace{}%
@@ -103,7 +103,7 @@ Next we verify that the type just defined is what we expect.
 \AgdaBound{b≡fa}\<%
 \end{code}
 \ccpad
-An inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab p), where \abt{a}{A}, and \ab p is a proof that \ab f maps \ab a to \ab b; that is, \ab p \as : \ab b \ad ≡ \ab f \ab a. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a ``witness'' \abt{a}{A}, we can actually \emph{compute} a \emph{pseudoinverse} of \ab f. This function takes an arbitrary \ab b \as : \ab B and a (\textit{witness}, \textit{proof})-pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
+An inhabitant of \af{Image} \ab f \af ∋ \ab b is a pair (\ab a , \ab p), where \abt{a}{A}, and \ab p is a proof that \ab f maps \ab a to \ab b; that is, \ab p \as : \ab b \ad ≡ \ab f \ab a. Since the proof that \ab b belongs to the image of \ab f is always accompanied by a witness \abt{a}{A}, we can actually \emph{compute} a pseudoinverse of \ab f. This will be a function that takes an arbitrary \ab b \as : \ab B and a (\textit{witness}, \textit{proof})-pair, (\ab a , \ab p) \as : \af{Image} \ab f \af ∋ \ab b, and returns \ab a.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Inv}\AgdaSpace{}%
@@ -196,14 +196,12 @@ We can prove that \af{Inv} \ab f is the \emph{right-inverse} of \ab f, as follow
 
 \subsubsection{Epics (surjective functions)}\label{surjective-functions}
 
-An \defn{epic} (or \defn{surjective}) function from \ab A to \ab B \as is as an inhabitant of the \af{Epic} type, which we now define.
+We represent an \defn{epic} (or \defn{surjective}) function from \ab A to \ab B \as as an inhabitant of the following type.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Epic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}%
@@ -225,7 +223,7 @@ An \defn{epic} (or \defn{surjective}) function from \ab A to \ab B \as is as an 
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-We obtain the right-inverse of an epic function \ab f by applying the function \af{EpicInv} (which we now define) to the function \ab f along with a proof, \ab{fepi} \as : \af{Epic} \ab f, that \ab f is surjective.
+With the next definition, we can represent the \defn{right-inverse} of an epic function.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{EpicInv}\AgdaSpace{}%
@@ -255,7 +253,7 @@ We obtain the right-inverse of an epic function \ab f by applying the function \
 \AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse of \ab f. To state this, we'll use the function composition operation \af{∘}, which is already defined in the \typetopology library, as follows.
+The right-inverse of \ab f is obtained by applying \af{EpicInv} to \ab f along with a proof of \af{Epic}~\ab f. To see that this does indeed give the right-inverse we prove the \af{EpicInvIsRightInv} lemma below. This requires function composition, denoted \af{∘} and defined in the \typetopology library.
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -297,7 +295,7 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
-\scpad
+\ccpad
 % \\
 % %
 % \\[\AgdaEmptyExtraSkip]%
@@ -383,7 +381,8 @@ The function defined by \af{EpicInv} \ab f \ab{fepi} is indeed the right-inverse
 % \AgdaBound{x}\AgdaSymbol{))}\<%
 % \end{code}
 %
-We can now express the assertion that \af{EpicInv} \ab f does, indeed, give the right-inverse of \ab f.  Note that the proof requires function extensionality.
+%We can now express the assertion that \af{EpicInv} \ab f does, indeed, give the right-inverse of \ab f.  
+Note that the next proof requires function extensionality, which we postulate in the module declaration.
 \ccpad
 \begin{code}
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -441,8 +440,8 @@ We can now express the assertion that \af{EpicInv} \ab f does, indeed, give the 
 \AgdaSymbol{(}\AgdaBound{fE}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
-\ccpad
-Here we break with our convention of hiding anonymous module declarations in order to emphasize that function extensionality is required. Also, this gives us a chance to demonstrating how one postulates function extensionality in a module declaration. We will see many more such examples later.
+% \ccpad
+% Here we break with our convention of hiding anonymous module declarations in order to emphasize that function extensionality is required. Also, this gives us a chance to demonstrating how one postulates function extensionality in a module declaration. We will see many more such examples later.
 
 
 \subsubsection{Monics (injective functions)}\label{injective-functions}
@@ -450,7 +449,7 @@ Here we break with our convention of hiding anonymous module declarations in ord
 % \subsubsection{Monics (injective functions)\protect\footnotemark}\label{injective-functions}
 % \contextfn{uwab}{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}}
 
-We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it does not map distinct elements to a common point. The \af{Monic} type, which we now define, manifests this property.
+We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it does not map distinct elements to a common point. The following type manifests this property.
 % As above, we usually omit easily inferred typing judgments like \ab{A} \as{:} \ab{𝓤}\af ̇ and \ab{B} 
 % \as{:} \ab{𝓦}\af ̇.
 \ccpad
@@ -543,8 +542,7 @@ We obtain the left-inverse by applying the function \af{MonicInv} to \ab g and a
 \AgdaBound{imfb}\<%
 \end{code}
 \ccpad
-The function defined by \af{MonicInv} \ab f \ab{fM} is a (left-)pseudo-inverse
-of \ab f, and the proof is trivial.
+The function defined by \af{MonicInv} \ab f \ab{fM} is a left-inverse of \ab f, and the proof is trivial.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInvIsLeftInv}\AgdaSpace{}%
@@ -614,7 +612,7 @@ The \af{is-embedding} type is defined in the \typetopology library in the follow
 \AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Thus, \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons. This is a natural way to represent what we usually mean in mathematics by embedding. Observe that an embedding does not simply correspond to an injective map. However, if we assume that the codomain \ab B has unique identity proofs (i.e., \ab B is a \emph{set}), then we can prove that a monic function into \ab B is an embedding. We postpone this until we arrive at the \ualibhtml{Relations.Truncation} module and take up the topic of sets.
+Thus, \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons. Observe that an embedding so defined is not simply an injective map. However, if we assume that the codomain \ab B has \emph{unique identity proofs} (UIP), then we can prove that a monic function into \ab B is an embedding. We discuss the UIP principle in~\S\ref{sec:trunc-sets-prop} where we present the \ualibhtml{Relations.Truncation} module.
 
 Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 \ccpad

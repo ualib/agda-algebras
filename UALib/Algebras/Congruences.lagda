@@ -20,7 +20,7 @@ open import Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
-A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of different ways, not only in type theory, but also in the informal presentation.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, a compatible equivalence relation can be represented as an inhabitant of a certain Sigma type (which we denote by `Con`) or a record type (which we denote by `Congruence`).
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, we represent a congruence as an inhabitant of either a the Sigma type `Con` or the record type `Congruence`, which we now define.
 
 \begin{code}
 
@@ -38,7 +38,7 @@ open Congruence
 
 \end{code}
 
-Each of these two options captures the informal notion of congruence. In fact, they are equivalent and the bi-implication is easily verified as follows.
+Each of these types captures the informal notion of congruence, and the only real difference between them is that `Congruence` includes the extra universe parameter `𝓦` to accommodate more general underlying relations.   Otherwise, the two definitions are equivalent in the sense that each implies the other, as we now prove.
 
 \begin{code}
 
@@ -56,9 +56,7 @@ module _ {𝑨 : Algebra 𝓤 𝑆} where
 
 
 #### <a id="example">Example</a>
-We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module, and we now demonstrate how to build the trivial congruence out of this relation.
-
-The relation `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎-rel` as its underlying relation. Observe that `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 
@@ -79,7 +77,7 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \end{code}
 
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like. (For example, see the proof of `⟪𝟎⟫[ 𝑨 ╱ θ ]` below.)
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
 
 \begin{code}
 
@@ -89,18 +87,21 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 \end{code}
 
 
+A concrete example is `⟪𝟎⟫[ 𝑨 ╱ θ ]`, presented in the next subsection.
+
 #### <a id="quotient-algebras">Quotient algebras</a>
-In many areas of abstract mathematics (including universal algebra) the quotient of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays a central role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
+In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
 
-open Congruence
+module _ {𝓤 𝓦 : Universe} where
+ open Congruence
 
-_╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
-𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
+ 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
 
-        λ 𝑓 𝒂 → ⟪(𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣)⟫  -- the basic operations of the quotient algebra
+         λ 𝑓 𝒂 → ⟪(𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣)⟫  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -109,17 +110,17 @@ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 �
 \begin{code}
 
 
-𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
-𝟎[ 𝑨 ╱ θ ] = λ u v → u ≡ v
+ 𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
+ 𝟎[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
 \end{code}
 
-We easily obtain from this the zero congruence relation of `𝑨 ╱ θ` (which we denote by `⟪𝟎⟫ 𝑨 ╱ θ`) using the `Δ` function defined above.
+From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the `Δ` function defined above.
 
 \begin{code}
 
-⟪𝟎⟫_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
-(⟪𝟎⟫ 𝑨 ╱ θ) {fe} = Δ fe
+ ⟪𝟎⟫_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
+ (⟪𝟎⟫ 𝑨 ╱ θ) {fe} = Δ fe
 
 \end{code}
 
@@ -128,7 +129,7 @@ Finally, the following elimination rule is sometimes useful.
 
 \begin{code}
 
-module _ {𝑨 : Algebra 𝓤 𝑆} where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
  ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫{⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
  ╱-≡ θ refl = IsEquivalence.rfl (IsEquiv θ) _

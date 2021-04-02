@@ -105,7 +105,7 @@ Above we saw lifts of continuous relations and what it means for such relations 
 module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 
  eval-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → J → 𝒜 i) → 𝓥 ⊔ 𝓦 ̇
- eval-dep-rel R 𝕒 = ∀ (j : J) → R (λ i → (𝕒 i) j)
+ eval-dep-rel R 𝒂 = ∀ (j : J) → R (λ i → (𝒂 i) j)
 
  dep-compatible-fun : (∀ i → (J → 𝒜 i) → 𝒜 i) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
  dep-compatible-fun 𝑓 R  = ∀ 𝒂 → (eval-dep-rel R) 𝒂 → R λ i → (𝑓 i)(𝒂 i)

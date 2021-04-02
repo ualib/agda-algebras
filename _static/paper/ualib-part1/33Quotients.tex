@@ -197,7 +197,7 @@ Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton
 
 
 
-\subsubsection{Equivalence classes}\label{equivalence-classes}
+\subsubsection{Equivalence relations}\label{equivalence-classes}
 
 A binary relation is called a \defn{preorder} if it is reflexive and transitive. An \defn{equivalence relation} is a symmetric preorder. Here are the types we use to represent these concepts in the \ualib.
 \ccpad
@@ -379,9 +379,9 @@ An easy first example of an equivalence relation is the kernel of any function. 
 \AgdaSymbol{\}}\<%
 \end{code}
 
-\subsubsection{Equivalence classes}\label{equivalence-classes-1}
+\subsubsection{Equivalence classes (blocks)}\label{equivalence-classes-1}
 
-If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there is an \defn{equivalence class} containing \ab 𝑎, which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} all \abt{𝑏}{A} such that \ab R \ab 𝑎 \ab 𝑏.
+If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there is an \defn{equivalence class} (or \defn{equivalence block}) containing \ab 𝑎, which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} \as{\{}\abt{x}{A}~|~\ab R~\ab x~\ab 𝑏\as{\}}. %We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -425,7 +425,7 @@ If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x, as desired. We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-class containing} \ab 𝑎, and we represent the collection of all such \ab R-classes by the following type.
+Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x. We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-block containing} \ab 𝑎, and we represent the collection of all such \ab R-blocks by the following type.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
@@ -466,7 +466,9 @@ Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x
 \end{code}
 \ccpad
 If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R}, denoted by
-\ab{A} \aof / \ab R, is defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of equivalence classes of \ab{R}. There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
+\ab{A} \aof / \ab R, is defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A.
+
+There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -517,24 +519,24 @@ If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{
 \AgdaBound{C}\<%
 \end{code}
 \ccpad
-The next type is used to represent an `R`-class with a designated representative.
+We use the following type to represent an \ab R-block with a designated representative.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaOperator{\AgdaFunction{⟪\AgdaUnderscore{}⟫}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -549,22 +551,22 @@ The next type is used to represent an `R`-class with a designated representative
 \AgdaBound{R}\<%
 \\
 %
-\>[1]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟫}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-This serves as a kind of \emph{introduction rule}.  Dually, the next type provides an *elimination rule*.\footnote{%
+This serves as a kind of \emph{introduction rule}.  Dually, the next type provides an \emph{elimination rule}.\footnote{%
 \textbf{Unicode Hint}. Type \af ⌜ and \af ⌝ as \texttt{\textbackslash{}cul} and \texttt{\textbackslash{}cur} in \agdamode.}
 \ccpad
 \begin{code}%
@@ -583,7 +585,7 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \AgdaBound{A}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
+% \\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
 \AgdaBound{𝕔}\AgdaSpace{}%
@@ -594,8 +596,7 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \AgdaBound{𝕔}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
-\scpad
-
+\ccpad
 Later we will need the following tools for working with the quotient types defined above.
 \ccpad
 \begin{code}%
