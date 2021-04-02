@@ -25,7 +25,19 @@ open import Homomorphisms.Basic{𝑆 = 𝑆}{gfe} public
 
 #### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
-Here is a version of the so-called *First Homomorphism theorem* (sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as "modern algebra").<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
+Here we formalize a version of the *first homomorphism theorem*, sometimes called *Noether's first homomorphism theorem*, after Emmy Noether who was among the first proponents of the abstract approach to the subject that we now call "modern algebra").
+
+Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
+
+Our formal proof of this theorem will require function extensionality as well as a couple of truncation assumptions. The function extensionality postulate (`fe`) will be clear enough.  As for the truncation assumptions, we require the following:<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
+
++ *uniqueness of kernel-membership/kernel-block-identity proofs*: proving that `φ` is monic requires that the kernel of `h` inhabits the type `Pred₂` of *binary propositions* (postulate `ssR`) and that we are able to decide when two blocks of the kernel are equal (postulate `ssA`);
+
++ *uniqueness of codomain-identity proofs*: proving that `φ` is an embedding requires that the codomain `∣ 𝑩 ∣` is a *set*, that is, has unique identity proofs (postulate `Bset`).
+
+Note that the classical, informal statement of the theorem does not demand that `φ` be an embedding (in our sense of having subsingleton fibers), and if we left this out of the consequent of the formal theorem statement below, then we could omit from the antecedent the assumption that ∣ 𝑩 ∣ is a set.
+
+Without further ado, we present our formalization of the first homomorphism theorem.<sup>[2](Homomorphisms.Noether.html#fn2)</sup>
 
 \begin{code}
 
@@ -42,44 +54,42 @@ module _ {𝓤 𝓦 : Universe}
             (Bset : is-set ∣ 𝑩 ∣)
             (ssR : ∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
             (ssA : ∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
-
  where
-
 
  FirstHomomorphismTheorem :
 
-  Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
-       (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣) × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
+  Σ φ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 ,
+       (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
 
- FirstHomomorphismTheorem = (ϕ , ϕhom) , ϕcom , ϕmon , ϕemb
+ FirstHomomorphismTheorem = (φ , φhom) , φcom , φmon , φemb
   where
   θ : Congruence 𝑨
   θ = kercon 𝑩 h
 
-  ϕ : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
-  ϕ a = ∣ h ∣ ⌜ a ⌝
+  φ : ∣ 𝑨 [ 𝑩 ]/ker h ∣ → ∣ 𝑩 ∣
+  φ a = ∣ h ∣ ⌜ a ⌝
 
   𝑹 : Pred₂ ∣ 𝑨 ∣ 𝓦
   𝑹 = ⟨ kercon 𝑩 h ⟩ , ssR
 
-  ϕhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 ϕ
-  ϕhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
+  φhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h) 𝑩 φ
+  φhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌜ 𝒂 x ⌝) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌜ 𝒂 x ⌝)  ⟩
              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌜ 𝒂 x ⌝)) ≡⟨ ap (𝑓 ̂ 𝑩) (fe λ x → refl) ⟩
-             (𝑓 ̂ 𝑩) (λ x → ϕ (𝒂 x))             ∎
+             (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
-  ϕmon : Monic ϕ
-  ϕmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) ϕuv =
-   class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) ϕuv
+  φmon : Monic φ
+  φmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) φuv =
+   class-extensionality' {𝑹 = 𝑹} pe ssA (IsEquiv θ) φuv
 
-  ϕcom : ∣ h ∣ ≡ ϕ ∘ ∣ πker 𝑩 h ∣
-  ϕcom = refl
+  φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h ∣
+  φcom = refl
 
-  ϕemb : is-embedding ϕ
-  ϕemb = monic-is-embedding|sets ϕ Bset ϕmon
+  φemb : is-embedding φ
+  φemb = monic-is-embedding|sets φ Bset φmon
 
 \end{code}
 
-Next we prove that the homomorphism `ϕ`, whose existence we just proved, is unique.
+Next we prove that the homomorphism `φ`, whose existence we just proved, is unique.
 
 \begin{code}
 
@@ -111,7 +121,7 @@ If we postulate function extensionality, then we obtain the following variation 
 
 \end{code}
 
-If we assume the hypotheses of the First Homomorphism theorem and add the assumption that `h` is epic, then we get the so-called First Isomorphism theorem.
+If we assume the hypotheses of the first homomorphism theorem and add the assumption that `h` is epic, then we get the so-called *first isomorphism theorem*.
 
 \begin{code}
 
@@ -205,13 +215,13 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 #### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 
-If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `ϕ : hom 𝑪 𝑩` such that `g = ϕ ∘ h`, that is, such that the following diagram commutes;
+If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h`, that is, such that the following diagram commutes;
 
 ```
 𝑨---- h -->>𝑪
  \         .
   \       .
-   g     ∃ϕ
+   g     ∃φ
     \   .
      \ .
       V
@@ -226,21 +236,21 @@ homFactor : {𝓤 : Universe} → funext 𝓤 𝓤 → {𝑨 𝑩 𝑪 : Algebra
             (g : hom 𝑨 𝑩) (h : hom 𝑨 𝑪)
  →          kernel ∣ h ∣ ⊆ kernel ∣ g ∣  →   Epic ∣ h ∣
             -------------------------------------------
- →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ ϕ ∣ ∘ ∣ h ∣
+ →          Σ φ ꞉ (hom 𝑪 𝑩) , ∣ g ∣ ≡ ∣ φ ∣ ∘ ∣ h ∣
 
-homFactor fe{𝑨}{𝑩}{𝑪}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomCB) , g≡ϕ∘h
+homFactor fe{𝑨}{𝑩}{𝑪}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (φ , φIsHomCB) , gφh
  where
  hInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
  hInv = λ c → (EpicInv h hEpi) c
 
- ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
- ϕ = λ c → g ( hInv c )
+ φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+ φ = λ c → g ( hInv c )
 
  ξ : ∀ x → kernel h (x , hInv (h x))
  ξ x = (cong-app (EpicInvIsRightInv {fe = fe} h hEpi) (h x))⁻¹
 
- g≡ϕ∘h : g ≡ ϕ ∘ h
- g≡ϕ∘h = fe  λ x → Kh⊆Kg (ξ x)
+ gφh : g ≡ φ ∘ h
+ gφh = fe  λ x → Kh⊆Kg (ξ x)
 
  ζ : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣)(x : ∥ 𝑆 ∥ 𝑓) →  𝒄 x ≡ (h ∘ hInv)(𝒄 x)
  ζ  𝑓 𝒄 x = (cong-app (EpicInvIsRightInv {fe = fe} h hEpi) (𝒄 x))⁻¹
@@ -252,9 +262,9 @@ homFactor fe{𝑨}{𝑩}{𝑪}(g , ghom)(h , hhom) Kh⊆Kg hEpi = (ϕ , ϕIsHomC
  useker 𝑓 c = Kh⊆Kg (cong-app (EpicInvIsRightInv{fe = fe} h hEpi)
                               (h ((𝑓 ̂ 𝑨)(hInv ∘ c))) )
 
- ϕIsHomCB : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → ϕ((𝑓 ̂ 𝑪) 𝒄) ≡ (𝑓 ̂ 𝑩)(ϕ ∘ 𝒄)
+ φIsHomCB : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → φ((𝑓 ̂ 𝑪) 𝒄) ≡ (𝑓 ̂ 𝑩)(φ ∘ 𝒄)
 
- ϕIsHomCB 𝑓 𝒄 =  g (hInv ((𝑓 ̂ 𝑪) 𝒄))              ≡⟨ i   ⟩
+ φIsHomCB 𝑓 𝒄 =  g (hInv ((𝑓 ̂ 𝑪) 𝒄))              ≡⟨ i   ⟩
                 g (hInv ((𝑓 ̂ 𝑪)(h ∘ (hInv ∘ 𝒄)))) ≡⟨ ii  ⟩
                 g (hInv (h ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))))   ≡⟨ iii ⟩
                 g ((𝑓 ̂ 𝑨)(hInv ∘ 𝒄))              ≡⟨ iv  ⟩
@@ -273,7 +283,7 @@ Here's a more general version.
 𝑨 --- γ ->> 𝑪
  \         .
   \       .
-   β     ∃ϕ
+   β     ∃φ
     \   .
      \ .
       V
@@ -288,21 +298,21 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
              (β : hom 𝑨 𝑩) (γ : hom 𝑨 𝑪)
   →          Epic ∣ γ ∣ → (kernel ∣ γ ∣) ⊆ (kernel ∣ β ∣)
              --------------------------------------------
-  →          Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ γ ∣
+  →          Σ φ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ φ ∣ ∘ ∣ γ ∣
 
- HomFactor 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (ϕ , ϕIsHomCB) , βϕγ
+ HomFactor 𝑨 {𝑩}{𝑪} β γ γE Kγβ = (φ , φIsHomCB) , βφγ
   where
   γInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
   γInv = λ y → (EpicInv ∣ γ ∣ γE) y
 
-  ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  ϕ = λ y → ∣ β ∣ ( γInv y )
+  φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+  φ = λ y → ∣ β ∣ ( γInv y )
 
   ξ : (x : ∣ 𝑨 ∣) → kernel ∣ γ ∣ (x , γInv (∣ γ ∣ x))
   ξ x =  ( cong-app (EpicInvIsRightInv{fe = gfe} ∣ γ ∣ γE) ( ∣ γ ∣ x ) )⁻¹
 
-  βϕγ : ∣ β ∣ ≡ ϕ ∘ ∣ γ ∣
-  βϕγ = gfe λ x → Kγβ (ξ x)
+  βφγ : ∣ β ∣ ≡ φ ∘ ∣ γ ∣
+  βφγ = gfe λ x → Kγβ (ξ x)
 
   ι : (𝑓 : ∣ 𝑆 ∣)(𝒄 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑪 ∣) → 𝒄 ≡  ∣ γ ∣ ∘ (γInv ∘ 𝒄)
   ι 𝑓 𝒄 = ap (λ - → - ∘ 𝒄) (EpicInvIsRightInv{fe = gfe} ∣ γ ∣ γE)⁻¹
@@ -311,9 +321,9 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
   useker 𝑓 𝒄 = Kγβ (cong-app (EpicInvIsRightInv {fe = gfe} ∣ γ ∣ γE)
                              (∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))
 
-  ϕIsHomCB : ∀ 𝑓 𝒄 → ϕ ((𝑓 ̂ 𝑪) 𝒄) ≡ ((𝑓 ̂ 𝑩)(ϕ ∘ 𝒄))
+  φIsHomCB : ∀ 𝑓 𝒄 → φ ((𝑓 ̂ 𝑪) 𝒄) ≡ ((𝑓 ̂ 𝑩)(φ ∘ 𝒄))
 
-  ϕIsHomCB 𝑓 𝒄 = ∣ β ∣ (γInv ((𝑓 ̂ 𝑪) 𝒄))                   ≡⟨ i   ⟩
+  φIsHomCB 𝑓 𝒄 = ∣ β ∣ (γInv ((𝑓 ̂ 𝑪) 𝒄))                   ≡⟨ i   ⟩
                 ∣ β ∣ (γInv ((𝑓 ̂ 𝑪)(∣ γ ∣ ∘ (γInv ∘ 𝒄)))) ≡⟨ ii  ⟩
                 ∣ β ∣ (γInv (∣ γ ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))))   ≡⟨ iii ⟩
                 ∣ β ∣ ((𝑓 ̂ 𝑨)(γInv ∘ 𝒄))                  ≡⟨ iv  ⟩
@@ -326,7 +336,7 @@ module _ {𝓧 𝓨 𝓩 : Universe} where
 
 \end{code}
 
-If, in addition, both β and γ are epic, then so is ϕ.
+If, in addition, both β and γ are epic, then so is φ.
 
 \begin{code}
 
@@ -335,12 +345,12 @@ If, in addition, both β and γ are epic, then so is ϕ.
                 (ξ : hom 𝑨 𝑪) (ξe : Epic ∣ ξ ∣)
   →             (kernel ∣ ξ ∣) ⊆ (kernel ∣ β ∣)
                 ----------------------------------
-  →             Σ ϕ ꞉ (epi 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ ξ ∣
+  →             Σ φ ꞉ (epi 𝑪 𝑩) , ∣ β ∣ ≡ ∣ φ ∣ ∘ ∣ ξ ∣
 
- HomFactorEpi 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ ϕF ∣ , (snd ∣ ϕF ∣ , ϕE)) , ∥ ϕF ∥
+ HomFactorEpi 𝑨 {𝑩}{𝑪} β βe ξ ξe kerincl = (fst ∣ φF ∣ , (snd ∣ φF ∣ , φE)) , ∥ φF ∥
   where
-  ϕF : Σ ϕ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ ϕ ∣ ∘ ∣ ξ ∣
-  ϕF = HomFactor  𝑨 {𝑩}{𝑪} β ξ ξe kerincl
+  φF : Σ φ ꞉ (hom 𝑪 𝑩) , ∣ β ∣ ≡ ∣ φ ∣ ∘ ∣ ξ ∣
+  φF = HomFactor  𝑨 {𝑩}{𝑪} β ξ ξe kerincl
 
   ξinv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
   ξinv = λ c → (EpicInv ∣ ξ ∣ ξe) c
@@ -348,20 +358,23 @@ If, in addition, both β and γ are epic, then so is ϕ.
   βinv : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
   βinv = λ b → (EpicInv ∣ β ∣ βe) b
 
-  ϕ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  ϕ = λ c → ∣ β ∣ ( ξinv c )
+  φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+  φ = λ c → ∣ β ∣ ( ξinv c )
 
-  ϕE : Epic ϕ
-  ϕE = epic-factor {fe = gfe} ∣ β ∣ ∣ ξ ∣ ϕ ∥ ϕF ∥ βe
+  φE : Epic φ
+  φE = epic-factor {fe = gfe} ∣ β ∣ ∣ ξ ∣ φ ∥ φF ∥ βe
 
 \end{code}
 
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">Note that we already assumed *global* function extensionality in this module, so we could just appeal to that in this case.  However, we make a local function extensionality assumption explicit here merely to highlight where and how the principle is applied.</span>
+<sup>1</sup><span class="footnote" id="fn1"> See [Relations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of proofs*.</span>
 
-<p></p>
+<sup>2</sup><span class="footnote" id="fn2"> In this module we are already assuming *global* function extensionality (`gfe`), and we could just appeal to `gfe` (e.g., in the proof of `FirstHomomorphismTheorem`) instead of adding local function extensionality (\ab{fe}) to the list of assumptions.  However, we sometimes add an extra extensionality postulate in order to highlight where and how the principle is applied.}</span>
+
+<br>
+<br>
 
 [← Homomorphisms.Basic](Homomorphisms.Basic.html)
 <span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>

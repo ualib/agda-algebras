@@ -5,13 +5,26 @@
 %%% End: 
 \subsubsection{The First Homomorphism Theorem}\label{the-first-homomorphism-theorem}
 
-Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes called Noether's First Homomorphism theorem, after Emmy Noether who was among the first proponents of the abstract approach to algebra that we now refer to as ``modern algebra.''
+Here we formalize a version of the \defn{first homomorphism theorem}, sometimes called \defn{Noether's first homomorphism theorem}, after Emmy Noether who was among the first proponents of the abstract approach to the subject that we now call ``modern algebra.''  Informally, the theorem states that every homomorphism from \ab 𝑨 to \ab 𝑩 (\ab 𝑆-algebras) factors through the quotient algebra \ab 𝑨\af ╱\af{ker}~\ab h (\ab 𝑨 modulo the kernel of the given homomorphism).  In other terms, given \ab h~\as :~\af{hom}~\ab 𝑨~\ab 𝑩 there exists \ab φ~\as :~\af{hom}~(\ab 𝑨\af ╱\af{ker}\ab h)~\ab 𝑩 which, when composed with the canonical projection \AgdaFunction{πker}~\as :~\ab 𝑨~\af ↠~\ab 𝑨\af ╱\af{ker}\ab h, is equal to \ab h; that is, \ab h = \ab φ~\af ∘~\AgdaFunction{πker}.  Moreover, \ab φ is a \defn{monomorphism} (injective homomorphism) and is unique.
+
+Our formal proof of this theorem will require function extensionality as well as a couple of truncation assumptions. The function extensionality postulate (\ab{fe}) will be clear enough (but see~\cite{DeMeo:2021-1} for details).  As for the truncation assumptions, we require the following:\footnote{See \ualibhtml{Relations.Truncation} or~\cite{DeMeo:2021-1} for a discussion of \emph{truncation}, \emph{sets}, and \emph{uniqueness of proofs}.}
+\begin{itemize}
+\item \emph{uniqueness of kernel-membership/kernel-block-identity proofs}---proving that \ab φ is monic requires that the kernel of \ab h inhabits the type \af{Pred₂} of \emph{binary propositions} (postulate \ab{ssR}) and that we are able to decide when two blocks of the kernel are equal (postulate \ab{ssA});
+\item \emph{uniqueness of codomain-identity proofs}---proving that \ab φ is an embedding requires that the codomain \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}} is a \emph{set}, that is, has unique identity proofs (postulate \ab{Bset}).
+\end{itemize}
+Note that the classical, informal statement of the theorem does not demand that \ab φ be an embedding (in our sense of having subsingleton fibers), and if we left this out of the consequent of the formal theorem statement below, then we could omit from the antecedent the assumption that 
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}\AgdaBound{𝑩}\AgdaSpace{}\AgdaOperator{\AgdaFunction{∣}} is a set.
+
+Without further ado, we present our formalization of the first homomorphism theorem.\footnote{%
+In this module we are already assuming \emph{global} function extensionality (\ab{gfe}), and we could just appeal to \ab{gfe} (e.g., in the proof of \af{FirstHomomorphismTheorem}) instead of adding local function extensionality (\ab{fe}) to the antecedent.  However, adding the extra extensionality postulate here makes clear where and how the principle is applied.}
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Congruence}\<%
-\\
-%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{Congruence}\<%
+% \\
+% %
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}%
 \>[31I]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
@@ -99,12 +112,12 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{C}\AgdaSymbol{))}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{where}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
+% \\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{FirstHomomorphismTheorem}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
@@ -113,7 +126,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \\[\AgdaEmptyExtraSkip]%
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{ϕ}%
+\AgdaBound{φ}%
 \>[90I]\AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -122,15 +135,17 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaFunction{,}\<%
-\\
-\>[90I][@{}l@{\AgdaIndent{0}}]%
-\>[7]\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+% \<%
+% \\
+% \>[90I][@{}l@{\AgdaIndent{0}}]%
+% \>[7]
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -141,12 +156,12 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaFunction{Monic}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaFunction{is-embedding}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
@@ -154,15 +169,15 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 %
 \>[1]\AgdaFunction{FirstHomomorphismTheorem}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕhom}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{φhom}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕcom}\AgdaSpace{}%
+\AgdaFunction{φcom}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕmon}\AgdaSpace{}%
+\AgdaFunction{φmon}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕemb}\<%
+\AgdaFunction{φemb}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -183,7 +198,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -198,7 +213,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -233,7 +248,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕhom}\AgdaSpace{}%
+\>[2]\AgdaFunction{φhom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -242,10 +257,10 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaFunction{ϕ}\<%
+\AgdaFunction{φ}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕhom}\AgdaSpace{}%
+\>[2]\AgdaFunction{φhom}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒂}%
 \>[183I]\AgdaSymbol{=}%
@@ -312,7 +327,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝒂}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}%
 \>[49]\AgdaOperator{\AgdaFunction{∎}}\<%
@@ -320,13 +335,13 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕmon}\AgdaSpace{}%
+\>[2]\AgdaFunction{φmon}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Monic}\AgdaSpace{}%
-\AgdaFunction{ϕ}\<%
+\AgdaFunction{φ}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕmon}\AgdaSpace{}%
+\>[2]\AgdaFunction{φmon}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDottedPattern{\AgdaSymbol{.(}}\AgdaDottedPattern{\AgdaOperator{\AgdaField{⟨}}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaFunction{θ}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaOperator{\AgdaField{⟩}}}\AgdaSpace{}%
@@ -345,7 +360,7 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
-\AgdaBound{ϕuv}\AgdaSpace{}%
+\AgdaBound{φuv}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
@@ -357,18 +372,18 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{IsEquiv}\AgdaSpace{}%
 \AgdaFunction{θ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ϕuv}\<%
+\AgdaBound{φuv}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕcom}\AgdaSpace{}%
+\>[2]\AgdaFunction{φcom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{πker}\AgdaSpace{}%
@@ -377,28 +392,28 @@ Here is a version of the so-called \emph{First Homomorphism theorem}, sometimes 
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕcom}\AgdaSpace{}%
+\>[2]\AgdaFunction{φcom}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕemb}\AgdaSpace{}%
+\>[2]\AgdaFunction{φemb}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{is-embedding}\AgdaSpace{}%
-\AgdaFunction{ϕ}\<%
+\AgdaFunction{φ}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕemb}\AgdaSpace{}%
+\>[2]\AgdaFunction{φemb}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{monic-is-embedding|sets}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaBound{Bset}\AgdaSpace{}%
-\AgdaFunction{ϕmon}\<%
+\AgdaFunction{φmon}\<%
 \end{code}
 \ccpad
-Next we show that the homomorphism \ab{ϕ}, whose existence we just proved, is unique.
+Next we show that the homomorphism \ab{φ}, whose existence we just proved, is unique.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -618,7 +633,7 @@ We already assumed \emph{global} function extensionality in this module, so we c
 \AgdaBound{hgk}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Assuming the hypotheses of the First Homomorphism theorem, if we add the assumption that \ab{h} is epic, then we get the so-called \defn{First Isomorphism theorem}.
+Assuming the hypotheses of the first homomorphism theorem, if we add the assumption that \ab{h} is epic, then we get the so-called \defn{first isomorphism theorem}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1286,7 +1301,7 @@ included in the \ualib are the following.
 
 \subsubsection{Homomorphism decomposition}\label{homomorphism-decomposition}
 
-If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab{h} is surjective, and \af{ker} \ab h \af ⊆ \af{ker} \ab g, then there exists \ab{ϕ} \as : \af{hom} \ab 𝑪 \ab 𝑩 such that \ab{g} \as = \ab ϕ \af ∘ \ab h, that is, such that the following diagram commutes.\\
+If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab 𝑪, \ab{h} is surjective, and \af{ker} \ab h \af ⊆ \af{ker} \ab g, then there exists \ab{φ} \as : \af{hom} \ab 𝑪 \ab 𝑩 such that \ab{g} \as = \ab φ \af ∘ \ab h, that is, such that the following diagram commutes.\\
 
 \begin{tikzpicture} %\draw[gray] (0,4.5) node {{\tt TikzRepresentableFunctor3}};
   % \drawgrid{-2}{2}{-1}{4}
@@ -1297,20 +1312,20 @@ If \ab{g} \as : \af{hom} \ab 𝑨 \ab 𝑩, \ab{h} \as : \af{hom} \ab 𝑨 \ab �
     \path[->>] (A) edge node [fill=white] {\ab h} (A');
 
     \path[->] (A) edge node [fill=white] {\ab g} (B);
-    \path[dotted,->] (A') edge node [fill=white] {\as ∃\ab ϕ} (B);
+    \path[dotted,->] (A') edge node [fill=white] {\as ∃\ab φ} (B);
     % \draw[|->,bend left] (-.37,1.1) to node [above] {$\mathcal C(\mathrm{inr} f, B)$} (.37,1.1);
   \end{tikzpicture}\\
 % \begin{verbatim}
 % 𝑨---- h -->>𝑪
 %  \         .
 %   \       .
-%    g     ∃ϕ
+%    g     ∃φ
 %     \   .
 %      \ .
 %       V
 %       𝑩
 % \end{verbatim}
-This, or some variation of it, is sometimes referred to as the \defn{Second Isomorphism Theorem}. We formalize its statement and proof as follows. (Notice that the proof is constructive.)
+This, or some variation of it, is sometimes referred to as the \defn{second isomorphism theorem}. We formalize its statement and proof as follows. (Notice that the proof is constructive.)
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{homFactor}\AgdaSpace{}%
@@ -1366,7 +1381,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 %
 \>[1]\AgdaSymbol{→}%
 \>[12]\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -1377,7 +1392,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -1395,11 +1410,11 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 \AgdaBound{Kh⊆Kg}\AgdaSpace{}%
 \AgdaBound{hEpi}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕIsHomCB}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{φIsHomCB}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{g≡ϕ∘h}\<%
+\AgdaFunction{g≡φ∘h}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{where}\<%
@@ -1429,7 +1444,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[1]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -1440,7 +1455,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[1]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[1]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
@@ -1482,16 +1497,16 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{g≡ϕ∘h}\AgdaSpace{}%
+\>[1]\AgdaFunction{g≡φ∘h}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{h}\<%
 \\
 %
-\>[1]\AgdaFunction{g≡ϕ∘h}\AgdaSpace{}%
+\>[1]\AgdaFunction{g≡φ∘h}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{fe}%
 \>[13]\AgdaSymbol{λ}\AgdaSpace{}%
@@ -1633,7 +1648,7 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+\>[1]\AgdaFunction{φIsHomCB}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1650,21 +1665,21 @@ This, or some variation of it, is sometimes referred to as the \defn{Second Isom
 \AgdaBound{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝒄}\AgdaSymbol{)}\AgdaSpace{}%
 \>[666I]\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{𝒄}\AgdaSymbol{)}\<%
 \\
 %
 % \\[\AgdaEmptyExtraSkip]%
 % %
-\>[1]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+\>[1]\AgdaFunction{φIsHomCB}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒄}%
 \>[1330I]\AgdaSymbol{=}%
@@ -1831,7 +1846,7 @@ Here's a more general version.
 %
 \>[2]\AgdaSymbol{→}%
 \>[13]\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -1842,7 +1857,7 @@ Here's a more general version.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -1860,11 +1875,11 @@ Here's a more general version.
 \AgdaBound{γE}\AgdaSpace{}%
 \AgdaBound{Kγβ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕIsHomCB}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{φIsHomCB}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{βϕγ}\<%
+\AgdaFunction{βφγ}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -1896,7 +1911,7 @@ Here's a more general version.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -1907,7 +1922,7 @@ Here's a more general version.
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
@@ -1966,20 +1981,20 @@ Here's a more general version.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{βϕγ}\AgdaSpace{}%
+\>[2]\AgdaFunction{βφγ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{β}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{γ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{βϕγ}\AgdaSpace{}%
+\>[2]\AgdaFunction{βφγ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{gfe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
@@ -2093,13 +2108,13 @@ Here's a more general version.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+\>[2]\AgdaFunction{φIsHomCB}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒄}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSymbol{)}\AgdaSpace{}%
@@ -2107,14 +2122,14 @@ Here's a more general version.
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{𝒄}\AgdaSymbol{))}\<%
 \\
 %
 % \\[\AgdaEmptyExtraSkip]%
 % %
-\>[2]\AgdaFunction{ϕIsHomCB}\AgdaSpace{}%
+\>[2]\AgdaFunction{φIsHomCB}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒄}%
 \>[1662I]\AgdaSymbol{=}\AgdaSpace{}%
@@ -2249,7 +2264,7 @@ Here's a more general version.
 \AgdaBound{𝒄}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
+If, in addition, both \ab β and \ab γ are epic, then so is \ab φ.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -2313,7 +2328,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 % %
 \>[2]\AgdaSymbol{→}%
 \>[16]\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{epi}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -2324,7 +2339,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -2345,28 +2360,28 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{fst}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕF}\AgdaSpace{}%
+\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{snd}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕF}\AgdaSpace{}%
+\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ϕE}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaFunction{φE}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ϕF}\AgdaSpace{}%
+\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕF}\AgdaSpace{}%
+\>[2]\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -2377,7 +2392,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaBound{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -2385,7 +2400,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕF}\AgdaSpace{}%
+\>[2]\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{HomFactor}%
 \>[18]\AgdaBound{𝑨}\AgdaSpace{}%
@@ -2450,7 +2465,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑪}\AgdaSpace{}%
@@ -2461,7 +2476,7 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕ}\AgdaSpace{}%
+\>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
@@ -2477,13 +2492,13 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[2]\AgdaFunction{ϕE}\AgdaSpace{}%
+\>[2]\AgdaFunction{φE}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Epic}\AgdaSpace{}%
-\AgdaFunction{ϕ}\<%
+\AgdaFunction{φ}\<%
 \\
 %
-\>[2]\AgdaFunction{ϕE}\AgdaSpace{}%
+\>[2]\AgdaFunction{φE}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{epic-factor}\AgdaSpace{}%
 \AgdaBound{gfe}\AgdaSpace{}%
@@ -2493,9 +2508,9 @@ If, in addition, both \ab β and \ab γ are epic, then so is \ab ϕ.
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{ξ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{ϕ}\AgdaSpace{}%
+\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{ϕF}\AgdaSpace{}%
+\AgdaFunction{φF}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{βe}\<%
 \end{code}

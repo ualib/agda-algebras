@@ -22,7 +22,7 @@ To be sure we understand what this means, let $:=$ denote the relation with resp
 % \end{flushright}
 % \end{quote}
 
-The datatype used in the \ualib to represent definitional equality is imported from the \am{Identity-Type} module of the \typetopology library, but apart from superficial syntactic differences, it is equivalent to the identity type used in all other Agda libraries we know of.  We repeat the definition here for easy reference.
+The datatype used in the \ualib to represent definitional equality is imported from the \am{Identity-Type} module of \typtop, but apart from superficial syntactic differences, it is equivalent to the identity type used in all other Agda libraries we know of.  We repeat the definition here for easy reference.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -292,7 +292,7 @@ If we have a proof \ab p \as :~\ab x \aod ≡ \ab y, and we need a proof of \ab 
 
 \subsubsection{Transport}\label{transport}
 
-Alonzo Church characterized equality by declaring two things equal if and only if no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal if and only if for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{substitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of the \typetopology library, as follows.\footnote{Including every line of code of the \agdaualib in this paper would result in an unbearable reading experience. We include all significant sections of code from the first 13 modules, but we omit lines indicating that redundant definitions of functions (e.g., \af{transport} and \af{ap}) occur inside named ``hidden'' modules. We also omit lines importing the original definitions of such duplicate definitions from the \typetopology library.}
+Alonzo Church characterized equality by declaring two things equal if and only if no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal if and only if for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{substitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of \typtop as follows.\footnote{Including every line of code of the \agdaualib in this paper would result in an unbearable reading experience. We include all significant sections of code from the first 13 modules, but we omit lines indicating that redundant definitions of functions (e.g., \af{transport} and \af{ap}) occur inside named ``hidden'' modules. We also omit lines importing the original definitions of such duplicate definitions from \typtop library.}
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝑖𝑑}\AgdaSpace{}%
@@ -365,7 +365,7 @@ Alonzo Church characterized equality by declaring two things equal if and only i
 \scpad
 % See~\cite{MHE} for a discussion of transport.\footnote{cf.~transport in \href{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}{HoTT-Agda}: \url{https://github.com/HoTT/HoTT-Agda/blob/master/core/lib/Base.agda}.}
 
-A function is well-defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  It is equivalent to the substitution rule (subst) we defined in the last section. If we have a function \ab{f} \as : \ab A \as → \ab B, two elements \ab{x} \ab{y} \as : \ab A of the domain, and an identity proof \ab{p} \as : \ab x \ad ≡ \ab{y}, then we obtain a proof of \ab{f} \ab x \ad ≡ \ab f \ab{y} by simply applying the \af{ap} function like so, \af{ap} \ab f \ab p \as : \ab f \ab x \ad ≡ \ab f \ab{y}. Escardó defines \af{ap} in the \typetopology library as follows.
+A function is well-defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  It is equivalent to the substitution rule (subst) we defined in the last section. If we have a function \ab{f} \as : \ab A \as → \ab B, two elements \ab{x} \ab{y} \as : \ab A of the domain, and an identity proof \ab{p} \as : \ab x \ad ≡ \ab{y}, then we obtain a proof of \ab{f} \ab x \ad ≡ \ab f \ab{y} by simply applying the \af{ap} function like so, \af{ap} \ab f \ab p \as : \ab f \ab x \ad ≡ \ab f \ab{y}. Escardó defines \af{ap} in \typtop as follows.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -440,7 +440,7 @@ A function is well-defined if and only if it maps equivalent elements to a singl
 \ccpad
 This establishes that our definitional equality satisfies the substitution rule (subst).
 
-Here's a useful variation of \af{ap} that we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib (transcribed into TypeTopology/UALib notation of course).
+Here's a useful variation of \af{ap} that we borrow from the \texttt{Relation/Binary/Core.agda} module of the \agdastdlib (transcribed into \typtop/\ualib).
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{cong-app}\AgdaSpace{}%

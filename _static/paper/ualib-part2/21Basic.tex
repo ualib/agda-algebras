@@ -86,7 +86,7 @@ Recall, \ab{h} \af ∘ \ab 𝑎 is the tuple whose \ab i-th component is \ab{h} 
 \ab{h} ((\ab 𝑓 \af ̂ \ab 𝑨) \ab 𝑎) ≡ (\ab 𝑓 \af ̂ \ab 𝑩) (\ab h \af ∘ \ab 𝑎).\\[4pt]
 Instead of ``homomorphism,'' we sometimes use the nickname ``hom'' to refer to such a map.
 
-To formalize the notion of homomorphism in type theory, we first define a type representing the assertion that a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣, from the domain of \ab{𝑨} to the domain of \ab{𝑩}, \emph{commutes} (or is \emph{compatible}) with an operation \ab 𝑓, interpreted in the algebras \ab{𝑨} and \ab{𝑩}. Pleasingly, the defining equation of the previous paragraph can be expressed in Agda unadulterated.\footnote{%
+To formalize this concept, we first define a type representing the assertion that a function \ab{h} \as : \af ∣ \ab 𝑨 \af ∣ \as → \af ∣ \ab 𝑩 \af ∣ commutes with a single basic operation \ab 𝑓.  With Agda's extremely flexible syntax, the defining equation above can be expressed unadulterated.\footnote{%
 Here we put the definition inside an \emph{anonymous module}, which starts with the \AgdaKeyword{module} keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments (the ``parameters'' of the module, e.g., \AgdaBound{𝓤}\AgdaSpace{}%
   \AgdaBound{𝓦}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaFunction{Universe})
 out of the way so they don't obfuscate the definitions inside the module. In descriptions of the \ualib, such as the present paper, we usually don't show the module declarations unless we wish to emphasize the typing judgments that are postulated in the module declaration.}
@@ -97,15 +97,7 @@ out of the way so they don't obfuscate the definitions inside the module. In des
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{compatible-op-map}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[42I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -113,36 +105,35 @@ out of the way so they don't obfuscate the definitions inside the module. In des
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\<%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
 \\
-\>[.][@{}l@{}]\<[42I]%
-\>[21]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{compatible-op-map}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}%
-\>[44]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
-% %
 \>[1]\AgdaFunction{compatible-op-map}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -173,16 +164,6 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -202,16 +183,12 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 \\
 %
 \>[1]\AgdaFunction{is-homomorphism}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaSpace{}\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSpace{}\AgdaFunction{compatible-op-map}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{𝑓}%
+\>[26]\AgdaSymbol{→}%
+\>[29]\AgdaFunction{compatible-op-map}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{g}\<%
 \\
@@ -220,14 +197,6 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 %
 \>[1]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}%
-\>[34]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
@@ -239,8 +208,6 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 \\
 %
 \>[1]\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
@@ -255,53 +222,28 @@ We now define the type \af{hom}~\ab 𝑨~\ab 𝑩 of homomorphisms from \ab{𝑨
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{g}\<%
 \end{code}
 
-\subsubsection{Examples}
+\subsubsection{Examples of homomorphisms}
 Here we give a few very special examples of homomorphisms. In each case, the function in question commutes with the basic operations of \emph{all} algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
 
 The most obvious example of a homomorphism is the identity map, which is proved to be a homomorphism as follows.
 \ccpad
 \begin{code}%
-\>[0]\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{id-is-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{hom}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{A}\<%
-\\
-\>[0]\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{id-is-hom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -315,19 +257,52 @@ The most obvious example of a homomorphism is the identity map, which is proved 
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \\
-\>[0]\AgdaFunction{id-is-hom}\AgdaSpace{}%
+%
+\>[1]\AgdaFunction{id-is-hom}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+%
+\>[1]\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{id-is-hom}\<%
 \end{code}
 \ccpad
 Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} module~(see \cite[\S2.5]{DeMeo:2021-1}),\footnote{or \ualiburl{Prelude.Lifts}.} are (the maps of) homomorphisms. Again, the proof is trivial in each case.
 \ccpad
 \begin{code}
-\>[1]\AgdaFunction{lift-is-hom}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{Lift}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+\>[1]\AgdaFunction{Lift-is-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -339,17 +314,17 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaInductiveConstructor{lift}\<%
 \\
 %
-\>[1]\AgdaFunction{lift-is-hom}\AgdaSpace{}%
+\>[1]\AgdaFunction{Lift-is-hom}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -366,7 +341,7 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\<%
 \\
@@ -375,7 +350,7 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{lift}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{lift-is-hom}\AgdaSymbol{)}\<%
+\AgdaFunction{Lift-is-hom}\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -391,7 +366,7 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-homomorphism}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -402,7 +377,7 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -418,7 +393,7 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{lift-alg}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Lift-alg}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
@@ -437,6 +412,17 @@ Next, \aic{lift} and \afld{lower}, defined in the \ualibhtml{Prelude.Lifts} modu
 We represent \defn{monomorphisms} (injective homomorphisms) and \defn{epimorphisms} (surjective homomorphisms) by the following types.
 \ccpad
 \begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{is-monomorphism}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -613,7 +599,7 @@ We represent \defn{monomorphisms} (injective homomorphisms) and \defn{epimorphis
 \AgdaBound{g}\<%
 \end{code}
 \ccpad
-It will be convenient to have a function that takes an inhabitant of `mon` (or `epi`) and extracts the homomorphism part, or *hom reduct*, that is, the pair consisting of the map and a proof that the map is a homomorphism. 
+It will be convenient to have a function that takes an inhabitant of \af{mon} (or \af{epi}) and extracts the homomorphism part (or \defn{hom reduct}), which is the pair consisting of the map and a proof that the map is a homomorphism. 
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -691,9 +677,29 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 \subsubsection{Equalizers in Agda}\label{equalizers-in-agda}
 
-Recall, the equalizer of two functions (resp., homomorphisms) \ab{g h} \as : \ab A \as → \ab B is the subset of \ab{A} on which the values of the functions \ab{g} and \ab{h} agree. We define the equalizer of functions and homomorphisms in the \ualib as follows.
+Recall, the equalizer of two functions \ab{g h} \as : \ab A \as → \ab B is the subset of \ab{A} on which the values of the functions \ab{g} and \ab{h} agree. We define the equalizer of functions and homomorphisms in the \ualib as follows.
 \ccpad
 \begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{dfunext}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{𝐸}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSpace{}%
@@ -738,12 +744,15 @@ Recall, the equalizer of two functions (resp., homomorphisms) \ab{g h} \as : \ab
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{hom}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -772,9 +781,10 @@ Recall, the equalizer of two functions (resp., homomorphisms) \ab{g h} \as : \ab
 We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but we note here that the equalizer of homomorphisms from \ab{𝑨} to \ab{𝑩} will turn out to be subuniverse of \ab{𝑨}. Indeed, this is easily proved as follows.
 \ccpad
 \begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{𝐸hom-closed}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[494I]\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
+\>[187I]\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -787,15 +797,20 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[494I]%
+\AgdaTab{187}%
 \>[15]\AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{a}%
+\>[22]\AgdaSymbol{→}%
+\>[25]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{𝐸hom}\AgdaSpace{}%
@@ -804,7 +819,7 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \AgdaBound{h}\AgdaSymbol{)}\<%
 \\
 %
-\>[15]\AgdaComment{------------------------------------------------------}\<%
+\>[15]\AgdaComment{--------------------------------------------------------------}\<%
 \\
 %
 \>[2]\AgdaSymbol{→}%
@@ -835,7 +850,7 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[538I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[585I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{𝑓}\AgdaSpace{}%
@@ -850,7 +865,7 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
-\>[.][@{}l@{}]\<[538I]%
+\>[.][@{}l@{}]\<[585I]%
 \>[27]\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -862,7 +877,7 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \AgdaFunction{ap}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaBound{fe}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
@@ -892,19 +907,37 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 \AgdaBound{a}\AgdaSymbol{)}%
 \>[47]\AgdaOperator{\AgdaFunction{∎}}\<%
 \end{code}
+\ccpad
+(Agda infers the types of the implicit arguments, \ab{𝑓}~\as :~\af ∣~\ab 𝑆~\af ∣ and \ab 𝑎~\as :~\af ∥~\ab 𝑆~\af ∥~\ab 𝑓~\as →~\af ∣~\ab 𝑨~\af ∣.)
 
 \subsubsection{Kernels of Homomorphisms}\label{kernels-of-homomorphisms}
 
 The \defn{kernel} of a homomorphism is a congruence relation and conversely for every congruence relation \ab θ, there exists a homomorphism with kernel \ab θ (namely, that canonical projection onto the quotient modulo \ab θ).
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{homker-compatible}\AgdaSpace{}%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{Congruence}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[99I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{homker-compatible}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -912,23 +945,17 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[99I]%
-\>[21]\AgdaFunction{compatible}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{compatible}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{KER-rel}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{homker-compatible}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -962,7 +989,7 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 %
 \>[2]\AgdaFunction{γ}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[701I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\>[679I]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaBound{f}\AgdaSpace{}%
@@ -977,7 +1004,7 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 \AgdaBound{u}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\<%
 \\
-\>[.][@{}l@{}]\<[701I]%
+\>[.][@{}l@{}]\<[679I]%
 \>[6]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSymbol{)(}\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -1022,16 +1049,14 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{v}\AgdaSymbol{)}%
 \>[25]\AgdaOperator{\AgdaFunction{∎}}\<%
-\end{code}
-\scpad
-\begin{code}
+\\
+\\[\AgdaEmptyExtraSkip]%
+% \end{code}
+% \scpad
+% \begin{code}
 \>[1]\AgdaFunction{homker-equivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[98I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -1039,22 +1064,17 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[98I]%
-\>[22]\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{KER-rel}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{homker-equivalence}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{map-kernel-IsEquivalence}\AgdaSpace{}%
@@ -1066,22 +1086,18 @@ The \defn{kernel} of a homomorphism is a congruence relation and conversely for 
 It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel. We call this function \af{kercon}.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{kercon}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{Congruence}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
@@ -1092,20 +1108,30 @@ It is convenient to define a function that takes a homomorphism and constructs a
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{mkcon}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{KER-rel}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaFunction{homker-compatible}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)(}\AgdaFunction{homker-equivalence}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSymbol{)(}\AgdaFunction{homker-equivalence}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSymbol{)(}\AgdaFunction{homker-compatible}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-With this congruence we define the corresponding quotient, along with some syntactic sugar to denote it.
+With this we define the corresponding quotient, along with some syntactic sugar to denote it.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{kerquo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -1175,15 +1201,21 @@ With this congruence we define the corresponding quotient, along with some synta
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{kerquo}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaBound{h}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{60}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}[\AgdaUnderscore{}]/ker\AgdaUnderscore{}}}\<%
 \end{code}
 \ccpad
-Thus, given \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩, we can construct the quotient of \ab 𝑨 modulo the kernel of \ab h, and the \ualib syntax for this quotient is  \ab 𝑨 \af [ 𝑩 \af{]/ker} \ab h.
+Thus, given \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 we can construct the quotient of \ab 𝑨 modulo the kernel of \ab h with the shorthand \ab 𝑨 \af [ 𝑩 \af{]/ker} \ab h.
 
-\subsubsection{The natural projection}\label{sec:natural-projection}
-Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn{canonical projection} is a map from \ab{𝑨} onto \ab{𝑨} \af ╱ \ab θ that is constructed, and proved epimorphic, as follows.
+\subsubsection{The canonical projection}\label{sec:canonical-projection}
+Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn{canonical projection} is a map from \ab{𝑨} onto \ab{𝑨} \af ╱ \ab θ that is constructed (and proved) to be epimorphic, as follows.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1196,7 +1228,7 @@ Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn
 \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{epi}\AgdaSpace{}%
@@ -1236,9 +1268,9 @@ Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn
 \>[2]\AgdaFunction{cπ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{\{}\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟫}}\AgdaSymbol{\{}\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{⟩}}\AgdaSymbol{\}}\<%
 \\
@@ -1259,7 +1291,7 @@ Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1278,13 +1310,13 @@ Given an algebra \ab{𝑨} and a congruence \ab{θ}, the \emph{natural} or \defn
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{Image\AgdaUnderscore{}∋\AgdaUnderscore{}.im}\AgdaSpace{}%
 \AgdaBound{a}\<%
 \end{code}
 \ccpad
-Sometimes we don't care about the surjectivity of \af{πepi} and we want to work with its \emph{homomorphic reduct}, which is obtained by applying \af{epi-to-hom}, like so.
+It may happen that we don't care about the surjectivity of \af{πepi}, in which case we might prefer to work with the \emph{homomorphic reduct} of \af{πepi}. This is obtained by applying \af{epi-to-hom}, like so.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1296,7 +1328,7 @@ Sometimes we don't care about the surjectivity of \af{πepi} and we want to work
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{\}(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
@@ -1363,15 +1395,26 @@ inhabitants of certain types (like \ar{Congruence} or \af{Rel}) can be a tricky 
 to prove; luckily it is also the one we need later.
 \ccpad
 \begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{ker-in-con}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[111I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[382I]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{θ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaRecord{Congruence}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1381,7 +1424,7 @@ to prove; luckily it is also the one we need later.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[111I]%
+\AgdaTab{382}%
 \>[14]\AgdaOperator{\AgdaField{⟨}}\AgdaSpace{}%
 \AgdaFunction{kercon}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
@@ -1409,7 +1452,7 @@ to prove; luckily it is also the one we need later.
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaBound{hyp}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{╱-refl}\AgdaSpace{}%
+\AgdaFunction{╱-≡}\AgdaSpace{}%
 \AgdaBound{θ}\AgdaSpace{}%
 \AgdaBound{hyp}\<%
 \end{code}
@@ -1418,9 +1461,25 @@ to prove; luckily it is also the one we need later.
 Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type \abt{I}{𝓘}\af ̇, and a family \ab ℬ \as : \ab I \as → \af{Algebra} \ab 𝓦 \ab 𝑆 of algebras. We sometimes refer to the inhabitants of \ab I as \defn{indices}, and call \ab ℬ an \emph{indexed family of algebras}. If in addition we have a family \ab 𝒽 \as : (\ab i \as : \ab I) \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) of homomorphisms, then we can construct a homomorphism from \ab 𝑨 to the product \af ⨅ \ab ℬ in the natural way.
 \ccpad
 \begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{fe}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{dfunext}\AgdaSpace{}%
+\AgdaBound{𝓘}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⨅-hom-co}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[222I]
 \AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
@@ -1438,7 +1497,6 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[222I]%
 \>[12]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
@@ -1510,7 +1568,7 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1522,7 +1580,7 @@ Suppose we have an algebra \ab 𝑨 \as : \af{Algebra} \ab 𝓤 \ab 𝑆, a type
 \AgdaBound{𝒶}\<%
 \end{code}
 \ccpad
-The family \ab 𝒽 of homomorphisms inhabits the dependent type \af Π \ab i \af ꞉ \ab I , \af{hom} \ab 𝑨 (\ab ℬ \ab i).  The syntax we use to represent this type is available to us because of the way \af{-Π} is defined in the \typetopology library.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However, we could equally well have used one of the following alternatives, which may be closer to ``standard Agda'' syntax:\\[-5pt]
+The family \ab 𝒽 of homomorphisms inhabits the dependent type \af Π \ab i \af ꞉ \ab I , \af{hom} \ab 𝑨 (\ab ℬ \ab i).  The syntax we use to represent this type is available to us because of the way \af{-Π} is defined in \typtop.  We like this syntax because it is very close to the notation one finds in the standard type theory literature.  However, we could equally well have used one of the following alternatives, which may be closer to ``standard Agda'' syntax:\\[-5pt]
 
  \af Π \as λ \ab i \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) \hskip2mm or \hskip2mm (\ab i \as : \ab I) \as → \af{hom} \ab 𝑨 (\ab ℬ \ab i) \hskip2mm or \hskip2mm \as ∀ \ab i → \af{hom} \ab 𝑨 (\ab ℬ \ab i).\\[-4pt]
 
@@ -1530,9 +1588,10 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 \af{hom} (\AgdaBound{𝒜} \ab i) (\ab ℬ \ab i) (a family of homomorphisms), then we can construct a homomorphism from \af ⨅ \ab 𝒜 to \af ⨅ \ab ℬ in the following natural way.
 \ccpad
 \begin{code}
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{⨅-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\>[223I]\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓘}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
@@ -1551,7 +1610,6 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{→}%
-\>[.][@{}l@{}]\<[223I]%
 \>[9]\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
@@ -1626,7 +1684,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{gfe}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1648,6 +1706,17 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 Later we will need a proof of the fact that the natural projection out of a product algebra onto one of its factors is a homomorphism.
 \ccpad
 \begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓘}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⨅-projection-hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
@@ -1738,7 +1807,7 @@ Later we will need a proof of the fact that the natural projection out of a prod
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{𝓇ℯ𝒻𝓁}\<%
+\AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
-Of course, we could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
+Of course, we could prove a more general result involving projections onto multiple factors, but for many purposes the single-factor result suffices.

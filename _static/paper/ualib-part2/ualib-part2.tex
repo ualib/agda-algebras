@@ -122,31 +122,13 @@ The Agda Universal Algebra Library (UALib) is a library of types and programs (t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the Agda Universal Algebra Library (\agdaualib), a software library containing formal statements and proofs of the core definitions and results of universal algebra. 
-The \ualib is written in \agda~\cite{Norell:2009}, a programming language and proof assistant based on Martin-L\"of Type Theory that not only supports dependent and inductive types, as well as proof tactics for proving things about the objects that inhabit these types.
-
-
-
-
-\subsection{Motivation}\label{sec:motivation}
-The seminal idea for the \agdaualib project was the observation that, on the one hand, a number of fundamental constructions in universal algebra can be defined recursively, and theorems about them proved by structural induction, while, on the other hand, inductive and dependent types make possible very precise formal representations of recursively defined objects, which often admit elegant constructive proofs of properties of such objects.  An important feature of such proofs in type theory is that they are total functional programs and, as such, they are computable, composable, and machine-verifiable.
-
-Finally, our own research experience has taught us that a proof assistant and programming language (like Agda), when equipped with specialized libraries and domain-specific tactics to automate the proof idioms of our field, can be an extremely powerful and effective asset. As such we believe that proof assistants and their supporting libraries will eventually become indispensable tools in the working mathematician's toolkit.
-
-
-
-
-\subsection{Attributions and Contributions}\label{sec:contributions}
-\input{../attributions}
-
-
-
+\input{../introduction}
 
 \subsection{Organization of the paper}\label{sec:organization}
 
-In this paper we limit ourselves to the presentation of the middle third of the \ualib, which includes types for representing homomorphisms, terms, and subalgebras. This limitation will allow us the space required to discuss some of the more interesting type theoretic and foundational issues that arise when developing a library of this kind and when attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
+In this paper we limit ourselves to the presentation of the middle third of the \ualib, which includes types for representing \emph{homomorphisms}, \emph{terms}, and \emph{subalgebras}. This limitation will give us the space required to discuss some of the more interesting type theoretic and foundational issues that arise when developing a library of this kind and when attempting to represent advanced mathematical notions in type theory and formalize them in Agda.
 
-This is the second installment of a three-part series of papers describing the \agdaualib. The first part is~\cite{DeMeo:2021-1} which covers relations, algebras, congruences, and quotients. The third part will cover free algebras, equational classes of algebras (i.e., varieties), and Birkhoff's HSP theorem.
+This is the second installment of a three-part series of papers describing the \agdaualib. The first part (\cite{DeMeo:2021-1}) covers the logical foundations of Martin-L\"of type theory (including \emph{Sigma} and \emph{Pi types}, \emph{equality}, \emph{extensionality}, \emph{truncation}) and develops dependent types for representing \emph{relations}, \emph{algebras}, \emph{congruences}, and \emph{quotients}. The third part covers \emph{free algebras}, \emph{equational classes} of algebras (i.e., \emph{varieties}), and \emph{Birkhoff's HSP theorem}.
 
 The present paper is divided into three main parts (\S\ref{sec:homomorphism-types}, \S\ref{sec:types-terms}, \S\ref{sec:subalgebra-types}).  The first of these introduces types representing \emph{homomorphisms} from one algebra to another, and presents a formal statement and proof of the first fundamental theorem about homomorphisms, known as the \emph{First Isomorphism Theorem}, as well as a version of the so-called \emph{Second Isomorphism Theorem}. This is followed by dependent type definitions for representing \emph{isomorphisms} and \emph{homomorphic images} of algebraic structures.
 

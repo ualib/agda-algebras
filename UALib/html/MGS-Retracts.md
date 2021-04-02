@@ -1,10 +1,3 @@
----
-layout: default
-title : MGS-Retracts module
-date : 2021-02-25
-author: Martin Escardo
----
-
 Martin Escardo 1st May 2020.
 
 This is ported from the Midlands Graduate School 2019 lecture notes

@@ -373,8 +373,8 @@ Next we define convenient notation for asserting that the image of a function (t
 \AgdaBound{S}\<%
 \end{code}
 \ccpad
-The \defn{empty set} is naturally represented by the \defn{empty type}, \af 𝟘, and the latter is defined in \typetopology's \am{Empty-Type} module.\cref{uhints}$^, $\footnote{%
-The empty type is defined in \typetopology's \am{Empty-Type} module as an inductive type with no constructors; that is, \AgdaKeyword{data}\AgdaSpace{}%
+The \defn{empty set} is naturally represented by the \defn{empty type}, \af 𝟘, and the latter is defined in the \am{Empty-Type} module of \typtop.\cref{uhints}$^, $\footnote{%
+The empty type is an inductive type with no constructors; that is, \AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{𝟘}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -721,8 +721,8 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-Finally, the \defn{total relation} over \ab A, which in set theory is the full Cartesian product \ab A~\af ×~\ab A, can be represented using the one-element type from \typetopology's \am{Unit-Type} module, as follows.\cref{uhints}$^, $\footnote{%
-The one-element type is defined in \typetopology's \am{Unit-Type} module as an inductive type with a single constructor, denoted \AgdaInductiveConstructor{⋆}, as follows: \AgdaKeyword{data}\AgdaSpace{}%
+Finally, the \defn{total relation} over \ab A, which in set theory is the full Cartesian product \ab A~\af ×~\ab A, can be represented using the one-element type from the \am{Unit-Type} module of \typtop as follows.\cref{uhints}$^, $\footnote{%
+The one-element type is an inductive type with a single constructor, denoted \AgdaInductiveConstructor{⋆}, as follows: \AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -758,7 +758,7 @@ The one-element type is defined in \typetopology's \am{Unit-Type} module as an i
 
 
 \paragraph*{The implication relation\protect\footnotemark}
-\footnotetext{The definitions here are from the \agdastdlib, translated into \typetopology/\ualib notation.}
+\footnotetext{The definitions here are from the \agdastdlib, translated into \typtop/\ualib notation.}
 
 The following types represent \defn{implication} for binary relations.
 \ccpad

@@ -7,9 +7,9 @@ Here we define or import the basic types of \defn{Martin-Löf type theory} (\ml
 
 \subsubsection{Logical foundations}\label{sec:logical-foundations}
 % Mainly for the benefit of readers who are not yet proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib. 
-The \agdaualib is based on a type theory that is the same or very close to the one on which on which Martín Escardó's \typetopology Agda library is based. We don't discuss \mltt in great detail here because there are already nice and freely available resources covering the theory. (See, for example, the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by Escard\'o~\cite{MHE}, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, or the HoTT Book~\cite{HoTT}.)
+The \agdaualib is based on a type theory that is the same or very close to the one on which on which Martín Escardó's \typetopology (\typtop) Agda library is based. We don't discuss \mltt in great detail here because there are already nice and freely available resources covering the theory. (See, for example, the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by Escard\'o~\cite{MHE}, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, or the HoTT Book~\cite{HoTT}.)
 
-The objects and assumptions that form the foundation of \mltt are few.  There are the \defn{primitive types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), the \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type). Each of these type formers is defined by a \defn{type forming rule} which specifies how that type is constructed. Lastly, we have an infinite collection of \defn{type universes} (types of types) and \defn{universe variables} to denote them. Following Escardó, we denote universes in the \ualib by upper-case calligraphic letters from the second half of the English alphabet; to be precise, these are \ab 𝓞, \ab 𝓠, \ab 𝓡, …, \ab 𝓧, \ab 𝓨, \ab 𝓩.\footnote{We avoid using \ab 𝓟 as a universe variable because in the \typetopology library \ab 𝓟 denotes a powerset type.}
+The objects and assumptions that form the foundation of \mltt are few.  There are the \defn{primitive types} (\ad 𝟘, \ad 𝟙, and \ad ℕ, denoting the empty type, one-element type, and natural numbers), the \defn{type formers} (\ad +, \ad Π, \ad Σ, \ad{Id}, denoting \defn{binary sum}, \defn{product}, \defn{sum}, and the \defn{identity} type). Each of these type formers is defined by a \defn{type forming rule} which specifies how that type is constructed. Lastly, we have an infinite collection of \defn{type universes} (types of types) and \defn{universe variables} to denote them. Following Escardó, we denote universes in the \ualib by upper-case calligraphic letters from the second half of the English alphabet; to be precise, these are \ab 𝓞, \ab 𝓠, \ab 𝓡, …, \ab 𝓧, \ab 𝓨, \ab 𝓩.\footnote{We avoid using \ab 𝓟 as a universe variable because it is used to denote the powerset type in \typtop.}
 
 That's all. There are no further axioms or logical deduction (proof derivation) rules needed for the foundation of \mltt that we take as the starting point of the \agdaualib. The logical semantics come from the \href{https://ncatlab.org/nlab/show/propositions+as+types}{propositions-as-types correspondence}~\cite{nlab:propositions_as_types}: propositions and predicates are represented by types and the inhabitants of these types are the proofs of the propositions and predicates. As such, proofs are constructed using the type forming rules. In other words, the type forming rules \emph{are} the proof derivation rules.
 
@@ -75,8 +75,7 @@ For the very small amount of background we require about the notion of \emph{typ
 on universe-levels} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{Agda
 documentation}.\footnote{See \url{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}.}
 
-Throughout the \agdaualib we use many of the nice tools that Martín Escardó has developed and made available in the \typetopology
-repository of Agda code for the \emph{Univalent Foundations} of mathematics.\footnote{%
+Throughout the \agdaualib we use many of the nice tools that Martín Escardó has developed and made available in \typtop library of Agda code for the \emph{Univalent Foundations} of mathematics.\footnote{%
 Escardó has written an outstanding set of notes called
 \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html}{Introduction to Univalent Foundations of Mathematics with Agda}, which we highly recommend to anyone looking for more details than we provide
 here about \mltt and Univalent Foundations/HoTT in Agda.~\cite{MHE}.}
@@ -147,7 +146,7 @@ There will be many occasions calling for a type living in a universe at the leve
 
 Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Sigma type} (or \defn{dependent pair type}, or \defn{dependent product type}) is denoted by \ar{Σ}~\abt{x}{A} ,~\ab B~\ab x and generalizes the Cartesian product \ab A~\af ×~\ab B by allowing the type \ab{B x} of the second argument of the ordered pair (\ab x \af , \ab y) to depend on the value \ab{x} of the first. That is, an inhabitant of the type \ar{Σ}~\abt{x}{A}~,~\ab B~\ab x is a pair (\ab{x}~\af ,~\ab y) such that \abt{x}{A} and \abt{y}{B x}.
 
-The dependent product type is defined in the \typetopology in a standard way. For pedagogical purposes we repeat the definition here.\footnote{In the \ualib we put such redundant definitions inside ``hidden'' modules so that they doesn't conflict with the original definitions which we import and use. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do this in order to exhibit all of the types on which the \ualib depends while ensuring that this cannot be misinterpreted as a claim to originality.}
+The dependent product type is defined in \typtop in a standard way. For pedagogical purposes we repeat the definition here.\footnote{In the \ualib we put such redundant definitions inside ``hidden'' modules so that they doesn't conflict with the original definitions which we import and use. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do this in order to exhibit all of the types on which the \ualib depends while ensuring that this cannot be misinterpreted as a claim to originality.}
 \ccpad
 \begin{code}%
 \>[1]\AgdaKeyword{record}\AgdaSpace{}%
@@ -192,7 +191,7 @@ The dependent product type is defined in the \typetopology in a standard way. Fo
 \AgdaField{pr₁}\<%
 \end{code}
 \ccpad
-Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab A)\sP{3}\as →\sP{3}\ab B, but we prefer the notation \AgdaRecord{Σ}~\abt{x}{A}~,~\ab B, which is closer to the standard syntax described in the preceding paragraph. Fortunately, the \typetopology library makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
+Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab A)\sP{3}\as →\sP{3}\ab B, but we prefer the notation \AgdaRecord{Σ}~\abt{x}{A}~,~\ab B, which is closer to the standard syntax described in the preceding paragraph. Fortunately, \typtop makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{-Σ}\AgdaSpace{}%
@@ -282,7 +281,7 @@ A special case of the Sigma type is the one in which the type \ab{B} doesn't dep
 
 
 \paragraph*{Pi types (dependent functions)} %\label{ssec:dependent-functions}
-Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (or \defn{dependent function type}) is denoted by \ar Π~\abt{x}{A} ,~\ab B~\ab x and generalizes the function type \ab A~\as →~\ab B by letting the type \ab B~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in the \typetopology in a standard way.  For the reader's benefit, however, we repeat the definition here.  (In the \ualib this definition is included in a named or ``hidden'' module.)
+Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (or \defn{dependent function type}) is denoted by \ar Π~\abt{x}{A} ,~\ab B~\ab x and generalizes the function type \ab A~\as →~\ab B by letting the type \ab B~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in \typtop in a standard way.  For the reader's benefit, however, we repeat the definition here.  (In the \ualib this definition is included in a named or ``hidden'' module.)
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Π}\AgdaSpace{}%
@@ -366,7 +365,7 @@ To make the syntax for \af{Π} conform to the standard notation for Pi types, \e
 \AgdaBound{b}\<%
 \end{code}
 \ccpad
-Once we have studied the types, defined in the \typetopology library and repeated here for illustration purposes, the original definitions are imported like so.
+Once we have studied the types (defined in \typtop and repeated here for convenience and illustration purposes), the original definitions are imported like so.
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%

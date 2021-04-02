@@ -25,20 +25,18 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 #### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are `𝑆`-algebras, then a **homomorphism** is a function `ℎ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is compatible (or commutes) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and all tuples `𝒂 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
+If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* is a function `ℎ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
 
-`h ((𝑓 ̂ 𝑨) 𝒂) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝒂)`.
+`h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)`.
 
-To formalize this concept, we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣`, from the domain of `𝑨` to the domain of `𝑩`, *commutes* (or is *compatible*) with an operation 𝑓, interpreted in the algebras `𝑨` and `𝑩`.  Pleasingly, the defining equation of the previous paragraph can be expressed in Agda without any adulteration.
+To formalize this concept, we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` commutes with a single basic operation `𝑓`.  With Agda's extremely flexible syntax the defining equation above can be expressed unadulterated.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
 
- compatible-op-map : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)
-  →                  ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
-
- compatible-op-map 𝑨 𝑩 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
+ compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
 
 \end{code}
 
@@ -48,11 +46,11 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \begin{code}
 
- is-homomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- is-homomorphism 𝑨 𝑩 g = ∀ 𝑓  →  compatible-op-map 𝑨 𝑩 𝑓 g
+ is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
- hom : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- hom 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism 𝑨 𝑩 g
+ hom : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ hom = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism g
 
 \end{code}
 
@@ -166,7 +164,7 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
 
 \end{code}
 
-The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`
+The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
 
 
 #### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
@@ -224,9 +222,9 @@ Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo 
 
 
 
-#### <a id="natural-projection">The canonical projection</a>
+#### <a id="the-canonical-projection">The canonical projection</a>
 
-Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
+Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
 \begin{code}
 
@@ -244,7 +242,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *natural* or *canonical proje
 
 \end{code}
 
-To obtain the homomorphism part (or "hom reduct") of the canonical epimorphism, we apply `epi-to-hom`.
+In may happen that we don't care about the surjectivity of `πepi`, in which case would might prefer to work with the *homomorphic reduct* of `πepi`. This is obtained by applying `epi-to-hom`, like so.
 
 \begin{code}
 

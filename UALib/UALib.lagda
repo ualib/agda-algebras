@@ -86,7 +86,7 @@ open import Varieties
 
 - [Preface][]
 
-- [Overture][]
+- [Overture](Overture.html)
   - [Preliminaries](Overture.Preliminaries.html)
   - [Equality](Overture.Equality.html)
   - [Function Extensionality](Overture.Extensionality.html)
@@ -105,7 +105,7 @@ open import Varieties
   - [Product Algebras](Algebras.Products.html)
   - [Congruence Relations](Algebras.Congruences.html)
 
-- [Homomorphism Types](Homomorphism.html)
+- [Homomorphism Types](Homomorphisms.html)
   - [Basic definitions](Homomorphisms.Basic.html)
   - [Homomorphism Theorems](Homomorphisms.Noether.html)
   - [Isomorphisms](Homomorphisms.Isomorphisms.html)

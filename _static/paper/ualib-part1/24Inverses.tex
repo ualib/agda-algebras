@@ -253,7 +253,7 @@ With the next definition, we can represent the \defn{right-inverse} of an epic f
 \AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-The right-inverse of \ab f is obtained by applying \af{EpicInv} to \ab f along with a proof of \af{Epic}~\ab f. To see that this does indeed give the right-inverse we prove the \af{EpicInvIsRightInv} lemma below. This requires function composition, denoted \af{∘} and defined in the \typetopology library.
+The right-inverse of \ab f is obtained by applying \af{EpicInv} to \ab f along with a proof of \af{Epic}~\ab f. To see that this does indeed give the right-inverse we prove the \af{EpicInvIsRightInv} lemma below. This requires function composition, denoted \af{∘} and defined in \typtop library.
 \ccpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -585,7 +585,7 @@ The function defined by \af{MonicInv} \ab f \ab{fM} is a left-inverse of \ab f, 
 % is defined in the \typetopology library, using the \af{is-subsingleton} type \href{Overture.Extensionality.html\#alternative-extensionality-type}{described earlier}, as follows.
 
 % Finally, t
-The \af{is-embedding} type is defined in the \typetopology library in the following way.
+The \af{is-embedding} type is defined in \typtop in the following way.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{is-embedding}\AgdaSpace{}%
@@ -612,7 +612,7 @@ The \af{is-embedding} type is defined in the \typetopology library in the follow
 \AgdaBound{b}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-Thus, \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons. Observe that an embedding so defined is not simply an injective map. However, if we assume that the codomain \ab B has \emph{unique identity proofs} (UIP), then we can prove that a monic function into \ab B is an embedding. We discuss the UIP principle in~\S\ref{sec:trunc-sets-prop} where we present the \ualibhtml{Relations.Truncation} module.
+Thus, \af{is-embedding} \ab f asserts that \ab f is a function all of whose fibers are subsingletons. Observe that an embedding is not simply an injective map. However, if we assume that the codomain \ab B has \emph{unique identity proofs} (UIP), then we can prove that a monic function into \ab B is an embedding. We discuss the UIP principle in~\S\ref{sec:trunc-sets-prop} where we present the \ualibhtml{Relations.Truncation} module.
 
 Finding a proof that a function is an embedding isn't always easy, but one path that is often straightforward is to first prove that the function is invertible and then invoke the following theorem.
 \ccpad

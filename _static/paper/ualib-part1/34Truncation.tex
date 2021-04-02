@@ -18,7 +18,7 @@ Now, perhaps we have two proofs, say, \ab{r} \ab s \as : \ab p \aod{≡₁} \ab 
 \subsubsection{Sets}\label{sec:sets}
 In \href{https://homotopytypetheory.org}{homotopy type theory}, a type \ab{X} with an identity relation \ad{≡₀} is called a \defn{set} (or \defn{0-groupoid}) if for every pair \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡₀} \ab y. In other words, the type \ab{X}, along with it's equality type \ad{≡ₓ}, form a \emph{set} if for all \ab{x} \abt{y}{X} there is at most one proof of \ab{x} \aod{≡₀} \ab y.
 
-This notion is formalized in the \typetopology library using the type \af{is-set} which is defined using the \af{is-subsingleton} type (\S\ref{sec:inverse-image-invers}) as follows.
+This notion is formalized in \typtop using the type \af{is-set} which is defined using the \af{is-subsingleton} type (\S\ref{sec:inverse-image-invers}) as follows.
 % \footnote{%
 % As Escardó explains, ``at this point, with the definition of these notions, we are entering the realm
 % of univalent mathematics, but not yet needing the univalence axiom.''}
@@ -580,7 +580,7 @@ Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{�
 
 % \subsubsection{Binary propositions}\label{binary-propositions}
 
-The foregoing easily generalizes to binary relations.  If \ab{R} is a binary relation such that there is at most one way to prove that a given pair of elements is \ab{R}-related, then we call \ab{R} a \defn{binary proposition}. As above, we use \typetopology's \af{is-subsingleton} type to impose this truncation assumption on a binary relation.\footnote{Recall that \af{Rel A 𝓦} is simply the function type \ab{A → A → 𝓦 ̇}, so \af{Pred₂} is definitionally equal to \af Σ~\ab R~\af ꞉~(\ab A~\as →~\ab A~\as →~\ab 𝓦\af ̇)~\af ,~\as ∀~\ab x~\ab y~\as →~\af{is-subsingleton}~(\ab R~\ab x~\ab y).}$^, $\footnote{%
+The foregoing easily generalizes to binary relations.  If \ab{R} is a binary relation such that there is at most one way to prove that a given pair of elements is \ab{R}-related, then we call \ab{R} a \defn{binary proposition}. As above, we use the \af{is-subsingleton} type of \typtop to impose this truncation assumption on a binary relation.\footnote{Recall that \af{Rel A 𝓦} is simply the function type \ab{A → A → 𝓦 ̇}, so \af{Pred₂} is definitionally equal to \af Σ~\ab R~\af ꞉~(\ab A~\as →~\ab A~\as →~\ab 𝓦\af ̇)~\af ,~\as ∀~\ab x~\ab y~\as →~\af{is-subsingleton}~(\ab R~\ab x~\ab y).}$^, $\footnote{%
 This is another example of \emph{proof-irrelevance}. Indeed, if \ab{R} is a binary proposition and we
 have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant. Note also that we could have used the definition \AgdaFunction{is-subsingleton-valued} from \S~\ref{props-of-bin-rels} above to define \af{Pred₂} by \af{Σ} \ab{R} \af ꞉ (\af{Rel} \ab{A} \ab{𝓦}) , \af{is-subsingleton-valued} \ab{R}, but this seems less transparent than our explicit definition.}
 \ccpad
