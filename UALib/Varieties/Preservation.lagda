@@ -15,7 +15,7 @@ This section presents the [Varieties.Preservation][] module of the [Agda Univers
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (Universe; _̇; global-dfunext; _⇔_)
+open import Universes  using (Universe; _̇)
 
 module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} {𝓧 : Universe}{X : 𝓧 ̇} where
 
@@ -230,11 +230,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
  V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar fuu fvu fuu 𝑩 p q (V-id1 p q α VA) A≅B
  V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar fuu fvu fuu 𝑩 p q (V-id1 p q α VA) A≅B
 
-\end{code}
-
-\begin{code}
-
-module _ {𝓤 : Universe}{X : 𝓤 ̇}
+module cids {𝓤 : Universe}{X : 𝓤 ̇}
         {fuu : dfunext 𝓤 𝓤}
         {fvu : dfunext 𝓥 𝓤}
         {fe₀ : dfunext 𝓤 ((ov 𝓤) ⁺)}

@@ -14,7 +14,6 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 

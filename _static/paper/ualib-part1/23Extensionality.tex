@@ -156,11 +156,15 @@ As explained above, a natural notion of function equality is defined as follows:
 In informal settings, this so-called \emph{point-wise equality of functions} is typically what one means when one
 asserts that two functions are ``equal.''\footnote{In fact, if one assumes the \emph{univalence axiom} of Homotopy Type Theory~\cite{HoTT}, then point-wise equality of functions is equivalent to definitional equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of~\cite{MHE}.} However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}.~\cite{MHE}
 
-\subsubsection{Global function extensionality}\label{sec:glob-funct-extens}
 
-An assumption that we adopt throughout much of the current version of the \ualib is a \emph{global function extensionality principle}. This asserts that function extensionality holds at all universe levels. Agda is capable of expressing types representing global principles as the language has a special universe level for such types.
-Following Escardó, we denote this universe by \AgdaPrimitive{𝓤ω} (which is just an alias for Agda's \ad{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
+
+
+
+
+\subsubsection{Global function extensionality}\label{sec:glob-funct-extens}
+Previous versions of the \ualib made heavy use of a \defn{global function extensionality principle}. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by \apr{𝓤ω} (which is an alias for Agda's \apr{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
 \href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.}
+
 The types \af{global-funext} and \af{global-dfunext} are defined in \typtop as follows.
 \ccpad
 \begin{code}%
@@ -198,6 +202,11 @@ The types \af{global-funext} and \af{global-dfunext} are defined in \typtop as f
 \AgdaBound{𝓥}\<%
 \end{code}
 \ccpad
+We have decided to remove from the latest version of the \ualib all instances of global function extensionality and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of \emph{univalence}).
+
+
+
+
 The next two types define the converse of function extensionality.
 \ccpad
 \begin{code}%

@@ -14,7 +14,7 @@ This section presents the [Varieties.Varieties][] module of the [Agda Universal 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (Universe; _̇; global-dfunext)
+open import Universes using (Universe; _̇)
 
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{𝓧 : Universe}{X : 𝓧 ̇} where
 
@@ -466,7 +466,7 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 
 open Lift
 
-module _ {fe₀ : dfunext (ov 𝓤) 𝓤}
+module Vlift {fe₀ : dfunext (ov 𝓤) 𝓤}
          {fe₁ : dfunext ((ov 𝓤) ⊔ ((ov 𝓤)⁺)) ((ov 𝓤) ⁺)}
          {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
          {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where

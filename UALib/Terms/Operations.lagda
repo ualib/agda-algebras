@@ -16,7 +16,6 @@ Here we define *term operations* which are simply terms interpreted in a particu
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
@@ -135,8 +134,6 @@ module _ {𝓧 : Universe}{X : 𝓧 ̇}{fe : dfunext 𝓥 (ov 𝓧)} where
 
 
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
-
-Note that while in the previous section it sufficed to postulate a local version of function extensionality, here we are using the global version (`global-dfunext`), though we are not sure whether this is necessary or we could remove it with some effort.<sup>[1](Terms.Operations.html#fn1)</sup>
 
 \begin{code}
 

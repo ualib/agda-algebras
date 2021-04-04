@@ -29,7 +29,7 @@ open import MGS-Subsingleton-Theorems using (global-dfunext)
 module Subalgebras.Univalent {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
 
 -- Public imports (inherited by modules importing this one)
-open import Subalgebras.Subalgebras {𝑆 = 𝑆}{gfe} public
+open import Subalgebras.Subalgebras {𝑆 = 𝑆} public
 open import MGS-MLTT using (_⇔_) public
 
 -- Private imports (only visible in the current module)

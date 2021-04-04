@@ -16,7 +16,6 @@ The theoretical background that begins each subsection below is based on Cliff B
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 

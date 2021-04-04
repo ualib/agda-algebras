@@ -16,7 +16,6 @@ We start by defining a type that represents the important concept of **subuniver
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
 module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 

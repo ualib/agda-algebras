@@ -30,12 +30,14 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Embeddings using (Universe; _̇;embeddings-are-lc; _⇔_)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
+open import Universes using (Universe; _̇)
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{𝓧 : Universe}{X : 𝓧 ̇} where
 
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} hiding (Universe; _̇) public
+open import MGS-MLTT using (_⇔_) public
+open import MGS-Embeddings using (embeddings-are-lc) public
+
 
 \end{code}
 
