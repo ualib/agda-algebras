@@ -17,9 +17,9 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
-open import Homomorphisms.Noether{𝑆 = 𝑆}{gfe} public
+open import Homomorphisms.Noether{𝑆 = 𝑆} public
 open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding) public
 
 \end{code}
@@ -148,7 +148,7 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {𝓘 𝓤 𝓦 : Universe} {I : 𝓘 ̇} where
+module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{fiw : dfunext 𝓘 𝓦}{fiu : dfunext 𝓘 𝓤} where
 
  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
 
@@ -158,19 +158,19 @@ module _ {𝓘 𝓤 𝓦 : Universe} {I : 𝓘 ̇} where
   ϕ a i = ∣ fst (AB i) ∣ (a i)
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 a = gfe (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
+  ϕhom 𝑓 a = fiw (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
 
   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
 
   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-  ψhom 𝑓 𝒃 = gfe (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
+  ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
 
   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-  ϕ~ψ 𝒃 = gfe λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
+  ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
 
   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-  ψ~ϕ a = gfe λ i → snd ∥ snd (AB i) ∥ (a i)
+  ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
   γ : ⨅ 𝒜 ≅ ⨅ ℬ
   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
@@ -182,7 +182,7 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
-module _ {𝓘 𝓤 𝓦 𝓩 : Universe} {I : 𝓘 ̇} where
+module _ {𝓘 𝓩 : Universe}{I : 𝓘 ̇}{fizw : dfunext (𝓘 ⊔ 𝓩) 𝓦}{fiu : dfunext 𝓘 𝓤} where
 
  Lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift{𝓩} I) → Algebra 𝓦 𝑆}
   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
@@ -193,19 +193,19 @@ module _ {𝓘 𝓤 𝓦 𝓩 : Universe} {I : 𝓘 ̇} where
   ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 a = gfe (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+  ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
 
   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
 
   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-  ψhom 𝑓 𝒃 = gfe (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
+  ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
 
   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-  ϕ~ψ 𝒃 = gfe λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
+  ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
 
   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-  ψ~ϕ a = gfe λ i → snd ∥ snd (AB i) ∥ (a i)
+  ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
   A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
   A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)

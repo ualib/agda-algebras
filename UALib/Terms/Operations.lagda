@@ -18,9 +18,9 @@ Here we define *term operations* which are simply terms interpreted in a particu
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Terms.Operations {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
-open import Terms.Basic{𝑆 = 𝑆}{gfe} renaming (generator to ℊ) public
+open import Terms.Basic{𝑆 = 𝑆} renaming (generator to ℊ) public
 
 \end{code}
 
@@ -142,56 +142,58 @@ Note that while in the previous section it sufficed to postulate a local version
 
 module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇ }{I : 𝓦 ̇} where
 
- interp-prod : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+ interp-prod : dfunext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
   →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
 
- interp-prod (ℊ x₁) 𝒜 𝑎 = refl
+ interp-prod _ (ℊ x₁) 𝒜 𝑎 = refl
 
- interp-prod (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod (𝑡 x) 𝒜 𝑎
+ interp-prod fe (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod fe (𝑡 x) 𝒜 𝑎
   in
-  (𝑓 ̂ ⨅ 𝒜) (λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) 𝑎)                     ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
+  (𝑓 ̂ ⨅ 𝒜) (λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) 𝑎)                     ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(fe IH) ⟩
   (𝑓 ̂ ⨅ 𝒜)(λ x → λ i →  (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i)   ≡⟨ refl ⟩
   (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i))  ∎
 
  -- inferred type: 𝑡 : X → ∣ ⨅ 𝒜 ∣
- interp-prod2 : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
+ interp-prod2 : dfunext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → dfunext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 → (λ i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i))
 
- interp-prod2 (ℊ x₁) 𝒜 = refl
+ interp-prod2 _ _ (ℊ x₁) 𝒜 = refl
 
- interp-prod2 (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  let IH = λ x → interp-prod (t x) 𝒜  in
+ interp-prod2 fe fev (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  let IH = λ x → interp-prod fev (t x) 𝒜  in
   let tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧ in
-  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(gfe λ x → IH x tup)⟩
+  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(fev λ x → IH x tup)⟩
   (f ̂ ⨅ 𝒜)(λ s → λ j → (𝒜 j ⟦ t s ⟧) (λ ℓ → tup ℓ j))   ≡⟨ refl ⟩
   (λ i → (f ̂ 𝒜 i)(λ s →  (𝒜 i ⟦ t s ⟧) (λ ℓ → tup ℓ i))) ∎
 
 module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
 
- interp-prod' : {𝓦 : Universe}(p : Term X){I : 𝓦 ̇}
-               (𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
-               -----------------------------------------------
-  →            (p ̇ (⨅ 𝒜)) 𝑎 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝑎 j i))
+ interp-prod' : {𝓦 : Universe} → dfunext 𝓥 (𝓤 ⊔ 𝓦)
+  →             (p : Term X){I : 𝓦 ̇}
+                (𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+                ---------------------------------------------------
+  →             (p ̇ (⨅ 𝒜)) 𝑎 ≡ (λ i → (p ̇ 𝒜 i) (λ j → 𝑎 j i))
 
- interp-prod' (ℊ x₁) 𝒜 𝑎 = refl
+ interp-prod' _ (ℊ x₁) 𝒜 𝑎 = refl
 
- interp-prod' (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod' (𝑡 x) 𝒜 𝑎
+ interp-prod' fe (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod' fe (𝑡 x) 𝒜 𝑎
   in
-  (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝑎)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(gfe IH) ⟩
+  (𝑓 ̂ ⨅ 𝒜)(λ x → (𝑡 x ̇ ⨅ 𝒜) 𝑎)                      ≡⟨ ap (𝑓 ̂ ⨅ 𝒜)(fe IH) ⟩
   (𝑓 ̂ ⨅ 𝒜)(λ x → (λ i → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))   ≡⟨ refl ⟩
   (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝑡 x ̇ 𝒜 i)(λ j → 𝑎 j i)))  ∎
 
 
- interp-prod2' : (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
-                --------------------------------------------------------------
-  →             (p ̇ ⨅ 𝒜) ≡ λ(𝑡 : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → 𝑡 x i))
+ interp-prod2' : dfunext (𝓤 ⊔ 𝓧) 𝓤 → dfunext 𝓥 𝓤
+  →              (p : Term X){I : 𝓤 ̇ }(𝒜 : I → Algebra 𝓤 𝑆)
+                 ------------------------------------------------------------------
+  →              (p ̇ ⨅ 𝒜) ≡ λ(𝑡 : X → ∣ ⨅ 𝒜 ∣) → (λ i → (p ̇ 𝒜 i)(λ x → 𝑡 x i))
 
- interp-prod2' (ℊ x₁) 𝒜 = refl
+ interp-prod2' _ _ (ℊ x₁) 𝒜 = refl
 
- interp-prod2' (node f t) 𝒜 = gfe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  let IH = λ x → interp-prod' (t x) 𝒜  in
+ interp-prod2' fe fev (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  let IH = λ x → interp-prod' fev (t x) 𝒜  in
   let tA = λ z → t z ̇ ⨅ 𝒜 in
-  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(gfe λ x → IH x tup)⟩
+  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ ap(f ̂ ⨅ 𝒜)(fev λ x → IH x tup)⟩
   (f ̂ ⨅ 𝒜)(λ s → λ j → (t s ̇ 𝒜 j)(λ ℓ → tup ℓ j))   ≡⟨ refl ⟩
   (λ i → (f ̂ 𝒜 i)(λ s → (t s ̇ 𝒜 i)(λ ℓ → tup ℓ i))) ∎
 
@@ -208,33 +210,33 @@ We now prove two important facts about term operations.  The first of these, whi
 
 module _ {𝓤 𝓦 𝓧 : Universe}{X : 𝓧 ̇} where
 
- comm-hom-term : {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+ comm-hom-term : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
                  (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
                  -----------------------------------------
   →              ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
- comm-hom-term  𝑩 h (ℊ x) a = refl
+ comm-hom-term _ 𝑩 h (ℊ x) a = refl
 
- comm-hom-term {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
+ comm-hom-term fe {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
                                      (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
                                      (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
   where
   i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
-  ii = ap (𝑓 ̂ 𝑩)(gfe (λ i → comm-hom-term 𝑩 h (𝑡 i) a))
+  ii = ap (𝑓 ̂ 𝑩)(fe (λ i → comm-hom-term fe 𝑩 h (𝑡 i) a))
 
- comm-hom-term' : {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
-                 (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
-                 -----------------------------------------
-  →              ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
+ comm-hom-term' : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+                  (h : hom 𝑨 𝑩) (t : Term X) (a : X → ∣ 𝑨 ∣)
+                  -----------------------------------------
+  →               ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
- comm-hom-term'  𝑩 h (ℊ x) a = refl
+ comm-hom-term' _ 𝑩 h (ℊ x) a = refl
 
- comm-hom-term' {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣ ((𝑓 ̂ 𝑨)λ i → (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
+ comm-hom-term' fe {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣ ((𝑓 ̂ 𝑨)λ i → (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
                                      (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
                                      (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
   where
   i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
-  ii = ap (𝑓 ̂ 𝑩)(gfe (λ i → comm-hom-term' 𝑩 h (𝑡 i) a))
+  ii = ap (𝑓 ̂ 𝑩)(fe (λ i → comm-hom-term' fe 𝑩 h (𝑡 i) a))
 
 \end{code}
 

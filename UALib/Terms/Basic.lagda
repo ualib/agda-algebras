@@ -18,9 +18,9 @@ The theoretical background that begins each subsection below is based on Cliff B
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Terms.Basic {𝑆 : Signature 𝓞 𝓥} {gfe : global-dfunext} where
+module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
-open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆}{gfe} public
+open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} public
 
 \end{code}
 

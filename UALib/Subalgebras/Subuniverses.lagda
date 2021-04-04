@@ -18,9 +18,9 @@ We start by defining a type that represents the important concept of **subuniver
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
-open import Terms.Operations{𝑆 = 𝑆}{gfe} public
+open import Terms.Operations{𝑆 = 𝑆} public
 open import Relation.Unary using (⋂) public
 
 \end{code}
@@ -69,8 +69,7 @@ homomorphisms with domain `𝑨` is a subuniverse of `𝑨`.
  𝐸hom-is-subuniverse : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
   →                    Subuniverse {𝑨 = 𝑨}
 
- 𝐸hom-is-subuniverse fe 𝑩 g h =
-  mksub (𝐸hom{fe = fe} 𝑩 g h) λ 𝑓 a x → 𝐸hom-closed{fe = fe} 𝑩 g h 𝑓 a x
+ 𝐸hom-is-subuniverse fe 𝑩 g h = mksub (𝐸hom 𝑩 g h) λ 𝑓 a x → 𝐸hom-closed fe 𝑩 g h 𝑓 a x
 
 \end{code}
 
@@ -219,16 +218,16 @@ Now that we have developed the machinery of subuniverse generation, we can prove
 
 \begin{code}
 
- hom-image-is-sub : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+ hom-image-is-sub : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
                     (ϕ : hom 𝑨 𝑩) → (HomImage 𝑩 ϕ) ∈ Subuniverses 𝑩
 
- hom-image-is-sub {𝑨}{𝑩} ϕ 𝑓 b Imfb = eq ((𝑓 ̂ 𝑩) b) ((𝑓 ̂ 𝑨) ar) γ
+ hom-image-is-sub fe {𝑨}{𝑩} ϕ 𝑓 b Imfb = eq ((𝑓 ̂ 𝑩) b) ((𝑓 ̂ 𝑨) ar) γ
   where
   ar : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
   ar = λ x → Inv ∣ ϕ ∣ (Imfb x)
 
   ζ : ∣ ϕ ∣ ∘ ar ≡ b
-  ζ = gfe (λ x → InvIsInv ∣ ϕ ∣ (Imfb x))
+  ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (Imfb x))
 
   γ : (𝑓 ̂ 𝑩) b ≡ ∣ ϕ ∣ ((𝑓 ̂ 𝑨) ar)
   γ = (𝑓 ̂ 𝑩) b            ≡⟨ ap (𝑓 ̂ 𝑩)(ζ ⁻¹) ⟩

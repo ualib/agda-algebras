@@ -95,7 +95,7 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 \begin{code}
 
 
-module _ {I : 𝓥 ̇}{A : 𝓤 ̇} where
+module _ {𝓘 : Universe} {I : 𝓘 ̇}{A : 𝓤 ̇} where
 
  open Lift
 
@@ -104,10 +104,10 @@ module _ {I : 𝓥 ̇}{A : 𝓤 ̇} where
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
 
- open algebra
-
  Lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
  Lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
+
+ open algebra
 
  Lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
  Lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
