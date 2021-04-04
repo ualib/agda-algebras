@@ -1,16 +1,17 @@
 ---
 layout: default
 title : MGS-Embeddings module
-date : 2021-02-25
-author: Martin Escardo
+date : 2020-05-01
+author: Martín Escardó
 ---
 
 Martin Escardo 1st May 2020.
 
-This is ported from the Midlands Graduate School 2019 lecture notes
+This is ported from the Midlands Graduate School 2019 lecture notes, which are available online from the following links.
 
- https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html
- https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes
+[html lecture notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html)
+
+[Source code repository](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes)
 
 <pre class="Agda">
 
