@@ -75,6 +75,7 @@ UALib : $(HTML_DIR)/UALib.md
 $(HTML_DIR)/UALib.md: $(HTML_DIR)/UALib.tex
 	cp $< $@
 	for f in $(UALIB); do cp $(HTML_DIR)/$$f.tex $(HTML_DIR)/$$f.md; done
+	for f in $(MGS); do cp $(HTML_DIR)/$$f.tex $(HTML_DIR)/$$f.html; done
 
 $(HTML_DIR)/UALib.tex: UALib.lagda $(MODULE_NAMES)
 	$(AGDA) UALib.lagda
