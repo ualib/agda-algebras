@@ -14,11 +14,10 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
-open import Subalgebras.Subuniverses {𝑆 = 𝑆}{gfe} public
+open import Subalgebras.Subuniverses {𝑆 = 𝑆} public
 open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 \end{code}
@@ -51,30 +50,27 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 open Congruence
 
-FirstHomCorollary : -- extensionality assumptions --
-                    dfunext 𝓥 𝓦 → prop-ext 𝓤 𝓦
+module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+ -- extensionality assumptions:
+    (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
- →                  (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-
-                    -- truncation assumptions --
- →                  is-set ∣ 𝑩 ∣
- →                  (∀ a x → is-subsingleton (⟨ kercon 𝑩 h ⟩ a x))
- →                  (∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
-                    ----------------------------------------------------
- →                  (𝑨 [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
-
-FirstHomCorollary fe pe 𝑨 𝑩 h Bset ssR ssA = ϕhom , ϕemb
+ -- truncation assumptions:
+    (UIPc : is-set ∣ 𝑩 ∣)
+    (URPk : ∀ a x → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ a x))
+    (UIPb : ∀ C → is-subsingleton (𝒞 ⟨ kercon fe 𝑩 h ⟩ C))
  where
- FirstHomThm : Σ ϕ ꞉ hom (𝑨 [ 𝑩 ]/ker h) 𝑩 , (∣ h ∣ ≡ ∣ ϕ ∣ ∘ ∣ πker 𝑩 h ∣ )
-                                              × Monic ∣ ϕ ∣ × is-embedding ∣ ϕ ∣
 
- FirstHomThm = FirstHomomorphismTheorem fe pe 𝑨 𝑩 h Bset ssR ssA
+ open first-hom-thm {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
 
- ϕhom : hom (𝑨 [ 𝑩 ]/ker h) 𝑩
- ϕhom = ∣ FirstHomThm ∣
+ FirstHomColly : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
- ϕemb : is-embedding ∣ ϕhom ∣
- ϕemb = snd (snd (snd FirstHomThm))
+ FirstHomColly = ϕhom , ϕemb
+  where
+  ϕhom : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩
+  ϕhom = ∣ FirstHomomorphismTheorem ∣ 
+
+  ϕemb : is-embedding ∣ ϕhom ∣
+  ϕemb = ∥ snd ∥ FirstHomomorphismTheorem ∥ ∥
 
 \end{code}
 
@@ -82,19 +78,18 @@ One special case to which we will apply this is where the algebra `𝑨` is the 
 
 \begin{code}
 
-free-quot-subalg : --extensionality assumptions --
-                   dfunext 𝓥 𝓤 → prop-ext (ov 𝓧) 𝓤
+module _ {𝓤 𝓦 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩) where
 
- →                 (X : 𝓧 ̇)(𝑩 : Algebra 𝓤 𝑆)(h : hom (𝑻 X) 𝑩)
+ free-quot-subalg : --extensionality assumptions:
+                      prop-ext (ov 𝓧) 𝓦 → (fe : dfunext 𝓥 𝓦)
+                    --truncation assumptions:
+  →                   is-set ∣ 𝑩 ∣
+  →                   (∀ p q → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ p q))
+  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon fe 𝑩 h ⟩ C))
+                    ----------------------------------------------------
+  →                 (((𝑻 X) [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
-                   --truncation assumptions --
- →                 is-set ∣ 𝑩 ∣
- →                 (∀ p q → is-subsingleton (⟨ kercon 𝑩 h ⟩ p q))
- →                 (∀ C → is-subsingleton (𝒞 ⟨ kercon 𝑩 h ⟩ C))
-                   -----------------------------------------------
- →                 ((𝑻 X) [ 𝑩 ]/ker h) IsSubalgebraOf 𝑩
-
-free-quot-subalg fe pe X 𝑩 h Bset ssR ssB = FirstHomCorollary fe pe (𝑻 X) 𝑩 h Bset ssR ssB
+ free-quot-subalg pe fe UIPc URPk UIPb = FirstHomColly{𝓤 = (ov 𝓧)} (𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
 
 \end{code}
 

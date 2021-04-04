@@ -14,9 +14,8 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} public
 open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
@@ -97,7 +96,7 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 #### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
-We represent **monomorphisms** (injective homomorphisms) and **epimorphisms** (surjective homomorphisms) by the following types.
+A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjective homomorphism. These are represented in the [UALib][] by the following types.
 
 \begin{code}
 
@@ -138,10 +137,10 @@ Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} {fe : dfunext 𝓥 𝓦} where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- 𝐸 : {𝑩 : Algebra 𝓦 𝑆}(g h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
- 𝐸 g h x = g x ≡ h x
+ 𝐸 : (𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸 _ g h x = g x ≡ h x
 
  𝐸hom : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ 𝓦
  𝐸hom _ g h x = ∣ g ∣ x ≡ ∣ h ∣ x
@@ -152,15 +151,15 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
 
 \begin{code}
 
- 𝐸hom-closed : (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
-  →            ∀ 𝑓 a  →  Π x ꞉ ∥ 𝑆 ∥ 𝑓 , (a x ∈ 𝐸hom 𝑩 g h)
+ 𝐸hom-closed : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
+   →           ∀ 𝑓 a  →  Π x ꞉ ∥ 𝑆 ∥ 𝑓 , (a x ∈ 𝐸hom 𝑩 g h)
                ----------------------------------------------
-  →            ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
+   →           ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
 
- 𝐸hom-closed 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
-                           (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
-                           (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
-                           ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
+ 𝐸hom-closed fe 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
+                              (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
+                              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
+                              ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
 
 \end{code}
 
@@ -178,18 +177,18 @@ open Congruence
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- homker-compatible : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-compatible 𝑩 h f {u}{v} Kerhab = γ
+ homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+ homker-compatible fe 𝑩 h f {u}{v} Kerhab = γ
   where
   γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
   γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
-      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ ap (f ̂ 𝑩)(gfe λ x → Kerhab x) ⟩
+      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
       (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
       ∣ h ∣ ((f ̂ 𝑨) v)  ∎
 
 
  homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (ker ∣ h ∣)
- homker-equivalence 𝑩 h = map-kernel-IsEquivalence ∣ h ∣
+ homker-equivalence 𝑩  h = map-kernel-IsEquivalence ∣ h ∣
 
 \end{code}
 
@@ -197,8 +196,8 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
- kercon 𝑩 h = mkcon (ker ∣ h ∣)(homker-equivalence 𝑩 h)(homker-compatible 𝑩 h)
+ kercon : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
+ kercon fe 𝑩 h = mkcon (ker ∣ h ∣)(homker-equivalence 𝑩 h)(homker-compatible fe 𝑩 h)
 
 \end{code}
 
@@ -206,13 +205,13 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe} where -- where
 
- kerquo : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- kerquo {𝑨} 𝑩 h = 𝑨 ╱ (kercon 𝑩 h)
+ kerquo : {fe : dfunext 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ kerquo {fe} 𝑨 {𝑩} h = 𝑨 ╱ (kercon fe 𝑩 h)
 
- _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- 𝑨 [ 𝑩 ]/ker h = kerquo 𝑩 h
+ _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦} → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ (𝑨 [ 𝑩 ]/ker h) {fe} = kerquo {fe} 𝑨 {𝑩} h
 
  infix 60 _[_]/ker_
 
@@ -228,8 +227,10 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
- πepi : {𝑨 : Algebra 𝓤 𝑆} (θ : Congruence{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+
+ πepi : (θ : Congruence{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
   cπ a = ⟪ a ⟫{⟨ θ ⟩}
@@ -246,8 +247,8 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
- πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Congruence{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- πhom {𝑨} θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+ πhom : (θ : Congruence{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
@@ -255,8 +256,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)  →  epi 𝑨 (𝑨 [ 𝑩 ]/ker h)
- πker {𝑨} 𝑩 h = πepi (kercon 𝑩 h)
+ πker : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦}  →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h) {fe})
+ πker 𝑩 h {fe}  = πepi (kercon fe 𝑩 h)
 
 \end{code}
 
@@ -265,12 +266,10 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+ ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ (𝓦 ⁺))}(θ : Congruence{𝓦} 𝑨)
+  →           ∀ {x}{y} → ⟨ kercon fe (𝑨 ╱ θ) (πhom θ ) ⟩ x y →  ⟨ θ ⟩ x y
 
- ker-in-con : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨)(x y : ∣ 𝑨 ∣)
-  →           ⟨ kercon (𝑨 ╱ θ) (πhom θ) ⟩ x y  →  ⟨ θ ⟩ x y
-
- ker-in-con 𝑨 θ x y hyp = ╱-≡ θ hyp
+ ker-in-con θ hyp = ╱-≡ θ hyp
 
 \end{code}
 

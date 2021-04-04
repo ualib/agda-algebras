@@ -16,11 +16,11 @@ First we will define the relatively free algebra in a variety, which is the "fre
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
+open import MGS-Subsingleton-Theorems using (Universe; _̇)
 
-module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} {𝓧 : Universe}{X : 𝓧 ̇} where
 
-open import Varieties.Preservation {𝑆 = 𝑆}{gfe} public
+open import Varieties.Preservation {𝑆 = 𝑆}{𝓧}{X} public
 
 \end{code}
 
@@ -67,9 +67,6 @@ We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
                   →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
- -- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
- -- ψ 𝒦 (p , q) = Π 𝔸 ꞉ (ℑ (S{𝓤}{𝓤} 𝒦)) ,  (free-lift ∣ 𝔸 ∣ (snd ∥ 𝔸 ∥)) p ≡ (free-lift ∣ 𝔸 ∣ (snd ∥ 𝔸 ∥)) q
-
 \end{code}
 
 We convert the predicate ψ into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
@@ -88,8 +85,8 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 
 \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → compatible (𝑻 X)(ψRel 𝒦)
- ψcompatible 𝒦 𝑓 {p} {q} ψpq 𝑨 sA h = γ
+ ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾){fe : dfunext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
+ ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
    φ : hom (𝑻 X) 𝑨
    φ = lift-hom 𝑨 h
@@ -97,7 +94,7 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
    γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
    γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(gfe λ x → (ψpq x) 𝑨 sA h) ⟩
+       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
        (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
        ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
@@ -119,8 +116,8 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Congruence (𝑻 X)
- ψCon 𝒦 = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦)
+ ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾){fe : dfunext 𝓥 𝓤} → Congruence (𝑻 X)
+ ψCon 𝒦 {fe} = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦 {fe})
 
 \end{code}
 
@@ -131,7 +128,7 @@ Finally, we are ready to define the type representing the relatively free algebr
 
 module the-relatively-free-algebra
        {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-       {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+       {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
 
  open the-free-algebra{𝓤}{𝓧}{X}
 
@@ -139,7 +136,7 @@ module the-relatively-free-algebra
  𝓕 = (𝓧 ⊔ ov 𝓤) ⁺
 
  𝔉 : Algebra 𝓕 𝑆
- 𝔉 =  𝑻 X ╱ (ψCon 𝒦)
+ 𝔉 =  𝑻 X ╱ (ψCon 𝒦 {fe})
 
 \end{code}
 
@@ -180,11 +177,24 @@ Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#pr
 
 \begin{code}
 
-module HSPTheorem {𝓤 : Universe}{X : 𝓤 ̇}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+module HSPTheorem {𝓤 : Universe}{X : 𝓤 ̇}
+ {fuu : dfunext 𝓤 𝓤}
+ {fe₀ : dfunext (ov 𝓤) 𝓤}
+ {fe₁ : dfunext 𝓤 ((ov 𝓤) ⁺)}
+ {fe₂ : dfunext ((ov 𝓤) ⁺) 𝓤}
+ {fe₃ : dfunext (ov 𝓤) (ov 𝓤)}
+ {fe₄ : funext (ov 𝓤) ((ov 𝓤) ⁺)}
+ {fe₅ : dfunext ((ov 𝓤) ⁺) ((ov 𝓤) ⁺)}
+ {fvu : dfunext 𝓥 𝓤}
+ {fe : dfunext 𝓥 (ov 𝓤)}
+ {fvou : dfunext 𝓥 (ov 𝓤 ⁺)}
+ (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
+ where
+
 
  open the-free-algebra {𝓤}{𝓤}{X}
- open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}
- open class-products-with-maps {𝓤}{X} 𝒦
+ open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}{fvu}
+ open class-products-with-maps {𝓤}{X}{fe₀}{fe₅}{fe₃} 𝒦
 
 \end{code}
 
@@ -217,7 +227,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
  hom𝔄 i = lift-hom (𝔄 i) (𝔄h i)
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co {fe = gfe} 𝔄 hom𝔄
+ homℭ = ⨅-hom-co {fe = fe₀} 𝔄 hom𝔄
 
 \end{code}
 
@@ -229,10 +239,10 @@ As mentioned above, the initial version of the [Agda UALib][] used the free alge
 \begin{code}
 
  𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
- 𝔽 = (𝑻 X) [ ℭ ]/ker homℭ
+ 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe}
 
  epi𝔽 : epi (𝑻 X) 𝔽
- epi𝔽 = πker ℭ homℭ
+ epi𝔽 = πker ℭ homℭ {fe}
 
  hom𝔽 : hom (𝑻 X) 𝔽
  hom𝔽 = epi-to-hom 𝔽 epi𝔽
@@ -255,7 +265,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
    ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con (𝑻 X) (kercon ℭ homℭ) p q x
+   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{ fvou }(kercon fe ℭ homℭ) {p}{q} x
 
    γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
    γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -268,7 +278,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
  𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) hom𝔽 hom𝔽-is-epic (ψlemma0-ap skA))
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor fe₀ fuu fe₅ (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) hom𝔽 hom𝔽-is-epic (ψlemma0-ap skA))
 
 \end{code}
 
@@ -297,7 +307,7 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
  hom𝔽-is-lift-hom (ℊ x) = refl
  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(gfe (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(fvou (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
   (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
 
@@ -322,7 +332,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    f𝔑≡φ x = refl
 
    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-   h≡φ t = free-unique gfe 𝑨 h' φ f𝔑≡φ t
+   h≡φ t = free-unique fvu 𝑨 h' φ f𝔑≡φ t
 
    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
@@ -345,9 +355,9 @@ We need a three more lemmas before we are ready to tackle our main goal.
    skA = siso (sbase kA) (≅-sym Lift-≅)
 
    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = gfe λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp gfe 𝑨 h p ⟩
+   γ = fuu λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp fvu 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp gfe 𝑨 h q)⁻¹  ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp fvu 𝑨 h q)⁻¹  ⟩
                  (𝑨 ⟦ q ⟧) h       ∎
 
 \end{code}
@@ -368,33 +378,37 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
+ open cids {𝓤}{X}{fuu = fuu}{fvu = fvu}{fe₀ = fe₁}{fe₁ = fvou}{fe₂ = fe₅}{fe₃ = fe₂}{𝒦}
+
+
+
+
  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
  kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
 
  open Congruence
 
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
-  →                   (∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon ℭ homℭ ⟩ C))
+  →                   (∀ p q → is-subsingleton (⟨ kercon fe ℭ homℭ ⟩ p q ))
+  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon fe ℭ homℭ ⟩ C))
                       --------------------------------------------------------
-  →                   ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
+  →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe}) ≤ ℭ
 
- free-quot-subalg-ℭ fe pe Cset ssR ssC = FirstHomCorollary fe pe (𝑻 X) ℭ homℭ Cset ssR ssC
+ free-quot-subalg-ℭ fe pe UIPc URPk UIPb = FirstHomColly (𝑻 X) ℭ homℭ pe fe UIPc URPk UIPb
 
 
  module _ -- extensionality assumptions:
-          (fe : dfunext 𝓥 (ov 𝓤))
           (hfe : hfunext (ov 𝓤)(ov 𝓤))
           (pe : prop-ext (ov 𝓤)(ov 𝓤))
 
           -- truncation assumptions:
           (Cset : is-set ∣ ℭ ∣)
-          (ssR : ∀ p q → is-subsingleton (⟨ kercon ℭ homℭ ⟩ p q))
-          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon ℭ homℭ ⟩ C))
+          (ssR : ∀ p q → is-subsingleton (⟨ kercon fe ℭ homℭ ⟩ p q))
+          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon fe ℭ homℭ ⟩ C))
 
   where
 
-  𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ) ≤ ℭ
+  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe}) ≤ ℭ
   𝔽≤ℭ = free-quot-subalg-ℭ fe pe Cset ssR ssC
 
   𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
@@ -431,14 +445,14 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
       Apq = pqlem2 p q x
       γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
       γ = ∣ φ ∣ p                    ≡⟨ refl ⟩
-          free-lift 𝑨 η p   ≡⟨ (free-lift-interp gfe 𝑨 η p)⁻¹ ⟩
+          free-lift 𝑨 η p   ≡⟨ (free-lift-interp fvou 𝑨 η p)⁻¹ ⟩
           (𝑨 ⟦ p ⟧) η          ≡⟨ extfun (pqlem2 p q x) η  ⟩
-          (𝑨 ⟦ q ⟧) η          ≡⟨ free-lift-interp gfe 𝑨 η q ⟩
+          (𝑨 ⟦ q ⟧) η          ≡⟨ free-lift-interp fvou 𝑨 η q ⟩
           free-lift 𝑨 η q   ≡⟨ refl ⟩
           ∣ φ ∣ q                    ∎
 
     γ : epi 𝔽 𝑨
-    γ = fst (HomFactorEpi (𝑻 X){𝑨}{𝔽} φ φE hom𝔽 hom𝔽-is-epic  kerincl)
+    γ = fst (HomFactorEpi fe₄ fe₅ fe₅ (𝑻 X){𝑨}{𝔽} φ hom𝔽 φE hom𝔽-is-epic  kerincl)
 
 
 \end{code}
@@ -448,6 +462,8 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
 With this result in hand, along with what we proved earlier---namely, `PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦`---it is not hard to show that `𝔽` belongs to `V 𝒦`.
 
 \begin{code}
+
+  open Vlift {𝓤}{fe₀}{fe₅}{fe₃}{𝒦}
 
   𝔽∈SP : 𝔽 ∈ (S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦))
   𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ

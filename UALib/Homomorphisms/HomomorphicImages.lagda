@@ -14,11 +14,10 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆}{gfe} public
+open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} public
 
 \end{code}
 

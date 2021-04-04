@@ -51,7 +51,7 @@ module hide-∼ where
 
  infix 0 _∼_
 
-open import MGS-FunExt-from-Univalence using (_∼_) public
+open import MGS-MLTT using (_∼_) public
 
 \end{code}
 
@@ -82,11 +82,9 @@ However, it is important to keep in mind the following fact (see <a href="https:
 
 #### <a id="global-function-extensionality">Global function extensionality</a>
 
-An assumption that we adopt throughout much of the current version of the [UALib][] is a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels. Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Following Escardó, we denote this universe by 𝓤ω (which is just an alias for Agda's `Setω` universe). (For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
+Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by 𝓤ω (which is an alias for Agda's `Setω` universe). (For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
 
-
-
-The types `global-funext` and `global-dfunext` are defined in the [Type Topology][] library as follows.
+The types `global-funext` and `global-dfunext` defined in the [Type Topology][] library are the following.
 
 \begin{code}
 
@@ -98,12 +96,13 @@ The types `global-funext` and `global-dfunext` are defined in the [Type Topology
 
 \end{code}
 
+We have decided to remove from the latest version of the [UALib][] all instances of global function extensionality and limit ourselves to local applications of the principle.  This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of *univalence*).
+
 Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[3](Overture.Extensionality.html#fn3)</sup>
 
 \begin{code}
 
 open import MGS-FunExt-from-Univalence using (funext; dfunext) public
-open import MGS-Subsingleton-Theorems using (global-dfunext) public
 
 \end{code}
 
@@ -116,8 +115,6 @@ Note that this import directive does not impose any function extensionality assu
 The next two types define the converse of function extensionality.
 
 \begin{code}
-
-open import MGS-MLTT using (_∼_) public
 
 extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
 extfun refl _ = refl
@@ -199,7 +196,8 @@ module hide-hfunext where
 
  hfunext :  ∀ 𝓤 𝓦 → (𝓤 ⊔ 𝓦)⁺ ̇
  hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
-open import MGS-Subsingleton-Truncation using (hfunext) public
+
+open import MGS-FunExt-from-Univalence using (hfunext) public
 
 \end{code}
 

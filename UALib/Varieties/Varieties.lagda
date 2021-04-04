@@ -14,11 +14,11 @@ This section presents the [Varieties.Varieties][] module of the [Agda Universal 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
-open import MGS-Subsingleton-Theorems using (global-dfunext)
+open import Universes using (Universe; _̇)
 
-module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥}{𝓧 : Universe}{X : 𝓧 ̇} where
 
-open import Varieties.EquationalLogic {𝑆 = 𝑆}{gfe} public
+open import Varieties.EquationalLogic {𝑆 = 𝑆}{𝓧}{X} public
 
 \end{code}
 
@@ -127,65 +127,6 @@ is-variety{𝓤} 𝒱 = V{𝓤}{𝓤} 𝒱 ⊆ 𝒱
 
 variety : (𝓤 : Universe) → (ov 𝓤)⁺ ̇
 variety 𝓤 = Σ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) , is-variety 𝒱
-
-\end{code}
-
-
-#### <a id="V-is-closed-under-lift">V is closed under lift</a>
-
-As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
-
-\begin{code}
-
-open Lift
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
-
- VlA : {𝑨 : Algebra (ov 𝓤) 𝑆} → 𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
-       ------------------------------------------
-  →    Lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
-
- VlA (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-alg-associative 𝑨)
- VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (Lift-alg-hom-image hB)
- VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (Lift-≤-Lift 𝑨 B≤A)
- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
- VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
-  where
-  𝑰 : (ov 𝓤 ⁺) ̇
-  𝑰 = Lift I
-
-  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
-  lA i = Lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
-
-  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
-  vlA i = vlift (x (lower i))
-
-  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
-  iso-components i = Lift-≅
-
-  B≅A : Lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅ iso-components
-
- VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
-  where
-  𝑰 : (ov 𝓤 ⁺) ̇
-  𝑰 = Lift I
-
-  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
-  lA i = Lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
-
-  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
-  vlA i = VlA (x (lower i))
-
-  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
-  iso-components i = Lift-≅
-
-  B≅A : Lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅ iso-components
-
- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-alg-iso A≅B)
- VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-alg-iso A≅B)
 
 \end{code}
 
@@ -400,14 +341,18 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
-module _ {𝓤 𝓦 : Universe}{fe : hfunext 𝓦 𝓤}{𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
+-- module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{few : dfunext 𝓘 𝓦}{feu : dfunext 𝓘 𝓤} where
 
- lemPS⊆SP : {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
+--  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
+
+module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
+
+ lemPS⊆SP : hfunext 𝓦 𝓤 → dfunext 𝓦 𝓤 → {I : 𝓦 ̇}{ℬ : I → Algebra 𝓤 𝑆}
   →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
             -------------------------------------
   →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
- lemPS⊆SP {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ B≅SA)
+ lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅{fiw = fwu}{fiu = fwu}  B≅SA)
   where
   𝒜 : I → Algebra 𝓤 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -427,9 +372,9 @@ module _ {𝓤 𝓦 : Universe}{fe : hfunext 𝓦 𝓤}{𝒦 : Pred(Algebra 𝓤
   α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
   α = λ x i → (h i) (x i)
   β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
-  β = λ 𝑓 𝒂 → gfe λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+  β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
   γ : is-embedding α
-  γ = embedding-lift fe fe {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+  γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -448,9 +393,9 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {fovu : dfunext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- PS⊆SP : -- extensionality assumption:
+ PS⊆SP : -- extensionality assumptions:
             hfunext (ov 𝓤)(ov 𝓤)
 
   →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
@@ -469,7 +414,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {hfe} {P 𝒦} {I} {𝒜} ξ
+   η = lemPS⊆SP hfe fovu {I} {𝒜} ξ
 
  PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
@@ -477,7 +422,7 @@ module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    ξ i = S→subalgebra (PS⊆SP hfe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP {ov 𝓤} {ov 𝓤} {hfe} {P 𝒦} {I} {𝒜} ξ
+   η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
 
  PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
  PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
@@ -513,12 +458,75 @@ SP⊆V (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 \end{code}
+#### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
-We just proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
+As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
 
 \begin{code}
 
-module _ {𝓤 : Universe}{𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
+open Lift
+
+module Vlift {fe₀ : dfunext (ov 𝓤) 𝓤}
+         {fe₁ : dfunext ((ov 𝓤) ⊔ ((ov 𝓤)⁺)) ((ov 𝓤) ⁺)}
+         {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
+         {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+
+ VlA : {𝑨 : Algebra (ov 𝓤) 𝑆} → 𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
+  →    Lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+
+ VlA (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
+ VlA (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
+ VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-alg-associative 𝑨)
+ VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (Lift-alg-hom-image hB)
+ VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (Lift-≤-Lift 𝑨 B≤A)
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
+ VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+  where
+  𝑰 : (ov 𝓤 ⁺) ̇
+  𝑰 = Lift I
+
+  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
+  lA i = Lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
+
+  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA i = vlift (x (lower i))
+
+  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
+  iso-components i = Lift-≅
+
+  B≅A : Lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
+  B≅A = Lift-alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
+
+
+ VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+  where
+  𝑰 : (ov 𝓤 ⁺) ̇
+  𝑰 = Lift I
+
+  lA : 𝑰 → Algebra (ov 𝓤 ⁺) 𝑆
+  lA i = Lift-alg (𝒜 (lower i)) (ov 𝓤 ⁺)
+
+  vlA : ∀ i → (lA i) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
+  vlA i = VlA (x (lower i))
+
+  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
+  iso-components i = Lift-≅
+
+  B≅A : Lift-alg (⨅ 𝒜) (ov 𝓤 ⁺) ≅ ⨅ lA
+  B≅A = Lift-alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
+
+ VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-alg-iso A≅B)
+ VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-alg-iso A≅B)
+
+\end{code}
+
+
+
+Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
+
+\begin{code}
+
+-- module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
 
  SP⊆V' : S{ov 𝓤}{ov 𝓤 ⁺} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V 𝒦
 
@@ -548,7 +556,13 @@ Before doing so, we need to redefine the class product so that each factor comes
 
 \begin{code}
 
-module class-products-with-maps {𝓤 : Universe}{X : 𝓤 ̇}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) where
+module class-products-with-maps
+ {𝓤 : Universe}{X : 𝓤 ̇}
+ {fe₀ : dfunext (ov 𝓤) 𝓤}
+ {fe₁ : dfunext ((ov 𝓤) ⊔ ((ov 𝓤)⁺)) ((ov 𝓤) ⁺)}
+ {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
+ (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
+ where
 
  ℑ : ov 𝓤 ̇
  ℑ = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣)
@@ -577,12 +591,10 @@ Finally, we define `class-product` which represents the product of all members o
 
 If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
 
-
-
 \begin{code}
 
  class-prod-s-∈-ps : class-product ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
- class-prod-s-∈-ps = pisou psPllA (⨅≅ llA≅A)
+ class-prod-s-∈-ps = pisou psPllA (⨅≅{fiw = fe₀}{fiu = fe₂} llA≅A)
   where
   lA llA : ℑ → Algebra (ov 𝓤) 𝑆
   lA i =  Lift-alg (𝔄 i) (ov 𝓤)
@@ -607,7 +619,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 \begin{code}
 
  class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product ∈ S(P 𝒦)
- class-prod-s-∈-sp hfe = PS⊆SP hfe class-prod-s-∈-ps
+ class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
 
 \end{code}
 
@@ -617,5 +629,4 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 <span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
-
 
