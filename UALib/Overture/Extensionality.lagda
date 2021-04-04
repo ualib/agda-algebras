@@ -80,25 +80,7 @@ However, it is important to keep in mind the following fact (see <a href="https:
 
 *Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
 
-#### <a id="global-function-extensionality">Global function extensionality</a>
-
-Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by 𝓤ω (which is an alias for Agda's `Setω` universe). (For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
-
-The types `global-funext` and `global-dfunext` defined in the [Type Topology][] library are the following.
-
-\begin{code}
-
- global-funext : 𝓤ω
- global-funext = ∀  {𝓤 𝓥} → funext 𝓤 𝓥
-
- global-dfunext : 𝓤ω
- global-dfunext = ∀ {𝓤 𝓥} → dfunext 𝓤 𝓥
-
-\end{code}
-
-We have decided to remove from the latest version of the [UALib][] all instances of global function extensionality and limit ourselves to local applications of the principle.  This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of *univalence*).
-
-Before moving on to the next section, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].<sup>[3](Overture.Extensionality.html#fn3)</sup>
+Before moving on to the next subsection, let us pause to make a public import of the original definitions of the above types from the [Type Topology][] library so they're available through the remainder of the [UALib][].
 
 \begin{code}
 
@@ -109,6 +91,26 @@ open import MGS-FunExt-from-Univalence using (funext; dfunext) public
 
 Note that this import directive does not impose any function extensionality assumptions.  It merely makes the types available in case we want to impose such assumptions.
 
+
+#### <a id="global-function-extensionality">Global function extensionality</a>
+
+Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by 𝓤ω (which is an alias for Agda's `Setω` universe).<sup>[3](Overture.Extensionality.html#fn3)</sup> The types `global-funext` and `global-dfunext` defined in the [Type Topology][] library are the following.
+
+\begin{code}
+
+module hide-global-funext where
+
+ global-funext : 𝓤ω
+ global-funext = ∀  {𝓤 𝓥} → funext 𝓤 𝓥
+
+ global-dfunext : 𝓤ω
+ global-dfunext = ∀ {𝓤 𝓥} → dfunext 𝓤 𝓥
+
+\end{code}
+
+
+**ATTENTION!** (backward incompatibility)  
+We have decided to remove from the latest version of the [UALib][] all instances of global function extensionality and limit ourselves to local applications of the principle.  This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of *univalence*).
 
 
 
@@ -207,7 +209,7 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 <sup>2</sup> <span class="footnote" id="fn2"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).</span>
 
-<sup>3</sup> <span class="footnote" id="fn3"> We won't import `global-funext` yet because we'll need to import that at the top of most of the remaining modules of the [UALib][] anyway, so that it is available when declaring the given module.</span>
+<sup>3</sup> <span class="footnote" id="fn3"> For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
 
 <sup>4</sup><span class="footnote" id="fn4">  In earlier version of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the latter, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.</span>
 
