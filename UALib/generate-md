@@ -4,30 +4,30 @@ agda --html --html-highlight=code UALib.lagda
 
 cp html/UALib.tex html/index.md
 
-NAMES="Empty-Type
-       Identity-Type
-       MGS-Basic-UF
-       MGS-Embeddings
-       MGS-Equivalence-Induction
-       MGS-Equivalences
-       MGS-FunExt-from-Univalence
-       MGS-HAE
-       MGS-hlevels
-       MGS-MLTT
-       MGS-More-FunExt-Consequences
-       MGS-Powerset
-       MGS-Retracts
-       MGS-Solved-Exercises
-       MGS-Subsingleton-Theorems
-       MGS-Subsingleton-Truncation
-       MGS-Unique-Existence
-       MGS-Univalence
-       Natural-Numbers-Type
-       Plus-Type
-       Sigma-Type
-       Unit-Type
-       Universes
-       UALib
+# NAMES="Empty-Type
+#        Identity-Type
+#        MGS-Basic-UF
+#        MGS-Embeddings
+#        MGS-Equivalence-Induction
+#        MGS-Equivalences
+#        MGS-FunExt-from-Univalence
+#        MGS-HAE
+#        MGS-hlevels
+#        MGS-MLTT
+#        MGS-More-FunExt-Consequences
+#        MGS-Powerset
+#        MGS-Retracts
+#        MGS-Solved-Exercises
+#        MGS-Subsingleton-Theorems
+#        MGS-Subsingleton-Truncation
+#        MGS-Unique-Existence
+#        MGS-Univalence
+#        Natural-Numbers-Type
+#        Plus-Type
+#        Sigma-Type
+#        Unit-Type
+#        Universes
+NAMES="UALib
        Preface
        Overture
        Overture.Preliminaries
