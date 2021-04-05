@@ -16,11 +16,10 @@
 
 The hierarchy of universes in Agda is structured as follows: \ab{𝓤}\af ̇ \as : \ab 𝓤 \af ⁺\af ̇,
 \ab{𝓤} \af ⁺\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇, etc.\footnote{Recall, from the \ualibhtml{Overture.Preliminaries} module~(\S\ref{universes}), the special notation we use to denote Agda's \textit{levels} and \textit{universes}.}
-This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncumulative}. This makes it possible to treat universe levels more generally and precisely, which is nice. On the other hand, a noncumulative hierarchy can sometimes make it unduly difficult to convince Agda that a program or proof is correct. 
+This means that the universe \ab 𝓤\af ̇ has type \ab 𝓤  \af ⁺\af ̇, and 𝓤 \af ⁺\af ̇ has type \ab 𝓤 \af ⁺\af ⁺\af ̇, and so on.  It is important to note, however, this does \emph{not} imply that \ab 𝓤\af ̇ \as : \ab 𝓤 \af ⁺\af ⁺\af ̇. In other words, Agda's universe hierarchy is \emph{noncumulative}. This can be advantageous as it becomes possible to treat universe levels more generally and precisely. On the other hand, a noncumulative hierarchy can sometimes make it seem unduly difficult to convince Agda that a program or proof is correct. To help us overcome this technical issue, there are some general universe lifting and lowering functions, which we describe in the next subsection. In Section~\ref{lifts-of-algebras} we will define a couple of domain-specific analogs of these tools.  Later, in the  modules presented in~\cite{DeMeo:2021-2,DeMeo:2021-3}, we prove various properties that make these effective mechanisms for resolving universe level problems when working with algebra types.
+
 
 \subsubsection{Lifting and lowering}\label{lifting-and-lowering}
-Here we describe general lifting and lowering functions that help us overcome the technical issue described in the previous subsection. In Section~\ref{lifts-of-algebras} we will define a couple of domain-specific analogs of these tools.  Later, in the  modules presented in~\cite{DeMeo:2021-2,DeMeo:2021-3}, we prove various properties that make these effective mechanisms for resolving universe level problems when working with algebra types.
-
 Let us be more concrete about what is at issue here by considering a typical example. Agda frequently encounters errors during the type-checking process and responds by printing an error message. Often the message has the following form.
 {\color{red}{\small
 \begin{verbatim}

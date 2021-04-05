@@ -119,8 +119,7 @@ There will be many occasions calling for a type living in the universe that is t
 
 Given universes 𝓤 and 𝓥, a type `A : 𝓤 ̇`, and a type family `B : A → 𝓥 ̇`, the *Sigma type* (or *dependent pair type*), denoted by `Σ(x ꞉ A), B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ(x ꞉ A), B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
 
-The [Type Topology][] library contains a standard definition of the dependent product.
-For pedagogical purposes we repeat this definition here, inside a *hidden module* so that it doesn't conflict with the original definition that we import later.<sup>[3](Overture.Equality.html#fn3)</sup>
+The dependent product type is defined in the [Type Topology][] library. For pedagogical purposes we repeat this definition here (inside a "hidden module" so that it doesn't conflict with the [Type Topology][] definition that we import and use.)<sup>[3](Overture.Equality.html#fn3)</sup>
 
 \begin{code}
 
@@ -136,7 +135,7 @@ module hide-sigma where
 
 \end{code}
 
-For this dependent pair type, we prefer the notation `Σ x ꞉ A , B`, which is more pleasing and more standard than Agda's default syntax, `Σ A (λ x → B)`.  [Escardó][] makes this preferred notation available in the [Type Topology][] library by making the index type explicit, as follows.
+Agda's default syntax for this type is `Σ A (λ x → B)`, but we prefer the notation `Σ x ꞉ A , B`, which is closer to the syntax in the preceding paragraph and the notation used in the HoTT book~\cite{HoTT}, for example. Fortunately, the [Type Topology][] library makes the preferred notation available with the following type definition and `syntax` declaration.
 
 \begin{code}
 
@@ -222,7 +221,7 @@ Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`)
 
 <sup>2</sup><span class="footnote" id="fn2"> We won't discuss every line of the `Universes.lagda` file; instead we merely highlight the few lines of code from the `Universes` module that define the notational devices adopted throughout the UALib. For more details we refer readers to [Martin Escardo's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes).</span>
 
-<sup>3</sup><span class="footnote" id="fn3">To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library as long as we don't invoke `open hide-refl`. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do so in order to exhibit all of the types on which the [UALib][] depends while ensuring that this is not misinterpreted as a claim to originality.</span>
+<sup>3</sup><span class="footnote" id="fn3"> To hide code from the rest of the development, we enclose it in a named module.  For example, the code inside the `hide-refl` module will not conflict with the original definitions from the [Type Topology][] library as long as we don't invoke `open hide-refl`. It may seem odd to define something in a hidden module only to import and use an alternative definition, but we do so in order to exhibit all of the types on which the [UALib][] depends while ensuring that this cannot be misinterpreted as a claim to originality.</span>
 
 <br>
 <br>

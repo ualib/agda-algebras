@@ -22,7 +22,7 @@ A few specific instances (e.g., the proof of the Noether isomorphism theorems an
 
 \paragraph*{Specifying logical foundations in Agda}
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries.
-Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in the \ualib begins with the following line.
+Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control the way Agda behaves, for example, by specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in the \ualib begins with the following line.
 \ccpad
 \begin{code}[number=code:options]
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -34,11 +34,11 @@ Options are specified with the \AgdaKeyword{OPTIONS} \emph{pragma} and control t
 \end{code}
 \ccpad
 These options control certain foundational assumptions that Agda makes when type-checking the program to verify its correctness.
-\begin{itemize}
-\item \AgdaPragma{--without-K} disables \axiomk; see~\cite{agdaref-axiomk};
+\begin{enumerate}
+\item \AgdaPragma{--without-K} disables \axiomk, which makes Agda compatible with \emph{proof-relevant} type theories; see the discussion of proof-relevance in~\S~\ref{sec:trunc-sets-prop}; see also~\cite{agdaref-axiomk, Cockx:2017};
 \item \AgdaPragma{--exact-split} makes Agda accept only definitions that are \emph{judgmental} equalities; see~\cite{agdatools-patternmatching};
-\item \AgdaPragma{--safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda} and~\cite{agdatools-patternmatching}.
-\end{itemize}
+\item \AgdaPragma{--safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module); see~\cite{agdaref-safeagda, agdatools-patternmatching}.
+\end{enumerate}
 %% \end{enumerate}
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
 
@@ -191,7 +191,7 @@ The dependent product type is defined in \typtop in a standard way. For pedagogi
 \AgdaField{pr₁}\<%
 \end{code}
 \ccpad
-Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab A)\sP{3}\as →\sP{3}\ab B, but we prefer the notation \AgdaRecord{Σ}~\abt{x}{A}~,~\ab B, which is closer to the standard syntax described in the preceding paragraph. Fortunately, \typtop makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
+Agda's default syntax for this type is \AgdaRecord{Σ}\sP{3}\AgdaSymbol{λ}(\ab x\sP{3}꞉\sP{3}\ab A)\sP{3}\as →\sP{3}\ab B, but we prefer the notation \AgdaRecord{Σ}~\abt{x}{A}~,~\ab B, which is closer to the syntax in the preceding paragraph, and will be familiar to readers of the HoTT book~\cite{HoTT}, for example. Fortunately, \typtop makes the preferred notation available with the following type definition and \ak{syntax} declaration (see~\cite[Σ types]{MHE}).\footnote{\label{fncolon}\textbf{Attention!} The symbol \af ꞉ that appears in the special syntax defined here for the \AgdaFunction{Σ} type, and below for the \af{Π} type, is not the ordinary colon; rather, it is the symbol obtained by typing \texttt{\textbackslash{}:4} in \agdatwomode.} 
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{-Σ}\AgdaSpace{}%
@@ -281,7 +281,7 @@ A special case of the Sigma type is the one in which the type \ab{B} doesn't dep
 
 
 \paragraph*{Pi types (dependent functions)} %\label{ssec:dependent-functions}
-Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (or \defn{dependent function type}) is denoted by \ar Π~\abt{x}{A} ,~\ab B~\ab x and generalizes the function type \ab A~\as →~\ab B by letting the type \ab B~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in \typtop in a standard way.  For the reader's benefit, however, we repeat the definition here.  (In the \ualib this definition is included in a named or ``hidden'' module.)
+Given universes \ab 𝓤 and \ab 𝓥, a type \ab{A} \as : \ab 𝓤\af ̇, and a type family \ab{B}~\as :~\ab A~\as →~\ab 𝓥\af ̇, the \defn{Pi type} (or \defn{dependent function type}) is denoted by \ar Π~\abt{x}{A} ,~\ab B~\ab x and generalizes the function type \ab A~\as →~\ab B by letting the type \ab B~\ab x of the codomain depend on the value \ab x of the domain type. The dependent function type is defined in \typtop in a standard way.  For the reader's benefit, however, we repeat the definition here.  % (In the \ualib this definition is included in a named or ``hidden'' module.)
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{Π}\AgdaSpace{}%
