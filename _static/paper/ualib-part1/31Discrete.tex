@@ -967,5 +967,7 @@ Here is how we implement this in the \ualib.
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-The function \af{eval-rel} ``lifts'' a binary relation to the corresponding \ab{I}-ary relation.\footnote{Initially we called the first function
-\af{lift-rel} because it ``lifts'' a binary relation on \ab A to a binary relation on tuples of type \ab I~\as →~\ab A. However, we renamed it \af{eval-rel} to avoid confusion with the universe level \AgdaRecord{Lift} type defined in the \ualibhtml{Overture.Lifts} module, or with \af{free-lift} (\ualibhtml{Terms.Basic}) which lifts a map defined on generators to a map on the thing being generated. Also, observe that we silently added the type \ab I~\as :~\ab 𝓥\af ̇, representing \emph{relation arity}, to the context; we will have more to say about relation arities in the next section (\S\ref{sec:continuous-relations}).}
+The function \af{eval-rel} ``lifts'' a binary relation to the corresponding \ab{I}-ary relation.
+% \footnote{Initially we called the first function
+% \af{lift-rel} because it ``lifts'' a binary relation on \ab A to a binary relation on tuples of type \ab I~\as →~\ab A. However, we renamed it \af{eval-rel} to avoid confusion with the universe level \AgdaRecord{Lift} type defined in the \ualibhtml{Overture.Lifts} module, or with \af{free-lift} (\ualibhtml{Terms.Basic}) which lifts a map defined on generators to a map on the thing being generated. Also, o
+% (Here we silently added the type \ab I~\as :~\ab 𝓥\af ̇, representing \emph{relation arity}, to the context; we will have more to say about relation arities in the next section (\S\ref{sec:continuous-relations}).)

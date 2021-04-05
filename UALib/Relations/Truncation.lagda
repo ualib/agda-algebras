@@ -133,7 +133,7 @@ prop-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ 
 
 \end{code}
 
-Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we assume `prop-ext 𝓤 𝓦` holds, then we have `∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → P ≐ Q → P ≡ Q`.
+Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we postulate `prop-ext 𝓤 𝓦` and `P ≐ Q`, then `P ≡ Q` obviously follows. Nonetheless, let us record this observation.
 
 \begin{code}
 
@@ -238,7 +238,7 @@ To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prov
 
 \end{code}
 
-While we're at it, we might as well achieve full generality and define truncated types of *dependent continuous propositions*.
+While we're at it, we might as well take the abstraction one step further and define the type of *truncated dependent relations*, which we call *dependent propositions*.
 
 \begin{code}
 

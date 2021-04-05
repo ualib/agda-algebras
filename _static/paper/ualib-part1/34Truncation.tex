@@ -516,7 +516,7 @@ as follows.\footnote{cf.~\cite{MHE}, specifically the section on \href{https://w
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{≐} \ab Q \as = (\ab P \af ⊆ \ab Q) \af × (\ab Q \af ⊆ \ab P). Therefore, if we postulate \af{prop-ext} \ab 𝓤 \ab 𝓦 and \ab{P} \af{≐} \ab Q, then \ab{P} \aod ≡ \ab Q obviously follows. Nonetheless, let us record this corollary here, assuming the context includes \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{≐} \ab Q \as = (\ab P \af ⊆ \ab Q) \af × (\ab Q \af ⊆ \ab P). Therefore, if we postulate \af{prop-ext} \ab 𝓤 \ab 𝓦 and \ab{P} \af{≐} \ab Q, then \ab{P} \aod ≡ \ab Q obviously follows. Nonetheless, let us record this observation, assuming the context includes \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
@@ -1227,7 +1227,7 @@ To see the point of the types just defined, suppose \af{cont-prop-ext} \ab A \ab
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
 \ccpad
-While we're at it, we might as well take the abstraction one step further and define \emph{truncated dependent relations}, which we'll call \defn{dependent propositions}.
+While we're at it, we might as well take the abstraction one step further and define the type of \emph{truncated dependent relations}, which we call \defn{dependent propositions}.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -1317,69 +1317,60 @@ While we're at it, we might as well take the abstraction one step further and de
 \AgdaBound{Q}\<%
 \end{code}
 \ccpad
-Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier.%  (Here the context includes 
+% Applying the extensionality principle for dependent relations is no harder than applying the special cases of this principle defined earlier.%  (Here the context includes 
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 % \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaBound{I}\AgdaSpace{}%
 % \AgdaSymbol{→}\AgdaSpace{}%
 % \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)} and \AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}\AgdaPostulate{Universe}\AgdaSymbol{)}.)
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{dep-prop-ext}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{DepProp}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
-\\
-%
-\>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{pe}%
-\>[29]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}%
-\>[38]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\<%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
 % \\
-% \>[0]\<%
-\end{code}
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{dep-prop-ext}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
+% \AgdaBound{Q}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{DepProp}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{P}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{Q}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{P}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{Q}\<%
+% \\
+% %
+% \>[2]\AgdaFunction{dep-prop-ext'}\AgdaSpace{}%
+% \AgdaBound{pe}\AgdaSpace{}%
+% \AgdaBound{hyp}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{pe}%
+% \>[29]\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{hyp}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}%
+% \>[38]\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+% \AgdaBound{hyp}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∥}}\<%
+% \end{code}
