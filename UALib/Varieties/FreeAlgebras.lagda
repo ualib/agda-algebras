@@ -18,9 +18,11 @@ First we will define the relatively free algebra in a variety, which is the "fre
 open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (Universe; _̇)
 
-module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} {𝓧 : Universe}{X : 𝓧 ̇} where
+module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} {𝓤 : Universe}{X : 𝓤 ̇} where
 
-open import Varieties.Preservation {𝑆 = 𝑆}{𝓧}{X} public
+open import Varieties.Preservation {𝑆 = 𝑆}{𝓤}{𝓤}{X} public
+-- open import UF-FunExt using (FunExt) public
+
 
 \end{code}
 
@@ -49,13 +51,11 @@ We assume two ambient universes `𝓤` and `𝓧`, as well as a type `X : 𝓧 �
 
 \begin{code}
 
-module the-free-algebra {𝓤 𝓧 : Universe}{X : 𝓧 ̇} where
 
- -- NOTATION (universe aliases for convenience and readability).
- 𝓸𝓿𝓾 𝓸𝓿𝓾+ 𝓸𝓿𝓾++ : Universe
- 𝓸𝓿𝓾 = ov 𝓤
- 𝓸𝓿𝓾+ = 𝓸𝓿𝓾 ⁺
- 𝓸𝓿𝓾++ = 𝓸𝓿𝓾 ⁺ ⁺
+-- NOTATION (universe aliases for convenience and readability).
+-- 𝓕 𝓕⁺  : Universe
+-- 𝓕 = ov 𝓤
+-- 𝓕⁺ = (ov 𝓤) ⁺    -- (this will be the level of the relatively free algebra)
 
 \end{code}
 
@@ -63,9 +63,9 @@ We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields
 
 \begin{code}
 
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) (𝓧 ⊔ 𝓸𝓿𝓾)
- ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
-                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
+ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
+                 →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
 
@@ -73,8 +73,8 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾) → Rel ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓸𝓿𝓾)
- ψRel 𝒦 p q = ψ 𝒦 (p , q)
+ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Rel ∣ 𝑻 X ∣ 𝓕
+ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
 
@@ -85,30 +85,23 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 
 \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾){fe : dfunext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
- ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
-  where
-   φ : hom (𝑻 X) 𝑨
-   φ = lift-hom 𝑨 h
+ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
+ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
+ where
+  φ : hom (𝑻 X) 𝑨
+  φ = lift-hom 𝑨 h
 
-   γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
+  γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
-   γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
-       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
+  γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
+      ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
- ψRefl : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → reflexive (ψRel 𝒦)
- ψRefl = λ _ _ _ _ → refl
-
- ψSymm : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → symmetric (ψRel 𝒦)
- ψSymm _ _ pψRelq 𝑪 φ h = (pψRelq 𝑪 φ h)⁻¹
-
- ψTrans : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → transitive (ψRel 𝒦)
- ψTrans _ _ _ pψq qψr 𝑪 φ h = (pψq 𝑪 φ h) ∙ (qψr 𝑪 φ h)
-
- ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾} → IsEquivalence (ψRel 𝒦)
- ψIsEquivalence = record { rfl = ψRefl ; sym = ψSymm ; trans = ψTrans }
+ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
+ψIsEquivalence = record { rfl = λ 𝑨 sA h → refl
+                        ; sym = λ pψq 𝑨 sA h → (pψq 𝑨 sA h)⁻¹
+                        ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h)}
 
 \end{code}
 
@@ -116,8 +109,8 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓸𝓿𝓾){fe : dfunext 𝓥 𝓤} → Congruence (𝑻 X)
- ψCon 𝒦 {fe} = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦 {fe})
+ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → Congruence (𝑻 X)
+ψCon 𝒦 {fe} = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦 {fe})
 
 \end{code}
 
@@ -126,16 +119,9 @@ Finally, we are ready to define the type representing the relatively free algebr
 
 \begin{code}
 
-module the-relatively-free-algebra
-       {𝓤 𝓧 : Universe}{X : 𝓧 ̇}
-       {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
 
- open the-free-algebra{𝓤}{𝓧}{X}
-
- 𝓕 : Universe -- (universe level of the relatively free algebra)
- 𝓕 = (𝓧 ⊔ ov 𝓤) ⁺
-
- 𝔉 : Algebra 𝓕 𝑆
+ 𝔉 : Algebra 𝓕⁺ 𝑆
  𝔉 =  𝑻 X ╱ (ψCon 𝒦 {fe})
 
 \end{code}
@@ -146,7 +132,7 @@ The domain of `𝔉` is `∣ 𝔉 ∣ = ∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩`, wh
 
 This Sigma type denotes the set `{ C : ∃ p ∈ ∣ 𝑻 X ∣ , C ≡ [ p ] ⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of terms, as desired.
 
-We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓸𝓿𝓾)`.
+We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓕)`.
 
 
 
@@ -175,46 +161,26 @@ We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by 
 
 Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
+#### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
+Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.  We will also need to assume several (ten, to be honest) local function extensionality postulates and, as a result, the next submodule will begin with a long and unattractive list of such postulates.  Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.
+
 \begin{code}
 
-module HSPTheorem {𝓤 : Universe}{X : 𝓤 ̇}
- {fuu : dfunext 𝓤 𝓤}
- {fe₀ : dfunext (ov 𝓤) 𝓤}
- {fe₁ : dfunext 𝓤 ((ov 𝓤) ⁺)}
- {fe₂ : dfunext ((ov 𝓤) ⁺) 𝓤}
- {fe₃ : dfunext (ov 𝓤) (ov 𝓤)}
- {fe₄ : funext (ov 𝓤) ((ov 𝓤) ⁺)}
- {fe₅ : dfunext ((ov 𝓤) ⁺) ((ov 𝓤) ⁺)}
- {fvu : dfunext 𝓥 𝓤}
- {fe : dfunext 𝓥 (ov 𝓤)}
- {fvou : dfunext 𝓥 (ov 𝓤 ⁺)}
- (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
- where
+module HSPTheorem {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
-
- open the-free-algebra {𝓤}{𝓤}{X}
- open the-relatively-free-algebra {𝓤}{𝓤}{X}{𝒦}{fvu}
- open class-products-with-maps {𝓤}{X}{fe₀}{fe₅}{fe₃} 𝒦
+ -- {fe𝓤𝓤 : dfunext 𝓤 𝓤}  {fe𝓕𝓤 : dfunext 𝓕 𝓤}   {fe𝓤𝓕⁺ : dfunext 𝓤 𝓕⁺} {fe𝓕⁺𝓤 : dfunext 𝓕⁺ 𝓤}
+ -- {fe𝓕𝓕 : dfunext 𝓕 𝓕}  {fe𝓕𝓕⁺ : funext 𝓕 𝓕⁺}  {fe𝓕⁺𝓕⁺ : dfunext 𝓕⁺ 𝓕⁺}
+ -- {fe𝓥𝓤 : dfunext 𝓥 𝓤}  {fe𝓥𝓕 : dfunext 𝓥 𝓕}   {fe𝓥𝓕⁺ : dfunext 𝓥 𝓕⁺}
+ open class-products-with-maps {𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
 \end{code}
-
-
-#### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that turns out to be surprisingly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.
 
 We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
 \begin{code}
 
- -- NOTATION.
- SK𝔄 : (i : ℑ) → (𝔄 i) ∈ S{𝓤}{𝓤} 𝒦
- SK𝔄 = λ (i : ℑ) → fst ∥ i ∥
-
- 𝔄h : (i : ℑ) → X → ∣ 𝔄 i ∣
- 𝔄h = λ (i : ℑ) → snd ∥ i ∥
-
  -- ℭ is the product of all subalgebras of algebras in 𝒦.
- ℭ : Algebra 𝓸𝓿𝓾 𝑆
+ ℭ : Algebra 𝓕 𝑆
  ℭ = ⨅ 𝔄
 
 \end{code}
@@ -223,11 +189,15 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
 
 \begin{code}
 
+ -- NOTATION.
+ 𝔄h : (i : ℑ) → X → ∣ 𝔄 i ∣
+ 𝔄h = λ (i : ℑ) → snd ∥ i ∥
+
  hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)
  hom𝔄 i = lift-hom (𝔄 i) (𝔄h i)
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co {fe = fe₀} 𝔄 hom𝔄
+ homℭ = ⨅-hom-co {fe = fe 𝓕 𝓤} 𝔄 hom𝔄
 
 \end{code}
 
@@ -238,11 +208,11 @@ As mentioned above, the initial version of the [Agda UALib][] used the free alge
 
 \begin{code}
 
- 𝔽 : Algebra 𝓸𝓿𝓾+ 𝑆
- 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe}
+ 𝔽 : Algebra 𝓕⁺ 𝑆
+ 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}
 
  epi𝔽 : epi (𝑻 X) 𝔽
- epi𝔽 = πker ℭ homℭ {fe}
+ epi𝔽 = πker ℭ homℭ {fe 𝓥 𝓕}
 
  hom𝔽 : hom (𝑻 X) 𝔽
  hom𝔽 = epi-to-hom 𝔽 epi𝔽
@@ -265,7 +235,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
    ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{ fvou }(kercon fe ℭ homℭ) {p}{q} x
+   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{fe 𝓥 𝓕⁺}(kercon (fe 𝓥 𝓕) ℭ homℭ) {p}{q} x
 
    γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
    γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -278,7 +248,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
  𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor fe₀ fuu fe₅ (𝑻 X){𝑨}{𝔽}(lift-hom 𝑨 h) hom𝔽 hom𝔽-is-epic (ψlemma0-ap skA))
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 𝓤)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -307,7 +277,7 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
  hom𝔽-is-lift-hom (ℊ x) = refl
  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(fvou (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
   (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
 
@@ -332,7 +302,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    f𝔑≡φ x = refl
 
    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-   h≡φ t = free-unique fvu 𝑨 h' φ f𝔑≡φ t
+   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ f𝔑≡φ t
 
    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
@@ -355,9 +325,9 @@ We need a three more lemmas before we are ready to tackle our main goal.
    skA = siso (sbase kA) (≅-sym Lift-≅)
 
    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = fuu λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp fvu 𝑨 h p ⟩
+   γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp fvu 𝑨 h q)⁻¹  ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 𝓤) 𝑨 h q)⁻¹  ⟩
                  (𝑨 ⟦ q ⟧) h       ∎
 
 \end{code}
@@ -378,21 +348,16 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- open cids {𝓤}{X}{fuu = fuu}{fvu = fvu}{fe₀ = fe₁}{fe₁ = fvou}{fe₂ = fe₅}{fe₃ = fe₂}{𝒦}
-
-
-
-
  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
- kernel-in-theory {p , q} pKq = (class-ids-⇒ p q (class-models-kernel p q pKq))
+ kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
 
  open Congruence
 
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
-  →                   (∀ p q → is-subsingleton (⟨ kercon fe ℭ homℭ ⟩ p q ))
-  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon fe ℭ homℭ ⟩ C))
+  →                   (∀ p q → is-subsingleton (⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ p q ))
+  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
                       --------------------------------------------------------
-  →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe}) ≤ ℭ
+  →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
 
  free-quot-subalg-ℭ fe pe UIPc URPk UIPb = FirstHomColly (𝑻 X) ℭ homℭ pe fe UIPc URPk UIPb
 
@@ -403,16 +368,16 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
           -- truncation assumptions:
           (Cset : is-set ∣ ℭ ∣)
-          (ssR : ∀ p q → is-subsingleton (⟨ kercon fe ℭ homℭ ⟩ p q))
-          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon fe ℭ homℭ ⟩ C))
+          (ssR : ∀ p q → is-subsingleton (⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ p q))
+          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
 
   where
 
-  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe}) ≤ ℭ
-  𝔽≤ℭ = free-quot-subalg-ℭ fe pe Cset ssR ssC
+  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
+  𝔽≤ℭ = free-quot-subalg-ℭ (fe 𝓥 𝓕) pe Cset ssR ssC
 
-  𝕍𝒦 : Pred (Algebra 𝓸𝓿𝓾+ 𝑆) 𝓸𝓿𝓾++
-  𝕍𝒦 = V{𝓤}{𝓸𝓿𝓾+} 𝒦
+  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (𝓕⁺ ⁺)
+  𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
 
 
 \end{code}
@@ -423,10 +388,10 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
 
 \begin{code}
 
-  _↠_ : 𝓤 ̇ → Algebra 𝓸𝓿𝓾+ 𝑆 → 𝓸𝓿𝓾+ ̇
+  _↠_ : 𝓤 ̇ → Algebra 𝓕⁺ 𝑆 → 𝓕⁺ ̇
   X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
-  𝔽-ModTh-epi : (𝑨 : Algebra 𝓸𝓿𝓾+ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
   𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
    where
     φ : hom (𝑻 X) 𝑨
@@ -444,16 +409,13 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
       Apq : 𝑨 ⊧ p ≈ q
       Apq = pqlem2 p q x
       γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
-      γ = ∣ φ ∣ p                    ≡⟨ refl ⟩
-          free-lift 𝑨 η p   ≡⟨ (free-lift-interp fvou 𝑨 η p)⁻¹ ⟩
-          (𝑨 ⟦ p ⟧) η          ≡⟨ extfun (pqlem2 p q x) η  ⟩
-          (𝑨 ⟦ q ⟧) η          ≡⟨ free-lift-interp fvou 𝑨 η q ⟩
-          free-lift 𝑨 η q   ≡⟨ refl ⟩
-          ∣ φ ∣ q                    ∎
+      γ = ∣ φ ∣ p          ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
+          (𝑨 ⟦ p ⟧) η      ≡⟨ extfun (pqlem2 p q x) η  ⟩
+          (𝑨 ⟦ q ⟧) η      ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
+          ∣ φ ∣ q          ∎
 
     γ : epi 𝔽 𝑨
-    γ = fst (HomFactorEpi fe₄ fe₅ fe₅ (𝑻 X){𝑨}{𝔽} φ hom𝔽 φE hom𝔽-is-epic  kerincl)
-
+    γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
@@ -463,9 +425,9 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 \begin{code}
 
-  open Vlift {𝓤}{fe₀}{fe₅}{fe₃}{𝒦}
+  open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
 
-  𝔽∈SP : 𝔽 ∈ (S{𝓸𝓿𝓾}{𝓸𝓿𝓾+} (P{𝓤}{𝓸𝓿𝓾} 𝒦))
+  𝔽∈SP : 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
   𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
   𝔽∈𝕍 : 𝔽 ∈ V 𝒦
@@ -492,7 +454,7 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \begin{code}
 
-  birkhoff' : V{𝓤}{𝓸𝓿𝓾} 𝒦 ⊆ Mod {X = X}(Th (V 𝒦))
+  birkhoff' : V{𝓤}{𝓕} 𝒦 ⊆ Mod (Th (V 𝒦))
   birkhoff' α p q pThq = pThq α
 
 \end{code}

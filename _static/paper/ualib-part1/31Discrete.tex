@@ -632,7 +632,7 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaBound{y}\<%
 \end{code}
 \ccpad
-Similarly, the \defn{identity relation} (which is equivalent to the kernel of an injective function) can be represented using any one of the following types.\cref{uhints}
+Similarly, the \defn{identity relation} (which is equivalent to the kernel of an injective function) can be represented by a number of different types. Here we only show the representation that we use later to construct the zero congruence. The notation we use here is close to that of conventional algebra notation, where $0_A$ is used to denote the identity relation $\{(x, y) \in A \times A : x = y\}$.\cref{uhints}
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{𝟎}\AgdaSpace{}%
@@ -649,76 +649,76 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝟎-pred}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{𝓤}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟎-pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝟎-sigma}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟎-sigma}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{𝟎-sigma'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟎-sigma'}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{(x}\AgdaSpace{}%
-\AgdaBound{,}\AgdaSpace{}%
-\AgdaBound{y)}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{𝟎-pred}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Pred}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{𝓤}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{𝟎-pred}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{y}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{𝟎-sigma}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{𝟎-sigma}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{y}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{𝟎-sigma'}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{𝟎-sigma'}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{(x}\AgdaSpace{}%
+% \AgdaBound{,}\AgdaSpace{}%
+% \AgdaBound{y)}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{y}\<%
 \end{code}
 \ccpad
 Finally, the \defn{total relation} over \ab A, which in set theory is the full Cartesian product \ab A~\af ×~\ab A, can be represented using the one-element type from the \am{Unit-Type} module of \typtop as follows.\cref{uhints}$^, $\footnote{%

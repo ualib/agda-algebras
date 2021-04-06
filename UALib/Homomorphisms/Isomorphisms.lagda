@@ -147,7 +147,7 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{fiw : dfunext 𝓘 𝓦}{fiu : dfunext 𝓘 𝓤} where
+module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{fe𝓘𝓤 : dfunext 𝓘 𝓤}{fe𝓘𝓦 : dfunext 𝓘 𝓦} where
 
  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
 
@@ -157,19 +157,19 @@ module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{fiw : dfunext 𝓘 𝓦}{fiu :
   ϕ a i = ∣ fst (AB i) ∣ (a i)
 
   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 a = fiw (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
+  ϕhom 𝑓 a = fe𝓘𝓦 (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
 
   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
 
   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-  ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
+  ψhom 𝑓 𝒃 = fe𝓘𝓤 (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
 
   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-  ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
+  ϕ~ψ 𝒃 = fe𝓘𝓦 λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
 
   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-  ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+  ψ~ϕ a = fe𝓘𝓤 λ i → snd ∥ snd (AB i) ∥ (a i)
 
   γ : ⨅ 𝒜 ≅ ⨅ ℬ
   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)

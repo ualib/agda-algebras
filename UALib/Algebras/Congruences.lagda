@@ -31,8 +31,8 @@ record Congruence {𝓦 𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔
  constructor mkcon
  field
   ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓦
-  IsEquiv : IsEquivalence ⟨_⟩
-  Compatible : compatible 𝑨 ⟨_⟩
+  is-equivalence : IsEquivalence ⟨_⟩
+  is-compatible : compatible 𝑨 ⟨_⟩
 
 open Congruence
 
@@ -50,7 +50,7 @@ module _ {𝑨 : Algebra 𝓤 𝑆} where
  open Congruence
 
  Congruence→Con : Congruence{𝓤} 𝑨 →  Con 𝑨
- Congruence→Con θ = ⟨ θ ⟩ , IsEquiv θ , Compatible θ
+ Congruence→Con θ = ⟨ θ ⟩ , is-equivalence θ , is-compatible θ
 
 \end{code}
 
@@ -61,7 +61,7 @@ We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module.  W
 \begin{code}
 
 𝟎-IsEquivalence : {A : 𝓤 ̇} →  IsEquivalence {A = A} 𝟎
-𝟎-IsEquivalence = record {rfl = λ x → refl{x = x}; sym = ≡-symmetric; trans = ≡-transitive}
+𝟎-IsEquivalence = record {rfl = refl; sym = ≡-sym; trans = ≡-trans}
 
 \end{code}
 
@@ -132,7 +132,7 @@ Finally, the following elimination rule is sometimes useful.
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
  ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫{⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
- ╱-≡ θ refl = IsEquivalence.rfl (IsEquiv θ) _
+ ╱-≡ θ refl = IsEquivalence.rfl (is-equivalence θ)
 
 \end{code}
 

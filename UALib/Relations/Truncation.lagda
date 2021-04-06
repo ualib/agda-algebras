@@ -168,38 +168,41 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{𝑹 : Pred₂ A 𝓦} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
+ open IsEqv
 
- class-extensionality : prop-ext 𝓤 𝓦 → IsEquivalence ∣ 𝑹 ∣ → {u v : A}
-  →                     ∣ 𝑹 ∣ u v  →  [ u ] ∣ 𝑹 ∣ ≡ [ v ] ∣ 𝑹 ∣
+ class-extensionality : prop-ext 𝓤 𝓦 → IsEqv R → {u v : A}
+  →                     R u v  →  [ u ] R ≡ [ v ] R
 
- class-extensionality pe Reqv {u}{v} Ruv = ap fst PQ where
+ class-extensionality pe Req {u}{v} Ruv = ap fst PQ
+  where
   P Q : Pred₁ A 𝓦
-  P = (λ a → ∣ 𝑹 ∣ u a) , (λ a → ∥ 𝑹 ∥ u a)
-  Q = (λ a → ∣ 𝑹 ∣ v a) , (λ a → ∥ 𝑹 ∥ v a)
+  P = (λ a → R u a) , (λ a → is-truncated Req u a)
+  Q = (λ a → R v a) , (λ a → is-truncated Req v a)
 
-  α : [ u ] ∣ 𝑹 ∣ ⊆ [ v ] ∣ 𝑹 ∣
-  α ua = fst (/-≐ Reqv Ruv) ua
+  α : [ u ] R ⊆ [ v ] R
+  α ua = fst (/-≐ (is-equivalence Req) Ruv) ua
 
-  β : [ v ] ∣ 𝑹 ∣ ⊆ [ u ] ∣ 𝑹 ∣
-  β va = snd (/-≐ Reqv Ruv) va
+  β : [ v ] R ⊆ [ u ] R
+  β va = snd (/-≐ (is-equivalence Req) Ruv) va
 
   PQ : P ≡ Q
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟪⟫ : (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
-  →              {C D : Pred A 𝓦}{c : 𝒞 ∣ 𝑹 ∣ C}{d : 𝒞 ∣ 𝑹 ∣ D}
+ to-subtype-⟪⟫ : (∀ C → is-subsingleton (𝒞 R C))
+  →              {C D : Pred A 𝓦}{c : 𝒞 R C}{d : 𝒞 R D}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 ∣ 𝑹 ∣)  CD c) d)
+ to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 R)  CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 ∣ 𝑹 ∣ C))
-  →                      IsEquivalence ∣ 𝑹 ∣ → {u v : A}
-  →                      ∣ 𝑹 ∣ u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
+ class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 R C))
+  →                      IsEqv R → {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
  class-extensionality' pe ssA Reqv Ruv = to-subtype-⟪⟫ ssA (class-extensionality pe Reqv Ruv)
+
+
 
 \end{code}
 

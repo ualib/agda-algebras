@@ -28,17 +28,31 @@ Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Dis
 
 \begin{code}
 
-reflexive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-reflexive _≈_ = ∀ x → x ≈ x
+module _ {𝓤 𝓦 : Universe} where
 
-symmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
+ reflexive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ reflexive _≈_ = ∀ x → x ≈ x
 
-antisymmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-antisymmetric _≈_ = ∀ x y → x ≈ y → y ≈ x → x ≡ y
+ symmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
 
-transitive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
+ antisymmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ antisymmetric _≈_ = ∀ x y → x ≈ y → y ≈ x → x ≡ y
+
+ transitive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
+
+ Refl : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Refl _≈_ = ∀{x} → x ≈ x
+
+ Symm : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Symm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x
+
+ Antisymm : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Antisymm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x → x ≡ y
+
+ Trans : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
 
 \end{code}
 
@@ -62,22 +76,24 @@ In the [Relations.Truncation][] module we introduce a number of similar but more
 
 #### <a id="equivalence-classes">Equivalence relations</a>
 
-A binary relation is called a **preorder** if it is reflexive and transitive. An **equivalence relation** is a symmetric preorder.
+A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder.
 
 
 \begin{code}
 
-is-preorder : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-is-preorder _≈_ = is-subsingleton-valued _≈_ × reflexive _≈_ × transitive _≈_
+module _ {𝓤 𝓦 : Universe} where
 
-record IsEquivalence {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
- field
-  rfl   : reflexive _≈_
-  sym   : symmetric _≈_
-  trans : transitive _≈_
+ record IsPreorder {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field rfl : Refl _≈_; trans : Trans _≈_
 
-is-equivalence : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
-is-equivalence _≈_ = is-preorder _≈_ × symmetric _≈_
+ Preorder : (A : 𝓤 ̇) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Preorder A = Σ R ꞉ Rel A 𝓦 , IsPreorder R
+
+ record IsEquivalence {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field rfl : Refl _≈_; sym : Symm _≈_; trans : Trans _≈_
+
+ Equivalence : (A : 𝓤 ̇) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Equivalence A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
 
 \end{code}
 
@@ -85,13 +101,35 @@ An easy first example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
-map-kernel-IsEquivalence : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) → IsEquivalence (ker f)
-map-kernel-IsEquivalence f = record { rfl = λ x → refl ;
-                                      sym = λ x y z → ≡-sym z ;
-                                      trans = λ x y z p q → ≡-trans p q }
+ ker-IsEquivalence : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) → IsEquivalence (ker f)
+ ker-IsEquivalence f = record { rfl = refl; sym = λ z → ≡-sym z ; trans = λ p q → ≡-trans p q }
 
 \end{code}
 
+#### Truncated preorders and equivalences
+
+Using the `is-subsingleton-valued` type defined earlier, we can define the type of preorders and equivalences that have "unique identity proofs" as follows.
+
+\begin{code}
+
+ -- truncated preorder type
+ record IsPreord {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field is-preorder : IsPreorder R
+        is-truncated : is-subsingleton-valued R
+
+ Preord : (A : 𝓤 ̇) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Preord A = Σ R ꞉ Rel A 𝓦 , IsPreord R
+
+ -- truncated equivalence relation type
+ record IsEqv {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field is-equivalence : IsEquivalence _≈_
+        is-truncated : is-subsingleton-valued _≈_
+
+ Eqv : (A : 𝓤 ̇) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
+
+
+\end{code}
 
 
 
@@ -101,10 +139,10 @@ If R is an equivalence relation on A, then for each `𝑎 : A`, there is an *equ
 
 \begin{code}
 
-[_]_ : {A : 𝓤 ̇} → A → Rel A 𝓦 → Pred A 𝓦
-[ 𝑎 ] R = λ x → R 𝑎 x
+ [_]_ : {A : 𝓤 ̇} → A → Rel A 𝓦 → Pred A 𝓦
+ [ 𝑎 ] R = λ x → R 𝑎 x
 
-infix 60 [_]_
+ infix 60 [_]_
 
 \end{code}
 
@@ -112,8 +150,8 @@ Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to [ �
 
 \begin{code}
 
-𝒞 : {A : 𝓤 ̇}(R : Rel A 𝓦) → Pred A 𝓦 → (𝓤 ⊔ 𝓦 ⁺) ̇
-𝒞 R C = Σ a ꞉ _ , C ≡ ( [ a ] R)
+ 𝒞 : {A : 𝓤 ̇}(R : Rel A 𝓦) → Pred A 𝓦 → (𝓤 ⊔ 𝓦 ⁺) ̇
+ 𝒞 R C = Σ a ꞉ _ , C ≡ ( [ a ] R)
 
 \end{code}
 
@@ -121,20 +159,20 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 
 \begin{code}
 
-_/_ : (A : 𝓤 ̇ ) → Rel A 𝓦 → 𝓤 ⊔ (𝓦 ⁺) ̇
-A / R = Σ C ꞉ Pred A _ ,  𝒞 R C
+ _/_ : (A : 𝓤 ̇ ) → Rel A 𝓦 → 𝓤 ⊔ (𝓦 ⁺) ̇
+ A / R = Σ C ꞉ Pred A _ ,  𝒞 R C
 
-infix -1 _/_
+ infix -1 _/_
 \end{code}
 
 We use the following type to represent an `R`-block with a designated representative.
 
 \begin{code}
 
-⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
-⟪ a ⟫ {R} = ([ a ] R , a , refl)
+ ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
+ ⟪ a ⟫ {R} = ([ a ] R , a , refl)
 
-infix 60 ⟪_⟫
+ infix 60 ⟪_⟫
 
 \end{code}
 
@@ -142,9 +180,9 @@ This serves as a kind of *introduction rule*.  Dually, the next type provides an
 
 \begin{code}
 
-⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
+ ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
 
-⌜ 𝒄 ⌝ = fst ∥ 𝒄 ∥
+ ⌜ 𝒄 ⌝ = fst ∥ 𝒄 ∥
 
 \end{code}
 
@@ -152,15 +190,14 @@ Later we will need the following tools for working with the quotient types defin
 
 \begin{code}
 
-module _ {A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
 
  open IsEquivalence
-
  /-subset : IsEquivalence R → R x y →  [ x ] R  ⊆  [ y ] R
- /-subset Req Rxy {z} Rxz = (trans Req) y x z (sym Req x y Rxy) Rxz
+ /-subset Req Rxy {z} Rxz = (trans Req) ((sym Req) Rxy) Rxz
 
  /-supset : IsEquivalence R → R x y →  [ y ] R ⊆ [ x ] R
- /-supset Req Rxy {z} Ryz = (trans Req) x y z Rxy Ryz
+ /-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
 
  /-≐ : IsEquivalence R → R x y →  [ x ] R  ≐  [ y ] R
  /-≐ Req Rxy = /-subset Req Rxy , /-supset Req Rxy

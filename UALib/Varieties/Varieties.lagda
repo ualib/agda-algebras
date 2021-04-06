@@ -341,9 +341,6 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
--- module _ {𝓘 𝓤 𝓦 : Universe}{I : 𝓘 ̇}{few : dfunext 𝓘 𝓦}{feu : dfunext 𝓘 𝓤} where
-
---  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
 
 module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
@@ -352,7 +349,7 @@ module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
             -------------------------------------
   →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
- lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅{fiw = fwu}{fiu = fwu}  B≅SA)
+ lemPS⊆SP hfe𝓦𝓤 fe𝓦𝓤 {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fe𝓘𝓤 = fe𝓦𝓤}{fe𝓘𝓦 = fe𝓦𝓤} B≅SA)
   where
   𝒜 : I → Algebra 𝓤 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -372,9 +369,9 @@ module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
   α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
   α = λ x i → (h i) (x i)
   β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
-  β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+  β = λ 𝑓 𝒂 → fe𝓦𝓤 λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
   γ : is-embedding α
-  γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+  γ = embedding-lift hfe𝓦𝓤 hfe𝓦𝓤 {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -557,8 +554,8 @@ Before doing so, we need to redefine the class product so that each factor comes
 \begin{code}
 
 module class-products-with-maps
- {𝓤 : Universe}{X : 𝓤 ̇}
- {fe₀ : dfunext (ov 𝓤) 𝓤}
+ {X : 𝓤 ̇}
+ {fe𝓕𝓤 : dfunext (ov 𝓤) 𝓤}
  {fe₁ : dfunext ((ov 𝓤) ⊔ ((ov 𝓤)⁺)) ((ov 𝓤) ⁺)}
  {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
  (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
@@ -594,7 +591,8 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
 \begin{code}
 
  class-prod-s-∈-ps : class-product ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
- class-prod-s-∈-ps = pisou psPllA (⨅≅{fiw = fe₀}{fiu = fe₂} llA≅A)
+ class-prod-s-∈-ps = pisou psPllA (⨅≅ {fe𝓘𝓤 = fe₂}{fe𝓘𝓦 = fe𝓕𝓤} llA≅A) -- 
+
   where
   lA llA : ℑ → Algebra (ov 𝓤) 𝑆
   lA i =  Lift-alg (𝔄 i) (ov 𝓤)

@@ -39,7 +39,7 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
 
 \end{code}
 
-Note the appearance of the shorthand `∀ 𝑎` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣)` since Agda is able to infer that the `𝑎` here must be a tuple on `∣ 𝑨 ∣` of "length" `∥ 𝑆 ∥ 𝑓` (the arity of `𝑓`).
+Note the appearance of the shorthand `∀ 𝑎` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → ⋯` (or `Π 𝑎 ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) , …` ) since Agda is able to infer that the `𝑎` here must be a tuple on `∣ 𝑨 ∣` of "length" `∥ 𝑆 ∥ 𝑓` (the arity of `𝑓`).
 
 We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the property `is-homomorphism`.
 
@@ -188,7 +188,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
 
  homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (ker ∣ h ∣)
- homker-equivalence 𝑩  h = map-kernel-IsEquivalence ∣ h ∣
+ homker-equivalence 𝑩  h = ker-IsEquivalence ∣ h ∣
 
 \end{code}
 
